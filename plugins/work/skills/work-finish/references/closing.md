@@ -20,9 +20,11 @@ cancel" rules and its "Closing a work item" checklist, with V2 homes.
 - Merge only through `merge-and-clean-up`, and only when one of these holds:
   - the owner said yes to this merge; or
   - the project records a standing merge instruction (in `AGENTS.md`, a rule
-    file, or `DECISIONS.md`), and an `acceptance-checker` that did not build
-    the change reported no blocking issue on that exact head commit, and every
-    check passes.
+    file in `.claude/rules/`, a `DECISIONS.md` row, or the work item's
+    Notes > Decisions and context), and an `acceptance-checker` that did not
+    build the change reported no blocking issue on that exact head commit, and
+    every check passes. `merge-and-clean-up` step 2 accepts the same four
+    places.
 - A work item that says its merge needs the owner's approval overrides a
   standing instruction.
 

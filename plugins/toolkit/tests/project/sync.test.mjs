@@ -83,8 +83,8 @@ test('config set tracker.idPrefix renders AGENTS.md and the work-item rule again
   assert.equal(res.code, 0, res.stderr);
   assert.match(res.stdout, /Set tracker\.idPrefix to ACME \(was WI\)\./);
   assert.match(res.stdout, /toolkit sync ran/);
-  assert.match(read(path.join(root, 'AGENTS.md')), /IDs look like `ACME-0?12`/);
-  assert.match(read(path.join(root, '.claude', 'rules', 'work-item-folders.md')), /`ACME-0?12`/);
+  assert.match(read(path.join(root, 'AGENTS.md')), /IDs look like `ACME-001`/);
+  assert.match(read(path.join(root, '.claude', 'rules', 'work-item-folders.md')), /`ACME-001`/);
   assert.equal(config(root).tracker.idPrefix, 'ACME');
   const item = await tk(root, ['work', 'new', '--title', 'First', '--json'], { env });
   assert.equal(item.code, 0, item.stderr || item.stdout);

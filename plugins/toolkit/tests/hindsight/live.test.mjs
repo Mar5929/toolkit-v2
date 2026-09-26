@@ -117,8 +117,15 @@ test('ensureBank creates a free bank with the toolkit settings and is safe to ru
   assert.deepEqual(repaired.changed.sort(), ['reflect_mission', 'retain_extraction_mode']);
   assert.equal((await client.getBankConfig(bank)).config.reflect_mission, `Project memory. ${PLAIN_ENGLISH}`);
 
-  // Another project wanting the same id gets the next free one, even with the same key.
-  const other = await ensureBank({ client, bank, projectKey: bank });
+  // The same project key without a claim (init run again after .toolkit.json was lost)
+  // gets its own bank back.
+  const reused = await ensureBank({ client, bank, projectKey: bank });
+  assert.equal(reused.bank, bank);
+  assert.equal(reused.created, false);
+  assert.equal(reused.relation, 'this-project');
+
+  // Another project key wanting the same id gets the next free one.
+  const other = await ensureBank({ client, bank, projectKey: `${bank}-other` });
   assert.equal(other.bank, `${bank}-2`);
   assert.equal(other.created, true);
   assert.deepEqual(other.skipped.map((s) => s.bank), [bank]);
@@ -357,7 +364,7 @@ test('commands: ensure-bank records the bank; memory save, find, status, export,
   assert.equal(del.code, 2);
 });
 
-test('commands: ensure-bank never shares a bank between projects', async (t) => {
+test('commands: ensure-bank reuses the bank made for this key, and refuses a bank made for another key', async (t) => {
   if (skipIfDown(t)) return;
   const key = newBankId('owner');
   const first = makeProject({ memory: { type: 'hindsight' }, key });
@@ -365,11 +372,13 @@ test('commands: ensure-bank never shares a bank between projects', async (t) => 
   assert.equal(made.code, 0, made.stderr);
   assert.equal(made.json.bank, key);
 
-  // A second project with the same key (a sample run repeated with the same name) gets its own bank.
+  // The same key with no hindsight.bank in .toolkit.json (for example after it was lost)
+  // gets the bank whose owner marker names that key, not a new <key>-2.
   const twin = makeProject({ memory: { type: 'hindsight' }, key });
   const twinRes = await runToolkit(['hindsight', 'ensure-bank', '--json'], { cwd: twin.root });
   assert.equal(twinRes.code, 0, twinRes.stderr);
-  assert.equal(twinRes.json.bank, `${key}-2`);
+  assert.equal(twinRes.json.bank, key);
+  assert.equal(await client.bankExists(`${key}-2`), false, 'no second bank');
 
   // A project whose .toolkit.json names the first project's bank is refused, and told how to use it anyway.
   const copy = makeProject({ memory: { type: 'hindsight' }, hindsight: { url: DEFAULT_URL, bank: key }, key: `${key}-copy` });

@@ -11,7 +11,9 @@ import {
 import { BUILTIN_WORK_ITEM, BUILTIN_DESIGN, loadTemplate } from '../../lib/work/templates.mjs';
 import { PLUGIN_ROOT } from './helpers.mjs';
 
-const MODEL_TEMPLATE_DIR = '/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.work-items/work-item-template';
+// Frozen copies of the model project's templates (taken 2026-09-26). Tests never
+// read the model project itself: it changes while other sessions work on it.
+const MODEL_TEMPLATE_DIR = path.join(PLUGIN_ROOT, 'tests', 'notion', 'fixtures', 'templates');
 
 function templates() {
   const list = [
@@ -21,7 +23,7 @@ function templates() {
   for (const f of ['WORK-ITEM.md', 'DESIGN.md']) {
     const plugin = path.join(PLUGIN_ROOT, 'templates', f);
     if (fs.existsSync(plugin)) list.push({ name: `plugin ${f}`, text: fs.readFileSync(plugin, 'utf8') });
-    const model = path.join(MODEL_TEMPLATE_DIR, f);
+    const model = path.join(MODEL_TEMPLATE_DIR, `model-${f}`);
     if (fs.existsSync(model)) list.push({ name: `model project ${f}`, text: fs.readFileSync(model, 'utf8') });
   }
   return list;

@@ -39,7 +39,7 @@
       "source": "scaffold/base/.claude/rules/knowledge-direct-commit.md",
       "target": ".claude/rules/knowledge-direct-commit.md",
       "condition": "always",
-      "template": true,
+      "template": false,
       "mode": "copy"
     },
     {

@@ -205,20 +205,23 @@ Also noticed
 A check that could not run goes under `Skipped`. Never report a check you did
 not run as `Confirmed`, and never hide it by leaving it out.
 
-## How to write your report
+## Writing
 
 The owner reads your findings through the main agent, so write the way the
 project writes everything.
 
 - **Real names only.** The actual path, branch, work item id, and number. Never
   a label you made up, and never "option B" or "claim 1" on its own.
-- **Say the literal thing.** No figures of speech. Say that facts get less
-  accurate each time work is handed on.
-- **Common words**, where an everyday one works.
+- **Say the literal thing.** No figurative or metaphorical language and no
+  idioms. Say that facts get less accurate each time work is handed on.
+- **Common words**, where an everyday one works. Short sentences, one idea
+  each.
 - **Keep every fact.** Plain wording, never less content. Numbers, paths, and
   dates all stay.
 - **No em dashes and no section signs.** Use a comma, colon, parentheses, or a
   new sentence. Write "section 7" in words.
+- **No preamble and no closing line.** Start with the report.
+- **Never add a line crediting an AI.**
 
 This repeats the project's writing rules on purpose. An output style reaches
 only the main conversation, never you, and Codex has no output styles. If the

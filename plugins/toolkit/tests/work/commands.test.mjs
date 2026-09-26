@@ -422,3 +422,17 @@ test('set with --parent and a refused gate changes nothing, not even the folder'
   assert.equal(doc.meta.parent, a);
   assert.equal(doc.meta.priority, 'high');
 });
+
+test('--help anywhere in a work command shows the help and changes nothing', async () => {
+  const dir = makeProject();
+  const res = await tk(dir, ['work', 'new', '--title', 'Should not exist', '--help']);
+  assert.equal(res.code, 0, res.stderr);
+  assert.match(res.stdout, /^toolkit work: /);
+  assert.equal(fs.existsSync(path.join(dir, '.work-items')) && fs.readdirSync(path.join(dir, '.work-items')).some((n) => /Should|should/.test(n)), false, 'no item was created');
+  const list = await tk(dir, ['work', 'list', '--json']);
+  assert.equal(list.code, 0, list.stderr);
+  assert.doesNotMatch(list.stdout, /Should not exist/);
+  const short = await tk(dir, ['work', 'set', 'WI-001', '--stage', '02-requirements', '-h']);
+  assert.equal(short.code, 0, short.stderr);
+  assert.match(short.stdout, /^toolkit work: /);
+});

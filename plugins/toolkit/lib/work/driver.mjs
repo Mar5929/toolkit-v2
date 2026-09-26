@@ -112,6 +112,7 @@
 // ---------------------------------------------------------------------------
 
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { EXIT, ToolkitError } from '../core/output.mjs';
@@ -124,32 +125,93 @@ export const TRACKER_TYPES = Object.freeze(['local', 'notion', 'github', 'jira']
 
 const TRACKER_NAMES = { github: 'GitHub Issues', jira: 'Jira', notion: 'Notion', local: 'local folders' };
 
-/** The written instructions for a tracker the toolkit does not drive. */
-export function trackerInstructionsPath(type, pluginRoot) {
-  const rel = `plugins/work/references/trackers/${type}.md`;
-  const candidates = [];
-  if (pluginRoot) {
-    candidates.push(path.join(pluginRoot, '..', 'work', 'references', 'trackers', `${type}.md`));
+const MARKETPLACE = 'toolkit-v2';
+
+function isFile(p) {
+  try {
+    return fs.statSync(p).isFile();
+  } catch {
+    return false;
   }
-  candidates.push(path.join(WORK_LIB, '..', '..', '..', 'work', 'references', 'trackers', `${type}.md`));
-  const found = candidates.find((p) => {
-    try {
-      return fs.statSync(p).isFile();
-    } catch {
-      return false;
+}
+
+/** Compare two version folder names so the newest sorts first (1.10.0 before 1.9.0). */
+function newerFirst(a, b) {
+  const pa = a.split(/[.-]/);
+  const pb = b.split(/[.-]/);
+  for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+    const x = pa[i] ?? '';
+    const y = pb[i] ?? '';
+    const nx = /^\d+$/.test(x) ? Number(x) : NaN;
+    const ny = /^\d+$/.test(y) ? Number(y) : NaN;
+    if (!Number.isNaN(nx) && !Number.isNaN(ny)) {
+      if (nx !== ny) return ny - nx;
+    } else if (x !== y) {
+      return y < x ? -1 : 1;
     }
-  });
-  return { rel, path: found || null };
+  }
+  return 0;
+}
+
+/**
+ * The version folders under a cached plugin folder (<cache>/<marketplace>/work/),
+ * newest first, with `preferred` (the toolkit's own version) first when present.
+ */
+function versionFolders(dir, preferred) {
+  let names;
+  try {
+    names = fs.readdirSync(dir, { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => d.name);
+  } catch {
+    return [];
+  }
+  names.sort(newerFirst);
+  if (preferred && names.includes(preferred)) names = [preferred, ...names.filter((n) => n !== preferred)];
+  return names.map((n) => path.join(dir, n));
+}
+
+/**
+ * The folders where the work plugin may be, for a toolkit plugin folder `root`.
+ * Repository and local-marketplace layout: <repo>/plugins/toolkit next to
+ * <repo>/plugins/work. Cache layout (Claude Code and Codex):
+ * <cache>/<marketplace>/toolkit/<version>/ next to <cache>/<marketplace>/work/<version>/.
+ */
+function workFoldersNextTo(root) {
+  const out = [path.join(root, '..', 'work')];
+  const parent = path.dirname(root);
+  if (path.basename(parent) === 'toolkit') out.push(...versionFolders(path.join(parent, '..', 'work'), path.basename(root)));
+  return out;
+}
+
+/**
+ * The written instructions for a tracker the toolkit does not drive.
+ * Returns { rel, path }: `rel` names the file plainly (the work plugin's
+ * references/trackers/<type>.md); `path` is the file found on this computer,
+ * or null. It looks next to the toolkit plugin (repository or cache layout),
+ * then in the Claude Code and Codex plugin caches. `selfRoot` (default: the
+ * plugin folder this file is in) exists so tests can leave it out.
+ */
+export function trackerInstructionsPath(type, pluginRoot, { env = process.env, home, selfRoot = path.resolve(WORK_LIB, '..', '..') } = {}) {
+  const file = path.join('references', 'trackers', `${type}.md`);
+  const rel = `the work plugin's references/trackers/${type}.md`;
+  const homeDir = home || env.HOME || os.homedir();
+  const folders = [];
+  if (pluginRoot) folders.push(...workFoldersNextTo(path.resolve(pluginRoot)));
+  if (selfRoot) folders.push(...workFoldersNextTo(path.resolve(selfRoot)));
+  const claudeHome = env.CLAUDE_CONFIG_DIR || path.join(homeDir, '.claude');
+  const codexHome = env.CODEX_HOME || path.join(homeDir, '.codex');
+  for (const base of [claudeHome, codexHome]) folders.push(...versionFolders(path.join(base, 'plugins', 'cache', MARKETPLACE, 'work')));
+  const found = folders.map((dir) => path.join(dir, file)).find(isFile);
+  return { rel, path: found ? path.resolve(found) : null };
 }
 
 /** The error `toolkit work` gives for a GitHub Issues or Jira project (exit 3). */
-export function unsupportedTracker(type, pluginRoot) {
-  const where = trackerInstructionsPath(type, pluginRoot);
+export function unsupportedTracker(type, pluginRoot, env = process.env) {
+  const where = trackerInstructionsPath(type, pluginRoot, { env });
   const name = TRACKER_NAMES[type] || type;
   return new ToolkitError(
     EXIT.UNSUPPORTED,
-    `This project tracks work in ${name}. toolkit work does not manage ${name}; follow the written instructions in ${where.rel}${where.path ? ` (${where.path})` : ''}.`,
-    { tracker: type, instructions: where.rel, path: where.path, fix: `Open ${where.rel} and follow it for this project's work items.` },
+    `This project tracks work in ${name}. toolkit work does not manage ${name}; follow the written instructions in ${where.path || where.rel}.`,
+    { tracker: type, instructions: where.rel, path: where.path, fix: `Open ${where.path || where.rel} and follow it for this project's work items.` },
   );
 }
 
@@ -210,7 +272,7 @@ async function notionFromModule(mod, project, options) {
 export async function openTracker(project, options = {}) {
   const type = String((project.config && project.config.tracker && project.config.tracker.type) || 'local').toLowerCase();
   if (type === 'local') return new LocalTracker(project, options);
-  if (type === 'github' || type === 'jira') throw unsupportedTracker(type, options.pluginRoot);
+  if (type === 'github' || type === 'jira') throw unsupportedTracker(type, options.pluginRoot, options.env || process.env);
   if (type === 'notion') {
     let mod;
     try {

@@ -122,7 +122,7 @@ test('a client limit and signal stop every request: nothing is left running afte
   assert.equal(capped.forBank('b2').limitMs, 100, 'a client for another bank keeps the limit');
 });
 
-test('ensureBank: create with PUT, then PATCH the settings; any bank that exists is taken the first time', async () => {
+test('ensureBank: create with PUT, then PATCH the settings; a bank made for another key is taken the first time', async () => {
   const banks = new Map([
     ['taken', { overrides: { retain_mission: bankMissions({ projectKey: 'other' }).retain_mission }, config: {} }],
     ['samekey', { overrides: { retain_mission: bankMissions({ projectKey: 'mine' }).retain_mission }, config: {} }],
@@ -162,15 +162,32 @@ test('ensureBank: create with PUT, then PATCH the settings; any bank that exists
   assert.equal(bankOwner({ overrides: banks.get('taken-2').overrides }), 'mine');
   assert.deepEqual(settingsDrift({ config: banks.get('taken-2').config }), {});
 
-  // A bank made for the same key by another project (a repeated sample run) is not shared.
+  // A bank whose marker names this same project key is reused, not copied to samekey-2
+  // (init run again after .toolkit.json was lost). Its settings are repaired.
+  const writesBefore = calls.filter((c) => c.method === 'PUT').length;
   const sameKey = await ensureBank({ client, bank: 'samekey', projectKey: 'mine' });
-  assert.equal(sameKey.bank, 'samekey-2');
-  assert.deepEqual(sameKey.skipped, [{ bank: 'samekey', owner: 'mine' }]);
+  assert.equal(sameKey.bank, 'samekey');
+  assert.equal(sameKey.created, false);
+  assert.equal(sameKey.relation, 'this-project');
+  assert.equal(sameKey.owner, 'mine');
+  assert.deepEqual(sameKey.skipped, []);
+  assert.deepEqual(sameKey.changed.sort(), ['enable_observations', 'mcp_enabled_tools', 'reflect_mission', 'retain_extraction_mode']);
+  assert.equal(calls.filter((c) => c.method === 'PUT').length, writesBefore, 'no new bank was created');
+  assert.equal(banks.has('samekey-2'), false);
+  // Run again: nothing left to change.
+  const sameAgain = await ensureBank({ client, bank: 'samekey', projectKey: 'mine' });
+  assert.equal(sameAgain.bank, 'samekey');
+  assert.deepEqual(sameAgain.changed, []);
 
-  // Named in .toolkit.json and made for this key: used, and its settings repaired.
+  // A bank with no toolkit marker is never taken over without a claim.
+  const noMarker = await ensureBank({ client, bank: 'handmade', projectKey: 'mine' });
+  assert.equal(noMarker.bank, 'handmade-2');
+  assert.deepEqual(noMarker.skipped, [{ bank: 'handmade', owner: null }]);
+
+  // Named in .toolkit.json and made for this key: used as it is.
   const own = await ensureBank({ client, bank: 'samekey', projectKey: 'mine', claimed: true });
   assert.equal(own.relation, 'this-project');
-  assert.deepEqual(own.changed.sort(), ['enable_observations', 'mcp_enabled_tools', 'reflect_mission', 'retain_extraction_mode']);
+  assert.deepEqual(own.changed, []);
 
   // Named in .toolkit.json but made for another key: refused, and nothing is written.
   const before = calls.length;

@@ -7,9 +7,7 @@ paths:
   - "docs/**"
   - "ai-external-knowledge/**"
   - "**/README.md"
-<!-- if salesforce -->
   - "delivery/**"
-<!-- endif -->
 ---
 # Publish Documentation from an Isolated Workspace
 

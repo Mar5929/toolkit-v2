@@ -71,7 +71,13 @@ delivery/data/
   toolkit work set <id> --waiting-on owner
   ```
 
-  `--set-file` replaces the section, so start the file from the section's current text (`toolkit work show <id> --section "Notes > Decisions and context"`). No separate event README or record file is required.
+  `--set-file` replaces the section, so start the file from the section's current text. This command prints it:
+
+  ```
+  toolkit work show <id> --section "Notes > Decisions and context"
+  ```
+
+  No separate event README or record file is required.
 - Check once that Git ignores the data files: `git check-ignore -v <load-file>.csv` names the `.gitignore` in `data-loads/` or `production-backups/`.
 
 ## Step 4: hand over

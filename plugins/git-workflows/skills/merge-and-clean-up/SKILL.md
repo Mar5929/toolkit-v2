@@ -1,7 +1,6 @@
 ---
 name: merge-and-clean-up
-description: >-
-  Merges a GitHub pull request once merging is allowed, after its checks and the merge-safety check, updates the base checkout, and removes only that pull request's branches and worktree. Use when the owner or work-finish says "merge PR 12", "merge and clean up", or "land this pull request".
+description: "Merges a GitHub pull request once merging is allowed, after its checks and the merge-safety check, updates the base checkout, and removes only that pull request's branches and worktree. Use when the owner or work-finish says \"merge PR 12\", \"merge and clean up\", or \"land this pull request\"."
 ---
 
 # Merge and clean up
@@ -190,9 +189,9 @@ git -C <base-worktree> worktree prune
 ```
 
 A squash merge does not make the old branch commit part of the base, so
-`git branch -d` can refuse even after a good merge. Use `git branch -D
-<head-branch>` only when all five proofs still hold and that is the only
-refusal. This is not permission to force-delete any other branch.
+`git branch -d` can refuse even after a good merge. Use
+`git branch -D <head-branch>` only when all five proofs still hold and that is
+the only refusal. This is not permission to force-delete any other branch.
 
 If GitHub did not delete the remote branch, delete it only when it is in the
 same repository and belongs to this merged pull request:

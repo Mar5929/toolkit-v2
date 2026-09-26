@@ -1,7 +1,6 @@
 ---
 name: pull-latest
-description: >-
-  Brings the local repository up to date with its remote safely: fetch, fast-forward, or a merge pull when the two have diverged; never rebase, reset, or push. Use when the owner says "get the latest", "pull the latest changes", "update from origin", or "grab what others pushed".
+description: "Brings the local repository up to date with its remote safely: fetch, fast-forward, or a merge pull when the two have diverged; never rebase, reset, or push. Use when the owner says \"get the latest\", \"pull the latest changes\", \"update from origin\", or \"grab what others pushed\"."
 ---
 
 # Pull the latest from the remote

@@ -24,7 +24,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { run } from '../core/util.mjs';
 import { hasSpan, spanBody, buildSpan, readRules } from './render.mjs';
-import { planManifest, projectHosts, PROPOSAL_PATH, DEFAULT_PLUGIN_ROOT } from './manifest.mjs';
+import { planManifest, projectHosts, readHosts, HOSTS_FIX, PROPOSAL_PATH, DEFAULT_PLUGIN_ROOT } from './manifest.mjs';
 import { tomlGet } from './toml.mjs';
 import {
   claudeHome, claudeOldPlugins, codexOldPlugins, codexTrust, codexHookTrustKeys, homeDir,
@@ -258,6 +258,8 @@ function checkComputer(project, env, findings) {
 // ------------------------------------------------------------------ scaffold
 
 function checkScaffold(project, env, findings, { pluginRoot }) {
+  // An unreadable hosts value is already reported (config-hosts); the plan cannot run until it is fixed.
+  if (readHosts(project.config).problem) return null;
   let plan;
   try {
     plan = planManifest(project, { mode: 'sync', env, pluginRoot });
@@ -367,8 +369,8 @@ async function checkTracker(project, env, findings, { quick, pluginRoot }) {
     if (!wi || !wi.dataSourceId) finding(findings, 'notion-work-items', 'tracker', 'problem', 'The Notion Work Items database is not set up for this project (.toolkit.json has no notion.workItems ids).', 'Run toolkit notion ensure-project.');
   } else {
     const { trackerInstructionsPath } = await import('../work/driver.mjs');
-    const where = trackerInstructionsPath(type, pluginRoot);
-    finding(findings, 'tracker-instructions', 'tracker', 'note', `Work items live in ${type === 'github' ? 'GitHub Issues' : 'Jira'}. toolkit work does not manage them; agents follow ${where.rel}.`, null);
+    const where = trackerInstructionsPath(type, pluginRoot, { env });
+    finding(findings, 'tracker-instructions', 'tracker', 'note', `Work items live in ${type === 'github' ? 'GitHub Issues' : 'Jira'}. toolkit work does not manage them; agents follow ${where.path || where.rel}.`, null);
   }
 }
 
@@ -482,6 +484,8 @@ function checkConfig(project, findings) {
   const c = project.config;
   if (Number.isInteger(c.schema) && c.schema > 1) finding(findings, 'config-newer', 'toolkit', 'problem', `.toolkit.json was written by a newer toolkit (schema ${c.schema}).`, 'Update the toolkit plugin.');
   if (!c.project || !c.project.key) finding(findings, 'config-key', 'toolkit', 'problem', '.toolkit.json has no project.key.', 'toolkit config set project.key <short-key>');
+  const { problem } = readHosts(c);
+  if (problem) finding(findings, 'config-hosts', 'toolkit', 'problem', `${problem} Init and sync stop until it is fixed, and the other checks assume ${projectHosts(c).join(' and ')}.`, HOSTS_FIX);
 }
 
 // ------------------------------------------------------------------ all

@@ -1,7 +1,6 @@
 ---
 name: publish-docs
-description: >-
-  Commits and pushes an agreed edit to Git-tracked project documents (requirements/, docs/, DECISIONS.md, PROJECT.md, PROJECT-ROADMAP.md, ai-external-knowledge/, delivery/) straight to the default branch from an isolated worktree. Use after such an edit. Not for code, rules, skills, or .memory/.
+description: "Commits and pushes an agreed edit to Git-tracked project documents (requirements/, docs/, DECISIONS.md, PROJECT.md, PROJECT-ROADMAP.md, ai-external-knowledge/, delivery/) straight to the default branch from an isolated worktree. Use after such an edit. Not for code, rules, skills, or .memory/."
 ---
 
 # Publish a documentation save

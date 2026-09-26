@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { main, readVersion, listCommandGroups, detectHost, DEFAULT_VERSION, PLUGIN_ROOT } from '../../lib/cli.mjs';
+import { main, readVersion, listCommandGroups, detectHost, asksForHelp, DEFAULT_VERSION, PLUGIN_ROOT } from '../../lib/cli.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const PLUGIN = path.resolve(HERE, '..', '..');
@@ -270,6 +270,23 @@ test('help lists summaries and shows one command', async () => {
   assert.equal(one.stdout, 'toolkit echo: Print what it was given.\n\ntoolkit echo [words] [--stdin]\n');
   const flag = await call(['echo', '--help'], { commandsDir });
   assert.equal(flag.stdout, one.stdout);
+  // --help or -h anywhere after the command shows the help and does not run it.
+  for (const argv of [['echo', 'sub', '--help'], ['echo', 'sub', '--flag', 'value', '-h'], ['--json', 'echo', 'a', 'b', '--help=true']]) {
+    const later = await call(argv, { commandsDir });
+    assert.equal(later.code, 0, argv.join(' '));
+    if (argv[0] === '--json') assert.equal(JSON.parse(later.stdout).name, 'echo');
+    else assert.equal(later.stdout, one.stdout, argv.join(' '));
+    assert.doesNotMatch(later.stdout, /^echo /m, 'the command did not run');
+  }
+  const failing = await call(['boom', 'invalid', '--help'], { commandsDir });
+  assert.equal(failing.code, 0, 'help, not the command\'s failure');
+  assert.match(failing.stdout, /^toolkit boom: Always fails\./);
+  // After --, --help is an ordinary word for the command.
+  const literal = await call(['echo', '--', '--help'], { commandsDir });
+  assert.equal(literal.stdout, 'echo -- --help\n');
+  assert.equal(asksForHelp(['a', '-h']), true);
+  assert.equal(asksForHelp(['a', '--', '-h']), false);
+  assert.equal(asksForHelp(['--helpful']), false);
   const builtin = await call(['help', 'version'], { commandsDir });
   assert.equal(builtin.stdout, 'toolkit version: Print the toolkit version.\n');
   const missing = await call(['help', 'nothing'], { commandsDir });
@@ -296,4 +313,15 @@ test('lib/cli.mjs also runs when started directly', () => {
   const res = spawnSync(process.execPath, [path.join(PLUGIN, 'lib', 'cli.mjs'), 'version'], { encoding: 'utf8' });
   assert.equal(res.status, 0);
   assert.equal(res.stdout, `${expectedVersion()}\n`);
+});
+
+test('--help after a subcommand of a real command shows its help without running it (index, config)', async () => {
+  const cwd = tempDir('toolkit-help-');
+  const index = await call(['index', 'knowledge', '--help'], { cwd });
+  assert.equal(index.code, 0, index.stderr);
+  assert.match(index.stdout, /^toolkit index: /);
+  const config = await call(['config', 'set', 'tracker.idPrefix', 'ACME', '-h'], { cwd });
+  assert.equal(config.code, 0, config.stderr);
+  assert.match(config.stdout, /^toolkit config: /);
+  assert.equal(fs.existsSync(path.join(cwd, '.toolkit.json')), false);
 });

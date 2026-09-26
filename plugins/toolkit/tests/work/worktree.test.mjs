@@ -5,11 +5,33 @@
 import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { makeProject, cleanup, tk, newItem, git, trackerDir } from './helpers.mjs';
 import { itemIdFromBranch, currentBranch } from '../../lib/work/state.mjs';
 
 after(cleanup);
+
+test('currentBranch names the branch before the first commit; a detached HEAD or a folder outside Git has none', () => {
+  const dir = makeProject();
+  assert.throws(() => git(dir, ['rev-parse', '--verify', 'HEAD']), 'the repository has no commits yet');
+  assert.equal(currentBranch(dir), 'main');
+  git(dir, ['symbolic-ref', 'HEAD', 'refs/heads/wi-004-first-page']);
+  assert.equal(currentBranch(dir), 'wi-004-first-page');
+  assert.equal(itemIdFromBranch(currentBranch(dir)), 'WI-004');
+
+  const committed = makeProject({ commit: true });
+  assert.equal(currentBranch(committed), 'main');
+  git(committed, ['checkout', '-q', '--detach']);
+  assert.equal(currentBranch(committed), null, 'a detached HEAD has no branch');
+
+  const outside = fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), 'tk-nogit-'));
+  try {
+    assert.equal(currentBranch(outside), null);
+  } finally {
+    fs.rmSync(outside, { recursive: true, force: true });
+  }
+});
 
 test('branch names tie a worktree to an item', () => {
   assert.equal(itemIdFromBranch('wi-007-login-page'), 'WI-007');

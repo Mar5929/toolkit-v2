@@ -3,7 +3,7 @@
 
 import { EXIT, ToolkitError } from '../core/output.mjs';
 import { slugify } from '../core/util.mjs';
-import { HOSTS } from './manifest.mjs';
+import { HOSTS, projectHosts } from './manifest.mjs';
 
 export const TRACKERS = Object.freeze(['local', 'notion', 'github', 'jira']);
 export const MEMORIES = Object.freeze(['builtin', 'hindsight', 'notion']);
@@ -95,7 +95,7 @@ export function describeSetup(config) {
   const tracker = (c.tracker && c.tracker.type) || 'local';
   const memory = (c.memory && c.memory.type) || 'builtin';
   const prefix = (c.tracker && c.tracker.idPrefix) || 'WI';
-  const hosts = (Array.isArray(c.hosts) && c.hosts.length ? c.hosts : HOSTS).map((h) => HOST_WORDS[h] || h).join(' and ');
+  const hosts = projectHosts(c).map((h) => HOST_WORDS[h] || h).join(' and ');
   const ids = tracker === 'local' || tracker === 'notion' ? ` (ids like ${prefix}-001)` : '';
   return `${p.name || 'This project'} (${p.key || 'no key'}), owner ${p.owner || 'not set'}. Work items: ${TRACKER_WORDS[tracker] || tracker}${ids}. Memory: ${MEMORY_WORDS[memory] || memory}. Salesforce: ${c.salesforce && c.salesforce.enabled ? 'yes' : 'no'}. Hosts: ${hosts}.`;
 }

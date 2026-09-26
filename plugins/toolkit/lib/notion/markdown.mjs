@@ -18,6 +18,15 @@
 // - a child page or database is a line <page url="...">Title</page> or
 //   <database url="...">Title</database>.
 //
+// Two choices the toolkit makes when it sends local text:
+// - lines wrapped at a fixed width inside one paragraph or list item (a soft
+//   line break) are joined with a space, so Notion shows whole sentences. A
+//   hard break (two trailing spaces, a trailing backslash, or <br> at the end
+//   of the line) stays a line break (<br>).
+// - an HTML comment block (<!-- ... -->, as in DESIGN.md) is sent as an italic
+//   paragraph "*Note: ...*", because Notion would show the comment as raw text.
+//   An italic paragraph that starts with "Note: " is read back as the comment.
+//
 // toNotion(local)          local Markdown -> Notion Markdown to send
 // fromNotion(notion)       Notion Markdown -> { markdown, children }
 // normalizeLocal(local)    a form for comparing two local texts (spacing, escapes)
@@ -37,6 +46,8 @@ const TABLE_DELIM_RE = /^\s*\|?\s*:?-+:?\s*(?:\|\s*:?-+:?\s*)*\|?\s*$/;
 const BR_RE = /<br\s*\/?>/gi;
 const CHILD_RE = /^\t*<(page|database)\b[^>]*>[\s\S]*?<\/\1>\s*$/;
 const CHILD_URL_RE = /\burl="([^"]*)"/;
+// An italic paragraph that starts with "Note: ": how an HTML comment is sent (toNotion).
+const NOTE_RE = /^(?:\*Note: ((?:[^*\\]|\\.)*)\*|_Note: ((?:[^_\\]|\\.)*)_)$/;
 
 /** Notion block tags whose lines are passed through untouched in both directions. */
 const NOTION_BLOCK_TAGS = [
@@ -222,11 +233,55 @@ function startsBlock(line, lines, i) {
   if (LOCAL_ITEM_RE.test(line)) return true;
   if (isTableStart(lines, i)) return true;
   if (BLOCK_TAG_LINE_RE.test(line.trim()) || CHILD_RE.test(line.trim())) return true;
+  if (commentBlock(lines, i)) return true;
   return false;
 }
 
 function hardBreakText(line) {
   return line.replace(/\\$/, '').replace(/[ \t]+$/, '');
+}
+
+const TRAILING_BR_RE = /<br\s*\/?>[ \t]*$/i;
+
+/** True when a source line ends with a hard line break: two or more spaces, a backslash, or <br>. */
+function endsHard(line) {
+  return / {2,}$/.test(line) || /\\$/.test(line) || TRAILING_BR_RE.test(line);
+}
+
+/**
+ * Add one source line of a paragraph or list item to its lines. The line
+ * after a hard break starts a new entry (a line break in Notion and in the
+ * local text); a soft-wrapped line is joined to the entry before it with one
+ * space. `state.hard` says whether the line before ended with a hard break.
+ */
+function addLine(list, line, state) {
+  const text = hardBreakText(line.replace(TRAILING_BR_RE, ''));
+  if (!list.length || state.hard) list.push(text);
+  else list[list.length - 1] = list[list.length - 1] ? `${list[list.length - 1]} ${text}` : text;
+  state.hard = endsHard(line);
+}
+
+const COMMENT_START_RE = /^ {0,3}<!--/;
+
+/**
+ * An HTML comment block starting at line i: the whole block is the comment
+ * and nothing else. Returns { text, next } (text: the words inside, lines
+ * joined with a space) or null.
+ */
+function commentBlock(lines, i) {
+  if (!COMMENT_START_RE.test(lines[i])) return null;
+  const parts = [];
+  let k = i;
+  for (; k < lines.length; k++) {
+    parts.push(lines[k].trim());
+    if (lines[k].includes('-->')) break;
+    if (k > i && !lines[k].trim()) return null;
+  }
+  if (k >= lines.length) return null;
+  const whole = parts.join('\n');
+  const m = /^<!--([\s\S]*?)-->$/.exec(whole);
+  if (!m || m[1].includes('-->')) return null;
+  return { text: m[1].split('\n').map((l) => l.trim()).filter(Boolean).join(' '), next: k + 1 };
 }
 
 /**
@@ -239,6 +294,9 @@ function hardBreakText(line) {
  *   { type: 'quote', lines }
  *   { type: 'hr' }
  *   { type: 'raw', lines }                                  (Notion markup, verbatim)
+ *   { type: 'comment', text }                               (an HTML comment block)
+ * A paragraph's or item's `lines` are its hard-broken lines; soft-wrapped
+ * source lines are joined into one entry (addLine).
  */
 export function parseLocal(md) {
   const lines = String(md ?? '').replace(/\r\n?/g, '\n').split('\n');
@@ -262,13 +320,14 @@ export function parseLocal(md) {
         const indent = next.length - next.trimStart().length;
         if (indent >= stack[stack.length - 1].contentCol && !HEADING_RE.test(next.trim()) && !isFence(next)) {
           const para = [];
+          const state = { hard: false };
           i++;
           while (i < lines.length && lines[i].trim() && !startsBlock(lines[i].trimStart(), lines, i)) {
-            para.push(hardBreakText(lines[i].trim()));
+            addLine(para, lines[i].trimStart(), state);
             i++;
           }
           if (!para.length && i < lines.length) {
-            para.push(hardBreakText(lines[i].trim()));
+            addLine(para, lines[i].trimStart(), state);
             i++;
           }
           item.paras.push(para);
@@ -301,6 +360,13 @@ export function parseLocal(md) {
       stack = [];
       blocks.push({ type: 'raw', lines: [trimmed] });
       i++;
+      continue;
+    }
+    const comment = commentBlock(lines, i);
+    if (comment) {
+      stack = [];
+      blocks.push({ type: 'comment', text: comment.text });
+      i = comment.next;
       continue;
     }
     if (BLOCK_TAG_LINE_RE.test(trimmed)) {
@@ -358,11 +424,12 @@ export function parseLocal(md) {
       const contentCol = markerCol + item[2].length + 1;
       stack.push({ markerCol, contentCol });
       const check = item[3] ? item[3].trim()[1].toLowerCase() : null;
-      const first = hardBreakText(item[4]);
-      const text = [first];
+      const text = [];
+      const state = { hard: false };
+      addLine(text, item[4], state);
       i++;
       while (i < lines.length && lines[i].trim() && !startsBlock(lines[i], lines, i)) {
-        text.push(hardBreakText(lines[i].trim()));
+        addLine(text, lines[i].trimStart(), state);
         i++;
       }
       blocks.push({ type: 'item', level, marker: item[2], check, lines: text, paras: [] });
@@ -371,10 +438,12 @@ export function parseLocal(md) {
 
     // A paragraph: this line and the lines that continue it.
     stack = [];
-    const para = [hardBreakText(trimmed)];
+    const para = [];
+    const state = { hard: false };
+    addLine(para, line.replace(/^[ \t]+/, ''), state);
     i++;
     while (i < lines.length && lines[i].trim() && !startsBlock(lines[i], lines, i)) {
-      para.push(hardBreakText(lines[i].trim()));
+      addLine(para, lines[i].trimStart(), state);
       i++;
     }
     blocks.push({ type: 'paragraph', lines: para });
@@ -450,6 +519,10 @@ export function toNotion(md) {
         break;
       case 'raw':
         out.push(...b.lines);
+        break;
+      case 'comment':
+        // A star inside the note is escaped, so it cannot end the italic early.
+        out.push(`*Note: ${escapeInline(b.text).replace(/(?<!\\)\*/g, '\\*')}*`);
         break;
       default:
         break;
@@ -569,6 +642,12 @@ export function parseNotion(nmd) {
       i++;
       continue;
     }
+    const note = NOTE_RE.exec(trimmed);
+    if (note) {
+      blocks.push({ type: 'comment', text: unescapeInline(note[1] ?? note[2]).replace(/\\\*/g, '*').trim() });
+      i++;
+      continue;
+    }
     blocks.push({ type: 'paragraph', lines: trimmed.split(BR_RE).map(unescapeInline) });
     i++;
   }
@@ -631,6 +710,9 @@ export function renderLocal(blocks, opts = {}) {
         case 'code':
         case 'raw':
           text = b.lines.join('\n');
+          break;
+        case 'comment':
+          text = `<!-- ${b.text} -->`;
           break;
         case 'quote':
           text = b.lines.map((l) => `> ${l}`).join('  \n');

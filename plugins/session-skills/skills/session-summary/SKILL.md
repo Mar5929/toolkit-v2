@@ -1,7 +1,6 @@
 ---
 name: session-summary
-description: >-
-  Shows a table of what the owner asked for in this chat and where each request landed, then what still needs him. Use when the owner says "recap this chat", "summarize the session", "what did I ask for", or "what did we do today". Covers this conversation only, not the whole project.
+description: "Shows a table of what the owner asked for in this chat and where each request landed, then what still needs him. Use when the owner says \"recap this chat\", \"summarize the session\", \"what did I ask for\", or \"what did we do today\". Covers this conversation only, not the whole project."
 ---
 
 # Session summary
@@ -11,9 +10,9 @@ each one stand, and what still needs me.
 
 1. **Read this conversation only.** List the owner's real requests, not the
    steps taken to do them (see "Count the asks, not the steps").
-2. **Write the table.** Columns `#`, `What you asked`, `Status`, `Where it
-   landed`. One row per request, in the order asked. Use only the eight
-   statuses below.
+2. **Write the table.** Columns `#`, `What you asked`, `Status`,
+   `Where it landed`. One row per request, in the order asked. Use only the
+   eight statuses below.
 3. **Then the open block.** A horizontal rule (`---`), then the heading
    `### 🔴 Still open, and it needs you`. When nothing needs the owner, keep
    the heading and write "Nothing needed from you."

@@ -1,7 +1,6 @@
 ---
 name: handoff
-description: >-
-  Writes a checked prompt a fresh session can start from, after updating the active work item and current focus. Use when the owner says "write a handoff", "I'm going to clear context", "start a new session", "this chat is getting long", or "I'm stopping for today". "/handoff check" checks one.
+description: "Writes a checked prompt a fresh session can start from, after updating the active work item and current focus. Use when the owner says \"write a handoff\", \"I'm going to clear context\", \"start a new session\", \"this chat is getting long\", or \"I'm stopping for today\". \"/handoff check\" checks one."
 ---
 
 # Handoff

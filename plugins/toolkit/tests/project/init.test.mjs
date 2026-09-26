@@ -53,7 +53,7 @@ test('local tracker + built-in memory: scaffold, AGENTS.md, settings, Codex file
   const agents = read(path.join(root, 'AGENTS.md'));
   assert.match(agents, /^# Acme CRM$/m);
   assert.match(agents, /Mike owns this project/);
-  assert.match(agents, /IDs look like `WI-0?12`/);
+  assert.match(agents, /IDs look like `WI-001`/);
   assert.match(agents, /built-in memory in `\.memory\/`/);
   assert.doesNotMatch(agents, /Notion|Hindsight server|sf-architect-solutioning/);
   assert.doesNotMatch(agents, /\{\{|<!-- if |<!-- endif -->|Filled by toolkit init/);
@@ -162,6 +162,100 @@ test('hosts: Claude Code only gets no .codex files; Codex only gets no .claude/s
   assert.ok(files.includes('.codex/config.toml') && files.includes('.agents/skills/sf-deploy-check/SKILL.md'));
   assert.ok(files.includes('.claude/rules/salesforce-safety-guardrails.md'), 'rules install for both hosts');
   assert.deepEqual(config(codexOnly.root).hosts, ['codex']);
+});
+
+test('hosts: no --hosts means both; a hosts list in .toolkit.json is kept on a second run and on sync, and "claude" means claude-code', async () => {
+  const both = await initProject();
+  assert.equal(both.res.code, 0, both.res.stderr);
+  assert.deepEqual(config(both.root).hosts, ['claude-code', 'codex']);
+  let files = listFiles(both.root);
+  assert.ok(files.includes('.claude/settings.json') && files.includes('.codex/config.toml'));
+
+  const claudeOnly = await initProject({ hosts: 'claude-code' });
+  assert.equal(claudeOnly.res.code, 0, claudeOnly.res.stderr);
+  const again = await tk(claudeOnly.root, ['init'], { env: claudeOnly.env });
+  assert.equal(again.code, 0, again.stderr);
+  const synced = await tk(claudeOnly.root, ['sync'], { env: claudeOnly.env });
+  assert.equal(synced.code, 0, synced.stderr);
+  files = listFiles(claudeOnly.root);
+  assert.ok(!files.some((f) => f.startsWith('.codex/') || f.startsWith('.agents/')), 'no Codex files after init again and sync');
+  assert.deepEqual(config(claudeOnly.root).hosts, ['claude-code']);
+
+  // A hand-written hosts value: "claude" is Claude Code; the next init writes the standard name.
+  const cfgFile = path.join(claudeOnly.root, '.toolkit.json');
+  const c = config(claudeOnly.root);
+  c.hosts = ['claude'];
+  fs.writeFileSync(cfgFile, `${JSON.stringify(c, null, 2)}\n`);
+  const alias = await tk(claudeOnly.root, ['init'], { env: claudeOnly.env });
+  assert.equal(alias.code, 0, alias.stderr);
+  assert.deepEqual(config(claudeOnly.root).hosts, ['claude-code']);
+  assert.ok(!listFiles(claudeOnly.root).some((f) => f.startsWith('.codex/')));
+});
+
+test('hosts written by hand as a string is read as that host; a hosts value that cannot be read stops init, sync, and config set, and doctor reports it', async () => {
+  const { root, env } = await initProject({ hosts: 'claude-code' });
+  const cfgFile = path.join(root, '.toolkit.json');
+  const noCodex = () => !listFiles(root).some((f) => f.startsWith('.codex/') || f.startsWith('.agents/'));
+  const writeHosts = (value) => {
+    const c = config(root);
+    c.hosts = value;
+    fs.writeFileSync(cfgFile, `${JSON.stringify(c, null, 2)}\n`);
+  };
+
+  // "hosts": "claude-code" is Claude Code only, not both hosts.
+  writeHosts('claude-code');
+  const str = await tk(root, ['init'], { env });
+  assert.equal(str.code, 0, str.stderr);
+  assert.deepEqual(config(root).hosts, ['claude-code'], 'saved as a list');
+  assert.match(str.stdout, /hosts: "claude-code" -> \["claude-code"\]/);
+  assert.ok(noCodex(), 'no .codex/ or .agents/ files');
+  writeHosts('claude-code');
+  const syncStr = await tk(root, ['sync'], { env });
+  assert.equal(syncStr.code, 0, syncStr.stderr);
+  assert.ok(noCodex());
+
+  // Values that cannot be read: each stops init and sync with the reason, and nothing changes.
+  for (const [value, reason] of [
+    ['claude code', /"claude code" is not a host/],
+    [['claude-code', 'cursor'], /"cursor" is not a host/],
+    [42, /is 42, which is not a list of hosts/],
+    ['', /names no host/],
+    [[], /names no host/],
+  ]) {
+    writeHosts(value);
+    const before = read(cfgFile);
+    const res = await tk(root, ['init'], { env });
+    assert.equal(res.code, 2, `init with hosts ${JSON.stringify(value)}: ${res.stdout}`);
+    assert.match(res.stderr, reason);
+    assert.match(res.stderr, /Init changed nothing/);
+    assert.match(res.stderr, /--hosts claude-code/);
+    const sync = await tk(root, ['sync'], { env });
+    assert.equal(sync.code, 2, `sync with hosts ${JSON.stringify(value)}`);
+    assert.match(sync.stderr, reason);
+    assert.equal(read(cfgFile), before, '.toolkit.json is unchanged');
+    assert.ok(noCodex(), `no Codex files with hosts ${JSON.stringify(value)}`);
+  }
+
+  // doctor names the value and the fix; the scaffold check waits for it.
+  writeHosts('claude code');
+  const doctor = await tk(root, ['doctor', '--json'], { env });
+  const found = doctor.json.findings.find((f) => f.id === 'config-hosts');
+  assert.ok(found, JSON.stringify(doctor.json.findings.map((f) => f.id)));
+  assert.equal(found.severity, 'problem');
+  assert.match(found.message, /"claude code" is not a host/);
+  assert.match(found.fix, /toolkit config set hosts claude-code/);
+  assert.ok(!doctor.json.findings.some((f) => f.id === 'scaffold-plan'), 'reported once');
+
+  // Another setup key is refused before it is saved; setting hosts fixes it.
+  const before = read(cfgFile);
+  const owner = await tk(root, ['config', 'set', 'project.owner', 'Dana'], { env });
+  assert.equal(owner.code, 2);
+  assert.match(owner.stderr, /nothing was saved/);
+  assert.equal(read(cfgFile), before);
+  const fixed = await tk(root, ['config', 'set', 'hosts', 'claude-code'], { env });
+  assert.equal(fixed.code, 0, fixed.stderr);
+  assert.deepEqual(config(root).hosts, ['claude-code']);
+  assert.ok(noCodex());
 });
 
 test('adopting an existing repository keeps its files and merges into .gitignore, settings, and the Codex config', async () => {

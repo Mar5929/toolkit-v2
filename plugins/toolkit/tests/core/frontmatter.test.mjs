@@ -9,11 +9,12 @@ import { EXIT } from '../../lib/core/output.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const PLUGIN = path.resolve(HERE, '..', '..');
-const MODEL_PROJECT = '/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project';
-const MODEL_TEMPLATE = path.join(MODEL_PROJECT, '.work-items', 'work-item-template', 'WORK-ITEM.md');
-const hasModel = fs.existsSync(MODEL_TEMPLATE);
+const REPO = path.resolve(PLUGIN, '..', '..');
+// A frozen copy of the model project's WORK-ITEM.md template (taken 2026-09-26).
+// Tests never read the model project itself: it changes while other sessions work on it.
+const MODEL_TEMPLATE = path.join(HERE, '..', 'notion', 'fixtures', 'templates', 'model-WORK-ITEM.md');
 
-test('model WORK-ITEM.md: parse reads every key in order', { skip: !hasModel && 'model project not found' }, () => {
+test('model WORK-ITEM.md: parse reads every key in order', () => {
   const text = fs.readFileSync(MODEL_TEMPLATE, 'utf8');
   const { data, body, hasFrontmatter } = parse(text);
   assert.equal(hasFrontmatter, true);
@@ -28,19 +29,19 @@ test('model WORK-ITEM.md: parse reads every key in order', { skip: !hasModel && 
   assert.equal(text.endsWith(body), true);
 });
 
-test('model WORK-ITEM.md: stringify(parse(text)) gives the same bytes', { skip: !hasModel && 'model project not found' }, () => {
+test('model WORK-ITEM.md: stringify(parse(text)) gives the same bytes', () => {
   const text = fs.readFileSync(MODEL_TEMPLATE, 'utf8');
   const { data, body } = parse(text);
   assert.equal(stringify(data, body), text);
 });
 
-test('model WORK-ITEM.md: a fresh object (no remembered style) also gives the same bytes', { skip: !hasModel && 'model project not found' }, () => {
+test('model WORK-ITEM.md: a fresh object (no remembered style) also gives the same bytes', () => {
   const text = fs.readFileSync(MODEL_TEMPLATE, 'utf8');
   const { data, body } = parse(text);
   assert.equal(stringify({ ...data }, body), text);
 });
 
-test('model WORK-ITEM.md: changing one key changes only that line', { skip: !hasModel && 'model project not found' }, () => {
+test('model WORK-ITEM.md: changing one key changes only that line', () => {
   const text = fs.readFileSync(MODEL_TEMPLATE, 'utf8');
   const { data, body } = parse(text);
   data.stage = '01-discovery';
@@ -61,7 +62,7 @@ test('model WORK-ITEM.md: changing one key changes only that line', { skip: !has
   assert.deepEqual(Object.keys(again.data).slice(-1), ['updated']);
 });
 
-test('model WORK-ITEM.md: removing a key removes its line', { skip: !hasModel && 'model project not found' }, () => {
+test('model WORK-ITEM.md: removing a key removes its line', () => {
   const text = fs.readFileSync(MODEL_TEMPLATE, 'utf8');
   const { data, body } = parse(text);
   delete data.active_phase;
@@ -70,7 +71,7 @@ test('model WORK-ITEM.md: removing a key removes its line', { skip: !hasModel &&
   assert.equal(next, text.replace('active_phase: P1\n', ''));
 });
 
-test('update() patches keys in place and removes undefined ones', { skip: !hasModel && 'model project not found' }, () => {
+test('update() patches keys in place and removes undefined ones', () => {
   const text = fs.readFileSync(MODEL_TEMPLATE, 'utf8');
   const next = update(text, { status: 'In Progress', active_phase: undefined, parent: 'none' });
   const { data } = parse(next);
@@ -80,27 +81,44 @@ test('update() patches keys in place and removes undefined ones', { skip: !hasMo
   assert.deepEqual(Object.keys(data), ['id', 'title', 'type', 'status', 'stage', 'requirements_status', 'design', 'parent']);
 });
 
-test('every frontmatter file in the model project round-trips exactly', { skip: !hasModel && 'model project not found' }, () => {
-  const files = walk(MODEL_PROJECT, { skip: (name) => name === '.git' || name === 'node_modules' })
-    .filter((f) => f.endsWith('.md'));
+test('every frontmatter file shipped in the plugins round-trips exactly', () => {
+  const files = walk(path.join(REPO, 'plugins'), { skip: (name) => name === '.git' || name === 'node_modules' })
+    .filter((f) => f.endsWith('.md') || f.endsWith('.tmpl'));
   let checked = 0;
   for (const file of files) {
     const text = fs.readFileSync(file, 'utf8');
+    // A scaffold template with {{tokens}} or <!-- if --> lines is checked after
+    // rendering, in tests/scaffold/render.test.mjs.
+    if (text.includes('{{') || text.includes('<!-- if ')) continue;
     const parsed = parse(text);
     if (!parsed.hasFrontmatter) continue;
     checked++;
-    assert.equal(stringify(parsed.data, parsed.body), text, `round trip of ${path.relative(MODEL_PROJECT, file)}`);
+    assert.equal(stringify(parsed.data, parsed.body), text, `round trip of ${path.relative(REPO, file)}`);
   }
-  assert.ok(checked >= 5, `expected several frontmatter files, found ${checked}`);
+  assert.ok(checked >= 20, `expected many frontmatter files, found ${checked}`);
 });
 
-test('model rule and memory files: block lists and nested maps', { skip: !hasModel && 'model project not found' }, () => {
-  const rule = parse(fs.readFileSync(path.join(MODEL_PROJECT, '.claude/rules/production-data.md'), 'utf8'));
+test('shipped rule and output style, and a memory record: block lists and nested maps', () => {
+  const rule = parse(fs.readFileSync(path.join(PLUGIN, 'scaffold/salesforce/.claude/rules/production-data.md'), 'utf8'));
   assert.deepEqual(rule.data.paths, ['delivery/data/**', 'engagement/data/**']);
-  const memory = parse(fs.readFileSync(path.join(MODEL_PROJECT, '.memory/project_topic_template.md'), 'utf8'));
+  // The model project's memory topic template, as it was on 2026-09-26.
+  const memoryText = [
+    '---',
+    'name: <topic-slug>',
+    'description: <One line under 100 characters>',
+    'metadata:',
+    '  type: project',
+    'supersedes: none',
+    '---',
+    '',
+    '# <Topic title>',
+    '',
+  ].join('\n');
+  const memory = parse(memoryText);
   assert.deepEqual(memory.data.metadata, { type: 'project' });
   assert.equal(memory.data.supersedes, 'none');
-  const style = parse(fs.readFileSync(path.join(MODEL_PROJECT, '.claude/output-styles/plain-english.md'), 'utf8'));
+  assert.equal(stringify(memory.data, memory.body), memoryText);
+  const style = parse(fs.readFileSync(path.join(PLUGIN, 'templates/output-styles/plain-english.md'), 'utf8'));
   assert.equal(style.data['keep-coding-instructions'], true);
 });
 

@@ -1,7 +1,6 @@
 ---
 name: reset-to-remote
-description: >-
-  Makes the local repository an exact copy of its remote: shows a plan, then hard-resets tracking branches, deletes branches gone from the remote, and reinstalls dependencies. Use only when the owner says "wipe local", "match remote exactly", or "fresh start from remote".
+description: "Makes the local repository an exact copy of its remote: shows a plan, then hard-resets tracking branches, deletes branches gone from the remote, and reinstalls dependencies. Use only when the owner says \"wipe local\", \"match remote exactly\", or \"fresh start from remote\"."
 ---
 
 # Reset to remote

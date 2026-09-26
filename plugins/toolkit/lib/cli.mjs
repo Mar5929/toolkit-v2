@@ -11,6 +11,8 @@
 //   command file must not do any work when it is imported.
 //
 // Built-in groups: version, help. Unknown group: exit 1 with the list of groups.
+// --help or -h anywhere after the group (before `--`) shows that command's help
+// instead of running it (asksForHelp).
 //
 // ctx = {
 //   cwd,          the folder the command runs in
@@ -233,6 +235,20 @@ function scanGlobalFlags(tokens) {
   return { json, host };
 }
 
+/**
+ * True when --help or -h appears anywhere in a command's arguments (before a
+ * `--`), for example `toolkit work new --title X --help`. The command's help is
+ * shown and the command does not run, so a mistyped request for help never
+ * changes anything.
+ */
+export function asksForHelp(args) {
+  for (const t of args) {
+    if (t === '--') return false;
+    if (t === '--help' || t === '-h' || t === '--help=true') return true;
+  }
+  return false;
+}
+
 /** Run one toolkit command and return its exit code. Never throws. */
 export async function main(argv = process.argv.slice(2), overrides = {}) {
   const env = overrides.env || process.env;
@@ -300,7 +316,7 @@ export async function main(argv = process.argv.slice(2), overrides = {}) {
     if (typeof mod.run !== 'function') {
       return fail(ctx, new ToolkitError(EXIT.ERROR, `The command file for "${group}" does not export a run function.`, { file }));
     }
-    if (args[0] === '--help' || args[0] === '-h') return await printCommandHelp(ctx, group, commandsDir);
+    if (asksForHelp(args)) return await printCommandHelp(ctx, group, commandsDir);
 
     const code = await mod.run(args, ctx);
     if (typeof code === 'number' && Number.isInteger(code)) return code;

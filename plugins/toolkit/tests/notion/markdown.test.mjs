@@ -102,11 +102,57 @@ test('hard breaks become <br> and come back as two spaces and the list indent', 
   assert.equal(fromNotion(n).markdown, md);
 });
 
-test('soft line breaks are kept as line breaks (they read back as hard breaks)', () => {
+test('soft-wrapped lines in a paragraph or list item are joined with a space for Notion; hard breaks stay', () => {
+  // A paragraph wrapped at a fixed width reads as whole sentences in Notion.
   const md = 'Line one\nline two\n';
+  assert.equal(toNotion(md), 'Line one line two');
   const back = fromNotion(toNotion(md)).markdown;
-  assert.equal(back, 'Line one  \nline two\n');
+  assert.equal(back, 'Line one line two\n');
   assert.ok(sameLocal(back, md));
+  // List items and an item's later paragraph.
+  const list = '- An item wrapped\n  onto two lines\n- A second item  \n  after a hard break\n\n  A later paragraph\n  also wrapped\n';
+  assert.equal(toNotion(list), '- An item wrapped onto two lines\n- A second item<br>after a hard break\n\tA later paragraph also wrapped');
+  assert.equal(fromNotion(toNotion(list)).markdown, '- An item wrapped onto two lines\n- A second item  \n  after a hard break\n\n  A later paragraph also wrapped\n');
+  assert.ok(sameLocal(fromNotion(toNotion(list)).markdown, list));
+  // Every kind of hard break stays a line break: two spaces, a backslash, <br>.
+  const hard = 'One  \ntwo\\\nthree<br>\nfour\nfive\n';
+  assert.equal(toNotion(hard), 'One<br>two<br>three<br>four five');
+  assert.equal(fromNotion(toNotion(hard)).markdown, 'One  \ntwo  \nthree  \nfour five\n');
+  // The shipped current focus seed is wrapped at 80 columns; Notion gets whole sentences.
+  const focus = stripTitle(fs.readFileSync(path.join(SHIPPED, 'memory', 'CURRENT_FOCUS.md'), 'utf8')).body;
+  assert.match(toNotion(focus), /^Kept with `toolkit memory focus`\. Under 50 lines\. Name work items by ID only; their status lives in the tracker\.$/m);
+  assert.doesNotMatch(toNotion(focus), /<br>/);
+});
+
+test('an HTML comment block is sent as an italic "Note:" paragraph and read back as the comment', () => {
+  const md = 'Before.\n\n<!-- Include Recommendation only when there is more than one option. -->\n\n## Recommendation\n';
+  const n = toNotion(md);
+  assert.equal(n, 'Before.\n*Note: Include Recommendation only when there is more than one option.*\n## Recommendation');
+  assert.doesNotMatch(n, /<!--|-->/);
+  assert.equal(fromNotion(n).markdown, md);
+  // Placeholders and stars inside the comment are escaped, and come back.
+  const tricky = '<!-- Use <Option B> for 5 * 3 and **bold** words. -->\n';
+  const t = toNotion(tricky);
+  assert.equal(t, '*Note: Use \\<Option B\\> for 5 \\* 3 and \\*\\*bold\\*\\* words.*');
+  assert.equal(fromNotion(t).markdown, tricky);
+  // A comment over several lines is sent as one note.
+  assert.equal(toNotion('<!--\n  First line\n  second line\n-->\n'), '*Note: First line second line*');
+  assert.equal(fromNotion(toNotion('<!--\n  First line\n  second line\n-->\n')).markdown, '<!-- First line second line -->\n');
+  // A comment right after a paragraph line starts its own block.
+  assert.equal(toNotion('Text\n<!-- A note -->\n'), 'Text\n*Note: A note*');
+  // Notion may write italic with underscores.
+  assert.equal(fromNotion('_Note: From Notion_').markdown, '<!-- From Notion -->\n');
+  // Not a comment block: text after the comment, or no closing -->.
+  assert.equal(toNotion('<!-- a --> and more\n'), '\\<!-- a --\\> and more');
+  assert.equal(toNotion('<!-- never closed\n'), '\\<!-- never closed');
+  // Italic text that does not start with "Note: " stays italic text.
+  assert.equal(fromNotion('*Just italic*').markdown, '*Just italic*\n');
+  // The shipped DESIGN.md shows no raw comment text in Notion.
+  const design = shippedBody('DESIGN.md');
+  assert.match(design, /<!-- /);
+  const sent = toNotion(design);
+  assert.doesNotMatch(sent, /<!--|--\\?>/);
+  assert.match(sent, /^\*Note: Include Recommendation only when there is more than one option\.\*$/m);
 });
 
 test('nested lists use tabs in Notion and the parent indent locally', () => {
@@ -152,7 +198,10 @@ test('detectTableStyle', () => {
 });
 
 test('normalizeLocal ignores spacing, table padding, and escapes, not words', () => {
-  assert.ok(sameLocal('# A\n\n\ntext  \nmore\n', '# A\n\ntext\nmore'));
+  assert.ok(sameLocal('# A\n\n\ntext  \nmore\n', '# A\n\ntext\\\nmore'));
+  // A soft-wrapped line is the same as one line; a hard break is not.
+  assert.ok(sameLocal('text\nmore\n', 'text more'));
+  assert.ok(!sameLocal('text  \nmore\n', 'text more'));
   assert.ok(sameLocal('| a | b |\n| --- | --- |\n| 1 | 2 |', '|a|b|\n|---|---|\n|1|2|'));
   assert.ok(sameLocal('5 \\* 3', '5 * 3'));
   assert.ok(!sameLocal('Goal: A', 'Goal: B'));

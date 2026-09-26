@@ -9,6 +9,7 @@ import { EXIT, ToolkitError } from '../core/output.mjs';
 import { getPath, setPath, saveConfig } from '../core/config.mjs';
 import { TRACKERS, MEMORIES, APPROVALS, KEY_RE, PREFIX_RE, parseHosts } from './setup.mjs';
 import { configRoot } from './sync.mjs';
+import { readHosts, HOSTS_FIX } from './manifest.mjs';
 
 /** Keys that templates, conditions, or hosts read: changing one runs sync. */
 export const SETUP_KEYS = Object.freeze(['project.name', 'project.key', 'project.owner', 'tracker.type', 'tracker.idPrefix', 'memory.type', 'hindsight.bank', 'salesforce.enabled', 'hosts']);
@@ -166,6 +167,11 @@ export function setSetting(project, key, raw) {
   const from = getPath(config, key);
   if (JSON.stringify(from) === JSON.stringify(value)) {
     return { key, from, to: value, changed: false, setup: SETUP_KEYS.includes(key) };
+  }
+  // Another setup key would run sync, and sync stops on a hosts value it cannot read.
+  const hostsProblem = key !== 'hosts' && SETUP_KEYS.includes(key) ? readHosts(config).problem : null;
+  if (hostsProblem) {
+    throw new ToolkitError(EXIT.INVALID, `${hostsProblem} Fix hosts first; nothing was saved.`, { fix: HOSTS_FIX });
   }
   if (key === 'tracker.idPrefix' && (config.tracker && config.tracker.type) === 'local' && localItemsExist(project.mainRoot || project.root)) {
     throw new ToolkitError(EXIT.INVALID, `The local tracker already has work items numbered ${from || 'WI'}-..., so the id prefix cannot change now. Nothing was saved.`, {

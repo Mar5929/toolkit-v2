@@ -232,10 +232,13 @@ export function checkChanged(root) {
 
 /** The current Git branch name for a folder, or null (detached HEAD or not Git). */
 export function currentBranch(cwd) {
-  const res = run('git', ['rev-parse', '--abbrev-ref', 'HEAD'], { cwd, timeoutMs: 5000 });
+  // symbolic-ref names the branch even before the first commit, where
+  // `rev-parse --abbrev-ref HEAD` fails. It fails on a detached HEAD and
+  // outside a repository: no branch.
+  const res = run('git', ['symbolic-ref', '--quiet', '--short', 'HEAD'], { cwd, timeoutMs: 5000 });
   if (res.code !== 0) return null;
   const b = res.stdout.trim();
-  return b && b !== 'HEAD' ? b : null;
+  return b || null;
 }
 
 /**

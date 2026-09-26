@@ -62,11 +62,11 @@ Do everything else yourself, record it, and report it. When you need a decision,
 
 <!-- if tracker=local -->
 - Tracker: local folders in `.work-items/`, Git-ignored, in the main checkout, shared by every worktree. `.claude/rules/work-item-folders.md` covers folders, moves, and generated files. A sub-item is an item folder nested inside its parent item's folder. It is the only tracker; never copy items into a second tracker or a local list.
-- IDs look like `{{tracker.idPrefix}}-12`. Refer to work items by ID, never by folder path. The owner may move or rename item folders; find them by ID and continue. Change `waiting_on`, the stage, and other fields with `toolkit work` commands.
+- IDs look like `{{tracker.idPrefix}}-001`. Refer to work items by ID, never by folder path. The owner may move or rename item folders; find them by ID and continue. Change `waiting_on`, the stage, and other fields with `toolkit work` commands.
 <!-- endif -->
 <!-- if tracker=notion -->
 - Tracker: the Work Items database on this project's page in Notion (ids in `.toolkit.json` under `notion`). Read and write it only with `toolkit work` commands. The owner may edit cards in Notion; the owner's edits win. Sub-items are Notion sub-items. It is the only tracker; never copy items into a second tracker or a local list.
-- IDs look like `{{tracker.idPrefix}}-12` (the card's ID property). Refer to work items by ID, never by link. The owner may move or rename cards; find them by ID and continue. Change `waiting_on`, the stage, and other fields with `toolkit work` commands.
+- IDs look like `{{tracker.idPrefix}}-001` (the card's ID property). Refer to work items by ID, never by link. The owner may move or rename cards; find them by ID and continue. Change `waiting_on`, the stage, and other fields with `toolkit work` commands.
 <!-- endif -->
 <!-- if tracker=github -->
 - Tracker: GitHub Issues. `toolkit work` commands do not write to GitHub; any of them prints the path to the written GitHub instructions. Follow those. Sub-items are GitHub sub-issues. It is the only tracker; never copy items into a second tracker or a local list.
@@ -84,7 +84,7 @@ Do everything else yourself, record it, and report it. When you need a decision,
 - System: built-in memory in `.memory/`, Git-ignored, in the main checkout, shared by every worktree. What is worth saving: `.memory/memory-criteria.md`.
 <!-- endif -->
 <!-- if memory=hindsight -->
-- System: the local Hindsight server on this computer, memory bank `{{project.key}}`. Never call Hindsight directly.
+- System: the local Hindsight server on this computer, memory bank `{{hindsight.bank}}`. Never call Hindsight directly.
 <!-- endif -->
 <!-- if memory=notion -->
 - System: the Memory database on this project's page in Notion.

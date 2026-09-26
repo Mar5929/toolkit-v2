@@ -6,7 +6,7 @@
 //   --grammar  print the commands and flags read from ARCHITECTURE.md section 5, then stop
 //
 // For every SKILL.md in plugins/*/skills/ (and the Salesforce scaffold's
-// project-local copies under plugins/*/scaffold/, when they exist):
+// project-local skills under plugins/*/scaffold/*/skills/):
 //   - frontmatter has only `name` and `description`, and parses as YAML
 //     scalars Claude Code and Codex both read;
 //   - `name` equals the folder name;
@@ -63,11 +63,18 @@ const AGENT_NAMES_FOR_FALLBACK = [
 
 // Skills with a recorded reason to differ. Their findings are reported as
 // notes, not failures.
+const SALESFORCE_OVERLAY = {
+  reason: 'project-local Salesforce overlay skill: body adapted from the model\'s copy, with a new description (SKILL-INDEX section 3); the step-placement and voice-line rules are for plugin skills',
+  downgrade: new Set(['steps', 'voice']),
+};
 const EXCEPTIONS = {
   'sf-architect-solutioning': {
     reason: 'GOAL.md and ARCHITECTURE.md section 13 item 19: ported as is, body and description unchanged; a description change is Mike\'s call (SKILL-INDEX 9.1)',
     downgrade: new Set(['description-length', 'description-index', 'steps', 'voice', 'own-line', 'frontmatter-keys']),
   },
+  'sf-deploy-check': SALESFORCE_OVERLAY,
+  'sf-component-tracker': SALESFORCE_OVERLAY,
+  'sf-data-change': SALESFORCE_OVERLAY,
 };
 
 // ---------------------------------------------------------------- utilities
@@ -610,7 +617,9 @@ async function main() {
     }
     const scaffoldDir = path.join(pluginsDir, plugin.name, 'scaffold');
     for (const file of walk(scaffoldDir, (f) => path.basename(f) === 'SKILL.md')) {
-      if (!/[/\\]\.(claude|agents)[/\\]skills[/\\]/.test(file)) continue;
+      // Scaffold copies: scaffold/<overlay>/skills/<name>/ (MANIFEST.json installs
+      // them into .claude/skills/ and .agents/skills/), or already under those folders.
+      if (!/[/\\](?:\.(?:claude|agents)[/\\])?skills[/\\][^/\\]+[/\\]SKILL\.md$/.test(file)) continue;
       skillFiles.push({ file, plugin: plugin.name, folder: path.basename(path.dirname(file)), scaffold: true });
     }
   }

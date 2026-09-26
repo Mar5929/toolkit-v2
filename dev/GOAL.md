@@ -12,8 +12,10 @@ not changed.
 
 A fresh project set up by the new toolkit must match the model project at
 `/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project`: the same
-folders, file names, and template text, after one review pass for a solo
-developer who wants the agent to run the project while they make decisions.
+folders, file names, and template text. The templates are how the agent
+creates files in those folders. Claude reviews the model for a solo developer
+who wants the agent to run the project while they make decisions; the review
+is a checklist for Mike, not a change to what projects get.
 
 The main difference from the current toolkit: the orchestration layer is a
 clear, non-overlapping set of skills whose names and descriptions let Claude
@@ -35,9 +37,10 @@ steps that must always run the same way.
   system (with a review for improvements).
 - Follow Claude Code and Codex best practices: hooks set up the documented
   way, rules scoped to paths where that fits, no README in every folder.
-- Instruction files: `AGENTS.md` only, no `CLAUDE.md`. Claude Code 2.1.277 and
-  later read `AGENTS.md` natively (captured docs: `memory.md`, section
-  "AGENTS.md").
+- Instruction files: follow the model. Earlier (morning) Mike said `AGENTS.md`
+  only; in the evening he said the model's `AGENTS.md` and `CLAUDE.md` files
+  are what projects get, and the model keeps `CLAUDE.md` files. The model
+  wins. Later approved: one root `CLAUDE.md` with only `@AGENTS.md` (item 1 below).
 - Work items: the same stages, lifecycle, `WORK-ITEM.md` body and
   `DESIGN.md` everywhere. Nesting and sub-items are allowed. When Mike moves
   files or folders, the agent detects it and adapts.
@@ -54,12 +57,60 @@ steps that must always run the same way.
   Mac cannot use the GPU and needs Docker Desktop running). Installed with
   `uv tool install hindsight-api --python 3.12`; model `gpt-oss:20b` through
   Ollama (installed with Homebrew, runs as a brew service).
+- **The model project is the exact source for folders and file templates**
+  (Mike, 2026-09-26 evening, while he keeps editing the model). That covers
+  the folder structure, file templates, instructions, rules, `AGENTS.md` and
+  `CLAUDE.md` files, project hooks, and agents. The toolkit packages the
+  model as it is, with a copy step that can be re-run as he changes it. Setup
+  leaves out only `.work-items/`, `.memory/`, and the Salesforce parts when
+  they are not chosen. The model does not hold the new plugin skills, the
+  `toolkit` command, or plugin hooks; those come from toolkit-v2 and must
+  work with the model's templates as they are. Claude's review ideas are a
+  checklist for Mike; only approved ones are added, and they go into the model.
+- **Approved content changes (Mike, 2026-09-26 night: "go with your
+  recommendations on all of them").** The model decides folder layout, file
+  names, and locations. These 23 content changes are approved and go into the
+  model itself, on a separate branch of the model's Git repo so Mike's own
+  edits are never touched, then merged when he is ready:
+  1. One root `CLAUDE.md` containing only `@AGENTS.md`; the other `CLAUDE.md`
+     files removed. 2. Rewritten `AGENTS.md` (owner decisions, one routing
+     table, "How to write replies", generated rules list). 3. `SOUL.md` kept as
+     the model has it. 4. `.claude/RULES.md` and `docs/toolkit-manual.md`
+     removed. 5. `README.md` shortened. 6. `DECISIONS.md` added.
+     7. `.toolkit.json` replaces `.toolkit-memory.json`. 8. `work-item-folders.md`
+     rule for the local tracker. 9. Work item header fields `parent`,
+     `waiting_on`, `priority`, `delivery`, `result_approved`, `updated`,
+     `requirements_approved`; `active_phase` removed. 10. Six statuses; Blocked
+     becomes `waiting_on`. 11. Body uses IDs, "owner", a Sub-items column.
+     12. `DESIGN.md` header (work item, status, approval). 13. Four-section
+     current focus. 14. One-page memory criteria; save rules in `memory-save`.
+     15. Learned-rules table removed; corrections are `feedback` memories.
+     16. `delivery/` only in Salesforce projects. 17. Salesforce guards also in
+     Codex. 18. Salesforce skill descriptions rewritten, one source for both
+     hosts. 19. `tests/TEST-PLAN-TEMPLATE.md` stays where the model has it.
+     20. General example in `plain-english-artifacts.md`. 21. `system-guide/`
+     kept as the model has it. 22. `.vscode/` and `.sfdx/` not copied.
+     23. V2 projects turn on the V2 plugins and turn off the `claude-toolkit`
+     plugins.
+- **Memory: Claude's mechanisms, Mike's formats** (Mike, 2026-09-26 evening).
+  The toolkit's memory mechanisms are used: the `toolkit memory` command
+  written by the main agent (no curator subagent, no per-project
+  `scripts/memory.py`), the session-start briefing hook for both hosts, the
+  explicit-phrase reminder and the once-per-turn Stop check, worktree-safe
+  vault lookup, and one command set for built-in, Hindsight, and Notion. The
+  model's folder and file formats are kept exactly: the `.memory/` files and
+  their sections (including the nine-section `CURRENT_FOCUS.md`), the topic
+  template and its YAML, the index format, the glossary, memory criteria, and
+  Obsidian-style relative links with link repair on rename, merge, and
+  archive. Instruction text in the model that names the old mechanism (the
+  curator, `scripts/memory.py`, the model's memory hooks) is the only text
+  changed, to name the toolkit command instead.
 - Review the model project's scaffolding, every template, and its root
   `AGENTS.md` as a solo "vibe coder" developer would: the agent runs the
   project, the human only makes decisions and steers. Say what is missing and
-  what is not needed. The model project itself is left unchanged; the
-  reviewed version goes into the new repo's scaffold, and the findings go in
-  `dev/model-review.md`.
+  what is not needed. The findings are a checklist in `dev/model-review.md`.
+  Nothing from it reaches new projects unless Mike approves it, and approved
+  items are added to the model itself.
 - Notion CLI: `ntn` (official, by Notion) installed with `npm install -g ntn`.
   Mike runs `ntn login` himself, because it opens a browser sign-in.
 - Built by a team of Opus agents. Loop: build, set up sample projects, run
@@ -72,9 +123,10 @@ Claude leads a team of Opus subagents and keeps `dev/PROGRESS.md` current
 
 Rules on the way:
 
-- Leave the `claude-toolkit` repo and the `toolkit-v2-model-project` folder
-  unchanged, except one note on issue 419.
-- `AGENTS.md` only, never `CLAUDE.md`.
+- Leave the `claude-toolkit` repo unchanged, except one note on issue 419.
+  Leave the `toolkit-v2-model-project` folder unchanged unless Mike approves
+  a specific change there (he edits it himself, often).
+- Instruction files as the model has them (see above).
 - No Docker, no Hindsight Cloud, no GitHub repo without Mike's yes, no AI
   credit in commits.
 - Follow the captured Claude Code docs
@@ -90,9 +142,10 @@ with real command output, file listings, or links as proof.
 
 1. **Model review.** The model project's scaffolding, every template, and
    `AGENTS.md` reviewed as a solo vibe-coder would, where the agent runs the
-   project and the human only decides and steers. Findings in
-   `dev/model-review.md`; the improved version is the scaffold project init
-   installs.
+   project and the human only decides and steers. Findings are a checklist in
+   `dev/model-review.md`. The scaffold project init installs is a re-runnable
+   copy of the model (a parity test shows setup output matches the model,
+   apart from the chosen conditional parts and the memory mechanism files).
 2. **Plugins.** `toolkit-v2` registers its plugins for Claude Code and Codex,
    and `claude plugin validate .` passes.
 3. **Project init.** Copies the scaffold except `.work-items/` and `.memory/`,

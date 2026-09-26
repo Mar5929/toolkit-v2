@@ -20,11 +20,6 @@ report. hosts takes a comma list: claude-code,codex. salesforce.enabled takes
 true or false. The id prefix can change only before the first work item.`;
 
 export async function run(argv, ctx) {
-  // The dispatcher shows help for `toolkit <command> --help`; this covers --help after a subcommand too.
-  if (argv.includes('--help') || argv.includes('-h')) {
-    out(ctx, [`toolkit config: ${summary}`, '', help], { name: 'config', summary, help });
-    return EXIT.OK;
-  }
   const { _: pos } = parseArgs(argv, { boolean: ['json'], string: ['host'] });
   const [sub, key, ...rest] = pos;
   const project = requireProject(ctx.cwd);

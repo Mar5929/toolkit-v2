@@ -7,8 +7,8 @@ not backed up by Git: `toolkit export` is the backup.
 ## An item is found by its ID, not its path
 
 - An item is a folder holding a record, `WORK-ITEM.md`, and `DESIGN.md` when a
-  design exists. The frontmatter `id` (for example `{{tracker.idPrefix}}-12`) is the item's
-  identity. The folder name and the file name may change.
+  design exists. The frontmatter `id` (for example `{{tracker.idPrefix}}-001`)
+  is the item's identity. The folder name and the file name may change.
 - Refer to items by ID everywhere. Find an item's files with
   `toolkit work show <id> --path`. Never guess a path.
 - Create items only with `toolkit work new`. It takes the next ID under a lock,

@@ -19,11 +19,6 @@ SOURCE-RECORD.md. The index is generated: edit the SOURCE-RECORD.md files, not
 INDEX.md. --check writes nothing and exits 1 when INDEX.md is out of date.`;
 
 export async function run(argv, ctx) {
-  // The dispatcher shows help for `toolkit <command> --help`; this covers --help after a subcommand too.
-  if (argv.includes('--help') || argv.includes('-h')) {
-    out(ctx, [`toolkit index: ${summary}`, '', help], { name: 'index', summary, help });
-    return EXIT.OK;
-  }
   const { _: pos, flags } = parseArgs(argv, { boolean: ['check', 'json'], string: ['host'] });
   const what = pos[0];
   if (what !== 'knowledge') {

@@ -1,7 +1,6 @@
 ---
 name: unslop
-description: >-
-  Rewrites text so it no longer reads as machine-written, keeping every fact, and shows the findings before saving. Use when the owner says "unslop this", "this reads like AI wrote it", or "make it sound human", or when the humanize-outbound-text rule applies to text going to another person.
+description: "Rewrites text so it no longer reads as machine-written, keeping every fact, and shows the findings before saving. Use when the owner says \"unslop this\", \"this reads like AI wrote it\", or \"make it sound human\", or when the humanize-outbound-text rule applies to text going to another person."
 ---
 
 # Unslop

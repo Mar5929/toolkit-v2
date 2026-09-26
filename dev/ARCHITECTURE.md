@@ -1,10 +1,60 @@
-# Toolkit V2 architecture (revision 2)
+# Toolkit V2 architecture (revision 3)
 
 The build plan. `dev/GOAL.md` holds Mike's decisions and wins over this file.
 `dev/SKILL-INDEX.md` holds the skills and agents. Evidence: `dev/research/`.
 Revision 2 folds in `research/critique-architecture.md` (B1-B4, I1-I20,
 M1-M19) and `research/critique-platform.md` (P1-P23). Section 13 lists the calls
 Claude made on Mike's behalf.
+
+## 0. Revision 3: the model is the source of formats (overrides the rest)
+
+Mike decided on 2026-09-26 evening (GOAL.md): the model project is the exact
+source for the folder structure and every file template, instruction, rule,
+`AGENTS.md`, `CLAUDE.md`, project hook, and agent a new project gets. The
+toolkit supplies what the model does not hold: the plugin skills, the
+`toolkit` command, and the plugin hooks, and these work with the model's
+formats as they are. For memory, the toolkit's mechanisms are used with the
+model's file formats. Where this section and later sections disagree, this
+section wins.
+
+- **Scaffold = a copy of the model.** `node dev/tools/import-model.mjs`
+  copies the model's working tree into `plugins/toolkit/scaffold/model/`
+  exactly (leaving out `.git/`, `.sfdx/`, `__pycache__/`, `.DS_Store`, and the
+  memory mechanism files listed in `scaffold/CONDITIONS.json`), records the
+  model's commit and whether it had uncommitted edits, and fails loudly when a
+  rule in `CONDITIONS.json` no longer matches the model. Re-run it whenever
+  Mike changes the model.
+- **`scaffold/CONDITIONS.json`** is the only hand-kept file beside the copy:
+  which paths install only for `tracker:local` (`.work-items/**`),
+  `memory:builtin` (`.memory/**`), and `salesforce`; the mechanism files left
+  out (`scripts/memory.py`, the model's memory hooks and `memory_*` helpers,
+  the memory-curator agent, the memory runtime test, `.toolkit-memory.json`,
+  the model's session-start hook) and the settings entries that register
+  them; the few exact text substitutions that point instruction text at the
+  toolkit command instead of the old mechanism; the Salesforce-only lines to
+  drop from general files in a non-Salesforce project; and the placeholders
+  init fills (project name). Everything else is copied byte for byte.
+- **Parity test.** `plugins/toolkit/tests/scaffold/parity.test.mjs` runs
+  `toolkit init` for each combination and compares the result with the model:
+  every difference must be explained by `CONDITIONS.json` or by files the
+  toolkit adds (`.toolkit.json`, generated state and dashboard files).
+- **Runtime reads the model's formats.** Work items use the model's
+  `WORK-ITEM.md` and `DESIGN.md` frontmatter and sections as they are (no
+  added keys): parent comes from folder nesting (kept in state), "waiting on
+  the owner" comes from Open Questions rows whose "Decision needed from" is
+  the owner and from stage 11, and statuses follow the lifecycle map while
+  `Blocked` from the model's hint is accepted. Memory uses the model's topic
+  template YAML (`name`, `description`, `metadata.type`, `status`, `source`,
+  `last_verified`, `authorization`, `supersedes`, and any extra fields kept),
+  the nine-section `CURRENT_FOCUS.md`, the model's `MEMORY.md` index layout,
+  the glossary, and memory criteria. Built-in memory keeps Obsidian-style
+  relative Markdown links between notes and repairs them when a note is
+  renamed, merged, archived, or deleted. Templates are read from the model
+  copy in `scaffold/model/`, never from a second copy.
+- **Proposals, not changes.** Ideas from the review that change a format
+  (new frontmatter keys such as `parent` or `waiting_on`, `DECISIONS.md`, a
+  four-section focus, dropping `CLAUDE.md`) are items in the
+  `dev/model-review.md` checklist for Mike. They are not installed.
 
 ## 1. What Toolkit V2 is
 

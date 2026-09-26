@@ -33,9 +33,10 @@ export const help = `Usage:
 
 ensure-bank creates the bank named by .toolkit.json hindsight.bank. The first
 time, it makes the id from the project key (with p- in front when the key does
-not start with a letter), and when a bank with that id already exists, it uses
--2, -3, ... instead: a bank that exists belongs to someone else, even when it
-has the same key. It sets the bank to store records exactly, to allow only
+not start with a letter). A bank with that id that the toolkit made for this
+same project key is used again. A bank with that id made for another key, or
+not made by the toolkit, belongs to someone else, so it uses -2, -3, ...
+instead. It sets the bank to store records exactly, to allow only
 read-only MCP tools, and to answer find --reflect in plain English, and writes
 the bank id into .toolkit.json. Running it again changes only what is missing.
 A bank that .toolkit.json names but that was made for another project key is

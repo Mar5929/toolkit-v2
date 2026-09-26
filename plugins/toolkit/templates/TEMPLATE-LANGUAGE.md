@@ -19,7 +19,8 @@ A token is replaced everywhere it appears in a template file.
 | `{{tracker.type}}` | `tracker.type` | `local`, `notion`, `github`, `jira` |
 | `{{tracker.idPrefix}}` | `tracker.idPrefix` | `WI` |
 | `{{memory.type}}` | `memory.type` | `builtin`, `hindsight`, `notion` |
-| `{{today}}` | The local date of the render | `2026-09-26` |
+| `{{hindsight.bank}}` | `hindsight.bank`, else `project.key` | `acme-crm`, or `acme-crm-2` when another project owns `acme-crm` |
+| `{{today}}` | `.toolkit.json` `project.created`, the date init set the project up | `2026-09-26` |
 
 - A token is exactly two opening braces, the name, and two closing braces, with
   no spaces inside.
@@ -30,8 +31,15 @@ A token is replaced everywhere it appears in a template file.
   `project-setup` runs `toolkit config set tracker.idPrefix <prefix>` right
   after init, and that renders the files that use the token again (see
   "Setup changes").
-- `{{today}}` is the date of the render. A later render, by sync or a setup
-  change, uses the date of that render.
+- `{{today}}` is the project's setup date, `project.created` in
+  `.toolkit.json`, which init records once. Every later render (sync, a setup
+  change, doctor) uses the same date, so a file nobody changed never looks out
+  of date because the calendar moved. A project with no `project.created` gets
+  today's date from its next sync or init, which records it. `toolkit config
+  set` refuses `project.created`.
+- `{{hindsight.bank}}` is the Hindsight memory bank that init or `toolkit
+  hindsight ensure-bank` chose for the project. Before a bank is chosen, it is
+  the project key.
 
 `{{HOME}}` is not an init token. It appears only in
 `templates/hindsight/local.toolkit-v2.hindsight.plist.tmpl`, which is filled by
@@ -70,10 +78,9 @@ The closing marker is always `<!-- endif -->`.
   condition is an error: init stops and names the file and line.
 - Any other HTML comment (for example the guidance comments in `DESIGN.md`) is
   ordinary text and is left alone.
-- Markers work in any text file, not only Markdown. `templates/codex/config-base.toml`
-  uses them, and so does the YAML frontmatter of
-  `.claude/rules/knowledge-direct-commit.md`. The output is valid TOML or YAML
-  once the marker lines are gone.
+- Markers work in any text file, not only Markdown, including YAML
+  frontmatter. `templates/codex/config-base.toml` uses them. The output is
+  valid TOML or YAML once the marker lines are gone.
 
 ## Order of processing
 
@@ -158,8 +165,16 @@ Each `files` entry has a `condition`:
 
 An entry may also have a `host`: `claude-code` or `codex`. Such an entry
 installs only when `.toolkit.json` `hosts` lists that host (init `--hosts`;
-both by default). An entry with no `host` installs for every host. The
-condition and the host must both hold.
+both by default). `hosts` is a list, such as `["claude-code"]`; a
+comma-separated string written by hand, such as `"claude-code"` or
+`"claude-code,codex"`, is read the same way, and init saves it as a list.
+`claude` is read as `claude-code`. A missing `hosts` means both. A `hosts`
+value that cannot be read (another type, an unknown name, or no name at all)
+is never taken as both: init, sync, and `toolkit config set` of another setup
+key stop and change nothing, and doctor reports it with the fix
+(`toolkit config set hosts claude-code`, or `codex`, or `claude-code,codex`).
+An entry with no `host` installs for every host. The condition and the host
+must both hold.
 
 - `claude-code` only: `.claude/settings.json`, `.claude/output-styles/`, and
   `.claude/skills/`.
@@ -190,7 +205,8 @@ merge, the merged file). A target the toolkit did not write has no entry.
 
 - Target missing: write the rendered template and fill the span.
 - Target has both span markers: it is already a Toolkit V2 `AGENTS.md`. Keep
-  it and rebuild the span.
+  it, rebuild the span, and record it as described below when it has no
+  `installed` entry.
 - Target has no span markers (an existing repository being adopted): keep
   `AGENTS.md` unchanged. Write the rendered Toolkit V2 version, with its span
   filled, to `.toolkit-cache/AGENTS.proposed.md`, and report "kept the
@@ -199,6 +215,13 @@ merge, the merged file). A target the toolkit did not write has no entry.
   owner the difference and, after his yes, merges the V2 sections and the two
   span markers into `AGENTS.md`, then runs `toolkit sync`, which fills the span
   and records the `installed` hash.
+- The hash recorded is that of the toolkit's own rendered `AGENTS.md` (without
+  the span), not of the merged file. When the merged file is exactly the
+  toolkit's version, it counts as unchanged from then on, so a later sync or
+  setup change renders it again. When it also keeps the project's own text, it
+  counts as changed by the project, so sync rebuilds only the span and never
+  replaces that text. Init does the same when `AGENTS.md` already has both
+  markers and no `installed` entry.
 - Why a proposal and not an append: an existing `AGENTS.md`, often written for
   the current toolkit, names other skills and files. Appending would put two
   instruction sets that disagree into one file.
@@ -261,12 +284,13 @@ changed.
 
 `toolkit config set` on a key that a token, a condition, or a host reads
 (`project.name`, `project.key`, `project.owner`, `tracker.type`,
-`tracker.idPrefix`, `memory.type`, `salesforce.enabled`, `hosts`) saves the
-value, then runs `toolkit sync` and prints its report. Examples:
+`tracker.idPrefix`, `memory.type`, `hindsight.bank`, `salesforce.enabled`,
+`hosts`) saves the value, then runs `toolkit sync` and prints its report.
+Examples:
 
 - `toolkit config set tracker.idPrefix ACME` right after init renders
   `AGENTS.md` and `.claude/rules/work-item-folders.md` again, so both say
-  `ACME-12`.
+  `ACME-001`.
 - `toolkit config set memory.type builtin` adds the `.memory/` seeds and
   renders `AGENTS.md` again with the built-in memory block.
 - A template file the project already changed keeps the old text. The sync

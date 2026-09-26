@@ -32,9 +32,11 @@ Never save:
   specific, for example `no-force-push`.
 - The key is `<type>_<slug>` with every hyphen in the slug turned into an
   underscore: `--type feedback --name no-force-push` makes the key
-  `feedback_no_force_push`. Use the key with `get`, `retire`, `restore`,
-  `delete`, `--supersedes`, and `--superseded-by`; the CLI rejects the
-  hyphen form there. `toolkit memory save` prints the key it made.
+  `feedback_no_force_push`. `toolkit memory save` prints the key it made.
+- Always write a key with underscores: with `get`, `retire`, `restore`,
+  `delete`, `--supersedes`, and `--superseded-by`, and on a Related line. The
+  CLI also finds a record from the hyphen form, but it stores and prints only
+  the underscore key, and a Related line is text that no command corrects.
 - The description is one line, under 100 characters: what a future session
   would search for.
 - The CLI writes the frontmatter (`name`, `type`, `description`, `status`,
@@ -63,7 +65,9 @@ The file holds the Markdown body only, without frontmatter:
 
 - Dates are absolute (`2026-09-26`), never "today" or "last week".
 - The source line says who or what the fact came from and when.
-- Related lists other memory keys, decision ids (`D-4`), or work item ids.
+- Related lists other memory keys (with underscores, for example
+  `feedback_merge_only_by_pull_request`), decision ids (`D-4`), or work item
+  ids.
 
 ## Current focus
 

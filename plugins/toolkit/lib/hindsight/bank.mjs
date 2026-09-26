@@ -10,10 +10,12 @@
 //
 // Which bank a project gets:
 //   - The first time (no hindsight.bank in .toolkit.json), the id comes from the
-//     project key. Any bank that already exists is treated as taken, even one
-//     whose marker names the same key: two projects can share a key (a sample
-//     run repeated with the same name), and they must never share memory. The
-//     next free id (<id>-2, <id>-3, ...) is used instead.
+//     project key. A bank whose marker names this same project key is this
+//     project's bank (for example after .toolkit.json was lost or init ran
+//     again), so it is used and its settings are repaired. Any other bank that
+//     already exists (another key, or no marker) is taken, and the next free id
+//     (<id>-2, <id>-3, ...) is used instead. Known limit: two different projects
+//     with the same key share a bank; give one of them another key.
 //   - After that, .toolkit.json names the bank ("claimed"). It is used as is and
 //     created when missing. If its marker names another project's key, it is
 //     refused (exit 2), unless the owner named the bank on purpose with --bank.
@@ -116,7 +118,9 @@ export function settingsProblems(configResponse) {
  * bank       the wanted bank id
  * projectKey the project's key, written into the ownership marker
  * claimed    true when .toolkit.json or --bank names this bank: it is used as
- *            is, created when missing, and never swapped for another id
+ *            is, created when missing, and never swapped for another id.
+ *            When false, an existing bank is used only when its marker names
+ *            projectKey; any other existing bank is skipped.
  * explicit   true when the owner named the bank with --bank: a bank made for
  *            another project is used anyway instead of being refused
  *
@@ -139,7 +143,7 @@ export async function ensureBank({ client, bank, projectKey, projectName, claime
       return { bank: id, created: true, changed: Object.keys(BANK_SETTINGS), owner: bankOwner(after), relation: 'this-project', skipped };
     }
     const owner = bankOwner(current);
-    if (!claimed) {
+    if (!claimed && !(owner && projectKey && owner === projectKey)) {
       skipped.push({ bank: id, owner });
       continue;
     }

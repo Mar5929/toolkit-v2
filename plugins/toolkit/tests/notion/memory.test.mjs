@@ -69,6 +69,21 @@ test('save then get gives back exactly the text every backend stores', async () 
   assert.equal(await driver.get('feedback_missing_one'), null);
 });
 
+test('a body wrapped at a fixed width is stored as whole lines; save and get give the same version, and the next save with it works', async () => {
+  const { driver, fake } = await setup();
+  const wrapped = '**Remember:** Deploys happen only on Tuesday mornings, because the on-call\nperson is free then.\n\n**Why:** Owner, 2026-09-26.\n';
+  const res = await driver.save({ ...INPUT, body: wrapped }, { expect: 'absent' });
+  const page = Object.values(fake.pages).find((p) => String(p.markdown || '').includes('Tuesday mornings'));
+  assert.ok(page, 'the page was written');
+  assert.match(page.markdown, /because the on-call person is free then\./, 'Notion holds the sentence on one line');
+  assert.doesNotMatch(page.markdown, /<br>/);
+  const got = await driver.get('feedback_deploy_window');
+  assert.equal(got.version, res.version);
+  assert.match(got.text, /because the on-call person is free then\./);
+  const again = await driver.save({ ...INPUT, body: wrapped, description: 'Changed' }, { expect: got.version });
+  assert.equal(again.created, false);
+});
+
 test('a stale expect is refused and changes nothing; the right version saves', async () => {
   const { driver } = await setup();
   const first = await driver.save(INPUT);

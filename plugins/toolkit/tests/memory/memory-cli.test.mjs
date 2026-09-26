@@ -109,6 +109,7 @@ test('delete needs --owner-approved; retire and restore work by key', async () =
 
   const deleted = await runToolkit(['memory', 'delete', 'feedback_to_remove', '--owner-approved'], { cwd: root });
   assert.equal(deleted.code, 0, deleted.stderr);
+  assert.equal(deleted.stdout, 'Deleted feedback_to_remove. This cannot be undone.\n');
   assert.ok(!fs.existsSync(path.join(root, '.memory', 'feedback_to_remove.md')));
   const gone = await runToolkit(['memory', 'get', 'feedback_to_remove'], { cwd: root });
   assert.equal(gone.code, 1);

@@ -25,7 +25,12 @@ delivery/deployment/
 
 - One master tracker for the whole project. Never split it per work item.
 - `_master/` holds the full-cutover manifest (it can rebuild the whole org from source) and its manual steps.
-- Name each work-item folder with the work item's ID only, for example `WI-12`. The ID never changes, even when the owner moves or renames the item in the tracker. Check the item with `toolkit work show <id>`.
+- Name each work-item folder with the work item's ID only, for example `WI-12`. The ID never changes, even when the owner moves or renames the item in the tracker. To check the item, run:
+
+  ```
+  toolkit work show <id>
+  ```
+
 - Keep work-item folders flat under `delivery/deployment/`. The tracker owns status.
 - A manifest (`package.xml`) names the components a Salesforce CLI deploy includes.
 

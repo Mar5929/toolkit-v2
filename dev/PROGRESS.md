@@ -28,17 +28,52 @@ Read `dev/GOAL.md` first. This file says where the work stands.
   from three drafts); critiques in `dev/research/critique-*.md`;
   `dev/ARCHITECTURE.md` revision 2 folds them in.
 
+- Phase 3, build (workflow run `wf_65b6dd20-1be`, 23 agents): committed as
+  `afb1902`. Full suite 513 tests: 510 pass, 1 fail (a test reading a model
+  project file another session renamed), 2 skipped. `claude plugin validate .`
+  passes. check-skills: 0 failures after section 5 was updated.
+- Notion builder made a private test page, "Toolkit V2 Notion test area (safe
+  to delete)" (id in `dev/test-runs/notion-test-area.json`). Mike's real page
+  was not touched.
+
+## Blocked on Mike
+
+- The `claude` CLI is signed out ("OAuth session expired"). Real Claude Code
+  session tests need `claude auth login`. Codex is signed in.
+
+## Notes for Mike
+
+- Another session is editing the model project right now (it has a new Git
+  repo, commit `e7c3b37` "Baseline Toolkit V2 model scaffold" at 18:22, and
+  uncommitted edits). The V2 scaffold was ported from the model as it was
+  around 15:00; compare again before calling item 1 done.
+- A builder ran the model's `tools/kb` tests inside the model folder at 15:57,
+  which created and then removed `__pycache__` folders. No file content
+  changed, but folder modification times did.
+
 ## In progress
 
-- Phase 3, build (workflow `toolkit-v2-build`, run id `wf_65b6dd20-1be`):
-  core runtime, then six builders in parallel (scaffold + model review, work
-  engine, memory engine + Hindsight, Notion layer in a private test page,
-  work/memory/project skills, ported plugins), each checked by an independent
-  verifier and fixed once; then hooks/init/doctor/brief; then packaging and
-  `claude plugin validate`. Builders do not commit; the lead commits after.
+- Cleanup round (workflow run `wf_42691c62-28e`): 15 leftover items.
+- Mike approved all 23 recommendations (GOAL.md "Approved content changes").
+  They are being applied on a separate branch of the model repo,
+  `toolkit-v2/approved-changes`, in the worktree folder
+  `/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved`
+  (workflow run `wf_2fb1adda-6b5`). Mike's own model folder is not touched.
+  `.memory/` and `.work-items/` are Git-ignored in the model, so they are
+  copied into the worktree and edited there; `dev/model-changes.md` will tell
+  Mike how to bring everything into his model.
+
+- Mike's direction (evening): the model is the exact source for folders and
+  file templates; memory uses Claude's mechanisms with the model's formats,
+  plus Obsidian link repair for local memory. Recorded in GOAL.md and
+  ARCHITECTURE.md section 0 (revision 3).
 
 ## Next
 
-- Commit the build. Rebuild Mike's real Notion page (ensure-root). Sample runs
+- Commit the cleanup.
+- Model-alignment rework (ARCHITECTURE section 0): import-model tool and
+  CONDITIONS.json, parity test, work engine and memory drivers on the
+  model's formats, Obsidian link repair, skills and rules text updated,
+  model-review.md rewritten as a checklist for Mike. Rebuild Mike's real Notion page (ensure-root). Sample runs
   (a)-(d) in real Claude and Codex sessions. Independent review. Report.
 - Phase 3, build. Phase 4, sample runs and fixes. Phase 5, final review and report.

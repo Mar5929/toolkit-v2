@@ -309,11 +309,19 @@ async function del(argv, ctx, { project, driver }) {
   const { _, flags } = parseArgs(argv, { boolean: ['owner-approved'], string: ['host'] });
   const key = requireKeyArg(_, 'delete');
   if (flags['owner-approved'] !== true) {
-    throw new ToolkitError(EXIT.INVALID, `${key} was not deleted. Deleting a memory record cannot be undone, so it needs the owner's explicit approval: add --owner-approved only after the owner said to delete it. To hide a record instead, use toolkit memory retire ${key}.`, { key });
+    const what = driver.backend === 'notion'
+      ? 'Deleting a memory record moves it to the Notion trash, and Notion deletes it for good after 30 days'
+      : 'Deleting a memory record cannot be undone';
+    throw new ToolkitError(EXIT.INVALID, `${key} was not deleted. ${what}, so it needs the owner's explicit approval: add --owner-approved only after the owner said to delete it. To hide a record instead, use toolkit memory retire ${key}.`, { key });
   }
   const res = await driver.delete(key);
   await afterWrite(project, driver);
-  out(ctx, `Deleted ${res.key}. This cannot be undone.`, { ok: true, action: 'delete', backend: driver.backend, key: res.key, deleted: true });
+  // A driver that can undo a delete says how in `detail` (Notion: the page is
+  // in the Notion trash for 30 days). Otherwise the delete is final.
+  const detail = res.detail || 'This cannot be undone.';
+  out(ctx, `Deleted ${res.key}. ${detail}`, {
+    ok: true, action: 'delete', backend: driver.backend, key: res.key, deleted: true, trash: Boolean(res.trash), detail,
+  });
   return EXIT.OK;
 }
 

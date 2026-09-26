@@ -23,7 +23,7 @@ import { EXIT, ToolkitError } from '../core/output.mjs';
 import { gitInfo, loadConfig, mainCheckoutRoot, saveConfig, CONFIG_FILE, TOOLKIT_MARK } from '../core/config.mjs';
 import { atomicWrite } from '../core/fsx.mjs';
 import { run } from '../core/util.mjs';
-import { planManifest, applyPlan, planLines, planSummary, setupDate, todayFor } from './manifest.mjs';
+import { planManifest, applyPlan, planLines, planSummary, setupDate, todayFor, readHosts } from './manifest.mjs';
 import {
   newConfig, checkKey, keyFromName, checkChoice, parseHosts, describeSetup, TRACKERS, MEMORIES,
 } from './setup.mjs';
@@ -141,7 +141,18 @@ export function buildInitConfig(root, opts, existing, { today } = {}) {
   if (!config.project.key) config.project.key = checkKey(keyFromName(config.project.name || path.basename(root)));
   // A project set up before the setup date was recorded: from now on, today is its setup date.
   if (!setupDate(config)) config.project.created = created;
-  if (!Array.isArray(config.hosts) || !config.hosts.length) config.hosts = parseHosts(undefined);
+  // A hosts value init cannot read stops init; it is never widened to both hosts.
+  const { hosts, problem } = readHosts(config);
+  if (problem) {
+    throw new ToolkitError(EXIT.INVALID, `${problem} Init changed nothing.`, {
+      fix: 'Ask the owner which hosts the project uses, then run toolkit init again with --hosts claude-code (or codex, or claude-code,codex).',
+    });
+  }
+  // A hand-written value such as "claude-code" is saved as a list.
+  if (config.hosts !== undefined && JSON.stringify(config.hosts) !== JSON.stringify(hosts)) {
+    changes.push(`hosts: ${JSON.stringify(config.hosts)} -> ${JSON.stringify(hosts)}`);
+  }
+  config.hosts = hosts;
   if (!config.tracker.idPrefix) config.tracker.idPrefix = 'WI';
   if (!config.memory.approval) config.memory.approval = 'onboarding';
   if (!config.notion) config.notion = {};

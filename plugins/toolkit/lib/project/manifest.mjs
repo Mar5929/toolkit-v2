@@ -85,10 +85,57 @@ export function conditionHolds(condition, config) {
   }
 }
 
-/** The hosts a project serves (default both). */
+/**
+ * Read .toolkit.json `hosts`. It is a list (["claude-code", "codex"]) or, from
+ * a hand edit, a comma-separated string ("claude-code" or "claude-code,codex").
+ * "claude" is read as claude-code.
+ *
+ * Returns { hosts, problem }. With no `hosts` key (or null), hosts is both and
+ * problem is null. A value that cannot be read fully (another type, an
+ * unknown name, or no name at all) gives a problem sentence; hosts is then
+ * the names that could be read, or both when none could. Init, sync, and the
+ * scaffold plan stop on a problem, and doctor reports it, so an unreadable
+ * value is never quietly widened to both hosts.
+ */
+export function readHosts(config) {
+  const value = config ? config.hosts : undefined;
+  if (value === undefined || value === null) return { hosts: [...HOSTS], problem: null };
+  const shown = JSON.stringify(value);
+  const parts = typeof value === 'string' ? value.split(',')
+    : Array.isArray(value) ? value.flatMap((v) => (typeof v === 'string' ? v.split(',') : [v]))
+      : null;
+  if (!parts) {
+    return { hosts: [...HOSTS], problem: `.toolkit.json "hosts" is ${shown}, which is not a list of hosts.` };
+  }
+  const named = [];
+  const unknown = [];
+  for (const part of parts) {
+    const h = typeof part === 'string' ? part.trim().toLowerCase() : part;
+    if (h === '') continue;
+    const name = h === 'claude' || h === 'claudecode' ? 'claude-code' : h;
+    if (HOSTS.includes(name)) {
+      if (!named.includes(name)) named.push(name);
+    } else {
+      unknown.push(JSON.stringify(part));
+    }
+  }
+  const hosts = named.length ? HOSTS.filter((h) => named.includes(h)) : [...HOSTS];
+  if (unknown.length) {
+    return { hosts, problem: `.toolkit.json "hosts" is ${shown}, and ${unknown.join(', ')} ${unknown.length === 1 ? 'is not a host' : 'are not hosts'}. The hosts are claude-code and codex.` };
+  }
+  if (!named.length) return { hosts, problem: `.toolkit.json "hosts" is ${shown}, which names no host.` };
+  return { hosts, problem: null };
+}
+
+/** The fix for a hosts value readHosts() cannot read. */
+export const HOSTS_FIX = 'Ask the owner which hosts the project uses, then run toolkit config set hosts claude-code (or codex, or claude-code,codex).';
+
+/**
+ * The hosts a project serves: claude-code, codex, or both (see readHosts).
+ * No `hosts` key means both.
+ */
 export function projectHosts(config) {
-  const h = config && Array.isArray(config.hosts) ? config.hosts.map(String) : null;
-  return h && h.length ? h : [...HOSTS];
+  return readHosts(config).hosts;
 }
 
 /** True when an entry installs for this project: its condition and its host both hold. */
@@ -289,6 +336,12 @@ export function planManifest(project, opts = {}) {
   const pluginRoot = opts.pluginRoot || DEFAULT_PLUGIN_ROOT;
   const manifest = opts.manifest || loadManifest(pluginRoot);
   const config = project.config || {};
+  // An unreadable hosts value stops the plan: guessing both hosts would
+  // install the other host's files (for example .codex/) without a word.
+  const { problem: hostsProblem } = readHosts(config);
+  if (hostsProblem) {
+    throw new ToolkitError(EXIT.INVALID, `${hostsProblem} Nothing was changed.`, { fix: HOSTS_FIX });
+  }
   const installed = { ...((config && config.installed) || {}) };
   const ctx = {
     pluginRoot,

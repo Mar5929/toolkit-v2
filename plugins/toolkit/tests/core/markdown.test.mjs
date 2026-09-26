@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import {
   splitSections, flattenSections, getSection, replaceSection,
   parseTable, renderTable, appendTableRow, replaceTable, normalizeHeading,
@@ -9,16 +10,16 @@ import {
 import { parse, stringify } from '../../lib/core/frontmatter.mjs';
 import { EXIT } from '../../lib/core/output.mjs';
 
-const MODEL_TEMPLATE = '/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.work-items/work-item-template/WORK-ITEM.md';
-const hasModel = fs.existsSync(MODEL_TEMPLATE);
-const skip = !hasModel && 'model project not found';
+// A frozen copy of the model project's WORK-ITEM.md template (taken 2026-09-26).
+// Tests never read the model project itself: it changes while other sessions work on it.
+const MODEL_TEMPLATE = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'notion', 'fixtures', 'templates', 'model-WORK-ITEM.md');
 const modelBody = () => parse(fs.readFileSync(MODEL_TEMPLATE, 'utf8')).body;
 
 function outline(nodes, depth = 0) {
   return nodes.flatMap((n) => [`${'  '.repeat(depth)}${n.level} ${n.heading}`, ...outline(n.children, depth + 1)]);
 }
 
-test('model WORK-ITEM.md: section tree', { skip }, () => {
+test('model WORK-ITEM.md: section tree', () => {
   const body = modelBody();
   const tree = splitSections(body);
   assert.deepEqual(outline(tree), [
@@ -63,7 +64,7 @@ test('model WORK-ITEM.md: section tree', { skip }, () => {
   assert.equal(top.children[top.children.length - 1].end, body.length);
 });
 
-test('model WORK-ITEM.md: getSection by name, level, path, and prefix', { skip }, () => {
+test('model WORK-ITEM.md: getSection by name, level, path, and prefix', () => {
   const body = modelBody();
   const overview = getSection(body, 'Overview');
   assert.equal(overview.level, 2);
@@ -83,7 +84,7 @@ test('model WORK-ITEM.md: getSection by name, level, path, and prefix', { skip }
   assert.equal(getSection(body, 'Tasks').children.length, 2);
 });
 
-test('model WORK-ITEM.md: replaceSection changes only that section', { skip }, () => {
+test('model WORK-ITEM.md: replaceSection changes only that section', () => {
   const body = modelBody();
   const newOverview = [
     '**Goal:** Ship the login fix.',
@@ -112,7 +113,7 @@ test('model WORK-ITEM.md: replaceSection changes only that section', { skip }, (
   assert.ok(next.endsWith(body.slice(old.end)));
 });
 
-test('model WORK-ITEM.md: replacing a section with its own content changes nothing', { skip }, () => {
+test('model WORK-ITEM.md: replacing a section with its own content changes nothing', () => {
   const body = modelBody();
   for (const node of flattenSections(splitSections(body))) {
     const path = node.heading;
@@ -122,7 +123,7 @@ test('model WORK-ITEM.md: replacing a section with its own content changes nothi
   }
 });
 
-test('model WORK-ITEM.md: replacing a parent section replaces its sub-sections', { skip }, () => {
+test('model WORK-ITEM.md: replacing a parent section replaces its sub-sections', () => {
   const body = modelBody();
   const next = replaceSection(body, 'Requirements', '**Overall status:** Finalized  \nAll approved.');
   assert.equal(getSection(next, 'Starting request'), null);
@@ -132,7 +133,7 @@ test('model WORK-ITEM.md: replacing a parent section replaces its sub-sections',
   assert.ok(getSection(next, 'Open Questions'));
 });
 
-test('model WORK-ITEM.md: the last section, a renamed heading, and a missing section', { skip }, () => {
+test('model WORK-ITEM.md: the last section, a renamed heading, and a missing section', () => {
   const body = modelBody();
   const last = replaceSection(body, 'Solution options and considerations', 'None yet.');
   assert.ok(last.endsWith('### Solution options and considerations\n\nNone yet.\n'));
@@ -150,7 +151,7 @@ test('model WORK-ITEM.md: the last section, a renamed heading, and a missing sec
   assert.equal(getSection(created, 'Evidence').level, 2);
 });
 
-test('model WORK-ITEM.md: add a Recent History row and write the file back', { skip }, () => {
+test('model WORK-ITEM.md: add a Recent History row and write the file back', () => {
   const text = fs.readFileSync(MODEL_TEMPLATE, 'utf8');
   const { data, body } = parse(text);
   const history = getSection(body, 'Recent History');
@@ -169,7 +170,7 @@ test('model WORK-ITEM.md: add a Recent History row and write the file back', { s
     + '01-discovery'.length - '<Current lifecycle stage>'.length);
 });
 
-test('model WORK-ITEM.md: tables parse and render back to the same text', { skip }, () => {
+test('model WORK-ITEM.md: tables parse and render back to the same text', () => {
   const body = modelBody();
   for (const name of ['Roadmap', 'Recent History', 'Open Questions']) {
     const section = getSection(body, name);
@@ -287,5 +288,5 @@ test('empty and missing input', () => {
   assert.deepEqual([...splitSections(undefined)], []);
   assert.equal(getSection('', 'x'), null);
   assert.equal(parseTable(undefined).found, false);
-  assert.equal(path.basename(MODEL_TEMPLATE), 'WORK-ITEM.md');
+  assert.equal(fs.existsSync(MODEL_TEMPLATE), true);
 });

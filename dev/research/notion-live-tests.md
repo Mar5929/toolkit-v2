@@ -40,6 +40,16 @@ checks changed:
   focus page, and the Memory data source are found to be under it; the Projects
   database and the test area page are found to be outside it (8 calls).
 
+### Re-run after two converter changes (2026-09-26, evening)
+
+Same command, same test area: **18 of 18 checks passed in 99 seconds.** The
+converter (`plugins/toolkit/lib/notion/markdown.mjs`) now joins soft-wrapped
+lines of a paragraph or list item with a space, and sends an HTML comment
+block as an italic paragraph that starts with "Note: ". Reading the Solution
+Design page back gave `*Note: Include Recommendation only when there is more
+than one option.*` (and the two other notes) exactly as sent, and the design
+check read them back as the comments.
+
 ## The tests from notion-design.md section 16
 
 | Test | Result | Evidence |
