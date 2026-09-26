@@ -54,8 +54,12 @@ Read `dev/GOAL.md` first. This file says where the work stands.
 ## In progress
 
 - Cleanup round (workflow run `wf_42691c62-28e`): 15 leftover items.
+- Cleanup round done and committed (`46c0b62`): 554 of 556 tests pass, 2
+  skipped by design (slow reflect, live Notion).
 - Mike approved all 23 recommendations (GOAL.md "Approved content changes").
-  They are being applied on a separate branch of the model repo,
+  Applied and verified on branch `toolkit-v2/approved-changes` (5 commits,
+  head `9940854`); Mike merges with `git merge toolkit-v2/approved-changes`
+  in his model folder when ready (`dev/model-changes.md`). Originally applied on a separate branch of the model repo,
   `toolkit-v2/approved-changes`, in the worktree folder
   `/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved`
   (workflow run `wf_2fb1adda-6b5`). Mike's own model folder is not touched.
@@ -68,10 +72,15 @@ Read `dev/GOAL.md` first. This file says where the work stands.
   plus Obsidian link repair for local memory. Recorded in GOAL.md and
   ARCHITECTURE.md section 0 (revision 3).
 
+- Model-alignment rework (workflow run `wf_8b29f392-3ee`): import tool,
+  CONDITIONS.json, parity test, runtime on the model's formats, Obsidian link
+  repair, skills text, version 0.2.0.
+
 ## Next
 
-- Commit the cleanup.
-- Model-alignment rework (ARCHITECTURE section 0): import-model tool and
+- Commit the alignment. Then: Notion rebuild of Mike's real page; Codex
+  install and sample runs; Claude runs once Mike signs in.
+- (Done items below kept for history.) Model-alignment rework (ARCHITECTURE section 0): import-model tool and
   CONDITIONS.json, parity test, work engine and memory drivers on the
   model's formats, Obsidian link repair, skills and rules text updated,
   model-review.md rewritten as a checklist for Mike. Rebuild Mike's real Notion page (ensure-root). Sample runs
