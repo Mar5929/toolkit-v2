@@ -1,0 +1,21 @@
+# Files for this repository only. Patterns that name a folder start with "/"
+# so they never hide a file inside plugins/toolkit/scaffold/, which is copied
+# into projects as it is.
+
+# macOS and editor files
+.DS_Store
+*.swp
+*.swo
+*~
+/.idea/
+/.vscode/
+
+# Node
+node_modules/
+
+# Claude Code local state for sessions working on this repository
+/.claude/settings.local.json
+/.claude/worktrees/
+
+# Logs from local runs
+*.log

@@ -1,0 +1,12 @@
+# Codex command rules for this project, written by toolkit init.
+# The toolkit command runs outside the Codex sandbox without a prompt. It needs
+# the network for Notion and the local Hindsight server, and it writes the work
+# tracker and memory in the main checkout, which a worktree cannot reach.
+# Run each toolkit command on its own line so this rule matches it.
+
+prefix_rule(
+    pattern = ["toolkit"],
+    decision = "allow",
+    justification = "Toolkit V2 command: updates the work tracker and memory in the main checkout and calls Notion and the local Hindsight server.",
+    match = ["toolkit work sync", "toolkit memory find billing"],
+)

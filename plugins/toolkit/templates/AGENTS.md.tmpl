@@ -1,0 +1,142 @@
+Always execute work with the context in mind that the user will likely continue work across multiple AI coding sessions where the session context is cleared and picked up again. You must assist the user in helping establish that continuity across sessions while not adding context that might pollute future agents and skew them. Information must be curated and intentional.
+
+# {{project.name}}
+
+{{project.owner}} owns this project and makes its decisions. The agent runs it: it keeps the work tracker, memory, and project records current, and it does the technical work. What the project is for: `PROJECT.md`.
+
+## Every session
+
+- The session-start hook adds a "Project briefing" to your context: this worktree's work item, active items with the skill that continues each one, what waits on the owner, the current focus, moved items, and setup warnings. If there is no briefing, run `toolkit brief` and read it.
+- Anything to build, add, fix, or change, and "keep going": the `work-on` skill.
+- "Where are we": `work-status`. "What do you need from me" and approvals: `work-decide`.
+- "Remember", "from now on", "forget that": `memory-save`. "What did we decide": `memory-find`.
+- Method skills from other plugins (brainstorming, plans, debugging) may run inside these, never instead of them.
+<!-- if salesforce -->
+- Design work goes through `solution-design`; it opens `sf-architect-solutioning` as its specialist.
+- Salesforce org aliases are in `.toolkit.json` under `salesforce.orgs`. Agents never deploy to, validate against, or write data in production; hand the owner the command or the file.
+<!-- endif -->
+- Codex: at session start, read the always-on rules listed under "Rules". Before editing files in a folder that has its own `AGENTS.md`, read that file.
+
+## What the owner decides
+
+Ask the owner and record the answer before you:
+- approve requirements (build and data-load work cannot pass stage `03` without it; requirements count as approved only when the item records the owner's approval with a date);
+- choose or approve a design, approve a finished result, or mark work Done or Cancelled;
+- merge to the default branch (unless `DECISIONS.md` records a standing merge instruction), deploy, or do anything that cannot be undone;
+- spend money, sign in, or change an account.
+
+Do everything else yourself, record it, and report it. When you need a decision, add it to the work item's Open Questions with "Decision needed from: owner" and set the item's `waiting_on` to `owner` ("Work tracking" says how).
+
+## Where information goes
+
+| Information | Home |
+| --- | --- |
+| New request, idea, or bug | A new work item at stage `01-discovery` (`work-on`) |
+| Requirements, questions, tasks, progress, and history of one change | That work item |
+<!-- if tracker=local -->
+| How a change is built | `DESIGN.md` beside the item's `WORK-ITEM.md` (`toolkit work design`) |
+<!-- endif -->
+<!-- if tracker=notion -->
+| How a change is built | The item's "Solution Design" subpage (`toolkit work design`) |
+<!-- endif -->
+<!-- if tracker=github -->
+| How a change is built | A comment titled "Solution design" on the item's issue |
+<!-- endif -->
+<!-- if tracker=jira -->
+| How a change is built | A comment titled "Solution design" on the item's Jira issue |
+<!-- endif -->
+| A decision for the whole project | `DECISIONS.md` (`work-decide`) |
+| Agreed behavior, after delivery | The area's file in `requirements/`, at stage `14-spec-update` |
+| What is in progress, owner to-dos with no work item, where the next session starts | The current focus (`memory-save`) |
+| A lasting preference, correction, lesson, or hard-to-find reference | Memory (`memory-save`) |
+| Project terms | The glossary (`memory-save`) |
+| Outside documentation you capture | `ai-external-knowledge/`, one folder per topic |
+| How agents should work in this project | A rule in `.claude/rules/` or a skill, with the owner's yes; never memory |
+<!-- if salesforce -->
+| Client brief, source file, message, or meeting note | `delivery/`, in the folder for that kind of file |
+| Production data load and backup files | `delivery/data/` (never committed) |
+| Deploy manifests and manual deploy steps | `delivery/deployment/` (`sf-component-tracker`) |
+<!-- endif -->
+
+## Work tracking
+
+<!-- if tracker=local -->
+- Tracker: local folders in `.work-items/`, Git-ignored, in the main checkout, shared by every worktree. `.claude/rules/work-item-folders.md` covers folders, moves, and generated files. A sub-item is an item folder nested inside its parent item's folder. It is the only tracker; never copy items into a second tracker or a local list.
+- IDs look like `{{tracker.idPrefix}}-12`. Refer to work items by ID, never by folder path. The owner may move or rename item folders; find them by ID and continue. Change `waiting_on`, the stage, and other fields with `toolkit work` commands.
+<!-- endif -->
+<!-- if tracker=notion -->
+- Tracker: the Work Items database on this project's page in Notion (ids in `.toolkit.json` under `notion`). Read and write it only with `toolkit work` commands. The owner may edit cards in Notion; the owner's edits win. Sub-items are Notion sub-items. It is the only tracker; never copy items into a second tracker or a local list.
+- IDs look like `{{tracker.idPrefix}}-12` (the card's ID property). Refer to work items by ID, never by link. The owner may move or rename cards; find them by ID and continue. Change `waiting_on`, the stage, and other fields with `toolkit work` commands.
+<!-- endif -->
+<!-- if tracker=github -->
+- Tracker: GitHub Issues. `toolkit work` commands do not write to GitHub; any of them prints the path to the written GitHub instructions. Follow those. Sub-items are GitHub sub-issues. It is the only tracker; never copy items into a second tracker or a local list.
+- An item's ID is its issue number, written `#12`. Refer to work items by ID, never by link. Set `waiting_on`, the stage, and other fields with the labels the GitHub instructions name.
+<!-- endif -->
+<!-- if tracker=jira -->
+- Tracker: Jira. `toolkit work` commands do not write to Jira; any of them prints the path to the written Jira instructions. Follow those. Sub-items are Jira sub-tasks. It is the only tracker; never copy items into a second tracker or a local list.
+- An item's ID is its Jira key, for example `ACME-42`. Refer to work items by ID, never by link. Set `waiting_on`, the stage, and other fields as the Jira instructions say.
+<!-- endif -->
+- Stages `01-discovery` to `14-spec-update`, statuses, and approval gates: `toolkit work lifecycle`.
+
+## Memory
+
+<!-- if memory=builtin -->
+- System: built-in memory in `.memory/`, Git-ignored, in the main checkout, shared by every worktree. What is worth saving: `.memory/memory-criteria.md`.
+<!-- endif -->
+<!-- if memory=hindsight -->
+- System: the local Hindsight server on this computer, memory bank `{{project.key}}`. Never call Hindsight directly.
+<!-- endif -->
+<!-- if memory=notion -->
+- System: the Memory database on this project's page in Notion.
+<!-- endif -->
+- Read and write memory only through the `memory-save`, `memory-find`, and `memory-tidy` skills, which run `toolkit memory` commands. Search memory before asking the owner to repeat something. When a save needs the owner's yes: the `memory-save` skill. Never store secrets, email addresses, or work-item status.
+
+## Rules
+
+<!-- toolkit:rules:start -->
+(Filled by toolkit init from `.claude/rules/`.)
+<!-- toolkit:rules:end -->
+
+## Project map
+
+| Path | What is there, and when to open it |
+| --- | --- |
+| `PROJECT.md` | Purpose, scope, systems, people. Open for project context. |
+| `PROJECT-ROADMAP.md` | Outcome and phases (`P01`), each unit naming its work item ID. Open when planning. |
+| `DECISIONS.md` | Decisions for the whole project. Open before changing direction. |
+| `requirements/` | Agreed behavior by area. Read `requirements/AGENTS.md` before editing. |
+| `ai-external-knowledge/` | Captured outside documentation; `INDEX.md` lists the topics. |
+| `.toolkit.json` | Setup choices, such as the tracker and memory system. Change with `toolkit config set`. |
+<!-- if tracker=local -->
+| `.work-items/` | Work items. `DASHBOARD.md` there is a generated status board. |
+<!-- endif -->
+<!-- if memory=builtin -->
+| `.memory/` | Project memory. Read `.memory/AGENTS.md` before working there. |
+<!-- endif -->
+<!-- if salesforce -->
+| `force-app/` | Salesforce source (`sfdx-project.json`). |
+| `delivery/` | Client briefs, references, communications, meeting notes, data, deployment, deliverables, archive. |
+| `tools/kb/`, `tools/permissions/`, `docs/` | Metadata dependency graph and permission set checker (each has a `README.md`); the permission set runbook and research in `docs/`. |
+<!-- endif -->
+
+## Commands
+
+| Task | Command |
+| --- | --- |
+| Check the toolkit setup | `toolkit doctor`; the `project-setup` skill fixes what it reports |
+| Run the project, run its tests | Not recorded yet. Add the verified commands here. |
+<!-- if salesforce -->
+| Validate against the sandbox | `sf project deploy validate` with `-x` the item's manifest and `-o` the sandbox alias from `.toolkit.json` |
+<!-- endif -->
+
+## How to write replies
+
+Claude Code applies the Plain English output style to chat. Codex and helper agents follow these lines instead.
+
+- Start with the answer, result, or current status. Answer what was asked. Keep it short; add detail when asked.
+- Use ordinary words. Explain an unfamiliar term the first time it matters. Use the exact name a system uses, the same way every time.
+- Write literally: no metaphors, idioms, jokes, or picture words in place of the real name. State the point directly, without a "not this, but that" setup.
+- Use paragraphs for a connected explanation, bullets for separate items or choices, and a heading only when it names what is under it.
+- When asking for a decision, name the choice and the difference that matters, and recommend one.
+- Use the exact status word: written, built, tested, merged, installed, or seen working. Say something works only when you saw it work.
+- Leave out routine narration of process and helper activity. Give one direct line when the owner lost something, an action cannot be undone, work waits on the owner, or there is a cost.

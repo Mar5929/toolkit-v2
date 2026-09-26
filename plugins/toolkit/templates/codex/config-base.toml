@@ -1,0 +1,48 @@
+# Codex settings for this project, written by toolkit init.
+# Toolkit V2 plugins are turned on for this project only. The older
+# claude-toolkit plugins are turned off here so the two sets never both load.
+
+[plugins."toolkit@toolkit-v2"]
+enabled = true
+
+[plugins."work@toolkit-v2"]
+enabled = true
+
+[plugins."memory@toolkit-v2"]
+enabled = true
+
+[plugins."session-skills@toolkit-v2"]
+enabled = true
+
+[plugins."git-workflows@toolkit-v2"]
+enabled = true
+
+<!-- if salesforce -->
+[plugins."sf-architect-solutioning@toolkit-v2"]
+enabled = true
+<!-- endif -->
+<!-- if not salesforce -->
+[plugins."sf-architect-solutioning@toolkit-v2"]
+enabled = false
+<!-- endif -->
+
+[plugins."project-init@claude-toolkit"]
+enabled = false
+
+[plugins."second-brain@claude-toolkit"]
+enabled = false
+
+[plugins."sf-architect-solutioning@claude-toolkit"]
+enabled = false
+
+[plugins."git-workflows@claude-toolkit"]
+enabled = false
+
+[plugins."work-tracker@claude-toolkit"]
+enabled = false
+
+[plugins."session-skills@claude-toolkit"]
+enabled = false
+
+[plugins."system-guide@claude-toolkit"]
+enabled = false

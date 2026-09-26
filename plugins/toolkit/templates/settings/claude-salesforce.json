@@ -1,0 +1,54 @@
+{
+  "enabledPlugins": {
+    "sf-architect-solutioning@toolkit-v2": true
+  },
+  "permissions": {
+    "deny": [
+      "Bash(sf project delete source *)",
+      "Bash(sfdx force:source:delete *)",
+      "Bash(sf org delete *)"
+    ],
+    "ask": [
+      "Bash(sf project deploy start *)",
+      "Bash(sf data create *)",
+      "Bash(sf data update *)",
+      "Bash(sf data delete *)",
+      "Bash(sf data import *)",
+      "Bash(sf data upsert *)",
+      "Bash(sf apex run *)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/guard-protected-orgs.cjs"],
+            "timeout": 90
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/guard-permission-set-deploy.cjs"],
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3",
+            "args": ["${CLAUDE_PROJECT_DIR}/tools/kb/graph_freshness_hook.py"],
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  }
+}

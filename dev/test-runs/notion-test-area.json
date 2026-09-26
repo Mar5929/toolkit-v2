@@ -1,0 +1,17 @@
+{
+  "purpose": "Private Notion page for Toolkit V2 Notion layer tests. Safe to delete. Never Mike's real AI Agent Second Brain page.",
+  "title": "Toolkit V2 Notion test area (safe to delete)",
+  "pageId": "3e7b381d-a176-81ad-ad1c-eb0f8ab22d09",
+  "url": "https://app.notion.com/p/Toolkit-V2-Notion-test-area-safe-to-delete-3e7b381da17681adad1ceb0f8ab22d09",
+  "parent": "workspace (private)",
+  "createdOn": "2026-09-26",
+  "createdBy": "ntn api v1/pages (bot: Notion CLI)",
+  "projectsDatabaseId": "b7a4ba60-3cb6-448e-a45f-070b65ba8dc5",
+  "projectsDataSourceId": "c1c4928f-712d-4ed9-a00a-00edfe3d158e",
+  "contents": [
+    "Projects: an inline database built by plugins/toolkit/tests/notion/live/mimic-projects.mjs with the same properties and views as the real one, plus the registry properties ensure-root added.",
+    "Project rows: 'Toolkit V2 test' (Work Items prefix WI, Memory), 'Toolkit V2 test B' (Memory only), one or more 'Live run <time>' rows from run-live.mjs.",
+    "Pages named 'Experiment ...' and 'Round trip ...': Markdown experiments for T5 to T9."
+  ],
+  "cleanup": "Delete the whole page in the Notion app when the Notion work is finished. Its 'Toolkit V2 test' Work Items database holds the unique ID prefix WI; Notion allows one database per prefix, so delete it (and empty it from the trash) before the real AI Agent Second Brain rebuild if the first real project should use WI."
+}

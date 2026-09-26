@@ -1,0 +1,178 @@
+# Toolkit V2
+
+Toolkit V2 is a set of plugins for Claude Code and Codex. It sets up a project
+folder so the agent can run the project for you. You make the decisions and
+steer. The agent does the work, tracks it, and remembers what matters.
+
+It has three parts:
+
+- **Scaffold.** The folders and template files every project starts with, such
+  as `AGENTS.md` (the project manual the agent reads), `requirements/`, and the
+  work item template.
+- **Skills.** Written instructions the agent picks from, one per job. There are
+  22 skills in every project and 4 more in Salesforce projects.
+- **The `toolkit` command and hooks.** `toolkit` is a small program that keeps
+  work items and memory in order. Hooks are steps Claude Code and Codex run by
+  themselves at set moments. For example, every session starts with a short
+  briefing on where the project stands.
+
+Toolkit V2 is separate from your current toolkit (`claude-toolkit`). Installing
+it changes nothing in your current projects.
+
+## Plugins and skills
+
+In Claude Code you can start a skill by typing `/<skill>`. In Codex you type
+`$<skill>`. You rarely need to: the agent picks the skill from what you say.
+
+| Plugin | Skill | What it does | You might say |
+| --- | --- | --- | --- |
+| `toolkit` | `project-setup` | Sets up Toolkit V2 in a project, or checks and repairs it. | "set up this project", "check the setup" |
+| `work` | `work-on` | Starts, continues, or logs a piece of work, and builds it. | "build this", "keep going" |
+| `work` | `work-status` | Shows what is in progress, what is blocked, and what comes next. Changes nothing. | "where are we", "what's next" |
+| `work` | `work-decide` | Walks you through each decision waiting on you, one at a time. | "what do you need from me" |
+| `work` | `work-requirements` | Asks you questions one at a time and writes down what the work must do. | "grill me", "what should it do" |
+| `work` | `solution-design` | Works out how to build it and gives you design options to approve. | "how should we build this" |
+| `work` | `work-organize` | Splits big work into sub-items, moves items, and notices folders you moved by hand. | "split this", "I moved some folders around" |
+| `work` | `work-check` | Tests the finished work against every requirement, fixes what fails, and shows you the result. | "is it ready", "test it" |
+| `work` | `work-finish` | Ships and closes a work item after you approve it, or cancels it. | "ship it", "mark it done" |
+| `work` | `work-delegate` | Hands a goal to a team of agents, with you as the product owner. | "you drive", "take it from here" |
+| `memory` | `memory-save` | Saves, corrects, or forgets one lasting fact. | "remember this", "from now on" |
+| `memory` | `memory-find` | Finds what the project already knows and says where it came from. | "what did we decide", "do you remember" |
+| `memory` | `memory-tidy` | Cleans up memory: merges duplicates, retires old facts, makes a backup. | "clean up memory" |
+| `session-skills` | `handoff` | Writes a checked prompt a new session can start from. | "write a handoff", "I'm stopping for today" |
+| `session-skills` | `session-summary` | Shows what you asked for in this chat and where each request landed. | "recap this chat" |
+| `session-skills` | `braindump` | Plays back a loose brain dump in simple words before any work starts. | "here's a brain dump" |
+| `session-skills` | `explain-simply` | Explains the last answer again as short, plain bullets. | "explain it like I'm five" |
+| `session-skills` | `unslop` | Rewrites text so it no longer sounds machine-written. | "unslop this" |
+| `git-workflows` | `pull-latest` | Brings your copy of the code up to date, safely. | "get the latest" |
+| `git-workflows` | `reset-to-remote` | Makes your copy an exact match of the remote copy (for example on GitHub). It deletes local changes, so it runs only when you clearly ask. | "wipe local", "fresh start from remote" |
+| `git-workflows` | `merge-and-clean-up` | Merges a pull request and removes only its branches and worktree. | "merge and clean up" |
+| `git-workflows` | `publish-docs` | Saves an agreed document change straight to the main branch. The agent uses it after editing documents. | (agent use) |
+| `sf-architect-solutioning` | `sf-architect-solutioning` | Acts as a Salesforce architect and checks facts against official Salesforce documentation. Salesforce projects only. | "architect this" |
+| (copied into Salesforce projects) | `sf-deploy-check` | Finds components that would ship with a deploy before they are ready. | (agent use) |
+| (copied into Salesforce projects) | `sf-component-tracker` | Keeps the component tracker and `package.xml` files in step with the metadata. | (agent use) |
+| (copied into Salesforce projects) | `sf-data-change` | Builds your package for a production data change: load file, backup, steps, and undo steps. | (agent use) |
+
+Helper agents: the `work` plugin has six (`requirements-analyst`, `researcher`,
+`design-architect`, `design-critic`, `builder`, `acceptance-checker`), and
+`session-skills` has one (`handoff-verifier`). All of them run on Opus. Codex
+plugins cannot carry agents, so in Codex the skill hands the agent's written
+role to a Codex worker instead.
+
+## Install on this Mac (one time)
+
+A marketplace is a list of plugins. This folder is the `toolkit-v2`
+marketplace. You add it once, then install its six plugins.
+
+### Claude Code
+
+```bash
+claude plugin marketplace add /Users/michaelrihm/Documents/Projects/toolkit-v2
+claude plugin install toolkit@toolkit-v2
+claude plugin install work@toolkit-v2
+claude plugin install memory@toolkit-v2
+claude plugin install session-skills@toolkit-v2
+claude plugin install git-workflows@toolkit-v2
+claude plugin install sf-architect-solutioning@toolkit-v2
+```
+
+The plugins install switched off, and that is on purpose. Your current toolkit
+has plugins with the same names (`session-skills`, `git-workflows`,
+`sf-architect-solutioning`). Each Toolkit V2 project switches the Toolkit V2
+plugins on, and the old ones off, in its own settings. The two sets never load
+in the same project.
+
+To check: `claude plugin list` shows the six plugins as disabled.
+
+Claude Code reads these plugins straight from this folder. A change here shows
+up in the next session, or after `/reload-plugins`.
+
+### Codex
+
+```bash
+codex plugin marketplace add /Users/michaelrihm/Documents/Projects/toolkit-v2
+codex plugin add toolkit@toolkit-v2
+codex plugin add work@toolkit-v2
+codex plugin add memory@toolkit-v2
+codex plugin add session-skills@toolkit-v2
+codex plugin add git-workflows@toolkit-v2
+codex plugin add sf-architect-solutioning@toolkit-v2
+```
+
+`codex plugin add` switches each plugin on for every project. Switch them off
+for the whole computer: in `~/.codex/config.toml`, find the six blocks that end
+in `@toolkit-v2` and change `enabled = true` to `enabled = false`. Each block
+then reads like this:
+
+```toml
+[plugins."toolkit@toolkit-v2"]
+enabled = false
+```
+
+Each project's own `.codex/config.toml` switches on the plugins it needs. Codex
+reads a project's settings only after you trust the project folder, which Codex
+asks about the first time you open it.
+
+Codex runs a copy of each plugin, filed under its version number. After a
+change in this folder, raise `version` in the plugin's two manifests
+(`.claude-plugin/plugin.json` and `.codex-plugin/plugin.json`) and run
+`codex plugin add <plugin>@toolkit-v2` again.
+
+To check: `codex plugin list` shows the six plugins.
+
+## Set up a project
+
+Do this once per project. The folder must be a Git repository; if it is not,
+setup offers to run `git init` for you.
+
+1. In a terminal, go to the project folder and switch the setup plugin on for
+   this project only:
+
+   ```bash
+   claude plugin enable toolkit@toolkit-v2 --scope local
+   ```
+
+   This writes one line to `.claude/settings.local.json`, a personal settings
+   file Git does not track.
+
+2. Start Claude Code in that folder and say **"set up this project"**.
+3. Answer the questions. The agent asks one at a time and recommends an answer
+   each time:
+   - the project name;
+   - where to track work: local folders, Notion, GitHub Issues, or Jira;
+   - where to keep memory: the built-in `.memory/` folder, local Hindsight, or
+     Notion;
+   - whether it is a Salesforce project.
+4. Start a new session when setup finishes, so Claude Code loads the new
+   settings and the Plain English style.
+
+Setup copies the scaffold, writes `AGENTS.md`, the rules, and the settings for
+both Claude Code and Codex, and switches on the right plugins. After that the
+project also works in Codex: open Codex in the folder, trust the folder, and
+trust the hooks (see below).
+
+To check or repair a project later, say **"check the setup"**.
+
+## What you must do yourself
+
+The agent never does these for you. It tells you when each one is needed.
+
+- **`ntn login`**: signs the Notion command-line tool into your Notion account.
+  It opens a browser sign-in. Needed only when the project uses Notion for work
+  items or memory.
+- **Trust the hooks in Codex**: open Codex in the project, type `/hooks`, and
+  trust the Toolkit V2 hooks. Codex skips plugin hooks until you do. Do it again
+  after the hooks change or after you move the project folder.
+- **Trust the project folder in Codex**: Codex asks the first time you open it.
+  Without it, Codex ignores the project's settings.
+- **Say yes or no to anything that cannot be undone or costs money**: a new
+  GitHub repository, a production deploy, a production data load, starting the
+  Hindsight background service, and Notion pages outside the "AI Agent Second
+  Brain" page.
+
+## Where things are
+
+- `plugins/`: the six plugins. This is everything Claude Code and Codex install.
+- `dev/`: the goal, the build plan, research, and test runs. It is not
+  installed anywhere.
+- `AGENTS.md`: instructions for agents working on Toolkit V2 itself.

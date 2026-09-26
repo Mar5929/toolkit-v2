@@ -1,0 +1,524 @@
+{
+  "cover": null,
+  "created_by": {
+    "id": "3e7b381d-a176-812c-b0b2-00274d3be8cc",
+    "object": "user"
+  },
+  "created_time": "2026-09-26T19:58:00.000Z",
+  "database_parent": {
+    "page_id": "3e7b381d-a176-8139-9106-c4594106b6f6",
+    "type": "page_id"
+  },
+  "database_type": null,
+  "description": [],
+  "icon": {
+    "emoji": "🗂️",
+    "type": "emoji"
+  },
+  "id": "1555d59b-23f6-4a9d-adcb-5f201d9b6aa8",
+  "in_trash": false,
+  "is_inline": true,
+  "last_edited_by": {
+    "id": "3e7b381d-a176-812c-b0b2-00274d3be8cc",
+    "object": "user"
+  },
+  "last_edited_time": "2026-09-26T20:04:00.000Z",
+  "object": "data_source",
+  "parent": {
+    "database_id": "64a80ed6-b7e4-4973-813a-648030133b15",
+    "type": "database_id"
+  },
+  "properties": {
+    "Archived": {
+      "checkbox": {},
+      "description": "Hidden from the board and the briefing.",
+      "id": "VaZF",
+      "name": "Archived",
+      "type": "checkbox"
+    },
+    "Blocked by": {
+      "description": null,
+      "id": "%7Bvk%40",
+      "name": "Blocked by",
+      "relation": {
+        "data_source_id": "1555d59b-23f6-4a9d-adcb-5f201d9b6aa8",
+        "database_id": "64a80ed6-b7e4-4973-813a-648030133b15",
+        "dual_property": {
+          "synced_property_id": "T%40%5Bf",
+          "synced_property_name": "Blocking"
+        },
+        "type": "dual_property"
+      },
+      "type": "relation"
+    },
+    "Blocking": {
+      "description": null,
+      "id": "T%40%5Bf",
+      "name": "Blocking",
+      "relation": {
+        "data_source_id": "1555d59b-23f6-4a9d-adcb-5f201d9b6aa8",
+        "database_id": "64a80ed6-b7e4-4973-813a-648030133b15",
+        "dual_property": {
+          "synced_property_id": "%7Bvk%40",
+          "synced_property_name": "Blocked by"
+        },
+        "type": "dual_property"
+      },
+      "type": "relation"
+    },
+    "Delivery": {
+      "description": null,
+      "id": "Xul%5B",
+      "name": "Delivery",
+      "select": {
+        "options": [
+          {
+            "color": "default",
+            "description": null,
+            "id": "115a062a-31f5-4eb2-a2bc-b005ba1e6e64",
+            "name": "agent-led"
+          },
+          {
+            "color": "default",
+            "description": null,
+            "id": "353b2f68-4ab8-4470-b1a3-4805c390b217",
+            "name": "owner-led"
+          },
+          {
+            "color": "default",
+            "description": null,
+            "id": "50d2448f-b55e-4b3e-b4f0-95ed562ce02d",
+            "name": "not-offered"
+          }
+        ]
+      },
+      "type": "select"
+    },
+    "Design": {
+      "description": null,
+      "id": "xr~z",
+      "name": "Design",
+      "select": {
+        "options": [
+          {
+            "color": "default",
+            "description": null,
+            "id": "f801bdb4-d6c0-4bdc-87fa-6b473d81443e",
+            "name": "proposed"
+          },
+          {
+            "color": "default",
+            "description": null,
+            "id": "58eacdac-8ee4-425a-8695-6213f823f67f",
+            "name": "approved"
+          },
+          {
+            "color": "default",
+            "description": null,
+            "id": "2eac43e2-14e9-4157-adcd-904e8edf584c",
+            "name": "superseded"
+          },
+          {
+            "color": "default",
+            "description": null,
+            "id": "206ddf05-592c-4313-b8a6-08bdfae381cc",
+            "name": "none"
+          }
+        ]
+      },
+      "type": "select"
+    },
+    "Design approved": {
+      "description": "The Solution Design approval: \"YYYY-MM-DD by <name>\", or no.",
+      "id": "P%5EdB",
+      "name": "Design approved",
+      "rich_text": {},
+      "type": "rich_text"
+    },
+    "ID": {
+      "description": null,
+      "id": "J%3BjT",
+      "name": "ID",
+      "type": "unique_id",
+      "unique_id": {
+        "prefix": "WI"
+      }
+    },
+    "Last edited": {
+      "description": null,
+      "id": "dW~r",
+      "last_edited_time": {},
+      "name": "Last edited",
+      "type": "last_edited_time"
+    },
+    "Next action": {
+      "description": "The Overview \"Next action\" line.",
+      "id": "V%3CSc",
+      "name": "Next action",
+      "rich_text": {},
+      "type": "rich_text"
+    },
+    "Open owner questions": {
+      "description": "Open questions that need the owner.",
+      "id": "%3Cu%5Cf",
+      "name": "Open owner questions",
+      "number": {
+        "format": "number"
+      },
+      "type": "number"
+    },
+    "Parent item": {
+      "description": null,
+      "id": "%7CvVz",
+      "name": "Parent item",
+      "relation": {
+        "data_source_id": "1555d59b-23f6-4a9d-adcb-5f201d9b6aa8",
+        "database_id": "64a80ed6-b7e4-4973-813a-648030133b15",
+        "dual_property": {
+          "synced_property_id": "zfAU",
+          "synced_property_name": "Sub-items"
+        },
+        "type": "dual_property"
+      },
+      "type": "relation"
+    },
+    "Priority": {
+      "description": null,
+      "id": "elmD",
+      "name": "Priority",
+      "select": {
+        "options": [
+          {
+            "color": "red",
+            "description": null,
+            "id": "b86e1a9a-0556-45ac-b018-316164aec3d9",
+            "name": "urgent"
+          },
+          {
+            "color": "orange",
+            "description": null,
+            "id": "8be37915-dbc3-4ea0-a04a-9e06585067bd",
+            "name": "high"
+          },
+          {
+            "color": "yellow",
+            "description": null,
+            "id": "5e964caa-2a38-4d1c-b838-c9970ef7d07b",
+            "name": "medium"
+          },
+          {
+            "color": "gray",
+            "description": null,
+            "id": "a3570b68-3653-48b7-a528-0582eedb160c",
+            "name": "low"
+          }
+        ]
+      },
+      "type": "select"
+    },
+    "Requirements approved": {
+      "description": "\"YYYY-MM-DD by <name>\", or no.",
+      "id": "IMiy",
+      "name": "Requirements approved",
+      "rich_text": {},
+      "type": "rich_text"
+    },
+    "Result approved": {
+      "description": "\"YYYY-MM-DD by <name>\", or no.",
+      "id": "%40dtb",
+      "name": "Result approved",
+      "rich_text": {},
+      "type": "rich_text"
+    },
+    "Stage": {
+      "description": null,
+      "id": "%5DC%5DU",
+      "name": "Stage",
+      "select": {
+        "options": [
+          {
+            "color": "gray",
+            "description": "Working out what the owner wants.",
+            "id": "4305e11b-23c4-4652-99c7-9e71ad387611",
+            "name": "01-discovery"
+          },
+          {
+            "color": "gray",
+            "description": "Turning that into requirements.",
+            "id": "131fc1ff-1f2d-445a-a96a-165962a18eea",
+            "name": "02-refinement"
+          },
+          {
+            "color": "blue",
+            "description": "The owner approved the requirements.",
+            "id": "89b60a9d-9b46-4d4b-b9e1-8a0b533036c5",
+            "name": "03-requirements-approved"
+          },
+          {
+            "color": "purple",
+            "description": "Deciding how it gets built.",
+            "id": "1d18018b-2456-424b-8f39-14b7f2f5dc36",
+            "name": "04-solution-design"
+          },
+          {
+            "color": "purple",
+            "description": "Splitting work that is too large.",
+            "id": "df6dbdab-e4d7-458f-ad7a-d3c84c7c620c",
+            "name": "05-breakdown"
+          },
+          {
+            "color": "purple",
+            "description": "Ordering the build steps.",
+            "id": "3939cbec-0f9c-4e92-b093-fdb692b568cd",
+            "name": "06-implementation-plan"
+          },
+          {
+            "color": "purple",
+            "description": "Creating build tracking when needed.",
+            "id": "4826bfca-305e-47f8-8b96-4247fe640684",
+            "name": "07-tracking-setup"
+          },
+          {
+            "color": "orange",
+            "description": "Producing the requested change.",
+            "id": "d671c59b-4dec-47d5-9b9d-8f3753f5215c",
+            "name": "08-build"
+          },
+          {
+            "color": "yellow",
+            "description": "Checking it against the requirements.",
+            "id": "99131ca1-7919-4085-828b-5e7532f4c3c6",
+            "name": "09-testing"
+          },
+          {
+            "color": "red",
+            "description": "Fixing what testing found.",
+            "id": "5681a392-a794-4d70-9f1a-73e05d7816c6",
+            "name": "10-bug-fixing"
+          },
+          {
+            "color": "pink",
+            "description": "The owner reviews the result.",
+            "id": "30e7d81b-fe5b-4ebc-8c8d-84b10bca92d0",
+            "name": "11-user-approval"
+          },
+          {
+            "color": "green",
+            "description": "Repository work is in a pushed pull request.",
+            "id": "05c879d3-c04a-4fdd-9152-eea3bc32110b",
+            "name": "12-pr-and-push"
+          },
+          {
+            "color": "green",
+            "description": "The result is put where it belongs.",
+            "id": "e2044ee4-af36-41cb-9a2d-b63d28691a4b",
+            "name": "13-deployment"
+          },
+          {
+            "color": "green",
+            "description": "Lasting specifications match the result.",
+            "id": "505e2839-10e1-48d1-a11e-b4cd291fa986",
+            "name": "14-spec-update"
+          }
+        ]
+      },
+      "type": "select"
+    },
+    "Status": {
+      "description": null,
+      "id": "%3BIMe",
+      "name": "Status",
+      "status": {
+        "groups": [
+          {
+            "color": "gray",
+            "id": "a35ad257-198a-4302-bf9c-03c708d6e857",
+            "name": "To-do",
+            "option_ids": [
+              "1792ff23-0d6b-498d-8bce-e65da6644ed9",
+              "751c7634-2995-45c9-85f6-f12040bc98aa"
+            ]
+          },
+          {
+            "color": "blue",
+            "id": "5b51297c-c4fd-476a-b148-ebae6a341d73",
+            "name": "In progress",
+            "option_ids": [
+              "b93e46af-e5e7-474c-8598-13a9c09826aa",
+              "20c3d57a-bec1-427c-ae77-b8a5adeba469"
+            ]
+          },
+          {
+            "color": "green",
+            "id": "0792aacc-2827-43b0-9d9a-cc06cbba2e58",
+            "name": "Complete",
+            "option_ids": [
+              "c27a1259-f791-4fe3-84f0-2b1dc7237faf",
+              "9ecdf6d6-97e4-4992-b2fd-c8d9e9365f06"
+            ]
+          }
+        ],
+        "options": [
+          {
+            "color": "gray",
+            "description": null,
+            "id": "1792ff23-0d6b-498d-8bce-e65da6644ed9",
+            "name": "Backlog"
+          },
+          {
+            "color": "blue",
+            "description": null,
+            "id": "751c7634-2995-45c9-85f6-f12040bc98aa",
+            "name": "Ready"
+          },
+          {
+            "color": "yellow",
+            "description": null,
+            "id": "b93e46af-e5e7-474c-8598-13a9c09826aa",
+            "name": "In Progress"
+          },
+          {
+            "color": "purple",
+            "description": null,
+            "id": "20c3d57a-bec1-427c-ae77-b8a5adeba469",
+            "name": "In Review"
+          },
+          {
+            "color": "green",
+            "description": null,
+            "id": "c27a1259-f791-4fe3-84f0-2b1dc7237faf",
+            "name": "Done"
+          },
+          {
+            "color": "brown",
+            "description": null,
+            "id": "9ecdf6d6-97e4-4992-b2fd-c8d9e9365f06",
+            "name": "Cancelled"
+          }
+        ]
+      },
+      "type": "status"
+    },
+    "Sub-items": {
+      "description": null,
+      "id": "zfAU",
+      "name": "Sub-items",
+      "relation": {
+        "data_source_id": "1555d59b-23f6-4a9d-adcb-5f201d9b6aa8",
+        "database_id": "64a80ed6-b7e4-4973-813a-648030133b15",
+        "dual_property": {
+          "synced_property_id": "%7CvVz",
+          "synced_property_name": "Parent item"
+        },
+        "type": "dual_property"
+      },
+      "type": "relation"
+    },
+    "Type": {
+      "description": null,
+      "id": "%7BB%5BF",
+      "name": "Type",
+      "select": {
+        "options": [
+          {
+            "color": "default",
+            "description": null,
+            "id": "49727216-9650-4cf3-89ee-225a6aa4f9fc",
+            "name": "discovery"
+          },
+          {
+            "color": "default",
+            "description": null,
+            "id": "f222bf29-6b90-48ff-a5f6-c815351866dd",
+            "name": "solution-design"
+          },
+          {
+            "color": "default",
+            "description": null,
+            "id": "4a3fea8c-24f6-4c90-a0e9-56c5bf56cf7a",
+            "name": "build"
+          },
+          {
+            "color": "default",
+            "description": null,
+            "id": "aa55ad8c-ff68-4521-abcb-09250de770d1",
+            "name": "data-load"
+          },
+          {
+            "color": "default",
+            "description": null,
+            "id": "8318fe4f-8e4f-48cf-a488-9d448a438438",
+            "name": "repository-maintenance"
+          },
+          {
+            "color": "default",
+            "description": null,
+            "id": "7ce82cc1-68af-498f-986e-c7eb61a11a0d",
+            "name": "research"
+          },
+          {
+            "color": "default",
+            "description": null,
+            "id": "afee6792-b54b-4bc9-a4d5-c0e168379a9f",
+            "name": "task"
+          },
+          {
+            "color": "default",
+            "description": null,
+            "id": "5cb4e78d-e141-4bf8-ad68-a7ee9998f8ba",
+            "name": "bug"
+          },
+          {
+            "color": "default",
+            "description": null,
+            "id": "79327fb8-8fd7-4a62-ae1f-1bab50edd6a1",
+            "name": "enhancement"
+          }
+        ]
+      },
+      "type": "select"
+    },
+    "Updated": {
+      "date": {},
+      "description": "The date the toolkit last changed this item.",
+      "id": "Bscv",
+      "name": "Updated",
+      "type": "date"
+    },
+    "Waiting on": {
+      "description": "owner, agent, external: <who>, or none.",
+      "id": "ITpJ",
+      "name": "Waiting on",
+      "rich_text": {},
+      "type": "rich_text"
+    },
+    "Work item": {
+      "description": null,
+      "id": "title",
+      "name": "Work item",
+      "title": {},
+      "type": "title"
+    }
+  },
+  "public_url": null,
+  "title": [
+    {
+      "annotations": {
+        "bold": false,
+        "code": false,
+        "color": "default",
+        "italic": false,
+        "strikethrough": false,
+        "underline": false
+      },
+      "href": null,
+      "plain_text": "Work Items",
+      "text": {
+        "content": "Work Items",
+        "link": null
+      },
+      "type": "text"
+    }
+  ],
+  "url": "https://app.notion.com/p/64a80ed6b7e44973813a648030133b15"
+}

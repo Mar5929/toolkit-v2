@@ -1,0 +1,32 @@
+{
+  "name": "sf-architect-solutioning",
+  "version": "0.1.0",
+  "description": "Salesforce solution architect skill. Takes a requirement, pushes back on vagueness, verifies platform facts against official Salesforce docs (live fetch, never memory), designs declarative-first to Well-Architected standards, and produces an approved solution plan before any build. Project-agnostic: discovers each project's requirement/decision locations from its own AGENTS.md and rules.",
+  "author": {
+    "name": "Mike Rihm",
+    "email": "michael@rihm.com"
+  },
+  "keywords": [
+    "toolkit-v2",
+    "salesforce",
+    "architecture",
+    "solution-design"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Salesforce Architect",
+    "shortDescription": "Salesforce solution architecture, checked against official documentation.",
+    "longDescription": "A Salesforce solution architect skill, used in Salesforce projects only. It pushes back on vague requirements, checks platform facts against official Salesforce documentation, designs declarative-first to Well-Architected standards, and produces a solution plan for the owner to approve before any build. The solution-design skill calls it as its Salesforce specialist.",
+    "developerName": "Mike Rihm",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Read"
+    ],
+    "defaultPrompt": [
+      "Architect this Salesforce feature",
+      "Review this Salesforce design",
+      "Is this possible in Salesforce?"
+    ]
+  }
+}

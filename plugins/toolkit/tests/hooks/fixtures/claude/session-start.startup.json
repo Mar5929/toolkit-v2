@@ -1,0 +1,7 @@
+{
+  "session_id": "{{SESSION}}",
+  "transcript_path": "/Users/owner/.claude/projects/-tmp-project/{{SESSION}}.jsonl",
+  "cwd": "{{CWD}}",
+  "hook_event_name": "SessionStart",
+  "source": "startup"
+}

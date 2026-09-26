@@ -1,0 +1,34 @@
+{
+  "name": "work",
+  "version": "0.1.0",
+  "description": "Runs a project's work items from first idea to done: nine skills and six agents for requirements, solution design, sub-items, building, checking, and shipping, with the owner approving each gate. Works with a local .work-items/ folder or Notion.",
+  "author": {
+    "name": "Mike Rihm",
+    "email": "michael@rihm.com"
+  },
+  "keywords": [
+    "toolkit-v2",
+    "work-items",
+    "requirements",
+    "solution-design",
+    "delivery"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Work",
+    "shortDescription": "Run work items from first idea to done, with the owner approving each gate.",
+    "longDescription": "Nine skills that take a work item through the fourteen stages: work-on starts or continues work, work-status says where things stand, work-decide walks the owner through decisions, work-requirements interviews him, solution-design writes design options, work-organize handles sub-items and moved folders, work-check tests the result against the requirements, work-finish ships and closes, and work-delegate hands a goal to a team of agents. Every tracker uses the same stages, WORK-ITEM.md body, and DESIGN.md. In Codex the agent role files are passed to a native worker.",
+    "developerName": "Mike Rihm",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Write",
+      "Repository"
+    ],
+    "defaultPrompt": [
+      "Build this for me",
+      "Where are we?",
+      "What do you need from me?"
+    ]
+  }
+}

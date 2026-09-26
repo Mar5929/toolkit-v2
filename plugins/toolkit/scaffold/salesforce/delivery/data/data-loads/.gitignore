@@ -1,0 +1,5 @@
+# Data files (record IDs + PII). Local only. Do NOT commit.
+*.csv
+*.xlsx
+*.xls
+!.gitignore

@@ -1,0 +1,17 @@
+{
+  "name": "session-skills",
+  "version": "0.1.0",
+  "description": "Five conversation skills: handoff writes a checked prompt for a new session, session-summary recaps this chat, braindump plays back a brain dump, explain-simply re-explains in plain bullets, and unslop removes machine-written patterns from text.",
+  "author": {
+    "name": "Mike Rihm",
+    "email": "michael@rihm.com"
+  },
+  "keywords": [
+    "toolkit-v2",
+    "handoff",
+    "summary",
+    "plain-english",
+    "writing"
+  ],
+  "defaultEnabled": false
+}

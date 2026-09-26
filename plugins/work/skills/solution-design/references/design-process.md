@@ -1,0 +1,171 @@
+# The solution design process
+
+Detail for `solution-design`. Carried over from Toolkit V1's solution
+design process. What changed for V2: the design lives with the work
+item (never `docs/designs/`), the requirements live in the item (never a PRD
+file), every agent runs on Opus, and the design is read and saved with
+`toolkit work design`.
+
+## Checklist before the design round
+
+Work through every item in order. Tick each one only when it is true.
+
+- [ ] **The requirements are read and understood**
+  - [ ] The item's Requirements, Open Questions, Notes, and approval state are
+        read
+  - [ ] The spec check ran (`requirements-analyst`)
+  - [ ] The goal is written in one paragraph in the design's "What this
+        solves": who uses the result, what they are trying to do, what must be
+        true when it is done
+  - [ ] New build or existing build is known, and "What exists today" says
+        what the existing build does for this area
+  - [ ] Notes > Solution options and considerations are treated as ideas,
+        not requirements
+- [ ] **The requirements are ready to design from**
+  - [ ] Nothing is missing: every step, person, error case, state, boundary
+        with another system, rule for what happens after, and way to tell it
+        worked
+  - [ ] Every requirement is explicit end to end: who does what, when, with
+        what result, and what happens when it fails
+  - [ ] Every place a builder could misread the wording is listed, with the
+        wrong reading, the intended reading, and a rewording
+  - [ ] Every requirement that does not fit the end-to-end experience is
+        flagged with the reason
+  - [ ] The owner ruled on every flag, and each ruling is in the design's
+        Notes
+  - [ ] Gaps were fixed in the requirements through `work-requirements`, not
+        patched in the design
+- [ ] **The way of working is agreed**
+  - [ ] Interview first, or scan and research first
+  - [ ] Design philosophy: built-in mechanisms first, or a specialized one
+  - [ ] One option, or several, and what differs between them
+- [ ] **The team is agreed**
+  - [ ] Size weighed from `../../../references/team-roles.md`: requirement
+        count, systems touched, existing build, options wanted, unknowns
+  - [ ] Each role named with its count, what it reads, and what it returns
+  - [ ] The number of agent runs for the first pass is stated
+  - [ ] The owner agreed or changed the team, or the item records his
+        team-arrangement answer from `work-delegate`
+- [ ] **Preparation is in the design**
+  - [ ] What this solves, What exists today, Design philosophy, and
+        Preparation (readiness, way of working, team, constraints) are filled
+  - [ ] Unresolved discussion and the next action are in the design's Notes
+- [ ] **Research is done**
+  - [ ] One researcher per bounded question, started together
+  - [ ] Every finding has a source, a date, and a label: official
+        documentation, project evidence, or community claim
+  - [ ] Any requirements concern a researcher raised went back to the owner
+
+Only when every box is ticked does the design round (step 6) start.
+
+## Step 1 and 2: are the requirements ready?
+
+- Read the requirements against the whole end-to-end experience of the
+  person who uses the result, inside the larger system. A requirement that
+  seems out of place, contradicts another, or makes no sense in that flow is
+  flagged in the first reply, with the reason.
+- Answer three questions: Is anything missing? Is every requirement explicit
+  end to end? Where could a builder misread it?
+- Say plainly whether the requirements are ready. List what is still
+  unclear. Use no score.
+- Not ready: say so in the first reply, with each missing piece, unclear
+  piece, and misreading risk, each with a proposed fix. Push back even when
+  the owner wants to move on: a gap fixed in the requirements costs one
+  question; the same gap found by the critic costs a design round, and found
+  by a builder costs a build.
+- The owner can overrule a flag. Record his ruling and reason in the design's
+  Notes, with the `R-xx` it concerns.
+
+## Step 3: the way of working
+
+Ask at most two questions, each with a recommendation and a one-line reason.
+Skip anything already answered.
+
+1. **Interview or scan first.** Recommend the interview when the goal or the
+   constraints are open; recommend the scan when the requirements are
+   detailed and the unknowns are technical.
+2. **Philosophy and options.** Default: the platform's built-in mechanisms
+   wherever they meet a requirement, custom only where nothing built-in does.
+   One option unless the owner wants more; if more, agree how many and what
+   differs (for example built-in only against custom, or least change against
+   best long-term fit).
+3. **The team.** Propose it from `team-roles.md` with one line per role. The
+   owner agrees or changes it before any agent starts.
+
+Write settled answers into the design's Preparation section as they come.
+
+## Step 4: the design record
+
+- `toolkit work design <id> --create` creates the design from the project's
+  template (`.work-items/work-item-template/DESIGN.md` when present, otherwise
+  the toolkit's template) in the item's one design home.
+- `toolkit work design <id>` prints the current design. Paste the parts each
+  agent needs into its brief.
+- The design's frontmatter (`work_item`, `status`, `approved`) is written by
+  the CLI. Never edit it by hand.
+- Several options go in one design, each as its own top-level section
+  (`## Option A: <name>`, then `## Option B: <name>`), each with the same
+  inner headings.
+
+## Step 5: research
+
+One researcher per bounded question. Good questions: what the platform offers
+built in for a requirement; the current version's limits; what people are
+doing for this kind of problem; what an existing component in this
+repository already does. Each finding comes back with a source, a date, and a
+label.
+
+Salesforce projects: open `sf-architect-solutioning` as the specialist for
+platform facts (objects, Flows, Apex, permissions). It returns its findings to
+this design and starts no second interview. Pass its findings to the
+architect.
+
+## Step 6: design and critique
+
+- **Architect.** One per option. The brief holds the design's current text,
+  the requirements, the research findings, which option to write, and the
+  draft file path (a file in a temporary folder made with `mktemp -d`, never
+  inside `.work-items/`). It says plainly whether the requirements are ready
+  and does not design until they are.
+- **Critic.** One per draft. Returns one line per requirement (satisfied,
+  partly satisfied, not satisfied) with evidence, plus findings on the goal,
+  unnecessary custom work, sources, and writing.
+- **Fix loop.** Give the critic's findings to the architect. The architect
+  fixes the draft and lists what changed. The critic checks again. Repeat
+  until every requirement is satisfied and nothing material remains.
+  - A finding the architect and critic still disagree on after two rounds
+    goes to the owner as one question, with both positions in two lines each.
+  - A requirement no design can meet goes to the owner as a requirements
+    question.
+  - Stop because the list is empty or the owner decided the rest, never
+    because the loop is long.
+
+## Step 7 and 8: save, present, approve
+
+- Merge the final drafts into one design text: the shared sections, then one
+  `## Option` section per option, then the misreading table and Notes. Save it
+  with `toolkit work design <id> --set-file <file> --status proposed`.
+- Tell the owner: how many options, one sentence each, the recommendation and
+  its reason, what he will see when it is done, the main risks, the order of
+  work, and the decisions that need him. The full design is in the item; say
+  where in one line.
+- His yes: `toolkit work approve <id> --design --by <owner>`, a history note
+  with his words, then hand back to `work-on`, which turns the approved
+  option's Order of work into the Roadmap and Tasks.
+- He picks one of several options: note the choice in the design's Notes
+  before approving.
+- He wants changes: record them in the design's Notes, run another fix round
+  for the named changes only, and ask again.
+- Lasting lessons the owner stated along the way go through `memory-save`.
+  Decisions for the whole project go through `work-decide`. Working design
+  Notes are not project memory.
+- A failed save: lead with "Not saved" and keep the unsaved text.
+
+## Changing an approved design later
+
+- A build that shows the design does not work: record what failed in the
+  design's Notes, set the design back with
+  `toolkit work design <id> --status proposed`, and run a fix round for the
+  affected parts.
+- A replaced design: `toolkit work design <id> --status superseded` on the old
+  text only when a new design replaces it completely.

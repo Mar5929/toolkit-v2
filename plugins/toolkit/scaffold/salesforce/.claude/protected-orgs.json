@@ -1,0 +1,17 @@
+{
+  "_comment": "Policy for .claude/hooks/guard-protected-orgs.cjs. Agents never deploy or validate against production. The guard blocks production orgs and orgs it cannot classify, and asks before sandbox changes (blocked in Codex, which cannot ask). The owner runs production changes.",
+  "action": "deny",
+  "unknownOrgAction": "ask",
+  "sandboxAction": "ask",
+  "confirmOrgDeleteAlways": true,
+  "alwaysProtect": [],
+  "neverProtect": [],
+  "_fields": {
+    "action": "deny = block commands against recognized production orgs; ask = confirm. This project uses deny.",
+    "unknownOrgAction": "What to do when the target org can't be classified (not authenticated yet, sf CLI unavailable). Any value other than 'allow' treats the org like production and applies 'action'. 'allow' = let it through.",
+    "sandboxAction": "What to do when a deploy, data write, anonymous Apex run, or metadata delete targets a sandbox or scratch org. 'ask' = confirm, because the safety rule allows these only after the owner says yes (default). 'allow' = let it through silently. A deploy validate on a sandbox always passes silently.",
+    "confirmOrgDeleteAlways": "true = any 'org delete' asks even for scratch/sandbox, since it's irreversible. Set false to only guard production.",
+    "alwaysProtect": "Org aliases or usernames to always confirm, even if auto-detected as sandbox/scratch. Example: [\"target-build\"].",
+    "neverProtect": "Org aliases or usernames to never confirm (escape hatch for a known throwaway scratch org). Wins over every other rule."
+  }
+}
