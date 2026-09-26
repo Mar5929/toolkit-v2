@@ -1,0 +1,267 @@
+diff -ru /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.memory/AGENTS.md /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved/.memory/AGENTS.md
+--- /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.memory/AGENTS.md	2026-09-26 18:36:01
++++ /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved/.memory/AGENTS.md	2026-09-26 19:12:07
+@@ -1,28 +1,28 @@
+ # Local project memory
+ 
+-Keep future sessions oriented without turning every conversation into lasting memory. This folder is the selected Second Brain V2 store and can be opened directly as an Obsidian vault. Active topics stay flat; filenames and YAML types agree. Git ignores this folder, so setup must arrange an independent backup or sync.
++Keep future sessions oriented without turning every conversation into lasting memory. This folder is the project's built-in memory store and can be opened directly as an Obsidian vault. Active topics stay flat; filenames and YAML types agree. Git ignores this folder, so back it up with `toolkit memory export --to <folder outside this project>`.
+ 
+ ## Read and route
+ 
+-- Read `CURRENT_FOCUS.md` at startup. Read `MEMORY.md` as a short index, then open relevant topics. Check dates, scope, and the current source before acting on a remembered claim.
+-- Read `memory-criteria.md` before selecting or changing memory. It names the current onboarding or trusted mode and the default eligibility rules. Use the terminology glossary for project language, including distinct meanings across systems.
++- Read `CURRENT_FOCUS.md` at startup; the session briefing includes it. Read `MEMORY.md` as a short index, then open relevant topics. Check dates, scope, and the current source before acting on a remembered claim.
++- Read `memory-criteria.md` before selecting or changing memory. It holds the default eligibility rules; the `memory-save` skill holds the approval policy and the onboarding or trusted mode. Use the terminology glossary for project language, including distinct meanings across systems.
+ - Link related notes inside this vault with relative Markdown links, such as `[account model](project_account_model.md)`. Obsidian shows backlinks to a note from the notes that link to it; a second reverse link is optional. Link only when the relationship helps retrieval, and check that the target exists. Keep tracker URLs and paths outside `.memory/` as source references rather than vault links.
+-- Keep current tasks and owner-mentioned to-dos in `CURRENT_FOCUS.md`, with links to the chosen tracker. Keep full tasks, status, requirements, history, and the work item's design together in that tracker; verified system behavior in the System Guide; procedures in instructions or skills; and raw outside sources in their source folders.
++- Keep current tasks and owner-mentioned to-dos in `CURRENT_FOCUS.md`, naming work items by ID. Keep full tasks, status, requirements, history, and the work item's design together in the chosen tracker; verified system behavior in the System Guide; procedures in instructions or skills; and raw outside sources in their source folders.
+ 
+ ## Curate
+ 
+ - Use a coherent topic file such as `project_account_data_model.md`. Allowed prefixes and matching `metadata.type` values are `user`, `feedback`, `project`, `reference`, and `event`. `project_topic_template.md` is a seed, not a saved memory. Keep one related topic per file and aim for a quick read.
+ - Record source and date, status, scope, the durable point, why it matters, and how to apply it. Keep uncertainty explicit. Preserve extra YAML fields written by a host or imported record.
+-- Search for an existing topic before creating one. Correct, merge, or supersede in place where possible. Mark obsolete claims in both file text and index; do not leave an archived item reading as currently open.
+-- When renaming, merging, archiving, or deleting a topic, inspect links from other memory notes and repair any affected links. Do not leave a link pointing at a former active location.
+-- Rebuild `MEMORY.md` with `scripts/memory.py reindex` after a topic change. The index holds one short link per active topic, not the content itself. Keep it below the configured budget.
+-- Keep `CURRENT_FOCUS.md` under 50 lines by replacing stale sections, not appending. Do not remove an unresolved owner to-do solely to meet that limit.
+-- Keep the glossary broad through sourced real terms, aliases, and system-specific meanings. Do not invent definitions.
++- Search for an existing topic before creating one (`toolkit memory find`). Correct, merge, or supersede in place where possible. Mark obsolete claims in both file text and index; do not leave an archived item reading as currently open.
++- When renaming, merging, archiving, or deleting a topic, inspect links from other memory notes and repair any affected links, saving each repaired note with `toolkit memory save`. Do not leave a link pointing at a former active location.
++- `toolkit memory save`, `retire`, and `restore` rebuild `MEMORY.md`; run `toolkit memory reindex` after any other topic change. The index holds one short link per active topic, not the content itself. Keep it below the configured budget.
++- Keep `CURRENT_FOCUS.md` under 50 lines by replacing stale sections, not appending, and write it with `toolkit memory focus --set-file`. Do not remove an unresolved owner to-do solely to meet that limit.
++- Keep the glossary broad through sourced real terms, aliases, and system-specific meanings, and write it with `toolkit memory glossary --set-file`. Do not invent definitions.
+ 
+ ## Authority and completion
+ 
+-- In onboarding, propose substantive lasting-memory changes using the card in `.claude/rules/memory-review-and-save.md`. Write only after approval for the stated meaning and operation. An explicit request to remember or correct is authorization for that specific change.
+-- In trusted mode, routine saves, updates, and recoverable cleanup can proceed within the recorded grant. Ask before ambiguous, bulk, or irreversible deletion of unique content. Only the owner can change the mode.
+-- A rejected candidate is not saved to another memory, a criteria example, the glossary, or a pending queue. Record only the general selection lesson if the owner gave one.
+-- Prefer the dedicated curator as writer. Use the local script for lock-protected topic changes, index rebuild, archive, restore, and checks. If delegation is unavailable, the main agent follows the same steps. Never run parallel writers against the same topic.
+-- Read back changes and run `python3 scripts/memory.py doctor` before reporting success. The curator does not edit requirements, work-item status, designs, deployments, or source code.
++- Save through the `memory-save` skill, which holds the approval policy for onboarding and trusted mode. An explicit request to remember or correct is authorization for that specific change.
++- Ask before ambiguous, bulk, or irreversible deletion of unique content. Only the owner can change the mode.
++- A rejected candidate is not saved to another memory, a criteria example, the glossary, or a pending queue. Record only the general selection lesson, as a `feedback` memory, if the owner gave one.
++- The main agent writes this folder only with `toolkit memory` commands (`save`, `retire`, `restore`, `delete`, `focus`, `glossary`, `reindex`). They lock the folder, refuse stale edits, and rebuild the index. Never run parallel writers against the same topic.
++- Read back changes with `toolkit memory get` and run `toolkit doctor` before reporting success. Memory work does not edit requirements, work-item status, designs, deployments, or source code.
+Only in /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.memory: CLAUDE.md
+diff -ru /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.memory/CURRENT_FOCUS.md /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved/.memory/CURRENT_FOCUS.md
+--- /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.memory/CURRENT_FOCUS.md	2026-09-26 18:39:52
++++ /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved/.memory/CURRENT_FOCUS.md	2026-09-26 18:53:52
+@@ -1,43 +1,21 @@
+ # Current focus
+ 
+-<!-- Fill-in guide: replace each angle-bracket prompt directly under its heading with current, sourced project context. Add or remove bullets as needed. Put detailed task status in the linked work item and only the next-session route here. Write “None” in an empty section instead of leaving a sample bullet. Update Last updated and remove this guide after setup. -->
++<!-- Fill-in guide: replace each angle-bracket prompt directly under its heading with current, sourced project context. Add or remove bullets as needed. Name work items by ID; their detailed tasks and status stay in the work item, and only the next-session route goes here. Write “None” in an empty section instead of leaving a sample bullet. Keep the file under 50 lines. Update Last updated and remove this guide after setup. -->
+ 
+ Last updated: `<YYYY-MM-DD, source, and person or agent>`
+ 
+-## Current focuses
++## Now
+ 
+-- `<Current outcome or area; link the roadmap unit or active work item.>`
++- `<Current outcome or area, with its roadmap unit or active work item ID.>`
+ 
+-## Priorities and tasks to complete
++## Waiting on the owner
+ 
+-- `<Immediate action, owner, and work-item link if one exists.>`
++- `<A decision or action only the owner can take that has no work item; who needs it and when to check again.>`
+ 
+-## Owner-mentioned to-dos and open loops
++## Untracked to-dos
+ 
+-- `<An unresolved request without a ticket; add the ticket link when created.>`
++- `<An unresolved owner request without a work item; replace it with the work item ID once one is created.>`
+ 
+-## Upcoming milestones
+-
+-- `<Absolute date or event, expected outcome, and source.>`
+-
+-## Recent decisions
+-
+-- `<Date and one-line decision; link its authoritative record. Keep at most three.>`
+-
+-## Blockers and waiting on
+-
+-- `<Blocker, who can resolve it, and when to check again.>`
+-
+-## Things to be aware of
+-
+-- `<Time-sensitive concern and source, or none known.>`
+-
+-## Last 3 things touched
+-
+-- `<Most recent meaningful artifact or work item, with date and link.>`
+-- `<Second most recent, or none yet.>`
+-- `<Third most recent, or none yet.>`
+-
+-## Next-session handoff
++## Next session starts with
+ 
+ - `<Where to resume, what to read, and the next concrete action.>`
+diff -ru /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.memory/MEMORY.md /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved/.memory/MEMORY.md
+--- /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.memory/MEMORY.md	2026-09-25 17:08:33
++++ /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved/.memory/MEMORY.md	2026-09-26 18:54:04
+@@ -1,6 +1,6 @@
+ # Memory index
+ 
+-One short link per active topic. This file is generated by python3 scripts/memory.py reindex; open a topic before relying on it. Seed topic templates are excluded. In a new project, the sections stay empty until the curator saves real memories.
++One short link per active topic. This file is generated by `toolkit memory reindex`; open a topic before relying on it. Seed topic templates are excluded. In a new project, the sections stay empty until real memories are saved with the `memory-save` skill.
+ 
+ ## User
+ 
+diff -ru /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.memory/memory-criteria.md /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved/.memory/memory-criteria.md
+--- /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.memory/memory-criteria.md	2026-09-26 18:39:52
++++ /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved/.memory/memory-criteria.md	2026-09-26 19:12:07
+@@ -1,16 +1,7 @@
+----
+-mode: onboarding
+-trusted_by: none
+-trusted_on: none
+-trusted_scope: none
+-backup_destination: none
+-backup_restore_tested_on: none
+----
++# Memory criteria
+ 
+-# Memory criteria and trust
++This file is the project-specific selection policy: what is worth keeping in lasting memory. The approval policy, including onboarding and trusted mode, is in the `memory-save` skill, which saves with `toolkit memory save`. When the owner corrects what is worth saving, save the correction as a `feedback` memory with `memory-save`, as a general rule, without copying the rejected memory. Those `feedback` memories override this page.
+ 
+-This file is the project-specific selection policy. The default mode is **onboarding**. Only the owner can explicitly authorize **trusted** mode; record who granted it, when, and its scope in the frontmatter. Silence, elapsed time, or several approved cards do not change mode. The agent may propose improvements to these criteria during onboarding. Record a correction here as a general rule without copying a rejected memory into this file.
+-
+ ## Default test for lasting memory
+ 
+ Save a topic when it concerns this project, has a credible source, would matter in a future session, would be costly or unreliable to reconstruct, and has no better maintained owner. Prefer updating an existing topic. A short pointer to an authoritative record can qualify when future sessions would otherwise miss that record.
+@@ -19,13 +10,13 @@
+ | --- | --- | --- |
+ | `user_<topic>.md` | Relevant role, responsibility, working preference, or communication need the owner stated | Personal judgments, irrelevant biography, private details |
+ | `feedback_<topic>.md` | Repeated or standing correction to how the agent should work; confirmed selection lesson | One-off irritation, a rejected fact restated as policy, an instruction already in `AGENTS.md` |
+-| `project_<topic>.md` | Durable project constraint, rationale, technical landmark, proven costly fix, or otherwise-unowned decision | Code summary, schema copy, active ticket status, accepted requirement or design body |
++| `project_<topic>.md` | Durable project constraint, rationale, technical landmark, or proven costly fix | A decision for the whole project (`DECISIONS.md`), code summary, schema copy, active ticket status, accepted requirement or design body |
+ | `reference_<topic>.md` | Hard-to-rediscover route to a source, system, dashboard, or decision record, with why to open it | Entire outside page or a path already obvious in `PROJECT.md` or the project map |
+ | `event_<topic>.md` | Significant project episode: what was done, what resulted, and where the output lives | Routine edit, tool call, raw error, daily progress log |
+ 
+ ## Working context is different
+ 
+-`CURRENT_FOCUS.md` holds current focuses, near-term priorities, owner-mentioned to-dos without tickets, milestones, blockers, concerns, recent decisions, and the next-session handoff. It can change often. Link a tracked work item and keep its detailed tasks/status there. Do not turn every open task into lasting memory. Do not discard an unresolved owner to-do merely to shorten the file.
++`CURRENT_FOCUS.md` holds what is happening now: active work item IDs, what waits on the owner with no work item, untracked to-dos, and where the next session starts. It can change often. Keep a work item's detailed tasks and status in that item. Do not turn every open task into lasting memory. Do not discard an unresolved owner to-do merely to shorten the file.
+ 
+ ## Never save as lasting memory
+ 
+@@ -34,22 +25,6 @@
+ - Live status, pending approval, unshipped requirements, procedure steps, code restatements, or a current-system explanation that the code/System Guide owns.
+ - A rejected candidate under a new name or wider wording. A rejection stands until the owner changes it.
+ 
+-## Onboarding: review each lasting change
++## Backup
+ 
+-The main agent shows the exact operation and meaning in the current Toolkit card format: heading, **Change**, **Summary** or **Affected content**, and **Your decision**. No proposal inbox is created. The curator writes only after the owner approves that card or explicitly requests the same save/correction. Current-focus upkeep and faithful glossary updates from already-approved sources proceed without a lasting-memory card. An agent inference is never the owner's decision.
+-
+-## Trusted mode: routine curation
+-
+-When the owner explicitly grants it, the agent changes the frontmatter to `mode: trusted` and records the grant. Then the curator may create, update, merge, deduplicate, supersede, archive, and restore routine memory within that scope. Continue to check source and destination; a checkpoint may yield no memory. Ask before ambiguous or irreversible deletion, erasing unique history, or widening the grant. Revocation returns to onboarding immediately. Trusted mode never authorizes changes to requirements, work items, or designs.
+-
+-## Backup and recovery
+-
+-This folder is Git-ignored. During setup, record an independent backup or sync destination and the last tested restore date in the frontmatter. A one-time snapshot from `scripts/memory.py backup` does not create an ongoing schedule. Linked worktrees must resolve to one vault. A fresh clone or machine needs its memory restored before the agent treats an empty index as evidence that no memory exists.
+-
+-## Learned selection guidance
+-
+-<!-- Add a row only when an owner correction changes the general rule for selecting memories. Replace every angle-bracket prompt in that row with the date/source, concise rule, and practical effect; remove the example row when the first correction is recorded. Do not copy the rejected memory itself. -->
+-
+-| Date and source | General rule learned | Effect |
+-| --- | --- | --- |
+-| `<YYYY-MM-DD and owner correction>` | `<Rule about what counts or does not count, without repeating rejected content>` | `<How selection changes>` |
++This folder is Git-ignored. Back it up with `toolkit memory export --to <folder outside this project>` and restore a fresh clone with `toolkit memory import --from <that folder>`. Linked worktrees resolve to one vault in the main checkout. A fresh clone or machine needs its memory restored before the agent treats an empty index as evidence that no memory exists.
+diff -ru /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.work-items/work-item-template/DESIGN.md /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved/.work-items/work-item-template/DESIGN.md
+--- /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.work-items/work-item-template/DESIGN.md	2026-09-26 18:38:36
++++ /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved/.work-items/work-item-template/DESIGN.md	2026-09-26 19:11:57
+@@ -1,8 +1,14 @@
++---
++work_item: WI-001
++status: proposed
++approved: "no"
++---
++
+ # WI-001: <Work item title> — solution design
+ 
+ <!-- Fill-in guide: keep this file beside the real WORK-ITEM.md, replace WI-001 and every angle-bracket prompt with the actual value in that exact heading, field, table cell, or paragraph, and delete this guide. Add rows or options where needed; remove unused example rows and optional sections. When the owner answers a question, update the relevant design section and the matching work-item record, then update Notes at the bottom. -->
+ 
+-**Work item:** [WORK-ITEM.md](WORK-ITEM.md)  
++**Requirements:** WI-001  
+ **Design status:** <Draft | In review | Approved | Superseded>  
+ **Requirements checked:** <Link to WORK-ITEM.md requirements and date checked>  
+ **Last updated:** <YYYY-MM-DD>  
+diff -ru /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.work-items/work-item-template/WORK-ITEM.md /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved/.work-items/work-item-template/WORK-ITEM.md
+--- /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.work-items/work-item-template/WORK-ITEM.md	2026-09-26 18:40:49
++++ /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved/.work-items/work-item-template/WORK-ITEM.md	2026-09-26 19:11:57
+@@ -1,17 +1,22 @@
+ ---
+ id: WI-001
+ title: <Work item title>
+-type: <Work item type>
+-status: <Backlog | In Progress | Blocked | Done>
+-stage: <Current lifecycle stage>
+-active_phase: P1
+-requirements_status: refining
+-design: <Link to design, if one exists>
++type: <discovery | solution-design | build | data-load | repository-maintenance | research | task | bug | enhancement>
++stage: <01-discovery ... 14-spec-update>
++status: <Backlog | Ready | In Progress | In Review | Done | Cancelled>
++parent: <WI-id | none>
++waiting_on: "<owner | agent | external: who | none>"
++priority: <urgent | high | medium | low>
++delivery: <agent-led | owner-led | not-offered>
++requirements_approved: <YYYY-MM-DD by <name> | no>
++design: <proposed | approved | superseded | none>
++result_approved: <YYYY-MM-DD by <name> | no>
++updated: <YYYY-MM-DD>
+ ---
+ 
+ # WI-001: <Work item title>
+ 
+-<!-- Fill-in guide for a new local work item: copy this folder and rename the folder for the real item; keep the file name WORK-ITEM.md. Replace WI-001 in front matter and heading with the real ID, then use stable phase, task, requirement, and question IDs for this item. Replace every angle-bracket prompt with actual text in that same field, cell, or paragraph; do not leave the prompt in place. Keep the headings and field labels. Add or remove phase, task, question, and requirement examples to match the real work. Use the chosen tracker as the source of truth for status and links. Delete this guide after filling the item. -->
++<!-- Fill-in guide for a new local work item: create it with `toolkit work new`, which copies this folder, names the new folder, and sets the real ID in front matter and heading; keep the file name WORK-ITEM.md. Use stable phase, task, requirement, and question IDs for this item. In the front matter, keep one value from each list and change the fields with `toolkit work` commands; a blocked item has `waiting_on` set and its Blockers line filled, not a Blocked status. Replace every angle-bracket prompt with actual text in that same field, cell, or paragraph; do not leave the prompt in place. Keep the headings and field labels. Add or remove phase, task, question, and requirement examples to match the real work. Use the chosen tracker as the source of truth for status and links. Delete this guide after filling the item. -->
+ 
+ ## Overview
+ 
+@@ -25,18 +30,18 @@
+ 
+ **Blockers:** <Blocking decision or dependency, or “None.”>
+ 
+-**Related items:** <Roadmap, parent work item, design, or external links.>
++**Related items:** <Roadmap unit, parent and related work item IDs (never folder paths), design, or external links.>
+ 
+ ## Roadmap
+ 
+ A phase is complete when its tasks are complete and its exit result has been checked.
+ 
+-<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading and active_phase above. Add one row per phase; set Status from actual progress, not from this example. -->
++<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading. Add one row per phase; set Status from actual progress, not from this example. List the phase's sub-item IDs under Sub-items, or write “None.” -->
+ 
+-| Phase | Outcome | Status | Exit result |
+-|---|---|---|---|
+-| P1 — <Phase 1 name> | <What this phase establishes> | In Progress | <Evidence that P1 is complete> |
+-| P2 — <Phase 2 name> | <What this phase delivers> | Not Started | <Evidence that P2 is complete> |
++| Phase | Outcome | Status | Exit result | Sub-items |
++|---|---|---|---|---|
++| P1 — <Phase 1 name> | <What this phase establishes> | In Progress | <Evidence that P1 is complete> | <WI-ids or “None.”> |
++| P2 — <Phase 2 name> | <What this phase delivers> | Not Started | <Evidence that P2 is complete> | <WI-ids or “None.”> |
+ 
+ ## Tasks
+ 
+@@ -73,11 +78,11 @@
+ 
+ ## Open Questions
+ 
+-<!-- Add one row per unanswered decision, using a stable Q-ID. Write the exact question, affected requirement/task IDs, current status, and the person who can answer. Resolve or remove example rows as decisions are recorded; do not hide an open decision only in Notes. -->
++<!-- Add one row per unanswered decision, using a stable Q-ID. Write the exact question, affected requirement/task IDs, current status, and who can answer: `owner` for the project owner, or another person or role. Resolve or remove example rows as decisions are recorded; do not hide an open decision only in Notes. -->
+ 
+ | ID | Question | Affects | Status | Decision needed from |
+ |---|---|---|---|---|
+-| Q-01 | <Specific unanswered question> | R-01, P1-T02 | Open | <Person or role> |
++| Q-01 | <Specific unanswered question> | R-01, P1-T02 | Open | <owner, or another person or role> |
+ 
+ ## Requirements
+ 
