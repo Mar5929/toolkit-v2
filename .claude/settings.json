@@ -1,0 +1,7 @@
+{
+  "claudeMdExcludes": [
+    "**/plugins/toolkit/scaffold/model/**",
+    "**/plugins/toolkit/scaffold/model/.claude/rules/**",
+    "**/plugins/toolkit/scaffold/model/.memory/**"
+  ]
+}

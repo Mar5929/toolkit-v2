@@ -99,7 +99,7 @@ steps that must always run the same way.
   explicit-phrase reminder and the once-per-turn Stop check, worktree-safe
   vault lookup, and one command set for built-in, Hindsight, and Notion. The
   model's folder and file formats are kept exactly: the `.memory/` files and
-  their sections (including the nine-section `CURRENT_FOCUS.md`), the topic
+  their sections (with the four-section `CURRENT_FOCUS.md` from approved item 13), the topic
   template and its YAML, the index format, the glossary, memory criteria, and
   Obsidian-style relative links with link repair on rename, merge, and
   archive. Instruction text in the model that names the old mechanism (the
