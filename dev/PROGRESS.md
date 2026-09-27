@@ -72,13 +72,17 @@ Read `dev/GOAL.md` first. This file says where the work stands.
   plus Obsidian link repair for local memory. Recorded in GOAL.md and
   ARCHITECTURE.md section 0 (revision 3).
 
-- Model-alignment rework (workflow run `wf_8b29f392-3ee`): import tool,
-  CONDITIONS.json, parity test, runtime on the model's formats, Obsidian link
-  repair, skills text, version 0.2.0.
+- Model alignment done and committed (`cd73489`): `plugins/toolkit/scaffold/model/`
+  is an exact copy of the approved model branch (import tool
+  `dev/tools/import-model.mjs`, rules in `scaffold/CONDITIONS.json`); parity
+  test passes for all 24 setups; runtime reads the model's formats; local
+  memory repairs Obsidian links; version 0.2.0. Suite: 630 pass, 0 fail, 2
+  skipped by design. After Mike merges the approved branch, point
+  import-model's default source back at his model folder and re-import.
 
 ## Next
 
-- Commit the alignment. Then: Notion rebuild of Mike's real page; Codex
+- Notion rebuild of Mike's real page, Codex install, sample runs (a)-(d). Then: Notion rebuild of Mike's real page; Codex
   install and sample runs; Claude runs once Mike signs in.
 - (Done items below kept for history.) Model-alignment rework (ARCHITECTURE section 0): import-model tool and
   CONDITIONS.json, parity test, work engine and memory drivers on the
