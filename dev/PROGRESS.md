@@ -80,9 +80,21 @@ Read `dev/GOAL.md` first. This file says where the work stands.
   skipped by design. After Mike merges the approved branch, point
   import-model's default source back at his model folder and re-import.
 
+- Live runs (workflow run `wf_f772b253-d1b`, still running after the Mac
+  slept overnight): Codex install done (V2 plugins installed, off for the
+  whole machine, on only in V2 projects; `dev/test-runs/codex-setup.md`).
+  Salesforce run (b) round 1 finished with bugs (fixed in the next round).
+  Runs (a), (c), (d) round 1 active.
+- 2026-09-27: Mike's Notion page "AI Agent Second Brain" was found archived
+  (done from his account at 2026-09-26 22:41 UTC; cause unknown). Mike chose
+  "restore and rebuild". Restored with `PATCH is_archived false`; rebuild
+  running as workflow run `wf_41ff86e7-b26`.
+- `caffeinate -i -s -t 28800` runs in the background so the Mac does not
+  idle-sleep for 8 hours (closing the lid still sleeps it).
+
 ## Next
 
-- Notion rebuild of Mike's real page, Codex install, sample runs (a)-(d). Then: Notion rebuild of Mike's real page; Codex
+- Commit run evidence as runs finish; Claude Code runs after `claude auth login`. Then: Notion rebuild of Mike's real page; Codex
   install and sample runs; Claude runs once Mike signs in.
 - (Done items below kept for history.) Model-alignment rework (ARCHITECTURE section 0): import-model tool and
   CONDITIONS.json, parity test, work engine and memory drivers on the
