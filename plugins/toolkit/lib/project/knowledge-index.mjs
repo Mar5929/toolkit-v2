@@ -1,12 +1,17 @@
-// ai-external-knowledge/INDEX.md: generated from each topic folder's
-// SOURCE-RECORD.md (critique I16). The text around the table is the scaffold
-// seed's text, so a project with no topics gets exactly the seed.
+// ai-external-knowledge/INDEX.md: its table rows are built from each topic
+// folder's SOURCE-RECORD.md (critique I16). Everything around the rows is kept
+// as the file has it (the model's text when the project has no INDEX.md yet),
+// and a project with no topic folders keeps the rows it has, so a new project
+// keeps the model's file exactly.
 //
-// buildKnowledgeIndex(root) -> { text, topics: [{ folder, title, publisher, captured, use, record }] }
+// buildKnowledgeIndex(root, { pluginRoot }) -> { text, topics: [{ folder, title, publisher, captured, use, record }] }
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { parse as parseFrontmatter } from '../core/frontmatter.mjs';
+
+const PLUGIN_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 
 export const KNOWLEDGE_DIR = 'ai-external-knowledge';
 export const INDEX_FILE = 'INDEX.md';
@@ -14,6 +19,9 @@ export const INDEX_TARGET = `${KNOWLEDGE_DIR}/${INDEX_FILE}`;
 export const SOURCE_RECORD = 'SOURCE-RECORD.md';
 export const TEMPLATE_FOLDER = 'topic-template';
 
+const TABLE_HEADER = /^\|\s*Topic folder\s*\|/;
+
+// Used only when neither the project nor the model has an INDEX.md with the topic table.
 const HEAD = [
   '# Outside documentation index',
   '',
@@ -108,7 +116,30 @@ export function topicFolders(root) {
   }
 }
 
-export function buildKnowledgeIndex(root) {
+/** The project's INDEX.md, or the model's when the project has none. */
+function baseText(root, pluginRoot) {
+  for (const file of [path.join(root, KNOWLEDGE_DIR, INDEX_FILE), path.join(pluginRoot, 'scaffold', 'model', KNOWLEDGE_DIR, INDEX_FILE)]) {
+    try {
+      return fs.readFileSync(file, 'utf8');
+    } catch {
+      // Try the next one.
+    }
+  }
+  return null;
+}
+
+/** Replace the rows of the topic table in `text` (rows null: drop the folder rows only); null when it has no such table. */
+function replaceRows(text, rows) {
+  const lines = text.split('\n');
+  const head = lines.findIndex((l) => TABLE_HEADER.test(l));
+  if (head === -1 || !/^\|\s*-/.test(lines[head + 1] || '')) return null;
+  let end = head + 2;
+  while (end < lines.length && lines[end].trim().startsWith('|')) end += 1;
+  const keep = rows || lines.slice(head + 2, end).filter((l) => !/^\|\s*\[/.test(l.trim()));
+  return [...lines.slice(0, head + 2), ...keep, ...lines.slice(end)].join('\n');
+}
+
+export function buildKnowledgeIndex(root, { pluginRoot = PLUGIN_ROOT } = {}) {
   const topics = topicFolders(root).map((f) => describeTopic(root, f));
   const rows = topics.map((t) => {
     const folder = `[${t.folder}/](${encodeURI(t.folder)}/)`;
@@ -116,5 +147,17 @@ export function buildKnowledgeIndex(root) {
     const subject = [t.publisher, t.title].filter(Boolean).join(': ') || 'Not recorded';
     return `| ${folder} | ${cell(subject)}${t.url ? ` (${cell(t.url)})` : ''} | ${cell(t.captured || 'Not recorded')} | ${cell(t.use || 'Not recorded')} |`;
   });
+  const base = baseText(root, pluginRoot);
+  if (base !== null) {
+    if (!topics.length) {
+      // No topic folders: rows that link to a folder are gone; other rows
+      // (the model's placeholder row) stay.
+      const text = replaceRows(base, null);
+      if (text !== null) return { text, topics };
+    } else {
+      const text = replaceRows(base, rows);
+      if (text !== null) return { text, topics };
+    }
+  }
   return { text: `${[...HEAD, ...rows, ...FOOT].join('\n')}\n`, topics };
 }

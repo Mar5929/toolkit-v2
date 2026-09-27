@@ -15,7 +15,7 @@ the same as every other tracker: the fourteen stages, the six statuses, the
 | `title` | The summary |
 | Body (Overview through Notes) | The description: the `WORK-ITEM.md` body from `## Overview` to the end, without the frontmatter and the title line |
 | `stage` | A select field named "Stage" with the fourteen stages when the project has one; otherwise one label `stage-<stage>`, for example `stage-08-build`. Exactly one. |
-| `status` | The workflow status. Map the six statuses to the project's workflow once, at setup, and record the map in the project's `AGENTS.md`. Cancelled is the workflow's "Won't do" or equivalent resolution. |
+| `status` | The workflow status. Map the six statuses to the project's workflow once, at setup, with the owner, and record the map as a `DECISIONS.md` row (`toolkit decision add`, saved with `publish-docs`). Cancelled is the workflow's "Won't do" or equivalent resolution. |
 | `type` | The issue type (Story, Task, Bug) plus one label `type-<type>` for the toolkit type, for example `type-data-load` |
 | `priority` | The Jira priority field |
 | `waiting_on` | Label `waiting-on-owner` while the item waits for the owner; waiting on someone else goes in the Overview Blockers line |
@@ -25,10 +25,11 @@ the same as every other tracker: the fourteen stages, the six statuses, the
 | Design (`DESIGN.md`) | One comment whose first line is "Solution design". Edit that comment in place; never add a second one. |
 | Recent History | The Recent History table in the description |
 
-Start a new description from the toolkit plugin's `templates/WORK-ITEM.md`
-(from `## Overview` to the end) so every section exists, and a new design
-comment from its `templates/DESIGN.md`. [../trackers.md](../trackers.md),
-"Templates for every tracker", says how to find the plugin's folder.
+Start a new description from the model's work item template (from
+`## Overview` to the end) so every section exists, and a new design comment
+from the model's design template, without its frontmatter.
+[../trackers.md](../trackers.md), "Templates for every tracker", says where
+both are.
 
 ## Rules
 

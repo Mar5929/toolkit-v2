@@ -1,0 +1,78 @@
+{
+  "autoMemoryEnabled": false,
+  "enabledPlugins": {
+    "second-brain@claude-toolkit": false
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/tools/kb/graph_freshness_hook.py\"",
+            "timeout": 60
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard-protected-orgs.cjs\"",
+            "timeout": 90
+          },
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard-permission-set-deploy.cjs\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  },
+  "outputStyle": "Plain English",
+  "permissions": {
+    "deny": [
+      "Bash(git add -A)",
+      "Bash(git add -A *)",
+      "Bash(git add --all)",
+      "Bash(git add --all *)",
+      "Bash(git add .)",
+      "Bash(git add . *)",
+      "Bash(git commit -a *)",
+      "Bash(git commit -am *)",
+      "Bash(git commit --all *)",
+      "Bash(git commit --no-verify *)",
+      "Bash(git commit * --no-verify)",
+      "Bash(git commit * --no-verify *)",
+      "Bash(git commit -n *)",
+      "Bash(git commit * -n)",
+      "Bash(git commit * -n *)",
+      "Bash(git push --force *)",
+      "Bash(git push * --force)",
+      "Bash(git push * --force *)",
+      "Bash(git push -f *)",
+      "Bash(git push * -f)",
+      "Bash(git push * -f *)",
+      "Bash(git push --force-with-lease*)",
+      "Bash(git push * --force-with-lease*)",
+      "Bash(sf project delete source *)",
+      "Bash(sfdx force:source:delete *)",
+      "Bash(sf org delete *)"
+    ],
+    "ask": [
+      "Bash(git reset --hard *)",
+      "Bash(git clean *)",
+      "Bash(sf project deploy start *)",
+      "Bash(sf data create *)",
+      "Bash(sf data update *)",
+      "Bash(sf data delete *)",
+      "Bash(sf data import *)",
+      "Bash(sf data upsert *)",
+      "Bash(sf apex run *)"
+    ]
+  }
+}

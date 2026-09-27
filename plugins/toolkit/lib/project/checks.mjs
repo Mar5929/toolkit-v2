@@ -8,8 +8,9 @@
 // Checks (ARCHITECTURE sections 2, 3, 7, 9; critiques P5, P10, I17, I18, M19):
 //   the computer: Node version, the plugin-root pointer and the Codex wrapper,
 //     the Claude and Codex copies of the plugin at the same version
-//   instructions: CLAUDE.md files on the path, settings that stop Claude Code
-//     reading AGENTS.md, AGENTS.md markers, span, leftover placeholders, size
+//   instructions: the root CLAUDE.md imports AGENTS.md (the model's one
+//     CLAUDE.md), other CLAUDE.md files that stop Claude Code reading AGENTS.md,
+//     settings that do the same, AGENTS.md markers, span, leftover prompts, size
 //   plugins: enabledPlugins in .claude/settings.json and the plugin switches
 //     in .codex/config.toml
 //   Codex: trust for this folder and for the Toolkit V2 hooks
@@ -17,6 +18,9 @@
 //     leftovers, merge conflicts (the same plan `toolkit sync --dry-run` shows)
 //   Salesforce: the skill copies in .claude/skills and .agents/skills match,
 //     the org aliases are recorded
+//   project hooks: every script a hook in .claude/settings.json or
+//     .codex/hooks.json runs from the project exists (a quick check too, since
+//     a missing script fails on every tool call or every stop)
 //   tracker and memory health, ntn signed in, Hindsight health, backup age,
 //     worktrees Git can no longer find
 
@@ -25,6 +29,7 @@ import path from 'node:path';
 import { run } from '../core/util.mjs';
 import { hasSpan, spanBody, buildSpan, readRules } from './render.mjs';
 import { planManifest, projectHosts, readHosts, HOSTS_FIX, PROPOSAL_PATH, DEFAULT_PLUGIN_ROOT } from './manifest.mjs';
+import { MODEL_DIR } from './model-scaffold.mjs';
 import { tomlGet } from './toml.mjs';
 import {
   claudeHome, claudeOldPlugins, codexOldPlugins, codexTrust, codexHookTrustKeys, homeDir,
@@ -50,8 +55,26 @@ function truthy(v) {
 
 // ------------------------------------------------------------------ instructions
 
-/** CLAUDE.md files that stop Claude Code reading AGENTS.md: the project folder and every folder above it. */
+/** True when a CLAUDE.md text imports the AGENTS.md next to it (a line "@AGENTS.md" or "@./AGENTS.md"). */
+export function importsAgents(text) {
+  return String(text || '').split(/\r?\n/).some((l) => /^\s*@(\.\/)?AGENTS\.md\s*$/.test(l));
+}
+
+/**
+ * CLAUDE.md files that stop Claude Code reading AGENTS.md: the project folder
+ * and every folder above it. When the project's own CLAUDE.md imports
+ * AGENTS.md (the model's root CLAUDE.md is exactly "@AGENTS.md"), Claude Code
+ * reads AGENTS.md through that import, so no file on the path blocks it.
+ */
 export function claudeMdOnPath(root, env = process.env) {
+  const own = path.join(path.resolve(root), 'CLAUDE.md');
+  let ownText = null;
+  try {
+    ownText = fs.readFileSync(own, 'utf8');
+  } catch {
+    ownText = null;
+  }
+  if (ownText !== null && importsAgents(ownText)) return [];
   const found = [];
   const home = path.resolve(homeDir(env));
   let dir = path.resolve(root);
@@ -69,7 +92,7 @@ export function claudeMdOnPath(root, env = process.env) {
   return found;
 }
 
-/** CLAUDE.md files inside the project below its top folder. */
+/** CLAUDE.md files inside the project below its top folder (the model has one CLAUDE.md, at the top). */
 export function claudeMdInside(root) {
   const found = new Set();
   const res = run('git', ['ls-files', '-co', '--exclude-standard', '--', '*CLAUDE.md', '*CLAUDE.local.md'], { cwd: root, timeoutMs: 10000 });
@@ -98,17 +121,32 @@ function settingsFiles(project, env) {
 
 function checkInstructions(project, env, findings, { quick }) {
   const hosts = projectHosts(project.config);
+  if (hosts.includes('claude-code')) {
+    const own = path.join(project.root, 'CLAUDE.md');
+    let ownText = null;
+    try {
+      ownText = fs.readFileSync(own, 'utf8');
+    } catch {
+      ownText = null;
+    }
+    if (ownText !== null && !importsAgents(ownText)) {
+      finding(findings, 'claude-md-no-import', 'instructions', 'problem',
+        'CLAUDE.md does not import AGENTS.md. With a CLAUDE.md in the project, Claude Code reads CLAUDE.md files only, so it never sees AGENTS.md.',
+        'Ask the owner, then move the extra text into AGENTS.md (or a rule) and make CLAUDE.md the single line @AGENTS.md, as the model has it.');
+    }
+  }
   const onPathFiles = claudeMdOnPath(project.root, env);
   for (const file of onPathFiles) {
+    if (file === path.join(project.root, 'CLAUDE.md')) continue;
     finding(findings, 'claude-md-on-path', 'instructions', 'problem',
-      `${file} exists. A CLAUDE.md, .claude/CLAUDE.md, or CLAUDE.local.md in the project folder or a folder above it stops Claude Code from reading AGENTS.md.`,
-      'Ask the owner, then move its content into AGENTS.md (or a rule) and remove the file.');
+      `${file} exists. A CLAUDE.md, .claude/CLAUDE.md, or CLAUDE.local.md in the project folder or a folder above it stops Claude Code from reading AGENTS.md, unless the project's own CLAUDE.md imports it.`,
+      'Run toolkit sync to add the model\'s CLAUDE.md (the single line @AGENTS.md), or ask the owner and move that file\'s content into AGENTS.md.');
   }
   if (!quick) {
     for (const file of claudeMdInside(project.root)) {
       const hasAgents = fs.existsSync(path.join(path.dirname(file), 'AGENTS.md'));
-      finding(findings, 'claude-md-inside', 'instructions', hasAgents ? 'problem' : 'warning',
-        `${path.relative(project.root, file)} exists. Toolkit V2 uses AGENTS.md only${hasAgents ? ', and this file hides the AGENTS.md in the same folder from Claude Code' : ''}.`,
+      finding(findings, 'claude-md-inside', 'instructions', 'warning',
+        `${path.relative(project.root, file)} exists. The model has one CLAUDE.md, at the top of the project, holding only @AGENTS.md${hasAgents ? '; the AGENTS.md in this folder is the one to keep current' : ''}.`,
         'Ask the owner, then move its content into that folder\'s AGENTS.md and remove it.');
     }
   }
@@ -165,7 +203,7 @@ function checkInstructions(project, env, findings, { quick }) {
   if (Buffer.byteLength(agents) > AGENTS_MAX_BYTES) {
     finding(findings, 'agents-md-size', 'instructions', 'problem', `AGENTS.md is ${Math.round(Buffer.byteLength(agents) / 1024)} KiB. Codex reads at most 32 KiB of AGENTS.md files in total, so nested ones and the end of this one may be cut.`, 'Move detail into skills, rules, or requirements/ and keep AGENTS.md under 24 KiB.');
   }
-  if (/Not recorded yet/.test(agents)) finding(findings, 'agents-md-commands', 'instructions', 'note', 'The AGENTS.md Commands table has no verified run or test commands yet.', 'Add them once they are known and verified.');
+  if (/<Verified project commands/.test(agents)) finding(findings, 'agents-md-commands', 'instructions', 'note', 'The AGENTS.md Commands table has no verified build, test, or deploy commands yet.', 'Add them once they are known and verified.');
 }
 
 // ------------------------------------------------------------------ plugins and Codex
@@ -288,6 +326,113 @@ function checkScaffold(project, env, findings, { pluginRoot }) {
   return plan;
 }
 
+// ------------------------------------------------------------------ project hooks
+
+const ROOT_MARK = '\u0001ROOT\u0001';
+// How the project's hook commands name the project folder: Claude Code sets
+// CLAUDE_PROJECT_DIR; the model's Codex hooks ask Git for the top folder.
+const ROOT_EXPRESSIONS = [
+  /\$\{CLAUDE_PROJECT_DIR\}/g,
+  /\$CLAUDE_PROJECT_DIR\b/g,
+  /\$\(\s*git rev-parse --show-toplevel\s*\)/g,
+  /`\s*git rev-parse --show-toplevel\s*`/g,
+];
+const SCRIPT_EXT = /\.(?:c?js|mjs|ts|py|sh|bash|zsh|rb|pl|ps1)$/i;
+
+function markRoot(s) {
+  let out = String(s);
+  for (const re of ROOT_EXPRESSIONS) out = out.replace(re, ROOT_MARK);
+  return out;
+}
+
+/** Split a shell command into words: quotes and backslashes are honored, and ; & | < > ( ) end a word. */
+function shellWords(command) {
+  const words = [];
+  let cur = '';
+  let has = false;
+  let quote = null;
+  for (let i = 0; i < command.length; i++) {
+    const ch = command[i];
+    if (quote) {
+      if (ch === quote) quote = null;
+      else if (ch === '\\' && quote === '"' && i + 1 < command.length) cur += command[++i];
+      else cur += ch;
+      continue;
+    }
+    if (ch === '"' || ch === "'") {
+      quote = ch;
+      has = true;
+    } else if (ch === '\\' && i + 1 < command.length) {
+      cur += command[++i];
+      has = true;
+    } else if (/\s/.test(ch) || ';&|<>()'.includes(ch)) {
+      if (has) words.push(cur);
+      cur = '';
+      has = false;
+    } else {
+      cur += ch;
+      has = true;
+    }
+  }
+  if (has) words.push(cur);
+  return words;
+}
+
+/**
+ * The project files a hook handler runs, as paths relative to the project
+ * folder: a word that starts with the project folder ($CLAUDE_PROJECT_DIR,
+ * $(git rev-parse --show-toplevel)), or a relative path to a script file
+ * (tools/kb/hook.py). A word with any other variable (such as a plugin's own
+ * folder) is not a project file and is skipped.
+ */
+export function hookScriptPaths(handler) {
+  if (!handler || typeof handler.command !== 'string') return [];
+  const words = Array.isArray(handler.args)
+    ? [handler.command, ...handler.args].filter((w) => typeof w === 'string').map(markRoot)
+    : shellWords(markRoot(handler.command));
+  const out = [];
+  for (const w of words) {
+    if (w.startsWith(`${ROOT_MARK}/`)) {
+      const rel = w.slice(ROOT_MARK.length + 1).replace(/^\.\//, '');
+      if (rel && !rel.includes('$') && !rel.includes(ROOT_MARK)) out.push(rel);
+    } else if (!w.includes('$') && !w.includes(ROOT_MARK) && !w.startsWith('-') && !w.startsWith('~') && !path.isAbsolute(w) && w.includes('/') && SCRIPT_EXT.test(w)) {
+      out.push(w.replace(/^\.\//, ''));
+    }
+  }
+  return [...new Set(out)];
+}
+
+/** Every hook in the project's .claude/settings.json and .codex/hooks.json runs a script that exists. */
+function checkHookScripts(project, findings) {
+  for (const rel of ['.claude/settings.json', '.codex/hooks.json']) {
+    let data;
+    try {
+      data = JSON.parse(fs.readFileSync(path.join(project.root, ...rel.split('/')), 'utf8'));
+    } catch {
+      continue; // Missing, or not valid JSON (the scaffold check reports that).
+    }
+    const hooks = data && typeof data === 'object' ? data.hooks : null;
+    if (!hooks || typeof hooks !== 'object') continue;
+    const missing = [];
+    for (const [event, groups] of Object.entries(hooks)) {
+      if (!Array.isArray(groups)) continue;
+      for (const g of groups) {
+        for (const h of (g && Array.isArray(g.hooks) ? g.hooks : [])) {
+          if (!h || (h.type && h.type !== 'command')) continue;
+          for (const script of hookScriptPaths(h)) {
+            if (!fs.existsSync(path.join(project.root, ...script.split('/')))) missing.push(`${event} runs ${script}`);
+          }
+        }
+      }
+    }
+    if (!missing.length) continue;
+    const one = missing.length === 1;
+    finding(findings, 'hook-script-missing', 'hooks', 'problem',
+      `${rel} registers ${one ? 'a hook whose script is' : `${missing.length} hooks whose scripts are`} missing, so ${one ? 'it fails' : 'they fail'} every time ${one ? 'it runs' : 'they run'}: ${[...new Set(missing)].join('; ')}.`,
+      `Run toolkit sync: when Salesforce is off, it takes the Salesforce hooks out of a ${rel} the project has not changed. Otherwise restore the missing file, or remove the hook from ${rel} with the owner's yes.`);
+  }
+}
+
 // ------------------------------------------------------------------ Salesforce
 
 function checkSalesforce(project, findings, { pluginRoot }) {
@@ -297,10 +442,11 @@ function checkSalesforce(project, findings, { pluginRoot }) {
   const missing = ['sandbox', 'production'].filter((k) => !orgs[k]);
   if (missing.length) finding(findings, 'sf-orgs', 'salesforce', 'warning', `The Salesforce org alias for ${missing.join(' and ')} is not recorded in .toolkit.json.`, missing.map((k) => `toolkit config set salesforce.orgs.${k} <alias>`).join(' and '));
   const hosts = projectHosts(c);
-  const srcDir = path.join(pluginRoot || DEFAULT_PLUGIN_ROOT, 'scaffold', 'salesforce', 'skills');
+  // The model holds each Salesforce skill twice, with the same text: .claude/skills/ and .agents/skills/.
+  const srcDir = path.join(pluginRoot || DEFAULT_PLUGIN_ROOT, ...MODEL_DIR.split('/'), '.claude', 'skills');
   let skills = [];
   try {
-    skills = fs.readdirSync(srcDir).filter((n) => fs.existsSync(path.join(srcDir, n, 'SKILL.md')));
+    skills = fs.readdirSync(srcDir).filter((n) => n.startsWith('sf-') && fs.existsSync(path.join(srcDir, n, 'SKILL.md')));
   } catch {
     skills = [];
   }
@@ -509,6 +655,7 @@ export async function runChecks(project, opts = {}) {
   checkConfig(project, findings);
   checkInstructions(project, env, findings, { quick });
   checkCodex(project, env, findings);
+  checkHookScripts(project, findings);
   checkBackup(project, findings, { now: opts.now || Date.now() });
   if (quick) return { findings, plan: null };
   checkComputer(project, env, findings);

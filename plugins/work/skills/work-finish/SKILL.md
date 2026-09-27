@@ -13,11 +13,11 @@ Shared rules: `../../references/conventions.md`. Detail: `references/closing.md`
 1. Check that the result approval is recorded. Not recorded: show the result, the gaps, and the evidence, and ask. "Ship it" or "mark it done" from the owner after he has seen the result counts as the approval; record it with his words.
    `toolkit work show <id>`
    `toolkit work approve <id> --result --by <owner>`
-2. Repository work: push the item's branch, open the pull request (description through `unslop`, no AI credit), and set the pull request stage. Merge through `merge-and-clean-up` when the owner approves the merge, or when the project has a recorded standing merge instruction and the `acceptance-checker` agent found no blocking issue on that exact head.
+2. Repository work: push the item's branch, open the pull request (description through `unslop`, no AI credit), and set the pull request stage. Merge through `merge-and-clean-up` when the owner approves the merge, or when `DECISIONS.md` records a standing merge instruction and the `acceptance-checker` agent found no blocking issue on that exact head.
    `toolkit work set <id> --stage 12-pr-and-push`
-3. Deployment, when the item needs one: set the deployment stage. Salesforce: `sf-component-tracker` current, then `sf-deploy-check`, then validate against the sandbox. Production deploys and production data loads are handed to the owner to run (`sf-data-change`).
+3. Deployment, when the item needs one: set the deployment stage. Salesforce: `sf-component-tracker` current and the item's folder in `delivery/deployment/` complete, then `sf-deploy-check`, then validate against the sandbox. Production deploys and production data loads are handed to the owner to run (`sf-data-change`).
    `toolkit work set <id> --stage 13-deployment`
-4. Requirements baseline: set the spec update stage; copy only delivered and approved behavior into `requirements/<area>.md`; save it with `publish-docs`.
+4. Requirements baseline: set the spec update stage; read `requirements/AGENTS.md`; copy only delivered and approved behavior into the area's file in `requirements/` (a new area starts from `requirements/system-area-template/`); update the area's file in `system-guide/` when the verified structure changed; save both with `publish-docs`.
    `toolkit work set <id> --stage 14-spec-update`
 5. Sub-items: list the open ones. Each is finished or cancelled on its own (with its own approval or reason), or moved when the owner asks (`work-organize`). A parent with open sub-items is finished only when the owner says so, with the second finish command in step 7. Finishing a sub-item never finishes its parent.
    `toolkit work list --tree`
@@ -41,7 +41,7 @@ Shared rules: `../../references/conventions.md`. Detail: `references/closing.md`
 - Never mark Done without a recorded result approval. The CLI requires `--by`.
 - Approval of the result never covers merge, deployment, spending, or publishing. Each needs the owner's yes or a standing instruction recorded in the project.
 - Agents never run production deploys or production data loads. Hand the owner the exact command and what to check afterwards; record his report in a history note.
-- Only delivered and approved behavior goes into `requirements/<area>.md`. Approved but undelivered behavior is never written there as shipped.
+- Only delivered and approved behavior goes into the area's file in `requirements/`. Approved but undelivered behavior is never written there as shipped.
 - Stages that do not apply are skipped: work with no repository change has no pull request; work with no deployment has no deployment stage.
 - No AI credit in commits, pull requests, or release notes.
 - GitHub Issues or Jira: `toolkit work` exits with code 3. Close the issue as completed, or as not planned for a cancel, as `../../references/trackers.md` says.

@@ -14,9 +14,11 @@ are never the agent that wrote the draft.
 ## Start with the brief
 
 - The brief gives the work item id, the draft file path, the design's
-  Preparation and Notes (the goal, the flagged requirements and the owner's
-  rulings, the chosen philosophy, the constraints), and the requirements
-  (Agreed goal, every `R-xx`, Acceptance). Read those first, then the draft.
+  opening sections and Notes (What this design solves, Requirements and
+  design readiness, Constraints and assumptions, the owner's rulings in Notes
+  > Design changes during the interview), the way of working the owner chose,
+  and the requirements (Agreed goal, every `R-xx`, Acceptance). Read those
+  first, then the draft.
   You do not inherit the conversation or another agent's findings.
 - Treat only rulings the brief marks as approved by the owner as settled.
   Proposals and unanswered questions stay open. Do not infer approval for the
@@ -38,24 +40,28 @@ Then check the draft as a whole:
 - **Goal.** Walk the flow start to finish as the person who uses the result.
   Report every step where the design breaks that flow, even when each
   requirement is met on its own.
-- **Philosophy.** Where the draft builds custom, does a built-in mechanism
+- **Approach.** Where the draft builds custom, does a built-in mechanism
   meet the requirement? Name it. Where the owner chose a specialized
-  philosophy, does the draft follow it?
+  approach, does the draft follow it?
 - **Existing build.** Did the architect ask whether replacing what exists
   serves the requirements better, and answer with reasons? A design that
   extends the current build without saying why is a finding.
-- **Sources.** Does every material claim have a source and a label? Does any
-  community claim shape the design without a recorded check? Open the sources
-  behind the claims that carry the most weight.
+- **Sources.** Does every material claim have a row in "Sources and
+  decisions that affect the build", with a source and an evidence type? Does
+  any community claim shape the design without a recorded check? Open the
+  sources behind the claims that carry the most weight.
 - **Writing.** Report every figurative or metaphorical phrase, idiom, and
   picture word standing in for a real thing; every term a junior intern would
   not know that is not defined on first use; every component called by a
   nickname instead of its real name; and any preamble or closing line.
-- **Completeness.** Are the order of work, the components touched, the
-  risks, and the open decisions present and specific enough to act on?
-- **Misreading table.** Does the draft carry every misreading risk from the
-  Preparation, and say what the design does for each? Report any new place
-  where a builder could misread the design itself.
+- **Completeness.** Does the option fill every subsection the template
+  gives it (Approach, End-to-end behavior, Requirement coverage, Technical
+  shape, Tradeoffs and risks, Build order), and are the build order, the
+  components, the risks, and the open decisions specific enough to act on?
+- **Misreading table.** Does "Where a builder could misread this design"
+  carry every misreading risk the brief lists, and say how the design makes
+  the intended reading clear? Report any new place where a builder could
+  misread the design itself.
 
 ## Boundaries
 
@@ -84,7 +90,7 @@ Then check the draft as a whole:
 
 Plain, common words and the real name of every thing. Short sentences, one
 idea each. Define a term the first time it appears. No figurative or
-metaphorical language, no idioms, no em dashes, no section signs, no
-preamble, no closing line. Keep every number, version, path, and quotation
+metaphorical language, no idioms, no em dashes in your own sentences, no
+section signs, no preamble, no closing line. Keep every number, version, path, and quotation
 exactly as found. Lead with the verdict table and keep the report short.
 Never add a line crediting an AI.

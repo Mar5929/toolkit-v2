@@ -9,6 +9,7 @@ import { EXIT, ToolkitError } from '../core/output.mjs';
 import { parseTable, appendTableRow, renderTable } from '../core/markdown.mjs';
 import { today as todayDate, run } from '../core/util.mjs';
 import { gitInfo } from '../core/config.mjs';
+import { readTemplate } from '../core/templates.mjs';
 import { isTerminal, isApproved, stageNumber, stageShort, typeNeedsRequirements } from './lifecycle.mjs';
 import { parseQuestions, isOpenOwnerQuestion, getLabel, parseRoadmap, checkGates, isTemplateRow, isPlaceholder } from './model.mjs';
 
@@ -86,13 +87,10 @@ export const DECISIONS_STATE = 'decisions.json';
 /** Outside Git there is one checkout: the lock sits at the project root under this name. */
 const DECISIONS_LOCK_NO_GIT = '.toolkit-decisions.lock';
 
-export const DECISIONS_HEADER_TEXT = `# Decisions
-
-Project-wide decisions, one row each. Add a row with \`toolkit decision add\`.
-Never change or remove a row: a later decision names the one it replaces.
-Decisions about one work item stay in that work item.
-
-`;
+/** The text of a new DECISIONS.md: the model's template (DECISIONS.md at the model's root), as it is. */
+export function decisionsTemplate() {
+  return readTemplate('decisions');
+}
 
 /** Parse a decision id such as D-7, D7, or D-007. Returns the number or null. */
 export function decisionNumber(value) {
@@ -218,25 +216,22 @@ export async function addDecision(root, { decision, why, by, replaces, date, mai
     const id = `D-${next}`;
     const row = { ID: id, Date: date || todayDate(), Decision: String(decision).trim(), Why: String(why).trim(), 'Decided by': String(by).trim(), Replaces: replacesId };
     let out;
-    let created = false;
-    if (text === null) {
-      created = true;
-      out = DECISIONS_HEADER_TEXT + renderTable([...DECISION_HEADERS], [DECISION_HEADERS.map((h) => row[h])]);
+    const created = text === null;
+    // A new file starts from the model's DECISIONS.md: its intro and the empty table.
+    const base = created ? decisionsTemplate() : text;
+    const t = findDecisionsTable(base);
+    if (!t) {
+      const trimmed = base.replace(/\s+$/, '');
+      out = `${trimmed}${trimmed ? '\n\n' : ''}${renderTable([...DECISION_HEADERS], [DECISION_HEADERS.map((h) => row[h])])}`;
     } else {
-      const t = findDecisionsTable(text);
-      if (!t) {
-        const base = text.replace(/\s+$/, '');
-        out = `${base}${base ? '\n\n' : ''}${renderTable([...DECISION_HEADERS], [DECISION_HEADERS.map((h) => row[h])])}`;
-      } else {
-        const cells = t.headers.map((h) => {
-          const key = DECISION_HEADERS.find((k) => k.toLowerCase() === h.trim().toLowerCase());
-          return key ? row[key] : '';
-        });
-        const tableText = text.slice(t.start, t.end);
-        const updated = appendTableRow(tableText.endsWith('\n') ? tableText : `${tableText}\n`, cells, { dropPlaceholderRows: (r) => isTemplateRow(r) });
-        const rest = text.slice(t.end);
-        out = text.slice(0, t.start) + (tableText.endsWith('\n') || !rest ? updated : updated.replace(/\n$/, '')) + rest;
-      }
+      const cells = t.headers.map((h) => {
+        const key = DECISION_HEADERS.find((k) => k.toLowerCase() === h.trim().toLowerCase());
+        return key ? row[key] : '';
+      });
+      const tableText = base.slice(t.start, t.end);
+      const updated = appendTableRow(tableText.endsWith('\n') ? tableText : `${tableText}\n`, cells, { dropPlaceholderRows: (r) => isTemplateRow(r) });
+      const rest = base.slice(t.end);
+      out = base.slice(0, t.start) + (tableText.endsWith('\n') || !rest ? updated : updated.replace(/\n$/, '')) + rest;
     }
     // The number is kept first: if writing the file fails after this, the id is skipped, never given twice.
     if (place.stateFile) atomicWrite(place.stateFile, `${JSON.stringify({ highWater: next, updated: new Date().toISOString() }, null, 2)}\n`);

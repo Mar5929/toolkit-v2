@@ -4,18 +4,20 @@
 // Order, so that a failure at any step leaves a project that init can simply
 // run on again (critique M9):
 //  1. Work out the settings from the flags (and an earlier .toolkit.json).
-//  2. Plan the whole scaffold. A template error stops here, before any write.
+//  2. Plan the whole scaffold: the model project's files in scaffold/model/
+//     as scaffold/CONDITIONS.json says, plus the toolkit's additions. A setup
+//     marker error stops here, before any write.
 //  3. Check the Hindsight server answers, before anything is made in Notion.
 //     Nothing local is written yet.
 //  4. Wire the backends: `notion ensure-project` (it first checks that a root
 //     page is known) and `hindsight ensure-bank`.
 //     Their ids are kept in <git common dir>/toolkit-v2/init-pending.json, so a
 //     second run after a later failure reuses them instead of making new ones.
-//  5. Write the scaffold, AGENTS.md with its rules span, the settings, and the
-//     .work-items/ or .memory/ seeds.
+//  5. Write the scaffold, AGENTS.md with its rules span, the merged settings,
+//     and the model's .work-items/ or .memory/ files.
 //  6. Build DASHBOARD.md (toolkit work sync) and MEMORY.md (toolkit memory reindex).
 //  7. Write .toolkit.json, last. A new project records its setup date
-//     (project.created), which the {{today}} token renders as.
+//     (project.created); the toolkit's own templates render {{today}} as it.
 
 import fs from 'node:fs';
 import path from 'node:path';

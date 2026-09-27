@@ -13,10 +13,13 @@ export const summary = 'Rebuild a generated index: toolkit index knowledge rebui
 export const help = `Usage:
   toolkit index knowledge [--check]
 
-Lists every topic folder in ai-external-knowledge/ (not topic-template/) with
-its publisher, title, capture date, and "Project use" line from its
-SOURCE-RECORD.md. The index is generated: edit the SOURCE-RECORD.md files, not
-INDEX.md. --check writes nothing and exits 1 when INDEX.md is out of date.`;
+Lists every topic folder in ai-external-knowledge/ with its title, publisher,
+capture date, and "Project use" paragraph from its SOURCE-RECORD.md: the
+"# <title>" line, the "- Publisher:", "- Original documentation home:", and
+"- Captured on:" lines, and the "## Project use" section. The text around the
+table in INDEX.md is kept. The index is generated: edit the SOURCE-RECORD.md
+files, not INDEX.md. --check writes nothing and exits 1 when INDEX.md is out
+of date.`;
 
 export async function run(argv, ctx) {
   const { _: pos, flags } = parseArgs(argv, { boolean: ['check', 'json'], string: ['host'] });
@@ -44,7 +47,7 @@ export async function run(argv, ctx) {
   if (!upToDate) atomicWrite(file, text);
   const missing = topics.filter((t) => !t.record).map((t) => t.folder);
   const lines = [upToDate ? `${INDEX_TARGET} was already up to date (${topics.length} topic${topics.length === 1 ? '' : 's'}).` : `Rebuilt ${INDEX_TARGET}: ${topics.length} topic${topics.length === 1 ? '' : 's'}.`];
-  if (missing.length) lines.push(`Topic folders without a SOURCE-RECORD.md: ${missing.join(', ')}. Start one from ${KNOWLEDGE_DIR}/topic-template/SOURCE-RECORD-TEMPLATE.md.`);
+  if (missing.length) lines.push(`Topic folders without a SOURCE-RECORD.md: ${missing.join(', ')}. Add one to each folder: a "# <topic title>" line, the lines "- Publisher: <name>", "- Original documentation home: <URL>", and "- Captured on: <YYYY-MM-DD>", and a "## Project use" paragraph.`);
   out(ctx, lines, { ok: true, changed: !upToDate, path: file, topics });
   return EXIT.OK;
 }

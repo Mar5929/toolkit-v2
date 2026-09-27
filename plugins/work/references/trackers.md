@@ -33,7 +33,8 @@ toolkit config get tracker.type
   the same for both.
 - Local: a folder nested inside an item's folder is a sub-item. A plain folder
   with no record in it is a group. `archive/` hides items from the briefing
-  and from `toolkit work next`.
+  and from `toolkit work next`. The project's rule for this tracker is
+  `.claude/rules/work-item-folders.md`.
 - Notion: the design is the item's "Solution Design" child page. A card the
   owner made with Notion's New button has no template body; the CLI fills it
   on its next read and reports it. A Stage the owner changed by dragging is
@@ -53,14 +54,19 @@ toolkit config get tracker.type
 
 ## Templates for every tracker
 
-The templates ship in the toolkit plugin, so every project can reach them,
-whatever its tracker:
+The templates come from the model project. The toolkit plugin carries an exact
+copy of the model in its `scaffold/model/` folder, so every project can reach
+them, whatever its tracker:
 
-- `templates/WORK-ITEM.md`: the work item body. A new GitHub issue body or
-  Jira description starts from it, from `## Overview` to the end.
-- `templates/DESIGN.md`: the design. A new design comment starts from it.
+- `scaffold/model/.work-items/work-item-template/WORK-ITEM.md`: the work item
+  body. A new GitHub issue body or Jira description starts from it, from
+  `## Overview` to the end.
+- `scaffold/model/.work-items/work-item-template/DESIGN.md`: the design. A new
+  design comment starts from it, without its frontmatter.
 
 The file `~/.config/toolkit-v2/plugin-root` holds the path of the toolkit
-plugin's folder (every session start refreshes it). The templates are inside
-that folder. A local project also has copies in
-`.work-items/work-item-template/`, which the CLI uses by itself.
+plugin's folder (every session start refreshes it). The `scaffold/model/`
+folder is inside that folder. A local project also has its own copies in
+`.work-items/work-item-template/`, which the CLI prefers, so a project that
+edited its template keeps its version. Both files open with a fill-in guide
+comment: follow it, then delete it.

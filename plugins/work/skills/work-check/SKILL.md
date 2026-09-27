@@ -10,11 +10,11 @@ Shared rules: `../../references/conventions.md`. How to brief agents: `../../ref
 
 ## Steps
 
-1. Read the requirements, the acceptance list, and the tasks, then set the testing stage. When the show output's "Design:" value is not `none`, also read the design's "How to check it" lines (the design command exits 1 for an item with no design).
+1. Read the requirements, the acceptance list, and the tasks, then set the testing stage. When the show output's "Design:" value is not `none`, also read the design's Acceptance checks (in "Build and verification plan") and the selected option's "How to check it" column (the design command exits 1 for an item with no design).
    `toolkit work show <id>`
    `toolkit work design <id>`
    `toolkit work set <id> --stage 09-testing`
-2. Run the project's tests and every acceptance check the item lists. A check that could not run is reported as not run, never as passed.
+2. Run the project's tests and every acceptance check the item lists. A check with several scenarios or manual steps gets a test plan: a copy of `tests/TEST-PLAN-TEMPLATE.md` named for the item, with the results filled in. A check that could not run is reported as not run, never as passed.
 3. Brief the `acceptance-checker` agent (never the agent that built it): one verdict per requirement (met, partly met, not met) with evidence, plus defects seen in the diff. Give it the branch and commit to check.
 4. Failures: set the bug-fixing stage; a `builder` agent (or the main agent) fixes; the checker checks again. Repeat until clean, or until a failure needs an owner decision (an Open Questions row and the item waiting on the owner).
    `toolkit work set <id> --stage 10-bug-fixing`
@@ -29,7 +29,7 @@ Shared rules: `../../references/conventions.md`. How to brief agents: `../../ref
 
 ## Agents
 
-- `acceptance-checker`: step 3 and every re-check. Paste in the Agreed goal, every `R-xx` with its acceptance check, the Acceptance list, and the design's "How to check it" lines. Name the branch and commit.
+- `acceptance-checker`: step 3 and every re-check. Paste in the Agreed goal, every `R-xx` with its acceptance check, the Acceptance list, the design's Acceptance checks and "How to check it" column, and the test plan when there is one. Name the branch and commit.
 - `builder`: fixes in step 4 when a team was recorded or the owner agreed; one builder per independent fix, one writer per path.
 - Codex: this plugin's agents do not load there. Read the agent's file in this plugin's `agents/` folder and give its full text, with the brief, to a native Codex worker. With no worker, do the work yourself and say that no independent check ran.
 

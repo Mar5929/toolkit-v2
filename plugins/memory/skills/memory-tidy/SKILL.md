@@ -14,14 +14,15 @@ Record format: `../memory-save/references/record-format.md`. Approval rules: `me
    `toolkit doctor`
    `toolkit memory status`
    `toolkit memory list`
-2. Find duplicates, contradictions, stale records (replaced by a later decision, or not checked for a long time), records that copy work-item status, and a current focus over 50 lines.
+2. Find duplicates, contradictions, stale records (replaced by a later decision, or not checked for a long time), records that copy work-item status or break the memory criteria, file names whose prefix does not match `metadata.type`, and a current focus over 50 lines.
    `toolkit memory get <key>`
    `toolkit memory focus`
 3. Show one numbered list of proposed changes (merge, retire, correct, trim), each with its reason.
 4. Ask once for the whole list. Apply the approval rules in `memory-save` step 3 to every change on it; for a delete, quote his words.
-5. Apply the approved changes: save the merged or corrected record (`--supersedes` retires the record it replaces), retire a duplicate that is not saved again, and trim the focus.
+5. Apply the approved changes: save the merged or corrected record (`--supersedes` retires the record it replaces), retire a duplicate that is not saved again, rename a record whose file name prefix does not match its content or `metadata.type` (the new key sets the type), and trim the focus. The CLI repairs links in other notes and names each note it changed; check that report.
    `toolkit memory save --type <type> --name <slug> --description "<one line>" --body-file <file> --supersedes <old-key> --approved-by <owner>`
    `toolkit memory retire <key> --superseded-by <new-key>`
+   `toolkit memory rename <key> --to <new-key>`
    `toolkit memory delete <key> --owner-approved`
    `toolkit memory focus --set-file <file>`
 6. Back up memory (any backend) to the owner's backup folder, and, for a local tracker, the tracker too; say when the last backup was made. Restore only on his request, after a dry run.
@@ -34,11 +35,12 @@ Record format: `../memory-save/references/record-format.md`. Approval rules: `me
 
 ## What to look for
 
-- **Duplicates:** two records with the same meaning. Keep the clearer one, merge anything the other adds, and retire the other with `--superseded-by`.
+- **Duplicates:** two records with the same meaning. Keep the clearer one, merge anything the other adds, and retire the other with `--superseded-by`. Links to the retired record are repaired by the CLI; no note may keep pointing at it.
 - **Contradictions:** two current records that cannot both be true. Ask which is right; never pick one by date alone.
 - **Stale:** a record a later decision replaced, or one whose `last_verified` is old and whose subject has changed. Retire it, or mark it for review by saving it again after checking.
 - **Wrong home:** a record that holds work-item status, next steps, or undelivered requirements. Move the meaning to the work item and retire the record.
-- **Focus over 50 lines:** trim finished items from Now, move to-dos that became work items to Now as ids, and keep one entry in "Next session starts with".
+- **Focus over 50 lines:** trim finished items from Now, move to-dos that became work items to Now as ids, keep one entry in "Next session starts with", and update "Last updated". Never drop an unresolved owner to-do only to meet the limit.
+- **Broken links:** a Related memories link whose target no longer exists. Point it at the record that replaced it, or remove it, and save the note again.
 - **Built-in index out of date** (doctor says so): rebuild it.
   `toolkit memory reindex`
 
@@ -53,6 +55,6 @@ Record format: `../memory-save/references/record-format.md`. Approval rules: `me
 
 ## Rules
 
-- Never hand-edit `.memory/` files, including `.memory/MEMORY.md`. The hooks refuse it.
+- Never hand-edit `.memory/` files; change them only with `toolkit memory` commands. The hooks refuse hand edits of `.memory/MEMORY.md`.
 - Retire before delete. A retired record can be restored; a deleted one cannot.
 - Change nothing that the owner did not approve on the list.

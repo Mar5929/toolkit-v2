@@ -16,7 +16,7 @@ design, or a result.
 | Design architect | `agents/design-architect.md` | Writes or fixes one design option in a draft file | The draft file, and after each fix round a list of what changed by requirement |
 | Design critic | `agents/design-critic.md` | Checks one draft against every requirement and the writing rules | One verdict per requirement (satisfied, partly, not), then findings with fixes |
 | Builder | `agents/builder.md` | Builds one planned task in its own worktree and runs its checks | What changed, the tests run and their result, the commit on its branch, and anything it could not do |
-| Acceptance checker | `agents/acceptance-checker.md` | Checks a finished result against each requirement's acceptance check and the design's "How to check it", or a build plan before the build; never the agent that built it | One verdict per requirement (met, partly met, not met) with evidence, defects seen in the diff, and checks that could not run; for a plan, each finding by task id |
+| Acceptance checker | `agents/acceptance-checker.md` | Checks a finished result against each requirement's acceptance check and the design's Acceptance checks, or a build plan before the build; never the agent that built it | One verdict per requirement (met, partly met, not met) with evidence, defects seen in the diff, and checks that could not run; for a plan, each finding by task id |
 
 Narrower briefs for the same roles:
 
@@ -61,6 +61,5 @@ Starting points, not rules.
 ## What the owner sees
 
 A short list: role, count, and one line on what each reads and returns. The
-owner can cut, add, or change any role. Record the agreed team in the design's
-Preparation section (design teams) or in the item's Notes > Decisions and
-context (build teams).
+owner can cut, add, or change any role. Record the agreed team, for a design or
+a build, in the item's Notes > Decisions and context.

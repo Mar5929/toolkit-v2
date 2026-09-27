@@ -31,7 +31,7 @@ import { today as todayDate } from '../core/util.mjs';
 import { ensureDir } from '../core/fsx.mjs';
 import {
   canonicalId, formatId, parseId, sameId, isPlaceholder, normalizeParent, composeDoc, parseDoc, reconcileRecord,
-  snapshotWritten, newRecordText, getLabel, parseQuestions, isOpenOwnerQuestion, setDesignStatusLine, DESIGN_SUFFIX,
+  snapshotWritten, newRecordText, getLabel, parseQuestions, isOpenOwnerQuestion, setDesignStatusLine, designStatusFromBody, DESIGN_SUFFIX,
 } from '../work/model.mjs';
 import { DESIGN_FIELD_ORDER, DESIGN_STATUSES, statusForStage } from '../work/lifecycle.mjs';
 import { loadTemplate, RECORD_FILE, DESIGN_FILE } from '../work/templates.mjs';
@@ -147,9 +147,13 @@ export class NotionTracker {
     return (page && page.url) || '';
   }
 
-  /** The WORK-ITEM.md or DESIGN.md template as { text, source, path } (the driver interface in lib/work/driver.mjs). */
+  /**
+   * The WORK-ITEM.md or DESIGN.md template as { text, source, path } (the driver
+   * interface in lib/work/driver.mjs): the model's copy in the plugin, because a
+   * Notion project has no .work-items/ folder.
+   */
   template(name) {
-    return loadTemplate(name, { pluginRoot: this.pluginRoot || undefined });
+    return loadTemplate(name);
   }
 
   /** Run fn with a lock on this computer's cache folder, so two toolkit commands do not interleave writes. */
@@ -579,8 +583,9 @@ export class NotionTracker {
     const md = await this.client.getMarkdown(d.id);
     const conv = fromNotion(md.markdown || '', { styleFrom: this.template(DESIGN_FILE).text });
     const body = withTitle(this.designTitle(key, meta.title || ''), conv.markdown);
-    const line = /^Status:[ \t]*(\S+)/m.exec(conv.markdown);
-    const status = line && DESIGN_STATUSES.includes(line[1]) ? line[1] : DESIGN_STATUSES.includes(meta.design) ? meta.design : 'proposed';
+    // The model's "**Design status:**" line (or an older "Status:" line) gives the status.
+    const fromLine = designStatusFromBody(conv.markdown);
+    const status = fromLine || (DESIGN_STATUSES.includes(meta.design) ? meta.design : 'proposed');
     const approved = (this.p.designApproved && readValue(page, this.p.designApproved)) || 'no';
     const dmeta = { work_item: key, status, approved };
     this.remember(key, page, { designPageId: normalizeId(d.id), designUrl: d.url });
@@ -600,7 +605,7 @@ export class NotionTracker {
     const doc = parseDoc(String(markdown ?? ''));
     const status = DESIGN_STATUSES.includes(doc.meta.status) ? doc.meta.status : 'proposed';
     const approved = doc.meta.approved !== undefined && doc.meta.approved !== '' ? String(doc.meta.approved) : 'no';
-    const local = stripTitle(setDesignStatusLine(doc.hasFrontmatter ? doc.body : String(markdown ?? ''), status)).body;
+    const local = stripTitle(setDesignStatusLine(doc.hasFrontmatter ? doc.body : String(markdown ?? ''), status, { approved })).body;
     let d = await this.findDesignPage(page, key);
     const title = this.designTitle(key, meta.title || '');
     if (!d) {

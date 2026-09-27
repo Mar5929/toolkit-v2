@@ -78,7 +78,9 @@ its own writing rules.
 
 ## Section names in `WORK-ITEM.md`
 
-These are the headings `--section` uses. Every tracker uses the same body.
+These are the headings `--section` uses. Every tracker uses the same body: the
+project's `.work-items/work-item-template/WORK-ITEM.md`, copied from the model
+project.
 
 | Heading | What it holds |
 | --- | --- |
@@ -89,6 +91,37 @@ These are the headings `--section` uses. Every tracker uses the same body.
 | `Open Questions` | `Q-01` rows: question, affects, status, decision needed from (`owner` for the owner) |
 | `Requirements` | Overall status, Starting request, Agreed goal, Active requirements `R-01`, Acceptance |
 | `Notes` | Decisions and context, Resume here, Solution options and considerations |
+
+The frontmatter fields are `id`, `title`, `type`, `stage`, `status`, `parent`,
+`waiting_on`, `priority`, `delivery`, `requirements_approved`, `design`,
+`result_approved`, and `updated`. Only `toolkit work` commands change them.
+
+## Section names in `DESIGN.md`
+
+The design has one shape in every tracker (`DESIGN.md` beside a local item,
+the "Solution Design" page in Notion, the "Solution design" comment in GitHub
+or Jira). The CLI writes its frontmatter: `work_item`, `status` (`proposed`,
+`approved`, `superseded`), and `approved`.
+
+| Heading | What it holds |
+| --- | --- |
+| Header lines | Requirements (the item id), Design status, Requirements checked, Last updated, Design approval |
+| `What this design solves` | Who uses the result, what they need, what must be true afterward, and what the design leaves to another item |
+| `Requirements and design readiness` | One row per `R-xx`: its status in the item, the design coverage, and the remaining decision or gap |
+| `What exists today` | Verified current behavior and files, or "nothing exists yet" |
+| `Constraints and assumptions` | One row each, with source, status, and effect on the design |
+| `Design options` | `### Option A — <name>` (then B, C) with Approach, End-to-end behavior, Requirement coverage (Build or reuse, Why it meets the requirement, How to check it), Technical shape, Tradeoffs and risks, Build order |
+| `Option comparison` | Only with more than one option |
+| `Recommendation and owner decision` | Recommendation, Owner decision, Reason for decision |
+| `Selected design` | After the owner chooses: End-to-end flow, Components and responsibilities, Data, access, and integration details, Edge cases and failure behavior, Release and ongoing operation |
+| `Diagrams` | Mermaid diagrams, each with a heading and a one-sentence explanation |
+| `Build and verification plan` | Technical sequence, and Acceptance checks (one row per requirement) |
+| `Sources and decisions that affect the build` | Claim or decision, source, date, evidence type, how it was checked |
+| `Where a builder could misread this design` | Requirement or section, plausible wrong reading, intended reading |
+| `Notes` | Open design questions, Design changes during the interview, Current position and next step |
+
+Keep the headings exactly as the template has them, including the dash in
+`Option A — <name>`.
 
 ## Saving what the owner says
 

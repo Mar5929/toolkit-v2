@@ -19,42 +19,51 @@ section wins.
 
 - **Scaffold = a copy of the model.** `node dev/tools/import-model.mjs`
   copies the model's working tree into `plugins/toolkit/scaffold/model/`
-  exactly (leaving out `.git/`, `.sfdx/`, `__pycache__/`, `.DS_Store`, and the
-  memory mechanism files listed in `scaffold/CONDITIONS.json`), records the
-  model's commit and whether it had uncommitted edits, and fails loudly when a
-  rule in `CONDITIONS.json` no longer matches the model. Re-run it whenever
-  Mike changes the model.
+  exactly (leaving out `.git`, every `.sfdx/`, `.vscode/`, and `__pycache__/`
+  folder and `.DS_Store` file, the `exclude` patterns in
+  `scaffold/CONDITIONS.json`, and every file the model's Git ignores and does
+  not track), records the model's branch, commit, and whether it had
+  uncommitted edits in `scaffold/model/.import.json`, and stops without
+  copying when a rule in `CONDITIONS.json` no longer matches the model.
+  `--check` compares the copy with the model. Re-run it whenever Mike changes
+  the model. Until he merges `toolkit-v2/approved-changes`, it reads the
+  approved worktree (`dev/model-changes.md`).
 - **`scaffold/CONDITIONS.json`** is the only hand-kept file beside the copy:
-  which paths install only for `tracker:local` (`.work-items/**`),
-  `memory:builtin` (`.memory/**`), and `salesforce`; the mechanism files left
-  out (`scripts/memory.py`, the model's memory hooks and `memory_*` helpers,
-  the memory-curator agent, the memory runtime test, `.toolkit-memory.json`,
-  the model's session-start hook) and the settings entries that register
-  them; the few exact text substitutions that point instruction text at the
-  toolkit command instead of the old mechanism; the Salesforce-only lines to
-  drop from general files in a non-Salesforce project; and the placeholders
-  init fills (project name). Everything else is copied byte for byte.
+  which paths install only for `tracker:local` (`.work-items/**`,
+  `work-item-folders.md`), `memory:builtin` (`.memory/**`), `salesforce`, and
+  each host; the generated files installed only when missing
+  (`.memory/MEMORY.md`, `ai-external-knowledge/INDEX.md`); where init fills
+  the project name (heading lines of `AGENTS.md`, `README.md`, `PROJECT.md`);
+  and the Salesforce hooks, permission entries, and `.gitignore` lines a
+  project without Salesforce leaves out. Everything else is copied byte for
+  byte. The memory mechanism files are gone from the model itself (approved
+  items 13 to 15), so nothing needs leaving out for them.
+  `plugins/toolkit/templates/TEMPLATE-LANGUAGE.md` holds the full install
+  rules.
 - **Parity test.** `plugins/toolkit/tests/scaffold/parity.test.mjs` runs
-  `toolkit init` for each combination and compares the result with the model:
-  every difference must be explained by `CONDITIONS.json` or by files the
-  toolkit adds (`.toolkit.json`, generated state and dashboard files).
+  `toolkit init` for all 24 combinations and compares the result with the
+  model: every difference must be explained by `CONDITIONS.json` or by files
+  the toolkit adds (`.toolkit.json`, `.codex/config.toml`,
+  `.codex/rules/toolkit.rules`, generated state and dashboard files).
 - **Runtime reads the model's formats.** Work items use the model's
-  `WORK-ITEM.md` and `DESIGN.md` frontmatter and sections as they are (no
-  added keys): parent comes from folder nesting (kept in state), "waiting on
-  the owner" comes from Open Questions rows whose "Decision needed from" is
-  the owner and from stage 11, and statuses follow the lifecycle map while
-  `Blocked` from the model's hint is accepted. Memory uses the model's topic
-  template YAML (`name`, `description`, `metadata.type`, `status`, `source`,
-  `last_verified`, `authorization`, `supersedes`, and any extra fields kept),
-  the nine-section `CURRENT_FOCUS.md`, the model's `MEMORY.md` index layout,
-  the glossary, and memory criteria. Built-in memory keeps Obsidian-style
-  relative Markdown links between notes and repairs them when a note is
-  renamed, merged, archived, or deleted. Templates are read from the model
-  copy in `scaffold/model/`, never from a second copy.
-- **Proposals, not changes.** Ideas from the review that change a format
-  (new frontmatter keys such as `parent` or `waiting_on`, `DECISIONS.md`, a
-  four-section focus, dropping `CLAUDE.md`) are items in the
-  `dev/model-review.md` checklist for Mike. They are not installed.
+  `WORK-ITEM.md` and `DESIGN.md` frontmatter and sections as they are
+  (section 4.2; approved items 9 to 12). New items and designs are made from
+  the model's templates. Memory uses the model's topic template YAML (`name`,
+  `description`, `metadata.type`, `status`, `source`, `last_verified`,
+  `authorization`, `supersedes`, and any extra fields kept), the four-section
+  `CURRENT_FOCUS.md` (approved item 13), the model's `MEMORY.md` index
+  layout, the glossary, and memory criteria. A retired record is stored as
+  `superseded` (replaced by another record) or `archived` (moved to
+  `.memory/archive/`). Built-in memory keeps Obsidian-style relative Markdown
+  links between notes and repairs them when a note is renamed, merged,
+  superseded, archived, or deleted. Templates are read from the model copy
+  in `scaffold/model/` through `lib/core/templates.mjs`, never from a second
+  copy.
+- **Approved changes are in the model.** The 23 changes Mike approved
+  (GOAL.md) are applied on the model's branch `toolkit-v2/approved-changes`
+  (`dev/model-changes.md`), and the copy is made from that branch. Other
+  review ideas are items in the `dev/model-review.md` checklist. Nothing
+  reaches projects until Mike approves it and it is in the model.
 
 ## 1. What Toolkit V2 is
 
@@ -90,8 +99,9 @@ toolkit-v2/
       lib/hooks/                    session-start, user-prompt, pre-tool, post-tool, stop; host adapters (claude, codex)
       hooks/hooks.json              Claude Code, exec form
       hooks/codex-hooks.json        Codex, shell strings; named by "hooks" in .codex-plugin/plugin.json
-      templates/                    WORK-ITEM.md, DESIGN.md, AGENTS.md.tmpl, memory seeds, settings and codex fragments, hindsight plist
-      scaffold/base/, scaffold/salesforce/   the reviewed model tree
+      templates/                    only what the model does not hold: toolkit settings entries, codex fragments, .gitignore lines, hindsight plist, TEMPLATE-LANGUAGE.md
+      scaffold/model/               exact copy of the model project (dev/tools/import-model.mjs); never edited by hand
+      scaffold/CONDITIONS.json      install conditions for the copy (section 0)
       skills/project-setup/
       tests/                        node:test suites + fixtures (recorded Claude and Codex hook inputs, Notion responses)
     work/           9 work skills, 6 agents, references/ (conventions, trackers, helpers, team-roles)
@@ -193,7 +203,7 @@ type: <discovery | solution-design | build | data-load | repository-maintenance 
 stage: <01-discovery ... 14-spec-update>
 status: <Backlog | Ready | In Progress | In Review | Done | Cancelled>
 parent: <WI-id | none>
-waiting_on: <owner | agent | external: who | none>
+waiting_on: "<owner | agent | external: who | none>"
 priority: <urgent | high | medium | low>
 delivery: <agent-led | owner-led | not-offered>
 requirements_approved: <YYYY-MM-DD by <name> | no>
@@ -210,8 +220,12 @@ updated: <YYYY-MM-DD>
 - Body: "Related items" and Roadmap use IDs, never paths; Open Questions
   "Decision needed from" uses `owner` for Mike; the Roadmap table gains a
   "Sub-items" column.
-- `DESIGN.md` gains frontmatter `work_item`, `status`, `approved`, and says
-  `Requirements: WI-001`.
+- `waiting_on` is always written in double quotes, because the colon in
+  `external: who` stops standard YAML readers.
+- `DESIGN.md` gains frontmatter `work_item`, `status`, `approved` (written
+  `"no"` in quotes), and says `**Requirements:** WI-001`.
+- The model's `.work-items/work-item-template/` is the exact source of both
+  files; this block copies its frontmatter.
 
 **Owner edits win (I1).** Derived values (status from stage, parent from
 location, H1 from title, Overall status from `requirements_approved`) are
@@ -330,10 +344,11 @@ toolkit work decisions                        everything waiting on the owner
 toolkit work sync                             rescan, adopt, renumber duplicates, derive values, dashboard, report moves
 toolkit work validate [<id|file>]
 
-toolkit memory save --type <t> --name <slug> --description <d> (--body <t> | --body-file <f>) [--approved-by <who>] [--supersedes <key>]
+toolkit memory save --type <t> --name <slug> --description <d> (--body <t> | --body-file <f>) [--source <text>] [--approved-by <who>] [--authorization <text>] [--supersedes <key>] [--status <s>] [--last-verified <YYYY-MM-DD|unknown>] [--expect <version|absent>]
 toolkit memory find <query> [--reflect]
 toolkit memory get <key> | list [--type] [--status]
 toolkit memory retire <key> [--superseded-by <key>] | restore <key>
+toolkit memory rename <key> --to <new-key>      new key (and type); links and supersedes entries in other notes follow
 toolkit memory delete <key> --owner-approved
 toolkit memory focus [--set-file <f>] [--expect <version>]
 toolkit memory glossary [--set-file <f>] [--expect <version>]
@@ -369,10 +384,13 @@ Session state: `$CLAUDE_PLUGIN_DATA` or `$PLUGIN_DATA`, else
 
 ## 7. Memory
 
-- **Records:** Markdown with frontmatter `name`, `type`
-  (`user | feedback | project | reference | event`), `description` (one line),
-  `status` (`current | needs-review | retired`), `superseded_by`, `source`,
-  `saved`, `last_verified`. Key = `<type>_<slug>` (M1).
+- **Records:** the model's topic template (`.memory/project_topic_template.md`):
+  frontmatter `name` (the file name without `.md`), `description` (one line),
+  `metadata.type` (`user | feedback | project | reference | event`), `status`
+  (`current | needs-review | superseded | archived`; the CLI calls the last
+  two "retired"), `source`, `last_verified`, `authorization`, `supersedes`,
+  and any extra keys kept. Key = `<type>_<slug>` (M1). Older toolkit records
+  are still read; `toolkit memory reindex` rewrites them in the model format.
 - **Current focus:** four sections: Now (work item IDs), Waiting on the owner
   (things with no work item), Untracked to-dos, Next session starts with. Under
   50 lines; never repeats the tracker.
@@ -410,32 +428,39 @@ on their own line; the voice line and the Codex agent fallback from
 
 ## 9. Scaffold and host files
 
-The reviewed model tree (`dev/model-review.md`). Composition at init:
+Section 0 overrides this section. The copy of the model in
+`scaffold/model/`, installed as `scaffold/CONDITIONS.json` says. Composition
+at init:
 
-- `scaffold/base/`: every project. `scaffold/salesforce/`: overlay.
+- Every model file, byte for byte, apart from the conditions in section 0.
 - Tracker `local`: `.work-items/work-item-template/`. Memory `builtin`: `.memory/` seeds.
-- `AGENTS.md` from `templates/AGENTS.md.tmpl`: only the blocks that match the
-  answers; a "How to write replies" voice section; the always-on rules listed
-  with one line each for Codex; the path-scoped rules table. The two generated
-  lists sit between `<!-- toolkit:rules -->` markers and only that span is
-  regenerated (M10). No `CLAUDE.md` anywhere; `doctor` warns on any `CLAUDE.md`
-  or `CLAUDE.local.md` on the path and on settings that stop Claude reading
+- `AGENTS.md` is the model's: only the blocks between setup markers that
+  match the answers; the rules list between `<!-- toolkit:rules:start -->` and
+  `<!-- toolkit:rules:end -->` is generated from the rules the project has and
+  only that span is regenerated (M10). The model's one root `CLAUDE.md`
+  (only `@AGENTS.md`) is installed for Claude Code; `doctor` accepts it and
+  warns on a `CLAUDE.md` in a subfolder or one that does not import
   `AGENTS.md` (P10).
 - Scoped `AGENTS.md` in `requirements/` (and `.memory/` for built-in memory);
-  root `AGENTS.md` tells Codex to read them before editing there.
+  root `AGENTS.md` tells both hosts to read them before editing there. With
+  the root `CLAUDE.md` present, Claude Code does not load them by itself.
 - `.claude/rules/`: the general and Salesforce rules; always-on ones also
   listed in `AGENTS.md`.
-- `.claude/settings.json`: `outputStyle: "Plain English"`,
-  `autoMemoryEnabled: false`, `worktree.baseRef: "head"`,
-  `permissions.allow: ["Bash(toolkit *)"]`, `enabledPlugins` (section 2),
-  Salesforce fragment when chosen.
+- `.claude/settings.json`: the model's file, plus the toolkit's entries from
+  `templates/settings/claude-toolkit.json`: `enabledPlugins` (section 2),
+  `permissions.allow: ["Bash(toolkit *)"]`, `worktree.baseRef: "head"`,
+  `autoMemoryEnabled: false`, and `outputStyle` only when the model names
+  none. Without Salesforce, the guard and graph hooks and the `sf`/`sfdx`
+  permission entries come out (`jsonRemove` in `CONDITIONS.json`).
 - `.claude/output-styles/plain-english.md` (project copy, P12).
 - `.codex/config.toml`: plugin enablement. `.codex/rules/toolkit.rules`:
   `prefix_rule(pattern=["toolkit"], decision="allow")` so the CLI runs outside
   the sandbox (network for Notion and Hindsight, main-checkout writes) (P3, I7).
-  `.codex/hooks.json`: Salesforce guards only.
+  `.codex/hooks.json`: the model's file, which holds the Salesforce guards
+  only, so it is not installed without Salesforce.
 - Salesforce skills are project-local copies in `.claude/skills/` and
-  `.agents/skills/` from one source; `doctor` checks they match.
+  `.agents/skills/`, both taken from the model (approved item 18: the two
+  copies are identical); `doctor` checks they match.
 
 ## 10. Testing
 

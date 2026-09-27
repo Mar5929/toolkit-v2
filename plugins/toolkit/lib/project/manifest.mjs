@@ -1,17 +1,20 @@
 // The install engine behind `toolkit init`, `toolkit sync`, and the scaffold
-// checks in `toolkit doctor`. It follows scaffold/MANIFEST.json and
-// templates/TEMPLATE-LANGUAGE.md exactly:
+// checks in `toolkit doctor`. The files come from scaffold/model/ (an exact
+// copy of the model project) and scaffold/CONDITIONS.json, plus the toolkit's
+// own additions in templates/ (lib/project/model-scaffold.mjs builds the list).
+// Rules: templates/TEMPLATE-LANGUAGE.md.
 //
-// - planManifest() reads every source and target, renders templates, and
-//   decides what to do with each target. It writes nothing, so a template
+// - planManifest() reads every source and target, renders the model files
+//   that need it (setup markers, the project name, the Salesforce removals),
+//   and decides what to do with each target. It writes nothing, so a template
 //   error stops init before any file is written, and `sync --dry-run` and
 //   doctor can show the plan.
 // - applyPlan() writes the plan: every file first, then AGENTS.md with its
 //   rules span built from the rule files as they are after the writes.
 //
 // A target is judged once, before its first entry runs (several entries may
-// share one target: the two .gitignore parts, the two .claude/settings.json
-// fragments):
+// share one target: the model's .gitignore and the toolkit's lines, the
+// model's .claude/settings.json and the toolkit's settings):
 //   missing    the file does not exist
 //   unchanged  its SHA-256 equals the `installed` entry (AGENTS.md without its span)
 //   changed    it differs from the `installed` entry: the project changed it
@@ -19,17 +22,22 @@
 //
 // What happens (mode init | sync):
 //   missing                  install, record the hash
-//   unchanged                rebuild from the current sources and values; write when it differs
-//   changed                  leave it; list it, with what the toolkit would add or change
+//   unchanged                rebuild from the current sources and values; write when it differs.
+//                            An append or merge-json target is rebuilt from the file as it is,
+//                            after the CONDITIONS.json removals for the current setup are
+//                            applied to it (Salesforce off: its hooks and lines come out)
+//   changed                  leave it; list it, with what the toolkit would add, change, or remove
 //   untracked, init          copy: keep; append, merge-json, merge-toml: merge and record the hash
 //   untracked, sync          like changed
 //   AGENTS.md, no markers    keep; write the Toolkit V2 version to the proposal file
 //   AGENTS.md, untracked,    keep, rebuild the span, and record the hash of the toolkit's
 //     both markers           own version (init and sync): see planAdoptedAgents()
-// `{{today}}` renders as the setup date, .toolkit.json `project.created`
-// (renderDate), so a later render gives the same text.
+//   seed (generated file)    install when missing; never recorded, never replaced
 // A target whose condition or host no longer holds is never deleted; when the
 // toolkit wrote it, it is listed as left over.
+//
+// A model file that is not UTF-8 text (an image, for example) is copied as
+// bytes and hashed as bytes. A new file gets the model file's executable bits.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -39,8 +47,9 @@ import { atomicWrite, ensureDir, sha256 } from '../core/fsx.mjs';
 import { today as localToday } from '../core/util.mjs';
 import { renderTemplate, keysReadBy, hashText, hasSpan, buildSpan, fillSpan, spanBody, describeRule } from './render.mjs';
 import { mergeToml } from './toml.mjs';
+import { claudeOldPlugins, codexOldPlugins, OLD_MARKETPLACE, wantedV2Plugins } from './hosts.mjs';
+import { buildManifest, renderModelFile, whenHolds, applyRemovals, rulesChangeText } from './model-scaffold.mjs';
 import { buildKnowledgeIndex, INDEX_TARGET } from './knowledge-index.mjs';
-import { claudeOldPlugins, codexOldPlugins, OLD_MARKETPLACE } from './hosts.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const DEFAULT_PLUGIN_ROOT = path.resolve(HERE, '..', '..');
@@ -48,41 +57,20 @@ export const PROPOSAL_PATH = '.toolkit-cache/AGENTS.proposed.md';
 export const MAIN_CHECKOUT_DIRS = Object.freeze(['.work-items/', '.memory/']);
 export const HOSTS = Object.freeze(['claude-code', 'codex']);
 
-/** Targets whose content comes from a generator, not from their seed. */
-const GENERATORS = {
-  [INDEX_TARGET]: (project) => buildKnowledgeIndex(project.root).text,
-};
+/** The style init sets when the model's .claude/settings.json names none (the model's output style). */
+export const DEFAULT_OUTPUT_STYLE = 'Plain English';
 
+/**
+ * The install list: the model's files and the toolkit's additions
+ * (lib/project/model-scaffold.mjs). Kept under this name for the callers.
+ */
 export function loadManifest(pluginRoot = DEFAULT_PLUGIN_ROOT) {
-  const file = path.join(pluginRoot, 'scaffold', 'MANIFEST.json');
-  let manifest;
-  try {
-    manifest = JSON.parse(fs.readFileSync(file, 'utf8'));
-  } catch (err) {
-    throw new ToolkitError(EXIT.ERROR, `The scaffold manifest ${file} could not be read: ${err.message}`, {
-      fix: 'Reinstall or update the toolkit plugin.',
-    });
-  }
-  if (!manifest || !Array.isArray(manifest.files)) {
-    throw new ToolkitError(EXIT.ERROR, `The scaffold manifest ${file} has no "files" list.`, { fix: 'Reinstall or update the toolkit plugin.' });
-  }
-  return manifest;
+  return buildManifest(pluginRoot);
 }
 
-/** True when a MANIFEST condition holds for a project. */
+/** True when one install condition holds for a project (see model-scaffold.mjs whenHolds). */
 export function conditionHolds(condition, config) {
-  const c = config || {};
-  const tracker = String((c.tracker && c.tracker.type) || 'local');
-  const memory = String((c.memory && c.memory.type) || 'builtin');
-  switch (condition) {
-    case 'always': return true;
-    case 'salesforce': return Boolean(c.salesforce && c.salesforce.enabled);
-    case 'tracker:local': return tracker === 'local';
-    case 'memory:builtin': return memory === 'builtin';
-    case 'memory:hindsight': return memory === 'hindsight';
-    case 'memory:notion': return memory === 'notion';
-    default: return false;
-  }
+  return whenHolds(condition, config || {}, projectHosts(config));
 }
 
 /**
@@ -138,10 +126,10 @@ export function projectHosts(config) {
   return readHosts(config).hosts;
 }
 
-/** True when an entry installs for this project: its condition and its host both hold. */
+/** True when an entry installs for this project: every one of its conditions holds. */
 export function entryApplies(entry, config) {
-  if (!conditionHolds(entry.condition, config)) return false;
-  return !entry.host || projectHosts(config).includes(entry.host);
+  const hosts = projectHosts(config);
+  return (entry.when || []).every((w) => whenHolds(w, config || {}, hosts));
 }
 
 /** Targets under .work-items/ and .memory/ live in the main checkout. */
@@ -153,9 +141,9 @@ export function targetPath(target, project) {
   return path.join(targetBase(target, project), ...target.split('/'));
 }
 
-function readOrNull(file) {
+function readOrNull(file, { binary = false } = {}) {
   try {
-    return fs.readFileSync(file, 'utf8');
+    return binary ? fs.readFileSync(file) : fs.readFileSync(file, 'utf8');
   } catch (err) {
     if (err && (err.code === 'ENOENT' || err.code === 'ENOTDIR')) return null;
     if (err && err.code === 'EISDIR') {
@@ -266,60 +254,102 @@ function parseJsonTarget(text, target) {
 
 // ------------------------------------------------------------------ sources
 
-/** The source text for an entry, rendered when it is a template, with the per-computer additions. */
+/**
+ * The source text for an entry: a model file rendered for this project (setup
+ * markers, the project name, the Salesforce removals), a toolkit template
+ * rendered, and the per-computer additions. { text, raw, skip }: skip is true
+ * when a CONDITIONS.json rule leaves the file out for this project.
+ */
 function sourceText(entry, ctx) {
-  const key = `${entry.source}|${entry.template ? 'T' : ''}`;
+  const key = `${entry.source}|${entry.target}`;
   if (ctx.sourceCache.has(key)) return ctx.sourceCache.get(key);
   const file = path.join(ctx.pluginRoot, ...entry.source.split('/'));
-  let text;
+  let buf;
   try {
-    text = fs.readFileSync(file, 'utf8');
+    buf = fs.readFileSync(file);
   } catch (err) {
     throw new ToolkitError(EXIT.ERROR, `The scaffold file ${entry.source} is missing from the toolkit plugin (${err.message}).`, {
       fix: 'Reinstall or update the toolkit plugin.',
     });
   }
+  let text = buf.toString('utf8');
+  if (!Buffer.from(text, 'utf8').equals(buf)) {
+    // A file that is not text (an image, for example) is copied as bytes.
+    // Only a plain copy can be: markers, fills, removals, and merges need text.
+    if (entry.model && entry.mode === 'copy' && !entry.template && !rulesChangeText(entry.target, ctx.conditions)) {
+      const result = { text: buf, raw: null, skip: false, binary: true };
+      ctx.sourceCache.set(key, result);
+      return result;
+    }
+    throw new ToolkitError(EXIT.ERROR, `The scaffold file ${entry.source} is not UTF-8 text, and the toolkit can only copy such a file as it is (it cannot render, fill, merge, or remove lines from it).`, {
+      fix: 'Remove the file from the model, make it a plain copy, or add it to "exclude" in scaffold/CONDITIONS.json, then run node dev/tools/import-model.mjs.',
+    });
+  }
   const raw = text;
-  if (entry.template) text = renderTemplate(text, ctx.config, { file: entry.source, today: ctx.today });
-  text = withMachineAdditions(entry, text, ctx);
-  const result = { text, raw };
+  let result;
+  if (entry.model) {
+    const r = renderModelFile(entry, text, ctx.config, ctx.conditions);
+    result = r.skip ? { text: null, raw, skip: true } : { text: r.text, raw, skip: false };
+  } else {
+    if (entry.template) text = renderTemplate(text, ctx.config, { file: entry.source, today: ctx.today });
+    result = { text: toolkitAdditions(entry, text, ctx), raw, skip: false };
+  }
   ctx.sourceCache.set(key, result);
   return result;
 }
 
+/** True when an entry installs for this project and no CONDITIONS.json rule leaves its file out. */
+function entryInstalls(entry, ctx) {
+  return entryApplies(entry, ctx.config) && !sourceText(entry, ctx).skip;
+}
+
 /**
- * Per-computer additions (ARCHITECTURE section 2): every claude-toolkit plugin
- * this computer has is turned off in the project, not only the ones the
- * fragment names.
+ * The toolkit's own settings, fitted to the project and this computer
+ * (ARCHITECTURE section 2): the Toolkit V2 plugins on (the Salesforce one only
+ * in a Salesforce project), every claude-toolkit plugin this computer has
+ * turned off (not only the ones the fragment names), and the output style
+ * when the model's settings name none.
  */
-function withMachineAdditions(entry, text, ctx) {
-  if (entry.source === 'templates/settings/claude-base.json') {
-    const extra = ctx.claudeOldPlugins || [];
-    if (!extra.length) return text;
+function toolkitAdditions(entry, text, ctx) {
+  if (entry.toolkit === 'claude-settings') {
     let obj;
     try {
       obj = JSON.parse(text);
-    } catch {
-      return text;
+    } catch (err) {
+      throw new ToolkitError(EXIT.ERROR, `The toolkit file ${entry.source} is not valid JSON (${err.message}).`, { fix: 'Reinstall or update the toolkit plugin.' });
     }
-    obj.enabledPlugins = obj.enabledPlugins || {};
-    let added = false;
-    for (const name of extra) {
+    const out = {};
+    const model = ctx.modelSettings;
+    if (!model || !Object.prototype.hasOwnProperty.call(model, 'outputStyle')) out.outputStyle = DEFAULT_OUTPUT_STYLE;
+    Object.assign(out, obj);
+    out.enabledPlugins = { ...(obj.enabledPlugins || {}) };
+    for (const [id, on] of Object.entries(wantedV2Plugins(ctx.config))) out.enabledPlugins[id] = on;
+    for (const name of ctx.claudeOldPlugins || []) {
       const id = `${name}@${OLD_MARKETPLACE}`;
-      if (!Object.prototype.hasOwnProperty.call(obj.enabledPlugins, id)) {
-        obj.enabledPlugins[id] = false;
-        added = true;
-      }
+      if (!Object.prototype.hasOwnProperty.call(out.enabledPlugins, id)) out.enabledPlugins[id] = false;
     }
-    return added ? `${JSON.stringify(obj, null, 2)}\n` : text;
+    return `${JSON.stringify(out, null, 2)}\n`;
   }
-  if (entry.source === 'templates/codex/config-base.toml') {
+  if (entry.toolkit === 'codex-config') {
     const extra = (ctx.codexOldPlugins || []).filter((name) => !text.includes(`[plugins."${name}@${OLD_MARKETPLACE}"]`));
     if (!extra.length) return text;
     const blocks = extra.map((name) => `\n[plugins."${name}@${OLD_MARKETPLACE}"]\nenabled = false\n`).join('');
     return `${text.replace(/\n+$/, '\n')}${blocks}`;
   }
   return text;
+}
+
+/** The model's .claude/settings.json as this project gets it (before the toolkit's entries), or null. */
+function modelSettingsFor(manifest, ctx) {
+  const e = manifest.files.find((f) => f.model && f.target === '.claude/settings.json');
+  if (!e || !entryApplies(e, ctx.config)) return null;
+  const src = sourceText(e, ctx);
+  if (src.skip) return null;
+  try {
+    return JSON.parse(src.text);
+  } catch {
+    return null;
+  }
 }
 
 // ------------------------------------------------------------------ plan
@@ -346,11 +376,13 @@ export function planManifest(project, opts = {}) {
   const ctx = {
     pluginRoot,
     config,
+    conditions: manifest.conditions || {},
     today: opts.today || renderDate(config, env),
     sourceCache: new Map(),
     claudeOldPlugins: claudeOldPlugins(env),
     codexOldPlugins: codexOldPlugins(env),
   };
+  ctx.modelSettings = modelSettingsFor(manifest, ctx);
 
   const byTarget = new Map();
   for (const e of manifest.files) {
@@ -360,10 +392,12 @@ export function planManifest(project, opts = {}) {
 
   const targets = [];
   for (const [target, all] of byTarget) {
-    const entries = all.filter((e) => entryApplies(e, config));
+    const entries = all.filter((e) => entryInstalls(e, ctx));
     const abs = targetPath(target, project);
-    const before = readOrNull(abs);
-    const t = { target, abs, entries, before, after: null, action: 'none', record: false, would: [], conflicts: [], notes: [], template: entries.some((e) => e.template) };
+    const binary = entries.some((e) => e.binary);
+    const before = readOrNull(abs, { binary });
+    const execBits = entries.reduce((bits, e) => bits | (e.model ? (e.execBits || 0) : 0), 0);
+    const t = { target, abs, entries, before, after: null, action: 'none', record: false, would: [], conflicts: [], notes: [], template: entries.some((e) => e.template), binary, execBits };
     targets.push(t);
     if (!entries.length) {
       if (before !== null && installed[target]) t.action = 'leftover';
@@ -374,8 +408,8 @@ export function planManifest(project, opts = {}) {
     const status = before === null ? 'missing' : !recorded ? 'untracked' : currentHash === recorded ? 'unchanged' : 'changed';
     t.status = status;
 
-    if (GENERATORS[target]) {
-      planGenerated(t, project, { mode, recorded });
+    if (entries.some((e) => e.mode === 'seed')) {
+      planSeed(t, ctx, project);
       continue;
     }
 
@@ -390,8 +424,16 @@ export function planManifest(project, opts = {}) {
         t.action = 'install';
         t.record = true;
       } else if (status === 'unchanged') {
-        t.after = compute(entries, before, ctx, target).text;
-        t.action = sameText(target, t.after, before) ? 'same' : 'update';
+        // The toolkit wrote this file, so the removals for the current setup
+        // apply to it before the merge (a merge only adds).
+        const base = applyRemovals(target, before, config, ctx.conditions).text;
+        t.after = compute(entries, base, ctx, target).text;
+        if (sameText(target, t.after, before)) {
+          t.action = 'same';
+          if (binary) t.after = before;
+        } else {
+          t.action = 'update';
+        }
         t.record = true;
       } else if (status === 'untracked' && entries.some((e) => e.mode === 'agents-md')) {
         // Both span markers are there (the case without them is a proposal, above).
@@ -432,8 +474,9 @@ export function planManifest(project, opts = {}) {
     if (agents.action === 'propose' && agents.proposal) agents.proposal = fillSpan(agents.proposal, span);
   }
 
+  // Folders to create even when empty: none today (the model's folders all hold files).
   const directories = (manifest.directories || [])
-    .filter((d) => conditionHolds(d.condition, config))
+    .filter((d) => (d.when || []).every((w) => conditionHolds(w, config)))
     .map((d) => ({ target: d.target, abs: targetPath(d.target, project), exists: fs.existsSync(targetPath(d.target, project)) }));
 
   // The installed map after the plan is applied.
@@ -462,9 +505,10 @@ function sortKeys(obj) {
   return Object.fromEntries(Object.keys(obj).sort().map((k) => [k, obj[k]]));
 }
 
-/** AGENTS.md is compared without its span, which is filled in after the plan. */
+/** AGENTS.md is compared without its span, which is filled in after the plan. A binary file is compared byte for byte. */
 function sameText(target, a, b) {
   if (a === null || b === null) return a === b;
+  if (Buffer.isBuffer(a) || Buffer.isBuffer(b)) return Buffer.isBuffer(a) && Buffer.isBuffer(b) && a.equals(b);
   return hashText(target, a) === hashText(target, b);
 }
 
@@ -476,6 +520,7 @@ function compute(entries, base, ctx, target) {
     switch (e.mode) {
       case 'copy':
       case 'agents-md':
+      case 'seed':
         text = src;
         break;
       case 'append': {
@@ -484,8 +529,15 @@ function compute(entries, base, ctx, target) {
         break;
       }
       case 'merge-json': {
-        const current = text === null ? {} : parseJsonTarget(text, target);
         const incoming = JSON.parse(src);
+        if (text === null) {
+          // A new file is the first source exactly as it is, so the model's own
+          // file installs byte for byte when nothing else is merged into it.
+          would.push(...jsonChanges({}, incoming));
+          text = src;
+          break;
+        }
+        const current = parseJsonTarget(text, target);
         const merged = mergeJson(current, incoming);
         would.push(...jsonChanges(current, merged));
         if (text !== null && JSON.stringify(merged) === JSON.stringify(current)) break;
@@ -510,30 +562,23 @@ function compute(entries, base, ctx, target) {
   return { text, would };
 }
 
-function planGenerated(t, project, { mode, recorded }) {
-  const text = GENERATORS[t.target](project);
+/**
+ * A generated file (CONDITIONS.json "generated", for example .memory/MEMORY.md):
+ * the model's copy is installed when the file is missing, and a toolkit
+ * command rebuilds it from then on. It is never recorded and never replaced.
+ * The knowledge index is installed with a row for each topic folder the
+ * project already has (none in a new project, so it is the model's text).
+ */
+function planSeed(t, ctx, project) {
   if (t.before === null) {
-    t.after = text;
+    t.after = t.target === INDEX_TARGET
+      ? buildKnowledgeIndex(project.root, { pluginRoot: ctx.pluginRoot }).text
+      : compute(t.entries, null, ctx, t.target).text;
     t.action = 'install';
-    t.record = true;
+    t.record = false;
     return;
   }
-  if (!recorded && mode === 'init') {
-    t.action = 'keep';
-    t.notes.push('kept the project\'s file');
-    return;
-  }
-  if (!recorded) {
-    t.action = 'changed';
-    t.would.push(`it is generated: run toolkit index knowledge to rebuild it`);
-    return;
-  }
-  // A generated file the toolkit owns is always rebuilt; hand edits are refused
-  // by the PreToolUse hook. Its installed entry keeps the hash of the first
-  // install, so rebuilding it never rewrites .toolkit.json.
-  t.after = text;
-  t.action = text === t.before ? 'same' : 'update';
-  t.record = false;
+  t.action = 'same';
 }
 
 /**
@@ -576,29 +621,40 @@ function planChanged(t, ctx, before, recorded, changedSettings) {
   t.action = 'changed';
   const modes = new Set(t.entries.map((e) => e.mode));
   if (modes.has('append') || modes.has('merge-json') || modes.has('merge-toml')) {
-    const { text, would } = compute(t.entries, before, ctx, t.target);
-    t.would = text === before ? [] : would;
+    const { text: base, removed } = applyRemovals(t.target, before, ctx.config, ctx.conditions);
+    const { text, would } = compute(t.entries, base, ctx, t.target);
+    t.would = text === before ? [] : [...removed, ...would];
   } else {
     const fresh = compute(t.entries, null, ctx, t.target).text;
     if (!recorded) t.would.push('the project had this file before the toolkit; the toolkit version was not installed');
     else if (sha256(hashText(t.target, fresh)) !== recorded) t.would.push('the toolkit\'s own version has changed since it was installed');
   }
-  if (t.template && changedSettings && changedSettings.length) {
+  if (changedSettings && changedSettings.length) {
     const notes = [];
     for (const e of t.entries) {
-      if (!e.template) continue;
-      const reads = keysReadBy(sourceText(e, ctx).raw);
-      for (const cond of [e.condition]) {
-        if (cond === 'salesforce') reads.add('salesforce.enabled');
-        if (cond === 'tracker:local') reads.add('tracker.type');
-        if (cond && cond.startsWith('memory:')) reads.add('memory.type');
-      }
+      const reads = settingsReadBy(e, ctx);
+      if (!reads.size) continue;
       for (const s of changedSettings) {
         if (reads.has(s.key)) notes.push(`${t.target} was changed by the project, so it still describes ${s.key} ${formatValue(s.from)}. Update it by hand.`);
       }
     }
     t.notReflected = [...new Set(notes)];
   }
+}
+
+/**
+ * The settings that shape an entry's text: its setup markers and tokens, its
+ * fills, the Salesforce removals of a model file, and the Salesforce plugin
+ * switch in the toolkit's settings. An install condition is not one of them:
+ * a condition change adds a file or leaves it over, it does not change its text.
+ */
+function settingsReadBy(e, ctx) {
+  const reads = e.template ? keysReadBy(sourceText(e, ctx).raw) : new Set();
+  for (const f of e.fills || []) reads.add(f.value);
+  const c = ctx.conditions || {};
+  if (e.model && [...(c.jsonRemove || []), ...(c.lineRemove || [])].some((r) => r.path === e.target)) reads.add('salesforce.enabled');
+  if (e.toolkit === 'claude-settings' || e.toolkit === 'codex-config') reads.add('salesforce.enabled');
+  return reads;
 }
 
 function formatValue(v) {
@@ -653,6 +709,16 @@ function writeFile(abs, text) {
   }
 }
 
+/** Give a written file the model file's executable bits (never takes one away). */
+function addExecBits(abs, bits) {
+  try {
+    const mode = fs.statSync(abs).mode & 0o7777;
+    if ((mode & bits) !== bits) fs.chmodSync(abs, mode | bits);
+  } catch {
+    // The file was just written; a failed chmod leaves it readable, which is enough to run it with its interpreter.
+  }
+}
+
 /**
  * Write the plan. Returns { written: [{ target, action }], proposal, directories }.
  * Files are written first, then AGENTS.md, so its span matches the rule files.
@@ -667,6 +733,7 @@ export function applyPlan(plan) {
       continue;
     }
     writeFile(t.abs, t.after);
+    if (t.execBits && (t.action === 'install' || t.action === 'update')) addExecBits(t.abs, t.execBits);
     written.push({ target: t.target, action: t.action });
   }
   for (const t of later) {

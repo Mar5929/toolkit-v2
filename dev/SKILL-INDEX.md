@@ -52,14 +52,14 @@ minimal draft (`skill-index-draft-minimal.md`) are marked "(from lifecycle)" or
 | 10 | memory | `memory-save` | Saves, corrects, or forgets one lasting fact in project memory, and sends anything that belongs elsewhere to its home. Use when the owner says "remember this", "from now on", "always do X", "never do X", "forget that", or "remind me", corrects the agent, or a hook says to save. | 278 | Save, correct, forget one record; current focus and untracked to-dos; glossary terms; routing other information to its home. Holds the only written copy of the memory approval policy. |
 | 11 | memory | `memory-find` | Finds what the project already knows in memory, decisions, work items, requirements, and the current focus, and cites the source of each answer. Use when the owner asks "what did we decide", "do you remember", "why did we", or "have we done this before", and before asking him to repeat anything. | 296 | Looking up past decisions, preferences, history, and references in every home. Read-only. |
 | 12 | memory | `memory-tidy` | Reviews the whole project memory: merges duplicates, retires stale or contradicted facts, trims the current focus, and backs memory up. Use when the owner says "clean up memory" or "tidy memory", says memory seems wrong or out of date, or the toolkit doctor flags memory problems. | 280 | Whole-memory review; duplicates; stale records; focus trim; backup and restore. |
-| 13 | toolkit | `project-setup` | Sets up Toolkit V2 in a project or repairs it: copies the scaffold, asks tracker, memory, and Salesforce, writes AGENTS.md and rules, checks this computer, and fixes Notion or Hindsight wiring. Use when the owner says "set up this project", "check the setup", "update the toolkit", or "new computer". | 300 | New project (GOAL finish item 3); repair of an existing project; a new computer; switching the memory backend; Notion and Hindsight wiring. |
+| 13 | toolkit | `project-setup` | Sets up Toolkit V2 in a project or repairs it: copies the model scaffold and applies your answers on tracker, memory, and Salesforce, checks this computer, and fixes Notion or Hindsight wiring. Use when the owner says "set up this project", "check the setup", "update the toolkit", or "new computer". | 300 | New project (GOAL finish item 3); repair of an existing project; a new computer; switching the memory backend; Notion and Hindsight wiring. |
 | 14 | session-skills | `handoff` | Writes a checked prompt a fresh session can start from, after updating the active work item and current focus. Use when the owner says "write a handoff", "I'm going to clear context", "start a new session", "this chat is getting long", or "I'm stopping for today". "/handoff check" checks one. | 293 | Handoff between sessions at any stage; checking a pasted handoff prompt. |
 | 15 | session-skills | `session-summary` | Shows a table of what the owner asked for in this chat and where each request landed, then what still needs him. Use when the owner says "recap this chat", "summarize the session", "what did I ask for", or "what did we do today". Covers this conversation only, not the whole project. | 283 | Recap of this conversation only. |
 | 16 | session-skills | `braindump` | Plays back a loose brain dump in very simple words and waits for the owner to confirm before any work starts. Use when the owner types /braindump or says "here's a brain dump", "play that back", "tell me what you heard", or "make sure you understood before you start". | 268 | Confirming understanding before any work. No writes. |
 | 17 | session-skills | `explain-simply` | Re-explains the last answer, a plan, or a named document as short plain bullets, keeping every number, name, and path. Use when the owner types /explain-simply or says "explain it like I'm five", "simpler", "put that in plain bullets", or "I don't get it". | 256 | Re-explaining at a lower reading level. |
 | 18 | session-skills | `unslop` | Rewrites text so it no longer reads as machine-written, keeping every fact, and shows the findings before saving. Use when the owner says "unslop this", "this reads like AI wrote it", or "make it sound human", or when the humanize-outbound-text rule applies to text going to another person. | 290 | Removing machine-written patterns on request, and for outbound text under the `humanize-outbound-text.md` rule. |
 | 19 | git-workflows | `merge-and-clean-up` | Merges a GitHub pull request once merging is allowed, after its checks and the merge-safety check, updates the base checkout, and removes only that pull request's branches and worktree. Use when the owner or work-finish says "merge PR 12", "merge and clean up", or "land this pull request". | 290 | The merge inside `12-pr-and-push`. |
-| 20 | git-workflows | `publish-docs` | Commits and pushes an agreed edit to Git-tracked project documents (requirements/, docs/, DECISIONS.md, PROJECT.md, PROJECT-ROADMAP.md, ai-external-knowledge/, delivery/) straight to the default branch from an isolated worktree. Use after such an edit. Not for code, rules, skills, or .memory/. | 294 | Saving committed documents: the requirements baseline at `14-spec-update`, `DECISIONS.md` rows, `PROJECT.md`, `docs/`. Agent use. |
+| 20 | git-workflows | `publish-docs` | Commits and pushes an agreed edit to Git-tracked project documents (requirements/, system-guide/, DECISIONS.md, PROJECT.md, PROJECT-ROADMAP.md, ai-external-knowledge/, delivery/) to the default branch from an isolated worktree. Use after such an edit. Not for code, rules, skills, or .memory/. | 293 | Saving committed documents: the requirements baseline and System Guide at `14-spec-update`, `DECISIONS.md` rows, `PROJECT.md`, `PROJECT-ROADMAP.md`. Agent use. |
 | 21 | git-workflows | `pull-latest` | Brings the local repository up to date with its remote safely: fetch, fast-forward, or a merge pull when the two have diverged; never rebase, reset, or push. Use when the owner says "get the latest", "pull the latest changes", "update from origin", or "grab what others pushed". | 278 | Updating a checkout. |
 | 22 | git-workflows | `reset-to-remote` | Makes the local repository an exact copy of its remote: shows a plan, then hard-resets tracking branches, deletes branches gone from the remote, and reinstalls dependencies. Use only when the owner says "wipe local", "match remote exactly", or "fresh start from remote". | 270 | Destructive resync, only on the owner's explicit words. |
 | 23 | sf-architect-solutioning (Salesforce projects only) | `sf-architect-solutioning` | Acts as a certified Salesforce Technical Architect: checks platform facts against official Salesforce documentation and plans objects, Flows, Apex, and permissions. Use when solution-design needs a Salesforce specialist, or the owner says "architect this" or asks a Salesforce platform question. | 295 | Salesforce specialist inside `04-solution-design`; Salesforce platform questions at any stage. **Description needs Mike's yes (section 9.1, decision 1). Body unchanged.** |
@@ -77,8 +77,9 @@ Notes on the table:
   renames the plugins, only the Plugin column changes.
 - **Salesforce skills home** (critique M12). Rows 24 to 26 follow the model
   project: `project-setup` copies them into `.claude/skills/<name>/` and
-  `.agents/skills/<name>/` from one source in `plugins/toolkit/scaffold/salesforce/`,
-  and `toolkit doctor` checks that the two copies match. A per-project
+  `.agents/skills/<name>/` from the model copy in `plugins/toolkit/scaffold/model/`
+  (the model keeps the two copies identical), and `toolkit doctor` checks that
+  the two copies match. A per-project
   Salesforce plugin is the alternative the model review prefers; that is the
   lead's call and does not change any name or description.
 
@@ -106,7 +107,7 @@ when the skill listing has dropped descriptions.
 | `09-testing` | In Progress | `work-check` | `acceptance-checker` agent | none |
 | `10-bug-fixing` | In Progress | `work-check` | `builder` agent | only when a failure needs a choice |
 | `11-user-approval` | In Progress | `work-check` | `work-decide` records a later answer | approve the result |
-| `12-pr-and-push` | In Review | `work-finish` | `merge-and-clean-up` for the merge | the merge, or a recorded standing merge instruction |
+| `12-pr-and-push` | In Review | `work-finish` | `merge-and-clean-up` for the merge | the merge, or a standing merge instruction recorded in `DECISIONS.md` |
 | `13-deployment` | In Review | `work-finish` | `sf-component-tracker`, `sf-deploy-check`, `sf-data-change` | production deploys and data loads are run by the owner |
 | `14-spec-update` | In Review | `work-finish` | `publish-docs` | none |
 | Done | Done | `work-finish` | | the recorded result approval |
@@ -129,12 +130,12 @@ or publishing.
 | Requirements approval | `work-requirements` | `work-decide` | `toolkit work approve <id> --requirements --by <name>` | CLI; PostToolUse hook feeds back a `build` or `data-load` item past `03` without it |
 | Design approval | `solution-design` | `work-decide` | `toolkit work approve <id> --design --by <name>` | CLI |
 | Flagged task (its "Done when" names the owner) | `work-on` | `work-decide` | Open Questions row, then a history row | skill |
-| Result approval (`11`) | `work-check` | `work-decide` | `toolkit work approve <id> --result --by <name>` (proposed, section 7.1) | CLI once added |
-| Merge | `work-finish` | none | `merge-and-clean-up`, after the owner's yes or a standing merge instruction recorded in the project | merge-safety check in `merge-and-clean-up` |
+| Result approval (`11`) | `work-check` | `work-decide` | `toolkit work approve <id> --result --by <name>` | CLI |
+| Merge | `work-finish` | none | `merge-and-clean-up`, after the owner's yes or a standing merge instruction recorded in `DECISIONS.md` | merge-safety check in `merge-and-clean-up` |
 | Deploy, production data | `work-finish`, `sf-data-change` | none | the owner runs it; history row | Salesforce guard hooks |
 | Done | `work-finish` | none | `toolkit work finish <id> --by <name> --evidence <text>` | CLI requires `--by` |
 | Cancel | `work-finish`; `work-organize` for hand removals | none | `toolkit work cancel <id> --reason <text>` | CLI requires `--reason` |
-| Project-wide decision | `work-decide` | none | `DECISIONS.md` row (`toolkit decision add`, proposed), saved with `publish-docs` | none |
+| Project-wide decision | `work-decide` | none | `DECISIONS.md` row (`toolkit decision add`), saved with `publish-docs` | none |
 | Memory save of an inferred fact (onboarding mode), deletes, anything about a person | `memory-save`, `memory-tidy` | none | `toolkit memory save --approved-by`, `toolkit memory delete --owner-approved` | CLI flag; Stop hook reminder |
 | Split, move, restore | `work-organize` | none | `toolkit work new --parent`, `toolkit work move` | skill ("never on the agent's own initiative") |
 | Setup choices; anything created outside the project | `project-setup` | none | `.toolkit.json` | Notion writes refused outside the AI Agent Second Brain root |
@@ -159,8 +160,8 @@ or publishing.
 
 Each entry: the steps the first 40 lines of its `SKILL.md` carry (detail goes in
 `references/`), the `toolkit` commands it uses (ARCHITECTURE.md section 5;
-"(proposed)" marks a command section 5 does not list, collected in section 7.1),
-agents, what it replaces, and the hooks that back it.
+the commands first proposed in section 7.1 are now all listed there), agents,
+what it replaces, and the hooks that back it.
 
 ### 3.0 Shared text
 
@@ -230,9 +231,9 @@ match them.
      Never ask the owner which stage it is in.
   6. Plan (`06-implementation-plan`): Roadmap phases `P1`, `P2` and tasks
      `P1-T01` (Work, Deliverable, Done when, Depends on) from the design's
-     Order of work. Tracking setup (`07-tracking-setup`) only when needed: the
-     item's branch and worktree; Salesforce manifest folder through
-     `sf-component-tracker`.
+     "Build and verification plan". Tracking setup (`07-tracking-setup`) only
+     when needed: the item's branch and worktree; the item's folder in
+     `delivery/deployment/` through `sf-component-tracker`.
   7. Build (`08-build`) on the item's own branch and worktree. With a team: one
      `builder` per independent task, one writer per path. Tests go with each
      task. Tick a task only with evidence. A task whose "Done when" names the
@@ -251,8 +252,8 @@ match them.
   `toolkit work set <id> --stage|--waiting-on|--priority|--type`,
   `toolkit work lifecycle`, `toolkit work next`,
   `toolkit work history <id> --note`, `toolkit work validate <id>`,
-  `toolkit work edit <id> --section <name> --set-file <f>` (proposed, needed for
-  Notion items).
+  `toolkit work edit <id> --section <name> --set-file <f>` (needed for Notion
+  items).
 - **Agents:** `builder` (one per independent task when a team was chosen),
   `researcher` (an unknown found while planning).
 - **Replaces:** `work-tracker:work` (start, resume, capture, stage changes,
@@ -297,8 +298,7 @@ match them.
   1. Build the queue: requirements waiting for approval; designs with
      `status: proposed`; items at `11-user-approval`; Open Questions rows with
      "Decision needed from: owner"; delivery offers not yet answered. Use
-     `toolkit work decisions` (proposed); until it exists, `toolkit brief`,
-     `toolkit work list --waiting-on owner`, and `toolkit work show <id>`.
+     `toolkit work decisions`, then `toolkit work show <id>` for each item.
   2. The owner gave an answer without being asked ("approved", "go with B"):
      match it to exactly one waiting decision. If two could match, ask which,
      naming both.
@@ -315,18 +315,18 @@ match them.
      `toolkit work history` note in the owner's words. An unanswered delivery
      offer: open `work-delegate`.
   6. A decision for the whole project: add a `DECISIONS.md` row
-     (`toolkit decision add`, proposed) and save it with `publish-docs`.
+     (`toolkit decision add`) and save it with `publish-docs`.
   7. A "no" or a change: record it as the answer, move the item back (for
      example `--stage 02-refinement`), and open the skill that redoes the work.
   8. Lead with "Not saved" if any write failed. When the queue is empty, say so
      and offer to continue unblocked items with `work-on`.
-- **CLI:** `toolkit work decisions` (proposed), `toolkit brief`,
+- **CLI:** `toolkit work decisions`, `toolkit brief`,
   `toolkit work list --waiting-on owner`, `toolkit work show <id>`,
   `toolkit work approve <id> --requirements|--design --by <name>`,
-  `toolkit work approve <id> --result --by <name>` (proposed),
-  `toolkit work edit <id> --section "Open Questions" --set-file <f>` (proposed),
+  `toolkit work approve <id> --result --by <name>`,
+  `toolkit work edit <id> --section "Open Questions" --set-file <f>`,
   `toolkit work set <id> --waiting-on|--stage`, `toolkit work history <id> --note`,
-  `toolkit decision add` (proposed).
+  `toolkit decision add`.
 - **Agents:** none.
 - **Replaces:** nothing directly. It fills the model review's first gap (no one
   list of what waits on the owner, `model-review-draft.md` section 2) and takes
@@ -367,10 +367,9 @@ match them.
      Not yet: `toolkit work set <id> --waiting-on owner`.
   9. Lead with "Not saved" on a failed write. Hand back to `work-on` unless the
      owner stops.
-- **CLI:** `toolkit work show <id> [--section Requirements]` (the `--section`
-  flag is proposed), `toolkit work new`,
+- **CLI:** `toolkit work show <id> [--section Requirements]`, `toolkit work new`,
   `toolkit work set <id> --stage 01-discovery|02-refinement --waiting-on`,
-  `toolkit work edit <id> --section <name> --set-file <f>` (proposed),
+  `toolkit work edit <id> --section <name> --set-file <f>`,
   `toolkit work approve <id> --requirements --by <name>`,
   `toolkit work history <id> --note`, `toolkit work validate <id>`.
 - **Agents:** `requirements-analyst`, `researcher`.
@@ -400,10 +399,12 @@ this name lets that file ship byte for byte as GOAL.md asks.
      option or several; team size from `references/team-roles.md`.
   4. Start from the project's `DESIGN.md` template
      (`.work-items/work-item-template/DESIGN.md` when present, otherwise the
-     plugin's), through `toolkit work design <id>` (proposed). One home only:
-     `DESIGN.md` beside `WORK-ITEM.md` (local), the Solution Design child page
-     (Notion), the "Solution design" comment (GitHub, Jira). Never
-     `docs/designs/`.
+     model copy in the toolkit plugin's `scaffold/model/`), through
+     `toolkit work design <id>`. One home only: `DESIGN.md` beside
+     `WORK-ITEM.md` (local), the Solution Design child page (Notion), the
+     "Solution design" comment (GitHub, Jira). Never a separate design folder.
+     Fill the model's opening sections: What this design solves, Requirements
+     and design readiness, What exists today, Constraints and assumptions.
   5. One `researcher` per open question, in parallel. Salesforce project: open
      `sf-architect-solutioning` as the specialist and pass its findings to the
      architect.
@@ -411,8 +412,8 @@ this name lets that file ship byte for byte as GOAL.md asks.
      `design-critic` per draft; repeat the fix round until the critic's list is
      empty. A disagreement still open after two rounds goes to the owner as a
      decision.
-  7. Save with `status: proposed` (`toolkit work design <id> --set-file <draft>`,
-     proposed); set `waiting_on: owner`; project-wide decisions go to
+  7. Save with `status: proposed` (`toolkit work design <id> --set-file <draft>`);
+     set `waiting_on: owner`; project-wide decisions go to
      `work-decide`, lasting lessons to `memory-save`.
   8. Show the owner the options, the recommendation, what he will see when it
      is done, the risks, and the order of work; ask him to choose or approve.
@@ -420,10 +421,10 @@ this name lets that file ship byte for byte as GOAL.md asks.
      `work-on`.
   9. Codex: pass each role file's full text to a native worker; with no
      worker, say no independent research or critique ran.
-- **CLI:** `toolkit work show <id> --section Requirements` (flag proposed),
+- **CLI:** `toolkit work show <id> --section Requirements`,
   `toolkit work set <id> --stage 04-solution-design --waiting-on`,
-  `toolkit work design <id> [--create|--set-file <f>|--status proposed|approved]`
-  (proposed), `toolkit work approve <id> --design --by <name>`,
+  `toolkit work design <id> [--create|--set-file <f>|--status proposed|approved]`,
+  `toolkit work approve <id> --design --by <name>`,
   `toolkit work history <id> --note`, `toolkit work validate <id>`.
 - **Agents:** `requirements-analyst`, `researcher`, `design-architect`,
   `design-critic`; the `sf-architect-solutioning` skill in Salesforce projects.
@@ -464,8 +465,8 @@ this name lets that file ship byte for byte as GOAL.md asks.
      changed, and a history row on each item whose parent changed.
 - **CLI:** `toolkit work sync`, `toolkit work list --tree`,
   `toolkit work new --title <t> --parent <id>`,
-  `toolkit work move <id> --under <id|group|root|archive>` (`archive` target
-  proposed), `toolkit work set <id> --parent`, `toolkit work cancel <id> --reason`,
+  `toolkit work move <id> --under <id|group|root|archive>`,
+  `toolkit work set <id> --parent`, `toolkit work cancel <id> --reason`,
   `toolkit work validate`, `toolkit work history <id> --note`.
 - **Agents:** none.
 - **Replaces:** the group, link-children, archive, and reconcile parts of
@@ -482,8 +483,14 @@ it do what I asked".
 
 - **Steps:**
   1. Read the requirements, acceptance list, and tasks; set `09-testing`.
+     When the item has a design (`toolkit work show` prints a "Design:" value
+     other than `none`), also read the design's Acceptance checks (in "Build
+     and verification plan") and the selected option's "How to check it"
+     column.
   2. Run the project's tests and every acceptance check the item lists. A check
-     that could not run is reported as not run, never as passed.
+     with several scenarios or manual steps gets a test plan: a copy of
+     `tests/TEST-PLAN-TEMPLATE.md` named for the item, with the results filled
+     in. A check that could not run is reported as not run, never as passed.
   3. Brief `acceptance-checker` (never the agent that built it): one verdict per
      requirement (met, partly met, not met) with evidence, plus defects seen in
      the diff.
@@ -495,13 +502,13 @@ it do what I asked".
   6. Set `11-user-approval` and `waiting_on: owner`. Show what it does now, how
      to see it (a link, a command, or a screenshot), the evidence, and the
      gaps. Ask one line: "Do you approve this result?"
-  7. Yes: `toolkit work approve <id> --result --by <owner>` (proposed), then
+  7. Yes: `toolkit work approve <id> --result --by <owner>`, then
      open `work-finish`. Requirement changes go to `work-requirements`; fixes
      become tasks and continue here.
 - **CLI:** `toolkit work show <id>`,
   `toolkit work set <id> --stage 09-testing|10-bug-fixing|11-user-approval --waiting-on`,
   `toolkit work history <id> --note`,
-  `toolkit work approve <id> --result --by <name>` (proposed).
+  `toolkit work approve <id> --result --by <name>`.
 - **Agents:** `acceptance-checker`, `builder`.
 - **Replaces:** the result-review mode of the `delivery-reviewer` agent; the
   test and owner-review steps spread through `work-tracker:work` and
@@ -516,15 +523,19 @@ it do what I asked".
      after he has seen the result counts as the approval; record it.
   2. Repository work: push the branch, open the pull request (description
      through `unslop`, no AI credit), set `12-pr-and-push`. Merge through
-     `merge-and-clean-up` when the owner approves the merge, or when the project
-     has a recorded standing merge instruction and `acceptance-checker` found no
-     blocking issue on that exact head.
+     `merge-and-clean-up` when the owner approves the merge, or when
+     `DECISIONS.md` records a standing merge instruction and
+     `acceptance-checker` found no blocking issue on that exact head.
   3. Deployment, when the item needs one: set `13-deployment`. Salesforce:
-     `sf-component-tracker` current, then `sf-deploy-check`, then validate
+     `sf-component-tracker` current and the item's folder in
+     `delivery/deployment/` complete, then `sf-deploy-check`, then validate
      against the sandbox. Production deploys and production data loads are
      handed to the owner to run (`sf-data-change`).
-  4. Requirements baseline: set `14-spec-update`; copy only delivered and
-     approved behavior into `requirements/<area>.md`; save it with
+  4. Requirements baseline: set `14-spec-update`; read `requirements/AGENTS.md`;
+     copy only delivered and approved behavior into the area's file in
+     `requirements/` (a new area starts from
+     `requirements/system-area-template/`); update the area's file in
+     `system-guide/` when the verified structure changed; save both with
      `publish-docs`.
   5. Sub-items: list open ones. A parent with open sub-items is not finished
      unless the owner says so. Finishing a sub-item never finishes its parent.
@@ -584,7 +595,7 @@ it do what I asked".
   9. Archive a chat only when its task is complete, merged and shipped, the
      report is saved, and the owner approved. Never delete a chat.
 - **CLI:** `toolkit work show <id>`, `toolkit work history <id> --note`,
-  `toolkit work edit <id> --section Notes --set-file <f>` (proposed),
+  `toolkit work edit <id> --section Notes --set-file <f>`,
   `toolkit work set <id> --waiting-on owner|agent`, `toolkit work list --tree`.
 - **Agents:** `builder`, `researcher`, `acceptance-checker`.
 - **Replaces:** `references/agent-led-delivery.md` and
@@ -614,25 +625,33 @@ it do what I asked".
      personal details, a hard delete, more than five records at once, or a
      change to this policy.
   4. Save with `toolkit memory save`: type (`user`, `feedback`, `project`,
-     `reference`, `event`), slug, one-line description, body sections Remember,
-     Why, How to apply, Evidence and limits, Related, a source line, and an
-     absolute date.
+     `reference`, `event`), slug, one-line description, the source (`--source`,
+     a person or document with an absolute date), and a body with the model
+     topic template's labels: Remember, Why, How to apply, Evidence and limits
+     (source and an absolute date), Related memories (relative Markdown links,
+     Obsidian style), Authoritative records. A better name or type for the same
+     record: `toolkit memory rename <key> --to <new-key>`. The CLI writes the
+     model's frontmatter and repairs links on rename, merge, retire, and
+     delete.
   5. "Forget that": `toolkit memory retire <key>` (can be undone); right after
      a save, retire that record with no question (from lifecycle). Delete only
      when the owner says delete: `toolkit memory delete <key> --owner-approved`.
   6. Focus and to-dos: `toolkit memory focus --set-file <f>`, four sections,
-     under 50 lines, work item ids only, never their status. Glossary:
-     `toolkit memory glossary --set-file <f>` (proposed).
+     under 50 lines, work item ids only, never their status. On a new project,
+     remove the focus's fill-in guide and write "None." in each section that
+     still holds only a template prompt. Glossary:
+     `toolkit memory glossary --set-file <f>`.
   7. A preference a project setting can enforce (for example "I hate tabs" and
      `.editorconfig`): save it, then offer that change too.
   8. Tell the owner in one line: "Saved to memory: <title>. Say 'forget that'
      to undo." A failed save is reported first as "Not saved". Never store
      work-item status, secrets, or email addresses.
 - **CLI:** `toolkit memory find <query>`, `toolkit memory get <key>`,
-  `toolkit memory save --type <t> --name <slug> --description <d> --body-file - [--approved-by <name>]`,
+  `toolkit memory save --type <t> --name <slug> --description <d> --body-file <f> --source <text> [--approved-by <name>]`,
+  `toolkit memory rename <key> --to <new-key>`,
   `toolkit memory retire <key>`, `toolkit memory restore <key>`,
   `toolkit memory delete <key> --owner-approved`,
-  `toolkit memory focus --set-file <f>`, `toolkit memory glossary --set-file <f>` (proposed).
+  `toolkit memory focus --set-file <f>`, `toolkit memory glossary --set-file <f>`.
 - **Agents:** none. The model's `memory-curator` is dropped (ARCHITECTURE.md
   section 7).
 - **Replaces:** `second-brain:knowledge-save` and its aliases `remember` and
@@ -649,9 +668,9 @@ it do what I asked".
   2. `toolkit memory find "<query>"`; open each hit with `toolkit memory get`.
      A hit is a pointer; read the record.
   3. Search the other homes: `DECISIONS.md`; work items (`toolkit work show`
-     Recent History and Notes); `requirements/<area>.md`;
-     `ai-external-knowledge/INDEX.md`. Hindsight projects may also use the
-     bank's recall tool through the project's MCP entry.
+     Recent History and Notes); the area files in `requirements/` and
+     `system-guide/`; `PROJECT.md` and `PROJECT-ROADMAP.md`;
+     `ai-external-knowledge/INDEX.md`; the glossary.
   4. Give a source for every fact: memory key, decision id, work item id and
      section, or file path, with its date.
   5. Sources disagree: show both, say which is newer, leave it open, and offer
@@ -679,14 +698,16 @@ it do what I asked".
   4. Ask once for the whole list. Anything about a person, any hard delete, or
      more than five changes needs the owner's yes; quote his words for a
      delete.
-  5. Apply with `toolkit memory save`, `retire`, and `restore`; trim the focus
+  5. Apply with `toolkit memory save`, `retire`, `restore`, and `rename` (a
+     file name whose prefix does not match `metadata.type`); trim the focus
      with `toolkit memory focus --set-file`.
   6. Back up with `toolkit memory export --to <folder>`; restore with
      `toolkit memory import --from <folder>`; say when the last backup was made.
   7. Report what changed by key and how to undo it (`toolkit memory restore`).
 - **CLI:** `toolkit doctor`, `toolkit memory list`, `toolkit memory get <key>`,
   `toolkit memory save`, `toolkit memory retire <key>`,
-  `toolkit memory restore <key>`, `toolkit memory delete <key> --owner-approved`,
+  `toolkit memory restore <key>`, `toolkit memory rename <key> --to <new-key>`,
+  `toolkit memory delete <key> --owner-approved`,
   `toolkit memory focus --set-file <f>`, `toolkit memory export --to <dir>`,
   `toolkit memory import --from <dir>`.
 - **Agents:** none.
@@ -716,31 +737,40 @@ toolkit's `project-init` plugin still loads on this Mac (critique B3).
      at a time, each with a recommendation: tracker (local folders, Notion,
      GitHub Issues, Jira); memory (built-in `.memory/`, local Hindsight,
      Notion); Salesforce or not.
-  3. Run `toolkit init` with the answers. It copies the scaffold except
-     `.work-items/` and `.memory/`, writes `.toolkit.json`, `AGENTS.md`, the
-     rules, settings, hook registrations, and the Plain English style, enables
-     `sf-architect-solutioning` only for Salesforce, and turns off every
-     `*@claude-toolkit` plugin in the project's `.claude/settings.json` and
-     `.codex/config.toml` (critiques B3 and P14). `.codex/` files are written
-     from outside the Codex sandbox (critique P3).
+  3. Run `toolkit init` with the answers. Setup copies the model scaffold and
+     applies your answers: the model project's folders and files, only the
+     setup-marker blocks of `AGENTS.md`, `README.md`, and `PROJECT.md` that
+     match the answers, the project name, the rules list, and `.toolkit.json`;
+     the local tracker's template and rule, the built-in memory seeds, and the
+     Salesforce parts only when chosen; never work items or memory records.
+     It enables `sf-architect-solutioning` only for Salesforce and turns off
+     every `*@claude-toolkit` plugin in the project's `.claude/settings.json`
+     and `.codex/config.toml` (critiques B3 and P14). `.codex/` files are
+     written from outside the Codex sandbox (critique P3).
   4. Wire the choices. Notion: check `ntn whoami`, then
      `toolkit notion ensure-root` and `ensure-project`. Hindsight:
      `toolkit hindsight service status` (install or start only after a yes),
      then `toolkit hindsight ensure-bank`. GitHub or Jira: show the written
      instructions and create nothing in that service without a yes.
-  5. `.toolkit.json` present: repair. Run `toolkit sync --dry-run` and show one
+  5. Fill the setup guides with facts the owner confirmed: the outcome
+     sentence and the "Build, test, or deploy" row in `AGENTS.md`, then
+     `PROJECT.md` and `README.md`, and `PROJECT-ROADMAP.md` and
+     `requirements/SYSTEM-DATA-MODEL.md` when the facts are known; ask whether
+     he wants `SOUL.md`; delete each fill-in guide once its file is filled;
+     list every prompt left for a fact nobody knows yet.
+  6. `.toolkit.json` present: repair. Run `toolkit sync --dry-run` and show one
      numbered table: missing, out of date, changed by the owner, broken wiring,
      each with its fix. Apply only the rows the owner approves with
      `toolkit sync`. A file the project changed on purpose is never
      overwritten; report it as "project ahead of the toolkit".
-  6. Switching memory: `toolkit memory export --to <folder>`, change the choice
-     (`toolkit config set memory.type`, proposed), wire the new backend,
+  7. Switching memory: `toolkit memory export --to <folder>`, change the choice
+     (`toolkit config set memory.type`), wire the new backend,
      `toolkit memory import --from <folder>`. Switching tracker: no CLI support
      in this version; show a preview and move items only with the owner's yes.
-  7. Run `toolkit doctor` until clean, then `toolkit brief` to show the first
+  8. Run `toolkit doctor` until clean, then `toolkit brief` to show the first
      briefing. Report what was set up, what was skipped, and one next step
      ("Tell me the first thing you want built.").
-  8. Never create a GitHub repository, a paid service, or Notion pages outside
+  9. Never create a GitHub repository, a paid service, or Notion pages outside
      the "AI Agent Second Brain" root without a yes.
 - **CLI:** `toolkit doctor`, `toolkit machine-setup`,
   `toolkit init --name <n> --key <k> --tracker <t> --memory <m> [--salesforce] [--dir <path>]`,
@@ -748,8 +778,8 @@ toolkit's `project-init` plugin still loads on this Mac (critique B3).
   `toolkit notion ensure-project`,
   `toolkit hindsight service install|status|start|stop`,
   `toolkit hindsight ensure-bank`, `toolkit memory export --to <dir>`,
-  `toolkit memory import --from <dir>`, `toolkit config set <key> <value>`
-  (proposed), `toolkit brief`.
+  `toolkit memory import --from <dir>`, `toolkit config set <key> <value>`,
+  `toolkit brief`.
 - **Agents:** none.
 - **Replaces:** `project-init:project-init` (six gates become three
   questions); `project-init:project-sync` (a 994-line audit becomes
@@ -770,10 +800,13 @@ toolkit's `project-init` plugin still loads on this Mac (critique B3).
   2. Active work item: Current position, Next action and who owns it, and
      Blockers in Overview; Resume here in Notes; true stage and `waiting_on`;
      then `toolkit work validate <id>` and read back.
-  3. Anything the owner asked to keep this session that is not saved yet: open
-     `memory-save`. Write the current focus "Next session starts with" with
-     `toolkit memory focus --set-file`: one entry, replaced each handoff, whole
-     file under 50 lines.
+  3. Review the current focus and the memory criteria (the model's
+     `session-handoff.md` rule). Anything the owner asked to keep this session
+     that is not saved yet: open `memory-save`. Write the current focus "Next
+     session starts with" with `toolkit memory focus --set-file`: one entry,
+     replaced each handoff, "Last updated" set, whole file under 50 lines. On
+     a new project, remove the fill-in guide and write "None." in each section
+     that still holds only a template prompt.
   4. Draft the prompt. First line exactly: "This handoff prompt is
      AI-generated and may contain hallucinations, skewed context, etc. Please
      evaluate accordingly." Then the goal, why it matters, where it is written
@@ -789,14 +822,14 @@ toolkit's `project-init` plugin still loads on this Mac (critique B3).
   8. Never commit `.memory/` or `.work-items/`; never stop the owner from
      clearing.
 - **CLI:** `toolkit work show <id>`, `toolkit work set <id> --stage|--waiting-on`,
-  `toolkit work edit <id> --section <name> --set-file <f>` (proposed),
+  `toolkit work edit <id> --section <name> --set-file <f>`,
   `toolkit work history <id> --note`, `toolkit work validate <id>`,
   `toolkit memory focus --set-file <f>`.
 - **Agents:** `handoff-verifier`.
 - **Replaces:** `session-skills:handoff` (kept; steps 1, 2, 3, and 6 rewritten
   for V2 trackers and memory; the V1 "Session handoffs" list becomes the single
   focus section; description cut from 684 characters).
-- **Backed by:** the `offer-context-handoff.md` rule offers it; the next
+- **Backed by:** the model's `session-handoff.md` rule offers it; the next
   SessionStart briefing reads "Next session starts with".
 
 #### `session-summary`
@@ -859,8 +892,8 @@ toolkit's `project-init` plugin still loads on this Mac (critique B3).
 - **CLI:** none. **Agents:** none.
 - **Replaces:** `session-skills:unslop` (kept; "Runs only when asked, never on
   its own" replaced by the rule case, so the rule and the skill agree). The
-  `humanize-outbound-text.md` rule names `unslop` instead of the `humanizer`
-  skill, which does not ship.
+  model's `humanize-outbound-text.md` rule names the `humanizer` skill, which
+  V2 does not ship, and falls back to `unslop`.
 
 ### 3.5 git-workflows plugin
 
@@ -870,7 +903,7 @@ toolkit's `project-init` plugin still loads on this Mac (critique B3).
   1. Resolve the exact pull request and map branches to worktrees; the local
      head must equal the pull request head.
   2. Check the merge is allowed: the owner's yes, or a standing merge
-     instruction recorded in the project.
+     instruction recorded in `DECISIONS.md`.
   3. Preflight: open, not a draft, mergeable, reviews, checks ("no checks
      reported" is not a failure).
   4. Merge-safety check: compare `git diff --name-only <default>...<branch>`
@@ -1016,7 +1049,7 @@ this way (`session-skills.md` section 9). Generating
 | `design-architect` | work | Writes or fixes one design option as a local draft file; the main agent saves it through `toolkit work design`. | Read, Glob, Grep, WebSearch, WebFetch, Write, Edit | only its named draft file | `solution-design` | `design-architect` (kept) |
 | `design-critic` | work | Gives one verdict per requirement for a draft design (satisfied, partly, not), with evidence and a fix list. | Read, Glob, Grep, WebSearch, WebFetch | nothing | `solution-design` | `design-critic` (kept); the design mode of `delivery-reviewer` |
 | `builder` | work | Implements one planned task, runs its checks, and returns what changed, the tests run and their result, and anything it could not do. | Read, Glob, Grep, Edit, Write, Bash; `isolation: worktree` (from lifecycle and minimal) | only the files in its brief | `work-on`, `work-check`, `work-delegate` | new; replaces the unnamed general agents `work-guide` briefed by hand |
-| `acceptance-checker` | work | Checks a finished result against each R-xx acceptance check and the design's "How to check it"; runs tests; returns a verdict per requirement with evidence, defects in the diff, and checks that could not run. Never the agent that built it. | Read, Glob, Grep, Bash (tests and read-only commands) | nothing | `work-check`, `work-finish` | the result and plan modes of `delivery-reviewer` |
+| `acceptance-checker` | work | Checks a finished result against each R-xx acceptance check and the design's acceptance checks; runs tests; returns a verdict per requirement with evidence, defects in the diff, and checks that could not run. Never the agent that built it. | Read, Glob, Grep, Bash (tests and read-only commands) | nothing | `work-check`, `work-finish` | the result and plan modes of `delivery-reviewer` |
 | `handoff-verifier` | session-skills | Checks that a drafted handoff prompt states the goal and that every fact holds up. Returns a goal verdict, a claims table, and what it skipped. | Read, Glob, Grep, Bash (read-only, including `toolkit work show`, `toolkit memory get`, `gh issue view`) | nothing | `handoff` | `handoff-verifier` (kept; `model: inherit` becomes `opus`) |
 
 `builder` and `isolation: worktree`: the captured docs say an isolated worktree
@@ -1072,7 +1105,7 @@ skills from other plugins installed on this Mac.
 | 27 | "Remind me to email the client." | `memory-save` | `work-on` is for project work. Outside: `schedule` when a time is given ("at 9 tomorrow"). |
 | 28 | "What did we decide about the payment provider?" | `memory-find` | `work-decide` records decisions; it does not look them up. |
 | 29 | "Memory feels cluttered, clean it up." | `memory-tidy` | `merge-and-clean-up` shares only the word "clean". Outside: `anthropic-skills:consolidate-memory` works on Claude's own memory files, which V2 projects turn off. |
-| 30 | "Set up this new repo." | `project-setup` | Built-in `/init` runs only when typed and writes a `CLAUDE.md`, which V2 does not use. |
+| 30 | "Set up this new repo." | `project-setup` | Built-in `/init` runs only when typed and writes its own `CLAUDE.md`; V2 projects get the model's root `CLAUDE.md`, which holds only `@AGENTS.md`. |
 | 31 | "I got a new laptop, check the setup." | `project-setup` | `pull-latest` updates Git, not the toolkit or the computer. |
 | 32 | "Update the toolkit in this project." | `project-setup` | `pull-latest` claims "update from origin" (Git). |
 | 33 | "I'm going to clear context." | `handoff` | `session-summary` recaps but saves nothing and writes no prompt. |
@@ -1235,7 +1268,7 @@ split shared references, and the UserPromptSubmit wording.
 
 ## 7. What this index needs elsewhere
 
-### 7.1 CLI additions (not in ARCHITECTURE.md section 5)
+### 7.1 CLI additions this index asked for (now in ARCHITECTURE.md section 5)
 
 | Command or field | Needed by | Why |
 | --- | --- | --- |
@@ -1263,17 +1296,20 @@ Adopting a record with no id and renumbering a copied folder are handled by
 - **Stop** hook names `memory-save`; the **PostToolUse** gate message names
   `work-requirements`; the **SessionStart** briefing names `work-decide`,
   `work-organize`, and `project-setup` as in 5.4.
-- **Rules:** `work-item-stages.md` ("open the `work` skill" becomes "use
-  `work-on`"; approvals point to `work-decide`; the stage reference becomes
-  `toolkit work lifecycle`); `offer-context-handoff.md` (`handoff`, memory
-  through `memory-save`); `humanize-outbound-text.md` (`unslop` only);
+- **Rules** (the model's names, all applied on branch
+  `toolkit-v2/approved-changes`): `keep-work-item-current.md` (`work-on`,
+  `work-decide`, `work-delegate`, `handoff`, `toolkit work lifecycle`);
+  `session-handoff.md` (`handoff`, memory through `memory-save`);
+  `memory-review-and-save.md` (`memory-save`, `toolkit memory` commands);
+  `humanize-outbound-text.md` (`humanizer`, falling back to `unslop`);
   `work-item-folders.md`, local tracker only (moves handled by
-  `work-organize`); `knowledge-direct-commit.md` (`publish-docs`, plus
-  `DECISIONS.md` in its paths); `component-tracker.md` and
-  `deploy-hitchhiker-check.md` keep their `sf-*` skill names.
-- **`AGENTS.md` template:** the routing lines in 5.4; the model review's
-  `<tracker skill>` placeholder becomes `work-on` and `<memory skill>` becomes
-  `memory-save` / `memory-find`.
+  `work-organize`); `publish-project-documents.md` (`publish-docs`, with
+  `DECISIONS.md` in its paths); `component-tracker.md`,
+  `check-deployment-contents.md`, and `production-data-changes.md` keep their
+  `sf-*` skill names.
+- **`AGENTS.md`:** the model's own `AGENTS.md` carries the routing lines in
+  5.4 and names `work-on`, `work-status`, `work-decide`, `memory-save`,
+  `memory-find`, `memory-tidy`, `project-setup`, and `solution-design`.
 - **Settings fragment:** `"worktree": { "baseRef": "head" }` for `builder`
   (section 4); `enabledPlugins` off for every `*@claude-toolkit` plugin, and the
   matching `.codex/config.toml` entries.

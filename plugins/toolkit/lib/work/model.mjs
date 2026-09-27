@@ -203,19 +203,19 @@ export function applyMetaPatch(data, patch = {}, order = FIELD_ORDER) {
   return data;
 }
 
-// The frontmatter reader reads a plain `no` as the text "no", so the approval
-// fields are written the way the template shows them, without quotes.
-const PLAIN_NO_RE = /^((?:requirements_approved|result_approved|approved):[ \t]*)"no"([ \t]*\r?)$/gm;
-
-function tidyFrontmatter(text) {
-  const m = /^---\r?\n[\s\S]*?\r?\n---/.exec(text);
-  if (!m) return text;
-  return m[0].replace(PLAIN_NO_RE, '$1no$2') + text.slice(m[0].length);
-}
+// How the model writes values that YAML readers could misread (ARCHITECTURE 4.2):
+// - waiting_on is always in double quotes, because the colon in
+//   "external: Acme IT" stops standard YAML readers.
+// - `no` (requirements_approved, result_approved, and the design's approved) is
+//   written "no" in double quotes, as the model's DESIGN.md has it, so older YAML
+//   readers do not read it as the value false. The frontmatter writer quotes it
+//   because it is a YAML reserved word.
+// Unchanged lines are always written back exactly as they were read.
+export const QUOTED_FIELDS = Object.freeze(['waiting_on']);
 
 /** Text of a parsed doc (data object from parseDoc) and a body. */
 export function serializeDoc(data, body) {
-  return tidyFrontmatter(frontmatter.stringify(data, body));
+  return frontmatter.stringify(data, body, { quoteKeys: QUOTED_FIELDS });
 }
 
 /** A fresh record text from a plain meta object (known keys first, in order) and a body. */
@@ -225,7 +225,7 @@ export function composeDoc(meta, body, order = FIELD_ORDER) {
   for (const [k, v] of Object.entries(meta)) {
     if (!order.includes(k) && v !== undefined && v !== null) data[k] = v;
   }
-  return tidyFrontmatter(frontmatter.stringify(data, body));
+  return frontmatter.stringify(data, body, { quoteKeys: QUOTED_FIELDS });
 }
 
 // ------------------------------------------------------------------ H1
@@ -860,9 +860,10 @@ export function validateDesign(input, opts = {}) {
   const h1 = getH1(body);
   if (!h1) problem(warnings, 'no_h1', 'The design has no "# <id>: <title> — solution design" heading.');
   else if (h1.id && meta.work_item && !sameId(h1.id, meta.work_item)) problem(warnings, 'h1_id_mismatch', `The heading id ${h1.id} differs from work_item ${meta.work_item}.`);
-  const bodyStatus = /^Status:[ \t]*(\S+)/m.exec(body);
-  if (bodyStatus && DESIGN_STATUSES.includes(meta.status) && bodyStatus[1].toLowerCase() !== meta.status) {
-    problem(warnings, 'status_line_mismatch', `The "Status:" line says ${bodyStatus[1]} but the frontmatter says ${meta.status}.`);
+  const bodyStatus = designStatusLine(body);
+  if (bodyStatus && DESIGN_STATUSES.includes(meta.status) && !isPlaceholder(bodyStatus.value)
+    && !DESIGN_LINE_WORDS[meta.status].includes(bodyStatus.value.toLowerCase())) {
+    problem(warnings, 'status_line_mismatch', `The "${bodyStatus.label}" line says ${bodyStatus.value} but the frontmatter says ${meta.status}.`);
   }
   if (opts.itemMeta && opts.itemMeta.design && DESIGN_STATUSES.includes(meta.status) && opts.itemMeta.design !== meta.status) {
     problem(warnings, 'item_design_mismatch', `The work item says design: ${opts.itemMeta.design}, but the design says ${meta.status}.`);
@@ -933,7 +934,12 @@ export function freeTextForRequest(body) {
   return text.trim();
 }
 
-/** Build a new DESIGN.md text from a template for an item. */
+/**
+ * Build a new DESIGN.md text from a template for an item. The model's header
+ * lines are filled: "**Requirements:** <id>", "**Last updated:** <date>",
+ * "**Design status:**" (Draft for a proposed design), and "**Design approval:**"
+ * (Pending until the owner approves). Every other prompt stays for the agent.
+ */
 export function newDesignText(templateText, { id, title, date, status = 'proposed', approved = 'no' }) {
   const tpl = parseDoc(templateText);
   const meta = { work_item: id, status, approved };
@@ -943,15 +949,78 @@ export function newDesignText(templateText, { id, title, date, status = 'propose
   }
   let body = tpl.body;
   body = setH1(body, id, title, { suffix: DESIGN_SUFFIX });
-  body = body.replace(/^(Requirements:[ \t]*)(?:\[WORK-ITEM\.md\]\(WORK-ITEM\.md\)|[A-Za-z][A-Za-z0-9]*-\d+|<[^>\n]*>)/m, `$1${id}`);
-  body = body.replace(/^(Date:[ \t]*)<YYYY-MM-DD>/m, `$1${date}`);
-  body = setDesignStatusLine(body, status);
+  body = body.replace(/^((?:\*\*)?Requirements:(?:\*\*)?[ \t]*)(?:\[WORK-ITEM\.md\]\(WORK-ITEM\.md\)|[A-Za-z][A-Za-z0-9]*-\d+|<[^>\n]*>)/m, `$1${id}`);
+  body = body.replace(/^((?:\*\*)?(?:Date|Last updated):(?:\*\*)?[ \t]*)<YYYY-MM-DD>/m, `$1${date}`);
+  body = setDesignStatusLine(body, status, { approved });
   return composeDoc(meta, body, DESIGN_FIELD_ORDER);
 }
 
-/** Keep a "Status: <x>" body line (when the template has one) in step with the frontmatter. */
-export function setDesignStatusLine(body, status) {
-  return String(body ?? '').replace(/^(Status:[ \t]*)(\S+)/m, (all, lead) => `${lead}${status}`);
+/** The words the model's "**Design status:**" line uses for each frontmatter status. */
+export const DESIGN_LINE_WORDS = Object.freeze({
+  proposed: ['draft', 'in review', 'proposed'],
+  approved: ['approved'],
+  superseded: ['superseded'],
+});
+
+const DESIGN_STATUS_LINE_RE = /^(\*\*Design status:\*\*|Status:)([ \t]*)(.*?)([ \t]*)$/m;
+
+/** The design's status line: { label, value } ("**Design status:**" or an older "Status:" line), or null. */
+export function designStatusLine(body) {
+  const m = DESIGN_STATUS_LINE_RE.exec(String(body ?? ''));
+  return m ? { label: m[1].replace(/\*/g, ''), value: m[3].trim() } : null;
+}
+
+/**
+ * The frontmatter status (proposed, approved, superseded) a design body's
+ * status line gives, or null when there is no line or it is still a prompt.
+ * Draft and In review are a proposed design.
+ */
+export function designStatusFromBody(body) {
+  const line = designStatusLine(body);
+  if (!line || isPlaceholder(line.value)) return null;
+  const v = line.value.toLowerCase();
+  for (const [status, words] of Object.entries(DESIGN_LINE_WORDS)) if (words.includes(v)) return status;
+  return null;
+}
+
+/**
+ * Keep the design body's header lines in step with the frontmatter:
+ * - "**Design status:**": proposed -> Draft (an "In review" already written is
+ *   kept), approved -> Approved, superseded -> Superseded. An older "Status:"
+ *   line gets the frontmatter word.
+ * - "**Design approval:**" (when opts.approved is given): an approval
+ *   "YYYY-MM-DD by <name>" -> "Approved by <name> on YYYY-MM-DD"; no -> Pending.
+ */
+export function setDesignStatusLine(body, status, opts = {}) {
+  let text = String(body ?? '');
+  text = text.replace(DESIGN_STATUS_LINE_RE, (all, label, gap, value, tail) => {
+    if (label === 'Status:') return `${label}${gap || ' '}${status}${tail}`;
+    const words = DESIGN_LINE_WORDS[status];
+    if (!words) return all;
+    if (!isPlaceholder(value) && words.includes(value.trim().toLowerCase())) return all;
+    const word = status === 'proposed' ? 'Draft' : status === 'approved' ? 'Approved' : 'Superseded';
+    return `${label}${gap || ' '}${word}${tail}`;
+  });
+  if (opts.approved !== undefined && opts.approved !== null) {
+    const a = parseApproval(opts.approved);
+    let want = null;
+    if (a.ok && a.approved && a.date && a.by) want = `Approved by ${a.by} on ${a.date}`;
+    else if (a.ok && !a.approved) want = 'Pending';
+    if (want) {
+      text = text.replace(/^(\*\*Design approval:\*\*)([ \t]*)(.*?)([ \t]*)$/m, (all, label, gap, value, tail) => {
+        const v = value.trim();
+        if (v === want) return all;
+        if (want === 'Pending') {
+          // Only a prompt, an empty value, or an approval that no longer holds becomes Pending.
+          if (v && !isPlaceholder(v) && !/^approved\b/i.test(v)) return all;
+        } else if (!isPlaceholder(v) && /^approved\b/i.test(v) && v.includes(a.by) && v.includes(a.date)) {
+          return all; // an approval written by hand with more detail is kept
+        }
+        return `${label}${gap || ' '}${want}${tail}`;
+      });
+    }
+  }
+  return text;
 }
 
 // ------------------------------------------------------------------ owner edits and derived values

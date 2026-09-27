@@ -22,12 +22,69 @@ only decides and steers. `README.md` explains it for Mike.
 | `plugins/<name>/.claude-plugin/plugin.json` | Claude Code manifest. `defaultEnabled: false`: projects switch plugins on. |
 | `plugins/<name>/.codex-plugin/plugin.json` | Codex manifest: same `name` and `version`, `"skills": "./skills/"`, an `interface` block. |
 | `plugins/toolkit/` | The `toolkit` command (`bin/toolkit`, `lib/`), the hooks (`hooks/hooks.json` for Claude Code, `hooks/codex-hooks.json` for Codex), `templates/`, `scaffold/`, the `project-setup` skill, and `tests/`. |
+| `plugins/toolkit/scaffold/model/` | An exact copy of Mike's model project: every folder, file name, template, rule, `AGENTS.md`, `CLAUDE.md`, project hook, and project skill a new project gets. Made by `dev/tools/import-model.mjs`; never edited by hand. `.import.json` in it records the model branch and commit it came from. |
+| `plugins/toolkit/scaffold/CONDITIONS.json` | The only hand-kept file beside the copy: which model paths install only for the local tracker, built-in memory, Salesforce, or one host; which files a toolkit command generates; where init fills the project name; and which Salesforce entries and lines a project without Salesforce leaves out. |
+| `plugins/toolkit/templates/` | Only what the model does not hold: the toolkit's own settings entries, the Codex plugin switches and command rule, the toolkit's `.gitignore` lines, and the Hindsight service file. `TEMPLATE-LANGUAGE.md` there explains how init, sync, and doctor install the copy. |
 | `plugins/work/` | Nine work skills, six agents, and `references/`. |
 | `plugins/memory/` | Three memory skills. |
 | `plugins/session-skills/` | Five conversation skills and the `handoff-verifier` agent. |
 | `plugins/git-workflows/` | Four Git skills and their tests. |
 | `plugins/sf-architect-solutioning/` | The Salesforce architect skill, ported with its body unchanged. |
 | `dev/` | Goal, progress, plan, skill index, research, tools, and test runs. Not shipped. |
+| `dev/tools/import-model.mjs` | Copies the model project into `plugins/toolkit/scaffold/model/`. `--check` compares the copy with the model and changes nothing. |
+| `.claude/settings.json` | Settings for sessions working on this repository. `claudeMdExcludes` stops the copy's `CLAUDE.md`, `AGENTS.md` files, and `.claude/rules/` from loading as instructions here; they are for projects, not for this repository. |
+
+## The model project and the scaffold copy
+
+The model project is the exact source for every project file (`dev/GOAL.md`).
+The toolkit ships an exact copy of it. `toolkit init` and `toolkit sync`
+apply the setup answers while they install the files; the copy itself is
+never changed by hand.
+
+- The model is Mike's Git repository at
+  `/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project`. The 23
+  approved changes (`dev/model-changes.md`) sit on its branch
+  `toolkit-v2/approved-changes`, checked out as a second folder at
+  `/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved`.
+  Until Mike merges that branch, the import reads the second folder (the
+  `DEFAULT_SOURCE` line in `dev/tools/import-model.mjs`).
+- Setup markers in the model's `AGENTS.md`, `README.md`, and `PROJECT.md`
+  (`<!-- if salesforce -->`, `<!-- if not salesforce -->`,
+  `<!-- if tracker=... -->`, `<!-- if memory=... -->`, each closed by
+  `<!-- endif -->`) keep only the blocks that match the setup answers. The
+  rules list in `AGENTS.md` sits between `<!-- toolkit:rules:start -->` and
+  `<!-- toolkit:rules:end -->` and is rebuilt from the rules a project has.
+- The parity test, `plugins/toolkit/tests/scaffold/parity.test.mjs`, runs
+  `toolkit init` for all 24 combinations of tracker, memory, and Salesforce
+  and compares each result with the model file by file. Every difference must
+  be explained by `CONDITIONS.json` or be a file the toolkit adds.
+
+### Refresh the copy after Mike changes the model
+
+1. Read his change in the model folder. Never write there.
+2. After Mike merges `toolkit-v2/approved-changes`, change `DEFAULT_SOURCE`
+   in `dev/tools/import-model.mjs` to his own model folder, before the second
+   folder is removed. Until then, pass `--from <folder>` to read another
+   folder.
+3. Copy it: `node dev/tools/import-model.mjs`. It copies the model's working
+   tree, uncommitted edits included, and says so. It stops and copies nothing
+   when a `CONDITIONS.json` rule no longer matches the model, for example
+   after Mike renames a Salesforce rule. Update `CONDITIONS.json` and its
+   `notes` to match, then run it again.
+4. Stage any new file under `scaffold/model/.memory/` or
+   `scaffold/model/.work-items/` with the `git add -f` command the import
+   prints. The model's own `.gitignore`, copied into `scaffold/model/`, hides
+   those folders from this repository's Git, so a plain `git add` skips them
+   and a clean clone would set up projects without those templates.
+5. `node dev/tools/import-model.mjs --check` must pass.
+6. Run every check below. If the parity test fails, the model changed in a
+   way `CONDITIONS.json` does not cover yet: fix the rule, not the copy. If a
+   runtime test fails, the toolkit code must follow the model's new format.
+7. Raise the version of the `toolkit` plugin (see Versions). Existing
+   projects pick up the change with `toolkit sync` (the `project-setup`
+   skill: "update the toolkit").
+
+Full install rules: `plugins/toolkit/templates/TEMPLATE-LANGUAGE.md`.
 
 ## Checks to run before you hand work back
 
@@ -37,6 +94,7 @@ Run them from the repository root.
 node --test 'plugins/toolkit/tests/**/*.test.mjs'
 node --test 'plugins/git-workflows/tests/*.test.mjs'
 node dev/tools/check-skills.mjs
+node dev/tools/import-model.mjs --check
 claude plugin validate .
 claude plugin validate ./plugins/toolkit
 ```
@@ -67,18 +125,21 @@ claude plugin validate ./plugins/toolkit
 - **Plain English.** Every file, message, and skill uses short sentences, real
   names, and no metaphors. Agents carry their own writing rules, because
   subagents and Codex never see the output style.
-- **Never edit a generated file by hand.** In this repository:
-  `plugins/toolkit/scaffold/MANIFEST.json` (its `description` names the tool
-  that rebuilds it). In projects the toolkit writes `.work-items/DASHBOARD.md`,
-  `.work-items/.toolkit-state.json`, `.memory/MEMORY.md`, and
-  `ai-external-knowledge/INDEX.md`; the pre-tool hook refuses hand edits of
-  them.
+- **Never edit a generated file by hand.** In this repository: everything
+  under `plugins/toolkit/scaffold/model/`, which `node dev/tools/import-model.mjs`
+  rebuilds from the model. A change to a project file is a change to the model,
+  made by Mike or with his approval, then imported. In projects the toolkit
+  writes `.work-items/DASHBOARD.md`, `.work-items/.toolkit-state.json`,
+  `.memory/MEMORY.md`, and `ai-external-knowledge/INDEX.md`; the pre-tool hook
+  refuses hand edits of them.
 - **`dev/` is not shipped.** Claude Code and Codex install only
   `plugins/<name>/`. Shipped code never reads a file under `dev/` when it runs;
   a comment may cite one. A plugin also cannot use a file outside its own
   folder.
-- **`AGENTS.md` only.** No `CLAUDE.md` anywhere: not in this repository, not in
-  the scaffold. A `CLAUDE.md` stops Claude Code from reading `AGENTS.md`.
+- **Instruction files.** This repository has no `CLAUDE.md`: a `CLAUDE.md`
+  here would stop Claude Code from reading this `AGENTS.md`. Projects get what
+  the model has: one root `CLAUDE.md` holding only `@AGENTS.md`, plus the
+  model's `AGENTS.md` files. Never delete `plugins/toolkit/scaffold/model/CLAUDE.md`.
 - **Node 20 or newer, no npm dependencies.** Code is ES modules (`.mjs`).
   `bin/toolkit` stays a small CommonJS file that loads `lib/cli.mjs`. No
   `package.json` with a lockfile at a plugin root.
@@ -105,8 +166,11 @@ claude plugin validate ./plugins/toolkit
   (index: its `README.md`). Codex facts, with sources:
   `dev/research/platform-best-practices.md` part 3.
 - **Read-only sources.** Never change
-  `/Users/michaelrihm/Documents/Projects/claude-toolkit` or
-  `/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project`.
+  `/Users/michaelrihm/Documents/Projects/claude-toolkit`,
+  `/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project`, or
+  `/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved`.
+  A change to the model needs Mike's approval and goes on a branch of the
+  model's own Git repository, never into his checkout.
 - **Tests stay in scratch folders.** Point `HOME`, `CLAUDE_CONFIG_DIR`,
   `CODEX_HOME`, and `TOOLKIT_V2_CONFIG_DIR` at a temporary folder. Never write
   to Mike's real `~/.claude`, `~/.codex`, Notion page, or Hindsight banks.

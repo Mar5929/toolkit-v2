@@ -14,12 +14,13 @@ import { createTracker, readTrackerCache } from '../../lib/notion/tracker.mjs';
 import { openTracker, REQUIRED_METHODS } from '../../lib/work/driver.mjs';
 import { newRecordText, newDesignText, parseDoc, setLabel, appendHistory, getLabel } from '../../lib/work/model.mjs';
 import { FakeNotion, fakeRunner, seedProjects } from './fake-notion.mjs';
+import { readTemplate } from '../../lib/core/templates.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 // The shipped templates, so the tests follow any change to them.
-const TEMPLATES = path.resolve(HERE, '..', '..', 'templates');
-const WI_TEMPLATE = fs.readFileSync(path.join(TEMPLATES, 'WORK-ITEM.md'), 'utf8');
-const DESIGN_TEMPLATE = fs.readFileSync(path.join(TEMPLATES, 'DESIGN.md'), 'utf8');
+// The model's templates, read from scaffold/model/ through lib/core/templates.mjs.
+const WI_TEMPLATE = readTemplate('work-item');
+const DESIGN_TEMPLATE = readTemplate('design');
 const TODAY = '2026-09-26';
 
 async function setup() {
@@ -70,10 +71,12 @@ test('create assigns WI-001, WI-002 and stores meta as properties and the body a
   assert.equal(got.meta.status, 'Backlog');
   assert.equal(got.meta.parent, 'none');
   assert.equal(got.meta.requirements_approved, 'no');
-  assert.ok(got.body.startsWith('# WI-001: Login page\n\n## Overview'));
+  // The model's body, fill-in guide comments included, comes back exactly.
+  assert.ok(got.body.startsWith('# WI-001: Login page\n\n<!-- Fill-in guide for a new local work item:'), got.body.slice(0, 120));
+  assert.equal(got.body, a.body.replace(/^\n/, ''));
   assert.match(got.location, /^https:\/\/app\.notion\.com\/p\//);
   const page = Object.values(fake.pages).find((p) => p.parent.data_source_id === notion.workItems.dataSourceId && fake.titleOf(p) === 'Login page');
-  assert.ok(!/^# /.test(page.markdown) && page.markdown.startsWith('## Overview'), 'the H1 is not stored in Notion');
+  assert.ok(!/^# /.test(page.markdown) && /^## Overview$/m.test(page.markdown), 'the H1 is not stored in Notion');
   assert.match(page.markdown, /<table header-row="true">/);
 });
 
@@ -167,8 +170,10 @@ test('design: create, read back as DESIGN.md, update, and a missing design witho
   const d = await tracker.setDesign(id, text, { create: true });
   assert.deepEqual(d.meta, { work_item: id, status: 'proposed', approved: 'no' });
   assert.ok(d.body.startsWith(`# ${id}: Login page — solution design`));
-  assert.match(d.text, /^---\nwork_item: WI-001\nstatus: proposed\napproved: no\n---/);
-  const approved = d.text.replace('status: proposed', 'status: approved').replace('approved: no', 'approved: 2026-09-26 by Mike').replace('## What this solves\n\n<Who uses', '## What this solves\n\nPeople who log in. <Who uses');
+  assert.match(d.text, /^---\nwork_item: WI-001\nstatus: proposed\napproved: "no"\n---/);
+  assert.match(d.body, /^\*\*Requirements:\*\* WI-001 {2}$/m);
+  assert.match(d.body, /^\*\*Design status:\*\* Draft {2}$/m);
+  const approved = d.text.replace('status: proposed', 'status: approved').replace('approved: "no"', 'approved: 2026-09-26 by Mike').replace('## What this design solves\n\n<In a short paragraph', '## What this design solves\n\nPeople who log in. <In a short paragraph');
   const d2 = await tracker.setDesign(id, approved);
   assert.equal(d2.meta.status, 'approved');
   assert.equal(d2.meta.approved, '2026-09-26 by Mike');

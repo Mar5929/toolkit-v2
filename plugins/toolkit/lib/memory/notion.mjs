@@ -4,11 +4,28 @@
 //
 // How a record is stored:
 // - Frontmatter -> properties: Key (the page title, <type>_<slug>), Type, Name,
-//   Description, Status, Superseded by, Source, Saved, Last verified,
-//   Approved by, and Other fields (any extra frontmatter keys, as JSON).
-// - Body -> the page body, converted by lib/notion/markdown.mjs.
-// - The stored text is serializeRecord() of the record read back, so every
-//   backend gives the same text for the same record. version = its SHA-256.
+//   Description, Status (current, needs-review, retired), Superseded by,
+//   Source, Saved, Last verified, Approved by (the model's `authorization`
+//   words, for example "Approved by Mike on 2026-09-26"), and Other fields
+//   (JSON: `supersedes`, any `metadata` keys besides type, and any other
+//   frontmatter keys).
+// - Body -> the page body, converted by lib/notion/markdown.mjs. It is the
+//   model's topic body (# Title, **Remember:**, ...), the same as a built-in
+//   .memory/ file, except its first "# Title" line: Notion drops a leading
+//   level-1 heading from a new page, so the page holds the body without it.
+//   The title is read back from Other fields ("_heading") when it is not the
+//   one the name gives ("account-model" -> "Account model").
+// - A retired record is `superseded` when Superseded by or the body's newest
+//   "**Superseded <date>:**" line says so, and `archived` otherwise; a
+//   superseded record that names no replacement keeps its word in Other
+//   fields ("_status").
+// - Link repair goes on past a row it cannot save and reports it (linksFailed).
+// - The stored text is serializeRecord() of the record read back: the model's
+//   topic format, so every backend gives the same text for the same record.
+//   version = its SHA-256.
+// - Links in other records to a renamed, superseded, archived, or deleted
+//   record are repaired the same way as in built-in memory. A rename changes
+//   the Key, Type, and Name properties of the same page.
 //   Notion's Markdown is compared after normalization (spacing, escapes), so
 //   a body can read back with small spacing differences but the same words.
 //
@@ -30,10 +47,11 @@
 import { EXIT, ToolkitError } from '../core/output.mjs';
 import { today as localToday } from '../core/util.mjs';
 import {
-  RECORD_TYPES, assertKey, assertValidRecord, assertValidFocus, assertValidGlossary, assertFilter, changeRecordStatus,
-  checkExpect, countRecords, keywordScore, matchesFilter, normalizeDocument, normalizeRecord, notFound, parseRecord,
-  recordSummary, restoreNote, retireNote, searchTerms, serializeRecord, sortRecords, versionOf, focusLineCount,
-  FOCUS_MAX_LINES, isValidKey,
+  RECORD_TYPES, assertKey, assertValidRecord, assertValidFocus, assertValidGlossary, assertFilter, approverFrom,
+  changeRecordStatus, checkExpect, countRecords, keywordScore, matchesFilter, normalizeDocument, normalizeRecord, notFound,
+  parseRecord, recordSummary, renameRecordText, repairLinks, repairLinksWithDriver, repairResult, restoreNote, retireNote, searchTerms,
+  storedStatus,
+  serializeRecord, sortRecords, splitKey, supersedesList, titleFromName, versionOf, focusLineCount, FOCUS_MAX_LINES, isValidKey,
 } from './contract.mjs';
 import { withLock } from '../core/lock.mjs';
 import { normalizeId, isNotionError } from '../notion/client.mjs';
@@ -73,8 +91,36 @@ const FIELDS = {
   source: ['source', 'rich_text'],
   saved: ['saved', 'date'],
   last_verified: ['lastVerified', 'rich_text'],
-  approved_by: ['approvedBy', 'rich_text'],
+  authorization: ['approvedBy', 'rich_text'],
 };
+
+/** The Other fields key that keeps a record's own "# Title" when the name does not give it. */
+export const HEADING_KEY = '_heading';
+/**
+ * The Other fields key that keeps a retired record's status word (superseded or
+ * archived) when the Status and Superseded by properties and the body do not
+ * give it: a superseded record that names no replacement. The Status property
+ * holds only current, needs-review, or retired.
+ */
+export const STATUS_WORD_KEY = '_status';
+
+/** The page body of a record: its body without the leading "# Title" line. */
+export function pageBody(body) {
+  return stripTitle(body).body;
+}
+
+/** The fields a write reads back and compares. */
+const COMPARED = ['type', 'name', 'description', 'status', 'superseded_by', 'source', 'saved', 'last_verified', 'authorization'];
+
+/**
+ * The authorization words from the "Approved by" property. A row written by an
+ * older toolkit holds only a name there; that reads as "Approved by <name>".
+ */
+function authorizationOf(value) {
+  const v = String(value ?? '').trim();
+  if (!v) return '';
+  return /\s/.test(v) ? v : `Approved by ${v}`;
+}
 
 export async function createDriver(options = {}) {
   return new NotionMemoryDriver(options);
@@ -151,8 +197,24 @@ export class NotionMemoryDriver {
       r[field] = v === null || v === undefined ? '' : String(v);
     }
     r.superseded_by = r.superseded_by || null;
-    r.approved_by = r.approved_by || null;
+    r.authorization = authorizationOf(r.authorization);
+    r.approved_by = approverFrom(r.authorization);
+    const word = r.status === 'retired' ? this.otherFields(page).word : null;
+    if (word) r.stored_status = word;
     return r;
+  }
+
+  /** Split the Other fields JSON into supersedes, metadata, the heading, and the other keys. */
+  otherFields(page) {
+    const all = this.extraOf(page) || {};
+    const { supersedes, metadata, [HEADING_KEY]: heading, [STATUS_WORD_KEY]: word, ...extra } = all;
+    return {
+      supersedes: supersedesList(supersedes),
+      metadata: metadata && typeof metadata === 'object' && !Array.isArray(metadata) ? metadata : undefined,
+      heading: typeof heading === 'string' && heading.trim() ? heading.trim() : null,
+      word: word === 'superseded' || word === 'archived' ? word : null,
+      extra: Object.keys(extra).length ? extra : undefined,
+    };
   }
 
   extraOf(page) {
@@ -208,11 +270,15 @@ export class NotionMemoryDriver {
       readAt = new Date(this.clock()).toISOString();
     }
     const summary = this.summaryOf(page);
-    const record = { ...summary, key, body };
-    const extra = this.extraOf(page);
-    if (extra) record.extra = extra;
+    const other = this.otherFields(page);
+    const heading = other.heading || titleFromName(summary.name || (splitKey(key) || {}).name);
+    const record = { ...summary, key, body: withTitle(heading, body), supersedes: other.supersedes };
+    if (other.word && record.status === 'retired') record.stored_status = other.word;
+    if (other.metadata) record.metadata = other.metadata;
+    if (other.extra) record.extra = other.extra;
     const text = serializeRecord(record);
     const { record: parsed, problems } = parseRecord(text, key);
+    parsed.saved = summary.saved || '';
     this.cache.records[key] = { pageId: normalizeId(page.id), lastEdited: page.last_edited_time, readAt, body, url: page.url || null, tableStyle };
     return { ...parsed, version: versionOf(text), text, url: page.url || null, valid: problems.length === 0, problems };
   }
@@ -225,8 +291,17 @@ export class NotionMemoryDriver {
       props[key === 'title' ? 'title' : this.p[key]] = writeValue(type, v === null || v === undefined ? '' : v);
     }
     if (this.p.extra) {
-      const extra = record.extra && Object.keys(record.extra).length ? JSON.stringify(record.extra) : '';
-      props[this.p.extra] = writeValue('rich_text', extra);
+      const all = { ...(record.extra || {}) };
+      const supersedes = supersedesList(record.supersedes);
+      if (supersedes.length) all.supersedes = supersedes;
+      if (record.metadata && Object.keys(record.metadata).some((k) => k !== 'type')) all.metadata = record.metadata;
+      const heading = stripTitle(record.body).title;
+      if (heading && heading !== titleFromName(record.name)) all[HEADING_KEY] = heading;
+      if (record.status === 'retired') {
+        const word = storedStatus(record);
+        if (word !== storedStatus({ status: 'retired', superseded_by: record.superseded_by, body: record.body })) all[STATUS_WORD_KEY] = word;
+      }
+      props[this.p.extra] = writeValue('rich_text', Object.keys(all).length ? JSON.stringify(all) : '');
     }
     return props;
   }
@@ -286,14 +361,14 @@ export class NotionMemoryDriver {
       if (existing) {
         pageId = existing.id;
         // Plan the body before any write: a conflict with an edit made in Notion since the read above saves nothing.
-        planned = await this.planBody(pageId, record.body, current.body, label);
+        planned = await this.planBody(pageId, pageBody(record.body), pageBody(current.body), label);
         await this.client.updatePage(pageId, { properties: this.propertiesFor(record) });
         await this.applyPlan(pageId, planned.plan);
       } else {
         const page = await this.client.createPage({
           parent: { type: 'data_source_id', data_source_id: this.mem.dataSourceId },
           properties: this.propertiesFor(record),
-          ...(record.body.trim() ? { markdown: toNotion(record.body) } : {}),
+          ...(pageBody(record.body).trim() ? { markdown: toNotion(pageBody(record.body)) } : {}),
         });
         this.client.trust(page.id);
         pageId = page.id;
@@ -301,9 +376,11 @@ export class NotionMemoryDriver {
       this.cache.records[record.key] = { ...(this.cache.records[record.key] || {}), tableStyle: detectTableStyle(record.body), lastEdited: null };
       const back = await this.client.getPage(pageId);
       const stored = await this.stored(back, { useCache: false });
-      const same = ['type', 'name', 'description', 'status', 'superseded_by', 'source', 'saved', 'last_verified', 'approved_by']
-        .every((f) => String(stored[f] ?? '') === String(record[f] ?? ''));
-      const bodyOk = planned && planned.concurrent ? changedLeavesMatch(stored.body, record.body, planned.plan) : sameLocal(stored.body, record.body);
+      const same = COMPARED.every((f) => String(stored[f] ?? '') === String(record[f] ?? ''))
+        && (!this.p.extra || supersedesList(stored.supersedes).join(',') === supersedesList(record.supersedes).join(','));
+      const bodyOk = planned && planned.concurrent
+        ? changedLeavesMatch(pageBody(stored.body), pageBody(record.body), planned.plan)
+        : sameLocal(stored.body, record.body);
       if (!same || !bodyOk) {
         this.saveCache();
         throw new ToolkitError(EXIT.ERROR, `Saved but not verified: the Notion page for ${record.key} does not hold what was written.`, { key: record.key, location: back.url });
@@ -357,7 +434,7 @@ export class NotionMemoryDriver {
       const rec = await this.stored(page);
       const { score, snippet } = keywordScore(rec, terms);
       if (score <= 0) continue;
-      hits.push({ key, name: s.name, type: s.type, description: s.description, status: s.status, score, snippet });
+      hits.push({ key, name: s.name, type: s.type, description: s.description, status: s.status, stored_status: storedStatus(rec), superseded_by: rec.superseded_by ?? null, score, snippet });
     }
     this.saveCache();
     hits.sort((a, b) => b.score - a.score || (a.key < b.key ? -1 : 1));
@@ -373,31 +450,93 @@ export class NotionMemoryDriver {
       const current = await this.stored(page, { useCache: false });
       const text = changeRecordStatus(current.text, { status, supersededBy, note }, k);
       const { record } = parseRecord(text, k);
+      record.saved = this.today();
       const res = await this.writeRecord(record, current.version, action);
-      return { key: k, version: res.version, record: res.record };
+      return { key: k, version: res.version, record: res.record, before: current };
     });
   }
 
+  /** Add or remove a key in another record's `supersedes`. */
+  async changeSuccessor(successorKey, { add = [], remove = [] }) {
+    const rec = await this.get(successorKey);
+    if (!rec) return;
+    const now = supersedesList(rec.supersedes);
+    const next = now.filter((x) => !remove.includes(x));
+    for (const x of add) if (!next.includes(x)) next.push(x);
+    if (next.join(',') === now.join(',')) return;
+    await this.save({ ...rec, supersedes: next }, { expect: rec.version });
+  }
+
   async retire(key, { supersededBy, reason } = {}) {
+    const k = assertKey(key);
     const by = supersededBy ? assertKey(supersededBy) : null;
-    if (by && by === key) throw new ToolkitError(EXIT.INVALID, 'A record cannot be superseded by itself.');
+    if (by && by === k) throw new ToolkitError(EXIT.INVALID, 'A record cannot be superseded by itself.');
     const note = retireNote(this.today(), { reason, supersededBy: by });
-    return this.changeStatus(key, { status: 'retired', supersededBy: by, note }, 'retire');
+    const res = await this.changeStatus(k, { status: 'retired', supersededBy: by, note }, 'retire');
+    if (by) await this.changeSuccessor(by, { add: [k] });
+    const change = by ? { kind: 'supersede', from: k, to: by } : { kind: 'archive', from: k };
+    const repaired = await repairLinksWithDriver(this, change, { skip: by ? [k, by] : [k] });
+    return { key: res.key, version: res.version, record: res.record, ...repairResult(repaired) };
   }
 
   async restore(key) {
-    return this.changeStatus(key, { status: 'needs-review', supersededBy: null, note: restoreNote(this.today()) }, 'restore');
+    const res = await this.changeStatus(key, { status: 'needs-review', supersededBy: null, note: restoreNote(this.today()) }, 'restore');
+    if (res.before && res.before.superseded_by) await this.changeSuccessor(res.before.superseded_by, { remove: [res.key] });
+    return { key: res.key, version: res.version, record: res.record };
+  }
+
+  /**
+   * Give a record a new key: the same page gets the new Key, Type, and Name.
+   * Its own links to itself, and links in other records, follow.
+   */
+  async rename(key, toKey) {
+    const k = assertKey(key);
+    const to = assertKey(toKey);
+    if (k === to) throw new ToolkitError(EXIT.INVALID, `${k} already has that key.`, { key: k });
+    const parts = splitKey(to);
+    const res = await this.locked(async () => {
+      const page = await this.findRow(k);
+      if (!page) throw notFound(k, this.location);
+      if (await this.findRow(to)) {
+        throw new ToolkitError(EXIT.INVALID, `${k} was not renamed: a record with the key ${to} already exists.`, {
+          key: k,
+          to,
+          fix: `Merge them instead: save what should stay in ${to}, then run toolkit memory retire ${k} --superseded-by ${to}.`,
+        });
+      }
+      const current = await this.stored(page, { useCache: false });
+      const dir = storedStatus(current) === 'archived' ? 'archive' : '';
+      const change = { kind: 'rename', from: k, to, fromPath: dir ? `${dir}/${k}.md` : `${k}.md`, toPath: dir ? `${dir}/${to}.md` : `${to}.md` };
+      const { record } = parseRecord(repairLinks(renameRecordText(current.text, to), dir, change).text, to);
+      record.saved = current.saved || this.today();
+      const planned = pageBody(record.body) !== pageBody(current.body) ? await this.planBody(page.id, pageBody(record.body), pageBody(current.body), `The memory record ${k}`) : null;
+      await this.client.updatePage(page.id, { properties: this.propertiesFor(record) });
+      if (planned) await this.applyPlan(page.id, planned.plan);
+      delete this.cache.records[k];
+      this.cache.records[to] = { tableStyle: current.tableStyle || 'compact', lastEdited: null };
+      const back = await this.stored(await this.client.getPage(page.id), { useCache: false });
+      if (back.key !== to || back.type !== parts.type) {
+        this.saveCache();
+        throw new ToolkitError(EXIT.ERROR, `Saved but not verified: the Notion page for ${k} does not have the key ${to}.`, { key: k, to });
+      }
+      this.saveCache('rename');
+      return { key: to, from: k, version: back.version, record: back, change };
+    });
+    const repaired = await repairLinksWithDriver(this, res.change, { skip: [to] });
+    return { key: res.key, from: res.from, version: res.version, record: res.record, ...repairResult(repaired) };
   }
 
   /**
    * Moves the page to the Notion trash. Notion deletes it for good after 30
    * days; until then it can be restored from the trash in the Notion app.
+   * Links in other records become plain words.
    */
   async delete(key) {
     const k = assertKey(key);
-    return this.locked(async () => {
+    const res = await this.locked(async () => {
       const page = await this.findRow(k);
       if (!page) throw notFound(k, this.location);
+      const archived = storedStatus(this.summaryOf(page)) === 'archived';
       await this.client.updatePage(page.id, { in_trash: true });
       const back = await this.client.getPage(page.id);
       if (!back.in_trash) throw new ToolkitError(EXIT.ERROR, `Saved but not verified: ${k} is not in the Notion trash.`, { key: k });
@@ -407,9 +546,13 @@ export class NotionMemoryDriver {
         key: k,
         deleted: true,
         trash: true,
+        archived,
         detail: `${k} was moved to the Notion trash. Notion deletes it for good after 30 days; until then it can be restored from the trash in the Notion app.`,
       };
     });
+    const repaired = await repairLinksWithDriver(this, { kind: 'delete', from: k, fromPath: res.archived ? `archive/${k}.md` : `${k}.md` });
+    const { archived, ...out } = res;
+    return { ...out, ...repairResult(repaired) };
   }
 
   // ------------------------------------------------------------ focus and glossary

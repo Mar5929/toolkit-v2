@@ -21,8 +21,10 @@ lands in the work item, not in a separate requirements document or notes file.
 
 ## The interview
 
-- Read the item, the related `requirements/<area>.md` file, and memory before
-  asking. Ask only what the records and the code cannot answer.
+- Read the item, the related area file in `requirements/` (and
+  `requirements/SYSTEM-DATA-MODEL.md` when data is involved), the
+  `system-guide/` file for the area, and memory before asking. Ask only what
+  the records and the code cannot answer.
 - One question at a time. Include a recommended answer based on what you
   know, so the owner can confirm, correct, or redirect it.
 - Settle upstream decisions before the ones that depend on them.
@@ -51,10 +53,11 @@ lands in the work item, not in a separate requirements document or notes file.
 - Someone who was not in the conversation must be able to understand the
   goal, the required behavior, and how to tell it works.
 
-`R-xx` block format (from the work-item template):
+`R-xx` block format (from the work-item template; the requirement name
+follows an em dash, as in the template):
 
 ```markdown
-#### R-01 - Rejected requests show their reason
+#### R-01 — Rejected requests show their reason
 
 **Status:** Refining  
 **Applies to:** The person who submitted a request, after it is rejected.  
@@ -104,9 +107,9 @@ where, and what the line would say instead.
 - Change nothing without the owner's yes. Few findings: one decision at a
   time. Many: a short numbered list he can answer in one message.
 - A dismissed finding stays dismissed for this item in this session.
-- Two sources that disagree (the item and `requirements/<area>.md`, for
-  example): name both, quote the disagreement, and let the owner pick. Never
-  silently prefer the newer or longer one.
+- Two sources that disagree (the item and the area file in `requirements/`,
+  for example): name both, quote the disagreement, and let the owner pick.
+  Never silently prefer the newer or longer one.
 - Do not turn the check into a rewrite. Personal wording taste is not a
   finding.
 - Clean spec: say so in one line and move on.

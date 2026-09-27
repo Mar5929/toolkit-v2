@@ -5,9 +5,12 @@ import path from 'node:path';
 import {
   keyFor, splitKey, isValidKey, assertKey, canonicalKey, normalizeName, NAME_MAX, normalizeRecord, validateRecord, assertValidRecord,
   serializeRecord, parseRecord, checkExpect, versionOf, validateFocus, assertValidFocus, keywordScore, searchTerms,
-  changeRecordStatus, retireNote, matchesFilter, countRecords, sortRecords, loadDriver, isPlaceholder,
-  DESCRIPTION_MAX, FOCUS_SECTIONS,
+  changeRecordStatus, retireNote, restoreNote, matchesFilter, countRecords, sortRecords, loadDriver, isPlaceholder,
+  DESCRIPTION_MAX, FOCUS_SECTIONS, NO_AUTHORIZATION, topicBody, parseFocus, findLinks, repairLinks, rebaseLinks, brokenLinks,
+  changeSupersedes, renameRecordText, supersededByFromBody, approverFrom, storedStatus, latestStatusNote, repairLinksWithDriver,
+  fitLinks, recordSummary,
 } from '../../lib/memory/contract.mjs';
+import { readTemplate } from '../../lib/core/templates.mjs';
 import { EXIT } from '../../lib/core/output.mjs';
 import { cleanup, tempDir } from './helpers.mjs';
 
@@ -56,7 +59,16 @@ test('normalizeRecord fills defaults and computes the key', () => {
   assert.equal(r.saved, '2026-09-26');
   assert.equal(r.last_verified, '2026-09-26');
   assert.equal(r.approved_by, null);
+  assert.equal(r.authorization, NO_AUTHORIZATION);
+  assert.deepEqual(r.supersedes, []);
   assert.deepEqual(validateRecord(r), []);
+  const approved = normalizeRecord({ ...r, approved_by: 'Mike', authorization: undefined }, { today: '2026-09-26' });
+  assert.equal(approved.authorization, 'Approved by Mike on 2026-09-26');
+  assert.equal(approverFrom(approved.authorization), 'Mike');
+  // The model writes name as the whole key (the file name without .md).
+  const modelName = normalizeRecord({ type: 'project', name: 'project_account_model', description: 'd', source: 's', body: 'b' }, { today: '2026-09-26' });
+  assert.equal(modelName.key, 'project_account_model');
+  assert.equal(modelName.name, 'account-model');
   const fromKey = normalizeRecord({ key: 'project_payments_api', description: 'x', source: 's', body: 'b' }, { today: '2026-09-26' });
   assert.equal(fromKey.type, 'project');
   assert.equal(fromKey.name, 'payments-api');
@@ -100,26 +112,96 @@ test('validateRecord lists every broken rule; assertValidRecord refuses with INV
   assert.deepEqual(validateRecord({ ...base(), status: 'retired', superseded_by: 'feedback_other' }), []);
 });
 
-test('serializeRecord and parseRecord round-trip, keeping extra frontmatter keys', () => {
-  const r = { ...base(), approved_by: 'Mike', extra: { tags: ['a', 'b'] } };
+test('serializeRecord writes the model topic template YAML; parseRecord reads it back, keeping extra keys', () => {
+  const r = normalizeRecord({ ...base(), approved_by: 'Mike', authorization: undefined, extra: { tags: ['a', 'b'] }, metadata: { type: 'feedback', origin: 'chat' } }, { today: '2026-09-26' });
   const text = serializeRecord(r);
-  assert.match(text, /^---\nname: deploy-window\ntype: feedback\n/);
-  assert.match(text, /superseded_by: none\n/);
-  assert.match(text, /approved_by: Mike\ntags: \[a, b\]\n---\n\n# Deploy window/);
+  assert.equal(text, [
+    '---',
+    'name: feedback_deploy_window',
+    'description: Deploys happen on Tuesday mornings only.',
+    'metadata:',
+    '  type: feedback',
+    '  origin: chat',
+    'status: current',
+    'source: Mike in chat, 2026-09-26',
+    'last_verified: 2026-09-26',
+    'authorization: Approved by Mike on 2026-09-26',
+    'supersedes: none',
+    'tags: [a, b]',
+    '---',
+    '',
+    '# Deploy window',
+    '',
+    '**Remember:** Deploy only on Tuesday mornings.',
+    '',
+  ].join('\n'));
   const { record, problems } = parseRecord(text, 'feedback_deploy_window');
   assert.deepEqual(problems, []);
   assert.equal(record.approved_by, 'Mike');
   assert.equal(record.superseded_by, null);
+  assert.equal(record.type, 'feedback');
+  assert.equal(record.stored_status, 'current');
   assert.deepEqual(record.extra, { tags: ['a', 'b'] });
+  assert.deepEqual(record.metadata, { type: 'feedback', origin: 'chat' });
   assert.equal(serializeRecord(record), text);
-  const noApproval = serializeRecord(base());
-  assert.doesNotMatch(noApproval, /approved_by/);
+  // The seed template is not a record.
+  const seed = parseRecord(readTemplate('memory/topic'), 'project_topic_template');
+  assert.equal(seed.record.status, 'template');
+});
+
+test('the model topic template fields map onto the record, and every model status word is read', () => {
+  const tpl = readTemplate('memory/topic');
+  const filled = tpl
+    .replace('name: topic-template', 'name: project_account_model')
+    .replace('status: template', 'status: needs-review')
+    .replace('<Person, conversation, or document with absolute date>', 'Mike, 2026-09-26')
+    .replace('<YYYY-MM-DD or unknown>', 'unknown')
+    .replace('<Approved card or explicit request, or trusted grant>', 'Explicit request from Mike, 2026-09-26')
+    .replace('supersedes: none', 'supersedes: [project_old_model, project_accounts]\nhost_field: kept');
+  const { record } = parseRecord(filled, 'project_account_model');
+  assert.equal(record.type, 'project');
+  assert.equal(record.status, 'needs-review');
+  assert.equal(record.last_verified, 'unknown');
+  assert.equal(record.authorization, 'Explicit request from Mike, 2026-09-26');
+  assert.deepEqual(record.supersedes, ['project_old_model', 'project_accounts']);
+  assert.deepEqual(record.extra, { host_field: 'kept' });
+  for (const [word, status] of [['current', 'current'], ['needs-review', 'needs-review'], ['superseded', 'retired'], ['archived', 'retired']]) {
+    const t = serializeRecord(base()).replace('status: current', `status: ${word}`);
+    const got = parseRecord(t, 'feedback_deploy_window').record;
+    assert.equal(got.status, status, word);
+    assert.equal(got.stored_status, word);
+  }
+  // A name that is not the file name is reported.
+  const wrong = serializeRecord(base()).replace('name: feedback_deploy_window', 'name: feedback_other');
+  assert.match(parseRecord(wrong, 'feedback_deploy_window').problems.join(' '), /does not match the file name/);
+});
+
+test('a record in the older toolkit format is still read and is written again in the model format', () => {
+  const legacy = '---\nname: deploy-window\ntype: feedback\ndescription: Old one\nstatus: retired\nsuperseded_by: feedback_new_rule\nsource: Mike, 2026-09-01\nsaved: 2026-09-01\nlast_verified: 2026-09-01\napproved_by: Mike\n---\n\n**Remember:** Old.\n';
+  const { record, problems } = parseRecord(legacy, 'feedback_deploy_window');
+  assert.deepEqual(problems, []);
+  assert.equal(record.legacy, true);
+  assert.equal(record.status, 'retired');
+  assert.equal(record.superseded_by, 'feedback_new_rule');
+  assert.equal(record.approved_by, 'Mike');
+  assert.equal(record.saved, '2026-09-01');
+  const again = serializeRecord(record);
+  assert.match(again, /^---\nname: feedback_deploy_window\ndescription: Old one\nmetadata:\n  type: feedback\nstatus: superseded\n/);
+  assert.match(again, /authorization: Approved by Mike\n/);
+  assert.doesNotMatch(again, /^(type|saved|superseded_by|approved_by):/m);
+});
+
+test('topicBody adds the title and the Remember label, and renames the older Related label', () => {
+  assert.equal(topicBody('Deploy on Tuesdays.', { name: 'deploy-window' }), '# Deploy window\n\n**Remember:** Deploy on Tuesdays.\n');
+  assert.equal(topicBody('# Mine\n\n**Remember:** x\n\n**Related:** [a](project_a.md)\n'), '# Mine\n\n**Remember:** x\n\n**Related memories:** [a](project_a.md)\n');
+  const full = '# T\n\n**Remember:** a\n\n**Why:** b\n';
+  assert.equal(topicBody(full), full, 'a body in the topic format is not changed');
 });
 
 test('parseRecord reports a file with no frontmatter or a type that does not match its key', () => {
   assert.match(parseRecord('just text\n', 'user_x').problems.join(' '), /no frontmatter/);
   const text = serializeRecord(base());
-  assert.match(parseRecord(text, 'project_deploy_window').problems.join(' '), /does not match the key/);
+  assert.match(parseRecord(text, 'project_deploy_window').problems.join(' '), /metadata\.type "feedback" does not match the key/);
 });
 
 test('checkExpect: absent, a version, a short prefix, and stale versions', () => {
@@ -155,14 +237,205 @@ test('keyword search scores key, description, and body', () => {
   assert.equal(keywordScore(base(), ['payments']).score, 0);
 });
 
-test('changeRecordStatus keeps other lines and adds the dated note', () => {
-  const text = serializeRecord({ ...base(), approved_by: 'Mike' });
-  const retired = changeRecordStatus(text, { status: 'retired', supersededBy: 'feedback_new_window', note: retireNote('2026-09-27', { reason: 'Rule changed.', supersededBy: 'feedback_new_window' }) }, 'feedback_deploy_window');
-  assert.match(retired, /status: retired\n/);
-  assert.match(retired, /superseded_by: feedback_new_window\n/);
-  assert.match(retired, /approved_by: Mike\n/);
-  assert.match(retired, /\*\*Retired 2026-09-27:\*\* Rule changed\. Replaced by feedback_new_window\.\n$/);
+test('changeRecordStatus writes superseded or archived, keeps other lines, and puts the dated note under the title', () => {
+  const text = serializeRecord({ ...base(), approved_by: 'Mike', authorization: undefined, body: '# Deploy window\n\n**Remember:** x\n\n**Related memories:** [stack](project_stack.md)\n' });
+  const superseded = changeRecordStatus(text, { status: 'retired', supersededBy: 'feedback_new_window', note: retireNote('2026-09-27', { reason: 'Rule changed.', supersededBy: 'feedback_new_window' }) }, 'feedback_deploy_window');
+  assert.match(superseded, /\nstatus: superseded\n/);
+  assert.match(superseded, /authorization: Approved by Mike\n/);
+  assert.match(superseded, /# Deploy window\n\n\*\*Superseded 2026-09-27:\*\* Replaced by \[feedback_new_window\]\(feedback_new_window\.md\)\. Rule changed\.\n\n\*\*Remember:\*\* x/);
+  assert.equal(superseded.replace(/status: superseded/, 'status: current').replace(/\n\*\*Superseded[^\n]*\n/, ''), text, 'nothing else changed');
+  const s = parseRecord(superseded, 'feedback_deploy_window').record;
+  assert.equal(s.status, 'retired');
+  assert.equal(s.superseded_by, 'feedback_new_window');
+  assert.equal(supersededByFromBody(s.body), 'feedback_new_window');
+
+  // Archived: the note says why, and the note's own links now start with ../ (it moves to archive/).
+  const archived = changeRecordStatus(text, { status: 'retired', note: retireNote('2026-09-27', { reason: 'No longer true.' }) }, 'feedback_deploy_window');
+  assert.match(archived, /\nstatus: archived\n/);
+  assert.match(archived, /\*\*Archived 2026-09-27:\*\* No longer true\./);
+  assert.match(archived, /\[stack\]\(\.\.\/project_stack\.md\)/);
+  const a = parseRecord(archived, 'feedback_deploy_window').record;
+  assert.equal(a.status, 'retired');
+  assert.equal(a.superseded_by, null);
+
+  // Restored: needs-review, links back to the vault root, superseded_by cleared.
+  const restored = changeRecordStatus(archived, { status: 'needs-review', note: restoreNote('2026-09-28') }, 'feedback_deploy_window');
+  assert.match(restored, /\nstatus: needs-review\n/);
+  assert.match(restored, /\[stack\]\(project_stack\.md\)/);
+  assert.equal(parseRecord(changeRecordStatus(superseded, { status: 'needs-review' }, 'feedback_deploy_window'), 'feedback_deploy_window').record.superseded_by, null);
   assert.throws(() => changeRecordStatus('no frontmatter', { status: 'retired' }, 'user_x'), (err) => err.code === EXIT.INVALID);
+});
+
+test('supersedes and rename change only their own frontmatter lines', () => {
+  const text = serializeRecord(base());
+  const one = changeSupersedes(text, { add: ['feedback_old'] });
+  assert.match(one, /\nsupersedes: feedback_old\n/);
+  const two = changeSupersedes(one, { add: ['feedback_older'] });
+  assert.match(two, /\nsupersedes: \[feedback_old, feedback_older\]\n/);
+  assert.equal(changeSupersedes(two, { add: ['feedback_old'] }), two, 'no change, same text');
+  assert.equal(changeSupersedes(changeSupersedes(two, { remove: ['feedback_older'] }), { remove: ['feedback_old'] }), text);
+  const renamed = renameRecordText(text, 'project_deploy_rules');
+  assert.match(renamed, /^---\nname: project_deploy_rules\n/);
+  assert.match(renamed, /metadata:\n  type: project\n/);
+  assert.equal(renamed.split('\n').length, text.split('\n').length);
+});
+
+test('links: found outside code, repaired on rename, supersede, archive, and delete, and broken ones reported', () => {
+  const note = [
+    '**Related memories:** [billing](project_billing.md), [[project_billing|bills]], [project_billing](./project_billing.md#top).',
+    'Not a link: `[billing](project_billing.md)`; outside the vault: [spec](../requirements/spec.md); a site: [n](https://example.com/a.md).',
+    '```',
+    '[billing](project_billing.md)',
+    '```',
+  ].join('\n');
+  assert.equal(findLinks(note).length, 5, 'three links to the note, one outside the vault, one URL');
+  const renamed = repairLinks(note, '', { kind: 'rename', from: 'project_billing', to: 'project_invoices' });
+  assert.equal(renamed.count, 3);
+  assert.match(renamed.text, /\[billing\]\(project_invoices\.md\), \[\[project_invoices\|bills\]\], \[project_invoices\]\(project_invoices\.md#top\)\./);
+  assert.match(renamed.text, /`\[billing\]\(project_billing\.md\)`/, 'code is left alone');
+  assert.match(renamed.text, /```\n\[billing\]\(project_billing\.md\)\n```/);
+  const archived = repairLinks(note, '', { kind: 'archive', from: 'project_billing' });
+  assert.match(archived.text, /^\*\*Related memories:\*\* billing \(archived\), bills \(archived\), project_billing \(archived\)\./);
+  const deleted = repairLinks(note, '', { kind: 'delete', from: 'project_billing' });
+  assert.match(deleted.text, /^\*\*Related memories:\*\* billing, bills, project_billing\./);
+  // From a note in archive/, a link to the vault root starts with ../.
+  const fromArchive = repairLinks('[b](../project_billing.md)', 'archive', { kind: 'supersede', from: 'project_billing', to: 'project_invoices' });
+  assert.equal(fromArchive.text, '[b](../project_invoices.md)');
+  // A link to a file outside the vault follows the move too.
+  assert.equal(rebaseLinks('[b](project_b.md) [c](../x/c.md) [u](https://example.com/a.md)', '', 'archive').text, '[b](../project_b.md) [c](../../x/c.md) [u](https://example.com/a.md)');
+  assert.equal(rebaseLinks('[b](../project_b.md) [c](../../x/c.md)', 'archive', '').text, '[b](project_b.md) [c](../x/c.md)');
+  const exists = (p) => p === 'project_a.md';
+  assert.deepEqual(brokenLinks('[a](project_a.md) [b](project_b.md) [[project_c]] [s](../req.md)', '', { exists }).map((b) => b.path), ['project_b.md', 'project_c.md']);
+});
+
+test('a retired record keeps its stored word: superseded stays superseded without a replacement key', () => {
+  // The word decides; superseded_by is only the fallback for the older word "retired".
+  assert.equal(storedStatus({ status: 'retired', stored_status: 'superseded', superseded_by: null }), 'superseded');
+  assert.equal(storedStatus({ status: 'retired', stored_status: 'archived', superseded_by: 'project_x' }), 'archived');
+  assert.equal(storedStatus({ status: 'retired', stored_status: 'retired', superseded_by: 'project_x' }), 'superseded');
+  assert.equal(storedStatus({ status: 'retired', superseded_by: null }), 'archived');
+  assert.equal(storedStatus({ status: 'retired', body: '# T\n\n**Superseded 2026-09-01:** Replaced by x.\n' }), 'superseded');
+  assert.equal(storedStatus({ status: 'current', stored_status: 'superseded' }), 'current');
+
+  // The newest dated note counts: an older Superseded line under an Archived one does not name a replacement.
+  const history = '# T\n\n**Archived 2026-09-03:** Gone.\n\n**Superseded 2026-09-01:** Replaced by [project_b](project_b.md).\n';
+  assert.equal(latestStatusNote(history), 'archived');
+  assert.equal(supersededByFromBody(history), null);
+  assert.equal(supersededByFromBody('# T\n\n**Superseded 2026-09-01:** Replaced by [project_b](project_b.md).\n'), 'project_b');
+
+  // normalizeRecord keeps the word given and the one read from a file.
+  const given = normalizeRecord({ ...base(), status: 'superseded' }, { today: '2026-09-26' });
+  assert.equal(given.status, 'retired');
+  assert.equal(given.stored_status, 'superseded');
+  assert.equal(given.superseded_by, null);
+  assert.match(serializeRecord(given), /\nstatus: superseded\n/);
+  const text = serializeRecord(given);
+  const { record } = parseRecord(text, 'feedback_deploy_window');
+  assert.equal(record.stored_status, 'superseded');
+  assert.equal(serializeRecord(normalizeRecord(record, { today: '2026-09-30' })), text, 'a round trip changes nothing');
+  assert.equal(recordSummary(record).stored_status, 'superseded');
+  const archived = normalizeRecord({ ...base(), status: 'archived', superseded_by: 'feedback_other' }, { today: '2026-09-26' });
+  assert.equal(archived.superseded_by, null, 'an archived record has no replacement');
+  assert.equal(storedStatus(archived), 'archived');
+
+  // A replacement known only from a field is written into the body, dated by the record's save date.
+  const older = normalizeRecord({ ...base(), status: 'retired', superseded_by: 'feedback_new_window', saved: '2026-09-01' });
+  assert.match(older.body, /^# Deploy window\n\n\*\*Superseded 2026-09-01:\*\* Replaced by \[feedback_new_window\]\(feedback_new_window\.md\)\.\n\n\*\*Remember:\*\*/);
+  assert.equal(parseRecord(serializeRecord(older), 'feedback_deploy_window').record.superseded_by, 'feedback_new_window');
+});
+
+test('link repair for a supersede leaves the Superseded line alone; fitLinks rebases only links that need it', () => {
+  const a = '# A\n\n**Superseded 2026-09-01:** Replaced by [project_b](project_b.md).\n\n**Related memories:** [b](project_b.md)\n';
+  const fixed = repairLinks(a, '', { kind: 'supersede', from: 'project_b', to: 'project_c' });
+  assert.equal(fixed.count, 1);
+  assert.match(fixed.text, /Replaced by \[project_b\]\(project_b\.md\)\./);
+  assert.match(fixed.text, /\[b\]\(project_c\.md\)/);
+  // A rename still moves it: the old file is gone.
+  assert.match(repairLinks(a, '', { kind: 'rename', from: 'project_b', to: 'project_c' }).text, /Replaced by \[project_c\]\(project_c\.md\)\./);
+
+  const files = new Set(['project_x.md', '../docs/spec.md']);
+  const exists = (p) => files.has(p);
+  // Written for archive/, moving to the root: rebased. Written for the root already: kept.
+  assert.equal(fitLinks('[x](../project_x.md) [y](project_x.md) [s](../../docs/spec.md) [n](project_none.md)', 'archive', '', exists).text,
+    '[x](project_x.md) [y](project_x.md) [s](../docs/spec.md) [n](project_none.md)');
+  assert.equal(fitLinks('[x](project_x.md)', '', 'archive', exists).text, '[x](../project_x.md)');
+
+  // brokenLinks checks a link that leaves the vault only when asked to.
+  const text = '[a](../project_x.md) [b](../docs/spec.md) [c](../docs/none.md)';
+  assert.deepEqual(brokenLinks(text, '', { exists }), []);
+  assert.deepEqual(brokenLinks(text, '', { exists, outside: exists }).map((b) => [b.path, b.outside]), [['../project_x.md', true], ['../docs/none.md', true]]);
+});
+
+/** A driver kept in memory, for repairLinksWithDriver. failKeys: saves of these keys throw. */
+function fakeDriver(records, { failKeys = [] } = {}) {
+  const store = new Map(records.map((r) => {
+    const rec = normalizeRecord(r, { today: '2026-09-26' });
+    return [rec.key, serializeRecord(rec)];
+  }));
+  const saved = [];
+  let focus = '# Current focus\n\n## Now\n\n- See [old](project_old.md).\n';
+  return {
+    saved,
+    store,
+    async list() {
+      return [...store.keys()].map((key) => recordSummary(parseRecord(store.get(key), key).record));
+    },
+    async get(key) {
+      const text = store.get(key);
+      if (!text) return null;
+      return { ...parseRecord(text, key).record, text, version: versionOf(text) };
+    },
+    async save(input) {
+      const rec = normalizeRecord(input, { today: '2026-09-26' });
+      if (failKeys.includes(rec.key)) throw new Error(`The memory record ${rec.key} was not saved. Description is missing.`);
+      store.set(rec.key, serializeRecord(rec));
+      saved.push(rec.key);
+      return { key: rec.key };
+    },
+    async focusGet() {
+      return { text: focus, version: versionOf(focus) };
+    },
+    async focusSet(text) {
+      focus = text;
+      return { version: versionOf(text) };
+    },
+    focusText: () => focus,
+  };
+}
+
+test('repairLinksWithDriver keeps going past a record it cannot save and reports it', async () => {
+  const note = (name, extra = {}) => ({
+    type: 'project',
+    name,
+    description: `About ${name}.`,
+    source: 'Mike, 2026-09-26',
+    body: `# ${name}\n\n**Remember:** x\n\n**Related memories:** [old](project_old.md)\n`,
+    ...extra,
+  });
+  const driver = fakeDriver([note('alpha'), note('broken'), note('zeta')], { failKeys: ['project_broken'] });
+  // A record stored before the topic format: no title and no Remember label.
+  driver.store.set('project_raw', '---\nname: project_raw\ndescription: Raw.\nmetadata:\n  type: project\nstatus: current\nsource: Mike, 2026-09-01\nlast_verified: 2026-09-01\nauthorization: Trusted grant\nsupersedes: none\n---\n\nSee [old](project_old.md).\n');
+  const res = await repairLinksWithDriver(driver, { kind: 'rename', from: 'project_old', to: 'project_new' });
+  assert.deepEqual(res.repaired, ['project_alpha', 'project_zeta', 'project_raw', 'focus']);
+  assert.deepEqual(res.failed.map((f) => f.key), ['project_broken']);
+  assert.match(res.failed[0].reason, /Description is missing/);
+  assert.match(driver.store.get('project_alpha'), /\[old\]\(project_new\.md\)/);
+  assert.match(driver.store.get('project_broken'), /\[old\]\(project_old\.md\)/, 'the note that could not be saved is unchanged');
+  assert.match(driver.focusText(), /\[old\]\(project_new\.md\)/);
+  assert.deepEqual(res.reformatted, ['project_raw'], 'the older body gained a title and the Remember label');
+  assert.match(driver.store.get('project_raw'), /\n# Raw\n\n\*\*Remember:\*\* See \[old\]\(project_new\.md\)\.\n$/);
+});
+
+test('parseFocus reads the model focus: the fill-in guide and prompts are left out', () => {
+  const seed = parseFocus(readTemplate('memory/CURRENT_FOCUS'));
+  assert.equal(seed.filled, false);
+  assert.equal(seed.lastUpdated, '');
+  assert.deepEqual(seed.sections.map((s) => s.heading), [...FOCUS_SECTIONS]);
+  assert.deepEqual(validateFocus(readTemplate('memory/CURRENT_FOCUS')), [], 'the model seed is a valid focus');
+  const real = parseFocus('# Current focus\n\nLast updated: `2026-09-26, handoff, agent`\n\n## Now\n\n- WI-012 CSV export\n\n## Waiting on the owner\n\n- None.\n\n## Untracked to-dos\n\n- `<x>`\n\n## Next session starts with\n\n- Continue WI-012.\n');
+  assert.equal(real.filled, true);
+  assert.equal(real.lastUpdated, '2026-09-26, handoff, agent');
+  assert.deepEqual(real.sections.map((s) => s.lines.length), [1, 1, 0, 1]);
 });
 
 test('list filters, counts, and sorting are shared by every driver', () => {

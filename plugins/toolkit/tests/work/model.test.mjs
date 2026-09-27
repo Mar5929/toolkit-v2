@@ -1,30 +1,34 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import {
   parseDoc, serializeDoc, applyMetaPatch, composeDoc, getH1, setH1, getSectionText, setSectionText, getLabel, setLabel,
   appendHistory, appendSectionRow, splitRowText, parseRoadmap, parseTasks, parseRequirements, parseQuestions, parseHistory,
   validateRecord, validateDesign, checkGates, newRecordText, newDesignText, reconcileRecord, snapshotWritten, canonicalId,
-  parseId, isPlaceholder, isTemplateRow, overallFor, sectionNames, isOpenOwnerQuestion,
+  parseId, isPlaceholder, isTemplateRow, overallFor, sectionNames, isOpenOwnerQuestion, setDesignStatusLine, designStatusLine,
 } from '../../lib/work/model.mjs';
-import { BUILTIN_WORK_ITEM, BUILTIN_DESIGN, loadTemplate } from '../../lib/work/templates.mjs';
+import { FIELD_ORDER, DESIGN_FIELD_ORDER } from '../../lib/work/lifecycle.mjs';
+import { loadTemplate } from '../../lib/work/templates.mjs';
+import { templatePath } from '../../lib/core/templates.mjs';
 import { PLUGIN_ROOT } from './helpers.mjs';
 
-// Frozen copies of the model project's templates (taken 2026-09-26). Tests never
-// read the model project itself: it changes while other sessions work on it.
-const MODEL_TEMPLATE_DIR = path.join(PLUGIN_ROOT, 'tests', 'notion', 'fixtures', 'templates');
+// Older frozen copies of templates (taken 2026-09-26, before the approved
+// changes). They are only used to check that other layouts still round-trip.
+const OLD_TEMPLATE_DIR = path.join(PLUGIN_ROOT, 'tests', 'notion', 'fixtures', 'templates');
+// Mike's approved model (a Git worktree of his model repository). Read only,
+// and only when it is there: the shipped copy in scaffold/model must match it.
+const APPROVED_MODEL = '/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved';
 
 function templates() {
   const list = [
-    { name: 'built-in WORK-ITEM.md', text: BUILTIN_WORK_ITEM },
-    { name: 'built-in DESIGN.md', text: BUILTIN_DESIGN },
+    { name: 'model WORK-ITEM.md (scaffold/model)', text: fs.readFileSync(templatePath('work-item'), 'utf8') },
+    { name: 'model DESIGN.md (scaffold/model)', text: fs.readFileSync(templatePath('design'), 'utf8') },
   ];
-  for (const f of ['WORK-ITEM.md', 'DESIGN.md']) {
-    const plugin = path.join(PLUGIN_ROOT, 'templates', f);
-    if (fs.existsSync(plugin)) list.push({ name: `plugin ${f}`, text: fs.readFileSync(plugin, 'utf8') });
-    const model = path.join(MODEL_TEMPLATE_DIR, `model-${f}`);
-    if (fs.existsSync(model)) list.push({ name: `model project ${f}`, text: fs.readFileSync(model, 'utf8') });
+  for (const f of ['WORK-ITEM.md', 'DESIGN.md', 'model-WORK-ITEM.md', 'model-DESIGN.md']) {
+    const old = path.join(OLD_TEMPLATE_DIR, f);
+    if (fs.existsSync(old)) list.push({ name: `older ${f}`, text: fs.readFileSync(old, 'utf8') });
   }
   return list;
 }
@@ -68,8 +72,34 @@ test('new frontmatter keys are placed in the 4.2 order', () => {
   assert.deepEqual(Object.keys(d.data), ['id', 'title', 'type', 'stage', 'status', 'updated']);
 });
 
+test('the approved model WORK-ITEM.md and DESIGN.md have exactly the ARCHITECTURE 4.2 frontmatter', () => {
+  const wi = parseDoc(fs.readFileSync(templatePath('work-item'), 'utf8'));
+  assert.equal(wi.kind, 'record');
+  assert.deepEqual(Object.keys(wi.meta), [...FIELD_ORDER]);
+  assert.equal(wi.meta.waiting_on, '<owner | agent | external: who | none>', 'the quoted line is read as its text');
+  const design = parseDoc(fs.readFileSync(templatePath('design'), 'utf8'));
+  assert.equal(design.kind, 'design');
+  assert.deepEqual(design.meta, { work_item: 'WI-001', status: 'proposed', approved: 'no' });
+  assert.equal(designStatusLine(design.body).label, 'Design status:');
+  for (const name of ['work-item', 'design']) {
+    const shipped = loadTemplate(name === 'work-item' ? 'WORK-ITEM.md' : 'DESIGN.md');
+    assert.equal(shipped.source, 'model');
+    assert.equal(shipped.path, templatePath(name));
+  }
+});
+
+test('the shipped model copy matches the approved model when it is on this computer', (t) => {
+  if (!fs.existsSync(APPROVED_MODEL)) {
+    t.skip('the approved model worktree is not on this computer');
+    return;
+  }
+  for (const [name, rel] of [['work-item', '.work-items/work-item-template/WORK-ITEM.md'], ['design', '.work-items/work-item-template/DESIGN.md']]) {
+    assert.equal(fs.readFileSync(templatePath(name), 'utf8'), fs.readFileSync(path.join(APPROVED_MODEL, rel), 'utf8'), rel);
+  }
+});
+
 test('the model template is read: seven sections, H1, labels, tables, tasks, requirements', () => {
-  const t = templates().find((x) => x.name.includes('WORK-ITEM') && !x.name.startsWith('built-in')) || templates()[0];
+  const t = templates()[0];
   const d = parseDoc(t.text);
   assert.deepEqual(sectionNames(d.body), ['Overview', 'Roadmap', 'Tasks', 'Recent History', 'Open Questions', 'Requirements', 'Notes']);
   assert.deepEqual(getH1(d.body).id, 'WI-001');
@@ -86,7 +116,17 @@ test('the model template is read: seven sections, H1, labels, tables, tasks, req
 test('a new record from the template has 4.2 frontmatter, the real title, Refining, and one history row', () => {
   const r = fresh({ request: 'Please add a login page.' });
   assert.deepEqual(Object.keys(r.meta), ['id', 'title', 'type', 'stage', 'status', 'parent', 'waiting_on', 'priority', 'delivery', 'requirements_approved', 'design', 'result_approved', 'updated']);
-  assert.match(r.text, /^requirements_approved: no$/m);
+  // The model's quoting: waiting_on always in double quotes; "no" quoted so older YAML readers do not read false.
+  assert.match(r.text, /^waiting_on: "none"$/m);
+  assert.match(r.text, /^requirements_approved: "no"$/m);
+  assert.match(r.text, /^result_approved: "no"$/m);
+  assert.equal(r.meta.requirements_approved, 'no');
+  const external = fresh({ waiting_on: 'external: Acme IT' });
+  assert.match(external.text, /^waiting_on: "external: Acme IT"$/m);
+  assert.equal(external.meta.waiting_on, 'external: Acme IT');
+  // The body is the model template's body with the real id and title.
+  const tpl = parseDoc(fs.readFileSync(templatePath('work-item'), 'utf8'));
+  assert.deepEqual(sectionNames(r.body), sectionNames(tpl.body));
   assert.equal(getH1(r.body).heading, 'WI-004: Login page');
   assert.equal(getLabel(r.body, 'Overall status', { section: 'Requirements' }), 'Refining');
   assert.equal(getSectionText(r.body, 'Starting request'), 'Please add a login page.');
@@ -167,13 +207,27 @@ test('validation reports errors, warnings, and gate questions', () => {
   assert.ok(validateRecord({ meta: owner.meta, body: ob }, { ownerName: 'Mike' }).warnings.some((w) => w.code === 'owner_by_name'));
 });
 
-test('a new design has frontmatter, the item id, and today', () => {
+test('a new design has the model header filled: the item id, today, Draft, and Pending', () => {
   const text = newDesignText(loadTemplate('DESIGN.md').text, { id: 'WI-004', title: 'Login page', date: '2026-09-26' });
   const d = parseDoc(text);
   assert.deepEqual(d.meta, { work_item: 'WI-004', status: 'proposed', approved: 'no' });
+  assert.ok(text.startsWith('---\nwork_item: WI-004\nstatus: proposed\napproved: "no"\n---\n'), 'approved is quoted as the model writes it');
   assert.equal(getH1(d.body).heading, 'WI-004: Login page — solution design');
-  assert.match(d.body, /^Requirements: WI-004/m);
-  assert.match(d.body, /^Date: 2026-09-26/m);
+  assert.match(d.body, /^\*\*Requirements:\*\* WI-004 {2}$/m);
+  assert.match(d.body, /^\*\*Last updated:\*\* 2026-09-26 {2}$/m);
+  assert.match(d.body, /^\*\*Design status:\*\* Draft {2}$/m);
+  assert.match(d.body, /^\*\*Design approval:\*\* Pending$/m);
+  assert.match(d.body, /^\*\*Requirements checked:\*\* <Link to WORK-ITEM\.md requirements and date checked> {2}$/m, 'other prompts stay for the agent');
+  // Approval keeps the header lines in step.
+  const approvedBody = setDesignStatusLine(d.body, 'approved', { approved: '2026-09-27 by Mike' });
+  assert.match(approvedBody, /^\*\*Design status:\*\* Approved {2}$/m);
+  assert.match(approvedBody, /^\*\*Design approval:\*\* Approved by Mike on 2026-09-27$/m);
+  const back = setDesignStatusLine(approvedBody, 'proposed', { approved: 'no' });
+  assert.match(back, /^\*\*Design status:\*\* Draft {2}$/m);
+  assert.match(back, /^\*\*Design approval:\*\* Pending$/m);
+  const inReview = setDesignStatusLine(d.body.replace('**Design status:** Draft', '**Design status:** In review'), 'proposed');
+  assert.match(inReview, /^\*\*Design status:\*\* In review {2}$/m, 'In review is a proposed design too');
+  assert.ok(validateDesign({ meta: { ...d.meta, status: 'approved', approved: '2026-09-27 by Mike' }, body: d.body }).warnings.some((w) => w.code === 'status_line_mismatch'));
   const item = fresh();
   const v = validateDesign(text, { itemId: 'WI-004', itemBody: item.body, itemMeta: { design: 'proposed' } });
   assert.deepEqual(v.errors, []);
@@ -182,7 +236,7 @@ test('a new design has frontmatter, the item id, and today', () => {
   assert.ok(wrong.errors.some((e) => e.code === 'work_item_mismatch'));
   const approvedNoRecord = validateDesign(text.replace('status: proposed', 'status: approved'));
   assert.ok(approvedNoRecord.gates.some((g) => g.code === 'design_approved_without_record'));
-  const extraReq = validateDesign(text.replace('#### R-02', '#### R-09'), { itemBody: item.body });
+  const extraReq = validateDesign(text.replace('## Selected design', '## Selected design\n\n### R-09 — Something else'), { itemBody: item.body });
   assert.ok(extraReq.warnings.some((w) => w.code === 'unknown_requirement'));
 });
 
@@ -289,24 +343,15 @@ test('composeDoc writes known keys first', () => {
   assert.ok(text.startsWith('---\nid: WI-001\ntitle: T\nextra: x\n---\n'));
 });
 
-test('the built-in templates have the same structure as the plugin templates (so the fallback cannot drift)', () => {
-  const shape = (text) => {
-    const d = parseDoc(text);
-    const headings = [];
-    for (const line of d.body.split('\n')) {
-      const m = /^(#{1,6})\s+(.*)$/.exec(line);
-      if (m) headings.push(`${m[1]} ${m[2].trim()}`);
-    }
-    const labels = d.body.split('\n').map((l) => /^\s*(?:[-*]\s+)?\*\*([^*]+):\*\*/.exec(l)).filter(Boolean).map((m) => m[1]);
-    const tables = d.body.split('\n').filter((l) => /^\|.*\|$/.test(l.trim()) && !/^\|[-\s|]+\|$/.test(l.trim())).length;
-    const lineLabels = d.body.split('\n').map((l) => /^([A-Z][A-Za-z ]*):[ \t]/.exec(l)).filter(Boolean).map((m) => m[1]);
-    return { keys: Object.keys(d.meta), headings, labels, lineLabels, tables };
-  };
-  for (const [name, builtin] of [['WORK-ITEM.md', BUILTIN_WORK_ITEM], ['DESIGN.md', BUILTIN_DESIGN]]) {
-    const plugin = path.join(PLUGIN_ROOT, 'templates', name);
-    if (!fs.existsSync(plugin)) continue;
-    assert.deepEqual(shape(builtin), shape(fs.readFileSync(plugin, 'utf8')), `update the built-in ${name} in lib/work/templates.mjs to match templates/${name}`);
-  }
+test('a project copy of the templates is preferred over the model copy', (t) => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'tk-templates-'));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  fs.mkdirSync(path.join(dir, 'work-item-template'));
+  fs.writeFileSync(path.join(dir, 'work-item-template', 'WORK-ITEM.md'), '---\nid: WI-001\n---\n\n# WI-001: Mine\n');
+  const own = loadTemplate('WORK-ITEM.md', { trackerDir: dir });
+  assert.equal(own.source, 'project');
+  assert.match(own.text, /# WI-001: Mine/);
+  assert.equal(loadTemplate('DESIGN.md', { trackerDir: dir }).source, 'model', 'no project DESIGN.md: the model copy');
 });
 
 test('a frontmatter the reader cannot read is a validation error, never a thrown error', () => {

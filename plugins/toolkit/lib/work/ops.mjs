@@ -382,7 +382,7 @@ export function designText(design, { status, approved, body } = {}) {
   const meta = { ...(design.meta || {}) };
   if (status !== undefined) meta.status = status;
   if (approved !== undefined) meta.approved = approved;
-  const b = setDesignStatusLine(body !== undefined ? body : design.body || '', meta.status);
+  const b = setDesignStatusLine(body !== undefined ? body : design.body || '', meta.status, { approved: meta.approved });
   return composeDoc(meta, b, DESIGN_FIELD_ORDER);
 }
 

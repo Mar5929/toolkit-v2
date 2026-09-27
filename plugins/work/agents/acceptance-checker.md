@@ -1,6 +1,6 @@
 ---
 name: acceptance-checker
-description: Checks a finished work item result against each requirement's acceptance check and the design's "How to check it" lines, runs the tests, and returns a verdict per requirement with evidence, defects seen in the diff, and checks that could not run. Also checks a build plan before the build when asked. Never the agent that built it; changes nothing.
+description: Checks a finished work item result against each requirement's acceptance check and the design's acceptance checks, runs the tests, and returns a verdict per requirement with evidence, defects seen in the diff, and checks that could not run. Also checks a build plan before the build when asked. Never the agent that built it; changes nothing.
 tools: Read, Glob, Grep, Bash
 model: opus
 ---
@@ -14,9 +14,11 @@ advise; the main agent fixes; the owner approves.
 ## Start with the brief
 
 - The brief gives the work item id, the requirements (Agreed goal, every
-  `R-xx` with its acceptance check, the Acceptance list), the design's "How
-  to check it" line for each requirement, the branch or commit to check, and
-  the project's test commands.
+  `R-xx` with its acceptance check, the Acceptance list), the design's
+  Acceptance checks table (in its "Build and verification plan") and the
+  "How to check it" column of the selected option's Requirement coverage, the
+  item's test plan when it has one (a copy of `tests/TEST-PLAN-TEMPLATE.md`),
+  the branch or commit to check, and the project's test commands.
 - Check that you are looking at the exact code the brief names:
 
   ```text
@@ -50,7 +52,8 @@ advise; the main agent fixes; the owner approves.
 ## Plan check (only when the brief asks for one)
 
 Before a build starts, the brief may give the item's Roadmap and Tasks, the
-requirements, and the design's Order of work instead of a finished result.
+requirements, and the design's "Build and verification plan" instead of a
+finished result.
 Then check the plan, not code:
 
 - Every `R-xx` is covered by at least one task, and every task's "Done when"

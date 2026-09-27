@@ -25,10 +25,8 @@
 // stored ids are used: they are looked up again under this project's page.
 // Registry values are written only when they differ from what the row holds.
 
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { EXIT, ToolkitError } from '../core/output.mjs';
+import { readTemplate } from '../core/templates.mjs';
 import { run, today as localToday, nowIso } from '../core/util.mjs';
 import { normalizeId, isNotionError } from './client.mjs';
 import { toNotion, stripTitle } from './markdown.mjs';
@@ -36,8 +34,6 @@ import {
   PROJECTS_BASE_PROPERTIES, PROJECTS_REGISTRY_PROPERTIES, workItemProperties, WORK_ITEM_RELATIONS, MEMORY_PROPERTIES,
   FOCUS_PAGE_TITLE, GLOSSARY_PAGE_TITLE, WORK_ITEMS_TITLE, MEMORY_TITLE, PROJECTS_TITLE, specType,
 } from './schema.mjs';
-
-const PLUGIN_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 
 const plain = (rich) => (Array.isArray(rich) ? rich.map((r) => r.plain_text ?? (r.text && r.text.content) ?? '').join('') : '');
 const richText = (s) => (s ? [{ type: 'text', text: { content: String(s).slice(0, 2000) } }] : []);
@@ -665,9 +661,14 @@ async function findProjectRow(client, projects, key, storedPageId) {
   return { row: null, problems, notes };
 }
 
-function templateText(file, today) {
+/**
+ * The seed text of a Notion memory page: the model's own template
+ * (.memory/CURRENT_FOCUS.md or .memory/terminology-glossary.md), as it is.
+ * Null when the plugin copy of the model is missing.
+ */
+function templateText(name) {
   try {
-    return fs.readFileSync(path.join(PLUGIN_ROOT, 'templates', 'memory', file), 'utf8').replace(/\{\{today\}\}/g, today);
+    return readTemplate(name);
   } catch {
     return null;
   }
@@ -819,8 +820,8 @@ export async function ensureProject({ client, config, root, mainRoot, rootPageId
       const views = await ensureMemoryViews(client, { databaseId: normalizeId(db.database.id), dataSourceId: db.dataSourceId, ids: props.ids, stored: storedFor(db, s.databaseId, s.views), check });
       report.created.push(...views.created.map((v) => `Memory view: ${v}`));
       report.problems.push(...views.problems);
-      const focus = await ensureChildPage(client, { parentPageId: projectPageId, storedId: s.pages && s.pages.focus, title: FOCUS_PAGE_TITLE, seed: templateText('CURRENT_FOCUS.md', today), check });
-      const glossary = await ensureChildPage(client, { parentPageId: projectPageId, storedId: s.pages && s.pages.glossary, title: GLOSSARY_PAGE_TITLE, seed: templateText('terminology-glossary.md', today), check });
+      const focus = await ensureChildPage(client, { parentPageId: projectPageId, storedId: s.pages && s.pages.focus, title: FOCUS_PAGE_TITLE, seed: templateText('memory/CURRENT_FOCUS'), check });
+      const glossary = await ensureChildPage(client, { parentPageId: projectPageId, storedId: s.pages && s.pages.glossary, title: GLOSSARY_PAGE_TITLE, seed: templateText('memory/glossary'), check });
       report.problems.push(...focus.problems, ...glossary.problems);
       if (focus.created) report.created.push('Current focus page');
       if (glossary.created) report.created.push('Terminology glossary page');

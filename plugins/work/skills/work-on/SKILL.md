@@ -12,7 +12,7 @@ Shared rules: `../../references/conventions.md` (saving, section edits, history)
 
 1. No session briefing in this conversation: run the command below. Exit code 4 (no `.toolkit.json`): open `project-setup` and stop.
    `toolkit brief`
-2. Find the item: the id the owner named, or a title in the list that matches the request. Two possible matches: ask one question naming both. No match: it is new.
+2. Find the item: the id the owner named, or a title in the list that matches the request. Two possible matches: ask one question naming both. No match: it is new. When `PROJECT-ROADMAP.md` names the item, read its phase there too.
    `toolkit work show <id>`
    `toolkit work list`
 3. Size a new request. A quick edit (one sitting, no choice for the owner, no behavior recorded in `requirements/`): do it and report it, with no item. "Later", "backlog", "park that": check the list for a duplicate, create the item, write the owner's words unchanged into Starting request, reply "Logged as WI-014 (bug, backlog). Not started." and stop. Anything else: create it the same way and continue.
@@ -21,7 +21,7 @@ Shared rules: `../../references/conventions.md` (saving, section edits, history)
 4. A substantial goal whose item shows `delivery: not-offered`: open `work-delegate` first. Quick questions and small edits get no offer.
 5. Route by where the item stands, using the item and the "Continue with" column of the lifecycle. Requirements not approved and type `build` or `data-load` (or the risk calls for it): `work-requirements`. More than one reasonable way to build it and no approved design: `solution-design`. Too big for one build: `work-organize`. Stages 09 to 11: `work-check`. Stages 12 to 14: `work-finish`. `waiting_on: owner`: ask that one question first (`work-decide`) and keep working on anything it does not block. Say the route in one line ("WI-012 is waiting for your OK on the requirements; opening work-requirements."). Never ask the owner which stage it is in.
    `toolkit work lifecycle`
-6. Plan (stage 06): Roadmap phases `P1`, `P2` and tasks `P1-T01` (Work, Deliverable, Done when, Depends on) from the design's Order of work, in the format in `references/planning.md`. Tracking setup (stage 07) only when needed: the item's branch and worktree `wi-<number>-<slug>`; in a Salesforce project, the manifest folder through `sf-component-tracker`.
+6. Plan (stage 06): Roadmap phases `P1`, `P2` and tasks `P1-T01` (Work, Deliverable, Done when, Depends on) from the design's "Build and verification plan", in the format in `references/planning.md`. Tracking setup (stage 07) only when needed: the item's branch and worktree `wi-<number>-<slug>`; in a Salesforce project, the item's folder in `delivery/deployment/` through `sf-component-tracker`.
    `toolkit work set <id> --stage 06-implementation-plan`
    `toolkit work edit <id> --section Roadmap --set-file <file>`
    `toolkit work edit <id> --section Tasks --set-file <file>`
@@ -39,7 +39,7 @@ Shared rules: `../../references/conventions.md` (saving, section edits, history)
 
 - `builder`: one per independent build task, only when `work-delegate` recorded a team or the owner agreed to one. The main agent merges each builder's branch into the item's branch, then ticks the task.
 - `researcher`: one per unknown found while planning or building.
-- `acceptance-checker`: a plan check after step 6, before the build, when the plan has several builders, parallel tasks, or a shared environment. Paste in the requirements, the design's Order of work, the Roadmap, and the Tasks, and ask for a plan check.
+- `acceptance-checker`: a plan check after step 6, before the build, when the plan has several builders, parallel tasks, or a shared environment. Paste in the requirements, the design's "Build and verification plan", the Roadmap, and the Tasks, and ask for a plan check.
 - How to brief them: `../../references/helpers.md`.
 - Codex: this plugin's agents do not load there. Read the agent's file in this plugin's `agents/` folder and give its full text, with the brief, to a native Codex worker. With no worker, do the work yourself and say that no independent check ran.
 
@@ -56,6 +56,7 @@ Shared rules: `../../references/conventions.md` (saving, section edits, history)
 - Stages may be skipped, repeated, or revisited. Record a short reason when a move is not obvious.
 - A worktree whose branch is named `wi-<number>-<slug>` belongs to that item. The briefing says so. Work on that item there.
 - Several items at once: recommend what can proceed independently, what depends on another outcome, and which decision would unblock the most work. See `references/planning.md`.
+- `PROJECT-ROADMAP.md` holds the project's phases (`P01`) and deliverable-sized work units, each naming its work item ID; item detail stays in the tracker. A new item that is one of those units gets its ID written into the unit, saved with `publish-docs`. An item's own phases (`P1`) are a different thing and live in its Roadmap section.
 
 ## Never
 

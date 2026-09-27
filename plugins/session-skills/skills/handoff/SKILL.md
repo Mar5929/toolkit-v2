@@ -14,8 +14,10 @@ start from. Do these steps in this order. Details for each step are below.
    Overview: Current position, Next action and who owns it, Blockers. In Notes:
    Resume here. Set its true stage and `waiting_on`, add one history note, then
    validate it and read it back.
-3. **Save what must outlast the session.** Anything the owner asked to keep
-   that is not saved yet: open `memory-save`. Then replace the current focus
+3. **Save what must outlast the session.** Review the current focus and the
+   memory criteria, as the project's `session-handoff.md` rule asks. Anything
+   the owner asked to keep that is not saved yet: open `memory-save`, which
+   saves only authorized lasting memory. Then replace the current focus
    section "Next session starts with" with one entry for this handoff.
 4. **Draft the prompt.** First line exactly: "This handoff prompt is
    AI-generated and may contain hallucinations, skewed context, etc. Please
@@ -152,11 +154,14 @@ Other rules for this step:
 
 ## Step 3: memory and current focus
 
-**Things to keep.** When the owner said something to keep in this session
-("remember", "from now on", a correction) and it is not saved, open
-`memory-save`. It owns where each thing goes, the approval, and the wording.
-Wait for its result. Anything it did not save goes into the prompt, labeled not
-saved. Leave out anything the owner asked to forget or keep out of the handoff.
+**Things to keep.** Read the memory criteria first (`.memory/memory-criteria.md`
+with built-in memory; otherwise the `memory-save` skill's record format). When
+the owner said something to keep in this session ("remember", "from now on", a
+correction) and it is not saved, open `memory-save`. It owns where each thing
+goes, the approval, and the wording. Wait for its result. Anything it did not
+save goes into the prompt, labeled not saved. Leave out anything the owner
+asked to forget or keep out of the handoff. A review can end with nothing to
+save.
 
 **Current focus.** Read it with its version:
 
@@ -167,7 +172,13 @@ toolkit memory focus --json
 The output has `text` (the focus) and `version`. Replace only the section
 "Next session starts with". It holds one entry, replaced at each handoff.
 Leave the other sections as they are, except add this session's work item id
-to "Now" when it is missing.
+to "Now" when it is missing, and set the "Last updated" line to the date, the
+source (`handoff`), and who wrote it.
+
+On a new project the focus still holds the setup text from the model: a
+fill-in guide comment under the title, and an `<angle bracket>` prompt in
+every section. Remove the fill-in guide comment. Write "None." in each section
+that still holds only a prompt. Never leave a prompt in the saved focus.
 
 - With a work item, the entry is a pointer only:
   `<UTC date and time> | <topic>: continue <WI-id> from its Resume here. Goal: <one line>.`
@@ -190,9 +201,13 @@ and save with the new version. Never save without `--expect`: that would
 silently drop the other session's change.
 
 No focus yet (`version` is null): save with `--expect absent`. The file must
-have all four sections, or the command refuses it:
+have all four sections, or the command refuses it. Use the model's format:
 
 ```markdown
+# Current focus
+
+Last updated: <YYYY-MM-DD>, handoff, agent
+
 ## Now
 
 - <WI-id>: <one line>

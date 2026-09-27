@@ -1,8 +1,8 @@
 // Copy project memory to a folder of Markdown files and back, for any backend.
 //
 // An export folder has the same layout as the built-in .memory/ folder:
-//   <key>.md                       records in use
-//   archive/<key>.md               retired records
+//   <key>.md                       records in use, and superseded records
+//   archive/<key>.md               archived records (retired with no replacement)
 //   CURRENT_FOCUS.md               the current focus (when there is one)
 //   terminology-glossary.md        the glossary (when there is one)
 //   toolkit-memory-export.json     what was exported, from where, and when
@@ -12,7 +12,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { EXIT, ToolkitError } from '../core/output.mjs';
 import { atomicWrite, ensureDir, readText } from '../core/fsx.mjs';
-import { parseRecord, validateFocus, validateGlossary } from './contract.mjs';
+import { parseRecord, storedStatus, validateFocus, validateGlossary } from './contract.mjs';
 
 export const MANIFEST_FILE = 'toolkit-memory-export.json';
 const FOCUS_FILE = 'CURRENT_FOCUS.md';
@@ -61,7 +61,9 @@ export async function exportMemory(driver, dir, { now = () => new Date(), forbid
   for (const s of summaries) {
     const rec = await driver.get(s.key);
     if (!rec) continue;
-    const relPath = rec.status === 'retired' ? path.join('archive', `${rec.key}.md`) : `${rec.key}.md`;
+    // Archived records go to archive/ (superseded ones stay beside the others), as in built-in memory.
+    const archived = storedStatus(rec) === 'archived';
+    const relPath = archived ? path.join('archive', `${rec.key}.md`) : `${rec.key}.md`;
     if (rec.status === 'retired') retired++;
     atomicWrite(path.join(target, relPath), rec.text);
     files.push(relPath);

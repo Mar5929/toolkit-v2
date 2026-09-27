@@ -28,17 +28,20 @@ export async function syncProject(project, opts = {}) {
   let applied = null;
   let savedConfig = false;
   if (!opts.dryRun) {
-    applied = applyPlan(plan);
     const { config } = project;
     const tracker = (config.tracker && config.tracker.type) || 'local';
     const memory = (config.memory && config.memory.type) || 'builtin';
     const mainRoot = project.mainRoot || project.root;
+    // The plan installs the model's MEMORY.md when it is missing; the index is
+    // then rebuilt from the records, so it lists what the vault holds.
+    const indexMissing = !fs.existsSync(path.join(mainRoot, '.memory', 'MEMORY.md'));
+    applied = applyPlan(plan);
     if (tracker === 'local' && !fs.existsSync(path.join(mainRoot, '.work-items', 'DASHBOARD.md'))) {
       const { openTracker } = await import('../work/driver.mjs');
       const t = await openTracker(project, { env, cwd: project.root, pluginRoot: opts.pluginRoot });
       await t.sync({ quick: false });
     }
-    if (memory === 'builtin' && !fs.existsSync(path.join(mainRoot, '.memory', 'MEMORY.md'))) {
+    if (memory === 'builtin' && indexMissing) {
       const { reindexVault } = await import('../memory/builtin.mjs');
       await reindexVault(mainRoot);
     }

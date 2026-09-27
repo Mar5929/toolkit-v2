@@ -4,21 +4,25 @@ import { parseArgs } from '../core/args.mjs';
 import { EXIT, out } from '../core/output.mjs';
 import { initProject } from '../project/init.mjs';
 
-export const summary = 'Set up Toolkit V2 in this repository: scaffold, AGENTS.md, rules, settings, and the chosen tracker and memory. Safe to run again.';
+export const summary = 'Set up Toolkit V2 in this repository: the model project\'s files, AGENTS.md, rules, settings, and the chosen tracker and memory. Safe to run again.';
 
 export const help = `Usage:
   toolkit init --name <name> --tracker <local|notion|github|jira> --memory <builtin|hindsight|notion>
                [--key <key>] [--owner <name>] [--salesforce] [--dir <path>] [--hosts claude-code,codex]
 
-Copies the scaffold (never .work-items/ items or .memory/ records), writes
-AGENTS.md with its rules list, .claude/settings.json (the Toolkit V2 plugins on,
-the claude-toolkit plugins off), the Codex plugin switches and command rule,
-the Plain English output style, and the Salesforce kit with --salesforce. It
-creates .work-items/ or .memory/ as chosen, or sets up the Notion databases
-(toolkit notion ensure-project) or the Hindsight bank (toolkit hindsight
-ensure-bank). .toolkit.json is written last, so a failed run can simply be run
-again. A file the project already has is kept; .gitignore, the settings, and
-the Codex config get the toolkit's lines merged in.
+Copies the model project's files from the plugin's scaffold/model/, byte for
+byte, as scaffold/CONDITIONS.json says: .work-items/ only for the local
+tracker, .memory/ only for built-in memory, the Salesforce files only with
+--salesforce, and each host's own files only for that host. AGENTS.md,
+README.md, and PROJECT.md keep only the blocks for the choices made, with the
+project name in their headings; AGENTS.md gets its rules list. The model's
+.claude/settings.json gets the toolkit's entries (the Toolkit V2 plugins on,
+the claude-toolkit plugins off), and Codex gets the plugin switches and the
+command rule. It sets up the Notion databases (toolkit notion ensure-project)
+or the Hindsight bank (toolkit hindsight ensure-bank) when chosen.
+.toolkit.json is written last, so a failed run can simply be run again. A file
+the project already has is kept; .gitignore, the settings, and the Codex files
+get the toolkit's lines merged in.
 
 --key defaults to the name in lower case with dashes. --owner defaults to
 git config user.name. --hosts defaults to both. --dir must be the top of a Git

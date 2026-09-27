@@ -8,24 +8,26 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   toNotion, fromNotion, normalizeLocal, sameLocal, planUpdate, stripTitle, withTitle, escapeInline, unescapeInline,
-  undoAutoLinks, detectTableStyle, notionLeaves,
+  undoAutoLinks, detectTableStyle, notionLeaves, joinNoteRuns,
 } from '../../lib/notion/markdown.mjs';
 import { parse } from '../../lib/core/frontmatter.mjs';
+import { templatePath } from '../../lib/core/templates.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const FIX = path.join(HERE, 'fixtures');
 const read = (...p) => fs.readFileSync(path.join(FIX, ...p), 'utf8');
 
-// The templates the plugin ships. The exact round-trip tests read these files,
+// The templates the plugin ships: the model copy in scaffold/model/, read
+// through lib/core/templates.mjs. The exact round-trip tests read these files,
 // so a change to a shipped template is tested as it is.
-const SHIPPED = path.resolve(HERE, '..', '..', 'templates');
+const SHIPPED = { 'WORK-ITEM.md': 'work-item', 'DESIGN.md': 'design', 'memory/CURRENT_FOCUS.md': 'memory/CURRENT_FOCUS' };
 
 function templateBody(file) {
   return stripTitle(parse(read('templates', file)).body).body;
 }
 
 function shippedBody(file) {
-  return stripTitle(parse(fs.readFileSync(path.join(SHIPPED, file), 'utf8')).body).body;
+  return stripTitle(parse(fs.readFileSync(templatePath(SHIPPED[file]), 'utf8')).body).body;
 }
 
 test('WORK-ITEM.md: what Notion returned converts back to the exact template body', () => {
@@ -118,9 +120,9 @@ test('soft-wrapped lines in a paragraph or list item are joined with a space for
   const hard = 'One  \ntwo\\\nthree<br>\nfour\nfive\n';
   assert.equal(toNotion(hard), 'One<br>two<br>three<br>four five');
   assert.equal(fromNotion(toNotion(hard)).markdown, 'One  \ntwo  \nthree  \nfour five\n');
-  // The shipped current focus seed is wrapped at 80 columns; Notion gets whole sentences.
-  const focus = stripTitle(fs.readFileSync(path.join(SHIPPED, 'memory', 'CURRENT_FOCUS.md'), 'utf8')).body;
-  assert.match(toNotion(focus), /^Kept with `toolkit memory focus`\. Under 50 lines\. Name work items by ID only; their status lives in the tracker\.$/m);
+  // The shipped current focus seed (the model's): its lines reach Notion whole, with no hard breaks.
+  const focus = stripTitle(fs.readFileSync(templatePath(SHIPPED['memory/CURRENT_FOCUS.md']), 'utf8')).body;
+  assert.match(toNotion(focus), /^## Next session starts with$/m);
   assert.doesNotMatch(toNotion(focus), /<br>/);
 });
 
@@ -147,12 +149,14 @@ test('an HTML comment block is sent as an italic "Note:" paragraph and read back
   assert.equal(toNotion('<!-- never closed\n'), '\\<!-- never closed');
   // Italic text that does not start with "Note: " stays italic text.
   assert.equal(fromNotion('*Just italic*').markdown, '*Just italic*\n');
-  // The shipped DESIGN.md shows no raw comment text in Notion.
+  // The shipped DESIGN.md (the model's) shows no raw comment text in Notion.
+  // Its Mermaid example (A --> B) is code, not a comment, so code blocks are left out of the check.
   const design = shippedBody('DESIGN.md');
   assert.match(design, /<!-- /);
   const sent = toNotion(design);
-  assert.doesNotMatch(sent, /<!--|--\\?>/);
-  assert.match(sent, /^\*Note: Include Recommendation only when there is more than one option\.\*$/m);
+  const outsideCode = sent.replace(/```[\s\S]*?```/g, '');
+  assert.doesNotMatch(outsideCode, /<!--|--\\?>/);
+  assert.match(sent, /^\*Note: With a single option, keep the owner decision and remove the comparison and recommendation text\.\*$/m);
 });
 
 test('nested lists use tabs in Notion and the parent indent locally', () => {
@@ -356,4 +360,25 @@ test('planUpdate: repeated identical sections still get unique old text', () => 
 test('notionLeaves splits on headings outside tables and code', () => {
   const leaves = notionLeaves('intro\n## A\n```\n## not a heading\n```\n## B\n<table>\n<tr>\n<td>## no</td>\n</tr>\n</table>');
   assert.deepEqual(leaves.map((l) => l.heading), [null, 'A', 'B']);
+});
+
+test('a note that holds code spans or a file name Notion linked comes back as the exact comment', () => {
+  // What Notion returned on 2026-09-26 for a comment from the model's WORK-ITEM.md and DESIGN.md:
+  // each italic piece gets its own stars around a code span or an automatic link.
+  const fromReal = '*Note: Fill-in guide: create it with **`toolkit work new`**, which copies this folder; keep the file name *[*WORK-ITEM.md*](http://WORK-ITEM.md)*. Delete this guide.*';
+  assert.equal(joinNoteRuns(fromReal), '*Note: Fill-in guide: create it with `toolkit work new`, which copies this folder; keep the file name [WORK-ITEM.md](http://WORK-ITEM.md). Delete this guide.*');
+  assert.equal(fromNotion(fromReal).markdown, '<!-- Fill-in guide: create it with `toolkit work new`, which copies this folder; keep the file name WORK-ITEM.md. Delete this guide. -->\n');
+  // A code span or link at the very end of the note.
+  assert.equal(fromNotion('*Note: run **`toolkit sync`***').markdown, '<!-- run `toolkit sync` -->\n');
+  assert.equal(fromNotion('*Note: see *[*A.md*](http://A.md)').markdown, '<!-- see A.md -->\n');
+  // Bold code outside a note is left alone.
+  assert.equal(joinNoteRuns('Use **`x`** here.'), 'Use **`x`** here.');
+  // The model's templates keep every comment through toNotion and back.
+  for (const file of ['WORK-ITEM.md', 'DESIGN.md']) {
+    const body = shippedBody(file);
+    const comments = body.match(/<!--[\s\S]*?-->/g) || [];
+    assert.ok(comments.length >= 3, file);
+    const back = fromNotion(toNotion(body)).markdown;
+    for (const c of comments) assert.ok(back.includes(c.replace(/\s+/g, ' ')), `${file}: ${c.slice(0, 60)}`);
+  }
 });

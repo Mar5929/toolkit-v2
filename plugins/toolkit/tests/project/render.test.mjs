@@ -5,7 +5,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { renderTemplate, buildSpan, fillSpan, hashText, spanBody, keysReadBy, SPAN_START, SPAN_END } from '../../lib/project/render.mjs';
+import { renderTemplate, renderMarkers, buildSpan, fillSpan, hashText, spanBody, keysReadBy, SPAN_START, SPAN_END } from '../../lib/project/render.mjs';
+import { buildManifest, renderModelFile, applyFills, applyJsonRemove, applyLineRemove, applyRemovals } from '../../lib/project/model-scaffold.mjs';
 import { mergeToml, tomlGet, parseKeyPath } from '../../lib/project/toml.mjs';
 import { appendText, mergeJson, jsonChanges } from '../../lib/project/manifest.mjs';
 import { buildKnowledgeIndex } from '../../lib/project/knowledge-index.mjs';
@@ -47,24 +48,75 @@ test('other HTML comments are ordinary text and CRLF files keep their line endin
   assert.equal(renderTemplate('a\r\n\r\n\r\nb\r\n', CFG), 'a\r\n\r\nb\r\n');
 });
 
-test('every installed template renders for all 24 setups without leftover tokens or markers', () => {
-  const manifest = JSON.parse(fs.readFileSync(path.join(PLUGIN_ROOT, 'scaffold', 'MANIFEST.json'), 'utf8'));
-  const templates = manifest.files.filter((f) => f.template);
+test('every model file and toolkit template renders for all 24 setups without leftover markers', () => {
+  const { files, conditions } = buildManifest(PLUGIN_ROOT);
+  const templates = files.filter((f) => f.template);
+  assert.ok(templates.some((t) => t.target === 'AGENTS.md') && templates.some((t) => t.target === 'README.md') && templates.some((t) => t.target === 'PROJECT.md'));
   let renders = 0;
   for (const tracker of ['local', 'notion', 'github', 'jira']) {
     for (const memory of ['builtin', 'hindsight', 'notion']) {
       for (const salesforce of [false, true]) {
         const cfg = { ...CFG, tracker: { type: tracker, idPrefix: 'WI' }, memory: { type: memory }, salesforce: { enabled: salesforce } };
         for (const t of templates) {
-          const out = renderTemplate(fs.readFileSync(path.join(PLUGIN_ROOT, t.source), 'utf8'), cfg, { file: t.source, today: '2026-09-26' });
-          assert.doesNotMatch(out, /\{\{[^}]*\}\}/, `${t.source} ${tracker}/${memory}/${salesforce}`);
+          const text = fs.readFileSync(path.join(PLUGIN_ROOT, t.source), 'utf8');
+          const out = t.model ? renderModelFile(t, text, cfg, conditions).text : renderTemplate(text, cfg, { file: t.source, today: '2026-09-26' });
           assert.doesNotMatch(out, /^\s*<!-- (if .+|endif) -->\s*$/m, t.source);
+          if (t.model) assert.doesNotMatch(out.split('\n').filter((l) => /^#{1,6} /.test(l)).join('\n'), /<Project name>/, `${t.source}: the name is filled in its headings`);
           renders++;
         }
       }
     }
   }
-  assert.ok(renders >= 24 * 5);
+  assert.ok(renders >= 24 * 4);
+});
+
+test('renderMarkers changes nothing but the marker lines and the blocks that do not apply', () => {
+  const src = 'a\n\n<!-- if salesforce -->\nSF\n<!-- endif -->\n<!-- if not salesforce -->\nplain {{project.name}}\n<!-- endif -->\n\n\n\nend';
+  assert.equal(renderMarkers(src, CFG), 'a\n\nplain {{project.name}}\n\n\n\nend', 'tokens and blank lines stay as they are');
+  assert.equal(renderMarkers('x\r\n<!-- if salesforce -->\r\ny\r\n<!-- endif -->\r\nz\r\n', CFG), 'x\r\nz\r\n');
+  assert.throws(() => renderMarkers('<!-- if moon -->\nx\n<!-- endif -->\n', CFG, { file: 'm.md' }), (e) => e.code === 2 && /m\.md, line 1 has an unknown condition "moon"/.test(e.message));
+  assert.throws(() => renderMarkers('<!-- if salesforce -->\n<!-- if tracker=local -->\n<!-- endif -->\n', CFG), /inside the block/);
+});
+
+test('the project name fills heading lines only', () => {
+  const fills = [{ text: '<Project name>', value: 'project.name', lines: 'headings' }];
+  assert.equal(applyFills('# <Project name>: guide\n\nreplace <Project name> here\n## <Project name>\n', fills, CFG), '# Acme CRM: guide\n\nreplace <Project name> here\n## Acme CRM\n');
+});
+
+test('the Salesforce removals: hooks and permission rules come out of the settings, lines out of .gitignore', () => {
+  const settings = {
+    hooks: {
+      Stop: [{ hooks: [{ type: 'command', command: 'python3 tools/kb/graph_freshness_hook.py' }] }],
+      PreToolUse: [{ matcher: 'Bash', hooks: [{ command: 'node guard-protected-orgs.cjs' }, { command: 'node mine.js' }] }],
+    },
+    permissions: { deny: ['Bash(git add -A)', 'Bash(sf org delete *)'], ask: ['Bash(sf apex run *)'] },
+  };
+  const rule = { hookCommandContains: ['guard-protected-orgs.cjs', 'tools/kb/graph_freshness_hook.py'], values: { 'permissions.deny': ['Bash(sf org delete *)'], 'permissions.ask': ['Bash(sf apex run *)'] } };
+  const r = applyJsonRemove(settings, rule);
+  assert.equal(r.changed, true);
+  assert.deepEqual(r.data, { hooks: { PreToolUse: [{ matcher: 'Bash', hooks: [{ command: 'node mine.js' }] }] }, permissions: { deny: ['Bash(git add -A)'] } });
+  assert.equal(r.noHooksLeft, false);
+  assert.deepEqual(r.removed, [
+    'remove the Stop hook "python3 tools/kb/graph_freshness_hook.py"',
+    'remove the PreToolUse hook "node guard-protected-orgs.cjs"',
+    'remove "Bash(sf org delete *)" from permissions.deny',
+    'remove "Bash(sf apex run *)" from permissions.ask',
+  ]);
+  assert.equal(applyJsonRemove({ hooks: { PreToolUse: [{ hooks: [{ command: 'node guard-protected-orgs.cjs' }] }] } }, rule).noHooksLeft, true);
+  assert.equal(applyLineRemove('.memory/\n.sfdx/\n*.log\n', { lines: ['.sfdx/'] }), '.memory/\n*.log\n');
+
+  // The same rules on a project's own copy, only when the project is not a Salesforce project.
+  const conditions = {
+    jsonRemove: [{ path: '.claude/settings.json', unless: 'salesforce', ...rule }],
+    lineRemove: [{ path: '.gitignore', unless: 'salesforce', lines: ['.sfdx/'] }],
+  };
+  const text = `${JSON.stringify(settings, null, 2)}\n`;
+  const off = applyRemovals('.claude/settings.json', text, { salesforce: { enabled: false } }, conditions);
+  assert.deepEqual(JSON.parse(off.text), r.data);
+  assert.equal(off.removed.length, 4);
+  assert.deepEqual(applyRemovals('.claude/settings.json', text, { salesforce: { enabled: true } }, conditions), { text, removed: [] });
+  assert.deepEqual(applyRemovals('.gitignore', '.memory/\n.sfdx/\n', {}, conditions), { text: '.memory/\n', removed: ['remove the line ".sfdx/"'] });
+  assert.deepEqual(applyRemovals('.claude/settings.json', '{ not json', {}, conditions), { text: '{ not json', removed: [] }, 'a file that is not JSON is left for the merge to report');
 });
 
 test('the rules span has the exact TEMPLATE-LANGUAGE format', () => {
@@ -160,11 +212,13 @@ test('the TOML reader finds trust and inline-table values', () => {
   assert.deepEqual(parseKeyPath('plugins."a.b@c".enabled'), ['plugins', 'a.b@c', 'enabled']);
 });
 
-test('the knowledge index with no topics is exactly the scaffold seed, and lists a topic from its SOURCE-RECORD.md', () => {
+test('the knowledge index with no topics is exactly the model\'s INDEX.md, and lists a topic from its SOURCE-RECORD.md', () => {
   const root = tempDir();
-  fs.mkdirSync(path.join(root, 'ai-external-knowledge', 'topic-template'), { recursive: true });
-  const seed = fs.readFileSync(path.join(PLUGIN_ROOT, 'scaffold', 'base', 'ai-external-knowledge', 'INDEX.md'), 'utf8');
-  assert.equal(buildKnowledgeIndex(root).text, seed);
+  fs.mkdirSync(path.join(root, 'ai-external-knowledge'), { recursive: true });
+  const seed = fs.readFileSync(path.join(PLUGIN_ROOT, 'scaffold', 'model', 'ai-external-knowledge', 'INDEX.md'), 'utf8');
+  assert.equal(buildKnowledgeIndex(root).text, seed, 'no INDEX.md yet: the model\'s text');
+  fs.writeFileSync(path.join(root, 'ai-external-knowledge', 'INDEX.md'), seed);
+  assert.equal(buildKnowledgeIndex(root).text, seed, 'no topics: the file stays as it is');
   fs.mkdirSync(path.join(root, 'ai-external-knowledge', 'stripe-api'));
   fs.writeFileSync(path.join(root, 'ai-external-knowledge', 'stripe-api', 'SOURCE-RECORD.md'), '# Stripe API reference\n\n- Publisher: Stripe.\n- Original documentation home: https://docs.stripe.com/api.\n- Captured on: 2026-09-20.\n\n## Project use\n\nRead before changing the billing code.\n');
   fs.mkdirSync(path.join(root, 'ai-external-knowledge', 'no-record'));
@@ -172,4 +226,7 @@ test('the knowledge index with no topics is exactly the scaffold seed, and lists
   assert.equal(topics.length, 2);
   assert.match(text, /\| \[stripe-api\/\]\(stripe-api\/\) \| Stripe: Stripe API reference \(https:\/\/docs\.stripe\.com\/api\) \| 2026-09-20 \| Read before changing the billing code\. \|/);
   assert.match(text, /\| \[no-record\/\]\(no-record\/\) \| No SOURCE-RECORD\.md yet \|/);
+  assert.doesNotMatch(text, /<Link to an actual topic folder/, 'the placeholder row is replaced');
+  const withoutTable = (t) => t.split('\n').filter((l) => !l.startsWith('| ')).join('\n');
+  assert.equal(withoutTable(text), withoutTable(seed), 'the text around the table is the model\'s');
 });

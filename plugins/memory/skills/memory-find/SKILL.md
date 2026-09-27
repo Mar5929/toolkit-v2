@@ -12,10 +12,10 @@ Put each `toolkit` command on its own line. This skill only reads. It never chan
 
 1. Check the session briefing and the current focus.
    `toolkit memory focus`
-2. Search memory, then open each hit. A hit is a pointer; read the record before using it.
+2. Search memory, then open each hit. A hit is a pointer; read the record before using it, check its date, scope, and `last_verified`, and follow its Related memories links when they bear on the question.
    `toolkit memory find "<query>"`
    `toolkit memory get <key>`
-3. Search the other homes: `DECISIONS.md` at the project root; work items (their Recent History and Notes); `requirements/<area>.md`; `ai-external-knowledge/INDEX.md`; the glossary for project terms. GitHub Issues or Jira: the work commands exit with code 3; read the issues as the work plugin's `references/trackers.md` says.
+3. Search the other homes: `DECISIONS.md` at the project root; work items (their Recent History and Notes); the area files in `requirements/`; the area files in `system-guide/`; `PROJECT.md` and `PROJECT-ROADMAP.md`; `ai-external-knowledge/INDEX.md`; the glossary for project terms. GitHub Issues or Jira: the work commands exit with code 3; read the issues as the work plugin's `references/trackers.md` says.
    `toolkit work list`
    `toolkit work show <id> --section "Recent History"`
    `toolkit work show <id> --section Notes`

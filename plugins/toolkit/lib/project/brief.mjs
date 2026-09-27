@@ -18,6 +18,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { EXIT } from '../core/output.mjs';
 import { stageShort, continueWith, isTerminal } from '../work/lifecycle.mjs';
+import { parseFocus } from '../memory/contract.mjs';
 import { alwaysOnRules } from './render.mjs';
 import { describeSetup } from './setup.mjs';
 import { runChecks } from './checks.mjs';
@@ -204,8 +205,7 @@ function workSections(work) {
 /**
  * How long each current-focus section stays when the briefing is too long:
  * higher stays longer. The lines above the first "## " heading (the
- * "Updated:" date and the usage note) go first; "Now" and "Next session
- * starts with" go last.
+ * "Last updated:" line) go first; "Now" and "Next session starts with" go last.
  */
 const FOCUS_KEEP = Object.freeze({ now: 4, 'next session starts with': 4, 'waiting on the owner': 3, 'untracked to-dos': 2 });
 
@@ -233,6 +233,26 @@ export function focusDropOrder(lines) {
   return groups.flatMap((g) => [...g.lines].reverse());
 }
 
+/**
+ * The lines of the current focus for the briefing, from the model's four-section
+ * format: "Last updated: ..." (when filled), then each section that has text,
+ * as "## <heading>" and its lines. The fill-in guide comment and lines that are
+ * still template prompts are left out. [] when there is no focus; null when
+ * it is still the template (no section has text).
+ */
+export function focusItems(text) {
+  if (!String(text || '').trim()) return [];
+  const focus = parseFocus(text);
+  if (!focus.filled) return null;
+  const items = [];
+  if (focus.lastUpdated) items.push(`Last updated: ${focus.lastUpdated}`);
+  for (const s of focus.sections) {
+    if (!s.lines.length) continue;
+    items.push(`## ${s.heading}`, ...s.lines);
+  }
+  return items;
+}
+
 function memorySections(mem) {
   const sections = [];
   if (!mem.ok) {
@@ -240,9 +260,10 @@ function memorySections(mem) {
     return sections;
   }
   const live = (mem.records || []).filter((r) => r.status !== 'retired');
-  const focus = String(mem.focus || '').trim().split('\n').filter((l) => !/^# /.test(l)).join('\n').trim();
-  if (focus) {
-    const items = focus.split('\n');
+  const items = focusItems(mem.focus);
+  if (items === null) {
+    sections.push({ key: 'focus', priority: 6, lines: ['Current focus: still the empty template from setup. The memory-save skill fills it with toolkit memory focus --set-file.'] });
+  } else if (items.length) {
     sections.push({ key: 'focus', priority: 6, header: 'Current focus:', items, dropOrder: focusDropOrder(items), more: 'toolkit memory focus prints all of it.' });
   }
   const needsReview = live.filter((r) => r.status === 'needs-review').length;

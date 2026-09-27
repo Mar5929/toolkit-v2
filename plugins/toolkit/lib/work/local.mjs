@@ -105,7 +105,7 @@ export class LocalTracker {
   }
 
   template(name) {
-    return loadTemplate(name, { trackerDir: this.dir, pluginRoot: this.pluginRoot });
+    return loadTemplate(name, { trackerDir: this.dir });
   }
 
   // ------------------------------------------------------------------ reading
@@ -921,8 +921,9 @@ export class LocalTracker {
       const doc = parseDoc(markdown);
       const data = doc.hasFrontmatter ? doc.data : {};
       const status = DESIGN_STATUSES.includes(doc.meta.status) ? doc.meta.status : 'proposed';
-      applyMetaPatch(data, { work_item: r.id, status, approved: doc.meta.approved !== undefined ? doc.meta.approved : 'no' }, DESIGN_FIELD_ORDER);
-      const body = setDesignStatusLine(doc.body, status);
+      const approved = doc.meta.approved !== undefined ? doc.meta.approved : 'no';
+      applyMetaPatch(data, { work_item: r.id, status, approved }, DESIGN_FIELD_ORDER);
+      const body = setDesignStatusLine(doc.body, status, { approved });
       const text = doc.hasFrontmatter ? serializeDoc(data, body) : composeDoc(data, body, DESIGN_FIELD_ORDER);
       atomicWrite(file, text);
       const fresh = this._finalize(view.state, { ids: [r.id] });

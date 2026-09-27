@@ -8,7 +8,10 @@ import path from 'node:path';
 import { makeProject, cleanup, tk, newItem, readRecord, recordPath, readState, trackerDir, editFile, git } from './helpers.mjs';
 import { parseDoc, parseHistory, getH1, getLabel, getSectionText as getSectionTextOf } from '../../lib/work/model.mjs';
 import { checkChanged } from '../../lib/work/state.mjs';
-import { BUILTIN_WORK_ITEM } from '../../lib/work/templates.mjs';
+import { loadTemplate } from '../../lib/work/templates.mjs';
+
+// The model's WORK-ITEM.md template, as the plugin ships it.
+const BUILTIN_WORK_ITEM = loadTemplate('WORK-ITEM.md').text;
 import { LocalTracker } from '../../lib/work/local.mjs';
 import { requireProject } from '../../lib/core/config.mjs';
 
@@ -345,7 +348,7 @@ test('a newer state file stops every write before any file is touched', async ()
 test('an edit made by hand is picked up by the next command, and the Overall status follows an approval typed by hand', async () => {
   const dir = makeProject();
   const id = await newItem(dir, 'Report', ['--type', 'task']);
-  editFile(await recordPath(dir, id), 'requirements_approved: no', 'requirements_approved: 2026-09-25 by Mike');
+  editFile(await recordPath(dir, id), 'requirements_approved: "no"', 'requirements_approved: 2026-09-25 by Mike');
   const r = await tk(dir, ['work', 'show', id, '--json']);
   assert.ok(r.json.changes.ownerEdits.some((e) => e.field === 'requirements_approved'));
   assert.equal(getLabel(r.json.body, 'Overall status', { section: 'Requirements' }), 'Finalized');

@@ -642,7 +642,7 @@ export function parseNotion(nmd) {
       i++;
       continue;
     }
-    const note = NOTE_RE.exec(trimmed);
+    const note = NOTE_RE.exec(joinNoteRuns(trimmed));
     if (note) {
       blocks.push({ type: 'comment', text: unescapeInline(note[1] ?? note[2]).replace(/\\\*/g, '*').trim() });
       i++;
@@ -652,6 +652,23 @@ export function parseNotion(nmd) {
     i++;
   }
   return { blocks, children };
+}
+
+/**
+ * Notion writes an italic paragraph in pieces when part of it is a code span
+ * or a link (Notion links a word such as WORK-ITEM.md by itself): each piece
+ * gets its own stars, so "*Note: use `x` and WORK-ITEM.md.*" comes back as
+ * "*Note: use **`x`** and *[*WORK-ITEM.md*](http://WORK-ITEM.md)*.*".
+ * This joins the pieces of a "*Note: ...*" line again, so NOTE_RE reads it.
+ * Any other line is returned unchanged.
+ */
+export function joinNoteRuns(line) {
+  if (!/^\*Note: /.test(line)) return line;
+  return line
+    .replace(/\*\[\*([^*\]\n]+)\*\]\(([^()\s]+)\)\*/g, '[$1]($2)')
+    .replace(/\*\[\*([^*\]\n]+)\*\]\(([^()\s]+)\)$/, '[$1]($2)*')
+    .replace(/\*\*(`[^`\n]+`)\*\*/g, '$1')
+    .replace(/\*\*(`[^`\n]+`)\*$/, '$1*');
 }
 
 function isOrdered(marker) {

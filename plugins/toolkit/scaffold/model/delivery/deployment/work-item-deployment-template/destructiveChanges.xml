@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!-- Fill-in guide: keep this file only when this work item removes metadata.
+         Replace ComponentApiNameToRemove with the exact member to delete and
+         MetadataType with its Salesforce type. Add members and types blocks as
+         needed. Replace XX.0 with the verified API version. Confirm the target
+         org, backup, and owner approval before any destructive deployment. -->
+    <types>
+        <members>ComponentApiNameToRemove</members>
+        <name>MetadataType</name>
+    </types>
+    <version>XX.0</version>
+</Package>

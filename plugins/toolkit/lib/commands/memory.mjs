@@ -12,7 +12,10 @@ import { requireProject } from '../core/config.mjs';
 import { EXIT, ToolkitError, out } from '../core/output.mjs';
 import { parse as parseFrontmatter } from '../core/frontmatter.mjs';
 import { today } from '../core/util.mjs';
-import { FOCUS_SECTIONS, FRONTMATTER_ORDER, canonicalKey, loadDriver, normalizeName, keyFor, RECORD_TYPES } from '../memory/contract.mjs';
+import {
+  FOCUS_SECTIONS, KNOWN_FIELDS, NO_AUTHORIZATION, approvalText, canonicalKey, loadDriver, normalizeRecord, storedStatus,
+  supersededByFromBody, supersedesList, RECORD_TYPES,
+} from '../memory/contract.mjs';
 import { refreshCache } from '../memory/startup.mjs';
 import { exportMemory, importMemory } from '../memory/transfer.mjs';
 
@@ -20,13 +23,14 @@ export const summary = 'Save, find, and manage project memory: records, the curr
 
 export const help = `Usage:
   toolkit memory save --type <t> --name <slug> --description <d> (--body <text> | --body-file <file|->)
-                      [--approved-by <who>] [--supersedes <key>] [--source <text>] [--status <s>]
-                      [--last-verified <YYYY-MM-DD|unknown>] [--expect <version|absent>]
+                      [--approved-by <who>] [--authorization <text>] [--supersedes <key>] [--source <text>]
+                      [--status <s>] [--last-verified <YYYY-MM-DD|unknown>] [--expect <version|absent>]
   toolkit memory find <query> [--reflect] [--type <t>] [--limit <n>] [--all]
   toolkit memory get <key>
   toolkit memory list [--type <t>] [--status <current|needs-review|retired|all>]
   toolkit memory retire <key> [--superseded-by <key>] [--reason <text>]
   toolkit memory restore <key>
+  toolkit memory rename <key> --to <new-key>
   toolkit memory delete <key> --owner-approved
   toolkit memory focus [--set-file <file|->] [--expect <version>]
   toolkit memory glossary [--set-file <file|->] [--expect <version>]
@@ -36,17 +40,28 @@ export const help = `Usage:
   toolkit memory import --from <folder> [--dry-run]
 
 Types: ${RECORD_TYPES.join(', ')}. A key is <type>_<slug>, for example feedback_deploy_window.
+The key is also the file name without .md and the frontmatter name (the model's topic format).
 A key typed with dashes (feedback_deploy-window) finds the same record.
 A --name longer than 60 characters is refused, not shortened.
 A body file that starts with frontmatter fills any field not given as a flag.
-Saving over an existing record keeps its source, approved_by, last_verified, and
-any other frontmatter fields unless they are given again. Saving a record that
-needs review marks it verified today.
-retire --superseded-by needs a record that exists.
+--approved-by writes "authorization: Approved by <who> on <date>". With no approver
+and memory.approval trusted, it is "Trusted grant"; --authorization sets the words.
+Saving over an existing record keeps its source, authorization, supersedes,
+last_verified, and any other frontmatter fields unless they are given again.
+Saving a record that needs review marks it verified today.
+retire --superseded-by <key> marks the record superseded (the replacement must
+exist and not be archived); retire alone archives it (built-in: moved to
+.memory/archive/). A record saved with status superseded or archived keeps that
+word; a superseded record stays beside the current ones.
+Links to a note in other notes are repaired when it is renamed (rename, or save
+--supersedes), superseded, archived (the link becomes its words plus "(archived)"),
+or deleted (the link becomes its words); the notes changed are listed, and so
+are notes whose links could not be repaired. Saving an archived note as current
+moves it out of archive/ and keeps its links working.
 The current focus has four ## sections (${FOCUS_SECTIONS.join(', ')}) and at most 50 lines.
 Exit codes: 0 ok, 1 error or not found, 2 refused (a rule or a stale --expect), 3 not supported by this backend, 4 not a toolkit project.`;
 
-const SUBCOMMANDS = ['save', 'find', 'get', 'list', 'retire', 'restore', 'delete', 'focus', 'glossary', 'reindex', 'status', 'export', 'import'];
+const SUBCOMMANDS = ['save', 'find', 'get', 'list', 'retire', 'restore', 'rename', 'delete', 'focus', 'glossary', 'reindex', 'status', 'export', 'import'];
 
 export async function run(argv, ctx) {
   const [sub, ...rest] = argv;
@@ -109,11 +124,55 @@ function statusWord(status) {
   return status === 'needs-review' ? 'needs review' : status;
 }
 
+/**
+ * How a record's status reads in a list: "[needs review]", "[superseded by <key>]",
+ * "[superseded]" (the replacement is not named), "[archived]", or ''.
+ */
+function statusFlag(r) {
+  if (!r.status || r.status === 'current') return '';
+  if (r.status === 'retired') {
+    if (storedStatus(r) === 'archived') return ' [archived]';
+    return r.superseded_by ? ` [superseded by ${r.superseded_by}]` : ' [superseded]';
+  }
+  return ` [${statusWord(r.status)}]`;
+}
+
+function notes(n) {
+  return `${n} note${n === 1 ? '' : 's'}`;
+}
+
+/**
+ * The lines about link repair in a driver result: the notes whose links were
+ * repaired, the notes also written in the model's topic format, and the notes
+ * that could not be repaired (with why). [] when nothing was repaired.
+ */
+export function repairLines(res) {
+  const lines = [];
+  const list = (res && res.linksRepaired) || [];
+  if (list.length) lines.push(`Links repaired in ${notes(list.length)}: ${list.join(', ')}.`);
+  const reformatted = (res && res.reformatted) || [];
+  if (reformatted.length) lines.push(`Also written in the model's topic format: ${reformatted.join(', ')}.`);
+  const failed = (res && res.linksFailed) || [];
+  if (failed.length) {
+    lines.push(`Links not repaired in ${notes(failed.length)} (fix each with toolkit memory get and toolkit memory save):`);
+    for (const f of failed) lines.push(`- ${f.key}: ${f.reason}`);
+  }
+  return lines;
+}
+
+/** The link-repair fields for --json output: linksRepaired, and linksFailed and reformatted when given. */
+function repairFields(res) {
+  const outFields = { linksRepaired: (res && res.linksRepaired) || [] };
+  if (res && res.linksFailed && res.linksFailed.length) outFields.linksFailed = res.linksFailed;
+  if (res && res.reformatted && res.reformatted.length) outFields.reformatted = res.reformatted;
+  return outFields;
+}
+
 // ---------------------------------------------------------------- save
 
 async function save(argv, ctx, { project, driver }) {
   const { _, flags } = parseArgs(argv, {
-    string: ['type', 'name', 'description', 'body', 'body-file', 'approved-by', 'supersedes', 'source', 'status', 'last-verified', 'expect', 'host'],
+    string: ['type', 'name', 'description', 'body', 'body-file', 'approved-by', 'authorization', 'supersedes', 'source', 'status', 'last-verified', 'expect', 'host'],
   });
   if (_.length) throw new ToolkitError(EXIT.INVALID, `toolkit memory save takes no words outside flags (got "${_.join(' ')}"). Put the text in --body or --body-file.`);
   const bodyFlag = str(flags, 'body');
@@ -131,21 +190,25 @@ async function save(argv, ctx, { project, driver }) {
     fromFile = parsed.data || {};
     bodyText = parsed.body;
   }
-  const pick = (flag, field) => {
+  const fileMeta = fromFile.metadata && typeof fromFile.metadata === 'object' && !Array.isArray(fromFile.metadata) ? fromFile.metadata : {};
+  const pick = (flag, field, alt) => {
     const v = str(flags, flag);
     if (v !== undefined) return v;
-    const f = fromFile[field];
+    const f = fromFile[field] !== undefined && fromFile[field] !== null ? fromFile[field] : alt;
     return f === undefined || f === null ? undefined : String(f);
   };
-  const type = pick('type', 'type');
+  // A body file in the model's format has metadata.type, and name is the whole key.
+  const type = pick('type', 'type', fileMeta.type);
   const name = pick('name', 'name');
   const description = pick('description', 'description');
   const missing = [['type', type], ['name', name], ['description', description]].filter(([, v]) => !v).map(([n]) => `--${n}`);
   if (missing.length) throw new ToolkitError(EXIT.INVALID, `toolkit memory save needs ${missing.join(', ')}.`);
   const approvedBy = str(flags, 'approved-by');
+  const authorizationFlag = str(flags, 'authorization');
   let source = pick('source', 'source');
-  const key = keyFor(String(type).trim().toLowerCase(), normalizeName(name));
-  const existing = RECORD_TYPES.includes(String(type).trim().toLowerCase()) && normalizeName(name) ? await driver.get(key).catch(() => null) : null;
+  const probe = normalizeRecord({ type, name });
+  const key = probe.key;
+  const existing = RECORD_TYPES.includes(probe.type) && probe.name ? await driver.get(key).catch(() => null) : null;
   if (!source && existing && existing.source) source = existing.source;
   if (!source) source = approvedBy ? `${approvedBy}, ${today()}` : `Agent session, ${today()}`;
 
@@ -157,8 +220,21 @@ async function save(argv, ctx, { project, driver }) {
   }
   const extra = { ...((existing && existing.extra) || {}) };
   for (const [k, v] of Object.entries(fromFile)) {
-    if (!FRONTMATTER_ORDER.includes(k) && k !== 'key' && v !== undefined) extra[k] = v;
+    if (!KNOWN_FIELDS.includes(k) && k !== 'key' && v !== undefined) extra[k] = v;
   }
+
+  // authorization, in the model's words.
+  let authorization = authorizationFlag;
+  if (!authorization && approvedBy) authorization = approvalText(approvedBy, today());
+  if (!authorization && fromFile.authorization) authorization = String(fromFile.authorization);
+  if (!authorization && existing && existing.authorization) authorization = existing.authorization;
+  const mode = project.config && project.config.memory && project.config.memory.approval;
+  if (!authorization) authorization = mode === 'trusted' ? 'Trusted grant' : NO_AUTHORIZATION;
+
+  const supersedesFlag = str(flags, 'supersedes');
+  const supersedes = supersedesFlag === undefined ? undefined : canonicalKey(supersedesFlag);
+  const supersedesAll = supersedesList([...((existing && existing.supersedes) || []), ...supersedesList(fromFile.supersedes)]);
+  if (supersedes && supersedes !== key && !supersedesAll.includes(supersedes)) supersedesAll.push(supersedes);
 
   const record = {
     type,
@@ -167,32 +243,44 @@ async function save(argv, ctx, { project, driver }) {
     source,
     status: pick('status', 'status') || 'current',
     last_verified: lastVerified,
-    approved_by: approvedBy ?? (existing ? existing.approved_by : null) ?? null,
+    authorization,
+    approved_by: approvedBy ?? null,
+    supersedes: supersedesAll,
     body: bodyText,
   };
+  const metadata = { ...((existing && existing.metadata) || {}), ...fileMeta };
+  if (Object.keys(metadata).some((k) => k !== 'type')) record.metadata = metadata;
   if (Object.keys(extra).length) record.extra = extra;
-  if (record.status === 'retired') record.superseded_by = fromFile.superseded_by ?? null;
-  const supersedesFlag = str(flags, 'supersedes');
-  const supersedes = supersedesFlag === undefined ? undefined : canonicalKey(supersedesFlag);
+  // A retired record keeps its word (superseded or archived) and its replacement:
+  // from the frontmatter, the body's Superseded line, or the stored record.
+  const word = String(record.status).trim().toLowerCase();
+  if (word === 'retired' || word === 'superseded') {
+    const kept = existing && existing.status === 'retired' && storedStatus(existing) === 'superseded' ? existing.superseded_by : null;
+    record.superseded_by = fromFile.superseded_by ?? supersededByFromBody(bodyText) ?? kept ?? null;
+    if (word === 'retired' && existing && existing.status === 'retired') record.stored_status = storedStatus(existing);
+  }
   const result = await driver.save(record, { expect: str(flags, 'expect') });
 
   let retired = null;
   let retireError = null;
+  let retireResult = null;
   if (supersedes && supersedes !== result.key) {
     try {
-      await driver.retire(supersedes, { supersededBy: result.key });
+      retireResult = await driver.retire(supersedes, { supersededBy: result.key });
       retired = supersedes;
     } catch (err) {
       retireError = err;
     }
   }
+  const linksRepaired = (retireResult && retireResult.linksRepaired) || [];
   await afterWrite(project, driver);
 
   const lines = [`Saved to memory: ${result.key} (${result.created ? 'new record' : 'updated'}).`];
   lines.push(`Where: ${driver.location}`);
   lines.push(`Version: ${short(result.version)}`);
   if (approvedBy) lines.push(`Approved by: ${approvedBy}`);
-  if (retired) lines.push(`Retired ${retired}; it is replaced by ${result.key}.`);
+  if (retired) lines.push(`${retired} is now superseded by ${result.key}.`);
+  lines.push(...repairLines(retireResult));
   out(ctx, lines, {
     ok: true,
     action: 'save',
@@ -203,7 +291,11 @@ async function save(argv, ctx, { project, driver }) {
     location: driver.location,
     path: result.record && result.record.path ? result.record.path : null,
     approved_by: approvedBy ?? null,
+    authorization,
     retired,
+    linksRepaired,
+    ...(retireResult && retireResult.linksFailed ? { linksFailed: retireResult.linksFailed } : {}),
+    ...(retireResult && retireResult.reformatted ? { reformatted: retireResult.reformatted } : {}),
   });
   if (retireError) {
     throw new ToolkitError(retireError.code || EXIT.ERROR, `${result.key} was saved, but ${supersedes} was not retired: ${retireError.message}`, {
@@ -230,13 +322,11 @@ async function find(argv, ctx, { driver }) {
   // Recall (Hindsight) always lists the closest records, even when none is about the question.
   const closest = String(res.mode || '').startsWith('recall');
   if (!n) lines.push(`No memory records match "${query}".`);
-  else if (closest) {
-    lines.push(`The ${n} memory record${n === 1 ? '' : 's'} closest to "${query}", best first. A close record is not always about the question:`);
-  } else {
-    lines.push(`${n} memory record${n === 1 ? ' matches' : 's match'} "${query}" (best first):`);
+  else {
+    if (closest) lines.push(`The ${n} memory record${n === 1 ? '' : 's'} closest to "${query}", best first. A close record is not always about the question:`);
+    else lines.push(`${n} memory record${n === 1 ? ' matches' : 's match'} "${query}" (best first):`);
     for (const r of res.results) {
-      const flag = r.status && r.status !== 'current' ? ` [${statusWord(r.status)}]` : '';
-      lines.push(`- ${r.key}${flag}: ${r.description}`);
+      lines.push(`- ${r.key}${statusFlag(r)}: ${r.description}`);
       if (r.snippet) lines.push(`    ${r.snippet}`);
     }
     lines.push('Read a record with toolkit memory get <key> before relying on it.');
@@ -265,10 +355,7 @@ async function get(argv, ctx, { driver }) {
 async function list(argv, ctx, { driver }) {
   const { flags } = parseArgs(argv, { string: ['type', 'status', 'host'] });
   const records = await driver.list({ type: str(flags, 'type'), status: str(flags, 'status') });
-  const lines = records.length ? records.map((r) => {
-    const flag = r.status !== 'current' ? ` [${statusWord(r.status)}]` : '';
-    return `- ${r.key}${flag}: ${r.description}`;
-  }) : ['No memory records.'];
+  const lines = records.length ? records.map((r) => `- ${r.key}${statusFlag(r)}: ${r.description}`) : ['No memory records.'];
   out(ctx, lines, { ok: true, backend: driver.backend, records });
   return EXIT.OK;
 }
@@ -282,17 +369,50 @@ async function retire(argv, ctx, { project, driver }) {
   if (supersededBy !== undefined && canonicalKey(supersededBy) === canonicalKey(key)) {
     throw new ToolkitError(EXIT.INVALID, 'A record cannot be superseded by itself.', { key });
   }
-  if (supersededBy !== undefined && !(await driver.get(supersededBy))) {
-    throw new ToolkitError(EXIT.INVALID, `${key} was not retired: the replacement ${canonicalKey(supersededBy)} does not exist.`, {
-      key,
-      supersededBy: canonicalKey(supersededBy),
-      fix: 'Save the new record first, or check the key with toolkit memory list --status all.',
-    });
+  if (supersededBy !== undefined) {
+    const replacement = await driver.get(supersededBy);
+    if (!replacement) {
+      throw new ToolkitError(EXIT.INVALID, `${key} was not retired: the replacement ${canonicalKey(supersededBy)} does not exist.`, {
+        key,
+        supersededBy: canonicalKey(supersededBy),
+        fix: 'Save the new record first, or check the key with toolkit memory list --status all.',
+      });
+    }
+    if (replacement.status === 'retired' && storedStatus(replacement) === 'archived') {
+      throw new ToolkitError(EXIT.INVALID, `${key} was not retired: the replacement ${replacement.key} is archived, so a link to it would not work.`, {
+        key,
+        supersededBy: replacement.key,
+        fix: `Restore it first with toolkit memory restore ${replacement.key}, or name a record that is in use.`,
+      });
+    }
   }
   const res = await driver.retire(key, { supersededBy, reason: str(flags, 'reason') });
   await afterWrite(project, driver);
-  const by = res.record && res.record.superseded_by ? ` It is replaced by ${res.record.superseded_by}.` : '';
-  out(ctx, [`Retired ${res.key}.${by}`, `Undo with: toolkit memory restore ${res.key}`], { ok: true, action: 'retire', backend: driver.backend, key: res.key, version: res.version, superseded_by: res.record ? res.record.superseded_by : null });
+  const by = res.record && res.record.superseded_by ? res.record.superseded_by : null;
+  const lines = [by ? `Retired ${res.key}: it is superseded by ${by}.` : `Retired ${res.key}: it is archived.`];
+  lines.push(...repairLines(res));
+  lines.push(`Undo with: toolkit memory restore ${res.key}`);
+  out(ctx, lines, {
+    ok: true, action: 'retire', backend: driver.backend, key: res.key, version: res.version, superseded_by: by,
+    status: by ? 'superseded' : 'archived', ...repairFields(res),
+  });
+  return EXIT.OK;
+}
+
+async function rename(argv, ctx, { project, driver }) {
+  const { _, flags } = parseArgs(argv, { string: ['to', 'host'] });
+  const key = requireKeyArg(_, 'rename');
+  const to = str(flags, 'to');
+  if (!to) throw new ToolkitError(EXIT.INVALID, `Give the new key with --to, for example: toolkit memory rename ${key} --to project_new_name.`, { key });
+  if (typeof driver.rename !== 'function') {
+    throw new ToolkitError(EXIT.UNSUPPORTED, `The ${driver.backend} memory backend cannot rename a record.`, { key });
+  }
+  const res = await driver.rename(key, to);
+  await afterWrite(project, driver);
+  const lines = [`Renamed ${res.from} to ${res.key}.`];
+  const repaired = repairLines(res);
+  lines.push(...(repaired.length ? repaired : ['No other note linked to it.']));
+  out(ctx, lines, { ok: true, action: 'rename', backend: driver.backend, from: res.from, key: res.key, version: res.version, ...repairFields(res) });
   return EXIT.OK;
 }
 
@@ -319,8 +439,11 @@ async function del(argv, ctx, { project, driver }) {
   // A driver that can undo a delete says how in `detail` (Notion: the page is
   // in the Notion trash for 30 days). Otherwise the delete is final.
   const detail = res.detail || 'This cannot be undone.';
-  out(ctx, `Deleted ${res.key}. ${detail}`, {
+  const lines = [`Deleted ${res.key}. ${detail}`];
+  lines.push(...repairLines(res));
+  out(ctx, lines, {
     ok: true, action: 'delete', backend: driver.backend, key: res.key, deleted: true, trash: Boolean(res.trash), detail,
+    ...repairFields(res),
   });
   return EXIT.OK;
 }
@@ -417,6 +540,7 @@ const HANDLERS = {
   list,
   retire,
   restore,
+  rename,
   delete: del,
   focus: (argv, ctx, deps) => textDocument(argv, ctx, deps, 'focus'),
   glossary: (argv, ctx, deps) => textDocument(argv, ctx, deps, 'glossary'),

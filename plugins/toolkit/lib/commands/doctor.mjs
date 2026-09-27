@@ -11,8 +11,9 @@ export const help = `Usage:
   toolkit doctor [--json]
 
 Checks this computer (Node, the plugin-root pointer, the Codex wrapper, the
-Claude Code and Codex plugin copies), the instructions (CLAUDE.md files that
-stop AGENTS.md loading, settings that do the same, AGENTS.md markers, rules
+Claude Code and Codex plugin copies), the instructions (a CLAUDE.md that does
+not import AGENTS.md, other CLAUDE.md files that stop AGENTS.md loading,
+settings that do the same, AGENTS.md markers, rules
 list, placeholders, size), the plugin switches in both hosts, Codex trust for
 this folder and its hooks, the scaffold (missing, out of date, changed by the
 project, left over), Salesforce skill copies, the tracker and memory, ntn and

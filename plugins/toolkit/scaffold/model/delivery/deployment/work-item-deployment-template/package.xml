@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!-- Fill-in guide: in each types block, replace ComponentApiName with one real
+         member and MetadataType with its Salesforce metadata type. Add members
+         under that type and repeat the types block for each other type. Include
+         only this work item's new or changed components. Replace XX.0 below with
+         the verified API version from sfdx-project.json. Do not deploy the seed. -->
+    <types>
+        <members>ComponentApiName</members>
+        <name>MetadataType</name>
+    </types>
+    <version>XX.0</version>
+</Package>

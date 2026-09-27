@@ -1,0 +1,28 @@
+{
+  "autoMemoryEnabled": false,
+  "worktree": {
+    "baseRef": "head"
+  },
+  "enabledPlugins": {
+    "toolkit@toolkit-v2": true,
+    "work@toolkit-v2": true,
+    "memory@toolkit-v2": true,
+    "session-skills@toolkit-v2": true,
+    "git-workflows@toolkit-v2": true,
+    "sf-architect-solutioning@toolkit-v2": false,
+    "project-init@claude-toolkit": false,
+    "second-brain@claude-toolkit": false,
+    "work-tracker@claude-toolkit": false,
+    "session-skills@claude-toolkit": false,
+    "git-workflows@claude-toolkit": false,
+    "hooks-library@claude-toolkit": false,
+    "system-guide@claude-toolkit": false,
+    "protocol-guard@claude-toolkit": false,
+    "sf-architect-solutioning@claude-toolkit": false
+  },
+  "permissions": {
+    "allow": [
+      "Bash(toolkit *)"
+    ]
+  }
+}

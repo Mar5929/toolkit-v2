@@ -16,6 +16,20 @@
 // every key whose value did not change is written back exactly as it was read,
 // including comment lines above it, so an unchanged file round-trips byte for
 // byte. Comments are never part of `data`.
+//
+// Two more things are kept for a data object that came from parse():
+// - A changed text value keeps the quotes the old value had: a key written
+//   `waiting_on: "none"` is written `waiting_on: "owner"` after a change.
+// - A nested map one level deep (`metadata:` with `  type: project` under it)
+//   keeps every unchanged inner line, its indentation, its comments, and the
+//   order of its keys; only the inner keys that changed are written again.
+//
+// stringify(data, body, { quoteKeys: ['waiting_on'] }) always writes the
+// text value of those top-level keys in double quotes when the line is
+// written again (an unchanged line is still kept as it was).
+//
+// update() also takes a dotted key for one level of nesting:
+// update(text, { 'metadata.type': 'feedback' }) changes only that inner line.
 
 import { EXIT, ToolkitError } from './output.mjs';
 
@@ -95,15 +109,86 @@ function parseYaml(yamlText, firstLineNo) {
     const startIdx = state.i;
     const { key, value } = parseMapEntry(state, 0);
     assignKey(data, key, value, line);
-    meta.keys.set(key, {
+    const entryLines = lines.slice(startIdx, state.i);
+    const saved = {
       value: cloneValue(value),
       leading,
-      lines: lines.slice(startIdx, state.i).map((l) => l.orig),
-    });
+      lines: entryLines.map((l) => l.orig),
+      quote: quoteStyle(entryLines),
+    };
+    if (isPlainObject(value)) {
+      const nested = nestedStyle(entryLines, value);
+      if (nested) saved.nested = nested;
+    }
+    meta.keys.set(key, saved);
     leading = [];
   }
   meta.trailing = leading;
   return { data, meta };
+}
+
+/**
+ * The quote character of a one-line `key: "value"` or `key: 'value'` entry
+ * ('"' or "'"), or null for a plain value or a value on several lines.
+ */
+function quoteStyle(entryLines) {
+  if (entryLines.length !== 1) return null;
+  const raw = entryLines[0].raw;
+  const m = /^[ \t]*(?:"(?:[^"\\]|\\.)*"|'(?:[^']|'')*'|[^:]*?)[ \t]*:[ \t]+(["'])/.exec(raw);
+  return m ? m[1] : null;
+}
+
+/**
+ * How a block map one level deep was written, so an inner change keeps the
+ * other inner lines: { header, indent, entries: Map(innerKey -> { value, leading,
+ * lines, quote }), trailing }. Null when the value was written inline
+ * (`key: {a: b}`) or the inner lines cannot be matched to the inner keys.
+ */
+function nestedStyle(entryLines, value) {
+  if (entryLines.length < 2) return null;
+  const header = entryLines[0];
+  if (!/:[ \t]*(?:#.*)?$/.test(header.raw)) return null; // `key: {inline}` is rewritten as a whole
+  const rest = entryLines.slice(1);
+  const firstContent = rest.find((l) => !isBlankOrComment(l.raw));
+  if (!firstContent) return null;
+  const indent = indentOf(firstContent.raw);
+  if (indent <= 0) return null;
+  const keys = Object.keys(value);
+  const entries = new Map();
+  let leading = [];
+  let current = null;
+  let k = 0;
+  for (const l of rest) {
+    if (isBlankOrComment(l.raw)) {
+      leading.push(l.orig);
+      continue;
+    }
+    const ind = indentOf(l.raw);
+    if (ind === indent) {
+      const content = l.raw.slice(ind);
+      if (content === '-' || content.startsWith('- ')) return null;
+      let innerKey;
+      try {
+        innerKey = splitKey(content, l).key;
+      } catch {
+        return null;
+      }
+      if (innerKey !== keys[k]) return null; // a repeated key or an order the parser changed
+      // Blank or comment lines between two inner keys belong to the next key.
+      current ={ value: cloneValue(value[innerKey]), leading, lines: [l.orig], quote: quoteStyle([l]) };
+      entries.set(innerKey, current);
+      leading = [];
+      k++;
+      continue;
+    }
+    if (!current || ind < indent) return null;
+    // A deeper line continues the current inner key; comments seen just before it belong to it too.
+    current.lines.push(...leading, l.orig);
+    current.quote = null;
+    leading = [];
+  }
+  if (k !== keys.length) return null;
+  return { header: header.orig, indent, entries, trailing: leading };
 }
 
 function assignKey(obj, key, value, line) {
@@ -228,6 +313,12 @@ function parseValue(state, v, ownerIndent, line, isMapValue) {
     const pieces = [v];
     while (scanQuoted(text, 0) < 0) {
       if (state.i >= state.lines.length) throw syntaxError(line, 'has a quoted value with no closing quote');
+      const next = state.lines[state.i];
+      // A line back at the key's indentation that looks like "key: value" starts
+      // the next key; the quote above it was never closed.
+      if (!isBlankOrComment(next.raw) && indentOf(next.raw) <= ownerIndent && looksLikeMapEntry(next.raw.trim())) {
+        throw syntaxError(line, 'has a quoted value with no closing quote');
+      }
       pieces.push(state.lines[state.i++].raw.trim());
       text = foldPieces(pieces);
     }
@@ -605,11 +696,45 @@ function formatItem(item, indent) {
   return [`${pad}- ${formatScalar(item)}`];
 }
 
+/** A text value in the given quotes: '"' (JSON-style escapes) or "'" (quotes doubled). */
+function quoted(s, quote) {
+  if (quote === "'" && !/[\n\r]/.test(s) && !/[\x00-\x1f\x7f]/.test(s)) return `'${s.replace(/'/g, "''")}'`;
+  return JSON.stringify(s);
+}
+
+/** One `key: value` line for a changed scalar, keeping the quote style when there is one. */
+function formatScalarEntry(key, value, indent, quote) {
+  if (quote && typeof value === 'string') return [`${' '.repeat(indent)}${formatKey(key)}: ${quoted(value, quote)}`];
+  return formatEntry(key, value, indent);
+}
+
+/** Lines for a changed nested map, keeping every unchanged inner line as it was read. */
+function formatNested(key, value, saved) {
+  const nested = saved.nested;
+  const out = [nested.header];
+  const innerKeys = Object.keys(value).filter((x) => value[x] !== undefined);
+  for (const inner of innerKeys) {
+    const v = value[inner];
+    const old = nested.entries.get(inner);
+    if (old) {
+      out.push(...old.leading);
+      if (deepEqual(old.value, v)) out.push(...old.lines);
+      else out.push(...formatScalarEntry(inner, v, nested.indent, old.quote));
+    } else {
+      out.push(...formatEntry(inner, v, nested.indent));
+    }
+  }
+  out.push(...nested.trailing);
+  return out;
+}
+
 /**
  * Build a Markdown file from frontmatter data and a body.
  * With no keys (and data that did not come from parse()), returns the body alone.
+ * opts.quoteKeys: top-level keys whose text value is always written in double
+ * quotes when its line is written again.
  */
-export function stringify(data, body = '') {
+export function stringify(data, body = '', opts = {}) {
   const text = body == null ? '' : String(body);
   if (data == null) return text;
   if (typeof data !== 'object' || Array.isArray(data)) {
@@ -618,6 +743,7 @@ export function stringify(data, body = '') {
   const meta = STYLE.get(data);
   const keys = Object.keys(data).filter((k) => data[k] !== undefined);
   if (!keys.length && !meta) return text;
+  const alwaysQuote = new Set((opts && opts.quoteKeys) || []);
 
   const eol = meta ? meta.eol : '\n';
   const lines = [];
@@ -626,7 +752,12 @@ export function stringify(data, body = '') {
     const saved = meta && meta.keys.get(key);
     if (saved) lines.push(...saved.leading);
     if (saved && deepEqual(saved.value, value)) lines.push(...saved.lines);
-    else lines.push(...formatEntry(key, value, 0));
+    else if (saved && saved.nested && isPlainObject(value) && Object.keys(value).some((x) => value[x] !== undefined)) {
+      lines.push(...formatNested(key, value, saved));
+    } else {
+      const quote = alwaysQuote.has(key) ? '"' : (saved ? saved.quote : null);
+      lines.push(...formatScalarEntry(key, value, 0, quote));
+    }
   }
   if (meta) lines.push(...meta.trailing);
 
@@ -640,15 +771,28 @@ export function stringify(data, body = '') {
  * Change some frontmatter keys of a Markdown text and return the new text.
  * A key set to undefined is removed. New keys are added at the end.
  */
-export function update(text, patch = {}) {
+export function update(text, patch = {}, opts = {}) {
   const { data, body, hasFrontmatter } = parse(text);
+  const bad = (k) => k === '__proto__' || k === 'constructor' || k === 'prototype';
   for (const [key, value] of Object.entries(patch)) {
-    if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
-      throw new ToolkitError(EXIT.INVALID, `The frontmatter key "${key}" is not allowed.`);
+    if (bad(key)) throw new ToolkitError(EXIT.INVALID, `The frontmatter key "${key}" is not allowed.`);
+    const dot = key.indexOf('.');
+    if (dot > 0 && !Object.prototype.hasOwnProperty.call(data, key)) {
+      // One level of nesting: 'metadata.type' changes only that inner key.
+      const outer = key.slice(0, dot);
+      const inner = key.slice(dot + 1);
+      if (bad(outer) || bad(inner)) throw new ToolkitError(EXIT.INVALID, `The frontmatter key "${key}" is not allowed.`);
+      const current = data[outer];
+      const obj = isPlainObject(current) ? { ...current } : {};
+      if (value === undefined) delete obj[inner];
+      else obj[inner] = value;
+      if (Object.keys(obj).length) data[outer] = obj;
+      else if (isPlainObject(current)) delete data[outer];
+      continue;
     }
     if (value === undefined) delete data[key];
     else data[key] = value;
   }
   if (!hasFrontmatter && !Object.keys(data).length) return body;
-  return stringify(data, body);
+  return stringify(data, body, opts);
 }

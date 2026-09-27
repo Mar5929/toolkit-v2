@@ -126,7 +126,8 @@ test('approve records requirements, design, and result approvals', async () => {
   const design = parseDoc(fs.readFileSync(created.json.path, 'utf8'));
   assert.equal(design.meta.status, 'approved');
   assert.equal(design.meta.approved, `${TODAY} by Mike`);
-  assert.match(design.body, /^Status: approved/m);
+  assert.match(design.body, /^\*\*Design status:\*\* Approved {2}$/m);
+  assert.match(design.body, /^\*\*Design approval:\*\* Approved by Mike on \d{4}-\d{2}-\d{2}$/m);
   assert.equal(parseDoc(await readRecord(dir, id)).meta.design, 'approved');
 
   const res = await tk(dir, ['work', 'approve', id, '--result', '--by', 'Mike']);

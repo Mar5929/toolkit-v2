@@ -110,10 +110,21 @@ function localItemCount(mainRoot) {
   }
 }
 
-/** The number of memory records in .memory/ (files named <type>_<slug>.md). */
+/**
+ * The number of memory records in .memory/ (files named <type>_<slug>.md).
+ * The model's topic template (status: template) is not a record.
+ */
 function builtinRecordCount(mainRoot) {
+  const dir = path.join(mainRoot, '.memory');
   try {
-    return fs.readdirSync(path.join(mainRoot, '.memory')).filter((n) => /^(user|feedback|project|reference|event)_.+\.md$/.test(n)).length;
+    return fs.readdirSync(dir).filter((n) => {
+      if (!/^(user|feedback|project|reference|event)_.+\.md$/.test(n)) return false;
+      try {
+        return !/^status:\s*template\s*$/m.test(fs.readFileSync(path.join(dir, n), 'utf8').split(/\n---\s*\n/)[0]);
+      } catch {
+        return true;
+      }
+    }).length;
   } catch {
     return 0;
   }

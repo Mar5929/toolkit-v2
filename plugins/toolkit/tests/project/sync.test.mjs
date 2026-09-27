@@ -21,17 +21,17 @@ test('sync after a hand edit: the edited file is left alone and listed; a delete
   const { root, env } = await initProject();
   fs.appendFileSync(path.join(root, 'README.md'), '\nMy own notes.\n');
   const readme = read(path.join(root, 'README.md'));
-  fs.rmSync(path.join(root, '.claude', 'rules', 'offer-context-handoff.md'));
+  fs.rmSync(path.join(root, '.claude', 'rules', 'session-handoff.md'));
   const dry = await tk(root, ['sync', '--dry-run', '--json'], { env });
   assert.equal(dry.code, 0);
-  assert.deepEqual(dry.json.added, ['.claude/rules/offer-context-handoff.md']);
+  assert.deepEqual(dry.json.added, ['.claude/rules/session-handoff.md']);
   assert.deepEqual(dry.json.changedByProject.map((c) => c.target), ['README.md']);
-  assert.ok(!fs.existsSync(path.join(root, '.claude', 'rules', 'offer-context-handoff.md')), 'the dry run wrote nothing');
+  assert.ok(!fs.existsSync(path.join(root, '.claude', 'rules', 'session-handoff.md')), 'the dry run wrote nothing');
   const res = await tk(root, ['sync'], { env });
   assert.equal(res.code, 0, res.stderr);
   assert.match(res.stdout, /Changed by the project, left alone:\n {2}- README\.md/);
   assert.equal(read(path.join(root, 'README.md')), readme);
-  assert.ok(fs.existsSync(path.join(root, '.claude', 'rules', 'offer-context-handoff.md')));
+  assert.ok(fs.existsSync(path.join(root, '.claude', 'rules', 'session-handoff.md')));
   const second = await tk(root, ['sync', '--json'], { env });
   assert.deepEqual(second.json.added, []);
   assert.deepEqual(second.json.updated, []);
@@ -77,14 +77,15 @@ test('merge targets changed by the project list what the toolkit would add', asy
   assert.ok(doctor.json.findings.some((f) => f.id === 'claude-plugins' && f.severity === 'problem'));
 });
 
-test('config set tracker.idPrefix renders AGENTS.md and the work-item rule again', async () => {
+test('config set tracker.idPrefix: new items take the prefix; the model files name it through .toolkit.json and stay as they are', async () => {
   const { root, env } = await initProject();
+  const agentsBefore = read(path.join(root, 'AGENTS.md'));
   const res = await tk(root, ['config', 'set', 'tracker.idPrefix', 'acme'], { env });
   assert.equal(res.code, 0, res.stderr);
   assert.match(res.stdout, /Set tracker\.idPrefix to ACME \(was WI\)\./);
   assert.match(res.stdout, /toolkit sync ran/);
-  assert.match(read(path.join(root, 'AGENTS.md')), /IDs look like `ACME-001`/);
-  assert.match(read(path.join(root, '.claude', 'rules', 'work-item-folders.md')), /`ACME-001`/);
+  assert.equal(read(path.join(root, 'AGENTS.md')), agentsBefore, 'AGENTS.md says the prefix is tracker.idPrefix in .toolkit.json');
+  assert.match(agentsBefore, /the prefix is `tracker\.idPrefix` in `\.toolkit\.json`/);
   assert.equal(config(root).tracker.idPrefix, 'ACME');
   const item = await tk(root, ['work', 'new', '--title', 'First', '--json'], { env });
   assert.equal(item.code, 0, item.stderr || item.stdout);
@@ -97,11 +98,13 @@ test('config set tracker.idPrefix renders AGENTS.md and the work-item rule again
 test('config set memory.type: files nobody changed follow; a changed AGENTS.md is named with the setting it no longer reflects; old seeds are left over, not deleted', async () => {
   const { root, env } = await initProject();
   const agentsFile = path.join(root, 'AGENTS.md');
-  fs.writeFileSync(agentsFile, read(agentsFile).replace('# Acme CRM', '# Acme CRM (edited)'));
+  fs.writeFileSync(agentsFile, read(agentsFile).replace('# Acme CRM: agent guide', '# Acme CRM (edited): agent guide'));
   const res = await tk(root, ['config', 'set', 'memory.type', 'hindsight', '--json'], { env });
   assert.equal(res.code, 0, res.stderr);
   assert.deepEqual(res.json.sync.notReflected, ['AGENTS.md was changed by the project, so it still describes memory.type builtin. Update it by hand.']);
   assert.match(read(agentsFile), /built-in memory in `\.memory\/`/);
+  assert.match(read(path.join(root, 'PROJECT.md')), /this project's bank on the local Hindsight server/, 'PROJECT.md, unchanged by the project, follows');
+  assert.doesNotMatch(read(path.join(root, 'README.md')), /## Project memory/, 'README.md follows too');
   assert.ok(fs.existsSync(path.join(root, '.memory', 'CURRENT_FOCUS.md')), 'nothing is deleted');
   const dry = await tk(root, ['sync', '--dry-run', '--json'], { env });
   assert.ok(dry.json.leftovers.includes('.memory/CURRENT_FOCUS.md'));
@@ -119,6 +122,12 @@ test('config set salesforce.enabled true adds the Salesforce kit; hosts change a
   assert.ok(fs.existsSync(path.join(root, '.agents', 'skills', 'sf-deploy-check', 'SKILL.md')));
   assert.equal(JSON.parse(read(path.join(root, '.claude', 'settings.json'))).enabledPlugins['sf-architect-solutioning@toolkit-v2'], true);
   assert.match(read(path.join(root, 'AGENTS.md')), /Salesforce org aliases are in `\.toolkit\.json`/);
+  assert.match(read(path.join(root, 'AGENTS.md')), /`\.claude\/rules\/salesforce-org-safety\.md`: Salesforce Org Safety/, 'the rules list follows the new rule files');
+  const settings = JSON.parse(read(path.join(root, '.claude', 'settings.json')));
+  assert.equal(settings.hooks.PreToolUse[0].hooks.length, 2, 'the model\'s guard hooks are merged in');
+  assert.ok(settings.permissions.deny.includes('Bash(sf org delete *)'));
+  assert.ok(fs.existsSync(path.join(root, '.codex', 'hooks.json')));
+  assert.match(read(path.join(root, '.gitignore')), /^\.sfdx\/$/m);
 });
 
 test('config get and set: values, protected keys, and bad values', async () => {
@@ -156,8 +165,8 @@ test('an AGENTS.md without the span markers is kept, and sync writes the Toolkit
   assert.deepEqual(res.json.proposals, ['.toolkit-cache/AGENTS.proposed.md']);
   assert.equal(read(path.join(root, 'AGENTS.md')), '# Our own manual\n');
   const proposal = read(path.join(root, '.toolkit-cache', 'AGENTS.proposed.md'));
-  assert.match(proposal, /^# Acme CRM$/m);
-  assert.match(proposal, /- `\.claude\/rules\/work-item-stages\.md`: Keep the Active Work Item Accurate/);
+  assert.match(proposal, /^# Acme CRM: agent guide$/m);
+  assert.match(proposal, /- `\.claude\/rules\/keep-work-item-current\.md`: Keep the Active Work Item Accurate/);
   const brief = await tk(root, ['brief'], { env });
   assert.match(brief.stdout, /Setup warnings[^\n]*\n- AGENTS\.md has no Toolkit V2 sections/);
 });
@@ -189,15 +198,15 @@ test('adopting: the owner takes the proposal whole, sync records AGENTS.md, and 
   assert.deepEqual(again.json.changedByProject, [], 'AGENTS.md is the toolkit\'s own copy now');
   const doctor = await tk(root, ['doctor', '--json'], { env });
   assert.ok(!doctor.json.findings.some((f) => /^scaffold-/.test(f.id) && /AGENTS\.md/.test(f.message)), JSON.stringify(doctor.json.findings));
-  const set = await tk(root, ['config', 'set', 'tracker.idPrefix', 'ACME'], { env });
+  const set = await tk(root, ['config', 'set', 'memory.type', 'hindsight'], { env });
   assert.equal(set.code, 0, set.stderr);
-  assert.match(read(agentsFile), /`ACME-/);
+  assert.match(read(agentsFile), /the local Hindsight server on this computer/);
 });
 
 test('adopting: a merge that keeps the project\'s own text is recorded, its span is kept current, and no sync replaces the text', async () => {
   const { root, env, proposal } = await adoptedRepo();
   const agentsFile = path.join(root, 'AGENTS.md');
-  const merged = proposal.replace(/^# My App$/m, '# My App\n\nUse pnpm.');
+  const merged = proposal.replace(/^# My App: agent guide$/m, '# My App: agent guide\n\nUse pnpm.');
   assert.notEqual(merged, proposal);
   fs.writeFileSync(agentsFile, merged);
   fs.writeFileSync(path.join(root, '.claude', 'rules', 'my-rule.md'), '# Use Tabs in Makefiles\n');
@@ -217,12 +226,11 @@ test('adopting: a merge that keeps the project\'s own text is recorded, its span
   assert.match(read(agentsFile), /Use pnpm\./, 'never replaced by the template');
 });
 
-// ------------------------------------------------------------------ the setup date
+// ------------------------------------------------------------------ the setup date and the project name
 
-test('{{today}} renders as the setup date: a later day finds nothing out of date, and a re-render keeps the date', async () => {
+test('the setup date is recorded once: a later day finds nothing out of date and sync writes nothing', async () => {
   const { root, env } = await initProject();
   assert.equal(config(root).project.created, '2026-09-26');
-  assert.match(read(path.join(root, 'PROJECT.md')), /Project setup, 2026-09-26/);
   const later = { ...env, TOOLKIT_TODAY: '2026-10-30' };
   const dry = await tk(root, ['sync', '--dry-run', '--json'], { env: later });
   assert.deepEqual(dry.json.updated, []);
@@ -232,14 +240,21 @@ test('{{today}} renders as the setup date: a later day finds nothing out of date
   const sync = await tk(root, ['sync'], { env: later });
   assert.equal(sync.code, 0, sync.stderr);
   assert.deepEqual(snapshot(root), snap, 'sync on a later day writes nothing');
-  const set = await tk(root, ['config', 'set', 'project.owner', 'Michael'], { env: later });
-  assert.equal(set.code, 0, set.stderr);
-  const projectMd = read(path.join(root, 'PROJECT.md'));
-  assert.match(projectMd, /\| Michael \|/);
-  assert.match(projectMd, /Project setup, 2026-09-26/);
-  assert.match(read(path.join(root, '.memory', 'CURRENT_FOCUS.md')), /Updated: 2026-09-26/);
   const refused = await tk(root, ['config', 'set', 'project.created', '2026-01-01'], { env: later });
   assert.equal(refused.code, 2);
+});
+
+test('config set project.name fills the new name into the headings of files nobody changed', async () => {
+  const { root, env } = await initProject();
+  const readme = path.join(root, 'README.md');
+  fs.writeFileSync(readme, `${read(readme)}\nOur own line.\n`);
+  const set = await tk(root, ['config', 'set', 'project.name', 'Acme Portal', '--json'], { env });
+  assert.equal(set.code, 0, set.stderr);
+  assert.match(read(path.join(root, 'AGENTS.md')), /^# Acme Portal: agent guide$/m);
+  assert.match(read(path.join(root, 'PROJECT.md')), /^# Acme Portal$/m);
+  assert.match(read(path.join(root, 'PROJECT.md')), /replace <Project name> and every angle-bracket prompt/, 'the fill-in guide keeps its words');
+  assert.match(read(readme), /^# Acme CRM$/m, 'a file the project changed keeps its text');
+  assert.deepEqual(set.json.sync.notReflected, ['README.md was changed by the project, so it still describes project.name Acme CRM. Update it by hand.']);
 });
 
 test('a project with no recorded setup date gets one from its next sync, and the sync after that writes nothing', async () => {
@@ -273,4 +288,18 @@ test('config set of the tracker or memory backend names the next step and the re
   const back = await tk(root, ['config', 'set', 'tracker.type', 'local', '--json'], { env });
   assert.deepEqual(back.json.warnings, []);
   assert.deepEqual(back.json.next, []);
+});
+
+test('a deleted memory index comes back from sync with the saved records listed, and a deleted knowledge index comes back as the model\'s', async () => {
+  const { root, env } = await initProject();
+  const saved = await tk(root, ['memory', 'save', '--type', 'project', '--name', 'deploy-day', '--description', 'Deploys on Thursday', '--body', 'Thursday.\n', '--approved-by', 'Mike'], { env });
+  assert.equal(saved.code, 0, saved.stderr || saved.stdout);
+  const index = path.join(root, '.memory', 'MEMORY.md');
+  fs.rmSync(index);
+  fs.rmSync(path.join(root, 'ai-external-knowledge', 'INDEX.md'));
+  const res = await tk(root, ['sync'], { env });
+  assert.equal(res.code, 0, res.stderr);
+  assert.match(read(index), /deploy.day/i, 'the index lists the record, not only the model\'s empty layout');
+  assert.match(read(path.join(root, 'ai-external-knowledge', 'INDEX.md')), /^# Outside documentation index$/m);
+  assert.equal(config(root).installed['.memory/MEMORY.md'], undefined);
 });

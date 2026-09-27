@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { makeProject, cleanup, tk, tkProcess, TODAY, git } from './helpers.mjs';
 import { readDecisions, findDecisionsTable, decisionNumber, decisionsLockPlace } from '../../lib/work/decisions.mjs';
+import { readTemplate } from '../../lib/core/templates.mjs';
 
 after(cleanup);
 
@@ -17,6 +18,10 @@ test('decision add creates DECISIONS.md and numbers rows D-1, D-2', async () => 
   assert.equal(r2.code, 0, r2.stderr);
   const text = fs.readFileSync(path.join(dir, 'DECISIONS.md'), 'utf8');
   assert.match(text, /^# Decisions/);
+  // A new file is the model's DECISIONS.md with the rows added to its table.
+  const tpl = readTemplate('decisions');
+  assert.ok(text.startsWith(tpl), 'the model intro and table header, as they are');
+  assert.match(text.slice(tpl.length), /^\| D-1 \| \d{4}-\d{2}-\d{2} \| Use Postgres \| One database for everything \| Mike \|  \|\n\| D-2 \|/);
   const rows = readDecisions(text);
   assert.deepEqual(rows.map((r) => r.id), ['D-1', 'D-2']);
   assert.equal(rows[1].decision, 'Use SQLite | for tests', 'pipes are escaped and read back');

@@ -130,6 +130,48 @@ export function renderTemplate(text, config, { file = 'template', today = '' } =
   return `${collapsed.join(eol)}${eol}`;
 }
 
+/** True when a text has at least one setup marker line (<!-- if ... --> or <!-- endif -->). */
+export function hasMarkers(text) {
+  return String(text).split('\n').some((l) => {
+    const t = l.trim();
+    return MARKER_IF.test(t) || MARKER_ENDIF.test(t);
+  });
+}
+
+/**
+ * Resolve the setup markers in a model file and nothing else: the marker lines
+ * are dropped, a block is kept when its condition holds and dropped when it
+ * does not, and every other byte stays as it is (no tokens, no blank-line
+ * changes, the same line endings). The errors are those of renderTemplate.
+ */
+export function renderMarkers(text, config, { file = 'template' } = {}) {
+  const lines = String(text).split('\n');
+  const out = [];
+  let open = null;
+  let keep = true;
+  lines.forEach((line, i) => {
+    const t = line.trim();
+    const mIf = MARKER_IF.exec(t);
+    if (mIf) {
+      if (open) throw templateError(file, i + 1, `opens a block inside the block "${open.name}" that starts on line ${open.line}`);
+      const cond = CONDITIONS[mIf[1]];
+      if (!cond) throw templateError(file, i + 1, `has an unknown condition "${mIf[1]}"`);
+      open = { name: mIf[1], line: i + 1 };
+      keep = cond(config || {});
+      return;
+    }
+    if (MARKER_ENDIF.test(t)) {
+      if (!open) throw templateError(file, i + 1, 'has an endif with no open block');
+      open = null;
+      keep = true;
+      return;
+    }
+    if (keep) out.push(line);
+  });
+  if (open) throw templateError(file, open.line, `has a block "${open.name}" that is never closed`);
+  return out.join('\n');
+}
+
 /** The settings a template reads: token names and condition settings. */
 export function keysReadBy(text) {
   const keys = new Set();

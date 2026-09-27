@@ -18,7 +18,7 @@ import path from 'node:path';
 import { gitInfo } from '../core/config.mjs';
 import { atomicWrite, readText } from '../core/fsx.mjs';
 import { DEFAULT_URL } from '../hindsight/client.mjs';
-import { loadDriver } from './contract.mjs';
+import { loadDriver, parseFocus } from './contract.mjs';
 
 export const CACHE_NAME = 'memory-cache.json';
 
@@ -93,7 +93,13 @@ export function briefingText({ backend, focus, records }, { maxChars = 2500 } = 
   const live = records.filter((r) => r.status !== 'retired');
   lines.push(`Project memory (${backend}): ${live.length} record${live.length === 1 ? '' : 's'}. Search with toolkit memory find; read one with toolkit memory get <key>.`);
   if (focus && focus.trim()) {
-    lines.push('', 'Current focus:', focus.trim());
+    const parsed = parseFocus(focus);
+    if (!parsed.filled) lines.push('', 'Current focus: still the empty template from setup.');
+    else {
+      lines.push('', 'Current focus:');
+      if (parsed.lastUpdated) lines.push(`Last updated: ${parsed.lastUpdated}`);
+      for (const sec of parsed.sections) if (sec.lines.length) lines.push(`## ${sec.heading}`, ...sec.lines);
+    }
   }
   const index = live.map((r) => `- ${r.key}: ${r.description}${r.status === 'needs-review' ? ' (needs review)' : ''}`);
   if (index.length) lines.push('', 'Memory records:', ...index);

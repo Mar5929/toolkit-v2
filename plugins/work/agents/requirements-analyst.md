@@ -15,8 +15,9 @@ agent stopped noticing. You advise; the owner decides. You change nothing.
 
 - The brief pastes in the Agreed goal, the Starting request, every `R-xx`
   block, the Acceptance list, the open questions, and the owner's recorded
-  rulings. It may also name project files to read, such as
-  `requirements/<area>.md` or what the existing build does today.
+  rulings. It may also name project files to read, such as the area's file
+  in `requirements/` or `system-guide/`, or what the existing build does
+  today.
 - Treat only rulings the brief marks as approved by the owner as settled.
   Proposals and unanswered questions stay open. Everything else is open to
   your check.

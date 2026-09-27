@@ -183,7 +183,9 @@ test('driver: retire hides a record from list and find; restore brings it back; 
   assert.equal(retired.record.status, 'retired');
   const doc = await client.forBank(bank).getDocument('project_zeppelin_hangar');
   assert.ok(doc.tags.includes('status:retired'));
-  assert.match(doc.original_text, /\*\*Retired \d{4}-\d{2}-\d{2}:\*\* Closed\. Replaced by project_boat_dock\./);
+  assert.match(doc.original_text, /\nstatus: superseded\n/);
+  assert.match(doc.original_text, /\*\*Superseded \d{4}-\d{2}-\d{2}:\*\* Replaced by \[project_boat_dock\]\(project_boat_dock\.md\)\. Closed\./);
+  assert.deepEqual((await driver.get('project_boat_dock')).supersedes, ['project_zeppelin_hangar'], 'the replacement records what it supersedes');
   assert.deepEqual((await driver.list()).map((x) => x.key), ['project_boat_dock']);
   assert.deepEqual((await driver.list({ status: 'retired' })).map((x) => x.key), ['project_zeppelin_hangar']);
   const hidden = await driver.find('zeppelin hangar');
@@ -227,8 +229,27 @@ test('driver: retire refuses a replacement that does not exist; keys typed with 
   const retired = await driver.retire('project-newer', { supersededBy: 'feedback_no-force-push' });
   assert.equal(retired.record.superseded_by, 'feedback_no_force_push');
   const del = await driver.delete('feedback_no-force-push');
-  assert.deepEqual(del, { key: 'feedback_no_force_push', deleted: true });
+  // The superseded record's "Replaced by" link becomes plain words; it still names its replacement.
+  assert.deepEqual(del, { key: 'feedback_no_force_push', deleted: true, linksRepaired: ['project_newer'] });
   assert.equal(await driver.get('feedback_no_force_push'), null);
+  const newer = await driver.get('project_newer');
+  assert.match(newer.body, /Replaced by feedback_no_force_push\./);
+  assert.equal(newer.superseded_by, 'feedback_no_force_push');
+});
+
+test('driver: rename makes a new document under the new key and repairs links in other records', async (t) => {
+  if (skipIfDown(t)) return;
+  const { driver, bank } = await projectWithBank('rename');
+  await driver.save(rec('billing'));
+  await driver.save(rec('accounts', { body: '# Accounts\n\n**Remember:** One org per account.\n\n**Related memories:** [billing](project_billing.md)\n' }));
+  const res = await driver.rename('project_billing', 'reference_billing_rules');
+  assert.equal(res.key, 'reference_billing_rules');
+  assert.deepEqual(res.linksRepaired, ['project_accounts']);
+  assert.equal(await client.forBank(bank).getDocument('project_billing'), null);
+  const doc = await client.forBank(bank).getDocument('reference_billing_rules');
+  assert.match(doc.original_text, /^---\nname: reference_billing_rules\n[\s\S]*metadata:\n  type: reference\n/);
+  assert.ok(doc.tags.includes('type:reference'));
+  assert.match((await driver.get('project_accounts')).body, /\[billing\]\(reference_billing_rules\.md\)/);
 });
 
 test('driver: status takes the last save from the bank row at once, and records the last export', async (t) => {
@@ -340,6 +361,8 @@ test('commands: ensure-bank records the bank; memory save, find, status, export,
   assert.equal(dashed.json.key, 'user_plain_english');
   const closest = await runToolkit(['memory', 'find', 'zebra crossing lights'], { cwd: root });
   assert.match(closest.stdout, /closest to "zebra crossing lights", best first\. A close record is not always about the question/);
+  assert.match(closest.stdout, /^- user_plain_english: Mike wants plain English replies\.$/m, 'recall results are listed, not only the header');
+  assert.match(closest.stdout, /^Read a record with toolkit memory get <key> before relying on it\.$/m);
 
   const project = requireProject(root);
   assert.ok(fs.existsSync(cachePath(project)), 'the startup cache is written after a save');

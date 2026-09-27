@@ -10,7 +10,8 @@ export const summary = 'Add missing scaffold files and update the ones the proje
 export const help = `Usage:
   toolkit sync [--dry-run]
 
-Runs the scaffold manifest again with the current .toolkit.json values. A file
+Plans the install from the model project's files again with the current
+.toolkit.json values. A file
 still exactly as the toolkit wrote it is rebuilt; a missing file is added; a
 file the project changed is left alone and listed, with what the toolkit would
 add or change. The rules list in AGENTS.md is rebuilt every time. Nothing is

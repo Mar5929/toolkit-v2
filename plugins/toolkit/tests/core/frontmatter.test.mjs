@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse, stringify, update, needsQuotes } from '../../lib/core/frontmatter.mjs';
+import { templatePath } from '../../lib/core/templates.mjs';
 import { walk } from '../../lib/core/fsx.mjs';
 import { EXIT } from '../../lib/core/output.mjs';
 
@@ -99,8 +100,8 @@ test('every frontmatter file shipped in the plugins round-trips exactly', () => 
 });
 
 test('shipped rule and output style, and a memory record: block lists and nested maps', () => {
-  const rule = parse(fs.readFileSync(path.join(PLUGIN, 'scaffold/salesforce/.claude/rules/production-data.md'), 'utf8'));
-  assert.deepEqual(rule.data.paths, ['delivery/data/**', 'engagement/data/**']);
+  const rule = parse(fs.readFileSync(path.join(PLUGIN, 'scaffold/model/.claude/rules/record-deployment-steps.md'), 'utf8'));
+  assert.deepEqual(rule.data.paths, ['delivery/deployment/**', 'engagement/deployment/**']);
   // The model project's memory topic template, as it was on 2026-09-26.
   const memoryText = [
     '---',
@@ -118,15 +119,13 @@ test('shipped rule and output style, and a memory record: block lists and nested
   assert.deepEqual(memory.data.metadata, { type: 'project' });
   assert.equal(memory.data.supersedes, 'none');
   assert.equal(stringify(memory.data, memory.body), memoryText);
-  const style = parse(fs.readFileSync(path.join(PLUGIN, 'templates/output-styles/plain-english.md'), 'utf8'));
+  const style = parse(fs.readFileSync(path.join(PLUGIN, 'scaffold/model/.claude/output-styles/plain-english.md'), 'utf8'));
   assert.equal(style.data['keep-coding-instructions'], true);
 });
 
-test('plugin templates round-trip when they exist', () => {
-  for (const name of ['WORK-ITEM.md', 'DESIGN.md']) {
-    const file = path.join(PLUGIN, 'templates', name);
-    if (!fs.existsSync(file)) continue;
-    const text = fs.readFileSync(file, 'utf8');
+test('the model\'s work item templates round-trip', () => {
+  for (const name of ['work-item', 'design']) {
+    const text = fs.readFileSync(templatePath(name), 'utf8');
     const { data, body } = parse(text);
     assert.equal(stringify(data, body), text, name);
   }
@@ -438,4 +437,102 @@ test('prototype keys are never set on the data object', () => {
   assert.equal(Object.getPrototypeOf(data), Object.prototype);
   assert.throws(() => update('---\na: 1\n---\n', JSON.parse('{"__proto__": {"polluted": true}}')), (err) => err.code === EXIT.INVALID);
   assert.equal({}.polluted, undefined);
+});
+
+// ------------------------------------------------------------------ the model project's files
+
+// The model project the shipped copy was made from (scaffold/model/.import.json
+// "source"), or Mike's own model copy once that worktree is removed. Read only.
+function approvedModel() {
+  const fallback = '/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project';
+  try {
+    const source = JSON.parse(fs.readFileSync(path.join(PLUGIN, 'scaffold', 'model', '.import.json'), 'utf8')).source;
+    if (typeof source === 'string' && fs.existsSync(source)) return source;
+  } catch {
+    // no import record: use the fallback
+  }
+  return fallback;
+}
+const APPROVED_MODEL = approvedModel();
+
+function frontmatterFiles(root) {
+  return walk(root, { skip: (name) => name === '.git' || name === 'node_modules' || name === '__pycache__' || name === '.sfdx' })
+    .filter((f) => /\.(md|mdc|markdown)$/i.test(f))
+    .map((f) => ({ file: f, text: fs.readFileSync(f, 'utf8') }))
+    .filter(({ text }) => /^﻿?---[ \t]*\r?\n/.test(text));
+}
+
+for (const [label, root] of [['the approved model project', APPROVED_MODEL], ['the shipped model copy (scaffold/model)', path.join(PLUGIN, 'scaffold', 'model')]]) {
+  test(`every frontmatter file in ${label} is read and written back byte for byte`, (t) => {
+    if (!fs.existsSync(root)) {
+      t.skip(`${root} is not on this computer`);
+      return;
+    }
+    const files = frontmatterFiles(root);
+    assert.ok(files.length >= 10, `expected the model's frontmatter files, found ${files.length}`);
+    let nested = 0;
+    for (const { file, text } of files) {
+      const where = path.relative(root, file);
+      const parsed = parse(text);
+      assert.equal(parsed.hasFrontmatter, true, where);
+      assert.equal(stringify(parsed.data, parsed.body), text, `round trip of ${where}`);
+      // A fresh object with the same keys (no remembered style) reads back to the same data.
+      assert.deepEqual(parse(stringify({ ...parsed.data }, parsed.body)).data, parsed.data, `fresh write of ${where}`);
+      if (Object.values(parsed.data).some((v) => v && typeof v === 'object' && !Array.isArray(v))) nested++;
+    }
+    assert.ok(nested >= 1, 'the topic template has a nested metadata map');
+  });
+}
+
+test('the model topic template: metadata.type is read from the nested map, and changing it keeps every other line', () => {
+  const text = fs.readFileSync(templatePath('memory/topic'), 'utf8');
+  const { data, body } = parse(text);
+  assert.deepEqual(Object.keys(data), ['name', 'description', 'metadata', 'status', 'source', 'last_verified', 'authorization', 'supersedes']);
+  assert.deepEqual(data.metadata, { type: 'project' });
+  const next = update(text, { 'metadata.type': 'feedback', name: 'feedback_x', status: 'current' });
+  const before = text.split('\n');
+  const after = next.split('\n');
+  assert.equal(after.length, before.length);
+  assert.deepEqual(after.filter((l, i) => l !== before[i]), ['name: feedback_x', '  type: feedback', 'status: current']);
+  assert.equal(parse(next).body, body);
+});
+
+test('a nested map keeps unknown inner keys, their order, comments, and quotes; only changed inner lines are written again', () => {
+  const text = [
+    '---',
+    'name: project_x',
+    'metadata:',
+    '  # written by a host',
+    '  origin: "claude code"',
+    '  type: project',
+    '',
+    '  tags: [a, b]',
+    'status: current',
+    'host_field: {a: 1}',
+    '---',
+    'Body',
+    '',
+  ].join('\n');
+  const { data, body } = parse(text);
+  assert.deepEqual(data.metadata, { origin: 'claude code', type: 'project', tags: ['a', 'b'] });
+  assert.equal(stringify(data, body), text);
+  data.metadata = { ...data.metadata, type: 'event', added: 'yes' };
+  assert.equal(stringify(data, body), text.replace('  type: project', '  type: event').replace("  tags: [a, b]\n", "  tags: [a, b]\n  added: \"yes\"\n"));
+  data.metadata.origin = 'codex';
+  assert.match(stringify(data, body), /^ {2}origin: "codex"$/m, 'the inner key keeps its double quotes');
+  const removed = update(text, { 'metadata.tags': undefined });
+  assert.equal(removed, text.replace('\n\n  tags: [a, b]', ''), 'the inner key goes with the blank line above it');
+  assert.equal(update(text, { 'metadata.type': undefined, 'metadata.origin': undefined, 'metadata.tags': undefined }).includes('metadata'), false, 'an emptied map is removed');
+});
+
+test('a changed value keeps its quotes; quoteKeys always quotes; an unclosed quote names the line', () => {
+  const text = '---\nwaiting_on: "<owner | none>"\napproved: "no"\nsingle: \'x\'\nplain: y\n---\n';
+  const { data } = parse(text);
+  data.waiting_on = 'owner';
+  data.approved = '2026-09-26 by Mike';
+  data.single = "it's";
+  data.plain = 'z';
+  assert.equal(stringify(data, ''), '---\nwaiting_on: "owner"\napproved: "2026-09-26 by Mike"\nsingle: \'it\'\'s\'\nplain: z\n---\n');
+  assert.equal(stringify({ waiting_on: 'none', other: 'none' }, '', { quoteKeys: ['waiting_on'] }), '---\nwaiting_on: "none"\nother: none\n---\n');
+  assert.throws(() => parse('---\ntitle: "After stale lock\ntype: task\nwaiting_on: "none"\n---\n'), (err) => err.code === EXIT.INVALID && /line 2 has a quoted value with no closing quote/.test(err.message));
 });

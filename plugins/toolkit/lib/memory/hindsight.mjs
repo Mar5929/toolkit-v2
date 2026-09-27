@@ -5,9 +5,17 @@
 // sets it to store records exactly (`chunks` extraction, no language model on save).
 //
 // Mapping (ARCHITECTURE section 7):
-//   record        document id = key; content = serializeRecord(record), stored exactly;
-//                 tags kind:record, type:<type>, status:<status>;
-//                 metadata = the frontmatter fields as strings (lists read them from here)
+//   record        document id = key; content = serializeRecord(record), stored exactly
+//                 (the model's topic format, the same text as a built-in .memory/ file);
+//                 tags kind:record, type:<type>, status:<status> (the contract status:
+//                 current, needs-review, or retired);
+//                 metadata = the record's fields as strings (lists read them from here),
+//                 including saved, which is not part of the stored text, and
+//                 stored_status (superseded or archived for a retired record)
+//   rename        a new document under the new key, then the old one is deleted
+//   links         links in other records to a renamed, superseded, archived, or
+//                 deleted record are repaired the same way as in built-in memory;
+//                 a record that cannot be saved is skipped and reported (linksFailed)
 //   current focus document id "focus", tag kind:focus
 //   glossary      document id "glossary", tag kind:glossary
 //   find          recall with tag_groups: kind:record and not status:retired
@@ -35,9 +43,10 @@ import { DEFAULT_URL, HindsightClient, assertBankId } from '../hindsight/client.
 import { PLAIN_ENGLISH, settingsProblems } from '../hindsight/bank.mjs';
 import {
   FOCUS_ID, GLOSSARY_ID, assertFilter, assertKey, assertValidFocus, assertValidGlossary, assertValidRecord,
-  changeRecordStatus, checkExpect, countRecords, focusLineCount, isValidKey, matchesFilter, normalizeDocument,
-  normalizeRecord, notFound, parseRecord, recordSummary, restoreNote, retireNote, serializeRecord, sortRecords,
-  splitKey, stripFrontmatter, versionOf, RECORD_TYPES,
+  approverFrom, changeRecordStatus, changeSupersedes, checkExpect, countRecords, focusLineCount, isValidKey, matchesFilter,
+  normalizeDocument, normalizeRecord, notFound, parseRecord, recordSummary, renameRecordText, repairLinks,
+  repairLinksWithDriver, repairResult, restoreNote, retireNote, serializeRecord, sortRecords, splitKey, storedStatus, stripFrontmatter, versionOf,
+  RECORD_TYPES,
 } from './contract.mjs';
 
 export const backend = 'hindsight';
@@ -76,8 +85,8 @@ export function recordTags(record) {
   return [RECORD_TAG, `type:${record.type}`, `status:${record.status}`];
 }
 
-/** Metadata for a record: every frontmatter field as a string. */
-export function recordMetadata(record) {
+/** Metadata for a record: every field as a string. saved is the date of this write. */
+export function recordMetadata(record, { saved } = {}) {
   return {
     kind: 'record',
     key: record.key,
@@ -85,11 +94,14 @@ export function recordMetadata(record) {
     type: record.type,
     description: record.description,
     status: record.status,
+    stored_status: storedStatus(record),
     superseded_by: record.superseded_by || 'none',
     source: record.source,
-    saved: record.saved,
+    saved: saved || record.saved || '',
     last_verified: record.last_verified,
     approved_by: record.approved_by || '',
+    authorization: record.authorization || '',
+    supersedes: (record.supersedes || []).join(', ') || 'none',
   };
 }
 
@@ -103,12 +115,19 @@ function summaryFromMetadata(id, meta) {
     type: m.type || parts.type || '',
     description: m.description || '',
     status: m.status || '',
+    stored_status: m.stored_status || storedStatus({ status: m.status, superseded_by: none(m.superseded_by) }),
     superseded_by: none(m.superseded_by),
     source: m.source || '',
     saved: m.saved || '',
     last_verified: m.last_verified || '',
-    approved_by: none(m.approved_by),
+    approved_by: none(m.approved_by) ?? approverFrom(m.authorization),
   };
+}
+
+/** The YYYY-MM-DD part of an ISO time, or ''. */
+function dateOf(iso) {
+  const m = /^(\d{4}-\d{2}-\d{2})/.exec(String(iso ?? ''));
+  return m ? m[1] : '';
 }
 
 function sameTags(a, b) {
@@ -211,6 +230,8 @@ export class HindsightDriver {
 
   stored(id, doc) {
     const { record, problems } = parseRecord(doc.original_text, id);
+    const meta = doc.document_metadata || {};
+    if (!record.saved) record.saved = meta.saved || dateOf(doc.updated_at) || dateOf(doc.created_at) || '';
     return {
       ...record,
       version: versionOf(doc.original_text),
@@ -221,14 +242,14 @@ export class HindsightDriver {
   }
 
   /** Write one record's text with tags and metadata from its frontmatter, then read it back. */
-  async writeRecord(key, text) {
+  async writeRecord(key, text, { saved } = {}) {
     const { record } = parseRecord(text, key);
     const item = {
       content: text,
       document_id: key,
       context: record.type || 'record',
       tags: recordTags(record),
-      metadata: recordMetadata(record),
+      metadata: recordMetadata(record, { saved: saved || this.today() }),
       timestamp: this.now().toISOString(),
     };
     await this.client.retain([item], { async: false });
@@ -250,7 +271,7 @@ export class HindsightDriver {
     await this.ensureReady();
     const current = await this.readDoc(record.key);
     checkExpect(current ? versionOf(current.original_text) : null, expect, `The memory record ${record.key}`);
-    const back = await this.writeRecord(record.key, text);
+    const back = await this.writeRecord(record.key, text, { saved: record.saved });
     this.touchMeta(current ? 'update' : 'create', record.key);
     return { key: record.key, version: versionOf(text), created: !current, record: this.stored(record.key, back) };
   }
@@ -308,7 +329,7 @@ export class HindsightDriver {
       const s = summaryFromMetadata(id, r.metadata);
       const snippet = stripFrontmatter(String(r.text || '')).replace(/\s+/g, ' ').trim().slice(0, 160);
       const score = r.scores && typeof r.scores.final === 'number' ? r.scores.final : null;
-      results.push({ key: id, name: s.name, type: s.type, description: s.description, status: s.status, score, snippet });
+      results.push({ key: id, name: s.name, type: s.type, description: s.description, status: s.status, stored_status: s.stored_status, superseded_by: s.superseded_by, score, snippet });
       if (results.length >= max) break;
     }
     const out = { query: q, mode: 'recall', results };
@@ -328,10 +349,19 @@ export class HindsightDriver {
     await this.ensureReady();
     const current = await this.readDoc(k);
     if (!current) throw notFound(k, this.location);
+    const before = parseRecord(current.original_text, k).record;
     const text = changeRecordStatus(current.original_text, { status, supersededBy, note }, k);
     const back = await this.writeRecord(k, text);
     this.touchMeta(status === 'retired' ? 'retire' : 'restore', k);
-    return { key: k, version: versionOf(text), record: this.stored(k, back) };
+    return { key: k, version: versionOf(text), record: this.stored(k, back), before };
+  }
+
+  /** Add or remove a key in another record's `supersedes`. */
+  async changeSuccessor(successorKey, change) {
+    const doc = await this.readDoc(successorKey);
+    if (!doc) return;
+    const next = changeSupersedes(doc.original_text, change);
+    if (next !== doc.original_text) await this.writeRecord(successorKey, next, { saved: (doc.document_metadata || {}).saved });
   }
 
   async retire(key, { supersededBy, reason } = {}) {
@@ -348,16 +378,49 @@ export class HindsightDriver {
         });
       }
     }
-    return this.changeStatus(k, { status: 'retired', supersededBy: by, note: retireNote(this.today(), { reason, supersededBy: by }) });
+    const res = await this.changeStatus(k, { status: 'retired', supersededBy: by, note: retireNote(this.today(), { reason, supersededBy: by }) });
+    if (by) await this.changeSuccessor(by, { add: [k] });
+    const change = by ? { kind: 'supersede', from: k, to: by } : { kind: 'archive', from: k };
+    const repaired = await repairLinksWithDriver(this, change, { skip: by ? [k, by] : [k] });
+    return { key: res.key, version: res.version, record: res.record, ...repairResult(repaired) };
   }
 
   async restore(key) {
-    return this.changeStatus(key, { status: 'needs-review', supersededBy: null, note: restoreNote(this.today()) });
+    const res = await this.changeStatus(key, { status: 'needs-review', supersededBy: null, note: restoreNote(this.today()) });
+    if (res.before && res.before.superseded_by) await this.changeSuccessor(res.before.superseded_by, { remove: [res.key] });
+    return { key: res.key, version: res.version, record: res.record };
+  }
+
+  /** A new document under the new key, then the old one is deleted; links in other records follow. */
+  async rename(key, toKey) {
+    const k = assertKey(key);
+    const to = assertKey(toKey);
+    if (k === to) throw new ToolkitError(EXIT.INVALID, `${k} already has that key.`, { key: k });
+    await this.ensureReady();
+    const current = await this.readDoc(k);
+    if (!current) throw notFound(k, this.location);
+    if (await this.readDoc(to)) {
+      throw new ToolkitError(EXIT.INVALID, `${k} was not renamed: a record with the key ${to} already exists.`, {
+        key: k,
+        to,
+        fix: `Merge them instead: save what should stay in ${to}, then run toolkit memory retire ${k} --superseded-by ${to}.`,
+      });
+    }
+    const before = parseRecord(current.original_text, k).record;
+    const dir = storedStatus(before) === 'archived' ? 'archive' : '';
+    const change = { kind: 'rename', from: k, to, fromPath: dir ? `${dir}/${k}.md` : `${k}.md`, toPath: dir ? `${dir}/${to}.md` : `${to}.md` };
+    const text = repairLinks(renameRecordText(current.original_text, to), dir, change).text;
+    const back = await this.writeRecord(to, text, { saved: (current.document_metadata || {}).saved });
+    await this.client.deleteDocument(k);
+    this.touchMeta('rename', to);
+    const repaired = await repairLinksWithDriver(this, change, { skip: [to] });
+    return { key: to, from: k, version: versionOf(text), record: this.stored(to, back), ...repairResult(repaired) };
   }
 
   async delete(key) {
     const k = assertKey(key);
     await this.ensureReady();
+    const current = await this.readDoc(k);
     const res = await this.client.deleteDocument(k);
     if (res === null) throw notFound(k, this.location);
     this.touchMeta('delete', k);
@@ -368,7 +431,9 @@ export class HindsightDriver {
         fix: `Run toolkit memory get ${k} to see it, and try the delete again.`,
       });
     }
-    return { key: k, deleted: true };
+    const archived = current ? storedStatus(parseRecord(current.original_text, k).record) === 'archived' : false;
+    const repaired = await repairLinksWithDriver(this, { kind: 'delete', from: k, fromPath: archived ? `archive/${k}.md` : `${k}.md` });
+    return { key: k, deleted: true, ...repairResult(repaired) };
   }
 
   // ------------------------------------------------------------ focus and glossary
@@ -433,12 +498,16 @@ export class HindsightDriver {
       count++;
       const { record } = parseRecord(full.original_text, d.id);
       if (!RECORD_TYPES.includes(record.type)) continue;
-      if (sameTags(full.tags, recordTags(record)) && sameMetadata(full.document_metadata, recordMetadata(record))) continue;
-      await this.writeRecord(d.id, full.original_text);
+      const saved = (full.document_metadata || {}).saved || this.today();
+      // A record still in the older toolkit format is written again in the model's format
+      // (topic body, and the replacement of a superseded record kept in its body).
+      const text = record.legacy ? serializeRecord(normalizeRecord({ ...record, saved: record.saved || saved }, { today: this.today() })) : full.original_text;
+      if (text === full.original_text && sameTags(full.tags, recordTags(record)) && sameMetadata(full.document_metadata, recordMetadata(record, { saved }))) continue;
+      await this.writeRecord(d.id, text, { saved });
       changed++;
     }
     if (changed) this.touchMeta('reindex', null);
-    return { count, changed, detail: `Checked ${count} records in bank ${this.bank}; ${changed} had tags or metadata rewritten from their text.` };
+    return { count, changed, detail: `Checked ${count} records in bank ${this.bank}; ${changed} had their tags, metadata, or format written again from their text.` };
   }
 
   async status() {

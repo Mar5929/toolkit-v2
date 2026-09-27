@@ -11,7 +11,7 @@ that belonged to it. Merge and cleanup are one guarded workflow.
 1. **Resolve the exact pull request** and map branches to worktrees. The local
    head branch must be at the pull request's head commit.
 2. **Check the merge is allowed:** the owner's yes for this pull request, or a
-   standing merge instruction recorded in the project.
+   standing merge instruction recorded in `DECISIONS.md`.
 3. **Preflight on GitHub:** open, not a draft, mergeable, reviews satisfied,
    required checks passed. "No checks reported" is not a failure.
 4. **Merge-safety check:** after a fetch, compare
@@ -78,10 +78,11 @@ request title or body. No id found: skip the history note in step 7.
 The merge needs one of these:
 
 - The owner's own yes for this pull request, in this conversation.
-- A standing merge instruction recorded in the project, in one of these
-  places: `AGENTS.md`, a rule file in `.claude/rules/`, a `DECISIONS.md` row, or
-  the work item's "Decisions and context". Follow its conditions exactly (for
-  example an independent review with no blocking findings on this exact head).
+- A standing merge instruction the owner gave for this project, recorded as a
+  `DECISIONS.md` row that no later row replaces (the project's `AGENTS.md`
+  says merges need the owner unless `DECISIONS.md` records one). Follow its
+  conditions exactly (for example an independent review with no blocking
+  findings on this exact head).
 
 A work item that says its merge needs the owner's approval overrides a standing
 instruction. When neither is present, stop and ask the owner. `work-finish`

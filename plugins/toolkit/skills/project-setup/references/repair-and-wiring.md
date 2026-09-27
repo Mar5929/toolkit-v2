@@ -59,18 +59,20 @@ in Hindsight Cloud, and never in Docker.
 - GitHub: creating the stage, type, priority, and approval labels needs his
   yes. Never create a GitHub repository without his yes.
 - Jira: the Stage field or labels and the status map need his yes and, often,
-  a Jira admin. Record the status map in the project's `AGENTS.md`.
+  a Jira admin. Record the status map as a `DECISIONS.md` row with
+  `toolkit decision add`, saved with `publish-docs`.
 
 ## Repair (`.toolkit.json` present)
 
 1. `toolkit doctor` lists every problem with its fix.
 2. `toolkit sync --dry-run` lists the scaffold files that are missing or out
-   of date, and the files the project changed on purpose.
+   of date against the model copy in the toolkit, and the files the project
+   changed on purpose.
 3. Show one numbered table:
 
    | # | Problem | Kind | Fix |
    | --- | --- | --- | --- |
-   | 1 | `.claude/rules/work-item-stages.md` is missing | missing | `toolkit sync` |
+   | 1 | `.claude/rules/keep-work-item-current.md` is missing | missing | `toolkit sync` |
    | 2 | `AGENTS.md` differs from the toolkit's version | changed by the owner | none: project ahead of the toolkit |
    | 3 | Notion Memory database is missing | broken wiring | `toolkit notion ensure-project` |
 
@@ -84,7 +86,10 @@ in Hindsight Cloud, and never in Docker.
 ## Updating the toolkit
 
 - "Update the toolkit" usually means bringing this project up to date with
-  the installed toolkit: the repair steps above.
+  the installed toolkit: the repair steps above. When the owner changed his
+  model project, the toolkit's copy of the model is refreshed first, in the
+  toolkit's own repository; a project sees the change only after the updated
+  plugins are installed.
 - When doctor says the installed plugins are older than the toolkit source,
   the plugins themselves need updating first. In Claude Code, with the
   owner's yes: `claude plugin marketplace update toolkit-v2`, then

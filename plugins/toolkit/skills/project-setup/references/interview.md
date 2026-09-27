@@ -17,10 +17,12 @@ Check these first, without asking:
   one line instead of asking.
 - `.toolkit.json` present with `"toolkit": "toolkit-v2"`: this is a repair,
   not a new setup (see `repair-and-wiring.md`).
-- Files from the current toolkit (`.toolkit-memory.json`, `knowledge/`,
-  `CLAUDE.md` files): tell the owner what you found. Toolkit V2 adds its own
+- Files from an older toolkit setup (for example a `knowledge/` folder, or a
+  `CLAUDE.md` with more than the line `@AGENTS.md`): tell the owner what you
+  found. Toolkit V2 adds its own
   files and turns the current toolkit's plugins off for this project; it does
-  not move or delete the old files. Ask before touching them.
+  not move or delete the old files. Ask before touching them. A file the
+  project already has is kept, never overwritten.
 - The owner name: `git config user.name`.
 - `ntn whoami` (only matters for Notion): signed in or not.
 - `toolkit hindsight health` (only matters for Hindsight): the local server is
@@ -86,10 +88,68 @@ toolkit config set salesforce.orgs.production <alias>
 
 Say what will happen in three or four lines, then run it:
 
-> I'll now: copy the project scaffold; write AGENTS.md, the rules, and the settings; turn on the Toolkit V2 plugins for this project only (and turn the older toolkit's plugins off here); set up local folders for work and built-in memory. Nothing outside this folder changes.
+> I'll now copy the model scaffold and apply your answers: the project's folders and files from the model project, AGENTS.md with only the parts for your choices, the rules, and the settings; turn on the Toolkit V2 plugins for this project only (and turn the older toolkit's plugins off here); set up local folders for work and built-in memory. Nothing outside this folder changes.
 
 Then `toolkit init`, the `toolkit config set` lines the answers need, the
-wiring in `repair-and-wiring.md`, and `toolkit doctor`.
+wiring in `repair-and-wiring.md`, filling the setup guides (below), and
+`toolkit doctor`.
+
+## What setup installs
+
+The toolkit plugin carries an exact copy of the model project in its
+`scaffold/model/` folder. Setup copies that model and applies the answers:
+
+| Installed | When |
+| --- | --- |
+| `AGENTS.md`, `SOUL.md`, `PROJECT.md`, `PROJECT-ROADMAP.md`, `DECISIONS.md`, `README.md`, `.gitignore` | Every project |
+| `requirements/` (its own `AGENTS.md`, `SYSTEM-DATA-MODEL.md`, and `system-area-template/`), `system-guide/AREA-TEMPLATE.md`, `tests/TEST-PLAN-TEMPLATE.md`, `ai-external-knowledge/INDEX.md` | Every project |
+| The general rules in `.claude/rules/` | Every project (Codex reads them through `AGENTS.md`) |
+| A root `CLAUDE.md` holding only `@AGENTS.md`, `.claude/settings.json`, `.claude/output-styles/plain-english.md` | Claude Code is one of the hosts |
+| `.codex/config.toml` and `.codex/rules/toolkit.rules` (written by the toolkit; the model has neither) | Codex is one of the hosts |
+| `.work-items/work-item-template/` (`WORK-ITEM.md`, `DESIGN.md`) and `.claude/rules/work-item-folders.md` | Local folders tracker |
+| `.memory/` seed files: `AGENTS.md`, `CURRENT_FOCUS.md`, `MEMORY.md`, `memory-criteria.md`, `project_topic_template.md`, `terminology-glossary.md` | Built-in memory |
+| `delivery/`, `sfdx-project.json`, `.forceignore`, `tools/kb/`, `tools/permissions/`, the two guard hooks in `.claude/hooks/`, `.claude/protected-orgs.json`, and the nine Salesforce rules | Salesforce projects |
+| The `sf-*` skills in `.claude/skills/` | Salesforce projects with Claude Code as a host |
+| `.codex/hooks.json` (runs the two guard hooks in Codex) and the `sf-*` skills in `.agents/skills/` | Salesforce projects with Codex as a host |
+
+- `AGENTS.md`, `README.md`, and `PROJECT.md` carry setup markers such as
+  `<!-- if tracker=local -->` ... `<!-- endif -->`. Setup keeps the lines for
+  the answers given and removes the rest, markers included.
+- The rules list in `AGENTS.md`, between `<!-- toolkit:rules:start -->` and
+  `<!-- toolkit:rules:end -->`, is written from the files in `.claude/rules/`
+  and rebuilt on every `toolkit sync`. Never edit it by hand.
+- In a project that is not a Salesforce project, the Salesforce hooks and
+  `sf` permission lines are left out of `.claude/settings.json`, and the
+  Salesforce lines are left out of `.gitignore`.
+- `.memory/MEMORY.md` is generated: setup installs the model's copy, then
+  `toolkit memory reindex` rebuilds it.
+- Setup never copies work items or memory records, and never copies the
+  model's `.vscode/` or `.sfdx/` folders.
+- `.toolkit.json` records the answers. It is written last.
+
+## Filling the setup guides
+
+The copied files start with a fill-in guide comment and hold `<angle bracket>`
+prompts. Setup fills the project name. The rest is the agent's, with facts the
+owner confirmed:
+
+- `AGENTS.md`: the one-sentence outcome, and the "Build, test, or deploy" row
+  under Commands. Ask for both, one question at a time, with a
+  recommendation from what the repository shows.
+- `PROJECT.md` and `README.md`: follow each file's guide. Ask only what the
+  repository cannot answer.
+- `PROJECT-ROADMAP.md` (the project outcome, phases, and work units) and
+  `requirements/SYSTEM-DATA-MODEL.md` (accepted data model requirements):
+  fill them when the owner already knows the facts. On a new project they
+  usually stay as they are, and are listed in the final report as prompts
+  left. The data model gets only accepted requirements, never a guess.
+- `SOUL.md`: ask whether the owner wants it ("Do you want a SOUL.md that tells
+  the agent how you like to work? I recommend skipping it for now; you can add
+  it later."). With a yes, fill it with his words and get his approval. With a
+  no, remove the file.
+- Delete each fill-in guide once its file is filled. Never invent a fact to
+  fill a prompt: list each prompt that is left, with the fact it needs, in the
+  final report.
 
 ## Explaining the result
 

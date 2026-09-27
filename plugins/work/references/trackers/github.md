@@ -23,10 +23,11 @@ the same as every other tracker: the fourteen stages, the six statuses, the
 | Design (`DESIGN.md`) | One issue comment whose first line is `## Solution design`. Edit that comment in place; never add a second one. |
 | Recent History | The Recent History table in the body |
 
-Start a new issue body from the toolkit plugin's `templates/WORK-ITEM.md`
-(from `## Overview` to the end) so every section exists, and a new design
-comment from its `templates/DESIGN.md`. [../trackers.md](../trackers.md),
-"Templates for every tracker", says how to find the plugin's folder.
+Start a new issue body from the model's work item template (from
+`## Overview` to the end) so every section exists, and a new design comment
+from the model's design template, without its frontmatter.
+[../trackers.md](../trackers.md), "Templates for every tracker", says where
+both are.
 
 ## Commands
 

@@ -15,17 +15,21 @@ The design is a proposal until the owner approves it.
 ## Start with the brief
 
 - The brief gives the work item id, the draft file path, the design's current
-  text (What this solves, What exists today, Design philosophy, Preparation,
-  Notes), the requirements (Agreed goal, every `R-xx`, Acceptance), the
+  text (What this design solves, Requirements and design readiness, What
+  exists today, Constraints and assumptions, Notes), the way of working the
+  owner chose, the requirements (Agreed goal, every `R-xx`, Acceptance), the
   research findings, and which option you are writing and how it must differ
   from the others.
 - Read the existing build for this area yourself.
-- Keep the design's section headings exactly as the brief's template shows
-  them: `## Option <letter>: <name>` with Summary, How each requirement is
-  met (one heading per `R-xx`), What the person experiences start to finish,
-  Components and files touched, Order of work, Risks and tradeoffs, and
-  Sources; plus the shared "Where a builder could misread the requirements"
-  table.
+- Keep the design's section headings exactly as the project's `DESIGN.md`
+  template has them. Your option is `### Option <letter> — <name>` under
+  "Design options", with these subsections: Approach, End-to-end behavior,
+  Requirement coverage (a table: Requirement, Build or reuse, Why it meets the
+  requirement, How to check it), Technical shape (Components and files, Data
+  and state, Access and security, Integrations, Operations), Tradeoffs and
+  risks, and Build order. Also fill the rows your option adds to "Sources and
+  decisions that affect the build" and "Where a builder could misread this
+  design".
 - Before designing, say plainly whether the requirements describe a complete,
   well-thought-out result in the context of the system it is part of. If they
   do not, or anything is still unclear: do not design. Return the missing
@@ -47,14 +51,14 @@ The design is a proposal until the owner approves it.
   is not correctness, and a post from last year may describe a version that no
   longer exists. Before a community claim shapes the design, check it against
   official documentation, the project's own code, or a test. Record the check
-  in the Sources table. A claim you could not check stays out of the design,
-  or goes in as a named risk.
+  in "Sources and decisions that affect the build". A claim you could not
+  check stays out of the design, or goes in as a named risk.
 - Where sources disagree, say which one you followed and why.
 
 ## Decide the design
 
 - Built-in first, unless the brief says the owner chose a different
-  philosophy. For each requirement, name the standard mechanism the platform
+  approach. For each requirement, name the standard mechanism the platform
   or tool already provides. Build custom only where nothing built-in meets the
   requirement, and say why.
 - The existing build is evidence, not a limit. Ask of every requirement: what
@@ -65,15 +69,16 @@ The design is a proposal until the owner approves it.
 - Walk the whole flow as the person who uses the result, start to finish. A
   requirement that is met on its own but breaks that flow goes in a proposed
   "Still open" note, not silently designed around.
-- Every requirement gets its own heading with three lines: build or reuse,
+- Every requirement gets its own row in Requirement coverage: build or reuse,
   why this meets it, how to check it. No requirement is skipped. Mark every
-  component as reused, changed, or new, and separate code that exists from
+  component as new, changed, or reused, and separate code that exists from
   behavior checked in the intended environment.
-- The Order of work becomes the item's roadmap. Write it as numbered steps a
-  builder can take one at a time, each with what it depends on.
-- Fill the "Where a builder could misread the requirements" table: every risk
-  the brief lists, plus any you found, each with the wrong reading, the
-  intended reading, and what this design does about it.
+- The Build order becomes the item's roadmap once the owner picks the option.
+  Write it as numbered steps a builder can take one at a time, each with what
+  it depends on and its completion check.
+- Fill the "Where a builder could misread this design" table: every risk the
+  brief lists, plus any you found, each with the wrong reading and the
+  intended reading and how the design makes it clear.
 
 ## Fix rounds
 
@@ -89,7 +94,8 @@ when it does.
   changes to those to the main agent.
 - Do not run commands, tests, builds, or installs.
 - Do not approve anything, mark work done, or start other agents.
-- Do not ask the owner anything. Return questions for the design's Notes.
+- Do not ask the owner anything. Return questions for the design's Notes >
+  Open design questions.
 
 ## Return
 
@@ -103,6 +109,7 @@ when it does.
 Plain, common words and the real name of every component, setting, object,
 and file, every time. Short sentences, one idea each. Define a term the first
 time it appears. No figurative or metaphorical language, no idioms, no jargon
-a junior intern would not know, no em dashes, no section signs, no preamble,
-no closing line. Keep every number, version, path, and source exactly as
+a junior intern would not know, no em dashes in your own sentences (the
+template's headings keep theirs), no section signs, no preamble, no closing
+line. Keep every number, version, path, and source exactly as
 found. Never add a line crediting an AI.

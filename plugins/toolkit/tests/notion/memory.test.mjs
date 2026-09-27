@@ -11,6 +11,7 @@ import { ensureProject } from '../../lib/notion/ensure.mjs';
 import { PROJECTS_BASE_PROPERTIES } from '../../lib/notion/schema.mjs';
 import { createDriver, backend } from '../../lib/memory/notion.mjs';
 import { serializeRecord, normalizeRecord, versionOf } from '../../lib/memory/contract.mjs';
+import { writeValue } from '../../lib/notion/props.mjs';
 import { FakeNotion, fakeRunner, seedProjects } from './fake-notion.mjs';
 
 const now = () => new Date('2026-09-26T12:00:00');
@@ -114,13 +115,16 @@ test('list and find leave retired records out; restore brings one back as needs-
   const r = await driver.retire('feedback_deploy_window', { reason: 'Replaced.', supersededBy: 'project_stack' });
   assert.equal(r.record.status, 'retired');
   assert.equal(r.record.superseded_by, 'project_stack');
-  assert.match(r.record.body, /\*\*Retired 2026-09-26:\*\* Replaced\. Replaced by project_stack\./);
+  assert.match(r.record.body, /^# Deploy window\n\n\*\*Superseded 2026-09-26:\*\* Replaced by \[project_stack\]\(project_stack\.md\)\. Replaced\.\n/);
+  assert.match(r.record.text, /\nstatus: superseded\n/);
+  assert.deepEqual((await driver.get('project_stack')).supersedes, ['feedback_deploy_window'], 'the replacement records what it supersedes');
   assert.deepEqual((await driver.list()).map((x) => x.key), ['project_stack']);
   assert.equal((await driver.find('tuesday')).results.length, 0);
   assert.equal((await driver.find('tuesday', { all: true })).results.length, 1);
   const back = await driver.restore('feedback_deploy_window');
   assert.equal(back.record.status, 'needs-review');
   assert.equal(back.record.superseded_by, null);
+  assert.deepEqual((await driver.get('project_stack')).supersedes, []);
   await assert.rejects(driver.find('x', { reflect: true }), (err) => err.code === 3);
 });
 
@@ -319,4 +323,68 @@ test('an edit made in Notion after the --expect check, in the same section, is a
   );
   state.armed = false;
   assert.equal(writes(), before, 'no property or body write was made');
+});
+
+test('records use the model topic format: the same text as a built-in file, with the title kept outside the page body', async () => {
+  const { driver, fake } = await setup();
+  const res = await driver.save({ ...INPUT, approved_by: 'Mike', body: `# Tuesday deploys\n\n${BODY}` });
+  const got = await driver.get('feedback_deploy_window');
+  assert.match(got.text, /^---\nname: feedback_deploy_window\ndescription: Deploy only on Tuesday mornings\nmetadata:\n  type: feedback\nstatus: current\n/);
+  assert.match(got.text, /\nauthorization: Approved by Mike on 2026-09-26\nsupersedes: none\n---\n\n# Tuesday deploys\n\n\*\*Remember:\*\*/);
+  assert.match(got.text, /\*\*Related memories:\*\* WI-001/, 'the older Related label is written the model way');
+  assert.equal(got.version, res.version);
+  const page = Object.values(fake.pages).find((p) => fake.titleOf(p) === 'feedback_deploy_window');
+  assert.ok(page.markdown.startsWith('**Remember:**'), 'the page body starts after the title');
+  assert.equal(got.approved_by, 'Mike');
+});
+
+test('rename keeps the page and repairs links in other records; archive and delete leave the words', async () => {
+  const { driver } = await setup();
+  await driver.save(INPUT);
+  await driver.save({ type: 'project', name: 'release', description: 'How a release goes', source: 'Mike, 2026-09-26', body: '# Release\n\n**Remember:** Follow the window.\n\n**Related memories:** [deploy window](feedback_deploy_window.md)\n' });
+  const renamed = await driver.rename('feedback_deploy_window', 'feedback_release_window');
+  assert.equal(renamed.key, 'feedback_release_window');
+  assert.deepEqual(renamed.linksRepaired, ['project_release']);
+  assert.equal(await driver.get('feedback_deploy_window'), null);
+  assert.match((await driver.get('feedback_release_window')).text, /^---\nname: feedback_release_window\n/);
+  assert.match((await driver.get('project_release')).body, /\[deploy window\]\(feedback_release_window\.md\)/);
+  await assert.rejects(driver.rename('feedback_release_window', 'project_release'), (err) => err.code === 2 && /already exists/.test(err.message));
+  const archived = await driver.retire('feedback_release_window', { reason: 'No window any more.' });
+  assert.deepEqual(archived.linksRepaired, ['project_release']);
+  assert.match(archived.record.text, /\nstatus: archived\n/);
+  assert.match((await driver.get('project_release')).body, /\*\*Related memories:\*\* deploy window \(archived\)/);
+});
+
+test('link repair goes on past a row that cannot be saved, and names it', async () => {
+  const { driver, fake, client } = await setup();
+  await driver.save(INPUT);
+  const linking = (name) => ({ type: 'project', name, description: `About ${name}`, source: 'Mike, 2026-09-26', body: `# ${name}\n\n**Remember:** Follow the window.\n\n**Related memories:** [deploy window](feedback_deploy_window.md)\n` });
+  await driver.save(linking('handmade'));
+  await driver.save(linking('release'));
+  // Mike made this row with the New button and left the description empty.
+  const page = Object.values(fake.pages).find((p) => fake.titleOf(p) === 'project_handmade');
+  await client.updatePage(page.id, { properties: { [driver.p.description]: writeValue('rich_text', '') } });
+
+  const renamed = await driver.rename('feedback_deploy_window', 'feedback_release_window');
+  assert.equal(renamed.key, 'feedback_release_window');
+  assert.deepEqual(renamed.linksRepaired, ['project_release']);
+  assert.deepEqual(renamed.linksFailed.map((f) => f.key), ['project_handmade']);
+  assert.match(renamed.linksFailed[0].reason, /description is missing/i);
+  assert.match((await driver.get('project_release')).body, /\[deploy window\]\(feedback_release_window\.md\)/);
+  assert.match((await driver.get('project_handmade')).body, /\[deploy window\]\(feedback_deploy_window\.md\)/, 'left as it was');
+});
+
+test('a superseded record that names no replacement stays superseded, as in built-in memory', async () => {
+  const { driver } = await setup();
+  const input = { ...INPUT, status: 'superseded', body: '# Tuesday deploys\n\n**Remember:** Deploys went out on Tuesdays.\n' };
+  const res = await driver.save(input);
+  const expected = serializeRecord(normalizeRecord(input, { today: '2026-09-26' }));
+  assert.match(expected, /\nstatus: superseded\n/);
+  const got = await driver.get('feedback_deploy_window');
+  assert.equal(got.text, expected, 'the same text a built-in file holds');
+  assert.equal(got.version, res.version);
+  assert.equal(got.stored_status, 'superseded');
+  assert.equal(got.superseded_by, null);
+  const listed = (await driver.list({ status: 'all' })).find((r) => r.key === 'feedback_deploy_window');
+  assert.equal(listed.stored_status, 'superseded');
 });

@@ -617,8 +617,8 @@ async function main() {
     }
     const scaffoldDir = path.join(pluginsDir, plugin.name, 'scaffold');
     for (const file of walk(scaffoldDir, (f) => path.basename(f) === 'SKILL.md')) {
-      // Scaffold copies: scaffold/<overlay>/skills/<name>/ (MANIFEST.json installs
-      // them into .claude/skills/ and .agents/skills/), or already under those folders.
+      // Scaffold copies: the model copy's .claude/skills/<name>/ and
+      // .agents/skills/<name>/ in scaffold/model/, which init installs as they are.
       if (!/[/\\](?:\.(?:claude|agents)[/\\])?skills[/\\][^/\\]+[/\\]SKILL\.md$/.test(file)) continue;
       skillFiles.push({ file, plugin: plugin.name, folder: path.basename(path.dirname(file)), scaffold: true });
     }

@@ -1,12 +1,14 @@
 ---
 name: publish-docs
-description: "Commits and pushes an agreed edit to Git-tracked project documents (requirements/, docs/, DECISIONS.md, PROJECT.md, PROJECT-ROADMAP.md, ai-external-knowledge/, delivery/) straight to the default branch from an isolated worktree. Use after such an edit. Not for code, rules, skills, or .memory/."
+description: "Commits and pushes an agreed edit to Git-tracked project documents (requirements/, system-guide/, DECISIONS.md, PROJECT.md, PROJECT-ROADMAP.md, ai-external-knowledge/, delivery/) to the default branch from an isolated worktree. Use after such an edit. Not for code, rules, skills, or .memory/."
 ---
 
 # Publish a documentation save
 
 Save an agreed change to Git-tracked project documents from its own temporary
 worktree, and push it straight to the default branch with no pull request.
+The project's rule for this is `.claude/rules/publish-project-documents.md`;
+its `paths` list names the documents this skill saves.
 
 1. **Confirm it is documentation in an allowed path**, not code, rules, skills,
    hooks, settings, `.memory/`, or `.work-items/` (list below).
@@ -39,14 +41,17 @@ Voice: write to the owner in plain English. Claude Code: follow the project's Pl
 
 ## What counts as documentation
 
-The script accepts only these paths:
+The project documents are the paths in the project's
+`publish-project-documents.md` rule. The script accepts only these:
 
-- Files under `requirements/`, `docs/`, `ai-external-knowledge/`, and
+- Files under `requirements/`, `system-guide/`, `ai-external-knowledge/`, and
   `delivery/` of these document types: `.md`, `.txt`, `.csv`, `.xml`, `.png`,
   `.jpg`, `.jpeg`, `.gif`, `.svg`, `.pdf` (for example
   `delivery/deployment/component-tracker.csv` and a `package.xml`). A
-  `.gitignore` file under `delivery/` is also accepted.
-- `DECISIONS.md`, `PROJECT.md`, and `PROJECT-ROADMAP.md` at the project root.
+  `.gitignore` file under `delivery/` is also accepted. `delivery/` exists
+  only in Salesforce projects.
+- `DECISIONS.md`, `PROJECT.md`, and `PROJECT-ROADMAP.md` at the project root,
+  and `tools/permissions/PERMISSIONS-RUNBOOK.md` in a Salesforce project.
 - `README.md` files.
 
 It refuses:

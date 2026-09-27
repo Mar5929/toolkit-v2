@@ -18,8 +18,9 @@ import { spawnSync } from 'node:child_process';
 import { main } from '../../../lib/cli.mjs';
 import { NotionClient } from '../../../lib/notion/client.mjs';
 import { openTracker } from '../../../lib/work/driver.mjs';
-import { loadDriver } from '../../../lib/memory/contract.mjs';
+import { loadDriver, topicBody, serializeRecord } from '../../../lib/memory/contract.mjs';
 import { newRecordText, newDesignText, parseDoc, setLabel, appendHistory } from '../../../lib/work/model.mjs';
+import { readTemplate } from '../../../lib/core/templates.mjs';
 
 if (process.env.TOOLKIT_NOTION_LIVE !== '1') {
   console.error('This test writes to Notion. Set TOOLKIT_NOTION_LIVE=1 to run it.');
@@ -29,7 +30,6 @@ if (process.env.TOOLKIT_NOTION_LIVE !== '1') {
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(HERE, '../../../../..');
 const area = JSON.parse(fs.readFileSync(path.join(REPO, 'dev/test-runs/notion-test-area.json'), 'utf8'));
-const TEMPLATES = path.resolve(HERE, '../../../templates');
 const stamp = new Date().toISOString().replace(/[:.]/g, '-');
 const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'toolkit-notion-live-'));
 const project = path.join(dir, 'project');
@@ -72,8 +72,8 @@ async function toolkit(args) {
   return { code, out: chunks.join('') };
 }
 
-const tpl = fs.readFileSync(path.join(TEMPLATES, 'WORK-ITEM.md'), 'utf8');
-const dtpl = fs.readFileSync(path.join(TEMPLATES, 'DESIGN.md'), 'utf8');
+const tpl = readTemplate('work-item');
+const dtpl = readTemplate('design');
 const today = new Date().toISOString().slice(0, 10);
 const rec = (title, extra = {}) => parseDoc(newRecordText(tpl, {
   id: 'WI-001', title, type: 'build', stage: '01-discovery', status: 'Backlog', parent: 'none', waiting_on: 'none', priority: 'medium',
@@ -144,7 +144,7 @@ await check('tracker: update a section and properties from a fresh read', async 
 });
 await check('tracker: design subpage create, read, update', async () => {
   const d = await tracker.setDesign(ids.a, newDesignText(dtpl, { id: ids.a, title: 'Login page', date: today }), { create: true });
-  const d2 = await tracker.setDesign(ids.a, d.text.replace('status: proposed', 'status: approved').replace('approved: no', `approved: ${today} by Mike`));
+  const d2 = await tracker.setDesign(ids.a, d.text.replace('status: proposed', 'status: approved').replace('approved: "no"', `approved: ${today} by Mike`));
   assert(d2.meta.status === 'approved', 'design status');
   return d.location;
 });
@@ -210,7 +210,10 @@ await check('memory: save and get give back the exact text', async () => {
   const body = '**Remember:** Deploy on Tuesdays only.\n\n**Why:** On-call is free. Costs $0 | cheap <for now>.\n\n**Related:** WI-001 and `docs/deploy.md`.\n';
   const s = await memory.save({ type: 'feedback', name: 'deploy-window', description: 'Deploy on Tuesdays only', source: `Mike, ${today}`, body }, { expect: 'absent' });
   const g = await memory.get('feedback_deploy_window');
-  assert(g.version === s.version && g.body === body, 'text changed');
+  // The body is stored in the model's topic format: a title, and "Related memories".
+  const expected = topicBody(body, { name: 'deploy-window' });
+  assert(g.version === s.version && g.body === expected, 'text changed');
+  assert(g.text === serializeRecord({ ...g, body: expected }), 'not the model topic format');
 });
 await check('memory: find, retire, restore, stale expect', async () => {
   assert((await memory.find('tuesday')).results.length === 1, 'find');

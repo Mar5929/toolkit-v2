@@ -47,10 +47,11 @@ The item continues with `work-finish` (pull request, deployment, requirements ba
 
 ## Project-wide decisions
 
-- A decision for the whole project goes in `DECISIONS.md`, not in memory and not in one item. Example: "use Postgres everywhere".
+- A decision for the whole project goes in `DECISIONS.md`, not in memory and not in one item. Examples: "use Postgres everywhere", and a standing merge instruction ("agents may merge a pull request after an independent check finds no blocking issue").
 - A decision that replaces an older one names it with `--replaces D-<n>`:
   `toolkit decision add --decision "<decision>" --why "<why>" --by <owner> --replaces D-<n>`
-- Decisions about one item stay in that item (Open Questions, Notes > Decisions and context).
+- A decision about one item stays in that item: its Recent History, the answered Open Questions row, and Notes > Decisions and context when the next session needs the context.
+- `DECISIONS.md` is append-only. Never rewrite or remove a row; a changed decision is a new row that names the one it replaces.
 
 ## Tracker notes
 

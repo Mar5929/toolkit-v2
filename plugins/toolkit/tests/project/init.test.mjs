@@ -34,44 +34,55 @@ function checkInstalledHashes(root) {
   }
 }
 
-test('local tracker + built-in memory: scaffold, AGENTS.md, settings, Codex files, seeds, and .toolkit.json', async () => {
+test('local tracker + built-in memory: the model scaffold, AGENTS.md, settings, Codex files, seeds, and .toolkit.json', async () => {
   const { root, res } = await initProject({ tracker: 'local', memory: 'builtin' });
   assert.equal(res.code, 0, res.stderr || res.stdout);
   const files = listFiles(root);
-  for (const f of ['AGENTS.md', 'PROJECT.md', 'PROJECT-ROADMAP.md', 'DECISIONS.md', 'README.md', '.gitignore', '.toolkit.json',
-    '.claude/settings.json', '.claude/output-styles/plain-english.md', '.claude/rules/work-item-folders.md', '.claude/rules/work-item-stages.md',
-    '.codex/config.toml', '.codex/rules/toolkit.rules', 'requirements/AGENTS.md', 'ai-external-knowledge/INDEX.md',
-    '.work-items/work-item-template/WORK-ITEM.md', '.work-items/work-item-template/DESIGN.md', '.work-items/DASHBOARD.md', '.work-items/.toolkit-state.json',
-    '.memory/AGENTS.md', '.memory/CURRENT_FOCUS.md', '.memory/MEMORY.md', '.memory/memory-criteria.md', '.memory/terminology-glossary.md']) {
+  for (const f of ['AGENTS.md', 'CLAUDE.md', 'SOUL.md', 'PROJECT.md', 'PROJECT-ROADMAP.md', 'DECISIONS.md', 'README.md', '.gitignore', '.toolkit.json',
+    '.claude/settings.json', '.claude/output-styles/plain-english.md', '.claude/rules/work-item-folders.md', '.claude/rules/keep-work-item-current.md',
+    '.codex/config.toml', '.codex/rules/toolkit.rules', 'requirements/AGENTS.md', 'ai-external-knowledge/INDEX.md', 'system-guide/AREA-TEMPLATE.md',
+    'tests/TEST-PLAN-TEMPLATE.md', '.work-items/work-item-template/WORK-ITEM.md', '.work-items/work-item-template/DESIGN.md', '.work-items/DASHBOARD.md',
+    '.work-items/.toolkit-state.json', '.memory/AGENTS.md', '.memory/CURRENT_FOCUS.md', '.memory/MEMORY.md', '.memory/memory-criteria.md',
+    '.memory/terminology-glossary.md', '.memory/project_topic_template.md']) {
     assert.ok(files.includes(f), `${f} is installed`);
   }
-  assert.ok(!files.some((f) => /(^|\/)CLAUDE(\.local)?\.md$/.test(f)), 'no CLAUDE.md anywhere');
-  assert.ok(!files.some((f) => f.startsWith('delivery/') || f.startsWith('force-app')), 'no Salesforce files');
+  assert.equal(read(path.join(root, 'CLAUDE.md')), '@AGENTS.md\n', 'the model\'s one CLAUDE.md imports AGENTS.md');
+  assert.deepEqual(files.filter((f) => /(^|\/)CLAUDE(\.local)?\.md$/.test(f)), ['CLAUDE.md'], 'no other CLAUDE.md');
+  for (const f of files) {
+    assert.ok(!/^(delivery|tools)\//.test(f) && !['sfdx-project.json', '.forceignore', '.claude/protected-orgs.json', '.codex/hooks.json'].includes(f), `no Salesforce file: ${f}`);
+    assert.ok(!f.startsWith('.claude/hooks/') && !f.startsWith('.claude/skills/') && !f.startsWith('.agents/'), `no Salesforce hook or skill: ${f}`);
+  }
+  assert.ok(!files.includes('.claude/rules/salesforce-org-safety.md'), 'no Salesforce rule');
   assert.ok(!files.some((f) => /^\.work-items\/WI-/.test(f)), 'no work items are copied');
-  assert.ok(!files.some((f) => /^\.memory\/(user|feedback|project|reference|event)_/.test(f)), 'no memory records are copied');
+  assert.ok(!files.some((f) => /^\.memory\/(user|feedback|project|reference|event)_/.test(f) && f !== '.memory/project_topic_template.md'), 'no memory records are copied');
+  assert.ok(!files.some((f) => f.endsWith('.import.json')), 'the import record is not installed');
 
   const agents = read(path.join(root, 'AGENTS.md'));
-  assert.match(agents, /^# Acme CRM$/m);
-  assert.match(agents, /Mike owns this project/);
+  assert.match(agents, /^# Acme CRM: agent guide$/m);
+  assert.match(agents, /toolkit init replaces <Project name>/, 'the fill-in guide keeps its own words');
   assert.match(agents, /IDs look like `WI-001`/);
   assert.match(agents, /built-in memory in `\.memory\/`/);
-  assert.doesNotMatch(agents, /Notion|Hindsight server|sf-architect-solutioning/);
-  assert.doesNotMatch(agents, /\{\{|<!-- if |<!-- endif -->|Filled by toolkit init/);
+  assert.doesNotMatch(agents, /Notion|Hindsight server|sf-architect-solutioning|delivery\/`/);
+  assert.doesNotMatch(agents, /<!-- if |<!-- endif -->/);
   assert.ok(agents.includes(`${SPAN_START}\nAlways on.`));
-  assert.match(agents, /- `\.claude\/rules\/work-item-stages\.md`: Keep the Active Work Item Accurate/);
+  assert.match(agents, /- `\.claude\/rules\/keep-work-item-current\.md`: Keep the Active Work Item Accurate/);
   assert.match(agents, /\| `ai-external-knowledge\/\*\*` \| `\.claude\/rules\/ai-external-knowledge\.md` \|/);
+  assert.doesNotMatch(agents, /salesforce-org-safety/, 'the rules list names only the rules the project has');
   assert.ok(agents.indexOf(SPAN_END) > agents.indexOf(SPAN_START));
 
   const settings = JSON.parse(read(path.join(root, '.claude', 'settings.json')));
   assert.equal(settings.outputStyle, 'Plain English');
   assert.equal(settings.autoMemoryEnabled, false);
   assert.deepEqual(settings.worktree, { baseRef: 'head' });
-  assert.ok(settings.permissions.allow.includes('Bash(toolkit *)'));
+  assert.deepEqual(settings.permissions.allow, ['Bash(toolkit *)']);
   for (const p of ['toolkit', 'work', 'memory', 'session-skills', 'git-workflows']) assert.equal(settings.enabledPlugins[`${p}@toolkit-v2`], true, p);
   assert.equal(settings.enabledPlugins['sf-architect-solutioning@toolkit-v2'], false);
   assert.equal(settings.enabledPlugins['project-init@claude-toolkit'], false);
+  assert.equal(settings.enabledPlugins['second-brain@claude-toolkit'], false, 'the model\'s own switch is kept');
   assert.equal(settings.enabledPlugins['protocol-guard@claude-toolkit'], false, 'a claude-toolkit plugin from ~/.claude/settings.json is turned off too');
-  assert.equal(settings.hooks, undefined, 'no Salesforce hooks outside Salesforce');
+  assert.equal(settings.hooks, undefined, 'the Salesforce guard and graph hooks are left out');
+  assert.ok(settings.permissions.deny.includes('Bash(git add -A)'), 'the model\'s deny list is kept');
+  assert.ok(!settings.permissions.deny.some((d) => /\bsfdx? /.test(d)) && !settings.permissions.ask.some((d) => /\bsf /.test(d)), 'no Salesforce permission rules');
 
   const toml = read(path.join(root, '.codex', 'config.toml'));
   assert.equal(tomlGet(toml, ['plugins', 'toolkit@toolkit-v2', 'enabled']), true);
@@ -80,13 +91,19 @@ test('local tracker + built-in memory: scaffold, AGENTS.md, settings, Codex file
   assert.equal(tomlGet(toml, ['plugins', 'extra-thing@claude-toolkit', 'enabled']), false, 'a claude-toolkit plugin from ~/.codex/config.toml is turned off too');
   assert.match(read(path.join(root, '.codex', 'rules', 'toolkit.rules')), /pattern = \["toolkit"\]/);
 
+  const gi = read(path.join(root, '.gitignore'));
+  assert.ok(gi.startsWith('.memory/\n/.work-items/\n'), 'the model\'s .gitignore comes first');
+  assert.doesNotMatch(gi, /^\.sfdx\/$|tools\/kb/m, 'no Salesforce lines');
+  assert.match(gi, /^\/\.toolkit-cache\/$/m);
+
   const cfg = config(root);
   assert.deepEqual(Object.keys(cfg), ['toolkit', 'schema', 'project', 'tracker', 'memory', 'salesforce', 'hosts', 'notion', 'hindsight', 'installed']);
   assert.deepEqual(cfg.project, { name: 'Acme CRM', key: 'acme-crm', owner: 'Mike', created: '2026-09-26' });
   assert.deepEqual(cfg.tracker, { type: 'local', idPrefix: 'WI' });
   assert.deepEqual(cfg.memory, { type: 'builtin', approval: 'onboarding' });
   assert.deepEqual(cfg.hosts, ['claude-code', 'codex']);
-  assert.ok(Object.keys(cfg.installed).length >= 25);
+  assert.ok(Object.keys(cfg.installed).length >= 30);
+  assert.equal(cfg.installed['.memory/MEMORY.md'], undefined, 'a generated file is not recorded');
   checkInstalledHashes(root);
 
   assert.equal(git(root, ['check-ignore', '.work-items/x']), '.work-items/x');
@@ -115,36 +132,42 @@ test('init twice changes nothing the second time', async () => {
   assert.equal(bare.code, 0, bare.stderr);
 });
 
-test('Salesforce + local + built-in installs the Salesforce kit for both hosts', async () => {
+test('Salesforce + local + built-in installs the model\'s Salesforce files for both hosts', async () => {
   const { root, res } = await initProject({ salesforce: true, name: 'Acme Service', key: 'acme-service' });
   assert.equal(res.code, 0, res.stderr || res.stdout);
+  const model = path.join(PLUGIN_ROOT, 'scaffold', 'model');
   const files = listFiles(root);
   for (const f of ['.claude/hooks/guard-protected-orgs.cjs', '.claude/hooks/guard-permission-set-deploy.cjs', '.claude/protected-orgs.json',
-    '.claude/rules/salesforce-safety-guardrails.md', 'sfdx-project.json', '.forceignore', '.codex/hooks.json', 'tools/kb/README.md', 'tools/permissions/permsets.py',
-    'delivery/deployment/component-tracker.csv', 'docs/permissions-runbook.md']) {
+    '.claude/rules/salesforce-org-safety.md', '.claude/rules/component-tracker.md', 'sfdx-project.json', '.forceignore', '.codex/hooks.json',
+    'tools/kb/README.md', 'tools/permissions/permsets.py', 'tools/permissions/PERMISSIONS-RUNBOOK.md', 'delivery/deployment/component-tracker.csv',
+    'delivery/data/data-loads/.gitignore']) {
     assert.ok(files.includes(f), `${f} is installed`);
   }
-  for (const d of ['force-app', 'delivery/meeting-notes', 'delivery/deliverables']) assert.ok(fs.statSync(path.join(root, d)).isDirectory(), d);
   for (const s of ['sf-component-tracker', 'sf-data-change', 'sf-deploy-check']) {
     const a = read(path.join(root, '.claude', 'skills', s, 'SKILL.md'));
     const b = read(path.join(root, '.agents', 'skills', s, 'SKILL.md'));
     assert.equal(a, b, `${s}: the Claude Code and Codex copies match`);
+    assert.equal(a, read(path.join(model, '.claude', 'skills', s, 'SKILL.md')), `${s} is the model's copy`);
   }
-  assert.equal(JSON.parse(read(path.join(root, 'sfdx-project.json'))).name, 'acme-service');
+  for (const f of ['sfdx-project.json', '.codex/hooks.json', '.claude/protected-orgs.json', '.claude/hooks/guard-protected-orgs.cjs']) {
+    assert.equal(read(path.join(root, f)), read(path.join(model, f)), `${f} is the model's file byte for byte`);
+  }
   const settings = JSON.parse(read(path.join(root, '.claude', 'settings.json')));
   assert.equal(settings.enabledPlugins['sf-architect-solutioning@toolkit-v2'], true);
   assert.ok(settings.permissions.deny.includes('Bash(sf org delete *)'));
   assert.ok(settings.permissions.deny.includes('Bash(git add -A)'), 'the base deny list is kept');
   assert.equal(settings.hooks.PreToolUse[0].hooks.length, 2);
+  assert.match(settings.hooks.Stop[0].hooks[0].command, /graph_freshness_hook\.py/);
   const codexHooks = JSON.parse(read(path.join(root, '.codex', 'hooks.json')));
   assert.match(codexHooks.hooks.PreToolUse[0].hooks[0].command, /--host codex/);
   assert.equal(tomlGet(read(path.join(root, '.codex', 'config.toml')), ['plugins', 'sf-architect-solutioning@toolkit-v2', 'enabled']), true);
   const agents = read(path.join(root, 'AGENTS.md'));
+  assert.match(agents, /^# Acme Service: agent guide$/m);
   assert.match(agents, /sf-architect-solutioning/);
-  assert.match(agents, /`\.claude\/rules\/salesforce-safety-guardrails\.md`: Salesforce Org Safety/);
+  assert.match(agents, /`\.claude\/rules\/salesforce-org-safety\.md`: Salesforce Org Safety/);
   assert.match(agents, /`force-app\/\*\*`, `tools\/kb\/\*\*`/);
-  assert.match(read(path.join(root, '.gitignore')), /\.sfdx\//);
-  assert.match(read(path.join(root, '.claude', 'rules', 'knowledge-direct-commit.md')), /"delivery\/\*\*"/);
+  assert.match(read(path.join(root, '.gitignore')), /^\.sfdx\/$/m);
+  assert.match(read(path.join(root, 'PROJECT.md')), /Why this Salesforce project exists/);
   assert.deepEqual(config(root).salesforce, { enabled: true, orgs: {} });
   checkInstalledHashes(root);
 });
@@ -159,8 +182,10 @@ test('hosts: Claude Code only gets no .codex files; Codex only gets no .claude/s
   assert.equal(codexOnly.res.code, 0, codexOnly.res.stderr);
   files = listFiles(codexOnly.root);
   assert.ok(!files.includes('.claude/settings.json') && !files.includes('.claude/output-styles/plain-english.md') && !files.some((f) => f.startsWith('.claude/skills/')));
-  assert.ok(files.includes('.codex/config.toml') && files.includes('.agents/skills/sf-deploy-check/SKILL.md'));
-  assert.ok(files.includes('.claude/rules/salesforce-safety-guardrails.md'), 'rules install for both hosts');
+  assert.ok(!files.includes('CLAUDE.md'), 'CLAUDE.md is for Claude Code only');
+  assert.ok(files.includes('.codex/config.toml') && files.includes('.codex/hooks.json') && files.includes('.agents/skills/sf-deploy-check/SKILL.md'));
+  assert.ok(files.includes('.claude/rules/salesforce-org-safety.md'), 'rules install for both hosts');
+  assert.ok(files.includes('.claude/hooks/guard-protected-orgs.cjs'), 'the guard scripts install for Codex too');
   assert.deepEqual(config(codexOnly.root).hosts, ['codex']);
 });
 
@@ -264,7 +289,8 @@ test('adopting an existing repository keeps its files and merges into .gitignore
   const env = testEnv(home);
   fs.writeFileSync(path.join(root, 'README.md'), '# My app\n');
   fs.writeFileSync(path.join(root, 'AGENTS.md'), '# My own agent notes\n\nUse pnpm.\n');
-  fs.writeFileSync(path.join(root, '.gitignore'), 'node_modules/\n/.memory/\n');
+  fs.writeFileSync(path.join(root, '.gitignore'), 'node_modules/\n/.work-items/\n');
+  fs.writeFileSync(path.join(root, 'CLAUDE.md'), '# Old notes\n');
   fs.mkdirSync(path.join(root, '.claude'));
   fs.writeFileSync(path.join(root, '.claude', 'settings.json'), '{"model":"opus","permissions":{"allow":["Bash(pnpm *)"]},"enabledPlugins":{"work@toolkit-v2":false}}\n');
   fs.mkdirSync(path.join(root, '.codex'));
@@ -273,14 +299,15 @@ test('adopting an existing repository keeps its files and merges into .gitignore
   assert.equal(res.code, 0, res.stderr);
   assert.equal(read(path.join(root, 'README.md')), '# My app\n');
   assert.equal(read(path.join(root, 'AGENTS.md')), '# My own agent notes\n\nUse pnpm.\n');
+  assert.equal(read(path.join(root, 'CLAUDE.md')), '# Old notes\n', 'the project\'s own CLAUDE.md is kept');
   const proposal = read(path.join(root, '.toolkit-cache', 'AGENTS.proposed.md'));
-  assert.match(proposal, /^# My App$/m);
+  assert.match(proposal, /^# My App: agent guide$/m);
   assert.match(proposal, /Always on\. Claude Code loads these/);
   assert.match(res.stdout, /AGENTS\.proposed\.md/);
   const gi = read(path.join(root, '.gitignore'));
-  assert.ok(gi.startsWith('node_modules/\n/.memory/\n\n'));
-  assert.match(gi, /\/\.work-items\//);
-  assert.equal(gi.match(/^\/\.memory\/$/gm).length, 1, 'a line already there is not added again');
+  assert.ok(gi.startsWith('node_modules/\n/.work-items/\n\n'));
+  assert.match(gi, /^\.memory\/$/m);
+  assert.equal(gi.match(/^\/\.work-items\/$/gm).length, 1, 'a line already there is not added again');
   const settings = JSON.parse(read(path.join(root, '.claude', 'settings.json')));
   assert.equal(settings.model, 'opus');
   assert.deepEqual(settings.permissions.allow, ['Bash(pnpm *)', 'Bash(toolkit *)']);
@@ -291,6 +318,7 @@ test('adopting an existing repository keeps its files and merges into .gitignore
   const cfg = config(root);
   assert.equal(cfg.installed['README.md'], undefined, 'a kept project file gets no installed hash');
   assert.equal(cfg.installed['AGENTS.md'], undefined);
+  assert.equal(cfg.installed['CLAUDE.md'], undefined);
   assert.ok(cfg.installed['.gitignore'] && cfg.installed['.claude/settings.json'] && cfg.installed['.codex/config.toml']);
 });
 
@@ -339,16 +367,16 @@ test('init refuses: no Git repository, a foreign .toolkit.json, missing or wrong
   assert.deepEqual(listFiles(empty), [], 'nothing was written');
 });
 
-test('a template error stops init before anything is written', async () => {
+test('a setup marker error in the model stops init before anything is written', async () => {
   const fakeRoot = tempDir('tk-plugin-');
   for (const d of ['scaffold', 'templates', 'bin']) fs.cpSync(path.join(PLUGIN_ROOT, d), path.join(fakeRoot, d), { recursive: true });
-  const agents = path.join(fakeRoot, 'templates', 'AGENTS.md.tmpl');
-  fs.writeFileSync(agents, `${read(agents)}\n{{project.nickname}}\n`);
+  const readme = path.join(fakeRoot, 'scaffold', 'model', 'README.md');
+  fs.writeFileSync(readme, `${read(readme)}<!-- if tracker=trello -->\nx\n<!-- endif -->\n`);
   const root = makeRepo();
   const env = testEnv(makeHome());
   await assert.rejects(
     initDirect({ name: 'X', tracker: 'local', memory: 'builtin' }, { cwd: root, env, pluginRoot: fakeRoot }),
-    (e) => e.code === 2 && /AGENTS\.md\.tmpl, line \d+ has an unknown token \{\{project\.nickname\}\}/.test(e.message),
+    (e) => e.code === 2 && /scaffold\/model\/README\.md, line \d+ has an unknown condition "tracker=trello"/.test(e.message),
   );
   assert.deepEqual(listFiles(root), []);
 });
@@ -460,7 +488,7 @@ test('local tracker + Hindsight memory against the local server: one bank for th
     assert.equal(cfg.hindsight.url, 'http://127.0.0.1:8888');
     assert.ok(await client.bankExists(key));
     assert.ok(!fs.existsSync(path.join(root, '.memory')));
-    assert.match(read(path.join(root, 'AGENTS.md')), new RegExp(`memory bank \`${key}\``));
+    assert.match(read(path.join(root, 'AGENTS.md')), /the local Hindsight server on this computer, with this project's memory bank/);
     const again = await tk(root, ['init'], { env });
     assert.equal(again.code, 0, again.stderr);
     assert.equal(config(root).hindsight.bank, key, 'the same bank on the second run');

@@ -8,7 +8,8 @@ It has three parts:
 
 - **Scaffold.** The folders and template files every project starts with, such
   as `AGENTS.md` (the project manual the agent reads), `requirements/`, and the
-  work item template.
+  work item template. The scaffold is an exact copy of your model project
+  (`toolkit-v2-model-project`). Change the model, and new projects follow it.
 - **Skills.** Written instructions the agent picks from, one per job. There are
   22 skills in every project and 4 more in Salesforce projects.
 - **The `toolkit` command and hooks.** `toolkit` is a small program that keeps
@@ -146,12 +147,45 @@ setup offers to run `git init` for you.
 4. Start a new session when setup finishes, so Claude Code loads the new
    settings and the Plain English style.
 
-Setup copies the scaffold, writes `AGENTS.md`, the rules, and the settings for
-both Claude Code and Codex, and switches on the right plugins. After that the
-project also works in Codex: open Codex in the folder, trust the folder, and
-trust the hooks (see below).
+Setup copies your model project's files into the folder, byte for byte. It
+leaves out the parts you did not choose: `.work-items/` unless you track work
+in local folders, `.memory/` unless you use built-in memory, and the
+Salesforce files unless it is a Salesforce project. It keeps only the parts of
+`AGENTS.md`, `README.md`, and `PROJECT.md` that match your answers, puts the
+project name in their headings, lists the project's rules in `AGENTS.md`, adds
+the settings for both Claude Code and Codex, and switches on the right
+plugins. After that the project also works in Codex: open Codex in the folder,
+trust the folder, and trust the hooks (see below).
 
 To check or repair a project later, say **"check the setup"**.
+
+## When you change your model project
+
+Your model project is where every project file comes from. The toolkit keeps
+its own copy of it in `plugins/toolkit/scaffold/model/`. The copy does not
+follow your edits by itself, so after you change the model:
+
+1. Commit your change in the model project, so the copy records which version
+   it came from. (Uncommitted edits are copied too; the copy notes that they
+   were not committed.)
+2. In this folder, ask an agent to **"refresh the scaffold from my model"**.
+   It runs `node dev/tools/import-model.mjs`, which copies the model again,
+   then runs the checks. One of them sets up a test project for every mix of
+   answers (24 in all) and compares each one with your model, file by file.
+3. If the copy stops with a message about `CONDITIONS.json`, your change
+   touched a file that installs only in some projects. For example, you
+   renamed a Salesforce rule. `plugins/toolkit/scaffold/CONDITIONS.json` is
+   the list of those files, and the agent updates it to match.
+4. The agent raises the toolkit's version number, so Codex picks up the new
+   copy.
+5. In each existing project, say **"update the toolkit"**. The agent shows what
+   would change first. It never overwrites a file you changed in that project.
+
+Right now the toolkit copies from
+`/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved`,
+the folder that holds the 23 changes you approved. After you merge those
+changes into your model (`dev/model-changes.md` has the steps), the copy
+switches to your own model folder.
 
 ## What you must do yourself
 
@@ -173,6 +207,13 @@ The agent never does these for you. It tells you when each one is needed.
 ## Where things are
 
 - `plugins/`: the six plugins. This is everything Claude Code and Codex install.
+- `plugins/toolkit/scaffold/model/`: the copy of your model project that
+  setup installs. Nobody edits it by hand.
+- `plugins/toolkit/scaffold/CONDITIONS.json`: which model files install only
+  for some answers (local work items, built-in memory, Salesforce, or one of
+  Claude Code and Codex).
+- `dev/tools/import-model.mjs`: the tool that copies your model project into
+  the toolkit.
 - `dev/`: the goal, the build plan, research, and test runs. It is not
   installed anywhere.
 - `AGENTS.md`: instructions for agents working on Toolkit V2 itself.
