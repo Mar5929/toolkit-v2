@@ -92,7 +92,28 @@ Read `dev/GOAL.md` first. This file says where the work stands.
   Evidence: `dev/test-runs/notion-after.md`. Showcase row "Toolkit V2 sample
   (safe to delete)" with its own Work Items (prefix TVS) and Memory databases.
 
+- Claude Code run (claude-a) passed end to end in real `claude -p` sessions
+  with all five hooks seen (`dev/test-runs/claude-a/evidence.md`). Found:
+  AI credit lines in the test project's commits (must fix: attribution
+  setting + commit hook), publish-docs without a remote, temp folders,
+  focus heading, memory body labels, doctor exit code.
+- Routing check (`dev/test-runs/skill-routing.md`): Claude 81%, Codex 94%;
+  two Salesforce overlaps.
+- Lore research done (`dev/research/lore.md`); Mike chose "store in Lore's
+  layout" and approved rewriting the sf-architect-solutioning description.
+- Running: workflow `wf_d86598a0-140` (Firecrawl capture of official docs to
+  `ai-external-knowledge/`, skill-writing guide, all descriptions rewritten,
+  Lore layout for Notion memory, routing re-tests until 90% in both hosts).
+
 ## Pending fixes (collect; fix after the sample runs)
+
+- (claude-a) AI credit: add `"attribution": {"commit": "", "pr": ""}` to the
+  toolkit settings fragment; pre-tool hook denies commits or PRs with AI
+  credit lines; doctor checks it.
+- (claude-a) publish-docs with no remote; skills' temp folders on Claude
+  Code; focus heading and "Last updated"; memory body labels; doctor exit
+  code with only other-host warnings; test isolation command in
+  ARCHITECTURE section 10 needs `--settings` enabledPlugins for `@inline`.
 
 - Recent History rows are appended oldest first; the template says newest
   first (`lib/work/model.mjs` appendSectionRow/appendHistory).
