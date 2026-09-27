@@ -61,6 +61,17 @@ steps that must always run the same way.
   holding Lore's databases) so Lore's tools can read it. Lore's own automatic
   saving and hooks stay off; no new sign-in. Focus and glossary stay child
   pages.
+- **Memory additions from Mike's research note** (Mike, 2026-09-27; note
+  summarized in `dev/research/memory-architecture-notes.md`): (1) saved
+  proposals: an unanswered "Save to memory?" becomes a `needs-review`
+  record the agent does not rely on, listed under "what do you need from me"
+  (work-decide) until Mike approves or rejects it; (2) a duplicate check in
+  the `toolkit memory save` command itself; (3) clean deletes: deleting or
+  retiring a memory also clears it from the briefing, Hindsight, and Notion
+  caches; (4) a memory test set: fresh-session handoff, corrected fact
+  replaces the old one, "I don't know" instead of a guess, no leak between
+  projects. Enterprise parts (tenants, access control, legal hold, graphs)
+  are left out for a solo setup.
 - **Skill descriptions must be written to the official Claude Code and Codex
   best practices** (Mike, 2026-09-27), so the agent knows exactly when to use
   each skill. Use Firecrawl to capture the official guidance. Mike approved
