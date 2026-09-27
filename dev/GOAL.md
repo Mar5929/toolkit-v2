@@ -54,8 +54,17 @@ steps that must always run the same way.
 - Memory options: built-in `.memory/`, local Hindsight, or Notion.
 - **Notion memory uses Lore** (Mike, 2026-09-27): `github.com/makenotion/lore`,
   Notion's own open-source "persistent, shared AI memory backed by Notion for
-  MCP-compatible assistants". Research first (`dev/research/lore.md`), then
-  apply it to the Notion memory option, keeping per-project memory.
+  MCP-compatible assistants". Research: `dev/research/lore.md`. Mike chose
+  (2026-09-27) "store in Lore's layout": the toolkit keeps its own `toolkit
+  memory` commands, the model's formats, and the approval step, and writes
+  each project's Notion memory in Lore's database layout (a "Memory" page
+  holding Lore's databases) so Lore's tools can read it. Lore's own automatic
+  saving and hooks stay off; no new sign-in. Focus and glossary stay child
+  pages.
+- **Skill descriptions must be written to the official Claude Code and Codex
+  best practices** (Mike, 2026-09-27), so the agent knows exactly when to use
+  each skill. Use Firecrawl to capture the official guidance. Mike approved
+  rewriting the `sf-architect-solutioning` description only (body unchanged).
 - Hindsight: self-hosted only, never Hindsight Cloud. One local server on this
   Mac, one memory bank per project. No Docker (Mike was unsure; Docker on a
   Mac cannot use the GPU and needs Docker Desktop running). Installed with
