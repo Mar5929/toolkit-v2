@@ -87,8 +87,24 @@ Read `dev/GOAL.md` first. This file says where the work stands.
   Runs (a), (c), (d) round 1 active.
 - 2026-09-27: Mike's Notion page "AI Agent Second Brain" was found archived
   (done from his account at 2026-09-26 22:41 UTC; cause unknown). Mike chose
-  "restore and rebuild". Restored with `PATCH is_archived false`; rebuild
-  running as workflow run `wf_41ff86e7-b26`.
+  "restore and rebuild". Restored with `PATCH is_archived false`. Rebuilt
+  (workflow run `wf_41ff86e7-b26`); independent check: finish item 7 passes.
+  Evidence: `dev/test-runs/notion-after.md`. Showcase row "Toolkit V2 sample
+  (safe to delete)" with its own Work Items (prefix TVS) and Memory databases.
+
+## Pending fixes (collect; fix after the sample runs)
+
+- Recent History rows are appended oldest first; the template says newest
+  first (`lib/work/model.mjs` appendSectionRow/appendHistory).
+- Parent and sub-item links are not written into the body text (Related
+  items, Roadmap Sub-items column) in Notion items.
+- `ensure-root` does not add the registry columns (Key...) to the "All
+  Projects" view; `ensure-project` leaves the project row's Status empty.
+- "WORK-ITEM.md" in page text becomes an auto-link to http://WORK-ITEM.md in
+  Notion; write it as code text.
+- Notion "Design approved" left blank instead of "no" on new items.
+- `replace_content` on a page puts replaced text blocks in the Notion trash;
+  prefer targeted edits where possible.
 - `caffeinate -i -s -t 28800` runs in the background so the Mac does not
   idle-sleep for 8 hours (closing the lid still sleeps it).
 
