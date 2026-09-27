@@ -2,7 +2,7 @@ import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { makeProject, cleanup, tk, newItem, readRecord, recordPath, readState, trackerDir, TODAY } from './helpers.mjs';
+import { makeProject, cleanup, tk, newItem, readRecord, recordPath, readState, trackerDir, TODAY, approveRequirements } from './helpers.mjs';
 import { parseDoc, parseHistory, getLabel, parseQuestions, getH1 } from '../../lib/work/model.mjs';
 
 after(cleanup);
@@ -67,7 +67,7 @@ test('sub-items nest inside the parent folder and the parent gets a history row'
   assert.equal(file, path.join(trackerDir(dir), 'WI-001-checkout', 'WI-002-card-payments', 'WORK-ITEM.md'));
   assert.equal(parseDoc(fs.readFileSync(file, 'utf8')).meta.parent, 'WI-001');
   const hist = parseHistory(parseDoc(await readRecord(dir, parent)).body);
-  assert.match(hist.at(-1).change, /Sub-item WI-002 created/);
+  assert.match(hist[0].change, /Sub-item WI-002 created/);
   const tree = await tk(dir, ['work', 'list', '--tree']);
   assert.match(tree.stdout, /^WI-001 {2}Checkout .*\n {2}WI-002 {2}Card payments/m);
   const show = await tk(dir, ['work', 'show', parent, '--json']);
@@ -94,7 +94,7 @@ test('set changes the stage and status together and enforces the build gate', as
   const typeChange = await tk(dir, ['work', 'set', task, '--type', 'build']);
   assert.equal(typeChange.code, 2, 'changing to build past 03 is refused');
   const hist = parseHistory(parseDoc(await readRecord(dir, task)).body);
-  assert.match(hist.at(-1).change, /stage 01 Discovery -> 08 Build \(status In Progress\)/);
+  assert.match(hist[0].change, /stage 01 Discovery -> 08 Build \(status In Progress\)/);
   const bad = await tk(dir, ['work', 'set', task, '--waiting-on', 'bob']);
   assert.equal(bad.code, 2);
   const title = await tk(dir, ['work', 'set', task, '--title', 'Tidy the docs']);
@@ -105,11 +105,16 @@ test('set changes the stage and status together and enforces the build gate', as
 test('approve records requirements, design, and result approvals', async () => {
   const dir = makeProject();
   const id = await newItem(dir, 'Report export', ['--type', 'build']);
+  // The goal is written before the approval is recorded (sample run b, round 2).
+  const blank = await tk(dir, ['work', 'approve', id, '--requirements', '--by', 'Mike', '--json']);
+  assert.equal(blank.code, 2, 'refused while the Agreed goal is the template text');
+  assert.match(blank.stdout + blank.stderr, /Agreed goal still holds the template text/);
+  assert.equal(parseDoc(await readRecord(dir, id)).meta.requirements_approved, 'no', 'nothing was recorded');
+  assert.equal((await tk(dir, ['work', 'edit', id, '--section', 'Agreed goal', '--text', 'Export the report as CSV.'])).code, 0);
   const req = await tk(dir, ['work', 'approve', id, '--requirements', '--by', 'Mike', '--json']);
   assert.equal(req.code, 0, req.stdout);
   assert.equal(req.json.item.stage, '03-requirements-approved');
   assert.equal(req.json.item.status, 'Ready');
-  assert.ok(req.json.warnings.some((w) => w.includes('Agreed goal')));
   let doc = parseDoc(await readRecord(dir, id));
   assert.equal(doc.meta.requirements_approved, `${TODAY} by Mike`);
   assert.equal(getLabel(doc.body, 'Overall status', { section: 'Requirements' }), 'Finalized');
@@ -191,7 +196,7 @@ test('history adds a row; finish and cancel set the terminal statuses with their
   const id = await newItem(dir, 'Onboarding email', ['--type', 'task']);
   assert.equal((await tk(dir, ['work', 'history', id, '--note', 'Mike chose plain text.', '--effect', 'No HTML template.'])).code, 0);
   let hist = parseHistory(parseDoc(await readRecord(dir, id)).body);
-  assert.deepEqual([hist.at(-1).change, hist.at(-1).effect], ['Mike chose plain text.', 'No HTML template.']);
+  assert.deepEqual([hist[0].change, hist[0].effect], ['Mike chose plain text.', 'No HTML template.']);
   assert.equal((await tk(dir, ['work', 'finish', id, '--by', 'Mike'])).code, 2, 'evidence required');
   const child = await newItem(dir, 'Subject line', ['--parent', id]);
   const blocked = await tk(dir, ['work', 'finish', id, '--by', 'Mike', '--evidence', 'Sent a test email.']);
@@ -199,13 +204,20 @@ test('history adds a row; finish and cancel set the terminal statuses with their
   assert.match(blocked.stderr, /open sub-items: WI-002/);
   const cancel = await tk(dir, ['work', 'cancel', child, '--reason', 'Not needed after all.', '--json']);
   assert.equal(cancel.code, 0);
-  const fin = await tk(dir, ['work', 'finish', id, '--by', 'Mike', '--evidence', 'Sent a test email.', '--json']);
+  // With no recorded result approval, Done needs the owner's own words.
+  const noWords = await tk(dir, ['work', 'finish', id, '--by', 'Mike', '--evidence', 'Sent a test email.', '--json']);
+  assert.equal(noWords.code, 2, noWords.stdout);
+  assert.equal(JSON.parse(noWords.stdout || noWords.stderr).error.details.gate, 'result_not_approved');
+  assert.notEqual(parseDoc(await readRecord(dir, id)).meta.status, 'Done', 'nothing changed');
+  const fin = await tk(dir, ['work', 'finish', id, '--by', 'Mike', '--evidence', 'Sent a test email.', '--quote', 'Looks good, mark it done.', '--json']);
   assert.equal(fin.code, 0, fin.stdout);
   const doc = parseDoc(await readRecord(dir, id));
   assert.equal(doc.meta.status, 'Done');
   assert.equal(doc.meta.result_approved, `${TODAY} by Mike`);
   hist = parseHistory(doc.body);
-  assert.match(hist.at(-1).effect, /Evidence: Sent a test email\./);
+  assert.match(hist[0].effect, /Evidence: Sent a test email\./);
+  assert.match(hist[0].change, /Result approved by Mike: "Looks good, mark it done\."/);
+  assert.doesNotMatch(doc.body, /Fill-in guide/, 'finishing removes the template\'s item guide');
   assert.equal((await tk(dir, ['work', 'finish', id, '--by', 'Mike', '--evidence', 'x'])).code, 2, 'already Done');
   const list = await tk(dir, ['work', 'list', '--json']);
   assert.equal(list.json.items.length, 0, 'finished items are hidden by default');
@@ -235,7 +247,7 @@ test('move nests, groups, archives, and returns items; archive is hidden from ne
   assert.equal(under.code, 0, under.stdout);
   assert.equal(under.json.parentAfter, 'WI-001');
   assert.equal(parseDoc(await readRecord(dir, b)).meta.parent, 'WI-001');
-  assert.match(parseHistory(parseDoc(await readRecord(dir, b)).body).at(-1).effect, /Parent is now WI-001/);
+  assert.match(parseHistory(parseDoc(await readRecord(dir, b)).body)[0].effect, /Parent is now WI-001/);
   assert.equal((await tk(dir, ['work', 'move', a, '--under', b])).code, 2, 'no cycles');
   const grp = await tk(dir, ['work', 'move', a, '--under', 'billing', '--json']);
   assert.equal(grp.code, 0);
@@ -268,7 +280,7 @@ test('move nests, groups, archives, and returns items; archive is hidden from ne
 test('next ranks In Progress over Ready, skips blocked and Backlog items, and prefers higher priority', async () => {
   const dir = makeProject();
   const ready = await newItem(dir, 'Ready one', ['--type', 'task']);
-  await tk(dir, ['work', 'approve', ready, '--requirements', '--by', 'Mike']);
+  await approveRequirements(dir, ready);
   const low = await newItem(dir, 'Low', ['--stage', '08', '--priority', 'low']);
   const high = await newItem(dir, 'High', ['--stage', '08', '--priority', 'high']);
   const blocked = await newItem(dir, 'Blocked', ['--stage', '08', '--priority', 'urgent']);
@@ -299,14 +311,17 @@ test('decisions collects waiting_on owner, owner questions, proposed designs, st
   assert.ok(kinds.has(`${a}:waiting_on_owner`));
   assert.ok(kinds.has(`${b}:design_proposed`));
   assert.ok(kinds.has(`${c}:result_approval`));
-  assert.ok(kinds.has(`${d}:delivery_offer`));
-  assert.equal(kinds.get(`${d}:delivery_offer`).continueWith, 'work-delegate');
-  assert.ok(!kinds.has(`${early}:delivery_offer`), 'no delivery offer while the item is in Backlog (before 03)');
+  // The delivery offer is the agent's step, listed apart from the owner's decisions.
+  assert.ok(!kinds.has(`${d}:delivery_offer`), 'not counted as a decision waiting on the owner');
+  const todos = new Map(r.json.agentTodos.map((x) => [`${x.id}:${x.kind}`, x]));
+  assert.ok(todos.has(`${d}:delivery_offer`));
+  assert.equal(todos.get(`${d}:delivery_offer`).continueWith, 'work-delegate');
+  assert.ok(!todos.has(`${early}:delivery_offer`), 'no delivery offer while the item is in Backlog (before 03)');
   assert.ok(kinds.has(`${e}:open_question`));
   assert.equal(r.json.decisions.filter((x) => x.id === e && x.kind === 'open_question').length, 1, 'answered questions are left out');
   await tk(dir, ['work', 'set', d, '--delivery', 'agent-led']);
   const r2 = await tk(dir, ['work', 'decisions', '--json']);
-  assert.ok(!r2.json.decisions.some((x) => x.id === d && x.kind === 'delivery_offer'));
+  assert.ok(!r2.json.agentTodos.some((x) => x.id === d && x.kind === 'delivery_offer'));
   const dash = fs.readFileSync(path.join(trackerDir(dir), 'DASHBOARD.md'), 'utf8');
   assert.match(dash, /## Waiting on the owner\n\n\| ID \| Title \| What is needed \| Continue with \|/);
   assert.match(dash, /Colour\?/);
@@ -336,10 +351,10 @@ test('the dashboard lists in-progress, ready, backlog, recently done, and the tr
   const a = await newItem(dir, 'Building', ['--stage', '08']);
   await tk(dir, ['work', 'edit', a, '--label', 'Next action', '--value', 'Write the parser (agent).']);
   const b = await newItem(dir, 'Ready', ['--type', 'task']);
-  await tk(dir, ['work', 'approve', b, '--requirements', '--by', 'Mike']);
+  await approveRequirements(dir, b);
   await newItem(dir, 'Later');
   const d = await newItem(dir, 'Finished');
-  await tk(dir, ['work', 'finish', d, '--by', 'Mike', '--evidence', 'Done.']);
+  await tk(dir, ['work', 'finish', d, '--by', 'Mike', '--evidence', 'Done.', '--quote', 'Done, thanks.']);
   const dash = fs.readFileSync(path.join(trackerDir(dir), 'DASHBOARD.md'), 'utf8');
   assert.match(dash, /## In progress[\s\S]*\| WI-001 \| Building \| 08 Build \| In Progress \|  \| Write the parser \(agent\)\. \|/);
   assert.match(dash, /## Ready[\s\S]*\| WI-002 \| Ready \|/);
@@ -382,7 +397,7 @@ test('an item that breaks an approval gate is not recommended by next and contin
   assert.ok(!next.json.others.some((o) => o.id === gated));
   const decisions = await tk(dir, ['work', 'decisions', '--json']);
   assert.ok(decisions.json.decisions.some((d) => d.id === gated && d.kind === 'gate'));
-  await tk(dir, ['work', 'approve', gated, '--requirements', '--by', 'Mike']);
+  await approveRequirements(dir, gated);
   const after2 = await tk(dir, ['work', 'next', '--json']);
   assert.equal(after2.json.next.id, gated, 'once approved, it is recommended again');
   assert.equal(after2.json.next.continueWith, 'work-on');
@@ -402,7 +417,7 @@ test('approving the result at 11 continues with work-finish, and an approval end
   const text = await tk(dir, ['work', 'show', id]);
   assert.match(text.stdout, /Continue with: work-finish/);
   const doc = parseDoc(await readRecord(dir, id));
-  assert.match(parseHistory(doc.body).at(-1).effect, /No longer waiting on the owner\./);
+  assert.match(parseHistory(doc.body)[0].effect, /No longer waiting on the owner\./);
   const noWait = await newItem(dir, 'Other', ['--type', 'task', '--stage', '11']);
   const r2 = await tk(dir, ['work', 'approve', noWait, '--result', '--by', 'Mike', '--json']);
   assert.equal(r2.json.clearedWaiting, false);

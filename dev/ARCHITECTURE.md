@@ -168,14 +168,25 @@ entries in `.codex/config.toml`. `toolkit doctor` checks both.
 - `hindsight`: `{ "url": "http://127.0.0.1:8888", "bank": "<key>" }`, chosen once.
 - `salesforce`: `{ "enabled": true, "orgs": { "sandbox": "<alias>", "production": "<alias>" } }`.
 - `installed`: path -> sha256 of every scaffold file as installed, so
-  `toolkit sync` never overwrites a file Mike changed (M4).
+  `toolkit sync` never overwrites a file Mike changed (M4). A file with no
+  entry that is byte for byte the toolkit's version (left by a run that
+  stopped before `.toolkit.json` was written) is recorded on the next init or
+  sync, not treated as Mike's.
+- `declined` (only when set): optional scaffold files the owner turned down,
+  today only `SOUL.md`. Init leaves them out (`--decline SOUL.md`), sync never
+  adds them back, and doctor does not report them missing. Changed with
+  `toolkit config set declined SOUL.md` (or `none`).
 - The key `"toolkit": "toolkit-v2"` marks a V2 project. Every V2 hook exits
   silently with no output when `.toolkit.json` is missing or lacks that key.
 - The project root is found from the hook's stdin `cwd` (or the process cwd)
   with `git rev-parse --show-toplevel`; Git-ignored data (tracker, memory) is
   found in the main checkout through `git rev-parse --git-common-dir` (P20).
 - `init` writes `.toolkit.json` last, after every step succeeded; every step is
-  safe to run again (M9).
+  safe to run again (M9). It writes the files in `.codex/` and `.agents/`
+  first, because the Codex sandbox refuses them: inside Codex, init stops
+  before any other file is written and prints the exact command for the owner
+  to run in a terminal. `toolkit config set` of a setup key saves the new value
+  only after its sync worked.
 
 ## 4. Work items
 
@@ -317,7 +328,7 @@ not verified" and exits 1.
 
 ```text
 toolkit version | help [command]
-toolkit init --name <n> [--key <k>] --tracker <local|notion|github|jira> --memory <builtin|hindsight|notion> [--salesforce] [--owner <name>] [--dir <path>] [--hosts claude-code,codex]
+toolkit init --name <n> [--key <k>] --tracker <local|notion|github|jira> --memory <builtin|hindsight|notion> [--salesforce] [--owner <name>] [--dir <path>] [--hosts claude-code,codex] [--decline SOUL.md]
 toolkit sync [--dry-run]                      add missing scaffold files; never overwrite a file whose hash changed
 toolkit doctor [--json]                       every problem with its fix
 toolkit brief [--host claude|codex]           the session briefing
@@ -328,16 +339,16 @@ toolkit index knowledge [--check]             regenerate ai-external-knowledge/I
 toolkit decision add --decision <t> --why <t> --by <name> [--replaces D-n]
 
 toolkit work lifecycle
-toolkit work new --title <t> [--type <t>] [--parent <id>] [--stage <s>] [--priority <p>]
+toolkit work new --title <t> [--type <t>] [--parent <id> [--covers R-02,R-03]] [--stage <s>] [--priority <p>]
 toolkit work list [--status <s>] [--waiting-on <w>] [--tree] [--all]
 toolkit work show <id> [--section <heading>] [--path] [--json]
-toolkit work edit <id> --section <heading> --set-file <f> | --append-row <text>
-toolkit work set <id> [--stage] [--waiting-on] [--priority] [--type] [--delivery] [--title]
+toolkit work edit <id> --section <heading> --set-file <f> | --text <t> | --append-row <text> | --label <name> --value <t> | --remove-guide
+toolkit work set <id> [--stage] [--waiting-on] [--priority] [--type] [--delivery] [--title] [--note <why>]
 toolkit work approve <id> --requirements|--design|--result --by <name>
-toolkit work design <id> [--create] [--set-file <f>] [--status proposed|approved|superseded]
-toolkit work history <id> --note <text>
+toolkit work design <id> [--create] [--set-file <f> | --text <t>] [--status proposed|approved|superseded]
+toolkit work history <id> --note <text> [--effect <text>]
 toolkit work move <id> --under <id|group|archive|root>
-toolkit work finish <id> --by <name> --evidence <text> [--allow-open-sub-items]
+toolkit work finish <id> --by <name> --evidence <text> [--quote <owner's words>] [--allow-open-sub-items]
 toolkit work cancel <id> --reason <text>
 toolkit work next
 toolkit work decisions                        everything waiting on the owner
@@ -350,8 +361,8 @@ toolkit memory get <key> | list [--type] [--status]
 toolkit memory retire <key> [--superseded-by <key>] | restore <key>
 toolkit memory rename <key> --to <new-key>      new key (and type); links and supersedes entries in other notes follow
 toolkit memory delete <key> --owner-approved
-toolkit memory focus [--set-file <f>] [--expect <version>]
-toolkit memory glossary [--set-file <f>] [--expect <version>]
+toolkit memory focus [--set-file <f> | --text <t>] [--expect <version>]
+toolkit memory glossary [--set-file <f> | --text <t>] [--expect <version>]
 toolkit memory export --to <dir> | import --from <dir> [--dry-run]
 toolkit memory reindex
 toolkit memory status                         last save time, counts, backend health
@@ -373,9 +384,9 @@ use recorded real inputs from both hosts.
 
 | Event | Matcher | Does |
 | --- | --- | --- |
-| SessionStart | `startup\|resume\|clear\|compact\|fork` | Refreshes the plugin-root pointer; runs `work sync` (local); prints the briefing as `additionalContext`, about 6,000 characters max: this worktree's item, active items with their next skill, waiting on the owner, current focus, moves detected, setup warnings, a plain statement that `AGENTS.md` is the project manual. Codex adds the always-on rules list and the voice section. Notion and Hindsight read a Git-ignored cache (refreshed on every write) with 2-second timeouts and fail open (I9). |
+| SessionStart | `startup\|resume\|clear\|compact\|fork` | Refreshes the plugin-root pointer; runs `work sync` (local); prints the briefing as `additionalContext`, about 6,000 characters max: this worktree's item, active items with their next skill, waiting on the owner, current focus, moves detected, setup warnings, a plain statement that `AGENTS.md` is the project manual. Codex adds the always-on rules list and the voice section. Notion and Hindsight read a Git-ignored cache (refreshed on every write) with 2-second timeouts and fail open (I9). The Notion check only reads the row properties to report the owner's moves; it writes nothing, and the next `toolkit work` command records the history rows (sample run c, round 2). |
 | UserPromptSubmit | none | Records the turn in session state; cheap tracker rescan (reports moves); when the prompt contains an explicit keep phrase ("remember that/this", "from now on", "don't ever", "note that", "going forward", "keep in mind"; never "do you remember", "never mind", "always fails"), adds one factual line: "The owner stated something to keep; memory-save records it, or work-on if it is a task." (I14) |
-| PreToolUse | Claude `Write\|Edit\|MultiEdit\|Bash`; Codex `^apply_patch$\|^Bash$` | Denies hand edits of generated files (`DASHBOARD.md`, `.toolkit-state.json`, `.memory/MEMORY.md`, `ai-external-knowledge/INDEX.md`) with the command to use; denies `git clean` with `-x`/`-X` in the main checkout (I17); denies `git add -A`, `git add .`, `git commit -a`, force pushes (the model's settings deny list, now in both hosts, P11). Salesforce projects: the protected-org and permission-set guards run here too, with every `ask` turned into `deny` in Codex (I8). |
+| PreToolUse | Claude `Write\|Edit\|MultiEdit\|Bash`; Codex `^apply_patch$\|^Bash$` | Denies hand edits of generated files (`DASHBOARD.md`, `.toolkit-state.json`, `.memory/MEMORY.md`, `ai-external-knowledge/INDEX.md`) with the command to use; denies `git clean` with `-x`/`-X` in the main checkout (I17); denies `git add -A`, `git add .`, `git commit -a`, force pushes (the model's settings deny list, now in both hosts, P11). Codex only: adds a note (additionalContext, never a refusal) when a `toolkit` command is joined to other commands, sits in a heredoc, or runs from a script or loop, because it then runs inside the sandbox (sample runs, round 2). Salesforce projects: the protected-org and permission-set guards run here too, with every `ask` turned into `deny` in Codex (I8). |
 | PostToolUse | Claude `Write\|Edit\|MultiEdit\|Bash`; Codex `^apply_patch$\|^Bash$` | Records `toolkit memory save` / work-item edits in session state. After a work-item record changes: validates only (never rewrites the file, I2) and returns `additionalContext` with any error or gate question; `decision: block` only for a gate violation. After a `.memory/` topic change: reindex under the lock. |
 | Stop | none | Guarded by `stop_hook_active`. Blocks at most once per turn when this turn had a keep phrase and no memory save was recorded, or a work-item record changed this turn and fails validation. Reason text never contains the keep phrases (P8). Otherwise silent. |
 

@@ -202,6 +202,18 @@ Path-scoped. Claude Code loads each one when it reads a matching file. Codex: op
 content the toolkit wrote there. A target the toolkit did not write, and a
 generated file, has no entry.
 
+A target with no entry whose content is exactly what the toolkit would write
+is recorded, at init and at sync, whatever its mode. That is a file an earlier
+run wrote before it stopped (`.toolkit.json` is written last), so it is the
+toolkit's, not the project's. Doctor warns about such a file until sync
+records it.
+
+Files in `.codex/` and `.agents/` are written first. The Codex sandbox refuses
+those folders, so inside Codex a run stops before it writes anything else.
+
+A target named in `.toolkit.json` `declined` (today only `SOUL.md`) is never
+installed and never reported missing; its `installed` entry is dropped.
+
 | Mode | Used for | Target missing | Target already there at init |
 | --- | --- | --- | --- |
 | `copy` | every other model file; `.codex/rules/toolkit.rules` | Write the file. | Keep the project's file and report "kept the project's file". No `installed` entry is recorded, so sync never replaces it. |

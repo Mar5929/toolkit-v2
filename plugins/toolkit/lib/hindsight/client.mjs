@@ -44,6 +44,19 @@ export function assertBankId(bank) {
   return b;
 }
 
+/**
+ * True when the connection was refused by a sandbox, not by the server: the
+ * Codex sandbox blocks the network with EPERM for a command it runs, while a
+ * server that is down gives ECONNREFUSED.
+ */
+export function sandboxBlocked(err) {
+  const cause = (err && err.cause) || {};
+  return cause.code === 'EPERM' || cause.code === 'EACCES' || /\bconnect EPERM\b/.test(String(cause.message || err && err.message || ''));
+}
+
+/** The fix for a request the Codex sandbox blocked. */
+export const SANDBOX_FIX = 'The Codex sandbox blocked the network for this command; the server itself may be fine. Run the toolkit command alone on its own line (no &&, ;, pipe, heredoc, or script around it), so the project\'s .codex/rules/toolkit.rules runs it outside the sandbox, or ask the owner to approve running it outside the sandbox.';
+
 function describeFailure(err, timeoutMs) {
   if (!err) return 'no answer';
   if (err.name === 'TimeoutError' || err.name === 'AbortError') return `no answer within ${Math.round(timeoutMs / 100) / 10} seconds`;
@@ -149,6 +162,14 @@ export class HindsightClient {
         signal: this.signal ? anySignal([this.signal, AbortSignal.timeout(wait)]) : AbortSignal.timeout(wait),
       });
     } catch (err) {
+      if (sandboxBlocked(err)) {
+        throw new ToolkitError(EXIT.ERROR, `The request to the Hindsight server at ${this.url} was blocked before it left this computer (${describeFailure(err, wait)}). This is the Codex sandbox, not the server.`, {
+          url: this.url,
+          unreachable: true,
+          sandbox: true,
+          fix: SANDBOX_FIX,
+        });
+      }
       throw new ToolkitError(EXIT.ERROR, `The Hindsight server at ${this.url} did not answer ${method} ${url.pathname} (${describeFailure(err, wait)}).`, {
         url: this.url,
         unreachable: true,

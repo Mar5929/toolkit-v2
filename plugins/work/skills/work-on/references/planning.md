@@ -45,7 +45,11 @@ and name as its Roadmap row:
   **Depends on:** None.
 ```
 
-Phase status words: Not Started, In Progress, Done.
+Phase status words: Not Started, In Progress, Done (Cancelled for a phase
+that was dropped). Use no other word, such as "Planned". From stage 07 on,
+`toolkit work validate` warns when the Roadmap has no phase table, when Tasks
+has no checkbox lines, and when a template example row or task is left. When
+the item is finished, every phase it completed says Done.
 
 - Task status words: Not Started, In Progress, Done, Cancelled.
 - Tick a task (`- [x]`, status Done) only with evidence: the test result
@@ -62,10 +66,13 @@ Phase status words: Not Started, In Progress, Done.
 
 Only when the item needs it:
 
-- **Branch and worktree** for code work, named `wi-<number>-<slug>`, for
-  example `wi-007-csv-export`. Create the worktree under
-  `.claude/worktrees/`, as the project's `.claude/rules/shared-repository-work.md`
-  says.
+- **Branch and worktree** for code work: the worktree
+  `.claude/worktrees/wi-<number>-<slug>` on the branch
+  `claude/wi-<number>-<slug>`, as the project's
+  `.claude/rules/shared-repository-work.md` says, for example
+  `git worktree add .claude/worktrees/wi-007-csv-export -b claude/wi-007-csv-export`.
+  In Codex this command needs the owner's approval (the work plugin's
+  `references/conventions.md`, "Branches and worktrees").
 - **Salesforce projects:** the item's deployment folder,
   `delivery/deployment/<work-item-id>-<short-name>/`, copied from
   `delivery/deployment/work-item-deployment-template/` and kept current by

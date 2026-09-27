@@ -89,7 +89,7 @@ export const GATES = Object.freeze([
   { gate: 'Requirements approval', askedBy: 'work-requirements', command: 'toolkit work approve <id> --requirements --by <name>', rule: 'build and data-load items cannot reach stage 03 or later without it. Sets stage 03 when the item is earlier.' },
   { gate: 'Design approval', askedBy: 'solution-design', command: 'toolkit work approve <id> --design --by <name>', rule: 'The design stays proposed until the owner approves it.' },
   { gate: 'Result approval (stage 11)', askedBy: 'work-check', command: 'toolkit work approve <id> --result --by <name>', rule: 'The owner approves the result before it is finished.' },
-  { gate: 'Done', askedBy: 'work-finish', command: 'toolkit work finish <id> --by <name> --evidence <text>', rule: 'Only this command sets Done. It records the result approval when none is recorded.' },
+  { gate: 'Done', askedBy: 'work-finish', command: 'toolkit work finish <id> --by <name> --evidence <text> [--quote <owner\'s words>]', rule: 'Only this command sets Done. With no recorded result approval it needs --quote, the owner\'s own words approving the result, and records that approval.' },
   { gate: 'Cancel', askedBy: 'work-finish', command: 'toolkit work cancel <id> --reason <text>', rule: 'Only this command sets Cancelled. The reason is the owner\'s words.' },
   { gate: 'Delivery offer and team', askedBy: 'work-delegate', command: 'toolkit work set <id> --delivery agent-led|owner-led', rule: 'Offered once per goal; the detail goes in Notes > Decisions and context.' },
   { gate: 'Project-wide decision', askedBy: 'work-decide', command: 'toolkit decision add --decision <text> --why <text> --by <name>', rule: 'A row in DECISIONS.md at the project root.' },

@@ -41,14 +41,20 @@ async function localWork(project, { cwd, env, pluginRoot, sync }) {
 async function notionWork(project, { cwd, env, pluginRoot, live }) {
   const { readTrackerCache } = await import('../notion/tracker.mjs');
   const { worktreeItem } = await import('../work/state.mjs');
+  const { reportLines } = await import('../work/report.mjs');
   const mainRoot = project.mainRoot || project.root;
   let cache = readTrackerCache(mainRoot);
   let problem = null;
+  let moves = [];
   if (live || !Object.keys(cache.items).length) {
     try {
       const { openTracker } = await import('../work/driver.mjs');
       const tracker = await openTracker(project, { env, cwd, pluginRoot, deadlineMs: 2000, timeoutMs: 2000 });
-      await tracker.sync({ quick: true });
+      // Read only, from the row properties: the briefing reports the owner's
+      // moves and writes nothing, so it fits the 2-second budget, and the next
+      // toolkit command records the history rows (sample run c, round 2).
+      const report = await tracker.sync({ quick: true, write: false, movesOnly: true });
+      moves = reportLines(report);
       cache = readTrackerCache(mainRoot);
     } catch (err) {
       const copy = Object.keys(cache.items).length ? 'The list below is the local copy from the last toolkit command.' : 'toolkit work list reads them.';
@@ -84,8 +90,9 @@ async function notionWork(project, { cwd, env, pluginRoot, live }) {
   const waitingOnOwner = [];
   for (const i of items) {
     if (isTerminal(i.status)) continue;
-    if (String(i.waiting_on || '').toLowerCase() === 'owner') waitingOnOwner.push({ id: i.id, title: i.title, what: `${i.id} is waiting on the owner (${i.stageLabel}).`, continueWith: 'work-decide' });
+    // One entry per item: the open questions when there are some, else the general line.
     if (i.openOwnerQuestions) waitingOnOwner.push({ id: i.id, title: i.title, what: `${i.openOwnerQuestions} open question${i.openOwnerQuestions === 1 ? '' : 's'} for the owner.`, continueWith: 'work-decide' });
+    else if (String(i.waiting_on || '').toLowerCase() === 'owner') waitingOnOwner.push({ id: i.id, title: i.title, what: `${i.id} is waiting on the owner (${i.stageLabel}).`, continueWith: 'work-decide' });
   }
   const counts = { backlog: 0, ready: 0, inProgress: 0, inReview: 0, done: 0, cancelled: 0 };
   const key = { Backlog: 'backlog', Ready: 'ready', 'In Progress': 'inProgress', 'In Review': 'inReview', Done: 'done', Cancelled: 'cancelled' };
@@ -93,7 +100,7 @@ async function notionWork(project, { cwd, env, pluginRoot, live }) {
   return {
     tracker: 'notion',
     unsupported: false,
-    reportLines: [],
+    reportLines: moves,
     worktree: wt,
     thisItem,
     active,
@@ -178,6 +185,17 @@ function workSections(work) {
     });
   }
 
+  const todos = work.agentTodos || [];
+  if (todos.length) {
+    sections.push({
+      key: 'agent-todos',
+      priority: 6,
+      header: 'Agent to-do (not a decision the owner is waiting on):',
+      items: todos.map((d) => `- ${d.id}${d.title ? ` ${d.title}` : ''}: ${clip(d.what, 200)} (${d.continueWith})`),
+      more: 'toolkit work decisions lists them all.',
+    });
+  }
+
   const c = work.counts;
   if (c) {
     const bits = [];
@@ -194,7 +212,7 @@ function workSections(work) {
     sections.push({
       key: 'moves',
       priority: 8,
-      header: 'Changes found in the tracker since the last toolkit command (the work-organize skill handles moves and copies; work-decide handles questions):',
+      header: 'Changes found in the tracker since the last toolkit command. The owner has not been told about them in this session; work-on and work-organize say each one to him in one line before other work (work-organize handles moves and copies; work-decide handles questions):',
       items: moves.map((l) => `- ${clip(l, 300)}`),
       more: 'toolkit work sync prints the full report.',
     });
@@ -380,7 +398,8 @@ export function fitSections(sections, maxChars) {
 
 /**
  * Build the briefing.
- * opts: { host: 'claude'|'codex', env, pluginRoot, cwd, sync: 'full'|'quick'|false, maxChars, fetch, liveNotion }
+ * opts: { host: 'claude'|'codex', env, pluginRoot, cwd, sync: 'full'|'quick'|false, maxChars, fetch, liveNotion, fromHook }
+ *   fromHook: the SessionStart hook delivers the text (see the Codex trust findings below).
  * Returns { text, work, memory, findings }.
  */
 export async function buildBriefing(project, opts = {}) {
@@ -400,7 +419,18 @@ export async function buildBriefing(project, opts = {}) {
   ]);
 
   // Codex trust matters only to a Codex session; toolkit doctor shows it everywhere.
-  const findings = checks.findings.filter((f) => host === 'codex' || f.area !== 'codex');
+  let findings = checks.findings.filter((f) => host === 'codex' || f.area !== 'codex');
+  if (opts.fromHook && host === 'codex') {
+    // This text comes from a Toolkit V2 hook that Codex ran, so Codex runs the
+    // Toolkit V2 hooks here: a finding that says it skips them is false.
+    // When the toolkit plugin is off for the whole computer, only the
+    // project's own .codex/config.toml turned it on, and Codex reads that file
+    // only in a trusted folder, so the folder-trust finding is false too.
+    // toolkit doctor still reports both.
+    const { codexPluginOnEverywhere } = await import('./hosts.mjs');
+    const folderTrusted = !codexPluginOnEverywhere('toolkit', env);
+    findings = findings.filter((f) => f.id !== 'codex-hook-trust' && !(folderTrusted && f.id === 'codex-trust'));
+  }
   if (work.report && Array.isArray(work.report.problems)) {
     for (const p of work.report.problems) {
       if (p.severity === 'error') findings.push({ id: 'tracker-problem', severity: 'warning', message: p.message, fix: 'toolkit work validate shows the details.' });

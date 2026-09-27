@@ -39,6 +39,8 @@ its `paths` list names the documents this skill saves.
 
 Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
 
+Codex: its sandbox keeps `.git/` read-only, so every Git write here (the script's `start` and `publish`, `git add`, `git commit`, `git push`, `git worktree add` and `remove`) needs the owner's approval and escalated permissions. Run each one as its own command with `sandbox_permissions` set to `require_escalated` and a one-line reason saying what it does; an approval without escalation still runs inside the sandbox and fails on `.git/index.lock`. When Codex refuses a command without asking ("approval required by policy"), stop, show the owner the exact command, and ask him to approve it in an interactive session or run it in a terminal. With no remote (`git remote` prints nothing), skip `git fetch`.
+
 ## What counts as documentation
 
 The project documents are the paths in the project's

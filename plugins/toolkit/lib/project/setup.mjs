@@ -27,6 +27,32 @@ export const MEMORY_WORDS = Object.freeze({
 
 export const HOST_WORDS = Object.freeze({ 'claude-code': 'Claude Code', codex: 'Codex' });
 
+/**
+ * Scaffold files the owner may decline during setup. A declined file is
+ * listed in .toolkit.json "declined": init does not install it, sync never
+ * adds it back, and doctor does not report it missing.
+ */
+export const OPTIONAL_FILES = Object.freeze(['SOUL.md']);
+
+/**
+ * Read a --decline or `config set declined` value ("SOUL.md", a comma list,
+ * an array, or "none" or "" for no file) into a checked list.
+ */
+export function parseDeclined(value) {
+  if (value === undefined || value === null || value === true) return [];
+  const raw = Array.isArray(value) ? value.flatMap((v) => String(v).split(',')) : String(value).split(',');
+  const out = [];
+  for (const part of raw.map((s) => s.trim()).filter(Boolean)) {
+    if (part.toLowerCase() === 'none') continue;
+    const name = OPTIONAL_FILES.find((f) => f.toLowerCase() === part.toLowerCase());
+    if (!name) {
+      throw new ToolkitError(EXIT.INVALID, `"${part}" is not a file the owner can decline. Optional files: ${OPTIONAL_FILES.join(', ')}.`);
+    }
+    if (!out.includes(name)) out.push(name);
+  }
+  return out;
+}
+
 /** Read a --hosts value ("claude-code,codex", or an array) into a checked list. */
 export function parseHosts(value) {
   if (value === undefined || value === null || value === true) return [...HOSTS];
@@ -73,8 +99,8 @@ export function checkChoice(value, allowed, flag) {
  * A fresh .toolkit.json in the ARCHITECTURE section 3 key order.
  * `project.created` is the setup date: the `{{today}}` token renders as it.
  */
-export function newConfig({ name, key, owner, created, tracker, memory, salesforce, hosts }) {
-  return {
+export function newConfig({ name, key, owner, created, tracker, memory, salesforce, hosts, declined }) {
+  const config = {
     toolkit: 'toolkit-v2',
     schema: CONFIG_SCHEMA,
     project: created ? { name, key, owner, created } : { name, key, owner },
@@ -82,10 +108,15 @@ export function newConfig({ name, key, owner, created, tracker, memory, salesfor
     memory: { type: memory, approval: 'onboarding' },
     salesforce: salesforce ? { enabled: true, orgs: {} } : { enabled: false },
     hosts,
-    notion: {},
-    hindsight: {},
-    installed: {},
   };
+  if (Array.isArray(declined) && declined.length) config.declined = [...declined];
+  return { ...config, notion: {}, hindsight: {}, installed: {} };
+}
+
+/** The optional files a project declined (.toolkit.json "declined"), as a set. */
+export function declinedFiles(config) {
+  const list = config && Array.isArray(config.declined) ? config.declined : [];
+  return new Set(list.filter((f) => OPTIONAL_FILES.includes(f)));
 }
 
 /** One line describing a project's choices. */

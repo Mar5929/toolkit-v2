@@ -308,6 +308,8 @@ function checkScaffold(project, env, findings, { pluginRoot }) {
   const by = (action) => plan.targets.filter((t) => t.action === action);
   const missing = by('install');
   if (missing.length) finding(findings, 'scaffold-missing', 'scaffold', 'problem', `${missing.length} scaffold file${missing.length === 1 ? ' is' : 's are'} missing: ${missing.map((t) => t.target).slice(0, 12).join(', ')}${missing.length > 12 ? ', ...' : ''}.`, 'Run toolkit sync.');
+  const unrecorded = plan.targets.filter((t) => t.adoptedIdentical);
+  if (unrecorded.length) finding(findings, 'scaffold-unrecorded', 'scaffold', 'warning', `${unrecorded.length} scaffold file${unrecorded.length === 1 ? ' matches' : 's match'} the toolkit's version but ${unrecorded.length === 1 ? 'is' : 'are'} not recorded in .toolkit.json (an earlier setup stopped part way): ${unrecorded.map((t) => t.target).slice(0, 8).join(', ')}${unrecorded.length > 8 ? ', ...' : ''}.`, 'Run toolkit sync; it records them, so later updates reach them.');
   const outdated = by('update');
   if (outdated.length) finding(findings, 'scaffold-outdated', 'scaffold', 'warning', `${outdated.length} scaffold file${outdated.length === 1 ? ' is' : 's are'} older than the toolkit's version and unchanged by the project: ${outdated.map((t) => t.target).join(', ')}.`, 'Run toolkit sync.');
   const agents = plan.targets.find((t) => t.target === 'AGENTS.md');
@@ -320,6 +322,10 @@ function checkScaffold(project, env, findings, { pluginRoot }) {
   for (const t of by('conflict')) finding(findings, 'scaffold-conflict', 'scaffold', 'problem', t.conflicts.join(' '), `Fix ${t.target} by hand (define each setting one way only), then run toolkit sync.`);
   const changed = by('changed').filter((t) => !t.target.startsWith('.memory/') && !t.target.startsWith('.work-items/'));
   for (const t of changed) {
+    if (t.preexisting && !t.would.length) {
+      finding(findings, 'scaffold-changed', 'scaffold', 'note', `${t.target} is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed.`, 'The project-setup skill can show the owner the toolkit\'s version, and merges it only after his yes.');
+      continue;
+    }
     finding(findings, 'scaffold-changed', 'scaffold', 'note', `${t.target} was changed by the project, so sync leaves it alone.${t.would.length ? ` The toolkit would: ${t.would.join('; ')}.` : ' Nothing new from the toolkit.'}`, t.would.length ? 'The project-setup skill shows these to the owner and makes the changes he approves.' : null);
   }
   for (const t of by('leftover')) finding(findings, 'scaffold-leftover', 'scaffold', 'note', `${t.target} is left over from an earlier setup (its condition no longer holds).`, 'Ask the owner whether to keep or delete it.');
@@ -555,7 +561,11 @@ async function checkMemory(project, env, findings, { quick, fetch: fetchFn }) {
           else for (const p of settingsProblems(cfg)) finding(findings, 'hindsight-bank-settings', 'memory', 'warning', `Hindsight bank ${hs.bank}: ${p}`, 'Run toolkit hindsight ensure-bank.');
         }
       } catch (err) {
-        finding(findings, 'hindsight-down', 'memory', 'problem', `The local Hindsight server at ${client.url} does not answer (${err.message}).`, 'Check it with toolkit hindsight service status; start it with toolkit hindsight service start after the owner\'s yes.');
+        if (err && err.details && err.details.sandbox) {
+          finding(findings, 'hindsight-sandbox', 'memory', 'warning', `The Codex sandbox blocked doctor's request to the local Hindsight server at ${client.url}, so it was not checked. The server itself may be running.`, 'Run toolkit doctor alone on its own line, so the project\'s .codex/rules/toolkit.rules runs it outside the sandbox, or run it in a terminal.');
+        } else {
+          finding(findings, 'hindsight-down', 'memory', 'problem', `The local Hindsight server at ${client.url} does not answer (${err.message}).`, 'Check it with toolkit hindsight service status; start it with toolkit hindsight service start after the owner\'s yes.');
+        }
       }
     }
   } else if (type === 'notion') {

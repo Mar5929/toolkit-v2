@@ -478,7 +478,21 @@ export class LocalTracker {
     for (const m of report.moves) {
       const e = state.items[m.id];
       const r = view.byId.get(m.id);
-      if (r && e && e.written && normalizeParent(e.written.parent, this.prefix) === r.parent && r.parent !== 'none' && movedIds.has(r.parent)) m.withParent = r.parent;
+      if (!(r && e && e.written && normalizeParent(e.written.parent, this.prefix) === r.parent && r.parent !== 'none' && movedIds.has(r.parent))) continue;
+      // A sub-item only "moved with its parent" when its place inside the
+      // parent's folder is the same as before. A sub-item folder the owner also
+      // renamed is reported on its own, as a renamed folder.
+      const pe = state.items[r.parent];
+      const pr = view.byId.get(r.parent);
+      const inside = (p, dir) => (dir ? p.slice(dir.length + 1) : p);
+      const beforeInside = pe && pe.path ? inside(e.path, parentDir(pe.path) || '') : null;
+      const afterInside = pr ? inside(r.rel, pr.dirRel || '') : null;
+      if (beforeInside !== null && beforeInside === afterInside) {
+        m.withParent = r.parent;
+      } else if (beforeInside !== null && afterInside !== null && baseName(beforeInside) === baseName(afterInside)) {
+        m.kind = 'folder-renamed';
+        m.parentMoved = r.parent;
+      }
     }
     for (const [id, e] of Object.entries(state.items)) {
       if (seen.has(id) || e.missing || view.brokenIds.has(id)) continue;
@@ -504,6 +518,8 @@ export class LocalTracker {
       const list = view.designsFor(r.id);
       if (list.length > 1) report.problems.push({ severity: 'warning', id: r.id, message: `${r.id} has ${list.length} design files: ${list.map((d) => this.location(d.rel)).join(', ')}. The one beside the record is used.` });
     }
+
+    const moveRows = this._moveHistory(report.moves, view, today);
 
     // Derived values and owner edits.
     for (const r of view.records) {
@@ -548,6 +564,18 @@ export class LocalTracker {
       report.derived.push(...res.derived);
       report.ownerEdits.push(...res.ownerEdits);
       report.questions.push(...res.questions);
+      // The owner's hand moves and renames get a Recent History row on the
+      // item and on the parents it left and joined (sample runs a and d,
+      // round 2), written once: the state file then knows the new path.
+      for (const row of moveRows.get(r.id) || []) {
+        try {
+          body = appendHistory(body, row);
+          changedHere = true;
+        } catch {
+          // No Recent History table: the move is still reported.
+        }
+      }
+      if (changedHere && meta.updated !== today && !(res.patch && res.patch.updated)) applyMetaPatch(data, { updated: today });
       if (changedHere && canWrite) {
         const text = serializeDoc(data, body);
         if (text !== r.text) atomicWrite(r.abs, text);
@@ -562,6 +590,45 @@ export class LocalTracker {
     const fresh = this._finalize(state, { all: true, dashboard });
     fresh.report = report;
     return fresh;
+  }
+
+  /**
+   * The Recent History rows for moves found in this sync: id -> rows.
+   * The moved item says where it went; a parent it left or joined says which
+   * sub-item came or went. A sub-item that only moved inside its parent's
+   * folder says so too, because its path changed.
+   */
+  _moveHistory(moves, view, today) {
+    const rows = new Map();
+    const add = (id, change, effect) => {
+      if (!id || id === 'none' || !view.byId.has(id)) return;
+      if (!rows.has(id)) rows.set(id, []);
+      rows.get(id).push({ date: today, change, effect });
+    };
+    const top = (p) => (!p || p === 'none' ? 'none (top level)' : p);
+    for (const m of moves) {
+      const before = m.parentBefore;
+      const after = m.parentAfter;
+      const parentChanged = before !== undefined && before !== after;
+      const parentLine = parentChanged ? `Its parent is now ${top(after)}.` : `Its parent stays ${top(after)}.`;
+      const archLine = m.archivedAfter && !m.archivedBefore ? ' It is archived now.' : !m.archivedAfter && m.archivedBefore ? ' It is no longer archived.' : '';
+      if (m.kind === 'folder-renamed') {
+        add(m.id, `Folder renamed by hand: ${m.from} -> ${m.to}.`, `Same item; the toolkit uses the new path.${m.parentMoved ? ` Its parent ${m.parentMoved} moved too.` : ''}`);
+      } else if (m.kind === 'file-renamed') {
+        add(m.id, `File renamed by hand: ${m.from} -> ${m.to}.`, 'Same item; the toolkit uses the new path.');
+      } else if (m.kind === 'returned') {
+        add(m.id, `Found again by the toolkit at ${m.to} after it was missing.`, `${parentLine}${archLine}`);
+      } else if (m.withParent) {
+        add(m.id, `Moved by hand with its parent ${m.withParent}: ${m.from} -> ${m.to}.`, 'Same item; the toolkit uses the new path.');
+      } else {
+        add(m.id, `Moved by hand: ${m.from} -> ${m.to}.`, `${parentLine}${archLine}${m.group && !parentChanged ? ` Group: ${m.group}.` : ''}`);
+      }
+      if (parentChanged && !m.withParent) {
+        add(before, `Sub-item ${m.id} moved out by hand.`, `Its parent is now ${top(after)}.`);
+        add(after, `Sub-item ${m.id} moved here by hand (it was under ${top(before)}).`, `${m.id} is part of this item now.`);
+      }
+    }
+    return rows;
   }
 
   _move(r, e, kind) {

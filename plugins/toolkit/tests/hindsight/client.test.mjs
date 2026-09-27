@@ -233,3 +233,22 @@ test('ensure-bank for a project key that starts with a digit uses p-<key> and re
   const config = JSON.parse(fs.readFileSync(path.join(root, '.toolkit.json'), 'utf8'));
   assert.equal(config.hindsight.bank, 'p-3m-portal');
 });
+
+test('a request the Codex sandbox blocks (connect EPERM) is reported as the sandbox, not as a server that is down', async () => {
+  const blocked = new HindsightClient({
+    bank: 'b1',
+    fetch: async () => {
+      const e = new TypeError('fetch failed');
+      e.cause = { code: 'EPERM', message: 'connect EPERM 127.0.0.1:8888 - Local (0.0.0.0:0)' };
+      throw e;
+    },
+  });
+  await assert.rejects(() => blocked.health(), (err) => {
+    assert.match(err.message, /blocked before it left this computer/);
+    assert.match(err.message, /Codex sandbox, not the server/);
+    assert.equal(err.details.sandbox, true);
+    assert.match(err.details.fix, /alone on its own line/);
+    assert.doesNotMatch(err.details.fix, /service start/);
+    return true;
+  });
+});

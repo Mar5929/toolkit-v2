@@ -13,7 +13,7 @@ cancel" rules and its "Closing a work item" checklist, with V2 homes.
 
 ## The pull request (stage 12)
 
-- Push the item's branch (`wi-<number>-<slug>`). Never force-push.
+- Push the item's branch (`claude/wi-<number>-<slug>`). Never force-push.
 - Write the pull request title and description in plain words: what changed,
   why, how it was checked, and the item id. Run the description through the
   `unslop` skill, because it is read by other people. No line crediting an AI.
@@ -26,6 +26,14 @@ cancel" rules and its "Closing a work item" checklist, with V2 homes.
     same record.
 - A work item that says its merge needs the owner's approval overrides a
   standing instruction.
+- No remote: the local merge (`git merge --ff-only <branch>` in the main
+  checkout) is this stage. Set the stage anyway and add a history note:
+  "No remote: merged locally into main." A stage that does not apply at all
+  (no repository change, no deployment) gets one history note saying so, so
+  `toolkit work finish` has a record of it.
+- A merge that stops on a conflict: resolve it and commit with a message you
+  write. `git commit --no-edit` keeps Git's "# Conflicts:" lines in the
+  message.
 
 ## Deployment (stage 13)
 
@@ -87,9 +95,14 @@ cancel" rules and its "Closing a work item" checklist, with V2 homes.
 
 ## Done
 
+- Before the finish command: set each Roadmap phase the item completed to
+  Done, and bring Overview > Related items up to date (which sub-items
+  delivered what, and anything left to another item).
 - `toolkit work finish <id> --by <owner> --evidence "<what shows it works>"`.
   The evidence names the test result, the pull request or commit, or what the
-  owner saw.
+  owner saw. The command sets Next action to "None. Finished." and Notes >
+  Resume here to "Finished on <date>. Nothing to resume.", and prints a note
+  when stages 12 to 14 left no record or a Roadmap phase is not Done.
 - Repository work: say whether the work reached the default branch.
 - Leave the folder where it is. Moving or archiving happens only on the
   owner's request, through `work-organize`.

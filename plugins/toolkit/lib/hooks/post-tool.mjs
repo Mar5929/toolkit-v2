@@ -6,6 +6,10 @@
 //   additionalContext. `decision: "block"` only for a gate violation, with a
 //   reason that stays true when Codex puts it in place of the tool result.
 // - A .memory/ record changed by hand: rebuilds MEMORY.md under the lock.
+// - A shell command (not a toolkit command) that names a WORK-ITEM.md: checks
+//   that record after the command ran.
+// - The first direct body edit of a record in a session: one line saying that
+//   toolkit work edit is the way to change a record's text.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -38,19 +42,57 @@ function listText(items, max = 3) {
   return `${shown.join(' ')}${items.length > max ? ` (and ${items.length - max} more)` : ''}`;
 }
 
+/**
+ * Validate the work item records a shell command names (a write the pre-tool
+ * hook did not recognise still gets checked). Returns the same shape as an
+ * edit: context lines and block reasons.
+ */
+async function checkNamedRecords(cmd, cwd, project) {
+  const contexts = [];
+  const blocks = [];
+  const names = [...new Set((String(cmd).match(/[^\s'"`()<>|;&]*WORK-ITEM\.md/g) || []))];
+  if (!names.length) return { contexts, blocks };
+  const { isRecordPath } = await import('./records.mjs');
+  const { validateFile } = await import('../work/ops.mjs');
+  const config = project.config;
+  const prefix = (config.tracker && config.tracker.idPrefix) || 'WI';
+  const owner = config.project && config.project.owner;
+  for (const name of names) {
+    const abs = projectPath(path.resolve(cwd, name), project);
+    if (!isRecordPath(abs, project) || !fs.existsSync(abs)) continue;
+    const res = validateFile(abs, { prefix, ownerName: owner });
+    const rel = projectRelative(abs, project);
+    const who = res.id || rel;
+    if (res.errors.length) contexts.push(`${who} (${rel}) has ${res.errors.length} problem${res.errors.length === 1 ? '' : 's'} after this command: ${listText(res.errors)} toolkit work validate ${res.id || rel} lists every problem.`);
+    if (res.gates.length) blocks.push(`${rel} now skips an approval gate for ${who}: ${listText(res.gates)} Put the previous value back, or ask the owner and record the answer with toolkit work approve ${res.id || '<id>'} (the work-decide skill).`);
+  }
+  return { contexts, blocks };
+}
+
 async function onBash(input, io, cwd) {
   const cmd = input.tool_input && typeof input.tool_input.command === 'string' ? input.tool_input.command : '';
-  if (!/toolkit/.test(cmd)) return null;
+  const namesRecord = /WORK-ITEM\.md/.test(cmd);
+  if (!/toolkit/.test(cmd) && !namesRecord) return null;
   const found = toolkitCommands(cmd).map((c) => ({ c, kind: recordKind(c) })).filter((x) => x.kind);
-  if (!found.length || commandFailed(input)) return null;
-  const project = findProject(cwd);
+  const project = (found.length && !commandFailed(input)) || namesRecord ? findProject(cwd) : null;
   if (!project) return null;
-  await updateSession(project, io.host, input, io.env, (state) => {
-    const turn = currentTurn(state, input);
-    for (const { c, kind } of found) turn.records.push({ kind, what: `toolkit ${c.group} ${c.sub}`, at: new Date().toISOString() });
-  });
+  if (found.length && !commandFailed(input)) {
+    await updateSession(project, io.host, input, io.env, (state) => {
+      const turn = currentTurn(state, input);
+      for (const { c, kind } of found) turn.records.push({ kind, what: `toolkit ${c.group} ${c.sub}`, at: new Date().toISOString() });
+    });
+  }
+  // A command that is not a toolkit command and names a record: check the record after it ran.
+  if (namesRecord && !toolkitCommands(cmd).length) {
+    const { onlyReads } = await import('./records.mjs');
+    if (onlyReads(cmd)) return null;
+    const { contexts, blocks } = await checkNamedRecords(cmd, cwd, project);
+    if (contexts.length || blocks.length) return postToolOutput({ context: contexts.join('\n'), blockReason: blocks.join(' ') || null });
+  }
   return null;
 }
+
+const BODY_EDIT_NOTE = 'toolkit work edit <id> --section "<heading>" --set-file <file> changes a section the same way in every tracker and keeps the toolkit\'s record of what it wrote; prefer it to editing the file.';
 
 export async function postTool(input, io) {
   const cwd = input.cwd || io.cwd;
@@ -65,6 +107,7 @@ export async function postTool(input, io) {
   const contexts = [];
   const blocks = [];
   const edits = [];
+  const directEdits = [];
   let memoryTouched = false;
   const { validateFile } = await import('../work/ops.mjs');
   for (const given of files) {
@@ -83,6 +126,7 @@ export async function postTool(input, io) {
       if (res.gates.length) {
         blocks.push(`The edit to ${rel} was saved, and it skips an approval gate for ${who}: ${listText(res.gates)} Put the previous value back, or ask the owner and record the answer with toolkit work approve ${res.id || '<id>'} (the work-decide skill).`);
       }
+      if (!res.errors.length && !res.gates.length) directEdits.push(who);
     }
     if (memoryType(project) === 'builtin' && isMemoryTopic(f.path, project)) memoryTouched = true;
   }
@@ -90,12 +134,22 @@ export async function postTool(input, io) {
     const { reindexVault } = await import('../memory/builtin.mjs');
     await reindexVault(project.mainRoot || project.root);
   }
+  let remind = false;
   if (edits.length || memoryTouched) {
     await updateSession(project, io.host, input, io.env, (state) => {
       const turn = currentTurn(state, input);
       for (const e of edits) if (!turn.edits.some((x) => x.path === e.path)) turn.edits.push(e);
       if (memoryTouched) turn.records.push({ kind: 'memory-file', what: 'a .memory/ record was edited', at: new Date().toISOString() });
+      // One reminder per session that toolkit work edit is the way to change a record's text.
+      if (directEdits.length && !state.remindedBodyEdit) {
+        state.remindedBodyEdit = true;
+        remind = true;
+      }
     });
+  }
+  if (remind) {
+    const many = directEdits.length > 1;
+    contexts.push(`${many ? `${directEdits.slice(0, -1).join(', ')} and ${directEdits[directEdits.length - 1]} were` : `${directEdits[0]} was`} edited directly and ${many ? 'pass' : 'passes'} validation. ${BODY_EDIT_NOTE}`);
   }
   return postToolOutput({ context: contexts.join('\n'), blockReason: blocks.join(' ') || null });
 }

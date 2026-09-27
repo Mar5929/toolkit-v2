@@ -89,9 +89,13 @@ when it does.
 
 ## Boundaries
 
-- Write and edit only the draft file named in the brief. Do not edit the work
-  item, the requirements, memory, or any project file. Return proposed
-  changes to those to the main agent.
+- Write and edit only the draft file named in the brief. It sits in a folder
+  the main agent made for this design with `mktemp -d`. Never write a draft
+  to a fixed name in the shared `/tmp` (such as `/tmp/wi002-option-a.md`):
+  another project's item with the same id could overwrite it. If the brief
+  names no such path, ask for one in your return instead of choosing it. Do
+  not edit the work item, the requirements, memory, or any project file.
+  Return proposed changes to those to the main agent.
 - Do not run commands, tests, builds, or installs.
 - Do not approve anything, mark work done, or start other agents.
 - Do not ask the owner anything. Return questions for the design's Notes >

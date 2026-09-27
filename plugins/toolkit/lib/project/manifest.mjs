@@ -27,6 +27,8 @@
 //                            after the CONDITIONS.json removals for the current setup are
 //                            applied to it (Salesforce off: its hooks and lines come out)
 //   changed                  leave it; list it, with what the toolkit would add, change, or remove
+//   untracked, identical     the toolkit's version exactly (left by an earlier run that
+//                            stopped before .toolkit.json was written): record the hash
 //   untracked, init          copy: keep; append, merge-json, merge-toml: merge and record the hash
 //   untracked, sync          like changed
 //   AGENTS.md, no markers    keep; write the Toolkit V2 version to the proposal file
@@ -50,6 +52,7 @@ import { mergeToml } from './toml.mjs';
 import { claudeOldPlugins, codexOldPlugins, OLD_MARKETPLACE, wantedV2Plugins } from './hosts.mjs';
 import { buildManifest, renderModelFile, whenHolds, applyRemovals, rulesChangeText } from './model-scaffold.mjs';
 import { buildKnowledgeIndex, INDEX_TARGET } from './knowledge-index.mjs';
+import { declinedFiles } from './setup.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const DEFAULT_PLUGIN_ROOT = path.resolve(HERE, '..', '..');
@@ -390,10 +393,16 @@ export function planManifest(project, opts = {}) {
     byTarget.get(e.target).push(e);
   }
 
+  const declined = declinedFiles(config);
   const targets = [];
   for (const [target, all] of byTarget) {
     const entries = all.filter((e) => entryInstalls(e, ctx));
     const abs = targetPath(target, project);
+    if (entries.length && declined.has(target)) {
+      // The owner declined this optional file: never installed or recorded, never reported missing.
+      targets.push({ target, abs, entries, before: null, after: null, action: 'declined', record: false, would: [], conflicts: [], notes: [], template: false, binary: false, execBits: 0 });
+      continue;
+    }
     const binary = entries.some((e) => e.binary);
     const before = readOrNull(abs, { binary });
     const execBits = entries.reduce((bits, e) => bits | (e.model ? (e.execBits || 0) : 0), 0);
@@ -438,6 +447,15 @@ export function planManifest(project, opts = {}) {
       } else if (status === 'untracked' && entries.some((e) => e.mode === 'agents-md')) {
         // Both span markers are there (the case without them is a proposal, above).
         planAdoptedAgents(t, ctx, before);
+      } else if (status === 'untracked' && sameText(target, compute(entries, null, ctx, target).text, before)) {
+        // The file is exactly the toolkit's version: an earlier init or sync
+        // wrote it and stopped before .toolkit.json recorded it (for example
+        // when the Codex sandbox refused .codex/). It is recorded now, so
+        // later syncs keep it up to date instead of treating it as the project's.
+        t.action = 'same';
+        t.record = true;
+        t.adoptedIdentical = true;
+        t.after = before;
       } else if (status === 'untracked' && mode === 'init') {
         planInitExisting(t, ctx, before);
       } else {
@@ -481,6 +499,7 @@ export function planManifest(project, opts = {}) {
 
   // The installed map after the plan is applied.
   const nextInstalled = { ...installed };
+  for (const t of targets) if (t.action === 'declined') delete nextInstalled[t.target];
   for (const t of targets) {
     if (!t.record) continue;
     const hash = t.recordHash || (t.after !== null ? sha256(hashText(t.target, t.after)) : null);
@@ -626,8 +645,11 @@ function planChanged(t, ctx, before, recorded, changedSettings) {
     t.would = text === before ? [] : [...removed, ...would];
   } else {
     const fresh = compute(t.entries, null, ctx, t.target).text;
-    if (!recorded) t.would.push('the project had this file before the toolkit; the toolkit version was not installed');
-    else if (sha256(hashText(t.target, fresh)) !== recorded) t.would.push('the toolkit\'s own version has changed since it was installed');
+    // A file the project had before the toolkit came is not "changed by the
+    // project", and there is nothing the toolkit "would" do to it (sample run
+    // b, round 2: "The toolkit would: the project had this file before ...").
+    if (!recorded) t.preexisting = true;
+    else if (sha256(hashText(t.target, fresh)) !== recorded) t.would.push('replace it with its own version, which has changed since it was installed');
   }
   if (changedSettings && changedSettings.length) {
     const notes = [];
@@ -720,13 +742,26 @@ function addExecBits(abs, bits) {
 }
 
 /**
+ * Folders the Codex sandbox refuses to write even inside the project
+ * (workspace-write protects them). Their files are written first, so a
+ * refusal stops the run before any other file is written.
+ */
+export const SANDBOX_PROTECTED = Object.freeze(['.codex/', '.agents/']);
+
+function protectedFirst(targets) {
+  const isProtected = (t) => SANDBOX_PROTECTED.some((d) => t.target.startsWith(d));
+  return [...targets.filter(isProtected), ...targets.filter((t) => !isProtected(t))];
+}
+
+/**
  * Write the plan. Returns { written: [{ target, action }], proposal, directories }.
- * Files are written first, then AGENTS.md, so its span matches the rule files.
+ * Files in .codex/ and .agents/ are written first (see SANDBOX_PROTECTED), then
+ * the other files, then AGENTS.md, so its span matches the rule files.
  */
 export function applyPlan(plan) {
   const written = [];
   const later = [];
-  for (const t of plan.targets) {
+  for (const t of protectedFirst(plan.targets)) {
     if (t.after === null || t.after === t.before) continue;
     if (t.target === 'AGENTS.md') {
       later.push(t);
@@ -796,10 +831,14 @@ export function planLines(plan, { applied = false } = {}) {
   if (groups.span.length) lines.push(applied ? 'Rebuilt the rules list in AGENTS.md.' : 'Would rebuild the rules list in AGENTS.md.');
   list('Kept the project\'s own file (the toolkit never replaces it):', groups.keep, (t) => `${t.target}${t.notes.length ? ` (${t.notes.join('; ')})` : ''}`);
   list(applied ? 'Has the Toolkit V2 sections, so the toolkit now tracks it:' : 'Has the Toolkit V2 sections, so sync would start tracking it:', groups.adopt, (t) => `${t.target}: ${t.notes.join('; ')}`);
-  list('Changed by the project, left alone:', groups.changed, (t) => `${t.target}${t.would.length ? `. The toolkit would: ${t.would.join('; ')}` : '. Nothing new from the toolkit.'}`);
+  list('Changed by the project, left alone:', groups.changed, (t) => `${t.target}${t.preexisting ? '. The project had its own file before the toolkit, so the toolkit\'s version was never installed' : ''}${t.would.length ? `. The toolkit would: ${t.would.join('; ')}` : t.preexisting ? '.' : '. Nothing new from the toolkit.'}`);
   list('AGENTS.md has no Toolkit V2 sections:', groups.propose, () => `kept the project's AGENTS.md; the Toolkit V2 version is in ${PROPOSAL_PATH}. The project-setup skill merges it after the owner's yes.`);
   list('Could not merge:', groups.conflict, (t) => t.conflicts.join(' '));
   list('Left over from an earlier setup (not deleted; the owner decides):', groups.leftover);
+  const identical = plan.targets.filter((t) => t.adoptedIdentical);
+  if (identical.length) {
+    lines.push(`${applied ? 'Recorded' : 'Would record'} ${identical.length} file${identical.length === 1 ? '' : 's'} that already match${identical.length === 1 ? 'es' : ''} the toolkit's version (left by an earlier run that stopped), so sync keeps ${identical.length === 1 ? 'it' : 'them'} up to date: ${identical.slice(0, 8).map((t) => t.target).join(', ')}${identical.length > 8 ? ', ...' : ''}.`);
+  }
   const dirs = plan.directories.filter((d) => !d.exists);
   if (dirs.length) lines.push(`${applied ? 'Created' : 'Would create'} folders: ${dirs.map((d) => d.target).join(', ')}.`);
   for (const n of plan.notReflected) lines.push(n);
@@ -816,10 +855,11 @@ export function planSummary(plan) {
     kept: pick('keep'),
     adopted: pick('adopt'),
     unchanged: pick('same'),
-    changedByProject: plan.targets.filter((t) => t.action === 'changed').map((t) => ({ target: t.target, toolkitWould: t.would })),
+    changedByProject: plan.targets.filter((t) => t.action === 'changed').map((t) => ({ target: t.target, toolkitWould: t.would, preexisting: Boolean(t.preexisting) })),
     proposals: pick('propose').length ? [PROPOSAL_PATH] : [],
     conflicts: plan.targets.filter((t) => t.action === 'conflict').map((t) => ({ target: t.target, message: t.conflicts.join(' ') })),
     leftovers: pick('leftover'),
+    declined: pick('declined'),
     spanRebuilt: plan.targets.some((t) => t.target === 'AGENTS.md' && (t.spanOnly || t.spanChanged)),
     directories: plan.directories.filter((d) => !d.exists).map((d) => d.target),
     notReflected: plan.notReflected,

@@ -16,7 +16,8 @@ import {
   parseDoc, tryParseDoc, peekHeader, newRecordText, newDesignText, setH1, getH1, setLabel, hasLabel, appendHistory, appendSectionRow,
   setSectionText, getSectionText, splitRowText, sectionNames, canonicalId, parseId, normalizeParent,
   isPlaceholder, parseRequirements, parseQuestions, validateRecord, validateDesign, composeDoc,
-  isBlocked, DESIGN_SUFFIX, setDesignStatusLine, normalizeMeta,
+  isBlocked, DESIGN_SUFFIX, setDesignStatusLine, normalizeMeta, removeItemGuide, amendNewestHistory, parseHistory,
+  parseRoadmap,
 } from './model.mjs';
 import { RECORD_FILE, DESIGN_FILE, loadTemplate } from './templates.mjs';
 import { TRACKER_DIR } from './state.mjs';
@@ -154,21 +155,69 @@ function verify(back, want, id) {
  * Create an item from the template.
  * @returns {Promise<{ id: string, record: object }>}
  */
-export async function opNew(tracker, project, { title, type, parent, stage, priority, request, group, today } = {}) {
+/** Read a --covers value ("R-02", "R-02,R-03", or R2) into requirement ids such as R-02. */
+function coversArg(value) {
+  const raw = [].concat(value).flatMap((v) => String(v).split(',')).map((v) => v.trim()).filter(Boolean);
+  const ids = [];
+  for (const r of raw) {
+    const m = /^R-?0*(\d+)$/i.exec(r);
+    if (!m) throw invalid(`"${r}" is not a requirement id such as R-02.`);
+    const id = `R-${String(Number(m[1])).padStart(2, '0')}`;
+    if (!ids.includes(id)) ids.push(id);
+  }
+  if (!ids.length) throw invalid('--covers needs the parent\'s requirement ids, for example --covers R-02,R-03.');
+  return ids;
+}
+
+/**
+ * Create an item from the template.
+ * `covers` (with `parent`): the parent's approved requirement ids this sub-item
+ * delivers. The sub-item links them and copies none of their text, and it
+ * inherits the parent's requirements approval, so the owner is not asked to
+ * approve the same requirements twice. It starts at 03-requirements-approved
+ * (or a later stage given with `stage`).
+ * @returns {Promise<{ id: string, record: object }>}
+ */
+export async function opNew(tracker, project, { title, type, parent, stage, priority, request, group, covers, today } = {}) {
   if (!title || !String(title).trim() || isPlaceholder(title)) throw invalid('--title is required.', { fix: 'toolkit work new --title "<title>"' });
   const t = type ? typeArg(type) : 'task';
-  const s = stage ? stageArg(stage) : '01-discovery';
+  const coverIds = covers !== undefined && covers !== null ? coversArg(covers) : null;
+  if (coverIds && (!parent || String(parent).trim().toLowerCase() === 'none')) throw invalid('--covers needs --parent <id>: the item whose approved requirements this sub-item delivers.');
+  let s = stage ? stageArg(stage) : '01-discovery';
   const p = priority ? normalizePriority(priority) : 'medium';
   if (!p) throw invalid(`"${priority}" is not a priority. Priorities: ${PRIORITIES.join(', ')}.`);
-  if (stageNumber(s) === 3) throw invalid('A new item cannot start at 03-requirements-approved: record the approval with toolkit work approve <id> --requirements --by <name>.');
-  const gate = requirementsGate('A new item', t, s, { requirements_approved: 'no' });
-  if (gate) throw gate;
   let parentId = 'none';
+  let par = null;
   if (parent && String(parent).trim().toLowerCase() !== 'none') {
-    const par = await mustGet(tracker, parent);
+    par = await mustGet(tracker, parent);
     parentId = par.id;
   }
+  let inherited = null;
+  // A parent design the owner approved covers a child that delivers the
+  // parent's approved requirements: the child goes on to planning, not to a
+  // design of its own (work-organize step 6; sample runs a and d, round 2).
+  let parentDesign = null;
+  if (coverIds) {
+    if (!isApproved(par.meta.requirements_approved)) {
+      throw invalid(`${par.id} has no recorded requirements approval, so a sub-item cannot inherit one. Nothing was created.`, {
+        fix: `Create the sub-item without --covers; its requirements go through work-requirements. Or record ${par.id}'s approval first.`,
+      });
+    }
+    const known = new Set(parseRequirements(par.body).filter((r) => !r.placeholder).map((r) => r.id));
+    const unknown = coverIds.filter((r) => !known.has(r));
+    if (unknown.length) {
+      throw invalid(`${par.id} has no requirement ${unknown.join(', ')}. Its requirements: ${[...known].join(', ') || 'none'}. Nothing was created.`);
+    }
+    inherited = par.meta.requirements_approved;
+    if (par.meta.design === 'approved') parentDesign = par.id;
+    if (!stage || (stageNumber(s) ?? 0) < 3) s = parentDesign ? '06-implementation-plan' : '03-requirements-approved';
+  } else {
+    if (stageNumber(s) === 3) throw invalid('A new item cannot start at 03-requirements-approved: record the approval with toolkit work approve <id> --requirements --by <name>.');
+    const gate = requirementsGate('A new item', t, s, { requirements_approved: 'no' });
+    if (gate) throw gate;
+  }
   const date = todayOf({ today });
+  const coverText = coverIds ? coverIds.map((r) => `${parentId} ${r}`).join(', ') : '';
   const fields = {
     id: `${tracker.prefix || 'WI'}-000`,
     title: String(title).trim(),
@@ -179,27 +228,41 @@ export async function opNew(tracker, project, { title, type, parent, stage, prio
     waiting_on: 'none',
     priority: p,
     delivery: 'not-offered',
-    requirements_approved: 'no',
+    requirements_approved: inherited || 'no',
     design: 'none',
     result_approved: 'no',
     updated: date,
     request,
-    historyChange: 'Created.',
-    historyEffect: `Starts at ${stageShort(s)}. Continue with ${continueWith({ stage: s, status: statusForStage(s) })}.`,
+    historyChange: coverIds ? `Created as a sub-item of ${parentId}. It delivers ${coverText}.` : 'Created.',
+    historyEffect: coverIds
+      ? `Requirements approval inherited from ${parentId} (${inherited}); the owner is not asked again.${parentDesign ? ` ${parentDesign}'s approved design covers it, so it needs no design of its own.` : ''} Starts at ${stageShort(s)}. Continue with ${continueWith({ stage: s, status: statusForStage(s) })}.`
+      : `Starts at ${stageShort(s)}. Continue with ${continueWith({ stage: s, status: statusForStage(s) })}.`,
   };
-  const text = newRecordText(templateText(tracker, project, RECORD_FILE), fields);
-  const doc = parseDoc(text);
-  const id = await tracker.create({ meta: doc.meta, body: doc.body }, { group });
+  let text = newRecordText(templateText(tracker, project, RECORD_FILE), fields);
+  let doc = parseDoc(text);
+  let body = doc.body;
+  // The item-level guide speaks about local folders; a Notion card never needs it.
+  // A sub-item made with --covers starts filled in (stage 03 or later), and the
+  // guide says to delete it once the item is filled.
+  if ((tracker.type && tracker.type !== 'local') || coverIds) body = removeItemGuide(body);
+  if (coverIds) {
+    const line = `Covers ${coverText}. The requirement text and its approval (${inherited}) stay in ${parentId}; this item copies none of it.`;
+    if (getSectionText(body, 'Agreed goal') !== null) body = setSectionText(body, 'Agreed goal', line);
+    if (getSectionText(body, 'Active requirements') !== null) body = setSectionText(body, 'Active requirements', `- ${line}`);
+    const designNote = parentDesign ? ` Design: ${parentDesign}'s approved design.` : '';
+    if (hasLabel(body, 'Related items', { section: 'Overview' })) body = setLabel(body, 'Related items', `Parent ${parentId} (${coverIds.join(', ')}).${designNote}`, { section: 'Overview' });
+  }
+  const id = await tracker.create({ meta: doc.meta, body }, { group });
   if (parentId !== 'none') {
     await change(tracker, async () => {
-      const par = await mustGet(tracker, parentId);
-      const body = addHistory(par.body, { date, change: `Sub-item ${id} created: ${fields.title}.`, effect: `${id} is part of this item.` });
-      return save(tracker, par, { meta: { updated: date }, body });
+      const cur = await mustGet(tracker, parentId);
+      const pbody = addHistory(cur.body, { date, change: `Sub-item ${id} created: ${fields.title}.`, effect: coverIds ? `${id} delivers ${coverIds.join(', ')}. Those requirements stay here, unchanged and approved.` : `${id} is part of this item.` });
+      return save(tracker, cur, { meta: { updated: date }, body: pbody });
     });
   }
   const record = await mustGet(tracker, id);
   verify(record, { title: fields.title, stage: s, type: t }, id);
-  return { id, record };
+  return { id, record, covers: coverIds || [], inherited, parentDesign };
 }
 
 // ------------------------------------------------------------------ set
@@ -277,18 +340,88 @@ export async function opSet(tracker, id, opts = {}, { today, dryRun = false } = 
         changes.push(`title "${tt}"`);
       }
     }
-    if (!changes.length) return { id: rec.id, changed: false, changes, record: rec };
+    if (!changes.length) return { id: rec.id, changed: false, changes, record: rec, warnings: [] };
+    const warnings = patch.stage ? skipWarnings(rec, meta.stage, patch.stage, { note }) : [];
     // dryRun: every check above ran and passed; nothing is written.
-    if (dryRun) return { id: rec.id, changed: true, changes, record: rec, dryRun: true };
+    if (dryRun) return { id: rec.id, changed: true, changes, record: rec, dryRun: true, warnings };
     patch.updated = date;
-    body = addHistory(body, {
-      date,
-      change: `Set ${changes.join('; ')}.`,
-      effect: note ? String(note).trim() : patch.stage ? `Continue with ${continueWith({ stage: patch.stage, status: patch.status, waiting_on: patch.waiting_on || meta.waiting_on })}.` : '',
-    });
+    // The template's item-level guide says to delete it once the item is
+    // filled; from stage 03 on it is (validate warns about one left there).
+    if (patch.stage && (stageNumber(patch.stage) ?? 0) >= 3) body = removeItemGuide(body);
+    const onlyWaiting = Object.keys(patch).every((k) => k === 'waiting_on' || k === 'updated') && patch.waiting_on !== undefined;
+    let folded = false;
+    if (onlyWaiting && !note) {
+      // A waiting_on change alone goes into the newest row of today, the one
+      // it belongs to, instead of a row of its own (sample run b, round 2).
+      const sentence = waitingSentence(patch.waiting_on);
+      const amended = amendNewestHistory(body, (cells) => {
+        if (String(cells[0] || '').trim() !== date) return null;
+        const effect = String(cells[2] || '').trim();
+        if (effect.endsWith(sentence)) return cells;
+        cells[2] = effect ? `${effect.replace(/\s*(?:Now waiting on [^.]*\.|Nothing waits now\.)$/, '')} ${sentence}` : sentence;
+        return cells;
+      });
+      if (amended !== body) {
+        body = amended;
+        folded = true;
+      }
+    }
+    if (!folded) {
+      body = addHistory(body, {
+        date,
+        change: `Set ${changes.join('; ')}.`,
+        effect: note ? String(note).trim() : setEffect(meta, patch),
+      });
+    }
     const back = verify(await save(tracker, rec, { meta: patch, body }), patch, rec.id);
-    return { id: rec.id, changed: true, changes, record: back };
+    return { id: rec.id, changed: true, changes, record: back, warnings };
   });
+}
+
+/** The sentence a waiting_on change adds to the newest history row. */
+function waitingSentence(value) {
+  const w = normalizeWaitingOn(value) || String(value);
+  if (w === 'owner') return 'Now waiting on the owner.';
+  if (w === 'agent') return 'Now waiting on the agent.';
+  if (w === 'none') return 'Nothing waits now.';
+  if (w.startsWith('external')) return `Now waiting on ${w.slice('external:'.length).trim() || 'someone outside the project'}.`;
+  return `Now waiting on ${w}.`;
+}
+
+/**
+ * Warnings for a stage change that skips a step the lifecycle expects (sample
+ * run c, round 2: an item went from 01 to 09 with its requirement still
+ * Refining and no design). They never refuse the change: a skip can be right,
+ * and then its reason belongs in a history note.
+ */
+function skipWarnings(rec, fromStage, toStage, { note } = {}) {
+  const out = [];
+  const from = stageNumber(fromStage) ?? 0;
+  const to = stageNumber(toStage) ?? 0;
+  if (to <= from) return out;
+  const meta = rec.meta;
+  if (from <= 3 && to > 3 && !isApproved(meta.requirements_approved)) {
+    const refining = parseRequirements(rec.body).filter((r) => !r.placeholder && /^refining$/i.test(String(r.status).trim())).map((r) => r.id);
+    if (refining.length) {
+      out.push(`${rec.id} moves past 03 while ${refining.join(', ')} ${refining.length === 1 ? 'is' : 'are'} still Refining, and no requirements approval is recorded. Show the owner the requirements for approval (work-requirements), unless he agreed to skip that; then say why in a history note.`);
+    }
+  }
+  if (from < 5 && to >= 5 && (!meta.design || meta.design === 'none') && !(note && String(note).trim())) {
+    const reasoned = parseHistory(rec.body).some((h) => /\bdesign\b/i.test(h.change));
+    if (!reasoned) {
+      out.push(`${rec.id} moves past 04 Solution design with no design and no history note that says why. If the design is skipped on purpose, tell the owner in the reply ("I'll build it this way; say 'design first' to stop me.") and record the reason: toolkit work history ${rec.id} --note "Design skipped: <reason>". Otherwise open solution-design.`);
+    }
+  }
+  return out;
+}
+
+/** The "Effect on the work" cell for a `work set` row with no --note. */
+function setEffect(meta, patch) {
+  const after = { ...meta, ...patch };
+  const w = normalizeWaitingOn(after.waiting_on);
+  if (patch.waiting_on !== undefined && w === 'owner') return `Waits for the owner's answer (work-decide) before the step it blocks.`;
+  if (patch.waiting_on !== undefined && w && w.startsWith('external')) return `Waits on ${w.slice('external:'.length).trim() || 'someone outside the project'}.`;
+  return `Continue with ${continueWith(after)}.`;
 }
 
 // ------------------------------------------------------------------ approve
@@ -347,9 +480,21 @@ export async function opApprove(tracker, project, id, { what, by, today } = {}) 
     if (clearedWaiting) patch.waiting_on = 'none';
     const waitNote = clearedWaiting ? ' No longer waiting on the owner.' : '';
     if (what === 'requirements') {
+      // The owner approves a goal and requirements he was shown, so the goal
+      // is written before the approval is recorded (sample run b, round 2:
+      // "Approved." was lost because the Agreed goal was still blank).
+      const goal = getSectionText(body, 'Agreed goal');
+      if (goal !== null && isPlaceholder(goal)) {
+        throw invalid(`${rec.id}'s Agreed goal still holds the template text, so the requirements approval was not recorded. Nothing was changed.`, {
+          gate: 'goal_not_written',
+          fix: `Keep the owner's words first: toolkit work history ${rec.id} --note "Owner's words: <quote>". Write the goal he was shown with the requirements: toolkit work edit ${rec.id} --section "Agreed goal" --text "<goal>". Then run this command again; do not ask him again for the same approval.`,
+        });
+      }
       warnings = requirementWarnings(rec);
       patch.requirements_approved = approval;
       if (hasLabel(body, 'Overall status', { section: 'Requirements' })) body = setLabel(body, 'Overall status', 'Finalized', { section: 'Requirements' });
+      // The template's item-level guide says to delete it once the item is filled.
+      body = removeItemGuide(body);
       const n = stageNumber(rec.meta.stage);
       if (!isTerminal(rec.meta.status) && (n === null || n < 3)) {
         patch.stage = '03-requirements-approved';
@@ -461,8 +606,12 @@ export async function opHistory(tracker, id, { note, effect, today } = {}) {
   return change(tracker, async () => {
     const rec = await mustGet(tracker, id);
     let body;
+    // With no --effect, the row says where the item goes next, so the "Effect
+    // on the work" column is never empty (sample runs a and b, round 2).
+    const eff = effect && String(effect).trim() ? String(effect).trim()
+      : isTerminal(rec.meta.status) ? `No further work: the item is ${rec.meta.status}.` : `Continue with ${continueWith(rec.meta)}.`;
     try {
-      body = appendHistory(rec.body, { date, change: String(note).trim(), effect: effect ? String(effect).trim() : '' });
+      body = appendHistory(rec.body, { date, change: String(note).trim(), effect: eff });
     } catch (err) {
       throw new ToolkitError(EXIT.ERROR, `${rec.id} has no Recent History table to add to.`, { id: rec.id, fix: 'Restore the "## Recent History" table from the template.' });
     }
@@ -478,9 +627,9 @@ export async function opHistory(tracker, id, { note, effect, today } = {}) {
  *   section + appendRow: add a table row ("Q-02 | Question | R-01 | Open | owner")
  *   label + value: replace a bold-label line in Overview (or in --section)
  */
-export async function opEdit(tracker, id, { section, text, appendRow, label, value, today } = {}) {
-  const modes = [text !== undefined && text !== null, appendRow !== undefined && appendRow !== null, label !== undefined && label !== null].filter(Boolean).length;
-  if (modes !== 1) throw invalid('Give exactly one of --set-file <file>, --append-row <text>, or --label <name> --value <text>.');
+export async function opEdit(tracker, id, { section, text, appendRow, label, value, removeGuide = false, today } = {}) {
+  const modes = [text !== undefined && text !== null, appendRow !== undefined && appendRow !== null, label !== undefined && label !== null, Boolean(removeGuide)].filter(Boolean).length;
+  if (modes !== 1) throw invalid('Give exactly one of --set-file <file>, --text <text>, --append-row <text>, --label <name> --value <text>, or --remove-guide.');
   if ((text !== undefined && text !== null) || (appendRow !== undefined && appendRow !== null)) {
     if (!section) throw invalid('--section <heading> is required.');
   }
@@ -489,7 +638,10 @@ export async function opEdit(tracker, id, { section, text, appendRow, label, val
     const rec = await mustGet(tracker, id);
     let body = rec.body;
     try {
-      if (label !== undefined && label !== null) {
+      if (removeGuide) {
+        // The template's item-level fill-in guide: the comment above Overview.
+        body = removeItemGuide(body);
+      } else if (label !== undefined && label !== null) {
         if (value === undefined || value === null) throw invalid('--value <text> is required with --label.');
         body = setLabel(body, label, value, { section: section || 'Overview' });
       } else if (appendRow !== undefined && appendRow !== null) {
@@ -529,8 +681,12 @@ async function openSubItems(tracker, rec) {
   return kids;
 }
 
-/** Mark an item Done: needs the owner's name and evidence. Records the result approval when none is recorded. */
-export async function opFinish(tracker, id, { by, evidence, allowOpenSubItems = false, today } = {}) {
+/**
+ * Mark an item Done: needs the owner's name and evidence. With no recorded
+ * result approval, it also needs the owner's own words approving the result
+ * (--quote), and records that approval.
+ */
+export async function opFinish(tracker, id, { by, evidence, quote, allowOpenSubItems = false, today } = {}) {
   if (!by || !String(by).trim()) throw invalid('--by <name> is required: the owner who approved the result.');
   if (!evidence || !String(evidence).trim()) throw invalid('--evidence <text> is required: what shows the result works.');
   const who = String(by).trim();
@@ -554,17 +710,55 @@ export async function opFinish(tracker, id, { by, evidence, allowOpenSubItems = 
     }
     const patch = { status: 'Done', waiting_on: 'none', updated: date };
     const hadApproval = isApproved(rec.meta.result_approved);
+    const words = quote && String(quote).trim() ? String(quote).trim() : null;
+    if (!hadApproval && !words) {
+      throw invalid(`${rec.id} has no recorded result approval, so it cannot be marked Done without the owner's words. Nothing was changed.`, {
+        gate: 'result_not_approved',
+        fix: `Show the owner the result and ask. With his yes: toolkit work approve ${rec.id} --result --by ${who}, then finish; or finish with --quote "<his exact words>".`,
+      });
+    }
     if (!hadApproval) patch.result_approved = formatApproval(date, who);
-    let body = rec.body;
+    let body = removeItemGuide(rec.body);
     if (hasLabel(body, 'Next action', { section: 'Overview' })) body = setLabel(body, 'Next action', 'None. Finished.', { section: 'Overview' });
+    body = setResumeHere(body, `Finished on ${date}. Nothing to resume.`);
     body = addHistory(body, {
       date,
-      change: `Finished. ${hadApproval ? `Result approved earlier (${rec.meta.result_approved}); marked Done by ${who}.` : `Result approved by ${who}.`}`,
+      change: `Finished. ${hadApproval ? `Result approved earlier (${rec.meta.result_approved}); marked Done by ${who}.` : `Result approved by ${who}: "${words}"`}`,
       effect: `Evidence: ${String(evidence).trim()}${open.length ? ` Open sub-items left: ${open.map((k) => k.id).join(', ')}.` : ''}`,
     });
     const back = verify(await save(tracker, rec, { meta: patch, body }), { status: 'Done' }, rec.id);
-    return { id: rec.id, record: back, openSubItems: open, resultApproval: back.meta.result_approved };
+    return { id: rec.id, record: back, openSubItems: open, resultApproval: back.meta.result_approved, warnings: finishWarnings(rec) };
   });
+}
+
+/** Notes > Resume here set to a closing line, when the section is there. */
+function setResumeHere(body, line) {
+  try {
+    return getSectionText(body, 'Resume here') !== null ? setSectionText(body, 'Resume here', line) : body;
+  } catch {
+    return body;
+  }
+}
+
+/**
+ * What `work finish` reports after marking an item Done: stages 12 to 14 that
+ * left no record, and Roadmap phases not set to Done (sample runs a and c,
+ * round 2). Neither stops the finish: the owner approved the result.
+ */
+function finishWarnings(rec) {
+  const out = [];
+  const n = stageNumber(rec.meta.stage);
+  if (n !== null && n < 12) {
+    const said = parseHistory(rec.body).some((h) => /\b(no remote|merged locally|local merge|pull request|no repository change|nothing to deploy|skipp?ed)\b/i.test(`${h.change} ${h.effect}`));
+    if (!said) {
+      out.push(`${rec.id} finished from ${stageShort(rec.meta.stage)}, so stages 12 to 14 (pull request, deployment, requirements baseline) left no record. Say what happened instead in a history note, for example: toolkit work history ${rec.id} --note "No remote: merged locally into main; no deployment."`);
+    }
+  }
+  const open = parseRoadmap(rec.body).filter((r) => !r.placeholder && !isPlaceholder(r.status) && !/^(done|cancelled)\.?$/i.test(String(r.status).trim()));
+  if (open.length) {
+    out.push(`The Roadmap still shows ${open.map((r) => `${r.id || r.phase} as ${r.status}`).join(', ')}. Set each finished phase to Done: toolkit work edit ${rec.id} --section Roadmap --set-file <file>.`);
+  }
+  return out;
 }
 
 /** Mark an item Cancelled with the owner's reason. */
@@ -578,6 +772,7 @@ export async function opCancel(tracker, id, { reason, by, today } = {}) {
     const open = await openSubItems(tracker, rec);
     let body = rec.body;
     if (hasLabel(body, 'Next action', { section: 'Overview' })) body = setLabel(body, 'Next action', 'None. Cancelled.', { section: 'Overview' });
+    body = setResumeHere(body, `Cancelled on ${date}. Nothing to resume.`);
     body = addHistory(body, {
       date,
       change: `Cancelled${by ? ` by ${String(by).trim()}` : ''}: ${String(reason).trim()}`,
@@ -591,10 +786,14 @@ export async function opCancel(tracker, id, { reason, by, today } = {}) {
 
 // ------------------------------------------------------------------ move
 
-export async function opMove(tracker, id, target) {
+export async function opMove(tracker, id, target, { today } = {}) {
   if (!target || !String(target).trim()) throw invalid('--under <id|group|archive|root> is required.');
   const rec = await mustGet(tracker, id);
-  if (typeof tracker.move === 'function') return tracker.move(rec.id, String(target).trim());
+  if (typeof tracker.move === 'function') {
+    const res = await tracker.move(rec.id, String(target).trim());
+    if (!res.unchanged) await moveNotes(tracker, res, todayOf({ today }));
+    return res;
+  }
   const t = String(target).trim();
   if (t.toLowerCase() === 'root' || parseId(t)) {
     const parent = t.toLowerCase() === 'root' ? 'none' : (await mustGet(tracker, t)).id;
@@ -602,6 +801,52 @@ export async function opMove(tracker, id, target) {
     return { id: rec.id, parentBefore: rec.meta.parent, parentAfter: parent, record: back };
   }
   throw new ToolkitError(EXIT.UNSUPPORTED, `The ${tracker.type} tracker has no ${t} folder; move an item under another item or to root.`);
+}
+
+const topLevel = (p) => (!p || p === 'none' ? 'none (top level)' : p);
+
+/**
+ * Add a Recent History row unless the item already has the same change on the
+ * same date (a command run twice, or two sessions that found the same hand
+ * move). A missing item or history table is skipped: the move is still done.
+ */
+export async function noteOnce(tracker, id, row) {
+  return change(tracker, async () => {
+    const key = canonicalId(id, tracker.prefix);
+    const cur = key ? await tracker.get(key) : null;
+    if (!cur) return null;
+    if (!cur.id) cur.id = key;
+    cur.meta = normalizeMeta(cur.meta || {});
+    if (parseHistory(cur.body).some((h) => h.date === row.date && h.change === row.change)) return null;
+    let body;
+    try {
+      body = appendHistory(cur.body, row);
+    } catch {
+      return null; // No Recent History table.
+    }
+    return save(tracker, cur, { meta: { updated: row.date }, body });
+  });
+}
+
+/**
+ * History rows for `toolkit work move`: on the moved item when the tracker did
+ * not write one itself (Notion), and on the old and the new parent when the
+ * parent changed (sample run c, round 2: the parent got no row).
+ */
+async function moveNotes(tracker, res, date) {
+  const before = normalizeParent(res.parentBefore, tracker.prefix);
+  const after = normalizeParent(res.parentAfter, tracker.prefix);
+  if (tracker.type !== 'local') {
+    const where = res.archived ? 'to the archive' : after === 'none' ? 'to the top level' : `under ${after}`;
+    await noteOnce(tracker, res.id, { date, change: `Moved ${where} with toolkit work move.`, effect: `Parent is now ${topLevel(after)}.` });
+  }
+  if (before === after) return;
+  if (before !== 'none') {
+    await noteOnce(tracker, before, { date, change: `Sub-item ${res.id} moved out with toolkit work move.`, effect: `Its parent is now ${topLevel(after)}.` });
+  }
+  if (after !== 'none') {
+    await noteOnce(tracker, after, { date, change: `Sub-item ${res.id} moved here with toolkit work move (it was under ${topLevel(before)}).`, effect: `${res.id} is part of this item now.` });
+  }
 }
 
 // ------------------------------------------------------------------ next

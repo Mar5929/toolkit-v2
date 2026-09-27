@@ -15,7 +15,7 @@ import { openTracker } from '../work/driver.mjs';
 import {
   opNew, opSet, opApprove, opDesign, opHistory, opEdit, opFinish, opCancel, opMove, rankNext, opValidate, validateFile, mustGet, listItems,
 } from '../work/ops.mjs';
-import { collectOwnerDecisions } from '../work/decisions.mjs';
+import { collectOwnerDecisions, collectAgentTodos } from '../work/decisions.mjs';
 import { treeLines } from '../work/dashboard.mjs';
 import { worktreeItem, TRACKER_DIR } from '../work/state.mjs';
 import { itemSummary, reportLines } from '../work/report.mjs';
@@ -26,21 +26,30 @@ export const summary = 'Work items: create, list, show, change, approve, finish,
 
 const USAGE = `Usage:
   toolkit work lifecycle
-  toolkit work new --title <t> [--type <t>] [--parent <id>] [--stage <s>] [--priority <p>] [--request <text>] [--group <folder>]
+  toolkit work new --title <t> [--type <t>] [--parent <id> [--covers R-02,R-03]] [--stage <s>] [--priority <p>] [--request <text>] [--group <folder>]
   toolkit work list [--status <s>] [--waiting-on <w>] [--tree] [--all]
   toolkit work show <id> [--section <heading>] [--path]
-  toolkit work edit <id> --section <heading> --set-file <file|-> | --section <heading> --append-row "<a | b | c>" | --label <name> --value <text>
+  toolkit work edit <id> --section <heading> (--set-file <file|-> | --text <text>) | --section <heading> --append-row "<a | b | c>" | --label <name> --value <text> | --remove-guide
   toolkit work set <id> [--stage <s>] [--waiting-on <w>] [--priority <p>] [--type <t>] [--delivery <d>] [--title <t>] [--parent <id|none>] [--reopen] [--note <why>]
   toolkit work approve <id> --requirements|--design|--result --by <name>
-  toolkit work design <id> [--create] [--set-file <file|->] [--status proposed|approved|superseded] [--by <name>]
+  toolkit work design <id> [--create] [--set-file <file|-> | --text <text>] [--status proposed|approved|superseded] [--by <name>]
   toolkit work history <id> --note <text> [--effect <text>]
   toolkit work move <id> --under <id|group|archive|root>
-  toolkit work finish <id> --by <name> --evidence <text> [--allow-open-sub-items]
+  toolkit work finish <id> --by <name> --evidence <text> [--quote <owner's words>] [--allow-open-sub-items]
   toolkit work cancel <id> --reason <text> [--by <name>]
   toolkit work next
   toolkit work decisions
   toolkit work sync
   toolkit work validate [<id|file>]
+
+--covers: a sub-item that delivers some of the parent's approved requirements
+links them (the text stays in the parent) and inherits the parent's
+requirements approval, so the owner is not asked twice.
+--quote: finish needs the owner's own words approving the result when no
+result approval is recorded yet (toolkit work approve <id> --result records one).
+--set-file - reads the text from standard input. --text gives the text in
+the command itself, so no file is needed.
+--remove-guide: removes the template's fill-in guide comment above Overview.
 
 Exit codes: 0 ok, 1 error, 2 validation failure or a refused gate, 3 not supported for this tracker, 4 not a toolkit project.
 Skills find an item's file only with: toolkit work show <id> --path`;
@@ -51,8 +60,8 @@ export function help() {
 
 const SPEC = {
   string: ['title', 'type', 'parent', 'stage', 'priority', 'request', 'group', 'status', 'waiting-on', 'section', 'set-file', 'append-row',
-    'label', 'value', 'delivery', 'by', 'under', 'evidence', 'reason', 'note', 'effect', 'host'],
-  boolean: ['tree', 'all', 'path', 'requirements', 'design', 'result', 'create', 'reopen', 'allow-open-sub-items', 'json'],
+    'label', 'value', 'delivery', 'by', 'under', 'evidence', 'reason', 'note', 'effect', 'host', 'covers', 'quote', 'text'],
+  boolean: ['tree', 'all', 'path', 'requirements', 'design', 'result', 'create', 'reopen', 'allow-open-sub-items', 'json', 'remove-guide'],
 };
 
 function has(flags, name) {
@@ -79,6 +88,20 @@ async function readFileArg(ctx, file) {
   } catch (err) {
     throw new ToolkitError(EXIT.ERROR, `The file ${abs} could not be read: ${err.message}`, { path: abs });
   }
+}
+
+/**
+ * The text of --set-file <file|-> or --text <text>, or undefined when neither
+ * is given. --text lets a Codex session pass the text in the command, with no
+ * temporary file to name or clean up (sample run b, round 2).
+ */
+async function textArg(ctx, flags) {
+  const fromFile = has(flags, 'set-file');
+  const inline = has(flags, 'text');
+  if (fromFile && inline) throw new ToolkitError(EXIT.INVALID, 'Give --set-file or --text, not both.');
+  if (inline) return String(one(flags, 'text'));
+  if (fromFile) return readFileArg(ctx, one(flags, 'set-file'));
+  return undefined;
 }
 
 // ------------------------------------------------------------------ text helpers
@@ -143,10 +166,14 @@ async function cmdNew(ctx, tracker, project, args, changes) {
     priority: one(f, 'priority'),
     request: one(f, 'request'),
     group: one(f, 'group'),
+    covers: has(f, 'covers') ? f.covers : undefined,
     today: tracker.today ? tracker.today() : undefined,
   });
   const s = summaryOf(res.record);
-  const lines = [`Created ${res.id}: ${s.title} (${s.stageLabel}, ${s.status}${s.parent && s.parent !== 'none' ? `, sub-item of ${s.parent}` : ''}) at ${res.record.location}.`, `Continue with ${s.continueWith}.`];
+  const lines = [`Created ${res.id}: ${s.title} (${s.stageLabel}, ${s.status}${s.parent && s.parent !== 'none' ? `, sub-item of ${s.parent}` : ''}) at ${res.record.location}.`];
+  if (res.covers && res.covers.length) lines.push(`It delivers ${s.parent} ${res.covers.join(', ')} and inherits that requirements approval (${res.inherited}).`);
+  if (res.parentDesign) lines.push(`${res.parentDesign}'s approved design covers it, so it starts at planning with no design of its own.`);
+  lines.push(`Continue with ${s.continueWith}.`);
   out(ctx, withChanges(changes, lines), { ok: true, id: res.id, item: s, path: res.record.path || null, changes });
   return EXIT.OK;
 }
@@ -194,11 +221,12 @@ async function cmdList(ctx, tracker, project, args, changes) {
     lines.push(...treeLines(treeItems, {
       bullet: '',
       indent: '  ',
-      label: (it) => `${it.id}  ${it.meta.title}  (${stageShort(it.meta.stage)}, ${it.meta.status}${it.meta.waiting_on && it.meta.waiting_on !== 'none' ? `, waiting on ${it.meta.waiting_on}` : ''}${it.archived ? ', archived' : ''})${wt.id === it.id ? '  <- this worktree' : ''}`,
+      // A finished item shows only Done or Cancelled: its last stage is history, not where it stands.
+      label: (it) => `${it.id}  ${it.meta.title}  (${isTerminal(it.meta.status) ? it.meta.status : `${stageShort(it.meta.stage)}, ${it.meta.status}`}${!isTerminal(it.meta.status) && it.meta.waiting_on && it.meta.waiting_on !== 'none' ? `, waiting on ${it.meta.waiting_on}` : ''}${it.archived ? ', archived' : ''})${wt.id === it.id ? '  <- this worktree' : ''}`,
     }));
   } else {
     const rows = [['ID', 'Stage', 'Status', 'Waiting on', 'Title']];
-    for (const s of summaries) rows.push([s.id + (wt.id === s.id ? '*' : ''), s.stageLabel, s.status || '', s.waiting_on && s.waiting_on !== 'none' ? s.waiting_on : '', `${s.title}${s.archived ? ' (archived)' : ''}${s.parent && s.parent !== 'none' ? ` [sub-item of ${s.parent}]` : ''}`]);
+    for (const s of summaries) rows.push([s.id + (wt.id === s.id ? '*' : ''), isTerminal(s.status) ? '-' : s.stageLabel, s.status || '', !isTerminal(s.status) && s.waiting_on && s.waiting_on !== 'none' ? s.waiting_on : '', `${s.title}${s.archived ? ' (archived)' : ''}${s.parent && s.parent !== 'none' ? ` [sub-item of ${s.parent}]` : ''}`]);
     lines.push(...padTable(rows));
     if (wt.id && summaries.some((s) => s.id === wt.id)) lines.push('', '* this worktree\'s item');
   }
@@ -239,34 +267,60 @@ async function cmdShow(ctx, tracker, project, args, changes) {
   }
   const s = summaryOf(rec);
   const design = await tracker.getDesign(rec.id);
+  // A sub-item with no design of its own is built from its parent's approved
+  // design (work-organize step 6); say so, so work-check reads that design.
+  const inherited = design ? null : await parentDesignOf(tracker, s.parent);
+  const designText = design ? `${design.meta.status} (${design.location})`
+    : inherited ? `none of its own; ${inherited.id}'s design is approved (${inherited.location}). Read it with: toolkit work design ${inherited.id}` : 'none';
   const header = [
     `${rec.id}: ${s.title}`,
     `Location: ${rec.path || rec.location}`,
-    `Stage: ${s.stageLabel} (${s.status}) | Waiting on: ${s.waiting_on || 'none'} | Continue with: ${s.continueWith}`,
-    `Parent: ${s.parent || 'none'} | Sub-items: ${s.children.length ? s.children.join(', ') : 'none'} | Design: ${design ? `${design.meta.status} (${design.location})` : 'none'}${s.archived ? ' | Archived' : ''}`,
+    // A finished item shows Done or Cancelled: its last stage is history.
+    `Stage: ${isTerminal(s.status) ? s.status : `${s.stageLabel} (${s.status})`} | Waiting on: ${s.waiting_on || 'none'} | Continue with: ${s.continueWith}`,
+    `Parent: ${s.parent || 'none'} | Sub-items: ${s.children.length ? s.children.join(', ') : 'none'} | Design: ${designText}${s.archived ? ' | Archived' : ''}`,
     '',
   ];
   const text = composeDoc(rec.meta, rec.body);
   out(ctx, withChanges(changes, [...header, text.replace(/\s+$/, '')]), {
     ok: true, id: rec.id, item: s, meta: rec.meta, body: rec.body, location: rec.location, path: rec.path || null,
-    design: design ? { status: design.meta.status, location: design.location, path: design.path || null } : null, changes,
+    design: design ? { status: design.meta.status, location: design.location, path: design.path || null }
+      : inherited ? { status: 'approved', inheritedFrom: inherited.id, location: inherited.location, path: inherited.path || null } : null,
+    changes,
   });
   return EXIT.OK;
+}
+
+/** The parent's design when it is approved: { id, location, path }, else null. */
+async function parentDesignOf(tracker, parent) {
+  if (!parent || parent === 'none') return null;
+  try {
+    const d = await tracker.getDesign(parent);
+    if (d && d.meta && d.meta.status === 'approved') return { id: canonicalId(parent, tracker.prefix) || parent, location: d.location, path: d.path || null };
+  } catch {
+    // A parent that cannot be read: the item shows no design, as before.
+  }
+  return null;
 }
 
 async function cmdEdit(ctx, tracker, project, args, changes) {
   const id = needId(args, 'edit');
   const f = args.flags;
-  const text = has(f, 'set-file') ? await readFileArg(ctx, one(f, 'set-file')) : undefined;
+  const text = await textArg(ctx, f);
   const res = await opEdit(tracker, id, {
     section: one(f, 'section'),
     text,
     appendRow: one(f, 'append-row'),
     label: one(f, 'label'),
     value: one(f, 'value'),
+    removeGuide: Boolean(f['remove-guide']),
     today: tracker.today ? tracker.today() : undefined,
   });
-  const what = has(f, 'label') ? `"${one(f, 'label')}"` : `"${one(f, 'section')}"`;
+  const what = f['remove-guide'] ? 'the fill-in guide' : has(f, 'label') ? `"${one(f, 'label')}"` : `"${one(f, 'section')}"`;
+  if (f['remove-guide']) {
+    const line = res.changed ? `Removed the template's fill-in guide from ${res.id}.` : `${res.id} has no fill-in guide; nothing changed.`;
+    out(ctx, withChanges(changes, [line]), { ok: true, id: res.id, changed: res.changed, location: res.record.location, changes });
+    return EXIT.OK;
+  }
   const line = res.changed ? `Saved ${what} in ${res.id}.` : `${res.id}: ${what} already had that text; nothing changed.`;
   out(ctx, withChanges(changes, [line]), { ok: true, id: res.id, changed: res.changed, location: res.record.location, changes });
   return EXIT.OK;
@@ -285,7 +339,7 @@ async function cmdSet(ctx, tracker, project, args, changes) {
     // Check the other changes first, so a refused gate never follows a move that already happened.
     if (setting) await opSet(tracker, id, setOpts, { today, dryRun: true });
     const p = String(one(f, 'parent')).trim();
-    const moved = await opMove(tracker, id, p.toLowerCase() === 'none' ? 'root' : p);
+    const moved = await opMove(tracker, id, p.toLowerCase() === 'none' ? 'root' : p, { today });
     data.move = moved;
     lines.push(moved.unchanged ? `${moved.id} is already there.` : `Moved ${moved.id}${moved.to ? ` to ${moved.to}` : ''}. Parent: ${moved.parentAfter}.`);
   }
@@ -296,6 +350,8 @@ async function cmdSet(ctx, tracker, project, args, changes) {
       const s = summaryOf(res.record);
       lines.push(`Updated ${res.id}: ${res.changes.join('; ')}.`, `Now ${s.stageLabel} (${s.status}). Continue with ${s.continueWith}.`);
     } else lines.push(`${res.id} already has those values; nothing changed.`);
+    for (const w of res.warnings || []) lines.push(`Note: ${w}`);
+    data.warnings = res.warnings || [];
   } else if (!has(f, 'parent')) {
     throw new ToolkitError(EXIT.INVALID, 'Nothing to set. Give at least one of --stage, --waiting-on, --priority, --type, --delivery, --title, --parent.');
   }
@@ -321,7 +377,7 @@ async function cmdApprove(ctx, tracker, project, args, changes) {
 async function cmdDesign(ctx, tracker, project, args, changes) {
   const id = needId(args, 'design');
   const f = args.flags;
-  const text = has(f, 'set-file') ? await readFileArg(ctx, one(f, 'set-file')) : undefined;
+  const text = await textArg(ctx, f);
   const res = await opDesign(tracker, project, id, {
     create: Boolean(f.create), text, status: one(f, 'status'), by: one(f, 'by'), today: tracker.today ? tracker.today() : undefined,
   });
@@ -358,7 +414,7 @@ async function cmdMove(ctx, tracker, project, args, changes) {
   const id = needId(args, 'move');
   const f = args.flags;
   if (!has(f, 'under')) throw new ToolkitError(EXIT.INVALID, '--under <id|group|archive|root> is required.');
-  const res = await opMove(tracker, id, one(f, 'under'));
+  const res = await opMove(tracker, id, one(f, 'under'), { today: tracker.today ? tracker.today() : undefined });
   const lines = res.unchanged
     ? [`${res.id} is already at ${res.to}; nothing moved.`]
     : [`Moved ${res.id}${res.nested ? ` and its ${res.nested} nested item${res.nested === 1 ? '' : 's'}` : ''} from ${res.from} to ${res.to}.`, `Parent: ${res.parentAfter}${res.archived ? '. It is archived: hidden from the briefing and toolkit work next.' : '.'}`];
@@ -369,10 +425,11 @@ async function cmdMove(ctx, tracker, project, args, changes) {
 async function cmdFinish(ctx, tracker, project, args, changes) {
   const id = needId(args, 'finish');
   const f = args.flags;
-  const res = await opFinish(tracker, id, { by: one(f, 'by'), evidence: one(f, 'evidence'), allowOpenSubItems: Boolean(f['allow-open-sub-items']), today: tracker.today ? tracker.today() : undefined });
+  const res = await opFinish(tracker, id, { by: one(f, 'by'), evidence: one(f, 'evidence'), quote: one(f, 'quote'), allowOpenSubItems: Boolean(f['allow-open-sub-items']), today: tracker.today ? tracker.today() : undefined });
   const lines = [`${res.id} is Done. Result approval: ${res.resultApproval}.`];
   if (res.openSubItems.length) lines.push(`Open sub-items left: ${res.openSubItems.map((k) => `${k.id} (${k.status})`).join(', ')}.`);
-  out(ctx, withChanges(changes, lines), { ok: true, id: res.id, status: 'Done', resultApproval: res.resultApproval, openSubItems: res.openSubItems, changes });
+  for (const w of res.warnings || []) lines.push(`Note: ${w}`);
+  out(ctx, withChanges(changes, lines), { ok: true, id: res.id, status: 'Done', resultApproval: res.resultApproval, openSubItems: res.openSubItems, warnings: res.warnings || [], changes });
   return EXIT.OK;
 }
 
@@ -428,7 +485,9 @@ async function cmdNext(ctx, tracker, project, args, changes) {
 
 async function cmdDecisions(ctx, tracker, project, args, changes) {
   const items = await itemsWithBodies(tracker);
-  const decisions = collectOwnerDecisions(items, { ownerName: project.config.project && project.config.project.owner });
+  const ownerName = project.config.project && project.config.project.owner;
+  const decisions = collectOwnerDecisions(items, { ownerName });
+  const agentTodos = collectAgentTodos(items, { ownerName });
   const lines = [];
   if (!decisions.length) lines.push('Nothing is waiting on the owner.');
   else {
@@ -442,7 +501,11 @@ async function cmdDecisions(ctx, tracker, project, args, changes) {
       lines.push(`  - ${d.what}${d.detail ? ` ${d.detail}` : ''} (${d.continueWith})`);
     }
   }
-  out(ctx, withChanges(changes, lines), { ok: true, count: decisions.length, decisions, changes });
+  if (agentTodos.length) {
+    lines.push('', 'Agent to-do (the agent\'s step, not a decision the owner is waiting on):');
+    for (const t of agentTodos) lines.push(`  - ${t.what} ${t.detail} (${t.continueWith})`);
+  }
+  out(ctx, withChanges(changes, lines), { ok: true, count: decisions.length, decisions, agentTodos, changes });
   return EXIT.OK;
 }
 
@@ -531,6 +594,22 @@ const COMMANDS = {
   validate: cmdValidate,
 };
 
+/**
+ * The quick check for hand changes that runs before every work command. It
+ * never stops the command itself: a read still prints its result when the
+ * check fails, with the failure as a warning (sample run c, round 2: three
+ * reads exited 1 because the check's own write could not be verified).
+ */
+export async function checkHandChanges(tracker) {
+  try {
+    return await tracker.sync({ quick: true });
+  } catch (err) {
+    const changes = { changed: false, moves: [], adopted: [], renumbered: [], ownerEdits: [], questions: [], derived: [], missing: [], problems: [] };
+    changes.problems.push({ severity: 'warning', code: 'sync_failed', message: `The check for changes made by hand did not finish (${String(err && err.message ? err.message : err).replace(/\s+$/, '')}). This command ran anyway; toolkit work sync runs the check again.` });
+    return changes;
+  }
+}
+
 export async function run(argv, ctx) {
   const sub = argv[0];
   if (!sub || sub === 'help' || sub === '--help' || sub === '-h') {
@@ -546,7 +625,7 @@ export async function run(argv, ctx) {
   const project = requireProject(ctx.cwd);
   const tracker = await openTracker(project, { env: ctx.env, cwd: ctx.cwd, pluginRoot: ctx.pluginRoot });
   if (sub === 'sync') return handler(ctx, tracker, project, args);
-  const changes = await tracker.sync({ quick: true });
+  const changes = await checkHandChanges(tracker);
   // Hand changes found later, once a write holds the lock, are added to the same report.
   if (typeof tracker.collectReports === 'function') tracker.collectReports(changes);
   return handler(ctx, tracker, project, args, changes);

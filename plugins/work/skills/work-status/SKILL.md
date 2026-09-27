@@ -6,7 +6,7 @@ description: 'Answers "where are we", "what''s next", and "catch me up": shows a
 # Work status
 
 Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
-Shared rules: `../../references/conventions.md`. This skill only reads. It never changes an item, memory, or a file.
+Shared rules: the work plugin's `references/conventions.md`, two folders above this skill's folder (`../../references/conventions.md`). This skill only reads. It never changes an item, memory, or a file. Run each `toolkit` command alone, on its own line: in Codex a command joined by `&&`, `;`, or a pipe runs inside the sandbox and fails.
 
 ## Steps
 
@@ -19,7 +19,7 @@ Shared rules: `../../references/conventions.md`. This skill only reads. It never
    `toolkit work next`
    `toolkit work decisions`
    `toolkit memory focus`
-4. Answer in this order: how many decisions wait on the owner (one line each), what is in progress, the recommended next item and why, what was done recently, and anything moved or broken.
+4. Answer in this order: how many decisions wait on the owner (one line each; the count is the number of lines you show, and "Agent to-do" lines are not decisions), what is in progress, the recommended next item and why, what was done recently, and anything moved or broken.
 5. Show every stage in plain words with the item id ("WI-012 is in testing"). The plain labels come from:
    `toolkit work lifecycle`
 6. For each problem, name the skill that fixes it without running it: moved or missing items, `work-organize`; setup warnings, `project-setup`; decisions, `work-decide`. "Show the board": with the local tracker, summarize `.work-items/DASHBOARD.md`; with Notion, give the link to the project's Work Items board from the Notion ids in the configuration.

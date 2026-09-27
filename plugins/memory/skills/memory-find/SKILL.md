@@ -6,7 +6,7 @@ description: 'Finds what the project already knows in memory, decisions, work it
 # Memory find
 
 Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
-Put each `toolkit` command on its own line. This skill only reads. It never changes memory, an item, or a file.
+Put each `toolkit` command on its own line. In Codex, a `toolkit` command joined to anything else (`&&`, `;`, a pipe) runs inside the sandbox, which blocks Hindsight and Notion: run it alone. This skill only reads. It never changes memory, an item, or a file.
 
 ## Steps
 

@@ -7,7 +7,7 @@
 import { renderTable } from '../core/markdown.mjs';
 import { stageShort, isTerminal, normalizeWaitingOn } from './lifecycle.mjs';
 import { getLabel, isPlaceholder } from './model.mjs';
-import { collectOwnerDecisions } from './decisions.mjs';
+import { collectOwnerDecisions, collectAgentTodos } from './decisions.mjs';
 
 const RECENT_LIMIT = 10;
 
@@ -47,7 +47,7 @@ export function treeLines(items, { bullet = '- ', indent = '  ', label } = {}) {
       roots.push(it);
     }
   }
-  const show = label || ((it) => `${it.id} ${it.meta.title || ''} (${stageShort(it.meta.stage)}, ${it.meta.status || 'no status'})`);
+  const show = label || ((it) => `${it.id} ${it.meta.title || ''} (${isTerminal(it.meta.status) ? it.meta.status : `${stageShort(it.meta.stage)}, ${it.meta.status || 'no status'}`})`);
   const lines = [];
   const walk = (list, depth) => {
     // Items that sit in the same group folder are listed under that folder's name.
@@ -88,6 +88,7 @@ export function renderDashboard(items, { ownerName, unreadable = [] } = {}) {
   const live = items.filter((i) => !i.archived);
   const archivedCount = items.length - live.length;
   const decisions = collectOwnerDecisions(live, { ownerName });
+  const agentTodos = collectAgentTodos(live, { ownerName });
   const inProgress = live.filter((i) => i.meta.status === 'In Progress' || i.meta.status === 'In Review').sort(byId);
   const ready = live.filter((i) => i.meta.status === 'Ready').sort(byId);
   const backlog = live.filter((i) => i.meta.status === 'Backlog').sort(byId);
@@ -109,6 +110,9 @@ export function renderDashboard(items, { ownerName, unreadable = [] } = {}) {
     parts.push(`## Files that cannot be read\n\n${table(['ID', 'File', 'Problem'], unreadable.map((u) => [u.id || '', cell(u.location), cell(u.message)]))}`);
   }
   parts.push(`## Waiting on the owner\n\n${table(['ID', 'Title', 'What is needed', 'Continue with'], decisions.map((d) => [d.id, cell(d.title), d.what, d.continueWith]))}`);
+  if (agentTodos.length) {
+    parts.push(`## Agent to-do\n\n${table(['ID', 'Title', 'What the agent does next', 'Continue with'], agentTodos.map((d) => [d.id, cell(d.title), d.what, d.continueWith]))}`);
+  }
   parts.push(`## In progress\n\n${table(['ID', 'Title', 'Stage', 'Status', 'Waiting on', 'Next action'], inProgress.map((i) => [i.id, cell(i.meta.title), stageShort(i.meta.stage), i.meta.status, waitingText(i.meta), nextAction(i)]))}`);
   parts.push(`## Ready\n\n${table(['ID', 'Title', 'Priority', 'Next action'], ready.map((i) => [i.id, cell(i.meta.title), cell(i.meta.priority), nextAction(i)]))}`);
   parts.push(`## Backlog\n\n${table(['ID', 'Title', 'Stage', 'Priority', 'Waiting on'], backlog.map((i) => [i.id, cell(i.meta.title), stageShort(i.meta.stage), cell(i.meta.priority), waitingText(i.meta)]))}`);

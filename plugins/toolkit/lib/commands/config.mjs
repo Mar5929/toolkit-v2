@@ -2,7 +2,7 @@
 
 import { parseArgs } from '../core/args.mjs';
 import { EXIT, ToolkitError, out } from '../core/output.mjs';
-import { requireProject, getPath } from '../core/config.mjs';
+import { requireProject, getPath, saveConfig } from '../core/config.mjs';
 import { setSetting, formatSetting, afterSetting, SETUP_KEYS } from '../project/settings.mjs';
 import { syncProject } from '../project/sync.mjs';
 
@@ -42,7 +42,21 @@ export async function run(argv, ctx) {
     const lines = [res.changed ? `Set ${key} to ${formatSetting(res.to)} (was ${formatSetting(res.from)}).` : `${key} is already ${formatSetting(res.to)}; nothing changed.`];
     let sync = null;
     if (res.changed && res.setup) {
-      const s = await syncProject(project, { env: ctx.env, pluginRoot: ctx.pluginRoot, changedSettings: [{ key, from: res.from, to: res.to }] });
+      // The new value is saved only after the sync worked, so a failed sync
+      // (for example the Codex sandbox refusing .codex/) leaves the old value.
+      let s;
+      try {
+        s = await syncProject(project, { env: ctx.env, pluginRoot: ctx.pluginRoot, changedSettings: [{ key, from: res.from, to: res.to }] });
+      } catch (err) {
+        const fix = err && err.details && err.details.fix ? ` ${err.details.fix}` : '';
+        throw new ToolkitError(err && err.code === EXIT.INVALID ? EXIT.INVALID : EXIT.ERROR, `Nothing was saved: ${key} is still ${formatSetting(res.from)}. The setting needs toolkit sync, and the sync failed: ${err.message}`, {
+          key,
+          from: res.from,
+          to: res.to,
+          fix: `Fix what the sync names, then run toolkit config set ${key} ${Array.isArray(res.to) ? res.to.join(',') : res.to} again.${fix} In Codex, ask the owner to run the command in a terminal or to approve running it outside the sandbox.`,
+        });
+      }
+      if (!s.savedConfig) saveConfig(res.root, project.config);
       sync = s.summary;
       lines.push('This setting is part of the project setup, so toolkit sync ran:', ...s.lines.map((l) => `  ${l}`));
     }

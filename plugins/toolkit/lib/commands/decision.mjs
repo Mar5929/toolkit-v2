@@ -10,6 +10,7 @@ import { EXIT, ToolkitError, out } from '../core/output.mjs';
 import { requireProject } from '../core/config.mjs';
 import { readText } from '../core/fsx.mjs';
 import { addDecision, readDecisions, DECISIONS_FILE } from '../work/decisions.mjs';
+import { todayFor } from '../project/manifest.mjs';
 
 export const summary = 'Project-wide decisions: add a row to DECISIONS.md with the next id, or list them.';
 
@@ -46,6 +47,8 @@ export async function run(argv, ctx) {
       by: one(args.flags, 'by'),
       replaces: one(args.flags, 'replaces'),
       mainRoot: project.mainRoot,
+      // The same local date every toolkit command uses (TOOLKIT_TODAY in tests).
+      date: todayFor(ctx.env),
     });
     const rel = path.relative(ctx.cwd, res.file) || DECISIONS_FILE;
     const lines = [`Added ${res.id} to ${rel}${res.created ? ' (new file)' : ''}: ${res.row.Decision}`];

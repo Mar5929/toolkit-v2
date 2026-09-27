@@ -33,6 +33,9 @@ export async function sessionStart(input, io) {
     pluginRoot,
     cwd,
     sync: trackerType(project) === 'local' ? 'full' : 'quick',
+    // Notion: a quick live check (2-second deadline) so the owner's hand moves are reported at session start.
+    liveNotion: true,
+    fromHook: true,
     fetch: io.fetch,
   });
   return contextOutput('SessionStart', brief.text);

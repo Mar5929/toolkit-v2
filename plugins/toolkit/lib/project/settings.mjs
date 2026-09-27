@@ -7,12 +7,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { EXIT, ToolkitError } from '../core/output.mjs';
 import { getPath, setPath, saveConfig } from '../core/config.mjs';
-import { TRACKERS, MEMORIES, APPROVALS, KEY_RE, PREFIX_RE, parseHosts } from './setup.mjs';
+import { TRACKERS, MEMORIES, APPROVALS, KEY_RE, PREFIX_RE, parseHosts, parseDeclined } from './setup.mjs';
 import { configRoot } from './sync.mjs';
 import { readHosts, HOSTS_FIX } from './manifest.mjs';
 
 /** Keys that templates, conditions, or hosts read: changing one runs sync. */
-export const SETUP_KEYS = Object.freeze(['project.name', 'project.key', 'project.owner', 'tracker.type', 'tracker.idPrefix', 'memory.type', 'hindsight.bank', 'salesforce.enabled', 'hosts']);
+export const SETUP_KEYS = Object.freeze(['project.name', 'project.key', 'project.owner', 'tracker.type', 'tracker.idPrefix', 'memory.type', 'hindsight.bank', 'salesforce.enabled', 'hosts', 'declined']);
 
 const KNOWN = {
   'project.name': { kind: 'text' },
@@ -24,6 +24,7 @@ const KNOWN = {
   'memory.approval': { kind: 'choice', values: APPROVALS },
   'salesforce.enabled': { kind: 'boolean' },
   hosts: { kind: 'hosts' },
+  declined: { kind: 'declined' },
   'hindsight.url': { kind: 'url' },
   'hindsight.bank': { kind: 'text' },
 };
@@ -77,6 +78,8 @@ export function parseSettingValue(key, raw) {
     }
     case 'hosts':
       return parseHosts(text);
+    case 'declined':
+      return parseDeclined(text);
     case 'url': {
       const v = text.trim();
       if (!/^https?:\/\/[^\s]+$/.test(v)) throw new ToolkitError(EXIT.INVALID, `${key} must be a web address such as http://127.0.0.1:8888.`);
@@ -168,8 +171,11 @@ export function afterSetting(project, key, from, to) {
 }
 
 /**
- * Change one setting and save .toolkit.json.
- * Returns { key, from, to, changed, setup } (setup: the key needs a sync).
+ * Change one setting. A setting that is not a setup key is saved at once.
+ * A setup key is only changed in memory (`save: false` is returned): the
+ * caller runs toolkit sync and saves .toolkit.json only when the sync worked,
+ * so a failed sync leaves the old value (see commands/config.mjs).
+ * Returns { key, from, to, changed, setup, saved }.
  */
 export function setSetting(project, key, raw) {
   const root = configRoot(project);
@@ -189,9 +195,10 @@ export function setSetting(project, key, raw) {
       fix: 'Keep the current prefix. The prefix is set right after init, before the first work item.',
     });
   }
+  const setup = SETUP_KEYS.includes(key);
   setPath(config, key, value);
-  saveConfig(root, config);
-  return { key, from, to: value, changed: true, setup: SETUP_KEYS.includes(key) };
+  if (!setup) saveConfig(root, config);
+  return { key, from, to: value, changed: true, setup, saved: !setup, root };
 }
 
 /** Format a value for plain output. */

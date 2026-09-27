@@ -16,9 +16,15 @@ ask exactly:
 
 > Would you like agents to take responsibility for delivering this, with you acting as product owner?
 
-Do not make this offer for a simple question or quick edit. Wait for the
-answer before taking responsibility for organizing delivery, while continuing
-any useful work that does not depend on the choice.
+Do not make this offer for a simple question or quick edit, or for a small
+item (one or two tasks, no sub-items): record `delivery: owner-led` with a
+history note giving that reason. The offer is made once, at the top item of
+the goal; a sub-item is part of its parent's goal. When you ask, first add the
+question as an Open Questions row (owner decides) and set the item waiting on
+the owner, so a later session sees the offer is open if the answer does not
+come in this one. Wait for the answer before taking responsibility for
+organizing delivery, while continuing any useful work that does not depend on
+the choice. Mark the row Answered with his answer.
 
 A clear acceptance authorizes agent-led delivery for this goal across
 sessions. A later explicit request for agents to manage or deliver the goal

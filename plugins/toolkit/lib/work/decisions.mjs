@@ -16,11 +16,16 @@ import { parseQuestions, isOpenOwnerQuestion, getLabel, parseRoadmap, checkGates
 // ------------------------------------------------------------------ what waits on the owner
 
 /**
- * Collect every decision waiting on the owner.
+ * Collect every decision waiting on the owner: one entry per real question.
+ * The general "waiting on the owner" entry is left out for an item that has a
+ * more specific one (an open question, a proposed design, the stage 11 result
+ * approval, a gate), so one decision is never counted twice. The agent-led
+ * delivery offer is not listed here: it is the agent's step, not the owner's
+ * question (collectAgentTodos lists it).
  * @param {Array<{ id: string, meta: object, body?: string, archived?: boolean, children?: string[], design?: { status?: string } | null }>} items
  * @param {{ ownerName?: string }} [opts]
  * @returns {Array<{ id: string, title: string, kind: string, what: string, detail: string, continueWith: string }>}
- *   kind: waiting_on_owner | open_question | design_proposed | result_approval | delivery_offer | gate
+ *   kind: waiting_on_owner | open_question | design_proposed | result_approval | gate
  */
 export function collectOwnerDecisions(items, { ownerName } = {}) {
   const out = [];
@@ -31,31 +36,79 @@ export function collectOwnerDecisions(items, { ownerName } = {}) {
     const body = item.body || '';
     if (item.archived) continue;
     const terminal = isTerminal(meta.status);
-    const add = (kind, what, detail, skill) => out.push({ id, title, kind, what, detail: detail || '', continueWith: skill });
+    const mine = [];
+    const add = (kind, what, detail, skill) => mine.push({ id, title, kind, what, detail: detail || '', continueWith: skill });
 
     for (const g of checkGates(meta, { body })) add('gate', g.message, g.question, 'work-decide');
-    if (terminal) continue;
+    if (!terminal) {
+      let waiting = null;
+      if (String(meta.waiting_on || '').trim().toLowerCase() === 'owner') {
+        const next = getLabel(body, 'Next action', { section: 'Overview' });
+        waiting = { id, title, kind: 'waiting_on_owner', what: `${id} is waiting on the owner (${stageShort(meta.stage)}).`, detail: next && !isPlaceholder(next) ? `Next action: ${next}` : '', continueWith: 'work-decide' };
+      }
+      const designStatus = item.design && item.design.status ? item.design.status : meta.design;
+      // An open question that asks for the design choice itself is the same
+      // decision as the proposed design: one line, not two (sample run a,
+      // round 2: "Q-02: Which version source do you approve: Option A or B?"
+      // and "The design is proposed" were counted as 2 decisions).
+      const designQuestions = [];
+      for (const q of parseQuestions(body)) {
+        if (!isOpenOwnerQuestion(q, ownerName)) continue;
+        if (designStatus === 'proposed' && isDesignQuestion(q)) {
+          designQuestions.push(q);
+          continue;
+        }
+        add('open_question', `${q.id || 'Question'}: ${q.question}`, q.affects && !isPlaceholder(q.affects) ? `Affects ${q.affects}.` : '', 'work-decide');
+      }
+      if (designStatus === 'proposed') {
+        const asked = designQuestions.length ? ` ${designQuestions.map((q) => `${q.id || 'A question'} asks it: ${q.question}`).join(' ')} Mark ${designQuestions.length === 1 ? 'that row' : 'those rows'} Answered when the design is approved.` : '';
+        add('design_proposed', `The design for ${id} is proposed and waits for the owner's approval.`, `Approve with: toolkit work approve ${id} --design --by <name>.${asked}`, 'work-decide');
+      }
+      if (stageNumber(meta.stage) === 11 && !isApproved(meta.result_approved)) {
+        add('result_approval', `${id} is at 11 User approval: the owner reviews the result.`, `Approve with: toolkit work approve ${id} --result --by <name>.`, 'work-decide');
+      }
+      // The general entry only when nothing more specific says what he decides.
+      if (waiting && !mine.length) mine.push(waiting);
+    }
+    out.push(...mine);
+  }
+  return out;
+}
 
-    if (String(meta.waiting_on || '').trim().toLowerCase() === 'owner') {
-      const next = getLabel(body, 'Next action', { section: 'Overview' });
-      add('waiting_on_owner', `${id} is waiting on the owner (${stageShort(meta.stage)}).`, next && !isPlaceholder(next) ? `Next action: ${next}` : '', 'work-decide');
-    }
-    for (const q of parseQuestions(body)) {
-      if (!isOpenOwnerQuestion(q, ownerName)) continue;
-      add('open_question', `${q.id || 'Question'}: ${q.question}`, q.affects && !isPlaceholder(q.affects) ? `Affects ${q.affects}.` : '', 'work-decide');
-    }
-    const designStatus = item.design && item.design.status ? item.design.status : meta.design;
-    if (designStatus === 'proposed') {
-      add('design_proposed', `The design for ${id} is proposed and waits for the owner's approval.`, `Approve with: toolkit work approve ${id} --design --by <name>.`, 'work-decide');
-    }
-    if (stageNumber(meta.stage) === 11 && !isApproved(meta.result_approved)) {
-      add('result_approval', `${id} is at 11 User approval: the owner reviews the result.`, `Approve with: toolkit work approve ${id} --result --by <name>.`, 'work-decide');
-    }
-    // The offer is made when work starts on a big goal (work-on, stage 03 or later), not while it is in Backlog.
-    const big = (stageNumber(meta.stage) ?? 0) >= 3 ? bigReason(item) : null;
-    if (big && (!meta.delivery || meta.delivery === 'not-offered')) {
-      add('delivery_offer', `The agent-led delivery offer has not been made for ${id} (${big}).`, 'work-delegate asks the owner once per goal.', 'work-delegate');
-    }
+/** True when an Open Questions row asks for the design choice: it names the design or a design option. */
+export function isDesignQuestion(q) {
+  const text = `${q.question || ''} ${q.affects || ''}`;
+  return /\b(solution )?design\b/i.test(text) || /\b[Oo]ption [A-Z]\b/.test(text);
+}
+
+/** True when an open Open Questions row already asks the owner about agent-led delivery. */
+function deliveryAsked(body, ownerName) {
+  return parseQuestions(body).some((q) => isOpenOwnerQuestion(q, ownerName) && /agent-led|delivery|team of agents|agent team/i.test(q.question || ''));
+}
+
+/**
+ * The agent's own steps that the tracker shows: the agent-led delivery offer
+ * that work-delegate makes once per big goal. Listed only while the offer can
+ * still shape the work (stages 03 to 07), never for a finished item, and not
+ * when an open question already asks it.
+ * @returns {Array<{ id: string, title: string, kind: 'delivery_offer', what: string, detail: string, continueWith: string }>}
+ */
+export function collectAgentTodos(items, { ownerName } = {}) {
+  const out = [];
+  for (const item of items) {
+    const meta = item.meta || {};
+    const id = item.id || meta.id;
+    if (item.archived || isTerminal(meta.status)) continue;
+    // The offer is made once per goal, at the top item: a sub-item is part of
+    // its parent's goal (sample run d, round 2 listed both).
+    const parent = item.parent !== undefined ? item.parent : meta.parent;
+    if (parent && String(parent).trim().toLowerCase() !== 'none') continue;
+    const n = stageNumber(meta.stage) ?? 0;
+    if (n < 3 || n > 7) continue;
+    if (meta.delivery && meta.delivery !== 'not-offered') continue;
+    const big = bigReason(item);
+    if (!big || deliveryAsked(item.body || '', ownerName)) continue;
+    out.push({ id, title: meta.title || '', kind: 'delivery_offer', what: `Make the agent-led delivery offer for ${id} (${big}).`, detail: 'work-delegate asks the owner once per goal.', continueWith: 'work-delegate' });
   }
   return out;
 }

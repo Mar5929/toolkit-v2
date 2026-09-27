@@ -21,12 +21,15 @@ and how to size a team.
   depend on each other in the same message, so they run at the same time.
 - Codex: this plugin's agents do not load there. Read the agent's file in this
   plugin's `agents/` folder and give its full text, with the brief, to a
-  native Codex worker. With no worker, do the work yourself and say that no
-  independent check ran.
+  native Codex worker: the `spawn_agent` tool. Start it without this
+  conversation (`fork_turns` set to `none`): a worker forked from the
+  builder's thread is not an independent checker. Only when the session has
+  no `spawn_agent` tool, do the work yourself and say that no independent
+  check ran.
 
 Every skill that uses an agent carries this line:
 
-> Codex: this plugin's agents do not load there. Read the agent's file in this plugin's `agents/` folder and give its full text, with the brief, to a native Codex worker. With no worker, do the work yourself and say that no independent check ran.
+> Codex: this plugin's agents do not load there. Read the agent's file in this plugin's `agents/` folder and give its full text, with the brief, to a native Codex worker: the `spawn_agent` tool, started without this conversation (`fork_turns` set to `none`), so a checker never shares the builder's thread. With no worker, do the work yourself and say that no independent check ran.
 
 ## The brief
 

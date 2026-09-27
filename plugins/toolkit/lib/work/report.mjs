@@ -9,7 +9,7 @@
 import { EXIT } from '../core/output.mjs';
 import { stageShort, continueWith, isTerminal } from './lifecycle.mjs';
 import { normalizeMeta, getLabel, isPlaceholder } from './model.mjs';
-import { collectOwnerDecisions } from './decisions.mjs';
+import { collectOwnerDecisions, collectAgentTodos } from './decisions.mjs';
 import { openTracker } from './driver.mjs';
 import { rankNext, listItems } from './ops.mjs';
 import { worktreeItem, TRACKER_DIR } from './state.mjs';
@@ -49,7 +49,7 @@ export function reportLines(report, { full = false } = {}) {
       ? ` Its parent is now ${m.parentAfter === 'none' ? 'none (top level)' : m.parentAfter}.`
       : '';
     const archNote = m.archivedAfter && !m.archivedBefore ? ' It is now archived.' : !m.archivedAfter && m.archivedBefore ? ' It is no longer archived.' : '';
-    if (m.kind === 'folder-renamed') lines.push(`Renamed folder: ${m.id} is now at ${m.to} (was ${m.from}).${parentNote}`);
+    if (m.kind === 'folder-renamed') lines.push(`Renamed folder: ${m.id} is now at ${m.to} (was ${m.from}).${parentNote}${m.parentMoved ? ` Its parent ${m.parentMoved} moved too.` : ''}`);
     else if (m.kind === 'file-renamed') lines.push(`Renamed file: ${m.id} is now ${m.to} (was ${m.from}).`);
     else if (m.kind === 'returned') lines.push(`Found again: ${m.id} was missing and is now at ${m.to}.${parentNote}${archNote}`);
     else if (m.kind === 'reparented') lines.push(`Re-parented: ${m.id}.${parentNote}`);
@@ -102,7 +102,9 @@ export async function workSummary(project, opts = {}) {
   const active = live
     .filter((i) => ['In Progress', 'In Review', 'Ready'].includes(i.meta.status))
     .map((i) => ({ ...itemSummary(i), thisWorktree: Boolean(thisItem && thisItem.id === i.id) }));
-  const decisions = collectOwnerDecisions(live, { ownerName: project.config.project && project.config.project.owner });
+  const ownerName = project.config.project && project.config.project.owner;
+  const decisions = collectOwnerDecisions(live, { ownerName });
+  const agentTodos = collectAgentTodos(live, { ownerName });
   const ranked = rankNext(items);
   const counts = { backlog: 0, ready: 0, inProgress: 0, inReview: 0, done: 0, cancelled: 0, archived: items.length - live.length };
   const key = { Backlog: 'backlog', Ready: 'ready', 'In Progress': 'inProgress', 'In Review': 'inReview', Done: 'done', Cancelled: 'cancelled' };
@@ -116,6 +118,7 @@ export async function workSummary(project, opts = {}) {
     thisItem: thisItem ? itemSummary(thisItem) : null,
     active,
     waitingOnOwner: decisions,
+    agentTodos,
     next: thisItem && !isTerminal(thisItem.meta.status) ? itemSummary(thisItem) : ranked.length ? itemSummary(ranked[0]) : null,
     counts,
   };

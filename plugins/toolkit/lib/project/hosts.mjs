@@ -133,6 +133,14 @@ export function codexTrust(folder, env = process.env) {
   return null;
 }
 
+/**
+ * True when ~/.codex/config.toml turns a V2 plugin on for every folder
+ * ([plugins."<name>@toolkit-v2"] enabled = true). Off, or not listed, is false.
+ */
+export function codexPluginOnEverywhere(name, env = process.env) {
+  return tomlGet(codexUserConfig(env), ['plugins', `${name}@${MARKETPLACE}`, 'enabled']) === true;
+}
+
 /** Codex hook trust keys (the [hooks.state."..."] tables) that start with a prefix. */
 export function codexHookTrustKeys(prefix, env = process.env) {
   const keys = [];

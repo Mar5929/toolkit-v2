@@ -131,3 +131,14 @@ export function editFile(file, from, to) {
   if (!text.includes(from)) throw new Error(`"${from}" not found in ${file}`);
   fs.writeFileSync(file, text.replace(from, to));
 }
+
+/**
+ * Record the owner's requirements approval the way the skills do: the Agreed
+ * goal is written first (toolkit work approve --requirements refuses while it
+ * is still the template text), then the approval.
+ */
+export async function approveRequirements(dir, id, { by = 'Mike', goal = 'The owner agreed this goal.' } = {}) {
+  const g = await tk(dir, ['work', 'edit', id, '--section', 'Agreed goal', '--text', goal]);
+  if (g.code !== 0) throw new Error(`edit Agreed goal failed: ${g.stdout} ${g.stderr}`);
+  return tk(dir, ['work', 'approve', id, '--requirements', '--by', by]);
+}

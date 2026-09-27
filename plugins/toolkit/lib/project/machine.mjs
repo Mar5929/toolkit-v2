@@ -14,7 +14,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { atomicWrite } from '../core/fsx.mjs';
 import { run } from '../core/util.mjs';
-import { toolkitConfigDir, wrapperDir, claudeMarketplaceSource, pluginVersion } from './hosts.mjs';
+import { toolkitConfigDir, wrapperDir, claudeMarketplaceSource, pluginVersion, codexPluginOnEverywhere } from './hosts.mjs';
 
 export const POINTER_FILE = 'plugin-root';
 export const WRAPPER_NAME = 'toolkit';
@@ -205,6 +205,25 @@ export async function toolChecks({ env = process.env, fetch: fetchFn = globalThi
 }
 
 /**
+ * What a new project needs in Codex. The Toolkit V2 plugins are off for the
+ * whole computer and on only in a project whose .codex/config.toml turns them
+ * on; toolkit init writes that file. So in a new folder Codex does not list
+ * the project-setup skill, and inside Codex init cannot write .codex/ (the
+ * sandbox protects it). A new project is set up from a terminal or from Claude
+ * Code first.
+ */
+export function codexSetupLines(env = process.env) {
+  if (codexPluginOnEverywhere('toolkit', env)) {
+    return ['Codex: the toolkit plugin is on for every folder, so "set up Toolkit V2 in this project" works in a new folder. Codex asks once to run toolkit init outside its sandbox.'];
+  }
+  return [
+    'Codex: the Toolkit V2 skills appear only in a project that toolkit init has set up. To start a new project from Codex, first run toolkit init in a terminal in the project folder (or say "set up this project" in Claude Code), for example:',
+    '  toolkit init --name "<name>" --tracker local --memory builtin --hosts claude-code,codex',
+    '  Then open Codex in the folder, trust it, and say "finish setting up Toolkit V2".',
+  ];
+}
+
+/**
  * `toolkit machine-setup`: write the wrapper and the pointer, and check the programs.
  * Returns { pointer, wrapper, tools, lines, problems }.
  */
@@ -245,6 +264,7 @@ export async function machineSetup({ env = process.env, pluginRoot, fetch: fetch
   }
   const v = pluginVersion(pluginRoot);
   if (v) lines.push(`Toolkit plugin version: ${v} (${pluginRoot}).`);
+  lines.push(...codexSetupLines(env));
   const tools = await toolChecks({ env, fetch: fetchFn, network });
   lines.push('Programs:');
   for (const t of tools) {

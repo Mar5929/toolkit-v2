@@ -18,12 +18,19 @@ and:
 - renumbers the newer of two records that share an id, and reports both;
 - skips `work-item-template/`, folders whose names start with `_` or `.`, and
   records whose title is still `<Work item title>`;
+- writes one Recent History row on each item the owner moved or renamed
+  ("Moved by hand: <old path> -> <new path>", "Folder renamed by hand: ..."),
+  and on the parents a sub-item left and joined ("Sub-item WI-7 moved out by
+  hand", "Sub-item WI-7 moved here by hand"); `toolkit work move` writes the
+  same rows for a move it makes;
 - rebuilds `.work-items/DASHBOARD.md`;
 - in Notion, reads a dragged Stage and sets Status to match, fills a card
   made with the New button with the template body, and reads a changed
-  Parent item as the owner's edit.
+  Parent item as the owner's edit, with a "Parent changed in Notion by hand"
+  row on the item and a row on each parent. The session briefing only reads:
+  it reports the change, and the next `toolkit work` command writes the rows.
 
-Every one of these is reported. Say each one to the owner in one line.
+Every one of these is reported: in the session briefing under "Changes found in the tracker", and by the next `toolkit work` command. Say each one to the owner in one line before other work.
 
 ## Cases that need the owner
 
@@ -44,13 +51,27 @@ Every one of these is reported. Say each one to the owner in one line.
    and which of the parent's `R-xx` it covers. Say which phase of the
    parent's Roadmap each one delivers.
 2. Ask once: "Shall I split WI-12 into these three sub-items?"
-3. On a yes, create each child under the parent with
-   `toolkit work new --title "<title>" --type <type> --parent <id>`.
-4. Each child's Requirements section links the parent's `R-xx` ids ("Covers
-   WI-12 R-02 and R-03") and copies none of their text. When a child needs
-   its own detail, it gets its own `R-xx` blocks and its own approval.
-5. Update the parent's Roadmap Sub-items column with the child ids.
-6. Add a history note on the parent and on each child.
+3. On a yes, create each child under the parent. A child that delivers the
+   parent's approved requirements names them:
+   `toolkit work new --title "<title>" --type <type> --parent <id> --covers R-02,R-03`.
+   It links them ("Covers WI-12 R-02, WI-12 R-03"), copies none of their
+   text, and inherits the parent's requirements approval: it starts at
+   `03-requirements-approved` (or at `06-implementation-plan` when the
+   parent's design is approved), and the owner is not asked again. A child
+   with no approved parent requirement to cover is made without `--covers`.
+4. The parent keeps every `R-xx` as it is: never move, renumber, or rewrite
+   an approved requirement into a child, and never ask the owner to approve
+   the same requirement again. When a child needs new behavior, it gets its
+   own `R-xx` blocks and its own approval.
+5. A design the owner approved for the parent covers the children built from
+   it. A `--covers` child of such a parent starts at planning (stage 06), and
+   its first history row names the parent's design; `toolkit work show` says
+   "Design: none of its own; WI-12's design is approved". It gets its own
+   design only when it needs a choice the parent's design did not make.
+6. Update the parent's Roadmap Sub-items column with the child ids.
+7. The CLI writes the history rows for creating each child, on the child and
+   on the parent. When the split renames the parent, say the new title to the
+   owner in one line first.
 
 ## Moving and grouping
 

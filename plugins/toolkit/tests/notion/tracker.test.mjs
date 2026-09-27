@@ -250,6 +250,38 @@ test('sync reports a parent changed by hand and a trashed card', async () => {
   assert.deepEqual(r2.missing.map((m) => [m.id, m.reason]), [[b, 'It was moved to the Notion trash.']]);
 });
 
+test('a parent the owner cleared in Notion is reported even when a read came between, and gets a history row once', async () => {
+  // Sample run c (round 1): a `toolkit work show` between the owner's change and
+  // the next sync overwrote the cached parent, and sync said "Nothing changed".
+  const { tracker, client, notion } = await setup();
+  const a = await tracker.create({ meta: record('A').meta, body: record('A').body });
+  const b = await tracker.create({ meta: { ...record('B').meta, parent: a }, body: record('B').body });
+  await tracker.sync();
+  const pb = await tracker.findPage(b);
+  await client.updatePage(pb.id, { properties: { [notion.workItems.properties.parent]: { relation: [] } } });
+  const shown = await tracker.get(b);
+  assert.equal(shown.meta.parent, 'none', 'a read sees the new parent');
+  await tracker.list();
+  const quick = await tracker.sync({ quick: true });
+  assert.deepEqual(quick.moves.map((m) => [m.id, m.kind, m.from, m.to]), [[b, 'reparented', a, 'none']]);
+  const rec = await tracker.get(b);
+  assert.match(rec.body, /Parent changed in Notion by hand: WI-001 -> none \(top level\)\./);
+  const again = await tracker.sync();
+  assert.deepEqual(again.moves, [], 'reported once');
+});
+
+test('an item made with toolkit work new in Notion has no local-folder fill-in guide, and its history is newest first', async () => {
+  const { tracker, project } = await setup();
+  const { opNew, opHistory } = await import('../../lib/work/ops.mjs');
+  const { parseHistory } = await import('../../lib/work/model.mjs');
+  const made = await opNew(tracker, project, { title: 'Quote section', type: 'task', today: TODAY });
+  const rec = await tracker.get(made.id);
+  assert.doesNotMatch(rec.body, /Fill-in guide for a new local work item/);
+  await opHistory(tracker, made.id, { note: 'Second row.', today: TODAY });
+  const back = await tracker.get(made.id);
+  assert.deepEqual(parseHistory(back.body).map((h) => h.change), ['Second row.', 'Created.']);
+});
+
 test('quick sync with nothing changed makes one call', async () => {
   const { tracker, fake } = await setup();
   await tracker.create({ meta: record('A').meta, body: record('A').body });

@@ -32,12 +32,13 @@ import { ensureDir } from '../core/fsx.mjs';
 import {
   canonicalId, formatId, parseId, sameId, isPlaceholder, normalizeParent, composeDoc, parseDoc, reconcileRecord,
   snapshotWritten, newRecordText, getLabel, parseQuestions, isOpenOwnerQuestion, setDesignStatusLine, designStatusFromBody, DESIGN_SUFFIX,
+  appendHistory, removeItemGuide, parseHistory,
 } from '../work/model.mjs';
 import { DESIGN_FIELD_ORDER, DESIGN_STATUSES, statusForStage } from '../work/lifecycle.mjs';
 import { loadTemplate, RECORD_FILE, DESIGN_FILE } from '../work/templates.mjs';
 import { normalizeId, isNotionError } from './client.mjs';
 import { clientFor, notionCacheDir, readCache, writeCache } from './context.mjs';
-import { fromNotion, toNotion, planUpdate, stripTitle, withTitle, sameLocal, localLeaves } from './markdown.mjs';
+import { fromNotion, toNotion, planUpdate, stripTitle, withTitle, sameLocal, localLeaves, normalizeLocal } from './markdown.mjs';
 import { readValue, writeValue, findValue } from './props.mjs';
 
 export const type = 'notion';
@@ -80,6 +81,26 @@ function notFound(id) {
     id,
     fix: 'Run toolkit work list --all to see every item, or toolkit work sync to check Notion again.',
   });
+}
+
+/**
+ * The first line where the written text and the text read back differ, after
+ * both are put in the same form: "line 12: wrote "..."; Notion has "..."".
+ */
+export function firstDifference(written, readBack) {
+  const a = normalizeLocal(written).split('\n');
+  const b = normalizeLocal(readBack).split('\n');
+  const n = Math.max(a.length, b.length);
+  const clip = (s) => (s === undefined ? '(nothing)' : `"${s.length > 160 ? `${s.slice(0, 157)}...` : s}"`);
+  for (let i = 0; i < n; i++) {
+    if (a[i] !== b[i]) return `line ${i + 1}: wrote ${clip(a[i])}; Notion has ${clip(b[i])}`;
+  }
+  return 'the texts differ only in spacing or escapes';
+}
+
+/** "Saved but not verified" with the first difference, so the agent can judge it. */
+function notVerified(what, details, difference) {
+  return new ToolkitError(EXIT.ERROR, `Saved but not verified: ${what} does not match what was written (${difference}).`, { ...details, difference });
 }
 
 function conflictError(id, message, details = {}) {
@@ -134,13 +155,33 @@ export class NotionTracker {
     this.capabilities = { move: true, groups: false, archive: true, localFiles: false };
     this.pageToId = new Map();
     this.idToPage = new Map();
+    // Ids this process changed in its copy of the cache: 'full' after a write
+    // or a sync (every value), 'read' after a plain read (the values a list
+    // shows). saveCache writes only these over the file, so one process never
+    // puts back an older "written" record another process replaced.
+    this.touched = new Map();
+    // How long to wait before reading a write back a second time (Notion may
+    // return the page as it was a moment before the write).
+    this.verifyRetryMs = opts.verifyRetryMs !== undefined ? opts.verifyRetryMs : 1500;
+    this.pause = opts.sleep || ((ms) => new Promise((r) => setTimeout(r, ms)));
     this.cache = readTrackerCache(this.cacheRoot);
+    this.indexCache();
+  }
+
+  indexCache() {
     for (const [id, c] of Object.entries(this.cache.items)) {
       if (c && c.pageId) {
         this.pageToId.set(c.pageId, id);
         this.idToPage.set(id, c.pageId);
       }
     }
+  }
+
+  /** Read the cache file again (inside the lock, another process may have written it). */
+  reloadCache() {
+    this.cache = readTrackerCache(this.cacheRoot);
+    this.touched = new Map();
+    this.indexCache();
   }
 
   location(page) {
@@ -164,23 +205,59 @@ export class NotionTracker {
   }
 
   saveCache() {
-    this.cache.schema = 1;
-    this.cache.dataSourceId = this.wi.dataSourceId;
-    this.cache.updated = new Date().toISOString();
-    writeCache(this.cacheRoot, CACHE_FILE, this.cache);
+    // Merge with the file as it is now: other toolkit processes may have
+    // written it since this one read it (sample run c, round 2: parallel
+    // reads each saved an older copy, and the owner's move was found again).
+    const disk = readTrackerCache(this.cacheRoot);
+    for (const [id, how] of this.touched) {
+      const mine = this.cache.items[id];
+      if (!mine) continue;
+      if (how === 'full' || !disk.items[id]) {
+        disk.items[id] = mine;
+      } else {
+        // A plain read refreshes what a list shows; the marks sync uses to
+        // spot hand changes stay as the file has them.
+        const keep = disk.items[id];
+        const merged = { ...mine };
+        for (const k of ['lastEdited', 'fingerprint', 'written']) {
+          if (keep[k] !== undefined) merged[k] = keep[k];
+        }
+        disk.items[id] = merged;
+      }
+    }
+    disk.schema = 1;
+    disk.dataSourceId = this.wi.dataSourceId;
+    disk.updated = new Date().toISOString();
+    writeCache(this.cacheRoot, CACHE_FILE, disk);
+    this.cache = disk;
+    this.touched = new Map();
+    this.indexCache();
   }
 
+  markTouched(id, how) {
+    if (how === 'full' || this.touched.get(id) !== 'full') this.touched.set(id, how);
+  }
+
+  /**
+   * Keep what a read or a write saw of one row in the local copy. A plain read
+   * (list, show) refreshes the values the briefing shows, but not the marks
+   * sync uses to spot hand changes (lastEdited, fingerprint) and not what the
+   * toolkit last wrote (`written`): otherwise a `toolkit work show` between the
+   * owner's edit in Notion and the next sync would hide the edit from that sync.
+   * A write, and sync itself, pass `written` and refresh everything.
+   */
   remember(id, page, extra = {}) {
     const pid = normalizeId(page.id);
     this.pageToId.set(pid, id);
     this.idToPage.set(id, pid);
     const meta = this.metaOf(page);
     const prev = this.cache.items[id] || {};
+    const synced = Object.prototype.hasOwnProperty.call(extra, 'written') || prev.lastEdited === undefined;
     this.cache.items[id] = {
       ...prev,
       pageId: pid,
       url: page.url || prev.url || null,
-      lastEdited: page.last_edited_time || null,
+      lastEdited: synced ? page.last_edited_time || null : prev.lastEdited,
       title: meta.title,
       stage: meta.stage,
       status: meta.status,
@@ -190,10 +267,11 @@ export class NotionTracker {
       nextAction: readValue(page, this.p.nextAction) || '',
       openOwnerQuestions: readValue(page, this.p.openOwnerQuestions) || 0,
       design: meta.design,
-      fingerprint: this.fingerprint(page),
+      fingerprint: synced ? this.fingerprint(page) : prev.fingerprint,
       missing: false,
       ...extra,
     };
+    this.markTouched(id, Object.prototype.hasOwnProperty.call(extra, 'written') ? 'full' : 'read');
   }
 
   /**
@@ -453,13 +531,15 @@ export class NotionTracker {
         if (!(isNotionError(err) && err.status === 400)) throw err;
       }
     }
-    const back = await this.findPage(id);
-    if (!back) throw new ToolkitError(EXIT.ERROR, `Saved but not verified: ${id} was not found after it was created.`, { id });
-    const read = await this.readBody(back, id, this.metaOf(back).title || '');
     const expected = provisional && provisional !== id ? local.split(provisional).join(id) : local;
-    if (this.metaOf(back).title !== String(meta.title) || !sameLocal(stripTitle(read.body).body, expected)) {
-      throw new ToolkitError(EXIT.ERROR, `Saved but not verified: ${id} in Notion does not match what was written.`, { id, location: back.url });
-    }
+    const { back, read } = await this.readBack(async () => {
+      const b = await this.findPage(id);
+      if (!b) throw new ToolkitError(EXIT.ERROR, `Saved but not verified: ${id} was not found after it was created.`, { id });
+      const r = await this.readBody(b, id, this.metaOf(b).title || '');
+      if (this.metaOf(b).title !== String(meta.title)) return { back: b, read: r, problem: notVerified(`${id} in Notion`, { id, location: b.url }, `its title reads back as "${this.metaOf(b).title || ''}"`) };
+      if (!sameLocal(stripTitle(r.body).body, expected)) return { back: b, read: r, problem: notVerified(`${id} in Notion`, { id, location: b.url }, firstDifference(expected, stripTitle(r.body).body)) };
+      return { back: b, read: r };
+    });
     this.remember(id, back, { written: snapshotWritten(this.metaOf(back), read.body, {}, this.prefix) });
     this.saveCache();
     return id;
@@ -510,28 +590,47 @@ export class NotionTracker {
     }
     if (Object.keys(properties).length) await this.client.updatePage(page.id, { properties });
 
-    const back = await this.findPage(key);
-    if (!back) throw new ToolkitError(EXIT.ERROR, `Saved but not verified: ${key} was not found after writing.`, { id: key });
-    const backMeta = await this.resolveParentIds(this.metaOf(back));
-    const read = await this.readBody(back, key, backMeta.title || '');
-    for (const [k, v] of Object.entries(patch)) {
-      if (k !== 'parent' && !(FIELD_PROPS[k] && this.p[FIELD_PROPS[k][0]])) continue; // not stored in Notion
-      const want = k === 'parent' ? normalizeParent(v, this.prefix) : String(v ?? '');
-      const got = k === 'parent' ? normalizeParent(backMeta.parent, this.prefix) : String(backMeta[k] ?? '');
-      const noneLike = (x) => x === '' || x === 'none';
-      if (want !== got && !(noneLike(want) && noneLike(got))) {
-        throw new ToolkitError(EXIT.ERROR, `Saved but not verified: ${key} ${k} reads back as "${got}", not "${want}".`, { id: key, field: k });
+    const { back, backMeta, read } = await this.readBack(async () => {
+      const b = await this.findPage(key);
+      if (!b) throw new ToolkitError(EXIT.ERROR, `Saved but not verified: ${key} was not found after writing.`, { id: key });
+      const bm = await this.resolveParentIds(this.metaOf(b));
+      const r = await this.readBody(b, key, bm.title || '');
+      const got = { back: b, backMeta: bm, read: r };
+      for (const [k, v] of Object.entries(patch)) {
+        if (k !== 'parent' && !(FIELD_PROPS[k] && this.p[FIELD_PROPS[k][0]])) continue; // not stored in Notion
+        const want = k === 'parent' ? normalizeParent(v, this.prefix) : String(v ?? '');
+        const have = k === 'parent' ? normalizeParent(bm.parent, this.prefix) : String(bm[k] ?? '');
+        const noneLike = (x) => x === '' || x === 'none';
+        if (want !== have && !(noneLike(want) && noneLike(have))) {
+          return { ...got, problem: new ToolkitError(EXIT.ERROR, `Saved but not verified: ${key} ${k} reads back as "${have}", not "${want}".`, { id: key, field: k }) };
+        }
       }
-    }
-    if (plan && plan.type !== 'none' && !this.leavesMatch(stripTitle(read.body).body, next, plan.changed)) {
-      throw new ToolkitError(EXIT.ERROR, `Saved but not verified: the text of ${key} in Notion does not match what was written.`, { id: key, location: back.url });
-    }
+      if (plan && plan.type !== 'none' && !this.leavesMatch(stripTitle(r.body).body, next, plan.changed)) {
+        return { ...got, problem: notVerified(`the text of ${key} in Notion`, { id: key, location: b.url }, this.leafDifference(stripTitle(r.body).body, next, plan.changed)) };
+      }
+      return got;
+    });
     const rec = this.record(back, { body: read.body, children: read.children });
     rec.meta.parent = backMeta.parent;
     rec.parent = backMeta.parent;
     this.remember(key, back, { written: this.writtenAfter(key, backMeta, read.body) });
     this.saveCache();
     return rec;
+  }
+
+  /**
+   * Read a write back with read(), which returns { ...values, problem }. A
+   * problem gets one more read after a pause, because Notion can return a page
+   * as it was a moment before the write; a problem left after that is thrown.
+   */
+  async readBack(read) {
+    let got = await read();
+    if (got.problem && this.verifyRetryMs >= 0) {
+      await this.pause(this.verifyRetryMs);
+      got = await read();
+    }
+    if (got.problem) throw got.problem;
+    return got;
   }
 
   writtenAfter(id, meta, body) {
@@ -541,6 +640,23 @@ export class NotionTracker {
       for (const k of ['statusKept', 'overallKept', 'designKept', 'parentKept']) if (prev[k] !== undefined) snap[k] = false;
     }
     return snap;
+  }
+
+  /** The first difference in the sections this write changed, for the error text. */
+  leafDifference(backLocal, nextLocal, changed = []) {
+    if (!changed || !changed.length) return firstDifference(nextLocal, backLocal);
+    const back = new Map(localLeaves(backLocal).map((l) => [l.key, l]));
+    const want = new Map(localLeaves(nextLocal).map((l) => [l.key, l]));
+    for (const k of changed) {
+      const w = want.get(k);
+      if (!w) continue;
+      const b = back.get(k);
+      if (!b || b.local !== w.local) {
+        const where = w.heading ? `in "${w.heading}", ` : '';
+        return `${where}${firstDifference(w.local, b ? b.local : '')}`;
+      }
+    }
+    return firstDifference(nextLocal, backLocal);
   }
 
   leavesMatch(backLocal, nextLocal, changed = []) {
@@ -630,10 +746,12 @@ export class NotionTracker {
       await this.client.updatePage(page.id, { properties: { [this.p.designApproved]: writeValue('rich_text', approved) } });
     }
     this.remember(key, page, { designPageId: normalizeId(d.id), designUrl: d.url });
-    const back = await this.getDesign(key);
-    if (!back || !sameLocal(stripTitle(back.body).body, local)) {
-      throw new ToolkitError(EXIT.ERROR, `Saved but not verified: the design of ${key} in Notion does not match what was written.`, { id: key });
-    }
+    const { back } = await this.readBack(async () => {
+      const b = await this.getDesign(key);
+      if (!b) return { back: b, problem: notVerified(`the design of ${key} in Notion`, { id: key }, 'it could not be read back') };
+      if (!sameLocal(stripTitle(b.body).body, local)) return { back: b, problem: notVerified(`the design of ${key} in Notion`, { id: key, location: b.location }, firstDifference(local, stripTitle(b.body).body)) };
+      return { back: b };
+    });
     return back;
   }
 
@@ -686,14 +804,17 @@ export class NotionTracker {
     const written = (this.cache.items[key] && this.cache.items[key].written) || null;
     this.remember(key, back, written ? { written: { ...written, parent: normalizeParent(after.parent, this.prefix) } } : {});
     this.saveCache();
+    // Notion has no folders: say "the top level", not "root" (sample run c, round 2).
     return {
       id: key,
-      from: before.parent === 'none' ? 'root' : before.parent,
-      to: archived ? 'archive' : parentAfter === 'none' ? 'root' : parentAfter,
+      from: wasArchived ? 'the archive' : before.parent === 'none' ? 'the top level' : before.parent,
+      to: archived ? 'the archive' : parentAfter === 'none' ? 'the top level' : parentAfter,
       parentBefore: before.parent,
       parentAfter: after.parent,
       archived,
-      nested: parentAfter !== 'none',
+      // Sub-items in Notion follow their parent through the relation by themselves; none is moved one by one.
+      nested: 0,
+      isSubItem: parentAfter !== 'none',
       unchanged,
       location: back.url,
     };
@@ -707,11 +828,30 @@ export class NotionTracker {
    * and moved-out items. quick: stop after one query when nothing was edited
    * since the last sync on this computer.
    */
-  async sync({ quick = false, write = true } = {}) {
-    const report = emptyReport();
-    const rows = await this.queryRows();
+  async sync({ quick = false, write = true, movesOnly = false } = {}) {
+    // Read only (the briefing and the prompt hook): nothing is written, so
+    // the next toolkit command still finds and records the same changes.
+    if (!write) return this.syncRows(await this.queryRows(), { quick, write: false, movesOnly });
+    // A quick check that finds nothing new needs no lock (one call).
+    if (quick) {
+      const rows = await this.queryRows();
+      if (!this.changesIn(rows).any) return emptyReport();
+    }
+    // Writes run one process at a time, on the cache as the last process left
+    // it: parallel commands must not each record the same hand change
+    // (sample run c, round 2: one move got five history rows).
+    return this.transaction(async () => {
+      this.reloadCache();
+      const report = await this.syncRows(await this.queryRows(), { quick, write: true });
+      await this.noteParents(report);
+      this.saveCache();
+      return report;
+    });
+  }
+
+  /** Which rows changed since the cache was written, and which cached ids are gone. */
+  changesIn(rows) {
     const seen = new Set();
-    const today = this.today();
     const changedRows = [];
     for (const page of rows) {
       const id = this.idOf(page);
@@ -721,11 +861,22 @@ export class NotionTracker {
       if (!c || c.lastEdited !== page.last_edited_time || c.missing || c.fingerprint !== this.fingerprint(page)) changedRows.push(page);
     }
     const gone = Object.keys(this.cache.items).filter((id) => !seen.has(id) && !this.cache.items[id].missing);
+    return { changedRows, gone, any: Boolean(changedRows.length || gone.length) };
+  }
+
+  async syncRows(rows, { quick, write, movesOnly = false }) {
+    const report = emptyReport();
+    const today = this.today();
+    const { changedRows, gone } = this.changesIn(rows);
     if (quick && !changedRows.length && !gone.length) return report;
     const work = quick ? changedRows : rows.filter((p) => this.idOf(p));
 
     for (const page of work) {
       const id = this.idOf(page);
+      if (movesOnly) {
+        this.findMoves(page, id, report);
+        continue;
+      }
       try {
         await this.syncOne(page, id, { report, today, write });
       } catch (err) {
@@ -751,10 +902,74 @@ export class NotionTracker {
         }
       }
       report.missing.push({ id, lastLocation: c.url || null, reason });
-      c.missing = true;
+      if (write) {
+        c.missing = true;
+        this.markTouched(id, 'full');
+      }
     }
-    if (write) this.saveCache();
     return report;
+  }
+
+  /** The parent the toolkit last wrote or confirmed for a cached item, or undefined. */
+  knownParentOf(cached) {
+    if (!cached) return undefined;
+    return cached.written && cached.written.parent !== undefined ? cached.written.parent : cached.parent;
+  }
+
+  /**
+   * Moves only, from the row's properties: a parent changed by hand and the
+   * Archived box. No body is read and nothing is written, so it fits the
+   * session briefing's 2-second budget (sample run c, round 2).
+   */
+  findMoves(page, id, report) {
+    const cached = this.cache.items[id] || null;
+    const knownParent = this.knownParentOf(cached);
+    const after = normalizeParent(this.parentIdOf(page), this.prefix);
+    if (cached && knownParent !== undefined && normalizeParent(knownParent, this.prefix) !== after) {
+      const before = normalizeParent(knownParent, this.prefix);
+      report.moves.push({ id, kind: 'reparented', from: before, to: after, parentBefore: before, parentAfter: after, location: page.url });
+    }
+    const archived = Boolean(readValue(page, this.p.archived));
+    if (cached && cached.archived !== undefined && cached.archived !== archived) {
+      report.moves.push({ id, kind: archived ? 'archived' : 'unarchived', from: cached.archived ? 'archive' : 'board', to: archived ? 'archive' : 'board', parentBefore: after, parentAfter: after, location: page.url });
+    }
+  }
+
+  /**
+   * A history row on the old and the new parent of each item the owner
+   * re-parented by hand (sample run c, round 2: the parent got no row). Added
+   * once: a row already there for the same change on the same day is kept.
+   */
+  async noteParents(report) {
+    const today = this.today();
+    for (const m of report.moves) {
+      if (m.kind !== 'reparented') continue;
+      const rows = [];
+      if (m.parentBefore && m.parentBefore !== 'none') rows.push([m.parentBefore, { date: today, change: `Sub-item ${m.id} moved out in Notion by hand.`, effect: `Its parent is now ${m.parentAfter === 'none' ? 'none (top level)' : m.parentAfter}.` }]);
+      if (m.parentAfter && m.parentAfter !== 'none') rows.push([m.parentAfter, { date: today, change: `Sub-item ${m.id} moved here in Notion by hand (it was under ${m.parentBefore === 'none' ? 'none (top level)' : m.parentBefore}).`, effect: `${m.id} is part of this item now.` }]);
+      for (const [pid, row] of rows) {
+        try {
+          await this.appendHistoryOnce(pid, row);
+        } catch (err) {
+          report.problems.push({ severity: 'warning', id: pid, message: `The history row about ${m.id} could not be added to ${pid} (${err.message}).` });
+        }
+      }
+    }
+  }
+
+  /** Add a Recent History row to an item unless the same change is there for the same day. */
+  async appendHistoryOnce(id, row) {
+    const rec = await this.get(id);
+    if (!rec || !rec.body) return false;
+    if (parseHistory(rec.body).some((h) => h.date === row.date && h.change === row.change)) return false;
+    let body;
+    try {
+      body = appendHistory(rec.body, row);
+    } catch {
+      return false; // No Recent History table.
+    }
+    await this.update(id, { meta: { updated: row.date }, body, expectBody: rec.body });
+    return true;
   }
 
   async syncOne(page, id, { report, today, write }) {
@@ -787,15 +1002,23 @@ export class NotionTracker {
       const patch = {};
       for (const k of Object.keys(fields)) if (!meta[k]) patch[k] = fields[k];
       if (meta.stage && !meta.status) patch.status = statusForStage(meta.stage) || 'Backlog';
-      await this.update(id, { meta: { ...patch, updated: today }, body: doc.body });
+      // The template's item-level guide is about local folders; a Notion card never needs it.
+      await this.update(id, { meta: { ...patch, updated: today }, body: removeItemGuide(doc.body) });
       report.adopted.push({ id, location: page.url, reason: 'A card made in Notion with an empty body; the work item template was filled in.' });
       report.changed = true;
       return;
     }
 
-    // Moves: a parent changed by hand, or the Archived box.
-    if (cached && cached.parent !== undefined && normalizeParent(cached.parent, this.prefix) !== normalizeParent(meta.parent, this.prefix)) {
-      report.moves.push({ id, kind: 'reparented', from: cached.parent, to: meta.parent, parentBefore: cached.parent, parentAfter: meta.parent, location: page.url });
+    // Moves: a parent changed by hand, or the Archived box. The parent is
+    // compared with the one the toolkit last wrote or confirmed (written), not
+    // with the last read, so a read in between does not hide the change.
+    const knownParent = this.knownParentOf(cached);
+    let reparented = null;
+    if (cached && knownParent !== undefined && normalizeParent(knownParent, this.prefix) !== normalizeParent(meta.parent, this.prefix)) {
+      const before = normalizeParent(knownParent, this.prefix);
+      const after = normalizeParent(meta.parent, this.prefix);
+      reparented = { before, after };
+      report.moves.push({ id, kind: 'reparented', from: before, to: after, parentBefore: before, parentAfter: after, location: page.url });
     }
     const archived = Boolean(readValue(page, this.p.archived));
     if (cached && cached.archived !== undefined && cached.archived !== archived) {
@@ -807,6 +1030,25 @@ export class NotionTracker {
     if (written) written.parent = meta.parent; // In Notion the relation is the parent; there is no location to compare.
     const designSource = meta.design && meta.design !== 'none' ? meta.design : undefined;
     const r = reconcileRecord({ meta, body: read.body, sources: designSource ? { design: designSource } : {}, written, today, prefix: this.prefix });
+    if (reparented) {
+      // The owner's hand move gets a Recent History row, like any hand change,
+      // once: a row already there for the same change today is not repeated.
+      const row = {
+        date: today,
+        change: `Parent changed in Notion by hand: ${reparented.before === 'none' ? 'none (top level)' : reparented.before} -> ${reparented.after === 'none' ? 'none (top level)' : reparented.after}.`,
+        effect: reparented.after === 'none' ? 'It is a top-level item now.' : `It is a sub-item of ${reparented.after} now.`,
+      };
+      r.written = { ...r.written, parent: reparented.after };
+      if (!parseHistory(r.body).some((h) => h.date === row.date && h.change === row.change)) {
+        try {
+          r.body = appendHistory(r.body, row);
+          r.changed = true;
+          if (r.patch.updated === undefined && meta.updated !== today) r.patch.updated = today;
+        } catch {
+          // No Recent History table: the move is still reported.
+        }
+      }
+    }
     report.ownerEdits.push(...r.ownerEdits.map((e) => ({ ...e, location: page.url })));
     report.questions.push(...r.questions);
     report.derived.push(...r.derived.filter((d) => d.field !== 'heading'));

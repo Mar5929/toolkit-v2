@@ -17,7 +17,7 @@ import path from 'node:path';
 import { parseArgs } from '../core/args.mjs';
 import { CONFIG_FILE, requireProject, saveConfig } from '../core/config.mjs';
 import { EXIT, ToolkitError, out } from '../core/output.mjs';
-import { DEFAULT_URL, HindsightClient, assertBankId } from '../hindsight/client.mjs';
+import { DEFAULT_URL, HindsightClient, assertBankId, SANDBOX_FIX } from '../hindsight/client.mjs';
 import { bankIdFor, ensureBank, settingsProblems } from '../hindsight/bank.mjs';
 import { createService, defaultPlistPath, defaultRunner } from '../hindsight/service.mjs';
 
@@ -155,7 +155,12 @@ async function healthCommand(argv, ctx) {
     report.server = await client.health();
     report.version = await client.version().catch(() => null);
   } catch (err) {
-    lines.push(`Hindsight is not reachable at ${client.url}.`, err.message, 'Check the service with: toolkit hindsight service status');
+    if (err && err.details && err.details.sandbox) {
+      report.sandbox = true;
+      lines.push(err.message, SANDBOX_FIX);
+    } else {
+      lines.push(`Hindsight is not reachable at ${client.url}.`, err.message, 'Check the service with: toolkit hindsight service status');
+    }
     out(ctx, lines, report);
     return EXIT.ERROR;
   }
@@ -233,18 +238,21 @@ async function serviceCommand(argv, ctx) {
   if (action === 'status') {
     const st = await service.status();
     let healthy = false;
+    let blocked = false;
     try {
       const h = await client.health();
       healthy = Boolean(h && h.status === 'healthy');
-    } catch {
+    } catch (err) {
       healthy = false;
+      blocked = Boolean(err && err.details && err.details.sandbox);
     }
     const lines = [
       `Service: ${st.label}`,
       `Plist: ${st.plistPath} (${st.installed ? 'installed' : 'not installed'}${st.sameAsTemplate === false ? ', differs from the toolkit template' : ''})`,
       `launchd: ${st.loaded ? (st.running ? `loaded and running, pid ${st.pid}` : `loaded, not running${st.lastExit ? `, last exit ${st.lastExit}` : ''}`) : 'not loaded'}`,
-      `Server at ${client.url}: ${healthy ? 'healthy' : 'not answering'}`,
+      `Server at ${client.url}: ${healthy ? 'healthy' : blocked ? 'not reached: the Codex sandbox blocked the request, so this says nothing about the server' : 'not answering'}`,
     ];
+    if (blocked) lines.push(SANDBOX_FIX);
     if (!st.installed) lines.push('Install with: toolkit hindsight service install');
     else if (st.sameAsTemplate === false) lines.push('Bring it in line with the template: toolkit hindsight service install');
     out(ctx, lines, { ok: st.loaded && healthy, ...st, healthy, url: client.url });

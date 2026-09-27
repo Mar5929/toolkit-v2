@@ -27,7 +27,7 @@ import { atomicWrite } from '../core/fsx.mjs';
 import { run } from '../core/util.mjs';
 import { planManifest, applyPlan, planLines, planSummary, setupDate, todayFor, readHosts } from './manifest.mjs';
 import {
-  newConfig, checkKey, keyFromName, checkChoice, parseHosts, describeSetup, TRACKERS, MEMORIES,
+  newConfig, checkKey, keyFromName, checkChoice, parseHosts, parseDeclined, describeSetup, TRACKERS, MEMORIES,
 } from './setup.mjs';
 
 const PENDING_FILE = 'init-pending.json';
@@ -118,6 +118,7 @@ export function buildInitConfig(root, opts, existing, { today } = {}) {
       memory: checkChoice(opts.memory, MEMORIES, 'memory'),
       salesforce: Boolean(opts.salesforce),
       hosts: parseHosts(opts.hosts),
+      declined: parseDeclined(opts.decline),
     });
     return { config, rerun: false, changes };
   }
@@ -140,6 +141,10 @@ export function buildInitConfig(root, opts, existing, { today } = {}) {
   if (opts.memory) set(config.memory, 'type', checkChoice(opts.memory, MEMORIES, 'memory'), 'memory.type');
   if (opts.salesforce) set(config.salesforce, 'enabled', true, 'salesforce.enabled');
   if (opts.hosts !== undefined && opts.hosts !== null) set(config, 'hosts', parseHosts(opts.hosts), 'hosts');
+  if (opts.decline !== undefined && opts.decline !== null) {
+    const declined = [...new Set([...(Array.isArray(config.declined) ? config.declined : []), ...parseDeclined(opts.decline)])];
+    if (declined.length) set(config, 'declined', declined, 'declined');
+  }
   if (!config.project.key) config.project.key = checkKey(keyFromName(config.project.name || path.basename(root)));
   // A project set up before the setup date was recorded: from now on, today is its setup date.
   if (!setupDate(config)) config.project.created = created;
@@ -219,6 +224,17 @@ async function checkHindsight(project, { fetch: fetchFn }) {
   try {
     await client.health();
   } catch (err) {
+    if (err && err.details && err.details.sandbox) {
+      // The Codex sandbox blocked the request: the server may be fine, and
+      // init cannot run here at all. Say so, with the exact command for a
+      // terminal (sample run d, round 2: the fix said to start a running server).
+      const command = initCommandLine(project.config, project.root);
+      throw new ToolkitError(EXIT.ERROR, `The Codex sandbox blocked init's request to the local Hindsight server at ${url}, so init cannot check it from here. The server itself may be running. Nothing was written.`, {
+        sandbox: true,
+        command,
+        fix: `Ask the owner to run this in a Terminal window (outside Codex), or to approve running it outside the Codex sandbox: ${command}. Keep every setup answer as he gave it.`,
+      });
+    }
     throw new ToolkitError(EXIT.ERROR, `This project uses Hindsight memory, but the local Hindsight server at ${url} does not answer (${err.message}). Nothing was written.`, {
       fix: 'Check it with toolkit hindsight service status, start it (toolkit hindsight service start) after the owner\'s yes, then run toolkit init again.',
     });
@@ -240,6 +256,37 @@ async function wireHindsight(project, { client, url, report }) {
 }
 
 // ------------------------------------------------------------------ init
+
+function quoteArg(value) {
+  const v = String(value);
+  return /^[A-Za-z0-9_.,/:@%+=-]+$/.test(v) ? v : `"${v.replace(/(["\\$`])/g, '\\$1')}"`;
+}
+
+/** The toolkit init command that repeats this setup, for the owner to run in a terminal. */
+export function initCommandLine(config, root) {
+  const parts = ['toolkit', 'init', '--dir', quoteArg(root), '--name', quoteArg(config.project.name), '--key', quoteArg(config.project.key),
+    '--tracker', config.tracker.type, '--memory', config.memory.type, '--owner', quoteArg(config.project.owner)];
+  if (config.salesforce && config.salesforce.enabled) parts.push('--salesforce');
+  if (Array.isArray(config.hosts)) parts.push('--hosts', config.hosts.join(','));
+  if (Array.isArray(config.declined) && config.declined.length) parts.push('--decline', config.declined.join(','));
+  return parts.join(' ');
+}
+
+/**
+ * A write refused by the operating system (the Codex sandbox refuses .codex/
+ * and .agents/): the error names the exact command for the owner to run in a
+ * terminal, with the same answers. The answers are never changed to get past it.
+ */
+function refusedWrite(err, config, root) {
+  const cause = err && err.details && err.details.path ? err : null;
+  if (!cause) return err;
+  const command = initCommandLine(config, root);
+  return new ToolkitError(EXIT.ERROR, `${err.message} Files in .codex/ and .agents/ are written first, so no other setup file was written by this run.`, {
+    path: err.details.path,
+    command,
+    fix: `Ask the owner to run this in a Terminal window (outside Codex), or to approve running it outside the Codex sandbox: ${command}. Keep every setup answer as he gave it. It is safe to run again: files an earlier run wrote are recorded, not treated as the project's own.`,
+  });
+}
 
 /**
  * Run init. opts: { name, key, tracker, memory, salesforce, owner, dir, hosts }.
@@ -296,7 +343,12 @@ export async function initProject(opts, io = {}) {
 
   // 5. The scaffold, planned again with the final settings (the id prefix may have changed).
   const plan = planManifest(project, { mode: 'init', env, pluginRoot: io.pluginRoot });
-  const applied = applyPlan(plan);
+  let applied;
+  try {
+    applied = applyPlan(plan);
+  } catch (err) {
+    throw refusedWrite(err, config, root);
+  }
 
   // 6. Generated files that should exist from the start. On a second run the
   // tracker is only brought in step when it changed since the last toolkit

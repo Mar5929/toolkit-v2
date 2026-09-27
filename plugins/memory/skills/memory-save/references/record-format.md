@@ -113,6 +113,9 @@ only, without frontmatter. It uses the model template's labels, in this order:
 ```
 
 - Dates are absolute (`2026-09-26`), never "today" or "last week".
+- **Why** is the owner's reason in his words, or "Not stated by the owner."
+  when he gave none. Never write a reason the agent inferred: a later answer
+  would present it as his.
 - Keep uncertainty explicit under Evidence and limits.
 - Write "None." after a label that has nothing. Do not invent a related note
   or record to fill it.

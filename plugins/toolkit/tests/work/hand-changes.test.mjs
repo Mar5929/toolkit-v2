@@ -5,7 +5,7 @@ import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { makeProject, cleanup, tk, newItem, readRecord, recordPath, readState, trackerDir, editFile, git } from './helpers.mjs';
+import { makeProject, cleanup, tk, newItem, readRecord, recordPath, readState, trackerDir, editFile, git, approveRequirements } from './helpers.mjs';
 import { parseDoc, parseHistory, getH1, getLabel, getSectionText as getSectionTextOf } from '../../lib/work/model.mjs';
 import { checkChanged } from '../../lib/work/state.mjs';
 import { loadTemplate } from '../../lib/work/templates.mjs';
@@ -103,7 +103,7 @@ test('a copied folder keeps the original id and renumbers the copy (and its desi
   assert.equal(copyPath, W(dir, 'WI-003-search copy', 'WORK-ITEM.md'), 'the copy folder is renamed to its new id');
   const copy = parseDoc(fs.readFileSync(copyPath, 'utf8'));
   assert.equal(getH1(copy.body).id, 'WI-003');
-  assert.match(parseHistory(copy.body).at(-1).change, /^Renumbered: this record had id WI-001/);
+  assert.match(parseHistory(copy.body)[0].change, /^Renumbered: this record had id WI-001/);
   const design = parseDoc(fs.readFileSync(W(dir, 'WI-003-search copy', 'DESIGN.md'), 'utf8'));
   assert.equal(design.meta.work_item, 'WI-003');
   assert.equal(readState(dir).highWater, 3);
@@ -155,7 +155,7 @@ test('a record made by hand with a new id is adopted and the high-water id moves
   assert.equal(r.json.changes.adopted[0].id, 'WI-010');
   const doc = parseDoc(await readRecord(dir, 'WI-010'));
   assert.equal(doc.meta.status, 'Backlog');
-  assert.match(parseHistory(doc.body).at(-1).change, /Adopted by the toolkit/);
+  assert.match(parseHistory(doc.body)[0].change, /Adopted by the toolkit/);
   assert.equal(await newItem(dir, 'After manual'), 'WI-011');
 });
 
@@ -168,7 +168,7 @@ test('an H1 renamed by hand becomes the title, with a history row', async () => 
   assert.equal(r.json.items[0].title, 'Sign-in page');
   const doc = parseDoc(await readRecord(dir, id));
   assert.equal(doc.meta.title, 'Sign-in page');
-  assert.match(parseHistory(doc.body).at(-1).change, /^Changed by hand: title from "Login page" to "Sign-in page"/);
+  assert.match(parseHistory(doc.body)[0].change, /^Changed by hand: title from "Login page" to "Sign-in page"/);
 });
 
 test('a status set to Done by hand is kept, reported, and asked about', async () => {
@@ -217,7 +217,7 @@ test('a build item moved past 03 by hand is kept and becomes a question for the 
   const human = await tk(dir, ['work', 'validate']);
   assert.equal(human.code, 2);
   assert.match(human.stdout, /Question for the owner: Was moving WI-001 to 08-build/);
-  await tk(dir, ['work', 'approve', id, '--requirements', '--by', 'Mike']);
+  await approveRequirements(dir, id);
   assert.equal((await tk(dir, ['work', 'validate'])).code, 0);
   assert.equal(parseDoc(await readRecord(dir, id)).meta.stage, '08-build', 'approval does not move a later stage back');
 });
@@ -308,6 +308,8 @@ test('a newer state file stops every write before any file is touched', async ()
   const dir = makeProject();
   const one = await newItem(dir, 'One');
   await newItem(dir, 'Two');
+  // A goal, so the approval below is refused for the newer state file only.
+  await tk(dir, ['work', 'edit', one, '--section', 'Agreed goal', '--text', 'One goal.']);
   const file = W(dir, '.toolkit-state.json');
   const state = JSON.parse(fs.readFileSync(file, 'utf8'));
   state.schema = 99;
@@ -393,7 +395,7 @@ test('a WORK-ITEM.md written freely with no id gets the template sections, with 
   const request = getSectionTextOf(doc.body, 'Starting request');
   assert.match(request, /The footer overlaps the cookie banner on phones\./);
   assert.match(request, /^##### Why$/m, 'the owner heading moves down inside Starting request');
-  assert.match(parseHistory(doc.body).at(-1).change, /^Adopted by the toolkit: found at \.work-items\/footer\/WORK-ITEM\.md with no id\./);
+  assert.match(parseHistory(doc.body)[0].change, /^Adopted by the toolkit: found at \.work-items\/footer\/WORK-ITEM\.md with no id\./);
   const h = await tk(dir, ['work', 'history', 'WI-002', '--note', 'Looked at it']);
   assert.equal(h.code, 0, 'the history table exists');
 });

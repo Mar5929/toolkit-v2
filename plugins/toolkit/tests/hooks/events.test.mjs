@@ -229,12 +229,19 @@ test('PreToolUse refuses hand edits of generated files in both hosts, and allows
   }
   assert.match((await hook(root, env, 'claude', 'pre-tool', fixture('claude', 'pre-tool.write', vars(root, { FILE: path.join(root, '.memory', 'MEMORY.md') })))).out.hookSpecificOutput.permissionDecisionReason, /toolkit memory reindex/);
   assert.match((await hook(root, env, 'claude', 'pre-tool', fixture('claude', 'pre-tool.write', vars(root, { FILE: path.join(root, 'ai-external-knowledge', 'INDEX.md') })))).out.hookSpecificOutput.permissionDecisionReason, /toolkit index knowledge/);
-  for (const rel of ['README.md', '.work-items/WI-001-x/WORK-ITEM.md', '.memory/project_x.md', 'docs/INDEX.md']) {
+  for (const rel of ['README.md', '.memory/project_x.md', 'docs/INDEX.md']) {
     const r = await hook(root, env, 'claude', 'pre-tool', fixture('claude', 'pre-tool.write', vars(root, { FILE: path.join(root, rel) })));
     assert.equal(r.raw, '', rel);
     const c = await hook(root, env, 'codex', 'pre-tool', fixture('codex', 'pre-tool.apply-patch', vars(root, { PATCH: updatePatch(rel, 'a', 'b') })));
     assert.equal(c.raw, '', rel);
   }
+  // A body line of a work item record may be edited; a new record made by hand is refused (toolkit work new makes one).
+  const rec = '.work-items/WI-001-x/WORK-ITEM.md';
+  const body = await hook(root, env, 'codex', 'pre-tool', fixture('codex', 'pre-tool.apply-patch', vars(root, { PATCH: updatePatch(rec, 'a', 'b') })));
+  assert.equal(body.raw, '', 'a body edit');
+  const made = await hook(root, env, 'claude', 'pre-tool', fixture('claude', 'pre-tool.write', vars(root, { FILE: path.join(root, rec), CONTENT: '---\nid: WI-001\n---\n' })));
+  assert.equal(made.out.hookSpecificOutput.permissionDecision, 'deny');
+  assert.match(made.out.hookSpecificOutput.permissionDecisionReason, /toolkit work new/);
 });
 
 test('PreToolUse refuses the git commands the settings deny list names, in both hosts', async () => {
@@ -262,11 +269,18 @@ test('git clean -x is refused only in the main checkout, and only when the proje
   fs.copyFileSync(path.join(root, '.toolkit.json'), path.join(wt, '.toolkit.json'));
   const inWorktree = await hook(wt, env, 'codex', 'pre-tool', fixture('codex', 'pre-tool.bash', vars(wt, { COMMAND: 'git clean -fdx' })));
   assert.equal(inWorktree.raw, '');
-  const notion = await setup({ tracker: 'github', memory: 'hindsight' }).catch(() => null);
-  if (notion) {
-    const r = await hook(notion.root, notion.env, 'claude', 'pre-tool', fixture('claude', 'pre-tool.bash', vars(notion.root, { COMMAND: 'git clean -fdx' })));
-    assert.equal(r.raw, '');
-  }
+  // A project that keeps no Git-ignored data (GitHub tracker, Hindsight memory).
+  // It is set up with built-in memory and then switched in .toolkit.json, so the
+  // test never creates a memory bank on the real local Hindsight server (sample
+  // run d found 17 leftover acme-crm banks from an earlier version of this test).
+  const other = await setup({ tracker: 'github', memory: 'builtin' });
+  const cfgFile = path.join(other.root, '.toolkit.json');
+  const cfg = JSON.parse(read(cfgFile));
+  cfg.memory.type = 'hindsight';
+  cfg.hindsight = { bank: 'tkv2-test-not-created' };
+  fs.writeFileSync(cfgFile, `${JSON.stringify(cfg, null, 2)}\n`);
+  const r = await hook(other.root, other.env, 'claude', 'pre-tool', fixture('claude', 'pre-tool.bash', vars(other.root, { COMMAND: 'git clean -fdx' })));
+  assert.equal(r.raw, '');
 });
 
 // ------------------------------------------------------------------ PostToolUse
@@ -307,6 +321,9 @@ test('PostToolUse reads the apply_patch file names (Codex) and a clean edit give
   const rel = path.relative(root, file);
   fs.writeFileSync(file, read(file).replace(/^priority: .*$/m, 'priority: high'));
   const v = vars(root, { PATCH: updatePatch(rel, 'priority: medium', 'priority: high'), REL: rel });
+  // The first clean direct edit in a session gets one line about toolkit work edit; later ones say nothing.
+  const first = await hook(root, env, 'codex', 'post-tool', fixture('codex', 'post-tool.apply-patch', v));
+  assert.match(first.out.hookSpecificOutput.additionalContext, /toolkit work edit <id> --section/);
   const clean = await hook(root, env, 'codex', 'post-tool', fixture('codex', 'post-tool.apply-patch', v));
   assert.equal(clean.raw, '');
   fs.writeFileSync(file, read(file).replace(/^type: .*$/m, 'type: build').replace(/^stage: .*$/m, 'stage: 09-testing').replace(/^status: .*$/m, 'status: In Progress'));

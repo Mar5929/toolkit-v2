@@ -6,7 +6,7 @@ description: 'Designs how a work item gets built: checks the requirements are re
 # Solution design
 
 Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
-Shared rules: `../../references/conventions.md`. Full process and checklist: `references/design-process.md`. Team sizes: `../../references/team-roles.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`.
+Shared rules: the work plugin's `references/conventions.md` and `references/team-roles.md` (team sizes), two folders above this skill's folder (`../../references/`). Full process and checklist: this skill's `references/design-process.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Run each `toolkit` command alone, on its own line: in Codex a command joined by `&&`, `;`, a pipe, or a heredoc, or run from a script, runs inside the sandbox and fails. Give text with `--text`, or a file in a new `mktemp -d` folder (never a fixed `/tmp` name, deleted right after the command). Never change a record with a script.
 
 ## Steps
 
@@ -19,8 +19,8 @@ Shared rules: `../../references/conventions.md`. Full process and checklist: `re
    `toolkit work design <id> --create`
    `toolkit work design <id>`
 5. One `researcher` per open question, started together. Salesforce project: open `sf-architect-solutioning` as the specialist and pass its findings to the architect.
-6. One `design-architect` per option, each writing its own draft file in a temporary folder; one `design-critic` per draft; repeat the fix round until the critic's list is empty. A disagreement still open after two rounds goes to the owner as one question.
-7. Save the design as proposed and set the item waiting on the owner. Project-wide decisions go to `work-decide`; lasting lessons to `memory-save`.
+6. Make one folder for this design with `mktemp -d` (never a fixed name such as `/tmp/wi002-option-a.md`: another project's WI-002 could overwrite it). One `design-architect` per option, each writing its own file in that folder, named in its brief; one `design-critic` per draft; repeat the fix round until the critic's list is empty. A disagreement still open after two rounds goes to the owner as one question.
+7. Save the design as proposed, delete the design's temporary folder, and set the item waiting on the owner. The proposed design is the owner's decision: add no Open Questions row for the design approval itself. "Saved but not verified" from the save: lead the reply with it. Project-wide decisions go to `work-decide`; lasting lessons to `memory-save`.
    `toolkit work design <id> --set-file <file> --status proposed`
    `toolkit work set <id> --waiting-on owner`
    `toolkit work history <id> --note "Design proposed: <options and recommendation>"`
@@ -29,7 +29,8 @@ Shared rules: `../../references/conventions.md`. Full process and checklist: `re
    `toolkit work history <id> --note "Owner's words: <quote>"`
    `toolkit work set <id> --waiting-on agent`
    `toolkit work validate <id>`
-9. Codex: this plugin's agents do not load there. Read the agent's file in this plugin's `agents/` folder and give its full text, with the brief, to a native Codex worker. With no worker, do the work yourself and say that no independent research or critique ran.
+   End the reply with the approval question, or after a yes, the exact words that continue.
+9. Codex: this plugin's agents do not load there. Read the agent's file in this plugin's `agents/` folder and give its full text, with the brief, to a native Codex worker: the `spawn_agent` tool, started without this conversation (`fork_turns` set to `none`), so a checker never shares the builder's thread. Only when the session has no `spawn_agent` tool, do the work yourself; then say plainly, in the reply to the owner and in the design's Notes, that no independent research or critique ran.
 
 ## Agents
 

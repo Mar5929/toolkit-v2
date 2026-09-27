@@ -101,7 +101,8 @@ The toolkit plugin carries an exact copy of the model project in its
 
 | Installed | When |
 | --- | --- |
-| `AGENTS.md`, `SOUL.md`, `PROJECT.md`, `PROJECT-ROADMAP.md`, `DECISIONS.md`, `README.md`, `.gitignore` | Every project |
+| `AGENTS.md`, `PROJECT.md`, `PROJECT-ROADMAP.md`, `DECISIONS.md`, `README.md`, `.gitignore` | Every project |
+| `SOUL.md` | Every project, unless the owner declines it (`--decline SOUL.md`, or `toolkit config set declined SOUL.md` later) |
 | `requirements/` (its own `AGENTS.md`, `SYSTEM-DATA-MODEL.md`, and `system-area-template/`), `system-guide/AREA-TEMPLATE.md`, `tests/TEST-PLAN-TEMPLATE.md`, `ai-external-knowledge/INDEX.md` | Every project |
 | The general rules in `.claude/rules/` | Every project (Codex reads them through `AGENTS.md`) |
 | A root `CLAUDE.md` holding only `@AGENTS.md`, `.claude/settings.json`, `.claude/output-styles/plain-english.md` | Claude Code is one of the hosts |
@@ -145,8 +146,12 @@ owner confirmed:
   left. The data model gets only accepted requirements, never a guess.
 - `SOUL.md`: ask whether the owner wants it ("Do you want a SOUL.md that tells
   the agent how you like to work? I recommend skipping it for now; you can add
-  it later."). With a yes, fill it with his words and get his approval. With a
-  no, remove the file.
+  it later."). Ask it with the other setup questions, so a no goes to init as
+  `--decline SOUL.md` and the file is never installed. With a yes, fill it with
+  his words and get his approval. A no after init: run
+  `toolkit config set declined SOUL.md`, then delete the file. The no is kept
+  in `.toolkit.json`, so sync never brings the file back and doctor does not
+  report it missing. `toolkit config set declined none` undoes it.
 - Delete each fill-in guide once its file is filled. Never invent a fact to
   fill a prompt: list each prompt that is left, with the fact it needs, in the
   final report.

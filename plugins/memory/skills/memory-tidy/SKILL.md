@@ -6,7 +6,7 @@ description: 'Reviews the whole project memory: merges duplicates, retires stale
 # Memory tidy
 
 Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
-Record format: `../memory-save/references/record-format.md`. Approval rules: `memory-save` step 3 (the only written copy). Put each `toolkit` command on its own line; write `--body-file` and `--set-file` files in a temporary folder outside the repository.
+Record format: `../memory-save/references/record-format.md`. Approval rules: `memory-save` step 3 (the only written copy). Put each `toolkit` command on its own line. In Codex, a `toolkit` command joined to anything else (`&&`, `;`, a pipe, a heredoc) or run from a script runs inside the sandbox, which blocks Hindsight and Notion: run it alone. Text: give it in the command with `--body "<text>"` (a save) or `--text "<text>"` (the focus or the glossary), so no file is needed. For a long text, in Claude Code pass it on standard input (`--set-file -` or `--body-file -` with a heredoc); in Codex make a new folder for each save with `mktemp -d`, write the file there, and delete the file and the folder right after the command succeeds. Never use a fixed name such as `/tmp/focus.md`: another session could write the same file.
 
 ## Steps
 

@@ -159,6 +159,36 @@ trust the folder, and trust the hooks (see below).
 
 To check or repair a project later, say **"check the setup"**.
 
+### Starting a new project from Codex
+
+Codex shows the Toolkit V2 skills only in a project that `toolkit init` has
+already set up: the V2 plugins are off for the whole computer and on only
+where a project's `.codex/config.toml` turns them on, and init writes that
+file. Inside Codex, init also cannot write `.codex/` without your approval,
+because Codex's sandbox protects that folder. So start a new project in one of
+two ways:
+
+- Set it up from Claude Code (the steps above). Codex then works in the folder
+  too.
+- Or run `toolkit init` in a terminal in the project folder first, then open
+  Codex there, trust the folder, and say **"finish setting up Toolkit V2"**:
+
+  ```bash
+  toolkit init --name "Acme CRM" --tracker local --memory builtin --hosts claude-code,codex
+  ```
+
+Add `--salesforce` for a Salesforce project and `--decline SOUL.md` if you do
+not want a `SOUL.md`. `toolkit machine-setup` prints the same reminder.
+
+In Codex, Git commands that change the repository (`git add`, `git commit`,
+`git worktree add`, `git merge`, `git push`, `git branch -d`) need your
+approval each time: Codex's sandbox keeps `.git/` read-only, and the project's
+`.codex/rules/toolkit.rules` makes Codex ask you before each one. The agent
+asks for each one with escalated permissions, so the command you approve runs
+outside the sandbox; an approval without escalation still runs inside it and
+fails. When Codex runs with approvals turned off, it refuses these commands
+without asking, and the agent shows you the exact command to run in a terminal.
+
 ## When you change your model project
 
 Your model project is where every project file comes from. The toolkit keeps

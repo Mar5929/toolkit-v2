@@ -143,8 +143,9 @@ architect.
 
 - **Architect.** One per option. The brief holds the design's current text,
   the requirements, the research findings, which option to write, and the
-  draft file path (a file in a temporary folder made with `mktemp -d`, never
-  inside `.work-items/`). It says plainly whether the requirements are ready
+  draft file path: a file named for its option in the one folder made for
+  this design with `mktemp -d` (never a fixed name in the shared `/tmp`, never
+  inside `.work-items/`). Delete the folder once the design is saved. It says plainly whether the requirements are ready
   and does not design until they are.
 - **Critic.** One per draft. Returns one line per requirement (satisfied,
   partly satisfied, not satisfied) with evidence, plus findings on the goal,

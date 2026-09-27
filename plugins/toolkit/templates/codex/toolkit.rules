@@ -10,3 +10,37 @@ prefix_rule(
     justification = "Toolkit V2 command: updates the work tracker and memory in the main checkout and calls Notion and the local Hindsight server.",
     match = ["toolkit work sync", "toolkit memory find billing"],
 )
+
+# Git commands that write .git/. The Codex sandbox keeps .git/ read-only, so
+# these can never run inside it. Codex asks the owner before each one. The
+# approval alone does not move the command out of the sandbox: the agent must
+# also ask for escalated permissions (sandbox_permissions "require_escalated")
+# with a one-line reason, or the approved command still fails on
+# .git/index.lock. With approvals turned off (codex exec), Codex refuses these
+# commands without asking; the agent then shows the owner the exact command to
+# run in a terminal. Reading commands (git status, git log, git diff,
+# git branch --list) are not listed and run as before.
+
+prefix_rule(
+    pattern = ["git", ["add", "commit", "merge", "fetch", "pull", "push", "switch", "checkout", "restore", "rm", "mv", "stash", "cherry-pick", "revert"]],
+    decision = "prompt",
+    justification = "Git writes .git/, which the Codex sandbox keeps read-only. It runs only with the owner's approval and escalated permissions (outside the sandbox).",
+    match = ["git add src/greet.js", "git commit -m 'Add greeting'", "git merge --ff-only claude/wi-001-greet"],
+    not_match = ["git status", "git log --oneline -5"],
+)
+
+prefix_rule(
+    pattern = ["git", "worktree", ["add", "remove", "move", "prune", "repair"]],
+    decision = "prompt",
+    justification = "A worktree is made or removed in .git/, which the Codex sandbox keeps read-only. It runs only with the owner's approval and escalated permissions (outside the sandbox).",
+    match = ["git worktree add .claude/worktrees/wi-001-greet -b claude/wi-001-greet"],
+    not_match = ["git worktree list"],
+)
+
+prefix_rule(
+    pattern = ["git", "branch", ["-d", "-D", "--delete", "-m", "-M", "--move", "-c", "-C", "--copy"]],
+    decision = "prompt",
+    justification = "Deleting, renaming, or copying a branch writes .git/, which the Codex sandbox keeps read-only. It runs only with the owner's approval and escalated permissions (outside the sandbox).",
+    match = ["git branch -d claude/wi-001-greet"],
+    not_match = ["git branch --show-current"],
+)

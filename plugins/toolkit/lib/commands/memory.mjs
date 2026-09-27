@@ -32,8 +32,8 @@ export const help = `Usage:
   toolkit memory restore <key>
   toolkit memory rename <key> --to <new-key>
   toolkit memory delete <key> --owner-approved
-  toolkit memory focus [--set-file <file|->] [--expect <version>]
-  toolkit memory glossary [--set-file <file|->] [--expect <version>]
+  toolkit memory focus [--set-file <file|-> | --text <text>] [--expect <version>]
+  toolkit memory glossary [--set-file <file|-> | --text <text>] [--expect <version>]
   toolkit memory reindex
   toolkit memory status
   toolkit memory export --to <folder>
@@ -451,17 +451,21 @@ async function del(argv, ctx, { project, driver }) {
 // ---------------------------------------------------------------- focus and glossary
 
 async function textDocument(argv, ctx, { project, driver }, kind) {
-  const { _, flags } = parseArgs(argv, { string: ['set-file', 'expect', 'host'] });
-  if (_.length) throw new ToolkitError(EXIT.INVALID, `toolkit memory ${kind} takes no words outside flags. Use --set-file <file> to replace it.`);
+  const { _, flags } = parseArgs(argv, { string: ['set-file', 'text', 'expect', 'host'] });
+  if (_.length) throw new ToolkitError(EXIT.INVALID, `toolkit memory ${kind} takes no words outside flags. Use --set-file <file> or --text <text> to replace it.`);
   const label = kind === 'focus' ? 'current focus' : 'glossary';
   const file = str(flags, 'set-file');
-  if (file === undefined) {
+  const inline = str(flags, 'text');
+  if (file !== undefined && inline !== undefined) throw new ToolkitError(EXIT.INVALID, 'Give --set-file or --text, not both.');
+  if (file === undefined && inline === undefined) {
     const doc = kind === 'focus' ? await driver.focusGet() : await driver.glossaryGet();
     const text = doc.text ? doc.text : `There is no ${label} yet. Set it with toolkit memory ${kind} --set-file <file>.`;
     out(ctx, text, { ok: true, backend: driver.backend, kind, text: doc.text, version: doc.version });
     return EXIT.OK;
   }
-  const markdown = await readInput(ctx, file, 'set-file');
+  // --text gives the text in the command itself, so a Codex session needs no
+  // temporary file (sample run b, round 2).
+  const markdown = inline !== undefined ? inline : await readInput(ctx, file, 'set-file');
   const expect = str(flags, 'expect');
   const res = kind === 'focus' ? await driver.focusSet(markdown, { expect }) : await driver.glossarySet(markdown, { expect });
   await afterWrite(project, driver);

@@ -7,7 +7,7 @@ import {
   parseDoc, serializeDoc, applyMetaPatch, composeDoc, getH1, setH1, getSectionText, setSectionText, getLabel, setLabel,
   appendHistory, appendSectionRow, splitRowText, parseRoadmap, parseTasks, parseRequirements, parseQuestions, parseHistory,
   validateRecord, validateDesign, checkGates, newRecordText, newDesignText, reconcileRecord, snapshotWritten, canonicalId,
-  parseId, isPlaceholder, isTemplateRow, overallFor, sectionNames, isOpenOwnerQuestion, setDesignStatusLine, designStatusLine,
+  parseId, isPlaceholder, isTemplateRow, overallFor, sectionNames, isOpenOwnerQuestion, setDesignStatusLine, designStatusLine, getSectionWhole,
 } from '../../lib/work/model.mjs';
 import { FIELD_ORDER, DESIGN_FIELD_ORDER } from '../../lib/work/lifecycle.mjs';
 import { loadTemplate } from '../../lib/work/templates.mjs';
@@ -155,7 +155,10 @@ test('section helpers read and replace text, labels, and table rows', () => {
   assert.equal(qs[0].question, 'Use SSO?');
   assert.ok(isOpenOwnerQuestion(qs[0]));
   body = appendHistory(body, { date: '2026-09-27', change: 'A | pipe', effect: 'x' });
-  assert.equal(parseHistory(body).at(-1).change, 'A | pipe');
+  // Recent History is newest first, as the model template's guide says.
+  assert.equal(parseHistory(body)[0].change, 'A | pipe');
+  assert.equal(parseHistory(body).at(-1).change, 'Created as WI-004.');
+  assert.doesNotMatch(getSectionWhole(body, 'Recent History'), /<!--/, 'the section guide goes once the CLI writes rows');
   assert.deepEqual(splitRowText('| a | b \\| c | d |'), ['a', 'b | c', 'd']);
   assert.ok(isTemplateRow(['Q-01', '<Specific unanswered question>', 'R-01, P1-T02', 'Open', '<owner, or the person or role>']));
   assert.ok(!isTemplateRow(['Q-02', 'Should we use <b>?', 'R-01', 'Open', 'owner']));
@@ -253,7 +256,7 @@ test('an H1 renamed by hand becomes the title, with a history row', () => {
   const res = reconcileRecord({ meta: r.meta, body, sources: { parent: 'none', design: 'none' }, written: w, today: '2026-09-27' });
   assert.equal(res.patch.title, 'Sign-in page');
   assert.equal(res.ownerEdits[0].field, 'title');
-  assert.match(parseHistory(res.body).at(-1).change, /^Changed by hand: title/);
+  assert.match(parseHistory(res.body)[0].change, /^Changed by hand: title/);
   assert.equal(res.patch.updated, '2026-09-27');
 });
 

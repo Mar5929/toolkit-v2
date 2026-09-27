@@ -10,7 +10,7 @@ import { openTracker, REQUIRED_METHODS, trackerInstructionsPath, unsupportedTrac
 import { LocalTracker } from '../../lib/work/local.mjs';
 import { requireProject } from '../../lib/core/config.mjs';
 import { EXIT } from '../../lib/core/output.mjs';
-import { opNew, opSet, opApprove, opFinish, mustGet } from '../../lib/work/ops.mjs';
+import { opNew, opSet, opApprove, opFinish, opEdit, mustGet } from '../../lib/work/ops.mjs';
 import { parseDoc, composeDoc, setH1, canonicalId } from '../../lib/work/model.mjs';
 
 after(cleanup);
@@ -172,12 +172,15 @@ test('the operations run the same way on any driver that implements the interfac
   assert.equal(created.id, 'WI-001');
   assert.match(created.record.body, /^\n?# WI-001: Card$/m);
   await assert.rejects(opSet(t, 'WI-001', { stage: '08' }), (err) => err.code === EXIT.INVALID);
+  await assert.rejects(opApprove(t, project, 'WI-001', { what: 'requirements', by: 'Mike', today: '2026-09-26' }), (err) => err.code === EXIT.INVALID && err.details.gate === 'goal_not_written');
+  await opEdit(t, 'WI-001', { section: 'Agreed goal', text: 'A card on the board.', today: '2026-09-26' });
   await opApprove(t, project, 'WI-001', { what: 'requirements', by: 'Mike', today: '2026-09-26' });
   const rec = await mustGet(t, 'WI-001');
   assert.equal(rec.meta.stage, '03-requirements-approved');
   assert.equal(rec.meta.status, 'Ready');
   await opSet(t, 'WI-001', { stage: '11' });
-  const done = await opFinish(t, 'WI-001', { by: 'Mike', evidence: 'Works.', today: '2026-09-26' });
+  await assert.rejects(opFinish(t, 'WI-001', { by: 'Mike', evidence: 'Works.', today: '2026-09-26' }), (err) => err.code === EXIT.INVALID && err.details.gate === 'result_not_approved');
+  const done = await opFinish(t, 'WI-001', { by: 'Mike', evidence: 'Works.', quote: 'Yes, it works.', today: '2026-09-26' });
   assert.equal(done.record.meta.status, 'Done');
   assert.equal(done.record.meta.result_approved, '2026-09-26 by Mike');
   const text = composeDoc(done.record.meta, done.record.body);

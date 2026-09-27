@@ -385,7 +385,7 @@ function isPlaceholderRow(cells) {
  *   a function (cells, index) => boolean removes the rows it returns true for.
  * headers: when the text has no table, a new table with these columns is added.
  */
-export function appendTableRow(sectionText, cells, { dropPlaceholderRows = false, headers } = {}) {
+export function appendTableRow(sectionText, cells, { dropPlaceholderRows = false, headers, top = false } = {}) {
   const src = asText(sectionText);
   const eol = eolOf(src);
   const table = parseTable(src);
@@ -406,6 +406,11 @@ export function appendTableRow(sectionText, cells, { dropPlaceholderRows = false
         insertAt -= span.end - span.start;
       }
     }
+  }
+  if (top) {
+    // Newest first: the new row goes above the first data row that is left.
+    const left = parseTable(result);
+    if (left.found && left.rows.length) insertAt = left.rowSpans[0].start;
   }
   const before = result.slice(0, insertAt);
   const after = result.slice(insertAt);

@@ -6,31 +6,33 @@ description: 'Walks the owner through each decision waiting on him, one at a tim
 # Work decide
 
 Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
-Shared rules: `../../references/conventions.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`.
+Shared rules: the work plugin's `references/conventions.md`, two folders above this skill's folder (`../../references/conventions.md`). To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Run each `toolkit` command alone, on its own line: in Codex a command joined by `&&`, `;`, a pipe, or a heredoc, or run from a script, runs inside the sandbox and fails. Give text with `--text`, or a file in a new `mktemp -d` folder (never a fixed `/tmp` name, deleted right after the command). Never change a record with a script.
 
 ## Steps
 
-1. Build the queue: requirements waiting for approval, designs marked proposed, items at stage 11 waiting for result approval, Open Questions rows where the owner decides, and delivery offers not yet answered.
+1. Build the queue: requirements waiting for approval, designs marked proposed, items at stage 11 waiting for result approval, and Open Questions rows where the owner decides. The command lists each decision once. Its "Agent to-do" lines are the agent's own steps, not decisions waiting on the owner: count and show only the decisions, and handle a delivery offer there with `work-delegate` after the queue.
    `toolkit work decisions`
 2. The owner gave an answer without being asked ("approved", "go with B"): match it to exactly one waiting decision. If two could match, ask which one, naming both.
-3. Otherwise take the decisions one at a time, the one blocking the most work first. For each: what is being decided, the choices, your recommendation and its main reason, and what happens after each answer. One decision per message.
-4. Before recording a requirements approval, check that the Agreed goal is filled in and that no open question is linked to a requirement. If not, say what is missing and open `work-requirements`.
+3. Otherwise take the decisions one at a time, the one blocking the most work first. For each: what is being decided, the choices, your recommendation and its main reason, and what happens after each answer. Every decision carries a recommendation, even when it is the only one in the queue; a bare question is not enough. One decision per message.
+4. A requirements approval: save his words as a history note first, so no later session asks him again. Then check the Agreed goal and the open questions. The goal still holds the template text: write the goal he was shown with the approval question, then record the approval. A requirement still has an open question linked: say which one, open `work-requirements` for it, and record the approval, without asking him again, once it is answered.
    `toolkit work show <id> --section Requirements`
-5. Record each answer where it belongs. Approvals (for requirements, first mark each approved `R-xx` Finalized, as `work-requirements` step 8 does):
+   `toolkit work history <id> --note "Owner's words: <quote>" --effect "Requirements approval to record."`
+   `toolkit work edit <id> --section "Agreed goal" --text "<goal he was shown>"`
+5. Record each answer where it belongs. Approvals (for requirements, first set each approved `R-xx` Status to Finalized and put who approved it and when in its Decision record, as `work-requirements` step 8 does; after it, a `build` or `data-load` item goes to `solution-design` unless the owner agreed to skip the design, and a skip is said in the final reply). A design approval also answers an open question that asked for that choice: mark that row Answered.
    `toolkit work approve <id> --requirements --by <owner>`
    `toolkit work approve <id> --design --by <owner>`
    `toolkit work approve <id> --result --by <owner>`
    An Open Questions answer: rewrite that row with the answer, the date, and status Answered.
    `toolkit work edit <id> --section "Open Questions" --set-file <file>`
-   Then, for an approval or an answer: one history note in the owner's words, and `waiting_on` back to `agent` (or `none` when nothing waits), unless another question for him on that item is still open. The approve command does not change `waiting_on`.
+   Then, for an approval or an answer: one history note in the owner's words (a requirements approval has it from step 4), and `waiting_on` set to `agent` when the agent continues (the approve command sets it to `none` by itself), unless another question for him on that item is still open.
    `toolkit work history <id> --note "Owner's words: <quote>"`
    `toolkit work set <id> --waiting-on agent`
-   An unanswered delivery offer: open `work-delegate`.
+   A delivery offer listed as an agent to-do: open `work-delegate` once the owner's decisions are done.
 6. A decision for the whole project: add a `DECISIONS.md` row and save it with `publish-docs`. Run the command inside the worktree `publish-docs` opens, then let it commit and push.
    `toolkit decision add --decision "<decision>" --why "<why>" --by <owner>`
 7. A "no" or a change: record it as the answer, move the item back (for example to refinement), and open the skill that redoes the work.
    `toolkit work set <id> --stage 02-refinement`
-8. Lead with "Not saved" if any write failed. When the queue is empty, say so and offer to continue unblocked items with `work-on`.
+8. Lead with "Not saved" if any write failed. When the queue is empty, say so and offer to continue unblocked items with `work-on`. End the reply with the next decision's question, or the exact words that continue.
 
 ## What counts as an answer
 

@@ -62,6 +62,9 @@ updates the work item, and talks to the owner; you never do.
 - Never deploy, never run commands against a shared or production org or
   service, and never write production data.
 - Never install a new dependency unless the brief names it.
+- A scratch file outside the worktree goes in a new folder made with
+  `mktemp -d`, never at a fixed name in the shared `/tmp` (another session
+  could use the same name). Delete the folder when the task is done.
 - Do not start other agents. Do not ask the owner anything.
 
 ## Return

@@ -21,6 +21,8 @@ export const HISTORY_HEADERS = Object.freeze(['Date', 'Change or decision', 'Eff
 export const QUESTION_HEADERS = Object.freeze(['ID', 'Question', 'Affects', 'Status', 'Decision needed from']);
 export const ROADMAP_HEADERS = Object.freeze(['Phase', 'Outcome', 'Status', 'Exit result', 'Sub-items']);
 export const REQUIREMENT_STATUSES = Object.freeze(['Refining', 'Finalized', 'Superseded']);
+/** Roadmap phase status words (the work plugin's planning.md), plus Cancelled for a dropped phase. */
+export const PHASE_STATUSES = Object.freeze(['Not Started', 'In Progress', 'Done', 'Cancelled']);
 export const DESIGN_SUFFIX = ' — solution design';
 export const DEFAULT_PREFIX = 'WI';
 export const ID_WIDTH = 3;
@@ -210,8 +212,11 @@ export function applyMetaPatch(data, patch = {}, order = FIELD_ORDER) {
 //   written "no" in double quotes, as the model's DESIGN.md has it, so older YAML
 //   readers do not read it as the value false. The frontmatter writer quotes it
 //   because it is a YAML reserved word.
+// - An approval ("2026-09-27 by Mike") is written in double quotes too, whether
+//   `toolkit work approve` wrote it over "no" or `work new --covers` wrote it
+//   in a new record, so every record shows the same form (sample run b, round 2).
 // Unchanged lines are always written back exactly as they were read.
-export const QUOTED_FIELDS = Object.freeze(['waiting_on']);
+export const QUOTED_FIELDS = Object.freeze(['waiting_on', 'requirements_approved', 'result_approved', 'approved']);
 
 /** Text of a parsed doc (data object from parseDoc) and a body. */
 export function serializeDoc(data, body) {
@@ -422,13 +427,73 @@ export function appendSectionRow(body, heading, cells) {
       row[table.headers.length - 1] = cells.slice(table.headers.length - 1).join(' | ');
     }
   }
-  const updated = appendTableRow(content, row, { dropPlaceholderRows: (r) => isTemplateRow(r) });
-  return text.slice(0, node.contentStart) + updated + text.slice(node.end);
+  // Recent History is newest first (the model template's guide says so).
+  const history = normalizeHeading(heading) === normalizeHeading('Recent History');
+  const updated = appendTableRow(content, row, { dropPlaceholderRows: (r) => isTemplateRow(r), top: history });
+  const out = text.slice(0, node.contentStart) + updated + text.slice(node.end);
+  // The CLI writes Recent History rows, so the section's how-to guide goes with the first real row.
+  return history ? removeSectionGuide(out, heading) : out;
 }
 
 /** Add a Recent History row: | date | change | effect |. */
 export function appendHistory(body, { date, change, effect = '' }) {
   return appendSectionRow(body, 'Recent History', [date, change, effect]);
+}
+
+// The model's fill-in guides are HTML comments. The item-level guide says
+// "Delete this guide after filling the item"; each section guide explains how
+// to fill that section.
+const ITEM_GUIDE_RE = /<!--\s*Fill-in guide\b[\s\S]*?-->[ \t]*(?:\r?\n)?(?:[ \t]*\r?\n)?/;
+const LEADING_COMMENT_RE = /^(\s*)<!--[\s\S]*?-->[ \t]*(?:\r?\n)?(?:[ \t]*\r?\n)?/;
+
+/** True when the body still has the template's item-level fill-in guide comment. */
+export function hasItemGuide(body) {
+  return ITEM_GUIDE_RE.test(String(body ?? ''));
+}
+
+/** The body without the template's item-level fill-in guide comment. */
+export function removeItemGuide(body) {
+  return String(body ?? '').replace(ITEM_GUIDE_RE, '');
+}
+
+/** True when a section (with its sub-sections) still holds a template guide comment. */
+export function hasSectionGuide(body, heading) {
+  const node = getSection(String(body ?? ''), heading);
+  return Boolean(node) && /<!--[\s\S]*?-->/.test(node.content);
+}
+
+/**
+ * Change the newest Recent History row (the first data row) with fn(cells),
+ * which returns the new cells. Returns the body unchanged when there is no
+ * real row. Used to fold a waiting_on-only change into the row it belongs to.
+ */
+export function amendNewestHistory(body, fn) {
+  const text = String(body ?? '');
+  const node = getSection(text, 'Recent History');
+  if (!node) return text;
+  const content = text.slice(node.contentStart, node.end);
+  const t = parseTable(content);
+  if (!t.found || !t.rows.length || isTemplateRow(t.rows[0])) return text;
+  const cells = fn([...t.rows[0]]);
+  if (!cells) return text;
+  const esc = (c) => String(c ?? '').replace(/\r?\n/g, ' ').replace(/\|/g, '\\|');
+  const row = `| ${cells.map(esc).join(' | ')} |`;
+  const span = t.rowSpans[0];
+  const lineEnd = content.slice(span.start, span.end).match(/\r?\n$/);
+  const updated = content.slice(0, span.start) + row + (lineEnd ? lineEnd[0] : '') + content.slice(span.end);
+  return text.slice(0, node.contentStart) + updated + text.slice(node.end);
+}
+
+/** The body without the guide comment at the top of one section (the section itself stays). */
+export function removeSectionGuide(body, heading) {
+  const text = String(body ?? '');
+  const node = getSection(text, heading);
+  if (!node) return text;
+  const content = text.slice(node.contentStart, node.end);
+  const m = LEADING_COMMENT_RE.exec(content);
+  if (!m) return text;
+  const updated = m[1] + content.slice(m[0].length);
+  return text.slice(0, node.contentStart) + updated + text.slice(node.end);
 }
 
 /** Split "a | b | c" (pipes escaped with \| stay in the cell) into cells. */
@@ -714,6 +779,9 @@ export function validateRecord(input, opts = {}) {
   else if (!ITEM_DESIGN_VALUES.includes(meta.design)) problem(errors, 'bad_design', `design "${meta.design}" is not one of ${ITEM_DESIGN_VALUES.join(', ')}.`);
   if (meta.updated !== undefined && !isPlaceholder(meta.updated) && !DATE_RE.test(meta.updated)) problem(warnings, 'bad_updated', `updated "${meta.updated}" is not a YYYY-MM-DD date.`);
 
+  if (hasItemGuide(body) && ((stageKnown && stageKnown.n >= 3) || isTerminal(meta.status))) {
+    problem(warnings, 'guide_left', `The template's fill-in guide comment is still at the top of the body. It says to delete it once the item is filled. Remove it with: toolkit work edit ${id || '<id>'} --remove-guide`);
+  }
   for (const k of Object.keys(meta)) {
     if (DROPPED_FIELDS.includes(k)) problem(warnings, 'dropped_field', `${k} is no longer used; remove it (requirements_approved and the Roadmap replace it).`);
     else if (!FIELD_ORDER.includes(k)) problem(warnings, 'unknown_field', `frontmatter key ${k} is not a work item field; it is kept.`);
@@ -774,6 +842,9 @@ export function validateRecord(input, opts = {}) {
       const seen = new Set();
       for (const q of qs) {
         if (q.placeholder) continue;
+        if (!/^Q-\d+$/.test(String(q.id || '').trim())) {
+          problem(warnings, 'bad_question_id', `An Open Questions row has the ID "${q.id || ''}", not a question id such as Q-01. Each row is one question; remove a row that is not a question (a "None" row is not needed).`);
+        }
         if (q.id && seen.has(q.id)) problem(errors, 'duplicate_question', `Question ${q.id} appears twice.`);
         if (q.id) seen.add(q.id);
         if (opts.ownerName && q.from.trim().toLowerCase() === String(opts.ownerName).trim().toLowerCase()) {
@@ -788,15 +859,36 @@ export function validateRecord(input, opts = {}) {
     if (!t.found) problem(warnings, 'no_history_table', 'Recent History has no table.');
   }
 
+  // From tracking setup (stage 07) on, the item has a plan in the template's
+  // form: a phase table and checkbox tasks, with no template example left
+  // (sample runs a and c, round 2: a Roadmap written as headings, and one left
+  // as the template, both passed validation).
+  const planned = Boolean(stageKnown && stageKnown.n >= 7);
+  const PLAN_REF = 'the work plugin\'s skills/work-on/references/planning.md';
   if (names.includes('roadmap')) {
     const t = sectionTable(body, 'Roadmap');
     if (t.found && !t.headers.some((h) => normalizeHeading(h) === 'sub-items')) problem(warnings, 'no_subitems_column', 'The Roadmap table has no "Sub-items" column.');
+    const rows = parseRoadmap(body);
     if (known) {
-      for (const row of parseRoadmap(body)) {
+      for (const row of rows) {
         for (const sub of row.subItems) {
           if (!known.has(canonicalId(sub))) problem(warnings, 'missing_subitem', `Roadmap ${row.id || row.phase} lists ${sub}, which is not a known item.`);
         }
       }
+    }
+    for (const row of rows) {
+      if (row.placeholder || isPlaceholder(row.status)) continue;
+      const st = String(row.status).trim().replace(/\.$/, '').toLowerCase();
+      if (!PHASE_STATUSES.map((s) => s.toLowerCase()).includes(st)) {
+        problem(warnings, 'roadmap_status', `Roadmap ${row.id || row.phase} has the status "${row.status}"; a phase status is one of ${PHASE_STATUSES.join(', ')}.`);
+      } else if (meta.status === 'Done' && !['done', 'cancelled'].includes(st)) {
+        problem(warnings, 'roadmap_open_after_done', `${id || 'The item'} is Done, but Roadmap ${row.id || row.phase} still says ${row.status}. Set each finished phase to Done (toolkit work edit ${id || '<id>'} --section Roadmap).`);
+      }
+    }
+    if (planned) {
+      if (!t.found) problem(warnings, 'no_roadmap_table', `The Roadmap has no phase table (| Phase | Outcome | Status | Exit result | Sub-items |). Write the plan in the template's form (${PLAN_REF}).`);
+      else if (rows.some((r) => r.placeholder)) problem(warnings, 'roadmap_placeholder', `The Roadmap still has the template's example row (P1 — <Phase 1 name>). Replace it with the real phases (${PLAN_REF}).`);
+      if (hasSectionGuide(body, 'Roadmap')) problem(warnings, 'section_guide_left', 'The Roadmap still has the template\'s fill-in guide comment. Write the section again without it.');
     }
   }
 
@@ -809,6 +901,11 @@ export function validateRecord(input, opts = {}) {
     }
     for (const t of tasks) {
       for (const d of t.dependsOn) if (!ids.has(d)) problem(warnings, 'missing_dependency', `${t.id} depends on ${d}, which is not a task in this item.`);
+    }
+    if (planned) {
+      if (!tasks.length) problem(warnings, 'no_task_lines', `Tasks has no task lines ("- [ ] **P1-T01 — <name>** · <status>"). Write the tasks in the template's checkbox form (${PLAN_REF}).`);
+      else if (tasks.some((t) => isPlaceholder(t.name))) problem(warnings, 'tasks_placeholder', `Tasks still has the template's example task (P1-T01 — <Task 1 name>). Replace it with the real tasks (${PLAN_REF}).`);
+      if (hasSectionGuide(body, 'Tasks')) problem(warnings, 'section_guide_left', 'Tasks still has the template\'s fill-in guide comment. Write the section again without it.');
     }
   }
 

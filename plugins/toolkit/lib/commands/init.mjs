@@ -9,6 +9,7 @@ export const summary = 'Set up Toolkit V2 in this repository: the model project\
 export const help = `Usage:
   toolkit init --name <name> --tracker <local|notion|github|jira> --memory <builtin|hindsight|notion>
                [--key <key>] [--owner <name>] [--salesforce] [--dir <path>] [--hosts claude-code,codex]
+               [--decline SOUL.md]
 
 Copies the model project's files from the plugin's scaffold/model/, byte for
 byte, as scaffold/CONDITIONS.json says: .work-items/ only for the local
@@ -26,10 +27,17 @@ get the toolkit's lines merged in.
 
 --key defaults to the name in lower case with dashes. --owner defaults to
 git config user.name. --hosts defaults to both. --dir must be the top of a Git
-repository (default: the current repository).`;
+repository (default: the current repository). --decline SOUL.md records that
+the owner does not want SOUL.md: it is not installed, sync never adds it back,
+and doctor does not report it missing (toolkit config set declined changes it
+later).
+
+Files in .codex/ and .agents/ are written first. The Codex sandbox refuses
+them, so inside Codex init stops before writing anything else and prints the
+exact command for the owner to run in a terminal.`;
 
 const SPEC = {
-  string: ['name', 'key', 'tracker', 'memory', 'owner', 'dir', 'hosts', 'host'],
+  string: ['name', 'key', 'tracker', 'memory', 'owner', 'dir', 'hosts', 'host', 'decline'],
   boolean: ['salesforce', 'json'],
 };
 
@@ -44,6 +52,7 @@ export async function run(argv, ctx) {
     owner: last(flags.owner),
     dir: last(flags.dir),
     hosts: flags.hosts,
+    decline: flags.decline,
     salesforce: flags.salesforce === true,
   }, { cwd: ctx.cwd, env: ctx.env, pluginRoot: ctx.pluginRoot, fetch: ctx.fetch });
   out(ctx, res.lines, {
