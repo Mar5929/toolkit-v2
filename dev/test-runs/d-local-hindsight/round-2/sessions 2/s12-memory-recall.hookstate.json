@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "sessionId": "01a0e3e8-1b3b-7fc1-8abd-a9761c783d4e",
+  "host": "codex",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r2",
+  "startedAt": "2026-09-27T17:27:16.082Z",
+  "turns": 1,
+  "turn": {
+    "key": "01a0e3e8-1b95-7783-a7da-6faf19778fa3",
+    "n": 1,
+    "startedAt": "2026-09-27T17:27:16.225Z",
+    "keep": null,
+    "baseline": {
+      "memoryMeta": null,
+      "hindsightMeta": 1790529881090.6367,
+      "memoryCache": 1790529881112.169,
+      "workState": 1790530036123.646,
+      "decisions": 1790527938727.0588
+    },
+    "records": [],
+    "edits": [],
+    "stopBlocked": false
+  },
+  "lastStopReason": null,
+  "source": "startup",
+  "updated": "2026-09-27T17:27:50.277Z"
+}

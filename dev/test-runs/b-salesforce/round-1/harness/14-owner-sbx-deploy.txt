@@ -1,0 +1,3 @@
+# Owner runs the sandbox deploy in his own terminal, 2026-09-26T21:30:20-0400
+$ cd .claude/worktrees/wi-001-tier && sf project deploy start -x delivery/deployment/WI-001-account-tier/package.xml -o tkv2-sbx --json
+{"status":0,"result":{"status":"Succeeded","success":true,"done":true},"warnings":[]}

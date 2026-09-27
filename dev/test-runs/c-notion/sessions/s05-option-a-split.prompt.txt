@@ -1,0 +1,1 @@
+Go with option A. Also split the work: make the "how to add a quote" instructions their own sub-item under TV2-001, so I can review that part on its own. Then keep going.

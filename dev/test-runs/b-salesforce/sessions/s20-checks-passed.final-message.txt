@@ -1,0 +1,8 @@
+Your four reported checks passed, and I recorded them. **WI-001 and WI-002 are partly met** against the approved acceptance checks. The independent review found two results still unreported:
+
+- Did the System Administrator save **Gold, Silver, Bronze, and blank**? You reported a Tier save, but not which values.
+- Was a **Read Only user’s API update of Tier denied**? The reported API denial was for a Sales User.
+
+The field, layout, profile grants, and other reported behavior match the requirements. The independent reviewer found no XML or diff errors. I corrected the deployment records and left both items in testing.
+
+Please tell me which of those two remaining checks passed or were not run.

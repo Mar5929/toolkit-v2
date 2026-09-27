@@ -1,0 +1,7 @@
+Component Type,Object/Parent,API Name,Label,Work Item,Change Type,Sandbox,Production,Notes
+CustomField,Account,Tier__c,Tier,WI-001,New,Yes,Yes,Restricted optional picklist; Gold / Silver / Bronze; no default
+Layout,Account,Account-Account Layout,Account Layout,WI-002,Modified,Yes,Yes,Modified: add Tier__c beside Rating in Account Information; existing layout content retained
+Profile,,Sales Manager,Sales Manager,WI-002,Modified,Yes,Yes,Modified: manual Account.Tier__c read and edit access; excluded from CLI manifests
+Profile,,System Administrator,System Administrator,WI-002,Modified,Yes,Yes,Modified: manual Account.Tier__c read and edit access; excluded from CLI manifests
+Profile,,Sales User,Sales User,WI-002,Modified,Yes,Yes,Modified: manual Account.Tier__c read-only access; excluded from CLI manifests
+Profile,,Read Only,Read Only,WI-002,Modified,Yes,Yes,Modified: manual Account.Tier__c read-only access; excluded from CLI manifests

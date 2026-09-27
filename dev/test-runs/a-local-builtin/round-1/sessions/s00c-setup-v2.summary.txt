@@ -1,0 +1,318 @@
+PROMPT: Set up this project with Toolkit V2. My answers: call the project "greet" (key greet, work item ids WI-001 and up, owner Mike). Track work in local folders. Use the built-in .memory/ folder for memory. It is not a Salesforce project. I use both Codex and Claude Code. Skip SOUL.md for now. The project will be a tiny Node.js command-line tool that greets people; there is no code yet. Build and test with node (node --test). Do not write any app code yet; I will ask for that as a work item.
+THREAD: 01a0e371-7917-7fb0-ab81-43ef6c3da0cc
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll use the Toolkit V2 project setup skill to scaffold and verify the project with your settings. I’ll leave application code for the later work item.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.0/skills/project-setup/SKILL.md'
+  -> ---
+name: project-setup
+description: 'Sets up Toolkit V2 in a project or repairs it: copies the model scaffold and applies your answers on tracker, memory, and Salesforce, checks this computer, and fixes Notion or Hindsight wiring. Use when the owner says "set up this project", "check the setup", "update the toolkit", or "new computer".'
+---
+
+# Project setup
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+The interview wording and what setup installs: `references/interview.md`. Repair, switching, new computer, and wiring: `references/repair-and-wiring.md`. Put each `toolkit` command on its own line.
+
+## Steps
+
+1. Check the setup. If `toolkit` is not found, run `node <this skill's folder>/../../bin/toolkit machine-setup` (the skill's folder is the one holding this file). If doctor reports a computer problem, run machine-setup. Name anything the owner must do himself: `ntn login` opens a browser sign-in; trusting the hooks in Codex happens in its `/hooks` screen. Never do those for him.
+   `toolkit doctor`
+   `toolkit machine-setup`
+2. No `.toolkit.json`: a new project. Look before asking: an empty or existing repository; `sfdx-project.json` answers the Salesforce question in advance. Then ask one question at a time, each with a recommendation, in this order: the project name (with its key, id prefix, and owner name, confirmed in one line); the tracker (lo
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.0/skills/project-setup/references/interview.md'
+  -> # The setup interview
+
+Detail for `project-setup` step 2. Ask one question per message. Each
+question carries a recommendation and its main reason, so the owner can
+answer "yes" and move on.
+
+## Look before asking
+
+Check these first, without asking:
+
+- Is this folder a Git repository? (`git rev-parse --show-toplevel`.) No
+  repository: say so and offer `git init`. Toolkit V2 finds the project, the
+  tracker, and memory through Git.
+- Is the repository empty, or does it already hold code? Name the language
+  and framework you see.
+- `sfdx-project.json` present: this is a Salesforce project. Confirm it in
+  one line instead of asking.
+- `.toolkit.json` present with `"toolkit": "toolkit-v2"`: this is a repair,
+  not a new setup (see `repair-and-wiring.md`).
+- Files from an older toolkit setup (for example a `knowledge/` folder, or a
+  `CLAUDE.md` with more than the line `@AGENTS.md`): tell the owner what you
+  found. Toolkit V2 adds its own
+  files and turns the current toolkit's plugins off for this project; it does
+  not move or delete the old files. Ask before touching them. A file the
+  project already has is kept, never overwritten.
+- The owner name: `git config user.name`.
+- `ntn whoami` (only matters for Notion): signed in or not.
+- `toolkit hindsight health` (only matters for Hindsight): the local server is
+  up or not.
+
+## Question 1: the project name
+
+Confirm the name, key, id prefix, and owner in one line:
+
+> I'll call this project "Acme CRM" (short key `acme-crm`, wo
+
+[CMD exit=0] /bin/zsh -lc "pwd && rg --files -g '"'!node_modules'"' -g '"'!'"\\.git' | head -80 && ls -la"
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r1
+README.md
+total 8
+drwxr-xr-x   4 michaelrihm  wheel   128 Sep 27 11:17 .
+drwxr-xr-x  34 michaelrihm  wheel  1088 Sep 27 11:17 ..
+drwxr-xr-x  12 michael
+
+[CMD exit=0] /bin/zsh -lc 'command -v toolkit; command -v node; node --version; git status --short; git rev-parse --is-inside-work-tree'
+  -> /Users/michaelrihm/.local/bin/toolkit
+/opt/homebrew/bin/node
+v25.8.1
+true
+
+
+[CMD exit=4] /bin/zsh -lc 'toolkit doctor'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r1 is not a Toolkit V2 project: there is no .toolkit.json with "toolkit": "toolkit-v2".
+toolkit init sets it up (the project-setup skill asks the questions first).
+
+This computer: no problems found (Node, the plugin-root pointer, and the Codex wrapper).
+
+
+[CMD exit=0] /bin/zsh -lc 'cat README.md; git log -1 --oneline; git config user.name'
+  -> # greet
+
+A tiny Node.js command-line tool that greets people.
+722c7f5 Initial commit
+Mike Rihm
+
+
+[AGENT] This is already a Git repository with a short README and no application code. The computer check passed. I’m applying the local tracker, built-in memory, and Codex and Claude Code setup now.
+
+[CMD exit=1] /bin/zsh -lc 'toolkit init --name greet --key greet --tracker local --memory builtin --owner Mike'
+  -> Error: Could not write /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r1/.codex/config.toml: EPERM: operation not permitted, mkdir '/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r1/.codex'.
+Fix: In Codex, the sandbox protects .codex/ and folders outside this worktree: approve running the toolkit command outside the sandbox, then run it again. Nothing else needs undoing; the command is safe to run again.
+
+
+[CMD exit=0] /bin/zsh -lc "rg -n 'Could not write|\\.codex/config|codex/config|function init' /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.0 -g '*.js' | head -80"
+  -> 
+
+[CMD exit=0] /bin/zsh -lc "ls -la; rg --files --hidden -g '"'!'"\\.git' | head -120; git status --short"
+  -> total 56
+drwxr-xr-x  17 michaelrihm  wheel   544 Sep 27 11:17 .
+drwxr-xr-x  34 michaelrihm  wheel  1088 Sep 27 11:17 ..
+drwxr-xr-x   5 michaelrihm  wheel   160 Sep 27 11:17 .claude
+drwxr-xr-x  12 michaelrihm  wheel   384 Sep 27 11:17 .git
+-rw-r--r--   1 michaelrihm  wheel   182 Sep 27 11:17 .gitigno
+
+[CMD exit=0] /bin/zsh -lc 'toolkit init --help'
+  -> toolkit init: Set up Toolkit V2 in this repository: the model project's files, AGENTS.md, rules, settings, and the chosen tracker and memory. Safe to run again.
+
+Usage:
+  toolkit init --name <name> --tracker <local|notion|github|jira> --memory <builtin|hindsight|notion>
+               [--key <key>] [--owner <name>] [--salesforce] [--dir <path>] [--hosts claude-code,codex]
+
+Copies the model project's files from the plugin's scaffold/model/, byte for
+byte, as scaffold/CONDITIONS.json says: .work-items/ only for the local
+tracker, .memory/ only for built-in memory, the Salesforce files only with
+--salesforce, and each host's own files only for that host. AGENTS.md,
+README.md, and PROJECT.md keep only the blocks for the choices made, with the
+project name in their headings; AGENTS.md gets its rules list. The model's
+.claude/settings.json gets the toolkit's entries (the Toolkit V2 plugins on,
+the claude-toolkit plugins off), and Codex gets the plugin switches and the
+command rule. It sets up the Notion databases (toolkit notion ensure-project)
+or the Hindsight bank (toolkit hindsight ensure-bank) when chosen.
+.toolkit.json is written last, so a failed run can simply be run again. A file
+the project already has is kept; .gitignore, the settings, and the Codex files
+get the toolkit's lines merged in.
+
+--key defaults to the name in lower case with dashes. --owner defaults to
+git config user.name. --hosts defaults to both. --dir must be the top of a Git
+repository (default: the curren
+
+[AGENT] The toolkit hit a sandbox restriction while creating `.codex/config.toml`. I can finish the shared project files and Claude Code setup here, then check exactly what remains for Codex.
+
+[CMD exit=0] /bin/zsh -lc 'toolkit init --name greet --key greet --tracker local --memory builtin --owner Mike --hosts claude-code'
+  -> Set up Toolkit V2 in /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r1.
+greet (greet), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code.
+Added 1 file:
+  - AGENTS.md
+Kept the project's own file (the toolkit never replaces it):
+  - .claude/output-styles/plain-english.md (kept the project's file)
+  - .claude/rules/ai-external-knowledge.md (kept the project's file)
+  - .claude/rules/humanize-outbound-text.md (kept the project's file)
+  - .claude/rules/keep-work-item-current.md (kept the project's file)
+  - .claude/rules/memory-review-and-save.md (kept the project's file)
+  - .claude/rules/plain-english-artifacts.md (kept the project's file)
+  - .claude/rules/publish-project-documents.md (kept the project's file)
+  - .claude/rules/session-handoff.md (kept the project's file)
+  - .claude/rules/shared-repository-work.md (kept the project's file)
+  - .claude/rules/work-item-folders.md (kept the project's file)
+  - .memory/AGENTS.md (kept the project's file)
+  - .memory/CURRENT_FOCUS.md (kept the project's file)
+  - .memory/memory-criteria.md (kept the project's file)
+  - .memory/project_topic_template.md (kept the project's file)
+  - .memory/terminology-glossary.md (kept the project's file)
+  - .work-items/work-item-template/DESIGN.md (kept the project's file)
+  - .work-items/work-item-templa
+
+[CMD exit=0] /bin/zsh -lc 'cat README.md; cat SOUL.md; cat .gitignore; cat .memory/CURRENT_FOCUS.md'
+  -> # greet
+
+A tiny Node.js command-line tool that greets people.
+# <Owner-defined working style>
+
+<!-- Fill-in guide for this optional owner-defined file: ask the owner whether to use it. If selected, replace the title and each angle-bracket prompt directly under its heading with the owner's stated pre
+
+[CMD exit=0] /bin/zsh -lc 'cat AGENTS.md; cat PROJECT.md; cat PROJECT-ROADMAP.md'
+  -> Always execute work with the context in mind that the user will likely
+continue work across multiple AI coding sessions where the session context is
+cleared and picked up again. You must assist the user in helping establish
+that continuity across sessions while not adding context that might pollute
+
+
+[CMD exit=0] /bin/zsh -lc 'cat requirements/SYSTEM-DATA-MODEL.md; cat .toolkit.json; toolkit doctor'
+  -> # System Data Model
+
+<!-- Fill-in guide: replace this comment with verified, accepted data model requirements for the whole system. Use the sections below for each shared entity or relationship; add one block per real item. Link the approving work item and date. Do not copy an unapproved technical design here. Delete this guide when the first accepted content is added. -->
+
+## Scope and sources
+
+<State which system and business areas this shared model covers, the accepted work items, and the date it was last checked.>
+
+## Entities and relationships
+
+### <Entity or relationship name>
+
+- Business meaning: <What this represents to users.>
+- Required fields or links: <Accepted fields, identifiers, and relationships.>
+- Rules and exceptions: <Required constraints and when they do not apply.>
+- Source and approval: <Work item or owner decision, approver, and date.>
+
+## Shared definitions and access
+
+<Definitions, ownership, privacy, and access requirements that apply across areas; link area-specific requirements instead of copying them.>
+
+## Acceptance evidence
+
+<Link to checks or observed behavior that confirm the accepted model.>
+
+## Change history
+
+- <Date, accepted change, and source work item.>
+{
+  "toolkit": "toolkit-v2",
+  "schema": 1,
+  "project": {
+    "name": "greet",
+    "key": "greet",
+    "owner": "Mike",
+    "created": "2026-09-27"
+  },
+  "tracker": {
+    "type": "local",
+    "idPrefix": "WI"
+  },
+  "memory": {
+    "type": "builtin",
+    "approval": "onboarding"
+  },
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit config --help; toolkit brief'
+  -> Project briefing: greet (greet), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r1/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The tracker has no open items. A new request starts a work item with the work-on skill.
+
+Current focus: still the empty template from setup. The memory-save skill fills it with toolkit memory focus --set-file.
+
+Project memory (builtin): 0 records. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Always-on rules. Claude Code loads them by itself; in Codex, each one is read at session start:
+- .claude/rules/humanize-outbound-text.md: Humanize Anything Sent to Another Person
+- .claude/rules/keep-work-item-current.md: Keep the Active Work Item Accurate
+- .claude/rules/memory-review-and-save.md: Review and Save Project Memory
+- .claude/rules/plain-english-artifacts.md: Write Artifacts in Plain English
+- .claude/rules/session-handoff.md: Prepare a Session Handoff
+- .claude/rules/shared-repository-work.md: Work Safely in a Shared Repository
+- .claude/rules/work-item-folders.md: Local Work-Item Folders
+
+How to write replies (from AGENTS.md):
+C
+
+[CMD exit=0] /bin/zsh -lc 'node --test'
+  -> ℹ tests 0
+ℹ suites 0
+ℹ pass 0
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7.068958
+
+
+[CMD exit=0] /bin/zsh -lc 'cat .claude/rules/publish-project-documents.md; cat .memory/AGENTS.md'
+  -> ---
+paths:
+  - "requirements/**"
+  - "PROJECT-ROADMAP.md"
+  - "PROJECT.md"
+  - "DECISIONS.md"
+  - "system-guide/**"
+  - "tools/permissions/PERMISSIONS-RUNBOOK.md"
+  - "ai-external-knowledge/**"
+  - "delivery/**"
+  - "**/README.md"
+---
+# Publish Project Documents
+
+- In a copied Git repository, prepar
+
+[FILE_CHANGE] [{"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r1/AGENTS.md", "kind": "update"}, {"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r1/PROJECT.md", "kind": "update"}, {"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r1/SOUL.md", "kind": "delete"}]
+
+[CMD exit=0] /bin/zsh -lc "rg -n 'Project setup fill|One sentence|Verified project|Fill-in guide|<|SOUL' AGENTS.md PROJECT.md README.md; test -e SOUL.md; echo "'$?; git remote -v'
+  -> AGENTS.md:14:- Read `SOUL.md` (when the project has one) and `PROJECT.md`; read them again after resume, clear, or compaction.
+AGENTS.md:67:<!-- toolkit:rules:start -->
+AGENTS.md:83:<!-- toolkit:rules:end -->
+1
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit config get hosts; toolkit doctor; toolkit brief; git status --short'
+  -> Toolkit doctor for greet (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r1).
+
+Problems (1):
+1. 2 scaffold files are missing: .codex/config.toml, .codex/rules/toolkit.rules.
+   Fix: Run toolkit sync.
+
+Warnings (2):
+2. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r1). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+3. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (22):
+- .claude/output-styles/plain-english.md was changed by the project, so sync leaves it alone. The toolkit would: the project had this file before the toolkit; the toolkit version was not installed. The project-setup skill shows these to the owner and makes the changes he approves.
+- .claude/rules/ai-external-knowledge.md was changed by the project, so sync leaves it alone. The toolkit would: the project had this file before the toolkit; the toolkit version was not installed. The project-setup skill shows these to the owner and makes the c
+
+[FILE_CHANGE] [{"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r1/PROJECT-ROADMAP.md", "kind": "update"}, {"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r1/SOUL.md", "kind": "delete"}]
+
+[CMD exit=0] /bin/zsh -lc "toolkit doctor | sed -n '1,14p'; test "'! -e SOUL.md; echo "SOUL absent: $?"; git status --short | tail -20; rg -n '"'<["'^>]+>'"' AGENTS.md PROJECT.md PROJECT-ROADMAP.md requirements/SYSTEM-DATA-MODEL.md"
+  -> 
+
+[AGENT] Toolkit V2 is **partly set up** for `greet`: local work items (`WI-001` onward), built-in `.memory/`, and Claude Code files are in place. The project guides record Mike as owner, Node.js with `node --test`, and the instruction to wait for a work item before writing app code. I removed `SOUL.md` as requested. `node --test` ran successfully and found zero tests.
+
+**Codex setup remains blocked.** The sandbox denied the toolkit permission to create `.codex/config.toml` and `.codex/rules/toolkit.rules`. The project is configured for both hosts, but those two files are missing. The Toolkit V2 project-setup skill calls for rerunning `toolkit sync` outside the sandbox; this session cannot grant that access. Afterward, Codex will also need you to trust this folder and its hooks in `/hooks`.
+
+`toolkit doctor` also flags the intentionally removed `SOUL.md`. The roadmap’s phase details and the data model still have prompts because no work item or accepted requirements exist yet. No application code was written.
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 576927, "cached_input_tokens": 519424, "cache_write_input_tokens": 0, "output_tokens": 3613, "reasoning_output_tokens": 1117}}
+
+SKILLS OPENED: ['project-setup']

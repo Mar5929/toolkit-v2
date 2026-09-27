@@ -1,0 +1,95 @@
+$ find . -path ./.git -prune -o -print | sort   (in the sample project, after the run)
+.
+./.claude
+./.claude/output-styles
+./.claude/output-styles/plain-english.md
+./.claude/rules
+./.claude/rules/ai-external-knowledge.md
+./.claude/rules/humanize-outbound-text.md
+./.claude/rules/keep-work-item-current.md
+./.claude/rules/memory-review-and-save.md
+./.claude/rules/plain-english-artifacts.md
+./.claude/rules/publish-project-documents.md
+./.claude/rules/session-handoff.md
+./.claude/rules/shared-repository-work.md
+./.claude/rules/work-item-folders.md
+./.claude/settings.json
+./.claude/worktrees
+./.claude/worktrees/wi-001-shout
+./.claude/worktrees/wi-001-shout/.git
+./.claude/worktrees/wi-001-shout/README.md
+./.claude/worktrees/wi-001-shout/bin
+./.claude/worktrees/wi-001-shout/bin/greet.mjs
+./.claude/worktrees/wi-001-shout/package.json
+./.claude/worktrees/wi-001-shout/test
+./.claude/worktrees/wi-001-shout/test/greet.test.mjs
+./.claude/worktrees/wi-001-shout/tests
+./.claude/worktrees/wi-001-shout/tests/WI-001-test-plan.md
+./.codex
+./.codex/config.toml
+./.codex/rules
+./.codex/rules/toolkit.rules
+./.gitignore
+./.toolkit.json
+./.work-items
+./.work-items/.toolkit-state.json
+./.work-items/DASHBOARD.md
+./.work-items/cli-options
+./.work-items/cli-options/WI-001-add-shout-flag-to-greet-cli
+./.work-items/cli-options/WI-001-add-shout-flag-to-greet-cli/WORK-ITEM.md
+./.work-items/cli-options/WI-001-add-shout-flag-to-greet-cli/help-option
+./.work-items/cli-options/WI-001-add-shout-flag-to-greet-cli/help-option/DESIGN.md
+./.work-items/cli-options/WI-001-add-shout-flag-to-greet-cli/help-option/WORK-ITEM.md
+./.work-items/work-item-template
+./.work-items/work-item-template/DESIGN.md
+./.work-items/work-item-template/WORK-ITEM.md
+./AGENTS.md
+./CLAUDE.md
+./DECISIONS.md
+./PROJECT-ROADMAP.md
+./PROJECT.md
+./README.md
+./ai-external-knowledge
+./ai-external-knowledge/INDEX.md
+./bin
+./bin/greet.mjs
+./package.json
+./requirements
+./requirements/AGENTS.md
+./requirements/SYSTEM-DATA-MODEL.md
+./requirements/greet-cli
+./requirements/greet-cli/GREET-CLI.md
+./requirements/system-area-template
+./requirements/system-area-template/AREA-TEMPLATE.md
+./system-guide
+./system-guide/AREA-TEMPLATE.md
+./test
+./test/greet.test.mjs
+./tests
+./tests/TEST-PLAN-TEMPLATE.md
+./tests/WI-002-TEST-PLAN.md
+
+$ git log --oneline --graph --all
+* 29fc831 Record delivered WI-001 shout behavior
+* a45b6fb Record delivered WI-002 help behavior
+*   9c83b89 Merge WI-002 help option
+|\  
+| * cfe7b8d Update WI-002 acceptance review record
+| * d683ebb Record WI-002 acceptance checks
+| * e4bb6c0 Add shout and help flags to greet CLI
+* | b269b59 Commit Toolkit V2 project setup
+|/  
+* 1b03de7 Initial commit
+
+$ git worktree list
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r1                                29fc831 [main]
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r1/.claude/worktrees/wi-001-shout 1b03de7 [wi-001-shout]
+
+$ git status --short --ignored
+!! .claude/worktrees/
+!! .work-items/
+
+$ toolkit work list --tree --all
+cli-options/ (group)
+  WI-001  Add --shout flag to greet CLI  (14 Specification update, Done)
+    WI-002  Add --help option listing every flag  (14 Specification update, Done)

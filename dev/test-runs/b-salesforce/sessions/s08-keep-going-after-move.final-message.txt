@@ -1,0 +1,3 @@
+WI-001’s read-only sandbox check is complete: `Account.Tier__c` is absent. I recorded that finding and marked the inventory task done. No Salesforce metadata has changed.
+
+The project’s `work-delegate` procedure requires a delivery choice before the build. Would you like agents to take responsibility for delivering WI-001, with you acting as product owner?

@@ -1,0 +1,11 @@
+Toolkit V2 is set up for Acme CRM with local work items and built-in memory. I recorded the Salesforce aliases (`tkv2-sbx` and `tkv2-prod`), set API version 62.0 from the sandbox, and updated the project guide and current focus. `toolkit doctor` reports **0 problems** and three warnings that need your action:
+
+| # | Warning | Your step |
+| --- | --- | --- |
+| 1 | Codex does not trust this project folder | Open it in Codex and trust it when prompted. |
+| 2 | Toolkit V2 hooks are not trusted | Open `/hooks` in Codex and trust them. |
+| 3 | Salesforce guards are not trusted | Trust both guards in `/hooks`. |
+
+The sync check found nothing missing. The existing README is a project-owned file and was left as written. The business outcome, roadmap, and data model still need confirmed project facts; I left those prompts open. Start a new session after trusting the hooks so Codex loads them.
+
+Tell me the first thing you want built when you’re ready. Setup files are not committed. Commit them now?

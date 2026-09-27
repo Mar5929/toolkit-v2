@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "prefix": "WI",
+  "highWater": 2,
+  "fingerprint": "456e855dd64f392c675c69c81f0ebc24c837f46df69a38f677ab3178b9cb7371",
+  "items": {
+    "WI-001": {
+      "path": "account-tier/WI-001-add-a-tier-picklist-field-to-account/WORK-ITEM.md",
+      "missing": false,
+      "owner": true,
+      "hash": "c0540c440b32cb207e5a2edcd16a1acaebbdd3b4a684391a280abf1387cb9111",
+      "written": {
+        "title": "Add a Tier picklist field to Account",
+        "heading": "WI-001: Add a Tier picklist field to Account",
+        "type": "build",
+        "stage": "06-implementation-plan",
+        "status": "In Progress",
+        "parent": "none",
+        "parentSource": "none",
+        "requirements_approved": "2026-09-27 by Mike",
+        "overall": "Finalized",
+        "design": "approved",
+        "designSource": "approved",
+        "result_approved": "no",
+        "statusKept": false,
+        "overallKept": false,
+        "designKept": false,
+        "parentKept": false
+      }
+    },
+    "WI-002": {
+      "path": "account-tier/WI-001-add-a-tier-picklist-field-to-account/WI-002-tier-access-and-layout/WORK-ITEM.md",
+      "missing": false,
+      "owner": true,
+      "hash": "3f7af0abd681a7ba6c46d5b632c4a7823c5f683154e9ac29da47081d0935e648",
+      "written": {
+        "title": "Configure Account Tier access and page layout",
+        "heading": "WI-002: Configure Account Tier access and page layout",
+        "type": "build",
+        "stage": "06-implementation-plan",
+        "status": "In Progress",
+        "parent": "WI-001",
+        "parentSource": "WI-001",
+        "requirements_approved": "2026-09-27 by Mike",
+        "overall": "Finalized",
+        "design": "none",
+        "designSource": "none",
+        "result_approved": "no",
+        "statusKept": false,
+        "overallKept": false,
+        "designKept": false,
+        "parentKept": false
+      }
+    }
+  },
+  "updated": "2026-09-27T20:07:05.407Z"
+}

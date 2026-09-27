@@ -1,0 +1,9 @@
+I recorded your decision: I’ll lead WI-001 with helpers in this chat, and WI-002 remains its access and layout sub-item. The sandbox check confirmed `Account.Tier__c` is absent. No Salesforce metadata has changed.
+
+The build is paused because automatic approval review rejected the required Git worktree command: this session requires approval for it but is set to Never. Please run this from the project root, then say “keep going”:
+
+```sh
+git worktree add .claude/worktrees/wi-001-account-tier -b claude/wi-001-account-tier
+```
+
+I’ve saved that exact next step in WI-001 and the session handoff.

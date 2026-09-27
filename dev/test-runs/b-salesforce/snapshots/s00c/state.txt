@@ -1,0 +1,36 @@
+## git status
+## git log
+1119a44 Set up Acme CRM project toolkit
+8b982cd Initial commit
+## worktrees
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r3 1119a44 [main]
+## branches
+* main
+## tree
+.memory
+.memory/.toolkit-meta.json
+.memory/AGENTS.md
+.memory/CURRENT_FOCUS.md
+.memory/MEMORY.md
+.memory/memory-criteria.md
+.memory/project_topic_template.md
+.memory/terminology-glossary.md
+.work-items
+.work-items/.toolkit-state.json
+.work-items/DASHBOARD.md
+.work-items/work-item-template
+.work-items/work-item-template/DESIGN.md
+.work-items/work-item-template/WORK-ITEM.md
+delivery/deployment
+delivery/deployment/component-tracker.csv
+delivery/deployment/full-project-deployment-template
+delivery/deployment/full-project-deployment-template/manual-steps.md
+delivery/deployment/full-project-deployment-template/package.xml
+delivery/deployment/release-cutover-template
+delivery/deployment/release-cutover-template/CUTOVER-PLAN.md
+delivery/deployment/release-cutover-template/RELEASE-NOTES.md
+delivery/deployment/work-item-deployment-template
+delivery/deployment/work-item-deployment-template/DEPLOYMENT-RECORD.md
+delivery/deployment/work-item-deployment-template/destructiveChanges.xml
+delivery/deployment/work-item-deployment-template/manual-steps.md
+delivery/deployment/work-item-deployment-template/package.xml

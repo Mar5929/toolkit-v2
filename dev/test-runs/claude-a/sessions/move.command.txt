@@ -1,0 +1,1 @@
+mv .work-items/WI-001-add-a-version-flag-to-the-greet-cli/WI-002-handle-an-empty-name-and-version-in-any .work-items/WI-001-add-a-version-flag-to-the-greet-cli/edge-cases

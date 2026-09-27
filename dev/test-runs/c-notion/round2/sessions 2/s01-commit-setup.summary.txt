@@ -1,0 +1,664 @@
+# Session s01-commit-setup
+thread: 01a0e3cd-9af4-7693-bca0-a2b8c7a8eee2 | start: 2026-09-27T16:58:17Z | end: 2026-09-27T16:59:42Z | exit=0
+extra args: 
+
+## Prompt
+
+Commit setup: make one commit of the Toolkit V2 setup files you added and changed.
+
+## Hook context injected (SessionStart, UserPromptSubmit, PostToolUse)
+
+- 2026-09-27T16:58:19.688Z:
+    Project briefing: Toolkit V2 sample run c (safe to delete) (tv2-sample-run-c), owner Mike Rihm. Work items: the Notion Work Items database (ids like TSRC-001). Memory: the Notion Memory database. Salesforce: no. Hosts: Claude Code and Codex.
+    Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/c-notion-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+    
+    This worktree is on branch main, which names no work item.
+    
+    No item is Ready, In Progress, or In Review.
+    The tracker has no open items. A new request starts a work item with the work-on skill.
+    
+    Current focus: still the empty template from setup. The memory-save skill fills it with toolkit memory focus --set-file.
+    
+    Project memory (notion): 0 records, from the local copy. toolkit memory find searches it; toolkit memory get <key> reads one record.
+    
+    Always-on rules. Claude Code loads them by itself; in Codex, each one is read at session start:
+    - .claude/rules/humanize-outbound-text.md: Humanize Anything Sent to Another Person
+    - .claude/rules/keep-work-item-current.md: Keep the Active Work Item Accurate
+    - .claude/rules/memory-review-and-save.md: Review and Save Project Memory
+    - .claude/rules/plain-english-artifacts.md: Write Artifacts in Plain English
+    - .claude/rules/session-handoff.md: Prepare a Session Handoff
+    - .claude/rules/shared-repository-work.md: Work Safely in a Shared Repository
+    
+    How to write replies (from AGENTS.md):
+    Claude Code applies the Plain English output style to chat. Codex and helper agents follow these lines instead.
+    
+    - Start with the answer, result, or current status. Answer what was asked. Keep it short; add detail when asked.
+    - Use ordinary words. Explain an unfamiliar term the first time it matters. Use the exact name a system uses, the same way every time.
+    - Write literally: no metaphors, idioms, jokes, or picture words in place of the real name. State the point directly, without a "not this, but that" setup.
+    - Use paragraphs for a connected explanation, bullets for separate items or choices, and a heading only when it names what is under it.
+    - When asking for a decision, name the choice and the difference that matters, and recommend one.
+    - Use the exact status word: written, built, tested, merged, installed, or seen working. Say something works only when you saw it work.
+    - Leave out routine narration of process and helper activity. Give one direct line when the owner lo
+
+## Skills opened (SKILL.md read)
+
+work-on
+
+## Escalation requests (commands asked to run outside the sandbox)
+
+- const r=await tools.exec_command({cmd:"git fetch origin && git log --oneline -10 && git remote -v",sandbox_permissions:"require_escalated",justification:"May I let Git update FETCH_HEAD so I can confirm the remote state before making the requested setup commit?",prefix_rule:["git","fetch"],max_output_tokens:4000,yield_time_ms:30000});text(r) 
+- const r=await tools.exec_command({cmd:"git add -- .gitignore .claude/output-styles/plain-english.md .claude/rules/ai-external-knowledge.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/publish-project-documents.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/settings.json .codex/config.toml .codex/rules/toolkit.rules .toolkit.json AGENTS.md CLAUDE.md DECISIONS.md PROJECT-ROADMAP.md PROJECT.md README.md ai-external-knowledge/INDEX.md requirements/AGENTS.md requirements/SYSTEM-DATA-MODEL.md requirements/system-area-template/AREA-TEMPLATE.md system-guide/AREA-TEMPLATE.md tests/TEST-PLAN-TEMPLATE.md",sandbox_permissions:"require_escalated",justification:"May I stage the 26 named Toolkit V2 setup files for the one commit you requested?",prefix_rule:["git","add"],max_output_tokens:2000});text(r) 
+- const r=await tools.exec_command({cmd:"git commit -m 'Add Toolkit V2 project setup'","sandbox_permissions":"require_escalated","justification":"May I create the one requested commit containing the 26 reviewed Toolkit V2 setup files?","prefix_rule":["git","commit"],max_output_tokens:6000,yield_time_ms:30000});text(r) 
+
+## Commands
+
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/skills/work-on/SKILL.md'
+---
+name: work-on
+description: 'Starts, continues, or logs project work: finds or creates the work item, works out where it stands, and runs its next step through to a built result. Use when the owner asks to build, add, fix, or change something, says "keep going" or "continue", names an item, or wants an idea logged for later.'
+---
+
+# Work on
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Shared rules: the work plugin's `references/conventions.md` (saving, section edits, history, branches) and `references/trackers.md`, two folders above this skill's folder (`../../references/`). To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`.
+
+## Steps
+
+1. No session briefing in this conversation: run the command below. Exit code 4 (no `.toolkit.json`): open `project-setup` and stop. When the briefing or a `toolkit work` command lists changes found in the tracker (a moved or renamed folder, a new parent, a missing item), tell the owner each one in one line before other work.
+   `toolkit brief`
+2. Find the item: the id the owner named, or a title in the list that matches the request. Two possible matches: ask one question naming both. No match: it is new. When `PROJECT-ROADMAP.md` names the item, read its phase there too.
+   `toolkit work show <id>`
+   `toolkit work list`
+3. Size a new request. A quick edit (one sitting, no choice for the owner, no behavior recorded in `requirements/`, nothing bound for production): do it and report it, with no item. "Later", "backlog", "park that": check the list for a duplicate, create the item, write the owner's words unchanged into Starting request, reply "Logged as WI-014 (bug, backlog). Not started." and stop. Anything else: create it the same way and continue.
+   `toolkit work new --title "<title>" --type <type> --stage 01-discovery`
+   `toolkit work edit <id> --section "Starting request" --set-file <file>`
+4. A substantial goal whose item shows `delivery: not-offered`: open `work-delegate` first. Quick questions and small edits get no offer.
+5. Route by where the item stands, using the item and the "Continue with" column of the lifecycle. Requirements not approved and type `build` or `data-load` (or the risk calls for it): `work-requirements`. More than one reasonable way to build it and no approved design: `solution-design`. A `build` item going to planning without a design: say so to the owner in one line before building ("One way to build this: <approach>. I'll build it that way; say 'design first' to stop me."), and put the reason in a history note. Too big for one build: `work-organize`. Stages 09 to 11: `work-check`. Stages 12 to 14: `work-finish`. `waiting_on: owner`: ask that one question first (`work-decide`) and keep working on anything it does not block. Say the route in one line ("WI-012 is waiting for your OK on the requirements; opening work-requirements."). Never ask the owner which stage it is in.
+   `toolkit work lifecycle`
+6. Plan (stage 06): Roadmap phases `P1`, `P2` and tasks `P1-T01` (Work, Deliverable, Done when, Depends on) from the design's "Build and verification plan", in the format in `references/planning.md`. Tracking setup (stage 07) only when needed: the item's worktree `.claude/worktrees/wi-<number>-<slug>` on branch `claude/wi-<number>-<slug>`; in a Salesforce project, the item's folder in `delivery/deployment/` t
+...[truncated]
+```
+### exit=1
+```
+$ /bin/zsh -lc 'cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md'
+cat: SOUL.md: No such file or directory
+# Toolkit V2 sample run c (safe to delete)
+
+## Purpose and intended outcome
+
+- Purpose: Maintain a small Node.js script that prints a random quote.
+- Intended outcome: Running `node quote.js` prints one quote from the script's list.
+
+## Scope and boundaries
+
+- In scope: The local `quote.js` script and its project records.
+- Outside scope: Salesforce. No othe
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc 'git status --short && git branch --show-current && git diff --stat && git diff --cached --stat'
+ M .gitignore
+?? .claude/
+?? .codex/
+?? .toolkit.json
+?? AGENTS.md
+?? CLAUDE.md
+?? DECISIONS.md
+?? PROJECT-ROADMAP.md
+?? PROJECT.md
+?? README.md
+?? ai-external-knowledge/
+?? requirements/
+?? system-guide/
+?? tests/
+main
+ .gitignore | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+```
+### exit=0
+```
+$ /bin/zsh -lc 'git status'
+On branch main
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   .gitignore
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.claude/
+	.codex/
+	.toolkit.json
+	AGENTS.md
+	CLAUDE.md
+	DECISIONS.md
+	PROJECT-ROADMAP.md
+	PROJECT.md
+	README.md
+	
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc 'cat .claude/rules/publish-project-documents.md'
+---
+paths:
+  - "requirements/**"
+  - "PROJECT-ROADMAP.md"
+  - "PROJECT.md"
+  - "DECISIONS.md"
+  - "system-guide/**"
+  - "tools/permissions/PERMISSIONS-RUNBOOK.md"
+  - "ai-external-knowledge/**"
+  - "delivery/**"
+  - "**/README.md"
+---
+# Publish Project Documents
+
+- In a copied Git repository, prepare each authorized documentation-only save in its own temporary Git worktree. Publish its commit dire
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc 'git worktree list'
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/c-notion-r2 75ed330 [main]
+
+```
+### exit=0
+```
+$ /bin/zsh -lc "git ls-files && rg --files -g '"'!quote.js'"' -g '"'!node_modules'"' -g '"'!**/.DS_Store'"' .claude .codex ai-external-knowledge requirements system-guide tests"
+.gitignore
+quote.js
+tests/TEST-PLAN-TEMPLATE.md
+ai-external-knowledge/INDEX.md
+.codex/config.toml
+system-guide/AREA-TEMPLATE.md
+requirements/AGENTS.md
+requirements/SYSTEM-DATA-MODEL.md
+.claude/settings.json
+.codex/rules/toolkit.rules
+requirements/system-area-template/AREA-TEMPLATE.md
+.claude/output-styles/plain-english.md
+.claude/rules/publish-project-documents.md
+.claude/rules/keep-work-item-curr
+...[truncated]
+```
+### exit=128
+```
+$ /bin/zsh -lc 'git fetch origin && git log --oneline -10 && git remote -v'
+fatal: 'origin' does not appear to be a git repository
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+
+```
+### exit=0
+```
+$ /bin/zsh -lc 'find .claude .codex ai-external-knowledge requirements system-guide tests -type f -maxdepth 4 -print'
+.claude/settings.json
+.claude/output-styles/plain-english.md
+.claude/rules/publish-project-documents.md
+.claude/rules/keep-work-item-current.md
+.claude/rules/session-handoff.md
+.claude/rules/shared-repository-work.md
+.claude/rules/humanize-outbound-text.md
+.claude/rules/ai-external-knowledge.md
+.claude/rules/plain-english-artifacts.md
+.claude/rules/memory-review-and-save.md
+.codex/rules/toolkit.ru
+...[truncated]
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'git diff -- .gitignore && cat .toolkit.json && cat .codex/config.toml'
+diff --git a/.gitignore b/.gitignore
+index 2752eb9..c91db8b 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -1,2 +1,13 @@
+ node_modules/
+ .DS_Store
++
++.memory/
++/.work-items/
++.claude/worktrees/
++*.log
++__pycache__/
++*.pyc
++
++# Toolkit V2 command files, local to this computer and never committed.
++/.toolkit-cache/
++/.toolkit-decisions.lock
+{
+  "toolkit": "toolkit-v2",
+  "schema": 1,
+  "project": {
+    "name": "Toolkit V2 sample run c (safe to delete)",
+    "key": "tv2-sample-run-c",
+    "owner": "Mike Rihm",
+    "created": "2026-09-27"
+  },
+  "tracker": {
+    "type": "notion",
+    "idPrefix": "TSRC"
+  },
+  "memory": {
+    "type": "notion",
+    "approval": "onboarding"
+  },
+  "salesforce": {
+    "enabled": false
+  },
+  "hosts": [
+    "claude-code",
+    "codex"
+  ],
+  "declined": [
+    "SOUL.md"
+  ],
+  "notion": {
+    "rootPageId": "3e7b381d-a176-803f-a48f-e838ee648e67",
+    "projects": {
+      "databaseId": "3901f052-2c56-4603-ad56-7f5924655925",
+      "dataSourceId": "212cab42-22e0-4682-9fe1-a697a028331a",
+      "properties": {
+        "key": "EGxs",
+        "repository": "f%7C%7C%5B",
+        "localPath": "VNG%3F",
+        "tracker": "%7DhB%3E",
+        "memorySystem": "EEn%3E",
+        "salesforce": "NyXS",
+        "workItemsDataSource": "_m%3F%3B",
+        "memoryDataSource": "%3DgRM",
+        "setUpOn": "%5CVMx",
+        "title": "title"
+      }
+    },
+    "project": {
+      "pageId": "3e8b381d-a176-81c8-a2f7-cc7858684827",
+      "url": "https://app.notion.com/p/Toolkit-V2-sample-run-c-safe-to-delete-3e8b381da17681c8a2f7cc7858684827",
+      "key": "tv2-sample-run-c"
+    },
+    "workItems": {
+      "databaseId": "59c262e7-dd8c-4af2-bfd4-d5a389e31dfb",
+      "dataSourceId": "fbba0a17-212b-41af-9e91-47d97e1aca1a",
+      "url": "https://app.notion.com/p/59c262e7dd8c4af2bfd4d5a389e31dfb",
+      "idPrefix": "TSRC",
+      "properties": {
+        "title": "title",
+        "id": "n%60tb",
+        "stage": "Zwb%3B",
+        "status": "%3FYnF",
+        "type": "%5E%3FOz",
+        "priority": "TdkK",
+        "waitingOn": "%3CUlT",
+        "delivery": "%5DrpV",
+        "requirementsApproved": "WeQ%3F",
+        "design": "UmbC",
+        "designApproved": "VsXt",
+        "resultApproved": "tFH_",
+        "nextAction": "KOdV",
+        "openOwnerQuestions": "Xt%5Es",
+        "updated": "qfNs",
+        "archived": "%7CDhZ",
+        "lastEdited": "B%5DJk",
+        "parent": "%3CTTI",
+        "subItems": "%5BR_o",
+        "blockedBy": "MH%40Y",
+        "blocking": "zTDz"
+      },
+      "names": {
+        "title": "Work item",
+        "id": "ID",
+        "stage": "Stage",
+        "status": "Status",
+        "type": "Type",
+        "priority": "Priority",
+        "waitingOn": "Waiting on",
+        "delivery": "Delivery",
+        "requirementsApproved": "Requirements approved",
+        "design": "Design",
+        "designApproved": "Design approved",
+        "resultApproved": "Result approved",
+        "nextAction": "Next action",
+        "openOwnerQuestions": "Open owner questions",
+        "updated": "Updated",
+        "archived": "Archived",
+        "lastEdited": "Last edited",
+        "parent": "Parent item",
+        "subItems": "Sub-items",
+        "blockedBy": "Blocked by",
+        "blocking": "Blocking"
+      },
+      "views": {
+        "board": "3e8b381d-a176-8155-8578-000cf39360b1",
+        "allItems": "7d98f929-3186-4f3d-a0d7-1c4e54088ed4"
+      }
+    },
+    "memory": {
+      "databaseId": "5a83d3fc-a8ac-40d7-9a47-5e9dab0f081a",
+      "dataSourceId":
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc 'git status --short --untracked-files=all && git log --oneline -10 && git remote -v'
+ M .gitignore
+?? .claude/output-styles/plain-english.md
+?? .claude/rules/ai-external-knowledge.md
+?? .claude/rules/humanize-outbound-text.md
+?? .claude/rules/keep-work-item-current.md
+?? .claude/rules/memory-review-and-save.md
+?? .claude/rules/plain-english-artifacts.md
+?? .claude/rules/publish-project-documents.md
+?? .claude/rules/session-handoff.md
+?? .claude/rules/shared-repository-work.md
+?? .
+...[truncated]
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'git add -- .gitignore .claude/output-styles/plain-english.md .claude/rules/ai-external-knowledge.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/publish-project-documents.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/settings.json .codex/config.toml .codex/rules/toolkit.rules .toolkit.json AGENTS.md CLAUDE.md DECISIONS.md PROJECT-ROADMAP.md PROJECT.md README.md ai-external-knowledge/INDEX.md requirements/AGENTS.md requirements/SYSTEM-DATA-MODEL.md requirements/system-area-template/AREA-TEMPLATE.md system-guide/AREA-TEMPLATE.md tests/TEST-PLAN-TEMPLATE.md'
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'git diff --cached -- .gitignore .claude .codex .toolkit.json AGENTS.md CLAUDE.md DECISIONS.md PROJECT-ROADMAP.md PROJECT.md README.md ai-external-knowledge requirements system-guide tests'
+diff --git a/.claude/output-styles/plain-english.md b/.claude/output-styles/plain-english.md
+new file mode 100644
+index 0000000..fdf62e5
+--- /dev/null
++++ b/.claude/output-styles/plain-english.md
+@@ -0,0 +1,35 @@
++---
++name: Plain English
++description: Clear, direct replies in ordinary words that are easy to skim or scan, with the answer first and only the detail the user asked for.
++keep-coding-instructions: true
++---
++
++Write clear, natural replies that a smart reader who may not be a developer can skim or scan and still understand. These instructions govern chat replies. They do not reduce the care put into the work or create a duty to save or report routine details.
++
++## Answer directly
++
++Begin with the answer, result, or current status. Answer only what the user asked, in connected sentences. Keep replies short by default; there is no fixed length limit. Add detail only when the user asks.
++
++When asking for a decision, name what the user is choosing and explain the meaningful difference.
++
++Stop after the answer. Do not add extra implementation detail, related advice, next steps, or an offer to do more unless the user asked for them.
++
++## Make the reply easy to read
++
++Use ordinary words and explain an unfamiliar term when it first matters. Use the user's wording when it is accurate. Use the exact name from the system when precision matters, and keep that name consistent.
++
++Use paragraphs for a connected explanation. Use bullets when separate items, steps, or choices are easier to compare that way. Use a header only when it describes the content below it and is meaningful on its own.
++
++Write literally. Do not use figurative or metaphorical language, idioms, jokes, or picture words in place of the real name.
++
++State the true point directly. Do not set it up by denying another point and then correcting it, or use a rhetorical contrast such as "not this, but that." Factual corrections are allowed; state the correction plainly. Do not add word pairs chosen for rhythm rather than meaning.
++
++## Report work accurately
++
++Use the exact status verb: written, built, tested, merged, installed, or seen working. One status does not prove another. Say that something works or is done only when you saw it working.
++
++In a work-status reply, use one bullet per work item with status first. If a named thing has not appeared recently, add a few words that identify it.
++
++Leave out routine process narration, helper activity, unchanged details, and problems caught and fixed before the user lost anything. Mention methods or implementation detail only when the user asks.
++
++Give one direct line whenever any of these is true: the user lost or will lose something; an action cannot be undone; work cannot continue until the user acts; or there is a cost.
+diff --git a/.claude/rules/ai-external-knowledge.md b/.claude/rules/ai-external-knowledge.md
+new file mode 100644
+index 0000000..a87343a
+--- /dev/null
++++ b/.claude/rules/ai-external-knowledge.md
+@@ -0,0 +1,31 @@
++---
++paths:
++  - 'ai-external-knowledge/**'
++---
++
++# Outside Documentation Goes in ai-external-knowledge
++
++Agents work better when the documentation they need is already in the repository
++instead of behind a web search. Pulling a vendor's docs, an API reference, or a
++framework guide into the project as Markdown is a normal thing to do here. It has
++one home.
++
++This information is used to help ground the agent in official documentation or research so that it can provide better solutions.
+...[truncated]
+```
+### exit=2
+```
+$ /bin/zsh -lc 'git diff --cached --check && git diff --cached --stat && git status --short'
+PROJECT-ROADMAP.md:30: trailing whitespace.
++**Outcome:** `<Result larger than one work unit.>`  
+PROJECT-ROADMAP.md:31: trailing whitespace.
++**Exit condition:** `<Observable evidence that the phase is complete.>`  
+PROJECT-ROADMAP.md:36: trailing whitespace.
++**Deliverable:** `<Specific output or change from this unit.>`  
+PROJECT-ROADMAP.md:37: trailing whitespace.
++**Done when:** `<Evidence fo
+...[truncated]
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'git diff --cached -- .claude/settings.json .codex/config.toml .codex/rules/toolkit.rules .toolkit.json'
+diff --git a/.claude/settings.json b/.claude/settings.json
+new file mode 100644
+index 0000000..6718834
+--- /dev/null
++++ b/.claude/settings.json
+@@ -0,0 +1,58 @@
++{
++  "autoMemoryEnabled": false,
++  "enabledPlugins": {
++    "second-brain@claude-toolkit": false,
++    "toolkit@toolkit-v2": true,
++    "work@toolkit-v2": true,
++    "memory@toolkit-v2": true,
++    "session-skills@toolkit-v2": true,
++    "git-workflows@toolkit-v2": true,
++    "sf-architect-solutioning@toolkit-v2": false,
++    "project-init@claude-toolkit": false,
++    "work-tracker@claude-toolkit": false,
++    "session-skills@claude-toolkit": false,
++    "git-workflows@claude-toolkit": false,
++    "hooks-library@claude-toolkit": false,
++    "system-guide@claude-toolkit": false,
++    "protocol-guard@claude-toolkit": false,
++    "sf-architect-solutioning@claude-toolkit": false
++  },
++  "outputStyle": "Plain English",
++  "permissions": {
++    "deny": [
++      "Bash(git add -A)",
++      "Bash(git add -A *)",
++      "Bash(git add --all)",
++      "Bash(git add --all *)",
++      "Bash(git add .)",
++      "Bash(git add . *)",
++      "Bash(git commit -a *)",
++      "Bash(git commit -am *)",
++      "Bash(git commit --all *)",
++      "Bash(git commit --no-verify *)",
++      "Bash(git commit * --no-verify)",
++      "Bash(git commit * --no-verify *)",
++      "Bash(git commit -n *)",
++      "Bash(git commit * -n)",
++      "Bash(git commit * -n *)",
++      "Bash(git push --force *)",
++      "Bash(git push * --force)",
++      "Bash(git push * --force *)",
++      "Bash(git push -f *)",
++      "Bash(git push * -f)",
++      "Bash(git push * -f *)",
++      "Bash(git push --force-with-lease*)",
++      "Bash(git push * --force-with-lease*)"
++    ],
++    "ask": [
++      "Bash(git reset --hard *)",
++      "Bash(git clean *)"
++    ],
++    "allow": [
++      "Bash(toolkit *)"
++    ]
++  },
++  "worktree": {
++    "baseRef": "head"
++  }
++}
+diff --git a/.codex/config.toml b/.codex/config.toml
+new file mode 100644
+index 0000000..9648de3
+--- /dev/null
++++ b/.codex/config.toml
+@@ -0,0 +1,42 @@
++# Codex settings for this project, written by toolkit init.
++# Toolkit V2 plugins are turned on for this project only. The older
++# claude-toolkit plugins are turned off here so the two sets never both load.
++
++[plugins."toolkit@toolkit-v2"]
++enabled = true
++
++[plugins."work@toolkit-v2"]
++enabled = true
++
++[plugins."memory@toolkit-v2"]
++enabled = true
++
++[plugins."session-skills@toolkit-v2"]
++enabled = true
++
++[plugins."git-workflows@toolkit-v2"]
++enabled = true
++
++[plugins."sf-architect-solutioning@toolkit-v2"]
++enabled = false
++
++[plugins."project-init@claude-toolkit"]
++enabled = false
++
++[plugins."second-brain@claude-toolkit"]
++enabled = false
++
++[plugins."sf-architect-solutioning@claude-toolkit"]
++enabled = false
++
++[plugins."git-workflows@claude-toolkit"]
++enabled = false
++
++[plugins."work-tracker@claude-toolkit"]
++enabled = false
++
++[plugins."session-skills@claude-toolkit"]
++enabled = false
++
++[plugins."system-guide@claude-toolkit"]
++enabled = false
+diff --git a/.codex/rules/toolkit.rules b/.codex/rules/toolkit.rules
+new file mode 100644
+index 0000000..4611a62
+--- /dev/null
++++ b/.codex/rules/toolkit.rules
+@@ -0,0 +1,41 @@
++# Codex command rules for this project, written by toolkit init.
++# The toolkit command runs outside the Codex sandbox without a prompt. It needs
++# the network for Notion and the local Hindsight server, and it writes the work
++# tracker and memory in the main checkout, which a worktree cannot 
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc 'git diff --cached -- AGENTS.md CLAUDE.md DECISIONS.md PROJECT-ROADMAP.md PROJECT.md README.md'
+diff --git a/AGENTS.md b/AGENTS.md
+new file mode 100644
+index 0000000..52329a6
+--- /dev/null
++++ b/AGENTS.md
+@@ -0,0 +1,114 @@
++Always execute work with the context in mind that the user will likely
++continue work across multiple AI coding sessions where the session context is
++cleared and picked up again. You must assist the user in helping establish
++that continuity across sessions while not add
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc 'git diff --cached --stat && git diff --cached --name-only && git status --short'
+ .claude/output-styles/plain-english.md             |  35 ++++
+ .claude/rules/ai-external-knowledge.md             |  31 ++++
+ .claude/rules/humanize-outbound-text.md            |  13 ++
+ .claude/rules/keep-work-item-current.md            |  13 ++
+ .claude/rules/memory-review-and-save.md            |  21 +++
+ .claude/rules/plain-english-artifacts.md           |  81 ++++++++++
+ .claude/rules/publis
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc "git commit -m 'Add Toolkit V2 project setup'"
+[main 6bfc120] Add Toolkit V2 project setup
+ 26 files changed, 946 insertions(+)
+ create mode 100644 .claude/output-styles/plain-english.md
+ create mode 100644 .claude/rules/ai-external-knowledge.md
+ create mode 100644 .claude/rules/humanize-outbound-text.md
+ create mode 100644 .claude/rules/keep-work-item-current.md
+ create mode 100644 .claude/rules/memory-review-and-save.md
+ create mode 100644 .
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc 'git show --format=fuller --stat --oneline HEAD'
+6bfc120 Add Toolkit V2 project setup
+ .claude/output-styles/plain-english.md             |  35 ++++
+ .claude/rules/ai-external-knowledge.md             |  31 ++++
+ .claude/rules/humanize-outbound-text.md            |  13 ++
+ .claude/rules/keep-work-item-current.md            |  13 ++
+ .claude/rules/memory-review-and-save.md            |  21 +++
+ .claude/rules/plain-english-artifacts.md           |
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc 'git status --short && git log -1 --oneline'
+6bfc120 Add Toolkit V2 project setup
+
+```
+
+## File changes
+
+
+## Other items
+
+- error {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+- error {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+- EVENT {"type": "turn.completed", "usage": {"input_tokens": 388456, "cached_input_tokens": 322176, "cache_write_input_tokens": 0, "output_tokens": 2282, "reasoning_output_tokens": 702}}
+
+## Agent messages
+
+I’ll check the repository changes and project rules, then commit the Toolkit V2 setup files as one commit.
+
+---
+
+The setup files are uncommitted on `main`. I’m using the work-on procedure’s quick-edit path for this commit, and I’ll check the shared-repository state before staging anything.
+
+---
+
+This repository has no `origin` remote, so the commit will stay local. The changed files match the Toolkit V2 setup inventory; I’ll stage those paths and review the staged diff.
+
+---
+
+I reviewed the 26 staged setup files. The whitespace check flagged Markdown line breaks in the generated roadmap template; they are intentional. I’ll make the requested commit now.
+
+---
+
+Committed the 26 Toolkit V2 setup files in one local commit: `6bfc120 Add Toolkit V2 project setup`. The working tree is clean. This repository has no `origin` remote, so the commit was not pushed.
+
+---
+

@@ -1,0 +1,2 @@
+Skill files and helper agents opened (from the Codex session log, in order):
+work-finish, publish-docs, memory-save

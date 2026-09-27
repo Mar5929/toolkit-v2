@@ -1,0 +1,1031 @@
+PROMPT: Tier__c exists in production now because I already ran both production deploys myself a few minutes ago, the WI-001 field first and then the WI-002 layout, and both succeeded. I also set the production profile access per the manual steps, and Tier shows on the Account page for a Sales Manager. Close it out: finish WI-001 and WI-002 and mark them done. My OK for the git commands stands for the closeout.
+THREAD: 01a0e42d-00a5-7d83-87f0-c3362c5cda44
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Add Account Tier picklist: 13 Deployment, In Review, waiting on owner. Next action: Mike runs the WI-001 field production command and reports its result. If it succeeds, he runs the WI-002 layout production command, compl... Continues with work-decide.
+- WI-002 Configure Account Tier access and page layout: 13 Deployment, In Review, waiting on owner. Next action: After Mike successfully deploys the WI-001 field, he runs the WI-002 layout command, completes the manual profile access steps, checks th... Continues with work-decide.
+
+Waiting on the owner:
+- WI-001 Add Account Tier picklist: Q-07: Can you run the WI-001 field package against corrected tkv2-prod and report the deploy result? The project guard denies agent production deploys. Affects WI-001 production deployment. (work-decide)
+- WI-001 Add Account Tier picklist: Q-08: Can you recheck production Setup for Account.Tier__c and confirm whether it exists before running the WI-001 field package? The corrected production alias now gives conflicting read-only resu... Affects WI-001 production deployment safety. (work-decide)
+- WI-002 Configure Account Tier access and page layout: Q-03: After the WI-001 field deploy succeeds, can you run the WI-002 layout package against corrected tkv2-prod, complete production profile access, and report the deploy and page checks? Affects WI-002 production deployment. (work-decide)
+
+Items: 2 in review.
+
+Current focus:
+Last updated: 2026-09-27, WI-001 and WI-002 production handoff, Codex
+## Now
+- WI-001: Mike confirmed Account.Tier__c absent in production Setup and corrected tkv2-prod, which had pointed to the sandbox. A fresh production describe also shows no Tier__c. Its approved field package is merged into local main at 9970961.
+- WI-002: A fresh production layout retrieve from the corrected alias differs from source only by the Tier__c item. Its approved layout package is merged into local main. The project guard denies agent production deploys. No origin remote is configured.
+## Waiting on the owner
+- WI-001: Run the field package against tkv2-prod and report the result.
+- WI-002: After the field succeeds, run the layout package, complete production profile access, check the Account page and effective access, and report results.
+- Trust this project folder in Codex when prompted, then open `/hooks` and trust the Toolkit V2 hooks and two Salesforce org guards.
+## Untracked to-dos
+- None.
+## Next session starts with
+- Open WI-001 and WI-002. Confirm the
+
+[AGENT] I’ll record your production results, check the closeout steps for both items, and update their deployment records and status. I’ll use your standing OK for the closeout git commands.
+
+[CALL exec] pwd; git status --short --branch; cat SOUL.md PROJECT.md .claude/rules/{check-deployment-contents,component-tracker,confirm-salesforce-changes,humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,production-data-changes,project-file-locations,salesforce-org-safety,session-handoff,shared-repository-work,work-item-folders}.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2
+## main
+cat: SOUL.md: No such file or directory
+# Acme CRM
+
+## Purpose and intended outcome
+
+- Purpose: Give the Acme sales team Salesforce customizations for customer-account work.
+- Intended outcome: Help the Acme sales team track and prioritize customer accounts.
+
+## Scope and boundaries
+
+- In scope: Salesforce customizations for tracking and prioritizing customer accounts. Specific capabilities are not defined yet.
+- Outside scope: Not confirmed yet.
+- Constraints: Follow the Salesforce org safety rules in `.claude/rules/salesforce-org-safety.md`.
+
+## Systems and environments
+
+| System or org | Purpose | Environment | Source of truth | Access notes |
+| --- | --- | --- | --- | --- |
+| Acme CRM sandbox (`tkv2-sbx`) | Development and validation | Sandbox | `.toolkit.json` | Salesforce CLI org alias |
+| Acme CRM production (`tkv2-prod`) | Production target; owner performs production changes | Production | `.toolkit.json` | Salesforce CLI org alias |
+
+## People and ownership
+
+| Role | Person or team | Responsibility | Source / last confirmed |
+| --- | --- | --- | --- |
+| Owner | Mike | Project decisions | `.toolkit.json`, 2026-09-27 |
+| Users | Acme sales team | Track and prioritize customer accounts | Owner statement, 2026-09-27 |
+
+## Work and project records
+
+- Work tracker: Local `.work-items/` folders
+- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)
+- Project decisions: [DECISIONS.md](DECISIONS.md)
+- Functional requirements: [requirements/](requirements/)
+- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`
+- System Guide: `system-guide/`; add verified current-system details as they become known
+- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)
+- Memory backup or sync: No destination or restore procedure confirmed yet
+
+## Resources and project paths
+
+- Salesforce source: `force-app/`
+- Project-wide deployment manifest: `delivery/deployment/full-project-deployment-template/package.xml` after the API version and members are verified. Keep it as the full project component inventory; ordinary deployments use narrower work-item packages.
+- Work-item deployment manifests: `delivery/deployment/<work-item-id>-<short-name>/package.xml` when an item changes Salesforce metadata.
+- Tests and checks: No project-specific build or test command verified yet; sandbox validation uses the work-item manifest as described in `AGENTS.md`
+- Outside references: `ai-external-knowledge/`
+
+## Operating conventions
+
+No additional project-specific conventions confirmed yet.
+# Check What a Deployment Includes
+
+A deploy ships the whole current source of every component it names, not only your edit.
+
+- Before any deploy to a shared or high
+
+[AGENT] I have your confirmation that both deploys succeeded and the Sales Manager page check passed. I’m checking the item records and release files before closing them, so the next session has an accurate production baseline.
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/skills/{work-on,work-decide,work-finish}/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.1/skills/publish-docs/SKILL.md .agents/skills/sf-component-tracker/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.1/skills/memory-save/SKILL.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+Warning: truncated output (original token count: 11443)
+Total output lines: 550
+
+---
+name: work-on
+description: 'Starts, continues, or logs project work: finds or creates the work item, works out where it stands, and runs its next step through to a built result. Use when the owner asks to build, add, fix, or change something, says "keep going" or "continue", names an item, or wants an idea logged for later.'
+---
+
+# Work on
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Shared rules: the work plugin's `references/conventions.md` (saving, section edits, history, branches) and `references/trackers.md`, two folders above this skill's folder (`../../references/`). To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`.
+
+## Steps
+
+1. No session briefing in this conversation: run the command below. Exit code 4 (no `.toolkit.json`): open `project-setup` and stop. When the briefing or a `toolkit work` command lists changes found in the tracker (a moved or renamed folder, a new parent, a missing item), tell the owner each one in one line before other work.
+   `toolkit brief`
+2. Find the item: the id the owner named, or a title in the list that matches the request. Two possible matches: ask one question naming both. No match: it is new. When `PROJECT-ROADMAP.md` names the item, read its phase there too.
+   `toolkit work show <id>`
+   `toolkit work list`
+3. Size a new request. A quick edit (one sitting, no choice for the owner, no behavior recorded in `requirements/`, nothing bound for production): do it and report it, with no item. "Later", "backlog", "park that": check the list for a duplicate, create the item, write the owner's words unchanged into Starting request, reply "Logged as WI-014 (bug, backlog). Not started." and stop. Anything else: create it the same way and continue.
+   `toolkit work new --title "<title>" --type <type> --stage 01-discovery`
+   `toolkit work edit <id> --section "Starting request" --set-file <file>`
+4. A substantial goal whose item shows `delivery: not-offered`: open `work-delegate` first. Quick questions and small edits get no offer.
+5. Route by where the item stands, using the item and the "Continue with" column of the lifecycle. Requirements not approved and type `build` or `data-load` (or the risk calls for it): `work-requirements`. More than one reasonable way to build it and no approved design: `solution-design`. A `build` item going to planning without a design: say so to the owner in one line before building ("One way to build this: <approach>. I'll build it that way; say 'design first' to stop me."), and put the reason in a history note. Too big for one build: `work-organize`. Stages 09 to 11: `work-check`. Stages 12 to 14: `work-finish`. `waiting_on: owner`: ask that one question first (`work-decide`) and keep w
+
+[CALL exec] git worktree list; git status; git fetch origin; git log --oneline -10; toolkit work show WI-001; toolkit work show WI-002; toolkit work lifecycle; cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/skills/work-finish/references/closing.md; cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.1/skills/publish-docs/SKILL.md
+  -> Script completed
+Wall time 5.0 seconds
+Output:
+
+Warning: truncated output (original token count: 13179)
+Total output lines: 687
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2                                             9970961 [main]
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/.claude/worktrees/wi-001-account-tier       bd1ef75 [claude/wi-001-account-tier]
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/.claude/worktrees/wi-002-tier-access-layout 72f5b9c [claude/wi-002-tier-access-layout]
+On branch main
+nothing to commit, working tree clean
+error: cannot open '.git/FETCH_HEAD': Operation not permitted
+9970961 Merge branch 'claude/wi-002-tier-access-layout'
+72f5b9c Record completed Account Tier sandbox checks
+53de9f7 Record Account Tier sandbox access checks
+956bd90 Record WI-002 sandbox deployment and acceptance gaps
+bd1ef75 Record WI-001 sandbox deployment
+844e376 Add Account Tier to main Account layout
+07ac952 Prepare Account Tier profile access steps
+23c95e0 Add Account Tier field metadata
+1d49cdb Set up Acme CRM project toolkit
+f7b5c4d Initial commit
+WI-001: Add Account Tier picklist
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/.work-items/account-tier/WI-001-add-account-tier-picklist/WORK-ITEM.md
+Stage: 13 Deployment (In Review) | Waiting on: owner | Continue with: work-decide
+Parent: none | Sub-items: WI-002 | Design: approved (.work-items/account-tier/WI-001-add-account-tier-picklist/DESIGN.md)
+
+---
+id: WI-001
+title: Add Account Tier picklist
+type: build
+stage: 13-deployment
+status: In Review
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: agent-led
+requirements_approved: 2026-09-27 by Mike
+design: approved
+result_approved: 2026-09-27 by Mike
+updated: 2026-09-27
+---
+
+# WI-001: Add Account Tier picklist
+
+## Overview
+
+**Goal:** Let the sales team rank accounts using an Account Tier picklist.
+
+**Current position:** Mike confirmed in production Setup that Account.Tier__c is absent and corrected tkv2-prod, which had pointed to the sandbox. A fresh read-only Account describe against tkv2-prod also shows no Tier__c. The approved field source and narrow WI-001 package are merged into local main at 9970961. No production deploy has run.
+
+**Next action:** Mike runs the WI-001 field production command and reports its result. If it succeeds, he runs the WI-002 layout production command, completes the manual profile access steps, checks the page and effective access, and reports the results. Then reconcile the component tracker and finish the requirements baseline.
+
+**Blockers:** The project production-org guard denies agent production d
+
+[CALL exec] git remote -v; cat .claude/rules/publish-project-documents.md requirements/AGENTS.md; rg --files requirements system-guide delivery/deployment | sort; cat delivery/deployment/component-tracker.csv; cat delivery/deployment/WI-001-account-tier/DEPLOYMENT-RECORD.md delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md; cat delivery/deployment/WI-002-tier-access-layout/manual-steps.md; cat PROJECT-ROADMAP.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+---
+paths:
+  - "requirements/**"
+  - "PROJECT-ROADMAP.md"
+  - "PROJECT.md"
+  - "DECISIONS.md"
+  - "system-guide/**"
+  - "tools/permissions/PERMISSIONS-RUNBOOK.md"
+  - "ai-external-knowledge/**"
+  - "delivery/**"
+  - "**/README.md"
+---
+# Publish Project Documents
+
+- In a copied Git repository, prepare each authorized documentation-only save in its own temporary Git worktree. Publish its commit directly to the default branch without a pull request.
+- Rules, skills, hooks, prompts, settings, and code use a worktree and a pull request, even when written in Markdown.
+- Saving a document does not approve its requirements or its build.
+- Stage only this save's files, by name, in its worktree. Read the full staged diff.
+- Never force-push or change another session's checkout. Resolve a remote advance in this save's worktree.
+- An unpushed commit is unfinished. Verify the complete save reached the remote.
+- Steps, checks, and recovery: the `publish-docs` skill.
+
+- `.memory/` and `.work-items/` are local and Git-ignored. Their saves do not use this publication route.
+# Functional requirements
+
+Keep one maintained file per durable business area, following AREA-TEMPLATE.md. Record agreed functional behavior and its conditions, exceptions, and source. The active work item owns proposed changes, open questions, detailed tasks, and execution history. Update the area file at the agreed lifecycle point after confirming what was delivered. Link a design or work item when it explains a requirement; do not copy their task history here.
+delivery/deployment/WI-001-account-tier/package.xml
+delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md
+delivery/deployment/WI-002-tier-access-layout/manual-steps.md
+delivery/deployment/WI-002-tier-access-layout/package.xml
+delivery/deployment/component-tracker.csv
+delivery/deployment/full-project-deployment-template/manual-steps.md
+delivery/deployment/full-project-deployment-template/package.xml
+delivery/deployment/release-cutover-template/CUTOVER-PLAN.md
+delivery/deployment/release-cutover-template/RELEASE-NOTES.md
+delivery/deployment/work-item-deployment-template/DEPLOYMENT-RECORD.md
+delivery/deployment/work-item-deployment-template/destructiveChanges.xml
+delivery/deployment/work-item-deployment-template/manual-steps.md
+delivery/deployment/work-item-deployment-template/package.xml
+requirements/AGENTS.md
+requirements/SYSTEM-DATA-MODEL.md
+requirements/system-area-template/AREA-TEMPLATE.md
+system-guide/AREA-TEMPLATE.md
+Component Type,Object/Parent,API Name,Label,Work Item,Change Type,Sandbox,Production,Notes
+CustomField,Account,Tier__c,Tier,WI-001,New,Yes,No,Restricted optional picklist; Gold / Silver / Bronze; no default
+Layout,Account,Account-Account Layout,Account Layout,WI-002,Modified,Yes,No,Modified: add Tier__c beside Rating in Account Information; existing layout content retained
+Profile,,Sales Manager,Sales Manager,WI-002,Modified,Yes,No,Modified: manual Account.T
+
+[CALL exec] sed -n '1,95p' .work-items/account-tier/WI-001-add-account-tier-picklist/WI-002-configure-account-tier-access-and-page-layout/WORK-ITEM.md; cat requirements/system-area-template/AREA-TEMPLATE.md system-guide/AREA-TEMPLATE.md; cat force-app/main/default/objects/Account/fields/Tier__c.field-meta.xml; cat delivery/deployment/full-project-deployment-template/manual-steps.md; toolkit work list --tree; toolkit memory focus; cat .memory/AGENTS.md .memory/memory-criteria.md
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+sed: .work-items/account-tier/WI-001-add-account-tier-picklist/WI-002-configure-account-tier-access-and-page-layout/WORK-ITEM.md: No such file or directory
+# <Functional area>
+
+<!-- Fill-in guide: rename this folder and file for the real business area. Replace <Functional area> and every angle-bracket prompt in the section, rule block, and list below with accepted content. Repeat the stable-rule subsection once per behavior; use the same rule ID in related evidence. Link the work item that approved each rule. Remove unused example lines and this guide after filling. -->
+
+## Purpose and scope
+
+<Describe the capability and users covered here. State meaningful exclusions and adjacent owners.>
+
+## Functional behavior
+
+### <Stable rule ID> — <Behavior or rule name>
+
+- Trigger or context: <When this behavior applies.>
+- Required behavior: <What the system must do in observable terms.>
+- Conditions and exceptions: <When the behavior changes or does not apply.>
+- User or system outcome: <What should be visible or produced.>
+- Source: <Approved decision, work item, or other authoritative record.>
+- Delivery status and evidence: <Current delivered behavior, or a clearly labeled approved future requirement, with linked validation.>
+
+## Data and access rules
+
+<Business-owned fields, definitions, access expectations, and privacy constraints that apply to this area. Link to shared definitions rather than duplicating them.>
+
+## Integrations and dependencies
+
+<Other capabilities or systems this area depends on, including the owning records.>
+
+## Acceptance evidence
+
+<How the behavior is confirmed, including important examples or tests. Link to evidence when available.>
+
+## Change history
+
+- <Date — approved change — source or linked work item.>
+# <System area>
+
+<!-- Fill-in guide: rename this file for the real system area. Replace the heading and every angle-bracket prompt in its paragraph, table cell, or list item with observed facts. Add a Components row per real component. Keep source and last-verified evidence beside claims; mark uncertainty in Known gaps. Remove the example row and this guide once populated. -->
+
+## What this area does today
+
+<Describe observed current behavior and who uses it. State the environment and date of observation.>
+
+## Components and paths
+
+| Component | Role | Location or reference | Evidence |
+| --- | --- | --- | --- |
+| <Name> | <Purpose> | <Path or link> | <Code, config, or verified observation> |
+
+## Data and flow
+
+<How information enters, changes, and leaves this area. Include diagrams or links when they clarify the flow.>
+
+## Operational behavior
+
+<Permissions, schedules, limits, failure handling, support ownership, and known dependencies.>
+
+## Known gaps and uncertainty
+
+<What is unverified, outdated, or still being investigated; where to confirm it.>
+
+## Last verified
+
+- Date and environment: <When and where checked.>
+- Sources: <Links to code, configuration, documentation, 
+
+[CALL exec] toolkit work show WI-002 --path; toolkit work show WI-001 --path; git branch --list '*wi-*'; git status --short --branch; rg -n 'Current position|Next action|Blockers|Resume here|Q-0[378]|Production|manual' .work-items/account-tier -g WORK-ITEM.md
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/.work-items/account-tier/WI-001-add-account-tier-picklist/WI-002-tier-access-and-layout/WORK-ITEM.md
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/.work-items/account-tier/WI-001-add-account-tier-picklist/WORK-ITEM.md
++ claude/wi-001-account-tier
++ claude/wi-002-tier-access-layout
+## main
+.work-items/account-tier/WI-001-add-account-tier-picklist/WORK-ITEM.md:23:**Current position:** Mike confirmed in production Setup that Account.Tier__c is absent and corrected tkv2-prod, which had pointed to the sandbox. A fresh read-only Account describe against tkv2-prod also shows no Tier__c. The approved field source and narrow WI-001 package are merged into local main at 9970961. No production deploy has run.
+.work-items/account-tier/WI-001-add-account-tier-picklist/WORK-ITEM.md:25:**Next action:** Mike runs the WI-001 field production command and reports its result. If it succeeds, he runs the WI-002 layout production command, completes the manual profile access steps, checks the page and effective access, and reports the results. Then reconcile the component tracker and finish the requirements baseline.
+.work-items/account-tier/WI-001-add-account-tier-picklist/WORK-ITEM.md:27:**Blockers:** The project production-org guard denies agent production deploys, even with owner approval. This copy has no origin remote, so the local merge cannot be pushed from here.
+.work-items/account-tier/WI-001-add-account-tier-picklist/WORK-ITEM.md:75:| 2026-09-27 | Owner approved WI-001 result and both local merges. WI-001 fast-forwarded to bd1ef75; WI-002 merged at 9970961. No origin remote. Production Account describe shows Tier but Tooling CustomField query and retrieve did not return its metadata; owner must verify the field before any WI-001 field deploy. |  |
+.work-items/account-tier/WI-001-add-account-tier-picklist/WORK-ITEM.md:89:| 2026-09-27 | Mike reported: 'I ran both sandbox deploys and both succeeded. I also set the Tier field access on the four profiles the way your manual steps say, and as a Sales User I can see Tier but not edit it.' Sandbox describe confirms optional Tier, no default, and ordered values. Independent review: R-01 partly met, R-02 partly met, R-03 met; live save and effective-access checks remain. |  |
+.work-items/account-tier/WI-001-add-account-tier-picklist/WORK-ITEM.md:131:| Q-03 | Do you approve Option A in the proposed design: Account.Tier__c with the proposed description and help text, placement on the verified main Account layout, and field access editable only for Sales Manager profile users and system administrators? | Design for R-01 through R-03 | Answered 2026-09-27: Mike chose Option A and confirmed the field text; access and page layout are a
+
+[AGENT] The repository has no remote, so I can save the closeout documents to local `main` but cannot publish them elsewhere. Your report confirms the production deploys and the Sales Manager page check; I’ll record the broader production access checks as unverified where you did not report them.
+
+[CALL exec] git worktree add .claude/worktrees/wi-closeout -b claude/wi-closeout
+  -> Script completed
+Wall time 3.4 seconds
+Output:
+
+{"chunk_id":"446720","wall_time_seconds":0.000002916,"exit_code":0,"original_token_count":31,"output":"Preparing worktree (new branch 'claude/wi-closeout')\nHEAD is now at 9970961 Merge branch 'claude/wi-002-tier-access-layout'\n"}
+
+[CALL exec] python3 - <<'PY'
+from pathlib import Path
+p=Path('delivery/deployment/component-tracker.csv')
+s=p.read_text().replace(',Yes,No,',',Yes,Yes,')
+p.write_text(s)
+p=Path('delivery/deployment/WI-001-account-tier/DEPLOYMENT-RECORD.md')
+p.write_text('''# WI-001: Account Tier field
+
+## Scope
+
+The WI-001 package contains only `CustomField:Account.Tier__c`. It creates an optional restricted picklist with Gold, Silver, and Bronze in that order, no default, a description, and help text. WI-002 provides the layout and manual profile access.
+
+## Checks
+
+- Sandbox validation of the narrow package succeeded on 2026-09-27.
+- Mike reported that sandbox field checks passed: a new Account started with Tier blank; each value saved and remained after reload; clearing it to blank worked.
+
+## Production outcome
+
+On 2026-09-27, Mike reported that he ran the WI-001 field production deploy against corrected `tkv2-prod` first and that it succeeded. He reported that `Account.Tier__c` now exists in production. The production deploy was run by Mike; no deployment job ID was supplied.
+''')
+p=Path('delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md')
+s=p.read_text()
+s=s[:s.index('## Outcome')]+'''## Production outcome
+
+On 2026-09-27, Mike reported that he ran the WI-002 layout production deploy against corrected `tkv2-prod` after WI-001 and that it succeeded. He also completed the production profile access steps in `manual-steps.md` and saw Tier on the Account page as a Sales Manager. The production deploy and profile changes were run by Mike; no deployment job ID was supplied. He did not report separate production checks for system administrator editing, read-only users, or effective grants from permission sets.
+
+## Sandbox outcome
+
+Mike reported both sandbox deploys succeeded. He checked that Sales Manager and System Administrator users could edit and clear Tier, Sales User and Read Only users could see it but not edit it, and a user without Account record access could not open that Account. A sandbox FieldPermissions query returned the intended read and edit settings for all four profiles, and PermissionSetAssignment returned no records. The CLI field describe confirmed the intended values, optional setting, and no default. WI-001 records Mike's blank and value-save checks.
+'''
+p.write_text(s)
+p=Path('delivery/deployment/WI-002-tier-access-layout/manual-steps.md')
+s=p.read_text().replace('**Status:** In progress; sandbox checks done, production not started','**Status:** Done; Mike reported completing the production profile access steps on 2026-09-27')
+s += '\nMike also reported seeing Tier on the production Account page as a Sales Manager. Separate production checks for other profiles and effective permission-set grants were not reported.\n'
+p.write_text(s)
+p=Path('requirements/account-tier/ACCOUNT-TIER.md')
+p.parent.mkdir(exist_ok=True)
+p.write_text('''# Account Tier
+
+## Purpose and scope
+
+The Acme sales team uses Account Tier to rank customer accounts. WI-001 approved the field and behavior; WI-002 delivered profile access and main Account layout placement. Account record access still controls which records each user can see.
+
+## Functional behavior
+
+### AT-01 — Rank an Account by Tier
+
+- An Account can have a blank Tier. There is no default value.
+- The available values are Gold, Silver, and Bronze, in that order.
+- The field has a description and help text.
+- Source: WI-001 R-01, approved by Mike on 2026-09-27.
+- Delivery: Mike reported the WI-001 production field deploy succeeded on 2026-09-27. Sandbox blank, save, reload, and clear checks passed.
+
+### AT-02 — Control Tier access
+
+- Sales Manager profile users and system administrators can read and edit Tier on Accounts they can edit.
+- Other users who can view an Account can read Tier but cannot edit it.
+- Account record access remains unchanged.
+- Source: WI-001 R-02, delivered through WI-002; approved by Mike on 2026-09-27.
+- Delivery: Mike reported completing production profile access steps on 2026-09-27. Sandbox role checks passed. Separate production effective-access checks were not reported.
+
+### AT-03 — Show Tier on the main Account page
+
+- Tier appears on the main Account page layout for users who can view the Account.
+- Source: WI-001 R-03, delivered through WI-002; approved by Mike on 2026-09-27.
+- Delivery: Mike reported the WI-002 production layout deploy succeeded and saw Tier on the Account page as a Sales Manager on 2026-09-27.
+
+## Data and access rules
+
+Tier is the optional `Account.Tier__c` restricted picklist. Profile field access is set manually in production; profile metadata is excluded from the CLI deployment packages.
+
+## Integrations and dependencies
+
+No integration or report placement was included in WI-001 or WI-002. The WI-002 layout depends on the WI-001 field.
+
+## Acceptance evidence
+
+WI-001 and WI-002 record the approved requirements, sandbox checks, and Mike's production report. Production deployment records are in `delivery/deployment/WI-001-account-tier/` and `delivery/deployment/WI-002-tier-access-layout/`.
+
+## Change history
+
+- 2026-09-27 — WI-001 and WI-002 delivered to production and accepted by Mike.
+''')
+p=Path('system-guide/ACCOUNT-TIER.md')
+p.write_text('''# Account Tier
+
+## What this area does today
+
+Account Tier is a production Account field used to rank customer accounts. Mike reported the field and layout production deploys succeeded on 2026-09-27 and saw Tier on the Account page as a Sales Manager.
+
+## Components and paths
+
+| Component | Role | Location or reference | Evidence |
+| --- | --- | --- | --- |
+| `Account.Tier__c` | Optional restricted picklist: Gold, Silver, Bronze; no default | `force-app/main/default/objects/Account/fields/Tier__c.field-meta.xml` | Source and Mike's production deploy report, 2026-09-27 |
+| `Account-Account Layout` | Displays Tier below Rating in Account Information | `force-app/main/default/layouts/Account-Account Layout.layout-meta.xml` | Source and Mike's Sales Manager page check, 2026-09-27 |
+| Account profile field access | Sales Manager and System Administrator read/edit; Sales User and Read Only read only | `delivery/deployment/WI-002-tier-access-layout/manual-steps.md` | Mike reported completing production steps; sandbox role checks, 2026-09-27 |
+
+## Data and flow
+
+A permitted editor can select a Tier on an Account. Tier can remain blank. Account record access controls which Accounts a user can see.
+
+## Operational behavior
+
+Profile field access is maintained manually in Salesforce Setup. The WI-001 field package must be deployed before the WI-002 layout package. Neither package deploys profiles.
+
+## Known gaps and uncertainty
+
+Mike confirmed the Sales Manager production page display. Separate production checks for system administrator editing, other profiles' read-only access, and effective permission-set grants were not reported. Check these in the org before relying on production access details.
+
+## Last verified
+
+- Date and environment: 2026-09-27, production, based on Mike's deploy and page report; source and sandbox checks are recorded in WI-001 and WI-002.
+- Sources: `force-app/` metadata and `delivery/deployment/` records.
+- Maintainer: Acme CRM project owner.
+''')
+PY
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+
+
+[CALL exec] rg --files force-app/main/default/layouts; git status --short; git diff -- delivery/deployment/component-tracker.csv delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md delivery/deployment/WI-002-tier-access-layout/manual-steps.md; toolkit work show WI-002 --section 'Open Questions'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+force-app/main/default/layouts/Account-Account Layout.layout-meta.xml
+ M delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md
+ M delivery/deployment/WI-002-tier-access-layout/manual-steps.md
+ M delivery/deployment/component-tracker.csv
+?? delivery/deployment/WI-001-account-tier/DEPLOYMENT-RECORD.md
+?? requirements/account-tier/
+?? system-guide/ACCOUNT-TIER.md
+diff --git a/delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md b/delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md
+index a4d5f64..6342310 100644
+--- a/delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md
++++ b/delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md
+@@ -13,6 +13,10 @@ The layout depends on `Account.Tier__c` from WI-001. Deploy the WI-001 field bef
+ - Validation of the project manifest containing both the field and layout also reported success under the same job ID and reported one component. This count does not establish that both components were checked.
+ - The source dependency graph found one layout reference to `Account.Tier__c`. It does not establish live org behavior.
+ 
+-## Outcome
++## Production outcome
+ 
+-Mike reported that the WI-001 and WI-002 sandbox deploys succeeded on 2026-09-27 and that he completed the four profile field-access settings. He checked that Sales Manager and System Administrator users can edit and clear Tier, Sales User and Read Only users can see it but cannot edit it, and a user without Account record access cannot open that Account. A sandbox FieldPermissions query returned the intended read and edit settings for all four profiles, and PermissionSetAssignment returned no records. The CLI field describe confirms Tier exists with the intended values, optional setting, and no default. WI-001's blank and value-save checks remain open because the Codex org guard blocked test Account creation before execution.
++On 2026-09-27, Mike reported that he ran the WI-002 layout production deploy against corrected `tkv2-prod` after WI-001 and that it succeeded. He also completed the production profile access steps in `manual-steps.md` and saw Tier on the Account page as a Sales Manager. The production deploy and profile changes were run by Mike; no deployment job ID was supplied. He did not report separate production checks for system administrator editing, read-only users, or effective grants from permission sets.
++
++## Sandbox outcome
++
++Mike reported both sandbox deploys succeeded. He checked that Sales Manager and System Administrator users could edit and clear Tier, Sales User and Read Only users could see it but not edit it, and a user without Account record access could not open that Account. A sandbox FieldPermissions query returned the intended read and edit settings for all four profiles, and PermissionSetAssignment returned no records. The CLI field describe confirmed the intended values, optional setting, and no default. WI-001 r
+
+[CALL exec] python3 - <<'PY'
+from pathlib import Path
+p=Path('.work-items/account-tier/WI-001-add-account-tier-picklist/WORK-ITEM.md')
+s=p.read_text()
+a=s.index('**Current position:**'); b=s.index('\n## Roadmap',a)
+s=s[:a]+'''**Current position:** Mike reported that he deployed the WI-001 field package to corrected `tkv2-prod` on 2026-09-27, before WI-002, and that both deploys succeeded. He confirmed `Account.Tier__c` exists in production. The field source is merged into local main.
+
+**Next action:** Save the production closeout records and requirements baseline, then finish WI-002 and WI-001.
+
+**Blockers:** None for local closeout. This repository has no remote, so the documentation commit cannot be pushed.
+
+**Related items:** WI-002 delivers R-02 and R-03; Mike reported its production layout deploy, profile steps, and Sales Manager page check.
+''' + s[b:]
+s=s.replace('| Q-07 | Can you run the WI-001 field package against corrected tkv2-prod and report the deploy result? The project guard denies agent production deploys. | WI-001 production deployment | Open | owner |','| Q-07 | Can you run the WI-001 field package against corrected tkv2-prod and report the deploy result? The project guard denies agent production deploys. | WI-001 production deployment | Answered 2026-09-27: Mike ran the field package first and reported success. | owner |')
+s=s.replace('| Q-08 | Can you recheck production Setup for Account.Tier__c and confirm whether it exists before running the WI-001 field package? The corrected production alias now gives conflicting read-only results: Account describe lists Tier__c, while FieldDefinition and Tooling CustomField queries return no record. | WI-001 production deployment safety | Open | owner |','| Q-08 | Can you recheck production Setup for Account.Tier__c and confirm whether it exists before running the WI-001 field package? The corrected production alias now gives conflicting read-only results: Account describe lists Tier__c, while FieldDefinition and Tooling CustomField queries return no record. | WI-001 production deployment safety | Answered 2026-09-27: Mike previously confirmed the field absent in production Setup before running the package; he now reports it exists after the successful deploy. | owner |')
+s=s.replace('### Resume here\n','### Resume here\n\nProduction deployment was reported successful by Mike on 2026-09-27. Closeout documentation and the requirements baseline are being saved.\n\n',1)
+p.write_text(s)
+p=Path('.work-items/account-tier/WI-001-add-account-tier-picklist/WI-002-tier-access-and-layout/WORK-ITEM.md')
+s=p.read_text(); a=s.index('**Current position:**'); b=s.index('\n## Roadmap',a)
+s=s[:a]+'''**Current position:** Mike reported that he deployed the WI-002 layout package to corrected `tkv2-prod` after WI-001 on 2026-09-27 and that it succeeded. He completed production profile access steps and saw Tier on the Account page as a Sales Manager. The layout source is merged into local main.
+
+**Next action:** Save the production closeout records and requirements baseline, then finish WI-002 and WI-001.
+
+**Blockers:** None for local closeout. This repository has no remote, so the documentation commit cannot be pushed.
+''' + s[b:]
+s=s.replace('| Q-03 | After the WI-001 field deploy succeeds, can you run the WI-002 layout package against corrected tkv2-prod, complete production profile access, and report the deploy and page checks? | WI-002 production deployment | Open | owner |','| Q-03 | After the WI-001 field deploy succeeds, can you run the WI-002 layout package against corrected tkv2-prod, complete production profile access, and report the deploy and page checks? | WI-002 production deployment | Answered 2026-09-27: Mike reported layout deploy success, completed production profile steps, and saw Tier on the Account page as a Sales Manager. Other production role checks were not reported. | owner |')
+s=s.replace('### Resume here\n','### Resume here\n\nProduction layout deployment and manual profile steps were reported complete by Mike on 2026-09-27. Closeout documentation and the requirements baseline are being saved.\n\n',1)
+p.write_text(s)
+PY
+  -> Script failed
+Wall time 0.1 seconds
+Output:
+
+Script error:
+Command blocked by PreToolUse hook: .work-items/account-tier/WI-001-add-account-tier-picklist/WORK-ITEM.md is a work item record, and a script would change it past the toolkit's checks and its record of what it wrote. Use toolkit work edit <id> --section "<heading>" --set-file <file> for text, and toolkit work set, approve, design, move, finish, or cancel for the header fields. Nothing was changed.. Command: python3 - <<'PY'
+from pathlib
+
+[AGENT] The work item guard requires item text changes through `toolkit work edit`. I’m using that route for the owner answers and status notes; the deployment and baseline documents are already drafted in the isolated worktree.
+
+[CALL exec] toolkit work edit --help; toolkit work set --help; git status --short
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+toolkit work: Work items: create, list, show, change, approve, finish, and sync them. toolkit work lifecycle shows the stages.
+
+Usage:
+  toolkit work lifecycle
+  toolkit work new --title <t> [--type <t>] [--parent <id> [--covers R-02,R-03]] [--stage <s>] [--priority <p>] [--request <text>] [--group <folder>]
+  toolkit work list [--status <s>] [--waiting-on <w>] [--tree] [--all]
+  toolkit work show <id> [--section <heading>] [--path]
+  toolkit work edit <id> --section <heading> --set-file <file|-> | --section <heading> --append-row "<a | b | c>" | --label <name> --value <text>
+  toolkit work set <id> [--stage <s>] [--waiting-on <w>] [--priority <p>] [--type <t>] [--delivery <d>] [--title <t>] [--parent <id|none>] [--reopen] [--note <why>]
+  toolkit work approve <id> --requirements|--design|--result --by <name>
+  toolkit work design <id> [--create] [--set-file <file|->] [--status proposed|approved|superseded] [--by <name>]
+  toolkit work history <id> --note <text> [--effect <text>]
+  toolkit work move <id> --under <id|group|archive|root>
+  toolkit work finish <id> --by <name> --evidence <text> [--quote <owner's words>] [--allow-open-sub-items]
+  toolkit work cancel <id> --reason <text> [--by <name>]
+  toolkit work next
+  toolkit work decisions
+  toolkit work sync
+  toolkit work validate [<id|file>]
+
+--covers: a sub-item that delivers some of the parent's approved requirements
+links them (the text stays in the parent) and inherits the parent's
+requirements approval, so the owner is not asked twice.
+--quote: finish needs the owner's own words approving the result when no
+result approval is recorded yet (toolkit work approve <id> --result records one).
+--set-file - reads the text from standard input.
+
+Exit codes: 0 ok, 1 error, 2 validation failure or a refused gate, 3 not supported for this tracker, 4 not a toolkit project.
+Skills find an item's file only with: toolkit work show <id> --path
+toolkit work: Work items: create, list, show, change, approve, finish, and sync them. toolkit work lifecycle shows the stages.
+
+Usage:
+  toolkit work lifecycle
+  toolkit work new --title <t> [--type <t>] [--parent <id> [--covers R-02,R-03]] [--stage <s>] [--priority <p>] [--request <text>] [--group <folder>]
+  toolkit work list [--status <s>] [--waiting-on <w>] [--tree] [--all]
+  toolkit work show <id> [--section <heading>] [--path]
+  toolkit work edit <id> --section <heading> --set-file <file|-> | --section <heading> --append-row "<a | b | c>" | --label <name> --value <text>
+  toolkit work set <id> [--stage <s>] [--waiting-on <w>] [--priority <p>] [--type <t>] [--delivery <d>] [--title <t>] [--parent <id|none>] [--reopen] [--note <why>]
+  toolkit work approve <id> --requirements|--design|--result --by <name>
+  toolkit work design <id> [--create] [--set-file <file|->] [--status proposed|approved|superseded] [--by <name>]
+  toolkit work history <id> --note <text> [--effect <text>]
+  toolkit work move <id> --under <id|
+
+[CALL exec] toolkit work show WI-001 --section 'Open Questions'; toolkit work show WI-002 --section Overview
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+## Open Questions
+
+| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | Which values should the Account Tier picklist offer, in ranking order? | R-01 | Answered 2026-09-27: Gold, Silver, Bronze, in that order. | owner |
+| Q-02 | Must every Account have a Tier, or can Tier be blank? | R-01 | Answered 2026-09-27: Optional; Tier can be blank. | owner |
+| Q-03 | Do you approve Option A in the proposed design: Account.Tier__c with the proposed description and help text, placement on the verified main Account layout, and field access editable only for Sales Manager profile users and system administrators? | Design for R-01 through R-03 | Answered 2026-09-27: Mike chose Option A and confirmed the field text; access and page layout are a sub-item. | owner |
+| Q-04 | Will you authorize creating one sandbox test Account, saving Gold, Silver, Bronze, clearing Tier, and deleting that test Account to complete R-01? | R-01 live acceptance check | Answered 2026-09-27: Mike authorized one sandbox test Account, saving each value, clearing Tier, and deleting the Account. | owner |
+| Q-05 | Can you run the WI-001 sandbox Account blank, Gold, Silver, Bronze, clear, reload, and delete checks and report each result? Codex org guard blocked Account creation before execution. | R-01 live acceptance check | Answered 2026-09-27: Mike reported a new test Account with Tier blank; Gold, Silver, and Bronze each saved and remained after reload; clearing Tier to blank worked; he deleted the test Account. | owner |
+| Q-06 | Can you verify Account.Tier__c in production Setup, including description and help text, and report what you find? The read-only API results disagree. | WI-001 production status and field package decision | Answered 2026-09-27: Mike found the field absent in production Setup and corrected tkv2-prod, which had pointed to the sandbox. A fresh describe also shows no Tier__c. | owner |
+| Q-07 | Can you run the WI-001 field package against corrected tkv2-prod and report the deploy result? The project guard denies agent production deploys. | WI-001 production deployment | Open | owner |
+| Q-08 | Can you recheck production Setup for Account.Tier__c and confirm whether it exists before running the WI-001 field package? The corrected production alias now gives conflicting read-only results: Account describe lists Tier__c, while FieldDefinition and Tooling CustomField queries return no record. | WI-001 production deployment safety | Open | owner |
+## Overview
+
+**Goal:** Configure Account Tier field access and show Tier on the main Account page layout.
+
+**Current position:** Mike confirmed that Account.Tier__c is absent from production and corrected tkv2-prod, which had pointed to the sandbox. A fresh read-only layout retrieve from the corrected alias differs from source only by the Tier__c item. WI-002's approved layout source and narrow package are merged into local main at 9970961. 
+
+[CALL exec] mktemp -d -t acme-closeout
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+/var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/acme-closeout.3qqYP4C17u
+
+[CALL exec] python3 - <<'PY'
+from pathlib import Path
+root=Path('/var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/acme-closeout.3qqYP4C17u')
+items=[('WI-001',Path('.work-items/account-tier/WI-001-add-account-tier-picklist/WORK-ITEM.md')),('WI-002',Path('.work-items/account-tier/WI-001-add-account-tier-picklist/WI-002-tier-access-and-layout/WORK-ITEM.md'))]
+for id,p in items:
+ s=p.read_text()
+ q=s.split('## Open Questions\n',1)[1].split('\n## Requirements',1)[0].strip()
+ if id=='WI-001':
+  q=q.replace('| WI-001 production deployment | Open | owner |','| WI-001 production deployment | Answered 2026-09-27: Mike ran the field package first and reported success. | owner |')
+  q=q.replace('| WI-001 production deployment safety | Open | owner |','| WI-001 production deployment safety | Answered 2026-09-27: Mike had confirmed the field absent in production Setup; he now reports it exists after the deploy. | owner |')
+  overview='''**Goal:** Let the sales team rank accounts using an Account Tier picklist.
+
+**Current position:** Mike reported the WI-001 field production deploy succeeded on 2026-09-27, before WI-002, and confirmed Account.Tier__c now exists in production. The field source is merged into local main.
+
+**Next action:** Save the production records and requirements baseline, then finish WI-002 and WI-001.
+
+**Blockers:** None for local closeout. This repository has no remote, so the documentation commit cannot be pushed.
+
+**Related items:** WI-002 delivers R-02 and R-03; Mike reported its production layout deploy, profile steps, and Sales Manager page check.'''
+ else:
+  q=q.replace('| WI-002 production deployment | Open | owner |','| WI-002 production deployment | Answered 2026-09-27: Mike reported layout deploy success, completed production profile steps, and saw Tier on the Account page as a Sales Manager. Other production role checks were not reported. | owner |')
+  overview='''**Goal:** Configure Account Tier field access and show Tier on the main Account page layout.
+
+**Current position:** Mike reported the WI-002 layout production deploy succeeded after WI-001 on 2026-09-27. He completed the production profile access steps and saw Tier on the Account page as a Sales Manager. The layout source is merged into local main.
+
+**Next action:** Save the production records and requirements baseline, then finish WI-002 and WI-001.
+
+**Blockers:** None for local closeout. This repository has no remote, so the documentation commit cannot be pushed.
+
+**Related items:** Parent WI-001 owns R-01 through R-03 and the Tier field.'''
+ (root/f'{id}-questions.md').write_text(q+'\n')
+ (root/f'{id}-overview.md').write_text(overview+'\n')
+PY
+  -> Script failed
+Wall time 0.1 seconds
+Output:
+
+Script error:
+Command blocked by PreToolUse hook: .work-items/account-tier/WI-001-add-account-tier-picklist/WORK-ITEM.md is a work item record, and a script would change it past the toolkit's checks and its record of what it wrote. Use toolkit work edit <id> --section "<heading>" --set-file <file> for text, and toolkit work set, approve, design, move, finish, or cancel for the header fields. Nothing was changed.. Command: python3 - <<'PY'
+from pathlib
+
+[PATCH] files=['${dir}/${id}-questions.md\\n+${s.split("\\n").join("\\n+")}\\n*** End Patch`))}']
+  -> Script completed
+Wall time 0.7 seconds
+Output:
+
+{}
+{}
+
+[PATCH] files=['${dir}/${id}-overview.md\\n+${s.split("\\n").join("\\n+")}\\n*** End Patch`))']
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{}
+{}
+
+[CALL exec] toolkit work edit ${id} --section "${section}" --set-file ${dir}/${id}-${file}.md
+  -> Script completed
+Wall time 1.1 seconds
+Output:
+
+WI-001 Overview: Saved "Overview" in WI-001.
+
+WI-001 Open Questions: Saved "Open Questions" in WI-001.
+
+WI-002 Overview: Saved "Overview" in WI-002.
+
+WI-002 Open Questions: Saved "Open Questions" in WI-002.
+
+
+[CALL exec] git diff --check; git status --short; git diff --stat; cat requirements/account-tier/ACCOUNT-TIER.md system-guide/ACCOUNT-TIER.md delivery/deployment/WI-001-account-tier/DEPLOYMENT-RECORD.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+ M delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md
+ M delivery/deployment/WI-002-tier-access-layout/manual-steps.md
+ M delivery/deployment/component-tracker.csv
+?? delivery/deployment/WI-001-account-tier/DEPLOYMENT-RECORD.md
+?? requirements/account-tier/
+?? system-guide/ACCOUNT-TIER.md
+ .../WI-002-tier-access-layout/DEPLOYMENT-RECORD.md           |  8 ++++++--
+ .../deployment/WI-002-tier-access-layout/manual-steps.md     |  4 +++-
+ delivery/deployment/component-tracker.csv                    | 12 ++++++------
+ 3 files changed, 15 insertions(+), 9 deletions(-)
+# Account Tier
+
+## Purpose and scope
+
+The Acme sales team uses Account Tier to rank customer accounts. WI-001 approved the field and behavior; WI-002 delivered profile access and main Account layout placement. Account record access still controls which records each user can see.
+
+## Functional behavior
+
+### AT-01 — Rank an Account by Tier
+
+- An Account can have a blank Tier. There is no default value.
+- The available values are Gold, Silver, and Bronze, in that order.
+- The field has a description and help text.
+- Source: WI-001 R-01, approved by Mike on 2026-09-27.
+- Delivery: Mike reported the WI-001 production field deploy succeeded on 2026-09-27. Sandbox blank, save, reload, and clear checks passed.
+
+### AT-02 — Control Tier access
+
+- Sales Manager profile users and system administrators can read and edit Tier on Accounts they can edit.
+- Other users who can view an Account can read Tier but cannot edit it.
+- Account record access remains unchanged.
+- Source: WI-001 R-02, delivered through WI-002; approved by Mike on 2026-09-27.
+- Delivery: Mike reported completing production profile access steps on 2026-09-27. Sandbox role checks passed. Separate production effective-access checks were not reported.
+
+### AT-03 — Show Tier on the main Account page
+
+- Tier appears on the main Account page layout for users who can view the Account.
+- Source: WI-001 R-03, delivered through WI-002; approved by Mike on 2026-09-27.
+- Delivery: Mike reported the WI-002 production layout deploy succeeded and saw Tier on the Account page as a Sales Manager on 2026-09-27.
+
+## Data and access rules
+
+Tier is the optional `Account.Tier__c` restricted picklist. Profile field access is set manually in production; profile metadata is excluded from the CLI deployment packages.
+
+## Integrations and dependencies
+
+No integration or report placement was included in WI-001 or WI-002. The WI-002 layout depends on the WI-001 field.
+
+## Acceptance evidence
+
+WI-001 and WI-002 record the approved requirements, sandbox checks, and Mike's production report. Production deployment records are in `delivery/deployment/WI-001-account-tier/` and `delivery/deployment/WI-002-tier-access-layout/`.
+
+## Change history
+
+- 2026-09-27 — WI-001 and WI-002 delivered to production and accepted by Mike.
+# Account Tier
+
+## What this area does today
+
+Account Tier is a production Account
+
+[AGENT] The deployment tracker, both deployment records, and the Account Tier requirements and system guide are updated. I’m saving those documents to local `main`, then I’ll mark WI-002 and WI-001 Done and clear the handoff focus.
+
+[CALL exec] git add delivery/deployment/component-tracker.csv delivery/deployment/WI-001-account-tier/DEPLOYMENT-RECORD.md delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md delivery/deployment/WI-002-tier-access-layout/manual-steps.md requirements/account-tier/ACCOUNT-TIER.md system-guide/ACCOUNT-TIER.md
+  -> Script completed
+Wall time 3.6 seconds
+Output:
+
+{"chunk_id":"195036","wall_time_seconds":0.000002792,"exit_code":0,"original_token_count":0,"output":""}
+
+[CALL exec] git diff --cached --check; git diff --cached --stat; git diff --cached -- delivery/deployment/component-tracker.csv delivery/deployment/WI-001-account-tier/DEPLOYMENT-RECORD.md delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md delivery/deployment/WI-002-tier-access-layout/manual-steps.md requirements/account-tier/ACCOUNT-TIER.md system-guide/ACCOUNT-TIER.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+ .../WI-001-account-tier/DEPLOYMENT-RECORD.md       | 14 +++++++
+ .../WI-002-tier-access-layout/DEPLOYMENT-RECORD.md |  8 +++-
+ .../WI-002-tier-access-layout/manual-steps.md      |  4 +-
+ delivery/deployment/component-tracker.csv          | 12 +++---
+ requirements/account-tier/ACCOUNT-TIER.md          | 45 ++++++++++++++++++++++
+ system-guide/ACCOUNT-TIER.md                       | 31 +++++++++++++++
+ 6 files changed, 105 insertions(+), 9 deletions(-)
+diff --git a/delivery/deployment/WI-001-account-tier/DEPLOYMENT-RECORD.md b/delivery/deployment/WI-001-account-tier/DEPLOYMENT-RECORD.md
+new file mode 100644
+index 0000000..238986f
+--- /dev/null
++++ b/delivery/deployment/WI-001-account-tier/DEPLOYMENT-RECORD.md
+@@ -0,0 +1,14 @@
++# WI-001: Account Tier field
++
++## Scope
++
++The WI-001 package contains only `CustomField:Account.Tier__c`. It creates an optional restricted picklist with Gold, Silver, and Bronze in that order, no default, a description, and help text. WI-002 provides the layout and manual profile access.
++
++## Checks
++
++- Sandbox validation of the narrow package succeeded on 2026-09-27.
++- Mike reported that sandbox field checks passed: a new Account started with Tier blank; each value saved and remained after reload; clearing it to blank worked.
++
++## Production outcome
++
++On 2026-09-27, Mike reported that he ran the WI-001 field production deploy against corrected `tkv2-prod` first and that it succeeded. He reported that `Account.Tier__c` now exists in production. The production deploy was run by Mike; no deployment job ID was supplied.
+diff --git a/delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md b/delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md
+index a4d5f64..6342310 100644
+--- a/delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md
++++ b/delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md
+@@ -13,6 +13,10 @@ The layout depends on `Account.Tier__c` from WI-001. Deploy the WI-001 field bef
+ - Validation of the project manifest containing both the field and layout also reported success under the same job ID and reported one component. This count does not establish that both components were checked.
+ - The source dependency graph found one layout reference to `Account.Tier__c`. It does not establish live org behavior.
+ 
+-## Outcome
++## Production outcome
+ 
+-Mike reported that the WI-001 and WI-002 sandbox deploys succeeded on 2026-09-27 and that he completed the four profile field-access settings. He checked that Sales Manager and System Administrator users can edit and clear Tier, Sales User and Read Only users can see it but cannot edit it, and a user without Account record access cannot open that Account. A sandbox FieldPermissions query returned the intended read and edit settings for all four profiles, and PermissionSetAssignment returned no records. The CLI field describe confirms Tier exists with the intended values, opt
+
+[CALL exec] git commit -m 'Record Account Tier production closeout'
+  -> Script completed
+Wall time 3.4 seconds
+Output:
+
+{"chunk_id":"cd8d77","wall_time_seconds":0.000002791,"exit_code":0,"original_token_count":79,"output":"[claude/wi-closeout 8e29ac1] Record Account Tier production closeout\n 6 files changed, 105 insertions(+), 9 deletions(-)\n create mode 100644 delivery/deployment/WI-001-account-tier/DEPLOYMENT-RECORD.md\n create mode 100644 requirements/account-tier/ACCOUNT-TIER.md\n create mode 100644 system-guide/ACCOUNT-TIER.md\n"}
+
+[CALL exec] git diff --name-only main...claude/wi-closeout; git status --short --branch; git merge --ff-only claude/wi-closeout
+  -> Script completed
+Wall time 3.7 seconds
+Output:
+
+{"chunk_id":"dfd2ed","wall_time_seconds":0.000002833,"exit_code":0,"original_token_count":250,"output":"delivery/deployment/WI-001-account-tier/DEPLOYMENT-RECORD.md\ndelivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md\ndelivery/deployment/WI-002-tier-access-layout/manual-steps.md\ndelivery/deployment/component-tracker.csv\nrequirements/account-tier/ACCOUNT-TIER.md\nsystem-guide/ACCOUNT-TIER.md\n## main\nUpdating 9970961..8e29ac1\nFast-forward\n .../WI-001-account-tier/DEPLOYMENT-RECORD.md       | 14 +++++++\n .../WI-002-tier-access-layout/DEPLOYMENT-RECORD.md |  8 +++-\n .../WI-002-tier-access-layout/manual-steps.md      |  4 +-\n delivery/deployment/component-tracker.csv          | 12 +++---\n requirements/account-tier/ACCOUNT-TIER.md          | 45 ++++++++++++++++++++++\n system-guide/ACCOUNT-TIER.md                       | 31 +++++++++++++++\n 6 files changed, 105 insertions(+), 9 deletions(-)\n create mode 100644 delivery/deployment/WI-001-account-tier/DEPLOYMENT-RECORD.md\n create mode 100644 requirements/account-tier/ACCOUNT-TIER.md\n create mode 100644 system-guide/ACCOUNT-TIER.md\n"}
+
+[CALL exec] toolkit work history WI-001 --note "Owner's words: Tier__c exists in production now because I already ran both production deploys myself a few minutes ago, the WI-001 field first and then the WI-002 layout, and both succeeded. I also set the production profile access per the manual steps, and Tier shows on the Account page for a Sales Manager. Close it out: finish WI-001 and WI-002 and mark them done. My OK for the git commands stands for the closeout."
+   toolkit work history WI-002 --note "Owner reported successful production deploy after WI-001, completed production profile access steps, and Tier visible on the Account page for a Sales Manager; owner asked to mark WI-002 Done."
+   toolkit work set WI-001 --waiting-on agent
+   toolkit work set WI-002 --waiting-on agent
+   toolkit work set WI-001 --stage 14-spec-update
+   toolkit work set WI-002 --stage 14-spec-update
+  -> Script completed
+Wall time 1.6 seconds
+Output:
+
+toolkit work history WI-001: Added a Recent History row to WI-001.
+
+toolkit work history WI-002: Added a Recent History row to WI-002.
+
+toolkit work set WI-001: Updated WI-001: waiting on agent.
+Now 13 Deployment (In Review). Continue with work-finish.
+
+toolkit work set WI-002: Updated WI-002: waiting on agent.
+Now 13 Deployment (In Review). Continue with work-finish.
+
+toolkit work set WI-001: Updated WI-001: stage 13 Deployment -> 14 Specification update (status In Review).
+Now 14 Specification update (In Review). Continue with work-finish.
+
+toolkit work set WI-002: Updated WI-002: stage 13 Deployment -> 14 Specification update (status In Review).
+Now 14 Specification update (In Review). Continue with work-finish.
+
+
+[CALL exec] toolkit work finish WI-002 --by Mike --evidence "Mike reported successful WI-002 production layout deploy after WI-001, completed profile access steps, and Tier visible on the Account page as a Sales Manager; sandbox access checks passed; closeout commit 8e29ac1 is on local main."
+   toolkit work finish WI-001 --by Mike --evidence "Mike reported successful WI-001 production field deploy before WI-002 and confirmed Account.Tier__c exists in production; sandbox field checks passed; WI-002 is Done; closeout commit 8e29ac1 is on local main."
+  -> Script completed
+Wall time 0.6 seconds
+Output:
+
+WI-002 is Done. Result approval: 2026-09-27 by Mike.
+
+WI-001 is Done. Result approval: 2026-09-27 by Mike.
+
+
+[AGENT] WI-002 and WI-001 are both marked Done. The closeout commit is on local `main`. I’m clearing the completed handoff from current focus and checking that the tracker and repository are consistent.
+
+[PATCH] files=['${dir}/focus.md\\n+${s.split("\\n").join("\\n+")}\\n*** End Patch`))']
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{}
+
+[CALL exec] toolkit memory focus --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/acme-closeout.3qqYP4C17u/focus.md
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved the current focus (19 lines). Version: 396a4ca31cc8
+
+
+[CALL exec] toolkit work edit WI-001 --label 'Next action' --value 'Done. No next action.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Next action" in WI-001.
+
+
+[CALL exec] toolkit work edit WI-001 --label 'Current position' --value 'Done. Mike reported successful production field deploy, and the closeout records and requirements baseline are committed on local main at 8e29ac1.'
+   toolkit work edit WI-001 --label 'Blockers' --value 'None. This repository has no remote, so local commit 8e29ac1 has not been pushed.'
+   toolkit work edit WI-002 --label 'Current position' --value 'Done. Mike reported successful production layout deploy and profile steps, and saw Tier on the Account page as a Sales Manager. Closeout is committed on local main at 8e29ac1.'
+   toolkit work edit WI-002 --label 'Next action' --value 'Done. No next action.'
+   toolkit work edit WI-002 --label 'Blockers' --value 'None. This repository has no remote, so local commit 8e29ac1 has not been pushed.'
+  -> Script completed
+Wall time 1.3 seconds
+Output:
+
+Saved "Current position" in WI-001.
+
+Saved "Blockers" in WI-001.
+
+Saved "Current position" in WI-002.
+
+Saved "Next action" in WI-002.
+
+Saved "Blockers" in WI-002.
+
+
+[CALL exec] git status --short --branch; git worktree list; git branch --merged main; toolkit work list --tree; toolkit work validate WI-001; toolkit work validate WI-002; toolkit memory focus; toolkit doctor
+  -> Script completed
+Wall time 0.6 seconds
+Output:
+
+## main
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2                                             8e29ac1 [main]
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/.claude/worktrees/wi-001-account-tier       bd1ef75 [claude/wi-001-account-tier]
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/.claude/worktrees/wi-002-tier-access-layout 72f5b9c [claude/wi-002-tier-access-layout]
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/.claude/worktrees/wi-closeout               8e29ac1 [claude/wi-closeout]
++ claude/wi-001-account-tier
++ claude/wi-002-tier-access-layout
++ claude/wi-closeout
+* main
+No open work items. Add --all to include finished, cancelled, and archived ones.
+Checked 1 item: 1 clean, 0 errors, 0 questions for the owner.
+Checked 1 item: 1 clean, 0 errors, 0 questions for the owner.
+# Current focus
+
+Last updated: 2026-09-27, WI-001 and WI-002 closeout, Codex
+
+## Now
+
+- None.
+
+## Waiting on the owner
+
+- Trust this project folder in Codex when prompted, then open `/hooks` and trust the Toolkit V2 hooks and two Salesforce org guards.
+
+## Untracked to-dos
+
+- None.
+
+## Next session starts with
+
+- WI-001 and WI-002 are Done. Mike reported both production deploys succeeded, production profile steps were completed, and Tier is visible on the Account page for a Sales Manager. The production records, component flags, requirements baseline, and system guide are committed on local main at 8e29ac1. There is no origin remote, so this commit has not been pushed. Separate production effective-access checks for other profiles were not reported.
+Toolkit doctor for Acme CRM (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2).
+
+Warnings (3):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+3. The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them.
+   Fix: The owner opens /hooks in Codex in this project and trusts the two Sa
+
+[CALL exec] git status --short --branch
+  -> Script completed
+Wall time 0.6 seconds
+Output:
+
+.claude/worktrees/wi-001-account-tier: ## claude/wi-001-account-tier
+.claude/worktrees/wi-002-tier-access-layout: ## claude/wi-002-tier-access-layout
+.claude/worktrees/wi-closeout: ## claude/wi-closeout
+
+[CALL exec] git worktree remove .claude/worktrees/wi-001-account-tier; git worktree remove .claude/worktrees/wi-002-tier-access-layout; git worktree remove .claude/worktrees/wi-closeout; git branch -d claude/wi-001-account-tier claude/wi-002-tier-access-layout claude/wi-closeout
+  -> Script completed
+Wall time 4.0 seconds
+Output:
+
+{"chunk_id":"64b96f","wall_time_seconds":0.000003292,"exit_code":0,"original_token_count":43,"output":"Deleted branch claude/wi-001-account-tier (was bd1ef75).\nDeleted branch claude/wi-002-tier-access-layout (was 72f5b9c).\nDeleted branch claude/wi-closeout (was 8e29ac1).\n"}
+
+[CALL exec] git status --short --branch; git log -1 --oneline; git worktree list; toolkit work list --all --tree; rg -n 'stage:|status:|waiting_on:|result_approved:' .work-items/account-tier -g WORK-ITEM.md
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+## main
+8e29ac1 Record Account Tier production closeout
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2 8e29ac1 [main]
+account-tier/ (group)
+  WI-001  Add Account Tier picklist  (Done)
+    WI-002  Configure Account Tier access and page layout  (Done)
+.work-items/account-tier/WI-001-add-account-tier-picklist/WORK-ITEM.md:5:stage: 14-spec-update
+.work-items/account-tier/WI-001-add-account-tier-picklist/WORK-ITEM.md:6:status: Done
+.work-items/account-tier/WI-001-add-account-tier-picklist/WORK-ITEM.md:8:waiting_on: "none"
+.work-items/account-tier/WI-001-add-account-tier-picklist/WORK-ITEM.md:13:result_approved: "2026-09-27 by Mike"
+.work-items/account-tier/WI-001-add-account-tier-picklist/WORK-ITEM.md:144:**Overall status:** Finalized  
+.work-items/account-tier/WI-001-add-account-tier-picklist/WI-002-tier-access-and-layout/WORK-ITEM.md:5:stage: 14-spec-update
+.work-items/account-tier/WI-001-add-account-tier-picklist/WI-002-tier-access-and-layout/WORK-ITEM.md:6:status: Done
+.work-items/account-tier/WI-001-add-account-tier-picklist/WI-002-tier-access-and-layout/WORK-ITEM.md:8:waiting_on: "none"
+.work-items/account-tier/WI-001-add-account-tier-picklist/WI-002-tier-access-and-layout/WORK-ITEM.md:13:result_approved: "2026-09-27 by Mike"
+.work-items/account-tier/WI-001-add-account-tier-picklist/WI-002-tier-access-and-layout/WORK-ITEM.md:117:**Overall status:** Finalized  
+
+
+[CALL exec] rm -rf /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/acme-closeout.3qqYP4C17u
+  -> Script completed
+Wall time 4.1 seconds
+Output:
+
+
+
+[AGENT] WI-001 and WI-002 are **Done**. I recorded your successful production deploys, profile access steps, and Sales Manager page check; updated the component tracker, deployment records, requirements, and system guide; and saved the closeout on local `main` in commit `8e29ac1`. The working tree is clean.
+
+This repository has no remote, so the commit has not been pushed. Separate production access checks for other profiles were not reported and are recorded as unverified.
+
+SKILLS OPENED (SKILL.md read): ['publish-docs', 'sf-component-tracker', 'memory-save', 'publish-docs']
+
+TOOLKIT COMMANDS:
+   toolkit work show WI-001
+   toolkit work show WI-002
+   toolkit work lifecycle
+   toolkit work list --tree
+   toolkit memory focus
+   toolkit work show WI-002 --path
+   toolkit work show WI-001 --path
+   toolkit work show WI-002 --section 'Open Questions'
+   toolkit work edit --help
+   toolkit work set --help
+   toolkit work show WI-001 --section 'Open Questions'
+   toolkit work show WI-002 --section Overview
+   toolkit work show ${id} --section "Open Questions"
+   toolkit work edit ${id} --section "${section}" --set-file ${dir}/${id}-${file}.md
+   toolkit work history WI-001 --note "Owner's words: Tier__c exists in production now because I already ran both production deploys myself a few minutes ago, the WI-001 field first and then the WI-002 layout, and both succeeded. I also set the production profile access per the manual steps, and Tier shows on the Account page for a Sales Manager. Close it out: finish WI-001 and WI-002 and mark them d
+   toolkit work history WI-002 --note "Owner reported successful production deploy after WI-001, completed production profile access steps, and Tier visible on the Account page for a Sales Manager
+   toolkit work set WI-001 --waiting-on agent
+   toolkit work set WI-002 --waiting-on agent
+   toolkit work set WI-001 --stage 14-spec-update
+   toolkit work set WI-002 --stage 14-spec-update
+   toolkit work finish WI-002 --by Mike --evidence "Mike reported successful WI-002 production layout deploy after WI-001, completed profile access steps, and Tier visible on the Account page as a Sales Manager
+   toolkit work finish WI-001 --by Mike --evidence "Mike reported successful WI-001 production field deploy before WI-002 and confirmed Account.Tier__c exists in production
+   toolkit memory focus --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/acme-closeout.3qqYP4C17u/focus.md
+   toolkit work edit WI-001 --label 'Next action' --value 'Done. No next action.'
+   toolkit work edit WI-001 --label 'Current position' --value 'Done. Mike reported successful production field deploy, and the closeout records and requirements baseline are committed on local main at 8e29ac1.'
+   toolkit work edit WI-001 --label 'Blockers' --value 'None. This repository has no remote, so local commit 8e29ac1 has not been pushed.'
+   toolkit work edit WI-002 --label 'Current position' --value 'Done. Mike reported successful production layout deploy and profile steps, and saw Tier on the Account page as a Sales Manager. Closeout is committed on local main at 8e29ac1.'
+   toolkit work edit WI-002 --label 'Next action' --value 'Done. No next action.'
+   toolkit work edit WI-002 --label 'Blockers' --value 'None. This repository has no remote, so local commit 8e29ac1 has not been pushed.'
+   toolkit work list --tree
+   toolkit work validate WI-001
+   toolkit work validate WI-002
+   toolkit memory focus
+   toolkit doctor
+   toolkit work list --all --tree

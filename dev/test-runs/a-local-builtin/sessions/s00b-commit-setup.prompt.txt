@@ -1,0 +1,1 @@
+Yes, commit the setup files. I approve the git commands for that one commit when Codex asks.

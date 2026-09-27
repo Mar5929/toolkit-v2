@@ -1,0 +1,10 @@
+I could not run the production deploy. The project’s [Salesforce safety rule](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/.claude/rules/salesforce-org-safety.md) explicitly prohibits agent production deploys even when asked, and the local production guard is set to deny them. **Neither package was deployed.**
+
+I verified that the corrected `tkv2-prod` alias connects to production and that `Account.Tier__c` is absent there. The production layout differs from the approved source only by the Tier item. Please run these from the project root, in order:
+
+```sh
+sf project deploy start -x delivery/deployment/WI-001-account-tier/package.xml -o tkv2-prod
+sf project deploy start -x delivery/deployment/WI-002-tier-access-layout/package.xml -o tkv2-prod
+```
+
+Run the second command only after the first succeeds. Then complete the [production profile access steps](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/delivery/deployment/WI-002-tier-access-layout/manual-steps.md) and report the deploy results and Account page check. I recorded your alias correction and the remaining steps in WI-001, WI-002, and the current focus.

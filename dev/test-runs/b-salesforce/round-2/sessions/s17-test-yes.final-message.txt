@@ -1,0 +1,11 @@
+Your access checks are recorded. WI-002’s access and layout result passed independent review and is ready for your approval. The evidence is committed on its local branch as `53de9f7`; this copy has no remote to push it to.
+
+**WI-001 still needs the Account value check.** The Codex Salesforce guard blocked Account creation before execution, even with your authorization, and directed me to give you the command to run. No test Account was created.
+
+In the sandbox, run:
+
+```sh
+sf data create record -s Account -v "Name='WI-001 Tier acceptance 2026-09-27'" -o tkv2-sbx --json
+```
+
+Then open that Account, confirm Tier is blank, and save and reload it after each change: Gold, Silver, Bronze, then blank. Delete the test Account and tell me whether each step succeeded. I’ll record those results before requesting WI-001 result approval.

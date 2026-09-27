@@ -1,0 +1,133 @@
+{
+  "schema": 1,
+  "sessionId": "01a0e42d-00a5-7d83-87f0-c3362c5cda44",
+  "host": "codex",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2",
+  "startedAt": "2026-09-27T18:42:31.305Z",
+  "turns": 1,
+  "turn": {
+    "key": "01a0e42d-0131-7820-b802-d6b915821ef2",
+    "n": 1,
+    "startedAt": "2026-09-27T18:42:31.447Z",
+    "keep": null,
+    "baseline": {
+      "memoryMeta": 1790534365352.4229,
+      "hindsightMeta": null,
+      "memoryCache": null,
+      "workState": 1790534551342.4368,
+      "decisions": 1790527979553.7776
+    },
+    "records": [
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T18:44:21.443Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work set",
+        "at": "2026-09-27T18:44:21.443Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T18:45:09.441Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T18:45:09.704Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T18:45:09.968Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T18:45:10.232Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work history",
+        "at": "2026-09-27T18:45:48.997Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work history",
+        "at": "2026-09-27T18:45:49.259Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work set",
+        "at": "2026-09-27T18:45:49.533Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work set",
+        "at": "2026-09-27T18:45:49.798Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work set",
+        "at": "2026-09-27T18:45:50.062Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work set",
+        "at": "2026-09-27T18:45:50.325Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work finish",
+        "at": "2026-09-27T18:45:54.666Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work finish",
+        "at": "2026-09-27T18:45:54.938Z"
+      },
+      {
+        "kind": "memory",
+        "what": "toolkit memory focus",
+        "at": "2026-09-27T18:46:06.826Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T18:46:10.130Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T18:46:18.126Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T18:46:18.386Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T18:46:18.648Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T18:46:18.906Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T18:46:19.163Z"
+      }
+    ],
+    "edits": [],
+    "stopBlocked": false
+  },
+  "lastStopReason": null,
+  "source": "startup",
+  "updated": "2026-09-27T18:46:50.928Z"
+}

@@ -1,0 +1,3 @@
+=== HOOK additional_context (ordinal 103, ts 2026-09-27T19:33:45.361Z)
+This shell command joins a toolkit command to other commands (&&, ;, a pipe, a heredoc, or cd). In Codex that runs the toolkit command inside the sandbox, which blocks Notion, Hindsight, and the main checkout's .work-items/ and .memory/ from a worktree, so it may fail or report the wrong cause. Run each toolkit command alone, as its own command; pass section text with --text instead of a file written in the same command.
+

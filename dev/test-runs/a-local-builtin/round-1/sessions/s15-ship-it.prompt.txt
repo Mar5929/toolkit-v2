@@ -1,0 +1,1 @@
+Ship it: WI-001 and WI-002. There is no remote and I do not want a GitHub repo, so commit the work on its branch and merge it into main locally. I approve that merge. Then mark both done.

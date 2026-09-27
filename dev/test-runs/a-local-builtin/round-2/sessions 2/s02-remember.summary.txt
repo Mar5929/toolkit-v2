@@ -1,0 +1,217 @@
+PROMPT: Remember that I prefer plain Node.js with no npm packages, and tests written with the built-in node:test runner.
+THREAD: 01a0e3d1-f693-76c0-8205-7075f15e5d46
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll save that as a project preference for future sessions.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.1/skills/memory-save/references/record-format.md'
+  -> # Memory records, current focus, and glossary
+
+Detail for `memory-save`, `memory-find`, and `memory-tidy`. The approval
+policy is not here; it is written only in `memory-save` step 3.
+
+The formats are the model project's `.memory/` formats: the topic template
+(`project_topic_template.md`), `CURRENT_FOCUS.md`, `MEMORY.md`,
+`memory-criteria.md`, and `terminology-glossary.md`. With built-in memory the
+project has its own copies in `.memory/`; its `AGENTS.md` there is the folder's
+rule. Every backend (built-in, Hindsight, Notion) keeps the same fields and
+the same body. Only the `toolkit memory` commands write memory.
+
+## What belongs in memory
+
+With built-in memory, `.memory/memory-criteria.md` is the project's selection
+policy. Read it before choosing. `feedback` memories about what is worth
+saving override it. With Hindsight or Notion memory there is no
+`.memory/` folder, so the policy is the text below, copied word for word from
+the model's `.memory/memory-criteria.md` (its "Default test for lasting
+memory" and "Never save as lasting memory" sections). Where a project's own
+`memory-criteria.md` differs from this copy, the project's file wins.
+
+Save a topic when it concerns this project, has a credible source, would matter in a future session, would be costly or unreliable to reconstruct, and has no better maintained owner. Prefer updating an existing topic. A short pointer to an authoritative record can qualify when future sessions would otherwise miss that record.
+
+| Type an
+
+[CMD exit=0] /bin/zsh -lc 'toolkit config get memory.approval'
+  -> onboarding
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory find "Node.js npm packages node:test"'
+  -> No memory records match "Node.js npm packages node:test".
+
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r2 ee7c812 [main]
+
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## main
+
+
+[CMD exit=0] /bin/zsh -lc 'mktemp -d /tmp/greet-memory.XXXXXX'
+  -> /tmp/greet-memory.qGxvnU
+
+
+[CMD exit=0] /bin/zsh -lc "cat > /tmp/greet-memory.qGxvnU/body.md <<'EOF'
+# Node.js implementation preference
+
+**Remember:** Mike prefers plain Node.js with no npm packages, and tests written with the built-in "'`node:test` runner.
+
+**Why:** This guides implementation and test choices for the greet project.
+
+**How to apply:** Use Node.js built-ins for the CLI and its tests. Avoid adding npm dependencies unless Mike changes this preference.
+
+**Evidence and limits:** Mike, in chat, 2026-09-27. This is a stated preference for this project, not approval of any pending work item'"'s requirements.
+
+**Related mem
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory save --type user --name nodejs-dependencies-and-tests --description "Prefer plain Node.js, no npm packages, and the built-in node:test runner" --body-file /tmp/greet-memory.qGxvnU/body.md --source "Mike, in chat, 2026-09-27" --approved-by Mike'
+  -> Saved to memory: user_nodejs_dependencies_and_tests (new record).
+Where: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r2/.memory
+Version: 8a285641e880
+Approved by: Mike
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory get user_nodejs_dependencies_and_tests'
+  -> ---
+name: user_nodejs_dependencies_and_tests
+description: Prefer plain Node.js, no npm packages, and the built-in node:test runner
+metadata:
+  type: user
+status: current
+source: Mike, in chat, 2026-09-27
+last_verified: 2026-09-27
+authorization: Approved by Mike on 2026-09-27
+supersedes: none
+---
+
+# Node.js implementation preference
+
+**Remember:** Mike prefers plain Node.js with no npm packages, and tests written with the built-in `node:test` runner.
+
+**Why:** This guides implementation and test choices for the greet project.
+
+**How to apply:** Use Node.js built-ins for the CLI and its tests. Avoid adding npm dependencies unless Mike changes this preference.
+
+**Evidence and limits:** Mike, in chat, 2026-09-27. This is a stated preference for this project, not approval of any pending work item's requirements.
+
+**Related memories:** None.
+
+**Authoritative records:** None.
+
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for greet (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r2).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (3):
+- AGENTS.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- README.md was changed by the project, so sync leaves it alone. The toolkit would: the project had this file before the toolkit; the toolkit version was not installed. The project-setup skill shows these to the owner and makes the changes he approves.
+
+Result: 0 problems and 2 warnings.
+
+
+[CMD exit=0] /bin/zsh -lc 'rm /tmp/greet-memory.qGxvnU/body.md && rmdir /tmp/greet-memory.qGxvnU'
+  -> 
+
+[AGENT] Saved to memory: you prefer plain Node.js with no npm packages and tests using the built-in `node:test` runner. I’ll use that preference in future sessions. Say “forget that” to undo it.
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 287358, "cached_input_tokens": 263936, "cache_write_input_tokens": 0, "output_tokens": 1059, "reasoning_output_tokens": 133}}
+
+SKILLS OPENED: []
+
+[HOOK CONTEXT ord=9] Project briefing: greet (greet), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The backlog has 1 item; toolkit work next suggests which to take up.
+
+Waiting on the owner:
+- WI-002 Build greet CLI with --version: Q-01: Do you approve the draft goal and requirements, including initial version `0.1.0` and version output taking precedence when a name is also supplied? Affects R-01, R-02. (work-decide)
+
+Items: 1 in the backlog.
+
+Current focus:
+Last updated: 2026-09-27, Mike's setup tracking correction, Codex
+## Now
+- None.
+## Waiting on the owner
+- Trust this project folder in Codex and trust the Toolkit V2 hooks in `/hooks`.
+## Untracked to-dos
+- None.
+## Next session starts with
+- Read `PROJECT.md` and `README.md` for the current `greet` g
+
+[HOOK CONTEXT ord=12] The owner stated something to keep; memory-save records it, or work-on if it is a task.
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.1/skills/memory-save/SKILL.md && cat SOUL.md PROJECT.md .memory/AGENTS.md .memory/memory-criteria.md .claude/rules/{humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,session-handoff,shared-repository-work,work-item-folders}.md","max_output_tokens":16000}); text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "---\nname: memory-save\ndescription: 'Saves, corrects, or forgets one lasting fact in project memory, and sends anything that belongs elsewhere to its home. Use when the owner says \"remember this\", \"from now on\", \"always do X\", \"never do X\", \"forget that\", or \"remind me\", corrects the agent, or a hook says to save.'\n---\n\n# Memory save\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nRecord format, types, focus, and glossary: `references/record-format.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Put each `toolkit` command on its own line. In Codex, a `toolkit` command joined to anything else (`&&`, `;`, a pipe, a heredoc) or run from a script runs inside the sandbox, which blocks Hindsight and Notion: run it alone. Text for `--body-file` and `--set-file`: in Claude Code pass it on standard input (`--set-file -` or `--body-file -` with a heredoc); in Codex make a new folder for each save with `mktemp -d`, write the file there, and delete the file and the folder after the command succeeds. Never use a fixed name such as `/tmp/focus.md`: another session could write the same file.\n\n## Steps\n\n1. Decide the home first, with the memory criteria (`.memory/memory-criteria.md` with built-in memory; otherwise `references/record-format.md`). Memory holds a lasting preference, correction, fact about the project or the owner, or a hard-to-find reference. Elsewhere: project work goes to `work-on`; a decision for the whole project to `work-decide` (`DECISIONS.md`); delivered behavior to `requirements/`; how a change is built to the item's design; verified current structure to `system-guide/`; outside documentation to `ai-external-knowledge/`; a standing rule for how agents work here is proposed as a rule-file change; an owner to-do with no work item goes to the current focus \"Untracked to-dos\"; a project term goes to the glossary. A short memory pointer to a hard-to-find record is allowed; never copy its body.\n2. Search first and update the existing record rather than add a duplicate.\n   `toolkit memory find \"<topic>\"`\n   `toolkit memory get <key>`\n3. Approval. This is the only written copy of the memory approval policy. Read the mode, then apply it:\n
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"toolkit memory find \"Node.js npm packages node:test\"","max_output_tokens":3000}),
+  tools.exec_command({cmd:"toolkit config get memory.approval","max_output_tokens":1000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.1/skills/memory-save/references/record-format.md","max_output_tokens":5000})
+]); r.forEach((x,i)=>text(`${i}: ${x.status==="fulfilled"?x.value.output:String(x.reason)}`))
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "0: No memory records match \"Node.js npm packages node:test\".\n"}, {"type": "input_text", "text": "1: onboarding\n"}, {"type": "input_text", "text": "2: # Memory records, current focus, and glossary\n\nDetail for `memory-save`, `memory-find`, and `memory-tidy`. The approval\npolicy is not here; it is written only in `memory-save` step 3.\n\nThe formats are the model project's `.memory/` formats: the topic template\n(`project_topic_template.md`), `CURRENT_FOCUS.md`, `MEMORY.md`,\n`memory-criteria.md`, and `terminology-glossary.md`. With built-in memory the\nproject has its own copies in `.memory/`; its `AGENTS.md` there is the folder's\nrule. Every backend (built-in, Hindsight, Notion) keeps the same fields and\nthe same body. Only the `toolkit memory` commands write memory.\n\n## What belongs in memory\n\nWith built-in memory, `.memory/memory-criteria.md` is the project's selection\npolicy. Read it before choosing. `feedback` memories about what is worth\nsaving override it. With Hindsight or Notion memory there is no\n`.memory/` folder, so the policy is the text below, copied word for word from\nthe model's `.memory/memory-criteria.md` (its \"Default test for lasting\nmemory\" and \"Never save as lasting memory\" sections). Where a project's own\n`memory-criteria.md` differs from this copy, the project's file wins.\n\nSave a topic when it concerns this project, has a credible source, would matter in a future session, would be costly or unreliable to reconstruct, and has no better maintained owner. Prefer updating an existing topic. A short pointer to an authoritative record can qualify when future sessions would otherwise miss that record.\n\n| Type and filename | Usually worth retaining | Route or reject instead |\n| --- | --- | --- |\n| `user_<topic>.md` | Relevant role, responsibility, working preference, or communication need the owner stated | Personal judgments, irrelevant biography, private details |\n| `feedback_<topic>.md` | Repeated or standing correction to how the agent should work; confirmed selection lesson | One-off irritation, a rejected fact restated as policy, an instruction already in `AGENTS.md` |\n| `project_<topic>.md` | Durable project constraint, rationale, technical landmark, or proven costly fix | A decision for the whole project (`DECISIONS.md`), code summary, schema copy, active ticket status, accepted require
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"git worktree list","max_output_tokens":1000}),
+tools.exec_command({cmd:"git status --short --branch","max_output_tokens":1000}),
+tools.exec_command({cmd:"git fetch origin","max_output_tokens":1000})
+]); r.forEach((x,i)=>text(`${i}: ${x.status==="fulfilled"?x.value.output:String(x.reason)}`))
+
+
+[CALL] const r=await tools.exec_command({cmd:"mktemp -d /tmp/greet-memory.XXXXXX","max_output_tokens":1000}); text(r.output)
+
+
+[CALL] const r=await tools.exec_command({cmd:"cat > /tmp/greet-memory.qGxvnU/body.md <<'EOF'\n# Node.js implementation preference\n\n**Remember:** Mike prefers plain Node.js with no npm packages, and tests written with the built-in `node:test` runner.\n\n**Why:** This guides implementation and test choices for the greet project.\n\n**How to apply:** Use Node.js built-ins for the CLI and its tests. Avoid adding npm dependencies unless Mike changes this preference.\n\n**Evidence and limits:** Mike, in chat, 2026-09-27. This is a stated preference for this project, not approval of any pending work item's requirements.\n\n**Related memories:** None.\n\n**Authoritative records:** None.\nEOF","max_output_tokens":1000}); text(r.output)
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory save --type user --name nodejs-dependencies-and-tests --description \"Prefer plain Node.js, no npm packages, and the built-in node:test runner\" --body-file /tmp/greet-memory.qGxvnU/body.md --source \"Mike, in chat, 2026-09-27\" --approved-by Mike","max_output_tokens":2000}); text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved to memory: user_nodejs_dependencies_and_tests (new record).\nWhere: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r2/.memory\nVersion: 8a285641e880\nApproved by: Mike\n"}]
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"toolkit memory get user_nodejs_dependencies_and_tests","max_output_tokens":2500}),
+tools.exec_command({cmd:"toolkit doctor","max_output_tokens":3000})
+]); r.forEach((x,i)=>text(`${i}: ${x.status==="fulfilled"?x.value.output:String(x.reason)}`))
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "0: ---\nname: user_nodejs_dependencies_and_tests\ndescription: Prefer plain Node.js, no npm packages, and the built-in node:test runner\nmetadata:\n  type: user\nstatus: current\nsource: Mike, in chat, 2026-09-27\nlast_verified: 2026-09-27\nauthorization: Approved by Mike on 2026-09-27\nsupersedes: none\n---\n\n# Node.js implementation preference\n\n**Remember:** Mike prefers plain Node.js with no npm packages, and tests written with the built-in `node:test` runner.\n\n**Why:** This guides implementation and test choices for the greet project.\n\n**How to apply:** Use Node.js built-ins for the CLI and its tests. Avoid adding npm dependencies unless Mike changes this preference.\n\n**Evidence and limits:** Mike, in chat, 2026-09-27. This is a stated preference for this project, not approval of any pending work item's requirements.\n\n**Related memories:** None.\n\n**Authoritative records:** None.\n"}, {"type": "input_text", "text": "1: Toolkit doctor for greet (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r2).\n\nWarnings (2):\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.\n   Fix: The owner opens Codex in this folder and trusts it when Codex asks.\n2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).\n   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\n\nNotes (3):\n- AGENTS.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.\n- PROJECT.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.\n- README.md was changed by the project, so sync leaves it alone. The toolkit would: the project had this file before the toolkit; the toolkit version was not installed. The project-setup skill shows these to the owner and makes the changes he approves.\n\nResult: 0 problems and 2 warnings.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"rm /tmp/greet-memory.qGxvnU/body.md && rmdir /tmp/greet-memory.qGxvnU","max_output_tokens":1000}); text(r.output)
+

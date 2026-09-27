@@ -1,0 +1,1 @@
+All four passed: as System Administrator I saved Tier; as a Read Only user I can see Tier but can't edit it; an API update of Tier as a Sales User was denied with an insufficient access error; and an existing Account with no Tier stayed blank. Check it against what I asked for.

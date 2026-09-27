@@ -1,0 +1,7 @@
+WI-001’s proposed design is written and independently reviewed: [DESIGN.md](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/.work-items/WI-001-add-account-tier-picklist/DESIGN.md). **I recommend Option A.**
+
+It would add `Account.Tier__c` with Gold, Silver, and Bronze in that order, allow a blank value, and set no default. The proposed description is “Sales priority tier assigned to an account.” The proposed help text is “Select Gold, Silver, or Bronze to show this account’s sales priority. Leave blank if no tier has been assigned.”
+
+The build would place Tier on the verified main Account layout and give edit access to Sales Manager profile users and system administrators; other Account viewers would have read access. Permission sets can add access, so the build includes an effective-access check. [Salesforce’s field-access guidance](https://help.salesforce.com/s/articleView?id=platform.customize_fieldaccess.htm&language=en_US&type=5) supports that check.
+
+The sandbox shows no Tier field, but its layout assignment and effective access remain unverified. I’ll verify both before choosing the exact files to change. **Do you approve Option A and the proposed field text?** Design approval does not authorize a sandbox deployment; I’ll bring that separate decision to you after the build is reviewable.

@@ -1,0 +1,175 @@
+HOOK SessionStart:startup outcome=success exit=0
+  HOOK-OUTPUT: {"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"Project briefing: greet (greet), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.\nProject manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/claude-a/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.\n\nThis worktree is on branch main, which names no work item.\n\nNo item is Ready, In Progress, or In Review.\nThe tracker has no open items. A new request starts a work item with the work-on skill.\n\nCurrent focus:\nLast updated: 2026-09-27, Toolkit V2 project setup, agent\n## Now\n- Toolkit V2 is set up. No work items yet.\n## Waiting on the owner\n- Start a new Claude Code session in this project, so it loads the new settings, hooks, and Plain English style.\n- Codex only, when Mike uses it here: open Codex in this folder, trust the folder, then open `/hooks` and trust the Toolkit V2 hooks. `toolkit doctor` warns until then.\n- Commit the setup files (offered at the end of setup). The first merge of a work item needs them committed.\n## Untracked to-dos\n- None\n## Next session starts with\n- Ask Mike for the first thing to build, then run the `work-on` skill.\n\nProject memory (builtin): 0 records. toolkit memory find searches it; toolkit memory get <key> reads one record."}}
+
+HOOK UserPromptSubmit outcome=success exit=0
+INIT session=3793203d-567f-4ada-a4d6-8e1a68b12034 version=2.1.280 model=claude-opus-5-5[1m] permissionMode=acceptEdits cwd=/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/claude-a
+INIT plugins=['toolkit@inline', 'work@inline', 'memory@inline', 'session-skills@inline', 'git-workflows@inline', 'agents-md@builtin', 'telemetry@builtin', 'plugin-authoring@builtin']
+INIT non-V2 non-builtin plugins=[] error_fields={} mcp=[]
+INIT v2 skills=['toolkit:project-setup', 'work:solution-design', 'work:work-check', 'work:work-decide', 'work:work-delegate', 'work:work-finish', 'work:work-on', 'work:work-organize', 'work:work-requirements', 'work:work-status', 'memory:memory-find', 'memory:memory-save', 'memory:memory-tidy', 'session-skills:braindump', 'session-skills:explain-simply', 'session-skills:handoff', 'session-skills:session-summary', 'session-skills:unslop', 'git-workflows:merge-and-clean-up', 'git-workflows:publish-docs', 'git-workflows:pull-latest', 'git-workflows:reset-to-remote']
+INIT output_style=Plain English
+TOOL Bash: git worktree list; git status --short; git remote -v; git fetch origin 2>&1; git log --oneline -10; cat .gitignore
+HOOK PreToolUse:Bash outcome=success exit=0
+HOOK PostToolUse:Bash outcome=success exit=0
+  RESULT: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/claude-a a665a8b [main]
+?? .claude/
+?? .codex/
+?? .gitignore
+?? .toolkit.json
+?? AGENTS.md
+?? CLAUDE.md
+?? DECISIONS.md
+?? PROJECT-ROADMAP.md
+?? PROJECT.md
+?? ai-external-knowledge/
+?? requirements/
+?? system-guide/
+?? tests/
+fatal: 'origin' does not appear to be a git repository
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+a665a8b Initial commit
+.memory/
+/.work-items/
+.claude/worktrees/
+*.log
+__pycache__/
+*.pyc
+
+# Toolkit V2 command files, local to this computer and never committed.
+/.toolkit-cache/
+/.toolkit-decisions.lock
+ASSISTANT: No remote exists, so this is a local-only commit. Let me stage by name and review what goes in.
+TOOL Bash: git add .claude .codex .gitignore .toolkit.json AGENTS.md CLAUDE.md DECISIONS.md PROJECT-ROADMAP.md PROJECT.md ai-external-knowledge requirements system-guide tests && git diff --cached --stat && git diff --cached | grep -inE 'api[_-]?key|secret|token|password|BEGIN .*PRIVATE' | head; git diff --cached --name-only | grep -iE 'settings\.local|\.env' 
+HOOK PreToolUse:Bash outcome=success exit=0
+HOOK PostToolUse:Bash outcome=success exit=0
+  RESULT:  .claude/output-styles/plain-english.md             |  35 ++++++
+ .claude/rules/ai-external-knowledge.md             |  31 ++++++
+ .claude/rules/humanize-outbound-text.md            |  13 +++
+ .claude/rules/keep-work-item-current.md            |  13 +++
+ .claude/rules/memory-review-and-save.md            |  21 ++++
+ .claude/rules/plain-english-artifacts.md           |  81 ++++++++++++++
+ .claude/rules/publish-project-documents.md         |  23 ++++
+ .claude/rules/session-handoff.md                   |   3 +
+ .claude/rules/shared-repository-work.md            |  21 ++++
+ .claude/rules/work-item-folders.md                 |  42 ++++++++
+ .claude/settings.json                              |  58 ++++++++++
+ .codex/config.toml                                 |  42 ++++++++
+ .codex/rules/toolkit.rules                         |  46 ++++++++
+ .gitignore                                         | ... [2044 chars]
+TOOL Bash: git diff --cached -- .claude/settings.json .codex/config.toml .toolkit.json
+HOOK PreToolUse:Bash outcome=success exit=0
+HOOK PostToolUse:Bash outcome=success exit=0
+  RESULT: diff --git a/.claude/settings.json b/.claude/settings.json
+new file mode 100644
+index 0000000..6718834
+--- /dev/null
++++ b/.claude/settings.json
+@@ -0,0 +1,58 @@
++{
++  "autoMemoryEnabled": false,
++  "enabledPlugins": {
++    "second-brain@claude-toolkit": false,
++    "toolkit@toolkit-v2": true,
++    "work@toolkit-v2": true,
++    "memory@toolkit-v2": true,
++    "session-skills@toolkit-v2": true,
++    "git-workflows@toolkit-v2": true,
++    "sf-architect-solutioning@toolkit-v2": false,
++    "project-init@claude-toolkit": false,
++    "work-tracker@claude-toolkit": false,
++    "session-skills@claude-toolkit": false,
++    "git-workflows@claude-toolkit": false,
++    "hooks-library@claude-toolkit": false,
++    "system-guide@claude-toolkit": false,
++    "protocol-guard@claude-toolkit": false,
++    "sf-architect-solutioning@claude-toolkit": false
++  },
++  "outputStyle": "Plain English",
++  "permiss... [6943 chars]
+ASSISTANT: Nothing sensitive is staged. Committing now.
+TOOL Bash: git commit -q -F - <<'EOF'
+Add Toolkit V2 project setup
+
+Project manual, rules, output style, Claude Code and Codex settings,
+toolkit config, and the project document folders and templates.
+
+Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+EOF
+git log --oneline -3; git status --short
+HOOK PreToolUse:Bash outcome=success exit=0
+HOOK PostToolUse:Bash outcome=success exit=0
+  RESULT: 8d86fd9 Add Toolkit V2 project setup
+a665a8b Initial commit
+ASSISTANT: Now I'll remove the commit to-do from the current focus.
+TOOL Bash: toolkit memory focus --help 2>&1 | head -20; toolkit memory focus
+HOOK PreToolUse:Bash outcome=success exit=0
+HOOK PostToolUse:Bash outcome=success exit=0
+  RESULT: toolkit memory: Save, find, and manage project memory: records, the current focus, and the glossary.
+
+Usage:
+  toolkit memory save --type <t> --name <slug> --description <d> (--body <text> | --body-file <file|->)
+                      [--approved-by <who>] [--authorization <text>] [--supersedes <key>] [--source <text>]
+                      [--status <s>] [--last-verified <YYYY-MM-DD|unknown>] [--expect <version|absent>]
+  toolkit memory find <query> [--reflect] [--type <t>] [--limit <n>] [--all]
+  toolkit memory get <key>
+  toolkit memory list [--type <t>] [--status <current|needs-review|retired|all>]
+  toolkit memory retire <key> [--superseded-by <key>] [--reason <text>]
+  toolkit memory restore <key>
+  toolkit memory rename <key> --to <new-key>
+  toolkit memory delete <key> --owner-approved
+  toolkit memory focus [--set-file <file|-> | --text <text>] [--expect <version>]
+  toolkit mem... [1785 chars]
+TOOL Bash: toolkit memory focus --set-file - <<'EOF'
+# Current focus
+
+Last updated: 2026-09-27, Toolkit V2 project setup, agent
+
+## Now
+
+- Toolkit V2 is set up and the setup files are committed on `main` (commit 8d86fd9). The repository has no remote. No work items yet.
+
+## Waiting on the owner
+
+- Start a new Claude Code session in this project, so it loads the new settings, hooks, and Plain English style.
+- Codex only, when Mike uses it here: open Codex in this folder, trust the folder, then open `/hooks` and trust the Toolkit V2 hooks. `toolkit doctor` warns until then.
+
+## Untracked to-dos
+
+- None
+
+## Next session starts with
+
+- Ask Mike for the first thing to build, then run the `work-on` skill.
+EOF
+toolkit memory focus | head -8; toolkit doctor 2>&1 | tail -15
+HOOK PreToolUse:Bash outcome=success exit=0
+HOOK PostToolUse:Bash outcome=success exit=0
+  RESULT: Saved the current focus (20 lines). Version: 99bf42b87228
+# Current focus
+
+Last updated: 2026-09-27, Toolkit V2 project setup, agent
+
+## Now
+
+- Toolkit V2 is set up and the setup files are committed on `main` (commit 8d86fd9). The repository has no remote. No work items yet.
+
+Toolkit doctor for greet (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/claude-a).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/claude-a). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 ho... [1550 chars]
+ASSISTANT: I committed the 26 setup files to `main` as commit `8d86fd9`, "Add Toolkit V2 project setup". Nothing is left uncommitted. The commit is only on this computer because the repository has no remote to push to.
+
+I took "commit the setup files" off the list of things waiting on you. Two items remain:
+- Start a new Claude Code session in this project so it loads the new settings.
+- If you use Codex here, trust this folder and the Toolkit V2 hooks in Codex. The setup check (`toolkit doctor`) shows 2 warnings about this and no problems.
+HOOK Stop outcome=success exit=0
+RESULT-END subtype=success is_error=False turns=7 cost=0.3011334 duration_ms=20665
+FINAL: I committed the 26 setup files to `main` as commit `8d86fd9`, "Add Toolkit V2 project setup". Nothing is left uncommitted. The commit is only on this computer because the repository has no remote to push to.
+
+I took "commit the setup files" off the list of things waiting on you. Two items remain:
+- Start a new Claude Code session in this project so it loads the new settings.
+- If you use Codex here, trust this folder and the Toolkit V2 hooks in Codex. The setup check (`toolkit doctor`) shows 2 warnings about this and no problems.

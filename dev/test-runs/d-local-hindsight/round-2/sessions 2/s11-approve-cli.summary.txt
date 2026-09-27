@@ -1,0 +1,419 @@
+PROMPT: Yes, I approve the CLI result.
+THREAD: 01a0e3e6-eb8f-7e70-be36-016c089e5ed8
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll record your approval for the CLI result in WI-001, then check what remains for delivery. I’m using the work-decide procedure for this decision.
+
+[CMD exit=1] /bin/zsh -lc 'pwd && cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/skills/work-decide/SKILL.md'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r2
+cat: SOUL.md: No such file or directory
+# Greet CLI Sample D2
+
+## Purpose and intended outcome
+
+- Purpose: Provide a small, friendly greeting command that can grow with a few simple flags.
+- Intended outcome: The command prints a greeting, including `Hello, Mike!` for `node bin/greet.mjs Mike`. A few simple flags may be added later; their behavior has not been chosen.
+
+## Scope and boundaries
+
+- In scope: The greeting command in `bin/greet.mjs`, its tests in `test/`, and a few simple flags when specified.
+- Outside scope: Other CLI features are outside the current roadmap.
+- Constraints: No project-specific constraints have been recorded.
+
+## Systems and environments
+
+| System or org | Purpose | Environment | Source of truth | Access notes |
+| --- | --- | --- | --- | --- |
+| Local Node.js project | Greeting command and tests | Local development | `package.json`, `bin/greet.mjs`, `test/` | Files in this repository |
+| Local Hindsight server | Project memory | Local computer | `.toolkit.json` | Managed through `toolkit memory` commands |
+
+## People and ownership
+
+| Role | Person or team | Responsibility | Source / last confirmed |
+| --- | --- | --- | --- |
+| Owner | Mike | Project decisions | `.toolkit.json`, 2026-09-27 |
+
+## Work and project records
+
+- Work tracker: Local folders in `.work-items/`, configured in `.toolkit.json`
+
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/references/conventions.md'
+  -> # Conventions every work skill follows
+
+Every skill in the work plugin follows these rules. A skill's own `SKILL.md`
+names the file when a rule matters for a step.
+
+This file is `references/conventions.md` in the work plugin's own folder. From
+a skill's `SKILL.md` it is two folders up: `skills/work-on/SKILL.md` and
+`references/conventions.md` share the plugin folder. In Codex the plugin
+folder is the installed copy, for example
+`~/.codex/plugins/cache/toolkit-v2/work/<version>/`, so this file is
+`~/.codex/plugins/cache/toolkit-v2/work/<version>/references/conventions.md`.
+
+## Voice
+
+Every skill carries this line near its top:
+
+> Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+
+Agents do not receive the output style. Each agent file in `agents/` carries
+its own writing rules.
+
+## Opening another skill
+
+- Claude Code: use the Skill tool with the skill's name, for example
+  `work-requirements`.
+- Codex: read that skill's `SKILL.md` from the path shown in the skill list,
+  then follow it.
+- Say the handover in one line, for example "WI-012 needs a design; opening
+  solution-design."
+- The skill that asked a question records the answer. An answer that arrives
+  later, after that skill has finished, is recorded by `work-decide`.
+
+## Running `toolkit` commands
+
+- Put each `toolkit` command on its own line and run it as a plain command.
+  Do not wrap it in `$(...
+
+[CMD exit=0] /bin/zsh -lc 'git status --short'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'cat PROJECT-ROADMAP.md'
+  -> # Project roadmap
+
+## Project outcome
+
+A small, friendly greeting command that can grow with a few simple flags.
+
+## Phase overview
+
+| Phase | Intended outcome | Exit condition | Depends on |
+| --- | --- | --- | --- |
+| P01 — Greeting command | Print a greeting for a name or the default name. | The 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001'
+  -> WI-001: Add --shout flag to greet CLI
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r2/.work-items/cli-flags/WI-001-add-shout-flag-to-greet-cli/WORK-ITEM.md
+Stage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: none | Sub-items: WI-002 | Design: approved (.work-items/cli-flags/WI-001-add-shout-flag-to-greet-cli/DESIGN.md)
+
+---
+id: WI-001
+title: Add --shout flag to greet CLI
+type: build
+stage: 11-user-approval
+status: In Progress
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: not-offered
+requirements_approved: 2026-09-27 by Mike
+design: approved
+result_approved: "no"
+updated: 2026-09-27
+---
+
+# WI-001: Add --shout flag to greet CLI
+
+## Overview
+
+**Goal:** Add `--shout` so the whole greeting is in capitals. WI-002 delivers the README documentation under approved R-02.
+
+**Current position:** CLI and README results are built, committed, tested, and independently checked. WI-001's CLI branch is at `ba8557f`; the combined WI-002 branch is at `dfabaf3`. No remote is configured, so neither result has been pushed.
+
+**Next action:** Mike reviews the WI-001 CLI result and the WI-002 README result separately. After approval, add a remote or choose another delivery route before PR/publishing work can proceed.
+
+**Blockers:** Owner result approval; no Git remote is configured for publication.
+
+**Related items:** WI-002 (README d
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001 --path'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r2/.work-items/cli-flags/WI-001-add-shout-flag-to-greet-cli/WORK-ITEM.md
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 2 decisions wait on the owner:
+
+WI-001 Add --shout flag to greet CLI
+  - WI-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-001 --result --by <name>. (work-decide)
+
+WI-002 Document --shout in README
+  - WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work approve WI-001 --result --by Mike'
+  -> Recorded: result of WI-001 approved (2026-09-27 by Mike).
+It is no longer waiting on the owner (waiting_on: none).
+Now 11 User approval (In Progress). Continue with work-finish.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history WI-001 --note \"Owner's words: Yes, I approve the CLI result.\""
+  -> Added a Recent History row to WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --waiting-on agent'
+  -> Updated WI-001: waiting on agent.
+Now 11 User approval (In Progress). Continue with work-finish.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 1 decision waits on the owner:
+
+WI-002 Document --shout in README
+  - WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001 --json'
+  -> {
+  "ok": true,
+  "id": "WI-001",
+  "item": {
+    "id": "WI-001",
+    "title": "Add --shout flag to greet CLI",
+    "type": "build",
+    "stage": "11-user-approval",
+    "stageLabel": "11 User approval",
+    "status": "In Progress",
+    "waiting_on": "agent",
+    "priority": "medium",
+    "delivery": "not-offered",
+    "parent": "none",
+    "children": [
+      "WI-002"
+    ],
+    "archived": false,
+    "group": "cli-flags",
+    "location": ".work-items/cli-flags/WI-001-add-shout-flag-to-greet-cli/WORK-ITEM.md",
+    "design": "approved",
+    "continueWith": "work-finish",
+    "nextAction": "Mike reviews the WI-001 CLI result and the WI-002 README result separately. After approval, add a remote or choose another delivery route before PR/publishing work can proceed."
+  },
+  "meta": {
+    "id": "WI-001",
+    "title": "Add --shout flag to greet CLI",
+    "type": "build",
+    "stage": "11-user-approval",
+    "status": "In Progress",
+    "parent": "none",
+    "waiting_on": "agent",
+    "priority": "medium",
+    "delivery": "not-offered",
+    "requirements_approved": "2026-09-27 by Mike",
+    "design": "approved",
+    "result_approved": "2026-09-27 by Mike",
+    "updated": "2026-09-27"
+  },
+  "body": "\n# WI-001: Add --shout flag to greet CLI\n\n## Overview\n\n**Goal:** Add `--shout` so the whole greeting is in capitals. WI-002 delivers the README documentation under approved R-02.\n\n**Current position:** CLI and README results are built, committed, tested, and independently checked
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001 --section Notes'
+  -> ## Notes
+
+### Decisions and context
+
+- Mike's answer to Q-01 is recorded in Open Questions and R-01. His standing README preference is recorded in project memory and R-02.
+- Mike approved the requirements on 2026-09-27 and selected Option A on 2026-09-27.
+- WI-002 covers approved R-02 and was built and checked separately. WI-001 retains the complete approved requirements.
+
+### Resume here
+
+Both results are at stage 11, awaiting Mike's separate result approvals. CLI work is at `ba8557f`; the combined branch with README is at `dfabaf3`. Independent checker found R-01 and R-02 met. No Git remote is configured, so nothing has been pushed or merged. After approvals, use work-finish and resolve the publication route.
+
+### Solution options and considerations
+
+Option A handles `--shout` in the command entry point; Option B adds a separate argument parser. Mike selected Option A. Details and tradeoffs are in DESIGN.md.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001 --section Overview'
+  -> ## Overview
+
+**Goal:** Add `--shout` so the whole greeting is in capitals. WI-002 delivers the README documentation under approved R-02.
+
+**Current position:** CLI and README results are built, committed, tested, and independently checked. WI-001's CLI branch is at `ba8557f`; the combined WI-002 branch is at `dfabaf3`. No remote is configured, so neither result has been pushed.
+
+**Next action:** Mike reviews the WI-001 CLI result and the WI-002 README result separately. After approval, add a remote or choose another delivery route before PR/publishing work can proceed.
+
+**Blockers:** Owner result approval; no Git remote is configured for publication.
+
+**Related items:** WI-002 (README documentation); P02-U01 in PROJECT-ROADMAP.md.
+
+
+[AGENT] WI-001 now records your CLI approval. WI-002 still needs its own result decision, so I’m updating WI-001’s next step to reflect that.
+
+[CMD exit=0] /bin/zsh -lc 'mktemp -d'
+  -> /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.pN2dOuhpJ8
+
+
+[FILE_CHANGE] [{"path": "/var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.pN2dOuhpJ8/overview.md", "kind": "add"}]
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work edit WI-001 --section Overview --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.pN2dOuhpJ8/overview.md'
+  -> Saved "Overview" in WI-001.
+
+
+[FILE_CHANGE] [{"path": "/var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.pN2dOuhpJ8/notes.md", "kind": "add"}]
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work edit WI-001 --section Notes --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.pN2dOuhpJ8/notes.md'
+  -> Saved "Notes" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 1 decision waits on the owner:
+
+WI-002 Document --shout in README
+  - WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001 --section Notes'
+  -> ## Notes
+
+### Decisions and context
+
+- Mike's answer to Q-01 is recorded in Open Questions and R-01. His standing README preference is recorded in project memory and R-02.
+- Mike approved the requirements on 2026-09-27 and selected Option A on 2026-09-27.
+- Mike approved the WI-001 CLI result on 2026-09-27. WI-002's README result awaits separate approval.
+- WI-002 covers approved R-02 and was built and checked separately. WI-001 retains the complete approved requirements.
+
+### Resume here
+
+The WI-001 CLI result is approved and ready for work-finish. WI-002 remains at stage 11, awaiting Mike's separate README result approval. CLI work is at `ba8557f`; the combined branch with README is at `dfabaf3`. Independent checker found R-01 and R-02 met. No Git remote is configured, so nothing has been pushed or merged. After the WI-002 decision, use work-finish and resolve the publication route.
+
+### Solution options and considerations
+
+Option A handles `--shout` in the command entry point; Option B adds a separate argument parser. Mike selected Option A. Details and tradeoffs are in DESIGN.md.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001 --section Overview'
+  -> ## Overview
+
+**Goal:** Add `--shout` so the whole greeting is in capitals. WI-002 delivers the README documentation under approved R-02.
+
+**Current position:** CLI and README results are built, committed, tested, and independently checked. Mike approved the WI-001 CLI result on 2026-09-27. WI-002's README result still awaits Mike's separate approval. WI-001's CLI branch is at `ba8557f`; the combined WI-002 branch is at `dfabaf3`. No remote is configured, so neither result has been pushed.
+
+**Next action:** Mike reviews the WI-002 README result separately. After that decision, use work-finish and resolve the delivery route; no Git remote is configured for publication.
+
+**Blockers:** WI-002 owner result approval; no Git remote is configured for publication.
+
+**Related items:** WI-002 (README documentation); P02-U01 in PROJECT-ROADMAP.md.
+
+
+[CMD exit=0] /bin/zsh -lc 'rm /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.pN2dOuhpJ8/overview.md /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.pN2dOuhpJ8/notes.md'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git show dfabaf3:README.md'
+  -> # greet
+
+A tiny command that prints a greeting.
+
+    node bin/greet.mjs Mike
+    Hello, Mike!
+
+Use `--shout` to print the whole greeting in capital letters. It works with
+the default name or with a name before or after the flag:
+
+    node bin/greet.mjs --shout
+    HELLO, WORLD!
+
+    node bin/greet.m
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r2                                       b08125b [main]
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-
+
+[CMD exit=0] /bin/zsh -lc 'rmdir /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.pN2dOuhpJ8'
+  -> 
+
+[AGENT] Your approval of the WI-001 CLI result is recorded.
+
+WI-002 needs a separate decision. Its README explains `--shout` and shows the default greeting and both name orders. I recommend approving it; its documentation check passed. **Do you approve the README result?** After that decision, I can continue delivery. No Git remote is configured yet.
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 563047, "cached_input_tokens": 520576, "cache_write_input_tokens": 0, "output_tokens": 2247, "reasoning_output_tokens": 376}}
+
+SKILLS OPENED: ['work-decide']
+
+[HOOK CONTEXT ord=9] Project briefing: Greet CLI Sample D2 (greet-cli-sample-d2), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: the local Hindsight server. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Add --shout flag to greet CLI: 11 User approval, In Progress, waiting on owner. Next action: Mike reviews the WI-001 CLI result and the WI-002 README result separately. After approval, add a remote or choose another delivery route... Continues with work-decide.
+- WI-002 Document --shout in README: 11 User approval, In Progress, waiting on owner. Next action: Mike reviews the WI-002 documentation result separately. After approval, add a remote or choose another delivery route before publication... Continues with work-decide.
+
+Waiting on the owner:
+- WI-001 Add --shout flag to greet CLI: WI-001 is at 11 User approval: the owner reviews the result. Approv
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await tools.exec_command({cmd:"pwd && cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/skills/work-decide/SKILL.md","max_output_tokens":18000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r2\ncat: SOUL.md: No such file or directory\n# Greet CLI Sample D2\n\n## Purpose and intended outcome\n\n- Purpose: Provide a small, friendly greeting command that can grow with a few simple flags.\n- Intended outcome: The command prints a greeting, including `Hello, Mike!` for `node bin/greet.mjs Mike`. A few simple flags may be added later; their behavior has not been chosen.\n\n## Scope and boundaries\n\n- In scope: The greeting command in `bin/greet.mjs`, its tests in `test/`, and a few simple flags when specified.\n- Outside scope: Other CLI features are outside the current roadmap.\n- Constraints: No project-specific constraints have been recorded.\n\n## Systems and environments\n\n| System or org | Purpose | Environment | Source of truth | Access notes |\n| --- | --- | --- | --- | --- |\n| Local Node.js project | Greeting command and tests | Local development | `package.json`, `bin/greet.mjs`, `test/` | Files in this repository |\n| Local Hindsight server | Project memory | Local computer | `.toolkit.json` | Managed through `toolkit memory` commands |\n\n## People and ownership\n\n| Role | Person or team | Responsibility | Source / last confirmed |\n| --- | --- | --- | --- |\n| Owner | Mike | Project decisions | `.toolkit.json`, 2026-09-27 |\n\n## Work and project records\n\n- Work tracker: Local folders in `.work-items/`, configured in `.toolkit.json`\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\n- Project decisions: [DECISIONS.md](DECISIONS.md)\n- Functional requirements: [requirements/](requirements/)\n- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`\n- System Guide: `system-guide/` contains a template; no system area guide is written yet.\n- Memory: this project's bank on the local Hindsight server (the setup choice is in `.toolkit.json`)\n- Memory backup or sync: No destination or restore procedure has been recorded.\n\n## Resources and project paths\n\n- Tests and checks: `npm test` runs the tests in `test/`; `node bin/greet.mjs Mike` prints `Hello, Mike!`. Both passed on 2026-09-27.\n- Outside references: `ai-external-knowledge/INDEX.md`\n\n## Operating conventions\n\nNone yet.\n# Humanize Anything Sent to Anoth
+
+[CALL] const cmds=["cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/references/conventions.md","toolkit work decisions","toolkit work show WI-001","toolkit work show WI-001 --path","cat PROJECT-ROADMAP.md","git status --short"]; const r=await Promise.allSettled(cmds.map(cmd=>tools.exec_command({cmd,max_output_tokens:7000}))); r.forEach((v,i)=>text(JSON.stringify({cmd:cmds[i],result:v.status==="fulfilled"?v.value.output:String(v.reason)})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"cmd\":\"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/references/conventions.md\",\"result\":\"# Conventions every work skill follows\\n\\nEvery skill in the work plugin follows these rules. A skill's own `SKILL.md`\\nnames the file when a rule matters for a step.\\n\\nThis file is `references/conventions.md` in the work plugin's own folder. From\\na skill's `SKILL.md` it is two folders up: `skills/work-on/SKILL.md` and\\n`references/conventions.md` share the plugin folder. In Codex the plugin\\nfolder is the installed copy, for example\\n`~/.codex/plugins/cache/toolkit-v2/work/<version>/`, so this file is\\n`~/.codex/plugins/cache/toolkit-v2/work/<version>/references/conventions.md`.\\n\\n## Voice\\n\\nEvery skill carries this line near its top:\\n\\n> Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \\\"How to write replies\\\" section of `AGENTS.md`.\\n\\nAgents do not receive the output style. Each agent file in `agents/` carries\\nits own writing rules.\\n\\n## Opening another skill\\n\\n- Claude Code: use the Skill tool with the skill's name, for example\\n  `work-requirements`.\\n- Codex: read that skill's `SKILL.md` from the path shown in the skill list,\\n  then follow it.\\n- Say the handover in one line, for example \\\"WI-012 needs a design; opening\\n  solution-design.\\\"\\n- The skill that asked a question records the answer. An answer that arrives\\n  later, after that skill has finished, is recorded by `work-decide`.\\n\\n## Running `toolkit` commands\\n\\n- Put each `toolkit` command on its own line and run it as a plain command.\\n  Do not wrap it in `$(...)`, a pipe, or a redirect. Codex matches its\\n  command rule against the plain command.\\n- In Codex, a `toolkit` command joined to anything else (`&&`, `;`, a pipe, a\\n  heredoc, `cd ... &&`) or run from a script (for example Python's\\n  `subprocess`) runs inside the Codex sandbox. The sandbox blocks Notion,\\n  Hindsight, and the main checkout's `.work-items/` and `.memory/` from a\\n  worktree, so the command fails or reports the wrong cause. Run each one\\n  alone, as its own command.\\n- Add `--json` when you need to read the output field by field.\\n- Exit codes: `0` done; `1` error; `2` validation failure (fix what it names\\n  and run it again); `3` not supporte
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work approve WI-001 --result --by Mike","max_output_tokens":3000}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"da97a8\",\"wall_time_seconds\":0.000003792,\"exit_code\":0,\"original_token_count\":45,\"output\":\"Recorded: result of WI-001 approved (2026-09-27 by Mike).\\nIt is no longer waiting on the owner (waiting_on: none).\\nNow 11 User approval (In Progress). Continue with work-finish.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history WI-001 --note \"Owner's words: Yes, I approve the CLI result.\"","max_output_tokens":3000}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"3065d5\",\"wall_time_seconds\":0.000003959,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Added a Recent History row to WI-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-001 --waiting-on agent","max_output_tokens":3000}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"eee4b4\",\"wall_time_seconds\":0.000005667,\"exit_code\":0,\"original_token_count\":25,\"output\":\"Updated WI-001: waiting on agent.\\nNow 11 User approval (In Progress). Continue with work-finish.\\n\"}"}]
+
+[CALL] const cmds=["toolkit work show WI-001 --section Overview","toolkit work show WI-001 --section Notes","toolkit work decisions","toolkit work show WI-001 --json"]; const r=await Promise.allSettled(cmds.map(cmd=>tools.exec_command({cmd,max_output_tokens:5000}))); r.forEach((v,i)=>text(JSON.stringify({cmd:cmds[i],result:v.status==="fulfilled"?v.value.output:String(v.reason)})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"cmd\":\"toolkit work show WI-001 --section Overview\",\"result\":\"## Overview\\n\\n**Goal:** Add `--shout` so the whole greeting is in capitals. WI-002 delivers the README documentation under approved R-02.\\n\\n**Current position:** CLI and README results are built, committed, tested, and independently checked. WI-001's CLI branch is at `ba8557f`; the combined WI-002 branch is at `dfabaf3`. No remote is configured, so neither result has been pushed.\\n\\n**Next action:** Mike reviews the WI-001 CLI result and the WI-002 README result separately. After approval, add a remote or choose another delivery route before PR/publishing work can proceed.\\n\\n**Blockers:** Owner result approval; no Git remote is configured for publication.\\n\\n**Related items:** WI-002 (README documentation); P02-U01 in PROJECT-ROADMAP.md.\\n\"}"}, {"type": "input_text", "text": "{\"cmd\":\"toolkit work show WI-001 --section Notes\",\"result\":\"## Notes\\n\\n### Decisions and context\\n\\n- Mike's answer to Q-01 is recorded in Open Questions and R-01. His standing README preference is recorded in project memory and R-02.\\n- Mike approved the requirements on 2026-09-27 and selected Option A on 2026-09-27.\\n- WI-002 covers approved R-02 and was built and checked separately. WI-001 retains the complete approved requirements.\\n\\n### Resume here\\n\\nBoth results are at stage 11, awaiting Mike's separate result approvals. CLI work is at `ba8557f`; the combined branch with README is at `dfabaf3`. Independent checker found R-01 and R-02 met. No Git remote is configured, so nothing has been pushed or merged. After approvals, use work-finish and resolve the publication route.\\n\\n### Solution options and considerations\\n\\nOption A handles `--shout` in the command entry point; Option B adds a separate argument parser. Mike selected Option A. Details and tradeoffs are in DESIGN.md.\\n\"}"}, {"type": "input_text", "text": "{\"cmd\":\"toolkit work decisions\",\"result\":\"1 decision waits on the owner:\\n\\nWI-002 Document --shout in README\\n  - WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)\\n\"}"}, {"type": "input_text", "text": "{\"cmd\":\"toolkit work show WI-001 --json\",\"result\":\"{\\n  \\\"ok\\\": true,\\n  \\\"id\\\": \\\"WI-001\\\",\\n  \\\"item\\\": {\\n    \\\"
+
+[CALL] const r=await tools.exec_command({cmd:"mktemp -d","max_output_tokens":1000}); text(r.output);
+
+
+[CALL] text(await tools.apply_patch("*** Begin Patch\n*** Add File: /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.pN2dOuhpJ8/overview.md\n+## Overview\n+\n+**Goal:** Add `--shout` so the whole greeting is in capitals. WI-002 delivers the README documentation under approved R-02.\n+\n+**Current position:** CLI and README results are built, committed, tested, and independently checked. Mike approved the WI-001 CLI result on 2026-09-27. WI-002's README result still awaits Mike's separate approval. WI-001's CLI branch is at `ba8557f`; the combined WI-002 branch is at `dfabaf3`. No remote is configured, so neither result has been pushed.\n+\n+**Next action:** Mike reviews the WI-002 README result separately. After that decision, use work-finish and resolve the delivery route; no Git remote is configured for publication.\n+\n+**Blockers:** WI-002 owner result approval; no Git remote is configured for publication.\n+\n+**Related items:** WI-002 (README documentation); P02-U01 in PROJECT-ROADMAP.md.\n*** End Patch"));
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section Overview --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.pN2dOuhpJ8/overview.md","max_output_tokens":1000}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"fe2efe\",\"wall_time_seconds\":0.000003,\"exit_code\":0,\"original_token_count\":7,\"output\":\"Saved \\\"Overview\\\" in WI-001.\\n\"}"}]
+
+[CALL] text(await tools.apply_patch("*** Begin Patch\n*** Add File: /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.pN2dOuhpJ8/notes.md\n+## Notes\n+\n+### Decisions and context\n+\n+- Mike's answer to Q-01 is recorded in Open Questions and R-01. His standing README preference is recorded in project memory and R-02.\n+- Mike approved the requirements on 2026-09-27 and selected Option A on 2026-09-27.\n+- Mike approved the WI-001 CLI result on 2026-09-27. WI-002's README result awaits separate approval.\n+- WI-002 covers approved R-02 and was built and checked separately. WI-001 retains the complete approved requirements.\n+\n+### Resume here\n+\n+The WI-001 CLI result is approved and ready for work-finish. WI-002 remains at stage 11, awaiting Mike's separate README result approval. CLI work is at `ba8557f`; the combined branch with README is at `dfabaf3`. Independent checker found R-01 and R-02 met. No Git remote is configured, so nothing has been pushed or merged. After the WI-002 decision, use work-finish and resolve the publication route.\n+\n+### Solution options and considerations\n+\n+Option A handles `--shout` in the command entry point; Option B adds a separate argument parser. Mike selected Option A. Details and tradeoffs are in DESIGN.md.\n*** End Patch"));
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section Notes --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.pN2dOuhpJ8/notes.md","max_output_tokens":1000}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"4516f7\",\"wall_time_seconds\":0.00000275,\"exit_code\":0,\"original_token_count\":7,\"output\":\"Saved \\\"Notes\\\" in WI-001.\\n\"}"}]
+
+[CALL] const cmds=["toolkit work show WI-001 --section Overview","toolkit work show WI-001 --section Notes","toolkit work decisions"]; const r=await Promise.allSettled(cmds.map(cmd=>tools.exec_command({cmd,max_output_tokens:3000}))); r.forEach((v,i)=>text(JSON.stringify({cmd:cmds[i],result:v.status==="fulfilled"?v.value.output:String(v.reason)})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"cmd\":\"toolkit work show WI-001 --section Overview\",\"result\":\"## Overview\\n\\n**Goal:** Add `--shout` so the whole greeting is in capitals. WI-002 delivers the README documentation under approved R-02.\\n\\n**Current position:** CLI and README results are built, committed, tested, and independently checked. Mike approved the WI-001 CLI result on 2026-09-27. WI-002's README result still awaits Mike's separate approval. WI-001's CLI branch is at `ba8557f`; the combined WI-002 branch is at `dfabaf3`. No remote is configured, so neither result has been pushed.\\n\\n**Next action:** Mike reviews the WI-002 README result separately. After that decision, use work-finish and resolve the delivery route; no Git remote is configured for publication.\\n\\n**Blockers:** WI-002 owner result approval; no Git remote is configured for publication.\\n\\n**Related items:** WI-002 (README documentation); P02-U01 in PROJECT-ROADMAP.md.\\n\"}"}, {"type": "input_text", "text": "{\"cmd\":\"toolkit work show WI-001 --section Notes\",\"result\":\"## Notes\\n\\n### Decisions and context\\n\\n- Mike's answer to Q-01 is recorded in Open Questions and R-01. His standing README preference is recorded in project memory and R-02.\\n- Mike approved the requirements on 2026-09-27 and selected Option A on 2026-09-27.\\n- Mike approved the WI-001 CLI result on 2026-09-27. WI-002's README result awaits separate approval.\\n- WI-002 covers approved R-02 and was built and checked separately. WI-001 retains the complete approved requirements.\\n\\n### Resume here\\n\\nThe WI-001 CLI result is approved and ready for work-finish. WI-002 remains at stage 11, awaiting Mike's separate README result approval. CLI work is at `ba8557f`; the combined branch with README is at `dfabaf3`. Independent checker found R-01 and R-02 met. No Git remote is configured, so nothing has been pushed or merged. After the WI-002 decision, use work-finish and resolve the publication route.\\n\\n### Solution options and considerations\\n\\nOption A handles `--shout` in the command entry point; Option B adds a separate argument parser. Mike selected Option A. Details and tradeoffs are in DESIGN.md.\\n\"}"}, {"type": "input_text", "text": "{\"cmd\":\"toolkit work decisions\",\"result\":\"1 decision waits on the owner:\\n\\nWI-002 Document --shout in README\\n  - WI-002 is at 11 User approval: the own
+
+[CALL] const cmds=["git worktree list","git show dfabaf3:README.md","rm /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.pN2dOuhpJ8/overview.md /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.pN2dOuhpJ8/notes.md"]; const r=await Promise.allSettled(cmds.map(cmd=>tools.exec_command({cmd,max_output_tokens:3000}))); r.forEach((v,i)=>text(JSON.stringify({cmd:cmds[i],result:v.status==="fulfilled"?v.value.output:String(v.reason)})));
+
+
+[CALL] const r=await tools.exec_command({cmd:"rmdir /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.pN2dOuhpJ8","max_output_tokens":1000}); text(r);
+

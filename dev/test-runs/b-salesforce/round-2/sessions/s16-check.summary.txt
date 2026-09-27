@@ -1,0 +1,882 @@
+PROMPT: I ran both sandbox deploys and both succeeded. I also set the Tier field access on the four profiles the way your manual steps say, and as a Sales User I can see Tier but not edit it. Check it against what I asked for.
+THREAD: 01a0e407-9c77-7f83-804c-6b877aa135c8
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Add Account Tier picklist: 08 Build, In Progress. Next action: Run the WI-001 sandbox package from the WI-002 worktree in a host that can honor the org guard, or have Mike run it. Then run WI-002's pa... Continues with work-on.
+- WI-002 Configure Account Tier access and page layout: 08 Build, In Progress. Next action: After the WI-001 field is in the sandbox, run the WI-002 package and have a Salesforce administrator complete the manual profile step. Ch... Continues with work-on.
+
+Items: 2 in progress.
+
+Current focus:
+Last updated: 2026-09-27, WI-001 and WI-002 build, Codex
+## Now
+- WI-001: field source and narrow manifest are on its local branch; see WI-001 for commit and validation evidence.
+- WI-002: Account Layout source and narrow layout package are committed on its local branch, which includes WI-001. Manual profile access steps are prepared; see WI-002 for validation limits.
+## Waiting on the owner
+- Trust this project folder in Codex when prompted, then open `/hooks` and trust the Toolkit V2 hooks and two Salesforce org guards.
+## Untracked to-dos
+- None.
+## Next session starts with
+- Open WI-001 and WI-002. Check effective override permissions and review the WI-002 package. The Account Layout source was retrieved successfully and Tier added below Rating. No remote named origin is configured in this copy, so local commits cannot be pushed here. Sandbox deployment needs separate owner approval; live layout and field access checks follow deployment and manual profile setup.
+
+Project memory (builtin): 1 record. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_custom_field_documentation: Every new Salesforce custom field should have a description and help text
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them. Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.
+
+Always-on rules. Claude Code loads them by itself; in Codex, each one is read at session start:
+- .claude/rules/check-deployment-contents.md: Check What a Deployment Includes
+- .claude/rules/component-tracker.md: Component Tracker
+- .claude/rules/confirm-salesforce-changes.md: Confirm Salesforce Changes
+- .claude/rules/humanize-outbound-text.md: Humanize Anything Sent to Another Person
+- .claude/rules/keep-work-item-current.md: Keep the Active Work I
+
+[AGENT] I’ll compare the deployed field, layout, and access against the approved requirements, then update the work items with your sandbox results and any gaps I can verify.
+
+[CALL exec] cat SOUL.md PROJECT.md .claude/rules/{check-deployment-contents,component-tracker,confirm-salesforce-changes,humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,production-data-changes,project-file-locations,salesforce-org-safety,session-handoff,shared-repository-work,work-item-folders}.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+cat: SOUL.md: No such file or directory
+# Acme CRM
+
+## Purpose and intended outcome
+
+- Purpose: Give the Acme sales team Salesforce customizations for customer-account work.
+- Intended outcome: Help the Acme sales team track and prioritize customer accounts.
+
+## Scope and boundaries
+
+- In scope: Salesforce customizations for tracking and prioritizing customer accounts. Specific capabilities are not defined yet.
+- Outside scope: Not confirmed yet.
+-
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/skills/work-on/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/skills/work-check/SKILL.md /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/.agents/skills/sf-component-tracker/SKILL.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+---
+name: work-on
+description: 'Starts, continues, or logs project work: finds or creates the work item, works out where it stands, and runs its next step through to a built result. Use when the owner asks to build, add, fix, or change something, says "keep going" or "continue", names an item, or wants an idea logged for later.'
+---
+
+# Work on
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Shared rules: the work plugin's `references/conventions.md` (saving, section edits, history, branches) and `references/trackers.md`, two folders above this skill's folder (`../../references/`). To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`.
+
+## Steps
+
+1. No session briefing in this conversation: run the command below. Exit code 4 (no `.toolkit.json`): open `project-setup` and stop. When the briefing or a `toolkit work` command lists changes found in the tracker (a moved or renamed folder, a new parent, a missing item), tell the owner each one in one line before other work.
+   `toolkit brief`
+2. Find the item: the id the owner named, or a title in the list that matches the request. Two possible matches: ask one question naming both. No match: it is new. When `PROJECT-ROADMAP.md` names the item, read its phase there too.
+   `toolkit work show <id>`
+   `toolkit work list`
+3. Size a new request. A quick edit (one sitting, no choice for the owner, no behavior recorded in `requirements/`, nothing bound for production): do it and report it, with no item. "Later", "backlog", "park that": check the list for a duplicate, create the item, write the owner's words unchanged into Starting request, reply "Logged as WI-014 (bug, backlog). Not started." and stop. Anything else: create it the same way and continue.
+   `toolkit work new --title "<title>" --type <type> --stage 01-discovery`
+   `toolkit work edit <id> --section "Starting request" --set-file <file>`
+4. A substantial goal whose item shows `delivery: not-offered`: open `work-delegate` first. Quick questions and small edits get no offer.
+5. Route by where the item stands, using the item and the "Continue with" column of the lifecycle. Requirements not approved and type `build` or `data-load` (or the risk calls for it): `work-requirements`. More than one reasonable way to build it and no approved design: `solution-design`. A `build` item going to planning without a design: say so to the owner in one line before building ("One way to build this: <approach>. I'll build it that way; say 'design first' to stop me."), and put the reason in a history note. Too big for one build: `work-organize`. Stages 09 to 11: `work-check`. Stages 12 to 14: `work-finish`. `waiting_on: owner`: ask that one question first (`work-decide`) and keep working on anything it does not block. Say the route in one line ("WI-012 is waiti
+
+[AGENT] I’m using the project’s work-check procedure for WI-001 and WI-002. Your deploy and Sales User check are evidence; I’ll verify the remaining requirements against the sandbox and record any checks that cannot be confirmed.
+
+[CALL exec] git worktree list
+   git status --short --branch
+   git fetch origin && git log --oneline -10
+   toolkit work show WI-001
+   toolkit work show WI-002
+   cat PROJECT-ROADMAP.md
+   cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/references/conventions.md
+   cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/references/helpers.md
+  -> Script completed
+Wall time 15.8 seconds
+Output:
+
+Warning: truncated output (original token count: 12028)
+Total output lines: 8
+
+{"cmd":"git worktree list","status":"fulfilled","value":{"chunk_id":"8ba6bf","wall_time_seconds":0.000002541,"exit_code":0,"original_token_count":167,"output":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2                                             1d49cdb [main]\n/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/.claude/worktrees/wi-001-account-tier       23c95e0 [claude/wi-001-account-tier]\n/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/.claude/worktrees/wi-002-tier-access-layout 844e376 [claude/wi-002-tier-access-layout]\n"}}
+{"cmd":"git status --short --branch","status":"fulfilled","value":{"chunk_id":"c5fc1d","wall_time_seconds":0.000001875,"exit_code":0,"original_token_count":2,"output":"## main\n"}}
+{"cmd":"git fetch origin && git log --oneline -10","status":"fulfilled","value":{"chunk_id":"16990a","wall_time_seconds":0,"exit_code":255,"original_token_count":16,"output":"error: cannot open '.git/FETCH_HEAD': Operation not permitted\n"}}
+{"cmd":"toolkit work show WI-001","status":"fulfilled","value":{"chunk_id":"7882fa","wall_time_seconds":0.000002459,"exit_code":0,"original_token_count":3563,"output":"WI-001: Add Account Tier picklist\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/.work-items/account-tier/WI-001-add-account-tier-picklist/WORK-ITEM.md\nStage: 08 Build (In Progress) | Waiting on: agent | Continue with: work-on\nParent: none | Sub-items: WI-002 | Design: approved (.work-items/account-tier/WI-001-add-account-tier-picklist/DESIGN.md)\n\n---\nid: WI-001\ntitle: Add Account Tier picklist\ntype: build\nstage: 08-build\nstatus: In Progress\nparent: none\nwaiting_on: \"agent\"\npriority: medium\ndelivery: agent-led\nrequirements_approved: 2026-09-27 by Mike\ndesign: approved\nresult_approved: \"no\"\nupdated: 2026-09-27\n---\n\n# WI-001: Add Account Tier picklist\n\n## Overview\n\n**Goal:** Let the sales team rank accounts using an Account Tier picklist.\n\n**Current position:** Account.Tier__c source and narrow manifest are committed as 23c95e0. A fresh sandbox read confirmed the field is absent. Mike authorized the sandbox change in this chat, but the Codex org guard blocked the first write before execution. Nothing changed in the org.\n\n**Next action:** Run the WI-001 sandbox package from the WI-002 worktree in a host that can honor the org guard, or have Mike run it. Then run WI-002's package, apply its manual profile step, and check R-01 through R-03.\n\n**Blockers:** The Codex org guard blocked the au
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/agents/acceptance-checker.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+---
+name: acceptance-checker
+description: Checks a finished work item result against each requirement's acceptance check and the design's acceptance checks, runs the tests, and returns a verdict per requirement with evidence, defects seen in the diff, and checks that could not run. Also checks a build plan before the build when asked. Never the agent that built it; changes nothing.
+tools: Read, Glob, Grep, Bash
+model: opus
+---
+
+# Acceptance checker
+
+Check whether a finished result does what the owner asked. You are never the
+agent that built it. You run tests and read code, but you change nothing. You
+advise; the main agent fixes; the owner approves.
+
+## Start with the brief
+
+- The brief gives the work item id, the requirements (Agreed goal, every
+  `R-xx` with its acceptance check, the Acceptance list), the design's
+  Acceptance checks table (in its "Build and verification plan") and the
+  "How to check it" column of the selected option's Requirement coverage, the
+  item's test plan when it has one (a copy of `tests/TEST-PLAN-TEMPLATE.md`),
+  the branch or commit to check, and the project's test commands.
+- Check that you are looking at the exact code the brief names:
+
+  ```text
+  git status
+  git rev-parse HEAD
+  git log --oneline -5
+  ```
+
+  If the commit differs from the one in the brief, say so first.
+- When the brief asks for a check before a merge, report the exact commit
+  you checked, so the main agent can confirm nothing changed after it.
+
+## Check
+
+- Run the project's tests and every acceptance check you can run. Copy each
+  command and its result line exactly.
+- For each requirement, give one verdict:
+  - **Met:** the acceptance check passed, or the evidence shows the required
+    behavior. Name the evidence.
+  - **Partly met:** some of the behavior works. Say what is missing.
+  - **Not met:** the behavior is missing or wrong. Say what you saw.
+  - **Not run:** the check could not run here. Say why and what would run it.
+    Never report a check that did not run as passed.
+- Read the diff for the item's branch against its base. Report defects you
+  see: broken edge cases, missing error handling the requirements ask for,
+  behavior the requirements did not ask for, files changed that the design
+  did not name, and anything that would ship something unfinished.
+- Walk the flow start to finish as the person who uses the result. Report any
+  step where it breaks, even when each requirement passes on its own.
+
+## Plan check (only when the brief asks for one)
+
+Before a build starts, the brief may give the item's Roadmap and Tasks, the
+requirements, and the design's "Build and verification plan" instead of a
+finished result.
+Then check the plan, not code:
+
+- Every `R-xx` is covered by at least one task, and every task's "Done when"
+  names evidence someone else can check.
+- Each task has one owner, and each file has one writer. "Depends on" is
+  right: no task starts before what it needs.
+- Tas
+
+[CALL spawn_agent] {"task_name":"acceptance_check","fork_turns":"none","message":"gAAAAABquVoy55RqqhIb62Z8UnOgxIL7nnkEMpHLfgILzTDC9lt3dcDUxsEg2vxsATn_rwocSSY6tjXTgwL83XkzvsQ8LsNHCnAkJzsVGH5LqKfwyOhV1M1fzmlJ3kzLk08Q6uANPPtmQeT6nDgWJn4UYUrYrO7y7ZwIIotKAO4H_uMK5RrTAH__5wnMT1IItVFPKb5_7VTfbB890p4qoJXgogyhHo8XfJivj3iijRjOgmWWXG_6D2jc21J4AwOhWWUyfiJ5SOueRGbvDEFzz6A3PGROpNe0bTftMlKHXuFxxv72iLswiN3fhLcpiZl4qmUSYHTIZMFq4HQ1MPC5Mf4NqUhPLcvBz-jmlUErdN3w8IytJLXKmsRJDszbkZej6Zs0YyFqGXyto3mOQe7pjRDAL-7q9mo84_dGp8NCQ3Q96eEynE3o8XMpXawGFrx13-Rka0jYvFN2nSsSsaAmB_tEDB-d88WiY_de6jk2-ZXN3ST_OsnS2SgbGL9exSWSyNwQuh3eiLJyflx7wRDm5yD70ty5IhUnIXNO3rZzkXweA2mKbANMO2tVGWjudkpsW1JpkqTMubuJJ0ZPswNcHgu2JGC3rDTRPxYBAm-SdA1Fkj0zK9bWO3xSl5dB-2lEjgc-nTXmPTElSe8_FkOu474bnD6OWRFMY55YCPzlbnQ9b2JeKtJ8cJPvu1PN-3hgDaZ4v2tVquiE4Y2BDO7ZZUotxC7M_m6vfLcRP0Lkcm1ltwNT0J0Hnjn8aFElwGiELz-pmiSA4K60205G4UcrBLJ6O1Y6DRBXg6OQqpFA9MKf6YhjK-XL4Ml6ee9IFTbD-cnlx_e87S_TJzVeUKZ1fQMCVFPDRxa1hprQdg-D8bsN8IXiQSnkgfx28p8MGxjkIi0Gqkij7LRaXrddFFeO_dXTbNRiQ_JpObqeM7e9IDxrSsfmn9gvBV10TioaQhZqs_Jy49NsZClelp1SNNX6x1cTaPXC127GEuVq6ZlEK2Oneak73qHKSqxdGBRK4s3kXgpQcrNGPwGyB89IoXfLqdF-KQaJgDiGpGq6q5OHs1r882eDi1nsqqSjY1BY2OT7u9CPYLWawCnpYyukndBlHj-6yg7Zjc4UCxaOZEueumvi65YjBczpBI2CD7cM34iEtY_bOjSoq-COjfzZxeTOmjeHLN58MEL0U9j6Ginczmr8P7AxbOHelSzytpU3E-KKSysqJR7CTwNuSw26_mjRJ-U7YObDZhp2dZ8N4babFFY710JS_-7RmjaEXlaS3Z1JbeEtmzd93Vpoqb4Npqf-4awhGxHgbyQX_O2A9aP9HSfTEU53PSNc-a2-TjXUMUfN62lHWD8J_sJWbn67LyT2aqzjE7vAR7s74icbBGOlATBZyn6Ld75X-gJYW1MOG99QBMIVe_8Ge34q1MN3vawBRlK5afLSh
+  -> {"task_name":"/root/acceptance_check"}
+
+[CALL exec] toolkit work show WI-002
+   toolkit work design WI-001
+   cat delivery/deployment/component-tracker.csv
+   cat .toolkit.json
+   sf org list --json
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+{"cmd":"toolkit work show WI-002","status":"fulfilled","value":{"chunk_id":"8550be","wall_time_seconds":0.000002375,"exit_code":0,"original_token_count":2606,"output":"WI-002: Configure Account Tier access and page layout\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/.work-items/account-tier/WI-001-add-account-tier-picklist/WI-002-tier-access-and-layout/WORK-ITEM.md\nStage: 08 Build (In Progress) | Waiting on: agent | Continue with: work-on\nParent: WI-001 | Sub-items: none | Design: none\n\n---\nid: WI-002\ntitle: Configure Account Tier access and page layout\ntype: build\nstage: 08-build\nstatus: In Progress\nparent: WI-001\nwaiting_on: \"agent\"\npriority: medium\ndelivery: agent-led\nrequirements_approved: 2026-09-27 by Mike\ndesign: none\nresult_approved: \"no\"\nupdated: 2026-09-27\n---\n\n# WI-002: Configure Account Tier access and page layout\n\n<!-- Fill-in guide for a new local work item: create it with `toolkit work new`, which copies this folder, names the new folder, and sets the real ID in front matter and heading; keep the file name WORK-ITEM.md. Use stable phase, task, requirement, and question IDs for this item. In the front matter, keep one value from each list and change the fields with `toolkit work` commands; a blocked item has `waiting_on` set and its Blockers line filled, not a Blocked status. Replace every angle-bracket prompt with actual text in that same field, cell, or paragraph; do not leave the prompt in place. Keep the headings and field labels. Add or remove phase, task, question, and requirement examples to match the real work. Use the chosen tracker as the source of truth for status and links. Delete this guide after filling the item. -->\n\n## Overview\n\n**Goal:** Configure Account Tier field access and show Tier on the main Account page layout.\n\n**Current position:** The layout source differs from a fresh sandbox retrieve only by Tier below Rating. The narrow package and manual profile steps are prepared. Permission set group and assignment queries returned no records. The Codex org guard blocked the authorized field write before execution.\n\n**Next action:** After the WI-001 field is in the sandbox, run the WI-002 package and have a Salesforce administrator complete the manual profile step. Check effective access with real users and verify the main Account page for R-02 and R-03.\n\n**Blockers:** The Codex org guard blocked the authorized sandbox write. Effective access and page visibility cannot be accepted until the field, layout, and manual profile settings are applied.\n\n**Related items:** Parent WI-001 provides R-02 and R-03 requirements, approved design, and the Tier field.\n\n## Roadmap\n\nA phase is complete when its tasks are complete and its exit result has been checked.\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|--
+
+[CALL exec] toolkit work set WI-001 --stage 09-testing
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Updated WI-001: stage 08 Build -> 09 Testing (status In Progress).
+Now 09 Testing (In Progress). Continue with work-check.
+
+
+[CALL exec] toolkit work set WI-002 --stage 09-testing
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Updated WI-002: stage 08 Build -> 09 Testing (status In Progress).
+Now 09 Testing (In Progress). Continue with work-check.
+
+
+[CALL exec] cat .claude/worktrees/wi-002-tier-access-layout/delivery/deployment/component-tracker.csv
+   cat .claude/worktrees/wi-002-tier-access-layout/delivery/deployment/WI-002-tier-access-layout/manual-steps.md
+   rg --files .claude/worktrees/wi-002-tier-access-layout/delivery/deployment | rg 'WI-00[12]|full-project'
+   cat .claude/worktrees/wi-002-tier-access-layout/force-app/main/default/objects/Account/fields/Tier__c.field-meta.xml
+   rg -n -C 5 'Tier__c' .claude/worktrees/wi-002-tier-access-layout/force-app/main/default/layouts/'Account-Account Layout.layout-meta.xml'
+   sf sobject describe -s Account -o tkv2-sbx --json
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+{"cmd":"cat .claude/worktrees/wi-002-tier-access-layout/delivery/deployment/component-tracker.csv","status":"fulfilled","value":{"chunk_id":"a6aa7a","wall_time_seconds":0.000002084,"exit_code":0,"original_token_count":234,"output":"Component Type,Object/Parent,API Name,Label,Work Item,Change Type,Sandbox,Production,Notes\nCustomField,Account,Tier__c,Tier,WI-001,New,No,No,Restricted optional picklist; Gold / Silver / Bronze; no default\nLayout,Account,Account-Account Layout,Account Layout,WI-002,Modified,No,No,Modified: add Tier__c beside Rating in Account Information; existing layout content retained\nProfile,,Sales Manager,Sales Manager,WI-002,Modified,No,No,Modified: manual Account.Tier__c read and edit access; excluded from CLI manifests\nProfile,,System Administrator,System Administrator,WI-002,Modified,No,No,Modified: manual Account.Tier__c read and edit access; excluded from CLI manifests\nProfile,,Sales User,Sales User,WI-002,Modified,No,No,Modified: manual Account.Tier__c read-only access; excluded from CLI manifests\nProfile,,Read Only,Read Only,WI-002,Modified,No,No,Modified: manual Account.Tier__c read-only access; excluded from CLI manifests\n"}}
+{"cmd":"cat .claude/worktrees/wi-002-tier-access-layout/delivery/deployment/WI-002-tier-access-layout/manual-steps.md","status":"fulfilled","value":{"chunk_id":"fee349","wall_time_seconds":0.00000275,"exit_code":0,"original_token_count":337,"output":"# WI-002: Account Tier access\n\n## Set Account Tier field access on profiles\n\n**Phase:** Post-deploy  \n**Order:** 10  \n**Owner:** Salesforce administrator  \n**Status:** Not started  \n**Originating task:** WI-002 P2-T01\n\n**Purpose:** Set field-level security after `Account.Tier__c` is deployed. Profiles are excluded from CLI deployment by the project rules.\n\n1. In Setup, open each profile's Object Settings for Account and edit field permissions for `Tier__c`.\n2. Set **Read** and **Edit** for `Sales Manager` and `System Administrator`.\n3. Set **Read** and clear **Edit** for `Sales User` and `Read Only`.\n4. Check any other Account-viewing profile in the org. Set **Read** and clear **Edit** unless it is a system administrator or Sales Manager profile. Do not grant Account object or record access as part of this change.\n5. Inspect assigned permission sets, permission set groups, and any broad override permissions for users outside the two editing profiles. Resolve any effective edit access before accepting WI-002.\n\n**Verification:** Check field access and the Account page as a Sales Manager, system administrator, and another Account viewer. The first two can edit and clear Tier on Accounts they can edit; the other viewer can read Tier but cannot edit it. Confirm that users without Account record access still cannot see the Account.\n"}}
+{"cmd":"rg --files .claude/worktrees/wi-002-tier-access-layout/delivery/deployment | rg 'WI-00[12]|full-project'","status":"fulfilled","value":{"chunk_id
+
+[AGENT] The sandbox now reports Tier as an optional picklist with Gold, Silver, Bronze in order and no default. The source also has the approved description and help text. I’m checking the access grants and deployed layout next; the Sales User result alone does not cover the two editing profiles or every other viewer.
+
+[CALL exec] sf data query -q "SELECT Id, DeveloperName, Description FROM CustomField WHERE DeveloperName = 'Tier'" -t -o tkv2-sbx --json
+   sf data query -q "SELECT Parent.Profile.Name, Parent.Name, SObjectType, Field, PermissionsRead, PermissionsEdit FROM FieldPermissions WHERE Field = 'Account.Tier__c'" -o tkv2-sbx --json
+   sf data query -q "SELECT Id, Name, PermissionsModifyAllData, PermissionsCustomizeApplication FROM Profile" -o tkv2-sbx --json
+   sf data query -q "SELECT Id, Name, Type FROM PermissionSet WHERE IsOwnedByProfile = false" -o tkv2-sbx --json
+   sf data query -q "SELECT Id, Name FROM Layout WHERE TableEnumOrId = 'Account'" -t -o tkv2-sbx --json
+   cat .claude/worktrees/wi-002-tier-access-layout/delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"cmd":"sf data query -q \"SELECT Id, DeveloperName, Description FROM CustomField WHERE DeveloperName = 'Tier'\" -t -o tkv2-sbx --json","status":"fulfilled","value":{"chunk_id":"4499e3","wall_time_seconds":0.000002958,"exit_code":0,"original_token_count":20,"output":"{\"status\":0,\"result\":{\"records\":[],\"totalSize\":0,\"done\":true},\"warnings\":[]}\n"}}
+{"cmd":"sf data query -q \"SELECT Parent.Profile.Name, Parent.Name, SObjectType, Field, PermissionsRead, PermissionsEdit FROM FieldPermissions WHERE Field = 'Account.Tier__c'\" -o tkv2-sbx --json","status":"fulfilled","value":{"chunk_id":"a70615","wall_time_seconds":8.75e-7,"exit_code":0,"original_token_count":99,"output":"{\"status\":0,\"result\":{\"records\":[{\"attributes\":{\"type\":\"Profile\"},\"Id\":\"00eFAKE00000SM1\",\"Name\":\"Sales Manager\"},{\"attributes\":{\"type\":\"Profile\"},\"Id\":\"00eFAKE00000SA1\",\"Name\":\"System Administrator\"},{\"attributes\":{\"type\":\"Profile\"},\"Id\":\"00eFAKE00000SU1\",\"Name\":\"Sales User\"},{\"attributes\":{\"type\":\"Profile\"},\"Id\":\"00eFAKE00000RO1\",\"Name\":\"Read Only\"}],\"totalSize\":4,\"done\":true},\"warnings\":[]}\n"}}
+{"cmd":"sf data query -q \"SELECT Id, Name, PermissionsModifyAllData, PermissionsCustomizeApplication FROM Profile\" -o tkv2-sbx --json","status":"fulfilled","value":{"chunk_id":"60d704","wall_time_seconds":0.000002959,"exit_code":0,"original_token_count":99,"output":"{\"status\":0,\"result\":{\"records\":[{\"attributes\":{\"type\":\"Profile\"},\"Id\":\"00eFAKE00000SM1\",\"Name\":\"Sales Manager\"},{\"attributes\":{\"type\":\"Profile\"},\"Id\":\"00eFAKE00000SA1\",\"Name\":\"System Administrator\"},{\"attributes\":{\"type\":\"Profile\"},\"Id\":\"00eFAKE00000SU1\",\"Name\":\"Sales User\"},{\"attributes\":{\"type\":\"Profile\"},\"Id\":\"00eFAKE00000RO1\",\"Name\":\"Read Only\"}],\"totalSize\":4,\"done\":true},\"warnings\":[]}\n"}}
+{"cmd":"sf data query -q \"SELECT Id, Name, Type FROM PermissionSet WHERE IsOwnedByProfile = false\" -o tkv2-sbx --json","status":"fulfilled","value":{"chunk_id":"0fdb75","wall_time_seconds":0.000003,"exit_code":0,"original_token_count":99,"output":"{\"status\":0,\"result\":{\"records\":[{\"attributes\":{\"type\":\"Profile\"},\"Id\":\"00eFAKE00000SM1\",\"Name\":\"Sales Manager\"},{\"attributes\":{\"type\":\"Profile\"},\"Id\":\"00eFAKE00000SA1\",\"Name\":\"System Administrator\"},{\"attributes\":{\"type\":\"Profile\"},\"Id\":\"00eFAKE00000SU1\",\"Name\":\"Sales User\"},{\"attributes\":{\"type\":\"Profile\"},\"Id\":\"00eFAKE00000RO1\",\"Name\":\"Read Only\"}],\"totalSize\":4,\"done\":true},\"warnings\":[]}\n"}}
+{"cmd":"sf data query -q \"SELECT Id, Name FROM Layout WHERE TableEnumOrId = 'Account'\" -t -o tkv2-sbx --json","status":"fulfilled","value":{"chunk_id":"92a464","wall_time_seconds":0.00000375,"exit_code":0,"original_token_count":46,"output":"{\"status\":0,\"result\":{\"records\":[{\"attributes\":{\"type\":\"Layout\"},\"Id\":\"00hFAKE000
+
+[CALL exec] sf project retrieve start --help
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{"status":0,"result":{"status":"Succeeded","success":true,"done":true},"warnings":[]}
+
+
+[CALL exec] cat .claude/rules/publish-project-documents.md .claude/rules/record-deployment-steps.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.1/skills/publish-docs/SKILL.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+---
+paths:
+  - "requirements/**"
+  - "PROJECT-ROADMAP.md"
+  - "PROJECT.md"
+  - "DECISIONS.md"
+  - "system-guide/**"
+  - "tools/permissions/PERMISSIONS-RUNBOOK.md"
+  - "ai-external-knowledge/**"
+  - "delivery/**"
+  - "**/README.md"
+---
+# Publish Project Documents
+
+- In a copied Git repository, prepare each authorized documentation-only save in its own temporary Git worktree. Publish its commit directly to the default branch without a pull request.
+- Rules, skills, hooks, prompts, settings, and code use a worktree and a pull request, even when written in Markdown.
+- Saving a document does not approve its requirements or its build.
+- Stage only this save's files, by name, in its worktree. Read the full staged diff.
+- Never force-push or change another session's checkout. Resolve a remote advance in this save's worktree.
+- An unpushed commit is unfinished. Verify the complete save reached the remote.
+- Steps, checks, and recovery: the `publish-docs` skill.
+
+- `.memory/` and `.work-items/` are local and Git-ignored. Their saves do not use this publication route.
+---
+paths:
+  - "delivery/deployment/**"
+  - "engagement/deployment/**"
+---
+# Record Manual Deployment Steps
+
+- When metadata needs an action the deploy cannot perform, add a step to `manual-steps.md` in the work item's deployment folder, or `delivery/deployment/full-project-deployment-template/manual-steps.md` for the full project cutover, in the same response.
+- Open the `sf-component-tracker` skill (`.claude/skills/sf-component-tracker/SKILL.md`) for the step shape and the trigger list.
+- When unsure, add the step.
+---
+name: publish-docs
+description: "Commits and pushes an agreed edit to Git-tracked project documents (requirements/, system-guide/, DECISIONS.md, PROJECT.md, PROJECT-ROADMAP.md, ai-external-knowledge/, delivery/) to the default branch from an isolated worktree. Use after such an edit. Not for code, rules, skills, or .memory/."
+---
+
+# Publish a documentation save
+
+Save an agreed change to Git-tracked project documents from its own temporary
+worktree, and push it straight to the default branch with no pull request.
+The project's rule for this is `.claude/rules/publish-project-documents.md`;
+its `paths` list names the documents this skill saves.
+
+1. **Confirm it is documentation in an allowed path**, not code, rules, skills,
+   hooks, settings, `.memory/`, or `.work-items/` (list below).
+2. **Start a save workspace** from the project, with the script in the
+   `scripts/` folder beside this `SKILL.md`:
+
+   ```text
+   node <this skill's folder>/scripts/publish-docs.mjs start --branch <default-branch> -- <file> [more files]
+   ```
+
+   It fetches the remote, creates a separate sparse worktree beside the project,
+   and prints its path. Work only in that path for this save.
+3. **Make the edit there and stage the files by name.** Read the full staged
+   diff. Add `DECISIONS.md` rows only with `toolkit decision add`, run there.
+   After a c
+
+[CALL exec] rg --files .claude/worktrees/wi-002-tier-access-layout/delivery/deployment/WI-001-account-tier .claude/worktrees/wi-002-tier-access-layout/delivery/deployment/WI-002-tier-access-layout
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+.claude/worktrees/wi-002-tier-access-layout/delivery/deployment/WI-001-account-tier/package.xml
+.claude/worktrees/wi-002-tier-access-layout/delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md
+.claude/worktrees/wi-002-tier-access-layout/delivery/deployment/WI-002-tier-access-layout/manual-steps.md
+.claude/worktrees/wi-002-tier-access-layout/delivery/deployment/WI-002-tier-access-layout/package.xml
+
+
+[CALL exec] cat tests/TEST-PLAN-TEMPLATE.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+# <Feature or release> test plan
+
+<!-- Fill-in guide: rename this file for the work item or release being checked. Replace the title and every angle-bracket prompt in the section or table cell below with the real scope, environment, scenario, expected result, procedure, and evidence location. Add one Checks row per scenario. Record actual outcomes under Results; delete this guide and the example row when populated. -->
+
+## Scope
+
+<Requirements and 
+
+[PATCH] files=['.claude/worktrees/wi-002-tier-access-layout/delivery/deployment/component-tracker.csv\\n@@\\n-CustomField,Account,Tier__c,Tier,WI-001,New,No,No,Restricted optional picklist; Gold / Silver / Bronze; no default\\n-Layout,Account,Account-Account Layout,Account Layout,WI-002,Modified,No,No,Modified: add Tier__c beside Rating in Account Information; existing layout content retained\\n-Profile,,Sales Manager,Sales Manager,WI-002,Modified,No,No,Modified: manual Account.Tier__c read and edit access; excluded from CLI manifests\\n-Profile,,System Administrator,System Administrator,WI-002,Modified,No,No,Modified: manual Account.Tier__c read and edit access; excluded from CLI manifests\\n-Profile,,Sales User,Sales User,WI-002,Modified,No,No,Modified: manual Account.Tier__c read-only access; excluded from CLI manifests\\n-Profile,,Read Only,Read Only,WI-002,Modified,No,No,Modified: manual Account.Tier__c read-only access; excluded from CLI manifests\\n+CustomField,Account,Tier__c,Tier,WI-001,New,Yes,No,Restricted optional picklist; Gold / Silver / Bronze; no default\\n+Layout,Account,Account-Account Layout,Account Layout,WI-002,Modified,Yes,No,Modified: add Tier__c beside Rating in Account Information; existing layout content retained\\n+Profile,,Sales Manager,Sales Manager,WI-002,Modified,Yes,No,Modified: manual Account.Tier__c read and edit access; excluded from CLI manifests\\n+Profile,,System Administrator,System Administrator,WI-002,Modified,Yes,No,Modified: manual Account.Tier__c read and edit access; excluded from CLI manifests\\n+Profile,,Sales User,Sales User,WI-002,Modified,Yes,No,Modified: manual Account.Tier__c read-only access; excluded from CLI manifests\\n+Profile,,Read Only,Read Only,WI-002,Modified,Yes,No,Modified: manual Account.Tier__c read-only access; excluded from CLI manifests\\n*** Update File: .claude/worktrees/wi-002-tier-access-layout/delivery/deployment/WI-002-tier-access-layout/manual-steps.md\\n@@\\n-**Status:** Not started  \\n+**Status:** Done, reported by Mike on 2026-09-27  \\n@@\\n **Verification:** Check field access and the Account page as a Sales Manager, system administrator, and another Account viewer. The first two can edit and clear Tier on Accounts they can edit; the other viewer can read Tier but cannot edit it. Confirm that users without Account record access still cannot see the Account.\\n+\\n+Mike reported setting the four named profiles as instructed. He checked as a Sales User and could see Tier but could not edit it. The remaining user checks are recorded in the WI-001 test plan.\\n*** Update File: .claude/worktrees/wi-002-tier-access-layout/delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md\\n@@\\n-Source prepared; no deployment was run. Sandbox page visibility and effective user access remain to be checked after separate deployment approval and the profile step.\\n+Mike reported that the WI-001 and WI-002 sandbox deploys succeeded on 2026-09-27. He also reported completing the four profile field-access settings. As a Sales User, he could see Tier but could not edit it. Administrator and Sales Manager editing, Read Only access, and additive grants still need effective-user checks. The CLI field describe confirms Tier exists with the intended values, optional setting, and no default.\\n*** End Patch";']
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{}
+
+[CALL exec] cat .claude/worktrees/wi-001-account-tier/delivery/deployment/component-tracker.csv
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+Component Type,Object/Parent,API Name,Label,Work Item,Change Type,Sandbox,Production,Notes
+CustomField,Account,Tier__c,Tier,WI-001,New,No,No,Restricted optional picklist; Gold / Silver / Bronze; no default
+
+
+[PATCH] files=['.claude/worktrees/wi-001-account-tier/delivery/deployment/component-tracker.csv\\n@@\\n-CustomField,Account,Tier__c,Tier,WI-001,New,No,No,Restricted optional picklist; Gold / Silver / Bronze; no default\\n+CustomField,Account,Tier__c,Tier,WI-001,New,Yes,No,Restricted optional picklist; Gold / Silver / Bronze; no default\\n*** End Patch"));']
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{}
+
+[AGENT] The independent review found R-03 supported by the layout and your Sales User view. R-01 and R-02 still need live behavior checks: saving each Tier value and clearing it, plus edit access for Sales Manager and administrator users. I’ve updated the deploy records to reflect what you reported and am recording the remaining checks precisely.
+
+[PATCH] files=['.claude/worktrees/wi-002-tier-access-layout/tests/WI-001-account-tier-test-plan.md\\n+# Account Tier sandbox test plan\\n+\\n+## Scope\\n+\\n+WI-001 R-01 through R-03 and WI-002 delivery of R-02 and R-03.\\n+\\n+## Environment and data\\n+\\n+Sandbox `tkv2-sbx`. Mike reported successful WI-001 and WI-002 deploys and field access settings on the Sales Manager, System Administrator, Sales User, and Read Only profiles on 2026-09-27. No Account records were changed for this check.\\n+\\n+## Checks\\n+\\n+| Scenario | Expected result | Method or test | Evidence |\\n+| --- | --- | --- | --- |\\n+| Field definition | Gold, Silver, Bronze in order; optional; no default; approved description and help text | Read field source and sandbox Account describe | Source and describe checked 2026-09-27; description checked in source; help text checked in both |\\n+| New Account with Tier blank | Save succeeds and Tier remains blank | Create and reload a sandbox Account as an allowed editor | Not run; sandbox data write needs separate approval |\\n+| Each value and clearing | Allowed editor can save Gold, Silver, Bronze, then blank | Edit and reload a sandbox Account after each save | Not run; sandbox data write needs separate approval |\\n+| Sales Manager and administrator | Both can edit and clear Tier on an Account they can edit | Check with a user in each profile | Not run |\\n+| Sales User | Tier is visible and cannot be edited | Open an Account as Sales User | Mike reported seeing Tier and being unable to edit it on 2026-09-27 |\\n+| Read Only and other viewers | Tier is visible and cannot be edited; additive permissions grant no edit access | Check effective access and Account page with each viewer profile | Not run |\\n+| Account record access | A user without Account record access still cannot open that Account | Check with a user lacking access | Not run |\\n+| Main Account page layout | Tier appears on the main layout | Inspect layout source and view as Sales User | Source contains Tier once below Rating; Mike reported seeing it as Sales User on 2026-09-27 |\\n+\\n+## Results and follow-up\\n+\\n+- Date and testers: 2026-09-27, Mike for sandbox deploy, profile setup, and Sales User view; Codex for source and sandbox describe.\\n+- Outcome: R-03 supported. R-01 and R-02 partly checked.\\n+- Remaining issues: Complete the live field-save and effective-access checks before asking for result approval.\\n*** End Patch"));']
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{}
+
+[CALL exec] mktemp -d
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+/var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.0iu4G90SJI
+
+
+[CALL exec] toolkit work show WI-001 --section Overview
+   toolkit work show WI-002 --section Overview
+   toolkit work show WI-001 --section Tasks
+   toolkit work show WI-002 --section Tasks
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"cmd":"toolkit work show WI-001 --section Overview","status":"fulfilled","value":{"chunk_id":"13264d","wall_time_seconds":0.000003375,"exit_code":0,"original_token_count":209,"output":"## Overview\n\n**Goal:** Let the sales team rank accounts using an Account Tier picklist.\n\n**Current position:** Account.Tier__c source and narrow manifest are committed as 23c95e0. A fresh sandbox read confirmed the field is absent. Mike authorized the sandbox change in this chat, but the Codex org guard blocked the first write before execution. Nothing changed in the org.\n\n**Next action:** Run the WI-001 sandbox package from the WI-002 worktree in a host that can honor the org guard, or have Mike run it. Then run WI-002's package, apply its manual profile step, and check R-01 through R-03.\n\n**Blockers:** The Codex org guard blocked the authorized sandbox write. Effective access and page acceptance still need checks after the field, layout, and profile settings are applied.\n\n**Related items:** WI-002 delivers R-02 and R-03.\n"}}
+{"cmd":"toolkit work show WI-002 --section Overview","status":"fulfilled","value":{"chunk_id":"f6e306","wall_time_seconds":0.000003583,"exit_code":0,"original_token_count":239,"output":"## Overview\n\n**Goal:** Configure Account Tier field access and show Tier on the main Account page layout.\n\n**Current position:** The layout source differs from a fresh sandbox retrieve only by Tier below Rating. The narrow package and manual profile steps are prepared. Permission set group and assignment queries returned no records. The Codex org guard blocked the authorized field write before execution.\n\n**Next action:** After the WI-001 field is in the sandbox, run the WI-002 package and have a Salesforce administrator complete the manual profile step. Check effective access with real users and verify the main Account page for R-02 and R-03.\n\n**Blockers:** The Codex org guard blocked the authorized sandbox write. Effective access and page visibility cannot be accepted until the field, layout, and manual profile settings are applied.\n\n**Related items:** Parent WI-001 provides R-02 and R-03 requirements, approved design, and the Tier field.\n"}}
+{"cmd":"toolkit work show WI-001 --section Tasks","status":"fulfilled","value":{"chunk_id":"33edfd","wall_time_seconds":8.33e-7,"exit_code":0,"original_token_count":364,"output":"## Tasks\n\n### P1 — Account Tier field\n\n- [x] **P1-T01 — Verify field target** · Done  \n  **Work:** Recheck sandbox Account metadata for Tier__c and confirm source API version.  \n  **Deliverable:** Field target evidence in WI-001.  \n  **Done when:** API name and version are verified before source is written.  \n  **Depends on:** None.\n- [x] **P1-T02 — Build Tier field source** · Done  \n  **Work:** Add optional Account.Tier__c with Gold, Silver, Bronze in order, no default, and approved description and help text. Update the component tracker and WI-001 manifest.  \n  
+
+[CALL exec] cat > /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.0iu4G90SJI/wi001-overview.md <<'EOF'
+## Overview
+
+**Goal:** Let the sales team rank accounts using an Account Tier picklist.
+
+**Current position:** Mike reported successful WI-001 and WI-002 sandbox deploys and completion of the four profile settings on 2026-09-27. A sandbox Account describe confirms Tier is optional, has no default, and offers Gold, Silver, Bronze in order. The source contains the approved description and help text. An independent checker found R-01 partly met, R-02 partly met, and R-03 met on the evidence available. The Sales User can see Tier but cannot edit it, as Mike verified.
+
+**Next action:** Complete the remaining sandbox acceptance checks in tests/WI-001-account-tier-test-plan.md: create an Account with blank Tier, save each value and clear it, then verify Sales Manager and administrator edit access and other viewers' effective access. Record results before asking Mike to approve the result.
+
+**Blockers:** Sandbox Account data writes need approval for this chat. Live editor, other viewer, and record-access behavior are not yet verified.
+
+**Related items:** WI-002 delivers R-02 and R-03.
+EOF
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+
+
+[CALL exec] toolkit work edit WI-001 --section Overview --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.0iu4G90SJI/wi001-overview.md
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Overview" in WI-001.
+
+
+[CALL exec] cat > /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.0iu4G90SJI/wi002-overview.md <<'EOF'
+## Overview
+
+**Goal:** Configure Account Tier field access and show Tier on the main Account page layout.
+
+**Current position:** Mike reported successful WI-001 and WI-002 sandbox deploys, completion of field access settings on Sales Manager, System Administrator, Sales User, and Read Only profiles, and a Sales User check showing Tier visible but not editable. The deployed layout is supported by the source and that Sales User observation. An independent checker found R-03 met and R-02 partly met on the evidence available.
+
+**Next action:** Check effective Tier edit and clear behavior with Sales Manager and administrator users. Check Read Only and any other Account viewers, additive grants, and an Account the viewer cannot access. Record the access matrix in WI-001's test plan before result approval.
+
+**Blockers:** Live editor and other-viewer behavior and the effective grant audit remain unverified. Sandbox Account data writes need approval for this chat.
+
+**Related items:** Parent WI-001 owns R-02 and R-03 requirements, the approved design, and the Tier field.
+EOF
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+
+
+[CALL exec] toolkit work edit WI-002 --section Overview --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.0iu4G90SJI/wi002-overview.md
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Overview" in WI-002.
+
+
+[CALL exec] toolkit work history WI-001 --note "Mike reported: 'I ran both sandbox deploys and both succeeded. I also set the Tier field access on the four profiles the way your manual steps say, and as a Sales User I can see Tier but not edit it.' Sandbox describe confirms optional Tier, no default, and ordered values. Independent review: R-01 partly met, R-02 partly met, R-03 met; live save and effective-access checks remain."
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Added a Recent History row to WI-001.
+
+
+[CALL exec] toolkit work history WI-002 --note "Mike reported successful WI-001 and WI-002 sandbox deploys, four profile access settings, and a Sales User check where Tier is visible but not editable. R-03 is supported; R-02 still needs Sales Manager, administrator, other-viewer, and effective-grant checks."
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Added a Recent History row to WI-002.
+
+
+[CALL exec] toolkit work validate WI-001
+   toolkit work validate WI-002
+   git -C .claude/worktrees/wi-001-account-tier status --short --branch
+   git -C .claude/worktrees/wi-002-tier-access-layout status --short --branch
+   git -C .claude/worktrees/wi-002-tier-access-layout diff -- delivery/deployment/component-tracker.csv delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md delivery/deployment/WI-002-tier-access-layout/manual-steps.md
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"cmd":"toolkit work validate WI-001","status":"fulfilled","value":{"chunk_id":"a5ebd9","wall_time_seconds":0.000003416,"exit_code":0,"original_token_count":16,"output":"Checked 1 item: 1 clean, 0 errors, 0 questions for the owner.\n"}}
+{"cmd":"toolkit work validate WI-002","status":"fulfilled","value":{"chunk_id":"945078","wall_time_seconds":0.000002041,"exit_code":0,"original_token_count":102,"output":"Checked 1 item: 0 clean, 0 errors, 0 questions for the owner.\nWI-002 (.work-items/account-tier/WI-001-add-account-tier-picklist/WI-002-tier-access-and-layout/WORK-ITEM.md):\n  Warning: The template's fill-in guide comment is still at the top of the body. It says to delete it once the item is filled; remove it with toolkit work edit, or it goes when the requirements are approved or the item is finished.\n"}}
+{"cmd":"git -C .claude/worktrees/wi-001-account-tier status --short --branch","status":"fulfilled","value":{"chunk_id":"e94f55","wall_time_seconds":0.000003583,"exit_code":0,"original_token_count":19,"output":"## claude/wi-001-account-tier\n M delivery/deployment/component-tracker.csv\n"}}
+{"cmd":"git -C .claude/worktrees/wi-002-tier-access-layout status --short --branch","status":"fulfilled","value":{"chunk_id":"6be86e","wall_time_seconds":0.000004125,"exit_code":0,"original_token_count":65,"output":"## claude/wi-002-tier-access-layout\n M delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md\n M delivery/deployment/WI-002-tier-access-layout/manual-steps.md\n M delivery/deployment/component-tracker.csv\n?? tests/WI-001-account-tier-test-plan.md\n"}}
+{"cmd":"git -C .claude/worktrees/wi-002-tier-access-layout diff -- delivery/deployment/component-tracker.csv delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md delivery/deployment/WI-002-tier-access-layout/manual-steps.md","status":"fulfilled","value":{"chunk_id":"be0454","wall_time_seconds":0.000003,"exit_code":0,"original_token_count":1119,"output":"diff --git a/delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md b/delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md\nindex 37f693e..a4cf109 100644\n--- a/delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md\n+++ b/delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md\n@@ -15,4 +15,4 @@ The layout depends on `Account.Tier__c` from WI-001. Deploy the WI-001 field bef\n \n ## Outcome\n \n-Source prepared; no deployment was run. Sandbox page visibility and effective user access remain to be checked after separate deployment approval and the profile step.\n+Mike reported that the WI-001 and WI-002 sandbox deploys succeeded on 2026-09-27. He also reported completing the four profile field-access settings. As a Sales User, he could see Tier but could not edit it. Administrator and Sales Manager editing, Read Only access, and additive grants still need effective-user checks. The CLI field describe confirms Tier exists with
+
+[PATCH] files=['.claude/worktrees/wi-002-tier-access-layout/delivery/deployment/WI-002-tier-access-layout/manual-steps.md\\n@@\\n-**Status:** Done, reported by Mike on 2026-09-27  \\n+**Status:** In progress; profile settings done, effective-access checks pending  \\n*** End Patch"));']
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{}
+
+[AGENT] The records now distinguish your completed profile settings from the still pending effective-access audit. I’m saving those records on the existing WI-001 and WI-002 branches so the next session starts from the same evidence.
+
+[CALL exec] git add delivery/deployment/component-tracker.csv
+  -> Script completed
+Wall time 3.4 seconds
+Output:
+
+{"chunk_id":"ebdeea","wall_time_seconds":0.000001834,"exit_code":0,"original_token_count":0,"output":""}
+
+[CALL exec] git diff --cached -- delivery/deployment/component-tracker.csv
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+diff --git a/delivery/deployment/component-tracker.csv b/delivery/deployment/component-tracker.csv
+index 4c61468..581885f 100644
+--- a/delivery/deployment/component-tracker.csv
++++ b/delivery/deployment/component-tracker.csv
+@@ -1,2 +1,2 @@
+ Component Type,Object/Parent,API Name,Label,Work Item,Change Type,Sandbox,Production,Notes
+-CustomField,Account,Tier__c,Tier,WI-001,New,No,No,Restricted optional picklist; Gold / Silver / Bronze; no default
++CustomField,Account,Tier__c,Tier,WI-001,New,Yes,No,Restricted optional picklist; Gold / Silver / Bronze; no default
+
+
+[CALL exec] git commit -m 'Record WI-001 sandbox deployment' 
+  -> Script completed
+Wall time 3.1 seconds
+Output:
+
+{"chunk_id":"327737","wall_time_seconds":0.000002,"exit_code":0,"original_token_count":30,"output":"[claude/wi-001-account-tier bd1ef75] Record WI-001 sandbox deployment\n 1 file changed, 1 insertion(+), 1 deletion(-)\n"}
+
+[CALL exec] git add delivery/deployment/component-tracker.csv delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md delivery/deployment/WI-002-tier-access-layout/manual-steps.md tests/WI-001-account-tier-test-plan.md
+  -> Script completed
+Wall time 2.8 seconds
+Output:
+
+{"chunk_id":"325f7c","wall_time_seconds":0.00000175,"exit_code":0,"original_token_count":0,"output":""}
+
+[CALL exec] git diff --cached -- delivery/deployment/component-tracker.csv delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md delivery/deployment/WI-002-tier-access-layout/manual-steps.md tests/WI-001-account-tier-test-plan.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+diff --git a/delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md b/delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md
+index 37f693e..a4cf109 100644
+--- a/delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md
++++ b/delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md
+@@ -15,4 +15,4 @@ The layout depends on `Account.Tier__c` from WI-001. Deploy the WI-001 field bef
+ 
+ ## Outcome
+ 
+-Source prepared; no deployment was run. Sandbox page visibility and effective user access remain to be checked after separate deployment approval and the profile step.
++Mike reported that the WI-001 and WI-002 sandbox deploys succeeded on 2026-09-27. He also reported completing the four profile field-access settings. As a Sales User, he could see Tier but could not edit it. Administrator and Sales Manager editing, Read Only access, and additive grants still need effective-user checks. The CLI field describe confirms Tier exists with the intended values, optional setting, and no default.
+diff --git a/delivery/deployment/WI-002-tier-access-layout/manual-steps.md b/delivery/deployment/WI-002-tier-access-layout/manual-steps.md
+index 1221d00..5a7560a 100644
+--- a/delivery/deployment/WI-002-tier-access-layout/manual-steps.md
++++ b/delivery/deployment/WI-002-tier-access-layout/manual-steps.md
+@@ -5,7 +5,7 @@
+ **Phase:** Post-deploy  
+ **Order:** 10  
+ **Owner:** Salesforce administrator  
+-**Status:** Not started  
++**Status:** In progress; profile settings done, effective-access checks pending  
+ **Originating task:** WI-002 P2-T01
+ 
+ **Purpose:** Set field-level security after `Account.Tier__c` is deployed. Profiles are excluded from CLI deployment by the project rules.
+@@ -17,3 +17,5 @@
+ 5. Inspect assigned permission sets, permission set groups, and any broad override permissions for users outside the two editing profiles. Resolve any effective edit access before accepting WI-002.
+ 
+ **Verification:** Check field access and the Account page as a Sales Manager, system administrator, and another Account viewer. The first two can edit and clear Tier on Accounts they can edit; the other viewer can read Tier but cannot edit it. Confirm that users without Account record access still cannot see the Account.
++
++Mike reported setting the four named profiles as instructed. He checked as a Sales User and could see Tier but could not edit it. The remaining user checks are recorded in the WI-001 test plan.
+diff --git a/delivery/deployment/component-tracker.csv b/delivery/deployment/component-tracker.csv
+index ebf12bd..9e98dc8 100644
+--- a/delivery/deployment/component-tracker.csv
++++ b/delivery/deployment/component-tracker.csv
+@@ -1,7 +1,7 @@
+ Component Type,Object/Parent,API Name,Label,Work Item,Change Type,Sandbox,Production,Notes
+-CustomField,Account,Tier__c,Tier,WI-001,New,No,No,Restricted optional picklist; Gold / Silver / Bronze; no default
+-Layout,Account,Account-Account Layo
+
+[CALL exec] git commit -m 'Record WI-002 sandbox deployment and acceptance gaps'
+  -> Script completed
+Wall time 3.0 seconds
+Output:
+
+{"chunk_id":"9a4a03","wall_time_seconds":0.000002083,"exit_code":0,"original_token_count":52,"output":"[claude/wi-002-tier-access-layout 956bd90] Record WI-002 sandbox deployment and acceptance gaps\n 4 files changed, 38 insertions(+), 8 deletions(-)\n create mode 100644 tests/WI-001-account-tier-test-plan.md\n"}
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.1/skills/memory-save/SKILL.md .memory/AGENTS.md .memory/memory-criteria.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+---
+name: memory-save
+description: 'Saves, corrects, or forgets one lasting fact in project memory, and sends anything that belongs elsewhere to its home. Use when the owner says "remember this", "from now on", "always do X", "never do X", "forget that", or "remind me", corrects the agent, or a hook says to save.'
+---
+
+# Memory save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Record format, types, focus, and glossary: `references/record-format.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Put each `toolkit` command on its own line. In Codex, a `toolkit` command joined to anything else (`&&`, `;`, a pipe, a heredoc) or run from a script runs inside the sandbox, which blocks Hindsight and Notion: run it alone. Text for `--body-file` and `--set-file`: in Claude Code pass it on standard input (`--set-file -` or `--body-file -` with a heredoc); in Codex make a new folder for each save with `mktemp -d`, write the file there, and delete the file and the folder after the command succeeds. Never use a fixed name such as `/tmp/focus.md`: another session could write the same file.
+
+## Steps
+
+1. Decide the home first, with the memory criteria (`.memory/memory-criteria.md` with built-in memory; otherwise `references/record-format.md`). Memory holds a lasting preference, correction, fact about the project or the owner, or a hard-to-find reference. Elsewhere: project work goes to `work-on`; a decision for the whole project to `work-decide` (`DECISIONS.md`); delivered behavior to `requirements/`; how a change is built to the item's design; verified current structure to `system-guide/`; outside documentation to `ai-external-knowledge/`; a standing rule for how agents work here is proposed as a rule-file change; an owner to-do with no work item goes to the current focus "Untracked to-dos"; a project term goes to the glossary. A short memory pointer to a hard-to-find record is allowed; never copy its body.
+2. Search first and update the existing record rather than add a duplicate.
+   `toolkit memory find "<topic>"`
+   `toolkit memory get <key>`
+3. Approval. This is the only written copy of the memory approval policy. Read the mode, then apply it:
+   `toolkit config get memory.approval`
+   The owner's own words ("remember", "from now on", "always", "never", "forget", a correction) are the approval: save now, with his name as the approver. `onboarding` mode (the default): something the agent inferred gets one yes-or-no line first ("Save to memory: <one-line summary>?"); save after a yes. `trusted` mode: routine facts the agent is sure of are saved and reported, without an approver. Always ask first, in either mode, for anything about a named person, personal details, a hard delete, more than five records at once, or a change to this policy. A 
+
+[CALL exec] toolkit memory focus
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+# Current focus
+
+Last updated: 2026-09-27, WI-001 and WI-002 build, Codex
+
+## Now
+
+- WI-001: field source and narrow manifest are on its local branch; see WI-001 for commit and validation evidence.
+- WI-002: Account Layout source and narrow layout package are committed on its local branch, which includes WI-001. Manual profile access steps are prepared; see WI-002 for validation limits.
+
+## Waiting on the owner
+
+- Trust this project folder in Codex when prompted, then open `/hooks` and trust the Toolkit V2 hooks and two Salesforce org guards.
+
+## Untracked to-dos
+
+- None.
+
+## Next session starts with
+
+- Open WI-001 and WI-002. Check effective override permissions and review the WI-002 package. The Account Layout source was retrieved successfully and Tier added below Rating. No remote named origin is configured in this copy, so local commits cannot be pushed here. Sandbox deployment needs separate owner approval; live layout and field access checks follow deployment and manual profile setup.
+
+
+[CALL exec] cat > /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.0iu4G90SJI/focus.md <<'EOF'
+# Current focus
+
+Last updated: 2026-09-27, WI-001 and WI-002 sandbox acceptance check, Codex
+
+## Now
+
+- WI-001: Mike reported successful field deployment. Sandbox describe confirms the optional field, ordered values, and no default. The field source has description and help text. See WI-001 and the test plan for remaining acceptance checks.
+- WI-002: Mike reported successful layout deployment and four profile settings. He verified that Sales User sees Tier but cannot edit it. R-03 is supported; effective editor and other-viewer checks remain in WI-002.
+
+## Waiting on the owner
+
+- Trust this project folder in Codex when prompted, then open `/hooks` and trust the Toolkit V2 hooks and two Salesforce org guards.
+
+## Untracked to-dos
+
+- None.
+
+## Next session starts with
+
+- Open WI-001 and WI-002. Read tests/WI-001-account-tier-test-plan.md on the WI-002 branch. Complete blank/value/clear and effective-access checks before result approval. Sandbox Account data writes need the owner's approval in that chat. Local branch commits include sandbox outcome records. No remote named origin is configured in this copy, so these commits cannot be pushed here.
+EOF
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+
+
+[CALL exec] toolkit memory focus --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.0iu4G90SJI/focus.md
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved the current focus (20 lines). Version: ee4db2ab9abb
+
+
+[CALL exec] toolkit memory focus
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+# Current focus
+
+Last updated: 2026-09-27, WI-001 and WI-002 sandbox acceptance check, Codex
+
+## Now
+
+- WI-001: Mike reported successful field deployment. Sandbox describe confirms the optional field, ordered values, and no default. The field source has description and help text. See WI-001 and the test plan for remaining acceptance checks.
+- WI-002: Mike reported successful layout deployment and four profile settings. He verified that Sales User sees Tier but cannot edit it. R-03 is supported; effective editor and other-viewer checks remain in WI-002.
+
+## Waiting on the owner
+
+- Trust this project folder in Codex when prompted, then open `/hooks` and trust the Toolkit V2 hooks and two Salesforce org guards.
+
+## Untracked to-dos
+
+- None.
+
+## Next session starts with
+
+- Open WI-001 and WI-002. Read tests/WI-001-account-tier-test-plan.md on the WI-002 branch. Complete blank/value/clear and effective-access checks before result approval. Sandbox Account data writes need the owner's approval in that chat. Local branch commits include sandbox outcome records. No remote named origin is configured in this copy, so these commits cannot be pushed here.
+
+
+[CALL exec] toolkit doctor
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Toolkit doctor for Acme CRM (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2).
+
+Warnings (3):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+3. The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them.
+   Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.
+
+Notes (6):
+- AGENTS.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- README.md was changed by the project, so sync leaves it alone. The toolkit would: the project had this file before the toolkit; the toolkit version was not installed. The project-setup skill shows these to the owner and makes the changes he approves.
+- delivery/deployment/full-project-deployment-template/package.xml was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- sfdx-project.json was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+
+Result: 0 problems and 3 warnings.
+
+
+[CALL exec] rm /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.0iu4G90SJI/wi001-overview.md /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.0iu4G90SJI/wi002-overview.md /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.0iu4G90SJI/focus.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+
+
+[CALL exec] rmdir /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.0iu4G90SJI
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+
+
+[CALL exec] toolkit work edit WI-001 --section "Open Questions" --append-row "| Q-04 | Will you authorize creating one sandbox test Account, saving Gold, Silver, Bronze, clearing Tier, and deleting that test Account to complete R-01? | R-01 live acceptance check | Open | owner |"
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Open Questions" in WI-001.
+
+
+[CALL exec] toolkit work set WI-001 --waiting-on owner
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Updated WI-001: waiting on owner.
+Now 09 Testing (In Progress). Continue with work-decide.
+
+
+[CALL exec] toolkit work edit WI-002 --section "Open Questions" --append-row "| Q-02 | Can you check Tier as Sales Manager, System Administrator, and Read Only users on Accounts they can view, and confirm a user without Account record access still cannot open that Account? | R-02 effective-user acceptance check | Open | owner |"
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Open Questions" in WI-002.
+
+
+[CALL exec] toolkit work set WI-002 --waiting-on owner
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Updated WI-002: waiting on owner.
+Now 09 Testing (In Progress). Continue with work-decide.
+
+
+[CALL exec] mktemp -d
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+/var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.jjolLe39ps
+
+
+[CALL exec] cat > /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.jjolLe39ps/focus.md <<'EOF'
+# Current focus
+
+Last updated: 2026-09-27, WI-001 and WI-002 sandbox acceptance check, Codex
+
+## Now
+
+- WI-001: Mike reported successful field deployment. Sandbox describe confirms the optional field, ordered values, and no default. The field source has description and help text. See WI-001 and the test plan for remaining acceptance checks.
+- WI-002: Mike reported successful layout deployment and four profile settings. He verified that Sales User sees Tier but cannot edit it. R-03 is supported; effective editor and other-viewer checks remain in WI-002.
+
+## Waiting on the owner
+
+- WI-001: authorization for one sandbox test Account to check blank, Gold, Silver, Bronze, clear, and cleanup.
+- WI-002: Sales Manager, System Administrator, Read Only, and record-access user checks.
+- Trust this project folder in Codex when prompted, then open `/hooks` and trust the Toolkit V2 hooks and two Salesforce org guards.
+
+## Untracked to-dos
+
+- None.
+
+## Next session starts with
+
+- Open WI-001 and WI-002. Read tests/WI-001-account-tier-test-plan.md on the WI-002 branch. Complete blank/value/clear and effective-access checks before result approval. Local branch commits include sandbox outcome records. No remote named origin is configured in this copy, so these commits cannot be pushed here.
+EOF
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+
+
+[CALL exec] toolkit memory focus --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.jjolLe39ps/focus.md
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved the current focus (22 lines). Version: 88e8d43821ea
+
+
+[CALL exec] toolkit memory focus
+   toolkit work validate WI-001
+   toolkit work validate WI-002
+   toolkit doctor
+   git -C .claude/worktrees/wi-001-account-tier status --short --branch
+   git -C .claude/worktrees/wi-002-tier-access-layout status --short --branch
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+{"cmd":"toolkit memory focus","status":"fulfilled","value":{"chunk_id":"a26613","wall_time_seconds":0.000004125,"exit_code":0,"original_token_count":324,"output":"# Current focus\n\nLast updated: 2026-09-27, WI-001 and WI-002 sandbox acceptance check, Codex\n\n## Now\n\n- WI-001: Mike reported successful field deployment. Sandbox describe confirms the optional field, ordered values, and no default. The field source has description and help text. See WI-001 and the test plan for remaining acceptance checks.\n- WI-002: Mike reported successful layout deployment and four profile settings. He verified that Sales User sees Tier but cannot edit it. R-03 is supported; effective editor and other-viewer checks remain in WI-002.\n\n## Waiting on the owner\n\n- WI-001: authorization for one sandbox test Account to check blank, Gold, Silver, Bronze, clear, and cleanup.\n- WI-002: Sales Manager, System Administrator, Read Only, and record-access user checks.\n- Trust this project folder in Codex when prompted, then open `/hooks` and trust the Toolkit V2 hooks and two Salesforce org guards.\n\n## Untracked to-dos\n\n- None.\n\n## Next session starts with\n\n- Open WI-001 and WI-002. Read tests/WI-001-account-tier-test-plan.md on the WI-002 branch. Complete blank/value/clear and effective-access checks before result approval. Local branch commits include sandbox outcome records. No remote named origin is configured in this copy, so these commits cannot be pushed here.\n"}}
+{"cmd":"toolkit work validate WI-001","status":"fulfilled","value":{"chunk_id":"995394","wall_time_seconds":0.000004875,"exit_code":0,"original_token_count":16,"output":"Checked 1 item: 1 clean, 0 errors, 0 questions for the owner.\n"}}
+{"cmd":"toolkit work validate WI-002","status":"fulfilled","value":{"chunk_id":"0e6999","wall_time_seconds":0.000001958,"exit_code":0,"original_token_count":102,"output":"Checked 1 item: 0 clean, 0 errors, 0 questions for the owner.\nWI-002 (.work-items/account-tier/WI-001-add-account-tier-picklist/WI-002-tier-access-and-layout/WORK-ITEM.md):\n  Warning: The template's fill-in guide comment is still at the top of the body. It says to delete it once the item is filled; remove it with toolkit work edit, or it goes when the requirements are approved or the item is finished.\n"}}
+{"cmd":"toolkit doctor","status":"fulfilled","value":{"chunk_id":"49099a","wall_time_seconds":0.040832,"exit_code":1,"original_token_count":468,"output":"Toolkit doctor for Acme CRM (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2).\n\nWarnings (3):\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to t
+
+[CALL exec] rm /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.jjolLe39ps/focus.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+
+
+[CALL exec] rmdir /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.jjolLe39ps
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+
+
+[AGENT] **The sandbox result partly meets the approved requirements.** An independent review checked the source and deployment records; I also read the sandbox Account field definition.
+
+| Requirement | Result |
+| --- | --- |
+| R-01 — Tier values and field behavior | **Partly verified.** The sandbox shows Gold, Silver, Bronze in order, with Tier optional and no default. The source has the approved description and help text. Saving a new Account blank, saving each value, and clearing Tier remain untested. |
+| R-02 — Field access | **Partly verified.** You completed the four profile settings and confirmed that Sales User can see Tier but cannot edit it. Sales Manager and administrator editing, Read Only access, other effective grants, and Account record access remain unchecked. |
+| R-03 — Main Account page | **Met on the available evidence.** The deployed layout source places Tier below Rating, and you saw Tier as a Sales User. |
+
+I recorded your deploy results and the remaining checks in the [test plan](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/.claude/worktrees/wi-002-tier-access-layout/tests/WI-001-account-tier-test-plan.md). The records are committed locally; this copy has no `origin` remote.
+
+To finish R-01, **may I create one sandbox test Account, save Gold, Silver, and Bronze, clear Tier, then delete the test Account?** The project rule requires your approval in this chat for those sandbox data changes. For R-02, please check whether Sales Manager and System Administrator users can edit and clear Tier, whether Read Only can see but not edit it, and whether a user without access to an Account still cannot open it.
+
+SKILLS OPENED (SKILL.md read): ['work-on', 'work-check', 'sf-component-tracker', 'publish-docs', 'memory-save']
+
+TOOLKIT COMMANDS:
+   toolkit work show WI-001
+   toolkit work show WI-002
+   toolkit work show WI-002
+   toolkit work design WI-001
+   toolkit work set WI-001 --stage 09-testing
+   toolkit work set WI-002 --stage 09-testing
+   toolkit work show WI-001 --section Overview
+   toolkit work show WI-002 --section Overview
+   toolkit work show WI-001 --section Tasks
+   toolkit work show WI-002 --section Tasks
+   toolkit work edit WI-001 --section Overview --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.0iu4G90SJI/wi001-overview.md
+   toolkit work edit WI-002 --section Overview --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.0iu4G90SJI/wi002-overview.md
+   toolkit work history WI-001 --note "Mike reported: 'I ran both sandbox deploys and both succeeded. I also set the Tier field access on the four profiles the way your manual steps say, and as a Sales User I can see Tier but not edit it.' Sandbox describe confirms optional Tier, no default, and ordered values. Independent review: R-01 partly met, R-02 partly met, R-03 met
+   toolkit work history WI-002 --note "Mike reported successful WI-001 and WI-002 sandbox deploys, four profile access settings, and a Sales User check where Tier is visible but not editable. R-03 is supported
+   toolkit work validate WI-001
+   toolkit work validate WI-002
+   toolkit memory focus
+   toolkit memory focus --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.0iu4G90SJI/focus.md
+   toolkit memory focus
+   toolkit doctor
+   toolkit work edit WI-001 --section "Open Questions" --append-row "
+   toolkit work set WI-001 --waiting-on owner
+   toolkit work edit WI-002 --section "Open Questions" --append-row "
+   toolkit work set WI-002 --waiting-on owner
+   toolkit memory focus --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.jjolLe39ps/focus.md
+   toolkit memory focus
+   toolkit work validate WI-001
+   toolkit work validate WI-002
+   toolkit doctor

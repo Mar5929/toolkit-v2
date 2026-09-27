@@ -1,0 +1,3 @@
+Your approval is clear, but I can’t record it yet: WI-001’s **Agreed goal** is still blank, and the work-decide skill requires that line before requirements approval.
+
+Do you agree with this goal: **“Let the sales team rank accounts using an Account Tier picklist”?** Your yes will let me fill the line and record the approval you already gave.

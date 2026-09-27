@@ -1,0 +1,176 @@
+{
+  "toolkit": "toolkit-v2",
+  "schema": 1,
+  "project": {
+    "name": "Toolkit V2 sample run c (safe to delete)",
+    "key": "tv2-sample-run-c",
+    "owner": "Mike Rihm",
+    "created": "2026-09-27"
+  },
+  "tracker": {
+    "type": "notion",
+    "idPrefix": "TSRC"
+  },
+  "memory": {
+    "type": "notion",
+    "approval": "onboarding"
+  },
+  "salesforce": {
+    "enabled": false
+  },
+  "hosts": [
+    "claude-code",
+    "codex"
+  ],
+  "declined": [
+    "SOUL.md"
+  ],
+  "notion": {
+    "rootPageId": "3e7b381d-a176-803f-a48f-e838ee648e67",
+    "projects": {
+      "databaseId": "3901f052-2c56-4603-ad56-7f5924655925",
+      "dataSourceId": "212cab42-22e0-4682-9fe1-a697a028331a",
+      "properties": {
+        "key": "EGxs",
+        "repository": "f%7C%7C%5B",
+        "localPath": "VNG%3F",
+        "tracker": "%7DhB%3E",
+        "memorySystem": "EEn%3E",
+        "salesforce": "NyXS",
+        "workItemsDataSource": "_m%3F%3B",
+        "memoryDataSource": "%3DgRM",
+        "setUpOn": "%5CVMx",
+        "title": "title"
+      }
+    },
+    "project": {
+      "pageId": "3e8b381d-a176-81c8-a2f7-cc7858684827",
+      "url": "https://app.notion.com/p/Toolkit-V2-sample-run-c-safe-to-delete-3e8b381da17681c8a2f7cc7858684827",
+      "key": "tv2-sample-run-c"
+    },
+    "workItems": {
+      "databaseId": "59c262e7-dd8c-4af2-bfd4-d5a389e31dfb",
+      "dataSourceId": "fbba0a17-212b-41af-9e91-47d97e1aca1a",
+      "url": "https://app.notion.com/p/59c262e7dd8c4af2bfd4d5a389e31dfb",
+      "idPrefix": "TSRC",
+      "properties": {
+        "title": "title",
+        "id": "n%60tb",
+        "stage": "Zwb%3B",
+        "status": "%3FYnF",
+        "type": "%5E%3FOz",
+        "priority": "TdkK",
+        "waitingOn": "%3CUlT",
+        "delivery": "%5DrpV",
+        "requirementsApproved": "WeQ%3F",
+        "design": "UmbC",
+        "designApproved": "VsXt",
+        "resultApproved": "tFH_",
+        "nextAction": "KOdV",
+        "openOwnerQuestions": "Xt%5Es",
+        "updated": "qfNs",
+        "archived": "%7CDhZ",
+        "lastEdited": "B%5DJk",
+        "parent": "%3CTTI",
+        "subItems": "%5BR_o",
+        "blockedBy": "MH%40Y",
+        "blocking": "zTDz"
+      },
+      "names": {
+        "title": "Work item",
+        "id": "ID",
+        "stage": "Stage",
+        "status": "Status",
+        "type": "Type",
+        "priority": "Priority",
+        "waitingOn": "Waiting on",
+        "delivery": "Delivery",
+        "requirementsApproved": "Requirements approved",
+        "design": "Design",
+        "designApproved": "Design approved",
+        "resultApproved": "Result approved",
+        "nextAction": "Next action",
+        "openOwnerQuestions": "Open owner questions",
+        "updated": "Updated",
+        "archived": "Archived",
+        "lastEdited": "Last edited",
+        "parent": "Parent item",
+        "subItems": "Sub-items",
+        "blockedBy": "Blocked by",
+        "blocking": "Blocking"
+      },
+      "views": {
+        "board": "3e8b381d-a176-8155-8578-000cf39360b1",
+        "allItems": "7d98f929-3186-4f3d-a0d7-1c4e54088ed4"
+      }
+    },
+    "memory": {
+      "databaseId": "5a83d3fc-a8ac-40d7-9a47-5e9dab0f081a",
+      "dataSourceId": "488230f5-5c57-43ad-b360-a871ba5d4f15",
+      "url": "https://app.notion.com/p/5a83d3fca8ac40d79a475e9dab0f081a",
+      "properties": {
+        "title": "title",
+        "type": "dnmu",
+        "name": "LQVq",
+        "description": "jut%5B",
+        "status": "NCco",
+        "supersededBy": "s%7B%3Ad",
+        "source": "M%7CYR",
+        "saved": "b~m%3E",
+        "lastVerified": "fkdu",
+        "approvedBy": "FWhr",
+        "extra": "k%5EvZ",
+        "lastEdited": "%3EISv"
+      },
+      "names": {
+        "title": "Key",
+        "type": "Type",
+        "name": "Name",
+        "description": "Description",
+        "status": "Status",
+        "supersededBy": "Superseded by",
+        "source": "Source",
+        "saved": "Saved",
+        "lastVerified": "Last verified",
+        "approvedBy": "Approved by",
+        "extra": "Other fields",
+        "lastEdited": "Last edited"
+      },
+      "views": {
+        "index": "40b27a55-dbd6-43cf-9fb9-46cfa8c56cae",
+        "retired": "3e8b381d-a176-8158-98bb-000c68c08191"
+      },
+      "pages": {
+        "focus": "3e8b381d-a176-810c-b32d-de7499822212",
+        "glossary": "3e8b381d-a176-811a-acca-c5a59aae3846"
+      }
+    }
+  },
+  "hindsight": {},
+  "installed": {
+    ".claude/output-styles/plain-english.md": "b25d7be1b6a6034fc56d93ab80dee9fbe5a106cedacba6d6a3989d6b37946deb",
+    ".claude/rules/ai-external-knowledge.md": "c2140569c1dbe7592014f85e58f69314d09df74fe11ae48cbd47b08a3675c2e5",
+    ".claude/rules/humanize-outbound-text.md": "daa38057e72bde93a8057254d0ddcb220a4182e0636bd4f972552b53b520c561",
+    ".claude/rules/keep-work-item-current.md": "dd634b7d00ce9452eb9418ef682fe541c8a7565ff7bfe7eea5189dd997298867",
+    ".claude/rules/memory-review-and-save.md": "1a7b63b66bdbde4ee30d3dc81a7d695e43a7400b0cc9aa7a2043c9c703f7d044",
+    ".claude/rules/plain-english-artifacts.md": "692f6de8c6a824ef783d755ba6c431881c6444617dccb27a27e8bb343f22db9e",
+    ".claude/rules/publish-project-documents.md": "da1e72639a5da6daed6ab9e722cdeb5b96836d6475ce15bb989f445cc2a101ba",
+    ".claude/rules/session-handoff.md": "8f65bd122e6155e421c0c8199c1034106695a03e16cb04cbd190724cd6e31c34",
+    ".claude/rules/shared-repository-work.md": "359098503ab4f30dfb66956ef27d746e38a8e5ef95348a43069c98e1c620c3e4",
+    ".claude/settings.json": "885fe23fa367732833a601565cc0539aae5ab5c224840992a5a6685cf68cf7dc",
+    ".gitignore": "69a8a7e304acb5c0f2dadc5ad42631c5c3c1db75798eecc8924a0c17a42f62b4",
+    "AGENTS.md": "38291d2d07cba4654f393d2c8304fb29e62d9511db1e1edda628bbad959b65bc",
+    "CLAUDE.md": "336cc4fbf19beaada7ccf9986414fa91851a8d7a07dfb3ccbe800a69eed0ab49",
+    "DECISIONS.md": "b7d509350bd8b19f828c719fee436c1d09dfaf49489258feef376bda1b6d55d4",
+    "PROJECT-ROADMAP.md": "62b9dfccb5fcfef83f30216a4fc28a1c97f7669af9007fdb55603c05ddd158c1",
+    "PROJECT.md": "e4cd7da7c31409593169a835cc4a21983a474a9a749faf73d5d790ce0036b142",
+    "README.md": "a0b695f7f6b80c5cce9e2c9da3f50cd9cd98ba2eabf03a84fea091b74d06e173",
+    "requirements/AGENTS.md": "c1c9b8e4d03011a3876acbfb0db26f11aadf5c337ddd2c060639bcea9dc08fe2",
+    "requirements/SYSTEM-DATA-MODEL.md": "5b21749de4389227ac5362c986fa0f00a2b17212b6b2b68a04904197219a47ee",
+    "requirements/system-area-template/AREA-TEMPLATE.md": "24c945f06b2a3469b91b4bba13749cccbbfa54ba10ff8f956adf25e9c4093b69",
+    "system-guide/AREA-TEMPLATE.md": "4b447ce177ea963f7fb23aaa4961629801d215b4d4c01cda6be833f6b709ba6c",
+    "tests/TEST-PLAN-TEMPLATE.md": "73826c28ebbc9506a8395df5ea7f0dbabaf9b8f8cf84708990af0685b5538673",
+    ".codex/config.toml": "bad02e45f1a9e1ae6d8e78f17a7f7f185d30f8773b585b5e876f9f237b72f656",
+    ".codex/rules/toolkit.rules": "12d6e7084580a850305012bcc69e8f858ac7afff6177e73c6818ea6ae570f21e"
+  }
+}

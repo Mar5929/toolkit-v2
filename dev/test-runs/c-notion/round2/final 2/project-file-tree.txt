@@ -1,0 +1,66 @@
+Project folder: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/c-notion-r2
+
+$ git log --oneline --all --graph
+* 9516b64 Explain how to add a quote
+* c2329c8 Add project brief to README
+* 6bfc120 Add Toolkit V2 project setup
+* 75ed330 Add quote script
+
+$ git status --short --branch
+## main
+
+$ git worktree list
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/c-notion-r2 9516b64 [main]
+
+$ git branch --list
+* main
+
+$ find . -path ./.git -prune -o -type f -print | sort
+./.claude/output-styles/plain-english.md
+./.claude/rules/ai-external-knowledge.md
+./.claude/rules/humanize-outbound-text.md
+./.claude/rules/keep-work-item-current.md
+./.claude/rules/memory-review-and-save.md
+./.claude/rules/plain-english-artifacts.md
+./.claude/rules/publish-project-documents.md
+./.claude/rules/session-handoff.md
+./.claude/rules/shared-repository-work.md
+./.claude/settings.json
+./.codex/config.toml
+./.codex/rules/toolkit.rules
+./.gitignore
+./.toolkit.json
+./AGENTS.md
+./CLAUDE.md
+./DECISIONS.md
+./PROJECT-ROADMAP.md
+./PROJECT.md
+./README.md
+./ai-external-knowledge/INDEX.md
+./quote.js
+./requirements/AGENTS.md
+./requirements/SYSTEM-DATA-MODEL.md
+./requirements/system-area-template/AREA-TEMPLATE.md
+./system-guide/AREA-TEMPLATE.md
+./tests/TEST-PLAN-TEMPLATE.md
+
+$ ls .git/toolkit-v2 .git/toolkit-v2/notion
+.git/toolkit-v2:
+memory-cache.json
+notion
+
+.git/toolkit-v2/notion:
+ensure.json
+memory.json
+scope.json
+tracker.json
+
+$ git show --stat HEAD~1 HEAD
+c2329c8 Mike Rihm <michael@rihm.com> Add project brief to README
+
+ README.md | 6 ++++++
+ 1 file changed, 6 insertions(+)
+9516b64 Mike Rihm <michael@rihm.com> Explain how to add a quote
+
+ README.md | 1 +
+ 1 file changed, 1 insertion(+)

@@ -1,0 +1,42 @@
+# Owner runs the agent's git commands in his own terminal, 2026-09-26T21:45:32-0400
+$ git restore -- delivery/deployment/component-tracker.csv delivery/deployment/full-project-deployment-template/package.xml sfdx-project.json
+[exit=0]
+$ git clean -fd -- delivery/deployment/WI-001-account-tier force-app tests/WI-001-account-tier-test-plan.md
+Removing delivery/deployment/WI-001-account-tier/
+Removing force-app/
+Removing tests/WI-001-account-tier-test-plan.md
+[exit=0]
+$ git fetch .claude/worktrees/wi-001-tier claude/wi-001-tier
+From .claude/worktrees/wi-001-tier
+ * branch            claude/wi-001-tier -> FETCH_HEAD
+[exit=0]
+$ git merge --ff-only FETCH_HEAD
+Updating d82d509..e43580c
+Fast-forward
+ .../WI-001-account-tier/DEPLOYMENT-RECORD.md       | 26 ++++++++++++++
+ .../deployment/WI-001-account-tier/manual-steps.md | 42 ++++++++++++++++++++++
+ .../deployment/WI-001-account-tier/package.xml     |  8 +++++
+ delivery/deployment/component-tracker.csv          |  1 +
+ .../full-project-deployment-template/package.xml   | 14 ++++----
+ .../objects/Account/fields/Tier__c.field-meta.xml  | 30 ++++++++++++++++
+ sfdx-project.json                                  |  2 +-
+ tests/WI-001-account-tier-test-plan.md             | 29 +++++++++++++++
+ 8 files changed, 143 insertions(+), 9 deletions(-)
+ create mode 100644 delivery/deployment/WI-001-account-tier/DEPLOYMENT-RECORD.md
+ create mode 100644 delivery/deployment/WI-001-account-tier/manual-steps.md
+ create mode 100644 delivery/deployment/WI-001-account-tier/package.xml
+ create mode 100644 force-app/main/default/objects/Account/fields/Tier__c.field-meta.xml
+ create mode 100644 tests/WI-001-account-tier-test-plan.md
+[exit=0]
+$ git log --oneline -8
+e43580c Record complete Account Tier coverage check
+11bbc98 Record Tier sandbox acceptance evidence
+07c846b Record Tier sandbox deployment and access checks
+907a5da Record blocked Tier sandbox deployment
+ed2e6d4 Document Account Tier profile and layout setup
+46163ac Build Account Tier field source and deployment records
+d82d509 Set up Toolkit V2
+f8ad374 Initial commit
+[exit=0]
+$ git status --short
+[exit=0]

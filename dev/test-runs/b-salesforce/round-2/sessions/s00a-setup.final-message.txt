@@ -1,0 +1,9 @@
+Toolkit V2 setup stopped when Codex’s sandbox blocked a write to `.agents/`. The **project-setup skill** says to stop at this point and have you run the exact init command outside Codex; it reports that no other setup files were written.
+
+Please run this in a Terminal window:
+
+```sh
+toolkit init --dir /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2 --name "Acme CRM" --key acme-crm --tracker local --memory builtin --owner Mike --salesforce --hosts claude-code,codex --decline SOUL.md
+```
+
+Then tell me it finished. I’ll set the two org aliases, check the Salesforce API version, finish the project guides, and run the final checks.

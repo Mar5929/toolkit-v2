@@ -1,0 +1,2 @@
+I’ll run the approved command outside the sandbox and report its exact output or error.
+`git add probe.txt` exited with code 0. It produced no output.

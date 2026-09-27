@@ -1,0 +1,1 @@
+Ship WI-001. There is no remote, so merging it locally into main is fine; you have my OK for that merge.

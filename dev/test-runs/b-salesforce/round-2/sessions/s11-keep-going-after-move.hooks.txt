@@ -1,0 +1,34 @@
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Add Account Tier picklist: 06 Implementation plan, In Progress. Next action: Agent plans the field work on WI-001 and WI-002's access and layout work from the approved design. Verify the field name, exact layout as... Continues with work-on.
+- WI-002 Configure Account Tier access and page layout: 06 Implementation plan, In Progress. Next action: Agent verifies the assigned main Account layout, page mechanism, profiles, permission sets, groups, and override permissions, then plans... Continues with work-on.
+
+Items: 2 in progress.
+
+Changes found in the tracker since the last toolkit command. The owner has not been told about them in this session; work-on and work-organize say each one to him in one line before other work (work-organize handles moves and copies; work-decide handles questions):
+- Moved: WI-001 from .work-items/WI-001-add-account-tier-picklist/WORK-ITEM.md to .work-items/account-tier/WI-001-add-account-tier-picklist/WORK-ITEM.md.
+- Renamed folder: WI-002 is now at .work-items/account-tier/WI-001-add-account-tier-picklist/WI-002-tier-access-and-layout/WORK-ITEM.md (was .work-items/WI-001-add-account-tier-picklist/WI-002-configure-account-tier-access-and-page/WORK-ITEM.md). Its parent WI-001 moved too.
+
+Current focus:
+Last updated: 2026-09-27, WI-001 split, Codex
+## Now
+- WI-001 and WI-002: continue implementation planning from the approved Option A design. WI-001 owns the Account Tier field; WI-002 owns access and the main Account page layout.
+## Waiting on the owner
+- Trust this project folder in Codex when prompted, then open `/hooks` and trust the Toolkit V2 hooks and two Salesforce org guards.
+## Untracked to-dos
+- None.
+## Next session starts with
+- Open WI-001 and WI-002. Verify the field API name, exact main Account layout assignment, page mechanism, and effective access before building. The approved design is in WI-001. A changed component scope or access approach needs a design decision. Sandbox deployment needs separate approval.
+
+Project memory (builtin): 1 record. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_custom_field_documentation: Every new Salesforce custom field should have a description and help text
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them. Fix: The owner opens /hooks in Codex in this project and trusts th
+

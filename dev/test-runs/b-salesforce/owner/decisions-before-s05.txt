@@ -1,0 +1,8 @@
+2 decisions wait on the owner:
+
+WI-001 Add a Tier picklist field to Account
+  - Q-04: For the solution design, use Salesforce built-in features and one option, or show multiple options? Affects Design approach. (work-decide)
+  - Q-05: May the design use one requirements analyst, one researcher, one design architect, and one critic? Affects Design review team. (work-decide)
+
+Agent to-do (the agent's step, not a decision the owner is waiting on):
+  - Make the agent-led delivery offer for WI-001 (it is a build item past requirements). work-delegate asks the owner once per goal. (work-delegate)

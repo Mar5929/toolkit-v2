@@ -1,0 +1,32 @@
+Set hosts to [
+  "claude-code",
+  "codex"
+] (was [
+  "claude-code"
+]).
+This setting is part of the project setup, so toolkit sync ran:
+  Added 3 files:
+    - SOUL.md
+    - .codex/config.toml
+    - .codex/rules/toolkit.rules
+  Changed by the project, left alone:
+    - .claude/output-styles/plain-english.md. The toolkit would: the project had this file before the toolkit; the toolkit version was not installed
+    - .claude/rules/ai-external-knowledge.md. The toolkit would: the project had this file before the toolkit; the toolkit version was not installed
+    - .claude/rules/humanize-outbound-text.md. The toolkit would: the project had this file before the toolkit; the toolkit version was not installed
+    - .claude/rules/keep-work-item-current.md. The toolkit would: the project had this file before the toolkit; the toolkit version was not installed
+    - .claude/rules/memory-review-and-save.md. The toolkit would: the project had this file before the toolkit; the toolkit version was not installed
+    - .claude/rules/plain-english-artifacts.md. The toolkit would: the project had this file before the toolkit; the toolkit version was not installed
+    - .claude/rules/publish-project-documents.md. The toolkit would: the project had this file before the toolkit; the toolkit version was not installed
+    - .claude/rules/session-handoff.md. The toolkit would: the project had this file before the toolkit; the toolkit version was not installed
+    - .claude/rules/shared-repository-work.md. The toolkit would: the project had this file before the toolkit; the toolkit version was not installed
+    - AGENTS.md. Nothing new from the toolkit.
+    - CLAUDE.md. The toolkit would: the project had this file before the toolkit; the toolkit version was not installed
+    - DECISIONS.md. The toolkit would: the project had this file before the toolkit; the toolkit version was not installed
+    - PROJECT-ROADMAP.md. The toolkit would: the project had this file before the toolkit; the toolkit version was not installed
+    - PROJECT.md. The toolkit would: the project had this file before the toolkit; the toolkit version was not installed
+    - README.md. The toolkit would: the project had this file before the toolkit; the toolkit version was not installed
+    - requirements/AGENTS.md. The toolkit would: the project had this file before the toolkit; the toolkit version was not installed
+    - requirements/SYSTEM-DATA-MODEL.md. The toolkit would: the project had this file before the toolkit; the toolkit version was not installed
+    - requirements/system-area-template/AREA-TEMPLATE.md. The toolkit would: the project had this file before the toolkit; the toolkit version was not installed
+    - system-guide/AREA-TEMPLATE.md. The toolkit would: the project had this file before the toolkit; the toolkit version was not installed
+    - tests/TEST-PLAN-TEMPLATE.md. The toolkit would: the project had this file before the toolkit; the toolkit version was not installed

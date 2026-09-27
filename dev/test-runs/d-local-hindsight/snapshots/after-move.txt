@@ -1,0 +1,14 @@
+# Commands the tester ran as Mike
+mkdir .work-items/WI-001-add-a-shout-flag-to-the-greet-cli/docs
+mv .work-items/WI-001-add-a-shout-flag-to-the-greet-cli/WI-002-document-shout-in-the-readme .work-items/WI-001-add-a-shout-flag-to-the-greet-cli/docs/WI-002-readme
+
+# After the hand move, 2026-09-27T19:49:56Z
+.work-items
+.work-items/.toolkit-state.json
+.work-items/DASHBOARD.md
+.work-items/WI-001-add-a-shout-flag-to-the-greet-cli
+.work-items/WI-001-add-a-shout-flag-to-the-greet-cli/DESIGN.md
+.work-items/WI-001-add-a-shout-flag-to-the-greet-cli/WORK-ITEM.md
+.work-items/WI-001-add-a-shout-flag-to-the-greet-cli/docs
+.work-items/WI-001-add-a-shout-flag-to-the-greet-cli/docs/WI-002-readme
+.work-items/WI-001-add-a-shout-flag-to-the-greet-cli/docs/WI-002-readme/WORK-ITEM.md

@@ -1,0 +1,52 @@
+=== HOOK additional_context (ordinal 9, ts 2026-09-27T19:40:51.234Z)
+Project briefing: greet (greet), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The backlog has 1 item; toolkit work next suggests which to take up.
+
+Waiting on the owner:
+- WI-001 Add a --version flag to the greet CLI: Q-01: What initial version number should --version print? Affects R-02. (work-decide)
+
+Items: 1 in the backlog.
+
+Current focus:
+Last updated: 2026-09-27, project setup by Codex from Mike's request
+## Now
+- Toolkit V2 setup is complete. No work item has been opened.
+## Waiting on the owner
+- Trust this project folder when Codex asks, so it loads the project settings and plugins.
+- Open `/hooks` in Codex and trust the Toolkit V2 hooks, so Codex can run the project briefing and reminders.
+- Start a new Claude Code session in this project so it loads the project settings and Plain English style.
+## Untracked to-dos
+- None.
+## Next session starts with
+- Read `PROJECT.md` and the project briefing, then ask Mike for the first thing to build.
+
+Project memory (builtin): 0 records. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Always-on rules. Claude Code loads them by itself; in Codex, each one is read at session start:
+- .claude/rules/humanize-outbound-text.md: Humanize Anything Sent to Another Person
+- .claude/rules/keep-work-item-current.md: Keep the Active Work Item Accurate
+- .claude/rules/memory-review-and-save.md: Review and Save Project Memory
+- .claude/rules/plain-english-artifacts.md: Write Artifacts in Plain English
+- .claude/rules/session-handoff.md: Prepare a Session Handoff
+- .claude/rules/shared-repository-work.md: Work Safely in a Shared Repository
+- .claude/rules/work-item-folders.md: Local Work-Item Folders
+
+How to write replies (from AGENTS.md):
+Claude Code applies the Plain English output style to chat. Codex and helper agents follow these lines instead.
+
+- Start with the answer, result, or current status. Answer what was asked. Keep it short; add detail when asked.
+- Use ordinary words. Explain an unfamiliar term the first time it matters. Use the exact name a system uses, the same way every time.
+- Write literally: no metaphors, idioms, jokes, or picture words in place of the real name. State the point directly, without a "not this, but that" setup.
+- Use paragraphs for a connected explanation, bullets for separate items or choices, and a heading only when it names what is under it.
+- When asking for a decision, name the choice and the difference that matters, and recommend one.
+- Use the exact status word: written, built, tested, merged, installed, or seen working. Say something works only when you saw it work.
+- Leave out routine narration of process and helper activity. Give one direct line when the owner lost something, an action cannot be undone, work waits on the owner, or there is a cost.
+
+=== HOOK additional_context (ordinal 12, ts 2026-09-27T19:40:51.335Z)
+The owner stated something to keep; memory-save records it, or work-on if it is a task.
+

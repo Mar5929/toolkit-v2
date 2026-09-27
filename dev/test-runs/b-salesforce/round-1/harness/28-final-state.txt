@@ -1,0 +1,53 @@
+$ toolkit work list --tree --all
+account-tier/ (group)
+  WI-001  Account Tier picklist  (14 Specification update, Done)
+    WI-002  Account Tier field metadata  (09 Testing, Done)
+    WI-003  Account Tier access setup  (09 Testing, Done)
+$ toolkit work validate
+Checked 3 items: 3 clean, 0 errors, 0 questions for the owner.
+[exit=0]
+$ toolkit work decisions
+Nothing is waiting on the owner.
+$ toolkit memory find "custom field"
+1 memory record matches "custom field" (best first):
+- user_custom_field_description_help_text: Every new custom field should have a description and help text.
+    # Custom field description help text **Remember:** Mike prefers every new Salesforce custom field to have a description and help text. Why: Field purpose and...
+Read a record with toolkit memory get <key> before relying on it.
+$ toolkit doctor
+Toolkit doctor for Acme CRM (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r1).
+
+Problems (1):
+1. 1 scaffold file is missing: SOUL.md.
+   Fix: Run toolkit sync.
+
+Warnings (3):
+2. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r1). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+3. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+4. The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them.
+   Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.
+
+Notes (6):
+- AGENTS.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- README.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- delivery/deployment/component-tracker.csv was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- delivery/deployment/full-project-deployment-template/package.xml was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- sfdx-project.json was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+
+Result: 1 problem and 3 warnings.
+[exit=1]
+$ git log --oneline
+530a3e4 Record WI-001 production delivery and requirements baseline
+e43580c Record complete Account Tier coverage check
+11bbc98 Record Tier sandbox acceptance evidence
+07c846b Record Tier sandbox deployment and access checks
+907a5da Record blocked Tier sandbox deployment
+ed2e6d4 Document Account Tier profile and layout setup
+46163ac Build Account Tier field source and deployment records
+d82d509 Set up Toolkit V2
+f8ad374 Initial commit
+$ git status --short
+$ git worktree list
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r1 530a3e4 [main]

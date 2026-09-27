@@ -1,0 +1,1 @@
+Yes, mark WI-001 Done, and remove both leftover worktrees and their branches.

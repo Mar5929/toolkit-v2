@@ -1,0 +1,397 @@
+# Session s11-what-do-you-need
+thread: 01a0e3fe-7309-7fe2-8604-413d4b9da97c | start: 2026-09-27T17:51:38Z | end: 2026-09-27T17:52:10Z | exit=0
+extra args: 
+
+## Prompt
+
+What do you need from me?
+
+## Hook context injected (SessionStart, UserPromptSubmit, PostToolUse)
+
+- 2026-09-27T17:51:42.121Z:
+    Project briefing: Toolkit V2 sample run c (safe to delete) (tv2-sample-run-c), owner Mike Rihm. Work items: the Notion Work Items database (ids like TSRC-001). Memory: the Notion Memory database. Salesforce: no. Hosts: Claude Code and Codex.
+    Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/c-notion-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+    
+    This worktree is on branch main, which names no work item.
+    
+    Active items:
+    - TSRC-001 Write a short project brief in README.md: 08 Build, In Progress. Next action: After Mike Rihm reviews TSRC-002's result, integrate its commit into TSRC-001's branch, check the full four-bullet brief, and present the... Continues with work-on.
+    - TSRC-002 Explain how to add a quote in README.md: 11 User approval, In Progress, waiting on owner. Next action: Mike Rihm reviews the fourth bullet and approves or requests a change to TSRC-002's result. After approval, integrate commit `9516b64` in... Continues with work-decide.
+    
+    Waiting on the owner:
+    - TSRC-002 Explain how to add a quote in README.md: TSRC-002 is waiting on the owner (11 User approval). (work-decide)
+    
+    Items: 2 in progress. (Local copy of the Notion board from 2026-09-27T17:51:21.994Z.)
+    
+    Current focus:
+    Last updated: 2026-09-27, TSRC-002 result review, agent
+    ## Now
+    - TSRC-001 Write a short project brief in README.md.
+    - TSRC-002 Explain how to add a quote in README.md.
+    ## Waiting on the owner
+    - Review and approve or request changes to TSRC-002's separate quote instruction result.
+    ## Untracked to-dos
+    None.
+    ## Next session starts with
+    - Read TSRC-002 and TSRC-001. Mike Rihm approved Option A for TSRC-001. TSRC-001's first three README bullets are committed at `c2329c8` on `claude/tsrc-001-project-brief`. TSRC-002 adds only the fourth bullet at `9516b64` on `claude/tsrc-002-add-quote`. An independent checker found all child acceptance checks met and no diff defects. Ask for TSRC-002 result approval first. After approval, integrate the child commit into TSRC-001's branch, check the full four-bullet brief against `6bfc120`, and ask for TSRC-001's overall result approval. Main remains unchanged. This checkout has no Git remote, so publication cannot run here.
+    
+    Project memory (notion): 1 record, from the local copy. toolkit memory find searches it; toolkit memory get <key> reads one record.
+    
+    Memory records:
+    - user_readme_bullet_lists: Prefer short bullet list
+
+## Skills opened (SKILL.md read)
+
+work-decide
+
+## Escalation requests (commands asked to run outside the sandbox)
+
+
+## Commands
+
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/skills/work-decide/SKILL.md'
+---
+name: work-decide
+description: 'Walks the owner through each decision waiting on him, one at a time with a recommendation, and records each answer. Use when the owner asks "what do you need from me" or "what''s waiting on me", says "approved" or "go with option B", or states a decision for the whole project.'
+---
+
+# Work decide
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Shared rules: the work plugin's `references/conventions.md`, two folders above this skill's folder (`../../references/conventions.md`). To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`.
+
+## Steps
+
+1. Build the queue: requirements waiting for approval, designs marked proposed, items at stage 11 waiting for result approval, and Open Questions rows where the owner decides. The command lists each decision once. Its "Agent to-do" lines are the agent's own steps, not decisions waiting on the owner: count and show only the decisions, and handle a delivery offer there with `work-delegate` after the queue.
+   `toolkit work decisions`
+2. The owner gave an answer without being asked ("approved", "go with B"): match it to exactly one waiting decision. If two could match, ask which one, naming both.
+3. Otherwise take the decisions one at a time, the one blocking the most work first. For each: what is being decided, the choices, your recommendation and its main reason, and what happens after each answer. Every decision carries a recommendation, even when it is the only one in the queue; a bare question is not enough. One decision per message.
+4. Before recording a requirements approval, check that the Agreed goal is filled in and that no open question is linked to a requirement. If not, say what is missing and open `work-requirements`.
+   `toolkit work show <id> --section Requirements`
+5. Record each answer where it belongs. Approvals (for requirements, first mark each approved `R-xx` Finalized, as `work-requirements` step 8 does):
+   `toolkit work approve <id> --requirements --by <owner>`
+   `toolkit work approve <id> --design --by <owner>`
+   `toolkit work approve <id> --result --by <owner>`
+   An Open Questions answer: rewrite that row with the answer, the date, and status Answered.
+   `toolkit work edit <id> --section "Open Questions" --set-file <file>`
+   Then, for an approval or an answer: one history note in the owner's words, and `waiting_on` set to `agent` when the agent continues (the approve command sets it to `none` by itself), unless another question for him on that item is still open.
+   `toolkit work history <id> --note "Owner's words: <quote>"`
+   `toolkit work set <id> --waiting-on agent`
+   A delivery offer listed as an agent to-do: open `work-delegate` once the owner's decisions are done.
+6. A decision for the whole project: add a `DECISIONS.md` row and save it with `publish-docs`. Run the command inside the worktree `publish-docs` opens, then let it commit and push.
+   `toolkit decision add --decision "<decision>" --why "<why>" --by <owner>`
+7. A "no" or a change: record it as the answer, move the item back (for example to refinement), and open the skill that redoes the work.
+   `toolkit work set <id> --stage 02-refinement`
+8. Lead with "Not saved" if any write failed. When the queue is empty, say so and offer to continue unblocked items with `work-on`.
+
+## What counts as an answer
+
+- Only th
+...[truncated]
+```
+### exit=1
+```
+$ /bin/zsh -lc 'cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md'
+cat: SOUL.md: No such file or directory
+# Toolkit V2 sample run c (safe to delete)
+
+## Purpose and intended outcome
+
+- Purpose: Maintain a small Node.js script that prints a random quote.
+- Intended outcome: Running `node quote.js` prints one quote from the script's list.
+
+## Scope and boundaries
+
+- In scope: The local `quote.js` script and its project records.
+- Outside scope: Salesforce. No othe
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc 'git status --short --branch'
+## main
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/references/conventions.md'
+# Conventions every work skill follows
+
+Every skill in the work plugin follows these rules. A skill's own `SKILL.md`
+names the file when a rule matters for a step.
+
+This file is `references/conventions.md` in the work plugin's own folder. From
+a skill's `SKILL.md` it is two folders up: `skills/work-on/SKILL.md` and
+`references/conventions.md` share the plugin folder. In Codex the plugin
+folder is the installed copy, for example
+`~/.codex/plugins/cache/toolkit-v2/work/<version>/`, so this file is
+`~/.codex/plugins/cache/toolkit-v2/work/<version>/references/conventions.md`.
+
+## Voice
+
+Every skill carries this line near its top:
+
+> Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+
+Agents do not receive the output style. Each agent file in `agents/` carries
+its own writing rules.
+
+## Opening another skill
+
+- Claude Code: use the Skill tool with the skill's name, for example
+  `work-requirements`.
+- Codex: read that skill's `SKILL.md` from the path shown in the skill list,
+  then follow it.
+- Say the handover in one line, for example "WI-012 needs a design; opening
+  solution-design."
+- The skill that asked a question records the answer. An answer that arrives
+  later, after that skill has finished, is recorded by `work-decide`.
+
+## Running `toolkit` commands
+
+- Put each `toolkit` command on its own line and run it as a plain command.
+  Do not wrap it in `$(...)`, a pipe, or a redirect. Codex matches its
+  command rule against the plain command.
+- In Codex, a `toolkit` command joined to anything else (`&&`, `;`, a pipe, a
+  heredoc, `cd ... &&`) or run from a script (for example Python's
+  `subprocess`) runs inside the Codex sandbox. The sandbox blocks Notion,
+  Hindsight, and the main checkout's `.work-items/` and `.memory/` from a
+  worktree, so the command fails or reports the wrong cause. Run each one
+  alone, as its own command.
+- Add `--json` when you need to read the output field by field.
+- Exit codes: `0` done; `1` error; `2` validation failure (fix what it names
+  and run it again); `3` not supported for this tracker or memory backend
+  (follow [trackers.md](trackers.md)); `4` not a Toolkit V2 project (open
+  `project-setup`).
+- "saved but not verified" in the output means the write happened and the
+  read-back failed. Report it that way.
+
+## Changing a work item
+
+- Change a work item only through `toolkit work` commands. This keeps the
+  local tracker and Notion the same, and it keeps the CLI's record of what it
+  wrote. A value the agent changes by hand looks like an owner edit to the
+  CLI.
+- Find a file only with the command below. Never build a path by hand: the
+  owner may have moved or renamed the folder.
+
+  ```text
+  toolkit work show <id> --path
+  ```
+
+- To change one section of the body, read it, change only what needs to
+  change, and write the whole section back. The file holds the same text the
+  read printed for that heading, with your changes.
+
+  ```text
+  toolkit work show <id> --section "<heading>"
+  toolkit work edit <id> --section "<heading>" --set-file <file>
+  ```
+
+- To add one row to a table section (Open Questions, Recent History), use
+  `--append-row` with the full Markdown table row. A new question takes the
+  next free `Q-` number: read the Open Questions section first and add one to
+  the highest number there (`Q-01` when there is none).
+
+  ```text
+  toolkit work edit <id> --section "O
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc 'cat README.md'
+# Toolkit V2 sample run c (safe to delete)
+
+This project contains a small Node.js script that prints a random quote.
+
+## Purpose
+
+Run `quote.js` locally to print one of the quotes in its list. Mike Rihm owns the project.
+
+## Start here
+
+1. Open this repository on a computer with Node.js installed.
+2. Use the project folder; the script has no separate environment.
+3. Run `node quote.js`.
+
+## Projec
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc 'git worktree list'
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/c-notion-r2                                          6bfc120 [main]
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/c-notion-r2/.claude/worktrees/tsrc-001-project-brief c2329c8 [claude/tsr
+...[truncated]
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work decisions'
+1 decision waits on the owner:
+
+TSRC-002 Explain how to add a quote in README.md
+  - TSRC-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve TSRC-002 --result --by <name>. (work-decide)
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work show TSRC-002'
+TSRC-002: Explain how to add a quote in README.md
+Location: https://app.notion.com/p/Explain-how-to-add-a-quote-in-README-md-3e8b381da17681c4aa6fdd2d5bd76fa4
+Stage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: none | Sub-items: none | Design: none
+
+---
+id: TSRC-002
+title: Explain how to add a quote in README.md
+type: repository-maintenance
+stage: 11-user-approval
+status: In Progress
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: not-offered
+requirements_approved: 2026-09-27 by Mike Rihm
+design: none
+result_approved: "no"
+updated: 2026-09-27
+---
+# TSRC-002: Explain how to add a quote in README.md
+
+## Overview
+
+**Goal:** Add Option A's instruction for adding a quote to the README brief so Mike Rihm can review that wording separately.
+
+**Current position:** Built on `claude/tsrc-002-add-quote` at `9516b64`. An independent checker found all acceptance checks met and no diff defects. The commit adds only the fourth bullet.
+
+**Next action:** Mike Rihm reviews the fourth bullet and approves or requests a change to TSRC-002's result. After approval, integrate commit `9516b64` into TSRC-001's branch.
+
+**Blockers:** Waiting for separate owner result review. This checkout has no Git remote for publication.
+
+**Related items:** TSRC-001 (R-01 and approved Option A design); TSRC-002 is top-level in Notion.
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Quote instruction | The fourth Option A bullet explains the `quotes` array edit. | Done | The child diff adds only the fourth bullet and the README remains valid. | None. |
+| P2 — Separate review | The owner can accept the quote instruction on its own. | In Progress | TSRC-002's result and diff are shown for owner approval. | None. |
+
+## Tasks
+
+### P1 — Quote instruction
+
+- [x] **P1-T01 — Add the fourth bullet** · Done  
+  **Work:** Add the exact fourth bullet from TSRC-001's approved Option A design after the first three bullets (parent R-01).  
+  **Deliverable:** A separate README.md diff containing only the quote instruction.  
+  **Done when:** The new bullet names `quote.js`, the `quotes` array, and a quoted line followed by a comma; no original README text changes.  
+  **Depends on:** TSRC-001 P1-T01.
+
+### P2 — Separate review
+
+- [x] **P2-T01 — Check the instruction** · Done  
+  **Work:** Compare the child diff with the approved design and the `quotes` array, then run `node quote.js`.  
+  **Deliverable:** Check results for the child review.  
+  **Done when:** The wording matches Option A, the array exists, and the script prints one quote.  
+  **Depends on:** P1-T01.
+
+## Recent History
+
+| Date | Change or decision | Effect on the work |
+|---|---|---|
+| 2026-09-27 | Notion shows TSRC-002 as a top-level item after the owner moved it from TSRC-001. Kept the move and updated the current relationship wording; the README change and separate approval step are unchanged. |  |
+| 2026-09-27 | Parent changed in Notion by hand: TSRC-001 -> none (top level). | It is a top-level item now. |
+| 2026-09-27 | Parent changed in Notion by hand: TSRC-001 -> none (top level). | It is a top-level item now. |
+| 2026-09-27 | Parent changed in Notion by hand: TSRC-001 -> none (top level). | It is a top-level item now. |
+| 2026-09-27 | Parent changed in Notion by hand: TSRC-001 -> none (top level). | It is a top-level item now. |
+| 202
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc 'git show --format=fuller --stat --patch 9516b64 -- README.md'
+commit 9516b64233ad0fac369e1325d6b4f50a57844d1e
+Author:     Mike Rihm <michael@rihm.com>
+AuthorDate: Sun Sep 27 13:43:15 2026 -0400
+Commit:     Mike Rihm <michael@rihm.com>
+CommitDate: Sun Sep 27 13:43:15 2026 -0400
+
+    Explain how to add a quote
+---
+ README.md | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/README.md b/README.md
+index c778389..36adde4 100644
+--- a/README.md
++++ b/README.md
+@
+...[truncated]
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work show TSRC-001 --section Requirements'
+## Requirements
+
+**Overall status:** Finalized  
+**Finalization rule:** Mark the overall requirements Finalized only when the agreed goal, every active requirement, and acceptance have been reviewed and approved by the owner. Record who approved them and when.
+
+### Starting request
+
+Please put README.md back the way it was before your last edit. I want this tracked as a work item and done properly: write a short project brief in README.md. Start a work item for it and ask me what it should say before you write anything.
+
+### Agreed goal
+
+Restore the committed README.md, then add a short project brief at the top for people new to Node who clone the repository.
+
+### Active requirements
+
+#### R-01 — Short project brief in README.md
+
+**Status:** Finalized  
+**Applies to:** People new to Node.js who clone this repository and read README.md.  
+**Required behavior:** A short brief at the top of README.md explains that `quote.js` prints one random quote from its list, identifies the intended reader, gives the `node quote.js` command, and explains how to add a quote to the list. The brief uses short bullets.  
+**Boundaries and exceptions:** Preserve the existing README content from before the rejected edit.  
+**Acceptance check:** The README diff against that original content adds only the brief; the brief covers all four points in short bullets.  
+**Decision record:** Owner's starting request, follow-up specifying the four points, and README bullet-list preference, 2026-09-27. Revised for review after the owner rejected the first result on 2026-09-27. Approved by Mike Rihm on 2026-09-27 ("Approved.").  
+**Open questions:** None.
+
+### Acceptance
+
+This work item can be accepted when:
+
+1. The README contains the short brief at the top and preserves the committed content.
+2. The brief covers purpose, audience, run command, and adding a quote in short bullets.
+3. The README diff against the original content at commit `6bfc120` is reviewed and `node quote.js` is run.
+
+```
+
+## File changes
+
+
+## Other items
+
+- error {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+- error {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+- EVENT {"type": "turn.completed", "usage": {"input_tokens": 119119, "cached_input_tokens": 96000, "cache_write_input_tokens": 0, "output_tokens": 807, "reasoning_output_tokens": 204}}
+
+## Agent messages
+
+I’ll use the work-decide process to check the pending decision and show you exactly what needs your review.
+
+---
+
+I need your review of **TSRC-002**, the separate README instruction for adding a quote. It adds this one bullet:
+
+> To add a quote, add another quoted line followed by a comma inside the `quotes` array in `quote.js`.
+
+I recommend approving it. The change adds only that line, and the independent check found it meets the agreed requirements.
+
+**Do you approve TSRC-002’s result, or would you like the wording changed?** If you approve it, I’ll combine it with the other three brief bullets, check the complete README, and bring you TSRC-001 for final review.
+
+---
+

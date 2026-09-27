@@ -1,0 +1,1 @@
+Yes, use the team. Compare two approaches, especially for where --version gets its version number from.

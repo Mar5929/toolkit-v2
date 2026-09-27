@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "sessionId": "01a0e487-33cb-76f3-83cb-99105c6beb1d",
+  "host": "codex",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3",
+  "startedAt": "2026-09-27T20:21:02.642Z",
+  "turns": 1,
+  "turn": {
+    "key": "01a0e487-343a-7a01-bf29-ee0fdc1cfbe9",
+    "n": 1,
+    "startedAt": "2026-09-27T20:21:02.801Z",
+    "keep": null,
+    "baseline": {
+      "memoryMeta": 1790540290651.9963,
+      "hindsightMeta": null,
+      "memoryCache": null,
+      "workState": 1790540462685.4312,
+      "decisions": 1790537564359.3455
+    },
+    "records": [],
+    "edits": [
+      {
+        "path": ".work-items/cli/WI-001-basic-greet-cli/version-flag/WORK-ITEM.md",
+        "id": "WI-002"
+      }
+    ],
+    "stopBlocked": false
+  },
+  "lastStopReason": null,
+  "source": "startup",
+  "updated": "2026-09-27T20:21:47.694Z",
+  "remindedBodyEdit": true
+}

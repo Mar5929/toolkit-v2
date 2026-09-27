@@ -1,0 +1,943 @@
+PROMPT: I ran both production deploys from main. Step 10: {"status":0,"result":{"id":"0AfFAKE000DEPLOY3","status":"Succeeded","success":true,"numberComponentsDeployed":1,"numberComponentErrors":0}}. Step 20: the same, Succeeded, one component, zero errors. Step 30: I set the Tier grants in tkv2-prod Setup (Sales Manager and System Administrator read/edit, Sales User and Read Only read only; no other grants). Step 40: every check passed the same way it did in the sandbox. Close both items out. I approve the git commands for the closeout.
+THREAD: 01a0e4ba-ce3b-77a2-a43d-8151e848b83c
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r3/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Add a Tier picklist field to Account: 13 Deployment, In Review, waiting on owner. Next action: Mike runs the WI-001 field package first from main using the production cutover plan, reports its deployment result, then continues with... Continues with work-decide.
+- WI-002 Configure Account Tier access and page layout: 13 Deployment, In Review, waiting on owner. Next action: After the WI-001 production field package succeeds, Mike runs the WI-002 layout package, sets the Tier profile grants in tkv2-prod Setup,... Continues with work-decide.
+
+Waiting on the owner:
+- WI-001 Add a Tier picklist field to Account: WI-001 is waiting on the owner (13 Deployment). Next action: Mike runs the WI-001 field package first from main using the production cutover plan, reports its deployment result, then continues with WI-002... (work-decide)
+- WI-002 Configure Account Tier access and page layout: WI-002 is waiting on the owner (13 Deployment). Next action: After the WI-001 production field package succeeds, Mike runs the WI-002 layout package, sets the Tier profile grants in tkv2-prod Setup, perfor... (work-decide)
+
+Items: 2 in review.
+
+Current focus:
+Last updated: 2026-09-27, WI-001 and WI-002 production handoff, Codex
+## Now
+- WI-001 and WI-002: Results approved. Both branches and the production cutover plan reached local main at 3f0defd. The production packages and manual access steps are ready for Mike to run.
+## Waiting on the owner
+- Run the WI-001 field package, then the WI-002 layout package in tkv2-prod; set Tier profile grants in Setup, perform the cutover checks, and report the results. Use delivery/deployment/2026-09-27-account-tier/CUTOVER-PLAN.md.
+- Open Codex in this project, trust the project folder when prompted, then open /hooks and trust the Toolkit V2 hooks, including the two Salesforce guards.
+## Untracked to-dos
+- None.
+## Next session starts with
+- Read the project briefing and PROJECT.md. Plain sf on PATH intentionally simulates the practice orgs; its output counts as org results. Both result approvals are recorded. WI-001 and WI-002 are at stage 13, waiting for Mike to run the production cutover. Agents never deploy or validate against production. No production changes have been reported. No remote is configured. After Mike reports the results, update the deployment records and component tracker, baseline delivered behavior in requirements and system-guide, then finish the items.
+
+Project memory (builtin): 2 records. toolkit memory f
+
+[AGENT] I’ll record the production results, update the delivery records and agreed behavior, then close WI-001 and WI-002. I’ll check the closeout instructions and repository state first.
+
+[CALL exec] cat SOUL.md PROJECT.md PROJECT-ROADMAP.md
+   cat .claude/rules/{check-deployment-contents,component-tracker,confirm-salesforce-changes,humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,production-data-changes,project-file-locations,salesforce-org-safety,session-handoff,shared-repository-work,work-item-folders}.md
+   cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/skills/{work-on,work-finish}/SKILL.md
+   git status --short --branch && toolkit work lifecycle
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Warning: truncated output (original token count: 12146)
+Total output lines: 554
+
+READ 1
+cat: SOUL.md: No such file or directory
+# Acme CRM
+
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->
+
+## Purpose and intended outcome
+
+- Purpose: Salesforce customizations for Acme (from the existing `README.md`).
+- Intended outcome: Give the Acme sales team a Salesforce org that fits how they sell, starting with better account data. Confirmed by Mike on 2026-09-27.
+
+## Scope and boundaries
+
+- In scope: `<Business capabilities or systems this project owns.>`
+- Outside scope: `<Important exclusions or adjacent owners.>`
+- Constraints: `<Approved security, delivery, or operating constraints with sources.>`
+
+## Systems and environments
+
+| System or org | Purpose | Environment | Source of truth | Access notes |
+| --- | --- | --- | --- | --- |
+| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |
+
+## People and ownership
+
+| Role | Person or team | Responsibility | Source / last confirmed |
+| --- | --- | --- | --- |
+| Project owner | Mike | Makes project decisions | `.toolkit.json`, 2026-09-27 |
+
+## Work and project records
+
+- Work tracker: local `.work-items/` folders (Git-ignored).
+- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)
+- Project decisions: [DECISIONS.md](DECISIONS.md)
+- Functional requirements: [requirements/](requirements/)
+- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`
+- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`
+- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)
+- Memory backup or sync: `<Owner-approved destination and restore procedure, outside this repository>`
+
+## Resources and project paths
+
+- Salesforce source: `force-app/` (`sfdx-project.json`).
+- Project-wide deployment manifest: `delivery/deployment/full-project-deployment-template/package.xml` after the API version and members are verified. Keep it as the full project component inventory; ordinary deployments use narrower work-item packages.
+- Work-item deployment manifests: `delivery/deployment/<work-item-id>-<short-name>/package.xml` when an item changes Salesforce metadata.
+- Tests and checks: `<actual commands and locations>`
+- Outside references: `<source register or approved location>`
+
+## Operating conventions
+
+<Write only stable project-specific conventions here; link the source or governing rule. Write “None yet” if there are none.>
+# Project roadmap
+
+<!-- Fill-in guide: replace every angle-bra
+
+[HOOK CONTEXT] This shell command joins a toolkit command to other commands (&&, ;, a pipe, a heredoc, or cd). In Codex that runs the toolkit command inside the sandbox, which blocks Notion, Hindsight, and the main checkout's .work-items/ and .memory/ from a worktree, so it may fail or report the wrong cause. Run each toolkit command alone, as its own command; pass section text with --text instead of a file written in the same command.
+
+[AGENT] I’m using the work-finish, component-tracker, and publish-docs procedures for this closeout. The reported deployment IDs and checks will be recorded as owner-reported production results.
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/skills/work-finish/references/closing.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/references/conventions.md
+   cat .agents/skills/sf-component-tracker/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.2/skills/publish-docs/SKILL.md
+   cat .claude/rules/{publish-project-documents,record-deployment-steps}.md requirements/AGENTS.md
+   rg --files delivery/deployment requirements system-guide .work-items | sort
+   git worktree list --porcelain
+  -> Script completed
+Wall time 0.5 seconds
+Output:
+
+READ 1
+# Closing a work item
+
+Detail for `work-finish`. Carried over from Toolkit V1's "Finish or
+cancel" rules and its "Closing a work item" checklist, with V2 homes.
+
+## Before Done
+
+- Give the owner a short result, the known gaps, and the evidence, and ask
+  for approval. A clear earlier approval of that same result counts.
+- Never describe an unverified result as complete.
+- Done means the owner accepted the result. Cancelled means the work stopped
+  without it.
+
+## The pull request (stage 12)
+
+- Push the item's branch (`claude/wi-<number>-<slug>`). Never force-push.
+- Write the pull request title and description in plain words: what changed,
+  why, how it was checked, and the item id. Run the description through the
+  `unslop` skill, because it is read by other people. No line crediting an AI.
+- Merge only through `merge-and-clean-up`, and only when one of these holds:
+  - the owner said yes to this merge; or
+  - `DECISIONS.md` records a standing merge instruction from the owner (the
+    project's `AGENTS.md` names it there), and an `acceptance-checker` that
+    did not build the change reported no blocking issue on that exact head
+    commit, and every check passes. `merge-and-clean-up` step 2 checks the
+    same record.
+- A work item that says its merge needs the owner's approval overrides a
+  standing instruction.
+- No remote: the local merge (`git merge --ff-only <branch>` in the main
+  checkout) is this stage. Set the stage anyway and add a history note:
+  "No remote: merged locally into main." A stage that does not apply at all
+  (no repository change, no deployment) gets one history note saying so, so
+  `toolkit work finish` has a record of it.
+- A merge that stops on a conflict: resolve it and commit with a message you
+  write. `git commit --no-edit` keeps Git's "# Conflicts:" lines in the
+  message.
+
+## Deployment (stage 13)
+
+- Only when the result must be put somewhere beyond the default branch.
+- Salesforce projects, in order: `sf-component-tracker` is current and the
+  item's folder `delivery/deployment/<work-item-id>-<short-name>/` holds its
+  `package.xml`, `destructiveChanges.xml` when something is removed,
+  `manual-steps.md`, and `DEPLOYMENT-RECORD.md`; `sf-deploy-check` finds
+  nothing that would ship too early; then a validate against the sandbox. A
+  production deploy is handed to the owner: the exact command, what it
+  deploys, and what to check afterwards. A release of several items uses a
+  copy of `delivery/deployment/release-cutover-template/`.
+- Production data changes go through `sf-data-change`, which builds the
+  owner's package. The owner runs it.
+- Record the owner's report of the deploy in a history note.
+
+## Requirements baseline (stage 14)
+
+- The work item holds the proposed requirements while the work is in
+  progress. After delivery and approval, copy the delivered rules into the
+  area's file in `requirements/`. Read `requirements/AGENTS.md` first. A new
+  a
+
+[CALL exec] cat delivery/deployment/{component-tracker.csv,2026-09-27-account-tier/CUTOVER-PLAN.md,2026-09-27-account-tier/RELEASE-NOTES.md,WI-001-account-tier/DEPLOYMENT-RECORD.md,WI-002-tier-access-layout/DEPLOYMENT-RECORD.md,WI-002-tier-access-layout/manual-steps.md}
+   cat requirements/SYSTEM-DATA-MODEL.md requirements/system-area-template/AREA-TEMPLATE.md system-guide/AREA-TEMPLATE.md
+   cat .work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account/WORK-ITEM.md .work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account/WI-002-tier-access-and-layout/WORK-ITEM.md
+   git remote -v
+   cat .memory/AGENTS.md .memory/memory-criteria.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.2/skills/memory-save/SKILL.md
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+Warning: truncated output (original token count: 19311)
+Total output lines: 768
+
+READ 1
+Component Type,Object/Parent,API Name,Label,Work Item,Change Type,Sandbox,Production,Notes
+CustomField,Account,Account.Tier__c,Tier,WI-001,New,Yes,No,Optional restricted picklist; Gold / Silver / Bronze; no default
+Layout,Account,Account-Account Layout,Account Layout,WI-002,Modified,Yes,No,Modified: place Tier directly below Rating in Account Information
+# Account Tier: production cutover plan
+
+**Release folder:** `2026-09-27-account-tier`  
+**Owner:** Mike  
+**Target org:** `tkv2-prod` (simulated practice production)  
+**Window:** When Mike runs the steps; no time was set  
+**Status:** Ready for owner execution; not deployed
+
+## Included work items and packages
+
+| Work item | Package | Owner | Readiness |
+| --- | --- | --- | --- |
+| WI-001 | [Account Tier field package](../WI-001-account-tier/package.xml) | Mike | Result approved; production field absent on 2026-09-27 |
+| WI-002 | [Account Layout package](../WI-002-tier-access-layout/package.xml) and [manual access steps](../WI-002-tier-access-layout/manual-steps.md) | Mike | Result approved; source layout adds only Tier below Rating |
+
+## Entry conditions
+
+- Run from the project checkout on `main` at or after merge commit `a0030a7`; use plain `sf` on PATH. Confirm `git status --short` is clean before starting.
+- Read-only `tkv2-prod` checks on 2026-09-27 found no `Account.Tier__c` and no Tier field grants. A production layout retrieve differed from the approved source only by the Tier item immediately after Rating. The production query showed the four Account-viewing profiles use Account Layout and returned no custom Account Lightning page.
+- The two narrow packages and their source are merged into local `main`. The WI-001 sandbox validation and WI-002 sandbox validation each reported success with one component and no errors. The owner reported both sandbox deployments and behavior checks succeeded.
+- No agent has deployed or validated against production. Mike executes every production change below.
+
+## Cutover sequence
+
+| Order | Action | Operator | Verification | Fallback |
+| --- | --- | --- | --- | --- |
+| 10 | Run `sf project deploy start -x delivery/deployment/WI-001-account-tier/package.xml -o tkv2-prod --json` | Mike | Result is `Succeeded` with one deployed component and zero component errors. Read-only Account describe shows optional Tier with Gold, Silver, Bronze in order and no default. | Stop before the layout package; report the result. |
+| 20 | Run `sf project deploy start -x delivery/deployment/WI-002-tier-access-layout/package.xml -o tkv2-prod --json` | Mike | Result is `Succeeded` with one deployed component and zero component errors. Retrieve or inspect Account Layout and confirm Tier directly below Rating. | Stop before changing grants; report the result. |
+| 30 | In `tkv2-prod` Setup, set Tier field access for every Account-viewing profile. 
+
+[CALL exec] sed -n '1,240p' .work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account/WORK-ITEM.md
+   sed -n '1,150p' .work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account/WI-002-tier-access-and-layout/WORK-ITEM.md
+   cat system-guide/AREA-TEMPLATE.md requirements/system-area-template/AREA-TEMPLATE.md .memory/CURRENT_FOCUS.md
+   git branch --list '*wi-*' --verbose
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+Warning: truncated output (original token count: 11219)
+Total output lines: 415
+
+READ 1
+---
+id: WI-001
+title: Add a Tier picklist field to Account
+type: build
+stage: 13-deployment
+status: In Review
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: agent-led
+requirements_approved: "2026-09-27 by Mike"
+design: approved
+result_approved: "2026-09-27 by Mike"
+updated: 2026-09-27
+---
+
+# WI-001: Add a Tier picklist field to Account
+
+## Overview
+
+**Goal:** Let the sales team rank Accounts using a Tier field.
+
+**Current position:** Mike approved the WI-001 result on 2026-09-27. The WI-001 branch is merged into local main at a0030a7. Read-only tkv2-prod checks found Account.Tier__c absent. The production cutover plan and narrow field package are committed on main at 3f0defd. No production deployment has run.
+
+**Next action:** Mike runs the WI-001 field package first from main using the production cutover plan, reports its deployment result, then continues with WI-002 only if it succeeds.
+
+**Blockers:** Owner-run production deployment and result report; agents do not deploy or validate against production.
+
+**Related items:** WI-002 covers access and page layout for R-01 and follows this field package.
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Account Tier field | Optional Tier picklist metadata exists with the approved values, description, and help text | Done | Field metadata reviewed and practice sandbox validation succeeded on 2026-09-27. | None. |
+| P2 — Account Tier access and placement | Approved users have the right field access and Tier appears below Rating | Done | WI-002 reported checks passed; independent review found WI-001 R-01 met on 2026-09-27. | WI-002 |
+
+## Tasks
+
+### P1 — Account Tier field
+
+- [x] **P1-T01 — Inspect sandbox Tier field**
+  **Work:** Read Account.Tier__c status in the practice sandbox and compare with WI-001 R-01 and approved Option A.
+  **Deliverable:** Field inventory and implementation choice.
+  **Done when:** The field is confirmed absent or its existing settings are recorded without changing the org.
+  **Depends on:** None.
+  **Evidence:** On 2026-09-27, sf returned zero Account Tier custom field records for tkv2-sbx; Mike said to accept simulated output as the practice org result.
+- [x] **P1-T02 — Build and verify Tier metadata**
+  **Work:** Add Account.Tier__c with Gold, Silver, Bronze in order, optional with no default, plus the approved description and help text.
+  **Deliverable:** Field metadata and narrow WI-001 manifest.
+  **Done when:** Metadata review and sandbox validation confirm the field settings without a duplicate field.
+  **Depends on:** P1-T01.
+  **Evidence:** Field XML, component tracker, and narrow package committed on claude/wi-001-account-tier. Local XML checks passed. Practice sf validation returned Su
+
+[CALL exec] rg -n 'Tier|description|inlineHelpText' force-app/main/default/objects/Account/fields/Tier__c.field-meta.xml force-app/main/default/layouts/Account-Account\ Layout.layout-meta.xml
+   sed -n '1,48p' .work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account/WI-002-tier-access-and-layout/WORK-ITEM.md
+   cat .claude/rules/shared-repository-work.md
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+READ 1
+force-app/main/default/layouts/Account-Account Layout.layout-meta.xml:29:                <field>Tier__c</field>
+force-app/main/default/objects/Account/fields/Tier__c.field-meta.xml:3:    <fullName>Tier__c</fullName>
+force-app/main/default/objects/Account/fields/Tier__c.field-meta.xml:4:    <description>Ranks an Account as Gold, Silver, or Bronze for sales prioritization. Gold is highest.</description>
+force-app/main/default/objects/Account/f
+
+[CALL exec] sed -n '1,260p' /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.2/skills/publish-docs/scripts/publish-docs.mjs
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+#!/usr/bin/env node
+// publish-docs: save Git-tracked project documents straight to the default
+// branch from an isolated, sparse, detached worktree.
+//
+//   publish-docs.mjs start --branch <default-branch> -- <file> [more files]
+//   publish-docs.mjs publish --message "<commit message>"
+//
+// `start` checks every path, fetches the default branch, creates a worktree
+// beside the project, and prints its path. `publish` runs inside that worktree:
+// it refuses staged paths outside the save, commits, pushes without force, and
+// verifies that the remote has the commit.
+import { existsSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
+import { randomUUID } from 'node:crypto';
+import { dirname, basename, extname, join, resolve, isAbsolute } from 'node:path';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+
+// Folders whose files are project documents, when their type is a document type.
+// These and the files below follow the `paths` list of the project's
+// .claude/rules/publish-project-documents.md rule.
+export const DOCUMENT_FOLDERS = ['requirements/', 'system-guide/', 'ai-external-knowledge/', 'delivery/'];
+// Project documents at the repository root.
+export const ROOT_DOCUMENTS = ['DECISIONS.md', 'PROJECT.md', 'PROJECT-ROADMAP.md'];
+// Single project documents outside those folders. The runbook exists only in
+// Salesforce projects; the rest of tools/ is code.
+export const OTHER_DOCUMENTS = ['tools/permissions/PERMISSIONS-RUNBOOK.md'];
+// The only file types a documentation save accepts. Everything else (code,
+// settings, JSON, spreadsheets, environment files) needs a worktree and a pull request.
+export const DOCUMENT_EXTENSIONS = ['.md', '.txt', '.csv', '.xml', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.pdf'];
+// Salesforce data packages (loads and backups). They can hold production
+// records and personal data, so only notes (.md) and .gitignore files are
+// accepted here, whatever .gitignore says.
+export const DATA_FOLDER = 'delivery/data/';
+// Local, Git-ignored folders. Their saves go through the toolkit command.
+export const LOCAL_FOLDERS = ['.memory/', '.work-items/'];
+// Instruction files change agent behavior, so they need a pull request.
+// Compared without regard to case: macOS treats agents.md and AGENTS.md as one file.
+export const INSTRUCTION_FILES = ['AGENTS.md', 'CLAUDE.md', 'CLAUDE.local.md', 'SKILL.md'];
+// Generated by `toolkit index knowledge`; saved together with the folder's files.
+export const KNOWLEDGE_INDEX = 'ai-external-knowledge/INDEX.md';
+// Folders every save workspace checks out, so links between documents can be checked.
+export const SPARSE_BASE = ['requirements', 'system-guide', 'ai-external-knowledge'];
+
+function git(cwd, args, { allowFailure = false } = {}) {
+  const result = spawnSync('git', ['-C', cwd, ...args], { encoding: 'utf8' });
+  if (result.error || (!allowFailure && result.status !== 0)) {
+    //
+
+[AGENT] The two packages are already on local `main`, and no remote is configured. I’ll save the closeout documents in an isolated worktree, merge that commit into local `main`, and retain your report as the production evidence.
+
+[CALL exec] git worktree add .claude/worktrees/account-tier-closeout -b claude/account-tier-closeout main
+  -> Script completed
+Wall time 1.8 seconds
+Output:
+
+Preparing worktree (new branch 'claude/account-tier-closeout')
+HEAD is now at 3f0defd Prepare Account Tier production cutover
+
+
+[PATCH] files=['.claude/worktrees/account-tier-closeout/delivery/deployment/component-tracker.csv\\n@@\\n-CustomField,Account,Account.Tier__c,Tier,WI-001,New,Yes,No,Optional restricted picklist; Gold / Silver / Bronze; no default\\n-Layout,Account,Account-Account Layout,Account Layout,WI-002,Modified,Yes,No,Modified: place Tier directly below Rating in Account Information\\n+CustomField,Account,Account.Tier__c,Tier,WI-001,New,Yes,Yes,Optional restricted picklist; Gold / Silver / Bronze; no default\\n+Layout,Account,Account-Account Layout,Account Layout,WI-002,Modified,Yes,Yes,Modified: place Tier directly below Rating in Account Information\\n*** Update File: .claude/worktrees/account-tier-closeout/delivery/deployment/2026-09-27-account-tier/CUTOVER-PLAN.md\\n@@\\n-**Status:** Ready for owner execution; not deployed\\n+**Status:** Completed; Mike reported all four steps passed on 2026-09-27\\n@@\\n-| After each package | Deploy reports success with one component and zero errors | Mike | Pending |\\n-| After steps 30 and 40 | Access and behavior match WI-001 R-01 | Mike | Pending |\\n+| After each package | Deploy reports success with one component and zero errors | Mike | Both Succeeded; one component and zero errors each, 2026-09-27. Step 10 job `0AfFAKE000DEPLOY3`; Mike said step 20 returned the same result. |\\n+| After steps 30 and 40 | Access and behavior match WI-001 R-01 | Mike | Step 30 grants set in Setup; step 40 checks all passed as in sandbox, per Mike, 2026-09-27. |\\n@@\\n-Mike reports each production job result and the access and behavior checks to the agent. The agent then updates WI-001, WI-002, their deployment records, and the component tracker. Production status stays pending until that report.\\n+Mike reported both production job results, the four profile grants, and all behavior checks passed on 2026-09-27. The deployment records and component tracker reflect his report.\\n*** Update File: .claude/worktrees/account-tier-closeout/delivery/deployment/2026-09-27-account-tier/RELEASE-NOTES.md\\n@@\\n-**Release date:** Pending Mike\'s production run  \\n+**Release date:** 2026-09-27  \\n@@\\n-**Status:** Planned  \\n+**Status:** Deployed; checks passed per Mike\'s report  \\n@@\\n-## Changes planned\\n+## Changes delivered\\n@@\\n-The production deploys, profile grants, and behavior checks are pending Mike\'s run. Manual sandbox behavior checks were reported by Mike; test Account IDs were not recorded.\\n+No known follow-up from the reported cutover. Mike reported all production checks passed as they did in the sandbox; test Account IDs were not recorded.\\n@@\\n-Mike runs and reports the cutover checks. The agent updates the work items and deployment records from his report. Mike owns the production change.\\n+Mike reported that both one-component production deploys succeeded with zero component errors. He set the four approved Tier profile grants in `tkv2-prod` Setup, found no other grants, and reported every cutover check passed. Mike owns the production change.\\n*** Update File: .claude/worktrees/account-tier-closeout/delivery/deployment/WI-001-account-tier/DEPLOYMENT-RECORD.md\\n@@\\n-- The production deployment has not run. Mike runs the field package first using the [Account Tier cutover plan](../2026-09-27-account-tier/CUTOVER-PLAN.md), then reports the result. Production remains No in the component tracker until he reports success.\\n+- Mike reported running the field package first from main on 2026-09-27. Job `0AfFAKE000DEPLOY3` returned `Succeeded`, one component deployed, and zero component errors. He reported all step 40 production checks passed as in the sandbox. Production is Yes in the component tracker. See the [Account Tier cutover plan](../2026-09-27-account-tier/CUTOVER-PLAN.md).\\n*** Update File: .claude/worktrees/account-tier-closeout/delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md\\n@@\\n-- The production deployment and manual grants have not run. Production remains No in the component tracker until Mike reports success.\\n+- Mike reported running the layout package after WI-001 on 2026-09-27. Step 20 returned the same successful one-component, zero-error result as step 10; the reported job ID was `0AfFAKE000DEPLOY3`. He set Sales Manager and System Administrator to read/edit and Sales User and Read Only to read only in `tkv2-prod` Setup, with no other Tier grants. He reported every step 40 check passed as in the sandbox. Production is Yes in the component tracker. See the [Account Tier cutover plan](../2026-09-27-account-tier/CUTOVER-PLAN.md).\\n*** Update File: .claude/worktrees/account-tier-closeout/delivery/deployment/WI-002-tier-access-layout/manual-steps.md\\n@@\\n-- **Status:** Not started\\n+- **Status:** Done, 2026-09-27; Mike reported the production Setup grants and all cutover checks passed\\n@@\\n-**Verify:** A read-only FieldPermissions query shows Sales Manager and System Administrator read/edit, and Sales User and Read Only read/no edit. Check any additional Account-viewing profiles before declaring access complete. Run the record and API behavior checks in the production cutover plan. Report the outcome to the agent so WI-002 and the component tracker can be updated.\\n+**Verify:** Mike reported Sales Manager and System Administrator read/edit, Sales User and Read Only read only, and no other Tier grants in `tkv2-prod`. He reported every step 40 record and API check passed as in the sandbox. This production evidence is owner reported; no agent production query was run.\\n*** End Patch";']
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{}
+
+[PATCH] files=['.claude/worktrees/account-tier-closeout/requirements/accounts/ACCOUNT-TIER.md\\n+# Account Tier\\n+\\n+## Purpose and scope\\n+\\n+Account Tier lets the Acme sales team rank Accounts. This behavior was delivered to `tkv2-prod` on 2026-09-27 under WI-001 and WI-002.\\n+\\n+## Functional behavior\\n+\\n+### R-01 — Account ranking\\n+\\n+- Trigger or context: An Account is viewed or edited.\\n+- Required behavior: Tier is an optional restricted picklist with Gold, Silver, and Bronze in that order. Gold is highest. Tier has no default.\\n+- Conditions and exceptions: Existing Accounts may have a blank Tier. A new Account starts with Tier blank. A user who can view an Account can read Tier. Only Sales Manager profile users and system administrators can edit Tier.\\n+- User outcome: Tier appears directly below Rating on Account Layout. The field has a description and help text.\\n+- Source: WI-001 R-01, approved by Mike on 2026-09-27; WI-002 delivered access and placement.\\n+- Delivery status and evidence: Mike reported both production packages succeeded and all cutover checks passed on 2026-09-27. See the [cutover plan](../../delivery/deployment/2026-09-27-account-tier/CUTOVER-PLAN.md).\\n+\\n+## Data and access rules\\n+\\n+Tier does not require a value and does not change existing blank Accounts. Sales Manager and System Administrator profiles have read/edit; Sales User and Read Only profiles have read only. Mike reported no other Tier grants in `tkv2-prod` Setup. Account object and record access remain governed by their existing settings.\\n+\\n+## Integrations and dependencies\\n+\\n+Tier uses `Account.Tier__c`, Account Layout, and manually configured profile field permissions. No connector or data load is part of WI-001 or WI-002.\\n+\\n+## Acceptance evidence\\n+\\n+Mike reported that both editors saved Gold, Silver, Bronze, and blank; both non-editor types could read Tier but could not change it in the page or API; Tier appeared below Rating; a new Account had no default; and an existing blank remained blank. He reported the same checks passed in production on 2026-09-27. Test Account IDs were not recorded.\\n+\\n+## Change history\\n+\\n+- 2026-09-27 — Account Tier delivered and approved under WI-001 and WI-002; production cutover reported complete by Mike.\\n*** Add File: .claude/worktrees/account-tier-closeout/system-guide/ACCOUNT-TIER.md\\n+# Account Tier\\n+\\n+## What this area does today\\n+\\n+In `tkv2-prod`, Account Tier is an optional restricted picklist used to rank Accounts. Mike reported the field and layout deployed and the production checks passed on 2026-09-27.\\n+\\n+## Components and paths\\n+\\n+| Component | Role | Location or reference | Evidence |\\n+| --- | --- | --- | --- |\\n+| `Account.Tier__c` | Stores Gold, Silver, Bronze, or blank; no default | `force-app/main/default/objects/Account/fields/Tier__c.field-meta.xml` | WI-001 field package succeeded, one component and zero errors, per Mike. |\\n+| `Account-Account Layout` | Places Tier directly below Rating | `force-app/main/default/layouts/Account-Account Layout.layout-meta.xml` | WI-002 layout package succeeded, one component and zero errors, per Mike. |\\n+| Profile field permissions | Sales Manager and System Administrator read/edit; Sales User and Read Only read only | `tkv2-prod` Setup; [WI-002 manual steps](../delivery/deployment/WI-002-tier-access-layout/manual-steps.md) | Mike reported the four grants and no others. Profile XML was not deployed. |\\n+\\n+## Data and flow\\n+\\n+Users with Account access read Tier on Account Layout. Sales Manager and System Administrator users may set or clear it. The field has no default, and existing blanks remain blank. The delivered business rules are in [Account Tier requirements](../requirements/accounts/ACCOUNT-TIER.md).\\n+\\n+## Operational behavior\\n+\\n+The four Account-viewing profiles use the standard Account page with Account Layout, per Mike\'s Setup confirmation during the sandbox checks. No custom Account Lightning record page or permission set/group grant for Account fields was reported. The WI-001 package deploys the field; the WI-002 package deploys the layout; profile grants are set manually in Setup.\\n+\\n+## Known gaps and uncertainty\\n+\\n+Production behavior and grants were reported by Mike after the cutover. This closeout did not run an independent production query or record test. Test Account IDs were not recorded.\\n+\\n+## Last verified\\n+\\n+- Date and environment: 2026-09-27, `tkv2-prod` (simulated practice production), from Mike\'s cutover report.\\n+- Sources: [cutover plan](../delivery/deployment/2026-09-27-account-tier/CUTOVER-PLAN.md), WI-001, WI-002, and the metadata paths above.\\n+- Maintainer: Acme CRM project owner.\\n*** End Patch";']
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{}
+
+[CALL exec] git status --short && git diff --check && git diff --stat
+   rg -n 'Status:|Production|Pending|Not started|production deployment' delivery/deployment/{2026-09-27-account-tier,WI-001-account-tier,WI-002-tier-access-layout} requirements/accounts/ACCOUNT-TIER.md system-guide/ACCOUNT-TIER.md
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+CHECK 1
+ M delivery/deployment/2026-09-27-account-tier/CUTOVER-PLAN.md
+ M delivery/deployment/2026-09-27-account-tier/RELEASE-NOTES.md
+ M delivery/deployment/WI-001-account-tier/DEPLOYMENT-RECORD.md
+ M delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md
+ M delivery/deployment/WI-002-tier-access-layout/manual-steps.md
+ M delivery/deployment/component-tracker.csv
+?? requirements/accounts/
+?? system-guide/ACCOUNT-TIER.md
+delivery/deployment/2026-09-27-account-tier/RELEASE-NOTES.md:3: trailing whitespace.
++**Release date:** 2026-09-27  
+delivery/deployment/2026-09-27-account-tier/RELEASE-NOTES.md:5: trailing whitespace.
++**Status:** Deployed; checks passed per Mike's report  
+
+CHECK 2
+system-guide/ACCOUNT-TIER.md:25:Production behavior and grants were reported by Mike after the cutover. This closeout did not run an independent production query or record test. Test Account IDs were not recorded.
+delivery/deployment/WI-001-account-tier/DEPLOYMENT-RECORD.md:5:**Status:** Deployed to tkv2-sbx; field verified
+delivery/deployment/WI-001-account-tier/DEPLOYMENT-RECORD.md:31:- Component tracker update: Sandbox Yes; Production No.
+delivery/deployment/WI-001-account-tier/DEPLOYMENT-RECORD.md:37:## Production handoff, 2026-09-27
+delivery/deployment/WI-001-account-tier/DEPLOYMENT-RECORD.md:42:- Mike reported running the field package first from main on 2026-09-27. Job `0AfFAKE000DEPLOY3` returned `Succeeded`, one component deployed, and zero component errors. He reported all step 40 production checks passed as in the sandbox. Production is Yes in the component tracker. See the [Account Tier cutover plan](../2026-09-27-account-tier/CUTOVER-PLAN.md).
+delivery/deployment/2026-09-27-account-tier/CUTOVER-PLAN.md:7:**Status:** Completed; Mike reported all four steps passed on 2026-09-27
+delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md:6:**Status:** Deployed to sandbox; result approved; production handoff prepared
+delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md:33:- Component tracker update: Account Layout Sandbox is Yes; Production remains No.
+delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md:37:WI-002 Q-06 is answered. Mike approved both finished results. Production has not been changed.
+delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md:39:## Production handoff, 2026-09-27
+delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md:44:- Mike reported running the layout package after WI-001 on 2026-09-27. Step 20 returned the same successful one-component, zero-error result as step 10; the reported job ID was `0AfFAKE000DEPLOY3`. He set Sales Manager and System Administrator to read/edit and Sales User and Read Only to read only in `tkv2-prod` Setup, with no other Tier grants. He reported every step 40 check passed as in the sandbox. Production is Yes in the component tracker. See the [Account Tier cutover plan](../2026-09-27-acc
+
+[PATCH] files=['.claude/worktrees/account-tier-closeout/delivery/deployment/2026-09-27-account-tier/RELEASE-NOTES.md\\n@@\\n-**Release date:** 2026-09-27  \\n+**Release date:** 2026-09-27\\n@@\\n-**Status:** Deployed; checks passed per Mike\'s report  \\n+**Status:** Deployed; checks passed per Mike\'s report\\n*** Update File: .claude/worktrees/account-tier-closeout/delivery/deployment/WI-001-account-tier/DEPLOYMENT-RECORD.md\\n@@\\n-**Target org:** tkv2-sbx (sandbox)\\n-**Status:** Deployed to tkv2-sbx; field verified\\n+**Target orgs:** tkv2-sbx and tkv2-prod (simulated practice orgs)\\n+**Status:** Deployed to both; production checks passed per Mike\'s report\\n@@\\n-- Component tracker update: Sandbox Yes; Production No.\\n+- Component tracker at sandbox deployment: Sandbox Yes; production was pending then.\\n@@\\n-## Production handoff, 2026-09-27\\n+## Production outcome, 2026-09-27\\n*** Update File: .claude/worktrees/account-tier-closeout/delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md\\n@@\\n-**Target org:** `tkv2-sbx`, simulated practice sandbox\\n-**Status:** Deployed to sandbox; result approved; production handoff prepared\\n+**Target orgs:** `tkv2-sbx` and `tkv2-prod`, simulated practice orgs\\n+**Status:** Deployed to both; production grants and checks passed per Mike\'s report\\n@@\\n-- Component tracker update: Account Layout Sandbox is Yes; Production remains No.\\n+- Component tracker at sandbox deployment: Account Layout Sandbox Yes; production was pending then.\\n@@\\n-WI-002 Q-06 is answered. Mike approved both finished results. Production has not been changed.\\n+WI-002 Q-06 is answered. Mike approved both finished results. Production was pending at this handoff.\\n@@\\n-## Production handoff, 2026-09-27\\n+## Production outcome, 2026-09-27\\n*** End Patch";']
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{}
+
+[AGENT] The tracker now marks both deployed components in production. The cutover records and the new Account Tier requirements and system guide pages reflect your reported checks. I’m reviewing the document diff before committing it.
+
+[CALL exec] git add delivery/deployment/component-tracker.csv delivery/deployment/2026-09-27-account-tier/CUTOVER-PLAN.md delivery/deployment/2026-09-27-account-tier/RELEASE-NOTES.md delivery/deployment/WI-001-account-tier/DEPLOYMENT-RECORD.md delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md delivery/deployment/WI-002-tier-access-layout/manual-steps.md requirements/accounts/ACCOUNT-TIER.md system-guide/ACCOUNT-TIER.md
+  -> Script completed
+Wall time 2.3 seconds
+Output:
+
+
+
+[CALL exec] git diff --cached --check
+   git diff --cached
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+REVIEW 1
+
+REVIEW 2
+diff --git a/delivery/deployment/2026-09-27-account-tier/CUTOVER-PLAN.md b/delivery/deployment/2026-09-27-account-tier/CUTOVER-PLAN.md
+index 75631e7..d1e9c90 100644
+--- a/delivery/deployment/2026-09-27-account-tier/CUTOVER-PLAN.md
++++ b/delivery/deployment/2026-09-27-account-tier/CUTOVER-PLAN.md
+@@ -4,7 +4,7 @@
+ **Owner:** Mike  
+ **Target org:** `tkv2-prod` (simulated practice production)  
+ **Window:** When Mike runs the steps; no time was set  
+-**Status:** Ready for owner execution; not deployed
++**Status:** Completed; Mike reported all four steps passed on 2026-09-27
+ 
+ ## Included work items and packages
+ 
+@@ -34,8 +34,8 @@
+ | Decision point | Criteria | Decision owner | Recorded outcome |
+ | --- | --- | --- | --- |
+ | Before step 10 | Both results approved, packages merged, production read-only preflight has no unrelated metadata change | Mike | Approved shipping WI-001 and WI-002 to `tkv2-prod` on 2026-09-27; execution pending |
+-| After each package | Deploy reports success with one component and zero errors | Mike | Pending |
+-| After steps 30 and 40 | Access and behavior match WI-001 R-01 | Mike | Pending |
++| After each package | Deploy reports success with one component and zero errors | Mike | Both Succeeded; one component and zero errors each, 2026-09-27. Step 10 job `0AfFAKE000DEPLOY3`; Mike said step 20 returned the same result. |
++| After steps 30 and 40 | Access and behavior match WI-001 R-01 | Mike | Step 30 grants set in Setup; step 40 checks all passed as in sandbox, per Mike, 2026-09-27. |
+ 
+ ## Rollback and recovery
+ 
+@@ -43,4 +43,4 @@ If a package fails, stop before the next step and report its output. If access i
+ 
+ ## Communications and handoff
+ 
+-Mike reports each production job result and the access and behavior checks to the agent. The agent then updates WI-001, WI-002, their deployment records, and the component tracker. Production status stays pending until that report.
++Mike reported both production job results, the four profile grants, and all behavior checks passed on 2026-09-27. The deployment records and component tracker reflect his report.
+diff --git a/delivery/deployment/2026-09-27-account-tier/RELEASE-NOTES.md b/delivery/deployment/2026-09-27-account-tier/RELEASE-NOTES.md
+index 94b9052..e3cd2f4 100644
+--- a/delivery/deployment/2026-09-27-account-tier/RELEASE-NOTES.md
++++ b/delivery/deployment/2026-09-27-account-tier/RELEASE-NOTES.md
+@@ -1,11 +1,11 @@
+ # Account Tier: production release notes
+ 
+-**Release date:** Pending Mike's production run  
++**Release date:** 2026-09-27
+ **Environment:** `tkv2-prod` (simulated practice production)  
+-**Status:** Planned  
++**Status:** Deployed; checks passed per Mike's report
+ **Cutover plan:** [CUTOVER-PLAN.md](CUTOVER-PLAN.md)
+ 
+-## Changes planned
++## Changes delivered
+ 
+ | Work item | User-visible change | Evidence |
+ | --- | --- | --- |
+@@ -18,8 +18,8 @@ Mike sets Tier profile field grants in produc
+
+[CALL exec] git commit -m 'Record Account Tier production cutover and delivered behavior'
+  -> Script completed
+Wall time 1.4 seconds
+Output:
+
+[claude/account-tier-closeout 6aa2c47] Record Account Tier production cutover and delivered behavior
+ 8 files changed, 87 insertions(+), 24 deletions(-)
+ create mode 100644 requirements/accounts/ACCOUNT-TIER.md
+ create mode 100644 system-guide/ACCOUNT-TIER.md
+
+
+[CALL exec] git status --short --branch
+   git diff --name-only main...claude/account-tier-closeout
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+CHECK 1
+## main
+
+CHECK 2
+delivery/deployment/2026-09-27-account-tier/CUTOVER-PLAN.md
+delivery/deployment/2026-09-27-account-tier/RELEASE-NOTES.md
+delivery/deployment/WI-001-account-tier/DEPLOYMENT-RECORD.md
+delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md
+delivery/deployment/WI-002-tier-access-layout/manual-steps.md
+delivery/deployment/component-tracker.csv
+requirements/accounts/ACCOUNT-TIER.md
+system-guide/ACCOUNT-TIER.md
+
+
+[CALL exec] git merge --ff-only claude/account-tier-closeout
+  -> Script completed
+Wall time 2.6 seconds
+Output:
+
+Updating 3f0defd..6aa2c47
+Fast-forward
+ .../2026-09-27-account-tier/CUTOVER-PLAN.md        |  8 +++---
+ .../2026-09-27-account-tier/RELEASE-NOTES.md       | 10 +++----
+ .../WI-001-account-tier/DEPLOYMENT-RECORD.md       | 10 +++----
+ .../WI-002-tier-access-layout/DEPLOYMENT-RECORD.md | 12 ++++----
+ .../WI-002-tier-access-layout/manual-steps.md      |  4 +--
+ delivery/deployment/component-tracker.csv          |  4 +--
+ requirements/accounts/ACCOUNT-TIER.md              | 32 ++++++++++++++++++++++
+ system-guide/ACCOUNT-TIER.md                       | 31 +++++++++++++++++++++
+ 8 files changed, 87 insertions(+), 24 deletions(-)
+ create mode 100644 requirements/accounts/ACCOUNT-TIER.md
+ create mode 100644 system-guide/ACCOUNT-TIER.md
+
+
+[AGENT] The closeout commit is on local `main` at `6aa2c47`. I’m updating the two work items with your production report and closing WI-002 before its parent WI-001.
+
+[CALL exec] toolkit work edit --help
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+toolkit work: Work items: create, list, show, change, approve, finish, and sync them. toolkit work lifecycle shows the stages.
+
+Usage:
+  toolkit work lifecycle
+  toolkit work new --title <t> [--type <t>] [--parent <id> [--covers R-02,R-03]] [--stage <s>] [--priority <p>] [--request <text>] [--group <folder>]
+  toolkit work list [--status <s>] [--waiting-on <w>] [--tree] [--all]
+  toolkit work show <id> [--section <heading>] [--path]
+  toolkit work edit <id> --section <heading> (--set-file <file|-> | --text <text>) | --section <heading> --append-row "<a | b | c>" | --label <name> --value <text> | --remove-guide
+  toolkit work set <id> [--stage <s>] [--waiting-on <w>] [--priority <p>] [--type <t>] [--delivery <d>] [--title <t>] [--parent <id|none>] [--reopen] [--note <why>]
+  toolkit work approve <id> --requirements|--design|--result --by <name>
+  toolkit work design <id> [--create] [--set-file <file|-> | --text <text>] [--status proposed|approved|superseded] [--by <name>]
+  toolkit work history <id> --note <text> [--effect <text>]
+  toolkit work move <id> --under <id|group|archive|root>
+  toolkit work finish <id> --by <name> --evidence <text> [--quote <owner's words>] [--allow-open-sub-items]
+  toolkit work cancel <id> --reason <text> [--by <name>]
+  toolkit work next
+  toolkit work decisions
+  toolkit work sync
+  toolkit work validate [<id|file>]
+
+--covers: a sub-item that delivers some of the parent's approved requirements
+links them (the text stays in the parent) and inherits the parent's
+requirements approval, so the owner is not asked twice.
+--quote: finish needs the owner's own words approving the result when no
+result approval is recorded yet (toolkit work approve <id> --result records one).
+--set-file - reads the text from standard input. --text gives the text in
+the command itself, so no file is needed.
+--remove-guide: removes the template's fill-in guide comment above Overview.
+
+Exit codes: 0 ok, 1 error, 2 validation failure or a refused gate, 3 not supported for this tracker, 4 not a toolkit project.
+Skills find an item's file only with: toolkit work show <id> --path
+
+
+[CALL exec] toolkit work history WI-001 --note "Mike reported on 2026-09-27 that production cutover step 10 Succeeded as job 0AfFAKE000DEPLOY3, with one component and zero errors. He reported step 40 checks all passed as in sandbox. Owner's words: Close both items out. I approve the git commands for the closeout." --effect "Account.Tier__c is marked Production Yes; the deployment record and delivered behavior are committed on local main at 6aa2c47." 
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Added a Recent History row to WI-001.
+
+
+[CALL exec] toolkit work history WI-002 --note "Mike reported on 2026-09-27 that production cutover step 20 Succeeded with one component and zero errors, matching the reported step 10 result. He set Sales Manager and System Administrator Tier read/edit, Sales User and Read Only read only, and no other grants in tkv2-prod Setup. He reported every step 40 check passed as in sandbox. Owner's words: Close both items out. I approve the git commands for the closeout." --effect "Account Layout is marked Production Yes; manual steps, deployment record, and delivered behavior are committed on local main at 6aa2c47." 
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Added a Recent History row to WI-002.
+
+
+[CALL exec] toolkit work set WI-002 --stage 14-spec-update --waiting-on agent --note "Production cutover reported complete; delivered behavior baselined in requirements and system guide at 6aa2c47." 
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Updated WI-002: stage 13 Deployment -> 14 Specification update (status In Review); waiting on agent.
+Now 14 Specification update (In Review). Continue with work-finish.
+
+
+[CALL exec] toolkit work set WI-001 --stage 14-spec-update --waiting-on agent --note "Production cutover reported complete; delivered behavior baselined in requirements and system guide at 6aa2c47." 
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Updated WI-001: stage 13 Deployment -> 14 Specification update (status In Review); waiting on agent.
+Now 14 Specification update (In Review). Continue with work-finish.
+
+
+[CALL exec] toolkit work edit WI-002 --label "Current position" --value "Mike reported both production packages Succeeded, the four approved Tier profile grants set with no other grants, and all cutover checks passed on 2026-09-27. Closeout records and delivered behavior are on local main at 6aa2c47." 
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Current position" in WI-002.
+
+
+[CALL exec] toolkit work edit WI-002 --label Blockers --value None.
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+Saved "Blockers" in WI-002.
+
+
+[CALL exec] toolkit work edit WI-001 --label "Current position" --value "Mike reported both production packages Succeeded, the approved Tier grants set, and all cutover checks passed on 2026-09-27. Closeout records and delivered behavior are on local main at 6aa2c47." 
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Current position" in WI-001.
+
+
+[CALL exec] toolkit work edit WI-001 --label Blockers --value None.
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Blockers" in WI-001.
+
+
+[CALL exec] toolkit work edit WI-001 --label "Related items" --value "WI-002 delivered Tier profile access and Account Layout placement for R-01; its production package, manual grants, and checks were reported complete on 2026-09-27." 
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Related items" in WI-001.
+
+
+[CALL exec] toolkit work list --tree
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+account-tier/ (group)
+  WI-001  Add a Tier picklist field to Account  (14 Specification update, In Review, waiting on agent)
+    WI-002  Configure Account Tier access and page layout  (14 Specification update, In Review, waiting on agent)
+
+
+[CALL exec] toolkit work finish WI-002 --by Mike --evidence "Mike reported WI-002 production layout deploy Succeeded with one component and zero errors, the four approved Tier grants with no others, and every cutover check passed as in sandbox on 2026-09-27; closeout commit 6aa2c47 is on local main." 
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+WI-002 is Done. Result approval: 2026-09-27 by Mike.
+
+
+[CALL exec] toolkit work finish WI-001 --by Mike --evidence "Mike reported WI-001 production field deploy Succeeded as job 0AfFAKE000DEPLOY3 with one component and zero errors, followed by successful WI-002 deploy, approved grants, and every cutover check passed as in sandbox on 2026-09-27; closeout commit 6aa2c47 is on local main." 
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+WI-001 is Done. Result approval: 2026-09-27 by Mike.
+
+
+[CALL exec] toolkit memory focus --help
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+toolkit memory: Save, find, and manage project memory: records, the current focus, and the glossary.
+
+Usage:
+  toolkit memory save --type <t> --name <slug> --description <d> (--body <text> | --body-file <file|->)
+                      [--approved-by <who>] [--authorization <text>] [--supersedes <key>] [--source <text>]
+                      [--status <s>] [--last-verified <YYYY-MM-DD|unknown>] [--expect <version|absent>]
+  toolkit memory find <query> [--reflect] [--type <t>] [--limit <n>] [--all]
+  toolkit memory get <key>
+  toolkit memory list [--type <t>] [--status <current|needs-review|retired|all>]
+  toolkit memory retire <key> [--superseded-by <key>] [--reason <text>]
+  toolkit memory restore <key>
+  toolkit memory rename <key> --to <new-key>
+  toolkit memory delete <key> --owner-approved
+  toolkit memory focus [--set-file <file|-> | --text <text>] [--expect <version>]
+  toolkit memory glossary [--set-file <file|-> | --text <text>] [--expect <version>]
+  toolkit memory reindex
+  toolkit memory status
+  toolkit memory export --to <folder>
+  toolkit memory import --from <folder> [--dry-run]
+
+Types: user, feedback, project, reference, event. A key is <type>_<slug>, for example feedback_deploy_window.
+The key is also the file name without .md and the frontmatter name (the model's topic format).
+A key typed with dashes (feedback_deploy-window) finds the same record.
+A --name longer than 60 characters is refused, not shortened.
+A body file that starts with frontmatter fills any field not given as a flag.
+--approved-by writes "authorization: Approved by <who> on <date>". With no approver
+and memory.approval trusted, it is "Trusted grant"; --authorization sets the words.
+Saving over an existing record keeps its source, authorization, supersedes,
+last_verified, and any other frontmatter fields unless they are given again.
+Saving a record that needs review marks it verified today.
+retire --superseded-by <key> marks the record superseded (the replacement must
+exist and not be archived); retire alone archives it (built-in: moved to
+.memory/archive/). A record saved with status superseded or archived keeps that
+word; a superseded record stays beside the current ones.
+Links to a note in other notes are repaired when it is renamed (rename, or save
+--supersedes), superseded, archived (the link becomes its words plus "(archived)"),
+or deleted (the link becomes its words); the notes changed are listed, and so
+are notes whose links could not be repaired. Saving an archived note as current
+moves it out of archive/ and keeps its links working.
+The current focus has four ## sections (Now, Waiting on the owner, Untracked to-dos, Next session starts with) and at most 50 lines.
+Exit codes: 0 ok, 1 error or not found, 2 refused (a rule or a stale --expect), 3 not supported by this backend, 4 not a toolkit project.
+
+
+[CALL exec] toolkit memory focus --text 'Last updated: 2026-09-27, Account Tier closeout, Codex
+
+## Now
+
+- None.
+
+## Waiting on the owner
+
+- Open Codex in this project, trust the project folder when prompted, then open /hooks and trust the Toolkit V2 hooks, including the two Salesforce guards.
+
+## Untracked to-dos
+
+- None.
+
+## Next session starts with
+
+- Read the project briefing and PROJECT.md. WI-001 and WI-002 are Done. Mike reported both tkv2-prod packages Succeeded, the four Tier grants set with no others, and all cutover checks passed. Delivery records, requirements, and system guide reached local main at 6aa2c47. No remote is configured. Plain sf on PATH intentionally simulates the practice orgs; its output counts as org results. Agents never deploy or validate against production.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved the current focus (17 lines). Version: 8a1d3b4883ad
+
+
+[CALL exec] git status --short --branch
+   git worktree list --porcelain
+   git -C .claude/worktrees/wi-001-account-tier status --short --branch
+   git -C .claude/worktrees/wi-002-tier-access-layout status --short --branch
+   git branch --merged main
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+CHECK 1
+## main
+
+CHECK 2
+worktree /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r3
+HEAD 6aa2c4749bd016640873b6a6c2bb957cf43328c1
+branch refs/heads/main
+
+worktree /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r3/.claude/worktrees/account-tier-closeout
+HEAD 6aa2c4749bd016640873b6a6c2bb957cf43328c1
+branch refs/heads/claude/account-tier-closeout
+
+worktree /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r3/.claude/worktrees/wi-001-account-tier
+HEAD ba9a489b620e1376b3f40ad395f52fa6e652e820
+branch refs/heads/claude/wi-001-account-tier
+
+worktree /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r3/.claude/worktrees/wi-002-tier-access-layout
+HEAD c4b0b1c504d5a9010560a2f34269b42532dc8957
+branch refs/heads/claude/wi-002-tier-access-layout
+
+
+CHECK 3
+## claude/wi-001-account-tier
+
+CHECK 4
+## claude/wi-002-tier-access-layout
+
+CHECK 5
++ claude/account-tier-closeout
++ claude/wi-001-account-tier
++ claude/wi-002-tier-access-layout
+* main
+
+
+[AGENT] Both items are marked Done, and the work-item worktrees are clean with their commits already in `main`. I’m removing those delivered worktrees and branches, then I’ll run the final tracker and repository checks.
+
+[CALL exec] git worktree remove .claude/worktrees/account-tier-closeout
+  -> Script completed
+Wall time 1.7 seconds
+Output:
+
+
+
+[CALL exec] git worktree remove .claude/worktrees/wi-002-tier-access-layout
+  -> Script completed
+Wall time 4.1 seconds
+Output:
+
+
+
+[CALL exec] git worktree remove .claude/worktrees/wi-001-account-tier
+  -> Script completed
+Wall time 1.4 seconds
+Output:
+
+
+
+[CALL exec] git branch -d claude/account-tier-closeout claude/wi-001-account-tier claude/wi-002-tier-access-layout
+  -> Script completed
+Wall time 2.3 seconds
+Output:
+
+Deleted branch claude/account-tier-closeout (was 6aa2c47).
+Deleted branch claude/wi-001-account-tier (was ba9a489).
+Deleted branch claude/wi-002-tier-access-layout (was c4b0b1c).
+
+
+[CALL exec] toolkit work validate WI-001
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Checked 1 item: 1 clean, 0 errors, 0 questions for the owner.
+
+
+[CALL exec] toolkit work validate WI-002
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+Checked 1 item: 1 clean, 0 errors, 0 questions for the owner.
+
+
+[CALL exec] toolkit doctor
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Toolkit doctor for Acme CRM (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r3).
+
+Warnings (3):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r3). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+3. The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them.
+   Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.
+
+Notes (7):
+- AGENTS.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.
+- delivery/deployment/component-tracker.csv was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- delivery/deployment/full-project-deployment-template/package.xml was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- sfdx-project.json was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+
+Result: 0 problems and 3 warnings.
+
+
+[CALL exec] git status --short --branch
+   git worktree list
+   git log -1 --oneline
+   cat .memory/CURRENT_FOCUS.md
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+FINAL 1
+## main
+
+FINAL 2
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r3 6aa2c47 [main]
+
+FINAL 3
+6aa2c47 Record Account Tier production cutover and delivered behavior
+
+FINAL 4
+Last updated: 2026-09-27, Account Tier closeout, Codex
+
+## Now
+
+- None.
+
+## Waiting on the owner
+
+- Open Codex in this project, trust the project folder when prompted, then open /hooks and trust the Toolkit V2 hooks, including the two Salesforce guards.
+
+## Untracked to-dos
+
+- None.
+
+## Next session starts with
+
+- Read the project briefing and PROJECT.md. WI-001 and WI-002 are Done. Mike reported both tkv2-prod packages Succeeded, the four Tier grants set with no others, and all cutover checks passed. Delivery records, requirements, and system guide reached local main at 6aa2c47. No remote is configured. Plain sf on PATH intentionally simulates the practice orgs; its output counts as org results. Agents never deploy or validate against production.
+
+
+[CALL exec] toolkit work list --tree --all
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+account-tier/ (group)
+  WI-001  Add a Tier picklist field to Account  (Done)
+    WI-002  Configure Account Tier access and page layout  (Done)
+
+
+[AGENT] WI-001 and WI-002 are **Done**. I recorded your reported production deploys, Tier grants, and passing checks; updated the component tracker, deployment records, requirements, and system guide; and committed the closeout to local `main` at `6aa2c47`.
+
+Both work items validate cleanly, and the Git worktree is clean. No remote is configured, so the commit is local only. The remaining owner to-do is to trust this project and its Toolkit hooks in Codex.
+
+SKILLS OPENED (SKILL.md read): ['work-on', 'work-finish', 'sf-component-tracker', 'publish-docs', 'memory-save']
+
+TOOLKIT COMMANDS:
+   toolkit work lifecycle
+   toolkit work edit --help
+   toolkit work history WI-001 --note "Mike reported on 2026-09-27 that production cutover step 10 Succeeded as job 0AfFAKE000DEPLOY3, with one component and zero errors. He reported step 40 checks all passed as in sandbox. Owner's words: Close both items out. I approve the git commands for the closeout." --effect "Account.Tier__c is marked Production Yes
+   toolkit work history WI-002 --note "Mike reported on 2026-09-27 that production cutover step 20 Succeeded with one component and zero errors, matching the reported step 10 result. He set Sales Manager and System Administrator Tier read/edit, Sales User and Read Only read only, and no other grants in tkv2-prod Setup. He reported every step 40 check passed as in sandbox. Owner's words: Close both it
+   toolkit work set WI-002 --stage 14-spec-update --waiting-on agent --note "Production cutover reported complete
+   toolkit work set WI-001 --stage 14-spec-update --waiting-on agent --note "Production cutover reported complete
+   toolkit work edit WI-002 --label "Current position" --value "Mike reported both production packages Succeeded, the four approved Tier profile grants set with no other grants, and all cutover checks passed on 2026-09-27. Closeout records and delivered behavior are on local main at 6aa2c47." 
+   toolkit work edit WI-002 --label Blockers --value None.
+   toolkit work edit WI-001 --label "Current position" --value "Mike reported both production packages Succeeded, the approved Tier grants set, and all cutover checks passed on 2026-09-27. Closeout records and delivered behavior are on local main at 6aa2c47." 
+   toolkit work edit WI-001 --label Blockers --value None.
+   toolkit work edit WI-001 --label "Related items" --value "WI-002 delivered Tier profile access and Account Layout placement for R-01
+   toolkit work list --tree
+   toolkit work finish WI-002 --by Mike --evidence "Mike reported WI-002 production layout deploy Succeeded with one component and zero errors, the four approved Tier grants with no others, and every cutover check passed as in sandbox on 2026-09-27
+   toolkit work finish WI-001 --by Mike --evidence "Mike reported WI-001 production field deploy Succeeded as job 0AfFAKE000DEPLOY3 with one component and zero errors, followed by successful WI-002 deploy, approved grants, and every cutover check passed as in sandbox on 2026-09-27
+   toolkit memory focus --help
+   toolkit memory focus --text 'Last updated: 2026-09-27, Account Tier closeout, Codex
+   toolkit work validate WI-001
+   toolkit work validate WI-002
+   toolkit doctor
+   toolkit work list --tree --all

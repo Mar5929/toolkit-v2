@@ -1,0 +1,3 @@
+WI-001 needs two decisions from you. First, should I design the Account Tier field using Salesforce built-in features and present one recommended approach, or compare multiple options? I recommend **one approach using built-in features** because the approved requirement is specific.
+
+After you answer, I’ll record it and ask about the design review team. Which approach do you want?

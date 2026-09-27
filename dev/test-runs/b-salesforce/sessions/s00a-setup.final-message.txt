@@ -1,0 +1,9 @@
+Toolkit V2 setup stopped before writing any files. Codex’s sandbox rejected the first write to `.agents/`, and this session cannot approve an outside-sandbox run.
+
+Please run this exact command in a Terminal window:
+
+```sh
+toolkit init --dir /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r3 --name "Acme CRM" --key acme-crm --tracker local --memory builtin --owner Mike --salesforce --hosts claude-code,codex --decline SOUL.md
+```
+
+Then tell me it ran. I’ll set the two org aliases, fill the setup guides, and verify the project.

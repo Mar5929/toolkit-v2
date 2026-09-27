@@ -1,0 +1,3 @@
+I retrieved the current Account Layout and added Tier below Rating in the Account Information section, retaining the existing layout content. The change and WI-002 deployment package are committed on `claude/wi-002-tier-access-layout` as `844e376`. See the [layout source](</private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/.claude/worktrees/wi-002-tier-access-layout/force-app/main/default/layouts/Account-Account Layout.layout-meta.xml:1>).
+
+The layout XML check passed, and sandbox validation reported success. No deployment was run, so page visibility and effective access remain unverified. The commit is local because this copy has no Git remote.

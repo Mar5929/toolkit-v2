@@ -1,0 +1,37 @@
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Add Account Tier picklist: 11 User approval, In Progress, waiting on owner. Next action: Finish the R-01 through R-03 acceptance review and present WI-001's result to Mike for approval. Continues with work-decide.
+- WI-002 Configure Account Tier access and page layout: 11 User approval, In Progress. Next action: Continue WI-002 through the work-finish steps. The local WI-002 branch has no configured origin remote, so repository publication needs a... Continues with work-finish.
+
+Waiting on the owner:
+- WI-001 Add Account Tier picklist: WI-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-001 --result --by <name>. (work-decide)
+
+Items: 2 in progress.
+
+Current focus:
+Last updated: 2026-09-27, WI-001 acceptance and WI-002 result approval, Codex
+## Now
+- WI-001: Mike reported a sandbox test Account started with Tier blank; Gold, Silver, and Bronze saved and remained after reload; clearing Tier to blank worked; he deleted the Account. The test plan on the WI-002 branch records his results. Field source and sandbox describe support the field definition. R-02 and R-03 checks remain recorded in the same test plan.
+- WI-002: Mike approved the result. The WI-002 branch has the updated test plan at commit 72f5b9c. No origin remote is configured, so branch commits cannot be pushed from this copy.
+## Waiting on the owner
+- WI-001: Review and approve the overall Account Tier result after the final acceptance review.
+- Trust this project folder in Codex when prompted, then open `/hooks` and trust the Toolkit V2 hooks and two Salesforce org guards.
+## Untracked to-dos
+- None.
+## Next session starts with
+- Open WI-001 and WI-002. Check the independent WI-001 acceptance review and request WI-001 result approval. WI-002 result approval is recorded. Both branches still need publication and merge authorization; this copy has no origin remote.
+
+Project memory (builtin): 1 record. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_custom_field_documentation: Every new Salesforce custom field should have a description and help text
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them. Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.
+
+Always-on rules. Claude Code loads them by itself; in Codex
+

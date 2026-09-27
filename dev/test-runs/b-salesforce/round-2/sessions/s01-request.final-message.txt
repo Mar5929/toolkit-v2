@@ -1,0 +1,3 @@
+WI-001 is recorded and waiting on the Tier values. The proposed change is an Account picklist for sales users; its field metadata and access settings still need to be defined. A new field could affect Account forms, reports, and automation. No Salesforce metadata has been changed.
+
+Should the values be **High, Medium, Low**, in that order? If you want different values, please give them in ranking order.

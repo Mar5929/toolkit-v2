@@ -1,0 +1,344 @@
+PROMPT: Optional, with no default value. Only the Sales Manager profile and system administrators can edit it; everyone else who can see an Account can read it. Put it on the main Account page layout.
+THREAD: 01a0e3d6-d93b-7ca3-9851-c44ba27735e0
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The backlog has 1 item; toolkit work next suggests which to take up.
+
+Waiting on the owner:
+- WI-001 Add Account Tier picklist: Q-02: Must every Account have a Tier, or can Tier be blank? Affects R-01. (work-decide)
+
+Items: 1 in the backlog.
+
+Current focus:
+Last updated: 2026-09-27, setup commit, Codex
+## Now
+- None.
+## Waiting on the owner
+- Trust this project folder in Codex when prompted, then open `/hooks` and trust the Toolkit V2 hooks and two Salesforce org guards.
+## Untracked to-dos
+- None.
+## Next session starts with
+- Read `PROJECT.md` for the confirmed outcome. Ask for the first specific Salesforce change, then start its work item.
+
+Project memory (builtin): 1 record. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_custom_field_documentation: Every new Salesforce custom field should have a description and help text
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them. Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.
+
+Always-on rules. Claude Code loads them by itself; in Codex, each one is read at session start:
+- .claude/rules/check-deployment-contents.md: Check What a Deployment Includes
+- .claude/rules/component-tracker.md: Component Tracker
+- .claude/rules/confirm-salesforce-changes.md: Confirm Salesforce Changes
+- .claude/rules/humanize-outbound-text.md: Humanize Anything Sent to Another Person
+- .claude/rules/keep-work-item-current.md: Keep the Active Work Item Accurate
+- .claude/rules/memory-review-and-save.md: Review and Save Project Memory
+- .claude/rules/plain-english-artifacts.md: Write Artifacts in Plain English
+- .claude/rules/production-data-changes.md: Production Data Changes
+- .claude/rules/project-file-locations.md: Where Project Files Go
+- .claude/rules/salesforce-org-safety.md: Salesforce Org Safety
+- .claude/rules/session-handoff.md: Prepare a Session Handoff
+- .claude/rules/shared-repository-work.md: Work Safely in a Shared Repository
+- .claude/rules/work-item-folders.md: Local Work-Item Folders
+
+How to write replies (from AGENTS.md):
+Claude Code applies the Plain English output style to chat. Codex and helper agents follow these lines instead.
+
+- Start with the answer, result, or current status. Answer what was asked. Keep it short; add detail when asked.
+- 
+
+[AGENT] I’ll record these as requirements for WI-001, check the existing Account setup, and move the item forward as far as the approval gates allow.
+
+[CALL exec] cat SOUL.md PROJECT.md PROJECT-ROADMAP.md
+   cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/skills/work-on/SKILL.md
+   cat .claude/rules/{check-deployment-contents,component-tracker,confirm-salesforce-changes,humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,production-data-changes,project-file-locations,salesforce-org-safety,session-handoff,shared-repository-work,work-item-folders}.md
+   git status --short --branch && toolkit work lifecycle && toolkit work show WI-001
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Warning: truncated output (original token count: 12050)
+Total output lines: 4
+
+{"i":0,"status":"fulfilled","result":{"chunk_id":"da978e","wall_time_seconds":0,"exit_code":1,"original_token_count":1258,"output":"cat: SOUL.md: No such file or directory\n# Acme CRM\n\n## Purpose and intended outcome\n\n- Purpose: Give the Acme sales team Salesforce customizations for customer-account work.\n- Intended outcome: Help the Acme sales team track and prioritize customer accounts.\n\n## Scope and boundaries\n\n- In scope: Salesforce customizations for tracking and prioritizing customer accounts. Specific capabilities are not defined yet.\n- Outside scope: Not confirmed yet.\n- Constraints: Follow the Salesforce org safety rules in `.claude/rules/salesforce-org-safety.md`.\n\n## Systems and environments\n\n| System or org | Purpose | Environment | Source of truth | Access notes |\n| --- | --- | --- | --- | --- |\n| Acme CRM sandbox (`tkv2-sbx`) | Development and validation | Sandbox | `.toolkit.json` | Salesforce CLI org alias |\n| Acme CRM production (`tkv2-prod`) | Production target; owner performs production changes | Production | `.toolkit.json` | Salesforce CLI org alias |\n\n## People and ownership\n\n| Role | Person or team | Responsibility | Source / last confirmed |\n| --- | --- | --- | --- |\n| Owner | Mike | Project decisions | `.toolkit.json`, 2026-09-27 |\n| Users | Acme sales team | Track and prioritize customer accounts | Owner statement, 2026-09-27 |\n\n## Work and project records\n\n- Work tracker: Local `.work-items/` folders\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\n- Project decisions: [DECISIONS.md](DECISIONS.md)\n- Functional requirements: [requirements/](requirements/)\n- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`\n- System Guide: `system-guide/`; add verified current-system details as they become known\n- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)\n- Memory backup or sync: No destination or restore procedure confirmed yet\n\n## Resources and project paths\n\n- Salesforce source: `force-app/`\n- Project-wide deployment manifest: `delivery/deployment/full-project-deployment-template/package.xml` after the API version and members are verified. Keep it as the full project component inventory; ordinary deployments use narrower work-item packages.\n- Work-item deployment manifests: `delivery/deployment/<work-item-id>-<short-name>/package.xml` when an item changes Salesforce metadata.\n- Tests and checks: No project-specific build or test command verified yet; sandbox validation uses the work-item manifest as described in `AGENTS.md`\n- Outside references: `ai-external-knowledge/`\n\n## Operating conventions\n\nNo additional project-specific conventions confirmed yet.\n# Project roadmap\n\n<!-- Fill-in guide: replace every ang
+
+[AGENT] WI-001 now has answers for the blank value, default, access, and page layout. I’m updating the item with those choices, then I’ll check whether any requirement is still unclear before asking for formal approval.
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/skills/work-decide/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/skills/work-requirements/SKILL.md
+   cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/references/conventions.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/references/trackers.md
+   git worktree list && git status && git fetch origin && git log --oneline -10
+   cat .claude/rules/confirm-salesforce-changes.md .claude/rules/salesforce-org-safety.md .claude/rules/memory-review-and-save.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{"i":0,"status":"fulfilled","result":{"chunk_id":"8aa228","wall_time_seconds":0.000002708,"exit_code":0,"original_token_count":2777,"output":"---\nname: work-decide\ndescription: 'Walks the owner through each decision waiting on him, one at a time with a recommendation, and records each answer. Use when the owner asks \"what do you need from me\" or \"what''s waiting on me\", says \"approved\" or \"go with option B\", or states a decision for the whole project.'\n---\n\n# Work decide\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nShared rules: the work plugin's `references/conventions.md`, two folders above this skill's folder (`../../references/conventions.md`). To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`.\n\n## Steps\n\n1. Build the queue: requirements waiting for approval, designs marked proposed, items at stage 11 waiting for result approval, and Open Questions rows where the owner decides. The command lists each decision once. Its \"Agent to-do\" lines are the agent's own steps, not decisions waiting on the owner: count and show only the decisions, and handle a delivery offer there with `work-delegate` after the queue.\n   `toolkit work decisions`\n2. The owner gave an answer without being asked (\"approved\", \"go with B\"): match it to exactly one waiting decision. If two could match, ask which one, naming both.\n3. Otherwise take the decisions one at a time, the one blocking the most work first. For each: what is being decided, the choices, your recommendation and its main reason, and what happens after each answer. Every decision carries a recommendation, even when it is the only one in the queue; a bare question is not enough. One decision per message.\n4. Before recording a requirements approval, check that the Agreed goal is filled in and that no open question is linked to a requirement. If not, say what is missing and open `work-requirements`.\n   `toolkit work show <id> --section Requirements`\n5. Record each answer where it belongs. Approvals (for requirements, first mark each approved `R-xx` Finalized, as `work-requirements` step 8 does):\n   `toolkit work approve <id> --requirements --by <owner>`\n   `toolkit work approve <id> --design --by <owner>`\n   `toolkit work approve <id> --result --by <owner>`\n   An Open Questions answer: rewrite that row with the answer, the date, and status Answered.\n   `toolkit work edit <id> --section \"Open Questions\" --set-file <file>`\n   Then, for an approval or an answer: one history note in the owner's words, and `waiting_on` set to `agent` when the agent continues (the approve command sets it to `none` by itself), unless another question for him on that item is still open.\n   `toolkit work history <id> --note \"Owner's words: <quote>\"`\n   `toolkit work set <id> --wa
+
+[CALL exec] git worktree list
+   git status
+   git log --oneline -10
+   cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/skills/work-requirements/references/writing-requirements.md
+   toolkit work decisions
+   toolkit memory find "Account Tier"
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+{"i":0,"status":"fulfilled","result":{"chunk_id":"20a64a","wall_time_seconds":0.000002083,"exit_code":0,"original_token_count":41,"output":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2 1d49cdb [main]\n"}}
+{"i":1,"status":"fulfilled","result":{"chunk_id":"7b644b","wall_time_seconds":0.000002833,"exit_code":0,"original_token_count":14,"output":"On branch main\nnothing to commit, working tree clean\n"}}
+{"i":2,"status":"fulfilled","result":{"chunk_id":"c0a0bf","wall_time_seconds":0.000003958,"exit_code":0,"original_token_count":16,"output":"1d49cdb Set up Acme CRM project toolkit\nf7b5c4d Initial commit\n"}}
+{"i":3,"status":"fulfilled","result":{"chunk_id":"325bbf","wall_time_seconds":0.000004167,"exit_code":0,"original_token_count":1610,"output":"# Interviewing the owner and writing requirements\n\nDetail for `work-requirements`. Carried over from Toolkit V1's requirements\ninterview, deep-interview, and spec-check rules, with V2 homes: everything\nlands in the work item, not in a separate requirements document or notes file.\n\n## Aim at the outcome the owner wants\n\n- Work toward the outcome the owner wants, not only the words he used. Read a\n  rough answer in the context of that requirement's purpose and the rest of\n  the system, and ask focused follow-up questions until the real intent is\n  clear.\n- Say so when an answer would undermine his own goal, conflict with a stated\n  constraint, cause a problem elsewhere, or when a clearly better approach\n  exists. Name the concern, the tradeoff, and the direction you recommend,\n  then let him choose. Once he has heard the concern and decided, do it his\n  way.\n- Never quietly replace what he said with what you inferred.\n- Keep it light. Do not read every answer back for approval, do not challenge\n  every answer, and do not start designing while the goal is still open.\n\n## The interview\n\n- Read the item, the related area file in `requirements/` (and\n  `requirements/SYSTEM-DATA-MODEL.md` when data is involved), the\n  `system-guide/` file for the area, and memory before asking. Ask only what\n  the records and the code cannot answer.\n- One question at a time. Include a recommended answer based on what you\n  know, so the owner can confirm, correct, or redirect it.\n- Settle upstream decisions before the ones that depend on them.\n- When the owner does not know, record an Open Questions row with who can\n  answer, and continue with independent questions. Offer a `researcher` when\n  a fact can be found.\n- Follow contradictions and vague answers (\"fast\", \"easy\", \"secure\") until\n  they are resolved or recorded as open questions.\n- Save each settled answer into the item before asking the next question. A\n  long interview fills the conversation; the item is the record that\n  survives a cleared context.\n- When resuming an interview, re
+
+[CALL exec] toolkit work show WI-001 --section "Open Questions"
+   toolkit work show WI-001 --section "Active requirements"
+   toolkit work show WI-001 --section "Acceptance"
+   toolkit work show WI-001 --section "Overview"
+   toolkit work show WI-001 --section "Notes"
+   rg --files requirements system-guide force-app | head -80
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+{"i":0,"status":"fulfilled","result":{"chunk_id":"cabdcc","wall_time_seconds":6.67e-7,"exit_code":0,"original_token_count":87,"output":"## Open Questions\n\n| ID | Question | Affects | Status | Decision needed from |\n|---|---|---|---|---|\n| Q-01 | Which values should the Account Tier picklist offer, in ranking order? | R-01 | Answered 2026-09-27: Gold, Silver, Bronze, in that order. | owner |\n| Q-02 | Must every Account have a Tier, or can Tier be blank? | R-01 | Open | owner |\n"}}
+{"i":1,"status":"fulfilled","result":{"chunk_id":"2b5d6c","wall_time_seconds":0.00000225,"exit_code":0,"original_token_count":222,"output":"### Active requirements\n\n#### R-01 — Rank accounts by Tier\n\n**Status:** Refining  \n**Applies to:** Acme sales team members working with Account records.  \n**Required behavior:** An Account has a Tier choice that the sales team can use to rank accounts. The choices are Gold, Silver, Bronze, in that order. The new field has a description and help text.  \n**Boundaries and exceptions:** Whether the field is required, has a default, and appears on specific forms or reports remains to be decided.  \n**Acceptance check:** Once the remaining field behavior and access are agreed, a sales user can select a Tier on an Account and see the selected value; the field metadata includes a description and help text.  \n**Decision record:** Owner request and value order, 2026-09-27; remaining details pending approval.  \n**Open questions:** None about values; remaining field behavior to refine.\n"}}
+{"i":2,"status":"fulfilled","result":{"chunk_id":"34cec0","wall_time_seconds":0.000002834,"exit_code":0,"original_token_count":51,"output":"### Acceptance\n\nThis work item can be accepted when:\n\n1. <Overall result that must be delivered.>\n2. <How the completed result will be checked.>\n3. <Any required documentation, handoff, or owner review.>\n"}}
+{"i":3,"status":"fulfilled","result":{"chunk_id":"e560fa","wall_time_seconds":0.000003375,"exit_code":0,"original_token_count":117,"output":"## Overview\n\n**Goal:** Let the sales team rank accounts using an Account Tier picklist.\n\n**Current position:** The owner chose Gold, Silver, Bronze in that order. Requirements for the remaining field behavior are being refined.\n\n**Next action:** Owner answers whether Tier is required on every Account or can be blank. Agent then continues with default, placement, and access.\n\n**Blockers:** Q-02 and requirements approval before building.\n\n**Related items:** None.\n"}}
+{"i":4,"status":"fulfilled","result":{"chunk_id":"6e9fe1","wall_time_seconds":0.000002458,"exit_code":0,"original_token_count":261,"output":"## Notes\n\n### Decisions and context\n\n- The owner chose Gold, Silver, Bronze, in that order, for Account Tier on 2026-09-27.\n- The owner prefers a description and help text on every new custom field; this applies to Account Tier.\n- The repository has no Account metadata yet. Sandbox metadata and 
+
+[CALL exec] python3 - <<'PY'
+import tempfile, pathlib
+p=pathlib.Path(tempfile.mkdtemp(prefix='wi001-requirements-'))
+files={
+'questions.md':'''## Open Questions
+
+| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | Which values should the Account Tier picklist offer, in ranking order? | R-01 | Answered 2026-09-27: Gold, Silver, Bronze, in that order. | owner |
+| Q-02 | Must every Account have a Tier, or can Tier be blank? | R-01 | Answered 2026-09-27: Optional; Tier can be blank. | owner |
+''',
+'requirements.md':'''### Active requirements
+
+#### R-01 — Rank accounts by Tier
+
+**Status:** Refining  
+**Applies to:** Account records and people who can view them.  
+**Required behavior:** Account Tier offers Gold, Silver, and Bronze in that order. The field has a description and help text.  
+**Boundaries and exceptions:** Tier is optional and has no default value. An Account can retain a blank Tier.  
+**Acceptance check:** A new Account starts with Tier blank. A permitted editor can save Gold, Silver, or Bronze, and can leave Tier blank. The choices appear in that order; the field has a description and help text.  
+**Decision record:** Owner request and value order, 2026-09-27; owner clarified optional and no default, 2026-09-27. Pending requirements approval.  
+**Open questions:** None.
+
+#### R-02 — Control who can edit Tier
+
+**Status:** Refining  
+**Applies to:** People who can view an Account.  
+**Required behavior:** System administrators and users with the Sales Manager profile can edit Account Tier. Everyone else who can see the Account can read its Tier.  
+**Boundaries and exceptions:** Account access still controls which Account records a person can see. Other profiles cannot edit Tier.  
+**Acceptance check:** A Sales Manager and a system administrator can change Tier on an Account they can edit. A user with another profile who can see the Account can see Tier but cannot change it.  
+**Decision record:** Owner, 2026-09-27. Pending requirements approval.  
+**Open questions:** None.
+
+#### R-03 — Show Tier on the main Account page layout
+
+**Status:** Refining  
+**Applies to:** People viewing an Account through the main Account page layout.  
+**Required behavior:** Show Account Tier on the main Account page layout.  
+**Boundaries and exceptions:** No other layout or report placement was requested.  
+**Acceptance check:** Account Tier is visible on the main Account page layout to a user who can view the Account.  
+**Decision record:** Owner, 2026-09-27. Pending requirements approval.  
+**Open questions:** None.
+''',
+'acceptance.md':'''### Acceptance
+
+This work item can be accepted when:
+
+1. Account Tier has Gold, Silver, and Bronze in that order, is optional, has no default, and has a description and help text.
+2. Sales Manager profile users and system administrators can edit Tier; other users who can view an Account can read Tier without editing it.
+3. Tier appears on the main Account page layout, and the owner reviews the verified result.
+''',
+'overview.md':'''## Overview
+
+**Goal:** Let the sales team rank accounts using an Account Tier picklist.
+
+**Current position:** The owner specified Tier values, optional entry, no default, edit and read access, and placement. Draft requirements are ready for review.
+
+**Next action:** Owner reviews and explicitly approves the requirements. Then inspect the sandbox and design the metadata change.
+
+**Blockers:** Requirements approval before building.
+
+**Related items:** None.
+''',
+'notes.md':'''## Notes
+
+### Decisions and context
+
+- The owner chose Gold, Silver, Bronze, in that order, for Account Tier on 2026-09-27.
+- The owner specified that Tier is optional, has no default, is editable only by the Sales Manager profile and system administrators, is readable by others who can see an Account, and appears on the main Account page layout on 2026-09-27.
+- The owner prefers a description and help text on every new custom field; this applies to Account Tier.
+- The repository has no Account metadata yet. Sandbox metadata and access must be checked before implementation.
+- Salesforce field creation affects the Account data model; picklist value changes can affect existing forms, reports, and automation if they rely on this field or a similarly named field.
+
+### Resume here
+
+Get explicit owner approval of the draft requirements. Then inspect the sandbox for an existing Tier field, the main Account layout, and access configuration before designing the change.
+
+### Solution options and considerations
+
+These are possibilities to evaluate, **not approved requirements or design decisions**.
+
+- **For R-01:** A new Account custom picklist is the likely metadata change. Check whether a Tier field already exists in the sandbox before selecting an API name or creating source.
+- **For R-02:** Check existing profile and permission-set access before choosing metadata changes. Salesforce permissions can add edit access beyond a profile.
+- **For R-03:** Identify which Account layout is the main layout and how it is assigned before changing layout metadata.
+'''
+}
+for name,content in files.items(): (p/name).write_text(content)
+print(p)
+PY
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+/var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/wi001-requirements-kmuqgh82
+
+
+[CALL exec] toolkit work edit WI-001 --section "${section}" --set-file ${base}/${file}
+  -> Script completed
+Wall time 1.3 seconds
+Output:
+
+{"section":"Open Questions","exit_code":0,"output":"Saved \"Open Questions\" in WI-001.\n"}
+{"section":"Active requirements","exit_code":0,"output":"Saved \"Active requirements\" in WI-001.\n"}
+{"section":"Acceptance","exit_code":0,"output":"Saved \"Acceptance\" in WI-001.\n"}
+{"section":"Overview","exit_code":0,"output":"Saved \"Overview\" in WI-001.\n"}
+{"section":"Notes","exit_code":0,"output":"Saved \"Notes\" in WI-001.\n"}
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/agents/requirements-analyst.md
+   toolkit work show WI-001 --section Requirements
+   toolkit work show WI-001 --section "Open Questions"
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"i":0,"status":"fulfilled","result":{"chunk_id":"c40f83","wall_time_seconds":0.000002875,"exit_code":0,"original_token_count":1143,"output":"---\nname: requirements-analyst\ndescription: Checks a work item's requirements before design or build. Finds missing pieces, places not explicit end to end, wording a builder could misread, build details inside requirements, and drift from the Agreed goal. Returns ready or not ready with a fix for each finding. Read-only.\ntools: Read, Glob, Grep\nmodel: opus\n---\n\n# Requirements analyst\n\nRead the requirements as one whole and say whether they are ready to design\nor build from. You did not see the conversation, so you catch what the main\nagent stopped noticing. You advise; the owner decides. You change nothing.\n\n## Start with the brief\n\n- The brief pastes in the Agreed goal, the Starting request, every `R-xx`\n  block, the Acceptance list, the open questions, and the owner's recorded\n  rulings. It may also name project files to read, such as the area's file\n  in `requirements/` or `system-guide/`, or what the existing build does\n  today.\n- Treat only rulings the brief marks as approved by the owner as settled.\n  Proposals and unanswered questions stay open. Everything else is open to\n  your check.\n- If something the brief should contain is missing, say so first, then check\n  what you have.\n\n## Check readiness\n\nRead the requirements inside the larger system the result belongs to. Walk\nthe whole flow start to finish as the person who uses the result. Then report:\n\n- **Ready or not ready.** Say plainly whether these requirements describe a\n  complete, well-thought-out result in the context of the system it is part\n  of. List what is still unclear. Use no score.\n- **Missing.** Each step, person, error case, state, boundary with another\n  system, rule for what happens after, or way to tell it worked, without\n  which the goal cannot be met. One line each, with the fix.\n- **Not explicit end to end.** Each requirement where a reader who was not in\n  the conversation cannot say who does what, when, with what result, and what\n  happens when it fails. Quote the wording and propose wording that makes it\n  explicit.\n- **Misreading risks.** Each place a builder could take the wording too\n  literally, read it out of context, or read it two ways and build the wrong\n  thing. For each: the wording, the wrong reading, the intended reading, and a\n  rewording that removes the risk. Several valid ways to build the same clear\n  behavior are design freedom, not a risk.\n- **Build details inside requirements.** File paths, version numbers, tool\n  choices, or step-by-step build plans inside an `R-xx` block. Requirements\n  say what and why, never how. Ideas under Notes > Solution options and\n  considerations are allowed there and are not requirements.\n- **Drift from the Agreed goal.** Any requirement that pulls away from the\n  Agreed goal, co
+
+[CALL spawn_agent] {"task_name":"requirements_check","fork_turns":"none","message":"gAAAAABquU3pnwiOlGE_kWkT_HBTcw7i7rhWLZUsPnSCmMFN4UdoqERVAXIakmK5SctcU9KqHWw4PHfgP0_UC8v9LRfUMsvSniGvW2Qt8tYXieXDAfU-dzG5ksCK1X0xWUCXRzbBSp2s6xSBUOiqLts3dJApbS05gydKFGuzwhcOWyyXx8vd1Ni7zgctaufCItJhKrDqQZmTFWymnzNrGSZ_6o4tlRvnj1gdA4TuvwsbO4oFJGhXfnms5urRNWgc0VZfUdopEtDsg2KVdpHkdqMTMW2Ol9pm1q73KNxWRsH2NfvxmWe8q3wz39TCk2BLFuuhK1OfTnBmRk3fh-7H1aSAxVZwpiXqeEBn4TS-ErM4sCcGp1BYU9C9xTXPtTANSWA7xw6Hq4zxcV_V-vPY2OPyxVZBvMkYItMZ69kObOcpZZ5024ZYruCAWdgHtsi4y1-cuhempxgAOOLcmhJr5hb6LPm0Dt42N-MXXtWKevw2nmpGuK8lPYxkVoeFqkulkcSftGU38pwNi2ZAu9FfBEyothR00zFbVNj5nrzVvmUcDI4IkLtKyR7ou1nkn2BETXkvEXsIRpvFTqnjP7gRcLkGfD3fiKHUgUH7Kqhy_l3LbJKa8qIRHUyCEizHdp9Wi-_lq4vZOaZgli2gWnXr3yGQ7Zz3QhwCiczxeOk8GtEu7Of_6o186FYpKtTq7F5XJRDAFwO9l3W3LKhp1KlobINcYx3Ww1LpQYIOrJ7lU-ymDNMwAQx51rwNO-NEkd11ir00THXe-JNuxVNK8FB6ENuxsLUdw_SNfzSyvfoZLftbRa8pdcvHiN6JX4HH1tOUZaeoIeAtR_p6IxnAmMv5FGeWl0M-Hy42oKTwl7feS5CxaTisApQ_qsmlolw4QRtIMXl-yZiCpRboinS12XMVrJ618eh17sBj_pt5K_UUcRAPjHP4C48a3fKQARxAzsDO7FfbAnJyDBI75MqFE46-0EIaFrI-dmf6F_uPW1_5dULjvLB8RxrsbD2NN5csDInyXkgT2F7mKYnGanOde2_Gt_ygi3y5fTxPniacemEttvnpQrBQ6_-NDwzVmNmXXqGBr6k0_6vz59d8HO9_mr8hc_tZZc8UT-OdrHRgDEFY0IC3Xeh_vkt-FNxrOr1_FYv4GFKMI-7WguyKvaPFo_xpweFBdQ4T50RgHGGPwuMcX60tPvrhFKKWdm9RVGF4vg1cGfg804G288Dr6qiEz87Z00ODBDZM9JRf0ochUqmX8GN4Ip0zv5xjfykUh-E1noSg083XJTHdJFTxzl47KOmSQgNOPt8DliimVPtoQ3yMuLuhbDner5_e-DSRbvd2FxJc8-L_EY4eKRT51P0mcG13rVPlHAIKr0MZEx1moVTcqbuzFO-wwdtqsLOlV-w7AXYOLrEfHW9YJUi-fpAoHmL6tM_eq8A
+  -> {"task_name":"/root/requirements_check"}
+
+[CALL exec] toolkit work history WI-001 --note "Owner's words: Optional, with no default value. Only the Sales Manager profile and system administrators can edit it; everyone else who can see an Account can read it. Put it on the main Account page layout."
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Added a Recent History row to WI-001.
+
+
+[CALL exec] cat requirements/SYSTEM-DATA-MODEL.md system-guide/AREA-TEMPLATE.md
+   toolkit work validate WI-001
+   toolkit work decisions
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"i":0,"status":"fulfilled","result":{"chunk_id":"52db52","wall_time_seconds":0.000002708,"exit_code":0,"original_token_count":624,"output":"# System Data Model\n\n<!-- Fill-in guide: replace this comment with verified, accepted data model requirements for the whole system. Use the sections below for each shared entity or relationship; add one block per real item. Link the approving work item and date. Do not copy an unapproved technical design here. Delete this guide when the first accepted content is added. -->\n\n## Scope and sources\n\n<State which system and business areas this shared model covers, the accepted work items, and the date it was last checked.>\n\n## Entities and relationships\n\n### <Entity or relationship name>\n\n- Business meaning: <What this represents to users.>\n- Required fields or links: <Accepted fields, identifiers, and relationships.>\n- Rules and exceptions: <Required constraints and when they do not apply.>\n- Source and approval: <Work item or owner decision, approver, and date.>\n\n## Shared definitions and access\n\n<Definitions, ownership, privacy, and access requirements that apply across areas; link area-specific requirements instead of copying them.>\n\n## Acceptance evidence\n\n<Link to checks or observed behavior that confirm the accepted model.>\n\n## Change history\n\n- <Date, accepted change, and source work item.>\n# <System area>\n\n<!-- Fill-in guide: rename this file for the real system area. Replace the heading and every angle-bracket prompt in its paragraph, table cell, or list item with observed facts. Add a Components row per real component. Keep source and last-verified evidence beside claims; mark uncertainty in Known gaps. Remove the example row and this guide once populated. -->\n\n## What this area does today\n\n<Describe observed current behavior and who uses it. State the environment and date of observation.>\n\n## Components and paths\n\n| Component | Role | Location or reference | Evidence |\n| --- | --- | --- | --- |\n| <Name> | <Purpose> | <Path or link> | <Code, config, or verified observation> |\n\n## Data and flow\n\n<How information enters, changes, and leaves this area. Include diagrams or links when they clarify the flow.>\n\n## Operational behavior\n\n<Permissions, schedules, limits, failure handling, support ownership, and known dependencies.>\n\n## Known gaps and uncertainty\n\n<What is unverified, outdated, or still being investigated; where to confirm it.>\n\n## Last verified\n\n- Date and environment: <When and where checked.>\n- Sources: <Links to code, configuration, documentation, or responsible people.>\n- Maintainer: <Who is responsible for keeping this page current.>\n"}}
+{"i":1,"status":"fulfilled","result":{"chunk_id":"631b24","wall_time_seconds":0.000003,"exit_code":0,"original_token_count":16,"output":"Checked 1 item: 1 clean, 0 errors, 0 questions for the owner.\n"}}
+{"i":2,"status":"fulfilled","result":{"chunk_id"
+
+[AGENT] I’ve saved your answers in WI-001. I’m checking the sandbox’s profile and Account layout names so the approval request can identify the exact components.
+
+[CALL exec] cat .toolkit.json
+   sf org list --json
+   toolkit work show WI-001 --path
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"i":0,"status":"fulfilled","result":{"chunk_id":"42851b","wall_time_seconds":0.000003208,"exit_code":0,"original_token_count":3144,"output":"Warning: truncated output (original token count: 3144)\nTotal output lines: 146\n\n{\n  \"toolkit\": \"toolkit-v2\",\n  \"schema\": 1,\n  \"project\": {\n    \"name\": \"Acme CRM\",\n    \"key\": \"acme-crm\",\n    \"owner\": \"Mike\",\n    \"created\": \"2026-09-27\"\n  },\n  \"tracker\": {\n    \"type\": \"local\",\n    \"idPrefix\": \"WI\"\n  },\n  \"memory\": {\n    \"type\": \"builtin\",\n    \"approval\": \"onboarding\"\n  },\n  \"salesforce\": {\n    \"enabled\": true,\n    \"orgs\": {\n      \"sandbox\": \"tkv2-sbx\",\n      \"production\": \"tkv2-prod\"\n    }\n  },\n  \"hosts\": [\n    \"claude-code\",\n    \"codex\"\n  ],\n  \"declined\": [\n    \"SOUL.md\"\n  ],\n  \"notion\": {},\n  \"hindsight\": {},\n  \"installed\": {\n    \".agents/skills/sf-component-tracker/SKILL.md\": \"7119ff1eee4f0387fce73952e74a75a5e1c81b9c7b1f6d23d18a2386a40c3240\",\n    \".agents/skills/sf-data-change/SKILL.md\": \"797c38e98ae78a466843d1fe81cda8b8ea40b8b27e000e2965158c3f842bdad9\",\n    \".agents/skills/sf-deploy-check/SKILL.md\": \"084dcc4b91a4445fdd1b60e688b21f37f4b69991d67006a50cd6874b6b5b5e81\",\n    \".claude/hooks/guard-permission-set-deploy.cjs\": \"f965f51657307dca76354e45a34517964c9c7353cb8c5c24a8fde17146d55de0\",\n    \".claude/hooks/guard-protected-orgs.cjs\": \"d257005bc0d9d9b18d669335bd8a4bac1ccafa1cd602a9306f1ccde440ea87e1\",\n    \".claude/output-styles/plain-english.md\": \"b25d7be1b6a6034fc56d93ab80dee9fbe5a106cedacba6d6a3989d6b37946deb\",\n    \".claude/protected-orgs.json\": \"3e2250f9043cab5b8283f6b99d6334dddf3709cd408ba283af4e69a6b92dc329\",\n    \".claude/rules/ai-external-knowledge.md\": \"c2140569c1dbe7592014f85e58f69314d09df74fe11ae48cbd47b08a3675c2e5\",\n    \".claude/rules/check-deployment-contents.md\": \"af2bc2bf2ffbf90860532dcd5c01e7bcdcf579ebe258db03085febd6da8f868f\",\n    \".claude/rules/component-tracker.md\": \"efad6f2093b0b6dbf8a418737b4eff7e8eeabd122bf262b3e5a836fc01545e4f\",\n    \".claude/rules/confirm-salesforce-changes.md\": \"d7bea6491e922324cfbedfacc5b971ce230159e065efd10c2ff18fccafd6f029\",\n    \".claude/rules/dependency-graph.md\": \"536049cc87de1d25bfd189c4c1351e8c838efd7de5d9dbc5b4792b56b26122dd\",\n    \".claude/rules/humanize-outbound-text.md\": \"daa38057e72bde93a8057254d0ddcb220a4182e0636bd4f972552b53b520c561\",\n    \".claude/rules/keep-work-item-current.md\": \"dd634b7d00ce9452eb9418ef682fe541c8a7565ff7bfe7eea5189dd997298867\",\n    \".claude/rules/memory-review-and-save.md\": \"1a7b63b66bdbde4ee30d3dc81a7d695e43a7400b0cc9aa7a2043c9c703f7d044\",\n    \".claude/rules/permissions-source-control.md\": \"530b70edcef066973777a734777fac304fd30615466ebc1b33efa01bf0a13469\",\n    \".claude/rules/plain-english-artifacts.md\": \"692f6de8c6a824ef783d755ba6c431881c6444617dccb27a27e8bb343f22db9e\",\n    \".claude/rules/productio
+
+[CALL exec] sf data query -q "SELECT Id, Name FROM Profile WHERE Name LIKE '%Sales Manager%'" -o tkv2-sbx --json
+   sf data query -q "SELECT Id, Name, TableEnumOrId FROM Layout WHERE TableEnumOrId = 'Account'" --use-tooling-api -o tkv2-sbx --json
+   sf sobject describe -s Account -o tkv2-sbx --json
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{"i":0,"status":"fulfilled","result":{"chunk_id":"aee820","wall_time_seconds":0.000003209,"exit_code":0,"original_token_count":22,"output":"{\"status\":0,\"result\":{\"status\":\"Succeeded\",\"success\":true,\"done\":true},\"warnings\":[]}\n"}}
+{"i":1,"status":"fulfilled","result":{"chunk_id":"63b9e2","wall_time_seconds":8.75e-7,"exit_code":0,"original_token_count":22,"output":"{\"status\":0,\"result\":{\"status\":\"Succeeded\",\"success\":true,\"done\":true},\"warnings\":[]}\n"}}
+{"i":2,"status":"fulfilled","result":{"chunk_id":"bc25a0","wall_time_seconds":0.000003667,"exit_code":0,"original_token_count":22,"output":"{\"status\":0,\"result\":{\"status\":\"Succeeded\",\"success\":true,\"done\":true},\"warnings\":[]}\n"}}
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/skills/work-delegate/SKILL.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+---
+name: work-delegate
+description: 'Hands a goal to agents with the owner as product owner: makes the agent-led delivery offer, asks how the team is arranged, records the choice, and runs the team. Use when the owner says "you drive", "run with it", "take it from here", or "use a team of agents", or work-on starts a big goal.'
+---
+
+# Work delegate
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Shared rules: the work plugin's `references/conventions.md` and `references/helpers.md`, two folders above this skill's folder (`../../references/`). Full method: this skill's `references/agent-led-delivery.md` and `references/team-arrangements.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`.
+
+## Steps
+
+1. Look for a delivery choice that covers this goal: the item's `delivery` value and its Notes > Decisions and context. A quick question or small edit gets no offer.
+   `toolkit work show <id> --section "Decisions and context"`
+2. No choice recorded: ask exactly "Would you like agents to take responsibility for delivering this, with you acting as product owner?" If the owner already said it in his own words ("you drive"), that is the answer; do not ask again.
+3. Yes: ask about the team. Where this chat can list, read, and message other chats (today, the Claude Code desktop app): "Do you want one team inside this chat, or do you want me to rename this chat to Main Orchestrator and coordinate other chats that each have their own team?" On any other host, say the multi-chat arrangement is not available here and ask: "Shall I run one team of helpers inside this chat?" After the Main Orchestrator choice only: "Do you want me to archive sessions after their task is fully complete, everything is merged and shipped, and you approved?"
+4. Record the choice, the goal it covers, who said it, the date, the team arrangement, the archive answer, and the limits (delegation never includes merge, deployment, spending, or publishing beyond what was given) in Notes > Decisions and context. Set the delivery value, add one history note, and read it back.
+   `toolkit work edit <id> --section "Decisions and context" --set-file <file>`
+   `toolkit work set <id> --delivery agent-led`
+   `toolkit work history <id> --note "Agent-led delivery accepted by <owner>: <his words>"`
+   `toolkit work show <id> --section "Decisions and context"`
+5. No, or a later revoke: record it the same way; do not offer again for this goal unless it grows a lot or the owner asks.
+   `toolkit work set <id> --delivery owner-led`
+6. Run the team through the skill that handles each stage: the main agent plans, briefs `builder`, `researcher`, and `acceptance-checker` agents with their role files, gives one writer per path, and is the only writer of the work item.
+   `toolkit work list --tree
+
+[CALL exec] rm /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/wi001-requirements-kmuqgh82/questions.md /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/wi001-requirements-kmuqgh82/requirements.md /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/wi001-requirements-kmuqgh82/acceptance.md /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/wi001-requirements-kmuqgh82/overview.md /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/wi001-requirements-kmuqgh82/notes.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+
+
+[CALL exec] rmdir /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/wi001-requirements-kmuqgh82
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+
+
+[AGENT] I saved your answers in [WI-001](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/.work-items/WI-001-add-account-tier-picklist/WORK-ITEM.md): Tier is optional with no default; only the Sales Manager profile and system administrators can edit it; other Account viewers can read it; and it appears on the main Account page layout. The draft also includes Gold, Silver, Bronze in that order, plus description and help text.
+
+The change would touch the Account field, field access, and Account layout. I’ll verify the exact profile and layout assignments before building because those determine who can edit or see the field.
+
+**Do you approve this goal and these requirements?**
+
+SKILLS OPENED (SKILL.md read): ['work-on', 'work-decide', 'work-requirements', 'work-delegate']
+
+TOOLKIT COMMANDS:
+   toolkit work lifecycle 
+   toolkit work show WI-001
+   toolkit work decisions
+   toolkit memory find "Account Tier"
+   toolkit work show WI-001 --section "Open Questions"
+   toolkit work show WI-001 --section "Active requirements"
+   toolkit work show WI-001 --section "Acceptance"
+   toolkit work show WI-001 --section "Overview"
+   toolkit work show WI-001 --section "Notes"
+   toolkit work edit WI-001 --section "${section}" --set-file ${base}/${file}
+   toolkit work show WI-001 --section Requirements
+   toolkit work show WI-001 --section "Open Questions"
+   toolkit work history WI-001 --note "Owner's words: Optional, with no default value. Only the Sales Manager profile and system administrators can edit it
+   toolkit work validate WI-001
+   toolkit work decisions
+   toolkit work show WI-001 --path

@@ -1,0 +1,1 @@
+New work: write a short project brief in README.md. It should say what the quote script does, who it is for, how to run it, and how to add a new quote. Please start a work item for it and help me work out what exactly it should say.

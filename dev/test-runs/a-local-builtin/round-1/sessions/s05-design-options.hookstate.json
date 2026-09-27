@@ -1,0 +1,78 @@
+{
+  "schema": 1,
+  "sessionId": "01a0e37d-a816-7590-ac45-044a64655b00",
+  "host": "codex",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r1",
+  "startedAt": "2026-09-27T15:30:59.841Z",
+  "turns": 1,
+  "turn": {
+    "key": "01a0e37d-a8a6-76c1-8a69-453b31f29264",
+    "n": 1,
+    "startedAt": "2026-09-27T15:30:59.976Z",
+    "keep": null,
+    "baseline": {
+      "memoryMeta": 1790522682744.511,
+      "hindsightMeta": null,
+      "memoryCache": null,
+      "workState": 1790523059872.0703,
+      "decisions": 1790522279732.034
+    },
+    "records": [
+      {
+        "kind": "work",
+        "what": "toolkit work design",
+        "at": "2026-09-27T15:32:39.227Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work history",
+        "at": "2026-09-27T15:33:00.337Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work set",
+        "at": "2026-09-27T15:33:11.354Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T15:33:21.472Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work design",
+        "at": "2026-09-27T15:33:25.896Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work design",
+        "at": "2026-09-27T15:35:37.402Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T15:36:26.930Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T15:36:29.945Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work history",
+        "at": "2026-09-27T15:36:36.450Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work design",
+        "at": "2026-09-27T15:36:50.381Z"
+      }
+    ],
+    "edits": [],
+    "stopBlocked": false
+  },
+  "lastStopReason": null,
+  "source": "startup",
+  "updated": "2026-09-27T15:37:16.018Z"
+}

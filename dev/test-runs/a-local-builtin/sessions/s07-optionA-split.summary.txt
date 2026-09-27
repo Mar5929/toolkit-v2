@@ -1,0 +1,989 @@
+PROMPT: Go with option A. Before you build, split this up: WI-001 is doing two things. Keep the basic greeting in WI-001 and make the --version flag its own sub-item under it.
+THREAD: 01a0e472-68f4-7b61-8d95-d06d2b3e264c
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll record your choice of Option A, then split the work so WI-001 covers the basic greeting and the `--version` flag has its own sub-item. I’ll check the existing item and roadmap before changing the tracker.
+
+[CMD exit=1] /bin/zsh -lc 'pwd && cat SOUL.md PROJECT.md .claaude/rules/humanize-outbound-text.md'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3
+cat: SOUL.md: No such file or directory
+# greet
+
+## Purpose and intended outcome
+
+- Purpose: A tiny Node.js command-line tool that greets people, as de
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/humanize-outbound-text.md'"
+  -> # Humanize Anything Sent to Another Person
+
+Any text that will leave the project and be read by someone other than the owner
+is run through the `humanizer` skill before the owner sees the final version.
+Use the `unslop` skill when `humanizer` is not installed. That covers emails,
+chat messages, supp
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/work-item-folders.md'"
+  -> # Local Work-Item Folders
+
+This project tracks work in local folders under `.work-items/`. The folder is
+Git-ignored, lives in the main checkout, and is shared by every worktree. It is
+not backed up by Git: `toolkit export` is the backup.
+
+## An item is found by its ID, not its path
+
+- An item is a 
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/keep-work-item-current.md'"
+  -> # Keep the Active Work Item Accurate
+
+The work tracker is the source of truth for current work.
+
+- Before substantial work, use the `work-on` skill. Read the active item's requirements, state, next step, and blockers.
+- Save the owner's decisions, requirements, and corrections in the item or its lin
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/skills/work-decide/SKILL.md'"
+  -> ---
+name: work-decide
+description: 'Walks the owner through each decision waiting on him, one at a time with a recommendation, and records each answer. Use when the owner asks "what do you need from me" or "what''s waiting on me", says "approved" or "go with option B", or states a decision for the whole project.'
+---
+
+# Work decide
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Shared rules: the work plugin's `references/conventions.md`, two folders above this skill's folder (`../../references/conventions.md`). To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Run each `toolkit` command alone, on its own line: in Codex a command joined by `&&`, `;`, a pipe, or a heredoc, or run from a script, runs inside the sandbox and fails. Give text with `--text`, or a file in a new `mktemp -d` folder (never a fixed `/tmp` name, deleted right after the command). Never change a record with a script.
+
+## Steps
+
+1. Build the queue: requirements waiting for approval, designs marked proposed, items at stage 11 waiting for result approval, and Open Questions rows where the owner decides. The command lists each decision once. Its "Agent to-do" lines are the agent's own steps, not decisions waiting on the owner: count and show only the decisions, and handle a delivery offer there with `work-delegate` after the queue.
+   `toolkit wo
+
+[CMD exit=0] /bin/zsh -lc "cat 'PROJECT-ROADMAP.md'"
+  -> # Project roadmap
+
+<!-- Fill-in guide: replace every angle-bracket prompt in the outcome, phase table, phase heading, and work-unit fields with this project's real text. Keep one overview row and one matching ## heading per phase. Under that heading, repeat the ### work-unit block for each deliverab
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/session-handoff.md'"
+  -> # Prepare a Session Handoff
+
+When the session is long and the next step is complex, offer a handoff. Use the `handoff` skill. Before the handoff, review the current focus (`toolkit memory focus`) and the memory criteria; update the focus, and save only authorized lasting memory, with the `memory-sav
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/skills/work-organize/SKILL.md'"
+  -> ---
+name: work-organize
+description: 'Splits work items into sub-items, nests, groups, and moves them, and reconciles folders or cards the owner moved or renamed by hand. Use when the owner says "split this", "break it down", "it''s too big", "put X under Y", "I moved some folders around", or the briefing reports moved or missing items.'
+---
+
+# Work organize
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Shared rules: the work plugin's `references/conventions.md` and `references/trackers.md`, two folders above this skill's folder (`../../references/`). Cases and examples: this skill's `references/moves.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Run each `toolkit` command alone, on its own line: in Codex a command joined by `&&`, `;`, a pipe, or a heredoc, or run from a script, runs inside the sandbox and fails. Give text with `--text`, or a file in a new `mktemp -d` folder (never a fixed `/tmp` name, deleted right after the command). Never change a record with a script.
+
+## Steps
+
+1. Rescan the tracker and read the tree. Read the report: moved, renamed, nested or un-nested, missing, duplicate id, record with no id, adopted copies of the template.
+   `toolkit work sync`
+   `toolkit work list --tree`
+2. Say what the CLI already adapted (paths, a renamed folder, parent from location, Status from a drag
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/memory-review-and-save.md'"
+  -> # Review and Save Project Memory
+
+This rule applies to the main agent. The project memory system is chosen at setup and recorded in `.toolkit.json`; with built-in memory it is the local `.memory/` folder. It is the single project memory store. Claude's native auto-memory and the `claude-toolkit` Sec
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/plain-english-artifacts.md'"
+  -> # Write Artifacts in Plain English
+
+An artifact is something an agent generates for a person to look at: a
+diagram, a chart, a dashboard, a visualization, a mockup, a slide deck, a
+published page, or a generated document. This rule is about the words inside
+one: the title, the headings, the labels, 
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/shared-repository-work.md'"
+  -> # Work Safely in a Shared Repository
+
+Other sessions edit this repository now. Before your first edit, run:
+
+```
+git worktree list
+git status
+git fetch origin && git log --oneline -10
+```
+
+- An unknown worktree, moved branch, or change you did not make means other sessions are live. Do not fix it. T
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/skills/work-on/SKILL.md'"
+  -> ---
+name: work-on
+description: 'Starts, continues, or logs project work: finds or creates the work item, works out where it stands, and runs its next step through to a built result. Use when the owner asks to build, add, fix, or change something, says "keep going" or "continue", names an item, or wants an idea logged for later.'
+---
+
+# Work on
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Shared rules: the work plugin's `references/conventions.md` (saving, section edits, history, branches) and `references/trackers.md`, two folders above this skill's folder (`../../references/`). To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Run each `toolkit` command alone, on its own line: in Codex a command joined by `&&`, `;`, a pipe, or a heredoc, or run from a script, runs inside the sandbox and fails. Give text with `--text`, or a file in a new `mktemp -d` folder (never a fixed `/tmp` name, deleted right after the command). Never change a record with a script.
+
+## Steps
+
+1. No session briefing in this conversation: run the command below. Exit code 4 (no `.toolkit.json`): open `project-setup` and stop. When the briefing or a `toolkit work` command lists changes found in the tracker (a moved or renamed folder, a new parent, a missing item), tell the owner each one in one line before other work.
+   `toolkit brief`
+2. Fi
+
+[CMD exit=0] /bin/zsh -lc "cat 'DECISIONS.md'"
+  -> # Decisions
+
+Decisions for the whole project. A decision about one work item stays in that
+item's Recent History. Add rows only with `toolkit decision add`, which gives
+each row the next ID. Never rewrite an old row. To change a decision, add a new
+row that names the ID it replaces.
+
+| ID | Date | D
+
+[AGENT] I’m using the work-organize and work-decide procedures for this change. The item currently treats the version flag as the parent work, so I’m checking its requirements and design to keep your approved work and choice attached to the right item.
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work sync'
+  -> Nothing changed: every item is where the tracker expected it, and every derived value is in step.
+
+Dashboard: .work-items/DASHBOARD.md
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work list --tree'
+  -> WI-001  Add a --version flag to the greet CLI  (04 Solution design, In Progress, waiting on owner)
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001'
+  -> WI-001: Add a --version flag to the greet CLI
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3/.work-items/WI-001-add-a-version-flag-to-the-greet-cli/WORK-ITEM.md
+Stage: 04 Solution design (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: none | Sub-items: none | Design: proposed (.work-items/WI-001-add-a-version-flag-to-the-greet-cli/DESIGN.md)
+
+---
+id: WI-001
+title: Add a --version flag to the greet CLI
+type: build
+stage: 04-solution-design
+status: In Progress
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-27 by Mike"
+design: proposed
+result_approved: "no"
+updated: 2026-09-27
+---
+
+# WI-001: Add a --version flag to the greet CLI
+
+## Overview
+
+**Goal:** Build a small Node.js greet CLI with a greeting and a --version flag.
+
+**Current position:** Requirements approved by Mike on 2026-09-27; two design options reviewed and proposed.
+
+**Next action:** Mike chooses Option A or approves recommended Option B in the proposed design.
+
+**Blockers:** Design approval before implementation planning.
+
+**Related items:** None.
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading. Add one row per phase; set Status from actual progress, not from this example.
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001 --path'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3/.work-items/WI-001-add-a-version-flag-to-the-greet-cli/WORK-ITEM.md
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 1 decision waits on the owner:
+
+WI-001 Add a --version flag to the greet CLI
+  - The design for WI-001 is proposed and waits for the owner's approval. Approve with: toolkit work approve WI-001 --design --by <name>. (work-decide)
+
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3 00e30a2 [main]
+
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## main
+
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/references/conventions.md'
+  -> # Conventions every work skill follows
+
+Every skill in the work plugin follows these rules. A skill's own `SKILL.md`
+names the file when a rule matters for a step.
+
+This file is `references/conventions.md` in the work plugin's own folder. From
+a skill's `SKILL.md` it is two folders up: `skills/work-on/SKILL.md` and
+`references/conventions.md` share the plugin folder. In Codex the plugin
+folder is the installed copy, for example
+`~/.codex/plugins/cache/toolkit-v2/work/<version>/`, so this file is
+`~/.codex/plugins/cache/toolkit-v2/work/<version>/references/conventions.md`.
+
+Four rules that are easy to miss:
+
+- Run each `toolkit` command alone, as its own command (below).
+- Never change a work item with a script (Python, Node, `sed -i`, `cat >`).
+  Use `toolkit work edit --section` or `--label`, or the file edit tool for
+  body text. The hooks refuse the script, so it only wastes a step.
+- Temporary text goes in `--text`, or in a file in a new `mktemp -d` folder,
+  never at a fixed name such as `/tmp/wi001.md`.
+- End every reply to the owner with the one question he must answer, or with
+  the exact words that continue the work ("Say 'keep going' and I'll start the
+  build."). Never end on "The next step is ..." with nothing for him to do.
+
+## Voice
+
+Every skill carries this line near its top:
+
+> Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+
+Agents do not
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/skills/work-organize/references/moves.md'
+  -> # Moves, renames, and splits: cases
+
+Detail for `work-organize`. The CLI adapts to the owner's hand changes;
+this skill explains them and asks only where his intent is unclear.
+
+## What the CLI handles by itself
+
+`toolkit work sync` (also run by every `toolkit work` command, by the
+SessionStart hook, and by the UserPromptSubmit hook) rescans `.work-items/`
+and:
+
+- follows a folder or file the owner moved or renamed (identity is the
+  record's frontmatter `id`);
+- sets `parent` from the new location when a folder was nested inside
+  another item's folder, or moved out of one;
+- adopts a record that has no id (a copy of the template with a real title):
+  gives it the next free id and reports it;
+- renumbers the newer of two records that share an id, and reports both;
+- skips `work-item-template/`, folders whose names start with `_` or `.`, and
+  records whose title is still `<Work item title>`;
+- writes one Recent History row on each item the owner moved or renamed
+  ("Moved by hand: <old path> -> <new path>", "Folder renamed by hand: ..."),
+  and on the parents a sub-item left and joined ("Sub-item WI-7 moved out by
+  hand", "Sub-item WI-7 moved here by hand"); `toolkit work move` writes the
+  same rows for a move it makes;
+- rebuilds `.work-items/DASHBOARD.md`;
+- in Notion, reads a dragged Stage and sets Status to match, fills a card
+  made with the New button with the template body, and reads a changed
+  Parent item as the owner's edit, with a "Parent changed in Notion by ha
+
+[CMD exit=0] /bin/zsh -lc 'cat .work-items/WI-001-add-a-version-flag-to-the-greet-cli/DESIGN.md'
+  -> ---
+work_item: WI-001
+status: proposed
+approved: "no"
+---
+# WI-001: Add a --version flag to the greet CLI — solution design
+
+**Requirements:** WI-001  
+**Design status:** Proposed  
+**Requirements checked:** WI-001 Requirements, approved 2026-09-27  
+**Last updated:** 2026-09-27  
+**Design approval:
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work new --help'
+  -> toolkit work: Work items: create, list, show, change, approve, finish, and sync them. toolkit work lifecycle shows the stages.
+
+Usage:
+  toolkit work lifecycle
+  toolkit work new --title <t> [--type <t>] [--parent <id> [--covers R-02,R-03]] [--stage <s>] [--priority <p>] [--request <text>] [--group <folder>]
+  toolkit work list [--status <s>] [--waiting-on <w>] [--tree] [--all]
+  toolkit work show <id> [--section <heading>] [--path]
+  toolkit work edit <id> --section <heading> (--set-file <file|-> | --text <text>) | --section <heading> --append-row "<a | b | c>" | --label <name> --value <text> | --remove-guide
+  toolkit work set <id> [--stage <s>] [--waiting-on <w>] [--priority <p>] [--type <t>] [--delivery <d>] [--title <t>] [--parent <id|none>] [--reopen] [--note <why>]
+  toolkit work approve <id> --requirements|--design|--result --by <name>
+  toolkit work design <id> [--create] [--set-file <file|-> | --text <text>] [--status proposed|approved|superseded] [--by <name>]
+  toolkit work history <id> --note <text> [--effect <text>]
+  toolkit work move <id> --under <id|group|archive|root>
+  toolkit work finish <id> --by <name> --evidence <text> [--quote <owner's words>] [--allow-open-sub-items]
+  toolkit work cancel <id> --reason <text> [--by <name>]
+  toolkit work next
+  toolkit work decisions
+  toolkit work sync
+  toolkit work validate [<id|file>]
+
+--covers: a sub-item that delivers some of the parent's approved requirements
+links them (the text stays in the parent) and inheri
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work edit --help'
+  -> toolkit work: Work items: create, list, show, change, approve, finish, and sync them. toolkit work lifecycle shows the stages.
+
+Usage:
+  toolkit work lifecycle
+  toolkit work new --title <t> [--type <t>] [--parent <id> [--covers R-02,R-03]] [--stage <s>] [--priority <p>] [--request <text>] [--group <folder>]
+  toolkit work list [--status <s>] [--waiting-on <w>] [--tree] [--all]
+  toolkit work show <id> [--section <heading>] [--path]
+  toolkit work edit <id> --section <heading> (--set-file <file|-> | --text <text>) | --section <heading> --append-row "<a | b | c>" | --label <name> --value <text> | --remove-guide
+  toolkit work set <id> [--stage <s>] [--waiting-on <w>] [--priority <p>] [--type <t>] [--delivery <d>] [--title <t>] [--parent <id|none>] [--reopen] [--note <why>]
+  toolkit work approve <id> --requirements|--design|--result --by <name>
+  toolkit work design <id> [--create] [--set-file <file|-> | --text <text>] [--status proposed|approved|superseded] [--by <name>]
+  toolkit work history <id> --note <text> [--effect <text>]
+  toolkit work move <id> --under <id|group|archive|root>
+  toolkit work finish <id> --by <name> --evidence <text> [--quote <owner's words>] [--allow-open-sub-items]
+  toolkit work cancel <id> --reason <text> [--by <name>]
+  toolkit work next
+  toolkit work decisions
+  toolkit work sync
+  toolkit work validate [<id|file>]
+
+--covers: a sub-item that delivers some of the parent's approved requirements
+links them (the text stays in the parent) and inheri
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work lifecycle'
+  -> Stages (the status follows the stage):
+  01-discovery              Backlog      Working out what the owner wants.                                    Continue with: work-requirements
+  02-refinement             Backlog      Turning that into requirements.                                      Continue with: work-requirements
+  03-requirements-approved  Ready        The owner approved the requirements.                                 Continue with: solution-design or work-on
+  04-solution-design        In Progress  Deciding how it gets built.                                          Continue with: solution-design
+  05-breakdown              In Progress  Splitting work that is too large.                                    Continue with: work-organize
+  06-implementation-plan    In Progress  Ordering the build steps.                                            Continue with: work-on
+  07-tracking-setup         In Progress  Creating build tracking when needed.                                 Continue with: work-on
+  08-build                  In Progress  Producing the requested change.                                      Continue with: work-on
+  09-testing                In Progress  Checking it against the requirements.                                Continue with: work-check
+  10-bug-fixing             In Progress  Fixing what testing found.                                           Continue with: work-check
+  11-user-approval          In Progress  The owner reviews the result.  
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set --help'
+  -> toolkit work: Work items: create, list, show, change, approve, finish, and sync them. toolkit work lifecycle shows the stages.
+
+Usage:
+  toolkit work lifecycle
+  toolkit work new --title <t> [--type <t>] [--parent <id> [--covers R-02,R-03]] [--stage <s>] [--priority <p>] [--request <text>] [--group <folder>]
+  toolkit work list [--status <s>] [--waiting-on <w>] [--tree] [--all]
+  toolkit work show <id> [--section <heading>] [--path]
+  toolkit work edit <id> --section <heading> (--set-file <file|-> | --text <text>) | --section <heading> --append-row "<a | b | c>" | --label <name> --value <text> | --remove-guide
+  toolkit work set <id> [--stage <s>] [--waiting-on <w>] [--priority <p>] [--type <t>] [--delivery <d>] [--title <t>] [--parent <id|none>] [--reopen] [--note <why>]
+  toolkit work approve <id> --requirements|--design|--result --by <name>
+  toolkit work design <id> [--create] [--set-file <file|-> | --text <text>] [--status proposed|approved|superseded] [--by <name>]
+  toolkit work history <id> --note <text> [--effect <text>]
+  toolkit work move <id> --under <id|group|archive|root>
+  toolkit work finish <id> --by <name> --evidence <text> [--quote <owner's words>] [--allow-open-sub-items]
+  toolkit work cancel <id> --reason <text> [--by <name>]
+  toolkit work next
+  toolkit work decisions
+  toolkit work sync
+  toolkit work validate [<id|file>]
+
+--covers: a sub-item that delivers some of the parent's approved requirements
+links them (the text stays in the parent) and inheri
+
+[CMD exit=0] /bin/zsh -lc 'git remote -v'
+  -> 
+
+[AGENT] Option A is the `package.json` version source. I’ll record that as the approved design, rename WI-001 to “Build the basic greet CLI,” and create one child for R-02, the `--version` behavior. WI-001 will keep the original approved requirements as the source record.
+
+[CMD exit=0] /bin/zsh -lc 'mktemp -d'
+  -> /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mWFc34i2hx
+
+
+[CMD exit=0] /bin/zsh -lc 'cp .work-items/WI-001-add-a-version-flag-to-the-greet-cli/DESIGN.md /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mWFc34i2hx/design.md'
+  -> 
+
+[FILE_CHANGE] [{"path": "/var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mWFc34i2hx/design.md", "kind": "update"}]
+
+[CMD exit=0] /bin/zsh -lc "rg -n 'Owner decision|Selected design|None\\. Mike|Follow Option A' /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mWFc34i2hx/design.md"
+  -> 134:**Owner decision:** Mike chose Option A on 2026-09-27.  
+137:## Selected design
+145:Follow Option A. Build and check R-01 in WI-001 first. Then build and check R-02 in its sub-item, using `package.json` as the only version source. Record each item's test result and present each finished result t
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work design WI-001 --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mWFc34i2hx/design.md --status proposed'
+  -> Saved the design of WI-001 (proposed) at /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3/.work-items/WI-001-add-a-version-flag-to-the-greet-cli/DESIGN.md.
+It is proposed until the owner approves it: toolkit work approve <id> --design --by <name>.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work approve WI-001 --design --by Mike'
+  -> Recorded: design of WI-001 approved (2026-09-27 by Mike).
+It is no longer waiting on the owner (waiting_on: none).
+Now 04 Solution design (In Progress). Continue with solution-design.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history WI-001 --note \"Owner's words: Go with option A. Before you build, split this up: WI-001 is doing two things. Keep the basic greeting in WI-001 and make the --version flag its own sub-item under it.\" --effect \"Option A approved; split requested before build.\""
+  -> Added a Recent History row to WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --stage 05-breakdown'
+  -> Updated WI-001: stage 04 Solution design -> 05 Breakdown (status In Progress).
+Now 05 Breakdown (In Progress). Continue with work-organize.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --title "Build the basic greet CLI"'
+  -> Updated WI-001: title "Build the basic greet CLI".
+Now 05 Breakdown (In Progress). Continue with work-organize.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work new --title "Add a --version flag to the greet CLI" --type build --parent WI-001 --covers R-02 --request "Make the --version flag its own sub-item under WI-001. Use Option A: read version 0.1.0 from package.json."'
+  -> Created WI-002: Add a --version flag to the greet CLI (06 Implementation plan, In Progress, sub-item of WI-001) at .work-items/WI-001-add-a-version-flag-to-the-greet-cli/WI-002-add-a-version-flag-to-the-greet-cli/WORK-ITEM.md.
+It delivers WI-001 R-02 and inherits that requirements approval (2026-09-27 by Mike).
+WI-001's approved design covers it, so it starts at planning with no design of its own.
+Continue with work-on.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001 --section Roadmap'
+  -> ## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading. Add one row per phase; set Status from actual progress, not from this example. List the phase's sub-item IDs under Sub-items, or write “None.” -->
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — <Phase 1 name> | <What this phase establishes> | In Progress | <Evidence that P1 is complete> | <WI-ids or “None.”> |
+| P2 — <Phase 2 name> | <What this phase delivers> | Not Started | <Evidence that P2 is complete> | <WI-ids or “None.”> |
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001 --section Notes'
+  -> ## Notes
+
+### Decisions and context
+
+- Mike chose `0.1.0` for the initial version and specified a default greeting and version precedence on 2026-09-27.
+- Mike said, "Yes, use the team. Compare two approaches, especially for where --version gets its version number from." Three helpers checked requirements, drafted the two options, and critiqued them. The main agent checked Node.js and npm documentation.
+
+### Resume here
+
+Requirements are approved. Both design options are in DESIGN.md, with Option B recommended. The independent critique has no open findings. Mike must choose or approve an option before implementation planning. The repository has no CLI source or package.json, and no Git remote is configured.
+
+### Solution options and considerations
+
+- Option A reads the version from a new package.json.
+- Option B keeps the version as a constant in bin/greet.js. It is recommended for the current tiny repository.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001 --section Overview'
+  -> ## Overview
+
+**Goal:** Build a small Node.js greet CLI with a greeting and a --version flag.
+
+**Current position:** Requirements approved by Mike on 2026-09-27; two design options reviewed and proposed.
+
+**Next action:** Mike chooses Option A or approves recommended Option B in the proposed design.
+
+**Blockers:** Design approval before implementation planning.
+
+**Related items:** None.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-002 --section Roadmap'
+  -> ## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading. Add one row per phase; set Status from actual progress, not from this example. List the phase's sub-item IDs under Sub-items, or write “None.” -->
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — <Phase 1 name> | <What this phase establishes> | In Progress | <Evidence that P1 is complete> | <WI-ids or “None.”> |
+| P2 — <Phase 2 name> | <What this phase delivers> | Not Started | <Evidence that P2 is complete> | <WI-ids or “None.”> |
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-002'
+  -> WI-002: Add a --version flag to the greet CLI
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3/.work-items/WI-001-add-a-version-flag-to-the-greet-cli/WI-002-add-a-version-flag-to-the-greet-cli/WORK-ITEM.md
+Stage: 06 Implementation plan (In Progress) | Waiting on: none | Continue with: work-on
+Parent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/WI-001-add-a-version-flag-to-the-greet-cli/DESIGN.md). Read it with: toolkit work design WI-001
+
+---
+id: WI-002
+title: Add a --version flag to the greet CLI
+type: build
+stage: 06-implementation-plan
+status: In Progress
+parent: WI-001
+waiting_on: "none"
+priority: medium
+delivery: not-offered
+requirements_approved: "2026-09-27 by Mike"
+design: none
+result_approved: "no"
+updated: 2026-09-27
+---
+
+# WI-002: Add a --version flag to the greet CLI
+
+## Overview
+
+<!-- Enter the current summary directly after each bold label below. Keep this section current; detailed tasks and decisions belong in their sections further down. -->
+
+**Goal:** <The outcome this work item is meant to achieve.>
+
+**Current position:** <What has been completed and where work stands now.>
+
+**Next action:** <The next specific action and its owner.>
+
+**Blockers:** <Blocking decision or dependency, or “None.”>
+
+**Related items:** Parent WI-001 (R-02). Design: WI-001's approved design.
+
+## Roadmap
+
+A phase is complete wh
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-002 --section Overview'
+  -> ## Overview
+
+<!-- Enter the current summary directly after each bold label below. Keep this section current; detailed tasks and decisions belong in their sections further down. -->
+
+**Goal:** <The outcome this work item is meant to achieve.>
+
+**Current position:** <What has been completed and where work stands now.>
+
+**Next action:** <The next specific action and its owner.>
+
+**Blockers:** <Blocking decision or dependency, or “None.”>
+
+**Related items:** Parent WI-001 (R-02). Design: WI-001's approved design.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work edit WI-001 --section Overview --text $'"'**Goal:** Build the basic Node.js greet CLI: greet a named person or the world when no name is given.\\n\\n**Current position:** Mike approved requirements and Option A on 2026-09-27. The --version flag is tracked in sub-item WI-002. No code has been built.\\n\\n**Next action:** Plan and build the basic greeting in WI-001 before WI-002 adds the version flag.\\n\\n**Blockers:** Creating the required Git worktree needs an interactive session or a terminal command.\\n\\n**Related items:** WI-002 delivers R-02 (--version) under t
+  -> Saved "Overview" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work edit WI-001 --section Roadmap --text $'"'A phase is complete when its exit result has been checked.\\n\\n| Phase | Outcome | Status | Exit result | Sub-items |\\n|---|---|---|---|---|\\n| P1 — Basic greeting | "'`node bin/greet.js Mike` and `node bin/greet.js` print the approved greetings. | Not Started | Both exact outputs are tested; Mike reviews the WI-001 result. | None |'"\\n| P2 — Version flag | The CLI also prints version "'`0.1.0` from `package.json` when `--version` is present. | Not Started | All R-02 commands are tested; Mike reviews the WI-002 result. | W
+  -> Saved "Roadmap" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/skills/work-on/references/planning.md'
+  -> # Planning and building a work item
+
+Detail for `work-on` steps 6 to 10. Carried over from Toolkit V1's lifecycle
+and planning rules, with V2 names.
+
+## Roadmap and tasks
+
+- The Roadmap is an ordered list of phases from where the item stands to the
+  finished result. Name phases to fit the work. They do not have to match the
+  fourteen lifecycle stages. "Phase" (`P1`) is the item's plan; "stage"
+  (`08-build`) is the lifecycle. Never mix the two words.
+- Build the phases from the approved design's "Build and verification plan"
+  (its Technical sequence and Acceptance checks), and from the chosen
+  option's Build order. With no design (a small item that skipped design with
+  a recorded reason), build them from the requirements.
+- Each phase has one or more tasks, one or more sub-items, or both.
+- Keep detail in proportion to the item. A one-hour fix needs one phase with
+  one or two tasks.
+- Link sources; do not copy them. A task names the `R-xx` it implements and
+  the design section it follows.
+
+Roadmap section format, from the work item template (the table keeps these
+columns in every tracker, and the phase name follows an em dash, as in the
+template):
+
+```markdown
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — CSV export button | The export button creates a file | In Progress | The file opens in Excel with every column | None. |
+| P2 — Large exports |
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work edit WI-001 --section Tasks --text $'"'### P1 — Basic greeting\\n\\n- [ ] **P1-T01 — Build and test the greeting** · Not Started  \\n  **Work:** Add "'`bin/greet.js` for R-01, following the approved design; add `node:test` checks for the two greeting commands.  '"\\n  **Deliverable:** Greeting CLI and tests.  \\n  **Done when:** "'`node bin/greet.js Mike` prints `Hello, Mike!'"\\\\n"'`, `node bin/greet.js` prints `Hello, world!'"\\\\n"'`, and the tests pass.  '"\\n  **Depends on:** None.\\n\\n### P2 — Version flag\\n\\nWI-002 owns the version implementation and check
+  -> Saved "Tasks" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work edit WI-001 --section Notes --text $'"'### Decisions and context\\n\\n- Mike chose "'`0.1.0` for the initial version and specified the default greeting and version precedence on 2026-09-27.'"\\n- Mike chose Option A on 2026-09-27: "'`package.json` is the version source.'"\\n- At Mike\\x27s request, WI-001 owns the basic greeting and WI-002 owns R-02 ("'`--version`). The approved R-01 and R-02 remain in WI-001; WI-002 links R-02.'"\\n\\n### Resume here\\n\\nThe split and Option A approval are recorded. WI-001 is ready for its basic greeting build once its Git worktree
+  -> Saved "Notes" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work edit WI-002 --section Overview --text $'"'**Goal:** Add "'`--version` to the greet CLI, reading `0.1.0` from `package.json` as approved in Option A.'"\\n\\n**Current position:** Created as a sub-item of WI-001. R-02 requirements approval and the approved Option A design are inherited. No code has been built.\\n\\n**Next action:** After WI-001 builds the basic greeting, add the version source, flag behavior, and R-02 tests.\\n\\n**Blockers:** Depends on the WI-001 basic greeting build.\\n\\n**Related items:** Parent WI-001 (R-02). Design: WI-001\\x27s approved design.
+  -> Saved "Overview" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work edit WI-002 --section Roadmap --text $'"'A phase is complete when its tasks are complete and its exit result has been checked.\\n\\n| Phase | Outcome | Status | Exit result | Sub-items |\\n|---|---|---|---|---|\\n| P1 — Version flag | "'`--version` reads `0.1.0` from `package.json` and takes precedence over a name. | Not Started | Three R-02 command outputs are exact and tests pass. | None |'"'"
+  -> Saved "Roadmap" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work edit WI-002 --section Tasks --text $'"'### P1 — Version flag\\n\\n- [ ] **P1-T01 — Add the version source and flag** · Not Started  \\n  **Work:** Add "'`package.json` with version `0.1.0` and update `bin/greet.js` to print that version when any argument is exactly `--version` (WI-001 R-02; approved design Option A).  '"\\n  **Deliverable:** Version metadata and flag behavior.  \\n  **Done when:** The three approved R-02 commands print only "'`0.1.0'"\\\\n"'`.  '"\\n  **Depends on:** WI-001 P1-T01.\\n- [ ] **P1-T02 — Test version precedence** · Not Started  \\n  **Wo
+  -> Saved "Tasks" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work edit WI-002 --section "Open Questions" --text $'"'| ID | Question | Affects | Status | Decision needed from |\\n|---|---|---|---|---|\\n\\nNone open.'"
+  -> Saved "Open Questions" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work edit WI-002 --section Acceptance --text $'"'This work item can be accepted when WI-001 R-02\\x27s three commands each print only "'`0.1.0'"\\\\n"'`, the automated checks pass, and Mike reviews the tested result.'"'"
+  -> Saved "Acceptance" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work edit WI-002 --section Notes --text $'"'### Decisions and context\\n\\n- Mike chose Option A on 2026-09-27. The version number comes from "'`package.json`.'"\\n- This sub-item delivers WI-001 R-02 and inherits its approved requirements and design.\\n\\n### Resume here\\n\\nBuild after WI-001 P1-T01 completes. Add version metadata, flag handling, and R-02 tests in this item\\x27s own Git worktree.\\n\\n### Solution options and considerations\\n\\n- Option A is approved in WI-001 DESIGN.md.'"
+  -> Saved "Notes" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --stage 06-implementation-plan'
+  -> Updated WI-001: stage 05 Breakdown -> 06 Implementation plan (status In Progress).
+Now 06 Implementation plan (In Progress). Continue with work-on.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate WI-002'
+  -> Checked 1 item: 1 clean, 0 errors, 0 questions for the owner.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate WI-001'
+  -> Checked 1 item: 1 clean, 0 errors, 0 questions for the owner.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work list --tree'
+  -> WI-001  Build the basic greet CLI  (06 Implementation plan, In Progress)
+  WI-002  Add a --version flag to the greet CLI  (06 Implementation plan, In Progress)
+
+
+[AGENT] The split is recorded and both items validate cleanly. WI-002 inherits the approved R-02 requirement and Option A design. I’m moving into the greeting build now; the project requires an isolated Git worktree for code changes.
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --stage 07-tracking-setup'
+  -> Updated WI-001: stage 06 Implementation plan -> 07 Tracking setup (status In Progress).
+Now 07 Tracking setup (In Progress). Continue with work-on.
+
+
+[CMD exit=0] /bin/zsh -lc 'cat .memory/AGENTS.md .memory/memory-criteria.md'
+  -> # Local project memory
+
+Keep future sessions oriented without turning every conversation into lasting memory. This folder is the project's built-in memory store and can be opened directly as an Obsidian vault. Active topics stay flat; filenames and YAML types agree. Git ignores this folder, so back 
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.2/skills/memory-save/SKILL.md'
+  -> ---
+name: memory-save
+description: 'Saves, corrects, or forgets one lasting fact in project memory, and sends anything that belongs elsewhere to its home. Use when the owner says "remember this", "from now on", "always do X", "never do X", "forget that", or "remind me", corrects the agent, or a hook says to save.'
+---
+
+# Memory save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Record format, types, focus, and glossary: `references/record-format.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Put each `toolkit` command on its own line. In Codex, a `toolkit` command joined to anything else (`&&`, `;`, a pipe, a heredoc) or run from a script runs inside the sandbox, which blocks Hindsight and Notion: run it alone. Text: give it in the command with `--body "<text>"` (a save) or `--text "<text>"` (the focus or the glossary), so no file is needed. For a long text, in Claude Code pass it on standard input (`--set-file -` or `--body-file -` with a heredoc); in Codex make a new folder for each save with `mktemp -d`, write the file there, and delete the file and the folder right after the command succeeds. Never use a fixed name such as `/tmp/focus.md`: another session could write the same file.
+
+## Steps
+
+1. Decide the home first, with the memory criteria (`.memory/memory-criteria.md` with built-in memory; othe
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-27, Codex after Mike requested two design approaches for WI-001
+
+## Now
+
+- WI-001 is the current work item. Its record and design hold the approved requirements, proposed options, and next action.
+
+## Waiting on the owner
+
+- Trust this project folder when Codex asks, so it loads the project settings and plugins.
+- Open `/hooks` in Codex and trust the Toolkit V2 hooks, so Codex can run the project briefing and reminders.
+- Start a new Claude Code session in this project so it loads the project settings and Plain English style.
+
+## Untracked to-dos
+
+- None.
+
+## Next session starts with
+
+- Read `PROJECT.md`, the project briefing, and WI-001. Continue with the design decision.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001 --section Overview'
+  -> ## Overview
+
+**Goal:** Build the basic Node.js greet CLI: greet a named person or the world when no name is given.
+
+**Current position:** Mike approved requirements and Option A on 2026-09-27. The --version flag is tracked in sub-item WI-002. No code has been built.
+
+**Next action:** Plan and build the basic greeting in WI-001 before WI-002 adds the version flag.
+
+**Blockers:** Creating the required Git worktree needs an interactive session or a terminal command.
+
+**Related items:** WI-002 delivers R-02 (--version) under this parent.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work edit WI-001 --section Overview --text $'"'**Goal:** Build the basic Node.js greet CLI: greet a named person or the world when no name is given.\\n\\n**Current position:** Mike approved requirements and Option A on 2026-09-27. The "'`--version` flag is tracked in WI-002. The split and plans validate cleanly; no code has been built.'"\\n\\n**Next action:** Mike runs "'`git worktree add .claude/worktrees/wi-001-basic-greet-cli -b claude/wi-001-basic-greet-cli` from the main checkout, or continues in an interactive session that can approve it. Then the agent builds WI-00
+  -> Saved "Overview" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --waiting-on owner'
+  -> Updated WI-001: waiting on owner.
+Now 07 Tracking setup (In Progress). Continue with work-decide.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work history WI-001 --note "Split complete: WI-002 covers R-02 and inherits requirements and Option A design. Plans validate cleanly. Git worktree creation was rejected by automatic approval policy in this session." --effect "Waiting for Mike to create or approve the required WI-001 worktree before build."'
+  -> Added a Recent History row to WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work edit WI-001 --section Notes --text $'"'### Decisions and context\\n\\n- Mike chose "'`0.1.0` for the initial version and specified the default greeting and version precedence on 2026-09-27.'"\\n- Mike chose Option A on 2026-09-27: "'`package.json` is the version source.'"\\n- At Mike\\x27s request, WI-001 owns the basic greeting and WI-002 owns R-02 ("'`--version`). The approved R-01 and R-02 remain in WI-001; WI-002 links R-02.'"\\n\\n### Resume here\\n\\nThe split and plans are validated. No code has been built. The Git worktree command was rejected by this session
+  -> Saved "Notes" in WI-001.
+
+
+[AGENT] The code change is paused at the required worktree step. Automatic approval review rejected `git worktree add` in this session, whose approval policy cannot prompt you. I’ve recorded the exact command and the build order in WI-001 so another session can continue without redoing the split.
+
+[FILE_CHANGE] [{"path": "/var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mWFc34i2hx/focus.md", "kind": "add"}]
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mWFc34i2hx/focus.md'
+  -> Saved the current focus (22 lines). Version: c502e4401cdc
+
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## main
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-27, Codex after Mike chose Option A and split WI-001
+
+## Now
+
+- WI-001 is the basic greeting work item. WI-002 is its `--version` sub-item. Their records and WI-001's design hold the approved requirements, Option A, plans, and next actions.
+
+## Waiting on the owner
+
+- Run the WI-001 Git worktree command recorded in WI-001, or continue in an interactive session that can approve it. This session's automatic approval policy rejected that command.
+- Trust this project folder when Codex asks, so it loads the project settings and plugins.
+- Open `/hooks` in Codex and trust the Toolkit V2 hooks, so Codex can run the project briefing and reminders.
+- Start a new Claude Code session in this project so it loads the project settings and Plain English style.
+
+## Untracked to-dos
+
+- None.
+
+## Next session starts with
+
+- Read `PROJECT.md`, the project briefing, and WI-001 and WI-002. Confirm the WI-001 worktree exists, then build and test the basic greeting. Build WI-002 after WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate'
+  -> Checked 2 items: 2 clean, 0 errors, 0 questions for the owner.
+
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for greet (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (3):
+- AGENTS.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.
+
+Result: 0 problems and 2 warnings.
+
+
+[CMD exit=0] /bin/zsh -lc 'rm /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mWFc34i2hx/design.md /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mWFc34i2hx/focus.md'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'rmdir /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mWFc34i2hx'
+  -> 
+
+[AGENT] Option A is approved. WI-001 now covers the basic greeting, and WI-002 is its `--version` sub-item. WI-002 inherits the approved requirement and design. Both work items validate cleanly.
+
+No code has been built. Automatic approval review rejected the required Git worktree command, and this session cannot request approval. To unblock the build, run this from the main checkout, then say “keep going”:
+
+```sh
+git worktree add .claude/worktrees/wi-001-basic-greet-cli -b claude/wi-001-basic-greet-cli
+```
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 2150668, "cached_input_tokens": 2093824, "cache_write_input_tokens": 0, "output_tokens": 7487, "reasoning_output_tokens": 1484}}
+
+SKILLS OPENED: ['work-decide', 'work-organize', 'work-on', 'memory-save']
+
+[HOOK CONTEXT ord=9] Project briefing: greet (greet), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Add a --version flag to the greet CLI: 04 Solution design, In Progress, waiting on owner. Next action: Mike chooses Option A or approves recommended Option B in the proposed design. Continues with work-decide.
+
+Waiting on the owner:
+- WI-001 Add a --version flag to the greet CLI: The design for WI-001 is proposed and waits for the owner's approval. Approve with: toolkit work approve WI-001 --design --by <name>. (work-decide)
+
+Items: 1 in progress.
+
+Current focus:
+Last updated: 2026-09-27, Codex after Mike requested two design approaches for WI-001
+## Now
+- WI-001 is the current work item. Its record and design hold the approved requirements, proposed options, and next action.
+## W
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await tools.exec_command({cmd:"pwd && cat SOUL.md PROJECT.md .claaude/rules/humanize-outbound-text.md",max_output_tokens:3000}); text(r.output)
+
+
+[CALL] const paths=[".claude/rules/humanize-outbound-text.md",".claude/rules/keep-work-item-current.md",".claude/rules/memory-review-and-save.md",".claude/rules/plain-english-artifacts.md",".claude/rules/session-handoff.md",".claude/rules/shared-repository-work.md",".claude/rules/work-item-folders.md","/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/skills/work-organize/SKILL.md","/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/skills/work-decide/SKILL.md","/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/skills/work-on/SKILL.md","PROJECT-ROADMAP.md","DECISIONS.md"]; const rs=await Promise.allSettled(paths.map(p=>tools.exec_command({cmd:`cat '${p}'`,max_output_tokens:4000}))); rs.forEach((r,i)=>text(`\n### ${paths[i]}\n${r.status==="fulfilled"?r.value.output:r.reason}`))
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "\n### .claude/rules/humanize-outbound-text.md\n# Humanize Anything Sent to Another Person\n\nAny text that will leave the project and be read by someone other than the owner\nis run through the `humanizer` skill before the owner sees the final version.\nUse the `unslop` skill when `humanizer` is not installed. That covers emails,\nchat messages, support case text and comments, GitHub issues, pull request\ndescriptions, client documents, and any file made to hand to someone else.\n\nKeep every fact, name, id, number, and date exactly as it was. Write it in the\nowner's voice, first person, when it goes out under their name.\n\nIt does not apply to chat replies to the owner, work items, project knowledge,\ncode, or commit messages.\n"}, {"type": "input_text", "text": "\n### .claude/rules/keep-work-item-current.md\n# Keep the Active Work Item Accurate\n\nThe work tracker is the source of truth for current work.\n\n- Before substantial work, use the `work-on` skill. Read the active item's requirements, state, next step, and blockers.\n- Save the owner's decisions, requirements, and corrections in the item or its linked document before moving on.\n- When the work needs the owner's decision, add it to the item's Open Questions with \"Decision needed from: owner\" and set the item's `waiting_on` to `owner`. The `work-decide` skill records the answer.\n- `build` and `data-load` work needs approved requirements before it starts. A later stage does not revoke that approval.\n- After the owner accepts agent-led delivery, ask how the team is arranged. That choice authorizes helpers for that goal only.\n- Mark an item Done only after the owner approves the result.\n- Before ending unfinished work, record the exact next step in the item.\n\n`toolkit work lifecycle` prints the stages, statuses, and approval gates. \"Where information goes\" in `AGENTS.md` is the routing table; the `work-delegate` skill holds the delivery offer and team questions, and the `handoff` skill holds the handoff steps.\n"}, {"type": "input_text", "text": "\n### .claude/rules/memory-review-and-save.md\n# Review and Save Project Memory\n\nThis rule applies to the main agent. The project memory system is chosen at setup and recorded in `.toolkit.json`; with built-in memory it is the local `.memory/` folder. It is the single project memory store. Claude's native auto-memory and the 
+
+[CALL] const cmds=["toolkit work sync","toolkit work list --tree","toolkit work show WI-001","toolkit work show WI-001 --path","toolkit work decisions","git worktree list","git status --short --branch","git fetch origin","git log --oneline -10"]; for (const c of cmds){let r=await tools.exec_command({cmd:c,max_output_tokens:5000});text(`### ${c}\n${r.output}\nexit ${r.exit_code}`)}
+
+  [OUT] [{"type": "input_text", "text": "Script failed\nWall time 1.5 seconds\nOutput:\n"}, {"type": "input_text", "text": "### toolkit work sync\nNothing changed: every item is where the tracker expected it, and every derived value is in step.\n\nDashboard: .work-items/DASHBOARD.md\n\nexit 0"}, {"type": "input_text", "text": "### toolkit work list --tree\nWI-001  Add a --version flag to the greet CLI  (04 Solution design, In Progress, waiting on owner)\n\nexit 0"}, {"type": "input_text", "text": "### toolkit work show WI-001\nWI-001: Add a --version flag to the greet CLI\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3/.work-items/WI-001-add-a-version-flag-to-the-greet-cli/WORK-ITEM.md\nStage: 04 Solution design (In Progress) | Waiting on: owner | Continue with: work-decide\nParent: none | Sub-items: none | Design: proposed (.work-items/WI-001-add-a-version-flag-to-the-greet-cli/DESIGN.md)\n\n---\nid: WI-001\ntitle: Add a --version flag to the greet CLI\ntype: build\nstage: 04-solution-design\nstatus: In Progress\nparent: none\nwaiting_on: \"owner\"\npriority: medium\ndelivery: owner-led\nrequirements_approved: \"2026-09-27 by Mike\"\ndesign: proposed\nresult_approved: \"no\"\nupdated: 2026-09-27\n---\n\n# WI-001: Add a --version flag to the greet CLI\n\n## Overview\n\n**Goal:** Build a small Node.js greet CLI with a greeting and a --version flag.\n\n**Current position:** Requirements approved by Mike on 2026-09-27; two design options reviewed and proposed.\n\n**Next action:** Mike chooses Option A or approves recommended Option B in the proposed design.\n\n**Blockers:** Design approval before implementation planning.\n\n**Related items:** None.\n\n## Roadmap\n\nA phase is complete when its tasks are complete and its exit result has been checked.\n\n<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading. Add one row per phase; set Status from actual progress, not from this example. List the phase's sub-item IDs under Sub-items, or write \u201cNone.\u201d -->\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 \u2014 <Phase 1 name> | <What this phase establishes> | In Progress | <Evidence that P1 is complete> | <WI-ids or \u201cNone.\u201d> |\n| P2 \u2014 <Phase 2 name> | <What this phase delivers> | Not Started | <Evidence that P2 is complete> | <WI-ids or \u201cNone.\
+
+[CALL] const cmds=["cat .work-items/WI-001-add-a-version-flag-to-the-greet-cli/DESIGN.md","cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/references/conventions.md","cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/skills/work-organize/references/moves.md","toolkit work lifecycle","toolkit work new --help","toolkit work edit --help","toolkit work set --help"]; const rs=await Promise.allSettled(cmds.map(cmd=>tools.exec_command({cmd,max_output_tokens:6000}))); rs.forEach((r,i)=>text(`### ${cmds[i]}\n${r.status==="fulfilled"?r.value.output:r.reason}`))
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "Warning: truncated output (original token count: 12055)\nTotal output lines: 764\n\n### cat .work-items/WI-001-add-a-version-flag-to-the-greet-cli/DESIGN.md\n---\nwork_item: WI-001\nstatus: proposed\napproved: \"no\"\n---\n# WI-001: Add a --version flag to the greet CLI \u2014 solution design\n\n**Requirements:** WI-001  \n**Design status:** Proposed  \n**Requirements checked:** WI-001 Requirements, approved 2026-09-27  \n**Last updated:** 2026-09-27  \n**Design approval:** Pending\n\n## What this design solves\n\nPeople can run a new Node.js command to greet a named person, greet the world when they give no name, or print version `0.1.0`. The command must produce the exact output approved in WI-001. Handling other argument combinations remains unspecified.\n\n## Requirements and design readiness\n\nThe requirements analyst found both approved requirements ready for design, with no material gap or owner question. Both options cover the same command behavior and differ in where the version number is stored.\n\n| Requirement | Status in work item | Design coverage | Remaining decision or gap |\n| --- | --- | --- | --- |\n| R-01 \u2014 Greeting | Finalized | Both options use the first name argument or `world` and write one line. | None |\n| R-02 \u2014 Version flag | Finalized | Both options check for an exact `--version` argument before greeting. | Choose the version source in this design. |\n\n## What exists today\n\n`README.md` calls this a tiny Node.js command-line tool that greets people. The repository has no CLI source, `package.json`, or implemented tests. Node.js v25.8.1 is available in this session. No Git remote is configured.\n\n## Constraints and assumptions\n\n| Type | Constraint or assumption | Source and status | Effect on the design |\n| --- | --- | --- | --- |\n| Constraint | The command is `node bin/greet.js`. | WI-001 R-01, approved 2026-09-27 | Both options create this entry point. |\n| Constraint | `--version` prints exactly `0.1.0` and takes precedence over a name. | WI-001 R-02, approved 2026-09-27 | Check the flag before greeting. |\n| Constraint | Use plain Node.js without npm packages; use `node:test` for tests. | Project memory briefing, 2026-09-27 | No install step or external dependency. |\n| Constraint | Compare two approaches, especially their version source. | Mike, 2026-09-27 | Present a `package.json` source
+
+[CALL] const r=await tools.exec_command({cmd:"git remote -v",max_output_tokens:1000});text(r.output)
+
+
+[CALL] const r=await tools.exec_command({cmd:"mktemp -d",max_output_tokens:1000});text(r.output)
+
+
+[CALL] const r=await tools.exec_command({cmd:"cp .work-items/WI-001-add-a-version-flag-to-the-greet-cli/DESIGN.md /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mWFc34i2hx/design.md",max_output_tokens:1000});text(r.output)
+
+
+[CALL] text(await tools.apply_patch("*** Begin Patch\n*** Update File: /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mWFc34i2hx/design.md\n@@\n-**Owner decision:** Pending.  \n-**Reason for decision:** Pending owner decision.\n+**Owner decision:** Mike chose Option A on 2026-09-27.  \n+**Reason for decision:** The owner chose `package.json` as the version source.\n@@\n-Pending owner decision.\n+Option A. WI-001 delivers the basic greeting (R-01). Its `--version` sub-item delivers R-02, using the same approved design and the `version` field in `package.json`. Build the greeting first, then add the version branch and package metadata in the sub-item. Each item gets its own verification and result approval.\n@@\n-After Mike chooses an option, follow its Build order and make its version source the only one in the implementation. Use one worktree for WI-001. Record the command outputs and test result in WI-001 before presenting the finished result for approval.\n+Follow Option A. Build and check R-01 in WI-001 first. Then build and check R-02 in its sub-item, using `package.json` as the only version source. Record each item's test result and present each finished result to Mike for approval.\n@@\n-None beyond Mike's choice between Option A and Option B.\n+None. Mike chose Option A on 2026-09-27.\n@@\n-The requirements analyst found the approved requirements ready. The architect drafted both options. The independent critic found one unsupported packaging choice in Option A; it was 
+
+[CALL] const r=await tools.exec_command({cmd:"rg -n 'Owner decision|Selected design|None\\. Mike|Follow Option A' /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mWFc34i2hx/design.md",max_output_tokens:1000});text(r.output)
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work design WI-001 --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mWFc34i2hx/design.md --status proposed",max_output_tokens:2000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved the design of WI-001 (proposed) at /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3/.work-items/WI-001-add-a-version-flag-to-the-greet-cli/DESIGN.md.\nIt is proposed until the owner approves it: toolkit work approve <id> --design --by <name>.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work approve WI-001 --design --by Mike",max_output_tokens:2000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Recorded: design of WI-001 approved (2026-09-27 by Mike).\nIt is no longer waiting on the owner (waiting_on: none).\nNow 04 Solution design (In Progress). Continue with solution-design.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history WI-001 --note \"Owner's words: Go with option A. Before you build, split this up: WI-001 is doing two things. Keep the basic greeting in WI-001 and make the --version flag its own sub-item under it.\" --effect \"Option A approved; split requested before build.\"","max_output_tokens":2000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Added a Recent History row to WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-001 --stage 05-breakdown",max_output_tokens:2000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Updated WI-001: stage 04 Solution design -> 05 Breakdown (status In Progress).\nNow 05 Breakdown (In Progress). Continue with work-organize.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-001 --title \"Build the basic greet CLI\"",max_output_tokens:2000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Updated WI-001: title \"Build the basic greet CLI\".\nNow 05 Breakdown (In Progress). Continue with work-organize.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work new --title \"Add a --version flag to the greet CLI\" --type build --parent WI-001 --covers R-02 --request \"Make the --version flag its own sub-item under WI-001. Use Option A: read version 0.1.0 from package.json.\"",max_output_tokens:3000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Created WI-002: Add a --version flag to the greet CLI (06 Implementation plan, In Progress, sub-item of WI-001) at .work-items/WI-001-add-a-version-flag-to-the-greet-cli/WI-002-add-a-version-flag-to-the-greet-cli/WORK-ITEM.md.\nIt delivers WI-001 R-02 and inherits that requirements approval (2026-09-27 by Mike).\nWI-001's approved design covers it, so it starts at planning with no design of its own.\nContinue with work-on.\n"}]
+
+[CALL] const cmds=["toolkit work show WI-002","toolkit work show WI-001 --section Overview","toolkit work show WI-001 --section Roadmap","toolkit work show WI-001 --section Notes","toolkit work show WI-002 --section Roadmap","toolkit work show WI-002 --section Overview"]; const rs=await Promise.allSettled(cmds.map(cmd=>tools.exec_command({cmd,max_output_tokens:3500})));rs.forEach((r,i)=>text(`### ${cmds[i]}\n${r.status==="fulfilled"?r.value.output:r.reason}`))
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.5 seconds\nOutput:\n"}, {"type": "input_text", "text": "### toolkit work show WI-002\nWI-002: Add a --version flag to the greet CLI\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3/.work-items/WI-001-add-a-version-flag-to-the-greet-cli/WI-002-add-a-version-flag-to-the-greet-cli/WORK-ITEM.md\nStage: 06 Implementation plan (In Progress) | Waiting on: none | Continue with: work-on\nParent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/WI-001-add-a-version-flag-to-the-greet-cli/DESIGN.md). Read it with: toolkit work design WI-001\n\n---\nid: WI-002\ntitle: Add a --version flag to the greet CLI\ntype: build\nstage: 06-implementation-plan\nstatus: In Progress\nparent: WI-001\nwaiting_on: \"none\"\npriority: medium\ndelivery: not-offered\nrequirements_approved: \"2026-09-27 by Mike\"\ndesign: none\nresult_approved: \"no\"\nupdated: 2026-09-27\n---\n\n# WI-002: Add a --version flag to the greet CLI\n\n## Overview\n\n<!-- Enter the current summary directly after each bold label below. Keep this section current; detailed tasks and decisions belong in their sections further down. -->\n\n**Goal:** <The outcome this work item is meant to achieve.>\n\n**Current position:** <What has been completed and where work stands now.>\n\n**Next action:** <The next specific action and its owner.>\n\n**Blockers:** <Blocking decision or dependency, or \u201cNone.\u201d>\n\n**Related items:** Parent WI-001 (R-02). Design: WI-001's approved design.\n\n## Roadmap\n\nA phase is complete when its tasks are complete and its exit result has been checked.\n\n<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading. Add one row per phase; set Status from actual progress, not from this example. List the phase's sub-item IDs under Sub-items, or write \u201cNone.\u201d -->\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 \u2014 <Phase 1 name> | <What this phase establishes> | In Progress | <Evidence that P1 is complete> | <WI-ids or \u201cNone.\u201d> |\n| P2 \u2014 <Phase 2 name> | <What this phase delivers> | Not Started | <Evidence that P2 is complete> | <WI-ids or \u201cNone.\u201d> |\n\n## Tasks\n\n<!-- Under each phase heading, add that phase's tasks only. Replace P1-T01 and similar ex
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section Overview --text $'**Goal:** Build the basic Node.js greet CLI: greet a named person or the world when no name is given.\\n\\n**Current position:** Mike approved requirements and Option A on 2026-09-27. The --version flag is tracked in sub-item WI-002. No code has been built.\\n\\n**Next action:** Plan and build the basic greeting in WI-001 before WI-002 adds the version flag.\\n\\n**Blockers:** Creating the required Git worktree needs an interactive session or a terminal command.\\n\\n**Related items:** WI-002 delivers R-02 (--version) under this parent.'",max_output_tokens:2000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Overview\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section Roadmap --text $'A phase is complete when its exit result has been checked.\\n\\n| Phase | Outcome | Status | Exit result | Sub-items |\\n|---|---|---|---|---|\\n| P1 — Basic greeting | `node bin/greet.js Mike` and `node bin/greet.js` print the approved greetings. | Not Started | Both exact outputs are tested; Mike reviews the WI-001 result. | None |\\n| P2 — Version flag | The CLI also prints version `0.1.0` from `package.json` when `--version` is present. | Not Started | All R-02 commands are tested; Mike reviews the WI-002 result. | WI-002 |'",max_output_tokens:2000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Roadmap\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/skills/work-on/references/planning.md",max_output_tokens:5000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "# Planning and building a work item\n\nDetail for `work-on` steps 6 to 10. Carried over from Toolkit V1's lifecycle\nand planning rules, with V2 names.\n\n## Roadmap and tasks\n\n- The Roadmap is an ordered list of phases from where the item stands to the\n  finished result. Name phases to fit the work. They do not have to match the\n  fourteen lifecycle stages. \"Phase\" (`P1`) is the item's plan; \"stage\"\n  (`08-build`) is the lifecycle. Never mix the two words.\n- Build the phases from the approved design's \"Build and verification plan\"\n  (its Technical sequence and Acceptance checks), and from the chosen\n  option's Build order. With no design (a small item that skipped design with\n  a recorded reason), build them from the requirements.\n- Each phase has one or more tasks, one or more sub-items, or both.\n- Keep detail in proportion to the item. A one-hour fix needs one phase with\n  one or two tasks.\n- Link sources; do not copy them. A task names the `R-xx` it implements and\n  the design section it follows.\n\nRoadmap section format, from the work item template (the table keeps these\ncolumns in every tracker, and the phase name follows an em dash, as in the\ntemplate):\n\n```markdown\nA phase is complete when its tasks are complete and its exit result has been checked.\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 \u2014 CSV export button | The export button creates a file | In Progress | The file opens in Excel with every column | None. |\n| P2 \u2014 Large exports | Exports over 10,000 rows finish | Not Started | A 50,000-row export finishes in under a minute | WI-015 |\n```\n\nTasks section format. Each phase gets a `###` heading with the same phase ID\nand name as its Roadmap row:\n\n```markdown\n### P1 \u2014 CSV export button\n\n- [ ] **P1-T01 \u2014 Add the export endpoint** \u00b7 In Progress  \n  **Work:** Add the endpoint that streams the report rows as CSV (R-01, design Technical sequence step 1).  \n  **Deliverable:** The endpoint and its tests.  \n  **Done when:** The endpoint test passes and a manual export opens in Excel.  \n  **Depends on:** None.\n```\n\nPhase status words: Not Started, In Progress, Done (Cancelled for a phase\nthat was dropped). Use no other word, such as \"Planned\". From stage 07 on,\n`toolkit work validate` warns when the Roadmap has no phase table
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section Tasks --text $'### P1 — Basic greeting\\n\\n- [ ] **P1-T01 — Build and test the greeting** · Not Started  \\n  **Work:** Add `bin/greet.js` for R-01, following the approved design; add `node:test` checks for the two greeting commands.  \\n  **Deliverable:** Greeting CLI and tests.  \\n  **Done when:** `node bin/greet.js Mike` prints `Hello, Mike!\\\\n`, `node bin/greet.js` prints `Hello, world!\\\\n`, and the tests pass.  \\n  **Depends on:** None.\\n\\n### P2 — Version flag\\n\\nWI-002 owns the version implementation and checks for R-02. It follows P1-T01.'",max_output_tokens:2000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Tasks\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section Notes --text $'### Decisions and context\\n\\n- Mike chose `0.1.0` for the initial version and specified the default greeting and version precedence on 2026-09-27.\\n- Mike chose Option A on 2026-09-27: `package.json` is the version source.\\n- At Mike\\x27s request, WI-001 owns the basic greeting and WI-002 owns R-02 (`--version`). The approved R-01 and R-02 remain in WI-001; WI-002 links R-02.\\n\\n### Resume here\\n\\nThe split and Option A approval are recorded. WI-001 is ready for its basic greeting build once its Git worktree exists. WI-002 follows the greeting and inherits the approved requirements and design. No CLI source or package.json exists, and the repository has no Git remote.\\n\\n### Solution options and considerations\\n\\n- The approved design is Option A in DESIGN.md. Option B was considered and was not selected.'",max_output_tokens:2000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Notes\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --section Overview --text $'**Goal:** Add `--version` to the greet CLI, reading `0.1.0` from `package.json` as approved in Option A.\\n\\n**Current position:** Created as a sub-item of WI-001. R-02 requirements approval and the approved Option A design are inherited. No code has been built.\\n\\n**Next action:** After WI-001 builds the basic greeting, add the version source, flag behavior, and R-02 tests.\\n\\n**Blockers:** Depends on the WI-001 basic greeting build.\\n\\n**Related items:** Parent WI-001 (R-02). Design: WI-001\\x27s approved design.'",max_output_tokens:2000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Overview\" in WI-002.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --section Roadmap --text $'A phase is complete when its tasks are complete and its exit result has been checked.\\n\\n| Phase | Outcome | Status | Exit result | Sub-items |\\n|---|---|---|---|---|\\n| P1 — Version flag | `--version` reads `0.1.0` from `package.json` and takes precedence over a name. | Not Started | Three R-02 command outputs are exact and tests pass. | None |'",max_output_tokens:2000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Roadmap\" in WI-002.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --section Tasks --text $'### P1 — Version flag\\n\\n- [ ] **P1-T01 — Add the version source and flag** · Not Started  \\n  **Work:** Add `package.json` with version `0.1.0` and update `bin/greet.js` to print that version when any argument is exactly `--version` (WI-001 R-02; approved design Option A).  \\n  **Deliverable:** Version metadata and flag behavior.  \\n  **Done when:** The three approved R-02 commands print only `0.1.0\\\\n`.  \\n  **Depends on:** WI-001 P1-T01.\\n- [ ] **P1-T02 — Test version precedence** · Not Started  \\n  **Work:** Add `node:test` cases for `--version` alone and with a name in either order.  \\n  **Deliverable:** Version CLI tests.  \\n  **Done when:** `node --test tests/greet.test.js` passes with exact standard output, exit status, and empty standard error checks.  \\n  **Depends on:** P1-T01.'",max_output_tokens:2000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Tasks\" in WI-002.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --section \"Open Questions\" --text $'| ID | Question | Affects | Status | Decision needed from |\\n|---|---|---|---|---|\\n\\nNone open.'",max_output_tokens:2000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Open Questions\" in WI-002.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --section Acceptance --text $'This work item can be accepted when WI-001 R-02\\x27s three commands each print only `0.1.0\\\\n`, the automated checks pass, and Mike reviews the tested result.'",max_output_tokens:2000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Acceptance\" in WI-002.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --section Notes --text $'### Decisions and context\\n\\n- Mike chose Option A on 2026-09-27. The version number comes from `package.json`.\\n- This sub-item delivers WI-001 R-02 and inherits its approved requirements and design.\\n\\n### Resume here\\n\\nBuild after WI-001 P1-T01 completes. Add version metadata, flag handling, and R-02 tests in this item\\x27s own Git worktree.\\n\\n### Solution options and considerations\\n\\n- Option A is approved in WI-001 DESIGN.md.'",max_output_tokens:2000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Notes\" in WI-002.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-001 --stage 06-implementation-plan",max_output_tokens:2000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Updated WI-001: stage 05 Breakdown -> 06 Implementation plan (status In Progress).\nNow 06 Implementation plan (In Progress). Continue with work-on.\n"}]
+
+[CALL] const cmds=["toolkit work validate WI-001","toolkit work validate WI-002","toolkit work list --tree"];const rs=await Promise.allSettled(cmds.map(cmd=>tools.exec_command({cmd,max_output_tokens:3000})));rs.forEach((r,i)=>text(`### ${cmds[i]}\n${r.status==="fulfilled"?r.value.output:r.reason}`))
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "### toolkit work validate WI-001\nChecked 1 item: 1 clean, 0 errors, 0 questions for the owner.\n"}, {"type": "input_text", "text": "### toolkit work validate WI-002\nChecked 1 item: 1 clean, 0 errors, 0 questions for the owner.\n"}, {"type": "input_text", "text": "### toolkit work list --tree\nWI-001  Build the basic greet CLI  (06 Implementation plan, In Progress)\n  WI-002  Add a --version flag to the greet CLI  (06 Implementation plan, In Progress)\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-001 --stage 07-tracking-setup",max_output_tokens:2000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Updated WI-001: stage 06 Implementation plan -> 07 Tracking setup (status In Progress).\nNow 07 Tracking setup (In Progress). Continue with work-on.\n"}]
+
+[CALL] try { const r=await tools.exec_command({cmd:"git worktree add .claude/worktrees/wi-001-basic-greet-cli -b claude/wi-001-basic-greet-cli",max_output_tokens:2000});text(r.output)} catch(e){text(String(e))}
+
+
+[CALL] const cmds=["cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.2/skills/memory-save/SKILL.md","cat .memory/AGENTS.md .memory/memory-criteria.md","toolkit memory focus","toolkit work show WI-001 --section Overview"];const rs=await Promise.allSettled(cmds.map(cmd=>tools.exec_command({cmd,max_output_tokens:4000})));rs.forEach((r,i)=>text(`### ${cmds[i]}\n${r.status==="fulfilled"?r.value.output:r.reason}`))
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "### cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.2/skills/memory-save/SKILL.md\n---\nname: memory-save\ndescription: 'Saves, corrects, or forgets one lasting fact in project memory, and sends anything that belongs elsewhere to its home. Use when the owner says \"remember this\", \"from now on\", \"always do X\", \"never do X\", \"forget that\", or \"remind me\", corrects the agent, or a hook says to save.'\n---\n\n# Memory save\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nRecord format, types, focus, and glossary: `references/record-format.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Put each `toolkit` command on its own line. In Codex, a `toolkit` command joined to anything else (`&&`, `;`, a pipe, a heredoc) or run from a script runs inside the sandbox, which blocks Hindsight and Notion: run it alone. Text: give it in the command with `--body \"<text>\"` (a save) or `--text \"<text>\"` (the focus or the glossary), so no file is needed. For a long text, in Claude Code pass it on standard input (`--set-file -` or `--body-file -` with a heredoc); in Codex make a new folder for each save with `mktemp -d`, write the file there, and delete the file and the folder right after the command succeeds. Never use a fixed name such as `/tmp/focus.md`: another session could write the same file.\n\n## Steps\n\n1. Decide the home first, with the memory criteria (`.memory/memory-criteria.md` with built-in memory; otherwise `references/record-format.md`). Memory holds a lasting preference, correction, fact about the project or the owner, or a hard-to-find reference. Elsewhere: project work goes to `work-on`; a decision for the whole project to `work-decide` (`DECISIONS.md`); delivered behavior to `requirements/`; how a change is built to the item's design; verified current structure to `system-guide/`; outside documentation to `ai-external-knowledge/`; a standing rule for how agents work here is proposed as a rule-file change; an owner to-do with no work item goes to the current focus \"Untracked to-dos\"; a project term goes to the glossary. A short memory pointer to a hard-to-find record is allowed; never copy its body.\n2. Search first and update the 
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section Overview --text $'**Goal:** Build the basic Node.js greet CLI: greet a named person or the world when no name is given.\\n\\n**Current position:** Mike approved requirements and Option A on 2026-09-27. The `--version` flag is tracked in WI-002. The split and plans validate cleanly; no code has been built.\\n\\n**Next action:** Mike runs `git worktree add .claude/worktrees/wi-001-basic-greet-cli -b claude/wi-001-basic-greet-cli` from the main checkout, or continues in an interactive session that can approve it. Then the agent builds WI-001.\\n\\n**Blockers:** This session\\x27s automatic approval policy rejected the Git worktree command.\\n\\n**Related items:** WI-002 delivers R-02 (`--version`) under this parent.'",max_output_tokens:2000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Overview\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-001 --waiting-on owner",max_output_tokens:2000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Updated WI-001: waiting on owner.\nNow 07 Tracking setup (In Progress). Continue with work-decide.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history WI-001 --note \"Split complete: WI-002 covers R-02 and inherits requirements and Option A design. Plans validate cleanly. Git worktree creation was rejected by automatic approval policy in this session.\" --effect \"Waiting for Mike to create or approve the required WI-001 worktree before build.\"",max_output_tokens:2000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Added a Recent History row to WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section Notes --text $'### Decisions and context\\n\\n- Mike chose `0.1.0` for the initial version and specified the default greeting and version precedence on 2026-09-27.\\n- Mike chose Option A on 2026-09-27: `package.json` is the version source.\\n- At Mike\\x27s request, WI-001 owns the basic greeting and WI-002 owns R-02 (`--version`). The approved R-01 and R-02 remain in WI-001; WI-002 links R-02.\\n\\n### Resume here\\n\\nThe split and plans are validated. No code has been built. The Git worktree command was rejected by this session\\x27s automatic approval policy. Mike can run `git worktree add .claude/worktrees/wi-001-basic-greet-cli -b claude/wi-001-basic-greet-cli` from the main checkout, or continue in an interactive session that can approve it. Then build and test the basic greeting in WI-001. WI-002 follows it and inherits the approved requirements and design. The repository has no Git remote.\\n\\n### Solution options and considerations\\n\\n- The approved design is Option A in DESIGN.md. Option B was considered and was not selected.'",max_output_tokens:2000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Notes\" in WI-001.\n"}]
+
+[CALL] text(await tools.apply_patch("*** Begin Patch\n*** Add File: /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mWFc34i2hx/focus.md\n+# Current focus\n+\n+Last updated: 2026-09-27, Codex after Mike chose Option A and split WI-001\n+\n+## Now\n+\n+- WI-001 is the basic greeting work item. WI-002 is its `--version` sub-item. Their records and WI-001's design hold the approved requirements, Option A, plans, and next actions.\n+\n+## Waiting on the owner\n+\n+- Run the WI-001 Git worktree command recorded in WI-001, or continue in an interactive session that can approve it. This session's automatic approval policy rejected that command.\n+- Trust this project folder when Codex asks, so it loads the project settings and plugins.\n+- Open `/hooks` in Codex and trust the Toolkit V2 hooks, so Codex can run the project briefing and reminders.\n+- Start a new Claude Code session in this project so it loads the project settings and Plain English style.\n+\n+## Untracked to-dos\n+\n+- None.\n+\n+## Next session starts with\n+\n+- Read `PROJECT.md`, the project briefing, and WI-001 and WI-002. Confirm the WI-001 worktree exists, then build and test the basic greeting. Build WI-002 after WI-001.\n*** End Patch"))
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mWFc34i2hx/focus.md",max_output_tokens:2000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved the current focus (22 lines). Version: c502e4401cdc\n"}]
+
+[CALL] const cmds=["toolkit memory focus","toolkit doctor","toolkit work validate","git status --short --branch"];const rs=await Promise.allSettled(cmds.map(cmd=>tools.exec_command({cmd,max_output_tokens:2200})));rs.forEach((r,i)=>text(`### ${cmds[i]}\n${r.status==="fulfilled"?r.value.output:r.reason}`))
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.7 seconds\nOutput:\n"}, {"type": "input_text", "text": "### toolkit memory focus\n# Current focus\n\nLast updated: 2026-09-27, Codex after Mike chose Option A and split WI-001\n\n## Now\n\n- WI-001 is the basic greeting work item. WI-002 is its `--version` sub-item. Their records and WI-001's design hold the approved requirements, Option A, plans, and next actions.\n\n## Waiting on the owner\n\n- Run the WI-001 Git worktree command recorded in WI-001, or continue in an interactive session that can approve it. This session's automatic approval policy rejected that command.\n- Trust this project folder when Codex asks, so it loads the project settings and plugins.\n- Open `/hooks` in Codex and trust the Toolkit V2 hooks, so Codex can run the project briefing and reminders.\n- Start a new Claude Code session in this project so it loads the project settings and Plain English style.\n\n## Untracked to-dos\n\n- None.\n\n## Next session starts with\n\n- Read `PROJECT.md`, the project briefing, and WI-001 and WI-002. Confirm the WI-001 worktree exists, then build and test the basic greeting. Build WI-002 after WI-001.\n"}, {"type": "input_text", "text": "### toolkit doctor\nToolkit doctor for greet (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3).\n\nWarnings (2):\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.\n   Fix: The owner opens Codex in this folder and trusts it when Codex asks.\n2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).\n   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\n\nNotes (3):\n- AGENTS.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.\n- PROJECT.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.\n- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it onl
+
+[CALL] const r=await tools.exec_command({cmd:"rm /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mWFc34i2hx/design.md /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mWFc34i2hx/focus.md",max_output_tokens:1000});text(r.output)
+
+
+[CALL] const r=await tools.exec_command({cmd:"rmdir /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mWFc34i2hx",max_output_tokens:1000});text(r.output)
+

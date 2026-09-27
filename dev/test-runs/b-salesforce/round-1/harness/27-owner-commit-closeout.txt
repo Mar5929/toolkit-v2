@@ -1,0 +1,14 @@
+# Owner commits the closeout documents the agent could not commit, 2026-09-26T21:50:35-0400
+ M delivery/deployment/WI-001-account-tier/DEPLOYMENT-RECORD.md
+ M delivery/deployment/WI-001-account-tier/manual-steps.md
+ M delivery/deployment/component-tracker.csv
+?? requirements/accounts/
+?? system-guide/ACCOUNTS.md
+M	delivery/deployment/WI-001-account-tier/DEPLOYMENT-RECORD.md
+M	delivery/deployment/WI-001-account-tier/manual-steps.md
+M	delivery/deployment/component-tracker.csv
+A	requirements/accounts/ACCOUNTS.md
+A	system-guide/ACCOUNTS.md
+530a3e4 Record WI-001 production delivery and requirements baseline
+e43580c Record complete Account Tier coverage check
+11bbc98 Record Tier sandbox acceptance evidence

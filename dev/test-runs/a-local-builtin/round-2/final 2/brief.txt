@@ -1,0 +1,25 @@
+Project briefing: greet (greet), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The tracker has no open items. A new request starts a work item with the work-on skill.
+
+Items: 2 done.
+
+Current focus:
+Last updated: 2026-09-27, WI-002 and WI-003 delivered, Codex
+## Now
+- None.
+## Waiting on the owner
+- None.
+## Untracked to-dos
+- None.
+## Next session starts with
+- No open work items. WI-002 and WI-003 were delivered on local `main` in commits `8eab12e` and `3cf4d87`; project records followed in `9e544f6`. Their worktrees and branches were removed. No Git remote is configured. WI-001 was cancelled at Mike's request; do not track Toolkit V2 setup as a work item.
+
+Project memory (builtin): 1 record. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_nodejs_dependencies_and_tests: Prefer plain Node.js, no npm packages, and the built-in node:test runner

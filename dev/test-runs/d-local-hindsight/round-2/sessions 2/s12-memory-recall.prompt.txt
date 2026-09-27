@@ -1,0 +1,1 @@
+Before I approve the README: do you remember what I told you about documenting command-line flags? Does the README follow it?

@@ -1,0 +1,11 @@
+WI-001 approval is recorded. WI-001 and WI-002 are merged into local `main` at `9970961`. There is no `origin` remote, so the merge has not been pushed.
+
+**Production deployment remains open.** The project’s Salesforce safety rule says agents must never deploy or validate against production, even when asked. My read-only checks also disagree about `Account.Tier__c`: Account describe shows the intended values, but the Tooling query and metadata retrieve did not return the field.
+
+Please verify `Account.Tier__c` in production Setup, including its description and help text. If it matches, run the checked layout-only deployment from the merged checkout:
+
+```bash
+sf project deploy start -x delivery/deployment/WI-002-tier-access-layout/package.xml -o tkv2-prod
+```
+
+The production layout differs from source only by the Tier item. After the deploy, check that Tier appears on the Account page and report the result. I have left both work items open for that confirmation.

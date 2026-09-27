@@ -1,0 +1,39 @@
+== wi-002-greet
+8eab12e Build basic greet CLI
+Hello, Mike!
+Hello, world!
+== wi-003-version
+3cf4d87 Add greet version flag
+8eab12e Build basic greet CLI
+Hello, Mike!
+Hello, world!
+0.1.0
+0.1.0
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 211.921458
+{
+  "name": "greet",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "test": "node --test"
+  }
+}
+#!/usr/bin/env node
+
+const args = process.argv.slice(2);
+
+if (args.includes('--version')) {
+  console.log(require('../package.json').version);
+  process.exit(0);
+}
+
+const name = args[0] || 'world';
+
+console.log(`Hello, ${name}!`);

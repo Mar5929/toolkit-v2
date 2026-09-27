@@ -1,0 +1,5 @@
+I created the WI-001 worktree and committed the [Account Tier field](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r3/.claude/worktrees/wi-001-account-tier/force-app/main/default/objects/Account/fields/Tier__c.field-meta.xml) and its [deployment package](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r3/.claude/worktrees/wi-001-account-tier/delivery/deployment/WI-001-account-tier/package.xml) on `claude/wi-001-account-tier` at `0101f2f`. Local XML checks passed.
+
+I found that the workspace’s default `sf` command is a test double. I corrected the work item and design: its earlier field inventory and validation do not establish live sandbox state. The real Salesforce CLI has no authorization for `tkv2-sbx`, so WI-001 remains in build stage and WI-002’s live inventory cannot start yet. Nothing was deployed.
+
+Please run `/usr/local/bin/sf org login web -a tkv2-sbx -r https://test.salesforce.com`, complete sign-in, and tell me when it succeeds.

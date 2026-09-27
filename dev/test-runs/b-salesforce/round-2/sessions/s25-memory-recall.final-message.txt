@@ -1,0 +1,1 @@
+Yes. You prefer **every new Salesforce custom field to have both a description and help text**. I should include both in the requirements and field metadata, and ask you about the wording if the field’s purpose is unclear. [Project memory: user_custom_field_documentation, 2026-09-27]

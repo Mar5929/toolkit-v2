@@ -1,0 +1,11 @@
+# Mike runs the sandbox test record commands himself (fake sf), 14:13:11
+$ sf data create record -s Account -v "Name='WI-001 Tier acceptance 2026-09-27'" -o tkv2-sbx --json
+{"status":0,"result":{"id":"001FAKE0000TEST1","success":true,"errors":[]},"warnings":[]}
+$ sf data update record -s Account -i 001FAKE0000TEST1 -v "Tier__c=Gold" -o tkv2-sbx --json
+{"status":0,"result":{"id":"001FAKE0000TEST1","success":true,"errors":[]},"warnings":[]}
+$ sf data update record -s Account -i 001FAKE0000TEST1 -v "Tier__c=Silver" -o tkv2-sbx --json
+{"status":0,"result":{"id":"001FAKE0000TEST1","success":true,"errors":[]},"warnings":[]}
+$ sf data update record -s Account -i 001FAKE0000TEST1 -v "Tier__c=Bronze" -o tkv2-sbx --json
+{"status":0,"result":{"id":"001FAKE0000TEST1","success":true,"errors":[]},"warnings":[]}
+$ sf data delete record -s Account -i 001FAKE0000TEST1 -o tkv2-sbx --json
+{"status":0,"result":{"id":"001FAKE0000TEST1","success":true,"errors":[]},"warnings":[]}

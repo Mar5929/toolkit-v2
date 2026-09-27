@@ -1,0 +1,83 @@
+{
+  "schema": 1,
+  "sessionId": "01a0e460-a486-7820-87b3-7a117b8c1983",
+  "host": "codex",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3",
+  "startedAt": "2026-09-27T19:38:55.408Z",
+  "turns": 1,
+  "turn": {
+    "key": "01a0e460-a4ea-7862-a428-8a765673dafc",
+    "n": 1,
+    "startedAt": "2026-09-27T19:38:55.552Z",
+    "keep": "remember that",
+    "baseline": {
+      "memoryMeta": null,
+      "hindsightMeta": 1790537654934.9473,
+      "memoryCache": 1790537654960.5408,
+      "workState": 1790537935449.5928,
+      "decisions": 1790537523389.251
+    },
+    "records": [
+      {
+        "kind": "work",
+        "what": "toolkit work history",
+        "at": "2026-09-27T19:39:24.837Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T19:39:43.884Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T19:39:44.138Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T19:39:44.392Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T19:39:44.643Z"
+      },
+      {
+        "kind": "memory",
+        "what": "toolkit memory save",
+        "at": "2026-09-27T19:40:08.039Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T19:40:35.759Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T19:40:36.037Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T19:40:58.775Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T19:40:59.107Z"
+      },
+      {
+        "kind": "memory",
+        "what": "toolkit memory focus",
+        "at": "2026-09-27T19:41:16.742Z"
+      }
+    ],
+    "edits": [],
+    "stopBlocked": false
+  },
+  "lastStopReason": null,
+  "source": "startup",
+  "updated": "2026-09-27T19:41:32.350Z"
+}

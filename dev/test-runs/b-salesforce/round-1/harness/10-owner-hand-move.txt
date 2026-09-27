@@ -1,0 +1,9 @@
+# Owner hand move, 2026-09-26T21:18:56-0400, no toolkit command run
+$ mkdir .work-items/account-tier
+$ mv .work-items/WI-001-account-tier-picklist .work-items/account-tier/
+$ mv .work-items/account-tier/WI-001-account-tier-picklist/WI-002-account-tier-field-metadata .work-items/account-tier/WI-001-account-tier-picklist/WI-002-tier-field-xml
+$ find .work-items -name WORK-ITEM.md
+.work-items/account-tier/WI-001-account-tier-picklist/WI-002-tier-field-xml/WORK-ITEM.md
+.work-items/account-tier/WI-001-account-tier-picklist/WI-003-account-tier-access-setup/WORK-ITEM.md
+.work-items/account-tier/WI-001-account-tier-picklist/WORK-ITEM.md
+.work-items/work-item-template/WORK-ITEM.md

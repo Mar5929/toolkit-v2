@@ -1,0 +1,69 @@
+$ toolkit memory list
+- user_document_cli_flags_in_readme: Document every command-line flag in the README
+
+$ toolkit memory get user_document_cli_flags_in_readme
+---
+name: user_document_cli_flags_in_readme
+description: Document every command-line flag in the README
+metadata:
+  type: user
+status: current
+source: Mike, in chat, 2026-09-27
+last_verified: 2026-09-27
+authorization: Approved by Mike on 2026-09-27
+supersedes: none
+---
+
+# Document command-line flags in README
+
+**Remember:** Mike prefers every command-line flag to be documented in the README.
+
+**Why:** Future CLI changes should include discoverable usage instructions.
+
+**How to apply:** Whenever adding or changing a command-line flag, update the README with its behavior and usage.
+
+**Evidence and limits:** Mike, in chat, 2026-09-27. Applies to this project's command-line flags.
+
+**Related memories:** None.
+
+**Authoritative records:** None.
+
+$ toolkit memory focus
+# Current focus
+
+Last updated: 2026-09-27, work-finish, agent
+
+## Now
+
+None.
+
+## Waiting on the owner
+
+None.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+No active work items. WI-001 and WI-002 are Done on local `main` at `5410648`. No Git remote is configured.
+
+$ curl -s "http://127.0.0.1:8888/v1/default/banks/greet-cli-sample-d2/documents?limit=20"  (read-only, summarized)
+total: 2
+- focus | tags: ['kind:focus'] | created: 2026-09-27T17:24:41.061536+00:00 | updated: 2026-09-27T17:35:24.701445+00:00
+- user_document_cli_flags_in_readme | tags: ['type:user', 'status:current', 'kind:record'] | created: 2026-09-27T17:02:23.670785+00:00 | updated: 2026-09-27T17:02:23.670785+00:00
+
+--- toolkit memory find --reflect, run by the tester in a terminal ---
+$ toolkit memory find "What does Mike prefer for command-line flags, and why?" --reflect
+17:28:02
+The 1 memory record closest to "What does Mike prefer for command-line flags, and why?", best first. A close record is not always about the question:
+- user_document_cli_flags_in_readme: Document every command-line flag in the README
+    # Document command-line flags in README **Remember:** Mike prefers every command-line flag to be documented in the README. **Why:** Future CLI changes should in
+Read a record with toolkit memory get <key> before relying on it.
+
+Answer from Hindsight reflect (23.4 s; a summary, not a source):
+Mike prefers that every command‑line flag be documented in the README. He says this helps future CLI changes include discoverable usage instructions for users.
+toolkit memory find "What does Mike prefer for command-line flags, and why?"   0.15s user 0.03s system 0% cpu 23.601 total
+exit=0
+17:28:26

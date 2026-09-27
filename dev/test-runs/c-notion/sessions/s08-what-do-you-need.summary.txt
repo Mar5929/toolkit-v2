@@ -1,0 +1,399 @@
+# Session s08-what-do-you-need
+thread: 01a0e47f-5891-7843-be61-fffa27315456 | start: 2026-09-27T20:12:26Z | end: 2026-09-27T20:13:06Z | exit=0
+extra args: 
+
+## Prompt
+
+What do you need from me?
+
+## Hook context injected (SessionStart, UserPromptSubmit, PostToolUse)
+
+- 2026-09-27T20:12:28.616Z:
+    Project briefing: Toolkit V2 sample run c3 (safe to delete) (tv2-sample-run-c3), owner Mike Rihm. Work items: the Notion Work Items database (ids like TV2-001). Memory: the Notion Memory database. Salesforce: no. Hosts: Claude Code and Codex.
+    Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/c-notion-r3/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+    
+    This worktree is on branch main, which names no work item.
+    
+    Active items:
+    - TV2-001 Write a short project brief in README.md: 11 User approval, In Progress, waiting on owner. Next action: Mike reviews the TV2-001 three-bullet result. TV2-002 has its own result decision. Continues with work-decide.
+    - TV2-002 Write the how to add a quote instructions in README.md: 11 User approval, In Progress, waiting on owner. Next action: Mike reviews the TV2-002 quote instruction result separately. Continues with work-decide.
+    
+    Waiting on the owner:
+    - TV2-001 Write a short project brief in README.md: 1 open question for the owner. (work-decide)
+    - TV2-002 Write the how to add a quote instructions in README.md: 1 open question for the owner. (work-decide)
+    
+    Items: 2 in progress. (Local copy of the Notion board from 2026-09-27T20:12:12.076Z.)
+    
+    Current focus:
+    Last updated: 2026-09-27, Codex after the TV2-001 and TV2-002 result checks.
+    ## Now
+    - TV2-001 Write a short project brief in README.md.
+    - TV2-002 Write the how to add a quote instructions in README.md.
+    ## Waiting on the owner
+    - In Codex, trust this project folder when prompted so its .codex/ settings load.
+    - In Codex, open /hooks and trust the Toolkit V2 hooks so the session briefing and reminders run.
+    - Start a new Claude Code session in this project so it loads the new settings and Plain English style.
+    ## Untracked to-dos
+    None.
+    ## Next session starts with
+    - Read AGENTS.md and PROJECT.md, then use work-decide for TV2-001 and TV2-002.
+    
+    Project memory (notion): 1 record, from the local copy. toolkit memory find searches it; toolkit memory get <key> reads one record.
+    
+    Memory records:
+    - user_readme_bullet_lists: Prefers README sections as short bullet lists, not long paragraphs
+    
+    Always-on rules. Claude Code loads them by itself; in Codex, each one is read at session start:
+    - .claude/rules/humanize-outbound-text.md: Humanize Anything Sent to Another Person
+    - .claude/rules/keep-work-item-current.md: Keep the Active Work Item Accurate
+    - .claude/rules/memory-revi
+
+## Skills opened (SKILL.md read)
+
+work-decide
+
+## Escalation requests (commands asked to run outside the sandbox)
+
+
+## Commands
+
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/references/conventions.md'
+# Conventions every work skill follows
+
+Every skill in the work plugin follows these rules. A skill's own `SKILL.md`
+names the file when a rule matters for a step.
+
+This file is `references/conventions.md` in the work plugin's own folder. From
+a skill's `SKILL.md` it is two folders up: `skills/work-on/SKILL.md` and
+`references/conventions.md` share the plugin folder. In Codex the plugin
+folder is the installed copy, for example
+`~/.codex/plugins/cache/toolkit-v2/work/<version>/`, so this file is
+`~/.codex/plugins/cache/toolkit-v2/work/<version>/references/conventions.md`.
+
+Four rules that are easy to miss:
+
+- Run each `toolkit` command alone, as its own command (below).
+- Never change a work item with a script (Python, Node, `sed -i`, `cat >`).
+  Use `toolkit work edit --section` or `--label`, or the file edit tool for
+  body text. The hooks refuse the script, so it only wastes a step.
+- Temporary text goes in `--text`, or in a file in a new `mktemp -d` folder,
+  never at a fixed name such as `/tmp/wi001.md`.
+- End every reply to the owner with the one question he must answer, or with
+  the exact words that continue the work ("Say 'keep going' and I'll start the
+  build."). Never end on "The next step is ..." with nothing for him to do.
+
+## Voice
+
+Every skill carries this line near its top:
+
+> Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+
+Agents do not receive the output style. Each agent file in `agents/` carries
+its own writing rules.
+
+## Opening another skill
+
+- Claude Code: use the Skill tool with the skill's name, for example
+  `work-requirements`.
+- Codex: read that skill's `SKILL.md` from the path shown in the skill list,
+  then follow it.
+- Say the handover in one line, for example "WI-012 needs a design; opening
+  solution-design."
+- The skill that asked a question records the answer. An answer that arrives
+  later, after that skill has finished, is recorded by `work-decide`.
+
+## Running `toolkit` commands
+
+- Put each `toolkit` command on its own line and run it as a plain command.
+  Do not wrap it in `$(...)`, a pipe, or a redirect. Codex matches its
+  command rule against the plain command. This holds for read commands too:
+  `toolkit work decisions && toolkit work show WI-001` is two commands.
+- In Codex, a `toolkit` command joined to anything else (`&&`, `;`, a pipe, a
+  heredoc, `cd ... &&`) or run from a script (for example Python's
+  `subprocess`) runs inside the Codex sandbox. The sandbox blocks Notion,
+  Hindsight, and the main checkout's `.work-items/` and `.memory/` from a
+  worktree, so the command fails or reports the wrong cause. Run each one
+  alone, as its own command.
+- Add `--json` when you need to read the output field by field.
+- Exit codes: `0` done; `1` error; `2` validation failure (fix what it names
+  and run it again); `3` not supported for this tracker or memory backend
+  (follow [trackers.md](trackers.md)); `4` not a Toolkit V2 project (open
+  `project-setup`).
+- "saved but not verified" in the output means the write happened and the
+  read-back failed. The message names the first line that differs. Lead the
+  reply to the owner with "Saved but not verified", say which line, and read
+  the item back to judge it.
+
+## Changing a work item
+
+- Change a work item only through `toolkit work` commands. This keeps the
+  local tracker and Notion the same, and it keeps the CLI's record o
+...[truncated]
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work decisions'
+4 decisions wait on the owner:
+
+TV2-001 Write a short project brief in README.md
+  - Q-03: Do you approve the TV2-001 three-bullet parent result at 6216321 for R-01 through R-03? Affects P1-T03. (work-decide)
+  - TV2-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve TV2-001 --result --by <name>. (work-decide)
+
+TV2-002 Write the how to add a quote instructions in README.md
+  - Q-01: Do you approve the TV2-002 Add a quote bullet at e9425dd for R-04? Affects P1-T02. (work-decide)
+  - TV2-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve TV2-002 --result --by <name>. (work-decide)
+
+```
+### exit=0
+```
+$ /bin/zsh -lc 'cat README.md PROJECT-ROADMAP.md'
+# Toolkit V2 sample run c3 (safe to delete)
+
+This tiny Node.js project prints one random quote when you run `quote.js`.
+
+## Purpose
+
+The script chooses a quote from the list in `quote.js` and prints it to the terminal.
+
+## Start here
+
+1. Use a local installation of Node.js.
+2. From this repository's root, run `node quote.js`.
+3. Read the printed quote. There are no tests yet.
+
+## Project records
+
+
+...[truncated]
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work show TV2-002'
+TV2-002: Write the how to add a quote instructions in README.md
+Location: https://app.notion.com/p/Write-the-how-to-add-a-quote-instructions-in-README-md-3e8b381da1768156b32cce4163db9b48
+Stage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: none | Sub-items: none | Design: none
+
+---
+id: TV2-002
+title: Write the how to add a quote instructions in README.md
+type: task
+stage: 11-user-approval
+status: In Progress
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: not-offered
+requirements_approved: "2026-09-27 by Mike Rihm"
+design: none
+result_approved: "no"
+updated: 2026-09-27
+---
+# TV2-002: Write the how to add a quote instructions in README.md
+
+## Overview
+
+**Goal:** Add the how to add a quote instruction to the Option A project brief in README.md.
+
+**Current position:** The fourth bullet for TV2-001 R-04 is committed at e9425dd and independently checked. It is the only change from TV2-001 commit 6216321. TV2-002 is now a top-level item in Notion.
+
+**Next action:** Mike reviews the TV2-002 quote instruction result separately.
+
+**Blockers:** Owner result review. The repository has no remote for publication.
+
+**Related items:** TV2-001 defines R-04 and holds the approved design.
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Quote instruction | The Option A brief explains how to add a quote | Not Started | Fourth bullet meets TV2-001 R-04 and has its own owner review | None |
+
+## Tasks
+
+### P1 — Quote instruction
+
+- [x] **P1-T01 — Add the quote instruction** · Done **Work:** Follow TV2-001 Selected design and add the fourth bullet to README.md for TV2-001 R-04. **Deliverable:** README.md at e9425dd in the TV2-002 worktree. **Done when:** The bullet names quote.js, the quotes list, and a quoted string entry; wording matches quote.js; node quote.js printed one quote and git diff --check passed. **Depends on:** TV2-001 parent brief commit 6216321.
+- [ ] **P1-T02 — Review quote instruction** · Not Started **Work:** Show the R-04 result to Mike for its own review. **Deliverable:** Recorded owner result decision for TV2-002. **Done when:** Mike approves the TV2-002 result. **Depends on:** P1-T01.
+
+## Recent History
+
+| Date | Change or decision | Effect on the work |
+|---|---|---|
+| 2026-09-27 | Parent changed in Notion by hand: TV2-001 -> none (top level). | It is a top-level item now. |
+| 2026-09-27 | Set stage 09 Testing -> 11 User approval (status In Progress); waiting on owner. | Waits for the owner's answer (work-decide) before the step it blocks. |
+| 2026-09-27 | Checked commit e9425dd: TV2-001 R-04 met; node quote.js printed one quote; git diff --check 6216321..HEAD passed; independent checker found no defects. | Ready for Mike to review the child result separately. |
+| 2026-09-27 | Set stage 08 Build -> 09 Testing (status In Progress). | Continue with work-check. |
+| 2026-09-27 | Set stage 07 Tracking setup -> 08 Build (status In Progress). | Continue with work-on. |
+| 2026-09-27 | Set stage 06 Implementation plan -> 07 Tracking setup (status In Progress). | Parent brief is built at 6216321; build the R-04 bullet in a child branch so Mike can review its diff separately. |
+| 2026-09-27 | Set stage 03 Requirements approved -> 06 Implementation plan (status In Progress). | Inherits the approved TV2-001 Option A design; its separate build follows the parent r
+...[truncated]
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work show TV2-001'
+TV2-001: Write a short project brief in README.md
+Location: https://app.notion.com/p/Write-a-short-project-brief-in-README-md-3e8b381da176815394ddf4349c52d305
+Stage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: none | Sub-items: none | Design: approved (https://app.notion.com/p/TV2-001-Write-a-short-project-brief-in-README-md-solution-design-3e8b381da1768115ba32e17059f0e746)
+
+---
+id: TV2-001
+title: Write a short project brief in README.md
+type: task
+stage: 11-user-approval
+status: In Progress
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: not-offered
+requirements_approved: "2026-09-27 by Mike Rihm"
+design: approved
+result_approved: "no"
+updated: 2026-09-27
+---
+# TV2-001: Write a short project brief in README.md
+
+## Overview
+
+**Goal:** Write a short project brief in README.md.
+
+**Current position:** Option A is approved. The three TV2-001 bullets for R-01 through R-03 are committed at 6216321 and independently checked. TV2-002 is now a separate top-level item for R-04, with its own checked commit.
+
+**Next action:** Mike reviews the TV2-001 three-bullet result. TV2-002 has its own result decision.
+
+**Blockers:** Owner result reviews. The earlier result and merge were declined. The repository has no remote for publication.
+
+**Related items:** TV2-002 covers R-04 as a separate top-level item and has its own result review.
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — README brief | Option A brief covers R-01 through R-03 in TV2-001 and R-04 in the separate TV2-002 item | In Progress | Each item has its own checked result and owner review | None |
+
+## Tasks
+
+### P1 — README brief
+
+- [x] **P1-T01 — Write initial brief** · Done **Work:** Initial README edit in the item worktree. **Deliverable:** README.md at e8c9796. **Done when:** Initial request was checked. The owner declined this result. **Depends on:** None.
+- [x] **P1-T02 — Revise parent brief** · Done **Work:** Follow the approved Option A design for R-01 through R-03; add the heading and first three bullets at the top of README.md. Keep the existing main README sections. **Deliverable:** README.md at 6216321 in the TV2-001 worktree. **Done when:** The first three bullets match R-01 through R-03, node quote.js printed one quote, and git diff --check passed. **Depends on:** Approved design.
+- [ ] **P1-T03 — Review TV2-001 result** · Not Started **Work:** Show the R-01 through R-03 result to Mike for separate review. **Deliverable:** Recorded owner result decision for TV2-001. **Done when:** Mike approves the TV2-001 result. **Depends on:** P1-T02.
+- [ ] **P1-T04 — Review separate quote instruction item** · In Progress **Work:** TV2-002 adds and checks the fourth bullet for R-04 as a top-level item. **Deliverable:** TV2-002 result with its own owner review. **Done when:** TV2-002 has an approved result. **Depends on:** P1-T02.
+
+## Recent History
+
+| Date | Change or decision | Effect on the work |
+|---|---|---|
+| 2026-09-27 | Sub-item TV2-002 moved out in Notion by hand. | Its parent is now none (top level). |
+| 2026-09-27 | Set stage 09 Testing -> 11 User approval (status In Progress); waiting on owner. | Waits for the owner's answer (work-decide) before the step it blocks. |
+| 2026-09-27 | Checked commit 6216321: R-01 through R-03 met; node quote.js printed one quote; git diff --check main..HEAD p
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc 'git show --format=fuller --stat 6216321'
+commit 6216321b61815fddd62d73bb143401c814aa40a5
+Author:     Mike Rihm <michael@rihm.com>
+AuthorDate: Sun Sep 27 16:02:56 2026 -0400
+Commit:     Mike Rihm <michael@rihm.com>
+CommitDate: Sun Sep 27 16:02:56 2026 -0400
+
+    Add Option A project brief for new Node users
+
+ README.md | 33 ++++++++++++++++++++++++++++-----
+ 1 file changed, 28 insertions(+), 5 deletions(-)
+
+```
+### exit=0
+```
+$ /bin/zsh -lc 'git show --format= -- README.md 6216321'
+diff --git a/README.md b/README.md
+new file mode 100644
+index 0000000..3a22aaa
+--- /dev/null
++++ b/README.md
+@@ -0,0 +1,28 @@
++# Toolkit V2 sample run c3 (safe to delete)
++
++This tiny Node.js project prints one random quote when you run `quote.js`.
++
++## Purpose
++
++The script chooses a quote from the list in `quote.js` and prints it to the terminal.
++
++## Start here
++
++1. Use a local installation 
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc 'git show 6216321:README.md'
+# Toolkit V2 sample run c3 (safe to delete)
+
+## Project brief
+
+- **For:** People new to Node who cloned this repository.
+- **What it does:** `quote.js` picks one random quote from its `quotes` list and prints it to the terminal.
+- **Run it:** With Node.js installed, run `node quote.js` from the repository root.
+
+This tiny Node.js project prints one random quote when you run `quote.js`.
+
+## Purpose
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc 'git worktree list'
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/c-notion-r3                                       c1f1777 [main]
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/c-notion-r3/.claude/worktrees/tv2-002-add-quote   e9425dd [claude/tv2-002-a
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc 'git show e9425dd:README.md'
+# Toolkit V2 sample run c3 (safe to delete)
+
+## Project brief
+
+- **For:** People new to Node who cloned this repository.
+- **What it does:** `quote.js` picks one random quote from its `quotes` list and prints it to the terminal.
+- **Run it:** With Node.js installed, run `node quote.js` from the repository root.
+- **Add a quote:** In `quote.js`, add another quoted string as an entry in the `quotes`
+...[truncated]
+```
+
+## File changes
+
+
+## Other items
+
+- error {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+- error {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+- EVENT {"type": "turn.completed", "usage": {"input_tokens": 159677, "cached_input_tokens": 117248, "cache_write_input_tokens": 0, "output_tokens": 1299, "reasoning_output_tokens": 208}}
+
+## Agent messages
+
+I’ll check the two result decisions currently waiting on you and show you the first one with a recommendation. I’m using the work-decide procedure for this project.
+
+---
+
+I need two separate result decisions from you. First is **TV2-001**: the three-bullet project brief in [README.md](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/c-notion-r3/.claude/worktrees/wi-001-readme-brief/README.md). It says:
+
+> - **For:** People new to Node who cloned this repository.
+> - **What it does:** `quote.js` picks one random quote from its `quotes` list and prints it to the terminal.
+> - **Run it:** With Node.js installed, run `node quote.js` from the repository root.
+
+I recommend approving this result: it passed the check against the three agreed requirements. After your answer, I’ll ask separately about **TV2-002**, the “Add a quote” bullet. This approval does not authorize a merge.
+
+**Do you approve the TV2-001 three-bullet result?**
+
+---
+

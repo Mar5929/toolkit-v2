@@ -1,0 +1,199 @@
+PROMPT: Do you remember how I like code and tests written in this project?
+THREAD: 01a0e39f-6a27-7461-85af-edd6987065d1
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll check the project memory and give you the recorded preference.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.0/skills/memory-find/SKILL.md'
+  -> ---
+name: memory-find
+description: 'Finds what the project already knows in memory, decisions, work items, requirements, and the current focus, and cites the source of each answer. Use when the owner asks "what did we decide", "do you remember", "why did we", or "have we done this before", and before asking him to repeat anything.'
+---
+
+# Memory find
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Put each `toolkit` command on its own line. This skill only reads. It never changes memory, an item, or a file.
+
+## Steps
+
+1. Check the session briefing and the current focus.
+   `toolkit memory focus`
+2. Search memory, then open each hit. A hit is a pointer; read the record before using it, check its date, scope, and `last_verified`, and follow its Related memories links when they bear on the question.
+   `toolkit memory find "<query>"`
+   `toolkit memory get <key>`
+3. Search the other homes: `DECISIONS.md` at the project root; work items (their Recent History and Notes); the area files in `requirements/`; the area files in `system-guide/`; `PROJECT.md` and `PROJECT-ROADMAP.md`; `ai-external-knowledge/INDEX.md`; the glossary for project terms. GitHub Issues or Jira: the work commands exit with code 3; read the issues as the work plugin's `references/trackers.md` says.
+   `toolkit work list`
+   `toolkit work show <id> --section "Recent History"`
+   `toolkit wor
+
+[CMD exit=0] /bin/zsh -lc 'cat PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md'
+  -> # greet
+
+## Purpose and intended outcome
+
+- Purpose: Create a tiny Node.js command-line tool that greets people.
+- Intended outcome: A working command-line greeting tool with a version flag.
+
+## Scope and boundaries
+
+- In scope: The Node.js command-line greeting tool.
+- Outside scope: Behavior for a
+
+[CMD exit=0] /bin/zsh -lc 'if test -f SOUL.md; then cat SOUL.md; fi'
+  -> 
+
+[AGENT] I’m using the memory-find skill to check the saved preference and its source.
+
+[CMD exit=0] /bin/zsh -lc 'cat DECISIONS.md'
+  -> # Decisions
+
+Decisions for the whole project. A decision about one work item stays in that
+item's Recent History. Add rows only with `toolkit decision add`, which gives
+each row the next ID. Never rewrite an old row. To change a decision, add a new
+row that names the ID it replaces.
+
+| ID | Date | D
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-27, completed local delivery, Codex
+
+## Now
+
+- None.
+
+## Waiting on the owner
+
+- Open this project folder in Codex and trust the folder when prompted; then open `/hooks` and trust the Toolkit V2 hooks.
+
+## Untracked to-dos
+
+- None.
+
+## Next session starts with
+
+- Run `toolkit doctor` and `toolkit brief`. `SOUL.md` was deliberately omitted at Mike's request; doctor reports it as a missing scaffold file. After Mike completes Codex trust, confirm the two trust warnings are gone.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory find 'code and tests Node.js packages node:test'"
+  -> 1 memory record matches "code and tests Node.js packages node:test" (best first):
+- user_nodejs_implementation_preference: Prefer plain Node.js without npm packages and tests with node:test
+    # Node.js implementation preference **Remember:** Mike prefers plain Node.js with no npm packages and tests written with the built-in `node:test` runner. **Wh...
+Read a record with toolkit memory get <key> before relying on it.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work list'
+  -> No open work items. Add --all to include finished, cancelled, and archived ones.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory glossary'
+  -> # Terminology glossary
+
+<!-- Fill-in guide: replace the example table row with one verified term per row. Enter its exact meaning in Meaning here, distinguish aliases or system-specific uses in Distinction or alias, and cite the source and check date. Add an alias bullet only when a naming change exists. Remove example entries and this guide after the first real entry. -->
+
+Record terms whose meanings affect requirements, delivery, or collaboration. Verify definitions from the owner or an authoritative project source. A word used by two systems may need two rows. Update or retire entries when usage changes; never infer a definition from a similar word elsewhere.
+
+| Term | System or context | Meaning here | Distinction or alias | Source | Status / last checked |
+| --- | --- | --- | --- | --- | --- |
+| <Term> | <System, team, or process> | <Concise verified meaning> | <How this differs from another use, if relevant> | <Decision or source link and date> | <Current or needs review; date> |
+
+## Naming changes and aliases
+
+- <Old term or alias> → <Preferred term in this context>; <reason, source, and date>.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory get user_nodejs_implementation_preference'
+  -> ---
+name: user_nodejs_implementation_preference
+description: Prefer plain Node.js without npm packages and tests with node:test
+metadata:
+  type: user
+status: current
+source: Mike, in chat, 2026-09-27
+last_verified: 2026-09-27
+authorization: Approved by Mike on 2026-09-27
+supersedes: none
+---
+
+# Node.js implementation preference
+
+**Remember:** Mike prefers plain Node.js with no npm packages and tests written with the built-in `node:test` runner.
+
+**Why:** Future implementation choices should follow this preference.
+
+**How to apply:** Use Node.js built-in APIs and write tests with `node:test`. Avoid adding npm packages unless Mike changes this preference.
+
+**Evidence and limits:** Mike, in chat, 2026-09-27. This is a project implementation preference, not approval of the current work item's requirements.
+
+**Related memories:** None.
+
+**Authoritative records:** `PROJECT.md` already requires Node.js and `node --test`; this memory adds the no-packages preference.
+
+
+[AGENT] Yes. You prefer plain Node.js with no npm packages, using built-in APIs. Write tests with `node:test` and run them with `node --test`. [Project memory: `user_nodejs_implementation_preference`, recorded from you on 2026-09-27.]
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 106443, "cached_input_tokens": 89856, "cache_write_input_tokens": 0, "output_tokens": 521, "reasoning_output_tokens": 21}}
+
+SKILLS OPENED: ['memory-find']
+
+[HOOK CONTEXT ord=9] Project briefing: greet (greet), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r1/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The tracker has no open items. A new request starts a work item with the work-on skill.
+
+Items: 2 done.
+
+Current focus:
+Last updated: 2026-09-27, completed local delivery, Codex
+## Now
+- None.
+## Waiting on the owner
+- Open this project folder in Codex and trust the folder when prompted; then open `/hooks` and trust the Toolkit V2 hooks.
+## Untracked to-dos
+- None.
+## Next session starts with
+- Run `toolkit doctor` and `toolkit brief`. `SOUL.md` was deliberately omitted at Mike's request; doctor reports it as a missing scaffold file. After Mike completes Codex trust, confirm the two trust warnings are gone.
+
+Project memory (builtin): 1 record. toolkit memory 
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r=await Promise.allSettled([tools.exec_command({cmd:"cat PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md",max_output_tokens:12000}),tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.0/skills/memory-find/SKILL.md",max_output_tokens:6000}),tools.exec_command({cmd:"if test -f SOUL.md; then cat SOUL.md; fi",max_output_tokens:2000})]);r.forEach((x,i)=>text({i,...x}))
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"34e4de\",\"wall_time_seconds\":0.000004166,\"exit_code\":0,\"original_token_count\":3658,\"output\":\"# greet\\n\\n## Purpose and intended outcome\\n\\n- Purpose: Create a tiny Node.js command-line tool that greets people.\\n- Intended outcome: A working command-line greeting tool with a version flag.\\n\\n## Scope and boundaries\\n\\n- In scope: The Node.js command-line greeting tool.\\n- Outside scope: Behavior for additional command-line arguments is unspecified.\\n- Constraints: Build and test with Node.js; run tests with `node --test` (owner, 2026-09-27).\\n\\n## Systems and environments\\n\\n| System or org | Purpose | Environment | Source of truth | Access notes |\\n| --- | --- | --- | --- | --- |\\n| Local Node.js project | Command-line tool | Local development | This repository | Implemented locally; no remote is configured |\\n\\n## People and ownership\\n\\n| Role | Person or team | Responsibility | Source / last confirmed |\\n| --- | --- | --- | --- |\\n| Owner | Mike | Project decisions and approvals | Owner, 2026-09-27 |\\n\\n## Work and project records\\n\\n- Work tracker: `.work-items/` local folders\\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\\n- Project decisions: [DECISIONS.md](DECISIONS.md)\\n- Functional requirements: [requirements/](requirements/)\\n- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`\\n- System Guide: `system-guide/GREETING.md` describes the delivered CLI\\n- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)\\n- Memory backup or sync: No destination chosen yet\\n\\n## Resources and project paths\\n\\n- Tests and checks: `node --test` (three passing checks on 2026-09-27)\\n- Outside references: `ai-external-knowledge/INDEX.md`\\n\\n## Operating conventions\\n\\nThe delivered behavior is recorded in `requirements/greeting/GREETING.md`. WI-001 and WI-002 were approved by Mike on 2026-09-27.\\n# Humanize Anything Sent to Another Person\\n\\nAny text that will leave the project and be read by someone other than the owner\\nis run through the `humanizer` skill before the owner sees the final version.\\nUse the `unslop` skill when `humanizer` is not installed. That covers emails,\\nchat messages, s
+
+[CALL] const r=await Promise.allSettled([tools.exec_command({cmd:"toolkit memory focus",max_output_tokens:2000}),tools.exec_command({cmd:"toolkit memory find 'code and tests Node.js packages node:test'",max_output_tokens:2000}),tools.exec_command({cmd:"cat DECISIONS.md",max_output_tokens:2000}),tools.exec_command({cmd:"toolkit work list",max_output_tokens:2000})]);r.forEach((x,i)=>text({i,...x}))
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"556e2d\",\"wall_time_seconds\":0.000003083,\"exit_code\":0,\"original_token_count\":130,\"output\":\"# Current focus\\n\\nLast updated: 2026-09-27, completed local delivery, Codex\\n\\n## Now\\n\\n- None.\\n\\n## Waiting on the owner\\n\\n- Open this project folder in Codex and trust the folder when prompted; then open `/hooks` and trust the Toolkit V2 hooks.\\n\\n## Untracked to-dos\\n\\n- None.\\n\\n## Next session starts with\\n\\n- Run `toolkit doctor` and `toolkit brief`. `SOUL.md` was deliberately omitted at Mike's request; doctor reports it as a missing scaffold file. After Mike completes Codex trust, confirm the two trust warnings are gone.\\n\"}}"}, {"type": "input_text", "text": "{\"i\":1,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"622f12\",\"wall_time_seconds\":0.000001,\"exit_code\":0,\"original_token_count\":106,\"output\":\"1 memory record matches \\\"code and tests Node.js packages node:test\\\" (best first):\\n- user_nodejs_implementation_preference: Prefer plain Node.js without npm packages and tests with node:test\\n    # Node.js implementation preference **Remember:** Mike prefers plain Node.js with no npm packages and tests written with the built-in `node:test` runner. **Wh...\\nRead a record with toolkit memory get <key> before relying on it.\\n\"}}"}, {"type": "input_text", "text": "{\"i\":2,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"974cdf\",\"wall_time_seconds\":0.000002958,\"exit_code\":0,\"original_token_count\":95,\"output\":\"# Decisions\\n\\nDecisions for the whole project. A decision about one work item stays in that\\nitem's Recent History. Add rows only with `toolkit decision add`, which gives\\neach row the next ID. Never rewrite an old row. To change a decision, add a new\\nrow that names the ID it replaces.\\n\\n| ID | Date | Decision | Why | Decided by | Replaces |\\n| --- | --- | --- | --- | --- | --- |\\n\"}}"}, {"type": "input_text", "text": "{\"i\":3,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"06a315\",\"wall_time_seconds\":0.000002417,\"exit_code\":0,\"original_token_count\":21,\"output\":\"No open work items. Add --all to include finished, cancelled, and archived ones.\\n\"}}"}]
+
+[CALL] const r=await Promise.allSettled([tools.exec_command({cmd:"toolkit memory get user_nodejs_implementation_preference",max_output_tokens:2000}),tools.exec_command({cmd:"toolkit memory glossary",max_output_tokens:1000})]);r.forEach((x,i)=>text({i,...x}))
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"bc8e11\",\"wall_time_seconds\":7.92e-7,\"exit_code\":0,\"original_token_count\":244,\"output\":\"---\\nname: user_nodejs_implementation_preference\\ndescription: Prefer plain Node.js without npm packages and tests with node:test\\nmetadata:\\n  type: user\\nstatus: current\\nsource: Mike, in chat, 2026-09-27\\nlast_verified: 2026-09-27\\nauthorization: Approved by Mike on 2026-09-27\\nsupersedes: none\\n---\\n\\n# Node.js implementation preference\\n\\n**Remember:** Mike prefers plain Node.js with no npm packages and tests written with the built-in `node:test` runner.\\n\\n**Why:** Future implementation choices should follow this preference.\\n\\n**How to apply:** Use Node.js built-in APIs and write tests with `node:test`. Avoid adding npm packages unless Mike changes this preference.\\n\\n**Evidence and limits:** Mike, in chat, 2026-09-27. This is a project implementation preference, not approval of the current work item's requirements.\\n\\n**Related memories:** None.\\n\\n**Authoritative records:** `PROJECT.md` already requires Node.js and `node --test`; this memory adds the no-packages preference.\\n\"}}"}, {"type": "input_text", "text": "{\"i\":1,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"411442\",\"wall_time_seconds\":0.000002541,\"exit_code\":0,\"original_token_count\":281,\"output\":\"# Terminology glossary\\n\\n<!-- Fill-in guide: replace the example table row with one verified term per row. Enter its exact meaning in Meaning here, distinguish aliases or system-specific uses in Distinction or alias, and cite the source and check date. Add an alias bullet only when a naming change exists. Remove example entries and this guide after the first real entry. -->\\n\\nRecord terms whose meanings affect requirements, delivery, or collaboration. Verify definitions from the owner or an authoritative project source. A word used by two systems may need two rows. Update or retire entries when usage changes; never infer a definition from a similar word elsewhere.\\n\\n| Term | System or context | Meaning here | Distinction or alias | Source | Status / last checked |\\n| --- | --- | --- | --- | --- | --- |\\n| <Term> | <System, team, or process> | <Concise verified meaning> | <How this differs from another use, if relevant> | <Decision or source link and date> | <Current or need

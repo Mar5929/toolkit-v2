@@ -1,0 +1,1 @@
+Go with option A. Before you build, split this up: WI-001 is doing two things. Keep the basic greeting in WI-001 and make the --version flag its own sub-item under it.

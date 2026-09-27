@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "sessionId": "01a0e3cd-9af4-7693-bca0-a2b8c7a8eee2",
+  "host": "codex",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/c-notion-r2",
+  "startedAt": "2026-09-27T16:58:19.240Z",
+  "turns": 1,
+  "turn": {
+    "key": "01a0e3cd-9b5e-7a71-a167-ef5f82285143",
+    "n": 1,
+    "startedAt": "2026-09-27T16:58:19.778Z",
+    "keep": null,
+    "baseline": {
+      "memoryMeta": null,
+      "hindsightMeta": null,
+      "memoryCache": 1790528246509.447,
+      "workState": null,
+      "decisions": 1790528178478.866
+    },
+    "records": [],
+    "edits": [],
+    "stopBlocked": false
+  },
+  "lastStopReason": null,
+  "source": "startup",
+  "updated": "2026-09-27T16:59:40.792Z"
+}

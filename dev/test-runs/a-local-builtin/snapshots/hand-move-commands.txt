@@ -1,0 +1,5 @@
+# Run by the tester, as Mike, in a terminal, between s07 and s08 (no toolkit command, no agent):
+cd <project folder>
+mkdir .work-items/cli
+mv .work-items/WI-001-add-a-version-flag-to-the-greet-cli .work-items/cli/WI-001-basic-greet-cli
+mv .work-items/cli/WI-001-basic-greet-cli/WI-002-add-a-version-flag-to-the-greet-cli .work-items/cli/WI-001-basic-greet-cli/version-flag

@@ -1,0 +1,2 @@
+Skill files and helper agents opened (from the Codex session log, in order):
+work-decide, work-on, work-requirements, solution-design, work-delegate

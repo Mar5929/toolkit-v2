@@ -1,0 +1,69 @@
+{
+  "schema": 1,
+  "sessionId": "01a0e3e9-5652-7141-9245-1b329fa4d8ba",
+  "host": "codex",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r2",
+  "startedAt": "2026-09-27T17:28:37.245Z",
+  "turns": 1,
+  "turn": {
+    "key": "01a0e3e9-56c5-73e0-831e-ca0e8379769a",
+    "n": 1,
+    "startedAt": "2026-09-27T17:28:37.405Z",
+    "keep": null,
+    "baseline": {
+      "memoryMeta": null,
+      "hindsightMeta": 1790529881090.6367,
+      "memoryCache": 1790529881112.169,
+      "workState": 1790530117292.2192,
+      "decisions": 1790527938727.0588
+    },
+    "records": [
+      {
+        "kind": "work",
+        "what": "toolkit work approve",
+        "at": "2026-09-27T17:28:58.471Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work history",
+        "at": "2026-09-27T17:29:01.468Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work set",
+        "at": "2026-09-27T17:29:03.846Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T17:29:06.711Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T17:29:23.361Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T17:29:26.422Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T17:29:29.312Z"
+      }
+    ],
+    "edits": [
+      {
+        "path": ".work-items/cli-flags/WI-001-add-shout-flag-to-greet-cli/WI-002-readme-docs/WORK-ITEM.md",
+        "id": "WI-002"
+      }
+    ],
+    "stopBlocked": false
+  },
+  "lastStopReason": null,
+  "source": "startup",
+  "updated": "2026-09-27T17:29:42.574Z",
+  "remindedBodyEdit": true
+}

@@ -1,0 +1,98 @@
+{
+  "schema": 1,
+  "sessionId": "01a0e3c8-3c3b-7842-a443-c1c642ed3de5",
+  "host": "codex",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r2",
+  "startedAt": "2026-09-27T16:52:27.384Z",
+  "turns": 1,
+  "turn": {
+    "key": "01a0e3c8-3c98-7dd0-8ecf-f31e76153176",
+    "n": 1,
+    "startedAt": "2026-09-27T16:52:27.519Z",
+    "keep": null,
+    "baseline": {
+      "memoryMeta": null,
+      "hindsightMeta": null,
+      "memoryCache": null,
+      "workState": 1790527947415.4978,
+      "decisions": 1790527936701.245
+    },
+    "records": [
+      {
+        "kind": "work",
+        "what": "toolkit work new",
+        "at": "2026-09-27T16:53:06.735Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T16:53:27.413Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T16:54:39.557Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T16:54:39.813Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T16:54:40.068Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T16:54:40.324Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T16:54:40.576Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T16:54:40.831Z"
+      },
+      {
+        "kind": "memory",
+        "what": "toolkit memory focus",
+        "at": "2026-09-27T16:54:54.810Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T16:55:19.273Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T16:55:19.536Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T16:55:19.789Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work history",
+        "at": "2026-09-27T16:55:26.085Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work set",
+        "at": "2026-09-27T16:55:31.430Z"
+      }
+    ],
+    "edits": [],
+    "stopBlocked": false
+  },
+  "lastStopReason": null,
+  "source": "startup",
+  "updated": "2026-09-27T16:56:04.093Z"
+}

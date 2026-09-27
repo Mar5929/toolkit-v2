@@ -1,0 +1,13 @@
+.work-items
+.work-items/.toolkit-state.json
+.work-items/DASHBOARD.md
+.work-items/WI-001-finish-toolkit-v2-setup
+.work-items/WI-001-finish-toolkit-v2-setup/WORK-ITEM.md
+.work-items/WI-002-build-greet-cli-with-version
+.work-items/WI-002-build-greet-cli-with-version/DESIGN.md
+.work-items/WI-002-build-greet-cli-with-version/WI-003-add-version-flag-to-greet-cli
+.work-items/WI-002-build-greet-cli-with-version/WI-003-add-version-flag-to-greet-cli/WORK-ITEM.md
+.work-items/WI-002-build-greet-cli-with-version/WORK-ITEM.md
+.work-items/work-item-template
+.work-items/work-item-template/DESIGN.md
+.work-items/work-item-template/WORK-ITEM.md

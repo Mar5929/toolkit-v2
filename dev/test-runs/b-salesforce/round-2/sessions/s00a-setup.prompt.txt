@@ -1,0 +1,1 @@
+Set up Toolkit V2 in this project. My answers: project name Acme CRM (key acme-crm, id prefix WI, owner Mike). Tracker: local folders. Memory: built-in .memory/. Salesforce: yes, sandbox org alias tkv2-sbx and production org alias tkv2-prod. I use both Claude Code and Codex. I do not want a SOUL.md.

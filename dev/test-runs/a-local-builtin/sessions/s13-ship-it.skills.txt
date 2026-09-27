@@ -1,0 +1,1 @@
+work-finish, merge-and-clean-up, publish-docs, memory-save,   ref:work/skills/work-finish/references/closing.md,   ref:work/references/conventions.md

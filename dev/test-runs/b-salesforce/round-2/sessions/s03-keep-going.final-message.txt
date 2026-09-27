@@ -1,0 +1,3 @@
+WI-001 is in requirements refinement. Gold, Silver, Bronze are recorded in that order, along with your preference for a field description and help text.
+
+Should Tier be **optional** or required on every Account? I recommend optional so existing accounts can remain blank until the sales team ranks them.

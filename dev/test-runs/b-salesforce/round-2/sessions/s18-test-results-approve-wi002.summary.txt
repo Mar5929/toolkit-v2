@@ -1,0 +1,431 @@
+PROMPT: I ran the check in the sandbox: the new test Account had Tier blank; Gold, Silver, and Bronze each saved and stayed after a reload; clearing Tier back to blank worked; then I deleted the test Account. And I approve the WI-002 result.
+THREAD: 01a0e412-2ce7-7e90-8423-21689db73709
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Add Account Tier picklist: 09 Testing, In Progress, waiting on owner. Next action: Mike runs the sandbox Account check: create with blank Tier, reload, save and reload Gold, Silver, Bronze, clear and reload, then delete... Continues with work-decide.
+- WI-002 Configure Account Tier access and page layout: 11 User approval, In Progress, waiting on owner. Next action: Mike reviews the WI-002 access and layout result for approval. Independent acceptance review found R-02 and R-03 met on the available evi... Continues with work-decide.
+
+Waiting on the owner:
+- WI-001 Add Account Tier picklist: Q-05: Can you run the WI-001 sandbox Account blank, Gold, Silver, Bronze, clear, reload, and delete checks and report each result? Codex org guard blocked Account creation before execution. Affects R-01 live acceptance check. (work-decide)
+- WI-002 Configure Account Tier access and page layout: WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)
+
+Items: 2 in progress.
+
+Current focus:
+Last updated: 2026-09-27, WI-001 and WI-002 sandbox acceptance check, Codex
+## Now
+- WI-001: Sandbox describe and field source support the optional Gold, Silver, Bronze definition. Live blank/value/clear saves remain untested; the Codex org guard blocked Account creation before execution despite Mike's authorization. See WI-001 and the WI-001 test plan on the WI-002 branch.
+- WI-002: Mike confirmed editor, viewer, and Account record-access behavior. Sandbox FieldPermissions and PermissionSetAssignment queries support the access matrix. Independent checker found R-02 and R-03 met. Evidence update is committed as 53de9f7 on the WI-002 branch.
+## Waiting on the owner
+- WI-001: Run one sandbox test Account through blank, Gold, Silver, Bronze, clear, reload, and delete; report each result.
+- WI-002: Review the access and layout result for approval.
+- Trust this project folder in Codex when prompted, then open `/hooks` and trust the Toolkit V2 hooks and two Salesforce org guards.
+## Untracked to-dos
+- None.
+## Next session starts with
+- Open WI-001 and WI-002. Record Mike's sandbox Account check in the WI-001 test plan. Ask for WI-002 result approval; ask for WI-001 result approval only after R-01 live saves pass. No remote named origin is configured in this copy, so local branch commits cannot be pushed here.
+
+Project memory (builtin): 1 record. toolkit memory find searches it; toolkit memory get
+
+[AGENT] I’ll record the sandbox results for WI-001 and your approval of WI-002, then check what each item needs next. I’m using the work-decide skill for the approval and the work-on skill to update the active work.
+
+[CALL exec] pwd; cat SOUL.md PROJECT.md .claude/rules/*.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2
+cat: SOUL.md: No such file or directory
+# Acme CRM
+
+## Purpose and intended outcome
+
+- Purpose: Give the Acme sales team Salesforce customizations for customer-account work.
+- Intended outcome: Help the Acme sales team track and prioritize customer accounts.
+
+## Scope and boundaries
+
+- In scope: Salesforc
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/skills/work-decide/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/skills/work-on/SKILL.md
+   git worktree list; git status --short --branch; git remote -v; git fetch origin
+   toolkit work show WI-001; toolkit work show WI-002; toolkit work lifecycle; cat PROJECT-ROADMAP.md
+  -> Script completed
+Wall time 5.2 seconds
+Output:
+
+Warning: truncated output (original token count: 13119)
+Total output lines: 3
+
+{"i":0,"status":"fulfilled","value":"---\nname: work-decide\ndescription: 'Walks the owner through each decision waiting on him, one at a time with a recommendation, and records each answer. Use when the owner asks \"what do you need from me\" or \"what''s waiting on me\", says \"approved\" or \"go with option B\", or states a decision for the whole project.'\n---\n\n# Work decide\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nShared rules: the work plugin's `references/conventions.md`, two folders above this skill's folder (`../../references/conventions.md`). To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`.\n\n## Steps\n\n1. Build the queue: requirements waiting for approval, designs marked proposed, items at stage 11 waiting for result approval, and Open Questions rows where the owner decides. The command lists each decision once. Its \"Agent to-do\" lines are the agent's own steps, not decisions waiting on the owner: count and show only the decisions, and handle a delivery offer there with `work-delegate` after the queue.\n   `toolkit work decisions`\n2. The owner gave an answer without being asked (\"approved\", \"go with B\"): match it to exactly one waiting decision. If two could match, ask which one, naming both.\n3. Otherwise take the decisions one at a time, the one blocking the most work first. For each: what is being decided, the choices, your recommendation and its main reason, and what happens after each answer. Every decision carries a recommendation, even when it is the only one in the queue; a bare question is not enough. One decision per message.\n4. Before recording a requirements approval, check that the Agreed goal is filled in and that no open question is linked to a requirement. If not, say what is missing and open `work-requirements`.\n   `toolkit work show <id> --section Requirements`\n5. Record each answer where it belongs. Approvals (for requirements, first mark each approved `R-xx` Finalized, as `work-requirements` step 8 does):\n   `toolkit work approve <id> --requirements --by <owner>`\n   `toolkit work approve <id> --design --by <owner>`\n   `toolkit work approve <id> --result --by <owner>`\n   An Open Questions answer: rewrite that row with the answer, the date, and status Answered.\n   `toolkit work edit <id> --section \"Open Questions\" --set-file <file>`\n   Then, for an approval or an answer: one history note in the owner's words, and `waiting_on` set to `agent` when the agent continues (the approve command sets it to `none` by itself), unless another question for him on that item is still open.\n   `toolkit work history <id> --note \"Owner's words: <quote>\"`\n   `toolkit work set <id> --waiting-on agent`\n   A deli
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/skills/work-check/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/references/conventions.md
+   toolkit work decisions; toolkit work show WI-001 --path; toolkit work show WI-002 --path; rg --files .claude/worktrees/wi-002-tier-access-layout .claude/worktrees/wi-001-account-tier | rg 'TEST-PLAN|test-plan|Account|package.xml'
+   toolkit work show WI-001 --section 'Open Questions'; toolkit work show WI-001 --section Requirements; git log --oneline -10
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+{"i":0,"status":"fulfilled","value":"---\nname: work-check\ndescription: 'Checks a finished build against every requirement with an independent checker agent, fixes what fails, then shows the owner the result to approve. Use when the owner asks \"is it ready\", \"does it work\", \"test it\", or \"check it against what I asked for\", or when a build''s last task is done.'\n---\n\n# Work check\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nShared rules: the work plugin's `references/conventions.md` and `references/helpers.md` (how to brief agents), two folders above this skill's folder (`../../references/`). To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`.\n\n## Steps\n\n1. Read the requirements, the acceptance list, and the tasks, then set the testing stage. When the show output's \"Design:\" value is not `none`, also read the design's Acceptance checks (in \"Build and verification plan\") and the selected option's \"How to check it\" column (the design command exits 1 for an item with no design).\n   `toolkit work show <id>`\n   `toolkit work design <id>`\n   `toolkit work set <id> --stage 09-testing`\n2. Run the project's tests and every acceptance check the item lists. A check with several scenarios or manual steps gets a test plan: a copy of `tests/TEST-PLAN-TEMPLATE.md` named for the item, with the results filled in. A check that could not run is reported as not run, never as passed.\n3. Brief the `acceptance-checker` agent (never the agent that built it): one verdict per requirement (met, partly met, not met) with evidence, plus defects seen in the diff. Give it the branch and commit to check.\n4. Failures: set the bug-fixing stage; a `builder` agent (or the main agent) fixes; the checker checks again. Repeat until clean, or until a failure needs an owner decision (an Open Questions row and the item waiting on the owner).\n   `toolkit work set <id> --stage 10-bug-fixing`\n5. Record the result: what was checked, the evidence, the known gaps.\n   `toolkit work history <id> --note \"Checked: <what>; evidence: <where>; gaps: <gaps or none>\"`\n6. Set the approval stage and wait on the owner. Show him what it does now, how to see it (a link, a command, or a screenshot), the evidence, and the gaps. Ask one line: \"Do you approve this result?\"\n   `toolkit work set <id> --stage 11-user-approval --waiting-on owner`\n7. Yes: record it (the command adds its own history row), quote his words in one note, and hand the item back to the agent unless another question for him is still open; then open `work-finish`. A requirement change goes to `work-requirements`; a fix becomes a task and continues here.\n   `toolkit work approve <id> --result --by <owner>`\n   `toolkit work history <id> --note \"Owner's words: <quote>\"`\n   `toolkit wor
+
+[CALL exec] cat tests/WI-001-account-tier-test-plan.md
+   git status --short --branch
+   cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.1/skills/memory-save/SKILL.md; cat .memory/memory-criteria.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{"i":0,"status":"fulfilled","value":"# Account Tier sandbox test plan\n\n## Scope\n\nWI-001 R-01 through R-03 and WI-002 delivery of R-02 and R-03.\n\n## Environment and data\n\nSandbox `tkv2-sbx`. Mike reported successful WI-001 and WI-002 deploys and field access settings on the Sales Manager, System Administrator, Sales User, and Read Only profiles on 2026-09-27. He authorized one sandbox test Account for the blank, value, and clear checks. The Codex org guard blocked the create command before execution, so no Account record was changed by Codex.\n\n## Checks\n\n| Scenario | Expected result | Method or test | Evidence |\n| --- | --- | --- | --- |\n| Field definition | Gold, Silver, Bronze in order; optional; no default; approved description and help text | Read field source and sandbox Account describe | Source and describe checked 2026-09-27; description checked in source; help text checked in both |\n| New Account with Tier blank | Save succeeds and Tier remains blank | Create and reload a sandbox Account as an allowed editor | Not run. Mike authorized the check on 2026-09-27; the Codex org guard blocked the create command before execution. |\n| Each value and clearing | Allowed editor can save Gold, Silver, Bronze, then blank | Edit and reload a sandbox Account after each save | Not run. The sandbox test Account was not created. |\n| Sales Manager and administrator | Both can edit and clear Tier on an Account they can edit | Check with a user in each profile | Mike reported both users can edit and clear Tier on 2026-09-27. |\n| Sales User | Tier is visible and cannot be edited | Open an Account as Sales User | Mike reported seeing Tier and being unable to edit it on 2026-09-27 |\n| Read Only and other viewers | Tier is visible and cannot be edited; additive permissions grant no edit access | Check effective access and Account page with each viewer profile | Mike reported the Read Only user can see Tier but cannot edit it on 2026-09-27. Earlier, he reported the Sales User can see Tier but cannot edit it. A sandbox FieldPermissions query returned edit=true for Sales Manager and System Administrator and edit=false for Sales User and Read Only; PermissionSetAssignment returned no records. |\n| Account record access | A user without Account record access still cannot open that Account | Check with a user lacking access | Mike reported the user could not open the Account on 2026-09-27. |\n| Main Account page layout | Tier appears on the main layout | Inspect layout source and view as Sales User | Source contains Tier once below Rating; Mike reported seeing it as Sales User on 2026-09-27 |\n\n## Results and follow-up\n\n- Date and testers: 2026-09-27, Mike for sandbox deploy, profile setup, and effective-user checks; Codex for source, sandbox describe, and attempted sandbox Account creation.\n- Outcome: R-02 and R-03 supported by Mike's user checks, the layout source, and read-only field permission a
+
+[CALL exec] toolkit work approve WI-002 --result --by Mike
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Recorded: result of WI-002 approved (2026-09-27 by Mike).
+It is no longer waiting on the owner (waiting_on: none).
+Now 11 User approval (In Progress). Continue with work-finish.
+
+
+[CALL exec] toolkit work history WI-002 --note "Owner's words: And I approve the WI-002 result."
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Added a Recent History row to WI-002.
+
+
+[CALL exec] toolkit work set WI-002 --waiting-on agent
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Updated WI-002: waiting on agent.
+Now 11 User approval (In Progress). Continue with work-finish.
+
+
+[AGENT] WI-002 result approval is recorded. I’m updating WI-001’s check record with the save and reload results you reported, then I’ll review whether its acceptance checks are complete.
+
+[CALL exec] mktemp -d
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+/var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.uBhX6IEvmc
+
+
+[PATCH] files=['/var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.uBhX6IEvmc/open-questions.md\\n+## Open Questions\\n+\\n+| ID | Question | Affects | Status | Decision needed from |\\n+|---|---|---|---|---|\\n+| Q-01 | Which values should the Account Tier picklist offer, in ranking order? | R-01 | Answered 2026-09-27: Gold, Silver, Bronze, in that order. | owner |\\n+| Q-02 | Must every Account have a Tier, or can Tier be blank? | R-01 | Answered 2026-09-27: Optional; Tier can be blank. | owner |\\n+| Q-03 | Do you approve Option A in the proposed design: Account.Tier__c with the proposed description and help text, placement on the verified main Account layout, and field access editable only for Sales Manager profile users and system administrators? | Design for R-01 through R-03 | Answered 2026-09-27: Mike chose Option A and confirmed the field text; access and page layout are a sub-item. | owner |\\n+| Q-04 | Will you authorize creating one sandbox test Account, saving Gold, Silver, Bronze, clearing Tier, and deleting that test Account to complete R-01? | R-01 live acceptance check | Answered 2026-09-27: Mike authorized one sandbox test Account, saving each value, clearing Tier, and deleting the Account. | owner |\\n+| Q-05 | Can you run the WI-001 sandbox Account blank, Gold, Silver, Bronze, clear, reload, and delete checks and report each result? Codex org guard blocked Account creation before execution. | R-01 live acceptance check | Answered 2026-09-27: Mike reported a new test Account with Tier blank; Gold, Silver, and Bronze each saved and remained after reload; clearing Tier to blank worked; he deleted the test Account. | owner |\\n*** End Patch"));']
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{}
+
+[CALL exec] toolkit work edit WI-001 --section "Open Questions" --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.uBhX6IEvmc/open-questions.md
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Open Questions" in WI-001.
+
+
+[CALL exec] toolkit work history WI-001 --note "Owner's words: I ran the check in the sandbox: the new test Account had Tier blank; Gold, Silver, and Bronze each saved and stayed after a reload; clearing Tier back to blank worked; then I deleted the test Account."
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Added a Recent History row to WI-001.
+
+
+[CALL exec] toolkit work set WI-001 --waiting-on agent
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Updated WI-001: waiting on agent.
+Now 09 Testing (In Progress). Continue with work-check.
+
+
+[PATCH] files=['.claude/worktrees/wi-002-tier-access-layout/tests/WI-001-account-tier-test-plan.md\\n@@\\n-Sandbox `tkv2-sbx`. Mike reported successful WI-001 and WI-002 deploys and field access settings on the Sales Manager, System Administrator, Sales User, and Read Only profiles on 2026-09-27. He authorized one sandbox test Account for the blank, value, and clear checks. The Codex org guard blocked the create command before execution, so no Account record was changed by Codex.\\n+Sandbox `tkv2-sbx`. Mike reported successful WI-001 and WI-002 deploys and field access settings on the Sales Manager, System Administrator, Sales User, and Read Only profiles on 2026-09-27. He ran the blank, value, clear, reload, and delete checks with one test Account. The Codex org guard blocked Codex\'s create command before execution; Codex made no Account record change.\\n@@\\n-| New Account with Tier blank | Save succeeds and Tier remains blank | Create and reload a sandbox Account as an allowed editor | Not run. Mike authorized the check on 2026-09-27; the Codex org guard blocked the create command before execution. |\\n-| Each value and clearing | Allowed editor can save Gold, Silver, Bronze, then blank | Edit and reload a sandbox Account after each save | Not run. The sandbox test Account was not created. |\\n+| New Account with Tier blank | Save succeeds and Tier remains blank | Create and reload a sandbox Account as an allowed editor | Mike reported the new test Account had Tier blank on 2026-09-27. |\\n+| Each value and clearing | Allowed editor can save Gold, Silver, Bronze, then blank | Edit and reload a sandbox Account after each save | Mike reported Gold, Silver, and Bronze each saved and remained after reload; clearing Tier back to blank worked. He then deleted the test Account on 2026-09-27. |\\n@@\\n-- Date and testers: 2026-09-27, Mike for sandbox deploy, profile setup, and effective-user checks; Codex for source, sandbox describe, and attempted sandbox Account creation.\\n-- Outcome: R-02 and R-03 supported by Mike\'s user checks, the layout source, and read-only field permission and assignment queries. R-01 still lacks the blank and value-save checks.\\n-- Remaining issues: The Codex org guard blocked sandbox Account creation before execution despite Mike\'s authorization. Complete blank, Gold, Silver, Bronze, clear, reload, and deletion checks.\\n+- Date and testers: 2026-09-27, Mike for sandbox deploy, profile setup, effective-user checks, and the test Account save and reload checks; Codex for source, sandbox describe, and read-only field permission and assignment queries.\\n+- Outcome: R-01 through R-03 supported by Mike\'s sandbox checks, field and layout source, sandbox describe, and read-only field permission and assignment queries. Mike deleted the test Account after the checks.\\n+- Remaining issues: None in the acceptance checks. Codex did not independently observe the test Account saves.\\n*** End Patch"));']
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{}
+
+[CALL exec] toolkit work show WI-001 --section Overview
+   toolkit work show WI-001 --section Tasks
+   toolkit work show WI-001 --section Roadmap
+   toolkit work show WI-002 --section Overview
+   toolkit work design WI-001
+   cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/agents/acceptance-checker.md
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+{"i":0,"status":"fulfilled","value":"## Overview\n\n**Goal:** Let the sales team rank accounts using an Account Tier picklist.\n\n**Current position:** Mike reported successful WI-001 and WI-002 sandbox deploys and confirmed effective Tier access for Sales Manager, System Administrator, Sales User, and Read Only users, plus Account record access. Sandbox field describe confirms Tier is optional, has no default, and offers Gold, Silver, Bronze in order. Field source contains the approved description and help text. The remaining R-01 live save check could not run because the Codex org guard blocked Account creation before execution, despite Mike's authorization.\n\n**Next action:** Mike runs the sandbox Account check: create with blank Tier, reload, save and reload Gold, Silver, Bronze, clear and reload, then delete the test Account. Record the results before asking for WI-001 result approval.\n\n**Blockers:** The Codex org guard blocks sandbox data writes in this session and directs the owner to run the command. No test Account was created.\n\n**Related items:** WI-002 delivers R-02 and R-03.\n"}
+{"i":1,"status":"fulfilled","value":"## Tasks\n\n### P1 — Account Tier field\n\n- [x] **P1-T01 — Verify field target** · Done  \n  **Work:** Recheck sandbox Account metadata for Tier__c and confirm source API version.  \n  **Deliverable:** Field target evidence in WI-001.  \n  **Done when:** API name and version are verified before source is written.  \n  **Depends on:** None.\n- [x] **P1-T02 — Build Tier field source** · Done  \n  **Work:** Add optional Account.Tier__c with Gold, Silver, Bronze in order, no default, and approved description and help text. Update the component tracker and WI-001 manifest.  \n  **Deliverable:** Field metadata and narrow deployment package.  \n  **Done when:** Source and package are reviewed against R-01.  \n  **Depends on:** P1-T01.\n- [ ] **P1-T03 — Check Tier field** · Not Started  \n  **Work:** Validate in the sandbox, then check blank, values, order, description, and help text through an authorized sandbox change.  \n  **Deliverable:** R-01 evidence for owner review.  \n  **Done when:** The R-01 acceptance check is recorded.  \n  **Depends on:** P1-T02 and separate sandbox deployment approval.\n\n### P2 — Access and page layout\n\n- [ ] **P2-T01 — Complete WI-002** · Not Started  \n  **Work:** Deliver the field access and main Account page layout through WI-002.  \n  **Deliverable:** WI-002 result and R-02/R-03 evidence.  \n  **Done when:** WI-002's result has been reviewed and R-02 and R-03 checks are recorded.  \n  **Depends on:** P1-T02.\n"}
+{"i":2,"status":"fulfilled","value":"## Roadmap\n\nA phase is complete when its tasks are complete and its exit result has been checked.\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 — Account Tier field | Optional Account.Tier__c has Gold, Silver, Bronze, description, and help text. | Not S
+
+[PATCH] files=['/var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.uBhX6IEvmc/overview-001.md\\n+## Overview\\n+\\n+**Goal:** Let the sales team rank accounts using an Account Tier picklist.\\n+\\n+**Current position:** Mike reported successful WI-001 and WI-002 sandbox deploys. He checked a new test Account with Tier blank, saved and reloaded Gold, Silver, and Bronze, cleared Tier to blank, and deleted the test Account. Sandbox field describe confirms Tier is optional, has no default, and offers Gold, Silver, Bronze in order. Field source contains the approved description and help text. Mike confirmed effective Tier access for Sales Manager, System Administrator, Sales User, and Read Only users, plus Account record access. WI-002\'s result is approved.\\n+\\n+**Next action:** Finish the R-01 through R-03 acceptance review and present WI-001\'s result to Mike for approval.\\n+\\n+**Blockers:** None for the acceptance checks.\\n+\\n+**Related items:** WI-002 delivers R-02 and R-03; its result was approved by Mike on 2026-09-27.\\n*** Add File: /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.uBhX6IEvmc/overview-002.md\\n+## Overview\\n+\\n+**Goal:** Configure Account Tier field access and show Tier on the main Account page layout.\\n+\\n+**Current position:** Mike approved the WI-002 result on 2026-09-27. He reported successful WI-001 and WI-002 sandbox deploys and confirmed Tier behavior for Sales Manager, System Administrator, Sales User, and Read Only users. He also confirmed that a user without Account record access cannot open that Account. A sandbox FieldPermissions query shows edit access for Sales Manager and System Administrator and read-only access for Sales User and Read Only; PermissionSetAssignment returned no records. The main Account layout source includes Tier, and Mike saw it as Sales User.\\n+\\n+**Next action:** Continue WI-002 through the work-finish steps. The local WI-002 branch has no configured origin remote, so repository publication needs a remote.\\n+\\n+**Blockers:** No origin remote is configured in this copy of the repository.\\n+\\n+**Related items:** Parent WI-001 owns R-02 and R-03 requirements, the approved design, and the Tier field. Mike completed its R-01 live value-save check on 2026-09-27.\\n*** Add File: /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.uBhX6IEvmc/roadmap-001.md\\n+## Roadmap\\n+\\n+A phase is complete when its tasks are complete and its exit result has been checked.\\n+\\n+| Phase | Outcome | Status | Exit result | Sub-items |\\n+|---|---|---|---|---|\\n+| P1 — Account Tier field | Optional Account.Tier__c has Gold, Silver, Bronze, description, and help text. | Done | Field source and sandbox checks meet R-01. | None |\\n+| P2 — Access and page layout | Approved users can edit Tier; other Account viewers can read it; Tier appears on the main Account layout. | Done | WI-002 meets R-02 and R-03 and Mike approved its result. | WI-002 |\\n*** Add File: /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.uBhX6IEvmc/tasks-001.md\\n+## Tasks\\n+\\n+### P1 — Account Tier field\\n+\\n+- [x] **P1-T01 — Verify field target** · Done  \\n+  **Work:** Recheck sandbox Account metadata for Tier__c and confirm source API version.  \\n+  **Deliverable:** Field target evidence in WI-001.  \\n+  **Done when:** API name and version are verified before source is written.  \\n+  **Depends on:** None.\\n+- [x] **P1-T02 — Build Tier field source** · Done  \\n+  **Work:** Add optional Account.Tier__c with Gold, Silver, Bronze in order, no default, and approved description and help text. Update the component tracker and WI-001 manifest.  \\n+  **Deliverable:** Field metadata and narrow deployment package.  \\n+  **Done when:** Source and package are reviewed against R-01.  \\n+  **Depends on:** P1-T01.\\n+- [x] **P1-T03 — Check Tier field** · Done  \\n+  **Work:** Validate in the sandbox, then check blank, values, order, description, and help text through an authorized sandbox change.  \\n+  **Deliverable:** R-01 evidence for owner review.  \\n+  **Done when:** The R-01 acceptance check is recorded.  \\n+  **Depends on:** P1-T02 and separate sandbox deployment approval.\\n+\\n+### P2 — Access and page layout\\n+\\n+- [x] **P2-T01 — Complete WI-002** · Done  \\n+  **Work:** Deliver the field access and main Account page layout through WI-002.  \\n+  **Deliverable:** WI-002 result and R-02/R-03 evidence.  \\n+  **Done when:** WI-002\'s result has been reviewed and R-02 and R-03 checks are recorded.  \\n+  **Depends on:** P1-T02.\\n*** End Patch"));']
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{}
+
+[CALL exec] toolkit work edit WI-001 --section Overview --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.uBhX6IEvmc/overview-001.md
+   toolkit work edit WI-001 --section Roadmap --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.uBhX6IEvmc/roadmap-001.md
+   toolkit work edit WI-001 --section Tasks --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.uBhX6IEvmc/tasks-001.md
+   toolkit work edit WI-002 --section Overview --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.uBhX6IEvmc/overview-002.md
+  -> Script completed
+Wall time 1.1 seconds
+Output:
+
+Saved "Overview" in WI-001.
+
+Saved "Roadmap" in WI-001.
+
+Saved "Tasks" in WI-001.
+
+Saved "Overview" in WI-002.
+
+
+[AGENT] The WI-001 test plan now includes your reported results, and the tracker shows its checks complete. I’ll commit that evidence update on the WI-002 branch and run the final acceptance review.
+
+[CALL exec] git add tests/WI-001-account-tier-test-plan.md
+  -> Script completed
+Wall time 4.3 seconds
+Output:
+
+{"chunk_id":"da382c","wall_time_seconds":0.000002667,"exit_code":0,"original_token_count":0,"output":""}
+
+[CALL exec] git diff --cached -- tests/WI-001-account-tier-test-plan.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+diff --git a/tests/WI-001-account-tier-test-plan.md b/tests/WI-001-account-tier-test-plan.md
+index ab2a0fa..3839948 100644
+--- a/tests/WI-001-account-tier-test-plan.md
++++ b/tests/WI-001-account-tier-test-plan.md
+@@ -6,15 +6,15 @@ WI-001 R-01 through R-03 and WI-002 delivery of R-02 and R-03.
+ 
+ ## Environment and data
+ 
+-Sandbox `tkv2-sbx`. Mike reported successful WI-001 and WI-002 deploys and field access settings on the Sales Manager, System Administrator, Sales User, and Read Only profiles on 2026-09-27. He authorized one sandbox test Account for the blank, value, and clear checks. The Codex org guard blocked the create command before execution, so no Account record was changed by Codex.
++Sandbox `tkv2-sbx`. Mike reported successful WI-001 and WI-002 deploys and field access settings on the Sales Manager, System Administrator, Sales User, and Read Only profiles on 2026-09-27. He ran the blank, value, clear, reload, and delete checks with one test Account. The Codex org guard blocked Codex's create command before execution; Codex made no Account record change.
+ 
+ ## Checks
+ 
+ | Scenario | Expected result | Method or test | Evidence |
+ | --- | --- | --- | --- |
+ | Field definition | Gold, Silver, Bronze in order; optional; no default; approved description and help text | Read field source and sandbox Account describe | Source and describe checked 2026-09-27; description checked in source; help text checked in both |
+-| New Account with Tier blank | Save succeeds and Tier remains blank | Create and reload a sandbox Account as an allowed editor | Not run. Mike authorized the check on 2026-09-27; the Codex org guard blocked the create command before execution. |
+-| Each value and clearing | Allowed editor can save Gold, Silver, Bronze, then blank | Edit and reload a sandbox Account after each save | Not run. The sandbox test Account was not created. |
++| New Account with Tier blank | Save succeeds and Tier remains blank | Create and reload a sandbox Account as an allowed editor | Mike reported the new test Account had Tier blank on 2026-09-27. |
++| Each value and clearing | Allowed editor can save Gold, Silver, Bronze, then blank | Edit and reload a sandbox Account after each save | Mike reported Gold, Silver, and Bronze each saved and remained after reload; clearing Tier back to blank worked. He then deleted the test Account on 2026-09-27. |
+ | Sales Manager and administrator | Both can edit and clear Tier on an Account they can edit | Check with a user in each profile | Mike reported both users can edit and clear Tier on 2026-09-27. |
+ | Sales User | Tier is visible and cannot be edited | Open an Account as Sales User | Mike reported seeing Tier and being unable to edit it on 2026-09-27 |
+ | Read Only and other viewers | Tier is visible and cannot be edited; additive permissions grant no edit access | Check effective access and Account page with each viewer profile | Mike reported the Read Only us
+
+[CALL exec] git commit -m 'Record completed Account Tier sandbox checks'
+  -> Script completed
+Wall time 4.2 seconds
+Output:
+
+{"chunk_id":"367854","wall_time_seconds":0.000002667,"exit_code":0,"original_token_count":35,"output":"[claude/wi-002-tier-access-layout 72f5b9c] Record completed Account Tier sandbox checks\n 1 file changed, 6 insertions(+), 6 deletions(-)\n"}
+
+[CALL spawn_agent] {"task_name":"wi001_acceptance","fork_turns":"none","message":"gAAAAABquV1fmyAtjLBfbtWWrTpWIBNA0Jvsz9NTqtOv9Q8DWmKPWBndF4q1avf4CfowXkuGAC2a50rgDKYqv7g6fbQpxo57uE-AFXIHzgAeh0CdGCyYV8WvsxHaMqQRvYktfn0cJ3kfmeqF80cDdU1UBNMeRHsllV8PVnM3azhrd8Ug52K5AfJ7rPUY4_Se_8ZIC2m0P104uZHMfwGRMPV7WJuOUAVVghiIUs0druaUXa7GX3YTHb-ygPyLI2o9yFujkmiGbDZvSHsZznA4XWrX_hg9IuWH1fVOmVoBooUoqorExCf61JooxkEHBIzfBD4BGreFJZM698NSheA69amKawdobeHRUReandcC6SjTMf-Tcwf4u2Th-0lUnjx2hmp4DCagpChPsWV1i6chvsKSLwUdrj6iHr2nuRnMsc_QsYolaf4IJX7AY7Nb7Uft5vNQSCTTCH_yunXMnwyo0N0AHvbF3uOuEFzvupW3Rohu9UZYdzabL4LI05XRXoU-5ZZxWrWjwk_f7waTARSZIU2YYczoSOY9zpY7QgOX75qvFVukHbqOxMYShnhxePfQ8Z9Ii4576A-9jEt4YSynubQKwuI7AQw6Q4vFRFEdcl3Esi0IAd34s99QzMTZRfecxIbEIXiXUavZRBtNFDfgVxCQvWSHQOpmkE8Cfenists53lk9ImsN2KgL4VZZ3R837ds7C3sME82qPUw6F-2WFnGHTeyUfg9EqqqTl5TWA0Ku8zIdhNDfl9ckpUbOhG6H_rtvNEgpieXy_eCqx8HKlbguikE2AdsDPr6vLtHkJnY2py6CzwAk0QRcayTWTIhln-7_58dQB3fQRuKUvAUEh7yySjm6_DtI5KPk1O-urk7XcnejT7z57HZJDMfOERbbe0YtH5mbNBemhY9z40jbx7RP144AtPrrDNfBieYJVb42xK5lZXRYEDUy3J_MZcgIfDWtGsrtseUmvPjPYg9L4RSIGCg8JObm9Qp4eXW0Fi5nP-evCoqstycgOnAMVlDeQa-kkNXswGi7diYSu5ObL-E4aPK3vGy9fD7H0xCqItUIEUDBH-N6otYFLVhEZCYnKTgNy8FShhpN8eqSUxA0vLaYbMZm_yEomRf4JOgk1AmIf2v3KhhOzwuOnmUyzT6jy7Tsg4kZHKZP8iljE75pULJmxd8heTWeqK3gViSL2fRTrIBQST8Zu3mD0Ky1MtAF8DXduhKtKxd2jaDn03BEGEykpOdkkC0_m3zbxsKp22wJnLYDHWqt_eya-FV65Pk4H_QsMgYV14UbyAx8wLrIY2f_eUzTJu5fAnp0tRA051uRODkX-L7yfyF-m4XS1QNSxBxxwOlr4l5Cdd2_YGqdswFg9L-ClvTeKmhhhi6RJ1QZN-d0YF2jmuC30y6AT-HOEENGBvncSDqQ1S5bwGkM7gvCIsrxf
+  -> {"task_name":"/root/wi001_acceptance"}
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/skills/work-finish/SKILL.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+---
+name: work-finish
+description: 'Ships and closes a work item after the owner approves the result: pull request, merge, deployment, requirements baseline update, and Done; or cancels it with a reason. Use when the owner says "ship it", "deploy it", "close it out", "mark it done", "cancel it", or "drop it".'
+---
+
+# Work finish
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Shared rules: the work plugin's `references/conventions.md`, two folders above this skill's folder (`../../references/conventions.md`). Detail: this skill's `references/closing.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`.
+
+## Steps
+
+1. Check that the result approval is recorded. Not recorded: show the result, the gaps, and the evidence, and ask. "Ship it" or "mark it done" from the owner after he has seen the result counts as the approval; record it with his words. Each sub-item needs its own result approval: the owner's approval of the parent does not cover it.
+   `toolkit work show <id>`
+   `toolkit work approve <id> --result --by <owner>`
+   `toolkit work history <id> --note "Owner's words: <quote>"`
+2. Repository work: commit the item's files by name on its branch, push it, open the pull request (description through `unslop`, no AI credit), and set the pull request stage. Merge through `merge-and-clean-up` when the owner approves the merge, or when `DECISIONS.md` records a standing merge instruction and the `acceptance-checker` agent found no blocking issue on that exact head. With no remote, a local merge (`git merge --ff-only <branch>` in the main checkout) follows the same approval. In Codex, `git add`, `git commit`, `git merge`, `git push`, `git worktree remove`, and `git branch -d` need the owner's approval, because the sandbox keeps `.git/` read-only: say in one line what each does before Codex asks.
+   `toolkit work set <id> --stage 12-pr-and-push`
+3. Deployment, when the item needs one: set the deployment stage. Salesforce: `sf-component-tracker` current and the item's folder in `delivery/deployment/` complete, then `sf-deploy-check`, then validate against the sandbox. Production deploys and production data loads are handed to the owner to run (`sf-data-change`).
+   `toolkit work set <id> --stage 13-deployment`
+4. Requirements baseline: set the spec update stage; read `requirements/AGENTS.md`; copy only delivered and approved behavior into the area's file in `requirements/` (a new area starts from `requirements/system-area-template/`); update the area's file in `system-guide/` when the verified structure changed; save both with `publish-docs`.
+   `toolkit work set <id> --stage 14-spec-update`
+5. Sub-items: list the open ones. Each is finished or cancelled on its own (with its own approval or reason), or moved when the owner asks (`work-organi
+
+[CALL exec] toolkit memory focus
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+# Current focus
+
+Last updated: 2026-09-27, WI-001 and WI-002 sandbox acceptance check, Codex
+
+## Now
+
+- WI-001: Sandbox describe and field source support the optional Gold, Silver, Bronze definition. Live blank/value/clear saves remain untested; the Codex org guard blocked Account creation before execution despite Mike's authorization. See WI-001 and the WI-001 test plan on the WI-002 branch.
+- WI-002: Mike confirmed editor, viewer, and Account record-access behavior. Sandbox FieldPermissions and PermissionSetAssignment queries support the access matrix. Independent checker found R-02 and R-03 met. Evidence update is committed as 53de9f7 on the WI-002 branch.
+
+## Waiting on the owner
+
+- WI-001: Run one sandbox test Account through blank, Gold, Silver, Bronze, clear, reload, and delete; report each result.
+- WI-002: Review the access and layout result for approval.
+- Trust this project folder in Codex when prompted, then open `/hooks` and trust the Toolkit V2 hooks and two Salesforce org guards.
+
+## Untracked to-dos
+
+- None.
+
+## Next session starts with
+
+- Open WI-001 and WI-002. Record Mike's sandbox Account check in the WI-001 test plan. Ask for WI-002 result approval; ask for WI-001 result approval only after R-01 live saves pass. No remote named origin is configured in this copy, so local branch commits cannot be pushed here.
+
+
+[CALL exec] toolkit work validate WI-001
+   toolkit work validate WI-002
+   toolkit work decisions
+  -> Script completed
+Wall time 0.7 seconds
+Output:
+
+Checked 1 item: 1 clean, 0 errors, 0 questions for the owner.
+
+Checked 1 item: 0 clean, 0 errors, 0 questions for the owner.
+WI-002 (.work-items/account-tier/WI-001-add-account-tier-picklist/WI-002-tier-access-and-layout/WORK-ITEM.md):
+  Warning: The template's fill-in guide comment is still at the top of the body. It says to delete it once the item is filled; remove it with toolkit work edit, or it goes when the requirements are approved or the item is finished.
+
+Nothing is waiting on the owner.
+
+
+[CALL wait_agent] {"timeout_ms":10000}
+  -> {"message":"Wait timed out.","timed_out":true}
+
+[PATCH] files=['/var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.uBhX6IEvmc/focus.md\\n+# Current focus\\n+\\n+Last updated: 2026-09-27, WI-001 acceptance and WI-002 result approval, Codex\\n+\\n+## Now\\n+\\n+- WI-001: Mike reported a sandbox test Account started with Tier blank; Gold, Silver, and Bronze saved and remained after reload; clearing Tier to blank worked; he deleted the Account. The test plan on the WI-002 branch records his results. Field source and sandbox describe support the field definition. R-02 and R-03 checks remain recorded in the same test plan.\\n+- WI-002: Mike approved the result. The WI-002 branch has the updated test plan at commit 72f5b9c. No origin remote is configured, so branch commits cannot be pushed from this copy.\\n+\\n+## Waiting on the owner\\n+\\n+- WI-001: Review and approve the overall Account Tier result after the final acceptance review.\\n+- Trust this project folder in Codex when prompted, then open `/hooks` and trust the Toolkit V2 hooks and two Salesforce org guards.\\n+\\n+## Untracked to-dos\\n+\\n+- None.\\n+\\n+## Next session starts with\\n+\\n+- Open WI-001 and WI-002. Check the independent WI-001 acceptance review and request WI-001 result approval. WI-002 result approval is recorded. Both branches still need publication and merge authorization; this copy has no origin remote.\\n*** End Patch"));']
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{}
+
+[CALL wait_agent] {"timeout_ms":20000}
+  -> {"message":"Wait timed out.","timed_out":true}
+
+[AGENT] The tracker now shows no unanswered acceptance questions. The final review is checking the field and layout evidence against R-01 through R-03; after that, I’ll put WI-001 at the result approval step.
+
+[CALL wait_agent] {"timeout_ms":20000}
+  -> {"message":"Wait completed.","timed_out":false}
+
+[CALL exec] toolkit work history WI-001 --note "Checked: R-01 through R-03 against field and layout source, manifests, sandbox describe and field access evidence, and Mike's sandbox UI reports; independent checker found all requirements met on available evidence, with no material metadata defect. Mike's live Account operations were not independently observed. Evidence: WI-001 test plan on WI-002 branch at 72f5b9c, WI-001 field branch at bd1ef75."
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Added a Recent History row to WI-001.
+
+
+[CALL exec] toolkit work set WI-001 --stage 11-user-approval --waiting-on owner
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Updated WI-001: stage 09 Testing -> 11 User approval (status In Progress); waiting on owner.
+Now 11 User approval (In Progress). Continue with work-decide.
+
+
+[CALL exec] toolkit memory focus --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.uBhX6IEvmc/focus.md
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved the current focus (21 lines). Version: 6d1c673fac31
+
+
+[CALL exec] toolkit work decisions
+   toolkit memory focus
+   toolkit doctor
+   git status --short --branch
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+{"i":0,"status":"fulfilled","value":"1 decision waits on the owner:\n\nWI-001 Add Account Tier picklist\n  - WI-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-001 --result --by <name>. (work-decide)\n"}
+{"i":1,"status":"fulfilled","value":"# Current focus\n\nLast updated: 2026-09-27, WI-001 acceptance and WI-002 result approval, Codex\n\n## Now\n\n- WI-001: Mike reported a sandbox test Account started with Tier blank; Gold, Silver, and Bronze saved and remained after reload; clearing Tier to blank worked; he deleted the Account. The test plan on the WI-002 branch records his results. Field source and sandbox describe support the field definition. R-02 and R-03 checks remain recorded in the same test plan.\n- WI-002: Mike approved the result. The WI-002 branch has the updated test plan at commit 72f5b9c. No origin remote is configured, so branch commits cannot be pushed from this copy.\n\n## Waiting on the owner\n\n- WI-001: Review and approve the overall Account Tier result after the final acceptance review.\n- Trust this project folder in Codex when prompted, then open `/hooks` and trust the Toolkit V2 hooks and two Salesforce org guards.\n\n## Untracked to-dos\n\n- None.\n\n## Next session starts with\n\n- Open WI-001 and WI-002. Check the independent WI-001 acceptance review and request WI-001 result approval. WI-002 result approval is recorded. Both branches still need publication and merge authorization; this copy has no origin remote.\n"}
+{"i":2,"status":"fulfilled","value":"Toolkit doctor for Acme CRM (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2).\n\nWarnings (3):\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.\n   Fix: The owner opens Codex in this folder and trusts it when Codex asks.\n2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).\n   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\n3. The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them.\n   Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.\n\nNotes (6):\n- AGENTS.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.\n- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.\n- PROJECT.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.\n- README.md was changed by the project, so sync leaves i
+
+[CALL exec] rm /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.uBhX6IEvmc/open-questions.md /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.uBhX6IEvmc/overview-001.md /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.uBhX6IEvmc/overview-002.md /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.uBhX6IEvmc/roadmap-001.md /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.uBhX6IEvmc/tasks-001.md /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.uBhX6IEvmc/focus.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+
+
+[CALL exec] rmdir /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.uBhX6IEvmc
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+
+
+[AGENT] WI-002’s result approval is recorded. I also recorded your WI-001 sandbox checks: the test Account started with Tier blank, Gold, Silver, and Bronze each persisted after reload, clearing Tier worked, and you deleted the Account.
+
+An independent review found R-01 through R-03 met on the available evidence. The live Account checks are based on your report. The results are in the [test plan](</private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/.claude/worktrees/wi-002-tier-access-layout/tests/WI-001-account-tier-test-plan.md>). **I recommend approving WI-001’s result. Do you approve it?**
+
+Both changes remain on local branches; this repository copy has no configured remote for publication.
+
+SKILLS OPENED (SKILL.md read): ['work-decide', 'work-on', 'work-check', 'memory-save', 'work-finish']
+
+TOOLKIT COMMANDS:
+   toolkit work show WI-001
+   toolkit work show WI-002
+   toolkit work lifecycle
+   toolkit work decisions
+   toolkit work show WI-001 --path
+   toolkit work show WI-002 --path
+   toolkit work show WI-001 --section 'Open Questions'
+   toolkit work show WI-001 --section Requirements
+   toolkit work approve WI-002 --result --by Mike
+   toolkit work history WI-002 --note "Owner's words: And I approve the WI-002 result."
+   toolkit work set WI-002 --waiting-on agent
+   toolkit work edit WI-001 --section "Open Questions" --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.uBhX6IEvmc/open-questions.md
+   toolkit work history WI-001 --note "Owner's words: I ran the check in the sandbox: the new test Account had Tier blank
+   toolkit work set WI-001 --waiting-on agent
+   toolkit work show WI-001 --section Overview
+   toolkit work show WI-001 --section Tasks
+   toolkit work show WI-001 --section Roadmap
+   toolkit work show WI-002 --section Overview
+   toolkit work design WI-001
+   toolkit work edit WI-001 --section Overview --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.uBhX6IEvmc/overview-001.md
+   toolkit work edit WI-001 --section Roadmap --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.uBhX6IEvmc/roadmap-001.md
+   toolkit work edit WI-001 --section Tasks --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.uBhX6IEvmc/tasks-001.md
+   toolkit work edit WI-002 --section Overview --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.uBhX6IEvmc/overview-002.md
+   toolkit memory focus
+   toolkit work validate WI-001
+   toolkit work validate WI-002
+   toolkit work decisions
+   toolkit work history WI-001 --note "Checked: R-01 through R-03 against field and layout source, manifests, sandbox describe and field access evidence, and Mike's sandbox UI reports
+   toolkit work set WI-001 --stage 11-user-approval --waiting-on owner
+   toolkit memory focus --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.uBhX6IEvmc/focus.md
+   toolkit work decisions
+   toolkit memory focus
+   toolkit doctor

@@ -1,0 +1,3 @@
+$ mkdir .work-items/cli
+$ mv .work-items/WI-002-build-greet-cli-with-version .work-items/cli/
+$ mv .work-items/cli/WI-002-build-greet-cli-with-version/WI-003-add-version-flag-to-greet-cli .work-items/cli/WI-002-build-greet-cli-with-version/version-flag

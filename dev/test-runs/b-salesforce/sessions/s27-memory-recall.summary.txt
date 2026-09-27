@@ -1,0 +1,189 @@
+PROMPT: I'm about to ask for another custom field on Opportunity. Do you remember how I like new custom fields to be set up?
+THREAD: 01a0e4be-d7b2-7e30-9b9a-069967db7edb
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r3/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The tracker has no open items. A new request starts a work item with the work-on skill.
+
+Items: 2 done.
+
+Current focus:
+Last updated: 2026-09-27, Account Tier closeout, Codex
+## Now
+- None.
+## Waiting on the owner
+- Open Codex in this project, trust the project folder when prompted, then open /hooks and trust the Toolkit V2 hooks, including the two Salesforce guards.
+## Untracked to-dos
+- None.
+## Next session starts with
+- Read the project briefing and PROJECT.md. WI-001 and WI-002 are Done. Mike reported both tkv2-prod packages Succeeded, the four Tier grants set with no others, and all cutover checks passed. Delivery records, requirements, and system guide reached local main at 6aa2c47. No remote is configured. Plain sf on PATH intentionally simulates the practice orgs; its output counts as org results. Agents never deploy or validate against production.
+
+Project memory (builtin): 2 records. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_custom_field_description_help_text: Mike prefers a description and help text on every new custom field.
+- project_practice_salesforce_orgs: Acme CRM uses simulated practice Salesforce orgs through sf on PATH
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them. Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.
+
+Always-on rules. Claude Code loads them by itself; in Codex, each one is read at session start:
+- .claude/rules/check-deployment-contents.md: Check What a Deployment Includes
+- .claude/rules/component-tracker.md: Component Tracker
+- .claude/rules/confirm-salesforce-changes.md: Confirm Salesforce Changes
+- .claude/rules/humanize-outbound-text.md: Humanize Anything Sent to Another Person
+- .claude/rules/keep-work-item-current.md: Keep the Active Work Item Accurate
+- .claude/rules/memory-review-and-save.md: Review and Save Project Memory
+- .claude/rules/plain-english-artifacts.md: Write Artifacts in Plain English
+- .claude/rules/production-data-changes.md: Production Data Changes
+- .claude/rules/project-file-locations.md: Where Project Files Go
+- .claude/rules/salesforce-org-safety.md: Salesforce Org Safety
+- .claude/rules/session-handoff.md: Prepare a Session Handoff
+- .claude/rules/shared-repository-work.md: Work Safely in a Shared Repository
+- .c
+
+[AGENT] I’ll check the saved project preference so I give you the exact setup you asked for.
+
+[CALL exec] cat SOUL.md PROJECT.md .claude/rules/{check-deployment-contents,component-tracker,confirm-salesforce-changes,humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,production-data-changes,project-file-locations,salesforce-org-safety,session-handoff,shared-repository-work,work-item-folders}.md
+   cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.2/skills/memory-find/SKILL.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+cat: SOUL.md: No such file or directory
+# Acme CRM
+
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->
+
+## Purpose and intended outcome
+
+- Purpose: Salesforce customizations for Acme (from the existing `README.md`).
+- Intended outcome: Give the Acme sales team a Salesforce org that fits how they sell, starting with better account data. Confirmed by Mike on 2026-09-27.
+
+## Scope and boundaries
+
+- In scope: `<Business capabilities or systems this project owns.>`
+- Outside scope: `<Important exclusions or adjacent owners.>`
+- Constraints: `<Approved security, delivery, or operating constraints with sources.>`
+
+## Systems and environments
+
+| System or org | Purpose | Environment | Source of truth | Access notes |
+| --- | --- | --- | --- | --- |
+| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |
+
+## People and ownership
+
+| Role | Person or team | Responsibility | Source / last confirmed |
+| --- | --- | --- | --- |
+| Project owner | Mike | Makes project decisions | `.toolkit.json`, 2026-09-27 |
+
+## Work and project records
+
+- Work tracker: local `.work-items/` folders (Git-ignored).
+- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)
+- Project decisions: [DECISIONS.md](DECISIONS.md)
+- Functional requirements: [requirements/](requirements/)
+- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`
+- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`
+- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)
+- Memory backup or sync: `<Owner-approved destination and restore procedure, outside this repository>`
+
+## Resources and project paths
+
+- Salesforce source: `force-app/` (`sfdx-project.json`).
+- Project-wide deployment manifest: `delivery/deployment/full-project-deployment-template/package.xml` after the API version and members are verified. Keep it as the full project component inventory; ordinary deployments use narrower work-item packages.
+- Work-item deployment manifests: `delivery/deployment/<work-item-id>-<short-name>/package.xml` when an item changes Salesforce metadata.
+- Tests and checks: `<actual commands and locations>`
+- Outside references: `<source register or approved location>`
+
+## Operating conventions
+
+<Write only stable project-specific conventions here; link the source or governing rule. Write “None yet” if there are none.>
+# Check What a Deployment Includes
+
+A deploy ships the whole current source of every component it names, not only your edit.
+
+- Before any deploy to a
+
+[AGENT] I’m using the memory-find skill to verify the saved preference and its source.
+
+[CALL exec] toolkit memory focus
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Last updated: 2026-09-27, Account Tier closeout, Codex
+
+## Now
+
+- None.
+
+## Waiting on the owner
+
+- Open Codex in this project, trust the project folder when prompted, then open /hooks and trust the Toolkit V2 hooks, including the two Salesforce guards.
+
+## Untracked to-dos
+
+- None.
+
+## Next session starts with
+
+- Read the project briefing and PROJECT.md. WI-001 and WI-002 are Done. Mike reported both tkv2-prod packages Succeeded, the four Tier grants set with no others, and all cutover checks passed. Delivery records, requirements, and system guide reached local main at 6aa2c47. No remote is configured. Plain sf on PATH intentionally simulates the practice orgs; its output counts as org results. Agents never deploy or validate against production.
+
+
+[CALL exec] toolkit memory find "new custom field description help text"
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+1 memory record matches "new custom field description help text" (best first):
+- user_custom_field_description_help_text: Mike prefers a description and help text on every new custom field.
+    # Custom field descriptions and help text **Remember:** Mike prefers every new Salesforce custom field to have a description and help text. **Why:** Not state...
+Read a record with toolkit memory get <key> before relying on it.
+
+
+[CALL exec] toolkit memory get user_custom_field_description_help_text
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+---
+name: user_custom_field_description_help_text
+description: Mike prefers a description and help text on every new custom field.
+metadata:
+  type: user
+status: current
+source: Mike, in chat, 2026-09-27
+last_verified: 2026-09-27
+authorization: Approved by Mike on 2026-09-27
+supersedes: none
+---
+
+# Custom field descriptions and help text
+
+**Remember:** Mike prefers every new Salesforce custom field to have a description and help text.
+
+**Why:** Not stated by the owner.
+
+**How to apply:** Include a description and help text when planning or creating a new custom field in this project.
+
+**Evidence and limits:** Mike, in chat, 2026-09-27. Applies to new custom fields. No wording for individual fields was specified.
+
+**Related memories:** None.
+
+**Authoritative records:** WI-001 for the Account Tier field.
+
+
+[AGENT] Yes. You prefer **a description and help text on every new Salesforce custom field**. I’ll include both for the Opportunity field. The preference was saved from your instructions on September 27, 2026 (`user_custom_field_description_help_text`).
+
+SKILLS OPENED (SKILL.md read): ['memory-find']
+
+TOOLKIT COMMANDS:
+   toolkit memory focus
+   toolkit memory find "new custom field description help text"
+   toolkit memory get user_custom_field_description_help_text

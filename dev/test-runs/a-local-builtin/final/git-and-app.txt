@@ -1,0 +1,56 @@
+$ git log --format="%h %an <%ae> %s"
+71d46ac Mike Rihm <michael@rihm.com> Update project summary for delivered CLI
+be8468b Mike Rihm <michael@rihm.com> Document delivered greet CLI behavior
+ce657c1 Mike Rihm <michael@rihm.com> Add greet version flag
+cf0b951 Mike Rihm <michael@rihm.com> Build basic greet CLI
+00e30a2 Mike Rihm <michael@rihm.com> Set up Toolkit V2 project files
+555f1d1 Mike Rihm <michael@rihm.com> Initial commit
+
+$ git log --format=%B | grep -i -c -E "co-authored|generated with|claude|codex|openai"
+0
+
+$ git status --short --branch
+## main
+
+$ git worktree list
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3 71d46ac [main]
+
+$ git branch --list
+* main
+
+$ node --test tests/greet.test.js
+✔ version takes precedence before a name (42.028875ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 265.942375
+$ node bin/greet.js Mike
+Hello, Mike!
+$ node bin/greet.js 
+Hello, world!
+$ node bin/greet.js --version
+0.1.0
+$ node bin/greet.js Mike --version
+0.1.0
+$ node bin/greet.js --version Mike
+0.1.0
+
+$ cat package.json
+{
+  "version": "0.1.0"
+}
+$ cat bin/greet.js
+const args = process.argv.slice(2);
+
+if (args.includes('--version')) {
+  process.stdout.write(`${require('../package.json').version}\n`);
+  return;
+}
+
+const name = args[0] ?? 'world';
+
+process.stdout.write(`Hello, ${name}!\n`);

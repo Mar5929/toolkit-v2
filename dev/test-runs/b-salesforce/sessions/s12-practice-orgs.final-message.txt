@@ -1,0 +1,5 @@
+WI-001’s Account Tier field is built, and its one-component package **passed validation in the simulated `tkv2-sbx` org**. WI-002’s layout change is committed and also passed simulated validation. Nothing has been deployed.
+
+The practice `sf` responses did not provide usable field-permission or page-assignment details, so WI-002’s access and actual page placement remain unverified. I recorded your correction about the simulated orgs for future sessions.
+
+Do you approve deploying **only `Account.Tier__c`** from the WI-001 package to simulated `tkv2-sbx`? This adds the field; WI-002’s access and layout changes remain separate.

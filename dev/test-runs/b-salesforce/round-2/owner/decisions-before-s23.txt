@@ -1,0 +1,7 @@
+2 decisions wait on the owner:
+
+WI-001 Add Account Tier picklist
+  - Q-07: Can you run the WI-001 field package against corrected tkv2-prod and report the deploy result? The project guard denies agent production deploys. Affects WI-001 production deployment. (work-decide)
+
+WI-002 Configure Account Tier access and page layout
+  - Q-03: After the WI-001 field deploy succeeds, can you run the WI-002 layout package against corrected tkv2-prod, complete production profile access, and report the deploy and page checks? Affects WI-002 production deployment. (work-decide)

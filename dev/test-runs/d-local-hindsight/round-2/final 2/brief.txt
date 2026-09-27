@@ -1,0 +1,25 @@
+Project briefing: Greet CLI Sample D2 (greet-cli-sample-d2), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: the local Hindsight server. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The tracker has no open items. A new request starts a work item with the work-on skill.
+
+Items: 2 done.
+
+Current focus:
+Last updated: 2026-09-27, work-finish, agent
+## Now
+None.
+## Waiting on the owner
+None.
+## Untracked to-dos
+None.
+## Next session starts with
+No active work items. WI-001 and WI-002 are Done on local `main` at `5410648`. No Git remote is configured.
+
+Project memory (hindsight): 1 record, from the local copy. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_document_cli_flags_in_readme: Document every command-line flag in the README

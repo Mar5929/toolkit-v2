@@ -1,0 +1,29 @@
+Experiment: how codex exec handles the project's git 'prompt' rule (templates/codex/toolkit.rules copied into .codex/rules/).
+Scratch repos under /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/c-notion-r2-exp (proj, proj2), each with one commit and an untracked b.txt. codex-cli 0.157.0.
+
+== noapprove
+$ codex exec --json --sandbox workspace-write -c model_reasoning_effort="low" -c projects={"<proj>"={trust_level="trusted"}} -C <proj> "Run exactly this shell command on its own: git add b.txt ..."
+   agent_message | I’ll run the two commands in order and report their outputs exactly. | exit None
+   command_execution | /bin/zsh -lc 'git status --short' | exit 0
+   agent_message | `git add b.txt` was rejected before it ran: ```text exec_command failed: CreateProcess { message: "Rejected(\"approval required by policy, but AskForApproval is set to Never\")" } ```  `git status --short` output: ```text ?? .codex/ ?? b.txt ``` | exit None
+
+== approve
+$ codex exec --json --approve-for-me -c model_reasoning_effort="low" -c projects={"<proj2>"={trust_level="trusted"}} -C <proj2> "Run exactly this shell command on its own: git add b.txt ..."  (approval_policy on-request, approvals_reviewer auto_review; no escalation requested)
+   agent_message | I’ll run the two commands in order and report their output exactly as returned. | exit None
+   command_execution | /bin/zsh -lc 'git status --short' | exit 0
+   agent_message | `git add b.txt` output: ```text fatal: Unable to create '/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/c-notion-r2-exp/proj2/.git/index.lock': Operation not permitted ```  `git status --short` output: ```text ?? .codex/ ?? b.txt ``` | exit None
+
+== approve2
+$ codex exec --json --approve-for-me ... "Run the shell command: git add b.txt -- request escalated sandbox permissions for it (require_escalated) ..."
+   agent_message | I’ll run the staging command with the requested permission setting, then check status and report both outputs exactly. | exit None
+   command_execution | /bin/zsh -lc 'git add b.txt' | exit 0
+   command_execution | /bin/zsh -lc 'git status --short' | exit 0
+   agent_message | `git add b.txt` output: ```text ```  `git status --short` output: ```text A  b.txt ?? .codex/ ``` | exit None
+
+Result: with approval policy 'never' the rule rejects git add ('approval required by policy, but AskForApproval is set to Never').
+With --approve-for-me the matched prompt rule let git add run, but inside the sandbox: 'fatal: Unable to create .../.git/index.lock: Operation not permitted'.
+Only an explicit escalation request (sandbox_permissions require_escalated) ran git add outside the sandbox; git status then showed 'A  b.txt'.
+
+Plugin switch for one run in a new folder (no .codex/config.toml): both -c 'plugins."toolkit@toolkit-v2"={enabled=true}' and -c 'plugins={"toolkit@toolkit-v2"={enabled=true}}'
+were tried in an ephemeral session that listed skills; the model's answer named no project-setup either time (form1/form2 in the scratch folder).
+The real setup session s00 used the second form and its skill list did include project-setup (checked in the s00 session log).

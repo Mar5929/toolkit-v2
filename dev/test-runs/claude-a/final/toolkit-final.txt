@@ -1,0 +1,29 @@
+$ toolkit work list --tree --all
+WI-001  Add a --version flag to the greet CLI  (Done)
+  WI-002  Handle an empty name and --version in any position  (Done)
+
+$ toolkit work validate
+Checked 2 items: 2 clean, 0 errors, 0 questions for the owner.
+
+$ toolkit memory list
+- feedback_short_commit_messages: Mike prefers short commit messages
+
+$ toolkit memory list --status all
+- feedback_short_commit_messages: Mike prefers short commit messages
+
+$ toolkit doctor
+Toolkit doctor for greet (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/claude-a).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/claude-a). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (3):
+- AGENTS.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.
+
+Result: 0 problems and 2 warnings.
+exit=1

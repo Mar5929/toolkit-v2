@@ -1,0 +1,335 @@
+# Session s07-where-are-we
+thread: 01a0e47e-e371-7192-8b62-1aac95facdd8 | start: 2026-09-27T20:11:56Z | end: 2026-09-27T20:12:21Z | exit=0
+extra args: 
+
+## Prompt
+
+Where are we?
+
+## Hook context injected (SessionStart, UserPromptSubmit, PostToolUse)
+
+- 2026-09-27T20:11:58.259Z:
+    Project briefing: Toolkit V2 sample run c3 (safe to delete) (tv2-sample-run-c3), owner Mike Rihm. Work items: the Notion Work Items database (ids like TV2-001). Memory: the Notion Memory database. Salesforce: no. Hosts: Claude Code and Codex.
+    Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/c-notion-r3/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+    
+    This worktree is on branch main, which names no work item.
+    
+    Active items:
+    - TV2-001 Write a short project brief in README.md: 11 User approval, In Progress, waiting on owner. Next action: Mike reviews the TV2-001 three-bullet result. TV2-002 has its own result decision. Continues with work-decide.
+    - TV2-002 Write the how to add a quote instructions in README.md: 11 User approval, In Progress, waiting on owner. Next action: Mike reviews the TV2-002 quote instruction result separately. Continues with work-decide.
+    
+    Waiting on the owner:
+    - TV2-001 Write a short project brief in README.md: 1 open question for the owner. (work-decide)
+    - TV2-002 Write the how to add a quote instructions in README.md: 1 open question for the owner. (work-decide)
+    
+    Items: 2 in progress. (Local copy of the Notion board from 2026-09-27T20:11:47.540Z.)
+    
+    Current focus:
+    Last updated: 2026-09-27, Codex after the TV2-001 and TV2-002 result checks.
+    ## Now
+    - TV2-001 Write a short project brief in README.md.
+    - TV2-002 Write the how to add a quote instructions in README.md.
+    ## Waiting on the owner
+    - In Codex, trust this project folder when prompted so its .codex/ settings load.
+    - In Codex, open /hooks and trust the Toolkit V2 hooks so the session briefing and reminders run.
+    - Start a new Claude Code session in this project so it loads the new settings and Plain English style.
+    ## Untracked to-dos
+    None.
+    ## Next session starts with
+    - Read AGENTS.md and PROJECT.md, then use work-decide for TV2-001 and TV2-002.
+    
+    Project memory (notion): 1 record, from the local copy. toolkit memory find searches it; toolkit memory get <key> reads one record.
+    
+    Memory records:
+    - user_readme_bullet_lists: Prefers README sections as short bullet lists, not long paragraphs
+    
+    Always-on rules. Claude Code loads them by itself; in Codex, each one is read at session start:
+    - .claude/rules/humanize-outbound-text.md: Humanize Anything Sent to Another Person
+    - .claude/rules/keep-work-item-current.md: Keep the Active Work Item Accurate
+    - .claude/rules/memory-revi
+
+## Skills opened (SKILL.md read)
+
+work-status
+
+## Escalation requests (commands asked to run outside the sandbox)
+
+
+## Commands
+
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/skills/work-status/SKILL.md'
+---
+name: work-status
+description: 'Answers "where are we", "what''s next", and "catch me up": shows active work items, their progress and blockers, the recommended next step, and how many decisions wait on the owner. Use when the owner asks for project status, progress on one item, or what comes next. Changes nothing.'
+---
+
+# Work status
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Shared rules: the work plugin's `references/conventions.md`, two folders above this skill's folder (`../../references/conventions.md`). This skill only reads. It never changes an item, memory, or a file. Run each `toolkit` command alone, on its own line: in Codex a command joined by `&&`, `;`, or a pipe runs inside the sandbox and fails.
+
+## Steps
+
+1. Use the session briefing if this conversation already has it and nothing changed since. Otherwise run:
+   `toolkit brief`
+2. The owner named an item or an area: answer about that item only. Say where it stands in plain words, what is done and what is left in its Roadmap, its blockers, and its next action.
+   `toolkit work show <id>`
+3. The whole project: read the tree, the recommended next item, the decisions waiting on the owner, and the current focus.
+   `toolkit work list --tree`
+   `toolkit work next`
+   `toolkit work decisions`
+   `toolkit memory focus`
+4. Answer in this order: how many decisions wait on the owner (one line each; the count is the number of lines you show, and "Agent to-do" lines are not decisions), what is in progress, the recommended next item and why, what was done recently, and anything moved or broken.
+5. Show every stage in plain words with the item id ("WI-012 is in testing"). The plain labels come from:
+   `toolkit work lifecycle`
+6. For each problem, name the skill that fixes it without running it: moved or missing items, `work-organize`; setup warnings, `project-setup`; decisions, `work-decide`. "Show the board": with the local tracker, summarize `.work-items/DASHBOARD.md`; with Notion, give the link to the project's Work Items board from the Notion ids in the configuration.
+   `toolkit config get notion`
+7. Change nothing. End with one thing the owner can say next, for example "Say 'what do you need from me' to go through the 2 decisions."
+
+## How to answer
+
+- Lead with the answer, not with how you found it.
+- Decisions first, because only the owner can unblock them. Give the count and one line each: the item id, what is being decided, and how long it has waited when the record shows it.
+- One line per item in progress: id, title, plain stage, what is left, and who it waits on.
+- The recommended next item comes from the briefing or the `next` command. Say why in one line.
+- Recently done: items finished since the last session, when the record shows it. Skip it when there are none.
+- Keep the whole answer short. The owner can ask about one item for detail.
+
+## Tracker notes
+
+- GitHub Issues or Jira: the `toolkit work` commands exit with code 3. Read the items with the tracker's own tool (`../../references/trackers.md`) and answer in the same order.
+- An item in `archive/` is hidden from the briefing and from the recommended next item. Mention archived items only when the owner asks.
+- Nothing is tracked yet: say so in one line and offer `work-on` for the first piece of work.
+
+## Not this skill
+
+- "What did we do in this chat": `session-summary`.
+- "What do
+...[truncated]
+```
+### exit=1
+```
+$ /bin/zsh -lc 'cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md'
+cat: SOUL.md: No such file or directory
+# Toolkit V2 sample run c3 (safe to delete)
+
+## Purpose and intended outcome
+
+- Purpose: Keep a tiny Node.js script that prints a random quote.
+- Intended outcome: `node quote.js` prints one quote from the script's list.
+
+## Scope and boundaries
+
+- In scope: `quote.js` and the project records for future work.
+- Current setup constraint: Do not change `quote.
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc 'node quote.js'
+Make it work, make it right, make it fast. - Kent Beck
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/references/conventions.md'
+# Conventions every work skill follows
+
+Every skill in the work plugin follows these rules. A skill's own `SKILL.md`
+names the file when a rule matters for a step.
+
+This file is `references/conventions.md` in the work plugin's own folder. From
+a skill's `SKILL.md` it is two folders up: `skills/work-on/SKILL.md` and
+`references/conventions.md` share the plugin folder. In Codex the plugin
+folder is the installed copy, for example
+`~/.codex/plugins/cache/toolkit-v2/work/<version>/`, so this file is
+`~/.codex/plugins/cache/toolkit-v2/work/<version>/references/conventions.md`.
+
+Four rules that are easy to miss:
+
+- Run each `toolkit` command alone, as its own command (below).
+- Never change a work item with a script (Python, Node, `sed -i`, `cat >`).
+  Use `toolkit work edit --section` or `--label`, or the file edit tool for
+  body text. The hooks refuse the script, so it only wastes a step.
+- Temporary text goes in `--text`, or in a file in a new `mktemp -d` folder,
+  never at a fixed name such as `/tmp/wi001.md`.
+- End every reply to the owner with the one question he must answer, or with
+  the exact words that continue the work ("Say 'keep going' and I'll start the
+  build."). Never end on "The next step is ..." with nothing for him to do.
+
+## Voice
+
+Every skill carries this line near its top:
+
+> Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+
+Agents do not receive the output style. Each agent file in `agents/` carries
+its own writing rules.
+
+## Opening another skill
+
+- Claude Code: use the Skill tool with the skill's name, for example
+  `work-requirements`.
+- Codex: read that skill's `SKILL.md` from the path shown in the skill list,
+  then follow it.
+- Say the handover in one line, for example "WI-012 needs a design; opening
+  solution-design."
+- The skill that asked a question records the answer. An answer that arrives
+  later, after that skill has finished, is recorded by `work-decide`.
+
+## Running `toolkit` commands
+
+- Put each `toolkit` command on its own line and run it as a plain command.
+  Do not wrap it in `$(...)`, a pipe, or a redirect. Codex matches its
+  command rule against the plain command. This holds for read commands too:
+  `toolkit work decisions && toolkit work show WI-001` is two commands.
+- In Codex, a `toolkit` command joined to anything else (`&&`, `;`, a pipe, a
+  heredoc, `cd ... &&`) or run from a script (for example Python's
+  `subprocess`) runs inside the Codex sandbox. The sandbox blocks Notion,
+  Hindsight, and the main checkout's `.work-items/` and `.memory/` from a
+  worktree, so the command fails or reports the wrong cause. Run each one
+  alone, as its own command.
+- Add `--json` when you need to read the output field by field.
+- Exit codes: `0` done; `1` error; `2` validation failure (fix what it names
+  and run it again); `3` not supported for this tracker or memory backend
+  (follow [trackers.md](trackers.md)); `4` not a Toolkit V2 project (open
+  `project-setup`).
+- "saved but not verified" in the output means the write happened and the
+  read-back failed. The message names the first line that differs. Lead the
+  reply to the owner with "Saved but not verified", say which line, and read
+  the item back to judge it.
+
+## Changing a work item
+
+- Change a work item only through `toolkit work` commands. This keeps the
+  local tracker and Notion the same, and it keeps the CLI's record o
+...[truncated]
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work lifecycle'
+Stages (the status follows the stage):
+  01-discovery              Backlog      Working out what the owner wants.                                    Continue with: work-requirements
+  02-refinement             Backlog      Turning that into requirements.                                      Continue with: work-requirements
+  03-requirements-approved  Ready        The owner approved the requirements.                                 Continue with: solution-design or work-on
+  04-solution-design        In Progress  Deciding how it gets built.                                          Continue with: solution-design
+  05-breakdown              In Progress  Splitting work that is too large.                                    Continue with: work-organize
+  06-implementation-plan    In Progress  Ordering the build steps.                                            Continue with: work-on
+  07-tracking-setup         In Progress  Creating build tracking when needed.                                 Continue with: work-on
+  08-build                  In Progress  Producing the requested change.                                      Continue with: work-on
+  09-testing                In Progress  Checking it against the requirements.                                Continue with: work-check
+  10-bug-fixing             In Progress  Fixing what testing found.                                           Continue with: work-check
+  11-user-approval          In Progress  The owner reviews the result.                                        Continue with: work-check
+  12-pr-and-push            In Review    Repository work is in a pushed pull request.                         Continue with: work-finish
+  13-deployment             In Review    The result is put where it belongs.                                  Continue with: work-finish
+  14-spec-update            In Review    Lasting specifications match the result.                             Continue with: work-finish
+  (Done)                    Done         Set only by toolkit work finish <id> --by <name> --evidence <text>.  Continue with: work-finish
+  (Cancelled)               Cancelled    Set only by toolkit work cancel <id> --reason <text>.                Continue with: work-finish
+  An item with waiting_on: owner continues with work-decide, whatever its stage.
+
+Statuses:
+  Backlog      Logged; requirements are still being worked out (stages 01-02).
+  Ready        Requirements approved; work can start (stage 03).
+  In Progress  The item is active (stages 04-11). It does not mean building has started.
+  In Review    The result is in a pull request, being deployed, or being written into the specifications (stages 12-14).
+  Done         The owner accepted the result. Set only by toolkit work finish.
+  Cancelled    Work stopped without the result. Set only by toolkit work cancel.
+
+Types:
+  discovery               Finding out what is needed.
+  solution-design         Designing how something gets built.
+  build                   Producing a change. Needs approved requirements before stage 03.
+  data-load               Loading or changing data. Needs approved requirements before stage 03.
+  repository-maintenance  Keeping the repository in order.
+  research                Answering a question with sources.
+  task                    A small piece of work.
+  bug                     Something that does not work as it should.
+  enhancement             An improvement to something that works.
+  Other lower-case words are 
+...[truncated]
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit memory focus'
+# Current focus
+
+Last updated: 2026-09-27, Codex after the TV2-001 and TV2-002 result checks.
+
+## Now
+
+- TV2-001 Write a short project brief in README.md.
+- TV2-002 Write the how to add a quote instructions in README.md.
+
+## Waiting on the owner
+
+- In Codex, trust this project folder when prompted so its .codex/ settings load.
+- In Codex, open /hooks and trust the Toolkit V2 hooks so the session briefing and reminders run.
+- Start a new Claude Code session in this project so it loads the new settings and Plain English style.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Read AGENTS.md and PROJECT.md, then use work-decide for TV2-001 and TV2-002.
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work list --tree'
+TV2-001  Write a short project brief in README.md  (11 User approval, In Progress, waiting on owner)
+TV2-002  Write the how to add a quote instructions in README.md  (11 User approval, In Progress, waiting on owner)
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work decisions'
+4 decisions wait on the owner:
+
+TV2-001 Write a short project brief in README.md
+  - Q-03: Do you approve the TV2-001 three-bullet parent result at 6216321 for R-01 through R-03? Affects P1-T03. (work-decide)
+  - TV2-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve TV2-001 --result --by <name>. (work-decide)
+
+TV2-002 Write the how to add a quote instructions in README.md
+  - Q-01: Do you approve the TV2-002 Add a quote bullet at e9425dd for R-04? Affects P1-T02. (work-decide)
+  - TV2-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve TV2-002 --result --by <name>. (work-decide)
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work next'
+Nothing is ready to work on.
+
+4 decisions wait on the owner (work-decide; toolkit work decisions lists them).
+
+```
+
+## File changes
+
+
+## Other items
+
+- error {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+- error {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+- EVENT {"type": "turn.completed", "usage": {"input_tokens": 82835, "cached_input_tokens": 66816, "cache_write_input_tokens": 0, "output_tokens": 721, "reasoning_output_tokens": 178}}
+
+## Agent messages
+
+I’ll check the current work items and their next steps. I’m using the work-status skill for this project status request.
+
+---
+
+Two README changes are written and waiting for your review:
+
+- **TV2-001** is at user approval. It needs your decision on the three-bullet project brief.
+- **TV2-002** is at user approval. It needs your separate decision on the “Add a quote” instructions.
+
+The tracker shows four decision entries because it lists both an open question and an approval step for each item. No item is ready for more agent work until you decide on the results.
+
+Say **“what do you need from me”** to review the two results one at a time.
+
+---
+

@@ -1,0 +1,1 @@
+work-on,   ref:work/references/conventions.md,   ref:work/references/trackers.md, work-decide, work-check,   ref:work/agents/acceptance-checker.md, spawn_agent:check_wi001(fork_turns=none), spawn_agent:check_wi002(fork_turns=none), memory-save

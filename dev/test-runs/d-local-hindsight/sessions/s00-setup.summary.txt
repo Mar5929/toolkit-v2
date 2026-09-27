@@ -1,0 +1,215 @@
+PROMPT: Set up this project with the toolkit: the project name is Greet CLI Sample D3, key greet-cli-sample-d3, id prefix WI, owner Mike. Track work items in local folders. Use local Hindsight for memory. It is not a Salesforce project. I use both Claude Code and Codex. I don't want a SOUL.md.
+THREAD: 01a0e459-d2b2-70c1-9e6f-e78b2cb2903d
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll use the Toolkit V2 project setup skill to inspect this checkout, apply your project choices, and verify the resulting setup.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.2/skills/project-setup/SKILL.md'
+  -> ---
+name: project-setup
+description: 'Sets up Toolkit V2 in a new project or repairs one: copies the model scaffold, applies tracker, memory, and Salesforce answers, and fixes this Mac, Notion, or Hindsight. Use when the owner says "set up Toolkit V2", "set up this project", "check the setup", "update the toolkit", or "new computer".'
+---
+
+# Project setup
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+The interview wording and what setup installs: `references/interview.md`. Repair, switching, new computer, and wiring: `references/repair-and-wiring.md`. Put each `toolkit` command on its own line.
+
+## Steps
+
+1. Check the setup. If `toolkit` is not found, run `node <this skill's folder>/../../bin/toolkit machine-setup` (the skill's folder is the one holding this file). If doctor reports a computer problem, run machine-setup. Name anything the owner must do himself: `ntn login` opens a browser sign-in; trusting the hooks in Codex happens in its `/hooks` screen. Never do those for him. This skill sets up Toolkit V2, never the older claude-toolkit (its `project-init` skill); when the owner names Toolkit V2 and only `project-init` is listed, say so and use this skill's steps.
+   `toolkit doctor`
+   `toolkit machine-setup`
+2. No `.toolkit.json`: a new project. Look before asking: an empty or existing repository; `sfdx-project.json` answers the Salesforce questi
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.2/skills/project-setup/references/repair-and-wiring.md'
+  -> # Repair, switching, a new computer, and wiring
+
+Detail for `project-setup` steps 1 and 4 to 7.
+
+## Reaching the `toolkit` command
+
+- Claude Code puts the plugin's `bin/` folder on the path, so `toolkit` works
+  in every Claude Code session.
+- Codex needs the small wrapper script that `toolkit machine-setup` writes at
+  `~/.local/bin/toolkit`. When `toolkit` is not found, run the plugin's copy
+  directly once: `node <this skill's folder>/../../bin/toolkit machine-setup`.
+  The skill's folder is the folder that holds `SKILL.md`; both hosts show that
+  path when they load the skill.
+- Node 20 or later is required. When `node --version` is older or missing,
+  tell the owner and ask before installing it.
+
+## Wiring Notion
+
+Needed when the tracker or the memory is `notion`.
+
+1. `ntn whoami`. When it fails, the owner runs `ntn login` himself: it opens a
+   browser sign-in to his Notion account. Wait for him to say it is done, then
+   run `ntn whoami` again.
+2. `toolkit notion ensure-root` checks the "AI Agent Second Brain" page and
+   the Projects database, and adds what is missing.
+3. `toolkit notion ensure-project --project-name "<name>"` creates or repairs
+   this project's row, its Work Items database (board and table views, the
+   fourteen stages, sub-items), its Memory database, and its focus and
+   glossary pages. It saves the Notion ids in `.toolkit.json`.
+4. Both commands only add. They never delete or trash anything, and they
+   refuse to write outside the "AI Agent Secon
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.2/skills/project-setup/references/interview.md'
+  -> # The setup interview
+
+Detail for `project-setup` step 2. Ask one question per message. Each
+question carries a recommendation and its main reason, so the owner can
+answer "yes" and move on.
+
+## Look before asking
+
+Check these first, without asking:
+
+- Is this folder a Git repository? (`git rev-parse --show-toplevel`.) No
+  repository: say so and offer `git init`. Toolkit V2 finds the project, the
+  tracker, and memory through Git.
+- Is the repository empty, or does it already hold code? Name the language
+  and framework you see.
+- `sfdx-project.json` present: this is a Salesforce project. Confirm it in
+  one line instead of asking.
+- `.toolkit.json` present with `"toolkit": "toolkit-v2"`: this is a repair,
+  not a new setup (see `repair-and-wiring.md`).
+- Files from an older toolkit setup (for example a `knowledge/` folder, or a
+  `CLAUDE.md` with more than the line `@AGENTS.md`): tell the owner what you
+  found. Toolkit V2 adds its own
+  files and turns the current toolkit's plugins off for this project; it does
+  not move or delete the old files. Ask before touching them. A file the
+  project already has is kept, never overwritten.
+- The owner name: `git config user.name`.
+- `ntn whoami` (only matters for Notion): signed in or not.
+- `toolkit hindsight health` (only matters for Hindsight): the local server is
+  up or not.
+
+## Question 1: the project name
+
+Confirm the name, key, id prefix, and owner in one line:
+
+> I'll call this project "Acme CRM" (short key `acme-crm`, wo
+
+[CMD exit=0] /bin/zsh -lc "pwd && rg --files -g '"'!node_modules'"' -g '"'!vendor'"' | head -80 && ls -la"
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3
+package.json
+README.md
+bin/greet.mjs
+test/greet.test.mjs
+total 16
+drwxr-xr-x   7 michaelrihm  wheel   224 Sep 27 15:30 .
+drwxr-xr-x  81 michaelrihm  
+
+[CMD exit=4] /bin/zsh -lc 'command -v toolkit; toolkit doctor'
+  -> /Users/michaelrihm/.local/bin/toolkit
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3 is not a Toolkit V2 project: there is no .toolkit.json with "toolkit": "toolkit-v2".
+toolkit init sets it up (the project-setup skill asks the questions first).
+
+This computer: no problems found (Node, the plugin-root pointer, and the Codex wrapper).
+
+
+[CMD exit=0] /bin/zsh -lc 'cat package.json README.md; git status --short; git config user.name'
+  -> {
+  "name": "greet-cli",
+  "version": "0.1.0",
+  "description": "A tiny command that prints a greeting.",
+  "type": "module",
+  "bin": { "greet": "bin/greet.mjs" },
+  "scripts": { "test": "node --test test/*.test.mjs" }
+}
+# greet
+
+A tiny command that prints a greeting.
+
+    node bin/greet.mjs Mike
+ 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit init --help'
+  -> toolkit init: Set up Toolkit V2 in this repository: the model project's files, AGENTS.md, rules, settings, and the chosen tracker and memory. Safe to run again.
+
+Usage:
+  toolkit init --name <name> --tracker <local|notion|github|jira> --memory <builtin|hindsight|notion>
+               [--key <key>] [--owner <name>] [--salesforce] [--dir <path>] [--hosts claude-code,codex]
+               [--decline SOUL.md]
+
+Copies the model project's files from the plugin's scaffold/model/, byte for
+byte, as scaffold/CONDITIONS.json says: .work-items/ only for the local
+tracker, .memory/ only for built-in memory, the Salesforce files only with
+--salesforce, and each host's own files only for that host. AGENTS.md,
+README.md, and PROJECT.md keep only the blocks for the choices made, with the
+project name in their headings; AGENTS.md gets its rules list. The model's
+.claude/settings.json gets the toolkit's entries (the Toolkit V2 plugins on,
+the claude-toolkit plugins off), and Codex gets the plugin switches and the
+command rule. It sets up the Notion databases (toolkit notion ensure-project)
+or the Hindsight bank (toolkit hindsight ensure-bank) when chosen.
+.toolkit.json is written last, so a failed run can simply be run again. A file
+the project already has is kept; .gitignore, the settings, and the Codex files
+get the toolkit's lines merged in.
+
+--key defaults to the name in lower case with dashes. --owner defaults to
+git config user.name. --hosts defaults to both. --dir must be the top of a 
+
+[AGENT] The repo is a small Node.js CLI with tests, and all setup choices are clear. I’m running the toolkit init with both Claude Code and Codex enabled. This Codex sandbox may block its first writes to `.codex/` and `.agents/`; if so, I’ll give you the exact terminal command it requires.
+
+[AGENT] Toolkit init stopped before writing any files: this Codex sandbox blocked its connection to local Hindsight. Automatic approval to run outside the sandbox is unavailable here. Please run this exact command in Terminal:
+
+```sh
+toolkit init --dir /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3 --name "Greet CLI Sample D3" --key greet-cli-sample-d3 --tracker local --memory hindsight --owner Mike --hosts claude-code,codex --decline SOUL.md
+```
+
+Your choices are preserved in the command. Once it finishes, tell me and I’ll complete the project guides and verify the setup.
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 128323, "cached_input_tokens": 110720, "cache_write_input_tokens": 0, "output_tokens": 953, "reasoning_output_tokens": 208}}
+
+SKILLS OPENED: ['project-setup']
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/claude-toolkit/git-workflows/0.4.0/skills`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/claude
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.2/skills/project-setup/SKILL.md","max_output_tokens":12000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "---\nname: project-setup\ndescription: 'Sets up Toolkit V2 in a new project or repairs one: copies the model scaffold, applies tracker, memory, and Salesforce answers, and fixes this Mac, Notion, or Hindsight. Use when the owner says \"set up Toolkit V2\", \"set up this project\", \"check the setup\", \"update the toolkit\", or \"new computer\".'\n---\n\n# Project setup\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nThe interview wording and what setup installs: `references/interview.md`. Repair, switching, new computer, and wiring: `references/repair-and-wiring.md`. Put each `toolkit` command on its own line.\n\n## Steps\n\n1. Check the setup. If `toolkit` is not found, run `node <this skill's folder>/../../bin/toolkit machine-setup` (the skill's folder is the one holding this file). If doctor reports a computer problem, run machine-setup. Name anything the owner must do himself: `ntn login` opens a browser sign-in; trusting the hooks in Codex happens in its `/hooks` screen. Never do those for him. This skill sets up Toolkit V2, never the older claude-toolkit (its `project-init` skill); when the owner names Toolkit V2 and only `project-init` is listed, say so and use this skill's steps.\n   `toolkit doctor`\n   `toolkit machine-setup`\n2. No `.toolkit.json`: a new project. Look before asking: an empty or existing repository; `sfdx-project.json` answers the Salesforce question in advance. Then ask one question at a time, each with a recommendation, in this order: the project name (with its key, id prefix, and owner name, confirmed in one line); the tracker (local folders, Notion, GitHub Issues, Jira); the memory (built-in `.memory/`, local Hindsight, Notion); Salesforce or not, and for Salesforce the sandbox and production org aliases; whether he wants `SOUL.md` (a no becomes `--decline SOUL.md`, so no later sync brings it back).\n3. Run init with the answers (the second line, with `--salesforce`, for a Salesforce project; add `--decline SOUL.md` after a no). Setup copies the model scaffold and applies your answers: it copies the model project's folders and files, keeps only the blocks of `AGENTS.md`, `README.md`, and `PROJECT.md` that match the answers, fills the project name, writes the rules list and `.toolki
+
+[CALL] const results=await Promise.allSettled([
+  tools.exec_command({cmd:"pwd && rg --files -g '!node_modules' -g '!vendor' | head -80 && ls -la","max_output_tokens":5000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.2/skills/project-setup/references/interview.md","max_output_tokens":7000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.2/skills/project-setup/references/repair-and-wiring.md","max_output_tokens":7000}),
+  tools.exec_command({cmd:"command -v toolkit; toolkit doctor","max_output_tokens":5000})
+]); for(let i=0;i<results.length;i++) text(JSON.stringify({i,result:results[i]}));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"cd6b1d\",\"wall_time_seconds\":0.000003625,\"exit_code\":0,\"original_token_count\":158,\"output\":\"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3\\npackage.json\\nREADME.md\\nbin/greet.mjs\\ntest/greet.test.mjs\\ntotal 16\\ndrwxr-xr-x   7 michaelrihm  wheel   224 Sep 27 15:30 .\\ndrwxr-xr-x  81 michaelrihm  wheel  2592 Sep 27 15:31 ..\\ndrwxr-xr-x  12 michaelrihm  wheel   384 Sep 27 15:30 .git\\n-rw-r--r--   1 michaelrihm  wheel   126 Sep 27 15:30 README.md\\ndrwxr-xr-x   3 michaelrihm  wheel    96 Sep 27 15:30 bin\\n-rw-r--r--   1 michaelrihm  wheel   222 Sep 27 15:30 package.json\\ndrwxr-xr-x   3 michaelrihm  wheel    96 Sep 27 15:30 test\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"b0615a\",\"wall_time_seconds\":0.000002833,\"exit_code\":0,\"original_token_count\":2593,\"output\":\"# The setup interview\\n\\nDetail for `project-setup` step 2. Ask one question per message. Each\\nquestion carries a recommendation and its main reason, so the owner can\\nanswer \\\"yes\\\" and move on.\\n\\n## Look before asking\\n\\nCheck these first, without asking:\\n\\n- Is this folder a Git repository? (`git rev-parse --show-toplevel`.) No\\n  repository: say so and offer `git init`. Toolkit V2 finds the project, the\\n  tracker, and memory through Git.\\n- Is the repository empty, or does it already hold code? Name the language\\n  and framework you see.\\n- `sfdx-project.json` present: this is a Salesforce project. Confirm it in\\n  one line instead of asking.\\n- `.toolkit.json` present with `\\\"toolkit\\\": \\\"toolkit-v2\\\"`: this is a repair,\\n  not a new setup (see `repair-and-wiring.md`).\\n- Files from an older toolkit setup (for example a `knowledge/` folder, or a\\n  `CLAUDE.md` with more than the line `@AGENTS.md`): tell the owner what you\\n  found. Toolkit V2 adds its own\\n  files and turns the current toolkit's plugins off for this project; it does\\n  not move or delete the old files. Ask before touching them. A file the\\n  project already has is kept, never overwritten.\\n- The owner name: `git config user.name`.\\n- `ntn whoami` (only matters for Notion): signed in or not.\\n- `toolkit
+
+[CALL] const results=await Promise.allSettled([
+tools.exec_command({cmd:"cat package.json README.md; git status --short; git config user.name","max_output_tokens":2000}),
+tools.exec_command({cmd:"toolkit hindsight health","max_output_tokens":2000}),
+tools.exec_command({cmd:"toolkit init --help","max_output_tokens":5000})
+]);for(let i=0;i<results.length;i++)text(JSON.stringify({i,result:results[i]}));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"380ed8\",\"wall_time_seconds\":0.000003,\"exit_code\":0,\"original_token_count\":90,\"output\":\"{\\n  \\\"name\\\": \\\"greet-cli\\\",\\n  \\\"version\\\": \\\"0.1.0\\\",\\n  \\\"description\\\": \\\"A tiny command that prints a greeting.\\\",\\n  \\\"type\\\": \\\"module\\\",\\n  \\\"bin\\\": { \\\"greet\\\": \\\"bin/greet.mjs\\\" },\\n  \\\"scripts\\\": { \\\"test\\\": \\\"node --test test/*.test.mjs\\\" }\\n}\\n# greet\\n\\nA tiny command that prints a greeting.\\n\\n    node bin/greet.mjs Mike\\n    Hello, Mike!\\n\\nRun the tests with `npm test`.\\nMike Rihm\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"93f446\",\"wall_time_seconds\":0,\"exit_code\":1,\"original_token_count\":130,\"output\":\"The request to the Hindsight server at http://127.0.0.1:8888 was blocked before it left this computer (EPERM: connect EPERM 127.0.0.1:8888 - Local (0.0.0.0:0)). This is the Codex sandbox, not the server.\\nThe Codex sandbox blocked the network for this command; the server itself may be fine. Run the toolkit command alone on its own line (no &&, ;, pipe, heredoc, or script around it), so the project's .codex/rules/toolkit.rules runs it outside the sandbox, or ask the owner to approve running it outside the sandbox.\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":2,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"099032\",\"wall_time_seconds\":0.000002583,\"exit_code\":0,\"original_token_count\":488,\"output\":\"toolkit init: Set up Toolkit V2 in this repository: the model project's files, AGENTS.md, rules, settings, and the chosen tracker and memory. Safe to run again.\\n\\nUsage:\\n  toolkit init --name <name> --tracker <local|notion|github|jira> --memory <builtin|hindsight|notion>\\n               [--key <key>] [--owner <name>] [--salesforce] [--dir <path>] [--hosts claude-code,codex]\\n               [--decline SOUL.md]\\n\\nCopies the model project's files from the plugin's scaffold/model/, byte for\\nbyte, as scaffold/CONDITIONS.json says: .work-items/ only for the local\\ntracker, .memory/ only for built-in memory, the Salesforce files only with\\n--salesforce, and each host's own files only for that host. AGENTS.md,\\nREADME.md, and PROJECT.md keep only the blocks for the choices made,
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit init --name 'Greet CLI Sample D3' --key greet-cli-sample-d3 --tracker local --memory hindsight --owner Mike --hosts claude-code,codex --decline SOUL.md","max_output_tokens":5000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"feadbb\",\"wall_time_seconds\":0,\"exit_code\":1,\"original_token_count\":168,\"output\":\"Error: The Codex sandbox blocked init's request to the local Hindsight server at http://127.0.0.1:8888, so init cannot check it from here. The server itself may be running. Nothing was written.\\nFix: Ask the owner to run this in a Terminal window (outside Codex), or to approve running it outside the Codex sandbox: toolkit init --dir /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3 --name \\\"Greet CLI Sample D3\\\" --key greet-cli-sample-d3 --tracker local --memory hindsight --owner Mike --hosts claude-code,codex --decline SOUL.md. Keep every setup answer as he gave it.\\n\"}"}]

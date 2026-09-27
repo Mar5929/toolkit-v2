@@ -1,0 +1,79 @@
+PROMPT: What do you need from me?
+THREAD: 01a0e4b2-c845-7933-8da5-2d9d5155c8fc
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r3/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Add a Tier picklist field to Account: 11 User approval, In Progress, waiting on owner. Next action: Mike reviews and approves or rejects the WI-001 finished result. After approval, continue with work-finish. Continues with work-decide.
+- WI-002 Configure Account Tier access and page layout: 11 User approval, In Progress, waiting on owner. Next action: Mike reviews and approves or rejects the WI-002 finished result. After approval, continue with work-finish. Continues with work-decide.
+
+Waiting on the owner:
+- WI-001 Add a Tier picklist field to Account: WI-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-001 --result --by <name>. (work-decide)
+- WI-002 Configure Account Tier access and page layout: WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)
+
+Items: 2 in progress.
+
+Current focus:
+Last updated: 2026-09-27, WI-001 and WI-002 result approval, Codex
+## Now
+- WI-001 and WI-002: Independent finished-result check found WI-001 R-01 and WI-002 inherited R-01 met on field/layout metadata, read-only sf access results, and Mike reported behavior checks. WI-002 Q-06 is answered. Corrected WI-002 deployment records are committed at c4b0b1c.
+## Waiting on the owner
+- Review the finished WI-001 and WI-002 results and approve or reject each result. After approval, continue with work-finish.
+- Open Codex in this project, trust the project folder when prompted, then open /hooks and trust the Toolkit V2 hooks, including the two Salesforce guards.
+## Untracked to-dos
+- None.
+## Next session starts with
+- Read the project briefing and PROJECT.md. Plain sf on PATH intentionally simulates the practice orgs, and its output counts as org results. WI-001 field and WI-002 layout were reported deployed; the practice CLI reused job ID 0AfFAKE000DEPLOY3. Both items are at 11 User approval. Manual behavior checks are owner reported; test Account IDs were not recorded. No remote is configured. After result approval, use work-finish for the production handoff and remaining delivery steps.
+
+Project memory (builtin): 2 records. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_custom_field_description_help_text: Mike prefers a description and help text on every new custom field.
+- project_practice_salesforce_orgs: Acme CRM uses simulated practice Salesforce orgs through sf on PATH
+
+Setup 
+
+[AGENT] I’ll check the two items waiting on your decision and give you the exact choices.
+
+[CALL exec] cat SOUL.md PROJECT.md .claude/rules/*.md
+   cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/skills/work-decide/SKILL.md
+   toolkit work lifecycle
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Warning: truncated output (original token count: 10600)
+Total output lines: 3
+
+{"i":0,"result":{"status":"fulfilled","value":{"chunk_id":"d3d4f9","wall_time_seconds":0,"exit_code":1,"original_token_count":7144,"output":"cat: SOUL.md: No such file or directory\n# Acme CRM\n\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\n\n## Purpose and intended outcome\n\n- Purpose: Salesforce customizations for Acme (from the existing `README.md`).\n- Intended outcome: Give the Acme sales team a Salesforce org that fits how they sell, starting with better account data. Confirmed by Mike on 2026-09-27.\n\n## Scope and boundaries\n\n- In scope: `<Business capabilities or systems this project owns.>`\n- Outside scope: `<Important exclusions or adjacent owners.>`\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\n\n## Systems and environments\n\n| System or org | Purpose | Environment | Source of truth | Access notes |\n| --- | --- | --- | --- | --- |\n| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |\n\n## People and ownership\n\n| Role | Person or team | Responsibility | Source / last confirmed |\n| --- | --- | --- | --- |\n| Project owner | Mike | Makes project decisions | `.toolkit.json`, 2026-09-27 |\n\n## Work and project records\n\n- Work tracker: local `.work-items/` folders (Git-ignored).\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\n- Project decisions: [DECISIONS.md](DECISIONS.md)\n- Functional requirements: [requirements/](requirements/)\n- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`\n- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`\n- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)\n- Memory backup or sync: `<Owner-approved destination and restore procedure, outside this repository>`\n\n## Resources and project paths\n\n- Salesforce source: `force-app/` (`sfdx-project.json`).\n- Project-wide deployment manifest: `delivery/deployment/full-project-deployment-template/package.xml` after the API version and members are verified. Keep it as the full project component inventory; ordinary deployments use narrower work-item packages.\n- Work-item deployment manifests: `delivery/deployment/<work-item-id>-<short-name>/package.xml` when an item changes Salesforce metadata.\n- Tests and checks: `<actual commands and locations>`\n- Outside references: `<source register or approved location>`\n\n## Operating conventions\n\n<Write 
+
+[AGENT] I’m using the work-decide procedure to review the approval queue one item at a time.
+
+[CALL exec] toolkit work decisions
+   toolkit work show WI-001
+   toolkit work show WI-002
+   cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/references/conventions.md
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Warning: truncated output (original token count: 14557)
+Total output lines: 4
+
+{"i":0,"result":{"status":"fulfilled","value":{"chunk_id":"0b26fc","wall_time_seconds":0.000002875,"exit_code":0,"original_token_count":104,"output":"2 decisions wait on the owner:\n\nWI-001 Add a Tier picklist field to Account\n  - WI-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-001 --result --by <name>. (work-decide)\n\nWI-002 Configure Account Tier access and page layout\n  - WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)\n"}}}
+{"i":1,"result":{"status":"fulfilled","value":{"chunk_id":"da7436","wall_time_seconds":0.000001083,"exit_code":0,"original_token_count":4836,"output":"WI-001: Add a Tier picklist field to Account\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r3/.work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account/WORK-ITEM.md\nStage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide\nParent: none | Sub-items: WI-002 | Design: approved (.work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account/DESIGN.md)\n\n---\nid: WI-001\ntitle: Add a Tier picklist field to Account\ntype: build\nstage: 11-user-approval\nstatus: In Progress\nparent: none\nwaiting_on: \"owner\"\npriority: medium\ndelivery: agent-led\nrequirements_approved: \"2026-09-27 by Mike\"\ndesign: approved\nresult_approved: \"no\"\nupdated: 2026-09-27\n---\n\n# WI-001: Add a Tier picklist field to Account\n\n## Overview\n\n**Goal:** Let the sales team rank Accounts using a Tier field.\n\n**Current position:** The WI-001 Tier field and WI-002 Account Layout were reported deployed to tkv2-sbx. Read-only sf confirmed the four Option A profile grants. Mike reported both editors saved Gold, Silver, Bronze, and blank; both non-editors saw Tier without edit and had API Tier updates denied; Tier appeared below Rating; new Accounts had no Tier default; and an existing blank stayed blank. Independent review found R-01 met.\n\n**Next action:** Mike reviews and approves or rejects the WI-001 finished result. After approval, continue with work-finish.\n\n**Blockers:** Result approval from Mike.\n\n**Related items:** WI-002 covers access and page layout for R-01.\n\n## Roadmap\n\nA phase is complete when its tasks are complete and its exit result has been checked.\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 — Account Tier field | Optional Tier picklist metadata exists with the approved values, description, and help text | Done | Field metadata reviewed and practice sandbox validation succeeded on 2026-09-27. | None. |\n| P2 — Account Tier access and placement | Approved users have the right field access and Tier appears below
+
+[AGENT] I need your approval or rejection of two finished results, one at a time. **First is WI-001, the Account Tier field.** I recommend approving it: the field metadata and practice sandbox checks met the approved requirements. The record and API behavior checks were reported by you; the test Account IDs were not recorded.
+
+If you approve WI-001, I’ll record that decision and bring you WI-002, which covers Tier access and page layout. **Do you approve the finished WI-001 result?**
+
+SKILLS OPENED (SKILL.md read): ['work-decide']
+
+TOOLKIT COMMANDS:
+   toolkit work lifecycle
+   toolkit work decisions
+   toolkit work show WI-001
+   toolkit work show WI-002

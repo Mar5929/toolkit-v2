@@ -1,0 +1,3 @@
+WI-001’s field target is verified: the sandbox has no `Account.Tier__c`, and both the sandbox and project use API 62.0. I recorded that evidence in WI-001 and updated the current focus.
+
+No Salesforce source was built. Codex rejected the command to create WI-001’s required worktree because approval is unavailable in this session. WI-002 still needs a reliable check of the main Account layout assignment and effective field access before its components can be edited. Both next steps are recorded in the work items for the next session.

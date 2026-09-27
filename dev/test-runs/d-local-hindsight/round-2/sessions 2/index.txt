@@ -1,0 +1,20 @@
+session                start_utc            end_utc              thread                                 exit
+s00-setup              2026-09-27T16:51:24Z 2026-09-27T16:52:01Z 01a0e3c7-4d28-7fd1-928f-0135ca0d855f   exit=0
+s01-finish-setup       2026-09-27T16:52:28Z 2026-09-27T16:54:39Z 01a0e3c8-4844-7263-8baf-a0c22a210081   exit=0
+s02-outcome-commit     2026-09-27T16:55:21Z 2026-09-27T16:57:23Z 01a0e3ca-eb39-7750-80d3-e60f5d84715e   exit=0
+s03-commit-approved    2026-09-27T16:57:31Z 2026-09-27T16:58:59Z 01a0e3cc-e715-72b1-819d-0a87aa1c1623   exit=0
+s04-request            2026-09-27T16:59:15Z 2026-09-27T17:01:21Z 01a0e3ce-805a-7380-84e7-90bec4c64838   exit=0
+s05-answer-remember    2026-09-27T17:01:43Z 2026-09-27T17:05:06Z 01a0e3d0-bec6-77d2-84d8-66cb849d8fca   exit=0
+s06-approve-req        2026-09-27T17:05:18Z 2026-09-27T17:09:50Z 01a0e3d4-0524-7a72-9f05-b0ce8e071243   exit=0
+s07-optionA-split      2026-09-27T17:10:09Z 2026-09-27T17:14:05Z 01a0e3d8-78fc-78b3-9bee-b21e94ad384d   exit=0
+s08-status             2026-09-27T17:14:49Z 2026-09-27T17:15:57Z 01a0e3dc-bdfb-7b40-b883-10039fe9c308   exit=0
+s09-keep-going         2026-09-27T17:16:25Z 2026-09-27T17:25:05Z 01a0e3de-37bb-7a02-8180-e99a4444639d   exit=0
+s10-need-from-me       2026-09-27T17:25:30Z 2026-09-27T17:25:50Z 01a0e3e6-8535-7510-82f6-99c731889df5   exit=0
+s11-approve-cli        2026-09-27T17:25:56Z 2026-09-27T17:27:06Z 01a0e3e6-eb8f-7e70-be36-016c089e5ed8   exit=0
+s12-memory-recall      2026-09-27T17:27:14Z 2026-09-27T17:27:51Z 01a0e3e8-1b3b-7fc1-8abd-a9761c783d4e   exit=0
+s13-approve-readme     2026-09-27T17:28:35Z 2026-09-27T17:29:44Z 01a0e3e9-5652-7141-9245-1b329fa4d8ba   exit=0
+s14-ship               2026-09-27T17:29:51Z 2026-09-27T17:35:50Z 01a0e3ea-8203-7f60-8b71-87a52f4f9d97   exit=0
+
+Sandbox: s03, s09, s14 ran with --approve-for-me (Codex's automatic reviewer answers approval requests, standing in for Mike clicking approve). All others: --sandbox workspace-write.
+s00 also passed -c 'plugins={"toolkit@toolkit-v2"={enabled=true},"project-init@claude-toolkit"={enabled=true},"second-brain@claude-toolkit"={enabled=true},"git-workflows@claude-toolkit"={enabled=true},"sf-architect-solutioning@claude-toolkit"={enabled=true}}' (toolkit plugin on for that one run, claude-toolkit setup plugins still on).
+Full Codex session logs (rollouts): /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r2-logs/*.rollout.jsonl

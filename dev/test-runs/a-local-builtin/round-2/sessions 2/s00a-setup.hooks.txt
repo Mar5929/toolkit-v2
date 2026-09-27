@@ -1,0 +1,1 @@
+(no hook messages: the SessionStart hook does nothing outside a Toolkit V2 project)

@@ -1,0 +1,1 @@
+I ran both sandbox deploys and both succeeded. I also set the Tier field access on the four profiles the way your manual steps say, and as a Sales User I can see Tier but not edit it. Check it against what I asked for.

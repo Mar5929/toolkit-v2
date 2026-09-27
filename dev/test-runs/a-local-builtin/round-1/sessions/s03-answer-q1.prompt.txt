@@ -1,0 +1,1 @@
+About the greet CLI: yes, start at version 0.1.0 and print just 0.1.0 for --version. With no name it should print `Hello, world!`. For anything else, go with your recommendations.

@@ -1,0 +1,5 @@
+Saved your answers in WI-001. Tier may be blank, including on existing Accounts, and has no default. Everyone who can view an Account can read it; only Sales Manager profile users and system administrators can edit it. It will appear directly below Rating on Account Layout.
+
+The requirements also specify Gold, Silver, and Bronze in that order, plus a field description and help text. The spec check found no material gaps. No Salesforce metadata has changed.
+
+**Do you approve these requirements for WI-001?**

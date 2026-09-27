@@ -1,0 +1,3 @@
+# Test harness only: load Mike's own login profile, then put the fake sf first.
+[ -f "$HOME/.zprofile" ] && . "$HOME/.zprofile"
+export PATH="/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2-tools/bin:$PATH"

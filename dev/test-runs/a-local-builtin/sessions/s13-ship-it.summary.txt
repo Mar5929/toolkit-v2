@@ -1,0 +1,1007 @@
+PROMPT: Ship it: WI-001 and WI-002. There is no remote and I do not want a GitHub repo, so merge them into main locally. I approve that merge and the git commands Codex asks for to do it. Then mark both done and clean up their worktrees and branches.
+THREAD: 01a0e480-34aa-7f00-9329-32145fc8db93
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll check the two approved work items and their branches, merge them into `main`, verify the result, then mark both Done and remove their worktrees and branches.
+
+[CMD exit=1] /bin/zsh -lc 'pwd && cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3
+cat: SOUL.md: No such file or directory
+# greet
+
+## Purpose and intended outcome
+
+- Purpose: A tiny Node.js command-line tool that greets people, as de
+
+[AGENT] Both items are recorded as result approved. I’ll follow the project’s finish procedure and check for overlapping files or uncommitted changes before merging.
+
+[CMD exit=0] /bin/zsh -lc 'cat PROJECT-ROADMAP.md DECISIONS.md .claude/rules/publish-project-documents.md'
+  -> # Project roadmap
+
+<!-- Fill-in guide: replace every angle-bracket prompt in the outcome, phase table, phase heading, and work-unit fields with this project's real text. Keep one overview row and one matching ## heading per phase. Under that heading, repeat the ### work-unit block for each deliverab
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/skills/work-finish/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.2/skills/merge-and-clean-up/SKILL.md'
+  -> ---
+name: work-finish
+description: 'Ships and closes a work item after the owner approves the result: pull request, merge, deployment, requirements baseline update, and Done; or cancels it with a reason. Use when the owner says "ship it", "deploy it", "close it out", "mark it done", "cancel it", or "drop it".'
+---
+
+# Work finish
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Shared rules: the work plugin's `references/conventions.md`, two folders above this skill's folder (`../../references/conventions.md`). Detail: this skill's `references/closing.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Run each `toolkit` command alone, on its own line: in Codex a command joined by `&&`, `;`, a pipe, or a heredoc, or run from a script, runs inside the sandbox and fails. Give text with `--text`, or a file in a new `mktemp -d` folder (never a fixed `/tmp` name, deleted right after the command). Never change a record with a script.
+
+## Steps
+
+1. Check that the result approval is recorded. Not recorded: show the result, the gaps, and the evidence, and ask. "Ship it" or "mark it done" from the owner after he has seen the result counts as the approval; record it with his words. Each sub-item needs its own result approval: the owner's approval of the parent does not cover it.
+   `toolkit work show <id>`
+   `toolkit wor
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list && git status --short --branch && git remote -v && git log --oneline -10 && toolkit work show WI-001 && toolkit work show WI-002 && toolkit work lifecycle'
+  -> WI-002: Add a --version flag to the greet CLI
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3/.work-items/cli/WI-001-basic-greet-cli/version-flag/WORK-ITEM.md
+Stage: 11 User approval (In Progress) | Waiting on: none | Continue with: work-finish
+Parent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/cli/WI-001-basic-greet-cli/DESIGN.md). Read it with: toolkit work design WI-001
+
+---
+id: WI-002
+title: Add a --version flag to the greet CLI
+type: build
+stage: 11-user-approval
+status: In Progress
+parent: WI-001
+waiting_on: "none"
+priority: medium
+delivery: not-offered
+requirements_approved: "2026-09-27 by Mike"
+design: none
+result_approved: "2026-09-27 by Mike"
+updated: 2026-09-27
+---
+
+# WI-002: Add a --version flag to the greet CLI
+
+## Overview
+
+**Goal:** Add `--version` to the greet CLI, reading `0.1.0` from `package.json` as approved in Option A.
+
+**Current position:** Version flag built and independently checked at commit `ce657c1` on `claude/wi-002-version-flag`, based on WI-001 commit `cf0b951`. Mike approved the result on 2026-09-27 after running all three version commands in the WI-002 worktree.
+
+**Next action:** Wait for Mike to request shipping. Merge is not approved.
+
+**Blockers:** The repository has no Git remote. Merge needs Mike’s approval.
+
+**Related items:** Parent WI-001 (R-02). Design: WI-001’s approved desig
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/skills/work-finish/references/closing.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/references/conventions.md'
+  -> # Closing a work item
+
+Detail for `work-finish`. Carried over from Toolkit V1's "Finish or
+cancel" rules and its "Closing a work item" checklist, with V2 homes.
+
+## Before Done
+
+- Give the owner a short result, the known gaps, and the evidence, and ask
+  for approval. A clear earlier approval of that same result counts.
+- Never describe an unverified result as complete.
+- Done means the owner accepted the result. Cancelled means the work stopped
+  without it.
+
+## The pull request (stage 12)
+
+- Push the item's branch (`claude/wi-<number>-<slug>`). Never force-push.
+- Write the pull request title and description in plain words: what changed,
+  why, how it was checked, and the item id. Run the description through the
+  `unslop` skill, because it is read by other people. No line crediting an AI.
+- Merge only through `merge-and-clean-up`, and only when one of these holds:
+  - the owner said yes to this merge; or
+  - `DECISIONS.md` records a standing merge instruction from the owner (the
+    project's `AGENTS.md` names it there), and an `acceptance-checker` that
+    did not build the change reported no blocking issue on that exact head
+    commit, and every check passes. `merge-and-clean-up` step 2 checks the
+    same record.
+- A work item that says its merge needs the owner's approval overrides a
+  standing instruction.
+- No remote: the local merge (`git merge --ff-only <branch>` in the main
+  checkout) is this stage. Set the stage anyway and add a history note:
+  "No remote: merg
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.2/skills/publish-docs/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.2/skills/memory-save/SKILL.md'
+  -> ---
+name: publish-docs
+description: "Commits and pushes an agreed edit to Git-tracked project documents (requirements/, system-guide/, DECISIONS.md, PROJECT.md, PROJECT-ROADMAP.md, ai-external-knowledge/, delivery/) to the default branch from an isolated worktree. Use after such an edit. Not for code, rules, skills, or .memory/."
+---
+
+# Publish a documentation save
+
+Save an agreed change to Git-tracked project documents from its own temporary
+worktree, and push it straight to the default branch with no pull request.
+The project's rule for this is `.claude/rules/publish-project-documents.md`;
+its `paths` list names the documents this skill saves.
+
+1. **Confirm it is documentation in an allowed path**, not code, rules, skills,
+   hooks, settings, `.memory/`, or `.work-items/` (list below).
+2. **Start a save workspace** from the project, with the script in the
+   `scripts/` folder beside this `SKILL.md`:
+
+   ```text
+   node <this skill's folder>/scripts/publish-docs.mjs start --branch <default-branch> -- <file> [more files]
+   ```
+
+   It fetches the remote, creates a separate sparse worktree beside the project,
+   and prints its path. Work only in that path for this save.
+3. **Make the edit there and stage the files by name.** Read the full staged
+   diff. Add `DECISIONS.md` rows only with `toolkit decision add`, run there.
+   After a change under `ai-external-knowledge/`, regenerate its index there
+   ("Step 3 in detail") and stage `ai-external-knowledge/INDEX.md` too.
+4. **Pub
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list --porcelain'
+  -> worktree /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3
+HEAD 00e30a201d4800615aa8a99c6a3a32af51b25415
+branch refs/heads/main
+
+worktree /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-c
+
+[CMD exit=0] /bin/zsh -lc 'rg --files requirements system-guide tests .work-items | head -100'
+  -> .work-items/work-item-template/WORK-ITEM.md
+.work-items/work-item-template/DESIGN.md
+.work-items/cli/WI-001-basic-greet-cli/WORK-ITEM.md
+.work-items/cli/WI-001-basic-greet-cli/DESIGN.md
+.work-items/cli/WI-001-basic-greet-cli/version-flag/WORK-ITEM.md
+.work-items/DASHBOARD.md
+tests/TEST-PLAN-TEMPLATE
+
+[CMD exit=0] /bin/zsh -lc 'git status --porcelain=v1'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git -C .claude/worktrees/wi-002-version-flag status --porcelain=v1'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git -C .claude/worktrees/wi-001-basic-greet-cli status --porcelain=v1'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git log --graph --oneline --decorate --all -10'
+  -> * ce657c1 (claude/wi-002-version-flag) Add greet version flag
+* cf0b951 (claude/wi-001-basic-greet-cli) Build basic greet CLI
+* 00e30a2 (HEAD -> main) Set up Toolkit V2 project files
+* 555f1d1 Initial commit
+
+
+[CMD exit=0] /bin/zsh -lc 'cat requirements/AGENTS.md requirements/system-area-template/AREA-TEMPLATE.md system-guide/AREA-TEMPLATE.md'
+  -> # Functional requirements
+
+Keep one maintained file per durable business area, following AREA-TEMPLATE.md. Record agreed functional behavior and its conditions, exceptions, and source. The active work item owns proposed changes, open questions, detailed tasks, and execution history. Update the area 
+
+[CMD exit=0] /bin/zsh -lc 'git diff --name-only main...claude/wi-002-version-flag'
+  -> bin/greet.js
+package.json
+tests/greet.test.js
+
+
+[CMD exit=0] /bin/zsh -lc 'git merge-base --is-ancestor claude/wi-001-basic-greet-cli claude/wi-002-version-flag'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git diff --name-only main...claude/wi-001-basic-greet-cli'
+  -> bin/greet.js
+tests/greet.test.js
+
+
+[CMD exit=0] /bin/zsh -lc 'git config user.name'
+  -> Mike Rihm
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --stage 12-pr-and-push'
+  -> Updated WI-001: stage 11 User approval -> 12 Pull request and push (status In Review).
+Now 12 Pull request and push (In Review). Continue with work-finish.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-002 --stage 12-pr-and-push'
+  -> Updated WI-002: stage 11 User approval -> 12 Pull request and push (status In Review).
+Now 12 Pull request and push (In Review). Continue with work-finish.
+
+
+[AGENT] The worktrees are clean, and WI-002 starts from WI-001’s commit. I’m fast-forwarding `main` through WI-001 and then WI-002.
+
+[CMD exit=0] /bin/zsh -lc 'git merge --ff-only claude/wi-001-basic-greet-cli'
+  -> Updating 00e30a2..cf0b951
+Fast-forward
+ bin/greet.js        |  3 +++
+ tests/greet.test.js | 22 ++++++++++++++++++++++
+ 2 files changed, 25 insertions(+)
+ create mode 100644 bin/greet.js
+ create mode 100644 tests/greet.test.js
+
+
+[CMD exit=0] /bin/zsh -lc 'git merge --ff-only claude/wi-002-version-flag'
+  -> Updating cf0b951..ce657c1
+Fast-forward
+ bin/greet.js        |  9 ++++++++-
+ package.json        |  3 +++
+ tests/greet.test.js | 12 ++++++++++++
+ 3 files changed, 23 insertions(+), 1 deletion(-)
+ create mode 100644 package.json
+
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## main
+
+
+[CMD exit=0] /bin/zsh -lc 'git log --oneline -3'
+  -> ce657c1 Add greet version flag
+cf0b951 Build basic greet CLI
+00e30a2 Set up Toolkit V2 project files
+
+
+[CMD exit=0] /bin/zsh -lc 'node --test tests/greet.test.js'
+  -> ✔ greets a named person (43.798042ms)
+✔ greets the world when no name is given (44.278709ms)
+✔ prints the version (44.158208ms)
+✔ version takes precedence after a name (43.005458ms)
+✔ version takes precedence before a name (43.116667ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history WI-001 --note \"Owner's words: 'Ship it: WI-001 and WI-002. There is no remote and I do not want a GitHub repo, so merge them into main locally. I approve that merge and the git commands Codex asks for to do it. Then mark both done and clean up their worktrees and branches.' No remote: merged locally into main at cf0b951.\" --effect \"WI-001 is on main; no pull request or deployment.\""
+  -> Added a Recent History row to WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history WI-002 --note \"Owner's words: 'Ship it: WI-001 and WI-002. There is no remote and I do not want a GitHub repo, so merge them into main locally. I approve that merge and the git commands Codex asks for to do it. Then mark both done and clean up their worktrees and branches.' No remote: merged locally into main at ce657c1.\" --effect \"WI-002 is on main; no pull request or deployment.\""
+  -> Added a Recent History row to WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --stage 14-spec-update'
+  -> Updated WI-001: stage 12 Pull request and push -> 14 Specification update (status In Review).
+Now 14 Specification update (In Review). Continue with work-finish.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-002 --stage 14-spec-update'
+  -> Updated WI-002: stage 12 Pull request and push -> 14 Specification update (status In Review).
+Now 14 Specification update (In Review). Continue with work-finish.
+
+
+[AGENT] Both commits are on `main`, and all five CLI tests pass there. I’ll record the delivered behavior in the requirements and system guide, then finish the tracker records and remove the approved worktrees and branches.
+
+[CMD exit=0] /bin/zsh -lc 'git worktree add .claude/worktrees/ship-greet-docs -b claude/ship-greet-docs main'
+  -> Preparing worktree (new branch 'claude/ship-greet-docs')
+HEAD is now at ce657c1 Add greet version flag
+
+
+[FILE_CHANGE] [{"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3/.claude/worktrees/ship-greet-docs/requirements/greet-cli.md", "kind": "add"}, {"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3/.claude/worktrees/ship-greet-docs/system-guide/greet-cli.md", "kind": "add"}]
+
+[CMD exit=0] /bin/zsh -lc 'git -C .claude/worktrees/ship-greet-docs status --short'
+  -> ?? requirements/greet-cli.md
+?? system-guide/greet-cli.md
+
+
+[CMD exit=0] /bin/zsh -lc 'cat bin/greet.js package.json tests/greet.test.js'
+  -> const args = process.argv.slice(2);
+
+if (args.includes('--version')) {
+  process.stdout.write(`${require('../package.json').version}\n`);
+  return;
+}
+
+const name = args[0] ?? 'world';
+
+process.stdout.write(`Hello, ${name}!\n`);
+{
+  "version": "0.1.0"
+}
+const { test } = require('node:test');
+const as
+
+[CMD exit=0] /bin/zsh -lc 'git -C .claude/worktrees/ship-greet-docs add requirements/greet-cli.md system-guide/greet-cli.md'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git -C .claude/worktrees/ship-greet-docs diff --cached --check'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git -C .claude/worktrees/ship-greet-docs diff --cached'
+  -> diff --git a/requirements/greet-cli.md b/requirements/greet-cli.md
+new file mode 100644
+index 0000000..62e4b15
+--- /dev/null
++++ b/requirements/greet-cli.md
+@@ -0,0 +1,41 @@
++# Greet CLI
++
++## Purpose and scope
++
++The Node.js command-line tool prints a greeting or its version. These rules cover the 
+
+[CMD exit=0] /bin/zsh -lc "git -C .claude/worktrees/ship-greet-docs commit -m 'Document delivered greet CLI behavior'"
+  -> [claude/ship-greet-docs be8468b] Document delivered greet CLI behavior
+ 2 files changed, 72 insertions(+)
+ create mode 100644 requirements/greet-cli.md
+ create mode 100644 system-guide/greet-cli.md
+
+
+[CMD exit=0] /bin/zsh -lc 'git merge --ff-only claude/ship-greet-docs'
+  -> Updating ce657c1..be8468b
+Fast-forward
+ requirements/greet-cli.md | 41 +++++++++++++++++++++++++++++++++++++++++
+ system-guide/greet-cli.md | 31 +++++++++++++++++++++++++++++++
+ 2 files changed, 72 insertions(+)
+ create mode 100644 requirements/greet-cli.md
+ create mode 100644 system-guide/greet-cli
+
+[CMD exit=0] /bin/zsh -lc 'git -C .claude/worktrees/ship-greet-docs status --porcelain=v1'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git status --porcelain=v1'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git -C .claude/worktrees/wi-002-version-flag status --porcelain=v1'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3                                          be8468b [main]
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f
+
+[CMD exit=0] /bin/zsh -lc 'git -C .claude/worktrees/wi-001-basic-greet-cli status --porcelain=v1'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git branch --merged main'
+  -> + claude/ship-greet-docs
++ claude/wi-001-basic-greet-cli
++ claude/wi-002-version-flag
+* main
+
+
+[AGENT] The requirements and system guide are committed on `main`. All three worktrees are clean, and their branches are included in `main`; I’m removing them now.
+
+[CMD exit=0] /bin/zsh -lc 'git worktree remove .claude/worktrees/wi-001-basic-greet-cli'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git branch -d claude/wi-001-basic-greet-cli'
+  -> Deleted branch claude/wi-001-basic-greet-cli (was cf0b951).
+
+
+[CMD exit=0] /bin/zsh -lc 'git worktree remove .claude/worktrees/wi-002-version-flag'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git branch -d claude/wi-002-version-flag'
+  -> Deleted branch claude/wi-002-version-flag (was ce657c1).
+
+
+[CMD exit=0] /bin/zsh -lc 'git worktree remove .claude/worktrees/ship-greet-docs'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git branch -d claude/ship-greet-docs'
+  -> Deleted branch claude/ship-greet-docs (was be8468b).
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001 --section Roadmap'
+  -> ## Roadmap
+
+A phase is complete when its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Basic greeting | `node bin/greet.js Mike` and `node bin/greet.js` print the approved greetings. | Complete | Both exact outputs were tested; Mike ran both commands and approved the WI-001 result on 2026-09-27. | None |
+| P2 — Version flag | The CLI also prints version `0.1.0` from `package.json` when `--version` is present. | In Progress | All R-02 commands are tested; Mike reviews the WI-002 result. | WI-002 |
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-002 --section Roadmap'
+  -> ## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Version flag | `--version` reads `0.1.0` from `package.json` and takes precedence over a name. | In Progress | Three R-02 command outputs are exact and tests pass. | None |
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section Roadmap --text \"A phase is complete when its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Basic greeting | \\"'`node bin/greet.js Mike'"\\"'` and '"\\"'`node bin/greet.js'"\\"'` print the approved greetings. | Done | Both exact outputs were tested; Mike ran both commands and approved the WI-001 result on 2026-09-27. | None |
+| P2 — Version flag | The CLI also prints version '"\\"'`0.1.0'"\\"'` from '"\\"'`package.json'"\\"'` when '"\\"'`--version'"\\"'` is present. | Done | A
+  -> Saved "Roadmap" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --section Roadmap --text \"A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Version flag | \\"'`--version'"\\"'` reads '"\\"'`0.1.0'"\\"'` from '"\\"'`package.json'"\\"'` and takes precedence over a name. | Done | All three R-02 command outputs were exact; the five-test suite passed on main; Mike approved the result on 2026-09-27. | None |"'
+  -> Saved "Roadmap" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001 --section Overview'
+  -> ## Overview
+
+**Goal:** Build the basic Node.js greet CLI: greet a named person or the world when no name is given.
+
+**Current position:** Basic greeting built and independently checked at commit `cf0b951` on `claude/wi-001-basic-greet-cli`. Mike ran both greeting commands in the WI-001 worktree and approved the result on 2026-09-27. WI-002 adds the version flag separately and still awaits result approval.
+
+**Next action:** If Mike asks to ship WI-001, continue with work-finish. Merge has not been approved.
+
+**Blockers:** The repository has no Git remote. Merge requires Mike's approval.
+
+**Related items:** WI-002 delivers R-02 (`--version`) under this parent.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section Overview --text \"**Goal:** Build the basic Node.js greet CLI: greet a named person or the world when no name is given.
+
+**Current position:** Greeting delivered at commit \\"'`cf0b951'"\\"'` on '"\\"'`main'"\\"'`. Mike approved the result on 2026-09-27. The full five-test suite passed on '"\\"'`main'"\\"'` after WI-002 was merged. Delivered requirements and system structure are recorded in '"\\"'`requirements/greet-cli.md'"\\"'` and '"\\"'`system-guide/greet-cli.md'"\\"'` at commit '"\\"'`be8468b'"\\"'`.
+
+**Next action:** Finish WI-001 after WI
+  -> Saved "Overview" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-002 --section Overview'
+  -> ## Overview
+
+**Goal:** Add `--version` to the greet CLI, reading `0.1.0` from `package.json` as approved in Option A.
+
+**Current position:** Version flag built and independently checked at commit `ce657c1` on `claude/wi-002-version-flag`, based on WI-001 commit `cf0b951`. Mike approved the result on 2026-09-27 after running all three version commands in the WI-002 worktree.
+
+**Next action:** Wait for Mike to request shipping. Merge is not approved.
+
+**Blockers:** The repository has no Git remote. Merge needs Mike’s approval.
+
+**Related items:** Parent WI-001 (R-02). Design: WI-001’s approved design.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --section Overview --text \"**Goal:** Add \\"'`--version'"\\"'` to the greet CLI, reading '"\\"'`0.1.0'"\\"'` from '"\\"'`package.json'"\\"'` as approved in Option A.
+
+**Current position:** Version flag delivered at commit '"\\"'`ce657c1'"\\"'` on '"\\"'`main'"\\"'`. Mike approved the result on 2026-09-27. The full five-test suite passed on '"\\"'`main'"\\"'`. Delivered behavior is recorded in '"\\"'`requirements/greet-cli.md'"\\"'` at commit '"\\"'`be8468b'"\\"'`.
+
+**Next action:** Finish WI-002.
+
+**Blockers:** None.
+
+**Related items:** Parent WI-001 own
+  -> Saved "Overview" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work history WI-001 --note "Delivered behavior and verified system structure recorded in requirements/greet-cli.md and system-guide/greet-cli.md at be8468b on main." --effect "Specification update completed locally; no remote or deployment."'
+  -> Added a Recent History row to WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work history WI-002 --note "Delivered version behavior recorded in requirements/greet-cli.md at be8468b on main." --effect "Specification update completed locally; no remote or deployment."'
+  -> Added a Recent History row to WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work list --tree'
+  -> cli/ (group)
+  WI-001  Build the basic greet CLI  (14 Specification update, In Review)
+    WI-002  Add a --version flag to the greet CLI  (14 Specification update, In Review)
+
+
+[AGENT] Both worktrees and their branches are removed. I’m closing WI-002 first, then its parent WI-001, using the recorded approvals and the passing tests on `main`.
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work finish WI-002 --by Mike --evidence "Commit ce657c1 reached main; node --test tests/greet.test.js passed 5/5 on main on 2026-09-27; Mike approved the three version command results; delivered behavior documented at be8468b."'
+  -> WI-002 is Done. Result approval: 2026-09-27 by Mike.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work finish WI-001 --by Mike --evidence "Commit cf0b951 reached main; node --test tests/greet.test.js passed 5/5 on main on 2026-09-27; Mike approved both greeting command results; delivered behavior documented at be8468b. WI-002 is Done."'
+  -> WI-001 is Done. Result approval: 2026-09-27 by Mike.
+
+
+[CMD exit=0] /bin/zsh -lc 'cat .memory/AGENTS.md .memory/memory-criteria.md'
+  -> # Local project memory
+
+Keep future sessions oriented without turning every conversation into lasting memory. This folder is the project's built-in memory store and can be opened directly as an Obsidian vault. Active topics stay flat; filenames and YAML types agree. Git ignores this folder, so back 
+
+[CMD exit=0] /bin/zsh -lc 'git branch --list'
+  -> * main
+
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## main
+
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3 be8468b [main]
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-27, Codex after Mike approved WI-002's result
+
+## Now
+
+- WI-001 and WI-002 have Mike's result approval. The work items hold the commits and exact checks. No merge is approved.
+
+## Waiting on the owner
+
+- Say when to ship WI-001 and WI-002; neither may be merged yet.
+- Trust this project folder when Codex asks, so it loads the project settings and plugins.
+- Open /hooks in Codex and trust the Toolkit V2 hooks, so Codex can run the project briefing and reminders.
+- Start a new Claude Code session in this project so it loads the project settings and Plain English style.
+
+## Untracked to-dos
+
+- None.
+
+## Next session starts with
+
+- Read PROJECT.md, the project briefing, WI-001, and WI-002. Both results are approved. The repository has no remote; do not merge without Mike's approval.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus --text "# Current focus
+
+Last updated: 2026-09-27, Codex after shipping WI-001 and WI-002
+
+## Now
+
+- None.
+
+## Waiting on the owner
+
+- Trust this project folder when Codex asks, so it loads the project settings and plugins.
+- Open /hooks in Codex and trust the Toolkit V2 hooks, so Codex can run the project briefing and reminders.
+- Start a new Claude Code session in this project so it loads the project settings and Plain English style.
+
+## Untracked to-dos
+
+- None.
+
+## Next session starts with
+
+- Read PROJECT.md and the project briefing. WI-001 and WI-002 are
+  -> Saved the current focus (21 lines). Version: eac8fcb2ecee
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-27, Codex after shipping WI-001 and WI-002
+
+## Now
+
+- None.
+
+## Waiting on the owner
+
+- Trust this project folder when Codex asks, so it loads the project settings and plugins.
+- Open /hooks in Codex and trust the Toolkit V2 hooks, so Codex can run the project briefing and reminders.
+- Start a new Claude Code session in this project so it loads the project settings and Plain English style.
+
+## Untracked to-dos
+
+- None.
+
+## Next session starts with
+
+- Read PROJECT.md and the project briefing. WI-001 and WI-002 are Done. Their commits, delivered requirements, and system guide are on local main; there is no remote.
+
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for greet (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (3):
+- AGENTS.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.
+
+Result: 0 problems and 2 warnings.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work list --tree'
+  -> No open work items. Add --all to include finished, cancelled, and archived ones.
+
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3 be8468b [main]
+
+
+[CMD exit=0] /bin/zsh -lc 'git branch --list'
+  -> * main
+
+
+[CMD exit=0] /bin/zsh -lc 'git log --oneline -4'
+  -> be8468b Document delivered greet CLI behavior
+ce657c1 Add greet version flag
+cf0b951 Build basic greet CLI
+00e30a2 Set up Toolkit V2 project files
+
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## main
+
+
+[CMD exit=0] /bin/zsh -lc 'node --test tests/greet.test.js'
+  -> ✔ greets a named person (43.047125ms)
+✔ greets the world when no name is given (42.001916ms)
+✔ prints the version (40.577458ms)
+✔ version takes precedence after a name (40.471167ms)
+✔ version takes precedence before a name (38.857458ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 
+
+[CMD exit=0] /bin/zsh -lc 'cat README.md'
+  -> # greet
+
+A tiny Node.js command-line tool that greets people.
+
+
+[AGENT] Both work items are Done, and only `main` remains. I found one stale project summary that still says there are no source files or verified tests, so I’m correcting it before the final check.
+
+[CMD exit=0] /bin/zsh -lc 'git worktree add .claude/worktrees/ship-project-summary -b claude/ship-project-summary main'
+  -> Preparing worktree (new branch 'claude/ship-project-summary')
+HEAD is now at be8468b Document delivered greet CLI behavior
+
+
+[FILE_CHANGE] [{"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3/.claude/worktrees/ship-project-summary/PROJECT.md", "kind": "update"}]
+
+[CMD exit=0] /bin/zsh -lc 'git -C .claude/worktrees/ship-project-summary add PROJECT.md'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git -C .claude/worktrees/ship-project-summary diff --cached'
+  -> diff --git a/PROJECT.md b/PROJECT.md
+index aea249e..8846397 100644
+--- a/PROJECT.md
++++ b/PROJECT.md
+@@ -3,7 +3,7 @@
+ ## Purpose and intended outcome
+ 
+ - Purpose: A tiny Node.js command-line tool that greets people, as described in the existing `README.md`.
+-- Intended outcome: The desired greeting
+
+[CMD exit=0] /bin/zsh -lc "git -C .claude/worktrees/ship-project-summary commit -m 'Update project summary for delivered CLI'"
+  -> [claude/ship-project-summary 71d46ac] Update project summary for delivered CLI
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+
+[CMD exit=0] /bin/zsh -lc 'git merge --ff-only claude/ship-project-summary'
+  -> Updating be8468b..71d46ac
+Fast-forward
+ PROJECT.md | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+
+[CMD exit=0] /bin/zsh -lc 'git worktree remove .claude/worktrees/ship-project-summary'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git branch -d claude/ship-project-summary'
+  -> Deleted branch claude/ship-project-summary (was 71d46ac).
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work list --all --tree'
+  -> cli/ (group)
+  WI-001  Build the basic greet CLI  (Done)
+    WI-002  Add a --version flag to the greet CLI  (Done)
+
+
+[CMD exit=0] /bin/zsh -lc 'git log --oneline -5'
+  -> 71d46ac Update project summary for delivered CLI
+be8468b Document delivered greet CLI behavior
+ce657c1 Add greet version flag
+cf0b951 Build basic greet CLI
+00e30a2 Set up Toolkit V2 project files
+
+
+[CMD exit=0] /bin/zsh -lc 'git branch --list'
+  -> * main
+
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## main
+
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3 71d46ac [main]
+
+
+[AGENT] WI-001 and WI-002 are merged locally into `main` and marked Done. All five CLI tests pass. The delivered behavior and project summary are committed, the working tree is clean, and only `main` remains—both work item worktrees and branches have been removed. No remote or GitHub repository was created.
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 3412347, "cached_input_tokens": 3348224, "cache_write_input_tokens": 0, "output_tokens": 8837, "reasoning_output_tokens": 1521}}
+
+SKILLS OPENED: ['work-finish', 'merge-and-clean-up', 'publish-docs', 'memory-save']
+
+[HOOK CONTEXT ord=9] Project briefing: greet (greet), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Build the basic greet CLI: 11 User approval, In Progress. Next action: If Mike asks to ship WI-001, continue with work-finish. Merge has not been approved. Continues with work-finish.
+- WI-002 Add a --version flag to the greet CLI: 11 User approval, In Progress. Next action: Wait for Mike to request shipping. Merge is not approved. Continues with work-finish.
+
+Items: 2 in progress.
+
+Current focus:
+Last updated: 2026-09-27, Codex after Mike approved WI-002's result
+## Now
+- WI-001 and WI-002 have Mike's result approval. The work items hold the commits and exact checks. No merge is approved.
+## Waiting on the owner
+- Say when to ship WI-001 and WI-002; neither may be merged yet.
+- T
+
+[HOOK CONTEXT ord=26] This shell command joins a toolkit command to other commands (&&, ;, a pipe, a heredoc, or cd). In Codex that runs the toolkit command inside the sandbox, which blocks Notion, Hindsight, and the main checkout's .work-items/ and .memory/ from a worktree, so it may fail or report the wrong cause. Run each toolkit command alone, as its own command; pass section text with --text instead of a file written in the same command.
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-curated-remote/app-6a314a7
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await tools.exec_command({cmd:"pwd && cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md","max_output_tokens":12000}); text(r.output);
+
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/skills/work-finish/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.2/skills/merge-and-clean-up/SKILL.md","max_output_tokens":12000}),
+  tools.exec_command({cmd:"git worktree list && git status --short --branch && git remote -v && git log --oneline -10 && toolkit work show WI-001 && toolkit work show WI-002 && toolkit work lifecycle","max_output_tokens":15000}),
+  tools.exec_command({cmd:"cat PROJECT-ROADMAP.md DECISIONS.md .claude/rules/publish-project-documents.md","max_output_tokens":8000})
+]); r.forEach((x,i)=>text(`RESULT ${i+1}\n${x.status==="fulfilled"?x.value.output:String(x.reason)}`));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.5 seconds\nOutput:\n"}, {"type": "input_text", "text": "Warning: truncated output (original token count: 11786)\nTotal output lines: 722\n\nRESULT 1\n---\nname: work-finish\ndescription: 'Ships and closes a work item after the owner approves the result: pull request, merge, deployment, requirements baseline update, and Done; or cancels it with a reason. Use when the owner says \"ship it\", \"deploy it\", \"close it out\", \"mark it done\", \"cancel it\", or \"drop it\".'\n---\n\n# Work finish\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nShared rules: the work plugin's `references/conventions.md`, two folders above this skill's folder (`../../references/conventions.md`). Detail: this skill's `references/closing.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Run each `toolkit` command alone, on its own line: in Codex a command joined by `&&`, `;`, a pipe, or a heredoc, or run from a script, runs inside the sandbox and fails. Give text with `--text`, or a file in a new `mktemp -d` folder (never a fixed `/tmp` name, deleted right after the command). Never change a record with a script.\n\n## Steps\n\n1. Check that the result approval is recorded. Not recorded: show the result, the gaps, and the evidence, and ask. \"Ship it\" or \"mark it done\" from the owner after he has seen the result counts as the approval; record it with his words. Each sub-item needs its own result approval: the owner's approval of the parent does not cover it.\n   `toolkit work show <id>`\n   `toolkit work approve <id> --result --by <owner>`\n   `toolkit work history <id> --note \"Owner's words: <quote>\"`\n2. Repository work: commit the item's files by name on its branch, push it, open the pull request (description through `unslop`, no AI credit), and set the pull request stage. Merge through `merge-and-clean-up` when the owner approves the merge, or when `DECISIONS.md` records a standing merge instruction and the `acceptance-checker` agent found no blocking issue on that exact head. With no remote, a local merge (`git merge --ff-only <branch>` in the main checkout) follows the same approval: still set the pull request stage, and say \"No remote: merged locally into <branch>.\" in a history note. A merge that stops on a conflict is committed wi
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/skills/work-finish/references/closing.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/references/conventions.md","max_output_tokens":9000}),
+tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.2/skills/publish-docs/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.2/skills/memory-save/SKILL.md","max_output_tokens":11000}),
+tools.exec_command({cmd:"git worktree list --porcelain","max_output_tokens":2000}),
+tools.exec_command({cmd:"git status --porcelain=v1","max_output_tokens":2000}),
+tools.exec_command({cmd:"git -C .claude/worktrees/wi-001-basic-greet-cli status --porcelain=v1","max_output_tokens":2000}),
+tools.exec_command({cmd:"git -C .claude/worktrees/wi-002-version-flag status --porcelain=v1","max_output_tokens":2000}),
+tools.exec_command({cmd:"git log --graph --oneline --decorate --all -10","max_output_tokens":2000}),
+tools.exec_command({cmd:"rg --files requirements system-guide tests .work-items | head -100","max_output_tokens":2000})
+]);r.forEach((x,i)=>text(`RESULT ${i+1}\n${x.status==="fulfilled"?x.value.output:String(x.reason)}`));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.5 seconds\nOutput:\n"}, {"type": "input_text", "text": "RESULT 1\n# Closing a work item\n\nDetail for `work-finish`. Carried over from Toolkit V1's \"Finish or\ncancel\" rules and its \"Closing a work item\" checklist, with V2 homes.\n\n## Before Done\n\n- Give the owner a short result, the known gaps, and the evidence, and ask\n  for approval. A clear earlier approval of that same result counts.\n- Never describe an unverified result as complete.\n- Done means the owner accepted the result. Cancelled means the work stopped\n  without it.\n\n## The pull request (stage 12)\n\n- Push the item's branch (`claude/wi-<number>-<slug>`). Never force-push.\n- Write the pull request title and description in plain words: what changed,\n  why, how it was checked, and the item id. Run the description through the\n  `unslop` skill, because it is read by other people. No line crediting an AI.\n- Merge only through `merge-and-clean-up`, and only when one of these holds:\n  - the owner said yes to this merge; or\n  - `DECISIONS.md` records a standing merge instruction from the owner (the\n    project's `AGENTS.md` names it there), and an `acceptance-checker` that\n    did not build the change reported no blocking issue on that exact head\n    commit, and every check passes. `merge-and-clean-up` step 2 checks the\n    same record.\n- A work item that says its merge needs the owner's approval overrides a\n  standing instruction.\n- No remote: the local merge (`git merge --ff-only <branch>` in the main\n  checkout) is this stage. Set the stage anyway and add a history note:\n  \"No remote: merged locally into main.\" A stage that does not apply at all\n  (no repository change, no deployment) gets one history note saying so, so\n  `toolkit work finish` has a record of it.\n- A merge that stops on a conflict: resolve it and commit with a message you\n  write. `git commit --no-edit` keeps Git's \"# Conflicts:\" lines in the\n  message.\n\n## Deployment (stage 13)\n\n- Only when the result must be put somewhere beyond the default branch.\n- Salesforce projects, in order: `sf-component-tracker` is current and the\n  item's folder `delivery/deployment/<work-item-id>-<short-name>/` holds its\n  `package.xml`, `destructiveChanges.xml` when something is removed,\n  `manual-steps.md`, and `DEPLOYMENT-RECORD.md`; `sf-deploy-check` finds\n  nothing that would ship too early; then a validate against the sandbox. A\n  productio
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"git diff --name-only main...claude/wi-001-basic-greet-cli","max_output_tokens":1000}),
+tools.exec_command({cmd:"git diff --name-only main...claude/wi-002-version-flag","max_output_tokens":1000}),
+tools.exec_command({cmd:"git merge-base --is-ancestor claude/wi-001-basic-greet-cli claude/wi-002-version-flag","max_output_tokens":1000}),
+tools.exec_command({cmd:"cat requirements/AGENTS.md requirements/system-area-template/AREA-TEMPLATE.md system-guide/AREA-TEMPLATE.md","max_output_tokens":6000}),
+tools.exec_command({cmd:"git config user.name","max_output_tokens":1000})
+]);r.forEach((x,i)=>text(`RESULT ${i+1}\n${x.status==="fulfilled"?JSON.stringify(x.value):String(x.reason)}`));
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-001 --stage 12-pr-and-push","max_output_tokens":1000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Updated WI-001: stage 11 User approval -> 12 Pull request and push (status In Review).\nNow 12 Pull request and push (In Review). Continue with work-finish.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-002 --stage 12-pr-and-push","max_output_tokens":1000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Updated WI-002: stage 11 User approval -> 12 Pull request and push (status In Review).\nNow 12 Pull request and push (In Review). Continue with work-finish.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"git merge --ff-only claude/wi-001-basic-greet-cli","sandbox_permissions":"require_escalated","justification":"Fast-forward main to the owner-approved WI-001 commit.","prefix_rule":["git","merge"],"max_output_tokens":2000});text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"git merge --ff-only claude/wi-002-version-flag","sandbox_permissions":"require_escalated","justification":"Fast-forward main to the owner-approved WI-002 commit.","prefix_rule":["git","merge"],"max_output_tokens":2000});text(r);
+
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"node --test tests/greet.test.js","max_output_tokens":2000}),
+tools.exec_command({cmd:"git status --short --branch","max_output_tokens":1000}),
+tools.exec_command({cmd:"git log --oneline -3","max_output_tokens":1000})
+]);r.forEach((x,i)=>text(`RESULT ${i+1}\n${x.status==="fulfilled"?x.value.output:String(x.reason)}`));
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history WI-001 --note \"Owner's words: 'Ship it: WI-001 and WI-002. There is no remote and I do not want a GitHub repo, so merge them into main locally. I approve that merge and the git commands Codex asks for to do it. Then mark both done and clean up their worktrees and branches.' No remote: merged locally into main at cf0b951.\" --effect \"WI-001 is on main; no pull request or deployment.\"","max_output_tokens":1200});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Added a Recent History row to WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history WI-002 --note \"Owner's words: 'Ship it: WI-001 and WI-002. There is no remote and I do not want a GitHub repo, so merge them into main locally. I approve that merge and the git commands Codex asks for to do it. Then mark both done and clean up their worktrees and branches.' No remote: merged locally into main at ce657c1.\" --effect \"WI-002 is on main; no pull request or deployment.\"","max_output_tokens":1200});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Added a Recent History row to WI-002.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-001 --stage 14-spec-update","max_output_tokens":1000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Updated WI-001: stage 12 Pull request and push -> 14 Specification update (status In Review).\nNow 14 Specification update (In Review). Continue with work-finish.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-002 --stage 14-spec-update","max_output_tokens":1000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Updated WI-002: stage 12 Pull request and push -> 14 Specification update (status In Review).\nNow 14 Specification update (In Review). Continue with work-finish.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"git worktree add .claude/worktrees/ship-greet-docs -b claude/ship-greet-docs main","sandbox_permissions":"require_escalated","justification":"Create an isolated temporary worktree to commit the shipped CLI documentation.","prefix_rule":["git","worktree","add"],"max_output_tokens":2000});text(r);
+
+
+[CALL] const patch="*** Begin Patch\n*** Add File: .claude/worktrees/ship-greet-docs/requirements/greet-cli.md\n+# Greet CLI\n+\n+## Purpose and scope\n+\n+The Node.js command-line tool prints a greeting or its version. These rules cover the commands approved in WI-001 and WI-002. Other arguments have no specified behavior.\n+\n+## Functional behavior\n+\n+### G-01 — Greeting\n+\n+- Trigger or context: Run `node bin/greet.js` without `--version`.\n+- Required behavior: With `Mike` as the name, print `Hello, Mike!` followed by a newline. With no name, print `Hello, world!` followed by a newline.\n+- Conditions and exceptions: Behavior for additional arguments has not been specified.\n+- User or system outcome: One greeting is written to standard output.\n+- Source: WI-001 R-01, approved by Mike on 2026-09-27.\n+- Delivery status and evidence: Delivered in commit `cf0b951`; the greeting tests passed on `main` on 2026-09-27.\n+\n+### G-02 — Version\n+\n+- Trigger or context: Run `node bin/greet.js` with `--version`.\n+- Required behavior: Print `0.1.0` followed by a newline, whether a name is present or not.\n+- Conditions and exceptions: The version takes precedence over the greeting when both a name and `--version` are present.\n+- User or system outcome: Only the version is written to standard output.\n+- Source: WI-001 R-02, delivered by WI-002; approved by Mike on 2026-09-27.\n+- Delivery status and evidence: Delivered in commit `ce657c1`; the version tests passed on `main` on 202
+
+[CALL] const r=await tools.exec_command({cmd:"git -C .claude/worktrees/ship-greet-docs status --short","max_output_tokens":1000});text(r.output);
+
+
+[CALL] const r=await tools.exec_command({cmd:"cat bin/greet.js package.json tests/greet.test.js","max_output_tokens":3000});text(r.output);
+
+
+[CALL] const r=await tools.exec_command({cmd:"git -C .claude/worktrees/ship-greet-docs add requirements/greet-cli.md system-guide/greet-cli.md","sandbox_permissions":"require_escalated","justification":"Stage the delivered CLI requirements and system guide in the temporary documentation worktree.","prefix_rule":["git","-C"],"max_output_tokens":1000});text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"git -C .claude/worktrees/ship-greet-docs diff --cached --check","max_output_tokens":1000});text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"git -C .claude/worktrees/ship-greet-docs diff --cached","max_output_tokens":6000});text(r.output);
+
+
+[CALL] const r=await tools.exec_command({cmd:"git -C .claude/worktrees/ship-greet-docs commit -m 'Document delivered greet CLI behavior'","sandbox_permissions":"require_escalated","justification":"Commit the approved CLI requirements and verified system guide.","prefix_rule":["git","-C"],"max_output_tokens":2000});text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"git merge --ff-only claude/ship-greet-docs","sandbox_permissions":"require_escalated","justification":"Bring the committed delivered CLI documentation into main locally.","prefix_rule":["git","merge"],"max_output_tokens":1500});text(r);
+
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"git status --porcelain=v1","max_output_tokens":500}),
+tools.exec_command({cmd:"git -C .claude/worktrees/wi-001-basic-greet-cli status --porcelain=v1","max_output_tokens":500}),
+tools.exec_command({cmd:"git -C .claude/worktrees/wi-002-version-flag status --porcelain=v1","max_output_tokens":500}),
+tools.exec_command({cmd:"git -C .claude/worktrees/ship-greet-docs status --porcelain=v1","max_output_tokens":500}),
+tools.exec_command({cmd:"git branch --merged main","max_output_tokens":1000}),
+tools.exec_command({cmd:"git worktree list","max_output_tokens":1000})
+]);r.forEach((x,i)=>text(`RESULT ${i+1}\n${x.status==="fulfilled"?JSON.stringify(x.value):String(x.reason)}`));
+
+
+[CALL] const r=await tools.exec_command({cmd:"git worktree remove .claude/worktrees/wi-001-basic-greet-cli","sandbox_permissions":"require_escalated","justification":"Remove the clean WI-001 worktree after its commit reached main.","prefix_rule":["git","worktree","remove"],"max_output_tokens":1000});text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"git branch -d claude/wi-001-basic-greet-cli","sandbox_permissions":"require_escalated","justification":"Delete the merged WI-001 branch.","prefix_rule":["git","branch","-d"],"max_output_tokens":1000});text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"git worktree remove .claude/worktrees/wi-002-version-flag","sandbox_permissions":"require_escalated","justification":"Remove the clean WI-002 worktree after its commit reached main.","prefix_rule":["git","worktree","remove"],"max_output_tokens":1000});text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"git branch -d claude/wi-002-version-flag","sandbox_permissions":"require_escalated","justification":"Delete the merged WI-002 branch.","prefix_rule":["git","branch","-d"],"max_output_tokens":1000});text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"git worktree remove .claude/worktrees/ship-greet-docs","sandbox_permissions":"require_escalated","justification":"Remove the clean temporary documentation worktree after its commit reached main.","prefix_rule":["git","worktree","remove"],"max_output_tokens":1000});text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"git branch -d claude/ship-greet-docs","sandbox_permissions":"require_escalated","justification":"Delete the merged temporary documentation branch.","prefix_rule":["git","branch","-d"],"max_output_tokens":1000});text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show WI-001 --section Roadmap","max_output_tokens":2500});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "## Roadmap\n\nA phase is complete when its exit result has been checked.\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 \u2014 Basic greeting | `node bin/greet.js Mike` and `node bin/greet.js` print the approved greetings. | Complete | Both exact outputs were tested; Mike ran both commands and approved the WI-001 result on 2026-09-27. | None |\n| P2 \u2014 Version flag | The CLI also prints version `0.1.0` from `package.json` when `--version` is present. | In Progress | All R-02 commands are tested; Mike reviews the WI-002 result. | WI-002 |\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show WI-002 --section Roadmap","max_output_tokens":2000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "## Roadmap\n\nA phase is complete when its tasks are complete and its exit result has been checked.\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 \u2014 Version flag | `--version` reads `0.1.0` from `package.json` and takes precedence over a name. | In Progress | Three R-02 command outputs are exact and tests pass. | None |\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section Roadmap --text \"A phase is complete when its exit result has been checked.\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 — Basic greeting | \\`node bin/greet.js Mike\\` and \\`node bin/greet.js\\` print the approved greetings. | Done | Both exact outputs were tested; Mike ran both commands and approved the WI-001 result on 2026-09-27. | None |\n| P2 — Version flag | The CLI also prints version \\`0.1.0\\` from \\`package.json\\` when \\`--version\\` is present. | Done | All three R-02 commands and the five-test suite passed on main; Mike approved the WI-002 result on 2026-09-27. | WI-002 |\"","max_output_tokens":1000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.5 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Roadmap\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --section Roadmap --text \"A phase is complete when its tasks are complete and its exit result has been checked.\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 — Version flag | \\`--version\\` reads \\`0.1.0\\` from \\`package.json\\` and takes precedence over a name. | Done | All three R-02 command outputs were exact; the five-test suite passed on main; Mike approved the result on 2026-09-27. | None |\"","max_output_tokens":1000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Roadmap\" in WI-002.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show WI-001 --section Overview","max_output_tokens":1500});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "## Overview\n\n**Goal:** Build the basic Node.js greet CLI: greet a named person or the world when no name is given.\n\n**Current position:** Basic greeting built and independently checked at commit `cf0b951` on `claude/wi-001-basic-greet-cli`. Mike ran both greeting commands in the WI-001 worktree and approved the result on 2026-09-27. WI-002 adds the version flag separately and still awaits result approval.\n\n**Next action:** If Mike asks to ship WI-001, continue with work-finish. Merge has not been approved.\n\n**Blockers:** The repository has no Git remote. Merge requires Mike's approval.\n\n**Related items:** WI-002 delivers R-02 (`--version`) under this parent.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section Overview --text \"**Goal:** Build the basic Node.js greet CLI: greet a named person or the world when no name is given.\n\n**Current position:** Greeting delivered at commit \\`cf0b951\\` on \\`main\\`. Mike approved the result on 2026-09-27. The full five-test suite passed on \\`main\\` after WI-002 was merged. Delivered requirements and system structure are recorded in \\`requirements/greet-cli.md\\` and \\`system-guide/greet-cli.md\\` at commit \\`be8468b\\`.\n\n**Next action:** Finish WI-001 after WI-002 is Done.\n\n**Blockers:** None.\n\n**Related items:** WI-002 delivered R-02 (\\`--version\\`) and was merged into \\`main\\` at commit \\`ce657c1\\`.\"","max_output_tokens":1000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Overview\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show WI-002 --section Overview","max_output_tokens":1500});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "## Overview\n\n**Goal:** Add `--version` to the greet CLI, reading `0.1.0` from `package.json` as approved in Option A.\n\n**Current position:** Version flag built and independently checked at commit `ce657c1` on `claude/wi-002-version-flag`, based on WI-001 commit `cf0b951`. Mike approved the result on 2026-09-27 after running all three version commands in the WI-002 worktree.\n\n**Next action:** Wait for Mike to request shipping. Merge is not approved.\n\n**Blockers:** The repository has no Git remote. Merge needs Mike\u2019s approval.\n\n**Related items:** Parent WI-001 (R-02). Design: WI-001\u2019s approved design.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --section Overview --text \"**Goal:** Add \\`--version\\` to the greet CLI, reading \\`0.1.0\\` from \\`package.json\\` as approved in Option A.\n\n**Current position:** Version flag delivered at commit \\`ce657c1\\` on \\`main\\`. Mike approved the result on 2026-09-27. The full five-test suite passed on \\`main\\`. Delivered behavior is recorded in \\`requirements/greet-cli.md\\` at commit \\`be8468b\\`.\n\n**Next action:** Finish WI-002.\n\n**Blockers:** None.\n\n**Related items:** Parent WI-001 owns R-02 and its approved design; WI-002 delivered R-02.\"","max_output_tokens":1000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Overview\" in WI-002.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history WI-001 --note \"Delivered behavior and verified system structure recorded in requirements/greet-cli.md and system-guide/greet-cli.md at be8468b on main.\" --effect \"Specification update completed locally; no remote or deployment.\"","max_output_tokens":1000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Added a Recent History row to WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history WI-002 --note \"Delivered version behavior recorded in requirements/greet-cli.md at be8468b on main.\" --effect \"Specification update completed locally; no remote or deployment.\"","max_output_tokens":1000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.5 seconds\nOutput:\n"}, {"type": "input_text", "text": "Added a Recent History row to WI-002.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work list --tree","max_output_tokens":1000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "cli/ (group)\n  WI-001  Build the basic greet CLI  (14 Specification update, In Review)\n    WI-002  Add a --version flag to the greet CLI  (14 Specification update, In Review)\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work finish WI-002 --by Mike --evidence \"Commit ce657c1 reached main; node --test tests/greet.test.js passed 5/5 on main on 2026-09-27; Mike approved the three version command results; delivered behavior documented at be8468b.\"","max_output_tokens":1500});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "WI-002 is Done. Result approval: 2026-09-27 by Mike.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work finish WI-001 --by Mike --evidence \"Commit cf0b951 reached main; node --test tests/greet.test.js passed 5/5 on main on 2026-09-27; Mike approved both greeting command results; delivered behavior documented at be8468b. WI-002 is Done.\"","max_output_tokens":1500});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "WI-001 is Done. Result approval: 2026-09-27 by Mike.\n"}]
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"cat .memory/AGENTS.md .memory/memory-criteria.md","max_output_tokens":3500}),
+tools.exec_command({cmd:"git worktree list","max_output_tokens":1000}),
+tools.exec_command({cmd:"git branch --list","max_output_tokens":1000}),
+tools.exec_command({cmd:"git status --short --branch","max_output_tokens":1000})
+]);r.forEach((x,i)=>text(`RESULT ${i+1}\n${x.status==="fulfilled"?x.value.output:String(x.reason)}`));
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus","max_output_tokens":2000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "# Current focus\n\nLast updated: 2026-09-27, Codex after Mike approved WI-002's result\n\n## Now\n\n- WI-001 and WI-002 have Mike's result approval. The work items hold the commits and exact checks. No merge is approved.\n\n## Waiting on the owner\n\n- Say when to ship WI-001 and WI-002; neither may be merged yet.\n- Trust this project folder when Codex asks, so it loads the project settings and plugins.\n- Open /hooks in Codex and trust the Toolkit V2 hooks, so Codex can run the project briefing and reminders.\n- Start a new Claude Code session in this project so it loads the project settings and Plain English style.\n\n## Untracked to-dos\n\n- None.\n\n## Next session starts with\n\n- Read PROJECT.md, the project briefing, WI-001, and WI-002. Both results are approved. The repository has no remote; do not merge without Mike's approval.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --text \"# Current focus\n\nLast updated: 2026-09-27, Codex after shipping WI-001 and WI-002\n\n## Now\n\n- None.\n\n## Waiting on the owner\n\n- Trust this project folder when Codex asks, so it loads the project settings and plugins.\n- Open /hooks in Codex and trust the Toolkit V2 hooks, so Codex can run the project briefing and reminders.\n- Start a new Claude Code session in this project so it loads the project settings and Plain English style.\n\n## Untracked to-dos\n\n- None.\n\n## Next session starts with\n\n- Read PROJECT.md and the project briefing. WI-001 and WI-002 are Done. Their commits, delivered requirements, and system guide are on local main; there is no remote.\"","max_output_tokens":1000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved the current focus (21 lines). Version: eac8fcb2ecee\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus","max_output_tokens":1200});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "# Current focus\n\nLast updated: 2026-09-27, Codex after shipping WI-001 and WI-002\n\n## Now\n\n- None.\n\n## Waiting on the owner\n\n- Trust this project folder when Codex asks, so it loads the project settings and plugins.\n- Open /hooks in Codex and trust the Toolkit V2 hooks, so Codex can run the project briefing and reminders.\n- Start a new Claude Code session in this project so it loads the project settings and Plain English style.\n\n## Untracked to-dos\n\n- None.\n\n## Next session starts with\n\n- Read PROJECT.md and the project briefing. WI-001 and WI-002 are Done. Their commits, delivered requirements, and system guide are on local main; there is no remote.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit doctor","max_output_tokens":2000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.5 seconds\nOutput:\n"}, {"type": "input_text", "text": "Toolkit doctor for greet (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3).\n\nWarnings (2):\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/a-local-builtin-r3). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.\n   Fix: The owner opens Codex in this folder and trusts it when Codex asks.\n2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).\n   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\n\nNotes (3):\n- AGENTS.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.\n- PROJECT.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.\n- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.\n\nResult: 0 problems and 2 warnings.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work list --tree","max_output_tokens":800});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "No open work items. Add --all to include finished, cancelled, and archived ones.\n"}]
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"git status --short --branch","max_output_tokens":500}),
+tools.exec_command({cmd:"git worktree list","max_output_tokens":500}),
+tools.exec_command({cmd:"git branch --list","max_output_tokens":500}),
+tools.exec_command({cmd:"git log --oneline -4","max_output_tokens":500}),
+tools.exec_command({cmd:"node --test tests/greet.test.js","max_output_tokens":1500})
+]);r.forEach((x,i)=>text(`RESULT ${i+1}\n${x.status==="fulfilled"?x.value.output:String(x.reason)}`));
+
+
+[CALL] const r=await tools.exec_command({cmd:"cat README.md","max_output_tokens":1000});text(r.output);
+
+
+[CALL] const r=await tools.exec_command({cmd:"git worktree add .claude/worktrees/ship-project-summary -b claude/ship-project-summary main","sandbox_permissions":"require_escalated","justification":"Create an isolated worktree to correct the project summary after shipping the CLI.","prefix_rule":["git","worktree","add"],"max_output_tokens":1000});text(r);
+
+
+[CALL] text(await tools.apply_patch("*** Begin Patch\n*** Update File: .claude/worktrees/ship-project-summary/PROJECT.md\n@@\n-- Intended outcome: The desired greeting behavior and success criteria have not been specified yet.\n+- Intended outcome: The CLI greets a named person or the world by default and prints version `0.1.0` when `--version` is present.\n@@\n-No runtime system or environment has been confirmed. The repository currently has no source files or `package.json`.\n+The CLI runs locally with Node.js from `bin/greet.js`. Its version is in `package.json`. The delivered behavior and current structure are recorded in `requirements/greet-cli.md` and `system-guide/greet-cli.md`.\n@@\n-- Tests and checks: No project test command or test suite has been verified yet.\n+- Tests and checks: `node --test tests/greet.test.js` passed all five tests on local `main` on 2026-09-27.\n*** End Patch"));
+
+
+[CALL] const r=await tools.exec_command({cmd:"git -C .claude/worktrees/ship-project-summary add PROJECT.md","sandbox_permissions":"require_escalated","justification":"Stage the corrected project summary.","prefix_rule":["git","-C"],"max_output_tokens":500});text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"git -C .claude/worktrees/ship-project-summary diff --cached","max_output_tokens":1800});text(r.output);
+
+
+[CALL] const r=await tools.exec_command({cmd:"git -C .claude/worktrees/ship-project-summary commit -m 'Update project summary for delivered CLI'","sandbox_permissions":"require_escalated","justification":"Commit the corrected project summary for future sessions.","prefix_rule":["git","-C"],"max_output_tokens":1000});text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"git merge --ff-only claude/ship-project-summary","sandbox_permissions":"require_escalated","justification":"Fast-forward main to include the corrected project summary.","prefix_rule":["git","merge"],"max_output_tokens":1000});text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"git worktree remove .claude/worktrees/ship-project-summary","sandbox_permissions":"require_escalated","justification":"Remove the clean temporary project-summary worktree after its commit reached main.","prefix_rule":["git","worktree","remove"],"max_output_tokens":500});text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"git branch -d claude/ship-project-summary","sandbox_permissions":"require_escalated","justification":"Delete the merged temporary project-summary branch.","prefix_rule":["git","branch","-d"],"max_output_tokens":500});text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work list --all --tree","max_output_tokens":1000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "cli/ (group)\n  WI-001  Build the basic greet CLI  (Done)\n    WI-002  Add a --version flag to the greet CLI  (Done)\n"}]
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"git status --short --branch","max_output_tokens":500}),
+tools.exec_command({cmd:"git worktree list","max_output_tokens":500}),
+tools.exec_command({cmd:"git branch --list","max_output_tokens":500}),
+tools.exec_command({cmd:"git log --oneline -5","max_output_tokens":500})
+]);r.forEach((x,i)=>text(`RESULT ${i+1}\n${x.status==="fulfilled"?x.value.output:String(x.reason)}`));
+

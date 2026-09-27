@@ -1,0 +1,285 @@
+PROMPT: New work: Add a --shout flag to the greet CLI. It should print the greeting in capital letters. Track it as a work item and ask me what you need to pin down the requirements.
+THREAD: 01a0e45f-17d3-76d1-80d7-2ba728a91bdb
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll create a work item for `--shout`, then use the requirements workflow to pin down its behavior with you.
+
+[CMD exit=0] /bin/zsh -lc 'cat PROJECT-ROADMAP.md bin/greet.mjs test/greet.test.mjs /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/references/conventions.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/skills/work-requirements/references/writing-requirements.md'
+  -> # Project roadmap
+
+## Project outcome
+
+Build a small, friendly greeting command that can grow with a few simple flags. The current CLI prints a greeting for a supplied name or for the world by default. Specific flags and delivery phases have not been chosen.
+
+## Phases and work units
+
+No phases or work units have been agreed. Add them when the owner defines the next deliverable, and link each work unit to its work item ID.
+
+## Open project-level planning questions
+
+None open.
+
+## Planning changes
+
+None recorded.
+#!/usr/bin/env node
+// greet: prints a friendly greeting.
+// Usage: greet [name]
+export function greet(name = 'world') {
+  return `Hello, ${name}!`;
+}
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const args = process.argv.slice(2);
+  console.log(greet(args[0]));
+}
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { greet } from '../bin/greet.mjs';
+
+test('greets the world by default', () => {
+  assert.equal(greet(), 'Hello, world!');
+});
+
+test('greets a name', () => {
+  assert.equal(greet('Mike'), 'Hello, Mike!');
+});
+# Conventions every work skill follows
+
+Every skill in the work plugin follows these rules. A skill's own `SKILL.md`
+names the file when a rule matters for a step.
+
+This file is `references/conventions.md` in the work plugin's own folder. From
+a skill's `SKILL.md` it is two folders up: `skills/work-on/SKILL.md` and
+`references/conventions.md` share the plugin folder. In Codex the plugin
+folder is the installed 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work list'
+  -> No open work items. Add --all to include finished, cancelled, and archived ones.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work new --title "Add a --shout flag to the greet CLI" --type build --stage 01-discovery'
+  -> Created WI-001: Add a --shout flag to the greet CLI (01 Discovery, Backlog) at .work-items/WI-001-add-a-shout-flag-to-the-greet-cli/WORK-ITEM.md.
+Continue with work-requirements.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work edit WI-001 --section "Starting request" --text "New work: Add a --shout flag to the greet CLI. It should print the greeting in capital letters. Track it as a work item and ask me what you need to pin down the requirements."'
+  -> Saved "Starting request" in WI-001.
+
+
+[AGENT] WI-001 is created as a build item. The CLI currently takes the first argument as the name, so I’m checking the existing project records before asking how the flag should work alongside names.
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001'
+  -> WI-001: Add a --shout flag to the greet CLI
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3/.work-items/WI-001-add-a-shout-flag-to-the-greet-cli/WORK-ITEM.md
+Stage: 01 Discovery (Backlog) | Waiting on: none | Continue with: work-requirements
+Parent: none | Sub-items: none | Design: none
+
+---
+id: WI-001
+title: Add a --shout flag to the greet CLI
+type: build
+stage: 01-discovery
+status: Backlog
+parent: none
+waiting_on: "none"
+priority: medium
+delivery: not-offered
+requirements_approved: "no"
+design: none
+result_approved: "no"
+updated: 2026-09-27
+---
+
+# WI-001: Add a --shout flag to the greet CLI
+
+<!-- Fill-in guide for a new local work item: create it with `toolkit work new`, which copies this folder, names the new folder, and sets the real ID in front matter and heading; keep the file name WORK-ITEM.md. Use stable phase, task, requirement, and question IDs for this item. In the front matter, keep one value from each list and change the fields with `toolkit work` commands; a blocked item has `waiting_on` set and its Blockers line filled, not a Blocked status. Replace every angle-bracket prompt with actual text in that same field, cell, or paragraph; do not leave the prompt in place. Keep the headings and field labels. Add or remove phase, task, question, and requirement examples to match the real work. Use the chosen tracker as the source of truth for status and links
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory find "greet CLI shout flag argument behavior"'
+  -> No memory records match "greet CLI shout flag argument behavior".
+
+
+[CMD exit=0] /bin/zsh -lc 'rg --files requirements system-guide tests test 2>/dev/null'
+  -> test/greet.test.mjs
+tests/TEST-PLAN-TEMPLATE.md
+system-guide/AREA-TEMPLATE.md
+requirements/AGENTS.md
+requirements/SYSTEM-DATA-MODEL.md
+requirements/system-area-template/AREA-TEMPLATE.md
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --stage 02-refinement'
+  -> Updated WI-001: stage 01 Discovery -> 02 Refinement (status Backlog).
+Now 02 Refinement (Backlog). Continue with work-requirements.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work edit WI-001 --section "Open Questions" --text "| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | Should --shout uppercase the entire greeting for both a supplied name and the default world greeting, while calls without the flag stay unchanged? | R-01 | Open | owner |"'
+  -> Saved "Open Questions" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section \"Overview\" --text \"**Goal:** Add a --shout flag that prints the greeting in capital letters.
+
+**Current position:** Requirements are being clarified. The existing CLI greets the first argument as a name and defaults to world.
+
+**Next action:** Owner answers Q-01; agent records the behavior and continues the requirements interview.
+
+**Blockers:** Q-01 needs the owner's decision.
+
+**Related items:** None.\""
+  -> Saved "Overview" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work edit WI-001 --section "Notes" --text "### Decisions and context
+
+- Existing behavior: a supplied name prints Hello, <name>!; no name prints Hello, world! The CLI currently reads the first argument as the name.
+
+### Resume here
+
+Ask the owner Q-01 about the scope of capitalization. Then clarify flag position and any other argument behavior before drafting requirements for approval.
+
+### Solution options and considerations
+
+None recorded."'
+  -> Saved "Notes" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --waiting-on owner'
+  -> Updated WI-001: waiting on owner.
+Now 02 Refinement (Backlog). Continue with work-decide.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work history WI-001 --note "Owner requested a --shout flag that prints the greeting in capital letters and asked to pin down requirements." --effect "Created the build item and opened Q-01 about which greetings the flag affects."'
+  -> Added a Recent History row to WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate WI-001'
+  -> Checked 1 item: 1 clean, 0 errors, 0 questions for the owner.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001 --section "Open Questions"'
+  -> ## Open Questions
+
+| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | Should --shout uppercase the entire greeting for both a supplied name and the default world greeting, while calls without the flag stay unchanged? | R-01 | Open | owner |
+
+
+[AGENT] I created **WI-001** for the `--shout` flag. It’s in requirements refinement and waiting on your answer.
+
+Should `--shout` uppercase the **entire greeting** for both a supplied name and the default `world` greeting, while greetings without the flag stay unchanged? I recommend yes.
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 628984, "cached_input_tokens": 598656, "cache_write_input_tokens": 0, "output_tokens": 1636, "reasoning_output_tokens": 271}}
+
+SKILLS OPENED: []
+
+[HOOK CONTEXT ord=9] Project briefing: Greet CLI Sample D3 (greet-cli-sample-d3), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: the local Hindsight server. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The tracker has no open items. A new request starts a work item with the work-on skill.
+
+Current focus:
+Last updated: 2026-09-27, project setup, agent
+## Now
+None.
+## Waiting on the owner
+- In Codex, trust this project folder when prompted, then open `/hooks` and trust the Toolkit V2 hooks; check at the next session.
+- Start a new session after setup so Claude Code loads the project settings and output style; check at the next session.
+## Untracked to-dos
+None.
+## Next session starts with
+- Read `AGENTS.md` and `PROJECT.md`; ask for the first project change and create its work item.
+
+Project memory (hindsight): 0 records, from the
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/{humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,session-handoff,shared-repository-work,work-item-folders}.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/skills/work-on/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/skills/work-requirements/SKILL.md","max_output_tokens":16000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "cat: SOUL.md: No such file or directory\n# Greet CLI Sample D3\n\n## Purpose and intended outcome\n\n- Purpose: Provide a small command that prints a greeting.\n- Intended outcome: A small, friendly greeting command that can grow with a few simple flags. Today it prints `Hello, <name>!` for a supplied name and `Hello, world!` by default, as shown by the existing tests.\n\n## Scope and boundaries\n\n- In scope: The Node.js greeting command in `bin/greet.mjs` and its tests.\n- Outside scope: No exclusions have been defined.\n- Constraints: No project-specific constraints have been defined.\n\n## Systems and environments\n\n| System or org | Purpose | Environment | Source of truth | Access notes |\n| --- | --- | --- | --- | --- |\n| Local Node.js CLI | Prints greetings | Local | `bin/greet.mjs` | Runs with Node.js; no account access is required. |\n\n## People and ownership\n\n| Role | Person or team | Responsibility | Source / last confirmed |\n| --- | --- | --- | --- |\n| Owner | Mike | Makes project decisions | `.toolkit.json`, 2026-09-27 |\n\n## Work and project records\n\n- Work tracker: Local folders in `.work-items/` (Git-ignored)\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\n- Project decisions: [DECISIONS.md](DECISIONS.md)\n- Functional requirements: [requirements/](requirements/)\n- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`\n- System Guide: `system-guide/` contains a template; no system area guide has been written yet.\n- Memory: this project's bank on the local Hindsight server (the setup choice is in `.toolkit.json`)\n- Memory backup or sync: No owner-approved destination or restore procedure is recorded.\n\n## Resources and project paths\n\n- Tests and checks: `npm test` runs `test/greet.test.mjs`; `node bin/greet.mjs Mike` exercises the CLI.\n- Outside references: `ai-external-knowledge/INDEX.md`\n\n## Operating conventions\n\nNone yet.\n# Humanize Anything Sent to Another Person\n\nAny text that will leave the project and be read by someone other than the owner\nis run through the `humanizer` skill before the owner sees the final version.\nUse the `unslop` skill when `humanizer` is not installed. That covers emails,\nchat messages, support case text and comments, GitHub issues, pull request\ndescriptions, client documents, and any file made to hand to so
+
+[CALL] const r=await tools.exec_command({cmd:"cat PROJECT-ROADMAP.md bin/greet.mjs test/greet.test.mjs /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/references/conventions.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/skills/work-requirements/references/writing-requirements.md","max_output_tokens":14000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "# Project roadmap\n\n## Project outcome\n\nBuild a small, friendly greeting command that can grow with a few simple flags. The current CLI prints a greeting for a supplied name or for the world by default. Specific flags and delivery phases have not been chosen.\n\n## Phases and work units\n\nNo phases or work units have been agreed. Add them when the owner defines the next deliverable, and link each work unit to its work item ID.\n\n## Open project-level planning questions\n\nNone open.\n\n## Planning changes\n\nNone recorded.\n#!/usr/bin/env node\n// greet: prints a friendly greeting.\n// Usage: greet [name]\nexport function greet(name = 'world') {\n  return `Hello, ${name}!`;\n}\n\nif (import.meta.url === `file://${process.argv[1]}`) {\n  const args = process.argv.slice(2);\n  console.log(greet(args[0]));\n}\nimport { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { greet } from '../bin/greet.mjs';\n\ntest('greets the world by default', () => {\n  assert.equal(greet(), 'Hello, world!');\n});\n\ntest('greets a name', () => {\n  assert.equal(greet('Mike'), 'Hello, Mike!');\n});\n# Conventions every work skill follows\n\nEvery skill in the work plugin follows these rules. A skill's own `SKILL.md`\nnames the file when a rule matters for a step.\n\nThis file is `references/conventions.md` in the work plugin's own folder. From\na skill's `SKILL.md` it is two folders up: `skills/work-on/SKILL.md` and\n`references/conventions.md` share the plugin folder. In Codex the plugin\nfolder is the installed copy, for example\n`~/.codex/plugins/cache/toolkit-v2/work/<version>/`, so this file is\n`~/.codex/plugins/cache/toolkit-v2/work/<version>/references/conventions.md`.\n\nFour rules that are easy to miss:\n\n- Run each `toolkit` command alone, as its own command (below).\n- Never change a work item with a script (Python, Node, `sed -i`, `cat >`).\n  Use `toolkit work edit --section` or `--label`, or the file edit tool for\n  body text. The hooks refuse the script, so it only wastes a step.\n- Temporary text goes in `--text`, or in a file in a new `mktemp -d` folder,\n  never at a fixed name such as `/tmp/wi001.md`.\n- End every reply to the owner with the one question he must answer, or with\n  the exact words that continue the work (\"Say 'keep going' and I'll start the\n  build.\"). Never end on \"The next step is ...\" w
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work list","max_output_tokens":2000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "No open work items. Add --all to include finished, cancelled, and archived ones.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work new --title \"Add a --shout flag to the greet CLI\" --type build --stage 01-discovery","max_output_tokens":2000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Created WI-001: Add a --shout flag to the greet CLI (01 Discovery, Backlog) at .work-items/WI-001-add-a-shout-flag-to-the-greet-cli/WORK-ITEM.md.\nContinue with work-requirements.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section \"Starting request\" --text \"New work: Add a --shout flag to the greet CLI. It should print the greeting in capital letters. Track it as a work item and ask me what you need to pin down the requirements.\"","max_output_tokens":2000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Starting request\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show WI-001","max_output_tokens":7000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "WI-001: Add a --shout flag to the greet CLI\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3/.work-items/WI-001-add-a-shout-flag-to-the-greet-cli/WORK-ITEM.md\nStage: 01 Discovery (Backlog) | Waiting on: none | Continue with: work-requirements\nParent: none | Sub-items: none | Design: none\n\n---\nid: WI-001\ntitle: Add a --shout flag to the greet CLI\ntype: build\nstage: 01-discovery\nstatus: Backlog\nparent: none\nwaiting_on: \"none\"\npriority: medium\ndelivery: not-offered\nrequirements_approved: \"no\"\ndesign: none\nresult_approved: \"no\"\nupdated: 2026-09-27\n---\n\n# WI-001: Add a --shout flag to the greet CLI\n\n<!-- Fill-in guide for a new local work item: create it with `toolkit work new`, which copies this folder, names the new folder, and sets the real ID in front matter and heading; keep the file name WORK-ITEM.md. Use stable phase, task, requirement, and question IDs for this item. In the front matter, keep one value from each list and change the fields with `toolkit work` commands; a blocked item has `waiting_on` set and its Blockers line filled, not a Blocked status. Replace every angle-bracket prompt with actual text in that same field, cell, or paragraph; do not leave the prompt in place. Keep the headings and field labels. Add or remove phase, task, question, and requirement examples to match the real work. Use the chosen tracker as the source of truth for status and links. Delete this guide after filling the item. -->\n\n## Overview\n\n<!-- Enter the current summary directly after each bold label below. Keep this section current; detailed tasks and decisions belong in their sections further down. -->\n\n**Goal:** <The outcome this work item is meant to achieve.>\n\n**Current position:** <What has been completed and where work stands now.>\n\n**Next action:** <The next specific action and its owner.>\n\n**Blockers:** <Blocking decision or dependency, or \u201cNone.\u201d>\n\n**Related items:** <Roadmap unit, parent and related work item IDs (never folder paths), design, or external links.>\n\n## Roadmap\n\nA phase is complete when its tasks are complete and its exit result has been checked.\n\n<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading. Add one 
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory find \"greet CLI shout flag argument behavior\"","max_output_tokens":2000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "No memory records match \"greet CLI shout flag argument behavior\".\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"rg --files requirements system-guide tests test 2>/dev/null","max_output_tokens":2000}); text(r.output);
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-001 --stage 02-refinement","max_output_tokens":2000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Updated WI-001: stage 01 Discovery -> 02 Refinement (status Backlog).\nNow 02 Refinement (Backlog). Continue with work-requirements.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section \"Open Questions\" --text \"| ID | Question | Affects | Status | Decision needed from |\n|---|---|---|---|---|\n| Q-01 | Should --shout uppercase the entire greeting for both a supplied name and the default world greeting, while calls without the flag stay unchanged? | R-01 | Open | owner |\"","max_output_tokens":2000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Open Questions\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section \"Overview\" --text \"**Goal:** Add a --shout flag that prints the greeting in capital letters.\n\n**Current position:** Requirements are being clarified. The existing CLI greets the first argument as a name and defaults to world.\n\n**Next action:** Owner answers Q-01; agent records the behavior and continues the requirements interview.\n\n**Blockers:** Q-01 needs the owner's decision.\n\n**Related items:** None.\"","max_output_tokens":2000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Overview\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section \"Notes\" --text \"### Decisions and context\n\n- Existing behavior: a supplied name prints Hello, <name>!; no name prints Hello, world! The CLI currently reads the first argument as the name.\n\n### Resume here\n\nAsk the owner Q-01 about the scope of capitalization. Then clarify flag position and any other argument behavior before drafting requirements for approval.\n\n### Solution options and considerations\n\nNone recorded.\"","max_output_tokens":2000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Notes\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-001 --waiting-on owner","max_output_tokens":2000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Updated WI-001: waiting on owner.\nNow 02 Refinement (Backlog). Continue with work-decide.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history WI-001 --note \"Owner requested a --shout flag that prints the greeting in capital letters and asked to pin down requirements.\" --effect \"Created the build item and opened Q-01 about which greetings the flag affects.\"","max_output_tokens":2000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Added a Recent History row to WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work validate WI-001","max_output_tokens":3000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "Checked 1 item: 1 clean, 0 errors, 0 questions for the owner.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show WI-001 --section \"Open Questions\"","max_output_tokens":1000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "## Open Questions\n\n| ID | Question | Affects | Status | Decision needed from |\n|---|---|---|---|---|\n| Q-01 | Should --shout uppercase the entire greeting for both a supplied name and the default world greeting, while calls without the flag stay unchanged? | R-01 | Open | owner |\n"}]

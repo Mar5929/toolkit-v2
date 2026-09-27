@@ -1,0 +1,6 @@
+**One decision is waiting on you:** WI-002 needs your approval to deploy the Account Layout package to the `tkv2-sbx` sandbox as a separate release. The package adds Tier immediately below Rating. Profile access changes would follow in Setup.
+
+- **WI-001** is in build. The Tier field was deployed to the sandbox; its remaining access check depends on WI-002.
+- **WI-002** is in build, waiting on you. Its layout package passed the sandbox preflight and validation. It has not been deployed, and Tier access has not been granted or verified.
+
+Say **“what do you need from me”** to review the WI-002 deploy decision.

@@ -1,0 +1,1 @@
+I ran the check in the sandbox: the new test Account had Tier blank; Gold, Silver, and Bronze each saved and stayed after a reload; clearing Tier back to blank worked; then I deleted the test Account. And I approve the WI-002 result.

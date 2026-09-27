@@ -1,0 +1,307 @@
+PROMPT: Yes, that is the goal.
+THREAD: 01a0e3da-9f4e-7300-9146-014c0241f972
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The backlog has 1 item; toolkit work next suggests which to take up.
+
+Waiting on the owner:
+- WI-001 Add Account Tier picklist: WI-001 is waiting on the owner (02 Refinement). Next action: Owner reviews and explicitly approves the requirements. Then inspect the sandbox and design the metadata change. (work-decide)
+
+Items: 1 in the backlog.
+
+Current focus:
+Last updated: 2026-09-27, setup commit, Codex
+## Now
+- None.
+## Waiting on the owner
+- Trust this project folder in Codex when prompted, then open `/hooks` and trust the Toolkit V2 hooks and two Salesforce org guards.
+## Untracked to-dos
+- None.
+## Next session starts with
+- Read `PROJECT.md` for the confirmed outcome. Ask for the first specific Salesforce change, then start its work item.
+
+Project memory (builtin): 1 record. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_custom_field_documentation: Every new Salesforce custom field should have a description and help text
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them. Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.
+
+Always-on rules. Claude Code loads them by itself; in Codex, each one is read at session start:
+- .claude/rules/check-deployment-contents.md: Check What a Deployment Includes
+- .claude/rules/component-tracker.md: Component Tracker
+- .claude/rules/confirm-salesforce-changes.md: Confirm Salesforce Changes
+- .claude/rules/humanize-outbound-text.md: Humanize Anything Sent to Another Person
+- .claude/rules/keep-work-item-current.md: Keep the Active Work Item Accurate
+- .claude/rules/memory-review-and-save.md: Review and Save Project Memory
+- .claude/rules/plain-english-artifacts.md: Write Artifacts in Plain English
+- .claude/rules/production-data-changes.md: Production Data Changes
+- .claude/rules/project-file-locations.md: Where Project Files Go
+- .claude/rules/salesforce-org-safety.md: Salesforce Org Safety
+- .claude/rules/session-handoff.md: Prepare a Session Handoff
+- .claude/rules/shared-repository-work.md: Work Safely in a Shared Repository
+- .claude/rules/work-item-folders.md: Local Work-Item Folders
+
+How to write replies (from AGENTS.md):
+Claude Code applies the Plain English output style to chat. Codex and helper agents follow these lines instead.
+
+- Start with th
+
+[AGENT] I’ll check WI-001 and the project record to see what your “yes” confirms, then continue from there.
+
+[CALL exec] pwd; cat SOUL.md PROJECT.md; for f in .claude/rules/{check-deployment-contents,component-tracker,confirm-salesforce-changes,humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,production-data-changes,project-file-locations,salesforce-org-safety,session-handoff,shared-repository-work,work-item-folders}.md; do cat "$f"; done
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2
+cat: SOUL.md: No such file or directory
+# Acme CRM
+
+## Purpose and intended outcome
+
+- Purpose: Give the Acme sales team Salesforce customizations for customer-account work.
+- Intended outcome: Help the Acme sales team track and prioritize customer accounts.
+
+## Scope and boundaries
+
+- In scope: Salesforc
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/skills/work-on/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/skills/work-decide/SKILL.md; toolkit work show WI-001; cat PROJECT-ROADMAP.md; git status --short
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+---
+name: work-on
+description: 'Starts, continues, or logs project work: finds or creates the work item, works out where it stands, and runs its next step through to a built result. Use when the owner asks to build, add, fix, or change something, says "keep going" or "continue", names an item, or wants an idea logged for later.'
+---
+
+# Work on
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Shared rules: the work plugin's `references/conventions.md` (saving, section edits, history, branches) and `references/trackers.md`, two folders above this skill's folder (`../../references/`). To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`.
+
+## Steps
+
+1. No session briefing in this conversation: run the command below. Exit code 4 (no `.toolkit.json`): open `project-setup` and stop. When the briefing or a `toolkit work` command lists changes found in the tracker (a moved or renamed folder, a new parent, a missing item), tell the owner each one in one line before other work.
+   `toolkit brief`
+2. Find the item: the id the owner named, or a title in the list that matches the request. Two possible matches: ask one question naming both. No match: it is new. When `PROJECT-ROADMAP.md` names the item, read its phase there too.
+   `toolkit work show <id>`
+   `toolkit work list`
+3. Size a new request. A quick edit (one sitting, no choice for the owner, no behavior recorded in `requirements/`, nothing bound for production): do it and report it, with no item. "Later", "backlog", "park that": check the list for a duplicate, create the item, write the owner's words unchanged into Starting request, reply "Logged as WI-014 (bug, backlog). Not started." and stop. Anything else: create it the same way and continue.
+   `toolkit work new --title "<title>" --type <type> --stage 01-discovery`
+   `toolkit work edit <id> --section "Starting request" --set-file <file>`
+4. A substantial goal whose item shows `delivery: not-offered`: open `work-delegate` first. Quick questions and small edits get no offer.
+5. Route by where the item stands, using the item and the "Continue with" column of the lifecycle. Requirements not approved and type `build` or `data-load` (or the risk calls for it): `work-requirements`. More than one reasonable way to build it and no approved design: `solution-design`. A `build` item going to planning without a design: say so to the owner in one line before building ("One way to build this: <approach>. I'll build it that way; say 'design first' to stop me."), and put the reason in a history note. Too big for one build: `work-organize`. Stages 09 to 11: `work-check`. Stages 12 to 14: `work-finish`. `waiting_on: owner`: ask that one question first (`work-decide`) and keep working on anything it does not block. Say the route in one line ("WI-012 is waiti
+
+[AGENT] I found WI-001 waiting for requirements approval. I’ll record your confirmation of the goal; I won’t count it as approval of the detailed requirements.
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/skills/work-requirements/SKILL.md; cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/references/conventions.md; toolkit work decisions; toolkit work lifecycle
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+---
+name: work-requirements
+description: 'Interviews the owner one question at a time, writes the answers into the work item''s requirements and open questions, then asks for approval. Use when the owner says "grill me", "ask me questions", "what should it do", or "check the spec", changes a requirement, or requirements are missing.'
+---
+
+# Work requirements
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Shared rules: the work plugin's `references/conventions.md`, two folders above this skill's folder (`../../references/conventions.md`). Interview and writing rules: this skill's `references/writing-requirements.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`.
+
+## Steps
+
+1. Find the item as `work-on` does; none exists, create it. Use discovery while the goal is being worked out, refinement once requirements are being written. Requirements already approved and no change asked: stop and open the skill the lifecycle's "Continue with" column names.
+   `toolkit work show <id> --section Requirements`
+   `toolkit work new --title "<title>" --type <type> --stage 01-discovery`
+   `toolkit work set <id> --stage 02-refinement`
+2. Before asking anything, read the item (Starting request, Agreed goal, `R-xx`, Open Questions) and look up what the project already knows, so no question repeats an answer.
+   `toolkit work show <id>`
+   `toolkit memory find "<topic>"`
+3. Restate the goal in one sentence ("So the goal is X?"). Write the Agreed goal only after a yes.
+   `toolkit work edit <id> --section "Agreed goal" --set-file <file>`
+4. Ask one question at a time, most basic first, each with a recommended answer and a short reason. Push back when an answer works against the goal.
+5. Write each answer into the item before the next question: `R-xx` blocks (Status Refining, required behavior, boundaries, acceptance check, decision record) and the Acceptance list. Anything unanswered becomes an Open Questions row (next free `Q-` number) with who must answer; the item waits on the owner while one of his is open, and goes back to the agent when he answers the last one. Build ideas go under Notes > Solution options and considerations, never into requirements. A fact the owner cannot answer: brief a `researcher` agent.
+   `toolkit work edit <id> --section "Active requirements" --set-file <file>`
+   `toolkit work edit <id> --section "Open Questions" --append-row "| <next Q-id> | <question> | R-02 | Open | owner |"`
+   `toolkit work set <id> --waiting-on owner`
+   `toolkit work set <id> --waiting-on agent`
+6. A change to an approved requirement: edit the `R-xx`, keep the old wording in its decision record, set it back to Refining, move the item to refinement, and say what the change affects when the item is past stage 03.
+   `toolkit work set <id> --stage 02
+
+[CALL exec] toolkit memory find "Account Tier"
+   git worktree list
+   git status
+   git fetch origin && git log --oneline -10
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"i":0,"result":"1 memory record matches \"Account Tier\" (best first):\n- user_custom_field_documentation: Every new Salesforce custom field should have a description and help text\n    ...1 records how the preference applies to Account Tier.\nRead a record with toolkit memory get <key> before relying on it.\n"}
+{"i":1,"result":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2 1d49cdb [main]\n"}
+{"i":2,"result":"On branch main\nnothing to commit, working tree clean\n"}
+{"i":3,"result":"exec_command failed: CreateProcess { message: \"Rejected(\\\"approval required by policy, but AskForApproval is set to Never\\\")\" }"}
+
+[CALL exec] mktemp -d
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+/var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.aFlxNCFDDN
+
+
+[CALL exec] printf '%s\n' 'Let the Acme sales team rank customer accounts using an Account Tier picklist.' > /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.aFlxNCFDDN/agreed-goal.txt
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+
+
+[CALL exec] toolkit work edit WI-001 --section "Agreed goal" --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.aFlxNCFDDN/agreed-goal.txt
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Agreed goal" in WI-001.
+
+
+[CALL exec] toolkit work history WI-001 --note "Owner's words: Yes, that is the goal. Confirmed the Account Tier goal."
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Added a Recent History row to WI-001.
+
+
+[CALL exec] toolkit work show WI-001 --section "Agreed goal"
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+### Agreed goal
+
+Let the Acme sales team rank customer accounts using an Account Tier picklist.
+
+
+[CALL exec] toolkit work validate WI-001
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+Checked 1 item: 1 clean, 0 errors, 0 questions for the owner.
+
+
+[CALL exec] rm /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.aFlxNCFDDN/agreed-goal.txt
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+
+
+[CALL exec] rmdir /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.aFlxNCFDDN
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/agents/requirements-analyst.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+---
+name: requirements-analyst
+description: Checks a work item's requirements before design or build. Finds missing pieces, places not explicit end to end, wording a builder could misread, build details inside requirements, and drift from the Agreed goal. Returns ready or not ready with a fix for each finding. Read-only.
+tools: Read, Glob, Grep
+model: opus
+---
+
+# Requirements analyst
+
+Read the requirements as one whole and say whether they are ready to design
+or build from. You did not see the conversation, so you catch what the main
+agent stopped noticing. You advise; the owner decides. You change nothing.
+
+## Start with the brief
+
+- The brief pastes in the Agreed goal, the Starting request, every `R-xx`
+  block, the Acceptance list, the open questions, and the owner's recorded
+  rulings. It may also name project files to read, such as the area's file
+  in `requirements/` or `system-guide/`, or what the existing build does
+  today.
+- Treat only rulings the brief marks as approved by the owner as settled.
+  Proposals and unanswered questions stay open. Everything else is open to
+  your check.
+- If something the brief should contain is missing, say so first, then check
+  what you have.
+
+## Check readiness
+
+Read the requirements inside the larger system the result belongs to. Walk
+the whole flow start to finish as the person who uses the result. Then report:
+
+- **Ready or not ready.** Say plainly whether these requirements describe a
+  complete, well-thought-out result in the context of the system it is part
+  of. List what is still unclear. Use no score.
+- **Missing.** Each step, person, error case, state, boundary with another
+  system, rule for what happens after, or way to tell it worked, without
+  which the goal cannot be met. One line each, with the fix.
+- **Not explicit end to end.** Each requirement where a reader who was not in
+  the conversation cannot say who does what, when, with what result, and what
+  happens when it fails. Quote the wording and propose wording that makes it
+  explicit.
+- **Misreading risks.** Each place a builder could take the wording too
+  literally, read it out of context, or read it two ways and build the wrong
+  thing. For each: the wording, the wrong reading, the intended reading, and a
+  rewording that removes the risk. Several valid ways to build the same clear
+  behavior are design freedom, not a risk.
+- **Build details inside requirements.** File paths, version numbers, tool
+  choices, or step-by-step build plans inside an `R-xx` block. Requirements
+  say what and why, never how. Ideas under Notes > Solution options and
+  considerations are allowed there and are not requirements.
+- **Drift from the Agreed goal.** Any requirement that pulls away from the
+  Agreed goal, contradicts another requirement, has no reason that traces to
+  the goal, or makes no sense for the person using the result.
+- **Research or history in the wrong place.** Benchmarks, quotes, outs
+
+[CALL spawn_agent] {"task_name":"requirements_check","fork_turns":"none","message":"gAAAAABquU7Q2V5Jojt4JY-jqtMxefE9m0h-BOAVcLtCROpD-eQ5y9cTKh1FvX8OYxGvXjT4-ICWJcKoTHkFmOOZIjBCXREqKCS3_drGH5rWzRaL_cXQSNO7_z8rRpbMBbfGDljZmyVH7wlFkiEWryjGQiXxFZ0itOpszZK52I9W10RKKQFGHyOtz7ruaXQeeB_TuCmfMi_c3ZB9GXiphNp-Ynh139Av-OyoeNxyhe3NssaigmMCQPWlUoacI6aaRG5w_MH67VHxx2gOFp8x0hwhJqR7hEim4OrB8m8oQce5RzSrki2Livd43-hITnFthIsgckw21c4dwTDf90lqOQCxhH9avVAcFRc86TvmH8TG92s7RzieR9UwHkQi6YhNcQdDplLXfsjv9I80R2jlWryBa9eQ8W-j-QZ9K6iJmGWn0C-DwiWak4Qrhekn-_cb1gUEpRH6IT-_1q9uDqM_dvq5ka8M_c_Zar0qN5p3TczOgkaHFkqzZBtuExovyDL0wP69McD0tJdR3K2IRsyYHbHl0oza2QjM1XoYdj7hDyKeZwwMdfZwtsLm21e3NtPFj7iT4M8bWc06RgPjTm9g9cCH5C5cOWUIF7HqpXcXYjkoafcB8ouXRtume9B87t8sbDXEc1zTS_FQJxtXuZ5CPqvmscxBNUI_ljvT2rckZ_xY4Mn_iB5g9HfVRyTCixSV2WJuOYKjxcQ_8FKP5G2jO--N_Asi0Tg_SHtfPQUoaH5J-DXWB2RkI7-HxVfzeNVVAWXkWEpf3EsNdwxMYopzma7TB0GscvBnHETcHXAHW7h6QXgmbf3cnRn4mDZlePIV4pEP5mWf08EN1IrmcON0LfHvqD2r4PSp4vqUv61Uxy5ycAXEfr5jvX1_sekbLbOPDAfaAh1dsf8C"}
+  -> {"task_name":"/root/requirements_check"}
+
+[CALL send_message] {"target":"requirements_check","message":"gAAAAABquU7Tnj6jf09_42NinVG7hDz8xdekLLwBWK5PdT7A3pbNzFQCjCN8wf46JQDYHSrm4xPnRpWK6t_cm1orLb0llh7yZ4S6mkDak9XN7GmwYoyVIPPveXzkXmXuJ9as7vOsPx9-Iq4icFOGwZg3zkbHUkLbzSUwfcRHM2VwWyVY0rKY3JZLWEm5vCddL-QQmTgAXu7UsEDl-gf75egGKTWS6sbSAucm0Vif5QMIwZ7rOwWkGhQs9ylukpWpySIzq2DvP6Xqb-UTy-dJIrbu1y5fpTojBwDAbAAVxoxbm8MzumgW7lq2RnbmrvgpZ01sjphZlVMX51Xj-9zMMov6Zg8KTz84Cw=="}
+  -> 
+
+[CALL wait_agent] {"timeout_ms":20000}
+  -> {"message":"Wait timed out.","timed_out":true}
+
+[CALL wait_agent] {"timeout_ms":20000}
+  -> {"message":"Wait completed.","timed_out":false}
+
+[AGENT] I recorded your confirmation of WI-001’s goal. The requirements are ready for your approval:
+
+- Account Tier offers Gold, Silver, and Bronze in that order. It is optional, starts blank, and has a description and help text.
+- Sales Managers and system administrators can edit Tier. Others who can see an Account can read it.
+- Tier appears on the main Account page layout.
+
+**Do you approve these requirements?** Approval will let me inspect the sandbox and design the change; it does not authorize deployment.
+
+SKILLS OPENED (SKILL.md read): ['work-on', 'work-decide', 'work-requirements']
+
+TOOLKIT COMMANDS:
+   toolkit work show WI-001
+   toolkit work decisions
+   toolkit work lifecycle
+   toolkit memory find "Account Tier"
+   toolkit work edit WI-001 --section "Agreed goal" --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.aFlxNCFDDN/agreed-goal.txt
+   toolkit work history WI-001 --note "Owner's words: Yes, that is the goal. Confirmed the Account Tier goal."
+   toolkit work show WI-001 --section "Agreed goal"
+   toolkit work validate WI-001

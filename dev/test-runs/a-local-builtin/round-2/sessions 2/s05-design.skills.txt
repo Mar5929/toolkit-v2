@@ -1,0 +1,2 @@
+Skill files and helper agents opened (from the Codex session log, in order):
+solution-design, work-on, spawn_agent:requirements_review(fork_turns=none), spawn_agent:version_research(fork_turns=none), spawn_agent:option_a(fork_turns=none), spawn_agent:option_b(fork_turns=none), spawn_agent:design_critique(fork_turns=none), memory-save

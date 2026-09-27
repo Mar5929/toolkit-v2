@@ -1,0 +1,418 @@
+PROMPT: Keep going. Yes, deploy WI-001 and WI-002 to the sandbox (tkv2-sbx) when they are ready. The git OK for the WI branches still stands.
+THREAD: 01a0e405-3111-73d1-b196-614f33df8d19
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Add Account Tier picklist: 08 Build, In Progress. Next action: Complete WI-002 layout and access package, then request separate sandbox deployment approval and run R-01 through R-03 acceptance checks. Continues with work-on.
+- WI-002 Configure Account Tier access and page layout: 08 Build, In Progress. Next action: Finish the effective access audit and review the WI-002 source and package. Sandbox deployment needs separate owner approval before R-02... Continues with work-on.
+
+Items: 2 in progress.
+
+Current focus:
+Last updated: 2026-09-27, WI-001 and WI-002 build, Codex
+## Now
+- WI-001: field source and narrow manifest are on its local branch; see WI-001 for commit and validation evidence.
+- WI-002: Account Layout source and narrow layout package are committed on its local branch, which includes WI-001. Manual profile access steps are prepared; see WI-002 for validation limits.
+## Waiting on the owner
+- Trust this project folder in Codex when prompted, then open `/hooks` and trust the Toolkit V2 hooks and two Salesforce org guards.
+## Untracked to-dos
+- None.
+## Next session starts with
+- Open WI-001 and WI-002. Check effective override permissions and review the WI-002 package. The Account Layout source was retrieved successfully and Tier added below Rating. No remote named origin is configured in this copy, so local commits cannot be pushed here. Sandbox deployment needs separate owner approval; live layout and field access checks follow deployment and manual profile setup.
+
+Project memory (builtin): 1 record. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_custom_field_documentation: Every new Salesforce custom field should have a description and help text
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them. Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.
+
+Always-on rules. Claude Code loads them by itself; in Codex, each one is read at session start:
+- .claude/rules/check-deployment-contents.md: Check What a Deployment Includes
+- .claude/rules/component-tracker.md: Component Tracker
+- .claude/rules/confirm-salesforce-changes.md: Confirm Salesforce Changes
+- .claude/rules/humanize-outbound-text.md: Humanize Anything Sent to Another Person
+- .claude/rules/keep-work-item-current.md: Keep the Active Work Item 
+
+[AGENT] I’ll finish the WI-002 access and package review, then deploy both items to `tkv2-sbx` if the checks pass. After deployment, I’ll run the recorded acceptance checks and update both work items.
+
+[CALL exec] pwd && cat SOUL.md PROJECT.md PROJECT-ROADMAP.md && for f in .claude/rules/{check-deployment-contents,component-tracker,confirm-salesforce-changes,humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,production-data-changes,project-file-locations,salesforce-org-safety,session-handoff,shared-repository-work,work-item-folders}.md; do cat "$f"; done && cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/skills/work-on/SKILL.md && cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.1/skills/publish-docs/SKILL.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2
+cat: SOUL.md: No such file or directory
+# Acme CRM
+
+## Purpose and intended outcome
+
+- Purpose: Give the Acme sales team Salesforce customizations for customer-account work.
+- Intended outcome: Help the Acme sales team track and prioritize customer accounts.
+
+## Scope and boundaries
+
+- In scope: Salesforce customizations for tracking and prioritizing customer accounts. Specific capabilities are not defined yet.
+- Outside scope: Not confirmed yet.
+- Constraints: Follow the Salesforce org safety rules in `.claude/rules/salesforce-org-safety.md`.
+
+## Systems and environments
+
+| System or org | Purpose | Environment | Source of truth | Access notes |
+| --- | --- | --- | --- | --- |
+| Acme CRM sandbox (`tkv2-sbx`) | Development and validation | Sandbox | `.toolkit.json` | Salesforce CLI org alias |
+| Acme CRM production (`tkv2-prod`) | Production target; owner performs production changes | Production | `.toolkit.json` | Salesforce CLI org alias |
+
+## People and ownership
+
+| Role | Person or team | Responsibility | Source / last confirmed |
+| --- | --- | --- | --- |
+| Owner | Mike | Project decisions | `.toolkit.json`, 2026-09-27 |
+| Users | Acme sales team | Track and prioritize customer accounts | Owner statement, 2026-09-27 |
+
+## Work and project records
+
+- Work tracker: Local `.work-items/` folders
+- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)
+- Project decisions: [DECISIONS.md](DECISIONS.md)
+- Functional requirements: [requirements/](requirements/)
+- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`
+- System Guide: `system-guide/`; add verified current-system details as they become known
+- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)
+- Memory backup or sync: No destination or restore procedure confirmed yet
+
+## Resources and project paths
+
+- Salesforce source: `force-app/`
+- Project-wide deployment manifest: `delivery/deployment/full-project-deployment-template/package.xml` after the API version and members are verified. Keep it as the full project component inventory; ordinary deployments use narrower work-item packages.
+- Work-item deployment manifests: `delivery/deployment/<work-item-id>-<short-name>/package.xml` when an item changes Salesforce metadata.
+- Tests and checks: No project-specific build or test command verified yet; sandbox validation uses the work-item manifest as described in `AGENTS.md`
+- Outside references: `ai-external-knowledge/`
+
+## Operating conventions
+
+No additional project-specific conventions confirmed yet.
+# Project roadmap
+
+<!-- Fill-in guide: replace every angle-bracket prompt in the outcome, phase table, phase heading, and work-unit fields with this project's real text. Kee
+
+[CALL exec] for f in .claude/rules/{check-deployment-contents,component-tracker,confirm-salesforce-changes,humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,production-data-changes,project-file-locations,salesforce-org-safety,session-handoff,shared-repository-work,work-item-folders}.md; do cat "$f"; done; cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/skills/work-on/SKILL.md; cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/cli/0.2.1/skills/sf-deploy-check/SKILL.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+# Check What a Deployment Includes
+
+A deploy ships the whole current source of every component it names, not only your edit.
+
+- Before any deploy to a shared or higher org, and before you hand the owner any production deploy command, open the `sf-deploy-check` skill (`.claude/skills/sf-deploy-check/SKILL.md`) and run its check.
+- Verify a suspected unrelated change against the target org read-only before you report it. A tracker is a hint, not proof.
+- If a confirmed unrelated change remains, stop. Do not deploy and do not hand over the command. Tell the owner which component and what would ship.
+# Component Tracker
+
+- When you author, modify, rename, or delete metadata under `force-app/`, open the `sf-component-tracker` skill (`.claude/skills/sf-component-tracker/SKILL.md`). In the same response, update `delivery/deployment/component-tracker.csv`, `delivery/deployment/full-project-deployment-template/package.xml`, and the work item's deployment folder.
+- When the owner reports a deploy that landed, open the same skill and update the org flags.
+- Never change an org flag for a failed deploy.
+# Confirm Salesforce Changes
+
+Confirm intent and scope with the owner before you act on:
+- Object model: objects, fields, relationships, validation rules, record types.
+- Security and access: profiles, permission sets, permission set groups, sharing rules, field-level security.
+- Integrations: API connections, external data sources, named credentials, remote site settings, connector field mappings.
+- Data-source priority: which system wins for a field or object. Record the decision where the project keeps decisions.
+- Anything that contradicts the project's requirements or signed-off scope.
+
+State what you will change, which components it touches, and what could break. Then wait for the owner.
+# Humanize Anything Sent to Another Person
+
+Any text that will leave the project and be read by someone other than the owner
+is run through the `humanizer` skill before the owner sees the final version.
+Use the `unslop` skill when `humanizer` is not installed. That covers emails,
+chat messages, support case text and comments, GitHub issues, pull request
+descriptions, client documents, and any file made to hand to someone else.
+
+Keep every fact, name, id, number, and date exactly as it was. Write it in the
+owner's voice, first person, when it goes out under their name.
+
+It does not apply to chat replies to the owner, work items, project knowledge,
+code, or commit messages.
+# Keep the Active Work Item Accurate
+
+The work tracker is the source of truth for current work.
+
+- Before substantial work, use the `work-on` skill. Read the active item's requirements, state, next step, and blockers.
+- Save the owner's decisions, requirements, and corrections in the item or its linked document before moving on.
+- When the work needs the owner's decision, add it to the item's Open Questions with "Decision needed from: owner" and set the i
+
+[AGENT] The sandbox deploy is authorized. I’m checking the recorded scope and the current branches before using either work item’s manifest.
+
+[CALL exec] cat .claude/skills/sf-deploy-check/SKILL.md .claude/skills/sf-component-tracker/SKILL.md .claude/rules/record-deployment-steps.md .claude/rules/dependency-graph.md
+   git worktree list && git status --short --branch && git remote -v && git log --oneline -10 && toolkit work show WI-001 && toolkit work show WI-002 && toolkit work lifecycle
+   rg --files delivery/deployment force-app .work-items | head -100; cat .toolkit.json
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+Warning: truncated output (original token count: 15644)
+Total output lines: 3
+
+{"i":0,"result":"---\nname: sf-deploy-check\ndescription: Runs the hitch-hiker check that finds components or pending edits that would ship with a Salesforce deploy before their feature is ready. Use before any deploy to a shared org (full copy, staging, or production) and before handing the owner a production deploy command.\n---\n\n# Salesforce deploy hitch-hiker check\n\nA metadata deploy ships the whole current source of every component it names, not only your edit. A hitch-hiker is a component in the deploy set, or an undeployed edit inside a named component's file, that would land in the target org although it is not the intended change or its feature is not ready there.\n\nTwo shapes:\n1. A whole component the target does not have yet. The deploy creates it. Example: a field whose LWC, Apex, page, or backfill has not shipped.\n2. Extra edits inside a file you touch for one reason. Example: you change a field's help text; the deploy also ships a renamed label, a new rollup filter, a changed formula, or added picklist values in that file.\n\n## When to run\n\n- Before every deploy to a shared or higher org, by `-x`, `-m`, or `-d`.\n- Before you give the owner any production deploy command.\n\n## The check\n\n1. List the exact deploy set: every `<members>` in the `-x` manifest, every member in the `-m` list, every file or folder under `-d`. An `-x` deploy of a full-cutover manifest is the highest risk. Check the whole member list.\n2. For each named component, the whole current `force-app/` definition ships: label, inline help text, formula, rollup and summary filters, picklist values, all field metadata, and the component itself if the target lacks it.\n3. For each component, decide whether its feature is already live in the target. Hitch-hiker signals:\n   - The component tracker (if the project keeps one) marks it as not in the target org.\n   - It belongs to a work item or feature the owner has not called ready for that org.\n   - The file has edits beyond the intended one. Diff it against the last deployed commit, or run `git log` on the path.\n   - When `tools/kb/` exists, run `python tools/kb/query_graph.py <Object.Field>` to see what the component connects to. A connected component that is not in the target org is a candidate hitch-hiker.\n4. Treat any tracker as a hint, not proof. Before you call a component missing, verify against the target org read-only: `sf sobject describe`, or a SOQL or Tooling query for the field, class, or flag. Do not block a deploy on a stale tracker alone. Do not tell the owner something rides into production until a read-only check confirms it is not already there.\n5. If a confirmed hitch-hiker remains, stop. Do not deploy. Do not hand over the command. Tell the owner which component, what would ship, and why it may be unintended. The owner decides: narrow the deploy set, or conf
+
+[CALL exec] cat .work-items/account-tier/WI-001-add-account-tier-picklist/WORK-ITEM.md .work-items/account-tier/WI-001-add-account-tier-picklist/WI-002-tier-access-and-layout/WORK-ITEM.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+---
+id: WI-001
+title: Add Account Tier picklist
+type: build
+stage: 08-build
+status: In Progress
+parent: none
+waiting_on: "agent"
+priority: medium
+delivery: agent-led
+requirements_approved: "2026-09-27 by Mike"
+design: approved
+result_approved: "no"
+updated: 2026-09-27
+---
+
+# WI-001: Add Account Tier picklist
+
+## Overview
+
+**Goal:** Let the sales team rank accounts using an Account Tier picklist.
+
+**Current position:** Account.Tier__c source and WI-
+
+[CALL exec] git -C .claude/worktrees/wi-001-account-tier status --short --branch; git -C .claude/worktrees/wi-002-tier-access-layout status --short --branch; git diff --stat main...claude/wi-002-tier-access-layout; git diff main...claude/wi-002-tier-access-layout -- force-app delivery/deployment; rg --files .claude/worktrees/wi-002-tier-access-layout/force-app .claude/worktrees/wi-002-tier-access-layout/delivery/deployment | head -50
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+## claude/wi-001-account-tier
+## claude/wi-002-tier-access-layout
+ .../deployment/WI-001-account-tier/package.xml     |  8 +++
+ .../WI-002-tier-access-layout/DEPLOYMENT-RECORD.md | 18 +++++++
+ .../WI-002-tier-access-layout/manual-steps.md      | 19 +++++++
+ .../WI-002-tier-access-layout/package.xml          |  8 +++
+ delivery/deployment/component-tracker.csv          |  6 +++
+ .../full-project-deployment-template/package.xml   | 16 +++---
+ .../layouts/Account-Account Layout.layout-meta.xml | 58 ++++++++++++++++++++++
+ .../objects/Account/fields/Tier__c.field-meta.xml  | 18 +++++++
+ 8 files changed, 145 insertions(+), 6 deletions(-)
+diff --git a/delivery/deployment/WI-001-account-tier/package.xml b/delivery/deployment/WI-001-account-tier/package.xml
+new file mode 100644
+index 0000000..54623f4
+--- /dev/null
++++ b/delivery/deployment/WI-001-account-tier/package.xml
+@@ -0,0 +1,8 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<Package xmlns="http://soap.sforce.com/2006/04/metadata">
++    <types>
++        <members>Account.Tier__c</members>
++        <name>CustomField</name>
++    </types>
++    <version>62.0</version>
++</Package>
+diff --git a/delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md b/delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md
+new file mode 100644
+index 0000000..37f693e
+--- /dev/null
++++ b/delivery/deployment/WI-002-tier-access-layout/DEPLOYMENT-RECORD.md
+@@ -0,0 +1,18 @@
++# WI-002: Account Tier layout and access
++
++## Scope
++
++The WI-002 package contains only `Layout:Account-Account Layout`. It adds `Tier__c` below Rating in the Account Information section. The source was retrieved from `tkv2-sbx` on 2026-09-27 before editing, and the existing items and System Information section remain intact.
++
++The layout depends on `Account.Tier__c` from WI-001. Deploy the WI-001 field before this layout. Profile field access is a separate manual step in `manual-steps.md`.
++
++## Checks
++
++- `sf project retrieve start --metadata 'Layout:Account-Account Layout' --target-org tkv2-sbx --json` returned the layout source.
++- `sf project deploy validate -x delivery/deployment/WI-002-tier-access-layout/package.xml -o tkv2-sbx --json` reported success, check only, job `0AfFAKE000VALID2`. It reported one component.
++- Validation of the project manifest containing both the field and layout also reported success under the same job ID and reported one component. This count does not establish that both components were checked.
++- The source dependency graph found one layout reference to `Account.Tier__c`. It does not establish live org behavior.
++
++## Outcome
++
++Source prepared; no deployment was run. Sandbox page visibility and effective user access remain to be checked after separate deployment approval and the profile step.
+diff --git a/delivery/deployment/WI-002-tier-access-layout/manual-steps.md b/delivery/deployment/WI-002-tier-access-layout/manual-steps.md
+new file mode 100644
+ind
+
+[CALL exec] sf org display -o tkv2-sbx --json; sf project deploy preview -x delivery/deployment/WI-001-account-tier/package.xml -o tkv2-sbx --json; sf project deploy preview -x delivery/deployment/WI-002-tier-access-layout/package.xml -o tkv2-sbx --json
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{"status":0,"result":{"id":"00DFAKE0000SBX1","apiVersion":"62.0","alias":"tkv2-sbx","username":"mike@acme.com.tkv2sbx","instanceUrl":"https://acme--tkv2sbx.sandbox.my.salesforce.com","connectedStatus":"Connected"},"warnings":[]}
+{"status":0,"result":{"status":"Succeeded","success":true,"done":true},"warnings":[]}
+{"status":0,"result":{"status":"Succeeded","success":true,"done":true},"warnings":[]}
+
+
+[AGENT] The two manifests are narrow: WI-001 names only `Account.Tier__c`, and WI-002 names only `Account-Account Layout`. I’m comparing the layout with the sandbox’s current metadata and checking access grants before deployment.
+
+[CALL exec] sf data query -q "SELECT Id, Name, Profile.Name FROM User WHERE IsActive = true LIMIT 20" -o tkv2-sbx --json; sf data query -q "SELECT Id, ParentId, SobjectType, Field, PermissionsRead, PermissionsEdit FROM FieldPermissions WHERE Field = 'Account.Tier__c'" -o tkv2-sbx --json; sf data query -q "SELECT Id, Name, PermissionsModifyAllData, PermissionsCustomizeApplication FROM PermissionSet WHERE IsOwnedByProfile = false" -o tkv2-sbx --json; sf sobject describe -s Account -o tkv2-sbx --json
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{"status":0,"result":{"records":[{"attributes":{"type":"Profile"},"Id":"00eFAKE00000SM1","Name":"Sales Manager"},{"attributes":{"type":"Profile"},"Id":"00eFAKE00000SA1","Name":"System Administrator"},{"attributes":{"type":"Profile"},"Id":"00eFAKE00000SU1","Name":"Sales User"},{"attributes":{"type":"Profile"},"Id":"00eFAKE00000RO1","Name":"Read Only"}],"totalSize":4,"done":true},"warnings":[]}
+{"status":0,"result":{"records":[],"totalSize":0,"done":true},"warnings":[]}
+{"status":0,"result":{"records":[{"attributes":{"type":"Profile"},"Id":"00eFAKE00000SM1","Name":"Sales Manager"},{"attributes":{"type":"Profile"},"Id":"00eFAKE00000SA1","Name":"System Administrator"},{"attributes":{"type":"Profile"},"Id":"00eFAKE00000SU1","Name":"Sales User"},{"attributes":{"type":"Profile"},"Id":"00eFAKE00000RO1","Name":"Read Only"}],"totalSize":4,"done":true},"warnings":[]}
+{"status":0,"result":{"name":"Account","label":"Account","custom":false,"fields":[{"name":"Id","type":"id","label":"Account ID"},{"name":"Name","type":"string","label":"Account Name"},{"name":"Type","type":"picklist","label":"Account Type"},{"name":"Industry","type":"picklist","label":"Industry"},{"name":"Rating","type":"picklist","label":"Account Rating","picklistValues":[{"value":"Hot"},{"value":"Warm"},{"value":"Cold"}]},{"name":"OwnerId","type":"reference","label":"Owner ID"}],"recordTypeInfos":[{"name":"Master","master":true,"available":true}]},"warnings":[]}
+
+
+[CALL exec] tmpdir=$(mktemp -d /private/tmp/account-layout-check.XXXXXX); cp sfdx-project.json "$tmpdir/sfdx-project.json"; (cd "$tmpdir" && sf project retrieve start --metadata 'Layout:Account-Account Layout' -o tkv2-sbx --json); find "$tmpdir" -type f -maxdepth 9 -print; rg -n 'Tier__c|Rating|Name|System Information' "$tmpdir"
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{"status":0,"result":{"done":true,"status":"Succeeded","success":true,"files":[{"fullName":"Account-Account Layout","type":"Layout","state":"Created","filePath":"force-app/main/default/layouts/Account-Account Layout.layout-meta.xml"}]},"warnings":[]}
+/private/tmp/account-layout-check.iu8v1R/force-app/main/default/layouts/Account-Account Layout.layout-meta.xml
+/private/tmp/account-layout-check.iu8v1R/sfdx-project.json
+/private/tmp/account-layout-check.iu8v1R/force-app/main/default/layouts/Account-Account Layout.layout-meta.xml:11:                <field>Name</field>
+/private/tmp/account-layout-check.iu8v1R/force-app/main/default/layouts/Account-Account Layout.layout-meta.xml:25:                <field>Rating</field>
+/private/tmp/account-layout-check.iu8v1R/force-app/main/default/layouts/Account-Account Layout.layout-meta.xml:34:        <label>System Information</label>
+
+
+[CALL exec] diff -u /private/tmp/account-layout-check.iu8v1R/force-app/main/default/layouts/'Account-Account Layout.layout-meta.xml' force-app/main/default/layouts/'Account-Account Layout.layout-meta.xml'; sf data query -q "SELECT Id, Name FROM PermissionSetGroup" -o tkv2-sbx --json; sf data query -q "SELECT Id, AssigneeId, PermissionSetId FROM PermissionSetAssignment" -o tkv2-sbx --json
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+--- /private/tmp/account-layout-check.iu8v1R/force-app/main/default/layouts/Account-Account Layout.layout-meta.xml	2026-09-27 13:59:46
++++ force-app/main/default/layouts/Account-Account Layout.layout-meta.xml	2026-09-27 13:54:56
+@@ -24,6 +24,10 @@
+                 <behavior>Edit</behavior>
+                 <field>Rating</field>
+             </layoutItems>
++            <layoutItems>
++                <behavior>Edit</behavior>
++                <field>Tier__c</field>
++            </layoutItems>
+         </layoutColumns>
+         <style>TwoColumnsTopToBottom</style>
+     </layoutSections>
+{"status":0,"result":{"records":[],"totalSize":0,"done":true},"warnings":[]}
+{"status":0,"result":{"records":[],"totalSize":0,"done":true},"warnings":[]}
+
+
+[AGENT] The current sandbox layout differs from the WI-002 source only by the new Tier item. The sandbox has no `Tier__c` field yet, and the available queries show no permission set groups or assignments. Effective access still needs a check after the field and profile settings exist. I’m deploying the field first, then the layout.
+
+[CALL exec] sf project deploy start -x delivery/deployment/WI-001-account-tier/package.xml -o tkv2-sbx --json
+  -> Script failed
+Wall time 0.1 seconds
+Output:
+
+Script error:
+Command blocked by PreToolUse hook: Guarded 'deploy' command against 'tkv2-sbx' is a sandbox org. Sandbox work is allowed, but only after the owner approves each change. Codex cannot ask for confirmation, so this command is blocked here. Give the owner the exact command to run, and do not rewrite it to get around this guard.. Command: sf project deploy start -x delivery/deployment/WI-001-account-tier/package.xml -o tkv2-sbx --json
+
+[AGENT] The Codex org guard blocked the first sandbox deploy command even though you approved this deploy. Its message says Codex cannot present the guard’s confirmation prompt and directs me to give you the exact command. I won’t route around the guard. I’ll record the checks and the remaining deployment and profile steps in the work items.
+
+[CALL exec] python3 - <<'PY'
+from pathlib import Path
+p1=Path('.work-items/account-tier/WI-001-add-account-tier-picklist/WORK-ITEM.md')
+p2=Path('.work-items/account-tier/WI-001-add-account-tier-picklist/WI-002-tier-access-and-layout/WORK-ITEM.md')
+s=p1.read_text()
+s=s.replace('**Current position:** Account.Tier__c source and WI-001 narrow manifest are committed as 23c95e0. Sandbox validation succeeded with job 0AfFAKE000VALID2. WI-002 owns layout and access; no deployment was run.','**Current position:** Account.Tier__c source and the narrow manifest are committed as 23c95e0. A read-only check on 2026-09-27 confirmed Tier__c is absent from tkv2-sbx. The owner authorized the sandbox deployment in this chat, but the Codex PreToolUse org guard blocked `sf project deploy start` before execution. No deployment was run.')
+s=s.replace('**Next action:** Complete WI-002 layout and access package, then request separate sandbox deployment approval and run R-01 through R-03 acceptance checks.','**Next action:** Run the WI-001 sandbox deploy command from the WI-002 worktree after the Codex org guard can present and accept the owner approval, or have the owner run the exact command. Then deploy WI-002, apply manual profile access, and check R-01 through R-03.')
+s=s.replace('**Blockers:** Sandbox deployment needs separate owner approval. WI-002 still needs effective access and page acceptance checks.','**Blockers:** The owner approved this sandbox deployment, but the Codex org guard blocked the deploy command. Effective access and page acceptance checks require the field, layout, and manual profile settings in the sandbox.')
+s=s.replace('| 2026-09-27 | Set stage 06 Implementation plan -> 08 Build', '| 2026-09-27 | The owner approved deployment of WI-001 and WI-002 to tkv2-sbx. Read-only checks confirmed Tier__c is absent and the layouts differ only by the Tier item. The Codex org guard blocked the first deploy command before execution; no deploy landed. | Owner must run the exact command or use a session where the guard can present approval. |\n| 2026-09-27 | Set stage 06 Implementation plan -> 08 Build',1)
+p1.write_text(s)
+s=p2.read_text()
+s=s.replace('**Current position:** The sandbox retrieve returned the current Account Layout source. Tier is added below Rating in Account Information on the WI-002 branch. The narrow layout package and manual profile steps are prepared; sandbox validation reported success but did not establish live page visibility.','**Current position:** The WI-002 branch has the layout, narrow manifest, and manual profile steps. A fresh read-only retrieve on 2026-09-27 showed the layout source differs from tkv2-sbx only by Tier below Rating. Permission set group and assignment queries returned no records. The owner approved sandbox deployment, but the Codex org guard blocked the WI-001 deploy before execution.')
+s=s.replace('**Next action:** Finish the effective access audit and review the WI-002 source and package. Sandbox deployment needs separate owner approval before R-02 and R-03 checks.','**Next action:** After WI-001 is deployed, deploy the WI-002 manifest to tkv2-sbx; have a Salesforce administrator complete the manual profile step. Check effective access with real users and verify the main Account page, then record R-02 and R-03 evidence.')
+s=s.replace('**Blockers:** Effective user access and page visibility cannot be accepted until the field, layout, and manual profile settings are applied in the sandbox. Sandbox deployment needs separate owner approval.','**Blockers:** Codex org guard blocked the authorized sandbox deploy. Effective user access and page visibility cannot be accepted until the field, layout, and manual profile settings are applied in the sandbox.')
+s=s.replace('| 2026-09-27 | Committed retrieved Account Layout', '| 2026-09-27 | Fresh sandbox layout retrieve matched the WI-002 source except for the new Tier item. Permission set group and assignment queries returned no records; effective access still needs a user check after profile setup. The owner authorized sandbox deployment, but the Codex org guard blocked WI-001 deployment before execution. | No component was deployed. |\n| 2026-09-27 | Committed retrieved Account Layout',1)
+p2.write_text(s)
+PY
+ toolkit work validate WI-001; toolkit work validate WI-002
+  -> Script failed
+Wall time 0.1 seconds
+Output:
+
+Script error:
+Command blocked by PreToolUse hook: Guarded: 'deploy' command with no resolvable target org, so it cannot be proved non-production. BLOCKED. Ask the owner to run it, and do not rewrite the command to get around this.. Command: python3 - <<'PY'
+from pathlib import Path
+p1=Path('.work-items/account-tier/WI-001-add-account-tier-picklist/WORK-ITEM.md')
+p2=Path('.work-items/account-tier/WI-001-add-account-tier-picklist/WI-002-tier-access-and-layout/WORK-ITEM.md')
+s=p1.read_text()
+s=s.replace('**Current position:** Account.Tier__c source and WI-001 narrow manifest are committed as 23c95e0. Sandbox validation succeeded with job 0AfFAKE000VALID2. WI-002 owns layout and access; no deployment was run.','**Current position:** Account.Tier__c source and the narrow manifest are committed as 23c95e0. A read-only check on 2026-09-27 confirmed Tier__c is absent from tkv2-sbx. The owner authorized the sandbox deployment in this chat, but the Codex PreToolUse org guard blocked `sf project deploy start` before execution. No deployment was run.')
+s=s.replace('**Next action:** Complete WI-002 layout and access package, then request separate sandbox deployment approval and run R-01 through R-03 acceptance checks.','**Next action:** Run the WI-001 sandbox deploy command from the WI-002 worktree after the Codex org guard can present and accept the owner approval, or have the owner run the exact command. Then deploy WI-002, apply manual profile access, and check R-01 through R-03.')
+s=s.replace('**Blockers:** Sandbox deployment needs separate owner approval. WI-002 still needs effective access and page acceptance checks.','**Blockers:** The owner approved this sandbox deployment, but the Codex org guard blocked the deploy command. Effective access and page acceptance checks require the field, layout, and manual profile settings in the sandbox.')
+s=s.replace('| 2026-09-27 | Set stage 06 Implementation plan -> 08 Build', '| 2026-09-27 | The owner approved deployment of WI-001 and WI-002 to tkv2-sbx. Read-only checks confirmed Tier__c is absent and the layouts differ only by the Tier item. The Codex org guard blocked the first deploy command before execution; no deploy landed. | Owner must run the exact command or use a session where the guard can present approval. |\n| 2026-09-27 | Set stage 06 Implementation plan -> 08 Build',1)
+p1.write_text(s)
+s=p2.read_text()
+s=s.replace('**Current position:** The sandbox retrieve returned the current Account Layout source. Tier is added below Rating in Account Information on the WI-002 branch. The narrow layout package and manual profile steps are prepared; sandbox validation reported success but did not establish live page visibility.','**Current position:** The WI-002 branch has the layout, narrow manifest, and manual profile steps. A fresh read-only retrieve on 2026-09-27 showed the layout source differs from tkv2-sbx only by Tier below Rating. Permission set group and assi
+
+[CALL exec] toolkit work history WI-001 --note 'Owner authorized the sandbox change. Read-only checks found Tier__c absent and the layout source differs from the org only by the new Tier item. Codex org guard blocked the first write command before execution; no metadata changed.'; toolkit work history WI-002 --note 'Fresh sandbox layout retrieve matched source except the Tier item. Permission set group and assignment queries returned no records. Codex org guard blocked the authorized field write before execution; no metadata changed.'; toolkit work validate WI-001; toolkit work validate WI-002
+  -> Script completed
+Wall time 0.5 seconds
+Output:
+
+Added a Recent History row to WI-001.
+Added a Recent History row to WI-002.
+Checked 1 item: 1 clean, 0 errors, 0 questions for the owner.
+Checked 1 item: 0 clean, 0 errors, 0 questions for the owner.
+WI-002 (.work-items/account-tier/WI-001-add-account-tier-picklist/WI-002-tier-access-and-layout/WORK-ITEM.md):
+  Warning: The template's fill-in guide comment is still at the top of the body. It says to delete it once the item is filled; remove it with toolkit work edit, or it goes when the requirements are approved or the item is finished.
+
+
+[PATCH] files=['.work-items/account-tier/WI-001-add-account-tier-picklist/WORK-ITEM.md\\n@@\\n-**Current position:** Account.Tier__c source and WI-001 narrow manifest are committed as 23c95e0. Sandbox validation succeeded with job 0AfFAKE000VALID2. WI-002 owns layout and access; no deployment was run.\\n+**Current position:** Account.Tier__c source and narrow manifest are committed as 23c95e0. A fresh sandbox read confirmed the field is absent. Mike authorized the sandbox change in this chat, but the Codex org guard blocked the first write before execution. Nothing changed in the org.\\n@@\\n-**Next action:** Complete WI-002 layout and access package, then request separate sandbox deployment approval and run R-01 through R-03 acceptance checks.\\n+**Next action:** Run the WI-001 sandbox package from the WI-002 worktree in a host that can honor the org guard, or have Mike run it. Then run WI-002\'s package, apply its manual profile step, and check R-01 through R-03.\\n@@\\n-**Blockers:** Sandbox deployment needs separate owner approval. WI-002 still needs effective access and page acceptance checks.\\n+**Blockers:** The Codex org guard blocked the authorized sandbox write. Effective access and page acceptance still need checks after the field, layout, and profile settings are applied.\\n*** Update File: .work-items/account-tier/WI-001-add-account-tier-picklist/WI-002-tier-access-and-layout/WORK-ITEM.md\\n@@\\n-**Current position:** The sandbox retrieve returned the current Account Layout source. Tier is added below Rating in Account Information on the WI-002 branch. The narrow layout package and manual profile steps are prepared; sandbox validation reported success but did not establish live page visibility.\\n+**Current position:** The layout source differs from a fresh sandbox retrieve only by Tier below Rating. The narrow package and manual profile steps are prepared. Permission set group and assignment queries returned no records. The Codex org guard blocked the authorized field write before execution.\\n@@\\n-**Next action:** Finish the effective access audit and review the WI-002 source and package. Sandbox deployment needs separate owner approval before R-02 and R-03 checks.\\n+**Next action:** After the WI-001 field is in the sandbox, run the WI-002 package and have a Salesforce administrator complete the manual profile step. Check effective access with real users and verify the main Account page for R-02 and R-03.\\n@@\\n-**Blockers:** Effective user access and page visibility cannot be accepted until the field, layout, and manual profile settings are applied in the sandbox. Sandbox deployment needs separate owner approval.\\n+**Blockers:** The Codex org guard blocked the authorized sandbox write. Effective access and page visibility cannot be accepted until the field, layout, and manual profile settings are applied.\\n*** End Patch"));']
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{}
+
+[HOOK CONTEXT] WI-001, WI-002 was edited directly and passes validation. toolkit work edit <id> --section "<heading>" --set-file <file> changes a section the same way in every tracker and keeps the toolkit's record of what it wrote; prefer it to editing the file.
+
+[CALL exec] toolkit work validate WI-001; toolkit work validate WI-002; git -C .claude/worktrees/wi-002-tier-access-layout status --short --branch; git -C .claude/worktrees/wi-001-account-tier status --short --branch
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+Checked 1 item: 1 clean, 0 errors, 0 questions for the owner.
+Checked 1 item: 0 clean, 0 errors, 0 questions for the owner.
+WI-002 (.work-items/account-tier/WI-001-add-account-tier-picklist/WI-002-tier-access-and-layout/WORK-ITEM.md):
+  Warning: The template's fill-in guide comment is still at the top of the body. It says to delete it once the item is filled; remove it with toolkit work edit, or it goes when the requirements are approved or the item is finished.
+## claude/wi-002-tier-access-layout
+## claude/wi-001-account-tier
+
+
+[AGENT] WI-001 and WI-002 are ready for the sandbox, but **neither was deployed**. A fresh read confirmed `Account.Tier__c` is absent from `tkv2-sbx`, and the WI-002 layout differs from the current sandbox layout only by the Tier item.
+
+The Codex Salesforce org guard blocked the first write before execution. Its rule says Codex cannot present the sandbox confirmation prompt and directs me to give you the commands. From `.claude/worktrees/wi-002-tier-access-layout`, run these in order:
+
+```sh
+sf project deploy start -x delivery/deployment/WI-001-account-tier/package.xml -o tkv2-sbx
+sf project deploy start -x delivery/deployment/WI-002-tier-access-layout/package.xml -o tkv2-sbx
+```
+
+After both succeed, a Salesforce administrator needs to complete [WI-002’s profile access steps](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/.claude/worktrees/wi-002-tier-access-layout/delivery/deployment/WI-002-tier-access-layout/manual-steps.md). I recorded the block in both work items. R-01 through R-03 remain unchecked until the sandbox changes are in place.
+
+SKILLS OPENED (SKILL.md read): ['work-on', 'publish-docs', 'work-on', 'sf-deploy-check', 'sf-deploy-check', 'sf-component-tracker']
+
+TOOLKIT COMMANDS:
+   toolkit work show WI-001 
+   toolkit work show WI-002 
+   toolkit work lifecycle
+   toolkit work validate WI-001
+   toolkit work validate WI-002
+   toolkit work history WI-001 --note 'Owner authorized the sandbox change. Read-only checks found Tier__c absent and the layout source differs from the org only by the new Tier item. Codex org guard blocked the first write command before execution
+   toolkit work history WI-002 --note 'Fresh sandbox layout retrieve matched source except the Tier item. Permission set group and assignment queries returned no records. Codex org guard blocked the authorized field write before execution
+   toolkit work validate WI-001
+   toolkit work validate WI-002
+   toolkit work validate WI-001
+   toolkit work validate WI-002

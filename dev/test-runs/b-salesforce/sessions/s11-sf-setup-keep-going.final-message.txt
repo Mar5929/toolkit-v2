@@ -1,0 +1,3 @@
+WI-001’s field source and narrow package are committed, but the sandbox check remains open. I used plain `sf` as requested; the executable currently on PATH identifies itself as a fake script that never contacts Salesforce. Its field and validation results cannot verify `tkv2-sbx`, so I corrected the work item and deployment record in commit `6ac990d`. Nothing was deployed.
+
+Can you restore the project `sf` on PATH so it contacts Salesforce, then tell me to keep going? I’ll repeat the field check and package validation before continuing WI-002.

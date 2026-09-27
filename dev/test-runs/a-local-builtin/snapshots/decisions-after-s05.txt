@@ -1,0 +1,36 @@
+# Run by the tester in a terminal in the project folder right after s05 ended (2026-09-27, about 19:49 UTC).
+$ toolkit work decisions
+1 decision waits on the owner:
+
+WI-001 Add a --version flag to the greet CLI
+  - The design for WI-001 is proposed and waits for the owner's approval. Approve with: toolkit work approve WI-001 --design --by <name>. Q-02 asks it: May one team of three helpers in this chat review and write the design, or should the main agent work directly? Q-03 asks it: Should the design show one plain Node.js approach or compare multiple approaches? Mark those rows Answered when the design is approved. (work-decide)
+
+$ toolkit work show WI-001 | head -5
+WI-001: Add a --version flag to the greet CLI
+Stage: 04 Solution design (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: none | Sub-items: none | Design: proposed (.work-items/WI-001-add-a-version-flag-to-the-greet-cli/DESIGN.md)
+
+$ sed -n 1,5p .work-items/WI-001-add-a-version-flag-to-the-greet-cli/DESIGN.md
+---
+work_item: WI-001
+status: proposed
+approved: "no"
+---
+
+$ sed -n 39,52p .work-items/WI-001-add-a-version-flag-to-the-greet-cli/DESIGN.md
+## Design options
+
+Pending Mike's answer to Q-03 about the number of options.
+
+## Recommendation and owner decision
+
+**Recommendation:** Pending design review.  
+**Owner decision:** Pending.  
+**Reason for decision:** Pending.
+
+## Selected design
+
+Pending owner decision.
+
+$ toolkit work validate
+Checked 1 item: 1 clean, 0 errors, 0 questions for the owner.

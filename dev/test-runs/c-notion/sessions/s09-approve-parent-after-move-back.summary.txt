@@ -1,0 +1,911 @@
+# Session s09-approve-parent-after-move-back
+thread: 01a0e480-3c15-7d10-8b7a-ef88425c92bb | start: 2026-09-27T20:13:24Z | end: 2026-09-27T20:16:37Z | exit=0
+extra args: 
+
+## Prompt
+
+Approved, the TV2-001 brief looks good.
+
+## Hook context injected (SessionStart, UserPromptSubmit, PostToolUse)
+
+- 2026-09-27T20:13:27.999Z:
+    Project briefing: Toolkit V2 sample run c3 (safe to delete) (tv2-sample-run-c3), owner Mike Rihm. Work items: the Notion Work Items database (ids like TV2-001). Memory: the Notion Memory database. Salesforce: no. Hosts: Claude Code and Codex.
+    Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/c-notion-r3/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+    
+    This worktree is on branch main, which names no work item.
+    
+    Active items:
+    - TV2-001 Write a short project brief in README.md: 11 User approval, In Progress, waiting on owner. Next action: Mike reviews the TV2-001 three-bullet result. TV2-002 has its own result decision. Continues with work-decide.
+    - TV2-002 Write the how to add a quote instructions in README.md: 11 User approval, In Progress, waiting on owner. Next action: Mike reviews the TV2-002 quote instruction result separately. Continues with work-decide.
+    
+    Waiting on the owner:
+    - TV2-001 Write a short project brief in README.md: 1 open question for the owner. (work-decide)
+    - TV2-002 Write the how to add a quote instructions in README.md: 1 open question for the owner. (work-decide)
+    
+    Items: 2 in progress. (Local copy of the Notion board from 2026-09-27T20:12:51.685Z.)
+    
+    Changes found in the tracker since the last toolkit command. The owner has not been told about them in this session; work-on and work-organize say each one to him in one line before other work (work-organize handles moves and copies; work-decide handles questions):
+    - Re-parented: TV2-002. Its parent is now TV2-001.
+    
+    Current focus:
+    Last updated: 2026-09-27, Codex after the TV2-001 and TV2-002 result checks.
+    ## Now
+    - TV2-001 Write a short project brief in README.md.
+    - TV2-002 Write the how to add a quote instructions in README.md.
+    ## Waiting on the owner
+    - In Codex, trust this project folder when prompted so its .codex/ settings load.
+    - In Codex, open /hooks and trust the Toolkit V2 hooks so the session briefing and reminders run.
+    - Start a new Claude Code session in this project so it loads the new settings and Plain English style.
+    ## Untracked to-dos
+    None.
+    ## Next session starts with
+    - Read AGENTS.md and PROJECT.md, then use work-decide for TV2-001 and TV2-002.
+    
+    Project memory (notion): 1 record, from the local copy. toolkit memory find searches it; toolkit memory get <key> reads one record.
+    
+    Memory records:
+    - user_readme_bullet_lists: Prefers README sections as short bu
+
+## Skills opened (SKILL.md read)
+
+work-decide, work-organize, memory-save
+
+## Escalation requests (commands asked to run outside the sandbox)
+
+
+## Commands
+
+### exit=1
+```
+$ /bin/zsh -lc 'cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md'
+# Toolkit V2 sample run c3 (safe to delete)
+
+## Purpose and intended outcome
+
+- Purpose: Keep a tiny Node.js script that prints a random quote.
+- Intended outcome: `node quote.js` prints one quote from the script's list.
+
+## Scope and boundaries
+
+- In scope: `quote.js` and the project records for future work.
+- Current setup constraint: Do not change `quote.js` during Toolkit V2 setup.
+- Other sco
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc 'git status --short; cat PROJECT-ROADMAP.md'
+# Project roadmap
+
+<!-- Fill-in guide: replace every angle-bracket prompt in the outcome, phase table, phase heading, and work-unit fields with this project's real text. Keep one overview row and one matching ## heading per phase. Under that heading, repeat the ### work-unit block for each deliverable-sized unit and link its canonical work item in the Linked work item field. Remove example rows an
+...[truncated]
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/skills/work-decide/SKILL.md'
+---
+name: work-decide
+description: 'Walks the owner through each decision waiting on him, one at a time with a recommendation, and records each answer. Use when the owner asks "what do you need from me" or "what''s waiting on me", says "approved" or "go with option B", or states a decision for the whole project.'
+---
+
+# Work decide
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Shared rules: the work plugin's `references/conventions.md`, two folders above this skill's folder (`../../references/conventions.md`). To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Run each `toolkit` command alone, on its own line: in Codex a command joined by `&&`, `;`, a pipe, or a heredoc, or run from a script, runs inside the sandbox and fails. Give text with `--text`, or a file in a new `mktemp -d` folder (never a fixed `/tmp` name, deleted right after the command). Never change a record with a script.
+
+## Steps
+
+1. Build the queue: requirements waiting for approval, designs marked proposed, items at stage 11 waiting for result approval, and Open Questions rows where the owner decides. The command lists each decision once. Its "Agent to-do" lines are the agent's own steps, not decisions waiting on the owner: count and show only the decisions, and handle a delivery offer there with `work-delegate` after the queue.
+   `toolkit work decisions`
+2. The owner gave an answer without being asked ("approved", "go with B"): match it to exactly one waiting decision. If two could match, ask which one, naming both.
+3. Otherwise take the decisions one at a time, the one blocking the most work first. For each: what is being decided, the choices, your recommendation and its main reason, and what happens after each answer. Every decision carries a recommendation, even when it is the only one in the queue; a bare question is not enough. One decision per message.
+4. A requirements approval: save his words as a history note first, so no later session asks him again. Then check the Agreed goal and the open questions. The goal still holds the template text: write the goal he was shown with the approval question, then record the approval. A requirement still has an open question linked: say which one, open `work-requirements` for it, and record the approval, without asking him again, once it is answered.
+   `toolkit work show <id> --section Requirements`
+   `toolkit work history <id> --note "Owner's words: <quote>" --effect "Requirements approval to record."`
+   `toolkit work edit <id> --section "Agreed goal" --text "<goal he was shown>"`
+5. Record each answer where it belongs. Approvals (for requirements, first set each approved `R-xx` Status to Finalized and put who approved it and when in its Decision record, as `work-requirements` step 8 does; after it, a `build` or `data-load` item goes to `solution-design` unless the owner agreed to skip the design, and a skip is said in the final reply). A design approval also answers an open question that asked for that choice: mark that row Answered.
+   `toolkit work approve <id> --requirements --by <owner>`
+   `toolkit work approve <id> --design --by <owner>`
+   `toolkit work approve <id> --result --by <owner>`
+   An Open Questions answer: rewrite that row with the answer, the date, and status Answered.
+   `toolkit work edit <id> --section "Open Questions" --set-file 
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc 'node quote.js'
+First, solve the problem. Then, write the code. - John Johnson
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/references/conventions.md'
+# Conventions every work skill follows
+
+Every skill in the work plugin follows these rules. A skill's own `SKILL.md`
+names the file when a rule matters for a step.
+
+This file is `references/conventions.md` in the work plugin's own folder. From
+a skill's `SKILL.md` it is two folders up: `skills/work-on/SKILL.md` and
+`references/conventions.md` share the plugin folder. In Codex the plugin
+folder is the installed copy, for example
+`~/.codex/plugins/cache/toolkit-v2/work/<version>/`, so this file is
+`~/.codex/plugins/cache/toolkit-v2/work/<version>/references/conventions.md`.
+
+Four rules that are easy to miss:
+
+- Run each `toolkit` command alone, as its own command (below).
+- Never change a work item with a script (Python, Node, `sed -i`, `cat >`).
+  Use `toolkit work edit --section` or `--label`, or the file edit tool for
+  body text. The hooks refuse the script, so it only wastes a step.
+- Temporary text goes in `--text`, or in a file in a new `mktemp -d` folder,
+  never at a fixed name such as `/tmp/wi001.md`.
+- End every reply to the owner with the one question he must answer, or with
+  the exact words that continue the work ("Say 'keep going' and I'll start the
+  build."). Never end on "The next step is ..." with nothing for him to do.
+
+## Voice
+
+Every skill carries this line near its top:
+
+> Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+
+Agents do not receive the output style. Each agent file in `agents/` carries
+its own writing rules.
+
+## Opening another skill
+
+- Claude Code: use the Skill tool with the skill's name, for example
+  `work-requirements`.
+- Codex: read that skill's `SKILL.md` from the path shown in the skill list,
+  then follow it.
+- Say the handover in one line, for example "WI-012 needs a design; opening
+  solution-design."
+- The skill that asked a question records the answer. An answer that arrives
+  later, after that skill has finished, is recorded by `work-decide`.
+
+## Running `toolkit` commands
+
+- Put each `toolkit` command on its own line and run it as a plain command.
+  Do not wrap it in `$(...)`, a pipe, or a redirect. Codex matches its
+  command rule against the plain command. This holds for read commands too:
+  `toolkit work decisions && toolkit work show WI-001` is two commands.
+- In Codex, a `toolkit` command joined to anything else (`&&`, `;`, a pipe, a
+  heredoc, `cd ... &&`) or run from a script (for example Python's
+  `subprocess`) runs inside the Codex sandbox. The sandbox blocks Notion,
+  Hindsight, and the main checkout's `.work-items/` and `.memory/` from a
+  worktree, so the command fails or reports the wrong cause. Run each one
+  alone, as its own command.
+- Add `--json` when you need to read the output field by field.
+- Exit codes: `0` done; `1` error; `2` validation failure (fix what it names
+  and run it again); `3` not supported for this tracker or memory backend
+  (follow [trackers.md](trackers.md)); `4` not a Toolkit V2 project (open
+  `project-setup`).
+- "saved but not verified" in the output means the write happened and the
+  read-back failed. The message names the first line that differs. Lead the
+  reply to the owner with "Saved but not verified", say which line, and read
+  the item back to judge it.
+
+## Changing a work item
+
+- Change a work item only through `toolkit work` commands. This keeps the
+  local tracker and Notion the same, and it keeps the CLI's record o
+...[truncated]
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work lifecycle'
+Stages (the status follows the stage):
+  01-discovery              Backlog      Working out what the owner wants.                                    Continue with: work-requirements
+  02-refinement             Backlog      Turning that into requirements.                                      Continue with: work-requirements
+  03-requirements-approved  Ready        The owner approved the requirements.                                 Continue with: solution-design or work-on
+  04-solution-design        In Progress  Deciding how it gets built.                                          Continue with: solution-design
+  05-breakdown              In Progress  Splitting work that is too large.                                    Continue with: work-organize
+  06-implementation-plan    In Progress  Ordering the build steps.                                            Continue with: work-on
+  07-tracking-setup         In Progress  Creating build tracking when needed.                                 Continue with: work-on
+  08-build                  In Progress  Producing the requested change.                                      Continue with: work-on
+  09-testing                In Progress  Checking it against the requirements.                                Continue with: work-check
+  10-bug-fixing             In Progress  Fixing what testing found.                                           Continue with: work-check
+  11-user-approval          In Progress  The owner reviews the result.                                        Continue with: work-check
+  12-pr-and-push            In Review    Repository work is in a pushed pull request.                         Continue with: work-finish
+  13-deployment             In Review    The result is put where it belongs.                                  Continue with: work-finish
+  14-spec-update            In Review    Lasting specifications match the result.                             Continue with: work-finish
+  (Done)                    Done         Set only by toolkit work finish <id> --by <name> --evidence <text>.  Continue with: work-finish
+  (Cancelled)               Cancelled    Set only by toolkit work cancel <id> --reason <text>.                Continue with: work-finish
+  An item with waiting_on: owner continues with work-decide, whatever its stage.
+
+Statuses:
+  Backlog      Logged; requirements are still being worked out (stages 01-02).
+  Ready        Requirements approved; work can start (stage 03).
+  In Progress  The item is active (stages 04-11). It does not mean building has started.
+  In Review    The result is in a pull request, being deployed, or being written into the specifications (stages 12-14).
+  Done         The owner accepted the result. Set only by toolkit work finish.
+  Cancelled    Work stopped without the result. Set only by toolkit work cancel.
+
+Types:
+  discovery               Finding out what is needed.
+  solution-design         Designing how something gets built.
+  build                   Producing a change. Needs approved requirements before stage 03.
+  data-load               Loading or changing data. Needs approved requirements before stage 03.
+  repository-maintenance  Keeping the repository in order.
+  research                Answering a question with sources.
+  task                    A small piece of work.
+  bug                     Something that does not work as it should.
+  enhancement             An improvement to something that works.
+  Other lower-case words are 
+...[truncated]
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work decisions'
+4 decisions wait on the owner:
+
+TV2-001 Write a short project brief in README.md
+  - Q-03: Do you approve the TV2-001 three-bullet parent result at 6216321 for R-01 through R-03? Affects P1-T03. (work-decide)
+  - TV2-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve TV2-001 --result --by <name>. (work-decide)
+
+TV2-002 Write the how to add a quote instructions in README.md
+  - Q-01: Do you approve the TV2-002 Add a quote bullet at e9425dd for R-04? Affects P1-T02. (work-decide)
+  - TV2-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve TV2-002 --result --by <name>. (work-decide)
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work show TV2-001'
+Tracker changes found (work-organize handles moves, copies, and missing items; work-decide handles questions for the owner):
+  Re-parented: TV2-002. Its parent is now TV2-001.
+
+TV2-001: Write a short project brief in README.md
+Location: https://app.notion.com/p/Write-a-short-project-brief-in-README-md-3e8b381da176815394ddf4349c52d305
+Stage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: none | Sub-items: TV2-002 | Design: approved (https://app.notion.com/p/TV2-001-Write-a-short-project-brief-in-README-md-solution-design-3e8b381da1768115ba32e17059f0e746)
+
+---
+id: TV2-001
+title: Write a short project brief in README.md
+type: task
+stage: 11-user-approval
+status: In Progress
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: not-offered
+requirements_approved: "2026-09-27 by Mike Rihm"
+design: approved
+result_approved: "no"
+updated: 2026-09-27
+---
+# TV2-001: Write a short project brief in README.md
+
+## Overview
+
+**Goal:** Write a short project brief in README.md.
+
+**Current position:** Option A is approved. The three TV2-001 bullets for R-01 through R-03 are committed at 6216321 and independently checked. TV2-002 is now a separate top-level item for R-04, with its own checked commit.
+
+**Next action:** Mike reviews the TV2-001 three-bullet result. TV2-002 has its own result decision.
+
+**Blockers:** Owner result reviews. The earlier result and merge were declined. The repository has no remote for publication.
+
+**Related items:** TV2-002 covers R-04 as a separate top-level item and has its own result review.
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — README brief | Option A brief covers R-01 through R-03 in TV2-001 and R-04 in the separate TV2-002 item | In Progress | Each item has its own checked result and owner review | None |
+
+## Tasks
+
+### P1 — README brief
+
+- [x] **P1-T01 — Write initial brief** · Done **Work:** Initial README edit in the item worktree. **Deliverable:** README.md at e8c9796. **Done when:** Initial request was checked. The owner declined this result. **Depends on:** None.
+- [x] **P1-T02 — Revise parent brief** · Done **Work:** Follow the approved Option A design for R-01 through R-03; add the heading and first three bullets at the top of README.md. Keep the existing main README sections. **Deliverable:** README.md at 6216321 in the TV2-001 worktree. **Done when:** The first three bullets match R-01 through R-03, node quote.js printed one quote, and git diff --check passed. **Depends on:** Approved design.
+- [ ] **P1-T03 — Review TV2-001 result** · Not Started **Work:** Show the R-01 through R-03 result to Mike for separate review. **Deliverable:** Recorded owner result decision for TV2-001. **Done when:** Mike approves the TV2-001 result. **Depends on:** P1-T02.
+- [ ] **P1-T04 — Review separate quote instruction item** · In Progress **Work:** TV2-002 adds and checks the fourth bullet for R-04 as a top-level item. **Deliverable:** TV2-002 result with its own owner review. **Done when:** TV2-002 has an approved result. **Depends on:** P1-T02.
+
+## Recent History
+
+| Date | Change or decision | Effect on the work |
+|---|---|---|
+| 2026-09-27 | Sub-item TV2-002 moved here in Notion by hand (it was under none (top level)). | TV2-002 is part of this item now. |
+| 2026-09-27 | Sub-item TV2-002 moved out in Notion by hand. | Its parent is now no
+...[truncated]
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc "toolkit work edit TV2-001 --section \"Open Questions\" --text '| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | Do you approve the README brief and authorize merging commit e8c9796 into main? | Previous result | Declined by owner on 2026-09-27; no merge | none |
+| Q-02 | Do you approve the revised requirements for the README brief? | R-01–R-04 | Answered: Mike Rihm approved on 2026-09-27 (\"Approved.\") | none |
+| Q-03 | Do you approve the TV2-001 three-bullet parent result at 6216321 for R-01 through R-03? | P1-T03 | Answered: Mike Rihm approved on 2026-09-27 (\"Approved, the TV2-001 brief looks good.\") | none |'"
+Saved "Open Questions" in TV2-001.
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work approve TV2-001 --result --by "Mike Rihm"'
+Recorded: result of TV2-001 approved (2026-09-27 by Mike Rihm).
+It is no longer waiting on the owner (waiting_on: none).
+Now 11 User approval (In Progress). Continue with work-finish.
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc "toolkit work history TV2-001 --note \"Owner's words: 'Approved, the TV2-001 brief looks good.'\" --effect \"Approved the TV2-001 three-bullet result at 6216321 for R-01 through R-03; TV2-002 still has its own result decision.\""
+Added a Recent History row to TV2-001.
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/skills/work-organize/SKILL.md'
+---
+name: work-organize
+description: 'Splits work items into sub-items, nests, groups, and moves them, and reconciles folders or cards the owner moved or renamed by hand. Use when the owner says "split this", "break it down", "it''s too big", "put X under Y", "I moved some folders around", or the briefing reports moved or missing items.'
+---
+
+# Work organize
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Shared rules: the work plugin's `references/conventions.md` and `references/trackers.md`, two folders above this skill's folder (`../../references/`). Cases and examples: this skill's `references/moves.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Run each `toolkit` command alone, on its own line: in Codex a command joined by `&&`, `;`, a pipe, or a heredoc, or run from a script, runs inside the sandbox and fails. Give text with `--text`, or a file in a new `mktemp -d` folder (never a fixed `/tmp` name, deleted right after the command). Never change a record with a script.
+
+## Steps
+
+1. Rescan the tracker and read the tree. Read the report: moved, renamed, nested or un-nested, missing, duplicate id, record with no id, adopted copies of the template.
+   `toolkit work sync`
+   `toolkit work list --tree`
+2. Say what the CLI already adapted (paths, a renamed folder, parent from location, Status from a dragged Notion Stage) in one line each ("WI-7 is now a sub-item of WI-3"), and what needs the owner's intent. The CLI already wrote a history row on each item the owner moved or renamed, and on the parents it left and joined; add a note only for his reason.
+3. List side effects: a sub-item under a Done or Cancelled parent; a Roadmap phase listing a child that moved away; a `build` sub-item without approved requirements.
+4. A missing item: ask whether it was removed on purpose (then cancel it with his words) or moved outside the tracker (ask where; move it back only after a yes). A copied folder with a duplicate id: the CLI renumbered the newer copy; confirm which one is the original.
+   `toolkit work cancel <id> --reason "<owner's words>"`
+5. Notion: a Stage the owner changed by dragging is kept. A card dragged to Done is not an approval: ask, and on a yes open `work-finish`.
+6. Split (stage 05): propose the sub-items (title, what each delivers, which `R-xx` it covers), ask once, then create each one under the parent. A split never removes, renumbers, or rewrites the parent's `R-xx`: they stay in the parent, with their approval. A child that delivers approved parent requirements is made with `--covers`: it links them, copies no text, and inherits the parent's requirements approval, so the owner is never asked to approve the same requirement twice. A parent design the owner approved covers its children too: a `--covers` child of such a parent starts at planning (06), and its history row names that design; it gets no new design. Only a child that needs new behavior gets its own `R-xx` and its own approval. List the child ids in the parent's Roadmap Sub-items column. A split usually renames the parent: say the new title to the owner in one line before the title command below.
+   `toolkit work set <id> --stage 05-breakdown`
+   `toolkit work set <id> --title "<new title>"`
+   `toolkit work new --title "<title>" --type <type> --parent <id> --covers R-02,R-03`
+   `toolkit work
+...[truncated]
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work show TV2-001 --section "Open Questions"'
+## Open Questions
+
+| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | Do you approve the README brief and authorize merging commit e8c9796 into main? | Previous result | Declined by owner on 2026-09-27; no merge | none |
+| Q-02 | Do you approve the revised requirements for the README brief? | R-01–R-04 | Answered: Mike Rihm approved on 2026-09-27 ("Approved.") | none |
+| Q-03 | Do you approve the TV2-001 three-bullet parent result at 6216321 for R-01 through R-03? | P1-T03 | Answered: Mike Rihm approved on 2026-09-27 ("Approved, the TV2-001 brief looks good.") | none |
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work show TV2-001 --section "Recent History"'
+## Recent History
+
+| Date | Change or decision | Effect on the work |
+|---|---|---|
+| 2026-09-27 | Owner's words: 'Approved, the TV2-001 brief looks good.' | Approved the TV2-001 three-bullet result at 6216321 for R-01 through R-03; TV2-002 still has its own result decision. |
+| 2026-09-27 | Result approved by Mike Rihm. | The result can be shipped and finished (work-finish). No longer waiting on the owner. |
+| 2026-09-27 | Sub-item TV2-002 moved here in Notion by hand (it was under none (top level)). | TV2-002 is part of this item now. |
+| 2026-09-27 | Sub-item TV2-002 moved out in Notion by hand. | Its parent is now none (top level). |
+| 2026-09-27 | Set stage 09 Testing -> 11 User approval (status In Progress); waiting on owner. | Waits for the owner's answer (work-decide) before the step it blocks. |
+| 2026-09-27 | Checked commit 6216321: R-01 through R-03 met; node quote.js printed one quote; git diff --check main..HEAD passed; independent checker found no defects. R-04 is assigned to TV2-002. | Ready for Mike to review the parent result. |
+| 2026-09-27 | Set stage 08 Build -> 09 Testing (status In Progress). | Continue with work-check. |
+| 2026-09-27 | Set stage 07 Tracking setup -> 08 Build (status In Progress). | Continue with work-on. |
+| 2026-09-27 | Set stage 06 Implementation plan -> 07 Tracking setup (status In Progress). | Continue with work-on. |
+| 2026-09-27 | Set stage 05 Breakdown -> 06 Implementation plan (status In Progress). | Continue with work-on. |
+| 2026-09-27 | Design approved by Mike Rihm. | The design can be built. |
+| 2026-09-27 | Design updated (status approved). | The design can be built. |
+| 2026-09-27 | Sub-item TV2-002 created: Write the how to add a quote instructions in README.md. | TV2-002 delivers R-04. Those requirements stay here, unchanged and approved. |
+| 2026-09-27 | Set stage 04 Solution design -> 05 Breakdown (status In Progress). | Continue with work-organize. |
+| 2026-09-27 | Owner's words: 'Go with option A. Also split the work: make the how to add a quote instructions their own sub-item under TV2-001, so I can review that part on its own. Then keep going.' | Selected Option A; R-04 will be delivered and reviewed as a child item. Now waiting on the agent. |
+| 2026-09-27 | Design updated (status approved). | The design can be built. |
+| 2026-09-27 | Design updated (status proposed). | The owner approves it before building starts. |
+| 2026-09-27 | Proposed Option A: one four-bullet brief; Option B: short sections with one bullet each. Recommend Option A. Owner design choice pending. | Wait for the design decision before another README edit. |
+| 2026-09-27 | Design updated (status proposed). | The owner approves it before building starts. Now waiting on the owner. |
+| 2026-09-27 | Design created (proposed). | The owner approves it before building starts. |
+| 2026-09-27 | Set stage 03 Requirements approved -> 04 Solution design (status In Progress). | Continue with solution-design. |
+| 2026-09-27 | Requirements approved by Mike Rihm. | Stage 03 Requirements approved (status Ready). No longer waiting on the owner. Continue with solution-design. Now waiting on the agent. |
+| 2026-09-27 | Owner's words: 'Approved.' | Revised requirements R-01–R-04 approved; previous README result and merge remain declined. |
+| 2026-09-27 | Owner requirements recorded: explain quote.js, intended readers, node quote.js, and how to add a quote; place a short brief at the top of README.md. Owner asked to approve req
+...[truncated]
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work show TV2-002'
+TV2-002: Write the how to add a quote instructions in README.md
+Location: https://app.notion.com/p/Write-the-how-to-add-a-quote-instructions-in-README-md-3e8b381da1768156b32cce4163db9b48
+Stage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: TV2-001 | Sub-items: none | Design: none of its own; TV2-001's design is approved (https://app.notion.com/p/TV2-001-Write-a-short-project-brief-in-README-md-solution-design-3e8b381da1768115ba32e17059f0e746). Read it with: toolkit work design TV2-001
+
+---
+id: TV2-002
+title: Write the how to add a quote instructions in README.md
+type: task
+stage: 11-user-approval
+status: In Progress
+parent: TV2-001
+waiting_on: "owner"
+priority: medium
+delivery: not-offered
+requirements_approved: "2026-09-27 by Mike Rihm"
+design: none
+result_approved: "no"
+updated: 2026-09-27
+---
+# TV2-002: Write the how to add a quote instructions in README.md
+
+## Overview
+
+**Goal:** Add the how to add a quote instruction to the Option A project brief in README.md.
+
+**Current position:** The fourth bullet for TV2-001 R-04 is committed at e9425dd and independently checked. It is the only change from TV2-001 commit 6216321. TV2-002 is now a top-level item in Notion.
+
+**Next action:** Mike reviews the TV2-002 quote instruction result separately.
+
+**Blockers:** Owner result review. The repository has no remote for publication.
+
+**Related items:** TV2-001 defines R-04 and holds the approved design.
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Quote instruction | The Option A brief explains how to add a quote | Not Started | Fourth bullet meets TV2-001 R-04 and has its own owner review | None |
+
+## Tasks
+
+### P1 — Quote instruction
+
+- [x] **P1-T01 — Add the quote instruction** · Done **Work:** Follow TV2-001 Selected design and add the fourth bullet to README.md for TV2-001 R-04. **Deliverable:** README.md at e9425dd in the TV2-002 worktree. **Done when:** The bullet names quote.js, the quotes list, and a quoted string entry; wording matches quote.js; node quote.js printed one quote and git diff --check passed. **Depends on:** TV2-001 parent brief commit 6216321.
+- [ ] **P1-T02 — Review quote instruction** · Not Started **Work:** Show the R-04 result to Mike for its own review. **Deliverable:** Recorded owner result decision for TV2-002. **Done when:** Mike approves the TV2-002 result. **Depends on:** P1-T01.
+
+## Recent History
+
+| Date | Change or decision | Effect on the work |
+|---|---|---|
+| 2026-09-27 | Parent changed in Notion by hand: none (top level) -> TV2-001. | It is a sub-item of TV2-001 now. |
+| 2026-09-27 | Parent changed in Notion by hand: TV2-001 -> none (top level). | It is a top-level item now. |
+| 2026-09-27 | Set stage 09 Testing -> 11 User approval (status In Progress); waiting on owner. | Waits for the owner's answer (work-decide) before the step it blocks. |
+| 2026-09-27 | Checked commit e9425dd: TV2-001 R-04 met; node quote.js printed one quote; git diff --check 6216321..HEAD passed; independent checker found no defects. | Ready for Mike to review the child result separately. |
+| 2026-09-27 | Set stage 08 Build -> 09 Testing (status In Progress). | Continue with work-check. |
+| 2026-09-27 | Set stage 07 Tracking setup -> 08 Build (status In Progress). | Continue with work-on. |
+| 2026-09-27 | Set stage 06 Implementation plan -> 07 Tracking se
+...[truncated]
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work sync'
+Nothing changed: every item is where the tracker expected it, and every derived value is in step.
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work list --tree'
+TV2-001  Write a short project brief in README.md  (11 User approval, In Progress)
+  TV2-002  Write the how to add a quote instructions in README.md  (11 User approval, In Progress, waiting on owner)
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc "toolkit work edit TV2-001 --section \"Overview\" --text '**Goal:** Write a short project brief in README.md.
+
+**Current position:** The three TV2-001 bullets for R-01 through R-03 are committed at 6216321, independently checked, and approved by Mike on 2026-09-27. TV2-002 is a sub-item for R-04 with its own checked commit and result decision.
+
+**Next action:** Mike reviews the TV2-002 quote instruction result separately. After that, decide how to finish the two items; no merge or publication is authorized.
+
+**Blockers:** TV2-002 still awaits owner result review. The repository has no remote for publication.
+
+**Related items:** TV2-002 is a sub-item covering R-04.'"
+Saved "Overview" in TV2-001.
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc "toolkit work edit TV2-001 --section \"Roadmap\" --text 'A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — README brief | Option A brief covers R-01 through R-03 in TV2-001 and R-04 in TV2-002 | In Progress | TV2-001 result approved; TV2-002 awaits its own result decision | TV2-002 |'"
+Saved "Roadmap" in TV2-001.
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc "toolkit work edit TV2-001 --section \"Tasks\" --text '### P1 — README brief
+
+- [x] **P1-T01 — Write initial brief** · Done **Work:** Initial README edit in the item worktree. **Deliverable:** README.md at e8c9796. **Done when:** Initial request was checked. The owner declined this result. **Depends on:** None.
+- [x] **P1-T02 — Revise parent brief** · Done **Work:** Follow the approved Option A design for R-01 through R-03; add the heading and first three bullets at the top of README.md. Keep the existing main README sections. **Deliverable:** README.md at 6216321 in the TV2-001 worktree. **Done when:** The first three bullets match R-01 through R-03, node quote.js printed one quote, and git diff --check passed. **Depends on:** Approved design.
+- [x] **P1-T03 — Review TV2-001 result** · Done **Work:** Show the R-01 through R-03 result to Mike for separate review. **Deliverable:** Recorded owner result approval for TV2-001 on 2026-09-27. **Done when:** Mike approves the TV2-001 result. **Depends on:** P1-T02.
+- [ ] **P1-T04 — Review quote instruction sub-item** · In Progress **Work:** TV2-002 adds and checks the fourth bullet for R-04 as a sub-item. **Deliverable:** TV2-002 result with its own owner review. **Done when:** TV2-002 has an approved result. **Depends on:** P1-T02.'"
+Saved "Tasks" in TV2-001.
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc "toolkit work edit TV2-002 --section \"Overview\" --text '**Goal:** Add the how to add a quote instruction to the Option A project brief in README.md.
+
+**Current position:** The fourth bullet for TV2-001 R-04 is committed at e9425dd and independently checked. It is the only change from TV2-001 commit 6216321. TV2-002 is a sub-item of TV2-001 in Notion. Mike approved the TV2-001 three-bullet result on 2026-09-27.
+
+**Next action:** Mike reviews the TV2-002 quote instruction result separately.
+
+**Blockers:** Owner result review. The repository has no remote for publication.
+
+**Related items:** TV2-001 is the parent, defines R-04, and holds the approved design.'"
+Saved "Overview" in TV2-002.
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.2/skills/memory-save/SKILL.md'
+---
+name: memory-save
+description: 'Saves, corrects, or forgets one lasting fact in project memory, and sends anything that belongs elsewhere to its home. Use when the owner says "remember this", "from now on", "always do X", "never do X", "forget that", or "remind me", corrects the agent, or a hook says to save.'
+---
+
+# Memory save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Record format, types, focus, and glossary: `references/record-format.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Put each `toolkit` command on its own line. In Codex, a `toolkit` command joined to anything else (`&&`, `;`, a pipe, a heredoc) or run from a script runs inside the sandbox, which blocks Hindsight and Notion: run it alone. Text: give it in the command with `--body "<text>"` (a save) or `--text "<text>"` (the focus or the glossary), so no file is needed. For a long text, in Claude Code pass it on standard input (`--set-file -` or `--body-file -` with a heredoc); in Codex make a new folder for each save with `mktemp -d`, write the file there, and delete the file and the folder right after the command succeeds. Never use a fixed name such as `/tmp/focus.md`: another session could write the same file.
+
+## Steps
+
+1. Decide the home first, with the memory criteria (`.memory/memory-criteria.md` with built-in memory; otherwise `references/record-format.md`). Memory holds a lasting preference, correction, fact about the project or the owner, or a hard-to-find reference. Elsewhere: project work goes to `work-on`; a decision for the whole project to `work-decide` (`DECISIONS.md`); delivered behavior to `requirements/`; how a change is built to the item's design; verified current structure to `system-guide/`; outside documentation to `ai-external-knowledge/`; a standing rule for how agents work here is proposed as a rule-file change; an owner to-do with no work item goes to the current focus "Untracked to-dos"; a project term goes to the glossary. A short memory pointer to a hard-to-find record is allowed; never copy its body.
+2. Search first and update the existing record rather than add a duplicate.
+   `toolkit memory find "<topic>"`
+   `toolkit memory get <key>`
+3. Approval. This is the only written copy of the memory approval policy. Read the mode, then apply it:
+   `toolkit config get memory.approval`
+   The owner's own words ("remember", "from now on", "always", "never", "forget", a correction) are the approval: save now, with his name as the approver. `onboarding` mode (the default): something the agent inferred gets one yes-or-no line first ("Save to memory: <one-line summary>?"); save after a yes. `trusted` mode: routine facts the agent is sure of are saved and reported, without an approver. Always ask first, in either mode, for anything about a named person, personal details, a hard delete, more than five records at once, or a change to this policy. A yes covers only the change and meaning shown. Silence is never a yes. There is no proposal inbox: keep an unanswered question in the conversation and go on with other work.
+4. Save: type (`user`, `feedback`, `project`, `reference`, `event`), slug, one-line description, the source, and a body file with the model's labels: Remember, Why (the owner's reason in his words, or "Not stated by the owner."; never a reason you inferred), H
+...[truncated]
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work show TV2-001 --section "Tasks"'
+## Tasks
+
+### P1 — README brief
+
+- [x] **P1-T01 — Write initial brief** · Done **Work:** Initial README edit in the item worktree. **Deliverable:** README.md at e8c9796. **Done when:** Initial request was checked. The owner declined this result. **Depends on:** None.
+- [x] **P1-T02 — Revise parent brief** · Done **Work:** Follow the approved Option A design for R-01 through R-03; add the heading and first three bullets at the top of README.md. Keep the existing main README sections. **Deliverable:** README.md at 6216321 in the TV2-001 worktree. **Done when:** The first three bullets match R-01 through R-03, node quote.js printed one quote, and git diff --check passed. **Depends on:** Approved design.
+- [x] **P1-T03 — Review TV2-001 result** · Done **Work:** Show the R-01 through R-03 result to Mike for separate review. **Deliverable:** Recorded owner result approval for TV2-001 on 2026-09-27. **Done when:** Mike approves the TV2-001 result. **Depends on:** P1-T02.
+- [ ] **P1-T04 — Review quote instruction sub-item** · In Progress **Work:** TV2-002 adds and checks the fourth bullet for R-04 as a sub-item. **Deliverable:** TV2-002 result with its own owner review. **Done when:** TV2-002 has an approved result. **Depends on:** P1-T02.
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work show TV2-002 --section "Overview"'
+## Overview
+
+**Goal:** Add the how to add a quote instruction to the Option A project brief in README.md.
+
+**Current position:** The fourth bullet for TV2-001 R-04 is committed at e9425dd and independently checked. It is the only change from TV2-001 commit 6216321. TV2-002 is a sub-item of TV2-001 in Notion. Mike approved the TV2-001 three-bullet result on 2026-09-27.
+
+**Next action:** Mike reviews the TV2-002 quote instruction result separately.
+
+**Blockers:** Owner result review. The repository has no remote for publication.
+
+**Related items:** TV2-001 is the parent, defines R-04, and holds the approved design.
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work show TV2-001 --section "Overview"'
+## Overview
+
+**Goal:** Write a short project brief in README.md.
+
+**Current position:** The three TV2-001 bullets for R-01 through R-03 are committed at 6216321, independently checked, and approved by Mike on 2026-09-27. TV2-002 is a sub-item for R-04 with its own checked commit and result decision.
+
+**Next action:** Mike reviews the TV2-002 quote instruction result separately. After that, decide how to finish the two items; no merge or publication is authorized.
+
+**Blockers:** TV2-002 still awaits owner result review. The repository has no remote for publication.
+
+**Related items:** TV2-002 is a sub-item covering R-04.
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work validate'
+Checked 2 items: 2 clean, 0 errors, 0 questions for the owner.
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.2/skills/memory-save/references/record-format.md'
+# Memory records, current focus, and glossary
+
+Detail for `memory-save`, `memory-find`, and `memory-tidy`. The approval
+policy is not here; it is written only in `memory-save` step 3.
+
+The formats are the model project's `.memory/` formats: the topic template
+(`project_topic_template.md`), `CURRENT_FOCUS.md`, `MEMORY.md`,
+`memory-criteria.md`, and `terminology-glossary.md`. With built-in memory the
+project has its own copies in `.memory/`; its `AGENTS.md` there is the folder's
+rule. Every backend (built-in, Hindsight, Notion) keeps the same fields and
+the same body. Only the `toolkit memory` commands write memory.
+
+## What belongs in memory
+
+With built-in memory, `.memory/memory-criteria.md` is the project's selection
+policy. Read it before choosing. `feedback` memories about what is worth
+saving override it. With Hindsight or Notion memory there is no
+`.memory/` folder, so the policy is the text below, copied word for word from
+the model's `.memory/memory-criteria.md` (its "Default test for lasting
+memory" and "Never save as lasting memory" sections). Where a project's own
+`memory-criteria.md` differs from this copy, the project's file wins.
+
+Save a topic when it concerns this project, has a credible source, would matter in a future session, would be costly or unreliable to reconstruct, and has no better maintained owner. Prefer updating an existing topic. A short pointer to an authoritative record can qualify when future sessions would otherwise miss that record.
+
+| Type and filename | Usually worth retaining | Route or reject instead |
+| --- | --- | --- |
+| `user_<topic>.md` | Relevant role, responsibility, working preference, or communication need the owner stated | Personal judgments, irrelevant biography, private details |
+| `feedback_<topic>.md` | Repeated or standing correction to how the agent should work; confirmed selection lesson | One-off irritation, a rejected fact restated as policy, an instruction already in `AGENTS.md` |
+| `project_<topic>.md` | Durable project constraint, rationale, technical landmark, or proven costly fix | A decision for the whole project (`DECISIONS.md`), code summary, schema copy, active ticket status, accepted requirement or design body |
+| `reference_<topic>.md` | Hard-to-rediscover route to a source, system, dashboard, or decision record, with why to open it | Entire outside page or a path already obvious in `PROJECT.md` or the project map |
+| `event_<topic>.md` | Significant project episode: what was done, what resulted, and where the output lives | Routine edit, tool call, raw error, daily progress log |
+
+Never save as lasting memory:
+
+- Secrets, credentials, sensitive personal data, transcripts, scratch reasoning, raw logs, dropped guesses, or unsupported claims.
+- A fact the same change already places in the authoritative file, unless a small route to that file is genuinely needed.
+- Live status, pending approval, unshipped requirements, procedure steps, code restatements, or a current-system explanation that the code/System Guide owns.
+- A rejected candidate under a new name or wider wording. A rejection stands until the owner changes it.
+
+The `memory-save` skill adds one limit of its own in every backend: never
+store email addresses.
+
+## Keys and file names
+
+- `--name` takes the topic slug: lowercase words joined by hyphens, short and
+  specific, for example `no-force-push`.
+- The key is `<type>_<slug>` with every hyphen in the slug turned into an
+  underscore: `--type feedback --name no-f
+...[truncated]
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit memory focus'
+# Current focus
+
+Last updated: 2026-09-27, Codex after the TV2-001 and TV2-002 result checks.
+
+## Now
+
+- TV2-001 Write a short project brief in README.md.
+- TV2-002 Write the how to add a quote instructions in README.md.
+
+## Waiting on the owner
+
+- In Codex, trust this project folder when prompted so its .codex/ settings load.
+- In Codex, open /hooks and trust the Toolkit V2 hooks so the session briefing and reminders run.
+- Start a new Claude Code session in this project so it loads the new settings and Plain English style.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Read AGENTS.md and PROJECT.md, then use work-decide for TV2-001 and TV2-002.
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit memory focus --help'
+toolkit memory: Save, find, and manage project memory: records, the current focus, and the glossary.
+
+Usage:
+  toolkit memory save --type <t> --name <slug> --description <d> (--body <text> | --body-file <file|->)
+                      [--approved-by <who>] [--authorization <text>] [--supersedes <key>] [--source <text>]
+                      [--status <s>] [--last-verified <YYYY-MM-DD|unknown>] [--expect <version|absent>]
+  toolkit memory find <query> [--reflect] [--type <t>] [--limit <n>] [--all]
+  toolkit memory get <key>
+  toolkit memory list [--type <t>] [--status <current|needs-review|retired|all>]
+  toolkit memory retire <key> [--superseded-by <key>] [--reason <text>]
+  toolkit memory restore <key>
+  toolkit memory rename <key> --to <new-key>
+  toolkit memory delete <key> --owner-approved
+  toolkit memory focus [--set-file <file|-> | --text <text>] [--expect <version>]
+  toolkit memory glossary [--set-file <file|-> | --text <text>] [--expect <version>]
+  toolkit memory reindex
+  toolkit memory status
+  toolkit memory export --to <folder>
+  toolkit memory import --from <folder> [--dry-run]
+
+Types: user, feedback, project, reference, event. A key is <type>_<slug>, for example feedback_deploy_window.
+The key is also the file name without .md and the frontmatter name (the model's topic format).
+A key typed with dashes (feedback_deploy-window) finds the same record.
+A --name longer than 60 characters is refused, not shortened.
+A body file that starts with frontmatter fills any field not given as a flag.
+--approved-by writes "authorization: Approved by <who> on <date>". With no approver
+and memory.approval trusted, it is "Trusted grant"; --authorization sets the words.
+Saving over an existing record keeps its source, authorization, supersedes,
+last_verified, and any other frontmatter fields unless they are given again.
+Saving a record that needs review marks it verified today.
+retire --superseded-by <key> marks the record superseded (the replacement must
+exist and not be archived); retire alone archives it (built-in: moved to
+.memory/archive/). A record saved with status superseded or archived keeps that
+word; a superseded record stays beside the current ones.
+Links to a note in other notes are repaired when it is renamed (rename, or save
+--supersedes), superseded, archived (the link becomes its words plus "(archived)"),
+or deleted (the link becomes its words); the notes changed are listed, and so
+are notes whose links could not be repaired. Saving an archived note as current
+moves it out of archive/ and keeps its links working.
+The current focus has four ## sections (Now, Waiting on the owner, Untracked to-dos, Next session starts with) and at most 50 lines.
+Exit codes: 0 ok, 1 error or not found, 2 refused (a rule or a stale --expect), 3 not supported by this backend, 4 not a toolkit project.
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc "toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-27, TV2-001 result approval recorded by Codex.
+
+## Now
+
+- TV2-001 Write a short project brief in README.md.
+- TV2-002 Write the how to add a quote instructions in README.md (sub-item of TV2-001).
+
+## Waiting on the owner
+
+- In Codex, trust this project folder when prompted so its .codex/ settings load.
+- In Codex, open /hooks and trust the Toolkit V2 hooks so the session briefing and reminders run.
+- Start a new Claude Code session in this project so it loads the new settings and Plain English style.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Read AGENTS.md and PROJECT.md, then use work-decide for TV2-002. TV2-001 result approval is recorded; no merge or publication is authorized.'"
+Saved the current focus (22 lines). Version: f77bd753e942
+
+```
+### exit=1 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit doctor'
+Toolkit doctor for Toolkit V2 sample run c3 (safe to delete) (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/c-notion-r3).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/c-notion-r3). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (3):
+- AGENTS.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- README.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+
+Result: 0 problems and 2 warnings.
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit memory focus'
+# Current focus
+
+Last updated: 2026-09-27, TV2-001 result approval recorded by Codex.
+
+## Now
+
+- TV2-001 Write a short project brief in README.md.
+- TV2-002 Write the how to add a quote instructions in README.md (sub-item of TV2-001).
+
+## Waiting on the owner
+
+- In Codex, trust this project folder when prompted so its .codex/ settings load.
+- In Codex, open /hooks and trust the Toolkit V2 hooks so the session briefing and reminders run.
+- Start a new Claude Code session in this project so it loads the new settings and Plain English style.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Read AGENTS.md and PROJECT.md, then use work-decide for TV2-002. TV2-001 result approval is recorded; no merge or publication is authorized.
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work decisions'
+2 decisions wait on the owner:
+
+TV2-002 Write the how to add a quote instructions in README.md
+  - Q-01: Do you approve the TV2-002 Add a quote bullet at e9425dd for R-04? Affects P1-T02. (work-decide)
+  - TV2-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve TV2-002 --result --by <name>. (work-decide)
+
+```
+### exit=0
+```
+$ /bin/zsh -lc 'git worktree list --porcelain'
+worktree /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/c-notion-r3
+HEAD c1f1777ec105a8b6d2ae93555ef91ba94f579794
+branch refs/heads/main
+
+worktree /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/c-notion-r3/.claude/worktrees/tv2-002-ad
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc 'git show --format= -- README.md e9425dd'
+diff --git a/README.md b/README.md
+new file mode 100644
+index 0000000..3a22aaa
+--- /dev/null
++++ b/README.md
+@@ -0,0 +1,28 @@
++# Toolkit V2 sample run c3 (safe to delete)
++
++This tiny Node.js project prints one random quote when you run `quote.js`.
++
++## Purpose
++
++The script chooses a quote from the list in `quote.js` and prints it to the terminal.
++
++## Start here
++
++1. Use a local installation 
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc 'git show e9425dd -- README.md'
+commit e9425ddf7f30436b1720ea7362fad5876091f541
+Author: Mike Rihm <michael@rihm.com>
+Date:   Sun Sep 27 16:04:19 2026 -0400
+
+    Document how to add a quote
+
+diff --git a/README.md b/README.md
+index d031c91..9da058f 100644
+--- a/README.md
++++ b/README.md
+@@ -5,6 +5,7 @@
+ - **For:** People new to Node who cloned this repository.
+ - **What it does:** `quote.js` picks one random quote from its `quote
+...[truncated]
+```
+
+## File changes
+
+
+## Other items
+
+- error {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+- error {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+- EVENT {"type": "turn.completed", "usage": {"input_tokens": 1018982, "cached_input_tokens": 948992, "cache_write_input_tokens": 0, "output_tokens": 4282, "reasoning_output_tokens": 859}}
+
+## Agent messages
+
+I’ll record your approval for TV2-001 and check what remains for that item. I’ll keep TV2-002’s result decision separate.
+
+---
+
+The tracker shows TV2-002 is now a sub-item of TV2-001. I’ll record your approval on TV2-001 and then check its next step.
+
+---
+
+TV2-001’s result approval is recorded. I’ll update the item’s review task and parent details, then bring you TV2-002’s separate decision.
+
+---
+
+TV2-001’s review task is marked done, and the tracker confirms TV2-002 is its sub-item. I’m updating the session focus so the next session starts with TV2-002’s pending review.
+
+---
+
+Your approval of the TV2-001 three-bullet brief is recorded. TV2-002 remains a separate review.
+
+Its added bullet reads: “In `quote.js`, add another quoted string as an entry in the `quotes` list.” It passed the independent check. **I recommend approving TV2-002.** Do you approve that result?
+
+---
+

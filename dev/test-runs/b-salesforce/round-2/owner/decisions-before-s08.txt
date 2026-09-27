@@ -1,0 +1,4 @@
+Nothing is waiting on the owner.
+
+Agent to-do (the agent's step, not a decision the owner is waiting on):
+  - Make the agent-led delivery offer for WI-001 (it is a build item past requirements). work-delegate asks the owner once per goal. (work-delegate)

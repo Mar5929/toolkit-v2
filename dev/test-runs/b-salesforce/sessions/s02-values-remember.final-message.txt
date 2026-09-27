@@ -1,0 +1,3 @@
+WI-001 now specifies **Gold, Silver, Bronze**, in that order, with Gold highest. I also saved your preference that every new custom field have a description and help text. The work item passed validation.
+
+For the next requirement, I recommend allowing Tier to be blank, including on existing Accounts, so no value has to be assigned before someone ranks them. **Should Tier be allowed to be blank?**

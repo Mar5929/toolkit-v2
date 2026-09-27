@@ -1,0 +1,1 @@
+I ran the toolkit init command in a terminal and it finished. Finish setting up the project.

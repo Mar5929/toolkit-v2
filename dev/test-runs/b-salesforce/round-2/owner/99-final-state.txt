@@ -1,0 +1,70 @@
+$ toolkit work list --tree --all
+account-tier/ (group)
+  WI-001  Add Account Tier picklist  (Done)
+    WI-002  Configure Account Tier access and page layout  (Done)
+[exit=0]
+
+$ toolkit work validate
+Checked 2 items: 2 clean, 0 errors, 0 questions for the owner.
+[exit=0]
+
+$ toolkit work decisions
+Nothing is waiting on the owner.
+[exit=0]
+
+$ toolkit work next
+Nothing is ready to work on.
+[exit=0]
+
+$ toolkit doctor
+Toolkit doctor for Acme CRM (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2).
+
+Warnings (3):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+3. The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them.
+   Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.
+
+Notes (7):
+- AGENTS.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- README.md was changed by the project, so sync leaves it alone. The toolkit would: the project had this file before the toolkit; the toolkit version was not installed. The project-setup skill shows these to the owner and makes the changes he approves.
+- delivery/deployment/component-tracker.csv was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- delivery/deployment/full-project-deployment-template/package.xml was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- sfdx-project.json was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+
+Result: 0 problems and 3 warnings.
+[exit=1]
+
+$ toolkit memory list
+- user_custom_field_documentation: Every new Salesforce custom field should have a description and help text
+[exit=0]
+
+$ git log --format='%h %an <%ae> %s' --all
+8e29ac1 Mike Rihm <michael@rihm.com> Record Account Tier production closeout
+9970961 Mike Rihm <michael@rihm.com> Merge branch 'claude/wi-002-tier-access-layout'
+72f5b9c Mike Rihm <michael@rihm.com> Record completed Account Tier sandbox checks
+53de9f7 Mike Rihm <michael@rihm.com> Record Account Tier sandbox access checks
+956bd90 Mike Rihm <michael@rihm.com> Record WI-002 sandbox deployment and acceptance gaps
+bd1ef75 Mike Rihm <michael@rihm.com> Record WI-001 sandbox deployment
+844e376 Mike Rihm <michael@rihm.com> Add Account Tier to main Account layout
+07ac952 Mike Rihm <michael@rihm.com> Prepare Account Tier profile access steps
+23c95e0 Mike Rihm <michael@rihm.com> Add Account Tier field metadata
+1d49cdb Mike Rihm <michael@rihm.com> Set up Acme CRM project toolkit
+f7b5c4d Mike Rihm <michael@rihm.com> Initial commit
+[exit=0]
+
+$ git worktree list
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2 8e29ac1 [main]
+[exit=0]
+
+$ git branch -a
+* main
+[exit=0]
+
+$ git status --short
+[exit=0]
+

@@ -1,0 +1,4 @@
+1 decision waits on the owner:
+
+WI-001 Add a --version flag to the greet CLI
+  - The design for WI-001 is proposed and waits for the owner's approval. Approve with: toolkit work approve WI-001 --design --by <name>. (work-decide)

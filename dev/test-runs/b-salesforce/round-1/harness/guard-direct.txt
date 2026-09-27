@@ -1,0 +1,8 @@
+$ sf project deploy start --manifest delivery/deployment/WI-001-account-tier/package.xml --target-org tkv2-prod
+{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Guarded 'deploy' command: 'tkv2-prod' is a PRODUCTION org. BLOCKED. Ask the owner to run it, and do not rewrite the command to get around this."}} [exit=0]
+$ sf project deploy validate --manifest delivery/deployment/WI-001-account-tier/package.xml --target-org tkv2-sbx
+ [exit=0]
+$ sf project deploy start --manifest delivery/deployment/WI-001-account-tier/package.xml --target-org tkv2-sbx
+{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Guarded 'deploy' command against 'tkv2-sbx' is a sandbox org. Sandbox work is allowed, but only after the owner approves each change. Codex cannot ask for confirmation, so this command is blocked here. Give the owner the exact command to run, and do not rewrite it to get around this guard."}} [exit=0]
+$ sf project deploy validate -x x.xml -o tkv2-prod
+{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Guarded 'validate' command: 'tkv2-prod' is a PRODUCTION org. BLOCKED. Ask the owner to run it, and do not rewrite the command to get around this."}} [exit=0]

@@ -1,0 +1,74 @@
+./.claude/RULES.md
+./.claude/output-styles/plain-english.md
+./.claude/rules/humanize-outbound-text.md
+./.claude/rules/knowledge-direct-commit.md
+./.claude/rules/offer-context-handoff.md
+./.claude/rules/parallel-agent-sessions.md
+./.claude/rules/plain-english-artifacts.md
+./.claude/rules/work-item-folders.md
+./.claude/rules/work-item-stages.md
+./.claude/settings.json
+./.gitignore
+./.memory/README.md
+./.memory/current.md
+./.memory/project.md
+./.work-items/.work-tracker.yaml
+./.work-items/DASHBOARD.md
+./.work-items/README.md
+./AGENTS.md
+./CLAUDE.md
+./README.md
+./bin/AGENTS.md
+./bin/CLAUDE.md
+./bin/greet.mjs
+./package.json
+./src/AGENTS.md
+./src/CLAUDE.md
+./src/greet.mjs
+./test/AGENTS.md
+./test/CLAUDE.md
+./test/greet.test.mjs
+
+Always execute work with the context in mind that the user will likely continue work across multiple AI coding sessions where the session context is cleared and picked up again. You must assist the user in helping establish that continuity across sessions while not adding context that might pollute future agents and skew them. Information must be curated and intentional.
+
+# AGENTS.md: working in greet
+
+`greet` is a tiny Node.js command-line tool that greets people. Mike owns the project.
+
+Read `.claude/rules/` first; its files contain the project's working rules.
+
+## Startup
+
+- Read `.memory/project.md` and `.memory/current.md` at the start of a session and after context is cleared.
+- Keep stable facts in `.memory/`; keep active work and next steps in `.work-items/`.
+
+## Path-scoped rules
+
+Claude Code loads these for matching files. Codex: open the rule before working on a matching path.
+
+- `.memory/**`, `**/README.md`: `.claude/rules/knowledge-direct-commit.md`
+
+## Codemap
+
+| Path | What is there, and when to open it |
+| --- | --- |
+| `src/` | Greeting behavior. Open `src/AGENTS.md` when changing it. |
+| `bin/` | CLI entry point. Open `bin/AGENTS.md` when changing arguments or output. |
+| `test/` | Node tests. Open `test/AGENTS.md` when changing behavior. |
+| `.memory/` | Curated project context. Open its README before saving a lasting fact. |
+| `.claude/` | Claude Code settings, output style, and shared working rules. |
+
+## Tools
+
+| Tool | Use it for | Detail |
+| --- | --- | --- |
+| `node bin/greet.mjs [name]` | Run the CLI. | `README.md` |
+| `node --test` | Run tests. | `package.json` |
+
+## Where work is tracked
+
+Use the local `work-tracker` plugin and its `work` skill. Work lives in Git-ignored `.work-items/`, with IDs starting at `WI-001`; it stays in this checkout and does not sync through Git. Build work requires approved requirements recorded in the item.
+
+# Project memory
+
+This folder keeps concise, Git-tracked context for future Codex and Claude Code sessions. `project.md` holds stable project facts; `current.md` holds only durable context needed to resume work. Keep work-item status and tasks in `.work-items/` instead. Update memory when a fact or decision changes, and remove stale context.

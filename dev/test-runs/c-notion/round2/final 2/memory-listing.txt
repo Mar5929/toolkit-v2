@@ -1,0 +1,59 @@
+$ toolkit memory list --status all
+- user_readme_bullet_lists: Prefer short bullet lists in README sections
+
+$ toolkit memory get user_readme_bullet_lists
+---
+name: user_readme_bullet_lists
+description: Prefer short bullet lists in README sections
+metadata:
+  type: user
+status: current
+source: The owner, in chat, 2026-09-27
+last_verified: 2026-09-27
+authorization: Approved by Mike Rihm on 2026-09-27
+supersedes: none
+---
+
+# README bullet lists
+
+**Remember:** The owner prefers README sections written as short bullet lists rather than long paragraphs.
+
+**Why:** This makes README edits match the owner's stated writing preference.
+
+**How to apply:** Use concise bullets when adding or revising sections in a README.
+
+**Evidence and limits:** The owner said this in chat on 2026-09-27. Applies to README sections; it does not specify formatting for other documents.
+
+**Related memories:** None.
+
+**Authoritative records:** None.
+
+$ toolkit memory focus
+# Current focus
+
+Last updated: 2026-09-27, cleared completed README work, agent
+
+## Now
+
+None.
+
+## Waiting on the owner
+
+None.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Run `toolkit brief` for the current tracker state. No work is queued in this focus.
+
+$ toolkit memory status
+Backend: notion
+Where: the Notion Memory database (https://app.notion.com/p/5a83d3fca8ac40d79a475e9dab0f081a)
+Healthy: yes
+Last save: 2026-09-27T18:06:54.084Z
+Last export: never
+Records: 1 current, 0 needing review, 0 retired
+Notion Memory database: 1 record in use, 0 retired.

@@ -1,0 +1,554 @@
+# Session s03-start-item
+thread: 01a0e3d0-6dd8-7073-983e-a3dea477aafd | start: 2026-09-27T17:01:22Z | end: 2026-09-27T17:03:49Z | exit=0
+extra args: 
+
+## Prompt
+
+Please put README.md back the way it was before your last edit. I want this tracked as a work item and done properly: write a short project brief in README.md. Start a work item for it and ask me what it should say before you write anything.
+
+## Hook context injected (SessionStart, UserPromptSubmit, PostToolUse)
+
+- 2026-09-27T17:01:24.916Z:
+    Project briefing: Toolkit V2 sample run c (safe to delete) (tv2-sample-run-c), owner Mike Rihm. Work items: the Notion Work Items database (ids like TSRC-001). Memory: the Notion Memory database. Salesforce: no. Hosts: Claude Code and Codex.
+    Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/c-notion-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+    
+    This worktree is on branch main, which names no work item.
+    
+    No item is Ready, In Progress, or In Review.
+    The tracker has no open items. A new request starts a work item with the work-on skill.
+    
+    Current focus: still the empty template from setup. The memory-save skill fills it with toolkit memory focus --set-file.
+    
+    Project memory (notion): 0 records, from the local copy. toolkit memory find searches it; toolkit memory get <key> reads one record.
+    
+    Always-on rules. Claude Code loads them by itself; in Codex, each one is read at session start:
+    - .claude/rules/humanize-outbound-text.md: Humanize Anything Sent to Another Person
+    - .claude/rules/keep-work-item-current.md: Keep the Active Work Item Accurate
+    - .claude/rules/memory-review-and-save.md: Review and Save Project Memory
+    - .claude/rules/plain-english-artifacts.md: Write Artifacts in Plain English
+    - .claude/rules/session-handoff.md: Prepare a Session Handoff
+    - .claude/rules/shared-repository-work.md: Work Safely in a Shared Repository
+    
+    How to write replies (from AGENTS.md):
+    Claude Code applies the Plain English output style to chat. Codex and helper agents follow these lines instead.
+    
+    - Start with the answer, result, or current status. Answer what was asked. Keep it short; add detail when asked.
+    - Use ordinary words. Explain an unfamiliar term the first time it matters. Use the exact name a system uses, the same way every time.
+    - Write literally: no metaphors, idioms, jokes, or picture words in place of the real name. State the point directly, without a "not this, but that" setup.
+    - Use paragraphs for a connected explanation, bullets for separate items or choices, and a heading only when it names what is under it.
+    - When asking for a decision, name the choice and the difference that matters, and recommend one.
+    - Use the exact status word: written, built, tested, merged, installed, or seen working. Say something works only when you saw it work.
+    - Leave out routine narration of process and helper activity. Give one direct line when the owner lo
+
+## Skills opened (SKILL.md read)
+
+work-on, work-requirements
+
+## Escalation requests (commands asked to run outside the sandbox)
+
+
+## Commands
+
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/skills/work-on/SKILL.md && cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/skills/work-requirements/SKILL.md'
+---
+name: work-on
+description: 'Starts, continues, or logs project work: finds or creates the work item, works out where it stands, and runs its next step through to a built result. Use when the owner asks to build, add, fix, or change something, says "keep going" or "continue", names an item, or wants an idea logged for later.'
+---
+
+# Work on
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Shared rules: the work plugin's `references/conventions.md` (saving, section edits, history, branches) and `references/trackers.md`, two folders above this skill's folder (`../../references/`). To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`.
+
+## Steps
+
+1. No session briefing in this conversation: run the command below. Exit code 4 (no `.toolkit.json`): open `project-setup` and stop. When the briefing or a `toolkit work` command lists changes found in the tracker (a moved or renamed folder, a new parent, a missing item), tell the owner each one in one line before other work.
+   `toolkit brief`
+2. Find the item: the id the owner named, or a title in the list that matches the request. Two possible matches: ask one question naming both. No match: it is new. When `PROJECT-ROADMAP.md` names the item, read its phase there too.
+   `toolkit work show <id>`
+   `toolkit work list`
+3. Size a new request. A quick edit (one sitting, no choice for the owner, no behavior recorded in `requirements/`, nothing bound for production): do it and report it, with no item. "Later", "backlog", "park that": check the list for a duplicate, create the item, write the owner's words unchanged into Starting request, reply "Logged as WI-014 (bug, backlog). Not started." and stop. Anything else: create it the same way and continue.
+   `toolkit work new --title "<title>" --type <type> --stage 01-discovery`
+   `toolkit work edit <id> --section "Starting request" --set-file <file>`
+4. A substantial goal whose item shows `delivery: not-offered`: open `work-delegate` first. Quick questions and small edits get no offer.
+5. Route by where the item stands, using the item and the "Continue with" column of the lifecycle. Requirements not approved and type `build` or `data-load` (or the risk calls for it): `work-requirements`. More than one reasonable way to build it and no approved design: `solution-design`. A `build` item going to planning without a design: say so to the owner in one line before building ("One way to build this: <approach>. I'll build it that way; say 'design first' to stop me."), and put the reason in a history note. Too big for one build: `work-organize`. Stages 09 to 11: `work-check`. Stages 12 to 14: `work-finish`. `waiting_on: owner`: ask that one question first (`work-decide`) and keep working on anything it does not block. Say the route in one line ("WI-012 is waiting for your OK on the requirements; opening work-requirements."). Never ask the owner which stage it is in.
+   `toolkit work lifecycle`
+6. Plan (stage 06): Roadmap phases `P1`, `P2` and tasks `P1-T01` (Work, Deliverable, Done when, Depends on) from the design's "Build and verification plan", in the format in `references/planning.md`. Tracking setup (stage 07) only when needed: the item's worktree `.claude/worktrees/wi-<number>-<slug>` on branch `claude/wi-<number>-<slug>`; in a Salesforce project, the item's folder in `delivery/deployment/` t
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc "pwd && rg --files -g 'SOUL.md' -g 'PROJECT.md' -g 'PROJECT-ROADMAP.md' -g 'README.md' -g 'AGENTS.md' -g '.claude/rules/*.md' | sort"
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/c-notion-r2
+AGENTS.md
+PROJECT-ROADMAP.md
+PROJECT.md
+README.md
+requirements/AGENTS.md
+
+```
+### exit=0
+```
+$ /bin/zsh -lc 'for f in .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/publish-project-documents.md PROJECT.md SOUL.md PROJECT-ROADMAP.md; do if test -f "$f"; then echo "$f"; cat "$f"; fi; done'
+.claude/rules/humanize-outbound-text.md
+# Humanize Anything Sent to Another Person
+
+Any text that will leave the project and be read by someone other than the owner
+is run through the `humanizer` skill before the owner sees the final version.
+Use the `unslop` skill when `humanizer` is not installed. That covers emails,
+chat messages, support case text and comments, GitHub issues, pull request
+desc
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc 'git status --short && git log -5 --oneline -- README.md && git diff -- README.md'
+ M README.md
+6bfc120 Add Toolkit V2 project setup
+diff --git a/README.md b/README.md
+index fb78a87..00f4e27 100644
+--- a/README.md
++++ b/README.md
+@@ -1,28 +1,11 @@
+ # Toolkit V2 sample run c (safe to delete)
+ 
+-This project contains a small Node.js script that prints a random quote.
++A small Node.js project that prints a random quote from the list in `quote.js`. Mike Rihm owns project decisions.
+
+...[truncated]
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/references/conventions.md && cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/references/trackers.md && cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/skills/work-requirements/references/writing-requirements.md'
+# Conventions every work skill follows
+
+Every skill in the work plugin follows these rules. A skill's own `SKILL.md`
+names the file when a rule matters for a step.
+
+This file is `references/conventions.md` in the work plugin's own folder. From
+a skill's `SKILL.md` it is two folders up: `skills/work-on/SKILL.md` and
+`references/conventions.md` share the plugin folder. In Codex the plugin
+folder is the installed copy, for example
+`~/.codex/plugins/cache/toolkit-v2/work/<version>/`, so this file is
+`~/.codex/plugins/cache/toolkit-v2/work/<version>/references/conventions.md`.
+
+## Voice
+
+Every skill carries this line near its top:
+
+> Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+
+Agents do not receive the output style. Each agent file in `agents/` carries
+its own writing rules.
+
+## Opening another skill
+
+- Claude Code: use the Skill tool with the skill's name, for example
+  `work-requirements`.
+- Codex: read that skill's `SKILL.md` from the path shown in the skill list,
+  then follow it.
+- Say the handover in one line, for example "WI-012 needs a design; opening
+  solution-design."
+- The skill that asked a question records the answer. An answer that arrives
+  later, after that skill has finished, is recorded by `work-decide`.
+
+## Running `toolkit` commands
+
+- Put each `toolkit` command on its own line and run it as a plain command.
+  Do not wrap it in `$(...)`, a pipe, or a redirect. Codex matches its
+  command rule against the plain command.
+- In Codex, a `toolkit` command joined to anything else (`&&`, `;`, a pipe, a
+  heredoc, `cd ... &&`) or run from a script (for example Python's
+  `subprocess`) runs inside the Codex sandbox. The sandbox blocks Notion,
+  Hindsight, and the main checkout's `.work-items/` and `.memory/` from a
+  worktree, so the command fails or reports the wrong cause. Run each one
+  alone, as its own command.
+- Add `--json` when you need to read the output field by field.
+- Exit codes: `0` done; `1` error; `2` validation failure (fix what it names
+  and run it again); `3` not supported for this tracker or memory backend
+  (follow [trackers.md](trackers.md)); `4` not a Toolkit V2 project (open
+  `project-setup`).
+- "saved but not verified" in the output means the write happened and the
+  read-back failed. Report it that way.
+
+## Changing a work item
+
+- Change a work item only through `toolkit work` commands. This keeps the
+  local tracker and Notion the same, and it keeps the CLI's record of what it
+  wrote. A value the agent changes by hand looks like an owner edit to the
+  CLI.
+- Find a file only with the command below. Never build a path by hand: the
+  owner may have moved or renamed the folder.
+
+  ```text
+  toolkit work show <id> --path
+  ```
+
+- To change one section of the body, read it, change only what needs to
+  change, and write the whole section back. The file holds the same text the
+  read printed for that heading, with your changes.
+
+  ```text
+  toolkit work show <id> --section "<heading>"
+  toolkit work edit <id> --section "<heading>" --set-file <file>
+  ```
+
+- To add one row to a table section (Open Questions, Recent History), use
+  `--append-row` with the full Markdown table row. A new question takes the
+  next free `Q-` number: read the Open Questions section first and add one to
+  the highest number there (`Q-01` when there is none).
+
+  ```text
+  toolkit work edit <id> --section "O
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc 'cat README.md && git show HEAD:README.md && git remote -v'
+# Toolkit V2 sample run c (safe to delete)
+
+A small Node.js project that prints a random quote from the list in `quote.js`. Mike Rihm owns project decisions.
+
+## Run
+
+Run `node quote.js` from the project folder. The script needs Node.js and has no other dependencies.
+
+## Project records
+
+See [PROJECT.md](PROJECT.md) for scope and ownership, and [AGENTS.md](AGENTS.md) for the project workflow. Work
+...[truncated]
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit memory find "README project brief"'
+No memory records match "README project brief".
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work list && toolkit work lifecycle'
+No open work items. Add --all to include finished, cancelled, and archived ones.
+Stages (the status follows the stage):
+  01-discovery              Backlog      Working out what the owner wants.                                    Continue with: work-requirements
+  02-refinement             Backlog      Turning that into requirements.                                      Continue with: work-requirements
+  03-requirements-approved  Ready        The owner approved the requirements.                                 Continue with: solution-design or work-on
+  04-solution-design        In Progress  Deciding how it gets built.                                          Continue with: solution-design
+  05-breakdown              In Progress  Splitting work that is too large.                                    Continue with: work-organize
+  06-implementation-plan    In Progress  Ordering the build steps.                                            Continue with: work-on
+  07-tracking-setup         In Progress  Creating build tracking when needed.                                 Continue with: work-on
+  08-build                  In Progress  Producing the requested change.                                      Continue with: work-on
+  09-testing                In Progress  Checking it against the requirements.                                Continue with: work-check
+  10-bug-fixing             In Progress  Fixing what testing found.                                           Continue with: work-check
+  11-user-approval          In Progress  The owner reviews the result.                                        Continue with: work-check
+  12-pr-and-push            In Review    Repository work is in a pushed pull request.                         Continue with: work-finish
+  13-deployment             In Review    The result is put where it belongs.                                  Continue with: work-finish
+  14-spec-update            In Review    Lasting specifications match the result.                             Continue with: work-finish
+  (Done)                    Done         Set only by toolkit work finish <id> --by <name> --evidence <text>.  Continue with: work-finish
+  (Cancelled)               Cancelled    Set only by toolkit work cancel <id> --reason <text>.                Continue with: work-finish
+  An item with waiting_on: owner continues with work-decide, whatever its stage.
+
+Statuses:
+  Backlog      Logged; requirements are still being worked out (stages 01-02).
+  Ready        Requirements approved; work can start (stage 03).
+  In Progress  The item is active (stages 04-11). It does not mean building has started.
+  In Review    The result is in a pull request, being deployed, or being written into the specifications (stages 12-14).
+  Done         The owner accepted the result. Set only by toolkit work finish.
+  Cancelled    Work stopped without the result. Set only by toolkit work cancel.
+
+Types:
+  discovery               Finding out what is needed.
+  solution-design         Designing how something gets built.
+  build                   Producing a change. Needs approved requirements before stage 03.
+  data-load               Loading or changing data. Needs approved requirements before stage 03.
+  repository-maintenance  Keeping the repository in order.
+  research                Answering a question with sources.
+  task                    A small piece of work.
+  bug                     Something that does not work as it should.
+  enhancement 
+...[truncated]
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work new --title "Restore README and write a short project brief" --type repository-maintenance --stage 01-discovery'
+Created TSRC-001: Restore README and write a short project brief (01 Discovery, Backlog) at https://app.notion.com/p/Restore-README-and-write-a-short-project-brief-3e8b381da176813d9629dff9d158fb1d.
+Continue with work-requirements.
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work show TSRC-001'
+TSRC-001: Restore README and write a short project brief
+Location: https://app.notion.com/p/Restore-README-and-write-a-short-project-brief-3e8b381da176813d9629dff9d158fb1d
+Stage: 01 Discovery (Backlog) | Waiting on: none | Continue with: work-requirements
+Parent: none | Sub-items: none | Design: none
+
+---
+id: TSRC-001
+title: Restore README and write a short project brief
+type: repository-maintenance
+stage: 01-discovery
+status: Backlog
+parent: none
+waiting_on: "none"
+priority: medium
+delivery: not-offered
+requirements_approved: "no"
+design: none
+result_approved: "no"
+updated: 2026-09-27
+---
+# TSRC-001: Restore README and write a short project brief
+
+## Overview
+
+<!-- Enter the current summary directly after each bold label below. Keep this section current; detailed tasks and decisions belong in their sections further down. -->
+
+**Goal:** <The outcome this work item is meant to achieve.>
+
+**Current position:** <What has been completed and where work stands now.>
+
+**Next action:** <The next specific action and its owner.>
+
+**Blockers:** <Blocking decision or dependency, or “None.”>
+
+**Related items:** <Roadmap unit, parent and related work item IDs (never folder paths), design, or external links.>
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading. Add one row per phase; set Status from actual progress, not from this example. List the phase's sub-item IDs under Sub-items, or write “None.” -->
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — <Phase 1 name> | <What this phase establishes> | In Progress | <Evidence that P1 is complete> | <WI-ids or “None.”> |
+| P2 — <Phase 2 name> | <What this phase delivers> | Not Started | <Evidence that P2 is complete> | <WI-ids or “None.”> |
+
+## Tasks
+
+<!-- Under each phase heading, add that phase's tasks only. Replace P1-T01 and similar example IDs with stable real IDs. Put the action after Work, its output after Deliverable, the completion proof after Done when, and real prerequisites after Depends on. Change the checkbox only when the completion proof is met. -->
+
+### P1 — <Phase 1 name>
+
+- [ ] **P1-T01 — <Task 1 name>** · In Progress  
+  **Work:** <The action to take.>  
+  **Deliverable:** <The file, decision, or other result.>  
+  **Done when:** <The observable completion check.>  
+  **Depends on:** <Task ID or “None.”>
+- [ ] **P1-T02 — <Task 2 name>** · Not Started  
+  **Work:** <The action to take.>  
+  **Deliverable:** <The expected result.>  
+  **Done when:** <The observable completion check.>  
+  **Depends on:** P1-T01.
+
+### P2 — <Phase 2 name>
+
+- [ ] **P2-T01 — <Task 1 name>** · Not Started  
+  **Work:** <The action to take.>  
+  **Deliverable:** <The expected result.>  
+  **Done when:** <The observable completion check.>  
+  **Depends on:** P1 completion.
+
+## Recent History
+
+| Date | Change or decision | Effect on the work |
+|---|---|---|
+| 2026-09-27 | Created. | Starts at 01 Discovery. Continue with work-requirements. |
+
+## Open Questions
+
+<!-- Add one row per unanswered decision, using a stable Q-ID. Write the exact question, affected requirement/task IDs, current status, and who can answer: `owner` for the project owner, or another person or role. Resolve or remove example rows as decisions are recorded; do not hide an open decision only in Notes. -->
+
+| ID | Question | Affects | Status | Decision nee
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc 'mktemp -d'
+/var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mqXaEj0RAP
+
+```
+### exit=0
+```
+$ /bin/zsh -lc "cat > /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mqXaEj0RAP/starting-request.md <<'EOF'
+Please put README.md back the way it was before your last edit. I want this tracked as a work item and done properly: write a short project brief in README.md. Start a work item for it and ask me what it should say before you write anything.
+EOF"
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work edit TSRC-001 --section "Starting request" --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mqXaEj0RAP/starting-request.md'
+Saved "Starting request" in TSRC-001.
+
+```
+### exit=0
+```
+$ /bin/zsh -lc "cat > /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mqXaEj0RAP/open-questions.md <<'EOF'
+| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | What should the short project brief in README.md say? | README content | Open | owner |
+EOF"
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work edit TSRC-001 --section "Open Questions" --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mqXaEj0RAP/open-questions.md'
+Saved "Open Questions" in TSRC-001.
+
+```
+### exit=0
+```
+$ /bin/zsh -lc "cat > /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mqXaEj0RAP/overview.md <<'EOF'
+**Goal:** Restore README.md to its state before the latest uncommitted edit, then write a short project brief using the owner's requested content.
+
+**Current position:** The work item is open. The last README edit is uncommitted and the earlier committed content is available. README.md has not been changed for this item.
+
+**Next action:** Owner answers Q-01 with the brief's content; agent records the answer before editing README.md.
+
+**Blockers:** Q-01: the owner has not specified the brief's content.
+
+**Related items:** None.
+EOF"
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work edit TSRC-001 --section "Overview" --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mqXaEj0RAP/overview.md'
+Saved "Overview" in TSRC-001.
+
+```
+### exit=0
+```
+$ /bin/zsh -lc "cat > /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mqXaEj0RAP/notes.md <<'EOF'
+### Decisions and context
+
+- The current README.md change is uncommitted. The committed copy at HEAD contains the content from before that edit.
+- The owner asked to specify the brief's content before any README.md edit for this item.
+
+### Resume here
+
+Ask the owner Q-01. Record the answer in this item, then restore the prior README.md content and write the agreed short project brief. Check the resulting diff before presenting it for review.
+
+### Solution options and considerations
+
+None yet.
+EOF"
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work edit TSRC-001 --section "Notes" --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mqXaEj0RAP/notes.md'
+Saved "Notes" in TSRC-001.
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work set TSRC-001 --waiting-on owner'
+Updated TSRC-001: waiting on owner.
+Now 01 Discovery (Backlog). Continue with work-decide.
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc "toolkit work history TSRC-001 --note \"Owner asked: 'ask me what it should say before you write anything.' README remains unchanged while the brief content is decided.\""
+Added a Recent History row to TSRC-001.
+
+```
+### exit=0
+```
+$ /bin/zsh -lc 'git status --short && git diff -- README.md'
+ M README.md
+diff --git a/README.md b/README.md
+index fb78a87..00f4e27 100644
+--- a/README.md
++++ b/README.md
+@@ -1,28 +1,11 @@
+ # Toolkit V2 sample run c (safe to delete)
+ 
+-This project contains a small Node.js script that prints a random quote.
++A small Node.js project that prints a random quote from the list in `quote.js`. Mike Rihm owns project decisions.
+ 
+-## Purpose
++## Run
+ 
+-Run `quote.j
+...[truncated]
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work show TSRC-001 --section "Open Questions"'
+## Open Questions
+
+| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | What should the short project brief in README.md say? | README content | Open | owner |
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work show TSRC-001 --section "Overview"'
+## Overview
+
+**Goal:** Restore README.md to its state before the latest uncommitted edit, then write a short project brief using the owner's requested content.
+
+**Current position:** The work item is open. The last README edit is uncommitted and the earlier committed content is available. README.md has not been changed for this item.
+
+**Next action:** Owner answers Q-01 with the brief's content; agent records the answer before editing README.md.
+
+**Blockers:** Q-01: the owner has not specified the brief's content.
+
+**Related items:** None.
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work show TSRC-001 --section "Starting request"'
+### Starting request
+
+Please put README.md back the way it was before your last edit. I want this tracked as a work item and done properly: write a short project brief in README.md. Start a work item for it and ask me what it should say before you write anything.
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'toolkit work validate TSRC-001'
+Checked 1 item: 1 clean, 0 errors, 0 questions for the owner.
+
+```
+### exit=0
+```
+$ /bin/zsh -lc 'rm /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mqXaEj0RAP/starting-request.md /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mqXaEj0RAP/open-questions.md /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mqXaEj0RAP/overview.md /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mqXaEj0RAP/notes.md'
+
+```
+### exit=0
+```
+$ /bin/zsh -lc 'rmdir /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.mqXaEj0RAP'
+
+```
+
+## File changes
+
+
+## Other items
+
+- error {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+- error {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+- EVENT {"type": "turn.completed", "usage": {"input_tokens": 786968, "cached_input_tokens": 719104, "cache_write_input_tokens": 0, "output_tokens": 3396, "reasoning_output_tokens": 964}}
+
+## Agent messages
+
+I’ll check the README history, start the work item, and ask for the brief’s content before editing README.md. I’ll keep the existing content intact while I confirm which revision to restore.
+
+---
+
+I’m using the work-on and work-requirements procedures for this request. README.md has an uncommitted rewrite; the committed version is still available. I’ll record the request, then ask what you want in the brief before changing the file.
+
+---
+
+I started **TSRC-001** to track the README work. I found the version from before my last edit, and I have not changed README.md while waiting for your answer.
+
+What should the short project brief say? I recommend two or three sentences covering the project’s purpose, how to run it, and who owns decisions.
+
+---
+

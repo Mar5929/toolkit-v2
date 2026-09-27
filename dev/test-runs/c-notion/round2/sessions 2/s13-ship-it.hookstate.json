@@ -1,0 +1,88 @@
+{
+  "schema": 1,
+  "sessionId": "01a0e407-f9d6-75d3-8798-6f01e0b98bc4",
+  "host": "codex",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/c-notion-r2",
+  "startedAt": "2026-09-27T18:02:05.933Z",
+  "turns": 1,
+  "turn": {
+    "key": "01a0e407-fa3a-7f10-a401-7e032db4383b",
+    "n": 1,
+    "startedAt": "2026-09-27T18:02:06.566Z",
+    "keep": null,
+    "baseline": {
+      "memoryMeta": null,
+      "hindsightMeta": null,
+      "memoryCache": 1790532050990.211,
+      "workState": null,
+      "decisions": 1790528178478.866
+    },
+    "records": [
+      {
+        "kind": "work",
+        "what": "toolkit work approve",
+        "at": "2026-09-27T18:02:50.346Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work history",
+        "at": "2026-09-27T18:03:02.328Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work set",
+        "at": "2026-09-27T18:03:10.264Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work history",
+        "at": "2026-09-27T18:04:45.821Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work history",
+        "at": "2026-09-27T18:04:54.816Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T18:05:21.414Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T18:05:32.828Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T18:06:03.770Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T18:06:12.084Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work finish",
+        "at": "2026-09-27T18:06:24.236Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work finish",
+        "at": "2026-09-27T18:06:33.578Z"
+      },
+      {
+        "kind": "memory",
+        "what": "toolkit memory focus",
+        "at": "2026-09-27T18:06:55.323Z"
+      }
+    ],
+    "edits": [],
+    "stopBlocked": false
+  },
+  "lastStopReason": null,
+  "source": "startup",
+  "updated": "2026-09-27T18:07:26.347Z"
+}

@@ -1,0 +1,1 @@
+Keep going. Yes, deploy WI-001 and WI-002 to the sandbox (tkv2-sbx) when they are ready. The git OK for the WI branches still stands.

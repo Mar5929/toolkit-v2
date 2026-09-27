@@ -1,0 +1,80 @@
+# Before (find .work-items -maxdepth 4)
+.work-items
+.work-items/.toolkit-state.json
+.work-items/DASHBOARD.md
+.work-items/WI-001-add-account-tier-picklist
+.work-items/WI-001-add-account-tier-picklist/DESIGN.md
+.work-items/WI-001-add-account-tier-picklist/WI-002-configure-account-tier-access-and-page
+.work-items/WI-001-add-account-tier-picklist/WI-002-configure-account-tier-access-and-page/WORK-ITEM.md
+.work-items/WI-001-add-account-tier-picklist/WORK-ITEM.md
+.work-items/work-item-template
+.work-items/work-item-template/DESIGN.md
+.work-items/work-item-template/WORK-ITEM.md
+
+# Mike's hand move, 2026-09-27 13:36:46 EDT, plain shell, no toolkit command
+$ mkdir .work-items/account-tier
+$ mv .work-items/WI-001-add-account-tier-picklist .work-items/account-tier/
+$ mv .work-items/account-tier/WI-001-add-account-tier-picklist/WI-002-configure-account-tier-access-and-page .work-items/account-tier/WI-001-add-account-tier-picklist/WI-002-tier-access-and-layout
+
+# After
+.work-items
+.work-items/.toolkit-state.json
+.work-items/DASHBOARD.md
+.work-items/account-tier
+.work-items/account-tier/WI-001-add-account-tier-picklist
+.work-items/account-tier/WI-001-add-account-tier-picklist/DESIGN.md
+.work-items/account-tier/WI-001-add-account-tier-picklist/WI-002-tier-access-and-layout
+.work-items/account-tier/WI-001-add-account-tier-picklist/WI-002-tier-access-and-layout/WORK-ITEM.md
+.work-items/account-tier/WI-001-add-account-tier-picklist/WORK-ITEM.md
+.work-items/work-item-template
+.work-items/work-item-template/DESIGN.md
+.work-items/work-item-template/WORK-ITEM.md
+
+# .toolkit-state.json paths (not yet synced)
+{
+ "schema": 1,
+ "prefix": "WI",
+ "highWater": 2,
+ "fingerprint": "147b1832711fe1eeddaa7df99cada7365b71897d48bbdd619951f38b81fa1797",
+ "items": {
+  "WI-001": {
+   "path": "WI-001-add-account-tier-picklist/WORK-ITEM.md",
+   "missing": false,
+   "owner": true,
+   "hash": "0f4e9cbd007102b1530e86310d464c68fd001c04d972e16816dea2e275acec00",
+   "written": {
+    "title": "Add Account Tier picklist",
+    "heading": "WI-001: Add Account Tier picklist",
+    "type": "build",
+    "stage": "06-implementation-plan",
+    "status": "In Progress",
+    "parent": "none",
+    "parentSource": "none",
+    "requirements_approved": "2026-09-27 by Mike",
+    "overall": "Finalized",
+    "design": "approved",
+    "designSource": "approved",
+    "result_approved": "no",
+    "statusKept": false,
+    "overallKept": false,
+    "designKept": false,
+    "parentKept": false
+   }
+  },
+  "WI-002": {
+   "path": "WI-001-add-account-tier-picklist/WI-002-configure-account-tier-access-and-page/WORK-ITEM.md",
+   "missing": false,
+   "owner": true,
+   "hash": "015cfaeb8f1170d4776e59cfdf04fba037c4471fb2c6938be98257f2fee97c22",
+   "written": {
+    "title": "Configure Account Tier access and page layout",
+    "heading": "WI-002: Configure Account Tier access and page layout",
+    "type": "build",
+    "stage": "06-implementation-plan",
+    "status": "In Progress",
+    "parent": "WI-001",
+    "parentSource": "WI-001",
+    "requirements_approved": "2026-09-27 by Mike",
+    "overall": "Finalized",
+    "design": "none",
+    "

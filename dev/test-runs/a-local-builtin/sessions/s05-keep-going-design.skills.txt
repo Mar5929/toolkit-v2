@@ -1,0 +1,1 @@
+work-on, work-delegate,   ref:work/references/conventions.md,   ref:work/references/trackers.md, solution-design,   ref:work/references/team-roles.md,   ref:work/skills/solution-design/references/design-process.md

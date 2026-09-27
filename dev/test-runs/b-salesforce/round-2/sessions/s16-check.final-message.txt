@@ -1,0 +1,11 @@
+**The sandbox result partly meets the approved requirements.** An independent review checked the source and deployment records; I also read the sandbox Account field definition.
+
+| Requirement | Result |
+| --- | --- |
+| R-01 — Tier values and field behavior | **Partly verified.** The sandbox shows Gold, Silver, Bronze in order, with Tier optional and no default. The source has the approved description and help text. Saving a new Account blank, saving each value, and clearing Tier remain untested. |
+| R-02 — Field access | **Partly verified.** You completed the four profile settings and confirmed that Sales User can see Tier but cannot edit it. Sales Manager and administrator editing, Read Only access, other effective grants, and Account record access remain unchecked. |
+| R-03 — Main Account page | **Met on the available evidence.** The deployed layout source places Tier below Rating, and you saw Tier as a Sales User. |
+
+I recorded your deploy results and the remaining checks in the [test plan](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/.claude/worktrees/wi-002-tier-access-layout/tests/WI-001-account-tier-test-plan.md). The records are committed locally; this copy has no `origin` remote.
+
+To finish R-01, **may I create one sandbox test Account, save Gold, Silver, and Bronze, clear Tier, then delete the test Account?** The project rule requires your approval in this chat for those sandbox data changes. For R-02, please check whether Sales Manager and System Administrator users can edit and clear Tier, whether Read Only can see but not edit it, and whether a user without access to an Account still cannot open it.

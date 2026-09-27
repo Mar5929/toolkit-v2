@@ -1,0 +1,7 @@
+I recorded your confirmation of WI-001’s goal. The requirements are ready for your approval:
+
+- Account Tier offers Gold, Silver, and Bronze in that order. It is optional, starts blank, and has a description and help text.
+- Sales Managers and system administrators can edit Tier. Others who can see an Account can read it.
+- Tier appears on the main Account page layout.
+
+**Do you approve these requirements?** Approval will let me inspect the sandbox and design the change; it does not authorize deployment.

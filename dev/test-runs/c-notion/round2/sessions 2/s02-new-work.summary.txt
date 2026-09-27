@@ -1,0 +1,290 @@
+# Session s02-new-work
+thread: 01a0e3cf-2599-7be2-8cd5-1bde3cb40127 | start: 2026-09-27T16:59:58Z | end: 2026-09-27T17:01:02Z | exit=0
+extra args: 
+
+## Prompt
+
+New work: write a short project brief in README.md.
+
+## Hook context injected (SessionStart, UserPromptSubmit, PostToolUse)
+
+- 2026-09-27T17:00:02.391Z:
+    Project briefing: Toolkit V2 sample run c (safe to delete) (tv2-sample-run-c), owner Mike Rihm. Work items: the Notion Work Items database (ids like TSRC-001). Memory: the Notion Memory database. Salesforce: no. Hosts: Claude Code and Codex.
+    Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/c-notion-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+    
+    This worktree is on branch main, which names no work item.
+    
+    No item is Ready, In Progress, or In Review.
+    The tracker has no open items. A new request starts a work item with the work-on skill.
+    
+    Current focus: still the empty template from setup. The memory-save skill fills it with toolkit memory focus --set-file.
+    
+    Project memory (notion): 0 records, from the local copy. toolkit memory find searches it; toolkit memory get <key> reads one record.
+    
+    Always-on rules. Claude Code loads them by itself; in Codex, each one is read at session start:
+    - .claude/rules/humanize-outbound-text.md: Humanize Anything Sent to Another Person
+    - .claude/rules/keep-work-item-current.md: Keep the Active Work Item Accurate
+    - .claude/rules/memory-review-and-save.md: Review and Save Project Memory
+    - .claude/rules/plain-english-artifacts.md: Write Artifacts in Plain English
+    - .claude/rules/session-handoff.md: Prepare a Session Handoff
+    - .claude/rules/shared-repository-work.md: Work Safely in a Shared Repository
+    
+    How to write replies (from AGENTS.md):
+    Claude Code applies the Plain English output style to chat. Codex and helper agents follow these lines instead.
+    
+    - Start with the answer, result, or current status. Answer what was asked. Keep it short; add detail when asked.
+    - Use ordinary words. Explain an unfamiliar term the first time it matters. Use the exact name a system uses, the same way every time.
+    - Write literally: no metaphors, idioms, jokes, or picture words in place of the real name. State the point directly, without a "not this, but that" setup.
+    - Use paragraphs for a connected explanation, bullets for separate items or choices, and a heading only when it names what is under it.
+    - When asking for a decision, name the choice and the difference that matters, and recommend one.
+    - Use the exact status word: written, built, tested, merged, installed, or seen working. Say something works only when you saw it work.
+    - Leave out routine narration of process and helper activity. Give one direct line when the owner lo
+
+## Skills opened (SKILL.md read)
+
+work-on, publish-docs
+
+## Escalation requests (commands asked to run outside the sandbox)
+
+
+## Commands
+
+### exit=1
+```
+$ /bin/zsh -lc 'cat PROJECT.md; cat SOUL.md 2>/dev/null'
+# Toolkit V2 sample run c (safe to delete)
+
+## Purpose and intended outcome
+
+- Purpose: Maintain a small Node.js script that prints a random quote.
+- Intended outcome: Running `node quote.js` prints one quote from the script's list.
+
+## Scope and boundaries
+
+- In scope: The local `quote.js` script and its project records.
+- Outside scope: Salesforce. No other systems are part of this project.
+- Co
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc 'cat .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/publish-project-documents.md'
+# Humanize Anything Sent to Another Person
+
+Any text that will leave the project and be read by someone other than the owner
+is run through the `humanizer` skill before the owner sees the final version.
+Use the `unslop` skill when `humanizer` is not installed. That covers emails,
+chat messages, support case text and comments, GitHub issues, pull request
+descriptions, client documents, and any file
+...[truncated]
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/skills/work-on/SKILL.md; cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.1/skills/publish-docs/SKILL.md'
+---
+name: work-on
+description: 'Starts, continues, or logs project work: finds or creates the work item, works out where it stands, and runs its next step through to a built result. Use when the owner asks to build, add, fix, or change something, says "keep going" or "continue", names an item, or wants an idea logged for later.'
+---
+
+# Work on
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Shared rules: the work plugin's `references/conventions.md` (saving, section edits, history, branches) and `references/trackers.md`, two folders above this skill's folder (`../../references/`). To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`.
+
+## Steps
+
+1. No session briefing in this conversation: run the command below. Exit code 4 (no `.toolkit.json`): open `project-setup` and stop. When the briefing or a `toolkit work` command lists changes found in the tracker (a moved or renamed folder, a new parent, a missing item), tell the owner each one in one line before other work.
+   `toolkit brief`
+2. Find the item: the id the owner named, or a title in the list that matches the request. Two possible matches: ask one question naming both. No match: it is new. When `PROJECT-ROADMAP.md` names the item, read its phase there too.
+   `toolkit work show <id>`
+   `toolkit work list`
+3. Size a new request. A quick edit (one sitting, no choice for the owner, no behavior recorded in `requirements/`, nothing bound for production): do it and report it, with no item. "Later", "backlog", "park that": check the list for a duplicate, create the item, write the owner's words unchanged into Starting request, reply "Logged as WI-014 (bug, backlog). Not started." and stop. Anything else: create it the same way and continue.
+   `toolkit work new --title "<title>" --type <type> --stage 01-discovery`
+   `toolkit work edit <id> --section "Starting request" --set-file <file>`
+4. A substantial goal whose item shows `delivery: not-offered`: open `work-delegate` first. Quick questions and small edits get no offer.
+5. Route by where the item stands, using the item and the "Continue with" column of the lifecycle. Requirements not approved and type `build` or `data-load` (or the risk calls for it): `work-requirements`. More than one reasonable way to build it and no approved design: `solution-design`. A `build` item going to planning without a design: say so to the owner in one line before building ("One way to build this: <approach>. I'll build it that way; say 'design first' to stop me."), and put the reason in a history note. Too big for one build: `work-organize`. Stages 09 to 11: `work-check`. Stages 12 to 14: `work-finish`. `waiting_on: owner`: ask that one question first (`work-decide`) and keep working on anything it does not block. Say the route in one line ("WI-012 is waiting for your OK on the requirements; opening work-requirements."). Never ask the owner which stage it is in.
+   `toolkit work lifecycle`
+6. Plan (stage 06): Roadmap phases `P1`, `P2` and tasks `P1-T01` (Work, Deliverable, Done when, Depends on) from the design's "Build and verification plan", in the format in `references/planning.md`. Tracking setup (stage 07) only when needed: the item's worktree `.claude/worktrees/wi-<number>-<slug>` on branch `claude/wi-<number>-<slug>`; in a Salesforce project, the item's folder in `delivery/deployment/` t
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc "git status --short --branch; rg --files -g 'README.md' -g 'PROJECT-ROADMAP.md' -g 'DECISIONS.md' -g 'AGENTS.md' -g 'tests/**' -g 'quote.js' -g 'package.json'"
+## main
+DECISIONS.md
+AGENTS.md
+PROJECT-ROADMAP.md
+README.md
+requirements/AGENTS.md
+tests/TEST-PLAN-TEMPLATE.md
+quote.js
+
+```
+### exit=0 [toolkit]
+```
+$ /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/references/conventions.md; cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.1/references/trackers.md'
+# Conventions every work skill follows
+
+Every skill in the work plugin follows these rules. A skill's own `SKILL.md`
+names the file when a rule matters for a step.
+
+This file is `references/conventions.md` in the work plugin's own folder. From
+a skill's `SKILL.md` it is two folders up: `skills/work-on/SKILL.md` and
+`references/conventions.md` share the plugin folder. In Codex the plugin
+folder is the installed copy, for example
+`~/.codex/plugins/cache/toolkit-v2/work/<version>/`, so this file is
+`~/.codex/plugins/cache/toolkit-v2/work/<version>/references/conventions.md`.
+
+## Voice
+
+Every skill carries this line near its top:
+
+> Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+
+Agents do not receive the output style. Each agent file in `agents/` carries
+its own writing rules.
+
+## Opening another skill
+
+- Claude Code: use the Skill tool with the skill's name, for example
+  `work-requirements`.
+- Codex: read that skill's `SKILL.md` from the path shown in the skill list,
+  then follow it.
+- Say the handover in one line, for example "WI-012 needs a design; opening
+  solution-design."
+- The skill that asked a question records the answer. An answer that arrives
+  later, after that skill has finished, is recorded by `work-decide`.
+
+## Running `toolkit` commands
+
+- Put each `toolkit` command on its own line and run it as a plain command.
+  Do not wrap it in `$(...)`, a pipe, or a redirect. Codex matches its
+  command rule against the plain command.
+- In Codex, a `toolkit` command joined to anything else (`&&`, `;`, a pipe, a
+  heredoc, `cd ... &&`) or run from a script (for example Python's
+  `subprocess`) runs inside the Codex sandbox. The sandbox blocks Notion,
+  Hindsight, and the main checkout's `.work-items/` and `.memory/` from a
+  worktree, so the command fails or reports the wrong cause. Run each one
+  alone, as its own command.
+- Add `--json` when you need to read the output field by field.
+- Exit codes: `0` done; `1` error; `2` validation failure (fix what it names
+  and run it again); `3` not supported for this tracker or memory backend
+  (follow [trackers.md](trackers.md)); `4` not a Toolkit V2 project (open
+  `project-setup`).
+- "saved but not verified" in the output means the write happened and the
+  read-back failed. Report it that way.
+
+## Changing a work item
+
+- Change a work item only through `toolkit work` commands. This keeps the
+  local tracker and Notion the same, and it keeps the CLI's record of what it
+  wrote. A value the agent changes by hand looks like an owner edit to the
+  CLI.
+- Find a file only with the command below. Never build a path by hand: the
+  owner may have moved or renamed the folder.
+
+  ```text
+  toolkit work show <id> --path
+  ```
+
+- To change one section of the body, read it, change only what needs to
+  change, and write the whole section back. The file holds the same text the
+  read printed for that heading, with your changes.
+
+  ```text
+  toolkit work show <id> --section "<heading>"
+  toolkit work edit <id> --section "<heading>" --set-file <file>
+  ```
+
+- To add one row to a table section (Open Questions, Recent History), use
+  `--append-row` with the full Markdown table row. A new question takes the
+  next free `Q-` number: read the Open Questions section first and add one to
+  the highest number there (`Q-01` when there is none).
+
+  ```text
+  toolkit work edit <id> --section "O
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc 'cat README.md; cat quote.js; cat PROJECT-ROADMAP.md; cat DECISIONS.md'
+# Toolkit V2 sample run c (safe to delete)
+
+This project contains a small Node.js script that prints a random quote.
+
+## Purpose
+
+Run `quote.js` locally to print one of the quotes in its list. Mike Rihm owns the project.
+
+## Start here
+
+1. Open this repository on a computer with Node.js installed.
+2. Use the project folder; the script has no separate environment.
+3. Run `node quote.js`.
+
+## Projec
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc 'git remote -v; git config user.name; git config user.email'
+Mike Rihm
+michael@rihm.com
+
+```
+### exit=0
+```
+$ /bin/zsh -lc 'git diff --check; git diff -- README.md; git status --short'
+diff --git a/README.md b/README.md
+index fb78a87..00f4e27 100644
+--- a/README.md
++++ b/README.md
+@@ -1,28 +1,11 @@
+ # Toolkit V2 sample run c (safe to delete)
+ 
+-This project contains a small Node.js script that prints a random quote.
++A small Node.js project that prints a random quote from the list in `quote.js`. Mike Rihm owns project decisions.
+ 
+-## Purpose
++## Run
+ 
+-Run `quote.js` locally to
+...[truncated]
+```
+### exit=0
+```
+$ /bin/zsh -lc 'node quote.js'
+Make it work, make it right, make it fast. - Kent Beck
+
+```
+
+## File changes
+
+- [{"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/c-notion-r2/README.md", "kind": "update"}]
+
+## Other items
+
+- error {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+- error {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+- EVENT {"type": "turn.completed", "usage": {"input_tokens": 164059, "cached_input_tokens": 137728, "cache_write_input_tokens": 0, "output_tokens": 2290, "reasoning_output_tokens": 923}}
+
+## Agent messages
+
+I’ll open the project guidance and work-on procedure, then write the brief and record the work in the tracker.
+
+---
+
+I’m using the work-on and publish-docs procedures. This appears to be a one-file documentation edit, so the work-on procedure does not call for a tracker item.
+
+---
+
+The README already has the project facts, but it is longer than the requested brief. I’ll shorten it to the purpose, run command, and links to the project records. This checkout has no Git remote configured, so I can write and check the file locally but cannot publish it.
+
+---
+
+The short project brief is written in [README.md](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/c-notion-r2/README.md). I checked the diff and ran `node quote.js` successfully.
+
+The edit is local and uncommitted. This checkout has no Git remote configured, so I could not publish it.
+
+---
+

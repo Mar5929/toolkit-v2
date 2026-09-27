@@ -1,0 +1,1 @@
+Yes, use the README description as the goal for now. I did not ask for a work item for the setup itself, so cancel WI-001: I do not want the setup tracked as work. Then commit the setup files. I approve that one commit.

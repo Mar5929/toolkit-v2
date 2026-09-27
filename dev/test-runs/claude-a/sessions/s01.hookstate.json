@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "sessionId": "fd4b99db-89a9-406a-82fb-5b13c2c2407e",
+  "host": "claude",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/claude-a",
+  "startedAt": "2026-09-27T20:03:26.219Z",
+  "turns": 1,
+  "turn": {
+    "key": "92b27645-693d-4283-8e2f-c1a98fe312fa",
+    "n": 1,
+    "startedAt": "2026-09-27T20:03:26.219Z",
+    "keep": null,
+    "baseline": null,
+    "records": [
+      {
+        "kind": "memory",
+        "what": "toolkit memory focus",
+        "at": "2026-09-27T20:03:26.219Z"
+      }
+    ],
+    "edits": [],
+    "stopBlocked": false
+  },
+  "updated": "2026-09-27T20:03:36.328Z"
+}

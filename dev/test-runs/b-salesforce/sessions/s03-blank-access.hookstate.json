@@ -1,0 +1,78 @@
+{
+  "schema": 1,
+  "sessionId": "01a0e462-3260-7e80-8a43-dc903c01b789",
+  "host": "codex",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r3",
+  "startedAt": "2026-09-27T19:40:37.300Z",
+  "turns": 1,
+  "turn": {
+    "key": "01a0e462-32c7-7e40-9d3a-3ab9abc9c931",
+    "n": 1,
+    "startedAt": "2026-09-27T19:40:37.441Z",
+    "keep": null,
+    "baseline": {
+      "memoryMeta": 1790538003998.934,
+      "hindsightMeta": null,
+      "memoryCache": null,
+      "workState": 1790538037334.5283,
+      "decisions": 1790537582851.0742
+    },
+    "records": [
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T19:41:06.157Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T19:41:17.723Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T19:41:20.741Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T19:41:24.881Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work history",
+        "at": "2026-09-27T19:41:29.258Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T19:41:49.597Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T19:41:54.967Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work history",
+        "at": "2026-09-27T19:42:40.258Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T19:42:43.977Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-27T19:42:50.216Z"
+      }
+    ],
+    "edits": [],
+    "stopBlocked": false
+  },
+  "lastStopReason": null,
+  "source": "startup",
+  "updated": "2026-09-27T19:43:19.815Z"
+}

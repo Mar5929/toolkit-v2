@@ -1,0 +1,513 @@
+PROMPT: Commit setup. I approve running the git commands for it.
+THREAD: 01a0e3cf-9871-77c1-bc57-a3ea4bf0e891
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The tracker has no open items. A new request starts a work item with the work-on skill.
+
+Current focus:
+Last updated: 2026-09-27, project setup, Codex
+## Now
+- None.
+## Waiting on the owner
+- Trust this project folder in Codex when prompted, then open `/hooks` and trust the Toolkit V2 hooks and two Salesforce org guards.
+- The setup files are uncommitted. Commit them only after the owner approves the setup commit.
+## Untracked to-dos
+- None.
+## Next session starts with
+- Read `PROJECT.md` for the confirmed outcome. Ask for the first specific Salesforce change, then start its work item.
+
+Project memory (builtin): 0 records. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them. Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.
+
+Always-on rules. Claude Code loads them by itself; in Codex, each one is read at session start:
+- .claude/rules/check-deployment-contents.md: Check What a Deployment Includes
+- .claude/rules/component-tracker.md: Component Tracker
+- .claude/rules/confirm-salesforce-changes.md: Confirm Salesforce Changes
+- .claude/rules/humanize-outbound-text.md: Humanize Anything Sent to Another Person
+- .claude/rules/keep-work-item-current.md: Keep the Active Work Item Accurate
+- .claude/rules/memory-review-and-save.md: Review and Save Project Memory
+- .claude/rules/plain-english-artifacts.md: Write Artifacts in Plain English
+- .claude/rules/production-data-changes.md: Production Data Changes
+- .claude/rules/project-file-locations.md: Where Project Files Go
+- .claude/rules/salesforce-org-safety.md: Salesforce Org Safety
+- .claude/rules/session-handoff.md: Prepare a Session Handoff
+- .claude/rules/shared-repository-work.md: Work Safely in a Shared Repository
+- .claude/rules/work-item-folders.md: Local Work-Item Folders
+
+How to write replies (from AGENTS.md):
+Claude Code applies the Plain English output style to chat. Codex and helper agents follow these lines instead.
+
+- Start with the answer, result, or current status. Answer what was asked. Keep it short; add detail when asked.
+- Use ordinary words. Explain an unfamiliar term the first time it matters. Use the exact name a system uses, the same way every time.
+- Write literally: no metaphors, idioms, jokes, or
+
+[AGENT] I’ll check the setup changes and repository instructions, then commit the approved setup files.
+
+[CALL exec] pwd && cat SOUL.md PROJECT.md .claude/rules/{check-deployment-contents,component-tracker,confirm-salesforce-changes,humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,production-data-changes,project-file-locations,salesforce-org-safety,session-handoff,shared-repository-work,work-item-folders}.md && git status --short && git branch --show-current
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2
+cat: SOUL.md: No such file or directory
+# Acme CRM
+
+## Purpose and intended outcome
+
+- Purpose: Give the Acme sales team Salesforce customizations for customer-account work.
+- Intended outcome: Help the Acme sales team track and prioritize customer accounts.
+
+## Scope and boundaries
+
+- In scope: Salesforce customizations for tracking and prioritizing customer accounts. Specific capabilities are not defined yet.
+- Outside scope: Not confirmed yet.
+- Constraints: Follow the Salesforce org safety rules in `.claude/rules/salesforce-org-safety.md`.
+
+## Systems and environments
+
+| System or org | Purpose | Environment | Source of truth | Access notes |
+| --- | --- | --- | --- | --- |
+| Acme CRM sandbox (`tkv2-sbx`) | Development and validation | Sandbox | `.toolkit.json` | Salesforce CLI org alias |
+| Acme CRM production (`tkv2-prod`) | Production target; owner performs production changes | Production | `.toolkit.json` | Salesforce CLI org alias |
+
+## People and ownership
+
+| Role | Person or team | Responsibility | Source / last confirmed |
+| --- | --- | --- | --- |
+| Owner | Mike | Project decisions | `.toolkit.json`, 2026-09-27 |
+| Users | Acme sales team | Track and prioritize customer accounts | Owner statement, 2026-09-27 |
+
+## Work and project records
+
+- Work tracker: Local `.work-items/` folders
+- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)
+- Project decisions: [DECISIONS.md](DECISIONS.md)
+- Functional requirements: [requirements/](requirements/)
+- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`
+- System Guide: `system-guide/`; add verified current-system details as they become known
+- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)
+- Memory backup or sync: No destination or restore procedure confirmed yet
+
+## Resources and project paths
+
+- Salesforce source: `force-app/`
+- Project-wide deployment manifest: `delivery/deployment/full-project-deployment-template/package.xml` after the API version and members are verified. Keep it as the full project component inventory; ordinary deployments use narrower work-item packages.
+- Work-item deployment manifests: `delivery/deployment/<work-item-id>-<short-name>/package.xml` when an item changes Salesforce metadata.
+- Tests and checks: No project-specific build or test command verified yet; sandbox validation uses the work-item manifest as described in `AGENTS.md`
+- Outside references: `ai-external-knowledge/`
+
+## Operating conventions
+
+No additional project-specific conventions confirmed yet.
+# Check What a Deployment Includes
+
+A deploy ships the whole current source of every component it names, not only your edit.
+
+- Before any deploy to a shared or higher org, 
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.1/skills/project-setup/SKILL.md; git worktree list; git status --short; git remote -v; git log --oneline -10
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+---
+name: project-setup
+description: 'Sets up Toolkit V2 in a new project or repairs one: copies the model scaffold, applies tracker, memory, and Salesforce answers, and fixes this Mac, Notion, or Hindsight. Use when the owner says "set up Toolkit V2", "set up this project", "check the setup", "update the toolkit", or "new computer".'
+---
+
+# Project setup
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+The interview wording and what setup installs: `references/interview.md`. Repair, switching, new computer, and wiring: `references/repair-and-wiring.md`. Put each `toolkit` command on its own line.
+
+## Steps
+
+1. Check the setup. If `toolkit` is not found, run `node <this skill's folder>/../../bin/toolkit machine-setup` (the skill's folder is the one holding this file). If doctor reports a computer problem, run machine-setup. Name anything the owner must do himself: `ntn login` opens a browser sign-in; trusting the hooks in Codex happens in its `/hooks` screen. Never do those for him. This skill sets up Toolkit V2, never the older claude-toolkit (its `project-init` skill); when the owner names Toolkit V2 and only `project-init` is listed, say so and use this skill's steps.
+   `toolkit doctor`
+   `toolkit machine-setup`
+2. No `.toolkit.json`: a new project. Look before asking: an empty or existing repository; `sfdx-project.json` answers the Salesforce question in advance. Then ask one question at a time, each with a recommendation, in this order: the project name (with its key, id prefix, and owner name, confirmed in one line); the tracker (local folders, Notion, GitHub Issues, Jira); the memory (built-in `.memory/`, local Hindsight, Notion); Salesforce or not, and for Salesforce the sandbox and production org aliases; whether he wants `SOUL.md` (a no becomes `--decline SOUL.md`, so no later sync brings it back).
+3. Run init with the answers (the second line, with `--salesforce`, for a Salesforce project; add `--decline SOUL.md` after a no). Setup copies the model scaffold and applies your answers: it copies the model project's folders and files, keeps only the blocks of `AGENTS.md`, `README.md`, and `PROJECT.md` that match the answers, fills the project name, writes the rules list and `.toolkit.json`, installs the tracker, memory, and Salesforce parts only when chosen, never copies work items or memory records, and turns the V2 plugins on and every `*@claude-toolkit` plugin off in this project. Then record the choices init has no flag for: the id prefix when it is not `WI`, and the Salesforce org aliases. With Notion, init may take another id prefix when `WI` is already used there: say the prefix it reports in one line. In Codex: init writes `.codex/` and `.agents/`, which the Codex sandbox refuses, and it writes them first. Before running it, tell the owner that Codex will ask to
+
+[AGENT] The changes appear to be the setup scaffold. This checkout has no remote configured, so I’ll review the exact files locally before committing.
+
+[CALL exec] git fetch origin; git status --short --untracked-files=all; git diff -- README.md; git check-ignore -v .work-items .memory delivery/data/data-loads 2>/dev/null; toolkit doctor
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+error: cannot open '.git/FETCH_HEAD': Operation not permitted
+ M README.md
+?? .agents/skills/sf-component-tracker/SKILL.md
+?? .agents/skills/sf-data-change/SKILL.md
+?? .agents/skills/sf-deploy-check/SKILL.md
+?? .claude/hooks/guard-permission-set-deploy.cjs
+?? .claude/hooks/guard-protected-orgs.cjs
+?? .claude/output-styles/plain-english.md
+?? .claude/protected-orgs.json
+?? .claude/rules/ai-external-knowledge.md
+?? .claude/rules/check-deployment-contents.md
+?? .claude/rules/component-tracker.md
+?? .claude/rules/confirm-salesforce-changes.md
+?? .claude/rules/dependency-graph.md
+?? .claude/rules/humanize-outbound-text.md
+?? .claude/rules/keep-work-item-current.md
+?? .claude/rules/memory-review-and-save.md
+?? .claude/rules/permissions-source-control.md
+?? .claude/rules/plain-english-artifacts.md
+?? .claude/rules/production-data-changes.md
+?? .claude/rules/project-file-locations.md
+?? .claude/rules/publish-project-documents.md
+?? .claude/rules/record-deployment-steps.md
+?? .claude/rules/salesforce-org-safety.md
+?? .claude/rules/session-handoff.md
+?? .claude/rules/shared-repository-work.md
+?? .claude/rules/work-item-folders.md
+?? .claude/settings.json
+?? .claude/skills/sf-component-tracker/SKILL.md
+?? .claude/skills/sf-data-change/SKILL.md
+?? .claude/skills/sf-deploy-check/SKILL.md
+?? .codex/config.toml
+?? .codex/hooks.json
+?? .codex/rules/toolkit.rules
+?? .forceignore
+?? .gitignore
+?? .toolkit.json
+?? AGENTS.md
+?? CLAUDE.md
+?? DECISIONS.md
+?? PROJECT-ROADMAP.md
+?? PROJECT.md
+?? ai-external-knowledge/INDEX.md
+?? delivery/archive/item-template/ARCHIVE-RECORD-TEMPLATE.md
+?? delivery/data/area-template/DATA-AREA-TEMPLATE.md
+?? delivery/data/area-template/FIELD-MAPPING-TEMPLATE.md
+?? delivery/data/area-template/TRANSFORMATION-RULES-TEMPLATE.md
+?? delivery/data/data-loads/.gitignore
+?? delivery/data/production-backups/.gitignore
+?? delivery/deployment/component-tracker.csv
+?? delivery/deployment/full-project-deployment-template/manual-steps.md
+?? delivery/deployment/full-project-deployment-template/package.xml
+?? delivery/deployment/release-cutover-template/CUTOVER-PLAN.md
+?? delivery/deployment/release-cutover-template/RELEASE-NOTES.md
+?? delivery/deployment/work-item-deployment-template/DEPLOYMENT-RECORD.md
+?? delivery/deployment/work-item-deployment-template/destructiveChanges.xml
+?? delivery/deployment/work-item-deployment-template/manual-steps.md
+?? delivery/deployment/work-item-deployment-template/package.xml
+?? requirements/AGENTS.md
+?? requirements/SYSTEM-DATA-MODEL.md
+?? requirements/system-area-template/AREA-TEMPLATE.md
+?? sfdx-project.json
+?? system-guide/AREA-TEMPLATE.md
+?? tests/TEST-PLAN-TEMPLATE.md
+?? tools/kb/README.md
+?? tools/kb/build_edges.py
+?? tools/kb/build_org_catalog.py
+?? tools/kb/classify_fields.py
+?? tools/kb/compare_dependencies.py
+?? tools/kb/diff_graph.py
+?? tools/kb/edge_list.py
+?? tools/kb/extract.py
+?? tools/kb/extractors/__init__.py
+?? tools/kb/extractors/_kbpath.py
+?? tools/kb
+
+[CALL exec] cat .toolkit.json .codex/config.toml .codex/hooks.json .claude/protected-orgs.json .gitignore .forceignore sfdx-project.json; git diff --check; git status --porcelain=v1 | wc -l
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{
+  "toolkit": "toolkit-v2",
+  "schema": 1,
+  "project": {
+    "name": "Acme CRM",
+    "key": "acme-crm",
+    "owner": "Mike",
+    "created": "2026-09-27"
+  },
+  "tracker": {
+    "type": "local",
+    "idPrefix": "WI"
+  },
+  "memory": {
+    "type": "builtin",
+    "approval": "onboarding"
+  },
+  "salesforce": {
+    "enabled": true,
+    "orgs": {
+      "sandbox": "tkv2-sbx",
+      "production": "tkv2-prod"
+    }
+  },
+  "hosts": [
+    "claude-code",
+    "codex"
+  ],
+  "declined": [
+    "SOUL.md"
+  ],
+  "notion": {},
+  "hindsight": {},
+  "installed": {
+    ".agents/skills/sf-component-tracker/SKILL.md": "7119ff1eee4f0387fce73952e74a75a5e1c81b9c7b1f6d23d18a2386a40c3240",
+    ".agents/skills/sf-data-change/SKILL.md": "797c38e98ae78a466843d1fe81cda8b8ea40b8b27e000e2965158c3f842bdad9",
+    ".agents/skills/sf-deploy-check/SKILL.md": "084dcc4b91a4445fdd1b60e688b21f37f4b69991d67006a50cd6874b6b5b5e81",
+    ".claude/hooks/guard-permission-set-deploy.cjs": "f965f51657307dca76354e45a34517964c9c7353cb8c5c24a8fde17146d55de0",
+    ".claude/hooks/guard-protected-orgs.cjs": "d257005bc0d9d9b18d669335bd8a4bac1ccafa1cd602a9306f1ccde440ea87e1",
+    ".claude/output-styles/plain-english.md": "b25d7be1b6a6034fc56d93ab80dee9fbe5a106cedacba6d6a3989d6b37946deb",
+    ".claude/protected-orgs.json": "3e2250f9043cab5b8283f6b99d6334dddf3709cd408ba283af4e69a6b92dc329",
+    ".claude/rules/ai-external-knowledge.md": "c2140569c1dbe7592014f85e58f69314d09df74fe11ae48cbd47b08a3675c2e5",
+    ".claude/rules/check-deployment-contents.md": "af2bc2bf2ffbf90860532dcd5c01e7bcdcf579ebe258db03085febd6da8f868f",
+    ".claude/rules/component-tracker.md": "efad6f2093b0b6dbf8a418737b4eff7e8eeabd122bf262b3e5a836fc01545e4f",
+    ".claude/rules/confirm-salesforce-changes.md": "d7bea6491e922324cfbedfacc5b971ce230159e065efd10c2ff18fccafd6f029",
+    ".claude/rules/dependency-graph.md": "536049cc87de1d25bfd189c4c1351e8c838efd7de5d9dbc5b4792b56b26122dd",
+    ".claude/rules/humanize-outbound-text.md": "daa38057e72bde93a8057254d0ddcb220a4182e0636bd4f972552b53b520c561",
+    ".claude/rules/keep-work-item-current.md": "dd634b7d00ce9452eb9418ef682fe541c8a7565ff7bfe7eea5189dd997298867",
+    ".claude/rules/memory-review-and-save.md": "1a7b63b66bdbde4ee30d3dc81a7d695e43a7400b0cc9aa7a2043c9c703f7d044",
+    ".claude/rules/permissions-source-control.md": "530b70edcef066973777a734777fac304fd30615466ebc1b33efa01bf0a13469",
+    ".claude/rules/plain-english-artifacts.md": "692f6de8c6a824ef783d755ba6c431881c6444617dccb27a27e8bb343f22db9e",
+    ".claude/rules/production-data-changes.md": "3887dfbabf65d07390cd9362ba2a19c569989624c971bd58eb828e4388c699dc",
+    ".claude/rules/project-file-locations.md": "b2d0e25f7fc4d263e7f8b6556f4378ee7d936e0014c8c8b3f91438bd563f21ab",
+    ".claude/rules/publish-project-documents.md": "da1e72639a5da6daed6ab9e722cdeb5b96836d6475ce15bb989f445cc2a101ba",
+    ".claude/rules/record-deployment-steps.md": "89f13bf38c85e34b619d4a604b21de45e798eff0b8f20c1d8
+
+[CALL exec] git add -- README.md .agents .claude .codex .forceignore .gitignore .toolkit.json AGENTS.md CLAUDE.md DECISIONS.md PROJECT-ROADMAP.md PROJECT.md ai-external-knowledge delivery requirements sfdx-project.json system-guide tests tools
+  -> Script completed
+Wall time 5.5 seconds
+Output:
+
+{"chunk_id":"acfe38","wall_time_seconds":0.00000275,"exit_code":0,"original_token_count":0,"output":""}
+
+[CALL exec] git diff --cached --stat; git diff --cached --check; git diff --cached --numstat | tail -5; git diff --cached | wc -l; git status --short
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+ .agents/skills/sf-component-tracker/SKILL.md       | 183 ++++
+ .agents/skills/sf-data-change/SKILL.md             |  67 ++
+ .agents/skills/sf-deploy-check/SKILL.md            |  45 +
+ .claude/hooks/guard-permission-set-deploy.cjs      | 237 +++++
+ .claude/hooks/guard-protected-orgs.cjs             | 402 +++++++++
+ .claude/output-styles/plain-english.md             |  35 +
+ .claude/protected-orgs.json                        |  17 +
+ .claude/rules/ai-external-knowledge.md             |  31 +
+ .claude/rules/check-deployment-contents.md         |   7 +
+ .claude/rules/component-tracker.md                 |   5 +
+ .claude/rules/confirm-salesforce-changes.md        |  10 +
+ .claude/rules/dependency-graph.md                  |  18 +
+ .claude/rules/humanize-outbound-text.md            |  13 +
+ .claude/rules/keep-work-item-current.md            |  13 +
+ .claude/rules/memory-review-and-save.md            |  21 +
+ .claude/rules/permissions-source-control.md        |  28 +
+ .claude/rules/plain-english-artifacts.md           |  81 ++
+ .claude/rules/production-data-changes.md           |  13 +
+ .claude/rules/project-file-locations.md            |   8 +
+ .claude/rules/publish-project-documents.md         |  23 +
+ .claude/rules/record-deployment-steps.md           |  10 +
+ .claude/rules/salesforce-org-safety.md             |  26 +
+ .claude/rules/session-handoff.md                   |   3 +
+ .claude/rules/shared-repository-work.md            |  21 +
+ .claude/rules/work-item-folders.md                 |  42 +
+ .claude/settings.json                              |  98 +++
+ .claude/skills/sf-component-tracker/SKILL.md       | 183 ++++
+ .claude/skills/sf-data-change/SKILL.md             |  67 ++
+ .claude/skills/sf-deploy-check/SKILL.md            |  45 +
+ .codex/config.toml                                 |  42 +
+ .codex/hooks.json                                  |  24 +
+ .codex/rules/toolkit.rules                         |  41 +
+ .forceignore                                       |   2 +
+ .gitignore                                         |  18 +
+ .toolkit.json                                      | 146 +++
+ AGENTS.md                                          | 138 +++
+ CLAUDE.md                                          |   1 +
+ DECISIONS.md                                       |   9 +
+ PROJECT-ROADMAP.md                                 |  51 ++
+ PROJECT.md                                         |  49 ++
+ README.md                                          |   2 +-
+ ai-external-knowledge/INDEX.md                     |  11 +
+ .../item-template/ARCHIVE-RECORD-TEMPLATE.md       |  12 +
+ delivery/data/area-template/DATA-AREA-TEMPLATE.md  |  14 +
+ .../data/area-template/FIELD-MAPPING-TEMPLATE.md   |  15 +
+ .../area-template/TRANSFORMATION-RULES-TEMPLATE.md |  21 +
+ delivery/data/data-loads/.gitignore                |   5 +
+ delivery/data/production-backups/.gitignore        |   5 +
+ delivery/deployment/component-tracker.csv
+
+[AGENT] The staged files are the setup scaffold, including Salesforce tools and templates. I found no record data in the staged paths. The whitespace warnings are in template Markdown line breaks. I’ll commit the staged changes now.
+
+[CALL exec] git diff --cached --name-only | rg '(^|/)(\.env|.*(secret|token|credential|password)|.*\.(csv|xlsx|xls)$)' || true; git diff --cached -- .toolkit.json .codex .claude/protected-orgs.json .gitignore .forceignore PROJECT.md PROJECT-ROADMAP.md README.md sfdx-project.json delivery/deployment/full-project-deployment-template/package.xml | tail -200
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+delivery/deployment/component-tracker.csv
++    "tools/kb/README.md": "cfc79689ad24ae7881f636c3d842db8b27b9251d169882c030b29578ba2e3560",
++    "tools/kb/build_edges.py": "905f6f6dcea4b088099e6988693f6f098e7460c097d3dcd5a5100a21cff5da60",
++    "tools/kb/build_org_catalog.py": "96a1dce92ec92d934e6e012b7a3e29e997ab2877990d0034fe019fff79e06c84",
++    "tools/kb/classify_fields.py": "26067b67a7ef8f5211dc618e816621233456c0a076413252619680fb117af3b4",
++    "tools/kb/compare_dependencies.py": "c3c32d74f7568dbdc4eaac139639ecb25badd06951631d440a0787e078fcd75e",
++    "tools/kb/diff_graph.py": "a8adeabb2ac82fdfbf1da49dd492277cdf1c0ce2cfd8fd9c89e416f260b490e7",
++    "tools/kb/edge_list.py": "0dffcf938d0e8852f668c9dac6f0334df86e089e70f472a9de6397174bbef3f7",
++    "tools/kb/extract.py": "7fbb310922eafcaefaa5ebf5111e4dc3e53cf08a421d55a7991917fd5b45def6",
++    "tools/kb/extractors/__init__.py": "cbf0137be7d23a44b7c1ff0e84f337cc208cc26f5f702478e2738a170d71b96a",
++    "tools/kb/extractors/_kbpath.py": "d0134a41111b61c92f92121c1f66de30350850142ed5ba86555c563ba2b63a50",
++    "tools/kb/extractors/analytics.py": "28f5714cd943556f6c8137e29c87f5b7972a68f4ab5407ae95daeffdf818b561",
++    "tools/kb/extractors/apex.py": "5955ef98e55b9596d58907578c40c76262b1e0d2a074a82340ed3ee8a9e0a037",
++    "tools/kb/extractors/automation.py": "d45c07586674075a0f7469f7586846698af3c87dfcba02035feee434a23db665",
++    "tools/kb/extractors/contracts.py": "dedfe4f378c17a7427d0eacbca9863ef1db047ab06a18172de1b9ff31332336f",
++    "tools/kb/extractors/data.py": "c45105a43b0f7a85bc369d11d79f8e69f815be89c3362a3237afba936d61e409",
++    "tools/kb/extractors/driver.py": "e30415197272ea96e3a1b17d99346ef552ef35a86b4661f2d15401eec4136304",
++    "tools/kb/extractors/flows.py": "da11d7a0102390fe452398f912dd50fd041dcad9405fd09d838abc8b3ef224fc",
++    "tools/kb/extractors/generic.py": "ac004089b78b1d559828a3b61c79d6433129fa927065ab42af4893e2ba397c55",
++    "tools/kb/extractors/interface.py": "4fc4024d70a50c7c0835ec7d30bbc09224e7b03222da3fb13f6b85b3e503dbdd",
++    "tools/kb/extractors/names.py": "011bfb0d884cc3ea559b6a563587771827621e6962b0ed0a5d2c94d91c4679ba",
++    "tools/kb/extractors/objects.py": "02fa861b694ceee6346f1487afa7315b4ced74103e66c2443af09fdc14580185",
++    "tools/kb/extractors/security.py": "683364cf085de5c82d9c7acc653f32365a26398e07a17042805b7a4371df924e",
++    "tools/kb/extractors/xmlutil.py": "dcdb83cfa512b596d8c34405acf8375c0a8323fe4dc577292a6bafe4dba69b8b",
++    "tools/kb/file_registry.py": "83e2e10a5d9891aee43d4109e73b840458e89af9f02f4bfceedd21981a8adc8a",
++    "tools/kb/graph.py": "445eef548f33e18189d6aff0ffec945576569061c076d3b0fb571258213d8cec",
++    "tools/kb/graph_freshness_hook.py": "15bd0c65c50a3f45b0368e575c8ea70bf4ded2a439988ba00c2649e2c2322b5f",
++    "tools/kb/org_api.py": "519e7f28f692018b9ccafd17cc3beba1a1717b1a4c8bbe52ec5e1a98b0d3ec26",
++    "tools/kb/org_catalog.py": "84e22528e955d8b66084b62270e34a569ef1bc68154f3c136da3179d5012444e
+
+[CALL exec] git commit -m 'Set up Acme CRM project toolkit'
+  -> Script completed
+Wall time 5.6 seconds
+Output:
+
+{"chunk_id":"7183ba","wall_time_seconds":0.00000275,"exit_code":0,"original_token_count":1448,"output":"[main 1d49cdb] Set up Acme CRM project toolkit\n 106 files changed, 20589 insertions(+), 1 deletion(-)\n create mode 100644 .agents/skills/sf-component-tracker/SKILL.md\n create mode 100644 .agents/skills/sf-data-change/SKILL.md\n create mode 100644 .agents/skills/sf-deploy-check/SKILL.md\n create mode 100644 .claude/hooks/guard-permission-set-deploy.cjs\n create mode 100644 .claude/hooks/guard-protected-orgs.cjs\n create mode 100644 .claude/output-styles/plain-english.md\n create mode 100644 .claude/protected-orgs.json\n create mode 100644 .claude/rules/ai-external-knowledge.md\n create mode 100644 .claude/rules/check-deployment-contents.md\n create mode 100644 .claude/rules/component-tracker.md\n create mode 100644 .claude/rules/confirm-salesforce-changes.md\n create mode 100644 .claude/rules/dependency-graph.md\n create mode 100644 .claude/rules/humanize-outbound-text.md\n create mode 100644 .claude/rules/keep-work-item-current.md\n create mode 100644 .claude/rules/memory-review-and-save.md\n create mode 100644 .claude/rules/permissions-source-control.md\n create mode 100644 .claude/rules/plain-english-artifacts.md\n create mode 100644 .claude/rules/production-data-changes.md\n create mode 100644 .claude/rules/project-file-locations.md\n create mode 100644 .claude/rules/publish-project-documents.md\n create mode 100644 .claude/rules/record-deployment-steps.md\n create mode 100644 .claude/rules/salesforce-org-safety.md\n create mode 100644 .claude/rules/session-handoff.md\n create mode 100644 .claude/rules/shared-repository-work.md\n create mode 100644 .claude/rules/work-item-folders.md\n create mode 100644 .claude/settings.json\n create mode 100644 .claude/skills/sf-component-tracker/SKILL.md\n create mode 100644 .claude/skills/sf-data-change/SKILL.md\n create mode 100644 .claude/skills/sf-deploy-check/SKILL.md\n create mode 100644 .codex/config.toml\n create mode 100644 .codex/hooks.json\n create mode 100644 .codex/rules/toolkit.rules\n create mode 100644 .forceignore\n create mode 100644 .gitignore\n create mode 100644 .toolkit.json\n create mode 100644 AGENTS.md\n create mode 100644 CLAUDE.md\n create mode 100644 DECISIONS.md\n create mode 100644 PROJECT-ROADMAP.md\n create mode 100644 PROJECT.md\n create mode 100644 ai-external-knowledge/INDEX.md\n create mode 100644 delivery/archive/item-template/ARCHIVE-RECORD-TEMPLATE.md\n create mode 100644 delivery/data/area-template/DATA-AREA-TEMPLATE.md\n create mode 100644 delivery/data/area-template/FIELD-MAPPING-TEMPLATE.md\n create mode 100644 delivery/data/area-template/TRANSFORMATION-RULES-TEMPLATE.md\n create mode 100644 delivery/data/data-loads/.gitignore\n create mode 100644 delivery/data/production-backups/.gitignore\n create mode 100644 delivery/deployment/component-tracker.csv\n create mode 100644 delivery/deployment/full-project-deployme
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.1/skills/memory-save/SKILL.md .memory/AGENTS.md .memory/memory-criteria.md .memory/CURRENT_FOCUS.md; git status --short; git log -1 --format='%h %s'
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+---
+name: memory-save
+description: 'Saves, corrects, or forgets one lasting fact in project memory, and sends anything that belongs elsewhere to its home. Use when the owner says "remember this", "from now on", "always do X", "never do X", "forget that", or "remind me", corrects the agent, or a hook says to save.'
+---
+
+# Memory save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Record format, types, focus, and glossary: `references/record-format.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Put each `toolkit` command on its own line. In Codex, a `toolkit` command joined to anything else (`&&`, `;`, a pipe, a heredoc) or run from a script runs inside the sandbox, which blocks Hindsight and Notion: run it alone. Text for `--body-file` and `--set-file`: in Claude Code pass it on standard input (`--set-file -` or `--body-file -` with a heredoc); in Codex make a new folder for each save with `mktemp -d`, write the file there, and delete the file and the folder after the command succeeds. Never use a fixed name such as `/tmp/focus.md`: another session could write the same file.
+
+## Steps
+
+1. Decide the home first, with the memory criteria (`.memory/memory-criteria.md` with built-in memory; otherwise `references/record-format.md`). Memory holds a lasting preference, correction, fact about the project or the owner, or a hard-to-find reference. Elsewhere: project work goes to `work-on`; a decision for the whole project to `work-decide` (`DECISIONS.md`); delivered behavior to `requirements/`; how a change is built to the item's design; verified current structure to `system-guide/`; outside documentation to `ai-external-knowledge/`; a standing rule for how agents work here is proposed as a rule-file change; an owner to-do with no work item goes to the current focus "Untracked to-dos"; a project term goes to the glossary. A short memory pointer to a hard-to-find record is allowed; never copy its body.
+2. Search first and update the existing record rather than add a duplicate.
+   `toolkit memory find "<topic>"`
+   `toolkit memory get <key>`
+3. Approval. This is the only written copy of the memory approval policy. Read the mode, then apply it:
+   `toolkit config get memory.approval`
+   The owner's own words ("remember", "from now on", "always", "never", "forget", a correction) are the approval: save now, with his name as the approver. `onboarding` mode (the default): something the agent inferred gets one yes-or-no line first ("Save to memory: <one-line summary>?"); save after a yes. `trusted` mode: routine facts the agent is sure of are saved and reported, without an approver. Always ask first, in either mode, for anything about a named person, personal details, a hard delete, more than five records at once, or a change to this policy. A 
+
+[AGENT] Committed as `1d49cdb`. I’ll update the current focus so the next session no longer treats the setup commit as pending.
+
+[CALL exec] mktemp -d
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+/var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.VINzwreGwz
+
+
+[CALL exec] cat > /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.VINzwreGwz/focus.md <<'EOF'
+# Current focus
+
+Last updated: 2026-09-27, setup commit, Codex
+
+## Now
+
+- None.
+
+## Waiting on the owner
+
+- Trust this project folder in Codex when prompted, then open `/hooks` and trust the Toolkit V2 hooks and two Salesforce org guards.
+
+## Untracked to-dos
+
+- None.
+
+## Next session starts with
+
+- Read `PROJECT.md` for the confirmed outcome. Ask for the first specific Salesforce change, then start its work item.
+EOF
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+
+
+[CALL exec] toolkit memory focus --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.VINzwreGwz/focus.md
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved the current focus (19 lines). Version: 2012b5a68bf6
+
+
+[CALL exec] rm /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.VINzwreGwz/focus.md && rmdir /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.VINzwreGwz; toolkit memory focus; toolkit doctor; git status --short
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+# Current focus
+
+Last updated: 2026-09-27, setup commit, Codex
+
+## Now
+
+- None.
+
+## Waiting on the owner
+
+- Trust this project folder in Codex when prompted, then open `/hooks` and trust the Toolkit V2 hooks and two Salesforce org guards.
+
+## Untracked to-dos
+
+- None.
+
+## Next session starts with
+
+- Read `PROJECT.md` for the confirmed outcome. Ask for the first specific Salesforce change, then start its work item.
+Toolkit doctor for Acme CRM (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2).
+
+Warnings (3):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+3. The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them.
+   Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.
+
+Notes (6):
+- AGENTS.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- README.md was changed by the project, so sync leaves it alone. The toolkit would: the project had this file before the toolkit; the toolkit version was not installed. The project-setup skill shows these to the owner and makes the changes he approves.
+- delivery/deployment/full-project-deployment-template/package.xml was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- sfdx-project.json was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+
+Result: 0 problems and 3 warnings.
+
+
+[AGENT] The setup is committed locally as `1d49cdb` (`Set up Acme CRM project toolkit`). The working tree is clean, and I updated the current focus so the commit is no longer listed as pending. No remote is configured, so it has not been pushed.
+
+Codex still needs you to trust this project folder and, in `/hooks`, trust the Toolkit V2 hooks and two Salesforce org guards.
+
+SKILLS OPENED (SKILL.md read): ['project-setup', 'memory-save']
+
+TOOLKIT COMMANDS:
+   toolkit doctor
+   toolkit memory focus --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.VINzwreGwz/focus.md
+   toolkit memory focus
+   toolkit doctor

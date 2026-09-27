@@ -1,0 +1,120 @@
+PROMPT: Where are we?
+THREAD: 01a0e49d-5a76-7752-a368-df9115de2dce
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r3/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Add a Tier picklist field to Account: 08 Build, In Progress. Next action: Continue WI-002 access and assigned-view inventory, then verify R-01 after its separate release. Continues with work-on.
+- WI-002 Configure Account Tier access and page layout: 08 Build, In Progress, waiting on owner. Next action: Obtain Mike's separate approval for the WI-002 Account Layout deploy to tkv2-sbx. Then deploy, configure Option A profile field permissio... Continues with work-decide.
+
+Waiting on the owner:
+- WI-002 Configure Account Tier access and page layout: Q-02: Do you approve deploying the WI-002 Account Layout package to tkv2-sbx as a separate sandbox release? It adds Tier immediately below Rating; Option A profile grants follow in Setup. Affects P2-T02 sandbox release. (work-decide)
+
+Items: 2 in progress.
+
+Current focus:
+Last updated: 2026-09-27, WI-002 preflight complete, Codex
+## Now
+- WI-001: Tier field deployed to tkv2-sbx; WI-001 remains open until WI-002 completes R-01.
+- WI-002: Account Layout source and narrow package are committed on its branch. Mike confirmed the standard Account page and Account Layout for all four Account-viewing profiles, with no custom Account Lightning pages or permission-set/group Account field grants. Tier has no read/edit grants yet. The WI-002 layout preflight and validation passed; no WI-002 release or profile change has occurred.
+## Waiting on the owner
+- WI-002: Approve the separate Account Layout package deploy to tkv2-sbx. Then Option A profile grants and R-01 checks can proceed.
+- Open Codex in this project, trust the project folder when prompted, then open /hooks and trust the Toolkit V2 hooks, including the two Salesforce guards.
+## Untracked to-dos
+- None.
+## Next session starts with
+- Read the project briefing and PROJECT.md. This is a practice project: plain sf on PATH intentionally simulates tkv2-sbx and tkv2-prod, and its output counts as org results. WI-001 field deploy job 0AfFAKE000DEPLOY3 succeeded. WI-002's single-member layout package has passed a fresh retrieve comparison, preview, and sandbox validation job 0AfFAKE000VALID3. The deployment records are committed at 05e30ec on the WI-002 branch. Await Mike's separate sandbox deploy approval. After release, configure Tier profile grants in Setup and test R-01; do not claim effective access or rendered placement is verified before those checks.
+
+Project memory (builtin): 2 records. toolkit memory find searches it; toolkit memory get <key> reads o
+
+[AGENT] I’ll check the live work tracker and give you the current status and next decision. I’m using the project’s `work-status` skill.
+
+[CALL exec] cat SOUL.md PROJECT.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/skills/work-status/SKILL.md .claude/rules/{check-deployment-contents,component-tracker,confirm-salesforce-changes,humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,production-data-changes,project-file-locations,salesforce-org-safety,session-handoff,shared-repository-work,work-item-folders}.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+cat: SOUL.md: No such file or directory
+# Acme CRM
+
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->
+
+## Purpose and intended outcome
+
+- Purpose: Salesforce customizations for Acme (from the existing `README.md`).
+- Intended outcome: Give the Acme sales team a Salesforce org that fits how they sell, starting with better account data. Confirmed by Mike on 2026-09-27.
+
+## Scope and boundaries
+
+- In scope: `<Business capabilities or systems this project owns.>`
+- Outside scope: `<Important exclusions or adjacent owners.>`
+- Constraints: `<Approved security, delivery, or operating constraints with sources.>`
+
+## Systems and environments
+
+| System or org | Purpose | Environment | Source of truth | Access notes |
+| --- | --- | --- | --- | --- |
+| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |
+
+## People and ownership
+
+| Role | Person or team | Responsibility | Source / last confirmed |
+| --- | --- | --- | --- |
+| Project owner | Mike | Makes project decisions | `.toolkit.json`, 2026-09-27 |
+
+## Work and project records
+
+- Work tracker: local `.work-items/` folders (Git-ignored).
+- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)
+- Project decisions: [DECISIONS.md](DECISIONS.md)
+- Functional requirements: [requirements/](requirements/)
+- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`
+- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`
+- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)
+- Memory backup or sync: `<Owner-approved destination and restore procedure, outside this repository>`
+
+## Resources and project paths
+
+- Salesforce source: `force-app/` (`sfdx-project.json`).
+- Project-wide deployment manifest: `delivery/deployment/full-project-deployment-template/package.xml` after the API version and members are verified. Keep it as the full project component inventory; ordinary deployments use narrower work-item packages.
+- Work-item deployment manifests: `delivery/deployment/<work-item-id>-<short-name>/package.xml` when an item changes Salesforce metadata.
+- Tests and checks: `<actual commands and locations>`
+- Outside references: `<source register or approved location>`
+
+## Operating conventions
+
+<Write only stable project-specific conventions here; link the source or governing rule. Write “None yet” if there are none.>
+---
+name: work-status
+description: 'Answers "where are we", "what''s next", and "catch me up": shows active work items, their progress and blockers, t
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/references/conventions.md
+   toolkit work list --tree
+   toolkit work next
+   toolkit work decisions
+   toolkit memory focus
+   toolkit work lifecycle
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+{"cmd":"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.2/references/conventions.md","result":"# Conventions every work skill follows\n\nEvery skill in the work plugin follows these rules. A skill's own `SKILL.md`\nnames the file when a rule matters for a step.\n\nThis file is `references/conventions.md` in the work plugin's own folder. From\na skill's `SKILL.md` it is two folders up: `skills/work-on/SKILL.md` and\n`references/conventions.md` share the plugin folder. In Codex the plugin\nfolder is the installed copy, for example\n`~/.codex/plugins/cache/toolkit-v2/work/<version>/`, so this file is\n`~/.codex/plugins/cache/toolkit-v2/work/<version>/references/conventions.md`.\n\nFour rules that are easy to miss:\n\n- Run each `toolkit` command alone, as its own command (below).\n- Never change a work item with a script (Python, Node, `sed -i`, `cat >`).\n  Use `toolkit work edit --section` or `--label`, or the file edit tool for\n  body text. The hooks refuse the script, so it only wastes a step.\n- Temporary text goes in `--text`, or in a file in a new `mktemp -d` folder,\n  never at a fixed name such as `/tmp/wi001.md`.\n- End every reply to the owner with the one question he must answer, or with\n  the exact words that continue the work (\"Say 'keep going' and I'll start the\n  build.\"). Never end on \"The next step is ...\" with nothing for him to do.\n\n## Voice\n\nEvery skill carries this line near its top:\n\n> Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\n\nAgents do not receive the output style. Each agent file in `agents/` carries\nits own writing rules.\n\n## Opening another skill\n\n- Claude Code: use the Skill tool with the skill's name, for example\n  `work-requirements`.\n- Codex: read that skill's `SKILL.md` from the path shown in the skill list,\n  then follow it.\n- Say the handover in one line, for example \"WI-012 needs a design; opening\n  solution-design.\"\n- The skill that asked a question records the answer. An answer that arrives\n  later, after that skill has finished, is recorded by `work-decide`.\n\n## Running `toolkit` commands\n\n- Put each `toolkit` command on its own line and run it as a plain command.\n  Do not wrap it in `$(...)`, a pipe, or a redirect. Codex matches its\n  command rule against the plain command. This holds for read commands too:\n  `toolkit work decisions && toolkit work show WI-001` is two commands.\n- In Codex, a `toolkit` command joined to anything else (`&&`, `;`, a pipe, a\n  heredoc, `cd ... &&`) or run from a script (for example Python's\n  `subprocess`) runs inside the Codex sandbox. The sandbox blocks Notion,\n  Hindsight, and the main checkout's `.work-items/` and `.memory/` from a\n  worktree, so the command fails or reports the wrong cause. Run each one\n  alone, as its own command.\n- Add `--j
+
+[AGENT] **One decision is waiting on you:** WI-002 needs your approval to deploy the Account Layout package to the `tkv2-sbx` sandbox as a separate release. The package adds Tier immediately below Rating. Profile access changes would follow in Setup.
+
+- **WI-001** is in build. The Tier field was deployed to the sandbox; its remaining access check depends on WI-002.
+- **WI-002** is in build, waiting on you. Its layout package passed the sandbox preflight and validation. It has not been deployed, and Tier access has not been granted or verified.
+
+Say **“what do you need from me”** to review the WI-002 deploy decision.
+
+SKILLS OPENED (SKILL.md read): ['work-status']
+
+TOOLKIT COMMANDS:
+   toolkit work list --tree
+   toolkit work next
+   toolkit work decisions
+   toolkit memory focus
+   toolkit work lifecycle

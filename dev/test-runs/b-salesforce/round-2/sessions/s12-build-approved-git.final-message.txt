@@ -1,0 +1,5 @@
+WI-001 is built and committed locally as `23c95e0`. Its optional Account Tier field has Gold, Silver, Bronze, no default, and the approved description and help text. Sandbox validation succeeded; nothing was deployed.
+
+WI-002’s profile access steps are committed locally as `07ac952`. I recorded your facts about `Account Layout` and permission sets. The sandbox retrieval reported success but returned no layout file, so the layout edit remains unfinished.
+
+**Please provide the current `Account Layout` metadata XML, or a read-only way to retrieve it.** I need its existing contents to add Tier safely. This copy also has no `origin` remote, so neither local commit can be pushed here.

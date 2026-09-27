@@ -1,0 +1,200 @@
+PROMPT: I ran that init command in a terminal and it finished. Finish setting up Toolkit V2.
+THREAD: 01a0e45b-603f-7821-acdb-421b29c67a79
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r3/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The tracker has no open items. A new request starts a work item with the work-on skill.
+
+Current focus: still the empty template from setup. The memory-save skill fills it with toolkit memory focus --set-file.
+
+Project memory (builtin): 0 records. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them. Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.
+
+Always-on rules. Claude Code loads them by itself; in Codex, each one is read at session start:
+- .claude/rules/check-deployment-contents.md: Check What a Deployment Includes
+- .claude/rules/component-tracker.md: Component Tracker
+- .claude/rules/confirm-salesforce-changes.md: Confirm Salesforce Changes
+- .claude/rules/humanize-outbound-text.md: Humanize Anything Sent to Another Person
+- .claude/rules/keep-work-item-current.md: Keep the Active Work Item Accurate
+- .claude/rules/memory-review-and-save.md: Review and Save Project Memory
+- .claude/rules/plain-english-artifacts.md: Write Artifacts in Plain English
+- .claude/rules/production-data-changes.md: Production Data Changes
+- .claude/rules/project-file-locations.md: Where Project Files Go
+- .claude/rules/salesforce-org-safety.md: Salesforce Org Safety
+- .claude/rules/session-handoff.md: Prepare a Session Handoff
+- .claude/rules/shared-repository-work.md: Work Safely in a Shared Repository
+- .claude/rules/work-item-folders.md: Local Work-Item Folders
+
+How to write replies (from AGENTS.md):
+Claude Code applies the Plain English output style to chat. Codex and helper agents follow these lines instead.
+
+- Start with the answer, result, or current status. Answer what was asked. Keep it short; add detail when asked.
+- Use ordinary words. Explain an unfamiliar term the first time it matters. Use the exact name a system uses, the same way every time.
+- Write literally: no metaphors, idioms, jokes, or picture words in place of the real name. State the point directly, without a "not this, but that" setup.
+- Use paragraphs for a connected explanation, bullets for separate items or choices, and a heading only when it names what is under it.
+- When asking for a decision, name the choice and the difference that matters, and recommend one.
+- Use the exact status word: written, built
+
+[AGENT] I’ll check what init created, run the setup checks, and finish any remaining configuration I can verify here. I’m using the project-setup skill for this.
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.2/skills/project-setup/SKILL.md
+   cat SOUL.md PROJECT.md
+   for f in .claude/rules/*.md; do echo "### $f"; cat "$f"; done
+   git status --short --branch; toolkit doctor
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+Warning: truncated output (original token count: 10519)
+Total output lines: 4
+
+{"i":0,"result":{"status":"fulfilled","value":{"chunk_id":"9d4b71","wall_time_seconds":0.0000045,"exit_code":0,"original_token_count":2413,"output":"---\nname: project-setup\ndescription: 'Sets up Toolkit V2 in a new project or repairs one: copies the model scaffold, applies tracker, memory, and Salesforce answers, and fixes this Mac, Notion, or Hindsight. Use when the owner says \"set up Toolkit V2\", \"set up this project\", \"check the setup\", \"update the toolkit\", or \"new computer\".'\n---\n\n# Project setup\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nThe interview wording and what setup installs: `references/interview.md`. Repair, switching, new computer, and wiring: `references/repair-and-wiring.md`. Put each `toolkit` command on its own line.\n\n## Steps\n\n1. Check the setup. If `toolkit` is not found, run `node <this skill's folder>/../../bin/toolkit machine-setup` (the skill's folder is the one holding this file). If doctor reports a computer problem, run machine-setup. Name anything the owner must do himself: `ntn login` opens a browser sign-in; trusting the hooks in Codex happens in its `/hooks` screen. Never do those for him. This skill sets up Toolkit V2, never the older claude-toolkit (its `project-init` skill); when the owner names Toolkit V2 and only `project-init` is listed, say so and use this skill's steps.\n   `toolkit doctor`\n   `toolkit machine-setup`\n2. No `.toolkit.json`: a new project. Look before asking: an empty or existing repository; `sfdx-project.json` answers the Salesforce question in advance. Then ask one question at a time, each with a recommendation, in this order: the project name (with its key, id prefix, and owner name, confirmed in one line); the tracker (local folders, Notion, GitHub Issues, Jira); the memory (built-in `.memory/`, local Hindsight, Notion); Salesforce or not, and for Salesforce the sandbox and production org aliases; whether he wants `SOUL.md` (a no becomes `--decline SOUL.md`, so no later sync brings it back).\n3. Run init with the answers (the second line, with `--salesforce`, for a Salesforce project; add `--decline SOUL.md` after a no). Setup copies the model scaffold and applies your answers: it copies the model project's folders and files, keeps only the blocks of `AGENTS.md`, `README.md`, and `PROJECT.md` that match the answers, fills the project name, writes the rules list and `.toolkit.json`, installs the tracker, memory, and Salesforce parts only when chosen, never copies work items or memory records, and turns the V2 plugins on and every `*@claude-toolkit` plugin off in this project. Then record the choices init has no flag for: the id prefix when it is not `WI`, and the Salesforce org aliases. With Notion, init may ta
+
+[HOOK CONTEXT] This shell command joins a toolkit command to other commands (&&, ;, a pipe, a heredoc, or cd). In Codex that runs the toolkit command inside the sandbox, which blocks Notion, Hindsight, and the main checkout's .work-items/ and .memory/ from a worktree, so it may fail or report the wrong cause. Run each toolkit command alone, as its own command; pass section text with --text instead of a file written in the same command.
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.2/skills/project-setup/references/repair-and-wiring.md
+   cat .toolkit.json README.md PROJECT-ROADMAP.md sfdx-project.json
+   rg -n '<[^>]+>|Fill-in guide|fill-in guide|XX\.0' AGENTS.md PROJECT.md PROJECT-ROADMAP.md requirements README.md delivery/deployment sfdx-project.json
+   git worktree list
+   git status --short --branch
+   toolkit sync --dry-run
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+Warning: truncated output (original token count: 11850)
+Total output lines: 6
+
+{"i":0,"result":{"status":"fulfilled","value":{"chunk_id":"af9a44","wall_time_seconds":0.000003833,"exit_code":0,"original_token_count":1845,"output":"# Repair, switching, a new computer, and wiring\n\nDetail for `project-setup` steps 1 and 4 to 7.\n\n## Reaching the `toolkit` command\n\n- Claude Code puts the plugin's `bin/` folder on the path, so `toolkit` works\n  in every Claude Code session.\n- Codex needs the small wrapper script that `toolkit machine-setup` writes at\n  `~/.local/bin/toolkit`. When `toolkit` is not found, run the plugin's copy\n  directly once: `node <this skill's folder>/../../bin/toolkit machine-setup`.\n  The skill's folder is the folder that holds `SKILL.md`; both hosts show that\n  path when they load the skill.\n- Node 20 or later is required. When `node --version` is older or missing,\n  tell the owner and ask before installing it.\n\n## Wiring Notion\n\nNeeded when the tracker or the memory is `notion`.\n\n1. `ntn whoami`. When it fails, the owner runs `ntn login` himself: it opens a\n   browser sign-in to his Notion account. Wait for him to say it is done, then\n   run `ntn whoami` again.\n2. `toolkit notion ensure-root` checks the \"AI Agent Second Brain\" page and\n   the Projects database, and adds what is missing.\n3. `toolkit notion ensure-project --project-name \"<name>\"` creates or repairs\n   this project's row, its Work Items database (board and table views, the\n   fourteen stages, sub-items), its Memory database, and its focus and\n   glossary pages. It saves the Notion ids in `.toolkit.json`.\n4. Both commands only add. They never delete or trash anything, and they\n   refuse to write outside the \"AI Agent Second Brain\" page.\n5. In Codex, Notion calls need the network, which Codex's sandbox turns off.\n   The project's `.codex/rules/toolkit.rules` lets `toolkit` commands run\n   outside the sandbox; when it is missing, Codex asks the owner to approve\n   each call.\n\n## Wiring Hindsight\n\nNeeded when the memory is `hindsight`. Hindsight runs only on this Mac, never\nin Hindsight Cloud, and never in Docker.\n\n1. `toolkit hindsight health`: the local server at `127.0.0.1:8888` answers.\n2. When it does not: `toolkit hindsight service status`. Not installed: ask,\n   then `toolkit hindsight service install`. Installed but stopped: ask, then\n   `toolkit hindsight service start`.\n3. The server uses the local model `gpt-oss:20b` through Ollama. When doctor\n   says Ollama is not running, tell the owner; it runs as a Homebrew service\n   (`brew services start ollama`), which he may prefer to start himself.\n4. `toolkit hindsight ensure-bank` creates this project's memory bank (one\n   bank per project, named by the project key) and saves it in\n   `.toolkit.json`.\n\n## GitHub Issues or Jira\n\n- Show the owner the written instructions. In a GitHub or Jira project, any\n  `to
+
+[AGENT] Init installed the Toolkit files. The remaining setup checks are the Salesforce org aliases and Codex trust settings; I’m checking whether the aliases are already available locally and whether the existing README contains project facts I can use.
+
+[CALL exec] cat README.md PROJECT-ROADMAP.md sfdx-project.json requirements/AGENTS.md
+   sf org list --json
+   git fetch origin
+   git log --oneline -10
+   cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.2/skills/memory-save/SKILL.md
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"i":0,"result":{"status":"fulfilled","value":{"chunk_id":"46fd49","wall_time_seconds":0.000002667,"exit_code":0,"original_token_count":757,"output":"# Acme CRM\n\nSalesforce customizations for Acme.\n# Project roadmap\n\n<!-- Fill-in guide: replace every angle-bracket prompt in the outcome, phase table, phase heading, and work-unit fields with this project's real text. Keep one overview row and one matching ## heading per phase. Under that heading, repeat the ### work-unit block for each deliverable-sized unit and link its canonical work item in the Linked work item field. Remove example rows and this guide after setup. -->\n\nUse this file for the project's phases and deliverable-sized work units. Link each unit to its work item when one exists. The work item holds its active requirements, open questions, detailed tasks, and execution history.\n\n```text\nPROJECT-ROADMAP.md\n└── Phase\n    └── Deliverable-sized work unit\n        └── Linked work item\n            ├── Active requirements\n            ├── Open questions\n            ├── Detailed tasks\n            └── Execution history\n```\n\n## Project outcome\n\n`<What completing this project should accomplish for its users or owner.>`\n\n## Phase overview\n\n| Phase | Intended outcome | Exit condition | Depends on |\n| --- | --- | --- | --- |\n| `P01 — <phase name>` | `<result>` | `<evidence needed to finish>` | `<earlier phase or none>` |\n\n## P01 — <Phase name>\n\n**Outcome:** `<Result larger than one work unit.>`  \n**Exit condition:** `<Observable evidence that the phase is complete.>`  \n**Dependencies:** `<Real prerequisites, or none known.>`\n\n### P01-U01 — <Deliverable-sized work unit>\n\n**Deliverable:** `<Specific output or change from this unit.>`  \n**Done when:** `<Evidence for completing the unit.>`  \n**Depends on:** `<Other unit or none.>`  \n**Linked work item:** `<Link to the canonical issue or local WORK-ITEM.md when created.>`\n\nThe linked work item owns its active requirements, open questions, detailed tasks, approvals, and execution history. Summarize only project-level sequencing here.\n\n## Open project-level planning questions\n\n<!-- Put only questions about phase scope, order, dependencies, or milestones here. Work-item questions go in the linked item. Replace this prompt with real questions or write “None open.” -->\n\n- `<Question about phase scope, order, dependencies, or milestones; identify who can answer it.>`\n\n## Planning changes\n\n- `<Date and source>: <Material approved change to project outcome, phase scope, or sequence.>`\n{\n  \"packageDirectories\": [\n    {\n      \"path\": \"force-app\",\n      \"default\": true\n    }\n  ],\n  \"namespace\": \"\",\n  \"sourceApiVersion\": \"XX.0\"\n}\n# Functional requirements\n\nKeep one maintained file per durable business area, following AREA-TEMPLATE.md. Record agreed functional behavior and its conditions, exceptions, and source. The active work item owns pro
+
+[CALL exec] sf org display -o tkv2-sbx --json
+   cat .memory/AGENTS.md .memory/CURRENT_FOCUS.md .memory/memory-criteria.md
+   cat .claude/rules/memory-review-and-save.md
+   rg --files -g 'AGENTS.md' -g 'README.md' -g 'PROJECT.md' -g 'PROJECT-ROADMAP.md' .
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{"i":0,"result":{"status":"fulfilled","value":{"chunk_id":"c722e3","wall_time_seconds":7.5e-7,"exit_code":0,"original_token_count":58,"output":"{\"status\":0,\"result\":{\"id\":\"00DFAKE0000SBX1\",\"apiVersion\":\"62.0\",\"alias\":\"tkv2-sbx\",\"username\":\"mike@acme.com.tkv2sbx\",\"instanceUrl\":\"https://acme--tkv2sbx.sandbox.my.salesforce.com\",\"connectedStatus\":\"Connected\"},\"warnings\":[]}\n"}}}
+{"i":1,"result":{"status":"fulfilled","value":{"chunk_id":"c5f0d4","wall_time_seconds":3.75e-7,"exit_code":0,"original_token_count":2105,"output":"# Local project memory\n\nKeep future sessions oriented without turning every conversation into lasting memory. This folder is the project's built-in memory store and can be opened directly as an Obsidian vault. Active topics stay flat; filenames and YAML types agree. Git ignores this folder, so back it up with `toolkit memory export --to <folder outside this project>`.\n\n## Read and route\n\n- Read `CURRENT_FOCUS.md` at startup; the session briefing includes it. Read `MEMORY.md` as a short index, then open relevant topics. Check dates, scope, and the current source before acting on a remembered claim.\n- Read `memory-criteria.md` before selecting or changing memory. It holds the default eligibility rules; the `memory-save` skill holds the approval policy and the onboarding or trusted mode. Use the terminology glossary for project language, including distinct meanings across systems.\n- Link related notes inside this vault with relative Markdown links, such as `[account model](project_account_model.md)`. Obsidian shows backlinks to a note from the notes that link to it; a second reverse link is optional. Link only when the relationship helps retrieval, and check that the target exists. Keep tracker URLs and paths outside `.memory/` as source references rather than vault links.\n- Keep current tasks and owner-mentioned to-dos in `CURRENT_FOCUS.md`, naming work items by ID. Keep full tasks, status, requirements, history, and the work item's design together in the chosen tracker; verified system behavior in the System Guide; procedures in instructions or skills; and raw outside sources in their source folders.\n\n## Curate\n\n- Use a coherent topic file such as `project_account_data_model.md`. Allowed prefixes and matching `metadata.type` values are `user`, `feedback`, `project`, `reference`, and `event`. `project_topic_template.md` is a seed, not a saved memory. Keep one related topic per file and aim for a quick read.\n- Record source and date, status, scope, the durable point, why it matters, and how to apply it. Keep uncertainty explicit. Preserve extra YAML fields written by a host or imported record.\n- Search for an existing topic before creating one (`toolkit memory find`). Correct, merge, or supersede in place where possible. Mark obsolete claims in both file text and index; do not leave an archived item reading as currently open.\n- When renaming
+
+[CALL exec] toolkit config set salesforce.orgs.sandbox tkv2-sbx
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"3ec7b1","wall_time_seconds":0.000003375,"exit_code":0,"original_token_count":15,"output":"Set salesforce.orgs.sandbox to tkv2-sbx (was (not set)).\n"}
+
+[CALL exec] toolkit config set salesforce.orgs.production tkv2-prod
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{"chunk_id":"8d9f28","wall_time_seconds":0.000003208,"exit_code":0,"original_token_count":16,"output":"Set salesforce.orgs.production to tkv2-prod (was (not set)).\n"}
+
+[CALL exec] sed -n '1,32p' AGENTS.md; sed -n '102,145p' AGENTS.md; cat .system-guide.json
+   cat delivery/deployment/full-project-deployment-template/package.xml; cat .claude/protected-orgs.json
+   toolkit memory focus
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"i":0,"result":{"status":"fulfilled","value":{"chunk_id":"c699ab","wall_time_seconds":0,"exit_code":1,"original_token_count":1674,"output":"Always execute work with the context in mind that the user will likely\ncontinue work across multiple AI coding sessions where the session context is\ncleared and picked up again. You must assist the user in helping establish\nthat continuity across sessions while not adding context that might pollute\nfuture agents and skew them. Information must be curated and intentional.\n\n# Acme CRM: agent guide\n\n<!-- Project setup fill-in guide: toolkit init replaces <Project name>, keeps only the blocks for the tracker, memory system, and Salesforce choice made at setup, and writes the rules list. Then replace the one-sentence outcome below and the \"Build, test, or deploy\" row under Commands with this project's confirmed values. Change paths only when the installed folder differs. Remove this guide and every angle-bracket prompt before handing the guide to a new project agent. -->\n\n<One sentence describing this project and its outcome.> The owner named in `PROJECT.md` makes this project's decisions. The agent runs the project: it keeps the work tracker, memory, and project records current, and it does the technical work.\n\n## Every session\n\n- The session-start hook adds a \"Project briefing\" to your context: this worktree's work item, active items with the skill that continues each one, what waits on the owner, the current focus, moved items, and setup warnings. If there is no briefing, run `toolkit brief` and read it.\n- Read `SOUL.md` (when the project has one) and `PROJECT.md`; read them again after resume, clear, or compaction.\n- Anything to build, add, fix, or change, and \"keep going\": the `work-on` skill. It opens the work item; also read the item's phase in `PROJECT-ROADMAP.md`.\n- \"Where are we\": `work-status`. \"What do you need from me\" and approvals: `work-decide`.\n- \"Remember\", \"from now on\", \"forget that\": `memory-save`. \"What did we decide\": `memory-find`.\n- Open the matching skill or rule when the task needs its procedure. Method skills from other plugins (brainstorming, plans, debugging) may run inside these skills, never instead of them.\n- Design work goes through `solution-design`; it opens `sf-architect-solutioning` as its specialist.\n- Salesforce org aliases are in `.toolkit.json` under `salesforce.orgs`. Agents never deploy to, validate against, or write data in production; hand the owner the command or the file.\n- Before editing files in a folder that has its own `AGENTS.md` (for example `requirements/`), read that file.\n- Codex: at session start, read the always-on rules listed under \"Rules\".\n\n## What the owner decides\n\nAsk the owner and record the answer before you:\n- approve requirements (build and data-load work cannot pass stage `03` without it; requirements count as approved only when the item records the 
+
+[PATCH] files=['AGENTS.md\\n@@\\n-<!-- Project setup fill-in guide: toolkit init replaces <Project name>, keeps only the blocks for the tracker, memory system, and Salesforce choice made at setup, and writes the rules list. Then replace the one-sentence outcome below and the \\"Build, test, or deploy\\" row under Commands with this project\'s confirmed values. Change paths only when the installed folder differs. Remove this guide and every angle-bracket prompt before handing the guide to a new project agent. -->\\n-\\n-<One sentence describing this project and its outcome.> The owner named in `PROJECT.md` makes this project\'s decisions. The agent runs the project: it keeps the work tracker, memory, and project records current, and it does the technical work.\\n+Acme CRM holds Salesforce customizations for Acme. The owner named in `PROJECT.md` makes this project\'s decisions. The agent runs the project: it keeps the work tracker, memory, and project records current, and it does the technical work.\\n@@\\n-| Build, test, or deploy | `<Verified project commands and target environment; do not infer from this template.>` |\\n+| Build, test, or deploy | No project build or test command is verified yet. Validate an item against the sandbox with `sf project deploy validate -x <item package.xml> -o tkv2-sbx` after its manifest is ready. |\\n*** Update File: sfdx-project.json\\n@@\\n-  \\"sourceApiVersion\\": \\"XX.0\\"\\n+  \\"sourceApiVersion\\": \\"62.0\\"\\n*** Update File: delivery/deployment/full-project-deployment-template/package.xml\\n@@\\n-    <version>XX.0</version>\\n+    <version>62.0</version>\\n*** End Patch";']
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{}
+
+[PATCH] files=['PROJECT.md\\n@@\\n-- Purpose: `<Why this Salesforce project exists.>`\\n+- Purpose: Salesforce customizations for Acme (from the existing `README.md`).\\n@@\\n-| `<role>` | `<name or unknown>` | `<decision or operating responsibility>` | `<source and date>` |\\n+| Project owner | Mike | Makes project decisions | `.toolkit.json`, 2026-09-27 |\\n@@\\n-- Work tracker: `<one canonical service/project or local path>`\\n+- Work tracker: local `.work-items/` folders (Git-ignored).\\n@@\\n-- Salesforce source: `force-app/` or `<actual source path>`\\n+- Salesforce source: `force-app/` (`sfdx-project.json`).\\n*** End Patch";']
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{}
+
+[AGENT] I found one sandbox and one production org in the local Salesforce CLI, and the sandbox reports API version 62.0. I recorded those aliases and updated the project API version. The existing README only confirms that this is for Acme Salesforce customizations, so I’m leaving the business outcome and roadmap open for your direction.
+
+[CALL exec] toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-27, Toolkit V2 setup review by Codex
+
+## Now
+
+- None.
+
+## Waiting on the owner
+
+- Open Codex in this project, trust the project folder when prompted, then open /hooks and trust the Toolkit V2 hooks, including the two Salesforce guards.
+- Confirm the intended business outcome and scope for Acme CRM before the project plan is filled in.
+
+## Untracked to-dos
+
+- None.
+
+## Next session starts with
+
+- Read the project briefing and PROJECT.md. Check the Codex trust warnings with toolkit doctor. Ask for the first change to build when the owner is ready.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"ced334","wall_time_seconds":0.000002291,"exit_code":0,"original_token_count":15,"output":"Saved the current focus (20 lines). Version: 43749617b368\n"}
+
+[CALL exec] toolkit doctor
+   toolkit brief
+   git diff -- AGENTS.md PROJECT.md sfdx-project.json delivery/deployment/full-project-deployment-template/package.xml; git status --short
+   python3 -m json.tool sfdx-project.json
+   python3 -c 'import xml.etree.ElementTree as ET; ET.parse("delivery/deployment/full-project-deployment-template/package.xml"); print("package.xml parses")'
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+{"i":0,"result":{"status":"fulfilled","value":{"chunk_id":"cfade8","wall_time_seconds":0.018071708,"exit_code":1,"original_token_count":437,"output":"Toolkit doctor for Acme CRM (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r3).\n\nWarnings (3):\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r3). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.\n   Fix: The owner opens Codex in this folder and trusts it when Codex asks.\n2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).\n   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\n3. The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them.\n   Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.\n\nNotes (5):\n- AGENTS.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.\n- PROJECT.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.\n- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.\n- delivery/deployment/full-project-deployment-template/package.xml was changed by the project, so sync leaves it alone. Nothing new from the toolkit.\n- sfdx-project.json was changed by the project, so sync leaves it alone. Nothing new from the toolkit.\n\nResult: 0 problems and 3 warnings.\n"}}}
+{"i":1,"result":{"status":"fulfilled","value":{"chunk_id":"bfbdc6","wall_time_seconds":0.000003084,"exit_code":0,"original_token_count":1090,"output":"Project briefing: Acme CRM (acme-crm), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.\nProject manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r3/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.\n\nThis worktree is on branch main, which names no work item.\n\nNo item is Ready, In Progress, or In Review.\nThe tracker has no open items. A new request starts a work item with the work-on skill.\n\nCurrent focus:\nLast updated: 2026-09-27, Toolkit V2 setup review by Codex\n## Now\n- None.\n## Waiting on the owner\n- Open Codex in this project, trust the project folder when prompted, then open /hooks and trust the Toolkit V2 hooks, including t
+
+[AGENT] Toolkit V2 is set up for Acme CRM with local work items and built-in memory. I recorded the Salesforce aliases (`tkv2-sbx` and `tkv2-prod`), set API version 62.0 from the sandbox, and updated the project guide and current focus. `toolkit doctor` reports **0 problems** and three warnings that need your action:
+
+| # | Warning | Your step |
+| --- | --- | --- |
+| 1 | Codex does not trust this project folder | Open it in Codex and trust it when prompted. |
+| 2 | Toolkit V2 hooks are not trusted | Open `/hooks` in Codex and trust them. |
+| 3 | Salesforce guards are not trusted | Trust both guards in `/hooks`. |
+
+The sync check found nothing missing. The existing README is a project-owned file and was left as written. The business outcome, roadmap, and data model still need confirmed project facts; I left those prompts open. Start a new session after trusting the hooks so Codex loads them.
+
+Tell me the first thing you want built when you’re ready. Setup files are not committed. Commit them now?
+
+SKILLS OPENED (SKILL.md read): ['project-setup', 'memory-save']
+
+TOOLKIT COMMANDS:
+   toolkit doctor
+   toolkit sync --dry-run
+   toolkit config set salesforce.orgs.sandbox tkv2-sbx
+   toolkit config set salesforce.orgs.production tkv2-prod
+   toolkit memory focus
+   toolkit memory focus --text '# Current focus
+   toolkit doctor. Ask for the first change to build when the owner is ready.'
+   toolkit doctor
+   toolkit brief

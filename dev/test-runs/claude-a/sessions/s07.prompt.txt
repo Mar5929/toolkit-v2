@@ -1,0 +1,1 @@
+Before I approve WI-001, split the two cases the checker found into their own sub-item under WI-001: an empty name should print "Hello, world!", and --version should work wherever it appears in the arguments.

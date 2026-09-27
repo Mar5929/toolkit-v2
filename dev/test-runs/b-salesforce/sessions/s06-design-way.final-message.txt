@@ -1,0 +1,12 @@
+Your choices are recorded in WI-001. The [proposed design](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r3/.work-items/WI-001-add-a-tier-picklist-field-to-account/DESIGN.md) compares two built-in Salesforce options:
+
+| Option | How Tier edit access works | Main tradeoff |
+| --- | --- | --- |
+| **A — Profile field permissions** | Sales Manager and System Administrator profiles receive edit access. | Access settings require documented Setup steps in each org. |
+| **B — Dedicated permission set** | A permission set grants edit access to Sales Manager users. | Assignments must stay aligned when a user’s profile changes; the proposed automated route still needs verification in the sandbox. |
+
+I recommend **A** because the rule is tied directly to the profiles you named. Salesforce documents that [field permissions control access while page layouts control placement](https://help.salesforce.com/s/articleView?id=platform.managing_page_layouts_and_field-level_security.htm&language=en_US&type=5).
+
+The design review is complete. No Salesforce metadata has been changed. The first build step is to inspect the sandbox’s actual Account pages and effective permissions before changing anything.
+
+**Do you choose and approve Option A, or would you prefer Option B?**

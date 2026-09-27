@@ -1,0 +1,650 @@
+PROMPT: I ran the toolkit init command in a terminal and it finished. Finish setting up the project.
+THREAD: 01a0e45a-8345-7ed1-869b-620257f53deb
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll check what `toolkit init` created, run the setup checks, and finish the remaining project setup. I’m using the project-setup skill for this.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.2/skills/project-setup/SKILL.md'
+  -> ---
+name: project-setup
+description: 'Sets up Toolkit V2 in a new project or repairs one: copies the model scaffold, applies tracker, memory, and Salesforce answers, and fixes this Mac, Notion, or Hindsight. Use when the owner says "set up Toolkit V2", "set up this project", "check the setup", "update the toolkit", or "new computer".'
+---
+
+# Project setup
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+The interview wording and what setup installs: `references/interview.md`. Repair, switching, new computer, and wiring: `references/repair-and-wiring.md`. Put each `toolkit` command on its own line.
+
+## Steps
+
+1. Check the setup. If `toolkit` is not found, run `node <this skill's folder>/../../bin/toolkit machine-setup` (the skill's folder is the one holding this file). If doctor reports a computer problem, run machine-setup. Name anything the owner must do himself: `ntn login` opens a browser sign-in; trusting the hooks in Codex happens in its `/hooks` screen. Never do those for him. This skill sets up Toolkit V2, never the older claude-toolkit (its `project-init` skill); when the owner names Toolkit V2 and only `project-init` is listed, say so and use this skill's steps.
+   `toolkit doctor`
+   `toolkit machine-setup`
+2. No `.toolkit.json`: a new project. Look before asking: an empty or existing repository; `sfdx-project.json` answers the Salesforce questi
+
+[CMD exit=0] /bin/zsh -lc 'cat PROJECT.md'
+  -> # Greet CLI Sample D3
+
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts 
+
+[CMD exit=0] /bin/zsh -lc 'cat .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md'
+  -> # Humanize Anything Sent to Another Person
+
+Any text that will leave the project and be read by someone other than the owner
+is run through the `humanizer` skill before the owner sees the final version.
+Use the `unslop` skill when `humanizer` is not installed. That covers emails,
+chat messages, supp
+
+[CMD exit=1] /bin/zsh -lc 'cat SOUL.md'
+  -> cat: SOUL.md: No such file or directory
+
+
+[CMD exit=0] /bin/zsh -lc 'git status --short'
+  -> ?? .claude/
+?? .codex/
+?? .gitignore
+?? .toolkit.json
+?? AGENTS.md
+?? CLAUDE.md
+?? DECISIONS.md
+?? PROJECT-ROADMAP.md
+?? PROJECT.md
+?? ai-external-knowledge/
+?? requirements/
+?? system-guide/
+?? tests/
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit sync --dry-run'
+  -> Dry run: nothing was written.
+Changed by the project, left alone:
+  - README.md. The project had its own file before the toolkit, so the toolkit's version was never installed.
+
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for Greet CLI Sample D3 (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (2):
+- The AGENTS.md Commands table has no verified build, test, or deploy commands yet. Add them once they are known and verified.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.
+
+Result: 0 problems and 2 warnings.
+
+
+[AGENT] The toolkit files are installed. `toolkit doctor` reports no setup problems; the remaining warnings are Codex trust steps that only you can do. I’ll check the existing project files before filling any setup fields, and leave unknown facts open.
+
+[CMD exit=0] /bin/zsh -lc 'cat README.md .toolkit.json PROJECT-ROADMAP.md DECISIONS.md'
+  -> # greet
+
+A tiny command that prints a greeting.
+
+    node bin/greet.mjs Mike
+    Hello, Mike!
+
+Run the tests with `npm test`.
+{
+  "toolkit": "toolkit-v2",
+  "schema": 1,
+  "project": {
+    "name": "Greet CLI Sample D3",
+    "key": "greet-cli-sample-d3",
+    "owner": "Mike",
+    "created": "2026-09-27"
+  },
+  "tracker": {
+    "type": "local",
+    "idPrefix": "WI"
+  },
+  "memory": {
+    "type": "hindsight",
+    "approval": "onboarding"
+  },
+  "salesforce": {
+    "enabled": false
+  },
+  "hosts": [
+    "claude-code",
+    "codex"
+  ],
+  "declined": [
+    "SOUL.md"
+  ],
+  "notion": {},
+  "hindsight": {
+    "url": "http://127.0.0.1:8888",
+    "bank": "greet-cli-sample-d3"
+  },
+  "installed": {
+    ".claude/output-styles/plain-english.md": "b25d7be1b6a6034fc56d93ab80dee9fbe5a106cedacba6d6a3989d6b37946deb",
+    ".claude/rules/ai-external-knowledge.md": "c2140569c1dbe7592014f85e58f69314d09df74fe11ae48cbd47b08a3675c2e5",
+    ".claude/rules/humanize-outbound-text.md": "daa38057e72bde93a8057254d0ddcb220a4182e0636bd4f972552b53b520c561",
+    ".claude/rules/keep-work-item-current.md": "dd634b7d00ce9452eb9418ef682fe541c8a7565ff7bfe7eea5189dd997298867",
+    ".claude/rules/memory-review-and-save.md": "1a7b63b66bdbde4ee30d3dc81a7d695e43a7400b0cc9aa7a2043c9c703f7d044",
+    ".claude/rules/plain-english-artifacts.md": "692f6de8c6a824ef783d755ba6c431881c6444617dccb27a27e8bb343f22db9e",
+    ".claude/rules/publish-project-documents.md": "da1e72639a5da6daed6ab9e722cdeb5b96836d6475ce15bb989f445cc2a101ba
+
+[CMD exit=0] /bin/zsh -lc 'cat .claude/rules/publish-project-documents.md'
+  -> ---
+paths:
+  - "requirements/**"
+  - "PROJECT-ROADMAP.md"
+  - "PROJECT.md"
+  - "DECISIONS.md"
+  - "system-guide/**"
+  - "tools/permissions/PERMISSIONS-RUNBOOK.md"
+  - "ai-external-knowledge/**"
+  - "delivery/**"
+  - "**/README.md"
+---
+# Publish Project Documents
+
+- In a copied Git repository, prepar
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.2/skills/project-setup/references/repair-and-wiring.md'
+  -> # Repair, switching, a new computer, and wiring
+
+Detail for `project-setup` steps 1 and 4 to 7.
+
+## Reaching the `toolkit` command
+
+- Claude Code puts the plugin's `bin/` folder on the path, so `toolkit` works
+  in every Claude Code session.
+- Codex needs the small wrapper script that `toolkit machine-setup` writes at
+  `~/.local/bin/toolkit`. When `toolkit` is not found, run the plugin's copy
+  directly once: `node <this skill's folder>/../../bin/toolkit machine-setup`.
+  The skill's folder is the folder that holds `SKILL.md`; both hosts show that
+  path when they load the skill.
+- Node 20 or later is required. When `node --version` is older or missing,
+  tell the owner and ask before installing it.
+
+## Wiring Notion
+
+Needed when the tracker or the memory is `notion`.
+
+1. `ntn whoami`. When it fails, the owner runs `ntn login` himself: it opens a
+   browser sign-in to his Notion account. Wait for him to say it is done, then
+   run `ntn whoami` again.
+2. `toolkit notion ensure-root` checks the "AI Agent Second Brain" page and
+   the Projects database, and adds what is missing.
+3. `toolkit notion ensure-project --project-name "<name>"` creates or repairs
+   this project's row, its Work Items database (board and table views, the
+   fourteen stages, sub-items), its Memory database, and its focus and
+   glossary pages. It saves the Notion ids in `.toolkit.json`.
+4. Both commands only add. They never delete or trash anything, and they
+   refuse to write outside the "AI Agent Secon
+
+[CMD exit=0] /bin/zsh -lc 'git status'
+  -> On branch main
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.claude/
+	.codex/
+	.gitignore
+	.toolkit.json
+	AGENTS.md
+	CLAUDE.md
+	DECISIONS.md
+	PROJECT-ROADMAP.md
+	PROJECT.md
+	ai-external-knowledge/
+	requirements/
+	system-guide/
+	tests/
+
+nothing added to commit bu
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3 7ed63ce [main]
+
+
+[CMD exit=0] /bin/zsh -lc "rg --files -g '"'!node_modules'"' -g '"'!vendor'"' | head -80"
+  -> DECISIONS.md
+CLAUDE.md
+AGENTS.md
+system-guide/AREA-TEMPLATE.md
+PROJECT-ROADMAP.md
+package.json
+README.md
+requirements/AGENTS.md
+requirements/SYSTEM-DATA-MODEL.md
+requirements/system-area-template/AREA-TEMPLATE.md
+tests/TEST-PLAN-TEMPLATE.md
+PROJECT.md
+bin/greet.mjs
+test/greet.test.mjs
+ai-external-kn
+
+[CMD exit=0] /bin/zsh -lc 'git log --oneline -10'
+  -> 7ed63ce Initial commit
+
+
+[CMD exit=0] /bin/zsh -lc "rg -n '<["'^>]+>|Fill-in guide'"' AGENTS.md PROJECT.md PROJECT-ROADMAP.md requirements/SYSTEM-DATA-MODEL.md README.md"
+  -> PROJECT-ROADMAP.md:3:<!-- Fill-in guide: replace every angle-bracket prompt in the outcome, phase table, phase heading, and work-unit fields with this project's real text. Keep one overview row and one matching ## heading per phase. Under that heading, repeat the ### work-unit block for each deliver
+
+[CMD exit=0] /bin/zsh -lc 'git remote -v'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'cat package.json bin/greet.mjs test/greet.test.mjs requirements/SYSTEM-DATA-MODEL.md requirements/AGENTS.md'
+  -> {
+  "name": "greet-cli",
+  "version": "0.1.0",
+  "description": "A tiny command that prints a greeting.",
+  "type": "module",
+  "bin": { "greet": "bin/greet.mjs" },
+  "scripts": { "test": "node --test test/*.test.mjs" }
+}
+#!/usr/bin/env node
+// greet: prints a friendly greeting.
+// Usage: greet [nam
+
+[CMD exit=0] /bin/zsh -lc 'toolkit hindsight service status'
+  -> Service: local.toolkit-v2.hindsight
+Plist: /Users/michaelrihm/Library/LaunchAgents/local.toolkit-v2.hindsight.plist (installed)
+launchd: loaded and running, pid 99102
+Server at http://127.0.0.1:8888: healthy
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit hindsight health'
+  -> Hindsight at http://127.0.0.1:8888: healthy, version 0.10.1.
+This project's bank greet-cli-sample-d3: 0 documents, last write never.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit hindsight ensure-bank'
+  -> The Hindsight bank greet-cli-sample-d3 at http://127.0.0.1:8888 already exists and belongs to this project.
+Its settings were already right; nothing changed.
+
+
+[CMD exit=0] /bin/zsh -lc 'ls -la system-guide .work-items .codex'
+  -> .codex:
+total 8
+drwxr-xr-x   4 michaelrihm  wheel  128 Sep 27 15:32 .
+drwxr-xr-x  21 michaelrihm  wheel  672 Sep 27 15:32 ..
+-rw-r--r--   1 michaelrihm  wheel  929 Sep 27 15:32 config.toml
+drwxr-xr-x   3 michaelrihm  wheel   96 Sep 27 15:32 rules
+
+.work-items:
+total 16
+drwxr-xr-x   5 michaelrihm  wh
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.2/skills/publish-docs/SKILL.md'
+  -> ---
+name: publish-docs
+description: "Commits and pushes an agreed edit to Git-tracked project documents (requirements/, system-guide/, DECISIONS.md, PROJECT.md, PROJECT-ROADMAP.md, ai-external-knowledge/, delivery/) to the default branch from an isolated worktree. Use after such an edit. Not for code, rules, skills, or .memory/."
+---
+
+# Publish a documentation save
+
+Save an agreed change to Git-tracked project documents from its own temporary
+worktree, and push it straight to the default branch with no pull request.
+The project's rule for this is `.claude/rules/publish-project-documents.md`;
+its `paths` list names the documents this skill saves.
+
+1. **Confirm it is documentation in an allowed path**, not code, rules, skills,
+   hooks, settings, `.memory/`, or `.work-items/` (list below).
+2. **Start a save workspace** from the project, with the script in the
+   `scripts/` folder beside this `SKILL.md`:
+
+   ```text
+   node <this skill's folder>/scripts/publish-docs.mjs start --branch <default-branch> -- <file> [more files]
+   ```
+
+   It fetches the remote, creates a separate sparse worktree beside the project,
+   and prints its path. Work only in that path for this save.
+3. **Make the edit there and stage the files by name.** Read the full staged
+   diff. Add `DECISIONS.md` rows only with `toolkit decision add`, run there.
+   After a change under `ai-external-knowledge/`, regenerate its index there
+   ("Step 3 in detail") and stage `ai-external-knowledge/INDEX.md` too.
+4. **Pub
+
+[CMD exit=0] /bin/zsh -lc 'node bin/greet.mjs Mike'
+  -> Hello, Mike!
+
+
+[CMD exit=0] /bin/zsh -lc 'node bin/greet.mjs'
+  -> Hello, world!
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit brief'
+  -> Project briefing: Greet CLI Sample D3 (greet-cli-sample-d3), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: the local Hindsight server. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The tracker has no open items. A new request starts a work item with the work-on skill.
+
+Project memory (hindsight): 0 records, from the local copy. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off. Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+- The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards). Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+A
+
+[CMD exit=0] /bin/zsh -lc 'npm test'
+  -> ✔ greets the world by default (0.491ms)
+✔ greets a name (0.043667ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 56.1385
+
+
+[AGENT] The CLI and its tests are verified: it prints `Hello, Mike!` for a name, `Hello, world!` by default, and both tests pass. I’ll use those facts to fill the project guides. The existing README will stay as written.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.2/skills/memory-save/SKILL.md'
+  -> ---
+name: memory-save
+description: 'Saves, corrects, or forgets one lasting fact in project memory, and sends anything that belongs elsewhere to its home. Use when the owner says "remember this", "from now on", "always do X", "never do X", "forget that", or "remind me", corrects the agent, or a hook says to save.'
+---
+
+# Memory save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Record format, types, focus, and glossary: `references/record-format.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Put each `toolkit` command on its own line. In Codex, a `toolkit` command joined to anything else (`&&`, `;`, a pipe, a heredoc) or run from a script runs inside the sandbox, which blocks Hindsight and Notion: run it alone. Text: give it in the command with `--body "<text>"` (a save) or `--text "<text>"` (the focus or the glossary), so no file is needed. For a long text, in Claude Code pass it on standard input (`--set-file -` or `--body-file -` with a heredoc); in Codex make a new folder for each save with `mktemp -d`, write the file there, and delete the file and the folder right after the command succeeds. Never use a fixed name such as `/tmp/focus.md`: another session could write the same file.
+
+## Steps
+
+1. Decide the home first, with the memory criteria (`.memory/memory-criteria.md` with built-in memory; othe
+
+[FILE_CHANGE] [{"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3/AGENTS.md", "kind": "update"}, {"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3/PROJECT.md", "kind": "update"}]
+
+[FILE_CHANGE] [{"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3/PROJECT-ROADMAP.md", "kind": "delete"}]
+
+[FILE_CHANGE] [{"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3/PROJECT-ROADMAP.md", "kind": "add"}]
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> There is no current focus yet. Set it with toolkit memory focus --set-file <file>.
+
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.2/skills/memory-save/references/record-format.md'
+  -> # Memory records, current focus, and glossary
+
+Detail for `memory-save`, `memory-find`, and `memory-tidy`. The approval
+policy is not here; it is written only in `memory-save` step 3.
+
+The formats are the model project's `.memory/` formats: the topic template
+(`project_topic_template.md`), `CURRENT_FOCUS.md`, `MEMORY.md`,
+`memory-criteria.md`, and `terminology-glossary.md`. With built-in memory the
+project has its own copies in `.memory/`; its `AGENTS.md` there is the folder's
+rule. Every backend (built-in, Hindsight, Notion) keeps the same fields and
+the same body. Only the `toolkit memory` commands write memory.
+
+## What belongs in memory
+
+With built-in memory, `.memory/memory-criteria.md` is the project's selection
+policy. Read it before choosing. `feedback` memories about what is worth
+saving override it. With Hindsight or Notion memory there is no
+`.memory/` folder, so the policy is the text below, copied word for word from
+the model's `.memory/memory-criteria.md` (its "Default test for lasting
+memory" and "Never save as lasting memory" sections). Where a project's own
+`memory-criteria.md` differs from this copy, the project's file wins.
+
+Save a topic when it concerns this project, has a credible source, would matter in a future session, would be costly or unreliable to reconstruct, and has no better maintained owner. Prefer updating an existing topic. A short pointer to an authoritative record can qualify when future sessions would otherwise miss that record.
+
+| Type an
+
+[CMD exit=0] /bin/zsh -lc 'mktemp -d'
+  -> /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.z1idvW5Nqv
+
+
+[FILE_CHANGE] [{"path": "/var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.z1idvW5Nqv/focus.md", "kind": "add"}]
+
+[FILE_CHANGE] [{"path": "/var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.z1idvW5Nqv/focus.md", "kind": "update"}]
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.z1idvW5Nqv/focus.md'
+  -> Saved the current focus (20 lines). Version: 2e991cefa6c2
+
+
+[CMD exit=1] /bin/zsh -lc 'rm /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.z1idvW5Nqv/focus.md /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.z1idvW5Nqv/.unused'
+  -> rm: /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.z1idvW5Nqv/.unused: No such file or directory
+
+
+[CMD exit=0] /bin/zsh -lc 'rmdir /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.z1idvW5Nqv'
+  -> 
+
+[AGENT] The setup guides now describe the verified CLI behavior and commands. I left the shared data model template unfilled because no data model requirements have been approved. I also recorded the Codex trust steps in the current focus for the next session.
+
+[CMD exit=0] /bin/zsh -lc "rg -n '<["'^>]+>|Fill-in guide'"' AGENTS.md PROJECT.md PROJECT-ROADMAP.md requirements/SYSTEM-DATA-MODEL.md"
+  -> requirements/SYSTEM-DATA-MODEL.md:3:<!-- Fill-in guide: replace this comment with verified, accepted data model requirements for the whole system. Use the sections below for each shared entity or relationship; add one block per real item. Link the approving work item and date. Do not copy an unappro
+
+[CMD exit=0] /bin/zsh -lc 'git status --short'
+  -> ?? .claude/
+?? .codex/
+?? .gitignore
+?? .toolkit.json
+?? AGENTS.md
+?? CLAUDE.md
+?? DECISIONS.md
+?? PROJECT-ROADMAP.md
+?? PROJECT.md
+?? ai-external-knowledge/
+?? requirements/
+?? system-guide/
+?? tests/
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit brief'
+  -> Project briefing: Greet CLI Sample D3 (greet-cli-sample-d3), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: the local Hindsight server. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The tracker has no open items. A new request starts a work item with the work-on skill.
+
+Current focus:
+Last updated: 2026-09-27, project setup, agent
+## Now
+None.
+## Waiting on the owner
+- In Codex, trust this project folder when prompted, then open `/hooks` and trust the Toolkit V2 hooks; check at the next session.
+- Start a new session after setup so Claude Code loads the project settings and output style; check at the next session.
+## Untracked to-dos
+None.
+## Next session starts with
+- Read `AGENTS.md` and `PROJECT.md`; ask for the first project change and create its work item.
+
+Project memory (hindsight): 0 records, from the local copy. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-a
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-27, project setup, agent
+
+## Now
+
+None.
+
+## Waiting on the owner
+
+- In Codex, trust this project folder when prompted, then open `/hooks` and trust the Toolkit V2 hooks; check at the next session.
+- Start a new session after setup so Claude Code loads the project settings and output style; check at the next session.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Read `AGENTS.md` and `PROJECT.md`; ask for the first project change and create its work item.
+
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for Greet CLI Sample D3 (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (4):
+- AGENTS.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.
+
+Result: 0 problems and 2 warnings.
+
+
+[AGENT] Toolkit V2 setup is written and checked. I filled [AGENTS.md](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3/AGENTS.md), [PROJECT.md](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3/PROJECT.md), and the roadmap with verified facts. The local Hindsight bank is healthy, and both tests pass. `toolkit doctor` reports **0 problems**.
+
+Two Codex trust warnings need your action: open Codex in this folder and trust it when prompted, then open `/hooks` and trust the Toolkit V2 hooks. Start a new session afterward so the project settings load. The shared data model remains a template until requirements are approved; your existing README was left as written.
+
+Tell me the first thing you want built. Setup files are not committed. Commit them now?
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 862348, "cached_input_tokens": 818560, "cache_write_input_tokens": 0, "output_tokens": 6153, "reasoning_output_tokens": 1189}}
+
+SKILLS OPENED: ['project-setup', 'publish-docs', 'memory-save']
+
+[HOOK CONTEXT ord=9] Project briefing: Greet CLI Sample D3 (greet-cli-sample-d3), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: the local Hindsight server. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The tracker has no open items. A new request starts a work item with the work-on skill.
+
+Project memory (hindsight): 0 records. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Always-on rules. Claude Code loads them by itself; in Codex, each one is read at session start:
+- .claude/rules/humanize-outbound-text.md: Humanize Anything Sent to Another Person
+- .claude/rules/keep-work-item-current.md: Keep the Active Work Item Accurate
+- .claude/rules/memory-review-and-save.md: Review and Save Project Memory
+- .claude/rules/plain-english-artifacts.md: Write Artifacts in Plain English
+- .claude/rules/session-
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.2/skills/project-setup/SKILL.md","workdir":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3"}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "---\nname: project-setup\ndescription: 'Sets up Toolkit V2 in a new project or repairs one: copies the model scaffold, applies tracker, memory, and Salesforce answers, and fixes this Mac, Notion, or Hindsight. Use when the owner says \"set up Toolkit V2\", \"set up this project\", \"check the setup\", \"update the toolkit\", or \"new computer\".'\n---\n\n# Project setup\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nThe interview wording and what setup installs: `references/interview.md`. Repair, switching, new computer, and wiring: `references/repair-and-wiring.md`. Put each `toolkit` command on its own line.\n\n## Steps\n\n1. Check the setup. If `toolkit` is not found, run `node <this skill's folder>/../../bin/toolkit machine-setup` (the skill's folder is the one holding this file). If doctor reports a computer problem, run machine-setup. Name anything the owner must do himself: `ntn login` opens a browser sign-in; trusting the hooks in Codex happens in its `/hooks` screen. Never do those for him. This skill sets up Toolkit V2, never the older claude-toolkit (its `project-init` skill); when the owner names Toolkit V2 and only `project-init` is listed, say so and use this skill's steps.\n   `toolkit doctor`\n   `toolkit machine-setup`\n2. No `.toolkit.json`: a new project. Look before asking: an empty or existing repository; `sfdx-project.json` answers the Salesforce question in advance. Then ask one question at a time, each with a recommendation, in this order: the project name (with its key, id prefix, and owner name, confirmed in one line); the tracker (local folders, Notion, GitHub Issues, Jira); the memory (built-in `.memory/`, local Hindsight, Notion); Salesforce or not, and for Salesforce the sandbox and production org aliases; whether he wants `SOUL.md` (a no becomes `--decline SOUL.md`, so no later sync brings it back).\n3. Run init with the answers (the second line, with `--salesforce`, for a Salesforce project; add `--decline SOUL.md` after a no). Setup copies the model scaffold and applies your answers: it copies the model project's folders and files, keeps only the blocks of `AGENTS.md`, `README.md`, and `PROJECT.md` that match the answers, fills the project name, writes the rules list and `.toolki
+
+[CALL] const cmds=["cat SOUL.md","cat PROJECT.md","cat .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md","toolkit doctor","toolkit sync --dry-run","git status --short"]; const r=await Promise.allSettled(cmds.map(cmd=>tools.exec_command({cmd,workdir:"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3",max_output_tokens:4000}))); r.forEach((x,i)=>text(JSON.stringify({cmd:cmds[i],result:x.status==="fulfilled"?x.value.output:String(x.reason)})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"cmd\":\"cat SOUL.md\",\"result\":\"cat: SOUL.md: No such file or directory\\n\"}"}, {"type": "input_text", "text": "{\"cmd\":\"cat PROJECT.md\",\"result\":\"# Greet CLI Sample D3\\n\\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\\n\\n## Purpose and intended outcome\\n\\n- Purpose: `<Why this project exists.>`\\n- Intended outcome: `<What success means to the owner and users.>`\\n\\n## Scope and boundaries\\n\\n- In scope: `<Business capabilities or systems this project owns.>`\\n- Outside scope: `<Important exclusions or adjacent owners.>`\\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\\n\\n## Systems and environments\\n\\n| System or org | Purpose | Environment | Source of truth | Access notes |\\n| --- | --- | --- | --- | --- |\\n| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |\\n\\n## People and ownership\\n\\n| Role | Person or team | Responsibility | Source / last confirmed |\\n| --- | --- | --- | --- |\\n| `<role>` | `<name or unknown>` | `<decision or operating responsibility>` | `<source and date>` |\\n\\n## Work and project records\\n\\n- Work tracker: `<one canonical service/project or local path>`\\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\\n- Project decisions: [DECISIONS.md](DECISIONS.md)\\n- Functional requirements: [requirements/](requirements/)\\n- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`\\n- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`\\n- Memory: this project's bank on the local Hindsight server (the setup choice is in `.toolkit.json`)\\n- Memory backup or sync: `<Owner-approved destination and restore procedure, outside this repository>`\\n\\n## Resources and project paths\\n\\n- Tests and checks: `<actual commands and locations>`\\n- Outside references: `<source register or approved location>`\\n\\n## Operating conventions\\n\\n<Write only stable project-specific conventions here; link the source or 
+
+[CALL] const cmds=["cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.2/skills/project-setup/references/repair-and-wiring.md","cat README.md .toolkit.json PROJECT-ROADMAP.md DECISIONS.md","rg --files -g '!node_modules' -g '!vendor' | head -80","git worktree list","git status","git fetch origin","git log --oneline -10","cat .claude/rules/publish-project-documents.md"]; const r=await Promise.allSettled(cmds.map(cmd=>tools.exec_command({cmd,workdir:"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3",max_output_tokens:5000}))); r.forEach((x,i)=>text(JSON.stringify({cmd:cmds[i],result:x.status==="fulfilled"?x.value.output:String(x.reason)})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"cmd\":\"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.2/skills/project-setup/references/repair-and-wiring.md\",\"result\":\"# Repair, switching, a new computer, and wiring\\n\\nDetail for `project-setup` steps 1 and 4 to 7.\\n\\n## Reaching the `toolkit` command\\n\\n- Claude Code puts the plugin's `bin/` folder on the path, so `toolkit` works\\n  in every Claude Code session.\\n- Codex needs the small wrapper script that `toolkit machine-setup` writes at\\n  `~/.local/bin/toolkit`. When `toolkit` is not found, run the plugin's copy\\n  directly once: `node <this skill's folder>/../../bin/toolkit machine-setup`.\\n  The skill's folder is the folder that holds `SKILL.md`; both hosts show that\\n  path when they load the skill.\\n- Node 20 or later is required. When `node --version` is older or missing,\\n  tell the owner and ask before installing it.\\n\\n## Wiring Notion\\n\\nNeeded when the tracker or the memory is `notion`.\\n\\n1. `ntn whoami`. When it fails, the owner runs `ntn login` himself: it opens a\\n   browser sign-in to his Notion account. Wait for him to say it is done, then\\n   run `ntn whoami` again.\\n2. `toolkit notion ensure-root` checks the \\\"AI Agent Second Brain\\\" page and\\n   the Projects database, and adds what is missing.\\n3. `toolkit notion ensure-project --project-name \\\"<name>\\\"` creates or repairs\\n   this project's row, its Work Items database (board and table views, the\\n   fourteen stages, sub-items), its Memory database, and its focus and\\n   glossary pages. It saves the Notion ids in `.toolkit.json`.\\n4. Both commands only add. They never delete or trash anything, and they\\n   refuse to write outside the \\\"AI Agent Second Brain\\\" page.\\n5. In Codex, Notion calls need the network, which Codex's sandbox turns off.\\n   The project's `.codex/rules/toolkit.rules` lets `toolkit` commands run\\n   outside the sandbox; when it is missing, Codex asks the owner to approve\\n   each call.\\n\\n## Wiring Hindsight\\n\\nNeeded when the memory is `hindsight`. Hindsight runs only on this Mac, never\\nin Hindsight Cloud, and never in Docker.\\n\\n1. `toolkit hindsight health`: the local server at `127.0.0.1:8888` answers.\\n2. When it does not: `toolkit hindsight service status`. Not installed: ask,\\n   then `toolkit hindsight service install`. Installed but stopped: ask, then
+
+[CALL] const cmds=["cat package.json bin/greet.mjs test/greet.test.mjs requirements/SYSTEM-DATA-MODEL.md requirements/AGENTS.md","git remote -v","toolkit hindsight health","toolkit hindsight service status","toolkit hindsight ensure-bank","rg -n '<[^>]+>|Fill-in guide' AGENTS.md PROJECT.md PROJECT-ROADMAP.md requirements/SYSTEM-DATA-MODEL.md README.md"]; const r=await Promise.allSettled(cmds.map(cmd=>tools.exec_command({cmd,workdir:"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3",max_output_tokens:4000}))); r.forEach((x,i)=>text(JSON.stringify({cmd:cmds[i],result:x.status==="fulfilled"?x.value.output:String(x.reason)})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"cmd\":\"cat package.json bin/greet.mjs test/greet.test.mjs requirements/SYSTEM-DATA-MODEL.md requirements/AGENTS.md\",\"result\":\"{\\n  \\\"name\\\": \\\"greet-cli\\\",\\n  \\\"version\\\": \\\"0.1.0\\\",\\n  \\\"description\\\": \\\"A tiny command that prints a greeting.\\\",\\n  \\\"type\\\": \\\"module\\\",\\n  \\\"bin\\\": { \\\"greet\\\": \\\"bin/greet.mjs\\\" },\\n  \\\"scripts\\\": { \\\"test\\\": \\\"node --test test/*.test.mjs\\\" }\\n}\\n#!/usr/bin/env node\\n// greet: prints a friendly greeting.\\n// Usage: greet [name]\\nexport function greet(name = 'world') {\\n  return `Hello, ${name}!`;\\n}\\n\\nif (import.meta.url === `file://${process.argv[1]}`) {\\n  const args = process.argv.slice(2);\\n  console.log(greet(args[0]));\\n}\\nimport { test } from 'node:test';\\nimport assert from 'node:assert/strict';\\nimport { greet } from '../bin/greet.mjs';\\n\\ntest('greets the world by default', () => {\\n  assert.equal(greet(), 'Hello, world!');\\n});\\n\\ntest('greets a name', () => {\\n  assert.equal(greet('Mike'), 'Hello, Mike!');\\n});\\n# System Data Model\\n\\n<!-- Fill-in guide: replace this comment with verified, accepted data model requirements for the whole system. Use the sections below for each shared entity or relationship; add one block per real item. Link the approving work item and date. Do not copy an unapproved technical design here. Delete this guide when the first accepted content is added. -->\\n\\n## Scope and sources\\n\\n<State which system and business areas this shared model covers, the accepted work items, and the date it was last checked.>\\n\\n## Entities and relationships\\n\\n### <Entity or relationship name>\\n\\n- Business meaning: <What this represents to users.>\\n- Required fields or links: <Accepted fields, identifiers, and relationships.>\\n- Rules and exceptions: <Required constraints and when they do not apply.>\\n- Source and approval: <Work item or owner decision, approver, and date.>\\n\\n## Shared definitions and access\\n\\n<Definitions, ownership, privacy, and access requirements that apply across areas; link area-specific requirements instead of copying them.>\\n\\n## Acceptance evidence\\n\\n<Link to checks or observed behavior that confirm the accepted model.>\\n\\n## Change history\\n\\n- <Date, accepted change, and source work item.>\\n# Functional requirements\\n\\nKeep one main
+
+[CALL] const cmds=["npm test","node bin/greet.mjs Mike","node bin/greet.mjs","ls -la system-guide .work-items .codex","toolkit brief","cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.2/skills/publish-docs/SKILL.md"]; const r=await Promise.allSettled(cmds.map(cmd=>tools.exec_command({cmd,workdir:"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3",max_output_tokens:2500}))); r.forEach((x,i)=>text(JSON.stringify({cmd:cmds[i],result:x.status==="fulfilled"?x.value.output:String(x.reason)})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"cmd\":\"npm test\",\"result\":\"\\n> greet-cli@0.1.0 test\\n> node --test test/*.test.mjs\\n\\n\u2714 greets the world by default (0.491ms)\\n\u2714 greets a name (0.043667ms)\\n\u2139 tests 2\\n\u2139 suites 0\\n\u2139 pass 2\\n\u2139 fail 0\\n\u2139 cancelled 0\\n\u2139 skipped 0\\n\u2139 todo 0\\n\u2139 duration_ms 56.1385\\n\"}"}, {"type": "input_text", "text": "{\"cmd\":\"node bin/greet.mjs Mike\",\"result\":\"Hello, Mike!\\n\"}"}, {"type": "input_text", "text": "{\"cmd\":\"node bin/greet.mjs\",\"result\":\"Hello, world!\\n\"}"}, {"type": "input_text", "text": "{\"cmd\":\"ls -la system-guide .work-items .codex\",\"result\":\".codex:\\ntotal 8\\ndrwxr-xr-x   4 michaelrihm  wheel  128 Sep 27 15:32 .\\ndrwxr-xr-x  21 michaelrihm  wheel  672 Sep 27 15:32 ..\\n-rw-r--r--   1 michaelrihm  wheel  929 Sep 27 15:32 config.toml\\ndrwxr-xr-x   3 michaelrihm  wheel   96 Sep 27 15:32 rules\\n\\n.work-items:\\ntotal 16\\ndrwxr-xr-x   5 michaelrihm  wheel  160 Sep 27 15:32 .\\ndrwxr-xr-x  21 michaelrihm  wheel  672 Sep 27 15:32 ..\\n-rw-r--r--   1 michaelrihm  wheel  195 Sep 27 15:32 .toolkit-state.json\\n-rw-r--r--   1 michaelrihm  wheel  326 Sep 27 15:32 DASHBOARD.md\\ndrwxr-xr-x   4 michaelrihm  wheel  128 Sep 27 15:32 work-item-template\\n\\nsystem-guide:\\ntotal 8\\ndrwxr-xr-x   3 michaelrihm  wheel    96 Sep 27 15:32 .\\ndrwxr-xr-x  21 michaelrihm  wheel   672 Sep 27 15:32 ..\\n-rw-r--r--   1 michaelrihm  wheel  1283 Sep 27 15:32 AREA-TEMPLATE.md\\n\"}"}, {"type": "input_text", "text": "{\"cmd\":\"toolkit brief\",\"result\":\"Project briefing: Greet CLI Sample D3 (greet-cli-sample-d3), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: the local Hindsight server. Salesforce: no. Hosts: Claude Code and Codex.\\nProject manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.\\n\\nThis worktree is on branch main, which names no work item.\\n\\nNo item is Ready, In Progress, or In Review.\\nThe tracker has no open items. A new request starts a work item with the work-on skill.\\n\\nProject memory (hindsight): 0 records, from the local copy. toolkit memory find searches it; toolkit memory get <key> reads one record.\\n\\nSetup warnings (toolki
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.2/skills/memory-save/SKILL.md","workdir":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3",max_output_tokens:5000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "---\nname: memory-save\ndescription: 'Saves, corrects, or forgets one lasting fact in project memory, and sends anything that belongs elsewhere to its home. Use when the owner says \"remember this\", \"from now on\", \"always do X\", \"never do X\", \"forget that\", or \"remind me\", corrects the agent, or a hook says to save.'\n---\n\n# Memory save\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nRecord format, types, focus, and glossary: `references/record-format.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Put each `toolkit` command on its own line. In Codex, a `toolkit` command joined to anything else (`&&`, `;`, a pipe, a heredoc) or run from a script runs inside the sandbox, which blocks Hindsight and Notion: run it alone. Text: give it in the command with `--body \"<text>\"` (a save) or `--text \"<text>\"` (the focus or the glossary), so no file is needed. For a long text, in Claude Code pass it on standard input (`--set-file -` or `--body-file -` with a heredoc); in Codex make a new folder for each save with `mktemp -d`, write the file there, and delete the file and the folder right after the command succeeds. Never use a fixed name such as `/tmp/focus.md`: another session could write the same file.\n\n## Steps\n\n1. Decide the home first, with the memory criteria (`.memory/memory-criteria.md` with built-in memory; otherwise `references/record-format.md`). Memory holds a lasting preference, correction, fact about the project or the owner, or a hard-to-find reference. Elsewhere: project work goes to `work-on`; a decision for the whole project to `work-decide` (`DECISIONS.md`); delivered behavior to `requirements/`; how a change is built to the item's design; verified current structure to `system-guide/`; outside documentation to `ai-external-knowledge/`; a standing rule for how agents work here is proposed as a rule-file change; an owner to-do with no work item goes to the current focus \"Untracked to-dos\"; a project term goes to the glossary. A short memory pointer to a hard-to-find record is allowed; never copy its body.\n2. Search first and update the existing record rather than add a duplicate.\n   `toolkit memory find \"<topic>\"`\n   `toolkit memor
+
+[CALL] text(await tools.apply_patch("*** Begin Patch\n*** Update File: AGENTS.md\n@@\n-<!-- Project setup fill-in guide: toolkit init replaces <Project name>, keeps only the blocks for the tracker, memory system, and Salesforce choice made at setup, and writes the rules list. Then replace the one-sentence outcome below and the \"Build, test, or deploy\" row under Commands with this project's confirmed values. Change paths only when the installed folder differs. Remove this guide and every angle-bracket prompt before handing the guide to a new project agent. -->\n-\n-<One sentence describing this project and its outcome.> The owner named in `PROJECT.md` makes this project's decisions. The agent runs the project: it keeps the work tracker, memory, and project records current, and it does the technical work.\n+This project provides a small Node.js command that prints a greeting for a supplied name or for the world by default. The owner named in `PROJECT.md` makes this project's decisions. The agent runs the project: it keeps the work tracker, memory, and project records current, and it does the technical work.\n@@\n-| Build, test, or deploy | `<Verified project commands and target environment; do not infer from this template.>` |\n+| Run the CLI | `node bin/greet.mjs Mike` prints `Hello, Mike!`; without a name it prints `Hello, world!`. |\n+| Test | `npm test` runs the two Node.js tests in `test/`. |\n+| Deploy | No deployment command or target is defined. |\n*** Update File: PROJECT.m
+  [OUT] [{"type": "input_text", "text": "Script failed\nWall time 0.1 seconds\nOutput:\n"}, {"type": "input_text", "text": "Script error:\napply_patch verification failed: invalid patch: multiple operations target /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3/PROJECT-ROADMAP.md"}]
+
+[CALL] text(await tools.apply_patch("*** Begin Patch\n*** Update File: AGENTS.md\n@@\n-<!-- Project setup fill-in guide: toolkit init replaces <Project name>, keeps only the blocks for the tracker, memory system, and Salesforce choice made at setup, and writes the rules list. Then replace the one-sentence outcome below and the \"Build, test, or deploy\" row under Commands with this project's confirmed values. Change paths only when the installed folder differs. Remove this guide and every angle-bracket prompt before handing the guide to a new project agent. -->\n-\n-<One sentence describing this project and its outcome.> The owner named in `PROJECT.md` makes this project's decisions. The agent runs the project: it keeps the work tracker, memory, and project records current, and it does the technical work.\n+This project provides a small Node.js command that prints a greeting for a supplied name or for the world by default. The owner named in `PROJECT.md` makes this project's decisions. The agent runs the project: it keeps the work tracker, memory, and project records current, and it does the technical work.\n@@\n-| Build, test, or deploy | `<Verified project commands and target environment; do not infer from this template.>` |\n+| Run the CLI | `node bin/greet.mjs Mike` prints `Hello, Mike!`; without a name it prints `Hello, world!`. |\n+| Test | `npm test` runs the two Node.js tests in `test/`. |\n+| Deploy | No deployment command or target is defined. |\n*** Update File: PROJECT.m
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{}"}]
+
+[CALL] text(await tools.apply_patch("*** Begin Patch\n*** Delete File: PROJECT-ROADMAP.md\n*** End Patch"));
+
+
+[CALL] text(await tools.apply_patch("*** Begin Patch\n*** Add File: PROJECT-ROADMAP.md\n+# Project roadmap\n+\n+## Project outcome\n+\n+The current CLI prints a greeting for a supplied name or for the world by default. No further project outcome has been approved.\n+\n+## Phases and work units\n+\n+No phases or work units have been agreed. Add them when the owner defines the next deliverable, and link each work unit to its work item ID.\n+\n+## Open project-level planning questions\n+\n+None open.\n+\n+## Planning changes\n+\n+None recorded.\n*** End Patch"));
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus","workdir":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3"}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "There is no current focus yet. Set it with toolkit memory focus --set-file <file>.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.2/skills/memory-save/references/record-format.md","workdir":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3",max_output_tokens:4000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "# Memory records, current focus, and glossary\n\nDetail for `memory-save`, `memory-find`, and `memory-tidy`. The approval\npolicy is not here; it is written only in `memory-save` step 3.\n\nThe formats are the model project's `.memory/` formats: the topic template\n(`project_topic_template.md`), `CURRENT_FOCUS.md`, `MEMORY.md`,\n`memory-criteria.md`, and `terminology-glossary.md`. With built-in memory the\nproject has its own copies in `.memory/`; its `AGENTS.md` there is the folder's\nrule. Every backend (built-in, Hindsight, Notion) keeps the same fields and\nthe same body. Only the `toolkit memory` commands write memory.\n\n## What belongs in memory\n\nWith built-in memory, `.memory/memory-criteria.md` is the project's selection\npolicy. Read it before choosing. `feedback` memories about what is worth\nsaving override it. With Hindsight or Notion memory there is no\n`.memory/` folder, so the policy is the text below, copied word for word from\nthe model's `.memory/memory-criteria.md` (its \"Default test for lasting\nmemory\" and \"Never save as lasting memory\" sections). Where a project's own\n`memory-criteria.md` differs from this copy, the project's file wins.\n\nSave a topic when it concerns this project, has a credible source, would matter in a future session, would be costly or unreliable to reconstruct, and has no better maintained owner. Prefer updating an existing topic. A short pointer to an authoritative record can qualify when future sessions would otherwise miss that record.\n\n| Type and filename | Usually worth retaining | Route or reject instead |\n| --- | --- | --- |\n| `user_<topic>.md` | Relevant role, responsibility, working preference, or communication need the owner stated | Personal judgments, irrelevant biography, private details |\n| `feedback_<topic>.md` | Repeated or standing correction to how the agent should work; confirmed selection lesson | One-off irritation, a rejected fact restated as policy, an instruction already in `AGENTS.md` |\n| `project_<topic>.md` | Durable project constraint, rationale, technical landmark, or proven costly fix | A decision for the whole project (`DECISIONS.md`), code summary, schema copy, active ticket status, accepted requirement or design body |\n| `reference_<topic>.md` | Hard-to-rediscover route to a source, system, dashboard, or decision record, with why to open it | Entir
+
+[CALL] const r=await tools.exec_command({cmd:"mktemp -d","workdir":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3"}); const p=r.output.trim(); store("focusdir",p); text(p);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "/var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.z1idvW5Nqv"}]
+
+[CALL] const p=load("focusdir"); text(await tools.apply_patch(`*** Begin Patch
+*** Add File: ${p}/focus.md
++# Current focus
++
++Last updated: 2026-09-27, project setup, agent
++
++## Now
++
++None.
++
++## Waiting on the owner
++
++- In Codex, trust this project folder when prompted, then open \`/hooks\` and trust the Toolkit V2 hooks; check at the next session.
++
++## Untracked to-dos
++
++None.
++
++## Next session starts with
++
++- Read \`AGENTS.md\` and \`PROJECT.md\`; ask for the first project change and create its work item.
+*** End Patch`));
+
+
+[CALL] const p=load("focusdir"); text(await tools.apply_patch(`*** Begin Patch
+*** Update File: ${p}/focus.md
+@@
+ - In Codex, trust this project folder when prompted, then open \`/hooks\` and trust the Toolkit V2 hooks; check at the next session.
++- Start a new session after setup so Claude Code loads the project settings and output style; check at the next session.
+*** End Patch`));
+
+
+[CALL] const p=load("focusdir"); const r=await tools.exec_command({cmd:`toolkit memory focus --set-file ${p}/focus.md`,workdir:"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3"}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved the current focus (20 lines). Version: 2e991cefa6c2\n"}]
+
+[CALL] const p=load("focusdir"); const r=await tools.exec_command({cmd:`rm ${p}/focus.md ${p}/.unused`,workdir:"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3"}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "rm: /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.z1idvW5Nqv/.unused: No such file or directory\n"}]
+
+[CALL] const p=load("focusdir"); const r=await tools.exec_command({cmd:`rmdir ${p}`,workdir:"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3"}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": ""}]
+
+[CALL] const cmds=["toolkit doctor","toolkit memory focus","toolkit brief","rg -n '<[^>]+>|Fill-in guide' AGENTS.md PROJECT.md PROJECT-ROADMAP.md requirements/SYSTEM-DATA-MODEL.md","git status --short"]; const r=await Promise.allSettled(cmds.map(cmd=>tools.exec_command({cmd,workdir:"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3",max_output_tokens:2400}))); r.forEach((x,i)=>text(JSON.stringify({cmd:cmds[i],result:x.status==="fulfilled"?x.value.output:String(x.reason)})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"cmd\":\"toolkit doctor\",\"result\":\"Toolkit doctor for Greet CLI Sample D3 (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3).\\n\\nWarnings (2):\\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/d-local-hindsight-r3). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.\\n   Fix: The owner opens Codex in this folder and trusts it when Codex asks.\\n2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).\\n   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\\n\\nNotes (4):\\n- AGENTS.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.\\n- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.\\n- PROJECT.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.\\n- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.\\n\\nResult: 0 problems and 2 warnings.\\n\"}"}, {"type": "input_text", "text": "{\"cmd\":\"toolkit memory focus\",\"result\":\"# Current focus\\n\\nLast updated: 2026-09-27, project setup, agent\\n\\n## Now\\n\\nNone.\\n\\n## Waiting on the owner\\n\\n- In Codex, trust this project folder when prompted, then open `/hooks` and trust the Toolkit V2 hooks; check at the next session.\\n- Start a new session after setup so Claude Code loads the project settings and output style; check at the next session.\\n\\n## Untracked to-dos\\n\\nNone.\\n\\n## Next session starts with\\n\\n- Read `AGENTS.md` and `PROJECT.md`; ask for the first project change and create its work item.\\n\"}"}, {"type": "input_text", "text": "{\"cmd\":\"toolkit brief\",\"result\":\"Project briefing: Greet CLI Sample D3 (greet-cli-sample-d3), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: the local Hindsight server. Salesfor

@@ -1,0 +1,5 @@
+I saved your answers in [WI-001](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/.work-items/WI-001-add-account-tier-picklist/WORK-ITEM.md): Tier is optional with no default; only the Sales Manager profile and system administrators can edit it; other Account viewers can read it; and it appears on the main Account page layout. The draft also includes Gold, Silver, Bronze in that order, plus description and help text.
+
+The change would touch the Account field, field access, and Account layout. I’ll verify the exact profile and layout assignments before building because those determine who can edit or see the field.
+
+**Do you approve this goal and these requirements?**

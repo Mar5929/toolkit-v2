@@ -1,0 +1,30 @@
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/b-salesforce-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Add Account Tier picklist: 13 Deployment, In Review, waiting on owner. Next action: Mike runs the WI-001 field production command and reports its result. If it succeeds, he runs the WI-002 layout production command, compl... Continues with work-decide.
+- WI-002 Configure Account Tier access and page layout: 13 Deployment, In Review, waiting on owner. Next action: After Mike successfully deploys the WI-001 field, he runs the WI-002 layout command, completes the manual profile access steps, checks th... Continues with work-decide.
+
+Waiting on the owner:
+- WI-001 Add Account Tier picklist: Q-07: Can you run the WI-001 field package against corrected tkv2-prod and report the deploy result? The project guard denies agent production deploys. Affects WI-001 production deployment. (work-decide)
+- WI-001 Add Account Tier picklist: Q-08: Can you recheck production Setup for Account.Tier__c and confirm whether it exists before running the WI-001 field package? The corrected production alias now gives conflicting read-only resu... Affects WI-001 production deployment safety. (work-decide)
+- WI-002 Configure Account Tier access and page layout: Q-03: After the WI-001 field deploy succeeds, can you run the WI-002 layout package against corrected tkv2-prod, complete production profile access, and report the deploy and page checks? Affects WI-002 production deployment. (work-decide)
+
+Items: 2 in review.
+
+Current focus:
+Last updated: 2026-09-27, WI-001 and WI-002 production handoff, Codex
+## Now
+- WI-001: Mike confirmed Account.Tier__c absent in production Setup and corrected tkv2-prod, which had pointed to the sandbox. A fresh production describe also shows no Tier__c. Its approved field package is merged into local main at 9970961.
+- WI-002: A fresh production layout retrieve from the corrected alias differs from source only by the Tier__c item. Its approved layout package is merged into local main. The project guard denies agent production deploys. No origin remote is configured.
+## Waiting on the owner
+- WI-001: Run the field package against tkv2-prod and report the result.
+- WI-002: After the field succeeds, run the layout package, complete production profile access, check the Account page and effective access, and report results.
+- Trust this project folder in Codex when prompted, then open `/hooks` and trust the Toolkit V2 hooks and two Salesforce org guards.
+## Untracked to-dos
+- None.
+## Next session starts with
+- Open WI-001 and WI-002. Confirm the
+

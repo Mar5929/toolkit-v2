@@ -1,0 +1,20 @@
+53340c93fc43c0ca9252f04efccb6d8b .memory/.toolkit-meta.json
+8f6d87286abf3f14be8215d5bc586378 .memory/AGENTS.md
+2f59309cb55b6c0aa7d5023d0d0e5904 .memory/CURRENT_FOCUS.md
+e58f44bd06cb41e8efcc6bb54f0fa635 .memory/MEMORY.md
+fee9a2c0f9746c852049dbc9ec2060bf .memory/memory-criteria.md
+3a96bddd36edd7d6127405281c4353d6 .memory/project_practice_salesforce_orgs.md
+a0abdffc5b188ca8929595b195161bef .memory/project_topic_template.md
+430ce2b6130fe355137c476cd5dc63e6 .memory/terminology-glossary.md
+e20b72b0b58b0405a7898373b4e2d371 .memory/user_custom_field_description_help_text.md
+b389ef1eb1892d932b15734bad9dece8 .work-items/.toolkit-state.json
+465b7b6e9f03a5600cdd94400aba74ad .work-items/DASHBOARD.md
+25c9c29d31b9968a770288e0399d8bf2 .work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account/DESIGN.md
+0a7bb4124ef3c2d2016f1672cf0be0d1 .work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account/WI-002-tier-access-and-layout/WORK-ITEM.md
+72b03f2a855563286b8cff1b29ba7d0a .work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account/WORK-ITEM.md
+06963950258c0d39462ca2bfe293c072 .work-items/work-item-template/DESIGN.md
+d1a94b44bdf3b00e2b743060ba57b0e8 .work-items/work-item-template/WORK-ITEM.md
+== .claude/worktrees/wi-001-account-tier
+ba9a489 Record WI-001 sandbox field deployment
+== .claude/worktrees/wi-002-tier-access-layout
+05e30ec Record WI-002 sandbox access inventory and preflight
