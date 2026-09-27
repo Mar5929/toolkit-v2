@@ -52,6 +52,10 @@ steps that must always run the same way.
   subpage) and its own Memory database. No shared all-projects work item
   database. Use the Notion CLI (`ntn`) where it fits.
 - Memory options: built-in `.memory/`, local Hindsight, or Notion.
+- **Notion memory uses Lore** (Mike, 2026-09-27): `github.com/makenotion/lore`,
+  Notion's own open-source "persistent, shared AI memory backed by Notion for
+  MCP-compatible assistants". Research first (`dev/research/lore.md`), then
+  apply it to the Notion memory option, keeping per-project memory.
 - Hindsight: self-hosted only, never Hindsight Cloud. One local server on this
   Mac, one memory bank per project. No Docker (Mike was unsure; Docker on a
   Mac cannot use the GPU and needs Docker Desktop running). Installed with
