@@ -1,6 +1,6 @@
 ---
 name: work-finish
-description: 'Ships and closes a work item after the owner approves the result: pull request, merge, deployment, requirements baseline update, and Done; or cancels it with a reason. Use when the owner says "ship it", "deploy it", "close it out", "mark it done", "cancel it", or "drop it".'
+description: 'Ships and closes an approved work item (pull request, merge, sandbox or production deployment, requirements update, Done), or cancels an item with the owner''s reason. Use when the owner says "ship it", "deploy it", "close it out", or "mark it done", or asks to cancel or drop an item.'
 ---
 
 # Work finish

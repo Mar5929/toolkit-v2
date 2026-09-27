@@ -1,6 +1,6 @@
 ---
 name: work-organize
-description: 'Splits work items into sub-items, nests, groups, and moves them, and reconciles folders or cards the owner moved or renamed by hand. Use when the owner says "split this", "break it down", "it''s too big", "put X under Y", "I moved some folders around", or the briefing reports moved or missing items.'
+description: 'Splits work items into sub-items, nests or moves them, and reconciles item folders or Notion cards the owner moved, renamed, or deleted himself. Use when the owner says "break it down" or "put X under Y", says he moved folders or cards, or the briefing reports moved or missing items.'
 ---
 
 # Work organize

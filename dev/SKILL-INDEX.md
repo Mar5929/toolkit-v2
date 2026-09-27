@@ -15,13 +15,25 @@ minimal draft (`skill-index-draft-minimal.md`) are marked "(from lifecycle)" or
 - **26 skills**: 22 in a project that is not Salesforce, plus 4 Salesforce
   skills that are enabled or installed only in Salesforce projects.
 - **7 agents**, all on Opus.
-- Every description is 300 characters or fewer (longest 300, shortest 256),
+- Every description is 300 characters or fewer (longest 300, shortest 267),
   written in the third person, "what it does, then Use when", with the owner's
-  own words in quotes.
+  own words in quotes. Rewritten 2026-09-27 to
+  `dev/research/skill-writing-guide.md` (Part 3): the situation and project
+  state first, two to four example phrases, and a "Not for ...; use <skill>"
+  clause only where a neighbor skill competes. After routing round 1
+  (`dev/test-runs/skill-routing-r1.md`), five were changed again to end three
+  overlaps: a requirement change (`work-on` and `work-requirements`), a
+  handover of a named item (`work-on` and `work-delegate`), and a recap asked
+  together with a handoff (`session-summary` and `handoff`). After routing
+  round 2 (`dev/test-runs/skill-routing-r2.md`), three changed again:
+  `work-status` names a question about one item ("is X done yet"),
+  `explain-simply` names an answer the owner finds too technical or hard to
+  follow, and `session-summary` says a recap asked with a handoff belongs to
+  `handoff`. The check that followed is in section 5.5.
 - No quoted owner phrase appears in two descriptions. This was checked with a
   script over the exact text in section 1 (method in section 5.5).
-- The whole listing (names plus descriptions) is about 7,700 characters, or
-  about 6,500 in a project that is not Salesforce. The drafts measured about
+- The whole listing (names plus descriptions) is about 7,900 characters, or
+  about 6,600 in a project that is not Salesforce. The drafts measured about
   8,700 (lifecycle), 8,000 (owner words), and 2,800 to 4,000 (minimal). Today's
   toolkit lists about 14,100 characters, and the listing on this Mac already
   drops descriptions (`session-skills.md` 8.1), so every name is chosen to say
@@ -40,32 +52,32 @@ minimal draft (`skill-index-draft-minimal.md`) are marked "(from lifecycle)" or
 
 | # | Plugin | Skill | Exact description | Chars | Jobs and stages covered |
 | --- | --- | --- | --- | --- | --- |
-| 1 | work | `work-on` | Starts, continues, or logs project work: finds or creates the work item, works out where it stands, and runs its next step through to a built result. Use when the owner asks to build, add, fix, or change something, says "keep going" or "continue", names an item, or wants an idea logged for later. | 297 | First skill for any request to do work. Creates items at `01-discovery`; logs ideas for later; resumes an item. Runs `06-implementation-plan`, `07-tracking-setup`, `08-build`. Opens the stage skills below. |
-| 2 | work | `work-status` | Answers "where are we", "what's next", and "catch me up": shows active work items, their progress and blockers, the recommended next step, and how many decisions wait on the owner. Use when the owner asks for project status, progress on one item, or what comes next. Changes nothing. | 283 | Status of the project or one item; what comes next. Read-only at every stage. |
-| 3 | work | `work-decide` | Walks the owner through each decision waiting on him, one at a time with a recommendation, and records each answer. Use when the owner asks "what do you need from me" or "what's waiting on me", says "approved" or "go with option B", or states a decision for the whole project. | 276 | Every owner decision that arrives outside the skill that asked it: requirements approval (03), design approval (04), flagged tasks, result approval (11), open questions, an unanswered delivery offer. Project-wide decisions (`DECISIONS.md`). |
-| 4 | work | `work-requirements` | Interviews the owner one question at a time, writes the answers into the work item's requirements and open questions, then asks for approval. Use when the owner says "grill me", "ask me questions", "what should it do", or "check the spec", changes a requirement, or requirements are missing. | 291 | `01-discovery`, `02-refinement`, asking for `03-requirements-approved`; requirement changes at any later stage; the spec check. |
-| 5 | work | `solution-design` | Designs how a work item gets built: checks the requirements are ready, runs researcher, architect, and critic agents, and writes design options for the owner to approve. Use when the owner asks "how should we build this" or "give me design options", or signed-off requirements need a design. | 291 | `04-solution-design` and asking for design approval. Runs `sf-architect-solutioning` as the Salesforce specialist. |
-| 6 | work | `work-organize` | Splits work items into sub-items, nests, groups, and moves them, and reconciles folders or cards the owner moved or renamed by hand. Use when the owner says "split this", "break it down", "it's too big", "put X under Y", "I moved some folders around", or the briefing reports moved or missing items. | 299 | `05-breakdown`; sub-items; nesting, grouping, moving, archiving; reconciling moves, renames, deletions, and copies the owner made by hand in `.work-items/` or Notion. |
-| 7 | work | `work-check` | Checks a finished build against every requirement with an independent checker agent, fixes what fails, then shows the owner the result to approve. Use when the owner asks "is it ready", "does it work", "test it", or "check it against what I asked for", or when a build's last task is done. | 289 | `09-testing`, `10-bug-fixing`, asking for `11-user-approval`. |
-| 8 | work | `work-finish` | Ships and closes a work item after the owner approves the result: pull request, merge, deployment, requirements baseline update, and Done; or cancels it with a reason. Use when the owner says "ship it", "deploy it", "close it out", "mark it done", "cancel it", or "drop it". | 274 | `12-pr-and-push`, `13-deployment`, `14-spec-update`, Done, Cancelled. |
-| 9 | work | `work-delegate` | Hands a goal to agents with the owner as product owner: makes the agent-led delivery offer, asks how the team is arranged, records the choice, and runs the team. Use when the owner says "you drive", "run with it", "take it from here", or "use a team of agents", or work-on starts a big goal. | 291 | Delivery offer, team-arrangement question, archive question; running helper agents at any stage. |
-| 10 | memory | `memory-save` | Saves, corrects, or forgets one lasting fact in project memory, and sends anything that belongs elsewhere to its home. Use when the owner says "remember this", "from now on", "always do X", "never do X", "forget that", or "remind me", corrects the agent, or a hook says to save. | 278 | Save, correct, forget one record; current focus and untracked to-dos; glossary terms; routing other information to its home. Holds the only written copy of the memory approval policy. |
-| 11 | memory | `memory-find` | Finds what the project already knows in memory, decisions, work items, requirements, and the current focus, and cites the source of each answer. Use when the owner asks "what did we decide", "do you remember", "why did we", or "have we done this before", and before asking him to repeat anything. | 296 | Looking up past decisions, preferences, history, and references in every home. Read-only. |
-| 12 | memory | `memory-tidy` | Reviews the whole project memory: merges duplicates, retires stale or contradicted facts, trims the current focus, and backs memory up. Use when the owner says "clean up memory" or "tidy memory", says memory seems wrong or out of date, or the toolkit doctor flags memory problems. | 280 | Whole-memory review; duplicates; stale records; focus trim; backup and restore. |
-| 13 | toolkit | `project-setup` | Sets up Toolkit V2 in a new project or repairs one: copies the model scaffold, applies tracker, memory, and Salesforce answers, and fixes this Mac, Notion, or Hindsight. Use when the owner says "set up Toolkit V2", "set up this project", "check the setup", "update the toolkit", or "new computer". | 297 | New project (GOAL finish item 3); repair of an existing project; a new computer; switching the memory backend; Notion and Hindsight wiring. |
-| 14 | session-skills | `handoff` | Writes a checked prompt a fresh session can start from, after updating the active work item and current focus. Use when the owner says "write a handoff", "I'm going to clear context", "start a new session", "this chat is getting long", or "I'm stopping for today". "/handoff check" checks one. | 293 | Handoff between sessions at any stage; checking a pasted handoff prompt. |
-| 15 | session-skills | `session-summary` | Shows a table of what the owner asked for in this chat and where each request landed, then what still needs him. Use when the owner says "recap this chat", "summarize the session", "what did I ask for", or "what did we do today". Covers this conversation only, not the whole project. | 283 | Recap of this conversation only. |
+| 1 | work | `work-on` | Starts, resumes, or logs a work item and builds it. Use whenever the owner asks to build, add, fix, or change something, names an item id to resume, says "keep going", or wants a bug or idea logged ("put it in the backlog"). Not for requirement edits (work-requirements) or handovers (work-delegate). | 300 | First skill for any request to do work. Creates items at `01-discovery`; logs ideas for later; resumes an item. Runs `06-implementation-plan`, `07-tracking-setup`, `08-build`. Opens the stage skills below. |
+| 2 | work | `work-status` | Reports where the project's work items stand: progress, blockers, the next item, and decisions waiting on the owner. Use whenever the owner asks about project or item status, even one item, for example "where are we", "what's next", or "is X done yet". Not for a chat recap; use session-summary. | 295 | Status of the project or one item; what comes next. Read-only at every stage. |
+| 3 | work | `work-decide` | Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers. Use when he asks "what do you need from me", answers a waiting decision ("go with option B"), or states a project-wide decision. Not for a bare "yes" when this chat asked no question. | 298 | Every owner decision that arrives outside the skill that asked it: requirements approval (03), design approval (04), flagged tasks, result approval (11), open questions, an unanswered delivery offer. Project-wide decisions (`DECISIONS.md`). |
+| 4 | work | `work-requirements` | Interviews the owner one question at a time, writes a work item's requirements (R-01, R-02), checks them, and asks for his approval. Use when an item's requirements are missing or the owner changes, adds, or drops one at any stage, or says "grill me", "ask me questions", or "check the spec". | 292 | `01-discovery`, `02-refinement`, asking for `03-requirements-approved`; requirement changes at any later stage; the spec check. |
+| 5 | work | `solution-design` | Writes design options for how a work item gets built and asks the owner to choose and approve one. Use when approved requirements need a design, or the owner asks "how should we build this" or "give me design options". Not for a single Salesforce platform question; use sf-architect-solutioning. | 295 | `04-solution-design` and asking for design approval. Runs `sf-architect-solutioning` as the Salesforce specialist. |
+| 6 | work | `work-organize` | Splits work items into sub-items, nests or moves them, and reconciles item folders or Notion cards the owner moved, renamed, or deleted himself. Use when the owner says "break it down" or "put X under Y", says he moved folders or cards, or the briefing reports moved or missing items. | 284 | `05-breakdown`; sub-items; nesting, grouping, moving, archiving; reconciling moves, renames, deletions, and copies the owner made by hand in `.work-items/` or Notion. |
+| 7 | work | `work-check` | Tests a finished build against its work item's requirements, fixes what fails, and asks the owner to approve the result. Use when the last build task is done, or the owner asks whether it is ready to ship or works, for example "is it ready", "test it", or "check it against what I asked for". | 292 | `09-testing`, `10-bug-fixing`, asking for `11-user-approval`. |
+| 8 | work | `work-finish` | Ships and closes an approved work item (pull request, merge, sandbox or production deployment, requirements update, Done), or cancels an item with the owner's reason. Use when the owner says "ship it", "deploy it", "close it out", or "mark it done", or asks to cancel or drop an item. | 284 | `12-pr-and-push`, `13-deployment`, `14-spec-update`, Done, Cancelled. |
+| 9 | work | `work-delegate` | Hands a work item's goal to a team of agents with the owner as product owner: makes the delivery offer, records his choice, and runs the team. Use whenever the owner hands a goal over ("you drive", "take it from here"), even a named item, or work-on starts a large goal with no delivery choice. | 294 | Delivery offer, team-arrangement question, archive question; running helper agents at any stage. |
+| 10 | memory | `memory-save` | Saves, corrects, or forgets one lasting fact in the project's memory, or sends it to the record where it belongs. Use when the owner says "remember this", "from now on", "forget that", or "remind me" with no time given, corrects the agent, or a hook says a save is due. | 269 | Save, correct, forget one record; current focus and untracked to-dos; glossary terms; routing other information to its home. Holds the only written copy of the memory approval policy. |
+| 11 | memory | `memory-find` | Looks up what the project already recorded (memory, DECISIONS.md, work items, requirements, current focus) and cites the source of each answer. Use when the owner asks "what did we decide", "do you remember", or "why did we", and before asking him to repeat anything. | 267 | Looking up past decisions, preferences, history, and references in every home. Read-only. |
+| 12 | memory | `memory-tidy` | Reviews the project's whole memory (.memory/, Hindsight, or Notion): merges duplicates, retires stale or contradicted records, trims the current focus, and backs it up. Use when the owner says "clean up memory" or "tidy memory", thinks memory is wrong or out of date, or toolkit doctor flags memory. | 299 | Whole-memory review; duplicates; stale records; focus trim; backup and restore. |
+| 13 | toolkit | `project-setup` | Sets up Toolkit V2 in a new project, or checks, updates, and repairs an existing setup, including Notion and Hindsight. Use when the owner says "set up Toolkit V2", "set up this project", "check the setup", or "update the toolkit", or starts working on a new computer. | 268 | New project (GOAL finish item 3); repair of an existing project; a new computer; switching the memory backend; Notion and Hindsight wiring. |
+| 14 | session-skills | `handoff` | Updates the work item and current focus, then writes a checked prompt for a new session, or checks a pasted one. Use whenever the owner is about to clear context or end the session, even a short one or with a recap, for example "write a handoff", "start a new session", or "I'm stopping for today". | 298 | Handoff between sessions at any stage; checking a pasted handoff prompt. |
+| 15 | session-skills | `session-summary` | Recaps this chat as a table of the owner's requests, where each landed, and what still needs him. Use when he asks what happened in this chat, for example "recap this chat", "what did I ask for", or "what did we do today". Not with a handoff (handoff includes it) or for project status (work-status). | 300 | Recap of this conversation only. |
 | 16 | session-skills | `braindump` | Plays back a loose brain dump in very simple words and waits for the owner to confirm before any work starts. Use when the owner types /braindump or says "here's a brain dump", "play that back", "tell me what you heard", or "make sure you understood before you start". | 268 | Confirming understanding before any work. No writes. |
-| 17 | session-skills | `explain-simply` | Re-explains the last answer, a plan, or a named document as short plain bullets, keeping every number, name, and path. Use when the owner types /explain-simply or says "explain it like I'm five", "simpler", "put that in plain bullets", or "I don't get it". | 256 | Re-explaining at a lower reading level. |
-| 18 | session-skills | `unslop` | Rewrites text so it no longer reads as machine-written, keeping every fact, and shows the findings before saving. Use when the owner says "unslop this", "this reads like AI wrote it", or "make it sound human", or when the humanize-outbound-text rule applies to text going to another person. | 290 | Removing machine-written patterns on request, and for outbound text under the `humanize-outbound-text.md` rule. |
-| 19 | git-workflows | `merge-and-clean-up` | Merges a GitHub pull request once merging is allowed, after its checks and the merge-safety check, updates the base checkout, and removes only that pull request's branches and worktree. Use when the owner or work-finish says "merge PR 12", "merge and clean up", or "land this pull request". | 290 | The merge inside `12-pr-and-push`. |
-| 20 | git-workflows | `publish-docs` | Commits and pushes an agreed edit to Git-tracked project documents (requirements/, system-guide/, DECISIONS.md, PROJECT.md, PROJECT-ROADMAP.md, ai-external-knowledge/, delivery/) to the default branch from an isolated worktree. Use after such an edit. Not for code, rules, skills, or .memory/. | 293 | Saving committed documents: the requirements baseline and System Guide at `14-spec-update`, `DECISIONS.md` rows, `PROJECT.md`, `PROJECT-ROADMAP.md`. Agent use. |
-| 21 | git-workflows | `pull-latest` | Brings the local repository up to date with its remote safely: fetch, fast-forward, or a merge pull when the two have diverged; never rebase, reset, or push. Use when the owner says "get the latest", "pull the latest changes", "update from origin", or "grab what others pushed". | 278 | Updating a checkout. |
-| 22 | git-workflows | `reset-to-remote` | Makes the local repository an exact copy of its remote: shows a plan, then hard-resets tracking branches, deletes branches gone from the remote, and reinstalls dependencies. Use only when the owner says "wipe local", "match remote exactly", or "fresh start from remote". | 270 | Destructive resync, only on the owner's explicit words. |
-| 23 | sf-architect-solutioning (Salesforce projects only) | `sf-architect-solutioning` | Acts as a certified Salesforce Technical Architect: checks platform facts against official Salesforce documentation and plans objects, Flows, Apex, and permissions. Use when solution-design needs a Salesforce specialist, or the owner says "architect this" or asks a Salesforce platform question. | 295 | Salesforce specialist inside `04-solution-design`; Salesforce platform questions at any stage. **Description needs Mike's yes (section 9.1, decision 1). Body unchanged.** |
-| 24 | project-local, Salesforce overlay | `sf-deploy-check` | Runs the hitch-hiker check that finds components or pending edits that would ship with a Salesforce deploy before their feature is ready. Use before any deploy to a shared org (full copy, staging, or production) and before handing the owner a production deploy command. | 269 | `13-deployment`; any validate against a shared org. Agent use. |
+| 17 | session-skills | `explain-simply` | Re-explains the last answer, a plan, or a named document as short plain bullets, keeping every number, name, and path. Use whenever the owner finds an answer too technical or hard to follow, or wants it in plainer words, for example "explain it like I'm five", "less jargon", or "I don't get it". | 296 | Re-explaining at a lower reading level. |
+| 18 | session-skills | `unslop` | Rewrites existing text, such as an email or a pull request, so it no longer reads as machine-written, keeping every fact. Use when the owner says "unslop this", "this reads like AI wrote it", or "make it sound human", or text for another person falls under the humanize-outbound-text rule. | 289 | Removing machine-written patterns on request, and for outbound text under the `humanize-outbound-text.md` rule. |
+| 19 | git-workflows | `merge-and-clean-up` | Merges one approved GitHub pull request and removes only that pull request's branches and worktree, after its checks and the merge-safety check pass. Use when the owner or work-finish asks to merge a named pull request, for example "merge PR 12", "merge and clean up", or "land this pull request". | 297 | The merge inside `12-pr-and-push`. |
+| 20 | git-workflows | `publish-docs` | Commits and pushes an agreed edit of committed project documents (requirements/, system-guide/, DECISIONS.md, PROJECT.md, PROJECT-ROADMAP.md, ai-external-knowledge/, delivery/) straight to the default branch. Use whenever such an edit is ready to save. Not for code, rules, skills, or .memory/. | 294 | Saving committed documents: the requirements baseline and System Guide at `14-spec-update`, `DECISIONS.md` rows, `PROJECT.md`, `PROJECT-ROADMAP.md`. Agent use. |
+| 21 | git-workflows | `pull-latest` | Brings the local repository up to date with its remote without losing or rewriting anything. Use when the owner says "get the latest", "pull the latest changes", "update from origin", or "grab what others pushed". Not for throwing away local work; use reset-to-remote. | 268 | Updating a checkout. |
+| 22 | git-workflows | `reset-to-remote` | Makes the local repository an exact copy of its remote, discarding local changes and branches the remote no longer has, after showing a plan. Use only when the owner asks for that in his own words, for example "wipe local", "match remote exactly", or "fresh start from remote". | 277 | Destructive resync, only on the owner's explicit words. |
+| 23 | sf-architect-solutioning (Salesforce projects only) | `sf-architect-solutioning` | Answers Salesforce platform questions and plans Salesforce solutions, checking each fact against official Salesforce docs. Use whenever the owner asks a Salesforce platform question, even about a work item ("which Flow type", "Flow or Apex"), or solution-design needs a Salesforce specialist. | 292 | Salesforce specialist inside `04-solution-design`; Salesforce platform questions at any stage. Description rewritten with Mike's approval (2026-09-27); body unchanged, byte for byte. |
+| 24 | project-local, Salesforce overlay | `sf-deploy-check` | Finds hitch-hikers: components or pending edits that would ship with a Salesforce deploy before their feature is ready. Use before any deploy to a shared org (UAT, full copy, staging, or production), including a deploy command for the owner. Not for running the deploy; use work-finish. | 286 | `13-deployment`; any validate against a shared org. Agent use. |
 | 25 | project-local, Salesforce overlay | `sf-component-tracker` | Keeps the component tracker CSV, the master and per-work-item package.xml files, destructiveChanges.xml, and manual steps in sync. Use when Salesforce metadata under force-app/ is added, changed, renamed, or deleted, when a deploy result comes back, or when a deploy needs manual steps. | 286 | `07-tracking-setup`, `08-build`, `10-bug-fixing`, `13-deployment`. Agent use. |
-| 26 | project-local, Salesforce overlay | `sf-data-change` | Builds the owner's package for a Salesforce production data change: load file, backup, numbered load steps, success check, and undo steps, filed under delivery/data/. Use when production records must be created, updated, upserted, or deleted, or a backup is needed first. | 271 | `08-build` and `13-deployment` of a `data-load` item. |
+| 26 | project-local, Salesforce overlay | `sf-data-change` | Builds the owner's package for a Salesforce production data change: load file, backup, numbered steps, success check, and undo steps. Use first, before work-on, when the owner asks to load, import, update, or delete production records, for example "load this file into production". | 281 | `08-build` and `13-deployment` of a `data-load` item. |
 
 Notes on the table:
 
@@ -205,8 +217,10 @@ match them.
 #### `work-on`
 
 - **Steps:**
-  1. No briefing in context: run `toolkit brief`. No `.toolkit.json`: open
-     `project-setup` and stop.
+  1. A bare "ok", "yes", or "looks good" is not "keep going": when it is the
+     owner's whole message and this chat asked him nothing, start no work and
+     ask what he wants. No briefing in context: run `toolkit brief`. No
+     `.toolkit.json`: open `project-setup` and stop.
   2. Find the item: the id the owner named (`toolkit work show <id>`), or a
      title that matches the request in `toolkit work list`. Two possible
      matches: ask one question. No match: it is new.
@@ -217,11 +231,12 @@ match them.
      words unchanged as the Starting request; reply "Logged as WI-014 (bug,
      backlog). Not started." and stop. Anything else: `toolkit work new`, then
      continue.
-  4. A substantial goal with no recorded delivery choice: open `work-delegate`
-     first.
+  4. A substantial goal with no recorded delivery choice, or an owner who
+     hands the goal over in his own words: open `work-delegate` first.
   5. Route by where the item stands, using `toolkit work show` and the
      "Continue with" column of `toolkit work lifecycle`: requirements not
      approved and the type is `build` or `data-load` (or the risk calls for it):
+     `work-requirements`; a change to a requirement (`R-xx`) at any stage:
      `work-requirements`; more than one reasonable way to build it and no
      approved design: `solution-design`; too big for one build: `work-organize`;
      stages 09 to 11: `work-check`; stages 12 to 14: `work-finish`;
@@ -815,8 +830,9 @@ toolkit's `project-init` plugin still loads on this Mac (critique B3).
      repository, owner, worked out).
   5. Run `handoff-verifier`; fix every Wrong, Unchecked, Missing, or Skipped
      finding. Codex: pass the role file's text to a native worker.
-  6. Show what was saved (anything not saved first) and the prompt in one
-     fenced block. A failed save never blocks the prompt.
+  6. When the owner also asked for a recap, show the `session-summary` table
+     first. Then what was saved (anything not saved first) and the prompt in
+     one fenced block. A failed save never blocks the prompt.
   7. "/handoff check" (Codex: `$handoff check`): run only step 5 on a pasted
      prompt.
   8. Never commit `.memory/` or `.work-items/`; never stop the owner from
@@ -984,7 +1000,8 @@ toolkit's `project-init` plugin still loads on this Mac (critique B3).
   feature", "solution this requirement", and "architect this". The proposed
   description in section 1 changes the frontmatter only; the body stays byte
   for byte, and because `solution-design` keeps its name, the body's
-  coordination line still works. This needs Mike's yes (section 9.1, decision 1).
+  coordination line still works. Mike approved the description change on
+  2026-09-27 (section 9.1, decision 1); the section 1 text is in the file.
 
 #### `sf-deploy-check`
 
@@ -1078,7 +1095,7 @@ skills from other plugins installed on this Mac.
 | --- | --- | --- | --- |
 | 1 | "Where are we?" | `work-status` | `session-summary` covers this chat only and does not claim "where are we". |
 | 2 | "What's next?" | `work-status` | `work-on` claims "keep going" (do it); this asks to be told. |
-| 3 | "Keep going." | `work-on` | `work-delegate` claims "take it from here" (hand the goal to agents); "keep going" continues without changing who delivers. |
+| 3 | "Keep going." | `work-on` | `work-delegate` claims "take it from here" (hand the goal to agents); "keep going" continues without changing who delivers. `work-on` says it is not for handovers. |
 | 4 | "Let's build the login page." | `work-on` | `solution-design` claims "how should we build this", a question about approach. Outside: `superpowers:brainstorming`, handled by the `AGENTS.md` routing line (5.4). |
 | 5 | "Add dark mode to the backlog for later." | `work-on` | `memory-save` claims "remind me" for personal to-dos, not project work. |
 | 6 | "Log a bug: the export button does nothing. Not now." | `work-on` | Outside: `superpowers:systematic-debugging`. "Not now" means log only (step 3). |
@@ -1088,7 +1105,7 @@ skills from other plugins installed on this Mac.
 | 10 | "We've decided to use Postgres everywhere." | `work-decide` | `memory-save`: a decision for the whole project belongs in `DECISIONS.md`. If the owner says "remember we decided ...", `memory-save` starts and its step 1 sends it to `work-decide`. |
 | 11 | "Grill me on the checkout flow." | `work-requirements` | `braindump` plays back without asking questions. Outside: `llm-council` claims "stress-test this", not "grill me". |
 | 12 | "Check the spec before you build." | `work-requirements` | `work-check` checks a finished build, not the requirements. |
-| 13 | "Change R-02 so only admins can export." | `work-requirements` | `work-decide` records answers; a change of meaning is rewritten and approved again here. |
+| 13 | "Change R-02 so only admins can export." | `work-requirements` | `work-on` claims "change something" but says it is not for requirement edits; its step 5 also sends a requirement change here. `work-decide` records answers; a change of meaning is rewritten and approved again here. |
 | 14 | "How should we build the CSV export?" | `solution-design` | `work-on` does the work; this asks about approach. In a Salesforce project `sf-architect-solutioning` is the specialist `solution-design` opens (proposed description). |
 | 15 | "Split this into smaller pieces." | `work-organize` | `work-on` opens `work-organize` itself when an item is too big; the phrase is only here. |
 | 16 | "Make WI-7 a sub-item of WI-3." | `work-organize` | `work-on` sets a parent only when it creates a new item. |
@@ -1108,9 +1125,9 @@ skills from other plugins installed on this Mac.
 | 30 | "Set up this new repo." | `project-setup` | Built-in `/init` runs only when typed and writes its own `CLAUDE.md`; V2 projects get the model's root `CLAUDE.md`, which holds only `@AGENTS.md`. |
 | 31 | "I got a new laptop, check the setup." | `project-setup` | `pull-latest` updates Git, not the toolkit or the computer. |
 | 32 | "Update the toolkit in this project." | `project-setup` | `pull-latest` claims "update from origin" (Git). |
-| 33 | "I'm going to clear context." | `handoff` | `session-summary` recaps but saves nothing and writes no prompt. |
+| 33 | "I'm going to clear context." | `handoff` | `session-summary` recaps but saves nothing and writes no prompt. `handoff` says "even a short one", because the model's `session-handoff.md` rule says to skip a handoff for small edits and quick lookups. |
 | 34 | "Recap this chat." | `session-summary` | `work-status` covers the whole project; built-in `/recap` runs only when typed. |
-| 35 | "What did we do today?" | `session-summary` | `handoff` claims "I'm stopping for today"; the shared word is "today", the phrases differ. |
+| 35 | "What did we do today?" | `session-summary` | `handoff` claims "I'm stopping for today" and a recap only together with leaving; the shared word is "today", the phrases differ. |
 | 36 | "Here's a brain dump: ..." | `braindump` | `work-requirements` interviews only after the owner confirms the playback. |
 | 37 | "Explain that like I'm five." | `explain-simply` | `unslop` changes voice, not reading level. |
 | 38 | "This email reads like AI wrote it." | `unslop` | `explain-simply` simplifies meaning, not voice. |
@@ -1122,7 +1139,9 @@ skills from other plugins installed on this Mac.
 
 Messages no skill claims: "yes", "ok", "looks good", "thanks". The skill that
 asked the question records the answer; if nothing was asked, the agent asks what
-the owner is approving.
+the owner is approving. When an agent opens `work-on` for a bare "ok" anyway
+(Codex did in 1 of 4 runs in round 2 and 1 of 3 after it, reading the current
+focus as a go-ahead), `work-on` step 1 stops it: no work starts, and it asks.
 
 ### 5.2 Word-level overlaps that remain
 
@@ -1132,7 +1151,7 @@ description; the quoted phrase decides:
 | Word | Skills | Rule that settles it |
 | --- | --- | --- |
 | remember | `memory-save` ("remember this"), `memory-find` ("do you remember") | Statement saves; question finds. |
-| ship | `work-finish` ("ship it"), `sf-deploy-check` (describes components that "would ship") | `sf-deploy-check` has no owner phrase. |
+| ship | `work-finish` ("ship it"), `work-check` (asks "whether it is ready to ship"), `sf-deploy-check` (describes components that "would ship") | An instruction ships; a question checks. `sf-deploy-check` has no owner phrase. |
 | deploy | `work-finish` ("deploy it"), `sf-deploy-check`, `sf-component-tracker` | The two `sf-*` skills are agent use, run by `work-finish` and `work-on`. |
 | build | `work-on` (a request), `solution-design` ("how should we build this", a question), `work-check` (a finished build) | Request, question, finished result. |
 | check | `work-requirements` ("check the spec"), `work-check` ("check it against what I asked for"), `project-setup` ("check the setup") | The object named: spec, result, setup. |
@@ -1140,7 +1159,11 @@ description; the quoted phrase decides:
 | clean | `memory-tidy` ("clean up memory"), `merge-and-clean-up` ("merge and clean up") | Memory versus branches. |
 | today | `session-summary` ("what did we do today"), `handoff` ("I'm stopping for today") | Recap versus leaving. |
 | next | `work-status` ("what's next"), `work-on` (runs the next step) | Question versus doing. |
+| done | `work-status` ("is X done yet"), `work-finish` ("mark it done") | A question reports; an instruction closes. |
 | fix | `work-on` (fix something new), `work-check` (fixes what testing found) | `work-on` routes an item at stages 09 to 11 to `work-check`. |
+| change | `work-on` (change something in the product), `work-requirements` (the owner changes, adds, or drops a requirement) | A requirement (`R-xx`) goes to `work-requirements`; `work-on` says it is not for requirement edits. |
+| recap | `session-summary` ("recap this chat"), `handoff` (a recap asked together with leaving), `work-status` (not for a recap) | A recap alone: `session-summary`. A recap with a handoff or with leaving: `handoff`, which shows the `session-summary` table first. |
+| hand over | `work-delegate` (the owner hands a goal over to agents), `work-on` (not for handovers), `handoff` (hands the session to a new session) | Handing the work to agents is `work-delegate`; handing the conversation to a new session is `handoff`. |
 
 ### 5.3 Skills from other plugins that compete for the same words
 
@@ -1205,6 +1228,30 @@ description. Result: 0 problems. The first pass found five, fixed here:
 `work-requirements` and `sf-architect-solutioning` were over 300 characters,
 and "approved" (quoted in `work-decide`) also appeared in `work-requirements`,
 `solution-design`, `merge-and-clean-up`, and `publish-docs`.
+
+**Check after routing round 2 (2026-09-27).** The same script found 0
+problems with the new `work-status`, `explain-simply`, and `session-summary`
+text. The text then ran in scratch copies of the plugins, one fresh session
+per run, in Claude Code 2.1.280 and in Codex 0.157.0 (with its own Codex home
+holding a copy of Mike's Codex settings):
+
+- Round 2 misses: Claude Code O01 3 of 3 and T04 3 of 3 (`work-status`), O14
+  3 of 3 (`explain-simply`); Codex T10 3 of 3 (`handoff` first, and the only
+  skill read).
+- Codex X2 ("ok"): `work-on` opened in 1 of 3 runs. Its step 1 stopped it: it
+  asked what the owner wanted and changed nothing.
+- 11 new messages the text was not written from (one item's status, an
+  answer that is too technical, a recap with a handoff, "looks good"): Codex
+  11 of 11, Claude Code 10 of 11. Claude Code opened no skill for "Can you say
+  that without the technical terms?" (0 of 2); it rewrote the answer in plain
+  words itself. The round 2 candidate for `explain-simply` opened it for "too
+  technical for me, try again for a non-developer" in 1 of 3 runs; the final
+  text did in 3 of 3.
+- 19 neighbour messages from section 5.1 and round 2: all matched in both
+  hosts, except Claude Code #33 "I'm going to clear context." (1 of 3). That
+  miss comes from the model's `session-handoff.md` rule ("Skip this for small
+  edits"), not from a description; the proposed rule change waits for Mike in
+  `dev/model-changes.md`.
 
 ---
 
@@ -1355,6 +1402,7 @@ Current skills not listed as "kept" in section 3:
    outside the work item. Fallback if Mike says no: ship it unchanged, accept
    that one known overlap, and rely on the `AGENTS.md` Salesforce line and the
    body's own "return findings to `solution-design`" rule.
+   **Decided 2026-09-27:** Mike approved rewriting the description only.
 2. **Slash commands that change.** Gone: `/grill-me`, `/requirements-helper`,
    `/spec-check`, `/track-tasks`, `/work-guide`, `/project-init`,
    `/project-sync`, `/work`. New: `/work-requirements` (says "grill me" to it),

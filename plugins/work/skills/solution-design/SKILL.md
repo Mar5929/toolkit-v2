@@ -1,6 +1,6 @@
 ---
 name: solution-design
-description: 'Designs how a work item gets built: checks the requirements are ready, runs researcher, architect, and critic agents, and writes design options for the owner to approve. Use when the owner asks "how should we build this" or "give me design options", or signed-off requirements need a design.'
+description: 'Writes design options for how a work item gets built and asks the owner to choose and approve one. Use when approved requirements need a design, or the owner asks "how should we build this" or "give me design options". Not for a single Salesforce platform question; use sf-architect-solutioning.'
 ---
 
 # Solution design
@@ -10,7 +10,7 @@ Shared rules: the work plugin's `references/conventions.md` and `references/team
 
 ## Steps
 
-1. Read the item. Requirements not approved: say so and open `work-requirements`, unless the owner asked for options first (then keep the open choices visible). Set the design stage only when the requirements are approved or the item's type does not need approval; a `build` or `data-load` item without approved requirements keeps its stage (the CLI refuses the change), gets its design saved as proposed, and the owner hears that the requirements approval is still needed.
+1. A single Salesforce platform question that needs no design options (for example which Flow type fits, or Flow or Apex): open `sf-architect-solutioning` instead and stop here. Otherwise read the item. Requirements not approved: say so and open `work-requirements`, unless the owner asked for options first (then keep the open choices visible). Set the design stage only when the requirements are approved or the item's type does not need approval; a `build` or `data-load` item without approved requirements keeps its stage (the CLI refuses the change), gets its design saved as proposed, and the owner hears that the requirements approval is still needed.
    `toolkit work show <id> --section Requirements`
    `toolkit work set <id> --stage 04-solution-design`
 2. Brief the `requirements-analyst` agent and tell the owner plainly whether the requirements are ready to design from. A missing requirement goes back to `work-requirements`; the design never fills a requirements gap.

@@ -15,6 +15,12 @@ import { writeValue } from '../../lib/notion/props.mjs';
 import { FakeNotion, fakeRunner, seedProjects } from './fake-notion.mjs';
 
 const now = () => new Date('2026-09-26T12:00:00');
+
+/** The Record Key of a Memories row in the fake. */
+function recordKeyOf(page) {
+  const v = page.properties && page.properties['Record Key'];
+  return v && Array.isArray(v.rich_text) ? v.rich_text.map((r) => r.plain_text).join('') : '';
+}
 // A day after the fake Notion's edit times, so cached bodies count as safe to use.
 const LATER = () => Date.parse('2026-09-27T12:00:00Z');
 
@@ -53,7 +59,7 @@ test('the driver says it is the notion backend', async () => {
   const { driver } = await setup();
   assert.equal(backend, 'notion');
   assert.equal(driver.backend, 'notion');
-  assert.match(driver.location, /Notion Memory database/);
+  assert.match(driver.location, /Memories database on the project's Notion Memory page \(Lore layout\)/);
 });
 
 test('save then get gives back exactly the text every backend stores', async () => {
@@ -147,7 +153,7 @@ test('delete moves the page to the trash', async () => {
   assert.equal(res.trash, true);
   assert.match(res.detail, /Notion trash.*30 days/);
   assert.equal(await driver.get('feedback_deploy_window'), null);
-  assert.ok(Object.values(fake.pages).some((p) => p.in_trash && fake.titleOf(p) === 'feedback_deploy_window'));
+  assert.ok(Object.values(fake.pages).some((p) => p.in_trash && recordKeyOf(p) === 'feedback_deploy_window'));
   await assert.rejects(driver.delete('feedback_deploy_window'), /no memory record/);
 });
 
@@ -178,11 +184,13 @@ test('status and reindex report counts and problems', async () => {
   const { driver, client, config } = await setup();
   await driver.save(INPUT);
   await client.createPage({ parent: { type: 'data_source_id', data_source_id: config.notion.memory.dataSourceId }, properties: { title: { title: [{ type: 'text', text: { content: 'not a key' } }] } } });
+  await client.createPage({ parent: { type: 'data_source_id', data_source_id: config.notion.memory.dataSourceId }, properties: { [driver.p.recordKey]: writeValue('rich_text', 'Not A Key') } });
   const s = await driver.status();
   assert.equal(s.healthy, true);
   assert.equal(s.counts.current, 1);
-  assert.equal(s.problems.length, 1);
-  assert.match(s.problems[0].problem, /not <type>_<slug>/);
+  assert.equal(s.problems.length, 2);
+  assert.match(s.problems[0].problem, /has no Record Key, so the toolkit does not read it/);
+  assert.match(s.problems[1].problem, /not <type>_<slug>/);
   const r = await driver.reindex();
   assert.equal(r.count, 1);
 });
@@ -204,7 +212,7 @@ test('a missing Memory setup is a clear error', async () => {
 // ------------------------------------------------------------------ same-minute edits, locks, and concurrent edits
 
 function pageOf(fake, key) {
-  return Object.values(fake.pages).find((p) => !p.in_trash && fake.titleOf(p) === key);
+  return Object.values(fake.pages).find((p) => !p.in_trash && recordKeyOf(p) === key);
 }
 
 test('an edit in Notion that keeps the same last-edited minute is seen by get, find, and reindex', async () => {
@@ -333,8 +341,9 @@ test('records use the model topic format: the same text as a built-in file, with
   assert.match(got.text, /\nauthorization: Approved by Mike on 2026-09-26\nsupersedes: none\n---\n\n# Tuesday deploys\n\n\*\*Remember:\*\*/);
   assert.match(got.text, /\*\*Related memories:\*\* WI-001/, 'the older Related label is written the model way');
   assert.equal(got.version, res.version);
-  const page = Object.values(fake.pages).find((p) => fake.titleOf(p) === 'feedback_deploy_window');
+  const page = pageOf(fake, 'feedback_deploy_window');
   assert.ok(page.markdown.startsWith('**Remember:**'), 'the page body starts after the title');
+  assert.equal(fake.titleOf(page), 'Tuesday deploys', 'the Title column holds the "# Title" line');
   assert.equal(got.approved_by, 'Mike');
 });
 
@@ -362,8 +371,8 @@ test('link repair goes on past a row that cannot be saved, and names it', async 
   await driver.save(linking('handmade'));
   await driver.save(linking('release'));
   // Mike made this row with the New button and left the description empty.
-  const page = Object.values(fake.pages).find((p) => fake.titleOf(p) === 'project_handmade');
-  await client.updatePage(page.id, { properties: { [driver.p.description]: writeValue('rich_text', '') } });
+  const page = pageOf(fake, 'project_handmade');
+  await client.updatePage(page.id, { properties: { [driver.p.synopsis]: writeValue('rich_text', '') } });
 
   const renamed = await driver.rename('feedback_deploy_window', 'feedback_release_window');
   assert.equal(renamed.key, 'feedback_release_window');

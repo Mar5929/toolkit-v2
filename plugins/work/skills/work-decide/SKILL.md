@@ -1,6 +1,6 @@
 ---
 name: work-decide
-description: 'Walks the owner through each decision waiting on him, one at a time with a recommendation, and records each answer. Use when the owner asks "what do you need from me" or "what''s waiting on me", says "approved" or "go with option B", or states a decision for the whole project.'
+description: 'Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers. Use when he asks "what do you need from me", answers a waiting decision ("go with option B"), or states a project-wide decision. Not for a bare "yes" when this chat asked no question.'
 ---
 
 # Work decide
@@ -12,7 +12,7 @@ Shared rules: the work plugin's `references/conventions.md`, two folders above t
 
 1. Build the queue: requirements waiting for approval, designs marked proposed, items at stage 11 waiting for result approval, and Open Questions rows where the owner decides. The command lists each decision once. Its "Agent to-do" lines are the agent's own steps, not decisions waiting on the owner: count and show only the decisions, and handle a delivery offer there with `work-delegate` after the queue.
    `toolkit work decisions`
-2. The owner gave an answer without being asked ("approved", "go with B"): match it to exactly one waiting decision. If two could match, ask which one, naming both.
+2. The owner gave an answer without being asked ("approved", "go with B"): match it to exactly one waiting decision. If two could match, ask which one, naming both. A bare "yes", "ok", or "looks good" is not such an answer ("What counts as an answer").
 3. Otherwise take the decisions one at a time, the one blocking the most work first. For each: what is being decided, the choices, your recommendation and its main reason, and what happens after each answer. Every decision carries a recommendation, even when it is the only one in the queue; a bare question is not enough. One decision per message.
 4. A requirements approval: save his words as a history note first, so no later session asks him again. Then check the Agreed goal and the open questions. The goal still holds the template text: write the goal he was shown with the approval question, then record the approval. A requirement still has an open question linked: say which one, open `work-requirements` for it, and record the approval, without asking him again, once it is answered.
    `toolkit work show <id> --section Requirements`
@@ -40,7 +40,7 @@ Shared rules: the work plugin's `references/conventions.md`, two folders above t
   `toolkit work lifecycle`
 - A question, a suggestion, a tentative answer ("probably B"), or silence is not an answer. Ask again in one line.
 - An approval covers only what was shown. It never covers merge, deployment, spending, or publishing.
-- "Yes", "ok", or "looks good" with nothing waiting: ask what he is approving.
+- A bare "yes", "ok", or "looks good" answers only a question asked earlier in this conversation. When none was asked, or the waiting question is not a yes-or-no question, show the decision with its choices and your recommendation, and record nothing.
 - Set `waiting_on` to `agent` when the agent can continue, to `none` when nothing waits, or keep `owner` when another owner question is still open on that item.
 
 ## After a result approval

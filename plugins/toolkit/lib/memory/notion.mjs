@@ -1,24 +1,42 @@
-// Notion memory: records are rows of the project's Memory database; the
-// current focus and the glossary are two child pages of the project page
-// (ARCHITECTURE 7). Implements MemoryDriver from contract.mjs.
+// Notion memory: records are rows of the project's Memories database, in
+// Lore's layout (lib/notion/lore-schema.mjs); the current focus and the
+// glossary are two child pages of the project page (ARCHITECTURE 7).
+// Implements MemoryDriver from contract.mjs.
 //
-// How a record is stored:
-// - Frontmatter -> properties: Key (the page title, <type>_<slug>), Type, Name,
-//   Description, Status (current, needs-review, retired), Superseded by,
-//   Source, Saved, Last verified, Approved by (the model's `authorization`
-//   words, for example "Approved by Mike on 2026-09-26"), and Other fields
-//   (JSON: `supersedes`, any `metadata` keys besides type, and any other
-//   frontmatter keys).
+// Two layouts, chosen by the memory block in .toolkit.json:
+//
+// Lore layout (`layout: "lore"`, what toolkit notion ensure-project builds).
+// The project row has a "Memory" page holding Lore's five databases; a record
+// is one row of its Memories database (lib/notion/schema.mjs lists the columns):
+// - Frontmatter -> properties: Record Key (the key, <type>_<slug>; the toolkit
+//   finds a row by it), Keywords (the key again, for Lore's search), Title (the
+//   body's "# Title" line), Synopsis (description), Tags (the type), Status
+//   (current = accepted, needs-review = proposed, superseded = superseded,
+//   archived = deprecated), Supersedes (a relation to the rows this record
+//   replaced), Superseded by, Source note (source), Saved, Last verified,
+//   Authorization, and Other fields (JSON: any `metadata` keys besides type, any
+//   other frontmatter keys, and the `supersedes` keys only when one of them has
+//   no row to point at). Kind is always "note", Lore's Source is "manual",
+//   Author is the owner, Agent is Claude Code or Codex, and Project points at
+//   the project's row in the Memory page's Projects database.
+// - A row without a Record Key (made in Notion, or by Lore's own tools) is not
+//   a toolkit record: list and find leave it out and status names it.
+//
+// Older layout (no `layout`): one "Memory" database on the project row.
+// Frontmatter -> properties: Key (the page title), Type, Name, Description,
+// Status (current, needs-review, retired), Superseded by, Source, Saved, Last
+// verified, Approved by, and Other fields (JSON, with "_heading" for a title
+// the name does not give and "_status" for a superseded record that names no
+// replacement). toolkit notion ensure-project moves such a project to the Lore
+// layout; until then this driver still reads and writes it.
+//
+// In both layouts:
 // - Body -> the page body, converted by lib/notion/markdown.mjs. It is the
 //   model's topic body (# Title, **Remember:**, ...), the same as a built-in
 //   .memory/ file, except its first "# Title" line: Notion drops a leading
 //   level-1 heading from a new page, so the page holds the body without it.
-//   The title is read back from Other fields ("_heading") when it is not the
-//   one the name gives ("account-model" -> "Account model").
 // - A retired record is `superseded` when Superseded by or the body's newest
-//   "**Superseded <date>:**" line says so, and `archived` otherwise; a
-//   superseded record that names no replacement keeps its word in Other
-//   fields ("_status").
+//   "**Superseded <date>:**" line says so, and `archived` otherwise.
 // - Link repair goes on past a row it cannot save and reports it (linksFailed).
 // - The stored text is serializeRecord() of the record read back: the model's
 //   topic format, so every backend gives the same text for the same record.
@@ -58,7 +76,7 @@ import { normalizeId, isNotionError } from '../notion/client.mjs';
 import { clientFor, notionCacheDir, readCache, writeCache } from '../notion/context.mjs';
 import { fromNotion, toNotion, planUpdate, stripTitle, withTitle, sameLocal, detectTableStyle, localLeaves } from '../notion/markdown.mjs';
 import { readValue, writeValue } from '../notion/props.mjs';
-import { FOCUS_PAGE_TITLE, GLOSSARY_PAGE_TITLE } from '../notion/schema.mjs';
+import { FOCUS_PAGE_TITLE, GLOSSARY_PAGE_TITLE, LORE_STATUS_FOR, STATUS_FROM_LORE } from '../notion/schema.mjs';
 
 export const backend = 'notion';
 export const CACHE_FILE = 'memory.json';
@@ -80,7 +98,41 @@ function changedLeavesMatch(backBody, nextBody, plan) {
   return changed.every((k) => !want.has(k) || back.get(k) === want.get(k));
 }
 
-/** record field -> [property key, Notion type] */
+/** Lore layout: record field -> [property key, Notion type], for the fields stored as they are. */
+const LORE_FIELDS = {
+  description: ['synopsis', 'rich_text'],
+  superseded_by: ['supersededBy', 'rich_text'],
+  source: ['sourceNote', 'rich_text'],
+  saved: ['saved', 'date'],
+  last_verified: ['lastVerified', 'rich_text'],
+  authorization: ['authorization', 'rich_text'],
+};
+
+/** Lore's Kind and Source for every toolkit record. */
+export const LORE_KIND = 'note';
+export const LORE_SOURCE = 'manual';
+
+/** The Lore Status of a record. */
+export function loreStatusOf(record) {
+  return LORE_STATUS_FOR[storedStatus(record)] || LORE_STATUS_FOR.current;
+}
+
+/** The contract status and the stored word for a Lore Status ('' when empty or unknown). */
+export function statusFromLore(value) {
+  const word = STATUS_FROM_LORE[String(value ?? '').trim().toLowerCase()] || '';
+  if (!word) return { status: String(value ?? '').trim(), word: null };
+  return word === 'superseded' || word === 'archived' ? { status: 'retired', word } : { status: word, word: null };
+}
+
+/** The agent writing, for Lore's Agent column: Claude Code, Codex, or '' when not known. */
+function agentName(env) {
+  const e = env || {};
+  if (e.PLUGIN_ROOT || e.PLUGIN_DATA || e.CODEX_THREAD_ID || e.CODEX_SANDBOX) return 'Codex';
+  if (e.CLAUDECODE || e.CLAUDE_PLUGIN_ROOT || e.CLAUDE_PROJECT_DIR || e.CLAUDE_CODE_ENTRYPOINT) return 'Claude Code';
+  return '';
+}
+
+/** Older layout: record field -> [property key, Notion type] */
 const FIELDS = {
   key: ['title', 'title'],
   type: ['type', 'select'],
@@ -132,7 +184,12 @@ export class NotionMemoryDriver {
    * tests { client, runner, sleep, minIntervalMs, clock }. clock() gives the
    * time in milliseconds used to decide whether a cached body can be used.
    */
-  constructor({ root, mainRoot, config = {}, env = process.env, now, client, runner, sleep, minIntervalMs, deadlineMs, timeoutMs, clock } = {}) {
+  /**
+   * lock: false writes without this computer's memory lock (used by toolkit
+   * notion ensure-project when it moves records between layouts; the cache
+   * file is still read and written, so table styles carry over).
+   */
+  constructor({ root, mainRoot, config = {}, env = process.env, now, client, runner, sleep, minIntervalMs, deadlineMs, timeoutMs, clock, lock = true } = {}) {
     this.backend = backend;
     const mem = (config.notion && config.notion.memory) || null;
     if (!mem || !mem.dataSourceId || !mem.properties) {
@@ -142,18 +199,27 @@ export class NotionMemoryDriver {
     }
     this.mem = mem;
     this.p = mem.properties;
+    this.lore = mem.layout === 'lore';
+    this.useLock = lock !== false;
     this.cacheRoot = mainRoot || root;
     this.now = typeof now === 'function' ? now : () => new Date();
     this.clock = typeof clock === 'function' ? clock : Date.now;
     this.inLock = false;
+    this.owner = String((config.project && config.project.owner) || '').trim();
+    this.agent = agentName(env);
+    this.keyById = new Map(); // page id -> key, for the Supersedes relation
     this.client = client || clientFor({ config, root: this.cacheRoot, env, runner, sleep, minIntervalMs, deadlineMs, timeoutMs });
-    this.location = `the Notion Memory database${mem.url ? ` (${mem.url})` : ''}`;
+    this.location = this.lore
+      ? `the Memories database on the project's Notion Memory page (Lore layout)${mem.url ? ` (${mem.url})` : ''}`
+      : `the Notion Memory database${mem.url ? ` (${mem.url})` : ''}`;
     this.cache = this.loadCache();
   }
 
   loadCache() {
     const cache = readCache(this.cacheRoot, CACHE_FILE);
     if (!cache.records || typeof cache.records !== 'object') cache.records = {};
+    // Entries stay after a move to the Lore layout: a cached body is used only for
+    // the same page id (cacheUsable), and the table style belongs to the record text.
     return cache;
   }
 
@@ -162,7 +228,7 @@ export class NotionMemoryDriver {
    * inside the lock, so an entry another command just wrote is not lost.
    */
   async locked(fn) {
-    if (this.inLock) return fn();
+    if (this.inLock || !this.useLock) return fn();
     return withLock(notionCacheDir(this.cacheRoot), async () => {
       this.inLock = true;
       try {
@@ -190,7 +256,14 @@ export class NotionMemoryDriver {
 
   // ------------------------------------------------------------ rows
 
+  /** The record key of a row: Record Key (Lore layout) or the page title (older layout). '' when it has none. */
+  keyOf(page) {
+    const v = this.lore ? readValue(page, this.p.recordKey) : readValue(page, 'title');
+    return v === null || v === undefined ? '' : String(v).trim();
+  }
+
   summaryOf(page) {
+    if (this.lore) return this.loreSummaryOf(page);
     const r = {};
     for (const [field, [key]] of Object.entries(FIELDS)) {
       const v = readValue(page, this.p[key]);
@@ -202,6 +275,78 @@ export class NotionMemoryDriver {
     const word = r.status === 'retired' ? this.otherFields(page).word : null;
     if (word) r.stored_status = word;
     return r;
+  }
+
+  loreSummaryOf(page) {
+    const r = {};
+    for (const [field, [key]] of Object.entries(LORE_FIELDS)) {
+      const v = this.p[key] ? readValue(page, this.p[key]) : null;
+      r[field] = v === null || v === undefined ? '' : String(v);
+    }
+    const parts = splitKey(this.keyOf(page)) || {};
+    const tags = (this.p.tags && readValue(page, this.p.tags)) || [];
+    r.type = (Array.isArray(tags) ? tags : []).find((t) => RECORD_TYPES.includes(t)) || parts.type || '';
+    r.name = parts.name || '';
+    const { status, word } = statusFromLore(this.p.status ? readValue(page, this.p.status) : '');
+    r.status = status;
+    r.superseded_by = r.superseded_by || null;
+    r.approved_by = approverFrom(r.authorization);
+    if (word && status === 'retired') r.stored_status = word;
+    return r;
+  }
+
+  /** The page ids of the rows with these keys: { ids, missing } (missing: keys with no row). */
+  async pageIdsFor(keys) {
+    const ids = [];
+    const missing = [];
+    for (const k of keys) {
+      const row = await this.findRow(k);
+      if (row) ids.push(normalizeId(row.id));
+      else missing.push(k);
+    }
+    return { ids, missing };
+  }
+
+  /** The record key of the row with this page id (read from Notion when not seen yet), or null. */
+  async keyForPageId(id) {
+    const n = normalizeId(id || '');
+    if (!n) return null;
+    if (this.keyById.has(n)) return this.keyById.get(n);
+    let page;
+    try {
+      page = await this.client.getPage(n);
+    } catch (err) {
+      if (isNotionError(err) && (err.status === 404 || err.status === 400)) return null;
+      throw err;
+    }
+    const key = this.keyOf(page) || null;
+    this.keyById.set(n, key);
+    return key;
+  }
+
+  /**
+   * Lore layout: the keys this record supersedes. The Supersedes relation, in
+   * its order; the Other fields list instead when the last save could not point
+   * at every key (a key with no row).
+   */
+  async supersedesOf(page, other) {
+    if (other.supersedes.length) return other.supersedes;
+    const ids = (this.p.supersedes && readValue(page, this.p.supersedes)) || [];
+    const keys = [];
+    for (const id of ids) {
+      const k = await this.keyForPageId(id);
+      if (k && isValidKey(k) && !keys.includes(k)) keys.push(k);
+    }
+    return keys;
+  }
+
+  /** Remember the key of every row read, for the Supersedes relation. */
+  noteRows(rows) {
+    for (const r of rows) {
+      const k = this.keyOf(r);
+      this.keyById.set(normalizeId(r.id), k || null);
+    }
+    return rows;
   }
 
   /** Split the Other fields JSON into supersedes, metadata, the heading, and the other keys. */
@@ -229,12 +374,15 @@ export class NotionMemoryDriver {
   }
 
   async rows() {
-    return this.client.queryAll(this.mem.dataSourceId);
+    return this.noteRows(await this.client.queryAll(this.mem.dataSourceId));
   }
 
   async findRow(key) {
-    const rows = await this.client.queryAll(this.mem.dataSourceId, { filter: { property: 'title', title: { equals: key } } });
-    const live = rows.filter((r) => !r.in_trash && readValue(r, 'title') === key);
+    const filter = this.lore
+      ? { property: this.p.recordKey, rich_text: { equals: key } }
+      : { property: 'title', title: { equals: key } };
+    const rows = this.noteRows(await this.client.queryAll(this.mem.dataSourceId, { filter }));
+    const live = rows.filter((r) => !r.in_trash && this.keyOf(r) === key);
     return live[0] || null;
   }
 
@@ -256,7 +404,7 @@ export class NotionMemoryDriver {
 
   /** The stored record for a page. Reads the body from Notion, or with useCache from the cache when cacheUsable() allows it. */
   async stored(page, { useCache = true } = {}) {
-    const key = readValue(page, 'title');
+    const key = this.keyOf(page);
     const cached = this.cache.records[key];
     const tableStyle = (cached && cached.tableStyle) || 'compact';
     let body;
@@ -271,9 +419,11 @@ export class NotionMemoryDriver {
     }
     const summary = this.summaryOf(page);
     const other = this.otherFields(page);
-    const heading = other.heading || titleFromName(summary.name || (splitKey(key) || {}).name);
-    const record = { ...summary, key, body: withTitle(heading, body), supersedes: other.supersedes };
-    if (other.word && record.status === 'retired') record.stored_status = other.word;
+    const title = this.lore ? String(readValue(page, 'title') || '').trim() : other.heading;
+    const heading = title || titleFromName(summary.name || (splitKey(key) || {}).name);
+    const supersedes = this.lore ? await this.supersedesOf(page, other) : other.supersedes;
+    const record = { ...summary, key, body: withTitle(heading, body), supersedes };
+    if (!this.lore && other.word && record.status === 'retired') record.stored_status = other.word;
     if (other.metadata) record.metadata = other.metadata;
     if (other.extra) record.extra = other.extra;
     const text = serializeRecord(record);
@@ -283,7 +433,13 @@ export class NotionMemoryDriver {
     return { ...parsed, version: versionOf(text), text, url: page.url || null, valid: problems.length === 0, problems };
   }
 
-  propertiesFor(record) {
+  /**
+   * The page properties for a record. existing: the row as it is now (Lore
+   * layout: Tags that are not a record type, put there in Notion or by Lore,
+   * are kept).
+   */
+  async propertiesFor(record, { existing = null } = {}) {
+    if (this.lore) return this.lorePropertiesFor(record, { existing });
     const props = {};
     for (const [field, [key, type]] of Object.entries(FIELDS)) {
       if (!this.p[key]) continue;
@@ -301,6 +457,39 @@ export class NotionMemoryDriver {
         const word = storedStatus(record);
         if (word !== storedStatus({ status: 'retired', superseded_by: record.superseded_by, body: record.body })) all[STATUS_WORD_KEY] = word;
       }
+      props[this.p.extra] = writeValue('rich_text', Object.keys(all).length ? JSON.stringify(all) : '');
+    }
+    return props;
+  }
+
+  async lorePropertiesFor(record, { existing = null } = {}) {
+    const props = {};
+    const set = (key, type, value) => {
+      if (this.p[key]) props[this.p[key]] = writeValue(type, value === null || value === undefined ? '' : value);
+    };
+    props.title = writeValue('title', stripTitle(record.body).title || titleFromName(record.name));
+    set('recordKey', 'rich_text', record.key);
+    set('keywords', 'rich_text', record.key);
+    for (const [field, [key, type]] of Object.entries(LORE_FIELDS)) set(key, type, record[field]);
+    set('kind', 'select', LORE_KIND);
+    set('status', 'select', loreStatusOf(record));
+    set('source', 'select', LORE_SOURCE);
+    if (this.owner) set('author', 'rich_text', this.owner);
+    if (this.agent) set('agent', 'rich_text', this.agent);
+    if (this.p.tags) {
+      const had = existing ? readValue(existing, this.p.tags) || [] : [];
+      const others = (Array.isArray(had) ? had : []).filter((t) => !RECORD_TYPES.includes(t));
+      props[this.p.tags] = { multi_select: [record.type, ...others].filter(Boolean).map((name) => ({ name: String(name) })) };
+    }
+    if (this.p.project && this.mem.projectRowId) props[this.p.project] = { relation: [{ id: this.mem.projectRowId }] };
+    const supersedes = supersedesList(record.supersedes);
+    const linked = this.p.supersedes ? await this.pageIdsFor(supersedes) : { ids: [], missing: supersedes };
+    if (this.p.supersedes) props[this.p.supersedes] = { relation: linked.ids.map((id) => ({ id })) };
+    if (this.p.extra) {
+      const all = { ...(record.extra || {}) };
+      // The keys live in the Supersedes relation; the list is kept here only when a key has no row to point at.
+      if (linked.missing.length) all.supersedes = supersedes;
+      if (record.metadata && Object.keys(record.metadata).some((k) => k !== 'type')) all.metadata = record.metadata;
       props[this.p.extra] = writeValue('rich_text', Object.keys(all).length ? JSON.stringify(all) : '');
     }
     return props;
@@ -358,16 +547,17 @@ export class NotionMemoryDriver {
       }
       let pageId;
       let planned = null;
+      const properties = await this.propertiesFor(record, { existing });
       if (existing) {
         pageId = existing.id;
         // Plan the body before any write: a conflict with an edit made in Notion since the read above saves nothing.
         planned = await this.planBody(pageId, pageBody(record.body), pageBody(current.body), label);
-        await this.client.updatePage(pageId, { properties: this.propertiesFor(record) });
+        await this.client.updatePage(pageId, { properties });
         await this.applyPlan(pageId, planned.plan);
       } else {
         const page = await this.client.createPage({
           parent: { type: 'data_source_id', data_source_id: this.mem.dataSourceId },
-          properties: this.propertiesFor(record),
+          properties,
           ...(pageBody(record.body).trim() ? { markdown: toNotion(pageBody(record.body)) } : {}),
         });
         this.client.trust(page.id);
@@ -377,7 +567,7 @@ export class NotionMemoryDriver {
       const back = await this.client.getPage(pageId);
       const stored = await this.stored(back, { useCache: false });
       const same = COMPARED.every((f) => String(stored[f] ?? '') === String(record[f] ?? ''))
-        && (!this.p.extra || supersedesList(stored.supersedes).join(',') === supersedesList(record.supersedes).join(','));
+        && ((!this.lore && !this.p.extra) || supersedesList(stored.supersedes).join(',') === supersedesList(record.supersedes).join(','));
       const bodyOk = planned && planned.concurrent
         ? changedLeavesMatch(pageBody(stored.body), pageBody(record.body), planned.plan)
         : sameLocal(stored.body, record.body);
@@ -405,7 +595,7 @@ export class NotionMemoryDriver {
     const rows = await this.rows();
     const out = [];
     for (const page of rows) {
-      const key = readValue(page, 'title');
+      const key = this.keyOf(page);
       if (!isValidKey(key)) continue;
       const s = this.summaryOf(page);
       out.push(recordSummary({ ...s, key }));
@@ -426,7 +616,7 @@ export class NotionMemoryDriver {
     const rows = await this.rows();
     const hits = [];
     for (const page of rows) {
-      const key = readValue(page, 'title');
+      const key = this.keyOf(page);
       if (!isValidKey(key)) continue;
       const s = { ...this.summaryOf(page), key };
       if (!all && s.status === 'retired') continue;
@@ -510,7 +700,7 @@ export class NotionMemoryDriver {
       const { record } = parseRecord(repairLinks(renameRecordText(current.text, to), dir, change).text, to);
       record.saved = current.saved || this.today();
       const planned = pageBody(record.body) !== pageBody(current.body) ? await this.planBody(page.id, pageBody(record.body), pageBody(current.body), `The memory record ${k}`) : null;
-      await this.client.updatePage(page.id, { properties: this.propertiesFor(record) });
+      await this.client.updatePage(page.id, { properties: await this.propertiesFor(record, { existing: page }) });
       if (planned) await this.applyPlan(page.id, planned.plan);
       delete this.cache.records[k];
       this.cache.records[to] = { tableStyle: current.tableStyle || 'compact', lastEdited: null };
@@ -654,7 +844,7 @@ export class NotionMemoryDriver {
     let changed = 0;
     const seen = new Set();
     for (const page of rows) {
-      const key = readValue(page, 'title');
+      const key = this.keyOf(page);
       if (!isValidKey(key)) continue;
       seen.add(key);
       const before = this.cache.records[key];
@@ -665,7 +855,7 @@ export class NotionMemoryDriver {
     }
     for (const key of Object.keys(this.cache.records)) if (!seen.has(key)) delete this.cache.records[key];
     this.saveCache();
-    return { count, changed, detail: `The Index view of the Notion Memory database lists ${count} records in use; ${changed} record texts were refreshed in the local cache.` };
+    return { count, changed, detail: `The Index view of the ${this.lore ? 'Memories database on the Notion Memory page' : 'Notion Memory database'} lists ${count} records in use; ${changed} record texts were refreshed in the local cache.` };
   }
 
   async status() {
@@ -686,8 +876,13 @@ export class NotionMemoryDriver {
     const keys = new Map();
     let lastEdited = null;
     for (const page of rows) {
-      const key = readValue(page, 'title');
+      const key = this.keyOf(page);
       if (!lastEdited || page.last_edited_time > lastEdited) lastEdited = page.last_edited_time;
+      if (this.lore && !key) {
+        const title = String(readValue(page, 'title') || '').trim();
+        problems.push({ where: page.url || page.id, problem: `("${title || 'no title'}") has no Record Key, so the toolkit does not read it as a memory record. It was made in Notion or by Lore's own tools. Give it a Record Key (<type>_<slug>) to make it a record, or leave it.` });
+        continue;
+      }
       if (!isValidKey(key)) {
         problems.push({ where: page.url || page.id, problem: `has the key "${key || ''}", which is not <type>_<slug>. Give it a key or delete it.` });
         continue;
@@ -712,7 +907,7 @@ export class NotionMemoryDriver {
     this.saveCache();
     const counts = countRecords(summaries);
     const inUse = counts.total - counts.retired;
-    const detail = `Notion Memory database: ${inUse} record${inUse === 1 ? '' : 's'} in use, ${counts.retired} retired${problems.length ? `, ${problems.length} problem${problems.length === 1 ? '' : 's'} to look at` : ''}.`;
+    const detail = `${this.lore ? 'Notion Memory page (Lore layout)' : 'Notion Memory database'}: ${inUse} record${inUse === 1 ? '' : 's'} in use, ${counts.retired} retired${problems.length ? `, ${problems.length} problem${problems.length === 1 ? '' : 's'} to look at` : ''}.`;
     return { ...base, lastSave: this.cache.lastSave || lastEdited || null, counts, healthy: true, detail, problems };
   }
 
@@ -722,4 +917,89 @@ export class NotionMemoryDriver {
     this.cache.lastExportTo = dir;
     this.saveCache();
   }
+}
+
+/**
+ * Copy every record of one Notion memory database into another. toolkit
+ * notion ensure-project uses it to move a project from the older single Memory
+ * database into the Lore layout. from and to are NotionMemoryDriver objects.
+ *
+ * Each record is written with its stored text and read back; a record whose
+ * read-back version is not the source version is reported in `failed`. Rows
+ * with no memory key are not records and are listed in `skipped`. A record
+ * already in `to` with the same text counts as `same`; with different text it
+ * is replaced when overwrite is true (the source is still the project's
+ * memory), and otherwise kept and listed in `kept`. Records that supersede
+ * others are saved a second time once every row exists, so their Supersedes
+ * relation points at the rows. The whole copy holds `to`'s memory lock.
+ *
+ * Returns { total, copied, same, kept: [{ key }], skipped: [{ title, url }], failed: [{ key, reason }] }.
+ */
+export async function copyRecords(from, to, { overwrite = false } = {}) {
+  const out = { total: 0, copied: [], same: [], kept: [], skipped: [], failed: [] };
+  const why = (err) => String((err && err.message) || err).replace(/\s+/g, ' ').trim();
+  const recordOf = (rec) => {
+    const { record } = parseRecord(rec.text, rec.key);
+    record.saved = rec.saved || '';
+    return record;
+  };
+  return to.locked(async () => {
+    const sources = [];
+    for (const page of await from.rows()) {
+      const key = from.keyOf(page);
+      if (!isValidKey(key)) {
+        out.skipped.push({ title: key || String(readValue(page, 'title') || ''), url: page.url || null });
+        continue;
+      }
+      if (sources.some((x) => x.key === key)) {
+        out.skipped.push({ title: `${key} (a second row with this key)`, url: page.url || null });
+        continue;
+      }
+      out.total += 1;
+      try {
+        sources.push({ key, rec: await from.stored(page, { useCache: false }) });
+      } catch (err) {
+        out.failed.push({ key, reason: `it could not be read: ${why(err)}` });
+      }
+    }
+    // Pass 1: every record.
+    for (const { key, rec } of sources) {
+      try {
+        const row = await to.findRow(key);
+        if (!row) {
+          await to.writeRecord(recordOf(rec), 'absent', 'migrate');
+          out.copied.push(key);
+          continue;
+        }
+        const cur = await to.stored(row, { useCache: false });
+        if (cur.version === rec.version) out.same.push(key);
+        else if (overwrite) {
+          await to.writeRecord(recordOf(rec), cur.version, 'migrate');
+          out.copied.push(key);
+        } else out.kept.push({ key });
+      } catch (err) {
+        out.failed.push({ key, reason: why(err) });
+      }
+    }
+    // Pass 2: records that supersede others, now that every row exists.
+    for (const { key, rec } of sources) {
+      if (!out.copied.includes(key) || !supersedesList(rec.supersedes).length) continue;
+      try {
+        const cur = await to.get(key);
+        await to.writeRecord(recordOf(cur), cur.version, 'migrate');
+      } catch (err) {
+        out.failed.push({ key, reason: `its Supersedes relation was not set: ${why(err)}` });
+      }
+    }
+    // Check: every copied record reads back with the text it had.
+    for (const { key, rec } of sources) {
+      if (!out.copied.includes(key)) continue;
+      const back = await to.get(key);
+      if (!back || back.version !== rec.version) {
+        out.copied = out.copied.filter((k) => k !== key);
+        out.failed.push({ key, reason: back ? 'it reads back with different text in the Lore layout' : 'it is missing after the copy' });
+      }
+    }
+    return out;
+  });
 }

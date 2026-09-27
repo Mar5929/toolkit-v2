@@ -1,6 +1,6 @@
 ---
 name: sf-deploy-check
-description: Runs the hitch-hiker check that finds components or pending edits that would ship with a Salesforce deploy before their feature is ready. Use before any deploy to a shared org (full copy, staging, or production) and before handing the owner a production deploy command.
+description: 'Finds hitch-hikers: components or pending edits that would ship with a Salesforce deploy before their feature is ready. Use before any deploy to a shared org (UAT, full copy, staging, or production), including a deploy command for the owner. Not for running the deploy; use work-finish.'
 ---
 
 # Salesforce deploy hitch-hiker check

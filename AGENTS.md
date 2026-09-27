@@ -29,8 +29,11 @@ only decides and steers. `README.md` explains it for Mike.
 | `plugins/memory/` | Three memory skills. |
 | `plugins/session-skills/` | Five conversation skills and the `handoff-verifier` agent. |
 | `plugins/git-workflows/` | Four Git skills and their tests. |
-| `plugins/sf-architect-solutioning/` | The Salesforce architect skill, ported with its body unchanged. |
+| `plugins/sf-architect-solutioning/` | The Salesforce architect skill, ported with its body unchanged. Only its description was rewritten (Mike approved, 2026-09-27). |
+| `plugins/toolkit/lib/notion/lore-schema.mjs` | Lore's five Notion memory databases (Projects, Topics, Memories, Entities, Facts), copied from Lore 1.0.0 at commit `6e741b1`. Notion memory is stored in this layout (`dev/research/lore.md`). The toolkit's added Memories columns are in `lib/notion/schema.mjs`. |
+| `ai-external-knowledge/` | Official Claude Code, Codex, Agent Skills, and Anthropic engineering pages, captured with Firecrawl on 2026-09-27. `INDEX.md` lists the folders; each folder's `SOURCE-RECORD.md` gives every page's web address. Not shipped. |
 | `dev/` | Goal, progress, plan, skill index, research, tools, and test runs. Not shipped. |
+| `dev/research/skill-writing-guide.md` | The rules for skill names, descriptions, and bodies, taken from `ai-external-knowledge/`. Every rule cites its page. |
 | `dev/tools/import-model.mjs` | Copies the model project into `plugins/toolkit/scaffold/model/`. `--check` compares the copy with the model and changes nothing. |
 | `.claude/settings.json` | Settings for sessions working on this repository. `claudeMdExcludes` stops the copy's `CLAUDE.md`, `AGENTS.md` files, and `.claude/rules/` from loading as instructions here; they are for projects, not for this repository. |
 
@@ -110,7 +113,11 @@ claude plugin validate ./plugins/toolkit
   `TOOLKIT_SLOW=1` also runs the slow `find --reflect` test.
 - `TOOLKIT_NOTION_LIVE=1` runs the Notion tests against the private Notion test
   area named in `dev/test-runs/notion-test-area.json`, never against Mike's
-  real "AI Agent Second Brain" page.
+  real "AI Agent Second Brain" page. The Lore layout checks run by hand:
+  `TOOLKIT_NOTION_LIVE=1 node plugins/toolkit/tests/notion/live/run-lore-live.mjs`
+  (results: `dev/test-runs/lore-layout.md`).
+- `TOOLKIT_LORE_CLONE=<built Lore clone>` also runs the test that compares
+  `lore-schema.mjs` with Lore's own code. Run it before moving to a newer Lore.
 - Codex has no validate command. To prove Codex accepts the packages, install
   them into a scratch Codex home, never Mike's own:
   `CODEX_HOME=<scratch folder> codex plugin marketplace add <this folder>`, then
@@ -160,11 +167,21 @@ claude plugin validate ./plugins/toolkit
   1 word for word. No `when_to_use`, `` !`command` ``, `$ARGUMENTS`, or
   `${CLAUDE_*}`: Codex shows them as literal text. `check-skills.mjs` checks
   all of this.
-- **Read the documentation before building a Claude Code piece.** The captured
-  Claude Code pages are in
-  `/Users/michaelrihm/Documents/Projects/claude-toolkit/ai-external-knowledge/claude-code/`
-  (index: its `README.md`). Codex facts, with sources:
-  `dev/research/platform-best-practices.md` part 3.
+- **Skill descriptions** follow `dev/research/skill-writing-guide.md` Part 3
+  (Mike, 2026-09-27): in single quotes, what the skill does, then when to use
+  it, with two to four of the owner's example phrases, and a "Not for ...; use
+  <skill>" clause only where a neighbor skill competes. After changing one,
+  re-run the routing check (`dev/test-runs/skill-routing-r3.md` is the latest).
+- **Read the documentation before building a Claude Code or Codex piece.** The
+  captured pages are in this repository's `ai-external-knowledge/` (index:
+  `INDEX.md`): `claude-code/`, `codex/`, `anthropic-agent-skills/`, and
+  `anthropic-engineering/`. More Codex facts, with sources:
+  `dev/research/platform-best-practices.md` part 3. Never edit a captured
+  page; capture it again with Firecrawl and update its `SOURCE-RECORD.md`.
+- **Notion memory uses Lore's layout.** Never rename or remove a property in
+  `plugins/toolkit/lib/notion/lore-schema.mjs`; Lore finds its databases and
+  columns by these exact names. The toolkit does not install or run Lore, and
+  Lore's own saving and hooks stay off.
 - **Read-only sources.** Never change
   `/Users/michaelrihm/Documents/Projects/claude-toolkit`,
   `/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project`, or

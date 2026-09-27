@@ -1,6 +1,6 @@
 ---
 name: explain-simply
-description: "Re-explains the last answer, a plan, or a named document as short plain bullets, keeping every number, name, and path. Use when the owner types /explain-simply or says \"explain it like I'm five\", \"simpler\", \"put that in plain bullets\", or \"I don't get it\"."
+description: 'Re-explains the last answer, a plan, or a named document as short plain bullets, keeping every number, name, and path. Use whenever the owner finds an answer too technical or hard to follow, or wants it in plainer words, for example "explain it like I''m five", "less jargon", or "I don''t get it".'
 ---
 
 # Explain it simply

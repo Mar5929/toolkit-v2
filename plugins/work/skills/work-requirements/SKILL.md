@@ -1,6 +1,6 @@
 ---
 name: work-requirements
-description: 'Interviews the owner one question at a time, writes the answers into the work item''s requirements and open questions, then asks for approval. Use when the owner says "grill me", "ask me questions", "what should it do", or "check the spec", changes a requirement, or requirements are missing.'
+description: 'Interviews the owner one question at a time, writes a work item''s requirements (R-01, R-02), checks them, and asks for his approval. Use when an item''s requirements are missing or the owner changes, adds, or drops one at any stage, or says "grill me", "ask me questions", or "check the spec".'
 ---
 
 # Work requirements

@@ -1,6 +1,6 @@
 ---
 name: handoff
-description: "Writes a checked prompt a fresh session can start from, after updating the active work item and current focus. Use when the owner says \"write a handoff\", \"I'm going to clear context\", \"start a new session\", \"this chat is getting long\", or \"I'm stopping for today\". \"/handoff check\" checks one."
+description: 'Updates the work item and current focus, then writes a checked prompt for a new session, or checks a pasted one. Use whenever the owner is about to clear context or end the session, even a short one or with a recap, for example "write a handoff", "start a new session", or "I''m stopping for today".'
 ---
 
 # Handoff
@@ -29,8 +29,9 @@ start from. Do these steps in this order. Details for each step are below.
    Unchecked, Missing, or Skipped finding. Codex: pass the agent file's text
    to a native worker (`../../references/conventions.md`, "Running an agent
    from this plugin").
-6. **Show the result.** What was saved (anything not saved first), then the
-   prompt in one fenced block. A failed save never blocks the prompt.
+6. **Show the result.** Also asked for a recap: open `session-summary` and
+   show its table first. Then what was saved (anything not saved first), then
+   the prompt in one fenced block. A failed save never blocks the prompt.
 7. **"/handoff check"** (Codex: `$handoff check`): run only step 5 on a prompt
    the owner pasted.
 8. Never commit `.memory/` or `.work-items/`. Never stop the owner from
@@ -319,10 +320,13 @@ prompt anyway, and say inside the prompt that it was not checked.
 
 ## Step 6: show the short list, then the prompt
 
-First the saves: anything not saved, then what was saved and where (work item
-id and sections, current focus). Then the checker's short list, one line each;
-group small items when there are more than about six. Then one fenced block the
-owner can copy. Before showing it, confirm the fixed notice is its first line.
+When the owner asked for a recap in the same request, open `session-summary`
+(`../../references/conventions.md`, "Opening another skill") and show its
+table and open block first. Then the saves: anything not saved, then what was
+saved and where (work item id and sections, current focus). Then the checker's
+short list, one line each; group small items when there are more than about
+six. Then one fenced block the owner can copy. Before showing it, confirm the
+fixed notice is its first line.
 
 ```markdown
 Not saved: the current focus (Notion did not answer). The entry is in the prompt.
@@ -362,5 +366,7 @@ item by id and rechecks its current state and approvals before acting.
 ## What this is not
 
 It is not a recap. `session-summary` answers "which of my requests are where".
-This answers "how does somebody else pick this up". The checker does not decide
-what goes in the prompt; it checks what is there and never removes a claim.
+This answers "how does somebody else pick this up". When the owner asks for
+both, this skill runs and shows the `session-summary` table first (step 6).
+The checker does not decide what goes in the prompt; it checks what is there
+and never removes a claim.

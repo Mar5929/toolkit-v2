@@ -35,6 +35,7 @@ test('the Claude Code briefing names the manual, active items with their next sk
   const text = res.stdout;
   assert.match(text, /^Project briefing: Acme CRM \(acme-crm\), owner Mike\./);
   assert.ok(text.includes(`Project manual: ${path.join(root, 'AGENTS.md')}.`));
+  assert.ok(text.includes('Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.'));
   assert.match(text, /This worktree is on branch main, which names no work item\./);
   assert.match(text, /Active items:\n- WI-001 Login page: 06 [^\n]*In Progress\.[^\n]*Continues with work-on\./);
   assert.match(text, /Waiting on the owner:\n- WI-002 Billing export: WI-002 is waiting on the owner/);

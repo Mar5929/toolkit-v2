@@ -9,7 +9,9 @@
 //   edit that would remove a child page fails unless new_str keeps its tag;
 // - property ids are URL-encoded in data sources and plain in views;
 // - unique_id numbers are assigned per data source;
-// - a dual relation keeps its other side in step.
+// - a dual relation keeps its other side in step;
+// - a multi-select value that is not an option yet becomes one;
+// - a database title can be changed with PATCH v1/databases/<id>.
 // It can also fail on purpose: fake.failNext(n, stderr) makes the next n calls fail.
 //
 // fakeRunner(fake) gives a runner for NotionClient; fake.handle(args, input)
@@ -264,6 +266,16 @@ export class FakeNotion {
     else if (p.type === 'select') {
       if (value.select && value.select.name && !p.select.options.some((o) => o.name === value.select.name)) p.select.options.push({ id: uuid(), name: value.select.name, color: 'default' });
       cur.select = value.select ? { id: (p.select.options.find((o) => o.name === value.select.name) || {}).id, name: value.select.name, color: 'default' } : null;
+    } else if (p.type === 'multi_select') {
+      // Like Notion: a name that is not an option yet becomes one.
+      cur.multi_select = (value.multi_select || []).map((v) => {
+        let o = p.multi_select.options.find((x) => x.name === v.name);
+        if (!o) {
+          o = { id: uuid(), name: v.name, color: 'default', description: null };
+          p.multi_select.options.push(o);
+        }
+        return { id: o.id, name: o.name, color: o.color };
+      });
     } else if (p.type === 'status') {
       if (value.status && !p.status.options.some((o) => o.name === value.status.name)) fail(400, 'validation_error', `Invalid status option ${value.status.name}`);
       cur.status = value.status ? { name: value.status.name, color: 'default' } : null;
@@ -449,6 +461,10 @@ export class FakeNotion {
       if (!db) fail(404, 'object_not_found', `Could not find database with ID: ${id}.`);
       if (method === 'PATCH') {
         if (body.in_trash !== undefined) db.in_trash = Boolean(body.in_trash);
+        if (Array.isArray(body.title)) {
+          db.title = rich(plain(body.title));
+          db.last_edited_time = this.now();
+        }
       }
       return JSON.parse(JSON.stringify(db));
     }
@@ -483,8 +499,9 @@ export class FakeNotion {
             }
             continue;
           }
-          if (found && spec.select) {
-            found[1].select.options = spec.select.options.map((o) => ({ id: o.id || uuid(), name: o.name, color: o.color || 'default' }));
+          if (found && (spec.select || spec.multi_select)) {
+            const t = spec.select ? 'select' : 'multi_select';
+            found[1][t].options = spec[t].options.map((o) => ({ id: o.id || uuid(), name: o.name, color: o.color || 'default' }));
             continue;
           }
           if (found) continue;

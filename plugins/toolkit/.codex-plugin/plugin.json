@@ -1,6 +1,6 @@
 {
   "name": "toolkit",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "The Toolkit V2 runtime: the toolkit command, the hooks that brief each session and check work items and memory, and the project-setup skill that sets up or repairs a project. Its hooks do nothing outside a Toolkit V2 project.",
   "author": {
     "name": "Mike Rihm",

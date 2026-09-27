@@ -69,8 +69,8 @@ const SALESFORCE_OVERLAY = {
 };
 const EXCEPTIONS = {
   'sf-architect-solutioning': {
-    reason: 'GOAL.md and ARCHITECTURE.md section 13 item 19: ported as is, body and description unchanged; a description change is Mike\'s call (SKILL-INDEX 9.1)',
-    downgrade: new Set(['description-length', 'description-index', 'steps', 'voice', 'own-line', 'frontmatter-keys']),
+    reason: 'GOAL.md: body ported byte for byte; only the description was rewritten, which Mike approved on 2026-09-27, so the description rules apply in full',
+    downgrade: new Set(['steps', 'voice', 'own-line']),
   },
   'sf-deploy-check': SALESFORCE_OVERLAY,
   'sf-component-tracker': SALESFORCE_OVERLAY,

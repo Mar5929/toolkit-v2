@@ -1,6 +1,6 @@
 ---
 name: work-check
-description: 'Checks a finished build against every requirement with an independent checker agent, fixes what fails, then shows the owner the result to approve. Use when the owner asks "is it ready", "does it work", "test it", or "check it against what I asked for", or when a build''s last task is done.'
+description: 'Tests a finished build against its work item''s requirements, fixes what fails, and asks the owner to approve the result. Use when the last build task is done, or the owner asks whether it is ready to ship or works, for example "is it ready", "test it", or "check it against what I asked for".'
 ---
 
 # Work check

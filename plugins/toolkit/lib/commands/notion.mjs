@@ -7,8 +7,11 @@
 //                 inside a project, in .toolkit.json.
 // ensure-project  For this project: its row in Projects; when the tracker is
 //                 Notion, its Work Items database with the board and table
-//                 views; when memory is Notion, its Memory database and the
-//                 Current focus and Terminology glossary pages. Saves every id
+//                 views; when memory is Notion, its "Memory" page in Lore's
+//                 layout (Lore's five databases; records are rows of Memories)
+//                 and the Current focus and Terminology glossary pages. A
+//                 project still on the older single Memory database has its
+//                 records moved into the Lore layout. Saves every id
 //                 in the "notion" block of .toolkit.json. Safe to run again: it
 //                 adds only what is missing and repairs what was removed.
 //                 .toolkit.json is written only when an id changed; the time of
@@ -32,8 +35,13 @@ export const help = `Usage:
 ensure-root makes sure the Projects database under the root page has the
 toolkit's registry properties (Key, Tracker, Memory system, and others).
 ensure-project builds or repairs this project's row, its Work Items database
-(when tracker.type is notion), and its Memory database and pages (when
-memory.type is notion). Both only add what is missing and never delete.
+(when tracker.type is notion), and its memory (when memory.type is notion): a
+"Memory" page in the layout of Lore (github.com/makenotion/lore) holding the
+Projects, Topics, Memories, Entities, and Facts databases, plus the Current
+focus and Terminology glossary pages. A project still on the older single
+Memory database has its records copied into the Memories database and read
+back; the old database is then renamed "Old memory database (safe to delete)".
+Both only add what is missing and never delete.
 
 The root page is taken from --root-page, then .toolkit.json notion.rootPageId,
 then this computer's ~/.config/toolkit-v2/notion.json. Every write outside the
@@ -188,7 +196,8 @@ async function runEnsureProject(flags, ctx) {
   const lines = [];
   if (notion.project && notion.project.url) lines.push(`Project page: ${notion.project.url}`);
   if (notion.workItems && notion.workItems.url) lines.push(`Work Items database: ${notion.workItems.url}`);
-  if (notion.memory && notion.memory.url) lines.push(`Memory database: ${notion.memory.url}`);
+  if (notion.memory && notion.memory.layout === 'lore' && notion.memory.pageUrl) lines.push(`Memory page (Lore layout): ${notion.memory.pageUrl}`);
+  if (notion.memory && notion.memory.url) lines.push(`${notion.memory.layout === 'lore' ? 'Memories database' : 'Memory database'}: ${notion.memory.url}`);
   lines.push(...listLines('Created:', report.created), ...listLines('Added:', report.added), ...listLines('Note:', report.notes), ...listLines('Problems:', report.problems));
   if (!report.created.length && !report.added.length && !report.problems.length) lines.push('Everything was already in place.');
   if (configFile) lines.push(`Saved the Notion ids in ${configFile}.`);

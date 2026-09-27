@@ -1,6 +1,6 @@
 ---
 name: braindump
-description: "Plays back a loose brain dump in very simple words and waits for the owner to confirm before any work starts. Use when the owner types /braindump or says \"here's a brain dump\", \"play that back\", \"tell me what you heard\", or \"make sure you understood before you start\"."
+description: 'Plays back a loose brain dump in very simple words and waits for the owner to confirm before any work starts. Use when the owner types /braindump or says "here''s a brain dump", "play that back", "tell me what you heard", or "make sure you understood before you start".'
 ---
 
 # Brain dump playback

@@ -1,13 +1,6 @@
 ---
 name: sf-architect-solutioning
-description: >
-  Triggers when the user provides requirements to architect and solution for Salesforce. Acts as a
-  certified Salesforce Technical Architect. Pushes back on vague requirements, clarifies, interviews
-  for more info, verifies platform facts against official Salesforce documentation, and builds a
-  solution plan before any code. Use when user says "architect this", "solution this requirement",
-  "design this feature", feeds requirements, or asks how to build something in Salesforce.
-  Do NOT use for implementation or building; hand off to the project's available implementation workflow.
-  Do NOT use for non-Salesforce work.
+description: 'Answers Salesforce platform questions and plans Salesforce solutions, checking each fact against official Salesforce docs. Use whenever the owner asks a Salesforce platform question, even about a work item ("which Flow type", "Flow or Apex"), or solution-design needs a Salesforce specialist.'
 ---
 
 # Salesforce Architect & Solutioning

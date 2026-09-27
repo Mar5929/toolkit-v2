@@ -1,6 +1,6 @@
 ---
 name: project-setup
-description: 'Sets up Toolkit V2 in a new project or repairs one: copies the model scaffold, applies tracker, memory, and Salesforce answers, and fixes this Mac, Notion, or Hindsight. Use when the owner says "set up Toolkit V2", "set up this project", "check the setup", "update the toolkit", or "new computer".'
+description: 'Sets up Toolkit V2 in a new project, or checks, updates, and repairs an existing setup, including Notion and Hindsight. Use when the owner says "set up Toolkit V2", "set up this project", "check the setup", or "update the toolkit", or starts working on a new computer.'
 ---
 
 # Project setup

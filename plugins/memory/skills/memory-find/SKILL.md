@@ -1,6 +1,6 @@
 ---
 name: memory-find
-description: 'Finds what the project already knows in memory, decisions, work items, requirements, and the current focus, and cites the source of each answer. Use when the owner asks "what did we decide", "do you remember", "why did we", or "have we done this before", and before asking him to repeat anything.'
+description: 'Looks up what the project already recorded (memory, DECISIONS.md, work items, requirements, current focus) and cites the source of each answer. Use when the owner asks "what did we decide", "do you remember", or "why did we", and before asking him to repeat anything.'
 ---
 
 # Memory find

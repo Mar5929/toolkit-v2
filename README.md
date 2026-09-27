@@ -25,15 +25,21 @@ it changes nothing in your current projects.
 In Claude Code you can start a skill by typing `/<skill>`. In Codex you type
 `$<skill>`. You rarely need to: the agent picks the skill from what you say.
 
+Each skill has a short description that tells the agent what the skill does
+and when to use it. The descriptions follow the official Claude Code and Codex
+guidance, saved in `ai-external-knowledge/`. In the latest test, the agent
+picked the right skill first for 74 of 76 test messages in Claude Code and 72
+of 76 in Codex (`dev/test-runs/skill-routing-r3.md`).
+
 | Plugin | Skill | What it does | You might say |
 | --- | --- | --- | --- |
-| `toolkit` | `project-setup` | Sets up Toolkit V2 in a project, or checks and repairs it. | "set up this project", "check the setup" |
+| `toolkit` | `project-setup` | Sets up Toolkit V2 in a project, or checks, updates, and repairs it. | "set up this project", "check the setup", "update the toolkit" |
 | `work` | `work-on` | Starts, continues, or logs a piece of work, and builds it. | "build this", "keep going" |
 | `work` | `work-status` | Shows what is in progress, what is blocked, and what comes next. Changes nothing. | "where are we", "what's next" |
 | `work` | `work-decide` | Walks you through each decision waiting on you, one at a time. | "what do you need from me" |
-| `work` | `work-requirements` | Asks you questions one at a time and writes down what the work must do. | "grill me", "what should it do" |
+| `work` | `work-requirements` | Asks you questions one at a time and writes down what the work must do. | "grill me", "check the spec" |
 | `work` | `solution-design` | Works out how to build it and gives you design options to approve. | "how should we build this" |
-| `work` | `work-organize` | Splits big work into sub-items, moves items, and notices folders you moved by hand. | "split this", "I moved some folders around" |
+| `work` | `work-organize` | Splits big work into sub-items, moves items, and notices folders you moved by hand. | "break it down", "put X under Y", "I moved some folders around" |
 | `work` | `work-check` | Tests the finished work against every requirement, fixes what fails, and shows you the result. | "is it ready", "test it" |
 | `work` | `work-finish` | Ships and closes a work item after you approve it, or cancels it. | "ship it", "mark it done" |
 | `work` | `work-delegate` | Hands a goal to a team of agents, with you as the product owner. | "you drive", "take it from here" |
@@ -49,10 +55,10 @@ In Claude Code you can start a skill by typing `/<skill>`. In Codex you type
 | `git-workflows` | `reset-to-remote` | Makes your copy an exact match of the remote copy (for example on GitHub). It deletes local changes, so it runs only when you clearly ask. | "wipe local", "fresh start from remote" |
 | `git-workflows` | `merge-and-clean-up` | Merges a pull request and removes only its branches and worktree. | "merge and clean up" |
 | `git-workflows` | `publish-docs` | Saves an agreed document change straight to the main branch. The agent uses it after editing documents. | (agent use) |
-| `sf-architect-solutioning` | `sf-architect-solutioning` | Acts as a Salesforce architect and checks facts against official Salesforce documentation. Salesforce projects only. | "architect this" |
+| `sf-architect-solutioning` | `sf-architect-solutioning` | Answers Salesforce platform questions and plans Salesforce solutions, checking each fact against official Salesforce documentation. Salesforce projects only. | "Flow or Apex", "which Flow type" |
 | (copied into Salesforce projects) | `sf-deploy-check` | Finds components that would ship with a deploy before they are ready. | (agent use) |
 | (copied into Salesforce projects) | `sf-component-tracker` | Keeps the component tracker and `package.xml` files in step with the metadata. | (agent use) |
-| (copied into Salesforce projects) | `sf-data-change` | Builds your package for a production data change: load file, backup, steps, and undo steps. | (agent use) |
+| (copied into Salesforce projects) | `sf-data-change` | Builds your package for a production data change: load file, backup, steps, and undo steps. | "load this file into production" |
 
 Helper agents: the `work` plugin has six (`requirements-analyst`, `researcher`,
 `design-architect`, `design-critic`, `builder`, `acceptance-checker`), and
@@ -159,6 +165,26 @@ trust the folder, and trust the hooks (see below).
 
 To check or repair a project later, say **"check the setup"**.
 
+### Notion memory
+
+When a project keeps memory in Notion, its row in the Projects database gets a
+page named "Memory". That page holds the five databases of Lore, Notion's
+open-source memory system for AI agents (github.com/makenotion/lore):
+Projects, Topics, Memories, Entities, and Facts. Each saved memory is one row
+in Memories. The "Current focus" and "Terminology glossary" pages stay under
+the project row, as before.
+
+The agent still saves with the `toolkit memory` commands and still asks you
+before it saves. Lore itself is not installed, its automatic saving and hooks
+stay off, and there is no new sign-in. If you install Lore later, its tools can
+read the same rows.
+
+A project set up before this change has a single "Memory" database, and it
+keeps working until `toolkit notion ensure-project` runs for that project.
+That command copies each record into the new layout, reads each one back, and
+renames the old database "Old memory database (safe to delete)". Nothing is
+deleted. You can delete that old database yourself once you are happy.
+
 ### Starting a new project from Codex
 
 Codex shows the Toolkit V2 skills only in a project that `toolkit init` has
@@ -244,6 +270,9 @@ The agent never does these for you. It tells you when each one is needed.
   Claude Code and Codex).
 - `dev/tools/import-model.mjs`: the tool that copies your model project into
   the toolkit.
+- `ai-external-knowledge/`: saved copies of the official Claude Code, Codex,
+  and Agent Skills documentation, used to build the skills and hooks.
+  `INDEX.md` lists what is there. It is not installed anywhere.
 - `dev/`: the goal, the build plan, research, and test runs. It is not
   installed anywhere.
 - `AGENTS.md`: instructions for agents working on Toolkit V2 itself.

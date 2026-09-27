@@ -444,6 +444,10 @@ export async function buildBriefing(project, opts = {}) {
     lines: [
       `Project briefing: ${describeSetup(config)}`,
       `Project manual: ${path.join(project.root, 'AGENTS.md')}. Stages, statuses, and approval gates: toolkit work lifecycle.`,
+      // Routing check, 2026-09-27 (dev/test-runs/skill-routing.md): Claude Code
+      // often ran toolkit commands first and then answered without the skill.
+      // Stated as a fact, as the hooks docs advise for injected context.
+      'Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.',
     ],
   });
   sections.push(...workSections(work));

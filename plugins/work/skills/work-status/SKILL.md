@@ -1,6 +1,6 @@
 ---
 name: work-status
-description: 'Answers "where are we", "what''s next", and "catch me up": shows active work items, their progress and blockers, the recommended next step, and how many decisions wait on the owner. Use when the owner asks for project status, progress on one item, or what comes next. Changes nothing.'
+description: 'Reports where the project''s work items stand: progress, blockers, the next item, and decisions waiting on the owner. Use whenever the owner asks about project or item status, even one item, for example "where are we", "what''s next", or "is X done yet". Not for a chat recap; use session-summary.'
 ---
 
 # Work status

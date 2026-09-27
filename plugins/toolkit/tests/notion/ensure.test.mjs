@@ -8,7 +8,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { NotionClient } from '../../lib/notion/client.mjs';
 import { ensureRoot, ensureProject, samePropertyId, listViews, prefixCandidates } from '../../lib/notion/ensure.mjs';
-import { PROJECTS_BASE_PROPERTIES, PROJECTS_REGISTRY_PROPERTIES, workItemProperties, MEMORY_PROPERTIES } from '../../lib/notion/schema.mjs';
+import { PROJECTS_BASE_PROPERTIES, PROJECTS_REGISTRY_PROPERTIES, workItemProperties, LORE_MEMORY_ADDED_PROPERTIES, RECORD_TYPE_TAGS } from '../../lib/notion/schema.mjs';
+import { VAULT_DATABASES, VAULT_TITLES, loreProperties, loreTagOptions } from '../../lib/notion/lore-schema.mjs';
 import { FakeNotion, fakeRunner, seedProjects } from './fake-notion.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -78,7 +79,8 @@ test('ensureProject builds the row, Work Items, Memory, views, and pages', async
   const { notion, report } = await ensureProject({ client, config: cfg, root: null, mainRoot: '/work/sample-app', rootPageId: fake.rootPageId, now });
   assert.deepEqual(report.problems, []);
   assert.ok(report.created.includes('Work Items database'));
-  assert.ok(report.created.includes('Memory database'));
+  assert.ok(report.created.includes('Memory page (Lore layout)'));
+  assert.ok(report.created.includes('Memories database'));
   const row = fake.pages[notion.project.pageId];
   assert.equal(fake.titleOf(row), 'Sample app');
   const ds = fake.dataSources[notion.workItems.dataSourceId];
@@ -96,7 +98,12 @@ test('ensureProject builds the row, Work Items, Memory, views, and pages', async
   assert.equal(table.name, 'All items');
   assert.ok(samePropertyId(table.configuration.subtasks.property_id, notion.workItems.properties.parent));
   const mem = fake.dataSources[notion.memory.dataSourceId];
-  for (const p of MEMORY_PROPERTIES) assert.ok(mem.properties[p.name], `Memory lacks ${p.name}`);
+  assert.equal(notion.memory.layout, 'lore');
+  for (const p of loreProperties('memories', { projects: 'x', topics: 'x', memories: 'x' })) assert.ok(mem.properties[p.name], `Memories lacks Lore's ${p.name}`);
+  for (const p of LORE_MEMORY_ADDED_PROPERTIES) assert.ok(mem.properties[p.name], `Memories lacks ${p.name}`);
+  // Focus and glossary stay child pages of the project row, next to the Memory page.
+  const kids = (fake.children[notion.project.pageId] || []).map((c) => (c.kind === 'page' ? fake.titleOf(fake.pages[c.id]) : fake.databases[c.id].title[0].text.content));
+  assert.deepEqual(kids.sort(), ['Current focus', 'Memory', 'Terminology glossary', 'Work Items']);
   assert.equal(fake.titleOf(fake.pages[notion.memory.pages.focus]), 'Current focus');
   assert.match(fake.pages[notion.memory.pages.focus].markdown, /## Now/);
   assert.equal(fake.titleOf(fake.pages[notion.memory.pages.glossary]), 'Terminology glossary');

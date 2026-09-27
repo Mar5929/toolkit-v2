@@ -8,9 +8,21 @@
 //                tracker is Notion, its Work Items database (schema, Parent item /
 //                Sub-items and Blocked by / Blocking relations, a board view
 //                grouped by Stage, a table view with sub-items nested); when
-//                memory is Notion, its Memory database (Index and Retired views)
-//                and the Current focus and Terminology glossary pages.
+//                memory is Notion, its memory in Lore's layout: a "Memory" page
+//                under the project row holding Lore's five databases (Projects,
+//                Topics, Memories, Entities, Facts; lore-schema.mjs), the
+//                toolkit's added Memories columns, the Index and Retired views,
+//                and one row naming the project in that page's Projects
+//                database; plus the Current focus and Terminology glossary
+//                pages, which stay child pages of the project row.
 //                Returns the new "notion" block for .toolkit.json.
+//
+// Moving an older project: a project whose memory is still the older single
+// "Memory" database on its row gets the Lore layout next to it, every record
+// is copied into the Memories database and read back (the same text, so the
+// same version), and then the old database is renamed "Old memory database
+// (safe to delete)". It is never deleted. When a row cannot be moved, the old
+// database keeps its name and the report says which rows are left.
 //
 // Both read everything back at the end and list any difference as a problem.
 // With { check: true } nothing is written; missing pieces are reported.
@@ -33,7 +45,9 @@ import { toNotion, stripTitle } from './markdown.mjs';
 import {
   PROJECTS_BASE_PROPERTIES, PROJECTS_REGISTRY_PROPERTIES, workItemProperties, WORK_ITEM_RELATIONS, MEMORY_PROPERTIES,
   FOCUS_PAGE_TITLE, GLOSSARY_PAGE_TITLE, WORK_ITEMS_TITLE, MEMORY_TITLE, PROJECTS_TITLE, specType,
+  MEMORY_PAGE_TITLE, OLD_MEMORY_DATABASE_TITLE, LORE_MEMORY_ADDED_PROPERTIES, LORE_MEMORY_USED, loreMemoriesWanted,
 } from './schema.mjs';
+import { VAULT_DATABASES, VAULT_TITLES, LORE_COMMIT, LORE_VERSION, loreProperties, loreIcon } from './lore-schema.mjs';
 
 const plain = (rich) => (Array.isArray(rich) ? rich.map((r) => r.plain_text ?? (r.text && r.text.content) ?? '').join('') : '');
 const richText = (s) => (s ? [{ type: 'text', text: { content: String(s).slice(0, 2000) } }] : []);
@@ -114,7 +128,12 @@ export async function ensureProperties(client, dataSourceId, wanted, { stored = 
       problems.push(`The property "${found.name}" is a ${found.prop.type} property; the toolkit expects ${type}. It was left as it is.`);
       continue;
     }
-    if ((type === 'select' || type === 'status') && w.spec[type].options) {
+    const target = type === 'relation' && w.spec.relation.data_source_id;
+    if (target && found.prop.relation && normalizeId(found.prop.relation.data_source_id || '') !== normalizeId(target)) {
+      problems.push(`The relation "${found.name}" points at another database than the toolkit expects (${normalizeId(target)}). It was left as it is.`);
+      continue;
+    }
+    if ((type === 'select' || type === 'multi_select' || type === 'status') && w.spec[type].options) {
       const have = new Set(((found.prop[type] && found.prop[type].options) || []).map((o) => o.name));
       const missing = w.spec[type].options.filter((o) => !have.has(o.name));
       if (missing.length) {
@@ -122,10 +141,10 @@ export async function ensureProperties(client, dataSourceId, wanted, { stored = 
           problems.push(`The status property "${found.name}" lacks the options ${missing.map((o) => o.name).join(', ')}. Add them in the Notion app (the API cannot add status options to an existing property).`);
         } else {
           // Send every existing option back in full, description included, so none is changed.
-          const keep = ((found.prop.select && found.prop.select.options) || []).map((o) => ({
+          const keep = ((found.prop[type] && found.prop[type].options) || []).map((o) => ({
             id: o.id, name: o.name, color: o.color, ...(o.description ? { description: o.description } : {}),
           }));
-          patch[found.name] = { select: { options: [...keep, ...missing] } };
+          patch[found.name] = { [type]: { options: [...keep, ...missing] } };
           optionsAdded.push(...missing.map((o) => `${found.name}: ${o.name}`));
         }
       }
@@ -273,7 +292,7 @@ async function underRoot(client, kind, id) {
  * Returns { database, dataSourceId, created, moved, usedPrefix, problems }, or
  * with check and nothing found { missing: true, problems }.
  */
-async function ensureDatabase(client, { parentPageId, storedId, title, icon, properties, check, prefixes = null }) {
+async function ensureDatabase(client, { parentPageId, storedId, title, icon, properties, check, prefixes = null, inline = true }) {
   let db = null;
   let moved = false;
   const problems = [];
@@ -304,7 +323,7 @@ async function ensureDatabase(client, { parentPageId, storedId, title, icon, pro
         db = await client.createDatabase({
           parent: { type: 'page_id', page_id: normalizeId(parentPageId) },
           title: richText(title),
-          is_inline: true,
+          is_inline: inline,
           icon: icon ? { type: 'emoji', emoji: icon } : undefined,
           initial_data_source: { properties: propertiesBody(list) },
         });
@@ -429,22 +448,34 @@ export async function ensureWorkItemViews(client, { databaseId, dataSourceId, id
   return { views: out, created, problems };
 }
 
-/** The Memory views: "Index" (records in use) and "Retired". */
-export async function ensureMemoryViews(client, { databaseId, dataSourceId, ids, stored = {}, check = false }) {
+/**
+ * The memory views: "Index" (records in use) and "Retired". With lore: true
+ * they are for Lore's Memories database (Status accepted or proposed in use;
+ * superseded or deprecated retired; sorted by Record Key, which starts with the
+ * type); otherwise for the older Memory database.
+ */
+export async function ensureMemoryViews(client, { databaseId, dataSourceId, ids, stored = {}, check = false, lore = false }) {
   const views = await listViews(client, databaseId);
   const byId = (id) => views.find((v) => normalizeId(v.id) === normalizeId(id || ''));
   const created = [];
   const problems = [];
   const out = {};
-  const inUse = { property: ids.status, select: { does_not_equal: 'retired' } };
-  const retired = { property: ids.status, select: { equals: 'retired' } };
-  const sorts = [{ property: ids.type, direction: 'ascending' }, { property: ids.title, direction: 'ascending' }].filter((s) => s.property);
+  const label = lore ? 'Memories database' : 'Memory database';
+  const inUse = lore
+    ? { and: ['superseded', 'deprecated', 'rejected'].map((w) => ({ property: ids.status, select: { does_not_equal: w } })) }
+    : { property: ids.status, select: { does_not_equal: 'retired' } };
+  const retired = lore
+    ? { or: ['superseded', 'deprecated'].map((w) => ({ property: ids.status, select: { equals: w } })) }
+    : { property: ids.status, select: { equals: 'retired' } };
+  const sorts = (lore
+    ? [{ property: ids.recordKey, direction: 'ascending' }]
+    : [{ property: ids.type, direction: 'ascending' }, { property: ids.title, direction: 'ascending' }]).filter((s) => s.property);
 
   let index = byId(stored.index) || views.find((v) => v.type === 'table' && /^index$/i.test(v.name || ''));
   if (!index) {
     const tables = views.filter((v) => v.type === 'table');
     const fresh = tables.length === 1 && /^(default view|table|untitled)?$/i.test((tables[0].name || '').trim()) ? tables[0] : null;
-    if (check) problems.push('The Index view of the Memory database is missing.');
+    if (check) problems.push(`The Index view of the ${label} is missing.`);
     else if (fresh) {
       index = await client.updateView(fresh.id, { name: 'Index', filter: inUse, sorts });
       created.push('Index (renamed the default view)');
@@ -457,7 +488,7 @@ export async function ensureMemoryViews(client, { databaseId, dataSourceId, ids,
 
   let old = byId(stored.retired) || views.find((v) => /^retired$/i.test(v.name || ''));
   if (!old) {
-    if (check) problems.push('The Retired view of the Memory database is missing.');
+    if (check) problems.push(`The Retired view of the ${label} is missing.`);
     else {
       old = await client.createView({ database_id: databaseId, data_source_id: dataSourceId, name: 'Retired', type: 'table', position: { type: 'end' }, filter: retired, sorts });
       created.push('Retired');
@@ -674,27 +705,289 @@ function templateText(name) {
   }
 }
 
-async function ensureChildPage(client, { parentPageId, storedId, title, seed, check }) {
+/**
+ * Find a child page by its stored id or by title under the parent page, or
+ * create it. seed: model template text (its "# Title" line is left out);
+ * text: Notion Markdown for a page with no template. With withUrl the page is
+ * read when needed, so the result always has its url.
+ * Returns { id, url, created, problems } or with check and nothing found { missing: true }.
+ */
+async function ensureChildPage(client, { parentPageId, storedId, title, seed, text = '', check, withUrl = false }) {
   const problems = [];
   if (storedId) {
     const page = await tryGet(() => client.getPage(storedId));
     if (usable(page)) {
-      if (await underRoot(client, 'page', page.id)) return { id: normalizeId(page.id), created: false, problems };
+      if (await underRoot(client, 'page', page.id)) return { id: normalizeId(page.id), url: page.url || null, created: false, problems };
       problems.push(`The stored ${title} page (${normalizeId(storedId)}) is outside the root page, so it was not used.`);
     }
   }
   const kids = await childrenOf(client, parentPageId);
   const match = kids.find((k) => k.kind === 'page' && k.title.trim().toLowerCase() === title.toLowerCase());
-  if (match) return { id: match.id, created: false, problems };
+  if (match) {
+    const page = withUrl ? await tryGet(() => client.getPage(match.id)) : null;
+    return { id: match.id, url: (page && page.url) || null, created: false, problems };
+  }
   if (check) return { id: null, created: false, missing: true, problems };
-  const body = seed ? toNotion(stripTitle(seed).body) : '';
+  const body = seed ? toNotion(stripTitle(seed).body) : text;
   const page = await client.createPage({
     parent: { type: 'page_id', page_id: normalizeId(parentPageId) },
     properties: { title: { title: richText(title) } },
     ...(body ? { markdown: body } : {}),
   });
   client.trust(page.id);
-  return { id: normalizeId(page.id), created: true, problems };
+  return { id: normalizeId(page.id), url: page.url || null, created: true, problems };
+}
+
+// ------------------------------------------------------------------ memory in Lore's layout
+
+/** The text at the top of a project's Memory page. */
+function memoryPageMarkdown(config) {
+  const name = config.project && config.project.name ? config.project.name : 'this project';
+  return [
+    '<callout icon="🧠" color="gray_bg">',
+    `\t${escapeText(`This page holds the memory records of ${name} in the layout of Lore, Notion's open-source AI memory (github.com/makenotion/lore, version ${LORE_VERSION}). Agents write the Memories database through the toolkit. Lore needs all five databases on this page: Projects, Topics, Memories, Entities, and Facts. The Current focus and Terminology glossary pages are on the project page.`)}`,
+    '</callout>',
+  ].join('\n');
+}
+
+/** The values of this project's row in the Memory page's Projects database (Lore's project row). */
+function vaultProjectValues(config) {
+  const project = config.project || {};
+  return {
+    Name: { title: richText(project.name || project.key || 'Project') },
+    Type: { select: { name: 'project' } },
+    Path: { rich_text: richText('.') },
+    Status: { select: { name: 'active' } },
+    Description: { rich_text: richText(`${project.key ? `Toolkit project ${project.key}.` : 'Toolkit project.'} Its memory records are rows of the Memories database on this page.`) },
+  };
+}
+
+/**
+ * The project's row in the Memory page's Projects database. Lore finds it by
+ * Path "." (the whole project) or by Name. Returns { id, created, problems }.
+ */
+async function ensureVaultProjectRow(client, { dataSourceId, storedId, config, check }) {
+  const problems = [];
+  let row = null;
+  if (storedId) {
+    const page = await tryGet(() => client.getPage(storedId));
+    if (usable(page) && page.parent && normalizeId(page.parent.data_source_id || '') === normalizeId(dataSourceId)) row = page;
+  }
+  if (!row) {
+    const rows = await client.queryAll(dataSourceId, { filter: { property: 'Path', rich_text: { equals: '.' } } });
+    row = rows.find((r) => usable(r)) || null;
+  }
+  const values = vaultProjectValues(config);
+  if (!row) {
+    if (check) return { id: null, created: false, problems: ['The Projects database on the Memory page has no row for this project.'] };
+    row = await client.createPage({ parent: { type: 'data_source_id', data_source_id: normalizeId(dataSourceId) }, properties: values });
+    client.trust(row.id);
+    return { id: normalizeId(row.id), created: true, problems };
+  }
+  if (!check) {
+    const changed = {};
+    for (const [name, value] of Object.entries(values)) {
+      if (!sameValue((row.properties || {})[name], value)) changed[name] = value;
+    }
+    if (Object.keys(changed).length) await client.updatePage(row.id, { properties: changed });
+  }
+  return { id: normalizeId(row.id), created: false, problems };
+}
+
+/** Pick some keys of an object. */
+function pick(obj, keys) {
+  const out = {};
+  for (const k of keys) if (obj && obj[k] !== undefined) out[k] = obj[k];
+  return out;
+}
+
+/**
+ * Build or repair one project's memory in Lore's layout under its row.
+ * stored: the .toolkit.json memory block (used only when it is a Lore block).
+ * Returns { block, created, added, problems } (block null when the Memories
+ * database is missing in a --check run).
+ */
+async function ensureLoreMemory(client, { projectPageId, config, stored, check }) {
+  const s = stored && stored.layout === 'lore' ? stored : {};
+  const out = { block: null, created: [], added: [], problems: [] };
+  const page = await ensureChildPage(client, {
+    parentPageId: projectPageId, storedId: s.pageId, title: MEMORY_PAGE_TITLE, text: memoryPageMarkdown(config), check, withUrl: true,
+  });
+  out.problems.push(...page.problems);
+  if (page.missing) {
+    out.problems.push('The Memory page (Lore layout) is missing.');
+    return out;
+  }
+  if (page.created) out.created.push('Memory page (Lore layout)');
+
+  // The five databases, in Lore's order: each relation needs the database it points at.
+  const dbs = {};
+  const ids = {};
+  const storedDbs = s.databases || {};
+  for (const which of VAULT_DATABASES) {
+    const title = VAULT_TITLES[which];
+    let wanted;
+    try {
+      wanted = which === 'memories' ? loreMemoriesWanted({ projects: ids.projects, topics: ids.topics }) : loreProperties(which, ids);
+    } catch {
+      out.problems.push(`The ${title} database was not checked, because a database it points at is missing.`);
+      continue;
+    }
+    const db = await ensureDatabase(client, {
+      parentPageId: page.id,
+      storedId: (storedDbs[which] || {}).databaseId,
+      title,
+      icon: loreIcon(which),
+      properties: wanted,
+      inline: which === 'memories',
+      check,
+    });
+    out.problems.push(...db.problems);
+    if (db.missing) {
+      out.problems.push(`The ${title} database is missing from the Memory page.`);
+      continue;
+    }
+    if (db.created) out.created.push(`${title} database`);
+    if (db.moved) out.problems.push(`The ${title} database is no longer directly on the Memory page, so Lore's tools will not find it. The toolkit still uses it.`);
+    dbs[which] = db;
+    ids[which] = db.dataSourceId;
+  }
+
+  // Every property Lore expects (its relations to Memories itself are added now that it exists), and the toolkit's columns.
+  let memProps = null;
+  for (const which of VAULT_DATABASES) {
+    const db = dbs[which];
+    if (!db) continue;
+    let wanted;
+    try {
+      wanted = which === 'memories' ? loreMemoriesWanted(ids) : loreProperties(which, ids);
+    } catch {
+      continue;
+    }
+    const storedProps = which === 'memories' ? storedFor(db, s.databaseId, s.properties) : {};
+    const res = await ensureProperties(client, db.dataSourceId, wanted, { stored: storedProps, check });
+    // A database made in this run gets its relations to itself here, as part of making it.
+    if (!db.created) out.added.push(...res.added.map((a) => `${VAULT_TITLES[which]}: ${a}`), ...res.optionsAdded.map((a) => `${VAULT_TITLES[which]}: ${a}`));
+    out.problems.push(...res.problems);
+    if (which === 'memories') memProps = res;
+  }
+  const mem = dbs.memories;
+  if (!mem || !memProps) return out;
+
+  const used = [...LORE_MEMORY_USED, ...LORE_MEMORY_ADDED_PROPERTIES.map((p) => p.key)];
+  const properties = pick(memProps.ids, used);
+  const names = pick(memProps.names, used);
+  const views = await ensureMemoryViews(client, {
+    databaseId: normalizeId(mem.database.id), dataSourceId: mem.dataSourceId, ids: properties, stored: storedFor(mem, s.databaseId, s.views), check, lore: true,
+  });
+  out.created.push(...views.created.map((v) => `Memories view: ${v}`));
+  out.problems.push(...views.problems);
+
+  let projectRowId = null;
+  if (ids.projects) {
+    const row = await ensureVaultProjectRow(client, { dataSourceId: ids.projects, storedId: s.projectRowId, config, check });
+    out.problems.push(...row.problems);
+    if (row.created) out.created.push('Project row in the Memory page\'s Projects database');
+    projectRowId = row.id;
+  }
+
+  out.block = {
+    layout: 'lore',
+    lore: { version: LORE_VERSION, commit: LORE_COMMIT },
+    pageId: page.id,
+    pageUrl: page.url || null,
+    databaseId: normalizeId(mem.database.id),
+    dataSourceId: mem.dataSourceId,
+    url: mem.database.url || null,
+    databases: Object.fromEntries(VAULT_DATABASES.filter((w) => dbs[w]).map((w) => [w, { databaseId: normalizeId(dbs[w].database.id), dataSourceId: dbs[w].dataSourceId }])),
+    projectRowId,
+    properties,
+    names,
+    views: views.views,
+  };
+  return out;
+}
+
+/**
+ * The older single Memory database on the project row, when there is one:
+ * named in a .toolkit.json memory block without `layout: "lore"`, or found
+ * by the title "Memory" among the row's child databases. It must have the
+ * toolkit's Type and Status columns. Returns the memory block the older driver
+ * reads it with ({ databaseId, dataSourceId, url, properties, names }) plus
+ * { title }, or null.
+ */
+async function findOldMemoryDatabase(client, { projectPageId, stored }) {
+  const s = stored || {};
+  let db = null;
+  let storedProps = {};
+  if (s.layout !== 'lore' && s.databaseId) {
+    db = await tryGet(() => client.getDatabase(s.databaseId));
+    if (db && (!usable(db) || !(await underRoot(client, 'database', db.id)))) db = null;
+    if (db) storedProps = s.properties || {};
+  }
+  if (!db) {
+    const kids = await childrenOf(client, projectPageId);
+    const match = kids.find((k) => k.kind === 'database' && k.title.trim().toLowerCase() === MEMORY_TITLE.toLowerCase());
+    if (match) db = await tryGet(() => client.getDatabase(match.id));
+    if (db && (!usable(db) || !(await underRoot(client, 'database', db.id)))) db = null;
+  }
+  if (!db) return null;
+  const dataSourceId = normalizeId(((db.data_sources || [])[0] || {}).id || '');
+  if (!dataSourceId) return null;
+  const found = await ensureProperties(client, dataSourceId, MEMORY_PROPERTIES, { stored: storedProps, check: true });
+  if (!found.ids.type || !found.ids.status) return null;
+  return {
+    title: databaseTitle(db),
+    databaseId: normalizeId(db.id),
+    dataSourceId,
+    url: db.url || null,
+    properties: { ...found.ids, title: 'title' },
+    names: found.names,
+  };
+}
+
+/**
+ * Copy the records of the older Memory database into the Lore layout, then
+ * rename the old database. overwrite: the old database is still the one the
+ * project uses, so a copy in the Memories database that differs from it is
+ * replaced; otherwise the Memories copy is kept and the difference reported.
+ * Returns { notes, problems, migratedFrom, complete } where complete is false
+ * when a record could not be copied (the project then keeps the old database).
+ */
+async function moveOldMemory(client, { old, block, config, root, mainRoot, now, today, overwrite }) {
+  const { NotionMemoryDriver, copyRecords } = await import('../memory/notion.mjs');
+  const withMemory = (memory) => ({ ...config, notion: { ...(config.notion || {}), memory } });
+  // The copy holds this computer's memory lock (when there is a project folder), so a
+  // toolkit memory command run at the same time waits instead of writing to the old database.
+  const lock = Boolean(mainRoot || root);
+  const from = new NotionMemoryDriver({ root, mainRoot, config: withMemory(old), client, now, lock: false });
+  const to = new NotionMemoryDriver({ root, mainRoot, config: withMemory(block), client, now, lock });
+  const res = await copyRecords(from, to, { overwrite });
+  const notes = [];
+  const problems = [];
+  const moved = res.copied.length;
+  const words = (n) => `${n} record${n === 1 ? '' : 's'}`;
+  if (moved || res.same.length) {
+    notes.push(`Moved ${words(moved)} from the old Memory database into the Memories database on the Memory page (Lore layout)${res.same.length ? `; ${words(res.same.length)} ${res.same.length === 1 ? 'was' : 'were'} already there with the same text` : ''}. Each one reads back with the same text and version.`);
+  }
+  for (const f of res.failed) problems.push(`The memory record ${f.key} was not moved into the Lore layout: ${f.reason}`);
+  for (const k of res.kept) problems.push(`The memory record ${k.key} is in both the old Memory database and the Memories database with different text. The Memories database copy was kept; compare them in Notion.`);
+  if (res.skipped.length) {
+    problems.push(`The old Memory database holds ${res.skipped.length} row${res.skipped.length === 1 ? '' : 's'} with no memory key (<type>_<slug>), so ${res.skipped.length === 1 ? 'it was' : 'they were'} not moved: ${res.skipped.map((r) => `"${r.title || '(no title)'}"`).join(', ')}. Give ${res.skipped.length === 1 ? 'it' : 'them'} a key or delete ${res.skipped.length === 1 ? 'it' : 'them'} in Notion, then run toolkit notion ensure-project again.`);
+  }
+  const complete = res.failed.length === 0;
+  if (!complete) {
+    problems.push(`This project keeps using the old Memory database until every record is moved. Fix what is named above, then run toolkit notion ensure-project again.`);
+  }
+  if (res.failed.length || res.kept.length || res.skipped.length) {
+    problems.push(`The old Memory database (${old.url || old.databaseId}) keeps its name until every row is moved. Nothing was deleted.`);
+    return { notes, problems, migratedFrom: null, complete };
+  }
+  if (old.title !== OLD_MEMORY_DATABASE_TITLE) {
+    await client.patch(`v1/databases/${old.databaseId}`, { title: richText(OLD_MEMORY_DATABASE_TITLE) });
+    notes.push(`The old Memory database was left in place and renamed "${OLD_MEMORY_DATABASE_TITLE}": ${old.url || old.databaseId}. Nothing was deleted.`);
+  }
+  return { notes, problems, migratedFrom: { databaseId: old.databaseId, url: old.url, movedOn: today, records: moved + res.same.length }, complete };
 }
 
 /**
@@ -805,37 +1098,47 @@ export async function ensureProject({ client, config, root, mainRoot, rootPageId
     }
   }
 
-  // Memory.
+  // Memory: Lore's layout under the project row. The current focus and the
+  // glossary stay child pages of the project row.
   if (memoryNotion) {
     const s = sub('memory');
-    const db = await ensureDatabase(client, { parentPageId: projectPageId, storedId: s.databaseId, title: MEMORY_TITLE, icon: '🧠', properties: MEMORY_PROPERTIES, check });
-    report.problems.push(...db.problems);
-    if (db.missing) report.problems.push('The Memory database is missing.');
-    else {
-      if (db.created) report.created.push('Memory database');
-      if (db.moved) report.problems.push('The Memory database was moved off the project page. It is still used.');
-      const props = await ensureProperties(client, db.dataSourceId, MEMORY_PROPERTIES, { stored: storedFor(db, s.databaseId, s.properties), check });
-      report.added.push(...props.added.map((a) => `Memory: ${a}`), ...props.optionsAdded.map((a) => `Memory: ${a}`));
-      report.problems.push(...props.problems);
-      const views = await ensureMemoryViews(client, { databaseId: normalizeId(db.database.id), dataSourceId: db.dataSourceId, ids: props.ids, stored: storedFor(db, s.databaseId, s.views), check });
-      report.created.push(...views.created.map((v) => `Memory view: ${v}`));
-      report.problems.push(...views.problems);
-      const focus = await ensureChildPage(client, { parentPageId: projectPageId, storedId: s.pages && s.pages.focus, title: FOCUS_PAGE_TITLE, seed: templateText('memory/CURRENT_FOCUS'), check });
-      const glossary = await ensureChildPage(client, { parentPageId: projectPageId, storedId: s.pages && s.pages.glossary, title: GLOSSARY_PAGE_TITLE, seed: templateText('memory/glossary'), check });
-      report.problems.push(...focus.problems, ...glossary.problems);
-      if (focus.created) report.created.push('Current focus page');
-      if (glossary.created) report.created.push('Terminology glossary page');
-      if (focus.missing) report.problems.push('The Current focus page is missing.');
-      if (glossary.missing) report.problems.push('The Terminology glossary page is missing.');
-      notion.memory = {
-        databaseId: normalizeId(db.database.id),
-        dataSourceId: db.dataSourceId,
-        url: db.database.url || null,
-        properties: props.ids,
-        names: props.names,
-        views: views.views,
-        pages: { focus: focus.id, glossary: glossary.id },
-      };
+    const loreResult = await ensureLoreMemory(client, { projectPageId, config, stored: s, check });
+    report.created.push(...loreResult.created);
+    report.added.push(...loreResult.added);
+    report.problems.push(...loreResult.problems);
+    const focus = await ensureChildPage(client, { parentPageId: projectPageId, storedId: s.pages && s.pages.focus, title: FOCUS_PAGE_TITLE, seed: templateText('memory/CURRENT_FOCUS'), check });
+    const glossary = await ensureChildPage(client, { parentPageId: projectPageId, storedId: s.pages && s.pages.glossary, title: GLOSSARY_PAGE_TITLE, seed: templateText('memory/glossary'), check });
+    report.problems.push(...focus.problems, ...glossary.problems);
+    if (focus.created) report.created.push('Current focus page');
+    if (glossary.created) report.created.push('Terminology glossary page');
+    if (focus.missing) report.problems.push('The Current focus page is missing.');
+    if (glossary.missing) report.problems.push('The Terminology glossary page is missing.');
+    const pages = { focus: focus.id, glossary: glossary.id };
+
+    // An older project: the single Memory database on the row is moved into the Lore layout.
+    const old = await findOldMemoryDatabase(client, { projectPageId, stored: s });
+    const usingOld = Boolean(old) && s.layout !== 'lore';
+    let migratedFrom = s.layout === 'lore' && s.migratedFrom ? s.migratedFrom : null;
+    let keepOld = false;
+    if (old && check) {
+      report.problems.push(`This project's memory is still in the older Memory database (${old.url || old.databaseId}). Run toolkit notion ensure-project without --check to move its records into the Lore layout.`);
+    } else if (old && loreResult.block) {
+      const moved = await moveOldMemory(client, {
+        old, block: { ...loreResult.block, pages }, config, root, mainRoot, now, today, overwrite: usingOld,
+      });
+      report.notes.push(...moved.notes);
+      report.problems.push(...moved.problems);
+      if (moved.migratedFrom) migratedFrom = moved.migratedFrom;
+      keepOld = usingOld && !moved.complete;
+    }
+
+    if (keepOld || (check && usingOld)) {
+      // The project keeps reading and writing the older database until every record is moved.
+      const { title, ...oldBlock } = old;
+      const storedOld = s.layout !== 'lore' && normalizeId(s.databaseId || '') === old.databaseId ? s : {};
+      notion.memory = { ...storedOld, ...oldBlock, ...(storedOld.views ? { views: storedOld.views } : {}), pages };
+    } else if (loreResult.block) {
+      notion.memory = { ...loreResult.block, pages, ...(migratedFrom ? { migratedFrom } : {}) };
     }
   }
 
@@ -886,12 +1189,24 @@ export async function verifyProject(client, notion, { trackerNotion, memoryNotio
     }
   }
   if (memoryNotion && notion.memory) {
-    const ds = await client.getDataSource(notion.memory.dataSourceId);
+    const m = notion.memory;
+    const ds = await client.getDataSource(m.dataSourceId);
     const ids = new Set(Object.values(ds.properties || {}).map((p) => p.id));
-    for (const [key, id] of Object.entries(notion.memory.properties || {})) {
+    for (const [key, id] of Object.entries(m.properties || {})) {
       if (!ids.has(id)) problems.push(`Memory: the ${key} property (${id}) is missing after setup.`);
     }
-    for (const [name, id] of Object.entries(notion.memory.pages || {})) {
+    if (m.layout === 'lore') {
+      // Lore reads only databases placed directly on the vault page, found by these exact titles.
+      const kids = await childrenOf(client, m.pageId);
+      for (const which of VAULT_DATABASES) {
+        const title = VAULT_TITLES[which];
+        const want = normalizeId(((m.databases || {})[which] || {}).databaseId || '');
+        const hit = kids.filter((k) => k.kind === 'database' && k.title === title);
+        if (!hit.length) problems.push(`Memory: Lore needs a database titled "${title}" directly on the Memory page, and there is none.`);
+        else if (want && !hit.some((k) => normalizeId(k.id) === want)) problems.push(`Memory: the "${title}" database on the Memory page is not the one in .toolkit.json.`);
+      }
+    }
+    for (const [name, id] of Object.entries(m.pages || {})) {
       if (!id) problems.push(`Memory: the ${name} page is missing.`);
     }
   }

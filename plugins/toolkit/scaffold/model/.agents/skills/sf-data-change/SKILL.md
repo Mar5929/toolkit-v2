@@ -1,6 +1,6 @@
 ---
 name: sf-data-change
-description: 'Builds the owner''s package for a Salesforce production data change: load file, backup, numbered load steps, success check, and undo steps, filed under delivery/data/. Use when production records must be created, updated, upserted, or deleted, or a backup is needed first.'
+description: 'Builds the owner''s package for a Salesforce production data change: load file, backup, numbered steps, success check, and undo steps. Use first, before work-on, when the owner asks to load, import, update, or delete production records, for example "load this file into production".'
 ---
 
 # Salesforce data change handoff

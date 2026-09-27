@@ -1,5 +1,6 @@
 // The Notion schemas the toolkit builds: the Projects registry properties,
-// each project's Work Items database, and each project's Memory database.
+// each project's Work Items database, and each project's memory (Lore's
+// layout, from lore-schema.mjs, plus the toolkit's own columns).
 //
 // Every property has a key (used in code and in .toolkit.json), a name (what
 // Mike sees), and a spec (the Notion API property configuration). The toolkit
@@ -10,6 +11,7 @@
 // fields), dev/research/notion-design.md sections 8 and 9.
 
 import { STAGES, STATUSES, TYPE_IDS, PRIORITIES, DELIVERY, ITEM_DESIGN_VALUES } from '../work/lifecycle.mjs';
+import { loreProperties } from './lore-schema.mjs';
 
 export const STATUS_GROUPS = Object.freeze({
   Backlog: 'To-do',
@@ -118,8 +120,14 @@ export const WORK_ITEM_RELATIONS = Object.freeze([
   { key: 'blockedBy', name: 'Blocked by', pairKey: 'blocking', pairName: 'Blocking' },
 ]);
 
-// ------------------------------------------------------------------ Memory
+// ------------------------------------------------------------------ Memory, older layout
 
+/**
+ * The older single Memory database on the project page (before the Lore
+ * layout). New projects do not get it. ensure-project still reads it to move
+ * its records into the Lore layout, and the memory driver still reads and
+ * writes it for a project whose .toolkit.json has no `layout: "lore"` yet.
+ */
 export const MEMORY_PROPERTIES = Object.freeze([
   { key: 'title', name: 'Key', spec: { title: {} } },
   { key: 'type', name: 'Type', spec: { select: { options: [{ name: 'user', color: 'blue' }, { name: 'feedback', color: 'orange' }, { name: 'project', color: 'purple' }, { name: 'reference', color: 'gray' }, { name: 'event', color: 'green' }] } } },
@@ -134,6 +142,76 @@ export const MEMORY_PROPERTIES = Object.freeze([
   { key: 'extra', name: 'Other fields', spec: text('Extra frontmatter fields as JSON. Kept by the toolkit.') },
   { key: 'lastEdited', name: 'Last edited', spec: { last_edited_time: {} } },
 ]);
+
+// ------------------------------------------------------------------ Memory, Lore layout
+
+/**
+ * Each project's Notion memory is a "Memory" page under the project row that
+ * holds Lore's five databases (lore-schema.mjs). A record is a row of the
+ * Memories database:
+ *   Title        the body's "# Title" line          (Lore)
+ *   Keywords     the key, <type>_<slug>              (Lore)
+ *   Synopsis     description                         (Lore)
+ *   Kind         always "note"                       (Lore)
+ *   Tags         the type: user, feedback, project, reference, or event (Lore)
+ *   Status       current = accepted, needs-review = proposed,
+ *                superseded = superseded, archived = deprecated (Lore)
+ *   Supersedes   the records this one replaced      (Lore relation)
+ *   Source       always "manual"; Author = the owner; Agent = Claude Code or Codex;
+ *                Project = this project's row in the Memory page's Projects database (Lore)
+ *   the columns below, which the toolkit adds; Lore keeps columns it does not know.
+ * The page body is the record body, unchanged, without its "# Title" line.
+ */
+export const MEMORY_PAGE_TITLE = 'Memory';
+
+/** The title the older Memory database gets once its records are in the Lore layout. */
+export const OLD_MEMORY_DATABASE_TITLE = 'Old memory database (safe to delete)';
+
+/** The Tags options for the five record types (added to Lore's own tags). */
+export const RECORD_TYPE_TAGS = Object.freeze([
+  { name: 'user', color: 'blue' },
+  { name: 'feedback', color: 'orange' },
+  { name: 'project', color: 'purple' },
+  { name: 'reference', color: 'gray' },
+  { name: 'event', color: 'green' },
+]);
+
+/** The columns the toolkit adds to Lore's Memories database. */
+export const LORE_MEMORY_ADDED_PROPERTIES = Object.freeze([
+  { key: 'recordKey', name: 'Record Key', spec: text('The toolkit key, <type>_<slug>. The toolkit finds a record by it.') },
+  { key: 'supersededBy', name: 'Superseded by', spec: text('The key of the record that replaced this one.') },
+  { key: 'sourceNote', name: 'Source note', spec: text('Who or what said it, with a date (the record\'s source).') },
+  { key: 'saved', name: 'Saved', spec: { date: {} } },
+  { key: 'lastVerified', name: 'Last verified', spec: text('YYYY-MM-DD, or unknown.') },
+  { key: 'authorization', name: 'Authorization', spec: text('What allowed the save, for example "Approved by Mike on 2026-09-26".') },
+  { key: 'extra', name: 'Other fields', spec: text('Extra frontmatter fields as JSON. Kept by the toolkit.') },
+  { key: 'lastEdited', name: 'Last edited', spec: { last_edited_time: {} } },
+]);
+
+/** The Lore Memories columns the toolkit reads or writes (their ids are kept in .toolkit.json). */
+export const LORE_MEMORY_USED = Object.freeze(['title', 'keywords', 'synopsis', 'kind', 'tags', 'status', 'source', 'author', 'agent', 'project', 'supersedes']);
+
+/** The Lore Status for each stored status word. */
+export const LORE_STATUS_FOR = Object.freeze({ current: 'accepted', 'needs-review': 'proposed', superseded: 'superseded', archived: 'deprecated' });
+
+/** The stored status word for each Lore Status. Rows Lore's own tools made can also say informational or rejected. */
+export const STATUS_FROM_LORE = Object.freeze({
+  accepted: 'current', informational: 'current', proposed: 'needs-review', superseded: 'superseded', deprecated: 'archived', rejected: 'archived',
+});
+
+/**
+ * Every Memories property the toolkit makes sure of: Lore's own (with the five
+ * type tags added to Tags), then the toolkit's columns. ids: the data source ids
+ * of the vault's projects and topics databases, and memories once it exists.
+ */
+export function loreMemoriesWanted(ids = {}) {
+  const list = loreProperties('memories', ids).map((p) => {
+    if (p.name !== 'Tags') return p;
+    const have = new Set(p.spec.multi_select.options.map((o) => o.name));
+    return { ...p, spec: { multi_select: { options: [...p.spec.multi_select.options, ...RECORD_TYPE_TAGS.filter((o) => !have.has(o.name))] } } };
+  });
+  return [...list, ...LORE_MEMORY_ADDED_PROPERTIES];
+}
 
 export const FOCUS_PAGE_TITLE = 'Current focus';
 export const GLOSSARY_PAGE_TITLE = 'Terminology glossary';

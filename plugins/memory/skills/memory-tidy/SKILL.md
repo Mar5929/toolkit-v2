@@ -1,6 +1,6 @@
 ---
 name: memory-tidy
-description: 'Reviews the whole project memory: merges duplicates, retires stale or contradicted facts, trims the current focus, and backs memory up. Use when the owner says "clean up memory" or "tidy memory", says memory seems wrong or out of date, or the toolkit doctor flags memory problems.'
+description: 'Reviews the project''s whole memory (.memory/, Hindsight, or Notion): merges duplicates, retires stale or contradicted records, trims the current focus, and backs it up. Use when the owner says "clean up memory" or "tidy memory", thinks memory is wrong or out of date, or toolkit doctor flags memory.'
 ---
 
 # Memory tidy

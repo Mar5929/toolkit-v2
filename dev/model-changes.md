@@ -145,3 +145,78 @@ Your model's `.memory/` and `.work-items/` files are tracked by Git even though 
 - After you merge this branch: change `DEFAULT_SOURCE` in `dev/tools/import-model.mjs` to your own model folder, before the second folder is removed, and run the import again.
 
 Done since this list was written: `toolkit memory save` writes the model's topic YAML; `toolkit memory reindex` writes the model's `MEMORY.md` layout; work items and designs are made from the model's own templates, with `waiting_on` and `approved` in double quotes (the toolkit's separate template copies are gone); init fills `<Project name>`; and the import step and `CONDITIONS.json` are built.
+
+## Skill description changes (approved 2026-09-27)
+
+You asked for every skill description to follow the official Claude Code and
+Codex guidance, so the agent knows exactly when to use each skill. The rules
+are in `dev/research/skill-writing-guide.md`. Three of the model's Salesforce
+skills are affected. Only the `description:` line changes; the skill bodies
+stay as they are.
+
+Put the same line in both copies of each skill:
+`.claude/skills/<name>/SKILL.md` and `.agents/skills/<name>/SKILL.md`. It
+replaces the `description:` line that item 18 wrote.
+
+- `sf-deploy-check`: now names UAT as a shared org, and says that running the
+  deploy itself is the `work-finish` skill's job, so "deploy it to UAT" starts
+  `work-finish`, which runs this check first.
+
+  ```yaml
+  description: 'Finds hitch-hikers: components or pending edits that would ship with a Salesforce deploy before their feature is ready. Use before any deploy to a shared org (UAT, full copy, staging, or production), including a deploy command for the owner. Not for running the deploy; use work-finish.'
+  ```
+
+- `sf-data-change`: now says it is opened first, before `work-on`, when you ask
+  for a production data load. In the routing check, Codex opened `work-on`
+  first for "Load these 500 contacts into production."
+
+  ```yaml
+  description: 'Builds the owner''s package for a Salesforce production data change: load file, backup, numbered steps, success check, and undo steps. Use first, before work-on, when the owner asks to load, import, update, or delete production records, for example "load this file into production".'
+  ```
+
+- `sf-component-tracker`: the words do not change. The line is now in single
+  quotes, because the guide says to quote every description: a colon added
+  later would otherwise break the file's header.
+
+  ```yaml
+  description: 'Keeps the component tracker CSV, the master and per-work-item package.xml files, destructiveChanges.xml, and manual steps in sync. Use when Salesforce metadata under force-app/ is added, changed, renamed, or deleted, when a deploy result comes back, or when a deploy needs manual steps.'
+  ```
+
+Where it stands: the toolkit's copy of the model
+(`plugins/toolkit/scaffold/model/`) already has these three lines. Until the
+model's `toolkit-v2/approved-changes` branch gets the same lines,
+`node dev/tools/import-model.mjs --check` lists these 6 files as different, and
+running the import puts the old lines back.
+
+## Proposed: handoff rule wording (needs your yes, 2026-09-27)
+
+Not approved yet, and not applied anywhere. It changes one model file,
+`.claude/rules/session-handoff.md`.
+
+- The problem: when you say "I'm going to clear context" after a short
+  session, Claude Code often skips the handoff. It quotes the rule's last
+  sentence, "Skip this for small edits and quick lookups". That sentence is
+  meant for handoffs the agent offers on its own, not for one you ask for. In
+  one test the agent even said a finding "will be gone after you clear" and
+  still wrote no handoff.
+- Evidence (Claude Code, the same test project): with the current rule, 1 of
+  3 runs opened `handoff` (routing round 1 had 0 of 3). With the wording
+  below, 3 of 3 did. Codex opened `handoff` in round 1 without this change.
+- Recommendation: yes. The skill descriptions already say "even a short one";
+  the rule is the only text that still says to skip.
+
+Current text:
+
+```markdown
+When the session is long and the next step is complex, offer a handoff. Use the `handoff` skill. Before the handoff, review the current focus (`toolkit memory focus`) and the memory criteria; update the focus, and save only authorized lasting memory, with the `memory-save` skill. Then write the prompt. Skip this for small edits and quick lookups.
+```
+
+Proposed text (one sentence added at the start; "Skip this" becomes "Skip the
+offer"):
+
+```markdown
+When the owner says he is clearing context or ending the session, or asks for a handoff, use the `handoff` skill, whatever the session's length. When the session is long and the next step is complex, offer a handoff. Use the `handoff` skill. Before the handoff, review the current focus (`toolkit memory focus`) and the memory criteria; update the focus, and save only authorized lasting memory, with the `memory-save` skill. Then write the prompt. Skip the offer for small edits and quick lookups.
+```
+
+After a yes: the change goes on the model's `toolkit-v2/approved-changes`
+branch, then `node dev/tools/import-model.mjs` copies it into the toolkit.
