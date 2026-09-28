@@ -61,6 +61,13 @@ steps that must always run the same way.
   holding Lore's databases) so Lore's tools can read it. Lore's own automatic
   saving and hooks stay off; no new sign-in. Focus and glossary stay child
   pages.
+- **Routing approvals** (Mike, 2026-09-27 night): (1) the model's
+  `.claude/rules/session-handoff.md` gets the new wording in
+  `dev/model-changes.md` ("Proposed: handoff rule wording"); (2) the model's
+  `AGENTS.md` gets two routing lines: changing a requirement goes to
+  work-requirements, and "you drive" or "take it from here" goes to
+  work-delegate; (3) new projects raise Claude Code's skill-list budget
+  (`skillListingBudgetFraction`) so every Toolkit V2 description is visible.
 - **Memory additions from Mike's research note** (Mike, 2026-09-27; note
   summarized in `dev/research/memory-architecture-notes.md`): (1) saved
   proposals: an unanswered "Save to memory?" becomes a `needs-review`
