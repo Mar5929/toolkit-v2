@@ -152,6 +152,25 @@ Read `dev/GOAL.md` first. This file says where the work stands.
   Salesforce, Hindsight; Claude Code local; final independent review
   (`dev/final-review.md`). The Notion confirmation run waits for `ntn login`.
 
+## Last mile (2026-09-28, workflow `wf_93bccb2f-ec7`)
+
+- Committed `fe918aa`: skills carry their procedures in their own
+  `references/` (159 generated copies from `plugins/*/shared/`, kept in step
+  by `dev/tools/sync-skill-references.mjs`); model decisions 1-9 on the
+  branch (head `5e7d7a0`); review fixes (Stop hook saves unanswered memory
+  proposals, duplicate check, backups, ask-first rules, plugin pointer).
+  Suite 895 of 898, 3 skipped by design; routing spot check 16/16 in both
+  hosts.
+- Running: follow-up skill text, install in Mike's Claude Code and Codex
+  (decisions 10-11), final live runs of all five setups with one fix loop,
+  final independent re-review.
+- For Mike in the final report: delete about 20 test banks on his Hindsight
+  server (needs his yes); how many days of backups to keep; the audit's
+  proposals (reset-to-remote only on request in Codex; block question boxes
+  in Codex; Salesforce skill reference split); trust the V2 hooks in Codex
+  `/hooks`; merge the model branch; delete the Notion test area and showcase
+  rows when done.
+
 ## For the follow-up pass (from the 2026-09-28 confirmation runs)
 
 Results: Salesforce (Codex) passed; local (Codex) not passed only because
