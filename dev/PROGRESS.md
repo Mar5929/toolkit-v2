@@ -152,6 +152,27 @@ Read `dev/GOAL.md` first. This file says where the work stands.
   Salesforce, Hindsight; Claude Code local; final independent review
   (`dev/final-review.md`). The Notion confirmation run waits for `ntn login`.
 
+## For the follow-up pass (from the 2026-09-28 confirmation runs)
+
+Results: Salesforce (Codex) passed; local (Codex) not passed only because
+an unanswered "Save to memory?" was dropped (being fixed by the Stop hook in
+`wf_198da6c8-9c6`); Hindsight (Codex) not passed for the same proposal bug
+plus the duplicate check; Claude Code run blocked by the sign-out (now fixed).
+Small findings to fix after the running workflows:
+- History note prefix: use "Owner said:" (no apostrophe) in skills, the CLI
+  regex in `lib/work/ops.mjs`, and conventions; Codex breaks on `'\''`.
+- `toolkit work set --title` prints a "Tell the owner" line; work-on and
+  work-organize repeat tracker changes in the final reply.
+- `approve --design` refuses or warns while Selected design says "Pending".
+- PostToolUse direct-edit reminder once per file, not once per session.
+- solution-design: helper agents start with fork_turns none.
+- Moving back to 02-refinement after approval clears or re-marks the approval.
+- Briefing's Codex hook-trust fact must not claim trust under
+  `--dangerously-bypass-hook-trust`; a combined setup step is done only when
+  every part is done.
+- work-decide names every waiting decision, including memory proposals.
+- Memory replies end with the next step.
+
 ## Pending fixes (collect; fix after the sample runs)
 
 Status 2026-09-28: every item below is fixed in the working tree by the final
