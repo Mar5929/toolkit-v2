@@ -1,5 +1,11 @@
 {
   "autoMemoryEnabled": false,
+  "attribution": {
+    "commit": "",
+    "pr": "",
+    "sessionUrl": false
+  },
+  "skillListingBudgetFraction": 0.02,
   "worktree": {
     "baseRef": "head"
   },

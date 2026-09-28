@@ -28,8 +28,10 @@ test('a sub-item folder the owner renamed while he also moved its parent is repo
   assert.equal(child.kind, 'folder-renamed');
   assert.equal(child.withParent, undefined);
   const lines = reportLines(r.json.changes);
-  assert.ok(lines.some((l) => /^Moved: WI-001 /.test(l)));
-  assert.ok(lines.some((l) => /^Renamed folder: WI-002 is now at \.work-items\/cli-options\/WI-001-shout-flag\/help-option\/WORK-ITEM\.md .*Its parent WI-001 moved too\./.test(l)), lines.join('\n'));
+  // One line per change, ready to say to the owner (sample run a, round 3):
+  // the parent moved into a group; the sub-item's folder was renamed and it is still the parent's sub-item.
+  assert.ok(lines.includes('Moved: WI-001 from WI-001-shout-flag to cli-options/WI-001-shout-flag (moved by hand). It is still a top-level item.'), lines.join('\n'));
+  assert.ok(lines.includes("Renamed folder: WI-002's folder was renamed by hand from WI-002-help-option to help-option; the item itself is the same. It moved along with its parent WI-001's folder, and it is still a sub-item of WI-001."), lines.join('\n'));
 
   // A sub-item that only moved with its parent stays out of the short report.
   const dir2 = makeProject();

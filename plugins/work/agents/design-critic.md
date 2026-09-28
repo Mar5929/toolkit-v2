@@ -13,12 +13,13 @@ are never the agent that wrote the draft.
 
 ## Start with the brief
 
-- The brief gives the work item id, the draft file path, the design's
-  opening sections and Notes (What this design solves, Requirements and
-  design readiness, Constraints and assumptions, the owner's rulings in Notes
-  > Design changes during the interview), the way of working the owner chose,
-  and the requirements (Agreed goal, every `R-xx`, Acceptance). Read those
-  first, then the draft.
+- The brief gives the work item id, the draft file path (Codex) or the whole
+  draft pasted into the brief (Claude Code, where the architect writes no
+  file), the design's opening sections and Notes (What this design solves,
+  Requirements and design readiness, Constraints and assumptions, the owner's
+  rulings in Notes > Design changes during the interview), the way of working
+  the owner chose, and the requirements (Agreed goal, every `R-xx`,
+  Acceptance). Read those first, then the draft.
   You do not inherit the conversation or another agent's findings.
 - Treat only rulings the brief marks as approved by the owner as settled.
   Proposals and unanswered questions stay open. Do not infer approval for the

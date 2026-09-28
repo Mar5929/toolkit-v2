@@ -11,8 +11,12 @@
 //   naming the problem, and the hook carries on.
 //
 // refreshCache(project, driver) writes the cache after a write. It never throws.
+// forgetInCache(project, keys) takes records out of the cache at once, before
+// that refresh, so a deleted, rejected, or retired record is gone from the
+// next briefing even when the refresh fails (Mike, 2026-09-27, "clean deletes").
 // The cache is <git common dir>/toolkit-v2/memory-cache.json: inside .git, so
 // it is never committed, and shared by every worktree of the project.
+// Each cached record: { key, type, description, status, proposal, saved, source }.
 
 import path from 'node:path';
 import { gitInfo } from '../core/config.mjs';
@@ -67,7 +71,9 @@ async function snapshot(driver, identity) {
     location: driver.location,
     refreshedAt: new Date().toISOString(),
     focus: focus.text || '',
-    records: records.map((r) => ({ key: r.key, type: r.type, description: r.description, status: r.status })),
+    records: records.map((r) => ({
+      key: r.key, type: r.type, description: r.description, status: r.status, proposal: Boolean(r.proposal), saved: r.saved || '', source: r.source || '',
+    })),
   };
 }
 
@@ -87,10 +93,35 @@ export async function refreshCache(project, driver) {
   }
 }
 
+/**
+ * Take records out of the briefing cache (a delete, a rejected proposal, a
+ * retire, or the old key of a rename). Only the local file changes. Returns
+ * { ok, removed } and never throws.
+ */
+export function forgetInCache(project, keys) {
+  try {
+    const cached = readCache(project);
+    if (!cached || !Array.isArray(cached.records)) return { ok: true, removed: 0 };
+    const drop = new Set((Array.isArray(keys) ? keys : [keys]).filter(Boolean));
+    const records = cached.records.filter((r) => !drop.has(r.key));
+    const removed = cached.records.length - records.length;
+    if (removed) writeCacheData(project, { ...cached, records });
+    return { ok: true, removed };
+  } catch (err) {
+    return { ok: false, removed: 0, error: err.message };
+  }
+}
+
+/** The saved proposals among cached or listed records (see isProposal in contract.mjs). */
+export function proposalRecords(records) {
+  return (records || []).filter((r) => r && r.proposal && r.status === 'needs-review');
+}
+
 /** A short text block for the session briefing, at most maxChars characters. */
 export function briefingText({ backend, focus, records }, { maxChars = 2500 } = {}) {
   const lines = [];
-  const live = records.filter((r) => r.status !== 'retired');
+  const proposals = proposalRecords(records);
+  const live = records.filter((r) => r.status !== 'retired' && !proposals.includes(r));
   lines.push(`Project memory (${backend}): ${live.length} record${live.length === 1 ? '' : 's'}. Search with toolkit memory find; read one with toolkit memory get <key>.`);
   if (focus && focus.trim()) {
     const parsed = parseFocus(focus);
@@ -103,6 +134,9 @@ export function briefingText({ backend, focus, records }, { maxChars = 2500 } = 
   }
   const index = live.map((r) => `- ${r.key}: ${r.description}${r.status === 'needs-review' ? ' (needs review)' : ''}`);
   if (index.length) lines.push('', 'Memory records:', ...index);
+  if (proposals.length) {
+    lines.push('', 'Memory proposals the owner has not answered (not facts; do not rely on them):', ...proposals.map((r) => `- ${r.key}: ${r.description}`));
+  }
   let text = lines.join('\n');
   if (text.length > maxChars) {
     const note = '\n[Cut to fit. Run toolkit memory list for every record.]';

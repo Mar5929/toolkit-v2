@@ -24,7 +24,8 @@ gated by checks and the owner's yes.
 5. **Do the plan:** switch to the default branch, reset and delete as planned,
    then run the lockfile's installer. Ask when there are several lockfiles.
 6. **Report** the default branch and its new head commit, the branches reset,
-   deleted, and kept, and whether the install ran and changed anything.
+   deleted, and kept, and whether the install ran and changed anything. End
+   with the one question for the owner or the exact words that continue.
 
 Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
 
@@ -39,6 +40,8 @@ First, which remote:
 git remote -v
 ```
 
+- No remote at all (`git remote` prints nothing): there is nothing to reset
+  to. Say so and stop; never fetch.
 - `origin` exists: use it.
 - No `origin` (for example it was renamed to `upstream`): stop and ask which
   remote is the source.

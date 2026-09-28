@@ -83,6 +83,26 @@ function usable(obj) {
   return Boolean(obj) && !obj.in_trash && !obj.archived && !obj.is_archived;
 }
 
+/**
+ * Why a page or database cannot be used: 'trash' (in the Notion trash),
+ * 'archived' (archived with Notion's archive, which is not the trash), or
+ * null. The two need different fixes (2026-09-26: Mike's root page was
+ * archived, not trashed, and the old message said "in the trash").
+ */
+export function goneState(obj) {
+  if (!obj) return null;
+  if (obj.in_trash === true || (obj.in_trash === undefined && obj.archived === true)) return 'trash';
+  if (obj.is_archived === true) return 'archived';
+  return null;
+}
+
+/** How to bring back a page or database that goneState says is gone. */
+function restoreFix(state) {
+  return state === 'archived'
+    ? 'Open it in the Notion app and restore it from the archive (it is not in the trash), then run this command again. The toolkit does not restore it by itself.'
+    : 'Restore it from the trash in the Notion app (Trash, in the sidebar), then run this command again.';
+}
+
 function parentId(obj) {
   const p = obj && obj.parent;
   if (!p) return null;
@@ -514,17 +534,27 @@ export async function ensureRoot({ client, rootPageId, stored = {}, check = fals
       fix: 'Check the id, then share the page with the Notion CLI connection in the Notion app.',
     });
   }
-  if (!usable(page)) throw new ToolkitError(EXIT.ERROR, `The Notion root page ${root} is in the trash.`, { fix: 'Restore it from the Notion trash, or give another root page.' });
+  if (!usable(page)) {
+    const state = goneState(page) || 'trash';
+    throw new ToolkitError(EXIT.ERROR, `The Notion root page ${root} is ${state === 'archived' ? 'archived in Notion (it is not in the trash)' : 'in the Notion trash'}.`, {
+      state,
+      fix: `${restoreFix(state)} Or give another root page.`,
+    });
+  }
 
   // A Projects database named on the command line must exist under the root page:
   // the toolkit never makes a second Projects database in its place.
   const named = normalizeId(projectsDatabaseId || '');
   if (named) {
     const db = await tryGet(() => client.getDatabase(named));
-    if (!db || !usable(db)) {
-      throw new ToolkitError(EXIT.INVALID, `The Projects database ${named} was not found, is in the trash, or the "Notion CLI" connection cannot see it.`, {
+    if (!db) {
+      throw new ToolkitError(EXIT.INVALID, `The Projects database ${named} was not found, or the "Notion CLI" connection cannot see it.`, {
         fix: 'Check the id, and share the database with the Notion CLI connection.',
       });
+    }
+    if (!usable(db)) {
+      const state = goneState(db) || 'trash';
+      throw new ToolkitError(EXIT.INVALID, `The Projects database ${named} is ${state === 'archived' ? 'archived in Notion (it is not in the trash)' : 'in the Notion trash'}.`, { state, fix: restoreFix(state) });
     }
     if (!(await underRoot(client, 'database', named))) {
       throw new ToolkitError(EXIT.INVALID, `The Projects database ${named} is not under the root page ${root}, so the toolkit will not use it.`, {
@@ -545,11 +575,19 @@ export async function ensureRoot({ client, rootPageId, stored = {}, check = fals
     return { rootPageId: root, projects: null, created: false, added: [], problems: [...found.problems, 'The Projects database is missing under the root page.'] };
   }
   const props = await ensureProperties(client, found.dataSourceId, PROJECTS_REGISTRY_PROPERTIES, { stored: storedFor(found, stored.databaseId, stored.properties), check });
-  const titleProp = Object.entries(props.schema.properties || {}).find(([, p]) => p.type === 'title');
+  const schemaProps = Object.entries(props.schema.properties || {});
+  const titleProp = schemaProps.find(([, p]) => p.type === 'title');
+  // The Status column the "Active Projects" board groups by: a new project row gets Active.
+  const statusProp = schemaProps.find(([n, p]) => p.type === 'status' && n === 'Status') || schemaProps.find(([, p]) => p.type === 'status');
   const problems = [...found.problems, ...props.problems];
   if (found.moved) problems.push('The Projects database is no longer directly on the root page. It is still used.');
   const ids = { ...props.ids };
   if (titleProp) ids.title = titleProp[1].id;
+  const names = { ...props.names, ...(titleProp ? { title: titleProp[0] } : {}) };
+  const statusOptions = statusProp && statusProp[1].status ? (statusProp[1].status.options || []).map((o) => o.name) : [];
+  // The registry columns shown in the "All Projects" table (notion-design.md section 15, step 2).
+  const view = await ensureProjectsViewColumns(client, { databaseId: normalizeId(found.database.id), ids: props.ids, names: props.names, check });
+  problems.push(...view.problems);
   return {
     rootPageId: root,
     projects: {
@@ -557,12 +595,63 @@ export async function ensureRoot({ client, rootPageId, stored = {}, check = fals
       dataSourceId: found.dataSourceId,
       url: found.database.url || null,
       properties: ids,
-      names: { ...props.names, ...(titleProp ? { title: titleProp[0] } : {}) },
+      names,
+      ...(statusProp ? { status: { id: statusProp[1].id, name: statusProp[0], options: statusOptions } } : {}),
     },
     created: found.created,
-    added: [...props.added, ...props.optionsAdded],
+    added: [...props.added, ...props.optionsAdded, ...view.added],
     problems,
   };
+}
+
+/** The Projects database's table view the registry columns go into: "All Projects", or the only table view. */
+function projectsTableView(views) {
+  const tables = views.filter((v) => v.type === 'table');
+  return tables.find((v) => /^all projects$/i.test(String(v.name || '').trim())) || (tables.length === 1 ? tables[0] : null);
+}
+
+/**
+ * Show the registry columns (Key, Tracker, ...) in the Projects database's
+ * "All Projects" table view (the Notion rebuild check: ensure-root added the
+ * properties to the database but not to the view). A column the view already
+ * lists, shown or hidden, is left as it is: a column Mike hid stays hidden.
+ * Returns { added: ["All Projects view: Key", ...], problems }.
+ */
+export async function ensureProjectsViewColumns(client, { databaseId, ids, names = {}, check = false }) {
+  const out = { added: [], problems: [] };
+  let views;
+  try {
+    views = await listViews(client, databaseId);
+  } catch (err) {
+    if (isNotionError(err)) {
+      out.problems.push(`The views of the Projects database could not be read (${err.message}), so the registry columns were not added to them.`);
+      return out;
+    }
+    throw err;
+  }
+  const view = projectsTableView(views);
+  if (!view) return out;
+  const cfg = view.configuration || {};
+  const listed = Array.isArray(cfg.properties) ? cfg.properties : null;
+  if (!listed) return out; // No column list: Notion shows every property.
+  const missing = PROJECTS_REGISTRY_PROPERTIES.filter((p) => ids[p.key] && !listed.some((q) => samePropertyId(q.property_id, ids[p.key])));
+  if (!missing.length) return out;
+  const label = view.name || 'table';
+  if (check) {
+    out.problems.push(`The "${label}" view of the Projects database does not show the columns ${missing.map((p) => names[p.key] || p.name).join(', ')}.`);
+    return out;
+  }
+  const properties = [...listed.map((q) => ({ ...q })), ...missing.map((p) => ({ property_id: ids[p.key], visible: true }))];
+  // The whole configuration is sent back with the new column list, so a
+  // Notion that replaces the configuration keeps the view's other settings
+  // (sort, wrap, grouping) either way (verifier, fix round 2).
+  const updated = await client.updateView(view.id, { configuration: { ...cfg, type: cfg.type || view.type || 'table', properties } });
+  const back = (updated && updated.configuration && updated.configuration.properties) || [];
+  const shown = missing.filter((p) => back.some((q) => samePropertyId(q.property_id, ids[p.key]) && q.visible !== false));
+  out.added.push(...shown.map((p) => `${label} view: ${names[p.key] || p.name}`));
+  const notShown = missing.filter((p) => !shown.includes(p));
+  if (notShown.length) out.problems.push(`The "${label}" view still does not show ${notShown.map((p) => names[p.key] || p.name).join(', ')} after the update.`);
+  return out;
 }
 
 // ------------------------------------------------------------------ project
@@ -664,14 +753,28 @@ function inProjects(page, projects) {
 /**
  * The project's row in Projects. The row stored in .toolkit.json is used only
  * when it is a row of the Projects database under the root page and its Key is
- * empty or matches this project's key. Otherwise the row is looked up by Key.
- * Returns { row, problems, notes }.
+ * empty or matches this project's key. Otherwise the row is looked up by Key,
+ * then by title: a row made with the New button in Notion has no Key, so a
+ * row named like the project (its name or key) with an empty Key is adopted
+ * (the Notion rebuild check: otherwise setup made a second row).
+ *
+ * A row that is archived or in the Notion trash is never replaced by a new
+ * one: its page holds the project's Work Items and Memory. `blocked` is then
+ * true and the problem says how to restore it. Two rows with the project's
+ * name and no Key are a question for the owner, not a guess.
+ * Returns { row, problems, notes, blocked, adopted }.
  */
-async function findProjectRow(client, projects, key, storedPageId) {
+async function findProjectRow(client, projects, key, storedPageId, name = null) {
   const problems = [];
   const notes = [];
+  const gone = (page, how) => {
+    const state = goneState(page) || 'trash';
+    problems.push(`The project row for ${key || 'this project'} (${page.url || normalizeId(page.id)}), ${how}, is ${state === 'archived' ? 'archived in Notion (it is not in the trash)' : 'in the Notion trash'}. Its page holds this project's work items and memory, so no new row was made. ${restoreFix(state)}`);
+    return { row: null, problems, notes, blocked: true };
+  };
   if (storedPageId) {
     const page = await tryGet(() => client.getPage(storedPageId));
+    if (page && !usable(page) && inProjects(page, projects)) return gone(page, 'stored in .toolkit.json');
     if (usable(page)) {
       const id = normalizeId(page.id);
       const have = rowKey(page, projects);
@@ -686,9 +789,46 @@ async function findProjectRow(client, projects, key, storedPageId) {
   }
   if (!key || !projects.names.key) return { row: null, problems, notes };
   const rows = await client.queryAll(projects.dataSourceId, { filter: { property: projects.properties.key, rich_text: { equals: key } } });
+  let archived = null;
   for (const r of rows) {
-    if (usable(r) && inProjects(r, projects) && (await underRoot(client, 'page', r.id))) return { row: r, problems, notes };
+    if (!inProjects(r, projects)) continue;
+    if (!usable(r)) {
+      archived = archived || r;
+      continue;
+    }
+    if (await underRoot(client, 'page', r.id)) return { row: r, problems, notes };
   }
+  if (archived) return gone(archived, `found by its Key "${key}"`);
+
+  // A row made with the New button: no Key, the project's name (or key) as its title.
+  const titleId = projects.properties.title || 'title';
+  const names = [...new Set([name, key].filter((x) => x && String(x).trim()))];
+  const candidates = [];
+  for (const n of names) {
+    let found = [];
+    try {
+      found = await client.queryAll(projects.dataSourceId, { filter: { property: titleId, title: { equals: String(n).trim() } } });
+    } catch (err) {
+      if (!isNotionError(err)) throw err;
+      found = [];
+    }
+    for (const r of found) {
+      if (!inProjects(r, projects) || rowKey(r, projects) || candidates.some((c) => normalizeId(c.id) === normalizeId(r.id))) continue;
+      if (!(await underRoot(client, 'page', r.id))) continue;
+      candidates.push(r);
+    }
+  }
+  const live = candidates.filter((r) => usable(r));
+  if (live.length === 1) {
+    const title = plain(Object.values(live[0].properties || {}).find((v) => v && v.type === 'title')?.title);
+    notes.push(`Used the row "${title}" made in Notion with the New button (it had no Key). Its Key is now ${key}.`);
+    return { row: live[0], problems, notes, adopted: true };
+  }
+  if (live.length > 1) {
+    problems.push(`${live.length} rows in the Projects database are named "${names[0]}" and have no Key, so the toolkit did not pick one and made no new row. Fill in the Key "${key}" on the row that is this project (in Notion), then run toolkit notion ensure-project again.`);
+    return { row: null, problems, notes, blocked: true };
+  }
+  if (candidates.length) return gone(candidates[0], `named "${names[0]}"`);
   return { row: null, problems, notes };
 }
 
@@ -1016,10 +1156,14 @@ export async function ensureProject({ client, config, root, mainRoot, rootPageId
 
   // The project row.
   const storedRowId = normalizeId((stored.project && stored.project.pageId) || '');
-  const found = await findProjectRow(client, projects, project.key, storedRowId);
+  const found = await findProjectRow(client, projects, project.key, storedRowId, project.name);
   report.problems.push(...found.problems);
   report.notes.push(...found.notes);
+  if (found.blocked) return { notion: stored, report };
   let row = found.row;
+  // A new project row is Active, so it shows on the "Active Projects" board
+  // (the Notion rebuild check: its Status was empty, under "No Status").
+  const activeStatus = projects.status && projects.status.options.includes('Active') ? { [projects.status.name]: { status: { name: 'Active' } } } : null;
   if (!row) {
     if (check) {
       report.problems.push(`There is no row for ${project.key || 'this project'} in the Projects database.`);
@@ -1027,11 +1171,18 @@ export async function ensureProject({ client, config, root, mainRoot, rootPageId
     }
     row = await client.createPage({
       parent: { type: 'data_source_id', data_source_id: projects.dataSourceId },
-      properties: registryValues({ config, mainRoot: mainRoot || root, repository, names: projects.names, today, withTitle: true }),
+      properties: { ...registryValues({ config, mainRoot: mainRoot || root, repository, names: projects.names, today, withTitle: true }), ...(activeStatus || {}) },
       markdown: projectPageMarkdown(config, mainRoot || root),
     });
     client.trust(row.id);
     report.created.push(`Project row "${project.name || project.key}"`);
+  } else if (activeStatus && !check) {
+    // A row with no Status yet (made before this fix, or with the New button) gets Active; a Status Mike set is kept.
+    const cur = row.properties && row.properties[projects.status.name];
+    if (cur && cur.type === 'status' && !cur.status) {
+      await client.updatePage(row.id, { properties: activeStatus });
+      report.notes.push('The project row had no Status; it is now Active.');
+    }
   }
   const projectPageId = normalizeId(row.id);
 

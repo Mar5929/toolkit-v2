@@ -472,8 +472,10 @@ class TestFreshnessHook(unittest.TestCase):
         has to say it itself or nobody will know."""
         import graph_freshness_hook as hook
         self.assertIn("delete this file", hook.WHAT_TO_DO)
-        self.assertIn("knowledge/memory/", hook.WHAT_TO_DO)
-        self.assertNotIn("knowledge/memory/knowledge/", hook.WHAT_TO_DO)
+        # Project memory is read with the toolkit command; the old
+        # knowledge/memory/ folder does not exist in these projects.
+        self.assertIn("toolkit memory find", hook.WHAT_TO_DO)
+        self.assertNotIn("knowledge/memory/", hook.WHAT_TO_DO)
         self.assertIn("README.md", hook.WHAT_TO_DO)
 
 

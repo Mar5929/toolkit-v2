@@ -41,7 +41,7 @@ Create an item (the body file holds the template body with the owner's
 starting request filled in):
 
 ```text
-gh issue create --title "<title>" --body-file <file> --label "stage:01-discovery" --label "type:<type>"
+gh issue create --title '<title>' --body-file <file> --label 'stage:01-discovery' --label 'type:<type>'
 ```
 
 Change the body (always read it first, change only what needs to change, and
@@ -54,7 +54,7 @@ gh issue edit <number> --body-file <file>
 Change the stage (remove the old stage label, add the new one, in one call):
 
 ```text
-gh issue edit <number> --remove-label "stage:08-build" --add-label "stage:09-testing"
+gh issue edit <number> --remove-label 'stage:08-build' --add-label 'stage:09-testing'
 ```
 
 Add the design comment the first time, then edit it:
@@ -76,7 +76,7 @@ Finish or cancel, only after the owner's approval or reason is recorded:
 
 ```text
 gh issue close <number> --reason completed
-gh issue close <number> --reason "not planned"
+gh issue close <number> --reason 'not planned'
 ```
 
 ## Rules

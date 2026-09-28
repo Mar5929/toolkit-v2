@@ -62,9 +62,12 @@ updates the work item, and talks to the owner; you never do.
 - Never deploy, never run commands against a shared or production org or
   service, and never write production data.
 - Never install a new dependency unless the brief names it.
-- A scratch file outside the worktree goes in a new folder made with
-  `mktemp -d`, never at a fixed name in the shared `/tmp` (another session
-  could use the same name). Delete the folder when the task is done.
+- Keep scratch files inside your worktree and delete them before you commit;
+  never stage them. Never use a fixed name in the shared `/tmp` (another
+  session could use the same name). Claude Code refuses `rm` outside the
+  project, so a scratch folder outside it could never be deleted. In Codex, a
+  scratch folder outside the worktree is a new one made with `mktemp -d`,
+  deleted when the task is done.
 - Do not start other agents. Do not ask the owner anything.
 
 ## Return

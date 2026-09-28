@@ -73,6 +73,8 @@ export const DESIGN_FIELD_ORDER = Object.freeze(['work_item', 'status', 'approve
 
 /** The skills that continue each stage, from SKILL-INDEX 2.1. */
 export const CONTINUE_TERMINAL = 'work-finish';
+/** What a Done or Cancelled item continues with: nothing (sample runs a and d, round 3). */
+export const CONTINUE_FINISHED = 'nothing (finished)';
 export const CONTINUE_WAITING_ON_OWNER = 'work-decide';
 /** An item that breaks an approval gate continues here: the owner answers the gate question first. */
 export const CONTINUE_GATE = 'work-decide';
@@ -170,7 +172,7 @@ export function brokenGates(meta = {}) {
  * The skill that continues an item, from its frontmatter.
  * - A broken approval gate (brokenGates) goes to work-decide: the owner answers first.
  * - waiting_on: owner goes to work-decide.
- * - Done and Cancelled go to work-finish.
+ * - Done and Cancelled continue with nothing: the work is finished.
  * - Stage 11 with the result approval recorded goes to work-finish.
  * - Otherwise the stage's first continuing skill.
  */
@@ -178,7 +180,7 @@ export function continueWith(meta = {}) {
   const { stage, status, waiting_on: waitingOn } = meta || {};
   if (brokenGates(meta || {}).length) return CONTINUE_GATE;
   if (waitingOn && String(waitingOn).trim().toLowerCase() === 'owner' && !isTerminal(status)) return CONTINUE_WAITING_ON_OWNER;
-  if (isTerminal(status)) return CONTINUE_TERMINAL;
+  if (isTerminal(status)) return CONTINUE_FINISHED;
   const s = findStage(stage);
   if (!s) return 'work-on';
   if (s.n === 11 && isApproved(meta.result_approved)) return CONTINUE_TERMINAL;
@@ -279,8 +281,8 @@ export function lifecycleData() {
       continueWith: [...s.next],
     })),
     terminal: [
-      { status: 'Done', continueWith: [CONTINUE_TERMINAL], setBy: 'toolkit work finish <id> --by <name> --evidence <text>' },
-      { status: 'Cancelled', continueWith: [CONTINUE_TERMINAL], setBy: 'toolkit work cancel <id> --reason <text>' },
+      { status: 'Done', continueWith: [CONTINUE_FINISHED], setBy: 'toolkit work finish <id> --by <name> --evidence <text>' },
+      { status: 'Cancelled', continueWith: [CONTINUE_FINISHED], setBy: 'toolkit work cancel <id> --reason <text>' },
     ],
     waitingOnOwner: { continueWith: CONTINUE_WAITING_ON_OWNER },
     statuses: STATUSES.map((s) => ({ status: s, meaning: STATUS_MEANINGS[s] })),
@@ -298,6 +300,7 @@ export function lifecycleData() {
       'An item waiting on the owner continues with work-decide, whatever its stage.',
       'An item that breaks an approval gate continues with work-decide until the owner answers.',
       'An item at 11 User approval whose result approval is recorded continues with work-finish.',
+      'A Done or Cancelled item continues with nothing: it is finished. Reopen it with toolkit work set <id> --stage <s> --reopen.',
     ],
   };
 }

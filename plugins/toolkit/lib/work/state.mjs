@@ -249,7 +249,11 @@ export function itemIdFromBranch(branch, prefix = 'WI') {
   if (!branch) return null;
   const p = String(prefix).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const re = new RegExp(`(?:^|[^A-Za-z0-9])${p}-(\\d+)(?![A-Za-z0-9])`, 'i');
-  const m = re.exec(String(branch));
+  let m = re.exec(String(branch));
+  // A project whose items are not WI-...: a branch named wi-001 still means
+  // item 001, because the skills' examples use wi- (sample run c, round 3:
+  // claude/wi-001-readme-brief was made for TV2-001). One project has one prefix.
+  if (!m && String(prefix).toUpperCase() !== 'WI') m = /(?:^|[^A-Za-z0-9])wi-(\d+)(?![A-Za-z0-9])/i.exec(String(branch));
   if (!m) return null;
   return `${String(prefix).toUpperCase()}-${String(Number(m[1])).padStart(3, '0')}`;
 }

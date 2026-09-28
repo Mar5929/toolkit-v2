@@ -49,6 +49,11 @@ present is job one, before any path or branch.
     toolkit memory focus
     ```
 
+    Run each one alone, as its own command: never joined to another command
+    with `&&`, `;`, or a pipe (in Codex that runs it inside the sandbox,
+    which blocks Notion and Hindsight). No remote (`git remote` prints
+    nothing): never run `git fetch`.
+
     Every `toolkit work` command, these reads included, first runs the
     tracker's routine rescan, which may update the tracker's own state file
     and dashboard. That upkeep is the toolkit's, not a change you make. When a
@@ -56,7 +61,8 @@ present is job one, before any path or branch.
     `Also noticed` so the main agent sees it.
 
 - Never run a toolkit command with `--set-file`, `edit`, `set`, `approve`,
-  `history`, `save`, `retire`, `delete`, `new`, `move`, `finish`, or `cancel`.
+  `reject`, `history`, `save`, `retire`, `delete`, `new`, `move`, `finish`, or
+  `cancel`.
   Never run `git add`, `commit`, `push`, `checkout`, `switch`, `restore`,
   `stash`, `reset`, or `merge`.
 - **Never run tests, builds, installs, or any script.** They take time the

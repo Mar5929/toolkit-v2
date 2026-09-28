@@ -3,12 +3,20 @@
 // branch from an isolated, sparse, detached worktree.
 //
 //   publish-docs.mjs start --branch <default-branch> -- <file> [more files]
-//   publish-docs.mjs publish --message "<commit message>"
+//   publish-docs.mjs publish --message '<commit message>'
 //
 // `start` checks every path, fetches the default branch, creates a worktree
 // beside the project, and prints its path. `publish` runs inside that worktree:
 // it refuses staged paths outside the save, commits, pushes without force, and
 // verifies that the remote has the commit.
+//
+// The save fetches and pushes `origin`; a repository with remotes but none
+// named `origin` is refused at start, with the names it has. A repository with
+// no remote (`git remote` prints nothing) has nothing to fetch or push. Then `start` bases the save on the local default branch, and
+// `publish` commits and moves the local default branch forward with a
+// fast-forward only (`git merge --ff-only` in the checkout that has the branch
+// checked out, or a checked `git update-ref` when none has), and prints
+// "No remote: committed locally."
 import { existsSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import { randomUUID } from 'node:crypto';
 import { dirname, basename, extname, join, resolve, isAbsolute } from 'node:path';
@@ -112,6 +120,78 @@ function fetchDefault(cwd, branch) {
   return git(cwd, ['rev-parse', ref]).stdout.trim();
 }
 
+/** The names of the repository's remotes, in the order `git remote` prints them. */
+export function remoteNames(cwd) {
+  return git(cwd, ['remote']).stdout.split('\n').map(name => name.trim()).filter(Boolean);
+}
+
+/** True when the repository has at least one remote. */
+export function hasRemote(cwd) {
+  return remoteNames(cwd).length > 0;
+}
+
+/**
+ * The save fetches and pushes `origin` only. A repository whose remotes do not
+ * include `origin` is refused at start with the names it has, so the save never
+ * fails half way or is committed locally while a remote exists.
+ */
+export function checkOrigin(cwd, branch) {
+  const remotes = remoteNames(cwd);
+  if (remotes.length && !remotes.includes('origin'))
+    throw new Error(`This repository has no remote named origin (its remotes: ${remotes.join(', ')}). publish-docs fetches and pushes origin only, so nothing was started. `
+      + `Ask the owner which remote holds ${branch}; with his yes, rename it (git remote rename <name> origin) and run start again.`);
+  return remotes.length > 0;
+}
+
+/** The commit the local branch points at, or an error that names the branch. */
+function localBranchTip(cwd, branch) {
+  const result = git(cwd, ['rev-parse', '--verify', '--quiet', `refs/heads/${branch}^{commit}`], { allowFailure: true });
+  if (result.status !== 0 || !result.stdout.trim())
+    throw new Error(`No remote, and there is no local branch ${branch}. Give the default branch with --branch.`);
+  return result.stdout.trim();
+}
+
+function isAncestor(cwd, older, newer) {
+  return git(cwd, ['merge-base', '--is-ancestor', older, newer], { allowFailure: true }).status === 0;
+}
+
+/** The worktree that has the branch checked out, or null when none has. */
+export function worktreeHolding(cwd, branch) {
+  const listing = git(cwd, ['worktree', 'list', '--porcelain']).stdout;
+  let path = null;
+  for (const line of listing.split('\n')) {
+    if (line.startsWith('worktree ')) path = line.slice('worktree '.length);
+    else if (line === `branch refs/heads/${branch}`) return path;
+  }
+  return null;
+}
+
+/**
+ * No remote: move the local default branch forward to the save's commit, by
+ * a fast-forward only. Returns nothing; throws with the next step on failure.
+ */
+function publishLocally(workspace, branch, head) {
+  const current = localBranchTip(workspace, branch);
+  if (current === head) return;
+  if (!isAncestor(workspace, current, head))
+    throw new Error(`The default branch ${branch} advanced. Bring this save workspace current (git rebase ${branch}, here only), regenerate any generated index, then run publish again.`);
+  const holder = worktreeHolding(workspace, branch);
+  if (holder) {
+    const merged = git(holder, ['merge', '--ff-only', head], { allowFailure: true });
+    if (merged.status !== 0) {
+      const detail = [merged.stderr, merged.stdout].map(text => (text || '').trim()).filter(Boolean).join('\n');
+      throw new Error(`Committed ${head} in this save workspace, but ${branch} could not be moved forward in ${holder}:\n${detail}\n`
+        + 'When that checkout has this session\'s own uncommitted copy of a saved file, remove only that copy and run publish again: '
+        + 'return a changed file to its committed state (git restore -- <file>); for a new file this session created there, delete that copy (rm <file>). '
+        + 'Never discard another session\'s changes.');
+    }
+  } else {
+    git(workspace, ['update-ref', `refs/heads/${branch}`, head, current]);
+  }
+  if (localBranchTip(workspace, branch) !== head)
+    throw new Error(`Committed ${head}, but ${branch} does not point at it. Keep the workspace and inspect it.`);
+}
+
 function start(args) {
   const branchFlag = args.indexOf('--branch');
   const separator = args.indexOf('--');
@@ -126,7 +206,8 @@ function start(args) {
   const named = args.slice(separator + 1).map(cleanPath);
   refuseIgnored(source, named);
   const paths = generatedPaths(named);
-  const base = fetchDefault(source, branch);
+  const local = !checkOrigin(source, branch);
+  const base = local ? localBranchTip(source, branch) : fetchDefault(source, branch);
   const workspace = resolve(dirname(source), `${basename(source)}-docsave-${randomUUID().slice(0, 8)}`);
   if (existsSync(workspace)) throw new Error(`Save workspace already exists: ${workspace}`);
   git(source, ['worktree', 'add', '--no-checkout', '--detach', workspace, base]);
@@ -138,19 +219,20 @@ function start(args) {
   git(workspace, ['sparse-checkout', 'init', '--cone']);
   git(workspace, ['sparse-checkout', 'set', '--cone', ...folders]);
   git(workspace, ['read-tree', '-mu', 'HEAD']);
-  writeFileSync(markerPath(workspace), JSON.stringify({ source, workspace, branch, base, paths }, null, 2));
+  writeFileSync(markerPath(workspace), JSON.stringify({ source, workspace, branch, base, paths, local }, null, 2));
+  if (local) process.stderr.write(`No remote: this save will be committed locally on ${branch}; nothing is fetched or pushed.\n`);
   process.stdout.write(`${workspace}\n`);
 }
 
 function publish(args) {
   const messageFlag = args.indexOf('--message');
   if (messageFlag < 0 || !args[messageFlag + 1])
-    throw new Error('Usage: publish-docs.mjs publish --message "Commit message"');
+    throw new Error("Usage: publish-docs.mjs publish --message 'Commit message'");
   const workspace = git(process.cwd(), ['rev-parse', '--show-toplevel']).stdout.trim();
   const file = markerPath(workspace);
   if (!existsSync(file)) throw new Error('This is not a publish-docs save workspace. Run start first.');
   const state = JSON.parse(readFileSync(file, 'utf8'));
-  const { source, branch, base, paths } = state;
+  const { source, branch, base, paths, local } = state;
   if (resolve(workspace) === resolve(source) || git(workspace, ['symbolic-ref', '-q', 'HEAD'], { allowFailure: true }).status === 0)
     throw new Error('Publication requires the isolated, detached save workspace.');
   const staged = git(workspace, ['diff', '--cached', '--name-only', '--no-renames', '-z']).stdout.split('\0').filter(Boolean);
@@ -170,6 +252,14 @@ function publish(args) {
   if (staged.length) git(workspace, ['commit', '-m', args[messageFlag + 1]]);
   else if (git(workspace, ['rev-parse', 'HEAD']).stdout.trim() === (state.lastPublished || base))
     throw new Error('No changes to publish.');
+  if (local) {
+    const head = git(workspace, ['rev-parse', 'HEAD']).stdout.trim();
+    publishLocally(workspace, branch, head);
+    state.lastPublished = head;
+    writeFileSync(file, JSON.stringify(state, null, 2));
+    process.stdout.write(`No remote: committed locally. ${head} is on ${branch}.\n`);
+    return;
+  }
   const remote = fetchDefault(workspace, branch);
   if (git(workspace, ['merge-base', '--is-ancestor', remote, 'HEAD'], { allowFailure: true }).status !== 0)
     throw new Error('The default branch advanced. Bring this save workspace current, regenerate any generated index, then run publish again.');

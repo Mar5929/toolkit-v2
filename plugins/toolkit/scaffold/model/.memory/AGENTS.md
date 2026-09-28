@@ -24,5 +24,5 @@ Keep future sessions oriented without turning every conversation into lasting me
 - Save through the `memory-save` skill, which holds the approval policy for onboarding and trusted mode. An explicit request to remember or correct is authorization for that specific change.
 - Ask before ambiguous, bulk, or irreversible deletion of unique content. Only the owner can change the mode.
 - A rejected candidate is not saved to another memory, a criteria example, the glossary, or a pending queue. Record only the general selection lesson, as a `feedback` memory, if the owner gave one.
-- The main agent writes this folder only with `toolkit memory` commands (`save`, `retire`, `restore`, `delete`, `focus`, `glossary`, `reindex`). They lock the folder, refuse stale edits, and rebuild the index. Never run parallel writers against the same topic.
+- The main agent writes this folder only with `toolkit memory` commands, for example `save`, `retire`, `focus`, `glossary`, and `reindex` (`toolkit memory --help` lists them all). They lock the folder, refuse stale edits, and rebuild the index. Never run parallel writers against the same topic.
 - Read back changes with `toolkit memory get` and run `toolkit doctor` before reporting success. Memory work does not edit requirements, work-item status, designs, deployments, or source code.

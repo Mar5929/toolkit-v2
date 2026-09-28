@@ -35,9 +35,10 @@ test('the continuing skill per stage matches the skill index', () => {
   assert.deepEqual(findStage('03').next, ['solution-design', 'work-on']);
   assert.equal(continueWith({ stage: '08-build', status: 'In Progress', waiting_on: 'owner' }), 'work-decide');
   const approved = '2026-09-20 by Mike';
-  assert.equal(continueWith({ stage: '08-build', status: 'Done', result_approved: approved }), 'work-finish');
-  assert.equal(continueWith({ stage: '08-build', status: 'Done', waiting_on: 'owner', result_approved: approved }), 'work-finish');
-  assert.equal(continueWith({ stage: '08-build', status: 'Cancelled' }), 'work-finish');
+  // A finished item continues with nothing (sample runs a and d, round 3: "Continue with: work-finish" on Done items).
+  assert.equal(continueWith({ stage: '08-build', status: 'Done', result_approved: approved }), 'nothing (finished)');
+  assert.equal(continueWith({ stage: '08-build', status: 'Done', waiting_on: 'owner', result_approved: approved }), 'nothing (finished)');
+  assert.equal(continueWith({ stage: '08-build', status: 'Cancelled' }), 'nothing (finished)');
 });
 
 test('an item that breaks an approval gate continues with work-decide, not with building', () => {

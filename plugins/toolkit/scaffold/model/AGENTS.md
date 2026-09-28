@@ -15,6 +15,8 @@ future agents and skew them. Information must be curated and intentional.
 - The session-start hook adds a "Project briefing" to your context: this worktree's work item, active items with the skill that continues each one, what waits on the owner, the current focus, moved items, and setup warnings. If there is no briefing, run `toolkit brief` and read it.
 - Read `SOUL.md` (when the project has one) and `PROJECT.md`; read them again after resume, clear, or compaction.
 - Anything to build, add, fix, or change, and "keep going": the `work-on` skill. It opens the work item; also read the item's phase in `PROJECT-ROADMAP.md`.
+- A change to a requirement, such as R-01, at any stage: `work-requirements`.
+- "You drive", "take it from here", "run with it", even about a named item: `work-delegate`.
 - "Where are we": `work-status`. "What do you need from me" and approvals: `work-decide`.
 - "Remember", "from now on", "forget that": `memory-save`. "What did we decide": `memory-find`.
 - Open the matching skill or rule when the task needs its procedure. Method skills from other plugins (brainstorming, plans, debugging) may run inside these skills, never instead of them.
@@ -55,6 +57,7 @@ Do everything else yourself, record it, and report it. When you need a decision,
 <!-- endif -->
 | A decision for the whole project | `DECISIONS.md` (`work-decide`) |
 | Phases and deliverable-sized work units | `PROJECT-ROADMAP.md`, naming each unit's work item ID |
+| A work item's test plan | `tests/`, a copy of `TEST-PLAN-TEMPLATE.md` named for the item, committed on the item's branch; never in the tracker |
 | Agreed behavior, after delivery | The area's file in `requirements/`, at stage `14-spec-update` |
 | Verified structure of the current system | The area's file in `system-guide/` |
 | What is in progress, owner to-dos with no work item, where the next session starts | The current focus (`memory-save`) |

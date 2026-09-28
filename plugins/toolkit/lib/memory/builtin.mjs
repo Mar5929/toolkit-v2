@@ -47,7 +47,7 @@ import {
   assertFilter, brokenLinks, changeRecordStatus, changeSupersedes, checkExpect, countRecords, fitLinks, keywordScore,
   latestStatusNote, matchesFilter, normalizeDocument, normalizeRecord, notFound, parseRecord, rebaseLinks, recordSummary,
   renameRecordText, repairLinks, restoreNote, retireNote, searchTerms, serializeRecord, sortRecords, splitKey, storedStatus,
-  versionOf, focusLineCount,
+  versionOf, focusLineCount, focusShapeProblems, isProposal,
 } from './contract.mjs';
 
 export const backend = 'builtin';
@@ -112,11 +112,15 @@ export function indexFrame() {
   return { intro: text.slice(0, firstType).replace(/\n+$/, '\n'), end: text.slice(views) };
 }
 
+/** How MEMORY.md marks a saved proposal. */
+export const PROPOSAL_MARK = 'proposal: not a fact until the owner answers';
+
 /**
  * The text of MEMORY.md for a list of summaries (with stored_status), in the
  * model's layout: the intro, one "## <Type>" section per type with one line per
  * topic in the vault root ("- [<file>](<file>) — <description>", plus
- * " [needs-review]" or " [superseded]"), then "## Other memory views".
+ * " [needs-review]" or " [superseded]", or " [PROPOSAL_MARK]" for a saved
+ * proposal, whose `proposal` is true), then "## Other memory views".
  * With no topics it is the model's MEMORY.md byte for byte.
  */
 export function buildIndex(entries) {
@@ -126,7 +130,8 @@ export function buildIndex(entries) {
     chunks.push(`\n## ${TYPE_TITLES[type]}\n\n`);
     const ofType = entries.filter((e) => e.type === type).sort((a, b) => (a.key < b.key ? -1 : a.key > b.key ? 1 : 0));
     for (const e of ofType) {
-      const word = e.stored_status && e.stored_status !== 'current' ? ` [${e.stored_status}]` : '';
+      // A saved proposal is marked as one, so an agent reading only this index never takes it as a fact.
+      const word = e.proposal ? ` [${PROPOSAL_MARK}]` : e.stored_status && e.stored_status !== 'current' ? ` [${e.stored_status}]` : '';
       chunks.push(`- [${e.key}.md](${e.key}.md) — ${e.description}${word}\n`);
     }
   }
@@ -399,7 +404,13 @@ export class BuiltinDriver {
     return sortRecords(entries.map((e) => recordSummary(e.record)).filter((s) => matchesFilter(s, filter)));
   }
 
-  async find(query, { reflect = false, limit = 10, type, all = false } = {}) {
+  /**
+   * Keyword search. Retired records only with `all`; saved proposals (the
+   * owner has not answered them) only with `proposals` or `all`, so they are
+   * never found as facts. `proposalsLeftOut` counts the proposals that
+   * matched but were left out.
+   */
+  async find(query, { reflect = false, limit = 10, type, all = false, proposals = false } = {}) {
     if (reflect) {
       throw new ToolkitError(EXIT.UNSUPPORTED, 'find --reflect needs the Hindsight memory backend. The built-in memory searches by keywords only.', {
         backend,
@@ -413,20 +424,25 @@ export class BuiltinDriver {
     assertFilter({ type });
     const { entries } = this.scan();
     const hits = [];
+    let proposalsLeftOut = 0;
     for (const e of entries) {
       const r = e.record;
       if (!all && r.status === 'retired') continue;
       if (type && r.type !== type) continue;
       const { score, snippet } = keywordScore(r, terms);
       if (score <= 0) continue;
+      if (!all && !proposals && isProposal(r)) {
+        proposalsLeftOut++;
+        continue;
+      }
       hits.push({
         key: r.key, name: r.name, type: r.type, description: r.description, status: r.status,
-        stored_status: storedStatus(r), superseded_by: r.superseded_by ?? null, score, snippet,
+        stored_status: storedStatus(r), superseded_by: r.superseded_by ?? null, proposal: isProposal(r), score, snippet,
       });
     }
     hits.sort((a, b) => b.score - a.score || (a.key < b.key ? -1 : 1));
     const max = Number.isInteger(limit) && limit > 0 ? limit : 10;
-    return { query: String(query), mode: 'keyword', results: hits.slice(0, max) };
+    return { query: String(query), mode: 'keyword', results: hits.slice(0, max), proposalsLeftOut };
   }
 
   // ------------------------------------------------------------ links
@@ -483,7 +499,7 @@ export class BuiltinDriver {
       }
     };
     for (const e of entries) {
-      check(rel(this.vault, e.path), e.text, e.dir, `Correct the link, then save the note again with toolkit memory save (toolkit memory get ${e.key} gives its text).`);
+      check(rel(this.vault, e.path), e.text, e.dir, `Correct the link, then save the note again with toolkit memory save and --expect <version> (toolkit memory get ${e.key} --json gives its text and version).`);
     }
     for (const [file, cmd] of [[FOCUS_FILE, 'focus'], [GLOSSARY_FILE, 'glossary']]) {
       const text = readText(path.join(this.vault, file));
@@ -690,6 +706,7 @@ export class BuiltinDriver {
       type: e.record.type,
       description: e.record.description,
       stored_status: storedStatus(e.record),
+      proposal: isProposal(e.record),
     }));
     return buildIndex(listed);
   }
@@ -825,6 +842,9 @@ export class BuiltinDriver {
     const focus = readText(path.join(this.vault, FOCUS_FILE));
     if (focus !== null && focusLineCount(focus) > FOCUS_MAX_LINES) {
       problems.push({ where: `${VAULT_DIR}/${FOCUS_FILE}`, problem: `has ${focusLineCount(focus)} lines; the limit is ${FOCUS_MAX_LINES}.` });
+    }
+    for (const p of focusShapeProblems(focus)) {
+      problems.push({ where: `${VAULT_DIR}/${FOCUS_FILE}`, problem: `${p} Save it again with toolkit memory focus --text '<text>'; the command adds what is missing.` });
     }
     const ownerOnly = [...entries.map((e) => e.path), ...this.documentPaths()].filter(wrongMode);
     for (const file of ownerOnly) {

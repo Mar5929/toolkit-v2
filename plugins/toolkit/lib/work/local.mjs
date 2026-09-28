@@ -33,7 +33,7 @@ import { today as todayDate, slugify } from '../core/util.mjs';
 import {
   parseDoc, tryParseDoc, peekHeader, serializeDoc, composeDoc, applyMetaPatch, setH1, getH1, appendHistory, reconcileRecord, snapshotWritten,
   parseId, formatId, canonicalId, sameId, isPlaceholder, normalizeParent, DESIGN_SUFFIX, setDesignStatusLine,
-  isFreeForm, freeTextForRequest, newRecordText,
+  isFreeForm, freeTextForRequest, newRecordText, linkRelatedItem, unlinkRelatedItem, addRoadmapSubItem, removeRoadmapSubItem,
 } from './model.mjs';
 import { DESIGN_FIELD_ORDER, DESIGN_STATUSES, FIELD_ORDER, findStage, statusForStage } from './lifecycle.mjs';
 import { TRACKER_DIR, LOCK_NAME, DASHBOARD_FILE, ARCHIVE_DIR, trackerDirFor, scanTree, readState, writeState, isSkippedDir, newerStateError } from './state.mjs';
@@ -393,7 +393,8 @@ export class LocalTracker {
       group: r.group,
       children: [...r.children].sort(),
       owner: r.owner,
-      design: d ? { status: d.meta.status, location: this.location(d.rel), path: d.abs } : null,
+      // The design's text lets the decision list tell a draft from a design that waits for approval.
+      design: d ? { status: d.meta.status, location: this.location(d.rel), path: d.abs, body: d.body } : null,
     };
   }
 
@@ -520,6 +521,7 @@ export class LocalTracker {
     }
 
     const moveRows = this._moveHistory(report.moves, view, today);
+    const moveLinks = this._moveLinks(report.moves, view);
 
     // Derived values and owner edits.
     for (const r of view.records) {
@@ -567,6 +569,18 @@ export class LocalTracker {
       // The owner's hand moves and renames get a Recent History row on the
       // item and on the parents it left and joined (sample runs a and d,
       // round 2), written once: the state file then knows the new path.
+      // The parent and sub-item links in the text follow a hand move too.
+      for (const edit of moveLinks.get(r.id) || []) {
+        try {
+          const next = edit(body);
+          if (next !== body) {
+            body = next;
+            changedHere = true;
+          }
+        } catch {
+          // A body the edit cannot read keeps its text; the move is still reported.
+        }
+      }
       for (const row of moveRows.get(r.id) || []) {
         try {
           body = appendHistory(body, row);
@@ -605,15 +619,19 @@ export class LocalTracker {
       if (!rows.has(id)) rows.set(id, []);
       rows.get(id).push({ date: today, change, effect });
     };
-    const top = (p) => (!p || p === 'none' ? 'none (top level)' : p);
+    // "the top level", "(it was a top-level item)": never "none (top level)" (sample run c, round 3).
+    const top = (p) => (!p || p === 'none' ? 'the top level' : p);
+    const was = (p) => (!p || p === 'none' ? '(it was a top-level item)' : `(it was under ${p})`);
     for (const m of moves) {
       const before = m.parentBefore;
       const after = m.parentAfter;
       const parentChanged = before !== undefined && before !== after;
-      const parentLine = parentChanged ? `Its parent is now ${top(after)}.` : `Its parent stays ${top(after)}.`;
+      const parentLine = parentChanged
+        ? (after === 'none' ? 'It is a top-level item now.' : `Its parent is now ${after}.`)
+        : (after === 'none' ? 'It is still a top-level item.' : `Its parent stays ${after}.`);
       const archLine = m.archivedAfter && !m.archivedBefore ? ' It is archived now.' : !m.archivedAfter && m.archivedBefore ? ' It is no longer archived.' : '';
       if (m.kind === 'folder-renamed') {
-        add(m.id, `Folder renamed by hand: ${m.from} -> ${m.to}.`, `Same item; the toolkit uses the new path.${m.parentMoved ? ` Its parent ${m.parentMoved} moved too.` : ''}`);
+        add(m.id, `Folder renamed by hand: ${m.from} -> ${m.to}.`, `Same item; the toolkit uses the new path.${m.parentMoved ? ` It moved along with its parent ${m.parentMoved}'s folder and is still its sub-item.` : ''}`);
       } else if (m.kind === 'file-renamed') {
         add(m.id, `File renamed by hand: ${m.from} -> ${m.to}.`, 'Same item; the toolkit uses the new path.');
       } else if (m.kind === 'returned') {
@@ -624,11 +642,40 @@ export class LocalTracker {
         add(m.id, `Moved by hand: ${m.from} -> ${m.to}.`, `${parentLine}${archLine}${m.group && !parentChanged ? ` Group: ${m.group}.` : ''}`);
       }
       if (parentChanged && !m.withParent) {
-        add(before, `Sub-item ${m.id} moved out by hand.`, `Its parent is now ${top(after)}.`);
-        add(after, `Sub-item ${m.id} moved here by hand (it was under ${top(before)}).`, `${m.id} is part of this item now.`);
+        // Named, not "It": in the old parent's history "It" reads as the parent (verifier, fix round 2).
+        add(before, `Sub-item ${m.id} moved out by hand.`, after === 'none' ? `${m.id} is a top-level item now.` : `${m.id}'s parent is now ${after}.`);
+        add(after, `Sub-item ${m.id} moved here by hand ${was(before)}.`, `${m.id} is part of this item now.`);
       }
     }
     return rows;
+  }
+
+  /**
+   * Body edits for moves found in this sync that changed a parent: the moved
+   * item names its new parent in Related items; the parent it left and the
+   * parent it joined update their Related items and Roadmap Sub-items.
+   * @returns {Map<string, Array<(body: string) => string>>}
+   */
+  _moveLinks(moves, view) {
+    const edits = new Map();
+    const add = (id, fn) => {
+      if (!id || id === 'none' || !view.byId.has(id)) return;
+      if (!edits.has(id)) edits.set(id, []);
+      edits.get(id).push(fn);
+    };
+    for (const m of moves) {
+      const before = m.parentBefore;
+      const after = m.parentAfter;
+      if (before === undefined || before === after || m.withParent) continue;
+      add(m.id, (b) => {
+        let out = before !== 'none' ? unlinkRelatedItem(b, 'parent', before) : b;
+        if (after !== 'none') out = linkRelatedItem(out, 'parent', after);
+        return out;
+      });
+      add(before, (b) => removeRoadmapSubItem(unlinkRelatedItem(b, 'sub-item', m.id), m.id));
+      add(after, (b) => addRoadmapSubItem(linkRelatedItem(b, 'sub-item', m.id), m.id));
+    }
+    return edits;
   }
 
   _move(r, e, kind) {
@@ -997,6 +1044,43 @@ export class LocalTracker {
       const d = fresh.designsFor(r.id)[0];
       if (!d) throw new ToolkitError(EXIT.ERROR, `Saved but not verified: the design for ${r.id} was not found after writing.`, { id: r.id });
       return { id: r.id, meta: { ...d.meta }, body: d.body, location: this.location(d.rel), path: d.abs };
+    });
+  }
+
+  /**
+   * After a new title: rename the item's folder to "<id>-<slug of the new
+   * title>" when the folder still has the name the toolkit gave it from the
+   * old title ("WI-001-add-a-version-flag"). A folder the owner named by hand
+   * ("version-flag") is left as it is. Sub-items inside move with it; their
+   * new paths are recorded, so they are not reported as moved by hand.
+   * @returns {Promise<{ renamed: boolean, from?: string, to?: string, reason?: string }>}
+   */
+  async renameFolderForTitle(id, oldTitle) {
+    return this.transaction(() => {
+      this._assertWritable();
+      const view = this._syncCore({ force: false, dashboard: false });
+      this._absorb(view.report);
+      const r = this._mustRecord(view, id);
+      if (!r.owner) return { renamed: false, reason: `${r.id} shares a folder with another item, so there is no folder name to change.` };
+      const current = baseName(r.dirRel);
+      const oldSlug = slugify(oldTitle || '') || 'item';
+      const madeByToolkit = new RegExp(`^${r.id}-${oldSlug.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?:-\\d+)?$`, 'i').test(current);
+      const wanted = `${r.id}-${slugify(r.meta.title) || 'item'}`;
+      if (current === wanted) return { renamed: false };
+      if (!madeByToolkit) {
+        return { renamed: false, reason: `Its folder keeps the name ${this.location(r.dirRel)}/: that name was not made from the old title, so it may have been chosen by hand.` };
+      }
+      const destRel = joinRel(parentDir(r.dirRel), wanted);
+      if (fs.existsSync(path.join(this.dir, destRel))) {
+        return { renamed: false, reason: `Its folder keeps the name ${this.location(r.dirRel)}/, because ${this.location(destRel)}/ already exists.` };
+      }
+      fs.renameSync(path.join(this.dir, r.dirRel), path.join(this.dir, destRel));
+      const fresh = this._finalize(view.state, { ids: [r.id] });
+      const back = fresh.byId.get(r.id);
+      if (!back || back.dirRel !== destRel) {
+        throw new ToolkitError(EXIT.ERROR, `Saved but not verified: ${r.id} was not found in ${this.location(destRel)}/ after the rename.`, { id: r.id });
+      }
+      return { renamed: true, from: `${this.location(r.dirRel)}/`, to: `${this.location(destRel)}/` };
     });
   }
 

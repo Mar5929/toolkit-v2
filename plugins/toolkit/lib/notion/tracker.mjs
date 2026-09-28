@@ -32,7 +32,7 @@ import { ensureDir } from '../core/fsx.mjs';
 import {
   canonicalId, formatId, parseId, sameId, isPlaceholder, normalizeParent, composeDoc, parseDoc, reconcileRecord,
   snapshotWritten, newRecordText, getLabel, parseQuestions, isOpenOwnerQuestion, setDesignStatusLine, designStatusFromBody, DESIGN_SUFFIX,
-  appendHistory, removeItemGuide, parseHistory,
+  appendHistory, removeItemGuide, parseHistory, linkRelatedItem, unlinkRelatedItem, addRoadmapSubItem, removeRoadmapSubItem,
 } from '../work/model.mjs';
 import { DESIGN_FIELD_ORDER, DESIGN_STATUSES, statusForStage } from '../work/lifecycle.mjs';
 import { loadTemplate, RECORD_FILE, DESIGN_FILE } from '../work/templates.mjs';
@@ -42,6 +42,9 @@ import { fromNotion, toNotion, planUpdate, stripTitle, withTitle, sameLocal, loc
 import { readValue, writeValue, findValue } from './props.mjs';
 
 export const type = 'notion';
+// Work item and design pages send a bare .md file name as code text, so Notion
+// does not turn WORK-ITEM.md into a link to http://WORK-ITEM.md (the Notion rebuild check).
+const SEND = Object.freeze({ codeFileNames: true });
 export const CACHE_FILE = 'tracker.json';
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -510,11 +513,14 @@ export class NotionTracker {
     const properties = {
       ...(await this.propsFor({ ...meta, parent: meta.parent || 'none' })),
       ...this.bodyProps(local),
+      // "no" until the owner approves a design, as Requirements approved and
+      // Result approved show it (the Notion rebuild check: it was left blank).
+      ...(this.p.designApproved ? { [this.p.designApproved]: writeValue('rich_text', 'no') } : {}),
     };
     const created = await this.client.createPage({
       parent: { type: 'data_source_id', data_source_id: this.wi.dataSourceId },
       properties,
-      ...(local.trim() ? { markdown: toNotion(local) } : {}),
+      ...(local.trim() ? { markdown: toNotion(local, SEND) } : {}),
     });
     this.client.trust(created.id);
     const id = this.idOf(created) || this.idOf(await this.client.getPage(created.id));
@@ -573,7 +579,7 @@ export class NotionTracker {
       next = stripTitle(body).body;
       const base = expectBody !== undefined && expectBody !== null ? stripTitle(expectBody).body : undefined;
       try {
-        plan = planUpdate({ fresh: fresh.notion, base, next });
+        plan = planUpdate({ fresh: fresh.notion, base, next, ...SEND });
       } catch (err) {
         if (err && err.details && err.details.conflicts) throw conflictError(key, err.message, { conflicts: err.details.conflicts });
         throw err;
@@ -710,8 +716,34 @@ export class NotionTracker {
   }
 
   /**
+   * The text of an item's design page, for the decision list: one read when
+   * the design page's id is known from an earlier read, instead of the three
+   * getDesign makes (verifier, fix round 2: every briefing read each proposed
+   * design in full). Null when the item has no design.
+   */
+  async designBody(id) {
+    const key = canonicalId(id, this.prefix);
+    const cached = key && this.cache.items[key] && this.cache.items[key].designPageId;
+    if (cached) {
+      try {
+        const md = await this.client.getMarkdown(cached);
+        return fromNotion(md.markdown || '', { styleFrom: this.template(DESIGN_FILE).text }).markdown;
+      } catch (err) {
+        if (!(isNotionError(err) && (err.status === 404 || err.status === 400))) throw err;
+      }
+    }
+    const d = await this.getDesign(key || id);
+    return d ? stripTitle(d.body).body : null;
+  }
+
+  /**
    * Write the whole design (DESIGN.md text with frontmatter). Without create, a
    * missing design is an error. The caller updates the item's own design field.
+   *
+   * The page text is written and read back first; the item's "Design
+   * approved" property is written only after the text reads back as written,
+   * and is read back too (sample run c, round 3: the property was written, then
+   * the text check failed, and the approval was left half written).
    */
   async setDesign(id, markdown, { create = false } = {}) {
     const page = await this.findPage(id);
@@ -731,28 +763,58 @@ export class NotionTracker {
       d = await this.client.createPage({
         parent: { type: 'page_id', page_id: normalizeId(page.id) },
         properties: { title: writeValue('title', title) },
-        ...(local.trim() ? { markdown: toNotion(local) } : {}),
+        ...(local.trim() ? { markdown: toNotion(local, SEND) } : {}),
       });
       this.client.trust(d.id);
     } else {
       const md = await this.client.getMarkdown(d.id);
-      const plan = planUpdate({ fresh: md.markdown || '', next: local });
+      const plan = planUpdate({ fresh: md.markdown || '', next: local, ...SEND });
       if (plan.type === 'update_content') await this.client.patchMarkdown(d.id, { type: 'update_content', update_content: { content_updates: plan.ops } });
       else if (plan.type === 'replace_content') await this.client.patchMarkdown(d.id, { type: 'replace_content', replace_content: { new_str: plan.new_str } });
       const currentTitle = readValue(d, 'title');
       if (currentTitle !== title) await this.client.updatePage(d.id, { properties: { title: writeValue('title', title) } });
     }
-    if (this.p.designApproved && (readValue(page, this.p.designApproved) || 'no') !== approved) {
-      await this.client.updatePage(page.id, { properties: { [this.p.designApproved]: writeValue('rich_text', approved) } });
-    }
     this.remember(key, page, { designPageId: normalizeId(d.id), designUrl: d.url });
-    const { back } = await this.readBack(async () => {
+    // 1. The text, as written.
+    await this.readBack(async () => {
       const b = await this.getDesign(key);
       if (!b) return { back: b, problem: notVerified(`the design of ${key} in Notion`, { id: key }, 'it could not be read back') };
       if (!sameLocal(stripTitle(b.body).body, local)) return { back: b, problem: notVerified(`the design of ${key} in Notion`, { id: key, location: b.location }, firstDifference(local, stripTitle(b.body).body)) };
       return { back: b };
     });
+    // 2. Only then the approval property.
+    if (this.p.designApproved && (readValue(page, this.p.designApproved) || '') !== approved) {
+      await this.client.updatePage(page.id, { properties: { [this.p.designApproved]: writeValue('rich_text', approved) } });
+    }
+    const { back } = await this.readBack(async () => {
+      const b = await this.getDesign(key);
+      if (!b) return { back: b, problem: notVerified(`the design of ${key} in Notion`, { id: key }, 'it could not be read back') };
+      if (this.p.designApproved && String(b.meta.approved) !== approved) {
+        return { back: b, problem: notVerified(`the Design approved property of ${key} in Notion`, { id: key, location: b.location }, `it reads "${b.meta.approved}", not "${approved}"`) };
+      }
+      return { back: b };
+    });
     return back;
+  }
+
+  /**
+   * After the item's title changed: give the design page the new title
+   * ("<id>: <title> — solution design"). Returns true when it was changed.
+   */
+  async retitleDesign(id) {
+    const page = await this.findPage(id);
+    if (!page) throw notFound(id);
+    const key = this.idOf(page);
+    const d = await this.findDesignPage(page, key);
+    if (!d) return false;
+    const title = this.designTitle(key, this.metaOf(page).title || '');
+    if (readValue(d, 'title') === title) return false;
+    await this.client.updatePage(d.id, { properties: { title: writeValue('title', title) } });
+    const back = await this.client.getPage(d.id);
+    if (readValue(back, 'title') !== title) {
+      throw new ToolkitError(EXIT.ERROR, `Saved but not verified: the design page of ${key} reads back with the title "${readValue(back, 'title')}".`, { id: key });
+    }
+    return true;
   }
 
   // ------------------------------------------------------------------ move
@@ -945,11 +1007,13 @@ export class NotionTracker {
     for (const m of report.moves) {
       if (m.kind !== 'reparented') continue;
       const rows = [];
-      if (m.parentBefore && m.parentBefore !== 'none') rows.push([m.parentBefore, { date: today, change: `Sub-item ${m.id} moved out in Notion by hand.`, effect: `Its parent is now ${m.parentAfter === 'none' ? 'none (top level)' : m.parentAfter}.` }]);
-      if (m.parentAfter && m.parentAfter !== 'none') rows.push([m.parentAfter, { date: today, change: `Sub-item ${m.id} moved here in Notion by hand (it was under ${m.parentBefore === 'none' ? 'none (top level)' : m.parentBefore}).`, effect: `${m.id} is part of this item now.` }]);
-      for (const [pid, row] of rows) {
+      // Plain wording: "a top-level item", never "none (top level)" (sample run c, round 3).
+      // The parents' Related items and Roadmap Sub-items follow the move.
+      if (m.parentBefore && m.parentBefore !== 'none') rows.push([m.parentBefore, { date: today, change: `Sub-item ${m.id} moved out in Notion by hand.`, effect: m.parentAfter === 'none' ? `${m.id} is a top-level item now.` : `${m.id}'s parent is now ${m.parentAfter}.` }, (b) => removeRoadmapSubItem(unlinkRelatedItem(b, 'sub-item', m.id), m.id)]);
+      if (m.parentAfter && m.parentAfter !== 'none') rows.push([m.parentAfter, { date: today, change: `Sub-item ${m.id} moved here in Notion by hand ${m.parentBefore === 'none' ? '(it was a top-level item)' : `(it was under ${m.parentBefore})`}.`, effect: `${m.id} is part of this item now.` }, (b) => addRoadmapSubItem(linkRelatedItem(b, 'sub-item', m.id), m.id)]);
+      for (const [pid, row, edit] of rows) {
         try {
-          await this.appendHistoryOnce(pid, row);
+          await this.appendHistoryOnce(pid, row, edit);
         } catch (err) {
           report.problems.push({ severity: 'warning', id: pid, message: `The history row about ${m.id} could not be added to ${pid} (${err.message}).` });
         }
@@ -957,14 +1021,25 @@ export class NotionTracker {
     }
   }
 
-  /** Add a Recent History row to an item unless the same change is there for the same day. */
-  async appendHistoryOnce(id, row) {
+  /**
+   * Add a Recent History row to an item unless the same change is there for
+   * the same day. edit(body), when given, changes the body first (the links
+   * in Related items and the Roadmap); it runs only when the row is added.
+   */
+  async appendHistoryOnce(id, row, edit = null) {
     const rec = await this.get(id);
     if (!rec || !rec.body) return false;
     if (parseHistory(rec.body).some((h) => h.date === row.date && h.change === row.change)) return false;
-    let body;
+    let body = rec.body;
+    if (edit) {
+      try {
+        body = edit(body);
+      } catch {
+        body = rec.body;
+      }
+    }
     try {
-      body = appendHistory(rec.body, row);
+      body = appendHistory(body, row);
     } catch {
       return false; // No Recent History table.
     }
@@ -1003,6 +1078,9 @@ export class NotionTracker {
       for (const k of Object.keys(fields)) if (!meta[k]) patch[k] = fields[k];
       if (meta.stage && !meta.status) patch.status = statusForStage(meta.stage) || 'Backlog';
       // The template's item-level guide is about local folders; a Notion card never needs it.
+      if (this.p.designApproved && !readValue(page, this.p.designApproved)) {
+        await this.client.updatePage(page.id, { properties: { [this.p.designApproved]: writeValue('rich_text', 'no') } });
+      }
       await this.update(id, { meta: { ...patch, updated: today }, body: removeItemGuide(doc.body) });
       report.adopted.push({ id, location: page.url, reason: 'A card made in Notion with an empty body; the work item template was filled in.' });
       report.changed = true;
@@ -1035,13 +1113,16 @@ export class NotionTracker {
       // once: a row already there for the same change today is not repeated.
       const row = {
         date: today,
-        change: `Parent changed in Notion by hand: ${reparented.before === 'none' ? 'none (top level)' : reparented.before} -> ${reparented.after === 'none' ? 'none (top level)' : reparented.after}.`,
+        change: `Parent changed in Notion by hand: ${reparented.before === 'none' ? 'top level' : reparented.before} -> ${reparented.after === 'none' ? 'top level' : reparented.after}.`,
         effect: reparented.after === 'none' ? 'It is a top-level item now.' : `It is a sub-item of ${reparented.after} now.`,
       };
       r.written = { ...r.written, parent: reparented.after };
       if (!parseHistory(r.body).some((h) => h.date === row.date && h.change === row.change)) {
         try {
-          r.body = appendHistory(r.body, row);
+          // The item names its new parent in Related items.
+          let linked = reparented.before !== 'none' ? unlinkRelatedItem(r.body, 'parent', reparented.before) : r.body;
+          if (reparented.after !== 'none') linked = linkRelatedItem(linked, 'parent', reparented.after);
+          r.body = appendHistory(linked, row);
           r.changed = true;
           if (r.patch.updated === undefined && meta.updated !== today) r.patch.updated = today;
         } catch {
@@ -1060,6 +1141,19 @@ export class NotionTracker {
       meta = rec.meta;
       read = { body: rec.body };
       report.changed = true;
+    }
+    // An item made before "Design approved" started as "no" shows a blank
+    // cell; it gets "no" like a new item (verifier, fix round 2). An item
+    // whose design is approved is left alone: its approval value is not known here.
+    if (write && this.p.designApproved && meta.design !== 'approved' && !readValue(latest, this.p.designApproved)) {
+      try {
+        await this.client.updatePage(latest.id, { properties: { [this.p.designApproved]: writeValue('rich_text', 'no') } });
+        latest = await this.client.getPage(latest.id);
+        report.changed = true;
+      } catch (err) {
+        if (!isNotionError(err)) throw err;
+        // Left blank; it reads as "no".
+      }
     }
     const snap = r.written;
     this.remember(id, latest, { written: snap });

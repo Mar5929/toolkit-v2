@@ -6,7 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { cleanup, git, initProject, tk } from './helpers.mjs';
 import { hasKeepPhrase } from '../../lib/hooks/phrases.mjs';
-import { fitSections, focusDropOrder } from '../../lib/project/brief.mjs';
+import { fitSections, focusDropOrder, staleFocusLine } from '../../lib/project/brief.mjs';
 
 after(cleanup);
 
@@ -75,6 +75,7 @@ test('an item folder moved by hand is reported in the briefing', async () => {
   fs.renameSync(from, path.join(root, '.work-items', parent, 'WI-003-ideas'));
   const res = await tk(root, ['brief'], { env });
   assert.match(res.stdout, /Changes found in the tracker since the last toolkit command/);
+  assert.match(res.stdout, /say each line below to him as written/, 'the header tells the agent to use the report lines as written');
   assert.match(res.stdout, /WI-003[^\n]*parent is now WI-001/);
 });
 
@@ -86,7 +87,7 @@ test('the briefing stays under 6,000 characters with many items and memory recor
     await tk(root, ['work', 'set', `WI-${String(i).padStart(3, '0')}`, '--stage', i % 2 ? '06-implementation-plan' : '03-requirements-approved', ...(i % 3 ? [] : ['--waiting-on', 'owner'])], { env });
   }
   for (let i = 1; i <= 30; i++) {
-    const r = await tk(root, ['memory', 'save', '--type', 'project', '--name', `fact-${i}`, '--description', `A project fact number ${i} that is long enough to take some room`, '--body', `## Remember\n\nFact ${i}.\n`], { env });
+    const r = await tk(root, ['memory', 'save', '--type', 'project', '--name', `fact-${i}`, '--description', `A project fact number ${i} that is long enough to take some room`, '--body', `## Remember\n\nFact ${i}.\n`, '--allow-similar'], { env });
     assert.equal(r.code, 0, r.stderr);
   }
   for (const host of ['claude', 'codex']) {
@@ -152,4 +153,15 @@ test('a briefing too long for its limit cuts the current focus header lines firs
     assert.doesNotMatch(text, /Updated: 2026-09-26/, `max ${max}`);
   }
   assert.doesNotMatch(fitSections(make(), 230), /Untracked to-dos/);
+});
+
+test('staleFocusLine notes a current focus older than the newest open work item change', () => {
+  const focus = (date) => `# Current focus\n\nLast updated: ${date}, handoff, agent\n\n## Now\n\n- WI-001 requirements.\n\n## Waiting on the owner\n\n- None.\n\n## Untracked to-dos\n\n- None.\n\n## Next session starts with\n\n- Record Mike's answer to the requirements approval question.\n`;
+  const items = [{ id: 'WI-001', updated: '2026-09-27' }, { id: 'WI-002', updated: '2026-09-26' }, { id: 'WI-003' }];
+  assert.equal(staleFocusLine(focus('2026-09-25'), items),
+    'The current focus was last updated 2026-09-25, before WI-001 changed on 2026-09-27. Its "Now" and "Next session starts with" lines may be out of date: check them against the work items, and save the focus again when they differ.');
+  assert.equal(staleFocusLine(focus('2026-09-27'), items), null, 'the same day is not older');
+  assert.match(staleFocusLine(focus('2026-09-25'), [{ id: 'WI-004', updated: '2026-09-28T10:00:00.000Z' }]), /before WI-004 changed on 2026-09-28/, 'a Notion last edit time counts by its date');
+  assert.equal(staleFocusLine('', items), null);
+  assert.equal(staleFocusLine('# Current focus\n\n## Now\n\n- WI-001\n', items), null, 'no date: toolkit doctor reports that instead');
 });

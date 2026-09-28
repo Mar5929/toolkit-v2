@@ -6,34 +6,34 @@ description: 'Interviews the owner one question at a time, writes a work item''s
 # Work requirements
 
 Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
-Shared rules: the work plugin's `references/conventions.md`, two folders above this skill's folder (`../../references/conventions.md`). Interview and writing rules: this skill's `references/writing-requirements.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Run each `toolkit` command alone, on its own line: in Codex a command joined by `&&`, `;`, a pipe, or a heredoc, or run from a script, runs inside the sandbox and fails. Give text with `--text`, or a file in a new `mktemp -d` folder (never a fixed `/tmp` name, deleted right after the command). Never change a record with a script.
+Shared rules: the work plugin's `references/conventions.md`, two folders above this skill's folder (`../../references/conventions.md`). Interview and writing rules: this skill's `references/writing-requirements.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Run each `toolkit` command alone, on its own line, in both hosts: never joined by `&&`, `;`, or a pipe, and never from a script (in Codex that runs it inside the sandbox, where it fails). Text (conventions, "Text in a command"): one-line values (`--note`, `--effect`, `--append-row`, `--title`) go in single quotes, with an apostrophe written `'\''`, because double quotes run backticks and `$(...)`; section and design text goes on standard input in Claude Code (`<file>` is `-`, followed by a quoted heredoc, `<<'EOF'`), and in Codex in `--text '<text>'` or a file in a new `mktemp -d` folder, deleted right after the command. Never change a record with a script. Ask the owner in the reply text, never through a question tool. No remote (`git remote` prints nothing): never run `git fetch`, and never report a fetch refusal as a blocker.
 
 ## Steps
 
 1. Find the item as `work-on` does; none exists, create it. Use discovery while the goal is being worked out, refinement once requirements are being written. Requirements already approved and no change asked: stop and open the skill the lifecycle's "Continue with" column names.
    `toolkit work show <id> --section Requirements`
-   `toolkit work new --title "<title>" --type <type> --stage 01-discovery`
+   `toolkit work new --title '<title>' --type <type> --stage 01-discovery`
    `toolkit work set <id> --stage 02-refinement`
 2. Before asking anything, read the item (Starting request, Agreed goal, `R-xx`, Open Questions) and look up what the project already knows, so no question repeats an answer.
    `toolkit work show <id>`
-   `toolkit memory find "<topic>"`
+   `toolkit memory find '<topic>'`
 3. Restate the goal in one sentence ("So the goal is X?"). Write the Agreed goal after a yes, and always before asking for approval in step 8.
-   `toolkit work edit <id> --section "Agreed goal" --text "<goal>"`
+   `toolkit work edit <id> --section "Agreed goal" --text '<goal>'`
 4. Ask one question at a time, most basic first, each with a recommended answer and a short reason. Push back when an answer works against the goal.
-5. Write each answer into the item before the next question: `R-xx` blocks (Status Refining, required behavior, boundaries, acceptance check, decision record) and the Acceptance list. Anything unanswered becomes an Open Questions row (next free `Q-` number) with who must answer; the item waits on the owner while one of his is open, and goes back to the agent when he answers the last one. Build ideas go under Notes > Solution options and considerations, never into requirements. A fact the owner cannot answer: brief a `researcher` agent.
+5. Write each answer into the item before the next question: `R-xx` blocks (Status Refining, required behavior, boundaries, acceptance check, decision record) and the Acceptance list, with each section's fill-in guide comment left out once it holds real content. Anything unanswered becomes an Open Questions row (next free `Q-` number) with who must answer; the item waits on the owner while one of his is open, and goes back to the agent when he answers the last one. Build ideas go under Notes > Solution options and considerations, never into requirements. A fact the owner cannot answer: brief a `researcher` agent.
    `toolkit work edit <id> --section "Active requirements" --set-file <file>`
-   `toolkit work edit <id> --section "Open Questions" --append-row "| <next Q-id> | <question> | R-02 | Open | owner |"`
+   `toolkit work edit <id> --section "Open Questions" --append-row '| <next Q-id> | <question> | R-02 | Open | owner |'`
    `toolkit work set <id> --waiting-on owner`
    `toolkit work set <id> --waiting-on agent`
 6. A change to an approved requirement: edit the `R-xx`, keep the old wording in its decision record, set it back to Refining, move the item to refinement, and say what the change affects when the item is past stage 03.
    `toolkit work set <id> --stage 02-refinement`
 7. Spec check, before asking for approval and whenever the owner says "check the spec": brief the `requirements-analyst` agent with the requirements text. Fix what it finds or turn it into questions. Change nothing without a yes.
-8. With the Agreed goal written (the CLI refuses an approval while it holds the template text), show the goal and a short summary and ask one line: "Do you approve these requirements?" and set the item waiting on the owner. Yes: quote his words in one note first, set each approved `R-xx` Status to Finalized and put who approved it and when in its Decision record, record the approval (the command adds its own history row), and hand the item back to the agent unless another question for him is still open. Then a `build` or `data-load` item goes to `solution-design`, unless the owner agreed to skip the design; say a skip in the final reply, not a progress line. Not yet: it stays waiting on him.
-   `toolkit work history <id> --note "Owner's words: <quote>" --effect "Requirements approved."`
+8. With the Agreed goal written (the CLI refuses an approval while it holds the template text), show the goal and a short summary and ask one line, in the reply text: "Do you approve these requirements?" and set the item waiting on the owner. Yes: quote his words in one note first, set each approved `R-xx` Status to Finalized and put who approved it and when in its Decision record, record the approval (the command adds its own history row), and hand the item back to the agent unless another question for him is still open. Then a `build` or `data-load` item goes to `solution-design`, unless the owner agreed to skip the design; say a skip in the final reply, not a progress line. Not yet: it stays waiting on him.
+   `toolkit work history <id> --note 'Owner'\''s words: <quote>' --effect 'Requirements approved.'`
    `toolkit work edit <id> --section "Active requirements" --set-file <file>`
    `toolkit work approve <id> --requirements --by <owner>`
    `toolkit work set <id> --waiting-on agent`
-9. Lead with "Not saved" on a failed write. Check the item, then hand back to `work-on` unless the owner stops. End the reply with the one question for the owner, or the exact words that continue.
+9. Lead with "Not saved" on a failed write. Check the item, update the current focus when its next step changed (`../../references/conventions.md`, "The current focus"), then hand back to `work-on` unless the owner stops. End the reply with the one question for the owner, or the exact words that continue.
    `toolkit work validate <id>`
 
 ## Agents

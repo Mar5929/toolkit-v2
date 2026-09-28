@@ -382,3 +382,35 @@ test('a note that holds code spans or a file name Notion linked comes back as th
     for (const c of comments) assert.ok(back.includes(c.replace(/\s+/g, ' ')), `${file}: ${c.slice(0, 60)}`);
   }
 });
+
+test('planUpdate takes the section after along when the text before is not unique, instead of replacing the whole page', () => {
+  // Replacing the whole page puts every old block in the Notion trash (the Notion rebuild check).
+  const fresh = '## A\nsame\n## A\nsame\n## B\nend';
+  const local = fromNotion(fresh).markdown;
+  const next = local.replace(/^## A\n\nsame\n/, '## A\n\nchanged\n');
+  const plan = planUpdate({ fresh, next });
+  assert.equal(plan.type, 'update_content');
+  let applied = fresh;
+  for (const op of plan.ops) {
+    assert.equal(applied.split(op.old_str).length - 1, 1, 'old_str must be unique');
+    applied = applied.replace(op.old_str, op.new_str);
+  }
+  assert.ok(sameLocal(fromNotion(applied).markdown, next), applied);
+});
+
+test('a line that starts with a bold label is its own line in Notion, and a .md file name is code text only when asked', () => {
+  const header = '**Requirements:** TV2-001\n**Design status:** Proposed\n**Last updated:** 2026-09-27';
+  assert.equal(toNotion(header), '**Requirements:** TV2-001<br>**Design status:** Proposed<br>**Last updated:** 2026-09-27');
+  assert.ok(sameLocal(fromNotion(toNotion(header)).markdown, header));
+  assert.equal(toNotion('A soft\nwrapped line'), 'A soft wrapped line', 'other lines are still joined');
+  assert.equal(toNotion('Keep WORK-ITEM.md here.'), 'Keep WORK-ITEM.md here.', 'memory records are sent as they are');
+  assert.equal(toNotion('Keep WORK-ITEM.md and docs/a.md here, not [x.md](x.md).', { codeFileNames: true }), 'Keep `WORK-ITEM.md` and `docs/a.md` here, not [x.md](x.md).');
+  assert.ok(sameLocal('Keep `WORK-ITEM.md` here.', 'Keep WORK-ITEM.md here.'), 'the code form and the plain form compare the same');
+});
+
+test('a path that starts with a dot folder is sent as code text whole, so Notion does not link its file name', () => {
+  assert.equal(toNotion('See .work-items/WI-001-x/WORK-ITEM.md and ../docs/area.md.', { codeFileNames: true }), 'See `.work-items/WI-001-x/WORK-ITEM.md` and `../docs/area.md`.');
+  assert.ok(sameLocal('See `.work-items/WI-001-x/WORK-ITEM.md`.', 'See .work-items/WI-001-x/WORK-ITEM.md.'), 'the code form and the plain form compare the same');
+  assert.equal(escapeInline('Keep .gitignore and https://example.com/.x/y.md as they are.', { codeFileNames: true }), 'Keep .gitignore and https://example.com/.x/y.md as they are.');
+  assert.equal(escapeInline('A pause... then WORK-ITEM.md.', { codeFileNames: true }), 'A pause... then `WORK-ITEM.md`.');
+});

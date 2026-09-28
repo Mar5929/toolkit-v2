@@ -1,11 +1,18 @@
 # Team roles and team size
 
 Carried over from Toolkit V1's design team roles. Every agent runs on
-Opus. The team is sized fresh for each item. The main agent proposes
-it, and the owner agrees or changes it before any agent starts, unless the
-item already records his team-arrangement answer from `work-delegate`. That
-answer saves a repeated question; it does not approve a product decision, a
-design, or a result.
+Opus. The team is sized fresh for each item, by the main agent. The owner is
+one person who decides and steers; he cannot judge which internal helpers a
+small item needs, so he is not asked:
+
+- The small team for the item's kind (the first row of each table below): the
+  main agent picks it and states it in one line ("Design team: one
+  requirements analyst, one architect, one critic, and a researcher when a
+  question is open."). No question.
+- A larger team: the main agent proposes it, and the owner agrees or changes
+  it before any agent starts, unless the item already records his
+  team-arrangement answer from `work-delegate`. That answer saves a repeated
+  question; it does not approve a product decision, a design, or a result.
 
 ## The roles
 
@@ -36,10 +43,11 @@ Weigh, in the context of what is being built:
 - how many design options the owner wants;
 - how much is unknown about the platform, the version, or the data.
 
-Then propose a team, say why each role and count is there, and say how many
+Then pick a team, say why each role and count is there, and say how many
 agent runs the first pass takes. Cut what the item does not need. A small
 design still gets one requirements analyst and one critic; those two make the
-design loop stop for the right reason.
+design loop stop for the right reason, and a design with no critic is allowed
+only in a session with no agent tool.
 
 ## Example teams for a design
 
@@ -60,6 +68,7 @@ Starting points, not rules.
 
 ## What the owner sees
 
-A short list: role, count, and one line on what each reads and returns. The
-owner can cut, add, or change any role. Record the agreed team, for a design or
-a build, in the item's Notes > Decisions and context.
+The small team: one line naming it. A larger team: a short list of role,
+count, and one line on what each reads and returns, and the question whether
+to run it. The owner can cut, add, or change any role. Record the team, for a
+design or a build, in the item's Notes > Decisions and context.

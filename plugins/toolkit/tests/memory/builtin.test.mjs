@@ -197,6 +197,15 @@ test('template files and the seed template are not records', async () => {
   assert.deepEqual((await d.status()).problems.filter((p) => !/MEMORY\.md/.test(p.where)), [], 'the seed template link to project_related_topic.md is not a broken link');
 });
 
+test('MEMORY.md marks a saved proposal as not a fact, not as an ordinary record that needs review', () => {
+  const text = buildIndex([
+    { key: 'project_release_day', type: 'project', description: 'Releases go out on Fridays', stored_status: 'needs-review', proposal: true },
+    { key: 'project_review_me', type: 'project', description: 'Needs a look', stored_status: 'needs-review' },
+  ]);
+  assert.match(text, /^- \[project_release_day\.md\]\(project_release_day\.md\) — Releases go out on Fridays \[proposal: not a fact until the owner answers\]$/m);
+  assert.match(text, /^- \[project_review_me\.md\]\(project_review_me\.md\) — Needs a look \[needs-review\]$/m);
+});
+
 test('the model .memory/ folder, copied as setup copies it, reindexes to the model MEMORY.md byte for byte', async () => {
   const { root } = makeProject();
   const vault = path.join(root, '.memory');
@@ -236,7 +245,7 @@ test('links between notes: rename, supersede, archive, and delete repair every n
   await d.save(rec('ledger'));
   await d.save(rec('accounts', { body: '# Accounts\n\n**Remember:** One org per account.\n\n**Related memories:** [billing](project_billing.md) and [the ledger](project_ledger.md).\n' }));
   await d.save(rec('invoices', { body: '# Invoices\n\n**Remember:** Monthly.\n\n**Related memories:** [project_billing](project_billing.md); [accounts](project_accounts.md).\n' }));
-  await d.focusSet(`# Current focus\n\n## Now\n\n- See [billing](project_billing.md).\n\n## Waiting on the owner\n\n- None.\n\n## Untracked to-dos\n\n- None.\n\n## Next session starts with\n\n- None.\n`);
+  await d.focusSet(`# Current focus\n\nLast updated: 2026-09-26, test\n\n## Now\n\n- See [billing](project_billing.md).\n\n## Waiting on the owner\n\n- None.\n\n## Untracked to-dos\n\n- None.\n\n## Next session starts with\n\n- None.\n`);
 
   // Rename: links point at the new file; words that were the old key follow too.
   const renamed = await d.rename('project_billing', 'reference_billing_rules');
@@ -340,7 +349,11 @@ test('a hand-written superseded note stays in the vault root through reindex and
   const get = await runToolkit(['memory', 'get', 'project_hand_superseded'], { cwd: root });
   const f = path.join(tempDir(), 'note.md');
   fs.writeFileSync(f, get.stdout);
-  const saved = await runToolkit(['memory', 'save', '--body-file', f], { cwd: root });
+  // The same key again is an update: the duplicate check wants the version that was read.
+  const again = await runToolkit(['memory', 'save', '--body-file', f], { cwd: root });
+  assert.equal(again.code, 2, 'the same key without --expect is refused');
+  assert.match(again.stderr, /project_hand_superseded \(retired\), the same key/);
+  const saved = await runToolkit(['memory', 'save', '--body-file', f, '--expect', got.version], { cwd: root });
   assert.equal(saved.code, 0, saved.stderr);
   assert.equal(fs.readFileSync(file, 'utf8'), HAND_SUPERSEDED);
 });
@@ -361,7 +374,7 @@ test('saving a superseded note from its own memory get text keeps it superseded,
   const get = await runToolkit(['memory', 'get', 'project_release_train'], { cwd: root });
   const f = path.join(tempDir(), 'note.md');
   fs.writeFileSync(f, get.stdout.replace('Trains leave monthly.', 'Trains left monthly.'));
-  const saved = await runToolkit(['memory', 'save', '--body-file', f], { cwd: root });
+  const saved = await runToolkit(['memory', 'save', '--body-file', f, '--expect', (await d.get('project_release_train')).version], { cwd: root });
   assert.equal(saved.code, 0, saved.stderr);
 
   assert.ok(fs.existsSync(file), 'still in the vault root');

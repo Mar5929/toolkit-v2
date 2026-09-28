@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve, dirname, basename } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { cleanPath, generatedPaths, KNOWLEDGE_INDEX } from '../skills/publish-docs/scripts/publish-docs.mjs';
+import { cleanPath, generatedPaths, hasRemote, remoteNames, worktreeHolding, KNOWLEDGE_INDEX } from '../skills/publish-docs/scripts/publish-docs.mjs';
 
 const script = resolve(dirname(fileURLToPath(import.meta.url)), '../skills/publish-docs/scripts/publish-docs.mjs');
 const base = resolve(mkdtempSync(join(tmpdir(), 'publish-docs-test-')));
@@ -33,10 +33,9 @@ function startSave(source, ...paths) {
   workspaces.push({ source, workspace });
   return workspace;
 }
-function project(name, files) {
-  const remote = join(base, `${name}.git`);
+/** A repository with no remote at all, the way a new local project starts. */
+function localProject(name, files) {
   const source = join(base, name);
-  git(base, 'init', '--bare', '-q', remote);
   mkdirSync(source);
   git(source, 'init', '-q', '-b', 'main');
   git(source, 'config', 'user.name', 'Fixture Owner');
@@ -45,6 +44,12 @@ function project(name, files) {
   for (const [path, content] of Object.entries(files)) write(join(source, path), content);
   git(source, 'add', '--', ...Object.keys(files));
   git(source, 'commit', '-q', '-m', 'Initial files');
+  return source;
+}
+function project(name, files) {
+  const remote = join(base, `${name}.git`);
+  git(base, 'init', '--bare', '-q', remote);
+  const source = localProject(name, files);
   git(source, 'remote', 'add', 'origin', remote);
   git(source, 'push', '-q', '-u', 'origin', 'main');
   return source;
@@ -317,4 +322,171 @@ test('two-space Markdown line breaks publish; conflict markers are refused with 
   assert.equal(conflicted.status, 1);
   assert.match(conflicted.stderr, /conflict markers or whitespace errors/);
   assert.match(conflicted.stderr, /requirements\/billing\.md:\d+: leftover conflict marker/);
+});
+
+test('with no remote, a save commits on the local default branch by fast-forward and never fetches or pushes', () => {
+  const source = localProject('no-remote', {
+    'README.md': '# Project\n',
+    'requirements/billing.md': '# Billing\n',
+  });
+  assert.equal(hasRemote(source), false);
+  const before = git(source, 'rev-parse', 'main');
+
+  const started = run(process.execPath, [script, 'start', '--branch', 'main', '--', 'requirements/billing.md'], source);
+  assert.equal(started.status, 0, started.stderr);
+  assert.match(started.stderr, /No remote: this save will be committed locally on main/);
+  const workspace = started.stdout.trim();
+  workspaces.push({ source, workspace });
+  const marker = JSON.parse(readFileSync(join(git(workspace, 'rev-parse', '--absolute-git-dir'), 'toolkit-docsave.json'), 'utf8'));
+  assert.equal(marker.local, true);
+  assert.equal(marker.base, before);
+
+  write(join(workspace, 'requirements', 'billing.md'), '# Billing\n\nR-01 delivered.\n');
+  git(workspace, 'add', '--', 'requirements/billing.md');
+  const published = run(process.execPath, [script, 'publish', '--message', 'Save the billing requirements'], workspace);
+  assert.equal(published.status, 0, published.stderr);
+  const head = git(workspace, 'rev-parse', 'HEAD');
+  assert.equal(published.stdout.trim(), `No remote: committed locally. ${head} is on main.`);
+  assert.doesNotMatch(published.stderr, /origin|fetch|push/);
+
+  // The main checkout has main checked out: it moved forward, working tree included.
+  assert.equal(git(source, 'rev-parse', 'main'), head);
+  assert.equal(git(source, 'rev-parse', 'HEAD^'), before);
+  assert.equal(readFileSync(join(source, 'requirements', 'billing.md'), 'utf8'), '# Billing\n\nR-01 delivered.\n');
+  assert.equal(git(source, 'status', '--porcelain'), '');
+  assert.equal(git(source, 'remote'), '');
+
+  const again = run(process.execPath, [script, 'publish', '--message', 'Nothing new'], workspace);
+  assert.equal(again.status, 1);
+  assert.match(again.stderr, /No changes to publish/);
+});
+
+test('with no remote, a default branch that moved on is refused until the save workspace is brought current', () => {
+  const source = localProject('no-remote-advanced', {
+    'PROJECT.md': '# Project\n',
+    'system-guide/billing.md': '# Billing guide\n',
+  });
+  const workspace = startSave(source, 'system-guide/billing.md');
+  write(join(source, 'PROJECT.md'), '# Project\n\nAnother session committed this.\n');
+  git(source, 'add', '--', 'PROJECT.md');
+  git(source, 'commit', '-q', '-m', 'Another session');
+  const moved = git(source, 'rev-parse', 'main');
+
+  write(join(workspace, 'system-guide', 'billing.md'), '# Billing guide\n\nInvoices are sent monthly.\n');
+  git(workspace, 'add', '--', 'system-guide/billing.md');
+  const stale = run(process.execPath, [script, 'publish', '--message', 'Save the billing guide'], workspace);
+  assert.equal(stale.status, 1);
+  assert.match(stale.stderr, /The default branch main advanced/);
+  assert.equal(git(source, 'rev-parse', 'main'), moved, 'a refused save never moves the default branch');
+
+  git(workspace, 'rebase', '-q', 'main');
+  const current = run(process.execPath, [script, 'publish', '--message', 'Save the billing guide'], workspace);
+  assert.equal(current.status, 0, current.stderr);
+  assert.match(current.stdout, /^No remote: committed locally\./);
+  assert.equal(git(source, 'rev-parse', 'main^'), moved);
+  assert.match(readFileSync(join(source, 'system-guide', 'billing.md'), 'utf8'), /sent monthly/);
+  assert.match(readFileSync(join(source, 'PROJECT.md'), 'utf8'), /Another session/);
+});
+
+test('with no remote, an uncommitted copy of a saved file in the main checkout stops the fast-forward and is never overwritten', () => {
+  const source = localProject('no-remote-dirty', {
+    'requirements/billing.md': '# Billing\n',
+    'system-guide/other.md': '# Other\n',
+  });
+  const before = git(source, 'rev-parse', 'main');
+  const workspace = startSave(source, 'requirements/billing.md');
+  // This session's own edit, still in the main checkout.
+  write(join(source, 'requirements', 'billing.md'), '# Billing\n\nDraft in the main checkout.\n');
+  // Another session's unrelated uncommitted edit.
+  write(join(source, 'system-guide', 'other.md'), '# Other\n\nAnother session is editing this.\n');
+
+  write(join(workspace, 'requirements', 'billing.md'), '# Billing\n\nR-01 delivered.\n');
+  git(workspace, 'add', '--', 'requirements/billing.md');
+  const blocked = run(process.execPath, [script, 'publish', '--message', 'Save the billing requirements'], workspace);
+  assert.equal(blocked.status, 1);
+  assert.match(blocked.stderr, /could not be moved forward/);
+  assert.match(blocked.stderr, /git restore -- <file>/);
+  assert.equal(git(source, 'rev-parse', 'main'), before);
+  assert.match(readFileSync(join(source, 'requirements', 'billing.md'), 'utf8'), /Draft in the main checkout/);
+
+  git(source, 'restore', '--', 'requirements/billing.md');
+  const retried = run(process.execPath, [script, 'publish', '--message', 'Save the billing requirements'], workspace);
+  assert.equal(retried.status, 0, retried.stderr);
+  assert.equal(git(source, 'rev-parse', 'main'), git(workspace, 'rev-parse', 'HEAD'));
+  assert.match(readFileSync(join(source, 'requirements', 'billing.md'), 'utf8'), /R-01 delivered/);
+  assert.match(readFileSync(join(source, 'system-guide', 'other.md'), 'utf8'), /Another session is editing this/,
+    'the other session\'s uncommitted edit is kept');
+});
+
+test('with no remote and the default branch checked out nowhere, the branch moves forward and every checkout stays as it was', () => {
+  const source = localProject('no-remote-elsewhere', {
+    'DECISIONS.md': '# Decisions\n',
+  });
+  git(source, 'switch', '-q', '-c', 'claude/wi-001-feature');
+  assert.equal(worktreeHolding(source, 'main'), null);
+  const workspace = startSave(source, 'DECISIONS.md');
+  write(join(workspace, 'DECISIONS.md'), '# Decisions\n\n| D-1 | Use Postgres |\n');
+  git(workspace, 'add', '--', 'DECISIONS.md');
+  const published = run(process.execPath, [script, 'publish', '--message', 'Record D-1'], workspace);
+  assert.equal(published.status, 0, published.stderr);
+  assert.equal(git(source, 'rev-parse', 'main'), git(workspace, 'rev-parse', 'HEAD'));
+  assert.equal(git(source, 'rev-parse', '--abbrev-ref', 'HEAD'), 'claude/wi-001-feature');
+  assert.equal(readFileSync(join(source, 'DECISIONS.md'), 'utf8'), '# Decisions\n');
+  assert.equal(git(source, 'status', '--porcelain'), '');
+});
+
+test('with no remote, a default branch that does not exist is named in the refusal', () => {
+  const source = localProject('no-remote-branch', { 'README.md': '# Project\n' });
+  const missing = run(process.execPath, [script, 'start', '--branch', 'trunk', '--', 'README.md'], source);
+  assert.equal(missing.status, 1);
+  assert.match(missing.stderr, /No remote, and there is no local branch trunk/);
+});
+
+test('with no remote, an untracked copy of a new saved file in the main checkout is refused with the delete step', () => {
+  const source = localProject('no-remote-new-file', { 'requirements/billing.md': '# Billing\n' });
+  const before = git(source, 'rev-parse', 'main');
+  const workspace = startSave(source, 'requirements/export.md');
+  // This session first wrote the new requirements area in the main checkout.
+  write(join(source, 'requirements', 'export.md'), '# Export\n\nDraft in the main checkout.\n');
+
+  write(join(workspace, 'requirements', 'export.md'), '# Export\n\nR-01 export to CSV.\n');
+  git(workspace, 'add', '--', 'requirements/export.md');
+  const blocked = run(process.execPath, [script, 'publish', '--message', 'Add the export requirements'], workspace);
+  assert.equal(blocked.status, 1);
+  assert.match(blocked.stderr, /could not be moved forward/);
+  assert.match(blocked.stderr, /for a new file this session created there, delete that copy \(rm <file>\)/);
+  assert.equal(git(source, 'rev-parse', 'main'), before, 'a refused fast-forward never moves the default branch');
+  assert.match(readFileSync(join(source, 'requirements', 'export.md'), 'utf8'), /Draft in the main checkout/);
+
+  // git restore cannot help with an untracked file; deleting this session's copy does.
+  rmSync(join(source, 'requirements', 'export.md'));
+  const retried = run(process.execPath, [script, 'publish', '--message', 'Add the export requirements'], workspace);
+  assert.equal(retried.status, 0, retried.stderr);
+  assert.equal(git(source, 'rev-parse', 'main'), git(workspace, 'rev-parse', 'HEAD'));
+  assert.match(readFileSync(join(source, 'requirements', 'export.md'), 'utf8'), /R-01 export to CSV/);
+  assert.equal(git(source, 'status', '--porcelain'), '');
+});
+
+test('a repository whose remotes do not include origin is refused at start with the remote names', () => {
+  const source = localProject('upstream-only', { 'requirements/billing.md': '# Billing\n' });
+  const remote = join(base, 'upstream-only.git');
+  git(base, 'init', '--bare', '-q', remote);
+  git(source, 'remote', 'add', 'upstream', remote);
+  assert.deepEqual(remoteNames(source), ['upstream']);
+  assert.equal(hasRemote(source), true);
+  const worktreesBefore = git(source, 'worktree', 'list', '--porcelain');
+
+  const refused = run(process.execPath, [script, 'start', '--branch', 'main', '--', 'requirements/billing.md'], source);
+  assert.equal(refused.status, 1);
+  assert.match(refused.stderr, /no remote named origin \(its remotes: upstream\)/);
+  assert.match(refused.stderr, /git remote rename <name> origin/);
+  assert.equal(refused.stdout, '', 'no save workspace path is printed');
+  assert.equal(git(source, 'worktree', 'list', '--porcelain'), worktreesBefore, 'no save workspace is made');
+});
+
+test('the usage line shows the commit message in single quotes', () => {
+  const source = localProject('usage-quotes', { 'README.md': '# Project\n' });
+  const usage = run(process.execPath, [script, 'publish'], source);
+  assert.equal(usage.status, 1);
+  assert.match(usage.stderr, /publish --message 'Commit message'/);
 });

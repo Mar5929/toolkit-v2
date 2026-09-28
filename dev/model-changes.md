@@ -13,8 +13,17 @@ model folder was not touched.
   - `57b08b7` Run the Salesforce guards in Codex and rewrite the Salesforce skill descriptions (items 17, 18)
   - `ea9050f` Use a general example in the plain English rule and fill the rules list (item 20)
   - `9940854` Fix review findings in the approved model changes (items 1, 2, 9, 12, 16, 17, and your wording put back in two memory files)
-- Full diff of `.memory/` and `.work-items/`:
-  `dev/model-changes-ignored-folders.diff`.
+  - `94b23c8` Use the approved Salesforce skill descriptions ("Skill description changes" below)
+  - `031b71f` Route handoffs, requirement changes, and handovers to their skills (your routing approvals, 2026-09-27)
+  - `287b0c3` Check only the Salesforce commands the shell will run in the org guard ("Fixes from the sample runs" below)
+  - `8ff4d3d` Fix wording the sample runs showed sends agents wrong ("Fixes from the sample runs" below)
+  - `908456e` Keep an unanswered memory question as a proposal (your memory additions, 2026-09-27)
+  - `628027c` Read the whole line in the org guard when any part of it cannot be read ("Fixes from the sample runs" below)
+  - `f4684a5` Take an org only from the setting in front of its own sf command in the org guard ("Fixes from the sample runs" below)
+  - `54c5520` Hold the requirements layout sentence until Mike approves it (takes back the `requirements/AGENTS.md` part of `8ff4d3d`; "Needs your yes" below)
+- Full diff of `.memory/` and `.work-items/` from `efa2440` to the branch's
+  last commit: `dev/model-changes-ignored-folders.diff` (made with
+  `git diff efa2440 HEAD -- .memory .work-items` in the second folder).
 
 ## Decision for you
 
@@ -133,7 +142,7 @@ Your model's `.memory/` and `.work-items/` files are tracked by Git even though 
 
 - `PROJECT.md` names `.system-guide.json` on its System Guide line.
 - `humanize-outbound-text.md` names the `humanizer` skill, which V2 does not ship; it already falls back to `unslop`.
-- "Project Init" is still named in `tools/permissions/README.md`, the comment at the top of `tools/permissions/PERMISSIONS-RUNBOOK.md`, and line 29 of both `sf-component-tracker` copies. `tools/kb/graph_freshness_hook.py` still points to `knowledge/memory/`.
+- "Project Init" is still named in `tools/permissions/README.md`, the comment at the top of `tools/permissions/PERMISSIONS-RUNBOOK.md`, and line 29 of both `sf-component-tracker` copies. (`tools/kb/graph_freshness_hook.py` no longer points to `knowledge/memory/`; see "Fixes from the sample runs".)
 - Four Salesforce rules link to `.claude/skills/sf-*/SKILL.md`. Codex can still read those files; its own copies are in `.agents/skills/`.
 - In `DESIGN.md`, the body line "Design status: Draft | In review | Approved | Superseded" uses different words from the new header (`proposed`, `approved`, `superseded`).
 - The topic template's `authorization` prompt still mentions an "Approved card".
@@ -182,16 +191,14 @@ replaces the `description:` line that item 18 wrote.
   description: 'Keeps the component tracker CSV, the master and per-work-item package.xml files, destructiveChanges.xml, and manual steps in sync. Use when Salesforce metadata under force-app/ is added, changed, renamed, or deleted, when a deploy result comes back, or when a deploy needs manual steps.'
   ```
 
-Where it stands: the toolkit's copy of the model
-(`plugins/toolkit/scaffold/model/`) already has these three lines. Until the
-model's `toolkit-v2/approved-changes` branch gets the same lines,
-`node dev/tools/import-model.mjs --check` lists these 6 files as different, and
-running the import puts the old lines back.
+Where it stands: applied on the branch in commit `94b23c8`, in all 6 files,
+and imported. `node dev/tools/import-model.mjs --check` passes.
 
-## Proposed: handoff rule wording (needs your yes, 2026-09-27)
+## Handoff rule wording (approved 2026-09-27)
 
-Not approved yet, and not applied anywhere. It changes one model file,
-`.claude/rules/session-handoff.md`.
+You approved this with the routing approvals (`dev/GOAL.md`). It is applied
+on the branch in commit `031b71f`, word for word as proposed below, and
+imported. It changes one model file, `.claude/rules/session-handoff.md`.
 
 - The problem: when you say "I'm going to clear context" after a short
   session, Claude Code often skips the handoff. It quotes the rule's last
@@ -218,5 +225,247 @@ offer"):
 When the owner says he is clearing context or ending the session, or asks for a handoff, use the `handoff` skill, whatever the session's length. When the session is long and the next step is complex, offer a handoff. Use the `handoff` skill. Before the handoff, review the current focus (`toolkit memory focus`) and the memory criteria; update the focus, and save only authorized lasting memory, with the `memory-save` skill. Then write the prompt. Skip the offer for small edits and quick lookups.
 ```
 
-After a yes: the change goes on the model's `toolkit-v2/approved-changes`
-branch, then `node dev/tools/import-model.mjs` copies it into the toolkit.
+The same commit adds your two approved routing lines to `AGENTS.md`, under
+"Every session", right after the `work-on` line:
+
+```markdown
+- A change to a requirement, such as R-01, at any stage: `work-requirements`.
+- "You drive", "take it from here", "run with it", even about a named item: `work-delegate`.
+```
+
+"Run with it" is the third handover phrase the `work-delegate` skill already
+lists (`references/agent-led-delivery.md`).
+
+## Fixes from the sample runs (2026-09-28)
+
+The sample runs found 77 problems (`dev/test-runs/open-bugs.md`). Most are in
+the toolkit's own code and skills. The ones below are in model files. Each
+entry says what changed, which finding it fixes, and which approval covers it.
+Everything under "Applied" is on the branch and imported, and
+`node dev/tools/import-model.mjs --check` passes.
+
+### Applied
+
+1. **The org guard checks only the Salesforce commands the shell will run.**
+   Commits `287b0c3`, `628027c`, and `f4684a5`.
+   - Finding: b-salesforce b3. The guard matched the whole command text, so
+     `toolkit work history WI-001 --note "... sf project deploy start ..."`
+     was refused as a deploy (s13, s17), and `sf data create record --help`
+     was refused as a data write.
+   - File: `.claude/hooks/guard-protected-orgs.cjs`. What it does now:
+     - It splits the command line into simple commands at `;`, `&&`, `||`,
+       `&`, `|`, `(`, `)`, and line ends. Quotes, backslashes, comments,
+       redirections, and here-documents are read as text.
+     - An `sf` or `sfdx` command is checked by its own words: the command
+       words before the first option, and that command's own `-o`,
+       `--target-org`, or `-u` value. `--help` or `-h` passes, because it
+       only prints help. `sf project:deploy:start` is read as
+       `sf project deploy start`.
+     - A command that never runs its arguments is not checked: `toolkit`,
+       `echo`, `printf`, `cat`, `grep`, and a few other file and text
+       commands, and the git commands that take text and run nothing
+       (`git commit`, `git tag`, `git log`, `git status`, and others). So a
+       note, a commit message, or a here-document written to a file can
+       mention a deploy.
+     - Where the guard cannot be sure what runs, it matches the whole
+       command line as text, as before. That happens when the line holds any
+       other command (a Python or shell script, `bash -c`, a pipe into `sh`,
+       `xargs`, or `bash deploy.sh` after an `echo` wrote that script), a
+       `$(...)` or backticks (even inside double quotes, because the shell
+       runs them), or an unclosed quote. A line made only of `sf` commands
+       and those text commands is read command by command.
+     - It also matches the whole line when the reader could have misread it
+       (`f4684a5`): arithmetic, `((...))` or `$[...]`, whose `<<` is a
+       shift and not a here-document; a here-document whose closing line
+       never comes, or that sits on a command with no words; a `NAME=value`
+       setting whose value mentions `sf` (`GIT_EDITOR='sf ...' git commit`);
+       any setting in front of `git`, which runs commands named in settings
+       such as `GIT_EXTERNAL_DIFF`; and a bare `SF_TARGET_ORG=...;`. A
+       second review ran four such lines in bash and zsh, and each really
+       ran a production deploy that `628027c` let through.
+     - Target org, in order: the command's own `-o`; then
+       `SF_TARGET_ORG=...`, `SFDX_DEFAULTUSERNAME=...`, or
+       `SF_TARGET_ORG_ALIAS=...` written in front of that same `sf` command;
+       then the default org. An org set anywhere else on the line (after
+       `export`, as a bare setting, in front of another command, in a quote,
+       or in a comment) never replaces the default org: the whole-text check
+       judges it beside the default org, and the stricter result wins
+       (`f4684a5`). `628027c` took such an org from anywhere on the line, so
+       `SF_TARGET_ORG=acme-uat sf project deploy validate -x p.xml && sf
+       project deploy start -x p.xml` asked you to approve a sandbox deploy
+       while the second deploy really went to the default org, which can be
+       production. The sandbox prompt now says where the org came from.
+     - A command is known by the set of words in its name (`f4684a5`). The
+       installed Salesforce CLI (sf 2.128.5) reads those words in any order
+       and with spaces or colons, so `sf deploy project start` and
+       `sf force source deploy` are deploys; neither guard version caught
+       them before. The old names sf still accepts are guarded too:
+       `sf deploy metadata` (a deploy), `sf deploy metadata validate`, and
+       `sf env delete scratch` or `sandbox`. `sf data update bulk` and
+       `sf data update resume` are now guarded; the rule already forbade
+       them in production. `sf apex run test` and `sf apex test run` run
+       Apex tests, which the rule allows, so they now pass (before, the
+       guard read them as `sf apex run`).
+     - When one line holds several guarded commands, the strictest result
+       wins.
+     - Unchanged: `.claude/protected-orgs.json`, the messages apart from
+       the sandbox prompt, "ask" becoming "deny" in Codex, and PowerShell
+       commands (still matched as whole text).
+     - Still refused: a Python or shell script whose text only mentions a
+       deploy, and a line that joins a note about a deploy to a script, because
+       the guard cannot tell whether the script runs it.
+   - File: `.claude/rules/salesforce-org-safety.md`, section Enforcement. After
+     "It does not check `apex test run` or reads." it now says: "It checks the
+     `sf` and `sfdx` commands the shell will run, not text that only mentions
+     one, such as a toolkit note or a commit message, and it lets `--help`
+     through. A script, a `bash -c` string, or a `$(...)` that holds such a
+     command is still checked."
+   - Test: `plugins/toolkit/tests/scaffold/org-guard.test.mjs` runs the
+     shipped guard with a fake `sf`, with no default org and with a
+     production or sandbox default org. The round-3 commands and `--help`
+     pass; 42 ways of really running a production deploy, data write, or
+     Apex run are blocked in both hosts; an `SF_TARGET_ORG=...` elsewhere on
+     the line never turns a production deploy into a sandbox prompt; Apex
+     tests pass; a sandbox deploy still asks in Claude Code and is blocked in
+     Codex. Of the 13 tests, the guard before `287b0c3` fails 7 and the guard
+     at `628027c` fails 4.
+   - Covered by: item 17. Both files were approved for change; this is a bug
+     fix in them. Every command newly guarded is one the rule already
+     forbids in production, and `sf apex run test` is one it allows.
+
+2. **Where a test plan is saved.** Commit `8ff4d3d`.
+   - Finding: b-salesforce, "The test plan was saved in the Git-ignored
+     tracker folder" (s20 wrote `WI-002-TEST-PLAN.md` beside the item's
+     `WORK-ITEM.md`, so it is never committed).
+   - File: `AGENTS.md`, table "Where information goes". New row after the
+     `PROJECT-ROADMAP.md` row:
+
+     ```markdown
+     | A work item's test plan | `tests/`, a copy of `TEST-PLAN-TEMPLATE.md` named for the item, committed on the item's branch; never in the tracker |
+     ```
+
+   - Covered by: item 2 (`AGENTS.md` rewritten). Its project map already said
+     `tests/` holds test plans; the new row says it where agents route files.
+
+3. **Saving documents in a repository with no remote.** Commit `8ff4d3d`.
+   - Finding: d-local-hindsight 4 and claude-a. The sample projects had no
+     Git remote. The rule said to verify the save reached the remote, which
+     cannot happen there, so agents committed and fast-forwarded by hand with
+     nothing written down.
+   - File: `.claude/rules/publish-project-documents.md`. After "An unpushed
+     commit is unfinished. Verify the complete save reached the remote." it
+     now says: "In a repository with no remote (`git remote` prints nothing),
+     the save is finished when its commit is on the local default branch."
+   - Covered by: item 6 (this file was approved for change); a bug fix, since
+     the rule asked for a step that cannot happen. The `publish-docs` skill
+     gets the matching local mode in the toolkit.
+
+4. **The dependency drift note pointed at a folder these projects do not
+   have.** Commit `8ff4d3d`.
+   - Finding: listed under "Left as they were" above; an agent reading the
+     note would look for `knowledge/memory/`, the old toolkit's memory folder.
+   - File: `tools/kb/graph_freshness_hook.py`, the "What to do with this file"
+     text. Was: "contradicts something recorded in `knowledge/memory/` or in a
+     work item. ... the main agent makes the change once the owner approves
+     them." Now: "contradicts something recorded in project memory (search it
+     with `toolkit memory find`) or in a work item. ... the main agent makes
+     the change once the owner approves them, with the `memory-save` skill for
+     memory." Its test in `tools/kb/test_graph_tools.py` now checks for
+     `toolkit memory find` and that `knowledge/memory/` is gone. The file's 40
+     tests pass (one skips itself when no graph has been built).
+   - Covered by: your memory decision of 2026-09-26 ("Memory: Claude's
+     mechanisms, Mike's formats"): model text that names the old memory
+     mechanism changes to name the toolkit command.
+
+5. **An unanswered memory question is kept as a proposal.** Commit `908456e`.
+   - Not a sample-run finding: it brings the model in line with your memory
+     additions of 2026-09-27 (saved proposals), which the toolkit's
+     `memory-save` skill now follows.
+   - File: `.claude/rules/memory-review-and-save.md`, section Approval. Was:
+     "There is no proposal inbox; hold an unanswered question in the
+     conversation and continue independent work." Now: "An unanswered save
+     question is kept as a proposal: the agent does not rely on it, and
+     `work-decide` shows it to the owner until he approves or rejects it. The
+     `memory-save` skill says how."
+   - File: `.memory/AGENTS.md`. Was: "only with `toolkit memory` commands
+     (`save`, `retire`, `restore`, `delete`, `focus`, `glossary`,
+     `reindex`)." Now: "only with `toolkit memory` commands, for example
+     `save`, `retire`, `focus`, `glossary`, and `reindex` (`toolkit memory
+     --help` lists them all)." The closed list left out `rename` and the new
+     proposal commands, so an agent could read them as forbidden.
+   - Covered by: your memory additions (1), 2026-09-27, in files items 13 to
+     15 approved for change.
+
+### Needs your yes (not applied)
+
+- **Which layout a requirements area uses** (a-local-builtin, "The
+  requirements area file layout is not the same from run to run": round 2
+  wrote `requirements/greet/GREET.md`, round 3 `requirements/greet-cli.md`).
+  `requirements/AGENTS.md` says "Keep one maintained file per durable
+  business area, following AREA-TEMPLATE.md", but the template is a folder,
+  `system-area-template/`. Proposed first sentence: "Keep one folder per
+  durable business area, holding one maintained file. Start a new area by
+  copying `system-area-template/` to a folder named for the area, then
+  rename the copied `AREA-TEMPLATE.md` for the area, for example
+  `requirements/billing/BILLING.md`. Leave `system-area-template/` itself
+  unchanged for the next area." No approved item covers this file, and the
+  sentence adds instructions, so it was applied in `8ff4d3d` and taken back
+  out in `54c5520`. The toolkit's `work-finish` closing steps already say
+  the same, so nothing breaks while it waits. Recommendation: yes.
+- **Skip `git fetch` when there is no remote** (d-local-hindsight 3).
+  `.claude/rules/shared-repository-work.md` runs `git fetch origin` before
+  the first edit. In a project with no remote it fails, and one session told
+  you the refusal would need resolving before it could build. Proposed: add
+  "- No remote (`git remote` prints nothing): skip `git fetch`, and never
+  report a fetch failure as a blocker." No approved item covers this file.
+  Recommendation: yes.
+- **Sandbox deploys in Codex** (b-salesforce b2). In Codex the guard turns
+  every "ask" into "deny", so an agent can never run a sandbox deploy or
+  sandbox data change, even after your yes; you ran each one yourself. Two
+  choices: (a) your yes is written somewhere the guard reads, and it lets
+  that one command run; or (b) the rules say plainly that in Codex you run
+  every sandbox deploy and sandbox data change, and the agent hands you the
+  exact command. Recommendation: (b). It needs no new mechanism, and the
+  Enforcement section of `salesforce-org-safety.md` already says it; (a)
+  would need an approval record the agent could write itself.
+- **Template guides that say "rename this file".** `tests/TEST-PLAN-TEMPLATE.md`
+  ("rename this file for the work item or release being checked"),
+  `requirements/system-area-template/AREA-TEMPLATE.md` ("rename this folder
+  and file"), and `system-guide/AREA-TEMPLATE.md` ("rename this file"). Each
+  template must stay for the next use, so "copy" is meant. Items 19 and 21
+  said to keep `tests/` and `system-guide/` as they are, so none of the three
+  was changed. Proposed: "copy this file (or folder) and rename the copy".
+- **Salesforce platform questions** (routing round 0, message 43, "Which
+  Flow type fits this?"). Proposed: add to the Salesforce block of
+  `AGENTS.md`: "- A Salesforce platform question, even about a work item:
+  `sf-architect-solutioning`."
+- **`sf-component-tracker` before `work-on`** (routing round 3, O27). The
+  tested description matched 3 of 3 in both hosts:
+  "Keeps the component tracker CSV, the master and per-work-item package.xml
+  files, destructiveChanges.xml, and manual steps in sync. Use first, before
+  work-on, when Salesforce metadata under force-app/ is added, changed,
+  renamed, or deleted, a deploy result comes back, or a deploy needs manual
+  steps." Both skill copies and `dev/SKILL-INDEX.md` would change.
+- **Scripts that deploy.** The guard reads the command line only. A script
+  written in one call (`cat <<EOF > deploy.sh`, or the Write tool) and run
+  in a later call (`bash deploy.sh`) has no `sf` text in the second call,
+  so no guard sees it. Proposed, for the Never list of
+  `salesforce-org-safety.md`: "- Never write or run a script, or any other
+  file, that deploys, validates, writes data, or runs Apex. Run each `sf`
+  command directly, so the guard sees it." Recommendation: yes.
+- **Commands the guard does not check.** `sf project deploy pipeline
+  start`, `quick`, and `resume` (DevOps Center, beta) deploy to a pipeline
+  stage, which can be production; they name no `-o`. `sf org assign
+  permset` and `permsetlicense` write permission set assignments. The rule
+  names none of them. Proposed: guard the pipeline deploys like other
+  deploys (with no `-o`, this project blocks them), and leave permission
+  set assignment to the rule. Recommendation: yes for the pipeline
+  deploys.
+- **Old wording in the Salesforce skill bodies** (item 18 kept the bodies as
+  they were). `sf-component-tracker` line 29: "Project Init must fill the
+  verified API version before use." Proposed: "Fill the verified API version
+  before first use." `sf-deploy-check`, Related: "The production-org guard
+  hook asks before a production deploy runs." This project's guard blocks a
+  production deploy by an agent. Proposed: "The production-org guard blocks
+  a production deploy by an agent. This check runs before the owner gets the
+  command."

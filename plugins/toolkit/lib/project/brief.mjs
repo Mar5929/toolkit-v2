@@ -2,8 +2,10 @@
 // printed by `toolkit brief`. About 6,000 characters at most:
 //   this worktree's item, active items with the skill that continues each
 //   one, what waits on the owner, moves found in the tracker, the current
-//   focus, setup warnings, and a plain statement that AGENTS.md is the project
-//   manual. Codex also gets the always-on rules list and the "How to write
+//   focus (and a note when it is older than the newest work item change),
+//   saved memory proposals (not facts; waiting on the owner), the setup
+//   steps in the focus that are done now, setup warnings, and a plain
+//   statement that AGENTS.md is the project manual. Codex also gets the always-on rules list and the "How to write
 //   replies" section, because Codex has no output styles and never reads
 //   .claude/rules/ by itself (critique I5).
 //
@@ -84,6 +86,8 @@ async function notionWork(project, { cwd, env, pluginRoot, live }) {
       nextAction: c.nextAction || null,
       openOwnerQuestions: Number(c.openOwnerQuestions) || 0,
       continueWith: continueWith({ stage: c.stage, status: c.status, waiting_on: c.waiting_on }),
+      // When the row last changed (Notion's last edit time), for staleFocusLine().
+      updated: c.lastEdited ? String(c.lastEdited).slice(0, 10) : null,
     }));
   const thisItem = wt.id ? items.find((i) => i.id === wt.id) || null : null;
   const active = items.filter((i) => ['Ready', 'In Progress', 'In Review'].includes(i.status)).map((i) => ({ ...i, thisWorktree: Boolean(thisItem && thisItem.id === i.id) }));
@@ -212,7 +216,7 @@ function workSections(work) {
     sections.push({
       key: 'moves',
       priority: 8,
-      header: 'Changes found in the tracker since the last toolkit command. The owner has not been told about them in this session; work-on and work-organize say each one to him in one line before other work (work-organize handles moves and copies; work-decide handles questions):',
+      header: 'Changes found in the tracker since the last toolkit command. The owner has not been told about them in this session; work-on and work-organize say each line below to him as written, before other work (work-organize handles moves and copies; work-decide handles questions):',
       items: moves.map((l) => `- ${clip(l, 300)}`),
       more: 'toolkit work sync prints the full report.',
     });
@@ -271,24 +275,132 @@ export function focusItems(text) {
   return items;
 }
 
+/**
+ * A line for the briefing when the current focus is older than the newest
+ * change to an open work item, or null. Sample run d, round 3 (bug 6): the
+ * focus's "Next session starts with" line stayed as session 5 wrote it while
+ * WI-001 moved on for four sessions. items: [{ id, updated }], updated a
+ * YYYY-MM-DD date or an ISO time; items with no date are left out.
+ */
+export function staleFocusLine(focusText, items) {
+  if (!String(focusText || '').trim()) return null;
+  const focus = parseFocus(focusText);
+  if (!focus.filled) return null;
+  const m = /^(\d{4}-\d{2}-\d{2})/.exec(focus.lastUpdated || '');
+  if (!m) return null;
+  let newest = null;
+  for (const i of items || []) {
+    const d = /^(\d{4}-\d{2}-\d{2})/.exec(String((i && i.updated) || ''));
+    if (d && d[1] > m[1] && (!newest || d[1] > newest.date)) newest = { id: i.id, date: d[1] };
+  }
+  if (!newest) return null;
+  return `The current focus was last updated ${m[1]}, before ${newest.id} changed on ${newest.date}. Its "Now" and "Next session starts with" lines may be out of date: check them against the work items, and save the focus again when they differ.`;
+}
+
+// ------------------------------------------------------------------ setup reminders
+
+/**
+ * Setup steps that project-setup writes under "Waiting on the owner" in the
+ * current focus, and how to tell that each one is done. Without this, every
+ * session copied them forward, even after the owner had done them (sample
+ * runs a and d, round 3).
+ *   test(line)       the focus line is this reminder
+ *   done(facts)      it is done now; facts: { codexFolderTrusted, codexHooksTrusted, newClaudeSession }
+ */
+const SETUP_REMINDERS = Object.freeze([
+  {
+    id: 'codex-hooks',
+    test: (l) => /\/hooks\b/i.test(l) || (/\btrust/i.test(l) && /\bhooks?\b/i.test(l)),
+    done: (f) => f.codexHooksTrusted,
+    why: 'Codex trusts the Toolkit V2 hooks now',
+  },
+  {
+    id: 'codex-folder',
+    test: (l) => /\btrust/i.test(l) && /\b(folder|project)\b/i.test(l) && !/\bhooks?\b/i.test(l),
+    done: (f) => f.codexFolderTrusted,
+    why: 'Codex trusts this project folder now',
+  },
+  {
+    id: 'new-claude-session',
+    test: (l) => /\b(start|open)\b[^.]*\bnew\b[^.]*\bsession\b/i.test(l) || /\bnext session\b[^.]*\b(settings|load)/i.test(l),
+    done: (f) => f.newClaudeSession,
+    why: 'a new Claude Code session has started since setup, so it loaded the project settings',
+  },
+]);
+
+/**
+ * The setup reminders in the focus's "Waiting on the owner" section that are
+ * done: [{ line, why }]. facts: see SETUP_REMINDERS.
+ */
+export function doneSetupReminders(focusText, facts) {
+  if (!String(focusText || '').trim()) return [];
+  const focus = parseFocus(focusText);
+  const waiting = focus.sections.find((s) => s.heading.trim().toLowerCase() === 'waiting on the owner');
+  if (!waiting) return [];
+  const out = [];
+  for (const raw of waiting.lines) {
+    const line = raw.replace(/^\s*[-*]\s+/, '').trim();
+    const r = SETUP_REMINDERS.find((x) => x.test(line));
+    if (r && r.done(facts)) out.push({ line, why: r.why });
+  }
+  return out;
+}
+
+/** What the briefing knows about the owner's setup steps (see SETUP_REMINDERS). */
+async function setupFacts(project, { env, host, fromHook }) {
+  const { codexTrust, codexHookTrustKeys, MARKETPLACE } = await import('./hosts.mjs');
+  let folder = false;
+  let hooks = false;
+  try {
+    folder = codexTrust(project.root, env) === 'trusted';
+    hooks = codexHookTrustKeys(`toolkit@${MARKETPLACE}:`, env).length > 0;
+  } catch {
+    // Codex's config cannot be read: nothing is marked done.
+  }
+  // A Toolkit V2 hook that Codex ran means Codex runs them here.
+  if (fromHook && host === 'codex') hooks = true;
+  return { codexFolderTrusted: folder, codexHooksTrusted: hooks, newClaudeSession: Boolean(fromHook && host === 'claude') };
+}
+
+function reminderSection(done) {
+  if (!done.length) return [];
+  return [{
+    key: 'setup-reminders',
+    priority: 7,
+    header: 'Setup steps in the current focus that are done now. They are not copied forward: take them out of "Waiting on the owner" at the next focus update:',
+    items: done.map((d) => `- "${clip(d.line, 160)}": ${d.why}.`),
+  }];
+}
+
 function memorySections(mem) {
   const sections = [];
   if (!mem.ok) {
     sections.push({ key: 'memory', priority: 8, lines: [mem.problem || mem.text] });
     return sections;
   }
-  const live = (mem.records || []).filter((r) => r.status !== 'retired');
+  const proposals = (mem.records || []).filter((r) => r.proposal && r.status === 'needs-review');
+  const live = (mem.records || []).filter((r) => r.status !== 'retired' && !proposals.includes(r));
   const items = focusItems(mem.focus);
   if (items === null) {
-    sections.push({ key: 'focus', priority: 6, lines: ['Current focus: still the empty template from setup. The memory-save skill fills it with toolkit memory focus --set-file.'] });
+    sections.push({ key: 'focus', priority: 6, lines: ['Current focus: still the empty template from setup. The memory-save skill fills it with toolkit memory focus --text \'<text>\'.'] });
   } else if (items.length) {
     sections.push({ key: 'focus', priority: 6, header: 'Current focus:', items, dropOrder: focusDropOrder(items), more: 'toolkit memory focus prints all of it.' });
+  }
+  if (proposals.length) {
+    // Saved proposals (Mike, 2026-09-27): not facts, and waiting on the owner's yes or no.
+    sections.push({
+      key: 'memory-proposals',
+      priority: 8,
+      header: 'Memory proposals waiting on the owner (not facts: do not rely on them; work-decide asks him):',
+      items: proposals.map((r) => `- ${r.key}: ${clip(r.description, 150)}${r.saved ? ` (proposed ${r.saved})` : ''}`),
+      more: 'toolkit work decisions lists them all.',
+    });
   }
   const needsReview = live.filter((r) => r.status === 'needs-review').length;
   sections.push({
     key: 'memory-count',
     priority: 5,
-    lines: [`Project memory (${mem.backend}): ${live.length} record${live.length === 1 ? '' : 's'}${needsReview ? `, ${needsReview} needing review` : ''}${mem.source === 'cache' ? ', from the local copy' : ''}. toolkit memory find searches it; toolkit memory get <key> reads one record.`],
+    lines: [`Project memory (${mem.backend}): ${live.length} record${live.length === 1 ? '' : 's'}${needsReview ? `, ${needsReview} needing review` : ''}${proposals.length ? `, and ${proposals.length} proposal${proposals.length === 1 ? '' : 's'} the owner has not answered` : ''}${mem.source === 'cache' ? ', from the local copy' : ''}. toolkit memory find searches it; toolkit memory get <key> reads one record.`],
   });
   if (live.length) {
     sections.push({
@@ -451,7 +563,17 @@ export async function buildBriefing(project, opts = {}) {
     ],
   });
   sections.push(...workSections(work));
-  sections.push(...memorySections(memory));
+  const memSections = memorySections(memory);
+  if (memory.ok && memory.focus) {
+    const stale = staleFocusLine(memory.focus, [work.thisItem, ...(work.active || []), work.next].filter(Boolean));
+    const at = memSections.findIndex((x) => x.key === 'focus');
+    if (stale && at !== -1) memSections.splice(at + 1, 0, { key: 'focus-stale', priority: 7, lines: [stale] });
+  }
+  sections.push(...memSections);
+  if (memory.ok && memory.focus) {
+    const facts = await setupFacts(project, { env, host, fromHook: Boolean(opts.fromHook) });
+    sections.push(...reminderSection(doneSetupReminders(memory.focus, facts)));
+  }
   sections.push(...warningSection(findings));
   if (host === 'codex') sections.push(...codexSections(project.root));
 

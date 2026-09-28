@@ -36,10 +36,10 @@ test('a folder the owner moved or renamed by hand gets a history row, once, on t
   assert.equal(r.code, 0, r.stderr);
   const ha = await history(dir, a);
   assert.match(ha[0].change, /^Moved by hand: \.work-items\/WI-001-greet-cli\/WORK-ITEM\.md -> \.work-items\/cli\/WI-001-greet-cli\/WORK-ITEM\.md\.$/);
-  assert.match(ha[0].effect, /Its parent stays none \(top level\)\. Group: cli\./);
+  assert.match(ha[0].effect, /It is still a top-level item\. Group: cli\./);
   const hb = await history(dir, b);
   assert.match(hb[0].change, /^Folder renamed by hand: .*WI-002-version-flag\/WORK-ITEM\.md -> .*cli\/WI-001-greet-cli\/version-flag\/WORK-ITEM\.md\.$/);
-  assert.match(hb[0].effect, /Its parent WI-001 moved too\./);
+  assert.match(hb[0].effect, /It moved along with its parent WI-001's folder and is still its sub-item\./);
   // Written once: the next command finds nothing new.
   await tk(dir, ['work', 'list']);
   assert.equal((await history(dir, a)).filter((h) => /by hand/.test(h.change)).length, 1);
@@ -50,7 +50,7 @@ test('a folder the owner moved or renamed by hand gets a history row, once, on t
   const r2 = await tk(dir, ['work', 'list', '--json']);
   assert.equal(r2.json.changes.moves.find((m) => m.id === b).parentAfter, c);
   assert.equal((await history(dir, a))[0].change, `Sub-item ${b} moved out by hand.`);
-  assert.equal((await history(dir, a))[0].effect, `Its parent is now ${c}.`);
+  assert.equal((await history(dir, a))[0].effect, `${b}'s parent is now ${c}.`);
   assert.equal((await history(dir, c))[0].change, `Sub-item ${b} moved here by hand (it was under ${a}).`);
   assert.match((await history(dir, b))[0].effect, new RegExp(`Its parent is now ${c}\\.`));
 });
@@ -113,25 +113,44 @@ test('work set warns when a stage change skips the requirements approval or the 
 
   const other = await newItem(dir, 'Tidy', ['--type', 'task']);
   const reasoned = await tk(dir, ['work', 'set', other, '--stage', '06', '--note', 'Design skipped: one obvious way.', '--json']);
-  assert.deepEqual(reasoned.json.warnings, [], 'a reason given with --note');
+  // The note answers the design warning. An item with no requirement written
+  // at all is still warned about, whatever its type and note (sample run c,
+  // round 3: a task went from 01 to 07 with no R-01 and no question asked).
+  assert.equal(reasoned.json.warnings.length, 1, reasoned.json.warnings.join('\n'));
+  assert.match(reasoned.json.warnings[0], /moves from 01 Discovery to 06 Implementation plan with no requirement written \(no R-01\)/);
+  const withReq = await newItem(dir, 'Tidy two', ['--type', 'task']);
+  await tk(dir, ['work', 'edit', withReq, '--section', 'Active requirements', '--text', reqs.replace('Refining', 'Finalized')]);
+  const quiet = await tk(dir, ['work', 'set', withReq, '--stage', '06', '--note', 'Design skipped: one obvious way.', '--json']);
+  assert.deepEqual(quiet.json.warnings, [], 'a written requirement and a reason given with --note');
 });
 
-test('a waiting_on change alone joins the newest row of the same day; on another day it gets its own row', async () => {
+test('a waiting_on change alone stays in the header: it adds no history row and never joins a row another command wrote', async () => {
+  // Sample runs b and d, round 3: "Design updated (status approved). | The
+  // design can be built. Now waiting on the owner." mixed two changes.
   const dir = makeProject();
   const id = await newItem(dir, 'Greeting', ['--type', 'task']);
   await tk(dir, ['work', 'history', id, '--note', "Owner's words: \"Approved.\"", '--effect', 'Requirements approved.']);
-  await tk(dir, ['work', 'set', id, '--waiting-on', 'agent']);
+  const r = await tk(dir, ['work', 'set', id, '--waiting-on', 'agent']);
+  assert.equal(r.code, 0, r.stderr);
   let h = await history(dir, id);
   assert.equal(h[0].change, "Owner's words: \"Approved.\"");
-  assert.equal(h[0].effect, 'Requirements approved. Now waiting on the agent.');
+  assert.equal(h[0].effect, 'Requirements approved.', 'the row another command wrote is left as it is');
+  assert.equal(h.length, 2);
+  assert.equal(parseDoc(await readRecord(dir, id)).meta.waiting_on, 'agent', 'the header has the new value');
   await tk(dir, ['work', 'set', id, '--waiting-on', 'owner']);
   h = await history(dir, id);
-  assert.equal(h[0].effect, 'Requirements approved. Now waiting on the owner.', 'the later value replaces the earlier sentence');
   assert.equal(h.length, 2);
-  await tk(dir, ['work', 'set', id, '--waiting-on', 'none'], { env: { TOOLKIT_TODAY: '2026-09-27' } });
+  // With --note the change gets a row of its own.
+  await tk(dir, ['work', 'edit', id, '--section', 'Open Questions', '--append-row', 'Q-01 | Which colour? | R-01 | Open | owner']);
+  await tk(dir, ['work', 'set', id, '--waiting-on', 'none', '--note', 'Mike is away until Monday; the agent goes on with P2.']);
   h = await history(dir, id);
   assert.equal(h.length, 3);
   assert.equal(h[0].change, 'Set waiting on none.');
+  assert.equal(h[0].effect, 'Mike is away until Monday; the agent goes on with P2.');
+  // A stage change that also sets waiting on the owner names the open question.
+  await tk(dir, ['work', 'set', id, '--stage', '02', '--waiting-on', 'owner']);
+  h = await history(dir, id);
+  assert.match(h[0].effect, /Waits for the owner's answer to Q-01 \(work-decide\)/);
 });
 
 test('a history note with no --effect says where the item goes next', async () => {
@@ -255,15 +274,15 @@ test('a failed check for hand changes is a warning, and the command still runs',
   assert.deepEqual(ok, { moves: [], problems: [] });
 });
 
-test('toolkit work show and validate still work in a project where the Agreed goal is filled and a Recent History row folds', async () => {
-  // Guard for the history-folding helper: a row with an escaped pipe survives.
+test('toolkit work show and validate still work in a project where a Recent History row holds an escaped pipe', async () => {
+  // A row with an escaped pipe survives later writes.
   const dir = makeProject();
   const id = await newItem(dir, 'Pipes', ['--type', 'task']);
   await tk(dir, ['work', 'history', id, '--note', 'Chose a | b.', '--effect', 'Uses a | b.']);
   await tk(dir, ['work', 'set', id, '--waiting-on', 'owner']);
   const h = await history(dir, id);
   assert.equal(h[0].change, 'Chose a | b.');
-  assert.equal(h[0].effect, 'Uses a | b. Now waiting on the owner.');
+  assert.equal(h[0].effect, 'Uses a | b.');
   assert.equal((await tk(dir, ['work', 'validate', id])).code, 0);
   assert.ok(getSectionWhole(parseDoc(await readRecord(dir, id)).body, 'Recent History').includes('a \\| b'));
   assert.equal(getLabel(parseDoc(await readRecord(dir, id)).body, 'Goal', { section: 'Overview' }).startsWith('<'), true);

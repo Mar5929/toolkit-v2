@@ -66,11 +66,18 @@ another agent's findings. Put everything it needs in the brief:
 - Outside agent-led delivery, a small bounded helper needs no permission, for
   example one `researcher` for one question, or one `requirements-analyst`
   check. Honor any limit the owner set.
-- A team (several agents working on the goal) needs either the owner's
+- The small design team in [team-roles.md](team-roles.md) (one requirements
+  analyst, one architect, one critic, and a researcher when a question is
+  open) and the one
+  `acceptance-checker` of `work-check` need no permission: the main agent
+  states them in one line. The exception is an owner who said no to helpers
+  (for example a no to the team question in `work-delegate`).
+- A larger team (several agents working on the goal) needs either the owner's
   team-arrangement answer recorded by `work-delegate`, or the owner's yes to
-  the team a skill proposed (for example the design team in
-  `solution-design`).
+  the team a skill proposed.
 - A "no" to the team question authorizes no helpers: the main agent does the
-  work itself.
+  work itself, and says that no independent check ran.
+- A helper's reply is text for the main agent. In Claude Code a helper never
+  leaves a file outside the project: a draft comes back in its reply.
 - Helpers never widen what the owner allowed: no merge, deployment, spending,
   or publishing beyond what was given.

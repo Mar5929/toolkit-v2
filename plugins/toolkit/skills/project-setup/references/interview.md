@@ -47,7 +47,7 @@ Confirm the name, key, id prefix, and owner in one line:
 | Choice | `--tracker` | Good when | What to know |
 | --- | --- | --- | --- |
 | Local folders | `local` | A solo project on one computer | Items live in `.work-items/`, which Git ignores. They stay on this computer; `toolkit export` is the backup. |
-| Notion | `notion` | The owner wants the board on his phone or the web | Needs `ntn` signed in. Each project gets its own Work Items and Memory databases under the "AI Agent Second Brain" page. |
+| Notion | `notion` | The owner wants the board on his phone or the web | Needs `ntn` signed in. Each project gets its own Work Items database under the "AI Agent Second Brain" page. |
 | GitHub Issues | `github` | The code and the team already live in GitHub | No driver: agents follow written instructions with `gh`. Labels are created once, with a yes. |
 | Jira | `jira` | A client requires Jira | No driver: agents follow written instructions with the Jira tool the owner connects. |
 
@@ -59,7 +59,7 @@ Confirm the name, key, id prefix, and owner in one line:
 | --- | --- | --- | --- |
 | Built-in `.memory/` | `builtin` | Most projects | Files in the main checkout, Git-ignored, on this computer only; the `memory-tidy` skill backs it up to a folder the owner picks. |
 | Local Hindsight | `hindsight` | Many memories, and search by meaning matters | The local server at `127.0.0.1:8888` must be running (a background service on this Mac). One memory bank per project. Never Hindsight Cloud. |
-| Notion | `notion` | The tracker is Notion, or the owner reads memory on his phone | The project's Memory database in Notion. Needs `ntn` signed in. |
+| Notion | `notion` | The tracker is Notion, or the owner reads memory on his phone | The project's Memory page in Notion, in the layout of Lore (Notion's open-source AI memory): the records are rows of its Memories database. Needs `ntn` signed in. |
 
 Recommendation rule: Notion when the tracker is Notion; otherwise built-in.
 
@@ -136,7 +136,12 @@ owner confirmed:
 
 - `AGENTS.md`: the one-sentence outcome, and the "Build, test, or deploy" row
   under Commands. Ask for both, one question at a time, with a
-  recommendation from what the repository shows.
+  recommendation from what the repository shows. The outcome is the owner's
+  answer, never a sentence worked out from the code, the tests, or the
+  README: ask "What should this project do for you, in one sentence? From the
+  code I'd suggest: <suggestion>." Until he answers, leave the outcome prompts
+  in `AGENTS.md`, `PROJECT.md`, and `PROJECT-ROADMAP.md` and list them in the
+  report.
 - `PROJECT.md` and `README.md`: follow each file's guide. Ask only what the
   repository cannot answer.
 - `PROJECT-ROADMAP.md` (the project outcome, phases, and work units) and
@@ -164,5 +169,12 @@ End with a short plain report:
   Salesforce or not, the files added.
 - What was skipped and why.
 - What the owner must do himself (see the SKILL.md list), each with why.
-- Doctor's result: clean, or each remaining problem with its fix.
-- One next step: "Tell me the first thing you want built."
+  "Start a new session" goes here only. A step doctor checks (Codex hook
+  trust, `ntn login`) also goes in the current focus under "Waiting on the
+  owner", marked as a setup step to drop when doctor stops reporting it.
+- Doctor's result: 0 problems, or each remaining problem with its fix.
+  Warnings about the other host (Codex hook trust seen from Claude Code) are
+  expected and are the owner's steps.
+- The prompts left, each with the fact it needs.
+- The last line: the commit offer ("Setup files are not committed. Commit them
+  now?"), and after the commit, "Tell me the first thing you want built."

@@ -150,7 +150,7 @@ export function afterSetting(project, key, from, to) {
     next.push('Next: run toolkit notion ensure-project to make this project\'s Work Items database in Notion. Until then, toolkit work commands cannot reach it.');
   }
   if (key === 'memory.type' && to === 'notion' && !notion.memory) {
-    next.push('Next: run toolkit notion ensure-project to make this project\'s Memory database in Notion. Until then, memory commands cannot reach it.');
+    next.push('Next: run toolkit notion ensure-project to make this project\'s Memory page in Notion, with Lore\'s databases on it. Until then, memory commands cannot reach it.');
   }
   if (key === 'memory.type' && to === 'hindsight' && !(config.hindsight && config.hindsight.bank)) {
     next.push('Next: run toolkit hindsight ensure-bank to make this project\'s memory bank (toolkit hindsight health checks the server first). Until then, memory commands cannot reach it.');

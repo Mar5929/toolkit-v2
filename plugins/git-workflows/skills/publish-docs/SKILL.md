@@ -5,41 +5,41 @@ description: 'Commits and pushes an agreed edit of committed project documents (
 
 # Publish a documentation save
 
-Save an agreed change to Git-tracked project documents from its own temporary
-worktree, and push it straight to the default branch with no pull request.
-The project's rule for this is `.claude/rules/publish-project-documents.md`;
-its `paths` list names the documents this skill saves.
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Save an agreed change to Git-tracked project documents straight to the default
+branch, with no pull request (rule: `.claude/rules/publish-project-documents.md`).
 
 1. **Confirm it is documentation in an allowed path**, not code, rules, skills,
    hooks, settings, `.memory/`, or `.work-items/` (list below).
-2. **Start a save workspace** from the project, with the script in the
-   `scripts/` folder beside this `SKILL.md`:
+2. **Start a save workspace** with the script in the `scripts/` folder beside
+   this `SKILL.md`. It fetches the remote (with no remote, it uses the local
+   default branch and says so), makes a sparse worktree beside the project,
+   and prints its path. Work only there for this save.
 
    ```text
    node <this skill's folder>/scripts/publish-docs.mjs start --branch <default-branch> -- <file> [more files]
    ```
 
-   It fetches the remote, creates a separate sparse worktree beside the project,
-   and prints its path. Work only in that path for this save.
 3. **Make the edit there and stage the files by name.** Read the full staged
    diff. Add `DECISIONS.md` rows only with `toolkit decision add`, run there.
    After a change under `ai-external-knowledge/`, regenerate its index there
    ("Step 3 in detail") and stage `ai-external-knowledge/INDEX.md` too.
-4. **Publish** from the save workspace:
+4. **Publish** from the save workspace. It refuses other staged paths,
+   unstaged or untracked files, and conflict markers (two trailing spaces, a
+   Markdown line break, are fine); commits; pushes without force and checks
+   the remote has the commit. With no remote it moves the local default
+   branch forward by fast-forward only: "No remote: committed locally."
 
    ```text
-   node <this skill's folder>/scripts/publish-docs.mjs publish --message "<plain commit message>"
+   node <this skill's folder>/scripts/publish-docs.mjs publish --message '<plain commit message>'
    ```
 
-   It refuses other staged paths, unstaged or untracked files, and conflict
-   markers (trailing spaces are fine: two make a Markdown line break); commits;
-   pushes without force; and checks the remote has the commit.
-5. **Report** the commit id and that it reached the remote. After the task's
-   last publish, remove the clean save workspace (`git worktree remove <path>`).
+5. **Report** the commit id and where it is (the remote, or "No remote:
+   committed locally on <branch>."), remove the clean save workspace after
+   the task's last publish (`git worktree remove <path>`), and end with the
+   one question for the owner or the exact words that continue.
 
-Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
-
-Codex: its sandbox keeps `.git/` read-only, so every Git write here (the script's `start` and `publish`, `git add`, `git commit`, `git push`, `git worktree add` and `remove`) needs the owner's approval and escalated permissions. Run each one as its own command with `sandbox_permissions` set to `require_escalated` and a one-line reason saying what it does; an approval without escalation still runs inside the sandbox and fails on `.git/index.lock`. When Codex refuses a command without asking ("approval required by policy"), stop, show the owner the exact command, and ask him to approve it in an interactive session or run it in a terminal. With no remote (`git remote` prints nothing), skip `git fetch`.
+Codex: its sandbox keeps `.git/` read-only, so every Git write here (the script's `start` and `publish`, `git add`, `git commit`, `git push`, `git worktree add` and `remove`) needs the owner's approval and escalated permissions. Run each one as its own command with `sandbox_permissions` set to `require_escalated` and a one-line reason saying what it does; an approval without escalation still runs inside the sandbox and fails on `.git/index.lock`. When Codex refuses a command without asking ("approval required by policy"), stop, show the owner the exact command, and ask him to approve it in an interactive session or run it in a terminal. With no remote (`git remote` prints nothing), never run `git fetch` or `git push` yourself; the script skips both.
 
 ## What counts as documentation
 
@@ -87,11 +87,22 @@ first; never take another session's uncommitted work or overwrite it.
 
 When this session already made the edit in its working checkout, carry it
 across: start the save workspace, copy each edited file into the same path
-there, stage, and publish. After the publish is verified, return this
-session's own copy in the working checkout to its committed state
-(`git restore -- <file>`, only for files this session edited). The published
-version comes back with the next `pull-latest`, which would otherwise stop on
-the changed file.
+there, stage, and publish. Then remove this session's own copy from the
+working checkout, only for files this session edited or created: a changed
+file goes back to its committed state (`git restore -- <file>`); a new file
+this session created there has no committed state, so delete that copy
+(`rm <file>`):
+
+- With a remote: after the publish is verified. The published version comes
+  back with the next `pull-latest`, which would otherwise stop on the changed
+  file.
+- With no remote: before `publish`, once the copy is staged in the save
+  workspace. `publish` moves the default branch forward in the checkout that
+  has it checked out, and Git refuses that while the checkout holds a changed
+  copy of a saved file, or an untracked copy of a new one. When it refuses,
+  the commit is kept in the save workspace: restore this session's own
+  changed copy, or delete its own copy of a new file, and run `publish` again.
+  Never discard another session's changes.
 
 ## Step 3 in detail: the knowledge index and decision rows
 
@@ -117,8 +128,9 @@ check.
 
 - The default branch advanced: bring this save workspace current (fetch, then
   rebase or merge onto `origin/<default-branch>` inside the save workspace
-  only), regenerate the knowledge index if the save touches it, rerun the
-  checks, and run `publish` again. A refused push does not touch any other
+  only; with no remote, rebase onto the local `<default-branch>`), regenerate
+  the knowledge index if the save touches it, rerun the checks, and run
+  `publish` again. A refused push does not touch any other
   checkout. Ask the owner only when the meaning of the change or who approved
   it changes.
 - The default branch advanced and both sides added `DECISIONS.md` rows: take
@@ -128,6 +140,10 @@ check.
   conflict, or a failed check: report separately what is written, checked,
   committed, and published. Keep the save workspace, any commit id, and the
   exact next action in the work item or the handoff.
+- The repository has remotes but none named `origin`: `start` stops, names
+  them, and makes nothing. The script fetches and pushes `origin` only. Ask
+  the owner which remote holds the default branch; rename it to `origin` only
+  with his yes.
 - Never force-push, bypass branch protection, retry through another account,
   reset, or stash another session's work. An unpushed commit is unfinished.
 - Reuse the same save workspace only while a follow-up save to the same files

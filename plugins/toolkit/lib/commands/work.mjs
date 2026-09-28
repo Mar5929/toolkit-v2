@@ -8,14 +8,14 @@ import path from 'node:path';
 import { parseArgs } from '../core/args.mjs';
 import { EXIT, ToolkitError, out } from '../core/output.mjs';
 import { requireProject } from '../core/config.mjs';
-import { run as runProgram } from '../core/util.mjs';
+import { run as runProgram, slugify } from '../core/util.mjs';
 import { lifecycleData, stageShort, normalizeStatus, normalizeWaitingOn, isTerminal, STATUSES } from '../work/lifecycle.mjs';
 import { composeDoc, getSectionWhole, sectionNames, canonicalId, normalizeMeta, getLabel, isPlaceholder } from '../work/model.mjs';
 import { openTracker } from '../work/driver.mjs';
 import {
   opNew, opSet, opApprove, opDesign, opHistory, opEdit, opFinish, opCancel, opMove, rankNext, opValidate, validateFile, mustGet, listItems,
 } from '../work/ops.mjs';
-import { collectOwnerDecisions, collectAgentTodos } from '../work/decisions.mjs';
+import { collectOwnerDecisions, collectAgentTodos, withDesignBodies, collectMemoryProposals } from '../work/decisions.mjs';
 import { treeLines } from '../work/dashboard.mjs';
 import { worktreeItem, TRACKER_DIR } from '../work/state.mjs';
 import { itemSummary, reportLines } from '../work/report.mjs';
@@ -173,6 +173,7 @@ async function cmdNew(ctx, tracker, project, args, changes) {
   const lines = [`Created ${res.id}: ${s.title} (${s.stageLabel}, ${s.status}${s.parent && s.parent !== 'none' ? `, sub-item of ${s.parent}` : ''}) at ${res.record.location}.`];
   if (res.covers && res.covers.length) lines.push(`It delivers ${s.parent} ${res.covers.join(', ')} and inherits that requirements approval (${res.inherited}).`);
   if (res.parentDesign) lines.push(`${res.parentDesign}'s approved design covers it, so it starts at planning with no design of its own.`);
+  if (res.inheritedDelivery) lines.push(`Delivery: ${res.inheritedDelivery}, as recorded for ${s.parent}.`);
   lines.push(`Continue with ${s.continueWith}.`);
   out(ctx, withChanges(changes, lines), { ok: true, id: res.id, item: s, path: res.record.path || null, changes });
   return EXIT.OK;
@@ -272,22 +273,36 @@ async function cmdShow(ctx, tracker, project, args, changes) {
   const inherited = design ? null : await parentDesignOf(tracker, s.parent);
   const designText = design ? `${design.meta.status} (${design.location})`
     : inherited ? `none of its own; ${inherited.id}'s design is approved (${inherited.location}). Read it with: toolkit work design ${inherited.id}` : 'none';
+  const branch = worktreeBranch(rec.id, s.title);
   const header = [
     `${rec.id}: ${s.title}`,
     `Location: ${rec.path || rec.location}`,
     // A finished item shows Done or Cancelled: its last stage is history.
     `Stage: ${isTerminal(s.status) ? s.status : `${s.stageLabel} (${s.status})`} | Waiting on: ${s.waiting_on || 'none'} | Continue with: ${s.continueWith}`,
     `Parent: ${s.parent || 'none'} | Sub-items: ${s.children.length ? s.children.join(', ') : 'none'} | Design: ${designText}${s.archived ? ' | Archived' : ''}`,
+    // The branch name to use, with this item's own prefix (sample run c, round 3: wi-001 for TV2-001).
+    ...(isTerminal(s.status) ? [] : [`Worktree branch for this item: ${branch.branch} (folder ${branch.folder})`]),
     '',
   ];
   const text = composeDoc(rec.meta, rec.body);
   out(ctx, withChanges(changes, [...header, text.replace(/\s+$/, '')]), {
-    ok: true, id: rec.id, item: s, meta: rec.meta, body: rec.body, location: rec.location, path: rec.path || null,
+    ok: true, id: rec.id, item: s, meta: rec.meta, body: rec.body, location: rec.location, path: rec.path || null, worktreeBranch: isTerminal(s.status) ? null : branch,
     design: design ? { status: design.meta.status, location: design.location, path: design.path || null }
       : inherited ? { status: 'approved', inheritedFrom: inherited.id, location: inherited.location, path: inherited.path || null } : null,
     changes,
   });
   return EXIT.OK;
+}
+
+/**
+ * The worktree branch and folder for an item: claude/<prefix>-<number>-<slug>,
+ * with the item's own prefix in lower case (tv2-001 for TV2-001), so
+ * `toolkit work` finds the item from the branch name.
+ */
+export function worktreeBranch(id, title) {
+  const slug = slugify(title || '', 30) || 'work';
+  const name = `${String(id).toLowerCase()}-${slug}`;
+  return { branch: `claude/${name}`, folder: `.claude/worktrees/${name}` };
 }
 
 /** The parent's design when it is approved: { id, location, path }, else null. */
@@ -322,7 +337,11 @@ async function cmdEdit(ctx, tracker, project, args, changes) {
     return EXIT.OK;
   }
   const line = res.changed ? `Saved ${what} in ${res.id}.` : `${res.id}: ${what} already had that text; nothing changed.`;
-  out(ctx, withChanges(changes, [line]), { ok: true, id: res.id, changed: res.changed, location: res.record.location, changes });
+  const lines = [line];
+  const warnings = res.warnings || [];
+  // What the edit itself broke, so it is fixed now and not found sessions later.
+  for (const w of warnings) lines.push(`${w.level === 'error' ? 'Error' : w.level === 'question' ? 'Question for the owner' : 'Warning'} after this edit: ${w.message}`);
+  out(ctx, withChanges(changes, lines), { ok: true, id: res.id, changed: res.changed, location: res.record.location, warnings, changes });
   return EXIT.OK;
 }
 
@@ -344,14 +363,21 @@ async function cmdSet(ctx, tracker, project, args, changes) {
     lines.push(moved.unchanged ? `${moved.id} is already there.` : `Moved ${moved.id}${moved.to ? ` to ${moved.to}` : ''}. Parent: ${moved.parentAfter}.`);
   }
   if (setting) {
-    const res = await opSet(tracker, id, setOpts, { today });
+    const res = await opSet(tracker, id, setOpts, { today, ownerName: project && project.config && project.config.project ? project.config.project.owner || null : null });
     data.set = { changed: res.changed, changes: res.changes, item: summaryOf(res.record) };
     if (res.changed) {
       const s = summaryOf(res.record);
       lines.push(`Updated ${res.id}: ${res.changes.join('; ')}.`, `Now ${s.stageLabel} (${s.status}). Continue with ${s.continueWith}.`);
     } else lines.push(`${res.id} already has those values; nothing changed.`);
+    if (res.closedQuestions && res.closedQuestions.length) lines.push(`Marked ${res.closedQuestions.join(', ')} Answered: ${res.closedQuestions.length === 1 ? 'it' : 'they'} asked for this delivery choice.`);
+    if (res.clearedWaiting) lines.push('It is no longer waiting on the owner (waiting_on: none).');
+    if (res.stillWaiting && res.stillWaiting.length) lines.push(`It still waits on the owner for ${res.stillWaiting.join(', ')} (waiting_on: owner).`);
     for (const w of res.warnings || []) lines.push(`Note: ${w}`);
+    for (const n of res.notes || []) lines.push(n);
+    data.closedQuestions = res.closedQuestions || [];
     data.warnings = res.warnings || [];
+    data.notes = res.notes || [];
+    if (res.folder) data.folder = res.folder;
   } else if (!has(f, 'parent')) {
     throw new ToolkitError(EXIT.INVALID, 'Nothing to set. Give at least one of --stage, --waiting-on, --priority, --type, --delivery, --title, --parent.');
   }
@@ -368,9 +394,11 @@ async function cmdApprove(ctx, tracker, project, args, changes) {
   const s = summaryOf(res.record);
   const lines = [`Recorded: ${res.what} of ${res.id} approved (${res.approval}).`];
   if (res.clearedWaiting) lines.push('It is no longer waiting on the owner (waiting_on: none).');
+  if (res.closedQuestions && res.closedQuestions.length) lines.push(`Marked ${res.closedQuestions.join(', ')} Answered: ${res.closedQuestions.length === 1 ? 'it' : 'they'} asked for this approval.`);
+  if (res.stillWaiting && res.stillWaiting.length) lines.push(`It still waits on the owner for ${res.stillWaiting.join(', ')} (waiting_on: owner).`);
   lines.push(`Now ${s.stageLabel} (${s.status}). Continue with ${s.continueWith}.`);
   for (const w of res.warnings) lines.push(`Note: ${w}`);
-  out(ctx, withChanges(changes, lines), { ok: true, id: res.id, approved: res.what, approval: res.approval, clearedWaiting: Boolean(res.clearedWaiting), warnings: res.warnings, item: s, changes });
+  out(ctx, withChanges(changes, lines), { ok: true, id: res.id, approved: res.what, approval: res.approval, clearedWaiting: Boolean(res.clearedWaiting), stillWaiting: res.stillWaiting || [], closedQuestions: res.closedQuestions || [], warnings: res.warnings, item: s, changes });
   return EXIT.OK;
 }
 
@@ -444,7 +472,7 @@ async function cmdCancel(ctx, tracker, project, args, changes) {
 }
 
 async function itemsWithBodies(tracker) {
-  return listItems(tracker, { fetchBodies: true });
+  return withDesignBodies(tracker, await listItems(tracker, { fetchBodies: true }));
 }
 
 async function cmdNext(ctx, tracker, project, args, changes) {
@@ -488,10 +516,15 @@ async function cmdDecisions(ctx, tracker, project, args, changes) {
   const ownerName = project.config.project && project.config.project.owner;
   const decisions = collectOwnerDecisions(items, { ownerName });
   const agentTodos = collectAgentTodos(items, { ownerName });
+  // Memory records saved as proposals wait for the owner's yes or no too
+  // (Mike, 2026-09-27: an unanswered "Save to memory?" is listed here until he answers).
+  const memory = await collectMemoryProposals(project, { env: ctx.env });
+  const proposals = memory.proposals;
+  const count = decisions.length + proposals.length;
   const lines = [];
-  if (!decisions.length) lines.push('Nothing is waiting on the owner.');
+  if (!count) lines.push('Nothing is waiting on the owner.');
   else {
-    lines.push(`${decisions.length} decision${decisions.length === 1 ? ' waits' : 's wait'} on the owner:`);
+    lines.push(`${count} decision${count === 1 ? ' waits' : 's wait'} on the owner:`);
     let current = null;
     for (const d of decisions) {
       if (d.id !== current) {
@@ -500,12 +533,20 @@ async function cmdDecisions(ctx, tracker, project, args, changes) {
       }
       lines.push(`  - ${d.what}${d.detail ? ` ${d.detail}` : ''} (${d.continueWith})`);
     }
+    if (proposals.length) {
+      lines.push('', `Memory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):`);
+      const sentence = (t) => { const x = String(t || '').trim(); return !x ? '(no description).' : /[.!?]$/.test(x) ? x : `${x}.`; };
+      for (const p of proposals) {
+        lines.push(`  - ${p.key}: ${sentence(p.description)}${p.saved ? ` Saved ${p.saved}.` : ''} Yes: toolkit memory approve ${p.key} --by <name>. No: toolkit memory reject ${p.key}. (work-decide)`);
+      }
+    }
   }
+  if (memory.problem) lines.push('', `Warning: ${memory.problem}`);
   if (agentTodos.length) {
     lines.push('', 'Agent to-do (the agent\'s step, not a decision the owner is waiting on):');
     for (const t of agentTodos) lines.push(`  - ${t.what} ${t.detail} (${t.continueWith})`);
   }
-  out(ctx, withChanges(changes, lines), { ok: true, count: decisions.length, decisions, agentTodos, changes });
+  out(ctx, withChanges(changes, lines), { ok: true, count, decisions, memoryProposals: proposals, agentTodos, changes, ...(memory.problem ? { memoryProblem: memory.problem } : {}) });
   return EXIT.OK;
 }
 
@@ -530,7 +571,7 @@ async function cmdValidate(ctx, tracker, project, args, changes) {
   const owner = project.config.project && project.config.project.owner;
   if (target && !canonicalId(target, null) && fs.existsSync(path.resolve(ctx.cwd, target))) {
     const res = validateFile(path.resolve(ctx.cwd, target), { prefix: tracker.prefix, ownerName: owner });
-    const lines = [`${res.file} (${res.kind === 'design' ? 'design' : 'work item'} ${res.id || ''}): ${res.errors.length} error${res.errors.length === 1 ? '' : 's'}, ${res.warnings.length} warning${res.warnings.length === 1 ? '' : 's'}, ${res.gates.length} question${res.gates.length === 1 ? '' : 's'} for the owner.`];
+    const lines = [`${res.file} (${res.kind === 'design' ? 'design' : 'work item'} ${res.id || ''}): ${res.errors.length} error${res.errors.length === 1 ? '' : 's'}, ${res.warnings.length} warning${res.warnings.length === 1 ? '' : 's'}, ${res.gates.length} approval gate problem${res.gates.length === 1 ? '' : 's'}.`];
     for (const e of res.errors) lines.push(`  Error: ${e.message}`);
     for (const g of res.gates) lines.push(`  Question for the owner: ${g.question}`);
     for (const w of res.warnings) lines.push(`  Warning: ${w.message}`);
@@ -570,7 +611,11 @@ async function cmdValidate(ctx, tracker, project, args, changes) {
   for (const p of problems) lines.push(`${p.severity === 'error' ? 'Problem' : 'Warning'}: ${p.message}`);
   const errors = res.results.reduce((n, r) => n + r.errors.length + (r.design ? r.design.errors.length : 0), 0);
   const gates = res.results.reduce((n, r) => n + r.gates.length + (r.design ? r.design.gates.length : 0), 0);
-  lines.unshift(`Checked ${res.results.length} item${res.results.length === 1 ? '' : 's'}: ${clean} clean, ${errors} error${errors === 1 ? '' : 's'}, ${gates} question${gates === 1 ? '' : 's'} for the owner.`);
+  // "questions for the owner" counted only the approval gate problems, so it
+  // said 0 while Q-01 waited on him (sample runs a and d, round 3). The gate
+  // problems and the open owner questions are counted apart.
+  const openOwner = res.results.reduce((n, r) => n + (r.openOwnerQuestions || 0), 0);
+  lines.unshift(`Checked ${res.results.length} item${res.results.length === 1 ? '' : 's'}: ${clean} clean, ${errors} error${errors === 1 ? '' : 's'}, ${gates} approval gate problem${gates === 1 ? '' : 's'}. ${openOwner ? `${openOwner} open question${openOwner === 1 ? ' waits' : 's wait'} on the owner (toolkit work decisions lists ${openOwner === 1 ? 'it' : 'them'}).` : 'No open question waits on the owner.'}`);
   const ok = res.ok && !problems.some((p) => p.severity === 'error');
   out(ctx, withChanges(changes, lines), { ok, results: res.results, problems, changes });
   return ok ? EXIT.OK : EXIT.INVALID;

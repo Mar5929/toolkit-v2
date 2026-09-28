@@ -359,10 +359,14 @@ test('commands: ensure-bank records the bank; memory save, find, status, export,
   const dashed = await runToolkit(['memory', 'get', 'user_plain-english', '--json'], { cwd: root });
   assert.equal(dashed.code, 0, dashed.stderr);
   assert.equal(dashed.json.key, 'user_plain_english');
+  // A question no record is about: recall's closest record is shown as that, never as an answer.
   const closest = await runToolkit(['memory', 'find', 'zebra crossing lights'], { cwd: root });
-  assert.match(closest.stdout, /closest to "zebra crossing lights", best first\. A close record is not always about the question/);
-  assert.match(closest.stdout, /^- user_plain_english: Mike wants plain English replies\.$/m, 'recall results are listed, not only the header');
-  assert.match(closest.stdout, /^Read a record with toolkit memory get <key> before relying on it\.$/m);
+  assert.match(closest.stdout, /^No memory record is about "zebra crossing lights"\.$/m);
+  assert.match(closest.stdout, /^- user_plain_english: Mike wants plain English replies\.$/m, 'the closest records are listed, marked as not known to be about it');
+  assert.match(closest.stdout, /^Do not answer from these\./m);
+  const closestJson = await runToolkit(['memory', 'find', 'zebra crossing lights', '--json'], { cwd: root });
+  assert.deepEqual(closestJson.json.results, []);
+  assert.equal(closestJson.json.closest[0].key, 'user_plain_english');
 
   const project = requireProject(root);
   assert.ok(fs.existsSync(cachePath(project)), 'the startup cache is written after a save');

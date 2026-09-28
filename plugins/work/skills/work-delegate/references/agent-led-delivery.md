@@ -16,13 +16,23 @@ ask exactly:
 
 > Would you like agents to take responsibility for delivering this, with you acting as product owner?
 
+`work-delegate` is the only skill that makes this offer or records its
+answer. `work-on`, `work-decide`, and the session briefing only point at it,
+so the owner is asked once, in one place.
+
 Do not make this offer for a simple question or quick edit, or for a small
-item (one or two tasks, no sub-items): record `delivery: owner-led` with a
-history note giving that reason. The offer is made once, at the top item of
-the goal; a sub-item is part of its parent's goal. When you ask, first add the
-question as an Open Questions row (owner decides) and set the item waiting on
-the owner, so a later session sees the offer is open if the answer does not
-come in this one. Wait for the answer before taking responsibility for
+item (one or two tasks, no sub-items): record `delivery: owner-led` at once,
+with a history note giving that reason, so the briefing stops listing the
+offer as an agent to-do. The offer is made once, at the top item of the goal;
+a sub-item is part of its parent's goal. `toolkit work new --parent` copies
+the parent's delivery value to a new sub-item and says so. Check it, and make
+no offer for it. Only when the value is missing or differs from the parent's,
+set it (`toolkit work set <id> --delivery agent-led --note '<why>'` naming the
+parent). When you ask, first add the
+question as an Open Questions row (owner decides, Affects `delivery`) and set
+the item waiting on the owner, so a later session sees the offer is open if
+the answer does not come in this one. Ask it in the reply text, never through
+a question tool. Wait for the answer before taking responsibility for
 organizing delivery, while continuing any useful work that does not depend on
 the choice. Mark the row Answered with his answer.
 

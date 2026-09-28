@@ -18,7 +18,7 @@
 // - a child page or database is a line <page url="...">Title</page> or
 //   <database url="...">Title</database>.
 //
-// Two choices the toolkit makes when it sends local text:
+// Choices the toolkit makes when it sends local text:
 // - lines wrapped at a fixed width inside one paragraph or list item (a soft
 //   line break) are joined with a space, so Notion shows whole sentences. A
 //   hard break (two trailing spaces, a trailing backslash, or <br> at the end
@@ -26,12 +26,16 @@
 // - an HTML comment block (<!-- ... -->, as in DESIGN.md) is sent as an italic
 //   paragraph "*Note: ...*", because Notion would show the comment as raw text.
 //   An italic paragraph that starts with "Note: " is read back as the comment.
+// - a line that starts with a bold label ("**Design status:** Draft") stays a
+//   line of its own (a <br> in Notion), as in the model's templates.
+// - with { codeFileNames: true } (work item and design pages), a bare .md
+//   file name is sent as code text, so Notion does not link it.
 //
-// toNotion(local)          local Markdown -> Notion Markdown to send
+// toNotion(local, opts)    local Markdown -> Notion Markdown to send
 // fromNotion(notion)       Notion Markdown -> { markdown, children }
-// normalizeLocal(local)    a form for comparing two local texts (spacing, escapes)
+// normalizeLocal(local)    a form for comparing two local texts (spacing, escapes, `x.md` as x.md)
 // sameLocal(a, b)          true when the two local texts say the same thing
-// planUpdate({ fresh, base, next })   update_content operations built from a fresh read
+// planUpdate({ fresh, base, next, codeFileNames })   update_content operations built from a fresh read
 // stripTitle(body) / withTitle(title, body)   the leading "# ..." heading
 
 import { EXIT, ToolkitError } from '../core/output.mjs';
@@ -81,11 +85,21 @@ function codeSpanEnd(text, i) {
   }
 }
 
+// A file name ending in .md ("WORK-ITEM.md", "docs/area.md"). Notion reads it
+// as a web address and links it to http://WORK-ITEM.md, a site that does not
+// exist. With { codeFileNames: true } (the work tracker's pages) it is sent as
+// code text instead. normalizeLocal treats the code form and the plain form as
+// the same text. Memory records are sent without it, so they read back exactly.
+const MD_FILE_RE = /((?:[A-Za-z0-9_.-]+\/)*[A-Za-z0-9_-][A-Za-z0-9_.-]*\.md)(?![A-Za-z0-9_/-]|\]\()/y;
+const MD_FILE_CODE_RE = /`((?:[A-Za-z0-9_.-]+\/)*[A-Za-z0-9_-][A-Za-z0-9_.-]*\.md)`/g;
+
 /**
  * Escape one line of local inline text for Notion. Code spans, existing
  * backslash escapes, link targets, and Notion inline tags are kept as they are.
+ * With codeFileNames, a bare .md file name is sent as code text, so Notion
+ * does not link it.
  */
-export function escapeInline(text) {
+export function escapeInline(text, { codeFileNames = false } = {}) {
   let s = String(text ?? '');
   let tail = '';
   const attr = ATTR_TAIL_RE.exec(s);
@@ -116,6 +130,17 @@ export function escapeInline(text) {
       if (close !== -1 && !/\s/.test(s.slice(i + 2, close))) {
         out += s.slice(i, close + 1);
         i = close;
+        continue;
+      }
+    }
+    // A path may start with a dot folder: .work-items/WI-001-x/WORK-ITEM.md
+    // (verifier, fix round 2: its file name was left for Notion to link).
+    if (codeFileNames && (i === 0 || /[\s("'“‘,;:]/.test(s[i - 1])) && (/[A-Za-z0-9_]/.test(c) || (c === '.' && /[A-Za-z0-9_./]/.test(s[i + 1] || '')))) {
+      MD_FILE_RE.lastIndex = i;
+      const file = MD_FILE_RE.exec(s);
+      if (file) {
+        out += `\`${file[1]}\``;
+        i += file[1].length - 1;
         continue;
       }
     }
@@ -254,9 +279,15 @@ function endsHard(line) {
  * local text); a soft-wrapped line is joined to the entry before it with one
  * space. `state.hard` says whether the line before ended with a hard break.
  */
+// A line that starts with a bold label ("**Design status:** Draft") is its own
+// line, as in the model's templates: joined to the line before it, Notion shows
+// "**Requirements:** TV2-001 **Design status:** Proposed" as one line and the
+// label is no longer at the start of a line (sample run c, round 3).
+const LABEL_LINE_RE = /^\*\*[^*\n]{1,60}:\*\*/;
+
 function addLine(list, line, state) {
   const text = hardBreakText(line.replace(TRAILING_BR_RE, ''));
-  if (!list.length || state.hard) list.push(text);
+  if (!list.length || state.hard || LABEL_LINE_RE.test(text)) list.push(text);
   else list[list.length - 1] = list[list.length - 1] ? `${list[list.length - 1]} ${text}` : text;
   state.hard = endsHard(line);
 }
@@ -474,8 +505,8 @@ function collectContainer(lines, start) {
 
 // ------------------------------------------------------------------ local -> Notion
 
-function renderNotionTable(headers, rows) {
-  const cell = (t) => `<td>${escapeInline(String(t ?? ''))}</td>`;
+function renderNotionTable(headers, rows, opts = {}) {
+  const cell = (t) => `<td>${escapeInline(String(t ?? ''), opts)}</td>`;
   const out = ['<table header-row="true">'];
   for (const r of [headers, ...rows]) {
     out.push('<tr>');
@@ -486,33 +517,37 @@ function renderNotionTable(headers, rows) {
   return out;
 }
 
-/** Local Markdown -> the Notion Markdown to send. */
-export function toNotion(md) {
+/**
+ * Local Markdown -> the Notion Markdown to send.
+ * opts.codeFileNames: send bare .md file names as code text (escapeInline).
+ */
+export function toNotion(md, opts = {}) {
+  const esc = (t) => escapeInline(t, opts);
   const blocks = parseLocal(md);
   const out = [];
   for (const b of blocks) {
     switch (b.type) {
       case 'heading':
-        out.push(`${'#'.repeat(Math.min(b.level, 4))} ${escapeInline(b.text)}`);
+        out.push(`${'#'.repeat(Math.min(b.level, 4))} ${esc(b.text)}`);
         break;
       case 'paragraph':
-        out.push(b.lines.map(escapeInline).join('<br>'));
+        out.push(b.lines.map(esc).join('<br>'));
         break;
       case 'item': {
         const marker = /^\d/.test(b.marker) ? b.marker : '-';
         const check = b.check ? `[${b.check === 'x' ? 'x' : ' '}] ` : '';
-        out.push(`${'\t'.repeat(b.level)}${marker} ${check}${b.lines.map(escapeInline).join('<br>')}`);
-        for (const p of b.paras) out.push(`${'\t'.repeat(b.level + 1)}${p.map(escapeInline).join('<br>')}`);
+        out.push(`${'\t'.repeat(b.level)}${marker} ${check}${b.lines.map(esc).join('<br>')}`);
+        for (const p of b.paras) out.push(`${'\t'.repeat(b.level + 1)}${p.map(esc).join('<br>')}`);
         break;
       }
       case 'table':
-        out.push(...renderNotionTable(b.headers, b.rows));
+        out.push(...renderNotionTable(b.headers, b.rows, opts));
         break;
       case 'code':
         out.push(...b.lines);
         break;
       case 'quote':
-        out.push(`> ${b.lines.map(escapeInline).join('<br>')}`);
+        out.push(`> ${b.lines.map(esc).join('<br>')}`);
         break;
       case 'hr':
         out.push('---');
@@ -522,7 +557,7 @@ export function toNotion(md) {
         break;
       case 'comment':
         // A star inside the note is escaped, so it cannot end the italic early.
-        out.push(`*Note: ${escapeInline(b.text).replace(/(?<!\\)\*/g, '\\*')}*`);
+        out.push(`*Note: ${esc(b.text).replace(/(?<!\\)\*/g, '\\*')}*`);
         break;
       default:
         break;
@@ -771,7 +806,7 @@ export function normalizeLocal(md) {
   const text = renderLocal(blocks);
   return text
     .split('\n')
-    .map((l) => l.replace(/[ \t]+$/, '').replace(/\\([!-/:-@[-`{-~])/g, '$1'))
+    .map((l) => l.replace(/[ \t]+$/, '').replace(/\\([!-/:-@[-`{-~])/g, '$1').replace(MD_FILE_CODE_RE, '$1'))
     .join('\n')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
@@ -1005,12 +1040,13 @@ function rawLeaf(leaf) {
  * Throws ToolkitError INVALID with details.conflicts on a conflict.
  * Child page and database lines inside a replaced range are kept in new_str.
  */
-export function planUpdate({ fresh, base, next }) {
+export function planUpdate({ fresh, base, next, codeFileNames = false }) {
+  const send = { codeFileNames };
   const F = notionLeaves(fresh);
   const N = localLeaves(next);
   const freshText = String(fresh ?? '');
   if (!freshText.trim() || !F.length) {
-    const body = toNotion(next);
+    const body = toNotion(next, send);
     return body.trim() ? { type: 'replace_content', new_str: body, changed: N.map((l) => l.key) } : { type: 'none' };
   }
   const B = base === undefined || base === null ? F.map((l) => ({ key: l.key, local: l.local })) : localLeaves(base);
@@ -1102,42 +1138,57 @@ export function planUpdate({ fresh, base, next }) {
   const ops = [];
   const changed = [];
   let limit = 0; // an operation's old text must not reach into the previous one
-  for (const g of live) {
+  for (let gi = 0; gi < live.length; gi++) {
+    const g = live[gi];
+    // Nor into the next one.
+    const stop = gi + 1 < live.length ? live[gi + 1].fFrom : F.length;
     let from = g.fFrom;
-    let extra = [];
+    let to = g.fTo;
+    let before = [];
+    let after = [];
     for (;;) {
-      const op = buildOp(F.slice(from, g.fTo), [...extra, ...g.n]);
+      const op = buildOp(F.slice(from, to), [...before, ...g.n, ...after], send);
       if (op && countOccurrences(freshText, op.old_str) === 1) {
         ops.push(op);
         changed.push(...g.n.filter((l) => l.key).map((l) => l.key));
         break;
       }
-      if (from <= limit) {
-        return { type: 'replace_content', new_str: mergedPage(F, live), changed: live.flatMap((x) => x.n.filter((l) => l.key).map((l) => l.key)) };
+      // Take a neighbor along, as it is in Notion, until the old text is
+      // unique: first the leaves before, then the leaves after. Replacing the
+      // whole page is the last resort, because Notion moves every replaced
+      // block to its trash (the Notion rebuild check).
+      if (from > limit) {
+        from--;
+        before = [rawLeaf(F[from]), ...before];
+        continue;
       }
-      from--;
-      extra = [rawLeaf(F[from]), ...extra];
+      if (to < stop) {
+        after = [...after, rawLeaf(F[to])];
+        to++;
+        continue;
+      }
+      return { type: 'replace_content', new_str: mergedPage(F, live, send), changed: live.flatMap((x) => x.n.filter((l) => l.key).map((l) => l.key)) };
     }
-    limit = g.fTo;
+    limit = to;
   }
   return { type: 'update_content', ops, changed };
 }
 
 /** The whole page with each group's leaves replaced; every other leaf stays as it is in Notion. */
-function mergedPage(F, groups) {
+function mergedPage(F, groups, send = {}) {
   const parts = [];
   let k = 0;
   for (const g of groups) {
     for (; k < g.fFrom; k++) parts.push(F[k].lines.join('\n'));
     const kept = F.slice(g.fFrom, g.fTo).flatMap((l) => l.lines.filter((line) => CHILD_RE.test(line.trim())));
-    parts.push(...g.n.map((l) => (l.raw ? l.raw.filter((line) => !CHILD_RE.test(line.trim())).join('\n') : toNotion(l.text))), ...kept);
+    parts.push(...g.n.map((l) => (l.raw ? l.raw.filter((line) => !CHILD_RE.test(line.trim())).join('\n') : toNotion(l.text, send))), ...kept);
     k = g.fTo;
   }
   for (; k < F.length; k++) parts.push(F[k].lines.join('\n'));
   return parts.filter((t) => t !== '').join('\n');
 }
 
-function buildOp(fLeaves, nLeaves) {
+function buildOp(fLeaves, nLeaves, send = {}) {
   const oldLines = fLeaves.flatMap((l) => l.lines);
   // Child page lines at the end of the range stay outside the replaced text.
   let end = oldLines.length;
@@ -1145,7 +1196,7 @@ function buildOp(fLeaves, nLeaves) {
   const kept = oldLines.slice(0, end);
   if (!kept.length) return null;
   const inner = kept.filter((l) => CHILD_RE.test(l.trim()));
-  const newParts = nLeaves.map((l) => (l.raw ? l.raw.filter((line) => !CHILD_RE.test(line.trim())).join('\n') : toNotion(l.text)));
+  const newParts = nLeaves.map((l) => (l.raw ? l.raw.filter((line) => !CHILD_RE.test(line.trim())).join('\n') : toNotion(l.text, send)));
   const newStr = [...newParts.filter((t) => t !== ''), ...inner].join('\n');
   return { old_str: kept.join('\n'), new_str: newStr };
 }

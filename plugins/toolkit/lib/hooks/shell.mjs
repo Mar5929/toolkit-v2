@@ -22,38 +22,51 @@ function readHeredocOperator(src, i) {
   }
   while (src[j] === ' ' || src[j] === '\t') j++;
   let delim = '';
+  let quoted = false;
   while (j < src.length && !/[\s;&|()<>]/.test(src[j])) {
     const c = src[j];
     if (c === "'" || c === '"') {
       const k = src.indexOf(c, j + 1);
       delim += k === -1 ? src.slice(j + 1) : src.slice(j + 1, k);
       j = k === -1 ? src.length : k + 1;
+      quoted = true;
       continue;
     }
     if (c === '\\' && j + 1 < src.length) {
       delim += src[j + 1];
       j += 2;
+      quoted = true;
       continue;
     }
     delim += c;
     j++;
   }
-  return delim ? { delim, stripTabs, end: j } : null;
+  return delim ? { delim, stripTabs, quoted, end: j } : null;
 }
 
-/** Skip here-document bodies that start at `start`. Returns the index of the last character skipped. */
+/**
+ * Skip here-document bodies that start at `start`, and set each one's `body`
+ * (its text, without the end line). Returns the index of the last character skipped.
+ */
 function skipHeredocBodies(src, start, pending) {
   let pos = start;
   for (const h of pending) {
+    const body = [];
+    h.body = '';
     for (;;) {
-      if (pos >= src.length) return src.length - 1;
+      if (pos >= src.length) {
+        h.body = body.join('\n');
+        return src.length - 1;
+      }
       const nl = src.indexOf('\n', pos);
       const lineEnd = nl === -1 ? src.length : nl;
       let text = src.slice(pos, lineEnd);
       if (h.stripTabs) text = text.replace(/^\t+/, '');
       pos = lineEnd + 1;
       if (text === h.delim) break;
+      body.push(text);
     }
+    h.body = body.join('\n');
   }
   return pos - 1;
 }
@@ -333,7 +346,7 @@ export function checkGit(line, { mainCheckout = true, guardClean = true } = {}) 
 
 // ------------------------------------------------------------------ toolkit commands
 
-export const MEMORY_WRITES = Object.freeze(['save', 'retire', 'restore', 'delete', 'import']);
+export const MEMORY_WRITES = Object.freeze(['save', 'approve', 'reject', 'retire', 'restore', 'rename', 'delete', 'import']);
 export const WORK_WRITES = Object.freeze(['new', 'edit', 'set', 'approve', 'design', 'history', 'move', 'finish', 'cancel']);
 
 /**
@@ -359,10 +372,241 @@ export function recordKind(cmd) {
   if (!cmd || !cmd.group) return null;
   if (cmd.group === 'memory') {
     if (MEMORY_WRITES.includes(cmd.sub) && !(cmd.sub === 'import' && cmd.args.includes('--dry-run'))) return 'memory';
-    if ((cmd.sub === 'focus' || cmd.sub === 'glossary') && cmd.args.some((a) => a === '--set-file' || a.startsWith('--set-file='))) return 'memory';
+    if ((cmd.sub === 'focus' || cmd.sub === 'glossary') && cmd.args.some((a) => /^--(?:set-file|text)(?:=|$)/.test(a))) return 'memory';
     return null;
   }
   if (cmd.group === 'work' && WORK_WRITES.includes(cmd.sub)) return 'work';
   if (cmd.group === 'decision' && cmd.sub === 'add') return 'decision';
   return null;
+}
+
+// ------------------------------------------------------------------ AI credit
+
+// No AI credit on anything committed or pushed (AGENTS.md; sample run
+// claude-a found "Co-Authored-By: Claude ..." on four of five commits).
+const AI_NAMES = /(claude|anthropic|openai|chatgpt|\bgpt\b|\bgpt-|codex|copilot|gemini|cursor|devin|aider)/i;
+const AI_WORDS = /(claude|anthropic|openai|chatgpt|\bgpt\b|\bgpt-|codex|copilot|gemini|cursor|devin|aider|\bai\b|\bllm\b|artificial intelligence)/i;
+
+/**
+ * The first line of a text that gives an AI credit, or null: a Co-Authored-By
+ * line naming an AI (or its noreply address), or a "Generated with/by/using"
+ * line naming one (Claude Code's own pull request line starts with a robot
+ * emoji, which is skipped).
+ */
+export function aiCreditLine(text) {
+  for (const raw of String(text ?? '').split(/\r?\n/)) {
+    const line = raw.replace(/^[^A-Za-z0-9]+/, '').trim();
+    const co = /^co-authored-by:\s*(.*)$/i.exec(line);
+    if (co && AI_NAMES.test(co[1])) return raw.trim();
+    const gen = /^generated\s+(?:with|by|using)\b(.*)$/i.exec(line);
+    if (gen && AI_WORDS.test(gen[1])) return raw.trim();
+  }
+  return null;
+}
+
+/** The value of an option in a word list: --name value, --name=value, -x value, -xvalue. */
+function optionValues(args, longNames, shortNames = []) {
+  const out = [];
+  for (let i = 0; i < args.length; i++) {
+    const a = args[i];
+    if (a === '--') break;
+    for (const n of longNames) {
+      if (a === n && args[i + 1] !== undefined) out.push(args[i + 1]);
+      else if (a.startsWith(`${n}=`)) out.push(a.slice(n.length + 1));
+    }
+    for (const n of shortNames) {
+      if (a === n && args[i + 1] !== undefined) out.push(args[i + 1]);
+      else if (a.startsWith(n) && a.length > n.length && !a.startsWith('--')) out.push(a.slice(n.length));
+    }
+  }
+  return out;
+}
+
+/**
+ * Check a command line for a git commit, a gh pr create/edit, or a gh api
+ * call on a pull request path, whose message gives an AI credit.
+ * readFile(path) -> text or null reads a message file (-F, --file,
+ * --body-file, a gh api body=@file or --input). The whole command text is
+ * read too, so a message in a heredoc ($(cat <<'EOF' ... EOF)) is found.
+ * Returns { what: 'commit'|'pull request', line } or null.
+ */
+export function checkAiCredit(line, { readFile = () => null } = {}) {
+  const texts = [];
+  let what = null;
+  for (const words of allCommands(line)) {
+    const git = gitCommand(words);
+    if (git && git.sub === 'commit') {
+      what = what || 'commit';
+      texts.push(...optionValues(git.args, ['--message', '--trailer'], ['-m']));
+      for (const f of optionValues(git.args, ['--file'], ['-F'])) if (f !== '-') texts.push(readFile(f));
+      continue;
+    }
+    const w = stripPrefix(words);
+    if (w.length >= 3 && base(w[0]) === 'gh' && w[1] === 'pr' && (w[2] === 'create' || w[2] === 'edit')) {
+      what = what || 'pull request';
+      const args = w.slice(3);
+      texts.push(...optionValues(args, ['--title', '--body'], ['-t', '-b']));
+      for (const f of optionValues(args, ['--body-file'], ['-F'])) if (f !== '-') texts.push(readFile(f));
+      continue;
+    }
+    // gh api on a pull request path (repos/<owner>/<repo>/pulls or pulls/<n>):
+    // -f/-F/--field/--raw-field body=... or title=... (@file reads a file), and --input <file> (JSON).
+    if (w.length >= 3 && base(w[0]) === 'gh' && w[1] === 'api' && w.slice(2).some((a) => /(^|\/)pulls(\/|$)/.test(a))) {
+      what = what || 'pull request';
+      const args = w.slice(2);
+      for (const v of optionValues(args, ['--field', '--raw-field'], ['-f', '-F'])) {
+        const m = /^(?:body|title)=([\s\S]*)$/.exec(v);
+        if (!m) continue;
+        if (m[1].startsWith('@')) {
+          if (m[1] !== '@-') texts.push(readFile(m[1].slice(1)));
+        } else texts.push(m[1]);
+      }
+      for (const f of optionValues(args, ['--input'])) {
+        if (f === '-') continue;
+        const t = readFile(f);
+        texts.push(t);
+        try {
+          const j = JSON.parse(t || 'null');
+          if (j && typeof j === 'object') texts.push(j.body, j.title);
+        } catch {
+          // Not JSON: the text itself was checked.
+        }
+      }
+    }
+  }
+  if (!what) return null;
+  for (const t of [...texts, line]) {
+    const hit = aiCreditLine(t);
+    if (hit) return { what, line: hit };
+  }
+  return null;
+}
+
+// ------------------------------------------------------------------ backticks in toolkit text
+
+/**
+ * The simple commands of a line as source text, split where the shell splits
+ * them (&&, ||, ;, |, &, a new line, parentheses, an unquoted $( or backtick),
+ * with the here-documents each one reads: [{ text, heredocs: [{ delim,
+ * quoted, body }] }]. Quoted text is never split, so the text of a command
+ * keeps its quotes as written.
+ */
+export function commandSources(line) {
+  const src = String(line || '');
+  const out = [];
+  let start = 0;
+  let quote = null;
+  let heredocs = [];
+  let cur = [];
+  const end = (i) => {
+    const text = src.slice(start, i);
+    if (text.trim() || cur.length) out.push({ text, heredocs: cur });
+    cur = [];
+  };
+  for (let i = 0; i < src.length; i++) {
+    const c = src[i];
+    if (quote === "'") {
+      if (c === "'") quote = null;
+      continue;
+    }
+    if (quote === '"') {
+      if (c === '\\') i++;
+      else if (c === '"') quote = null;
+      continue;
+    }
+    if (c === '\\') {
+      i++;
+      continue;
+    }
+    if (c === "'" || c === '"') {
+      quote = c;
+      continue;
+    }
+    if (c === '<' && src[i + 1] === '<') {
+      const h = readHeredocOperator(src, i);
+      if (h) {
+        heredocs.push(h);
+        cur.push(h);
+        i = h.end - 1;
+        continue;
+      }
+    }
+    if (c === '\n' && heredocs.length) {
+      end(i);
+      i = skipHeredocBodies(src, i + 1, heredocs);
+      heredocs = [];
+      start = i + 1;
+      continue;
+    }
+    if ('&|;()\n`'.includes(c) || (c === '$' && src[i + 1] === '(')) {
+      end(i);
+      if (c === '$') i++;
+      start = i + 1;
+    }
+  }
+  end(src.length);
+  return out.map((cmd) => ({ text: cmd.text, heredocs: cmd.heredocs.map((h) => ({ delim: h.delim, quoted: Boolean(h.quoted), body: h.body || '' })) }));
+}
+
+/** The commands of a line (commandSources) that run toolkit. */
+function toolkitSources(line) {
+  return commandSources(line).filter((cmd) => toolkitCommands(cmd.text).length > 0);
+}
+
+/** True when `text` has a double-quoted part holding `test` (a function of the text and an index) outside escapes. */
+function inDoubleQuotes(text, test) {
+  let quote = null;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (quote === "'") {
+      if (c === "'") quote = null;
+      continue;
+    }
+    if (quote === '"') {
+      if (c === '\\') {
+        i++;
+        continue;
+      }
+      if (test(text, i)) return true;
+      if (c === '"') quote = null;
+      continue;
+    }
+    if (c === '\\') {
+      i++;
+      continue;
+    }
+    if (c === "'" || c === '"') quote = c;
+  }
+  return false;
+}
+
+/**
+ * True when a toolkit command in the line has a double-quoted argument
+ * holding a backtick that is not escaped. Inside double quotes the shell runs
+ * `...` as a command and puts its output in the text: sample run a saved a
+ * work item section with its `code` words missing, and zsh tried to run them.
+ * Only the toolkit command's own words are looked at, not another command
+ * joined to it, and not a here-document body.
+ */
+export function backtickInDoubleQuotes(line) {
+  return toolkitSources(line).some((cmd) => inDoubleQuotes(cmd.text, (t, i) => t[i] === '`'));
+}
+
+/**
+ * True when a toolkit command in the line has a double-quoted argument holding
+ * $( ... ). The shell runs it and puts its output in the text. That can be
+ * meant (--note "built at $(git rev-parse HEAD)"), so this gives a note, not
+ * a refusal.
+ */
+export function substitutionInDoubleQuotes(line) {
+  return toolkitSources(line).some((cmd) => inDoubleQuotes(cmd.text, (t, i) => t[i] === '$' && t[i + 1] === '('));
+}
+
+/**
+ * True when a toolkit command in the line reads a here-document whose
+ * delimiter is not quoted (<<EOF, not <<'EOF') and whose text holds a
+ * backtick or $( ): the shell runs those as commands inside the text too.
+ */
+export function backtickInUnquotedHeredoc(line) {
+  return toolkitSources(line).some((cmd) => cmd.heredocs.some((h) => !h.quoted && /(^|[^\\])(`|\$\()/.test(h.body)));
 }

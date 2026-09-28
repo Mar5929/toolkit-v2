@@ -6,7 +6,7 @@ description: 'Splits work items into sub-items, nests or moves them, and reconci
 # Work organize
 
 Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
-Shared rules: the work plugin's `references/conventions.md` and `references/trackers.md`, two folders above this skill's folder (`../../references/`). Cases and examples: this skill's `references/moves.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Run each `toolkit` command alone, on its own line: in Codex a command joined by `&&`, `;`, a pipe, or a heredoc, or run from a script, runs inside the sandbox and fails. Give text with `--text`, or a file in a new `mktemp -d` folder (never a fixed `/tmp` name, deleted right after the command). Never change a record with a script.
+Shared rules: the work plugin's `references/conventions.md` and `references/trackers.md`, two folders above this skill's folder (`../../references/`). Cases and examples: this skill's `references/moves.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Run each `toolkit` command alone, on its own line, in both hosts: never joined by `&&`, `;`, or a pipe, and never from a script (in Codex that runs it inside the sandbox, where it fails). Text (conventions, "Text in a command"): one-line values (`--note`, `--effect`, `--append-row`, `--title`) go in single quotes, with an apostrophe written `'\''`, because double quotes run backticks and `$(...)`; section and design text goes on standard input in Claude Code (`<file>` is `-`, followed by a quoted heredoc, `<<'EOF'`), and in Codex in `--text '<text>'` or a file in a new `mktemp -d` folder, deleted right after the command. Never change a record with a script. Ask the owner in the reply text, never through a question tool. No remote (`git remote` prints nothing): never run `git fetch`, and never report a fetch refusal as a blocker.
 
 ## Steps
 
@@ -16,22 +16,22 @@ Shared rules: the work plugin's `references/conventions.md` and `references/trac
 2. Say what the CLI already adapted (paths, a renamed folder, parent from location, Status from a dragged Notion Stage) in one line each ("WI-7 is now a sub-item of WI-3"), and what needs the owner's intent. The CLI already wrote a history row on each item the owner moved or renamed, and on the parents it left and joined; add a note only for his reason.
 3. List side effects: a sub-item under a Done or Cancelled parent; a Roadmap phase listing a child that moved away; a `build` sub-item without approved requirements.
 4. A missing item: ask whether it was removed on purpose (then cancel it with his words) or moved outside the tracker (ask where; move it back only after a yes). A copied folder with a duplicate id: the CLI renumbered the newer copy; confirm which one is the original.
-   `toolkit work cancel <id> --reason "<owner's words>"`
+   `toolkit work cancel <id> --reason '<his words>'`
 5. Notion: a Stage the owner changed by dragging is kept. A card dragged to Done is not an approval: ask, and on a yes open `work-finish`.
-6. Split (stage 05): propose the sub-items (title, what each delivers, which `R-xx` it covers), ask once, then create each one under the parent. A split never removes, renumbers, or rewrites the parent's `R-xx`: they stay in the parent, with their approval. A child that delivers approved parent requirements is made with `--covers`: it links them, copies no text, and inherits the parent's requirements approval, so the owner is never asked to approve the same requirement twice. A parent design the owner approved covers its children too: a `--covers` child of such a parent starts at planning (06), and its history row names that design; it gets no new design. Only a child that needs new behavior gets its own `R-xx` and its own approval. List the child ids in the parent's Roadmap Sub-items column. A split usually renames the parent: say the new title to the owner in one line before the title command below.
+6. Split (stage 05): propose the sub-items (title, what each delivers, which `R-xx` it covers), ask once, then create each one under the parent. A split never removes, renumbers, or rewrites the parent's `R-xx`: they stay in the parent, with their approval. A child that delivers approved parent requirements is made with `--covers`: it links them, copies no text, and inherits the parent's requirements approval, so the owner is never asked to approve the same requirement twice. A parent design the owner approved covers its children too: a `--covers` child of such a parent starts at planning (06), and its history row names that design; it gets no new design. Only a child that needs new behavior gets its own `R-xx` and its own approval. List the child ids in the parent's Roadmap Sub-items column. A child of an agent-led parent gets the same delivery value (`work-delegate` step 1). A split usually renames the parent: say the new title to the owner in one line before the title command below.
    `toolkit work set <id> --stage 05-breakdown`
-   `toolkit work set <id> --title "<new title>"`
-   `toolkit work new --title "<title>" --type <type> --parent <id> --covers R-02,R-03`
-   `toolkit work new --title "<title>" --type <type> --parent <id>`
+   `toolkit work set <id> --title '<new title>'`
+   `toolkit work new --title '<title>' --type <type> --parent <id> --covers R-02,R-03`
+   `toolkit work new --title '<title>' --type <type> --parent <id>`
    `toolkit work edit <id> --section Roadmap --set-file <file>`
 7. Nest, group, move, or archive on request. Before moving a folder, say how many nested items move with it.
    `toolkit work move <id> --under <parent-id>`
    `toolkit work move <id> --under <group>`
    `toolkit work move <id> --under archive`
    `toolkit work move <id> --under root`
-8. Never move, regroup, cancel, archive, or restore on the agent's own initiative. Finish with validation and a short tree of what changed. `toolkit work move` writes the history rows on the item and on both parents; add a note only for the owner's reason.
+8. Never move, regroup, cancel, archive, or restore on the agent's own initiative. Finish with validation and a short tree of what changed. `toolkit work move` writes the history rows on the item and on both parents; add a note only for the owner's reason. When a split or a move changed an item's next step, update the current focus (`../../references/conventions.md`, "The current focus"). End the reply with the one question for the owner, or the exact words that continue ("Say 'keep going' and I'll plan WI-008."), never with a plain statement of the next step.
    `toolkit work validate`
-   `toolkit work history <id> --note "Moved at the owner's request: <his words>"`
+   `toolkit work history <id> --note 'Moved at the owner'\''s request: <his words>'`
 
 ## Rules
 

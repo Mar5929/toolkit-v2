@@ -409,9 +409,13 @@ this name lets that file ship byte for byte as GOAL.md asks.
   2. Brief `requirements-analyst`; tell the owner plainly whether the
      requirements are ready to design from. A missing requirement goes back to
      `work-requirements`; the design never fills a requirements gap.
-  3. Agree the way of working in at most two questions, skipping anything
-     already recorded: built-in mechanisms first or a specialized approach; one
-     option or several; team size from `references/team-roles.md`.
+  3. Agree the way of working, skipping anything already recorded: at most
+     one question to the owner, only when its answer changes the design (one
+     option or several; built-in mechanisms first or a specialized approach).
+     The agent picks the team from `references/team-roles.md` and states it
+     in one line; it asks about the team only when it is larger than the small
+     team there, and never asks a solo owner which helpers to use for a small
+     item.
   4. Start from the project's `DESIGN.md` template
      (`.work-items/work-item-template/DESIGN.md` when present, otherwise the
      model copy in the toolkit plugin's `scaffold/model/`), through
@@ -423,16 +427,21 @@ this name lets that file ship byte for byte as GOAL.md asks.
   5. One `researcher` per open question, in parallel. Salesforce project: open
      `sf-architect-solutioning` as the specialist and pass its findings to the
      architect.
-  6. One `design-architect` per option, writing a local draft file; one
-     `design-critic` per draft; repeat the fix round until the critic's list is
-     empty. A disagreement still open after two rounds goes to the owner as a
-     decision.
+  6. One `design-architect` per option, and at least one `design-critic`
+     for every design, even a small one (one per draft); repeat the fix round
+     until the critic's list is empty. A disagreement still open after two
+     rounds goes to the owner as a decision. Drafts: in Claude Code each
+     architect returns its draft in its reply and writes no file; in Codex
+     each writes a file named in its brief, inside one `mktemp -d` folder.
   7. Save with `status: proposed` (`toolkit work design <id> --set-file <draft>`);
      set `waiting_on: owner`; project-wide decisions go to
      `work-decide`, lasting lessons to `memory-save`.
   8. Show the owner the options, the recommendation, what he will see when it
      is done, the risks, and the order of work; ask him to choose or approve.
-     Yes: `toolkit work approve <id> --design --by <owner>`, then back to
+     Yes: fill every Selected design subsection and the Build and
+     verification plan, save it with the Design status line unchanged, then
+     `toolkit work approve <id> --design --by <owner>` (only this command
+     approves a design; when it fails, the owner sees the error), then back to
      `work-on`.
   9. Codex: pass each role file's full text to a native worker; with no
      worker, say no independent research or critique ran.
@@ -1063,7 +1072,7 @@ this way (`session-skills.md` section 9). Generating
 | --- | --- | --- | --- | --- | --- | --- |
 | `requirements-analyst` | work | Checks requirements: missing pieces, places not explicit end to end, wording a builder could misread, build details in requirements, drift from the Agreed goal. Returns ready or not ready with a fix per finding. | Read, Glob, Grep | nothing | `work-requirements`, `solution-design` | `design-product-analyst` (renamed), the requirements mode of `delivery-reviewer`, the checks of `spec-check` |
 | `researcher` | work | Answers one bounded question from project evidence, official documentation, and community sources, each finding labeled by source type. | Read, Glob, Grep, WebSearch, WebFetch | nothing | `work-requirements`, `solution-design`, `work-on`, `work-delegate` | `design-researcher` and `delivery-researcher` (merged; the Sonnet default removed) |
-| `design-architect` | work | Writes or fixes one design option as a local draft file; the main agent saves it through `toolkit work design`. | Read, Glob, Grep, WebSearch, WebFetch, Write, Edit | only its named draft file | `solution-design` | `design-architect` (kept) |
+| `design-architect` | work | Writes or fixes one design option, in a named draft file (Codex) or in its reply (Claude Code); the main agent saves it through `toolkit work design`. | Read, Glob, Grep, WebSearch, WebFetch, Write, Edit | only its named draft file, or nothing | `solution-design` | `design-architect` (kept) |
 | `design-critic` | work | Gives one verdict per requirement for a draft design (satisfied, partly, not), with evidence and a fix list. | Read, Glob, Grep, WebSearch, WebFetch | nothing | `solution-design` | `design-critic` (kept); the design mode of `delivery-reviewer` |
 | `builder` | work | Implements one planned task, runs its checks, and returns what changed, the tests run and their result, and anything it could not do. | Read, Glob, Grep, Edit, Write, Bash; `isolation: worktree` (from lifecycle and minimal) | only the files in its brief | `work-on`, `work-check`, `work-delegate` | new; replaces the unnamed general agents `work-guide` briefed by hand |
 | `acceptance-checker` | work | Checks a finished result against each R-xx acceptance check and the design's acceptance checks; runs tests; returns a verdict per requirement with evidence, defects in the diff, and checks that could not run. Never the agent that built it. | Read, Glob, Grep, Bash (tests and read-only commands) | nothing | `work-check`, `work-finish` | the result and plan modes of `delivery-reviewer` |

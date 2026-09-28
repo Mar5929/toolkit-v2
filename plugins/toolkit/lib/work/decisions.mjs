@@ -11,7 +11,7 @@ import { today as todayDate, run } from '../core/util.mjs';
 import { gitInfo } from '../core/config.mjs';
 import { readTemplate } from '../core/templates.mjs';
 import { isTerminal, isApproved, stageNumber, stageShort, typeNeedsRequirements } from './lifecycle.mjs';
-import { parseQuestions, isOpenOwnerQuestion, getLabel, parseRoadmap, checkGates, isTemplateRow, isPlaceholder } from './model.mjs';
+import { parseQuestions, isOpenOwnerQuestion, getLabel, parseRoadmap, checkGates, isTemplateRow, isPlaceholder, designHasOptions, designStatusFromBody } from './model.mjs';
 
 // ------------------------------------------------------------------ what waits on the owner
 
@@ -22,7 +22,7 @@ import { parseQuestions, isOpenOwnerQuestion, getLabel, parseRoadmap, checkGates
  * approval, a gate), so one decision is never counted twice. The agent-led
  * delivery offer is not listed here: it is the agent's step, not the owner's
  * question (collectAgentTodos lists it).
- * @param {Array<{ id: string, meta: object, body?: string, archived?: boolean, children?: string[], design?: { status?: string } | null }>} items
+ * @param {Array<{ id: string, meta: object, body?: string, archived?: boolean, children?: string[], design?: { status?: string, body?: string } | null }>} items
  * @param {{ ownerName?: string }} [opts]
  * @returns {Array<{ id: string, title: string, kind: string, what: string, detail: string, continueWith: string }>}
  *   kind: waiting_on_owner | open_question | design_proposed | result_approval | gate
@@ -47,25 +47,40 @@ export function collectOwnerDecisions(items, { ownerName } = {}) {
         waiting = { id, title, kind: 'waiting_on_owner', what: `${id} is waiting on the owner (${stageShort(meta.stage)}).`, detail: next && !isPlaceholder(next) ? `Next action: ${next}` : '', continueWith: 'work-decide' };
       }
       const designStatus = item.design && item.design.status ? item.design.status : meta.design;
+      // A design made from the template, with no option written yet, is a
+      // draft: nothing waits for the owner's approval (sample run a, round 3:
+      // "The design for WI-001 is proposed" while its options section said
+      // only "Pending Mike's answer to Q-03"). Known only when the caller
+      // read the design's text (item.design.body); otherwise it counts as proposed.
+      const designBody = item.design && typeof item.design.body === 'string' ? item.design.body : null;
+      const designWaits = designStatus === 'proposed' && (designBody === null || designHasOptions(designBody));
+      const resultWaits = stageNumber(meta.stage) === 11 && !isApproved(meta.result_approved);
       // An open question that asks for the design choice itself is the same
       // decision as the proposed design: one line, not two (sample run a,
       // round 2: "Q-02: Which version source do you approve: Option A or B?"
-      // and "The design is proposed" were counted as 2 decisions).
+      // and "The design is proposed" were counted as 2 decisions). The same
+      // goes for a question that asks the owner to approve the result at
+      // stage 11 (sample run c, round 3: 4 decisions listed for 2).
       const designQuestions = [];
+      const resultQuestions = [];
       for (const q of parseQuestions(body)) {
         if (!isOpenOwnerQuestion(q, ownerName)) continue;
-        if (designStatus === 'proposed' && isDesignQuestion(q)) {
+        if (designWaits && isDesignQuestion(q)) {
           designQuestions.push(q);
+          continue;
+        }
+        if (resultWaits && isResultQuestion(q)) {
+          resultQuestions.push(q);
           continue;
         }
         add('open_question', `${q.id || 'Question'}: ${q.question}`, q.affects && !isPlaceholder(q.affects) ? `Affects ${q.affects}.` : '', 'work-decide');
       }
-      if (designStatus === 'proposed') {
-        const asked = designQuestions.length ? ` ${designQuestions.map((q) => `${q.id || 'A question'} asks it: ${q.question}`).join(' ')} Mark ${designQuestions.length === 1 ? 'that row' : 'those rows'} Answered when the design is approved.` : '';
-        add('design_proposed', `The design for ${id} is proposed and waits for the owner's approval.`, `Approve with: toolkit work approve ${id} --design --by <name>.${asked}`, 'work-decide');
+      const askedBy = (qs) => (qs.length ? ` ${qs.map((q) => `${q.id || 'A question'} asks it: ${q.question}`).join(' ')} Recording the approval marks ${qs.length === 1 ? 'that row' : 'those rows'} Answered.` : '');
+      if (designWaits) {
+        add('design_proposed', `The design for ${id} is proposed and waits for the owner's approval.`, `Approve with: toolkit work approve ${id} --design --by <name>.${askedBy(designQuestions)}`, 'work-decide');
       }
-      if (stageNumber(meta.stage) === 11 && !isApproved(meta.result_approved)) {
-        add('result_approval', `${id} is at 11 User approval: the owner reviews the result.`, `Approve with: toolkit work approve ${id} --result --by <name>.`, 'work-decide');
+      if (resultWaits) {
+        add('result_approval', `${id} is at 11 User approval: the owner reviews the result.`, `Approve with: toolkit work approve ${id} --result --by <name>.${askedBy(resultQuestions)}`, 'work-decide');
       }
       // The general entry only when nothing more specific says what he decides.
       if (waiting && !mine.length) mine.push(waiting);
@@ -75,15 +90,64 @@ export function collectOwnerDecisions(items, { ownerName } = {}) {
   return out;
 }
 
-/** True when an Open Questions row asks for the design choice: it names the design or a design option. */
+/**
+ * True when an Open Questions row asks the owner to choose or approve the
+ * design: it names a design option ("Option A or B?"), or it asks him to
+ * approve, choose, or pick the design, an option, or an approach. A question
+ * that only mentions the design ("Should the design compare two approaches?",
+ * "May a team of three write the design?") is its own decision (sample run a,
+ * round 3). Only the question text counts, not the Affects column.
+ */
 export function isDesignQuestion(q) {
-  const text = `${q.question || ''} ${q.affects || ''}`;
-  return /\b(solution )?design\b/i.test(text) || /\b[Oo]ption [A-Z]\b/.test(text);
+  const text = String(q.question || '');
+  if (/\b[Oo]ption [A-Z]\b/.test(text)) return true;
+  return /\b(approve|approves|approved|choose|chooses|pick|select|go with|prefer|sign off on|accept)\b[^?.]*\b(design|option|options|approach)\b/i.test(text)
+    || /\b(which|what)\b[^?.]*\b(option|approach)\b[^?.]*\b(approve|choose|pick|want|prefer|go with)\b/i.test(text)
+    // "Which approach should we take: the plain file or the database?" asks
+    // for the choice without a verb such as approve or pick (verifier, fix round 2).
+    || /\b(which|what)\s+(?:of\s+the\s+(?:two\s+|three\s+)?)?(options?|approach(?:es)?)(?=\s*[?:,]|\s+(?:should|shall|do|does|would|will|is|are|to|for|fits|works|suits)\b)[^?]*\?/i.test(text);
 }
 
-/** True when an open Open Questions row already asks the owner about agent-led delivery. */
-function deliveryAsked(body, ownerName) {
-  return parseQuestions(body).some((q) => isOpenOwnerQuestion(q, ownerName) && /agent-led|delivery|team of agents|agent team/i.test(q.question || ''));
+/**
+ * True when an Open Questions row asks the owner to approve or accept the
+ * result ("Do you approve the TV2-001 result at 6216321?"). At stage 11 it is
+ * the same decision as the result approval (sample run c, round 3).
+ */
+export function isResultQuestion(q) {
+  const text = String(q.question || '');
+  return /\b(approve|approves|accept|accepts|sign off on|happy with|ok with|okay with)\b/i.test(text)
+    && /\b(result|results|build|change|changes|work|brief|output)\b/i.test(text)
+    && !/\brequirement/i.test(text)
+    && !isDesignQuestion(q);
+}
+
+/**
+ * True when an Open Questions row asks the owner to approve the requirements
+ * ("Do you approve requirements R-01 to R-03?"). Recording that approval
+ * answers it, as the design and result approvals answer theirs.
+ */
+export function isRequirementsQuestion(q) {
+  const text = String(q.question || '');
+  return /\b(approve|approves|accept|accepts|sign off on|agree to|ok with|okay with|happy with)\b[^?]*\brequirements?\b/i.test(text);
+}
+
+/**
+ * True when an open Open Questions row already asks the owner about agent-led
+ * delivery. "Would you like agents to take responsibility for delivering
+ * this?" counts (sample runs b and d, round 3: the offer was listed twice
+ * because "delivering" did not match), and so does a row whose Affects says delivery.
+ */
+export function deliveryAsked(body, ownerName) {
+  return parseQuestions(body).some((q) => isOpenOwnerQuestion(q, ownerName) && isDeliveryQuestion(q));
+}
+
+/** True when an Open Questions row asks who delivers the work: agent-led or owner-led. */
+export function isDeliveryQuestion(q) {
+  const text = String(q.question || '');
+  return /\b(?:agent|owner)-led\b|\bteam of agents\b|\bagent team\b/i.test(text)
+    || /\bagents?\b[^?]*\b(?:deliver|delivering|delivery|take responsibility|take on|take over|build it)\b/i.test(text)
+    || /\bdeliver(?:y|ing)?\b[^?]*\bagents?\b/i.test(text)
+    || /\bdelivery\b/i.test(q.affects || '');
 }
 
 /**
@@ -122,6 +186,58 @@ export function bigReason(item) {
   const n = stageNumber(meta.stage);
   if ((typeNeedsRequirements(meta.type) || meta.type === 'solution-design') && n !== null && n >= 3) return `it is a ${meta.type} item past requirements`;
   return null;
+}
+
+/**
+ * Read the design text of each open item whose design is proposed and whose
+ * design text the tracker did not return with the list (Notion), so
+ * collectOwnerDecisions can tell a draft design from one that waits for the
+ * owner. A design that cannot be read is left as it was (counted as proposed).
+ */
+export async function withDesignBodies(tracker, items) {
+  for (const item of items) {
+    const meta = item.meta || {};
+    const status = item.design && item.design.status ? item.design.status : meta.design;
+    if (item.archived || isTerminal(meta.status) || status !== 'proposed') continue;
+    if (item.design && typeof item.design.body === 'string') continue;
+    try {
+      // The Notion tracker reads only the design page's text (one call).
+      if (typeof tracker.designBody === 'function') {
+        const body = await tracker.designBody(item.id);
+        if (typeof body === 'string') item.design = { ...(item.design || {}), status: (item.design && item.design.status) || designStatusFromBody(body) || status, body };
+        continue;
+      }
+      const d = await tracker.getDesign(item.id);
+      if (d) item.design = { ...(item.design || {}), status: (item.design && item.design.status) || d.meta.status, body: d.body };
+    } catch {
+      // Left as it was.
+    }
+  }
+  return items;
+}
+
+/**
+ * The memory records that wait for the owner's yes or no: saved proposals
+ * (status needs-review), from lib/memory/proposals.mjs listProposals(project).
+ * An older toolkit without that file, or a memory system that cannot be read,
+ * gives an empty list and a problem line instead of an error.
+ * opts go to listProposals ({ env }).
+ * @returns {Promise<{ proposals: Array<{ key, description, saved, source }>, problem: string|null }>}
+ */
+export async function collectMemoryProposals(project, opts = {}) {
+  let mod;
+  try {
+    mod = await import('../memory/proposals.mjs');
+  } catch {
+    return { proposals: [], problem: null };
+  }
+  if (!mod || typeof mod.listProposals !== 'function') return { proposals: [], problem: null };
+  try {
+    const list = await mod.listProposals(project, opts);
+    return { proposals: Array.isArray(list) ? list.filter((p) => p && p.key) : [], problem: null };
+  } catch (err) {
+    return { proposals: [], problem: `The memory proposals could not be read (${String(err && err.message ? err.message : err).replace(/\.$/, '')}).` };
+  }
 }
 
 /** The skill that continues each decision kind. */

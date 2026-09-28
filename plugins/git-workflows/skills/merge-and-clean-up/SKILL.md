@@ -27,7 +27,9 @@ that belonged to it. Merge and cleanup are one guarded workflow.
 
 Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
 
-Codex: its sandbox keeps `.git/` read-only, so every Git write here (the script's `start` and `publish`, `git add`, `git commit`, `git push`, `git worktree add` and `remove`) needs the owner's approval and escalated permissions. Run each one as its own command with `sandbox_permissions` set to `require_escalated` and a one-line reason saying what it does; an approval without escalation still runs inside the sandbox and fails on `.git/index.lock`. When Codex refuses a command without asking ("approval required by policy"), stop, show the owner the exact command, and ask him to approve it in an interactive session or run it in a terminal. With no remote (`git remote` prints nothing), skip `git fetch`.
+Codex: its sandbox keeps `.git/` read-only, so every Git write here (`git fetch`, `git pull`, `git push`, `git worktree remove`, `git branch -d`) and every `gh` call that needs the network needs the owner's approval and escalated permissions. Run each one as its own command with `sandbox_permissions` set to `require_escalated` and a one-line reason saying what it does; an approval without escalation still runs inside the sandbox and fails on `.git/index.lock`. When Codex refuses a command without asking ("approval required by policy"), stop, show the owner the exact command, and ask him to approve it in an interactive session or run it in a terminal.
+
+No remote (`git remote` prints nothing): there is no pull request to merge, so this skill does not apply. Never run `git fetch`, and never report a fetch refusal as a blocker. Say so in one line; the local merge of a work item's branch is `work-finish` step 2.
 
 ## Safety rules
 
@@ -72,8 +74,10 @@ promise it can be deleted. A different commit means local-only work exists: stop
 and keep it.
 
 Find the linked work item id: a head branch named like `claude/wi-007-<slug>`
-(or `wi-007-<slug>`), or any branch containing `WI-007`, belongs to `WI-007`; otherwise look for an id in the pull
-request title or body. No id found: skip the history note in step 7.
+(or `wi-007-<slug>`), or any branch containing `WI-007`, belongs to `WI-007`.
+The id prefix is in lower case in a branch name, so `claude/tv2-007-<slug>`
+belongs to `TV2-007`. Otherwise look for an id in the pull request title or
+body. No id found: skip the history note in step 7.
 
 ## 2. Check the merge is allowed
 
@@ -212,7 +216,7 @@ When the project has `.toolkit.json` and step 1 found a work item id, add one
 history note:
 
 ```text
-toolkit work history <id> --note "Merged pull request <number> as <merge commit>"
+toolkit work history <id> --note 'Merged pull request <number> as <merge commit>'
 ```
 
 For a GitHub Issues or Jira tracker, `toolkit work` exits with code 3 and
@@ -227,5 +231,6 @@ gone; every unrelated worktree remains.
 
 End with the pull request link, the merge commit, the final base state, the
 cleanup result, and whether the history note was saved ("Not saved" first when
-it failed). Put any remaining owner action last. If everything is complete, say
-nothing else is needed.
+it failed). The last line is the one question for the owner (a remaining
+action he must take), or the exact words that continue ("Say 'finish WI-007'
+and I'll close the work item.").

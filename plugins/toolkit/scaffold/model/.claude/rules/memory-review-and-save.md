@@ -10,7 +10,7 @@ Review on explicit remember/forget requests, corrections, standing preferences, 
 
 ## Approval
 
-The `memory-save` skill holds the approval policy: what the owner's own words authorize, what needs a yes in onboarding mode, what trusted mode allows, and what always needs the owner. The mode is `memory.approval` in `.toolkit.json`; only an explicit owner instruction changes it. A yes authorizes the shown operation and meaning only. Silence does not. There is no proposal inbox; hold an unanswered question in the conversation and continue independent work.
+The `memory-save` skill holds the approval policy: what the owner's own words authorize, what needs a yes in onboarding mode, what trusted mode allows, and what always needs the owner. The mode is `memory.approval` in `.toolkit.json`; only an explicit owner instruction changes it. A yes authorizes the shown operation and meaning only. Silence does not. An unanswered save question is kept as a proposal: the agent does not rely on it, and `work-decide` shows it to the owner until he approves or rejects it. The `memory-save` skill says how.
 
 If the owner says a proposed item should not be memory, withdraw it. Save only a general selection rule, as a `feedback` memory, if their feedback supplies one; do not restate the rejected fact in the current focus or another topic. Review similar candidates against that rule from then on.
 

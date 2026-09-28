@@ -10,17 +10,25 @@ folder is the installed copy, for example
 `~/.codex/plugins/cache/toolkit-v2/work/<version>/`, so this file is
 `~/.codex/plugins/cache/toolkit-v2/work/<version>/references/conventions.md`.
 
-Four rules that are easy to miss:
+Rules that are easy to miss:
 
-- Run each `toolkit` command alone, as its own command (below).
+- Run each `toolkit` command alone, as its own command, in both hosts (below).
 - Never change a work item with a script (Python, Node, `sed -i`, `cat >`).
   Use `toolkit work edit --section` or `--label`, or the file edit tool for
   body text. The hooks refuse the script, so it only wastes a step.
-- Temporary text goes in `--text`, or in a file in a new `mktemp -d` folder,
-  never at a fixed name such as `/tmp/wi001.md`.
+- Text goes on standard input in Claude Code and in single quotes or a
+  `mktemp -d` file in Codex, never in double quotes and never at a fixed name
+  such as `/tmp/wi001.md` ("Text in a command", below).
+- Ask the owner in the reply text. Never ask through a question tool (such as
+  Codex's `request_user_input`): he may never see it, and the reply must hold
+  the question.
+- No remote (`git remote` prints nothing): never run `git fetch`, and never
+  report a refused or failed fetch as a blocker.
 - End every reply to the owner with the one question he must answer, or with
   the exact words that continue the work ("Say 'keep going' and I'll start the
   build."). Never end on "The next step is ..." with nothing for him to do.
+- Keep the current focus current when an item's stage or next step changes
+  ("The current focus", below).
 
 ## Voice
 
@@ -40,20 +48,25 @@ its own writing rules.
 - Say the handover in one line, for example "WI-012 needs a design; opening
   solution-design."
 - The skill that asked a question records the answer. An answer that arrives
-  later, after that skill has finished, is recorded by `work-decide`.
+  later, after that skill has finished, is recorded by `work-decide`. The
+  agent-led delivery offer is the one exception: only `work-delegate` makes
+  the offer and records its answer.
 
 ## Running `toolkit` commands
 
-- Put each `toolkit` command on its own line and run it as a plain command.
-  Do not wrap it in `$(...)`, a pipe, or a redirect. Codex matches its
-  command rule against the plain command. This holds for read commands too:
-  `toolkit work decisions && toolkit work show WI-001` is two commands.
+- Put each `toolkit` command on its own line and run it as a plain command,
+  in both hosts. Do not join it to another command with `&&`, `;`, or a pipe,
+  and do not wrap it in `$(...)`, a loop, or a script. This holds for read
+  commands too: `toolkit work decisions && toolkit work show WI-001` is two
+  commands, run one after the other.
 - In Codex, a `toolkit` command joined to anything else (`&&`, `;`, a pipe, a
   heredoc, `cd ... &&`) or run from a script (for example Python's
   `subprocess`) runs inside the Codex sandbox. The sandbox blocks Notion,
   Hindsight, and the main checkout's `.work-items/` and `.memory/` from a
-  worktree, so the command fails or reports the wrong cause. Run each one
-  alone, as its own command.
+  worktree, so the command fails or reports the wrong cause. Codex matches
+  its command rule against the plain command.
+- The one thing a Claude Code command may carry is its own text on standard
+  input (`--set-file -` with a quoted heredoc, "Text in a command" below).
 - Add `--json` when you need to read the output field by field.
 - Exit codes: `0` done; `1` error; `2` validation failure (fix what it names
   and run it again); `3` not supported for this tracker or memory backend
@@ -78,8 +91,10 @@ its own writing rules.
   ```
 
 - To change one section of the body, read it, change only what needs to
-  change, and write the whole section back. The file holds the same text the
-  read printed for that heading, with your changes.
+  change, and write the whole section back. The new text is the same text the
+  read printed for that heading, with your changes. Leave out the section's
+  fill-in guide comment (`<!-- ... -->`) once the section holds real content.
+  `<file>` below is `-` (standard input) in Claude Code ("Text in a command").
 
   ```text
   toolkit work show <id> --section "<heading>"
@@ -92,7 +107,7 @@ its own writing rules.
   the highest number there (`Q-01` when there is none).
 
   ```text
-  toolkit work edit <id> --section "Open Questions" --append-row "| <next Q-id> | <question> | R-02 | Open | owner |"
+  toolkit work edit <id> --section "Open Questions" --append-row '| <next Q-id> | <question> | R-02 | Open | owner |'
   ```
 
 - Frontmatter values change only through `toolkit work set`, `approve`,
@@ -104,34 +119,53 @@ its own writing rules.
   `toolkit work set <id> --title`, and never retitle an item quietly.
 - Never hand-edit `.work-items/DASHBOARD.md` or
   `.work-items/.toolkit-state.json`. The hooks refuse it.
-- Text for a section or a design:
-  - Short or medium text, in both hosts: give it in the command with
-    `--text "<text>"`. No file is needed, and newlines inside the quotes are
-    kept:
-
-    ```text
-    toolkit work edit <id> --section "<heading>" --text "<text>"
-    toolkit work design <id> --text "<text>" --status proposed
-    ```
-
-  - Claude Code, for long text: pass it on standard input, so no file is left
-    anywhere: `toolkit work edit <id> --section "<heading>" --set-file - <<'EOF'`,
-    then the text, then `EOF`. (In Codex a heredoc runs the command inside the
-    sandbox; use `--text` or a file there.)
-  - Codex, for text too long for `--text`: make a new folder for this one save
-    with `mktemp -d` (its name is unique, so two sessions or two projects never
-    share a file), write the file in it with the file edit tool, run the
-    `toolkit` command alone with the file's full path, and delete the file and
-    the folder right after the command succeeds (`rm <file>`, then
-    `rmdir <folder>`), before you ask the owner anything. Never use a fixed
-    name such as `/tmp/wi001-requirements.md`: every project starts at
-    `WI-001`, so another session's save could land in this item. Never write
-    the file and run the `toolkit` command in one shell command.
-  - Never leave draft files inside `.work-items/`: a second `DESIGN.md`-shaped
-    file there confuses the design lookup.
 - Never write a work item record from the shell (`cat >`, `tee`, `sed -i`,
   `cp`, or a script) and never change its frontmatter with a file edit. The
   hooks refuse both, because they would skip the approval gates.
+
+## Text in a command
+
+The shell changes text before the command sees it. Inside double quotes it
+runs anything between backticks and anything in `$(...)` as a command, and
+puts that command's output in the text. The command then saves the text with
+those parts missing and still prints "Saved". So:
+
+- **One-line values** (`--note`, `--effect`, `--append-row`, `--title`,
+  `--reason`, `--quote`, `--evidence`, `--description`, `--source`): put them
+  in single quotes, in both hosts. Inside single quotes the shell changes
+  nothing. Write an apostrophe inside them as `'\''`, for example
+  `--note 'Owner'\''s words: "ship it"'`. Never use double quotes for text.
+- **Section, design, focus, glossary, and memory text in Claude Code:** pass
+  it on standard input with `--set-file -` (or `--body-file -` for a memory
+  save) and a quoted heredoc. The quotes around `EOF` in `<<'EOF'` stop the
+  shell from changing anything in the text, and no file is left anywhere. Claude Code
+  refuses `rm` outside the project, so a temporary folder there could never be
+  deleted. Write the command, then the text, then a line holding only `EOF`:
+
+  ```text
+  toolkit work edit <id> --section "<heading>" --set-file - <<'EOF'
+  ```
+
+- **The same text in Codex:** a heredoc runs the command inside the sandbox,
+  so do not use one. Give short or medium text in single quotes
+  (`--text '<text>'`; newlines inside the quotes are kept). For longer text,
+  make a new folder for this one save with `mktemp -d` (its name is unique, so
+  two sessions or two projects never share a file), write the file in it with
+  the file edit tool (`apply_patch`), run the `toolkit` command alone with the
+  file's full path, and delete the file and the folder right after the command
+  succeeds (`rm <file>`, then `rmdir <folder>`), before you ask the owner
+  anything. Never write the file and run the `toolkit` command in one shell
+  command.
+
+  ```text
+  toolkit work edit <id> --section "<heading>" --text '<text>'
+  toolkit work design <id> --text '<text>' --status proposed
+  ```
+
+- Never use a fixed name such as `/tmp/wi001-requirements.md`: every project
+  starts at `WI-001`, so another session's save could land in this item.
+- Never leave draft files inside `.work-items/`: a second `DESIGN.md`-shaped
+  file there confuses the design lookup.
 
 ## Section names in `WORK-ITEM.md`
 
@@ -216,7 +250,7 @@ saving answers that are already settled.
 
 ## When to add a history note
 
-Add one `toolkit work history <id> --note "<text>" --effect "<what it changes>"`
+Add one `toolkit work history <id> --note '<text>' --effect '<what it changes>'`
 when (without `--effect`, the row says which skill continues the item):
 
 - the stage, type, priority, `waiting_on`, blockers, or next action changes
@@ -231,6 +265,12 @@ when (without `--effect`, the row says which skill continues the item):
 Record the owner's meaning briefly. Do not add reasons, scope, or certainty he
 did not give. Do not log routine commands, files opened, ordinary test runs,
 or small edits.
+
+A note that quotes the owner's approval ("Owner's words: ...") right after an
+approval or a `waiting_on` change gets its own `--effect` that says what the
+answer changes ("Result approved; work-finish continues."). Without it, the
+row's default effect is worked out from the item before the change and can
+name the wrong next step.
 
 ## Waiting on the owner
 
@@ -250,6 +290,37 @@ or small edits.
 - An item left at `owner` stays in the briefing and in
   `toolkit work decisions`, and `work-on` sends it to `work-decide` instead of
   its next stage.
+
+## The current focus
+
+The current focus (`toolkit memory focus`) is the first thing the next session
+reads. Its "Now" section names work item ids and titles, never their status;
+its "Next session starts with" section says where to resume. A line there that
+names a step already done misleads every later session.
+
+When an item's stage changes, or its next step changes to something the focus
+does not say, read the focus and check two things before the reply ends:
+
+- "Now" lists the item (id and title only). Add it when it is missing; take
+  it off when the item is Done or Cancelled.
+- "Next session starts with" does not name a step that is done or no longer
+  next. Replace that line with the item's real next step, in one line that
+  points at the item ("Continue WI-012 from its Resume here: build P1.").
+
+Also drop a setup step under "Waiting on the owner" once `toolkit doctor` no
+longer reports it. Change the "Last updated" line (date, source, who) and keep
+the `# Current focus` title line. Leave every other line as it is. Save the
+whole text back with the version you read, so another session's change is not
+lost (`--expect` refuses a stale save with exit code 2: read it again and
+redo the change). Claude Code passes the text on standard input.
+
+```text
+toolkit memory focus --json
+toolkit memory focus --set-file <file> --expect <version>
+```
+
+Skip the save when nothing in the focus is wrong. The work item itself stays
+the record of where the item stands.
 
 ## Stages in plain words
 
@@ -279,15 +350,20 @@ CLI cannot know, such as the owner's reason.
 ## Branches and worktrees
 
 - An item's code work happens in its own worktree
-  `.claude/worktrees/wi-<number>-<slug>` on the branch
-  `claude/wi-<number>-<slug>`, the form the project's
-  `shared-repository-work.md` rule uses:
+  `.claude/worktrees/<prefix>-<number>-<slug>` on the branch
+  `claude/<prefix>-<number>-<slug>`, the form the project's
+  `shared-repository-work.md` rule uses. `<prefix>` is the item's own id
+  prefix in lower case: `wi` for `WI-007`, `tv2` for `TV2-007`, `acme` for
+  `ACME-007`. For WI-007:
   `git worktree add .claude/worktrees/wi-007-csv-export -b claude/wi-007-csv-export`.
-  The briefing ties a worktree to its item by the item id in the branch name.
-  With another id prefix, use it in lower case (`acme-007-...`).
+  The briefing ties a worktree to its item by the item id in the branch name,
+  so a branch named `wi-001-...` for `TV2-001` is not linked to it.
 - Never commit `.work-items/` or `.memory/`. They are Git-ignored and live in
   the main checkout.
 - No AI credit anywhere: not in commits, pull requests, comments, or files.
+  A commit message never carries a `Co-Authored-By` line naming an AI or a
+  "Generated with" line. Stage files by name; never `git add -A`, `git add .`,
+  or `git commit -a`.
 - Codex: its sandbox keeps `.git/` read-only, so `git add`, `git commit`,
   `git worktree add` and `remove`, `git merge`, `git branch -d`, `git fetch`,
   and `git push` cannot run inside it. The project's
@@ -307,8 +383,12 @@ CLI cannot know, such as the owner's reason.
     `.git/`, no building on the default branch instead of the item's branch.
 - The project's shared-repository rule runs `git fetch origin` before the
   first edit. When `git remote` prints nothing, the project has no remote:
-  skip the fetch.
+  never run `git fetch`, and never report a refused or failed fetch as a
+  blocker or write it into the item. Check `git remote` before any fetch.
+  Without a remote there is no pull request and no push: the item's branch is
+  merged locally (`work-finish`), and documents are committed locally
+  (`publish-docs` does this by itself).
 - A merge that stops on a conflict: resolve it, then commit with a message you
-  write (`git commit -m "Merge <branch>: <what it brings>"`), never
+  write (`git commit -m 'Merge <branch>: <what it brings>'`), never
   `git commit --no-edit`, which keeps Git's "# Conflicts:" lines in the
   message.

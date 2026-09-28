@@ -108,7 +108,7 @@ test('a history row that is already there for the same hand move is not written 
   // An earlier run wrote the row, then failed before it recorded the move.
   const rec = await t0.get(b);
   const { appendHistory } = await import('../../lib/work/model.mjs');
-  const body = appendHistory(rec.body, { date: TODAY, change: `Parent changed in Notion by hand: ${a} -> none (top level).`, effect: 'It is a top-level item now.' });
+  const body = appendHistory(rec.body, { date: TODAY, change: `Parent changed in Notion by hand: ${a} -> top level.`, effect: 'It is a top-level item now.' });
   await t0.update(b, { body, expectBody: rec.body });
   const cache = readTrackerCache(t0.cacheRoot);
   cache.items[b].written.parent = a;
@@ -151,7 +151,8 @@ test('toolkit work move in Notion says "the top level" and adds history rows to 
   assert.equal(parseHistory((await t.get(a)).body)[0].change, `Sub-item ${b} moved out with toolkit work move.`);
   const res2 = await opMove(t, b, c, { today: TODAY });
   assert.equal(res2.from, 'the top level');
-  assert.equal(parseHistory((await t.get(c)).body)[0].change, `Sub-item ${b} moved here with toolkit work move (it was under none (top level)).`);
+  // Plain words, never "(it was under none (top level))" (sample run c, round 3).
+  assert.equal(parseHistory((await t.get(c)).body)[0].change, `Sub-item ${b} moved here with toolkit work move (it was a top-level item).`);
 });
 
 test('a write is read back a second time before "Saved but not verified", and the error names the first line that differs', async () => {
@@ -172,7 +173,8 @@ test('a write is read back a second time before "Saved but not verified", and th
   const changed = text.replace('## What this design solves\n', '## What this design solves\n\nGreeting people.\n');
   const saved = await t.setDesign(id, changed);
   assert.match(saved.body, /Greeting people\./, 'the second read-back matched');
-  assert.equal(n, 3);
+  // The plan read, the stale read-back, the second read-back, then the read that checks the Design approved property.
+  assert.equal(n, 4);
   // Always different: the error says where.
   n = 0;
   t.client.getMarkdown = async (pageId) => {

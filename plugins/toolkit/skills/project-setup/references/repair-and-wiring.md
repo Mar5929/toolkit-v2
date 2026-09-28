@@ -23,10 +23,12 @@ Needed when the tracker or the memory is `notion`.
    run `ntn whoami` again.
 2. `toolkit notion ensure-root` checks the "AI Agent Second Brain" page and
    the Projects database, and adds what is missing.
-3. `toolkit notion ensure-project --project-name "<name>"` creates or repairs
+3. `toolkit notion ensure-project --project-name '<name>'` creates or repairs
    this project's row, its Work Items database (board and table views, the
-   fourteen stages, sub-items), its Memory database, and its focus and
-   glossary pages. It saves the Notion ids in `.toolkit.json`.
+   fourteen stages, sub-items), its Memory page in Lore's layout (the Projects,
+   Topics, Memories, Entities, and Facts databases; the records are rows of
+   Memories), and its focus and glossary pages. It saves the Notion ids in
+   `.toolkit.json`.
 4. Both commands only add. They never delete or trash anything, and they
    refuse to write outside the "AI Agent Second Brain" page.
 5. In Codex, Notion calls need the network, which Codex's sandbox turns off.
@@ -74,14 +76,16 @@ in Hindsight Cloud, and never in Docker.
    | --- | --- | --- | --- |
    | 1 | `.claude/rules/keep-work-item-current.md` is missing | missing | `toolkit sync` |
    | 2 | `AGENTS.md` differs from the toolkit's version | changed by the owner | none: project ahead of the toolkit |
-   | 3 | Notion Memory database is missing | broken wiring | `toolkit notion ensure-project` |
+   | 3 | The Notion Memory page (Lore layout) is missing | broken wiring | `toolkit notion ensure-project` |
 
 4. `toolkit sync` applies every sync row at once. When the owner declines one
    of them, say so and ask whether to run sync anyway or skip it. Wiring rows
    are fixed one at a time with their own command, after his yes.
 5. A file the project changed on purpose is never overwritten. Report it as
    "project ahead of the toolkit".
-6. Run `toolkit doctor` again until it is clean.
+6. Run `toolkit doctor` again until it reports 0 problems. Warnings about the
+   other host (for example Codex hook trust, seen from Claude Code) are
+   expected: they are the owner's steps.
 
 ## Updating the toolkit
 
@@ -91,10 +95,22 @@ in Hindsight Cloud, and never in Docker.
   toolkit's own repository; a project sees the change only after the updated
   plugins are installed.
 - When doctor says the installed plugins are older than the toolkit source,
-  the plugins themselves need updating first. In Claude Code, with the
-  owner's yes: `claude plugin marketplace update toolkit-v2`, then
-  `claude plugin update <plugin>@toolkit-v2` for each plugin. Then start a
-  new session and run the repair steps.
+  the plugins themselves need updating first, in each host, with the owner's
+  yes:
+  - Claude Code: `claude plugin marketplace update toolkit-v2`, then
+    `claude plugin update <plugin>@toolkit-v2` for each plugin. Then start a
+    new session.
+  - Codex runs a copy filed under the plugin's version, so a new version needs
+    the plugin added again. A marketplace added from a Git address is
+    refreshed first with `codex plugin marketplace upgrade toolkit-v2` (a
+    local folder needs no refresh); then `codex plugin add <plugin>@toolkit-v2`
+    for each of the six plugins. `codex plugin add` turns the plugin on for the
+    whole computer (`enabled = true` in `~/.codex/config.toml`), and Codex
+    has no command to turn it off. Then, with the owner's yes, run
+    `toolkit machine-setup`: it sets each `[plugins."<plugin>@toolkit-v2"]`
+    table back to `enabled = false` and keeps every other line, so the
+    plugins stay on only in projects whose `.codex/config.toml` turns them on.
+  Then run the repair steps.
 - Changed hooks must be trusted again in Codex (`/hooks`). That is the
   owner's step.
 
@@ -129,10 +145,26 @@ with the owner's yes, one by one, reading each back. Then
 
 ## A new computer
 
-1. `toolkit machine-setup` writes the Codex wrapper and the plugin-root
-   pointer, and checks for `node`, `git`, `ntn`, `ollama`, and Hindsight.
-2. `toolkit doctor` in each project.
-3. The local tracker (`.work-items/`) and built-in memory (`.memory/`) are
+1. Install the plugins in each host the owner uses, with his yes:
+   - Claude Code: `claude plugin marketplace add <toolkit folder or Git address>`,
+     then `claude plugin install <plugin>@toolkit-v2` for each plugin. The plugins are off by default; each project's settings turn
+     them on.
+   - Codex: `codex plugin marketplace add <toolkit folder or Git address>`,
+     then `codex plugin add <plugin>@toolkit-v2` for `toolkit`, `work`,
+     `memory`, `session-skills`, `git-workflows`, and
+     `sf-architect-solutioning`. `codex plugin add` writes `enabled = true`
+     to `~/.codex/config.toml`, which would load the plugins in every Codex
+     project, including ones set up with the older claude-toolkit. Codex has
+     no disable command; step 2 turns them off again. A project set up with
+     `toolkit init` turns them on in its own `.codex/config.toml`.
+2. `toolkit machine-setup` writes the Codex wrapper and the plugin-root
+   pointer, sets each `[plugins."<plugin>@toolkit-v2"]` table in
+   `~/.codex/config.toml` to `enabled = false` (every other line is kept),
+   and checks for `node`, `git`, `ntn`, `ollama`, and Hindsight. Because it
+   changes the owner's Codex settings, say so in one line and run it only
+   after his yes.
+3. `toolkit doctor` in each project.
+4. The local tracker (`.work-items/`) and built-in memory (`.memory/`) are
    Git-ignored, so they do not come with a clone. After the owner copies the
    backup folder over, restore them with
    `toolkit import --from <backup-folder>/project` (a project export holds
@@ -140,5 +172,6 @@ with the owner's yes, one by one, reading each back. Then
    with `toolkit memory import --from <backup-folder>/memory`. Hindsight
    memory lives on the old Mac; move it the same way, through a memory
    export there and a memory import here. Notion needs no restore.
-4. Owner steps on the new computer: `ntn login` (for Notion projects), and
-   trusting the hooks in Codex (`/hooks`).
+5. Owner steps on the new computer: `ntn login` (for Notion projects),
+   trusting each project folder in Codex, and trusting the hooks in Codex
+   (`/hooks`).

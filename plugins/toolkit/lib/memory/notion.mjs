@@ -70,6 +70,7 @@ import {
   parseRecord, recordSummary, renameRecordText, repairLinks, repairLinksWithDriver, repairResult, restoreNote, retireNote, searchTerms,
   storedStatus,
   serializeRecord, sortRecords, splitKey, supersedesList, titleFromName, versionOf, focusLineCount, FOCUS_MAX_LINES, isValidKey,
+  focusShapeProblems, isProposal,
 } from './contract.mjs';
 import { withLock } from '../core/lock.mjs';
 import { normalizeId, isNotionError } from '../notion/client.mjs';
@@ -193,7 +194,7 @@ export class NotionMemoryDriver {
     this.backend = backend;
     const mem = (config.notion && config.notion.memory) || null;
     if (!mem || !mem.dataSourceId || !mem.properties) {
-      throw new ToolkitError(EXIT.INVALID, 'The Notion Memory database is not set up for this project.', {
+      throw new ToolkitError(EXIT.INVALID, 'Notion memory is not set up for this project: .toolkit.json has no notion.memory settings for the Memory page and its Lore databases (Projects, Topics, Memories, Entities, Facts).', {
         fix: 'Run toolkit notion ensure-project.',
       });
     }
@@ -603,7 +604,8 @@ export class NotionMemoryDriver {
     return sortRecords(out.filter((s) => matchesFilter(s, filter)));
   }
 
-  async find(query, { reflect = false, limit = 10, type, all = false } = {}) {
+  /** Keyword search. Retired records only with `all`; saved proposals only with `proposals` or `all`. */
+  async find(query, { reflect = false, limit = 10, type, all = false, proposals = false } = {}) {
     if (reflect) {
       throw new ToolkitError(EXIT.UNSUPPORTED, 'find --reflect needs the Hindsight memory backend. Notion memory searches by keywords only.', {
         backend,
@@ -615,6 +617,7 @@ export class NotionMemoryDriver {
     assertFilter({ type });
     const rows = await this.rows();
     const hits = [];
+    let proposalsLeftOut = 0;
     for (const page of rows) {
       const key = this.keyOf(page);
       if (!isValidKey(key)) continue;
@@ -624,12 +627,16 @@ export class NotionMemoryDriver {
       const rec = await this.stored(page);
       const { score, snippet } = keywordScore(rec, terms);
       if (score <= 0) continue;
-      hits.push({ key, name: s.name, type: s.type, description: s.description, status: s.status, stored_status: storedStatus(rec), superseded_by: rec.superseded_by ?? null, score, snippet });
+      if (!all && !proposals && isProposal(s)) {
+        proposalsLeftOut++;
+        continue;
+      }
+      hits.push({ key, name: s.name, type: s.type, description: s.description, status: s.status, stored_status: storedStatus(rec), superseded_by: rec.superseded_by ?? null, proposal: isProposal(s), score, snippet });
     }
     this.saveCache();
     hits.sort((a, b) => b.score - a.score || (a.key < b.key ? -1 : 1));
     const max = Number.isInteger(limit) && limit > 0 ? limit : 10;
-    return { query: String(query), mode: 'keyword', results: hits.slice(0, max) };
+    return { query: String(query), mode: 'keyword', results: hits.slice(0, max), proposalsLeftOut };
   }
 
   async changeStatus(key, { status, supersededBy = null, note = '' }, action) {
@@ -901,6 +908,7 @@ export class NotionMemoryDriver {
       if (focus.text && focusLineCount(focus.text) > FOCUS_MAX_LINES) {
         problems.push({ where: FOCUS_PAGE_TITLE, problem: `has ${focusLineCount(focus.text)} lines; the limit is ${FOCUS_MAX_LINES}.` });
       }
+      for (const p of focusShapeProblems(focus.text)) problems.push({ where: FOCUS_PAGE_TITLE, problem: `${p} Save it again with toolkit memory focus --text '<text>'; the command adds what is missing.` });
     } catch (err) {
       problems.push({ where: FOCUS_PAGE_TITLE, problem: `cannot be read: ${err.message}` });
     }

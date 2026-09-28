@@ -46,13 +46,15 @@ Work through every item in order. Tick each one only when it is true.
   - [ ] One option, or several, and what differs between them
   - [ ] The answers are in the item's Notes > Decisions and context, and a
         built-in-first choice is a row in "Constraints and assumptions"
-- [ ] **The team is agreed**
+- [ ] **The team is set**
   - [ ] Size weighed from `../../../references/team-roles.md`: requirement
         count, systems touched, existing build, options wanted, unknowns
   - [ ] Each role named with its count, what it reads, and what it returns
   - [ ] The number of agent runs for the first pass is stated
-  - [ ] The owner agreed or changed the team, or the item records his
-        team-arrangement answer from `work-delegate`
+  - [ ] At least one design critic is on it
+  - [ ] The small team was stated to the owner in one line; a larger team was
+        agreed by him, or the item records his team-arrangement answer from
+        `work-delegate`
 - [ ] **The opening sections are in the design**
   - [ ] The header lines, What this design solves, Requirements and design
         readiness, What exists today, and Constraints and assumptions are
@@ -87,19 +89,26 @@ Only when every box is ticked does the design round (step 6) start.
 
 ## Step 3: the way of working
 
-Ask at most two questions, each with a recommendation and a one-line reason.
-Skip anything already answered.
+The owner is one person who decides and steers; the agent runs the work. Ask
+him at most one question here, with a recommendation and a one-line reason,
+and only when the answer changes the design. Skip anything already answered.
+Ask it in the reply text, never through a question tool (such as Codex's
+`request_user_input`): a question he never sees stalls the item.
 
-1. **Interview or scan first.** Recommend the interview when the goal or the
-   constraints are open; recommend the scan when the requirements are
-   detailed and the unknowns are technical.
+1. **Interview or scan first.** The agent decides: the interview when the goal
+   or the constraints are open, the scan when the requirements are detailed
+   and the unknowns are technical. Say which in one line.
 2. **Approach and options.** Default: the platform's built-in mechanisms
    wherever they meet a requirement, custom only where nothing built-in does.
-   One option unless the owner wants more; if more, agree how many and what
-   differs (for example built-in only against custom, or least change against
-   best long-term fit).
-3. **The team.** Propose it from `team-roles.md` with one line per role. The
-   owner agrees or changes it before any agent starts.
+   One option unless the owner wants more, or the requirements leave a real
+   choice he should make; then ask how many and what differs (for example
+   built-in only against custom, or least change against best long-term fit).
+   This is the one question worth asking.
+3. **The team.** The agent picks it from `team-roles.md` and states it in one
+   line. The small team (one requirements analyst, one architect, one
+   critic, and a researcher when a question is open) needs no question: a solo owner cannot judge which
+   helpers a small design needs. Ask only when the team is larger than that,
+   because it then costs noticeably more.
 
 Record settled answers in the item's Notes > Decisions and context as they
 come. The approach also goes into the design's "Constraints and assumptions"
@@ -142,14 +151,27 @@ architect.
 ## Step 6: design and critique
 
 - **Architect.** One per option. The brief holds the design's current text,
-  the requirements, the research findings, which option to write, and the
-  draft file path: a file named for its option in the one folder made for
-  this design with `mktemp -d` (never a fixed name in the shared `/tmp`, never
-  inside `.work-items/`). Delete the folder once the design is saved. It says plainly whether the requirements are ready
-  and does not design until they are.
-- **Critic.** One per draft. Returns one line per requirement (satisfied,
-  partly satisfied, not satisfied) with evidence, plus findings on the goal,
-  unnecessary custom work, sources, and writing.
+  the requirements, the research findings, and which option to write. Where
+  the draft goes:
+  - Claude Code: the architect writes no file and returns its whole draft in
+    its reply. Claude Code refuses `rm` outside the project, so a temporary
+    folder could never be deleted. The critic's brief holds that draft,
+    pasted in. For a fix round, paste its last draft and the critic's
+    findings into the new brief.
+  - Codex: the brief names the draft file: a file named for its option in the
+    one folder made for this design with `mktemp -d` (never a fixed name in the
+    shared `/tmp`, never inside `.work-items/`). The critic's brief names the
+    same file. Delete the folder once the
+    design is saved.
+
+  It says plainly whether the requirements are ready and does not design
+  until they are.
+- **Critic.** At least one for every design, even a small one, and one per
+  draft. Returns one line per requirement (satisfied, partly satisfied, not
+  satisfied) with evidence, plus findings on the goal, unnecessary custom
+  work, sources, and writing. Only a session with no agent tool at all (no
+  Agent tool in Claude Code, no `spawn_agent` in Codex) skips the critic, and
+  then the reply and the design's Notes say that no critique ran.
 - **Fix loop.** Give the critic's findings to the architect. The architect
   fixes the draft and lists what changed. The critic checks again. Repeat
   until every requirement is satisfied and nothing material remains.
@@ -167,18 +189,28 @@ architect.
   Option comparison (with several options), the Recommendation, then Sources,
   the misreading table, and Notes. "Selected design" says "Pending owner
   decision." until he chooses. Save it with
-  `toolkit work design <id> --set-file <file> --status proposed`.
+  `toolkit work design <id> --set-file <file> --status proposed` (`<file>` is
+  `-` with the text on standard input in Claude Code).
 - Tell the owner: how many options, one sentence each, the recommendation and
   its reason, what he will see when it is done, the main risks, the build
   order, and the decisions that need him. The full design is in the item; say
   where in one line.
 - His yes, or his choice of one option: fill "Owner decision" (who, when,
   where he said it) and "Reason for decision" (his reason only; never invent
-  one), then write the chosen option into "Selected design" and its build
-  steps into "Build and verification plan". Save, then run
-  `toolkit work approve <id> --design --by <owner>` and add a history note
-  with his words. Hand back to `work-on`, which turns the Build and
-  verification plan into the Roadmap and Tasks.
+  one). Write the chosen option into every subsection of "Selected design"
+  (End-to-end flow; Components and responsibilities; Data, access, and
+  integration details; Edge cases and failure behavior; Release and ongoing
+  operation) and into "Build and verification plan" (Technical sequence, and
+  Acceptance checks with one row per requirement). Keep "Diagrams" when the
+  template has it. Remove every leftover prompt, including a line that still
+  says the plan comes "after Mike chooses". `work-check` reads these
+  Acceptance checks, so an empty plan leaves the checker nothing to check.
+- Save it with its "Design status" header line unchanged: never write
+  "Approved" there yourself. Keep each header line (`**Requirements:**`,
+  `**Design status:**`, and the rest) on its own line. Then run
+  `toolkit work approve <id> --design --by <owner>`, which marks it approved,
+  and add a history note with his words. Hand back to `work-on`, which turns
+  the Build and verification plan into the Roadmap and Tasks.
 - He wants changes: record them in the design's Notes > Design changes during
   the interview, run another fix round for the named changes only, and ask
   again.
@@ -188,6 +220,10 @@ architect.
 - A failed save: lead with "Not saved" and keep the unsaved text.
 
 ## Changing an approved design later
+
+- Any change to the text of an approved design gets a history note that says
+  what changed and whether the owner must approve it again. A factual
+  correction that changes no choice needs no new approval; say so in the note.
 
 - A build that shows the design does not work: record what failed in the
   design's Notes, set the design back with

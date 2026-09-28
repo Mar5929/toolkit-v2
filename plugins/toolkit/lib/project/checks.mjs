@@ -23,6 +23,16 @@
 //     a missing script fails on every tool call or every stop)
 //   tracker and memory health, ntn signed in, Hindsight health, backup age,
 //     worktrees Git can no longer find
+//   Claude Code settings the toolkit needs: no AI credit on commits and pull
+//     requests (attribution) and the larger skill list (skillListingBudgetFraction)
+//   Codex on this computer: the Toolkit V2 plugins switched off for every
+//     folder in ~/.codex/config.toml, and its copy of the toolkit not older
+//     than this one
+//   the current focus has the model's heading and "Last updated:" line, and a
+//     Notion project is not still on the older single Memory database
+//
+// A finding with `host` ('codex') can only be cleared in that host; toolkit
+// doctor run from the other host lists it without counting it in its exit code.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -32,8 +42,8 @@ import { planManifest, projectHosts, readHosts, HOSTS_FIX, PROPOSAL_PATH, DEFAUL
 import { MODEL_DIR } from './model-scaffold.mjs';
 import { tomlGet } from './toml.mjs';
 import {
-  claudeHome, claudeOldPlugins, codexOldPlugins, codexTrust, codexHookTrustKeys, homeDir,
-  installedPluginCopies, readJson, wantedV2Plugins, MARKETPLACE, OLD_MARKETPLACE,
+  claudeHome, claudeOldPlugins, codexOldPlugins, codexPluginOnEverywhere, codexTrust, codexHookTrustKeys, homeDir,
+  installedPluginCopies, pluginVersion, readJson, wantedV2Plugins, MARKETPLACE, OLD_MARKETPLACE, V2_PLUGINS,
 } from './hosts.mjs';
 import { readPointer, isPluginRoot, wrapperState, onPath } from './machine.mjs';
 import { readExportRecord } from './backup.mjs';
@@ -45,8 +55,32 @@ const AGENTS_BLOCKERS = ['CLAUDE.md', path.join('.claude', 'CLAUDE.md'), 'CLAUDE
 const FEATURE_FLAG_VARS = ['DISABLE_GROWTHBOOK', 'DISABLE_TELEMETRY', 'DO_NOT_TRACK', 'CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC'];
 const PROVIDER_VARS = ['CLAUDE_CODE_USE_BEDROCK', 'CLAUDE_CODE_USE_VERTEX', 'CLAUDE_CODE_USE_FOUNDRY'];
 
-function finding(list, id, area, severity, message, fix = null) {
-  list.push({ id, area, severity, message, fix });
+function finding(list, id, area, severity, message, fix = null, extra = null) {
+  list.push({ id, area, severity, message, fix, ...(extra || {}) });
+}
+
+/** The skillListingBudgetFraction that the toolkit's Claude Code settings set (templates/settings/claude-toolkit.json). */
+export const SKILL_BUDGET = 0.02;
+
+/**
+ * True when Claude Code's `attribution` setting hides the AI credit on commits
+ * and pull requests: false, or { commit: '', pr: '' }
+ * (ai-external-knowledge/claude-code/settings-reference.md, "attribution").
+ */
+export function hidesAttribution(value) {
+  if (value === false) return true;
+  return Boolean(value) && typeof value === 'object' && value.commit === '' && value.pr === '';
+}
+
+/** Compare two versions such as 0.2.0 and 0.10.1: -1, 0, or 1. */
+export function compareVersions(a, b) {
+  const pa = String(a || '').split(/[.+-]/).map((x) => Number.parseInt(x, 10) || 0);
+  const pb = String(b || '').split(/[.+-]/).map((x) => Number.parseInt(x, 10) || 0);
+  for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+    const d = (pa[i] || 0) - (pb[i] || 0);
+    if (d) return d < 0 ? -1 : 1;
+  }
+  return 0;
 }
 
 function truthy(v) {
@@ -252,23 +286,80 @@ function checkPlugins(project, env, findings) {
   }
 }
 
+/**
+ * The two settings the toolkit's Claude Code fragment sets: `attribution`
+ * with empty commit and pr texts, so Claude Code adds no AI credit to commits
+ * and pull requests (sample run claude-a found it on four of five commits),
+ * and skillListingBudgetFraction 0.02, so every Toolkit V2 skill description
+ * stays in Claude's skill list (Mike approved, 2026-09-27). A settings.local.json
+ * that sets attribution again wins over the project file, so it is read too.
+ */
+function checkClaudeSettings(project, findings) {
+  if (!projectHosts(project.config).includes('claude-code')) return;
+  const settings = readJson(path.join(project.root, '.claude', 'settings.json'));
+  if (!settings) return; // Missing or not valid JSON: the scaffold and plugin checks report it.
+  const local = readJson(path.join(project.root, '.claude', 'settings.local.json')) || {};
+  const attribution = Object.prototype.hasOwnProperty.call(local, 'attribution') ? local.attribution : settings.attribution;
+  const where = Object.prototype.hasOwnProperty.call(local, 'attribution') ? '.claude/settings.local.json' : '.claude/settings.json';
+  if (!hidesAttribution(attribution)) {
+    finding(findings, 'claude-attribution', 'plugins', 'problem',
+      attribution === undefined
+        ? '.claude/settings.json has no "attribution" setting, so Claude Code adds a Co-Authored-By line naming the AI to commits and a "Generated with" line to pull requests whenever the owner\'s own settings are not loaded.'
+        : `${where} sets "attribution" to ${JSON.stringify(attribution)}, so Claude Code can add AI credit to commits and pull requests.`,
+      'Run toolkit sync; it adds "attribution": {"commit": "", "pr": "", "sessionUrl": false}. If the file was changed by the project, set that value by hand.');
+  }
+  const budget = Object.prototype.hasOwnProperty.call(local, 'skillListingBudgetFraction') ? local.skillListingBudgetFraction : settings.skillListingBudgetFraction;
+  if (!(typeof budget === 'number' && budget >= SKILL_BUDGET)) {
+    finding(findings, 'claude-skill-budget', 'plugins', 'warning',
+      `.claude/settings.json ${budget === undefined ? 'does not set skillListingBudgetFraction' : `sets skillListingBudgetFraction to ${JSON.stringify(budget)}`}. At Claude Code's default (0.01, 1% of the context window) the skill list drops descriptions when many skills are installed, and Claude is then less likely to pick the right Toolkit V2 skill.`,
+      `Run toolkit sync; it sets "skillListingBudgetFraction": ${SKILL_BUDGET}. If the file was changed by the project, set it by hand.`);
+  }
+}
+
 function checkCodex(project, env, findings) {
   if (!projectHosts(project.config).includes('codex')) return;
   const trust = codexTrust(project.root, env);
   if (trust !== 'trusted') {
     finding(findings, 'codex-trust', 'codex', 'warning',
       `Codex does not trust this folder (${project.root})${trust ? `: trust_level is ${trust}` : ''}. Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.`,
-      'The owner opens Codex in this folder and trusts it when Codex asks.');
+      'The owner opens Codex in this folder and trusts it when Codex asks.', { host: 'codex' });
   }
   // Codex names a plugin hook "<plugin>@<marketplace>:<file>...:<event>:<i>:<j>"
   // (seen in ~/.codex/config.toml: "browser@openai-bundled:plugin.json#hooks[0]:stop:0:0").
   const hookKeys = codexHookTrustKeys(`toolkit@${MARKETPLACE}:`, env);
   if (!hookKeys.length) {
-    finding(findings, 'codex-hook-trust', 'codex', 'warning', 'The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).', 'The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.');
+    finding(findings, 'codex-hook-trust', 'codex', 'warning', 'The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).', 'The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.', { host: 'codex' });
   }
   if (project.config.salesforce && project.config.salesforce.enabled && fs.existsSync(path.join(project.root, '.codex', 'hooks.json'))) {
     const sfKeys = codexHookTrustKeys(path.join(project.root, '.codex', 'hooks.json'), env);
-    if (!sfKeys.length) finding(findings, 'codex-sf-hook-trust', 'codex', 'warning', 'The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them.', 'The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.');
+    if (!sfKeys.length) finding(findings, 'codex-sf-hook-trust', 'codex', 'warning', 'The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them.', 'The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.', { host: 'codex' });
+  }
+}
+
+/**
+ * Codex on this computer (Codex setup run, 2026-09-26): `codex plugin add`
+ * writes enabled = true for the plugin in ~/.codex/config.toml, which loads it
+ * in every Codex folder, claude-toolkit projects included. Toolkit V2 plugins
+ * stay off there and on only in a project whose own .codex/config.toml turns
+ * them on. Codex also runs its own copy of a plugin, filed under the version,
+ * so after a toolkit update it runs the older copy until the plugin is added
+ * again.
+ */
+function checkCodexMachine(project, env, findings, { pluginRoot }) {
+  const on = V2_PLUGINS.filter((name) => codexPluginOnEverywhere(name, env));
+  if (on.length) {
+    finding(findings, 'codex-plugins-everywhere', 'computer', 'warning',
+      `~/.codex/config.toml turns ${on.length === 1 ? 'this Toolkit V2 plugin' : 'these Toolkit V2 plugins'} on for every folder: ${on.map((n) => `${n}@${MARKETPLACE}`).join(', ')}. Codex then loads ${on.length === 1 ? 'it' : 'them'} in every project, including claude-toolkit projects. codex plugin add does this after every install or update.`,
+      'With the owner\'s yes, run toolkit machine-setup: it sets enabled = false for them in ~/.codex/config.toml. Each project set up by toolkit init turns them on for itself.');
+  }
+  if (!projectHosts(project.config).includes('codex')) return;
+  const running = pluginVersion(pluginRoot || DEFAULT_PLUGIN_ROOT);
+  const codex = installedPluginCopies('toolkit', env).filter((c) => c.host === 'codex' && c.version).map((c) => c.version);
+  if (running && codex.length && codex.every((v) => compareVersions(v, running) < 0)) {
+    const newest = [...codex].sort(compareVersions).pop();
+    finding(findings, 'codex-plugin-old', 'computer', 'warning',
+      `Codex runs toolkit ${newest}, which is older than this toolkit (${running}). Codex runs the copy it made at install time, so it misses the newer commands and fixes.`,
+      'With the owner\'s yes, run codex plugin add toolkit@toolkit-v2 (and the other Toolkit V2 plugins), then toolkit machine-setup to switch them off for every folder again.');
   }
 }
 
@@ -570,7 +661,46 @@ async function checkMemory(project, env, findings, { quick, fetch: fetchFn }) {
     }
   } else if (type === 'notion') {
     const mem = c.notion && c.notion.memory;
-    if (!mem || !mem.dataSourceId) finding(findings, 'notion-memory', 'memory', 'problem', 'The Notion Memory database is not set up for this project (.toolkit.json has no notion.memory ids).', 'Run toolkit notion ensure-project.');
+    if (!mem || !mem.dataSourceId) finding(findings, 'notion-memory', 'memory', 'problem', 'The Notion memory is not set up for this project: .toolkit.json has no notion.memory ids for its Memory page and Lore\'s databases on it.', 'Run toolkit notion ensure-project.');
+    else if (mem.layout !== 'lore') {
+      finding(findings, 'notion-memory-old-layout', 'memory', 'problem',
+        'This project\'s Notion memory is still in the older single Memory database. Toolkit V2 keeps Notion memory in Lore\'s layout: a Memory page on the project row with Lore\'s databases, so Lore\'s tools can read it.',
+        'Run toolkit notion ensure-project: it copies every record into the Lore layout, checks each one, and records the new ids.');
+    }
+  }
+  if (!quick && type !== 'builtin') await checkFocusShape(project, env, findings, { fetch: fetchFn });
+}
+
+/**
+ * Hindsight and Notion: the current focus has the model's "# Current focus"
+ * heading and a dated "Last updated:" line (built-in memory reports this in
+ * toolkit memory status). A backend that cannot be read in 5 seconds is
+ * skipped; its own checks report that.
+ */
+async function checkFocusShape(project, env, findings, { fetch: fetchFn }) {
+  const controller = new AbortController();
+  let timer;
+  try {
+    const { loadDriver, focusShapeProblems } = await import('../memory/contract.mjs');
+    const work = (async () => {
+      const driver = await loadDriver(project, { env, fetch: fetchFn, timeoutMs: 5000, signal: controller.signal });
+      return driver.focusGet();
+    })();
+    work.catch(() => {});
+    const deadline = new Promise((_, reject) => {
+      timer = setTimeout(() => {
+        controller.abort();
+        reject(new Error('no answer in 5 seconds'));
+      }, 5000);
+    });
+    const doc = await Promise.race([work, deadline]);
+    for (const p of focusShapeProblems(doc && doc.text)) {
+      finding(findings, 'memory-focus-shape', 'memory', 'warning', `The current focus ${p}`, 'Save it again with toolkit memory focus --text \'<text>\'; the command adds the heading and the "Last updated:" line when they are missing.');
+    }
+  } catch {
+    // Unreachable memory is reported by the checks above.
+  } finally {
+    clearTimeout(timer);
   }
 }
 
@@ -666,9 +796,11 @@ export async function runChecks(project, opts = {}) {
   checkInstructions(project, env, findings, { quick });
   checkCodex(project, env, findings);
   checkHookScripts(project, findings);
+  checkClaudeSettings(project, findings);
   checkBackup(project, findings, { now: opts.now || Date.now() });
   if (quick) return { findings, plan: null };
   checkComputer(project, env, findings);
+  checkCodexMachine(project, env, findings, { pluginRoot });
   checkPlugins(project, env, findings);
   const plan = checkScaffold(project, env, findings, { pluginRoot });
   checkSalesforce(project, findings, { pluginRoot });

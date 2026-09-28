@@ -5,6 +5,7 @@ import http from 'node:http';
 import path from 'node:path';
 import { FOCUS_SECTIONS } from '../../lib/memory/contract.mjs';
 import { repairLines } from '../../lib/commands/memory.mjs';
+import { today } from '../../lib/core/util.mjs';
 import { addWorktree, body, cleanup, makeProject, runToolkit, tempDir, PLUGIN } from './helpers.mjs';
 
 after(cleanup);
@@ -140,7 +141,8 @@ test('focus and glossary through the command', async () => {
   assert.equal(set.code, 0, set.stderr);
   assert.match(set.stdout, /Saved the current focus \(\d+ lines\)/);
   const got = await runToolkit(['memory', 'focus'], { cwd: root });
-  assert.equal(got.stdout, FOCUS);
+  // The command adds the model's "Last updated:" line when the text has none.
+  assert.equal(got.stdout, FOCUS.replace('# Current focus\n\n', `# Current focus\n\nLast updated: ${today()}, saved with toolkit memory focus\n\n`));
   const bad = await runToolkit(['memory', 'focus', '--set-file', '-'], { cwd: root, stdin: '# Focus\n\n## Recent decisions\n' });
   assert.equal(bad.code, 2);
   assert.match(bad.stderr, /needs these ## sections/);
@@ -216,7 +218,8 @@ test('an update keeps approved_by, other frontmatter fields, and last_verified u
   assert.equal(first.code, 0, first.stderr);
   assert.match(fs.readFileSync(file, 'utf8'), /^ticket: WI-007$/m);
 
-  const update = await runToolkit(saveArgs('kept-fields'), { cwd: root });
+  const version = async () => (await runToolkit(['memory', 'get', 'feedback_kept_fields', '--json'], { cwd: root })).json.version;
+  const update = await runToolkit(saveArgs('kept-fields', ['--expect', await version()]), { cwd: root });
   assert.equal(update.code, 0, update.stderr);
   const text = fs.readFileSync(file, 'utf8');
   assert.match(text, /^authorization: Approved by Mike on \d{4}-\d{2}-\d{2}$/m);
@@ -227,7 +230,7 @@ test('an update keeps approved_by, other frontmatter fields, and last_verified u
   // A record that needed review and is saved again has just been checked.
   await runToolkit(['memory', 'retire', 'feedback_kept_fields'], { cwd: root });
   await runToolkit(['memory', 'restore', 'feedback_kept_fields'], { cwd: root });
-  const reviewed = await runToolkit(saveArgs('kept-fields'), { cwd: root });
+  const reviewed = await runToolkit(saveArgs('kept-fields', ['--expect', await version()]), { cwd: root });
   assert.equal(reviewed.code, 0, reviewed.stderr);
   const after = fs.readFileSync(file, 'utf8');
   assert.match(after, /^status: current$/m);
@@ -269,7 +272,7 @@ test('rename moves the note and repairs links; status names a link to a note tha
 
   await runToolkit(['memory', 'save', '--type', 'project', '--name', 'dangling', '--description', 'Points at nothing.', '--body', '**Remember:** x\n\n**Related memories:** [gone](project_gone.md)'], { cwd: root });
   const st = await runToolkit(['memory', 'status'], { cwd: root });
-  assert.match(st.stdout, /^- \.memory\/project_dangling\.md links to project_gone\.md, which does not exist: \[gone\]\(project_gone\.md\)\. Correct the link, then save the note again with toolkit memory save \(toolkit memory get project_dangling gives its text\)\.$/m);
+  assert.match(st.stdout, /^- \.memory\/project_dangling\.md links to project_gone\.md, which does not exist: \[gone\]\(project_gone\.md\)\. Correct the link, then save the note again with toolkit memory save and --expect <version> \(toolkit memory get project_dangling --json gives its text and version\)\.$/m);
   const help = await runToolkit(['memory', 'help'], { cwd: root });
   assert.match(help.stdout, /toolkit memory rename <key> --to <new-key>/);
 });
@@ -344,7 +347,7 @@ test('find in recall mode lists each result with its status and snippet', async 
     const res = await runToolkit(['memory', 'find', 'accounts', 'contacts', '--all'], { cwd: root });
     assert.equal(res.code, 0, res.stderr);
     assert.equal(res.stdout, [
-      'The 2 memory records closest to "accounts contacts", best first. A close record is not always about the question:',
+      '2 memory records are about "accounts contacts" (Hindsight recall, best first):',
       '- project_accounts: About project_accounts.',
       '    # Accounts **Remember:** One org per account.',
       '- project_contacts [superseded by project_accounts]: About project_contacts.',

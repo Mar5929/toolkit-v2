@@ -22,7 +22,7 @@ export const TRACKER_WORDS = Object.freeze({
 export const MEMORY_WORDS = Object.freeze({
   builtin: 'built-in memory in .memory/',
   hindsight: 'the local Hindsight server',
-  notion: 'the Notion Memory database',
+  notion: 'Notion, in Lore\'s layout (a Memory page on the project row with Lore\'s databases)',
 });
 
 export const HOST_WORDS = Object.freeze({ 'claude-code': 'Claude Code', codex: 'Codex' });

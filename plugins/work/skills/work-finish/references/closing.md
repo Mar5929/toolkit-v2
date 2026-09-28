@@ -13,10 +13,13 @@ cancel" rules and its "Closing a work item" checklist, with V2 homes.
 
 ## The pull request (stage 12)
 
-- Push the item's branch (`claude/wi-<number>-<slug>`). Never force-push.
+- Push the item's branch (`claude/<prefix>-<number>-<slug>`, for example
+  `claude/wi-007-csv-export`). Never force-push.
 - Write the pull request title and description in plain words: what changed,
   why, how it was checked, and the item id. Run the description through the
-  `unslop` skill, because it is read by other people. No line crediting an AI.
+  `unslop` skill, because it is read by other people. No line crediting an AI,
+  in the pull request or in any commit on the branch (no `Co-Authored-By` line
+  naming an AI, no "Generated with" line).
 - Merge only through `merge-and-clean-up`, and only when one of these holds:
   - the owner said yes to this merge; or
   - `DECISIONS.md` records a standing merge instruction from the owner (the
@@ -54,21 +57,24 @@ cancel" rules and its "Closing a work item" checklist, with V2 homes.
 
 - The work item holds the proposed requirements while the work is in
   progress. After delivery and approval, copy the delivered rules into the
-  area's file in `requirements/`. Read `requirements/AGENTS.md` first. A new
-  area starts as a copy of `requirements/system-area-template/`, with the
-  folder and the file renamed for the business area, as the template's
-  fill-in guide says. Rules that apply across areas go in
-  `requirements/SYSTEM-DATA-MODEL.md`.
+  area's file in `requirements/`. Read `requirements/AGENTS.md` first. Each
+  business area has one folder holding one maintained file. A new area: copy
+  `requirements/system-area-template/` to a folder named for the area, then
+  rename the copied `AREA-TEMPLATE.md` for the area, for example
+  `requirements/billing/BILLING.md`. Fill it as its guide says and delete the
+  guide. Leave `system-area-template/` itself unchanged for the next area.
+  Rules that apply across areas go in `requirements/SYSTEM-DATA-MODEL.md`.
 - Copy only behavior that was delivered and approved. Behavior that was
   approved but not delivered is never written as shipped.
 - Link the work item id from the area file when it explains a requirement,
   and add a line to its Change history. Do not copy task history there.
 - When the change altered the verified structure of the current system, also
-  update the area's file in `system-guide/` (a new area starts from
-  `system-guide/AREA-TEMPLATE.md`), with the observed facts and the date
-  checked.
-- Save these files with the `publish-docs` skill (it commits and pushes the
-  documents from its own worktree).
+  update the area's file in `system-guide/` (a new area is a copy of
+  `system-guide/AREA-TEMPLATE.md` named for the area, for example
+  `system-guide/billing.md`), with the observed facts and the date checked.
+- Save these files with the `publish-docs` skill. It commits the documents
+  from its own worktree and pushes them; with no remote it commits them on the
+  default branch locally and says "No remote: committed locally".
 - Confirm the item links to the requirements, decisions, and code that
   actually exist. Do not create missing documents just to complete a
   checklist.
@@ -90,25 +96,32 @@ cancel" rules and its "Closing a work item" checklist, with V2 homes.
 
 - At most one `event` record through `memory-save`, only when the episode
   will matter later, for example a costly fix or a surprising platform limit.
-- Take the item off the current focus "Now" list and update its "Last
-  updated" line. The focus holds work item ids only, never their status.
+- Take the item off the current focus "Now" list, replace a "Next session
+  starts with" line that names it, and update the "Last updated" line. The
+  focus holds work item ids only, never their status. How:
+  `../../../references/conventions.md`, "The current focus".
 
 ## Done
 
 - Before the finish command: set each Roadmap phase the item completed to
-  Done, and bring Overview > Related items up to date (which sub-items
-  delivered what, and anything left to another item).
-- `toolkit work finish <id> --by <owner> --evidence "<what shows it works>"`.
+  Done, and in Overview bring Related items up to date (which sub-items
+  delivered what, and anything left to another item), set Current position to
+  "Done on <date>: <evidence>", and set Blockers to "None.". A Done item that
+  still names a deleted branch or a merge waiting for approval misleads the
+  next reader.
+- `toolkit work finish <id> --by <owner> --evidence '<what shows it works>'`.
   The evidence names the test result, the pull request or commit, or what the
   owner saw. The command sets Next action to "None. Finished." and Notes >
   Resume here to "Finished on <date>. Nothing to resume.", and prints a note
   when stages 12 to 14 left no record or a Roadmap phase is not Done.
 - Repository work: say whether the work reached the default branch.
+- End the reply with the one question for the owner, or the exact words that
+  continue ("Tell me the next thing to build.").
 - Leave the folder where it is. Moving or archiving happens only on the
   owner's request, through `work-organize`.
 
 ## Cancel
 
-- `toolkit work cancel <id> --reason "<owner's words>"`. The reason is his
+- `toolkit work cancel <id> --reason '<his words>'`. The reason is his
   words, not a summary.
 - Cancelling keeps the record. Nothing is deleted.

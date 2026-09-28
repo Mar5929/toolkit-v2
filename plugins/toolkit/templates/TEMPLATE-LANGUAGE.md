@@ -227,6 +227,16 @@ installed and never reported missing; its `installed` entry is dropped.
 
 The model's `.claude/settings.json` is the base. The toolkit adds only its
 own entries: `autoMemoryEnabled: false`, `worktree.baseRef: "head"`,
+`attribution: {"commit": "", "pr": "", "sessionUrl": false}` (no AI credit
+on commits and pull requests; the form the settings reference gives for files
+that older Claude Code versions also read), `skillListingBudgetFraction: 0.02`
+(twice the default, so every Toolkit V2 skill keeps its description in the
+skill list; Mike approved, 2026-09-27; measured 2026-09-28 with
+`claude -p /skill-doctor`, Claude Code 2.1.280, in a new V2 project on Mike's
+Mac with the 22 V2 skills and 52 skills listed in all: with the session's
+default model every description was kept at 0.01 and at 0.02; with a
+200,000-token model (`--model haiku`) 0.01 kept no description at all, and
+0.02 kept all 22 V2 descriptions while 21 other skills lost theirs),
 `permissions.allow: ["Bash(toolkit *)"]`, and `enabledPlugins` with every
 Toolkit V2 plugin on (`sf-architect-solutioning@toolkit-v2` only in a
 Salesforce project) and every `claude-toolkit` plugin off, including any other

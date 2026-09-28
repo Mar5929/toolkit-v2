@@ -6,7 +6,7 @@ description: 'Reports where the project''s work items stand: progress, blockers,
 # Work status
 
 Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
-Shared rules: the work plugin's `references/conventions.md`, two folders above this skill's folder (`../../references/conventions.md`). This skill only reads. It never changes an item, memory, or a file. Run each `toolkit` command alone, on its own line: in Codex a command joined by `&&`, `;`, or a pipe runs inside the sandbox and fails.
+Shared rules: the work plugin's `references/conventions.md`, two folders above this skill's folder (`../../references/conventions.md`). This skill only reads. It never changes an item, memory, or a file. Run each `toolkit` command alone, on its own line, in both hosts: never joined by `&&`, `;`, or a pipe (in Codex that runs it inside the sandbox, where it fails).
 
 ## Steps
 

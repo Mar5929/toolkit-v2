@@ -43,14 +43,39 @@ import { DEFAULT_URL, HindsightClient, assertBankId } from '../hindsight/client.
 import { PLAIN_ENGLISH, settingsProblems } from '../hindsight/bank.mjs';
 import {
   FOCUS_ID, GLOSSARY_ID, assertFilter, assertKey, assertValidFocus, assertValidGlossary, assertValidRecord,
-  approverFrom, changeRecordStatus, changeSupersedes, checkExpect, countRecords, focusLineCount, isValidKey, matchesFilter,
-  normalizeDocument, normalizeRecord, notFound, parseRecord, recordSummary, renameRecordText, repairLinks,
-  repairLinksWithDriver, repairResult, restoreNote, retireNote, serializeRecord, sortRecords, splitKey, storedStatus, stripFrontmatter, versionOf,
-  RECORD_TYPES,
+  approverFrom, changeRecordStatus, changeSupersedes, checkExpect, countRecords, focusLineCount, focusShapeProblems, isProposal,
+  isProposalAuthorization, isValidKey, matchesFilter, normalizeDocument, normalizeRecord, notFound, parseRecord, recordSummary,
+  renameRecordText, repairLinks, repairLinksWithDriver, repairResult, restoreNote, retireNote, searchTerms, serializeRecord,
+  sortRecords, splitKey, storedStatus, stripFrontmatter, versionOf, RECORD_TYPES,
 } from './contract.mjs';
 
 export const backend = 'hindsight';
 export const RECORD_TAG = 'kind:record';
+/** The extra tag of a saved proposal, so recall can leave proposals out. */
+export const PROPOSAL_TAG = 'proposal';
+/**
+ * How a recall hit is sorted (recallTier). Hindsight's score alone cannot say
+ * whether a record answers a question. Measured on the local server
+ * (2026-09-28, two runs, four and twelve questions): hits that shared words
+ * with the question scored 0.06 to 1.08; a hit about the question in other
+ * words scored 0.000017 to 0.0013; and a hit that was not about it scored
+ * 0.00001 to 0.00046 ("What language is the backend written in?" gave the
+ * plain-English replies record 0.00028, because of the word "language").
+ * So only word overlap or a very high score (RECALL_STRONG_SCORE) makes a hit
+ * an answer. A hit at or above RECALL_MIN_SCORE, or RECALL_GAP times the
+ * lowest score of the hits (and at least RECALL_GAP_FLOOR), "may be about it":
+ * it is listed to be read before any answer. The rest are only "closest".
+ */
+export const RECALL_STRONG_SCORE = 0.001;
+export const RECALL_MIN_SCORE = 0.0001;
+export const RECALL_GAP = 10;
+export const RECALL_GAP_FLOOR = 0.00005;
+/**
+ * Question words too common to show that a record is about the question.
+ * "Do we use TypeScript?" shares only "use" with "Replies use plain English".
+ */
+const RECALL_WEAK_WORDS = new Set(('use uses used using can could should would may might must shall need needs '
+  + 'want wants get gets got make makes there their they them then than not no any all some just also if my me us here now like').split(' '));
 export const META_NAME = 'hindsight-meta.json';
 
 /**
@@ -80,9 +105,42 @@ function laterTime(a, b) {
   return new Date(tb).toISOString();
 }
 
-/** Tags for a record. */
+/** Tags for a record. A saved proposal also gets PROPOSAL_TAG. */
 export function recordTags(record) {
-  return [RECORD_TAG, `type:${record.type}`, `status:${record.status}`];
+  const tags = [RECORD_TAG, `type:${record.type}`, `status:${record.status}`];
+  if (isProposal(record)) tags.push(PROPOSAL_TAG);
+  return tags;
+}
+
+/**
+ * How sure recall is that a hit is about the question:
+ * - 'answer': its key, description, or text holds at least half of the
+ *   question's search words (leaving out RECALL_WEAK_WORDS), or its score is
+ *   at least RECALL_STRONG_SCORE.
+ * - 'maybe': its score is at least RECALL_MIN_SCORE, or at least RECALL_GAP
+ *   times `noise` (the lowest score of the hits) and at least RECALL_GAP_FLOOR.
+ *   It may be about the question; read it before answering from it.
+ * - 'none': not known to be about it. Recall always returns the closest
+ *   records, even when none is about the question.
+ */
+export function recallTier(query, hit, { noise = null } = {}) {
+  const score = typeof hit.score === 'number' ? hit.score : null;
+  if (score !== null && score >= RECALL_STRONG_SCORE) return 'answer';
+  const terms = searchTerms(query).filter((t) => !RECALL_WEAK_WORDS.has(t));
+  if (terms.length) {
+    const text = `${hit.key} ${hit.description || ''} ${hit.text || ''}`.toLowerCase().replace(/[_-]/g, ' ');
+    const found = terms.filter((t) => new RegExp(`\\b${t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`).test(text)).length;
+    if (found >= Math.ceil(terms.length / 2)) return 'answer';
+  }
+  if (score === null) return 'none';
+  if (score >= RECALL_MIN_SCORE) return 'maybe';
+  if (typeof noise === 'number' && noise > 0 && score >= RECALL_GAP_FLOOR && score >= RECALL_GAP * noise) return 'maybe';
+  return 'none';
+}
+
+/** True when recallTier() counts the hit as an answer to the question. */
+export function recallMatches(query, hit, opts = {}) {
+  return recallTier(query, hit, opts) === 'answer';
 }
 
 /** Metadata for a record: every field as a string. saved is the date of this write. */
@@ -121,6 +179,7 @@ function summaryFromMetadata(id, meta) {
     saved: m.saved || '',
     last_verified: m.last_verified || '',
     approved_by: none(m.approved_by) ?? approverFrom(m.authorization),
+    proposal: m.status === 'needs-review' && isProposalAuthorization(m.authorization),
   };
 }
 
@@ -305,34 +364,53 @@ export class HindsightDriver {
     return sortRecords(out);
   }
 
-  tagGroups({ type, all }) {
+  tagGroups({ type, all, proposals = false }) {
     const groups = [{ tags: [RECORD_TAG], match: 'any_strict' }];
     if (!all) groups.push({ not: { tags: ['status:retired'], match: 'any_strict' } });
+    if (!all && !proposals) groups.push({ not: { tags: [PROPOSAL_TAG], match: 'any_strict' } });
     if (type) groups.push({ tags: [`type:${type}`], match: 'any_strict' });
     return groups;
   }
 
-  async find(query, { reflect = false, limit = 10, type, all = false } = {}) {
+  /**
+   * Recall, sorted by recallTier(). `results` holds only the records known to
+   * be about the question; `maybe` holds up to three records that may be
+   * about it and must be read before any answer; `closest` holds up to three
+   * other records recall ranked closest, which are not known to be about it.
+   * So a question no record answers gives no results instead of a guess.
+   * Saved proposals are left out unless `proposals` or `all` is true.
+   */
+  async find(query, { reflect = false, limit = 10, type, all = false, proposals = false } = {}) {
     const q = String(query ?? '').trim();
     if (!q) throw new ToolkitError(EXIT.INVALID, 'Give one or more words to search for.');
     assertFilter({ type });
     await this.ensureReady();
-    const tag_groups = this.tagGroups({ type, all });
+    const tag_groups = this.tagGroups({ type, all, proposals });
     const res = await this.client.recall({ query: q, budget: 'mid', max_tokens: 2048, tag_groups });
     const max = Number.isInteger(limit) && limit > 0 ? limit : 10;
     const seen = new Set();
     const results = [];
-    for (const r of Array.isArray(res.results) ? res.results : []) {
+    const maybe = [];
+    const closest = [];
+    const raw = Array.isArray(res.results) ? res.results : [];
+    // The lowest score of the hits: what a record that is not about the question scores here.
+    const scores = raw.map((r) => (r.scores && typeof r.scores.final === 'number' ? r.scores.final : null)).filter((x) => typeof x === 'number');
+    const noise = scores.length >= 2 ? Math.min(...scores) : null;
+    for (const r of raw) {
       const id = r.document_id;
       if (!id || seen.has(id) || !isValidKey(id)) continue;
       seen.add(id);
       const s = summaryFromMetadata(id, r.metadata);
       const snippet = stripFrontmatter(String(r.text || '')).replace(/\s+/g, ' ').trim().slice(0, 160);
       const score = r.scores && typeof r.scores.final === 'number' ? r.scores.final : null;
-      results.push({ key: id, name: s.name, type: s.type, description: s.description, status: s.status, stored_status: s.stored_status, superseded_by: s.superseded_by, score, snippet });
-      if (results.length >= max) break;
+      const hit = { key: id, name: s.name, type: s.type, description: s.description, status: s.status, stored_status: s.stored_status, superseded_by: s.superseded_by, proposal: s.proposal, score, snippet };
+      const tier = recallTier(q, { ...hit, text: stripFrontmatter(String(r.text || '')) }, { noise });
+      if (tier === 'answer') {
+        if (results.length < max) results.push(hit);
+      } else if (tier === 'maybe' && maybe.length < 3) maybe.push(hit);
+      else if (closest.length < 3) closest.push(hit);
     }
-    const out = { query: q, mode: 'recall', results };
+    const out = { query: q, mode: 'recall', results, maybe, closest };
     if (reflect) {
       const started = Date.now();
       // The bank's reflect mission says the same; this is the second guard.
@@ -528,13 +606,20 @@ export class HindsightDriver {
     }
     this.ready = true;
     const problems = settingsProblems(cfg).map((p) => ({ where: `bank ${this.bank}`, problem: p }));
+    const settingCount = problems.length;
     const docs = await this.allRecordDocs();
     const summaries = docs.filter((d) => isValidKey(d.id)).map((d) => summaryFromMetadata(d.id, d.document_metadata));
     const counts = countRecords(summaries);
+    try {
+      const focus = await this.readDoc(FOCUS_ID);
+      for (const p of focusShapeProblems(focus ? focus.original_text : '')) problems.push({ where: 'the current focus', problem: `${p} Save it again with toolkit memory focus --text '<text>'; the command adds what is missing.` });
+    } catch (err) {
+      problems.push({ where: 'the current focus', problem: `cannot be read: ${err.message}` });
+    }
     // The bank row is current at once; GET .../stats can lag a minute or more behind.
     const lastSave = laterTime(row.last_write_at, meta.lastSave);
     const inUse = counts.total - counts.retired;
-    const detail = `Hindsight bank ${this.bank} at ${this.client.url}: ${inUse} record${inUse === 1 ? '' : 's'} in use, ${counts.retired} retired${problems.length ? `, ${problems.length} setting${problems.length === 1 ? '' : 's'} to fix (run toolkit hindsight ensure-bank)` : ''}.`;
+    const detail = `Hindsight bank ${this.bank} at ${this.client.url}: ${inUse} record${inUse === 1 ? '' : 's'} in use, ${counts.retired} retired${settingCount ? `, ${settingCount} setting${settingCount === 1 ? '' : 's'} to fix (run toolkit hindsight ensure-bank)` : ''}${problems.length > settingCount ? `, ${problems.length - settingCount} other problem${problems.length - settingCount === 1 ? '' : 's'} to look at` : ''}.`;
     return { ...base, lastSave, counts, healthy: true, detail, problems };
   }
 }

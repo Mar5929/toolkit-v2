@@ -17,7 +17,7 @@ paths:
 - Saving a document does not approve its requirements or its build.
 - Stage only this save's files, by name, in its worktree. Read the full staged diff.
 - Never force-push or change another session's checkout. Resolve a remote advance in this save's worktree.
-- An unpushed commit is unfinished. Verify the complete save reached the remote.
+- An unpushed commit is unfinished. Verify the complete save reached the remote. In a repository with no remote (`git remote` prints nothing), the save is finished when its commit is on the local default branch.
 - Steps, checks, and recovery: the `publish-docs` skill.
 
 - `.memory/` and `.work-items/` are local and Git-ignored. Their saves do not use this publication route.

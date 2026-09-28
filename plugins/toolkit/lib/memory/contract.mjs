@@ -8,8 +8,8 @@
 // Driver modules:
 //   builtin   -> lib/memory/builtin.mjs     (.memory/ folder in the main checkout)
 //   hindsight -> lib/memory/hindsight.mjs   (one bank on the local Hindsight server)
-//   notion    -> lib/memory/notion.mjs      (the project's Notion Memory database;
-//                                            written by the Notion builder)
+//   notion    -> lib/memory/notion.mjs      (the Memories database on the project's
+//                                            Notion Memory page, in Lore's layout)
 //
 // Every driver module exports:
 //   export const backend = '<builtin|hindsight|notion>';
@@ -134,6 +134,8 @@ import { slugify, today as localToday } from '../core/util.mjs';
  * @property {string} query
  * @property {string} mode          'keyword' (built-in), 'recall' (Hindsight), or the driver's own word
  * @property {FindHit[]} results    best first; retired records only when `all` is true
+ * @property {FindHit[]} [maybe]    recall only: records that may be about the question; read before answering
+ * @property {FindHit[]} [closest]  recall only: other records ranked closest; not known to be about it
  * @property {string} [answer]      with { reflect: true }: the synthesized answer
  * @property {number} [answerMs]    how long the synthesized answer took
  *
@@ -162,10 +164,14 @@ import { slugify, today as localToday } from '../core/util.mjs';
  *   A stale expect throws ToolkitError INVALID and changes nothing. Reads the record
  *   back and throws ERROR "saved but not verified" when it differs.
  * @property {(key: string) => Promise<StoredRecord|null>} get
- * @property {(query: string, opts?: { reflect?: boolean, limit?: number, type?: string, all?: boolean }) =>
+ * @property {(query: string, opts?: { reflect?: boolean, limit?: number, type?: string, all?: boolean, proposals?: boolean }) =>
  *   Promise<FindResult>} find
  *   reflect: true asks the backend for a synthesized answer; a backend that cannot
- *   throws ToolkitError UNSUPPORTED (exit 3).
+ *   throws ToolkitError UNSUPPORTED (exit 3). Saved proposals (isProposal) are
+ *   left out unless proposals or all is true; keyword backends count them in
+ *   proposalsLeftOut. Hindsight also gives `maybe`: records that may be about the
+ *   question and must be read before any answer; and `closest`: records recall
+ *   ranked closest that are not known to be about it (never presented as an answer).
  * @property {(filter?: { type?: string, status?: string }) => Promise<RecordSummary[]>} list
  *   status undefined lists every record that is not retired; 'all' lists every record.
  *   Sorted by RECORD_TYPES order, then key.
@@ -398,16 +404,97 @@ export function titleFromName(name) {
 
 const LABEL_LINE_RE = /^\s*\*\*([^*\n]+?):\*\*/gm;
 
+/** The model's label for a word an agent may have written: 'why' -> 'Why', 'related' -> 'Related memories'. */
+function canonicalLabel(word) {
+  const w = String(word ?? '').trim().replace(/\s+/g, ' ').toLowerCase();
+  if (w === 'related') return 'Related memories';
+  return TOPIC_LABELS.find((l) => l.toLowerCase() === w) || null;
+}
+
+const LABEL_WORDS = '(Remember|Why|How to apply|Evidence and limits|Related memories|Related|Authoritative records)';
+const HEADING_LABEL_RE = new RegExp(`^#{2,6}\\s+\\**${LABEL_WORDS}\\**\\s*:?\\s*$`, 'i');
+const PLAIN_LABEL_RE = new RegExp(`^${LABEL_WORDS}:[ \\t]*`, 'i');
+const OUTSIDE_COLON_RE = new RegExp(`^\\*\\*${LABEL_WORDS}\\*\\*:[ \\t]*`, 'i');
+const BOLD_LABEL_RE = new RegExp(`^\\*\\*${LABEL_WORDS}:\\*\\*[ \\t]*`, 'i');
+
+/**
+ * Write the six topic labels the way the model's topic template does
+ * ("**Why:** ..."), whatever form an agent used: a heading ("## Why"), a plain
+ * "Why:" at the start of a line, "**Why**:", or a lower-case word. A label
+ * word repeated after the label ("**Remember:** Remember: ...") is written
+ * once. Lines inside fenced code blocks are left as they are.
+ * (Sample runs a and claude-a, 2026-09-27.)
+ */
+export function modelLabels(text) {
+  const lines = String(text ?? '').split('\n');
+  const out = [];
+  let fence = null;
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const f = /^\s*(```|~~~)/.exec(line);
+    if (fence) {
+      out.push(line);
+      if (f && f[1] === fence) fence = null;
+      continue;
+    }
+    if (f) {
+      fence = f[1];
+      out.push(line);
+      continue;
+    }
+    const heading = HEADING_LABEL_RE.exec(line);
+    if (heading) {
+      const label = canonicalLabel(heading[1]);
+      // The label goes in front of the paragraph under the heading, as the template has it.
+      let j = i + 1;
+      while (j < lines.length && !lines[j].trim()) j++;
+      const next = j < lines.length ? lines[j] : '';
+      const nextLabel = BOLD_LABEL_RE.exec(next) || PLAIN_LABEL_RE.exec(next) || OUTSIDE_COLON_RE.exec(next);
+      // "## Remember" over "Remember: ..." is one label.
+      if (nextLabel && canonicalLabel(nextLabel[1]) === label) {
+        i = j - 1;
+        continue;
+      }
+      const own =!next.trim() || /^\s*(#{1,6}\s|[-*+]\s|\d+[.)]\s|\||```|~~~|>|<!--)/.test(next) || BOLD_LABEL_RE.test(next) || PLAIN_LABEL_RE.test(next) || HEADING_LABEL_RE.test(next);
+      if (own) {
+        out.push(`**${label}:**`);
+        continue;
+      }
+      out.push(`**${label}:** ${stripRepeatedLabel(next.trim(), label)}`);
+      i = j;
+      continue;
+    }
+    let m = OUTSIDE_COLON_RE.exec(line) || BOLD_LABEL_RE.exec(line) || PLAIN_LABEL_RE.exec(line);
+    if (m) {
+      const label = canonicalLabel(m[1]);
+      const rest = stripRepeatedLabel(line.slice(m[0].length), label);
+      out.push(rest ? `**${label}:** ${rest}` : `**${label}:**`);
+      continue;
+    }
+    out.push(line);
+  }
+  return out.join('\n');
+}
+
+/** "Remember: text" after a Remember label -> "text". */
+function stripRepeatedLabel(rest, label) {
+  const m = PLAIN_LABEL_RE.exec(rest) || BOLD_LABEL_RE.exec(rest) || OUTSIDE_COLON_RE.exec(rest);
+  if (m && canonicalLabel(m[1]) === label) return rest.slice(m[0].length).trim();
+  return rest.trim();
+}
+
 /**
  * Put a body in the model's topic format without changing what it says:
- * a "# <Title>" first line when there is no level-1 heading, "**Remember:**"
- * in front of the first paragraph when the body has no Remember label and that
- * paragraph has no label of its own,
- * and the older "**Related:**" label written "**Related memories:**".
+ * a "# <Title>" first line when there is no level-1 heading, the six labels
+ * written in the template's bold form (modelLabels), "**Remember:**" in front
+ * of the first paragraph when the body has no Remember label and that
+ * paragraph has no label of its own, and the older "**Related:**" label
+ * written "**Related memories:**".
  */
 export function topicBody(body, { name } = {}) {
   let text = normalizeBody(body);
   if (!text) return text;
+  text = normalizeBody(modelLabels(text));
   text = text.replace(/^(\s*)\*\*Related:\*\*/gm, '$1**Related memories:**');
   const lines = text.split('\n');
   const h1 = lines.findIndex((l) => /^# \S/.test(l));
@@ -746,13 +833,13 @@ export function changeRecordStatus(text, { status, supersededBy = null, note = '
   } catch (err) {
     throw new ToolkitError(EXIT.INVALID, `The memory record ${key} has frontmatter that cannot be read, so its status was not changed: ${err.message}`, {
       key,
-      fix: 'Save the record again with toolkit memory save.',
+      fix: `Read it with toolkit memory get ${key} --json, correct the text, and save it again with toolkit memory save and --expect <version> (the version field of that read).`,
     });
   }
   if (!parsed.hasFrontmatter) {
     throw new ToolkitError(EXIT.INVALID, `The memory record ${key} has no frontmatter, so its status was not changed.`, {
       key,
-      fix: 'Save the record again with toolkit memory save.',
+      fix: `Read it with toolkit memory get ${key} --json, correct the text, and save it again with toolkit memory save and --expect <version> (the version field of that read).`,
     });
   }
   const word = status === 'retired' ? (supersededBy ? 'superseded' : 'archived') : status;
@@ -819,7 +906,11 @@ export function renameRecordText(text, toKey) {
   return stringifyFrontmatter(data, parsed.body);
 }
 
-/** A record without its body. stored_status is the status word as stored (superseded, archived, ...). */
+/**
+ * A record without its body. stored_status is the status word as stored
+ * (superseded, archived, ...); proposal is true for a saved proposal the owner
+ * has not answered (see isProposal).
+ */
 export function recordSummary(record) {
   return {
     key: record.key,
@@ -833,7 +924,38 @@ export function recordSummary(record) {
     saved: record.saved,
     last_verified: record.last_verified,
     approved_by: record.approved_by ?? null,
+    proposal: isProposal(record),
   };
+}
+
+// ---------------------------------------------------------------- saved proposals
+
+/**
+ * A saved proposal (Mike, 2026-09-27, "Memory additions" 1): a record the
+ * agent proposed ("Save to memory: ...?") that the owner has not answered.
+ * It is stored with the model's needs-review status (Lore: proposed) and an
+ * authorization that starts with "Proposed by". The agent never uses it as a
+ * fact: find leaves it out unless asked, the briefing lists it as waiting on
+ * the owner, and `toolkit memory approve` or `reject` records his answer.
+ * A record that needs review for another reason (restored after a retire)
+ * is not a proposal.
+ */
+export const PROPOSAL_PREFIX = 'Proposed by';
+
+/** The authorization written for a proposal: "Proposed by the agent on 2026-09-28; the owner has not answered". */
+export function proposalText(day) {
+  return `${PROPOSAL_PREFIX} the agent on ${day}; the owner has not answered`;
+}
+
+/** True when an authorization text marks a proposal. */
+export function isProposalAuthorization(authorization) {
+  return /^proposed by\b/i.test(oneLine(authorization));
+}
+
+/** True for a saved proposal: status needs-review and an authorization that starts with "Proposed by". */
+export function isProposal(record) {
+  const r = record || {};
+  return r.status === 'needs-review' && isProposalAuthorization(r.authorization);
 }
 
 // ---------------------------------------------------------------- links between notes (Obsidian style)
@@ -1332,6 +1454,12 @@ export function assertValidFocus(markdown) {
  * template ("None." counts as a line). Sections are in the order of the text; each `lines` keeps its
  * bullets as written.
  */
+/**
+ * A "Last updated:" line of the focus: plain as in the model, or bold
+ * ("**Last updated:** ..." or "**Last updated**: ..."). Group 1 is its text.
+ */
+export const LAST_UPDATED_RE = /^\s*(?:\*\*|__)?(?:Last updated|Updated)(?::(?:\*\*|__)?|(?:\*\*|__)?:)\s*(.*?)\s*$/i;
+
 export function parseFocus(markdown) {
   const text = String(markdown ?? '').replace(/<!--[\s\S]*?-->/g, '');
   const sections = [];
@@ -1346,7 +1474,7 @@ export function parseFocus(markdown) {
       continue;
     }
     if (/^#\s/.test(line)) continue;
-    const upd = /^(?:Last updated|Updated):\s*(.*)$/i.exec(line);
+    const upd = LAST_UPDATED_RE.exec(line);
     if (upd && !cur) {
       lastUpdated = isPlaceholder(upd[1]) ? '' : upd[1].trim().replace(/^`(.*)`$/, '$1');
       continue;
@@ -1358,6 +1486,79 @@ export function parseFocus(markdown) {
   }
   const filled = sections.some((s) => s.lines.length > 0);
   return { lastUpdated, sections, filled };
+}
+
+/** The first line of the model's CURRENT_FOCUS.md. */
+export const FOCUS_HEADING = '# Current focus';
+
+/**
+ * The current focus in the model's shape before it is saved: its "# Current
+ * focus" heading is kept, or added when the text has no level-1 heading. Its
+ * "Last updated:" line is added under the heading when the text has none (or
+ * only the template prompt), and set to today when its date is older than
+ * today or missing: a save through the command is an update made today, so an
+ * agent that copies last week's focus forward does not keep last week's date.
+ * A bold "**Last updated:**" line is accepted and written in the model's plain
+ * form. Sample runs b and claude-a saved a focus without the heading and the
+ * line, and every later session copied it.
+ * Returns { text, added: ['heading'|'last updated'|'date'] } ('date': an
+ * older date was changed to today).
+ */
+export function completeFocus(markdown, { today = localToday(), by = 'toolkit memory focus' } = {}) {
+  let text = String(markdown ?? '').replace(/\r\n/g, '\n');
+  if (!text.trim()) return { text, added: [] };
+  const added = [];
+  let lines = text.replace(/^\s*\n/, '').split('\n');
+  const firstSection = () => {
+    const i = lines.findIndex((l) => /^##\s/.test(l));
+    return i === -1 ? lines.length : i;
+  };
+  if (!lines.slice(0, firstSection()).some((l) => /^#\s+\S/.test(l))) {
+    lines = [FOCUS_HEADING, '', ...lines];
+    added.push('heading');
+  }
+  const top = firstSection();
+  const updIdx = lines.slice(0, top).findIndex((l) => LAST_UPDATED_RE.test(l));
+  const stamp = `Last updated: ${today}, saved with ${by}`;
+  if (updIdx === -1) {
+    const h1 = lines.findIndex((l) => /^#\s+\S/.test(l));
+    // Under the heading, before any fill-in guide comment or section.
+    lines.splice(h1 + 1, 0, '', stamp, '');
+    added.push('last updated');
+  } else {
+    const raw = LAST_UPDATED_RE.exec(lines[updIdx])[1];
+    const value = raw.replace(/^`(.*)`$/, '$1').trim();
+    const date = /^(\d{4}-\d{2}-\d{2})\b/.exec(value);
+    if (!value || isPlaceholder(raw) || isPlaceholder(value)) {
+      lines[updIdx] = stamp;
+      added.push('last updated');
+    } else if (!date || date[1] < today) {
+      lines[updIdx] = stamp;
+      added.push('date');
+    } else {
+      lines[updIdx] = `Last updated: ${value}`;
+    }
+  }
+  text = lines.join('\n').replace(/\n{3,}/g, '\n\n');
+  return { text, added };
+}
+
+/**
+ * What a saved current focus lacks of the model's shape: its "# Current
+ * focus" heading, and (once it is filled in) a dated "Last updated:" line.
+ * [] when it has both, when it is empty, or when it is still the template.
+ */
+export function focusShapeProblems(markdown) {
+  const text = String(markdown ?? '');
+  if (!text.trim()) return [];
+  const problems = [];
+  const lines = text.replace(/<!--[\s\S]*?-->/g, '').split(/\r?\n/);
+  const top = lines.findIndex((l) => /^##\s/.test(l));
+  const head = top === -1 ? lines : lines.slice(0, top);
+  if (!head.some((l) => /^#\s+\S/.test(l))) problems.push(`has no "${FOCUS_HEADING}" heading at the top.`);
+  const parsed = parseFocus(text);
+  if (parsed.filled && !parsed.lastUpdated) problems.push('has no "Last updated:" line with a date, so the briefing cannot say how old it is.');
+  return problems;
 }
 
 /** Rules for the glossary: not empty. */

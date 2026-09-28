@@ -81,20 +81,26 @@ supersedes: none
 | `name` | The key, the same as the file name without `.md` | `--type` and `--name` |
 | `description` | One line a future session would search for | `--description` |
 | `metadata.type` | `user`, `feedback`, `project`, `reference`, or `event` | `--type` |
-| `status` | `current` or `needs-review` for a live record. A retired record is stored as `superseded` (another record replaced it) or `archived` (no replacement). The value `template` marks only the seed template. | `--status`, `retire`, `restore` |
+| `status` | `current` or `needs-review` for a live record. `needs-review` also marks a proposal: a record saved with `--proposal` because the owner did not answer "Save to memory?" (its `authorization` says "Proposed by the agent on <date>"). The agent does not rely on a `needs-review` record until it is checked or approved. A retired record is stored as `superseded` (another record replaced it) or `archived` (no replacement). The value `template` marks only the seed template. | `--status`, `--proposal`, `retire`, `restore`, `approve` |
 | `source` | The person, conversation, or document the fact came from, with an absolute date | the `--source` flag |
 | `last_verified` | The date the fact was last checked, or `unknown` | the `--last-verified` flag |
 | `authorization` | What authorized the save: "Approved by <name> on <date>" for the owner's request or his yes, or "Trusted grant" for a routine save in trusted mode | `--approved-by` writes the first; a save with no approver in trusted mode writes the second; the `--authorization` flag sets other words |
 | `supersedes` | The key this record replaces, or `none` | `--supersedes` |
 
 Any other frontmatter field, written by a host, an import, or the CLI itself,
-is kept when the record is saved again. Saving the same type and slug again
-updates that record and keeps fields that are not given again.
+is kept when the record is saved again. Saving the same type and slug again,
+with `--expect <version>` (the `version` field of
+`toolkit memory get <key> --json`; the first 12 characters are enough),
+updates that record and keeps fields that are not given again. The text form
+of `toolkit memory get` shows no version.
 
 ## Body
 
-The body file for `toolkit memory save --body-file` holds the Markdown body
-only, without frontmatter. It uses the model template's labels, in this order:
+The body for `toolkit memory save` (`--body-file -` on standard input in
+Claude Code, `--body '<text>'` or a file in Codex) holds the Markdown body
+only, without frontmatter. It uses the model template's labels, in bold, each
+starting its own paragraph, in this order. Never write them as `## Remember`
+headings:
 
 ```markdown
 # No force-push
@@ -153,9 +159,43 @@ Read that report. A link must never point at a former location.
 `toolkit memory status` lists any link whose target does not exist; correct
 that note with `toolkit memory save`.
 
+## Proposals
+
+An unanswered "Save to memory?" is not dropped. `memory-save` saves it with
+`--proposal` and no approver: status `needs-review`, authorization "Proposed
+by the agent on <date>". `toolkit work decisions` and the session briefing
+list it among the decisions for the owner, and `work-decide` asks him:
+
+- yes: `toolkit memory approve <key> --by <owner>` makes it `current`, with
+  him as the approver;
+- no: `toolkit memory reject <key>` deletes the proposal. A rejection stands:
+  never propose the same fact again under other words.
+
+Until then it is not a fact. `toolkit memory find` leaves it out unless
+`--proposals` is given, and `memory-find` says it is unapproved. A proposal
+never replaces a record the owner approved.
+
+## Duplicates
+
+`toolkit memory save` checks for a record with the same key, or with a very
+similar description or text. When it finds one or more, it saves nothing,
+exits with code 2, and lists them by key with the reason. Read each one
+(`toolkit memory get <key> --json`), then:
+
+- the same fact: save that record's type and slug again with
+  `--expect <version>`, where the version is the `version` field of that
+  read (the first 12 characters are enough), which updates it. When the
+  listed record has the same key, the command's fix line already gives the
+  version;
+- a newer fact that replaces it: save with `--supersedes <old-key>`;
+- a different fact: say why in one line, then save again with
+  `--allow-similar`.
+
 ## Replacing, retiring, and merging
 
-- Correct or merge in place where possible: save the existing key again.
+- Correct or merge in place where possible: save the existing key again,
+  with `--expect <version>` from `toolkit memory get <key> --json`. Without
+  `--expect`, a save of an existing key exits with code 2 and saves nothing.
 - A better name for the same record, or a file name whose prefix does not
   match `metadata.type`: rename it. The new key sets the new type and name.
   The record keeps its content; links to it and `supersedes` entries that name
@@ -204,9 +244,14 @@ hand; the hooks refuse it. Open a topic before relying on its index line.
 
 ## Current focus
 
-`toolkit memory focus` prints it; `--set-file` replaces it. The model's
-format: a title, a "Last updated" line, and four sections in this order,
-under 50 lines in total:
+`toolkit memory focus` prints it; `--set-file` replaces it (standard input,
+`--set-file -`, in Claude Code; `--text '<text>'` or a `mktemp -d` file in
+Codex). Read it with `--json` for its version and save with
+`--expect <version>`, so another session's change is never lost. The model's
+format: the `# Current focus` title line, a "Last updated" line, and four
+sections in this order, under 50 lines in total. Always write the title and
+the "Last updated" line (the command adds them with today's date when they
+are missing, but write them yourself so the source and author are right):
 
 ```markdown
 # Current focus
@@ -237,7 +282,9 @@ Last updated: 2026-09-26, handoff, agent
   never their status. The tracker holds the status.
 - Waiting on the owner: a decision or action only the owner can take that
   has no work item, who needs it, and when to check again. Work items that
-  wait on him are listed by `toolkit work decisions`.
+  wait on him are listed by `toolkit work decisions`. A setup step (trust the
+  hooks in Codex, sign in to Notion) stays only while `toolkit doctor` still
+  reports it; drop it at the next focus save after doctor stops reporting it.
 - Untracked to-dos: owner requests with no work item. When one becomes a work
   item, replace it with the id under Now.
 - Next session starts with: where to resume, what to read, and the next
@@ -270,6 +317,8 @@ invent a definition.
 - Hindsight: the local server at `127.0.0.1:8888`, one bank per project.
   `toolkit memory find <query> --reflect` asks the local model for a combined
   answer.
-- Notion: the project's Memory database; focus and glossary are pages under
-  the project page.
+- Notion: the project's Memory page, in the layout of Lore (Notion's
+  open-source AI memory): the records are rows of the Memories database on
+  that page, beside Lore's Projects, Topics, Entities, and Facts databases.
+  The current focus and the glossary are pages under the project page.
 - Every backend uses the same commands. Only the CLI writes memory.

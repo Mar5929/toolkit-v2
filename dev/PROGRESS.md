@@ -114,11 +114,31 @@ Read `dev/GOAL.md` first. This file says where the work stands.
 - Running: final fix round, workflow `wf_bf3d2b80-30f` (model branch, work
   and Notion tracker, memory and runtime, skills), each verified, then
   integration and `dev/test-runs/open-bugs-status.md`.
+- Final fix round integrated (2026-09-28, not committed yet): all four
+  areas' handoffs done; 77 findings sorted in
+  `dev/test-runs/open-bugs-status.md` (67 fixed, 5 not a bug, 5 left for
+  Mike). Versions: toolkit 0.2.4, work 0.2.6, memory 0.2.4, session-skills
+  0.2.4, git-workflows 0.2.4, marketplace metadata 0.2.6. The lead commits,
+  including `git add -f plugins/toolkit/scaffold/model/.memory/AGENTS.md`.
+- Waiting on Mike: `ntn login`, then two live Notion checks (does
+  `PATCH /v1/views/{id}` merge or replace `configuration`; does a data source
+  query by Key return archived project rows) before ensure-root runs on his
+  page; the "Needs your yes" list in `dev/model-changes.md`; trusting the V2
+  hooks in Codex `/hooks` (then check doctor's hook-trust key).
 - Next after it: one confirmation round of the sample runs (4 Codex + Claude
   Code), a final independent review, then the report with the 11-item
-  checklist.
+  checklist. Watch in the Codex round: whether the `toolkit` allow rule
+  matches a command with an escaped apostrophe (`'Owner'\''s words'`).
 
 ## Pending fixes (collect; fix after the sample runs)
+
+Status 2026-09-28: every item below is fixed in the working tree by the final
+fix round (`dev/test-runs/open-bugs-status.md` names the file and test for
+each). The `replace_content` item is handled too: a targeted edit comes
+first and a whole-page replace is the last resort. The `caffeinate` line is a
+note about this Mac, not a fix. Two Notion checks need Mike's `ntn login`
+first (see "In progress").
+
 
 - (claude-a) AI credit: add `"attribution": {"commit": "", "pr": ""}` to the
   toolkit settings fragment; pre-tool hook denies commits or PRs with AI

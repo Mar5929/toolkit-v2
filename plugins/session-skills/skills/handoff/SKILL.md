@@ -15,10 +15,10 @@ start from. Do these steps in this order. Details for each step are below.
    Resume here. Set its true stage and `waiting_on`, add one history note, then
    validate it and read it back.
 3. **Save what must outlast the session.** Review the current focus and the
-   memory criteria, as the project's `session-handoff.md` rule asks. Anything
-   the owner asked to keep that is not saved yet: open `memory-save`, which
-   saves only authorized lasting memory. Then replace the current focus
-   section "Next session starts with" with one entry for this handoff.
+   memory criteria (the project's `session-handoff.md` rule). Anything the
+   owner asked to keep that is not saved, and any "Save to memory?" he left
+   unanswered: open `memory-save` (it keeps an unanswered one as a proposal).
+   Then replace the focus section "Next session starts with" with one entry.
 4. **Draft the prompt.** First line exactly: "This handoff prompt is
    AI-generated and may contain hallucinations, skewed context, etc. Please
    evaluate accordingly." Then the goal, why it matters, where it is written
@@ -31,9 +31,9 @@ start from. Do these steps in this order. Details for each step are below.
    from this plugin").
 6. **Show the result.** Also asked for a recap: open `session-summary` and
    show its table first. Then what was saved (anything not saved first), then
-   the prompt in one fenced block. A failed save never blocks the prompt.
-7. **"/handoff check"** (Codex: `$handoff check`): run only step 5 on a prompt
-   the owner pasted.
+   the prompt in one fenced block, then the last line: "Clear the context, then
+   paste this prompt." A failed save never blocks the prompt.
+7. **"/handoff check"** (Codex: `$handoff check`): only step 5, on a pasted prompt.
 8. Never commit `.memory/` or `.work-items/`. Never stop the owner from
    clearing context.
 
@@ -42,6 +42,12 @@ Voice: write to the owner in plain English. Claude Code: follow the project's Pl
 Save results: a failed write is "Not saved"; a write that cannot be read back
 is "Saved but not verified". Lead with either one and name the pending write.
 Edge cases: `references/edge-cases.md`.
+
+Commands: run each `toolkit` command alone, on its own line, in both hosts.
+Text goes on standard input in Claude Code (`--set-file -` and a quoted
+heredoc) and in `--text '<text>'` or a `mktemp -d` file in Codex; one-line
+values go in single quotes (`../../references/conventions.md`, "Running
+`toolkit` commands").
 
 ## Why the order matters
 
@@ -68,7 +74,8 @@ memory store for a handoff.
 
 **Find the item.** Update only an item this session actually worked on: the
 one named in the conversation, the one the session briefing named for this
-worktree (a branch such as `wi-007-<slug>` belongs to `WI-007`), or one this
+worktree (a branch such as `claude/wi-007-<slug>` belongs to `WI-007`; the
+id prefix is in lower case, so `tv2-007-<slug>` belongs to `TV2-007`), or one this
 session changed with a `toolkit work` command. Never pick an item only because
 it is open: another session may be working on it right now, and this handoff
 would overwrite its Overview and Resume here.
@@ -95,12 +102,21 @@ toolkit work show <id>
 
 **Overview.** Keep Goal and Related items as they are. Rewrite Current position
 (what is done and where work stands), Next action (the next specific action and
-who owns it: `agent` or `owner`), and Blockers (or "None."). Write the whole new
-Overview section to a file in a temporary folder outside the repository (make
-one with `mktemp -d`), then:
+who owns it: `agent` or `owner`), and Blockers (or "None."). Save the whole
+new Overview section. Run only the form for this host.
+
+Claude Code passes it on standard input: the command, then the text, then a
+line holding only `EOF`.
 
 ```text
-toolkit work edit <id> --section Overview --set-file <file>
+toolkit work edit <id> --section Overview --set-file - <<'EOF'
+```
+
+Codex gives it in single quotes, or with `--set-file` and a file in a new
+`mktemp -d` folder that is deleted right after.
+
+```text
+toolkit work edit <id> --section Overview --text '<text>'
 ```
 
 **Resume here.** The exact point where work stopped, approval boundaries (what
@@ -111,6 +127,8 @@ repeating them.
 ```text
 toolkit work edit <id> --section "Resume here" --set-file <file>
 ```
+
+`<file>` is `-` with a quoted heredoc in Claude Code, as above.
 
 **Stage and waiting_on**, only when they changed. This command lists the
 stages:
@@ -129,7 +147,7 @@ toolkit work set <id> --stage <stage> --waiting-on <owner | agent | external: wh
 **One history note:**
 
 ```text
-toolkit work history <id> --note "Handoff: <where work stopped, in one line>"
+toolkit work history <id> --note 'Handoff: <where work stopped, in one line>'
 ```
 
 **Validate and read back:**
@@ -172,9 +190,11 @@ toolkit memory focus --json
 
 The output has `text` (the focus) and `version`. Replace only the section
 "Next session starts with". It holds one entry, replaced at each handoff.
-Leave the other sections as they are, except add this session's work item id
-to "Now" when it is missing, and set the "Last updated" line to the date, the
-source (`handoff`), and who wrote it.
+Leave the other sections as they are, except: add this session's work item id
+to "Now" when it is missing; drop a setup step under "Waiting on the owner"
+that doctor no longer reports; and set the "Last updated" line to
+the date, the source (`handoff`), and who wrote it. Keep the `# Current focus`
+title line and the "Last updated" line: the briefing shows the date from it.
 
 On a new project the focus still holds the setup text from the model: a
 fill-in guide comment under the title, and an `<angle bracket>` prompt in
@@ -187,9 +207,10 @@ that still holds only a prompt. Never leave a prompt in the saved focus.
   first next action, constraints and approval boundaries, and open questions.
   Label unchecked claims. Do not create a work item just to hold this note.
 
-Keep the whole file under 50 lines. Write the whole new focus to a file in a
-temporary folder outside the repository, then save it with the version you
-read, and read it back:
+Keep the whole file under 50 lines. Save the whole new focus with the version
+you read (Claude Code: `<file>` is `-`, with the text on standard input;
+Codex: `--text '<text>'` in place of `--set-file`, or a `mktemp -d` file), and
+read it back:
 
 ```text
 toolkit memory focus --set-file <file> --expect <version>

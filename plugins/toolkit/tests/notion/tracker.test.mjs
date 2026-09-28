@@ -14,6 +14,7 @@ import { createTracker, readTrackerCache } from '../../lib/notion/tracker.mjs';
 import { openTracker, REQUIRED_METHODS } from '../../lib/work/driver.mjs';
 import { newRecordText, newDesignText, parseDoc, setLabel, appendHistory, getLabel } from '../../lib/work/model.mjs';
 import { FakeNotion, fakeRunner, seedProjects } from './fake-notion.mjs';
+import { readValue } from '../../lib/notion/props.mjs';
 import { readTemplate } from '../../lib/core/templates.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -71,13 +72,17 @@ test('create assigns WI-001, WI-002 and stores meta as properties and the body a
   assert.equal(got.meta.status, 'Backlog');
   assert.equal(got.meta.parent, 'none');
   assert.equal(got.meta.requirements_approved, 'no');
-  // The model's body, fill-in guide comments included, comes back exactly.
+  // The model's body, fill-in guide comments included, comes back exactly,
+  // except that a bare file name such as WORK-ITEM.md is sent as code text so
+  // Notion does not link it to http://WORK-ITEM.md (the Notion rebuild check).
   assert.ok(got.body.startsWith('# WI-001: Login page\n\n<!-- Fill-in guide for a new local work item:'), got.body.slice(0, 120));
-  assert.equal(got.body, a.body.replace(/^\n/, ''));
+  assert.equal(got.body, a.body.replace(/^\n/, '').replace('keep the file name WORK-ITEM.md.', 'keep the file name `WORK-ITEM.md`.'));
   assert.match(got.location, /^https:\/\/app\.notion\.com\/p\//);
   const page = Object.values(fake.pages).find((p) => p.parent.data_source_id === notion.workItems.dataSourceId && fake.titleOf(p) === 'Login page');
   assert.ok(!/^# /.test(page.markdown) && /^## Overview$/m.test(page.markdown), 'the H1 is not stored in Notion');
   assert.match(page.markdown, /<table header-row="true">/);
+  assert.match(page.markdown, /keep the file name `WORK-ITEM\.md`\./, 'the file name is code text in Notion');
+  assert.equal(readValue(page, notion.workItems.properties.designApproved), 'no', 'Design approved starts as "no", like the other approvals');
 });
 
 test('a sub-item is linked through Parent item and listed as a child', async () => {
@@ -265,7 +270,7 @@ test('a parent the owner cleared in Notion is reported even when a read came bet
   const quick = await tracker.sync({ quick: true });
   assert.deepEqual(quick.moves.map((m) => [m.id, m.kind, m.from, m.to]), [[b, 'reparented', a, 'none']]);
   const rec = await tracker.get(b);
-  assert.match(rec.body, /Parent changed in Notion by hand: WI-001 -> none \(top level\)\./);
+  assert.match(rec.body, /Parent changed in Notion by hand: WI-001 -> top level\./);
   const again = await tracker.sync();
   assert.deepEqual(again.moves, [], 'reported once');
 });

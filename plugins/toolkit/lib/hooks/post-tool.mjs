@@ -93,6 +93,19 @@ async function onBash(input, io, cwd) {
 }
 
 const BODY_EDIT_NOTE = 'toolkit work edit <id> --section "<heading>" --set-file <file> changes a section the same way in every tracker and keeps the toolkit\'s record of what it wrote; prefer it to editing the file.';
+// A design has its own command (sample run b named the section command for a DESIGN.md).
+const DESIGN_EDIT_NOTE = 'toolkit work design <id> --set-file <file> (or --text \'<text>\') saves a design the same way in every tracker and keeps its status; prefer it to editing DESIGN.md.';
+
+/** The reminder line for records edited directly: [{ who, design }]. */
+export function directEditNote(edits) {
+  const names = (list) => (list.length > 1 ? `${list.slice(0, -1).join(', ')} and ${list[list.length - 1]}` : list[0]);
+  const lines = [];
+  const designs = edits.filter((e) => e.design).map((e) => e.who);
+  const records = edits.filter((e) => !e.design).map((e) => e.who);
+  if (records.length) lines.push(`${names(records)} ${records.length > 1 ? 'were' : 'was'} edited directly and ${records.length > 1 ? 'pass' : 'passes'} validation. ${BODY_EDIT_NOTE}`);
+  if (designs.length) lines.push(`The design of ${names(designs)} was edited directly and passes validation. ${DESIGN_EDIT_NOTE}`);
+  return lines.join('\n');
+}
 
 export async function postTool(input, io) {
   const cwd = input.cwd || io.cwd;
@@ -126,7 +139,7 @@ export async function postTool(input, io) {
       if (res.gates.length) {
         blocks.push(`The edit to ${rel} was saved, and it skips an approval gate for ${who}: ${listText(res.gates)} Put the previous value back, or ask the owner and record the answer with toolkit work approve ${res.id || '<id>'} (the work-decide skill).`);
       }
-      if (!res.errors.length && !res.gates.length) directEdits.push(who);
+      if (!res.errors.length && !res.gates.length) directEdits.push({ who, design: path.basename(f.path) === 'DESIGN.md' });
     }
     if (memoryType(project) === 'builtin' && isMemoryTopic(f.path, project)) memoryTouched = true;
   }
@@ -147,10 +160,7 @@ export async function postTool(input, io) {
       }
     });
   }
-  if (remind) {
-    const many = directEdits.length > 1;
-    contexts.push(`${many ? `${directEdits.slice(0, -1).join(', ')} and ${directEdits[directEdits.length - 1]} were` : `${directEdits[0]} was`} edited directly and ${many ? 'pass' : 'passes'} validation. ${BODY_EDIT_NOTE}`);
-  }
+  if (remind) contexts.push(directEditNote(directEdits));
   return postToolOutput({ context: contexts.join('\n'), blockReason: blocks.join(' ') || null });
 }
 

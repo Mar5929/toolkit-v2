@@ -298,6 +298,11 @@ test('decisions collects waiting_on owner, owner questions, proposed designs, st
   await tk(dir, ['work', 'set', a, '--waiting-on', 'owner']);
   const b = await newItem(dir, 'Designing', ['--type', 'task']);
   await tk(dir, ['work', 'design', b, '--create']);
+  // A design just made from the template has no option yet: a draft, not a decision (sample run a, round 3).
+  const draft = await tk(dir, ['work', 'decisions', '--json']);
+  assert.ok(!draft.json.decisions.some((x) => x.id === b && x.kind === 'design_proposed'), 'a draft design waits for no approval');
+  const designPath = path.join(path.dirname(await recordPath(dir, b)), 'DESIGN.md');
+  fs.writeFileSync(designPath, fs.readFileSync(designPath, 'utf8').replace('### Option A — <Short name>', '### Option A — One greeting file'));
   const c = await newItem(dir, 'Reviewing', ['--type', 'task', '--stage', '11']);
   const d = await newItem(dir, 'Big one', ['--type', 'task', '--stage', '04']);
   await newItem(dir, 'Part', ['--parent', d]);

@@ -9,12 +9,22 @@
 //   to the toolkit-v2 source folder when the pointer is missing.
 // - `toolkit machine-setup` writes both and checks node, git, ntn, ollama, and
 //   Hindsight.
+// - It also switches the Toolkit V2 plugins off for every Codex folder again:
+//   `codex plugin add` (after every install or version update) writes
+//   enabled = true to ~/.codex/config.toml, which loads the plugin in every
+//   Codex project, claude-toolkit ones included. A project set up by toolkit
+//   init turns them on in its own .codex/config.toml (Codex setup run,
+//   2026-09-26).
 
 import fs from 'node:fs';
 import path from 'node:path';
 import { atomicWrite } from '../core/fsx.mjs';
 import { run } from '../core/util.mjs';
-import { toolkitConfigDir, wrapperDir, claudeMarketplaceSource, pluginVersion, codexPluginOnEverywhere } from './hosts.mjs';
+import {
+  toolkitConfigDir, wrapperDir, claudeMarketplaceSource, pluginVersion, codexPluginOnEverywhere, codexHome, codexUserConfig,
+  MARKETPLACE, V2_PLUGINS,
+} from './hosts.mjs';
+import { mergeToml } from './toml.mjs';
 
 export const POINTER_FILE = 'plugin-root';
 export const WRAPPER_NAME = 'toolkit';
@@ -224,8 +234,32 @@ export function codexSetupLines(env = process.env) {
 }
 
 /**
- * `toolkit machine-setup`: write the wrapper and the pointer, and check the programs.
- * Returns { pointer, wrapper, tools, lines, problems }.
+ * Set enabled = false for every Toolkit V2 plugin that ~/.codex/config.toml
+ * turns on for every folder. Only those plugin tables change; every other
+ * line of the file is kept. Never throws.
+ * Returns { path, changed: [plugin ids], error }.
+ */
+export function codexSwitchesOff(env = process.env) {
+  const file = path.join(codexHome(env), 'config.toml');
+  const on = V2_PLUGINS.filter((name) => codexPluginOnEverywhere(name, env)).map((name) => `${name}@${MARKETPLACE}`);
+  if (!on.length) return { path: file, changed: [] };
+  try {
+    const source = on.map((id) => `[plugins."${id}"]\nenabled = false\n`).join('\n');
+    const merged = mergeToml(codexUserConfig(env), source);
+    if (merged.conflicts.length) return { path: file, changed: [], error: merged.conflicts.join('; ') };
+    atomicWrite(file, merged.text);
+    const still = on.filter((id) => codexPluginOnEverywhere(id.split('@')[0], env));
+    if (still.length) return { path: file, changed: on.filter((id) => !still.includes(id)), error: `${still.join(', ')} still read as on after the write` };
+    return { path: file, changed: on };
+  } catch (err) {
+    return { path: file, changed: [], error: err.message };
+  }
+}
+
+/**
+ * `toolkit machine-setup`: write the wrapper and the pointer, switch the
+ * Toolkit V2 plugins off for every Codex folder, and check the programs.
+ * Returns { pointer, wrapper, codex, tools, lines, problems }.
  */
 export async function machineSetup({ env = process.env, pluginRoot, fetch: fetchFn, network = true } = {}) {
   const lines = [];
@@ -264,6 +298,9 @@ export async function machineSetup({ env = process.env, pluginRoot, fetch: fetch
   }
   const v = pluginVersion(pluginRoot);
   if (v) lines.push(`Toolkit plugin version: ${v} (${pluginRoot}).`);
+  const codex = codexSwitchesOff(env);
+  if (codex.error) problems.push(`Could not switch the Toolkit V2 plugins off for every Codex folder in ${codex.path}: ${codex.error}. Set enabled = false under each [plugins."<name>@toolkit-v2"] table by hand (ask the owner first).`);
+  if (codex.changed.length) lines.push(`Switched off for every Codex folder in ${codex.path} (codex plugin add had turned ${codex.changed.length === 1 ? 'it' : 'them'} on): ${codex.changed.join(', ')}. Projects set up by toolkit init turn them on for themselves.`);
   lines.push(...codexSetupLines(env));
   const tools = await toolChecks({ env, fetch: fetchFn, network });
   lines.push('Programs:');
@@ -271,5 +308,5 @@ export async function machineSetup({ env = process.env, pluginRoot, fetch: fetch
     lines.push(`  - ${t.name}: ${t.ok ? 'ok' : 'needs attention'}. ${t.detail}.${t.fix ? ` ${t.fix}` : ''}`);
     if (!t.ok && t.required) problems.push(`${t.name}: ${t.detail}. ${t.fix || ''}`.trim());
   }
-  return { pointer, wrapper, tools, lines, problems };
+  return { pointer, wrapper, codex, tools, lines, problems };
 }

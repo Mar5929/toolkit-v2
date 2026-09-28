@@ -16,11 +16,13 @@ import {
   parseDoc, tryParseDoc, peekHeader, newRecordText, newDesignText, setH1, getH1, setLabel, hasLabel, appendHistory, appendSectionRow,
   setSectionText, getSectionText, splitRowText, sectionNames, canonicalId, parseId, normalizeParent,
   isPlaceholder, parseRequirements, parseQuestions, validateRecord, validateDesign, composeDoc,
-  isBlocked, DESIGN_SUFFIX, setDesignStatusLine, normalizeMeta, removeItemGuide, amendNewestHistory, parseHistory,
-  parseRoadmap,
+  isBlocked, DESIGN_SUFFIX, setDesignStatusLine, normalizeMeta, removeItemGuide, parseHistory,
+  parseRoadmap, separateLabelLines, ensureDesignStatusLine, designStatusFromBody, isOpenOwnerQuestion, setQuestionStatus,
+  linkRelatedItem, unlinkRelatedItem, addRoadmapSubItem, removeRoadmapSubItem, removeTemplateComments, removeHistoryRow,
 } from './model.mjs';
 import { RECORD_FILE, DESIGN_FILE, loadTemplate } from './templates.mjs';
 import { TRACKER_DIR } from './state.mjs';
+import { isDesignQuestion, isResultQuestion, isDeliveryQuestion, isRequirementsQuestion } from './decisions.mjs';
 
 const MAX_TRIES = 6;
 
@@ -218,6 +220,10 @@ export async function opNew(tracker, project, { title, type, parent, stage, prio
   }
   const date = todayOf({ today });
   const coverText = coverIds ? coverIds.map((r) => `${parentId} ${r}`).join(', ') : '';
+  // A sub-item is part of its parent's goal: the delivery the owner chose for
+  // the parent covers it (sample run b, round 3: a sub-item built agent-led
+  // kept delivery: not-offered).
+  const inheritedDelivery = par && ['agent-led', 'owner-led'].includes(par.meta.delivery) ? par.meta.delivery : null;
   const fields = {
     id: `${tracker.prefix || 'WI'}-000`,
     title: String(title).trim(),
@@ -227,7 +233,7 @@ export async function opNew(tracker, project, { title, type, parent, stage, prio
     parent: parentId,
     waiting_on: 'none',
     priority: p,
-    delivery: 'not-offered',
+    delivery: inheritedDelivery || 'not-offered',
     requirements_approved: inherited || 'no',
     design: 'none',
     result_approved: 'no',
@@ -251,18 +257,23 @@ export async function opNew(tracker, project, { title, type, parent, stage, prio
     if (getSectionText(body, 'Active requirements') !== null) body = setSectionText(body, 'Active requirements', `- ${line}`);
     const designNote = parentDesign ? ` Design: ${parentDesign}'s approved design.` : '';
     if (hasLabel(body, 'Related items', { section: 'Overview' })) body = setLabel(body, 'Related items', `Parent ${parentId} (${coverIds.join(', ')}).${designNote}`, { section: 'Overview' });
+  } else if (parentId !== 'none') {
+    // The parent is named in the text too, not only in the parent field (sample run c, round 3).
+    body = linkRelatedItem(body, 'parent', parentId);
   }
   const id = await tracker.create({ meta: doc.meta, body }, { group });
   if (parentId !== 'none') {
     await change(tracker, async () => {
       const cur = await mustGet(tracker, parentId);
-      const pbody = addHistory(cur.body, { date, change: `Sub-item ${id} created: ${fields.title}.`, effect: coverIds ? `${id} delivers ${coverIds.join(', ')}. Those requirements stay here, unchanged and approved.` : `${id} is part of this item.` });
+      let pbody = linkRelatedItem(cur.body, 'sub-item', id);
+      pbody = addRoadmapSubItem(pbody, id);
+      pbody = addHistory(pbody, { date, change: `Sub-item ${id} created: ${fields.title}.`, effect: coverIds ? `${id} delivers ${coverIds.join(', ')}. Those requirements stay here, unchanged and approved.` : `${id} is part of this item.` });
       return save(tracker, cur, { meta: { updated: date }, body: pbody });
     });
   }
   const record = await mustGet(tracker, id);
   verify(record, { title: fields.title, stage: s, type: t }, id);
-  return { id, record, covers: coverIds || [], inherited, parentDesign };
+  return { id, record, covers: coverIds || [], inherited, parentDesign, inheritedDelivery };
 }
 
 // ------------------------------------------------------------------ set
@@ -271,13 +282,100 @@ export async function opNew(tracker, project, { title, type, parent, stage, prio
  * Change stage, waiting_on, priority, type, delivery, or title.
  * A stage change also sets the status the stage gives. Gates are enforced.
  */
-export async function opSet(tracker, id, opts = {}, { today, dryRun = false } = {}) {
+export async function opSet(tracker, id, opts = {}, { today, dryRun = false, ownerName = null } = {}) {
   const { stage, waitingOn, priority, type, delivery, title, reopen, note } = opts;
   if ([stage, waitingOn, priority, type, delivery, title].every((v) => v === undefined || v === null)) {
     throw invalid('Nothing to set. Give at least one of --stage, --waiting-on, --priority, --type, --delivery, --title.');
   }
   if (reopen && !stage) throw invalid('--reopen needs --stage: the stage the item goes back to.');
   const date = todayOf({ today });
+  const res = await setCore(tracker, id, opts, { date, dryRun, ownerName });
+  if (dryRun || !res.changed) return res;
+  res.notes = [];
+  // A new title goes into the design's heading and, for a folder the toolkit
+  // named, into the folder name (sample run a, round 3: both kept the old title).
+  if (res.oldTitle !== undefined) {
+    res.notes.push(...(await retitleDesign(tracker, res.id, res.record.meta.title)));
+    if (typeof tracker.renameFolderForTitle === 'function') {
+      try {
+        const r = await tracker.renameFolderForTitle(res.id, res.oldTitle);
+        if (r && r.renamed) {
+          res.folder = r;
+          res.notes.push(`Renamed its folder to match the new title: ${r.to} (was ${r.from}).`);
+          await noteOnce(tracker, res.id, { date, change: `Folder renamed for the new title: ${r.from} -> ${r.to}.`, effect: 'Same item; the toolkit uses the new path.' }).catch(() => null);
+        } else if (r && r.reason) {
+          res.notes.push(r.reason);
+        }
+      } catch (err) {
+        res.notes.push(`Its folder keeps the old name: ${err.message}`);
+      }
+    }
+  }
+  // The delivery chosen for a goal covers the sub-items that were not asked about.
+  if (res.deliveryChanged && ['agent-led', 'owner-led'].includes(res.record.meta.delivery)) {
+    const done = await propagateDelivery(tracker, res.id, res.record.meta.delivery, date);
+    if (done.length) res.notes.push(`Delivery ${res.record.meta.delivery} also recorded on its sub-item${done.length === 1 ? '' : 's'} ${done.join(', ')}.`);
+  }
+  return res;
+}
+
+/** Put a new title into the design's heading (and the Notion design page's title). Returns report lines. */
+async function retitleDesign(tracker, id, newTitle) {
+  try {
+    if (typeof tracker.retitleDesign === 'function') {
+      return (await tracker.retitleDesign(id)) ? ['The design page title now has the new title.'] : [];
+    }
+    const design = await tracker.getDesign(id);
+    if (!design) return [];
+    const h1 = getH1(design.body);
+    if (h1 && h1.title === newTitle) return [];
+    const body = setH1(design.body, id, newTitle, { suffix: DESIGN_SUFFIX });
+    await tracker.setDesign(id, composeDoc(design.meta, body, DESIGN_FIELD_ORDER), { create: false });
+    return ['The design heading now has the new title.'];
+  } catch (err) {
+    return [`The design heading still has the old title (${err.message}).`];
+  }
+}
+
+/** Set delivery on every open sub-item (at any depth) that still says not-offered. Returns their ids. */
+async function propagateDelivery(tracker, parentId, value, date) {
+  const out = [];
+  const queue = [parentId];
+  const seen = new Set();
+  let items = null;
+  while (queue.length) {
+    const pid = queue.shift();
+    if (seen.has(pid)) continue;
+    seen.add(pid);
+    let kids;
+    const rec = await tracker.get(pid);
+    if (rec && Array.isArray(rec.children)) kids = rec.children;
+    else {
+      items = items || await listItems(tracker);
+      kids = items.filter((k) => normalizeParent(k.meta.parent) === pid).map((k) => k.id);
+    }
+    for (const kid of kids) {
+      if (!parseId(kid)) continue;
+      queue.push(kid);
+      try {
+        await change(tracker, async () => {
+          const cur = await mustGet(tracker, kid);
+          if (isTerminal(cur.meta.status) || cur.meta.delivery !== 'not-offered') return null;
+          const body = addHistory(cur.body, { date, change: `Delivery ${value} (recorded on ${parentId}).`, effect: `${parentId}'s delivery covers this sub-item.` });
+          const back = await save(tracker, cur, { meta: { delivery: value, updated: date }, body });
+          out.push(kid);
+          return back;
+        });
+      } catch {
+        // A sub-item that cannot be changed keeps its value; the parent's is recorded.
+      }
+    }
+  }
+  return out;
+}
+
+async function setCore(tracker, id, opts, { date, dryRun, ownerName = null }) {
+  const { stage, waitingOn, priority, type, delivery, title, reopen, note } = opts;
   return change(tracker, async () => {
     const rec = await mustGet(tracker, id);
     const meta = rec.meta;
@@ -337,7 +435,8 @@ export async function opSet(tracker, id, opts = {}, { today, dryRun = false } = 
       if (tt !== meta.title) {
         patch.title = tt;
         body = setH1(body, rec.id, tt);
-        changes.push(`title "${tt}"`);
+        // The old title stays readable in the history row (verifier, fix round 2).
+        changes.push(`title "${tt}" (was "${meta.title || ''}")`);
       }
     }
     if (!changes.length) return { id: rec.id, changed: false, changes, record: rec, warnings: [] };
@@ -345,47 +444,45 @@ export async function opSet(tracker, id, opts = {}, { today, dryRun = false } = 
     // dryRun: every check above ran and passed; nothing is written.
     if (dryRun) return { id: rec.id, changed: true, changes, record: rec, dryRun: true, warnings };
     patch.updated = date;
+    // Recording the delivery answers the open question that offered it
+    // (verifier, fix round 2: the offer stayed listed as waiting on the owner
+    // after `set --delivery agent-led`). An item that waited on the owner
+    // only for it no longer waits, unless --waiting-on says otherwise.
+    let closed = [];
+    let clearedWaiting = false;
+    let stillWaiting = [];
+    if (patch.delivery && ['agent-led', 'owner-led'].includes(patch.delivery)) {
+      closed = answeredQuestions(body, isDeliveryQuestion, ownerName);
+      if (closed.length) {
+        body = setQuestionStatus(body, closed, 'Answered');
+        if (patch.waiting_on === undefined && (waitingOn === undefined || waitingOn === null)) {
+          ({ clear: clearedWaiting, still: stillWaiting } = ownerWaitAfter(rec, closed, ownerName));
+          if (clearedWaiting) patch.waiting_on = 'none';
+        }
+      }
+    }
     // The template's item-level guide says to delete it once the item is
     // filled; from stage 03 on it is (validate warns about one left there).
     if (patch.stage && (stageNumber(patch.stage) ?? 0) >= 3) body = removeItemGuide(body);
+    // A waiting_on change alone lives in the header only: it gets no history
+    // row, and it is never joined to a row another command wrote (sample runs
+    // b and d, round 3: "Design updated ... Now waiting on the owner." while
+    // the wait came from a different question). With --note it gets its own row.
     const onlyWaiting = Object.keys(patch).every((k) => k === 'waiting_on' || k === 'updated') && patch.waiting_on !== undefined;
-    let folded = false;
-    if (onlyWaiting && !note) {
-      // A waiting_on change alone goes into the newest row of today, the one
-      // it belongs to, instead of a row of its own (sample run b, round 2).
-      const sentence = waitingSentence(patch.waiting_on);
-      const amended = amendNewestHistory(body, (cells) => {
-        if (String(cells[0] || '').trim() !== date) return null;
-        const effect = String(cells[2] || '').trim();
-        if (effect.endsWith(sentence)) return cells;
-        cells[2] = effect ? `${effect.replace(/\s*(?:Now waiting on [^.]*\.|Nothing waits now\.)$/, '')} ${sentence}` : sentence;
-        return cells;
-      });
-      if (amended !== body) {
-        body = amended;
-        folded = true;
-      }
-    }
-    if (!folded) {
+    if (!onlyWaiting || note) {
       body = addHistory(body, {
         date,
-        change: `Set ${changes.join('; ')}.`,
-        effect: note ? String(note).trim() : setEffect(meta, patch),
+        change: `Set ${changes.join('; ')}.${closed.length ? ` ${closed.join(', ')} answered.` : ''}${clearedWaiting ? ' No longer waiting on the owner.' : ''}`,
+        effect: note ? String(note).trim() : setEffect(meta, patch, body),
       });
     }
     const back = verify(await save(tracker, rec, { meta: patch, body }), patch, rec.id);
-    return { id: rec.id, changed: true, changes, record: back, warnings };
+    return {
+      id: rec.id, changed: true, changes, record: back, warnings, closedQuestions: closed, clearedWaiting, stillWaiting,
+      oldTitle: patch.title !== undefined ? meta.title : undefined,
+      deliveryChanged: patch.delivery !== undefined,
+    };
   });
-}
-
-/** The sentence a waiting_on change adds to the newest history row. */
-function waitingSentence(value) {
-  const w = normalizeWaitingOn(value) || String(value);
-  if (w === 'owner') return 'Now waiting on the owner.';
-  if (w === 'agent') return 'Now waiting on the agent.';
-  if (w === 'none') return 'Nothing waits now.';
-  if (w.startsWith('external')) return `Now waiting on ${w.slice('external:'.length).trim() || 'someone outside the project'}.`;
-  return `Now waiting on ${w}.`;
 }
 
 /**
@@ -401,9 +498,15 @@ function skipWarnings(rec, fromStage, toStage, { note } = {}) {
   if (to <= from) return out;
   const meta = rec.meta;
   if (from <= 3 && to > 3 && !isApproved(meta.requirements_approved)) {
-    const refining = parseRequirements(rec.body).filter((r) => !r.placeholder && /^refining$/i.test(String(r.status).trim())).map((r) => r.id);
+    const reqs = parseRequirements(rec.body).filter((r) => !r.placeholder);
+    const refining = reqs.filter((r) => /^refining$/i.test(String(r.status).trim())).map((r) => r.id);
     if (refining.length) {
       out.push(`${rec.id} moves past 03 while ${refining.join(', ')} ${refining.length === 1 ? 'is' : 'are'} still Refining, and no requirements approval is recorded. Show the owner the requirements for approval (work-requirements), unless he agreed to skip that; then say why in a history note.`);
+    } else if (!reqs.length && from <= 2) {
+      // Sample run c, round 3: "write a short project brief" went from 01 to
+      // 07 as a task, with no requirement written and no question asked; the
+      // --note was the agent's own reason. This warns for every type.
+      out.push(`${rec.id} moves from ${stageShort(fromStage)} to ${stageShort(toStage)} with no requirement written (no R-01) and no requirements approval. When the owner named a result but not what it should say or do, that is a question for him: add it to Open Questions and ask before building (work-requirements).`);
     }
   }
   if (from < 5 && to >= 5 && (!meta.design || meta.design === 'none') && !(note && String(note).trim())) {
@@ -416,10 +519,14 @@ function skipWarnings(rec, fromStage, toStage, { note } = {}) {
 }
 
 /** The "Effect on the work" cell for a `work set` row with no --note. */
-function setEffect(meta, patch) {
+function setEffect(meta, patch, body = '') {
   const after = { ...meta, ...patch };
   const w = normalizeWaitingOn(after.waiting_on);
-  if (patch.waiting_on !== undefined && w === 'owner') return `Waits for the owner's answer (work-decide) before the step it blocks.`;
+  if (patch.waiting_on !== undefined && w === 'owner') {
+    // Name the question the item waits on, so the row says which decision it is.
+    const open = parseQuestions(body).filter((q) => isOpenOwnerQuestion(q) && q.id).map((q) => q.id);
+    return `Waits for the owner's answer${open.length ? ` to ${open.join(', ')}` : ''} (work-decide) before the step it blocks.`;
+  }
   if (patch.waiting_on !== undefined && w && w.startsWith('external')) return `Waits on ${w.slice('external:'.length).trim() || 'someone outside the project'}.`;
   return `Continue with ${continueWith(after)}.`;
 }
@@ -449,25 +556,9 @@ export async function opApprove(tracker, project, id, { what, by, today } = {}) 
   const who = String(by).trim();
   const date = todayOf({ today });
   const approval = formatApproval(date, who);
+  const ownerName = ownerOf(project);
 
-  if (what === 'design') {
-    const rec = await mustGet(tracker, id);
-    const design = await tracker.getDesign(rec.id);
-    if (!design) throw new ToolkitError(EXIT.ERROR, `${rec.id} has no design to approve.`, { fix: `Create one with: toolkit work design ${rec.id} --create` });
-    const text = designText(design, { status: 'approved', approved: approval });
-    const saved = await tracker.setDesign(rec.id, text, { create: false });
-    if (!saved || !saved.meta || saved.meta.status !== 'approved') throw new ToolkitError(EXIT.ERROR, `Saved but not verified: the design of ${rec.id} does not read back as approved.`, { id: rec.id });
-    let clearedWaiting = false;
-    const back = await change(tracker, async () => {
-      const cur = await mustGet(tracker, rec.id);
-      const meta = { design: 'approved', updated: date };
-      clearedWaiting = waitingOnOwner(cur.meta);
-      if (clearedWaiting) meta.waiting_on = 'none';
-      const body = addHistory(cur.body, { date, change: `Design approved by ${who}.`, effect: `The design can be built.${clearedWaiting ? ' No longer waiting on the owner.' : ''}` });
-      return verify(await save(tracker, cur, { meta, body }), { design: 'approved' }, cur.id);
-    });
-    return { id: rec.id, what, approval, warnings: [], clearedWaiting, record: back };
-  }
+  if (what === 'design') return approveDesign(tracker, id, { who, date, approval, ownerName });
 
   return change(tracker, async () => {
     const rec = await mustGet(tracker, id);
@@ -475,10 +566,13 @@ export async function opApprove(tracker, project, id, { what, by, today } = {}) 
     let body = rec.body;
     let warnings = [];
     let effect;
-    // The owner just answered: an item waiting on the owner no longer waits.
-    const clearedWaiting = waitingOnOwner(rec.meta);
+    // An open question that asked for this same approval is answered by it.
+    const closed = answeredQuestions(body, what === 'requirements' ? isRequirementsQuestion : isResultQuestion, ownerName);
+    // The owner just answered: an item waiting on the owner no longer waits,
+    // unless another of his questions is still open.
+    const { clear: clearedWaiting, still: stillWaiting } = ownerWaitAfter(rec, closed, ownerName);
     if (clearedWaiting) patch.waiting_on = 'none';
-    const waitNote = clearedWaiting ? ' No longer waiting on the owner.' : '';
+    const waitNote = `${waitEffect(clearedWaiting, stillWaiting)}${closed.length ? ` ${closed.join(', ')} answered by this approval.` : ''}`;
     if (what === 'requirements') {
       // The owner approves a goal and requirements he was shown, so the goal
       // is written before the approval is recorded (sample run b, round 2:
@@ -511,13 +605,218 @@ export async function opApprove(tracker, project, id, { what, by, today } = {}) 
       effect = `The result can be shipped and finished (work-finish).${waitNote}`;
       body = addHistory(body, { date, change: `Result approved by ${who}.`, effect });
     }
+    if (closed.length) body = setQuestionStatus(body, closed, 'Answered');
     const back = verify(await save(tracker, rec, { meta: patch, body }), patch, rec.id);
-    return { id: rec.id, what, approval, warnings, clearedWaiting, record: back };
+    return { id: rec.id, what, approval, warnings, clearedWaiting, stillWaiting, closedQuestions: closed, record: back };
   });
 }
 
 function waitingOnOwner(meta) {
   return normalizeWaitingOn(meta && meta.waiting_on) === 'owner';
+}
+
+/** The ids of the open owner questions that `asks` says ask for this approval. */
+function answeredQuestions(body, asks, ownerName = null) {
+  return parseQuestions(body).filter((q) => isOpenOwnerQuestion(q, ownerName) && q.id && /^Q-\d+$/.test(q.id) && asks(q)).map((q) => q.id);
+}
+
+/** The project owner's name from the project config, or null. */
+function ownerOf(project) {
+  const o = project && project.config && project.config.project && project.config.project.owner;
+  return o && String(o).trim() ? String(o).trim() : null;
+}
+
+/**
+ * After the owner answered the questions in `closed`: clear waiting_on only
+ * when the item waits on the owner and none of his other questions is still
+ * open (verifier, fix round 2: "No longer waiting on the owner" while Q-02
+ * stayed open). still: the ids of the owner questions that are still open.
+ */
+function ownerWaitAfter(rec, closed = [], ownerName = null) {
+  if (!waitingOnOwner(rec.meta)) return { clear: false, still: [] };
+  const still = parseQuestions(rec.body).filter((q) => isOpenOwnerQuestion(q, ownerName) && q.id && !closed.includes(q.id)).map((q) => q.id);
+  return { clear: still.length === 0, still };
+}
+
+/** The sentence a history row's effect gets about the owner wait. */
+function waitEffect(cleared, still = []) {
+  if (cleared) return ' No longer waiting on the owner.';
+  return still.length ? ` Still waiting on the owner for ${still.join(', ')}.` : '';
+}
+
+/** Write a design text back as it was (after a failed approval). True when it was written. */
+async function restoreDesign(tracker, id, text) {
+  try {
+    await tracker.setDesign(id, text, { create: false });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Record the owner's design approval, all or nothing (sample run c, round 3:
+ * the Notion "Design approved" property was written, then the check failed
+ * because Notion had joined the header lines, and the approval was left half
+ * written). In order:
+ *   1. The design text is prepared: each header label on its own line, a
+ *      "**Design status:**" line set to Approved (added when missing). It is
+ *      checked before anything is written.
+ *   2. The design is written and read back: status approved and the approval
+ *      value. A design that does not read back approved is written back as it
+ *      was, and nothing is approved.
+ *   3. The item gets design: approved, a history row, and the open questions
+ *      that asked for this choice are marked Answered. When this fails, the
+ *      item is read again (recoverItemApproval): an item that reads approved
+ *      keeps the approval; otherwise what reached the item is taken out and
+ *      the design is written back as it was.
+ */
+async function approveDesign(tracker, id, { who, date, approval, ownerName = null }) {
+  const rec = await mustGet(tracker, id);
+  const design = await tracker.getDesign(rec.id);
+  if (!design) throw new ToolkitError(EXIT.ERROR, `${rec.id} has no design to approve.`, { fix: `Create one with: toolkit work design ${rec.id} --create` });
+  const original = design.text || composeDoc(design.meta, design.body, DESIGN_FIELD_ORDER);
+  const body = ensureDesignStatusLine(separateLabelLines(design.body, { design: true }), 'approved');
+  const text = designText({ ...design, body }, { status: 'approved', approved: approval });
+  if (designStatusFromBody(parseDoc(text).body) !== 'approved') {
+    throw new ToolkitError(EXIT.ERROR, `The design of ${rec.id} has a design status line the toolkit cannot set to Approved, so nothing was approved and nothing was changed.`, {
+      id: rec.id,
+      fix: `Put "**Design status:** Draft" on a line of its own under the design's heading (toolkit work design ${rec.id} --set-file <file>), then run this command again.`,
+    });
+  }
+  const fail = async (reason, cause) => {
+    const restored = await restoreDesign(tracker, rec.id, original);
+    return new ToolkitError(EXIT.ERROR, `The design approval of ${rec.id} was not recorded: ${reason} ${restored ? 'The design was written back as it was.' : 'Writing the design back as it was failed too; check it with toolkit work design ' + rec.id + '.'} Nothing was approved.`, {
+      id: rec.id,
+      restored,
+      cause: cause && cause.message ? cause.message : undefined,
+      fix: `Run toolkit work approve ${rec.id} --design --by ${who} again. If it fails the same way, show the owner the error; do not write the approval into the design text by hand.`,
+    });
+  };
+  let saved;
+  try {
+    saved = await tracker.setDesign(rec.id, text, { create: false });
+  } catch (err) {
+    throw await fail(`saving the design failed (${String(err && err.message ? err.message : err).replace(/\.$/, '')}).`, err);
+  }
+  const m = (saved && saved.meta) || {};
+  if (m.status !== 'approved' || String(m.approved ?? '') !== approval) {
+    throw await fail(`the design reads back as ${m.status || 'nothing'} with approval "${m.approved ?? ''}", not approved with "${approval}".`);
+  }
+  let clearedWaiting = false;
+  let stillWaiting = [];
+  let closed = [];
+  // The item as read and the text written to it, on the last try: what a
+  // failed step 3 has to undo.
+  let attempt = null;
+  const historyChange = `Design approved by ${who}.`;
+  let back;
+  try {
+    back = await change(tracker, async () => {
+      attempt = null;
+      const cur = await mustGet(tracker, rec.id);
+      const meta = { design: 'approved', updated: date };
+      closed = answeredQuestions(cur.body, isDesignQuestion, ownerName);
+      ({ clear: clearedWaiting, still: stillWaiting } = ownerWaitAfter(cur, closed, ownerName));
+      if (clearedWaiting) meta.waiting_on = 'none';
+      let ibody = closed.length ? setQuestionStatus(cur.body, closed, 'Answered') : cur.body;
+      ibody = addHistory(ibody, {
+        date,
+        change: historyChange,
+        effect: `The design can be built.${waitEffect(clearedWaiting, stillWaiting)}${closed.length ? ` ${closed.join(', ')} answered by this approval.` : ''}`,
+      });
+      attempt = { cur, body: ibody };
+      return verify(await save(tracker, cur, { meta, body: ibody }), { design: 'approved' }, cur.id);
+    });
+  } catch (err) {
+    return recoverItemApproval(tracker, rec, {
+      err, attempt, fail, restore: () => restoreDesign(tracker, rec.id, original), date, who, approval, historyChange, closed, clearedWaiting, stillWaiting,
+    });
+  }
+  return { id: rec.id, what: 'design', approval, warnings: [], clearedWaiting, stillWaiting, closedQuestions: closed, record: back };
+}
+
+const errText = (err) => String(err && err.message ? err.message : err).replace(/\.$/, '');
+
+/**
+ * Step 3 of approveDesign failed: the design reads approved, but writing the
+ * item threw. A Notion update writes the page text before the properties, so
+ * the item can hold the history row and the Answered questions without
+ * design: approved (verifier, fix round 2). The item is read again:
+ *   - When it says design: approved, the item was saved and only its check
+ *     failed: the approval stands, and a warning says so.
+ *   - Otherwise what reached its text is taken out again (the history row and
+ *     the Answered statuses), its design and waiting_on values are written
+ *     back, and it is read back. Then the design is written back as it was.
+ *     The error says exactly what, if anything, is left.
+ */
+async function recoverItemApproval(tracker, rec, { err, attempt, fail, restore, date, who, approval, historyChange, closed, clearedWaiting, stillWaiting }) {
+  const reason = errText(err);
+  // Nothing was written to the item: it failed before its save.
+  if (!attempt) throw await fail(`the design was saved, but ${rec.id} itself could not be updated (${reason}).`, err);
+  const before = attempt.cur;
+  let now;
+  try {
+    now = await mustGet(tracker, rec.id);
+  } catch (err2) {
+    throw new ToolkitError(EXIT.ERROR, `The design approval of ${rec.id} may be half written: saving ${rec.id} failed (${reason}), and reading it again failed too (${errText(err2)}). The design reads Approved and was left that way, because ${rec.id} may already say design: approved.`, {
+      id: rec.id, cause: reason,
+      fix: `Run toolkit work show ${rec.id}. If it says design: approved, the approval is recorded. If not, run toolkit work approve ${rec.id} --design --by ${who} again. Do not write the approval into the design text by hand.`,
+    });
+  }
+  if (normalizeMeta(now.meta).design === 'approved') {
+    return {
+      id: rec.id, what: 'design', approval, clearedWaiting, stillWaiting, closedQuestions: closed, record: now,
+      warnings: [`${rec.id} was saved, but its first check failed (${reason}). Reading it again shows design: approved, so the approval is recorded.`],
+    };
+  }
+  // Take out of the item's text only what this approval put there.
+  let body = removeHistoryRow(now.body, { date, change: historyChange });
+  const found = [];
+  if (body !== now.body) found.push(`the Recent History row "${historyChange}"`);
+  const prevStatus = new Map(parseQuestions(before.body).map((q) => [q.id, q.status]));
+  const reopened = parseQuestions(body).filter((q) => closed.includes(q.id) && /^answered$/i.test(String(q.status).trim()) && !/^answered$/i.test(String(prevStatus.get(q.id) || '').trim())).map((q) => q.id);
+  for (const qid of reopened) body = setQuestionStatus(body, [qid], prevStatus.get(qid) || 'Open');
+  if (reopened.length) found.push(`${reopened.join(', ')} marked Answered`);
+  const metaBack = { design: before.meta.design || 'none', waiting_on: before.meta.waiting_on || 'none' };
+  const nowMeta = normalizeMeta(now.meta);
+  const metaDiffers = Object.entries(metaBack).some(([k, v]) => String(nowMeta[k] ?? '') !== String(v));
+  let left = [];
+  if (body !== now.body || metaDiffers) {
+    let writeErr = null;
+    try {
+      await tracker.update(rec.id, { meta: metaBack, ...(body !== now.body ? { body, expectBody: now.body } : {}) });
+    } catch (err3) {
+      writeErr = err3;
+    }
+    // What is left is read back, not assumed: a Notion update that failed on
+    // its properties has already written its text.
+    try {
+      const check = await mustGet(tracker, rec.id);
+      if (parseHistory(check.body).some((h) => h.date === date && h.change === historyChange)) left.push(`the Recent History row "${historyChange}"`);
+      const answered = parseQuestions(check.body).filter((q) => reopened.includes(q.id) && /^answered$/i.test(String(q.status).trim())).map((q) => q.id);
+      if (answered.length) left.push(`${answered.join(', ')} marked Answered`);
+      const cm = normalizeMeta(check.meta);
+      for (const [k, v] of Object.entries(metaBack)) {
+        if (String(cm[k] ?? '') !== String(v)) left.push(`${k} "${cm[k] ?? ''}" (it was "${v}")`);
+      }
+    } catch (err4) {
+      left = found.length ? [...found] : [];
+      if (metaDiffers || !left.length) left.push(`values that could not be checked (${errText(writeErr || err4)})`);
+    }
+  }
+  const restored = await restore();
+  const designLine = restored ? 'The design was written back as it was.' : `Writing the design back as it was failed too; check it with toolkit work design ${rec.id}.`;
+  if (left.length) {
+    throw new ToolkitError(EXIT.ERROR, `The design approval of ${rec.id} was not recorded: the design was saved, but ${rec.id} itself could not be updated (${reason}). ${designLine} ${rec.id} still has ${left.join(' and ')}, which could not be taken out. Nothing was approved.`, {
+      id: rec.id, restored, left, cause: reason,
+      fix: `Take out ${left.join(' and ')} with toolkit work edit ${rec.id}, then run toolkit work approve ${rec.id} --design --by ${who} again.`,
+    });
+  }
+  throw new ToolkitError(EXIT.ERROR, `The design approval of ${rec.id} was not recorded: the design was saved, but ${rec.id} itself could not be updated (${reason}). ${designLine} ${found.length ? `${found.join(' and ')} ${found.length === 1 ? 'was' : 'were'} taken out of ${rec.id} again. ` : ''}Nothing was approved.`, {
+    id: rec.id, restored, cause: reason,
+    fix: `Run toolkit work approve ${rec.id} --design --by ${who} again. If it fails the same way, show the owner the error; do not write the approval into the design text by hand.`,
+  });
 }
 
 // ------------------------------------------------------------------ design
@@ -544,6 +843,19 @@ export async function opDesign(tracker, project, id, { create, text, status, by,
   }
   if (status === 'approved') {
     if (!by) throw invalid('Approving a design needs the approver: toolkit work approve <id> --design --by <name>.', { fix: `toolkit work approve ${rec.id} --design --by <name>` });
+    // Every design approval goes through the one all-or-nothing path
+    // (approveDesign). New text is saved first, as a proposed design.
+    let created = false;
+    let warnings = [];
+    if (!design || (text !== undefined && text !== null)) {
+      const first = await opDesign(tracker, project, rec.id, { create, text, today });
+      created = Boolean(first.created);
+      warnings = first.warnings || [];
+    }
+    const who = String(by).trim();
+    const res = await approveDesign(tracker, rec.id, { who, date, approval: formatApproval(date, who), ownerName: ownerOf(project) });
+    const saved = await tracker.getDesign(rec.id);
+    return { id: rec.id, design: saved, changed: true, created, warnings: [...warnings, ...(res.warnings || [])], closedQuestions: res.closedQuestions, record: res.record };
   }
   const noEdit = (text === undefined || text === null) && (status === undefined || status === null);
   if (create && design && noEdit) return { id: rec.id, design, changed: false, existed: true };
@@ -563,22 +875,33 @@ export async function opDesign(tracker, project, id, { create, text, status, by,
     const doc = parseDoc(base);
     const st = status || 'proposed';
     const approvedValue = st === 'approved' ? formatApproval(date, by) : 'no';
-    full = designText({ meta: { ...doc.meta, work_item: rec.id }, body: fixDesignHeading(doc.body, rec) }, { status: st, approved: approvedValue });
+    const body = ensureDesignStatusLine(separateLabelLines(fixDesignHeading(doc.body, rec), { design: true }), st);
+    full = designText({ meta: { ...doc.meta, work_item: rec.id }, body }, { status: st, approved: approvedValue });
     history = { date, change: `Design created (${st}${st === 'approved' ? ` by ${String(by).trim()}` : ''}).`, effect: st === 'approved' ? 'The design can be built.' : 'The owner approves it before building starts.' };
   } else {
     let body = design.body;
     let meta = { ...design.meta };
+    let changedApproved = false;
     if (text !== undefined && text !== null) {
       const doc = parseDoc(text);
-      body = doc.body;
+      // Header labels written on consecutive lines stay on their own lines (sample run c, round 3).
+      body = separateLabelLines(doc.body, { design: true });
+      // Only `toolkit work approve --design` approves: a status in the text never does.
       if (doc.hasFrontmatter && DESIGN_STATUSES.includes(doc.meta.status) && doc.meta.status !== 'approved' && !status) meta.status = doc.meta.status;
-      if (design.meta.status === 'approved' && !status) warnings.push('The design was approved. A changed design may need the owner\'s approval again.');
+      if (design.meta.status === 'approved' && !status) {
+        changedApproved = true;
+        warnings.push('The design was approved. A changed design may need the owner\'s approval again.');
+      }
     }
     if (status) meta.status = status;
     if (status === 'approved') meta.approved = formatApproval(date, by);
     else if (meta.status === 'proposed') meta.approved = 'no';
+    body = ensureDesignStatusLine(body, meta.status);
     full = designText({ meta, body }, {});
-    history = { date, change: text !== undefined && text !== null ? `Design updated${status ? ` (status ${status})` : ''}.` : `Design status set to ${status}${status === 'approved' ? ` by ${String(by).trim()}` : ''}.`, effect: meta.status === 'approved' ? 'The design can be built.' : meta.status === 'superseded' ? 'This design is no longer used.' : 'The owner approves it before building starts.' };
+    const effect = changedApproved
+      ? 'The text of the approved design changed. Tell the owner what changed; ask him to approve it again when the change is more than a correction.'
+      : meta.status === 'approved' ? 'The design can be built.' : meta.status === 'superseded' ? 'This design is no longer used.' : 'The owner approves it before building starts.';
+    history = { date, change: text !== undefined && text !== null ? `Design ${changedApproved ? 'text changed after approval' : 'updated'}${status ? ` (status ${status})` : ''}.` : `Design status set to ${status}${status === 'approved' ? ` by ${String(by).trim()}` : ''}.`, effect };
   }
   const saved = await tracker.setDesign(rec.id, full, { create: !design });
   if (!saved || !saved.meta) throw new ToolkitError(EXIT.ERROR, `Saved but not verified: the design of ${rec.id} could not be read back.`, { id: rec.id });
@@ -608,8 +931,13 @@ export async function opHistory(tracker, id, { note, effect, today } = {}) {
     let body;
     // With no --effect, the row says where the item goes next, so the "Effect
     // on the work" column is never empty (sample runs a and b, round 2).
+    // A note that quotes the owner's answer ends the wait on him: its effect
+    // names the step after the answer, not work-decide (sample run b, round 3:
+    // "Owner's words: All four passed ... | Continue with work-decide.").
+    const answered = /^owner'?s? words:/i.test(String(note).trim()) && normalizeWaitingOn(rec.meta.waiting_on) === 'owner';
     const eff = effect && String(effect).trim() ? String(effect).trim()
-      : isTerminal(rec.meta.status) ? `No further work: the item is ${rec.meta.status}.` : `Continue with ${continueWith(rec.meta)}.`;
+      : isTerminal(rec.meta.status) ? `No further work: the item is ${rec.meta.status}.`
+        : `Continue with ${continueWith(answered ? { ...rec.meta, waiting_on: 'agent' } : rec.meta)}.`;
     try {
       body = appendHistory(rec.body, { date, change: String(note).trim(), effect: eff });
     } catch (err) {
@@ -647,7 +975,8 @@ export async function opEdit(tracker, id, { section, text, appendRow, label, val
       } else if (appendRow !== undefined && appendRow !== null) {
         body = appendSectionRow(body, section, splitRowText(appendRow));
       } else {
-        const content = String(text).replace(/\s+$/, '');
+        // Each template label ("**Work:**", "**Design status:**") keeps a line of its own (sample run c, round 3).
+        const content = separateLabelLines(String(text).replace(/\s+$/, ''));
         if (/^#\s/m.test(content)) throw invalid('The new text contains a level-1 heading ("# ..."). Only the item\'s own title line may be level 1.');
         body = setSectionText(body, section, content);
       }
@@ -658,10 +987,28 @@ export async function opEdit(tracker, id, { section, text, appendRow, label, val
       }
       throw err;
     }
-    if (body === rec.body) return { id: rec.id, changed: false, record: rec };
+    if (body === rec.body) return { id: rec.id, changed: false, record: rec, warnings: [] };
     const back = await save(tracker, rec, { meta: { updated: date }, body });
-    return { id: rec.id, changed: true, record: back };
+    // The PostToolUse hook checks only direct file edits, so the command says
+    // what its own edit broke (sample run a, round 3: a Roadmap status
+    // "Complete" was saved with no word until validate ran two sessions later).
+    return { id: rec.id, changed: true, record: back, warnings: newProblems(tracker, rec, back) };
   });
+}
+
+/** Validation problems the saved record has that it did not have before the edit, as { level, message }. */
+function newProblems(tracker, before, after) {
+  const opts = { prefix: tracker.prefix, ownerName: tracker.ownerName };
+  const check = (r) => {
+    try {
+      const v = validateRecord({ meta: normalizeMeta(r.meta || {}), body: r.body }, opts);
+      return [...v.errors.map((e) => ({ level: 'error', ...e })), ...v.warnings.map((w) => ({ level: 'warning', ...w })), ...v.gates.map((g) => ({ level: 'question', code: g.code, message: g.message }))];
+    } catch {
+      return [];
+    }
+  };
+  const had = new Set(check(before).map((p) => `${p.code}|${p.message}`));
+  return check(after).filter((p) => !had.has(`${p.code}|${p.message}`)).map((p) => ({ level: p.level, code: p.code, message: p.message }));
 }
 
 // ------------------------------------------------------------------ finish and cancel
@@ -718,8 +1065,11 @@ export async function opFinish(tracker, id, { by, evidence, quote, allowOpenSubI
       });
     }
     if (!hadApproval) patch.result_approved = formatApproval(date, who);
-    let body = removeItemGuide(rec.body);
-    if (hasLabel(body, 'Next action', { section: 'Overview' })) body = setLabel(body, 'Next action', 'None. Finished.', { section: 'Overview' });
+    let body = withoutGuides(tracker, rec.body);
+    body = closeOverview(body, {
+      position: `Done on ${date}. ${oneLine(evidence)}`,
+      next: 'None. Finished.',
+    });
     body = setResumeHere(body, `Finished on ${date}. Nothing to resume.`);
     body = addHistory(body, {
       date,
@@ -729,6 +1079,43 @@ export async function opFinish(tracker, id, { by, evidence, quote, allowOpenSubI
     const back = verify(await save(tracker, rec, { meta: patch, body }), { status: 'Done' }, rec.id);
     return { id: rec.id, record: back, openSubItems: open, resultApproval: back.meta.result_approved, warnings: finishWarnings(rec) };
   });
+}
+
+function oneLine(text) {
+  const t = String(text ?? '').replace(/\s+/g, ' ').trim();
+  return /[.!?]$/.test(t) ? t : `${t}.`;
+}
+
+/**
+ * The Overview of a finished or cancelled item: Current position says so,
+ * Next action says there is none, and Blockers is None. (sample run d,
+ * round 3: Done items kept "Current position: Built on a deleted branch" and
+ * "Blockers: Local merge to main needs Mike's approval").
+ */
+function closeOverview(body, { position, next }) {
+  let out = body;
+  const set = (label, value) => {
+    if (hasLabel(out, label, { section: 'Overview' })) out = setLabel(out, label, value, { section: 'Overview' });
+  };
+  set('Current position', position);
+  set('Next action', next);
+  set('Blockers', 'None.');
+  return out;
+}
+
+/**
+ * The body without the template's guide comments: they are instructions for
+ * filling the item, and a finished or cancelled item keeps none (sample run
+ * b, round 3). Comments someone wrote are kept.
+ */
+function withoutGuides(tracker, body) {
+  let out = removeItemGuide(body);
+  try {
+    out = removeTemplateComments(out, templateText(tracker, null, RECORD_FILE));
+  } catch {
+    // No template to compare with: the guides stay.
+  }
+  return out;
 }
 
 /** Notes > Resume here set to a closing line, when the section is there. */
@@ -770,8 +1157,11 @@ export async function opCancel(tracker, id, { reason, by, today } = {}) {
     if (rec.meta.status === 'Cancelled') throw invalid(`${rec.id} is already Cancelled.`);
     if (rec.meta.status === 'Done') throw invalid(`${rec.id} is Done. Reopen it first if it should be cancelled: toolkit work set ${rec.id} --stage <stage> --reopen.`);
     const open = await openSubItems(tracker, rec);
-    let body = rec.body;
-    if (hasLabel(body, 'Next action', { section: 'Overview' })) body = setLabel(body, 'Next action', 'None. Cancelled.', { section: 'Overview' });
+    // A cancelled item keeps no template guides either (verifier, fix round 2).
+    let body = closeOverview(withoutGuides(tracker, rec.body), {
+      position: `Cancelled on ${date}${by ? ` by ${String(by).trim()}` : ''}: ${oneLine(reason)}`,
+      next: 'None. Cancelled.',
+    });
     body = setResumeHere(body, `Cancelled on ${date}. Nothing to resume.`);
     body = addHistory(body, {
       date,
@@ -803,27 +1193,40 @@ export async function opMove(tracker, id, target, { today } = {}) {
   throw new ToolkitError(EXIT.UNSUPPORTED, `The ${tracker.type} tracker has no ${t} folder; move an item under another item or to root.`);
 }
 
-const topLevel = (p) => (!p || p === 'none' ? 'none (top level)' : p);
+/** "WI-003" or "the top level" (not "none (top level)"; sample run c, round 3). */
+export const placeName = (p) => (!p || p === 'none' ? 'the top level' : p);
+/** "(it was under WI-001)" or "(it was a top-level item)". */
+export const wasUnder = (p) => (!p || p === 'none' ? '(it was a top-level item)' : `(it was under ${p})`);
 
 /**
  * Add a Recent History row unless the item already has the same change on the
  * same date (a command run twice, or two sessions that found the same hand
  * move). A missing item or history table is skipped: the move is still done.
+ * edit(body) may change the body first (the links in Related items and the Roadmap).
  */
-export async function noteOnce(tracker, id, row) {
+export async function noteOnce(tracker, id, row, edit = null) {
   return change(tracker, async () => {
     const key = canonicalId(id, tracker.prefix);
     const cur = key ? await tracker.get(key) : null;
     if (!cur) return null;
     if (!cur.id) cur.id = key;
     cur.meta = normalizeMeta(cur.meta || {});
-    if (parseHistory(cur.body).some((h) => h.date === row.date && h.change === row.change)) return null;
-    let body;
-    try {
-      body = appendHistory(cur.body, row);
-    } catch {
-      return null; // No Recent History table.
+    let body = cur.body;
+    if (edit) {
+      try {
+        body = edit(body);
+      } catch {
+        body = cur.body;
+      }
     }
+    if (row.change && !parseHistory(body).some((h) => h.date === row.date && h.change === row.change)) {
+      try {
+        body = appendHistory(body, row);
+      } catch {
+        // No Recent History table.
+      }
+    }
+    if (body === cur.body) return null;
     return save(tracker, cur, { meta: { updated: row.date }, body });
   });
 }
@@ -831,21 +1234,32 @@ export async function noteOnce(tracker, id, row) {
 /**
  * History rows for `toolkit work move`: on the moved item when the tracker did
  * not write one itself (Notion), and on the old and the new parent when the
- * parent changed (sample run c, round 2: the parent got no row).
+ * parent changed (sample run c, round 2: the parent got no row). The parent
+ * and sub-item links in Related items and the Roadmap follow the move.
  */
 async function moveNotes(tracker, res, date) {
   const before = normalizeParent(res.parentBefore, tracker.prefix);
   const after = normalizeParent(res.parentAfter, tracker.prefix);
+  const relink = (body) => {
+    let b = before !== 'none' ? unlinkRelatedItem(body, 'parent', before) : body;
+    if (after !== 'none') b = linkRelatedItem(b, 'parent', after);
+    return b;
+  };
   if (tracker.type !== 'local') {
     const where = res.archived ? 'to the archive' : after === 'none' ? 'to the top level' : `under ${after}`;
-    await noteOnce(tracker, res.id, { date, change: `Moved ${where} with toolkit work move.`, effect: `Parent is now ${topLevel(after)}.` });
+    await noteOnce(tracker, res.id, { date, change: `Moved ${where} with toolkit work move.`, effect: `Parent is now ${placeName(after)}.` }, before !== after ? relink : null);
+  } else if (before !== after) {
+    // The local tracker wrote the moved item's own history row; only its links change here.
+    await noteOnce(tracker, res.id, { date, change: null }, relink).catch(() => null);
   }
   if (before === after) return;
   if (before !== 'none') {
-    await noteOnce(tracker, before, { date, change: `Sub-item ${res.id} moved out with toolkit work move.`, effect: `Its parent is now ${topLevel(after)}.` });
+    await noteOnce(tracker, before, { date, change: `Sub-item ${res.id} moved out with toolkit work move.`, effect: after === 'none' ? `${res.id} is a top-level item now.` : `${res.id}'s parent is now ${after}.` },
+      (b) => removeRoadmapSubItem(unlinkRelatedItem(b, 'sub-item', res.id), res.id));
   }
   if (after !== 'none') {
-    await noteOnce(tracker, after, { date, change: `Sub-item ${res.id} moved here with toolkit work move (it was under ${topLevel(before)}).`, effect: `${res.id} is part of this item now.` });
+    await noteOnce(tracker, after, { date, change: `Sub-item ${res.id} moved here with toolkit work move ${wasUnder(before)}.`, effect: `${res.id} is part of this item now.` },
+      (b) => addRoadmapSubItem(linkRelatedItem(b, 'sub-item', res.id), res.id));
   }
 }
 
@@ -879,16 +1293,24 @@ export async function opValidate(tracker, { id, ownerName } = {}) {
   if (typeof tracker.knownIds === 'function') for (const k of tracker.knownIds()) knownIds.add(k);
   const targets = id ? [await mustGet(tracker, id)] : items;
   const results = [];
+  let designTemplate = null;
+  try {
+    designTemplate = templateText(tracker, null, DESIGN_FILE);
+  } catch {
+    designTemplate = null;
+  }
   for (const it of targets) {
     const full = it.body === undefined ? await mustGet(tracker, it.id) : it;
     const meta = normalizeMeta(full.meta || {});
     const opts = { prefix: tracker.prefix, knownIds, ownerName };
     if (tracker.type === 'local' && full.parent !== undefined) opts.locationParent = full.parent;
+    if (Array.isArray(full.children)) opts.children = full.children.filter((c) => parseId(c));
     const v = validateRecord({ meta, body: full.body }, opts);
     const res = { id: full.id, location: full.location, errors: v.errors, warnings: v.warnings, gates: v.gates };
+    res.openOwnerQuestions = isTerminal(meta.status) || full.archived ? 0 : parseQuestions(full.body).filter((q) => isOpenOwnerQuestion(q, ownerName)).length;
     const design = await tracker.getDesign(full.id);
     if (design) {
-      const dv = validateDesign({ meta: design.meta, body: design.body }, { itemId: full.id, itemBody: full.body, itemMeta: meta });
+      const dv = validateDesign({ meta: design.meta, body: design.body }, { itemId: full.id, itemBody: full.body, itemMeta: meta, templateText: designTemplate });
       res.design = { location: design.location, errors: dv.errors, warnings: dv.warnings, gates: dv.gates };
     } else if (meta.design && meta.design !== 'none' && !isPlaceholder(meta.design)) {
       res.warnings.push({ code: 'design_missing', message: `design is ${meta.design}, but the item has no design.` });

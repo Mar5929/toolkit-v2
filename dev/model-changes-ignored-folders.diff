@@ -1,6 +1,7 @@
-diff -ru /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.memory/AGENTS.md /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved/.memory/AGENTS.md
---- /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.memory/AGENTS.md	2026-09-26 18:36:01
-+++ /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved/.memory/AGENTS.md	2026-09-26 19:12:07
+diff --git a/.memory/AGENTS.md b/.memory/AGENTS.md
+index 17d83c9..898c42b 100644
+--- a/.memory/AGENTS.md
++++ b/.memory/AGENTS.md
 @@ -1,28 +1,28 @@
  # Local project memory
  
@@ -42,12 +43,19 @@ diff -ru /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.memory/
 +- Save through the `memory-save` skill, which holds the approval policy for onboarding and trusted mode. An explicit request to remember or correct is authorization for that specific change.
 +- Ask before ambiguous, bulk, or irreversible deletion of unique content. Only the owner can change the mode.
 +- A rejected candidate is not saved to another memory, a criteria example, the glossary, or a pending queue. Record only the general selection lesson, as a `feedback` memory, if the owner gave one.
-+- The main agent writes this folder only with `toolkit memory` commands (`save`, `retire`, `restore`, `delete`, `focus`, `glossary`, `reindex`). They lock the folder, refuse stale edits, and rebuild the index. Never run parallel writers against the same topic.
++- The main agent writes this folder only with `toolkit memory` commands, for example `save`, `retire`, `focus`, `glossary`, and `reindex` (`toolkit memory --help` lists them all). They lock the folder, refuse stale edits, and rebuild the index. Never run parallel writers against the same topic.
 +- Read back changes with `toolkit memory get` and run `toolkit doctor` before reporting success. Memory work does not edit requirements, work-item status, designs, deployments, or source code.
-Only in /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.memory: CLAUDE.md
-diff -ru /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.memory/CURRENT_FOCUS.md /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved/.memory/CURRENT_FOCUS.md
---- /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.memory/CURRENT_FOCUS.md	2026-09-26 18:39:52
-+++ /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved/.memory/CURRENT_FOCUS.md	2026-09-26 18:53:52
+diff --git a/.memory/CLAUDE.md b/.memory/CLAUDE.md
+deleted file mode 100644
+index 43c994c..0000000
+--- a/.memory/CLAUDE.md
++++ /dev/null
+@@ -1 +0,0 @@
+-@AGENTS.md
+diff --git a/.memory/CURRENT_FOCUS.md b/.memory/CURRENT_FOCUS.md
+index c38bca3..afb092a 100644
+--- a/.memory/CURRENT_FOCUS.md
++++ b/.memory/CURRENT_FOCUS.md
 @@ -1,43 +1,21 @@
  # Current focus
  
@@ -100,9 +108,10 @@ diff -ru /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.memory/
 +## Next session starts with
  
  - `<Where to resume, what to read, and the next concrete action.>`
-diff -ru /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.memory/MEMORY.md /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved/.memory/MEMORY.md
---- /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.memory/MEMORY.md	2026-09-25 17:08:33
-+++ /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved/.memory/MEMORY.md	2026-09-26 18:54:04
+diff --git a/.memory/MEMORY.md b/.memory/MEMORY.md
+index c217c0d..653c5c9 100644
+--- a/.memory/MEMORY.md
++++ b/.memory/MEMORY.md
 @@ -1,6 +1,6 @@
  # Memory index
  
@@ -111,10 +120,11 @@ diff -ru /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.memory/
  
  ## User
  
-diff -ru /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.memory/memory-criteria.md /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved/.memory/memory-criteria.md
---- /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.memory/memory-criteria.md	2026-09-26 18:39:52
-+++ /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved/.memory/memory-criteria.md	2026-09-26 19:12:07
-@@ -1,16 +1,7 @@
+diff --git a/.memory/memory-criteria.md b/.memory/memory-criteria.md
+index 2c34afc..86225f2 100644
+--- a/.memory/memory-criteria.md
++++ b/.memory/memory-criteria.md
+@@ -1,15 +1,6 @@
 ----
 -mode: onboarding
 -trusted_by: none
@@ -126,14 +136,13 @@ diff -ru /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.memory/
 +# Memory criteria
  
 -# Memory criteria and trust
+-
+-This file is the project-specific selection policy. The default mode is **onboarding**. Only the owner can explicitly authorize **trusted** mode; record who granted it, when, and its scope in the frontmatter. Silence, elapsed time, or several approved cards do not change mode. The agent may propose improvements to these criteria during onboarding. Record a correction here as a general rule without copying a rejected memory into this file.
 +This file is the project-specific selection policy: what is worth keeping in lasting memory. The approval policy, including onboarding and trusted mode, is in the `memory-save` skill, which saves with `toolkit memory save`. When the owner corrects what is worth saving, save the correction as a `feedback` memory with `memory-save`, as a general rule, without copying the rejected memory. Those `feedback` memories override this page.
  
--This file is the project-specific selection policy. The default mode is **onboarding**. Only the owner can explicitly authorize **trusted** mode; record who granted it, when, and its scope in the frontmatter. Silence, elapsed time, or several approved cards do not change mode. The agent may propose improvements to these criteria during onboarding. Record a correction here as a general rule without copying a rejected memory into this file.
--
  ## Default test for lasting memory
  
- Save a topic when it concerns this project, has a credible source, would matter in a future session, would be costly or unreliable to reconstruct, and has no better maintained owner. Prefer updating an existing topic. A short pointer to an authoritative record can qualify when future sessions would otherwise miss that record.
-@@ -19,13 +10,13 @@
+@@ -19,13 +10,13 @@ Save a topic when it concerns this project, has a credible source, would matter
  | --- | --- | --- |
  | `user_<topic>.md` | Relevant role, responsibility, working preference, or communication need the owner stated | Personal judgments, irrelevant biography, private details |
  | `feedback_<topic>.md` | Repeated or standing correction to how the agent should work; confirmed selection lesson | One-off irritation, a rejected fact restated as policy, an instruction already in `AGENTS.md` |
@@ -149,13 +158,12 @@ diff -ru /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.memory/
  
  ## Never save as lasting memory
  
-@@ -34,22 +25,6 @@
+@@ -34,22 +25,6 @@ Save a topic when it concerns this project, has a credible source, would matter
  - Live status, pending approval, unshipped requirements, procedure steps, code restatements, or a current-system explanation that the code/System Guide owns.
  - A rejected candidate under a new name or wider wording. A rejection stands until the owner changes it.
  
 -## Onboarding: review each lasting change
-+## Backup
- 
+-
 -The main agent shows the exact operation and meaning in the current Toolkit card format: heading, **Change**, **Summary** or **Affected content**, and **Your decision**. No proposal inbox is created. The curator writes only after the owner approves that card or explicitly requests the same save/correction. Current-focus upkeep and faithful glossary updates from already-approved sources proceed without a lasting-memory card. An agent inference is never the owner's decision.
 -
 -## Trusted mode: routine curation
@@ -163,7 +171,8 @@ diff -ru /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.memory/
 -When the owner explicitly grants it, the agent changes the frontmatter to `mode: trusted` and records the grant. Then the curator may create, update, merge, deduplicate, supersede, archive, and restore routine memory within that scope. Continue to check source and destination; a checkpoint may yield no memory. Ask before ambiguous or irreversible deletion, erasing unique history, or widening the grant. Revocation returns to onboarding immediately. Trusted mode never authorizes changes to requirements, work items, or designs.
 -
 -## Backup and recovery
--
++## Backup
+ 
 -This folder is Git-ignored. During setup, record an independent backup or sync destination and the last tested restore date in the frontmatter. A one-time snapshot from `scripts/memory.py backup` does not create an ongoing schedule. Linked worktrees must resolve to one vault. A fresh clone or machine needs its memory restored before the agent treats an empty index as evidence that no memory exists.
 -
 -## Learned selection guidance
@@ -174,9 +183,10 @@ diff -ru /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.memory/
 -| --- | --- | --- |
 -| `<YYYY-MM-DD and owner correction>` | `<Rule about what counts or does not count, without repeating rejected content>` | `<How selection changes>` |
 +This folder is Git-ignored. Back it up with `toolkit memory export --to <folder outside this project>` and restore a fresh clone with `toolkit memory import --from <that folder>`. Linked worktrees resolve to one vault in the main checkout. A fresh clone or machine needs its memory restored before the agent treats an empty index as evidence that no memory exists.
-diff -ru /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.work-items/work-item-template/DESIGN.md /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved/.work-items/work-item-template/DESIGN.md
---- /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.work-items/work-item-template/DESIGN.md	2026-09-26 18:38:36
-+++ /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved/.work-items/work-item-template/DESIGN.md	2026-09-26 19:11:57
+diff --git a/.work-items/work-item-template/DESIGN.md b/.work-items/work-item-template/DESIGN.md
+index 76ac5d7..7e1d965 100644
+--- a/.work-items/work-item-template/DESIGN.md
++++ b/.work-items/work-item-template/DESIGN.md
 @@ -1,8 +1,14 @@
 +---
 +work_item: WI-001
@@ -193,9 +203,10 @@ diff -ru /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.work-it
  **Design status:** <Draft | In review | Approved | Superseded>  
  **Requirements checked:** <Link to WORK-ITEM.md requirements and date checked>  
  **Last updated:** <YYYY-MM-DD>  
-diff -ru /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.work-items/work-item-template/WORK-ITEM.md /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved/.work-items/work-item-template/WORK-ITEM.md
---- /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.work-items/work-item-template/WORK-ITEM.md	2026-09-26 18:40:49
-+++ /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved/.work-items/work-item-template/WORK-ITEM.md	2026-09-26 19:11:57
+diff --git a/.work-items/work-item-template/WORK-ITEM.md b/.work-items/work-item-template/WORK-ITEM.md
+index 21d4d5e..e549e01 100644
+--- a/.work-items/work-item-template/WORK-ITEM.md
++++ b/.work-items/work-item-template/WORK-ITEM.md
 @@ -1,17 +1,22 @@
  ---
  id: WI-001
@@ -226,7 +237,7 @@ diff -ru /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.work-it
  
  ## Overview
  
-@@ -25,18 +30,18 @@
+@@ -25,18 +30,18 @@ design: <Link to design, if one exists>
  
  **Blockers:** <Blocking decision or dependency, or “None.”>
  
@@ -251,7 +262,7 @@ diff -ru /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project/.work-it
  
  ## Tasks
  
-@@ -73,11 +78,11 @@
+@@ -73,11 +78,11 @@ A phase is complete when its tasks are complete and its exit result has been che
  
  ## Open Questions
  

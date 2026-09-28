@@ -9,7 +9,7 @@
 import { EXIT } from '../core/output.mjs';
 import { stageShort, continueWith, isTerminal } from './lifecycle.mjs';
 import { normalizeMeta, getLabel, isPlaceholder } from './model.mjs';
-import { collectOwnerDecisions, collectAgentTodos } from './decisions.mjs';
+import { collectOwnerDecisions, collectAgentTodos, withDesignBodies } from './decisions.mjs';
 import { openTracker } from './driver.mjs';
 import { rankNext, listItems } from './ops.mjs';
 import { worktreeItem, TRACKER_DIR } from './state.mjs';
@@ -36,24 +36,84 @@ export function itemSummary(item) {
     design: item.design ? item.design.status : meta.design,
     continueWith: continueWith(meta),
     nextAction: next && !isPlaceholder(next) ? next : null,
+    // The item's last change date, so the briefing can tell when the current
+    // focus is older than the work (staleFocusLine in lib/project/brief.mjs).
+    updated: meta.updated && !isPlaceholder(meta.updated) ? meta.updated : null,
   };
 }
 
-/** Plain lines for a sync report. `full` also lists the derived values brought in step. */
+/** A record location (".work-items/cli/WI-001-x/WORK-ITEM.md") as its folder inside .work-items ("cli/WI-001-x"). */
+function folderOf(loc) {
+  const s = String(loc || '').replace(/^\.work-items\//, '');
+  const i = s.lastIndexOf('/');
+  return i === -1 ? '(the top of .work-items)' : s.slice(0, i);
+}
+
+function fileOf(loc) {
+  const s = String(loc || '');
+  return s.slice(s.lastIndexOf('/') + 1);
+}
+
+function lastPart(p) {
+  const s = String(p || '');
+  return s.slice(s.lastIndexOf('/') + 1);
+}
+
+const under = (p) => (!p || p === 'none' ? 'a top-level item' : `a sub-item of ${p}`);
+
+/**
+ * One line about a tracker change, ready to say to the owner as it is
+ * (sample run a, round 3: the agent read "Renamed folder ... Its parent WI-001
+ * moved too." and told Mike "WI-002 is now nested under it", which was
+ * already true; what changed was the folder name). It starts with the kind of
+ * change and says what changed and what stayed the same.
+ */
+export function moveOwnerLine(m) {
+  const id = m.id;
+  const before = m.parentBefore;
+  const after = m.parentAfter;
+  const parentChanged = after !== undefined && before !== undefined && before !== after;
+  const parentPart = parentChanged
+    ? (after === 'none' ? ` It is now a top-level item. It was a sub-item of ${before}.` : ` Its parent is now ${after}. It was ${under(before)}.`)
+    : after !== undefined ? ` It is still ${under(after)}.` : '';
+  const archPart = m.archivedAfter && !m.archivedBefore ? ` It is archived now.` : !m.archivedAfter && m.archivedBefore ? ` It is no longer archived.` : '';
+  switch (m.kind) {
+    case 'folder-renamed': {
+      const was = lastPart(folderOf(m.from));
+      const now = lastPart(folderOf(m.to));
+      const rest = m.parentMoved && !parentChanged
+        ? ` It moved along with its parent ${m.parentMoved}'s folder, and it is still a sub-item of ${m.parentMoved}.`
+        : parentPart;
+      return `Renamed folder: ${id}'s folder was renamed by hand from ${was} to ${now}; the item itself is the same.${rest}`;
+    }
+    case 'file-renamed':
+      return `Renamed file: ${id} is now ${m.to} (was ${fileOf(m.from)}), in the same folder.${parentPart}`;
+    case 'returned':
+      return `Found again: ${id} was missing and is back, now in ${folderOf(m.to)}.${parentPart}${archPart}`;
+    case 'reparented':
+      if (after === 'none') return `Re-parented: ${id} was made a top-level item in Notion by hand. It was a sub-item of ${before}.`;
+      return `Re-parented: ${id} was put under ${after} in Notion by hand. Its parent is now ${after}. It was ${under(before)}.`;
+    case 'archived':
+      return `Archived: ${id} was archived in Notion by hand (its Archived box was ticked), so it is hidden from the board and the briefing.`;
+    case 'unarchived':
+      return `Unarchived: ${id} was taken out of the archive in Notion by hand (its Archived box was cleared).`;
+    default:
+      if (m.withParent) return `Moved: ${id} moved along with its parent ${m.withParent}; its folder is now ${folderOf(m.to)}.`;
+      return `Moved: ${id} from ${folderOf(m.from)} to ${folderOf(m.to)} (${lastPart(folderOf(m.from)) === lastPart(folderOf(m.to)) ? 'moved' : 'moved and renamed'} by hand).${parentPart}${archPart}`;
+  }
+}
+
+/**
+ * Plain lines for a sync report. `full` also lists the derived values brought
+ * in step. A move is one line the agent can say to the owner as it is
+ * (moveOwnerLine).
+ */
 export function reportLines(report, { full = false } = {}) {
   if (!report) return [];
   const lines = [];
   for (const m of report.moves || []) {
     if (m.withParent && !full) continue;
-    const parentNote = m.parentAfter !== undefined && m.parentBefore !== m.parentAfter
-      ? ` Its parent is now ${m.parentAfter === 'none' ? 'none (top level)' : m.parentAfter}.`
-      : '';
-    const archNote = m.archivedAfter && !m.archivedBefore ? ' It is now archived.' : !m.archivedAfter && m.archivedBefore ? ' It is no longer archived.' : '';
-    if (m.kind === 'folder-renamed') lines.push(`Renamed folder: ${m.id} is now at ${m.to} (was ${m.from}).${parentNote}${m.parentMoved ? ` Its parent ${m.parentMoved} moved too.` : ''}`);
-    else if (m.kind === 'file-renamed') lines.push(`Renamed file: ${m.id} is now ${m.to} (was ${m.from}).`);
-    else if (m.kind === 'returned') lines.push(`Found again: ${m.id} was missing and is now at ${m.to}.${parentNote}${archNote}`);
-    else if (m.kind === 'reparented') lines.push(`Re-parented: ${m.id}.${parentNote}`);
-    else lines.push(`Moved: ${m.id} from ${m.from} to ${m.to}.${parentNote}${archNote}${m.withParent ? ` (moved with ${m.withParent})` : ''}`);
+    lines.push(moveOwnerLine(m));
   }
   for (const a of report.adopted || []) lines.push(`Adopted: ${a.id} at ${a.location}. ${a.reason || ''}`.trim());
   for (const r of report.renumbered || []) {
@@ -90,7 +150,7 @@ export async function workSummary(project, opts = {}) {
     }
   }
   const report = sync ? await tracker.sync({ quick: sync !== 'full' }) : null;
-  const items = await listItems(tracker, { fetchBodies: true });
+  const items = await withDesignBodies(tracker, await listItems(tracker, { fetchBodies: true }));
   let wt = { branch: null, id: null };
   try {
     wt = worktreeItem(cwd, tracker.prefix || 'WI');

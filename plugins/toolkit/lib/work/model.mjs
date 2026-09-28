@@ -440,6 +440,25 @@ export function appendHistory(body, { date, change, effect = '' }) {
   return appendSectionRow(body, 'Recent History', [date, change, effect]);
 }
 
+/**
+ * Take out the newest Recent History row with this date and change text
+ * (used to undo a row a failed command wrote). The body is returned unchanged
+ * when no row matches.
+ */
+export function removeHistoryRow(body, { date, change }) {
+  const text = String(body ?? '');
+  const node = getSection(text, 'Recent History');
+  if (!node) return text;
+  const content = text.slice(node.contentStart, node.end);
+  const t = parseTable(content);
+  if (!t.found) return text;
+  const norm = (s) => String(s ?? '').replace(/\s+/g, ' ').trim();
+  const r = t.objects.findIndex((o) => norm(o.Date) === norm(date) && norm(o['Change or decision']) === norm(change));
+  if (r === -1) return text;
+  const span = t.rowSpans[r];
+  return text.slice(0, node.contentStart) + content.slice(0, span.start) + content.slice(span.end) + text.slice(node.end);
+}
+
 // The model's fill-in guides are HTML comments. The item-level guide says
 // "Delete this guide after filling the item"; each section guide explains how
 // to fill that section.
@@ -463,25 +482,24 @@ export function hasSectionGuide(body, heading) {
 }
 
 /**
- * Change the newest Recent History row (the first data row) with fn(cells),
- * which returns the new cells. Returns the body unchanged when there is no
- * real row. Used to fold a waiting_on-only change into the row it belongs to.
+ * The body without the template's fill-in guide comments: every HTML comment
+ * block that is word for word one of the template's own comments, wherever it
+ * stands. A comment the owner or an agent wrote is kept.
  */
-export function amendNewestHistory(body, fn) {
-  const text = String(body ?? '');
-  const node = getSection(text, 'Recent History');
-  if (!node) return text;
-  const content = text.slice(node.contentStart, node.end);
-  const t = parseTable(content);
-  if (!t.found || !t.rows.length || isTemplateRow(t.rows[0])) return text;
-  const cells = fn([...t.rows[0]]);
-  if (!cells) return text;
-  const esc = (c) => String(c ?? '').replace(/\r?\n/g, ' ').replace(/\|/g, '\\|');
-  const row = `| ${cells.map(esc).join(' | ')} |`;
-  const span = t.rowSpans[0];
-  const lineEnd = content.slice(span.start, span.end).match(/\r?\n$/);
-  const updated = content.slice(0, span.start) + row + (lineEnd ? lineEnd[0] : '') + content.slice(span.end);
-  return text.slice(0, node.contentStart) + updated + text.slice(node.end);
+export function removeTemplateComments(body, templateText) {
+  let text = String(body ?? '');
+  let tpl = String(templateText ?? '');
+  try {
+    tpl = parseDoc(tpl).body;
+  } catch {
+    // A template without frontmatter is used as it is.
+  }
+  const comments = [...new Set(tpl.match(/<!--[\s\S]*?-->/g) || [])];
+  for (const c of comments) {
+    const esc = c.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    text = text.replace(new RegExp(`(^|\\n)[ \\t]*${esc}[ \\t]*(?:\\r?\\n)?(?:[ \\t]*\\r?\\n)?`, 'g'), '$1');
+  }
+  return text;
 }
 
 /** The body without the guide comment at the top of one section (the section itself stays). */
@@ -907,6 +925,32 @@ export function validateRecord(input, opts = {}) {
       else if (tasks.some((t) => isPlaceholder(t.name))) problem(warnings, 'tasks_placeholder', `Tasks still has the template's example task (P1-T01 — <Task 1 name>). Replace it with the real tasks (${PLAN_REF}).`);
       if (hasSectionGuide(body, 'Tasks')) problem(warnings, 'section_guide_left', 'Tasks still has the template\'s fill-in guide comment. Write the section again without it.');
     }
+    // Sample run c, round 3: a task's fields written on the task line itself.
+    const joined = taskFieldsJoined(body);
+    if (joined.length) {
+      problem(warnings, 'task_fields_joined', `${joined.join(', ')} ${joined.length === 1 ? 'has' : 'have'} **Work:**, **Deliverable:**, **Done when:**, or **Depends on:** on the task line. Put each field on its own line under the task (toolkit work edit ${id || '<id>'} --section Tasks does this when the text is saved again).`);
+    }
+  }
+
+  // A finished item's Overview says it is finished (sample run d, round 3:
+  // Done items kept "Blockers: Local merge to main needs Mike's approval").
+  if (isTerminal(meta.status) && names.includes('overview')) {
+    const blockers = getLabel(body, 'Blockers', { section: 'Overview' });
+    if (blockers !== null && !isNoneText(blockers)) {
+      problem(warnings, 'terminal_blockers', `${id || 'The item'} is ${meta.status}, but Blockers in its Overview still says: ${String(blockers).trim().replace(/\.+$/, '')}. Set it to None: toolkit work edit ${id || '<id>'} --label Blockers --value "None."`);
+    }
+  }
+
+  // Every sub-item is named in the Roadmap's Sub-items column once the plan is written.
+  if (planned && Array.isArray(opts.children) && opts.children.length && names.includes('roadmap')) {
+    const rows = parseRoadmap(body).filter((r) => !r.placeholder);
+    if (rows.length) {
+      const listed = new Set(rows.flatMap((r) => r.subItems.map((s) => canonicalId(s) || s)));
+      const missingKids = opts.children.map((c) => canonicalId(c) || c).filter((c) => !listed.has(c));
+      if (missingKids.length) {
+        problem(warnings, 'subitem_not_in_roadmap', `The Roadmap's Sub-items column does not name ${missingKids.join(', ')}. Put each sub-item in the row of the phase it belongs to.`);
+      }
+    }
   }
 
   const gates = checkGates(meta, { body });
@@ -965,6 +1009,9 @@ export function validateDesign(input, opts = {}) {
   if (opts.itemMeta && opts.itemMeta.design && DESIGN_STATUSES.includes(meta.status) && opts.itemMeta.design !== meta.status) {
     problem(warnings, 'item_design_mismatch', `The work item says design: ${opts.itemMeta.design}, but the design says ${meta.status}.`);
   }
+  if (meta.status === 'approved' && opts.templateText) {
+    for (const w of approvedDesignGaps(body, opts.templateText)) problem(warnings, w.code, w.message);
+  }
   if (opts.itemBody) {
     const reqIds = new Set(parseRequirements(opts.itemBody).map((r) => r.id));
     for (const n of flattenSections(splitSections(body))) {
@@ -975,6 +1022,53 @@ export function validateDesign(input, opts = {}) {
     }
   }
   return { ok: errors.length === 0 && gates.length === 0, errors, warnings, gates };
+}
+
+/** Design sections the model's template says to remove when they do not apply. */
+const OPTIONAL_DESIGN_SECTIONS = Object.freeze(['Option comparison']);
+/** Sections of an approved design that a builder reads, with the sub-sections each must keep. */
+const BUILD_SECTIONS = Object.freeze(['Selected design', 'Build and verification plan']);
+
+/**
+ * What an approved design is missing compared with the model's DESIGN.md
+ * template (sample run b, round 3: an approved design had no Diagrams section
+ * and a one-paragraph Selected design, and validate said nothing):
+ * - a "## " section of the template (Option comparison is optional);
+ * - a "### " sub-section of Selected design or Build and verification plan;
+ * - a template prompt ("<...>") or "Pending owner decision" left in those two sections.
+ * @returns {Array<{ code: string, message: string }>}
+ */
+export function approvedDesignGaps(body, templateText) {
+  const out = [];
+  let tplBody = String(templateText ?? '');
+  try {
+    tplBody = parseDoc(tplBody).body;
+  } catch {
+    // A template without frontmatter is read as it is.
+  }
+  const have = new Set(sectionNames(body).map(normalizeHeading));
+  const wanted = sectionNames(tplBody).filter((s) => !OPTIONAL_DESIGN_SECTIONS.some((o) => normalizeHeading(o) === normalizeHeading(s)));
+  const missing = wanted.filter((s) => !have.has(normalizeHeading(s)));
+  if (missing.length) {
+    out.push({ code: 'design_section_missing', message: `The approved design has no ${missing.map((s) => `"## ${s}"`).join(', ')} section${missing.length === 1 ? '' : 's'}; the template has ${missing.length === 1 ? 'it' : 'them'}. A builder reads the whole design.` });
+  }
+  for (const name of BUILD_SECTIONS) {
+    const tpl = getSection(tplBody, name);
+    const mine = getSection(String(body ?? ''), name);
+    if (!tpl || !mine) continue;
+    const mineSubs = new Set(flattenSections(mine.children).map((n) => normalizeHeading(n.heading)));
+    const subsMissing = tpl.children.map((n) => n.heading).filter((h) => !mineSubs.has(normalizeHeading(h)));
+    if (subsMissing.length) {
+      out.push({ code: 'design_subsection_missing', message: `"## ${name}" in the approved design has no ${subsMissing.map((h) => `"### ${h}"`).join(', ')}.` });
+    }
+    const text = mine.content;
+    const prompt = /<(?!!--|br\b|\/|https?:)[A-Z][^<>\n]{2,}>/.exec(text.replace(/```[\s\S]*?```/g, ''));
+    const pending = /pending owner decision|after (?:mike|the owner) chooses/i.exec(text);
+    if (prompt || pending) {
+      out.push({ code: 'design_prompt_left', message: `"## ${name}" in the approved design still holds template text (${prompt ? prompt[0] : pending[0]}). Write the chosen design there.` });
+    }
+  }
+  return out;
 }
 
 // ------------------------------------------------------------------ new records
@@ -1059,12 +1153,57 @@ export const DESIGN_LINE_WORDS = Object.freeze({
   superseded: ['superseded'],
 });
 
-const DESIGN_STATUS_LINE_RE = /^(\*\*Design status:\*\*|Status:)([ \t]*)(.*?)([ \t]*)$/m;
+const OLD_STATUS_LINE_RE = /^(Status:)([ \t]*)(.*?)([ \t]*)$/m;
+
+/**
+ * Where a bold label's value is: { start, end, labelStart, value } or null.
+ * The label may stand anywhere in a line, not only at its start: Notion joins
+ * header lines that were written without Markdown line breaks into one
+ * paragraph ("**Requirements:** TV2-001 **Design status:** Proposed ...";
+ * sample run c, round 3). The value ends at the next bold label on the same
+ * line, or at the end of the line.
+ */
+export function inlineLabelSpan(text, label) {
+  const src = String(text ?? '');
+  const esc = label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const re = new RegExp(`(^|[ \\t])\\*\\*${esc}:\\*\\*[ \\t]*`, 'gm');
+  let m;
+  while ((m = re.exec(src))) {
+    // Skip a label inside a code span or a table row.
+    const lineStart = src.lastIndexOf('\n', m.index) + 1;
+    const lineEndAt = src.indexOf('\n', m.index);
+    const lineEnd = lineEndAt === -1 ? src.length : lineEndAt;
+    const line = src.slice(lineStart, lineEnd);
+    if (/^[ \t]*\|/.test(line)) continue;
+    const before = src.slice(lineStart, m.index + m[1].length);
+    if ((before.match(/`/g) || []).length % 2 === 1) continue;
+    const start = m.index + m[0].length;
+    const rest = src.slice(start, lineEnd);
+    const next = /[ \t]+\*\*[^*\n]{1,60}:\*\*/.exec(rest);
+    let end = next ? start + next.index : lineEnd;
+    while (end > start && /[ \t\r]/.test(src[end - 1])) end--;
+    return { start, end, labelStart: m.index + m[1].length, value: src.slice(start, end) };
+  }
+  return null;
+}
+
+/** Replace the value of a bold label found anywhere in a line (inlineLabelSpan); unchanged when there is none. */
+function replaceInlineLabel(text, label, fn) {
+  const src = String(text ?? '');
+  const span = inlineLabelSpan(src, label);
+  if (!span) return src;
+  const next = fn(span.value);
+  if (next === null || next === undefined || next === span.value) return src;
+  return src.slice(0, span.start) + next + src.slice(span.end);
+}
 
 /** The design's status line: { label, value } ("**Design status:**" or an older "Status:" line), or null. */
 export function designStatusLine(body) {
-  const m = DESIGN_STATUS_LINE_RE.exec(String(body ?? ''));
-  return m ? { label: m[1].replace(/\*/g, ''), value: m[3].trim() } : null;
+  const text = String(body ?? '');
+  const span = inlineLabelSpan(text, 'Design status');
+  if (span) return { label: 'Design status:', value: span.value.trim() };
+  const m = OLD_STATUS_LINE_RE.exec(text);
+  return m ? { label: 'Status:', value: m[3].trim() } : null;
 }
 
 /**
@@ -1090,34 +1229,385 @@ export function designStatusFromBody(body) {
  */
 export function setDesignStatusLine(body, status, opts = {}) {
   let text = String(body ?? '');
-  text = text.replace(DESIGN_STATUS_LINE_RE, (all, label, gap, value, tail) => {
-    if (label === 'Status:') return `${label}${gap || ' '}${status}${tail}`;
-    const words = DESIGN_LINE_WORDS[status];
-    if (!words) return all;
-    if (!isPlaceholder(value) && words.includes(value.trim().toLowerCase())) return all;
-    const word = status === 'proposed' ? 'Draft' : status === 'approved' ? 'Approved' : 'Superseded';
-    return `${label}${gap || ' '}${word}${tail}`;
-  });
+  const words = DESIGN_LINE_WORDS[status];
+  if (inlineLabelSpan(text, 'Design status')) {
+    if (words) {
+      const word = status === 'proposed' ? 'Draft' : status === 'approved' ? 'Approved' : 'Superseded';
+      text = replaceInlineLabel(text, 'Design status', (value) => {
+        if (!isPlaceholder(value) && words.includes(value.trim().toLowerCase())) return null;
+        return word;
+      });
+    }
+  } else {
+    text = text.replace(OLD_STATUS_LINE_RE, (all, label, gap, value, tail) => `${label}${gap || ' '}${status}${tail}`);
+  }
   if (opts.approved !== undefined && opts.approved !== null) {
     const a = parseApproval(opts.approved);
     let want = null;
     if (a.ok && a.approved && a.date && a.by) want = `Approved by ${a.by} on ${a.date}`;
     else if (a.ok && !a.approved) want = 'Pending';
     if (want) {
-      text = text.replace(/^(\*\*Design approval:\*\*)([ \t]*)(.*?)([ \t]*)$/m, (all, label, gap, value, tail) => {
+      text = replaceInlineLabel(text, 'Design approval', (value) => {
         const v = value.trim();
-        if (v === want) return all;
+        if (v === want) return null;
         if (want === 'Pending') {
           // Only a prompt, an empty value, or an approval that no longer holds becomes Pending.
-          if (v && !isPlaceholder(v) && !/^approved\b/i.test(v)) return all;
+          if (v && !isPlaceholder(v) && !/^approved\b/i.test(v)) return null;
         } else if (!isPlaceholder(v) && /^approved\b/i.test(v) && v.includes(a.by) && v.includes(a.date)) {
-          return all; // an approval written by hand with more detail is kept
+          return null; // an approval written by hand with more detail is kept
         }
-        return `${label}${gap || ' '}${want}${tail}`;
+        return want;
       });
     }
   }
   return text;
+}
+
+/**
+ * The body with a "**Design status:**" line, added under the header lines
+ * when the design has none (a design written by hand without the model's
+ * header), so the status it is saved with is the status it reads back with.
+ */
+export function ensureDesignStatusLine(body, status) {
+  const text = String(body ?? '');
+  if (designStatusLine(text)) return text;
+  const word = status === 'approved' ? 'Approved' : status === 'superseded' ? 'Superseded' : 'Draft';
+  const eol = eolOf(text);
+  const req = inlineLabelSpan(text, 'Requirements');
+  if (req) {
+    // Right after the "**Requirements:**" line, as the model's header has it.
+    const lineEndAt = text.indexOf('\n', req.end);
+    const lineEnd = lineEndAt === -1 ? text.length : lineEndAt;
+    const line = text.slice(text.lastIndexOf('\n', req.start) + 1, lineEnd).replace(/\r$/, '');
+    const hard = / {2,}$/.test(line) ? '' : '  ';
+    const cut = text[lineEnd - 1] === '\r' ? lineEnd - 1 : lineEnd;
+    return `${text.slice(0, cut)}${hard}${eol}**Design status:** ${word}  ${text.slice(cut)}`;
+  }
+  const h1 = getH1(text);
+  if (h1) return `${text.slice(0, h1.end)}${eol}**Design status:** ${word}${eol}${text.slice(h1.end)}`;
+  return `**Design status:** ${word}${eol}${eol}${text}`;
+}
+
+// ------------------------------------------------------------------ label lines
+
+/**
+ * The bold labels the model's templates put at the start of a line
+ * (WORK-ITEM.md and DESIGN.md). separateLabelLines puts each one back on its
+ * own line when text joined them.
+ */
+export const LINE_LABELS = Object.freeze([
+  'Goal', 'Current position', 'Next action', 'Blockers', 'Related items',
+  'Work', 'Deliverable', 'Done when', 'Depends on',
+  'Overall status', 'Finalization rule',
+  'Status', 'Applies to', 'Required behavior', 'Boundaries and exceptions', 'Acceptance check', 'Decision record', 'Open questions',
+  'Requirements', 'Design status', 'Requirements checked', 'Last updated', 'Design approval',
+  'Recommendation', 'Owner decision', 'Reason for decision',
+]);
+
+const LINE_LABEL_ALT = LINE_LABELS.map((l) => l.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
+const JOINED_LABEL_RE = new RegExp(`[ \\t]+(?=\\*\\*(?:${LINE_LABEL_ALT}):\\*\\*)`, 'g');
+const LABEL_LEAD_RE = new RegExp(`^([ \\t]*)(?:[-*][ \\t]+(?:\\[[ xX]\\][ \\t]+)?)?\\*\\*(?:(?:${LINE_LABEL_ALT}):\\*\\*|P\\d+-T\\d+\\b)`);
+
+/**
+ * Put each template label back on its own line, with a Markdown hard line
+ * break (two spaces) at the end of the line before it:
+ *   "**Requirements:** TV2-001 **Design status:** Proposed"
+ *   -> "**Requirements:** TV2-001  \n**Design status:** Proposed"
+ * A line that starts with a template label or a task ("- [ ] **P1-T01 ...**")
+ * is split before every later template label in it; a task's fields are
+ * indented under the task. Consecutive label lines with no line break between
+ * them get one, so Notion does not join them into one paragraph (sample run c,
+ * round 3). Code blocks, tables, and other lines are left as they are.
+ *
+ * opts.design: the text is a design. Blank lines between its header lines
+ * (Requirements, Design status, Requirements checked, Last updated, Design
+ * approval) become hard breaks, as the model writes them (sample run c,
+ * round 3, bug 43).
+ */
+export function separateLabelLines(text, opts = {}) {
+  const src = String(text ?? '');
+  const eol = eolOf(src);
+  const lines = src.split(/\r?\n/);
+  const out = [];
+  const code = new Set(); // indexes in out of lines inside a code block
+  let fence = null;
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const f = /^[ \t]*(`{3,}|~{3,})/.exec(line);
+    if (fence) {
+      code.add(out.length);
+      out.push(line);
+      if (f && f[1][0] === fence[0] && f[1].length >= fence.length) fence = null;
+      continue;
+    }
+    if (f) {
+      fence = f[1];
+      code.add(out.length);
+      out.push(line);
+      continue;
+    }
+    const lead = LABEL_LEAD_RE.exec(line);
+    if (!lead || /^[ \t]*\|/.test(line)) {
+      out.push(line);
+      continue;
+    }
+    const isTask = /^[ \t]*[-*][ \t]+\[[ xX]\]/.test(line);
+    const indent = isTask ? `${lead[1]}  ` : lead[1];
+    // Split outside code spans only.
+    const parts = [];
+    let cur = '';
+    let ticks = 0;
+    for (let k = 0; k < line.length; k++) {
+      if (line[k] === '`') ticks++;
+      if (ticks % 2 === 0 && (line[k] === ' ' || line[k] === '\t')) {
+        JOINED_LABEL_RE.lastIndex = k;
+        const m = JOINED_LABEL_RE.exec(line);
+        if (m && m.index === k && cur.trim()) {
+          parts.push(cur);
+          cur = '';
+          k += m[0].length - 1;
+          continue;
+        }
+      }
+      cur += line[k];
+    }
+    parts.push(cur);
+    if (parts.length === 1) {
+      out.push(line);
+      continue;
+    }
+    parts.forEach((p, k) => {
+      const last = k === parts.length - 1;
+      // The last piece keeps the line's own ending (a hard break stays a hard break).
+      const piece = k === 0 ? p.replace(/[ \t]+$/, '') : `${indent}${last ? p.replace(/^[ \t]+/, '') : p.trim()}`;
+      out.push(last ? piece : `${piece}  `);
+    });
+  }
+  // A label line followed directly by another label line needs a hard break.
+  for (let i = 0; i < out.length - 1; i++) {
+    if (code.has(i) || code.has(i + 1)) continue;
+    if (!LABEL_LEAD_RE.test(out[i]) || /^[ \t]*\|/.test(out[i])) continue;
+    const next = out[i + 1];
+    if (!next.trim() || !LABEL_LEAD_RE.test(next) || /^[ \t]*\|/.test(next)) continue;
+    // A new list item starts its own block; only a continuation needs the break.
+    if (/^[ \t]*[-*][ \t]/.test(next)) continue;
+    if (!/ {2,}$|\\$|<br\s*\/?>$/i.test(out[i])) out[i] = `${out[i].replace(/[ \t]+$/, '')}  `;
+  }
+  return opts.design ? joinDesignHeader(out).join(eol) : out.join(eol);
+}
+
+const DESIGN_HEADER_RE = /^\*\*(?:Requirements|Design status|Requirements checked|Last updated|Design approval):\*\*/;
+
+/** Design header lines split by blank lines, joined with hard breaks (before the first "## " section only). */
+function joinDesignHeader(lines) {
+  const out = [];
+  let seenSection = false;
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (/^##[ \t]/.test(line)) seenSection = true;
+    if (!seenSection && !line.trim() && out.length && DESIGN_HEADER_RE.test(out[out.length - 1])) {
+      let j = i;
+      while (j < lines.length && !lines[j].trim()) j++;
+      if (j < lines.length && DESIGN_HEADER_RE.test(lines[j])) {
+        const prev = out[out.length - 1];
+        if (!/ {2,}$|\\$|<br\s*\/?>$/i.test(prev)) out[out.length - 1] = `${prev.replace(/[ \t]+$/, '')}  `;
+        i = j - 1;
+        continue;
+      }
+    }
+    out.push(line);
+  }
+  return out;
+}
+
+/** True when a task line holds a task field (**Work:** and the others) that belongs on a line of its own. */
+export function taskFieldsJoined(body) {
+  const text = getSectionWhole(body, 'Tasks');
+  if (text === null) return [];
+  const out = [];
+  for (const line of text.split(/\r?\n/)) {
+    const m = TASK_RE.exec(line) || /^[ \t]*[-*][ \t]+\[[ xX]\][ \t]+\*\*(P\d+-T\d+)/.exec(line);
+    if (!m) continue;
+    if (/\*\*(?:Work|Deliverable|Done when|Depends on):\*\*/.test(line)) out.push(m[2] || m[1]);
+  }
+  return out;
+}
+
+// ------------------------------------------------------------------ design readiness
+
+/**
+ * True when a design has something for the owner to approve: an option under
+ * "## Design options" with a real name ("### Option A — One short brief"), or
+ * a filled "## Selected design". A design just made from the template, or one
+ * that says only "Pending the owner's answer", is a draft: nothing waits for
+ * his approval yet (sample run a, round 3).
+ */
+export function designHasOptions(body) {
+  const text = String(body ?? '');
+  const options = getSection(text, 'Design options');
+  if (options) {
+    for (const n of flattenSections(options.children)) {
+      const m = /^Option\s+[A-Z0-9]+\s*[—–:-]?\s*(.*)$/i.exec(n.heading);
+      if (m && m[1].trim() && !isPlaceholder(m[1].trim())) return true;
+    }
+  }
+  const selected = getSectionText(text, 'Selected design');
+  if (selected !== null) {
+    const real = selected.replace(/```[\s\S]*?```/g, '').split(/\r?\n/).map((l) => l.trim()).filter((l) => l
+      && !/^#{1,6}\s/.test(l)
+      && !/^\|/.test(l)
+      && !/<[^<>\n]+>/.test(l)
+      && !/\bpending\b/i.test(l)
+      && !/^<!--/.test(l));
+    if (real.length) return true;
+  }
+  return false;
+}
+
+// ------------------------------------------------------------------ parent and sub-item links in the text
+
+const idListRe = (label) => new RegExp(`${label}:\\s*((?:[A-Za-z][A-Za-z0-9]*-\\d+)(?:\\s*,\\s*[A-Za-z][A-Za-z0-9]*-\\d+)*)\\.?`);
+
+/**
+ * Name a parent or a sub-item in the Overview's "**Related items:**" line
+ * (sample run c, round 3: the link lived only in Notion's relation properties).
+ * kind 'parent': "Parent WI-001." (a different parent named the same way is replaced);
+ * kind 'sub-item': "Sub-items: WI-002, WI-003." (one list).
+ * Unchanged when the line is missing or already names the id that way.
+ */
+export function linkRelatedItem(body, kind, id) {
+  const text = String(body ?? '');
+  const cur = getLabel(text, 'Related items', { section: 'Overview' });
+  if (cur === null) return text;
+  let next;
+  if (kind === 'parent') {
+    const phrase = `Parent ${id}.`;
+    if (isNoneText(cur)) next = phrase;
+    else if (/\bParent\s+[A-Za-z][A-Za-z0-9]*-\d+\b/.test(cur)) next = cur.replace(/\bParent\s+[A-Za-z][A-Za-z0-9]*-\d+\b/, `Parent ${id}`);
+    else if (new RegExp(`\\b${id}\\b`).test(cur)) return text;
+    else next = `${cur.replace(/\s+$/, '')} ${phrase}`;
+  } else {
+    const m = idListRe('Sub-items').exec(cur);
+    if (isNoneText(cur)) next = `Sub-items: ${id}.`;
+    else if (m) {
+      const ids = m[1].split(/\s*,\s*/);
+      if (ids.includes(id)) return text;
+      next = cur.replace(m[0], `Sub-items: ${[...ids, id].join(', ')}.`);
+    } else if (new RegExp(`\\b${id}\\b`).test(cur)) return text;
+    else next = `${cur.replace(/\s+$/, '')} Sub-items: ${id}.`;
+  }
+  return next === cur ? text : setLabel(text, 'Related items', next, { section: 'Overview' });
+}
+
+/**
+ * Take a parent or a sub-item out of the "**Related items:**" line, where the
+ * toolkit wrote it (linkRelatedItem). Other text is left as it is; a line left
+ * empty says "None."
+ */
+export function unlinkRelatedItem(body, kind, id) {
+  const text = String(body ?? '');
+  const cur = getLabel(text, 'Related items', { section: 'Overview' });
+  if (cur === null || isNoneText(cur)) return text;
+  let next = cur;
+  if (kind === 'parent') {
+    next = cur.replace(new RegExp(`\\s*\\bParent ${id}\\b(?:\\s*\\([^)]*\\))?\\.?`), '');
+  } else {
+    const m = idListRe('Sub-items').exec(cur);
+    if (m) {
+      const ids = m[1].split(/\s*,\s*/).filter((x) => x !== id);
+      next = cur.replace(m[0], ids.length ? `Sub-items: ${ids.join(', ')}.` : '').replace(/\s{2,}/g, ' ');
+    }
+  }
+  next = next.trim();
+  if (next === cur) return text;
+  return setLabel(text, 'Related items', next || 'None.', { section: 'Overview' });
+}
+
+/** Rewrite one row of the Roadmap table with fn(cells, headers); rows fn returns null for stay as they are. */
+function mapRoadmapRows(body, fn) {
+  const text = String(body ?? '');
+  const node = getSection(text, 'Roadmap');
+  if (!node) return text;
+  const content = text.slice(node.contentStart, node.end);
+  const t = parseTable(content);
+  if (!t.found) return text;
+  let updated = content;
+  const esc = (c) => String(c ?? '').replace(/\r?\n/g, ' ').replace(/\|/g, '\\|');
+  for (let r = t.rows.length - 1; r >= 0; r--) {
+    const cells = fn([...t.rows[r]], t.headers, r, t.rows);
+    if (!cells) continue;
+    const span = t.rowSpans[r];
+    const lineEnd = updated.slice(span.start, span.end).match(/\r?\n$/);
+    updated = updated.slice(0, span.start) + `| ${cells.map(esc).join(' | ')} |` + (lineEnd ? lineEnd[0] : '') + updated.slice(span.end);
+  }
+  return updated === content ? text : text.slice(0, node.contentStart) + updated + text.slice(node.end);
+}
+
+/**
+ * Put a sub-item in the Roadmap's Sub-items column: in the first phase that
+ * is In Progress, else the first Not Started one, else the last phase. A
+ * Roadmap that is still the template's example is left alone (the plan is
+ * written at stage 06), and so is one that already names the sub-item.
+ */
+export function addRoadmapSubItem(body, id) {
+  const rows = parseRoadmap(body);
+  const real = rows.map((r, k) => ({ ...r, k })).filter((r) => !r.placeholder);
+  if (!real.length || rows.some((r) => r.subItems.some((s) => sameId(s, id)))) return String(body ?? '');
+  const pick = real.find((r) => /^in progress\.?$/i.test(String(r.status).trim()))
+    || real.find((r) => /^not started\.?$/i.test(String(r.status).trim()))
+    || real[real.length - 1];
+  return mapRoadmapRows(body, (cells, headers, r) => {
+    if (r !== pick.k) return null;
+    const col = headers.findIndex((h) => normalizeHeading(h) === 'sub-items');
+    if (col === -1) return null;
+    const cur = String(cells[col] || '').trim();
+    cells[col] = isNoneText(cur) ? id : `${cur.replace(/\.$/, '')}, ${id}`;
+    return cells;
+  });
+}
+
+/** Take a sub-item out of the Roadmap's Sub-items column; a cell left empty says "None." */
+export function removeRoadmapSubItem(body, id) {
+  return mapRoadmapRows(body, (cells, headers) => {
+    const col = headers.findIndex((h) => normalizeHeading(h) === 'sub-items');
+    if (col === -1) return null;
+    const cur = String(cells[col] || '');
+    const ids = cur.match(/[A-Za-z][A-Za-z0-9]*-\d+/g) || [];
+    if (!ids.some((x) => sameId(x, id))) return null;
+    const left = ids.filter((x) => !sameId(x, id));
+    cells[col] = left.length ? left.join(', ') : 'None.';
+    return cells;
+  });
+}
+
+// ------------------------------------------------------------------ open questions
+
+/**
+ * Set the Status cell of Open Questions rows. ids: question ids such as Q-02.
+ * Returns the body unchanged when none of them is there.
+ */
+export function setQuestionStatus(body, ids, status) {
+  const text = String(body ?? '');
+  const want = new Set([].concat(ids).map((x) => String(x).trim()));
+  const node = getSection(text, 'Open Questions');
+  if (!node || !want.size) return text;
+  const content = text.slice(node.contentStart, node.end);
+  const t = parseTable(content);
+  if (!t.found) return text;
+  const idCol = t.headers.findIndex((h) => normalizeHeading(h) === 'id');
+  const statusCol = t.headers.findIndex((h) => normalizeHeading(h) === 'status');
+  if (idCol === -1 || statusCol === -1) return text;
+  let updated = content;
+  const esc = (c) => String(c ?? '').replace(/\r?\n/g, ' ').replace(/\|/g, '\\|');
+  for (let r = t.rows.length - 1; r >= 0; r--) {
+    const cells = [...t.rows[r]];
+    if (!want.has(String(cells[idCol] || '').trim())) continue;
+    cells[statusCol] = status;
+    const span = t.rowSpans[r];
+    const lineEnd = updated.slice(span.start, span.end).match(/\r?\n$/);
+    updated = updated.slice(0, span.start) + `| ${cells.map(esc).join(' | ')} |` + (lineEnd ? lineEnd[0] : '') + updated.slice(span.end);
+  }
+  return text.slice(0, node.contentStart) + updated + text.slice(node.end);
 }
 
 // ------------------------------------------------------------------ owner edits and derived values

@@ -53,7 +53,7 @@ Every one of these is reported: in the session briefing under "Changes found in 
 2. Ask once: "Shall I split WI-12 into these three sub-items?"
 3. On a yes, create each child under the parent. A child that delivers the
    parent's approved requirements names them:
-   `toolkit work new --title "<title>" --type <type> --parent <id> --covers R-02,R-03`.
+   `toolkit work new --title '<title>' --type <type> --parent <id> --covers R-02,R-03`.
    It links them ("Covers WI-12 R-02, WI-12 R-03"), copies none of their
    text, and inherits the parent's requirements approval: it starts at
    `03-requirements-approved` (or at `06-implementation-plan` when the

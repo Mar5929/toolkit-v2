@@ -71,9 +71,11 @@ WHAT_TO_DO = """
 
 **What to do with this file.** Something under `force-app/` changed and the
 connections above moved with it. Read them, then check whether any of them
-contradicts something recorded in `knowledge/memory/` or in a work item. If one
-does, tell the owner and propose the correction in the actual words it would use;
-the main agent makes the change once the owner approves them. Then delete this file.
+contradicts something recorded in project memory (search it with
+`toolkit memory find`) or in a work item. If one does, tell the owner and
+propose the correction in the actual words it would use; the main agent makes
+the change once the owner approves them, with the `memory-save` skill for
+memory. Then delete this file.
 
 Nothing else deletes it. It stays until somebody reads it.
 

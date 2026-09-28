@@ -8,8 +8,10 @@ description: 'Brings the local repository up to date with its remote without los
 Bring the current checkout up to date with its remote without destroying or
 rewriting anything. Other sessions may be working in this repository right now.
 
-1. **Look first.** Run `git status -sb` and `git rev-parse --abbrev-ref HEAD`.
-   A dirty working tree, or the shared primary checkout on a branch other than
+1. **Look first.** Run `git remote`, `git status -sb`, and
+   `git rev-parse --abbrev-ref HEAD`. No remote (`git remote` prints nothing):
+   there is nothing to pull; say so in one line and stop, with no fetch. A
+   dirty working tree, or the shared primary checkout on a branch other than
    the default branch: stop and report. Your own worktree on your own branch is
    fine.
 2. **Fetch, then try a fast-forward:**
@@ -29,7 +31,8 @@ rewriting anything. Other sessions may be working in this repository right now.
    Then, unless the local commits look like another session's work that does
    not belong here, run `git pull --no-rebase --no-edit`.
 4. **Never push, rebase, or reset.**
-5. **Report** the incoming commits and the final state.
+5. **Report** the incoming commits and the final state, and end with the one
+   question for the owner or the exact words that continue.
 
 Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
 

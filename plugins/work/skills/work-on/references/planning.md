@@ -33,7 +33,10 @@ A phase is complete when its tasks are complete and its exit result has been che
 ```
 
 Tasks section format. Each phase gets a `###` heading with the same phase ID
-and name as its Roadmap row:
+and name as its Roadmap row. Each task field (`**Work:**`, `**Deliverable:**`,
+`**Done when:**`, `**Depends on:**`) starts its own line, and every line of a
+task but the last ends with two spaces, which Markdown reads as a line break.
+Never run the fields together on one line:
 
 ```markdown
 ### P1 — CSV export button
@@ -67,9 +70,10 @@ the item is finished, every phase it completed says Done.
 Only when the item needs it:
 
 - **Branch and worktree** for code work: the worktree
-  `.claude/worktrees/wi-<number>-<slug>` on the branch
-  `claude/wi-<number>-<slug>`, as the project's
-  `.claude/rules/shared-repository-work.md` says, for example
+  `.claude/worktrees/<prefix>-<number>-<slug>` on the branch
+  `claude/<prefix>-<number>-<slug>`, as the project's
+  `.claude/rules/shared-repository-work.md` says. `<prefix>` is the item's id
+  prefix in lower case (`wi` for WI-007, `tv2` for TV2-007), for example
   `git worktree add .claude/worktrees/wi-007-csv-export -b claude/wi-007-csv-export`.
   In Codex this command needs the owner's approval (the work plugin's
   `references/conventions.md`, "Branches and worktrees").
@@ -79,13 +83,18 @@ Only when the item needs it:
   `sf-component-tracker`.
 - **A test plan**, when the checks need more than the item's acceptance
   checks (several scenarios, a manual check, or a release): a copy of
-  `tests/TEST-PLAN-TEMPLATE.md` named for the item, filled as its fill-in
-  guide says.
+  `tests/TEST-PLAN-TEMPLATE.md` named for the item (for example
+  `tests/WI-007-TEST-PLAN.md`), filled as its fill-in guide says, saved in
+  `tests/` in the item's worktree and committed on its branch. Never in
+  `.work-items/`: Git ignores that folder, so the plan would never be
+  committed.
 - **Sub-items** for phases that own real scope: open `work-organize`.
 
 ## Building (stage 08)
 
 - Work on the item's own branch and worktree. Never on the default branch.
+- Stage files by name and write a plain commit message. No `Co-Authored-By`
+  line naming an AI and no "Generated with" line.
 - One task at a time, in the order the Depends on lines allow.
 - With a team: one `builder` agent per independent task, each with its own
   files. The main agent merges each builder's branch into the item's branch,

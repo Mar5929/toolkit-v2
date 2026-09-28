@@ -6,7 +6,7 @@ description: 'Tests a finished build against its work item''s requirements, fixe
 # Work check
 
 Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
-Shared rules: the work plugin's `references/conventions.md` and `references/helpers.md` (how to brief agents), two folders above this skill's folder (`../../references/`). To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Run each `toolkit` command alone, on its own line: in Codex a command joined by `&&`, `;`, a pipe, or a heredoc, or run from a script, runs inside the sandbox and fails. Give text with `--text`, or a file in a new `mktemp -d` folder (never a fixed `/tmp` name, deleted right after the command). Never change a record with a script.
+Shared rules: the work plugin's `references/conventions.md` and `references/helpers.md` (how to brief agents), two folders above this skill's folder (`../../references/`). To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Run each `toolkit` command alone, on its own line, in both hosts: never joined by `&&`, `;`, or a pipe, and never from a script (in Codex that runs it inside the sandbox, where it fails). Text (conventions, "Text in a command"): one-line values (`--note`, `--effect`, `--append-row`, `--title`) go in single quotes, with an apostrophe written `'\''`, because double quotes run backticks and `$(...)`; section and design text goes on standard input in Claude Code (`<file>` is `-`, followed by a quoted heredoc, `<<'EOF'`), and in Codex in `--text '<text>'` or a file in a new `mktemp -d` folder, deleted right after the command. Never change a record with a script. Ask the owner in the reply text, never through a question tool. No remote (`git remote` prints nothing): never run `git fetch`, and never report a fetch refusal as a blocker.
 
 ## Steps
 
@@ -15,18 +15,18 @@ Shared rules: the work plugin's `references/conventions.md` and `references/help
    `toolkit work design <id>`
    `toolkit work design <parent-id>`
    `toolkit work set <id> --stage 09-testing`
-2. Run the project's tests and every acceptance check the item lists. A check with several scenarios or manual steps gets a test plan: a copy of `tests/TEST-PLAN-TEMPLATE.md` named for the item, with the results filled in. A check that could not run is reported as not run, never as passed.
+2. Run the project's tests and every acceptance check the item lists. A check with several scenarios or manual steps gets a test plan: a copy of `tests/TEST-PLAN-TEMPLATE.md` named for the item (for example `tests/WI-012-TEST-PLAN.md`), saved in `tests/` in the item's worktree and committed on its branch with the results filled in. Never save it in `.work-items/`, which Git ignores. A check that could not run is reported as not run, never as passed.
 3. Brief the `acceptance-checker` agent (never the agent that built it): one verdict per requirement (met, partly met, not met) with evidence, plus defects seen in the diff. Give it the branch and commit to check.
 4. Failures: set the bug-fixing stage; a `builder` agent (or the main agent) fixes; the checker checks again. Repeat until clean, or until a failure needs an owner decision (an Open Questions row and the item waiting on the owner).
    `toolkit work set <id> --stage 10-bug-fixing`
 5. Record the result: what was checked, the evidence, the known gaps.
-   `toolkit work history <id> --note "Checked: <what>; evidence: <where>; gaps: <gaps or none>"`
-6. Set the approval stage and wait on the owner. Show him what it does now, how to see it (a link, a command, or a screenshot), the evidence, and the gaps. Ask one line: "Do you approve this result?"
+   `toolkit work history <id> --note 'Checked: <what>; evidence: <where>; gaps: <gaps or none>'`
+6. Set the approval stage and wait on the owner. Show him what it does now, how to see it (a link, a command, or a screenshot), the evidence, and the gaps. Ask one line, in the reply text: "Do you approve this result?" Add no Open Questions row for the result approval itself: stage 11 already lists it as the owner's decision. Update the current focus when its next step changed (`../../references/conventions.md`, "The current focus").
    `toolkit work set <id> --stage 11-user-approval --waiting-on owner`
-7. Yes: record it (the command adds its own history row), quote his words in one note, and hand the item back to the agent unless another question for him is still open; then open `work-finish`. A requirement change goes to `work-requirements`; a fix becomes a task and continues here. Every reply ends with the approval question, or the exact words that continue.
+7. Yes: record it (the command adds its own history row), hand the item back to the agent unless another question for him is still open, and quote his words in one note; then open `work-finish`. When the approve command fails, show the owner its error; never work around it by editing the record. A requirement change goes to `work-requirements`; a fix becomes a task and continues here. Every reply ends with the approval question, or the exact words that continue.
    `toolkit work approve <id> --result --by <owner>`
-   `toolkit work history <id> --note "Owner's words: <quote>"`
    `toolkit work set <id> --waiting-on agent`
+   `toolkit work history <id> --note 'Owner'\''s words: <quote>' --effect 'Result approved; work-finish continues.'`
 
 ## Agents
 
