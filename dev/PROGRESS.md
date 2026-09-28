@@ -130,6 +130,19 @@ Read `dev/GOAL.md` first. This file says where the work stands.
   checklist. Watch in the Codex round: whether the `toolkit` allow rule
   matches a command with an escaped apostrophe (`'Owner'\''s words'`).
 
+## Now (2026-09-28)
+
+- Final fix round committed (`9d21337`): 67 of 77 findings fixed, 5 not
+  bugs, 5 for Mike (`dev/test-runs/open-bugs-status.md`). Suite 841 of 844
+  pass, 3 skipped by design.
+- Waiting on Mike: `ntn login` (Notion sign-in was lost on this Mac), trust
+  the V2 hooks in Codex `/hooks`, and 11 yes/no decisions (the "Needs your
+  yes" list in `dev/model-changes.md` plus turning the toolkit plugin on
+  machine-wide and installing V2 in his everyday Claude Code).
+- Running: confirmation round (workflow `wf_2df5e88b-ba7`): Codex local,
+  Salesforce, Hindsight; Claude Code local; final independent review
+  (`dev/final-review.md`). The Notion confirmation run waits for `ntn login`.
+
 ## Pending fixes (collect; fix after the sample runs)
 
 Status 2026-09-28: every item below is fixed in the working tree by the final
