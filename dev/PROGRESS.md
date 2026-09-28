@@ -101,9 +101,22 @@ Read `dev/GOAL.md` first. This file says where the work stands.
   two Salesforce overlaps.
 - Lore research done (`dev/research/lore.md`); Mike chose "store in Lore's
   layout" and approved rewriting the sf-architect-solutioning description.
-- Running: workflow `wf_d86598a0-140` (Firecrawl capture of official docs to
-  `ai-external-knowledge/`, skill-writing guide, all descriptions rewritten,
-  Lore layout for Notion memory, routing re-tests until 90% in both hosts).
+- Done (`f208325`): 40 official pages captured with Firecrawl into
+  `ai-external-knowledge/`; `dev/research/skill-writing-guide.md` (68 rules);
+  all 26 descriptions rewritten; Lore layout for Notion memory; routing
+  re-tested (last round: Claude Code 97%, Codex 95%; remaining misses are
+  mixed two-job messages).
+- Codex sample runs round 3: local, Salesforce, Hindsight passed; Notion
+  failed on one HIGH bug (design approval half-written). 77 findings in
+  `dev/test-runs/open-bugs.md`.
+- Mike approved (2026-09-27/28): handoff rule wording, two AGENTS.md routing
+  lines, bigger skill list budget, and the four memory additions.
+- Running: final fix round, workflow `wf_bf3d2b80-30f` (model branch, work
+  and Notion tracker, memory and runtime, skills), each verified, then
+  integration and `dev/test-runs/open-bugs-status.md`.
+- Next after it: one confirmation round of the sample runs (4 Codex + Claude
+  Code), a final independent review, then the report with the 11-item
+  checklist.
 
 ## Pending fixes (collect; fix after the sample runs)
 
