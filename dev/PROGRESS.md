@@ -152,6 +152,18 @@ Read `dev/GOAL.md` first. This file says where the work stands.
   Salesforce, Hindsight; Claude Code local; final independent review
   (`dev/final-review.md`). The Notion confirmation run waits for `ntn login`.
 
+## Close-out (2026-09-28 evening, workflow `wf_68dc2118-661`)
+
+- Final runs (committed `82aefe9`): Claude Code local, Codex Hindsight,
+  Codex Salesforce, and Notion (real page) passed; Codex local did not pass
+  only because "no agent team" skipped the independent checker. Re-review:
+  finish items 1-8 met; 9 partly; 10 and 11 open.
+- Mike decided: the checker always runs, even with "no agent team"; Notion-
+  only projects rely on Notion history for backup.
+- Running: close-out fixes (R-B1, R-I1 to R-I4, 12 minors, run bugs),
+  installs updated, reruns in Codex and Claude Code, independent
+  confirmation of the finish items. Then the final report.
+
 ## Last mile (2026-09-28, workflow `wf_93bccb2f-ec7`)
 
 - Committed `fe918aa`: skills carry their procedures in their own
