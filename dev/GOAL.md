@@ -61,6 +61,25 @@ steps that must always run the same way.
   holding Lore's databases) so Lore's tools can read it. Lore's own automatic
   saving and hooks stay off; no new sign-in. Focus and glossary stay child
   pages.
+- **Decisions of 2026-09-28** (Mike: "yes to all your recommendations"):
+  (1) requirements areas are one folder per area copied from
+  `system-area-template/`; (2) skip `git fetch` when there is no remote;
+  (3) in Codex the owner runs every sandbox deploy and sandbox data change;
+  (4) template guides say "copy this file" not "rename"; (5) Salesforce
+  platform questions route to `sf-architect-solutioning` (AGENTS.md line);
+  (6) `sf-component-tracker` description "Use first, before work-on";
+  (7) never write a script that deploys; (8) the guard also checks DevOps
+  Center pipeline deploys; (9) fix old wording in two Salesforce skill
+  bodies; (10) the `toolkit` plugin is on machine-wide in both hosts (only
+  project-setup plus hooks that do nothing outside V2 projects), the other
+  V2 plugins only inside V2 projects; (11) install Toolkit V2 in Mike's
+  everyday Claude Code with that rule; (12) risky toolkit commands (memory
+  delete, import, machine-setup, Hindsight service install/start) ask first
+  in both hosts; (13) setup asks for a backup folder and the toolkit exports
+  `.work-items/` and `.memory/` automatically at work-finish and handoff.
+  Goal adjustments: one skill per job with reference files (no new skills
+  per process), and anything that must happen every time lives in the
+  `toolkit` command or a hook, with the skill explaining it.
 - **Skills carry their own procedures** (Mike, 2026-09-28): every process the
   agent must run a certain way (work tracking, local Markdown and Obsidian
   memory, design and delivery teams, handoffs, git, setup) has a skill with a
