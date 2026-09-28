@@ -139,6 +139,8 @@ Read `dev/GOAL.md` first. This file says where the work stands.
   the V2 hooks in Codex `/hooks`, and 11 yes/no decisions (the "Needs your
   yes" list in `dev/model-changes.md` plus turning the toolkit plugin on
   machine-wide and installing V2 in his everyday Claude Code).
+- Running: skill references workflow (`wf_d3c692ad-9e1`): audit, per-skill
+  reference files, shared-text sync tool, review, routing spot check.
 - Running: confirmation round (workflow `wf_2df5e88b-ba7`): Codex local,
   Salesforce, Hindsight; Claude Code local; final independent review
   (`dev/final-review.md`). The Notion confirmation run waits for `ntn login`.

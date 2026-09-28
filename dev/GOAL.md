@@ -61,6 +61,13 @@ steps that must always run the same way.
   holding Lore's databases) so Lore's tools can read it. Lore's own automatic
   saving and hooks stay off; no new sign-in. Focus and glossary stay child
   pages.
+- **Skills carry their own procedures** (Mike, 2026-09-28): every process the
+  agent must run a certain way (work tracking, local Markdown and Obsidian
+  memory, design and delivery teams, handoffs, git, setup) has a skill with a
+  clear SKILL.md and reference files inside its own folder for the
+  step-by-step details, following Anthropic's and OpenAI's official skill
+  and hook guidance. Descriptions say exactly what each skill does and when
+  to use it.
 - **Routing approvals** (Mike, 2026-09-27 night): (1) the model's
   `.claude/rules/session-handoff.md` gets the new wording in
   `dev/model-changes.md` ("Proposed: handoff rule wording"); (2) the model's
