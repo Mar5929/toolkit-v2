@@ -80,6 +80,13 @@ steps that must always run the same way.
   Goal adjustments: one skill per job with reference files (no new skills
   per process), and anything that must happen every time lives in the
   `toolkit` command or a hook, with the skill explaining it.
+- **Decisions of 2026-09-28, evening** (Mike): (1) "No agent team" decides
+  only who builds. Before asking for the owner's result approval, the agent
+  always starts one independent acceptance checker agent (in Codex, the
+  fallback in the skill's agent reference). The old rule "a no authorizes no
+  helpers" is replaced for this one check. (2) Projects that keep both work
+  items and memory in Notion rely on Notion's page history and trash; setup
+  skips the backup-folder question for them and says why.
 - **Skills carry their own procedures** (Mike, 2026-09-28): every process the
   agent must run a certain way (work tracking, local Markdown and Obsidian
   memory, design and delivery teams, handoffs, git, setup) has a skill with a
