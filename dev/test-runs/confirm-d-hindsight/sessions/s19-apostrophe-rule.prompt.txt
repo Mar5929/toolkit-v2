@@ -1,0 +1,1 @@
+Please run this exact shell command once, on its own, and show me its output: toolkit memory find 'Mike'\''s README preference'

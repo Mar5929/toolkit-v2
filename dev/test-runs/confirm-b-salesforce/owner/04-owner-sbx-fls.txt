@@ -1,0 +1,2 @@
+Mike, in tkv2-sbx Setup (simulated by the harness): Account > Tier > Set Field-Level Security: Visible for Sales Manager, System Administrator, Sales User, Read Only; Read-Only for Sales User and Read Only. Saved.
+2026-09-28T13:25:25

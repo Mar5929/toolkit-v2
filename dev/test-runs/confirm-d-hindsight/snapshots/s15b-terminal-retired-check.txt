@@ -1,0 +1,51 @@
+$ toolkit memory find 'explain each command-line flag in the README file'
+1 memory record is about "explain each command-line flag in the README file" (Hindsight recall, best first):
+- user_document_cli_flags_in_readme: Document every command-line flag in the README
+    # Command-line flag documentation **Remember:** Mike prefers every command-line flag to be documented in the README. **Why:** Not stated by the owner. **How to 
+Read a record with toolkit memory get <key> before relying on it.
+exit=0
+
+$ toolkit memory find 'README flags'
+1 memory record is about "README flags" (Hindsight recall, best first):
+- user_document_cli_flags_in_readme: Document every command-line flag in the README
+    # Command-line flag documentation **Remember:** Mike prefers every command-line flag to be documented in the README. **Why:** Not stated by the owner. **How to 
+Read a record with toolkit memory get <key> before relying on it.
+
+$ toolkit memory list
+- user_document_cli_flags_in_readme: Document every command-line flag in the README
+
+$ toolkit memory list --status retired
+- user_explain_each_cli_flag_in_readme [archived]: Explain each command-line flag in the README file
+
+$ toolkit brief | grep -n -i "explain_each\|Memory records\|Project memory" -A2
+28:Project memory (hindsight): 1 record, from the local copy. toolkit memory find searches it; toolkit memory get <key> reads one record.
+29-
+30:Memory records:
+31-- user_document_cli_flags_in_readme: Document every command-line flag in the README
+
+$ grep -rl explain_each .toolkit-cache
+ugrep: warning: .toolkit-cache: No such file or directory
+ls: .toolkit-cache: No such file or directory
+$ cat .git/toolkit-v2/memory-cache.json
+{
+  "schema": 2,
+  "backend": "hindsight",
+  "identity": "hindsight greet-cli-confirm-d http://127.0.0.1:8888",
+  "location": "Hindsight bank greet-cli-confirm-d at http://127.0.0.1:8888",
+  "refreshedAt": "2026-09-28T16:59:36.342Z",
+  "focus": "# Current focus\n\nLast updated: 2026-09-28, Codex after checking the combined WI-001 branch.\n\n## Now\n\n- WI-001 — Add a --shout flag to the greet CLI.\n- WI-002 — Document the --shout flag in README.\n\n## Waiting on the owner\n\n- Trust this project folder and Toolkit V2 hooks in Codex (setup steps; toolkit doctor still reports both warnings).\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Ask Mike to approve the WI-001 result. WI-002 result is approved; its README commit is on the WI-001 branch at 9c30dd9. The parent check passed seven tests, five direct command cases, the README example, and git diff --check. No remote is configured. After parent approval, continue delivery with work-finish.\n",
+  "records": [
+    {
+      "key": "user_document_cli_flags_in_readme",
+      "type": "user",
+      "description": "Document every command-line flag in the README",
+      "status": "current",
+      "proposal": false,
+      "saved": "2026-09-28",
+      "source": "Mike, in chat, 2026-09-28"
+    }
+  ]
+}
+
+$ grep -c explain_each .git/toolkit-v2/memory-cache.json
+0

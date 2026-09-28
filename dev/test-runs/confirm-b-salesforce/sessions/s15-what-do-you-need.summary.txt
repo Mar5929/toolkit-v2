@@ -1,0 +1,76 @@
+PROMPT: What do you need from me?
+THREAD: 01a0e916-df88-7073-a29a-cf33dc10366f
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 add a Tier picklist field to Account so the sales team can rank their accounts: 08 Build, In Progress. Next action: Complete R-01 record behavior and R-02 UI checks after WI-002 field access and Account Layout are configured. Record evidence, then reque... Continues with work-on.
+- WI-002 Set Account Tier access and place it below Rating on Account Layout: 08 Build, In Progress, waiting on owner. Next action: After final deploy-scope review, obtain Mike’s separate approval for the WI-002 layout-only deployment to tkv2-sbx. Then deploy, verify T... Continues with work-decide.
+
+Waiting on the owner:
+- WI-002 Set Account Tier access and place it below Rating on Account Layout: Q-04: Does Mike approve deploying the validated layout-only WI-002 package containing Account-Account Layout to tkv2-sbx? This adds Tier directly below Rating on Account Layout and affects its assi... Affects P2-T03; R-04. (work-decide)
+
+Items: 2 in progress.
+
+Current focus:
+## Now
+- WI-001 field-only sandbox deployment job 0AfFAKE000DEPLOY3 succeeded. Mike verified the approved field description and help text in tkv2-sbx Setup. Field shape and guidance checks passed; record behavior and UI checks remain.
+- WI-002: Mike reported saving the approved four-profile Tier field-access Setup step in tkv2-sbx. A read-only FieldPermissions query found exactly the expected four grants: Sales Manager and System Administrator read/edit; Sales User and Read Only read only. No permission-set Tier grant appeared. Account read access remains on all four profiles. Evidence was committed on the WI-002 branch as 89aed0d.
+- WI-002 layout-only package contains Account-Account Layout. The source adds Tier directly below Rating; a fresh sandbox retrieve found no other difference. Check-only validation succeeded as 0AfFAKE000VALID3, and deploy preview succeeded. The layout has not been deployed.
+- The repository has no origin remote. tkv2-sbx refreshes from production every Sunday night.
+## Next session starts with
+- Continue WI-002 from Resume here. If Mike approves Q-04, run the layout-only sandbox deploy, verify deployment outcome, and check Tier placement and representative-user R-03/R-04 behavior.
+- Continue WI-001 from Resume here. After WI-002 layout, run record behavior and UI checks for R-01/R-02; sandbox data writes require separate approval.
+- ... 7 more.
+
+[AGENT] WI-002 is waiting on your decision about the sandbox layout deployment. I’ll check the recorded deployment scope and work item so I can give you the exact approval choice.
+
+[CALL exec] cat SOUL.md PROJECT.md .claude/rules/*.md
+   cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/skills/work-decide/SKILL.md
+   rg --files .work-items | head -60
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"i":0,"result":{"status":"fulfilled","value":{"chunk_id":"215161","wall_time_seconds":0,"exit_code":1,"original_token_count":7357,"output":"cat: SOUL.md: No such file or directory\n# Acme CRM\n\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\n\n## Purpose and intended outcome\n\n- Purpose: Give the Acme sales team a Salesforce org that fits how they sell.\n- Intended outcome: Better account data is the first improvement toward that goal.\n\n## Scope and boundaries\n\n- In scope: The Acme sales team's Salesforce org, starting with account data.\n- Outside scope: `<Important exclusions or adjacent owners.>`\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\n\n## Systems and environments\n\n| System or org | Purpose | Environment | Source of truth | Access notes |\n| --- | --- | --- | --- | --- |\n| `tkv2-sbx` | Project sandbox; refreshed from production every Sunday night, so sandbox-only changes are gone by Monday | Sandbox | Salesforce org alias and refresh schedule, confirmed by Mike on 2026-09-28 | Salesforce CLI |\n| `tkv2-prod` | Production org | Production | Salesforce org alias, confirmed by Mike on 2026-09-28 | Salesforce CLI; agents do not deploy or write data here |\n\n## People and ownership\n\n| Role | Person or team | Responsibility | Source / last confirmed |\n| --- | --- | --- | --- |\n| Project owner | Mike | Makes project decisions | Project setup, 2026-09-28 |\n\n## Work and project records\n\n- Work tracker: Local folders in `.work-items/`, identified by work item ID.\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\n- Project decisions: [DECISIONS.md](DECISIONS.md)\n- Functional requirements: [requirements/](requirements/)\n- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`\n- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`\n- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)\n- Memory backup or sync: `<Owner-approved destination and restore procedure, outside this repository>`\n\n## Resources and project paths\n\n- Salesforce source: `force-app/` or `<actual source path>`\n- Project-wide deployment manifest: `delivery/deployment/full-project-deployment-template/package.xml` after the API version and members are verified. Keep it as the full project component inventory; ordinary deployments use narrower work-item packages.\n- Work-item deployment manifests: `delivery/deployment/<work-item-id>-<short-name>/package.xml` when an item changes Salesforce metadata.\n
+
+[AGENT] I’m using the project’s work-decide procedure to check every recorded owner decision.
+
+[CALL exec] toolkit work decisions
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+2 decisions wait on the owner:
+
+WI-002 Set Account Tier access and place it below Rating on Account Layout
+  - Q-04: Does Mike approve deploying the validated layout-only WI-002 package containing Account-Account Layout to tkv2-sbx? This adds Tier directly below Rating on Account Layout and affects its assigned users; no profile or permission set is in the package. Affects P2-T03; R-04. (work-decide)
+
+Memory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):
+  - user_salesforce_setup_afternoon: Mike prefers to handle his own Salesforce Setup clicking and checks in the afternoon. Saved 2026-09-28. Yes: toolkit memory approve user_salesforce_setup_afternoon --by <name>. No: toolkit memory reject user_salesforce_setup_afternoon. (work-decide)
+
+
+[CALL exec] toolkit work show WI-002
+   git status --short
+   rg -n 'VALID3|Q-04|layout-only|Account-Account Layout' .work-items delivery/deployment
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"i":0,"result":{"status":"fulfilled","value":{"chunk_id":"88fe72","wall_time_seconds":0.000005333,"exit_code":0,"original_token_count":2847,"output":"WI-002: Set Account Tier access and place it below Rating on Account Layout\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce/.work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account-so/WI-002-tier-access-and-layout/WORK-ITEM.md\nStage: 08 Build (In Progress) | Waiting on: owner | Continue with: work-decide\nParent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account-so/DESIGN.md). Read it with: toolkit work design WI-001\nWorktree branch for this item: claude/wi-002-set-account-tier-access-and (folder .claude/worktrees/wi-002-set-account-tier-access-and)\n\n---\nid: WI-002\ntitle: Set Account Tier access and place it below Rating on Account Layout\ntype: build\nstage: 08-build\nstatus: In Progress\nparent: WI-001\nwaiting_on: \"owner\"\npriority: medium\ndelivery: agent-led\nrequirements_approved: \"2026-09-28 by Mike\"\ndesign: none\nresult_approved: \"no\"\nupdated: 2026-09-28\n---\n\n# WI-002: Set Account Tier access and place it below Rating on Account Layout\n\n## Overview\n\n**Goal:** Give Account viewers read access to Tier, limit editing to Sales Manager and System Administrator profile users, and place Tier directly below Rating on Account Layout.\n\n**Current position:** Mike reported saving the approved four-profile Tier access in tkv2-sbx. A read-only FieldPermissions query returned exactly the expected four grants, with edit access only for Sales Manager and System Administrator. The layout-only package remains validated and awaits separate deployment approval; representative-user UI checks remain.\n\n**Next action:** After final deploy-scope review, obtain Mike’s separate approval for the WI-002 layout-only deployment to tkv2-sbx. Then deploy, verify Tier directly below Rating as an assigned user, and finish representative-user access checks for R-03/R-04.\n\n**Blockers:** The Account Layout deployment needs separate owner approval. Representative-user UI checks for WI-002 and WI-001 depend on that deployment.\n\n**Related items:** Parent WI-001 R-03 and R-04; its approved Option A design.\n\n## Roadmap\n\nA phase is complete when its tasks are complete and its exit result has been checked.\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 — Access and layout baseline | Existing grants and Account Layout configuration are known | Done | Actual layout assignment and effective access paths are recorded | None |\n| P2 — Tier access and placement | Approved R-03 and R-04 behavior is implemented and checked | In Progress | Account Layout and effective access checks pass, then Mike review
+
+[AGENT] I need your decision on **WI-002’s sandbox layout deployment**. I recommend approving it: the package was validated and contains only `Account-Account Layout`. It adds Tier directly below Rating for users assigned that layout; it contains no profile or permission set changes.
+
+**Do you approve deploying that package to `tkv2-sbx`?** If yes, I’ll run the final scope check, deploy it, and verify the result. If no, I’ll record your decision and leave it undeployed.
+
+There is also a separate proposed memory preference to review after this decision.
+
+SKILLS OPENED (SKILL.md read): ['work-decide']
+
+TOOLKIT COMMANDS:
+   toolkit work decisions
+   toolkit work show WI-002

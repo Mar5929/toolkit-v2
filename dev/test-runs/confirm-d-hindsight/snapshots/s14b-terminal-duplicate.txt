@@ -1,0 +1,26 @@
+$ toolkit memory save --type user --name explain-each-cli-flag-in-readme --description 'Explain each command-line flag in the README file' --body '<near-copy body>' --source 'Mike, in chat, 2026-09-28' --approved-by Mike
+Saved to memory: user_explain_each_cli_flag_in_readme (new record).
+Where: Hindsight bank greet-cli-confirm-d at http://127.0.0.1:8888
+Version: b1182b37118b
+Approved by: Mike
+exit=0
+
+$ toolkit memory save (same key as the existing record, no --expect)
+Error: user_document_cli_flags_in_readme was not saved: memory already has a record like it.
+- user_document_cli_flags_in_readme, the same key: Document every command-line flag in the README
+Fix: To update user_document_cli_flags_in_readme, read it with toolkit memory get user_document_cli_flags_in_readme and save again with --expect 98ae4331b503. To replace a record with this one, add --supersedes <key>. When it is a different fact, add --allow-similar.
+exit=2
+
+$ toolkit memory list --status all
+- user_document_cli_flags_in_readme: Document every command-line flag in the README
+- user_explain_each_cli_flag_in_readme: Explain each command-line flag in the README file
+
+$ toolkit memory save --type user --name readme-documents-each-cli-flag --description 'Document each command-line flag in the README file' --body '**Remember:** Mike prefers each command-line flag to be documented in the README. ...' --source 'Mike, in chat, 2026-09-28' --approved-by Mike
+Error: user_readme_documents_each_cli_flag was not saved: memory already has records like it.
+- user_document_cli_flags_in_readme, a very similar description: Document every command-line flag in the README
+- user_explain_each_cli_flag_in_readme, a very similar description: Explain each command-line flag in the README file
+Fix: To update user_document_cli_flags_in_readme, read it with toolkit memory get user_document_cli_flags_in_readme --json, then save that key with --expect <version> (the version field of that read). To replace a record with this one, add --supersedes <key>. When it is a different fact, add --allow-similar.
+exit=2
+$ toolkit memory list --status all
+- user_document_cli_flags_in_readme: Document every command-line flag in the README
+- user_explain_each_cli_flag_in_readme: Explain each command-line flag in the README file

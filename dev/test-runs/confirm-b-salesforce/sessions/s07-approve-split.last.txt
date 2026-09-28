@@ -1,0 +1,9 @@
+Option A, the approved description and help text, and the split are recorded. **WI-001 will deliver the Tier field first; WI-002 will deliver access and Account Layout afterward.** Both work items validate cleanly. No Salesforce metadata has changed.
+
+The local approval policy rejected worktree creation before it ran. Can you run this command from the project root, or approve it in an interactive Codex session, so I can start the field build?
+
+```sh
+git worktree add .claude/worktrees/wi-001-add-a-tier-picklist-field-to -b claude/wi-001-add-a-tier-picklist-field-to
+```
+
+`toolkit doctor` also still reports that this folder and its Toolkit V2 and Salesforce guard hooks are untrusted in Codex.

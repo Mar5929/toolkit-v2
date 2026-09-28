@@ -1,0 +1,13 @@
+Your help text guidance is recorded in WI-001: “Set by hand. Gold is the highest tier, then Silver, then Bronze.” It is suggested wording; the requirement fixes the meaning.
+
+The requirements are ready for your review:
+
+- **Goal:** Manually rank Accounts with a Tier field; no automatic ranking.
+- **R-01:** Gold, Silver, Bronze in that order; Tier may be blank and has no default.
+- **R-02:** The field has a description and help text explaining manual setting and the tier order.
+- **R-03:** Anyone who can see an Account can read Tier. Only users with the Sales Manager profile and system administrators can edit it.
+- **R-04:** Tier appears directly below Rating on Account Layout.
+
+Acceptance requires those behaviors to be tested and you to review the result. No Salesforce metadata has been changed.
+
+Do you approve these requirements?

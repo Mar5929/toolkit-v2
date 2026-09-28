@@ -1,0 +1,3 @@
+WI-002’s layout is present in `tkv2-sbx`. A fresh retrieve matches the source exactly, with Tier directly below Rating. The four profile grants also match the approved access settings. I saved your afternoon Salesforce Setup preference to memory and recorded the deploy and test evidence.
+
+**One check remains:** the sandbox has no Account records, so I could not test the Account page or saving Tier values. I recommend creating a disposable Account in `tkv2-sbx` and checking that Tier starts blank, saves Gold, Silver, Bronze, and blank, shows the approved help text below Rating, and is editable only for Sales Manager and System Administrator. Can you run those checks as the four representative profiles and share the results?

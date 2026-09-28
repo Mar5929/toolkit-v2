@@ -1,0 +1,1 @@
+Not yet on the merge. For WI-002, in its worktree --lines printed 4 for a four-line file, 2 for a file with one and two line breaks, and 0 for an empty file. I approve the WI-002 result.

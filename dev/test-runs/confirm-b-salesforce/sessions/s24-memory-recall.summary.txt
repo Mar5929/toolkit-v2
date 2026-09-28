@@ -1,0 +1,156 @@
+PROMPT: I'm thinking about the next field. Do you remember how I like new custom fields to be set up?
+THREAD: 01a0e939-a872-7e13-a65a-94a9878260da
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The tracker has no open items. A new request starts a work item with the work-on skill.
+
+Items: 2 done.
+
+Current focus:
+Last updated: 2026-09-28, Account Tier production delivery recorded and WI-001/WI-002 finished; recorded by agent from Mike's report
+## Now
+- None.
+## Waiting on the owner
+- None.
+## Untracked to-dos
+- None.
+## Next session starts with
+- WI-001 and WI-002 are Done. Their production outcomes, approved behavior, and known verification gaps are in the work items, deployment records, Account requirements, and Account system guide on local main.
+- Await Mike's next project request. The repository has no remote. `tkv2-sbx` refreshes from production every Sunday night.
+
+Project memory (builtin): 2 records. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_custom_field_documentation: Every new custom field should have a description and help text
+- user_salesforce_setup_afternoon: Mike prefers to handle his own Salesforce Setup clicking and checks in the afternoon
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them. Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.
+
+Always-on rules. Claude Code loads them by itself; in Codex, each one is read at session start:
+- .claude/rules/check-deployment-contents.md: Check What a Deployment Includes
+- .claude/rules/component-tracker.md: Component Tracker
+- .claude/rules/confirm-salesforce-changes.md: Confirm Salesforce Changes
+- .claude/rules/humanize-outbound-text.md: Humanize Anything Sent to Another Person
+- .claude/rules/keep-work-item-current.md: Keep the Active Work Item Accurate
+- .claude/rules/memory-review-and-save.md: Review and Save Project Memory
+- .claude/rules/plain-english-artifacts.md: Write Artifacts in Plain English
+- .claude/rules/production-data-changes.md: Production Data Changes
+- .claude/rules/project-file-locations.md: Where Project Files Go
+- .claude/rules/salesforce-org-safety.md: Salesforce Org Safety
+- .claude/rules/session-handoff.md: Prepare a Session Handoff
+- .claude/rules/shared-repository-work.md: Work Safely in a Shared Repository
+- .claude/rules/work-item-folders.md: Local Work-I
+
+[AGENT] I’ll check the project memory for your custom field preference. I’m using the memory-find skill so I can give you the recorded wording.
+
+[CALL exec] cat SOUL.md PROJECT.md
+   cat .claude/rules/*.md
+   cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.4/skills/memory-find/SKILL.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{"i":0,"result":{"status":"fulfilled","value":{"chunk_id":"26c251","wall_time_seconds":0,"exit_code":1,"original_token_count":760,"output":"cat: SOUL.md: No such file or directory\n# Acme CRM\n\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\n\n## Purpose and intended outcome\n\n- Purpose: Give the Acme sales team a Salesforce org that fits how they sell.\n- Intended outcome: Better account data is the first improvement toward that goal.\n\n## Scope and boundaries\n\n- In scope: The Acme sales team's Salesforce org, starting with account data.\n- Outside scope: `<Important exclusions or adjacent owners.>`\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\n\n## Systems and environments\n\n| System or org | Purpose | Environment | Source of truth | Access notes |\n| --- | --- | --- | --- | --- |\n| `tkv2-sbx` | Project sandbox; refreshed from production every Sunday night, so sandbox-only changes are gone by Monday | Sandbox | Salesforce org alias and refresh schedule, confirmed by Mike on 2026-09-28 | Salesforce CLI |\n| `tkv2-prod` | Production org | Production | Salesforce org alias, confirmed by Mike on 2026-09-28 | Salesforce CLI; agents do not deploy or write data here |\n\n## People and ownership\n\n| Role | Person or team | Responsibility | Source / last confirmed |\n| --- | --- | --- | --- |\n| Project owner | Mike | Makes project decisions | Project setup, 2026-09-28 |\n\n## Work and project records\n\n- Work tracker: Local folders in `.work-items/`, identified by work item ID.\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\n- Project decisions: [DECISIONS.md](DECISIONS.md)\n- Functional requirements: [requirements/](requirements/)\n- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`\n- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`\n- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)\n- Memory backup or sync: `<Owner-approved destination and restore procedure, outside this repository>`\n\n## Resources and project paths\n\n- Salesforce source: `force-app/` or `<actual source path>`\n- Project-wide deployment manifest: `delivery/deployment/full-project-deployment-template/package.xml` after the API version and members are verified. Keep it as the full project component inventory; ordinary deployments use narrower work-item packages.\n- Work-item deployment manifests: `delivery/deployment/<work-item-id>-<short-name>/package.xml` when an item changes Salesforce metadata.\n-
+
+[CALL exec] toolkit memory focus
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+# Current focus
+
+Last updated: 2026-09-28, Account Tier production delivery recorded and WI-001/WI-002 finished; recorded by agent from Mike's report
+
+## Now
+
+- None.
+
+## Waiting on the owner
+
+- None.
+
+## Untracked to-dos
+
+- None.
+
+## Next session starts with
+
+- WI-001 and WI-002 are Done. Their production outcomes, approved behavior, and known verification gaps are in the work items, deployment records, Account requirements, and Account system guide on local main.
+- Await Mike's next project request. The repository has no remote. `tkv2-sbx` refreshes from production every Sunday night.
+
+
+[CALL exec] toolkit memory find 'new custom fields setup description help text'
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+2 memory records match "new custom fields setup description help text" (best first):
+- user_custom_field_documentation: Every new custom field should have a description and help text
+    # Custom field documentation **Remember:** Mike prefers every new custom field to have a description and help text. **Why:** Not stated by the owner. **How t...
+- user_salesforce_setup_afternoon: Mike prefers to handle his own Salesforce Setup clicking and checks in the afternoon
+    # Salesforce setup afternoon **Remember:** Mike tends to do his own Salesforce clicking and checks in the afternoon. Anything requiring him in Setup probably w...
+Read a record with toolkit memory get <key> before relying on it.
+
+
+[CALL exec] toolkit memory get user_custom_field_documentation
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+---
+name: user_custom_field_documentation
+description: Every new custom field should have a description and help text
+metadata:
+  type: user
+status: current
+source: Mike, in chat, 2026-09-28
+last_verified: 2026-09-28
+authorization: Approved by Mike on 2026-09-28
+supersedes: none
+---
+
+# Custom field documentation
+
+**Remember:** Mike prefers every new custom field to have a description and help text.
+
+**Why:** Not stated by the owner.
+
+**How to apply:** Include both when planning and creating custom fields for this project.
+
+**Evidence and limits:** Mike, in chat, 2026-09-28. This is a standing preference for new custom fields.
+
+**Related memories:** None.
+
+**Authoritative records:** None.
+
+
+[CALL exec] rg -n -i 'custom field|description|help text' DECISIONS.md requirements system-guide PROJECT-ROADMAP.md ai-external-knowledge/INDEX.md
+   toolkit work list
+   toolkit memory glossary
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"i":0,"result":{"status":"fulfilled","value":{"chunk_id":"69da66","wall_time_seconds":0.000002708,"exit_code":0,"original_token_count":336,"output":"PROJECT-ROADMAP.md:22:**Deliverable:** Nullable restricted Tier picklist on Account, with Gold, Silver, Bronze, description, and help text.\nPROJECT-ROADMAP.md:23:**Done when:** Production deploy succeeds and field behavior is verified. Mike reported the deploy succeeded; production Account describe verified the values, nullability, default, and help text.\nsystem-guide/account.md:25:The production field description was not independently checked in Setup. Unsupported-value API rejection, full org automation inspection, detailed before-and-after Account record-access comparison, and exhaustive effective-permission audit were not run. The WI-002 production job ID was not separately supplied.\nrequirements/account/ACCOUNT.md:21:- Required behavior: Tier has a description and help text. The help text says: “Set by hand. Gold is the highest tier, then Silver, then Bronze.”\nrequirements/account/ACCOUNT.md:23:- User or system outcome: The help text explains the manual setting and tier order.\nrequirements/account/ACCOUNT.md:25:- Delivery status and evidence: The [field source](../../force-app/main/default/objects/Account/fields/Tier__c.field-meta.xml) contains the approved description and help text. A read-only production Account describe confirmed the help text. The production description was not independently checked in Setup.\n"}}}
+{"i":1,"result":{"status":"fulfilled","value":{"chunk_id":"53034c","wall_time_seconds":0.000002375,"exit_code":0,"original_token_count":21,"output":"No open work items. Add --all to include finished, cancelled, and archived ones.\n"}}}
+{"i":2,"result":{"status":"fulfilled","value":{"chunk_id":"8e4825","wall_time_seconds":0.00000275,"exit_code":0,"original_token_count":281,"output":"# Terminology glossary\n\n<!-- Fill-in guide: replace the example table row with one verified term per row. Enter its exact meaning in Meaning here, distinguish aliases or system-specific uses in Distinction or alias, and cite the source and check date. Add an alias bullet only when a naming change exists. Remove example entries and this guide after the first real entry. -->\n\nRecord terms whose meanings affect requirements, delivery, or collaboration. Verify definitions from the owner or an authoritative project source. A word used by two systems may need two rows. Update or retire entries when usage changes; never infer a definition from a similar word elsewhere.\n\n| Term | System or context | Meaning here | Distinction or alias | Source | Status / last checked |\n| --- | --- | --- | --- | --- | --- |\n| <Term> | <System, team, or process> | <Concise verified meaning> | <How this differs from another use, if relevant> | <Decision or source link and date> | <Current or needs review; date> |\n\n## Naming changes and aliases\n\n- <Old term or alias>
+
+[AGENT] Yes. You want every new custom field to have **both a description and help text**. That’s recorded as your standing preference from September 28, 2026. [Project memory: `user_custom_field_documentation`]
+
+What field are you considering next?
+
+SKILLS OPENED (SKILL.md read): ['memory-find']
+
+TOOLKIT COMMANDS:
+   toolkit memory focus
+   toolkit memory find 'new custom fields setup description help text'
+   toolkit memory get user_custom_field_documentation
+   toolkit work list
+   toolkit memory glossary

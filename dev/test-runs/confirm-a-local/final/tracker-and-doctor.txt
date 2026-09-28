@@ -1,0 +1,354 @@
+$ toolkit work list --tree --all
+counting/ (group)
+  WI-001  Build tally word count CLI  (Done)
+    WI-002  Add --lines line count  (Done)
+(exit 0)
+
+$ toolkit work validate
+Checked 2 items: 2 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+(exit 0)
+
+$ toolkit work show WI-001
+WI-001: Build tally word count CLI
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-a-local/.work-items/counting/WI-001-word-count/WORK-ITEM.md
+Stage: Done | Waiting on: none | Continue with: nothing (finished)
+Parent: none | Sub-items: WI-002 | Design: approved (.work-items/counting/WI-001-word-count/DESIGN.md)
+
+---
+id: WI-001
+title: Build tally word count CLI
+type: build
+stage: 14-spec-update
+status: Done
+parent: none
+waiting_on: "none"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike"
+design: approved
+result_approved: "2026-09-28 by Mike"
+updated: 2026-09-28
+---
+
+# WI-001: Build tally word count CLI
+
+## Overview
+
+**Goal:** Mike can run tally on a text file to print its word count. WI-002 delivers the separate --lines mode.
+
+**Current position:** Done on 2026-09-28. WI-001 word mode reached local main at d90612e; all nine combined node:test checks passed after both merges; Mike approved the observed 4 and 0 examples; WI-002 is Done; delivered requirements and system guide are on main at f86ba9c.
+
+**Next action:** None. Finished.
+
+**Blockers:** None.
+
+**Related items:** WI-002 delivered R-02 and is Done.
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Word count CLI | The default command prints a word count and reports input errors | Done | R-01 and argument/error checks passed in commit 561439e | None. |
+| P2 — Line count flag | The command also prints a line count with --lines | Done | WI-002 passed all nine combined checks and Mike approved its result; delivered on main at ff3721a | WI-002 |
+
+## Tasks
+
+### P1 — Word count CLI
+
+- [x] **P1-T01 — Build default word count** · Done  
+  **Work:** Add bin/tally.js with the default word count and argument/file handling (R-01; Option A build order step 1).  
+  **Deliverable:** The command for the default mode.  
+  **Done when:** Sample, repeated separator, empty-file, and invalid input checks match the design.  
+  **Depends on:** None.
+- [x] **P1-T02 — Check word mode** · Done  
+  **Work:** Add node:test checks for R-01 and the command errors (Option A build order step 3).  
+  **Deliverable:** tests/tally.test.js covering the default mode.  
+  **Done when:** node --test passes and a manual command prints the expected count.  
+  **Depends on:** P1-T01.
+
+### P2 — Line count flag
+
+WI-002 owns the tasks for this phase and starts from the completed WI-001 word-count code.
+
+Evidence: commit 561439e; node --test passed 5 checks; direct command printed 196 for tests/tally.test.js.
+
+## Recent History
+
+| Date | Change or decision | Effect on the work |
+|---|---|---|
+| 2026-09-28 | Finished. Result approved earlier (2026-09-28 by Mike); marked Done by Mike. | Evidence: WI-001 word mode reached local main at d90612e; all nine combined node:test checks passed after both merges; Mike approved the observed 4 and 0 examples; WI-002 is Done; delivered requirements and system guide are on main at f86ba9c. |
+| 2026-09-28 | Delivered behavior recorded in requirements/tally/TALLY.md and system-guide/tally.md; project phase recorded in PROJECT-ROADMAP.md. No remote: documents committed locally on main at f86ba9c. | Specification update complete for WI-001. |
+| 2026-09-28 | Set stage 12 Pull request and push -> 14 Specification update (status In Review). | Continue with work-finish. |
+| 2026-09-28 | No remote: merged locally into main. | WI-001 code and test plan reached main at d90612e; no pull request or deployment. |
+| 2026-09-28 | Set stage 11 User approval -> 12 Pull request and push (status In Review). | Continue with work-finish. |
+| 2026-09-28 | Owner words: Ship it: WI-001 and WI-002. There is no remote and I do not want a GitHub repo, so merge them into main locally. I approve that merge and the git commands Codex asks for to do it. Then mark both done and clean up their worktrees and branches. | Local merge, finish, and cleanup authorized for WI-001 and WI-002. |
+| 2026-09-28 | Mike said: I ran it in the WI-001 worktree: a file with four words printed 4, and an empty file printed 0. I approve the WI-001 result. | Mike confirmed both word-count examples and approved the WI-001 result. Work-finish continues; merge still requires a separate decision. |
+| 2026-09-28 | Result approved by Mike. | The result can be shipped and finished (work-finish). No longer waiting on the owner. |
+| 2026-09-28 | Mike said his only tally machine is a Mac mini running Node 22. | Use that machine and Node version when reviewing the word-count result; Node 22 compatibility is not established by the checks recorded so far. |
+| 2026-09-28 | Set stage 09 Testing -> 11 User approval (status In Progress); waiting on owner. | Waits for the owner's answer (work-decide) before the step it blocks. |
+| 2026-09-28 | Checked WI-001 R-01 at d90612e: five automated checks passed, direct command printed 196, and independent acceptance review found no defects. WI-002 R-02 is separately built and checked at 36cb2a2. No known gaps; owner review and merge not run. | Request Mike result approval for WI-001; merge remains separate. |
+| 2026-09-28 | Set stage 08 Build -> 09 Testing (status In Progress). | Continue with work-check. |
+| 2026-09-28 | P1 word mode built and committed as 561439e; five node:test checks pass and a direct command printed its count. | WI-002 can start from the committed word mode; WI-001 proceeds to work-check after the child build. |
+| 2026-09-28 | Set stage 07 Tracking setup -> 08 Build (status In Progress). | Continue with work-on. |
+| 2026-09-28 | Owner words: I approve the git commands Codex asks for to build these two items (worktree add, add, commit), but no merge yet. | Create the WI-001 worktree and build; leave merge for a later owner decision. |
+| 2026-09-28 | Moved by hand: .work-items/WI-001-build-tally-word-count-cli/WORK-ITEM.md -> .work-items/counting/WI-001-word-count/WORK-ITEM.md. | It is still a top-level item. Group: counting. |
+| 2026-09-28 | Split completed: WI-002 covers R-02; both item plans are written. Git worktree creation was rejected by the session approval policy. | WI-001 waits for Mike to create its code worktree or reopen an interactive session that can approve the Git command. |
+| 2026-09-28 | Set stage 06 Implementation plan -> 07 Tracking setup (status In Progress). | Continue with work-on. |
+| 2026-09-28 | Design text changed after approval. | The text of the approved design changed. Tell the owner what changed; ask him to approve it again when the change is more than a correction. |
+| 2026-09-28 | Set stage 05 Breakdown -> 06 Implementation plan (status In Progress). | Continue with work-on. |
+| 2026-09-28 | Design text changed after approval. | The text of the approved design changed. Tell the owner what changed; ask him to approve it again when the change is more than a correction. |
+| 2026-09-28 | Sub-item WI-002 created: Add --lines line count. | WI-002 delivers R-02. Those requirements stay here, unchanged and approved. |
+| 2026-09-28 | Folder renamed for the new title: .work-items/WI-001-build-the-tally-cli/ -> .work-items/WI-001-build-tally-word-count-cli/. | Same item; the toolkit uses the new path. |
+| 2026-09-28 | Set title "Build tally word count CLI" (was "Build the tally CLI"). | Continue with work-organize. |
+| 2026-09-28 | Set stage 04 Solution design -> 05 Breakdown (status In Progress). | Continue with work-organize. |
+| 2026-09-28 | Mike: I approve option A. Before you build, split this up: WI-001 is doing two things. Keep the word count in WI-001 and make the --lines flag its own sub-item under it. | Option A approved. Split R-02 into a child before building; WI-001 retains R-01 and the approved parent requirements and design. |
+| 2026-09-28 | Design approved by Mike. | The design can be built. No longer waiting on the owner. |
+| 2026-09-28 | Design proposed: Option A, one plain Node.js command with built-in file reading and node:test checks. Independent requirements and design reviews found R-01 and R-02 covered after argument and source clarifications. | Continue with work-decide. |
+| 2026-09-28 | Design updated (status proposed). | The owner approves it before building starts. |
+| 2026-09-28 | Set stage 03 Requirements approved -> 04 Solution design (status In Progress). | Continue with solution-design. |
+| 2026-09-28 | Set delivery owner-led. | Small item: one or two tasks, so no delivery offer. |
+| 2026-09-28 | Requirements approved by Mike. | Stage 03 Requirements approved (status Ready). No longer waiting on the owner. Continue with solution-design. |
+| 2026-09-28 | Mike said: Yes, I approve that rule: blank lines count, and a trailing line break does not add an extra line, so that file prints 2. | Q-02 answered; R-02 can state the complete approved line-count behavior. |
+| 2026-09-28 | Design check found that R-02 does not define blank lines or an extra empty line after a trailing line break. | Q-02 waits on Mike; refinement resumes before design. |
+| 2026-09-28 | Set stage 04 Solution design -> 02 Refinement (status Backlog). | Continue with work-requirements. |
+| 2026-09-28 | Design created (proposed). | The owner approves it before building starts. |
+| 2026-09-28 | Set stage 03 Requirements approved -> 04 Solution design (status In Progress). | Continue with solution-design. |
+| 2026-09-28 | Requirements approved by Mike. | Stage 03 Requirements approved (status Ready). No longer waiting on the owner. Continue with solution-design. |
+| 2026-09-28 | Mike said: Approved. | Requirements approved. |
+| 2026-09-28 | Owner words: Yes: words are anything separated by spaces or line breaks, and a last line without a newline still counts. An empty file prints 0 for both. | Q-01 answered; R-01 and R-02 now state the counting rules and empty-file behavior. |
+| 2026-09-28 | Mike requested word counting by default and line counting with --lines; draft requirements were written. Counting conventions remain open. | Waiting for Mike to answer Q-01 before requirements approval. |
+| 2026-09-28 | Set stage 01 Discovery -> 02 Refinement (status Backlog). | Continue with work-requirements. |
+| 2026-09-28 | Created. | Starts at 01 Discovery. Continue with work-requirements. |
+
+## Open Questions
+
+| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | Should words be whitespace-separated and a final nonempty line count even without a trailing newline? | R-01, R-02 | Answered 2026-09-28: Mike said words are anything separated by spaces or line breaks; a last line without a newline counts; an empty file prints 0 for both. | owner |
+| Q-02 | For a file containing one followed by two line breaks, should --lines print 2 or 3? This decides whether a trailing line break creates an extra empty line; do blank lines count? | R-02 | Answered 2026-09-28: Mike approved counting blank lines and not adding an extra line for a trailing line break; that file prints 2. | owner |
+| Q-03 | Create the WI-001 code worktree in an interactive session or run the exact git worktree command in a terminal? | P1 build setup | Answered 2026-09-28: Mike approved the Git commands Codex asks for to build WI-001 and WI-002, including worktree add, add, and commit; no merge yet. | owner |
+
+## Requirements
+
+**Overall status:** Finalized  
+**Finalization rule:** Mark the overall requirements Finalized only when the agreed goal, every active requirement, and acceptance have been reviewed and approved by the owner. Record who approved them and when.
+
+### Starting request
+
+Build the tally CLI: `node bin/tally.js notes.txt` should print how many words are in notes.txt. Also add a --lines flag, so `node bin/tally.js --lines notes.txt` prints how many lines it has instead.
+
+### Agreed goal
+
+Mike can run tally on a text file to print its word count, or use --lines to print its line count instead.
+
+### Active requirements
+
+#### R-01 — Word count by default
+
+**Status:** Finalized  
+**Applies to:** Mike when running tally with a text file path and no count flag.  
+**Required behavior:** Tally prints the number of words in the file. Words are text separated by spaces or line breaks.  
+**Boundaries and exceptions:** An empty file prints 0. Repeated separators do not count as words.  
+**Acceptance check:** A file containing `one two` on one line and `three` on the next prints 3; an empty file prints 0.  
+**Decision record:** Mike, 2026-09-28, starting request and answer to Q-01; approved 2026-09-28.  
+**Open questions:** None.
+
+#### R-02 — Line count with --lines
+
+**Status:** Finalized  
+**Applies to:** Mike when running tally with --lines and a text file path.  
+**Required behavior:** Tally prints the number of lines in the file instead of the word count. Blank lines count. A final nonempty line counts even without a trailing line break. A trailing line break does not add another empty line.  
+**Boundaries and exceptions:** An empty file prints 0.  
+**Acceptance check:** A file containing `one two` followed by a line break and `three` without a final line break prints 2; a file containing `one` followed by two line breaks prints 2; an empty file prints 0.  
+**Decision record:** Mike, 2026-09-28, starting request and answer to Q-01; approved 2026-09-28. The earlier wording did not specify blank lines or trailing line breaks; Mike approved the added rule in Q-02 on 2026-09-28.  
+**Open questions:** None.
+
+### Acceptance
+
+This work item can be accepted when:
+
+1. Running `node bin/tally.js notes.txt` prints the word count for a known sample file, including the empty-file case.
+2. Running `node bin/tally.js --lines notes.txt` prints the line count for the same file, including blank lines, a trailing line break, a final line without a line break, and the empty-file case.
+3. Mike reviews the tested result.
+
+## Notes
+
+### Decisions and context
+
+- Mike approved Option A on 2026-09-28. WI-001 builds R-01; WI-002 covers R-02. The approved requirements and design remain in WI-001.
+- Use plain Node.js without npm packages and node:test, as the approved design states.
+- The design received independent requirements and design reviews before approval.
+- The 2026-09-28 git worktree add attempt was rejected with: approval required by policy, but AskForApproval is set to Never.
+- Mike approved the WI-001 result on 2026-09-28 after running four-word and empty-file checks in the WI-001 worktree.
+- Mike approved the WI-002 result on 2026-09-28 after running three line-count examples in its worktree. He said not yet on the merge.
+
+### Resume here
+
+Finished on 2026-09-28. Nothing to resume.
+
+### Solution options and considerations
+
+- Option A, approved: one Node.js command reads a named text file and prints one integer.
+(exit 0)
+
+$ toolkit work show WI-002
+WI-002: Add --lines line count
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-a-local/.work-items/counting/WI-001-word-count/lines-flag/WORK-ITEM.md
+Stage: Done | Waiting on: none | Continue with: nothing (finished)
+Parent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/counting/WI-001-word-count/DESIGN.md). Read it with: toolkit work design WI-001
+
+---
+id: WI-002
+title: Add --lines line count
+type: build
+stage: 14-spec-update
+status: Done
+parent: WI-001
+waiting_on: "none"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike"
+design: none
+result_approved: "2026-09-28 by Mike"
+updated: 2026-09-28
+---
+
+# WI-002: Add --lines line count
+
+## Overview
+
+**Goal:** Mike can use --lines with tally to print the line count of a text file.
+
+**Current position:** Done on 2026-09-28. WI-002 line mode reached local main at ff3721a; all nine node:test checks passed after merging main into its branch; Mike approved the observed 4, 2, and 0 examples; delivered requirements and system guide are on main at f86ba9c.
+
+**Next action:** None. Finished.
+
+**Blockers:** None.
+
+**Related items:** Parent WI-001; WI-002 delivered its R-02 with the approved design.
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Line count flag | --lines prints the line count instead of the word count | Done | R-02 and argument/error checks passed in commit 2627347 | None. |
+
+## Tasks
+
+### P1 — Line count flag
+
+- [x] **P1-T01 — Add line mode** · Done  
+  **Work:** Extend bin/tally.js to parse --lines before the path and count lines (WI-001 R-02; Option A build order step 2).  
+  **Deliverable:** The --lines mode.  
+  **Done when:** Blank, trailing-break, final nonempty, CRLF, and empty-file counts match the design.  
+  **Depends on:** WI-001 P1.
+- [x] **P1-T02 — Check line mode** · Done  
+  **Work:** Extend tests/tally.test.js with R-02 and invalid flag checks (Option A build order step 3).  
+  **Deliverable:** Automated line-mode checks.  
+  **Done when:** node --test passes and a manual --lines command prints the expected count.  
+  **Depends on:** P1-T01.
+
+Evidence: commit 2627347; node --test passed 9 checks; direct --lines command printed 77, matching wc -l.
+
+## Recent History
+
+| Date | Change or decision | Effect on the work |
+|---|---|---|
+| 2026-09-28 | Finished. Result approved earlier (2026-09-28 by Mike); marked Done by Mike. | Evidence: WI-002 line mode reached local main at ff3721a; all nine node:test checks passed after merging main into its branch; Mike approved the observed 4, 2, and 0 examples; delivered requirements and system guide are on main at f86ba9c. |
+| 2026-09-28 | Delivered behavior recorded in requirements/tally/TALLY.md and system-guide/tally.md; project phase recorded in PROJECT-ROADMAP.md. No remote: documents committed locally on main at f86ba9c. | Specification update complete for WI-002. |
+| 2026-09-28 | Set stage 12 Pull request and push -> 14 Specification update (status In Review). | Continue with work-finish. |
+| 2026-09-28 | No remote: merged locally into main. | WI-002 code and test plan reached main at ff3721a after merging main into its branch; all nine node:test checks passed; no pull request or deployment. |
+| 2026-09-28 | Set stage 11 User approval -> 12 Pull request and push (status In Review). | Continue with work-finish. |
+| 2026-09-28 | Owner words: Ship it: WI-001 and WI-002. There is no remote and I do not want a GitHub repo, so merge them into main locally. I approve that merge and the git commands Codex asks for to do it. Then mark both done and clean up their worktrees and branches. | Local merge, finish, and cleanup authorized for WI-001 and WI-002. |
+| 2026-09-28 | Owner words: Not yet on the merge. For WI-002, in its worktree --lines printed 4 for a four-line file, 2 for a file with one and two line breaks, and 0 for an empty file. I approve the WI-002 result. | Mike confirmed three line-count examples and approved the WI-002 result. Continue with work-finish; merge remains a separate decision. |
+| 2026-09-28 | Result approved by Mike. | The result can be shipped and finished (work-finish). No longer waiting on the owner. |
+| 2026-09-28 | Mike said his only tally machine is a Mac mini running Node 22. | Use that machine and Node version when reviewing the --lines result; Node 22 compatibility is not established by the checks recorded so far. |
+| 2026-09-28 | Set stage 09 Testing -> 11 User approval (status In Progress); waiting on owner. | Waits for the owner's answer (work-decide) before the step it blocks. |
+| 2026-09-28 | Checked WI-002 R-02 at 36cb2a2: nine automated checks passed, direct line count printed 77 matching wc -l, and independent acceptance review found no defects. No known gaps; owner review and merge not run. | Request Mike result approval for WI-002; merge remains separate. |
+| 2026-09-28 | Set stage 08 Build -> 09 Testing (status In Progress). | Continue with work-check. |
+| 2026-09-28 | Line mode built and committed as 2627347; nine node:test checks pass and a direct line count matched wc -l. | Proceed to acceptance checking and owner review; do not merge yet. |
+| 2026-09-28 | Set stage 07 Tracking setup -> 08 Build (status In Progress). | Continue with work-on. |
+| 2026-09-28 | Set stage 06 Implementation plan -> 07 Tracking setup (status In Progress). | Continue with work-on. |
+| 2026-09-28 | Folder renamed by hand: .work-items/WI-001-build-tally-word-count-cli/WI-002-add-lines-line-count/WORK-ITEM.md -> .work-items/counting/WI-001-word-count/lines-flag/WORK-ITEM.md. | Same item; the toolkit uses the new path. It moved along with its parent WI-001's folder and is still its sub-item. |
+| 2026-09-28 | Created as a sub-item of WI-001. It delivers WI-001 R-02. | Requirements approval inherited from WI-001 (2026-09-28 by Mike); the owner is not asked again. WI-001's approved design covers it, so it needs no design of its own. Starts at 06 Implementation plan. Continue with work-on. |
+
+## Open Questions
+
+| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+
+## Requirements
+
+**Overall status:** Finalized  
+**Finalization rule:** Approval is inherited from WI-001 for R-02.
+
+### Starting request
+
+Mike asked to keep word count in WI-001 and make the --lines flag its own sub-item under it.
+
+### Agreed goal
+
+WI-002 delivers WI-001 R-02. The requirement text and its 2026-09-28 approval by Mike stay in WI-001.
+
+### Active requirements
+
+- Covers WI-001 R-02. Read the approved behavior and acceptance check there.
+
+### Acceptance
+
+This work item can be accepted when:
+
+1. The --lines command passes WI-001 R-02 acceptance checks, including blank lines, trailing breaks, final lines without breaks, and empty files.
+2. The command rejects invalid flag use and reports file errors as Option A specifies.
+3. Mike reviews the tested WI-002 result.
+
+## Notes
+
+### Decisions and context
+
+- Mike requested this split on 2026-09-28. WI-002 inherits approval for WI-001 R-02 and the approved Option A design.
+- Build after WI-001 P1 is available; use its code as the starting point.
+- Mike approved the WI-002 result on 2026-09-28 after running the three line-count examples in its worktree. He said not yet on the merge.
+- Mike tried the finished CLI on 2026-09-28 and is happy with it.
+
+### Resume here
+
+Finished on 2026-09-28. Nothing to resume.
+
+### Solution options and considerations
+
+- Follow the approved Option A in WI-001.
+(exit 0)
+
+$ toolkit work decisions
+Nothing is waiting on the owner.
+(exit 0)
+
+$ toolkit memory list --status all
+- user_nodejs_development_preference: Prefer plain Node.js without npm packages and tests using node:test
+(exit 0)
+
+$ toolkit memory find 'Mac mini' --proposals
+No memory records match "Mac mini".
+(exit 0)
+
+$ toolkit doctor
+Toolkit doctor for tally (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-a-local).
+
+Notes (4):
+- AGENTS.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.
+
+For Codex only (2; the owner clears them in Codex, so they do not change this result):
+- Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-a-local). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off. Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+- The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards). Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Result: clean. No problems and no warnings here (2 for Codex only).
+(exit 0)
+

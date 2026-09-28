@@ -1,0 +1,62 @@
+PROMPT: Set up this project with the toolkit (Toolkit V2). My answers: project name Acme CRM, key acme-crm, id prefix WI, owner Mike. Track work in local folders. Memory: built-in. It is a Salesforce project: sandbox org alias tkv2-sbx, production org alias tkv2-prod. Hosts: Claude Code and Codex. I don't want a SOUL.md. One thing to know: Acme CRM is a practice project. tkv2-sbx and tkv2-prod are practice orgs, and the sf command on the PATH simulates them on purpose; there is no real Salesforce org behind it. Treat what that sf prints as the result from the org.
+THREAD: 01a0e8d2-f1af-79f3-b629-d1c34271f5c9
+
+[AGENT] I’m using the Toolkit V2 setup workflow. I’ll inspect this project’s current state, apply your project settings, then verify the local tracker, memory setup, host files, and Salesforce aliases.
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.4/skills/project-setup/SKILL.md
+   pwd && rg --files -g 'AGENTS.md' -g 'CLAUDE.md' -g 'SOUL.md' -g '.codex/**' -g '.agents/**' -g 'package.json' -g 'README*' -g '*.md' | head -100 && git status --short && ls -la
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{"status":"fulfilled","value":{"chunk_id":"79d3ce","wall_time_seconds":0.000003833,"exit_code":0,"original_token_count":2989,"output":"---\nname: project-setup\ndescription: 'Sets up Toolkit V2 in a new project, or checks, updates, and repairs an existing setup, including Notion and Hindsight. Use when the owner says \"set up Toolkit V2\", \"set up this project\", \"check the setup\", or \"update the toolkit\", or starts working on a new computer.'\n---\n\n# Project setup\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nThe interview wording and what setup installs: `references/interview.md`. Repair, switching, new computer, and wiring: `references/repair-and-wiring.md`. Run each `toolkit` command alone, on its own line, in both hosts: never joined by `&&`, `;`, or a pipe, and never from a script (in Codex that runs it inside the sandbox, which blocks Notion, Hindsight, and `.codex/`). Text: one-line values (`--name`, `--owner`) go in single quotes, with an apostrophe written `'\\''`, because double quotes run backticks and `$(...)`; the current focus goes on standard input in Claude Code (`<file>` is `-`, followed by a quoted heredoc, `<<'EOF'`) and in `--text '<text>'` in Codex, never through a file at a fixed name such as `/tmp/focus.md`. Ask the owner in the reply text, one question per message, never through a question tool.\n\n## Steps\n\n1. Check the setup. If `toolkit` is not found, run `node <this skill's folder>/../../bin/toolkit machine-setup` (the skill's folder is the one holding this file). If doctor reports a computer problem, run machine-setup. machine-setup also changes `~/.codex/config.toml`: it turns off, for every Codex folder, each Toolkit V2 plugin that `codex plugin add` turned on there (projects turn them on for themselves); say that in one line and get the owner's yes before the first run on a computer. Name anything the owner must do himself: `ntn login` opens a browser sign-in; trusting the hooks in Codex happens in its `/hooks` screen. Never do those for him. This skill sets up Toolkit V2, never the older claude-toolkit (its `project-init` skill); when the owner names Toolkit V2 and only `project-init` is listed, say so and use this skill's steps. A new computer, or a toolkit update, also needs the plugins installed or updated in each host, Codex included: in Codex, `codex plugin marketplace add`, then `codex plugin add` for each of the six plugins, then machine-setup (`references/repair-and-wiring.md`, \"A new computer\" and \"Updating the toolkit\").\n   `toolkit doctor`\n   `toolkit machine-setup`\n2. No `.toolkit.json`: a new project. Look before asking: an empty or existing repository; `sfdx-project.json` answers the Salesforce question in advance. Then ask one question at a time, each with a recommendation, in this order: the project name (
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.4/skills/project-setup/references/interview.md
+   cat README.md
+   command -v toolkit
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{"status":"fulfilled","value":{"chunk_id":"74d006","wall_time_seconds":0.000003167,"exit_code":0,"original_token_count":2822,"output":"# The setup interview\n\nDetail for `project-setup` step 2. Ask one question per message. Each\nquestion carries a recommendation and its main reason, so the owner can\nanswer \"yes\" and move on.\n\n## Look before asking\n\nCheck these first, without asking:\n\n- Is this folder a Git repository? (`git rev-parse --show-toplevel`.) No\n  repository: say so and offer `git init`. Toolkit V2 finds the project, the\n  tracker, and memory through Git.\n- Is the repository empty, or does it already hold code? Name the language\n  and framework you see.\n- `sfdx-project.json` present: this is a Salesforce project. Confirm it in\n  one line instead of asking.\n- `.toolkit.json` present with `\"toolkit\": \"toolkit-v2\"`: this is a repair,\n  not a new setup (see `repair-and-wiring.md`).\n- Files from an older toolkit setup (for example a `knowledge/` folder, or a\n  `CLAUDE.md` with more than the line `@AGENTS.md`): tell the owner what you\n  found. Toolkit V2 adds its own\n  files and turns the current toolkit's plugins off for this project; it does\n  not move or delete the old files. Ask before touching them. A file the\n  project already has is kept, never overwritten.\n- The owner name: `git config user.name`.\n- `ntn whoami` (only matters for Notion): signed in or not.\n- `toolkit hindsight health` (only matters for Hindsight): the local server is\n  up or not.\n\n## Question 1: the project name\n\nConfirm the name, key, id prefix, and owner in one line:\n\n> I'll call this project \"Acme CRM\" (short key `acme-crm`, work item ids `WI-001`, `WI-002`, owner Mike). Is that right?\n\n- The key is the name in lowercase words joined by hyphens. It names the\n  Hindsight memory bank and appears in the Notion page title.\n- The id prefix is `WI` unless the owner wants another (for example `ACME`).\n  A different prefix is set right after init, before any item exists, with\n  `toolkit config set tracker.idPrefix <prefix>`.\n\n## Question 2: where work is tracked\n\n> Where should work items live? I recommend local folders on this computer: they are the fastest, work offline, and need nothing else set up. Choose Notion if you want to see and change the board on your phone or the web. GitHub Issues and Jira are possible, but the toolkit only gives written instructions for them.\n\n| Choice | `--tracker` | Good when | What to know |\n| --- | --- | --- | --- |\n| Local folders | `local` | A solo project on one computer | Items live in `.work-items/`, which Git ignores. They stay on this computer; `toolkit export` is the backup. |\n| Notion | `notion` | The owner wants the board on his phone or the web | Needs `ntn` signed in. Each project gets its own Work Items database under the \"AI Agent Second Brain\" page. |\n| GitHub Issues | `github` | The code and the team already live in 
+
+[AGENT] This is a Git repository with only a short README so far. Your answers cover the setup choices. I’ll check the toolkit’s health and the practice org aliases, then run initialization. The Codex sandbox may block writes to `.codex/` or `.agents/`; if it does, I’ll report the exact command it requires.
+
+[CALL exec] toolkit doctor
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{"chunk_id":"36f99e","wall_time_seconds":0.000002583,"exit_code":4,"original_token_count":101,"output":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce is not a Toolkit V2 project: there is no .toolkit.json with \"toolkit\": \"toolkit-v2\".\ntoolkit init sets it up (the project-setup skill asks the questions first).\n\nThis computer: no problems found (Node, the plugin-root pointer, and the Codex wrapper).\n"}
+
+[CALL exec] sf org list --json
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"6c7021","wall_time_seconds":0.016492292,"exit_code":0,"original_token_count":139,"output":"{\"status\":0,\"result\":{\"other\":[],\"sandboxes\":[{\"alias\":\"tkv2-sbx\",\"username\":\"mike@acme.com.tkv2sbx\",\"orgId\":\"00DFAKE0000SBX1\",\"instanceUrl\":\"https://acme--tkv2sbx.sandbox.my.salesforce.com\",\"loginUrl\":\"https://test.salesforce.com\",\"isSandbox\":true,\"connectedStatus\":\"Unknown\"}],\"nonScratchOrgs\":[{\"alias\":\"tkv2-prod\",\"username\":\"mike@acme.com\",\"orgId\":\"00DFAKE0000PRD1\",\"instanceUrl\":\"https://acme.my.salesforce.com\",\"loginUrl\":\"https://login.salesforce.com\",\"isSandbox\":false,\"connectedStatus\":\"Unknown\"}],\"devHubs\":[],\"scratchOrgs\":[]},\"warnings\":[]}\n"}
+
+[AGENT] The toolkit reports no computer setup problems, and `sf` lists both aliases you gave. I’m initializing the project with local work folders, built-in memory, Salesforce support, and `SOUL.md` declined.
+
+[CALL exec] toolkit init --name 'Acme CRM' --key acme-crm --tracker local --memory builtin --owner 'Mike' --salesforce --decline SOUL.md
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"2b6984","wall_time_seconds":0,"exit_code":1,"original_token_count":278,"output":"Error: Could not write /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce/.agents/skills/sf-component-tracker/SKILL.md: EPERM: operation not permitted, mkdir '/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce/.agents/skills/sf-component-tracker'. Files in .codex/ and .agents/ are written first, so no other setup file was written by this run.\nFix: Ask the owner to run this in a Terminal window (outside Codex), or to approve running it outside the Codex sandbox: toolkit init --dir /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce --name \"Acme CRM\" --key acme-crm --tracker local --memory builtin --owner Mike --salesforce --hosts claude-code,codex --decline SOUL.md. Keep every setup answer as he gave it. It is safe to run again: files an earlier run wrote are recorded, not treated as the project's own.\n"}
+
+[AGENT] Toolkit V2 initialization stopped when the Codex sandbox blocked a write under `.agents/`. The toolkit says no other setup files were written. It found both practice org aliases, and I’m treating the simulated `sf` output as the org result.
+
+The **Toolkit V2 project-setup skill** requires this command to run outside the sandbox before setup can continue. Please run it in a Terminal window:
+
+```sh
+toolkit init --dir /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce --name "Acme CRM" --key acme-crm --tracker local --memory builtin --owner Mike --salesforce --hosts claude-code,codex --decline SOUL.md
+```
+
+Then tell me it completed so I can finish the aliases, API version, guides, and verification.
+
+SKILLS OPENED (SKILL.md read): ['project-setup']
+
+TOOLKIT COMMANDS:
+   toolkit doctor
+   toolkit init --name 'Acme CRM' --key acme-crm --tracker local --memory builtin --owner 'Mike' --salesforce --decline SOUL.md

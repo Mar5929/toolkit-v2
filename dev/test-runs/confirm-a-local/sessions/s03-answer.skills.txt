@@ -1,0 +1,1 @@
+work-decide, work-requirements,   ref:work/references/conventions.md,   ref:work/skills/work-requirements/references/writing-requirements.md,   ref:work/agents/requirements-analyst.md, spawn_agent:requirements_check(fork_turns=none), memory-save

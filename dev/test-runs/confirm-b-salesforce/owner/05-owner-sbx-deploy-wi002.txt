@@ -1,0 +1,3 @@
+$ cd .claude/worktrees/wi-002-set-account-tier-access-and
+$ sf project deploy start -x delivery/deployment/WI-002-tier-access-and-layout/package.xml -o tkv2-sbx --json
+{"status":0,"result":{"id":"0AfFAKE000DEPLOY3","status":"Succeeded","success":true,"checkOnly":false,"done":true,"numberComponentsDeployed":1,"numberComponentErrors":0},"warnings":[]}

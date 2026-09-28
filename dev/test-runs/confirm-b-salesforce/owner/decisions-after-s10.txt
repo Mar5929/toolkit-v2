@@ -1,0 +1,10 @@
+3 decisions wait on the owner:
+
+WI-001 add a Tier picklist field to Account so the sales team can rank their accounts
+  - Q-08: What description and help text does Account Tier show in tkv2-sbx Setup after deployment? Sandbox describe reports different help text from the approved source. Affects R-02; P1-T03. (work-decide)
+
+WI-002 Set Account Tier access and place it below Rating on Account Layout
+  - Q-01: What Account Tier field-level access does Setup show for Sales Manager, System Administrator, Sales User, Read Only, and any permission sets or groups assigned to Account users? Initial SOQL returned no rows. Affects P1-T01; R-03. (work-decide)
+
+Memory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):
+  - user_salesforce_setup_afternoon: Mike prefers to handle his own Salesforce Setup clicking and checks in the afternoon. Saved 2026-09-28. Yes: toolkit memory approve user_salesforce_setup_afternoon --by <name>. No: toolkit memory reject user_salesforce_setup_afternoon. (work-decide)

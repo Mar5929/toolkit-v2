@@ -1,0 +1,588 @@
+PROMPT: Yes, it can be blank, with no default value. For who sees it: everyone who can see an Account can read Tier, but only the Sales Manager profile and system administrators can edit it. Put it on the Account Layout page layout, right below Rating.
+THREAD: 01a0e8dc-82a2-7033-9cac-8dfbde286f4c
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The backlog has 1 item; toolkit work next suggests which to take up.
+
+Waiting on the owner:
+- WI-001 add a Tier picklist field to Account so the sales team can rank their accounts: Q-02: Should the Tier field be optional, with no default value? Affects R-01. (work-decide)
+
+Items: 1 in the backlog.
+
+Current focus:
+Last updated: 2026-09-28, WI-001 requirements interview by agent
+## Now
+- Toolkit V2 setup files are committed locally on main as ffaab24. Mike confirmed the project outcome and Salesforce org roles. The project records tkv2-sbx as sandbox, tkv2-prod as production, and API version 62.0.
+- Toolkit doctor reported 0 problems and 3 Codex trust warnings in the setup session, although the owner already said trust was completed. The repository has no origin remote.
+- WI-001: add a Tier picklist field to Account so the sales team can rank their accounts.
+## Waiting on the owner
+- None outside WI-001.
+## Untracked to-dos
+- None.
+## Next session starts with
+- Continue WI-001 from its Resume here: ask the owner Q-02 about whether Tier is optional with no default, then continue the requirements interview.
+- Recheck toolkit doctor in Codex and reconcile its trust warnings with the owners earlier confirmation. Phase plan remains open.
+
+Project memory (builtin): 1 record. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_custom_field_documentation: Every new custom field should have a description and help text
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them. Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.
+
+Always-on rules. Claude Code loads them by itself; in Codex, each one is read at session start:
+- .claude/rules/check-deployment-contents.md: Check What a Deployment Includes
+- .claude/rules/component-tracker.md: Component Tracker
+- .claude/rules/confirm-salesforce-changes.md: Confirm Salesforce Changes
+- .claude/rules/humanize-outbound-text.md: Humanize Anything Sent to Another Person
+- .claude/rules/keep-work-item-current.md: Keep the Active Work Item Accurate
+- .claude/rules/memory-review-and-save.md: Review and Save Project Memory
+- .claude/rules/plain-en
+
+[AGENT] I’ll record those choices for WI-001 and update its requirements, then check whether the requirements interview has any remaining questions.
+
+[CALL exec] cat SOUL.md PROJECT.md .claude/rules/*.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/skills/work-decide/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/skills/work-requirements/SKILL.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+Warning: truncated output (original token count: 11206)
+Total output lines: 540
+
+cat: SOUL.md: No such file or directory
+# Acme CRM
+
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->
+
+## Purpose and intended outcome
+
+- Purpose: Give the Acme sales team a Salesforce org that fits how they sell.
+- Intended outcome: Better account data is the first improvement toward that goal.
+
+## Scope and boundaries
+
+- In scope: The Acme sales team's Salesforce org, starting with account data.
+- Outside scope: `<Important exclusions or adjacent owners.>`
+- Constraints: `<Approved security, delivery, or operating constraints with sources.>`
+
+## Systems and environments
+
+| System or org | Purpose | Environment | Source of truth | Access notes |
+| --- | --- | --- | --- | --- |
+| `tkv2-sbx` | Project sandbox | Sandbox | Salesforce org alias, confirmed by Mike on 2026-09-28 | Salesforce CLI |
+| `tkv2-prod` | Production org | Production | Salesforce org alias, confirmed by Mike on 2026-09-28 | Salesforce CLI; agents do not deploy or write data here |
+
+## People and ownership
+
+| Role | Person or team | Responsibility | Source / last confirmed |
+| --- | --- | --- | --- |
+| Project owner | Mike | Makes project decisions | Project setup, 2026-09-28 |
+
+## Work and project records
+
+- Work tracker: Local folders in `.work-items/`, identified by work item ID.
+- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)
+- Project decisions: [DECISIONS.md](DECISIONS.md)
+- Functional requirements: [requirements/](requirements/)
+- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`
+- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`
+- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)
+- Memory backup or sync: `<Owner-approved destination and restore procedure, outside this repository>`
+
+## Resources and project paths
+
+- Salesforce source: `force-app/` or `<actual source path>`
+- Project-wide deployment manifest: `delivery/deployment/full-project-deployment-template/package.xml` after the API version and members are verified. Keep it as the full project component inventory; ordinary deployments use narrower work-item packages.
+- Work-item deployment manifests: `delivery/deployment/<work-item-id>-<short-name>/package.xml` when an item changes Salesforce metadata.
+- Tests and checks: `<actual commands and locations>`
+- Outside references: `<source register or approved location>`
+
+## Operating conventions
+
+<Write only stable project-specific conventions here; link the source or
+
+[CALL exec] git worktree list
+   git status --short --branch
+   git remote
+   cat PROJECT-ROADMAP.md
+   cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/references/conventions.md
+   cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/skills/work-requirements/references/writing-requirements.md
+   toolkit work decisions
+   toolkit work show WI-001
+  -> Script completed
+Wall time 0.6 seconds
+Output:
+
+Warning: truncated output (original token count: 10124)
+Total output lines: 8
+
+{"cmd":"git worktree list","result":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce ffaab24 [main]\n"}
+{"cmd":"git status --short --branch","result":"## main\n"}
+{"cmd":"git remote","result":""}
+{"cmd":"cat PROJECT-ROADMAP.md","result":"# Project roadmap\n\n<!-- Fill-in guide: replace every angle-bracket prompt in the outcome, phase table, phase heading, and work-unit fields with this project's real text. Keep one overview row and one matching ## heading per phase. Under that heading, repeat the ### work-unit block for each deliverable-sized unit and link its canonical work item in the Linked work item field. Remove example rows and this guide after setup. -->\n\nUse this file for the project's phases and deliverable-sized work units. Link each unit to its work item when one exists. The work item holds its active requirements, open questions, detailed tasks, and execution history.\n\n```text\nPROJECT-ROADMAP.md\n└── Phase\n    └── Deliverable-sized work unit\n        └── Linked work item\n            ├── Active requirements\n            ├── Open questions\n            ├── Detailed tasks\n            └── Execution history\n```\n\n## Project outcome\n\nGive the Acme sales team a Salesforce org that fits how they sell, starting with better account data.\n\n## Phase overview\n\n| Phase | Intended outcome | Exit condition | Depends on |\n| --- | --- | --- | --- |\n| `P01 — <phase name>` | `<result>` | `<evidence needed to finish>` | `<earlier phase or none>` |\n\n## P01 — <Phase name>\n\n**Outcome:** `<Result larger than one work unit.>`  \n**Exit condition:** `<Observable evidence that the phase is complete.>`  \n**Dependencies:** `<Real prerequisites, or none known.>`\n\n### P01-U01 — <Deliverable-sized work unit>\n\n**Deliverable:** `<Specific output or change from this unit.>`  \n**Done when:** `<Evidence for completing the unit.>`  \n**Depends on:** `<Other unit or none.>`  \n**Linked work item:** `<Link to the canonical issue or local WORK-ITEM.md when created.>`\n\nThe linked work item owns its active requirements, open questions, detailed tasks, approvals, and execution history. Summarize only project-level sequencing here.\n\n## Open project-level planning questions\n\n<!-- Put only questions about phase scope, order, dependencies, or milestones here. Work-item questions go in the linked item. Replace this prompt with real questions or write “None open.” -->\n\n- `<Question about phase scope, order, dependencies, or milestones; identify who can answer it.>`\n\n## Planning changes\n\n- `<Date and source>: <Material approved change to project outcome, phase scope, or sequence.>`\n"}
+{"cmd":"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/references/conventions.md","result":"# Conventions every work s
+
+[AGENT] I found WI-001 in requirements refinement. I’m recording Tier as optional with no default, the read and edit access you specified, and its position on Account Layout.
+
+[CALL exec] toolkit memory find 'Tier Account field access'
+   rg --files requirements system-guide .memory 2>/dev/null
+   toolkit work show WI-001 --section 'Open Questions'
+   toolkit work show WI-001 --section 'Overview'
+   toolkit work show WI-001 --section 'Notes'
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+{"cmd":"toolkit memory find 'Tier Account field access'","output":"1 memory record matches \"Tier Account field access\" (best first):\n- user_custom_field_documentation: Every new custom field should have a description and help text\n    # Custom field documentation **Remember:** Mike prefers every new custom field to have a description and help text. **Why:** Not stated by the owner. **How t...\nRead a record with toolkit memory get <key> before relying on it.\n"}
+{"cmd":"rg --files requirements system-guide .memory 2>/dev/null","output":"requirements/AGENTS.md\nsystem-guide/AREA-TEMPLATE.md\nrequirements/SYSTEM-DATA-MODEL.md\n.memory/memory-criteria.md\n.memory/CURRENT_FOCUS.md\n.memory/user_custom_field_documentation.md\n.memory/project_topic_template.md\n.memory/terminology-glossary.md\n.memory/MEMORY.md\n.memory/AGENTS.md\nrequirements/system-area-template/AREA-TEMPLATE.md\n"}
+{"cmd":"toolkit work show WI-001 --section 'Open Questions'","output":"## Open Questions\n\n| ID | Question | Affects | Status | Decision needed from |\n|---|---|---|---|---|\n| Q-01 | Is the goal to let salespeople manually rank Accounts using one Tier picklist, with no automatic ranking? Answer: Yes. Gold, Silver, Bronze, in that order, with Gold highest. Mike, 2026-09-28. | R-01 | Answered | owner |\n| Q-02 | Should the Tier field be optional, with no default value? | R-01 | Open | owner |\n"}
+{"cmd":"toolkit work show WI-001 --section 'Overview'","output":"## Overview\n\n**Goal:** Let the Acme sales team manually rank Accounts using a Tier picklist.\n\n**Current position:** The owner confirmed manual ranking and the ordered values. Requirements remain in refinement.\n\n**Next action:** Owner decides whether the field is optional with no default; then the agent completes the requirements interview.\n\n**Blockers:** Owner decision on requiredness and default value.\n\n**Related items:** None.\n"}
+{"cmd":"toolkit work show WI-001 --section 'Notes'","output":"## Notes\n\n### Decisions and context\n\n- No Account Tier metadata has been changed. The project source has no force-app directory yet.\n\n### Resume here\n\nAsk the owner Q-02: should Tier be optional with no default? Then confirm who may edit the field and finish the requirements interview. Before changing Account metadata, state the intended change, components, and what could break, then wait for owner confirmation under the Salesforce change rule.\n\n### Solution options and considerations\n\n- For R-01: A custom Account picklist is the requested approach. Field details remain open.\n"}
+
+[CALL exec] cat requirements/SYSTEM-DATA-MODEL.md .memory/memory-criteria.md .memory/AGENTS.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+# System Data Model
+
+<!-- Fill-in guide: replace this comment with verified, accepted data model requirements for the whole system. Use the sections below for each shared entity or relationship; add one block per real item. Link the approving work item and date. Do not copy an unapproved technical design here. Delete this guide when the first accepted content is added. -->
+
+## Scope and sources
+
+<State which system and business areas this shared mo
+
+[CALL exec] toolkit work edit WI-001 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | Is the goal to let salespeople manually rank Accounts using one Tier picklist, with no automatic ranking? Answer: Yes. Gold, Silver, Bronze, in that order, with Gold highest. Mike, 2026-09-28. | R-01 | Answered | owner |
+| Q-02 | Should the Tier field be optional, with no default value? Answer: Yes. Tier can be blank and has no default value. Mike, 2026-09-28. | R-01 | Answered | owner |'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"2a8397","wall_time_seconds":0.00000325,"exit_code":0,"original_token_count":9,"output":"Saved \"Open Questions\" in WI-001.\n"}
+
+[CALL exec] toolkit work edit WI-001 --section 'Requirements' --text '**Overall status:** Refining  
+**Finalization rule:** Mark the overall requirements Finalized only when the agreed goal, every active requirement, and acceptance have been reviewed and approved by the owner. Record who approved them and when.
+
+### Starting request
+
+New work: add a Tier picklist field to Account so the sales team can rank their accounts.
+
+### Agreed goal
+
+Let salespeople manually rank Accounts using one Tier picklist with Gold, Silver, and Bronze in that order, with Gold highest. No automatic ranking.
+
+### Active requirements
+
+#### R-01 — Manual Account Tier
+
+**Status:** Refining  
+**Applies to:** Salespeople ranking Account records.  
+**Required behavior:** One Tier picklist on Account lets salespeople choose Gold, Silver, or Bronze, in that order, with Gold highest. Salespeople set the value by hand; the system does not rank Accounts automatically.  
+**Boundaries and exceptions:** Tier can be blank and has no default value.  
+**Acceptance check:** Check that a new Account has a blank Tier. Set existing Accounts to each of the three values and clear Tier; the values display in the specified order, and no automatic ranking changes the selection.  
+**Decision record:** Mike, 2026-09-28, requirements interview. Mike confirmed blank values and no default on 2026-09-28.  
+**Open questions:** None.
+
+#### R-02 — Field guidance
+
+**Status:** Refining  
+**Applies to:** The new Account Tier custom field.  
+**Required behavior:** The field has a description and help text.  
+**Boundaries and exceptions:** Exact wording will be set during design.  
+**Acceptance check:** The field metadata contains a description and help text, and the help text appears with the field in Salesforce.  
+**Decision record:** Mike, 2026-09-28, standing preference stated in chat.  
+**Open questions:** None.
+
+#### R-03 — Tier access
+
+**Status:** Refining  
+**Applies to:** Everyone who can see an Account.  
+**Required behavior:** Everyone who can see an Account can read its Tier. Only users with the Sales Manager profile and system administrators can edit Tier.  
+**Boundaries and exceptions:** Access to an Account record remains governed by existing Account access.  
+**Acceptance check:** A user with Account access can read Tier; a Sales Manager and a system administrator can edit it; another user with Account access cannot edit it.  
+**Decision record:** Mike, 2026-09-28, requirements interview.  
+**Open questions:** None.
+
+#### R-04 — Account Layout placement
+
+**Status:** Refining  
+**Applies to:** The Account Layout page layout.  
+**Required behavior:** Tier appears directly below Rating on Account Layout.  
+**Boundaries and exceptions:** Other page layouts are outside this requirement.  
+**Acceptance check:** Open an Account using Account Layout and confirm Tier appears directly below Rating.  
+**Decision record:** Mike, 2026-09-28, requirements interview.  
+**Open questions:** None.
+
+### Acceptance
+
+This work item can be accepted when:
+
+1. Account has one manually set Tier picklist with Gold, Silver, and Bronze in that order, with Gold highest. Tier can be blank and has no default.
+2. The field has a description and help text.
+3. Everyone who can see an Account can read Tier, and only users with the Sales Manager profile and system administrators can edit it.
+4. Tier appears directly below Rating on Account Layout.
+5. The owner reviews the tested result.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"27df68","wall_time_seconds":0.00000425,"exit_code":0,"original_token_count":8,"output":"Saved \"Requirements\" in WI-001.\n"}
+
+[CALL exec] toolkit work edit WI-001 --section 'Overview' --text '**Goal:** Let the Acme sales team manually rank Accounts using a Tier picklist.
+
+**Current position:** The owner confirmed the values, blank default, field access, and Account Layout placement. Requirements remain in refinement.
+
+**Next action:** Check the requirements for gaps, then ask the owner to review and approve them.
+
+**Blockers:** None.
+
+**Related items:** None.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"66bfe0","wall_time_seconds":0.000003958,"exit_code":0,"original_token_count":7,"output":"Saved \"Overview\" in WI-001.\n"}
+
+[CALL exec] toolkit work edit WI-001 --section 'Notes' --text '### Decisions and context
+
+- No Account Tier metadata has been changed. The project source has no force-app directory yet.
+
+### Resume here
+
+Check the requirements for gaps, then ask the owner to review and approve them. Before changing Account metadata or field access, state the intended change, components, and what could break, then wait for owner confirmation under the Salesforce change rule.
+
+### Solution options and considerations
+
+- For R-01: A custom Account picklist is the requested approach.
+- For R-03: Confirm existing Account access and profile names during design before selecting the field access configuration.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"94849f","wall_time_seconds":0.000003667,"exit_code":0,"original_token_count":7,"output":"Saved \"Notes\" in WI-001.\n"}
+
+[CALL exec] toolkit work set WI-001 --waiting-on agent
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"68c1a6","wall_time_seconds":0.000003083,"exit_code":0,"original_token_count":24,"output":"Updated WI-001: waiting on agent.\nNow 02 Refinement (Backlog). Continue with work-requirements.\n"}
+
+[CALL exec] toolkit work history WI-001 --note 'Owner words: Yes, it can be blank, with no default value. For who sees it: everyone who can see an Account can read Tier, but only the Sales Manager profile and system administrators can edit it. Put it on the Account Layout page layout, right below Rating.' --effect 'Q-02 answered; access and layout requirements added; agent checks requirements before approval request.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"314dbb","wall_time_seconds":0.000003333,"exit_code":0,"original_token_count":10,"output":"Added a Recent History row to WI-001.\n"}
+
+[AGENT] The choices are saved in WI-001. I’m checking the requirements for gaps before asking you to approve them.
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/agents/requirements-analyst.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+---
+name: requirements-analyst
+description: Checks a work item's requirements before design or build. Finds missing pieces, places not explicit end to end, wording a builder could misread, build details inside requirements, and drift from the Agreed goal. Returns ready or not ready with a fix for each finding. Read-only.
+tools: Read, Glob, Grep
+model: opus
+---
+
+# Requirements analyst
+
+Read the requirements as one whole and say whether they are ready to design
+or build from. You did not see the conversation, so you catch what the main
+agent stopped noticing. You advise; the owner decides. You change nothing.
+
+## Start with the brief
+
+- The brief pastes in the Agreed goal, the Starting request, every `R-xx`
+  block, the Acceptance list, the open questions, and the owner's recorded
+  rulings. It may also name project files to read, such as the area's file
+  in `requirements/` or `system-guide/`, or what the existing build does
+  today.
+- Treat only rulings the brief marks as approved by the owner as settled.
+  Proposals and unanswered questions stay open. Everything else is open to
+  your check.
+- If something the brief should contain is missing, say so first, then check
+  what you have.
+
+## Check readiness
+
+Read the requirements inside the larger system the result belongs to. Walk
+the whole flow start to finish as the person who uses the result. Then report:
+
+- **Ready or not ready.** Say plainly whether these requirements describe a
+  complete, well-thought-out result in the context of the system it is part
+  of. List what is still unclear. Use no score.
+- **Missing.** Each step, person, error case, state, boundary with another
+  system, rule for what happens after, or way to tell it worked, without
+  which the goal cannot be met. One line each, with the fix.
+- **Not explicit end to end.** Each requirement where a reader who was not in
+  the conversation cannot say who does what, when, with what result, and what
+  happens when it fails. Quote the wording and propose wording that makes it
+  explicit.
+- **Misreading risks.** Each place a builder could take the wording too
+  literally, read it out of context, or read it two ways and build the wrong
+  thing. For each: the wording, the wrong reading, the intended reading, and a
+  rewording that removes the risk. Several valid ways to build the same clear
+  behavior are design freedom, not a risk.
+- **Build details inside requirements.** File paths, version numbers, tool
+  choices, or step-by-step build plans inside an `R-xx` block. Requirements
+  say what and why, never how. Ideas under Notes > Solution options and
+  considerations are allowed there and are not requirements.
+- **Drift from the Agreed goal.** Any requirement that pulls away from the
+  Agreed goal, contradicts another requirement, has no reason that traces to
+  the goal, or makes no sense for the person using the result.
+- **Research or history in the wrong place.** Benchmarks, quotes, outs
+
+[CALL spawn_agent] {"task_name":"requirements_check","fork_turns":"none","message":"gAAAAABqupb9DEpBkJ4cNs7GlFhtgy5M30dvA7_YZd8UM9obJQ-FwUjYBAnk0_sUGwH6dFkXo6yA8JDRliAViFDvI2EIDMsy7pvHsOiveMg1nMXyNRYsltLJ9muoAWizG5UlVjb7IKhY7AbYs4WuPC2roCjltkj7D2NKyCy09vFg2K0w1WhZ3H7A_WTJQ8LqLmC-g4N7bHUuL2IWZdfDTZUoUWBTPLp5LaEqJVSz4cZpqVGWdfdJzVyiDPlxNSAVZs9UulI3g7GXRlf6DnpaiBdbiBPjkiy2tz_Ji218TnUbdxLs2OS6vMzVPefA8vHD6MeJu5gyShkvgPny3Ci_wITbZszrdXusCKD9mzRNAe_PZbZD9BW9O5TTTgmqibsGj7gUe0jUMfSR6wgiavRBQkhmUi0jsVKR2R-8bbo9nXnz6T4sQyrCTqefhLBpcfy_lmVKGiHl-x1KQ6wvBTb-ZR4k6AyhCxSmNP0C7_PRfst4DWGVWAIueG-m90Cu_l829mJFbyQC55yJAqMIJYsEwZcisF0et4ozkHcfCSKDikkWSED2SD6v2nI9JcOktlhOIPK6aOJHXu-QW0VxXxOn7k6zc23OFiwKuMimmI3VSc0BBMWVcoG66JBEFina9eLwsjR3uiP8wchOH7JolYHmbME7iDJFDKw0MJoIy-aTWWtOkeot1pX68AktpGgp0I7fWZNeoXSC536V5Unk8DwYWH3BFhLGpCHAC11yFcF0NksdjuSzQROwlX_Pj7By-v6EXP-G7vrWURYWFcGwMUOlgfLEAk0EGJV-rqrMxlYNQ5D-FXEZkOyiwGQDNJ3on4GDRYKy2HrJW73vACF9yOObhGX08TMrCxrjcrHAiwgJeIZJfWVdVSB7KG5ex6JGbs8N1DWdSoIB_m86kapjn7GYEJuA02CXfrqwBxtAQ-5LKnkCNmE32EIWN1G0Xk1lqz7dyPwUPlFREIzJQ610zNxKQlhLLY7_MQhHQapi_-dLlMWFgYNXF8xdyq6ll4Hn0oiQqkutDkq5BM-Yal_GRg8FAD2-xioT3kyZDb0qU4Zmcmv19nQl5-5K7G2zUkziRkPt-uvpy4pmDsdOR8QU6PuvmGqgUWXGc6JGMphQUFlxGDNlTthVM0H7p6_O6NQFOQ_oV-fkhy1J2chTVFjCu-qlsv4e90BBlDH7xIJyqeimdBBkoPkBNIRxAdvaOAD7Ven6OTga6m5JsUN83PVKEvmnEO_7Ny1n4YeySdiDyMo47L8xZQFC9ycpm0LzQWDRgTktSC8OfYb00sF-iYRZ1JSRS_G7vEbaW8C5VMZPxu4f7bGlRW-DV3POiKIcUd5nzDuraNNNw1IgT3EXt-pq7qlKFHehpEocoT96kq_4hO2hvosmAx8KPPcQO6rmK-kK4_lXe3wKPEpKweg8G_vp1kQFpRAZX8v
+  -> {"task_name":"/root/requirements_check"}
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.4/skills/memory-save/SKILL.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+---
+name: memory-save
+description: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says "remember this", "from now on", "forget that", or "remind me" with no time given, corrects the agent, or a hook says a save is due.'
+---
+
+# Memory save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Record format, types, focus, and glossary: `references/record-format.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Run each `toolkit` command alone, on its own line, in both hosts: never joined by `&&`, `;`, or a pipe, and never from a script (in Codex that runs it inside the sandbox, which blocks Hindsight and Notion). Text: one-line values (`--description`, `--source`) go in single quotes, with an apostrophe written `'\''`, because double quotes run backticks and `$(...)` and drop that text. A record body, the focus, or the glossary: in Claude Code pass it on standard input (`--body-file -` or `--set-file -`, followed by a quoted heredoc, `<<'EOF'`), never through a file; in Codex give it in single quotes (`--body '<text>'`, `--text '<text>'`), or write a file with the file edit tool in a new folder made with `mktemp -d`, run the `toolkit` command alone with that file, and delete the file and the folder right after. Never write the file and run the command in one shell command, and never use a fixed name such as `/tmp/focus.md`. Ask the owner in the reply text, never through a question tool.
+
+## Steps
+
+1. Decide the home first, with the memory criteria (`.memory/memory-criteria.md` with built-in memory; otherwise `references/record-format.md`). Memory holds a lasting preference, correction, fact about the project or the owner, or a hard-to-find reference. Elsewhere: project work goes to `work-on`; a decision for the whole project to `work-decide` (`DECISIONS.md`); delivered behavior to `requirements/`; how a change is built to the item's design; verified current structure to `system-guide/`; outside documentation to `ai-external-knowledge/`; a standing rule for how agents work here is proposed as a rule-file change; an owner to-do with no work item goes to the current focus "Untracked to-dos"; a project term goes to the glossary. A short memory pointer to a hard-to-find record is allowed; never copy its body.
+2. Search first and update the existing record rather than add a duplicate. The save command checks too: when memory already has a record with the same key or a very similar description or text, it saves nothing, exits with code 2, and lists those records. Read each one with the second command below, which prints its `version` field. The same fact: save that record's type and slug again with `--expect <version>`, which updates it (the first 12 characte
+
+[CALL exec] toolkit memory focus --json
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{
+  "ok": true,
+  "backend": "builtin",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-28, WI-001 requirements interview by agent\n\n## Now\n\n- Toolkit V2 setup files are committed locally on main as ffaab24. Mike confirmed the project outcome and Salesforce org roles. The project records tkv2-sbx as sandbox, tkv2-prod as production, and API version 62.0.\n- Toolkit doctor reported 0 problems and 3 Codex trust warnings in the setup session, although the owner already said trust was completed. The repository has no origin remote.\n- WI-001: add a Tier picklist field to Account so the sales team can rank their accounts.\n\n## Waiting on the owner\n\n- None outside WI-001.\n\n## Untracked to-dos\n\n- None.\n\n## Next session starts with\n\n- Continue WI-001 from its Resume here: ask the owner Q-02 about whether Tier is optional with no default, then continue the requirements interview.\n- Recheck toolkit doctor in Codex and reconcile its trust warnings with the owners earlier confirmation. Phase plan remains open.\n",
+  "version": "5048fea7bbac4e1288cd502a6246f1199b1ea811466e09f022089490cc25ab2e"
+}
+
+
+[CALL wait_agent] {"timeout_ms":20000}
+  -> {"message":"Wait completed.","timed_out":false}
+
+[CALL exec] toolkit work edit WI-001 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | Is the goal to let salespeople manually rank Accounts using one Tier picklist, with no automatic ranking? Answer: Yes. Gold, Silver, Bronze, in that order, with Gold highest. Mike, 2026-09-28. | R-01 | Answered | owner |
+| Q-02 | Should the Tier field be optional, with no default value? Answer: Yes. Tier can be blank and has no default value. Mike, 2026-09-28. | R-01 | Answered | owner |
+| Q-03 | Should the field help text explain that Tier is set manually and Gold is the highest rank? | R-02 | Open | owner |'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"51f6cd","wall_time_seconds":0.000002875,"exit_code":0,"original_token_count":9,"output":"Saved \"Open Questions\" in WI-001.\n"}
+
+[CALL exec] toolkit work show WI-001 --section 'R-02'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"3b7bdc","wall_time_seconds":0.000003,"exit_code":1,"original_token_count":32,"output":"Error: WI-001 has no section \"R-02\". Sections: Overview, Roadmap, Tasks, Recent History, Open Questions, Requirements, Notes.\n"}
+
+[CALL exec] toolkit work edit WI-001 --section 'Requirements' --text '**Overall status:** Refining  
+**Finalization rule:** Mark the overall requirements Finalized only when the agreed goal, every active requirement, and acceptance have been reviewed and approved by the owner. Record who approved them and when.
+
+### Starting request
+
+New work: add a Tier picklist field to Account so the sales team can rank their accounts.
+
+### Agreed goal
+
+Let salespeople manually rank Accounts using one Tier picklist with Gold, Silver, and Bronze in that order, with Gold highest. No automatic ranking.
+
+### Active requirements
+
+#### R-01 — Manual Account Tier
+
+**Status:** Refining  
+**Applies to:** Salespeople ranking Account records.  
+**Required behavior:** One Tier picklist on Account lets salespeople choose Gold, Silver, or Bronze, in that order, with Gold highest. Salespeople set the value by hand; the system does not rank Accounts automatically.  
+**Boundaries and exceptions:** Tier can be blank and has no default value.  
+**Acceptance check:** Check that a new Account has a blank Tier. Set existing Accounts to each of the three values and clear Tier; the values display in the specified order, and no automatic ranking changes the selection.  
+**Decision record:** Mike, 2026-09-28, requirements interview. Mike confirmed blank values and no default on 2026-09-28.  
+**Open questions:** None.
+
+#### R-02 — Field guidance
+
+**Status:** Refining  
+**Applies to:** The new Account Tier custom field.  
+**Required behavior:** The field has a description and help text.  
+**Boundaries and exceptions:** Exact wording will be set during design.  
+**Acceptance check:** The field metadata contains a description and help text, and the help text appears with the field in Salesforce.  
+**Decision record:** Mike, 2026-09-28, standing preference stated in chat.  
+**Open questions:** Q-03.
+
+#### R-03 — Tier access
+
+**Status:** Refining  
+**Applies to:** Everyone who can see an Account.  
+**Required behavior:** Everyone who can see an Account can read its Tier. Only users with the Sales Manager profile and system administrators can edit Tier.  
+**Boundaries and exceptions:** Access to an Account record remains governed by existing Account access.  
+**Acceptance check:** A user with Account access can read Tier; a Sales Manager and a system administrator can edit it; another user with Account access cannot edit it.  
+**Decision record:** Mike, 2026-09-28, requirements interview.  
+**Open questions:** None.
+
+#### R-04 — Account Layout placement
+
+**Status:** Refining  
+**Applies to:** The Account Layout page layout.  
+**Required behavior:** Tier appears directly below Rating on Account Layout.  
+**Boundaries and exceptions:** Other page layouts are outside this requirement.  
+**Acceptance check:** Open an Account using Account Layout and confirm Tier appears directly below Rating.  
+**Decision record:** Mike, 2026-09-28, requirements interview.  
+**Open questions:** None.
+
+### Acceptance
+
+This work item can be accepted when:
+
+1. Account has one manually set Tier picklist with Gold, Silver, and Bronze in that order, with Gold highest. Tier can be blank and has no default.
+2. The field has a description and help text.
+3. Everyone who can see an Account can read Tier, and only users with the Sales Manager profile and system administrators can edit it.
+4. Tier appears directly below Rating on Account Layout.
+5. The owner reviews the tested result.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"f33925","wall_time_seconds":0.00000325,"exit_code":0,"original_token_count":8,"output":"Saved \"Requirements\" in WI-001.\n"}
+
+[CALL exec] toolkit work edit WI-001 --section 'Overview' --text '**Goal:** Let the Acme sales team manually rank Accounts using a Tier picklist.
+
+**Current position:** The owner confirmed the values, blank default, field access, and Account Layout placement. Requirements remain in refinement.
+
+**Next action:** Owner answers Q-03 about what Tier help text should explain; then the agent finishes the requirements review.
+
+**Blockers:** Owner answer to Q-03.
+
+**Related items:** None.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"6c0863","wall_time_seconds":0.000003375,"exit_code":0,"original_token_count":7,"output":"Saved \"Overview\" in WI-001.\n"}
+
+[CALL exec] toolkit work edit WI-001 --section 'Notes' --text '### Decisions and context
+
+- No Account Tier metadata has been changed. The project source has no force-app directory yet.
+- Requirements review found that the intended meaning of field guidance needs an owner answer. Confirm the exact Sales Manager and administrator profile identities against the sandbox during design.
+
+### Resume here
+
+Ask the owner Q-03 about what Tier help text should explain. Then finish the requirements review and ask for approval. Before changing Account metadata or field access, state the intended change, components, and what could break, then wait for owner confirmation under the Salesforce change rule.
+
+### Solution options and considerations
+
+- For R-01: A custom Account picklist is the requested approach.
+- For R-03: Confirm existing Account access and profile names during design before selecting the field access configuration.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"2085de","wall_time_seconds":0.000003,"exit_code":0,"original_token_count":7,"output":"Saved \"Notes\" in WI-001.\n"}
+
+[CALL exec] toolkit work set WI-001 --waiting-on owner
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"3a0fce","wall_time_seconds":0.000003291,"exit_code":0,"original_token_count":23,"output":"Updated WI-001: waiting on owner.\nNow 02 Refinement (Backlog). Continue with work-decide.\n"}
+
+[CALL exec] toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-28, WI-001 requirements interview by agent
+
+## Now
+
+- Toolkit V2 setup files are committed locally on main as ffaab24. Mike confirmed the project outcome and Salesforce org roles. The project records tkv2-sbx as sandbox, tkv2-prod as production, and API version 62.0.
+- Toolkit doctor reported 0 problems and 3 Codex trust warnings in the setup session, although the owner already said trust was completed. The repository has no origin remote.
+- WI-001: add a Tier picklist field to Account so the sales team can rank their accounts.
+
+## Waiting on the owner
+
+- None outside WI-001.
+
+## Untracked to-dos
+
+- None.
+
+## Next session starts with
+
+- Continue WI-001 from its Resume here: ask the owner Q-03 about what Tier help text should explain, then finish the requirements review.
+- Recheck toolkit doctor in Codex and reconcile its trust warnings with the owners earlier confirmation. Phase plan remains open.' --expect 5048fea7bbac4e1288cd502a6246f1199b1ea811466e09f022089490cc25ab2e
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+{"chunk_id":"afed6f","wall_time_seconds":0.000005,"exit_code":0,"original_token_count":15,"output":"Saved the current focus (22 lines). Version: afc2844d4b97\n"}
+
+[CALL exec] toolkit work validate WI-001
+   toolkit work show WI-001 --section 'Open Questions'
+   toolkit memory focus
+   toolkit doctor
+  -> Script completed
+Wall time 0.5 seconds
+Output:
+
+{"cmd":"toolkit work validate WI-001","result":"Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. 1 open question waits on the owner (toolkit work decisions lists it).\n"}
+{"cmd":"toolkit work show WI-001 --section 'Open Questions'","result":"## Open Questions\n\n| ID | Question | Affects | Status | Decision needed from |\n|---|---|---|---|---|\n| Q-01 | Is the goal to let salespeople manually rank Accounts using one Tier picklist, with no automatic ranking? Answer: Yes. Gold, Silver, Bronze, in that order, with Gold highest. Mike, 2026-09-28. | R-01 | Answered | owner |\n| Q-02 | Should the Tier field be optional, with no default value? Answer: Yes. Tier can be blank and has no default value. Mike, 2026-09-28. | R-01 | Answered | owner |\n| Q-03 | Should the field help text explain that Tier is set manually and Gold is the highest rank? | R-02 | Open | owner |\n"}
+{"cmd":"toolkit memory focus","result":"# Current focus\n\nLast updated: 2026-09-28, WI-001 requirements interview by agent\n\n## Now\n\n- Toolkit V2 setup files are committed locally on main as ffaab24. Mike confirmed the project outcome and Salesforce org roles. The project records tkv2-sbx as sandbox, tkv2-prod as production, and API version 62.0.\n- Toolkit doctor reported 0 problems and 3 Codex trust warnings in the setup session, although the owner already said trust was completed. The repository has no origin remote.\n- WI-001: add a Tier picklist field to Account so the sales team can rank their accounts.\n\n## Waiting on the owner\n\n- None outside WI-001.\n\n## Untracked to-dos\n\n- None.\n\n## Next session starts with\n\n- Continue WI-001 from its Resume here: ask the owner Q-03 about what Tier help text should explain, then finish the requirements review.\n- Recheck toolkit doctor in Codex and reconcile its trust warnings with the owners earlier confirmation. Phase plan remains open.\n"}
+{"cmd":"toolkit doctor","result":"Toolkit doctor for Acme CRM (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce).\n\nWarnings (3):\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.\n   Fix: The owner opens Codex in this folder and trusts it when Codex asks.\n2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).\n   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\n3. The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them.\n   Fix: The owner opens /hooks in Codex in this project and trusts the
+
+[AGENT] I saved your choices in WI-001: Tier can be blank with no default; everyone who can see an Account can read it; only the Sales Manager profile and system administrators can edit it; and it appears directly below Rating on Account Layout. The work item passed validation.
+
+The requirements review found one detail to settle. I recommend that the help text explain that Tier is set manually and Gold is the highest rank. Should it say that?
+
+SKILLS OPENED (SKILL.md read): ['work-decide', 'work-requirements', 'memory-save']
+
+TOOLKIT COMMANDS:
+   toolkit work decisions
+   toolkit work show WI-001
+   toolkit memory find 'Tier Account field access'
+   toolkit work show WI-001 --section 'Open Questions'
+   toolkit work show WI-001 --section 'Overview'
+   toolkit work show WI-001 --section 'Notes'
+   toolkit work edit WI-001 --section 'Open Questions' --text '
+   toolkit work edit WI-001 --section 'Requirements' --text '**Overall status:** Refining  
+   toolkit work edit WI-001 --section 'Overview' --text '**Goal:** Let the Acme sales team manually rank Accounts using a Tier picklist.
+   toolkit work edit WI-001 --section 'Notes' --text '### Decisions and context
+   toolkit work set WI-001 --waiting-on agent
+   toolkit work history WI-001 --note 'Owner words: Yes, it can be blank, with no default value. For who sees it: everyone who can see an Account can read Tier, but only the Sales Manager profile and system administrators can edit it. Put it on the Account Layout page layout, right below Rating.' --effect 'Q-02 answered
+   toolkit memory focus --json
+   toolkit work edit WI-001 --section 'Open Questions' --text '
+   toolkit work show WI-001 --section 'R-02'
+   toolkit work edit WI-001 --section 'Requirements' --text '**Overall status:** Refining  
+   toolkit work edit WI-001 --section 'Overview' --text '**Goal:** Let the Acme sales team manually rank Accounts using a Tier picklist.
+   toolkit work edit WI-001 --section 'Notes' --text '### Decisions and context
+   toolkit work set WI-001 --waiting-on owner
+   toolkit memory focus --text '# Current focus
+   toolkit doctor in Codex and reconcile its trust warnings with the owners earlier confirmation. Phase plan remains open.' --expect 5048fea7bbac4e1288cd502a6246f1199b1ea811466e09f022089490cc25ab2e
+   toolkit work validate WI-001
+   toolkit work show WI-001 --section 'Open Questions'
+   toolkit memory focus
+   toolkit doctor

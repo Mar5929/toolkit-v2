@@ -1,0 +1,1126 @@
+PROMPT: I approve that worktree command and the other git commands the build needs, so go ahead and run them yourself. Keep going.
+THREAD: 01a0e8f3-5b1b-7c23-ad40-164868b8559a
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 add a Tier picklist field to Account so the sales team can rank their accounts: 07 Tracking setup, In Progress, waiting on owner. Next action: Mike runs or approves the exact WI-001 worktree command recorded in Resume here. Then the agent inspects Account metadata and builds R-01... Continues with work-decide.
+- WI-002 Set Account Tier access and place it below Rating on Account Layout: 06 Implementation plan, In Progress. Next action: After the WI-001 field is available, inspect Account Layout assignments and effective field access, then prepare and check the access and... Continues with work-on.
+
+Waiting on the owner:
+- WI-001 add a Tier picklist field to Account so the sales team can rank their accounts: Q-05: Will Mike run or approve creation of the WI-001 worktree with the exact command in Resume here? Affects P1-T01, P1-T02. (work-decide)
+
+Items: 2 in progress.
+
+Changes found in the tracker since the last toolkit command. The owner has not been told about them in this session; work-on and work-organize say each line below to him as written, before other work (work-organize handles moves and copies; work-decide handles questions):
+- Moved: WI-001 from WI-001-add-a-tier-picklist-field-to-account-so to account-tier/WI-001-add-a-tier-picklist-field-to-account-so (moved by hand). It is still a top-level item.
+- Renamed folder: WI-002's folder was renamed by hand from WI-002-set-account-tier-access-and-place-it to WI-002-tier-access-and-layout; the item itself is the same. It moved along with its parent WI-001's folder, and it is still a sub-item of WI-001.
+
+Current focus:
+## Now
+- Toolkit V2 setup files are committed locally on main as ffaab24. The project records tkv2-sbx as sandbox, tkv2-prod as production, and API version 62.0. There is no origin remote.
+- WI-001 is the Account Tier field item. Mike approved its requirements, Option A, the exact field texts, and agent-led delivery with one team inside this chat.
+- WI-002 is the sub-item for Tier access and Account Layout, to follow the WI-001 field. It inherits WI-001 R-03 and R-04 and the approved design.
+## Next session starts with
+- ... 8 more. toolkit memory focus prints all of it.
+
+Project memory (builtin): 1 record. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_custom_field_documentation: Every new 
+
+[AGENT] I’ll record your approval, run the WI-001 worktree command, and continue the Account Tier build. I’ll read the project rules and item instructions first. I’m using the work-decide and work-on skills for this step.
+
+[CALL exec] cat SOUL.md PROJECT.md PROJECT-ROADMAP.md DECISIONS.md
+   for f in .claude/rules/*.md; do echo "FILE $f"; cat "$f"; done
+   cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/skills/work-decide/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/skills/work-on/SKILL.md
+   git status --short --branch; toolkit work lifecycle; toolkit memory focus
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+Warning: truncated output (original token count: 15273)
+Total output lines: 725
+
+RESULT 1
+cat: SOUL.md: No such file or directory
+# Acme CRM
+
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->
+
+## Purpose and intended outcome
+
+- Purpose: Give the Acme sales team a Salesforce org that fits how they sell.
+- Intended outcome: Better account data is the first improvement toward that goal.
+
+## Scope and boundaries
+
+- In scope: The Acme sales team's Salesforce org, starting with account data.
+- Outside scope: `<Important exclusions or adjacent owners.>`
+- Constraints: `<Approved security, delivery, or operating constraints with sources.>`
+
+## Systems and environments
+
+| System or org | Purpose | Environment | Source of truth | Access notes |
+| --- | --- | --- | --- | --- |
+| `tkv2-sbx` | Project sandbox | Sandbox | Salesforce org alias, confirmed by Mike on 2026-09-28 | Salesforce CLI |
+| `tkv2-prod` | Production org | Production | Salesforce org alias, confirmed by Mike on 2026-09-28 | Salesforce CLI; agents do not deploy or write data here |
+
+## People and ownership
+
+| Role | Person or team | Responsibility | Source / last confirmed |
+| --- | --- | --- | --- |
+| Project owner | Mike | Makes project decisions | Project setup, 2026-09-28 |
+
+## Work and project records
+
+- Work tracker: Local folders in `.work-items/`, identified by work item ID.
+- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)
+- Project decisions: [DECISIONS.md](DECISIONS.md)
+- Functional requirements: [requirements/](requirements/)
+- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`
+- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`
+- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)
+- Memory backup or sync: `<Owner-approved destination and restore procedure, outside this repository>`
+
+## Resources and project paths
+
+- Salesforce source: `force-app/` or `<actual source path>`
+- Project-wide deployment manifest: `delivery/deployment/full-project-deployment-template/package.xml` after the API version and members are verified. Keep it as the full project component inventory; ordinary deployments use narrower work-item packages.
+- Work-item deployment manifests: `delivery/deployment/<work-item-id>-<short-name>/package.xml` when an item changes Salesforce metadata.
+- Tests and checks: `<actual commands and locations>`
+- Outside references: `<source register or approved location>`
+
+## Operating conventions
+
+<Write only stable project-specific conventions here; link the 
+
+[HOOK CONTEXT] This shell command joins a toolkit command to other commands (&&, ;, a pipe, a heredoc, or cd). In Codex that runs the toolkit command inside the sandbox, which blocks Notion, Hindsight, and the main checkout's .work-items/ and .memory/ from a worktree, so it may fail or report the wrong cause. Run each toolkit command alone, as its own command; pass section text with --text '<text>' in single quotes (an apostrophe written '\''), instead of a file written in the same command.
+
+[AGENT] The tracker reports two folder changes: WI-001 moved by hand into `account-tier/` and remains a top-level item. WI-002’s folder was renamed by hand to `WI-002-tier-access-and-layout`; it moved with WI-001 and remains its sub-item. I’ll keep using their IDs.
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/skills/work-decide/SKILL.md
+   cat .claude/rules/shared-repository-work.md .claude/rules/salesforce-org-safety.md .claude/rules/work-item-folders.md .claude/rules/session-handoff.md
+   cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/references/conventions.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/references/trackers.md
+   cat .toolkit.json; rg --files force-app delivery/deployment tests tools/kb | head -100
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Warning: truncated output (original token count: 13710)
+Total output lines: 823
+
+RESULT 1
+---
+name: work-decide
+description: 'Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers. Use when he asks "what do you need from me", answers a waiting decision ("go with option B"), or states a project-wide decision. Not for a bare "yes" when this chat asked no question.'
+---
+
+# Work decide
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Shared rules: the work plugin's `references/conventions.md`, two folders above this skill's folder (`../../references/conventions.md`). To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Run each `toolkit` command alone, on its own line, in both hosts: never joined by `&&`, `;`, or a pipe, and never from a script (in Codex that runs it inside the sandbox, where it fails). Text (conventions, "Text in a command"): one-line values (`--note`, `--effect`, `--append-row`, `--title`) go in single quotes, with an apostrophe written `'\''`, because double quotes run backticks and `$(...)`; section and design text goes on standard input in Claude Code (`<file>` is `-`, followed by a quoted heredoc, `<<'EOF'`), and in Codex in `--text '<text>'` or a file in a new `mktemp -d` folder, deleted right after the command. Never change a record with a script. Ask the owner in the reply text, never through a question tool. No remote (`git remote` prints nothing): never run `git fetch`, and never report a fetch refusal as a blocker.
+
+## Steps
+
+1. Build the queue: requirements waiting for approval, designs marked proposed, items at stage 11 waiting for result approval, Open Questions rows where the owner decides, and memory proposals (records saved as `needs-review` because the owner did not answer "Save to memory?"). The command lists each decision once. Its "Agent to-do" lines are the agent's own steps, not decisions waiting on the owner: count and show only the decisions. A delivery offer, as an agent to-do or as an open question, belongs to `work-delegate`, the only skill that makes or records it: open it after the owner's other decisions.
+   `toolkit work decisions`
+2. The owner gave an answer without being asked ("approved", "go with B"): match it to exactly one waiting decision. If two could match, ask which one, naming both. A bare "yes", "ok", or "looks good" is not such an answer ("What counts as an answer").
+3. Otherwise take the decisions one at a time, the one blocking the most work first. For each: what is being decided, the choices, your recommendation and its main reason, and what happens after each answer. Every decision carries a recommendation, even when it is the only one in the queue; a bare question is not enough. One decision per message, asked in the 
+
+[CALL exec] toolkit work decisions
+   toolkit work show WI-001
+   toolkit work show WI-002
+   git worktree list
+   git remote
+   git status --short --branch
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+RESULT 1
+1 decision waits on the owner:
+
+WI-001 add a Tier picklist field to Account so the sales team can rank their accounts
+  - Q-05: Will Mike run or approve creation of the WI-001 worktree with the exact command in Resume here? Affects P1-T01, P1-T02. (work-decide)
+
+RESULT 2
+WI-001: add a Tier picklist field to Account so the sales team can rank their accounts
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce/.work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account-so/WORK-ITEM.md
+Stage: 07 Tracking setup (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: none | Sub-items: WI-002 | Design: approved (.work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account-so/DESIGN.md)
+Worktree branch for this item: claude/wi-001-add-a-tier-picklist-field-to (folder .claude/worktrees/wi-001-add-a-tier-picklist-field-to)
+
+---
+id: WI-001
+title: add a Tier picklist field to Account so the sales team can rank their accounts
+type: build
+stage: 07-tracking-setup
+status: In Progress
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: agent-led
+requirements_approved: "2026-09-28 by Mike"
+design: approved
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-001: add a Tier picklist field to Account so the sales team can rank their accounts
+
+## Overview
+
+**Goal:** Let the Acme sales team manually rank Accounts using a Tier picklist.
+
+**Current position:** Mike approved Option A and both field texts. WI-002 owns access and Account Layout. The field-only plan is ready, and no metadata has been changed. This Codex session could not create the WI-001 worktree because local approval policy rejected the Git write.
+
+**Next action:** Mike runs or approves the exact WI-001 worktree command recorded in Resume here. Then the agent inspects Account metadata and builds R-01 and R-02 on that worktree.
+
+**Blockers:** WI-001 worktree creation needs owner action in an interactive session or terminal. Sandbox deployment still needs separate owner approval.
+
+**Related items:** WI-002 delivers R-03 and R-04 after the field.
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Account Tier field | Account has the approved Tier picklist and field guidance from R-01 and R-02 | In Progress | Field metadata is reviewed and validated against tkv2-sbx; field result is checked separately before access and layout work | None |
+| P2 — Access and Account Layout | R-03 and R-04 are delivered after the field | Not Started | WI-002 has its own checked result and owner approval | WI-002 |
+
+## Tasks
+
+### P1 — Account Tier field
+
+- [ ] **P1-T01 — Inspect Account metadata and dependencies** · Not Started  
+  **Work:** Check the Salesforce project, Account Rating and Tier
+
+[CALL exec] toolkit work edit WI-001 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | Is the goal to let salespeople manually rank Accounts using one Tier picklist, with no automatic ranking? Answer: Yes. Gold, Silver, Bronze, in that order, with Gold highest. Mike, 2026-09-28. | R-01 | Answered | owner |
+| Q-02 | Should the Tier field be optional, with no default value? Answer: Yes. Tier can be blank and has no default value. Mike, 2026-09-28. | R-01 | Answered | owner |
+| Q-03 | Should the field help text explain that Tier is set manually and Gold is the highest rank? Answer: Yes. Explain that Tier is set by hand and that Gold is highest, followed by Silver, then Bronze. Mike, 2026-09-28. | R-02 | Answered | owner |
+| Q-04 | Would you like agents to take responsibility for delivering this, with you acting as product owner? | delivery | Answered | owner |
+| Q-05 | Will Mike run or approve creation of the WI-001 worktree with the exact command in Resume here? Answer: Mike approved the command and other Git commands needed for the build on 2026-09-28. | P1-T01, P1-T02 | Answered | owner |'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Open Questions" in WI-001.
+
+
+[CALL exec] toolkit work set WI-001 --waiting-on agent
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Updated WI-001: waiting on agent.
+Now 07 Tracking setup (In Progress). Continue with work-on.
+
+
+[CALL exec] toolkit work history WI-001 --note 'Owner words: I approve that worktree command and the other git commands the build needs, so go ahead and run them yourself. Keep going.' --effect 'WI-001 worktree and build Git commands are authorized; continue field work. Sandbox deployment and Salesforce Setup writes still require separate decisions.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Added a Recent History row to WI-001.
+
+
+[AGENT] I’ve recorded your Git approval on WI-001. I’m creating its worktree now so the field changes stay on the item’s branch.
+
+[CALL exec] git worktree add .claude/worktrees/wi-001-add-a-tier-picklist-field-to -b claude/wi-001-add-a-tier-picklist-field-to
+  -> Script completed
+Wall time 3.8 seconds
+Output:
+
+{"chunk_id":"b9189b","wall_time_seconds":0.000003167,"exit_code":0,"original_token_count":33,"output":"Preparing worktree (new branch 'claude/wi-001-add-a-tier-picklist-field-to')\nHEAD is now at ffaab24 Set up Toolkit V2 for Acme CRM\n"}
+
+[CALL exec] toolkit work design WI-001
+   cat .agents/skills/sf-component-tracker/SKILL.md .claude/rules/record-deployment-steps.md .claude/rules/project-file-locations.md .claude/rules/publish-project-documents.md
+   cat sfdx-project.json delivery/deployment/component-tracker.csv delivery/deployment/full-project-deployment-template/package.xml tests/TEST-PLAN-TEMPLATE.md
+   sf org display -o tkv2-sbx --json
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+RESULT 1
+Design of WI-001 (approved) at /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce/.work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account-so/DESIGN.md
+
+---
+work_item: WI-001
+status: approved
+approved: "2026-09-28 by Mike"
+---
+
+# WI-001: Account Tier — solution design
+
+**Requirements:** WI-001  
+**Design status:** Approved  
+**Requirements checked:** WI-001 requirements, approved by Mike on 2026-09-28  
+**Last updated:** 2026-09-28  
+**Design approval:** Approved by Mike on 2026-09-28
+
+## What this design solves
+
+Account users need a manually maintained Tier that shows the relative importance of an account. WI-001 adds the field first. WI-002 then places it on Account Layout and sets field access so Account viewers can read it while only Sales Manager and System Administrator profile users can edit it. The design does not change record access or automate Tier assignment.
+
+## Requirements and design readiness
+
+The four approved requirements are ready for design. Effective field access needs an audit of all profiles, permission sets, and permission set groups before configuration and verification; this is an implementation check, not a new owner choice.
+
+| Requirement | Status in work item | Design coverage | Remaining decision or gap |
+| --- | --- | --- | --- |
+| R-01 — Account Tier values and manual entry | Approved 2026-09-28 | Option A, field definition and acceptance checks | None |
+| R-02 — Description and help text | Approved 2026-09-28 | Option A, approved wording and acceptance checks | None |
+| R-03 — Read and edit access | Approved 2026-09-28 | Option A, access configuration and effective-access audit | None; audit required during build |
+| R-04 — Account Layout placement | Approved 2026-09-28 | Option A, layout change and acceptance checks | None |
+
+## What exists today
+
+The connected sandbox is `tkv2-sbx` at API 62.0. An Account describe showed Rating and no Tier field; Account has one Master record type. An org query found Sales Manager, System Administrator, Sales User, and Read Only profiles and a layout named Account Layout. The project has no `force-app` source yet. The full metadata names, current layout XML, effective field grants, and existing object or record access have not yet been inspected. Those are build prerequisites, not assumptions about the org.
+
+## Constraints and assumptions
+
+| Type | Constraint or assumption | Source and status | Effect on the design |
+| --- | --- | --- | --- |
+| Constraint | The owner approved R-01 through R-04 and both final field texts on 2026-09-28. | WI-001 owner decisions | Build must match the values, texts, access, and layout position. |
+| Constraint | Salesforce permissions are additive. | [Salesforce security hierarchy](https://developer.salesforce.com/workshops/admin-security-workshop/identity-and-access/2-security-hiera
+
+[CALL exec] sf sobject describe -s Account -o tkv2-sbx --json | jq '{status, fields: [.result.fields[] | select(.name == "Tier__c" or .name == "Rating") | {name,label,type,picklistValues}]}'
+   sf data query -q "SELECT DurableId, DeveloperName, NamespacePrefix FROM EntityDefinition WHERE QualifiedApiName = 'Account'" -o tkv2-sbx --json
+   python3 tools/kb/build_edges.py
+   sf data query -q "SELECT DeveloperName, NamespacePrefix FROM CustomField WHERE TableEnumOrId = 'Account'" -o tkv2-sbx --json
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+RESULT 1
+{
+  "status": 0,
+  "fields": [
+    {
+      "name": "Rating",
+      "label": "Account Rating",
+      "type": "picklist",
+      "picklistValues": [
+        {
+          "value": "Hot"
+        },
+        {
+          "value": "Warm"
+        },
+        {
+          "value": "Cold"
+        }
+      ]
+    }
+  ]
+}
+
+RESULT 2
+{"status":0,"result":{"records":[],"totalSize":0,"done":true},"warnings":[]}
+
+RESULT 3
+no org metadata found under /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce/.claude/worktrees/wi-001-add-a-tier-picklist-field-to
+expected either packageDirectories in sfdx-project.json, or folders under force-app holding main/default
+name one directly with --org NAME --force-app PATH
+
+RESULT 4
+{"status":0,"result":{"records":[],"totalSize":0,"done":true},"warnings":[]}
+
+
+[AGENT] The sandbox Account describe shows Rating and no Tier field. The repository has no Salesforce source to inspect yet, so I’m adding the approved `Tier__c` field and its narrow deployment package. Sandbox deployment will need its own approval.
+
+[CALL exec] const r=await tools.web__run({search_query:[{"q":"site:developer.salesforce.com custom field metadata picklist valueSet restricted valueSetDefinition CustomField XML"},{"q":"site:github.com salesforce customfield field-meta.xml valueSet restricted picklist sample"}],response_length:"short"});text(r)
+
+  -> Script completed
+Wall time 1.8 seconds
+Output:
+
+Custom picklist field with css static resources as names · GitHub (https://gist.github.com/j-schreiber/fb8569ff6bde3af49394a1c243aef309)
+citeturn0search0 [wordlim: 200] Published: 6.2 years ago; Crawled: last month; # j-schreiber/LetterFormat__c.field-meta.xml ... Custom picklist field with css static resources as names ...  | <valueSet> | <restricted>true</restricted>
+
+# j-schreiber/LetterFormat__c.field-meta.xml
+
+Created July 8, 2020 11:44
+
+Sh
+
+[CALL exec] toolkit work set WI-001 --stage 08-build
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Updated WI-001: stage 07 Tracking setup -> 08 Build (status In Progress).
+Now 08 Build (In Progress). Continue with work-on.
+
+
+[CALL exec] cat delivery/deployment/work-item-deployment-template/DEPLOYMENT-RECORD.md delivery/deployment/work-item-deployment-template/package.xml delivery/deployment/work-item-deployment-template/destructiveChanges.xml
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+# <Work item ID>: deployment record
+
+<!-- Fill-in guide: create one deployment folder named for the real work-item ID and short name. Replace every angle-bracket prompt in each labeled field, row, and paragraph with that deploy's verified information. Keep the package link; replace optional Removals and Manual steps values with links only when those files exist. Record checks before the deploy and actual results afterward. Delete this guide and exa
+
+[PATCH] files=['.claude/worktrees/wi-001-add-a-tier-picklist-field-to/force-app/main/default/objects/Account/fields/Tier__c.field-meta.xml\\n+<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>\\n+<CustomField xmlns=\\"http://soap.sforce.com/2006/04/metadata\\">\\n+    <fullName>Tier__c</fullName>\\n+    <description>Manually assigned account importance tier.</description>\\n+    <inlineHelpText>Set by hand. Gold is the highest tier, then Silver, then Bronze.</inlineHelpText>\\n+    <label>Tier</label>\\n+    <required>false</required>\\n+    <type>Picklist</type>\\n+    <valueSet>\\n+        <restricted>true</restricted>\\n+        <valueSetDefinition>\\n+            <sorted>false</sorted>\\n+            <value>\\n+                <fullName>Gold</fullName>\\n+                <default>false</default>\\n+                <label>Gold</label>\\n+            </value>\\n+            <value>\\n+                <fullName>Silver</fullName>\\n+                <default>false</default>\\n+                <label>Silver</label>\\n+            </value>\\n+            <value>\\n+                <fullName>Bronze</fullName>\\n+                <default>false</default>\\n+                <label>Bronze</label>\\n+            </value>\\n+        </valueSetDefinition>\\n+    </valueSet>\\n+</CustomField>\\n*** Add File: .claude/worktrees/wi-001-add-a-tier-picklist-field-to/delivery/deployment/WI-001-account-tier-field/package.xml\\n+<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>\\n+<Package xmlns=\\"http://soap.sforce.com/2006/04/metadata\\">\\n+    <types>\\n+        <members>Account.Tier__c</members>\\n+        <name>CustomField</name>\\n+    </types>\\n+    <version>62.0</version>\\n+</Package>\\n*** Update File: .claude/worktrees/wi-001-add-a-tier-picklist-field-to/delivery/deployment/component-tracker.csv\\n@@\\n Component Type,Object/Parent,API Name,Label,Work Item,Change Type,Sandbox,Production,Notes\\n+CustomField,Account,Account.Tier__c,Tier,WI-001,New,No,No,Restricted picklist; Gold/Silver/Bronze; nullable; no default\\n*** Update File: .claude/worktrees/wi-001-add-a-tier-picklist-field-to/delivery/deployment/full-project-deployment-template/package.xml\\n@@\\n-    <!-- Fill-in guide: replace XX.0 below with the verified API version from\\n-         sfdx-project.json. For each CLI-deployable metadata type tracked in\\n-         delivery/deployment/component-tracker.csv, add a types block containing\\n-         its exact members and Salesforce metadata type, for example:\\n-         <types><members>ExactMemberApiName</members><name>MetadataType</name></types>\\n-         Replace that example with real values; do not copy it as a live member.\\n-         Ordinary work deploys its narrow work-item package. Do not deploy this seed. -->\\n+    <!-- Full project component inventory. Deploy ordinary changes with the narrow work-item package. -->\\n+    <types>\\n+        <members>Account.Tier__c</members>\\n+        <name>CustomField</name>\\n+    </types>\\n*** End Patch"))']
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{}
+
+[CALL exec] cat .agents/skills/sf-deploy-check/SKILL.md
+   git status --short --branch
+   python3 tools/kb/build_edges.py
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+RESULT 1
+---
+name: sf-deploy-check
+description: 'Finds hitch-hikers: components or pending edits that would ship with a Salesforce deploy before their feature is ready. Use before any deploy to a shared org (UAT, full copy, staging, or production), including a deploy command for the owner. Not for running the deploy; use work-finish.'
+---
+
+# Salesforce deploy hitch-hiker check
+
+A metadata deploy ships the whole current source of every component it names, not only your edit. A hitch-hiker is a component in the deploy set, or an undeployed edit inside a named component's file, that would land in the target org although it is not the intended change or its feature is not ready there.
+
+Two shapes:
+1. A whole component the target does not have yet. The deploy creates it. Example: a field whose LWC, Apex, page, or backfill has not shipped.
+2. Extra edits inside a file you touch for one reason. Example: you change a field's help text; the deploy also ships a renamed label, a new rollup filter, a changed formula, or added picklist values in that file.
+
+## When to run
+
+- Before every deploy to a shared or higher org, by `-x`, `-m`, or `-d`.
+- Before you give the owner any production deploy command.
+
+## The check
+
+1. List the exact deploy set: every `<members>` in the `-x` manifest, every member in the `-m` list, every file or folder under `-d`. An `-x` deploy of a full-cutover manifest is the highest risk. Check the whole member list.
+2. For each named component, the whole current `force-app/` definition ships: label, inline help text, formula, rollup and summary filters, picklist values, all field metadata, and the component itself if the target lacks it.
+3. For each component, decide whether its feature is already live in the target. Hitch-hiker signals:
+   - The component tracker (if the project keeps one) marks it as not in the target org.
+   - It belongs to a work item or feature the owner has not called ready for that org.
+   - The file has edits beyond the intended one. Diff it against the last deployed commit, or run `git log` on the path.
+   - When `tools/kb/` exists, run `python tools/kb/query_graph.py <Object.Field>` to see what the component connects to. A connected component that is not in the target org is a candidate hitch-hiker.
+4. Treat any tracker as a hint, not proof. Before you call a component missing, verify against the target org read-only: `sf sobject describe`, or a SOQL or Tooling query for the field, class, or flag. Do not block a deploy on a stale tracker alone. Do not tell the owner something rides into production until a read-only check confirms it is not already there.
+5. If a confirmed hitch-hiker remains, stop. Do not deploy. Do not hand over the command. Tell the owner which component, what would ship, and why it may be unintended. The owner decides: narrow the deploy set, or confirm the rider is wanted.
+
+## Narrow the deploy set
+
+- Name only the components the change needs.
+
+[CALL exec] python3 tools/kb/query_graph.py Account.Tier__c
+   sf project deploy validate -x delivery/deployment/WI-001-account-tier-field/package.xml -o tkv2-sbx --json
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+RESULT 1
+# Impact report: force-app:CustomField:Account.Tier__c
+
+- **Component:** CustomField `Account.Tier__c`
+- **Defined in:** `force-app/main/default/objects/Account/fields/Tier__c.field-meta.xml`
+- **Belongs to:** `force-app:CustomObject:Account`
+- **How it is populated:** manual_only (nothing in this snapshot writes it, so it is typed in by hand, written by Apex the pattern match did not catch, or written through the API by an integration that leaves no metadata behind); 0 write(s) found
+- **Radius:** 2 hop(s); `contains` edges skipped in the multi-hop walk
+
+## Where this value comes from (0)
+
+_Nothing in this snapshot writes it and it is not computed. It is typed in by hand, written by Apex the pattern match did not catch, or written through the API by an integration. See the caveat at the bottom._
+
+## Direct connections (1 hop): everything that names this (0)
+
+| direction | relationship | other component | confidence | evidence |
+| --- | --- | --- | --- | --- |
+
+## Impact radius (up to 2 hops): what could break if this changes (0)
+
+_Nothing else connects within the radius._
+
+---
+
+This report is built from the metadata files on disk, not from a live org. It cannot see everything: Apex writes are found by matching patterns against code text so they are near-complete rather than exhaustive, anything built at runtime (dynamic SOQL, `Type.forName`, a field name inside a string) is largely invisible, and an integration writing through the API leaves no metadata behind at all. An empty section means "nothing in this snapshot", never "nothing". `tools/kb/README.md` has the full list under "What this cannot tell you".
+
+
+RESULT 2
+{"status":0,"result":{"id":"0AfFAKE000VALID3","status":"Succeeded","success":true,"checkOnly":true,"done":true,"numberComponentsDeployed":1,"numberComponentErrors":0,"numberTestErrors":0},"warnings":[]}
+
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/skills/work-check/SKILL.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+---
+name: work-check
+description: 'Tests a finished build against its work item''s requirements, fixes what fails, and asks the owner to approve the result. Use when the last build task is done, or the owner asks whether it is ready to ship or works, for example "is it ready", "test it", or "check it against what I asked for".'
+---
+
+# Work check
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Shared rules: the work plugin's `references/conventions.md` and `references/helpers.md` (how to brief agents), two folders above this skill's folder (`../../references/`). To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Run each `toolkit` command alone, on its own line, in both hosts: never joined by `&&`, `;`, or a pipe, and never from a script (in Codex that runs it inside the sandbox, where it fails). Text (conventions, "Text in a command"): one-line values (`--note`, `--effect`, `--append-row`, `--title`) go in single quotes, with an apostrophe written `'\''`, because double quotes run backticks and `$(...)`; section and design text goes on standard input in Claude Code (`<file>` is `-`, followed by a quoted heredoc, `<<'EOF'`), and in Codex in `--text '<text>'` or a file in a new `mktemp -d` folder, deleted right after the command. Never change a record with a script. Ask the owner in the reply text, never through a question tool. No remote (`git remote` prints nothing): never run `git fetch`, and never report a fetch refusal as a blocker.
+
+## Steps
+
+1. Read the requirements, the acceptance list, and the tasks, then set the testing stage. When the show output's "Design:" value is not `none`, also read the design's Acceptance checks (in "Build and verification plan") and the selected option's "How to check it" column (the design command exits 1 for an item with no design). A sub-item whose "Design:" says "none of its own" and names its parent's approved design is checked against that design: read the parent's.
+   `toolkit work show <id>`
+   `toolkit work design <id>`
+   `toolkit work design <parent-id>`
+   `toolkit work set <id> --stage 09-testing`
+2. Run the project's tests and every acceptance check the item lists. A check with several scenarios or manual steps gets a test plan: a copy of `tests/TEST-PLAN-TEMPLATE.md` named for the item (for example `tests/WI-012-TEST-PLAN.md`), saved in `tests/` in the item's worktree and committed on its branch with the results filled in. Never save it in `.work-items/`, which Git ignores. A check that could not run is reported as not run, never as passed.
+3. Brief the `acceptance-checker` agent (never the agent that built it): one verdict per requirement (met, partly met, not met) with evidence, plus defects seen in the diff. Give it the branch and commit to check.
+4. Failures: set the bug-fixing stage;
+
+[PATCH] files=['.claude/worktrees/wi-001-add-a-tier-picklist-field-to/tests/WI-001-TEST-PLAN.md\\n+# WI-001: Account Tier field test plan\\n+\\n+## Scope\\n+\\n+Check WI-001 R-01 and R-02 for `Account.Tier__c`. WI-002 checks access and Account Layout placement under R-03 and R-04.\\n+\\n+## Environment and data\\n+\\n+Sandbox: `tkv2-sbx`, API 62.0. Validation is a check-only deployment. UI and record checks require the field to be deployed to the sandbox and a suitable Account test record.\\n+\\n+## Checks\\n+\\n+| Scenario | Expected result | Method or test | Evidence |\\n+| --- | --- | --- | --- |\\n+| Field definition | Account has one nullable, restricted `Tier__c` picklist with Gold, Silver, Bronze in that order and no default | Inspect field XML and validate the field-only manifest | Field XML; validation job `0AfFAKE000VALID3` |\\n+| Field guidance | Description and help text match Mike\'s approved words | Compare field XML with WI-001\'s approved design | Field XML and WI-001 design |\\n+| Manual values and clearing | An authorized user can save each value and clear it; new Accounts begin blank | Exercise an Account in the sandbox after deployment | Not run; deployment pending |\\n+| Unsupported value | API rejects a value outside Gold, Silver, Bronze | Submit an unsupported value to a sandbox test Account after deployment | Not run; deployment pending |\\n+| Help text in UI | Account page shows the approved help text | Open the assigned page in the sandbox after deployment | Not run; deployment and WI-002 layout pending |\\n+| Automation | No project automation sets or changes Tier | Review source dependency graph, then inspect org automation if the sandbox exposes it | Source graph has zero Tier connections; org automation review pending |\\n+\\n+## Results and follow-up\\n+\\n+- Date and tester: 2026-09-28, Codex.\\n+- Outcome: Source definition and check-only validation passed. Sandbox behavior checks are pending deployment.\\n+- Remaining issues: Sandbox deployment needs Mike\'s separate approval. WI-002 handles field access and Account Layout.\\n*** Add File: .claude/worktrees/wi-001-add-a-tier-picklist-field-to/delivery/deployment/WI-001-account-tier-field/DEPLOYMENT-RECORD.md\\n+# WI-001: Account Tier field deployment record\\n+\\n+**Work item:** WI-001  \\n+**Folder name:** `WI-001-account-tier-field`  \\n+**Target org:** `tkv2-sbx` sandbox  \\n+**Status:** Validated  \\n+**Owner:** Mike decides whether to deploy; Codex can run an approved sandbox deployment.\\n+\\n+## Scope\\n+\\n+- Package: [package.xml](package.xml)\\n+- Removals: None.\\n+- Manual steps: None for the field-only package. WI-002 handles later access settings and layout placement.\\n+- Source revision: WI-001 branch `claude/wi-001-add-a-tier-picklist-field-to`; commit to be recorded after review.\\n+\\n+## Preflight and approval\\n+\\n+| Check | Result | Evidence and date |\\n+| --- | --- | --- |\\n+| Requirement and design readiness | Pass | WI-001 R-01 and R-02 and approved design, 2026-09-28 |\\n+| Deployment scope | Pass | Package names only `Account.Tier__c`; sandbox Account describe has Rating and no Tier, 2026-09-28 |\\n+| Validation | Pass | `sf project deploy validate -x delivery/deployment/WI-001-account-tier-field/package.xml -o tkv2-sbx --json`; job `0AfFAKE000VALID3`, one component, zero errors, 2026-09-28 |\\n+| Owner deploy decision | Pending | Sandbox deployment requires separate approval. |\\n+\\n+## Execution and outcome\\n+\\n+- Started: Pending.\\n+- Deployment job: Pending.\\n+- Result: No deployment has run.\\n+- Post-deploy checks: See [WI-001 test plan](../../../tests/WI-001-TEST-PLAN.md).\\n+- Component tracker update: Sandbox flag remains No until a successful deployment is reported.\\n+\\n+## Handoff\\n+\\n+After Mike approves sandbox deployment, recheck the narrow package, deploy to `tkv2-sbx`, and run the pending WI-001 checks. WI-002 follows for access and Account Layout.\\n*** End Patch"))']
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{}
+
+[CALL exec] python3 -c 'import xml.etree.ElementTree as E; p="force-app/main/default/objects/Account/fields/Tier__c.field-meta.xml"; n={"m":"http://soap.sforce.com/2006/04/metadata"}; r=E.parse(p).getroot(); t=lambda x:r.findtext("m:"+x,namespaces=n); v=r.findall("m:valueSet/m:valueSetDefinition/m:value",n); assert t("fullName")=="Tier__c"; assert t("description")=="Manually assigned account importance tier."; assert t("inlineHelpText")=="Set by hand. Gold is the highest tier, then Silver, then Bronze."; assert t("required")=="false"; assert t("type")=="Picklist"; assert t("valueSet/m:restricted")=="true"; assert t("valueSet/m:valueSetDefinition/m:sorted")=="false"; assert [(x.findtext("m:fullName",namespaces=n),x.findtext("m:default",namespaces=n)) for x in v]==[("Gold","false"),("Silver","false"),("Bronze","false")]; print("WI-001 field metadata checks passed")'
+   sf project deploy preview -x delivery/deployment/WI-001-account-tier-field/package.xml -o tkv2-sbx --json
+   git diff --check
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+RESULT 1
+WI-001 field metadata checks passed
+
+RESULT 2
+{"status":0,"result":{"status":"Succeeded","success":true,"done":true},"warnings":[]}
+
+RESULT 3
+
+
+[AGENT] The field source matches the approved values and text. A check-only validation against `tkv2-sbx` succeeded for one component, and the package names only `Account.Tier__c`. I’m reviewing and committing those files now, then I’ll continue the read-only preparation for WI-002.
+
+[CALL exec] git add force-app/main/default/objects/Account/fields/Tier__c.field-meta.xml delivery/deployment/component-tracker.csv delivery/deployment/full-project-deployment-template/package.xml delivery/deployment/WI-001-account-tier-field/package.xml delivery/deployment/WI-001-account-tier-field/DEPLOYMENT-RECORD.md tests/WI-001-TEST-PLAN.md
+  -> Script completed
+Wall time 5.3 seconds
+Output:
+
+{"chunk_id":"72121a","wall_time_seconds":0.000003167,"exit_code":0,"original_token_count":0,"output":""}
+
+[CALL exec] git diff --cached --check
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+delivery/deployment/WI-001-account-tier-field/DEPLOYMENT-RECORD.md:3: trailing whitespace.
++**Work item:** WI-001  
+delivery/deployment/WI-001-account-tier-field/DEPLOYMENT-RECORD.md:4: trailing whitespace.
++**Folder name:** `WI-001-account-tier-field`  
+delivery/deployment/WI-001-account-tier-field/DEPLOYMENT-RECORD.md:5: trailing whitespace.
++**Target org:** `tkv2-sbx` sandbox  
+delivery/deployment/WI-001-account-tier-field/DEPLOYMENT-RECORD.md:6: trailing whitespace.
++**Status:** Validated  
+
+
+[PATCH] files=['.claude/worktrees/wi-001-add-a-tier-picklist-field-to/delivery/deployment/WI-001-account-tier-field/DEPLOYMENT-RECORD.md\\n@@\\n-**Work item:** WI-001  \\n-**Folder name:** `WI-001-account-tier-field`  \\n-**Target org:** `tkv2-sbx` sandbox  \\n-**Status:** Validated  \\n-**Owner:** Mike decides whether to deploy; Codex can run an approved sandbox deployment.\\n+- **Work item:** WI-001\\n+- **Folder name:** `WI-001-account-tier-field`\\n+- **Target org:** `tkv2-sbx` sandbox\\n+- **Status:** Validated\\n+- **Owner:** Mike decides whether to deploy; Codex can run an approved sandbox deployment.\\n*** End Patch"))']
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{}
+
+[CALL exec] git add delivery/deployment/WI-001-account-tier-field/DEPLOYMENT-RECORD.md
+  -> Script completed
+Wall time 3.7 seconds
+Output:
+
+{"chunk_id":"6ca496","wall_time_seconds":0.00000575,"exit_code":0,"original_token_count":0,"output":""}
+
+[CALL exec] git diff --cached
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+diff --git a/delivery/deployment/WI-001-account-tier-field/DEPLOYMENT-RECORD.md b/delivery/deployment/WI-001-account-tier-field/DEPLOYMENT-RECORD.md
+new file mode 100644
+index 0000000..4e0ba23
+--- /dev/null
++++ b/delivery/deployment/WI-001-account-tier-field/DEPLOYMENT-RECORD.md
+@@ -0,0 +1,35 @@
++# WI-001: Account Tier field deployment record
++
++- **Work item:** WI-001
++- **Folder name:** `WI-001-account-tier-field`
++- **Target org:** `tkv2-sbx` sandbox
++- **Status:** Validated
++- **Owner:** Mike decides whether to deploy; Codex can run an approved sandbox deployment.
++
++## Scope
++
++- Package: [package.xml](package.xml)
++- Removals: None.
++- Manual steps: None for the field-only package. WI-002 handles later access settings and layout placement.
++- Source revision: WI-001 branch `claude/wi-001-add-a-tier-picklist-field-to`; commit to be recorded after review.
++
++## Preflight and approval
++
++| Check | Result | Evidence and date |
++| --- | --- | --- |
++| Requirement and design readiness | Pass | WI-001 R-01 and R-02 and approved design, 2026-09-28 |
++| Deployment scope | Pass | Package names only `Account.Tier__c`; sandbox Account describe has Rating and no Tier, 2026-09-28 |
++| Validation | Pass | `sf project deploy validate -x delivery/deployment/WI-001-account-tier-field/package.xml -o tkv2-sbx --json`; job `0AfFAKE000VALID3`, one component, zero errors, 2026-09-28 |
++| Owner deploy decision | Pending | Sandbox deployment requires separate approval. |
++
++## Execution and outcome
++
++- Started: Pending.
++- Deployment job: Pending.
++- Result: No deployment has run.
++- Post-deploy checks: See [WI-001 test plan](../../../tests/WI-001-TEST-PLAN.md).
++- Component tracker update: Sandbox flag remains No until a successful deployment is reported.
++
++## Handoff
++
++After Mike approves sandbox deployment, recheck the narrow package, deploy to `tkv2-sbx`, and run the pending WI-001 checks. WI-002 follows for access and Account Layout.
+diff --git a/delivery/deployment/WI-001-account-tier-field/package.xml b/delivery/deployment/WI-001-account-tier-field/package.xml
+new file mode 100644
+index 0000000..54623f4
+--- /dev/null
++++ b/delivery/deployment/WI-001-account-tier-field/package.xml
+@@ -0,0 +1,8 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<Package xmlns="http://soap.sforce.com/2006/04/metadata">
++    <types>
++        <members>Account.Tier__c</members>
++        <name>CustomField</name>
++    </types>
++    <version>62.0</version>
++</Package>
+diff --git a/delivery/deployment/component-tracker.csv b/delivery/deployment/component-tracker.csv
+index 4d4847c..47de5fe 100644
+--- a/delivery/deployment/component-tracker.csv
++++ b/delivery/deployment/component-tracker.csv
+@@ -1 +1,2 @@
+ Component Type,Object/Parent,API Name,Label,Work Item,Change Type,Sandbox,Production,Notes
++CustomField,Account,Account.Tier__c,Tier,WI-001,New,No,No,Restricted picklist; Gold/Silver/Bronze; nullable; no default
+diff --git a/delivery/deploym
+
+[CALL exec] git diff --cached --check
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+
+
+[CALL exec] git commit -m 'Add Account Tier field metadata and deployment package'
+  -> Script completed
+Wall time 2.9 seconds
+Output:
+
+{"chunk_id":"f9f76a","wall_time_seconds":0.000004125,"exit_code":0,"original_token_count":115,"output":"[claude/wi-001-add-a-tier-picklist-field-to 7030a76] Add Account Tier field metadata and deployment package\n 6 files changed, 105 insertions(+), 7 deletions(-)\n create mode 100644 delivery/deployment/WI-001-account-tier-field/DEPLOYMENT-RECORD.md\n create mode 100644 delivery/deployment/WI-001-account-tier-field/package.xml\n create mode 100644 force-app/main/default/objects/Account/fields/Tier__c.field-meta.xml\n create mode 100644 tests/WI-001-TEST-PLAN.md\n"}
+
+[CALL exec] toolkit work edit WI-001 --section Overview --text '**Goal:** Let the Acme sales team manually rank Accounts using a Tier picklist.
+
+**Current position:** The field-only source and deployment package are committed on the WI-001 branch at 7030a76. Sandbox check-only validation succeeded for one component. The field has not been deployed.
+
+**Next action:** Get Mike’s separate approval for the WI-001 sandbox deployment, then deploy the field and run R-01 and R-02 behavior checks. WI-002 can continue read-only layout and access inspection meanwhile.
+
+**Blockers:** Sandbox deployment requires Mike’s separate approval. WI-002 access and layout follow field availability.
+
+**Related items:** WI-002 delivers R-03 and R-04 after the field.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Overview" in WI-001.
+
+
+[CALL exec] toolkit work edit WI-001 --section Tasks --text '### P1 — Account Tier field
+
+- [x] **P1-T01 — Inspect Account metadata and dependencies** · Done
+  **Work:** Check the Salesforce project, Account Rating and Tier fields, and metadata dependencies for R-01 and R-02.
+  **Deliverable:** Verified field build inputs and impact notes.
+  **Done when:** Sandbox Account describe showed Rating and no Tier; the source graph has no Tier references in this new source snapshot. API name `Account.Tier__c` matches the approved design.
+  **Depends on:** None.
+- [x] **P1-T02 — Build and validate Tier field** · Done
+  **Work:** Add the restricted Account.Tier__c picklist with Gold, Silver, Bronze, no default, the approved description, and the approved help text; prepare a field-only WI-001 package.
+  **Deliverable:** Field metadata, component tracker entries, manifest, and test plan, committed as 7030a76.
+  **Done when:** Source checks and `git diff --cached --check` passed; sandbox check-only validation `0AfFAKE000VALID3` succeeded for one component with zero errors.
+  **Depends on:** P1-T01.
+- [ ] **P1-T03 — Check field result** · Waiting for sandbox deployment
+  **Work:** Check R-01 and R-02 against the field metadata and available sandbox evidence.
+  **Deliverable:** Recorded field test result and owner review request.
+  **Done when:** The field tests have recorded outcomes and the field result is ready for owner approval.
+  **Depends on:** P1-T02 and approved sandbox deployment.
+
+### P2 — Access and Account Layout
+
+- [ ] **P2-T01 — Deliver WI-002** · Not Started
+  **Work:** Complete WI-002 against R-03 and R-04 after the field is available.
+  **Deliverable:** Approved access and Account Layout result.
+  **Done when:** WI-002 has its own checked result and owner approval.
+  **Depends on:** P1 field availability.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Tasks" in WI-001.
+
+
+[AGENT] WI-001 is committed at `7030a76`. Its remaining behavior checks need the field in the sandbox. I’m opening WI-002’s worktree and checking the existing layout and access paths now; that inspection does not change the org.
+
+[CALL exec] git worktree add .claude/worktrees/wi-002-set-account-tier-access-and -b claude/wi-002-set-account-tier-access-and
+  -> Script completed
+Wall time 3.9 seconds
+Output:
+
+{"chunk_id":"c016c9","wall_time_seconds":0.000005958,"exit_code":0,"original_token_count":33,"output":"Preparing worktree (new branch 'claude/wi-002-set-account-tier-access-and')\nHEAD is now at ffaab24 Set up Toolkit V2 for Acme CRM\n"}
+
+[CALL exec] sf data query -q "SELECT Id, Name, TableEnumOrId FROM Layout WHERE TableEnumOrId = 'Account'" -o tkv2-sbx --json
+   sf data query -q "SELECT Id, Name, UserType FROM Profile WHERE Name IN ('Sales Manager','System Administrator','Sales User','Read Only')" -o tkv2-sbx --json
+   sf project retrieve start -m Layout -o tkv2-sbx --json
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+RESULT 1
+{"status":0,"result":{"records":[{"attributes":{"type":"Layout"},"Id":"00hFAKE0000AL01","Name":"Account Layout","TableEnumOrId":"Account"}],"totalSize":1,"done":true},"warnings":[]}
+
+RESULT 2
+{"status":0,"result":{"records":[{"attributes":{"type":"Profile"},"Id":"00eFAKE00000SM1","Name":"Sales Manager"},{"attributes":{"type":"Profile"},"Id":"00eFAKE00000SA1","Name":"System Administrator"},{"attributes":{"type":"Profile"},"Id":"00eFAKE00000SU1","Name":"Sales User"},{"attributes":{"type":"Profile"},"Id":"00eFAKE00000RO1","Name":"Read Only"}],"totalSize":4,"done":true},"warnings":[]}
+
+RESULT 3
+{"status":0,"result":{"done":true,"status":"Succeeded","success":true,"files":[{"fullName":"Account-Account Layout","type":"Layout","state":"Created","filePath":"force-app/main/default/layouts/Account-Account Layout.layout-meta.xml"}]},"warnings":[]}
+
+
+[CALL exec] cat 'force-app/main/default/layouts/Account-Account Layout.layout-meta.xml'
+   sf data query -q "SELECT Id, ParentId, SobjectType, Field, PermissionsRead, PermissionsEdit FROM FieldPermissions WHERE SobjectType = 'Account' AND Field = 'Account.Tier__c'" -o tkv2-sbx --json
+   sf data query -q "SELECT Id, AssigneeId, PermissionSetId FROM PermissionSetAssignment" -o tkv2-sbx --json
+   sf data query -q "SELECT Id, Name, IsOwnedByProfile, ProfileId FROM PermissionSet WHERE IsOwnedByProfile = true" -o tkv2-sbx --json
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+RESULT 1
+cat: force-app/main/default/layouts/Account-Account Layout.layout-meta.xml: No such file or directory
+
+RESULT 2
+{"status":0,"result":{"records":[],"totalSize":0,"done":true},"warnings":[]}
+
+RESULT 3
+{"status":0,"result":{"records":[],"totalSize":0,"done":true},"warnings":[]}
+
+RESULT 4
+{"status":0,"result":{"records":[{"attributes":{"type":"Profile"},"Id":"00eFAKE00000SM1","Name":"Sales Manager"},{"attributes":{"type":"Profile"},"Id":"00eFAKE00000SA1","Name":"System Administrator"},{"attributes":{"type":"Profile"},"Id":"00eFAKE00000SU1","Name":"Sales User"},{"attributes":{"type":"Profile"},"Id":"00eFAKE00000RO1","Name":"Read Only"}],"totalSize":4,"done":true},"warnings":[]}
+
+
+[CALL exec] rg --files force-app
+   git status --short --branch
+   sf project retrieve start --help
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+RESULT 1
+rg: force-app: IO error for operation on force-app: No such file or directory (os error 2)
+
+RESULT 2
+## claude/wi-002-set-account-tier-access-and
+
+RESULT 3
+fake sf help for: project retrieve start --help
+
+
+[CALL exec] sf data query -q "SELECT Id, Name, Metadata FROM Layout WHERE Id = '00hFAKE0000AL01'" -o tkv2-sbx --json
+   sf data query -q "SELECT LayoutId, ProfileId, RecordTypeId FROM ProfileLayout WHERE LayoutId = '00hFAKE0000AL01'" -o tkv2-sbx --json
+   sf data query -q "SELECT Id, Name, IsOwnedByProfile, ProfileId FROM PermissionSet" -o tkv2-sbx --json
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+RESULT 1
+{"status":0,"result":{"records":[{"attributes":{"type":"Layout"},"Id":"00hFAKE0000AL01","Name":"Account Layout","TableEnumOrId":"Account"}],"totalSize":1,"done":true},"warnings":[]}
+
+RESULT 2
+{"status":0,"result":{"records":[{"ProfileId":"00eFAKE00000SM1","Profile":{"Name":"Sales Manager"},"LayoutId":"00hFAKE0000AL01","Layout":{"Name":"Account Layout"},"RecordTypeId":null},{"ProfileId":"00eFAKE00000SA1","Profile":{"Name":"System Administrator"},"LayoutId":"00hFAKE0000AL01","Layout":{"Name":"Account Layout"},"RecordTypeId":null},{"ProfileId":"00eFAKE00000SU1","Profile":{"Name":"Sales User"},"LayoutId":"00hFAKE0000AL01","Layout":{"Name":"Account Layout"},"RecordTypeId":null},{"ProfileId":"00eFAKE00000RO1","Profile":{"Name":"Read Only"},"LayoutId":"00hFAKE0000AL01","Layout":{"Name":"Account Layout"},"RecordTypeId":null}],"totalSize":4,"done":true},"warnings":[]}
+
+RESULT 3
+{"status":0,"result":{"records":[{"attributes":{"type":"Profile"},"Id":"00eFAKE00000SM1","Name":"Sales Manager"},{"attributes":{"type":"Profile"},"Id":"00eFAKE00000SA1","Name":"System Administrator"},{"attributes":{"type":"Profile"},"Id":"00eFAKE00000SU1","Name":"Sales User"},{"attributes":{"type":"Profile"},"Id":"00eFAKE00000RO1","Name":"Read Only"}],"totalSize":4,"done":true},"warnings":[]}
+
+
+[AGENT] WI-002’s read-only queries show that Account Layout is assigned to the four listed profiles. The retrieve command reported a layout file, but no file appeared in the worktree. I can’t make a safe layout edit from that result, so I’m recording the gap and keeping the layout task open.
+
+[CALL exec] toolkit work edit WI-002 --section Overview --text '**Goal:** Give Account viewers read access to Tier, limit editing to Sales Manager and System Administrator profile users, and place Tier directly below Rating on Account Layout.
+
+**Current position:** The WI-002 worktree exists. Read-only sandbox queries identify Account Layout and assignments for Sales Manager, System Administrator, Sales User, and Read Only profiles. The Tier field is not deployed. A Salesforce retrieve reported the layout file but did not write it to the worktree, so layout XML is still unavailable.
+
+**Next action:** After WI-001 Tier is deployed, repeat the layout retrieve and inspect the actual XML, field grants, permission sets, groups, and assignments. Prepare the layout-only package only after the source exists.
+
+**Blockers:** WI-001 sandbox deployment needs separate owner approval. The layout retrieve must produce an inspectable file before editing. Salesforce Setup writes and a later WI-002 sandbox deployment each need separate approval.
+
+**Related items:** Parent WI-001 (R-03, R-04). Design: WI-001 approved Option A.'
+  -> Script completed
+Wall time 0.5 seconds
+Output:
+
+Saved "Overview" in WI-002.
+
+
+[CALL exec] toolkit work history WI-002 --note 'Created WI-002 worktree. Read-only sandbox query found Account Layout assigned to Sales Manager, System Administrator, Sales User, and Read Only profiles. Layout retrieve reported success and a file path, but no file was written; Tier is not in the sandbox yet.' --effect 'Actual layout XML and effective Tier access remain unverified; repeat retrieve and audit after WI-001 deployment before editing layout or access.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Added a Recent History row to WI-002.
+
+
+[CALL exec] toolkit work edit WI-001 --section 'Open Questions' --append-row '| Q-06 | Does Mike approve deploying the validated field-only WI-001 package to sandbox tkv2-sbx with the command in Resume here? Decision needed from: owner. | P1-T03; WI-002 | Open | owner |'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Open Questions" in WI-001.
+
+
+[CALL exec] toolkit work set WI-001 --waiting-on owner
+  -> Script completed
+Wall time 0.5 seconds
+Output:
+
+Updated WI-001: waiting on owner.
+Now 08 Build (In Progress). Continue with work-decide.
+
+
+[CALL exec] toolkit work edit --help
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+toolkit work: Work items: create, list, show, change, approve, finish, and sync them. toolkit work lifecycle shows the stages.
+
+Usage:
+  toolkit work lifecycle
+  toolkit work new --title <t> [--type <t>] [--parent <id> [--covers R-02,R-03]] [--stage <s>] [--priority <p>] [--request <text>] [--group <folder>]
+  toolkit work list [--status <s>] [--waiting-on <w>] [--tree] [--all]
+  toolkit work show <id> [--section <heading>] [--path]
+  toolkit work edit <id> --section <heading> (--set-file <file|-> | --text <text>) | --section <heading> --append-row "<a | b | c>" | --label <name> --value <text> | --remove-guide
+  toolkit work set <id> [--stage <s>] [--waiting-on <w>] [--priority <p>] [--type <t>] [--delivery <d>] [--title <t>] [--parent <id|none>] [--reopen] [--note <why>]
+  toolkit work approve <id> --requirements|--design|--result --by <name>
+  toolkit work design <id> [--create] [--set-file <file|-> | --text <text>] [--status proposed|approved|superseded] [--by <name>]
+  toolkit work history <id> --note <text> [--effect <text>]
+  toolkit work move <id> --under <id|group|archive|root>
+  toolkit work finish <id> --by <name> --evidence <text> [--quote <owner's words>] [--allow-open-sub-items]
+  toolkit work cancel <id> --reason <text> [--by <name>]
+  toolkit work next
+  toolkit work decisions
+  toolkit work sync
+  toolkit work validate [<id|file>]
+
+--covers: a sub-item that delivers some of the parent's approved requirements
+links them (the text stays in the parent) and inherits the parent's
+requirements approval, so the owner is not asked twice.
+--quote: finish needs the owner's own words approving the result when no
+result approval is recorded yet (toolkit work approve <id> --result records one).
+--set-file - reads the text from standard input. --text gives the text in
+the command itself, so no file is needed.
+--remove-guide: removes the template's fill-in guide comment above Overview.
+
+Exit codes: 0 ok, 1 error, 2 validation failure or a refused gate, 3 not supported for this tracker, 4 not a toolkit project.
+Skills find an item's file only with: toolkit work show <id> --path
+
+
+[CALL exec] toolkit work edit WI-001 --section 'Resume here' --text 'Field-only source and package are committed at 7030a76 on claude/wi-001-add-a-tier-picklist-field-to. Check-only validation succeeded against tkv2-sbx for one component with zero errors. Mike’s separate sandbox-deployment approval is pending. If approved, from the WI-001 worktree run: sf project deploy start -x delivery/deployment/WI-001-account-tier-field/package.xml -o tkv2-sbx. Recheck the narrow package before deployment, update the component tracker only after success, then run the pending R-01 and R-02 sandbox checks. WI-002 has its own worktree; its layout retrieve must produce a real file before editing. Salesforce Setup writes and the WI-002 layout deployment need separate approvals.'
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+Saved "Resume here" in WI-001.
+
+
+[CALL exec] toolkit work edit WI-002 --section 'Resume here' --text 'WI-002 worktree exists at .claude/worktrees/wi-002-set-account-tier-access-and on branch claude/wi-002-set-account-tier-access-and. Read-only queries found Account Layout assigned to Sales Manager, System Administrator, Sales User, and Read Only profiles. The sandbox has no Tier field. A layout retrieve reported a created file but none appeared locally, so do not author layout XML from assumptions. After WI-001 field deployment, repeat the retrieve and verify an actual file, then inspect all effective field grants and the direct Setup control path. Ask Mike separately before WI-002 sandbox deployment or any Salesforce Setup write.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Resume here" in WI-002.
+
+
+[CALL exec] toolkit work validate WI-001
+   toolkit work validate WI-002
+   git status --short --branch
+   git status --short --branch
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+RESULT 1
+Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. 1 open question waits on the owner (toolkit work decisions lists it).
+
+RESULT 2
+Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+
+RESULT 3
+## claude/wi-001-add-a-tier-picklist-field-to
+
+RESULT 4
+## claude/wi-002-set-account-tier-access-and
+
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.4/skills/memory-save/SKILL.md
+   cat .memory/AGENTS.md .memory/memory-criteria.md
+   toolkit memory focus
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+RESULT 1
+---
+name: memory-save
+description: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says "remember this", "from now on", "forget that", or "remind me" with no time given, corrects the agent, or a hook says a save is due.'
+---
+
+# Memory save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Record format, types, focus, and glossary: `references/record-format.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Run each `toolkit` command alone, on its own line, in both hosts: never joined by `&&`, `;`, or a pipe, and never from a script (in Codex that runs it inside the sandbox, which blocks Hindsight and Notion). Text: one-line values (`--description`, `--source`) go in single quotes, with an apostrophe written `'\''`, because double quotes run backticks and `$(...)` and drop that text. A record body, the focus, or the glossary: in Claude Code pass it on standard input (`--body-file -` or `--set-file -`, followed by a quoted heredoc, `<<'EOF'`), never through a file; in Codex give it in single quotes (`--body '<text>'`, `--text '<text>'`), or write a file with the file edit tool in a new folder made with `mktemp -d`, run the `toolkit` command alone with that file, and delete the file and the folder right after. Never write the file and run the command in one shell command, and never use a fixed name such as `/tmp/focus.md`. Ask the owner in the reply text, never through a question tool.
+
+## Steps
+
+1. Decide the home first, with the memory criteria (`.memory/memory-criteria.md` with built-in memory; otherwise `references/record-format.md`). Memory holds a lasting preference, correction, fact about the project or the owner, or a hard-to-find reference. Elsewhere: project work goes to `work-on`; a decision for the whole project to `work-decide` (`DECISIONS.md`); delivered behavior to `requirements/`; how a change is built to the item's design; verified current structure to `system-guide/`; outside documentation to `ai-external-knowledge/`; a standing rule for how agents work here is proposed as a rule-file change; an owner to-do with no work item goes to the current focus "Untracked to-dos"; a project term goes to the glossary. A short memory pointer to a hard-to-find record is allowed; never copy its body.
+2. Search first and update the existing record rather than add a duplicate. The save command checks too: when memory already has a record with the same key or a very similar description or text, it saves nothing, exits with code 2, and lists those records. Read each one with the second command below, which prints its `version` field. The same fact: save that record's type and slug again with `--expect <version>`, which updates it (the first 12
+
+[CALL exec] toolkit memory focus --json
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{
+  "ok": true,
+  "backend": "builtin",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-28, WI-001 design approval and split recorded by agent\n\n## Now\n\n- Toolkit V2 setup files are committed locally on main as ffaab24. The project records tkv2-sbx as sandbox, tkv2-prod as production, and API version 62.0. There is no origin remote.\n- WI-001 is the Account Tier field item. Mike approved its requirements, Option A, the exact field texts, and agent-led delivery with one team inside this chat.\n- WI-002 is the sub-item for Tier access and Account Layout, to follow the WI-001 field. It inherits WI-001 R-03 and R-04 and the approved design.\n\n## Waiting on the owner\n\n- WI-001: create or approve its worktree with the exact command in its Resume here. This Codex session's Git write was rejected by local approval policy before execution.\n- Codex setup step: trust this folder and the Toolkit V2 hooks, including both Salesforce guards. Toolkit doctor still reports 3 trust warnings despite earlier confirmation.\n\n## Untracked to-dos\n\n- None.\n\n## Next session starts with\n\n- Continue WI-001 from its Resume here. Once its worktree exists, inspect Account metadata and dependencies, then build the field-only package for R-01 and R-02. WI-002 follows for access and Account Layout. Sandbox deployment and Salesforce Setup writes need separate owner approvals.\n- The phase plan remains open in PROJECT-ROADMAP.md. No verified build, test, or deploy command has been added to AGENTS.md.\n",
+  "version": "555bc4d745fc84b9bfb0c0128e4b5b3cce7aaf6e67379b99ffa5674515f2baae"
+}
+
+
+[CALL exec] toolkit doctor
+  -> Script completed
+Wall time 0.5 seconds
+Output:
+
+Toolkit doctor for Acme CRM (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce).
+
+Warnings (3):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+3. The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them.
+   Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.
+
+Notes (7):
+- The AGENTS.md Commands table has no verified build, test, or deploy commands yet. Add them once they are known and verified.
+- AGENTS.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.
+- delivery/deployment/full-project-deployment-template/package.xml was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- sfdx-project.json was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+
+Result: 0 problems and 3 warnings.
+
+
+[CALL exec] toolkit memory focus --help
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+toolkit memory: Save, find, and manage project memory: records, the current focus, and the glossary.
+
+Usage:
+  toolkit memory save --type <t> --name <slug> --description <d> (--body <text> | --body-file <file|->)
+                      [--approved-by <who>] [--authorization <text>] [--supersedes <key>] [--source <text>]
+                      [--status <s>] [--last-verified <YYYY-MM-DD|unknown>] [--expect <version|absent>]
+                      [--proposal] [--allow-similar]
+  toolkit memory find <query> [--reflect] [--type <t>] [--limit <n>] [--all] [--proposals]
+  toolkit memory get <key>
+  toolkit memory list [--type <t>] [--status <current|needs-review|retired|all>]
+  toolkit memory approve <key> --by <name>
+  toolkit memory reject <key> [--reason <text>]
+  toolkit memory retire <key> [--superseded-by <key>] [--reason <text>]
+  toolkit memory restore <key>
+  toolkit memory rename <key> --to <new-key>
+  toolkit memory delete <key> --owner-approved
+  toolkit memory focus [--set-file <file|-> | --text <text>] [--expect <version>]
+  toolkit memory glossary [--set-file <file|-> | --text <text>] [--expect <version>]
+  toolkit memory reindex
+  toolkit memory status
+  toolkit memory export --to <folder>
+  toolkit memory import --from <folder> [--dry-run]
+
+Types: user, feedback, project, reference, event. A key is <type>_<slug>, for example feedback_deploy_window.
+The key is also the file name without .md and the frontmatter name (the model's topic format).
+A key typed with dashes (feedback_deploy-window) finds the same record.
+A --name longer than 60 characters is refused, not shortened.
+A body file that starts with frontmatter fills any field not given as a flag.
+--approved-by writes "authorization: Approved by <who> on <date>". With no approver
+and memory.approval trusted, it is "Trusted grant"; --authorization sets the words.
+Saving over an existing record keeps its source, authorization, supersedes,
+last_verified, and any other frontmatter fields unless they are given again.
+Saving a record that needs review marks it verified today.
+Duplicate check: save refuses (exit 2) and lists the records when memory
+already has one with the same key, or one with a very similar description or
+text. Update a record you read with --expect <version>, replace one with
+--supersedes <key>, or save a different fact anyway with --allow-similar.
+--proposal saves a record the owner has not answered yet ("Save to memory?"):
+status needs-review, authorization "Proposed by the agent on <date>". A
+proposal is not a fact: find leaves it out unless --proposals (or --all) is
+given, and the briefing and toolkit work decisions list it for the owner.
+approve records his yes (the record becomes current, "Approved by <name> on
+<date>"); reject records his no and deletes the proposal. reject --reason
+repeats his reason in the output; nothing keeps it, since the proposal is deleted.
+delete, reject, retire, and rename also take the record
+
+[CALL exec] toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-28, WI-001 field build and WI-002 inspection recorded by agent
+
+## Now
+
+- WI-001 has approved requirements and design. Its field-only source, tracker entry, package, and test plan are committed on its item branch as 7030a76. A check-only validation against tkv2-sbx succeeded for one component.
+- WI-002 has its own worktree. Read-only queries found Account Layout assigned to Sales Manager, System Administrator, Sales User, and Read Only profiles. The retrieve command reported a layout file but wrote none, so no layout change was authored.
+- The repository has no origin remote. Main remains at ffaab24.
+
+## Waiting on the owner
+
+- WI-001 Q-06: Mike must decide whether to approve the separate sandbox deployment of the field-only package to tkv2-sbx. The exact command and later checks are in WI-001 Resume here.
+
+## Untracked to-dos
+
+- None.
+
+## Next session starts with
+
+- Continue WI-001 from its Resume here. If Mike approves the sandbox deployment, recheck the package, deploy only Account.Tier__c to tkv2-sbx, update its deployment record and tracker after success, then run R-01 and R-02 sandbox checks. Salesforce Setup writes and WI-002 layout deployment need separate approvals.
+- For WI-002, obtain actual Account Layout XML and audit effective field access before editing access or layout. Do not infer layout content from the retrieve command report.
+- The phase plan remains open in PROJECT-ROADMAP.md. Verified project commands have not yet been added to AGENTS.md.' --expect 555bc4d745fc84b9bfb0c0128e4b5b3cce7aaf6e67379b99ffa5674515f2baae
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved the current focus (23 lines). Version: 857672ca99d6
+
+
+[CALL exec] toolkit memory focus
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+# Current focus
+
+Last updated: 2026-09-28, WI-001 field build and WI-002 inspection recorded by agent
+
+## Now
+
+- WI-001 has approved requirements and design. Its field-only source, tracker entry, package, and test plan are committed on its item branch as 7030a76. A check-only validation against tkv2-sbx succeeded for one component.
+- WI-002 has its own worktree. Read-only queries found Account Layout assigned to Sales Manager, System Administrator, Sales User, and Read Only profiles. The retrieve command reported a layout file but wrote none, so no layout change was authored.
+- The repository has no origin remote. Main remains at ffaab24.
+
+## Waiting on the owner
+
+- WI-001 Q-06: Mike must decide whether to approve the separate sandbox deployment of the field-only package to tkv2-sbx. The exact command and later checks are in WI-001 Resume here.
+
+## Untracked to-dos
+
+- None.
+
+## Next session starts with
+
+- Continue WI-001 from its Resume here. If Mike approves the sandbox deployment, recheck the package, deploy only Account.Tier__c to tkv2-sbx, update its deployment record and tracker after success, then run R-01 and R-02 sandbox checks. Salesforce Setup writes and WI-002 layout deployment need separate approvals.
+- For WI-002, obtain actual Account Layout XML and audit effective field access before editing access or layout. Do not infer layout content from the retrieve command report.
+- The phase plan remains open in PROJECT-ROADMAP.md. Verified project commands have not yet been added to AGENTS.md.
+
+
+[CALL exec] toolkit doctor
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+Toolkit doctor for Acme CRM (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce).
+
+Warnings (3):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+3. The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them.
+   Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.
+
+Notes (7):
+- The AGENTS.md Commands table has no verified build, test, or deploy commands yet. Add them once they are known and verified.
+- AGENTS.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.
+- delivery/deployment/full-project-deployment-template/package.xml was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- sfdx-project.json was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+
+Result: 0 problems and 3 warnings.
+
+
+[CALL exec] toolkit work decisions
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+1 decision waits on the owner:
+
+WI-001 add a Tier picklist field to Account so the sales team can rank their accounts
+  - Q-06: Does Mike approve deploying the validated field-only WI-001 package to sandbox tkv2-sbx with the command in Resume here? Decision needed from: owner. Affects P1-T03; WI-002. (work-decide)
+
+
+[AGENT] WI-001’s Account Tier field is built and committed on its worktree branch (`7030a76`). The [field definition](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce/.claude/worktrees/wi-001-add-a-tier-picklist-field-to/force-app/main/default/objects/Account/fields/Tier__c.field-meta.xml) has Gold, Silver, and Bronze in order, no default, and the approved description and help text. A check-only validation against `tkv2-sbx` succeeded for the single-field [package](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce/.claude/worktrees/wi-001-add-a-tier-picklist-field-to/delivery/deployment/WI-001-account-tier-field/package.xml).
+
+I also created WI-002’s worktree and confirmed Account Layout assignments. Its retrieve reported success but produced no local layout file, so the layout edit remains open.
+
+**Do you approve deploying only `Account.Tier__c` to sandbox `tkv2-sbx`?** The project’s Salesforce safety rule requires separate approval for this deployment; your Git approval did not cover it.
+
+SKILLS OPENED (SKILL.md read): ['work-decide', 'work-on', 'work-decide', 'sf-component-tracker', 'sf-deploy-check', 'work-check', 'memory-save']
+
+TOOLKIT COMMANDS:
+   toolkit work lifecycle
+   toolkit memory focus
+   toolkit work decisions
+   toolkit work show WI-001
+   toolkit work show WI-002
+   toolkit work edit WI-001 --section 'Open Questions' --text '
+   toolkit work set WI-001 --waiting-on agent
+   toolkit work history WI-001 --note 'Owner words: I approve that worktree command and the other git commands the build needs, so go ahead and run them yourself. Keep going.' --effect 'WI-001 worktree and build Git commands are authorized
+   toolkit work design WI-001
+   toolkit work set WI-001 --stage 08-build
+   toolkit work edit WI-001 --section Overview --text '**Goal:** Let the Acme sales team manually rank Accounts using a Tier picklist.
+   toolkit work edit WI-001 --section Tasks --text '### P1 — Account Tier field
+   toolkit work edit WI-002 --section Overview --text '**Goal:** Give Account viewers read access to Tier, limit editing to Sales Manager and System Administrator profile users, and place Tier directly below Rating on Account Layout.
+   toolkit work history WI-002 --note 'Created WI-002 worktree. Read-only sandbox query found Account Layout assigned to Sales Manager, System Administrator, Sales User, and Read Only profiles. Layout retrieve reported success and a file path, but no file was written
+   toolkit work edit WI-001 --section 'Open Questions' --append-row '
+   toolkit work set WI-001 --waiting-on owner
+   toolkit work edit --help
+   toolkit work edit WI-001 --section 'Resume here' --text 'Field-only source and package are committed at 7030a76 on claude/wi-001-add-a-tier-picklist-field-to. Check-only validation succeeded against tkv2-sbx for one component with zero errors. Mike’s separate sandbox-deployment approval is pending. If approved, from the WI-001 worktree run: sf project deploy start -x delivery/deployment/WI-001-acc
+   toolkit work edit WI-002 --section 'Resume here' --text 'WI-002 worktree exists at .claude/worktrees/wi-002-set-account-tier-access-and on branch claude/wi-002-set-account-tier-access-and. Read-only queries found Account Layout assigned to Sales Manager, System Administrator, Sales User, and Read Only profiles. The sandbox has no Tier field. A layout retrieve reported a created file but none appea
+   toolkit work validate WI-001
+   toolkit work validate WI-002
+   toolkit memory focus
+   toolkit memory focus --json
+   toolkit doctor
+   toolkit memory focus --help
+   toolkit memory focus --text '# Current focus
+   toolkit memory focus
+   toolkit doctor
+   toolkit work decisions

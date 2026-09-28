@@ -1,0 +1,1 @@
+I approve the WI-002 README result. And no to that memory proposal about separate documentation work items: don't keep it. Then carry on with WI-001; I approve the git commands you need.

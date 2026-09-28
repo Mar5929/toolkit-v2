@@ -1,0 +1,1 @@
+work-decide, work-organize, work-on,   ref:work/references/conventions.md,   ref:work/references/trackers.md,   ref:work/skills/work-on/references/planning.md, solution-design, memory-save

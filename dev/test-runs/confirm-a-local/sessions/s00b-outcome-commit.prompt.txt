@@ -1,0 +1,1 @@
+The outcome: tally tells me how many words or lines a text file has, straight from the command line. After you fill that in, commit the setup files. I approve the git commands for that one commit when Codex asks.

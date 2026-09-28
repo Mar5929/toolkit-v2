@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "prefix": "WI",
+  "highWater": 2,
+  "fingerprint": "73012e73a49ac499d580b4a6e59794bfc53a6a2b6d6a3c1269d8613a2b898e0e",
+  "items": {
+    "WI-001": {
+      "path": "WI-001-build-tally-word-count-cli/WORK-ITEM.md",
+      "missing": false,
+      "owner": true,
+      "hash": "96a6cbad4c837e4eee20879a1e3441d87428b69ec3a260d5611997d4c65fc5c5",
+      "written": {
+        "title": "Build tally word count CLI",
+        "heading": "WI-001: Build tally word count CLI",
+        "type": "build",
+        "stage": "07-tracking-setup",
+        "status": "In Progress",
+        "parent": "none",
+        "parentSource": "none",
+        "requirements_approved": "2026-09-28 by Mike",
+        "overall": "Finalized",
+        "design": "approved",
+        "designSource": "approved",
+        "result_approved": "no",
+        "statusKept": false,
+        "overallKept": false,
+        "designKept": false,
+        "parentKept": false
+      }
+    },
+    "WI-002": {
+      "path": "WI-001-build-tally-word-count-cli/WI-002-add-lines-line-count/WORK-ITEM.md",
+      "missing": false,
+      "owner": true,
+      "hash": "d73a657138d1bc48a37934767f07fb0a490e1a52dbe46c5aab4112dca54b4a32",
+      "written": {
+        "title": "Add --lines line count",
+        "heading": "WI-002: Add --lines line count",
+        "type": "build",
+        "stage": "06-implementation-plan",
+        "status": "In Progress",
+        "parent": "WI-001",
+        "parentSource": "WI-001",
+        "requirements_approved": "2026-09-28 by Mike",
+        "overall": "Finalized",
+        "design": "none",
+        "designSource": "none",
+        "result_approved": "no",
+        "statusKept": false,
+        "overallKept": false,
+        "designKept": false,
+        "parentKept": false
+      }
+    }
+  },
+  "updated": "2026-09-28T16:55:54.289Z"
+}

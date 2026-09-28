@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "sessionId": "01a0e8ec-d7d9-7763-82e7-7b6676fe2c21",
+  "host": "codex",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-d-hindsight",
+  "startedAt": "2026-09-28T16:50:33.635Z",
+  "turns": 3,
+  "turn": {
+    "key": "01a0e8ee-817c-76b1-baf9-10d03aec9410",
+    "n": 3,
+    "startedAt": "2026-09-28T16:52:21.947Z",
+    "keep": null,
+    "baseline": {
+      "memoryMeta": null,
+      "hindsightMeta": 1790614195138.645,
+      "memoryCache": 1790614195165.0803,
+      "workState": 1790614341837.786,
+      "decisions": 1790612607419.54
+    },
+    "records": [],
+    "edits": [],
+    "stopBlocked": false
+  },
+  "lastStopReason": null,
+  "source": "resume",
+  "updated": "2026-09-28T16:52:24.979Z"
+}

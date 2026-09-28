@@ -1,0 +1,264 @@
+PROMPT: Yes, I approve that exact field-access change in tkv2-sbx.
+THREAD: 01a0e90a-b5ce-7881-83e8-44f9b8d4c0f0
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 add a Tier picklist field to Account so the sales team can rank their accounts: 08 Build, In Progress. Next action: Complete R-01 record behavior and R-02 UI checks after WI-002 field access and Account Layout are configured. Record evidence, then reque... Continues with work-on.
+- WI-002 Set Account Tier access and place it below Rating on Account Layout: 08 Build, In Progress, waiting on owner. Next action: Ask Mike to approve the four-profile Tier field-access change in tkv2-sbx. After that action, audit effective grants. Seek separate appro... Continues with work-decide.
+
+Waiting on the owner:
+- WI-002 Set Account Tier access and place it below Rating on Account Layout: Q-02: Does Mike approve setting Account.Tier__c Visible for Sales Manager, System Administrator, Sales User, and Read Only in tkv2-sbx, with edit access only for Sales Manager and System Administra... Affects P2-T02; R-03. (work-decide)
+
+Items: 2 in progress.
+
+Current focus:
+## Now
+- WI-001 field-only sandbox deployment job 0AfFAKE000DEPLOY3 succeeded. Mike verified the approved field description and help text in tkv2-sbx Setup. Field shape and guidance checks passed; record behavior and UI checks remain.
+- WI-002 layout-only source and package are committed and check-only validated. A fresh sandbox layout retrieve differed only by the proposed Tier item below Rating. Mike verified no Tier access on the four Account-reading profiles and no permission set or group grant. Manual Setup steps are committed.
+- The repository has no origin remote. tkv2-sbx refreshes from production every Sunday night.
+## Waiting on the owner
+- WI-002 Q-02: Approve the exact four-profile Account Tier field-access change in tkv2-sbx. Layout deployment needs a separate approval after access is checked.
+## Next session starts with
+- Continue WI-002 from Resume here. After access approval and execution, audit effective access, then seek separate approval for its layout-only sandbox deployment and check R-03/R-04.
+- Continue WI-001 from Resume here. After WI-002 access and layout, run record behavior and UI checks for R-01/R-02; sandbox data writes require separate approval.
+- The phase plan remains open in PROJECT-ROADMAP.md. Verified project commands have not yet been added to AGENTS.md.
+- ... 4 more. toolkit memory focus prints all of it.
+
+Memory proposals waiting on 
+
+[AGENT] I’ll record your approval for WI-002, make the approved field-access change in tkv2-sbx, then check the resulting access. I’m using the work-decide skill to record the decision.
+
+[CALL exec] cat SOUL.md PROJECT.md PROJECT-ROADMAP.md
+   for f in .claude/rules/*.md; do echo "FILE $f"; cat "$f"; done
+   cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/skills/work-decide/SKILL.md
+   git status --short --branch && rg --files .work-items | head -80
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Warning: truncated output (original token count: 10640)
+Total output lines: 4
+
+{"i":0,"status":"fulfilled","value":{"chunk_id":"a7eca2","wall_time_seconds":0,"exit_code":1,"original_token_count":1359,"output":"# Acme CRM\n\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\n\n## Purpose and intended outcome\n\n- Purpose: Give the Acme sales team a Salesforce org that fits how they sell.\n- Intended outcome: Better account data is the first improvement toward that goal.\n\n## Scope and boundaries\n\n- In scope: The Acme sales team's Salesforce org, starting with account data.\n- Outside scope: `<Important exclusions or adjacent owners.>`\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\n\n## Systems and environments\n\n| System or org | Purpose | Environment | Source of truth | Access notes |\n| --- | --- | --- | --- | --- |\n| `tkv2-sbx` | Project sandbox; refreshed from production every Sunday night, so sandbox-only changes are gone by Monday | Sandbox | Salesforce org alias and refresh schedule, confirmed by Mike on 2026-09-28 | Salesforce CLI |\n| `tkv2-prod` | Production org | Production | Salesforce org alias, confirmed by Mike on 2026-09-28 | Salesforce CLI; agents do not deploy or write data here |\n\n## People and ownership\n\n| Role | Person or team | Responsibility | Source / last confirmed |\n| --- | --- | --- | --- |\n| Project owner | Mike | Makes project decisions | Project setup, 2026-09-28 |\n\n## Work and project records\n\n- Work tracker: Local folders in `.work-items/`, identified by work item ID.\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\n- Project decisions: [DECISIONS.md](DECISIONS.md)\n- Functional requirements: [requirements/](requirements/)\n- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`\n- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`\n- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)\n- Memory backup or sync: `<Owner-approved destination and restore procedure, outside this repository>`\n\n## Resources and project paths\n\n- Salesforce source: `force-app/` or `<actual source path>`\n- Project-wide deployment manifest: `delivery/deployment/full-project-deployment-template/package.xml` after the API version and members are verified. Keep it as the full project component inventory; ordinary deployments use narrower work-item packages.\n- Work-item deployment manifests: `delivery/deployment/<work-item-id>-<short-name>/package.xml` when an item ch
+
+[CALL exec] toolkit work decisions
+   toolkit work show WI-002 --path
+   cat .work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account-so/WI-002-tier-access-and-layout/WORK-ITEM.md
+   cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/references/conventions.md
+   git worktree list && git status --short --branch && git remote
+   rg --files delivery/deployment | sort
+  -> Script completed
+Wall time 0.5 seconds
+Output:
+
+{"i":0,"status":"fulfilled","value":{"chunk_id":"28ba6b","wall_time_seconds":0.00000475,"exit_code":0,"original_token_count":194,"output":"2 decisions wait on the owner:\n\nWI-002 Set Account Tier access and place it below Rating on Account Layout\n  - Q-02: Does Mike approve setting Account.Tier__c Visible for Sales Manager, System Administrator, Sales User, and Read Only in tkv2-sbx, with edit access only for Sales Manager and System Administrator, using the exact WI-002 manual step? Affects P2-T02; R-03. (work-decide)\n\nMemory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):\n  - user_salesforce_setup_afternoon: Mike prefers to handle his own Salesforce Setup clicking and checks in the afternoon. Saved 2026-09-28. Yes: toolkit memory approve user_salesforce_setup_afternoon --by <name>. No: toolkit memory reject user_salesforce_setup_afternoon. (work-decide)\n"}}
+{"i":1,"status":"fulfilled","value":{"chunk_id":"0cfa8f","wall_time_seconds":0.000002875,"exit_code":0,"original_token_count":67,"output":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce/.work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account-so/WI-002-tier-access-and-layout/WORK-ITEM.md\n"}}
+{"i":2,"status":"fulfilled","value":{"chunk_id":"1c7d9b","wall_time_seconds":0.000005291,"exit_code":0,"original_token_count":2402,"output":"---\nid: WI-002\ntitle: Set Account Tier access and place it below Rating on Account Layout\ntype: build\nstage: 08-build\nstatus: In Progress\nparent: WI-001\nwaiting_on: \"owner\"\npriority: medium\ndelivery: agent-led\nrequirements_approved: \"2026-09-28 by Mike\"\ndesign: none\nresult_approved: \"no\"\nupdated: 2026-09-28\n---\n\n# WI-002: Set Account Tier access and place it below Rating on Account Layout\n\n## Overview\n\n**Goal:** Give Account viewers read access to Tier, limit editing to Sales Manager and System Administrator profile users, and place Tier directly below Rating on Account Layout.\n\n**Current position:** Mike checked tkv2-sbx Setup: none of the four Account-reading profiles has Tier access and no permission set or group grants it. Read-only ObjectPermissions confirms Account read access for those four profiles. A fresh layout retrieve differs from the prepared WI-002 source only by Tier directly below Rating. The layout-only package passed check-only validation. The exact proposed access step is recorded in WI-002 manual steps.\n\n**Next action:** Ask Mike to approve the four-profile Tier field-access change in tkv2-sbx. After that action, audit effective grants. Seek separate approval for the layout-only sandbox deployment and check R-04 as assigned users.\n\n**Blockers:** The field-access Setup write and later layout deployment each need separate owner approval. WI-001 record behavior and UI checks depend on these changes.\n\
+
+[CALL exec] toolkit work edit WI-002 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | What Account Tier field-level access does Setup show for Sales Manager, System Administrator, Sales User, Read Only, and any permission sets or groups assigned to Account users? Answer: None of the four profiles has access to Tier; no permission sets or permission set groups grant Tier. Mike checked tkv2-sbx Setup on 2026-09-28. | P1-T01; R-03 | Answered | owner |
+| Q-02 | Does Mike approve setting Account.Tier__c Visible for Sales Manager, System Administrator, Sales User, and Read Only in tkv2-sbx, with edit access only for Sales Manager and System Administrator, using the exact WI-002 manual step? Answer: Yes. Mike approved that exact field-access change in tkv2-sbx on 2026-09-28. | P2-T02; R-03 | Answered | owner |'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"d07b25","wall_time_seconds":0.000003083,"exit_code":0,"original_token_count":9,"output":"Saved \"Open Questions\" in WI-002.\n"}
+
+[CALL exec] toolkit work set WI-002 --waiting-on agent
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"82fa46","wall_time_seconds":0.000004417,"exit_code":0,"original_token_count":22,"output":"Updated WI-002: waiting on agent.\nNow 08 Build (In Progress). Continue with work-on.\n"}
+
+[CALL exec] toolkit work history WI-002 --note 'Owner words: Yes, I approve that exact field-access change in tkv2-sbx.' --effect 'The four-profile Account.Tier__c Setup change is approved in tkv2-sbx; configure it and audit effective access before seeking separate layout deployment approval.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"b59e61","wall_time_seconds":0.000003042,"exit_code":0,"original_token_count":10,"output":"Added a Recent History row to WI-002.\n"}
+
+[AGENT] Your approval is recorded in WI-002 for the four named profiles. I’m continuing with the approved access step and will check what the sandbox actually permits afterward.
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/skills/work-on/SKILL.md
+   cat .claude/worktrees/wi-002-set-account-tier-access-and/delivery/deployment/wi-002-tier-access-and-layout/manual-steps.md
+   rg --files .claude/worktrees/wi-002-set-account-tier-access-and/delivery/deployment | sort
+   toolkit work show WI-002 --section 'Open Questions'
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+{"i":0,"status":"fulfilled","value":{"chunk_id":"923a1a","wall_time_seconds":0.000007292,"exit_code":0,"original_token_count":3049,"output":"---\nname: work-on\ndescription: 'Starts, resumes, or logs a work item and builds it. Use whenever the owner asks to build, add, fix, or change something, names an item id to resume, says \"keep going\", or wants a bug or idea logged (\"put it in the backlog\"). Not for requirement edits (work-requirements) or handovers (work-delegate).'\n---\n\n# Work on\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nShared rules: the work plugin's `references/conventions.md` (saving, section edits, history, branches) and `references/trackers.md`, two folders above this skill's folder (`../../references/`). To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Run each `toolkit` command alone, on its own line, in both hosts: never joined by `&&`, `;`, or a pipe, and never from a script (in Codex that runs it inside the sandbox, where it fails). Text (conventions, \"Text in a command\"): one-line values (`--note`, `--effect`, `--append-row`, `--title`) go in single quotes, with an apostrophe written `'\\''`, because double quotes run backticks and `$(...)`; section and design text goes on standard input in Claude Code (`<file>` is `-`, followed by a quoted heredoc, `<<'EOF'`), and in Codex in `--text '<text>'` or a file in a new `mktemp -d` folder, deleted right after the command. Never change a record with a script. Ask the owner in the reply text, never through a question tool. No remote (`git remote` prints nothing): never run `git fetch`, and never report a fetch refusal as a blocker.\n\n## Steps\n\n1. A bare \"ok\", \"yes\", or \"looks good\" is not \"keep going\": when it is the owner's whole message and this chat asked him nothing, start no work and ask what he wants. No session briefing in this conversation: run the command below. Exit code 4 (no `.toolkit.json`): open `project-setup` and stop. When the briefing or a `toolkit work` command lists changes found in the tracker (a moved or renamed folder, a new parent, a missing item), tell the owner each one in one line in the reply, not only in a progress line, before other work. Use the CLI's own words for what changed; do not guess at a cause it does not name.\n   `toolkit brief`\n2. Find the item: the id the owner named, or a title in the list that matches the request. Two possible matches: ask one question naming both. No match: it is new. When `PROJECT-ROADMAP.md` names the item, read its phase there too.\n   `toolkit work show <id>`\n   `toolkit work list`\n3. Size a new request. Setup is not a work item: never create one for setup steps. Owner setup steps go in the reply; only a step doctor checks (trust the hooks in Codex, `ntn login`) also goes in
+
+[CALL exec] const xs=ALL_TOOLS.filter(x=>/salesforce|browser|computer|sf /i.test(x.name+" "+x.description));text(xs.map(x=>({name:x.name,description:x.description.slice(0,180)})))
+
+  -> Script completed
+Wall time 0.0 seconds
+Output:
+
+[{"name":"mcp__codex_apps__firecrawl_firecrawl_interact","description":"Search and extract web data\n\nOpen or reuse a live browser session to navigate a page, click controls, fill fields, or run browser code. Provide either `url` or `scrapeId`, and eith"},{"name":"mcp__codex_apps__firecrawl_firecrawl_scrape","description":"Search and extract web data\n\nRetrieve and extract content from one supplied URL through Firecrawl. Use this when the request
+
+[CALL js] {"code":"await cua.getState();","title":"Check available Salesforce UI"}
+  -> Wall time: 5.9993 seconds
+Output:
+## Computer Use
+
+Control native apps and browsers on the user’s computer by reading or operating UI. Prefer purpose-built connectors, APIs, or CLIs when available.
+
+- Use `cua_repl` (JavaScript) for all UI actions.
+- Do not use other technologies besides `cua_repl` for computer interactions, unless specifically requested by the user (e.g. AppleScript, `osascript`, JXA, System Events, CGEvent synthesis).
+- Prefer a dedicated plugin or skill when it can complete t
+
+[CALL exec] toolkit work show WI-002 --section Overview
+   toolkit work show WI-002 --section Notes
+   toolkit memory focus --json
+   cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.4/skills/memory-save/SKILL.md
+   cat .memory/AGENTS.md .memory/memory-criteria.md
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+{"i":0,"status":"fulfilled","value":{"chunk_id":"d64fb0","wall_time_seconds":0.000005875,"exit_code":0,"original_token_count":282,"output":"## Overview\n\n**Goal:** Give Account viewers read access to Tier, limit editing to Sales Manager and System Administrator profile users, and place Tier directly below Rating on Account Layout.\n\n**Current position:** Mike checked tkv2-sbx Setup: none of the four Account-reading profiles has Tier access and no permission set or group grants it. Read-only ObjectPermissions confirms Account read access for those four profiles. A fresh layout retrieve differs from the prepared WI-002 source only by Tier directly below Rating. The layout-only package passed check-only validation. The exact proposed access step is recorded in WI-002 manual steps.\n\n**Next action:** Ask Mike to approve the four-profile Tier field-access change in tkv2-sbx. After that action, audit effective grants. Seek separate approval for the layout-only sandbox deployment and check R-04 as assigned users.\n\n**Blockers:** The field-access Setup write and later layout deployment each need separate owner approval. WI-001 record behavior and UI checks depend on these changes.\n\n**Related items:** Parent WI-001 R-03 and R-04; its approved Option A design.\n"}}
+{"i":1,"status":"fulfilled","value":{"chunk_id":"e4a5be","wall_time_seconds":0.000002667,"exit_code":0,"original_token_count":378,"output":"## Notes\n\n### Decisions and context\n\n- Mike approved Option A, including the description and help text, on 2026-09-28 and requested this split. WI-002 inherits WI-001 R-03 and R-04 and the approved design; it has no separate design approval to seek.\n- The field itself goes first in WI-001. Existing Account object and record access must remain unchanged.\n\n### Resume here\n\nMike checked tkv2-sbx Setup on 2026-09-28 and found no Tier access on Sales Manager, System Administrator, Sales User, or Read Only, and no permission set or group Tier grants. Read-only ObjectPermissions confirms all four can read Account; a User query found one active representative user in each profile. The exact proposed field-access Setup step is in WI-002 manual-steps.md: Visible on all four, editable for Sales Manager and System Administrator, read-only for Sales User and Read Only. Obtain Mike’s separate approval before that write, then audit effective access. The WI-002 layout-only package has a successful check-only validation. A fresh sandbox retrieve differed from source only by the Tier layout item directly below Rating, so the deploy check found no unrelated layout edit. Obtain separate approval before its deployment. WI-001 field description and help text were confirmed in Setup; its record and UI checks depend on WI-002.\n\n### Solution options and considerations\n\n- Follow WI-001’s approved Option A for access and layout. Record any conflict in effective permissions before changing an unrelated grant.\n"}}
+{"i":
+
+[CALL exec] toolkit work edit WI-002 --section Overview --text '**Goal:** Give Account viewers read access to Tier, limit editing to Sales Manager and System Administrator profile users, and place Tier directly below Rating on Account Layout.
+
+**Current position:** Mike approved the exact four-profile Tier field-access change in tkv2-sbx on 2026-09-28. The Setup step is assigned to Mike and has not been reported complete. The layout-only package passed check-only validation; its sandbox deployment still needs separate approval.
+
+**Next action:** Mike performs the approved WI-002 manual Setup step in tkv2-sbx and reports when it is saved. Then audit effective grants, seek separate approval for the layout-only sandbox deployment, and check R-04 as assigned users.
+
+**Blockers:** The approved field-access Setup step awaits Mike’s execution. The layout deployment needs separate owner approval. WI-001 record behavior and UI checks depend on these changes.
+
+**Related items:** Parent WI-001 R-03 and R-04; its approved Option A design.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"e3038e","wall_time_seconds":0.000003084,"exit_code":0,"original_token_count":7,"output":"Saved \"Overview\" in WI-002.\n"}
+
+[CALL exec] toolkit work edit WI-002 --section Notes --text '### Decisions and context
+
+- Mike approved Option A, including the description and help text, on 2026-09-28 and requested this split. WI-002 inherits WI-001 R-03 and R-04 and the approved design; it has no separate design approval to seek.
+- The field itself goes first in WI-001. Existing Account object and record access must remain unchanged.
+- Mike approved the exact four-profile Account.Tier__c Setup change in tkv2-sbx on 2026-09-28. This approval does not cover the layout deployment.
+
+### Resume here
+
+Mike checked tkv2-sbx Setup on 2026-09-28 and found no Tier access on Sales Manager, System Administrator, Sales User, or Read Only, and no permission set or group Tier grants. Read-only ObjectPermissions confirms all four can read Account; a User query found one active representative user in each profile. Mike approved the exact manual field-access step on 2026-09-28. It is assigned to him and has not been reported complete: Visible on all four, editable for Sales Manager and System Administrator, read-only for Sales User and Read Only. After Mike reports it saved, audit effective access. The WI-002 layout-only package has a successful check-only validation. A fresh sandbox retrieve differed from source only by the Tier layout item directly below Rating, so the deploy check found no unrelated layout edit. Obtain separate approval before its deployment. WI-001 field description and help text were confirmed in Setup; its record and UI checks depend on WI-002.
+
+### Solution options and considerations
+
+- Follow WI-001’s approved Option A for access and layout. Record any conflict in effective permissions before changing an unrelated grant.'
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+{"chunk_id":"71bc85","wall_time_seconds":0.000003208,"exit_code":0,"original_token_count":7,"output":"Saved \"Notes\" in WI-002.\n"}
+
+[CALL exec] toolkit work edit WI-002 --section 'Open Questions' --append-row '| Q-03 | Has Mike completed and saved the approved four-profile Account.Tier__c field-access Setup step in tkv2-sbx? | P2-T02; R-03 | Open | owner |'
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+{"chunk_id":"401327","wall_time_seconds":0.000002792,"exit_code":0,"original_token_count":9,"output":"Saved \"Open Questions\" in WI-002.\n"}
+
+[CALL exec] toolkit work set WI-002 --waiting-on owner
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"864c7d","wall_time_seconds":0.000002959,"exit_code":0,"original_token_count":23,"output":"Updated WI-002: waiting on owner.\nNow 08 Build (In Progress). Continue with work-decide.\n"}
+
+[AGENT] The WI-002 manual step assigns the Setup change to you. I found no open Salesforce session to make that change here, so I’ve recorded the approval and kept the step marked uncompleted. I’ll update the handoff state with the exact next action.
+
+[CALL exec] toolkit memory focus --set-file /dev/stdin --expect 88fad8f9b5757393ae0fd6534b7f5acfa4f12b36ac92a98711384f31a863057c
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"088971","wall_time_seconds":0.000003291,"exit_code":2,"original_token_count":17,"output":"Error: The current focus was not saved. The current focus is empty.\n"}
+
+[CALL exec] toolkit memory focus --help
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"4ef4ca","wall_time_seconds":0.000003375,"exit_code":0,"original_token_count":1049,"output":"toolkit memory: Save, find, and manage project memory: records, the current focus, and the glossary.\n\nUsage:\n  toolkit memory save --type <t> --name <slug> --description <d> (--body <text> | --body-file <file|->)\n                      [--approved-by <who>] [--authorization <text>] [--supersedes <key>] [--source <text>]\n                      [--status <s>] [--last-verified <YYYY-MM-DD|unknown>] [--expect <version|absent>]\n                      [--proposal] [--allow-similar]\n  toolkit memory find <query> [--reflect] [--type <t>] [--limit <n>] [--all] [--proposals]\n  toolkit memory get <key>\n  toolkit memory list [--type <t>] [--status <current|needs-review|retired|all>]\n  toolkit memory approve <key> --by <name>\n  toolkit memory reject <key> [--reason <text>]\n  toolkit memory retire <key> [--superseded-by <key>] [--reason <text>]\n  toolkit memory restore <key>\n  toolkit memory rename <key> --to <new-key>\n  toolkit memory delete <key> --owner-approved\n  toolkit memory focus [--set-file <file|-> | --text <text>] [--expect <version>]\n  toolkit memory glossary [--set-file <file|-> | --text <text>] [--expect <version>]\n  toolkit memory reindex\n  toolkit memory status\n  toolkit memory export --to <folder>\n  toolkit memory import --from <folder> [--dry-run]\n\nTypes: user, feedback, project, reference, event. A key is <type>_<slug>, for example feedback_deploy_window.\nThe key is also the file name without .md and the frontmatter name (the model's topic format).\nA key typed with dashes (feedback_deploy-window) finds the same record.\nA --name longer than 60 characters is refused, not shortened.\nA body file that starts with frontmatter fills any field not given as a flag.\n--approved-by writes \"authorization: Approved by <who> on <date>\". With no approver\nand memory.approval trusted, it is \"Trusted grant\"; --authorization sets the words.\nSaving over an existing record keeps its source, authorization, supersedes,\nlast_verified, and any other frontmatter fields unless they are given again.\nSaving a record that needs review marks it verified today.\nDuplicate check: save refuses (exit 2) and lists the records when memory\nalready has one with the same key, or one with a very similar description or\ntext. Update a record you read with --expect <version>, replace one with\n--supersedes <key>, or save a different fact anyway with --allow-similar.\n--proposal saves a record the owner has not answered yet (\"Save to memory?\"):\nstatus needs-review, authorization \"Proposed by the agent on <date>\". A\nproposal is not a fact: find leaves it out unless --proposals (or --all) is\ngiven, and the briefing and toolkit work decisions list it for the owner.\napprove records his yes (the record becomes current, \"Approved by <name> on\n<date>\"); reject records his no and deletes the proposa
+
+[CALL exec] toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-28, WI-002 field-access approval recorded; recorded by agent
+
+## Now
+
+- WI-001 field-only sandbox deployment job 0AfFAKE000DEPLOY3 succeeded. Mike verified the approved field description and help text in tkv2-sbx Setup. Field shape and guidance checks passed; record behavior and UI checks remain.
+- WI-002 layout-only source and package are committed and check-only validated. A fresh sandbox layout retrieve differed only by the proposed Tier item below Rating. Mike verified no Tier access on the four Account-reading profiles and no permission set or group grant. Mike approved the exact field-access Setup change on 2026-09-28; the manual step is not yet reported complete.
+- The repository has no origin remote. tkv2-sbx refreshes from production every Sunday night.
+
+## Waiting on the owner
+
+- WI-002 Q-03: Complete the approved four-profile Account Tier field-access Setup step in tkv2-sbx and report when saved. Layout deployment needs a separate approval after access is checked.
+- The proposed lasting memory of Mike’s afternoon Salesforce Setup preference still awaits his yes or no; it is not active memory.
+
+## Untracked to-dos
+
+- None.
+
+## Next session starts with
+
+- Continue WI-002 from Resume here. Once Mike reports the field-access Setup step saved, audit effective access, then seek separate approval for its layout-only sandbox deployment and check R-03/R-04.
+- Continue WI-001 from Resume here. After WI-002 access and layout, run record behavior and UI checks for R-01/R-02; sandbox data writes require separate approval.
+- The phase plan remains open in PROJECT-ROADMAP.md. Verified project commands have not yet been added to AGENTS.md.
+' --expect 88fad8f9b5757393ae0fd6534b7f5acfa4f12b36ac92a98711384f31a863057c
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"128799","wall_time_seconds":0.000003333,"exit_code":0,"original_token_count":15,"output":"Saved the current focus (24 lines). Version: 3358685b4058\n"}
+
+[CALL exec] toolkit work validate WI-002
+   toolkit memory focus --json
+   toolkit doctor
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+{"i":0,"status":"fulfilled","value":{"chunk_id":"0931ca","wall_time_seconds":0.000003542,"exit_code":0,"original_token_count":33,"output":"Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. 1 open question waits on the owner (toolkit work decisions lists it).\n"}}
+{"i":1,"status":"fulfilled","value":{"chunk_id":"d33c09","wall_time_seconds":0.000003666,"exit_code":0,"original_token_count":471,"output":"{\n  \"ok\": true,\n  \"backend\": \"builtin\",\n  \"kind\": \"focus\",\n  \"text\": \"# Current focus\\n\\nLast updated: 2026-09-28, WI-002 field-access approval recorded; recorded by agent\\n\\n## Now\\n\\n- WI-001 field-only sandbox deployment job 0AfFAKE000DEPLOY3 succeeded. Mike verified the approved field description and help text in tkv2-sbx Setup. Field shape and guidance checks passed; record behavior and UI checks remain.\\n- WI-002 layout-only source and package are committed and check-only validated. A fresh sandbox layout retrieve differed only by the proposed Tier item below Rating. Mike verified no Tier access on the four Account-reading profiles and no permission set or group grant. Mike approved the exact field-access Setup change on 2026-09-28; the manual step is not yet reported complete.\\n- The repository has no origin remote. tkv2-sbx refreshes from production every Sunday night.\\n\\n## Waiting on the owner\\n\\n- WI-002 Q-03: Complete the approved four-profile Account Tier field-access Setup step in tkv2-sbx and report when saved. Layout deployment needs a separate approval after access is checked.\\n- The proposed lasting memory of Mike’s afternoon Salesforce Setup preference still awaits his yes or no; it is not active memory.\\n\\n## Untracked to-dos\\n\\n- None.\\n\\n## Next session starts with\\n\\n- Continue WI-002 from Resume here. Once Mike reports the field-access Setup step saved, audit effective access, then seek separate approval for its layout-only sandbox deployment and check R-03/R-04.\\n- Continue WI-001 from Resume here. After WI-002 access and layout, run record behavior and UI checks for R-01/R-02; sandbox data writes require separate approval.\\n- The phase plan remains open in PROJECT-ROADMAP.md. Verified project commands have not yet been added to AGENTS.md.\\n\",\n  \"version\": \"3358685b405870fbe50b3a3dd1526f2c1a60df2b38eb6d594a8a6024759f4eaa\"\n}\n"}}
+{"i":2,"status":"fulfilled","value":{"chunk_id":"3a01c9","wall_time_seconds":0.034311542,"exit_code":1,"original_token_count":497,"output":"Toolkit doctor for Acme CRM (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce).\n\nWarnings (3):\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce). Codex loads the project's .codex/ settings, plugin switches, and hooks on
+
+[AGENT] Your approval for WI-002 is recorded. **The field access has not been changed yet.** The project’s manual step assigns the Setup change to you.
+
+In `tkv2-sbx`, open **Setup → Object Manager → Account → Fields & Relationships → Tier → Set Field-Level Security**. Set **Visible** for Sales Manager, System Administrator, Sales User, and Read Only. Set **Read-Only** for Sales User and Read Only only, then save.
+
+Please tell me when you’ve saved it so I can check the resulting access. The Account Layout deployment will need separate approval.
+
+SKILLS OPENED (SKILL.md read): ['work-decide', 'work-on', 'memory-save']
+
+TOOLKIT COMMANDS:
+   toolkit work decisions
+   toolkit work show WI-002 --path
+   toolkit work edit WI-002 --section 'Open Questions' --text '
+   toolkit work set WI-002 --waiting-on agent
+   toolkit work history WI-002 --note 'Owner words: Yes, I approve that exact field-access change in tkv2-sbx.' --effect 'The four-profile Account.Tier__c Setup change is approved in tkv2-sbx
+   toolkit work show WI-002 --section 'Open Questions'
+   toolkit work show WI-002 --section Overview
+   toolkit work show WI-002 --section Notes
+   toolkit memory focus --json
+   toolkit work edit WI-002 --section Overview --text '**Goal:** Give Account viewers read access to Tier, limit editing to Sales Manager and System Administrator profile users, and place Tier directly below Rating on Account Layout.
+   toolkit work edit WI-002 --section Notes --text '### Decisions and context
+   toolkit work edit WI-002 --section 'Open Questions' --append-row '
+   toolkit work set WI-002 --waiting-on owner
+   toolkit memory focus --set-file /dev/stdin --expect 88fad8f9b5757393ae0fd6534b7f5acfa4f12b36ac92a98711384f31a863057c
+   toolkit memory focus --help
+   toolkit memory focus --text '# Current focus
+   toolkit work validate WI-002
+   toolkit memory focus --json
+   toolkit doctor

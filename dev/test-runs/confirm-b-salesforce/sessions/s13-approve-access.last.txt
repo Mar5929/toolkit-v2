@@ -1,0 +1,5 @@
+Your approval for WI-002 is recorded. **The field access has not been changed yet.** The project’s manual step assigns the Setup change to you.
+
+In `tkv2-sbx`, open **Setup → Object Manager → Account → Fields & Relationships → Tier → Set Field-Level Security**. Set **Visible** for Sales Manager, System Administrator, Sales User, and Read Only. Set **Read-Only** for Sales User and Read Only only, then save.
+
+Please tell me when you’ve saved it so I can check the resulting access. The Account Layout deployment will need separate approval.

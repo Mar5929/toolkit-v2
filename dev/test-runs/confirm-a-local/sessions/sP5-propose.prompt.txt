@@ -1,0 +1,1 @@
+Propose a memory about my test machine, the Mac mini with Node 22, and ask me yes or no before you save it.

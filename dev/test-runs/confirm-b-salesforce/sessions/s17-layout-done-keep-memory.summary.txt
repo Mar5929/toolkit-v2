@@ -1,0 +1,578 @@
+PROMPT: I ran the WI-002 layout deploy from its worktree. It printed: {"status":0,"result":{"id":"0AfFAKE000DEPLOY3","status":"Succeeded","success":true,"checkOnly":false,"done":true,"numberComponentsDeployed":1,"numberComponentErrors":0},"warnings":[]}. And yes, keep that memory preference. Keep going.
+THREAD: 01a0e91a-4f40-7842-a17c-414e1af83b45
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 add a Tier picklist field to Account so the sales team can rank their accounts: 08 Build, In Progress. Next action: Complete R-01 record behavior and R-02 UI checks after WI-002 field access and Account Layout are configured. Record evidence, then reque... Continues with work-on.
+- WI-002 Set Account Tier access and place it below Rating on Account Layout: 08 Build, In Progress, waiting on owner. Next action: Mike runs the exact approved layout-only deploy command from the WI-002 worktree and shares the job result. Then verify Tier placement an... Continues with work-decide.
+
+Waiting on the owner:
+- WI-002 Set Account Tier access and place it below Rating on Account Layout: Q-05: Will Mike run the approved layout-only deploy command in the WI-002 worktree and share its result? The Codex Salesforce guard blocked the agent command and directs an owner-run command. Affects P2-T03; R-04. (work-decide)
+
+Items: 2 in progress.
+
+Current focus:
+## Now
+- WI-001 field-only sandbox deployment job 0AfFAKE000DEPLOY3 succeeded. Mike verified the approved field description and help text in tkv2-sbx Setup. Field shape and guidance checks passed; record behavior and UI checks remain.
+- WI-002: Mike reported saving the approved four-profile Tier field-access Setup step in tkv2-sbx. A read-only FieldPermissions query found exactly the expected four grants: Sales Manager and System Administrator read/edit; Sales User and Read Only read only. No permission-set Tier grant appeared. Account read access remains on all four profiles. Evidence was committed on the WI-002 branch as 89aed0d.
+- WI-002 layout-only package contains Account-Account Layout. Mike approved its tkv2-sbx deployment. A fresh sandbox retrieve found no difference from source except Tier directly below Rating, and deploy preview succeeded. The Codex Salesforce guard blocked the deploy command before a job started; the layout has not been deployed.
+- The repository has no origin remote. tkv2-sbx refreshes from production every Sunday night.
+## Next session starts with
+- Continue WI-002 from Resume here. After Mike reports the layout deploy result, verify deployment outcome, Tier placement, and representative-user R-03/R-04 behavior.
+- Continue WI-001 from Resume here. After WI-002 layout, run record behavior and UI checks for R-01/R-02; sandbox data writes require separa
+
+[AGENT] I’ll record the layout deploy result and your memory preference, then continue the WI-002 and WI-001 checks that are possible from here.
+
+[CALL exec] pwd && cat SOUL.md PROJECT.md .claude/rules/*.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce
+cat: SOUL.md: No such file or directory
+# Acme CRM
+
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices
+
+[AGENT] The reported job succeeded with one component and no errors. I’m checking the work item and the required tracking steps before I record it.
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/skills/work-decide/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/skills/work-on/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.4/skills/memory-save/SKILL.md .agents/skills/sf-component-tracker/SKILL.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+Warning: truncated output (original token count: 10398)
+Total output lines: 374
+
+---
+name: work-decide
+description: 'Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers. Use when he asks "what do you need from me", answers a waiting decision ("go with option B"), or states a project-wide decision. Not for a bare "yes" when this chat asked no question.'
+---
+
+# Work decide
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Shared rules: the work plugin's `references/conventions.md`, two folders above this skill's folder (`../../references/conventions.md`). To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Run each `toolkit` command alone, on its own line, in both hosts: never joined by `&&`, `;`, or a pipe, and never from a script (in Codex that runs it inside the sandbox, where it fails). Text (conventions, "Text in a command"): one-line values (`--note`, `--effect`, `--append-row`, `--title`) go in single quotes, with an apostrophe written `'\''`, because double quotes run backticks and `$(...)`; section and design text goes on standard input in Claude Code (`<file>` is `-`, followed by a quoted heredoc, `<<'EOF'`), and in Codex in `--text '<text>'` or a file in a new `mktemp -d` folder, deleted right after the command. Never change a record with a script. Ask the owner in the reply text, never through a question tool. No remote (`git remote` prints nothing): never run `git fetch`, and never report a fetch refusal as a blocker.
+
+## Steps
+
+1. Build the queue: requirements waiting for approval, designs marked proposed, items at stage 11 waiting for result approval, Open Questions rows where the owner decides, and memory proposals (records saved as `needs-review` because the owner did not answer "Save to memory?"). The command lists each decision once. Its "Agent to-do" lines are the agent's own steps, not decisions waiting on the owner: count and show only the decisions. A delivery offer, as an agent to-do or as an open question, belongs to `work-delegate`, the only skill that makes or records it: open it after the owner's other decisions.
+   `toolkit work decisions`
+2. The owner gave an answer without being asked ("approved", "go with B"): match it to exactly one waiting decision. If two could match, ask which one, naming both. A bare "yes", "ok", or "looks good" is not such an answer ("What counts as an answer").
+3. Otherwise take the decisions one at a time, the one blocking the most work first. For each: what is being decided, the choices, your recommendation and its main reason, and what happens after each answer. Every decision carries a recommendation, even when it is the only one in the queue; a bare question is not enough. One decision per message, asked in the reply tex
+
+[CALL exec] git worktree list
+   git status --short --branch
+   git remote
+   toolkit work decisions
+   toolkit work show WI-002
+   toolkit work show WI-001
+   cat .memory/memory-criteria.md .memory/AGENTS.md
+   rg -n 'WI-00[12]|P0|P1|P2' PROJECT-ROADMAP.md
+  -> Script completed
+Wall time 0.6 seconds
+Output:
+
+Warning: truncated output (original token count: 10119)
+Total output lines: 8
+
+{"i":0,"result":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce                                                       65661ed [main]\n/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce/.claude/worktrees/wi-001-add-a-tier-picklist-field-to 93af0c7 [claude/wi-001-add-a-tier-picklist-field-to]\n/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce/.claude/worktrees/wi-002-set-account-tier-access-and  89aed0d [claude/wi-002-set-account-tier-access-and]\n"}
+{"i":1,"result":"## main\n"}
+{"i":2,"result":""}
+{"i":3,"result":"2 decisions wait on the owner:\n\nWI-002 Set Account Tier access and place it below Rating on Account Layout\n  - Q-05: Will Mike run the approved layout-only deploy command in the WI-002 worktree and share its result? The Codex Salesforce guard blocked the agent command and directs an owner-run command. Affects P2-T03; R-04. (work-decide)\n\nMemory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):\n  - user_salesforce_setup_afternoon: Mike prefers to handle his own Salesforce Setup clicking and checks in the afternoon. Saved 2026-09-28. Yes: toolkit memory approve user_salesforce_setup_afternoon --by <name>. No: toolkit memory reject user_salesforce_setup_afternoon. (work-decide)\n"}
+{"i":4,"result":"WI-002: Set Account Tier access and place it below Rating on Account Layout\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce/.work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account-so/WI-002-tier-access-and-layout/WORK-ITEM.md\nStage: 08 Build (In Progress) | Waiting on: owner | Continue with: work-decide\nParent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account-so/DESIGN.md). Read it with: toolkit work design WI-001\nWorktree branch for this item: claude/wi-002-set-account-tier-access-and (folder .claude/worktrees/wi-002-set-account-tier-access-and)\n\n---\nid: WI-002\ntitle: Set Account Tier access and place it below Rating on Account Layout\ntype: build\nstage: 08-build\nstatus: In Progress\nparent: WI-001\nwaiting_on: \"owner\"\npriority: medium\ndelivery: agent-led\nrequirements_approved: \"2026-09-28 by Mike\"\ndesign: none\nresult_approved: \"no\"\nupdated: 2026-09-28\n---\n\n# WI-002: Set Account Tier access and place it below Rating on Account Layout\n\n## Overview\n\n**Goal:** Give Account viewers read access to Tier, limit editing to Sale
+
+[CALL exec] toolkit memory approve user_salesforce_setup_afternoon --by Mike
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Approved user_salesforce_setup_afternoon: it is now a current memory record, approved by Mike on 2026-09-28.
+Version: 4bc19c6dcdf1
+
+
+[CALL exec] sf project deploy report -i 0AfFAKE000DEPLOY3 -o tkv2-sbx --json
+   cat delivery/deployment/component-tracker.csv
+   cat delivery/deployment/WI-002-tier-access-and-layout/DEPLOYMENT-RECORD.md
+   toolkit memory get user_salesforce_setup_afternoon
+   toolkit doctor
+  -> Script completed
+Wall time 0.5 seconds
+Output:
+
+{"i":0,"result":"{\"status\":0,\"result\":{\"status\":\"Succeeded\",\"success\":true,\"done\":true},\"warnings\":[]}\n"}
+{"i":1,"result":"Component Type,Object/Parent,API Name,Label,Work Item,Change Type,Sandbox,Production,Notes\nCustomField,Account,Account.Tier__c,Tier,WI-001,New,Yes,No,Restricted picklist; Gold/Silver/Bronze; nullable; no default; approved field guidance confirmed in Setup\nLayout,Account,Account-Account Layout,Account Layout,WI-002,Modified,No,No,Modified: add Tier directly below Rating; deployment pending\nProfile,,Sales Manager,Sales Manager,WI-002,Modified,Yes,No,Modified: Tier visible and editable; Mike saved in sandbox Setup; grant verified\nProfile,,System Administrator,System Administrator,WI-002,Modified,Yes,No,Modified: Tier visible and editable; Mike saved in sandbox Setup; grant verified\nProfile,,Sales User,Sales User,WI-002,Modified,Yes,No,Modified: Tier visible and read-only; Mike saved in sandbox Setup; grant verified\nProfile,,Read Only,Read Only,WI-002,Modified,Yes,No,Modified: Tier visible and read-only; Mike saved in sandbox Setup; grant verified\n"}
+{"i":2,"result":"# WI-002: Account Layout deployment record\n\n- **Work item:** WI-002\n- **Target org:** `tkv2-sbx` sandbox\n- **Status:** Layout source prepared and validated; deployment pending\n- **Package:** [package.xml](package.xml), containing only `Account-Account Layout`\n\n## Scope\n\nTier is inserted directly below Rating in the second column of the Account Information section. No other layout item was changed. Field access is a separate Setup action under WI-002 and is not in this package.\n\n## Evidence and next checks\n\n- The retrieved Account Layout XML was inspected on 2026-09-28 before editing.\n- Check-only validation against `tkv2-sbx` reported `Succeeded` for one component with zero component and test errors, job `0AfFAKE000VALID3`, on 2026-09-28.\n- Check the diff and whether other edits have appeared in the sandbox since the retrieve immediately before deployment.\n- Ask Mike separately before deploying the layout. After deployment, check the placement on an Account assigned this layout.\n- Mike reported saving the separately approved four-profile field-access change in `tkv2-sbx` Setup on 2026-09-28. A read-only FieldPermissions query returned exactly four Tier grants: Sales Manager and System Administrator can read and edit; Sales User and Read Only can read but not edit. No permission-set Tier grant appeared. A read-only ObjectPermissions query confirms Account read access for all four profiles. Representative-user UI checks remain.\n- A fresh read-only layout retrieve on 2026-09-28 differed from the prepared source only by the Tier item directly after Rating. The work-item package names only that layout. No unrelated layout edit was found.\n"}
+{"i":3,"result":"---\nname: user_salesforce_setup_afternoon\ndescription: Mike prefers to handle his own Salesforce Setup clicking and checks in t
+
+[AGENT] The report lookup also says “Succeeded,” but it returns no component details, and the job ID matches the earlier WI-001 field deploy. I’ll verify the layout in sandbox metadata before marking Account Layout deployed.
+
+[CALL exec] sf project retrieve start --help
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+fake sf help for: project retrieve start --help
+
+
+[CALL exec] mktemp -d /private/tmp/wi-002-layout-verify.XXXXXX
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+/private/tmp/wi-002-layout-verify.46Zib5
+
+
+[CALL exec] cp sfdx-project.json /private/tmp/wi-002-layout-verify.46Zib5/sfdx-project.json
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+
+
+[CALL exec] sf project retrieve start -m 'Layout:Account-Account Layout' -o tkv2-sbx --json
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{"status":0,"result":{"done":true,"status":"Succeeded","success":true,"files":[{"fullName":"Account-Account Layout","type":"Layout","state":"Created","filePath":"force-app/main/default/layouts/Account-Account Layout.layout-meta.xml"}]},"warnings":[]}
+
+
+[CALL exec] rg --files /private/tmp/wi-002-layout-verify.46Zib5
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+/private/tmp/wi-002-layout-verify.46Zib5/sfdx-project.json
+/private/tmp/wi-002-layout-verify.46Zib5/force-app/main/default/layouts/Account-Account Layout.layout-meta.xml
+
+
+[CALL exec] rg -n -C 5 'Rating|Tier__c' 'force-app/main/default/layouts/Account-Account Layout.layout-meta.xml'
+   diff -u '/private/tmp/wi-002-layout-verify.46Zib5/force-app/main/default/layouts/Account-Account Layout.layout-meta.xml' 'force-app/main/default/layouts/Account-Account Layout.layout-meta.xml'
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{"i":0,"result":{"output":"20-                <behavior>Edit</behavior>\n21-                <field>Industry</field>\n22-            </layoutItems>\n23-            <layoutItems>\n24-                <behavior>Edit</behavior>\n25:                <field>Rating</field>\n26-            </layoutItems>\n27-            <layoutItems>\n28-                <behavior>Edit</behavior>\n29:                <field>Tier__c</field>\n30-            </layoutItems>\n31-  
+
+[CALL exec] toolkit work set WI-002 --waiting-on agent
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Updated WI-002: waiting on agent.
+Now 08 Build (In Progress). Continue with work-on.
+
+
+[CALL exec] toolkit work history WI-002 --note 'Owner words: I ran the WI-002 layout deploy from its worktree. It printed: {"status":0,"result":{"id":"0AfFAKE000DEPLOY3","status":"Succeeded","success":true,"checkOnly":false,"done":true,"numberComponentsDeployed":1,"numberComponentErrors":0},"warnings":[]}.' --effect 'Owner-reported layout-only sandbox deployment succeeded; verify the retrieved layout and access before completing R-03/R-04 checks.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Added a Recent History row to WI-002.
+
+
+[CALL exec] git status --short --branch
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+## claude/wi-002-set-account-tier-access-and
+
+
+[PATCH] files=['.claude/worktrees/wi-002-set-account-tier-access-and/delivery/deployment/component-tracker.csv\\n@@\\n-Layout,Account,Account-Account Layout,Account Layout,WI-002,Modified,No,No,Modified: add Tier directly below Rating; deployment pending\\n+Layout,Account,Account-Account Layout,Account Layout,WI-002,Modified,Yes,No,Modified: Tier directly below Rating; sandbox layout retrieve verified after deployment\\n*** Update File: .claude/worktrees/wi-002-set-account-tier-access-and/delivery/deployment/WI-002-tier-access-and-layout/DEPLOYMENT-RECORD.md\\n@@\\n-- **Status:** Layout source prepared and validated; deployment pending\\n+- **Status:** Mike reported a successful layout-only deployment on 2026-09-28; post-deploy sandbox retrieve verified the layout\\n@@\\n - A fresh read-only layout retrieve on 2026-09-28 differed from the prepared source only by the Tier item directly after Rating. The work-item package names only that layout. No unrelated layout edit was found.\\n+- Mike reported running the approved layout-only deploy command from the WI-002 worktree on 2026-09-28. The command returned `Succeeded`, `checkOnly: false`, one component deployed, and zero component errors, with job ID `0AfFAKE000DEPLOY3`. A read-only deploy report also returned `Succeeded`; its response did not list components. The reported job ID is the same one previously reported for the WI-001 field deploy, so the job ID alone does not distinguish the two deployments.\\n+- A fresh read-only retrieve from `tkv2-sbx` after Mike\'s report contains Tier directly below Rating in Account Layout and matches the WI-002 source file byte for byte. This confirms the intended layout is present in the sandbox. A representative user\'s Account page still needs a UI check.\\n*** End Patch"));']
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{}
+
+[AGENT] The sandbox retrieve now matches the WI-002 layout source exactly, with Tier directly below Rating. I’ve marked the layout present in the sandbox; I’m checking the remaining access and page behavior evidence.
+
+[CALL exec] rg -n 'FieldPermissions|ObjectPermissions|Profile|Account Layout|sf data query|User' tests .work-items delivery/deployment/WI-002-tier-access-and-layout -g '*.md'
+   rg --files tests .claude/worktrees/wi-002-set-account-tier-access-and/tests
+   cat .claude/worktrees/wi-002-set-account-tier-access-and/delivery/deployment/WI-002-tier-access-and-layout/manual-steps.md
+   toolkit memory focus --json
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"i":0,"result":"rg: delivery/deployment/WI-002-tier-access-and-layout: No such file or directory (os error 2)\n.work-items/DASHBOARD.md:9:| WI-002 | Set Account Tier access and place it below Rating on Account Layout | Q-05: Will Mike run the approved layout-only deploy command in the WI-002 worktree and share its result? The Codex Salesforce guard blocked the agent command and directs an owner-run command. | work-decide |\n.work-items/DASHBOARD.md:15:| WI-001 | add a Tier picklist field to Account so the sales team can rank their accounts | 08 Build | In Progress | agent | Complete R-01 record behavior and R-02 UI checks after WI-002 field access and Account Layout are configured. Record evidence, then request Mike’s field-result review. |\n.work-items/DASHBOARD.md:16:| WI-002 | Set Account Tier access and place it below Rating on Account Layout | 08 Build | In Progress | agent | Mike runs the exact approved layout-only deploy command from the WI-002 worktree and shares the job result. Then verify Tier placement and representative-user R-03/R-04 behavior. |\n.work-items/DASHBOARD.md:34:    - WI-002 Set Account Tier access and place it below Rating on Account Layout (08 Build, In Progress)\n.work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account-so/WORK-ITEM.md:25:**Next action:** Complete R-01 record behavior and R-02 UI checks after WI-002 field access and Account Layout are configured. Record evidence, then request Mike’s field-result review.\n.work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account-so/WORK-ITEM.md:38:| P2 — Access and Account Layout | R-03 and R-04 are delivered after the field | Not Started | WI-002 has its own checked result and owner approval | WI-002 |\n.work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account-so/WORK-ITEM.md:60:### P2 — Access and Account Layout\n.work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account-so/WORK-ITEM.md:64:  **Deliverable:** Approved access and Account Layout result.  \n.work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account-so/WORK-ITEM.md:84:| 2026-09-28 | Sub-item WI-002 created: Set Account Tier access and place it below Rating on Account Layout. | WI-002 delivers R-03, R-04. Those requirements stay here, unchanged and approved. |\n.work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account-so/WORK-ITEM.md:88:| 2026-09-28 | Proposed the Account Tier design: restricted picklist, Account Layout placement, direct Setup field access with effective-permission audit, and separate org-change approvals. | Mike must approve the design and the proposed field description and help text before the build starts. |\n.work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account-so/WORK-ITEM.md:97:| 2026-09-28 | Owner words: Yes, it can be blank, with no default value. For who sees it: everyone who can see an Account can read Tier, but only the Sales Manager profile and system a
+
+[CALL exec] cat tests/WI-002-TEST-PLAN.md
+   cat tests/WI-001-TEST-PLAN.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{"i":0,"result":"# WI-002: Tier access and Account Layout test plan\n\n## Scope\n\nCheck WI-001 R-03 and R-04 in sandbox `tkv2-sbx`. The approved field-only WI-001 deployment must be present.\n\n## Checks\n\n| Scenario | Expected result | Method | Evidence |\n| --- | --- | --- | --- |\n| Effective Tier access | Account viewers can read Tier; only Sales Manager and System Administrator profile users can edit it | Audit profiles, permission sets, per
+
+[CALL exec] sf data query -q "SELECT Parent.Label, Field, PermissionsRead, PermissionsEdit FROM FieldPermissions WHERE Field = 'Account.Tier__c'" -o tkv2-sbx --json
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{"status":0,"result":{"records":[{"Parent":{"Profile":{"Name":"Sales Manager"}},"Field":"Account.Tier__c","PermissionsRead":true,"PermissionsEdit":true},{"Parent":{"Profile":{"Name":"System Administrator"}},"Field":"Account.Tier__c","PermissionsRead":true,"PermissionsEdit":true},{"Parent":{"Profile":{"Name":"Sales User"}},"Field":"Account.Tier__c","PermissionsRead":true,"PermissionsEdit":false},{"Parent":{"Profile":{"Name":"Read Only"}},"Field":"Account.Tier__c","PermissionsRead":true,"PermissionsEdit":false}],"totalSize":4,"done":true},"warnings":[]}
+
+
+[CALL js] {"code":"await cua.getState();","title":"Check available Salesforce UI session"}
+  -> Wall time: 6.6277 seconds
+Output:
+## Computer Use
+
+Control native apps and browsers on the user’s computer by reading or operating UI. Prefer purpose-built connectors, APIs, or CLIs when available.
+
+- Use `cua_repl` (JavaScript) for all UI actions.
+- Do not use other technologies besides `cua_repl` for computer interactions, unless specifically requested by the user (e.g. AppleScript, `osascript`, JXA, System Events, CGEvent synthesis).
+- Prefer a dedicated plugin or skill when it can complete t
+
+[PATCH] files=['.work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account-so/WI-002-tier-access-and-layout/WORK-ITEM.md\\n@@\\n-**Current position:** Mike approved the layout-only WI-002 package for tkv2-sbx. A fresh sandbox retrieve differed from source only by Tier directly below Rating, and deploy preview succeeded. The Codex Salesforce guard blocked the deploy command, so the layout has not been deployed. The four profile Tier grants were verified by read-only query; representative-user UI checks remain.\\n+**Current position:** Mike reported a successful layout-only deployment to tkv2-sbx. A read-only deploy report returned Succeeded, and a fresh sandbox layout retrieve matches the WI-002 source exactly, with Tier directly below Rating. The four profile Tier grants were verified again by read-only query; representative-user UI checks remain.\\n@@\\n-**Next action:** Mike runs the exact approved layout-only deploy command from the WI-002 worktree and shares the job result. Then verify Tier placement and representative-user R-03/R-04 behavior.\\n+**Next action:** Check Tier visibility and editability on Account records for representative users in the four profiles, and confirm the rendered Account Layout places Tier below Rating. Record R-03/R-04 results and request Mike\'s result review.\\n@@\\n-**Blockers:** The Codex Salesforce guard requires Mike to run the sandbox deploy command. Representative-user UI checks depend on that deployment.\\n+**Blockers:** Representative-user UI checks require access to the sandbox as those users or Mike\'s observed results.\\n@@\\n-- [ ] **P2-T03 — Check layout result** · Not Started  \\n+- [ ] **P2-T03 — Check layout result** · In Progress  \\n@@\\n-| Q-05 | Will Mike run the approved layout-only deploy command in the WI-002 worktree and share its result? The Codex Salesforce guard blocked the agent command and directs an owner-run command. | P2-T03; R-04 | Open | owner |\\n+| Q-05 | Will Mike run the approved layout-only deploy command in the WI-002 worktree and share its result? Answer: Yes. Mike reported a successful one-component deploy on 2026-09-28. A fresh read-only retrieve confirmed the intended layout is in tkv2-sbx. | P2-T03; R-04 | Answered | owner |\\n@@\\n-The approved four-profile field-access Setup step is saved in tkv2-sbx. A read-only FieldPermissions query returned exactly four Tier grants: Sales Manager and System Administrator read/edit; Sales User and Read Only read only. No permission-set Tier grant appeared, and Account read access remains on all four profiles. A fresh sandbox layout retrieve on 2026-09-28 differed from the WI-002 source only by Tier directly below Rating. Deploy preview succeeded. The Codex Salesforce guard blocked the deployment; no deploy job was started. Mike needs to run `sf project deploy start -x delivery/deployment/WI-002-tier-access-and-layout/package.xml -o tkv2-sbx --json` from the WI-002 worktree and share the result. Then verify layout placement and representative-user access, and continue WI-001 record and UI checks.\\n+The approved four-profile field-access Setup step is saved in tkv2-sbx. A read-only FieldPermissions query returned exactly four Tier grants: Sales Manager and System Administrator read/edit; Sales User and Read Only read only. No permission-set Tier grant appeared, and Account read access remains on all four profiles. Mike reported a successful layout-only deployment on 2026-09-28: one component, zero errors. A read-only report returned Succeeded. The reported job ID `0AfFAKE000DEPLOY3` duplicates the earlier WI-001 field job ID, so use the fresh retrieve as layout evidence: sandbox Account Layout matches the WI-002 source byte for byte, with Tier directly below Rating. Next check representative-user access and rendered layout, record R-03/R-04 evidence, then request Mike\'s result review. WI-001 record and UI checks can now proceed; sandbox data writes need separate approval.\\n*** End Patch"));']
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{}
+
+[HOOK CONTEXT] WI-002 was edited directly and passes validation. toolkit work edit <id> --section "<heading>" --set-file <file> changes a section the same way in every tracker and keeps the toolkit's record of what it wrote; prefer it to editing the file.
+
+[PATCH] files=['.claude/worktrees/wi-002-set-account-tier-access-and/tests/WI-002-TEST-PLAN.md\\n@@\\n-| Account Layout source | Tier directly follows Rating in Account Information | Compare retrieved layout XML with the WI-002 source diff | Source prepared; sandbox validation `0AfFAKE000VALID3` reported success for one component. |\\n-| Account Layout in sandbox | Tier appears directly below Rating for a user assigned Account Layout | Open an Account after approved layout deployment | Pending deployment and UI check. |\\n+| Account Layout source | Tier directly follows Rating in Account Information | Compare retrieved layout XML with the WI-002 source diff | Passed. Sandbox validation `0AfFAKE000VALID3` reported success for one component. A fresh post-deploy retrieve matches the WI-002 source byte for byte, including Tier directly after Rating. |\\n+| Account Layout in sandbox | Tier appears directly below Rating for a user assigned Account Layout | Open an Account after approved layout deployment | Metadata passed after Mike reported a successful one-component deploy on 2026-09-28. Representative-user UI check remains. |\\n@@\\n-- The approved Setup change is reported saved and the four profile Tier grants match R-03 in read-only metadata queries. Layout source and check-only validation are complete. Layout deployment and representative-user UI checks remain open.\\n+- The approved Setup change is reported saved and the four profile Tier grants match R-03 in read-only metadata queries, including a repeat query after the layout deployment. Mike reported a successful layout-only deployment. A read-only deploy report returned Succeeded, and the post-deploy sandbox layout retrieve matches source exactly. The reported job ID `0AfFAKE000DEPLOY3` duplicates the earlier WI-001 field deploy ID; the retrieved layout is the direct evidence that the layout is present. Representative-user UI and record-access checks remain open.\\n*** End Patch"));']
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{}
+
+[PATCH] files=['.work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account-so/WORK-ITEM.md\\n@@\\n-**Next action:** Complete R-01 record behavior and R-02 UI checks after WI-002 field access and Account Layout are configured. Record evidence, then request Mike’s field-result review.\\n+**Next action:** Complete R-01 record behavior and R-02 UI checks now that WI-002 field access and Account Layout are present in tkv2-sbx. Record evidence, then request Mike\'s field-result review.\\n@@\\n-**Blockers:** UI and record behavior checks depend on WI-002 access and layout. Any sandbox data write for testing needs separate approval.\\n+**Blockers:** Record behavior checks need a separately approved sandbox data write or Mike\'s observed test results. UI checks need sandbox Account access.\\n@@\\n-Mike ran the approved field-only deploy from the WI-001 worktree on 2026-09-28 and reported Succeeded job 0AfFAKE000DEPLOY3, one component, zero errors. Read-only deploy report also says Succeeded. Account describe confirms field shape but returned inconsistent help text. Mike directly checked tkv2-sbx Setup on 2026-09-28 and confirmed Description `Manually assigned account importance tier.` and Help Text `Set by hand. Gold is the highest tier, then Silver, then Bronze.` The deployment record, tracker, and test plan on the WI-001 branch reflect that. R-01 record behavior and R-02 UI checks await WI-002 access and layout. Sandbox data writes need separate approval. tkv2-sbx refreshes from production every Sunday night.\\n+Mike ran the approved field-only deploy from the WI-001 worktree on 2026-09-28 and reported Succeeded job 0AfFAKE000DEPLOY3, one component, zero errors. Read-only deploy report also says Succeeded. Account describe confirms field shape but returned inconsistent help text. Mike directly checked tkv2-sbx Setup on 2026-09-28 and confirmed Description `Manually assigned account importance tier.` and Help Text `Set by hand. Gold is the highest tier, then Silver, then Bronze.` The deployment record, tracker, and test plan on the WI-001 branch reflect that. WI-002 access is configured and its layout is present in sandbox. R-01 record behavior and R-02 UI checks can proceed. Sandbox data writes need separate approval. tkv2-sbx refreshes from production every Sunday night.\\n*** End Patch"));']
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{}
+
+[CALL exec] sf data query -q 'SELECT Id, Tier__c FROM Account LIMIT 5' -o tkv2-sbx --json
+   sf data query -q "SELECT Id, DeveloperName, Status FROM FlowDefinitionView WHERE ApiName LIKE '%Account%'" -o tkv2-sbx --json
+   git diff --check
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"i":0,"result":{"output":"{\"status\":0,\"result\":{\"records\":[],\"totalSize\":0,\"done\":true},\"warnings\":[]}\n","exit":0}}
+{"i":1,"result":{"output":"{\"status\":0,\"result\":{\"records\":[],\"totalSize\":0,\"done\":true},\"warnings\":[]}\n","exit":0}}
+{"i":2,"result":{"output":"","exit":0}}
+
+[AGENT] The sandbox query returned no Account records, so the record behavior test needs a new sandbox test Account. I’m recording the completed metadata checks and the exact remaining test steps for you.
+
+[PATCH] files=['.claude/worktrees/wi-001-add-a-tier-picklist-field-to/tests/WI-001-TEST-PLAN.md\\n@@\\n-| Manual values and clearing | An authorized user can save each value and clear it; new Accounts begin blank | Exercise an Account in the sandbox after access is configured | Not run; WI-002 access pending |\\n-| Unsupported value | API rejects a value outside Gold, Silver, Bronze | Submit an unsupported value to a sandbox test Account after access is configured | Not run; WI-002 access pending |\\n-| Help text in UI | Account page shows the approved help text | Open the assigned page in the sandbox after WI-002 layout deployment | Not run; WI-002 layout pending |\\n+| Manual values and clearing | An authorized user can save each value and clear it; new Accounts begin blank | Exercise a test Account in the sandbox as an authorized user | Not run. WI-002 access and layout are present; a read-only Account query returned no records, so a new sandbox test Account is needed. |\\n+| Unsupported value | API rejects a value outside Gold, Silver, Bronze | Submit an unsupported value to the sandbox test Account | Not run; needs the test Account and separate approval for a sandbox data write. |\\n+| Help text in UI | Account page shows the approved help text | Open the assigned page in the sandbox after WI-002 layout deployment | Not run; WI-002 layout is present, but a representative Account page is not yet available. |\\n@@\\n-- Remaining issues: UI display and record behavior checks wait for WI-002 access and Account Layout. The description and help text were confirmed in Setup by Mike.\\n+- Remaining issues: WI-002 access and Account Layout are present in the sandbox. A read-only query returned no Account records. UI display and record behavior checks need a sandbox test Account and representative-user access; sandbox data writes need separate approval. The description and help text were confirmed in Setup by Mike.\\n*** End Patch"));']
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{}
+
+[CALL exec] sf data query -q "SELECT Id, Name, Profile.Name FROM User WHERE IsActive = true AND Profile.Name IN ('Sales Manager', 'System Administrator', 'Sales User', 'Read Only')" -o tkv2-sbx --json
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{"status":0,"result":{"records":[{"Id":"005FAKE000000SM","Name":"Sam Manager","Profile":{"Name":"Sales Manager"},"IsActive":true},{"Id":"005FAKE000000AD","Name":"Mike Admin","Profile":{"Name":"System Administrator"},"IsActive":true},{"Id":"005FAKE000000SU","Name":"Sue Seller","Profile":{"Name":"Sales User"},"IsActive":true},{"Id":"005FAKE000000RO","Name":"Rob Reader","Profile":{"Name":"Read Only"},"IsActive":true}],"totalSize":4,"done":true},"warnings":[]}
+
+
+[CALL exec] toolkit work edit WI-002 --section 'Open Questions' --append-row '| Q-06 | Will Mike create a disposable Account in tkv2-sbx and check Tier on its assigned Account Layout as representative Sales Manager, System Administrator, Sales User, and Read Only users? Record Tier placement, visibility, and editability, then share the results. The sandbox currently has no Account records. | P2-T02; P2-T03; R-03; R-04; WI-001 R-01/R-02 | Open | owner |'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Open Questions" in WI-002.
+
+
+[CALL exec] toolkit work set WI-002 --waiting-on owner
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Updated WI-002: waiting on owner.
+Now 08 Build (In Progress). Continue with work-decide.
+
+
+[PATCH] files=['.work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account-so/WI-002-tier-access-and-layout/WORK-ITEM.md\\n@@\\n-| Q-06 | Will Mike create a disposable Account in tkv2-sbx and check Tier on its assigned Account Layout as representative Sales Manager, System Administrator, Sales User, and Read Only users? Record Tier placement, visibility, and editability, then share the results. The sandbox currently has no Account records. | P2-T02; P2-T03; R-03; R-04; WI-001 R-01/R-02 | Open | owner |\\n+| Q-06 | Will Mike create a disposable Account in tkv2-sbx and run the remaining Account Tier UI checks? Confirm Tier starts blank; an authorized user can save Gold, Silver, Bronze, and blank; the approved help text appears; Tier sits directly below Rating; Sales Manager and System Administrator can edit it; Sales User and Read Only can read but cannot edit it. Share the results. The sandbox currently has no Account records. | P2-T02; P2-T03; R-03; R-04; WI-001 R-01/R-02 | Open | owner |\\n*** End Patch"));']
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{}
+
+[PATCH] files=['.work-items/account-tier/WI-001-add-a-tier-picklist-field-to-account-so/WI-002-tier-access-and-layout/WORK-ITEM.md\\n@@\\n-**Next action:** Check Tier visibility and editability on Account records for representative users in the four profiles, and confirm the rendered Account Layout places Tier below Rating. Record R-03/R-04 results and request Mike\'s result review.\\n+**Next action:** Mike completes Q-06\'s representative-user UI checks on a disposable sandbox Account and shares the results. Record R-03/R-04 results and request his result review.\\n@@\\n-**Blockers:** Representative-user UI checks require access to the sandbox as those users or Mike\'s observed results.\\n+**Blockers:** The sandbox has no Account records. Representative-user UI and record behavior checks need a disposable sandbox Account and Mike\'s observed results.\\n@@\\n-The approved four-profile field-access Setup step is saved in tkv2-sbx. A read-only FieldPermissions query returned exactly four Tier grants: Sales Manager and System Administrator read/edit; Sales User and Read Only read only. No permission-set Tier grant appeared, and Account read access remains on all four profiles. Mike reported a successful layout-only deployment on 2026-09-28: one component, zero errors. A read-only report returned Succeeded. The reported job ID `0AfFAKE000DEPLOY3` duplicates the earlier WI-001 field job ID, so use the fresh retrieve as layout evidence: sandbox Account Layout matches the WI-002 source byte for byte, with Tier directly below Rating. Next check representative-user access and rendered layout, record R-03/R-04 evidence, then request Mike\'s result review. WI-001 record and UI checks can now proceed; sandbox data writes need separate approval.\\n+The approved four-profile field-access Setup step is saved in tkv2-sbx. A read-only FieldPermissions query returned exactly four Tier grants: Sales Manager and System Administrator read/edit; Sales User and Read Only read only. No permission-set Tier grant appeared, and Account read access remains on all four profiles. Mike reported a successful layout-only deployment on 2026-09-28: one component, zero errors. A read-only report returned Succeeded. The reported job ID `0AfFAKE000DEPLOY3` duplicates the earlier WI-001 field job ID, so use the fresh retrieve as layout evidence: sandbox Account Layout matches the WI-002 source byte for byte, with Tier directly below Rating. A read-only Account query returned zero records, while a User query found one active user in each of the four target profiles. Q-06 asks Mike to create a disposable Account and run the remaining representative-user UI checks, including WI-001 record behavior and help text. Record the results, then request Mike\'s review of each result. Sandbox data writes need separate approval if performed by an agent.\\n*** End Patch"));']
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{}
+
+[CALL exec] git diff -- delivery/deployment/component-tracker.csv delivery/deployment/WI-002-tier-access-and-layout/DEPLOYMENT-RECORD.md tests/WI-002-TEST-PLAN.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+diff --git a/delivery/deployment/WI-002-tier-access-and-layout/DEPLOYMENT-RECORD.md b/delivery/deployment/WI-002-tier-access-and-layout/DEPLOYMENT-RECORD.md
+index 800a936..769805d 100644
+--- a/delivery/deployment/WI-002-tier-access-and-layout/DEPLOYMENT-RECORD.md
++++ b/delivery/deployment/WI-002-tier-access-and-layout/DEPLOYMENT-RECORD.md
+@@ -2,7 +2,7 @@
+ 
+ - **Work item:** WI-002
+ - **Target org:** `tkv2-sbx` sandbox
+-- **Status:** Layout source prepared and validated; deployment pending
++- **Status:** Mike reported a successful layout-only deployment on 2026-09-28; post-deploy sandbox retrieve verified the layout
+ - **Package:** [package.xml](package.xml), containing only `Account-Account Layout`
+ 
+ ## Scope
+@@ -17,3 +17,5 @@ Tier is inserted directly below Rating in the second column of the Account Infor
+ - Ask Mike separately before deploying the layout. After deployment, check the placement on an Account assigned this layout.
+ - Mike reported saving the separately approved four-profile field-access change in `tkv2-sbx` Setup on 2026-09-28. A read-only FieldPermissions query returned exactly four Tier grants: Sales Manager and System Administrator can read and edit; Sales User and Read Only can read but not edit. No permission-set Tier grant appeared. A read-only ObjectPermissions query confirms Account read access for all four profiles. Representative-user UI checks remain.
+ - A fresh read-only layout retrieve on 2026-09-28 differed from the prepared source only by the Tier item directly after Rating. The work-item package names only that layout. No unrelated layout edit was found.
++- Mike reported running the approved layout-only deploy command from the WI-002 worktree on 2026-09-28. The command returned `Succeeded`, `checkOnly: false`, one component deployed, and zero component errors, with job ID `0AfFAKE000DEPLOY3`. A read-only deploy report also returned `Succeeded`; its response did not list components. The reported job ID is the same one previously reported for the WI-001 field deploy, so the job ID alone does not distinguish the two deployments.
++- A fresh read-only retrieve from `tkv2-sbx` after Mike's report contains Tier directly below Rating in Account Layout and matches the WI-002 source file byte for byte. This confirms the intended layout is present in the sandbox. A representative user's Account page still needs a UI check.
+diff --git a/delivery/deployment/component-tracker.csv b/delivery/deployment/component-tracker.csv
+index 9f651ab..d2a8cd4 100644
+--- a/delivery/deployment/component-tracker.csv
++++ b/delivery/deployment/component-tracker.csv
+@@ -1,6 +1,6 @@
+ Component Type,Object/Parent,API Name,Label,Work Item,Change Type,Sandbox,Production,Notes
+ CustomField,Account,Account.Tier__c,Tier,WI-001,New,Yes,No,Restricted picklist; Gold/Silver/Bronze; nullable; no default; approved field guidance confirmed in Setup
+-Layout,Account,Account-Account Layout,Account Layout,WI-002,Modif
+
+[PATCH] files=['.claude/worktrees/wi-002-set-account-tier-access-and/delivery/deployment/WI-002-tier-access-and-layout/DEPLOYMENT-RECORD.md\\n@@\\n-- Check the diff and whether other edits have appeared in the sandbox since the retrieve immediately before deployment.\\n-- Ask Mike separately before deploying the layout. After deployment, check the placement on an Account assigned this layout.\\n+- The predeploy diff and fresh retrieve confirmed no other layout edits had appeared in the sandbox. Mike approved and ran the layout-only deployment.\\n+- Check placement on an Account assigned this layout as a representative user.\\n*** End Patch"));']
+  -> Script completed
+Wall time 0.1 seconds
+Output:
+
+{}
+
+[CALL exec] git add delivery/deployment/component-tracker.csv delivery/deployment/WI-002-tier-access-and-layout/DEPLOYMENT-RECORD.md tests/WI-002-TEST-PLAN.md
+  -> Script completed
+Wall time 3.5 seconds
+Output:
+
+{"chunk_id":"98c113","wall_time_seconds":0.000003333,"exit_code":0,"original_token_count":0,"output":""}
+
+[CALL exec] git diff --cached --check
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+
+
+[CALL exec] git diff --cached
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+diff --git a/delivery/deployment/WI-002-tier-access-and-layout/DEPLOYMENT-RECORD.md b/delivery/deployment/WI-002-tier-access-and-layout/DEPLOYMENT-RECORD.md
+index 800a936..a4fc36d 100644
+--- a/delivery/deployment/WI-002-tier-access-and-layout/DEPLOYMENT-RECORD.md
++++ b/delivery/deployment/WI-002-tier-access-and-layout/DEPLOYMENT-RECORD.md
+@@ -2,7 +2,7 @@
+ 
+ - **Work item:** WI-002
+ - **Target org:** `tkv2-sbx` sandbox
+-- **Status:** Layout source prepared and validated; deployment pending
++- **Status:** Mike reported a successful layout-only deployment on 2026-09-28; post-deploy sandbox retrieve verified the layout
+ - **Package:** [package.xml](package.xml), containing only `Account-Account Layout`
+ 
+ ## Scope
+@@ -13,7 +13,9 @@ Tier is inserted directly below Rating in the second column of the Account Infor
+ 
+ - The retrieved Account Layout XML was inspected on 2026-09-28 before editing.
+ - Check-only validation against `tkv2-sbx` reported `Succeeded` for one component with zero component and test errors, job `0AfFAKE000VALID3`, on 2026-09-28.
+-- Check the diff and whether other edits have appeared in the sandbox since the retrieve immediately before deployment.
+-- Ask Mike separately before deploying the layout. After deployment, check the placement on an Account assigned this layout.
++- The predeploy diff and fresh retrieve confirmed no other layout edits had appeared in the sandbox. Mike approved and ran the layout-only deployment.
++- Check placement on an Account assigned this layout as a representative user.
+ - Mike reported saving the separately approved four-profile field-access change in `tkv2-sbx` Setup on 2026-09-28. A read-only FieldPermissions query returned exactly four Tier grants: Sales Manager and System Administrator can read and edit; Sales User and Read Only can read but not edit. No permission-set Tier grant appeared. A read-only ObjectPermissions query confirms Account read access for all four profiles. Representative-user UI checks remain.
+ - A fresh read-only layout retrieve on 2026-09-28 differed from the prepared source only by the Tier item directly after Rating. The work-item package names only that layout. No unrelated layout edit was found.
++- Mike reported running the approved layout-only deploy command from the WI-002 worktree on 2026-09-28. The command returned `Succeeded`, `checkOnly: false`, one component deployed, and zero component errors, with job ID `0AfFAKE000DEPLOY3`. A read-only deploy report also returned `Succeeded`; its response did not list components. The reported job ID is the same one previously reported for the WI-001 field deploy, so the job ID alone does not distinguish the two deployments.
++- A fresh read-only retrieve from `tkv2-sbx` after Mike's report contains Tier directly below Rating in Account Layout and matches the WI-002 source file byte for byte. This confirms the intended layout is present in the sandbox. A representative user's Account 
+
+[CALL exec] git commit -m 'Record WI-002 sandbox layout deployment and checks'
+  -> Script completed
+Wall time 4.3 seconds
+Output:
+
+{"chunk_id":"65ab5b","wall_time_seconds":0.000003041,"exit_code":0,"original_token_count":39,"output":"[claude/wi-002-set-account-tier-access-and 69a314c] Record WI-002 sandbox layout deployment and checks\n 3 files changed, 9 insertions(+), 7 deletions(-)\n"}
+
+[CALL exec] git diff -- tests/WI-001-TEST-PLAN.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+diff --git a/tests/WI-001-TEST-PLAN.md b/tests/WI-001-TEST-PLAN.md
+index f7ec930..1274669 100644
+--- a/tests/WI-001-TEST-PLAN.md
++++ b/tests/WI-001-TEST-PLAN.md
+@@ -14,13 +14,13 @@ Sandbox: `tkv2-sbx`, API 62.0. Validation is a check-only deployment. UI and rec
+ | --- | --- | --- | --- |
+ | Field definition | Account has one nullable, restricted `Tier__c` picklist with Gold, Silver, Bronze in that order and no default | Inspect field XML and sandbox Account describe | Passed in source and sandbox describe after deployment job `0AfFAKE000DEPLOY3` |
+ | Field guidance | Description and help text match Mike's approved words | Compare field XML with WI-001's approved design and sandbox Setup | Passed. Mike checked `tkv2-sbx` Setup on 2026-09-28 and reported Description `Manually assigned account importance tier.` and Help Text `Set by hand. Gold is the highest tier, then Silver, then Bronze.` The earlier describe response differed; Setup is the direct field check. |
+-| Manual values and clearing | An authorized user can save each value and clear it; new Accounts begin blank | Exercise an Account in the sandbox after access is configured | Not run; WI-002 access pending |
+-| Unsupported value | API rejects a value outside Gold, Silver, Bronze | Submit an unsupported value to a sandbox test Account after access is configured | Not run; WI-002 access pending |
+-| Help text in UI | Account page shows the approved help text | Open the assigned page in the sandbox after WI-002 layout deployment | Not run; WI-002 layout pending |
++| Manual values and clearing | An authorized user can save each value and clear it; new Accounts begin blank | Exercise a test Account in the sandbox as an authorized user | Not run. WI-002 access and layout are present; a read-only Account query returned no records, so a new sandbox test Account is needed. |
++| Unsupported value | API rejects a value outside Gold, Silver, Bronze | Submit an unsupported value to the sandbox test Account | Not run; needs the test Account and separate approval for a sandbox data write. |
++| Help text in UI | Account page shows the approved help text | Open the assigned page in the sandbox after WI-002 layout deployment | Not run; WI-002 layout is present, but a representative Account page is not yet available. |
+ | Automation | No project automation sets or changes Tier | Review source dependency graph, then inspect org automation if the sandbox exposes it | Source graph has zero Tier connections; org automation review pending |
+ 
+ ## Results and follow-up
+ 
+ - Date and tester: 2026-09-28, Codex.
+ - Outcome: Source definition, check-only validation, and sandbox field shape passed. Mike reported successful deployment job `0AfFAKE000DEPLOY3`; the read-only deployment report confirmed success.
+-- Remaining issues: UI display and record behavior checks wait for WI-002 access and Account Layout. The description and help text were confirmed in Setup by Mike.
+
+
+[CALL exec] git add tests/WI-001-TEST-PLAN.md
+  -> Script completed
+Wall time 4.2 seconds
+Output:
+
+{"chunk_id":"a7db46","wall_time_seconds":0.000002917,"exit_code":0,"original_token_count":0,"output":""}
+
+[CALL exec] git diff --cached --check
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+
+
+[CALL exec] git diff --cached
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+diff --git a/tests/WI-001-TEST-PLAN.md b/tests/WI-001-TEST-PLAN.md
+index f7ec930..1274669 100644
+--- a/tests/WI-001-TEST-PLAN.md
++++ b/tests/WI-001-TEST-PLAN.md
+@@ -14,13 +14,13 @@ Sandbox: `tkv2-sbx`, API 62.0. Validation is a check-only deployment. UI and rec
+ | --- | --- | --- | --- |
+ | Field definition | Account has one nullable, restricted `Tier__c` picklist with Gold, Silver, Bronze in that order and no default | Inspect field XML and sandbox Account describe | Passed in source and sandbox describe after deployment job `0AfFAKE000DEPLOY3` |
+ | Field guidance | Description and help text match Mike's approved words | Compare field XML with WI-001's approved design and sandbox Setup | Passed. Mike checked `tkv2-sbx` Setup on 2026-09-28 and reported Description `Manually assigned account importance tier.` and Help Text `Set by hand. Gold is the highest tier, then Silver, then Bronze.` The earlier describe response differed; Setup is the direct field check. |
+-| Manual values and clearing | An authorized user can save each value and clear it; new Accounts begin blank | Exercise an Account in the sandbox after access is configured | Not run; WI-002 access pending |
+-| Unsupported value | API rejects a value outside Gold, Silver, Bronze | Submit an unsupported value to a sandbox test Account after access is configured | Not run; WI-002 access pending |
+-| Help text in UI | Account page shows the approved help text | Open the assigned page in the sandbox after WI-002 layout deployment | Not run; WI-002 layout pending |
++| Manual values and clearing | An authorized user can save each value and clear it; new Accounts begin blank | Exercise a test Account in the sandbox as an authorized user | Not run. WI-002 access and layout are present; a read-only Account query returned no records, so a new sandbox test Account is needed. |
++| Unsupported value | API rejects a value outside Gold, Silver, Bronze | Submit an unsupported value to the sandbox test Account | Not run; needs the test Account and separate approval for a sandbox data write. |
++| Help text in UI | Account page shows the approved help text | Open the assigned page in the sandbox after WI-002 layout deployment | Not run; WI-002 layout is present, but a representative Account page is not yet available. |
+ | Automation | No project automation sets or changes Tier | Review source dependency graph, then inspect org automation if the sandbox exposes it | Source graph has zero Tier connections; org automation review pending |
+ 
+ ## Results and follow-up
+ 
+ - Date and tester: 2026-09-28, Codex.
+ - Outcome: Source definition, check-only validation, and sandbox field shape passed. Mike reported successful deployment job `0AfFAKE000DEPLOY3`; the read-only deployment report confirmed success.
+-- Remaining issues: UI display and record behavior checks wait for WI-002 access and Account Layout. The description and help text were confirmed in Setup by Mike.
+
+
+[CALL exec] git commit -m 'Record remaining WI-001 sandbox checks'
+  -> Script completed
+Wall time 3.9 seconds
+Output:
+
+{"chunk_id":"a7b2df","wall_time_seconds":0.0000035,"exit_code":0,"original_token_count":36,"output":"[claude/wi-001-add-a-tier-picklist-field-to 0a7cd4d] Record remaining WI-001 sandbox checks\n 1 file changed, 4 insertions(+), 4 deletions(-)\n"}
+
+[CALL exec] mktemp -d /private/tmp/acme-focus.XXXXXX
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+/private/tmp/acme-focus.6xa2op
+
+
+[PATCH] files=['/private/tmp/acme-focus.6xa2op/focus.md\\n+# Current focus\\n+\\n+Last updated: 2026-09-28, WI-002 layout verified in sandbox; recorded by agent\\n+\\n+## Now\\n+\\n+- WI-001 field-only sandbox deployment succeeded. Mike verified the approved field description and help text in tkv2-sbx Setup. Field shape and guidance checks passed; record behavior and UI checks remain. The WI-001 test-plan update is committed as 0a7cd4d.\\n+- WI-002: Mike saved the approved four-profile Tier access settings. Read-only FieldPermissions queries found exactly four grants: Sales Manager and System Administrator read/edit; Sales User and Read Only read only. No permission-set Tier grant appeared; Account read access remains on all four profiles.\\n+- WI-002: Mike reported a successful layout-only sandbox deployment. A read-only deploy report says Succeeded. A fresh sandbox retrieve matches WI-002 source exactly, with Tier directly below Rating. The reported job ID matches the earlier WI-001 field job ID, so the retrieve is the direct layout evidence. Deployment evidence and the sandbox tracker flag are committed as 69a314c.\\n+- A read-only Account query returned no records; a User query found active users in all four target profiles. The repository has no origin remote. tkv2-sbx refreshes from production every Sunday night.\\n+\\n+## Waiting on the owner\\n+\\n+- WI-002 Q-06: Mike creates a disposable sandbox Account and shares the results of the remaining Tier UI and record checks across the four profiles. This also covers WI-001 R-01/R-02. Mike prefers to do his own Salesforce Setup clicking and checks in the afternoon; that is an active memory preference, not a fixed appointment.\\n+\\n+## Untracked to-dos\\n+\\n+- None.\\n+\\n+## Next session starts with\\n+\\n+- Continue WI-002 from Resume here. After Mike reports Q-06 results, record R-03/R-04 evidence and request result approval.\\n+- Continue WI-001 from Resume here. Record R-01/R-02 UI and record behavior results, then request result approval. Sandbox data writes by an agent need separate approval.\\n+- The phase plan remains open in PROJECT-ROADMAP.md. Verified project commands have not yet been added to AGENTS.md.\\n*** End Patch"));']
+  -> Script completed
+Wall time 3.6 seconds
+Output:
+
+{}
+
+[CALL exec] toolkit memory focus --set-file /private/tmp/acme-focus.6xa2op/focus.md --expect 055162b703882346e01aae699691a8ac322e01ee1d782291b5ffb71ae92c89d2
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved the current focus (24 lines). Version: b55513629d6d
+
+
+[CALL exec] rm /private/tmp/acme-focus.6xa2op/focus.md
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+
+
+[CALL exec] rmdir /private/tmp/acme-focus.6xa2op
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+
+
+[CALL exec] toolkit work validate WI-002
+   toolkit work validate WI-001
+   toolkit memory focus
+   toolkit doctor
+   git status --short --branch
+   git status --short --branch
+  -> Script completed
+Wall time 0.8 seconds
+Output:
+
+{"i":0,"result":{"output":"Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. 1 open question waits on the owner (toolkit work decisions lists it).\n","exit":0}}
+{"i":1,"result":{"output":"Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.\n","exit":0}}
+{"i":2,"result":{"output":"# Current focus\n\nLast updated: 2026-09-28, WI-002 layout verified in sandbox; recorded by agent\n\n## Now\n\n- WI-001 field-only sandbox deployment succeeded. Mike verified the approved field description and help text in tkv2-sbx Setup. Field shape and guidance checks passed; record behavior and UI checks remain. The WI-001 test-plan update is committed as 0a7cd4d.\n- WI-002: Mike saved the approved four-profile Tier access settings. Read-only FieldPermissions queries found exactly four grants: Sales Manager and System Administrator read/edit; Sales User and Read Only read only. No permission-set Tier grant appeared; Account read access remains on all four profiles.\n- WI-002: Mike reported a successful layout-only sandbox deployment. A read-only deploy report says Succeeded. A fresh sandbox retrieve matches WI-002 source exactly, with Tier directly below Rating. The reported job ID matches the earlier WI-001 field job ID, so the retrieve is the direct layout evidence. Deployment evidence and the sandbox tracker flag are committed as 69a314c.\n- A read-only Account query returned no records; a User query found active users in all four target profiles. The repository has no origin remote. tkv2-sbx refreshes from production every Sunday night.\n\n## Waiting on the owner\n\n- WI-002 Q-06: Mike creates a disposable sandbox Account and shares the results of the remaining Tier UI and record checks across the four profiles. This also covers WI-001 R-01/R-02. Mike prefers to do his own Salesforce Setup clicking and checks in the afternoon; that is an active memory preference, not a fixed appointment.\n\n## Untracked to-dos\n\n- None.\n\n## Next session starts with\n\n- Continue WI-002 from Resume here. After Mike reports Q-06 results, record R-03/R-04 evidence and request result approval.\n- Continue WI-001 from Resume here. Record R-01/R-02 UI and record behavior results, then request result approval. Sandbox data writes by an agent need separate approval.\n- The phase plan remains open in PROJECT-ROADMAP.md. Verified project commands have not yet been added to AGENTS.md.\n","exit":0}}
+{"i":3,"result":{"output":"Toolkit doctor for Acme CRM (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce).\n\nWarnings (3):\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce). Codex loads the project's .codex/ settings, plugin switches, and hooks only in 
+
+[CALL exec] rm -r /private/tmp/wi-002-layout-verify.46Zib5
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+
+
+[CALL exec] toolkit work decisions
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+1 decision waits on the owner:
+
+WI-002 Set Account Tier access and place it below Rating on Account Layout
+  - Q-06: Will Mike create a disposable Account in tkv2-sbx and run the remaining Account Tier UI checks? Confirm Tier starts blank; an authorized user can save Gold, Silver, Bronze, and blank; the approved help text appears; Tier sits directly below Rating; Sales Manager and System Administrator can edit it; Sales User and Read Only can read but cannot edit it. Share the results. The sandbox currently has no Account records. Affects P2-T02; P2-T03; R-03; R-04; WI-001 R-01/R-02. (work-decide)
+
+
+[AGENT] WI-002’s layout is present in `tkv2-sbx`. A fresh retrieve matches the source exactly, with Tier directly below Rating. The four profile grants also match the approved access settings. I saved your afternoon Salesforce Setup preference to memory and recorded the deploy and test evidence.
+
+**One check remains:** the sandbox has no Account records, so I could not test the Account page or saving Tier values. I recommend creating a disposable Account in `tkv2-sbx` and checking that Tier starts blank, saves Gold, Silver, Bronze, and blank, shows the approved help text below Rating, and is editable only for Sales Manager and System Administrator. Can you run those checks as the four representative profiles and share the results?
+
+SKILLS OPENED (SKILL.md read): ['work-decide', 'work-on', 'memory-save', 'sf-component-tracker']
+
+TOOLKIT COMMANDS:
+   toolkit work decisions
+   toolkit work show WI-002
+   toolkit work show WI-001
+   toolkit memory approve user_salesforce_setup_afternoon --by Mike
+   toolkit memory get user_salesforce_setup_afternoon
+   toolkit doctor
+   toolkit work set WI-002 --waiting-on agent
+   toolkit work history WI-002 --note 'Owner words: I ran the WI-002 layout deploy from its worktree. It printed: {"status":0,"result":{"id":"0AfFAKE000DEPLOY3","status":"Succeeded","success":true,"checkOnly":false,"done":true,"numberComponentsDeployed":1,"numberComponentErrors":0},"warnings":[]}.' --effect 'Owner-reported layout-only sandbox deployment succeeded
+   toolkit memory focus --json
+   toolkit work edit WI-002 --section 'Open Questions' --append-row '
+   toolkit work set WI-002 --waiting-on owner
+   toolkit memory focus --set-file /private/tmp/acme-focus.6xa2op/focus.md --expect 055162b703882346e01aae699691a8ac322e01ee1d782291b5ffb71ae92c89d2
+   toolkit work validate WI-002
+   toolkit work validate WI-001
+   toolkit memory focus
+   toolkit doctor
+   toolkit work decisions

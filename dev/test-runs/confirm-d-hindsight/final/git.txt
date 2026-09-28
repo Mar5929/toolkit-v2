@@ -1,0 +1,22 @@
+$ git log --format="%h %an <%ae>%n%B---"
+f2d8a08 Mike Rihm <michael@rihm.com>
+Record delivered shout flag behavior
+---
+9c30dd9 Mike Rihm <michael@rihm.com>
+Document shout flag in README
+---
+6250bf5 Mike Rihm <michael@rihm.com>
+Add shout flag to greet CLI
+---
+24c8716 Mike Rihm <michael@rihm.com>
+Set up Toolkit V2 for greeting CLI
+---
+87232ba Mike Rihm <michael@rihm.com>
+Initial commit
+---
+$ git log --all --format=%B | grep -i -E "co-authored|generated with|claude|codex|openai|anthropic|gpt" || echo "(no AI credit lines)"
+(no AI credit lines)
+
+$ git status --short; git branch -a; git worktree list
+* main
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-d-hindsight f2d8a08 [main]

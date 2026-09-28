@@ -1,0 +1,271 @@
+PROMPT: Where are we?
+THREAD: 01a0e91f-cb6b-7373-9f80-87f5d004011d
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 add a Tier picklist field to Account so the sales team can rank their accounts: 08 Build, In Progress. Next action: Complete R-01 record behavior and R-02 UI checks now that WI-002 field access and Account Layout are present in tkv2-sbx. Record evidence... Continues with work-on.
+- WI-002 Set Account Tier access and place it below Rating on Account Layout: 08 Build, In Progress, waiting on owner. Next action: Mike completes Q-06's representative-user UI checks on a disposable sandbox Account and shares the results. Record R-03/R-04 results and... Continues with work-decide.
+
+Waiting on the owner:
+- WI-002 Set Account Tier access and place it below Rating on Account Layout: Q-06: Will Mike create a disposable Account in tkv2-sbx and run the remaining Account Tier UI checks? Confirm Tier starts blank; an authorized user can save Gold, Silver, Bronze, and blank; the app... Affects P2-T02; P2-T03; R-03; R-04; WI-001 R-01/R-02. (work-decide)
+
+Items: 2 in progress.
+
+Current focus:
+## Now
+- WI-001 field-only sandbox deployment succeeded. Mike verified the approved field description and help text in tkv2-sbx Setup. Field shape and guidance checks passed; record behavior and UI checks remain. The WI-001 test-plan update is committed as 0a7cd4d.
+- WI-002: Mike saved the approved four-profile Tier access settings. Read-only FieldPermissions queries found exactly four grants: Sales Manager and System Administrator read/edit; Sales User and Read Only read only. No permission-set Tier grant appeared; Account read access remains on all four profiles.
+- WI-002: Mike reported a successful layout-only sandbox deployment. A read-only deploy report says Succeeded. A fresh sandbox retrieve matches WI-002 source exactly, with Tier directly below Rating. The reported job ID matches the earlier WI-001 field job ID, so the retrieve is the direct layout evidence. Deployment evidence and the sandbox tracker flag are committed as 69a314c.
+- A read-only Account query returned no records; a User query found active users in all four target profiles. The repository has no origin remote. tkv2-sbx refreshes from production every Sunday night.
+## Next session starts with
+- Continue WI-002 from Resume here. After Mike reports Q-06 results, record R-03/R-04 evidence and request result approval.
+- Continue WI-001 from Resume here. Record R-01/R-02 U
+
+[AGENT] I’ll check the current work items and project focus, then give you a short status. I’m using the work-status skill for this update.
+
+[CALL exec] cat SOUL.md PROJECT.md PROJECT-ROADMAP.md
+   cat .claude/rules/check-deployment-contents.md .claude/rules/component-tracker.md .claude/rules/confirm-salesforce-changes.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/production-data-changes.md .claude/rules/project-file-locations.md .claude/rules/salesforce-org-safety.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md
+   cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/skills/work-status/SKILL.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+RESULT 1
+cat: SOUL.md: No such file or directory
+# Acme CRM
+
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->
+
+## Purpose and intended outcome
+
+- Purpose: Give the Acme sales team a Salesforce org that fits how they sell.
+- Intended outcome: Better account data is the first improvement toward that goal.
+
+## Scope and boundaries
+
+- In scope: The Acme sales team's Salesforce org, starting with account data.
+- Outside scope: `<Important exclusions or adjacent owners.>`
+- Constraints: `<Approved security, delivery, or operating constraints with sources.>`
+
+## Systems and environments
+
+| System or org | Purpose | Environment | Source of truth | Access notes |
+| --- | --- | --- | --- | --- |
+| `tkv2-sbx` | Project sandbox; refreshed from production every Sunday night, so sandbox-only changes are gone by Monday | Sandbox | Salesforce org alias and refresh schedule, confirmed by Mike on 2026-09-28 | Salesforce CLI |
+| `tkv2-prod` | Production org | Production | Salesforce org alias, confirmed by Mike on 2026-09-28 | Salesforce CLI; agents do not deploy or write data here |
+
+## People and ownership
+
+| Role | Person or team | Responsibility | Source / last confirmed |
+| --- | --- | --- | --- |
+| Project owner | Mike | Makes project decisions | Project setup, 2026-09-28 |
+
+## Work and project records
+
+- Work tracker: Local folders in `.work-items/`, identified by work item ID.
+- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)
+- Project decisions: [DECISIONS.md](DECISIONS.md)
+- Functional requirements: [requirements/](requirements/)
+- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`
+- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`
+- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)
+- Memory backup or sync: `<Owner-approved destination and restore procedure, outside this repository>`
+
+## Resources and project paths
+
+- Salesforce source: `force-app/` or `<actual source path>`
+- Project-wide deployment manifest: `delivery/deployment/full-project-deployment-template/package.xml` after the API version and members are verified. Keep it as the full project component inventory; ordinary deployments use narrower work-item packages.
+- Work-item deployment manifests: `delivery/deployment/<work-item-id>-<short-name>/package.xml` when an item changes Salesforce metadata.
+- Tests and checks: `<actual commands and locations>`
+- Outside references: `<source register or approved location>`
+
+## Operating conventions
+
+<Write only stable project-specif
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/references/conventions.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+Warning: truncated output (original token count: 5392)
+Total output lines: 394
+
+# Conventions every work skill follows
+
+Every skill in the work plugin follows these rules. A skill's own `SKILL.md`
+names the file when a rule matters for a step.
+
+This file is `references/conventions.md` in the work plugin's own folder. From
+a skill's `SKILL.md` it is two folders up: `skills/work-on/SKILL.md` and
+`references/conventions.md` share the plugin folder. In Codex the plugin
+folder is the installed copy, for example
+`~/.codex/plugins/cache/toolkit-v2/work/<version>/`, so this file is
+`~/.codex/plugins/cache/toolkit-v2/work/<version>/references/conventions.md`.
+
+Rules that are easy to miss:
+
+- Run each `toolkit` command alone, as its own command, in both hosts (below).
+- Never change a work item with a script (Python, Node, `sed -i`, `cat >`).
+  Use `toolkit work edit --section` or `--label`, or the file edit tool for
+  body text. The hooks refuse the script, so it only wastes a step.
+- Text goes on standard input in Claude Code and in single quotes or a
+  `mktemp -d` file in Codex, never in double quotes and never at a fixed name
+  such as `/tmp/wi001.md` ("Text in a command", below).
+- Ask the owner in the reply text. Never ask through a question tool (such as
+  Codex's `request_user_input`): he may never see it, and the reply must hold
+  the question.
+- No remote (`git remote` prints nothing): never run `git fetch`, and never
+  report a refused or failed fetch as a blocker.
+- End every reply to the owner with the one question he must answer, or with
+  the exact words that continue the work ("Say 'keep going' and I'll start the
+  build."). Never end on "The next step is ..." with nothing for him to do.
+- Keep the current focus current when an item's stage or next step changes
+  ("The current focus", below).
+
+## Voice
+
+Every skill carries this line near its top:
+
+> Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+
+Agents do not receive the output style. Each agent file in `agents/` carries
+its own writing rules.
+
+## Opening another skill
+
+- Claude Code: use the Skill tool with the skill's name, for example
+  `work-requirements`.
+- Codex: read that skill's `SKILL.md` from the path shown in the skill list,
+  then follow it.
+- Say the handover in one line, for example "WI-012 needs a design; opening
+  solution-design."
+- The skill that asked a question records the answer. An answer that arrives
+  later, after that skill has finished, is recorded by `work-decide`. The
+  agent-led delivery offer is the one exception: only `work-delegate` makes
+  the offer and records its answer.
+
+## Running `toolkit` commands
+
+- Put each `toolkit` command on its own line and run it as a plain command,
+  in both hosts. Do not join it to another command with `&&`, `;`, or a pipe,
+  and do not wrap it in `$(...)`,
+
+[CALL exec] toolkit work list --tree
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+account-tier/ (group)
+  WI-001  add a Tier picklist field to Account so the sales team can rank their accounts  (08 Build, In Progress, waiting on agent)
+    WI-002  Set Account Tier access and place it below Rating on Account Layout  (08 Build, In Progress, waiting on owner)
+
+
+[CALL exec] toolkit work next
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Nothing is ready to work on.
+
+1 decision waits on the owner (work-decide; toolkit work decisions lists them).
+
+
+[CALL exec] toolkit work decisions
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+1 decision waits on the owner:
+
+WI-002 Set Account Tier access and place it below Rating on Account Layout
+  - Q-06: Will Mike create a disposable Account in tkv2-sbx and run the remaining Account Tier UI checks? Confirm Tier starts blank; an authorized user can save Gold, Silver, Bronze, and blank; the approved help text appears; Tier sits directly below Rating; Sales Manager and System Administrator can edit it; Sales User and Read Only can read but cannot edit it. Share the results. The sandbox currently has no Account records. Affects P2-T02; P2-T03; R-03; R-04; WI-001 R-01/R-02. (work-decide)
+
+
+[CALL exec] toolkit memory focus
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+# Current focus
+
+Last updated: 2026-09-28, WI-002 layout verified in sandbox; recorded by agent
+
+## Now
+
+- WI-001 field-only sandbox deployment succeeded. Mike verified the approved field description and help text in tkv2-sbx Setup. Field shape and guidance checks passed; record behavior and UI checks remain. The WI-001 test-plan update is committed as 0a7cd4d.
+- WI-002: Mike saved the approved four-profile Tier access settings. Read-only FieldPermissions queries found exactly four grants: Sales Manager and System Administrator read/edit; Sales User and Read Only read only. No permission-set Tier grant appeared; Account read access remains on all four profiles.
+- WI-002: Mike reported a successful layout-only sandbox deployment. A read-only deploy report says Succeeded. A fresh sandbox retrieve matches WI-002 source exactly, with Tier directly below Rating. The reported job ID matches the earlier WI-001 field job ID, so the retrieve is the direct layout evidence. Deployment evidence and the sandbox tracker flag are committed as 69a314c.
+- A read-only Account query returned no records; a User query found active users in all four target profiles. The repository has no origin remote. tkv2-sbx refreshes from production every Sunday night.
+
+## Waiting on the owner
+
+- WI-002 Q-06: Mike creates a disposable sandbox Account and shares the results of the remaining Tier UI and record checks across the four profiles. This also covers WI-001 R-01/R-02. Mike prefers to do his own Salesforce Setup clicking and checks in the afternoon; that is an active memory preference, not a fixed appointment.
+
+## Untracked to-dos
+
+- None.
+
+## Next session starts with
+
+- Continue WI-002 from Resume here. After Mike reports Q-06 results, record R-03/R-04 evidence and request result approval.
+- Continue WI-001 from Resume here. Record R-01/R-02 UI and record behavior results, then request result approval. Sandbox data writes by an agent need separate approval.
+- The phase plan remains open in PROJECT-ROADMAP.md. Verified project commands have not yet been added to AGENTS.md.
+
+
+[CALL exec] toolkit work lifecycle
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Stages (the status follows the stage):
+  01-discovery              Backlog      Working out what the owner wants.                                    Continue with: work-requirements
+  02-refinement             Backlog      Turning that into requirements.                                      Continue with: work-requirements
+  03-requirements-approved  Ready        The owner approved the requirements.                                 Continue with: solution-design or work-on
+  04-solution-design        In Progress  Deciding how it gets built.                                          Continue with: solution-design
+  05-breakdown              In Progress  Splitting work that is too large.                                    Continue with: work-organize
+  06-implementation-plan    In Progress  Ordering the build steps.                                            Continue with: work-on
+  07-tracking-setup         In Progress  Creating build tracking when needed.                                 Continue with: work-on
+  08-build                  In Progress  Producing the requested change.                                      Continue with: work-on
+  09-testing                In Progress  Checking it against the requirements.                                Continue with: work-check
+  10-bug-fixing             In Progress  Fixing what testing found.                                           Continue with: work-check
+  11-user-approval          In Progress  The owner reviews the result.                                        Continue with: work-check
+  12-pr-and-push            In Review    Repository work is in a pushed pull request.                         Continue with: work-finish
+  13-deployment             In Review    The result is put where it belongs.                                  Continue with: work-finish
+  14-spec-update            In Review    Lasting specifications match the result.                             Continue with: work-finish
+  (Done)                    Done         Set only by toolkit work finish <id> --by <name> --evidence <text>.  Continue with: nothing (finished)
+  (Cancelled)               Cancelled    Set only by toolkit work cancel <id> --reason <text>.                Continue with: nothing (finished)
+  An item with waiting_on: owner continues with work-decide, whatever its stage.
+
+Statuses:
+  Backlog      Logged; requirements are still being worked out (stages 01-02).
+  Ready        Requirements approved; work can start (stage 03).
+  In Progress  The item is active (stages 04-11). It does not mean building has started.
+  In Review    The result is in a pull request, being deployed, or being written into the specifications (stages 12-14).
+  Done         The owner accepted the result. Set only by toolkit work finish.
+  Cancelled    Work stopped without the result. Set only by toolkit work cancel.
+
+Types:
+  discovery               Finding out what is needed.
+  solution-design    
+
+[AGENT] One decision waits on you: **WI-002** needs your sandbox Account checks across the four profiles. Please confirm that Tier starts blank, saves Gold, Silver, Bronze and blank, shows the approved help text below Rating, and has the expected edit access. The sandbox currently has no Account records.
+
+- **WI-002 is in build (stage 08).** The access settings and layout are in the sandbox; your UI checks are the next step.
+- **WI-001 is in build (stage 08).** The field is deployed, and you verified its description and help text in Setup. Its record and UI checks remain; your WI-002 checks also cover these.
+
+Nothing else is ready to work on until those results arrive. Say **“what do you need from me”** to go through the checks.
+
+SKILLS OPENED (SKILL.md read): ['work-status']
+
+TOOLKIT COMMANDS:
+   toolkit work list --tree
+   toolkit work next
+   toolkit work decisions
+   toolkit memory focus
+   toolkit work lifecycle

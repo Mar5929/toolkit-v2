@@ -1,0 +1,4 @@
+== .claude/worktrees/wi-001-add-a-tier-picklist-field-to
+0a7cd4d Record remaining WI-001 sandbox checks
+== .claude/worktrees/wi-002-set-account-tier-access-and
+69a314c Record WI-002 sandbox layout deployment and checks

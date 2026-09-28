@@ -1,0 +1,1 @@
+Yes, one picklist that salespeople set by hand. Use Gold, Silver, Bronze, in that order, with Gold the highest. Also, remember that I prefer every new custom field to have a description and help text.

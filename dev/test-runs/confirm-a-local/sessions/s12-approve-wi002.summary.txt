@@ -1,0 +1,451 @@
+PROMPT: Not yet on the merge. For WI-002, in its worktree --lines printed 4 for a four-line file, 2 for a file with one and two line breaks, and 0 for an empty file. I approve the WI-002 result.
+THREAD: 01a0e904-1725-7d10-b3f6-2621648c5387
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll record your WI-002 result approval and keep the merge decision pending. I’ll also check the work item and current focus so the next session has the right status.
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## main
+
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/references/conventions.md'
+  -> # Conventions every work skill follows
+
+Every skill in the work plugin follows these rules. A skill's own `SKILL.md`
+names the file when a rule matters for a step.
+
+This file is `references/conventions.md` in the work plugin's own folder. From
+a skill's `SKILL.md` it is two folders up: `skills/work-on/SKILL.md` and
+`references/conventions.md` share the plugin folder. In Codex the plugin
+folder is the installed copy, for example
+`~/.codex/plugins/cache/toolkit-v2/work/<version>/`, so this file is
+`~/.codex/plugins/cache/toolkit-v2/work/<version>/references/conventions.md`.
+
+Rules that are easy to miss:
+
+- Run each `toolkit` command alone, as its own command, in both hosts (below).
+- Never change a work item with a script (Python, Node, `sed -i`, `cat >`).
+  Use `toolkit work edit --section` or `--label`, or the file edit tool for
+  body text. The hooks refuse the script, so it only wastes a step.
+- Text goes on standard input in Claude Code and in single quotes or a
+  `mktemp -d` file in Codex, never in double quotes and never at a fixed name
+  such as `/tmp/wi001.md` ("Text in a command", below).
+- Ask the owner in the reply text. Never ask through a question tool (such as
+  Codex's `request_user_input`): he may never see it, and the reply must hold
+  the question.
+- No remote (`git remote` prints nothing): never run `git fetch`, and never
+  report a refused or failed fetch as a blocker.
+- End every reply to the owner with the one question he must answer, or with
+  the exact 
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-a-local                                                     b2edf8d [main]
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-a
+
+[CMD exit=0] /bin/zsh -lc 'git remote'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001'
+  -> WI-001: Build tally word count CLI
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-a-local/.work-items/counting/WI-001-word-count/WORK-ITEM.md
+Stage: 11 User approval (In Progress) | Waiting on: agent | Continue with: work-finish
+Parent: none | Sub-items: WI-002 | Design: approved (.work-items/counting/WI-001-word-count/DESIGN.md)
+Worktree branch for this item: claude/wi-001-build-tally-word-count-cli (folder .claude/worktrees/wi-001-build-tally-word-count-cli)
+
+---
+id: WI-001
+title: Build tally word count CLI
+type: build
+stage: 11-user-approval
+status: In Progress
+parent: none
+waiting_on: "agent"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike"
+design: approved
+result_approved: "2026-09-28 by Mike"
+updated: 2026-09-28
+---
+
+# WI-001: Build tally word count CLI
+
+## Overview
+
+**Goal:** Mike can run tally on a text file to print its word count. WI-002 delivers the separate --lines mode.
+
+**Current position:** Word mode is built at d90612e. Five automated checks and an independent acceptance review passed with no defects found. Mike ran the command in the WI-001 worktree: a four-word file printed 4, and an empty file printed 0. Mike approved the WI-001 result on 2026-09-28. WI-002 is built and checked on its own branch and awaits separate result approval.
+
+**Next action:** Continue WI-001 with work-finish. Ask Mike for a separate merge decision befor
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-002'
+  -> WI-002: Add --lines line count
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-a-local/.work-items/counting/WI-001-word-count/lines-flag/WORK-ITEM.md
+Stage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/counting/WI-001-word-count/DESIGN.md). Read it with: toolkit work design WI-001
+Worktree branch for this item: claude/wi-002-add-lines-line-count (folder .claude/worktrees/wi-002-add-lines-line-count)
+
+---
+id: WI-002
+title: Add --lines line count
+type: build
+stage: 11-user-approval
+status: In Progress
+parent: WI-001
+waiting_on: "owner"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-002: Add --lines line count
+
+## Overview
+
+**Goal:** Mike can use --lines with tally to print the line count of a text file.
+
+**Current position:** Line mode is built at 36cb2a2. Nine automated checks and an independent acceptance review passed with no defects found.
+
+**Next action:** Mike reviews the WI-002 line-count result and gives result approval or specific corrections. Merge is a later decision.
+
+**Blockers:** Waiting on Mike result approval. No merge approval has been given.
+
+**Related items:** Parent WI-001; covers its R-02 and uses its approved design.
+
+## Roadma
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 2 decisions wait on the owner:
+
+WI-002 Add --lines line count
+  - WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)
+
+Memory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):
+  - user_tally_runtime_environment: Mike may run tally only on his Mac mini with Node 22. Saved 2026-09-28. Yes: toolkit memory approve user_tally_runtime_environment --by <name>. No: toolkit memory reject user_tally_runtime_environment. (work-decide)
+
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-a-local                                                     b2edf8d [main]
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-a
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## main
+
+
+[CMD exit=0] /bin/zsh -lc 'git remote'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 2 decisions wait on the owner:
+
+WI-002 Add --lines line count
+  - WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)
+
+Memory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):
+  - user_tally_runtime_environment: Mike may run tally only on his Mac mini with Node 22. Saved 2026-09-28. Yes: toolkit memory approve user_tally_runtime_environment --by <name>. No: toolkit memory reject user_tally_runtime_environment. (work-decide)
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work approve WI-002 --result --by Mike'
+  -> Recorded: result of WI-002 approved (2026-09-28 by Mike).
+It is no longer waiting on the owner (waiting_on: none).
+Now 11 User approval (In Progress). Continue with work-finish.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-002 --waiting-on agent'
+  -> Updated WI-002: waiting on agent.
+Now 11 User approval (In Progress). Continue with work-finish.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history WI-002 --note 'Owner words: Not yet on the merge. For WI-002, in its worktree --lines printed 4 for a four-line file, 2 for a file with one and two line breaks, and 0 for an empty file. I approve the WI-002 result.' --effect 'Mike confirmed three line-count examples and approved the WI-002 result. Continue with work-finish; merge remains a separate decision.'"
+  -> Added a Recent History row to WI-002.
+
+
+[AGENT] WI-002’s result approval is recorded. I’m updating the two work items’ next steps so neither points to the old approval request.
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --section Overview --text '**Goal:** Mike can use --lines with tally to print the line count of a text file.
+
+**Current position:** Line mode is built at 36cb2a2. Nine automated checks and an independent acceptance review passed with no defects found. Mike ran --lines in the WI-002 worktree: a four-line file printed 4, a file with one and two line breaks printed 2, and an empty file printed 0. Mike approved the WI-002 result on 2026-09-28.
+
+**Next action:** Continue WI-002 with work-finish after Mike makes a separate merge decision.
+
+**Blockers:** Merge a
+  -> Saved "Overview" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --section Notes --text '### Decisions and context
+
+- Mike requested this split on 2026-09-28. WI-002 inherits approval for WI-001 R-02 and the approved Option A design.
+- Build after WI-001 P1 is available; use its code as the starting point.
+- Mike approved the WI-002 result on 2026-09-28 after running the three line-count examples in its worktree. He said not yet on the merge.
+
+### Resume here
+
+WI-002 line mode is built and checked at 36cb2a2, and Mike approved its result. Continue with work-finish after a separate merge decision. Do not merge until Mik
+  -> Saved "Notes" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section Overview --text '**Goal:** Mike can run tally on a text file to print its word count. WI-002 delivers the separate --lines mode.
+
+**Current position:** Word mode is built at d90612e. Five automated checks and an independent acceptance review passed with no defects found. Mike ran the command in the WI-001 worktree: a four-word file printed 4, and an empty file printed 0. Mike approved the WI-001 result on 2026-09-28. WI-002 is built and checked on its own branch, and Mike approved its result after running three line-count examples.
+
+**Next actio
+  -> Saved "Overview" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section Notes --text '### Decisions and context
+
+- Mike approved Option A on 2026-09-28. WI-001 builds R-01; WI-002 covers R-02. The approved requirements and design remain in WI-001.
+- Use plain Node.js without npm packages and node:test, as the approved design states.
+- The design received independent requirements and design reviews before approval.
+- The 2026-09-28 git worktree add attempt was rejected with: approval required by policy, but AskForApproval is set to Never.
+- Mike approved the WI-001 result on 2026-09-28 after running four-word and emp
+  -> Saved "Notes" in WI-001.
+
+
+[AGENT] I’m using the memory-save skill for the current focus, since it controls what the next session sees. The approval itself stays in WI-002.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.4/skills/memory-save/SKILL.md'
+  -> ---
+name: memory-save
+description: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says "remember this", "from now on", "forget that", or "remind me" with no time given, corrects the agent, or a hook says a save is due.'
+---
+
+# Memory save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Record format, types, focus, and glossary: `references/record-format.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Run each `toolkit` command alone, on its own line, in both hosts: never joined by `&&`, `;`, or a pipe, and never from a script (in Codex that runs it inside the sandbox, which blocks Hindsight and Notion). Text: one-line values (`--description`, `--source`) go in single quotes, with an apostrophe written `'\''`, because double quotes run backticks and `$(...)` and drop that text. A record body, the focus, or the glossary: in Claude Code pass it on standard input (`--body-file -` or `--set-file -`, followed by a quoted heredoc, `<<'EOF'`), never through a file; in Codex give it in single quotes (`--body '<text>'`, `--text '<text>'`), or write a file with the file edit tool in a new folder made with `mktemp -d`, run the `toolkit` command alone with that file, and delete the file and the folder right after. Never write the f
+
+[CMD exit=0] /bin/zsh -lc 'cat .memory/AGENTS.md .memory/memory-criteria.md'
+  -> # Local project memory
+
+Keep future sessions oriented without turning every conversation into lasting memory. This folder is the project's built-in memory store and can be opened directly as an Obsidian vault. Active topics stay flat; filenames and YAML types agree. Git ignores this folder, so back 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus --json'
+  -> {
+  "ok": true,
+  "backend": "builtin",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-28, WI-001 result approval by Mike, recorded by Codex\n\n## Now\n\n- WI-001 Build tally word count CLI.\n- WI-002 Add --lines line count.\n\n## Waiting on the owner\n\n- Trust this project folder in Codex; setup step, drop when toolkit doctor stops reporting it.\n- Open /hooks in Codex and trust the Toolkit V2 hooks; setup step, drop when toolkit doctor stops reporting it.\n\n## Untracked to-dos\n\n- None.\n\n## Next session starts with\n\n- Continue WI-001 from its Resume here: Mike approved the word-count result; work-finish follows, with a separate merge decision required. WI-002 still waits for Mike result approval. Do not merge without a separate owner decision.\n",
+  "version": "3de54e132895b172a4ae1b480d2a0de89fa0f16ca1d088336b6ce9be6346c997"
+}
+
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for tally (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-a-local).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-a-local). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (4):
+- AGENTS.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.
+
+Result: 0 problems and 2 warnings.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-28, WI-002 result approval by Mike, recorded by Codex
+
+## Now
+
+- WI-001 Build tally word count CLI.
+- WI-002 Add --lines line count.
+
+## Waiting on the owner
+
+- Trust this project folder in Codex; setup step, drop when toolkit doctor stops reporting it.
+- Open /hooks in Codex and trust the Toolkit V2 hooks; setup step, drop when toolkit doctor stops reporting it.
+
+## Untracked to-dos
+
+- None.
+
+## Next session starts with
+
+- WI-001 and WI-002 results are approved. Continue from their Resume here notes with work-fi
+  -> Saved the current focus (21 lines). Version: 9d18a92a50f2
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus --json'
+  -> {
+  "ok": true,
+  "backend": "builtin",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-28, WI-002 result approval by Mike, recorded by Codex\n\n## Now\n\n- WI-001 Build tally word count CLI.\n- WI-002 Add --lines line count.\n\n## Waiting on the owner\n\n- Trust this project folder in Codex; setup step, drop when toolkit doctor stops reporting it.\n- Open /hooks in Codex and trust the Toolkit V2 hooks; setup step, drop when toolkit doctor stops reporting it.\n\n## Untracked to-dos\n\n- None.\n\n## Next session starts with\n\n- WI-001 and WI-002 results are approved. Continue from their Resume here notes with work-finish after Mike gives a separate merge decision. Mike said not yet on the merge; do not merge until he authorizes it.\n",
+  "version": "9d18a92a50f2ee4ff5cef007ee5dfdd1eb019a5642106b22894977b37170b058"
+}
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001 --section Overview'
+  -> ## Overview
+
+**Goal:** Mike can run tally on a text file to print its word count. WI-002 delivers the separate --lines mode.
+
+**Current position:** Word mode is built at d90612e. Five automated checks and an independent acceptance review passed with no defects found. Mike ran the command in the WI-001 worktree: a four-word file printed 4, and an empty file printed 0. Mike approved the WI-001 result on 2026-09-28. WI-002 is built and checked on its own branch, and Mike approved its result after running three line-count examples.
+
+**Next action:** Continue WI-001 with work-finish after Mike makes a separate merge decision. WI-002 also awaits that decision.
+
+**Blockers:** Merge approval has not been given; Mike said not yet on the merge.
+
+**Related items:** WI-002 covers R-02 and has result approval.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-002'
+  -> WI-002: Add --lines line count
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-a-local/.work-items/counting/WI-001-word-count/lines-flag/WORK-ITEM.md
+Stage: 11 User approval (In Progress) | Waiting on: agent | Continue with: work-finish
+Parent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/counting/WI-001-word-count/DESIGN.md). Read it with: toolkit work design WI-001
+Worktree branch for this item: claude/wi-002-add-lines-line-count (folder .claude/worktrees/wi-002-add-lines-line-count)
+
+---
+id: WI-002
+title: Add --lines line count
+type: build
+stage: 11-user-approval
+status: In Progress
+parent: WI-001
+waiting_on: "agent"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike"
+design: none
+result_approved: "2026-09-28 by Mike"
+updated: 2026-09-28
+---
+
+# WI-002: Add --lines line count
+
+## Overview
+
+**Goal:** Mike can use --lines with tally to print the line count of a text file.
+
+**Current position:** Line mode is built at 36cb2a2. Nine automated checks and an independent acceptance review passed with no defects found. Mike ran --lines in the WI-002 worktree: a four-line file printed 4, a file with one and two line breaks printed 2, and an empty file printed 0. Mike approved the WI-002 result on 2026-09-28.
+
+**Next action:** Continue WI-002 with work-finish after Mike makes a separate merge decision.
+
+**Block
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for tally (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-a-local).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-a-local). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (4):
+- AGENTS.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.
+
+Result: 0 problems and 2 warnings.
+
+
+[AGENT] WI-002’s result approval is recorded, including the three counts you checked. Both WI-001 and WI-002 now have result approval. **Neither has been merged**, and I recorded your “not yet” decision for the next session.
+
+One separate memory proposal is pending: save that your only tally machine is a Mac mini running Node 22? I recommend **no** because it is already recorded in the work items. Should I reject that proposal?
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 561527, "cached_input_tokens": 526976, "cache_write_input_tokens": 0, "output_tokens": 2995, "reasoning_output_tokens": 722}}
+
+SKILLS OPENED: ['memory-save']
+
+[HOOK CONTEXT ord=9] Project briefing: tally (tally), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-a-local/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Build tally word count CLI: 11 User approval, In Progress. Next action: Continue WI-001 with work-finish. Ask Mike for a separate merge decision before merging. WI-002 result approval remains separate. Continues with work-finish.
+- WI-002 Add --lines line count: 11 User approval, In Progress, waiting on owner. Next action: Mike reviews the WI-002 line-count result and gives result approval or specific corrections. Merge is a later decision. Continues with work-decide.
+
+Waiting on the owner:
+- WI-002 Add --lines line count: WI-002 is at 11 User approval: the o
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await tools.exec_command({cmd:"pwd && cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/skills/work-decide/SKILL.md",max_output_tokens:16000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-a-local\ncat: SOUL.md: No such file or directory\n# tally\n\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\n\n## Purpose and intended outcome\n\n- Purpose: Count words or lines in a text file from the command line.\n- Intended outcome: tally tells Mike how many words or lines a text file has, straight from the command line.\n\n## Scope and boundaries\n\n- In scope: `<Business capabilities or systems this project owns.>`\n- Outside scope: `<Important exclusions or adjacent owners.>`\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\n\n## Systems and environments\n\n| System or org | Purpose | Environment | Source of truth | Access notes |\n| --- | --- | --- | --- | --- |\n| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |\n\n## People and ownership\n\n| Role | Person or team | Responsibility | Source / last confirmed |\n| --- | --- | --- | --- |\n| Project owner | Mike | Makes project decisions | Owner's setup request, 2026-09-28 |\n\n## Work and project records\n\n- Work tracker: `.work-items/` (local folders, Git-ignored)\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\n- Project decisions: [DECISIONS.md](DECISIONS.md)\n- Functional requirements: [requirements/](requirements/)\n- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`\n- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`\n- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)\n- Memory backup or sync: `<Owner-approved destination and restore procedure, outside this repository>`\n\n## Resources and project paths\n\n- Tests and checks: `<actual commands and locations>`\n- Outside references: `<source register or approved location>`\n\n## Operating conventions\n\n<Write only 
+
+[CALL] const cmds=["cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/references/conventions.md","git worktree list","git status --short --branch","git remote","toolkit work decisions","toolkit work show WI-002","toolkit work show WI-001"]; const r=await Promise.allSettled(cmds.map(cmd=>tools.exec_command({cmd,max_output_tokens:7000}))); r.forEach((x,i)=>text(JSON.stringify({cmd:cmds[i],result:x.status==="fulfilled"?x.value.output:String(x.reason)})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Warning: truncated output (original token count: 10979)\nTotal output lines: 7\n\n{\"cmd\":\"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/references/conventions.md\",\"result\":\"# Conventions every work skill follows\\n\\nEvery skill in the work plugin follows these rules. A skill's own `SKILL.md`\\nnames the file when a rule matters for a step.\\n\\nThis file is `references/conventions.md` in the work plugin's own folder. From\\na skill's `SKILL.md` it is two folders up: `skills/work-on/SKILL.md` and\\n`references/conventions.md` share the plugin folder. In Codex the plugin\\nfolder is the installed copy, for example\\n`~/.codex/plugins/cache/toolkit-v2/work/<version>/`, so this file is\\n`~/.codex/plugins/cache/toolkit-v2/work/<version>/references/conventions.md`.\\n\\nRules that are easy to miss:\\n\\n- Run each `toolkit` command alone, as its own command, in both hosts (below).\\n- Never change a work item with a script (Python, Node, `sed -i`, `cat >`).\\n  Use `toolkit work edit --section` or `--label`, or the file edit tool for\\n  body text. The hooks refuse the script, so it only wastes a step.\\n- Text goes on standard input in Claude Code and in single quotes or a\\n  `mktemp -d` file in Codex, never in double quotes and never at a fixed name\\n  such as `/tmp/wi001.md` (\\\"Text in a command\\\", below).\\n- Ask the owner in the reply text. Never ask through a question tool (such as\\n  Codex's `request_user_input`): he may never see it, and the reply must hold\\n  the question.\\n- No remote (`git remote` prints nothing): never run `git fetch`, and never\\n  report a refused or failed fetch as a blocker.\\n- End every reply to the owner with the one question he must answer, or with\\n  the exact words that continue the work (\\\"Say 'keep going' and I'll start the\\n  build.\\\"). Never end on \\\"The next step is ...\\\" with nothing for him to do.\\n- Keep the current focus current when an item's stage or next step changes\\n  (\\\"The current focus\\\", below).\\n\\n## Voice\\n\\nEvery skill carries this line near its top:\\n\\n> Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \\\"How to write replies\\\" section of `AGENTS.md`.\\n\\nAgents do not receive the output style. Each agent file in `agents/` carries\\nits own writing 
+
+[CALL] const cmds=["git worktree list","git status --short --branch","git remote","toolkit work decisions"]; for (const cmd of cmds){const r=await tools.exec_command({cmd,max_output_tokens:2000});text(JSON.stringify({cmd,output:r.output,exit:r.exit_code}));}
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.7 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"cmd\":\"git worktree list\",\"output\":\"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-a-local                                                     b2edf8d [main]\\n/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-a-local/.claude/worktrees/wi-001-build-tally-word-count-cli d90612e [claude/wi-001-build-tally-word-count-cli]\\n/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-a-local/.claude/worktrees/wi-002-add-lines-line-count       36cb2a2 [claude/wi-002-add-lines-line-count]\\n\",\"exit\":0}"}, {"type": "input_text", "text": "{\"cmd\":\"git status --short --branch\",\"output\":\"## main\\n\",\"exit\":0}"}, {"type": "input_text", "text": "{\"cmd\":\"git remote\",\"output\":\"\",\"exit\":0}"}, {"type": "input_text", "text": "{\"cmd\":\"toolkit work decisions\",\"output\":\"2 decisions wait on the owner:\\n\\nWI-002 Add --lines line count\\n  - WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)\\n\\nMemory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):\\n  - user_tally_runtime_environment: Mike may run tally only on his Mac mini with Node 22. Saved 2026-09-28. Yes: toolkit memory approve user_tally_runtime_environment --by <name>. No: toolkit memory reject user_tally_runtime_environment. (work-decide)\\n\",\"exit\":0}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work approve WI-002 --result --by Mike",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"2b5627\",\"wall_time_seconds\":0.000001834,\"exit_code\":0,\"original_token_count\":45,\"output\":\"Recorded: result of WI-002 approved (2026-09-28 by Mike).\\nIt is no longer waiting on the owner (waiting_on: none).\\nNow 11 User approval (In Progress). Continue with work-finish.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-002 --waiting-on agent",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"a67f8f\",\"wall_time_seconds\":0.000002,\"exit_code\":0,\"original_token_count\":25,\"output\":\"Updated WI-002: waiting on agent.\\nNow 11 User approval (In Progress). Continue with work-finish.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history WI-002 --note 'Owner words: Not yet on the merge. For WI-002, in its worktree --lines printed 4 for a four-line file, 2 for a file with one and two line breaks, and 0 for an empty file. I approve the WI-002 result.' --effect 'Mike confirmed three line-count examples and approved the WI-002 result. Continue with work-finish; merge remains a separate decision.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"57a936\",\"wall_time_seconds\":0.000002333,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Added a Recent History row to WI-002.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --section Overview --text '**Goal:** Mike can use --lines with tally to print the line count of a text file.\n\n**Current position:** Line mode is built at 36cb2a2. Nine automated checks and an independent acceptance review passed with no defects found. Mike ran --lines in the WI-002 worktree: a four-line file printed 4, a file with one and two line breaks printed 2, and an empty file printed 0. Mike approved the WI-002 result on 2026-09-28.\n\n**Next action:** Continue WI-002 with work-finish after Mike makes a separate merge decision.\n\n**Blockers:** Merge approval has not been given; Mike said not yet on the merge.\n\n**Related items:** Parent WI-001; covers its R-02 and uses its approved design.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"e2a357\",\"wall_time_seconds\":0.000001791,\"exit_code\":0,\"original_token_count\":7,\"output\":\"Saved \\\"Overview\\\" in WI-002.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --section Notes --text '### Decisions and context\n\n- Mike requested this split on 2026-09-28. WI-002 inherits approval for WI-001 R-02 and the approved Option A design.\n- Build after WI-001 P1 is available; use its code as the starting point.\n- Mike approved the WI-002 result on 2026-09-28 after running the three line-count examples in its worktree. He said not yet on the merge.\n\n### Resume here\n\nWI-002 line mode is built and checked at 36cb2a2, and Mike approved its result. Continue with work-finish after a separate merge decision. Do not merge until Mike authorizes it.\n\n### Solution options and considerations\n\n- Follow the approved Option A in WI-001.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"e7bcf0\",\"wall_time_seconds\":0.000005209,\"exit_code\":0,\"original_token_count\":7,\"output\":\"Saved \\\"Notes\\\" in WI-002.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section Overview --text '**Goal:** Mike can run tally on a text file to print its word count. WI-002 delivers the separate --lines mode.\n\n**Current position:** Word mode is built at d90612e. Five automated checks and an independent acceptance review passed with no defects found. Mike ran the command in the WI-001 worktree: a four-word file printed 4, and an empty file printed 0. Mike approved the WI-001 result on 2026-09-28. WI-002 is built and checked on its own branch, and Mike approved its result after running three line-count examples.\n\n**Next action:** Continue WI-001 with work-finish after Mike makes a separate merge decision. WI-002 also awaits that decision.\n\n**Blockers:** Merge approval has not been given; Mike said not yet on the merge.\n\n**Related items:** WI-002 covers R-02 and has result approval.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"2e7fb1\",\"wall_time_seconds\":0.000001875,\"exit_code\":0,\"original_token_count\":7,\"output\":\"Saved \\\"Overview\\\" in WI-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section Notes --text '### Decisions and context\n\n- Mike approved Option A on 2026-09-28. WI-001 builds R-01; WI-002 covers R-02. The approved requirements and design remain in WI-001.\n- Use plain Node.js without npm packages and node:test, as the approved design states.\n- The design received independent requirements and design reviews before approval.\n- The 2026-09-28 git worktree add attempt was rejected with: approval required by policy, but AskForApproval is set to Never.\n- Mike approved the WI-001 result on 2026-09-28 after running four-word and empty-file checks in the WI-001 worktree.\n- Mike approved the WI-002 result on 2026-09-28 after running three line-count examples in its worktree. He said not yet on the merge.\n\n### Resume here\n\nWI-001 word mode is built and checked at d90612e, and Mike approved its result. WI-002 line mode is built and checked at 36cb2a2, and Mike approved its result. Continue with work-finish after a separate merge decision; do not merge until Mike authorizes it.\n\n### Solution options and considerations\n\n- Option A, approved: one Node.js command reads a named text file and prints one integer.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"0b70ae\",\"wall_time_seconds\":0.000001834,\"exit_code\":0,\"original_token_count\":7,\"output\":\"Saved \\\"Notes\\\" in WI-001.\\n\"}"}]
+
+[CALL] const cmds=["cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.4/skills/memory-save/SKILL.md","cat .memory/AGENTS.md .memory/memory-criteria.md","toolkit memory focus --json","toolkit doctor"]; const r=await Promise.allSettled(cmds.map(cmd=>tools.exec_command({cmd,max_output_tokens:6500})));r.forEach((x,i)=>text(JSON.stringify({cmd:cmds[i],output:x.status==="fulfilled"?x.value.output:String(x.reason)})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"cmd\":\"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.4/skills/memory-save/SKILL.md\",\"output\":\"---\\nname: memory-save\\ndescription: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says \\\"remember this\\\", \\\"from now on\\\", \\\"forget that\\\", or \\\"remind me\\\" with no time given, corrects the agent, or a hook says a save is due.'\\n---\\n\\n# Memory save\\n\\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \\\"How to write replies\\\" section of `AGENTS.md`.\\nRecord format, types, focus, and glossary: `references/record-format.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Run each `toolkit` command alone, on its own line, in both hosts: never joined by `&&`, `;`, or a pipe, and never from a script (in Codex that runs it inside the sandbox, which blocks Hindsight and Notion). Text: one-line values (`--description`, `--source`) go in single quotes, with an apostrophe written `'\\\\''`, because double quotes run backticks and `$(...)` and drop that text. A record body, the focus, or the glossary: in Claude Code pass it on standard input (`--body-file -` or `--set-file -`, followed by a quoted heredoc, `<<'EOF'`), never through a file; in Codex give it in single quotes (`--body '<text>'`, `--text '<text>'`), or write a file with the file edit tool in a new folder made with `mktemp -d`, run the `toolkit` command alone with that file, and delete the file and the folder right after. Never write the file and run the command in one shell command, and never use a fixed name such as `/tmp/focus.md`. Ask the owner in the reply text, never through a question tool.\\n\\n## Steps\\n\\n1. Decide the home first, with the memory criteria (`.memory/memory-criteria.md` with built-in memory; otherwise `references/record-format.md`). Memory holds a lasting preference, correction, fact about the project or the owner, or a hard-to-find reference. Elsewhere: project work goes to `work-on`; a decision for the whole project to `work-decide` (`DECISIONS.md`); delivered behavior to `requirements/`; how a change is built to the item's design; verified current structure to `system-guide/`; outside documentation to `ai-e
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --text '# Current focus\n\nLast updated: 2026-09-28, WI-002 result approval by Mike, recorded by Codex\n\n## Now\n\n- WI-001 Build tally word count CLI.\n- WI-002 Add --lines line count.\n\n## Waiting on the owner\n\n- Trust this project folder in Codex; setup step, drop when toolkit doctor stops reporting it.\n- Open /hooks in Codex and trust the Toolkit V2 hooks; setup step, drop when toolkit doctor stops reporting it.\n\n## Untracked to-dos\n\n- None.\n\n## Next session starts with\n\n- WI-001 and WI-002 results are approved. Continue from their Resume here notes with work-finish after Mike gives a separate merge decision. Mike said not yet on the merge; do not merge until he authorizes it.' --expect 3de54e132895b172a4ae1b480d2a0de89fa0f16ca1d088336b6ce9be6346c997",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"2850f2\",\"wall_time_seconds\":0.00000175,\"exit_code\":0,\"original_token_count\":15,\"output\":\"Saved the current focus (21 lines). Version: 9d18a92a50f2\\n\"}"}]
+
+[CALL] const cmds=["toolkit work show WI-002","toolkit work show WI-001 --section Overview","toolkit memory focus --json","toolkit doctor"];const r=await Promise.allSettled(cmds.map(cmd=>tools.exec_command({cmd,max_output_tokens:3800})));r.forEach((x,i)=>text(JSON.stringify({cmd:cmds[i],output:x.status==="fulfilled"?x.value.output:String(x.reason)})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"cmd\":\"toolkit work show WI-002\",\"output\":\"WI-002: Add --lines line count\\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-a-local/.work-items/counting/WI-001-word-count/lines-flag/WORK-ITEM.md\\nStage: 11 User approval (In Progress) | Waiting on: agent | Continue with: work-finish\\nParent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/counting/WI-001-word-count/DESIGN.md). Read it with: toolkit work design WI-001\\nWorktree branch for this item: claude/wi-002-add-lines-line-count (folder .claude/worktrees/wi-002-add-lines-line-count)\\n\\n---\\nid: WI-002\\ntitle: Add --lines line count\\ntype: build\\nstage: 11-user-approval\\nstatus: In Progress\\nparent: WI-001\\nwaiting_on: \\\"agent\\\"\\npriority: medium\\ndelivery: owner-led\\nrequirements_approved: \\\"2026-09-28 by Mike\\\"\\ndesign: none\\nresult_approved: \\\"2026-09-28 by Mike\\\"\\nupdated: 2026-09-28\\n---\\n\\n# WI-002: Add --lines line count\\n\\n## Overview\\n\\n**Goal:** Mike can use --lines with tally to print the line count of a text file.\\n\\n**Current position:** Line mode is built at 36cb2a2. Nine automated checks and an independent acceptance review passed with no defects found. Mike ran --lines in the WI-002 worktree: a four-line file printed 4, a file with one and two line breaks printed 2, and an empty file printed 0. Mike approved the WI-002 result on 2026-09-28.\\n\\n**Next action:** Continue WI-002 with work-finish after Mike makes a separate merge decision.\\n\\n**Blockers:** Merge approval has not been given; Mike said not yet on the merge.\\n\\n**Related items:** Parent WI-001; covers its R-02 and uses its approved design.\\n\\n## Roadmap\\n\\nA phase is complete when its tasks are complete and its exit result has been checked.\\n\\n| Phase | Outcome | Status | Exit result | Sub-items |\\n|---|---|---|---|---|\\n| P1 \u2014 Line count flag | --lines prints the line count instead of the word count | Done | R-02 and argument/error checks passed in commit 2627347 | None. |\\n\\n## Tasks\\n\\n### P1 \u2014 Line count flag\\n\\n- [x] **P1-T01 \u2014 Add line mode** \u00b7 Done  \\n  **Work:** Extend bin/tally.js to parse --lines before the path and count lines (WI-001 R-02; Option A build order step 2).  \

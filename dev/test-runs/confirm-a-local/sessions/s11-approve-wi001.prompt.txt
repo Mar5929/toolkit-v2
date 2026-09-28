@@ -1,0 +1,1 @@
+I ran it in the WI-001 worktree: a file with four words printed 4, and an empty file printed 0. I approve the WI-001 result.

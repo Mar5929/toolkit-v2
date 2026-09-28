@@ -1,0 +1,3 @@
+WI-001 now records one manually set Account Tier picklist with **Gold, Silver, Bronze** in that order, with Gold highest. I also saved your standing preference that every new custom field have a description and help text. The requirements remain in refinement.
+
+I recommend leaving Tier optional with no default so a salesperson makes a deliberate choice. Should Tier be optional with no default?

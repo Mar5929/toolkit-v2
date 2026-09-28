@@ -1,0 +1,8 @@
+{
+  "pluginId": "session-skills@toolkit-v2",
+  "name": "session-skills",
+  "marketplaceName": "toolkit-v2",
+  "version": "0.2.4",
+  "installedPath": "/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/session-skills/0.2.4",
+  "authPolicy": "ON_INSTALL"
+}

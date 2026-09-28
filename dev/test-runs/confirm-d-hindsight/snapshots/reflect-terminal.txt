@@ -1,0 +1,20 @@
+$ time toolkit memory find 'What does Mike prefer for command-line flags and the README, and why?' --reflect
+1 memory record is about "What does Mike prefer for command-line flags and the README, and why?" (Hindsight recall, best first):
+- user_document_cli_flags_in_readme: Document every command-line flag in the README
+    # Command-line flag documentation **Remember:** Mike prefers every command-line flag to be documented in the README. **Why:** Not stated by the owner. **How to 
+Read a record with toolkit memory get <key> before relying on it.
+
+Answer from Hindsight reflect (36.7 s; a summary, not a source):
+Mike prefers that every command‑line flag be documented in the project’s README. He states this preference in a chat on 2026‑09‑28 and gives it explicit approval for the current project. The reasoning notes that the owner did not state a specific motive, but the policy is to document all flags so users can see usage and behavior directly in the README.
+
+**Key points**
+- **Preference**: Document every CLI flag in README.md.
+- **Source**: Mike, chat, 2026‑09‑28.
+- **Scope**: Applies to this project only.
+- **Why**: Not explicitly stated by Mike; the rule is in place for clarity and consistency.
+
+This is the current, authoritative stance on CLI flag documentation.
+real 36.92
+user 0.15
+sys 0.04
+exit=0

@@ -1,0 +1,3 @@
+I saved your choices in WI-001: Tier can be blank with no default; everyone who can see an Account can read it; only the Sales Manager profile and system administrators can edit it; and it appears directly below Rating on Account Layout. The work item passed validation.
+
+The requirements review found one detail to settle. I recommend that the help text explain that Tier is set manually and Gold is the highest rank. Should it say that?

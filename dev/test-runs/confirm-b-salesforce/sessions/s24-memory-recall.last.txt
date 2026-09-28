@@ -1,0 +1,3 @@
+Yes. You want every new custom field to have **both a description and help text**. That’s recorded as your standing preference from September 28, 2026. [Project memory: `user_custom_field_documentation`]
+
+What field are you considering next?

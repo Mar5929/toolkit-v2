@@ -1,0 +1,57 @@
+=== hook text (ordinal 9) ===
+Project briefing: Greet CLI Confirm D (greet-cli-confirm-d), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: the local Hindsight server. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-d-hindsight/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Add a --shout flag to the greet CLI: 06 Implementation plan, In Progress, waiting on owner. Next action: Mike answers the delivery offer in Q-02; then plan and build the CLI change under P1 and complete WI-002. Continues with work-decide.
+- WI-002 Document the --shout flag in README: 06 Implementation plan, In Progress. Next action: Build the README example after the --shout CLI behavior is available, then check it against the command. Continues with work-on.
+
+Waiting on the owner:
+- WI-001 Add a --shout flag to the greet CLI: Q-02: Would you like agents to take responsibility for delivering this, with you acting as product owner? Affects delivery. (work-decide)
+
+Items: 2 in progress.
+
+Current focus:
+Last updated: 2026-09-28, Codex after Mike approved Option A and requested the README split.
+## Now
+WI-001 — Add a --shout flag to the greet CLI.
+WI-002 — Document the --shout flag in README.
+Toolkit V2 setup is committed as 24c8716. The project guides record a small, friendly greeting command that can grow with a few simple flags. The baseline command printed Hello, Mike! and both Node tests passed on 2026-09-28. The original README.md was kept as written.
+## Waiting on the owner
+- Trust this project folder in Codex (setup step; drop it when doctor stops reporting it).
+## Untracked to-dos
+None.
+## Next session starts with
+Continue WI-001 from its Resume here: Mike answers the agent-led delivery offer in Q-02, then plan the CLI build and the separate WI-002 README build and check. Toolkit doctor still reported Codex trust warnings on 2026-09-28, although the session briefing says hook trust is complete; recheck the discrepancy.
+
+Project memory (hindsight): 1 record, from the local copy. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_document_cli_flags_in_readme: Document every command-line flag in the README
+
+Always-on rules. Claude Code loads them by itself; in Codex, each one is read at session start:
+- .claude/rules/humanize-outbound-text.md: Humanize Anything Sent to Another Person
+- .claude/rules/keep-work-item-current.md: Keep the Active Work Item Accurate
+- .claude/rules/memory-review-and-save.md: Review and Save Project Memory
+- .claude/rules/plain-english-artifacts.md: Write Artifacts in Plain English
+- .claude/rules/session-handoff.md: Prepare a Session Handoff
+- .claude/rules/shared-repository-work.md: Work Safely in a Shared Repository
+- .claude/rules/work-item-folders.md: Local Work-Item Folders
+
+How to write replies (from AGENTS.md):
+Claude Code applies the Plain English output style to chat. Codex and helper agents follow these lines instead.
+
+- Start with the answer, result, or current status. Answer what was asked. Keep it short; add detail when asked.
+- Use ordinary words. Explain an unfamiliar term the first time it matters. Use the exact name a system uses, the same way every time.
+- Write literally: no metaphors, idioms, jokes, or picture words in place of the real name. State the point directly, without a "not this, but that" setup.
+- Use paragraphs for a connected explanation, bullets for separate items or choices, and a heading only when it names what is under it.
+- When asking for a decision, name the choice and the difference that matters, and recommend one.
+- Use the exact status word: written, built, tested, merged, installed, or seen working. Say something works only when you saw it work.
+- Leave out routine narration of process and helper activity. Give one direct line when the owner lost something, an action cannot be undone, work waits on the owner, or there is a cost.
+
+=== hook text (ordinal 197) ===
+This shell command joins a toolkit command to other commands (&&, ;, a pipe, a heredoc, or cd). In Codex that runs the toolkit command inside the sandbox, which blocks Notion, Hindsight, and the main checkout's .work-items/ and .memory/ from a worktree, so it may fail or report the wrong cause. Run each toolkit command alone, as its own command; pass section text with --text '<text>' in single quotes (an apostrophe written '\''), instead of a file written in the same command.
+

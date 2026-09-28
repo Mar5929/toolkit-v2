@@ -1,0 +1,81 @@
+--- d9b30e2
+Record Account Tier production delivery and baseline
+
+--- f1ee63f
+Record Account Tier production handoff
+
+--- 3a010eb
+Merge main into WI-002 before delivery
+
+--- 01dd280
+Merge main into WI-001 before delivery
+
+--- 241c84e
+Record all Account reader Tier grants
+
+--- b6eacfa
+Record sandbox Tier dependency query
+
+--- 8cb488f
+Record sandbox Tier dependency query
+
+--- 705ac36
+Update WI-001 deployment handoff after UI checks
+
+--- 9fa0955
+Update WI-002 deployment record after UI checks
+
+--- de64f00
+Update WI-001 deployment handoff after UI checks
+
+--- b2bff6f
+Record Account Tier field UI checks
+
+--- ca53ed3
+Record Account Tier access and layout UI checks
+
+--- 8846576
+Record Account Tier field UI checks
+
+--- 0a7cd4d
+Record remaining WI-001 sandbox checks
+
+--- 69a314c
+Record WI-002 sandbox layout deployment and checks
+
+--- 89aed0d
+Record WI-002 sandbox Tier access verification
+
+--- b961f70
+Prepare WI-002 Tier access steps and deploy check
+
+--- 8dbe033
+Merge branch 'claude/wi-001-add-a-tier-picklist-field-to' into claude/wi-002-set-account-tier-access-and
+
+# Conflicts:
+#	delivery/deployment/component-tracker.csv
+
+--- 93af0c7
+Confirm WI-001 field guidance in sandbox Setup
+
+--- 6f985c4
+Prepare WI-002 Account Layout change
+
+--- 466c700
+Record WI-001 sandbox deployment and field check
+
+--- 65661ed
+Record weekly sandbox refresh schedule
+
+--- 940c13b
+Record approved Tier sandbox deploy blocked by guard
+
+--- 7030a76
+Add Account Tier field metadata and deployment package
+
+--- ffaab24
+Set up Toolkit V2 for Acme CRM
+
+--- 609c240
+Initial commit
+

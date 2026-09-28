@@ -1,0 +1,865 @@
+PROMPT: I ran both production deploys from main. Step 1: {"status":0,"result":{"id":"0AfFAKE000DEPLOY3","status":"Succeeded","success":true,"numberComponentsDeployed":1,"numberComponentErrors":0}}. Step 2: I set the Tier field-level security in tkv2-prod Setup (visible to Sales Manager, System Administrator, Sales User, and Read Only; editable only by Sales Manager and System Administrator). Step 3: the same, Succeeded, one component, zero errors. In production Tier sits directly below Rating and the access matches. Close both items out. I approve the git commands for the closeout.
+THREAD: 01a0e932-57b9-77d1-a5b9-d16c72ebc0e1
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 add a Tier picklist field to Account so the sales team can rank their accounts: 13 Deployment, In Review, waiting on owner. Next action: Mike runs the WI-001 field-only package against tkv2-prod from main, verifies the field and guidance in Setup, and reports the deployment... Continues with work-decide.
+- WI-002 Set Account Tier access and place it below Rating on Account Layout: 13 Deployment, In Review, waiting on owner. Next action: After WI-001 field deployment succeeds in tkv2-prod, Mike saves the four-profile Tier field access in production Setup, runs the WI-002 l... Continues with work-decide.
+
+Waiting on the owner:
+- WI-001 add a Tier picklist field to Account so the sales team can rank their accounts: WI-001 is waiting on the owner (13 Deployment). Next action: Mike runs the WI-001 field-only package against tkv2-prod from main, verifies the field and guidance in Setup, and reports the deployment result... (work-decide)
+- WI-002 Set Account Tier access and place it below Rating on Account Layout: WI-002 is waiting on the owner (13 Deployment). Next action: After WI-001 field deployment succeeds in tkv2-prod, Mike saves the four-profile Tier field access in production Setup, runs the WI-002 layout-o... (work-decide)
+
+Items: 2 in review.
+
+Current focus:
+## Now
+- WI-001 add a Tier picklist field to Account so the sales team can rank their accounts.
+- WI-002 Set Account Tier access and place it below Rating on Account Layout.
+## Waiting on the owner
+- Mike runs the WI-001 field-only package against tkv2-prod and confirms the field, values, description, and help text. He then sets the four-profile Tier field access in production Setup, runs the WI-002 layout-only package, checks the four profile views and Tier placement, and reports both deployment results. Exact commands and checks are in the two deployment records and WI-002 manual steps on main. Agents cannot validate against or deploy to production.
+## Next session starts with
+- Continue WI-001 and WI-002 at stage 13 Deployment. Read Mike's production results, verify read-only if needed, update deployment records and component tracker flags, then complete the requirements and system-guide baseline and finish the items.
+- Both results were approved with disclosed gaps: unsupported-value API rejection, full org automation inspection, and detailed before-
+
+[AGENT] I’ll record your production results, check the closeout steps for both items, and update the deployment records, tracker, and project docs.
+
+[CALL exec] cat SOUL.md PROJECT.md .claude/rules/{check-deployment-contents,component-tracker,confirm-salesforce-changes,humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,production-data-changes,project-file-locations,salesforce-org-safety,session-handoff,shared-repository-work,work-item-folders}.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+cat: SOUL.md: No such file or directory
+# Acme CRM
+
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->
+
+## Purpose and intended outcome
+
+- Purpose
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/skills/work-decide/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/skills/work-finish/SKILL.md
+   cat .agents/skills/sf-component-tracker/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.4/skills/publish-docs/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.4/skills/memory-save/SKILL.md
+   git worktree list
+   git status --short --branch
+   git fetch origin && git log --oneline -10
+  -> Script completed
+Wall time 7.9 seconds
+Output:
+
+Warning: truncated output (original token count: 12128)
+Total output lines: 526
+
+RESULT 0
+---
+name: work-decide
+description: 'Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers. Use when he asks "what do you need from me", answers a waiting decision ("go with option B"), or states a project-wide decision. Not for a bare "yes" when this chat asked no question.'
+---
+
+# Work decide
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Shared rules: the work plugin's `references/conventions.md`, two folders above this skill's folder (`../../references/conventions.md`). To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Run each `toolkit` command alone, on its own line, in both hosts: never joined by `&&`, `;`, or a pipe, and never from a script (in Codex that runs it inside the sandbox, where it fails). Text (conventions, "Text in a command"): one-line values (`--note`, `--effect`, `--append-row`, `--title`) go in single quotes, with an apostrophe written `'\''`, because double quotes run backticks and `$(...)`; section and design text goes on standard input in Claude Code (`<file>` is `-`, followed by a quoted heredoc, `<<'EOF'`), and in Codex in `--text '<text>'` or a file in a new `mktemp -d` folder, deleted right after the command. Never change a record with a script. Ask the owner in the reply text, never through a question tool. No remote (`git remote` prints nothing): never run `git fetch`, and never report a fetch refusal as a blocker.
+
+## Steps
+
+1. Build the queue: requirements waiting for approval, designs marked proposed, items at stage 11 waiting for result approval, Open Questions rows where the owner decides, and memory proposals (records saved as `needs-review` because the owner did not answer "Save to memory?"). The command lists each decision once. Its "Agent to-do" lines are the agent's own steps, not decisions waiting on the owner: count and show only the decisions. A delivery offer, as an agent to-do or as an open question, belongs to `work-delegate`, the only skill that makes or records it: open it after the owner's other decisions.
+   `toolkit work decisions`
+2. The owner gave an answer without being asked ("approved", "go with B"): match it to exactly one waiting decision. If two could match, ask which one, naming both. A bare "yes", "ok", or "looks good" is not such an answer ("What counts as an answer").
+3. Otherwise take the decisions one at a time, the one blocking the most work first. For each: what is being decided, the choices, your recommendation and its main reason, and what happens after each answer. Every decision carries a recommendation, even when it is the only one in the queue; a bare question is not enough. One decision per message, asked in the 
+
+[AGENT] I’m using the work-finish, component-tracker, and publish-docs procedures for this closeout. Your report confirms both deploys succeeded and the Tier placement and access in production; I’ll record those as owner-reported verification.
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/skills/work-finish/references/closing.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/references/conventions.md .agents/skills/sf-component-tracker/SKILL.md .claude/rules/publish-project-documents.md
+   toolkit work show WI-001
+   toolkit work show WI-002
+   toolkit work decisions
+   rg --files delivery/deployment requirements system-guide .work-items | head -100
+   git remote
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+Warning: truncated output (original token count: 20060)
+Total output lines: 1130
+
+RESULT 0
+# Closing a work item
+
+Detail for `work-finish`. Carried over from Toolkit V1's "Finish or
+cancel" rules and its "Closing a work item" checklist, with V2 homes.
+
+## Before Done
+
+- Give the owner a short result, the known gaps, and the evidence, and ask
+  for approval. A clear earlier approval of that same result counts.
+- Never describe an unverified result as complete.
+- Done means the owner accepted the result. Cancelled means the work stopped
+  without it.
+
+## The pull request (stage 12)
+
+- Push the item's branch (`claude/<prefix>-<number>-<slug>`, for example
+  `claude/wi-007-csv-export`). Never force-push.
+- Write the pull request title and description in plain words: what changed,
+  why, how it was checked, and the item id. Run the description through the
+  `unslop` skill, because it is read by other people. No line crediting an AI,
+  in the pull request or in any commit on the branch (no `Co-Authored-By` line
+  naming an AI, no "Generated with" line).
+- Merge only through `merge-and-clean-up`, and only when one of these holds:
+  - the owner said yes to this merge; or
+  - `DECISIONS.md` records a standing merge instruction from the owner (the
+    project's `AGENTS.md` names it there), and an `acceptance-checker` that
+    did not build the change reported no blocking issue on that exact head
+    commit, and every check passes. `merge-and-clean-up` step 2 checks the
+    same record.
+- A work item that says its merge needs the owner's approval overrides a
+  standing instruction.
+- No remote: the local merge (`git merge --ff-only <branch>` in the main
+  checkout) is this stage. Set the stage anyway and add a history note:
+  "No remote: merged locally into main." A stage that does not apply at all
+  (no repository change, no deployment) gets one history note saying so, so
+  `toolkit work finish` has a record of it.
+- A merge that stops on a conflict: resolve it and commit with a message you
+  write. `git commit --no-edit` keeps Git's "# Conflicts:" lines in the
+  message.
+
+## Deployment (stage 13)
+
+- Only when the result must be put somewhere beyond the default branch.
+- Salesforce projects, in order: `sf-component-tracker` is current and the
+  item's folder `delivery/deployment/<work-item-id>-<short-name>/` holds its
+  `package.xml`, `destructiveChanges.xml` when something is removed,
+  `manual-steps.md`, and `DEPLOYMENT-RECORD.md`; `sf-deploy-check` finds
+  nothing that would ship too early; then a validate against the sandbox. A
+  production deploy is handed to the owner: the exact command, what it
+  deploys, and what to check afterwards. A release of several items uses a
+  copy of `delivery/deployment/release-cutover-template/`.
+- Production data changes go through `sf-data-change`, which builds the
+  owner's package. The owner runs it.
+- Record the owner's report of the deploy in a history note.
+
+## Requ
+
+[CALL exec] cat delivery/deployment/component-tracker.csv delivery/deployment/WI-001-account-tier-field/DEPLOYMENT-RECORD.md delivery/deployment/WI-002-tier-access-and-layout/DEPLOYMENT-RECORD.md delivery/deployment/WI-002-tier-access-and-layout/manual-steps.md
+   cat requirements/AGENTS.md requirements/SYSTEM-DATA-MODEL.md requirements/system-area-template/AREA-TEMPLATE.md system-guide/AREA-TEMPLATE.md PROJECT-ROADMAP.md
+   toolkit work show WI-001 --section Overview
+   toolkit work show WI-001 --section Roadmap
+   toolkit work show WI-001 --section Tasks
+   toolkit work list --tree
+   toolkit memory focus --json
+   cat .memory/memory-criteria.md .memory/AGENTS.md
+  -> Script completed
+Wall time 0.5 seconds
+Output:
+
+RESULT 0
+Component Type,Object/Parent,API Name,Label,Work Item,Change Type,Sandbox,Production,Notes
+CustomField,Account,Account.Tier__c,Tier,WI-001,New,Yes,No,Restricted picklist; Gold/Silver/Bronze; nullable; no default; approved field guidance confirmed in Setup
+Layout,Account,Account-Account Layout,Account Layout,WI-002,Modified,Yes,No,Modified: Tier directly below Rating; sandbox layout retrieve verified after deployment
+Profile,,Sales Manager,Sales Manager,WI-002,Modified,Yes,No,Modified: Tier visible and editable; Mike saved in sandbox Setup; grant verified
+Profile,,System Administrator,System Administrator,WI-002,Modified,Yes,No,Modified: Tier visible and editable; Mike saved in sandbox Setup; grant verified
+Profile,,Sales User,Sales User,WI-002,Modified,Yes,No,Modified: Tier visible and read-only; Mike saved in sandbox Setup; grant verified
+Profile,,Read Only,Read Only,WI-002,Modified,Yes,No,Modified: Tier visible and read-only; Mike saved in sandbox Setup; grant verified
+# WI-001: Account Tier field deployment record
+
+- **Work item:** WI-001
+- **Folder name:** `WI-001-account-tier-field`
+- **Target org:** `tkv2-sbx` sandbox
+- **Status:** Deployed to sandbox; field guidance confirmed in Setup
+- **Owner:** Mike approved and ran the field-only sandbox deployment on 2026-09-28.
+
+## Scope
+
+- Package: [package.xml](package.xml)
+- Removals: None.
+- Manual steps: None for the field-only package. WI-002 handles later access settings and layout placement.
+- Source revision: WI-001 branch `claude/wi-001-add-a-tier-picklist-field-to`; commit to be recorded after review.
+
+## Preflight and approval
+
+| Check | Result | Evidence and date |
+| --- | --- | --- |
+| Requirement and design readiness | Pass | WI-001 R-01 and R-02 and approved design, 2026-09-28 |
+| Deployment scope | Pass | Package names only `Account.Tier__c`; sandbox Account describe has Rating and no Tier, 2026-09-28 |
+| Validation | Pass | `sf project deploy validate -x delivery/deployment/WI-001-account-tier-field/package.xml -o tkv2-sbx --json`; job `0AfFAKE000VALID3`, one component, zero errors, 2026-09-28 |
+| Owner deploy decision | Approved | Mike approved deploying only `Account.Tier__c` to `tkv2-sbx`, 2026-09-28. |
+| Codex deploy attempt | Blocked | The Salesforce PreToolUse guard blocked the command before execution, 2026-09-28. |
+
+## Execution and outcome
+
+- Started: 2026-09-28, by Mike.
+- Deployment job: `0AfFAKE000DEPLOY3`.
+- Result: Mike reported `Succeeded`, `checkOnly: false`, one component deployed, zero component errors, and no warnings. A read-only `sf project deploy report` also returned `Succeeded`.
+- Post-deploy checks: Account describe confirms nullable restricted `Tier__c`, Gold/Silver/Bronze in order, and no default. Its help-text response differed from the approved source, but Mike checked the field in `tkv2-sbx` Setup on 2026-09-28 and reported the approved description and help text exactly. A field retrieve returned 
+
+[CALL exec] cat .agents/skills/sf-component-tracker/SKILL.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+---
+name: sf-component-tracker
+description: 'Keeps the component tracker CSV, the master and per-work-item package.xml files, destructiveChanges.xml, and manual steps in sync. Use when Salesforce metadata under force-app/ is added, changed, renamed, or deleted, when a deploy result comes back, or when a deploy needs manual steps.'
+---
+
+# Salesforce component tracker
+
+Keep the deployment records current in the same response as the change.
+
+A project
+
+[CALL exec] sf sobject describe -s Account -o tkv2-prod --json
+   git status --short
+   git branch --list '*wi-00*'
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+RESULT 0
+{"status":0,"result":{"name":"Account","label":"Account","custom":false,"fields":[{"name":"Id","type":"id","label":"Account ID"},{"name":"Name","type":"string","label":"Account Name"},{"name":"Type","type":"picklist","label":"Account Type"},{"name":"Industry","type":"picklist","label":"Industry"},{"name":"Rating","type":"picklist","label":"Account Rating","picklistValues":[{"value":"Hot"},{"value":"Warm"},{"value":"Cold"}]},{"name":"OwnerId","type":"reference","label":"Owner ID"},{"name":"Tier__c","type":"picklist","label":"Tier","custom":true,"nillable":true,"defaultValue":null,"inlineHelpText":"Set by hand. Gold is the highest tier, then Silver, then Bronze.","picklistValues":[{"value":"Gold","label":"Gold","active":true,"defaultValue":false},{"value":"Silver","label":"Silver","active":true,"defaultValue":false},{"value":"Bronze","label":"Bronze","active":true,"defaultValue":false}],"restrictedPicklist":true}],"recordTypeInfos":[{"name":"Master","master":true,"available":true}]},"warnings":[]}
+
+RESULT 1
+
+RESULT 2
++ claude/wi-001-add-a-tier-picklist-field-to
++ claude/wi-002-set-account-tier-access-and
+
+
+[CALL exec] toolkit work show WI-001 --section Requirements
+   cat force-app/main/default/objects/Account/fields/Tier__c.field-meta.xml
+   rg -n 'Tier|Account Layout' force-app/main/default/layouts/Account-Account\ Layout.layout-meta.xml
+   sf project deploy report -i 0AfFAKE000DEPLOY3 -o tkv2-prod --json
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+RESULT 0
+## Requirements
+
+**Overall status:** Finalized  
+**Finalization rule:** Mark the overall requirements Finalized only when the agreed goal, every active requirement, and acceptance have been reviewed and approved by the owner. Record who approved them and when.
+
+### Starting request
+
+New work: add a Tier picklist field to Account so the sales team can rank their accounts.
+
+### Agreed goal
+
+Let salespeople manually rank Accounts using one Tier picklist with Gold, Silver, and Bronze in that order, with Gold highest. No automatic ranking.
+
+### Active requirements
+
+#### R-01 — Manual Account Tier
+
+**Status:** Finalized  
+**Applies to:** Sales Managers and system administrators ranking Account records.  
+**Required behavior:** One Tier picklist on Account lets authorized users choose Gold, Silver, or Bronze, in that order, with Gold highest. Authorized users set the value by hand; the system does not rank Accounts automatically.  
+**Boundaries and exceptions:** Tier can be blank and has no default value. Editing access is defined in R-03.  
+**Acceptance check:** Check that a new Account has a blank Tier. As an authorized user, set existing Accounts to each of the three values and clear Tier; the values display in the specified order, and no automatic ranking changes the selection.  
+**Decision record:** Mike, 2026-09-28, requirements interview. Mike confirmed blank values, no default, and editing access on 2026-09-28. Mike approved the requirements on 2026-09-28 with the words: Approved.  
+**Open questions:** None.
+
+#### R-02 — Field guidance
+
+**Status:** Finalized  
+**Applies to:** The new Account Tier custom field.  
+**Required behavior:** The field has a description and help text. The help text explains that Tier is set by hand and that Gold is the highest tier, followed by Silver, then Bronze.  
+**Boundaries and exceptions:** Suggested help text: “Set by hand. Gold is the highest tier, then Silver, then Bronze.” The description wording will be set during design.  
+**Acceptance check:** The field metadata contains a description and help text, and the help text appears with the field in Salesforce and explains the manual setting and tier order.  
+**Decision record:** Mike, 2026-09-28, standing preference stated in chat. Mike confirmed the help text meaning and suggested wording on 2026-09-28. Mike approved the requirements on 2026-09-28 with the words: Approved.  
+**Open questions:** None.
+
+#### R-03 — Tier access
+
+**Status:** Finalized  
+**Applies to:** Everyone who can see an Account.  
+**Required behavior:** Everyone who can see an Account can read its Tier. Only users with the Sales Manager profile and system administrators can edit Tier.  
+**Boundaries and exceptions:** Access to an Account record remains governed by existing Account access.  
+**Acceptance check:** A user with Account access can read Tier; a Sales Manager and a system administrator can edit it; another user with Account ac
+
+[AGENT] A read-only production Account describe shows Tier as a nullable restricted picklist with Gold, Silver, and Bronze in order, no default, and the approved help text. I’ll now save the deployment outcomes and delivered behavior, then finish WI-002 before its parent WI-001.
+
+[CALL exec] node /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.4/skills/publish-docs/scripts/publish-docs.mjs start --branch main -- delivery/deployment/component-tracker.csv delivery/deployment/WI-001-account-tier-field/DEPLOYMENT-RECORD.md delivery/deployment/WI-002-tier-access-and-layout/DEPLOYMENT-RECORD.md delivery/deployment/WI-002-tier-access-and-layout/manual-steps.md requirements/account/ACCOUNT.md system-guide/account.md PROJECT-ROADMAP.md
+  -> Script completed
+Wall time 7.4 seconds
+Output:
+
+No remote: this save will be committed locally on main; nothing is fetched or pushed.
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce-docsave-f2b27543
+
+
+[PATCH] files=['/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce-docsave-f2b27543/delivery/deployment/component-tracker.csv\\n@@\\n-CustomField,Account,Account.Tier__c,Tier,WI-001,New,Yes,No,Restricted picklist; Gold/Silver/Bronze; nullable; no default; approved field guidance confirmed in Setup\\n-Layout,Account,Account-Account Layout,Account Layout,WI-002,Modified,Yes,No,Modified: Tier directly below Rating; sandbox layout retrieve verified after deployment\\n-Profile,,Sales Manager,Sales Manager,WI-002,Modified,Yes,No,Modified: Tier visible and editable; Mike saved in sandbox Setup; grant verified\\n-Profile,,System Administrator,System Administrator,WI-002,Modified,Yes,No,Modified: Tier visible and editable; Mike saved in sandbox Setup; grant verified\\n-Profile,,Sales User,Sales User,WI-002,Modified,Yes,No,Modified: Tier visible and read-only; Mike saved in sandbox Setup; grant verified\\n-Profile,,Read Only,Read Only,WI-002,Modified,Yes,No,Modified: Tier visible and read-only; Mike saved in sandbox Setup; grant verified\\n+CustomField,Account,Account.Tier__c,Tier,WI-001,New,Yes,Yes,Restricted picklist; Gold/Silver/Bronze; nullable; no default; production describe verified\\n+Layout,Account,Account-Account Layout,Account Layout,WI-002,Modified,Yes,Yes,Modified: Tier directly below Rating; production placement reported by Mike\\n+Profile,,Sales Manager,Sales Manager,WI-002,Modified,Yes,Yes,Modified: Tier visible and editable; Mike saved in production Setup\\n+Profile,,System Administrator,System Administrator,WI-002,Modified,Yes,Yes,Modified: Tier visible and editable; Mike saved in production Setup\\n+Profile,,Sales User,Sales User,WI-002,Modified,Yes,Yes,Modified: Tier visible and read-only; Mike saved in production Setup\\n+Profile,,Read Only,Read Only,WI-002,Modified,Yes,Yes,Modified: Tier visible and read-only; Mike saved in production Setup\\n*** Update File: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce-docsave-f2b27543/delivery/deployment/WI-001-account-tier-field/DEPLOYMENT-RECORD.md\\n@@\\n-- Status: production deployment is awaiting Mike. Agents do not validate against or deploy to production.\\n+- Status: Mike reported the production field-only deployment succeeded on 2026-09-28. The result reported one component deployed and zero component errors, with job ID `0AfFAKE000DEPLOY3`. A read-only production Account describe found nullable restricted `Tier__c`, Gold/Silver/Bronze in order, no default, and the approved help text. The field description was not independently checked in production Setup. Agents did not validate against or deploy to production.\\n@@\\n-Report the deployment result and Setup check so the production flag and work item can be updated.\\n+Mike reported the deployment result on 2026-09-28. The production component flag and work item were updated during closeout.\\n*** Update File: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce-docsave-f2b27543/delivery/deployment/WI-002-tier-access-and-layout/DEPLOYMENT-RECORD.md\\n@@\\n-- Status: the production field-access step and layout deployment await Mike. Agents do not validate against or deploy to production.\\n+- Status: Mike reported saving the four-profile field access in production Setup and a successful layout-only deployment on 2026-09-28. The result reported one component deployed and zero component errors. Mike observed Tier directly below Rating in production and confirmed the access matches: Sales Manager and System Administrator can edit; Sales User and Read Only can read only. Agents did not validate against or deploy to production.\\n+- The WI-002 result was described as the same successful one-component result as WI-001. Its distinct production job ID was not supplied; `0AfFAKE000DEPLOY3` is the ID reported for WI-001. The observed layout and access are the production outcome evidence.\\n@@\\n-Report the deployment and checks so the production flags and work item can be updated.\\n+Mike reported the deployment and checks on 2026-09-28. The production component flags and work item were updated during closeout.\\n*** Update File: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce-docsave-f2b27543/delivery/deployment/WI-002-tier-access-and-layout/manual-steps.md\\n@@\\n-| Status | Not started in `tkv2-prod` |\\n+| Status | Done in `tkv2-prod` on 2026-09-28; Mike reported saving the four profile grants and confirming the resulting access |\\n*** End Patch";']
+  -> Script failed
+Wall time 0.1 seconds
+Output:
+
+Script error:
+apply_patch verification failed: Failed to find expected lines in /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce-docsave-f2b27543/delivery/deployment/WI-001-account-tier-field/DEPLOYMENT-RECORD.md:
+Report the deployment result and Setup check so the production flag and work item can be updated.
+
+[CALL exec] git status --short
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+
+
+[PATCH] files=['/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce-docsave-f2b27543/delivery/deployment/component-tracker.csv\\n@@\\n-CustomField,Account,Account.Tier__c,Tier,WI-001,New,Yes,No,Restricted picklist; Gold/Silver/Bronze; nullable; no default; approved field guidance confirmed in Setup\\n-Layout,Account,Account-Account Layout,Account Layout,WI-002,Modified,Yes,No,Modified: Tier directly below Rating; sandbox layout retrieve verified after deployment\\n-Profile,,Sales Manager,Sales Manager,WI-002,Modified,Yes,No,Modified: Tier visible and editable; Mike saved in sandbox Setup; grant verified\\n-Profile,,System Administrator,System Administrator,WI-002,Modified,Yes,No,Modified: Tier visible and editable; Mike saved in sandbox Setup; grant verified\\n-Profile,,Sales User,Sales User,WI-002,Modified,Yes,No,Modified: Tier visible and read-only; Mike saved in sandbox Setup; grant verified\\n-Profile,,Read Only,Read Only,WI-002,Modified,Yes,No,Modified: Tier visible and read-only; Mike saved in sandbox Setup; grant verified\\n+CustomField,Account,Account.Tier__c,Tier,WI-001,New,Yes,Yes,Restricted picklist; Gold/Silver/Bronze; nullable; no default; production describe verified\\n+Layout,Account,Account-Account Layout,Account Layout,WI-002,Modified,Yes,Yes,Modified: Tier directly below Rating; production placement reported by Mike\\n+Profile,,Sales Manager,Sales Manager,WI-002,Modified,Yes,Yes,Modified: Tier visible and editable; Mike saved in production Setup\\n+Profile,,System Administrator,System Administrator,WI-002,Modified,Yes,Yes,Modified: Tier visible and editable; Mike saved in production Setup\\n+Profile,,Sales User,Sales User,WI-002,Modified,Yes,Yes,Modified: Tier visible and read-only; Mike saved in production Setup\\n+Profile,,Read Only,Read Only,WI-002,Modified,Yes,Yes,Modified: Tier visible and read-only; Mike saved in production Setup\\n*** End Patch";text(await tools.apply_patch(p));']
+  -> Script completed
+Wall time 3.9 seconds
+Output:
+
+{}
+
+[PATCH] files=['/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce-docsave-f2b27543/delivery/deployment/WI-001-account-tier-field/DEPLOYMENT-RECORD.md\\n@@\\n-- Status: production deployment is awaiting Mike. Agents do not validate against or deploy to production.\\n+- Status: Mike reported the production field-only deployment succeeded on 2026-09-28. The result reported one component deployed and zero component errors, with job ID `0AfFAKE000DEPLOY3`. A read-only production Account describe found nullable restricted `Tier__c`, Gold/Silver/Bronze in order, no default, and the approved help text. The field description was not independently checked in production Setup. Agents did not validate against or deploy to production.\\n@@\\n-Check that the command reports `Succeeded`, `checkOnly: false`, one component deployed, and zero component errors. In production Setup, confirm Tier is blank by default, has Gold, Silver, Bronze in that order, and shows the approved description and help text. Then complete the WI-002 production field-access step before deploying its Account Layout package. Report the deployment result and Setup check so the production flag and work item can be updated.\\n+Mike reported `Succeeded`, one component deployed, and zero component errors on 2026-09-28. The read-only production Account describe confirmed the values, nullability, default, and help text. The field description still requires a production Setup check if independent confirmation is needed. WI-002 followed in order.\\n*** Update File: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce-docsave-f2b27543/delivery/deployment/WI-002-tier-access-and-layout/DEPLOYMENT-RECORD.md\\n@@\\n-- Status: the production field-access step and layout deployment await Mike. Agents do not validate against or deploy to production.\\n+- Status: Mike reported saving the four-profile field access in production Setup and a successful layout-only deployment on 2026-09-28. The result reported one component deployed and zero component errors. Mike observed Tier directly below Rating in production and confirmed the access matches: Sales Manager and System Administrator can edit; Sales User and Read Only can read only. Agents did not validate against or deploy to production.\\n+- The WI-002 result was described as the same successful one-component result as WI-001. Its distinct production job ID was not supplied; `0AfFAKE000DEPLOY3` is the ID reported for WI-001. The observed layout and access are the production outcome evidence.\\n@@\\n-Check that the command reports `Succeeded`, `checkOnly: false`, one component deployed, and zero component errors. Open an Account assigned Account Layout in production and confirm Tier is directly below Rating. Check Tier visibility and editability with a user from each of the four profiles. Report the deployment and checks so the production flags and work item can be updated.\\n+Mike reported `Succeeded`, one component deployed, and zero component errors on 2026-09-28. He confirmed Tier directly below Rating and the four-profile access in production. The production flags and work item were updated during closeout.\\n*** Update File: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce-docsave-f2b27543/delivery/deployment/WI-002-tier-access-and-layout/manual-steps.md\\n@@\\n-| Status | Not started in `tkv2-prod` |\\n+| Status | Done in `tkv2-prod` on 2026-09-28; Mike reported saving the four profile grants and confirming the resulting access |\\n*** End Patch";text(await tools.apply_patch(p));']
+  -> Script completed
+Wall time 2.9 seconds
+Output:
+
+{}
+
+[PATCH] files=['/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce-docsave-f2b27543/requirements/account/ACCOUNT.md\\n+# Account\\n+\\n+## Purpose and scope\\n+\\n+The Acme sales team uses Account Tier to rank Accounts manually. This requirement covers Account Layout. Other Account layouts and automatic ranking are outside its scope.\\n+\\n+## Functional behavior\\n+\\n+### R-01 — Manual Account Tier\\n+\\n+- Trigger or context: An authorized user creates or edits an Account.\\n+- Required behavior: Tier offers Gold, Silver, and Bronze in that order, with Gold highest. Users set it by hand.\\n+- Conditions and exceptions: Tier may be blank and has no default. The system does not rank Accounts automatically.\\n+- User or system outcome: The chosen value or blank value is saved on the Account.\\n+- Source: WI-001 R-01, approved by Mike on 2026-09-28.\\n+- Delivery status and evidence: Delivered to `tkv2-prod` on 2026-09-28. Mike reported the field deploy succeeded. A read-only production Account describe confirmed the restricted picklist, value order, nullability, and no default. Sandbox record checks are in [WI-001 test plan](../../tests/WI-001-TEST-PLAN.md).\\n+\\n+### R-02 — Field guidance\\n+\\n+- Trigger or context: A user views Tier or its field settings.\\n+- Required behavior: Tier has a description and help text. The help text says: “Set by hand. Gold is the highest tier, then Silver, then Bronze.”\\n+- Conditions and exceptions: None.\\n+- User or system outcome: The help text explains the manual setting and tier order.\\n+- Source: WI-001 R-02, approved by Mike on 2026-09-28.\\n+- Delivery status and evidence: The [field source](../../force-app/main/default/objects/Account/fields/Tier__c.field-meta.xml) contains the approved description and help text. A read-only production Account describe confirmed the help text. The production description was not independently checked in Setup.\\n+\\n+### R-03 — Tier access\\n+\\n+- Trigger or context: A user who can access an Account views or edits it.\\n+- Required behavior: Account viewers can read Tier. Sales Manager and System Administrator profile users can edit Tier; Sales User and Read Only profile users can read it without editing.\\n+- Conditions and exceptions: Existing Account object and record access still governs which Accounts a user can see.\\n+- User or system outcome: Tier is visible to the four Account-reading profiles, with editing limited as stated.\\n+- Source: WI-001 R-03, delivered by WI-002; approved by Mike on 2026-09-28.\\n+- Delivery status and evidence: Mike reported saving these grants in `tkv2-prod` Setup and confirming the resulting access on 2026-09-28. The detailed before-and-after Account record-access comparison and exhaustive effective-permission audit were not run; see [WI-002 test plan](../../tests/WI-002-TEST-PLAN.md).\\n+\\n+### R-04 — Account Layout placement\\n+\\n+- Trigger or context: A user opens an Account assigned Account Layout.\\n+- Required behavior: Tier appears directly below Rating on Account Layout.\\n+- Conditions and exceptions: Other layouts are outside this requirement.\\n+- User or system outcome: Tier is visible below Rating on the Account page, subject to field access.\\n+- Source: WI-001 R-04, delivered by WI-002; approved by Mike on 2026-09-28.\\n+- Delivery status and evidence: Mike reported the production layout deploy succeeded and saw Tier directly below Rating on 2026-09-28.\\n+\\n+## Data and access rules\\n+\\n+Tier is a nullable, restricted Account picklist. Gold is highest, followed by Silver and Bronze. The four-profile access rules are in R-03. Account object and record access remains governed by existing settings.\\n+\\n+## Integrations and dependencies\\n+\\n+No automatic ranking or integration is part of WI-001 or WI-002. Full org automation inspection was not run.\\n+\\n+## Acceptance evidence\\n+\\n+Mike approved both tested results with disclosed gaps on 2026-09-28. He reported both production deploys succeeded, the four-profile access matched, and Tier sat directly below Rating. The [WI-001 deployment record](../../delivery/deployment/WI-001-account-tier-field/DEPLOYMENT-RECORD.md) and [WI-002 deployment record](../../delivery/deployment/WI-002-tier-access-and-layout/DEPLOYMENT-RECORD.md) hold the production outcomes. Unsupported-value API rejection remains unrun.\\n+\\n+## Change history\\n+\\n+- 2026-09-28 — Account Tier, its guidance, access, and Account Layout placement delivered under WI-001 and WI-002; approved by Mike.\\n*** Add File: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce-docsave-f2b27543/system-guide/account.md\\n+# Account\\n+\\n+## What this area does today\\n+\\n+In `tkv2-prod` on 2026-09-28, Account has a manually set Tier picklist with Gold, Silver, and Bronze. Mike reported Tier directly below Rating on Account Layout and confirmed the four-profile field access.\\n+\\n+## Components and paths\\n+\\n+| Component | Role | Location or reference | Evidence |\\n+| --- | --- | --- | --- |\\n+| Account.Tier__c | Stores the manual Account ranking | [Field source](../force-app/main/default/objects/Account/fields/Tier__c.field-meta.xml) | Read-only production Account describe on 2026-09-28 |\\n+| Account-Account Layout | Displays Tier below Rating | [Layout source](../force-app/main/default/layouts/Account-Account%20Layout.layout-meta.xml) | Mike\'s production page check on 2026-09-28 |\\n+| Four profile field grants | Controls Tier read and edit access | [WI-002 manual steps](../delivery/deployment/WI-002-tier-access-and-layout/manual-steps.md) | Mike\'s production Setup and access report on 2026-09-28 |\\n+\\n+## Data and flow\\n+\\n+An authorized user selects Gold, Silver, Bronze, or blank on an Account. The field has no default. No automatic ranking is part of this change.\\n+\\n+## Operational behavior\\n+\\n+Sales Manager and System Administrator profile users can read and edit Tier. Sales User and Read Only profile users can read it. Existing Account object and record access determines which Accounts users can open. The field access was set in production Setup and is outside the layout-only deployment package.\\n+\\n+## Known gaps and uncertainty\\n+\\n+The production field description was not independently checked in Setup. Unsupported-value API rejection, full org automation inspection, detailed before-and-after Account record-access comparison, and exhaustive effective-permission audit were not run. The WI-002 production job ID was not separately supplied.\\n+\\n+## Last verified\\n+\\n+- Date and environment: 2026-09-28, `tkv2-prod`.\\n+- Sources: Production Account describe; Mike\'s deployment, Setup, access, and layout report; WI-001 and WI-002 deployment records.\\n+- Maintainer: Acme CRM project owner and agents.\\n*** Delete File: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce-docsave-f2b27543/PROJECT-ROADMAP.md\\n*** Add File: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce-docsave-f2b27543/PROJECT-ROADMAP.md\\n+# Project roadmap\\n+\\n+## Project outcome\\n+\\n+Give the Acme sales team a Salesforce org that fits how they sell, starting with better account data.\\n+\\n+## Phase overview\\n+\\n+| Phase | Intended outcome | Exit condition | Depends on | Status |\\n+| --- | --- | --- | --- | --- |\\n+| P01 — Account Tier | Sales team can rank Accounts manually with controlled field access | Tier field, guidance, access, and layout placement are in production and accepted by Mike | None | Done on 2026-09-28 |\\n+\\n+## P01 — Account Tier\\n+\\n+**Outcome:** Account Tier is available to the Acme sales team with the approved values, guidance, access, and Account Layout placement.  \\n+**Exit condition:** Mike reported both production deploys succeeded and confirmed Tier placement and access on 2026-09-28.  \\n+**Dependencies:** None.\\n+\\n+### P01-U01 — Account Tier field\\n+\\n+**Deliverable:** Nullable restricted Tier picklist on Account, with Gold, Silver, Bronze, description, and help text.  \\n+**Done when:** Production deploy succeeds and the field behavior is verified. Mike reported the deploy succeeded; production Account describe verified the values, nullability, default, and help text.  \\n+**Depends on:** None.  \\n+**Linked work item:** WI-001.\\n+\\n+### P01-U02 — Tier access and Account Layout\\n+\\n+**Deliverable:** Four-profile Tier access and Tier directly below Rating on Account Layout.  \\n+**Done when:** Production Setup grants and layout deployment are complete, and Mike verifies placement and access. He reported these results on 2026-09-28.  \\n+**Depends on:** P01-U01.  \\n+**Linked work item:** WI-002.\\n+\\n+## Open project-level planning questions\\n+\\n+None open.\\n+\\n+## Planning changes\\n+\\n+- 2026-09-28 — WI-001 and WI-002 completed the Account Tier phase; Mike approved the results and reported production deployment.\\n*** End Patch";text(await tools.apply_patch(p));']
+  -> Script failed
+Wall time 0.1 seconds
+Output:
+
+Script error:
+apply_patch verification failed: invalid patch: multiple operations target /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce-docsave-f2b27543/PROJECT-ROADMAP.md
+
+[PATCH] files=['/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce-docsave-f2b27543/requirements/account/ACCOUNT.md\\n+# Account\\n+\\n+## Purpose and scope\\n+\\n+The Acme sales team uses Account Tier to rank Accounts manually. This requirement covers Account Layout. Other Account layouts and automatic ranking are outside its scope.\\n+\\n+## Functional behavior\\n+\\n+### R-01 — Manual Account Tier\\n+\\n+- Trigger or context: An authorized user creates or edits an Account.\\n+- Required behavior: Tier offers Gold, Silver, and Bronze in that order, with Gold highest. Users set it by hand.\\n+- Conditions and exceptions: Tier may be blank and has no default. The system does not rank Accounts automatically.\\n+- User or system outcome: The chosen value or blank value is saved on the Account.\\n+- Source: WI-001 R-01, approved by Mike on 2026-09-28.\\n+- Delivery status and evidence: Delivered to `tkv2-prod` on 2026-09-28. Mike reported the field deploy succeeded. A read-only production Account describe confirmed the restricted picklist, value order, nullability, and no default. Sandbox record checks are in [WI-001 test plan](../../tests/WI-001-TEST-PLAN.md).\\n+\\n+### R-02 — Field guidance\\n+\\n+- Trigger or context: A user views Tier or its field settings.\\n+- Required behavior: Tier has a description and help text. The help text says: “Set by hand. Gold is the highest tier, then Silver, then Bronze.”\\n+- Conditions and exceptions: None.\\n+- User or system outcome: The help text explains the manual setting and tier order.\\n+- Source: WI-001 R-02, approved by Mike on 2026-09-28.\\n+- Delivery status and evidence: The [field source](../../force-app/main/default/objects/Account/fields/Tier__c.field-meta.xml) contains the approved description and help text. A read-only production Account describe confirmed the help text. The production description was not independently checked in Setup.\\n+\\n+### R-03 — Tier access\\n+\\n+- Trigger or context: A user who can access an Account views or edits it.\\n+- Required behavior: Account viewers can read Tier. Sales Manager and System Administrator profile users can edit Tier; Sales User and Read Only profile users can read it without editing.\\n+- Conditions and exceptions: Existing Account object and record access still governs which Accounts a user can see.\\n+- User or system outcome: Tier is visible to the four Account-reading profiles, with editing limited as stated.\\n+- Source: WI-001 R-03, delivered by WI-002; approved by Mike on 2026-09-28.\\n+- Delivery status and evidence: Mike reported saving these grants in `tkv2-prod` Setup and confirming the resulting access on 2026-09-28. The detailed before-and-after Account record-access comparison and exhaustive effective-permission audit were not run; see [WI-002 test plan](../../tests/WI-002-TEST-PLAN.md).\\n+\\n+### R-04 — Account Layout placement\\n+\\n+- Trigger or context: A user opens an Account assigned Account Layout.\\n+- Required behavior: Tier appears directly below Rating on Account Layout.\\n+- Conditions and exceptions: Other layouts are outside this requirement.\\n+- User or system outcome: Tier is visible below Rating on the Account page, subject to field access.\\n+- Source: WI-001 R-04, delivered by WI-002; approved by Mike on 2026-09-28.\\n+- Delivery status and evidence: Mike reported the production layout deploy succeeded and saw Tier directly below Rating on 2026-09-28.\\n+\\n+## Data and access rules\\n+\\n+Tier is a nullable, restricted Account picklist. Gold is highest, followed by Silver and Bronze. The four-profile access rules are in R-03. Account object and record access remains governed by existing settings.\\n+\\n+## Integrations and dependencies\\n+\\n+No automatic ranking or integration is part of WI-001 or WI-002. Full org automation inspection was not run.\\n+\\n+## Acceptance evidence\\n+\\n+Mike approved both tested results with disclosed gaps on 2026-09-28. He reported both production deploys succeeded, the four-profile access matched, and Tier sat directly below Rating. The [WI-001 deployment record](../../delivery/deployment/WI-001-account-tier-field/DEPLOYMENT-RECORD.md) and [WI-002 deployment record](../../delivery/deployment/WI-002-tier-access-and-layout/DEPLOYMENT-RECORD.md) hold the production outcomes. Unsupported-value API rejection remains unrun.\\n+\\n+## Change history\\n+\\n+- 2026-09-28 — Account Tier, its guidance, access, and Account Layout placement delivered under WI-001 and WI-002; approved by Mike.\\n*** Add File: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce-docsave-f2b27543/system-guide/account.md\\n+# Account\\n+\\n+## What this area does today\\n+\\n+In `tkv2-prod` on 2026-09-28, Account has a manually set Tier picklist with Gold, Silver, and Bronze. Mike reported Tier directly below Rating on Account Layout and confirmed the four-profile field access.\\n+\\n+## Components and paths\\n+\\n+| Component | Role | Location or reference | Evidence |\\n+| --- | --- | --- | --- |\\n+| Account.Tier__c | Stores the manual Account ranking | [Field source](../force-app/main/default/objects/Account/fields/Tier__c.field-meta.xml) | Read-only production Account describe on 2026-09-28 |\\n+| Account-Account Layout | Displays Tier below Rating | [Layout source](../force-app/main/default/layouts/Account-Account%20Layout.layout-meta.xml) | Mike\'s production page check on 2026-09-28 |\\n+| Four profile field grants | Controls Tier read and edit access | [WI-002 manual steps](../delivery/deployment/WI-002-tier-access-and-layout/manual-steps.md) | Mike\'s production Setup and access report on 2026-09-28 |\\n+\\n+## Data and flow\\n+\\n+An authorized user selects Gold, Silver, Bronze, or blank on an Account. The field has no default. No automatic ranking is part of this change.\\n+\\n+## Operational behavior\\n+\\n+Sales Manager and System Administrator profile users can read and edit Tier. Sales User and Read Only profile users can read it. Existing Account object and record access determines which Accounts users can open. The field access was set in production Setup and is outside the layout-only deployment package.\\n+\\n+## Known gaps and uncertainty\\n+\\n+The production field description was not independently checked in Setup. Unsupported-value API rejection, full org automation inspection, detailed before-and-after Account record-access comparison, and exhaustive effective-permission audit were not run. The WI-002 production job ID was not separately supplied.\\n+\\n+## Last verified\\n+\\n+- Date and environment: 2026-09-28, `tkv2-prod`.\\n+- Sources: Production Account describe; Mike\'s deployment, Setup, access, and layout report; WI-001 and WI-002 deployment records.\\n+- Maintainer: Acme CRM project owner and agents.\\n*** End Patch";text(await tools.apply_patch(p));']
+  -> Script completed
+Wall time 4.8 seconds
+Output:
+
+{}
+
+[PATCH] files=['/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce-docsave-f2b27543/PROJECT-ROADMAP.md\\n@@\\n-<!-- Fill-in guide: replace every angle-bracket prompt in the outcome, phase table, phase heading, and work-unit fields with this project\'s real text. Keep one overview row and one matching ## heading per phase. Under that heading, repeat the ### work-unit block for each deliverable-sized unit and link its canonical work item in the Linked work item field. Remove example rows and this guide after setup. -->\\n-\\n-Use this file for the project\'s phases and deliverable-sized work units. Link each unit to its work item when one exists. The work item holds its active requirements, open questions, detailed tasks, and execution history.\\n-\\n-```text\\n-PROJECT-ROADMAP.md\\n-└── Phase\\n-    └── Deliverable-sized work unit\\n-        └── Linked work item\\n-            ├── Active requirements\\n-            ├── Open questions\\n-            ├── Detailed tasks\\n-            └── Execution history\\n-```\\n-\\n@@\\n-| `P01 — <phase name>` | `<result>` | `<evidence needed to finish>` | `<earlier phase or none>` |\\n+| P01 — Account Tier | Sales team can rank Accounts manually with controlled field access | Tier field, guidance, access, and layout placement are in production and accepted by Mike on 2026-09-28 | None |\\n@@\\n-## P01 — <Phase name>\\n+## P01 — Account Tier\\n@@\\n-**Outcome:** `<Result larger than one work unit.>`  \\n-**Exit condition:** `<Observable evidence that the phase is complete.>`  \\n-**Dependencies:** `<Real prerequisites, or none known.>`\\n+**Outcome:** Account Tier is available to the Acme sales team with approved values, guidance, access, and Account Layout placement.  \\n+**Exit condition:** Mike reported both production deploys succeeded and confirmed Tier placement and access on 2026-09-28.  \\n+**Dependencies:** None.  \\n+**Status:** Done on 2026-09-28.\\n@@\\n-### P01-U01 — <Deliverable-sized work unit>\\n+### P01-U01 — Account Tier field\\n@@\\n-**Deliverable:** `<Specific output or change from this unit.>`  \\n-**Done when:** `<Evidence for completing the unit.>`  \\n-**Depends on:** `<Other unit or none.>`  \\n-**Linked work item:** `<Link to the canonical issue or local WORK-ITEM.md when created.>`\\n+**Deliverable:** Nullable restricted Tier picklist on Account, with Gold, Silver, Bronze, description, and help text.  \\n+**Done when:** Production deploy succeeds and field behavior is verified. Mike reported the deploy succeeded; production Account describe verified the values, nullability, default, and help text.  \\n+**Depends on:** None.  \\n+**Linked work item:** WI-001.\\n@@\\n-The linked work item owns its active requirements, open questions, detailed tasks, approvals, and execution history. Summarize only project-level sequencing here.\\n+### P01-U02 — Tier access and Account Layout\\n+\\n+**Deliverable:** Four-profile Tier access and Tier directly below Rating on Account Layout.  \\n+**Done when:** Production Setup grants and layout deployment are complete, and Mike verifies placement and access. He reported these results on 2026-09-28.  \\n+**Depends on:** P01-U01.  \\n+**Linked work item:** WI-002.\\n@@\\n-<!-- Put only questions about phase scope, order, dependencies, or milestones here. Work-item questions go in the linked item. Replace this prompt with real questions or write “None open.” -->\\n-\\n-- `<Question about phase scope, order, dependencies, or milestones; identify who can answer it.>`\\n+None open.\\n@@\\n-- `<Date and source>: <Material approved change to project outcome, phase scope, or sequence.>`\\n+- 2026-09-28 — WI-001 and WI-002 completed the Account Tier phase; Mike approved the results and reported production deployment.\\n*** End Patch";text(await tools.apply_patch(p));']
+  -> Script completed
+Wall time 3.8 seconds
+Output:
+
+{}
+
+[CALL exec] git add -- PROJECT-ROADMAP.md delivery/deployment/component-tracker.csv delivery/deployment/WI-001-account-tier-field/DEPLOYMENT-RECORD.md delivery/deployment/WI-002-tier-access-and-layout/DEPLOYMENT-RECORD.md delivery/deployment/WI-002-tier-access-and-layout/manual-steps.md requirements/account/ACCOUNT.md system-guide/account.md
+  -> Script completed
+Wall time 2.9 seconds
+Output:
+
+
+
+[CALL exec] git diff --cached --check
+   git diff --cached
+   git status --short
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+RESULT 0
+PROJECT-ROADMAP.md:15: trailing whitespace.
++**Outcome:** Account Tier is available to the Acme sales team with approved values, guidance, access, and Account Layout placement.  
+PROJECT-ROADMAP.md:16: trailing whitespace.
++**Exit condition:** Mike reported both production deploys succeeded and confirmed Tier placement and access on 2026-09-28.  
+PROJECT-ROADMAP.md:17: trailing whitespace.
++**Dependencies:** None.  
+PROJECT-ROADMAP.md:22: trailing whitespace.
++**Deliverable:** Nullable restricted Tier picklist on Account, with Gold, Silver, Bronze, description, and help text.  
+PROJECT-ROADMAP.md:23: trailing whitespace.
++**Done when:** Production deploy succeeds and field behavior is verified. Mike reported the deploy succeeded; production Account describe verified the values, nullability, default, and help text.  
+PROJECT-ROADMAP.md:24: trailing whitespace.
++**Depends on:** None.  
+PROJECT-ROADMAP.md:29: trailing whitespace.
++**Deliverable:** Four-profile Tier access and Tier directly below Rating on Account Layout.  
+PROJECT-ROADMAP.md:30: trailing whitespace.
++**Done when:** Production Setup grants and layout deployment are complete, and Mike verifies placement and access. He reported these results on 2026-09-28.  
+PROJECT-ROADMAP.md:31: trailing whitespace.
++**Depends on:** P01-U01.  
+
+RESULT 1
+diff --git a/PROJECT-ROADMAP.md b/PROJECT-ROADMAP.md
+index 6b524d2..8fefc51 100644
+--- a/PROJECT-ROADMAP.md
++++ b/PROJECT-ROADMAP.md
+@@ -1,20 +1,5 @@
+ # Project roadmap
+ 
+-<!-- Fill-in guide: replace every angle-bracket prompt in the outcome, phase table, phase heading, and work-unit fields with this project's real text. Keep one overview row and one matching ## heading per phase. Under that heading, repeat the ### work-unit block for each deliverable-sized unit and link its canonical work item in the Linked work item field. Remove example rows and this guide after setup. -->
+-
+-Use this file for the project's phases and deliverable-sized work units. Link each unit to its work item when one exists. The work item holds its active requirements, open questions, detailed tasks, and execution history.
+-
+-```text
+-PROJECT-ROADMAP.md
+-└── Phase
+-    └── Deliverable-sized work unit
+-        └── Linked work item
+-            ├── Active requirements
+-            ├── Open questions
+-            ├── Detailed tasks
+-            └── Execution history
+-```
+-
+ ## Project outcome
+ 
+ Give the Acme sales team a Salesforce org that fits how they sell, starting with better account data.
+@@ -23,29 +8,33 @@ Give the Acme sales team a Salesforce org that fits how they sell, starting with
+ 
+ | Phase | Intended outcome | Exit condition | Depends on |
+ | --- | --- | --- | --- |
+-| `P01 — <phase name>` | `<result>` | `<evidence needed to finish>` | `<earlier phase or none>` |
++| P01 — Account Tier | Sales team can rank Accounts manually with controlled field access | Tier field, guidance, access, and layout placement are i
+
+[PATCH] files=['/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce-docsave-f2b27543/PROJECT-ROADMAP.md\\n@@\\n-**Outcome:** Account Tier is available to the Acme sales team with approved values, guidance, access, and Account Layout placement.  \\n-**Exit condition:** Mike reported both production deploys succeeded and confirmed Tier placement and access on 2026-09-28.  \\n-**Dependencies:** None.  \\n+**Outcome:** Account Tier is available to the Acme sales team with approved values, guidance, access, and Account Layout placement.\\n+**Exit condition:** Mike reported both production deploys succeeded and confirmed Tier placement and access on 2026-09-28.\\n+**Dependencies:** None.\\n@@\\n-**Deliverable:** Nullable restricted Tier picklist on Account, with Gold, Silver, Bronze, description, and help text.  \\n-**Done when:** Production deploy succeeds and field behavior is verified. Mike reported the deploy succeeded; production Account describe verified the values, nullability, default, and help text.  \\n-**Depends on:** None.  \\n+**Deliverable:** Nullable restricted Tier picklist on Account, with Gold, Silver, Bronze, description, and help text.\\n+**Done when:** Production deploy succeeds and field behavior is verified. Mike reported the deploy succeeded; production Account describe verified the values, nullability, default, and help text.\\n+**Depends on:** None.\\n@@\\n-**Deliverable:** Four-profile Tier access and Tier directly below Rating on Account Layout.  \\n-**Done when:** Production Setup grants and layout deployment are complete, and Mike verifies placement and access. He reported these results on 2026-09-28.  \\n-**Depends on:** P01-U01.  \\n+**Deliverable:** Four-profile Tier access and Tier directly below Rating on Account Layout.\\n+**Done when:** Production Setup grants and layout deployment are complete, and Mike verifies placement and access. He reported these results on 2026-09-28.\\n+**Depends on:** P01-U01.\\n*** End Patch";text(await tools.apply_patch(p));']
+  -> Script completed
+Wall time 2.7 seconds
+Output:
+
+{}
+
+[CALL exec] git add -- PROJECT-ROADMAP.md
+  -> Script completed
+Wall time 3.4 seconds
+Output:
+
+
+
+[CALL exec] git diff --cached --check
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+
+
+[CALL exec] node /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.4/skills/publish-docs/scripts/publish-docs.mjs publish --message 'Record Account Tier production delivery and baseline'
+  -> Script completed
+Wall time 4.7 seconds
+Output:
+
+No remote: committed locally. d9b30e2295652a0f94cf6528dde21898b29d94a9 is on main.
+
+
+[AGENT] The closeout documents are committed locally on `main` at `d9b30e2`. I’m updating the work item records now; the production flags are marked Yes, with the separate WI-002 job ID left unspecified because it was not supplied.
+
+[CALL exec] toolkit work history WI-002 --note 'Owner words: I ran both production deploys from main. Step 2: I set the Tier field-level security in tkv2-prod Setup (visible to Sales Manager, System Administrator, Sales User, and Read Only; editable only by Sales Manager and System Administrator). Step 3: the same, Succeeded, one component, zero errors. In production Tier sits directly below Rating and the access matches. Close both items out.' --effect 'Production access and layout are reported delivered; deployment record, tracker, requirements, and system guide were updated.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Added a Recent History row to WI-002.
+
+
+[CALL exec] toolkit work history WI-001 --note 'Owner words: I ran both production deploys from main. Step 1: status 0, Succeeded, success true, one component deployed, zero component errors. Close both items out.' --effect 'Production field deployment is reported delivered; production Account describe confirmed the Tier values, nullability, default, and help text; deployment record, tracker, requirements, and system guide were updated.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Added a Recent History row to WI-001.
+
+
+[CALL exec] toolkit work set WI-002 --stage 14-spec-update
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Updated WI-002: stage 13 Deployment -> 14 Specification update (status In Review).
+Now 14 Specification update (In Review). Continue with work-decide.
+
+
+[CALL exec] toolkit work set WI-001 --stage 14-spec-update
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Updated WI-001: stage 13 Deployment -> 14 Specification update (status In Review).
+Now 14 Specification update (In Review). Continue with work-decide.
+
+
+[CALL exec] toolkit work edit WI-002 --section Overview --text '**Goal:** Give Account viewers read access to Tier, limit editing to Sales Manager and System Administrator profile users, and place Tier directly below Rating on Account Layout.
+
+**Current position:** Done on 2026-09-28: Mike reported production field access saved, the layout-only deploy succeeded, Tier sits directly below Rating, and the four-profile access matches. The approved result, deployment record, component tracker, requirements, and system guide are on local main at d9b30e2.
+
+**Next action:** None. Finished.
+
+**Blockers:** None.
+
+**Related items:** Child of WI-001; delivers R-03 and R-04. The detailed before-and-after Account record-access comparison and exhaustive effective-permission audit were not run under the approved result gaps.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Overview" in WI-002.
+
+
+[CALL exec] toolkit work edit WI-002 --section Roadmap --text 'A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Access and layout baseline | Existing grants and Account Layout configuration are known | Done | Actual layout assignment and effective access paths were recorded | None |
+| P2 — Tier access and placement | Approved R-03 and R-04 behavior is implemented and checked | Done | Mike reported production field access and layout deployment succeeded, Tier below Rating, and the four-profile access matches on 2026-09-28 | None |'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Roadmap" in WI-002.
+
+
+[CALL exec] toolkit work edit WI-002 --section Tasks --text '### P1 — Access and layout baseline
+
+- [x] **P1-T01 — Inspect layout and access** · Complete
+  **Work:** Inspect Account Layout metadata, assignments, Account-visible profiles, permission sets, groups, and user assignments under the approved design.
+  **Deliverable:** Layout and effective-access baseline, including the verified Setup control path.
+  **Done when:** The baseline identified the layout and relevant grant paths; conflicts were recorded.
+  **Depends on:** WI-001 field availability.
+
+### P2 — Tier access and placement
+
+- [x] **P2-T01 — Prepare Account Layout change** · Complete
+  **Work:** Place Tier directly below Rating in Account Layout and prepare a layout-only WI-002 package.
+  **Deliverable:** Reviewed layout diff, manifest, component tracker entries, and deployment steps.
+  **Done when:** Sandbox validation succeeded without unrelated components.
+  **Depends on:** P1-T01.
+- [x] **P2-T02 — Configure and check access** · Complete with approved audit gaps
+  **Work:** Set field access through production Setup and check resulting grants.
+  **Deliverable:** Access settings and R-03 check results.
+  **Done when:** Mike reported saving visible grants for four profiles, editable only for Sales Manager and System Administrator, and confirmed access in production on 2026-09-28. Detailed before-and-after Account record-access comparison and exhaustive effective-permission audit were not run under the approved result gaps.
+  **Depends on:** P1-T01 and deployed Tier field.
+- [x] **P2-T03 — Check layout result** · Complete
+  **Work:** Check Tier placement on Account Layout as an assigned user and record R-04 evidence.
+  **Deliverable:** Tested WI-002 layout result in its test plan and production deployment record.
+  **Done when:** Mike reported Tier directly below Rating in production on 2026-09-28.
+  **Depends on:** P2-T01 and approved deployments.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Tasks" in WI-002.
+
+
+[CALL exec] toolkit work edit WI-001 --section Overview --text '**Goal:** Let the Acme sales team manually rank Accounts using a Tier picklist.
+
+**Current position:** Done on 2026-09-28: Mike reported the field-only production deploy succeeded, and a read-only production Account describe confirmed Tier values, nullability, no default, restriction, and help text. WI-002 delivered Tier access and Account Layout placement. The approved result, deployment record, component tracker, requirements, and system guide are on local main at d9b30e2.
+
+**Next action:** None. Finished.
+
+**Blockers:** None.
+
+**Related items:** WI-002 delivered R-03 and R-04. Unsupported-value API rejection and full org automation inspection remain unrun under the approved result gaps. The production field description was not independently checked in Setup.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Overview" in WI-001.
+
+
+[CALL exec] toolkit work edit WI-001 --section Roadmap --text 'A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Account Tier field | Account has the approved Tier picklist and field guidance from R-01 and R-02 | Done | Mike reported the production field-only deploy succeeded; production Account describe confirmed values, nullability, default, restriction, and help text | None |
+| P2 — Access and Account Layout | R-03 and R-04 are delivered after the field | Done | WI-002 has its own approved result; Mike reported production access and layout checks passed | WI-002 |'
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+Saved "Roadmap" in WI-001.
+
+
+[CALL exec] toolkit work edit WI-001 --section Tasks --text '### P1 — Account Tier field
+
+- [x] **P1-T01 — Inspect Account metadata and dependencies** · Done
+  **Work:** Check the Salesforce project, Account Rating and Tier fields, and metadata dependencies for R-01 and R-02.
+  **Deliverable:** Verified field build inputs and impact notes.
+  **Done when:** Sandbox Account describe showed Rating and no Tier; the source graph had no Tier references in the new source snapshot. API name Account.Tier__c matched the approved design.
+  **Depends on:** None.
+- [x] **P1-T02 — Build and validate Tier field** · Done
+  **Work:** Add restricted Account.Tier__c with Gold, Silver, Bronze, no default, description, and help text; prepare the field-only package.
+  **Deliverable:** Field metadata, component tracker entries, manifest, and test plan.
+  **Done when:** Source checks and sandbox check-only validation succeeded for one component with zero errors.
+  **Depends on:** P1-T01.
+- [x] **P1-T03 — Check field result** · Complete with approved test gaps
+  **Work:** Check R-01 and R-02 against field metadata, sandbox evidence, and read-only production Account describe.
+  **Deliverable:** Recorded field result and Mike approval.
+  **Done when:** Mike approved the result with disclosed gaps and reported the production deploy succeeded; production Account describe confirmed the field values, nullability, default, restriction, and help text on 2026-09-28.
+  **Depends on:** P1-T02 and approved deployment.
+
+### P2 — Access and Account Layout
+
+- [x] **P2-T01 — Deliver WI-002** · Done
+  **Work:** Complete WI-002 against R-03 and R-04 after the field became available.
+  **Deliverable:** Approved access and Account Layout result.
+  **Done when:** Mike approved WI-002 and reported production access and layout checks passed on 2026-09-28.
+  **Depends on:** P1 field availability.'
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+Saved "Tasks" in WI-001.
+
+
+[CALL exec] toolkit work set WI-002 --waiting-on agent
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+Updated WI-002: waiting on agent.
+Now 14 Specification update (In Review). Continue with work-finish.
+
+
+[CALL exec] toolkit work set WI-001 --waiting-on agent
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+Updated WI-001: waiting on agent.
+Now 14 Specification update (In Review). Continue with work-finish.
+
+
+[CALL exec] git status --short --branch
+   git status --short --branch
+   git status --short --branch
+   git merge-base --is-ancestor claude/wi-001-add-a-tier-picklist-field-to main
+   git merge-base --is-ancestor claude/wi-002-set-account-tier-access-and main
+   git log -1 --format='%h %s'
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+RESULT 0
+## main
+ (exit 0)
+RESULT 1
+## claude/wi-001-add-a-tier-picklist-field-to
+ (exit 0)
+RESULT 2
+## claude/wi-002-set-account-tier-access-and
+ (exit 0)
+RESULT 3
+ (exit 0)
+RESULT 4
+ (exit 0)
+RESULT 5
+d9b30e2 Record Account Tier production delivery and baseline
+ (exit 0)
+
+[CALL exec] toolkit work finish WI-002 --by Mike --evidence 'Mike reported saving the four-profile Tier field access in tkv2-prod Setup, a successful one-component layout deploy with zero component errors, Tier directly below Rating, and matching access on 2026-09-28; local main commit d9b30e2 records the baseline.'
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+WI-002 is Done. Result approval: 2026-09-28 by Mike.
+
+
+[CALL exec] toolkit work finish WI-001 --by Mike --evidence 'Mike reported a successful one-component Account Tier field deploy to tkv2-prod with zero component errors on 2026-09-28; production Account describe confirmed the restricted Gold/Silver/Bronze picklist, no default, nullability, and help text; WI-002 delivered access and layout; local main commit d9b30e2 records the baseline.'
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+WI-001 is Done. Result approval: 2026-09-28 by Mike.
+
+
+[AGENT] WI-002 and WI-001 are both marked Done. I’m clearing their old next steps from the current focus and removing the two clean, merged worktrees and branches.
+
+[CALL exec] toolkit memory focus --json
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{
+  "ok": true,
+  "backend": "builtin",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-28, approved Tier results merged locally and production handoff prepared; recorded by agent\n\n## Now\n\n- WI-001 add a Tier picklist field to Account so the sales team can rank their accounts.\n- WI-002 Set Account Tier access and place it below Rating on Account Layout.\n\n## Waiting on the owner\n\n- Mike runs the WI-001 field-only package against tkv2-prod and confirms the field, values, description, and help text. He then sets the four-profile Tier field access in production Setup, runs the WI-002 layout-only package, checks the four profile views and Tier placement, and reports both deployment results. Exact commands and checks are in the two deployment records and WI-002 manual steps on main. Agents cannot validate against or deploy to production.\n\n## Untracked to-dos\n\n- None.\n\n## Next session starts with\n\n- Continue WI-001 and WI-002 at stage 13 Deployment. Read Mike's production results, verify read-only if needed, update deployment records and component tracker flags, then complete the requirements and system-guide baseline and finish the items.\n- Both results were approved with disclosed gaps: unsupported-value API rejection, full org automation inspection, and detailed before-and-after Account record-access comparison remain unrun.\n- Both branches were merged locally into main; the repository has no remote. The phase plan remains open in PROJECT-ROADMAP.md. tkv2-sbx refreshes from production every Sunday night.\n",
+  "version": "74520d441d8497ace2f316d63791e78c92e1fd5613fd44d16e2de4e9f0a2fc5a"
+}
+
+
+[CALL exec] mktemp -d
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+/var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.17Aowp5IE2
+
+
+[PATCH] files=['/var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.17Aowp5IE2/focus.md\\n+# Current focus\\n+\\n+Last updated: 2026-09-28, Account Tier production delivery recorded and WI-001/WI-002 finished; recorded by agent from Mike\'s report\\n+\\n+## Now\\n+\\n+- None.\\n+\\n+## Waiting on the owner\\n+\\n+- None.\\n+\\n+## Untracked to-dos\\n+\\n+- None.\\n+\\n+## Next session starts with\\n+\\n+- WI-001 and WI-002 are Done. Their production outcomes, approved behavior, and known verification gaps are in the work items, deployment records, Account requirements, and Account system guide on local main.\\n+- Await Mike\'s next project request. The repository has no remote. `tkv2-sbx` refreshes from production every Sunday night.\\n*** End Patch";text(await tools.apply_patch(p));']
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{}
+
+[CALL exec] toolkit memory focus --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.17Aowp5IE2/focus.md --expect 74520d441d8497ace2f316d63791e78c92e1fd5613fd44d16e2de4e9f0a2fc5a
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved the current focus (20 lines). Version: b03e628c7603
+
+
+[CALL exec] rm /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.17Aowp5IE2/focus.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+
+
+[CALL exec] rmdir /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.17Aowp5IE2
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+
+
+[CALL exec] git worktree remove .claude/worktrees/wi-002-set-account-tier-access-and
+  -> Script completed
+Wall time 4.9 seconds
+Output:
+
+
+
+[CALL exec] git branch -d claude/wi-002-set-account-tier-access-and
+  -> Script completed
+Wall time 3.9 seconds
+Output:
+
+Deleted branch claude/wi-002-set-account-tier-access-and (was 3a010eb).
+
+
+[CALL exec] git worktree remove .claude/worktrees/wi-001-add-a-tier-picklist-field-to
+  -> Script completed
+Wall time 3.0 seconds
+Output:
+
+
+
+[CALL exec] git branch -d claude/wi-001-add-a-tier-picklist-field-to
+  -> Script completed
+Wall time 3.0 seconds
+Output:
+
+Deleted branch claude/wi-001-add-a-tier-picklist-field-to (was 01dd280).
+
+
+[CALL exec] git worktree remove /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce-docsave-f2b27543
+  -> Script completed
+Wall time 4.2 seconds
+Output:
+
+
+
+[CALL exec] toolkit work list --tree
+   toolkit memory focus
+   toolkit doctor
+   git status --short --branch
+   git worktree list
+   git log -1 --format='%h %s'
+  -> Script completed
+Wall time 0.5 seconds
+Output:
+
+RESULT 0
+No open work items. Add --all to include finished, cancelled, and archived ones.
+
+RESULT 1
+# Current focus
+
+Last updated: 2026-09-28, Account Tier production delivery recorded and WI-001/WI-002 finished; recorded by agent from Mike's report
+
+## Now
+
+- None.
+
+## Waiting on the owner
+
+- None.
+
+## Untracked to-dos
+
+- None.
+
+## Next session starts with
+
+- WI-001 and WI-002 are Done. Their production outcomes, approved behavior, and known verification gaps are in the work items, deployment records, Account requirements, and Account system guide on local main.
+- Await Mike's next project request. The repository has no remote. `tkv2-sbx` refreshes from production every Sunday night.
+
+RESULT 2
+Toolkit doctor for Acme CRM (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce).
+
+Warnings (3):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+3. The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them.
+   Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.
+
+Notes (8):
+- The AGENTS.md Commands table has no verified build, test, or deploy commands yet. Add them once they are known and verified.
+- AGENTS.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.
+- delivery/deployment/component-tracker.csv was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- delivery/deployment/full-project-deployment-template/package.xml was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- sfdx-project.json was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+
+Result: 0 problems and 3 warnings.
+
+RESULT 3
+## main
+
+RESULT 4
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee93
+
+[CALL exec] toolkit work list --tree --all
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+account-tier/ (group)
+  WI-001  add a Tier picklist field to Account so the sales team can rank their accounts  (Done)
+    WI-002  Set Account Tier access and place it below Rating on Account Layout  (Done)
+
+
+[AGENT] WI-001 and WI-002 are **Done**. I recorded your production deployment and access results, updated the component tracker and Account documentation, and removed the clean merged worktrees and branches. The closeout is committed locally on `main` at `d9b30e2`; this repository has no remote.
+
+A read-only production check confirmed Tier’s values, blank default, and help text. The production field description was not independently checked in Setup. The previously approved test and audit gaps remain documented in the [Account system guide](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce/system-guide/account.md).
+
+Tell me the next thing to build.
+
+SKILLS OPENED (SKILL.md read): ['work-decide', 'work-finish', 'sf-component-tracker', 'publish-docs', 'memory-save', 'sf-component-tracker', 'sf-component-tracker']
+
+TOOLKIT COMMANDS:
+   toolkit work show WI-001
+   toolkit work show WI-002
+   toolkit work decisions
+   toolkit work show WI-001 --section Overview
+   toolkit work show WI-001 --section Roadmap
+   toolkit work show WI-001 --section Tasks
+   toolkit work list --tree
+   toolkit memory focus --json
+   toolkit work show WI-001 --section Requirements
+   toolkit work history WI-002 --note 'Owner words: I ran both production deploys from main. Step 2: I set the Tier field-level security in tkv2-prod Setup (visible to Sales Manager, System Administrator, Sales User, and Read Only
+   toolkit work history WI-001 --note 'Owner words: I ran both production deploys from main. Step 1: status 0, Succeeded, success true, one component deployed, zero component errors. Close both items out.' --effect 'Production field deployment is reported delivered
+   toolkit work set WI-002 --stage 14-spec-update
+   toolkit work set WI-001 --stage 14-spec-update
+   toolkit work edit WI-002 --section Overview --text '**Goal:** Give Account viewers read access to Tier, limit editing to Sales Manager and System Administrator profile users, and place Tier directly below Rating on Account Layout.
+   toolkit work edit WI-002 --section Roadmap --text 'A phase is complete when its tasks are complete and its exit result has been checked.
+   toolkit work edit WI-002 --section Tasks --text '### P1 — Access and layout baseline
+   toolkit work edit WI-001 --section Overview --text '**Goal:** Let the Acme sales team manually rank Accounts using a Tier picklist.
+   toolkit work edit WI-001 --section Roadmap --text 'A phase is complete when its tasks are complete and its exit result has been checked.
+   toolkit work edit WI-001 --section Tasks --text '### P1 — Account Tier field
+   toolkit work set WI-002 --waiting-on agent
+   toolkit work set WI-001 --waiting-on agent
+   toolkit work finish WI-002 --by Mike --evidence 'Mike reported saving the four-profile Tier field access in tkv2-prod Setup, a successful one-component layout deploy with zero component errors, Tier directly below Rating, and matching access on 2026-09-28
+   toolkit work finish WI-001 --by Mike --evidence 'Mike reported a successful one-component Account Tier field deploy to tkv2-prod with zero component errors on 2026-09-28
+   toolkit memory focus --json
+   toolkit memory focus --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.17Aowp5IE2/focus.md --expect 74520d441d8497ace2f316d63791e78c92e1fd5613fd44d16e2de4e9f0a2fc5a
+   toolkit work list --tree
+   toolkit memory focus
+   toolkit doctor
+   toolkit work list --tree --all

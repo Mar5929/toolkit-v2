@@ -1,0 +1,1 @@
+Yes, I approve deploying only Account.Tier__c to tkv2-sbx. By the way, tkv2-sbx gets refreshed from production every Sunday night, so anything deployed there only and not to production is gone by Monday.

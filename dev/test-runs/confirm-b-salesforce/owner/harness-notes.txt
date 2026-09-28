@@ -1,0 +1,2 @@
+2026-09-28T13:03:59 harness: fake sf retrieve now copies the Account layout for any Layout retrieve (after s08, which ran 'sf project retrieve start -m Layout')
+2026-09-28T13:15:29 harness: fake describe help text changed from the round 3 value to the approved wording, after s10 noticed the mismatch (a harness artifact)

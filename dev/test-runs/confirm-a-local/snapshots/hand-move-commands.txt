@@ -1,0 +1,3 @@
+mkdir .work-items/counting
+mv .work-items/WI-001-build-tally-word-count-cli .work-items/counting/WI-001-word-count
+mv .work-items/counting/WI-001-word-count/WI-002-add-lines-line-count .work-items/counting/WI-001-word-count/lines-flag

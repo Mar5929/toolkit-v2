@@ -1,0 +1,5 @@
+I need your approval for **WI-002’s Account Tier access change in the `tkv2-sbx` sandbox**. I recommend approving it so we can check the intended access before the separate Account Layout deployment.
+
+The change would make `Account.Tier__c` visible to Sales Manager, System Administrator, Sales User, and Read Only. Only Sales Manager and System Administrator would be able to edit it. After the access change, I’ll audit the effective permissions. The layout deployment will require a separate approval.
+
+**Do you approve that exact field-access change in `tkv2-sbx`?**

@@ -1,0 +1,5 @@
+I recorded your project outcome in the setup guides and set `tkv2-sbx` as the sandbox and `tkv2-prod` as production. The phase plan and detailed account data requirements remain open.
+
+`toolkit doctor` reports **0 problems and 3 warnings**: it still sees this folder and the Toolkit V2 hooks, including the Salesforce guards, as untrusted in Codex. Please trust the folder and those hooks in `/hooks`. The setup files are still uncommitted.
+
+The project-setup skill requires your approval before the initial setup commit. **Commit the setup files now?**

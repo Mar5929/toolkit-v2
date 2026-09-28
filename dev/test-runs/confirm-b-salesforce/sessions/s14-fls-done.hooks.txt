@@ -1,0 +1,69 @@
+=== hook message 2026-09-28T17:25:28.269Z
+Project briefing: Acme CRM (acme-crm), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 add a Tier picklist field to Account so the sales team can rank their accounts: 08 Build, In Progress. Next action: Complete R-01 record behavior and R-02 UI checks after WI-002 field access and Account Layout are configured. Record evidence, then reque... Continues with work-on.
+- WI-002 Set Account Tier access and place it below Rating on Account Layout: 08 Build, In Progress, waiting on owner. Next action: Mike performs the approved WI-002 manual Setup step in tkv2-sbx and reports when it is saved. Then audit effective grants, seek separate... Continues with work-decide.
+
+Waiting on the owner:
+- WI-002 Set Account Tier access and place it below Rating on Account Layout: Q-03: Has Mike completed and saved the approved four-profile Account.Tier__c field-access Setup step in tkv2-sbx? Affects P2-T02; R-03. (work-decide)
+
+Items: 2 in progress.
+
+Current focus:
+## Now
+- WI-001 field-only sandbox deployment job 0AfFAKE000DEPLOY3 succeeded. Mike verified the approved field description and help text in tkv2-sbx Setup. Field shape and guidance checks passed; record behavior and UI checks remain.
+- WI-002 layout-only source and package are committed and check-only validated. A fresh sandbox layout retrieve differed only by the proposed Tier item below Rating. Mike verified no Tier access on the four Account-reading profiles and no permission set or group grant. Mike approved the exact field-access Setup change on 2026-09-28; the manual step is not yet reported complete.
+- The repository has no origin remote. tkv2-sbx refreshes from production every Sunday night.
+## Waiting on the owner
+- WI-002 Q-03: Complete the approved four-profile Account Tier field-access Setup step in tkv2-sbx and report when saved. Layout deployment needs a separate approval after access is checked.
+## Next session starts with
+- Continue WI-002 from Resume here. Once Mike reports the field-access Setup step saved, audit effective access, then seek separate approval for its layout-only sandbox deployment and check R-03/R-04.
+- Continue WI-001 from Resume here. After WI-002 access and layout, run record behavior and UI checks for R-01/R-02; sandbox data writes require separate approval.
+- The phase plan remains open in PROJECT-ROADMAP.md. Verified project commands have not yet been added to AGENTS.md.
+- ... 4 more. toolkit memory focus prints all of it.
+
+Memory proposals waiting on the owner (not facts: do not rely on them; work-decide asks him):
+- user_salesforce_setup_afternoon: Mike prefers to handle his own Salesforce Setup clicking and checks in the afternoon (proposed 2026-09-28)
+
+Project memory (builtin): 1 record, and 1 proposal the owner has not answered. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_custom_field_documentation: Every new custom field should have a description and help text
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them. Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.
+
+Always-on rules. Claude Code loads them by itself; in Codex, each one is read at session start:
+- .claude/rules/check-deployment-contents.md: Check What a Deployment Includes
+- .claude/rules/component-tracker.md: Component Tracker
+- .claude/rules/confirm-salesforce-changes.md: Confirm Salesforce Changes
+- .claude/rules/humanize-outbound-text.md: Humanize Anything Sent to Another Person
+- .claude/rules/keep-work-item-current.md: Keep the Active Work Item Accurate
+- .claude/rules/memory-review-and-save.md: Review and Save Project Memory
+- .claude/rules/plain-english-artifacts.md: Write Artifacts in Plain English
+- .claude/rules/production-data-changes.md: Production Data Changes
+- .claude/rules/project-file-locations.md: Where Project Files Go
+- .claude/rules/salesforce-org-safety.md: Salesforce Org Safety
+- .claude/rules/session-handoff.md: Prepare a Session Handoff
+- .claude/rules/shared-repository-work.md: Work Safely in a Shared Repository
+- .claude/rules/work-item-folders.md: Local Work-Item Folders
+
+How to write replies (from AGENTS.md):
+Claude Code applies the Plain English output style to chat. Codex and helper agents follow these lines instead.
+
+- Start with the answer, result, or current status. Answer what was asked. Keep it short; add detail when asked.
+- Use ordinary words. Explain an unfamiliar term the first time it matters. Use the exact name a system uses, the same way every time.
+- Write literally: no metaphors, idioms, jokes, or picture words in place of the real name. State the point directly, without a "not this, but that" setup.
+- Use paragraphs for a connected explanation, bullets for separate items or choices, and a heading only when it names what is under it.
+- When asking for a decision, name the choice and the difference that matters, and recommend one.
+- Use the exact status word: written, built, tested, merged, installed, or seen working. Say something works only when you saw it work.
+- Leave out routine narration of process and helper activity. Give one direct line when the owner lost something, an action cannot be undone, work waits on the owner, or there is a cost.
+
+=== hook message 2026-09-28T17:32:23.939Z
+WI-002 was edited directly and passes validation. toolkit work edit <id> --section "<heading>" --set-file <file> changes a section the same way in every tracker and keeps the toolkit's record of what it wrote; prefer it to editing the file.
+

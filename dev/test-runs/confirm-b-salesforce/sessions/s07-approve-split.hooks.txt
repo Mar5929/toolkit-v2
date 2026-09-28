@@ -1,0 +1,65 @@
+=== hook message 2026-09-28T16:51:39.886Z
+Project briefing: Acme CRM (acme-crm), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 add a Tier picklist field to Account so the sales team can rank their accounts: 04 Solution design, In Progress, waiting on owner. Next action: Ask Mike to approve Option A and its proposed description and help text. After approval, inspect layout and access details before building. Continues with work-decide.
+
+Waiting on the owner:
+- WI-001 add a Tier picklist field to Account so the sales team can rank their accounts: The design for WI-001 is proposed and waits for the owner's approval. Approve with: toolkit work approve WI-001 --design --by <name>. (work-decide)
+
+Items: 1 in progress.
+
+Current focus:
+Last updated: 2026-09-28, WI-001 design proposal prepared by agent
+## Now
+- Toolkit V2 setup files are committed locally on main as ffaab24. The project records tkv2-sbx as sandbox, tkv2-prod as production, and API version 62.0. There is no origin remote.
+- WI-001 is the active Account Tier item. Mike approved its requirements and accepted agent-led delivery with one team inside this chat. The reviewed design is proposed in the item.
+## Waiting on the owner
+- Codex setup step: trust this folder and the Toolkit V2 hooks, including both Salesforce guards. Toolkit doctor still reports 3 trust warnings despite earlier confirmation.
+## Untracked to-dos
+- None.
+## Next session starts with
+- Continue WI-001 from its Resume here. Ask Mike to approve Option A and the proposed field wording; then follow work-on for the build. Account metadata, sandbox deployment, and Salesforce Setup changes each need confirmation under project rules.
+- The phase plan remains open in PROJECT-ROADMAP.md. No verified build, test, or deploy command has been added to AGENTS.md.
+
+Project memory (builtin): 1 record. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_custom_field_documentation: Every new custom field should have a description and help text
+
+Setup steps in the current focus that are done now. They are not copied forward: take them out of "Waiting on the owner" at the next focus update:
+- "Codex setup step: trust this folder and the Toolkit V2 hooks, including both Salesforce guards. Toolkit doctor still reports 3 trust warnings despite earlier...": Codex trusts the Toolkit V2 hooks now.
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them. Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.
+
+Always-on rules. Claude Code loads them by itself; in Codex, each one is read at session start:
+- .claude/rules/check-deployment-contents.md: Check What a Deployment Includes
+- .claude/rules/component-tracker.md: Component Tracker
+- .claude/rules/confirm-salesforce-changes.md: Confirm Salesforce Changes
+- .claude/rules/humanize-outbound-text.md: Humanize Anything Sent to Another Person
+- .claude/rules/keep-work-item-current.md: Keep the Active Work Item Accurate
+- .claude/rules/memory-review-and-save.md: Review and Save Project Memory
+- .claude/rules/plain-english-artifacts.md: Write Artifacts in Plain English
+- .claude/rules/production-data-changes.md: Production Data Changes
+- .claude/rules/project-file-locations.md: Where Project Files Go
+- .claude/rules/salesforce-org-safety.md: Salesforce Org Safety
+- .claude/rules/session-handoff.md: Prepare a Session Handoff
+- .claude/rules/shared-repository-work.md: Work Safely in a Shared Repository
+- .claude/rules/work-item-folders.md: Local Work-Item Folders
+
+How to write replies (from AGENTS.md):
+Claude Code applies the Plain English output style to chat. Codex and helper agents follow these lines instead.
+
+- Start with the answer, result, or current status. Answer what was asked. Keep it short; add detail when asked.
+- Use ordinary words. Explain an unfamiliar term the first time it matters. Use the exact name a system uses, the same way every time.
+- Write literally: no metaphors, idioms, jokes, or picture words in place of the real name. State the point directly, without a "not this, but that" setup.
+- Use paragraphs for a connected explanation, bullets for separate items or choices, and a heading only when it names what is under it.
+- When asking for a decision, name the choice and the difference that matters, and recommend one.
+- Use the exact status word: written, built, tested, merged, installed, or seen working. Say something works only when you saw it work.
+- Leave out routine narration of process and helper activity. Give one direct line when the owner lost something, an action cannot be undone, work waits on the owner, or there is a cost.
+

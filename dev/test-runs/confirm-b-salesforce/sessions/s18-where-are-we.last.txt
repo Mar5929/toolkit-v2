@@ -1,0 +1,6 @@
+One decision waits on you: **WI-002** needs your sandbox Account checks across the four profiles. Please confirm that Tier starts blank, saves Gold, Silver, Bronze and blank, shows the approved help text below Rating, and has the expected edit access. The sandbox currently has no Account records.
+
+- **WI-002 is in build (stage 08).** The access settings and layout are in the sandbox; your UI checks are the next step.
+- **WI-001 is in build (stage 08).** The field is deployed, and you verified its description and help text in Setup. Its record and UI checks remain; your WI-002 checks also cover these.
+
+Nothing else is ready to work on until those results arrive. Say **“what do you need from me”** to go through the checks.

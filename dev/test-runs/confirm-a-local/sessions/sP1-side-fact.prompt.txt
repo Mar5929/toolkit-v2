@@ -1,0 +1,1 @@
+Quick note before I review the results: my test machine is a Mac mini running Node 22, and that is the only place I run tally.

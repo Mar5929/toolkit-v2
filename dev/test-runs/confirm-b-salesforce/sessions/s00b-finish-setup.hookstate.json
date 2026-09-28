@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "sessionId": "01a0e8d3-ad01-7060-9071-9b296f509a9b",
+  "host": "codex",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce",
+  "startedAt": "2026-09-28T16:23:03.337Z",
+  "turns": 1,
+  "turn": {
+    "key": "01a0e8d3-ad63-74d0-8aef-bed9f132c500",
+    "n": 1,
+    "startedAt": "2026-09-28T16:23:03.501Z",
+    "keep": null,
+    "baseline": {
+      "memoryMeta": null,
+      "hindsightMeta": null,
+      "memoryCache": null,
+      "workState": 1790612583393.0044,
+      "decisions": 1790612578012.49
+    },
+    "records": [
+      {
+        "kind": "memory",
+        "what": "toolkit memory focus",
+        "at": "2026-09-28T16:24:07.193Z"
+      }
+    ],
+    "edits": [],
+    "stopBlocked": false
+  },
+  "lastStopReason": null,
+  "source": "startup",
+  "updated": "2026-09-28T16:24:37.260Z"
+}

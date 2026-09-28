@@ -1,0 +1,17 @@
+Toolkit doctor for greet (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-claude-local).
+
+Warnings (2):
+1. ~/.config/toolkit-v2/plugin-root is missing, so the Codex wrapper cannot find the toolkit.
+   Fix: Run toolkit machine-setup (every session start also refreshes it).
+2. The toolkit wrapper script /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-claude-local-logs/home/.local/bin/toolkit is missing, so Codex cannot run toolkit commands by name.
+   Fix: Run toolkit machine-setup.
+
+Notes (2):
+- The AGENTS.md Commands table has no verified build, test, or deploy commands yet. Add them once they are known and verified.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.
+
+For Codex only (2; the owner clears them in Codex, so they do not change this result):
+- Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-claude-local). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off. Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+- The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards). Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Result: 0 problems and 2 warnings.

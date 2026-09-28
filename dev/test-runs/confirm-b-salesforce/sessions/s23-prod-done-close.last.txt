@@ -1,0 +1,5 @@
+WI-001 and WI-002 are **Done**. I recorded your production deployment and access results, updated the component tracker and Account documentation, and removed the clean merged worktrees and branches. The closeout is committed locally on `main` at `d9b30e2`; this repository has no remote.
+
+A read-only production check confirmed Tier’s values, blank default, and help text. The production field description was not independently checked in Setup. The previously approved test and audit gaps remain documented in the [Account system guide](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-b-salesforce/system-guide/account.md).
+
+Tell me the next thing to build.

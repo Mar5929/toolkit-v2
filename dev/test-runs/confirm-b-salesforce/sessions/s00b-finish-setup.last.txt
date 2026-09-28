@@ -1,0 +1,3 @@
+Toolkit V2 is installed, and I set the Salesforce API version to **62.0** from the sandbox. Doctor reports **0 problems**. Setup still needs your project outcome and confirmation of the Salesforce aliases.
+
+What should Acme CRM accomplish for the sales team? A possible starting point is: “Give the Acme sales team a reliable place to manage customer relationships and sales work.”

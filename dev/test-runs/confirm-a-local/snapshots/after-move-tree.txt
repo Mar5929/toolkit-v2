@@ -1,0 +1,7 @@
+.work-items/.toolkit-state.json
+.work-items/DASHBOARD.md
+.work-items/counting/WI-001-word-count/DESIGN.md
+.work-items/counting/WI-001-word-count/WORK-ITEM.md
+.work-items/counting/WI-001-word-count/lines-flag/WORK-ITEM.md
+.work-items/work-item-template/DESIGN.md
+.work-items/work-item-template/WORK-ITEM.md

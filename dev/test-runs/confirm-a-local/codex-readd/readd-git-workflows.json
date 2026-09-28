@@ -1,0 +1,8 @@
+{
+  "pluginId": "git-workflows@toolkit-v2",
+  "name": "git-workflows",
+  "marketplaceName": "toolkit-v2",
+  "version": "0.2.4",
+  "installedPath": "/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.4",
+  "authPolicy": "ON_INSTALL"
+}

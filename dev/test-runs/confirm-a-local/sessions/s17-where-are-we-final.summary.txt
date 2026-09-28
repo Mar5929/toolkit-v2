@@ -1,0 +1,181 @@
+PROMPT: Where are we?
+THREAD: 01a0e90d-cf95-7db0-95aa-27491fdd5683
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll check the current project records and give you the short status.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/skills/work-status/SKILL.md'
+  -> ---
+name: work-status
+description: 'Reports where the project''s work items stand: progress, blockers, the next item, and decisions waiting on the owner. Use whenever the owner asks about project or item status, even one item, for example "where are we", "what''s next", or "is X done yet". Not for a chat recap; use session-summary.'
+---
+
+# Work status
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Shared rules: the work plugin's `references/conventions.md`, two folders above this skill's folder (`../../references/conventions.md`). This skill only reads. It never changes an item, memory, or a file. Run each `toolkit` command alone, on its own line, in both hosts: never joined by `&&`, `;`, or a pipe (in Codex that runs it inside the sandbox, where it fails).
+
+## Steps
+
+1. Use the session briefing if this conversation already has it and nothing changed since. Otherwise run:
+   `toolkit brief`
+2. The owner named an item or an area: answer about that item only. Say where it stands in plain words, what is done and what is left in its Roadmap, its blockers, and its next action.
+   `toolkit work show <id>`
+3. The whole project: read the tree, the recommended next item, the decisions waiting on the owner, and the current focus.
+   `toolkit work list --tree`
+   `toolkit work next`
+   `toolkit work decisions`
+   `toolkit memory focus`
+4. Answer in this order: how
+
+[AGENT] I’m using the work-status procedure to check the tracker, next item, and owner decisions.
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work list --tree'
+  -> No open work items. Add --all to include finished, cancelled, and archived ones.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work next'
+  -> Nothing is ready to work on.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> Nothing is waiting on the owner.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-28, WI-001 and WI-002 local delivery by Codex
+
+## Now
+
+- None.
+
+## Waiting on the owner
+
+- Trust this project folder in Codex; toolkit doctor still reports this setup step.
+- Open /hooks in Codex and trust the Toolkit V2 hooks; toolkit doctor still reports this setup step.
+
+## Untracked to-dos
+
+- None.
+
+## Next session starts with
+
+- WI-001 and WI-002 are Done. Their code and project documents are on local main, and their worktrees and branches have been removed. Wait for Mike's next request.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work lifecycle'
+  -> Stages (the status follows the stage):
+  01-discovery              Backlog      Working out what the owner wants.                                    Continue with: work-requirements
+  02-refinement             Backlog      Turning that into requirements.                                      Continue with: work-requirements
+  03-requirements-approved  Ready        The owner approved the requirements.                                 Continue with: solution-design or work-on
+  04-solution-design        In Progress  Deciding how it gets built.                                          Continue with: solution-design
+  05-breakdown              In Progress  Splitting work that is too large.                                    Continue with: work-organize
+  06-implementation-plan    In Progress  Ordering the build steps.                                            Continue with: work-on
+  07-tracking-setup         In Progress  Creating build tracking when needed.                                 Continue with: work-on
+  08-build                  In Progress  Producing the requested change.                                      Continue with: work-on
+  09-testing                In Progress  Checking it against the requirements.                                Continue with: work-check
+  10-bug-fixing             In Progress  Fixing what testing found.                                           Continue with: work-check
+  11-user-approval          In Progress  The owner reviews the result.  
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for tally (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-a-local).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-a-local). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (4):
+- AGENTS.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- PROJECT.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.
+
+Result: 0 problems and 2 warnings.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work list --tree --all'
+  -> counting/ (group)
+  WI-001  Build tally word count CLI  (Done)
+    WI-002  Add --lines line count  (Done)
+
+
+[AGENT] There are **no open work items or decisions waiting on you**. WI-001 (word counting) and WI-002 (`--lines` counting) are Done, with their code and project documents on local `main`. There is no next item queued.
+
+`toolkit doctor` currently reports two Codex setup warnings: this folder and the Toolkit V2 hooks are not trusted. The session briefing says the hooks were trusted, so those records disagree. The `project-setup` procedure can check that when you want to address it.
+
+Tell me what you’d like to work on next.
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 139270, "cached_input_tokens": 121088, "cache_write_input_tokens": 0, "output_tokens": 688, "reasoning_output_tokens": 186}}
+
+SKILLS OPENED: ['work-status']
+
+[HOOK CONTEXT ord=9] Project briefing: tally (tally), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-a-local/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The tracker has no open items. A new request starts a work item with the work-on skill.
+
+Items: 2 done.
+
+Current focus:
+Last updated: 2026-09-28, WI-001 and WI-002 local delivery by Codex
+## Now
+- None.
+## Waiting on the owner
+- Trust this project folder in Codex; toolkit doctor still reports this setup step.
+- Open /hooks in Codex and trust the Toolkit V2 hooks; toolkit doctor still reports this setup step.
+## Untracked to-dos
+- None.
+## Next session starts with
+- WI-001 and WI-002 are Done. Their code and project documents are on local
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md",max_output_tokens:12000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.6/skills/work-status/SKILL.md",max_output_tokens:8000})
+]); r.forEach((v,i)=>text(JSON.stringify({i,result:v})))
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"27e2eb\",\"wall_time_seconds\":0,\"exit_code\":1,\"original_token_count\":3837,\"output\":\"cat: SOUL.md: No such file or directory\\n# tally\\n\\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\\n\\n## Purpose and intended outcome\\n\\n- Purpose: Count words or lines in a text file from the command line.\\n- Intended outcome: tally tells Mike how many words or lines a text file has, straight from the command line.\\n\\n## Scope and boundaries\\n\\n- In scope: `<Business capabilities or systems this project owns.>`\\n- Outside scope: `<Important exclusions or adjacent owners.>`\\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\\n\\n## Systems and environments\\n\\n| System or org | Purpose | Environment | Source of truth | Access notes |\\n| --- | --- | --- | --- | --- |\\n| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |\\n\\n## People and ownership\\n\\n| Role | Person or team | Responsibility | Source / last confirmed |\\n| --- | --- | --- | --- |\\n| Project owner | Mike | Makes project decisions | Owner's setup request, 2026-09-28 |\\n\\n## Work and project records\\n\\n- Work tracker: `.work-items/` (local folders, Git-ignored)\\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\\n- Project decisions: [DECISIONS.md](DECISIONS.md)\\n- Functional requirements: [requirements/](requirements/)\\n- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`\\n- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`\\n- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)\\n- Memory backup or sync: `<Owner-approved destination and restore procedure, outside this repository>`\\n\\n## Resources and project paths\\n\\n- Tests and checks: `<actual commands and locations>`\\n- Outside references: `<source register or appr
+
+[CALL] const cmds=["toolkit work list --tree","toolkit work next","toolkit work decisions","toolkit memory focus","toolkit work lifecycle"]; for (const cmd of cmds){const r=await tools.exec_command({cmd,max_output_tokens:3000});text(JSON.stringify({cmd,...r}))}
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.1 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"cmd\":\"toolkit work list --tree\",\"chunk_id\":\"9502f8\",\"wall_time_seconds\":0.000003459,\"exit_code\":0,\"original_token_count\":21,\"output\":\"No open work items. Add --all to include finished, cancelled, and archived ones.\\n\"}"}, {"type": "input_text", "text": "{\"cmd\":\"toolkit work next\",\"chunk_id\":\"8fdea7\",\"wall_time_seconds\":0.000002833,\"exit_code\":0,\"original_token_count\":8,\"output\":\"Nothing is ready to work on.\\n\"}"}, {"type": "input_text", "text": "{\"cmd\":\"toolkit work decisions\",\"chunk_id\":\"7a25eb\",\"wall_time_seconds\":0.000002583,\"exit_code\":0,\"original_token_count\":9,\"output\":\"Nothing is waiting on the owner.\\n\"}"}, {"type": "input_text", "text": "{\"cmd\":\"toolkit memory focus\",\"chunk_id\":\"a33865\",\"wall_time_seconds\":0.000003208,\"exit_code\":0,\"original_token_count\":135,\"output\":\"# Current focus\\n\\nLast updated: 2026-09-28, WI-001 and WI-002 local delivery by Codex\\n\\n## Now\\n\\n- None.\\n\\n## Waiting on the owner\\n\\n- Trust this project folder in Codex; toolkit doctor still reports this setup step.\\n- Open /hooks in Codex and trust the Toolkit V2 hooks; toolkit doctor still reports this setup step.\\n\\n## Untracked to-dos\\n\\n- None.\\n\\n## Next session starts with\\n\\n- WI-001 and WI-002 are Done. Their code and project documents are on local main, and their worktrees and branches have been removed. Wait for Mike's next request.\\n\"}"}, {"type": "input_text", "text": "{\"cmd\":\"toolkit work lifecycle\",\"chunk_id\":\"fe0958\",\"wall_time_seconds\":0.000003,\"exit_code\":0,\"original_token_count\":1559,\"output\":\"Stages (the status follows the stage):\\n  01-discovery              Backlog      Working out what the owner wants.                                    Continue with: work-requirements\\n  02-refinement             Backlog      Turning that into requirements.                                      Continue with: work-requirements\\n  03-requirements-approved  Ready        The owner approved the requirements.                                 Continue with: solution-design or work-on\\n  04-solution-design        In Progress  Deciding how it gets built.                                          Continue with: solution-design\\n  05-breakdown              In Progress  Splitting work that is too large.                                    Continue with
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit doctor",max_output_tokens:2500});text(r)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"da04bd\",\"wall_time_seconds\":0.000002667,\"exit_code\":1,\"original_token_count\":348,\"output\":\"Toolkit doctor for tally (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-a-local).\\n\\nWarnings (2):\\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/confirm-a-local). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.\\n   Fix: The owner opens Codex in this folder and trusts it when Codex asks.\\n2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).\\n   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\\n\\nNotes (4):\\n- AGENTS.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.\\n- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.\\n- PROJECT.md was changed by the project, so sync leaves it alone. Nothing new from the toolkit.\\n- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.\\n\\nResult: 0 problems and 2 warnings.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work list --tree --all",max_output_tokens:2000});text(r)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"951ddb\",\"wall_time_seconds\":0.000002791,\"exit_code\":0,\"original_token_count\":27,\"output\":\"counting/ (group)\\n  WI-001  Build tally word count CLI  (Done)\\n    WI-002  Add --lines line count  (Done)\\n\"}"}]

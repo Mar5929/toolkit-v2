@@ -1,0 +1,3 @@
+I ran the exact command once. The PreToolUse Salesforce guard **blocked it before execution** because `tkv2-prod` is a production org. The CLI returned no dry-run validation result. I changed no files.
+
+Your correction is confirmed: the Salesforce guard runs in this session.

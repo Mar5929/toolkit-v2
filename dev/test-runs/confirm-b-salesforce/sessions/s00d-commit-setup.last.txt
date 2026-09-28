@@ -1,0 +1,5 @@
+The setup files are committed locally on `main` as `ffaab24`. The working tree is clean. There is no `origin` remote, so nothing was pushed.
+
+`toolkit doctor` reports 0 problems but still shows three Codex trust warnings despite your confirmation. I recorded that discrepancy for the next session.
+
+Tell me the first thing you want built.
