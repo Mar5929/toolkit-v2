@@ -607,6 +607,72 @@ export function isPlaceholder(value) {
   return /^<[^<>]*>$/.test(s);
 }
 
+// Secrets never go in memory (the model's memory-criteria.md, "Never save as
+// lasting memory"; final review M2): memory is plain text, and Notion memory
+// sends it to Notion. These are the common shapes of a key, a token, a
+// private key, or a password written out.
+const SECRET_PATTERNS = [
+  { what: 'an API key (sk-...)', re: /\bsk-(?:ant-|proj-|live-|test-)?[A-Za-z0-9_-]{16,}/ },
+  { what: 'a GitHub token', re: /\b(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,})/ },
+  { what: 'a Notion token (ntn_...)', re: /\bntn_[A-Za-z0-9]{20,}/ },
+  { what: 'a Slack token (xox...)', re: /\bxox[abprs]-[A-Za-z0-9-]{10,}/ },
+  { what: 'an AWS access key (AKIA...)', re: /\bAKIA[0-9A-Z]{16}\b/ },
+  { what: 'a Google API key (AIza...)', re: /\bAIza[0-9A-Za-z_-]{30,}/ },
+  { what: 'a private key', re: /-----BEGIN [A-Z ]*PRIVATE KEY-----/ },
+  { what: 'a bearer token', re: /\bBearer\s+[A-Za-z0-9._~+/-]{20,}/ },
+  { what: 'a password', re: /\b(?:password|passwd|passcode|pwd)\s*(?::|=)\s*(\S{3,})/gi, secret: looksLikePassword },
+  { what: 'a password', re: /\b(?:password|passwd|passcode)\s+is\s+(?!(?:stored|kept|saved|managed|held|in|on|at|the|a|an|not|never|required|needed|set|changed|rotated|reset|expired|shared|available|found|listed|given|sent|handled|provided|written|documented|located|entered|typed|asked|prompted|missing|wrong|correct|same|different|long|short|strong|weak|only|also|still|now)\b)["'“‘]?[^\s"'”’.,;]{3,}/i },
+  { what: 'an API key or token', re: /\b(?:api[_ -]?key|secret|token|access[_ -]?key)\s*(?::|=|is)\s*["'“‘]?([A-Za-z0-9_./+~-]{20,})/gi, secret: looksLikeKey },
+];
+
+/**
+ * True when the text after "password:" looks like a password, not a word: it
+ * has a digit, a sign, or a capital letter after a small one ("hunter2",
+ * "S3cret!", "hUnter"). "password: field" and "Password: required" are words.
+ */
+function looksLikePassword(value) {
+  const v = String(value).replace(/[.,;:!?)"'”’]+$/, '');
+  if (/^<[^<>]*>$/.test(v) || /^[*•x]+$/i.test(v)) return false;
+  return /[0-9]/.test(v) || /[^A-Za-z]/.test(v) || /[a-z][A-Z]/.test(v);
+}
+
+/**
+ * True when the text after "API key:" or "token:" looks like a key: not a
+ * file path (~/.config/app/key.json, config/secrets/app.env), and not the
+ * name of an environment variable (STAGING_API_KEY_VALUE).
+ */
+function looksLikeKey(value) {
+  const v = String(value);
+  if (/^[~./]/.test(v)) return false;
+  if (/^[A-Z][A-Z0-9_]+$/.test(v)) return false;
+  if (/\.(?:json|env|ya?ml|toml|txt|md|pem|key|ini|conf|cfg|plist)$/i.test(v)) return false;
+  if (v.includes('/') && v.split('/').every((seg) => /^[a-z0-9._-]*$/.test(seg))) return false;
+  return true;
+}
+
+/**
+ * What kind of secret a text holds, or null: an API key, a token, a private
+ * key, or a password written out. Never returns the secret itself.
+ */
+export function secretKind(text) {
+  const s = String(text ?? '');
+  for (const p of SECRET_PATTERNS) {
+    if (!p.secret) {
+      if (p.re.test(s)) return p.what;
+      continue;
+    }
+    p.re.lastIndex = 0;
+    let m;
+    while ((m = p.re.exec(s)) !== null) {
+      if (p.secret(m[1])) {
+        p.re.lastIndex = 0;
+        return p.what;
+      }
+    }
+  }
+  return null;
+}
+
 /**
  * Every rule a record breaks, as plain sentences. [] means valid.
  * Only the description is measured for length (never the key or file name),
@@ -650,6 +716,13 @@ export function validateRecord(record) {
   for (const k of r.supersedes || []) {
     if (!isValidKey(k)) problems.push(`supersedes names "${k}", which is not a memory key.`);
     else if (k === r.key) problems.push('a record cannot supersede itself.');
+  }
+  for (const [field, value] of [['description', r.description], ['source', r.source], ['body', r.body]]) {
+    const kind = secretKind(value);
+    if (kind) {
+      problems.push(`${field} looks like it holds ${kind}. Secrets never go in memory: memory is plain text, and Notion memory sends it to Notion. Keep the secret in the keychain, a password manager, or the tool's own sign-in, and save only where it is kept, for example "The staging key is in 1Password under Staging".`);
+      break;
+    }
   }
   const body = String(r.body ?? '');
   if (!body.trim()) problems.push('body is empty. Write at least the Remember line.');

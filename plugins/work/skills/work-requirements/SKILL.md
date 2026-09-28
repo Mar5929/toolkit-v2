@@ -6,50 +6,66 @@ description: 'Interviews the owner one question at a time, writes a work item''s
 # Work requirements
 
 Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
-Shared rules: the work plugin's `references/conventions.md`, two folders above this skill's folder (`../../references/conventions.md`). Interview and writing rules: this skill's `references/writing-requirements.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Run each `toolkit` command alone, on its own line, in both hosts: never joined by `&&`, `;`, or a pipe, and never from a script (in Codex that runs it inside the sandbox, where it fails). Text (conventions, "Text in a command"): one-line values (`--note`, `--effect`, `--append-row`, `--title`) go in single quotes, with an apostrophe written `'\''`, because double quotes run backticks and `$(...)`; section and design text goes on standard input in Claude Code (`<file>` is `-`, followed by a quoted heredoc, `<<'EOF'`), and in Codex in `--text '<text>'` or a file in a new `mktemp -d` folder, deleted right after the command. Never change a record with a script. Ask the owner in the reply text, never through a question tool. No remote (`git remote` prints nothing): never run `git fetch`, and never report a fetch refusal as a blocker.
+Interviews the owner and writes what the result must do, never how to build it; every answer lands in the work item. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
 
 ## Steps
 
-1. Find the item as `work-on` does; none exists, create it. Use discovery while the goal is being worked out, refinement once requirements are being written. Requirements already approved and no change asked: stop and open the skill the lifecycle's "Continue with" column names.
-   `toolkit work show <id> --section Requirements`
-   `toolkit work new --title '<title>' --type <type> --stage 01-discovery`
-   `toolkit work set <id> --stage 02-refinement`
-2. Before asking anything, read the item (Starting request, Agreed goal, `R-xx`, Open Questions) and look up what the project already knows, so no question repeats an answer.
+1. Find the item as `work-on` does; none exists, create it with his words as the Starting request. Requirements already approved and no change asked: open the skill the item's "Continue with" names and stop.
    `toolkit work show <id>`
-   `toolkit memory find '<topic>'`
-3. Restate the goal in one sentence ("So the goal is X?"). Write the Agreed goal after a yes, and always before asking for approval in step 8.
-   `toolkit work edit <id> --section "Agreed goal" --text '<goal>'`
-4. Ask one question at a time, most basic first, each with a recommended answer and a short reason. Push back when an answer works against the goal.
-5. Write each answer into the item before the next question: `R-xx` blocks (Status Refining, required behavior, boundaries, acceptance check, decision record) and the Acceptance list, with each section's fill-in guide comment left out once it holds real content. Anything unanswered becomes an Open Questions row (next free `Q-` number) with who must answer; the item waits on the owner while one of his is open, and goes back to the agent when he answers the last one. Build ideas go under Notes > Solution options and considerations, never into requirements. A fact the owner cannot answer: brief a `researcher` agent.
-   `toolkit work edit <id> --section "Active requirements" --set-file <file>`
-   `toolkit work edit <id> --section "Open Questions" --append-row '| <next Q-id> | <question> | R-02 | Open | owner |'`
-   `toolkit work set <id> --waiting-on owner`
-   `toolkit work set <id> --waiting-on agent`
-6. A change to an approved requirement: edit the `R-xx`, keep the old wording in its decision record, set it back to Refining, move the item to refinement, and say what the change affects when the item is past stage 03.
+   `toolkit work new --title '<title>' --type <type> --stage 01-discovery`
+   `toolkit work edit <id> --section 'Starting request' --text '<his exact words>'`
+2. Move it to refinement once requirements are being written. Before the first question, read the item and what the project already knows (`references/interview.md`, section 2).
    `toolkit work set <id> --stage 02-refinement`
-7. Spec check, before asking for approval and whenever the owner says "check the spec": brief the `requirements-analyst` agent with the requirements text. Fix what it finds or turn it into questions. Change nothing without a yes.
-8. With the Agreed goal written (the CLI refuses an approval while it holds the template text), show the goal and a short summary and ask one line, in the reply text: "Do you approve these requirements?" and set the item waiting on the owner. Yes: quote his words in one note first, set each approved `R-xx` Status to Finalized and put who approved it and when in its Decision record, record the approval (the command adds its own history row), and hand the item back to the agent unless another question for him is still open. Then a `build` or `data-load` item goes to `solution-design`, unless the owner agreed to skip the design; say a skip in the final reply, not a progress line. Not yet: it stays waiting on him.
-   `toolkit work history <id> --note 'Owner'\''s words: <quote>' --effect 'Requirements approved.'`
-   `toolkit work edit <id> --section "Active requirements" --set-file <file>`
+   `toolkit memory find '<topic>'`
+3. Restate the goal in one sentence ("So the goal is X?"). Write the Agreed goal after a yes, and always before asking for approval.
+   `toolkit work edit <id> --section 'Agreed goal' --text '<goal>'`
+4. Ask one question at a time, most basic first, each with a recommended answer and a short reason (`references/interview.md`, sections 3 and 4).
+5. Save each answer before the next question: `R-xx` blocks and the Acceptance list in the format in `references/requirement-format.md`; anything unanswered as an Open Questions row, with the item waiting on the owner while one of his is open.
+   `toolkit work edit <id> --section 'Active requirements' --set-file <file>`
+   `toolkit work edit <id> --section 'Open Questions' --append-row '| <next Q-id> | <question> | R-02 | Open | owner |'`
+   `toolkit work set <id> --waiting-on owner`
+6. A change to an approved requirement: edit the `R-xx`, keep the old wording in its Decision record, set it back to Refining, move the item to refinement, and say what the change affects when the item is past stage 03 (`references/interview.md`, section 7).
+   `toolkit work set <id> --stage 02-refinement`
+7. Spec check, before asking for approval and whenever the owner says "check the spec": brief the `requirements-analyst` and handle its findings (`references/spec-check.md`).
+8. Ask for approval and record his yes with the requirements checklist in `references/approvals.md`, section 2. Then a `build` or `data-load` item goes to `solution-design`, unless he agreed to skip the design.
    `toolkit work approve <id> --requirements --by <owner>`
-   `toolkit work set <id> --waiting-on agent`
-9. Lead with "Not saved" on a failed write. Check the item, update the current focus when its next step changed (`../../references/conventions.md`, "The current focus"), then hand back to `work-on` unless the owner stops. End the reply with the one question for the owner, or the exact words that continue.
+9. Lead with "Not saved" on a failed write. Validate, update the current focus when the next step changed (`references/current-focus.md`), and hand back to `work-on` unless the owner stops. End with the one question or the exact words that continue.
    `toolkit work validate <id>`
+
+## Gotchas
+
+- Run each `toolkit` command alone: never joined by `&&`, `;`, or a pipe, and never from a script (in Codex that runs it inside the sandbox, where it fails). One-line values go in single quotes, never double quotes; an apostrophe inside them is `'\''` in Claude Code and ’ (U+2019) in Codex, or reword the text. Section text goes on standard input (`--set-file -`) in Claude Code, and in `--text '<text>'` or a `mktemp -d` file in Codex (`references/toolkit-commands.md`, "Text in a command").
+- Ask in the reply text, never through a question tool. "Grill me" or "ask me questions" means one question at a time, never a batch.
+- Build ideas never go into requirements: they go under Notes > Solution options and considerations.
+- The CLI refuses the approval while the Agreed goal still holds the template text.
+- Local and Notion trackers: never write the Requirements "Overall status" line; the approve command sets it. GitHub Issues and Jira have no approve command, so there the agent writes it after his yes.
+- A change to an approved `R-xx` sends the item back to refinement and needs approval again.
+- The spec check changes nothing without the owner's yes.
+- "Give me options first" is not a requirements approval: go to `solution-design` with the open choices kept visible.
+- GitHub Issues or Jira: `toolkit work` exits with code 3. Edit the issue's Requirements section as `references/tracker-github.md` or `references/tracker-jira.md` says.
 
 ## Agents
 
-- `requirements-analyst`: the spec check in step 7. Paste in the Starting request, Agreed goal, every `R-xx`, the Acceptance list, and the open questions.
-- `researcher`: one per fact the owner cannot answer (a platform limit, what the existing build does).
-- How to brief them: `../../references/helpers.md`.
-- Codex: this plugin's agents do not load there. Read the agent's file in this plugin's `agents/` folder and give its full text, with the brief, to a native Codex worker: the `spawn_agent` tool, started without this conversation (`fork_turns` set to `none`), so a checker never shares the builder's thread. With no worker, do the work yourself and say that no independent check ran.
+- `requirements-analyst` (`references/agent-requirements-analyst.md`): the spec check in step 7. The brief is in `references/spec-check.md`.
+- `researcher` (`references/agent-researcher.md`): one per fact the owner cannot answer (a platform limit, what the existing build does).
+- Brief them as `references/helpers.md` says.
+- Codex: this plugin's agents do not load there. Give the full text of this skill's `references/agent-<name>.md`, with the brief, to a native Codex worker: the `spawn_agent` tool, started without this conversation (`fork_turns` set to `none`), so a checker never shares the builder's thread. With no worker, do the work yourself and say that no independent check ran.
 
-## Spec check findings
+## References
 
-The analyst reports: missing pieces; places not explicit end to end; wording a builder could misread; build details inside requirements; drift from the Agreed goal; research or history in the wrong place. For each finding, propose a fix in plain words. The owner approves, edits, or dismisses each one. A dismissed finding stays dismissed for this item in this session. Clean spec: say so in one line and move on.
-
-## Notes
-
-- "Grill me" means a deep interview: keep asking, one question at a time, until every branch that could change the result is covered. End with "What have we not touched that could change this?"
-- The owner thinks out loud; let him. Save settled answers as they come; do not wait for the interview to end.
-- Brainstorming methods from other plugins may run inside this skill. The answers still land in the work item.
-- GitHub Issues or Jira: `toolkit work` exits with code 3. Edit the issue body's Requirements section as `../../references/trackers.md` says.
+| File | Open it when |
+| --- | --- |
+| [references/interview.md](references/interview.md) | Steps 2 to 6: what to read first, how to ask, "grill me", resuming, corrections |
+| [references/requirement-format.md](references/requirement-format.md) | Step 5: writing an `R-xx` block or the Acceptance list |
+| [references/spec-check.md](references/spec-check.md) | Step 7: the analyst's brief and handling its findings |
+| [references/approvals.md](references/approvals.md) | Step 8: the requirements approval checklist; what counts as a yes |
+| [references/recording-owner-answers.md](references/recording-owner-answers.md) | Where each answer goes; history notes; `waiting_on`; a failed save |
+| [references/work-item-format.md](references/work-item-format.md) | Before any section edit or table row |
+| [references/current-focus.md](references/current-focus.md) | Step 9: the item's next step changed |
+| [references/toolkit-commands.md](references/toolkit-commands.md) | Before a command that carries text, and on any exit code other than 0 |
+| [references/helpers.md](references/helpers.md) | Before starting any agent |
+| [references/agent-requirements-analyst.md](references/agent-requirements-analyst.md), [references/agent-researcher.md](references/agent-researcher.md) | Codex only: the text to give the worker |
+| [references/tracker-notion.md](references/tracker-notion.md) | `tracker.type` is `notion`, or a command prints a Notion error |
+| [references/tracker-github.md](references/tracker-github.md) | A `toolkit work` command exits 3 in a GitHub Issues project |
+| [references/tracker-jira.md](references/tracker-jira.md) | A `toolkit work` command exits 3 in a Jira project |
+| [assets/WORK-ITEM.md](assets/WORK-ITEM.md) | GitHub or Jira: the body of a new issue |

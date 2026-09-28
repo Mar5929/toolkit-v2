@@ -1,6 +1,6 @@
 {
   "name": "work",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "Runs a project's work items from first idea to done: nine skills and six agents for requirements, solution design, sub-items, building, checking, and shipping, with the owner approving each gate. Works with a local .work-items/ folder or Notion.",
   "author": {
     "name": "Mike Rihm",

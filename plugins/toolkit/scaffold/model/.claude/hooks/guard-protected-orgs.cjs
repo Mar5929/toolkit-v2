@@ -43,6 +43,11 @@
  *     SF_TARGET_ORG=... written in front of that same command, then from the
  *     default org. An org set anywhere else on the line never replaces the
  *     default org; both are checked and the stricter result wins.
+ *   - A DevOps Center pipeline deploy (`sf project deploy pipeline start`,
+ *     `quick`, `resume`, or `validate`) goes to the org of a pipeline stage,
+ *     which DevOps Center picks and the command line does not name. The guard
+ *     never takes an org for it from -o, a setting, or the default org; it
+ *     treats the org as one it cannot classify.
  *   - `sf ... --help` (or `-h`) only prints help, so it passes.
  *   - Org classification calls `sf org list --json --skip-connection-status`,
  *     which reads the LOCAL auth store (no network round-trip).
@@ -134,6 +139,15 @@ const GUARDED = [
   // tests in the target org. The safety rule forbids it in production. It has
   // its own category because the same rule allows it on a sandbox with no yes.
   ['validate', ['project:deploy:validate', 'deploy:metadata:validate']],
+  // DevOps Center (checked against sf 2.142.7 with the devops-center plugin
+  // 1.2.28, where these commands are beta). Each one deploys, or validates,
+  // to the org of a pipeline stage, which can be production. The command names
+  // only the DevOps Center org (-c) and the stage's branch (-b), never the
+  // target org. `sf project deploy pipeline report` only reads.
+  ['pipelineDeploy', [
+    'project:deploy:pipeline:start', 'project:deploy:pipeline:quick',
+    'project:deploy:pipeline:resume', 'project:deploy:pipeline:validate',
+  ]],
   // Every way the CLI can change records, not only the delete verbs.
   ['dataWrite', [
     'data:delete:record', 'data:delete:bulk', 'data:delete:resume',
@@ -162,6 +176,11 @@ const NOT_GUARDED_KEYS = new Set(NOT_GUARDED.map((name) => nameKey(name.split(':
 // Categories the safety rule allows on a sandbox or scratch org without the
 // owner's yes. Everything else asks there, unless sandboxAction is "allow".
 const SANDBOX_SILENT = new Set(['validate']);
+
+// Categories whose target org is never on the command line. No -o, setting,
+// or default org is taken for them: each is judged as a command with no
+// resolvable target org.
+const STAGE_TARGET = new Set(['pipelineDeploy']);
 
 /**
  * The category of the command whose name is `parts` (the words after sf, split
@@ -728,6 +747,7 @@ function sfCheck(words, assignments) {
   }
   const kind = categoryOf(parts);
   if (!kind) return null;
+  if (STAGE_TARGET.has(kind)) return { kind, targets: null, how: '' };
   const targets = targetsFromWords(args);
   if (targets.length) return { kind, targets, how: '' };
   const env = assignments.filter((a) => TARGET_ENV.includes(a.name) && a.value);
@@ -751,6 +771,10 @@ function textChecks(text) {
   const explicit = explicitTargets(text);
   const env = envTargetsIn(text);
   for (const kind of categoriesIn(text)) {
+    if (STAGE_TARGET.has(kind)) {
+      checks.push({ kind, targets: null, how: '' });
+      continue;
+    }
     checks.push(explicit.length ? { kind, targets: explicit, how: '' } : { kind, targets: null, how: '' });
     if (env.length) checks.push({ kind, targets: env, how: ' (org named by an environment variable in the command text)' });
   }
@@ -803,6 +827,18 @@ function judge(check, cfg, lookups) {
       : 'Confirm before running.';
   const never = (cfg.neverProtect || []).map((s) => String(s).toLowerCase());
   const always = (cfg.alwaysProtect || []).map((s) => String(s).toLowerCase());
+
+  // A pipeline deploy goes to a pipeline stage's org. The default org is not
+  // that org, so it is never looked up here.
+  if (STAGE_TARGET.has(check.kind)) {
+    return {
+      decision: cfg.unknownOrgAction === 'allow' ? 'allow' : decision,
+      reason:
+        `Guarded: '${check.kind}' command with no resolvable target org. A DevOps ` +
+        `Center pipeline deploy goes to the org of a pipeline stage, which the ` +
+        `command line does not name, so it cannot be proved non-production. ${tail}`,
+    };
+  }
 
   let targets = (check.targets || []).slice();
   let how = targets.length ? check.how || '' : '';

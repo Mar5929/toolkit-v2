@@ -26,6 +26,7 @@ import { gitInfo, loadConfig, mainCheckoutRoot, saveConfig, CONFIG_FILE, TOOLKIT
 import { atomicWrite } from '../core/fsx.mjs';
 import { run } from '../core/util.mjs';
 import { planManifest, applyPlan, planLines, planSummary, setupDate, todayFor, readHosts } from './manifest.mjs';
+import { parseBackupDir } from './backup.mjs';
 import {
   newConfig, checkKey, keyFromName, checkChoice, parseHosts, parseDeclined, describeSetup, TRACKERS, MEMORIES,
 } from './setup.mjs';
@@ -98,9 +99,13 @@ function gitUserName(root) {
  * The settings init will write.
  * @returns {{ config, rerun: boolean, changes: string[] }}
  */
-export function buildInitConfig(root, opts, existing, { today } = {}) {
+export function buildInitConfig(root, opts, existing, { today, env = process.env } = {}) {
   const changes = [];
   const created = today || todayFor(process.env);
+  // The backup folder the owner gave in the setup interview (decision 13).
+  const backupDir = opts.backupDir !== undefined && opts.backupDir !== null && opts.backupDir !== true
+    ? parseBackupDir(opts.backupDir, { root, mainRoot: mainCheckoutRoot(root), env })
+    : undefined;
   if (!existing) {
     if (!opts.name || !String(opts.name).trim()) {
       throw new ToolkitError(EXIT.INVALID, 'Give the project name: toolkit init --name "<name>" --tracker <local|notion|github|jira> --memory <builtin|hindsight|notion>.');
@@ -119,6 +124,7 @@ export function buildInitConfig(root, opts, existing, { today } = {}) {
       salesforce: Boolean(opts.salesforce),
       hosts: parseHosts(opts.hosts),
       declined: parseDeclined(opts.decline),
+      backupDir,
     });
     return { config, rerun: false, changes };
   }
@@ -144,6 +150,10 @@ export function buildInitConfig(root, opts, existing, { today } = {}) {
   if (opts.decline !== undefined && opts.decline !== null) {
     const declined = [...new Set([...(Array.isArray(config.declined) ? config.declined : []), ...parseDeclined(opts.decline)])];
     if (declined.length) set(config, 'declined', declined, 'declined');
+  }
+  if (backupDir !== undefined) {
+    config.backup = config.backup && typeof config.backup === 'object' ? config.backup : {};
+    set(config.backup, 'dir', backupDir, 'backup.dir');
   }
   if (!config.project.key) config.project.key = checkKey(keyFromName(config.project.name || path.basename(root)));
   // A project set up before the setup date was recorded: from now on, today is its setup date.
@@ -269,6 +279,7 @@ export function initCommandLine(config, root) {
   if (config.salesforce && config.salesforce.enabled) parts.push('--salesforce');
   if (Array.isArray(config.hosts)) parts.push('--hosts', config.hosts.join(','));
   if (Array.isArray(config.declined) && config.declined.length) parts.push('--decline', config.declined.join(','));
+  if (config.backup && config.backup.dir) parts.push('--backup-dir', quoteArg(config.backup.dir));
   return parts.join(' ');
 }
 
@@ -315,7 +326,7 @@ export async function initProject(opts, io = {}) {
     }
   }
   const existing = loadConfig(root);
-  const { config, rerun, changes } = buildInitConfig(root, opts, existing, { today: todayFor(env) });
+  const { config, rerun, changes } = buildInitConfig(root, opts, existing, { today: todayFor(env), env });
 
   // Values from an earlier run that stopped after wiring a backend.
   const pending = readPending(root);
@@ -390,6 +401,9 @@ export async function initProject(opts, io = {}) {
   const next = ['Next:'];
   if (config.hosts.includes('claude-code')) next.push('- Start a new Claude Code session in this project so it loads the settings, the hooks, and the Plain English style.');
   if (config.hosts.includes('codex')) next.push('- In Codex, the owner opens /hooks once and trusts the Toolkit V2 hooks. Codex skips plugin hooks until he does.');
+  if (!(config.backup && config.backup.dir) && (config.tracker.type === 'local' || ['builtin', 'hindsight'].includes(config.memory.type))) {
+    next.push('- Ask the owner for a backup folder outside the project (for example ~/Backups/toolkit), then run toolkit config set backup.dir <folder>, or none when he wants no backup. The work items and memory are Git-ignored, so they exist only on this computer until they are backed up.');
+  }
   next.push('- Run toolkit doctor to check the setup.');
   lines.push(...next);
   return { root, mainRoot, config, rerun, plan, summary, applied, lines, report };

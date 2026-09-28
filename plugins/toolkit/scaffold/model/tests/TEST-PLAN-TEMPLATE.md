@@ -1,6 +1,6 @@
 # <Feature or release> test plan
 
-<!-- Fill-in guide: rename this file for the work item or release being checked. Replace the title and every angle-bracket prompt in the section or table cell below with the real scope, environment, scenario, expected result, procedure, and evidence location. Add one Checks row per scenario. Record actual outcomes under Results; delete this guide and the example row when populated. -->
+<!-- Fill-in guide: copy this file and rename the copy for the work item or release being checked. Replace the title and every angle-bracket prompt in the section or table cell below with the real scope, environment, scenario, expected result, procedure, and evidence location. Add one Checks row per scenario. Record actual outcomes under Results; delete this guide and the example row when populated. -->
 
 ## Scope
 

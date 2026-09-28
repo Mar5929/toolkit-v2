@@ -42,11 +42,13 @@ import { planManifest, projectHosts, readHosts, HOSTS_FIX, PROPOSAL_PATH, DEFAUL
 import { MODEL_DIR } from './model-scaffold.mjs';
 import { tomlGet } from './toml.mjs';
 import {
-  claudeHome, claudeOldPlugins, codexOldPlugins, codexPluginOnEverywhere, codexTrust, codexHookTrustKeys, homeDir,
-  installedPluginCopies, pluginVersion, readJson, wantedV2Plugins, MARKETPLACE, OLD_MARKETPLACE, V2_PLUGINS,
+  claudeHome, claudeOldPlugins, codexOldPlugins, codexPluginOnEverywhere, codexTrust, codexHookTrustKeys, compareVersions, homeDir,
+  installedPluginCopies, pluginVersion, readJson, wantedV2Plugins, MARKETPLACE, OLD_MARKETPLACE, V2_PLUGINS, MACHINE_WIDE_PLUGINS,
 } from './hosts.mjs';
-import { readPointer, isPluginRoot, wrapperState, onPath } from './machine.mjs';
-import { readExportRecord } from './backup.mjs';
+import { readPointer, pointerPath, isCompleteRoot, isInstalledRoot, wrapperState, onPath, readCodexHooksSeen, codexHooksHash } from './machine.mjs';
+import { readExportRecord, backupParts, backupSetting, BACKUP_MAX_AGE_DAYS } from './backup.mjs';
+import { projectCodexRules, ruleDecision } from './codex-rules.mjs';
+import { ASK_FIRST_COMMANDS } from '../cli.mjs';
 
 export const AGENTS_MAX_BYTES = 24 * 1024;
 export const EXPORT_MAX_AGE_DAYS = 7;
@@ -58,6 +60,23 @@ const PROVIDER_VARS = ['CLAUDE_CODE_USE_BEDROCK', 'CLAUDE_CODE_USE_VERTEX', 'CLA
 function finding(list, id, area, severity, message, fix = null, extra = null) {
   list.push({ id, area, severity, message, fix, ...(extra || {}) });
 }
+
+/**
+ * The permissions.ask rules the toolkit's Claude Code settings add
+ * (templates/settings/claude-toolkit.json; decision 12). The Codex side is
+ * templates/codex/toolkit.rules.
+ */
+export const TOOLKIT_ASK_RULES = Object.freeze([
+  'Bash(toolkit machine-setup)',
+  'Bash(toolkit machine-setup *)',
+  'Bash(toolkit memory delete *)',
+  'Bash(toolkit memory import *)',
+  'Bash(toolkit import *)',
+  'Bash(toolkit hindsight service install)',
+  'Bash(toolkit hindsight service install *)',
+  'Bash(toolkit hindsight service start)',
+  'Bash(toolkit hindsight service start *)',
+]);
 
 /** The skillListingBudgetFraction that the toolkit's Claude Code settings set (templates/settings/claude-toolkit.json). */
 export const SKILL_BUDGET = 0.02;
@@ -72,16 +91,7 @@ export function hidesAttribution(value) {
   return Boolean(value) && typeof value === 'object' && value.commit === '' && value.pr === '';
 }
 
-/** Compare two versions such as 0.2.0 and 0.10.1: -1, 0, or 1. */
-export function compareVersions(a, b) {
-  const pa = String(a || '').split(/[.+-]/).map((x) => Number.parseInt(x, 10) || 0);
-  const pb = String(b || '').split(/[.+-]/).map((x) => Number.parseInt(x, 10) || 0);
-  for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
-    const d = (pa[i] || 0) - (pb[i] || 0);
-    if (d) return d < 0 ? -1 : 1;
-  }
-  return 0;
-}
+export { compareVersions };
 
 function truthy(v) {
   return v !== undefined && v !== null && v !== '' && v !== '0' && String(v).toLowerCase() !== 'false';
@@ -308,12 +318,42 @@ function checkClaudeSettings(project, findings) {
         : `${where} sets "attribution" to ${JSON.stringify(attribution)}, so Claude Code can add AI credit to commits and pull requests.`,
       'Run toolkit sync; it adds "attribution": {"commit": "", "pr": "", "sessionUrl": false}. If the file was changed by the project, set that value by hand.');
   }
+  // The risky toolkit commands ask the owner first (decision 12).
+  const ask = [...(((settings.permissions || {}).ask) || []), ...(((local.permissions || {}).ask) || [])];
+  const missingAsk = TOOLKIT_ASK_RULES.filter((r) => !ask.includes(r));
+  if (missingAsk.length) {
+    finding(findings, 'claude-ask-rules', 'plugins', 'warning',
+      `.claude/settings.json does not make Claude Code ask the owner before ${missingAsk.length === TOOLKIT_ASK_RULES.length ? 'the toolkit commands that are hard to undo' : 'some toolkit commands that are hard to undo'} (missing permissions.ask: ${missingAsk.join(', ')}). They would run without his yes.`,
+      'Run toolkit sync; it adds them. If the file was changed by the project, add them to permissions.ask by hand.');
+  }
   const budget = Object.prototype.hasOwnProperty.call(local, 'skillListingBudgetFraction') ? local.skillListingBudgetFraction : settings.skillListingBudgetFraction;
   if (!(typeof budget === 'number' && budget >= SKILL_BUDGET)) {
     finding(findings, 'claude-skill-budget', 'plugins', 'warning',
       `.claude/settings.json ${budget === undefined ? 'does not set skillListingBudgetFraction' : `sets skillListingBudgetFraction to ${JSON.stringify(budget)}`}. At Claude Code's default (0.01, 1% of the context window) the skill list drops descriptions when many skills are installed, and Claude is then less likely to pick the right Toolkit V2 skill.`,
       `Run toolkit sync; it sets "skillListingBudgetFraction": ${SKILL_BUDGET}. If the file was changed by the project, set it by hand.`);
   }
+}
+
+/**
+ * The Codex twin of the claude-ask-rules check (decision 12): the project's
+ * .codex/rules/*.rules files must make Codex ask the owner (a "prompt" or
+ * "forbidden" rule) before each ask-first toolkit command. A project that
+ * changed .codex/rules/toolkit.rules keeps its own file, so sync alone never
+ * adds the prompt rules there.
+ */
+function checkCodexAskRules(project, findings, { pluginRoot }) {
+  if (!projectHosts(project.config).includes('codex')) return;
+  const { files, rules } = projectCodexRules(project.root);
+  if (!files.length) return; // No rules file: the scaffold check reports the missing .codex/rules/toolkit.rules.
+  const missing = ASK_FIRST_COMMANDS.map((c) => ['toolkit', ...c])
+    .filter((words) => !['prompt', 'forbidden'].includes(ruleDecision(rules, [...words, 'x'])))
+    .map((words) => words.join(' '));
+  if (!missing.length) return;
+  const template = path.join(pluginRoot || DEFAULT_PLUGIN_ROOT, 'templates', 'codex', 'toolkit.rules');
+  finding(findings, 'codex-ask-rules', 'codex', 'warning',
+    `.codex/rules/ does not make Codex ask the owner before ${missing.length === ASK_FIRST_COMMANDS.length ? 'the toolkit commands that are hard to undo' : 'some toolkit commands that are hard to undo'}: ${missing.join(', ')}. The general toolkit rule allows ${missing.length === 1 ? 'it' : 'them'}, so ${missing.length === 1 ? 'it runs' : 'they run'} without his yes.`,
+    `Run toolkit sync. If the project changed .codex/rules/toolkit.rules, sync leaves it alone: copy the prefix_rule entries with decision = "prompt" for these commands from ${template} into it, above the general toolkit rule (ask the owner first).`,
+    { host: 'codex', commands: missing });
 }
 
 function checkCodex(project, env, findings) {
@@ -329,6 +369,17 @@ function checkCodex(project, env, findings) {
   const hookKeys = codexHookTrustKeys(`toolkit@${MARKETPLACE}:`, env);
   if (!hookKeys.length) {
     finding(findings, 'codex-hook-trust', 'codex', 'warning', 'The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).', 'The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.', { host: 'codex' });
+  } else {
+    // A trust entry exists; is it for the hooks Codex would run now? (final review M10)
+    const seen = readCodexHooksSeen(env);
+    const codexCopies = installedPluginCopies('toolkit', env).filter((c) => c.host === 'codex' && c.path && c.version).sort((a, b) => compareVersions(a.version, b.version));
+    const newest = codexCopies.length ? codexCopies[codexCopies.length - 1] : null;
+    const now = newest ? codexHooksHash(newest.path) : null;
+    if (seen && now && seen.hash !== now) {
+      finding(findings, 'codex-hook-changed', 'codex', 'warning',
+        `The Toolkit V2 hooks changed since Codex last ran them (Codex last ran the hooks of toolkit ${seen.version || 'an older version'}; its copy is now ${newest.version}). Codex skips a changed hook until the owner trusts it again.`,
+        'The owner opens /hooks in Codex and trusts the Toolkit V2 hooks again.', { host: 'codex' });
+    }
   }
   if (project.config.salesforce && project.config.salesforce.enabled && fs.existsSync(path.join(project.root, '.codex', 'hooks.json'))) {
     const sfKeys = codexHookTrustKeys(path.join(project.root, '.codex', 'hooks.json'), env);
@@ -346,11 +397,12 @@ function checkCodex(project, env, findings) {
  * again.
  */
 function checkCodexMachine(project, env, findings, { pluginRoot }) {
-  const on = V2_PLUGINS.filter((name) => codexPluginOnEverywhere(name, env));
+  // The toolkit plugin itself is on for every folder (decision 10); only the others are reported.
+  const on = V2_PLUGINS.filter((name) => !MACHINE_WIDE_PLUGINS.includes(name) && codexPluginOnEverywhere(name, env));
   if (on.length) {
     finding(findings, 'codex-plugins-everywhere', 'computer', 'warning',
       `~/.codex/config.toml turns ${on.length === 1 ? 'this Toolkit V2 plugin' : 'these Toolkit V2 plugins'} on for every folder: ${on.map((n) => `${n}@${MARKETPLACE}`).join(', ')}. Codex then loads ${on.length === 1 ? 'it' : 'them'} in every project, including claude-toolkit projects. codex plugin add does this after every install or update.`,
-      'With the owner\'s yes, run toolkit machine-setup: it sets enabled = false for them in ~/.codex/config.toml. Each project set up by toolkit init turns them on for itself.');
+      'With the owner\'s yes, run toolkit machine-setup: it sets enabled = false for them in ~/.codex/config.toml (toolkit itself stays on). Each project set up by toolkit init turns them on for itself.');
   }
   if (!projectHosts(project.config).includes('codex')) return;
   const running = pluginVersion(pluginRoot || DEFAULT_PLUGIN_ROOT);
@@ -366,11 +418,20 @@ function checkCodexMachine(project, env, findings, { pluginRoot }) {
 function checkComputer(project, env, findings) {
   const major = Number(process.versions.node.split('.')[0]);
   if (major < 20) finding(findings, 'node-version', 'computer', 'problem', `Node.js ${process.versions.node} is older than 20.`, 'Install Node.js 20 or newer (ask the owner).');
-  const pointer = readPointer(env);
-  if (!pointer || !isPluginRoot(pointer)) {
-    finding(findings, 'plugin-pointer', 'computer', 'warning', pointer ? `~/.config/toolkit-v2/plugin-root names ${pointer}, which has no bin/toolkit.` : '~/.config/toolkit-v2/plugin-root is missing, so the Codex wrapper cannot find the toolkit.', 'Run toolkit machine-setup (every session start also refreshes it).');
-  }
-  if (projectHosts(project.config).includes('codex')) {
+  // The pointer and the wrapper are for Codex (and for a terminal). A Claude
+  // Code-only project does not need them (final review M4). The message names
+  // the pointer file this computer really reads (TOOLKIT_V2_CONFIG_DIR).
+  const hosts = project.config && Object.keys(project.config).length ? projectHosts(project.config) : ['claude-code', 'codex'];
+  if (hosts.includes('codex')) {
+    const file = pointerPath(env);
+    const pointer = readPointer(env);
+    if (!pointer) {
+      finding(findings, 'plugin-pointer', 'computer', 'warning', `${file} is missing, so the toolkit wrapper cannot find the toolkit.`, 'Run toolkit machine-setup (the session-start hook also refreshes it in Toolkit V2 projects).');
+    } else if (!isCompleteRoot(pointer)) {
+      finding(findings, 'plugin-pointer', 'computer', 'warning', `${file} names ${pointer}, which has no bin/toolkit or no scaffold/CONDITIONS.json, so the wrapper uses its fallback folder.`, 'Run toolkit machine-setup (the session-start hook also refreshes it in Toolkit V2 projects).');
+    } else if (!isInstalledRoot(pointer, env)) {
+      finding(findings, 'plugin-pointer', 'computer', 'warning', `${file} names ${pointer}, which is not an installed copy of toolkit@${MARKETPLACE} (the Claude Code or Codex plugin cache, or the registered marketplace source folder). A test copy there can go out of date or be deleted.`, 'Run toolkit machine-setup from an installed copy (ask the owner first).');
+    }
     const w = wrapperState(env);
     if (!w.exists) finding(findings, 'wrapper-missing', 'computer', 'warning', `The toolkit wrapper script ${w.path} is missing, so Codex cannot run toolkit commands by name.`, 'Run toolkit machine-setup.');
     else if (!w.ours) finding(findings, 'wrapper-foreign', 'computer', 'warning', `${w.path} exists but was not written by toolkit machine-setup.`, 'Ask the owner, then move it aside and run toolkit machine-setup.');
@@ -417,7 +478,7 @@ function checkScaffold(project, env, findings, { pluginRoot }) {
       finding(findings, 'scaffold-changed', 'scaffold', 'note', `${t.target} is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed.`, 'The project-setup skill can show the owner the toolkit\'s version, and merges it only after his yes.');
       continue;
     }
-    finding(findings, 'scaffold-changed', 'scaffold', 'note', `${t.target} was changed by the project, so sync leaves it alone.${t.would.length ? ` The toolkit would: ${t.would.join('; ')}.` : ' Nothing new from the toolkit.'}`, t.would.length ? 'The project-setup skill shows these to the owner and makes the changes he approves.' : null);
+    finding(findings, 'scaffold-changed', 'scaffold', 'note', `${t.target} was changed by the project, so sync leaves it alone.${t.would.length ? ` The toolkit would: ${t.would.join('; ')}.` : ' The toolkit\'s own version has not changed since it was installed, so the project\'s differences from it stay as they are.'}`, t.would.length ? 'The project-setup skill shows these to the owner and makes the changes he approves.' : null);
   }
   for (const t of by('leftover')) finding(findings, 'scaffold-leftover', 'scaffold', 'note', `${t.target} is left over from an earlier setup (its condition no longer holds).`, 'Ask the owner whether to keep or delete it.');
   return plan;
@@ -728,12 +789,39 @@ function birthTime(p) {
   }
 }
 
-/** The backup warning (M19): the last export of .work-items/ and .memory/ is older than 7 days. */
-export function checkBackup(project, findings, { now = Date.now() } = {}) {
+/**
+ * True when a backup folder can be made: it exists, or its nearest existing
+ * parent is a real folder, not the top of the disk or /Volumes (a drive that
+ * is not plugged in).
+ */
+export function backupReachable(dir) {
+  let cur = path.resolve(dir);
+  for (;;) {
+    if (fs.existsSync(cur)) return cur !== path.parse(cur).root && cur !== '/Volumes';
+    const up = path.dirname(cur);
+    if (up === cur) return false;
+    cur = up;
+  }
+}
+
+/**
+ * The backup checks (M19; decision 13; final review I8). The local tracker,
+ * built-in memory, and Hindsight memory exist only on this computer.
+ * - No backup folder set (.toolkit.json backup.dir): a warning that suggests
+ *   one, from the first day.
+ * - A backup folder set: a warning when the last backup is more than
+ *   BACKUP_MAX_AGE_DAYS (1) day old, or when nothing was ever backed up and
+ *   the folders are more than a day old; and when the folder cannot be
+ *   reached.
+ * - The owner chose no backup folder (backup.dir none): the older 7-day
+ *   reminder, as a note.
+ */
+export function checkBackup(project, findings, { now = Date.now(), env = process.env } = {}) {
   const c = project.config;
-  const local = ((c.tracker && c.tracker.type) || 'local') === 'local';
-  const builtin = ((c.memory && c.memory.type) || 'builtin') === 'builtin';
-  if (!local && !builtin) return;
+  const parts = backupParts(c);
+  if (!parts.length) return;
+  const local = parts.some((p) => p.name === 'work-items');
+  const builtin = parts.some((p) => p.name === 'memory');
   const mainRoot = project.mainRoot || project.root;
   const record = readExportRecord(project);
   let memoryExport = null;
@@ -745,12 +833,34 @@ export function checkBackup(project, findings, { now = Date.now() } = {}) {
   const folders = [local ? path.join(mainRoot, '.work-items') : null, builtin ? path.join(mainRoot, '.memory') : null].filter(Boolean);
   const oldest = folders.map(birthTime).filter(Boolean);
   const since = oldest.length ? Math.min(...oldest) : null;
-  const what = [local ? '.work-items/' : null, builtin ? '.memory/' : null].filter(Boolean).join(' and ');
+  const what = parts.map((p) => p.words).join(' and ');
+  const plural = parts.length > 1;
+  const setting = backupSetting(project, env);
+  const age = last ? Math.floor((now - last) / DAY) : null;
+  if (!setting) {
+    finding(findings, 'backup-folder', 'backup', 'warning',
+      `No backup folder is set. ${what} ${plural ? 'exist' : 'exists'} only on this computer (Git ignores ${plural ? 'them' : 'it'})${last ? `, and the last backup was ${age} day${age === 1 ? '' : 's'} ago` : ', and nothing has been backed up yet'}.`,
+      'Ask the owner for a backup folder outside the project (for example ~/Backups/toolkit, a synced folder, or an external drive), then run toolkit config set backup.dir <folder>; toolkit work finish and toolkit handoff-backup then back up by themselves. If he wants no backup folder: toolkit config set backup.dir none.');
+    return;
+  }
+  if (setting.declined) {
+    const limit = EXPORT_MAX_AGE_DAYS * DAY;
+    if (last ? now - last > limit : since && now - since > limit) {
+      finding(findings, last ? 'backup-old' : 'backup-never', 'backup', 'note',
+        last ? `The last backup of ${what} was ${age} days ago, and the owner chose no backup folder. Git ignores ${plural ? 'these folders' : 'this folder'}, so ${plural ? 'they exist' : 'it exists'} only on this computer.`
+          : `${what} ${plural ? 'have' : 'has'} never been backed up, and the owner chose no backup folder.`,
+        'Run toolkit export --to <a backup folder outside the project>, or ask the owner for a backup folder (toolkit config set backup.dir <folder>).');
+    }
+    return;
+  }
+  const limit = BACKUP_MAX_AGE_DAYS * DAY;
+  if (!backupReachable(setting.dir)) {
+    finding(findings, 'backup-unreachable', 'backup', 'warning', `The backup folder ${setting.dir} (backup.dir ${setting.raw}) cannot be reached: the drive it is on is not there. An external drive may not be plugged in.`, 'Ask the owner to connect the drive, or to pick another folder: toolkit config set backup.dir <folder>.');
+  }
   if (last) {
-    const age = Math.floor((now - last) / DAY);
-    if (age > EXPORT_MAX_AGE_DAYS) finding(findings, 'backup-old', 'backup', 'warning', `The last backup of ${what} was ${age} days ago. Git ignores these folders, so they exist only on this computer.`, 'Run toolkit export --to <a backup folder outside the project>.');
-  } else if (since && now - since > EXPORT_MAX_AGE_DAYS * DAY) {
-    finding(findings, 'backup-never', 'backup', 'warning', `${what} ${local && builtin ? 'have' : 'has'} never been backed up. Git ignores ${local && builtin ? 'these folders' : 'this folder'}, so ${local && builtin ? 'they exist' : 'it exists'} only on this computer.`, 'Run toolkit export --to <a backup folder outside the project>.');
+    if (now - last > limit) finding(findings, 'backup-old', 'backup', 'warning', `The last backup of ${what} was ${age} day${age === 1 ? '' : 's'} ago. Git ignores ${plural ? 'these folders' : 'this folder'}, so ${plural ? 'they exist' : 'it exists'} only on this computer.`, `Run toolkit handoff-backup: it backs up to ${setting.dir}.`);
+  } else if (since && now - since > limit) {
+    finding(findings, 'backup-never', 'backup', 'warning', `${what} ${plural ? 'have' : 'has'} never been backed up. Git ignores ${plural ? 'these folders' : 'this folder'}, so ${plural ? 'they exist' : 'it exists'} only on this computer.`, `Run toolkit handoff-backup: it backs up to ${setting.dir}.`);
   }
 }
 
@@ -797,7 +907,8 @@ export async function runChecks(project, opts = {}) {
   checkCodex(project, env, findings);
   checkHookScripts(project, findings);
   checkClaudeSettings(project, findings);
-  checkBackup(project, findings, { now: opts.now || Date.now() });
+  checkCodexAskRules(project, findings, { pluginRoot });
+  checkBackup(project, findings, { now: opts.now || Date.now(), env });
   if (quick) return { findings, plan: null };
   checkComputer(project, env, findings);
   checkCodexMachine(project, env, findings, { pluginRoot });

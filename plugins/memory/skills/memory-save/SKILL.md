@@ -6,60 +6,125 @@ description: 'Saves, corrects, or forgets one lasting fact in the project''s mem
 # Memory save
 
 Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
-Record format, types, focus, and glossary: `references/record-format.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Run each `toolkit` command alone, on its own line, in both hosts: never joined by `&&`, `;`, or a pipe, and never from a script (in Codex that runs it inside the sandbox, which blocks Hindsight and Notion). Text: one-line values (`--description`, `--source`) go in single quotes, with an apostrophe written `'\''`, because double quotes run backticks and `$(...)` and drop that text. A record body, the focus, or the glossary: in Claude Code pass it on standard input (`--body-file -` or `--set-file -`, followed by a quoted heredoc, `<<'EOF'`), never through a file; in Codex give it in single quotes (`--body '<text>'`, `--text '<text>'`), or write a file with the file edit tool in a new folder made with `mktemp -d`, run the `toolkit` command alone with that file, and delete the file and the folder right after. Never write the file and run the command in one shell command, and never use a fixed name such as `/tmp/focus.md`. Ask the owner in the reply text, never through a question tool.
+Saves, corrects, or retires one memory record with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand.
 
 ## Steps
 
-1. Decide the home first, with the memory criteria (`.memory/memory-criteria.md` with built-in memory; otherwise `references/record-format.md`). Memory holds a lasting preference, correction, fact about the project or the owner, or a hard-to-find reference. Elsewhere: project work goes to `work-on`; a decision for the whole project to `work-decide` (`DECISIONS.md`); delivered behavior to `requirements/`; how a change is built to the item's design; verified current structure to `system-guide/`; outside documentation to `ai-external-knowledge/`; a standing rule for how agents work here is proposed as a rule-file change; an owner to-do with no work item goes to the current focus "Untracked to-dos"; a project term goes to the glossary. A short memory pointer to a hard-to-find record is allowed; never copy its body.
-2. Search first and update the existing record rather than add a duplicate. The save command checks too: when memory already has a record with the same key or a very similar description or text, it saves nothing, exits with code 2, and lists those records. Read each one with the second command below, which prints its `version` field. The same fact: save that record's type and slug again with `--expect <version>`, which updates it (the first 12 characters of the version are enough; for a record with the same key, the command's own fix line already gives them). A newer fact that replaces it: add `--supersedes <old-key>`. A different fact: say why in one line and save again with `--allow-similar`. Never add `--allow-similar` without reading the listed records.
+Track these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home ("Where other things go" below) and stop.
+2. Search for a record that already holds it, and read each hit with its version. The save's duplicate check compares wording, so only this search finds a record the new fact contradicts (for example "Mondays" against "Tuesdays").
    `toolkit memory find '<topic>'`
    `toolkit memory get <key> --json`
-3. Approval. This is the only written copy of the memory approval policy. Read the mode, then apply it:
+3. Read the approval mode and apply "Approval policy" below. When it says ask, ask and wait.
    `toolkit config get memory.approval`
-   The owner's own words ("remember", "from now on", "always", "never", "forget", a correction) are the approval: save now, with his name as the approver. `onboarding` mode (the default): something the agent inferred gets one yes-or-no line first ("Save to memory: <one-line summary>?"); save after a yes. `trusted` mode: routine facts the agent is sure of are saved and reported, without an approver. Always ask first, in either mode, for anything about a named person, personal details, a hard delete, more than five records at once, or a change to this policy. A yes covers only the change and meaning shown. Silence is never a yes. An unanswered "Save to memory?" (his next message does not answer it, or the session is ending) is not dropped: save it as a proposal (`--proposal`, never with an approver). A proposal is not a fact: search leaves it out, the agent does not rely on it, and the decision list shows it to the owner until he approves or rejects it through `work-decide`.
-4. Save: type (`user`, `feedback`, `project`, `reference`, `event`), slug, one-line description, the source, and a body with the model's bold labels, each starting its own paragraph: `**Remember:**`, `**Why:**` (the owner's reason in his words, or "Not stated by the owner."; never a reason you inferred), `**How to apply:**`, `**Evidence and limits:**` (the source and an absolute date), `**Related memories:**` (relative links such as `[deploy window](project_deploy_window.md)`), `**Authoritative records:**`. Never write them as `## headings`. The source is the person, conversation, or document the fact came from, with an absolute date, for example "The owner, in chat, 2026-09-26". Saving the same type and slug again, with `--expect <version>` (the `version` field of the step 2 read), updates that record. Replacing a record under a new name: add `--supersedes <old-key>`. A better name or a type that matches the content: rename it; links to it are repaired. The first form is for the owner's approval (his words or his yes); the second for a routine save in `trusted` mode; the third for an unanswered proposal; the fourth updates a record read in step 2. `<file>` is `-` in Claude Code.
-   `toolkit memory save --type <type> --name <slug> --description '<one line>' --body-file <file> --source '<person or document>, <YYYY-MM-DD>' --approved-by <owner>`
-   `toolkit memory save --type <type> --name <slug> --description '<one line>' --body-file <file> --source '<person or document>, <YYYY-MM-DD>'`
-   `toolkit memory save --type <type> --name <slug> --description '<one line>' --body-file <file> --source '<person or document>, <YYYY-MM-DD>' --proposal`
-   `toolkit memory save --type <type> --name <slug> --description '<one line>' --body-file <file> --expect <version> --approved-by <owner>`
-   `toolkit memory rename <key> --to <new-key>`
-5. "Forget that": retire the record (it can be undone); right after a save, retire that record with no question. Delete only when the owner says delete, and quote his words.
-   `toolkit memory retire <key>`
-   `toolkit memory delete <key> --owner-approved`
-6. Focus and to-dos: read the current focus with its version, change it, write the whole text back. The model's format: the `# Current focus` title line, a "Last updated" line (date, source, who), and four sections, under 50 lines, work item ids only, never their status; keep the title and the date line (the CLI adds them when missing, but without the source and who). Drop a setup step under "Waiting on the owner" once doctor no longer reports it. On a new project remove the fill-in guide comment, and write "None." in each section that still holds only an angle-bracket prompt. Glossary terms the same way, sourced, never invented.
-   `toolkit memory focus --json`
-   `toolkit memory focus --set-file <file> --expect <version>`
-   `toolkit memory glossary`
-   `toolkit memory glossary --set-file <file>`
-7. A preference a project setting can enforce (for example "I hate tabs" and `.editorconfig`): save it, then offer that change too.
-8. Read the save back and check memory, then tell the owner in one line: "Saved to memory: <title>. Say 'forget that' to undo." (a proposal: "Saved as a proposal for your yes or no: <title>."). A failed save is reported first as "Not saved". Never store work-item status, secrets, or email addresses. End the reply with the question still waiting for him, if there is one, or those exact words.
+4. Write the description and body in the record format (`references/record-format.md`), then save with the form for the case ("Save forms" below).
+5. Exit code 2 saved nothing. Read the "Error:" line. Records listed: the duplicate check. "Changed since it was read": read it again and redo the change. Any other rule: fix the text as the message says. `references/replacing-and-retiring.md`, section 2, has each case.
+6. "Forget that": retire the record, with his words as the reason. Delete only when his own words say delete ("Approval policy").
+   `toolkit memory retire <key> --reason '<his words>'`
+7. An owner to-do with no work item, or a change to what is happening now: update the current focus (`references/current-focus.md`). A project term: update the glossary (`references/glossary.md`).
+8. A preference a project setting can enforce (for example "I hate tabs" and `.editorconfig`): save it, then offer that change too.
+9. Read the record back, check, and reply in one line ("Replies" below). End with the question still waiting for the owner, or the exact words that continue.
    `toolkit memory get <key>`
    `toolkit doctor`
 
-## Changing the approval mode
+## Approval policy
 
-- Only the owner switches modes, in his own words ("you can save routine things without asking me"). Silence, time, or many approved saves never switch it.
-- Switch to trusted, or back to onboarding:
+This is the only written copy of the memory approval policy.
+
+- The owner's own words are the approval: "remember", "from now on", "always", "never", "forget", or a correction. Save now, with `--approved-by <owner>`. That includes a fact about a named person he asks you to remember ("remember that Priya's last day is October 15").
+- `onboarding` mode (the default): something the agent inferred gets one yes-or-no line first, in exactly this form: "Save to memory: <one-line summary>?". Save after his yes (`references/proposals.md` when a proposal was saved for the question).
+- `trusted` mode: a routine fact the agent is sure of is saved without asking and reported in one line, with no approver. The record says "Trusted grant".
+- In either mode, always ask first for anything about a named person or personal details that he did not ask you to remember, for more than five records at once, and for a change to this policy.
+- A delete needs his own words about that record ("delete it", "remove it for good"), or his yes to a numbered list that shows the delete. Do not ask again: the host asks him to confirm `toolkit memory delete`, and that prompt is the confirmation. "Forget that" is a retire, never a delete.
+- A yes covers only the change and the meaning shown. Silence is never a yes.
+- `--approved-by` is only for a change his words or his yes covered.
+- An unanswered "Save to memory?" stays a proposal until he answers (`references/proposals.md`). Never drop it, and never save it with an approver.
+- Only the owner switches the mode, in his own words ("you can save routine things without asking me"). Save his words as a `feedback` record with the date, then run one of:
   `toolkit config set memory.approval trusted`
   `toolkit config set memory.approval onboarding`
-- Save his words as a `feedback` record with the date.
+
+## Save forms
+
+`<file>` is `-` in Claude Code, with the body on standard input after a quoted heredoc (`<<'EOF'`). In Codex give `--body '<text>'` in place of `--body-file <file>`. `references/record-format.md` shows both.
+
+- A new record, from the owner's words or his yes:
+  `toolkit memory save --type <type> --name <slug> --description '<one line>' --body-file <file> --source '<person or document>, <YYYY-MM-DD>' --approved-by <owner>`
+- A new routine fact in `trusted` mode:
+  `toolkit memory save --type <type> --name <slug> --description '<one line>' --body-file <file> --source '<person or document>, <YYYY-MM-DD>'`
+- A question he has not answered yet:
+  `toolkit memory save --type <type> --name <slug> --description '<one line>' --body-file <file> --source '<person or document>, <YYYY-MM-DD>' --proposal`
+- An update of a record read in step 2, which his words or his yes covered:
+  `toolkit memory save --type <type> --name <slug> --description '<one line>' --body-file <file> --expect <version> --approved-by <owner>`
+- A routine update in `trusted` mode (the stored authorization is kept):
+  `toolkit memory save --type <type> --name <slug> --description '<one line>' --body-file <file> --expect <version>`
+- A new record that replaces an old one: add `--supersedes <old-key>` to a new-record form.
+- A better name, or a type that matches the content:
+  `toolkit memory rename <key> --to <new-key>`
+
+## Gotchas
+
+- Run each `toolkit` command alone, on its own line: never joined by `&&`, `;`, or a pipe, and never from a script. In Codex a joined command runs inside the sandbox, which blocks Hindsight, Notion, and the main checkout's `.memory/`.
+- Put one-line values (`--description`, `--source`, `--reason`) in single quotes. An apostrophe inside them: Claude Code writes `'\''`; Codex writes ’ (U+2019) or rewords, and never uses `'\''`, which runs the command inside the sandbox. Double quotes run backticks and `$(...)`, drop that text, and the save still says "Saved".
+- Never use a fixed file name such as `/tmp/memory.md`, and never write a file and run the command in one shell command.
+- Body labels are bold paragraphs (`**Remember:**`), never `## Remember` headings.
+- **Why** is the owner's reason in his words, or exactly "Not stated by the owner." Never a reason you inferred.
+- In `onboarding` mode, a save with neither `--approved-by` nor `--proposal` is stored as "No approval recorded". That is a mistake: ask first.
+- A save of an existing key without `--expect` saves nothing. Take the version from the `--json` read; the first 12 characters are enough. Keep that read: its old text is the undo for an update.
+- Add `--allow-similar` only after reading every record the duplicate check listed.
+- A proposal the Stop hook saved is never approved with `toolkit memory approve`: that leaves its unfinished body. Save the full body instead (`references/proposals.md`).
+- Never store email addresses, secrets, or work-item status. The CLI catches common secret shapes, not all. For a secret, save where it is kept, never the secret.
+- Ask the owner in the reply text, never through a question tool.
+- Built-in memory: the CLI rebuilds `MEMORY.md` and repairs links in other notes after a rename, supersede, retire, or delete, and names each note it changed. Read that report (`references/memory-builtin.md`).
+
+## Where other things go
+
+| The owner's words are about | Home | Open |
+| --- | --- | --- |
+| Project work, a task, a bug, "add it to the backlog" | A work item | `work-on` |
+| A decision for the whole project | `DECISIONS.md` | `work-decide` |
+| A requirement for a work item | The item's requirements | `work-requirements` |
+| Behavior already delivered | `requirements/` | none |
+| How a change is built | The item's design | `solution-design` |
+| Verified current structure of the system | `system-guide/` | none |
+| Outside documentation | `ai-external-knowledge/` | none |
+| A standing rule for how agents work here | A rule-file change, proposed to him | none |
+| His to-do with no work item and no time | Current focus, Untracked to-dos | step 7 |
+| A to-do with a time ("at 9 tomorrow") | A scheduled reminder, outside memory | the host's scheduling tool |
+| A project term | The glossary | step 7 |
+
+A short memory pointer to a hard-to-find record is allowed; never copy the record's body.
+
+## Replies
+
+- A new record: "Saved to memory: <title>. Say 'forget that' to undo."
+- An update: "Updated in memory: <title>. Say 'undo that' to put back the old wording." His "undo that" is a save of the old text from the `--json` read (`references/replacing-and-retiring.md`, section 3). Right after a supersede, the undo is a restore of the old record and a retire of the new one (same file, section 4).
+- A proposal: "Saved as a proposal for your yes or no: <title>."
+- A retire: "Retired from memory: <title>. Say 'bring it back' to restore it." His "bring it back" is the whole restore in `references/replacing-and-retiring.md`, section 7, not `toolkit memory restore` alone.
+- A delete: "Deleted from memory, as you said: '<his words>'. This cannot be undone." For a secret or an email address, add that older backups still hold it (`references/replacing-and-retiring.md`, section 8).
+- A failed save: lead with "Not saved: <reason>." Keep the text and try again later in the session. With Hindsight or Notion, the command prints the fix (`references/memory-hindsight.md`, `references/memory-notion.md`).
 
 ## Hook reminders
 
-- The UserPromptSubmit hook adds a line when the owner's message contains a keep phrase ("remember that", "from now on", "note that"). It is a reminder, not an instruction to save everything: route it with step 1.
-- The Stop hook blocks once when a keep phrase had no save this turn. Save it, or tell the owner in one line why it belongs elsewhere and where it went.
+- The UserPromptSubmit hook adds one line when the owner's message holds an explicit keep phrase, such as "remember that". It is a reminder: route the fact with step 1.
+- The Stop hook blocks once when a keep phrase got no save, work-item change, or decision in the turn. Save it, or say in one line where it went instead.
+- When a reply asks "Save to memory: <summary>?" and no proposal was saved in that turn, the Stop hook tries to save one, and the next turn's context says what happened:
+  - It saved a proposal and names its key: his answer approves or rejects that key (`references/proposals.md`).
+  - It saved nothing because a similar record exists, and names it: when he says yes, update that record with `--expect`; never save a second one.
+  - The save failed: save the proposal yourself in this turn, with `--proposal`.
 
-## Proposals and declined saves
+## References
 
-- A proposal saved in step 3 waits for the owner's yes or no; `work-decide` asks him. His answer in this chat also settles it: yes approves it (a current record with him as the approver), no rejects it (the proposal is deleted).
-  `toolkit memory approve <key> --by <owner>`
-  `toolkit memory reject <key>`
-- When the owner says a proposed item should not be memory, withdraw it (a saved proposal: reject it). Do not put the rejected fact in the current focus, the glossary, or another record, and never propose it again under other words. If his words give a general rule about what to save, save only that rule, as a `feedback` record.
-- Several independent things can be grouped into one save. Never run two saves against the same record or the index at once.
-
-## Backend notes
-
-- Built-in `.memory/`: never edit the files by hand; the CLI writes them and rebuilds `.memory/MEMORY.md`. The folder opens as an Obsidian vault. When a record is renamed, merged, retired, or deleted, the CLI repairs the links in other notes and names each note it changed; read that report (`references/record-format.md`, "Links between memories").
-- Hindsight or Notion unreachable: the save fails with "Not saved". Keep the text, tell the owner in one line, and retry later in the session.
-- Undo a retire:
-  `toolkit memory restore <key>`
+| File | Open it when |
+| --- | --- |
+| `references/memory-criteria.md` | Step 1, with Hindsight or Notion memory (built-in projects read `.memory/memory-criteria.md`) |
+| `references/record-format.md` | Step 4: choosing the type and key, writing the description and body, passing text in each host |
+| `references/replacing-and-retiring.md` | Step 5 (exit code 2), step 6, any update, supersede, rename, restore, or delete, and any undo |
+| `references/proposals.md` | Asking "Save to memory?", a proposal named in the context, or the owner's answer to one |
+| `references/current-focus.md` | Step 7: a to-do or a change to what is happening now |
+| `references/glossary.md` | Step 7: a project term |
+| `references/memory-builtin.md` | Built-in memory: links, the index, a link-repair report, notes the owner edited in Obsidian |
+| `references/memory-hindsight.md` | Hindsight memory: a failed command, the server, how records are stored |
+| `references/memory-notion.md` | Notion memory: a failed command, sign-in, Lore's layout, edits made in Notion |
+| `references/examples.md` | You want a complete worked example of the case in front of you |
+| `references/toolkit-commands.md` | A `toolkit` command fails, is refused by a hook, or you are unsure how to pass text in this host |

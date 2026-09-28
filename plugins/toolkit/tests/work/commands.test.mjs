@@ -2,7 +2,7 @@ import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { makeProject, cleanup, tk, newItem, readRecord, recordPath, readState, trackerDir, TODAY, approveRequirements } from './helpers.mjs';
+import { makeProject, cleanup, tk, newItem, readRecord, recordPath, readState, trackerDir, TODAY, approveRequirements, fillSelectedDesign } from './helpers.mjs';
 import { parseDoc, parseHistory, getLabel, parseQuestions, getH1 } from '../../lib/work/model.mjs';
 
 after(cleanup);
@@ -126,6 +126,11 @@ test('approve records requirements, design, and result approvals', async () => {
   assert.equal(created.json.status, 'proposed');
   assert.equal(created.json.path, path.join(path.dirname(await recordPath(dir, id)), 'DESIGN.md'));
   assert.equal(parseDoc(await readRecord(dir, id)).meta.design, 'proposed');
+  const unfilled = await tk(dir, ['work', 'approve', id, '--design', '--by', 'Mike']);
+  assert.equal(unfilled.code, 2, 'a design whose Selected design is still the template prompt is not approved');
+  assert.match(unfilled.stderr, /"## Selected design" still says "Before an option is chosen"/);
+  assert.equal(parseDoc(await readRecord(dir, id)).meta.design, 'proposed', 'nothing changed');
+  await fillSelectedDesign(dir, id);
   const dApprove = await tk(dir, ['work', 'approve', id, '--design', '--by', 'Mike']);
   assert.equal(dApprove.code, 0, dApprove.stderr);
   const design = parseDoc(fs.readFileSync(created.json.path, 'utf8'));

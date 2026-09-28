@@ -6,53 +6,117 @@ description: 'Sets up Toolkit V2 in a new project, or checks, updates, and repai
 # Project setup
 
 Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
-The interview wording and what setup installs: `references/interview.md`. Repair, switching, new computer, and wiring: `references/repair-and-wiring.md`. Run each `toolkit` command alone, on its own line, in both hosts: never joined by `&&`, `;`, or a pipe, and never from a script (in Codex that runs it inside the sandbox, which blocks Notion, Hindsight, and `.codex/`). Text: one-line values (`--name`, `--owner`) go in single quotes, with an apostrophe written `'\''`, because double quotes run backticks and `$(...)`; the current focus goes on standard input in Claude Code (`<file>` is `-`, followed by a quoted heredoc, `<<'EOF'`) and in `--text '<text>'` in Codex, never through a file at a fixed name such as `/tmp/focus.md`. Ask the owner in the reply text, one question per message, never through a question tool.
+Sets up Toolkit V2, never the older claude-toolkit (its `project-init` skill).
 
 ## Steps
 
-1. Check the setup. If `toolkit` is not found, run `node <this skill's folder>/../../bin/toolkit machine-setup` (the skill's folder is the one holding this file). If doctor reports a computer problem, run machine-setup. machine-setup also changes `~/.codex/config.toml`: it turns off, for every Codex folder, each Toolkit V2 plugin that `codex plugin add` turned on there (projects turn them on for themselves); say that in one line and get the owner's yes before the first run on a computer. Name anything the owner must do himself: `ntn login` opens a browser sign-in; trusting the hooks in Codex happens in its `/hooks` screen. Never do those for him. This skill sets up Toolkit V2, never the older claude-toolkit (its `project-init` skill); when the owner names Toolkit V2 and only `project-init` is listed, say so and use this skill's steps. A new computer, or a toolkit update, also needs the plugins installed or updated in each host, Codex included: in Codex, `codex plugin marketplace add`, then `codex plugin add` for each of the six plugins, then machine-setup (`references/repair-and-wiring.md`, "A new computer" and "Updating the toolkit").
+1. **Check the computer and the project.** `toolkit` not found, or doctor
+   reports a computer problem: `references/repair-and-update.md`, "Reaching
+   the `toolkit` command".
    `toolkit doctor`
-   `toolkit machine-setup`
-2. No `.toolkit.json`: a new project. Look before asking: an empty or existing repository; `sfdx-project.json` answers the Salesforce question in advance. Then ask one question at a time, each with a recommendation, in this order: the project name (with its key, id prefix, and owner name, confirmed in one line); the tracker (local folders, Notion, GitHub Issues, Jira); the memory (built-in `.memory/`, local Hindsight, Notion); Salesforce or not, and for Salesforce the sandbox and production org aliases; whether he wants `SOUL.md` (a no becomes `--decline SOUL.md`, so no later sync brings it back).
-3. Run init with the answers (the second line, with `--salesforce`, for a Salesforce project; add `--decline SOUL.md` after a no). Setup copies the model scaffold and applies your answers: it copies the model project's folders and files, keeps only the blocks of `AGENTS.md`, `README.md`, and `PROJECT.md` that match the answers, fills the project name, writes the rules list and `.toolkit.json`, installs the tracker, memory, and Salesforce parts only when chosen, never copies work items or memory records, and turns the V2 plugins on and every `*@claude-toolkit` plugin off in this project. Then record the choices init has no flag for: the id prefix when it is not `WI`, and the Salesforce org aliases. With Notion, init may take another id prefix when `WI` is already used there: say the prefix it reports in one line. In Codex: init writes `.codex/` and `.agents/`, which the Codex sandbox refuses, and it writes them first. Before running it, tell the owner that Codex will ask to run it outside the sandbox. If it stops with "Could not write ... .codex/" (or `.agents/`), or says the Codex sandbox blocked its request to Hindsight, nothing else was written: stop, show him the exact command init printed, and ask him to approve it or to run it in a terminal. Never change a setup answer (hosts, tracker, memory, Salesforce) to get past an error, and never set it up in another folder and copy it over.
-   `toolkit init --name '<name>' --key <key> --tracker <tracker> --memory <memory> --owner '<owner>'`
-   `toolkit init --name '<name>' --key <key> --tracker <tracker> --memory <memory> --owner '<owner>' --salesforce`
-   `toolkit config set tracker.idPrefix <prefix>`
-   `toolkit config set salesforce.orgs.sandbox <alias>`
-   `toolkit config set salesforce.orgs.production <alias>`
-4. Wire the choices. Notion: check the sign-in with `ntn whoami` (if it fails, the owner runs `ntn login` himself), then build the project's pages. Hindsight: check the service (install or start it only after a yes), then create the project's bank. GitHub or Jira: show the written instructions and create nothing in that service without a yes. Salesforce: fill the API version, which the model leaves as `XX.0`. Read it from the sandbox org (the `apiVersion` field of the read-only `sf org display -o <sandbox alias> --json`), or ask the owner. Put it in `sfdx-project.json` (`sourceApiVersion`) and in the `<version>` line of `delivery/deployment/full-project-deployment-template/package.xml`; the work item templates get it when `sf-component-tracker` copies them.
-   `toolkit notion ensure-root`
-   `toolkit notion ensure-project --project-name '<name>'`
-   `toolkit hindsight service status`
-   `toolkit hindsight ensure-bank`
-5. Fill the setup guides: the copied files carry fill-in guide comments and `<angle bracket>` prompts. Fill them only with facts the owner confirmed. The project's one-sentence outcome is his to say: ask for it in its own question, with a suggestion drawn from the repository, and never write it from the code, the tests, or the README; until he answers, leave the outcome prompts in `AGENTS.md`, `PROJECT.md`, and `PROJECT-ROADMAP.md` and list them. Then fill the "Build, test, or deploy" row in `AGENTS.md`, then `PROJECT.md` and `README.md` (`PROJECT-ROADMAP.md` and `requirements/SYSTEM-DATA-MODEL.md` when the facts are known), fill `SOUL.md` with his words when he wanted it, and delete each guide once its file is filled. List any prompt left for a fact nobody knows yet, including those in `PROJECT-ROADMAP.md` and `requirements/SYSTEM-DATA-MODEL.md`. A `SOUL.md` the owner turns down after init: record the no with the command below, then delete the file, so sync and doctor leave it out.
-   `toolkit config set declined SOUL.md`
-6. `.toolkit.json` present: repair. Show one numbered table from doctor and the dry run: missing, out of date, changed by the owner, broken wiring, each with its fix. Run sync only after a yes; it adds every missing file at once and never overwrites a file the project changed. Report a changed file as "project ahead of the toolkit".
+2. **Pick the path.** `.toolkit.json` present: step 8. A new computer:
+   `references/new-computer.md`. Switching memory or tracker:
+   `references/switching.md`. Otherwise a new project: put the checklist
+   below in the plan tool (Claude Code: the task list; Codex: `update_plan`).
+3. **Interview**, one question per message, each with a recommendation:
+   name, tracker, memory, Salesforce, `SOUL.md`, backup folder. Look before
+   asking. `references/interview.md`. Notion or Hindsight chosen: do the
+   "Before init" part of its wiring file (step 5) now.
+4. **Run init** with the answers, then record what it has no flag for.
+   Inside Codex, say first that Codex will ask to run it outside the sandbox.
+   `references/running-init.md`.
+   `toolkit init --name '<name>' --key <key> --tracker <tracker> --memory <memory> --owner '<owner>' --backup-dir '<folder>' [--salesforce] [--decline SOUL.md]`
+5. **Finish wiring each choice**: `references/wiring-notion.md`,
+   `wiring-hindsight.md`, `wiring-github-jira.md`, `wiring-salesforce.md`.
+6. **Fill the setup guides** with facts the owner confirmed; the one-sentence
+   outcome is his to say. `references/finishing-setup.md`.
+7. **Finish:** backups, doctor at 0 problems, owner steps in the reply and the
+   focus, the first briefing, the report, the commit offer.
+   `references/finishing-setup.md`.
+8. **Repair or update:** one numbered table from doctor and the dry run; sync
+   only after a yes; doctor again until 0 problems.
+   `references/repair-and-update.md`.
    `toolkit sync --dry-run`
-   `toolkit sync`
-7. Switching memory (export, change the choice, sync, wire the new backend as in step 4, a dry-run import, then the import) or the tracker (no command yet: a preview, then moves only with the owner's yes): follow `references/repair-and-wiring.md`, "Switching the memory backend" and "Switching the tracker".
-8. Run doctor until it reports 0 problems. Warnings about the other host (for example Codex hook trust, seen from Claude Code) are expected: they are the owner's steps, do not block setup, and do not make doctor fail when run from Claude Code. Setup is not a work item: create none for setup steps. An owner step that doctor checks (trust the hooks in Codex, `ntn login`) goes in the reply and in the current focus under "Waiting on the owner", marked "setup step; drop it when doctor stops reporting it"; "Start a new session" goes in the reply only. Save the focus as the header says (the first save command below in Claude Code, with the text in a quoted heredoc; the second in Codex), with the `# Current focus` title and the "Last updated" line. Then show the first briefing and explain in plain words what was set up, what was skipped, what the owner must do himself, and the prompts left. The setup files are not committed yet, and the first merge of a work item needs them committed, so the reply's last line is the offer: "Setup files are not committed. Commit them now?" Commit only after a yes, staged by name (never `git add -A`), with a plain message and no AI credit (no `Co-Authored-By` line naming an AI, no "Generated with" line); in Codex, with escalated permissions (`sandbox_permissions` set to `require_escalated`) and a one-line reason, or by the owner in a terminal when Codex refuses it without asking. After the commit, the reply's last line is "Tell me the first thing you want built."
-   `toolkit memory focus --json`
-   `toolkit memory focus --set-file - --expect <version>`
-   `toolkit memory focus --text '<text>' --expect <version>`
-   `toolkit brief`
+
+## New project checklist
+
+```text
+- [ ] Doctor run; computer problems fixed
+- [ ] Looked before asking: Git repository, code, sfdx-project.json, older toolkit files
+- [ ] Six answers: name (key, id prefix, owner), tracker, memory, Salesforce (org aliases), SOUL.md, backup folder
+- [ ] Notion signed in and root page known, or Hindsight answering, before init
+- [ ] toolkit init run; id prefix and Salesforce aliases recorded
+- [ ] Each choice wired: Notion, Hindsight, GitHub or Jira, Salesforce API version
+- [ ] Setup guides filled with confirmed facts; outcome asked for; prompts left listed
+- [ ] First backup made, or the owner's no-backup choice reported
+- [ ] Doctor at 0 problems (warnings only the other host can clear are the owner's)
+- [ ] Owner steps in the reply; the ones doctor checks also in the current focus
+- [ ] First briefing shown; the report given
+- [ ] Commit offer made; commit only after a yes
+```
+
+## Gotchas
+
+- Never change an answer the owner gave (hosts, tracker, memory, Salesforce,
+  `SOUL.md`) to get past a failed command, and never set up in another folder
+  and copy it over. Stop, say what failed, and say what he must approve or
+  run.
+- Setup is never a work item. Never create one for setup steps, and never add
+  made-up owner questions to finish setup.
+- The project's one-sentence outcome is the owner's answer, never a sentence
+  worked out from the code, the tests, or the README.
+- Init wires Notion and Hindsight itself, so it stops when `ntn` is not signed
+  in, no Notion root page is known, or the Hindsight server does not answer.
+  Get the backend ready before init.
+- Inside Codex, init writes `.codex/` and `.agents/` first, which the sandbox
+  refuses. It must run outside the sandbox, with the owner's approval.
+- The machine-setup command changes `~/.codex/config.toml`. Get the owner's
+  yes before its first run on a computer.
+- Nothing is created outside this project without a yes: no GitHub
+  repository, no Jira fields, no paid service, no Notion pages outside the "AI
+  Agent Second Brain" page.
+- Every step is safe to run again. Init writes `.toolkit.json` last, and a
+  second run reuses what an earlier run made.
+- Run each `toolkit` command alone, on its own line, in both hosts; one-line
+  values in single quotes (`references/toolkit-commands.md`).
 
 ## Steps only the owner can do
 
 Say each one plainly, with why, and wait. Never do them for him.
 
-- **`ntn login`**: signs the Notion command-line tool into his Notion account. It opens a browser sign-in. Needed only for a Notion tracker or Notion memory, and only when `ntn whoami` fails.
-- **Trust the hooks in Codex**: open Codex in this project, type `/hooks`, and trust the Toolkit V2 hooks. Codex skips plugin hooks until he does. Needed again after the hooks change or the project folder moves.
-- **Start a new session** after setup, so Claude Code loads the new settings and the Plain English style.
-- **Approve Codex running the init command outside its sandbox**, when setup runs inside Codex, or run the command init printed in a terminal.
-- **Start a new project from Codex:** Codex lists the Toolkit V2 skills only in a project that `toolkit init` has set up, because the V2 plugins are on only where a project's `.codex/config.toml` turns them on. In a new folder, run `toolkit init` in a terminal first (or set the project up from Claude Code), then open Codex there and say "finish setting up Toolkit V2".
+- **`ntn login`**: signs the Notion command-line tool into his Notion account.
+  It opens a browser sign-in. Needed only for Notion, and only when
+  `ntn whoami` fails.
+- **Trust this project folder in Codex**: open Codex in the project folder
+  and trust it when Codex asks. Until he does, Codex ignores the project's
+  `.codex/config.toml`, which turns the other Toolkit V2 plugins on. Trust is
+  tied to the folder path, so it is needed again after the folder moves.
+- **Trust the hooks in Codex**: open Codex in the project, type `/hooks`, and
+  trust the Toolkit V2 hooks. Codex skips plugin hooks until he does. Needed
+  again after the hooks change or the project folder moves.
+- **Approve Codex running init outside its sandbox**, when setup runs inside
+  Codex, or run the command init printed in a terminal.
+- **Start a new session** after setup, so the host loads the new settings, the
+  Plain English style, and the Toolkit V2 skills.
 
-## Rules
+## References
 
-- One question per message. Every question carries a recommendation and its main reason.
-- Setup is not a work item. Never create one for setup steps, and never add made-up owner questions to finish setup. Owner steps go in the final reply; the ones doctor checks also go in the current focus under "Waiting on the owner" until doctor stops reporting them.
-- Never fill a fact the owner has not confirmed, above all the project's outcome. Leave the prompt and ask.
-- Every step is safe to run again. When a step fails, fix the cause and run it again; init writes `.toolkit.json` last, and a second run records the files an earlier run wrote.
-- Never change an answer the owner gave (tracker, memory, hosts, Salesforce, `SOUL.md`) to get past a failed command. Stop, say what failed, and say what he must approve or run.
-- Nothing is created outside this project without a yes: no GitHub repository, no Jira fields, no paid service, no Notion pages outside the "AI Agent Second Brain" page.
-- Instruction files follow the model: `AGENTS.md` holds the instructions, and one root `CLAUDE.md` (installed when Claude Code is a host) holds only the line `@AGENTS.md`, so Claude Code reads `AGENTS.md` through it. Doctor checks this. There is no other `CLAUDE.md`, `.claude/CLAUDE.md`, or `CLAUDE.local.md`. Because the root `CLAUDE.md` exists, Claude Code does not load a subfolder's `AGENTS.md` by itself; the root `AGENTS.md` tells the agent to read it before editing in that folder. Ask before changing or removing a `CLAUDE.md` the owner wrote.
+| File | Open it when |
+| --- | --- |
+| `references/interview.md` | Step 3: what to check before asking, and the six questions with their recommendations |
+| `references/running-init.md` | Step 4: the init commands, what init writes and installs, a failed run, init inside Codex |
+| `references/wiring-notion.md` | The tracker or memory is Notion: before init, and to check or repair it after |
+| `references/wiring-hindsight.md` | The memory is Hindsight: before init, and to check or repair it after |
+| `references/installing-hindsight.md` | Hindsight or Ollama is not installed on this Mac: the installs, the first start, the service |
+| `references/wiring-github-jira.md` | The tracker is GitHub Issues or Jira |
+| `references/wiring-salesforce.md` | A Salesforce project: org aliases and the API version |
+| `references/finishing-setup.md` | Steps 6 and 7: the setup guides, `SOUL.md`, backups, doctor, owner steps in the focus, the report, the commit offer |
+| `references/repair-and-update.md` | Step 1 when `toolkit` is not found; step 8; updating the installed plugins |
+| `references/new-computer.md` | The owner starts on a new computer |
+| `references/switching.md` | The owner wants another memory backend or tracker |
+| `references/toolkit-commands.md` | Before the first `toolkit` command: one command per call, text in a command, exit codes |
+| `references/current-focus.md` | Step 7: the focus format and the version check |
+| `references/backup-and-restore.md` | Backups, and restoring on a new computer |
+| `references/git-rules.md` | The setup commit, and Git writes in Codex |
+| `references/tracker-github.md` | A GitHub Issues tracker: what agents do in place of `toolkit work` |
+| `references/tracker-jira.md` | A Jira tracker: what agents do in place of `toolkit work` |

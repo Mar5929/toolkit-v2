@@ -27,10 +27,10 @@ test('a local project gets the local driver with every interface method', async 
 test('github and jira projects get exit 3 with the path to the written instructions', async () => {
   for (const type of ['github', 'jira']) {
     const dir = makeProject({ tracker: type });
-    await assert.rejects(openTracker(requireProject(dir)), (err) => err.code === EXIT.UNSUPPORTED && err.message.includes(`plugins/work/references/trackers/${type}.md`));
+    await assert.rejects(openTracker(requireProject(dir)), (err) => err.code === EXIT.UNSUPPORTED && err.message.includes(`plugins/work/shared/tracker-${type}.md`));
     const r = await tk(dir, ['work', 'list']);
     assert.equal(r.code, 3);
-    assert.match(r.stderr, new RegExp(`references/trackers/${type}\\.md`));
+    assert.match(r.stderr, new RegExp(`shared/tracker-${type}\\.md`));
     const life = await tk(dir, ['work', 'lifecycle']);
     assert.equal(life.code, 0, 'the lifecycle is the same for every tracker');
   }
@@ -50,10 +50,10 @@ function put(file, text = '# Instructions\n') {
 
 test('tracker instructions: the repository layout finds plugins/work next to plugins/toolkit', () => {
   const where = trackerInstructionsPath('github', PLUGIN_ROOT);
-  assert.equal(where.path, path.resolve(PLUGIN_ROOT, '..', 'work', 'references', 'trackers', 'github.md'));
-  assert.equal(where.rel, "the work plugin's references/trackers/github.md");
+  assert.equal(where.path, path.resolve(PLUGIN_ROOT, '..', 'work', 'shared', 'tracker-github.md'));
+  assert.equal(where.rel, "the work plugin's shared/tracker-github.md");
   const repo = tempDir();
-  const inRepo = put(path.join(repo, 'plugins', 'work', 'references', 'trackers', 'jira.md'));
+  const inRepo = put(path.join(repo, 'plugins', 'work', 'shared', 'tracker-jira.md'));
   fs.mkdirSync(path.join(repo, 'plugins', 'toolkit'), { recursive: true });
   const env = { HOME: repo };
   assert.equal(trackerInstructionsPath('jira', path.join(repo, 'plugins', 'toolkit'), { env, selfRoot: null }).path, inRepo);
@@ -66,11 +66,11 @@ test('tracker instructions: the Claude Code cache layout finds the work plugin i
   fs.mkdirSync(toolkitRoot, { recursive: true });
   const env = { HOME: home, CLAUDE_CONFIG_DIR: path.join(home, 'no-claude'), CODEX_HOME: path.join(home, 'no-codex') };
   // Only other versions of the work plugin: the newest wins (0.10.0 is newer than 0.9.0).
-  put(path.join(cache, 'work', '0.9.0', 'references', 'trackers', 'github.md'));
-  const newest = put(path.join(cache, 'work', '0.10.0', 'references', 'trackers', 'github.md'));
+  put(path.join(cache, 'work', '0.9.0', 'shared', 'tracker-github.md'));
+  const newest = put(path.join(cache, 'work', '0.10.0', 'shared', 'tracker-github.md'));
   assert.equal(trackerInstructionsPath('github', toolkitRoot, { env, selfRoot: null }).path, newest);
   // The toolkit's own version wins when the work plugin has it.
-  const same = put(path.join(cache, 'work', '0.2.0', 'references', 'trackers', 'github.md'));
+  const same = put(path.join(cache, 'work', '0.2.0', 'shared', 'tracker-github.md'));
   assert.equal(trackerInstructionsPath('github', toolkitRoot, { env, selfRoot: null }).path, same);
   // The message names the file it found.
   const err = unsupportedTracker('github', toolkitRoot, env);
@@ -81,11 +81,11 @@ test('tracker instructions: the Codex cache (~/.codex/plugins/cache/toolkit-v2/w
   const home = tempDir();
   const elsewhere = path.join(home, 'somewhere', 'toolkit');
   fs.mkdirSync(elsewhere, { recursive: true });
-  const inCodex = put(path.join(home, '.codex', 'plugins', 'cache', 'toolkit-v2', 'work', '0.1.0', 'references', 'trackers', 'jira.md'));
+  const inCodex = put(path.join(home, '.codex', 'plugins', 'cache', 'toolkit-v2', 'work', '0.1.0', 'shared', 'tracker-jira.md'));
   assert.equal(trackerInstructionsPath('jira', elsewhere, { env: { HOME: home }, selfRoot: null }).path, inCodex);
   // CODEX_HOME moves it.
   const codexHome = path.join(home, 'codex-home');
-  const moved = put(path.join(codexHome, 'plugins', 'cache', 'toolkit-v2', 'work', '0.3.0', 'references', 'trackers', 'jira.md'));
+  const moved = put(path.join(codexHome, 'plugins', 'cache', 'toolkit-v2', 'work', '0.3.0', 'shared', 'tracker-jira.md'));
   assert.equal(trackerInstructionsPath('jira', elsewhere, { env: { HOME: path.join(home, 'empty'), CODEX_HOME: codexHome }, selfRoot: null }).path, moved);
 });
 
@@ -93,7 +93,7 @@ test('tracker instructions: when the file is nowhere, the message names it plain
   const home = tempDir();
   const env = { HOME: home };
   const where = trackerInstructionsPath('github', path.join(home, 'toolkit'), { env, selfRoot: null });
-  assert.deepEqual(where, { rel: "the work plugin's references/trackers/github.md", path: null });
+  assert.deepEqual(where, { rel: "the work plugin's shared/tracker-github.md", path: null });
 });
 
 test('a missing Notion driver gives exit 3 with a clear message', async () => {

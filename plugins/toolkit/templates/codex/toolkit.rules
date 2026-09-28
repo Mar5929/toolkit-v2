@@ -3,6 +3,55 @@
 # the network for Notion and the local Hindsight server, and it writes the work
 # tracker and memory in the main checkout, which a worktree cannot reach.
 # Run each toolkit command on its own line so this rule matches it.
+#
+# Five toolkit commands change things that are hard or impossible to undo, so
+# Codex asks the owner before each one (Mike, 2026-09-28, decision 12). When
+# several rules match a command, the strictest decision wins, so these prompt
+# rules hold even though the general rule below allows every toolkit command.
+# The approval alone does not move the command out of the sandbox: the agent
+# must also ask for escalated permissions (sandbox_permissions
+# "require_escalated") with a one-line reason, or the approved command still
+# runs inside the sandbox and fails. Inside it, toolkit memory delete cannot
+# reach Hindsight or Notion, toolkit machine-setup cannot write
+# ~/.codex/config.toml or ~/.local/bin, toolkit hindsight service install
+# cannot write ~/Library/LaunchAgents, and toolkit import run from a worktree
+# cannot write the main checkout. With approvals turned off (codex exec),
+# Codex refuses these commands without asking; the agent then shows the owner
+# the exact command to run in a terminal. The toolkit refuses these commands
+# when a flag such as --json is written before the command words, because
+# these rules would not match that form.
+
+prefix_rule(
+    pattern = ["toolkit", "machine-setup"],
+    decision = "prompt",
+    justification = "toolkit machine-setup changes this computer: ~/.codex/config.toml, ~/.local/bin/toolkit, and ~/.config/toolkit-v2. It runs only after the owner's yes. Run it alone with sandbox_permissions require_escalated.",
+    match = ["toolkit machine-setup", "toolkit machine-setup --offline"],
+    not_match = ["toolkit doctor"],
+)
+
+prefix_rule(
+    pattern = ["toolkit", "memory", ["delete", "import"]],
+    decision = "prompt",
+    justification = "toolkit memory delete removes a memory record for good, and toolkit memory import replaces records. It runs only after the owner's yes. Run it alone with sandbox_permissions require_escalated.",
+    match = ["toolkit memory delete project_old_fact --owner-approved", "toolkit memory import --from backup"],
+    not_match = ["toolkit memory find billing", "toolkit memory save --type project --name x --description y --body z"],
+)
+
+prefix_rule(
+    pattern = ["toolkit", "import"],
+    decision = "prompt",
+    justification = "toolkit import writes .work-items/ and .memory/ from a backup and can replace files. It runs only after the owner's yes. Run it alone with sandbox_permissions require_escalated.",
+    match = ["toolkit import --from backup", "toolkit import --from backup --replace"],
+    not_match = ["toolkit export --to backup"],
+)
+
+prefix_rule(
+    pattern = ["toolkit", "hindsight", "service", ["install", "start"]],
+    decision = "prompt",
+    justification = "This installs or starts the Hindsight background service on this computer. It runs only after the owner's yes. Run it alone with sandbox_permissions require_escalated.",
+    match = ["toolkit hindsight service install", "toolkit hindsight service start"],
+    not_match = ["toolkit hindsight service status", "toolkit hindsight health"],
+)
 
 prefix_rule(
     pattern = ["toolkit"],

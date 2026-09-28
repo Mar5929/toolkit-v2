@@ -1,0 +1,97 @@
+{
+  "note": "Every generated copy that lands in a work plugin skill. Sources are edited; copies are written by node dev/tools/sync-skill-references.mjs.",
+  "copies": [
+    {
+      "source": "plugins/toolkit/shared/toolkit-commands.md",
+      "skills": ["work/work-on", "work/work-status", "work/work-decide", "work/work-requirements", "work/solution-design", "work/work-organize", "work/work-check", "work/work-finish", "work/work-delegate"]
+    },
+    {
+      "source": "plugins/git-workflows/shared/git-rules.md",
+      "skills": ["work/work-on", "work/work-check", "work/work-finish", "work/work-delegate"]
+    },
+    {
+      "source": "plugins/work/shared/work-item-format.md",
+      "skills": ["work/work-on", "work/work-status", "work/work-decide", "work/work-requirements", "work/solution-design", "work/work-organize", "work/work-check", "work/work-finish", "work/work-delegate"]
+    },
+    {
+      "source": "plugins/work/shared/recording-owner-answers.md",
+      "skills": ["work/work-on", "work/work-status", "work/work-decide", "work/work-requirements", "work/solution-design", "work/work-organize", "work/work-check", "work/work-finish", "work/work-delegate"]
+    },
+    {
+      "source": "plugins/work/shared/approvals.md",
+      "skills": ["work/work-decide", "work/work-requirements", "work/solution-design", "work/work-organize", "work/work-check", "work/work-finish", "work/work-delegate"]
+    },
+    {
+      "source": "plugins/work/shared/helpers.md",
+      "skills": ["work/work-on", "work/work-requirements", "work/solution-design", "work/work-check", "work/work-finish", "work/work-delegate"]
+    },
+    {
+      "source": "plugins/work/shared/team-roles.md",
+      "skills": ["work/work-on", "work/solution-design", "work/work-delegate"]
+    },
+    {
+      "source": "plugins/work/shared/tracker-local.md",
+      "skills": ["work/work-on", "work/work-status", "work/work-decide", "work/work-organize", "work/work-finish"]
+    },
+    {
+      "source": "plugins/work/shared/tracker-notion.md",
+      "skills": ["work/work-on", "work/work-status", "work/work-decide", "work/work-requirements", "work/solution-design", "work/work-organize", "work/work-check", "work/work-finish", "work/work-delegate"]
+    },
+    {
+      "source": "plugins/work/shared/tracker-github.md",
+      "skills": ["work/work-on", "work/work-status", "work/work-decide", "work/work-requirements", "work/solution-design", "work/work-organize", "work/work-check", "work/work-finish", "work/work-delegate"]
+    },
+    {
+      "source": "plugins/work/shared/tracker-jira.md",
+      "skills": ["work/work-on", "work/work-status", "work/work-decide", "work/work-requirements", "work/solution-design", "work/work-organize", "work/work-check", "work/work-finish", "work/work-delegate"]
+    },
+    {
+      "source": "plugins/memory/shared/current-focus.md",
+      "skills": ["work/work-on", "work/work-decide", "work/work-requirements", "work/solution-design", "work/work-organize", "work/work-check", "work/work-finish"]
+    },
+    {
+      "source": "plugins/memory/shared/proposals.md",
+      "skills": ["work/work-decide"]
+    },
+    {
+      "source": "plugins/work/agents/requirements-analyst.md",
+      "as": "references/agent-requirements-analyst.md",
+      "skills": ["work/work-requirements", "work/solution-design"]
+    },
+    {
+      "source": "plugins/work/agents/researcher.md",
+      "as": "references/agent-researcher.md",
+      "skills": ["work/work-on", "work/work-requirements", "work/solution-design", "work/work-delegate"]
+    },
+    {
+      "source": "plugins/work/agents/design-architect.md",
+      "as": "references/agent-design-architect.md",
+      "skills": ["work/solution-design"]
+    },
+    {
+      "source": "plugins/work/agents/design-critic.md",
+      "as": "references/agent-design-critic.md",
+      "skills": ["work/solution-design"]
+    },
+    {
+      "source": "plugins/work/agents/builder.md",
+      "as": "references/agent-builder.md",
+      "skills": ["work/work-on", "work/work-check", "work/work-delegate"]
+    },
+    {
+      "source": "plugins/work/agents/acceptance-checker.md",
+      "as": "references/agent-acceptance-checker.md",
+      "skills": ["work/work-on", "work/work-check", "work/work-finish", "work/work-delegate"]
+    },
+    {
+      "source": "plugins/toolkit/scaffold/model/.work-items/work-item-template/WORK-ITEM.md",
+      "as": "assets/WORK-ITEM.md",
+      "skills": ["work/work-on", "work/work-requirements", "work/work-organize"]
+    },
+    {
+      "source": "plugins/toolkit/scaffold/model/.work-items/work-item-template/DESIGN.md",
+      "as": "assets/DESIGN.md",
+      "skills": ["work/solution-design"]
+    }
+  ]
+}

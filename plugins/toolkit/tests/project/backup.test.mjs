@@ -189,7 +189,7 @@ test('machine-setup writes the wrapper script and the pointer; the wrapper runs 
   const again = await tk(home, ['machine-setup', '--offline'], { env });
   assert.match(again.stdout, /already up to date/);
   // Codex lists the V2 skills only in a project init set up, so the output says how to start one.
-  assert.match(again.stdout, /Codex: the Toolkit V2 skills appear only in a project that toolkit init has set up\. To start a new project from Codex, first run toolkit init in a terminal/);
+  assert.match(again.stdout, /Codex: the toolkit plugin is not on for every folder yet, so the Toolkit V2 skills appear only in a project that toolkit init has set up\. To start a new project from Codex, first run toolkit init in a terminal/);
   fs.writeFileSync(wrapper, '#!/bin/sh\necho mine\n');
   const foreign = await tk(home, ['machine-setup', '--offline'], { env });
   assert.equal(foreign.code, 1);

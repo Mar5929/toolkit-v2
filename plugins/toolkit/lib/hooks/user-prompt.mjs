@@ -1,6 +1,8 @@
 // UserPromptSubmit (ARCHITECTURE section 6): start the turn in session state,
-// rescan the local tracker cheaply (report items the owner moved), and add one
-// factual line when the prompt holds an explicit keep phrase.
+// rescan the local tracker cheaply (report items the owner moved), add one
+// factual line when the prompt holds an explicit keep phrase, and pass on
+// once what the Stop hook saved as a memory proposal at the end of the last
+// turn (lib/hooks/stop.mjs).
 //
 // The rescan only reads. Derived values (parent from location, status from
 // stage) are written only by toolkit work commands and the SessionStart sync
@@ -36,14 +38,19 @@ export async function userPrompt(input, io) {
 
   let followUp = false;
   let lastReported = null;
+  let proposalNotes = [];
   await updateSession(project, io.host, input, io.env, (state) => {
     // Codex turns a Stop reason into a new prompt; it is not a new request from the owner.
     if (state.lastStopReason && prompt.trim() === String(state.lastStopReason).trim()) followUp = true;
     lastReported = state.trackerReported || null;
+    if (!followUp && Array.isArray(state.proposalNotes) && state.proposalNotes.length) {
+      proposalNotes = state.proposalNotes;
+      state.proposalNotes = [];
+    }
   });
   if (followUp) return null;
 
-  const lines = [];
+  const lines = [...proposalNotes];
   const scan = await rescan(project, io, lastReported);
   if (scan.lines.length) {
     lines.push('Changes found in the work tracker since the last toolkit command (the work-organize skill handles moves and copies; the next toolkit work command brings the records in step):');

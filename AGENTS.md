@@ -25,7 +25,8 @@ only decides and steers. `README.md` explains it for Mike.
 | `plugins/toolkit/scaffold/model/` | An exact copy of Mike's model project: every folder, file name, template, rule, `AGENTS.md`, `CLAUDE.md`, project hook, and project skill a new project gets. Made by `dev/tools/import-model.mjs`; never edited by hand. `.import.json` in it records the model branch and commit it came from. |
 | `plugins/toolkit/scaffold/CONDITIONS.json` | The only hand-kept file beside the copy: which model paths install only for the local tracker, built-in memory, Salesforce, or one host; which files a toolkit command generates; where init fills the project name; and which Salesforce entries and lines a project without Salesforce leaves out. |
 | `plugins/toolkit/templates/` | Only what the model does not hold: the toolkit's own settings entries, the Codex plugin switches and command rule, the toolkit's `.gitignore` lines, and the Hindsight service file. `TEMPLATE-LANGUAGE.md` there explains how init, sync, and doctor install the copy. |
-| `plugins/work/` | Nine work skills, six agents, and `references/`. |
+| `plugins/work/` | Nine work skills, six agents, and `shared/`: the source files for text several skills need. |
+| `plugins/<name>/shared/` | One source file per shared subject (work item format, approvals, trackers, Git rules, running `toolkit` commands, memory backends). Each skill gets a generated copy in its own `references/` or `assets/`; edit the source, never the copy. |
 | `plugins/memory/` | Three memory skills. |
 | `plugins/session-skills/` | Five conversation skills and the `handoff-verifier` agent. |
 | `plugins/git-workflows/` | Four Git skills and their tests. |
@@ -35,6 +36,9 @@ only decides and steers. `README.md` explains it for Mike.
 | `dev/` | Goal, progress, plan, skill index, research, tools, and test runs. Not shipped. |
 | `dev/research/skill-writing-guide.md` | The rules for skill names, descriptions, and bodies, taken from `ai-external-knowledge/`. Every rule cites its page. |
 | `dev/tools/import-model.mjs` | Copies the model project into `plugins/toolkit/scaffold/model/`. `--check` compares the copy with the model and changes nothing. |
+| `dev/tools/sync-skill-references.mjs` | Copies each shared source (`plugins/<name>/shared/`, agent files, the model's work item and design templates) into the skills listed for it in `dev/tools/shared-references/<plugin>.json`, and deletes copies no list names. `--check` changes nothing; `--only <plugin>` limits it to one plugin's skills. |
+| `dev/tools/shared-references/` | One list per plugin (`<plugin>.json`) of the shared sources copied into that plugin's skills, and the skills that get each copy. |
+| `dev/tools/check-skills.mjs` | Checks every `SKILL.md`, reference, and agent file: frontmatter, descriptions against `dev/SKILL-INDEX.md`, `toolkit` commands against `dev/ARCHITECTURE.md` section 5, links, contents lists, and generated copies (see Rules, "Skill files"). |
 | `.claude/settings.json` | Settings for sessions working on this repository. `claudeMdExcludes` stops the copy's `CLAUDE.md`, `AGENTS.md` files, and `.claude/rules/` from loading as instructions here; they are for projects, not for this repository. |
 
 ## The model project and the scaffold copy
@@ -79,7 +83,11 @@ never changed by hand.
    prints. The model's own `.gitignore`, copied into `scaffold/model/`, hides
    those folders from this repository's Git, so a plain `git add` skips them
    and a clean clone would set up projects without those templates.
-5. `node dev/tools/import-model.mjs --check` must pass.
+5. `node dev/tools/import-model.mjs --check` must pass. Then run
+   `node dev/tools/sync-skill-references.mjs`: the work skills'
+   `assets/WORK-ITEM.md` and `assets/DESIGN.md`, and the
+   `references/memory-criteria.md` in `memory-save`, `memory-tidy`, and
+   `handoff`, are copies of the model's files.
 6. Run every check below. If the parity test fails, the model changed in a
    way `CONDITIONS.json` does not cover yet: fix the rule, not the copy. If a
    runtime test fails, the toolkit code must follow the model's new format.
@@ -97,6 +105,7 @@ Run them from the repository root.
 node --test 'plugins/toolkit/tests/**/*.test.mjs'
 node --test 'plugins/git-workflows/tests/*.test.mjs'
 node dev/tools/check-skills.mjs
+node dev/tools/sync-skill-references.mjs --check
 node dev/tools/import-model.mjs --check
 claude plugin validate .
 claude plugin validate ./plugins/toolkit
@@ -138,7 +147,10 @@ claude plugin validate ./plugins/toolkit
   made by Mike or with his approval, then imported. In projects the toolkit
   writes `.work-items/DASHBOARD.md`, `.work-items/.toolkit-state.json`,
   `.memory/MEMORY.md`, and `ai-external-knowledge/INDEX.md`; the pre-tool hook
-  refuses hand edits of them.
+  refuses hand edits of them. A file in a skill's `references/` or `assets/`
+  whose first line (after any frontmatter) starts with "Generated file" is a
+  copy: edit the source it names, then run
+  `node dev/tools/sync-skill-references.mjs`.
 - **`dev/` is not shipped.** Claude Code and Codex install only
   `plugins/<name>/`. Shipped code never reads a file under `dev/` when it runs;
   a comment may cite one. A plugin also cannot use a file outside its own
@@ -156,9 +168,29 @@ claude plugin validate ./plugins/toolkit
   `description` and `hooks` at the top level, so no `$schema`). Any change to a
   Codex hook means Mike must trust it again in Codex `/hooks`; say so.
 - **Versions.** Both manifests of a plugin carry the same `name` and
-  `version`. Codex runs a copy filed under the version, so bump `version` in
-  both manifests (and `metadata.version` in `.claude-plugin/marketplace.json`)
-  for any change Codex must see. Claude Code reads the folder in place.
+  `version`. Claude Code and Codex each run their own copy, filed under the
+  version (Claude Code: `~/.claude/plugins/cache/toolkit-v2/<plugin>/<version>`;
+  Codex: `~/.codex/plugins/cache/toolkit-v2/<plugin>/<version>`). Neither
+  reads this folder in place. So every shipped change raises `version` in
+  both manifests (and `metadata.version` in `.claude-plugin/marketplace.json`).
+  A change without a raise never reaches Mike's sessions, and nothing reports
+  it. To install a raised version: `claude plugin marketplace update
+  toolkit-v2`, then `claude plugin update <plugin>@toolkit-v2`; for Codex,
+  `codex plugin add <plugin>@toolkit-v2`, then `toolkit machine-setup` (it
+  switches the other V2 plugins off for every Codex folder again). Each of
+  these changes Mike's own setup, so ask him first.
+- **Machine-wide plugins** (Mike, 2026-09-28, decision 10): `toolkit` is on
+  for every folder in both hosts; it holds only `project-setup` and hooks that
+  do nothing outside a V2 project. The other five V2 plugins are on only in V2
+  projects. `toolkit machine-setup` keeps Codex that way.
+- **The plugin-root pointer.** `~/.config/toolkit-v2/plugin-root` names the
+  installed toolkit that `~/.local/bin/toolkit` runs. Only an installed copy
+  may be named there: a plugin cache folder for `toolkit-v2`, or the source
+  folder Claude Code or Codex registered as the marketplace. A copy loaded
+  with `--plugin-dir` from a scratch folder never is (`lib/project/machine.mjs`
+  refuses it). A cache copy of the same or a newer version always wins over
+  this source folder, because other sessions edit this folder; the source
+  folder is named only when no such cache copy exists.
 - **Adding or renaming a plugin** means changing both marketplace files, the
   `V2_PLUGINS` list in `plugins/toolkit/lib/project/hosts.mjs`, and the
   `README.md` table.
@@ -167,6 +199,24 @@ claude plugin validate ./plugins/toolkit
   1 word for word. No `when_to_use`, `` !`command` ``, `$ARGUMENTS`, or
   `${CLAUDE_*}`: Codex shows them as literal text. `check-skills.mjs` checks
   all of this.
+- **Skill files** (`dev/research/skill-writing-guide.md` Part 5). A skill reads
+  only files inside its own folder. `SKILL.md` links every file in its
+  `references/`, `assets/`, and `scripts/` folders directly, in its References
+  table with when to open it; a file that only another reference names is two
+  levels deep. A reference over 100 lines starts with a `## Contents` list.
+  `check-skills.mjs` fails on a link to a missing file, a link that leaves the
+  skill folder, a file `SKILL.md` does not link, a long reference without a
+  contents list, and a generated copy that differs from its source (it runs
+  the same check as `sync-skill-references.mjs --check`).
+- **Shared sources.** Text more than one skill needs goes in
+  `plugins/<owner plugin>/shared/`. To give it to another skill: add the skill
+  to the source's entry in `dev/tools/shared-references/<plugin>.json`, run
+  `node dev/tools/sync-skill-references.mjs`, and link the new copy from that
+  skill's `SKILL.md`. A source names a skill file by its path
+  (`references/approvals.md`) only when every skill that gets the copy holds
+  that file; otherwise it names the file and the skills that carry it ("the
+  `DESIGN.md` template in the `solution-design` skill's assets folder").
+  Raise the version of every plugin whose copies changed.
 - **Skill descriptions** follow `dev/research/skill-writing-guide.md` Part 3
   (Mike, 2026-09-27): in single quotes, what the skill does, then when to use
   it, with two to four of the owner's example phrases, and a "Not for ...; use

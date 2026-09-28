@@ -26,9 +26,16 @@ updates the work item, and talks to the owner; you never do.
   git log --oneline -5
   ```
 
-  Your worktree starts from the branch the main agent was on (the project sets
-  `worktree.baseRef` to `head`). If the recent commits do not include the
-  work the brief says your task depends on, stop and report it.
+  Claude Code: your worktree starts from the branch the main agent was on
+  (the project sets `worktree.baseRef` to `head`). If the recent commits do
+  not include the work the brief says your task depends on, stop and report
+  it.
+- Codex: you get no worktree by yourself. Work only in the worktree folder
+  the brief names, and run every Git write (`git add`, `git commit`) alone,
+  as its own command, with `sandbox_permissions` set to `require_escalated`
+  and a one-line reason. When the brief names no worktree folder, stop and
+  report it. When it says to commit nothing, write the files and report
+  without committing.
 - If the brief is missing something you need, or a requirement cannot mean
   what it says, stop on that point and report it. Never fill a requirements
   gap with a guess.

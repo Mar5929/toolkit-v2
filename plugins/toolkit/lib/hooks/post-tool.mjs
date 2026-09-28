@@ -69,6 +69,16 @@ async function checkNamedRecords(cmd, cwd, project) {
   return { contexts, blocks };
 }
 
+/** The value of --<name> <value> or --<name>=<value> in a command's words, or null. */
+export function flagValue(args, name) {
+  for (let i = 0; i < args.length; i++) {
+    const a = args[i];
+    if (a === `--${name}`) return i + 1 < args.length ? args[i + 1] : null;
+    if (a.startsWith(`--${name}=`)) return a.slice(name.length + 3);
+  }
+  return null;
+}
+
 async function onBash(input, io, cwd) {
   const cmd = input.tool_input && typeof input.tool_input.command === 'string' ? input.tool_input.command : '';
   const namesRecord = /WORK-ITEM\.md/.test(cmd);
@@ -79,7 +89,17 @@ async function onBash(input, io, cwd) {
   if (found.length && !commandFailed(input)) {
     await updateSession(project, io.host, input, io.env, (state) => {
       const turn = currentTurn(state, input);
-      for (const { c, kind } of found) turn.records.push({ kind, what: `toolkit ${c.group} ${c.sub}`, at: new Date().toISOString() });
+      for (const { c, kind } of found) {
+        const rec = { kind, what: `toolkit ${c.group} ${c.sub}`, at: new Date().toISOString() };
+        // The Stop hook saves an unanswered "Save to memory?" as a proposal unless the agent already did.
+        if (c.group === 'memory' && c.sub === 'save' && c.args.includes('--proposal')) rec.proposal = true;
+        // The description saved, so the Stop hook does not propose the same text again.
+        if (c.group === 'memory' && c.sub === 'save') {
+          const d = flagValue(c.args, 'description');
+          if (d) rec.description = d.slice(0, 200);
+        }
+        turn.records.push(rec);
+      }
     });
   }
   // A command that is not a toolkit command and names a record: check the record after it ran.
@@ -92,9 +112,24 @@ async function onBash(input, io, cwd) {
   return null;
 }
 
-const BODY_EDIT_NOTE = 'toolkit work edit <id> --section "<heading>" --set-file <file> changes a section the same way in every tracker and keeps the toolkit\'s record of what it wrote; prefer it to editing the file.';
+const BODY_EDIT_NOTE = 'toolkit work edit <id> --section \'<heading>\' --set-file <file> changes a section the same way in every tracker and keeps the toolkit\'s record of what it wrote; prefer it to editing the file.';
 // A design has its own command (sample run b named the section command for a DESIGN.md).
 const DESIGN_EDIT_NOTE = 'toolkit work design <id> --set-file <file> (or --text \'<text>\') saves a design the same way in every tracker and keeps its status; prefer it to editing DESIGN.md.';
+
+/** True when a DESIGN.md file's frontmatter says status: approved. */
+function approvedDesignFile(file) {
+  try {
+    const head = fs.readFileSync(file, 'utf8').split(/\r?\n---\s*\r?\n/)[0];
+    return /^status:\s*["']?approved["']?\s*$/m.test(head);
+  } catch {
+    return false;
+  }
+}
+
+/** The line for an approved design edited directly: the owner hears what changed, and the change is recorded. */
+export function approvedDesignNote(who) {
+  return `The approved design of ${who} was edited directly. The approval covered the design as it was: tell the owner what changed, record it with toolkit work history ${who} --note 'Design text changed after approval: <what changed>', and ask him again when the change alters what gets built. toolkit work design ${who} --set-file <file> records this row for you next time.`;
+}
 
 /** The reminder line for records edited directly: [{ who, design }]. */
 export function directEditNote(edits) {
@@ -121,6 +156,7 @@ export async function postTool(input, io) {
   const blocks = [];
   const edits = [];
   const directEdits = [];
+  const approvedDesigns = [];
   let memoryTouched = false;
   const { validateFile } = await import('../work/ops.mjs');
   for (const given of files) {
@@ -140,6 +176,9 @@ export async function postTool(input, io) {
         blocks.push(`The edit to ${rel} was saved, and it skips an approval gate for ${who}: ${listText(res.gates)} Put the previous value back, or ask the owner and record the answer with toolkit work approve ${res.id || '<id>'} (the work-decide skill).`);
       }
       if (!res.errors.length && !res.gates.length) directEdits.push({ who, design: path.basename(f.path) === 'DESIGN.md' });
+      // An edit to an approved design is told every time, not once per session
+      // (sample run confirm-a: the second direct edit, to an approved design, got no message).
+      if (res.kind === 'design' && approvedDesignFile(f.path)) approvedDesigns.push(who);
     }
     if (memoryType(project) === 'builtin' && isMemoryTopic(f.path, project)) memoryTouched = true;
   }
@@ -148,19 +187,21 @@ export async function postTool(input, io) {
     await reindexVault(project.mainRoot || project.root);
   }
   let remind = false;
+  const reminded = directEdits.filter((e) => !(e.design && approvedDesigns.includes(e.who)));
   if (edits.length || memoryTouched) {
     await updateSession(project, io.host, input, io.env, (state) => {
       const turn = currentTurn(state, input);
       for (const e of edits) if (!turn.edits.some((x) => x.path === e.path)) turn.edits.push(e);
       if (memoryTouched) turn.records.push({ kind: 'memory-file', what: 'a .memory/ record was edited', at: new Date().toISOString() });
       // One reminder per session that toolkit work edit is the way to change a record's text.
-      if (directEdits.length && !state.remindedBodyEdit) {
+      if (reminded.length && !state.remindedBodyEdit) {
         state.remindedBodyEdit = true;
         remind = true;
       }
     });
   }
-  if (remind) contexts.push(directEditNote(directEdits));
+  if (remind) contexts.push(directEditNote(reminded));
+  for (const who of [...new Set(approvedDesigns)]) contexts.push(approvedDesignNote(who));
   return postToolOutput({ context: contexts.join('\n'), blockReason: blocks.join(' ') || null });
 }
 

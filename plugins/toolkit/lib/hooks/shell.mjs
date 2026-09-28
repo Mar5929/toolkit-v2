@@ -302,6 +302,7 @@ export const GIT_REASONS = Object.freeze({
   commitAll: 'git commit -a stages every tracked change, including work from other sessions. Stage the files you changed by name, then run git commit.',
   noVerify: 'git commit --no-verify (or -n) skips the project\'s commit checks. Fix what the check reports, then commit again.',
   forcePush: 'A force push (--force, -f, --force-with-lease, or a + refspec) can overwrite work on the remote, so it is not run from an agent session. Tell the owner what needs a force push and why; he runs it himself.',
+  addIgnoredData: 'git add -f on .work-items/ or .memory/ would commit the work items or the memory. Both folders are Git-ignored on purpose: they hold the owner\'s private tracker and memory, and toolkit handoff-backup (or toolkit export) backs them up. Stage other files by name.',
   cleanIgnored: 'git clean -x or -X in the main checkout deletes Git-ignored files, including the work items in .work-items/ and the memory in .memory/, which Git cannot bring back. Delete the build output by name instead, or run git clean without -x and -X. toolkit export --to <folder> makes a backup first.',
 });
 
@@ -322,6 +323,11 @@ export function checkGit(line, { mainCheckout = true, guardClean = true } = {}) 
       const paths = [...args.filter((a) => !a.startsWith('-')), ...afterDash];
       if (opts.includes('-A') || opts.includes('--all') || opts.some((o) => shortLetters(o).includes('A')) || paths.some(stagesEverything)) {
         return { rule: 'git-add-all', reason: GIT_REASONS.addAll };
+      }
+      // .work-items/ and .memory/ are Git-ignored on purpose; only a forced add stages them.
+      const forced = opts.includes('--force') || opts.some((o) => shortLetters(o).includes('f'));
+      if (forced && paths.some((p) => /(^|\/)\.(?:work-items|memory)(\/|$)/.test(p) && !/scaffold\/model\//.test(p))) {
+        return { rule: 'git-add-ignored-data', reason: GIT_REASONS.addIgnoredData };
       }
     }
     if (sub === 'commit') {
@@ -387,11 +393,18 @@ export function recordKind(cmd) {
 const AI_NAMES = /(claude|anthropic|openai|chatgpt|\bgpt\b|\bgpt-|codex|copilot|gemini|cursor|devin|aider)/i;
 const AI_WORDS = /(claude|anthropic|openai|chatgpt|\bgpt\b|\bgpt-|codex|copilot|gemini|cursor|devin|aider|\bai\b|\bllm\b|artificial intelligence)/i;
 
+// The same credit in the middle of a line ("Release 1.0. Generated with
+// <AI tool>" in a tag message or a gh api release name): counted only when an
+// AI's name is one of the next three words, so "generated with make" passes.
+const MID_LINE_CREDIT = /\b(?:generated|written|created)\s+(?:with|by|using)\s+((?:\S+\s+){0,2}\S+)/gi;
+
 /**
  * The first line of a text that gives an AI credit, or null: a Co-Authored-By
  * line naming an AI (or its noreply address), or a "Generated with/by/using"
  * line naming one (Claude Code's own pull request line starts with a robot
- * emoji, which is skipped).
+ * emoji, which is skipped). In the middle of a line, "Generated with/by/using"
+ * (or written, created) counts when an AI's name is one of the next three
+ * words. A Co-Authored-By inside a sentence is not a credit line.
  */
 export function aiCreditLine(text) {
   for (const raw of String(text ?? '').split(/\r?\n/)) {
@@ -400,6 +413,14 @@ export function aiCreditLine(text) {
     if (co && AI_NAMES.test(co[1])) return raw.trim();
     const gen = /^generated\s+(?:with|by|using)\b(.*)$/i.exec(line);
     if (gen && AI_WORDS.test(gen[1])) return raw.trim();
+    MID_LINE_CREDIT.lastIndex = 0;
+    let m;
+    while ((m = MID_LINE_CREDIT.exec(line)) !== null) {
+      if (AI_NAMES.test(m[1])) {
+        MID_LINE_CREDIT.lastIndex = 0;
+        return raw.trim();
+      }
+    }
   }
   return null;
 }
@@ -422,40 +443,61 @@ function optionValues(args, longNames, shortNames = []) {
   return out;
 }
 
+// Git commands that write a message into history, with the options that
+// hold the message (final review M1: merges, tags, and notes passed the guard).
+const GIT_MESSAGE = {
+  commit: { what: 'commit', text: ['--message', '--trailer'], short: ['-m'], files: ['--file'], shortFiles: ['-F'] },
+  merge: { what: 'commit', text: ['--message'], short: ['-m'], files: ['--file'], shortFiles: ['-F'] },
+  tag: { what: 'tag', text: ['--message'], short: ['-m'], files: ['--file'], shortFiles: ['-F'] },
+  notes: { what: 'note', text: ['--message'], short: ['-m'], files: ['--file'], shortFiles: ['-F'] },
+  'cherry-pick': { what: 'commit', text: [], short: [], files: [], shortFiles: [] },
+  revert: { what: 'commit', text: [], short: [], files: [], shortFiles: [] },
+};
+// gh commands that publish text: [group, subcommand] -> the options that hold it.
+const GH_TEXT = [
+  { group: 'pr', subs: ['create', 'edit', 'comment', 'review', 'merge'], what: 'pull request', text: ['--title', '--body', '--subject'], short: ['-t', '-b'] },
+  { group: 'issue', subs: ['create', 'edit', 'comment'], what: 'issue', text: ['--title', '--body'], short: ['-t', '-b'] },
+  { group: 'release', subs: ['create', 'edit'], what: 'release', text: ['--title', '--notes'], short: ['-t', '-n'], files: ['--notes-file'], shortFiles: ['-F'] },
+];
+
 /**
- * Check a command line for a git commit, a gh pr create/edit, or a gh api
- * call on a pull request path, whose message gives an AI credit.
+ * Check a command line for a git commit, merge, tag, or note, a gh pr, issue,
+ * or release command that publishes text, or a gh api call on a pull request
+ * or issue path, whose message gives an AI credit.
  * readFile(path) -> text or null reads a message file (-F, --file,
- * --body-file, a gh api body=@file or --input). The whole command text is
- * read too, so a message in a heredoc ($(cat <<'EOF' ... EOF)) is found.
- * Returns { what: 'commit'|'pull request', line } or null.
+ * --body-file, --notes-file, a gh api body=@file or --input). The whole
+ * command text is read too, so a message in a heredoc ($(cat <<'EOF' ... EOF))
+ * is found. Returns { what: 'commit'|'tag'|'note'|'pull request'|'issue'|'release', line } or null.
  */
 export function checkAiCredit(line, { readFile = () => null } = {}) {
   const texts = [];
   let what = null;
   for (const words of allCommands(line)) {
     const git = gitCommand(words);
-    if (git && git.sub === 'commit') {
-      what = what || 'commit';
-      texts.push(...optionValues(git.args, ['--message', '--trailer'], ['-m']));
-      for (const f of optionValues(git.args, ['--file'], ['-F'])) if (f !== '-') texts.push(readFile(f));
+    const spec = git && GIT_MESSAGE[git.sub];
+    if (spec) {
+      what = what || spec.what;
+      texts.push(...optionValues(git.args, spec.text, spec.short));
+      for (const f of optionValues(git.args, spec.files, spec.shortFiles)) if (f !== '-') texts.push(readFile(f));
       continue;
     }
     const w = stripPrefix(words);
-    if (w.length >= 3 && base(w[0]) === 'gh' && w[1] === 'pr' && (w[2] === 'create' || w[2] === 'edit')) {
-      what = what || 'pull request';
+    const gh = w.length >= 3 && base(w[0]) === 'gh' ? GH_TEXT.find((g) => g.group === w[1] && g.subs.includes(w[2])) : null;
+    if (gh) {
+      what = what || gh.what;
       const args = w.slice(3);
-      texts.push(...optionValues(args, ['--title', '--body'], ['-t', '-b']));
-      for (const f of optionValues(args, ['--body-file'], ['-F'])) if (f !== '-') texts.push(readFile(f));
+      texts.push(...optionValues(args, gh.text, gh.short));
+      for (const f of optionValues(args, ['--body-file', ...(gh.files || [])], ['-F', ...(gh.shortFiles || [])])) if (f !== '-') texts.push(readFile(f));
       continue;
     }
-    // gh api on a pull request path (repos/<owner>/<repo>/pulls or pulls/<n>):
-    // -f/-F/--field/--raw-field body=... or title=... (@file reads a file), and --input <file> (JSON).
-    if (w.length >= 3 && base(w[0]) === 'gh' && w[1] === 'api' && w.slice(2).some((a) => /(^|\/)pulls(\/|$)/.test(a))) {
-      what = what || 'pull request';
+    // gh api on a pull request or issue path (repos/<owner>/<repo>/pulls,
+    // pulls/<n>, issues, issues/<n>/comments): -f/-F/--field/--raw-field
+    // body=... or title=... (@file reads a file), and --input <file> (JSON).
+    if (w.length >= 3 && base(w[0]) === 'gh' && w[1] === 'api' && w.slice(2).some((a) => /(^|\/)(pulls|issues|releases)(\/|$)/.test(a))) {
+      what = what || (w.slice(2).some((a) => /(^|\/)pulls(\/|$)/.test(a)) ? 'pull request' : w.slice(2).some((a) => /(^|\/)releases(\/|$)/.test(a)) ? 'release' : 'issue');
       const args = w.slice(2);
       for (const v of optionValues(args, ['--field', '--raw-field'], ['-f', '-F'])) {
-        const m = /^(?:body|title)=([\s\S]*)$/.exec(v);
+        const m = /^(?:body|title|name)=([\s\S]*)$/.exec(v);
         if (!m) continue;
         if (m[1].startsWith('@')) {
           if (m[1] !== '@-') texts.push(readFile(m[1].slice(1)));
@@ -467,7 +509,7 @@ export function checkAiCredit(line, { readFile = () => null } = {}) {
         texts.push(t);
         try {
           const j = JSON.parse(t || 'null');
-          if (j && typeof j === 'object') texts.push(j.body, j.title);
+          if (j && typeof j === 'object') texts.push(j.body, j.title, j.name);
         } catch {
           // Not JSON: the text itself was checked.
         }
@@ -609,4 +651,52 @@ export function substitutionInDoubleQuotes(line) {
  */
 export function backtickInUnquotedHeredoc(line) {
   return toolkitSources(line).some((cmd) => cmd.heredocs.some((h) => !h.quoted && /(^|[^\\])(`|\$\()/.test(h.body)));
+}
+
+// ------------------------------------------------------------------ apostrophes in Codex
+
+/**
+ * True when a quote in the line is never closed: the shell stops with
+ * "unmatched '". Codex writes the command inside a JavaScript string, where
+ * \' is only ', so the escape '\'' reaches the shell as ''' (sample runs
+ * confirm-a and confirm-d).
+ */
+export function unmatchedQuote(line) {
+  const src = String(line || '');
+  let quote = null;
+  for (let i = 0; i < src.length; i++) {
+    const c = src[i];
+    if (quote === "'") {
+      if (c === "'") quote = null;
+      continue;
+    }
+    if (quote === '"') {
+      if (c === '\\') i++;
+      else if (c === '"') quote = null;
+      continue;
+    }
+    if (c === '\\') {
+      i++;
+      continue;
+    }
+    if (c === "'" || c === '"') quote = c;
+  }
+  return quote !== null;
+}
+
+/**
+ * Why a toolkit command's apostrophe will not work in Codex, or null:
+ * 'escaped' when the command writes it as '\'' (the command then runs inside
+ * the Codex sandbox, because the project's toolkit rule does not match it, so
+ * Notion, Hindsight, and the main checkout are blocked), or 'unmatched' when
+ * a quote is never closed (the backslash was lost on the way to the shell).
+ */
+export function codexApostropheProblem(line) {
+  const src = String(line || '');
+  if (!src.includes("'")) return null;
+  const sources = toolkitSources(src);
+  if (!sources.length) return null;
+  if (sources.some((cmd) => cmd.text.includes("'\\''"))) return 'escaped';
+  if (unmatchedQuote(src)) return 'unmatched';
+  return null;
 }

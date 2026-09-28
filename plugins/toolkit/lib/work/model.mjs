@@ -937,7 +937,7 @@ export function validateRecord(input, opts = {}) {
   if (isTerminal(meta.status) && names.includes('overview')) {
     const blockers = getLabel(body, 'Blockers', { section: 'Overview' });
     if (blockers !== null && !isNoneText(blockers)) {
-      problem(warnings, 'terminal_blockers', `${id || 'The item'} is ${meta.status}, but Blockers in its Overview still says: ${String(blockers).trim().replace(/\.+$/, '')}. Set it to None: toolkit work edit ${id || '<id>'} --label Blockers --value "None."`);
+      problem(warnings, 'terminal_blockers', `${id || 'The item'} is ${meta.status}, but Blockers in its Overview still says: ${String(blockers).trim().replace(/\.+$/, '')}. Set it to None: toolkit work edit ${id || '<id>'} --label Blockers --value 'None.'`);
     }
   }
 

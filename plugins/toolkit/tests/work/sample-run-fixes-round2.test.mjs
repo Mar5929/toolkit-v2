@@ -8,7 +8,7 @@ import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { makeProject, cleanup, tk, newItem, readRecord, recordPath, trackerDir, approveRequirements, TODAY } from './helpers.mjs';
+import { makeProject, cleanup, tk, newItem, readRecord, recordPath, trackerDir, approveRequirements, TODAY, fillSelectedDesign } from './helpers.mjs';
 import { parseDoc, parseHistory, getSectionText, getSectionWhole, getLabel } from '../../lib/work/model.mjs';
 import { checkHandChanges } from '../../lib/commands/work.mjs';
 import { collectOwnerDecisions, collectAgentTodos } from '../../lib/work/decisions.mjs';
@@ -82,6 +82,7 @@ test('a sub-item made with --covers under a parent whose design is approved star
   assert.ok(!JSON.stringify(v.json).includes('guide_left'));
 
   await tk(dir, ['work', 'design', parent, '--create']);
+  await fillSelectedDesign(dir, parent);
   await tk(dir, ['work', 'approve', parent, '--design', '--by', 'Mike']);
   const kid = await tk(dir, ['work', 'new', '--title', 'Version flag', '--type', 'build', '--parent', parent, '--covers', 'R-01']);
   assert.equal(kid.code, 0, kid.stderr);

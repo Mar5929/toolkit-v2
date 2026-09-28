@@ -71,6 +71,11 @@ role to a Codex worker instead.
 A marketplace is a list of plugins. This folder is the `toolkit-v2`
 marketplace. You add it once, then install its six plugins.
 
+Both Claude Code and Codex run their own copy of each plugin, filed under its
+version number. They do not read this folder directly, so a change here
+reaches them only after the version goes up and the plugin is updated (see
+"After a change in this folder" below).
+
 ### Claude Code
 
 ```bash
@@ -81,18 +86,20 @@ claude plugin install memory@toolkit-v2
 claude plugin install session-skills@toolkit-v2
 claude plugin install git-workflows@toolkit-v2
 claude plugin install sf-architect-solutioning@toolkit-v2
+claude plugin enable toolkit@toolkit-v2 --scope user
 ```
 
-The plugins install switched off, and that is on purpose. Your current toolkit
-has plugins with the same names (`session-skills`, `git-workflows`,
-`sf-architect-solutioning`). Each Toolkit V2 project switches the Toolkit V2
-plugins on, and the old ones off, in its own settings. The two sets never load
-in the same project.
+The plugins install switched off, and that is on purpose. The last line
+switches one of them, `toolkit`, on for every folder. It holds only the
+`project-setup` skill and hooks that do nothing outside a Toolkit V2 project,
+so "set up this project" works in any folder. The other five stay off: your
+current toolkit has plugins with the same names (`session-skills`,
+`git-workflows`, `sf-architect-solutioning`). Each Toolkit V2 project switches
+the other Toolkit V2 plugins on, and the old ones off, in its own settings.
+The two sets never load in the same project.
 
-To check: `claude plugin list` shows the six plugins as disabled.
-
-Claude Code reads these plugins straight from this folder. A change here shows
-up in the next session, or after `/reload-plugins`.
+To check: `claude plugin list` shows `toolkit` as enabled and the other five
+as disabled.
 
 ### Codex
 
@@ -104,53 +111,70 @@ codex plugin add memory@toolkit-v2
 codex plugin add session-skills@toolkit-v2
 codex plugin add git-workflows@toolkit-v2
 codex plugin add sf-architect-solutioning@toolkit-v2
+node /Users/michaelrihm/Documents/Projects/toolkit-v2/plugins/toolkit/bin/toolkit machine-setup
 ```
 
-`codex plugin add` switches each plugin on for every project. Switch them off
-for the whole computer: in `~/.codex/config.toml`, find the six blocks that end
-in `@toolkit-v2` and change `enabled = true` to `enabled = false`. Each block
-then reads like this:
+`codex plugin add` switches each plugin on for every folder. The last line,
+`toolkit machine-setup`, puts that right and sets up the `toolkit` command for
+Codex and your terminal:
 
-```toml
-[plugins."toolkit@toolkit-v2"]
-enabled = false
-```
+- it switches the other five Toolkit V2 plugins off for every folder in
+  `~/.codex/config.toml` and leaves `toolkit` on, and keeps every other line
+  of that file;
+- it writes `~/.local/bin/toolkit`, a small script that runs the installed
+  toolkit, and `~/.config/toolkit-v2/plugin-root`, which names that installed
+  copy. It names the copy Codex or Claude Code made at install time, not this
+  folder, because other agent sessions edit this folder while they work. This
+  folder is named only when neither host has a copy of the same or a newer
+  version;
+- it checks Node.js, Git, `ntn`, Ollama, and the Hindsight server.
 
 Each project's own `.codex/config.toml` switches on the plugins it needs. Codex
 reads a project's settings only after you trust the project folder, which Codex
 asks about the first time you open it.
 
-Codex runs a copy of each plugin, filed under its version number. After a
-change in this folder, raise `version` in the plugin's two manifests
-(`.claude-plugin/plugin.json` and `.codex-plugin/plugin.json`) and run
-`codex plugin add <plugin>@toolkit-v2` again.
+To check: `codex plugin list` shows the six plugins, and `toolkit version`
+in a terminal prints the toolkit's version.
 
-To check: `codex plugin list` shows the six plugins.
+### After a change in this folder
+
+Every change that should reach Claude Code or Codex raises `version` in the
+plugin's two manifests (`.claude-plugin/plugin.json` and
+`.codex-plugin/plugin.json`, the same number in both). Then:
+
+```bash
+claude plugin marketplace update toolkit-v2
+claude plugin update <plugin>@toolkit-v2
+codex plugin add <plugin>@toolkit-v2
+toolkit machine-setup
+```
+
+Start a new session in each host afterwards. `toolkit machine-setup` runs last
+because `codex plugin add` switches the plugin on for every folder again.
 
 ## Set up a project
 
 Do this once per project. The folder must be a Git repository; if it is not,
 setup offers to run `git init` for you.
 
-1. In a terminal, go to the project folder and switch the setup plugin on for
-   this project only:
-
-   ```bash
-   claude plugin enable toolkit@toolkit-v2 --scope local
-   ```
-
-   This writes one line to `.claude/settings.local.json`, a personal settings
-   file Git does not track.
-
-2. Start Claude Code in that folder and say **"set up this project"**.
-3. Answer the questions. The agent asks one at a time and recommends an answer
+1. Start Claude Code in the project folder and say **"set up this project"**.
+2. Answer the questions. The agent asks one at a time and recommends an answer
    each time:
    - the project name;
    - where to track work: local folders, Notion, GitHub Issues, or Jira;
    - where to keep memory: the built-in `.memory/` folder, local Hindsight, or
      Notion;
-   - whether it is a Salesforce project.
-4. Start a new session when setup finishes, so Claude Code loads the new
+   - whether it is a Salesforce project;
+   - a backup folder outside the project, for example `~/Backups/toolkit`.
+     Work items and built-in memory are not in Git, so they exist only on this
+     Mac. The toolkit copies them to that folder by itself every time a work
+     item is finished, at every handoff, and at the start of a session when a
+     day has passed without a copy. It makes one folder per project per day,
+     named like `acme-crm-2026-09-28`, and never deletes an old one; delete
+     old day folders yourself when you no longer want them. A second copy
+     (clone) of the same project gets its own day folder, with 8 extra
+     letters at the end of its name, so the two never write over each other.
+3. Start a new session when setup finishes, so Claude Code loads the new
    settings and the Plain English style.
 
 Setup copies your model project's files into the folder, byte for byte. It
@@ -187,24 +211,20 @@ deleted. You can delete that old database yourself once you are happy.
 
 ### Starting a new project from Codex
 
-Codex shows the Toolkit V2 skills only in a project that `toolkit init` has
-already set up: the V2 plugins are off for the whole computer and on only
-where a project's `.codex/config.toml` turns them on, and init writes that
-file. Inside Codex, init also cannot write `.codex/` without your approval,
-because Codex's sandbox protects that folder. So start a new project in one of
-two ways:
+The `toolkit` plugin is on for every Codex folder, so you can also open Codex
+in a new folder and say **"set up Toolkit V2 in this project"**. Codex's
+sandbox protects the `.codex/` folder, so Codex asks you once to run
+`toolkit init` outside the sandbox. Or run `toolkit init` in a terminal in the
+project folder first, then open Codex there, trust the folder, and say
+**"finish setting up Toolkit V2"**:
 
-- Set it up from Claude Code (the steps above). Codex then works in the folder
-  too.
-- Or run `toolkit init` in a terminal in the project folder first, then open
-  Codex there, trust the folder, and say **"finish setting up Toolkit V2"**:
-
-  ```bash
-  toolkit init --name "Acme CRM" --tracker local --memory builtin --hosts claude-code,codex
-  ```
+```bash
+toolkit init --name "Acme CRM" --tracker local --memory builtin --hosts claude-code,codex --backup-dir ~/Backups/toolkit
+```
 
 Add `--salesforce` for a Salesforce project and `--decline SOUL.md` if you do
-not want a `SOUL.md`. `toolkit machine-setup` prints the same reminder.
+not want a `SOUL.md`. `--backup-dir none` records that you want no backup
+folder.
 
 In Codex, Git commands that change the repository (`git add`, `git commit`,
 `git worktree add`, `git merge`, `git push`, `git branch -d`) need your
@@ -232,8 +252,9 @@ follow your edits by itself, so after you change the model:
    touched a file that installs only in some projects. For example, you
    renamed a Salesforce rule. `plugins/toolkit/scaffold/CONDITIONS.json` is
    the list of those files, and the agent updates it to match.
-4. The agent raises the toolkit's version number, so Codex picks up the new
-   copy.
+4. The agent raises the toolkit's version number, so Claude Code and Codex
+   pick up the new copy after the update commands in "After a change in this
+   folder".
 5. In each existing project, say **"update the toolkit"**. The agent shows what
    would change first. It never overwrites a file you changed in that project.
 
@@ -259,6 +280,18 @@ The agent never does these for you. It tells you when each one is needed.
   GitHub repository, a production deploy, a production data load, starting the
   Hindsight background service, and Notion pages outside the "AI Agent Second
   Brain" page.
+- **Approve the toolkit commands that ask first.** In every Toolkit V2 project,
+  Claude Code and Codex ask you before these run: `toolkit machine-setup`
+  (changes this Mac's Codex settings and the `toolkit` command),
+  `toolkit memory delete` (a memory is gone for good), `toolkit import` and
+  `toolkit memory import` (they can replace work items or memory from a
+  backup), and `toolkit hindsight service install` or `start` (a background
+  service). Every other `toolkit` command runs without asking. In Codex, the
+  agent asks for these to run outside Codex's sandbox when it asks you;
+  approved inside the sandbox, they fail. The toolkit refuses these commands
+  when an option such as `--json` is typed before the command words
+  (`toolkit --json memory delete ...`), because the ask-first rules would not
+  catch that form.
 
 ## Where things are
 

@@ -185,14 +185,14 @@ function workFoldersNextTo(root) {
 /**
  * The written instructions for a tracker the toolkit does not drive.
  * Returns { rel, path }: `rel` names the file plainly (the work plugin's
- * references/trackers/<type>.md); `path` is the file found on this computer,
+ * shared/tracker-<type>.md); `path` is the file found on this computer,
  * or null. It looks next to the toolkit plugin (repository or cache layout),
  * then in the Claude Code and Codex plugin caches. `selfRoot` (default: the
  * plugin folder this file is in) exists so tests can leave it out.
  */
 export function trackerInstructionsPath(type, pluginRoot, { env = process.env, home, selfRoot = path.resolve(WORK_LIB, '..', '..') } = {}) {
-  const file = path.join('references', 'trackers', `${type}.md`);
-  const rel = `the work plugin's references/trackers/${type}.md`;
+  const file = path.join('shared', `tracker-${type}.md`);
+  const rel = `the work plugin's shared/tracker-${type}.md`;
   const homeDir = home || env.HOME || os.homedir();
   const folders = [];
   if (pluginRoot) folders.push(...workFoldersNextTo(path.resolve(pluginRoot)));

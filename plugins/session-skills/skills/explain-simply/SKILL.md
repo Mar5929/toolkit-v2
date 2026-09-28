@@ -5,6 +5,8 @@ description: 'Re-explains the last answer, a plan, or a named document as short 
 
 # Explain it simply
 
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+
 Rewrite something as short bullets the owner can read once and act on.
 
 1. **Pick what to explain.** Whatever the owner named (a file path, a plan, a
@@ -19,7 +21,15 @@ Rewrite something as short bullets the owner can read once and act on.
    for the owner to do. No ending when there is nothing.
 5. **Do not research again.** Explain what is already established.
 
-Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+## Gotchas
+
+- A simple explanation that dropped the numbers is not simpler, only vaguer,
+  and the owner cannot act on it. If a fact will not fit, keep the fact and
+  cut a different bullet.
+- "Option B" or "risk 1" on its own means nothing to someone reading once.
+  Name the thing itself.
+- Do not run a new search or command to improve the answer. New findings
+  change the facts the owner is trying to follow.
 
 ## The shape
 
@@ -37,10 +47,6 @@ Voice: write to the owner in plain English. Claude Code: follow the project's Pl
 - Record ids, work item ids, org names, field names
 - What is blocked, and what is blocking it
 - Anything that costs money, takes time, or cannot be undone
-
-A simple explanation that dropped the numbers is not simpler, only vaguer, and
-the owner cannot act on it. If a fact will not fit, keep the fact and cut a
-different bullet.
 
 ## The words
 

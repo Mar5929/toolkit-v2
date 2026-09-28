@@ -15,6 +15,11 @@
 // the line back to whole-text matching; and a command is known by the words
 // of its name in any order, as the sf CLI reads them.
 //
+// Mike's decision of 2026-09-28 (8): the guard also checks DevOps Center
+// pipeline deploys. They go to the org of a pipeline stage, which the command
+// line does not name, so the guard blocks them in this project whatever org
+// the line or the default org names.
+//
 // Run from the repository root: node --test 'plugins/toolkit/tests/**/*.test.mjs'
 // It writes only to a temporary folder. A fake `sf` on PATH answers the org
 // lookups, so no real Salesforce CLI or org is used.
@@ -29,6 +34,7 @@ import { fileURLToPath } from 'node:url';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const GUARD = path.resolve(HERE, '..', '..', 'scaffold', 'model', '.claude', 'hooks', 'guard-protected-orgs.cjs');
+const RULE = path.resolve(HERE, '..', '..', 'scaffold', 'model', '.claude', 'rules', 'salesforce-org-safety.md');
 
 const TMP = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'toolkit-org-guard-')));
 after(() => fs.rmSync(TMP, { recursive: true, force: true }));
@@ -224,11 +230,63 @@ test('a line that also runs a command the guard cannot read is matched as whole 
   assert.equal(guard('python3 tools/kb/build_edges.py && toolkit work show WI-001', { host: 'codex' }).decision, 'allow', 'no Salesforce command in the text');
 });
 
+test('a script file run by a later command is not seen by the guard, so the rule forbids such a script', () => {
+  // Mike's decision of 2026-09-28 (7). The guard reads only the command line in
+  // front of it. The rule's Never list and Enforcement section must say so.
+  const rule = fs.readFileSync(RULE, 'utf8');
+  assert.match(rule, /Never write or run a script, or any other file, that deploys, validates, writes data, or runs Apex\./);
+  assert.match(rule, /A script file run by a later command is not checked/);
+  assert.doesNotMatch(rule, /A script, a `bash -c` string, or a `\$\(\.\.\.\)` that holds such a command is still checked/);
+  for (const host of ['claude', 'codex']) {
+    // No sf text on the line, so no guard sees what the file does.
+    assert.equal(guard('bash deploy.sh', { host }).decision, 'allow', `${host}: bash deploy.sh`);
+    assert.equal(guard('./scripts/deploy-uat.sh', { host }).decision, 'allow', `${host}: ./scripts/deploy-uat.sh`);
+    // Written and run in the same command: the text is on the line, so it is checked.
+    assert.equal(guard("cat > deploy.sh <<'EOF'\nsf project deploy start -x p.xml -o acme-prod\nEOF\nbash deploy.sh", { host }).decision, 'deny', `${host}: written and run together`);
+    assert.equal(guard("bash <<'EOF'\nsf project deploy start -x p.xml -o acme-prod\nEOF", { host }).decision, 'deny', `${host}: here-document fed to a shell`);
+  }
+});
+
 test('an org it cannot classify, or no target at all, is blocked', () => {
   assert.equal(guard('sf project deploy start -o someone-else').decision, 'deny');
   const none = guard('sf project deploy start -x p.xml', { host: 'codex' });
   assert.equal(none.decision, 'deny');
   assert.match(none.reason, /no resolvable target org/);
+});
+
+test('a DevOps Center pipeline deploy is blocked, whatever org the line or the default org names', () => {
+  const before = sfCalls();
+  const pipeline = [
+    'sf project deploy pipeline start -p "Recruiting App" -b main -c devops-admin',
+    'sf project deploy pipeline quick -c devops-admin -r',
+    'sf project deploy pipeline resume -c devops-admin -r',
+    'sf project deploy pipeline validate -p "Recruiting App" -b main -c devops-admin',
+    'sf project:deploy:pipeline:start -p App -b main -c devops-admin',
+    'sf deploy pipeline project start -p App -b main -c devops-admin',
+    // An org named on the line is not the stage's org, so it never makes this a sandbox prompt.
+    'SF_TARGET_ORG=acme-uat sf project deploy pipeline start -p App -b main -c devops-admin',
+    'sf project deploy pipeline start -p App -b main -c acme-uat -o acme-uat',
+    'bash -c "sf project deploy pipeline start -p App -b main -c acme-uat -o acme-uat"',
+  ];
+  for (const host of ['claude', 'codex']) {
+    for (const defaultOrg of ['', 'acme-uat']) {
+      for (const command of pipeline) {
+        const r = guard(command, { host, defaultOrg });
+        assert.equal(r.decision, 'deny', `${host}, default org '${defaultOrg}': ${command}`);
+        assert.match(r.reason, /no resolvable target org\. A DevOps Center pipeline deploy goes to the org of a pipeline stage/, command);
+        assert.doesNotMatch(r.reason, /sandbox org/, command);
+      }
+    }
+  }
+  assert.equal(sfCalls(), before, 'a pipeline deploy never looks up the default org');
+  // A report only reads, help only prints, and a note only mentions one.
+  for (const command of [
+    'sf project deploy pipeline report -c devops-admin -r',
+    'sf project deploy pipeline start --help',
+    'toolkit work history WI-001 --note "Owner ran sf project deploy pipeline start for UAT"',
+  ]) {
+    assert.equal(guard(command, { host: 'codex' }).decision, 'allow', command);
+  }
 });
 
 test('a sandbox change asks in Claude Code and is blocked in Codex, as before', () => {

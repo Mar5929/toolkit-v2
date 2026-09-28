@@ -7,5 +7,5 @@
   "model": "gpt-6-sol",
   "permission_mode": "default",
   "stop_hook_active": "{{STOP_ACTIVE}}",
-  "last_assistant_message": "Done."
+  "last_assistant_message": "{{MESSAGE}}"
 }

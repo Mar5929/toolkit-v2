@@ -52,7 +52,10 @@ export function git(cwd, args) {
  * A home folder for one test: ~/.claude/settings.json with some claude-toolkit
  * plugins turned on, and ~/.codex/config.toml with others, like Mike's machine.
  */
-export function makeHome({ claudeOld = ['second-brain', 'protocol-guard'], codexOld = ['work-tracker', 'extra-thing'], trust = [], hookTrust = [] } = {}) {
+/** The toolkit-v2 folder this plugin is in (the marketplace source folder). */
+export const MARKETPLACE_SOURCE = path.resolve(PLUGIN_ROOT, '..', '..');
+
+export function makeHome({ claudeOld = ['second-brain', 'protocol-guard'], codexOld = ['work-tracker', 'extra-thing'], trust = [], hookTrust = [], marketplace = MARKETPLACE_SOURCE } = {}) {
   const home = tempDir('tk-home-');
   fs.mkdirSync(path.join(home, '.claude'), { recursive: true });
   const enabled = { 'superpowers@claude-plugins-official': true };
@@ -60,6 +63,11 @@ export function makeHome({ claudeOld = ['second-brain', 'protocol-guard'], codex
   fs.writeFileSync(path.join(home, '.claude', 'settings.json'), `${JSON.stringify({ enabledPlugins: enabled, outputStyle: 'Plain English' }, null, 2)}\n`);
   fs.mkdirSync(path.join(home, '.codex'), { recursive: true });
   const lines = ['model = "gpt-test"', ''];
+  // marketplace: a folder registered as the toolkit-v2 marketplace, the way
+  // codex plugin marketplace add records it (by default this plugin's own
+  // toolkit-v2 folder; false for none). Only a registered source folder (or a
+  // plugin cache copy) may become the plugin-root pointer (final review I1).
+  if (marketplace) lines.push('[marketplaces.toolkit-v2]', 'source_type = "local"', `source = "${marketplace}"`, '');
   for (const p of trust) lines.push(`[projects."${p}"]`, 'trust_level = "trusted"', '');
   for (const n of codexOld) lines.push(`[plugins."${n}@claude-toolkit"]`, 'enabled = true', '');
   if (hookTrust.length) {

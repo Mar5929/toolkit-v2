@@ -25,10 +25,10 @@ branch, with no pull request (rule: `.claude/rules/publish-project-documents.md`
    After a change under `ai-external-knowledge/`, regenerate its index there
    ("Step 3 in detail") and stage `ai-external-knowledge/INDEX.md` too.
 4. **Publish** from the save workspace. It refuses other staged paths,
-   unstaged or untracked files, and conflict markers (two trailing spaces, a
-   Markdown line break, are fine); commits; pushes without force and checks
-   the remote has the commit. With no remote it moves the local default
-   branch forward by fast-forward only: "No remote: committed locally."
+   unstaged or untracked files, and conflict markers; commits; pushes without
+   force and checks the remote has the commit. No remote: it moves the local
+   default branch forward ("No remote: committed locally."). It stops, or the
+   push is refused: open `references/recovery.md`.
 
    ```text
    node <this skill's folder>/scripts/publish-docs.mjs publish --message '<plain commit message>'
@@ -39,7 +39,37 @@ branch, with no pull request (rule: `.claude/rules/publish-project-documents.md`
    the task's last publish (`git worktree remove <path>`), and end with the
    one question for the owner or the exact words that continue.
 
-Codex: its sandbox keeps `.git/` read-only, so every Git write here (the script's `start` and `publish`, `git add`, `git commit`, `git push`, `git worktree add` and `remove`) needs the owner's approval and escalated permissions. Run each one as its own command with `sandbox_permissions` set to `require_escalated` and a one-line reason saying what it does; an approval without escalation still runs inside the sandbox and fails on `.git/index.lock`. When Codex refuses a command without asking ("approval required by policy"), stop, show the owner the exact command, and ask him to approve it in an interactive session or run it in a terminal. With no remote (`git remote` prints nothing), never run `git fetch` or `git push` yourself; the script skips both.
+## Gotchas
+
+- Codex keeps `.git/` read-only. The script's `start` and `publish`,
+  `git add`, and `git worktree remove` each run alone, with
+  `sandbox_permissions` set to `require_escalated` and a one-line reason.
+  Refused without asking: show the owner the exact command and wait
+  (`references/git-rules.md`, "Git writes in Codex").
+- In Codex the save workspace is outside the folder Codex may write to,
+  because it sits beside the project. Codex asks the owner before every file
+  edit or copy there, and under `codex exec` it refuses them. In a
+  `codex exec` run, stop after `start`, show the owner the workspace path and
+  the edit, and ask him to run the save in an interactive session.
+- No remote (`git remote` prints nothing): never run `git fetch` or
+  `git push` yourself. The script skips both and commits on the local default
+  branch.
+- Saving requirements or a design does not approve them or their build.
+- `publish` refuses conflict markers and whitespace errors, but not two
+  trailing spaces at the end of a line: that is a Markdown line break the
+  templates use. Leave them.
+- `DECISIONS.md` rows and `ai-external-knowledge/INDEX.md` are written by
+  `toolkit` commands, never by hand.
+- An unpushed commit is unfinished. The save is done only when the remote has
+  the commit, or, with no remote, when the local default branch has it.
+
+## References
+
+| File | Open it when |
+| --- | --- |
+| `references/recovery.md` | `start` or `publish` stops, the push is refused, the default branch advanced, or `DECISIONS.md` rows collide |
+| `references/git-rules.md` | Before a Git write in Codex, or when staging, commit messages, or the no-remote case need the full rule |
+| `scripts/publish-docs.mjs` | Run it (steps 2 and 4). Do not read it into the conversation |
 
 ## What counts as documentation
 
@@ -77,7 +107,6 @@ stays with that change and its review. Do not split dependent changes to avoid
 review, and do not describe an unshipped feature as shipped.
 
 This skill changes how a save is published, not who may change the content.
-Saving requirements or a design does not approve them or their build.
 
 ## Step 1 in detail: choose the exact files
 
@@ -123,29 +152,3 @@ workspace. It assigns the next id. Never type a row by hand.
 Check links and formatting in the other documents you changed. A failed check
 or an unexpected staged path leaves the save unfinished. Never bypass a failing
 check.
-
-## Recover without losing work
-
-- The default branch advanced: bring this save workspace current (fetch, then
-  rebase or merge onto `origin/<default-branch>` inside the save workspace
-  only; with no remote, rebase onto the local `<default-branch>`), regenerate
-  the knowledge index if the save touches it, rerun the checks, and run
-  `publish` again. A refused push does not touch any other
-  checkout. Ask the owner only when the meaning of the change or who approved
-  it changes.
-- The default branch advanced and both sides added `DECISIONS.md` rows: take
-  the remote's `DECISIONS.md`, then run `toolkit decision add` again for this
-  save's rows, so each gets the next free id. Never renumber the other rows.
-- A refused push, an account mismatch, a login prompt, a protected branch, a
-  conflict, or a failed check: report separately what is written, checked,
-  committed, and published. Keep the save workspace, any commit id, and the
-  exact next action in the work item or the handoff.
-- The repository has remotes but none named `origin`: `start` stops, names
-  them, and makes nothing. The script fetches and pushes `origin` only. Ask
-  the owner which remote holds the default branch; rename it to `origin` only
-  with his yes.
-- Never force-push, bypass branch protection, retry through another account,
-  reset, or stash another session's work. An unpushed commit is unfinished.
-- Reuse the same save workspace only while a follow-up save to the same files
-  is still pending in this task. Do not delete another session's save
-  workspace.

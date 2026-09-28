@@ -173,10 +173,13 @@ function settingsWithoutToolkit(installed, model) {
     delete out.enabledPlugins[id];
   }
   if (out.enabledPlugins && !Object.keys(out.enabledPlugins).length && !model.enabledPlugins) delete out.enabledPlugins;
-  const allow = TOOLKIT_SETTINGS.permissions.allow;
-  if (out.permissions && out.permissions.allow) {
-    out.permissions.allow = out.permissions.allow.filter((a) => !allow.includes(a) || ((model.permissions || {}).allow || []).includes(a));
-    if (!out.permissions.allow.length && !((model.permissions || {}).allow)) delete out.permissions.allow;
+  // The toolkit's permission rules: allow toolkit, and ask first for the risky toolkit commands (decision 12).
+  for (const list of ['allow', 'ask']) {
+    const mine = TOOLKIT_SETTINGS.permissions[list] || [];
+    if (out.permissions && out.permissions[list]) {
+      out.permissions[list] = out.permissions[list].filter((a) => !mine.includes(a) || ((model.permissions || {})[list] || []).includes(a));
+      if (!out.permissions[list].length && !((model.permissions || {})[list])) delete out.permissions[list];
+    }
   }
   return out;
 }
@@ -302,6 +305,9 @@ function compare(root, setup) {
       assert.equal(s.enabledPlugins['sf-architect-solutioning@toolkit-v2'], setup.salesforce);
       assert.deepEqual(s.worktree, { baseRef: 'head' });
       assert.ok(s.permissions.allow.includes('Bash(toolkit *)'));
+      for (const rule of ['Bash(toolkit machine-setup)', 'Bash(toolkit memory delete *)', 'Bash(toolkit import *)', 'Bash(toolkit hindsight service start *)']) {
+        assert.ok(s.permissions.ask.includes(rule), `${rule} asks the owner first`);
+      }
       assert.equal(s.autoMemoryEnabled, false);
       continue;
     }

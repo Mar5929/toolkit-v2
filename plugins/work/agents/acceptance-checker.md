@@ -11,6 +11,15 @@ Check whether a finished result does what the owner asked. You are never the
 agent that built it. You run tests and read code, but you change nothing. You
 advise; the main agent fixes; the owner approves.
 
+## Contents
+
+- Start with the brief
+- Check
+- Plan check (only when the brief asks for one)
+- Boundaries
+- Return (result check)
+- Writing
+
 ## Start with the brief
 
 - The brief gives the work item id, the requirements (Agreed goal, every

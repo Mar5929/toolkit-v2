@@ -47,6 +47,9 @@ links them (the text stays in the parent) and inherits the parent's
 requirements approval, so the owner is not asked twice.
 --quote: finish needs the owner's own words approving the result when no
 result approval is recorded yet (toolkit work approve <id> --result records one).
+finish then backs up .work-items/ and .memory/ (and Hindsight memory) to the
+backup folder in .toolkit.json backup.dir, one folder per day; with no folder
+set it says how to set one.
 --set-file - reads the text from standard input. --text gives the text in
 the command itself, so no file is needed.
 --remove-guide: removes the template's fill-in guide comment above Overview.
@@ -457,7 +460,15 @@ async function cmdFinish(ctx, tracker, project, args, changes) {
   const lines = [`${res.id} is Done. Result approval: ${res.resultApproval}.`];
   if (res.openSubItems.length) lines.push(`Open sub-items left: ${res.openSubItems.map((k) => `${k.id} (${k.status})`).join(', ')}.`);
   for (const w of res.warnings || []) lines.push(`Note: ${w}`);
-  out(ctx, withChanges(changes, lines), { ok: true, id: res.id, status: 'Done', resultApproval: res.resultApproval, openSubItems: res.openSubItems, warnings: res.warnings || [], changes });
+  // Every finished item is backed up at once (decision 13): the tracker and
+  // built-in memory are Git-ignored and exist only on this computer.
+  const { autoBackup } = await import('../project/backup.mjs');
+  const backup = await autoBackup(project, { env: ctx.env, fetch: ctx.fetch });
+  if (backup.line) lines.push(backup.line);
+  out(ctx, withChanges(changes, lines), {
+    ok: true, id: res.id, status: 'Done', resultApproval: res.resultApproval, openSubItems: res.openSubItems, warnings: res.warnings || [], changes,
+    backup: { status: backup.status, dir: backup.dir || null, parts: backup.parts, errors: backup.errors },
+  });
   return EXIT.OK;
 }
 

@@ -20,7 +20,14 @@ model folder was not touched.
   - `908456e` Keep an unanswered memory question as a proposal (your memory additions, 2026-09-27)
   - `628027c` Read the whole line in the org guard when any part of it cannot be read ("Fixes from the sample runs" below)
   - `f4684a5` Take an org only from the setting in front of its own sf command in the org guard ("Fixes from the sample runs" below)
-  - `54c5520` Hold the requirements layout sentence until Mike approves it (takes back the `requirements/AGENTS.md` part of `8ff4d3d`; "Needs your yes" below)
+  - `54c5520` Hold the requirements layout sentence until Mike approves it (takes back the `requirements/AGENTS.md` part of `8ff4d3d`; put back in `dd49a67` after your yes)
+  - `dd49a67` Keep one folder per requirements area, copied from system-area-template/ (your decision of 2026-09-28 (1); "Fixes from the sample runs", item 6)
+  - `81b3bda` Skip git fetch when the repository has no remote (decision (2); item 7)
+  - `9d22a3d` Say copy, not rename, in the three template guides (decision (4); item 9)
+  - `8cfd0b1` Route Salesforce platform questions to sf-architect-solutioning (decision (5); item 10)
+  - `9a2a69b` Use the tested sf-component-tracker description and fix old wording in two Salesforce skills (decisions (6) and (9); items 11 and 14)
+  - `7faee75` Guard DevOps Center pipeline deploys, and state the Codex sandbox and script rules (decisions (3), (7), and (8); items 8, 12, and 13)
+  - `5e7d7a0` Say which script lines the org guard checks, and that a script file run later is not checked (decision (7); item 12)
 - Full diff of `.memory/` and `.work-items/` from `efa2440` to the branch's
   last commit: `dev/model-changes-ignored-folders.diff` (made with
   `git diff efa2440 HEAD -- .memory .work-items` in the second folder).
@@ -59,10 +66,10 @@ toolkit's `memory-save` skill, and that skill asks one line instead:
 15. **Learned-rules table removed.** An owner correction about what is worth saving is now a `feedback` memory. This is stated in `memory-criteria.md`, `.memory/AGENTS.md`, and `.claude/rules/memory-review-and-save.md`.
 16. **`delivery/`.** No change to the folder. Install condition: Salesforce projects only. `PROJECT.md` lines that point into it are now inside Salesforce markers: the "Why this Salesforce project exists" purpose line (a non-Salesforce project gets "Why this project exists") and the three lines for `force-app/` and the two `delivery/deployment/.../package.xml` manifests.
 17. **Salesforce guards also protect Codex.** `.claude/hooks/guard-protected-orgs.js` and `guard-permission-set-deploy.js` are renamed `.cjs`. With `--host codex`, every "ask" becomes "deny", because Codex cannot ask; the agent hands the command to you. The permission set guard now finds its receipts next to its own folder. `.claude/settings.json` points at the `.cjs` files, and `.codex/hooks.json` now runs both guards for Codex (matcher `^Bash$`, shell commands, the project root from `git rev-parse --show-toplevel`). References were updated in `salesforce-org-safety.md`, `permissions-source-control.md`, `tools/permissions/permsets.py`, `tools/permissions/PERMISSIONS-RUNBOOK.md`, and `.claude/protected-orgs.json`. That file's comment and its notes on `action` and `unknownOrgAction` now match the V2 reference: the guard blocks an org it cannot classify the same way it blocks production, in Claude Code and in Codex. Your other guard edits are kept.
-18. **Salesforce skill descriptions.** `sf-deploy-check`, `sf-component-tracker`, and `sf-data-change` use the SKILL-INDEX texts in both `.claude/skills/` and `.agents/skills/`. The two copies are identical, and the skill bodies are unchanged.
-19. **`tests/TEST-PLAN-TEMPLATE.md`.** No change.
+18. **Salesforce skill descriptions.** `sf-deploy-check`, `sf-component-tracker`, and `sf-data-change` use the SKILL-INDEX texts in both `.claude/skills/` and `.agents/skills/`. The two copies are identical, and the skill bodies are unchanged. (Changed 2026-09-28: one body line each in `sf-component-tracker` and `sf-deploy-check`, and a new `sf-component-tracker` description. See "Fixes from the sample runs", items 11 and 14.)
+19. **`tests/TEST-PLAN-TEMPLATE.md`.** No change to where it is. (Changed 2026-09-28: its fill-in guide says "copy this file". See "Fixes from the sample runs", item 9.)
 20. **`plain-english-artifacts.md`.** The Salesforce role-hierarchy example is now a general one: who can see and edit projects in a team web app. The rule text is unchanged.
-21. **`system-guide/`.** No change.
+21. **`system-guide/`.** No change to the folder. (Changed 2026-09-28: the fill-in guide of `system-guide/AREA-TEMPLATE.md` says "copy this file". See "Fixes from the sample runs", item 9.)
 22. **`.vscode/` and `.sfdx/`.** No change in the model. The planned import step must leave them out; that step is not built yet.
 23. **Plugin switches.** No change in the model. Toolkit init writes `enabledPlugins` into each project's settings. The model's existing `"second-brain@claude-toolkit": false` line is kept.
 
@@ -142,7 +149,7 @@ Your model's `.memory/` and `.work-items/` files are tracked by Git even though 
 
 - `PROJECT.md` names `.system-guide.json` on its System Guide line.
 - `humanize-outbound-text.md` names the `humanizer` skill, which V2 does not ship; it already falls back to `unslop`.
-- "Project Init" is still named in `tools/permissions/README.md`, the comment at the top of `tools/permissions/PERMISSIONS-RUNBOOK.md`, and line 29 of both `sf-component-tracker` copies. (`tools/kb/graph_freshness_hook.py` no longer points to `knowledge/memory/`; see "Fixes from the sample runs".)
+- "Project Init" is still named in `tools/permissions/README.md` and the comment at the top of `tools/permissions/PERMISSIONS-RUNBOOK.md`. (Line 29 of both `sf-component-tracker` copies no longer names it: item 14 under "Fixes from the sample runs". `tools/kb/graph_freshness_hook.py` no longer points to `knowledge/memory/`; see "Fixes from the sample runs".)
 - Four Salesforce rules link to `.claude/skills/sf-*/SKILL.md`. Codex can still read those files; its own copies are in `.agents/skills/`.
 - In `DESIGN.md`, the body line "Design status: Draft | In review | Approved | Superseded" uses different words from the new header (`proposed`, `approved`, `superseded`).
 - The topic template's `authorization` prompt still mentions an "Approved card".
@@ -185,7 +192,9 @@ replaces the `description:` line that item 18 wrote.
 
 - `sf-component-tracker`: the words do not change. The line is now in single
   quotes, because the guide says to quote every description: a colon added
-  later would otherwise break the file's header.
+  later would otherwise break the file's header. (Replaced on 2026-09-28 by
+  the description routing round 3 tested; see item 11 under "Fixes from the
+  sample runs".)
 
   ```yaml
   description: 'Keeps the component tracker CSV, the master and per-work-item package.xml files, destructiveChanges.xml, and manual steps in sync. Use when Salesforce metadata under force-app/ is added, changed, renamed, or deleted, when a deploy result comes back, or when a deploy needs manual steps.'
@@ -319,7 +328,8 @@ Everything under "Applied" is on the branch and imported, and
      `sf` and `sfdx` commands the shell will run, not text that only mentions
      one, such as a toolkit note or a commit message, and it lets `--help`
      through. A script, a `bash -c` string, or a `$(...)` that holds such a
-     command is still checked."
+     command is still checked." The last sentence was wrong about script
+     files and was rewritten on 2026-09-28 in `5e7d7a0` (item 12).
    - Test: `plugins/toolkit/tests/scaffold/org-guard.test.mjs` runs the
      shipped guard with a fake `sf`, with no default org and with a
      production or sandbox default org. The round-3 commands and `--help`
@@ -396,76 +406,195 @@ Everything under "Applied" is on the branch and imported, and
    - Covered by: your memory additions (1), 2026-09-27, in files items 13 to
      15 approved for change.
 
-### Needs your yes (not applied)
+6. **Which layout a requirements area uses.** Commit `dd49a67`.
+   - Finding: a-local-builtin, "The requirements area file layout is not the
+     same from run to run": round 2 wrote `requirements/greet/GREET.md`,
+     round 3 `requirements/greet-cli.md`. `requirements/AGENTS.md` said "one
+     maintained file per durable business area, following
+     AREA-TEMPLATE.md", but the template is a folder, `system-area-template/`.
+   - File: `requirements/AGENTS.md`. Its first sentence is now: "Keep one
+     folder per durable business area, holding one maintained file. Start a
+     new area by copying `system-area-template/` to a folder named for the
+     area, then rename the copied `AREA-TEMPLATE.md` for the area, for
+     example `requirements/billing/BILLING.md`. Leave
+     `system-area-template/` itself unchanged for the next area." The rest
+     of the paragraph is unchanged. This is the sentence applied in
+     `8ff4d3d` and taken back out in `54c5520` while it waited for your yes.
+   - Covered by: your decision of 2026-09-28 (1).
 
-- **Which layout a requirements area uses** (a-local-builtin, "The
-  requirements area file layout is not the same from run to run": round 2
-  wrote `requirements/greet/GREET.md`, round 3 `requirements/greet-cli.md`).
-  `requirements/AGENTS.md` says "Keep one maintained file per durable
-  business area, following AREA-TEMPLATE.md", but the template is a folder,
-  `system-area-template/`. Proposed first sentence: "Keep one folder per
-  durable business area, holding one maintained file. Start a new area by
-  copying `system-area-template/` to a folder named for the area, then
-  rename the copied `AREA-TEMPLATE.md` for the area, for example
-  `requirements/billing/BILLING.md`. Leave `system-area-template/` itself
-  unchanged for the next area." No approved item covers this file, and the
-  sentence adds instructions, so it was applied in `8ff4d3d` and taken back
-  out in `54c5520`. The toolkit's `work-finish` closing steps already say
-  the same, so nothing breaks while it waits. Recommendation: yes.
-- **Skip `git fetch` when there is no remote** (d-local-hindsight 3).
-  `.claude/rules/shared-repository-work.md` runs `git fetch origin` before
-  the first edit. In a project with no remote it fails, and one session told
-  you the refusal would need resolving before it could build. Proposed: add
-  "- No remote (`git remote` prints nothing): skip `git fetch`, and never
-  report a fetch failure as a blocker." No approved item covers this file.
-  Recommendation: yes.
-- **Sandbox deploys in Codex** (b-salesforce b2). In Codex the guard turns
-  every "ask" into "deny", so an agent can never run a sandbox deploy or
-  sandbox data change, even after your yes; you ran each one yourself. Two
-  choices: (a) your yes is written somewhere the guard reads, and it lets
-  that one command run; or (b) the rules say plainly that in Codex you run
-  every sandbox deploy and sandbox data change, and the agent hands you the
-  exact command. Recommendation: (b). It needs no new mechanism, and the
-  Enforcement section of `salesforce-org-safety.md` already says it; (a)
-  would need an approval record the agent could write itself.
-- **Template guides that say "rename this file".** `tests/TEST-PLAN-TEMPLATE.md`
-  ("rename this file for the work item or release being checked"),
-  `requirements/system-area-template/AREA-TEMPLATE.md` ("rename this folder
-  and file"), and `system-guide/AREA-TEMPLATE.md` ("rename this file"). Each
-  template must stay for the next use, so "copy" is meant. Items 19 and 21
-  said to keep `tests/` and `system-guide/` as they are, so none of the three
-  was changed. Proposed: "copy this file (or folder) and rename the copy".
-- **Salesforce platform questions** (routing round 0, message 43, "Which
-  Flow type fits this?"). Proposed: add to the Salesforce block of
-  `AGENTS.md`: "- A Salesforce platform question, even about a work item:
-  `sf-architect-solutioning`."
-- **`sf-component-tracker` before `work-on`** (routing round 3, O27). The
-  tested description matched 3 of 3 in both hosts:
-  "Keeps the component tracker CSV, the master and per-work-item package.xml
-  files, destructiveChanges.xml, and manual steps in sync. Use first, before
-  work-on, when Salesforce metadata under force-app/ is added, changed,
-  renamed, or deleted, a deploy result comes back, or a deploy needs manual
-  steps." Both skill copies and `dev/SKILL-INDEX.md` would change.
-- **Scripts that deploy.** The guard reads the command line only. A script
-  written in one call (`cat <<EOF > deploy.sh`, or the Write tool) and run
-  in a later call (`bash deploy.sh`) has no `sf` text in the second call,
-  so no guard sees it. Proposed, for the Never list of
-  `salesforce-org-safety.md`: "- Never write or run a script, or any other
-  file, that deploys, validates, writes data, or runs Apex. Run each `sf`
-  command directly, so the guard sees it." Recommendation: yes.
-- **Commands the guard does not check.** `sf project deploy pipeline
-  start`, `quick`, and `resume` (DevOps Center, beta) deploy to a pipeline
-  stage, which can be production; they name no `-o`. `sf org assign
-  permset` and `permsetlicense` write permission set assignments. The rule
-  names none of them. Proposed: guard the pipeline deploys like other
-  deploys (with no `-o`, this project blocks them), and leave permission
-  set assignment to the rule. Recommendation: yes for the pipeline
-  deploys.
-- **Old wording in the Salesforce skill bodies** (item 18 kept the bodies as
-  they were). `sf-component-tracker` line 29: "Project Init must fill the
-  verified API version before use." Proposed: "Fill the verified API version
-  before first use." `sf-deploy-check`, Related: "The production-org guard
-  hook asks before a production deploy runs." This project's guard blocks a
-  production deploy by an agent. Proposed: "The production-org guard blocks
-  a production deploy by an agent. This check runs before the owner gets the
-  command."
+7. **Skip `git fetch` when there is no remote.** Commit `81b3bda`.
+   - Finding: d-local-hindsight 3. `.claude/rules/shared-repository-work.md`
+     runs `git fetch origin` before the first edit. In a project with no
+     remote it fails, and one session told you the refusal would need
+     resolving before it could build.
+   - File: `.claude/rules/shared-repository-work.md`. New first bullet under
+     the commands: "- No remote (`git remote` prints nothing): skip `git
+     fetch`, and never report a fetch failure as a blocker."
+   - Covered by: your decision of 2026-09-28 (2).
+
+8. **Sandbox deploys in Codex (choice b).** Commit `7faee75`.
+   - Finding: b-salesforce b2. In Codex the guard turns every "ask" into
+     "deny", so an agent can never run a sandbox deploy or sandbox data
+     change, even after your yes; you ran each one yourself.
+   - File: `.claude/rules/salesforce-org-safety.md`, section Allowed. New
+     bullet after the two sandbox bullets: "- In Codex, the owner runs every
+     sandbox deploy and sandbox data change, including `sf apex run` against
+     a sandbox. Hand him the exact command, with its `-o <sandbox>`; do not
+     run it yourself, even after his yes." The guard is unchanged: it
+     already blocks these in Codex. `sf apex run` is named because the rule
+     groups it with sandbox data writes and the guard blocks it the same way.
+   - Covered by: your decision of 2026-09-28 (3), choice (b).
+
+9. **Template guides say "copy", not "rename".** Commit `9d22a3d`.
+   - Each template must stay for the next use. The fill-in guides now start:
+     - `tests/TEST-PLAN-TEMPLATE.md`: "copy this file and rename the copy for
+       the work item or release being checked."
+     - `requirements/system-area-template/AREA-TEMPLATE.md`: "copy this
+       folder and rename the copied folder and file for the real business
+       area."
+     - `system-guide/AREA-TEMPLATE.md`: "copy this file and rename the copy
+       for the real system area."
+   - The rest of each guide is unchanged.
+   - Covered by: your decision of 2026-09-28 (4).
+
+10. **Salesforce platform questions.** Commit `8cfd0b1`.
+    - Finding: routing round 0, message 43, "Which Flow type fits this?".
+    - File: `AGENTS.md`, the Salesforce block under "Every session", after
+      the `solution-design` line: "- A Salesforce platform question, even
+      about a work item: `sf-architect-solutioning`." A project without
+      Salesforce does not get the line (it is inside the
+      `<!-- if salesforce -->` block).
+    - Covered by: your decision of 2026-09-28 (5).
+
+11. **`sf-component-tracker` before `work-on`.** Commit `9a2a69b`.
+    - Finding: routing round 3, O27. The tested description matched 3 of 3
+      in both hosts.
+    - Files: the `description:` line of `.claude/skills/sf-component-tracker/SKILL.md`
+      and `.agents/skills/sf-component-tracker/SKILL.md` (the two copies
+      stay identical), and row 25 of `dev/SKILL-INDEX.md` in this repository
+      (299 characters):
+
+      ```yaml
+      description: 'Keeps the component tracker CSV, the master and per-work-item package.xml files, destructiveChanges.xml, and manual steps in sync. Use first, before work-on, when Salesforce metadata under force-app/ is added, changed, renamed, or deleted, a deploy result comes back, or a deploy needs manual steps.'
+      ```
+
+    - Covered by: your decision of 2026-09-28 (6).
+
+12. **Scripts that deploy.** Commits `7faee75` and `5e7d7a0`.
+    - The guard reads the command line only. A script written in one call
+      (`cat <<EOF > deploy.sh`, or the Write tool) and run in a later call
+      (`bash deploy.sh`) has no `sf` text in the second call, so no guard
+      sees it.
+    - File: `.claude/rules/salesforce-org-safety.md`, section Never, after
+      "Never trust the default org.": "- Never write or run a script, or any
+      other file, that deploys, validates, writes data, or runs Apex. Run
+      each `sf` command directly, so the guard sees it." (`7faee75`)
+    - Same file, section Enforcement (`5e7d7a0`). The sentence "A script, a
+      `bash -c` string, or a `$(...)` that holds such a command is still
+      checked." said a script file is covered, which is wrong: the guard
+      lets `bash deploy.sh` and `./scripts/deploy-uat.sh` through in both
+      hosts. It now says: "A `bash -c` string, a `$(...)`, a here-document
+      fed to a shell, or a script written and run in the same command is
+      still checked. A script file run by a later command is not checked,
+      which is why the Never list forbids such a script." The guard is
+      unchanged.
+    - Test: `plugins/toolkit/tests/scaffold/org-guard.test.mjs`, "a script
+      file run by a later command is not seen by the guard, so the rule
+      forbids such a script": checks both rule sentences, that `bash
+      deploy.sh` and `./scripts/deploy-uat.sh` pass the guard, and that a
+      script written and run in the same command, or a here-document fed to
+      `bash`, is blocked, in both hosts.
+    - Covered by: your decision of 2026-09-28 (7). The replaced sentence was
+      agent-written in `287b0c3` (item 1), not your wording; the new one
+      states what the guard does, so the rule no longer contradicts its own
+      Never line.
+
+13. **The guard checks DevOps Center pipeline deploys.** Commit `7faee75`.
+    - `sf project deploy pipeline start`, `quick`, `resume`, and `validate`
+      (DevOps Center, beta; checked against sf 2.142.7 with the
+      devops-center plugin 1.2.28) deploy, or validate, to the org of a
+      pipeline stage, which can be production. They name only the DevOps
+      Center org (`-c`) and the stage's branch (`-b`), never the target org.
+      The guard at `54c5520` let all four through.
+    - File: `.claude/hooks/guard-protected-orgs.cjs`. The four commands are a
+      new guarded kind, `pipelineDeploy`. The guard never takes an org for
+      them from `-o`, a setting in front of the command, or the default org,
+      because none of those is the stage's org. Each is judged as a command
+      with no resolvable target org, so this project blocks it in both hosts.
+      The message says a pipeline deploy goes to a pipeline stage's org that
+      the command line does not name. `sf project deploy pipeline report`
+      only reads and passes, as do `--help` and a note that only mentions a
+      pipeline deploy.
+    - File: `.claude/rules/salesforce-org-safety.md`, section Enforcement: the
+      list of checked commands names "DevOps Center pipeline deploys", and a
+      new sentence says the guard treats a pipeline deploy's org as
+      unclassified.
+    - Test: `plugins/toolkit/tests/scaffold/org-guard.test.mjs`, "a DevOps
+      Center pipeline deploy is blocked, whatever org the line or the default
+      org names": 9 command lines, in both hosts, with no default org and
+      with a sandbox default org, are blocked, and none looks up an org.
+    - Left to the rule, as recommended: `sf org assign permset` and
+      `permsetlicense`.
+    - Not covered by decision (8), so not guarded: the eight `sf devops`
+      commands that change DevOps Center records. See proposal A under
+      "Needs your yes".
+    - Covered by: your decision of 2026-09-28 (8).
+
+14. **Old wording in two Salesforce skill bodies.** Commit `9a2a69b`.
+    - Item 18 kept the bodies as they were. Both copies of each skill changed
+      and stay identical.
+    - `sf-component-tracker`, line 29: "Project Init must fill the verified
+      API version before use." is now "Fill the verified API version before
+      first use."
+    - `sf-deploy-check`, Related: "The production-org guard hook asks before
+      a production deploy runs. This check runs before that prompt." is now
+      "The production-org guard blocks a production deploy by an agent. This
+      check runs before the owner gets the command."
+    - Covered by: your decision of 2026-09-28 (9).
+
+### Needs your yes
+
+You approved the first nine proposals on 2026-09-28 ("yes to all your
+recommendations"). They are items 6 to 14 above, applied on the branch and
+imported, and `node dev/tools/import-model.mjs --check` passes (commit
+`5e7d7a0`). Two new proposals came from the review of that work. Nothing
+below is applied.
+
+A. **Guard the DevOps Center commands that change records.**
+   - The problem: the installed Salesforce CLI (sf 2.142.7, devops-center
+     plugin 1.2.28) has eight DevOps Center commands that create or change
+     records in the DevOps Center org: `sf devops pipeline activate`,
+     `sf devops pipeline create`, `sf devops pipeline attach-project`,
+     `sf devops pipeline stage add`, `sf devops project create`,
+     `sf devops work-item create`, `sf devops work-item status update`, and
+     `sf devops pull-request create`. Each names that org with `-o`.
+     Salesforce recommends installing DevOps Center in production. The guard
+     lets all eight through today, in both hosts, even with `-o acme-prod`
+     (checked 2026-09-28). The rule's first line says "Read-only against
+     every org". Decision (8) named pipeline deploys only, so these were left
+     out.
+   - Proposed: the guard treats these eight as a data write and uses their
+     own `-o`. Aimed at production or an org it cannot classify: blocked, and
+     the agent hands you the command. Aimed at a sandbox: it asks in Claude
+     Code and is blocked in Codex, like other sandbox data changes.
+     `sf devops project list` and `sf devops work-item list` only read and
+     stay unguarded.
+   - Files if you say yes: `.claude/hooks/guard-protected-orgs.cjs`, the
+     Enforcement list in `.claude/rules/salesforce-org-safety.md` (it would
+     name "DevOps Center record changes"), and a test in
+     `plugins/toolkit/tests/scaffold/org-guard.test.mjs`.
+   - The cost: when your DevOps Center runs in production, an agent cannot
+     create a DevOps Center work item, move one to a new status, or open its
+     pull request. It hands you the command instead.
+   - Recommendation: yes. It keeps "read-only against every org" true.
+
+B. **Say that a sandbox validate still runs in Codex.**
+   - The problem: the Codex bullet (item 8) says "the owner runs every
+     sandbox deploy". An agent could read that as including
+     `sf project deploy validate -o <sandbox>`. The same rule allows a
+     sandbox validate with no yes, and the guard lets it through in Codex.
+   - Proposed: add one sentence at the end of that bullet in
+     `.claude/rules/salesforce-org-safety.md`, section Allowed: "A sandbox
+     validate is not a deploy: the agent still runs it."
+   - Recommendation: yes. It is small, and it keeps an agent from handing
+     you a validate it may run itself.

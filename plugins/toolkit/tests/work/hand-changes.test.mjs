@@ -5,7 +5,7 @@ import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { makeProject, cleanup, tk, newItem, readRecord, recordPath, readState, trackerDir, editFile, git, approveRequirements } from './helpers.mjs';
+import { makeProject, cleanup, tk, newItem, readRecord, recordPath, readState, trackerDir, editFile, git, approveRequirements, fillSelectedDesign } from './helpers.mjs';
 import { parseDoc, parseHistory, getH1, getLabel, getSectionText as getSectionTextOf } from '../../lib/work/model.mjs';
 import { checkChanged } from '../../lib/work/state.mjs';
 import { loadTemplate } from '../../lib/work/templates.mjs';
@@ -435,6 +435,7 @@ test('a design set to approved by hand with no recorded approval is asked about'
   editFile(W(dir, 'WI-001-search', 'DESIGN.md'), 'status: proposed', 'status: approved');
   const r = await tk(dir, ['work', 'sync', '--json']);
   assert.ok(r.json.questions.some((q) => q.code === 'design_approved_without_record' && /toolkit work approve WI-001 --design --by <name>/.test(q.question)));
+  await fillSelectedDesign(dir, id);
   await tk(dir, ['work', 'approve', id, '--design', '--by', 'Mike']);
   const v = await tk(dir, ['work', 'validate', id, '--json']);
   assert.deepEqual(v.json.results[0].design.gates, []);

@@ -5,6 +5,8 @@ description: 'Plays back a loose brain dump in very simple words and waits for t
 
 # Brain dump playback
 
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+
 The owner pasted or spoke a loose dump of what they want. Say back what you
 understood, in words a five year old could follow, and wait for a yes.
 
@@ -26,13 +28,21 @@ understood, in words a five year old could follow, and wait for a yes.
    go past it. Hand project work to `work-on` (Claude Code: the Skill tool;
    Codex: read its `SKILL.md` from the skill list).
 
-Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+## Gotchas
+
+- A dump that reads like clear orders still gets only the playback in the
+  first turn. Do not start even the easy parts: a loose dump is easy to
+  misread, and the owner asked to check the reading first.
+- An ordinary short request is not a dump. Do the request instead of playing
+  it back.
+- Keep every number, name, file path, and system from the dump. Simpler words
+  never mean fewer facts.
 
 ## What counts as the dump
 
 The dump is whatever the owner pasted or spoke in this message or the messages
 just before the command. If there is no dump, say so in one line and ask for
-it. Do not treat an ordinary short request as a dump.
+it.
 
 ## The words
 

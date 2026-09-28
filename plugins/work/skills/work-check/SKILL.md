@@ -6,33 +6,39 @@ description: 'Tests a finished build against its work item''s requirements, fixe
 # Work check
 
 Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
-Shared rules: the work plugin's `references/conventions.md` and `references/helpers.md` (how to brief agents), two folders above this skill's folder (`../../references/`). To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Run each `toolkit` command alone, on its own line, in both hosts: never joined by `&&`, `;`, or a pipe, and never from a script (in Codex that runs it inside the sandbox, where it fails). Text (conventions, "Text in a command"): one-line values (`--note`, `--effect`, `--append-row`, `--title`) go in single quotes, with an apostrophe written `'\''`, because double quotes run backticks and `$(...)`; section and design text goes on standard input in Claude Code (`<file>` is `-`, followed by a quoted heredoc, `<<'EOF'`), and in Codex in `--text '<text>'` or a file in a new `mktemp -d` folder, deleted right after the command. Never change a record with a script. Ask the owner in the reply text, never through a question tool. No remote (`git remote` prints nothing): never run `git fetch`, and never report a fetch refusal as a blocker.
+Checks a finished build against every requirement with an independent checker, fixes what fails, and asks the owner to approve the result; it never merges, deploys, or marks Done. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
 
 ## Steps
 
-1. Read the requirements, the acceptance list, and the tasks, then set the testing stage. When the show output's "Design:" value is not `none`, also read the design's Acceptance checks (in "Build and verification plan") and the selected option's "How to check it" column (the design command exits 1 for an item with no design). A sub-item whose "Design:" says "none of its own" and names its parent's approved design is checked against that design: read the parent's.
+1. Read the requirements, the Acceptance list, the Tasks, and the design's Acceptance checks; a sub-item with no design of its own is checked against its parent's (`references/testing.md`, section 1). Then set the testing stage.
    `toolkit work show <id>`
    `toolkit work design <id>`
-   `toolkit work design <parent-id>`
    `toolkit work set <id> --stage 09-testing`
-2. Run the project's tests and every acceptance check the item lists. A check with several scenarios or manual steps gets a test plan: a copy of `tests/TEST-PLAN-TEMPLATE.md` named for the item (for example `tests/WI-012-TEST-PLAN.md`), saved in `tests/` in the item's worktree and committed on its branch with the results filled in. Never save it in `.work-items/`, which Git ignores. A check that could not run is reported as not run, never as passed.
-3. Brief the `acceptance-checker` agent (never the agent that built it): one verdict per requirement (met, partly met, not met) with evidence, plus defects seen in the diff. Give it the branch and commit to check.
-4. Failures: set the bug-fixing stage; a `builder` agent (or the main agent) fixes; the checker checks again. Repeat until clean, or until a failure needs an owner decision (an Open Questions row and the item waiting on the owner).
+2. Run the project's tests and every acceptance check the item lists. Several scenarios or manual steps: write a test plan in `tests/` on the item's branch (`references/testing.md`, sections 2 and 3).
+3. Brief the `acceptance-checker`, never the agent that built it, naming the branch and the exact commit (`references/testing.md`, section 4).
+4. Failures: run the check and fix loop until clean, or until a failure needs an owner decision (`references/testing.md`, section 5).
    `toolkit work set <id> --stage 10-bug-fixing`
-5. Record the result: what was checked, the evidence, the known gaps.
+5. Record what was checked, the evidence, and the gaps.
    `toolkit work history <id> --note 'Checked: <what>; evidence: <where>; gaps: <gaps or none>'`
-6. Set the approval stage and wait on the owner. Show him what it does now, how to see it (a link, a command, or a screenshot), the evidence, and the gaps. Ask one line, in the reply text: "Do you approve this result?" Add no Open Questions row for the result approval itself: stage 11 already lists it as the owner's decision. Update the current focus when its next step changed (`../../references/conventions.md`, "The current focus").
+6. Ask for the result approval with the checklist in `references/approvals.md`, section 4: stage 11, the item waiting on the owner, the result shown as "Showing the result" says below, and one question: "Do you approve this result?"
    `toolkit work set <id> --stage 11-user-approval --waiting-on owner`
-7. Yes: record it (the command adds its own history row), hand the item back to the agent unless another question for him is still open, and quote his words in one note; then open `work-finish`. When the approve command fails, show the owner its error; never work around it by editing the record. A requirement change goes to `work-requirements`; a fix becomes a task and continues here. Every reply ends with the approval question, or the exact words that continue.
+7. His yes: save his words first, record the approval, hand the item back to the agent, and open `work-finish`. A requirement change goes to `work-requirements`; a fix becomes a task and continues here.
+   `toolkit work history <id> --note 'Owner said: <quote>' --effect 'Result approved; work-finish continues.'`
    `toolkit work approve <id> --result --by <owner>`
    `toolkit work set <id> --waiting-on agent`
-   `toolkit work history <id> --note 'Owner'\''s words: <quote>' --effect 'Result approved; work-finish continues.'`
+8. Update the current focus when the item's next step changed (`references/current-focus.md`). End every reply with the approval question, or the exact words that continue.
 
-## Agents
+## Gotchas
 
-- `acceptance-checker`: step 3 and every re-check. Paste in the Agreed goal, every `R-xx` with its acceptance check, the Acceptance list, the design's Acceptance checks and "How to check it" column, and the test plan when there is one. Name the branch and commit.
-- `builder`: fixes in step 4 when a team was recorded or the owner agreed; one builder per independent fix, one writer per path.
-- Codex: this plugin's agents do not load there. Read the agent's file in this plugin's `agents/` folder and give its full text, with the brief, to a native Codex worker: the `spawn_agent` tool, started without this conversation (`fork_turns` set to `none`), so a checker never shares the builder's thread. With no worker, do the work yourself and say that no independent check ran.
+- Run each `toolkit` command alone: never joined by `&&`, `;`, or a pipe, and never from a script (in Codex that runs it inside the sandbox, where it fails). One-line values go in single quotes, never double quotes; an apostrophe inside them is `'\''` in Claude Code and ’ (U+2019) in Codex, or reword the text. Section text goes on standard input (`--set-file -`) in Claude Code, and in `--text '<text>'` or a `mktemp -d` file in Codex (`references/toolkit-commands.md`, "Text in a command").
+- The checker is never the agent or session that built the change. When no independent check could run, say so plainly before asking for approval.
+- A check that did not run is reported as not run, never as passed.
+- The test plan lives in `tests/` on the item's branch, committed there. Never in `.work-items/`, which Git ignores.
+- "Looks good" to any question other than the approval question is not the approval. Ask the approval question.
+- Add no Open Questions row for the result approval: stage 11 already lists it as the owner's decision.
+- When the approve command fails, show the owner its error. Never work around it by editing the record.
+- The result approval covers the result shown, never merge, deployment, or publishing; `work-finish` handles those.
+- GitHub Issues or Jira: `toolkit work` exits with code 3. Change the stage label and record the result in the issue (`references/tracker-github.md` or `references/tracker-jira.md`).
 
 ## Showing the result
 
@@ -42,11 +48,28 @@ Shared rules: the work plugin's `references/conventions.md` and `references/help
 - Then the gaps: anything partly met, not run, or known to be missing. Never hide a gap to get an approval.
 - One question: "Do you approve this result?"
 
-## Rules
+A "no": record his words, turn each named problem into a task or a requirement change, and continue.
 
-- The checker is independent: never the agent or session that built the change. When no independent check could run, say so plainly before asking for approval.
-- A check that did not run is never reported as passed.
-- The approval covers the result shown. It is not an approval to merge, deploy, or publish; `work-finish` handles those.
-- "Looks good" to a question other than the approval question is not the approval. Ask the approval question.
-- A "no": record his words, turn each named problem into a task or a requirement change, and continue.
-- GitHub Issues or Jira: `toolkit work` exits with code 3. Change the stage label and record the result in the issue as `../../references/trackers.md` says.
+## Agents
+
+- `acceptance-checker` (`references/agent-acceptance-checker.md`): step 3 and every re-check.
+- `builder` (`references/agent-builder.md`): fixes in step 4 when a team was recorded or the owner agreed; one builder per independent fix, one writer per path. In Codex the main agent first makes each builder's worktree (`references/helpers.md`, section 2, "Codex builders").
+- Brief them as `references/helpers.md` says.
+- Codex: this plugin's agents do not load there. Give the full text of this skill's `references/agent-<name>.md`, with the brief, to a native Codex worker: the `spawn_agent` tool, started without this conversation (`fork_turns` set to `none`), so a checker never shares the builder's thread. With no worker, do the work yourself and say that no independent check ran.
+
+## References
+
+| File | Open it when |
+| --- | --- |
+| [references/testing.md](references/testing.md) | Steps 1 to 5: what to check against, the test plan, the checker's brief, the fix loop |
+| [references/approvals.md](references/approvals.md) | Steps 6 and 7: the result approval checklist; what counts as a yes |
+| [references/git-rules.md](references/git-rules.md) | Committing the test plan or a fix, and Git writes in Codex |
+| [references/helpers.md](references/helpers.md) | Before starting any agent |
+| [references/agent-acceptance-checker.md](references/agent-acceptance-checker.md), [references/agent-builder.md](references/agent-builder.md) | Codex only: the text to give the worker |
+| [references/recording-owner-answers.md](references/recording-owner-answers.md) | The owner answers; history notes; `waiting_on`; a failed save |
+| [references/work-item-format.md](references/work-item-format.md) | Before any section edit or table row |
+| [references/current-focus.md](references/current-focus.md) | Step 8: the item's next step changed |
+| [references/toolkit-commands.md](references/toolkit-commands.md) | Before a command that carries text, and on any exit code other than 0 |
+| [references/tracker-notion.md](references/tracker-notion.md) | `tracker.type` is `notion`, or a command prints a Notion error |
+| [references/tracker-github.md](references/tracker-github.md) | A `toolkit work` command exits 3 in a GitHub Issues project |
+| [references/tracker-jira.md](references/tracker-jira.md) | A `toolkit work` command exits 3 in a Jira project |

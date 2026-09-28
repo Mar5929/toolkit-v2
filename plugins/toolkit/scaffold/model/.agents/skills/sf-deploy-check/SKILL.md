@@ -42,4 +42,4 @@ A tracker can be stale in either direction. In one real case a help-text deploy 
 
 - `salesforce-org-safety.md`: the read-only verify in step 4 is allowed there.
 - `sf-component-tracker` skill: the tracker this check reads.
-- The production-org guard hook asks before a production deploy runs. This check runs before that prompt.
+- The production-org guard blocks a production deploy by an agent. This check runs before the owner gets the command.

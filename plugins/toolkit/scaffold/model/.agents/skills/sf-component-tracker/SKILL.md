@@ -1,6 +1,6 @@
 ---
 name: sf-component-tracker
-description: 'Keeps the component tracker CSV, the master and per-work-item package.xml files, destructiveChanges.xml, and manual steps in sync. Use when Salesforce metadata under force-app/ is added, changed, renamed, or deleted, when a deploy result comes back, or when a deploy needs manual steps.'
+description: 'Keeps the component tracker CSV, the master and per-work-item package.xml files, destructiveChanges.xml, and manual steps in sync. Use first, before work-on, when Salesforce metadata under force-app/ is added, changed, renamed, or deleted, a deploy result comes back, or a deploy needs manual steps.'
 ---
 
 # Salesforce component tracker
@@ -26,7 +26,7 @@ delivery/deployment/
 ```
 
 - One master tracker for the whole project. Never split it per work item.
-- `delivery/deployment/full-project-deployment-template/` holds the project-wide manifest and any full-cutover manual steps. Project Init must fill the verified API version before use.
+- `delivery/deployment/full-project-deployment-template/` holds the project-wide manifest and any full-cutover manual steps. Fill the verified API version before first use.
 - Name each work-item folder with the work item's id and a short slug from the project's tracker, for example `WI-12-account-merge`. With local tracking, that item is under root `.work-items/`.
 - Keep work-item folders flat under `delivery/deployment/`. The tracker owns status.
 - A manifest (`package.xml`) names the components a Salesforce CLI deploy includes.

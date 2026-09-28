@@ -25,7 +25,7 @@ import {
 } from '../memory/contract.mjs';
 import { forgetInCache, refreshCache } from '../memory/startup.mjs';
 import { exportMemory, importMemory } from '../memory/transfer.mjs';
-import { findSimilar } from '../memory/similar.mjs';
+import { findSimilar, CLOSEST_WHY } from '../memory/similar.mjs';
 import { approveRecord, rejectProposal } from '../memory/proposals.mjs';
 
 export const summary = 'Save, find, and manage project memory: records, the current focus, and the glossary.';
@@ -370,6 +370,10 @@ async function save(argv, ctx, { project, driver }) {
   lines.push(`Where: ${driver.location}`);
   lines.push(`Version: ${short(result.version)}`);
   if (approvedBy) lines.push(`Approved by: ${approvedBy}`);
+  // The approval policy (memory-save) says to ask first in onboarding mode; a
+  // save with no approver and no --proposal is the mistake it names.
+  const unapproved = !isProp && authorization === NO_AUTHORIZATION && mode !== 'trusted';
+  if (unapproved) lines.push(`Note: ${result.key} was saved with no approval recorded. Memory is in onboarding mode, so the owner is asked first ("Save to memory: <one line>?"): save again with --approved-by <owner> and --expect ${short(result.version)} after his yes, or with --proposal while he has not answered.`);
   if (retired) lines.push(`${retired} is now superseded by ${result.key}.`);
   lines.push(...repairLines(retireResult));
   out(ctx, lines, {
@@ -384,6 +388,7 @@ async function save(argv, ctx, { project, driver }) {
     approved_by: approvedBy ?? null,
     authorization,
     proposal: isProp,
+    unapproved,
     retired,
     linksRepaired,
     ...(retireResult && retireResult.linksFailed ? { linksFailed: retireResult.linksFailed } : {}),
@@ -403,23 +408,35 @@ async function save(argv, ctx, { project, driver }) {
  * why, and the three ways on.
  */
 function duplicateError(key, similar) {
-  const lines = [`${key} was not saved: memory already has ${similar.length === 1 ? 'a record' : 'records'} like it.`];
+  // Found only by the closest-match rule: about the same subject, maybe a different fact.
+  const subjectOnly = similar.every((s) => s.why === CLOSEST_WHY);
+  const lines = [subjectOnly
+    ? `${key} was not saved: memory already has ${similar.length === 1 ? 'a record' : 'records'} about the same subject. Check whether it is the same fact.`
+    : `${key} was not saved: memory already has ${similar.length === 1 ? 'a record' : 'records'} like it.`];
   for (const s of similar) {
     const flag = s.proposal ? ' (a proposal the owner has not answered)' : s.status && s.status !== 'current' ? ` (${statusWord(s.status)})` : '';
     lines.push(`- ${s.key}${flag}, ${s.why}: ${s.description}`);
   }
   const same = similar.find((s) => s.why === 'the same key');
   const first = similar[0];
-  const fix = [
+  const fix = subjectOnly ? [
+    `Read ${first.key} with toolkit memory get ${first.key}.`,
+    `When this is a different fact, save it again with --allow-similar.`,
+    `When it is the same fact in other words, keep ${first.key}, or update it: save that key with --expect <version> (the version field of toolkit memory get ${first.key} --json).`,
+  ].join(' ') : [
     same
       ? `To update ${same.key}, read it with toolkit memory get ${same.key} and save again with --expect ${short(same.version)}.`
       : `To update ${first.key}, read it with toolkit memory get ${first.key} --json, then save that key with --expect <version> (the version field of that read).`,
     `To replace a record with this one, add --supersedes <key>. When it is a different fact, add --allow-similar.`,
   ].join(' ');
+  const proposals = similar.filter((s) => s.proposal && s.why !== 'the same key');
+  const proposalFix = proposals.length
+    ? ` ${proposals.map((s) => s.key).join(', ')} ${proposals.length === 1 ? 'is a proposal' : 'are proposals'} the owner has not answered: record his yes with toolkit memory approve <key> --by <name>, or his no with toolkit memory reject <key>.`
+    : '';
   return new ToolkitError(EXIT.INVALID, lines.join('\n'), {
     key,
     similar: similar.map(({ version, ...rest }) => rest),
-    fix,
+    fix: fix + proposalFix,
   });
 }
 

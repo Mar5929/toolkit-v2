@@ -312,7 +312,9 @@ const SETUP_REMINDERS = Object.freeze([
     id: 'codex-hooks',
     test: (l) => /\/hooks\b/i.test(l) || (/\btrust/i.test(l) && /\bhooks?\b/i.test(l)),
     done: (f) => f.codexHooksTrusted,
-    why: 'Codex trusts the Toolkit V2 hooks now',
+    // Worded as what was seen: a hook that ran, not a trust entry doctor may not find
+    // (sample run confirm-a: the briefing said "trusts" while doctor said "not trusted").
+    why: 'a Toolkit V2 hook ran in this Codex session (or Codex lists the hooks as trusted), so Codex runs them here',
   },
   {
     id: 'codex-folder',

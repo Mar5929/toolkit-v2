@@ -6,47 +6,61 @@ description: 'Writes design options for how a work item gets built and asks the 
 # Solution design
 
 Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
-Shared rules: the work plugin's `references/conventions.md` and `references/team-roles.md` (team sizes), two folders above this skill's folder (`../../references/`). Full process and checklist: this skill's `references/design-process.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Run each `toolkit` command alone, on its own line, in both hosts: never joined by `&&`, `;`, or a pipe, and never from a script (in Codex that runs it inside the sandbox, where it fails). Text (conventions, "Text in a command"): one-line values (`--note`, `--effect`, `--append-row`, `--title`) go in single quotes, with an apostrophe written `'\''`, because double quotes run backticks and `$(...)`; section and design text goes on standard input in Claude Code (`<file>` is `-`, followed by a quoted heredoc, `<<'EOF'`), and in Codex in `--text '<text>'` or a file in a new `mktemp -d` folder, deleted right after the command. Never change a record with a script. Ask the owner in the reply text, never through a question tool. No remote (`git remote` prints nothing): never run `git fetch`, and never report a fetch refusal as a blocker.
+Writes one design per work item with a small team of helper agents and asks the owner to choose and approve it; it never fills a requirements gap. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
 
 ## Steps
 
-1. A single Salesforce platform question that needs no design options (for example which Flow type fits, or Flow or Apex): open `sf-architect-solutioning` instead and stop here. Otherwise read the item. Requirements not approved: say so and open `work-requirements`, unless the owner asked for options first (then keep the open choices visible). Set the design stage only when the requirements are approved or the item's type does not need approval; a `build` or `data-load` item without approved requirements keeps its stage (the CLI refuses the change), gets its design saved as proposed, and the owner hears that the requirements approval is still needed.
+1. A single Salesforce platform question that needs no design options (which Flow type fits, Flow or Apex): open `sf-architect-solutioning` and stop. Otherwise read the requirements. Not approved: open `work-requirements`, unless the owner asked for options first (`references/design-process.md`, section 2).
    `toolkit work show <id> --section Requirements`
+2. Set the design stage when the requirements are approved or the item's type needs no approval. A `build` or `data-load` item without approved requirements keeps its stage (the CLI refuses the change).
    `toolkit work set <id> --stage 04-solution-design`
-2. Brief the `requirements-analyst` agent and tell the owner plainly whether the requirements are ready to design from. A missing requirement goes back to `work-requirements`; the design never fills a requirements gap.
-3. Agree the way of working, skipping anything already recorded. Ask the owner at most one question, and only when its answer changes the design: one option or several (and what differs), or built-in mechanisms first or a specialized approach. Pick the team yourself from `../../references/team-roles.md` and state it in one line ("Design team: one requirements analyst, one architect, one critic, and a researcher when a question is open."); ask about the team only when it is larger than the small team there. Never ask a solo owner which helpers to use for a small item. Ask in the reply text, never through a question tool. Record the answers and the team in the item's Notes > Decisions and context.
-4. Create the item's design from the project's template and read it. One home only: `DESIGN.md` beside the local record, the Solution Design child page in Notion, the "Solution design" comment in GitHub or Jira. Never a separate design folder. Fill the header lines, What this design solves, Requirements and design readiness, What exists today, and Constraints and assumptions (a built-in-first choice is a constraint row); section list in `../../references/conventions.md`.
+3. Brief the `requirements-analyst` and tell the owner plainly whether the requirements are ready to design from. A missing requirement goes back to `work-requirements`.
+4. Agree the way of working and pick the team (`references/design-process.md`, section 3; `references/team-roles.md`): at most one question, only when its answer changes the design. State the small team in one line; ask only about a larger one. Record both in Notes > Decisions and context.
+5. Create the design in the item's one design home and fill its opening sections (`references/design-process.md`, section 4; headings in `references/work-item-format.md`, section 4).
    `toolkit work design <id> --create`
    `toolkit work design <id>`
-5. One `researcher` per open question, started together. Salesforce project: open `sf-architect-solutioning` as the specialist and pass its findings to the architect.
-6. One `design-architect` per option, and at least one `design-critic` for every design, even a small one (one per draft); repeat the fix round until the critic's list is empty. A disagreement still open after two rounds goes to the owner as one question. Drafts: in Claude Code each architect returns its whole draft in its reply and writes no file; in Codex make one folder for this design with `mktemp -d` (never a fixed name such as `/tmp/wi002-option-a.md`: another project's WI-002 could overwrite it) and name each architect's file in it in its brief.
-7. Save the design as proposed (Claude Code: the merged text on standard input; Codex: the merged file, then delete the design's temporary folder), and set the item waiting on the owner. The proposed design is the owner's decision: add no Open Questions row for the design approval itself. "Saved but not verified" from the save: lead the reply with it. Project-wide decisions go to `work-decide`; lasting lessons to `memory-save`.
+6. Research: one `researcher` per open question, started together; in a Salesforce project, `sf-architect-solutioning` as the specialist (`references/design-process.md`, section 5). Every box of the checklist in section 1 is ticked before step 7.
+7. Design round: one `design-architect` per option and at least one `design-critic` per draft; repeat the fix round until the critic's list is empty (`references/design-process.md`, section 6; drafts in each host: section 7).
+8. Save the merged design as proposed, set the item waiting on the owner, and add a history note.
    `toolkit work design <id> --set-file <file> --status proposed`
    `toolkit work set <id> --waiting-on owner`
    `toolkit work history <id> --note 'Design proposed: <options and recommendation>'`
-8. Show the owner the options, your recommendation, what he will see when it is done, the risks, and the build order. Ask him, in the reply text, to choose or approve. Yes: fill Recommendation and owner decision, every Selected design subsection (End-to-end flow; Components and responsibilities; Data, access, and integration details; Edge cases and failure behavior; Release and ongoing operation), and the Build and verification plan (Technical sequence, and Acceptance checks with one row per requirement), and remove every leftover prompt; save it with its Design status line unchanged, because only the approve command marks a design approved (the save replaces a Design status line in the text with the stored status). When the approve command fails, show the owner its error; never work around it by editing the design text. Then record the approval (the command adds its own history row), hand the item back to the agent unless another question for him is still open, quote his words in one note, update the current focus (`../../references/conventions.md`, "The current focus"), and hand back to `work-on`.
-   `toolkit work design <id> --set-file <file>`
+9. Present the options, your recommendation, what he will see when it is done, the risks, and the build order, and ask him to choose or approve. His yes: run the design approval checklist in `references/approvals.md`, section 3, update the current focus (`references/current-focus.md`), and hand back to `work-on`.
    `toolkit work approve <id> --design --by <owner>`
-   `toolkit work set <id> --waiting-on agent`
-   `toolkit work history <id> --note 'Owner'\''s words: <quote>' --effect 'Design approved; work-on plans the build.'`
-   `toolkit work validate <id>`
-   End the reply with the approval question, or after a yes, the exact words that continue.
-9. Codex: this plugin's agents do not load there. Read the agent's file in this plugin's `agents/` folder and give its full text, with the brief, to a native Codex worker: the `spawn_agent` tool, started without this conversation (`fork_turns` set to `none`), so a checker never shares the builder's thread. With no worker, do the work yourself and say that no independent check ran. That is allowed only when the session has no agent tool at all (no `spawn_agent` in Codex, no Agent tool in Claude Code); then say plainly, in the reply to the owner and in the design's Notes, that no independent research or critique ran.
+
+## Gotchas
+
+- Run each `toolkit` command alone: never joined by `&&`, `;`, or a pipe, and never from a script (in Codex that runs it inside the sandbox, where it fails). One-line values go in single quotes, never double quotes; an apostrophe inside them is `'\''` in Claude Code and ’ (U+2019) in Codex, or reword the text. Section and design text go on standard input (`--set-file -`) in Claude Code, and in `--text '<text>'` or a `mktemp -d` file in Codex (`references/toolkit-commands.md`, "Text in a command").
+- Local and Notion trackers: never write "Approved" in the Design status line. Only the approve command approves a design, all or nothing. When it fails, show the owner its error; never work around it by editing the design text. GitHub Issues and Jira have no approve command, so there the agent writes it after his yes.
+- One design home per item: `DESIGN.md` beside a local record, the Solution Design page in Notion, one issue comment in GitHub or Jira. Never a separate design folder.
+- Every design gets at least one critic, even a small one. Only a session with no agent tool at all, or an owner who said no to helpers, skips it; then the reply and the design's Notes say no critique ran.
+- Drafts never go to a fixed name in `/tmp` or inside `.work-items/` (`references/design-process.md`, section 7).
+- Add no Open Questions row for the design approval itself: a proposed design is already listed as the owner's decision.
+- `sf-architect-solutioning` is a skill the main agent runs, not an agent. It starts no second interview.
+- Built-in mechanisms first unless the owner chose otherwise. The existing build is evidence, not a limit.
+- A design approval covers the design only, never merge, deployment, or spending.
+- GitHub Issues or Jira: `toolkit work` exits with code 3. The design is one issue comment started from `assets/DESIGN.md` and edited in place (`references/tracker-github.md` or `references/tracker-jira.md`).
 
 ## Agents
 
-- `requirements-analyst` (step 2), `researcher` (step 5), `design-architect` and `design-critic` (step 6). How to brief them: `../../references/helpers.md`.
-- Every brief pastes in the design's current text (What this design solves, Requirements and design readiness, What exists today, Constraints and assumptions, Notes), the way of working from the item's Notes, and the requirements. Agents have no tracker access.
-- The architect writes only the draft file its brief names (Codex), or returns the draft in its reply (Claude Code). The critic gets that file's path (Codex) or the draft pasted into its brief (Claude Code). The main agent saves the chosen text with the design command. Several options go in one design, under Design options, as `### Option A — <name>`, `### Option B — <name>`.
-- Salesforce: `sf-architect-solutioning` is a skill, not an agent. The main agent runs it and returns its findings to this design; it starts no second interview.
+- `requirements-analyst` (step 3), `researcher` (step 6), `design-architect` and `design-critic` (step 7). Their Codex texts: `references/agent-requirements-analyst.md`, `references/agent-researcher.md`, `references/agent-design-architect.md`, `references/agent-design-critic.md`.
+- Every brief pastes in the design's current text (What this design solves, Requirements and design readiness, What exists today, Constraints and assumptions, Notes), the way of working from the item's Notes, and the requirements. Agents have no tracker access. The seven parts of a brief: `references/helpers.md`.
+- Codex: this plugin's agents do not load there. Give the full text of this skill's `references/agent-<name>.md`, with the brief, to a native Codex worker: the `spawn_agent` tool, started without this conversation (`fork_turns` set to `none`), so a checker never shares the builder's thread. With no worker, do the work yourself and say that no independent check ran. That is allowed only when the session has no agent tool at all, or the owner said no to helpers.
 
-## Rules
+## References
 
-- A design is a proposal until the owner approves it. Approval covers the design only, never merge, deployment, or spending.
-- Built-in first unless the owner chose otherwise. The existing build is evidence, not a limit: recommend a rewrite when that serves the requirements better, with its cost.
-- A community claim shapes the design only after a check against official documentation, the project's code, or a test.
-- A requirement no design can meet goes to the owner as a requirements question, not a design compromise.
-- Stop the fix loop because the critic's list is empty or the owner decided the rest, never because it is long. Start another round only for a named finding or a changed input.
-- Keep the current review position in the design's Notes > Current position and next step (open findings, next action), not a transcript of every round.
-- The design reads like the project's writing rules: common words, real names, no figurative language, a term defined the first time it appears.
-- GitHub Issues or Jira: `toolkit work` exits with code 3. The design is one issue comment that starts with "Solution design", edited in place, as `../../references/trackers.md` says.
+| File | Open it when |
+| --- | --- |
+| [references/design-process.md](references/design-process.md) | Every step: the readiness checklist, way of working, research, the architect and critic loop, drafts in each host, presenting |
+| [references/approvals.md](references/approvals.md) | Steps 8 and 9: the design approval checklist; what counts as a yes |
+| [references/work-item-format.md](references/work-item-format.md) | Step 5 and every design save: the exact `DESIGN.md` headings |
+| [references/team-roles.md](references/team-roles.md) | Step 4: sizing the team |
+| [references/helpers.md](references/helpers.md) | Before starting any agent |
+| [references/agent-requirements-analyst.md](references/agent-requirements-analyst.md), [references/agent-researcher.md](references/agent-researcher.md), [references/agent-design-architect.md](references/agent-design-architect.md), [references/agent-design-critic.md](references/agent-design-critic.md) | Codex only: the text to give the worker |
+| [references/recording-owner-answers.md](references/recording-owner-answers.md) | The owner answers; history notes; `waiting_on`; a failed save |
+| [references/current-focus.md](references/current-focus.md) | Step 9: after the approval |
+| [references/toolkit-commands.md](references/toolkit-commands.md) | Before a command that carries text, and on any exit code other than 0 |
+| [references/tracker-notion.md](references/tracker-notion.md) | `tracker.type` is `notion`: the Solution Design page, or a command prints a Notion error |
+| [references/tracker-github.md](references/tracker-github.md) | A `toolkit work` command exits 3 in a GitHub Issues project |
+| [references/tracker-jira.md](references/tracker-jira.md) | A `toolkit work` command exits 3 in a Jira project |
+| [assets/DESIGN.md](assets/DESIGN.md) | GitHub or Jira: the text of a new design comment |

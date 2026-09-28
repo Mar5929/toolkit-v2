@@ -17,7 +17,11 @@ Setup keys (${SETUP_KEYS.join(', ')}) are read by the scaffold templates, so
 setting one saves it and then runs toolkit sync: files nobody changed are
 rendered again; a file the project changed keeps its text and is named in the
 report. hosts takes a comma list: claude-code,codex. salesforce.enabled takes
-true or false. The id prefix can change only before the first work item.`;
+true or false. The id prefix can change only before the first work item.
+backup.dir is the folder for the automatic backups of .work-items/ and
+.memory/ (and Hindsight memory): a full path outside the project, such as
+~/Backups/toolkit, or none when the owner wants no backup folder. toolkit work
+finish and toolkit handoff-backup export to <folder>/<project key>-<date>/.`;
 
 export async function run(argv, ctx) {
   const { _: pos } = parseArgs(argv, { boolean: ['json'], string: ['host'] });
@@ -38,7 +42,7 @@ export async function run(argv, ctx) {
   if (sub === 'set') {
     if (!key || !rest.length) throw new ToolkitError(EXIT.INVALID, 'Give the setting and its value: toolkit config set <key> <value>.');
     const raw = rest.join(' ');
-    const res = setSetting(project, key, raw);
+    const res = setSetting(project, key, raw, { env: ctx.env });
     const lines = [res.changed ? `Set ${key} to ${formatSetting(res.to)} (was ${formatSetting(res.from)}).` : `${key} is already ${formatSetting(res.to)}; nothing changed.`];
     let sync = null;
     if (res.changed && res.setup) {

@@ -181,7 +181,7 @@ function coversArg(value) {
  * @returns {Promise<{ id: string, record: object }>}
  */
 export async function opNew(tracker, project, { title, type, parent, stage, priority, request, group, covers, today } = {}) {
-  if (!title || !String(title).trim() || isPlaceholder(title)) throw invalid('--title is required.', { fix: 'toolkit work new --title "<title>"' });
+  if (!title || !String(title).trim() || isPlaceholder(title)) throw invalid('--title is required.', { fix: "toolkit work new --title '<title>'" });
   const t = type ? typeArg(type) : 'task';
   const coverIds = covers !== undefined && covers !== null ? coversArg(covers) : null;
   if (coverIds && (!parent || String(parent).trim().toLowerCase() === 'none')) throw invalid('--covers needs --parent <id>: the item whose approved requirements this sub-item delivers.');
@@ -310,6 +310,19 @@ export async function opSet(tracker, id, opts = {}, { today, dryRun = false, own
         res.notes.push(`Its folder keeps the old name: ${err.message}`);
       }
     }
+  }
+  // The owner hears about a new title in the reply, not only in a progress line
+  // (sample run confirm-a: WI-001 was retitled and its folder renamed, and no
+  // message told him).
+  if (res.oldTitle !== undefined && res.oldTitle !== res.record.meta.title) {
+    res.notes.push(`Tell the owner in the reply: ${res.id} is now called "${res.record.meta.title}" (was "${res.oldTitle}")${res.folder ? `, and its folder is now ${res.folder.to}` : ''}.`);
+  }
+  // Back to 01 or 02 with a recorded requirements approval: the approval stays
+  // on the record, but it covered the requirements as they were (sample run
+  // confirm-a: validate warned until the owner approved again).
+  const newStage = stageNumber(res.record.meta.stage);
+  if (stage && newStage !== null && newStage < 3 && isApproved(res.record.meta.requirements_approved)) {
+    res.notes.push(`${res.id} is back at ${stageShort(res.record.meta.stage)} with a recorded requirements approval (${res.record.meta.requirements_approved}). It stays on the record, but it covered the requirements as they were: after they change, ask the owner again and record his answer with toolkit work approve ${res.id} --requirements --by <name>.`);
   }
   // The delivery chosen for a goal covers the sub-items that were not asked about.
   if (res.deliveryChanged && ['agent-led', 'owner-led'].includes(res.record.meta.delivery)) {
@@ -512,7 +525,7 @@ function skipWarnings(rec, fromStage, toStage, { note } = {}) {
   if (from < 5 && to >= 5 && (!meta.design || meta.design === 'none') && !(note && String(note).trim())) {
     const reasoned = parseHistory(rec.body).some((h) => /\bdesign\b/i.test(h.change));
     if (!reasoned) {
-      out.push(`${rec.id} moves past 04 Solution design with no design and no history note that says why. If the design is skipped on purpose, tell the owner in the reply ("I'll build it this way; say 'design first' to stop me.") and record the reason: toolkit work history ${rec.id} --note "Design skipped: <reason>". Otherwise open solution-design.`);
+      out.push(`${rec.id} moves past 04 Solution design with no design and no history note that says why. If the design is skipped on purpose, tell the owner in the reply ("I'll build it this way; say 'design first' to stop me.") and record the reason: toolkit work history ${rec.id} --note 'Design skipped: <reason>'. Otherwise open solution-design.`);
     }
   }
   return out;
@@ -581,7 +594,7 @@ export async function opApprove(tracker, project, id, { what, by, today } = {}) 
       if (goal !== null && isPlaceholder(goal)) {
         throw invalid(`${rec.id}'s Agreed goal still holds the template text, so the requirements approval was not recorded. Nothing was changed.`, {
           gate: 'goal_not_written',
-          fix: `Keep the owner's words first: toolkit work history ${rec.id} --note "Owner's words: <quote>". Write the goal he was shown with the requirements: toolkit work edit ${rec.id} --section "Agreed goal" --text "<goal>". Then run this command again; do not ask him again for the same approval.`,
+          fix: `Keep the owner's words first: toolkit work history ${rec.id} --note 'Owner’s words: <quote>'. Write the goal he was shown with the requirements: toolkit work edit ${rec.id} --section 'Agreed goal' --text '<goal>'. In single-quoted text, write an apostrophe as ’. Then run this command again; do not ask him again for the same approval.`,
         });
       }
       warnings = requirementWarnings(rec);
@@ -675,6 +688,17 @@ async function approveDesign(tracker, id, { who, date, approval, ownerName = nul
   const rec = await mustGet(tracker, id);
   const design = await tracker.getDesign(rec.id);
   if (!design) throw new ToolkitError(EXIT.ERROR, `${rec.id} has no design to approve.`, { fix: `Create one with: toolkit work design ${rec.id} --create` });
+  // The owner approves the design he was shown, so the chosen design is
+  // written first (sample run confirm-a: approved while "Selected design"
+  // still said "Pending owner decision.", then filled twice after approval).
+  const selected = getSectionText(design.body, 'Selected design');
+  const pendingText = selected === null ? null : /pending owner decision|after (?:mike|the owner) chooses|<Before an option is chosen/i.exec(selected);
+  if (pendingText) {
+    throw invalid(`The design of ${rec.id} was not approved: "## Selected design" still says "${pendingText[0].replace(/^</, '')}". Nothing was changed.`, {
+      gate: 'design_not_filled',
+      fix: `Write the option the owner chose into "## Selected design" first (toolkit work design ${rec.id} --set-file <file>), then run this command again. Do not ask him again for the same approval.`,
+    });
+  }
   const original = design.text || composeDoc(design.meta, design.body, DESIGN_FIELD_ORDER);
   const body = ensureDesignStatusLine(separateLabelLines(design.body, { design: true }), 'approved');
   const text = designText({ ...design, body }, { status: 'approved', approved: approval });
@@ -923,6 +947,22 @@ function fixDesignHeading(body, rec) {
 
 // ------------------------------------------------------------------ history and edit
 
+/**
+ * True when a history note starts by quoting the owner: "Owner's words:"
+ * (with ' or ’), "Owner words:", "Owner said:", or the owner's name followed
+ * by "said:", "'s words:", or ":" (sample run confirm-a: in Codex the
+ * apostrophe escape failed, and agents wrote "Owner words:", "Mike said:",
+ * and "Mike:" instead).
+ */
+export function quotesOwner(note, ownerName) {
+  const text = String(note ?? '').trim();
+  if (/^owner(?:['’]s|s)?\s+(?:words|said)\s*:/i.test(text)) return true;
+  const name = String(ownerName ?? '').trim();
+  if (!name) return false;
+  const n = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp(`^${n}(?:['’]s\\s+words|\\s+said)?\\s*:`, 'i').test(text);
+}
+
 export async function opHistory(tracker, id, { note, effect, today } = {}) {
   if (!note || !String(note).trim()) throw invalid('--note <text> is required.');
   const date = todayOf({ today });
@@ -934,7 +974,8 @@ export async function opHistory(tracker, id, { note, effect, today } = {}) {
     // A note that quotes the owner's answer ends the wait on him: its effect
     // names the step after the answer, not work-decide (sample run b, round 3:
     // "Owner's words: All four passed ... | Continue with work-decide.").
-    const answered = /^owner'?s? words:/i.test(String(note).trim()) && normalizeWaitingOn(rec.meta.waiting_on) === 'owner';
+    const ownerName = tracker.project && tracker.project.config && tracker.project.config.project && tracker.project.config.project.owner;
+    const answered = quotesOwner(note, ownerName) && normalizeWaitingOn(rec.meta.waiting_on) === 'owner';
     const eff = effect && String(effect).trim() ? String(effect).trim()
       : isTerminal(rec.meta.status) ? `No further work: the item is ${rec.meta.status}.`
         : `Continue with ${continueWith(answered ? { ...rec.meta, waiting_on: 'agent' } : rec.meta)}.`;
@@ -1061,7 +1102,7 @@ export async function opFinish(tracker, id, { by, evidence, quote, allowOpenSubI
     if (!hadApproval && !words) {
       throw invalid(`${rec.id} has no recorded result approval, so it cannot be marked Done without the owner's words. Nothing was changed.`, {
         gate: 'result_not_approved',
-        fix: `Show the owner the result and ask. With his yes: toolkit work approve ${rec.id} --result --by ${who}, then finish; or finish with --quote "<his exact words>".`,
+        fix: `Show the owner the result and ask. With his yes: toolkit work approve ${rec.id} --result --by ${who}, then finish; or finish with --quote '<his exact words>' (an apostrophe in them written as ’).`,
       });
     }
     if (!hadApproval) patch.result_approved = formatApproval(date, who);
@@ -1138,7 +1179,7 @@ function finishWarnings(rec) {
   if (n !== null && n < 12) {
     const said = parseHistory(rec.body).some((h) => /\b(no remote|merged locally|local merge|pull request|no repository change|nothing to deploy|skipp?ed)\b/i.test(`${h.change} ${h.effect}`));
     if (!said) {
-      out.push(`${rec.id} finished from ${stageShort(rec.meta.stage)}, so stages 12 to 14 (pull request, deployment, requirements baseline) left no record. Say what happened instead in a history note, for example: toolkit work history ${rec.id} --note "No remote: merged locally into main; no deployment."`);
+      out.push(`${rec.id} finished from ${stageShort(rec.meta.stage)}, so stages 12 to 14 (pull request, deployment, requirements baseline) left no record. Say what happened instead in a history note, for example: toolkit work history ${rec.id} --note 'No remote: merged locally into main; no deployment.'`);
     }
   }
   const open = parseRoadmap(rec.body).filter((r) => !r.placeholder && !isPlaceholder(r.status) && !/^(done|cancelled)\.?$/i.test(String(r.status).trim()));

@@ -10,6 +10,7 @@ import { getPath, setPath, saveConfig } from '../core/config.mjs';
 import { TRACKERS, MEMORIES, APPROVALS, KEY_RE, PREFIX_RE, parseHosts, parseDeclined } from './setup.mjs';
 import { configRoot } from './sync.mjs';
 import { readHosts, HOSTS_FIX } from './manifest.mjs';
+import { parseBackupDir } from './backup.mjs';
 
 /** Keys that templates, conditions, or hosts read: changing one runs sync. */
 export const SETUP_KEYS = Object.freeze(['project.name', 'project.key', 'project.owner', 'tracker.type', 'tracker.idPrefix', 'memory.type', 'hindsight.bank', 'salesforce.enabled', 'hosts', 'declined']);
@@ -27,6 +28,8 @@ const KNOWN = {
   declined: { kind: 'declined' },
   'hindsight.url': { kind: 'url' },
   'hindsight.bank': { kind: 'text' },
+  // The automatic backup folder (decision 13): a full path outside the project, or none.
+  'backup.dir': { kind: 'backup-dir' },
 };
 
 const OPEN_PREFIXES = ['salesforce.orgs.', 'notion.', 'hindsight.'];
@@ -177,9 +180,11 @@ export function afterSetting(project, key, from, to) {
  * so a failed sync leaves the old value (see commands/config.mjs).
  * Returns { key, from, to, changed, setup, saved }.
  */
-export function setSetting(project, key, raw) {
+export function setSetting(project, key, raw, { env = process.env } = {}) {
   const root = configRoot(project);
-  const value = parseSettingValue(key, raw);
+  const value = key === 'backup.dir'
+    ? parseBackupDir(raw, { root: project.root, mainRoot: project.mainRoot, env })
+    : parseSettingValue(key, raw);
   const config = project.config;
   const from = getPath(config, key);
   if (JSON.stringify(from) === JSON.stringify(value)) {

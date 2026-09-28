@@ -1,6 +1,6 @@
 # <Functional area>
 
-<!-- Fill-in guide: rename this folder and file for the real business area. Replace <Functional area> and every angle-bracket prompt in the section, rule block, and list below with accepted content. Repeat the stable-rule subsection once per behavior; use the same rule ID in related evidence. Link the work item that approved each rule. Remove unused example lines and this guide after filling. -->
+<!-- Fill-in guide: copy this folder and rename the copied folder and file for the real business area. Replace <Functional area> and every angle-bracket prompt in the section, rule block, and list below with accepted content. Repeat the stable-rule subsection once per behavior; use the same rule ID in related evidence. Link the work item that approved each rule. Remove unused example lines and this guide after filling. -->
 
 ## Purpose and scope
 

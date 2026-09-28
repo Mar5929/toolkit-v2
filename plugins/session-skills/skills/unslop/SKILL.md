@@ -5,13 +5,15 @@ description: 'Rewrites existing text, such as an email or a pull request, so it 
 
 # Unslop
 
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+
 Take writing that already exists, name every pattern in it that reads as
 machine-written, and hand back a version with those patterns gone and a voice
 put back. It runs in two cases: the owner asks for it, or the
 `humanize-outbound-text.md` rule applies because the text will be read by
 someone other than the owner.
 
-1. **Read the voice rules first** (the Voice line below; in Claude Code the
+1. **Read the voice rules first** (the Voice line above; in Claude Code the
    project copy is `.claude/output-styles/plain-english.md`). Where a pattern
    below and those rules disagree, the rules win. Say in one line which rule
    you followed.
@@ -25,12 +27,15 @@ someone other than the owner.
 5. **Change the owner's files only after a yes.** Never change numbers, paths,
    names, ids, quotes, or code ("What never changes").
 
-Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+## Gotchas
 
-It never runs on an ordinary chat reply to the owner. How a chat reply is
-written is the output style's job, and the words inside a diagram, chart, or
-generated document are the job of the `plain-english-artifacts.md` rule. This
-skill cleans up text that is already written.
+- It never runs on an ordinary chat reply to the owner. How a chat reply is
+  written is the output style's job, and the words inside a diagram, chart,
+  or generated document are the job of the `plain-english-artifacts.md` rule.
+  This skill cleans up text that is already written.
+- A code identifier keeps its exact spelling even when the word is on a
+  pattern list below. Only the prose around it changes.
+- Clean text gets one line saying so, and no rewrite. Never invent findings.
 
 ## What it works on
 

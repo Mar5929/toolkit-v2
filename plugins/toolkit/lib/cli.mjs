@@ -249,6 +249,31 @@ export function asksForHelp(args) {
   return false;
 }
 
+/**
+ * The commands Claude Code and Codex ask the owner about before they run
+ * (Mike, 2026-09-28, decision 12): the "ask" entries in
+ * templates/settings/claude-toolkit.json and the "prompt" rules in
+ * templates/codex/toolkit.rules. Both match only when these words come right
+ * after "toolkit", so main() refuses them when a global flag (--json, --host)
+ * is written before them: "toolkit --json memory delete k" would otherwise
+ * run without the owner being asked.
+ */
+export const ASK_FIRST_COMMANDS = Object.freeze([
+  ['machine-setup'],
+  ['memory', 'delete'],
+  ['memory', 'import'],
+  ['import'],
+  ['hindsight', 'service', 'install'],
+  ['hindsight', 'service', 'start'],
+]);
+
+/** The ask-first command a group and its arguments start with, as words ("memory delete"), or null. */
+export function askFirstCommand(group, args = []) {
+  const words = [group, ...args];
+  const hit = ASK_FIRST_COMMANDS.find((c) => c.every((w, k) => words[k] === w));
+  return hit ? hit.join(' ') : null;
+}
+
 /** Run one toolkit command and return its exit code. Never throws. */
 export async function main(argv = process.argv.slice(2), overrides = {}) {
   const env = overrides.env || process.env;
@@ -258,6 +283,7 @@ export async function main(argv = process.argv.slice(2), overrides = {}) {
   // Leading global flags, then the group.
   let i = 0;
   let group = null;
+  let groupAt = -1;
   while (i < tokens.length) {
     const t = tokens[i];
     if (t === '--json' || t === '--json=true' || t === '--json=false' || t.startsWith('--host=')) {
@@ -279,6 +305,7 @@ export async function main(argv = process.argv.slice(2), overrides = {}) {
       break;
     }
     group = t;
+    groupAt = i;
     i++;
     break;
   }
@@ -317,6 +344,14 @@ export async function main(argv = process.argv.slice(2), overrides = {}) {
       return fail(ctx, new ToolkitError(EXIT.ERROR, `The command file for "${group}" does not export a run function.`, { file }));
     }
     if (asksForHelp(args)) return await printCommandHelp(ctx, group, commandsDir);
+    const askFirst = groupAt > 0 ? askFirstCommand(group, args) : null;
+    if (askFirst) {
+      return fail(ctx, new ToolkitError(
+        EXIT.INVALID,
+        `toolkit ${askFirst} was not run: a flag was written before the command words. Write the command words right after toolkit, and --json or --host after them, for example: toolkit ${askFirst} ... --json. Claude Code and Codex ask the owner before toolkit ${askFirst} only in that form.`,
+        { command: askFirst, fix: `Run it as toolkit ${askFirst} ..., with --json and --host after the command words.` },
+      ));
+    }
 
     const code = await mod.run(args, ctx);
     if (typeof code === 'number' && Number.isInteger(code)) return code;

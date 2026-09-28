@@ -5,6 +5,8 @@ description: 'Merges one approved GitHub pull request and removes only that pull
 
 # Merge and clean up
 
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+
 Land one exact pull request, prove it merged, then remove only the workspace
 that belonged to it. Merge and cleanup are one guarded workflow.
 
@@ -17,19 +19,39 @@ that belonged to it. Merge and cleanup are one guarded workflow.
 4. **Merge-safety check:** after a fetch, compare
    `git diff --name-only origin/<default>...<branch>` with `git status` in the
    primary checkout. A file in both lists: stop and name it.
-5. **Merge** with `gh pr merge <n> --squash --delete-branch` (no admin flags),
-   then confirm the state is `MERGED`.
+5. **Merge** with
+   `gh pr merge <n> --squash --delete-branch --match-head-commit <headRefOid>`,
+   using the head commit recorded in step 1 (no admin flags), then confirm the
+   state is `MERGED`.
 6. **Fast-forward the base checkout**, then remove only this pull request's
    worktree and branches.
 7. **Add one history note** to the linked work item. Stage moves and Done stay
    with `work-finish`. Report the link, the merge commit, and the cleanup
    result.
 
-Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+## Gotchas
 
-Codex: its sandbox keeps `.git/` read-only, so every Git write here (`git fetch`, `git pull`, `git push`, `git worktree remove`, `git branch -d`) and every `gh` call that needs the network needs the owner's approval and escalated permissions. Run each one as its own command with `sandbox_permissions` set to `require_escalated` and a one-line reason saying what it does; an approval without escalation still runs inside the sandbox and fails on `.git/index.lock`. When Codex refuses a command without asking ("approval required by policy"), stop, show the owner the exact command, and ask him to approve it in an interactive session or run it in a terminal.
-
-No remote (`git remote` prints nothing): there is no pull request to merge, so this skill does not apply. Never run `git fetch`, and never report a fetch refusal as a blocker. Say so in one line; the local merge of a work item's branch is `work-finish` step 2.
+- Codex keeps `.git/` read-only and turns the network off. Every Git write
+  here (`git fetch`, `git pull`, `git push`, `git worktree remove`,
+  `git branch -d`) and every `gh` call runs alone, with `sandbox_permissions`
+  set to `require_escalated` and a one-line reason. Refused without asking:
+  show the owner the exact command and wait (`references/git-rules.md`, "Git
+  writes in Codex").
+- No remote (`git remote` prints nothing): there is no pull request, so this
+  skill does not apply. Never run `git fetch`, and never report a fetch
+  refusal as a blocker. Say so in one line; the local merge of a work item's
+  branch belongs to `work-finish` (`references/git-rules.md`, "A project with
+  no remote").
+- A squash merge leaves the old branch commit outside the base, so
+  `git branch -d` can refuse after a good merge. `git branch -D` is allowed
+  only for this pull request's head branch, with all five proofs in step 6.
+- The result approval of a work item never covers the merge. The merge needs
+  its own yes, or a standing merge instruction whose conditions hold on this
+  exact head.
+- A commit pushed after step 1 would be merged without anyone checking it.
+  `--match-head-commit <headRefOid>` makes GitHub refuse the merge when the
+  head is no longer the commit step 1 recorded. A refusal means a new commit
+  arrived: stop, and run steps 1 to 4 again on the new head.
 
 ## Safety rules
 
@@ -84,15 +106,15 @@ body. No id found: skip the history note in step 7.
 The merge needs one of these:
 
 - The owner's own yes for this pull request, in this conversation.
-- A standing merge instruction the owner gave for this project, recorded as a
-  `DECISIONS.md` row that no later row replaces (the project's `AGENTS.md`
-  says merges need the owner unless `DECISIONS.md` records one). Follow its
-  conditions exactly (for example an independent review with no blocking
-  findings on this exact head).
+- A standing merge instruction recorded in `DECISIONS.md` whose conditions
+  hold on this exact head. Open `references/approvals.md`, "Standing merge
+  instruction", for where it is recorded, the conditions it carries (for
+  example an independent check with no blocking findings on this head), and
+  what overrides it.
 
-A work item that says its merge needs the owner's approval overrides a standing
-instruction. When neither is present, stop and ask the owner. `work-finish`
-asks for this approval; this skill only checks it.
+A work item that says its merge needs the owner's approval overrides a
+standing instruction. When neither is present, stop and ask the owner.
+`work-finish` asks for this approval; this skill only checks it.
 
 ## 3. Preflight
 
@@ -150,8 +172,14 @@ structure matters; ask when the choice would change history in a way that
 matters.
 
 ```bash
-gh pr merge <number> --repo <owner/repo> --squash --delete-branch
+gh pr merge <number> --repo <owner/repo> --squash --delete-branch --match-head-commit <headRefOid>
 ```
+
+`<headRefOid>` is the head commit recorded in step 1 and checked again in step
+3. Never leave `--match-head-commit` out, and never fill it with a newer
+commit to get past a refusal. A refusal means someone pushed after the checks:
+stop, report the new commit, and run steps 1 to 4 again on it. A standing
+merge instruction covers only the head its independent check saw.
 
 Replace `--squash` with the chosen method when needed. Leave out
 `--delete-branch` for a pull request from a fork: that branch belongs to the
@@ -234,3 +262,10 @@ cleanup result, and whether the history note was saved ("Not saved" first when
 it failed). The last line is the one question for the owner (a remaining
 action he must take), or the exact words that continue ("Say 'finish WI-007'
 and I'll close the work item.").
+
+## References
+
+| File | Open it when |
+| --- | --- |
+| `references/approvals.md` | Step 2: the merge rests on a standing merge instruction, not the owner's yes in this conversation |
+| `references/git-rules.md` | Before a Git write in Codex, the merge-safety check in full, or a project with no remote |

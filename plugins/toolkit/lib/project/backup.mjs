@@ -5,11 +5,28 @@
 // Export folder layout:
 //   work-items/...            a copy of .work-items/ (state file included, lock left out)
 //   memory/...                a copy of .memory/ (lock left out)
+//   memory-export/...         automatic backups only: Hindsight memory, which
+//                             lives on this computer too (toolkit memory export)
 //   toolkit-export.json       what was exported, from where, and when
 //
-// Hindsight and Notion memory are not in this backup: `toolkit memory export`
-// covers every memory backend. The time of the last export is kept in
+// Notion memory is in Notion, so no backup here covers it; `toolkit memory
+// export` covers every memory backend. The time of the last export is kept in
 // <git common dir>/toolkit-v2/export.json for the doctor's backup warning.
+//
+// Automatic backups (Mike, 2026-09-28, decision 13; final review I8): setup
+// asks the owner for a backup folder (`toolkit init --backup-dir`, or
+// `toolkit config set backup.dir <folder>`; "none" when he declines). With it
+// set, `toolkit work finish` and `toolkit handoff-backup` (the handoff skill's
+// last step) export to <backup.dir>/<project key>-<YYYY-MM-DD>/, one folder
+// per day, so an older day is still there when a later one is wrong. A second
+// clone of the same project gets its own folder for the day (backupTarget).
+// The toolkit never deletes a backup folder; which old ones to keep is the
+// owner's choice. The
+// SessionStart hook does the same for the two folders when a day has passed
+// without a backup (backupDue), so a session that ends without a finish or a
+// handoff is covered the next day. Doctor
+// warns when the last export is more than a day old, and suggests setting a
+// folder when none is set.
 //
 // Import treats two kinds of file as state, not as the owner's content:
 // the generated files (DASHBOARD.md, MEMORY.md), and .memory/.toolkit-meta.json
@@ -163,6 +180,14 @@ export async function exportProject(project, toDir, { now = () => new Date() } =
         fix: 'Give a new or empty folder, or the folder of an earlier toolkit export.',
       });
     }
+    // Never write over another project's export.
+    const earlier = names.includes(EXPORT_MANIFEST) ? readJsonFile(path.join(target, EXPORT_MANIFEST)) : null;
+    const key = config.project && config.project.key;
+    if (earlier && earlier.project && earlier.project.key && key && earlier.project.key !== key) {
+      throw new ToolkitError(EXIT.INVALID, `${target} holds an export of another project (${earlier.project.key}), so nothing was written.`, {
+        fix: 'Give a folder of this project\'s own.',
+      });
+    }
   }
   ensureDir(target);
   const result = [];
@@ -216,6 +241,15 @@ export async function exportProject(project, toDir, { now = () => new Date() } =
     }
   }
   return { dir: target, parts: result, manifest };
+}
+
+function readJsonFile(file) {
+  try {
+    const v = JSON.parse(fs.readFileSync(file, 'utf8'));
+    return v && typeof v === 'object' ? v : null;
+  } catch {
+    return null;
+  }
 }
 
 function readManifest(dir) {
@@ -345,3 +379,179 @@ export async function importProject(project, fromDir, { dryRun = false, replace 
     dryRun,
   };
 }
+
+// ------------------------------------------------------------------ automatic backups
+
+/** How old the last backup may be before doctor warns, when a backup folder is set. */
+export const BACKUP_MAX_AGE_DAYS = 1;
+const DECLINED = /^(?:none|off|no)$/i;
+
+function homeOf(env) {
+  return (env && env.HOME) || process.env.HOME || '';
+}
+
+/** A folder path with a leading ~ turned into the home folder. */
+export function expandHome(p, env = process.env) {
+  const v = String(p ?? '').trim();
+  if (v === '~') return homeOf(env);
+  if (v.startsWith('~/')) return path.join(homeOf(env), v.slice(2));
+  return path.resolve(v);
+}
+
+/**
+ * Check a backup folder value for .toolkit.json backup.dir: "none" (the owner
+ * chose no backup folder), or a full path (starting with / or ~/) outside the
+ * project. Returns the value to store (a ~ path is kept as written, so it
+ * works on another computer of the owner's too).
+ */
+export function parseBackupDir(value, { root, mainRoot, env = process.env } = {}) {
+  const v = String(value ?? '').trim();
+  if (!v) throw new ToolkitError(EXIT.INVALID, 'Give the backup folder, for example ~/Backups/toolkit, or none when the owner wants no backup folder.');
+  if (DECLINED.test(v)) return 'none';
+  if (!(v.startsWith('/') || v === '~' || v.startsWith('~/'))) {
+    throw new ToolkitError(EXIT.INVALID, `"${v}" is not a full path. Give the backup folder as a full path, for example ~/Backups/toolkit or /Volumes/Backup/toolkit.`);
+  }
+  const abs = expandHome(v, env);
+  for (const base of [root, mainRoot].filter(Boolean)) {
+    if (isInside(abs, base)) {
+      throw new ToolkitError(EXIT.INVALID, `${abs} is inside the project, so a lost or wiped project folder would take the backup with it. Nothing was saved.`, {
+        fix: 'Pick a folder outside the project, for example ~/Backups/toolkit, a synced folder such as iCloud Drive, or an external drive.',
+      });
+    }
+  }
+  return v;
+}
+
+/** The backup folder setting: { dir, raw }, { declined: true, raw }, or null when it is not set. */
+export function backupSetting(project, env = process.env) {
+  const raw = project && project.config && project.config.backup ? project.config.backup.dir : undefined;
+  if (raw === undefined || raw === null || String(raw).trim() === '') return null;
+  const v = String(raw).trim();
+  if (DECLINED.test(v)) return { declined: true, raw: v };
+  return { dir: expandHome(v, env), raw: v };
+}
+
+/** What an automatic backup covers for a project: [{ name, words }]. */
+export function backupParts(config) {
+  const c = config || {};
+  const out = [];
+  if (((c.tracker && c.tracker.type) || 'local') === 'local') out.push({ name: 'work-items', words: '.work-items/' });
+  const memory = (c.memory && c.memory.type) || 'builtin';
+  if (memory === 'builtin') out.push({ name: 'memory', words: '.memory/' });
+  if (memory === 'hindsight') out.push({ name: 'memory-export', words: 'the Hindsight memory' });
+  return out;
+}
+
+function words(parts) {
+  const w = parts.map((p) => p.words);
+  return w.length > 1 ? `${w.slice(0, -1).join(', ')} and ${w[w.length - 1]}` : w[0] || '';
+}
+
+function localDate(env, now) {
+  const fixed = env && env.TOOLKIT_TODAY;
+  if (fixed && /^\d{4}-\d{2}-\d{2}$/.test(fixed)) return fixed;
+  const d = now || new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+/**
+ * The folder one day's automatic backup goes to:
+ * <backup.dir>/<project key>-<YYYY-MM-DD>. When that folder already holds a
+ * backup made from another folder with the same project key (a second clone
+ * of the project), this clone's backup goes to
+ * <project key>-<YYYY-MM-DD>-<8 letters of a hash of its folder path>, so
+ * neither clone writes over the other's.
+ */
+export function backupTarget(project, dir, date) {
+  const key = (project.config && project.config.project && project.config.project.key) || path.basename(project.mainRoot || project.root);
+  const plain = path.join(dir, `${key}-${date}`);
+  const from = project.mainRoot || project.root;
+  const earlier = readJsonFile(path.join(plain, EXPORT_MANIFEST));
+  if (earlier && earlier.from && path.resolve(earlier.from) !== path.resolve(from)) {
+    return `${plain}-${sha256(path.resolve(from)).slice(0, 8)}`;
+  }
+  return plain;
+}
+
+/**
+ * The automatic backup: export this project's Git-ignored folders (and the
+ * Hindsight memory) to today's folder under backup.dir. Never throws.
+ * Returns { status: 'done'|'not-set'|'declined'|'nothing'|'failed', dir,
+ * parts, errors, line } (line: one sentence for the command's output, or null).
+ */
+export async function autoBackup(project, { env = process.env, now, fetch: fetchFn, filesOnly = false } = {}) {
+  const parts = backupParts(project.config).filter((p) => !filesOnly || p.name !== 'memory-export');
+  if (!parts.length) return { status: 'nothing', parts: [], errors: [], line: null };
+  const setting = backupSetting(project, env);
+  if (!setting) {
+    return {
+      status: 'not-set',
+      parts: parts.map((p) => p.name),
+      errors: [],
+      line: `No backup folder is set, so ${words(parts)} ${parts.length === 1 ? 'was' : 'were'} not backed up. Ask the owner for a folder outside the project (for example ~/Backups/toolkit), then run toolkit config set backup.dir <folder> (or none when he wants no backup).`,
+    };
+  }
+  if (setting.declined) return { status: 'declined', parts: [], errors: [], line: null };
+  const target = backupTarget(project, setting.dir, localDate(env, now ? now() : null));
+  const done = [];
+  const errors = [];
+  try {
+    fs.mkdirSync(target, { recursive: true });
+  } catch (err) {
+    return { status: 'failed', dir: target, parts: [], errors: [err.message], line: `The automatic backup to ${target} failed: ${err.message}. Tell the owner (is the backup folder or drive there?); the work itself is saved.` };
+  }
+  const files = parts.filter((p) => p.name !== 'memory-export');
+  if (files.length) {
+    try {
+      const res = await exportProject(project, target, now ? { now } : {});
+      done.push(...res.parts.map((p) => p.name));
+    } catch (err) {
+      errors.push(`${words(files)}: ${err.message}`);
+    }
+  }
+  if (parts.some((p) => p.name === 'memory-export')) {
+    try {
+      const { loadDriver } = await import('../memory/contract.mjs');
+      const { exportMemory } = await import('../memory/transfer.mjs');
+      const driver = await loadDriver(project, { env, fetch: fetchFn, timeoutMs: 10000 });
+      await exportMemory(driver, path.join(target, 'memory-export'), now ? { now } : {});
+      done.push('memory-export');
+      if (!files.length) writeExportRecord(project, { lastExport: (now ? now() : new Date()).toISOString(), to: target, parts: ['memory-export'] });
+    } catch (err) {
+      errors.push(`the Hindsight memory: ${err.message}`);
+    }
+  }
+  const doneParts = parts.filter((p) => done.includes(p.name));
+  if (errors.length && !done.length) {
+    return { status: 'failed', dir: target, parts: [], errors, line: `The automatic backup to ${target} failed: ${errors.join('; ')}. Tell the owner; the work itself is saved.` };
+  }
+  const line = errors.length
+    ? `Backed up ${words(doneParts)} to ${target}, but not ${errors.join('; ')}. Tell the owner.`
+    : `Backed up ${words(doneParts)} to ${target}.`;
+  return { status: errors.length ? 'failed' : 'done', dir: target, parts: done, errors, line };
+}
+
+function writeExportRecord(project, record) {
+  const file = exportRecordPath(project);
+  if (!file) return;
+  try {
+    atomicWrite(file, `${JSON.stringify(record, null, 2)}\n`);
+  } catch {
+    // The backup itself is done.
+  }
+}
+
+/**
+ * True when the automatic backup is due: a backup folder is set, this project
+ * keeps .work-items/ or .memory/ here, and the last backup is more than
+ * BACKUP_MAX_AGE_DAYS old (or there is none yet).
+ */
+export function backupDue(project, { env = process.env, now = Date.now() } = {}) {
+  const setting = backupSetting(project, env);
+  if (!setting || setting.declined) return false;
+  if (!backupParts(project.config).some((p) => p.name !== 'memory-export')) return false;
+  const record = readExportRecord(project);
+  const last = record && Date.parse(record.lastExport || '');
+  return !Number.isFinite(last) || now - last > BACKUP_MAX_AGE_DAYS * 24 * 60 * 60 * 1000;
+}
+

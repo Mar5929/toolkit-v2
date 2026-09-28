@@ -5,6 +5,8 @@ description: 'Recaps this chat as a table of the owner''s requests, where each l
 
 # Session summary
 
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+
 Answer exactly two questions: what did I ask for in this chat and where does
 each one stand, and what still needs me.
 
@@ -23,11 +25,16 @@ each one stand, and what still needs me.
    Offer once.
 5. **Change nothing.** No files, work items, or memory are written.
 
-Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+## Gotchas
 
-No title above the table. No story of the work, no wrap-up, no third part. If
-something went wrong or surprised you, it goes in the `Where it landed` cell of
-the request it came from.
+- A row is a request, not a step. The owner picking one of your options or
+  answering your question is part of the request that caused it, not a new
+  row.
+- No title above the table, no story of the work, no wrap-up, no third part.
+  If something went wrong or surprised you, it goes in the `Where it landed`
+  cell of the request it came from.
+- A recap asked for together with a handoff belongs to `handoff`, which shows
+  this table first and then the handoff.
 
 ## Why this shape
 

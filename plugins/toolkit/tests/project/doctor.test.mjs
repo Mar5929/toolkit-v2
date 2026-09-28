@@ -20,7 +20,7 @@ async function healthyHome(root) {
 }
 
 test('a fresh project on a set-up computer is clean', async () => {
-  const { root } = await initProject();
+  const { root } = await initProject({ extraArgs: ['--backup-dir', '~/Backups/toolkit'] });
   const env = await healthyHome(root);
   const res = await tk(root, ['doctor'], { env });
   assert.equal(res.code, 0, res.stdout);
@@ -33,7 +33,7 @@ test('a fresh project on a computer that is not set up: Codex trust, hook trust,
   const res = await tk(root, ['doctor', '--json'], { env });
   assert.equal(res.code, 1);
   const ids = res.json.findings.filter((f) => f.severity === 'warning').map((f) => f.id).sort();
-  assert.deepEqual(ids, ['codex-hook-trust', 'codex-trust', 'plugin-pointer', 'wrapper-missing']);
+  assert.deepEqual(ids, ['backup-folder', 'codex-hook-trust', 'codex-trust', 'plugin-pointer', 'wrapper-missing']);
   for (const f of res.json.findings) if (f.severity !== 'note') assert.ok(f.fix, `${f.id} has a fix`);
 });
 
@@ -152,23 +152,51 @@ test('AGENTS.md without Toolkit V2 sections is reported with the proposal', asyn
   assert.match(f.fix, /project-setup skill/);
 });
 
-test('the backup warning: never exported and older than 7 days, or the last export older than 7 days', async () => {
+test('the backup checks: no folder set is a warning from the first day; with a folder, a backup older than 1 day is; none gives the older 7-day note', async () => {
   const { root, env } = await initProject();
-  const project = { root, mainRoot: root, config: JSON.parse(read(path.join(root, '.toolkit.json'))) };
+  const config = JSON.parse(read(path.join(root, '.toolkit.json')));
+  const project = { root, mainRoot: root, config };
   const now = Date.now();
+  const DAY = 24 * 3600 * 1000;
   let findings = [];
-  checkBackup(project, findings, { now });
-  assert.deepEqual(findings, [], 'a new project needs no backup yet');
-  checkBackup(project, findings, { now: now + 8 * 24 * 3600 * 1000 });
+  checkBackup(project, findings, { now, env });
+  assert.equal(findings.length, 1);
+  assert.equal(findings[0].id, 'backup-folder');
+  assert.equal(findings[0].severity, 'warning');
+  assert.match(findings[0].message, /^No backup folder is set\. \.work-items\/ and \.memory\/ exist only on this computer/);
+  assert.match(findings[0].fix, /toolkit config set backup\.dir <folder>/);
+
+  // A folder set: nothing to say on the first day; after a day with no backup, a warning.
+  const backups = path.join(path.dirname(root), 'backups');
+  project.config = { ...config, backup: { dir: backups } };
+  findings = [];
+  checkBackup(project, findings, { now, env });
+  assert.deepEqual(findings, [], 'a new project with a backup folder needs no backup yet');
+  checkBackup(project, findings, { now: now + 2 * DAY, env });
   assert.equal(findings[0].id, 'backup-never');
-  const out = path.join(path.dirname(root), 'backup');
-  const exp = await tk(root, ['export', '--to', out], { env });
+  assert.match(findings[0].fix, /toolkit handoff-backup/);
+  const exp = await tk(root, ['export', '--to', path.join(backups, 'manual')], { env });
   assert.equal(exp.code, 0, exp.stderr);
   findings = [];
-  checkBackup(project, findings, { now: now + 2 * 24 * 3600 * 1000 });
+  checkBackup(project, findings, { now: now + 12 * 3600 * 1000, env });
   assert.deepEqual(findings, []);
-  checkBackup(project, findings, { now: now + 9 * 24 * 3600 * 1000 });
+  checkBackup(project, findings, { now: now + 2 * DAY, env });
   assert.equal(findings[0].id, 'backup-old');
+
+  // A folder that cannot be reached (a drive not plugged in).
+  project.config = { ...config, backup: { dir: '/Volumes/no-such-drive-tkv2/backups' } };
+  findings = [];
+  checkBackup(project, findings, { now, env });
+  assert.equal(findings[0].id, 'backup-unreachable');
+
+  // The owner chose none: the 7-day reminder, as a note.
+  project.config = { ...config, backup: { dir: 'none' } };
+  findings = [];
+  checkBackup(project, findings, { now: now + 2 * DAY, env });
+  assert.deepEqual(findings, []);
+  checkBackup(project, findings, { now: now + 9 * DAY, env });
+  assert.equal(findings[0].id, 'backup-old');
+  assert.equal(findings[0].severity, 'note');
   assert.match(findings[0].fix, /toolkit export --to/);
 });
 
@@ -188,7 +216,8 @@ test('outside a project, doctor checks this computer only and exits 4', async ()
   const res = await tk(path.dirname(env.HOME), ['doctor'], { env });
   assert.equal(res.code, 4);
   assert.match(res.stdout, /is not a Toolkit V2 project/);
-  assert.match(res.stdout, /This computer:\n- ~\/\.config\/toolkit-v2\/plugin-root is missing/);
+  // The message names the pointer file this computer reads (TOOLKIT_V2_CONFIG_DIR), not a fixed ~/.config path (final review M4).
+  assert.ok(res.stdout.includes(`This computer:\n- ${path.join(env.TOOLKIT_V2_CONFIG_DIR, 'plugin-root')} is missing`), res.stdout);
   const json = await tk(path.dirname(env.HOME), ['doctor', '--json'], { env });
   assert.equal(json.code, 4);
   assert.ok(json.json.findings.some((f) => f.id === 'wrapper-missing'));

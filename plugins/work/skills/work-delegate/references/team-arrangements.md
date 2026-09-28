@@ -1,9 +1,8 @@
 # Team arrangements
 
-Carried over from Toolkit V1's work tracker. This file explains the two answers to the team-arrangement question in
-[agent-led delivery](agent-led-delivery.md), and the archive answer that
-follows the Main Orchestrator arrangement. That file owns the questions, when
-they are asked, and where the answers are recorded.
+What each answer to the team-arrangement question means, and the archive
+answer that follows the Main Orchestrator arrangement. `agent-led-delivery.md`
+owns the questions, when they are asked, and where the answers are recorded.
 
 ## One team inside this chat
 
@@ -49,7 +48,7 @@ they are asked, and where the answers are recorded.
 ## Archiving finished chats
 
 - This applies only when the owner answered yes to the archive question in
-  [agent-led delivery](agent-led-delivery.md).
+  `agent-led-delivery.md`.
 - With a yes, the Main Orchestrator archives a team chat only when all four of
   these are true: its task is complete; its work is merged and shipped; its
   report is saved to a file; and the owner approved the result.
@@ -58,17 +57,18 @@ they are asked, and where the answers are recorded.
 
 ## Starting a chat
 
-These are host facts, observed in the Claude Code desktop app on 2026-09-21.
-Check the current host's behavior when it matters.
+What the host must let the Main Orchestrator do, and what to check in the
+tools this session has. Hosts change; never assume a tool exists.
 
 - A new chat starts from a task button the owner clicks. The Main Orchestrator
-  cannot create a chat silently. The button's "Start with worktree" option
-  gives the chat its own folder.
-- A chat started from the Main Orchestrator copies its model. Set the lead's
-  model on purpose.
-- The Main Orchestrator can message chats, read their transcripts, and group
-  them in the sidebar. It cannot approve their permission prompts. It sees the
-  20 most recent local chats.
+  cannot create a chat silently. When the button offers to start the chat in
+  its own worktree, use that, so the chat gets its own folder.
+- A new chat may copy the Main Orchestrator's model. Set the lead's model on
+  purpose.
+- The Main Orchestrator can message chats and read their transcripts through
+  the host's session tools. It cannot approve their permission prompts. The
+  list of chats it can see may be limited to recent ones: record each chat's
+  id in the work item when the chat starts, so it can be found later.
 - A chat will not let a message from another chat lift a limit set in its own
   starting prompt. So put every permission the chat will need in its starting
   prompt, including permission to save its own report to a file. Include only

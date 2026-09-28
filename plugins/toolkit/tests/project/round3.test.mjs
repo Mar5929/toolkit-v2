@@ -48,7 +48,7 @@ test('hidesAttribution and compareVersions', () => {
 });
 
 test('init writes the attribution and skill list settings, and doctor checks them', async () => {
-  const { root } = await initProject();
+  const { root } = await initProject({ extraArgs: ['--backup-dir', '~/Backups/toolkit'] });
   const settingsFile = path.join(root, '.claude', 'settings.json');
   const settings = JSON.parse(read(settingsFile));
   assert.deepEqual(settings.attribution, { commit: '', pr: '', sessionUrl: false });
@@ -83,7 +83,7 @@ test('init writes the attribution and skill list settings, and doctor checks the
 });
 
 test('doctor run in Claude Code exits 0 when only the Codex trust warnings remain; run in Codex it does not', async () => {
-  const { root } = await initProject();
+  const { root } = await initProject({ extraArgs: ['--backup-dir', '~/Backups/toolkit'] });
   const home = makeHome();
   const env = testEnv(home, { PATH: `${path.join(home, '.local', 'bin')}${path.delimiter}${process.env.PATH}` });
   assert.equal((await tk(root, ['machine-setup', '--offline'], { env })).code, 0);
@@ -102,29 +102,36 @@ test('doctor run in Claude Code exits 0 when only the Codex trust warnings remai
   assert.equal(otherHost({ host: 'codex' }, null), null, 'a terminal run counts every warning');
 });
 
-test('doctor warns when ~/.codex/config.toml turns the V2 plugins on for every folder; machine-setup switches them off and keeps the rest', async () => {
+test('doctor warns when ~/.codex/config.toml turns the V2 plugins other than toolkit on for every folder; machine-setup switches them off, turns toolkit on, and keeps the rest', async () => {
   const { root } = await initProject();
-  const codexLines = ['', '[plugins."toolkit@toolkit-v2"]', 'enabled = true', '', '[plugins."work@toolkit-v2"]', 'enabled = true', '', '[plugins."memory@toolkit-v2"]', 'enabled = false'];
+  const codexLines = ['', '[plugins."toolkit@toolkit-v2"]', 'enabled = false', '', '[plugins."work@toolkit-v2"]', 'enabled = true', '', '[plugins."session-skills@toolkit-v2"]', 'enabled = true', '', '[plugins."memory@toolkit-v2"]', 'enabled = false'];
   const home = makeHome({ trust: [root], hookTrust: ['toolkit@toolkit-v2:hooks/codex-hooks.json:session_start:0:0'] });
   fs.appendFileSync(path.join(home, '.codex', 'config.toml'), `${codexLines.join('\n')}\n`);
+  // Codex has a copy of the toolkit plugin, so machine-setup turns it on for every folder (decision 10).
+  fs.mkdirSync(path.join(home, '.codex', 'plugins', 'cache', 'toolkit-v2', 'toolkit', '0.2.4'), { recursive: true });
   const env = testEnv(home, { PATH: `${path.join(home, '.local', 'bin')}${path.delimiter}${process.env.PATH}` });
   const before = await tk(root, ['doctor', '--json'], { env });
   const warn = before.json.findings.find((f) => f.id === 'codex-plugins-everywhere');
   assert.ok(warn, 'doctor warns');
-  assert.match(warn.message, /toolkit@toolkit-v2, work@toolkit-v2\./);
+  assert.match(warn.message, /on for every folder: work@toolkit-v2, session-skills@toolkit-v2\./, 'toolkit itself is meant to be on everywhere');
   assert.match(warn.fix, /toolkit machine-setup/);
 
   const configFile = path.join(home, '.codex', 'config.toml');
   const text = read(configFile);
   const setup = await tk(root, ['machine-setup', '--offline'], { env });
   assert.equal(setup.code, 0, setup.stdout + setup.stderr);
-  assert.match(setup.stdout, /Switched off for every Codex folder in .*config\.toml \(codex plugin add had turned them on\): toolkit@toolkit-v2, work@toolkit-v2\./);
+  assert.match(setup.stdout, /Switched off for every Codex folder in .*config\.toml \(codex plugin add had turned them on\): work@toolkit-v2, session-skills@toolkit-v2\./);
+  assert.match(setup.stdout, /Switched on for every Codex folder in .*config\.toml: toolkit@toolkit-v2\./);
+  assert.match(setup.stdout, /Codex: the toolkit plugin is on for every folder/);
   const after = read(configFile);
-  assert.equal(after, text.replace(/(\[plugins\."(?:toolkit|work)@toolkit-v2"\]\n)enabled = true/g, '$1enabled = false'), 'only the two switches changed');
+  const want = text
+    .replace(/(\[plugins\."(?:work|session-skills)@toolkit-v2"\]\n)enabled = true/g, '$1enabled = false')
+    .replace(/(\[plugins\."toolkit@toolkit-v2"\]\n)enabled = false/, '$1enabled = true');
+  assert.equal(after, want, 'only the three switches changed');
   const again = await tk(root, ['doctor', '--json'], { env });
   assert.ok(!again.json.findings.some((f) => f.id === 'codex-plugins-everywhere'));
   const second = await tk(root, ['machine-setup', '--offline'], { env });
-  assert.doesNotMatch(second.stdout, /Switched off/, 'a second run changes nothing');
+  assert.doesNotMatch(second.stdout, /Switched (off|on)/, 'a second run changes nothing');
 });
 
 test('doctor warns when Codex runs an older copy of the toolkit', async () => {
@@ -212,7 +219,7 @@ test('the briefing says which setup steps in the current focus are done, so they
   const { env } = await healthyHome(root);
   assert.equal((await tk(root, ['memory', 'focus', '--text', SETUP_FOCUS], { env })).code, 0);
   const brief = await tk(root, ['brief', '--host', 'claude'], { env });
-  assert.match(brief.stdout, /Setup steps in the current focus that are done now\. They are not copied forward: take them out of "Waiting on the owner" at the next focus update:\n- "Trust this project folder in Codex when it asks\.": Codex trusts this project folder now\.\n- "Open \/hooks in Codex and trust the Toolkit V2 hooks\.": Codex trusts the Toolkit V2 hooks now\./);
+  assert.match(brief.stdout, /Setup steps in the current focus that are done now\. They are not copied forward: take them out of "Waiting on the owner" at the next focus update:\n- "Trust this project folder in Codex when it asks\.": Codex trusts this project folder now\.\n- "Open \/hooks in Codex and trust the Toolkit V2 hooks\.": a Toolkit V2 hook ran in this Codex session \(or Codex lists the hooks as trusted\), so Codex runs them here\./);
   assert.doesNotMatch(brief.stdout, /"Start a new Claude Code session[^\n]*": a new Claude Code session/, 'toolkit brief is not a new session');
   assert.doesNotMatch(brief.stdout, /Decide the billing currency\.":/);
   // A Claude Code session-start hook is a new session after setup.

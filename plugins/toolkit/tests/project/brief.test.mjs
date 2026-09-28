@@ -103,7 +103,7 @@ test('GitHub and Jira projects get the path to the written instructions', async 
   const { root, env } = await initProject({ tracker: 'github' });
   const res = await tk(root, ['brief'], { env });
   assert.equal(res.code, 0, res.stderr);
-  assert.match(res.stdout, /Work items: This project tracks work in GitHub Issues\. toolkit work does not manage GitHub Issues; follow the written instructions in \S*plugins\/work\/references\/trackers\/github\.md/);
+  assert.match(res.stdout, /Work items: This project tracks work in GitHub Issues\. toolkit work does not manage GitHub Issues; follow the written instructions in \S*plugins\/work\/shared\/tracker-github\.md/);
 });
 
 test('a Notion project: the briefing lists items from the local copy of the board (fake ntn)', async () => {

@@ -146,7 +146,7 @@ test('cancel removes the template guide comments, and the Blockers warning has o
   const stale = rec.body.replace(/\*\*Blockers:\*\* None\./, '**Blockers:** Something stale.');
   const v = validateRecord({ meta: rec.meta, body: stale });
   const w = v.warnings.find((x) => x.code === 'terminal_blockers');
-  assert.equal(w.message, 'WI-001 is Cancelled, but Blockers in its Overview still says: Something stale. Set it to None: toolkit work edit WI-001 --label Blockers --value "None."');
+  assert.equal(w.message, 'WI-001 is Cancelled, but Blockers in its Overview still says: Something stale. Set it to None: toolkit work edit WI-001 --label Blockers --value \'None.\'');
 });
 
 test('a retitle keeps the old title and the folder rename in the history', async () => {

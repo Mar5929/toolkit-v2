@@ -1,0 +1,57 @@
+{
+  "note": "Every generated copy that lands in a memory plugin skill. Sources are edited; copies are written by node dev/tools/sync-skill-references.mjs.",
+  "copies": [
+    {
+      "source": "plugins/toolkit/shared/toolkit-commands.md",
+      "skills": ["memory/memory-save", "memory/memory-find", "memory/memory-tidy"]
+    },
+    {
+      "source": "plugins/memory/shared/record-format.md",
+      "skills": ["memory/memory-save", "memory/memory-find", "memory/memory-tidy"]
+    },
+    {
+      "source": "plugins/memory/shared/replacing-and-retiring.md",
+      "skills": ["memory/memory-save", "memory/memory-tidy"]
+    },
+    {
+      "source": "plugins/memory/shared/proposals.md",
+      "skills": ["memory/memory-save", "memory/memory-find", "memory/memory-tidy"]
+    },
+    {
+      "source": "plugins/memory/shared/current-focus.md",
+      "skills": ["memory/memory-save", "memory/memory-tidy"]
+    },
+    {
+      "source": "plugins/memory/shared/glossary.md",
+      "skills": ["memory/memory-save", "memory/memory-tidy"]
+    },
+    {
+      "source": "plugins/memory/shared/memory-builtin.md",
+      "skills": ["memory/memory-save", "memory/memory-find", "memory/memory-tidy"]
+    },
+    {
+      "source": "plugins/memory/shared/memory-hindsight.md",
+      "skills": ["memory/memory-save", "memory/memory-find", "memory/memory-tidy"]
+    },
+    {
+      "source": "plugins/memory/shared/memory-notion.md",
+      "skills": ["memory/memory-save", "memory/memory-find", "memory/memory-tidy"]
+    },
+    {
+      "source": "plugins/memory/shared/backup-and-restore.md",
+      "skills": ["memory/memory-tidy"]
+    },
+    {
+      "source": "plugins/toolkit/scaffold/model/.memory/memory-criteria.md",
+      "skills": ["memory/memory-save", "memory/memory-tidy"]
+    },
+    {
+      "source": "plugins/work/shared/tracker-github.md",
+      "skills": ["memory/memory-find"]
+    },
+    {
+      "source": "plugins/work/shared/tracker-jira.md",
+      "skills": ["memory/memory-find"]
+    }
+  ]
+}

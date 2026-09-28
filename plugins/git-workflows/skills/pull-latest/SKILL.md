@@ -5,12 +5,17 @@ description: 'Brings the local repository up to date with its remote without los
 
 # Pull the latest from the remote
 
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+
 Bring the current checkout up to date with its remote without destroying or
 rewriting anything. Other sessions may be working in this repository right now.
 
 1. **Look first.** Run `git remote`, `git status -sb`, and
    `git rev-parse --abbrev-ref HEAD`. No remote (`git remote` prints nothing):
-   there is nothing to pull; say so in one line and stop, with no fetch. A
+   there is nothing to pull; say so in one line and stop, with no fetch. The
+   branch has no upstream (`git status -sb` shows no `...origin/<branch>`
+   after the branch name): it has nothing to pull, and `git pull --ff-only`
+   would fail with "no tracking information"; say so in one line and stop. A
    dirty working tree, or the shared primary checkout on a branch other than
    the default branch: stop and report. Your own worktree on your own branch is
    fine.
@@ -34,10 +39,23 @@ rewriting anything. Other sessions may be working in this repository right now.
 5. **Report** the incoming commits and the final state, and end with the one
    question for the owner or the exact words that continue.
 
-Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
-
 The owner wanting to throw away local work ("wipe local", "match remote
 exactly") is a different job: `reset-to-remote`.
+
+## Gotchas
+
+- Codex keeps `.git/` read-only and turns the network off. `git fetch` and
+  `git pull` each run alone, with `sandbox_permissions` set to
+  `require_escalated` and a one-line reason ("Fetch origin and fast-forward
+  main."). Refused without asking: show the owner the exact commands and wait
+  (`references/git-rules.md`, "Git writes in Codex").
+- `--no-edit` is only for a merge pull that finishes cleanly. A merge that
+  stops on a conflict: stop and report the files, unless the owner asked you
+  to finish the update; then commit with a message you write
+  (`references/git-rules.md`, "A merge that stops on a conflict").
+- After a merge pull the branch is ahead of its upstream. Leave it that way.
+- A dirty working tree is another session's work until shown otherwise. Stop
+  and report it; never stash, commit, or discard it.
 
 ## Why these limits
 
@@ -89,3 +107,9 @@ merge commit). Leave it that way.
 - The final state: "up to date with origin/<branch>", or "ahead by N commits
   (which ones); pushing is your call".
 - Anything odd found in step 3, even when you went ahead.
+
+## References
+
+| File | Open it when |
+| --- | --- |
+| `references/git-rules.md` | Before a fetch or pull in Codex, a merge that stops on a conflict, or a project with no remote |

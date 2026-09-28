@@ -120,7 +120,7 @@ export function reportLines(report, { full = false } = {}) {
     lines.push(`Renumbered a copy: ${r.location} had id ${r.from}, which ${r.originalId || r.from} at ${r.original} already uses. The copy is now ${r.to}.`);
   }
   for (const m of report.missing || []) {
-    lines.push(`Missing: ${m.id}${m.title ? ` (${m.title})` : ''} was at ${m.lastLocation} and is no longer found. Ask the owner whether it was removed on purpose (then toolkit work cancel ${m.id} --reason "<the owner's words>") or moved outside ${TRACKER_DIR}/ (work-organize).`);
+    lines.push(`Missing: ${m.id}${m.title ? ` (${m.title})` : ''} was at ${m.lastLocation} and is no longer found. Ask the owner whether it was removed on purpose (then toolkit work cancel ${m.id} --reason '<the owner’s words>') or moved outside ${TRACKER_DIR}/ (work-organize).`);
   }
   for (const e of report.ownerEdits || []) lines.push(`Changed by hand: ${e.id} ${e.field} "${e.from}" -> "${e.to}". ${e.note || ''}`.trim());
   for (const q of report.questions || []) lines.push(`Question for the owner: ${q.question}`);

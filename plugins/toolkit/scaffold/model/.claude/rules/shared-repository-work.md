@@ -8,6 +8,7 @@ git status
 git fetch origin && git log --oneline -10
 ```
 
+- No remote (`git remote` prints nothing): skip `git fetch`, and never report a fetch failure as a blocker.
 - An unknown worktree, moved branch, or change you did not make means other sessions are live. Do not fix it. Tell the owner.
 - Code, rules, skills, hooks, settings: use your own worktree and branch (`git worktree add .claude/worktrees/<name> -b claude/<name>`). Exception: a one-file edit asked for directly.
 - Documentation-only saves: open the `publish-docs` skill.

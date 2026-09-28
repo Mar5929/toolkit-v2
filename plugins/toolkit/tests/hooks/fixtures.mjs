@@ -23,7 +23,7 @@ function fill(value, vars) {
 /** The fixture with its placeholders filled. */
 export function fixture(host, name, vars = {}) {
   const raw = JSON.parse(fs.readFileSync(path.join(FIXTURES, host, `${name}.json`), 'utf8'));
-  const defaults = { SESSION: 'sess-test-1', TURN: 'turn-1', STOP_ACTIVE: false, STDOUT: '', STDERR: '', CONTENT: '', OLD: '', NEW: '', PROMPT: '', COMMAND: '' };
+  const defaults = { SESSION: 'sess-test-1', TURN: 'turn-1', STOP_ACTIVE: false, STDOUT: '', STDERR: '', CONTENT: '', OLD: '', NEW: '', PROMPT: '', COMMAND: '', MESSAGE: 'Done.' };
   return fill(raw, { ...defaults, ...vars });
 }
 

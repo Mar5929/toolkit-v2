@@ -6,45 +6,52 @@ description: 'Splits work items into sub-items, nests or moves them, and reconci
 # Work organize
 
 Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
-Shared rules: the work plugin's `references/conventions.md` and `references/trackers.md`, two folders above this skill's folder (`../../references/`). Cases and examples: this skill's `references/moves.md`. To open another skill, Claude Code uses the Skill tool; Codex reads that skill's `SKILL.md`. Run each `toolkit` command alone, on its own line, in both hosts: never joined by `&&`, `;`, or a pipe, and never from a script (in Codex that runs it inside the sandbox, where it fails). Text (conventions, "Text in a command"): one-line values (`--note`, `--effect`, `--append-row`, `--title`) go in single quotes, with an apostrophe written `'\''`, because double quotes run backticks and `$(...)`; section and design text goes on standard input in Claude Code (`<file>` is `-`, followed by a quoted heredoc, `<<'EOF'`), and in Codex in `--text '<text>'` or a file in a new `mktemp -d` folder, deleted right after the command. Never change a record with a script. Ask the owner in the reply text, never through a question tool. No remote (`git remote` prints nothing): never run `git fetch`, and never report a fetch refusal as a blocker.
+Explains what the owner changed in the tracker, asks only where his intent is unclear, and splits or moves items when he asks; it never moves anything on its own. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
 
 ## Steps
 
-1. Rescan the tracker and read the tree. Read the report: moved, renamed, nested or un-nested, missing, duplicate id, record with no id, adopted copies of the template.
+1. Rescan the tracker, then read the tree and the report: moved, renamed, nested or un-nested, archived, missing, duplicate id, adopted.
    `toolkit work sync`
    `toolkit work list --tree`
-2. Say what the CLI already adapted (paths, a renamed folder, parent from location, Status from a dragged Notion Stage) in one line each ("WI-7 is now a sub-item of WI-3"), and what needs the owner's intent. The CLI already wrote a history row on each item the owner moved or renamed, and on the parents it left and joined; add a note only for his reason.
-3. List side effects: a sub-item under a Done or Cancelled parent; a Roadmap phase listing a child that moved away; a `build` sub-item without approved requirements.
-4. A missing item: ask whether it was removed on purpose (then cancel it with his words) or moved outside the tracker (ask where; move it back only after a yes). A copied folder with a duplicate id: the CLI renumbered the newer copy; confirm which one is the original.
+2. Say each report line to the owner, one line each, before other work (`references/moves.md`, section 1). The CLI already wrote the history rows.
+3. Ask about each case that needs his intent, one at a time, with your recommendation: a missing or trashed item, a duplicate id, a sub-item under a finished parent, an item marked Done by hand, a skipped gate (`references/moves.md`, section 2).
    `toolkit work cancel <id> --reason '<his words>'`
-5. Notion: a Stage the owner changed by dragging is kept. A card dragged to Done is not an approval: ask, and on a yes open `work-finish`.
-6. Split (stage 05): propose the sub-items (title, what each delivers, which `R-xx` it covers), ask once, then create each one under the parent. A split never removes, renumbers, or rewrites the parent's `R-xx`: they stay in the parent, with their approval. A child that delivers approved parent requirements is made with `--covers`: it links them, copies no text, and inherits the parent's requirements approval, so the owner is never asked to approve the same requirement twice. A parent design the owner approved covers its children too: a `--covers` child of such a parent starts at planning (06), and its history row names that design; it gets no new design. Only a child that needs new behavior gets its own `R-xx` and its own approval. List the child ids in the parent's Roadmap Sub-items column. A child of an agent-led parent gets the same delivery value (`work-delegate` step 1). A split usually renames the parent: say the new title to the owner in one line before the title command below.
+4. Split (stage 05): propose the sub-items, ask once, then create each child with `--covers` for the parent requirements it delivers, and update the parent's Roadmap, with the checklist in `references/moves.md`, section 3.
    `toolkit work set <id> --stage 05-breakdown`
-   `toolkit work set <id> --title '<new title>'`
    `toolkit work new --title '<title>' --type <type> --parent <id> --covers R-02,R-03`
-   `toolkit work new --title '<title>' --type <type> --parent <id>`
    `toolkit work edit <id> --section Roadmap --set-file <file>`
-7. Nest, group, move, or archive on request. Before moving a folder, say how many nested items move with it.
-   `toolkit work move <id> --under <parent-id>`
-   `toolkit work move <id> --under <group>`
-   `toolkit work move <id> --under archive`
-   `toolkit work move <id> --under root`
-8. Never move, regroup, cancel, archive, or restore on the agent's own initiative. Finish with validation and a short tree of what changed. `toolkit work move` writes the history rows on the item and on both parents; add a note only for the owner's reason. When a split or a move changed an item's next step, update the current focus (`../../references/conventions.md`, "The current focus"). End the reply with the one question for the owner, or the exact words that continue ("Say 'keep going' and I'll plan WI-008."), never with a plain statement of the next step.
+5. Nest, group, move, archive, or restore only when the owner asks. First say how many nested items move with it (`references/moves.md`, section 4).
+   `toolkit work move <id> --under <target>`
+6. Validate, show a short tree of what changed, and add a history note only for the owner's reason.
    `toolkit work validate`
-   `toolkit work history <id> --note 'Moved at the owner'\''s request: <his words>'`
+   `toolkit work history <id> --note 'Moved because the owner asked: <his words>'`
+7. Update the current focus when a split or a move changed an item's next step (`references/current-focus.md`). End with the one question for the owner, or the exact words that continue ("Say 'keep going' and I'll plan WI-008.").
 
-## Rules
+## Gotchas
 
-- A folder nested inside an item's folder is a sub-item; its parent follows its location. A plain folder with no record in it is a group and changes no parent. A sub-item cannot also sit in a group.
-- `archive/` is a reserved group. Items there are hidden from the briefing and from the recommended next item. Archiving is not cancelling.
-- Identity is the record's `id`, never the folder name. Renaming a folder or file keeps the item.
-- Ids are never reused. When two records share an id, the one the CLI already knew keeps it and the newcomer gets the next free id.
+- Run each `toolkit` command alone: never joined by `&&`, `;`, or a pipe, and never from a script (in Codex that runs it inside the sandbox, where it fails). One-line values go in single quotes, never double quotes; an apostrophe inside them is `'\''` in Claude Code and ’ (U+2019) in Codex, or reword the text. Section text goes on standard input (`--set-file -`) in Claude Code, and in `--text '<text>'` or a `mktemp -d` file in Codex (`references/toolkit-commands.md`, "Text in a command").
+- Never move, regroup, cancel, archive, or restore on your own initiative. The owner's hand changes win: never undo one.
+- An item marked Done by hand (a Notion card set to Done) is not an approval. Ask whether he approves the result; on a yes open `work-finish`.
+- A split never removes, renumbers, or rewrites the parent's `R-xx`. A `--covers` child inherits the parent's requirements approval, and an approved parent design, so he is never asked to approve the same thing twice.
+- Archiving hides an item; it is not a cancel.
+- Identity is the record's `id`, never the folder name. Ids are never reused.
 - A record whose title is still `<Work item title>` is an unused template copy and is skipped.
-- Never hand-edit `.work-items/DASHBOARD.md` or `.work-items/.toolkit-state.json`. The sync command in step 1 rebuilds them.
-- Splitting keeps each child whole: its own roadmap and tasks, and its own result approval. Requirements and a design the owner already approved for the parent are linked and inherited, never copied or asked for again. Finishing a child never finishes or approves the parent.
-- The owner's hand changes win. The CLI keeps them and reports them. Ask about a hand change only when it skipped a gate.
+- Never hand-edit `.work-items/DASHBOARD.md` or `.work-items/.toolkit-state.json`: the sync rebuilds them.
+- Notion: dragging a card between board columns changes its Stage, not its parent. There are no group folders; `--under` takes an item id, `root`, or `archive` (`references/tracker-notion.md`).
+- GitHub Issues or Jira: `toolkit work` exits with code 3. Use sub-issues or sub-tasks (`references/tracker-github.md` or `references/tracker-jira.md`); there is no folder layout to reconcile.
 
-## Tracker notes
+## References
 
-- Notion: nesting is the Parent item and Sub-items relation. Moving a card between groups on the board changes its Stage, not its parent.
-- GitHub Issues or Jira: `toolkit work` exits with code 3. Use sub-issues or sub-tasks as `../../references/trackers.md` says. There is no folder layout to reconcile.
+| File | Open it when |
+| --- | --- |
+| [references/moves.md](references/moves.md) | Every step: report lines, cases that need the owner, the split checklist, moves |
+| [references/tracker-local.md](references/tracker-local.md) | `tracker.type` is `local`: what the sync does by itself, groups, `archive/` |
+| [references/tracker-notion.md](references/tracker-notion.md) | `tracker.type` is `notion`: cards the owner made, dragged, archived, or trashed |
+| [references/approvals.md](references/approvals.md) | A hand change skipped a gate; sub-items and approvals (section 10) |
+| [references/work-item-format.md](references/work-item-format.md) | Before editing the Roadmap or any section |
+| [references/recording-owner-answers.md](references/recording-owner-answers.md) | The owner answers; history notes; a failed save |
+| [references/current-focus.md](references/current-focus.md) | Step 7: an item's next step changed |
+| [references/toolkit-commands.md](references/toolkit-commands.md) | Before a command that carries text, and on any exit code other than 0 |
+| [references/tracker-github.md](references/tracker-github.md) | A `toolkit work` command exits 3 in a GitHub Issues project |
+| [references/tracker-jira.md](references/tracker-jira.md) | A `toolkit work` command exits 3 in a Jira project |
+| [assets/WORK-ITEM.md](assets/WORK-ITEM.md) | GitHub or Jira: the body of a new child issue |

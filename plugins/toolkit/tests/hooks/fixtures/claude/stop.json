@@ -6,7 +6,7 @@
   "permission_mode": "default",
   "hook_event_name": "Stop",
   "stop_hook_active": "{{STOP_ACTIVE}}",
-  "last_assistant_message": "Done.",
+  "last_assistant_message": "{{MESSAGE}}",
   "background_tasks": [],
   "session_crons": []
 }

@@ -99,7 +99,7 @@ export function checkChoice(value, allowed, flag) {
  * A fresh .toolkit.json in the ARCHITECTURE section 3 key order.
  * `project.created` is the setup date: the `{{today}}` token renders as it.
  */
-export function newConfig({ name, key, owner, created, tracker, memory, salesforce, hosts, declined }) {
+export function newConfig({ name, key, owner, created, tracker, memory, salesforce, hosts, declined, backupDir }) {
   const config = {
     toolkit: 'toolkit-v2',
     schema: CONFIG_SCHEMA,
@@ -110,6 +110,7 @@ export function newConfig({ name, key, owner, created, tracker, memory, salesfor
     hosts,
   };
   if (Array.isArray(declined) && declined.length) config.declined = [...declined];
+  if (backupDir) config.backup = { dir: backupDir };
   return { ...config, notion: {}, hindsight: {}, installed: {} };
 }
 

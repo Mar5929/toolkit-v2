@@ -1,6 +1,6 @@
 {
   "name": "session-skills",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Five conversation skills: handoff writes a checked prompt for a new session, session-summary recaps this chat, braindump plays back a brain dump, explain-simply re-explains in plain bullets, and unslop removes machine-written patterns from text.",
   "author": {
     "name": "Mike Rihm",

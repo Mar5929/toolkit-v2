@@ -142,3 +142,19 @@ export async function approveRequirements(dir, id, { by = 'Mike', goal = 'The ow
   if (g.code !== 0) throw new Error(`edit Agreed goal failed: ${g.stdout} ${g.stderr}`);
   return tk(dir, ['work', 'approve', id, '--requirements', '--by', by]);
 }
+
+/**
+ * Write a chosen design into "## Selected design" of an item's DESIGN.md, the
+ * way solution-design does before it asks for the approval: toolkit work
+ * approve --design refuses a design whose Selected design is still the
+ * template prompt (sample run confirm-a).
+ */
+export async function fillSelectedDesign(dir, id, text = 'Option A: one small command, as the owner chose.') {
+  const d = await tk(dir, ['work', 'design', id, '--json']);
+  const file = d.json && d.json.path;
+  if (!file) throw new Error(`no design file for ${id}`);
+  const before = fs.readFileSync(file, 'utf8');
+  const after = before.replace(/^<Before an option is chosen[^\n]*>$/m, text);
+  fs.writeFileSync(file, after);
+  return file;
+}

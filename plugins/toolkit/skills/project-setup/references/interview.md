@@ -1,8 +1,30 @@
 # The setup interview
 
-Detail for `project-setup` step 2. Ask one question per message. Each
-question carries a recommendation and its main reason, so the owner can
-answer "yes" and move on.
+Purpose: what to check before asking, and the exact wording of the six setup
+questions for a new project, each with its recommendation.
+
+## Contents
+
+- Rules for every question
+- Look before asking
+- Question 1: the project name
+- Question 2: where work is tracked
+- Question 3: where memory lives
+- Question 4: Salesforce
+- Question 5: SOUL.md
+- Question 6: the backup folder
+- After the answers
+
+## Rules for every question
+
+- One question per message, in the reply text, never through a question tool.
+- Each question carries a recommendation and its main reason, so the owner
+  can answer "yes" and move on.
+- Ask in the order below. A question the repository already answers is
+  confirmed in one line instead of asked.
+- Record each answer on its checklist line in the plan tool as soon as it is
+  given, for example `- [x] tracker: local`. A later turn may start without
+  this skill loaded, and the plan tool keeps the answers until init runs.
 
 ## Look before asking
 
@@ -13,20 +35,21 @@ Check these first, without asking:
   tracker, and memory through Git.
 - Is the repository empty, or does it already hold code? Name the language
   and framework you see.
-- `sfdx-project.json` present: this is a Salesforce project. Confirm it in
-  one line instead of asking.
+- `sfdx-project.json` present: this is a Salesforce project. Confirm it in one
+  line instead of asking question 4.
 - `.toolkit.json` present with `"toolkit": "toolkit-v2"`: this is a repair,
-  not a new setup (see `repair-and-wiring.md`).
+  not a new setup (`repair-and-update.md` in this folder).
 - Files from an older toolkit setup (for example a `knowledge/` folder, or a
   `CLAUDE.md` with more than the line `@AGENTS.md`): tell the owner what you
-  found. Toolkit V2 adds its own
-  files and turns the current toolkit's plugins off for this project; it does
-  not move or delete the old files. Ask before touching them. A file the
-  project already has is kept, never overwritten.
+  found. Toolkit V2 adds its own files and turns the older toolkit's plugins
+  off for this project. It does not move or delete the old files. Ask before
+  touching them. A file the project already has is kept, never overwritten.
 - The owner name: `git config user.name`.
-- `ntn whoami` (only matters for Notion): signed in or not.
-- `toolkit hindsight health` (only matters for Hindsight): the local server is
-  up or not.
+- `ntn whoami` (only for Notion): signed in or not. In Codex, run it outside
+  the sandbox (`wiring-notion.md` in this folder, step 1); inside it, the
+  check fails even when the owner is signed in.
+- `toolkit hindsight health` (only for Hindsight): the local server answers
+  or not.
 
 ## Question 1: the project name
 
@@ -34,11 +57,10 @@ Confirm the name, key, id prefix, and owner in one line:
 
 > I'll call this project "Acme CRM" (short key `acme-crm`, work item ids `WI-001`, `WI-002`, owner Mike). Is that right?
 
-- The key is the name in lowercase words joined by hyphens. It names the
-  Hindsight memory bank and appears in the Notion page title.
+- The key is the name in lower case, with words joined by hyphens. It names
+  the Hindsight memory bank and appears in the Notion page title.
 - The id prefix is `WI` unless the owner wants another (for example `ACME`).
-  A different prefix is set right after init, before any item exists, with
-  `toolkit config set tracker.idPrefix <prefix>`.
+  Another prefix is set right after init, before any item exists.
 
 ## Question 2: where work is tracked
 
@@ -46,22 +68,29 @@ Confirm the name, key, id prefix, and owner in one line:
 
 | Choice | `--tracker` | Good when | What to know |
 | --- | --- | --- | --- |
-| Local folders | `local` | A solo project on one computer | Items live in `.work-items/`, which Git ignores. They stay on this computer; `toolkit export` is the backup. |
+| Local folders | `local` | A solo project on one computer | Items live in `.work-items/`, which Git ignores. They stay on this computer and are backed up to the backup folder (question 6). |
 | Notion | `notion` | The owner wants the board on his phone or the web | Needs `ntn` signed in. Each project gets its own Work Items database under the "AI Agent Second Brain" page. |
 | GitHub Issues | `github` | The code and the team already live in GitHub | No driver: agents follow written instructions with `gh`. Labels are created once, with a yes. |
 | Jira | `jira` | A client requires Jira | No driver: agents follow written instructions with the Jira tool the owner connects. |
 
 ## Question 3: where memory lives
 
-> Where should the project's memory live? I recommend the built-in `.memory/` folder: it is private, fast, and needs no server. [When the tracker is Notion: I recommend Notion, so work and memory sit together and you can read both on your phone.] Hindsight is also installed on this Mac; choose it if you want search by meaning across many memories.
+> Where should the project's memory live? I recommend the built-in `.memory/` folder: it is private, fast, and needs no server.
+
+Offer Hindsight by name only when `toolkit hindsight health` answered (Look
+before asking): "Hindsight is running on this Mac; choose it if you want
+search by meaning across many memories." When it did not answer, say that
+Hindsight would need to be installed first, and that the install downloads
+about 13 GB (`installing-hindsight.md` in this folder).
+
+When the tracker is Notion, recommend Notion instead: "I recommend Notion, so
+work and memory sit together and you can read both on your phone."
 
 | Choice | `--memory` | Good when | What to know |
 | --- | --- | --- | --- |
-| Built-in `.memory/` | `builtin` | Most projects | Files in the main checkout, Git-ignored, on this computer only; the `memory-tidy` skill backs it up to a folder the owner picks. |
+| Built-in `.memory/` | `builtin` | Most projects | Files in the main checkout, Git-ignored, on this computer only. Backed up to the owner's backup folder. |
 | Local Hindsight | `hindsight` | Many memories, and search by meaning matters | The local server at `127.0.0.1:8888` must be running (a background service on this Mac). One memory bank per project. Never Hindsight Cloud. |
 | Notion | `notion` | The tracker is Notion, or the owner reads memory on his phone | The project's Memory page in Notion, in the layout of Lore (Notion's open-source AI memory): the records are rows of its Memories database. Needs `ntn` signed in. |
-
-Recommendation rule: Notion when the tracker is Notion; otherwise built-in.
 
 ## Question 4: Salesforce
 
@@ -77,104 +106,36 @@ Show the aliases on this computer first (`sf org list`, a read-only command):
 
 > Which org alias is production? Agents never deploy there or change its data; the guards block it and hand you the command instead. I see `acme-prod`.
 
-Record them after init:
+## Question 5: SOUL.md
 
-```text
-toolkit config set salesforce.orgs.sandbox <alias>
-toolkit config set salesforce.orgs.production <alias>
-```
+> Do you want a SOUL.md that tells the agent how you like to work? I recommend skipping it for now; you can add it later.
+
+A no goes to init as `--decline SOUL.md`, so the file is never installed and
+no later sync brings it back. A yes: fill it with his words after init
+(`finishing-setup.md` in this folder).
+
+## Question 6: the backup folder
+
+`.work-items/` (local tracker), `.memory/` (built-in memory), and Hindsight
+memory exist only on this computer. Ask where their automatic backups go:
+
+> Where should backups of the work items and memory go? I recommend `~/Backups/toolkit`: one folder outside every project, which your computer's own backup already covers. Each project gets its own dated folder inside it.
+
+- The answer goes to init as `--backup-dir <folder>`: a full path starting
+  with `/` or `~/`, outside the project. Init refuses a folder inside it.
+- "No backups" goes to init as `--backup-dir none`.
+- With a Notion tracker and Notion memory, nothing lives only on this
+  computer: skip this question.
+
+With the folder set, `toolkit work finish` and every handoff back up by
+themselves.
 
 ## After the answers
 
-Say what will happen in three or four lines, then run it:
+Say what will happen in three or four lines, then run init:
 
 > I'll now copy the model scaffold and apply your answers: the project's folders and files from the model project, AGENTS.md with only the parts for your choices, the rules, and the settings; turn on the Toolkit V2 plugins for this project only (and turn the older toolkit's plugins off here); set up local folders for work and built-in memory. Nothing outside this folder changes.
 
-Then `toolkit init`, the `toolkit config set` lines the answers need, the
-wiring in `repair-and-wiring.md`, filling the setup guides (below), and
-`toolkit doctor`.
-
-## What setup installs
-
-The toolkit plugin carries an exact copy of the model project in its
-`scaffold/model/` folder. Setup copies that model and applies the answers:
-
-| Installed | When |
-| --- | --- |
-| `AGENTS.md`, `PROJECT.md`, `PROJECT-ROADMAP.md`, `DECISIONS.md`, `README.md`, `.gitignore` | Every project |
-| `SOUL.md` | Every project, unless the owner declines it (`--decline SOUL.md`, or `toolkit config set declined SOUL.md` later) |
-| `requirements/` (its own `AGENTS.md`, `SYSTEM-DATA-MODEL.md`, and `system-area-template/`), `system-guide/AREA-TEMPLATE.md`, `tests/TEST-PLAN-TEMPLATE.md`, `ai-external-knowledge/INDEX.md` | Every project |
-| The general rules in `.claude/rules/` | Every project (Codex reads them through `AGENTS.md`) |
-| A root `CLAUDE.md` holding only `@AGENTS.md`, `.claude/settings.json`, `.claude/output-styles/plain-english.md` | Claude Code is one of the hosts |
-| `.codex/config.toml` and `.codex/rules/toolkit.rules` (written by the toolkit; the model has neither) | Codex is one of the hosts |
-| `.work-items/work-item-template/` (`WORK-ITEM.md`, `DESIGN.md`) and `.claude/rules/work-item-folders.md` | Local folders tracker |
-| `.memory/` seed files: `AGENTS.md`, `CURRENT_FOCUS.md`, `MEMORY.md`, `memory-criteria.md`, `project_topic_template.md`, `terminology-glossary.md` | Built-in memory |
-| `delivery/`, `sfdx-project.json`, `.forceignore`, `tools/kb/`, `tools/permissions/`, the two guard hooks in `.claude/hooks/`, `.claude/protected-orgs.json`, and the nine Salesforce rules | Salesforce projects |
-| The `sf-*` skills in `.claude/skills/` | Salesforce projects with Claude Code as a host |
-| `.codex/hooks.json` (runs the two guard hooks in Codex) and the `sf-*` skills in `.agents/skills/` | Salesforce projects with Codex as a host |
-
-- `AGENTS.md`, `README.md`, and `PROJECT.md` carry setup markers such as
-  `<!-- if tracker=local -->` ... `<!-- endif -->`. Setup keeps the lines for
-  the answers given and removes the rest, markers included.
-- The rules list in `AGENTS.md`, between `<!-- toolkit:rules:start -->` and
-  `<!-- toolkit:rules:end -->`, is written from the files in `.claude/rules/`
-  and rebuilt on every `toolkit sync`. Never edit it by hand.
-- In a project that is not a Salesforce project, the Salesforce hooks and
-  `sf` permission lines are left out of `.claude/settings.json`, and the
-  Salesforce lines are left out of `.gitignore`.
-- `.memory/MEMORY.md` is generated: setup installs the model's copy, then
-  `toolkit memory reindex` rebuilds it.
-- Setup never copies work items or memory records, and never copies the
-  model's `.vscode/` or `.sfdx/` folders.
-- `.toolkit.json` records the answers. It is written last.
-
-## Filling the setup guides
-
-The copied files start with a fill-in guide comment and hold `<angle bracket>`
-prompts. Setup fills the project name. The rest is the agent's, with facts the
-owner confirmed:
-
-- `AGENTS.md`: the one-sentence outcome, and the "Build, test, or deploy" row
-  under Commands. Ask for both, one question at a time, with a
-  recommendation from what the repository shows. The outcome is the owner's
-  answer, never a sentence worked out from the code, the tests, or the
-  README: ask "What should this project do for you, in one sentence? From the
-  code I'd suggest: <suggestion>." Until he answers, leave the outcome prompts
-  in `AGENTS.md`, `PROJECT.md`, and `PROJECT-ROADMAP.md` and list them in the
-  report.
-- `PROJECT.md` and `README.md`: follow each file's guide. Ask only what the
-  repository cannot answer.
-- `PROJECT-ROADMAP.md` (the project outcome, phases, and work units) and
-  `requirements/SYSTEM-DATA-MODEL.md` (accepted data model requirements):
-  fill them when the owner already knows the facts. On a new project they
-  usually stay as they are, and are listed in the final report as prompts
-  left. The data model gets only accepted requirements, never a guess.
-- `SOUL.md`: ask whether the owner wants it ("Do you want a SOUL.md that tells
-  the agent how you like to work? I recommend skipping it for now; you can add
-  it later."). Ask it with the other setup questions, so a no goes to init as
-  `--decline SOUL.md` and the file is never installed. With a yes, fill it with
-  his words and get his approval. A no after init: run
-  `toolkit config set declined SOUL.md`, then delete the file. The no is kept
-  in `.toolkit.json`, so sync never brings the file back and doctor does not
-  report it missing. `toolkit config set declined none` undoes it.
-- Delete each fill-in guide once its file is filled. Never invent a fact to
-  fill a prompt: list each prompt that is left, with the fact it needs, in the
-  final report.
-
-## Explaining the result
-
-End with a short plain report:
-
-- What was set up, as a short list the owner can check: tracker, memory,
-  Salesforce or not, the files added.
-- What was skipped and why.
-- What the owner must do himself (see the SKILL.md list), each with why.
-  "Start a new session" goes here only. A step doctor checks (Codex hook
-  trust, `ntn login`) also goes in the current focus under "Waiting on the
-  owner", marked as a setup step to drop when doctor stops reporting it.
-- Doctor's result: 0 problems, or each remaining problem with its fix.
-  Warnings about the other host (Codex hook trust seen from Claude Code) are
-  expected and are the owner's steps.
-- The prompts left, each with the fact it needs.
-- The last line: the commit offer ("Setup files are not committed. Commit them
-  now?"), and after the commit, "Tell me the first thing you want built."
+Adjust the last part to the answers (for example "build the Notion Work Items
+database under your AI Agent Second Brain page"). Running init, and what it
+installs: `running-init.md` in this folder.

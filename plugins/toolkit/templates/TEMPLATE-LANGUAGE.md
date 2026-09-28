@@ -237,14 +237,21 @@ Mac with the 22 V2 skills and 52 skills listed in all: with the session's
 default model every description was kept at 0.01 and at 0.02; with a
 200,000-token model (`--model haiku`) 0.01 kept no description at all, and
 0.02 kept all 22 V2 descriptions while 21 other skills lost theirs),
-`permissions.allow: ["Bash(toolkit *)"]`, and `enabledPlugins` with every
+`permissions.allow: ["Bash(toolkit *)"]`, `permissions.ask` for the five
+toolkit commands that are hard to undo (`toolkit machine-setup`,
+`toolkit memory delete`, `toolkit memory import`, `toolkit import`, and
+`toolkit hindsight service install` or `start`; Mike, 2026-09-28, decision
+12; Claude Code checks ask rules before allow rules), and `enabledPlugins` with every
 Toolkit V2 plugin on (`sf-architect-solutioning@toolkit-v2` only in a
 Salesforce project) and every `claude-toolkit` plugin off, including any other
 `claude-toolkit` plugin this computer has in `~/.claude/settings.json` or
 `~/.claude/plugins/installed_plugins.json`. When the model names no
 `outputStyle`, the toolkit sets `"Plain English"`. `.codex/config.toml` gets
 the same plugin switches for Codex, plus any `claude-toolkit` plugin in
-`~/.codex/config.toml`.
+`~/.codex/config.toml`. `.codex/rules/toolkit.rules` allows every toolkit
+command outside the sandbox and, in rules placed before that one, makes Codex
+ask the owner before the same five commands (`decision = "prompt"`; the
+strictest matching rule wins).
 
 ### `agents-md`
 

@@ -15,6 +15,16 @@ draft's own three-backtick code blocks do not end it early. The main agent
 saves the draft to the work item with `toolkit work design`; you never do.
 The design is a proposal until the owner approves it.
 
+## Contents
+
+- Start with the brief
+- Reason about the research
+- Decide the design
+- Fix rounds
+- Boundaries
+- Return
+- Writing
+
 ## Start with the brief
 
 - The brief gives the work item id, the draft file path when there is one,

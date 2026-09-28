@@ -29,6 +29,17 @@
   "permissions": {
     "allow": [
       "Bash(toolkit *)"
+    ],
+    "ask": [
+      "Bash(toolkit machine-setup)",
+      "Bash(toolkit machine-setup *)",
+      "Bash(toolkit memory delete *)",
+      "Bash(toolkit memory import *)",
+      "Bash(toolkit import *)",
+      "Bash(toolkit hindsight service install)",
+      "Bash(toolkit hindsight service install *)",
+      "Bash(toolkit hindsight service start)",
+      "Bash(toolkit hindsight service start *)"
     ]
   }
 }

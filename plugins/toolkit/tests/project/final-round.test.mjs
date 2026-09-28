@@ -73,5 +73,5 @@ test('the Codex note on a chained toolkit command shows --text in single quotes'
   const note = chainedToolkitNote('toolkit work show WI-001 && git status --short');
   assert.ok(note, 'a chained toolkit command gets the note');
   assert.ok(note.includes("--text '<text>' in single quotes"), note);
-  assert.ok(note.includes("an apostrophe written '\\''"), note);
+  assert.ok(note.includes("In Codex write an apostrophe inside that text as ’ (U+2019), or reword it; never '\\''"), note);
 });

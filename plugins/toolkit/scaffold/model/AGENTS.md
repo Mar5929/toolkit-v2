@@ -22,6 +22,7 @@ future agents and skew them. Information must be curated and intentional.
 - Open the matching skill or rule when the task needs its procedure. Method skills from other plugins (brainstorming, plans, debugging) may run inside these skills, never instead of them.
 <!-- if salesforce -->
 - Design work goes through `solution-design`; it opens `sf-architect-solutioning` as its specialist.
+- A Salesforce platform question, even about a work item: `sf-architect-solutioning`.
 - Salesforce org aliases are in `.toolkit.json` under `salesforce.orgs`. Agents never deploy to, validate against, or write data in production; hand the owner the command or the file.
 <!-- endif -->
 - Before editing files in a folder that has its own `AGENTS.md` (for example `requirements/`), read that file.

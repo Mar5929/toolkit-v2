@@ -1,12 +1,18 @@
 # Agent-led delivery
 
-Carried over from Toolkit V1's work tracker. The four questions below keep
-their exact wording. What changed for V2: the
-choice is recorded in the work item's Notes > Decisions and context and in its
-`delivery` frontmatter value, through `toolkit work` commands, in every
-tracker.
+The rules for the delivery offer: when to make it, the exact questions, how
+to record the owner's answers, and what an acceptance allows. The four
+questions keep their exact wording. The choice is recorded in the work item's
+Notes > Decisions and context and in its `delivery` value, in every tracker.
 
-## Offer once for the goal
+## Contents
+
+1. Offer once for the goal
+2. Ask how the team is arranged
+3. Record the choice
+4. Divide responsibility
+
+## 1. Offer once for the goal
 
 First read the item's `delivery` value and its Notes > Decisions and context
 to see whether the owner already accepted, declined, or revoked agent-led
@@ -21,20 +27,37 @@ answer. `work-on`, `work-decide`, and the session briefing only point at it,
 so the owner is asked once, in one place.
 
 Do not make this offer for a simple question or quick edit, or for a small
-item (one or two tasks, no sub-items): record `delivery: owner-led` at once,
-with a history note giving that reason, so the briefing stops listing the
-offer as an agent to-do. The offer is made once, at the top item of the goal;
-a sub-item is part of its parent's goal. `toolkit work new --parent` copies
-the parent's delivery value to a new sub-item and says so. Check it, and make
-no offer for it. Only when the value is missing or differs from the parent's,
-set it (`toolkit work set <id> --delivery agent-led --note '<why>'` naming the
-parent). When you ask, first add the
-question as an Open Questions row (owner decides, Affects `delivery`) and set
-the item waiting on the owner, so a later session sees the offer is open if
-the answer does not come in this one. Ask it in the reply text, never through
-a question tool. Wait for the answer before taking responsibility for
-organizing delivery, while continuing any useful work that does not depend on
-the choice. Mark the row Answered with his answer.
+item (one or two tasks, no sub-items): record owner-led at once, with the
+reason, so the briefing stops listing the offer as an agent to-do.
+
+```text
+toolkit work set <id> --delivery owner-led --note 'Small item: one or two tasks, so no delivery offer.'
+```
+
+The offer is made once, at the top item of the goal; a sub-item is part of
+its parent's goal. `toolkit work new --parent` copies the parent's delivery
+value to a new sub-item and says so ("Delivery: agent-led, as recorded for
+WI-012."). Check it, and make no offer for it. Only when the value is missing
+or differs from the parent's, set it with a note naming the parent:
+
+```text
+toolkit work set <id> --delivery agent-led --note 'Part of WI-012, whose goal is agent-led.'
+```
+
+When you ask, first add the question as an Open Questions row (owner decides,
+Affects `delivery`) and set the item waiting on the owner, so a later session
+sees the offer is open if the answer does not come in this one:
+
+```text
+toolkit work edit <id> --section 'Open Questions' --append-row '| <next Q-id> | Would you like agents to take responsibility for delivering this, with you acting as product owner? | delivery | Open | owner |'
+toolkit work set <id> --waiting-on owner
+```
+
+Ask it in the reply text, as its last line, never through a question tool.
+Wait for the answer before taking responsibility for organizing delivery,
+while continuing any useful work that does not depend on the choice. The
+`--delivery` command that records his answer marks that row Answered and
+prints "Marked Q-xx Answered"; do not edit the row by hand.
 
 A clear acceptance authorizes agent-led delivery for this goal across
 sessions. A later explicit request for agents to manage or deliver the goal
@@ -50,7 +73,7 @@ The choice belongs to the named goal. It does not carry over to an unrelated
 goal, a new work item, or an unrelated sub-item. The end of a session does not
 end it, and missing tracker access does not mean the owner is undecided.
 
-## Ask how the team is arranged
+## 2. Ask how the team is arranged
 
 After a clear acceptance, read the goal record for a saved team arrangement.
 When none is recorded, ask one more question:
@@ -59,9 +82,9 @@ When none is recorded, ask one more question:
 
 Offer the multi-chat choice only where the current host lets this chat list,
 read, and message other chats and offer new chats to the owner as task
-buttons. Today that is the Claude Code desktop app. On any other host, tell
-the owner the multi-chat arrangement is not available on this host and ask
-one simple question instead:
+buttons. Check the tools this session has; do not assume. On any other host,
+tell the owner the multi-chat arrangement is not available on this host and
+ask one simple question instead:
 
 > Shall I run one team of helpers inside this chat?
 
@@ -80,19 +103,25 @@ question:
 Record the answer with the goal like the arrangement answer, and do not ask it
 again.
 
-[Team arrangements](team-arrangements.md) explains what each answer means,
-including when a chat may be archived. Read it before organizing the team, and
-when resuming a goal that has a recorded arrangement.
+`team-arrangements.md` explains what each answer means, including when a
+chat may be archived. Read it before organizing the team, and when resuming a
+goal that has a recorded arrangement.
 
-## Record the choice
+## 3. Record the choice
 
 Save accepted, declined, or revoked, and the team arrangement answer once
 given, in the item:
 
 - `toolkit work set <id> --delivery agent-led` for accepted;
   `toolkit work set <id> --delivery owner-led` for declined or revoked.
+- When the offer's row was his last open question, the delivery command
+  also sets `waiting_on` to `none` and prints "It is no longer waiting on the
+  owner". When the agent continues the item (an acceptance, or a decline
+  with work still to do), set it to `agent`:
+  `toolkit work set <id> --waiting-on agent`. Keep `owner` while another of
+  his questions on the item is open.
 - A block in Notes > Decisions and context, written with
-  `toolkit work edit <id> --section "Decisions and context" --set-file <file>`:
+  `toolkit work edit <id> --section 'Decisions and context' --set-file <file>`:
 
   ```markdown
   - **Agent-led delivery (WI-012 goal: CSV export):** accepted by Mike on
@@ -129,7 +158,7 @@ failed step, and keep the choice as a pending update. If the write worked but
 the read-back failed, say "Saved but not verified". Continue independent work.
 Put the pending save in the handoff and retry when access returns.
 
-## Divide responsibility
+## 4. Divide responsibility
 
 With acceptance, agents take responsibility for moving the agreed goal
 through discovery, the owner interview, requirements, open questions, records,

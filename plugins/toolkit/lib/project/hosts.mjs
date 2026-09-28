@@ -18,6 +18,13 @@ export const OLD_MARKETPLACE = 'claude-toolkit';
 /** Every Toolkit V2 plugin. sf-architect-solutioning is on only in Salesforce projects. */
 export const V2_PLUGINS = Object.freeze(['toolkit', 'work', 'memory', 'session-skills', 'git-workflows', 'sf-architect-solutioning']);
 export const SALESFORCE_ONLY_PLUGINS = Object.freeze(['sf-architect-solutioning']);
+/**
+ * V2 plugins that stay on for every folder (Mike, 2026-09-28, decision 10):
+ * the toolkit plugin holds only project-setup and hooks that do nothing
+ * outside a Toolkit V2 project. The other V2 plugins are on only inside V2
+ * projects.
+ */
+export const MACHINE_WIDE_PLUGINS = Object.freeze(['toolkit']);
 
 export function homeDir(env = process.env) {
   return env.HOME || os.homedir();
@@ -173,6 +180,28 @@ export function claudeMarketplaceSource(env = process.env) {
   if (!entry) return null;
   const loc = entry.installLocation || (entry.source && (entry.source.path || entry.source.directory)) || null;
   return loc || null;
+}
+
+/** The toolkit-v2 marketplace source folder Codex knows ([marketplaces.toolkit-v2] source in ~/.codex/config.toml), or null. */
+export function codexMarketplaceSource(env = process.env) {
+  const v = tomlGet(codexUserConfig(env), ['marketplaces', MARKETPLACE, 'source']);
+  return typeof v === 'string' && v ? v : null;
+}
+
+/** Every toolkit-v2 marketplace source folder Claude Code or Codex knows, without repeats. */
+export function marketplaceSources(env = process.env) {
+  return [...new Set([claudeMarketplaceSource(env), codexMarketplaceSource(env)].filter(Boolean))];
+}
+
+/** Compare two versions such as 0.2.0 and 0.10.1: -1, 0, or 1. */
+export function compareVersions(a, b) {
+  const pa = String(a || '').split(/[.+-]/).map((x) => Number.parseInt(x, 10) || 0);
+  const pb = String(b || '').split(/[.+-]/).map((x) => Number.parseInt(x, 10) || 0);
+  for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+    const d = (pa[i] || 0) - (pb[i] || 0);
+    if (d) return d < 0 ? -1 : 1;
+  }
+  return 0;
 }
 
 /** The plugin's version from its manifest, or null. */

@@ -5,6 +5,8 @@ description: 'Makes the local repository an exact copy of its remote, discarding
 
 # Reset to remote
 
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+
 Bring a local repository into exact alignment with its remote: the safe
 equivalent of deleting the folder and cloning again, without losing
 remote-tracking refs or local tool setup. It throws away local changes, so it is
@@ -13,24 +15,52 @@ gated by checks and the owner's yes.
 1. **Run only on the owner's own words** asking for a destructive reset. A plain
    "get the latest" is `pull-latest`.
 2. **Refuse when work is at risk:** more than one remote and no clear source;
-   a dirty working tree; any stash; or a shared primary checkout where another
-   worktree has uncommitted changes or uses a branch in the plan. Report what
-   blocks it and stop.
+   uncommitted changes here or in another worktree; any stash; a branch in the
+   plan that another worktree has checked out; or any other worktree at all,
+   until the owner confirms no other session is working in this repository.
+   Report what blocks it and stop.
 3. **Fetch** with `git fetch --all --prune`, then find the default branch from
    the remote (never assume `main`).
 4. **Show the plan:** branches to hard-reset (with their target commits),
    branches to delete because their remote branch is gone, and local-only
-   branches that will be kept. Wait for a yes.
+   branches that will be kept. Include the line about the shared checkout
+   (Gotchas). Wait for a yes.
 5. **Do the plan:** switch to the default branch, reset and delete as planned,
    then run the lockfile's installer. Ask when there are several lockfiles.
 6. **Report** the default branch and its new head commit, the branches reset,
    deleted, and kept, and whether the install ran and changed anything. End
    with the one question for the owner or the exact words that continue.
 
-Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
-
 The owner chose "stop on dirty state" over automatic stashing: hidden stashes
 get forgotten, and a stop forces a real decision.
+
+## Gotchas
+
+- This throws away local work. Run it only on the owner's own words asking
+  for it, and only after he says yes to the plan in step 4, even when he said
+  "just do it".
+- The project rule `.claude/rules/shared-repository-work.md` says: "In the
+  shared primary checkout, never switch branches, reset, rebase, or stash."
+  This skill is the one exception, and only when both hold: the owner asked
+  for the reset in his own words, and `git worktree list` shows no other
+  worktree, or the owner confirms that no other session is working in this
+  repository. Put this line in the step 4 plan, word for word: "This switches
+  branches and resets in the shared checkout. No other worktree exists (or:
+  you confirmed no other session is working here)."
+- `.work-items/` and `.memory/` are Git-ignored, so the reset leaves them as
+  they are. Never run `git clean` with `-x` or `-X`: it deletes them, and the
+  hooks refuse it in the main checkout.
+- Codex keeps `.git/` read-only and turns the network off. `git fetch`,
+  `git checkout`, `git reset --hard`, `git branch -f`, and `git branch -D`
+  each run alone, with `sandbox_permissions` set to `require_escalated` and a
+  one-line reason. The lockfile install (`npm install` and the others in step
+  5) needs the network too: run it the same way. Refused without asking: show
+  the owner the exact commands and wait (`references/git-rules.md`, "Git
+  writes in Codex").
+- No remote (`git remote` prints nothing): there is nothing to reset to. Say
+  so and stop, with no fetch.
+- A local branch with no upstream is almost always unpushed work. It is kept
+  unless the owner says yes for that branch.
 
 ## Step 2 in detail: the preflight
 
@@ -65,6 +95,10 @@ git worktree list --porcelain
   output, or any branch in the plan that another worktree has checked out,
   means another session's work: stop and report it. Never reset, switch, or
   delete a branch another session is using.
+- Other worktrees exist and all are clean: a clean worktree can still belong
+  to a session that is working right now. Name each worktree and its branch,
+  and ask the owner whether any other session is working in this repository.
+  Go on only after he confirms none is.
 
 ## Step 3 in detail: fetch and find the default branch
 
@@ -148,3 +182,9 @@ one can rewrite the wrong lockfile or install a different set of packages.
 - Assume `main` is the default branch.
 - Guess between several lockfiles.
 - Push anything.
+
+## References
+
+| File | Open it when |
+| --- | --- |
+| `references/git-rules.md` | Before a Git write in Codex, or to check the no-remote case |

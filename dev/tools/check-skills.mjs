@@ -16,10 +16,10 @@
 //   - no syntax Codex leaves as literal text: `when_to_use`, !`command`,
 //     ```! blocks, $ARGUMENTS, $0-$9, ${CLAUDE_*};
 //   - the numbered steps end within the first 40 lines;
-//   - the voice line from plugins/work/references/conventions.md is present
+//   - the voice line from plugins/work/shared/recording-owner-answers.md is present
 //     (required in the work, memory, and toolkit plugins; a warning elsewhere);
 //   - work-plugin skills that brief agents carry the Codex agent fallback line
-//     from plugins/work/references/helpers.md;
+//     from plugins/work/shared/helpers.md;
 //   - every `toolkit ...` command stands on its own line. A code span that
 //     holds only a command's name (for example `toolkit decision add`) for a
 //     command that needs arguments is a mention in a sentence, not a command
@@ -37,12 +37,32 @@
 // For every agent file in plugins/*/agents/: name equals the file name,
 // `model: opus`, and the tools match dev/SKILL-INDEX.md section 4.
 //
+// For every skill folder (plugin skills and the scaffold's project skills),
+// the file rules from dev/research/skill-writing-guide.md Part 5:
+//   - links: every file a SKILL.md or a reference names (a Markdown link
+//     outside code, or a path that starts with references/, assets/, or
+//     scripts/) exists in the skill folder, and no link or path leaves the
+//     skill folder with ../ (R1, R4);
+//   - one level deep: SKILL.md itself names every file in references/,
+//     assets/, and scripts/. A file that only another reference names is two
+//     levels deep; a file nothing names is never opened (R1, R6);
+//   - contents: a reference over 100 lines (not counting the generated-file
+//     header line) has a "## Contents" heading as its first section (R3);
+//   - generated copies: every copy listed in dev/tools/shared-references/
+//     exists and equals its source, and no unlisted copy is left. This calls
+//     syncSkillReferences() from dev/tools/sync-skill-references.mjs, so both
+//     tools apply the same rules (B12). A finding on a generated copy names
+//     the source to edit.
+// Toolkit commands in a generated copy are checked once, in its source under
+// plugins/*/shared/ or plugins/*/agents/; the copy equals the source.
+//
 // Exit code 0 when there are no failures, 1 when there is at least one.
 // Node 20+, no dependencies.
 
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { syncSkillReferences, headerSource } from './sync-skill-references.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const ARGS = new Set(process.argv.slice(2));
@@ -56,6 +76,11 @@ const ALLOWED_AGENT_KEYS = new Set(['name', 'description', 'tools', 'model', 'is
 const GLOBAL_FLAGS = new Set(['--json']);
 const MAX_DESCRIPTION = 300;
 const STEPS_LINE_LIMIT = 40;
+const CONTENTS_LINE_LIMIT = 100;
+// Skill subfolders whose files SKILL.md must name directly. agents/ is left
+// out: agents/openai.yaml is Codex's settings file for the skill, not a
+// file the agent reads.
+const LINKED_SUBFOLDERS = ['references', 'assets', 'scripts'];
 const KNOWN_TOOLS = ['Read', 'Glob', 'Grep', 'Edit', 'MultiEdit', 'Write', 'Bash', 'WebSearch', 'WebFetch'];
 const AGENT_NAMES_FOR_FALLBACK = [
   'requirements-analyst', 'researcher', 'design-architect', 'design-critic', 'builder', 'acceptance-checker',
@@ -69,8 +94,8 @@ const SALESFORCE_OVERLAY = {
 };
 const EXCEPTIONS = {
   'sf-architect-solutioning': {
-    reason: 'GOAL.md: body ported byte for byte; only the description was rewritten, which Mike approved on 2026-09-27, so the description rules apply in full',
-    downgrade: new Set(['steps', 'voice', 'own-line']),
+    reason: 'GOAL.md: body and references ported byte for byte; only the description was rewritten, which Mike approved on 2026-09-27, so the description rules apply in full',
+    downgrade: new Set(['steps', 'voice', 'own-line', 'contents']),
   },
   'sf-deploy-check': SALESFORCE_OVERLAY,
   'sf-component-tracker': SALESFORCE_OVERLAY,
@@ -549,6 +574,123 @@ function parseSkillIndex(indexText) {
   return { skills, agents };
 }
 
+// ------------------------------------------------- skill folder file rules
+
+/** Number of lines, counted as `wc -l` would for a file that ends with a newline. */
+function lineCount(text) {
+  if (!text) return 0;
+  const n = text.split('\n').length;
+  return text.endsWith('\n') ? n - 1 : n;
+}
+
+/** Line number (1-based) of the first line after a YAML frontmatter block; 1 when there is none. */
+function bodyStart(lines) {
+  if (lines[0] !== '---') return 1;
+  const close = lines.indexOf('---', 1);
+  return close > 0 ? close + 2 : 1;
+}
+
+const PATH_PREFIX = /^(?:\.\/)?(?:\.\.\/|references\/|assets\/|scripts\/)/;
+const PROSE_PATH = /(?<![\w./<{-])(?:references|assets|scripts)\/[A-Za-z0-9_./-]*[A-Za-z0-9_-]\.[A-Za-z0-9]+/g;
+
+/** A path is a placeholder or an outside address, not a file to find. */
+function skipPath(p) {
+  return !p || /[<>{}*$]/.test(p) || /^[a-z][a-z0-9+.-]*:/i.test(p) || p.startsWith('#') || p.startsWith('/') || p.startsWith('~');
+}
+
+/**
+ * The file paths a Markdown file names: Markdown link targets outside code,
+ * code spans that hold a path starting with references/, assets/, scripts/,
+ * or ../, and the same paths written in prose. Fenced code blocks are
+ * skipped: they hold commands and examples, not links. Each item is
+ * { path, line }.
+ */
+function namedPaths(text) {
+  const out = [];
+  const lines = text.split('\n');
+  let fence = null;
+  for (let i = bodyStart(lines) - 1; i < lines.length; i += 1) {
+    const raw = lines[i];
+    const t = raw.trim();
+    const fm = t.match(/^(`{3,}|~{3,})/);
+    if (fm) {
+      if (!fence) fence = fm[1][0];
+      else if (t[0] === fence && /^(`{3,}|~{3,})\s*$/.test(t)) fence = null;
+      continue;
+    }
+    if (fence) continue;
+    const spans = [];
+    const prose = raw.replace(/`([^`]+)`/g, (m, s) => {
+      spans.push(s.trim());
+      return ' '.repeat(m.length);
+    });
+    for (const m of prose.matchAll(/\]\(\s*<?([^)\s>]+)>?(?:\s+"[^"]*")?\s*\)/g)) {
+      const p = m[1].replace(/[#?].*$/, '');
+      if (!skipPath(m[1]) && p) out.push({ path: p, line: i + 1 });
+    }
+    for (const s of spans) {
+      const first = s.split(/\s+/)[0].replace(/[,;:.)]+$/, '');
+      if (PATH_PREFIX.test(first) && !skipPath(first)) out.push({ path: first.replace(/[#?].*$/, ''), line: i + 1 });
+    }
+    for (const m of prose.matchAll(PROSE_PATH)) {
+      if (!skipPath(m[0])) out.push({ path: m[0], line: i + 1 });
+    }
+  }
+  return out;
+}
+
+/** Every file under a skill's references/, assets/, and scripts/ folders, as skill-relative paths. */
+function skillFolderFiles(skillDir) {
+  const out = [];
+  for (const sub of LINKED_SUBFOLDERS) {
+    const dir = path.join(skillDir, sub);
+    for (const f of walk(dir, (p) => !path.basename(p).startsWith('.'))) {
+      out.push(path.relative(skillDir, f).split(path.sep).join('/'));
+    }
+  }
+  return out.sort();
+}
+
+/**
+ * Resolve a named path. The Agent Skills specification resolves paths from
+ * the skill folder; a Markdown link in a reference may also be relative to
+ * that reference. Returns { inside, exists, rel } with rel relative to the
+ * skill folder.
+ */
+function resolveNamed(skillDir, fromFile, p) {
+  const tries = [path.resolve(skillDir, p)];
+  const fromDir = path.dirname(fromFile);
+  if (fromDir !== skillDir) tries.push(path.resolve(fromDir, p));
+  let first = null;
+  for (const full of tries) {
+    const r = path.relative(skillDir, full);
+    const inside = r !== '' && !r.startsWith('..') && !path.isAbsolute(r);
+    const hit = { inside, exists: fs.existsSync(full), rel: r.split(path.sep).join('/') };
+    if (!first) first = hit;
+    if (hit.inside && hit.exists) return hit;
+  }
+  return first;
+}
+
+/** True when the first section heading after the title is a contents list. */
+function contentsFirst(text) {
+  const lines = text.split('\n');
+  let fence = null;
+  for (let i = bodyStart(lines) - 1; i < lines.length; i += 1) {
+    const t = lines[i].trim();
+    const fm = t.match(/^(`{3,}|~{3,})/);
+    if (fm) {
+      if (!fence) fence = fm[1][0];
+      else if (t[0] === fence && /^(`{3,}|~{3,})\s*$/.test(t)) fence = null;
+      continue;
+    }
+    if (fence) continue;
+    const h = t.match(/^(#{2,6})\s+(.+?)\s*#*$/);
+    if (h) return /^(?:table of )?contents$/i.test(h[2].replace(/[*_`]/g, '').trim());
+  }
+  return false;
+}
+
 // ------------------------------------------------------------- the checks
 
 function lastStepLine(text) {
@@ -593,15 +735,22 @@ async function main() {
   const groups = new Set([...grammar.commands, ...cliGrammar.commands].map((c) => c.path[0]));
   const index = parseSkillIndex(indexText);
 
-  const conventions = exists('plugins/work/references/conventions.md') ? read('plugins/work/references/conventions.md') : '';
-  const helpers = exists('plugins/work/references/helpers.md') ? read('plugins/work/references/helpers.md') : '';
+  // The quoted lines come from the work plugin's shared sources; the older
+  // plugins/work/references/ files are read only while they still exist.
+  const VOICE_SOURCE = ['plugins/work/shared/recording-owner-answers.md', 'plugins/work/references/conventions.md'].find(exists) || 'plugins/work/shared/recording-owner-answers.md';
+  const FALLBACK_SOURCE = ['plugins/work/shared/helpers.md', 'plugins/work/references/helpers.md'].find(exists) || 'plugins/work/shared/helpers.md';
+  const conventions = exists(VOICE_SOURCE) ? read(VOICE_SOURCE) : '';
+  const helpers = exists(FALLBACK_SOURCE) ? read(FALLBACK_SOURCE) : '';
   const voiceLine = (conventions.match(/^> (Voice: .+)$/m) || [])[1] || null;
   const fallbackFull = (helpers.match(/^> (Codex: this plugin's agents .+)$/m) || [])[1] || null;
   const fallbackPrefix = fallbackFull ? fallbackFull.split('. ').slice(0, 2).join('. ') : null;
 
-  const report = { files: [], failures: 0, warnings: 0, notes: 0, commandsChecked: 0, sectionFiveGaps: 0 };
+  const report = { files: [], failures: 0, warnings: 0, notes: 0, commandsChecked: 0, sectionFiveGaps: 0, skillFolderFiles: 0, copiesChecked: 0 };
+  const results = new Map();
   const fileResult = (file) => {
+    if (results.has(file)) return results.get(file);
     const r = { file, fail: [], warn: [], note: [] };
+    results.set(file, r);
     report.files.push(r);
     return r;
   };
@@ -693,8 +842,8 @@ async function main() {
     // Voice line.
     if (voiceLine) {
       if (!text.includes(voiceLine)) {
-        if (REQUIRED_VOICE_PLUGINS.has(s.plugin) && !s.scaffold) flag('voice', 'the voice line from plugins/work/references/conventions.md is missing or changed');
-        else if (!(exception && exception.downgrade.has('voice'))) r.warn.push('the voice line from plugins/work/references/conventions.md is not present');
+        if (REQUIRED_VOICE_PLUGINS.has(s.plugin) && !s.scaffold) flag('voice', `the voice line from ${VOICE_SOURCE} is missing or changed`);
+        else if (!(exception && exception.downgrade.has('voice'))) r.warn.push(`the voice line from ${VOICE_SOURCE} is not present`);
       } else {
         const lineNo = text.slice(0, text.indexOf(voiceLine)).split('\n').length;
         if (lineNo > STEPS_LINE_LIMIT) r.warn.push(`the voice line is on line ${lineNo}, after the first ${STEPS_LINE_LIMIT} lines`);
@@ -704,7 +853,7 @@ async function main() {
     // Codex agent fallback for work-plugin skills that brief agents.
     if (fallbackPrefix && s.plugin === 'work' && !s.scaffold) {
       const usesAgents = AGENT_NAMES_FOR_FALLBACK.some((a) => text.includes(`\`${a}\``));
-      if (usesAgents && !text.includes(fallbackPrefix)) flag('fallback', 'briefs agents but lacks the Codex agent fallback line from plugins/work/references/helpers.md');
+      if (usesAgents && !text.includes(fallbackPrefix)) flag('fallback', `briefs agents but lacks the Codex agent fallback line from ${FALLBACK_SOURCE}`);
     }
 
     // Commands: own line, and valid.
@@ -721,6 +870,67 @@ async function main() {
     for (const p of plain) r.warn.push(`line ${p.line}: a toolkit command outside backticks is not checked: "${p.text}"`);
   }
 
+  // Skill folders: links, one level deep, contents lists (skill-writing-guide R1 to R4, R6).
+  for (const s of skillFiles) {
+    const skillDir = path.dirname(s.file);
+    const exception = EXCEPTIONS[s.folder];
+    const flagIn = (r, kind, msg) => {
+      if (exception && exception.downgrade.has(kind)) r.note.push(`${msg} [exception: ${exception.reason}]`);
+      else r.fail.push(msg);
+    };
+    const skillText = fs.readFileSync(s.file, 'utf8');
+    const files = skillFolderFiles(skillDir);
+    report.skillFolderFiles += files.length;
+    const namedBy = new Map(); // skill-relative path -> the skill-relative files that name it
+
+    for (const from of ['SKILL.md', ...files.filter((f) => f.endsWith('.md'))]) {
+      const fromAbs = path.join(skillDir, from);
+      const text = from === 'SKILL.md' ? skillText : fs.readFileSync(fromAbs, 'utf8');
+      const generatedFrom = from === 'SKILL.md' ? null : headerSource(text);
+      const r = fileResult(rel(fromAbs));
+      const fix = generatedFrom ? ` Edit the source ${generatedFrom}, then run node dev/tools/sync-skill-references.mjs.` : '';
+      const reported = new Set();
+      for (const n of namedPaths(text)) {
+        const hit = resolveNamed(skillDir, fromAbs, n.path);
+        if (!hit.inside) {
+          if (!reported.has(`out:${n.path}`)) flagIn(r, 'links', `line ${n.line}: "${n.path}" leaves the skill folder; a skill may read only files inside its own folder (R1, R4).${fix}`);
+          reported.add(`out:${n.path}`);
+          continue;
+        }
+        if (!hit.exists) {
+          if (!reported.has(`missing:${n.path}`)) flagIn(r, 'links', `line ${n.line}: "${n.path}" does not exist in ${rel(skillDir)}.${fix}`);
+          reported.add(`missing:${n.path}`);
+          continue;
+        }
+        if (!namedBy.has(hit.rel)) namedBy.set(hit.rel, new Set());
+        namedBy.get(hit.rel).add(from);
+      }
+
+      // A reference over 100 lines starts with a contents list.
+      if (from.startsWith('references/') && from.endsWith('.md')) {
+        const lines = lineCount(text) - (generatedFrom ? 1 : 0);
+        if (lines > CONTENTS_LINE_LIMIT && !contentsFirst(text)) {
+          flagIn(r, 'contents', `${lines} lines and no "## Contents" list as its first section; a reference over ${CONTENTS_LINE_LIMIT} lines needs one (R3).${fix}`);
+        }
+      }
+    }
+
+    // One level deep: SKILL.md itself names every file.
+    for (const f of files) {
+      const by = namedBy.get(f);
+      if (by && by.has('SKILL.md')) continue;
+      const r = fileResult(rel(path.join(skillDir, f)));
+      const others = by ? [...by].sort() : [];
+      if (others.length) flagIn(r, 'depth', `more than one level deep: SKILL.md does not link it; only ${others.join(', ')} does. Link it from SKILL.md with when to open it (R1, R2).`);
+      else flagIn(r, 'depth', 'nothing links it: SKILL.md must link every file in references/, assets/, and scripts/, with when to open it (R1, R2, R6).');
+    }
+  }
+
+  // Generated copies: the same check as node dev/tools/sync-skill-references.mjs --check.
+  const sync = syncSkillReferences({ check: true });
+  report.copiesChecked = sync.copies.length;
+  for (const p of sync.problems) fileResult(p.file).fail.push(`${p.message} Run node dev/tools/sync-skill-references.mjs.`);
+
   // Index entries with no SKILL.md yet.
   const missing = [...index.skills.keys()].filter((n) => !seen.has(n));
   if (missing.length) {
@@ -728,16 +938,20 @@ async function main() {
     for (const n of missing) r.note.push(`"${n}" (${index.skills.get(n).plugin}) has no SKILL.md yet`);
   }
 
-  // Other Markdown in skill folders, plugin references, and agents: commands only.
+  // Other Markdown in skill folders and shared sources: commands only. A
+  // generated copy of a shared/ or agents/ source is checked in its source
+  // (the copy check above makes sure the two are equal).
   const extraMarkdown = [];
   for (const plugin of listDir(pluginsDir).filter((d) => d.isDirectory())) {
     const base = path.join(pluginsDir, plugin.name);
-    for (const sub of ['skills', 'references']) {
+    for (const sub of ['skills', 'shared', 'references']) {
       for (const f of walk(path.join(base, sub), (p) => p.endsWith('.md') && path.basename(p) !== 'SKILL.md')) extraMarkdown.push(f);
     }
   }
   for (const f of extraMarkdown) {
     const text = fs.readFileSync(f, 'utf8');
+    const copyOf = headerSource(text);
+    if (copyOf && /^plugins\/[^/]+\/(?:shared|agents)\//.test(copyOf)) continue;
     const { commands, oddTicks, plain } = extractCommands(text, 0, groups);
     const r = fileResult(rel(f));
     for (const c of commands) {
@@ -817,7 +1031,7 @@ async function main() {
     report.warnings += cliGrammar.problems.length;
   }
   const gaps = report.sectionFiveGaps ? ` (${report.sectionFiveGaps} of them are commands or flags the CLI has and ARCHITECTURE.md section 5 does not list)` : '';
-  const summary = `check-skills: ${skillCount} SKILL.md files, ${agentCount} agent files, ${report.commandsChecked} toolkit commands checked against ${grammar.commands.length} commands in ARCHITECTURE.md section 5 and ${cliGrammar.commands.length} in the CLI's own help; ${report.failures} failures${gaps}, ${report.warnings} warnings, ${report.notes} notes`;
+  const summary = `check-skills: ${skillCount} SKILL.md files, ${report.skillFolderFiles} files in their references/, assets/, and scripts/ folders (${report.copiesChecked} of them generated copies), ${agentCount} agent files, ${report.commandsChecked} toolkit commands checked against ${grammar.commands.length} commands in ARCHITECTURE.md section 5 and ${cliGrammar.commands.length} in the CLI's own help; ${report.failures} failures${gaps}, ${report.warnings} warnings, ${report.notes} notes`;
 
   if (JSON_OUT) {
     process.stdout.write(`${JSON.stringify({ ...report, summary }, null, 2)}\n`);

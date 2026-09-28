@@ -831,7 +831,7 @@ export function planLines(plan, { applied = false } = {}) {
   if (groups.span.length) lines.push(applied ? 'Rebuilt the rules list in AGENTS.md.' : 'Would rebuild the rules list in AGENTS.md.');
   list('Kept the project\'s own file (the toolkit never replaces it):', groups.keep, (t) => `${t.target}${t.notes.length ? ` (${t.notes.join('; ')})` : ''}`);
   list(applied ? 'Has the Toolkit V2 sections, so the toolkit now tracks it:' : 'Has the Toolkit V2 sections, so sync would start tracking it:', groups.adopt, (t) => `${t.target}: ${t.notes.join('; ')}`);
-  list('Changed by the project, left alone:', groups.changed, (t) => `${t.target}${t.preexisting ? '. The project had its own file before the toolkit, so the toolkit\'s version was never installed' : ''}${t.would.length ? `. The toolkit would: ${t.would.join('; ')}` : t.preexisting ? '.' : '. Nothing new from the toolkit.'}`);
+  list('Changed by the project, left alone:', groups.changed, (t) => `${t.target}${t.preexisting ? '. The project had its own file before the toolkit, so the toolkit\'s version was never installed' : ''}${t.would.length ? `. The toolkit would: ${t.would.join('; ')}` : t.preexisting ? '.' : '. The toolkit\'s own version has not changed since it was installed, so the project\'s differences from it stay as they are.'}`);
   list('AGENTS.md has no Toolkit V2 sections:', groups.propose, () => `kept the project's AGENTS.md; the Toolkit V2 version is in ${PROPOSAL_PATH}. The project-setup skill merges it after the owner's yes.`);
   list('Could not merge:', groups.conflict, (t) => t.conflicts.join(' '));
   list('Left over from an earlier setup (not deleted; the owner decides):', groups.leftover);

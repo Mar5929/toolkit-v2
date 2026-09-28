@@ -38,6 +38,6 @@ test('workSummary fails open for trackers the toolkit does not drive', async () 
   const dir = makeProject({ tracker: 'github' });
   const s = await workSummary(requireProject(dir), { cwd: dir });
   assert.equal(s.unsupported, true);
-  assert.match(s.message, /references\/trackers\/github\.md/);
+  assert.match(s.message, /shared\/tracker-github\.md/);
   assert.deepEqual(reportLines(null), []);
 });

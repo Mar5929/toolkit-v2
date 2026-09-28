@@ -1,6 +1,6 @@
 # <System area>
 
-<!-- Fill-in guide: rename this file for the real system area. Replace the heading and every angle-bracket prompt in its paragraph, table cell, or list item with observed facts. Add a Components row per real component. Keep source and last-verified evidence beside claims; mark uncertainty in Known gaps. Remove the example row and this guide once populated. -->
+<!-- Fill-in guide: copy this file and rename the copy for the real system area. Replace the heading and every angle-bracket prompt in its paragraph, table cell, or list item with observed facts. Add a Components row per real component. Keep source and last-verified evidence beside claims; mark uncertainty in Known gaps. Remove the example row and this guide once populated. -->
 
 ## What this area does today
 
