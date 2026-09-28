@@ -1,0 +1,16 @@
+f239370c3d2528183c04252e588a700aa70a3afc  .memory/.toolkit-meta.json
+126eb52f13643e6fc1a05520db6c23a5b712db47  .memory/AGENTS.md
+a498e267511f36761953fa45b8df234ca87792e5  .memory/CURRENT_FOCUS.md
+2abfe22654dc5f35c551081ac0623360a066be81  .memory/MEMORY.md
+47d4bf9a5c3857c2d7e6b81cf352613325b1cdc2  .memory/memory-criteria.md
+47f348a091a639a123c529a71bcaec725ab3b810  .memory/project_mike_rihm_friends_settle_split_bills_venmo_takes.md
+51b9898af057efda206a240b11c9580146fc1bbc  .memory/project_topic_template.md
+a97fce23eae6708933ea198494ecb55e0fc99684  .memory/terminology-glossary.md
+f6c1f02ec33a9c5866a58722032c0adf3b89ae5d  .memory/user_coding_preferences.md
+d6e00397931e94708b9f03603de53597fafa87a3  .work-items/.toolkit-state.json
+75036db1b064626d4ecc3dd9b39c718a39c6dcf3  .work-items/DASHBOARD.md
+658650620d51fe215f3b17df666c04379f1d8331  .work-items/cli/WI-001-tip-command/DESIGN.md
+fdb9e271836621701a5d1affc224f3d4220741a1  .work-items/cli/WI-001-tip-command/WORK-ITEM.md
+08125b9e9e689f8550b63829acdc53276f483170  .work-items/cli/WI-001-tip-command/split-option/WORK-ITEM.md
+9813e9dfcbfc3204c01b93c077f4b9277bcd9a14  .work-items/work-item-template/DESIGN.md
+5f8f505d377cc6c77c15b03aee1ccea8b96aa9f7  .work-items/work-item-template/WORK-ITEM.md

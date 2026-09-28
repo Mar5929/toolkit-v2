@@ -1,0 +1,36 @@
+$ toolkit memory find environment variable README --all
+No memory record is about "environment variable README".
+Hindsight recall ranked these closest, but they score low and share few of its words, so none is known to be about it:
+- user_document_cli_flags_in_readme: Explain every command-line flag in the README
+- feedback_small_changes_mike_prefers_working_directly_agent: For small changes, Mike prefers working directly with the agent without helper agents
+Do not answer from these. Read the first one with toolkit memory get <key>, and answer only if its text says it; otherwise say it is not in memory.
+exit=0
+$ toolkit memory list --status all
+- user_document_cli_flags_in_readme: Explain every command-line flag in the README
+- feedback_small_changes_mike_prefers_working_directly_agent: For small changes, Mike prefers working directly with the agent without helper agents
+exit=0
+$ toolkit memory get user_document_env_vars_in_readme
+Error: There is no memory record with the key user_document_env_vars_in_readme.
+Fix: Run toolkit memory list --status all to see the keys.
+exit=1
+$ toolkit brief | grep -i -e env -e "Memory records" -A4
+Project memory (hindsight): 2 records, from the local copy. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_document_cli_flags_in_readme: Explain every command-line flag in the README
+- feedback_small_changes_mike_prefers_working_directly_agent: For small changes, Mike prefers working directly with the agent without helper agents
+$ grep -c env_vars .git/toolkit-v2/memory-cache.json
+0
+$ GET /v1/default/banks/greet-cli-final-h/documents
+total 3
+ - user_document_cli_flags_in_readme ['type:user', 'status:current', 'kind:record']
+ - focus ['kind:focus']
+ - feedback_small_changes_mike_prefers_working_directly_agent ['type:feedback', 'status:current', 'kind:record']
+$ GET documents/user_document_env_vars_in_readme
+404
+$ POST recall "environment variable README"
+results 3
+ - user_document_cli_flags_in_readme --- name: user_document_cli_flags_in_readme description: Explain every command-line flag in the READ
+ - focus # Current focus  Last updated: 2026-09-28, work-finish, agent  ## Now  None.  ## Waiting on the owne
+ - feedback_small_changes_mike_prefers_working_directly_agent --- name: feedback_small_changes_mike_prefers_working_directly_agent description: For small changes,
+mentions env: 0

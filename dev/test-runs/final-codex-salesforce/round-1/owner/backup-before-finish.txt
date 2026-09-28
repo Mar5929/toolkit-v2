@@ -1,0 +1,6 @@
+## before s25 (work-finish)
+total 0
+drwxr-xr-x  3 michaelrihm  wheel   96 Sep 28 15:50 .
+drwxr-xr-x  7 michaelrihm  wheel  224 Sep 28 15:59 ..
+drwxr-xr-x  5 michaelrihm  wheel  160 Sep 28 15:54 acme-crm-2026-09-28
+  "exportedAt": "2026-09-28T19:54:01.764Z",

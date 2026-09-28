@@ -1,0 +1,532 @@
+PROMPT: Yes, that's the goal. The values are Gold, Silver, and Bronze, in that order. Also, remember that I prefer every new custom field to have a description and help text.
+THREAD: 01a0e999-532f-7ea3-aefc-bb5761cb7876
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The backlog has 1 item; toolkit work next suggests which to take up.
+
+Waiting on the owner:
+- WI-001 Add a Tier picklist field to Account: Q-01: Is the goal for the sales team to assign each Account a Tier and use that Tier to rank accounts? Affects Agreed goal, R-01. (work-decide)
+
+Items: 1 in the backlog.
+
+Current focus:
+Last updated: 2026-09-28, chat, agent
+## Now
+- WI-001 Add a Tier picklist field to Account
+## Waiting on the owner
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, and trust the Toolkit V2 hooks and two Salesforce guards. Setup step; drop it when doctor stops reporting it.
+## Untracked to-dos
+None.
+## Next session starts with
+- Continue WI-001 from its Resume here: confirm the goal, then define the Tier field requirements.
+
+Project memory (builtin): 0 records. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off. Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+- Codex ran this Toolkit V2 hook, but ~/.codex/config.toml has no trust entry for the Toolkit V2 hooks. Codex runs untrusted hooks only when it is started with --dangerously-bypass-hook-trust; a normal Codex session skips them. Fix: The owner opens /hooks in Codex and trusts the Toolkit V2 hooks; toolkit doctor checks it.
+- The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them. Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.
+
+Always-on rules. Claude Code loads them by itself; in Codex, each one is read at session start:
+- .claude/rules/check-deployment-contents.md: Check What a Deployment Includes
+- .claude/rules/component-tracker.md: Component Tracker
+- .claude/rules/confirm-sa
+
+[HOOK CONTEXT] The owner stated something to keep; memory-save records it, or work-on if it is a task.
+
+[AGENT] I’ll record the goal and Tier values in WI-001, then save your custom field preference for future work. I’m using the work-decide, work-requirements, and memory-save procedures.
+
+[CALL exec] pwd && cat SOUL.md PROJECT.md PROJECT-ROADMAP.md && for f in .claude/rules/{check-deployment-contents,component-tracker,confirm-salesforce-changes,humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,production-data-changes,project-file-locations,salesforce-org-safety,session-handoff,shared-repository-work,work-item-folders}.md; do cat "$f"; done && cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-requirements/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.6/skills/memory-save/SKILL.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1
+cat: SOUL.md: No such file or directory
+# Acme CRM
+
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->
+
+## Purpose and intended outcome
+
+- Purpose: Support the Acme sales team's account ranking and access to account information in Salesforce.
+- Intended outcome: The Acme sales team can rank their accounts and see the information they need on each account in Salesforce.
+
+## Scope and boundaries
+
+- In scope: Account ranking and account information for the Acme sales team in Salesforce.
+- Outside scope: `<Important exclusions or adjacent owners.>`
+- Constraints: `<Approved security, delivery, or operating constraints with sources.>`
+
+## Systems and environments
+
+| System or org | Purpose | Environment | Source of truth | Access notes |
+| --- | --- | --- | --- | --- |
+| Acme CRM (`tkv2-sbx`) | Practice Salesforce org for testing | Sandbox | `sf org list` and `sf org display -o tkv2-sbx --json`, 2026-09-28 | Agents may read it; Codex hands sandbox deploy and data-change commands to the owner. |
+| Acme CRM (`tkv2-prod`) | Practice Salesforce production org | Production | `sf org list`, 2026-09-28 | Agents may read it; the owner runs any production change. |
+
+## People and ownership
+
+| Role | Person or team | Responsibility | Source / last confirmed |
+| --- | --- | --- | --- |
+| Project owner | Mike Rihm | Makes project decisions | Setup answer and Git identity, 2026-09-28 |
+
+## Work and project records
+
+- Work tracker: Local `.work-items/` folders, Git-ignored.
+- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)
+- Project decisions: [DECISIONS.md](DECISIONS.md)
+- Functional requirements: [requirements/](requirements/)
+- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`
+- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`
+- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)
+- Memory backup or sync: `/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-salesforce`; Toolkit V2 backs up local work items and memory there.
+
+## Resources and project paths
+
+- Salesforce source: `force-app/` as configured in `sfdx-project.json`.
+- Project-wide deployment manifest: `delivery/deployment/full-project-deployment-template/package.xml` after the API version and members are verified. Keep it as the full project com
+
+[CALL exec] for f in .claude/rules/{check-deployment-contents,component-tracker,confirm-salesforce-changes,humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,production-data-changes,project-file-locations,salesforce-org-safety,session-handoff,shared-repository-work,work-item-folders}.md; do cat "$f"; done; cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-requirements/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.6/skills/memory-save/SKILL.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+Warning: truncated output (original token count: 12017)
+Total output lines: 545
+
+# Check What a Deployment Includes
+
+A deploy ships the whole current source of every component it names, not only your edit.
+
+- Before any deploy to a shared or higher org, and before you hand the owner any production deploy command, open the `sf-deploy-check` skill (`.claude/skills/sf-deploy-check/SKILL.md`) and run its check.
+- Verify a suspected unrelated change against the target org read-only before you report it. A tracker is a hint, not proof.
+- If a confirmed unrelated change remains, stop. Do not deploy and do not hand over the command. Tell the owner which component and what would ship.
+# Component Tracker
+
+- When you author, modify, rename, or delete metadata under `force-app/`, open the `sf-component-tracker` skill (`.claude/skills/sf-component-tracker/SKILL.md`). In the same response, update `delivery/deployment/component-tracker.csv`, `delivery/deployment/full-project-deployment-template/package.xml`, and the work item's deployment folder.
+- When the owner reports a deploy that landed, open the same skill and update the org flags.
+- Never change an org flag for a failed deploy.
+# Confirm Salesforce Changes
+
+Confirm intent and scope with the owner before you act on:
+- Object model: objects, fields, relationships, validation rules, record types.
+- Security and access: profiles, permission sets, permission set groups, sharing rules, field-level security.
+- Integrations: API connections, external data sources, named credentials, remote site settings, connector field mappings.
+- Data-source priority: which system wins for a field or object. Record the decision where the project keeps decisions.
+- Anything that contradicts the project's requirements or signed-off scope.
+
+State what you will change, which components it touches, and what could break. Then wait for the owner.
+# Humanize Anything Sent to Another Person
+
+Any text that will leave the project and be read by someone other than the owner
+is run through the `humanizer` skill before the owner sees the final version.
+Use the `unslop` skill when `humanizer` is not installed. That covers emails,
+chat messages, support case text and comments, GitHub issues, pull request
+descriptions, client documents, and any file made to hand to someone else.
+
+Keep every fact, name, id, number, and date exactly as it was. Write it in the
+owner's voice, first person, when it goes out under their name.
+
+It does not apply to chat replies to the owner, work items, project knowledge,
+code, or commit messages.
+# Keep the Active Work Item Accurate
+
+The work tracker is the source of truth for current work.
+
+- Before substantial work, use the `work-on` skill. Read the active item's requirements, state, next step, and blockers.
+- Save the owner's decisions, requirements, and corrections in the item or its linked document before moving on.
+- When the work needs the owner's decision, add
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/SKILL.md; cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-requirements/SKILL.md; cat .memory/memory-criteria.md .memory/AGENTS.md; cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.6/skills/memory-save/references/record-format.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+---
+name: work-decide
+description: 'Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers. Use when he asks "what do you need from me", answers a waiting decision ("go with option B"), or states a project-wide decision.'
+---
+
+# Work decide
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Walks the owner through what waits on him, one decision at a time, and records each answer where it belongs. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Build the queue. The command lists each decision once: requirements waiting for approval, proposed designs, results at stage 11, Open Questions rows the owner decides, and memory proposals. Its "Agent to-do" lines are not decisions. A delivery offer belongs to `work-delegate`: open it after his other decisions.
+   `toolkit work decisions`
+2. He gave an answer without being asked ("approved", "go with B"): match it to exactly one waiting decision; when two could match, ask which, naming both. A bare "yes", "ok", or "looks good" with no question asked is not an answer (`references/approvals.md`, section 1).
+3. Otherwise start with the count and one short line for every waiting decision, memory proposals included ("3 decisions wait on you: the WI-004 design, the WI-006 result, and a memory proposal about deploy days."). Then take them one at a time, the one blocking the most work first: what is decided, the choices, your recommendation and its main reason, and what happens after each answer. One decision per message, in the reply text.
+4. An approval: read the item, then run that gate's checklist in `references/approvals.md` (requirements: section 2; design: section 3; result: section 4).
+   `toolkit work show <id>`
+5. An Open Questions answer: save his words first, rewrite that row with the answer, the date, and Answered, then set `waiting_on` back (`references/recording-owner-answers.md`, sections 4 and 5).
+   `toolkit work history <id> --note 'Owner said: <quote>' --effect '<what the answer changes>'`
+   `toolkit work edit <id> --section 'Open Questions' --set-file <file>`
+   `toolkit work set <id> --waiting-on agent`
+6. A memory proposal: show its one line and your recommendation. Yes: approve it. No: reject it, and never propose the same fact again (`references/proposals.md`).
+   `toolkit memory approve <key> --by <owner>`
+   `toolkit memory reject <key>`
+7. A decision for the whole project: add the row inside the `publish-docs` save workspace, in the order in `references/decisions-log.md`.
+   `toolkit decision add --decision '<decision>' --why '<why>' --by <owner>`
+8. A "no" or a change: record it as the answer, move the item back (for example to refinement), and open the skill that redoes the work.
+ 
+
+[CALL exec] toolkit work show WI-001
+   toolkit work decisions
+   toolkit memory find 'custom field description help text'
+   git worktree list
+   git status --short --branch
+   git remote
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+{"i":0,"result":{"chunk_id":"78709a","wall_time_seconds":5e-7,"exit_code":0,"original_token_count":1835,"output":"WI-001: Add a Tier picklist field to Account\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1/.work-items/WI-001-add-a-tier-picklist-field-to-account/WORK-ITEM.md\nStage: 02 Refinement (Backlog) | Waiting on: owner | Continue with: work-decide\nParent: none | Sub-items: none | Design: none\nWorktree branch for this item: claude/wi-001-add-a-tier-picklist-field-to (folder .claude/worktrees/wi-001-add-a-tier-picklist-field-to)\n\n---\nid: WI-001\ntitle: Add a Tier picklist field to Account\ntype: build\nstage: 02-refinement\nstatus: Backlog\nparent: none\nwaiting_on: \"owner\"\npriority: medium\ndelivery: not-offered\nrequirements_approved: \"no\"\ndesign: none\nresult_approved: \"no\"\nupdated: 2026-09-28\n---\n\n# WI-001: Add a Tier picklist field to Account\n\n<!-- Fill-in guide for a new local work item: create it with `toolkit work new`, which copies this folder, names the new folder, and sets the real ID in front matter and heading; keep the file name WORK-ITEM.md. Use stable phase, task, requirement, and question IDs for this item. In the front matter, keep one value from each list and change the fields with `toolkit work` commands; a blocked item has `waiting_on` set and its Blockers line filled, not a Blocked status. Replace every angle-bracket prompt with actual text in that same field, cell, or paragraph; do not leave the prompt in place. Keep the headings and field labels. Add or remove phase, task, question, and requirement examples to match the real work. Use the chosen tracker as the source of truth for status and links. Delete this guide after filling the item. -->\n\n## Overview\n\n**Goal:** Let the Acme sales team rank Accounts using a Tier field.\n\n**Current position:** Requirements interview started; the goal and field behavior await confirmation.\n\n**Next action:** Owner confirms the goal, then the agent asks for the Tier values and other field rules.\n\n**Blockers:** Owner answer to Q-01; requirements approval is required before build.\n\n**Related items:** None identified.\n\n## Roadmap\n\nA phase is complete when its tasks are complete and its exit result has been checked.\n\n<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading. Add one row per phase; set Status from actual progress, not from this example. List the phase's sub-item IDs under Sub-items, or write “None.” -->\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 — <Phase 1 name> | <What this phase establishes> | In Progress | <Evidence that P1 is complete> | <WI-ids or “None.”> |\n| P2 — <Phase 2 name> | <What this phase delivers> | Not Started | <Evidence that P2 is complete> | <WI-ids or “None.”> 
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/{recording-owner-answers,work-item-format,current-focus}.md; cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-requirements/references/{interview,requirement-format}.md; cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.6/skills/memory-save/references/current-focus.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+Warning: truncated output (original token count: 10732)
+Total output lines: 1026
+
+<!-- Generated file. Source: plugins/work/shared/recording-owner-answers.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Recording the owner's answers
+
+Where each thing the owner says is saved, how to ask him a question, how to
+end a reply, and what to say when a save fails.
+
+## Contents
+
+1. Voice
+2. Where each answer goes
+3. Save it before the next question
+4. History notes
+5. Waiting on the owner
+6. Asking the owner
+7. Ending every reply
+8. Reporting a failed save
+9. Owner edits win
+10. Stages in plain words
+11. Handing over to another skill
+
+## 1. Voice
+
+Every skill carries this line near its top:
+
+> Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+
+Helper agents do not receive the output style. Each agent file carries its
+own writing rules.
+
+## 2. Where each answer goes
+
+| Information | Home | What to record |
+| --- | --- | --- |
+| Requirement or correction | The item's `Active requirements` (the `R-xx` block) and `Acceptance` | The new meaning, and Status Refining until approved |
+| Design choice | The item's design (`toolkit work design`) | The approach, proposed or approved, and why |
+| Open question | The item's `Open Questions` table | Question, what it affects, Open, who must answer |
+| Answer or decision about this item | The question's row, the section it changes, and one history note | The answer, who gave it, the date, and whether it is an approval |
+| Decision for the whole project | `DECISIONS.md`, through `work-decide` | Decision, why, who decided, what it replaces |
+| Outstanding task | The item's `Tasks` section | Work, Deliverable, Done when, Depends on |
+| Context that is not a requirement | `Notes` > `Decisions and context` | Only what the next session needs |
+| Build idea kept for later | `Notes` > `Solution options and considerations` | The idea and the `R-xx` it relates to |
+| A lasting fact, preference, or lesson | Project memory, through `memory-save` | One record |
+
+A choice about how agents deliver a goal (the delivery offer) is recorded
+only by `work-delegate`.
+
+## 3. Save it before the next question
+
+- Save each settled answer in its home before moving to the next topic. An
+  unanswered question is also information: save it as an Open Questions row.
+- Open decisions never delay saving answers that are already settled.
+- Read the section back after saving. A command that exits `0` is not proof
+  by itself.
+- Check the item and memory before asking the owner something. Never ask
+  again what the record already answers.
+- When two sources disagree, keep the conflict open and ask. Never pick the
+  convenient answer.
+
+## 4. History notes
+
+Add one note when:
+
+- the stage, type, priority, `waiting_on`, blockers, or next action changes
+  for a rea
+
+[CALL exec] rg --files requirements system-guide tests | head -80
+   toolkit config get memory.approval
+   toolkit memory focus --json
+   toolkit memory find 'Tier Account ranking'
+   git log --oneline -10
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+{"i":0,"result":{"chunk_id":"feb18c","wall_time_seconds":0.00000275,"exit_code":0,"original_token_count":42,"output":"tests/TEST-PLAN-TEMPLATE.md\nsystem-guide/AREA-TEMPLATE.md\nrequirements/AGENTS.md\nrequirements/SYSTEM-DATA-MODEL.md\nrequirements/system-area-template/AREA-TEMPLATE.md\n"}}
+{"i":1,"result":{"chunk_id":"6ff850","wall_time_seconds":0.00000325,"exit_code":0,"original_token_count":3,"output":"onboarding\n"}}
+{"i":2,"result":{"chunk_id":"356698","wall_time_seconds":0.00000275,"exit_code":0,"original_token_count":195,"output":"{\n  \"ok\": true,\n  \"backend\": \"builtin\",\n  \"kind\": \"focus\",\n  \"text\": \"# Current focus\\n\\nLast updated: 2026-09-28, chat, agent\\n\\n## Now\\n\\n- WI-001 Add a Tier picklist field to Account\\n\\n## Waiting on the owner\\n\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, and trust the Toolkit V2 hooks and two Salesforce guards. Setup step; drop it when doctor stops reporting it.\\n\\n## Untracked to-dos\\n\\nNone.\\n\\n## Next session starts with\\n\\n- Continue WI-001 from its Resume here: confirm the goal, then define the Tier field requirements.\\n\",\n  \"version\": \"5d8e0129590a5f326a3d35bb1d2b1ecb5b0d2bfa8e8afb6b20a27ca70fd53594\"\n}\n"}}
+{"i":3,"result":{"chunk_id":"093536","wall_time_seconds":0.000001666,"exit_code":0,"original_token_count":12,"output":"No memory records match \"Tier Account ranking\".\n"}}
+{"i":4,"result":{"chunk_id":"9cb454","wall_time_seconds":0.0000045,"exit_code":0,"original_token_count":16,"output":"d89f330 Set up Toolkit V2 for Acme CRM\ncb7b2d6 Initial commit\n"}}
+
+[AGENT] WI-001 is still in requirements refinement. I’ve confirmed your answer resolves Q-01, and I’ll record Gold, Silver, Bronze in that order. The next field rule to settle is whether Tier is required when an Account is saved.
+
+[CALL exec] cat requirements/SYSTEM-DATA-MODEL.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+# System Data Model
+
+<!-- Fill-in guide: replace this comment with verified, accepted data model requirements for the whole system. Use the sections below for each shared entity or relationship; add one block per real item. Link the approving work item and date. Do not copy an unapproved technical design here. Delete this guide when the first accepted content is added. -->
+
+## Scope and sources
+
+<State which system and business areas this shared mo
+
+[CALL exec] toolkit work history WI-001 --note 'Owner said: "Yes, that’s the goal. The values are Gold, Silver, and Bronze, in that order. Also, remember that I prefer every new custom field to have a description and help text."' --effect 'Goal confirmed; Tier values and field text requirement enter refinement.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Added a Recent History row to WI-001.
+
+
+[CALL exec] toolkit work edit WI-001 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | Is the goal for the sales team to assign each Account a Tier and use that Tier to rank accounts? Answer: Yes, confirmed by the owner on 2026-09-28. | Agreed goal, R-01 | Answered | owner |'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Open Questions" in WI-001.
+
+
+[CALL exec] toolkit work edit WI-001 --section 'Agreed goal' --text 'The Acme sales team can assign each Account a Tier and use that Tier to rank accounts.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Agreed goal" in WI-001.
+
+
+[CALL exec] toolkit work edit WI-001 --section 'Active requirements' --text '#### R-01 — Assign and rank Account Tiers
+
+**Status:** Refining  
+**Applies to:** Accounts ranked by the Acme sales team.  
+**Required behavior:** The sales team can assign an Account a Tier of Gold, Silver, or Bronze. The Tier values are ordered Gold, Silver, Bronze for ranking.  
+**Boundaries and exceptions:** Whether every Account must have a Tier is not yet decided.  
+**Acceptance check:** On an Account, a user can choose Gold, Silver, or Bronze and see those values in that order; the assigned Tier can be used to rank Accounts.  
+**Decision record:** Owner confirmed the goal and values on 2026-09-28. Requirements approval is pending.  
+**Open questions:** Q-02.
+
+#### R-02 — Explain the Tier field
+
+**Status:** Refining  
+**Applies to:** The new custom Tier field on Account.  
+**Required behavior:** The field has a description and help text.  
+**Boundaries and exceptions:** Exact wording is not yet decided.  
+**Acceptance check:** The field has a description and help text.  
+**Decision record:** Owner stated the standing preference on 2026-09-28. Requirements approval is pending.  
+**Open questions:** None.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Active requirements" in WI-001.
+
+
+[CALL exec] toolkit work edit WI-001 --section 'Acceptance' --text 'This work item can be accepted when:
+
+1. The sales team can assign Gold, Silver, or Bronze to an Account and use Tier to rank Accounts (R-01).
+2. The Tier choices appear in Gold, Silver, Bronze order (R-01).
+3. The Tier field has a description and help text (R-02).
+4. The owner reviews the result.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Acceptance" in WI-001.
+
+
+[CALL exec] toolkit work edit WI-001 --section 'Open Questions' --append-row '| Q-02 | Must every Account have a Tier before it can be saved? | R-01 | Open | owner |'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Open Questions" in WI-001.
+
+
+[CALL exec] toolkit work edit WI-001 --section 'Overview' --text '**Goal:** Let the Acme sales team rank Accounts using a Tier field.
+
+**Current position:** The goal, Tier values, and field text requirement are recorded. Requirements are being refined.
+
+**Next action:** Owner answers Q-02 about whether Tier is required on every Account.
+
+**Blockers:** Owner answer to Q-02; requirements approval is required before build.
+
+**Related items:** None identified.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Overview" in WI-001.
+
+
+[CALL exec] toolkit work edit WI-001 --section 'Resume here' --text 'Ask Q-02: must every Account have a Tier before it can be saved? Recommend no, so existing Accounts remain valid and the team can assign Tiers as they review them. Then continue the requirements interview one question at a time. Do not build until the requirements are approved.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Resume here" in WI-001.
+
+
+[CALL exec] toolkit memory save --type user --name custom-field-description-help-text --description 'Every new custom field should have a description and help text' --body '# Custom field descriptions and help text
+
+**Remember:** The owner prefers every new custom field to have a description and help text.
+
+**Why:** Not stated by the owner.
+
+**How to apply:** Include both when planning, building, or reviewing a new custom field.
+
+**Evidence and limits:** Owner, in chat, 2026-09-28. Applies to new custom fields.
+
+**Related memories:** None.
+
+**Authoritative records:** WI-001 also requires both for its Tier field.' --source 'Owner, in chat, 2026-09-28' --approved-by 'Mike Rihm'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved to memory: user_custom_field_description_help_text (new record).
+Where: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1/.memory
+Version: c51fe408efb6
+Approved by: Mike Rihm
+
+
+[CALL exec] toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Add a Tier picklist field to Account
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, and trust the Toolkit V2 hooks and two Salesforce guards. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 from its Resume here: ask whether every Account must have a Tier before it can be saved.' --expect '5d8e0129590a5f326a3d35bb1d2bfa8e8afb6b20a27ca70fd53594'
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+Error: The current focus changed since it was read, so it was not saved.
+Fix: Read it again with toolkit memory get and redo the change.
+
+
+[CALL exec] toolkit memory focus --json
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{
+  "ok": true,
+  "backend": "builtin",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Add a Tier picklist field to Account\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, and trust the Toolkit V2 hooks and two Salesforce guards. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 from its Resume here: confirm the goal, then define the Tier field requirements.\n",
+  "version": "5d8e0129590a5f326a3d35bb1d2b1ecb5b0d2bfa8e8afb6b20a27ca70fd53594"
+}
+
+
+[CALL exec] toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Add a Tier picklist field to Account
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, and trust the Toolkit V2 hooks and two Salesforce guards. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 from its Resume here: ask whether every Account must have a Tier before it can be saved.' --expect '5d8e0129590a'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved the current focus (20 lines). Version: 415f4edae059
+
+
+[CALL exec] toolkit work validate WI-001
+   toolkit work show WI-001 --section 'Active requirements'
+   toolkit work show WI-001 --section 'Open Questions'
+   toolkit memory get user_custom_field_description_help_text
+   toolkit memory focus
+   toolkit doctor
+  -> Script completed
+Wall time 0.5 seconds
+Output:
+
+{"i":0,"result":{"chunk_id":"10ba6b","wall_time_seconds":0.000004041,"exit_code":0,"original_token_count":33,"output":"Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. 1 open question waits on the owner (toolkit work decisions lists it).\n"}}
+{"i":1,"result":{"chunk_id":"d48d3a","wall_time_seconds":0.000003625,"exit_code":0,"original_token_count":289,"output":"### Active requirements\n\n#### R-01 — Assign and rank Account Tiers\n\n**Status:** Refining  \n**Applies to:** Accounts ranked by the Acme sales team.  \n**Required behavior:** The sales team can assign an Account a Tier of Gold, Silver, or Bronze. The Tier values are ordered Gold, Silver, Bronze for ranking.  \n**Boundaries and exceptions:** Whether every Account must have a Tier is not yet decided.  \n**Acceptance check:** On an Account, a user can choose Gold, Silver, or Bronze and see those values in that order; the assigned Tier can be used to rank Accounts.  \n**Decision record:** Owner confirmed the goal and values on 2026-09-28. Requirements approval is pending.  \n**Open questions:** Q-02.\n\n#### R-02 — Explain the Tier field\n\n**Status:** Refining  \n**Applies to:** The new custom Tier field on Account.  \n**Required behavior:** The field has a description and help text.  \n**Boundaries and exceptions:** Exact wording is not yet decided.  \n**Acceptance check:** The field has a description and help text.  \n**Decision record:** Owner stated the standing preference on 2026-09-28. Requirements approval is pending.  \n**Open questions:** None.\n"}}
+{"i":2,"result":{"chunk_id":"b6e97a","wall_time_seconds":0.000002667,"exit_code":0,"original_token_count":97,"output":"## Open Questions\n\n| ID | Question | Affects | Status | Decision needed from |\n|---|---|---|---|---|\n| Q-01 | Is the goal for the sales team to assign each Account a Tier and use that Tier to rank accounts? Answer: Yes, confirmed by the owner on 2026-09-28. | Agreed goal, R-01 | Answered | owner |\n| Q-02 | Must every Account have a Tier before it can be saved? | R-01 | Open | owner |\n"}}
+{"i":3,"result":{"chunk_id":"de5af7","wall_time_seconds":0.000003916,"exit_code":0,"original_token_count":187,"output":"---\nname: user_custom_field_description_help_text\ndescription: Every new custom field should have a description and help text\nmetadata:\n  type: user\nstatus: current\nsource: Owner, in chat, 2026-09-28\nlast_verified: 2026-09-28\nauthorization: Approved by Mike Rihm on 2026-09-28\nsupersedes: none\n---\n\n# Custom field descriptions and help text\n\n**Remember:** The owner prefers every new custom field to have a description and help text.\n\n**Why:** Not stated by the owner.\n\n**How to apply:** Include both when planning, building, or reviewing a new custom field.\n\n**Evidence and limits:** Owner, in chat, 2026-09-28. Applies to new custom fields.\n\n**Related memories:** None.\n\n**Authoritative records:** WI-001 also requires both for its Tier f
+
+[AGENT] WI-001 now records the confirmed goal and Tier values in order: **Gold, Silver, Bronze**. I also saved your standing preference that every new custom field has a description and help text. The requirements are still being refined.
+
+Must every Account have a Tier before it can be saved? I recommend **no**, so existing Accounts remain valid while the sales team assigns Tiers.
+
+SKILLS OPENED (SKILL.md read): ['work-decide', 'work-requirements', 'memory-save', 'work-decide', 'work-requirements', 'memory-save', 'work-decide', 'work-requirements']
+
+TOOLKIT COMMANDS:
+   toolkit work show WI-001
+   toolkit work decisions
+   toolkit memory find 'custom field description help text'
+   toolkit config get memory.approval
+   toolkit memory focus --json
+   toolkit memory find 'Tier Account ranking'
+   toolkit work history WI-001 --note 'Owner said: "Yes, that’s the goal. The values are Gold, Silver, and Bronze, in that order. Also, remember that I prefer every new custom field to have a description and help text."' --effect 'Goal confirmed
+   toolkit work edit WI-001 --section 'Open Questions' --text '
+   toolkit work edit WI-001 --section 'Agreed goal' --text 'The Acme sales team can assign each Account a Tier and use that Tier to rank accounts.'
+   toolkit work edit WI-001 --section 'Active requirements' --text '#### R-01 — Assign and rank Account Tiers
+   toolkit work edit WI-001 --section 'Acceptance' --text 'This work item can be accepted when:
+   toolkit work edit WI-001 --section 'Open Questions' --append-row '
+   toolkit work edit WI-001 --section 'Overview' --text '**Goal:** Let the Acme sales team rank Accounts using a Tier field.
+   toolkit work edit WI-001 --section 'Resume here' --text 'Ask Q-02: must every Account have a Tier before it can be saved? Recommend no, so existing Accounts remain valid and the team can assign Tiers as they review them. Then continue the requirements interview one question at a time. Do not build until the requirements are approved.'
+   toolkit memory save --type user --name custom-field-description-help-text --description 'Every new custom field should have a description and help text' --body '# Custom field descriptions and help text
+   toolkit memory focus --text '# Current focus
+   toolkit memory focus --json
+   toolkit memory focus --text '# Current focus
+   toolkit work validate WI-001
+   toolkit work show WI-001 --section 'Active requirements'
+   toolkit work show WI-001 --section 'Open Questions'
+   toolkit memory get user_custom_field_description_help_text
+   toolkit memory focus
+   toolkit doctor

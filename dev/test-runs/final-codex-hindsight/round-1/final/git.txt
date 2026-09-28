@@ -1,0 +1,15 @@
+$ git log --format=%h %an <%ae> | %s
+8fc70ea Mike Rihm <michael@rihm.com> | Record delivered greeting behavior
+d961e1e Mike Rihm <michael@rihm.com> | Document shout flag in README
+819bda7 Mike Rihm <michael@rihm.com> | Add shout flag to greeting CLI
+86f219e Mike Rihm <michael@rihm.com> | Set up Toolkit V2
+27d0789 Mike Rihm <michael@rihm.com> | Initial commit
+
+$ git log --format=%B | grep -i -E "co-authored|generated with|claude|codex|openai|anthropic|gpt|ai"
+grep exit=1 (1 means no match)
+
+$ git status --short
+$ git worktree list
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r1 8fc70ea [main]
+$ git branch --list
+* main

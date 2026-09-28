@@ -1,0 +1,17 @@
+PROMPT: The built-in folder is fine.
+THREAD: 01a0ea0e-8d5f-7041-9b01-dad50e2cc550
+
+[AGENT] I’ll use the built-in `.memory/` folder. Salesforce is already confirmed, with `tkv2-sbx` as the sandbox and `tkv2-prod` as production. The next choice is whether to add a personal working style file.
+
+[CALL request_user_input_async] {"questions":[{"title":"Do you want a `SOUL.md` file for how you like the agent to work? I recommend skipping it for now; you can add it later.","options":["Skip it (recommended)","Add SOUL.md"]}]}
+  -> {"accepted":true}
+
+[CALL sleep] {"duration_ms":30000}
+  -> Wall time: 30.0075 seconds
+Sleep completed.
+
+[AGENT] The built-in memory choice is recorded. Please answer the `SOUL.md` question above; I recommend skipping it for now.
+
+SKILLS OPENED (SKILL.md read): []
+
+TOOLKIT COMMANDS:

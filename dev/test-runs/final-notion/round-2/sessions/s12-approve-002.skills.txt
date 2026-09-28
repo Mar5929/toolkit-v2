@@ -1,0 +1,1 @@
+work-decide,   ref:work/skills/work-decide/references/approvals.md, memory-save,   ref:memory/skills/memory-save/references/current-focus.md, work-finish,   ref:work/skills/work-finish/references/closing.md,   ref:work/skills/work-finish/references/git-rules.md,   ref:work/skills/work-decide/references/work-item-format.md

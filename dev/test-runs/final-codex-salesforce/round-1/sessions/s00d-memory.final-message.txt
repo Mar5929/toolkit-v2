@@ -1,0 +1,3 @@
+I’ll configure Salesforce with `tkv2-sbx` as the sandbox and `tkv2-prod` as production, using the aliases you supplied and `sf` confirmed.
+
+Do you want a `SOUL.md` describing how you like the agent to work? I recommend skipping it for now; you can add it later.

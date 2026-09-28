@@ -1,0 +1,5 @@
+2026-09-28T19:58:49Z
+$ mv .work-items/WI-001-build-the-greet-command/WI-002-handle-an-empty-word-among-several-names .work-items/WI-001-build-the-greet-command/WI-002-empty-word-gap
+.work-items/WI-001-build-the-greet-command/WORK-ITEM.md
+.work-items/work-item-template/WORK-ITEM.md
+.work-items/WI-001-build-the-greet-command/WI-002-empty-word-gap/WORK-ITEM.md

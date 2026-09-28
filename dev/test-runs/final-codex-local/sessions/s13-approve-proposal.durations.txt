@@ -1,0 +1,9 @@
+0.231s :: 'const r = await tools.exec_command({cmd:"pwd && rg --files -g \'SOUL.md\' -g \'PROJECT.md\' -g \'AGENTS.md\' -g \'.claude/rules/*.md\' -g \'.memory/AGENTS.md\' | sort && cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memor'
+0.198s :: 'const r = await tools.exec_command({cmd:"cat PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .cl'
+0.22s :: 'const r = await tools.exec_command({cmd:"toolkit memory find \'Ghost\' --proposals","max_output_tokens":2000}); text(r.output);\n'
+0.217s :: 'const r = await tools.exec_command({cmd:"toolkit memory get project_publish_blog_ghost_keeps_only_first_190_characters --json","max_output_tokens":4000}); text(r.output);\n'
+0.22s :: 'const r = await tools.exec_command({cmd:"toolkit config get memory.approval","max_output_tokens":1000}); text(r.output);\n'
+0.297s :: 'const r = await tools.exec_command({cmd:"toolkit memory approve project_publish_blog_ghost_keeps_only_first_190_characters --by Mike","max_output_tokens":2000}); text(r.output);\n'
+0.368s :: 'const r = await tools.exec_command({cmd:"toolkit memory get project_publish_blog_ghost_keeps_only_first_190_characters","max_output_tokens":3000}); text(r.output);\n'
+0.301s :: 'const r = await tools.exec_command({cmd:"toolkit doctor","max_output_tokens":3000}); text(r.output);\n'
+MAX toolkit call seconds: 0.368

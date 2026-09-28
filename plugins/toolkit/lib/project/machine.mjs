@@ -372,7 +372,7 @@ export async function toolChecks({ env = process.env, fetch: fetchFn = globalThi
     ok: Boolean(ollama) && ollamaUp !== false,
     required: false,
     detail: !ollama ? 'not found (needed only for Hindsight memory)' : ollamaUp === false ? `${ollama}, not running` : ollamaUp ? `${ollama}, running` : ollama,
-    fix: !ollama ? 'Install it with Homebrew (ask the owner first).' : ollamaUp === false ? 'Start it with brew services start ollama (ask the owner first).' : null,
+    fix: !ollama ? 'Install it with Homebrew (ask the owner first); the project-setup skill\'s references/installing-hindsight.md has the steps.' : ollamaUp === false ? 'Start it with brew services start ollama (ask the owner first).' : null,
   });
   // Found on the PATH without running it: starting hindsight-api would start a server.
   const hsBin = which('hindsight-api', env) || (env.HOME && fs.existsSync(path.join(env.HOME, '.local', 'bin', 'hindsight-api')) ? 'installed' : null);
@@ -390,7 +390,7 @@ export async function toolChecks({ env = process.env, fetch: fetchFn = globalThi
     ok: hsUp !== false || !hsBin,
     required: false,
     detail: !hsBin && !hsUp ? 'not installed (needed only for Hindsight memory)' : hsUp ? 'the local server at 127.0.0.1:8888 is healthy' : hsUp === false ? 'installed, but the local server at 127.0.0.1:8888 does not answer' : 'installed',
-    fix: hsBin && hsUp === false ? 'Check it with toolkit hindsight service status; start it after the owner\'s yes.' : null,
+    fix: hsBin && hsUp === false ? 'Check it with toolkit hindsight service status; start it after the owner\'s yes.' : !hsBin && !hsUp ? 'Only for Hindsight memory: the project-setup skill\'s references/installing-hindsight.md has the install steps (ask the owner first).' : null,
   });
   return out;
 }
@@ -410,7 +410,7 @@ export function codexSetupLines(env = process.env) {
   }
   return [
     'Codex: the toolkit plugin is not on for every folder yet, so the Toolkit V2 skills appear only in a project that toolkit init has set up. To start a new project from Codex, first run toolkit init in a terminal in the project folder (or say "set up this project" in Claude Code), for example:',
-    '  toolkit init --name "<name>" --tracker local --memory builtin --hosts claude-code,codex',
+    "  toolkit init --name '<name>' --tracker local --memory builtin --hosts claude-code,codex",
     '  Then open Codex in the folder, trust it, and say "finish setting up Toolkit V2".',
   ];
 }
@@ -469,7 +469,7 @@ export function claudeMachineWideLine(env = process.env) {
   if (!installed) return null;
   const enabled = (claudeUserSettings(env).enabledPlugins || {})[`toolkit@${MARKETPLACE}`];
   if (enabled === true) return `Claude Code: toolkit@${MARKETPLACE} is on for every folder.`;
-  return `Claude Code: toolkit@${MARKETPLACE} is installed but not on for every folder, so "set up this project" works only after it is switched on. To switch it on for every folder: claude plugin enable toolkit@${MARKETPLACE} (ask the owner first). The other Toolkit V2 plugins stay off and turn on in each project.`;
+  return `Claude Code: toolkit@${MARKETPLACE} is installed but not on for every folder, so "set up this project" works only after it is switched on. To switch it on for every folder: claude plugin enable toolkit@${MARKETPLACE} --scope user (ask the owner first). The other Toolkit V2 plugins stay off and turn on in each project.`;
 }
 
 /**

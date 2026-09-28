@@ -1,0 +1,5 @@
+Your **WI-001 result approval is recorded**. Two decisions remain: the WI-002 result and a proposed memory note about Fridays.
+
+**WI-002:** You reported that Sales Managers and system administrators can edit Tier; Sales Users and Read Only users can see it but cannot edit it. All four profiles see Tier directly below Rating on the Account page. You can review those access and page checks in the sandbox. No acceptance gap was reported; no independent agent check ran. I recommend approving this result because your access and placement checks passed.
+
+Do you approve the WI-002 result?

@@ -1,0 +1,6 @@
+Two results are waiting for your separate approval:
+
+- **WI-002 — Tier access and Account page layout:** Tested against the approved requirements. Your sandbox checks confirmed who can edit Tier and that it appears below Rating.
+- **WI-001 — Account Tier field:** Tested against the approved requirements. Your sandbox checks confirmed the values, blank default, saving behavior, description, and help text.
+
+Both remain **In Progress at user approval**. There is no other work item ready to start. Review WI-002 first, then WI-001. Say **“what do you need from me”** to go through the two approvals.

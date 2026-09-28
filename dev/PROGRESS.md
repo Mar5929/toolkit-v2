@@ -173,6 +173,8 @@ Read `dev/GOAL.md` first. This file says where the work stands.
 
 ## For the follow-up pass (from the 2026-09-28 confirmation runs)
 
+All items below are done in the follow-up pass (next section).
+
 Results: Salesforce (Codex) passed; local (Codex) not passed only because
 an unanswered "Save to memory?" was dropped (being fixed by the Stop hook in
 `wf_198da6c8-9c6`); Hindsight (Codex) not passed for the same proposal bug
@@ -191,6 +193,98 @@ Small findings to fix after the running workflows:
   every part is done.
 - work-decide names every waiting decision, including memory proposals.
 - Memory replies end with the next step.
+
+## Follow-up pass (2026-09-28, workflow `wf_93bccb2f-ec7`, not committed yet)
+
+Every open follow-up that needed no decision from Mike, from the list above,
+the `skill_text` lists of `wf_198da6c8-9c6`, the open items of
+`wf_d3c692ad-9e1`, and the minor items of `dev/final-review.md`. Versions:
+toolkit 0.2.6, work 0.2.8, memory 0.2.6, session-skills 0.2.6, git-workflows
+0.2.6, marketplace metadata 0.2.8 (sf-architect-solutioning unchanged).
+
+- Runtime: doctor and the briefing warn about a hook failure in
+  `<git common dir>/toolkit-v2/hook-errors.log` from the last 3 days
+  (`hook-errors`); `toolkit memory approve` finishes a proposal the Stop hook
+  saved (its "Do not rely on this" words go), so the hook note, the CLI, and
+  the skills agree; the direct-edit reminder comes once per file; a focus
+  setup line is done only when every step it names is done, and Codex hook
+  trust is read from `~/.codex/config.toml`, never from a hook that ran
+  (`--dangerously-bypass-hook-trust`); the automatic backup never replaces a
+  larger backup of the same day and leaves out `.memory/.obsidian/`; CLI fix
+  lines say 'Owner said:', use single quotes, and
+  `claude plugin enable ... --scope user`; `CONDITIONS.json` takes the two
+  Salesforce paths out of `publish-project-documents.md` in projects without
+  Salesforce (final review M5).
+- Tests: `tests/hooks/timing.test.mjs` (every hook, both hosts, at most half
+  its timeout in a busy project; under 2.5 seconds and silent outside a V2
+  project), `tests/hooks/follow-up.test.mjs`,
+  `tests/project/follow-up.test.mjs`. Suite: 913 tests, 910 pass, 3 skipped by
+  design.
+- Skill text: "Owner said:" examples; ask-first commands with
+  `require_escalated` in Codex and flags after the command words; design
+  approval refuses while "Selected design" is pending; `fork_turns` none;
+  work-on and work-organize repeat tracker changes in the final reply;
+  work-on step 3 "ask me questions first" (routing O21); work-check step 1
+  finds the item as work-on does; work-decide names every waiting decision
+  first; memory-save lists the six keep phrases, the Stop-hook notes, and ends
+  every reply with the next step; Salesforce sandbox deploy lines in
+  work-finish, `closing.md`, work-on, and project-setup; doctor finding table
+  in `repair-and-update.md`; backup folder naming and the kept folder;
+  GitHub label list; Git rules name the automatic backup.
+- Docs: ARCHITECTURE sections 5 and 6, AGENTS.md layout rows, SKILL-INDEX
+  work-on steps, README (kept backups, hook failures), model-review.md
+  (M8), AI co-author trailers in `dev/test-runs/claude-a/` and
+  `open-bugs.md` replaced with "<AI co-author line>" (M9).
+- Not done, not Mike's but needs a live run: the routing re-check for the
+  changed skill bodies (work-on step 3, work-check step 1) and the proposed
+  memory-tidy and publish-docs description rewrites (each needs a routing
+  run in both hosts first).
+
+## Final confirmation round 1 fixes (2026-09-28, not committed yet)
+
+The 34 findings of the five final runs (`dev/test-runs/final-*/evidence.md`).
+Versions: toolkit 0.2.7, work 0.2.9, memory 0.2.7, session-skills 0.2.7,
+git-workflows 0.2.7, marketplace metadata 0.2.9. Installed in Mike's Claude
+Code (`claude plugin update`) and Codex (`codex plugin add`, then
+`toolkit machine-setup`: toolkit on for every folder, the other five off;
+`~/.codex/config.toml` and `~/.claude/settings.json` are byte for byte as
+before). Suite 928 tests, 925 pass, 3 skipped by design; git-workflows 14 of
+14.
+
+- Code: ensure-root leaves a deleted property's column out of the "All
+  Projects" view update and makes a view failure a warning (ids still saved);
+  a hand rename in Notion is in the briefing's quick check and retitles the
+  Solution Design page; design text with unfenced work_item/status/approved
+  lines is read as the header; a proposed design is checked for the
+  template's sections at save and at approve; `work next` counts memory
+  proposals; a parent whose phases are all delivered by sub-items has no
+  "no task lines" warning; approvals note a stale Next action; `work finish`
+  says when nothing was backed up (Notion tracker and memory) and init says
+  so for a backup folder; the Stop hook saves a "you ..." summary with the
+  owner's name (and approve rewrites older ones), types an owner preference
+  as `user`, cuts long titles at a clause, and keeps the type word out of the
+  key; Codex deny reasons end without a period; publish-docs puts the save
+  workspace in the ignored `.claude/worktrees/` and `publish --workspace`
+  runs from the project folder; handoff-verifier may run
+  `toolkit work decisions` and `toolkit doctor`.
+- Skill text: owner-led delivery keeps the design critic and the acceptance
+  checker; tell the owner about a changed approved design; work-decide names
+  what still waits after each answer; exact quotes in "Owner said:" notes;
+  focus off before `work finish`; delivery offer with a recommendation;
+  memory-save: a passing mention is inferred, "proposal" only after a
+  `--proposal` save, a recommendation needs evidence, a refused delete is not
+  a retire, project-document offers go to the focus when unanswered, the
+  approver's full name; project-setup: warnings do not block init, never
+  change the model templates' two-space line breaks, never edit Notion with
+  `ntn api` after an ensure-root failure; work-status repeats hand changes.
+- For Mike: the registry columns in his "All Projects" view are listed but
+  hidden (from the setup agent's raw PATCH in the Notion run); showing them
+  is his step in Notion. Whether Notion projects should get an automatic
+  `toolkit memory export` at work-finish and handoff (decision). The model's
+  `PROJECT-ROADMAP.md` two-space line breaks could become backslash breaks
+  (model change, needs his yes). `AGENTS.md` "Versions" says neither host
+  reads this folder in place; Claude Code does (`install-everyday.md`,
+  Finding 1).
 
 ## Pending fixes (collect; fix after the sample runs)
 

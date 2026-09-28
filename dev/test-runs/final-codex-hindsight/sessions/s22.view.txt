@@ -1,0 +1,70 @@
+PROMPT: Where are we?
+TIME: 2026-09-28T22:55:24Z -> 2026-09-28T22:55:46Z
+
+[AGENT] I’ll check the project tracker and roadmap for the current status. I’m using the work-status skill for this.
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work lifecycle'
+  -> Stages (the status follows the stage):
+  01-discovery              Backlog      Working out what the owner wants.                                    Continue with: work-requirements
+  02-refinement             Backlog      Turning that into requirements.                                      Continue with: work-requirements
+  03-requirements-approved  Ready        The owner approved the requirements.                                 Continue with: solution-design or work-on
+  04-solution-design        In Progress  Deciding how it gets built.                                          Continue with: solution-design
+  05-breakdown              In Progress  Splitting work that is too large.                                    Continue with: work-organize
+  06-implementation-plan    In Progress  Ordering the build steps.                                            Continue with: work-on
+  07-tracking-setup         In Progress  Creating build tracking when needed.                                 Continue with: work-on
+  08-build                  In Progress  Producing the requested change.                                      Continue with: work-on
+  09-testing                In Progress  Checking it against the requirements.                                Continue with: work-check
+  10-bug-fixing             In Progress  Fixing what testing found.                                           Continue with: work-check
+  11-user-approval          In Progress  The owner reviews the result.  
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work list --tree'
+  -> No open work items. Add --all to include finished, cancelled, and archived ones.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-28, handoff, agent
+
+## Now
+
+None.
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- 2026-09-28 22:53 UTC | Greet CLI: WI-001 and WI-002 are complete on local main. Read the project briefing and await the next project request. Goal: a small, friendly greeting command that Mike can grow with a few simple flags.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> Nothing is waiting on the owner.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work next'
+  -> Nothing is ready to work on.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work list --tree --all'
+  -> WI-001  Add a --times flag to greet  (Done)
+  WI-002  Document greet flags in the README  (Done)
+
+
+[AGENT] WI-001 (`--times` flag) and WI-002 (README flag examples) are Done. There are no open work items, no project decisions waiting on you, and nothing queued next.
+
+Two Codex setup steps remain: trust this folder, then open `/hooks` and trust the Toolkit V2 hooks. The project-setup skill can check those afterward.
+
+Tell me what you’d like to add or change next.
+
+SKILLS OPENED: ['work-status']
+ESCALATED CALLS: 0
+HOOK CONTEXTS: 1
+  * Project briefing: Greet CLI Final H2 (greet-cli-final-h2), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: the local Hindsight server. Salesforce: no. Hosts: Claude Code and Codex. | Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle. | Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs. |  | This worktree is on branch main, which names no work item. |  | No item is Ready, In Progress, or In Review. | The tracker has no open items. A new request starts a work item with the work-on skill. |  | Items: 2 done. |  | Current focus: | Last updated: 2026-09-28, handoff, agent | ## Now | None. | ## Waiting on the owner | - Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it. | - Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it. | ## Untracked to-dos | None. | ## Next session starts with | - 2026-09-28 22:53 UTC | Greet CLI: WI-001 and WI-002 are complete on local main. Read the project briefing and await the next project request. Goal: a small, friendly greeting command that Mike can grow with a few simple flags. |  | Project memory (hindsight): 1 record, from the local cop
+HOOKSTATE turns=1 keep=None records=[] stopBlocked=False lastStop=

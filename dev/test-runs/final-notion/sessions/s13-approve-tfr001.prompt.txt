@@ -1,0 +1,1 @@
+I ran it in the TFR-001 worktree: 2026-12-25 printed "88 days", yesterday printed "-1 day", and 2026-02-30 gave the invalid date error. I approve the TFR-001 result.

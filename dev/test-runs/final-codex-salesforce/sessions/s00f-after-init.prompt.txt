@@ -1,0 +1,1 @@
+I ran it in Terminal and it finished: it added 112 files and wrote .toolkit.json last. Keep going with the setup.

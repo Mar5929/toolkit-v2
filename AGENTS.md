@@ -27,9 +27,9 @@ only decides and steers. `README.md` explains it for Mike.
 | `plugins/toolkit/templates/` | Only what the model does not hold: the toolkit's own settings entries, the Codex plugin switches and command rule, the toolkit's `.gitignore` lines, and the Hindsight service file. `TEMPLATE-LANGUAGE.md` there explains how init, sync, and doctor install the copy. |
 | `plugins/work/` | Nine work skills, six agents, and `shared/`: the source files for text several skills need. |
 | `plugins/<name>/shared/` | One source file per shared subject (work item format, approvals, trackers, Git rules, running `toolkit` commands, memory backends). Each skill gets a generated copy in its own `references/` or `assets/`; edit the source, never the copy. |
-| `plugins/memory/` | Three memory skills. |
+| `plugins/memory/` | Three memory skills and `shared/`: the sources of the memory reference files (record format, proposals, backends, backups). |
 | `plugins/session-skills/` | Five conversation skills and the `handoff-verifier` agent. |
-| `plugins/git-workflows/` | Four Git skills and their tests. |
+| `plugins/git-workflows/` | Four Git skills, their tests, and `shared/git-rules.md`, which several plugins' skills get a copy of. |
 | `plugins/sf-architect-solutioning/` | The Salesforce architect skill, ported with its body unchanged. Only its description was rewritten (Mike approved, 2026-09-27). |
 | `plugins/toolkit/lib/notion/lore-schema.mjs` | Lore's five Notion memory databases (Projects, Topics, Memories, Entities, Facts), copied from Lore 1.0.0 at commit `6e741b1`. Notion memory is stored in this layout (`dev/research/lore.md`). The toolkit's added Memories columns are in `lib/notion/schema.mjs`. |
 | `ai-external-knowledge/` | Official Claude Code, Codex, Agent Skills, and Anthropic engineering pages, captured with Firecrawl on 2026-09-27. `INDEX.md` lists the folders; each folder's `SOURCE-RECORD.md` gives every page's web address. Not shipped. |

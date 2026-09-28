@@ -1,0 +1,1 @@
+Quick fact before I review: I publish my blog on Ghost, and Ghost only keeps the first 190 characters of a slug. That might be worth keeping for this project. Ask me before you save it.

@@ -13,8 +13,8 @@ branch, with no pull request (rule: `.claude/rules/publish-project-documents.md`
    hooks, settings, `.memory/`, or `.work-items/` (list below).
 2. **Start a save workspace** with the script in the `scripts/` folder beside
    this `SKILL.md`. It fetches the remote (with no remote, it uses the local
-   default branch and says so), makes a sparse worktree beside the project,
-   and prints its path. Work only there for this save.
+   default branch), makes a sparse worktree in `.claude/worktrees/` (beside
+   the project when Git does not ignore it), and prints its path. Work there.
 
    ```text
    node <this skill's folder>/scripts/publish-docs.mjs start --branch <default-branch> -- <file> [more files]
@@ -24,14 +24,14 @@ branch, with no pull request (rule: `.claude/rules/publish-project-documents.md`
    diff. Add `DECISIONS.md` rows only with `toolkit decision add`, run there.
    After a change under `ai-external-knowledge/`, regenerate its index there
    ("Step 3 in detail") and stage `ai-external-knowledge/INDEX.md` too.
-4. **Publish** from the save workspace. It refuses other staged paths,
-   unstaged or untracked files, and conflict markers; commits; pushes without
-   force and checks the remote has the commit. No remote: it moves the local
-   default branch forward ("No remote: committed locally."). It stops, or the
-   push is refused: open `references/recovery.md`.
+4. **Publish** from the project folder, naming the path `start` printed. It
+   refuses other staged, unstaged, or untracked files and conflict markers;
+   commits; pushes without force and checks the remote has the commit. No
+   remote: it moves the local default branch forward. It stops, or the push
+   is refused: open `references/recovery.md`.
 
    ```text
-   node <this skill's folder>/scripts/publish-docs.mjs publish --message '<plain commit message>'
+   node <this skill's folder>/scripts/publish-docs.mjs publish --workspace <save workspace path> --message '<plain commit message>'
    ```
 
 5. **Report** the commit id and where it is (the remote, or "No remote:
@@ -46,11 +46,17 @@ branch, with no pull request (rule: `.claude/rules/publish-project-documents.md`
   `sandbox_permissions` set to `require_escalated` and a one-line reason.
   Refused without asking: show the owner the exact command and wait
   (`references/git-rules.md`, "Git writes in Codex").
-- In Codex the save workspace is outside the folder Codex may write to,
-  because it sits beside the project. Codex asks the owner before every file
-  edit or copy there, and under `codex exec` it refuses them. In a
-  `codex exec` run, stop after `start`, show the owner the workspace path and
-  the edit, and ask him to run the save in an interactive session.
+- Stage with `git -C <save workspace path> add -- <file>` and publish with
+  `--workspace`, from the project folder. In Claude Code a `cd` into the save
+  workspace is fine when it is under `.claude/worktrees/`; a `cd` into a
+  workspace beside the project needs the owner's approval each time, and
+  `claude -p` refuses it.
+- When `start` put the workspace beside the project (the project's
+  `.gitignore` does not list `.claude/worktrees/`), it is outside the folder
+  Codex may write to. Codex asks the owner before every file edit or copy
+  there, and under `codex exec` it refuses them. In a `codex exec` run, stop
+  after `start`, show the owner the workspace path and the edit, and ask him
+  to run the save in an interactive session.
 - No remote (`git remote` prints nothing): never run `git fetch` or
   `git push` yourself. The script skips both and commits on the local default
   branch.

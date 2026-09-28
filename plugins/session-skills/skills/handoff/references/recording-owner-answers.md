@@ -80,10 +80,12 @@ toolkit work history <id> --note '<what happened>' --effect '<what it changes>'
 - Record the owner's meaning briefly. Add no reason, scope, or certainty he
   did not give.
 - A note that quotes him starts with `Owner said:`, followed by his words in
-  double quotes inside the single-quoted text.
-- Keep apostrophes out of the note where you can. When one is needed, write
-  it as `'\''` in Claude Code and as ’ (U+2019) in Codex
-  (`toolkit-commands.md`, "Text in a command").
+  double quotes inside the single-quoted text. A quote is his exact words:
+  never reword it to avoid an apostrophe ("she'll" stays "she'll", never
+  "she will").
+- Keep apostrophes out of your own words in the note where you can. In a
+  quote, and wherever one is needed, write it as `'\''` in Claude Code and as
+  ’ (U+2019) in Codex (`toolkit-commands.md`, "Text in a command").
 - Do not log routine commands, files opened, ordinary test runs, or small
   edits.
 

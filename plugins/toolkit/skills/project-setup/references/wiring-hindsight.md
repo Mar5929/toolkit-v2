@@ -36,6 +36,9 @@ Init stops, with nothing written, when the server does not answer.
    ```
 
    Both ask the owner first in both hosts, because they change this computer.
+   In Codex, run each alone with `sandbox_permissions` set to
+   `require_escalated` and a one-line reason: the approval alone keeps it
+   inside the sandbox, which cannot write `~/Library/LaunchAgents`.
 
 3. The server uses the local model `gpt-oss:20b` through Ollama. When doctor
    says Ollama is not running, tell the owner. It runs as a Homebrew service

@@ -1,0 +1,12 @@
+drwxr-xr-x  3 michaelrihm  wheel  96 Sep 28 15:50:11 2026 .
+drwxr-xr-x  5 michaelrihm  wheel  160 Sep 28 15:50:11 2026 ./greet-cli-final-h-2026-09-28
+-rw-r--r--  1 michaelrihm  wheel  657 Sep 28 15:50:11 2026 ./greet-cli-final-h-2026-09-28/toolkit-export.json
+drwxr-xr-x  4 michaelrihm  wheel  128 Sep 28 15:50:11 2026 ./greet-cli-final-h-2026-09-28/memory-export
+drwxr-xr-x  5 michaelrihm  wheel  160 Sep 28 15:50:11 2026 ./greet-cli-final-h-2026-09-28/work-items
+-rw-r--r--  1 michaelrihm  wheel  547 Sep 28 15:50:11 2026 ./greet-cli-final-h-2026-09-28/memory-export/CURRENT_FOCUS.md
+-rw-r--r--  1 michaelrihm  wheel  232 Sep 28 15:50:11 2026 ./greet-cli-final-h-2026-09-28/memory-export/toolkit-memory-export.json
+-rw-r--r--  1 michaelrihm  wheel  195 Sep 28 15:50:11 2026 ./greet-cli-final-h-2026-09-28/work-items/.toolkit-state.json
+-rw-r--r--  1 michaelrihm  wheel  326 Sep 28 15:50:11 2026 ./greet-cli-final-h-2026-09-28/work-items/DASHBOARD.md
+drwxr-xr-x  4 michaelrihm  wheel  128 Sep 28 15:50:11 2026 ./greet-cli-final-h-2026-09-28/work-items/work-item-template
+-rw-r--r--  1 michaelrihm  wheel  8954 Sep 28 15:50:11 2026 ./greet-cli-final-h-2026-09-28/work-items/work-item-template/DESIGN.md
+-rw-r--r--  1 michaelrihm  wheel  7524 Sep 28 15:50:11 2026 ./greet-cli-final-h-2026-09-28/work-items/work-item-template/WORK-ITEM.md

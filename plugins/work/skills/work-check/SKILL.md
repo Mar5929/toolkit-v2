@@ -10,7 +10,7 @@ Checks a finished build against every requirement with an independent checker, f
 
 ## Steps
 
-1. Read the requirements, the Acceptance list, the Tasks, and the design's Acceptance checks; a sub-item with no design of its own is checked against its parent's (`references/testing.md`, section 1). Then set the testing stage.
+1. Find the item as `work-on` does: the id he named, this worktree's item, or a title that matches; two matches, ask one question naming both. Read the requirements, the Acceptance list, the Tasks, and the design's Acceptance checks; a sub-item with no design of its own is checked against its parent's (`references/testing.md`, section 1). Then set the testing stage.
    `toolkit work show <id>`
    `toolkit work design <id>`
    `toolkit work set <id> --stage 09-testing`
@@ -32,6 +32,8 @@ Checks a finished build against every requirement with an independent checker, f
 
 - Run each `toolkit` command alone: never joined by `&&`, `;`, or a pipe, and never from a script (in Codex that runs it inside the sandbox, where it fails). One-line values go in single quotes, never double quotes; an apostrophe inside them is `'\''` in Claude Code and ’ (U+2019) in Codex, or reword the text. Section text goes on standard input (`--set-file -`) in Claude Code, and in `--text '<text>'` or a `mktemp -d` file in Codex (`references/toolkit-commands.md`, "Text in a command").
 - The checker is never the agent or session that built the change. When no independent check could run, say so plainly before asking for approval.
+- Owner-led delivery ("no agent team for this one") is a delivery choice, not a no to the check: the `acceptance-checker` still runs. Only his words about the check itself ("skip the independent check") remove it.
+- The change is only in a worktree until it is merged. When the reply gives him a command to try, name the worktree folder and give the command with its folder, for example `cd <worktree path>` first.
 - A check that did not run is reported as not run, never as passed.
 - The test plan lives in `tests/` on the item's branch, committed there. Never in `.work-items/`, which Git ignores.
 - "Looks good" to any question other than the approval question is not the approval. Ask the approval question.

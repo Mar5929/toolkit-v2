@@ -1,0 +1,88 @@
+$ toolkit doctor
+Toolkit doctor for slug (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-claude-local-r2).
+
+Notes (4):
+- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.
+
+For Codex only (2; the owner clears them in Codex, so they do not change this result):
+- Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-claude-local-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off. Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+- The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards). Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Result: clean. No problems and no warnings here (2 for Codex only).
+(exit 0)
+
+$ toolkit work validate
+Checked 2 items: 2 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+(exit 0)
+
+$ toolkit work list --all --tree
+WI-001  Build the slug command  (Done)
+  WI-002  Add a --max option to cap slug length  (Done)
+(exit 0)
+
+$ toolkit work decisions
+Nothing is waiting on the owner.
+(exit 0)
+
+$ toolkit work next
+Nothing is ready to work on.
+(exit 0)
+
+$ toolkit work next --json
+{
+  "ok": true,
+  "next": null,
+  "reason": "",
+  "others": [],
+  "waitingOnOwner": 0,
+  "memoryProposals": 0,
+  "worktree": {
+    "branch": "main",
+    "id": null
+  },
+  "changes": {
+    "changed": false,
+    "moves": [],
+    "adopted": [],
+    "renumbered": [],
+    "ownerEdits": [],
+    "questions": [],
+    "derived": [],
+    "missing": [],
+    "problems": []
+  }
+}
+(exit 0)
+
+$ toolkit memory list
+- feedback_commit_messages_without_item_id: Commit messages say what changed and never include the work item ID
+- project_slug_docs_site_https_example_com_usage_page_people: the slug docs site is https://docs.example.com/slug, and its usage page is where people read about the options
+- project_slug_first_release_friday: slug's first release is on Friday, 2026-10-02
+(exit 0)
+
+$ toolkit memory focus
+# Current focus
+
+Last updated: 2026-09-28, handoff, agent
+
+## Now
+
+- None.
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+- None.
+
+## Next session starts with
+
+- 2026-09-28 | No open work items; WI-001 and WI-002 are Done. Ask the owner for the next thing to build and start it with work-on. First release is Friday, 2026-10-02.
+(exit 0)
+

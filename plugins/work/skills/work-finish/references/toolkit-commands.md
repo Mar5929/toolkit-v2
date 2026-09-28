@@ -31,11 +31,29 @@ pass text in one, and what each exit code means. Every skill that runs a
   cause.
 - The one thing a Claude Code command may carry is its own text on standard
   input (`--set-file -` with a quoted heredoc; "Text in a command", below).
-- Five commands ask the owner first in Codex, because they are hard or
+- Five commands ask the owner first, in both hosts, because they are hard or
   impossible to undo: `toolkit machine-setup`, `toolkit memory delete`,
   `toolkit memory import`, `toolkit import`, and
   `toolkit hindsight service install` or `start`. Get his yes in the reply
-  before you run one, in both hosts.
+  before you run one. The host then asks him to confirm the command (Claude
+  Code: a permission prompt; Codex: an approval). That prompt is expected, not
+  an error.
+- When the host refuses one of the five without asking him (Codex with
+  approvals off: "approval required by policy, but AskForApproval is set to
+  Never"), say that the cause is that approval setting, show him the exact
+  command to run himself in a terminal, and wait. Do nothing in its place
+  that he did not ask for: a refused delete is not a retire.
+- In Codex, run each of those five alone, with `sandbox_permissions` set to
+  `require_escalated` and a one-line reason. The approval alone keeps the
+  command inside the sandbox, where it fails: `toolkit memory delete` cannot
+  reach Hindsight or Notion, `toolkit machine-setup` cannot write `~/.codex`
+  or `~/.local/bin`, `toolkit hindsight service install` cannot write
+  `~/Library/LaunchAgents`, and `toolkit import` from a worktree cannot write
+  the main checkout.
+- Write `--json` and `--host` after the command words
+  (`toolkit memory delete <key> --owner-approved --json`). The toolkit refuses
+  those five commands when a flag comes first, because the ask-first rules
+  would not match them.
 - Never change a work item or a memory record with a script or a shell write
   (Python, Node, `sed -i`, `cat >`, `tee`, `cp`). Use the `toolkit` command
   that owns it. The hooks refuse the shell write, so it only wastes a step.
@@ -54,7 +72,7 @@ those parts missing and still reports success. So:
   nothing. Never use double quotes for text.
 - **An apostrophe inside single quotes:**
   - Claude Code: write it as `'\''`, for example
-    `--note 'Owner'\''s words: "ship it"'`.
+    `--note 'Owner said: "it'\''s ready, ship it"'`.
   - Codex: write it as ’ (the curly apostrophe, U+2019), or reword the text.
     Never `'\''` in Codex: the command rule does not match that form, so the
     command runs inside the sandbox, and the tool call can drop the
@@ -144,14 +162,15 @@ The `project-setup` skill fixes that.
    - Wrong: `toolkit work list && toolkit work show WI-004`
    - Right: `toolkit work list`, then, as a second command,
      `toolkit work show WI-004`.
-2. A history note with an apostrophe.
-   - Wrong: ``toolkit work history WI-004 --note "Owner's words: `ship it`"``
+2. A history note that quotes the owner, with an apostrophe in his words.
+   - Wrong: ``toolkit work history WI-004 --note "Owner said: it's ready, `ship it`"``
      (double quotes: the shell runs the words between the backticks as a
      command and saves its output in their place).
    - Right in Claude Code:
-     `toolkit work history WI-004 --note 'Owner'\''s words: "ship it"'`
+     `toolkit work history WI-004 --note 'Owner said: "it'\''s ready, ship it"'`
    - Right in Codex:
-     `toolkit work history WI-004 --note 'Owner’s words: "ship it"'`
+     `toolkit work history WI-004 --note 'Owner said: "it’s ready, ship it"'`
+   - The prefix is `Owner said:`, which has no apostrophe to escape.
 3. Section text in Codex.
    - Wrong: `cat > /tmp/overview.md <<'EOF' ... EOF && toolkit work edit WI-004 --section 'Overview' --set-file /tmp/overview.md`
      (one shell command, a heredoc, and a fixed file name).

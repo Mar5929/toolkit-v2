@@ -52,15 +52,24 @@ restored. Never treat an empty tracker or an empty memory index there as
   ```text
   <backup.dir>/<project key>-<YYYY-MM-DD>/
     work-items/          a copy of .work-items/ (a local tracker)
-    memory/              a copy of .memory/ (built-in memory), including Obsidian's .obsidian/ folder
+    memory/              a copy of .memory/ (built-in memory), without Obsidian's .obsidian/ folder
     memory-export/       a memory export (Hindsight memory)
     toolkit-export.json  what was copied, from where, and when
   ```
 
 - A second backup on the same day replaces that day's `work-items/`,
   `memory/`, and `memory-export/` with the state at that moment. Nothing is
-  merged. A part that is empty or missing on this computer is empty in the
-  backup too.
+  merged.
+- One exception keeps a good backup: when today's folder already holds more
+  files in `work-items/` or `memory/` than the project has now (a fresh
+  clone, or the project on a new computer), the backup goes to a new folder,
+  `<project key>-<YYYY-MM-DD>-<HHMMSS>`, and today's earlier folder is kept as
+  it was. The backup line says so.
+- A second clone of the project with the same project key writes
+  `<project key>-<YYYY-MM-DD>-<8 letters>` instead, so the two clones never
+  write over each other.
+- The toolkit never deletes an old day folder. Removing old ones is the
+  owner's choice.
 
 ## Automatic backups
 
@@ -128,7 +137,11 @@ Restore only when the owner asks. Then, in this order:
    `toolkit work finish`. Each replaces today's folder.
 4. Tell the owner that the host asks him to allow each import command, the
    dry run too (Claude Code asks for `toolkit import` and
-   `toolkit memory import`; Codex has a prompt rule for each).
+   `toolkit memory import`; Codex has a prompt rule for each). In Codex, run
+   each import alone with `sandbox_permissions` set to `require_escalated`
+   and a one-line reason: the approval alone keeps it inside the sandbox,
+   where it cannot write the main checkout from a worktree or reach
+   Hindsight.
 
 ## Restore the project folders
 
@@ -240,8 +253,9 @@ holds the order of steps for switching backends.
 - An export into the folder of an earlier export replaces that export. Give
   a new folder.
 - Both import commands ask the owner, the dry run too, in both hosts.
-- Backups copy `.memory/.obsidian/`. A conflict only in `.obsidian/` files is
-  Obsidian's own state, not memory.
+- Backups leave out `.memory/.obsidian/`, Obsidian's own window state. An
+  older backup made before this may hold it; a conflict only in `.obsidian/`
+  files is Obsidian's state, not memory.
 - A deleted record stays in older backups: the day folders and every memory
   export made before the delete. When the owner deletes a secret or an email
   address, tell him those copies still hold it, and that he removes them

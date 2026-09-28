@@ -12,7 +12,8 @@ Sets up Toolkit V2, never the older claude-toolkit (its `project-init` skill).
 
 1. **Check the computer and the project.** `toolkit` not found, or doctor
    reports a computer problem: `references/repair-and-update.md`, "Reaching
-   the `toolkit` command".
+   the `toolkit` command". A warning (the `plugin-pointer` one included)
+   never blocks init: note it and go on.
    `toolkit doctor`
 2. **Pick the path.** `.toolkit.json` present: step 8. A new computer:
    `references/new-computer.md`. Switching memory or tracker:
@@ -23,8 +24,8 @@ Sets up Toolkit V2, never the older claude-toolkit (its `project-init` skill).
    asking. `references/interview.md`. Notion or Hindsight chosen: do the
    "Before init" part of its wiring file (step 5) now.
 4. **Run init** with the answers, then record what it has no flag for.
-   Inside Codex, say first that Codex will ask to run it outside the sandbox.
-   `references/running-init.md`.
+   Inside Codex, first tell the owner that Codex will ask him to approve
+   running init outside the sandbox. `references/running-init.md`.
    `toolkit init --name '<name>' --key <key> --tracker <tracker> --memory <memory> --owner '<owner>' --backup-dir '<folder>' [--salesforce] [--decline SOUL.md]`
 5. **Finish wiring each choice**: `references/wiring-notion.md`,
    `wiring-hindsight.md`, `wiring-github-jira.md`, `wiring-salesforce.md`.
@@ -77,6 +78,13 @@ Sets up Toolkit V2, never the older claude-toolkit (its `project-init` skill).
   Agent Second Brain" page.
 - Every step is safe to run again. Init writes `.toolkit.json` last, and a
   second run reuses what an earlier run made.
+- `git diff --check` reports the scaffold's Markdown templates, because some
+  of their lines end with two spaces: a Markdown line break. Leave them.
+  Never change a scaffold file to pass a check.
+- When the Notion setup (ensure-root or ensure-project) fails, or prints a
+  warning about the owner's Notion pages, stop and tell the owner what it
+  printed. Never change his Notion pages or views with `ntn api` or any other
+  tool to get past it.
 - Run each `toolkit` command alone, on its own line, in both hosts; one-line
   values in single quotes (`references/toolkit-commands.md`).
 

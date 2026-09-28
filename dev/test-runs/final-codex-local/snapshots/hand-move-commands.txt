@@ -1,0 +1,5 @@
+cd <project folder>
+mkdir .work-items/slug-cli
+mv .work-items/WI-001-build-slug-command-with-max-option .work-items/slug-cli/WI-001-slug
+mv .work-items/slug-cli/WI-001-slug/WI-003-add-max-length-option-to-slug-command .work-items/slug-cli/WI-001-slug/max-option
+2026-09-28T20:10:26Z

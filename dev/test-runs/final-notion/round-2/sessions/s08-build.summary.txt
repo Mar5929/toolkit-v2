@@ -1,0 +1,2213 @@
+PROMPT: No agent team for this one. Keep it owner-led: build it yourself and show me each result. Go ahead and build both. I approve the git commands you need for worktrees, branches, and commits, but no merge yet.
+THREAD: 01a0ea3a-2dbe-79b2-99e3-19152c44440c
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll build both items myself and show you each result for review. I’ll keep the work on branches and leave merging until you approve it.
+
+[CMD exit=0] /bin/zsh -lc "pwd && rg --files -g 'SOUL.md' -g 'PROJECT.md' -g 'PROJECT-ROADMAP.md' -g 'DECISIONS.md' -g 'AGENTS.md' -g '.claude/rules/*.md' -g 'tests/**' -g '.toolkit.json' | sort && git status --short --branch"
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2
+.toolkit.json
+AGENTS.md
+DECISIONS.md
+PROJECT-ROADMAP.md
+PROJECT.md
+requirements/AGENTS.md
+tests/TEST-PLAN-TEMPLATE.md
+## main
+
+
+[AGENT] I’m using the project’s work-decision and build procedures to record your delivery choice, then I’ll implement the two items in order.
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-organize/SKILL.md'"
+  -> ---
+name: work-organize
+description: 'Splits work items into sub-items, nests or moves them, and reconciles item folders or Notion cards the owner moved, renamed, or deleted himself. Use when the owner says "break it down" or "put X under Y", says he moved folders or cards, or the briefing reports moved or missing items.'
+---
+
+# Work organize
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Explains what the owner changed in the tracker, asks only where his intent is unclear, and splits or moves items when he asks; it never moves anything on its own. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Rescan the tracker, then read the tree and the report: moved, renamed, nested or un-nested, archived, missing, duplicate id, adopted.
+   `toolkit work sync`
+   `toolkit work list --tree`
+2. Say each report line to the owner, one line each, before other work (`references/moves.md`, section 1). The CLI already wrote the history rows.
+3. Ask about each case that needs his intent, one at a time, with your recommendation: a missing or trashed item, a duplicate id, a sub-item under a finished parent, an item marked Done by hand, a skipped gate (`references/moves.md`, section 2).
+   `toolkit work cancel <id> --reason '<his words>'`
+4. Split (stage 05): propose the sub-items, ask once, then 
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/SKILL.md'"
+  -> ---
+name: work-decide
+description: 'Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers. Use when he asks "what do you need from me", answers a waiting decision ("go with option B"), or states a project-wide decision.'
+---
+
+# Work decide
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Walks the owner through what waits on him, one decision at a time, and records each answer where it belongs. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Build the queue. The command lists each decision once: requirements waiting for approval, proposed designs, results at stage 11, Open Questions rows the owner decides, and memory proposals. Its "Agent to-do" lines are not decisions. A delivery offer belongs to `work-delegate`: open it after his other decisions.
+   `toolkit work decisions`
+2. He gave an answer without being asked ("approved", "go with B"): match it to exactly one waiting decision; when two could match, ask which, naming both. A bare "yes", "ok", or "looks good" with no question asked is not an answer (`references/approvals.md`, section 1).
+3. Otherwise start with the count and one short line for every waiting decision, memory proposals included ("3 decisions wait on you: the WI-004 design, the WI-006 result, and a 
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-on/SKILL.md'"
+  -> ---
+name: work-on
+description: 'Starts, resumes, or logs a work item and builds it. Use whenever the owner asks to build, add, fix, or change something, names an item id to resume, says "keep going", or wants a bug or idea logged ("put it in the backlog"). Not for requirement edits (work-requirements) or handovers (work-delegate).'
+---
+
+# Work on
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Starts or resumes one work item, plans it, and builds it; it never records an approval, Done, a merge, or a deploy. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. No project briefing in this conversation: run the briefing. Exit code 4: open `project-setup` and stop. Tell the owner each change listed under "Changes found in the tracker", one line each in the CLI's words, before other work.
+   `toolkit brief`
+2. A bare "ok", "yes", or "looks good" when this chat asked him nothing: start no work and ask what he wants. Otherwise find the item: the id he named, this worktree's item, or a title that matches. Two matches: ask one question naming both.
+   `toolkit work list`
+   `toolkit work show <id>`
+3. No item yet: size the request as a quick edit, log only, or a work item, and pick the type (`references/sizing-and-routing.md`, sections 1 to 3). He asks to be asked first ("ask me questions"
+
+[CMD exit=0] /bin/zsh -lc "cat 'PROJECT-ROADMAP.md'"
+  -> # Project roadmap
+
+<!-- Fill-in guide: replace every angle-bracket prompt in the outcome, phase table, phase heading, and work-unit fields with this project's real text. Keep one overview row and one matching ## heading per phase. Under that heading, repeat the ### work-unit block for each deliverab
+
+[CMD exit=1] /bin/zsh -lc "cat 'SOUL.md'"
+  -> cat: SOUL.md: No such file or directory
+
+
+[CMD exit=0] /bin/zsh -lc "cat 'PROJECT.md'"
+  -> # Toolkit V2 final run (safe to delete)
+
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep sta
+
+[CMD exit=0] /bin/zsh -lc "cat 'DECISIONS.md'"
+  -> # Decisions
+
+Decisions for the whole project. A decision about one work item stays in that
+item's Recent History. Add rows only with `toolkit decision add`, which gives
+each row the next ID. Never rewrite an old row. To change a decision, add a new
+row that names the ID it replaces.
+
+| ID | Date | D
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/humanize-outbound-text.md'"
+  -> # Humanize Anything Sent to Another Person
+
+Any text that will leave the project and be read by someone other than the owner
+is run through the `humanizer` skill before the owner sees the final version.
+Use the `unslop` skill when `humanizer` is not installed. That covers emails,
+chat messages, supp
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/session-handoff.md'"
+  -> # Prepare a Session Handoff
+
+When the owner says he is clearing context or ending the session, or asks for a handoff, use the `handoff` skill, whatever the session's length. When the session is long and the next step is complex, offer a handoff. Use the `handoff` skill. Before the handoff, review th
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/keep-work-item-current.md'"
+  -> # Keep the Active Work Item Accurate
+
+The work tracker is the source of truth for current work.
+
+- Before substantial work, use the `work-on` skill. Read the active item's requirements, state, next step, and blockers.
+- Save the owner's decisions, requirements, and corrections in the item or its lin
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/shared-repository-work.md'"
+  -> # Work Safely in a Shared Repository
+
+Other sessions edit this repository now. Before your first edit, run:
+
+```
+git worktree list
+git status
+git fetch origin && git log --oneline -10
+```
+
+- No remote (`git remote` prints nothing): skip `git fetch`, and never report a fetch failure as a blocker.
+- A
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/plain-english-artifacts.md'"
+  -> # Write Artifacts in Plain English
+
+An artifact is something an agent generates for a person to look at: a
+diagram, a chart, a dashboard, a visualization, a mockup, a slide deck, a
+published page, or a generated document. This rule is about the words inside
+one: the title, the headings, the labels, 
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/memory-review-and-save.md'"
+  -> # Review and Save Project Memory
+
+This rule applies to the main agent. The project memory system is chosen at setup and recorded in `.toolkit.json`; with built-in memory it is the local `.memory/` folder. It is the single project memory store. Claude's native auto-memory and the `claude-toolkit` Sec
+
+[AGENT] Re-parented: TFR2-002 was made a top-level item in Notion by hand. It was a sub-item of TFR2-001. I’ll keep that organization as you set it.
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/references/recording-owner-answers.md'"
+  -> <!-- Generated file. Source: plugins/work/shared/recording-owner-answers.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Recording the owner's answers
+
+Where each thing the owner says is saved, how to ask him a question, how to
+end a reply, and what to say when a save fails.
+
+## Contents
+
+1. Voice
+2. Where each answer goes
+3. Save it before the next question
+4. History notes
+5. Waiting on the owner
+6. Asking the owner
+7. Ending every reply
+8. Reporting a failed save
+9. Owner edits win
+10. Stages in plain words
+11. Handing over to another skill
+
+## 1. Voice
+
+Every skill carries this line near its top:
+
+> Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+
+Helper agents do not receive the output style. Each agent file carries its
+own writing rules.
+
+## 2. Where each answer goes
+
+| Information | Home | What to record |
+| --- | --- | --- |
+| Requirement or correction | The item's `Active requirements` (the `R-xx` block) and `Acceptance` | The new meaning, and Status Refining until approved |
+| Design choice | The item's design (`toolkit work design`) | The approach, proposed or approved, and why |
+| Open question | The item's `Open Questions` table | Question, what it affects, Open, who must answer |
+| Answer or decision about this item | The question's row, the section it changes, and one history note | The answer, who gave it, the
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/references/work-item-format.md'"
+  -> <!-- Generated file. Source: plugins/work/shared/work-item-format.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Work item and design format
+
+What a work item and its design hold, their exact section names, and how to
+change them with `toolkit work` commands without losing text.
+
+## Contents
+
+1. Where the record and the design live
+2. Header fields
+3. Sections of `WORK-ITEM.md`
+4. Sections of `DESIGN.md`
+5. Finding an item's file
+6. Changing one section
+7. Adding a table row
+8. Editing a record directly
+9. Titles
+10. Generated files
+11. Examples
+
+## 1. Where the record and the design live
+
+Every tracker uses the same body and the same design shape. Only the place
+differs.
+
+| Tracker | Work item | Design |
+| --- | --- | --- |
+| Local | `WORK-ITEM.md` in the item's folder under `.work-items/` | `DESIGN.md` beside it |
+| Notion | The item's page in the project's Work Items database | The item's "Solution Design" child page |
+| GitHub Issues | The issue body | One issue comment whose first line is `## Solution design` |
+| Jira | The issue description | One comment whose first line is "Solution design" |
+
+An item has one design home. Never make a separate design folder or a second
+design file.
+
+## 2. Header fields
+
+The header (frontmatter locally, properties in Notion) holds these fields.
+Only `toolkit work` commands change them.
+
+| Field | Values | Changed by |
+| --- | --- | --- |
+| `id` | `WI-001` (the project's prefix and a number) | `toolkit work
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-organize/references/moves.md'"
+  -> # Moves, splits, and hand changes: cases
+
+What to ask or do for each change the tracker reports, how to split an item
+into sub-items, and how to move or archive items on request. What the CLI
+already does by itself is in `tracker-local.md` and `tracker-notion.md`.
+
+## Contents
+
+1. Reporting what the CLI already adapted
+2. Cases that need the owner
+3. Splitting an item (stage 05)
+4. Moving, grouping, and archiving
+5. Things never done here
+
+## 1. Reporting what the CLI already adapted
+
+Each report line is written to be said to the owner as it is. Say each one
+in the reply, one line each, before other work. Do not guess at a cause the
+line does not name. The CLI already wrote the history rows; add a note only
+for the owner's reason.
+
+| The line starts with | Example | Add |
+| --- | --- | --- |
+| `Moved:` | "Moved: WI-007 from WI-003-csv/WI-007-export to WI-007-export (moved by hand). It is now a top-level item. It was a sub-item of WI-003." | Nothing, unless a side effect in section 2 applies |
+| `Renamed folder:` | "Renamed folder: WI-002's folder was renamed by hand from wi-002-help to help-option; the item itself is the same. It is still a top-level item." | Nothing |
+| `Re-parented:` | "Re-parented: WI-009 was put under WI-004 in Notion by hand. Its parent is now WI-004. It was a top-level item." | Nothing, unless a side effect in section 2 applies |
+| `Archived:` | "Archived: WI-005 was archived in Notion by hand (its Archived box was ticked), so it is hidden from the boar
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-on/references/planning.md'"
+  -> # Planning and building a work item
+
+The Roadmap and Tasks formats, tracking setup, and the build rules for
+`work-on` stages 06 to 08.
+
+## Contents
+
+1. Roadmap and tasks
+2. The Roadmap format
+3. The Tasks format
+4. Status words and ticking a task
+5. Tracking setup (stage 07)
+6. Building (stage 08)
+7. Keeping the item current while building
+8. Checklist before stopping
+
+## 1. Roadmap and tasks
+
+- The Roadmap is an ordered list of phases from where the item stands to the
+  finished result. Name phases to fit the work. "Phase" (`P1`) is the item's
+  plan; "stage" (`08-build`) is the lifecycle. Never mix the two words.
+- Build the phases from the approved design's "Build and verification plan"
+  (its Technical sequence and Acceptance checks) and the chosen option's
+  Build order. With no design (a small item that skipped design with a
+  recorded reason), build them from the requirements.
+- A sub-item that inherits its parent's approved design is planned from the
+  parent's design: `toolkit work design <parent-id>`.
+- Each phase has one or more tasks, one or more sub-items, or both.
+- Keep detail in proportion. A one-hour fix needs one phase with one or two
+  tasks.
+- Link sources; do not copy them. A task names the `R-xx` it implements and
+  the design section it follows.
+
+## 2. The Roadmap format
+
+The table keeps these columns in every tracker. The phase name follows an em
+dash, as in the template.
+
+```markdown
+A phase is complete when its tasks are complete and its exit result 
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-on/references/sizing-and-routing.md'"
+  -> # Sizing a request and routing an item
+
+How `work-on` decides between a quick edit, a logged item, and a worked item,
+which type to give it, and which skill continues it.
+
+## Contents
+
+1. Three sizes of request
+2. Owner messages and the right action
+3. Choosing the type
+4. Routing by where the item stands
+5. Several items at once
+6. Project roadmap units
+
+## 1. Three sizes of request
+
+- **Quick edit, no item.** One sitting, no choice for the owner, no change to
+  behavior recorded in `requirements/`, nothing bound for production. Do it
+  and report it in one line.
+- **Log only.** The owner says "later", "backlog", "park that", "not now", or
+  "log a bug". Check the list for a duplicate, create the item at
+  `01-discovery` with his exact words as the Starting request, reply
+  "Logged as WI-014 (bug, backlog). Not started." and stop.
+- **Work item.** Everything else. "New work", "track", "work item", or "done
+  properly" always makes an item. A request that grows past a quick edit
+  while you work becomes an item then, with his words as the Starting
+  request.
+
+Never make a work item for project setup. Setup steps the owner must do go in
+the reply. Only a step `toolkit doctor` checks (trusting the hooks in Codex
+`/hooks`, `ntn login`) also goes in the current focus under "Waiting on the
+owner", marked as a setup step, and leaves it once doctor stops reporting it.
+"Start a new session" goes in the reply only.
+
+A deliverable the owner named without saying what it should say or do
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-delegate/SKILL.md'"
+  -> ---
+name: work-delegate
+description: 'Hands a work item''s goal to a team of agents with the owner as product owner: makes the delivery offer, records his choice, and runs the team. Use whenever the owner hands a goal over ("you drive", "take it from here"), even a named item, or work-on starts a large goal with no delivery choice.'
+---
+
+# Work delegate
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+The only skill that makes the agent-led delivery offer and records the answer; after a yes it runs the team through the skill that owns each stage. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Look for a delivery choice that covers this goal: the item's `delivery` value, its Notes > Decisions and context, and its parent's choice. A sub-item makes no offer. A quick question, a small edit, or a small item (one or two tasks, no sub-items) gets no offer: record owner-led with the reason and go on (`references/agent-led-delivery.md`, section 1).
+   `toolkit work show <id> --section 'Decisions and context'`
+   `toolkit work set <id> --delivery owner-led --note 'Small item: one or two tasks, so no delivery offer.'`
+2. No choice recorded: add the offer as an Open Questions row, set the item waiting on the owner, and give your recommendation with its main reason in one line before the 
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-on/references/git-rules.md'"
+  -> <!-- Generated file. Source: plugins/git-workflows/shared/git-rules.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Git rules for Toolkit V2 skills
+
+Purpose: the Git rules every Toolkit V2 skill follows when it makes a branch,
+commits, merges, pushes, or removes a worktree, in Claude Code and in Codex.
+
+## Contents
+
+- Look before the first Git write
+- Branch and worktree names for a work item
+- Staging and committing
+- No AI credit
+- The Git-ignored toolkit folders
+- A project with no remote
+- The merge-safety check
+- A merge that stops on a conflict
+- Git writes in Codex
+- Checklist: one commit
+- Examples
+
+## Look before the first Git write
+
+Other sessions may work in the same repository at the same time. Before the
+first Git write in a session, run each of these on its own:
+
+```text
+git worktree list
+git status
+git remote
+```
+
+- `git remote` prints nothing: the project has no remote. Read "A project
+  with no remote" below before any fetch, pull, push, or pull request.
+- An unknown worktree, a branch that moved, or a change this session did not
+  make means another session is working. Do not change it. Tell the owner.
+- The shared primary checkout is the first entry `git worktree list` prints.
+  In it, never switch branches, reset, rebase, or stash.
+- Never commit, push, rebase, or delete another session's branch, and never
+  commit its uncommitted changes, even when they look finished.
+
+## Branch and worktree names for a work item
+
+A work item
+
+[CMD exit=0] /bin/zsh -lc 'git status'
+  -> On branch main
+nothing to commit, working tree clean
+
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2 77fd652 [main]
+
+
+[CMD exit=0] /bin/zsh -lc 'git remote'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work list --tree'
+  -> Tracker changes found (work-organize handles moves, copies, and missing items; work-decide handles questions for the owner):
+  Re-parented: TFR2-002 was made a top-level item in Notion by hand. It was a sub-item of TFR2-001.
+
+TFR2-001  Build the tip-split command  (06 Implementation plan, In Progress, waiting on owner)
+TFR2-002  Add the --tip option  (06 Implementation plan, In Progress)
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 1 decision waits on the owner:
+
+TFR2-001 Build the tip-split command
+  - Q-04: Would you like agents to take responsibility for delivering this, with you acting as product owner? Affects delivery for TFR2-001 and TFR2-002. (work-decide)
+
+Agent to-do (the agent's step, not a decision the owner is waiting on):
+  - Make the agent-led delivery offer for TFR2-002 (it is a build item past requirements). work-delegate asks the owner once per goal. (work-delegate)
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show TFR2-002'
+  -> TFR2-002: Add the --tip option
+Location: https://app.notion.com/p/Add-the-tip-option-3e9b381da17681329539cd4b097626cf
+Stage: 06 Implementation plan (In Progress) | Waiting on: none | Continue with: work-on
+Parent: none | Sub-items: none | Design: none
+Worktree branch for this item: claude/tfr2-002-add-the-tip-option (folder .claude/worktrees/tfr2-002-add-the-tip-option)
+
+---
+id: TFR2-002
+title: Add the --tip option
+type: build
+stage: 06-implementation-plan
+status: In Progress
+parent: none
+waiting_on: "none"
+priority: medium
+delivery: not-offered
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+# TFR2-002: Add the --tip option
+
+## Overview
+
+**Goal:** Let a person choose a nonnegative tip percentage with `--tip` and see the resulting equal share.
+
+**Current position:** Created under TFR2-001 to deliver approved R-02. It inherits the parent’s approved Option A design. No implementation has started.
+
+**Next action:** Plan the optional tip parser, tests, and separate result review after the parent delivery choice is settled.
+
+**Blockers:** The parent default command is a build dependency.
+
+**Related items:** Design: TFR2-001’s approved Option A.
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Optional tip | The command accepts a valid `--tip` value and replaces the default 18% (TFR2-001 R-
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show TFR2-001'
+  -> TFR2-001: Build the tip-split command
+Location: https://app.notion.com/p/Build-the-tip-split-command-3e9b381da17681e8a739cde47e080e24
+Stage: 06 Implementation plan (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: none | Sub-items: none | Design: approved (https://app.notion.com/p/TFR2-001-Build-the-tip-split-command-solution-design-3e9b381da1768133a4fbecd575748cc7)
+Worktree branch for this item: claude/tfr2-001-build-the-tip-split-command (folder .claude/worktrees/tfr2-001-build-the-tip-split-command)
+
+---
+id: TFR2-001
+title: Build the tip-split command
+type: build
+stage: 06-implementation-plan
+status: In Progress
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: not-offered
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: approved
+result_approved: "no"
+updated: 2026-09-28
+---
+# TFR2-001: Build the tip-split command
+
+## Overview
+
+**Goal:** Split a restaurant bill equally with an 18% default tip and an optional tip percentage.
+
+**Current position:** Requirements R-01 and R-02 and design Option A are approved. TFR2-002 was created for the optional `--tip` behavior and its separate result review. No implementation has started.
+
+**Next action:** Settle the delivery choice, then plan P1 for the default command and P2 for TFR2-002.
+
+**Blockers:** Delivery choice before build.
+
+**Related items:** Sub-item TFR2-002 covers R-02.
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show TFR2-001'
+  -> TFR2-001: Build the tip-split command
+Location: https://app.notion.com/p/Build-the-tip-split-command-3e9b381da17681e8a739cde47e080e24
+Stage: 06 Implementation plan (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: none | Sub-items: none | Design: approved (https://app.notion.com/p/TFR2-001-Build-the-tip-split-command-solution-design-3e9b381da1768133a4fbecd575748cc7)
+Worktree branch for this item: claude/tfr2-001-build-the-tip-split-command (folder .claude/worktrees/tfr2-001-build-the-tip-split-command)
+
+---
+id: TFR2-001
+title: Build the tip-split command
+type: build
+stage: 06-implementation-plan
+status: In Progress
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: not-offered
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: approved
+result_approved: "no"
+updated: 2026-09-28
+---
+# TFR2-001: Build the tip-split command
+
+## Overview
+
+**Goal:** Split a restaurant bill equally with an 18% default tip and an optional tip percentage.
+
+**Current position:** Requirements R-01 and R-02 and design Option A are approved. TFR2-002 was created for the optional `--tip` behavior and its separate result review. No implementation has started.
+
+**Next action:** Settle the delivery choice, then plan P1 for the default command and P2 for TFR2-002.
+
+**Blockers:** Delivery choice before build.
+
+**Related items:** Sub-item TFR2-002 covers R-02.
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show TFR2-002'
+  -> TFR2-002: Add the --tip option
+Location: https://app.notion.com/p/Add-the-tip-option-3e9b381da17681329539cd4b097626cf
+Stage: 06 Implementation plan (In Progress) | Waiting on: none | Continue with: work-on
+Parent: none | Sub-items: none | Design: none
+Worktree branch for this item: claude/tfr2-002-add-the-tip-option (folder .claude/worktrees/tfr2-002-add-the-tip-option)
+
+---
+id: TFR2-002
+title: Add the --tip option
+type: build
+stage: 06-implementation-plan
+status: In Progress
+parent: none
+waiting_on: "none"
+priority: medium
+delivery: not-offered
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+# TFR2-002: Add the --tip option
+
+## Overview
+
+**Goal:** Let a person choose a nonnegative tip percentage with `--tip` and see the resulting equal share.
+
+**Current position:** Created under TFR2-001 to deliver approved R-02. It inherits the parent’s approved Option A design. No implementation has started.
+
+**Next action:** Plan the optional tip parser, tests, and separate result review after the parent delivery choice is settled.
+
+**Blockers:** The parent default command is a build dependency.
+
+**Related items:** Design: TFR2-001’s approved Option A.
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Optional tip | The command accepts a valid `--tip` value and replaces the default 18% (TFR2-001 R-
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work design TFR2-001'
+  -> Design of TFR2-001 (approved) at https://app.notion.com/p/TFR2-001-Build-the-tip-split-command-solution-design-3e9b381da1768133a4fbecd575748cc7
+
+---
+work_item: TFR2-001
+status: approved
+approved: "2026-09-28 by Mike Rihm"
+---
+# TFR2-001: Build the tip-split command — solution design
+
+**Requirements:** TFR2-001  
+**Design status:** Approved  
+**Requirements checked:** TFR2-001 R-01 and R-02, 2026-09-28  
+**Last updated:** 2026-09-28  
+**Design approval:** Approved by Mike Rihm on 2026-09-28
+
+## What this design solves
+
+A person enters a restaurant bill and the number of people, optionally sets a tip percentage, and sees one equal per-person amount with tip included. The command uses an 18% default tip and rounds an exact half-cent share up. This item covers the command and its tests; no other system is involved.
+
+## Requirements and design readiness
+
+The requirements analyst checked the full input-to-output flow on 2026-09-28 and found no material gap. Q-01, Q-02, and Q-03 are answered.
+
+| Requirement | Status in work item | Design coverage | Remaining decision or gap |
+|---|---|---|---|
+| R-01 — Split the bill with the default tip | Finalized | Option A: input validation, exact calculation, output, and tests | None |
+| R-02 — Choose the tip percentage | Finalized | Option A: optional tip parsing, replacement of the default, and tests | None |
+
+## What exists today
+
+The repository has project documents and a test-plan template. It has no implementation files or verified build 
+
+[AGENT] The approved design covers both paths. I’ve confirmed the default command comes first, and the `--tip` item has its own review. I’m recording your owner-led choice now, then I’ll build the default path.
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-on/references/planning.md'"
+  -> # Planning and building a work item
+
+The Roadmap and Tasks formats, tracking setup, and the build rules for
+`work-on` stages 06 to 08.
+
+## Contents
+
+1. Roadmap and tasks
+2. The Roadmap format
+3. The Tasks format
+4. Status words and ticking a task
+5. Tracking setup (stage 07)
+6. Building (stage 08)
+7. Keeping the item current while building
+8. Checklist before stopping
+
+## 1. Roadmap and tasks
+
+- The Roadmap is an ordered list of phases from where the item stands to the
+  finished result. Name phases to fit the work. "Phase" (`P1`) is the item's
+  plan; "stage" (`08-build`) is the lifecycle. Never mix the two words.
+- Build the phases from the approved design's "Build and verification plan"
+  (its Technical sequence and Acceptance checks) and the chosen option's
+  Build order. With no design (a small item that skipped design with a
+  recorded reason), build them from the requirements.
+- A sub-item that inherits its parent's approved design is planned from the
+  parent's design: `toolkit work design <parent-id>`.
+- Each phase has one or more tasks, one or more sub-items, or both.
+- Keep detail in proportion. A one-hour fix needs one phase with one or two
+  tasks.
+- Link sources; do not copy them. A task names the `R-xx` it implements and
+  the design section it follows.
+
+## 2. The Roadmap format
+
+The table keeps these columns in every tracker. The phase name follows an em
+dash, as in the template.
+
+```markdown
+A phase is complete when its tasks are complete and its exit result 
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-delegate/references/agent-led-delivery.md'"
+  -> # Agent-led delivery
+
+The rules for the delivery offer: when to make it, the exact questions, how
+to record the owner's answers, and what an acceptance allows. The four
+questions keep their exact wording. The choice is recorded in the work item's
+Notes > Decisions and context and in its `delivery` value, in every tracker.
+
+## Contents
+
+1. Offer once for the goal
+2. Ask how the team is arranged
+3. Record the choice
+4. Divide responsibility
+
+## 1. Offer once for the goal
+
+First read the item's `delivery` value and its Notes > Decisions and context
+to see whether the owner already accepted, declined, or revoked agent-led
+delivery for this goal. `not-offered` means no answer is recorded yet. Do not
+treat missing access as an undecided choice. When the records show no choice,
+ask exactly:
+
+> Would you like agents to take responsibility for delivering this, with you acting as product owner?
+
+`work-delegate` is the only skill that makes this offer or records its
+answer. `work-on`, `work-decide`, and the session briefing only point at it,
+so the owner is asked once, in one place.
+
+Do not make this offer for a simple question or quick edit, or for a small
+item (one or two tasks, no sub-items): record owner-led at once, with the
+reason, so the briefing stops listing the offer as an agent to-do.
+
+```text
+toolkit work set <id> --delivery owner-led --note 'Small item: one or two tasks, so no delivery offer.'
+```
+
+The offer is made once, at the top item of the goal; a sub-item is part of
+i
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-on/references/work-item-format.md'"
+  -> <!-- Generated file. Source: plugins/work/shared/work-item-format.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Work item and design format
+
+What a work item and its design hold, their exact section names, and how to
+change them with `toolkit work` commands without losing text.
+
+## Contents
+
+1. Where the record and the design live
+2. Header fields
+3. Sections of `WORK-ITEM.md`
+4. Sections of `DESIGN.md`
+5. Finding an item's file
+6. Changing one section
+7. Adding a table row
+8. Editing a record directly
+9. Titles
+10. Generated files
+11. Examples
+
+## 1. Where the record and the design live
+
+Every tracker uses the same body and the same design shape. Only the place
+differs.
+
+| Tracker | Work item | Design |
+| --- | --- | --- |
+| Local | `WORK-ITEM.md` in the item's folder under `.work-items/` | `DESIGN.md` beside it |
+| Notion | The item's page in the project's Work Items database | The item's "Solution Design" child page |
+| GitHub Issues | The issue body | One issue comment whose first line is `## Solution design` |
+| Jira | The issue description | One comment whose first line is "Solution design" |
+
+An item has one design home. Never make a separate design folder or a second
+design file.
+
+## 2. Header fields
+
+The header (frontmatter locally, properties in Notion) holds these fields.
+Only `toolkit work` commands change them.
+
+| Field | Values | Changed by |
+| --- | --- | --- |
+| `id` | `WI-001` (the project's prefix and a number) | `toolkit work
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-on/references/git-rules.md'"
+  -> <!-- Generated file. Source: plugins/git-workflows/shared/git-rules.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Git rules for Toolkit V2 skills
+
+Purpose: the Git rules every Toolkit V2 skill follows when it makes a branch,
+commits, merges, pushes, or removes a worktree, in Claude Code and in Codex.
+
+## Contents
+
+- Look before the first Git write
+- Branch and worktree names for a work item
+- Staging and committing
+- No AI credit
+- The Git-ignored toolkit folders
+- A project with no remote
+- The merge-safety check
+- A merge that stops on a conflict
+- Git writes in Codex
+- Checklist: one commit
+- Examples
+
+## Look before the first Git write
+
+Other sessions may work in the same repository at the same time. Before the
+first Git write in a session, run each of these on its own:
+
+```text
+git worktree list
+git status
+git remote
+```
+
+- `git remote` prints nothing: the project has no remote. Read "A project
+  with no remote" below before any fetch, pull, push, or pull request.
+- An unknown worktree, a branch that moved, or a change this session did not
+  make means another session is working. Do not change it. Tell the owner.
+- The shared primary checkout is the first entry `git worktree list` prints.
+  In it, never switch branches, reset, rebase, or stash.
+- Never commit, push, rebase, or delete another session's branch, and never
+  commit its uncommitted changes, even when they look finished.
+
+## Branch and worktree names for a work item
+
+A work item
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-on/references/toolkit-commands.md'"
+  -> <!-- Generated file. Source: plugins/toolkit/shared/toolkit-commands.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Running `toolkit` commands
+
+Purpose: how to run a `toolkit` command in Claude Code and in Codex, how to
+pass text in one, and what each exit code means. Every skill that runs a
+`toolkit` command follows this file.
+
+## Contents
+
+- Running toolkit commands
+- Text in a command
+- Exit codes
+- Reporting a save
+- Reading output and updating what you read
+- Right and wrong examples
+
+## Running toolkit commands
+
+- Put each `toolkit` command on its own line and run it as a plain command,
+  in both hosts. Do not join it to another command with `&&`, `;`, or a pipe,
+  and do not wrap it in `$(...)`, a loop, or a script. This holds for read
+  commands too: `toolkit work decisions && toolkit work show WI-001` is two
+  commands, run one after the other.
+- Why, in Codex: the project's command rule (`.codex/rules/toolkit.rules`)
+  runs a `toolkit` command outside the sandbox only when it is the whole
+  command. A `toolkit` command joined to anything else (`&&`, `;`, a pipe, a
+  heredoc, `cd ... &&`) or run from a script (for example Python's
+  `subprocess`) runs inside the Codex sandbox. The sandbox blocks Notion, the
+  local Hindsight server, and the main checkout's `.work-items/` and
+  `.memory/` from a worktree, so the command fails or reports the wrong
+  cause.
+- The one thing a Claude Code command may carry is its own text on standard
+  input
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set TFR2-001 --delivery owner-led'
+  -> Updated TFR2-001: delivery owner-led.
+Now 06 Implementation plan (In Progress). Continue with work-on.
+Marked Q-04 Answered: it asked for this delivery choice.
+It is no longer waiting on the owner (waiting_on: none).
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set TFR2-001 --waiting-on agent'
+  -> Updated TFR2-001: waiting on agent.
+Now 06 Implementation plan (In Progress). Continue with work-on.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work set TFR2-002 --delivery owner-led --note 'Part of the TFR2-001 goal; owner chose to have this agent build both results without a team.'"
+  -> Updated TFR2-002: delivery owner-led.
+Now 06 Implementation plan (In Progress). Continue with work-on.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history TFR2-001 --note 'Owner said: \"No agent team for this one. Keep it owner-led: build it yourself and show me each result. Go ahead and build both. I approve the git commands you need for worktrees, branches, and commits, but no merge yet.\"' --effect 'Build both items with this agent, present each result separately, and leave both unmerged.'"
+  -> Added a Recent History row to TFR2-001.
+
+
+[CMD exit=0] /bin/zsh -lc "rg --files -g '"'!AGENTS.md'"' -g '"'!PROJECT.md'"' -g '"'!PROJECT-ROADMAP.md'"' -g '"'!DECISIONS.md'"' | sort"
+  -> CLAUDE.md
+README.md
+ai-external-knowledge/INDEX.md
+requirements/SYSTEM-DATA-MODEL.md
+requirements/system-area-template/AREA-TEMPLATE.md
+system-guide/AREA-TEMPLATE.md
+tests/TEST-PLAN-TEMPLATE.md
+
+
+[CMD exit=0] /bin/zsh -lc 'cat tests/TEST-PLAN-TEMPLATE.md'
+  -> # <Feature or release> test plan
+
+<!-- Fill-in guide: copy this file and rename the copy for the work item or release being checked. Replace the title and every angle-bracket prompt in the section or table cell below with the real scope, environment, scenario, expected result, procedure, and evidenc
+
+[CMD exit=0] /bin/zsh -lc 'node --version'
+  -> v25.8.1
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show TFR2-001 --section 'Decisions and context'"
+  -> ### Decisions and context
+
+- Option A was approved by Mike Rihm on 2026-09-28.
+- TFR2-002 covers R-02 and has its own result review, as the owner requested on 2026-09-28.
+- Design process: scan the repository and requirements first; use Node.js built-ins; present one option because the requirements leave no material product choice in the implementation.
+- Design review team: one requirements analyst, one design architect, and one design critic. No research question needs a separate researcher.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> Nothing is waiting on the owner.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR2-001 --section 'Decisions and context' --text '- Option A was approved by Mike Rihm on 2026-09-28.
+- TFR2-002 covers R-02 and has its own result review, as the owner requested on 2026-09-28. The owner made it a top-level item in Notion.
+- Design process: scan the repository and requirements first; use Node.js built-ins; present one option because the requirements leave no material product choice in the implementation.
+- Design review team: one requirements analyst, one design architect, and one design critic. No research question needs a separate researcher.
+  -> Saved "Decisions and context" in TFR2-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show TFR2-001 --section 'Decisions and context'"
+  -> ### Decisions and context
+
+- Option A was approved by Mike Rihm on 2026-09-28.
+- TFR2-002 covers R-02 and has its own result review, as the owner requested on 2026-09-28. The owner made it a top-level item in Notion.
+- Design process: scan the repository and requirements first; use Node.js built-ins; present one option because the requirements leave no material product choice in the implementation.
+- Design review team: one requirements analyst, one design architect, and one design critic. No research question needs a separate researcher.
+- Owner-led delivery for the TFR2-001 goal and TFR2-002: Mike Rihm chose on 2026-09-28 to have this agent build both without a team and show each result. He approved Git commands for worktrees, branches, and commits. No merge yet. Lead: this chat.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set TFR2-001 --stage 07-tracking-setup'
+  -> Updated TFR2-001: stage 06 Implementation plan -> 07 Tracking setup (status In Progress).
+Now 07 Tracking setup (In Progress). Continue with work-on.
+
+
+[AGENT] TFR2-001 is ready for implementation. I’m creating its worktree and branch, then I’ll write and test the default 18% command there.
+
+[CMD exit=0] /bin/zsh -lc 'git worktree add .claude/worktrees/tfr2-001-build-the-tip-split-command -b claude/tfr2-001-build-the-tip-split-command'
+  -> Preparing worktree (new branch 'claude/tfr2-001-build-the-tip-split-command')
+HEAD is now at 77fd652 Set up Toolkit V2
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set TFR2-001 --stage 08-build'
+  -> Updated TFR2-001: stage 07 Tracking setup -> 08 Build (status In Progress).
+Now 08 Build (In Progress). Continue with work-on.
+
+
+[FILE_CHANGE] [{"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-001-build-the-tip-split-command/bin/tip-split.js", "kind": "add"}, {"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-001-build-the-tip-split-command/tests/tip-split.test.js", "kind": "add"}]
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## claude/tfr2-001-build-the-tip-split-command
+?? bin/
+?? tests/tip-split.test.js
+
+
+[CMD exit=0] /bin/zsh -lc 'node bin/tip-split.js 84.50 3'
+  -> Each person pays $33.24
+
+
+[CMD exit=0] /bin/zsh -lc 'node --test tests/tip-split.test.js'
+  -> ✔ splits the approved default example (55.371791ms)
+✔ rounds exact half cents up and supports zero and leading zeroes (131.937792ms)
+✔ rejects invalid bill and people input with usage and exit code 1 (565.014333ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_
+
+[AGENT] The default path is built. The approved example prints `Each person pays $33.24`, and the default-path tests pass, including invalid input and half-cent rounding. I’m committing TFR2-001 before adding `--tip` on TFR2-002’s branch.
+
+[CMD exit=0] /bin/zsh -lc 'git add bin/tip-split.js tests/tip-split.test.js'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git diff --cached --name-status'
+  -> A	bin/tip-split.js
+A	tests/tip-split.test.js
+
+
+[CMD exit=0] /bin/zsh -lc 'git diff --cached'
+  -> diff --git a/bin/tip-split.js b/bin/tip-split.js
+new file mode 100644
+index 0000000..c4d1ba7
+--- /dev/null
++++ b/bin/tip-split.js
+@@ -0,0 +1,38 @@
++#!/usr/bin/env node
++
++const usage = 'Usage: node bin/tip-split.js <bill> <people> [--tip <percent>]';
++
++function parseBill(value) {
++  if (!/^[0-9]+(?
+
+[CMD exit=0] /bin/zsh -lc 'git branch --show-current'
+  -> claude/tfr2-001-build-the-tip-split-command
+
+
+[CMD exit=0] /bin/zsh -lc "git commit -m 'Build default tip split command'"
+  -> [claude/tfr2-001-build-the-tip-split-command e9dd6fa] Build default tip split command
+ 2 files changed, 71 insertions(+)
+ create mode 100644 bin/tip-split.js
+ create mode 100644 tests/tip-split.test.js
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show TFR2-001 --section Tasks'
+  -> ## Tasks
+
+### P1 — Default tip command
+
+- [ ] **P1-T01 — Add the default command** · Not Started  
+  **Work:** Build bill and people validation, the 18% calculation, half-cent-up rounding, and output formatting (R-01; design Technical sequence step 1).  
+  **Deliverable:** `bin/tip-split.js` with the default path.  
+  **Done when:** `node bin/tip-split.js 84.50 3` prints `Each person pays $33.24`; invalid bill and people values print the usage line and exit 1.  
+  **Depends on:** None.
+- [ ] **P1-T02 — Test the default path** · Not Started  
+  **Work:** Add `node:test` cases for the default result and invalid bill and people values (R-01; design Acceptance checks).  
+  **Deliverable:** `tests/tip-split.test.js` with default-path tests.  
+  **Done when:** `node --test tests/tip-split.test.js` passes the default-path cases.  
+  **Depends on:** P1-T01.
+
+### P2 — Optional tip
+
+- [ ] **P2-T01 — Check the combined command** · Not Started  
+  **Work:** After TFR2-002 adds `--tip`, run the full command tests and the R-01 half-cent example using `--tip 0` (design Technical sequence step 3).  
+  **Deliverable:** Recorded test results on TFR2-001; TFR2-002 keeps its own result evidence.  
+  **Done when:** The full test suite passes and `node bin/tip-split.js 0.01 2 --tip 0` prints `Each person pays $0.01`.  
+  **Depends on:** P1-T02 and TFR2-002 build.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR2-001 --section Tasks --text '### P1 — Default tip command
+
+- [x] **P1-T01 — Add the default command** · Done  
+  **Work:** Build bill and people validation, the 18% calculation, half-cent-up rounding, and output formatting (R-01; design Technical sequence step 1).  
+  **Deliverable:** "'`bin/tip-split.js` with the default path.  
+  **Done when:** `node bin/tip-split.js 84.50 3` prints `Each person pays $33.24`; invalid bill and people values print the usage line and exit 1.  
+  **Depends on:** None.
+- [x] **P1-T02 — Test the default path** · Done  
+  **Work:
+  -> Saved "Tasks" in TFR2-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show TFR2-001 --section Tasks'
+  -> ## Tasks
+
+### P1 — Default tip command
+
+- [x] **P1-T01 — Add the default command** · Done  
+  **Work:** Build bill and people validation, the 18% calculation, half-cent-up rounding, and output formatting (R-01; design Technical sequence step 1).  
+  **Deliverable:** `bin/tip-split.js` with the default path.  
+  **Done when:** `node bin/tip-split.js 84.50 3` prints `Each person pays $33.24`; invalid bill and people values print the usage line and exit 1.  
+  **Depends on:** None.
+- [x] **P1-T02 — Test the default path** · Done  
+  **Work:** Add `node:test` cases for the default result and invalid bill and people values (R-01; design Acceptance checks).  
+  **Deliverable:** `tests/tip-split.test.js` with default-path tests.  
+  **Done when:** `node --test tests/tip-split.test.js` passes the default-path cases.  
+  **Depends on:** P1-T01.
+
+### P2 — Optional tip
+
+- [ ] **P2-T01 — Check the combined command** · Not Started  
+  **Work:** After TFR2-002 adds `--tip`, run the full command tests and the R-01 half-cent example using `--tip 0` (design Technical sequence step 3).  
+  **Deliverable:** Recorded test results on TFR2-001; TFR2-002 keeps its own result evidence.  
+  **Done when:** The full test suite passes and `node bin/tip-split.js 0.01 2 --tip 0` prints `Each person pays $0.01`.  
+  **Depends on:** P1-T02 and TFR2-002 build.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set TFR2-002 --stage 07-tracking-setup'
+  -> Updated TFR2-002: stage 06 Implementation plan -> 07 Tracking setup (status In Progress).
+Now 07 Tracking setup (In Progress). Continue with work-on.
+
+
+[CMD exit=0] /bin/zsh -lc 'git worktree add .claude/worktrees/tfr2-002-add-the-tip-option -b claude/tfr2-002-add-the-tip-option claude/tfr2-001-build-the-tip-split-command'
+  -> Preparing worktree (new branch 'claude/tfr2-002-add-the-tip-option')
+HEAD is now at e9dd6fa Build default tip split command
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set TFR2-002 --stage 08-build'
+  -> Updated TFR2-002: stage 07 Tracking setup -> 08 Build (status In Progress).
+Now 08 Build (In Progress). Continue with work-on.
+
+
+[AGENT] TFR2-002 now starts from the committed default command. I’m adding exact decimal tip parsing and tests for custom, zero, fractional, scientific, and invalid percentages.
+
+[FILE_CHANGE] [{"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-002-add-the-tip-option/bin/tip-split.js", "kind": "update"}, {"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-002-add-the-tip-option/tests/tip-split.test.js", "kind": "update"}]
+
+[CMD exit=0] /bin/zsh -lc 'git diff --check'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'node bin/tip-split.js 84.50 3 --tip 20'
+  -> Each person pays $33.80
+
+
+[CMD exit=0] /bin/zsh -lc 'node bin/tip-split.js 0.01 2 --tip 0'
+  -> Each person pays $0.01
+
+
+[CMD exit=0] /bin/zsh -lc 'node --test tests/tip-split.test.js'
+  -> ✔ splits the approved default example (40.237792ms)
+✔ rounds exact half cents up and supports zero and leading zeroes (118.502042ms)
+✔ rejects invalid bill and people input with usage and exit code 1 (499.364375ms)
+✔ uses a custom or zero tip and rounds the final share (210.749833ms)
+✔ rejects missi
+
+[CMD exit=0] /bin/zsh -lc 'git add bin/tip-split.js tests/tip-split.test.js'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git branch --show-current'
+  -> claude/tfr2-002-add-the-tip-option
+
+
+[CMD exit=0] /bin/zsh -lc 'git diff --cached'
+  -> diff --git a/bin/tip-split.js b/bin/tip-split.js
+index c4d1ba7..ecc1a63 100644
+--- a/bin/tip-split.js
++++ b/bin/tip-split.js
+@@ -14,19 +14,31 @@ function parsePeople(value) {
+   return people > 0n ? people : null;
+ }
+ 
++function parseTip(value) {
++  const match = /^\+?(\d+(?:\.\d*)?|\.\d+)(?:[eE]([+
+
+[CMD exit=0] /bin/zsh -lc 'git diff --cached --name-status'
+  -> M	bin/tip-split.js
+M	tests/tip-split.test.js
+
+
+[CMD exit=0] /bin/zsh -lc "git commit -m 'Add optional tip percentage'"
+  -> [claude/tfr2-002-add-the-tip-option dd7f00f] Add optional tip percentage
+ 2 files changed, 46 insertions(+), 4 deletions(-)
+
+
+[AGENT] The `--tip` path is built and committed. The full suite passes: `--tip 20` prints `$33.80`, and `--tip 0` prints `$0.01` for the half-cent example. I’m checking both items against their acceptance criteria and recording separate review results.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-check/SKILL.md'
+  -> ---
+name: work-check
+description: 'Tests a finished build against its work item''s requirements, fixes what fails, and asks the owner to approve the result. Use when the last build task is done, or the owner asks whether it is ready to ship or works, for example "is it ready", "test it", or "check it against what I asked for".'
+---
+
+# Work check
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Checks a finished build against every requirement with an independent checker, fixes what fails, and asks the owner to approve the result; it never merges, deploys, or marks Done. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Find the item as `work-on` does: the id he named, this worktree's item, or a title that matches; two matches, ask one question naming both. Read the requirements, the Acceptance list, the Tasks, and the design's Acceptance checks; a sub-item with no design of its own is checked against its parent's (`references/testing.md`, section 1). Then set the testing stage.
+   `toolkit work show <id>`
+   `toolkit work design <id>`
+   `toolkit work set <id> --stage 09-testing`
+2. Run the project's tests and every acceptance check the item lists. Several scenarios or manual steps: write a test plan in `tests/` on the item's branch (`references/testing.md`, sections 2 and 3).
+3
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-check/references/current-focus.md'"
+  -> <!-- Generated file. Source: plugins/memory/shared/current-focus.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# The current focus
+
+Purpose: the format of the current focus, when to change it, and the exact
+read-change-save sequence, in every memory backend.
+
+## Contents
+
+- What the focus is for
+- The format
+- What goes in each section
+- When to check it
+- Read, change, save
+- A new project's focus
+- Examples
+- Checklist for a focus save
+
+## What the focus is for
+
+The current focus is the first thing the next session reads: the session
+briefing includes it. It says what is happening now and where the next
+session starts. It never repeats the tracker: a work item's status, tasks,
+and history stay in the work item.
+
+| Backend | Where the focus lives |
+| --- | --- |
+| Built-in | `.memory/CURRENT_FOCUS.md` in the main checkout |
+| Hindsight | The document `focus` in the project's bank |
+| Notion | The "Current focus" page under the project's page |
+
+The same commands read and save it in every backend. Never edit the file or
+the page by hand.
+
+## The format
+
+The model's format: a `# Current focus` title line, a `Last updated:` line,
+then exactly four `##` sections in this order, under 50 lines in total.
+
+```markdown
+# Current focus
+
+Last updated: <YYYY-MM-DD>, <source>, <person or agent>
+
+## Now
+
+## Waiting on the owner
+
+## Untracked to-dos
+
+## Next session starts with
+```
+
+What the command enforces:
+
+- It refuses a focus that lacks one of the four se
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-check/references/approvals.md'"
+  -> <!-- Generated file. Source: plugins/work/shared/approvals.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Approvals and gates
+
+The exact steps to ask for and record each owner approval, and what counts as
+one. Run each checklist in order; one wrong or missing command leaves the
+item in the wrong state.
+
+## Contents
+
+1. What counts as approval
+2. Requirements approval
+3. Design approval
+4. Result approval
+5. Done
+6. Cancel
+7. Delivery offer
+8. Project-wide decision
+9. Memory proposal
+10. Sub-items and approvals
+11. Standing merge instruction
+12. When an approve command refuses
+
+## 1. What counts as approval
+
+`toolkit work lifecycle` prints the gates and these rules. In short:
+
+- Only the owner's explicit words count. Quote them in a history note.
+- A question, a suggestion, a tentative answer ("probably B"), silence, or a
+  saved draft is not approval.
+- An approval covers only what was shown. It never covers merge, deployment,
+  spending, or publishing.
+- An approval survives later stages. A stage alone does not prove approval:
+  check the approval field (`toolkit work show <id>`).
+- A bare "yes", "ok", or "looks good" answers only a yes-or-no question asked
+  earlier in this conversation. When none was asked, or the waiting question
+  is not a yes-or-no question, show the decision with its choices and your
+  recommendation, and record nothing.
+- After a yes, save his words first, in a history note that starts with
+  `Owner said:`. Then run the 
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-check/references/testing.md'"
+  -> # Testing a work item
+
+How `work-check` decides what to check, writes a test plan when one is
+needed, briefs the independent checker, runs the fix loop, and records the
+result.
+
+## Contents
+
+1. What to check against
+2. When a test plan is needed
+3. Writing the test plan
+4. Briefing the acceptance checker
+5. The check and fix loop
+6. Recording the result
+7. Showing the result to the owner
+
+## 1. What to check against
+
+Read these before running anything:
+
+- every `R-xx` block and its Acceptance check, and the item's Acceptance
+  list: `toolkit work show <id>`;
+- the design's "Build and verification plan" > Acceptance checks, and the
+  selected option's "How to check it" column: `toolkit work design <id>`
+  (it exits 1 when the item has no design);
+- a sub-item whose show output says "Design: none of its own; WI-012's design
+  is approved" is checked against the parent's design:
+  `toolkit work design <parent-id>`;
+- the Tasks section, to know what was built and on which branch.
+
+## 2. When a test plan is needed
+
+A test plan is needed when a check has several scenarios, a manual step, test
+data, or a release across environments. The item's own acceptance checks are
+enough when each one is a single automated test or a single observation.
+
+## 3. Writing the test plan
+
+- [ ] Work in the item's worktree, on its branch. Never on the default branch.
+- [ ] Copy `tests/TEST-PLAN-TEMPLATE.md` to `tests/<id>-TEST-PLAN.md`, for
+      example `tests/WI-012-TEST-PLAN.md`. Leave the template 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show TFR2-002 --section Tasks'
+  -> ## Tasks
+
+### P1 — Optional tip
+
+- [ ] **P1-T01 — Add optional tip parsing** · Not Started  
+  **Work:** Add `--tip <percent>` parsing, exact decimal percentage handling, and validation to the parent command (TFR2-001 R-02; design Technical sequence step 2).  
+  **Deliverable:** Updated `bin/tip-split.js`.  
+  **Done when:** `node bin/tip-split.js 84.50 3 --tip 20` prints `Each person pays $33.80`; invalid tips print the usage line and exit 1.  
+  **Depends on:** TFR2-001 P1-T01.
+- [ ] **P1-T02 — Test optional tips** · Not Started  
+  **Work:** Add `node:test` cases for custom, zero, fractional, large, scientific, missing, and invalid tips (TFR2-001 R-02; design Acceptance checks).  
+  **Deliverable:** Updated `tests/tip-split.test.js` and recorded results.  
+  **Done when:** The full suite passes; `node bin/tip-split.js 0.01 2 --tip 0` prints `Each person pays $0.01`.  
+  **Depends on:** P1-T01.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR2-002 --section Tasks --text '### P1 — Optional tip
+
+- [x] **P1-T01 — Add optional tip parsing** · Done  
+  **Work:** Add "'`--tip <percent>` parsing, exact decimal percentage handling, and validation to the parent command (TFR2-001 R-02; design Technical sequence step 2).  
+  **Deliverable:** Updated `bin/tip-split.js`.  
+  **Done when:** `node bin/tip-split.js 84.50 3 --tip 20` prints `Each person pays $33.80`; invalid tips print the usage line and exit 1.  
+  **Depends on:** TFR2-001 P1-T01.
+- [x] **P1-T02 — Test optional tips** · Done  
+  **Work:** Add `n
+  -> Saved "Tasks" in TFR2-002.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show TFR2-002 --section Tasks'
+  -> ## Tasks
+
+### P1 — Optional tip
+
+- [x] **P1-T01 — Add optional tip parsing** · Done  
+  **Work:** Add `--tip <percent>` parsing, exact decimal percentage handling, and validation to the parent command (TFR2-001 R-02; design Technical sequence step 2).  
+  **Deliverable:** Updated `bin/tip-split.js`.  
+  **Done when:** `node bin/tip-split.js 84.50 3 --tip 20` prints `Each person pays $33.80`; invalid tips print the usage line and exit 1.  
+  **Depends on:** TFR2-001 P1-T01.
+- [x] **P1-T02 — Test optional tips** · Done  
+  **Work:** Add `node:test` cases for custom, zero, fractional, large, scientific, missing, and invalid tips (TFR2-001 R-02; design Acceptance checks).  
+  **Deliverable:** Updated `tests/tip-split.test.js` and recorded results.  
+  **Done when:** The full suite passes; `node bin/tip-split.js 0.01 2 --tip 0` prints `Each person pays $0.01`.  
+  **Depends on:** P1-T01.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR2-001 --section Tasks --text '### P1 — Default tip command
+
+- [x] **P1-T01 — Add the default command** · Done  
+  **Work:** Build bill and people validation, the 18% calculation, half-cent-up rounding, and output formatting (R-01; design Technical sequence step 1).  
+  **Deliverable:** "'`bin/tip-split.js` with the default path.  
+  **Done when:** `node bin/tip-split.js 84.50 3` prints `Each person pays $33.24`; invalid bill and people values print the usage line and exit 1.  
+  **Depends on:** None.
+- [x] **P1-T02 — Test the default path** · Done  
+  **Work:
+  -> Saved "Tasks" in TFR2-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show TFR2-001 --section Tasks'
+  -> ## Tasks
+
+### P1 — Default tip command
+
+- [x] **P1-T01 — Add the default command** · Done  
+  **Work:** Build bill and people validation, the 18% calculation, half-cent-up rounding, and output formatting (R-01; design Technical sequence step 1).  
+  **Deliverable:** `bin/tip-split.js` with the default path.  
+  **Done when:** `node bin/tip-split.js 84.50 3` prints `Each person pays $33.24`; invalid bill and people values print the usage line and exit 1.  
+  **Depends on:** None.
+- [x] **P1-T02 — Test the default path** · Done  
+  **Work:** Add `node:test` cases for the default result and invalid bill and people values (R-01; design Acceptance checks).  
+  **Deliverable:** `tests/tip-split.test.js` with default-path tests.  
+  **Done when:** `node --test tests/tip-split.test.js` passes the default-path cases.  
+  **Depends on:** P1-T01.
+
+### P2 — Optional tip
+
+- [x] **P2-T01 — Check the combined command** · Done  
+  **Work:** After TFR2-002 adds `--tip`, run the full command tests and the R-01 half-cent example using `--tip 0` (design Technical sequence step 3).  
+  **Deliverable:** Recorded test results on TFR2-001; TFR2-002 keeps its own result evidence.  
+  **Done when:** The full test suite passes and `node bin/tip-split.js 0.01 2 --tip 0` prints `Each person pays $0.01`.  
+  **Depends on:** P1-T02 and TFR2-002 build.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set TFR2-001 --stage 09-testing'
+  -> Updated TFR2-001: stage 08 Build -> 09 Testing (status In Progress).
+Now 09 Testing (In Progress). Continue with work-check.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set TFR2-002 --stage 09-testing'
+  -> Updated TFR2-002: stage 08 Build -> 09 Testing (status In Progress).
+Now 09 Testing (In Progress). Continue with work-check.
+
+
+[FILE_CHANGE] [{"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-001-build-the-tip-split-command/tests/TFR2-001-TEST-PLAN.md", "kind": "add"}, {"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-002-add-the-tip-option/tests/TFR2-002-TEST-PLAN.md", "kind": "add"}]
+
+[CMD exit=0] /bin/zsh -lc 'git add tests/TFR2-001-TEST-PLAN.md'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git diff --cached --name-status'
+  -> A	tests/TFR2-001-TEST-PLAN.md
+
+
+[CMD exit=0] /bin/zsh -lc 'git diff --cached'
+  -> diff --git a/tests/TFR2-001-TEST-PLAN.md b/tests/TFR2-001-TEST-PLAN.md
+new file mode 100644
+index 0000000..1148878
+--- /dev/null
++++ b/tests/TFR2-001-TEST-PLAN.md
+@@ -0,0 +1,25 @@
++# TFR2-001 test plan
++
++## Scope
++
++Check R-01 for the default 18% tip command. Check the approved half-cent example on
+
+[CMD exit=0] /bin/zsh -lc "git commit -m 'Record default command test results'"
+  -> [claude/tfr2-001-build-the-tip-split-command ff39be4] Record default command test results
+ 1 file changed, 25 insertions(+)
+ create mode 100644 tests/TFR2-001-TEST-PLAN.md
+
+
+[CMD exit=0] /bin/zsh -lc 'git add tests/TFR2-002-TEST-PLAN.md'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git diff --cached --name-status'
+  -> A	tests/TFR2-002-TEST-PLAN.md
+
+
+[CMD exit=0] /bin/zsh -lc 'git diff --cached'
+  -> diff --git a/tests/TFR2-002-TEST-PLAN.md b/tests/TFR2-002-TEST-PLAN.md
+new file mode 100644
+index 0000000..2da2c46
+--- /dev/null
++++ b/tests/TFR2-002-TEST-PLAN.md
+@@ -0,0 +1,25 @@
++# TFR2-002 test plan
++
++## Scope
++
++Check TFR2-001 R-02 through TFR2-002: a custom tip replaces 18%, with exact decimal
+
+[CMD exit=0] /bin/zsh -lc "git commit -m 'Record optional tip test results'"
+  -> [claude/tfr2-002-add-the-tip-option 339892d] Record optional tip test results
+ 1 file changed, 25 insertions(+)
+ create mode 100644 tests/TFR2-002-TEST-PLAN.md
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show TFR2-002 --section Roadmap'
+  -> ## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Optional tip | The command accepts a valid `--tip` value and replaces the default 18% (TFR2-001 R-02). | Not Started | The `--tip 20` and `--tip 0` examples and invalid-tip tests pass. | None. |
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show TFR2-002 --section Overview'
+  -> ## Overview
+
+**Goal:** Let a person choose a nonnegative tip percentage with `--tip` and see the resulting equal share.
+
+**Current position:** Created under TFR2-001 to deliver approved R-02. It inherits the parent’s approved Option A design. No implementation has started.
+
+**Next action:** Plan the optional tip parser, tests, and separate result review after the parent delivery choice is settled.
+
+**Blockers:** The parent default command is a build dependency.
+
+**Related items:** Design: TFR2-001’s approved Option A.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show TFR2-002 --section 'Resume here'"
+  -> ### Resume here
+
+Continue TFR2-002 after the TFR2-001 delivery choice. Plan and build optional tip parsing and tests on its own branch after the parent default command is available. Present this result for a separate owner approval.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show TFR2-001 --section Roadmap'
+  -> ## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Default tip command | The command splits a bill with the 18% default tip (R-01). | Not Started | The default example and invalid bill or people checks pass. | None. |
+| P2 — Optional tip | The command accepts `--tip <percent>` (R-02). | Not Started | TFR2-002 passes its custom-tip and invalid-tip checks, including the R-01 half-cent example using `--tip 0`; its result is reviewed separately. | None. |
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show TFR2-001 --section Overview'
+  -> ## Overview
+
+**Goal:** Split a restaurant bill equally with an 18% default tip and an optional tip percentage.
+
+**Current position:** Requirements R-01 and R-02 and design Option A are approved. TFR2-002 was created for the optional `--tip` behavior and its separate result review. No implementation has started.
+
+**Next action:** Settle the delivery choice, then plan P1 for the default command and P2 for TFR2-002.
+
+**Blockers:** Delivery choice before build.
+
+**Related items:** Sub-item TFR2-002 covers R-02.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show TFR2-001 --section 'Resume here'"
+  -> ### Resume here
+
+Continue TFR2-001 at implementation planning. The parent delivers the default 18% path (R-01); TFR2-002 delivers `--tip` (R-02). Settle the delivery choice, then plan both items from the approved Option A design. Keep separate result approvals.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR2-001 --section Roadmap --text 'A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Default tip command | The command splits a bill with the 18% default tip (R-01). | Done | The default example and invalid bill or people checks pass. | None. |
+| P2 — Optional tip | The command accepts "'`--tip <percent>` (R-02). | In Progress | TFR2-002 passes its custom-tip and invalid-tip checks, including the R-01 half-cent example using `--tip 0`; its res
+  -> Saved "Roadmap" in TFR2-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR2-002 --section Roadmap --text 'A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Optional tip | The command accepts a valid "'`--tip` value and replaces the default 18% (TFR2-001 R-02). | Done | The `--tip 20` and `--tip 0` examples and invalid-tip tests pass. | None. |'"'"
+  -> Saved "Roadmap" in TFR2-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR2-001 --section Overview --text '**Goal:** Split a restaurant bill equally with an 18% default tip and an optional tip percentage.
+
+**Current position:** The default command is built on TFR2-001 branch at ff39be4. Its 3 tests pass, and the approved "'$84.50 example prints $33.24. TFR2-002 is a separate top-level item; its combined command passes 5 tests, including the zero-tip half-cent check.
+
+**Next action:** Show the default command result to Mike Rihm for its own approval. Leave both branches unmerged.
+
+**Blockers:** Owner result approval is pending.
+
+**R
+  -> Saved "Overview" in TFR2-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR2-002 --section Overview --text '**Goal:** Let a person choose a nonnegative tip percentage with "'`--tip` and see the resulting equal share.
+
+**Current position:** The optional tip command is built on TFR2-002 branch at 339892d, based on the TFR2-001 default command. All 5 tests pass. The 20% example prints $33.80 and the zero-tip half-cent example prints $0.01.
+
+**Next action:** Show this result to Mike Rihm for approval separate from TFR2-001. Leave both branches unmerged.
+
+**Blockers:** Owner result approval is pending.
+
+**Related items:** Covers TFR2-001
+  -> Saved "Overview" in TFR2-002.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show TFR2-002 --section Roadmap'
+  -> ## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Optional tip | The command accepts a valid `--tip` value and replaces the default 18% (TFR2-001 R-02). | Done | The `--tip 20` and `--tip 0` examples and invalid-tip tests pass. | None. |
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show TFR2-001 --section Roadmap'
+  -> ## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Default tip command | The command splits a bill with the 18% default tip (R-01). | Done | The default example and invalid bill or people checks pass. | None. |
+| P2 — Optional tip | The command accepts `--tip <percent>` (R-02). | In Progress | TFR2-002 passes its custom-tip and invalid-tip checks, including the R-01 half-cent example using `--tip 0`; its result is reviewed separately. | None. |
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show TFR2-001 --section Overview'
+  -> ## Overview
+
+**Goal:** Split a restaurant bill equally with an 18% default tip and an optional tip percentage.
+
+**Current position:** The default command is built on TFR2-001 branch at ff39be4. Its 3 tests pass, and the approved $84.50 example prints $33.24. TFR2-002 is a separate top-level item; its combined command passes 5 tests, including the zero-tip half-cent check.
+
+**Next action:** Show the default command result to Mike Rihm for its own approval. Leave both branches unmerged.
+
+**Blockers:** Owner result approval is pending.
+
+**Related items:** TFR2-002 covers R-02 and has a separate result review.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show TFR2-002 --section Overview'
+  -> ## Overview
+
+**Goal:** Let a person choose a nonnegative tip percentage with `--tip` and see the resulting equal share.
+
+**Current position:** The optional tip command is built on TFR2-002 branch at 339892d, based on the TFR2-001 default command. All 5 tests pass. The 20% example prints $33.80 and the zero-tip half-cent example prints $0.01.
+
+**Next action:** Show this result to Mike Rihm for approval separate from TFR2-001. Leave both branches unmerged.
+
+**Blockers:** Owner result approval is pending.
+
+**Related items:** Covers TFR2-001 R-02 and follows its approved Option A design. The owner made this item top-level in Notion.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR2-001 --section 'Resume here' --text 'TFR2-001 default result is built and tested on branch claude/tfr2-001-build-the-tip-split-command at ff39be4. The owner reviews this result separately from TFR2-002. Ask for result approval, then continue with work-finish only after his answer. No merge is authorized yet.'"
+  -> Saved "Resume here" in TFR2-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR2-002 --section 'Resume here' --text 'TFR2-002 optional tip result is built and tested on branch claude/tfr2-002-add-the-tip-option at 339892d. It depends on the TFR2-001 command commit e9dd6fa. The owner reviews this result separately from TFR2-001. Ask for result approval, then continue with work-finish only after his answer. No merge is authorized yet.'"
+  -> Saved "Resume here" in TFR2-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history TFR2-001 --note 'Checked R-01 default command at ff39be4: 3 tests passed; direct "'$84.50 example printed $33.24. Combined TFR2-002 branch at 339892d: 5 tests passed and zero-tip half-cent example printed $0.01. Evidence: tests/TFR2-001-TEST-PLAN.md. No independent agent check; no gaps found.'"' --effect 'Default command result is ready for separate owner approval; branches remain unmerged.'"
+  -> Added a Recent History row to TFR2-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history TFR2-002 --note 'Checked R-02 optional tip command at 339892d: 5 tests passed; direct 20% and zero-tip examples printed "'$33.80 and $0.01. Evidence: tests/TFR2-002-TEST-PLAN.md. No independent agent check; no gaps found.'"' --effect 'Optional tip result is ready for separate owner approval; branches remain unmerged.'"
+  -> Added a Recent History row to TFR2-002.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set TFR2-001 --stage 11-user-approval --waiting-on owner'
+  -> Updated TFR2-001: stage 09 Testing -> 11 User approval (status In Progress); waiting on owner.
+Now 11 User approval (In Progress). Continue with work-decide.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set TFR2-002 --stage 11-user-approval --waiting-on owner'
+  -> Updated TFR2-002: stage 09 Testing -> 11 User approval (status In Progress); waiting on owner.
+Now 11 User approval (In Progress). Continue with work-decide.
+
+
+[AGENT] Both results are now ready for your separate reviews. I’ve recorded the test evidence on each item and left both branches unmerged. I’m finishing the tracker and session focus checks before I show you the commands to try.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/SKILL.md'
+  -> ---
+name: memory-save
+description: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says "remember this", "from now on", "forget that", or "remind me" with no time given, corrects the agent, or a hook says a save is due.'
+---
+
+# Memory save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Saves, corrects, or retires one memory record with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand.
+
+## Steps
+
+Track these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home ("Where other things go" below) and stop.
+2. Search for a record that already holds it, and read each hit with its version. The save's duplicate check compares wording, so only this search finds a record the new fact contradicts (for example "Mondays" against "Tuesdays").
+   `toolkit memory find '<topic>'`
+   `toolkit memory get <key> --json`
+3. Read the approval mode and apply "Approval policy" below. When it says ask, ask and wait.
+   `toolkit config get memory.approval`
+4. Write the description and body in the record format (`refer
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus --json'
+  -> {
+  "ok": true,
+  "backend": "notion",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- TFR2-001 Build the tip-split command\n- TFR2-002 Add the --tip option\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue TFR2-001 from its Resume here: owner answers Q-04 about delivery responsibility, then build the default path and TFR2-002 optional tip path for separate reviews.\n",
+  "version": "259fb33da3ccd0588f3db298db8a8519c06f711eb4f03d279eb66f1290547d91"
+}
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- TFR2-001 Build the tip-split command
+- TFR2-002 Add the --tip option
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue TFR2-001 and TFR2-002 from their Resume here notes: both test
+  -> Saved the current focus (21 lines). Version: c5bb62a69299
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- TFR2-001 Build the tip-split command
+- TFR2-002 Add the --tip option
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue TFR2-001 and TFR2-002 from their Resume here notes: both tested results await separate owner approvals; no merge is authorized yet.
+
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## claude/tfr2-002-add-the-tip-option
+
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## claude/tfr2-001-build-the-tip-split-command
+
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2                                                        77fd652 [main]
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for Toolkit V2 final run (safe to delete) (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (4):
+- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- README.md is the project's own file from before the toolkit, so sync le
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 2 decisions wait on the owner:
+
+TFR2-001 Build the tip-split command
+  - TFR2-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve TFR2-001 --result --by <name>. (work-decide)
+
+TFR2-002 Add the --tip option
+  - TFR2-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve TFR2-002 --result --by <name>. (work-decide)
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate TFR2-002'
+  -> Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate TFR2-001'
+  -> Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+
+
+[AGENT] Both results are built and tested on separate branches. Neither is merged.
+
+- **TFR2-001 — default 18% tip:** `84.50 3` prints `Each person pays $33.24`. All 3 default-path tests pass. [Command](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-001-build-the-tip-split-command/bin/tip-split.js) · [Test results](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-001-build-the-tip-split-command/tests/TFR2-001-TEST-PLAN.md)
+- **TFR2-002 — optional `--tip`:** `84.50 3 --tip 20` prints `Each person pays $33.80`; `0.01 2 --tip 0` prints `$0.01`. All 5 combined tests pass. [Command](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-002-add-the-tip-option/bin/tip-split.js) · [Test results](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-002-add-the-tip-option/tests/TFR2-002-TEST-PLAN.md)
+
+You can try each from the project root:
+
+```sh
+node .claude/worktrees/tfr2-001-build-the-tip-split-command/bin/tip-split.js 84.50 3
+node .claude/worktrees/tfr2-002-add-the-tip-option/bin/tip-split.js 84.50 3 --tip 20
+```
+
+I did the checks myself; no independent agent check ran, as you requested no agent team. The tracker records TFR2-002 as a top-level item following your Notion change.
+
+Do you approve each result? You can approve TFR2-001, TFR2-002, both, or neither.
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 5275493, "cached_input_tokens": 5172608, "cache_write_input_tokens": 0, "output_tokens": 18930, "reasoning_output_tokens": 4772}}
+
+SKILLS OPENED: ['work-organize', 'work-decide', 'work-on', 'work-delegate', 'work-check', 'memory-save']
+
+[HOOK CONTEXT ord=9] Project briefing: Toolkit V2 final run (safe to delete) (tv2-final-run-2), owner Mike Rihm. Work items: the Notion Work Items database (ids like TFR2-001). Memory: Notion, in Lore's layout (a Memory page on the project row with Lore's databases). Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- TFR2-001 Build the tip-split command: 06 Implementation plan, In Progress, waiting on owner. Next action: Settle the delivery choice, then plan P1 for the default command and P2 for TFR2-002. Continues with work-decide.
+- TFR2-002 Add the --tip option: 06 Implementation plan, In Progress. Next action: Plan the optional tip parser, tests, and separate result review after the parent delivery choice is settled. Continues with work-on.
+
+Waiting on the owner:
+- TFR2-00
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await tools.exec_command({cmd:"pwd && rg --files -g 'SOUL.md' -g 'PROJECT.md' -g 'PROJECT-ROADMAP.md' -g 'DECISIONS.md' -g 'AGENTS.md' -g '.claude/rules/*.md' -g 'tests/**' -g '.toolkit.json' | sort && git status --short --branch","workdir":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2","yield_time_ms":10000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2\n.toolkit.json\nAGENTS.md\nDECISIONS.md\nPROJECT-ROADMAP.md\nPROJECT.md\nrequirements/AGENTS.md\ntests/TEST-PLAN-TEMPLATE.md\n## main\n"}]
+
+[CALL] const paths=["/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/SKILL.md","/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-on/SKILL.md","/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-organize/SKILL.md"]; const rs=await Promise.allSettled(paths.map(p=>tools.exec_command({cmd:"cat '"+p+"'","max_output_tokens":12000}))); rs.forEach((r,i)=>text(`FILE ${paths[i]}\n${r.status==="fulfilled"?r.value.output:String(r.reason)}`));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "FILE /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/SKILL.md\n---\nname: work-decide\ndescription: 'Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers. Use when he asks \"what do you need from me\", answers a waiting decision (\"go with option B\"), or states a project-wide decision.'\n---\n\n# Work decide\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nWalks the owner through what waits on him, one decision at a time, and records each answer where it belongs. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.\n\n## Steps\n\n1. Build the queue. The command lists each decision once: requirements waiting for approval, proposed designs, results at stage 11, Open Questions rows the owner decides, and memory proposals. Its \"Agent to-do\" lines are not decisions. A delivery offer belongs to `work-delegate`: open it after his other decisions.\n   `toolkit work decisions`\n2. He gave an answer without being asked (\"approved\", \"go with B\"): match it to exactly one waiting decision; when two could match, ask which, naming both. A bare \"yes\", \"ok\", or \"looks good\" with no question asked is not an answer (`references/approvals.md`, section 1).\n3. Otherwise start with the count and one short line for every waiting decision, memory proposals included (\"3 decisions wait on you: the WI-004 design, the WI-006 result, and a memory proposal about deploy days.\"). Then take them one at a time, the one blocking the most work first: what is decided, the choices, your recommendation and its main reason, and what happens after each answer. One decision per message, in the reply text.\n4. An approval: read the item, then run that gate's checklist in `references/approvals.md` (requirements: section 2; design: section 3; result: section 4).\n   `toolkit work show <id>`\n5. An Open Questions answer: save his words first, rewrite that row with the answer, the date, and Answered, then set `waiting_on` back (`references/recording-owner-answers.md`, sections 4 and 5).\n   `toolkit work history <id> --note 'Owner said: <quote>' --effect '<what the answer changes>'`\n   `toolk
+
+[CALL] const files=["SOUL.md","PROJECT.md","PROJECT-ROADMAP.md","DECISIONS.md",".claude/rules/humanize-outbound-text.md",".claude/rules/keep-work-item-current.md",".claude/rules/memory-review-and-save.md",".claude/rules/plain-english-artifacts.md",".claude/rules/session-handoff.md",".claude/rules/shared-repository-work.md"]; const rs=await Promise.allSettled(files.map(f=>tools.exec_command({cmd:"cat '"+f+"'","max_output_tokens":7000}))); rs.forEach((r,i)=>text(`FILE ${files[i]}\n${r.status==="fulfilled"?r.value.output:String(r.reason)}`));
+
+
+[CALL] const base="/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills"; const files=["work-delegate/SKILL.md","work-decide/references/recording-owner-answers.md","work-decide/references/work-item-format.md","work-on/references/planning.md","work-on/references/git-rules.md","work-on/references/sizing-and-routing.md","work-organize/references/moves.md"]; const rs=await Promise.allSettled(files.map(f=>tools.exec_command({cmd:"cat '"+base+"/"+f+"'","max_output_tokens":14000}))); rs.forEach((r,i)=>text(`FILE ${files[i]}\n${r.status==="fulfilled"?r.value.output:String(r.reason)}`));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "Warning: truncated output (original token count: 15252)\nTotal output lines: 1150\n\nFILE work-delegate/SKILL.md\n---\nname: work-delegate\ndescription: 'Hands a work item''s goal to a team of agents with the owner as product owner: makes the delivery offer, records his choice, and runs the team. Use whenever the owner hands a goal over (\"you drive\", \"take it from here\"), even a named item, or work-on starts a large goal with no delivery choice.'\n---\n\n# Work delegate\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nThe only skill that makes the agent-led delivery offer and records the answer; after a yes it runs the team through the skill that owns each stage. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.\n\n## Steps\n\n1. Look for a delivery choice that covers this goal: the item's `delivery` value, its Notes > Decisions and context, and its parent's choice. A sub-item makes no offer. A quick question, a small edit, or a small item (one or two tasks, no sub-items) gets no offer: record owner-led with the reason and go on (`references/agent-led-delivery.md`, section 1).\n   `toolkit work show <id> --section 'Decisions and context'`\n   `toolkit work set <id> --delivery owner-led --note 'Small item: one or two tasks, so no delivery offer.'`\n2. No choice recorded: add the offer as an Open Questions row, set the item waiting on the owner, and give your recommendation with its main reason in one line before the question (for example \"I recommend yes: the item has three phases that helpers can build side by side.\"). Then ask exactly this as the last line of the reply: \"Would you like agents to take responsibility for delivering this, with you acting as product owner?\" \"You drive\" in his own words is already the answer.\n   `toolkit work edit <id> --section 'Open Questions' --append-row '| <next Q-id> | Would you like agents to take responsibility for delivering this, with you acting as product owner? | delivery | Open | owner |'`\n   `toolkit work set <id> --waiting-on owner`\n3. Yes: ask the team question. Where the host lets this chat list, read, and message other chats and offer new chats to the owner: \"Do you want one team inside thi
+
+[CALL] const rs=await Promise.allSettled([
+  tools.exec_command({cmd:"git worktree list","max_output_tokens":2000}),
+  tools.exec_command({cmd:"git status","max_output_tokens":2000}),
+  tools.exec_command({cmd:"git remote","max_output_tokens":2000}),
+  tools.exec_command({cmd:"toolkit work decisions","max_output_tokens":4000}),
+  tools.exec_command({cmd:"toolkit work show TFR2-001","max_output_tokens":14000}),
+  tools.exec_command({cmd:"toolkit work show TFR2-002","max_output_tokens":14000}),
+  tools.exec_command({cmd:"toolkit work list --tree","max_output_tokens":3000})
+]); rs.forEach((r,i)=>text(`CMD ${i+1}\n${r.status==="fulfilled"?r.value.output:String(r.reason)}`));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 10.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "CMD 1\n/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2 77fd652 [main]\n"}, {"type": "input_text", "text": "CMD 2\nOn branch main\nnothing to commit, working tree clean\n"}, {"type": "input_text", "text": "CMD 3\n"}, {"type": "input_text", "text": "CMD 4\n"}, {"type": "input_text", "text": "CMD 5\n"}, {"type": "input_text", "text": "CMD 6\n"}, {"type": "input_text", "text": "CMD 7\nTracker changes found (work-organize handles moves, copies, and missing items; work-decide handles questions for the owner):\n  Re-parented: TFR2-002 was made a top-level item in Notion by hand. It was a sub-item of TFR2-001.\n\nTFR2-001  Build the tip-split command  (06 Implementation plan, In Progress, waiting on owner)\nTFR2-002  Add the --tip option  (06 Implementation plan, In Progress)\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show TFR2-001","yield_time_ms":30000,"max_output_tokens":16000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"f6a215\",\"wall_time_seconds\":2.909028584,\"exit_code\":0,\"original_token_count\":3190,\"output\":\"TFR2-001: Build the tip-split command\\nLocation: https://app.notion.com/p/Build-the-tip-split-command-3e9b381da17681e8a739cde47e080e24\\nStage: 06 Implementation plan (In Progress) | Waiting on: owner | Continue with: work-decide\\nParent: none | Sub-items: none | Design: approved (https://app.notion.com/p/TFR2-001-Build-the-tip-split-command-solution-design-3e9b381da1768133a4fbecd575748cc7)\\nWorktree branch for this item: claude/tfr2-001-build-the-tip-split-command (folder .claude/worktrees/tfr2-001-build-the-tip-split-command)\\n\\n---\\nid: TFR2-001\\ntitle: Build the tip-split command\\ntype: build\\nstage: 06-implementation-plan\\nstatus: In Progress\\nparent: none\\nwaiting_on: \\\"owner\\\"\\npriority: medium\\ndelivery: not-offered\\nrequirements_approved: \\\"2026-09-28 by Mike Rihm\\\"\\ndesign: approved\\nresult_approved: \\\"no\\\"\\nupdated: 2026-09-28\\n---\\n# TFR2-001: Build the tip-split command\\n\\n## Overview\\n\\n**Goal:** Split a restaurant bill equally with an 18% default tip and an optional tip percentage.\\n\\n**Current position:** Requirements R-01 and R-02 and design Option A are approved. TFR2-002 was created for the optional `--tip` behavior and its separate result review. No implementation has started.\\n\\n**Next action:** Settle the delivery choice, then plan P1 for the default command and P2 for TFR2-002.\\n\\n**Blockers:** Delivery choice before build.\\n\\n**Related items:** Sub-item TFR2-002 covers R-02.\\n\\n## Roadmap\\n\\nA phase is complete when its tasks are complete and its exit result has been checked.\\n\\n| Phase | Outcome | Status | Exit result | Sub-items |\\n|---|---|---|---|---|\\n| P1 \u2014 Default tip command | The command splits a bill with the 18% default tip (R-01). | Not Started | The default example and invalid bill or people checks pass. | None. |\\n| P2 \u2014 Optional tip | The command accepts `--tip <percent>` (R-02). | Not Started | TFR2-002 passes its custom-tip and invalid-tip checks, including the R-01 half-cent example using `--tip 0`; its result is reviewed separately. | None. |\\n\\n## Tasks\\n\\n### P1 \u2014 Default tip command\\n\\n- [ ] **P1-T01 \u2014 Add the default command** \u00b7 Not Started  \\n  **Work:** Build bill and people validation, the 1
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show TFR2-002","yield_time_ms":30000,"max_output_tokens":14000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 2.0 seconds\nOutput:\n"}, {"type": "input_text", "text": "TFR2-002: Add the --tip option\nLocation: https://app.notion.com/p/Add-the-tip-option-3e9b381da17681329539cd4b097626cf\nStage: 06 Implementation plan (In Progress) | Waiting on: none | Continue with: work-on\nParent: none | Sub-items: none | Design: none\nWorktree branch for this item: claude/tfr2-002-add-the-tip-option (folder .claude/worktrees/tfr2-002-add-the-tip-option)\n\n---\nid: TFR2-002\ntitle: Add the --tip option\ntype: build\nstage: 06-implementation-plan\nstatus: In Progress\nparent: none\nwaiting_on: \"none\"\npriority: medium\ndelivery: not-offered\nrequirements_approved: \"2026-09-28 by Mike Rihm\"\ndesign: none\nresult_approved: \"no\"\nupdated: 2026-09-28\n---\n# TFR2-002: Add the --tip option\n\n## Overview\n\n**Goal:** Let a person choose a nonnegative tip percentage with `--tip` and see the resulting equal share.\n\n**Current position:** Created under TFR2-001 to deliver approved R-02. It inherits the parent\u2019s approved Option A design. No implementation has started.\n\n**Next action:** Plan the optional tip parser, tests, and separate result review after the parent delivery choice is settled.\n\n**Blockers:** The parent default command is a build dependency.\n\n**Related items:** Design: TFR2-001\u2019s approved Option A.\n\n## Roadmap\n\nA phase is complete when its tasks are complete and its exit result has been checked.\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 \u2014 Optional tip | The command accepts a valid `--tip` value and replaces the default 18% (TFR2-001 R-02). | Not Started | The `--tip 20` and `--tip 0` examples and invalid-tip tests pass. | None. |\n\n## Tasks\n\n### P1 \u2014 Optional tip\n\n- [ ] **P1-T01 \u2014 Add optional tip parsing** \u00b7 Not Started  \n  **Work:** Add `--tip <percent>` parsing, exact decimal percentage handling, and validation to the parent command (TFR2-001 R-02; design Technical sequence step 2).  \n  **Deliverable:** Updated `bin/tip-split.js`.  \n  **Done when:** `node bin/tip-split.js 84.50 3 --tip 20` prints `Each person pays $33.80`; invalid tips print the usage line and exit 1.  \n  **Depends on:** TFR2-001 P1-T01.\n- [ ] **P1-T02 \u2014 Test optional tips** \u00b7 Not Started  \n  **Work:** Add `node:test` cases for custom, zero, fractional, large, scientific, missing, and invalid tips (TFR2-001 R-02; design Acceptance ch
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work design TFR2-001","yield_time_ms":30000,"max_output_tokens":12000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 2.6 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"4eb043\",\"wall_time_seconds\":2.240861208,\"exit_code\":0,\"original_token_count\":3158,\"output\":\"Design of TFR2-001 (approved) at https://app.notion.com/p/TFR2-001-Build-the-tip-split-command-solution-design-3e9b381da1768133a4fbecd575748cc7\\n\\n---\\nwork_item: TFR2-001\\nstatus: approved\\napproved: \\\"2026-09-28 by Mike Rihm\\\"\\n---\\n# TFR2-001: Build the tip-split command \u2014 solution design\\n\\n**Requirements:** TFR2-001  \\n**Design status:** Approved  \\n**Requirements checked:** TFR2-001 R-01 and R-02, 2026-09-28  \\n**Last updated:** 2026-09-28  \\n**Design approval:** Approved by Mike Rihm on 2026-09-28\\n\\n## What this design solves\\n\\nA person enters a restaurant bill and the number of people, optionally sets a tip percentage, and sees one equal per-person amount with tip included. The command uses an 18% default tip and rounds an exact half-cent share up. This item covers the command and its tests; no other system is involved.\\n\\n## Requirements and design readiness\\n\\nThe requirements analyst checked the full input-to-output flow on 2026-09-28 and found no material gap. Q-01, Q-02, and Q-03 are answered.\\n\\n| Requirement | Status in work item | Design coverage | Remaining decision or gap |\\n|---|---|---|---|\\n| R-01 \u2014 Split the bill with the default tip | Finalized | Option A: input validation, exact calculation, output, and tests | None |\\n| R-02 \u2014 Choose the tip percentage | Finalized | Option A: optional tip parsing, replacement of the default, and tests | None |\\n\\n## What exists today\\n\\nThe repository has project documents and a test-plan template. It has no implementation files or verified build or test command for this feature. The proposed command and test file are new.\\n\\n## Constraints and assumptions\\n\\n| Type | Constraint or assumption | Source and status | Effect on the design |\\n|---|---|---|---|\\n| Constraint | Use plain Node.js without npm packages and tests with `node:test`. | Project memory preference, 2026-09-28 | Use Node.js built-in modules only. |\\n| Constraint | Exact half-cent shares round up. | TFR2-001 Q-03, owner answer, 2026-09-28 | Calculate with integers and round the final share once. |\\n| Design choice | Accept ordinary nonnegative decimal numbers for the bill and tip; accept scientific decimal notation for tips. | Option A approve
+
+[CALL] const base="/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills"; const files=["work-delegate/references/agent-led-delivery.md","work-on/references/planning.md","work-on/references/git-rules.md","work-on/references/toolkit-commands.md","work-on/references/work-item-format.md"]; const rs=await Promise.allSettled(files.map(f=>tools.exec_command({cmd:"cat '"+base+"/"+f+"'","max_output_tokens":10000}))); rs.forEach((r,i)=>text(`FILE ${files[i]}\n${r.status==="fulfilled"?r.value.output:String(r.reason)}`));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "Warning: truncated output (original token count: 12032)\nTotal output lines: 1023\n\nFILE work-delegate/references/agent-led-delivery.md\n# Agent-led delivery\n\nThe rules for the delivery offer: when to make it, the exact questions, how\nto record the owner's answers, and what an acceptance allows. The four\nquestions keep their exact wording. The choice is recorded in the work item's\nNotes > Decisions and context and in its `delivery` value, in every tracker.\n\n## Contents\n\n1. Offer once for the goal\n2. Ask how the team is arranged\n3. Record the choice\n4. Divide responsibility\n\n## 1. Offer once for the goal\n\nFirst read the item's `delivery` value and its Notes > Decisions and context\nto see whether the owner already accepted, declined, or revoked agent-led\ndelivery for this goal. `not-offered` means no answer is recorded yet. Do not\ntreat missing access as an undecided choice. When the records show no choice,\nask exactly:\n\n> Would you like agents to take responsibility for delivering this, with you acting as product owner?\n\n`work-delegate` is the only skill that makes this offer or records its\nanswer. `work-on`, `work-decide`, and the session briefing only point at it,\nso the owner is asked once, in one place.\n\nDo not make this offer for a simple question or quick edit, or for a small\nitem (one or two tasks, no sub-items): record owner-led at once, with the\nreason, so the briefing stops listing the offer as an agent to-do.\n\n```text\ntoolkit work set <id> --delivery owner-led --note 'Small item: one or two tasks, so no delivery offer.'\n```\n\nThe offer is made once, at the top item of the goal; a sub-item is part of\nits parent's goal. `toolkit work new --parent` copies the parent's delivery\nvalue to a new sub-item and says so (\"Delivery: agent-led, as recorded for\nWI-012.\"). Check it, and make no offer for it. Only when the value is missing\nor differs from the parent's, set it with a note naming the parent:\n\n```text\ntoolkit work set <id> --delivery agent-led --note 'Part of WI-012, whose goal is agent-led.'\n```\n\nWhen you ask, first add the question as an Open Questions row (owner decides,\nAffects `delivery`) and set the item waiting on the owner, so a later session\nsees the offer is open if the answer does not come in this one:\n\n```text\ntoolkit work edit <id> --section 'Open Questions' --append
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set TFR2-001 --delivery owner-led","yield_time_ms":30000,"max_output_tokens":3000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.8 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"19ad58\",\"wall_time_seconds\":4.507638291,\"exit_code\":0,\"original_token_count\":55,\"output\":\"Updated TFR2-001: delivery owner-led.\\nNow 06 Implementation plan (In Progress). Continue with work-on.\\nMarked Q-04 Answered: it asked for this delivery choice.\\nIt is no longer waiting on the owner (waiting_on: none).\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set TFR2-001 --waiting-on agent","yield_time_ms":30000,"max_output_tokens":3000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.6 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"df2ff8\",\"wall_time_seconds\":3.243622125,\"exit_code\":0,\"original_token_count\":26,\"output\":\"Updated TFR2-001: waiting on agent.\\nNow 06 Implementation plan (In Progress). Continue with work-on.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set TFR2-002 --delivery owner-led --note 'Part of the TFR2-001 goal; owner chose to have this agent build both results without a team.'","yield_time_ms":30000,"max_output_tokens":3000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 7.0 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"6a3a9f\",\"wall_time_seconds\":6.679167709,\"exit_code\":0,\"original_token_count\":26,\"output\":\"Updated TFR2-002: delivery owner-led.\\nNow 06 Implementation plan (In Progress). Continue with work-on.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history TFR2-001 --note 'Owner said: \"No agent team for this one. Keep it owner-led: build it yourself and show me each result. Go ahead and build both. I approve the git commands you need for worktrees, branches, and commits, but no merge yet.\"' --effect 'Build both items with this agent, present each result separately, and leave both unmerged.'","yield_time_ms":30000,"max_output_tokens":3000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"ebfaa1\",\"wall_time_seconds\":4.04771,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Added a Recent History row to TFR2-001.\\n\"}"}]
+
+[CALL] const rs=await Promise.allSettled([
+tools.exec_command({cmd:"rg --files -g '!AGENTS.md' -g '!PROJECT.md' -g '!PROJECT-ROADMAP.md' -g '!DECISIONS.md' | sort","max_output_tokens":3000}),
+tools.exec_command({cmd:"cat tests/TEST-PLAN-TEMPLATE.md","max_output_tokens":4000}),
+tools.exec_command({cmd:"node --version","max_output_tokens":1000}),
+tools.exec_command({cmd:"toolkit work decisions","yield_time_ms":30000,"max_output_tokens":4000}),
+tools.exec_command({cmd:"toolkit work show TFR2-001 --section 'Decisions and context'","yield_time_ms":30000,"max_output_tokens":4000})
+]); rs.forEach((r,i)=>text(`RESULT ${i+1}\n${r.status==="fulfilled"?JSON.stringify(r.value):String(r.reason)}`));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 2.7 seconds\nOutput:\n"}, {"type": "input_text", "text": "RESULT 1\n{\"chunk_id\":\"f46aae\",\"wall_time_seconds\":0.000002917,\"exit_code\":0,\"original_token_count\":49,\"output\":\"CLAUDE.md\\nREADME.md\\nai-external-knowledge/INDEX.md\\nrequirements/SYSTEM-DATA-MODEL.md\\nrequirements/system-area-template/AREA-TEMPLATE.md\\nsystem-guide/AREA-TEMPLATE.md\\ntests/TEST-PLAN-TEMPLATE.md\\n\"}"}, {"type": "input_text", "text": "RESULT 2\n{\"chunk_id\":\"12909e\",\"wall_time_seconds\":0.000002333,\"exit_code\":0,\"original_token_count\":253,\"output\":\"# <Feature or release> test plan\\n\\n<!-- Fill-in guide: copy this file and rename the copy for the work item or release being checked. Replace the title and every angle-bracket prompt in the section or table cell below with the real scope, environment, scenario, expected result, procedure, and evidence location. Add one Checks row per scenario. Record actual outcomes under Results; delete this guide and the example row when populated. -->\\n\\n## Scope\\n\\n<Requirements and work items being verified; exclusions.>\\n\\n## Environment and data\\n\\n<Verified org or test environment, required access, and approved test data.>\\n\\n## Checks\\n\\n| Scenario | Expected result | Method or test | Evidence |\\n| --- | --- | --- | --- |\\n| <Condition or user action> | <Observable outcome> | <Automated or manual procedure> | <Link or location> |\\n\\n## Results and follow-up\\n\\n- Date and tester: <Who ran the checks and when.>\\n- Outcome: <Pass, fail, or blocked with evidence.>\\n- Remaining issues: <Linked work items or accepted limitations.>\\n\"}"}, {"type": "input_text", "text": "RESULT 3\n{\"chunk_id\":\"d8df89\",\"wall_time_seconds\":0.000002709,\"exit_code\":0,\"original_token_count\":2,\"output\":\"v25.8.1\\n\"}"}, {"type": "input_text", "text": "RESULT 4\n{\"chunk_id\":\"732ddc\",\"wall_time_seconds\":2.348610916,\"exit_code\":0,\"original_token_count\":9,\"output\":\"Nothing is waiting on the owner.\\n\"}"}, {"type": "input_text", "text": "RESULT 5\n{\"chunk_id\":\"5787d7\",\"wall_time_seconds\":1.187996959,\"exit_code\":0,\"original_token_count\":125,\"output\":\"### Decisions and context\\n\\n- Option A was approved by Mike Rihm on 2026-09-28.\\n- TFR2-002 covers R-02 and has its own result review, as the owner requested on 2026-09-28.\\n- Design process: scan the repository and requirements first; use Node.js built-ins; present one option b
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit TFR2-001 --section 'Decisions and context' --text '- Option A was approved by Mike Rihm on 2026-09-28.\n- TFR2-002 covers R-02 and has its own result review, as the owner requested on 2026-09-28. The owner made it a top-level item in Notion.\n- Design process: scan the repository and requirements first; use Node.js built-ins; present one option because the requirements leave no material product choice in the implementation.\n- Design review team: one requirements analyst, one design architect, and one design critic. No research question needs a separate researcher.\n- Owner-led delivery for the TFR2-001 goal and TFR2-002: Mike Rihm chose on 2026-09-28 to have this agent build both without a team and show each result. He approved Git commands for worktrees, branches, and commits. No merge yet. Lead: this chat.'","yield_time_ms":30000,"max_output_tokens":3000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.7 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"1396d5\",\"wall_time_seconds\":4.376531125,\"exit_code\":0,\"original_token_count\":11,\"output\":\"Saved \\\"Decisions and context\\\" in TFR2-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show TFR2-001 --section 'Decisions and context'","yield_time_ms":30000,"max_output_tokens":3000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "### Decisions and context\n\n- Option A was approved by Mike Rihm on 2026-09-28.\n- TFR2-002 covers R-02 and has its own result review, as the owner requested on 2026-09-28. The owner made it a top-level item in Notion.\n- Design process: scan the repository and requirements first; use Node.js built-ins; present one option because the requirements leave no material product choice in the implementation.\n- Design review team: one requirements analyst, one design architect, and one design critic. No research question needs a separate researcher.\n- Owner-led delivery for the TFR2-001 goal and TFR2-002: Mike Rihm chose on 2026-09-28 to have this agent build both without a team and show each result. He approved Git commands for worktrees, branches, and commits. No merge yet. Lead: this chat.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set TFR2-001 --stage 07-tracking-setup","yield_time_ms":30000,"max_output_tokens":3000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 5.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"aa5bae\",\"wall_time_seconds\":4.955280333,\"exit_code\":0,\"original_token_count\":38,\"output\":\"Updated TFR2-001: stage 06 Implementation plan -> 07 Tracking setup (status In Progress).\\nNow 07 Tracking setup (In Progress). Continue with work-on.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"git worktree add .claude/worktrees/tfr2-001-build-the-tip-split-command -b claude/tfr2-001-build-the-tip-split-command","sandbox_permissions":"require_escalated","justification":"Create the approved TFR2-001 branch and worktree for the default tip command.","prefix_rule":["git","worktree","add"],"yield_time_ms":30000,"max_output_tokens":3000}); text(JSON.stringify(r));
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set TFR2-001 --stage 08-build","yield_time_ms":30000,"max_output_tokens":3000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.7 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"2ef0d4\",\"wall_time_seconds\":4.389599166,\"exit_code\":0,\"original_token_count\":32,\"output\":\"Updated TFR2-001: stage 07 Tracking setup -> 08 Build (status In Progress).\\nNow 08 Build (In Progress). Continue with work-on.\\n\"}"}]
+
+[CALL] const patch="*** Begin Patch\n*** Add File: .claude/worktrees/tfr2-001-build-the-tip-split-command/bin/tip-split.js\n+#!/usr/bin/env node\n+\n+const usage = 'Usage: node bin/tip-split.js <bill> <people> [--tip <percent>]';\n+\n+function parseBill(value) {\n+  if (!/^[0-9]+(?:\\.[0-9]{1,2})?$/.test(value ?? '')) return null;\n+  const [dollars, fraction = ''] = value.split('.');\n+  return BigInt(dollars) * 100n + BigInt(fraction.padEnd(2, '0'));\n+}\n+\n+function parsePeople(value) {\n+  if (!/^[0-9]+$/.test(value ?? '')) return null;\n+  const people = BigInt(value);\n+  return people > 0n ? people : null;\n+}\n+\n+function formatCents(cents) {\n+  return `${cents / 100n}.${String(cents % 100n).padStart(2, '0')}`;\n+}\n+\n+function main(args) {\n+  if (args.length !== 2) return false;\n+  const billCents = parseBill(args[0]);\n+  const people = parsePeople(args[1]);\n+  if (billCents === null || people === null) return false;\n+\n+  // Keep the share exact until the final division, then round half a cent up.\n+  const numerator = billCents * 118n;\n+  const denominator = people * 100n;\n+  const cents = numerator / denominator + (numerator % denominator * 2n >= denominator ? 1n : 0n);\n+  process.stdout.write(`Each person pays $${formatCents(cents)}\\n`);\n+  return true;\n+}\n+\n+if (!main(process.argv.slice(2))) {\n+  process.stderr.write(`${usage}\\n`);\n+  process.exitCode = 1;\n+}\n*** Add File: .claude/worktrees/tfr2-001-build-the-tip-split-command/tests/tip-split.test
+
+[CALL] const rs=await Promise.allSettled([
+tools.exec_command({cmd:"node --test tests/tip-split.test.js","workdir":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-001-build-the-tip-split-command","yield_time_ms":30000,"max_output_tokens":4000}),
+tools.exec_command({cmd:"node bin/tip-split.js 84.50 3","workdir":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-001-build-the-tip-split-command","max_output_tokens":1000}),
+tools.exec_command({cmd:"git status --short --branch","workdir":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-001-build-the-tip-split-command","max_output_tokens":1000})
+]); rs.forEach((r,i)=>text(`RESULT ${i+1}\n${r.status==="fulfilled"?JSON.stringify(r.value):String(r.reason)}`));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.1 seconds\nOutput:\n"}, {"type": "input_text", "text": "RESULT 1\n{\"chunk_id\":\"3d0a9c\",\"wall_time_seconds\":0.747727792,\"exit_code\":0,\"original_token_count\":84,\"output\":\"\u2714 splits the approved default example (55.371791ms)\\n\u2714 rounds exact half cents up and supports zero and leading zeroes (131.937792ms)\\n\u2714 rejects invalid bill and people input with usage and exit code 1 (565.014333ms)\\n\u2139 tests 3\\n\u2139 suites 0\\n\u2139 pass 3\\n\u2139 fail 0\\n\u2139 cancelled 0\\n\u2139 skipped 0\\n\u2139 todo 0\\n\u2139 duration_ms 820.875083\\n\"}"}, {"type": "input_text", "text": "RESULT 2\n{\"chunk_id\":\"b9ab06\",\"wall_time_seconds\":0.000003458,\"exit_code\":0,\"original_token_count\":6,\"output\":\"Each person pays $33.24\\n\"}"}, {"type": "input_text", "text": "RESULT 3\n{\"chunk_id\":\"ecc8db\",\"wall_time_seconds\":0.000001917,\"exit_code\":0,\"original_token_count\":21,\"output\":\"## claude/tfr2-001-build-the-tip-split-command\\n?? bin/\\n?? tests/tip-split.test.js\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"git add bin/tip-split.js tests/tip-split.test.js","workdir":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-001-build-the-tip-split-command","sandbox_permissions":"require_escalated","justification":"Stage the tested TFR2-001 command and tests for its branch commit.","prefix_rule":["git","add"],"yield_time_ms":30000,"max_output_tokens":1000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.5 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"2d9b5e\",\"wall_time_seconds\":0.000002125,\"exit_code\":0,\"original_token_count\":0,\"output\":\"\"}"}]
+
+[CALL] const rs=await Promise.allSettled([
+tools.exec_command({cmd:"git diff --cached --name-status","workdir":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-001-build-the-tip-split-command","max_output_tokens":1000}),
+tools.exec_command({cmd:"git diff --cached","workdir":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-001-build-the-tip-split-command","max_output_tokens":6000}),
+tools.exec_command({cmd:"git branch --show-current","workdir":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-001-build-the-tip-split-command","max_output_tokens":1000})
+]); rs.forEach((r,i)=>text(`RESULT ${i+1}\n${r.status==="fulfilled"?r.value.output:String(r.reason)}`));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "RESULT 1\nA\tbin/tip-split.js\nA\ttests/tip-split.test.js\n"}, {"type": "input_text", "text": "RESULT 2\ndiff --git a/bin/tip-split.js b/bin/tip-split.js\nnew file mode 100644\nindex 0000000..c4d1ba7\n--- /dev/null\n+++ b/bin/tip-split.js\n@@ -0,0 +1,38 @@\n+#!/usr/bin/env node\n+\n+const usage = 'Usage: node bin/tip-split.js <bill> <people> [--tip <percent>]';\n+\n+function parseBill(value) {\n+  if (!/^[0-9]+(?:\\.[0-9]{1,2})?$/.test(value ?? '')) return null;\n+  const [dollars, fraction = ''] = value.split('.');\n+  return BigInt(dollars) * 100n + BigInt(fraction.padEnd(2, '0'));\n+}\n+\n+function parsePeople(value) {\n+  if (!/^[0-9]+$/.test(value ?? '')) return null;\n+  const people = BigInt(value);\n+  return people > 0n ? people : null;\n+}\n+\n+function formatCents(cents) {\n+  return `${cents / 100n}.${String(cents % 100n).padStart(2, '0')}`;\n+}\n+\n+function main(args) {\n+  if (args.length !== 2) return false;\n+  const billCents = parseBill(args[0]);\n+  const people = parsePeople(args[1]);\n+  if (billCents === null || people === null) return false;\n+\n+  // Keep the share exact until the final division, then round half a cent up.\n+  const numerator = billCents * 118n;\n+  const denominator = people * 100n;\n+  const cents = numerator / denominator + (numerator % denominator * 2n >= denominator ? 1n : 0n);\n+  process.stdout.write(`Each person pays $${formatCents(cents)}\\n`);\n+  return true;\n+}\n+\n+if (!main(process.argv.slice(2))) {\n+  process.stderr.write(`${usage}\\n`);\n+  process.exitCode = 1;\n+}\ndiff --git a/tests/tip-split.test.js b/tests/tip-split.test.js\nnew file mode 100644\nindex 0000000..ae2f0d2\n--- /dev/null\n+++ b/tests/tip-split.test.js\n@@ -0,0 +1,33 @@\n+const test = require('node:test');\n+const assert = require('node:assert/strict');\n+const { spawnSync } = require('node:child_process');\n+const path = require('node:path');\n+\n+const command = path.join(__dirname, '..', 'bin', 'tip-split.js');\n+const usage = 'Usage: node bin/tip-split.js <bill> <people> [--tip <percent>]\\n';\n+\n+function run(...args) {\n+  return spawnSync(process.execPath, [command, ...args], { encoding: 'utf8' });\n+}\n+\n+test('splits the approved default example', () => {\n+  const result = run('84.50', '3');\n+  assert.equal(result.status, 0);\n+  assert.equal(result.stdout, 'Each person pays $33.24\\n');\n+  assert.eq
+
+[CALL] const r=await tools.exec_command({cmd:"git commit -m 'Build default tip split command'","workdir":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-001-build-the-tip-split-command","sandbox_permissions":"require_escalated","justification":"Commit the tested default tip command on the TFR2-001 branch.","prefix_rule":["git","commit"],"yield_time_ms":30000,"max_output_tokens":3000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"70f9a1\",\"wall_time_seconds\":0.000003,\"exit_code\":0,\"original_token_count\":51,\"output\":\"[claude/tfr2-001-build-the-tip-split-command e9dd6fa] Build default tip split command\\n 2 files changed, 71 insertions(+)\\n create mode 100644 bin/tip-split.js\\n create mode 100644 tests/tip-split.test.js\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show TFR2-001 --section Tasks","yield_time_ms":30000,"max_output_tokens":5000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "## Tasks\n\n### P1 \u2014 Default tip command\n\n- [ ] **P1-T01 \u2014 Add the default command** \u00b7 Not Started  \n  **Work:** Build bill and people validation, the 18% calculation, half-cent-up rounding, and output formatting (R-01; design Technical sequence step 1).  \n  **Deliverable:** `bin/tip-split.js` with the default path.  \n  **Done when:** `node bin/tip-split.js 84.50 3` prints `Each person pays $33.24`; invalid bill and people values print the usage line and exit 1.  \n  **Depends on:** None.\n- [ ] **P1-T02 \u2014 Test the default path** \u00b7 Not Started  \n  **Work:** Add `node:test` cases for the default result and invalid bill and people values (R-01; design Acceptance checks).  \n  **Deliverable:** `tests/tip-split.test.js` with default-path tests.  \n  **Done when:** `node --test tests/tip-split.test.js` passes the default-path cases.  \n  **Depends on:** P1-T01.\n\n### P2 \u2014 Optional tip\n\n- [ ] **P2-T01 \u2014 Check the combined command** \u00b7 Not Started  \n  **Work:** After TFR2-002 adds `--tip`, run the full command tests and the R-01 half-cent example using `--tip 0` (design Technical sequence step 3).  \n  **Deliverable:** Recorded test results on TFR2-001; TFR2-002 keeps its own result evidence.  \n  **Done when:** The full test suite passes and `node bin/tip-split.js 0.01 2 --tip 0` prints `Each person pays $0.01`.  \n  **Depends on:** P1-T02 and TFR2-002 build.\n"}]
+
+[CALL] const s=`### P1 — Default tip command
+
+- [x] **P1-T01 — Add the default command** · Done  
+  **Work:** Build bill and people validation, the 18% calculation, half-cent-up rounding, and output formatting (R-01; design Technical sequence step 1).  
+  **Deliverable:** \`bin/tip-split.js\` with the default path.  
+  **Done when:** \`node bin/tip-split.js 84.50 3\` prints \`Each person pays $33.24\`; invalid bill and people values print the usage line and exit 1.  
+  **Depends on:** None.
+- [x] **P1-T02 — Test the default path** · Done  
+  **Work:** Add \`node:test\` cases for the default result and invalid bill and people values (R-01; design Acceptance checks).  
+  **Deliverable:** \`tests/tip-split.test.js\` with default-path tests.  
+  **Done when:** \`node --test tests/tip-split.test.js\` passes the default-path cases.  
+  **Depends on:** P1-T01.
+
+### P2 — Optional tip
+
+- [ ] **P2-T01 — Check the combined command** · Not Started  
+  **Work:** After TFR2-002 adds \`--tip\`, run the full command tests and the R-01 half-cent example using \`--tip 0\` (design Technical sequence step 3).  
+  **Deliverable:** Recorded test results on TFR2-001; TFR2-002 keeps its own result evidence.  
+  **Done when:** The full test suite passes and \`node bin/tip-split.js 0.01 2 --tip 0\` prints \`Each person pays $0.01\`.  
+  **Depends on:** P1-T02 and TFR2-002 build.`;
+if(s.includes("'")) throw Error("single quote in text");
+const r=await tools.exec_command({cmd:"toolkit work edit TFR2-001 --sect
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.1 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"6de183\",\"wall_time_seconds\":3.765607458,\"exit_code\":0,\"original_token_count\":7,\"output\":\"Saved \\\"Tasks\\\" in TFR2-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show TFR2-001 --section Tasks","yield_time_ms":30000,"max_output_tokens":5000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "## Tasks\n\n### P1 \u2014 Default tip command\n\n- [x] **P1-T01 \u2014 Add the default command** \u00b7 Done  \n  **Work:** Build bill and people validation, the 18% calculation, half-cent-up rounding, and output formatting (R-01; design Technical sequence step 1).  \n  **Deliverable:** `bin/tip-split.js` with the default path.  \n  **Done when:** `node bin/tip-split.js 84.50 3` prints `Each person pays $33.24`; invalid bill and people values print the usage line and exit 1.  \n  **Depends on:** None.\n- [x] **P1-T02 \u2014 Test the default path** \u00b7 Done  \n  **Work:** Add `node:test` cases for the default result and invalid bill and people values (R-01; design Acceptance checks).  \n  **Deliverable:** `tests/tip-split.test.js` with default-path tests.  \n  **Done when:** `node --test tests/tip-split.test.js` passes the default-path cases.  \n  **Depends on:** P1-T01.\n\n### P2 \u2014 Optional tip\n\n- [ ] **P2-T01 \u2014 Check the combined command** \u00b7 Not Started  \n  **Work:** After TFR2-002 adds `--tip`, run the full command tests and the R-01 half-cent example using `--tip 0` (design Technical sequence step 3).  \n  **Deliverable:** Recorded test results on TFR2-001; TFR2-002 keeps its own result evidence.  \n  **Done when:** The full test suite passes and `node bin/tip-split.js 0.01 2 --tip 0` prints `Each person pays $0.01`.  \n  **Depends on:** P1-T02 and TFR2-002 build.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set TFR2-002 --stage 07-tracking-setup","yield_time_ms":30000,"max_output_tokens":3000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.1 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"ca61ee\",\"wall_time_seconds\":3.795707125,\"exit_code\":0,\"original_token_count\":38,\"output\":\"Updated TFR2-002: stage 06 Implementation plan -> 07 Tracking setup (status In Progress).\\nNow 07 Tracking setup (In Progress). Continue with work-on.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"git worktree add .claude/worktrees/tfr2-002-add-the-tip-option -b claude/tfr2-002-add-the-tip-option claude/tfr2-001-build-the-tip-split-command","sandbox_permissions":"require_escalated","justification":"Create the approved TFR2-002 branch and worktree from the tested default command.","prefix_rule":["git","worktree","add"],"yield_time_ms":30000,"max_output_tokens":3000}); text(JSON.stringify(r));
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set TFR2-002 --stage 08-build","yield_time_ms":30000,"max_output_tokens":3000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.9 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"c22b7a\",\"wall_time_seconds\":3.617583292,\"exit_code\":0,\"original_token_count\":32,\"output\":\"Updated TFR2-002: stage 07 Tracking setup -> 08 Build (status In Progress).\\nNow 08 Build (In Progress). Continue with work-on.\\n\"}"}]
+
+[CALL] const patch="*** Begin Patch\n*** Update File: .claude/worktrees/tfr2-002-add-the-tip-option/bin/tip-split.js\n@@\n function parsePeople(value) {\n@@\n }\n+\n+function parseTip(value) {\n+  const match = /^\\+?(\\d+(?:\\.\\d*)?|\\.\\d+)(?:[eE]([+-]?\\d+))?$/.exec(value ?? '');\n+  if (!match) return null;\n+  const [whole, fraction = ''] = match[1].split('.');\n+  const digits = BigInt((whole || '0') + fraction);\n+  const power = BigInt(match[2] ?? '0') - BigInt(fraction.length);\n+  return power >= 0n\n+    ? { numerator: digits * 10n ** power, denominator: 1n }\n+    : { numerator: digits, denominator: 10n ** -power };\n+}\n@@\n function main(args) {\n-  if (args.length !== 2) return false;\n+  if (args.length !== 2 && (args.length !== 4 || args[2] !== '--tip')) return false;\n   const billCents = parseBill(args[0]);\n   const people = parsePeople(args[1]);\n-  if (billCents === null || people === null) return false;\n+  const tip = args.length === 2 ? { numerator: 18n, denominator: 1n } : parseTip(args[3]);\n+  if (billCents === null || people === null || tip === null) return false;\n \n   // Keep the share exact until the final division, then round half a cent up.\n-  const numerator = billCents * 118n;\n-  const denominator = people * 100n;\n+  const numerator = billCents * (100n * tip.denominator + tip.numerator);\n+  const denominator = people * 100n * tip.denominator;\n*** Update File: .claude/worktrees/tfr2-002-add-the-tip-option/tests/tip-split.test.js\n@@\n test('
+
+[CALL] const wd="/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-002-add-the-tip-option"; const rs=await Promise.allSettled([
+tools.exec_command({cmd:"node --test tests/tip-split.test.js","workdir":wd,"yield_time_ms":30000,"max_output_tokens":4000}),
+tools.exec_command({cmd:"node bin/tip-split.js 84.50 3 --tip 20","workdir":wd,"max_output_tokens":1000}),
+tools.exec_command({cmd:"node bin/tip-split.js 0.01 2 --tip 0","workdir":wd,"max_output_tokens":1000}),
+tools.exec_command({cmd:"git diff --check","workdir":wd,"max_output_tokens":1000})
+]); rs.forEach((r,i)=>text(`RESULT ${i+1}\n${r.status==="fulfilled"?JSON.stringify(r.value):String(r.reason)}`));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.6 seconds\nOutput:\n"}, {"type": "input_text", "text": "RESULT 1\n{\"chunk_id\":\"299e4d\",\"wall_time_seconds\":1.271264208,\"exit_code\":0,\"original_token_count\":122,\"output\":\"\u2714 splits the approved default example (40.237792ms)\\n\u2714 rounds exact half cents up and supports zero and leading zeroes (118.502042ms)\\n\u2714 rejects invalid bill and people input with usage and exit code 1 (499.364375ms)\\n\u2714 uses a custom or zero tip and rounds the final share (210.749833ms)\\n\u2714 rejects missing, negative, nonnumeric, and misplaced tips (423.56525ms)\\n\u2139 tests 5\\n\u2139 suites 0\\n\u2139 pass 5\\n\u2139 fail 0\\n\u2139 cancelled 0\\n\u2139 skipped 0\\n\u2139 todo 0\\n\u2139 duration_ms 1349.560833\\n\"}"}, {"type": "input_text", "text": "RESULT 2\n{\"chunk_id\":\"554dfe\",\"wall_time_seconds\":0.000002667,\"exit_code\":0,\"original_token_count\":6,\"output\":\"Each person pays $33.80\\n\"}"}, {"type": "input_text", "text": "RESULT 3\n{\"chunk_id\":\"754515\",\"wall_time_seconds\":6.67e-7,\"exit_code\":0,\"original_token_count\":6,\"output\":\"Each person pays $0.01\\n\"}"}, {"type": "input_text", "text": "RESULT 4\n{\"chunk_id\":\"54b1b1\",\"wall_time_seconds\":0.000001792,\"exit_code\":0,\"original_token_count\":0,\"output\":\"\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"git add bin/tip-split.js tests/tip-split.test.js","workdir":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-002-add-the-tip-option","sandbox_permissions":"require_escalated","justification":"Stage the tested TFR2-002 tip parser and tests for its branch commit.","prefix_rule":["git","add"],"yield_time_ms":30000,"max_output_tokens":1000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.0 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"e95154\",\"wall_time_seconds\":0.000005125,\"exit_code\":0,\"original_token_count\":0,\"output\":\"\"}"}]
+
+[CALL] const wd="/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-002-add-the-tip-option"; const rs=await Promise.allSettled([tools.exec_command({cmd:"git diff --cached --name-status","workdir":wd,"max_output_tokens":1000}),tools.exec_command({cmd:"git diff --cached","workdir":wd,"max_output_tokens":5000}),tools.exec_command({cmd:"git branch --show-current","workdir":wd,"max_output_tokens":1000})]);rs.forEach((r,i)=>text(`RESULT ${i+1}\n${r.status==="fulfilled"?r.value.output:String(r.reason)}`));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "RESULT 1\nM\tbin/tip-split.js\nM\ttests/tip-split.test.js\n"}, {"type": "input_text", "text": "RESULT 2\ndiff --git a/bin/tip-split.js b/bin/tip-split.js\nindex c4d1ba7..ecc1a63 100644\n--- a/bin/tip-split.js\n+++ b/bin/tip-split.js\n@@ -14,19 +14,31 @@ function parsePeople(value) {\n   return people > 0n ? people : null;\n }\n \n+function parseTip(value) {\n+  const match = /^\\+?(\\d+(?:\\.\\d*)?|\\.\\d+)(?:[eE]([+-]?\\d+))?$/.exec(value ?? '');\n+  if (!match) return null;\n+  const [whole, fraction = ''] = match[1].split('.');\n+  const digits = BigInt((whole || '0') + fraction);\n+  const power = BigInt(match[2] ?? '0') - BigInt(fraction.length);\n+  return power >= 0n\n+    ? { numerator: digits * 10n ** power, denominator: 1n }\n+    : { numerator: digits, denominator: 10n ** -power };\n+}\n+\n function formatCents(cents) {\n   return `${cents / 100n}.${String(cents % 100n).padStart(2, '0')}`;\n }\n \n function main(args) {\n-  if (args.length !== 2) return false;\n+  if (args.length !== 2 && (args.length !== 4 || args[2] !== '--tip')) return false;\n   const billCents = parseBill(args[0]);\n   const people = parsePeople(args[1]);\n-  if (billCents === null || people === null) return false;\n+  const tip = args.length === 2 ? { numerator: 18n, denominator: 1n } : parseTip(args[3]);\n+  if (billCents === null || people === null || tip === null) return false;\n \n   // Keep the share exact until the final division, then round half a cent up.\n-  const numerator = billCents * 118n;\n-  const denominator = people * 100n;\n+  const numerator = billCents * (100n * tip.denominator + tip.numerator);\n+  const denominator = people * 100n * tip.denominator;\n   const cents = numerator / denominator + (numerator % denominator * 2n >= denominator ? 1n : 0n);\n   process.stdout.write(`Each person pays $${formatCents(cents)}\\n`);\n   return true;\ndiff --git a/tests/tip-split.test.js b/tests/tip-split.test.js\nindex ae2f0d2..9332f21 100644\n--- a/tests/tip-split.test.js\n+++ b/tests/tip-split.test.js\n@@ -31,3 +31,33 @@ test('rejects invalid bill and people input with usage and exit code 1', () => {\n     assert.equal(result.stderr, usage, args.join(' '));\n   }\n });\n+\n+test('uses a custom or zero tip and rounds the final share', () => {\n+  for (const [args, expected] of [\n+    [['84.50', '3', '--tip', '20'], 'Each person pays $33.80\\n'],\
+
+[CALL] const r=await tools.exec_command({cmd:"git commit -m 'Add optional tip percentage'","workdir":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-002-add-the-tip-option","sandbox_permissions":"require_escalated","justification":"Commit the tested optional tip behavior on the TFR2-002 branch.","prefix_rule":["git","commit"],"yield_time_ms":30000,"max_output_tokens":3000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 2.5 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"7076e4\",\"wall_time_seconds\":0.000002042,\"exit_code\":0,\"original_token_count\":31,\"output\":\"[claude/tfr2-002-add-the-tip-option dd7f00f] Add optional tip percentage\\n 2 files changed, 46 insertions(+), 4 deletions(-)\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-check/SKILL.md","max_output_tokens":12000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "---\nname: work-check\ndescription: 'Tests a finished build against its work item''s requirements, fixes what fails, and asks the owner to approve the result. Use when the last build task is done, or the owner asks whether it is ready to ship or works, for example \"is it ready\", \"test it\", or \"check it against what I asked for\".'\n---\n\n# Work check\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nChecks a finished build against every requirement with an independent checker, fixes what fails, and asks the owner to approve the result; it never merges, deploys, or marks Done. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.\n\n## Steps\n\n1. Find the item as `work-on` does: the id he named, this worktree's item, or a title that matches; two matches, ask one question naming both. Read the requirements, the Acceptance list, the Tasks, and the design's Acceptance checks; a sub-item with no design of its own is checked against its parent's (`references/testing.md`, section 1). Then set the testing stage.\n   `toolkit work show <id>`\n   `toolkit work design <id>`\n   `toolkit work set <id> --stage 09-testing`\n2. Run the project's tests and every acceptance check the item lists. Several scenarios or manual steps: write a test plan in `tests/` on the item's branch (`references/testing.md`, sections 2 and 3).\n3. Brief the `acceptance-checker`, never the agent that built it, naming the branch and the exact commit (`references/testing.md`, section 4).\n4. Failures: run the check and fix loop until clean, or until a failure needs an owner decision (`references/testing.md`, section 5).\n   `toolkit work set <id> --stage 10-bug-fixing`\n5. Record what was checked, the evidence, and the gaps.\n   `toolkit work history <id> --note 'Checked: <what>; evidence: <where>; gaps: <gaps or none>'`\n6. Ask for the result approval with the checklist in `references/approvals.md`, section 4: stage 11, the item waiting on the owner, the result shown as \"Showing the result\" says below, and one question: \"Do you approve this result?\"\n   `toolkit work set <id> --stage 11-user-approval --waiting-on owner`\n7. His yes: save his words first, record the approval, hand the
+
+[CALL] const base="/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-check/references"; const files=["testing.md","approvals.md","current-focus.md"]; const rs=await Promise.allSettled(files.map(f=>tools.exec_command({cmd:"cat '"+base+"/"+f+"'","max_output_tokens":8000}))); rs.forEach((r,i)=>text(`FILE ${files[i]}\n${r.status==="fulfilled"?r.value.output:String(r.reason)}`));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "FILE testing.md\n# Testing a work item\n\nHow `work-check` decides what to check, writes a test plan when one is\nneeded, briefs the independent checker, runs the fix loop, and records the\nresult.\n\n## Contents\n\n1. What to check against\n2. When a test plan is needed\n3. Writing the test plan\n4. Briefing the acceptance checker\n5. The check and fix loop\n6. Recording the result\n7. Showing the result to the owner\n\n## 1. What to check against\n\nRead these before running anything:\n\n- every `R-xx` block and its Acceptance check, and the item's Acceptance\n  list: `toolkit work show <id>`;\n- the design's \"Build and verification plan\" > Acceptance checks, and the\n  selected option's \"How to check it\" column: `toolkit work design <id>`\n  (it exits 1 when the item has no design);\n- a sub-item whose show output says \"Design: none of its own; WI-012's design\n  is approved\" is checked against the parent's design:\n  `toolkit work design <parent-id>`;\n- the Tasks section, to know what was built and on which branch.\n\n## 2. When a test plan is needed\n\nA test plan is needed when a check has several scenarios, a manual step, test\ndata, or a release across environments. The item's own acceptance checks are\nenough when each one is a single automated test or a single observation.\n\n## 3. Writing the test plan\n\n- [ ] Work in the item's worktree, on its branch. Never on the default branch.\n- [ ] Copy `tests/TEST-PLAN-TEMPLATE.md` to `tests/<id>-TEST-PLAN.md`, for\n      example `tests/WI-012-TEST-PLAN.md`. Leave the template unchanged.\n- [ ] Fill it as its guide comment says: Scope (the `R-xx` and items\n      checked), Environment and data, one Checks row per scenario, then\n      Results and follow-up. Delete the guide and the example row.\n- [ ] Commit it on the item's branch with the results filled in, staged by\n      name (`git-rules.md`).\n- [ ] Never save it in `.work-items/`: Git ignores that folder, so the plan\n      would never be committed.\n\nOne Checks row:\n\n```markdown\n| A manager clicks Export on the September report | A CSV file downloads and opens in Excel with all 12 columns | Manual, in the staging app | tests/evidence/wi-012-export.png |\n```\n\n## 4. Briefing the acceptance checker\n\nThe checker is never the agent or session that built the change. Brief the\n`acceptance-checker` (Claude Code: `work:a
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show TFR2-002 --section Tasks","yield_time_ms":30000,"max_output_tokens":4000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.6 seconds\nOutput:\n"}, {"type": "input_text", "text": "## Tasks\n\n### P1 \u2014 Optional tip\n\n- [ ] **P1-T01 \u2014 Add optional tip parsing** \u00b7 Not Started  \n  **Work:** Add `--tip <percent>` parsing, exact decimal percentage handling, and validation to the parent command (TFR2-001 R-02; design Technical sequence step 2).  \n  **Deliverable:** Updated `bin/tip-split.js`.  \n  **Done when:** `node bin/tip-split.js 84.50 3 --tip 20` prints `Each person pays $33.80`; invalid tips print the usage line and exit 1.  \n  **Depends on:** TFR2-001 P1-T01.\n- [ ] **P1-T02 \u2014 Test optional tips** \u00b7 Not Started  \n  **Work:** Add `node:test` cases for custom, zero, fractional, large, scientific, missing, and invalid tips (TFR2-001 R-02; design Acceptance checks).  \n  **Deliverable:** Updated `tests/tip-split.test.js` and recorded results.  \n  **Done when:** The full suite passes; `node bin/tip-split.js 0.01 2 --tip 0` prints `Each person pays $0.01`.  \n  **Depends on:** P1-T01.\n"}]
+
+[CALL] const s=`### P1 — Optional tip
+
+- [x] **P1-T01 — Add optional tip parsing** · Done  
+  **Work:** Add \`--tip <percent>\` parsing, exact decimal percentage handling, and validation to the parent command (TFR2-001 R-02; design Technical sequence step 2).  
+  **Deliverable:** Updated \`bin/tip-split.js\`.  
+  **Done when:** \`node bin/tip-split.js 84.50 3 --tip 20\` prints \`Each person pays $33.80\`; invalid tips print the usage line and exit 1.  
+  **Depends on:** TFR2-001 P1-T01.
+- [x] **P1-T02 — Test optional tips** · Done  
+  **Work:** Add \`node:test\` cases for custom, zero, fractional, large, scientific, missing, and invalid tips (TFR2-001 R-02; design Acceptance checks).  
+  **Deliverable:** Updated \`tests/tip-split.test.js\` and recorded results.  
+  **Done when:** The full suite passes; \`node bin/tip-split.js 0.01 2 --tip 0\` prints \`Each person pays $0.01\`.  
+  **Depends on:** P1-T01.`;
+if(s.includes("'")) throw Error("quote");
+const r=await tools.exec_command({cmd:"toolkit work edit TFR2-002 --section Tasks --text '"+s+"'","yield_time_ms":30000,"max_output_tokens":2000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 8.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"e24be4\",\"wall_time_seconds\":8.0628615,\"exit_code\":0,\"original_token_count\":7,\"output\":\"Saved \\\"Tasks\\\" in TFR2-002.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show TFR2-002 --section Tasks","yield_time_ms":30000,"max_output_tokens":4000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.7 seconds\nOutput:\n"}, {"type": "input_text", "text": "## Tasks\n\n### P1 \u2014 Optional tip\n\n- [x] **P1-T01 \u2014 Add optional tip parsing** \u00b7 Done  \n  **Work:** Add `--tip <percent>` parsing, exact decimal percentage handling, and validation to the parent command (TFR2-001 R-02; design Technical sequence step 2).  \n  **Deliverable:** Updated `bin/tip-split.js`.  \n  **Done when:** `node bin/tip-split.js 84.50 3 --tip 20` prints `Each person pays $33.80`; invalid tips print the usage line and exit 1.  \n  **Depends on:** TFR2-001 P1-T01.\n- [x] **P1-T02 \u2014 Test optional tips** \u00b7 Done  \n  **Work:** Add `node:test` cases for custom, zero, fractional, large, scientific, missing, and invalid tips (TFR2-001 R-02; design Acceptance checks).  \n  **Deliverable:** Updated `tests/tip-split.test.js` and recorded results.  \n  **Done when:** The full suite passes; `node bin/tip-split.js 0.01 2 --tip 0` prints `Each person pays $0.01`.  \n  **Depends on:** P1-T01.\n"}]
+
+[CALL] const s=`### P1 — Default tip command
+
+- [x] **P1-T01 — Add the default command** · Done  
+  **Work:** Build bill and people validation, the 18% calculation, half-cent-up rounding, and output formatting (R-01; design Technical sequence step 1).  
+  **Deliverable:** \`bin/tip-split.js\` with the default path.  
+  **Done when:** \`node bin/tip-split.js 84.50 3\` prints \`Each person pays $33.24\`; invalid bill and people values print the usage line and exit 1.  
+  **Depends on:** None.
+- [x] **P1-T02 — Test the default path** · Done  
+  **Work:** Add \`node:test\` cases for the default result and invalid bill and people values (R-01; design Acceptance checks).  
+  **Deliverable:** \`tests/tip-split.test.js\` with default-path tests.  
+  **Done when:** \`node --test tests/tip-split.test.js\` passes the default-path cases.  
+  **Depends on:** P1-T01.
+
+### P2 — Optional tip
+
+- [x] **P2-T01 — Check the combined command** · Done  
+  **Work:** After TFR2-002 adds \`--tip\`, run the full command tests and the R-01 half-cent example using \`--tip 0\` (design Technical sequence step 3).  
+  **Deliverable:** Recorded test results on TFR2-001; TFR2-002 keeps its own result evidence.  
+  **Done when:** The full test suite passes and \`node bin/tip-split.js 0.01 2 --tip 0\` prints \`Each person pays $0.01\`.  
+  **Depends on:** P1-T02 and TFR2-002 build.`;
+if(s.includes("'")) throw Error("quote");
+const r=await tools.exec_command({cmd:"toolkit work edit TFR2-001 --section Tasks --text '"+s+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 5.0 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"2b8caa\",\"wall_time_seconds\":4.712452417,\"exit_code\":0,\"original_token_count\":7,\"output\":\"Saved \\\"Tasks\\\" in TFR2-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show TFR2-001 --section Tasks","yield_time_ms":30000,"max_output_tokens":4000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.5 seconds\nOutput:\n"}, {"type": "input_text", "text": "## Tasks\n\n### P1 \u2014 Default tip command\n\n- [x] **P1-T01 \u2014 Add the default command** \u00b7 Done  \n  **Work:** Build bill and people validation, the 18% calculation, half-cent-up rounding, and output formatting (R-01; design Technical sequence step 1).  \n  **Deliverable:** `bin/tip-split.js` with the default path.  \n  **Done when:** `node bin/tip-split.js 84.50 3` prints `Each person pays $33.24`; invalid bill and people values print the usage line and exit 1.  \n  **Depends on:** None.\n- [x] **P1-T02 \u2014 Test the default path** \u00b7 Done  \n  **Work:** Add `node:test` cases for the default result and invalid bill and people values (R-01; design Acceptance checks).  \n  **Deliverable:** `tests/tip-split.test.js` with default-path tests.  \n  **Done when:** `node --test tests/tip-split.test.js` passes the default-path cases.  \n  **Depends on:** P1-T01.\n\n### P2 \u2014 Optional tip\n\n- [x] **P2-T01 \u2014 Check the combined command** \u00b7 Done  \n  **Work:** After TFR2-002 adds `--tip`, run the full command tests and the R-01 half-cent example using `--tip 0` (design Technical sequence step 3).  \n  **Deliverable:** Recorded test results on TFR2-001; TFR2-002 keeps its own result evidence.  \n  **Done when:** The full test suite passes and `node bin/tip-split.js 0.01 2 --tip 0` prints `Each person pays $0.01`.  \n  **Depends on:** P1-T02 and TFR2-002 build.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set TFR2-001 --stage 09-testing","yield_time_ms":30000,"max_output_tokens":2000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 5.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"7050f3\",\"wall_time_seconds\":4.987468208,\"exit_code\":0,\"original_token_count\":32,\"output\":\"Updated TFR2-001: stage 08 Build -> 09 Testing (status In Progress).\\nNow 09 Testing (In Progress). Continue with work-check.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set TFR2-002 --stage 09-testing","yield_time_ms":30000,"max_output_tokens":2000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"d0d8a3\",\"wall_time_seconds\":3.8830095829999998,\"exit_code\":0,\"original_token_count\":32,\"output\":\"Updated TFR2-002: stage 08 Build -> 09 Testing (status In Progress).\\nNow 09 Testing (In Progress). Continue with work-check.\\n\"}"}]
+
+[CALL] const patch="*** Begin Patch\n*** Add File: .claude/worktrees/tfr2-001-build-the-tip-split-command/tests/TFR2-001-TEST-PLAN.md\n+# TFR2-001 test plan\n+\n+## Scope\n+\n+Check R-01 for the default 18% tip command. Check the approved half-cent example on the combined TFR2-002 branch, where `--tip 0` is implemented. TFR2-002 has a separate test plan and result review for R-02.\n+\n+## Environment and data\n+\n+Node.js v25.8.1. Local command with no service or saved data. Default command commit: `e9dd6fa`. Combined command commit: `dd7f00f`.\n+\n+## Checks\n+\n+| Scenario | Expected result | Method or test | Evidence |\n+| --- | --- | --- | --- |\n+| Bill $84.50, 3 people, default tip | `Each person pays $33.24` and exit 0 | `node bin/tip-split.js 84.50 3` on TFR2-001 branch | Direct run and `tests/tip-split.test.js` |\n+| Exact half cent with default tip | Bill $0.25, 1 person prints `$0.30` | `node --test tests/tip-split.test.js` on TFR2-001 branch | Default test suite |\n+| Zero bill and leading zeroes | Valid dollar amount with two decimal output | `node --test tests/tip-split.test.js` on TFR2-001 branch | Default test suite |\n+| Missing or invalid bill or people | Exact usage line on standard error and exit 1 | `node --test tests/tip-split.test.js` on TFR2-001 branch | Default test suite |\n+| Bill $0.01, 2 people, zero tip | `Each person pays $0.01` and exit 0 | `node bin/tip-split.js 0.01 2 --tip 0` on TFR2-002 branch | Direct run and combined test suite |\n+\n+## Results
+
+[CALL] const r=await tools.exec_command({cmd:"git add tests/TFR2-001-TEST-PLAN.md","workdir":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-001-build-the-tip-split-command","sandbox_permissions":"require_escalated","justification":"Stage the TFR2-001 test plan on its own branch.","prefix_rule":["git","add"],"yield_time_ms":30000,"max_output_tokens":1000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.6 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"3217ac\",\"wall_time_seconds\":0.000002459,\"exit_code\":0,\"original_token_count\":0,\"output\":\"\"}"}]
+
+[CALL] const wd="/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-001-build-the-tip-split-command"; const rs=await Promise.allSettled([tools.exec_command({cmd:"git diff --cached --name-status","workdir":wd,"max_output_tokens":1000}),tools.exec_command({cmd:"git diff --cached","workdir":wd,"max_output_tokens":5000})]);rs.forEach((r,i)=>text(`RESULT ${i+1}\n${r.status==="fulfilled"?r.value.output:String(r.reason)}`));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "RESULT 1\nA\ttests/TFR2-001-TEST-PLAN.md\n"}, {"type": "input_text", "text": "RESULT 2\ndiff --git a/tests/TFR2-001-TEST-PLAN.md b/tests/TFR2-001-TEST-PLAN.md\nnew file mode 100644\nindex 0000000..1148878\n--- /dev/null\n+++ b/tests/TFR2-001-TEST-PLAN.md\n@@ -0,0 +1,25 @@\n+# TFR2-001 test plan\n+\n+## Scope\n+\n+Check R-01 for the default 18% tip command. Check the approved half-cent example on the combined TFR2-002 branch, where `--tip 0` is implemented. TFR2-002 has a separate test plan and result review for R-02.\n+\n+## Environment and data\n+\n+Node.js v25.8.1. Local command with no service or saved data. Default command commit: `e9dd6fa`. Combined command commit: `dd7f00f`.\n+\n+## Checks\n+\n+| Scenario | Expected result | Method or test | Evidence |\n+| --- | --- | --- | --- |\n+| Bill $84.50, 3 people, default tip | `Each person pays $33.24` and exit 0 | `node bin/tip-split.js 84.50 3` on TFR2-001 branch | Direct run and `tests/tip-split.test.js` |\n+| Exact half cent with default tip | Bill $0.25, 1 person prints `$0.30` | `node --test tests/tip-split.test.js` on TFR2-001 branch | Default test suite |\n+| Zero bill and leading zeroes | Valid dollar amount with two decimal output | `node --test tests/tip-split.test.js` on TFR2-001 branch | Default test suite |\n+| Missing or invalid bill or people | Exact usage line on standard error and exit 1 | `node --test tests/tip-split.test.js` on TFR2-001 branch | Default test suite |\n+| Bill $0.01, 2 people, zero tip | `Each person pays $0.01` and exit 0 | `node bin/tip-split.js 0.01 2 --tip 0` on TFR2-002 branch | Direct run and combined test suite |\n+\n+## Results and follow-up\n+\n+- Date and tester: 2026-09-28, Codex in this chat.\n+- Outcome: Pass. Default suite: 3 tests passed, 0 failed. Direct default example printed `$33.24`. Combined suite on TFR2-002 branch: 5 tests passed, 0 failed. Direct zero-tip half-cent example printed `$0.01`.\n+- Remaining issues: None found. No independent agent check ran, following the owner's request for no agent team.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"git commit -m 'Record default command test results'","workdir":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-001-build-the-tip-split-command","sandbox_permissions":"require_escalated","justification":"Commit the TFR2-001 test plan and results on its branch.","prefix_rule":["git","commit"],"yield_time_ms":30000,"max_output_tokens":2000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.6 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"17a933\",\"wall_time_seconds\":0.000002125,\"exit_code\":0,\"original_token_count\":43,\"output\":\"[claude/tfr2-001-build-the-tip-split-command ff39be4] Record default command test results\\n 1 file changed, 25 insertions(+)\\n create mode 100644 tests/TFR2-001-TEST-PLAN.md\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"git add tests/TFR2-002-TEST-PLAN.md","workdir":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-002-add-the-tip-option","sandbox_permissions":"require_escalated","justification":"Stage the TFR2-002 test plan on its own branch.","prefix_rule":["git","add"],"yield_time_ms":30000,"max_output_tokens":1000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.7 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"b35f1c\",\"wall_time_seconds\":0.000002083,\"exit_code\":0,\"original_token_count\":0,\"output\":\"\"}"}]
+
+[CALL] const wd="/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-002-add-the-tip-option"; const rs=await Promise.allSettled([tools.exec_command({cmd:"git diff --cached --name-status","workdir":wd,"max_output_tokens":1000}),tools.exec_command({cmd:"git diff --cached","workdir":wd,"max_output_tokens":5000})]);rs.forEach((r,i)=>text(`RESULT ${i+1}\n${r.status==="fulfilled"?r.value.output:String(r.reason)}`));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "RESULT 1\nA\ttests/TFR2-002-TEST-PLAN.md\n"}, {"type": "input_text", "text": "RESULT 2\ndiff --git a/tests/TFR2-002-TEST-PLAN.md b/tests/TFR2-002-TEST-PLAN.md\nnew file mode 100644\nindex 0000000..2da2c46\n--- /dev/null\n+++ b/tests/TFR2-002-TEST-PLAN.md\n@@ -0,0 +1,25 @@\n+# TFR2-002 test plan\n+\n+## Scope\n+\n+Check TFR2-001 R-02 through TFR2-002: a custom tip replaces 18%, with exact decimal calculation, required output, and invalid-input behavior. Check the R-01 half-cent example with `--tip 0`.\n+\n+## Environment and data\n+\n+Node.js v25.8.1. Local command with no service or saved data. Combined command commit: `dd7f00f`.\n+\n+## Checks\n+\n+| Scenario | Expected result | Method or test | Evidence |\n+| --- | --- | --- | --- |\n+| Bill $84.50, 3 people, 20% tip | `Each person pays $33.80` and exit 0 | `node bin/tip-split.js 84.50 3 --tip 20` | Direct run and `tests/tip-split.test.js` |\n+| Bill $0.01, 2 people, zero tip | `Each person pays $0.01` and exit 0 | `node bin/tip-split.js 0.01 2 --tip 0` | Direct run and test suite |\n+| Fractional, large, and scientific percentages | Exact cents with no percentage ceiling | `node --test tests/tip-split.test.js` | Test suite cases for `.5`, `+1e-2`, and `1.25e3` |\n+| Missing, negative, nonnumeric, or misplaced tip | Exact usage line on standard error and exit 1 | `node --test tests/tip-split.test.js` | Invalid tip test cases |\n+| Default behavior after adding `--tip` | `Each person pays $33.24` for the original example | `node --test tests/tip-split.test.js` | Default example test case |\n+\n+## Results and follow-up\n+\n+- Date and tester: 2026-09-28, Codex in this chat.\n+- Outcome: Pass. Full suite: 5 tests passed, 0 failed. Direct 20% and zero-tip examples printed `$33.80` and `$0.01`.\n+- Remaining issues: None found. No independent agent check ran, following the owner's request for no agent team.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"git commit -m 'Record optional tip test results'","workdir":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-002-add-the-tip-option","sandbox_permissions":"require_escalated","justification":"Commit the TFR2-002 test plan and results on its branch.","prefix_rule":["git","commit"],"yield_time_ms":30000,"max_output_tokens":2000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"462e55\",\"wall_time_seconds\":0.000002041,\"exit_code\":0,\"original_token_count\":40,\"output\":\"[claude/tfr2-002-add-the-tip-option 339892d] Record optional tip test results\\n 1 file changed, 25 insertions(+)\\n create mode 100644 tests/TFR2-002-TEST-PLAN.md\\n\"}"}]
+
+[CALL] const rs=await Promise.allSettled([
+tools.exec_command({cmd:"toolkit work show TFR2-001 --section Roadmap","yield_time_ms":30000,"max_output_tokens":3000}),
+tools.exec_command({cmd:"toolkit work show TFR2-002 --section Roadmap","yield_time_ms":30000,"max_output_tokens":3000}),
+tools.exec_command({cmd:"toolkit work show TFR2-001 --section Overview","yield_time_ms":30000,"max_output_tokens":3000}),
+tools.exec_command({cmd:"toolkit work show TFR2-002 --section Overview","yield_time_ms":30000,"max_output_tokens":3000}),
+tools.exec_command({cmd:"toolkit work show TFR2-001 --section 'Resume here'","yield_time_ms":30000,"max_output_tokens":2000}),
+tools.exec_command({cmd:"toolkit work show TFR2-002 --section 'Resume here'","yield_time_ms":30000,"max_output_tokens":2000})
+]);rs.forEach((r,i)=>text(`RESULT ${i+1}\n${r.status==="fulfilled"?r.value.output:String(r.reason)}`));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.6 seconds\nOutput:\n"}, {"type": "input_text", "text": "RESULT 1\n## Roadmap\n\nA phase is complete when its tasks are complete and its exit result has been checked.\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 \u2014 Default tip command | The command splits a bill with the 18% default tip (R-01). | Not Started | The default example and invalid bill or people checks pass. | None. |\n| P2 \u2014 Optional tip | The command accepts `--tip <percent>` (R-02). | Not Started | TFR2-002 passes its custom-tip and invalid-tip checks, including the R-01 half-cent example using `--tip 0`; its result is reviewed separately. | None. |\n"}, {"type": "input_text", "text": "RESULT 2\n## Roadmap\n\nA phase is complete when its tasks are complete and its exit result has been checked.\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 \u2014 Optional tip | The command accepts a valid `--tip` value and replaces the default 18% (TFR2-001 R-02). | Not Started | The `--tip 20` and `--tip 0` examples and invalid-tip tests pass. | None. |\n"}, {"type": "input_text", "text": "RESULT 3\n## Overview\n\n**Goal:** Split a restaurant bill equally with an 18% default tip and an optional tip percentage.\n\n**Current position:** Requirements R-01 and R-02 and design Option A are approved. TFR2-002 was created for the optional `--tip` behavior and its separate result review. No implementation has started.\n\n**Next action:** Settle the delivery choice, then plan P1 for the default command and P2 for TFR2-002.\n\n**Blockers:** Delivery choice before build.\n\n**Related items:** Sub-item TFR2-002 covers R-02.\n"}, {"type": "input_text", "text": "RESULT 4\n## Overview\n\n**Goal:** Let a person choose a nonnegative tip percentage with `--tip` and see the resulting equal share.\n\n**Current position:** Created under TFR2-001 to deliver approved R-02. It inherits the parent\u2019s approved Option A design. No implementation has started.\n\n**Next action:** Plan the optional tip parser, tests, and separate result review after the parent delivery choice is settled.\n\n**Blockers:** The parent default command is a build dependency.\n\n**Related items:** Design: TFR2-001\u2019s approved Option A.\n"}, {"type": "input_text", "text": "RESULT 5\n### Resume here\n\nContinue TFR2-001 at implementation planning. The parent delivers the default 18% path (R-01); TFR2-002
+
+[CALL] const s=`A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Default tip command | The command splits a bill with the 18% default tip (R-01). | Done | The default example and invalid bill or people checks pass. | None. |
+| P2 — Optional tip | The command accepts \`--tip <percent>\` (R-02). | In Progress | TFR2-002 passes its custom-tip and invalid-tip checks, including the R-01 half-cent example using \`--tip 0\`; its result is reviewed separately. | None. |`;
+if(s.includes("'")) throw Error("quote"); const r=await tools.exec_command({cmd:"toolkit work edit TFR2-001 --section Roadmap --text '"+s+"'","yield_time_ms":30000,"max_output_tokens":2000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.6 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"27de30\",\"wall_time_seconds\":4.272936,\"exit_code\":0,\"original_token_count\":8,\"output\":\"Saved \\\"Roadmap\\\" in TFR2-001.\\n\"}"}]
+
+[CALL] const s=`A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Optional tip | The command accepts a valid \`--tip\` value and replaces the default 18% (TFR2-001 R-02). | Done | The \`--tip 20\` and \`--tip 0\` examples and invalid-tip tests pass. | None. |`;
+if(s.includes("'")) throw Error("quote"); const r=await tools.exec_command({cmd:"toolkit work edit TFR2-002 --section Roadmap --text '"+s+"'","yield_time_ms":30000,"max_output_tokens":2000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"9cabba\",\"wall_time_seconds\":3.826775583,\"exit_code\":0,\"original_token_count\":8,\"output\":\"Saved \\\"Roadmap\\\" in TFR2-002.\\n\"}"}]
+
+[CALL] const s=`**Goal:** Split a restaurant bill equally with an 18% default tip and an optional tip percentage.
+
+**Current position:** The default command is built on TFR2-001 branch at ff39be4. Its 3 tests pass, and the approved $84.50 example prints $33.24. TFR2-002 is a separate top-level item; its combined command passes 5 tests, including the zero-tip half-cent check.
+
+**Next action:** Show the default command result to Mike Rihm for its own approval. Leave both branches unmerged.
+
+**Blockers:** Owner result approval is pending.
+
+**Related items:** TFR2-002 covers R-02 and has a separate result review.`;
+if(s.includes("'")) throw Error("quote"); const r=await tools.exec_command({cmd:"toolkit work edit TFR2-001 --section Overview --text '"+s+"'","yield_time_ms":30000,"max_output_tokens":2000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"6abbb1\",\"wall_time_seconds\":4.071034125,\"exit_code\":0,\"original_token_count\":8,\"output\":\"Saved \\\"Overview\\\" in TFR2-001.\\n\"}"}]
+
+[CALL] const s=`**Goal:** Let a person choose a nonnegative tip percentage with \`--tip\` and see the resulting equal share.
+
+**Current position:** The optional tip command is built on TFR2-002 branch at 339892d, based on the TFR2-001 default command. All 5 tests pass. The 20% example prints $33.80 and the zero-tip half-cent example prints $0.01.
+
+**Next action:** Show this result to Mike Rihm for approval separate from TFR2-001. Leave both branches unmerged.
+
+**Blockers:** Owner result approval is pending.
+
+**Related items:** Covers TFR2-001 R-02 and follows its approved Option A design. The owner made this item top-level in Notion.`;
+if(s.includes("'")) throw Error("quote"); const r=await tools.exec_command({cmd:"toolkit work edit TFR2-002 --section Overview --text '"+s+"'","yield_time_ms":30000,"max_output_tokens":2000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.6 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"daaba1\",\"wall_time_seconds\":4.237388709,\"exit_code\":0,\"original_token_count\":8,\"output\":\"Saved \\\"Overview\\\" in TFR2-002.\\n\"}"}]
+
+[CALL] const rs=await Promise.allSettled([
+tools.exec_command({cmd:"toolkit work show TFR2-001 --section Overview","yield_time_ms":30000,"max_output_tokens":3000}),
+tools.exec_command({cmd:"toolkit work show TFR2-002 --section Overview","yield_time_ms":30000,"max_output_tokens":3000}),
+tools.exec_command({cmd:"toolkit work show TFR2-001 --section Roadmap","yield_time_ms":30000,"max_output_tokens":2000}),
+tools.exec_command({cmd:"toolkit work show TFR2-002 --section Roadmap","yield_time_ms":30000,"max_output_tokens":2000})
+]);rs.forEach((r,i)=>text(`RESULT ${i+1}\n${r.status==="fulfilled"?r.value.output:String(r.reason)}`));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 2.9 seconds\nOutput:\n"}, {"type": "input_text", "text": "RESULT 1\n## Overview\n\n**Goal:** Split a restaurant bill equally with an 18% default tip and an optional tip percentage.\n\n**Current position:** The default command is built on TFR2-001 branch at ff39be4. Its 3 tests pass, and the approved $84.50 example prints $33.24. TFR2-002 is a separate top-level item; its combined command passes 5 tests, including the zero-tip half-cent check.\n\n**Next action:** Show the default command result to Mike Rihm for its own approval. Leave both branches unmerged.\n\n**Blockers:** Owner result approval is pending.\n\n**Related items:** TFR2-002 covers R-02 and has a separate result review.\n"}, {"type": "input_text", "text": "RESULT 2\n## Overview\n\n**Goal:** Let a person choose a nonnegative tip percentage with `--tip` and see the resulting equal share.\n\n**Current position:** The optional tip command is built on TFR2-002 branch at 339892d, based on the TFR2-001 default command. All 5 tests pass. The 20% example prints $33.80 and the zero-tip half-cent example prints $0.01.\n\n**Next action:** Show this result to Mike Rihm for approval separate from TFR2-001. Leave both branches unmerged.\n\n**Blockers:** Owner result approval is pending.\n\n**Related items:** Covers TFR2-001 R-02 and follows its approved Option A design. The owner made this item top-level in Notion.\n"}, {"type": "input_text", "text": "RESULT 3\n## Roadmap\n\nA phase is complete when its tasks are complete and its exit result has been checked.\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 \u2014 Default tip command | The command splits a bill with the 18% default tip (R-01). | Done | The default example and invalid bill or people checks pass. | None. |\n| P2 \u2014 Optional tip | The command accepts `--tip <percent>` (R-02). | In Progress | TFR2-002 passes its custom-tip and invalid-tip checks, including the R-01 half-cent example using `--tip 0`; its result is reviewed separately. | None. |\n"}, {"type": "input_text", "text": "RESULT 4\n## Roadmap\n\nA phase is complete when its tasks are complete and its exit result has been checked.\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 \u2014 Optional tip | The command accepts a valid `--tip` value and replaces the default 18% (TFR2-001 R-02). | Done | The `--tip 20` and `--tip 0` examples and invalid-tip t
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit TFR2-001 --section 'Resume here' --text 'TFR2-001 default result is built and tested on branch claude/tfr2-001-build-the-tip-split-command at ff39be4. The owner reviews this result separately from TFR2-002. Ask for result approval, then continue with work-finish only after his answer. No merge is authorized yet.'","yield_time_ms":30000,"max_output_tokens":2000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"10647c\",\"wall_time_seconds\":4.094572292,\"exit_code\":0,\"original_token_count\":9,\"output\":\"Saved \\\"Resume here\\\" in TFR2-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit TFR2-002 --section 'Resume here' --text 'TFR2-002 optional tip result is built and tested on branch claude/tfr2-002-add-the-tip-option at 339892d. It depends on the TFR2-001 command commit e9dd6fa. The owner reviews this result separately from TFR2-001. Ask for result approval, then continue with work-finish only after his answer. No merge is authorized yet.'","yield_time_ms":30000,"max_output_tokens":2000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.5 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"71a149\",\"wall_time_seconds\":4.172407625,\"exit_code\":0,\"original_token_count\":9,\"output\":\"Saved \\\"Resume here\\\" in TFR2-002.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history TFR2-001 --note 'Checked R-01 default command at ff39be4: 3 tests passed; direct $84.50 example printed $33.24. Combined TFR2-002 branch at 339892d: 5 tests passed and zero-tip half-cent example printed $0.01. Evidence: tests/TFR2-001-TEST-PLAN.md. No independent agent check; no gaps found.' --effect 'Default command result is ready for separate owner approval; branches remain unmerged.'","yield_time_ms":30000,"max_output_tokens":2000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.8 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"032032\",\"wall_time_seconds\":4.492799666,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Added a Recent History row to TFR2-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history TFR2-002 --note 'Checked R-02 optional tip command at 339892d: 5 tests passed; direct 20% and zero-tip examples printed $33.80 and $0.01. Evidence: tests/TFR2-002-TEST-PLAN.md. No independent agent check; no gaps found.' --effect 'Optional tip result is ready for separate owner approval; branches remain unmerged.'","yield_time_ms":30000,"max_output_tokens":2000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 8.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"5f9741\",\"wall_time_seconds\":7.890898916,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Added a Recent History row to TFR2-002.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set TFR2-001 --stage 11-user-approval --waiting-on owner","yield_time_ms":30000,"max_output_tokens":2000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 7.0 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"da01bd\",\"wall_time_seconds\":6.689824584,\"exit_code\":0,\"original_token_count\":40,\"output\":\"Updated TFR2-001: stage 09 Testing -> 11 User approval (status In Progress); waiting on owner.\\nNow 11 User approval (In Progress). Continue with work-decide.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set TFR2-002 --stage 11-user-approval --waiting-on owner","yield_time_ms":30000,"max_output_tokens":2000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 6.8 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"2f696c\",\"wall_time_seconds\":6.46965325,\"exit_code\":0,\"original_token_count\":40,\"output\":\"Updated TFR2-002: stage 09 Testing -> 11 User approval (status In Progress); waiting on owner.\\nNow 11 User approval (In Progress). Continue with work-decide.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/SKILL.md","max_output_tokens":10000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "---\nname: memory-save\ndescription: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says \"remember this\", \"from now on\", \"forget that\", or \"remind me\" with no time given, corrects the agent, or a hook says a save is due.'\n---\n\n# Memory save\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nSaves, corrects, or retires one memory record with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand.\n\n## Steps\n\nTrack these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.\n\n1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home (\"Where other things go\" below) and stop.\n2. Search for a record that already holds it, and read each hit with its version. The save's duplicate check compares wording, so only this search finds a record the new fact contradicts (for example \"Mondays\" against \"Tuesdays\").\n   `toolkit memory find '<topic>'`\n   `toolkit memory get <key> --json`\n3. Read the approval mode and apply \"Approval policy\" below. When it says ask, ask and wait.\n   `toolkit config get memory.approval`\n4. Write the description and body in the record format (`references/record-format.md`), then save with the form for the case (\"Save forms\" below).\n5. Exit code 2 saved nothing. Read the \"Error:\" line. Records listed: the duplicate check. \"Changed since it was read\": read it again and redo the change. Any other rule: fix the text as the message says. `references/replacing-and-retiring.md`, section 2, has each case.\n6. \"Forget that\": retire the record, with his words as the reason. Delete only when his own words say delete (\"Approval policy\").\n   `toolkit memory retire <key> --reason '<his words>'`\n7. An owner to-do with no work item, or a change to what is happening now: update the current focus (`references/current-focus.md`). A project term: update the glossary (`references/glossary.md`).\n8. A preference a project setting can enforce (for example \"I hate tabs\" and `.editorco
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --json","yield_time_ms":30000,"max_output_tokens":5000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.0 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"51331a\",\"wall_time_seconds\":0.679733709,\"exit_code\":0,\"original_token_count\":209,\"output\":\"{\\n  \\\"ok\\\": true,\\n  \\\"backend\\\": \\\"notion\\\",\\n  \\\"kind\\\": \\\"focus\\\",\\n  \\\"text\\\": \\\"# Current focus\\\\n\\\\nLast updated: 2026-09-28, chat, agent\\\\n\\\\n## Now\\\\n\\\\n- TFR2-001 Build the tip-split command\\\\n- TFR2-002 Add the --tip option\\\\n\\\\n## Waiting on the owner\\\\n\\\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\\\n\\\\n## Untracked to-dos\\\\n\\\\nNone.\\\\n\\\\n## Next session starts with\\\\n\\\\n- Continue TFR2-001 from its Resume here: owner answers Q-04 about delivery responsibility, then build the default path and TFR2-002 optional tip path for separate reviews.\\\\n\\\",\\n  \\\"version\\\": \\\"259fb33da3ccd0588f3db298db8a8519c06f711eb4f03d279eb66f1290547d91\\\"\\n}\\n\"}"}]
+
+[CALL] const s=`# Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- TFR2-001 Build the tip-split command
+- TFR2-002 Add the --tip option
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue TFR2-001 and TFR2-002 from their Resume here notes: both tested results await separate owner approvals; no merge is authorized yet.
+`;
+if(s.includes("'")) throw Error("quote"); const r=await tools.exec_command({cmd:"toolkit memory focus --text '"+s+"' --expect 259fb33da3ccd0588f3db298db8a8519c06f711eb4f03d279eb66f1290547d91","yield_time_ms":30000,"max_output_tokens":2000}); text(JSON.stringify(r));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"e93254\",\"wall_time_seconds\":3.8465505,\"exit_code\":0,\"original_token_count\":15,\"output\":\"Saved the current focus (21 lines). Version: c5bb62a69299\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus","yield_time_ms":30000,"max_output_tokens":3000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.1 seconds\nOutput:\n"}, {"type": "input_text", "text": "# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- TFR2-001 Build the tip-split command\n- TFR2-002 Add the --tip option\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue TFR2-001 and TFR2-002 from their Resume here notes: both tested results await separate owner approvals; no merge is authorized yet.\n"}]
+
+[CALL] const rs=await Promise.allSettled([
+tools.exec_command({cmd:"toolkit work validate TFR2-001","yield_time_ms":30000,"max_output_tokens":4000}),
+tools.exec_command({cmd:"toolkit work validate TFR2-002","yield_time_ms":30000,"max_output_tokens":4000}),
+tools.exec_command({cmd:"toolkit work decisions","yield_time_ms":30000,"max_output_tokens":3000}),
+tools.exec_command({cmd:"git status --short --branch","workdir":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-001-build-the-tip-split-command","max_output_tokens":2000}),
+tools.exec_command({cmd:"git status --short --branch","workdir":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-002-add-the-tip-option","max_output_tokens":2000}),
+tools.exec_command({cmd:"git worktree list","max_output_tokens":2000}),
+tools.exec_command({cmd:"toolkit doctor","yield_time_ms":30000,"max_output_tokens":3000})
+]);rs.forEach((r,i)=>text(`RESULT ${i+1}\n${r.status==="fulfilled"?JSON.stringify(r.value):String(r.reason)}`));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 5.0 seconds\nOutput:\n"}, {"type": "input_text", "text": "RESULT 1\n{\"chunk_id\":\"71b47a\",\"wall_time_seconds\":4.562329041,\"exit_code\":0,\"original_token_count\":25,\"output\":\"Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.\\n\"}"}, {"type": "input_text", "text": "RESULT 2\n{\"chunk_id\":\"f7ab01\",\"wall_time_seconds\":4.278932917,\"exit_code\":0,\"original_token_count\":25,\"output\":\"Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.\\n\"}"}, {"type": "input_text", "text": "RESULT 3\n{\"chunk_id\":\"55920a\",\"wall_time_seconds\":2.903220791,\"exit_code\":0,\"original_token_count\":99,\"output\":\"2 decisions wait on the owner:\\n\\nTFR2-001 Build the tip-split command\\n  - TFR2-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve TFR2-001 --result --by <name>. (work-decide)\\n\\nTFR2-002 Add the --tip option\\n  - TFR2-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve TFR2-002 --result --by <name>. (work-decide)\\n\"}"}, {"type": "input_text", "text": "RESULT 4\n{\"chunk_id\":\"2f35e1\",\"wall_time_seconds\":0.000002708,\"exit_code\":0,\"original_token_count\":12,\"output\":\"## claude/tfr2-001-build-the-tip-split-command\\n\"}"}, {"type": "input_text", "text": "RESULT 5\n{\"chunk_id\":\"008ad1\",\"wall_time_seconds\":0.000002333,\"exit_code\":0,\"original_token_count\":10,\"output\":\"## claude/tfr2-002-add-the-tip-option\\n\"}"}, {"type": "input_text", "text": "RESULT 6\n{\"chunk_id\":\"734bd8\",\"wall_time_seconds\":0.000002083,\"exit_code\":0,\"original_token_count\":180,\"output\":\"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2                                                        77fd652 [main]\\n/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-001-build-the-tip-split-command ff39be4 [claude/tfr2-001-build-the-tip-split-command]\\n/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/.claude/worktrees/tfr2-002-add-the-tip-option          339892d [claude/tfr2-002-add-the-tip-option]\\n\"}"}, {"

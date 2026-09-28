@@ -48,8 +48,9 @@ Check these first, without asking:
 - `ntn whoami` (only for Notion): signed in or not. In Codex, run it outside
   the sandbox (`wiring-notion.md` in this folder, step 1); inside it, the
   check fails even when the owner is signed in.
-- `toolkit hindsight health` (only for Hindsight): the local server answers
-  or not.
+- `toolkit hindsight health`: the local server answers or not. Run it
+  before the memory question, so the question offers Hindsight only when it
+  answers (Question 3).
 
 ## Question 1: the project name
 
@@ -102,7 +103,7 @@ one line instead.
 For a Salesforce project, ask for the org aliases, one question at a time.
 Show the aliases on this computer first (`sf org list`, a read-only command):
 
-> Which org alias is the sandbox the agents may deploy to for testing? I see `acme-uat` and `acme-dev`; I recommend `acme-uat`.
+> Which org alias is the sandbox the agents may deploy to for testing (in Codex you run those deploys yourself)? I see `acme-uat` and `acme-dev`; I recommend `acme-uat`.
 
 > Which org alias is production? Agents never deploy there or change its data; the guards block it and hand you the command instead. I see `acme-prod`.
 

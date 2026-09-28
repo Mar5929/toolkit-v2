@@ -1,0 +1,157 @@
+PROMPT: Before I approve anything: what did I tell you earlier about command-line flags and the README? Does the WI-002 change follow it?
+TIME: 2026-09-28T22:43:55Z -> 2026-09-28T22:44:26Z
+
+[AGENT] I’ll check the recorded preference, then compare it with the WI-002 README change.
+
+[AGENT] I’m using the memory-find procedure to verify your earlier instruction and its source.
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2                                                      ec6e66b [main]
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/.claude/worktrees/wi-001-add-a-times-flag-to-greet   fe07ccb [claude/wi-001-add-a-times-flag-to-greet]
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/.claude/worktrees/wi-002-document-greet-flags-in-the 17d584a [claude/wi-002-document-greet-flags-in-the]
+
+
+[CMD exit=0] /bin/zsh -lc 'git status --short'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-002 --path'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/.work-items/WI-001-times-flag/WI-002-document-greet-flags-in-the-readme/WORK-ITEM.md
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory get user_cli_flags_readme_examples'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Add a --times flag to greet
+- WI-002 Document greet flags in the README
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 and WI-002 from their Resume here: ask Mike to approve each tested result separately, then follow work-finish for any approved item.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory find 'README flags'"
+  -> 1 memory record is about "README flags" (Hindsight recall, best first):
+- user_cli_flags_readme_examples: List every command-line flag in the README with a short example
+    # README examples for CLI flags **Remember:** Mike prefers every command-line flag to be listed in the README with a short example. **Why:** Not stated by the o
+Read a record with toolkit memory get <key> before relying on it.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory find 'command-line flags README'"
+  -> 1 memory record is about "command-line flags README" (Hindsight recall, best first):
+- user_cli_flags_readme_examples: List every command-line flag in the README with a short example
+    # README examples for CLI flags **Remember:** Mike prefers every command-line flag to be listed in the README with a short example. **Why:** Not stated by the o
+Read a record with toolkit memory get <key> before relying on it.
+
+
+[CMD exit=0] /bin/zsh -lc 'cat .claude/worktrees/wi-002-document-greet-flags-in-the/README.md'
+  -> # greet
+
+A tiny command that prints a greeting.
+
+Run it with an optional name. With no name, it greets the world.
+
+```text
+$ node bin/greet.mjs Mike
+H
+
+[CMD exit=0] /bin/zsh -lc 'cat .claude/worktrees/wi-002-document-greet-flags-in-the/bin/greet.mjs'
+  -> #!/usr/bin/env node
+// greet: prints a friendly greeting.
+// Usage: greet [name] [--times N]
+export function greet(name = 'world') {
+  return `Hello, 
+
+[CMD exit=0] /bin/zsh -lc 'cat .work-items/WI-001-times-flag/WI-002-document-greet-flags-in-the-readme/WORK-ITEM.md'
+  -> ---
+id: WI-002
+title: Document greet flags in the README
+type: build
+stage: 11-user-approval
+status: In Progress
+parent: WI-001
+waiting_on: "owner"
+pr
+
+[CMD exit=0] /bin/zsh -lc 'cat .claude/worktrees/wi-001-add-a-times-flag-to-greet/bin/greet.mjs'
+  -> #!/usr/bin/env node
+// greet: prints a friendly greeting.
+// Usage: greet [name] [--times N]
+export function greet(name = 'world') {
+  return `Hello, 
+
+[CMD exit=0] /bin/zsh -lc 'git diff main...claude/wi-002-document-greet-flags-in-the -- README.md'
+  -> diff --git a/README.md b/README.md
+index df49ae7..bec9645 100644
+--- a/README.md
++++ b/README.md
+@@ -2,7 +2,22 @@
+ 
+ A tiny command that prints a greeting.
+ 
+-    node bin/greet.mjs Mike
+-    Hello, Mike!
++Run it with an optional name. With no name, it greets the world.
++
++```text
++$ node bin/greet.mjs Mike
++Hello, Mike!
++```
++
++## Flags
++
++`--times N` prints the same greeting N times, one per line. N must be a positive whole number. The name can appear before or after the flag.
++
++```text
++$ node bin/greet.mjs Mike --times 3
++Hello, Mike!
++Hello, Mike!
++Hello, Mike!
++```
+ 
+ Run the tests with `npm test`.
+
+
+[CMD exit=0] /bin/zsh -lc 'cat README.md'
+  -> # greet
+
+A tiny command that prints a greeting.
+
+    node bin/greet.mjs Mike
+    Hello, Mike!
+
+Run the tests with `npm test`.
+
+
+[CMD exit=0] /bin/zsh -lc 'node bin/greet.mjs Mike --times 3'
+  -> Hello, Mike!
+Hello, Mike!
+Hello, Mike!
+
+
+[AGENT] You told me to **list every command-line flag in the README with a short example** (project memory, recorded from your chat on September 28).
+
+Yes. The [WI-002 README](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/.claude/worktrees/wi-002-document-greet-flags-in-the/README.md) lists the command’s only flag, `--times`, and gives a short command and output example. I ran that command and got the output shown. The change is on the WI-002 branch; your approval is still pending.
+
+Do you approve the WI-002 README result?
+
+SKILLS OPENED: []
+ESCALATED CALLS: 0
+HOOK CONTEXTS: 1
+  * Project briefing: Greet CLI Final H2 (greet-cli-final-h2), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: the local Hindsight server. Salesforce: no. Hosts: Claude Code and Codex. | Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle. | Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs. |  | This worktree is on branch main, which names no work item. |  | Active items: | - WI-001 Add a --times flag to greet: 11 User approval, In Progress, waiting on owner. Next action: Ask Mike to approve the WI-001 command result separately from WI-002's README result. Continues with work-decide. | - WI-002 Document greet flags in the README: 11 User approval, In Progress, waiting on owner. Next action: Ask Mike to approve the WI-002 README result separately from WI-001's command result. Continues with work-decide. |  | Waiting on the owner: | - WI-001 Add a --times flag to greet: WI-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-001 --result --by <name>. (work-decide) | - WI-002 Document greet flags in the README: WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide) |  | Items: 2 in pro
+HOOKSTATE turns=1 keep=None records=[] stopBlocked=False lastStop=

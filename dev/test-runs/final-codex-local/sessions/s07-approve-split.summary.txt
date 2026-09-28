@@ -1,0 +1,955 @@
+PROMPT: I approve Option A. Before you build, split the --max option out into its own sub-item under WI-001, so the basic slug and the --max limit are tracked separately.
+THREAD: 01a0e99f-62c6-7a62-8656-21812d3a682b
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll record your approval of Option A, then split `--max` into a sub-item under WI-001. I’ll check the updated item structure before building the basic command.
+
+[CMD exit=0] /bin/zsh -lc "pwd; rg --files -g 'SOUL.md' -g 'PROJECT.md' -g 'PROJECT-ROADMAP.md' -g 'DECISIONS.md' -g 'AGENTS.md' -g '.claude/rules/*.md' -g '.work-items/**' | head -80"
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1
+DECISIONS.md
+AGENTS.md
+PROJECT-ROADMAP.md
+requirements/AGENTS.md
+PROJECT.md
+
+
+[CMD exit=0] /bin/zsh -lc 'cat PROJECT.md PROJECT-ROADMAP.md DECISIONS.md; if test -f SOUL.md; then cat SOUL.md; fi; for f in .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md; do cat "$f"; done; cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-organize/SKILL.md /Users/micha
+  -> # slug
+
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->
+
+## Purpose and intended outcome
+
+- Purpose: Turn typed titles into slugs for Mike Rihm’s blog.
+- Intended outcome: slug turns any title I type into a clean, URL-friendly slug that I can paste into my blog.
+
+## Scope and boundaries
+
+- In scope: A Node.js command-line tool that turns a typed title into a URL-friendly slug.
+- Outside scope: `<Important exclusions or adjacent owners.>`
+- Constraints: `<Approved security, delivery, or operating constraints with sources.>`
+
+## Systems and environments
+
+| System or org | Purpose | Environment | Source of truth | Access notes |
+| --- | --- | --- | --- | --- |
+| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |
+
+## People and ownership
+
+| Role | Person or team | Responsibility | Source / last confirmed |
+| --- | --- | --- | --- |
+| Project owner | Mike Rihm | Makes project decisions | Owner, 2026-09-28 |
+
+## Work and project records
+
+- Work tracker: `.work-items/` (local folders, Git-ignored)
+- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)
+- Project decisions: [DECISIONS.md](DECISIONS.md)
+- Functional require
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1 c062d63 [main]
+
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## main
+
+
+[CMD exit=0] /bin/zsh -lc 'git remote'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/approvals.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-organize/references/moves.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/current-focus.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/toolkit-commands.md'
+  -> <!-- Generated file. Source: plugins/work/shared/approvals.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Approvals and gates
+
+The exact steps to ask for and record each owner approval, and what counts as
+one. Run each checklist in order; one wrong or missing command leaves the
+item in the wrong state.
+
+## Contents
+
+1. What counts as approval
+2. Requirements approval
+3. Design approval
+4. Result approval
+5. Done
+6. Cancel
+7. Delivery offer
+8. Project-wide decision
+9. Memory proposal
+10. Sub-items and approvals
+11. Standing merge instruction
+12. When an approve command refuses
+
+## 1. What counts as approval
+
+`toolkit work lifecycle` prints the gates and these rules. In short:
+
+- Only the owner's explicit words count. Quote them in a history note.
+- A question, a suggestion, a tentative answer ("probably B"), silence, or a
+  saved draft is not approval.
+- An approval covers only what was shown. It never covers merge, deployment,
+  spending, or publishing.
+- An approval survives later stages. A stage alone does not prove approval:
+  check the approval field (`toolkit work show <id>`).
+- A bare "yes", "ok", or "looks good" answers only a yes-or-no question asked
+  earlier in this conversation. When none was asked, or the waiting question
+  is not a yes-or-no question, show the decision with its choices and your
+  recommendation, and record nothing.
+- After a yes, save his words first, in a history note that starts with
+  `Owner said:`. Then run the 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 1 decision waits on the owner:
+
+WI-001 Build slug command with max option
+  - The design for WI-001 is proposed and waits for the owner's approval. Approve with: toolkit work approve WI-001 --design --by <name>. (work-decide)
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001'
+  -> WI-001: Build slug command with max option
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1/.work-items/WI-001-build-slug-command-with-max-option/WORK-ITEM.md
+Stage: 04 Solution design (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: none | Sub-items: none | Design: proposed (.work-items/WI-001-build-slug-command-with-max-option/DESIGN.md)
+Worktree branch for this item: claude/wi-001-build-slug-command-with-max (folder .claude/worktrees/wi-001-build-slug-command-with-max)
+
+---
+id: WI-001
+title: Build slug command with max option
+type: build
+stage: 04-solution-design
+status: In Progress
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: proposed
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-001: Build slug command with max option
+
+## Overview
+
+**Goal:** Turn typed blog titles into URL-friendly slugs, with an optional maximum length.
+
+**Current position:** R-01 and R-02 were approved on 2026-09-28. Two design options are proposed.
+
+**Next action:** Mike chooses and approves Option A or Option B in the proposed design.
+
+**Blockers:** Design choice and approval from Mike.
+
+**Related items:** P01-U01 in PROJECT-ROADMAP.md.
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+<!-- Replace each example row with a real phase.
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001 --path'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1/.work-items/WI-001-build-slug-command-with-max-option/WORK-ITEM.md
+
+
+[CMD exit=0] /bin/zsh -lc 'cat .work-items/WI-001-build-slug-command-with-max-option/DESIGN.md'
+  -> ---
+work_item: WI-001
+status: proposed
+approved: "no"
+---
+
+# WI-001: Build slug command with max option — solution design
+
+**Requirements:** WI-001  
+**Design status:** Proposed  
+**Requirements checked:** WI-001, R-01 and R-02, 2026-09-28  
+**Last updated:** 2026-09-28  
+**Design approval:** Pendin
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work sync'
+  -> Nothing changed: every item is where the tracker expected it, and every derived value is in step.
+
+Dashboard: .work-items/DASHBOARD.md
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work list --tree'
+  -> WI-001  Build slug command with max option  (04 Solution design, In Progress, waiting on owner)
+
+
+[AGENT] WI-001 has approved requirements for both R-01 and R-02, and its proposed Option A covers both. I’ll record your design choice, then create separate child items for the basic command and `--max`.
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history WI-001 --note 'Owner said: I approve Option A. Before you build, split the --max option out into its own sub-item under WI-001, so the basic slug and the --max limit are tracked separately.' --effect 'Select Option A and split implementation into basic slug and max sub-items before building.'"
+  -> Added a Recent History row to WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work design WI-001 --text '---
+work_item: WI-001
+status: proposed
+approved: \"no\"
+---
+
+# WI-001: Build slug command with max option — solution design
+
+**Requirements:** WI-001 R-01 and R-02  
+**Design status:** Proposed  
+**Requirements checked:** WI-001, R-01 and R-02, 2026-09-28  
+**Last updated:** 2026-09-28  
+**Design approval:** Pending recording of Mike Rihm approval
+
+## What this design solves
+
+Mike runs "'`node bin/slug.js "Hello World!"` and gets `hello-world`. An optional `--max` limits its length. The two behaviors are tracked in separate sub-items under WI-00
+  -> Saved the design of WI-001 (proposed) at /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1/.work-items/WI-001-build-slug-command-with-max-option/DESIGN.md.
+It is proposed until the owner approves it: toolkit work approve <id> --design --by <name>.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work approve WI-001 --design --by 'Mike Rihm'"
+  -> Recorded: design of WI-001 approved (2026-09-28 by Mike Rihm).
+It is no longer waiting on the owner (waiting_on: none).
+Now 04 Solution design (In Progress). Continue with solution-design.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --waiting-on agent'
+  -> Updated WI-001: waiting on agent.
+Now 04 Solution design (In Progress). Continue with solution-design.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate WI-001'
+  -> Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --stage 05-breakdown'
+  -> Updated WI-001: stage 04 Solution design -> 05 Breakdown (status In Progress).
+Now 05 Breakdown (In Progress). Continue with work-organize.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work new --title 'Build basic slug command' --type build --parent WI-001 --covers R-01"
+  -> Created WI-002: Build basic slug command (06 Implementation plan, In Progress, sub-item of WI-001) at .work-items/WI-001-build-slug-command-with-max-option/WI-002-build-basic-slug-command/WORK-ITEM.md.
+It delivers WI-001 R-01 and inherits that requirements approval (2026-09-28 by Mike Rihm).
+WI-001's approved design covers it, so it starts at planning with no design of its own.
+Delivery: owner-led, as recorded for WI-001.
+Continue with work-on.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work new --title 'Add max length option to slug command' --type build --parent WI-001 --covers R-02"
+  -> Created WI-003: Add max length option to slug command (06 Implementation plan, In Progress, sub-item of WI-001) at .work-items/WI-001-build-slug-command-with-max-option/WI-003-add-max-length-option-to-slug-command/WORK-ITEM.md.
+It delivers WI-001 R-02 and inherits that requirements approval (2026-09-28 by Mike Rihm).
+WI-001's approved design covers it, so it starts at planning with no design of its own.
+Delivery: owner-led, as recorded for WI-001.
+Continue with work-on.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section Roadmap --text 'A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+| --- | --- | --- | --- | --- |
+| P1 — Basic slug | Convert a title to a slug | Not Started | R-01 acceptance checks pass and Mike approves the WI-002 result | WI-002 |
+| P2 — Maximum length | Limit the slug with "'`--max` | Not Started | R-02 acceptance checks pass and Mike approves the WI-003 result | WI-003 |'"'"
+  -> Saved "Roadmap" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work list --tree'
+  -> WI-001  Build slug command with max option  (05 Breakdown, In Progress, waiting on agent)
+  WI-002  Build basic slug command  (06 Implementation plan, In Progress)
+  WI-003  Add max length option to slug command  (06 Implementation plan, In Progress)
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate'
+  -> Checked 3 items: 3 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+
+
+[AGENT] Option A is recorded as approved. WI-002 now covers the basic slug command (R-01), and WI-003 covers `--max` (R-02); both inherited the approved requirements and design. The tracker validates cleanly. I’ll build WI-002 first.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-on/references/planning.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-on/references/git-rules.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-on/references/sizing-and-routing.md'
+  -> # Planning and building a work item
+
+The Roadmap and Tasks formats, tracking setup, and the build rules for
+`work-on` stages 06 to 08.
+
+## Contents
+
+1. Roadmap and tasks
+2. The Roadmap format
+3. The Tasks format
+4. Status words and ticking a task
+5. Tracking setup (stage 07)
+6. Building (stage 08)
+7. Keeping the item current while building
+8. Checklist before stopping
+
+## 1. Roadmap and tasks
+
+- The Roadmap is an ordered list of phases from where the item stands to the
+  finished result. Name phases to fit the work. "Phase" (`P1`) is the item's
+  plan; "stage" (`08-build`) is the lifecycle. Never mix the two words.
+- Build the phases from the approved design's "Build and verification plan"
+  (its Technical sequence and Acceptance checks) and the chosen option's
+  Build order. With no design (a small item that skipped design with a
+  recorded reason), build them from the requirements.
+- A sub-item that inherits its parent's approved design is planned from the
+  parent's design: `toolkit work design <parent-id>`.
+- Each phase has one or more tasks, one or more sub-items, or both.
+- Keep detail in proportion. A one-hour fix needs one phase with one or two
+  tasks.
+- Link sources; do not copy them. A task names the `R-xx` it implements and
+  the design section it follows.
+
+## 2. The Roadmap format
+
+The table keeps these columns in every tracker. The phase name follows an em
+dash, as in the template.
+
+```markdown
+A phase is complete when its tasks are complete and its exit result 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-002'
+  -> WI-002: Build basic slug command
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1/.work-items/WI-001-build-slug-command-with-max-option/WI-002-build-basic-slug-command/WORK-ITEM.md
+Stage: 06 Implementation plan (In Progress) | Waiting on: none | Continue with: work-on
+Parent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/WI-001-build-slug-command-with-max-option/DESIGN.md). Read it with: toolkit work design WI-001
+Worktree branch for this item: claude/wi-002-build-basic-slug-command (folder .claude/worktrees/wi-002-build-basic-slug-command)
+
+---
+id: WI-002
+title: Build basic slug command
+type: build
+stage: 06-implementation-plan
+status: In Progress
+parent: WI-001
+waiting_on: "none"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-002: Build basic slug command
+
+## Overview
+
+<!-- Enter the current summary directly after each bold label below. Keep this section current; detailed tasks and decisions belong in their sections further down. -->
+
+**Goal:** <The outcome this work item is meant to achieve.>
+
+**Current position:** <What has been completed and where work stands now.>
+
+**Next action:** <The next specific action and its owner.>
+
+**Blockers:** <Blocking decision or dependency, or “None.”>
+
+**Related items:** Parent WI
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --section Overview --text '**Goal:** Build the title-to-slug command for WI-001 R-01.
+
+**Current position:** Approved requirements and Option A design inherited from WI-001; implementation is planned.
+
+**Next action:** Create the WI-002 worktree and implement the basic command.
+
+**Blockers:** None.
+
+**Related items:** Parent WI-001 (R-01). Design: WI-001 approved Option A. WI-003 adds "'`--max` after this command is available.'"'"
+  -> Saved "Overview" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --section Roadmap --text 'A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+| --- | --- | --- | --- | --- |
+| P1 — Basic command | A title becomes a slug | In Progress | WI-001 R-01 command cases pass | None. |'"
+  -> Saved "Roadmap" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --section Tasks --text '### P1 — Basic command
+
+- [ ] **P1-T01 — Implement title conversion** · In Progress  
+  **Work:** Add "'`bin/slug.js` using WI-001 R-01 and the approved design end-to-end flow.  
+  **Deliverable:** A command that converts titles and reports empty-content errors.  
+  **Done when:** Hello World!, Café, and punctuation-only inputs have the expected stdout, stderr, and exit code.  
+  **Depends on:** None.
+- [ ] **P1-T02 — Check the command** · Not Started  
+  **Work:** Add CLI checks with built-in `node:test` and run them.  
+  **Delive
+  -> Saved "Tasks" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-002 --stage 07-tracking-setup'
+  -> Updated WI-002: stage 06 Implementation plan -> 07 Tracking setup (status In Progress).
+Now 07 Tracking setup (In Progress). Continue with work-on.
+
+
+[AGENT] WI-002 is planned, but the required Git worktree command was rejected by automatic approval review because this session cannot request Git write approval. I’ll finish the tracker details for both sub-items and record the exact command needed to resume the build.
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-003'
+  -> WI-003: Add max length option to slug command
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1/.work-items/WI-001-build-slug-command-with-max-option/WI-003-add-max-length-option-to-slug-command/WORK-ITEM.md
+Stage: 06 Implementation plan (In Progress) | Waiting on: none | Continue with: work-on
+Parent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/WI-001-build-slug-command-with-max-option/DESIGN.md). Read it with: toolkit work design WI-001
+Worktree branch for this item: claude/wi-003-add-max-length-option-to-slug (folder .claude/worktrees/wi-003-add-max-length-option-to-slug)
+
+---
+id: WI-003
+title: Add max length option to slug command
+type: build
+stage: 06-implementation-plan
+status: In Progress
+parent: WI-001
+waiting_on: "none"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-003: Add max length option to slug command
+
+## Overview
+
+<!-- Enter the current summary directly after each bold label below. Keep this section current; detailed tasks and decisions belong in their sections further down. -->
+
+**Goal:** <The outcome this work item is meant to achieve.>
+
+**Current position:** <What has been completed and where work stands now.>
+
+**Next action:** <The next specific action and its owner.>
+
+**Blockers:** <Blocking dec
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-003 --section Overview --text '**Goal:** Add "'`--max` to the slug command for WI-001 R-02.
+
+**Current position:** Approved requirements and Option A design inherited from WI-001; implementation is planned.
+
+**Next action:** After WI-002 is delivered, create the WI-003 worktree and add the max option.
+
+**Blockers:** Depends on the basic command from WI-002.
+
+**Related items:** Parent WI-001 (R-02). Design: WI-001 approved Option A. Depends on WI-002.'"'"
+  -> Saved "Overview" in WI-003.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-003 --section Roadmap --text 'A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+| --- | --- | --- | --- | --- |
+| P1 — Maximum length | The existing command accepts "'`--max` | Not Started | WI-001 R-02 command cases pass | None. |'"'"
+  -> Saved "Roadmap" in WI-003.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-003 --section Tasks --text '### P1 — Maximum length
+
+- [ ] **P1-T01 — Implement max argument** · Not Started  
+  **Work:** Extend "'`bin/slug.js` with WI-001 R-02 using the approved design end-to-end flow.  
+  **Deliverable:** A command that validates `--max`, limits length, and removes a trailing hyphen.  
+  **Done when:** Valid and invalid R-02 cases have the expected stdout, stderr, and exit code.  
+  **Depends on:** WI-002 basic command.
+- [ ] **P1-T02 — Check max behavior** · Not Started  
+  **Work:** Extend the CLI checks with built-in `node:test` and r
+  -> Saved "Tasks" in WI-003.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |
+| --- | --- | --- | --- | --- |
+
+None open.'"
+  -> Saved "Open Questions" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-003 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |
+| --- | --- | --- | --- | --- |
+
+None open.'"
+  -> Saved "Open Questions" in WI-003.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --section Requirements --text '**Overall status:** Finalized
+
+### Starting request
+
+Mike asked to split the basic slug command and the "'`--max` option into separate sub-items before building.
+
+### Agreed goal
+
+Covers WI-001 R-01. The requirement text and approval (2026-09-28 by Mike Rihm) stay in WI-001.
+
+### Active requirements
+
+- Covers WI-001 R-01.
+
+### Acceptance
+
+This work item can be accepted when:
+
+1. `node bin/slug.js "Hello World!"` prints `hello-world` and a newline.
+2. `Café` prints `cafe` and a newline.
+3. Punctuation-only input prints an err
+  -> Saved "Requirements" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-003 --section Requirements --text '**Overall status:** Finalized
+
+### Starting request
+
+Mike asked to split the basic slug command and the "'`--max` option into separate sub-items before building.
+
+### Agreed goal
+
+Covers WI-001 R-02. The requirement text and approval (2026-09-28 by Mike Rihm) stay in WI-001.
+
+### Active requirements
+
+- Covers WI-001 R-02.
+
+### Acceptance
+
+This work item can be accepted when:
+
+1. `--max 5` with Hello World prints `hello`.
+2. `--max 6` with Hello World prints `hello` after removing the trailing hyphen.
+3. Missing, zero, negati
+  -> Saved "Requirements" in WI-003.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --section Notes --text '### Decisions and context
+
+Mike approved Option A for WI-001 on 2026-09-28 and directed this split. WI-001 holds the approved design and R-01.
+
+### Resume here
+
+The worktree command was rejected by automatic approval review because this Codex session has AskForApproval set to Never. In an interactive session, approve or run "'`git worktree add .claude/worktrees/wi-002-build-basic-slug-command -b claude/wi-002-build-basic-slug-command` from the main checkout. Then resume WI-002 at stage 07, build R-01 on that branch, and run its CLI
+  -> Saved "Notes" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-003 --section Notes --text '### Decisions and context
+
+Mike approved Option A for WI-001 on 2026-09-28 and directed this split. WI-001 holds the approved design and R-02.
+
+### Resume here
+
+Wait for WI-002 to deliver the basic command. Then create the WI-003 worktree from a branch containing that command, add the max behavior on WI-003, and run R-01 and R-02 CLI checks.
+
+### Solution options and considerations
+
+Option A was approved in WI-001. This child extends the one-file command design.'"
+  -> Saved "Notes" in WI-003.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-002 --waiting-on owner'
+  -> Updated WI-002: waiting on owner.
+Now 07 Tracking setup (In Progress). Continue with work-decide.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --section Overview --text '**Goal:** Build the title-to-slug command for WI-001 R-01.
+
+**Current position:** Approved requirements and Option A design inherited from WI-001; implementation is planned. The required worktree command was rejected by automatic approval review.
+
+**Next action:** Mike approves or runs the WI-002 worktree command in an interactive session; then the agent builds the basic command.
+
+**Blockers:** This session cannot perform the Git worktree write because AskForApproval is set to Never.
+
+**Related items:** Parent WI-001 (R-01). Des
+  -> Saved "Overview" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section Overview --text '**Goal:** Turn typed blog titles into URL-friendly slugs, with an optional maximum length.
+
+**Current position:** R-01 and R-02 and Option A are approved. WI-002 tracks basic conversion; WI-003 tracks "'`--max`. Both children are planned. The WI-002 worktree command was rejected by automatic approval review.
+
+**Next action:** Mike approves or runs the WI-002 worktree command in an interactive session, then the agent builds WI-002 and WI-003 in order.
+
+**Blockers:** The WI-002 worktree cannot be created in this session because As
+  -> Saved "Overview" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section Notes --text '### Decisions and context
+
+- Mike approved Option A on 2026-09-28. The command uses one source file, "'`bin/slug.js`, with built-in Node.js tests.
+- Mike directed the split before building. WI-002 covers R-01; WI-003 covers R-02. Both inherit the approved requirements and design.
+- Delivery is owner-led.
+
+### Resume here
+
+WI-002 is at tracking setup and waits for its worktree command to be approved or run in an interactive session. Resume WI-002 first, then WI-003 after the basic command is delivered. Parent WI-001 remains open unt
+  -> Saved "Notes" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section Tasks --text '### P1 — Basic slug
+
+WI-002 owns the implementation and checks for R-01.
+
+### P2 — Maximum length
+
+WI-003 owns the implementation and checks for R-02 after WI-002 delivers the command.'"
+  -> Saved "Tasks" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history WI-002 --note 'Planned R-01 command work; Git worktree creation was rejected by automatic approval review because AskForApproval is set to Never.' --effect 'Waiting for Mike to approve or run the exact worktree command in an interactive session before build.'"
+  -> Added a Recent History row to WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate'
+  -> Checked 3 items: 3 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.6/skills/memory-save/SKILL.md'
+  -> ---
+name: memory-save
+description: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says "remember this", "from now on", "forget that", or "remind me" with no time given, corrects the agent, or a hook says a save is due.'
+---
+
+# Memory save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Saves, corrects, or retires one memory record with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand.
+
+## Steps
+
+Track these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home ("Where other things go" below) and stop.
+2. Search for a record that already holds it, and read each hit with its version. The save's duplicate check compares wording, so only this search finds a record the new fact contradicts (for example "Mondays" against "Tuesdays").
+   `toolkit memory find '<topic>'`
+   `toolkit memory get <key> --json`
+3. Read the approval mode and apply "Approval policy" below. When it says ask, ask and wait.
+   `toolkit config get memory.approval`
+4. Write the description and body in the record format (`refer
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus --json'
+  -> {
+  "ok": true,
+  "backend": "builtin",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Build slug command with max option\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 from its Resume here: get Mike’s choice and approval of Option A or B, then complete Selected design.\n",
+  "version": "b2ea21b8fc364a7fba14c3991491fa25a4d59f434afb25461786014f1c40586d"
+}
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Build slug command with max option
+- WI-002 Build basic slug command
+- WI-003 Add max length option to slug command
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-002 
+  -> Saved the current focus (22 lines). Version: 1332d254ba05
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Build slug command with max option
+- WI-002 Build basic slug command
+- WI-003 Add max length option to slug command
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-002 from its Resume here: its worktree command needs approval in an interactive session. Then build the basic command before WI-003.
+
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for slug (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (4):
+- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the t
+
+[AGENT] Option A is approved and recorded. WI-001 is split into WI-002 for the basic slug command (R-01) and WI-003 for `--max` (R-02). Both inherited the approved requirements and design, and the tracker validates cleanly.
+
+**The build has not started.** Automatic approval review rejected the Git worktree command because this session cannot request Git write approval. From the main checkout, run this command in an interactive session, or approve it there when prompted:
+
+```sh
+git worktree add .claude/worktrees/wi-002-build-basic-slug-command -b claude/wi-002-build-basic-slug-command
+```
+
+Then say “keep going” to resume WI-002. WI-003 follows the basic command.
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 2931051, "cached_input_tokens": 2858880, "cache_write_input_tokens": 0, "output_tokens": 8343, "reasoning_output_tokens": 1294}}
+
+SKILLS OPENED: ['work-decide', 'work-organize', 'work-on', 'memory-save']
+
+[HOOK CONTEXT ord=9] Project briefing: slug (slug), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Build slug command with max option: 04 Solution design, In Progress, waiting on owner. Next action: Mike chooses and approves Option A or Option B in the proposed design. Continues with work-decide.
+
+Waiting on the owner:
+- WI-001 Build slug command with max option: The design for WI-001 is proposed and waits for the owner's approval. Approve with: toolkit work approve WI-001 --design --by <name>. (work-decide)
+
+Items: 1 in progress.
+
+Current focus:
+Last updated: 2026-09-28, chat, agent
+## Now
+- WI-001 Build slug command with max option
+## Waiting on 
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await tools.exec_command({cmd:"pwd; rg --files -g 'SOUL.md' -g 'PROJECT.md' -g 'PROJECT-ROADMAP.md' -g 'DECISIONS.md' -g 'AGENTS.md' -g '.claude/rules/*.md' -g '.work-items/**' | head -80",max_output_tokens:3000}); text(r.output);
+
+
+[CALL] const p="/Users/michaelrihm/.codex/plugins/cache/toolkit-v2"; const r=await tools.exec_command({cmd:"cat PROJECT.md PROJECT-ROADMAP.md DECISIONS.md; if test -f SOUL.md; then cat SOUL.md; fi; for f in .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md; do cat \"$f\"; done; cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-organize/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-on/SKILL.md",max_output_tokens:25000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "# slug\n\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\n\n## Purpose and intended outcome\n\n- Purpose: Turn typed titles into slugs for Mike Rihm\u2019s blog.\n- Intended outcome: slug turns any title I type into a clean, URL-friendly slug that I can paste into my blog.\n\n## Scope and boundaries\n\n- In scope: A Node.js command-line tool that turns a typed title into a URL-friendly slug.\n- Outside scope: `<Important exclusions or adjacent owners.>`\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\n\n## Systems and environments\n\n| System or org | Purpose | Environment | Source of truth | Access notes |\n| --- | --- | --- | --- | --- |\n| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |\n\n## People and ownership\n\n| Role | Person or team | Responsibility | Source / last confirmed |\n| --- | --- | --- | --- |\n| Project owner | Mike Rihm | Makes project decisions | Owner, 2026-09-28 |\n\n## Work and project records\n\n- Work tracker: `.work-items/` (local folders, Git-ignored)\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\n- Project decisions: [DECISIONS.md](DECISIONS.md)\n- Functional requirements: [requirements/](requirements/)\n- Design home: `DESIGN.md` beside each local work item\n- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`\n- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)\n- Memory backup or sync: `/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-local` via `toolkit handoff-backup`\n\n## Resources and project paths\n\n- Tests and checks: `<actual commands and locations>`\n- Outside references: `<source register or approved location>`\n\n## Operating conventions\n\n<Write only stable project-specific conventions here; link the source or governing rule. Write \u201cNone yet\u201d if there are none.>\n# Pr
+
+[CALL] const r=await tools.exec_command({cmd:"git worktree list",max_output_tokens:2000}); text(r.output);
+
+
+[CALL] const r=await tools.exec_command({cmd:"git status --short --branch",max_output_tokens:2000}); text(r.output);
+
+
+[CALL] const r=await tools.exec_command({cmd:"git remote",max_output_tokens:1000}); text(r.output);
+
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/approvals.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-organize/references/moves.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/current-focus.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/toolkit-commands.md",max_output_tokens:18000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "<!-- Generated file. Source: plugins/work/shared/approvals.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\n# Approvals and gates\n\nThe exact steps to ask for and record each owner approval, and what counts as\none. Run each checklist in order; one wrong or missing command leaves the\nitem in the wrong state.\n\n## Contents\n\n1. What counts as approval\n2. Requirements approval\n3. Design approval\n4. Result approval\n5. Done\n6. Cancel\n7. Delivery offer\n8. Project-wide decision\n9. Memory proposal\n10. Sub-items and approvals\n11. Standing merge instruction\n12. When an approve command refuses\n\n## 1. What counts as approval\n\n`toolkit work lifecycle` prints the gates and these rules. In short:\n\n- Only the owner's explicit words count. Quote them in a history note.\n- A question, a suggestion, a tentative answer (\"probably B\"), silence, or a\n  saved draft is not approval.\n- An approval covers only what was shown. It never covers merge, deployment,\n  spending, or publishing.\n- An approval survives later stages. A stage alone does not prove approval:\n  check the approval field (`toolkit work show <id>`).\n- A bare \"yes\", \"ok\", or \"looks good\" answers only a yes-or-no question asked\n  earlier in this conversation. When none was asked, or the waiting question\n  is not a yes-or-no question, show the decision with its choices and your\n  recommendation, and record nothing.\n- After a yes, save his words first, in a history note that starts with\n  `Owner said:`. Then run the gate's commands. A command that refuses then\n  never loses his answer, and no later session asks him again.\n\n| The owner says | After this question | It is |\n| --- | --- | --- |\n| \"Yes, approved.\" | \"Do you approve these requirements?\" | The requirements approval |\n| \"Go with B.\" | The design options with a recommendation | The choice and approval of Option B |\n| \"Looks good.\" | \"Do you approve this result?\" | The result approval |\n| \"Looks good.\" | \"Shall I split WI-12 into these three sub-items?\" | A yes to the split only, not a result approval |\n| \"ok\" | Nothing was asked in this chat | Not an answer; ask what he wants |\n| \"Probably A, but let me think.\" | The design options | Not an answer; the design stays proposed |\n| \"Ship it.\" | He has seen the result, gaps, and evidence | The result a
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:3000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "1 decision waits on the owner:\n\nWI-001 Build slug command with max option\n  - The design for WI-001 is proposed and waits for the owner's approval. Approve with: toolkit work approve WI-001 --design --by <name>. (work-decide)\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show WI-001",max_output_tokens:13000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "WI-001: Build slug command with max option\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1/.work-items/WI-001-build-slug-command-with-max-option/WORK-ITEM.md\nStage: 04 Solution design (In Progress) | Waiting on: owner | Continue with: work-decide\nParent: none | Sub-items: none | Design: proposed (.work-items/WI-001-build-slug-command-with-max-option/DESIGN.md)\nWorktree branch for this item: claude/wi-001-build-slug-command-with-max (folder .claude/worktrees/wi-001-build-slug-command-with-max)\n\n---\nid: WI-001\ntitle: Build slug command with max option\ntype: build\nstage: 04-solution-design\nstatus: In Progress\nparent: none\nwaiting_on: \"owner\"\npriority: medium\ndelivery: owner-led\nrequirements_approved: \"2026-09-28 by Mike Rihm\"\ndesign: proposed\nresult_approved: \"no\"\nupdated: 2026-09-28\n---\n\n# WI-001: Build slug command with max option\n\n## Overview\n\n**Goal:** Turn typed blog titles into URL-friendly slugs, with an optional maximum length.\n\n**Current position:** R-01 and R-02 were approved on 2026-09-28. Two design options are proposed.\n\n**Next action:** Mike chooses and approves Option A or Option B in the proposed design.\n\n**Blockers:** Design choice and approval from Mike.\n\n**Related items:** P01-U01 in PROJECT-ROADMAP.md.\n\n## Roadmap\n\nA phase is complete when its tasks are complete and its exit result has been checked.\n\n<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading. Add one row per phase; set Status from actual progress, not from this example. List the phase's sub-item IDs under Sub-items, or write \u201cNone.\u201d -->\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 \u2014 <Phase 1 name> | <What this phase establishes> | In Progress | <Evidence that P1 is complete> | <WI-ids or \u201cNone.\u201d> |\n| P2 \u2014 <Phase 2 name> | <What this phase delivers> | Not Started | <Evidence that P2 is complete> | <WI-ids or \u201cNone.\u201d> |\n\n## Tasks\n\n<!-- Under each phase heading, add that phase's tasks only. Replace P1-T01 and similar example IDs with stable real IDs. Put the action after Work, its output after Deliverable, the completion proof after Done when, and real prerequisites afte
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show WI-001 --path",max_output_tokens:1000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1/.work-items/WI-001-build-slug-command-with-max-option/WORK-ITEM.md\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"cat .work-items/WI-001-build-slug-command-with-max-option/DESIGN.md",max_output_tokens:10000}); text(r.output);
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work sync",max_output_tokens:2000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Nothing changed: every item is where the tracker expected it, and every derived value is in step.\n\nDashboard: .work-items/DASHBOARD.md\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work list --tree",max_output_tokens:2000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "WI-001  Build slug command with max option  (04 Solution design, In Progress, waiting on owner)\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history WI-001 --note 'Owner said: I approve Option A. Before you build, split the --max option out into its own sub-item under WI-001, so the basic slug and the --max limit are tracked separately.' --effect 'Select Option A and split implementation into basic slug and max sub-items before building.'",max_output_tokens:2000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Added a Recent History row to WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work design WI-001 --text '---\nwork_item: WI-001\nstatus: proposed\napproved: \"no\"\n---\n\n# WI-001: Build slug command with max option — solution design\n\n**Requirements:** WI-001 R-01 and R-02  \n**Design status:** Proposed  \n**Requirements checked:** WI-001, R-01 and R-02, 2026-09-28  \n**Last updated:** 2026-09-28  \n**Design approval:** Pending recording of Mike Rihm approval\n\n## What this design solves\n\nMike runs `node bin/slug.js \"Hello World!\"` and gets `hello-world`. An optional `--max` limits its length. The two behaviors are tracked in separate sub-items under WI-001.\n\n## Requirements and design readiness\n\nBoth parent requirements were approved on 2026-09-28. R-01 belongs to the basic slug child. R-02 belongs to the max option child. No additional behavior is needed to build either one.\n\n## What exists today\n\nThis repository has project records and a test-plan template, but no command implementation.\n\n## Constraints and assumptions\n\nThe command runs directly with Node.js at `bin/slug.js`, uses no npm packages, and uses built-in `node:test` for automated checks. The title is one quoted argument. The optional `--max` may appear before or after it. Unicode letters and numbers outside Latin script remain valid title content.\n\n## Design options\n\n### Option A — One command file\n\nPut argument parsing and slug conversion in `bin/slug.js`. Normalize accents, form lowercase hyphen-separated words, an
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved the design of WI-001 (proposed) at /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1/.work-items/WI-001-build-slug-command-with-max-option/DESIGN.md.\nIt is proposed until the owner approves it: toolkit work approve <id> --design --by <name>.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work approve WI-001 --design --by 'Mike Rihm'",max_output_tokens:2500}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Recorded: design of WI-001 approved (2026-09-28 by Mike Rihm).\nIt is no longer waiting on the owner (waiting_on: none).\nNow 04 Solution design (In Progress). Continue with solution-design.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-001 --waiting-on agent",max_output_tokens:1500}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Updated WI-001: waiting on agent.\nNow 04 Solution design (In Progress). Continue with solution-design.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work validate WI-001",max_output_tokens:2000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-001 --stage 05-breakdown",max_output_tokens:1500}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Updated WI-001: stage 04 Solution design -> 05 Breakdown (status In Progress).\nNow 05 Breakdown (In Progress). Continue with work-organize.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work new --title 'Build basic slug command' --type build --parent WI-001 --covers R-01",max_output_tokens:2500}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Created WI-002: Build basic slug command (06 Implementation plan, In Progress, sub-item of WI-001) at .work-items/WI-001-build-slug-command-with-max-option/WI-002-build-basic-slug-command/WORK-ITEM.md.\nIt delivers WI-001 R-01 and inherits that requirements approval (2026-09-28 by Mike Rihm).\nWI-001's approved design covers it, so it starts at planning with no design of its own.\nDelivery: owner-led, as recorded for WI-001.\nContinue with work-on.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work new --title 'Add max length option to slug command' --type build --parent WI-001 --covers R-02",max_output_tokens:2500}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Created WI-003: Add max length option to slug command (06 Implementation plan, In Progress, sub-item of WI-001) at .work-items/WI-001-build-slug-command-with-max-option/WI-003-add-max-length-option-to-slug-command/WORK-ITEM.md.\nIt delivers WI-001 R-02 and inherits that requirements approval (2026-09-28 by Mike Rihm).\nWI-001's approved design covers it, so it starts at planning with no design of its own.\nDelivery: owner-led, as recorded for WI-001.\nContinue with work-on.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section Roadmap --text 'A phase is complete when its tasks are complete and its exit result has been checked.\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n| --- | --- | --- | --- | --- |\n| P1 — Basic slug | Convert a title to a slug | Not Started | R-01 acceptance checks pass and Mike approves the WI-002 result | WI-002 |\n| P2 — Maximum length | Limit the slug with `--max` | Not Started | R-02 acceptance checks pass and Mike approves the WI-003 result | WI-003 |'",max_output_tokens:2000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Roadmap\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work list --tree",max_output_tokens:2000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "WI-001  Build slug command with max option  (05 Breakdown, In Progress, waiting on agent)\n  WI-002  Build basic slug command  (06 Implementation plan, In Progress)\n  WI-003  Add max length option to slug command  (06 Implementation plan, In Progress)\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work validate",max_output_tokens:2000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Checked 3 items: 3 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-on/references/planning.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-on/references/git-rules.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-on/references/sizing-and-routing.md",max_output_tokens:18000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "# Planning and building a work item\n\nThe Roadmap and Tasks formats, tracking setup, and the build rules for\n`work-on` stages 06 to 08.\n\n## Contents\n\n1. Roadmap and tasks\n2. The Roadmap format\n3. The Tasks format\n4. Status words and ticking a task\n5. Tracking setup (stage 07)\n6. Building (stage 08)\n7. Keeping the item current while building\n8. Checklist before stopping\n\n## 1. Roadmap and tasks\n\n- The Roadmap is an ordered list of phases from where the item stands to the\n  finished result. Name phases to fit the work. \"Phase\" (`P1`) is the item's\n  plan; \"stage\" (`08-build`) is the lifecycle. Never mix the two words.\n- Build the phases from the approved design's \"Build and verification plan\"\n  (its Technical sequence and Acceptance checks) and the chosen option's\n  Build order. With no design (a small item that skipped design with a\n  recorded reason), build them from the requirements.\n- A sub-item that inherits its parent's approved design is planned from the\n  parent's design: `toolkit work design <parent-id>`.\n- Each phase has one or more tasks, one or more sub-items, or both.\n- Keep detail in proportion. A one-hour fix needs one phase with one or two\n  tasks.\n- Link sources; do not copy them. A task names the `R-xx` it implements and\n  the design section it follows.\n\n## 2. The Roadmap format\n\nThe table keeps these columns in every tracker. The phase name follows an em\ndash, as in the template.\n\n```markdown\nA phase is complete when its tasks are complete and its exit result has been checked.\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 \u2014 CSV export button | The export button creates a file | In Progress | The file opens in Excel with every column | None. |\n| P2 \u2014 Large exports | Exports over 10,000 rows finish | Not Started | A 50,000-row export finishes in under a minute | WI-015 |\n```\n\n## 3. The Tasks format\n\nEach phase gets a `###` heading with the same phase id and name as its\nRoadmap row. Each task field (`**Work:**`, `**Deliverable:**`,\n`**Done when:**`, `**Depends on:**`) starts its own line, and every line of a\ntask but the last ends with two spaces, which Markdown reads as a line break.\nNever run the fields together on one line.\n\n```markdown\n### P1 \u2014 CSV export button\n\n- [ ] **P1-T01 \u2014 Add the export endpoint*
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show WI-002",max_output_tokens:6500}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "WI-002: Build basic slug command\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1/.work-items/WI-001-build-slug-command-with-max-option/WI-002-build-basic-slug-command/WORK-ITEM.md\nStage: 06 Implementation plan (In Progress) | Waiting on: none | Continue with: work-on\nParent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/WI-001-build-slug-command-with-max-option/DESIGN.md). Read it with: toolkit work design WI-001\nWorktree branch for this item: claude/wi-002-build-basic-slug-command (folder .claude/worktrees/wi-002-build-basic-slug-command)\n\n---\nid: WI-002\ntitle: Build basic slug command\ntype: build\nstage: 06-implementation-plan\nstatus: In Progress\nparent: WI-001\nwaiting_on: \"none\"\npriority: medium\ndelivery: owner-led\nrequirements_approved: \"2026-09-28 by Mike Rihm\"\ndesign: none\nresult_approved: \"no\"\nupdated: 2026-09-28\n---\n\n# WI-002: Build basic slug command\n\n## Overview\n\n<!-- Enter the current summary directly after each bold label below. Keep this section current; detailed tasks and decisions belong in their sections further down. -->\n\n**Goal:** <The outcome this work item is meant to achieve.>\n\n**Current position:** <What has been completed and where work stands now.>\n\n**Next action:** <The next specific action and its owner.>\n\n**Blockers:** <Blocking decision or dependency, or \u201cNone.\u201d>\n\n**Related items:** Parent WI-001 (R-01). Design: WI-001's approved design.\n\n## Roadmap\n\nA phase is complete when its tasks are complete and its exit result has been checked.\n\n<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading. Add one row per phase; set Status from actual progress, not from this example. List the phase's sub-item IDs under Sub-items, or write \u201cNone.\u201d -->\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 \u2014 <Phase 1 name> | <What this phase establishes> | In Progress | <Evidence that P1 is complete> | <WI-ids or \u201cNone.\u201d> |\n| P2 \u2014 <Phase 2 name> | <What this phase delivers> | Not Started | <Evidence that P2 is complete> | <WI-ids or \u201cNone.\u201d> |\n\n## Tasks\n\n<!-- Under each phase heading, add t
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --section Overview --text '**Goal:** Build the title-to-slug command for WI-001 R-01.\n\n**Current position:** Approved requirements and Option A design inherited from WI-001; implementation is planned.\n\n**Next action:** Create the WI-002 worktree and implement the basic command.\n\n**Blockers:** None.\n\n**Related items:** Parent WI-001 (R-01). Design: WI-001 approved Option A. WI-003 adds `--max` after this command is available.'",max_output_tokens:1000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Overview\" in WI-002.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --section Roadmap --text 'A phase is complete when its tasks are complete and its exit result has been checked.\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n| --- | --- | --- | --- | --- |\n| P1 — Basic command | A title becomes a slug | In Progress | WI-001 R-01 command cases pass | None. |'",max_output_tokens:1000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Roadmap\" in WI-002.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --section Tasks --text '### P1 — Basic command\n\n- [ ] **P1-T01 — Implement title conversion** · In Progress  \n  **Work:** Add `bin/slug.js` using WI-001 R-01 and the approved design end-to-end flow.  \n  **Deliverable:** A command that converts titles and reports empty-content errors.  \n  **Done when:** Hello World!, Café, and punctuation-only inputs have the expected stdout, stderr, and exit code.  \n  **Depends on:** None.\n- [ ] **P1-T02 — Check the command** · Not Started  \n  **Work:** Add CLI checks with built-in `node:test` and run them.  \n  **Deliverable:** `tests/slug.test.js` and a recorded test result.  \n  **Done when:** Automated R-01 acceptance cases pass.  \n  **Depends on:** P1-T01.'",max_output_tokens:1000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Tasks\" in WI-002.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-002 --stage 07-tracking-setup",max_output_tokens:1300}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Updated WI-002: stage 06 Implementation plan -> 07 Tracking setup (status In Progress).\nNow 07 Tracking setup (In Progress). Continue with work-on.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"git worktree add .claude/worktrees/wi-002-build-basic-slug-command -b claude/wi-002-build-basic-slug-command",max_output_tokens:2000}); text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show WI-003",max_output_tokens:4600}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "WI-003: Add max length option to slug command\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1/.work-items/WI-001-build-slug-command-with-max-option/WI-003-add-max-length-option-to-slug-command/WORK-ITEM.md\nStage: 06 Implementation plan (In Progress) | Waiting on: none | Continue with: work-on\nParent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/WI-001-build-slug-command-with-max-option/DESIGN.md). Read it with: toolkit work design WI-001\nWorktree branch for this item: claude/wi-003-add-max-length-option-to-slug (folder .claude/worktrees/wi-003-add-max-length-option-to-slug)\n\n---\nid: WI-003\ntitle: Add max length option to slug command\ntype: build\nstage: 06-implementation-plan\nstatus: In Progress\nparent: WI-001\nwaiting_on: \"none\"\npriority: medium\ndelivery: owner-led\nrequirements_approved: \"2026-09-28 by Mike Rihm\"\ndesign: none\nresult_approved: \"no\"\nupdated: 2026-09-28\n---\n\n# WI-003: Add max length option to slug command\n\n## Overview\n\n<!-- Enter the current summary directly after each bold label below. Keep this section current; detailed tasks and decisions belong in their sections further down. -->\n\n**Goal:** <The outcome this work item is meant to achieve.>\n\n**Current position:** <What has been completed and where work stands now.>\n\n**Next action:** <The next specific action and its owner.>\n\n**Blockers:** <Blocking decision or dependency, or \u201cNone.\u201d>\n\n**Related items:** Parent WI-001 (R-02). Design: WI-001's approved design.\n\n## Roadmap\n\nA phase is complete when its tasks are complete and its exit result has been checked.\n\n<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading. Add one row per phase; set Status from actual progress, not from this example. List the phase's sub-item IDs under Sub-items, or write \u201cNone.\u201d -->\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 \u2014 <Phase 1 name> | <What this phase establishes> | In Progress | <Evidence that P1 is complete> | <WI-ids or \u201cNone.\u201d> |\n| P2 \u2014 <Phase 2 name> | <What this phase delivers> | Not Started | <Evidence that P2 is complete> | <WI-ids or \u201cNone
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-003 --section Overview --text '**Goal:** Add `--max` to the slug command for WI-001 R-02.\n\n**Current position:** Approved requirements and Option A design inherited from WI-001; implementation is planned.\n\n**Next action:** After WI-002 is delivered, create the WI-003 worktree and add the max option.\n\n**Blockers:** Depends on the basic command from WI-002.\n\n**Related items:** Parent WI-001 (R-02). Design: WI-001 approved Option A. Depends on WI-002.'",max_output_tokens:1000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Overview\" in WI-003.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-003 --section Roadmap --text 'A phase is complete when its tasks are complete and its exit result has been checked.\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n| --- | --- | --- | --- | --- |\n| P1 — Maximum length | The existing command accepts `--max` | Not Started | WI-001 R-02 command cases pass | None. |'",max_output_tokens:1000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Roadmap\" in WI-003.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-003 --section Tasks --text '### P1 — Maximum length\n\n- [ ] **P1-T01 — Implement max argument** · Not Started  \n  **Work:** Extend `bin/slug.js` with WI-001 R-02 using the approved design end-to-end flow.  \n  **Deliverable:** A command that validates `--max`, limits length, and removes a trailing hyphen.  \n  **Done when:** Valid and invalid R-02 cases have the expected stdout, stderr, and exit code.  \n  **Depends on:** WI-002 basic command.\n- [ ] **P1-T02 — Check max behavior** · Not Started  \n  **Work:** Extend the CLI checks with built-in `node:test` and run them.  \n  **Deliverable:** Automated R-02 checks and a recorded test result.  \n  **Done when:** R-02 cases pass and R-01 cases still pass.  \n  **Depends on:** P1-T01.'",max_output_tokens:1000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Tasks\" in WI-003.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |\n| --- | --- | --- | --- | --- |\n\nNone open.'",max_output_tokens:1000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Open Questions\" in WI-002.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-003 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |\n| --- | --- | --- | --- | --- |\n\nNone open.'",max_output_tokens:1000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Open Questions\" in WI-003.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --section Requirements --text '**Overall status:** Finalized\n\n### Starting request\n\nMike asked to split the basic slug command and the `--max` option into separate sub-items before building.\n\n### Agreed goal\n\nCovers WI-001 R-01. The requirement text and approval (2026-09-28 by Mike Rihm) stay in WI-001.\n\n### Active requirements\n\n- Covers WI-001 R-01.\n\n### Acceptance\n\nThis work item can be accepted when:\n\n1. `node bin/slug.js \"Hello World!\"` prints `hello-world` and a newline.\n2. `Café` prints `cafe` and a newline.\n3. Punctuation-only input prints an error and exits with code 1.\n4. Mike reviews the WI-002 result.'",max_output_tokens:1000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Requirements\" in WI-002.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-003 --section Requirements --text '**Overall status:** Finalized\n\n### Starting request\n\nMike asked to split the basic slug command and the `--max` option into separate sub-items before building.\n\n### Agreed goal\n\nCovers WI-001 R-02. The requirement text and approval (2026-09-28 by Mike Rihm) stay in WI-001.\n\n### Active requirements\n\n- Covers WI-001 R-02.\n\n### Acceptance\n\nThis work item can be accepted when:\n\n1. `--max 5` with Hello World prints `hello`.\n2. `--max 6` with Hello World prints `hello` after removing the trailing hyphen.\n3. Missing, zero, negative, and non-whole max values each print an error and exit with code 1.\n4. Mike reviews the WI-003 result.'",max_output_tokens:1000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Requirements\" in WI-003.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --section Notes --text '### Decisions and context\n\nMike approved Option A for WI-001 on 2026-09-28 and directed this split. WI-001 holds the approved design and R-01.\n\n### Resume here\n\nThe worktree command was rejected by automatic approval review because this Codex session has AskForApproval set to Never. In an interactive session, approve or run `git worktree add .claude/worktrees/wi-002-build-basic-slug-command -b claude/wi-002-build-basic-slug-command` from the main checkout. Then resume WI-002 at stage 07, build R-01 on that branch, and run its CLI checks. Do not build on main.\n\n### Solution options and considerations\n\nOption A was approved in WI-001. This child uses the one-file command design.'",max_output_tokens:1000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Notes\" in WI-002.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-003 --section Notes --text '### Decisions and context\n\nMike approved Option A for WI-001 on 2026-09-28 and directed this split. WI-001 holds the approved design and R-02.\n\n### Resume here\n\nWait for WI-002 to deliver the basic command. Then create the WI-003 worktree from a branch containing that command, add the max behavior on WI-003, and run R-01 and R-02 CLI checks.\n\n### Solution options and considerations\n\nOption A was approved in WI-001. This child extends the one-file command design.'",max_output_tokens:1000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Notes\" in WI-003.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-002 --waiting-on owner",max_output_tokens:1000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Updated WI-002: waiting on owner.\nNow 07 Tracking setup (In Progress). Continue with work-decide.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --section Overview --text '**Goal:** Build the title-to-slug command for WI-001 R-01.\n\n**Current position:** Approved requirements and Option A design inherited from WI-001; implementation is planned. The required worktree command was rejected by automatic approval review.\n\n**Next action:** Mike approves or runs the WI-002 worktree command in an interactive session; then the agent builds the basic command.\n\n**Blockers:** This session cannot perform the Git worktree write because AskForApproval is set to Never.\n\n**Related items:** Parent WI-001 (R-01). Design: WI-001 approved Option A. WI-003 adds `--max` after this command is available.'",max_output_tokens:1000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Overview\" in WI-002.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section Overview --text '**Goal:** Turn typed blog titles into URL-friendly slugs, with an optional maximum length.\n\n**Current position:** R-01 and R-02 and Option A are approved. WI-002 tracks basic conversion; WI-003 tracks `--max`. Both children are planned. The WI-002 worktree command was rejected by automatic approval review.\n\n**Next action:** Mike approves or runs the WI-002 worktree command in an interactive session, then the agent builds WI-002 and WI-003 in order.\n\n**Blockers:** The WI-002 worktree cannot be created in this session because AskForApproval is set to Never.\n\n**Related items:** WI-002 covers R-01. WI-003 covers R-02. P01-U01 in PROJECT-ROADMAP.md.'",max_output_tokens:1000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Overview\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section Notes --text '### Decisions and context\n\n- Mike approved Option A on 2026-09-28. The command uses one source file, `bin/slug.js`, with built-in Node.js tests.\n- Mike directed the split before building. WI-002 covers R-01; WI-003 covers R-02. Both inherit the approved requirements and design.\n- Delivery is owner-led.\n\n### Resume here\n\nWI-002 is at tracking setup and waits for its worktree command to be approved or run in an interactive session. Resume WI-002 first, then WI-003 after the basic command is delivered. Parent WI-001 remains open until both child results are reviewed.\n\n### Solution options and considerations\n\nOption A was approved. See the WI-001 design for the selected approach.'",max_output_tokens:1000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Notes\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section Tasks --text '### P1 — Basic slug\n\nWI-002 owns the implementation and checks for R-01.\n\n### P2 — Maximum length\n\nWI-003 owns the implementation and checks for R-02 after WI-002 delivers the command.'",max_output_tokens:1000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Tasks\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history WI-002 --note 'Planned R-01 command work; Git worktree creation was rejected by automatic approval review because AskForApproval is set to Never.' --effect 'Waiting for Mike to approve or run the exact worktree command in an interactive session before build.'",max_output_tokens:1000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Added a Recent History row to WI-002.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work validate",max_output_tokens:1600}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Checked 3 items: 3 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.6/skills/memory-save/SKILL.md",max_output_tokens:9000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "---\nname: memory-save\ndescription: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says \"remember this\", \"from now on\", \"forget that\", or \"remind me\" with no time given, corrects the agent, or a hook says a save is due.'\n---\n\n# Memory save\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nSaves, corrects, or retires one memory record with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand.\n\n## Steps\n\nTrack these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.\n\n1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home (\"Where other things go\" below) and stop.\n2. Search for a record that already holds it, and read each hit with its version. The save's duplicate check compares wording, so only this search finds a record the new fact contradicts (for example \"Mondays\" against \"Tuesdays\").\n   `toolkit memory find '<topic>'`\n   `toolkit memory get <key> --json`\n3. Read the approval mode and apply \"Approval policy\" below. When it says ask, ask and wait.\n   `toolkit config get memory.approval`\n4. Write the description and body in the record format (`references/record-format.md`), then save with the form for the case (\"Save forms\" below).\n5. Exit code 2 saved nothing. Read the \"Error:\" line. Records listed: the duplicate check. \"Changed since it was read\": read it again and redo the change. Any other rule: fix the text as the message says. `references/replacing-and-retiring.md`, section 2, has each case.\n6. \"Forget that\": retire the record, with his words as the reason. Delete only when his own words say delete (\"Approval policy\").\n   `toolkit memory retire <key> --reason '<his words>'`\n7. An owner to-do with no work item, or a change to what is happening now: update the current focus (`references/current-focus.md`). A project term: update the glossary (`references/glossary.md`).\n8. A preference a project setting can enforce (for example \"I hate tabs\" and `.editorco
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --json",max_output_tokens:3000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\n  \"ok\": true,\n  \"backend\": \"builtin\",\n  \"kind\": \"focus\",\n  \"text\": \"# Current focus\\n\\nLast updated: 2026-09-28, chat, agent\\n\\n## Now\\n\\n- WI-001 Build slug command with max option\\n\\n## Waiting on the owner\\n\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\n\\n## Untracked to-dos\\n\\nNone.\\n\\n## Next session starts with\\n\\n- Continue WI-001 from its Resume here: get Mike\u2019s choice and approval of Option A or B, then complete Selected design.\\n\",\n  \"version\": \"b2ea21b8fc364a7fba14c3991491fa25a4d59f434afb25461786014f1c40586d\"\n}\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --text '# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Build slug command with max option\n- WI-002 Build basic slug command\n- WI-003 Add max length option to slug command\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-002 from its Resume here: its worktree command needs approval in an interactive session. Then build the basic command before WI-003.' --expect b2ea21b8fc364a7fba14c3991491fa25a4d59f434afb25461786014f1c40586d",max_output_tokens:1700}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved the current focus (22 lines). Version: 1332d254ba05\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus",max_output_tokens:1600}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Build slug command with max option\n- WI-002 Build basic slug command\n- WI-003 Add max length option to slug command\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-002 from its Resume here: its worktree command needs approval in an interactive session. Then build the basic command before WI-003.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit doctor",max_output_tokens:3000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Toolkit doctor for slug (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1).\n\nWarnings (2):\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.\n   Fix: The owner opens Codex in this folder and trusts it when Codex asks.\n2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).\n   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\n\nNotes (4):\n- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\n- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\n- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\n- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.\n\nResult: 0 problems and 2 warnings.\n"}]

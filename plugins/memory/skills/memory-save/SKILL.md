@@ -34,11 +34,13 @@ This is the only written copy of the memory approval policy.
 
 - The owner's own words are the approval: "remember", "from now on", "always", "never", "forget", or a correction. Save now, with `--approved-by <owner>`. That includes a fact about a named person he asks you to remember ("remember that Priya's last day is October 15").
 - `onboarding` mode (the default): something the agent inferred gets one yes-or-no line first, in exactly this form: "Save to memory: <one-line summary>?". Save after his yes (`references/proposals.md` when a proposal was saved for the question).
+- A preference or fact he mentions in passing, without a keep phrase or an instruction ("screenshots were more useful than the text"), is inferred: ask "Save to memory: ...?" first. Only his keep words, or his yes to that question, are an approval.
+- Recommend a yes only with evidence from this project (what he said, what happened, and when). With none, ask without a recommendation.
 - `trusted` mode: a routine fact the agent is sure of is saved without asking and reported in one line, with no approver. The record says "Trusted grant".
 - In either mode, always ask first for anything about a named person or personal details that he did not ask you to remember, for more than five records at once, and for a change to this policy.
 - A delete needs his own words about that record ("delete it", "remove it for good"), or his yes to a numbered list that shows the delete. Do not ask again: the host asks him to confirm `toolkit memory delete`, and that prompt is the confirmation. "Forget that" is a retire, never a delete.
 - A yes covers only the change and the meaning shown. Silence is never a yes.
-- `--approved-by` is only for a change his words or his yes covered.
+- `--approved-by` is only for a change his words or his yes covered. Give his name exactly as the project settings hold it (`project.owner`, for example "Mike Rihm", not "Mike").
 - An unanswered "Save to memory?" stays a proposal until he answers (`references/proposals.md`). Never drop it, and never save it with an approver.
 - Only the owner switches the mode, in his own words ("you can save routine things without asking me"). Save his words as a `feedback` record with the date, then run one of:
   `toolkit config set memory.approval trusted`
@@ -69,12 +71,15 @@ This is the only written copy of the memory approval policy.
 - Never use a fixed file name such as `/tmp/memory.md`, and never write a file and run the command in one shell command.
 - Body labels are bold paragraphs (`**Remember:**`), never `## Remember` headings.
 - **Why** is the owner's reason in his words, or exactly "Not stated by the owner." Never a reason you inferred.
-- In `onboarding` mode, a save with neither `--approved-by` nor `--proposal` is stored as "No approval recorded". That is a mistake: ask first.
+- In `onboarding` mode, a save with neither `--approved-by` nor `--proposal` is stored as "No approval recorded", and the save prints a "Note:" line about it. That is a mistake: fix it at once. Ask him, then save again with `--expect` and `--approved-by` after his yes, or with `--proposal` while he has not answered.
 - A save of an existing key without `--expect` saves nothing. Take the version from the `--json` read; the first 12 characters are enough. Keep that read: its old text is the undo for an update.
 - Add `--allow-similar` only after reading every record the duplicate check listed.
-- A proposal the Stop hook saved is never approved with `toolkit memory approve`: that leaves its unfinished body. Save the full body instead (`references/proposals.md`).
+- A proposal the Stop hook saved holds only the one-line summary. His plain yes is `toolkit memory approve`, which takes out its "Do not rely on this" words; when he adds a reason or a detail, save the full body instead (`references/proposals.md`).
 - Never store email addresses, secrets, or work-item status. The CLI catches common secret shapes, not all. For a secret, save where it is kept, never the secret.
 - Ask the owner in the reply text, never through a question tool.
+- Say "proposal" only for a record saved with `--proposal` (by you or the Stop hook). When nothing was saved, say that nothing was saved, and ask.
+- An inferred fact whose home is a project document (for example `PROJECT.md`) is asked the same way, as one yes-or-no line: "Add to PROJECT.md: <one line>?". When he does not answer, add it to the current focus under "Waiting on the owner", so it is asked again (`references/current-focus.md`).
+- The host refused `toolkit memory delete` without asking him (Codex with approvals off): the cause is that approval setting. Show him the exact command to run in a terminal and wait. Do not retire the record in its place unless he asks for that.
 - Built-in memory: the CLI rebuilds `MEMORY.md` and repairs links in other notes after a rename, supersede, retire, or delete, and names each note it changed. Read that report (`references/memory-builtin.md`).
 
 ## Where other things go
@@ -97,20 +102,26 @@ A short memory pointer to a hard-to-find record is allowed; never copy the recor
 
 ## Replies
 
+Use these lines word for word, with the record's title. Every memory reply ends with the next step: the question still waiting for the owner (for example "Save to memory: <one line>?"), or the exact words that continue. Never end on what was not done ("I haven't saved anything.").
+
 - A new record: "Saved to memory: <title>. Say 'forget that' to undo."
 - An update: "Updated in memory: <title>. Say 'undo that' to put back the old wording." His "undo that" is a save of the old text from the `--json` read (`references/replacing-and-retiring.md`, section 3). Right after a supersede, the undo is a restore of the old record and a retire of the new one (same file, section 4).
 - A proposal: "Saved as a proposal for your yes or no: <title>."
+- A rejected proposal: "Not saved: <title>. I will not suggest it again.", then the next step.
 - A retire: "Retired from memory: <title>. Say 'bring it back' to restore it." His "bring it back" is the whole restore in `references/replacing-and-retiring.md`, section 7, not `toolkit memory restore` alone.
 - A delete: "Deleted from memory, as you said: '<his words>'. This cannot be undone." For a secret or an email address, add that older backups still hold it (`references/replacing-and-retiring.md`, section 8).
 - A failed save: lead with "Not saved: <reason>." Keep the text and try again later in the session. With Hindsight or Notion, the command prints the fix (`references/memory-hindsight.md`, `references/memory-notion.md`).
 
 ## Hook reminders
 
-- The UserPromptSubmit hook adds one line when the owner's message holds an explicit keep phrase, such as "remember that". It is a reminder: route the fact with step 1.
+- The UserPromptSubmit hook adds one line when the owner's message holds one of six keep phrases: "remember that" (or "remember this"), "from now on", "don't ever", "note that", "going forward", or "keep in mind". It is a reminder: route the fact with step 1.
 - The Stop hook blocks once when a keep phrase got no save, work-item change, or decision in the turn. Save it, or say in one line where it went instead.
+- Ask in exactly the form "Save to memory: <one line>?" (bold is fine). Other wording, such as "Save it to memory?", makes the Stop hook stop the turn once and ask for that form.
 - When a reply asks "Save to memory: <summary>?" and no proposal was saved in that turn, the Stop hook tries to save one, and the next turn's context says what happened:
-  - It saved a proposal and names its key: his answer approves or rejects that key (`references/proposals.md`).
-  - It saved nothing because a similar record exists, and names it: when he says yes, update that record with `--expect`; never save a second one.
+  - It saved a proposal and names its key: his yes approves that key, his no rejects it (`references/proposals.md`, "Recording the owner's answer").
+  - Memory already holds a proposal like it, and names it: his answer approves or rejects that proposal.
+  - Memory already holds a record about the same subject, and names it: read it as in step 2. The same fact: keep it, or update it with `--expect`. A different fact and his yes: save it with `--allow-similar` and `--approved-by`. Never overwrite a record with a different fact.
+  - The text looks like a secret, so nothing was saved: never save it; after his yes, save only where the secret is kept.
   - The save failed: save the proposal yourself in this turn, with `--proposal`.
 
 ## References

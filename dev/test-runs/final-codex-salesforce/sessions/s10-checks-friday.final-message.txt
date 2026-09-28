@@ -1,0 +1,5 @@
+All four sandbox checks passed, and I recorded the results in WI-001 and WI-002. The records are committed on their work item branches as `ec5ebe1` and `af88cab`. The Setup text matches the committed field definition. Both items now await separate result approvals; no independent agent check ran.
+
+**WI-001 result:** Tier starts blank, offers Gold, Silver, and Bronze in order, saves each value, and can be cleared. Its description and help text match the committed source. Do you approve this result?
+
+Your Friday availability is saved as a proposal pending your yes or no. WI-002’s result approval will follow WI-001’s.

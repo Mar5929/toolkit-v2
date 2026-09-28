@@ -1,0 +1,9 @@
+0.24s :: 'const r = await tools.exec_command({cmd:"pwd; rg --files -g \'SOUL.md\' -g \'PROJECT.md\' -g \'PROJECT-ROADMAP.md\' -g \'DECISIONS.md\' -g \'WORK-ITEM.md\' -g \'AGENTS.md\' .work-items . 2>/dev/null | head -80; cat /Users/michaelrih'
+0.269s :: 'const r=await tools.exec_command({cmd:"toolkit work list --tree",max_output_tokens:3000}); text(r.output);\n'
+0.27s :: 'const r=await tools.exec_command({cmd:"toolkit work next",max_output_tokens:3000}); text(r.output);\n'
+0.242s :: 'const r=await tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:4000}); text(r.output);\n'
+0.249s :: 'const r=await tools.exec_command({cmd:"toolkit memory focus",max_output_tokens:3000}); text(r.output);\n'
+0.241s :: 'const r=await tools.exec_command({cmd:"toolkit work lifecycle",max_output_tokens:5000}); text(r.output);\n'
+0.26s :: 'const r=await tools.exec_command({cmd:"toolkit work show WI-002",max_output_tokens:6000}); text(r.output);\n'
+0.226s :: 'const r=await tools.exec_command({cmd:"toolkit work show WI-001",max_output_tokens:5500}); text(r.output);\n'
+MAX toolkit call seconds: 0.27

@@ -1,0 +1,83 @@
+{
+  "schema": 1,
+  "sessionId": "01a0e99b-69d2-7732-a734-9dd489bc223a",
+  "host": "codex",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1",
+  "startedAt": "2026-09-28T20:01:22.749Z",
+  "turns": 1,
+  "turn": {
+    "key": "01a0e99b-6a3d-7132-aef7-38a9e5acb2e0",
+    "n": 1,
+    "startedAt": "2026-09-28T20:01:22.908Z",
+    "keep": null,
+    "baseline": {
+      "memoryMeta": 1790625640246.4265,
+      "hindsightMeta": null,
+      "memoryCache": null,
+      "workState": 1790625682801.3254,
+      "decisions": 1790625050568.4336
+    },
+    "records": [
+      {
+        "kind": "work",
+        "what": "toolkit work history",
+        "at": "2026-09-28T20:02:07.062Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T20:02:12.054Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T20:02:27.311Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T20:02:33.050Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work set",
+        "at": "2026-09-28T20:02:37.201Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T20:03:46.623Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T20:04:01.859Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T20:04:08.843Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T20:04:14.772Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work set",
+        "at": "2026-09-28T20:04:17.773Z"
+      },
+      {
+        "kind": "memory",
+        "what": "toolkit memory focus",
+        "at": "2026-09-28T20:04:24.253Z"
+      }
+    ],
+    "edits": [],
+    "stopBlocked": false
+  },
+  "lastStopReason": null,
+  "source": "startup",
+  "updated": "2026-09-28T20:04:34.649Z"
+}

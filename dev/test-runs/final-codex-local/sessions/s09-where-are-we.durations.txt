@@ -1,0 +1,7 @@
+0.239s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/{humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,session-handoff,shared-re'
+0.256s :: 'const r=await tools.exec_command({cmd:"toolkit work list --tree",max_output_tokens:4000});text(r.output);\n'
+0.226s :: 'const r=await tools.exec_command({cmd:"toolkit work next",max_output_tokens:4000});text(r.output);\n'
+0.242s :: 'const r=await tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:4000});text(r.output);\n'
+0.249s :: 'const r=await tools.exec_command({cmd:"toolkit memory focus",max_output_tokens:4000});text(r.output);\n'
+0.242s :: 'const r=await tools.exec_command({cmd:"toolkit work lifecycle",max_output_tokens:5000});text(r.output);\n'
+MAX toolkit call seconds: 0.256

@@ -219,7 +219,7 @@ test('the briefing says which setup steps in the current focus are done, so they
   const { env } = await healthyHome(root);
   assert.equal((await tk(root, ['memory', 'focus', '--text', SETUP_FOCUS], { env })).code, 0);
   const brief = await tk(root, ['brief', '--host', 'claude'], { env });
-  assert.match(brief.stdout, /Setup steps in the current focus that are done now\. They are not copied forward: take them out of "Waiting on the owner" at the next focus update:\n- "Trust this project folder in Codex when it asks\.": Codex trusts this project folder now\.\n- "Open \/hooks in Codex and trust the Toolkit V2 hooks\.": a Toolkit V2 hook ran in this Codex session \(or Codex lists the hooks as trusted\), so Codex runs them here\./);
+  assert.match(brief.stdout, /Setup steps in the current focus that are done now\. They are not copied forward: take them out of "Waiting on the owner" at the next focus update:\n- "Trust this project folder in Codex when it asks\.": Codex lists this project folder as trusted\.\n- "Open \/hooks in Codex and trust the Toolkit V2 hooks\.": Codex lists the Toolkit V2 hooks as trusted\./);
   assert.doesNotMatch(brief.stdout, /"Start a new Claude Code session[^\n]*": a new Claude Code session/, 'toolkit brief is not a new session');
   assert.doesNotMatch(brief.stdout, /Decide the billing currency\.":/);
   // A Claude Code session-start hook is a new session after setup.

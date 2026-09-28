@@ -1,0 +1,33 @@
+## Tester, as Mike, ran the command s20 gave, in a terminal, Mon Sep 28 22:53:25 UTC 2026
+$ toolkit memory delete user_readme_under_one_page --owner-approved
+Deleted user_readme_under_one_page. This cannot be undone.
+exit=0
+
+### Mon Sep 28 22:53:25 UTC 2026  key=user_readme_under_one_page  query='README one screen'
+--- toolkit memory list --status all
+- user_cli_flags_readme_examples: List every command-line flag in the README with a short example
+--- toolkit memory get user_readme_under_one_page
+Error: There is no memory record with the key user_readme_under_one_page.
+Fix: Run toolkit memory list --status all to see the keys.
+exit=0
+--- toolkit memory find 'README one screen' --all
+1 memory record is about "README one screen" (Hindsight recall, best first):
+- user_cli_flags_readme_examples: List every command-line flag in the README with a short example
+    # README examples for CLI flags **Remember:** Mike prefers every command-line flag to be listed in the README with a short example. **Why:** Not stated by the o
+Read a record with toolkit memory get <key> before relying on it.
+exit=0
+--- toolkit brief (memory part)
+Project memory (hindsight): 1 record, from the local copy. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_cli_flags_readme_examples: List every command-line flag in the README with a short example
+--- grep -c user_readme_under_one_page .git/toolkit-v2/memory-cache.json
+0
+--- Hindsight bank documents
+2 ['focus', 'user_cli_flags_readme_examples']
+--- GET document user_readme_under_one_page
+404
+--- Hindsight recall 'README one screen'
+2 results
+ - user_cli_flags_readme_examples | --- name: user_cli_flags_readme_examples description: List every command-line flag in the README with a short 
+ - focus | # Current focus  Last updated: 2026-09-28, work-finish, agent  ## Now  None.  ## Waiting on the owner  - Trust

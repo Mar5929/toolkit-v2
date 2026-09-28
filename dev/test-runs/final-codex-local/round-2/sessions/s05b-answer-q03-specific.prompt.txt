@@ -1,0 +1,1 @@
+Yes, that is the rule: bills of zero or more with at most two decimal places, percentages from 0 to 100, and split counts that are whole numbers of 1 or more. Missing or invalid input prints an error that says how to fix it and exits with code 1.

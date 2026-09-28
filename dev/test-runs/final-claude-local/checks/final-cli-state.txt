@@ -1,0 +1,28 @@
+$ toolkit doctor
+Toolkit doctor for greet (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-claude-local-r1).
+
+Notes (4):
+- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.
+
+For Codex only (2; the owner clears them in Codex, so they do not change this result):
+- Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-claude-local-r1). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off. Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+- The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards). Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Result: clean. No problems and no warnings here (2 for Codex only).
+exit=0
+$ toolkit work validate
+Checked 2 items: 2 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+exit=0
+$ toolkit work list --all --tree
+WI-001  Build the greet command  (Done)
+  WI-002  Leave out empty words and drop spaces at the ends of each word  (Done)
+$ toolkit work decisions
+Nothing is waiting on the owner.
+$ toolkit memory find commit
+1 memory record matches "commit" (best first):
+- user_short_commit_messages: Commit messages: one line, under 50 characters
+    # Short commit messages **Remember:** Mike prefers short commit messages: a single line, under 50 characters, with no body. **Why:** Not stated by the owner....
+Read a record with toolkit memory get <key> before relying on it.

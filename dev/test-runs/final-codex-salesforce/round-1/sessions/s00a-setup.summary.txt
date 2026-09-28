@@ -1,0 +1,46 @@
+PROMPT: Set up Toolkit V2 in this project. It's a Salesforce project for the Acme sales team. One thing to know: Acme CRM is a practice project. The two orgs, tkv2-sbx and tkv2-prod, are practice orgs, and the sf command on this computer simulates them on purpose, so treat what sf prints as the answer from the org.
+THREAD: 01a0e98f-922b-72f2-a382-b71ca3b04745
+
+[AGENT] I’ll use the Toolkit V2 project setup skill to inspect the repository, add the missing project files, and verify the setup. I’ll treat the `sf` command’s output as the result from Acme’s practice orgs.
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.6/skills/project-setup/SKILL.md
+   cat /Users/michaelrihm/.codex/plugins/cache/claude-toolkit/work-tracker/2.10.2/skills/work/SKILL.md
+   pwd && rg --files -g 'AGENTS.md' -g 'README*' -g 'package.json' -g 'sfdx-project.json' -g '.forceignore' -g '.gitignore' -g '.codex/**' -g '.agents/**' | head -100 && git status --short --branch
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{"i":0,"result":{"status":"fulfilled","value":{"chunk_id":"04c896","wall_time_seconds":0.000003459,"exit_code":0,"original_token_count":1880,"output":"---\nname: project-setup\ndescription: 'Sets up Toolkit V2 in a new project, or checks, updates, and repairs an existing setup, including Notion and Hindsight. Use when the owner says \"set up Toolkit V2\", \"set up this project\", \"check the setup\", or \"update the toolkit\", or starts working on a new computer.'\n---\n\n# Project setup\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nSets up Toolkit V2, never the older claude-toolkit (its `project-init` skill).\n\n## Steps\n\n1. **Check the computer and the project.** `toolkit` not found, or doctor\n   reports a computer problem: `references/repair-and-update.md`, \"Reaching\n   the `toolkit` command\".\n   `toolkit doctor`\n2. **Pick the path.** `.toolkit.json` present: step 8. A new computer:\n   `references/new-computer.md`. Switching memory or tracker:\n   `references/switching.md`. Otherwise a new project: put the checklist\n   below in the plan tool (Claude Code: the task list; Codex: `update_plan`).\n3. **Interview**, one question per message, each with a recommendation:\n   name, tracker, memory, Salesforce, `SOUL.md`, backup folder. Look before\n   asking. `references/interview.md`. Notion or Hindsight chosen: do the\n   \"Before init\" part of its wiring file (step 5) now.\n4. **Run init** with the answers, then record what it has no flag for.\n   Inside Codex, say first that Codex will ask to run it outside the sandbox.\n   `references/running-init.md`.\n   `toolkit init --name '<name>' --key <key> --tracker <tracker> --memory <memory> --owner '<owner>' --backup-dir '<folder>' [--salesforce] [--decline SOUL.md]`\n5. **Finish wiring each choice**: `references/wiring-notion.md`,\n   `wiring-hindsight.md`, `wiring-github-jira.md`, `wiring-salesforce.md`.\n6. **Fill the setup guides** with facts the owner confirmed; the one-sentence\n   outcome is his to say. `references/finishing-setup.md`.\n7. **Finish:** backups, doctor at 0 problems, owner steps in the reply and the\n   focus, the first briefing, the report, the commit offer.\n   `references/finishing-setup.md`.\n8. **Repair or update:** one numbered table from doctor and the dry run; sync\n   only after a yes; doctor again until 0 problems.\n   `references/repair-and-update.md`.\n   `toolkit sync --dry-run`\n\n## New project checklist\n\n```text\n- [ ] Doctor run; computer problems fixed\n- [ ] Looked before asking: Git repository, code, sfdx-project.json, older toolkit files\n- [ ] Six answers: name (key, id prefix, owner), tracker, memory, Salesforce (org aliases), SOUL.md, backup folder\n- [ ] Notion signed in and root page known, or Hindsight answering, before init\n- [ ] toolkit init run; id prefix and Sa
+
+[CALL exec] cat 
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{"name":"interview.md","result":{"status":"fulfilled","value":{"chunk_id":"d6a9e6","wall_time_seconds":0.000001958,"exit_code":0,"original_token_count":1970,"output":"# The setup interview\n\nPurpose: what to check before asking, and the exact wording of the six setup\nquestions for a new project, each with its recommendation.\n\n## Contents\n\n- Rules for every question\n- Look before asking\n- Question 1: the project name\n- Question 2: where wor
+
+[CALL exec] toolkit doctor
+   rg --files -uuu | head -100
+   git rev-parse --show-toplevel
+   git config user.name
+   cat README.md
+   sf org list --json
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"i":0,"result":{"status":"fulfilled","value":{"chunk_id":"591bfa","wall_time_seconds":0.000003333,"exit_code":4,"original_token_count":102,"output":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1 is not a Toolkit V2 project: there is no .toolkit.json with \"toolkit\": \"toolkit-v2\".\ntoolkit init sets it up (the project-setup skill asks the questions first).\n\nThis computer: no problems found (Node, the plugin-root pointer, and the Codex wrapper).\n"}}}
+{"i":1,"result":{"status":"fulfilled","value":{"chunk_id":"d9dd69","wall_time_seconds":0.000002708,"exit_code":0,"original_token_count":193,"output":".git/COMMIT_EDITMSG\n.git/index\n.git/refs/heads/main\n.git/hooks/push-to-checkout.sample\n.git/hooks/update.sample\n.git/hooks/pre-push.sample\n.git/hooks/pre-applypatch.sample\n.git/hooks/pre-merge-commit.sample\n.git/hooks/post-update.sample\n.git/hooks/prepare-commit-msg.sample\n.git/hooks/pre-receive.sample\n.git/hooks/fsmonitor-watchman.sample\n.git/hooks/applypatch-msg.sample\n.git/hooks/pre-commit.sample\n.git/hooks/sendemail-validate.sample\n.git/hooks/pre-rebase.sample\n.git/hooks/commit-msg.sample\n.git/description\n.git/logs/refs/heads/main\n.git/logs/HEAD\n.git/info/exclude\n.git/HEAD\n.git/objects/76/eaaa0923ca04885822ff87f7c950550ffe3599\n.git/objects/cb/7b2d68d1e3690ef9389dffe1589a4e71c50fb8\n.git/objects/9b/78ae82d1138a8f86eea118720f1260b9c27174\n.git/config\nREADME.md\n"}}}
+{"i":2,"result":{"status":"fulfilled","value":{"chunk_id":"68acfe","wall_time_seconds":0.0000025,"exit_code":0,"original_token_count":39,"output":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1\n"}}}
+{"i":3,"result":{"status":"fulfilled","value":{"chunk_id":"7bd249","wall_time_seconds":0.000001625,"exit_code":0,"original_token_count":3,"output":"Mike Rihm\n"}}}
+{"i":4,"result":{"status":"fulfilled","value":{"chunk_id":"b55f52","wall_time_seconds":0.000002125,"exit_code":0,"original_token_count":14,"output":"# Acme CRM\n\nSalesforce work for the Acme sales team.\n"}}}
+{"i":5,"result":{"status":"fulfilled","value":{"chunk_id":"b19d2e","wall_time_seconds":0.000003916,"exit_code":0,"original_token_count":139,"output":"{\"status\":0,\"result\":{\"other\":[],\"sandboxes\":[{\"alias\":\"tkv2-sbx\",\"username\":\"mike@acme.com.tkv2sbx\",\"orgId\":\"00DFAKE0000SBX1\",\"instanceUrl\":\"https://acme--tkv2sbx.sandbox.my.salesforce.com\",\"loginUrl\":\"https://test.salesforce.com\",\"isSandbox\":true,\"connectedStatus\":\"Unknown\"}],\"nonScratchOrgs\":[{\"alias\":\"tkv2-prod\",\"username\":\"mike@acme.com\",\"orgId\":\"00DFAKE0000PRD1\",\"instanceUrl\":\"https://acme.my.salesforce.com\",\"loginUrl\":\"https://login.salesforce.com\",\"isSandbox\":false,\"connectedStatus\":\"Unknown\"}],\"devHubs\":[],\"scratchOr
+
+[AGENT] The repo is a minimal Git project with an Acme CRM README. Toolkit is installed on this computer, and `sf` lists `tkv2-sbx` as a sandbox and `tkv2-prod` as production. I’ll use those aliases for the Salesforce setup.
+
+[AGENT] I’ll call the project **Acme CRM**, use the key `acme-crm`, number work items `WI-001`, `WI-002`, and list **Mike Rihm** as owner. Is that right?
+
+SKILLS OPENED (SKILL.md read): ['project-setup', 'work']
+
+TOOLKIT COMMANDS:
+   toolkit doctor

@@ -1,0 +1,1 @@
+Yes, use "ago" for past dates with --weeks. And if the date is missing or not written as YYYY-MM-DD, print a short usage line and exit with code 1.

@@ -1,0 +1,1 @@
+Yes, that's the goal. For --split, print a second line like "Each person pays: $20.00". When the total doesn't divide evenly, round each share up to the next cent so nobody is short.

@@ -1,0 +1,56 @@
+$ node dev/tools/check-skills.mjs --quiet
+note  plugins/sf-architect-solutioning/skills/sf-architect-solutioning/SKILL.md
+        note  the numbered steps run from line 75 to line 78; they must end by line 40 [exception: GOAL.md: body and references ported byte for byte; only the description was rewritten, which Mike approved on 2026-09-27, so the description rules apply in full]
+note  plugins/toolkit/scaffold/model/.agents/skills/sf-component-tracker/SKILL.md
+        note  the numbered steps run from line 38 to line 50; they must end by line 40 [exception: project-local Salesforce overlay skill: body adapted from the model's copy, with a new description (SKILL-INDEX section 3); the step-placement and voice-line rules are for plugin skills]
+note  plugins/toolkit/scaffold/model/.claude/skills/sf-component-tracker/SKILL.md
+        note  the numbered steps run from line 38 to line 50; they must end by line 40 [exception: project-local Salesforce overlay skill: body adapted from the model's copy, with a new description (SKILL-INDEX section 3); the step-placement and voice-line rules are for plugin skills]
+note  plugins/sf-architect-solutioning/skills/sf-architect-solutioning/references/architectural-patterns.md
+        note  269 lines and no "## Contents" list as its first section; a reference over 100 lines needs one (R3). [exception: GOAL.md: body and references ported byte for byte; only the description was rewritten, which Mike approved on 2026-09-27, so the description rules apply in full]
+note  plugins/sf-architect-solutioning/skills/sf-architect-solutioning/references/doc-sources.md
+        note  122 lines and no "## Contents" list as its first section; a reference over 100 lines needs one (R3). [exception: GOAL.md: body and references ported byte for byte; only the description was rewritten, which Mike approved on 2026-09-27, so the description rules apply in full]
+note  plugins/sf-architect-solutioning/skills/sf-architect-solutioning/references/metadata/approval-processes.md
+        note  252 lines and no "## Contents" list as its first section; a reference over 100 lines needs one (R3). [exception: GOAL.md: body and references ported byte for byte; only the description was rewritten, which Mike approved on 2026-09-27, so the description rules apply in full]
+note  plugins/sf-architect-solutioning/skills/sf-architect-solutioning/references/metadata/custom-metadata-types.md
+        note  334 lines and no "## Contents" list as its first section; a reference over 100 lines needs one (R3). [exception: GOAL.md: body and references ported byte for byte; only the description was rewritten, which Mike approved on 2026-09-27, so the description rules apply in full]
+note  plugins/sf-architect-solutioning/skills/sf-architect-solutioning/references/metadata/flows.md
+        note  532 lines and no "## Contents" list as its first section; a reference over 100 lines needs one (R3). [exception: GOAL.md: body and references ported byte for byte; only the description was rewritten, which Mike approved on 2026-09-27, so the description rules apply in full]
+note  plugins/sf-architect-solutioning/skills/sf-architect-solutioning/references/metadata/objects-fields.md
+        note  568 lines and no "## Contents" list as its first section; a reference over 100 lines needs one (R3). [exception: GOAL.md: body and references ported byte for byte; only the description was rewritten, which Mike approved on 2026-09-27, so the description rules apply in full]
+note  plugins/sf-architect-solutioning/skills/sf-architect-solutioning/references/metadata/page-layouts-record-types.md
+        note  224 lines and no "## Contents" list as its first section; a reference over 100 lines needs one (R3). [exception: GOAL.md: body and references ported byte for byte; only the description was rewritten, which Mike approved on 2026-09-27, so the description rules apply in full]
+note  plugins/sf-architect-solutioning/skills/sf-architect-solutioning/references/metadata/permission-sets.md
+        note  222 lines and no "## Contents" list as its first section; a reference over 100 lines needs one (R3). [exception: GOAL.md: body and references ported byte for byte; only the description was rewritten, which Mike approved on 2026-09-27, so the description rules apply in full]
+note  plugins/sf-architect-solutioning/skills/sf-architect-solutioning/references/metadata/platform-events-other.md
+        note  201 lines and no "## Contents" list as its first section; a reference over 100 lines needs one (R3). [exception: GOAL.md: body and references ported byte for byte; only the description was rewritten, which Mike approved on 2026-09-27, so the description rules apply in full]
+note  plugins/sf-architect-solutioning/skills/sf-architect-solutioning/references/metadata/validation-rules.md
+        note  179 lines and no "## Contents" list as its first section; a reference over 100 lines needs one (R3). [exception: GOAL.md: body and references ported byte for byte; only the description was rewritten, which Mike approved on 2026-09-27, so the description rules apply in full]
+note  plugins/sf-architect-solutioning/skills/sf-architect-solutioning/references/naming-conventions.md
+        note  226 lines and no "## Contents" list as its first section; a reference over 100 lines needs one (R3). [exception: GOAL.md: body and references ported byte for byte; only the description was rewritten, which Mike approved on 2026-09-27, so the description rules apply in full]
+note  plugins/sf-architect-solutioning/skills/sf-architect-solutioning/references/salesforce-well-architected.md
+        note  282 lines and no "## Contents" list as its first section; a reference over 100 lines needs one (R3). [exception: GOAL.md: body and references ported byte for byte; only the description was rewritten, which Mike approved on 2026-09-27, so the description rules apply in full]
+note  plugins/sf-architect-solutioning/skills/sf-architect-solutioning/references/solution-plan-template.md
+        note  171 lines and no "## Contents" list as its first section; a reference over 100 lines needs one (R3). [exception: GOAL.md: body and references ported byte for byte; only the description was rewritten, which Mike approved on 2026-09-27, so the description rules apply in full]
+check-skills: 29 SKILL.md files, 205 files in their references/, assets/, and scripts/ folders (159 of them generated copies), 7 agent files, 649 toolkit commands checked against 53 commands in ARCHITECTURE.md section 5 and 56 in the CLI's own help; 0 failures, 0 warnings, 16 notes
+exit=0
+$ node dev/tools/sync-skill-references.mjs --check
+sync-skill-references: 159 copies listed, 0 written, 0 deleted, 0 problems (check only; nothing written).
+exit=0
+$ node dev/tools/import-model.mjs --check
+scaffold/model matches /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved (112 files, commit 5e7d7a0723f896e1da4578bd8cb9d8d2e75b7690). Every CONDITIONS.json rule matches the copy.
+exit=0
+$ node --test plugins/git-workflows/tests/*.test.mjs
+✔ a project that Git-ignores .claude/worktrees/ gets its save folder there, and publish runs from the project folder with --workspace (1685.070791ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 25181.257583
+$ claude plugin validate .
+Validating marketplace manifest: /Users/michaelrihm/Documents/Projects/toolkit-v2/.claude-plugin/marketplace.json
+
+✔ Validation passed
+exit=0

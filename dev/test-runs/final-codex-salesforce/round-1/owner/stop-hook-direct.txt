@@ -1,0 +1,66 @@
+## Direct Stop hook test: a turn that ends with an unanswered "Save to memory: ...?" and saved nothing (the installed Codex copy, toolkit 0.2.6)
+$ printf <UserPromptSubmit input> | node $H/bin/toolkit hook user-prompt --host codex
+exit=0
+$ printf <Stop input, last_assistant_message ends with Save to memory: ...?> | node $H/bin/toolkit hook stop --host codex
+exit=0
+$ toolkit work decisions
+3 decisions wait on the owner:
+
+WI-001 Add a Tier picklist field to Account
+  - WI-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-001 --result --by <name>. (work-decide)
+
+Memory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):
+  - project_sandbox_deploy_checks_project_usually_take_longer: Sandbox deploy checks in this project usually take longer than ten minutes. Saved 2026-09-28. Yes: toolkit memory approve project_sandbox_deploy_checks_project_usually_take_longer --by <name>. No: toolkit memory reject project_sandbox_deploy_checks_project_usually_take_longer. (work-decide)
+  - user_friday_availability: Mike Rihm is usually off on Fridays. Saved 2026-09-28. Yes: toolkit memory approve user_friday_availability --by <name>. No: toolkit memory reject user_friday_availability. (work-decide)
+$ ls .memory
+AGENTS.md
+CURRENT_FOCUS.md
+MEMORY.md
+memory-criteria.md
+project_sandbox_deploy_checks_project_usually_take_longer.md
+project_topic_template.md
+terminology-glossary.md
+user_afternoon_salesforce_setup.md
+user_custom_field_description_help_text.md
+user_friday_availability.md
+user_salesforce_setup_screenshots.md
+$ cat <git common dir>/toolkit-v2/sessions/tester-stop-hook-1.json
+{
+  "schema": 1,
+  "sessionId": "tester-stop-hook-1",
+  "host": "codex",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1",
+  "startedAt": "2026-09-28T21:10:47.851Z",
+  "turns": 1,
+  "turn": {
+    "key": "t1",
+    "n": 1,
+    "startedAt": "2026-09-28T21:10:47.872Z",
+    "keep": null,
+    "baseline": {
+      "memoryMeta": 1790629742843.501,
+      "hindsightMeta": null,
+      "memoryCache": null,
+      "workState": 1790629787337.6492,
+      "decisions": 1790625050568.4336
+    },
+    "records": [
+      {
+        "kind": "memory",
+        "what": "toolkit memory save --proposal (Stop hook)",
+        "proposal": true,
+        "key": "project_sandbox_deploy_checks_project_usually_take_longer",
+        "at": "2026-09-28T21:10:48.017Z"
+      }
+    ],
+    "edits": [],
+    "stopBlocked": false
+  },
+  "updated": "2026-09-28T21:10:48.017Z",
+  "proposedSummaries": [
+    "sandbox deploy checks in this project usually take longer than ten minutes"
+  ],
+  "proposalNotes": [
+    "At the end of the last turn the toolkit saved the unanswered \"Save to memory: Sandbox deploy checks in this project usually take longer than ten minutes?\" as a memory proposal: project_sandbox_deploy_checks_project_usually_take_longer. It is not a fact. If the owner answers it now, his yes is toolkit memory approve project_sandbox_deploy_checks_project_usually_take_longer --by <name> and his no is toolkit memory reject project_sandbox_deploy_checks_project_usually_take_longer; otherwise work-decide asks him later."
+  ]
+}

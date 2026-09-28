@@ -1,0 +1,1 @@
+New work: build the days-until command. `node bin/days-until.js 2026-12-25` should print how many days are left until that date. Also add a --weeks flag that shows the answer as weeks and days.

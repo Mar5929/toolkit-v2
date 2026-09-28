@@ -1,0 +1,14 @@
+$ git status --short; git log --oneline -1
+e8c3087 Merge WI-001 acceptance checks into WI-002
+$ sf project deploy start -x delivery/deployment/WI-001-tier-field/package.xml -o tkv2-prod
+{"status":0,"result":{"id":"0AfFAKE000DEPLOY3","status":"Succeeded","success":true,"checkOnly":false,"done":true,"numberComponentsDeployed":1,"numberComponentErrors":0},"warnings":[]}
+(Mike checked production: four profiles, all on Account Layout, no Lightning record pages, no permission set grants for Tier.)
+$ sf project deploy start -x delivery/deployment/WI-002-tier-access-and-layout/package.xml -o tkv2-prod
+{"status":0,"result":{"id":"0AfFAKE000DEPLOY3","status":"Succeeded","success":true,"checkOnly":false,"done":true,"numberComponentsDeployed":1,"numberComponentErrors":0},"warnings":[]}
+(Mike set the Tier field permissions in production Setup. Harness: touch org-state/prod.fls)
+prod.deployed
+prod.fls
+prod.layout
+sbx.deployed
+sbx.fls
+sbx.layout

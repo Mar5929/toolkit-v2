@@ -1,0 +1,62 @@
+## after setup (s00j)
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-salesforce:
+total 0
+drwxr-xr-x  3 michaelrihm  wheel   96 Sep 28 15:50 .
+drwxr-xr-x  6 michaelrihm  wheel  192 Sep 28 15:51 ..
+drwxr-xr-x  5 michaelrihm  wheel  160 Sep 28 15:54 acme-crm-2026-09-28
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-salesforce/acme-crm-2026-09-28:
+total 8
+drwxr-xr-x  5 michaelrihm  wheel  160 Sep 28 15:54 .
+drwxr-xr-x  3 michaelrihm  wheel   96 Sep 28 15:50 ..
+drwxr-xr-x  9 michaelrihm  wheel  288 Sep 28 15:54 memory
+-rw-r--r--  1 michaelrihm  wheel  943 Sep 28 15:54 toolkit-export.json
+drwxr-xr-x  5 michaelrihm  wheel  160 Sep 28 15:54 work-items
+{
+  "toolkit": "toolkit-v2",
+  "kind": "project-export",
+  "schema": 1,
+  "project": {
+    "name": "Acme CRM",
+    "key": "acme-crm"
+  },
+  "exportedAt": "2026-09-28T19:54:01.764Z",
+  "from": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1",
+  "parts": [
+    {
+      "name": "work-items",
+      "from": ".work-items/",
+      "files": 4
+    },
+    {
+      "name": "memory",
+      "from": ".memory/",
+      "files": 7
+    }
+  ],
+  "files": [
+    "memory/.toolkit-meta.json",
+    "memory/AGENTS.md",
+    "memory/CURRENT_FOCUS.md",
+    "memory/MEMORY.md",
+    "memory/memory-criteria.md",
+    "memory/project_topic_template.md",
+    "memory/terminology-glossary.md",
+    "work-items/.toolkit-state.json",
+    "work-items/DASHBOARD.md",
+    "work-items/work-item-template/DESIGN.md",
+    "work-items/work-item-template/WORK-ITEM.md"
+  ]
+}
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-salesforce/acme-crm-2026-09-28/memory/.toolkit-meta.json
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-salesforce/acme-crm-2026-09-28/memory/AGENTS.md
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-salesforce/acme-crm-2026-09-28/memory/CURRENT_FOCUS.md
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-salesforce/acme-crm-2026-09-28/memory/MEMORY.md
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-salesforce/acme-crm-2026-09-28/memory/memory-criteria.md
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-salesforce/acme-crm-2026-09-28/memory/project_topic_template.md
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-salesforce/acme-crm-2026-09-28/memory/terminology-glossary.md
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-salesforce/acme-crm-2026-09-28/toolkit-export.json
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-salesforce/acme-crm-2026-09-28/work-items/.toolkit-state.json
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-salesforce/acme-crm-2026-09-28/work-items/DASHBOARD.md
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-salesforce/acme-crm-2026-09-28/work-items/work-item-template/DESIGN.md
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-salesforce/acme-crm-2026-09-28/work-items/work-item-template/WORK-ITEM.md

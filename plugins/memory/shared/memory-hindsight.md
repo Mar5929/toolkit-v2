@@ -41,7 +41,8 @@ toolkit hindsight service status
 - `health` checks that the server answers. `service status` shows whether
   the background service is installed and running.
 - Start the service only after the owner says yes; it runs a local language
-  model and uses the computer's memory:
+  model and uses the computer's memory. In Codex, run it alone with
+  `sandbox_permissions` set to `require_escalated` and a one-line reason:
 
   ```text
   toolkit hindsight service start

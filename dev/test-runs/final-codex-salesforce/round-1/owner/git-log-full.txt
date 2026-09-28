@@ -1,0 +1,85 @@
+=== 0f57d076cd2795b340133b3e50ce9d89d6fbcb36
+Author: Mike Rihm <michael@rihm.com>
+Committer: Mike Rihm <michael@rihm.com>
+Record Account Tier production release and delivered behavior
+
+=== c4690fa64dae4ae6ae32567fbcd0a0b0c45ebae6
+Author: Mike Rihm <michael@rihm.com>
+Committer: Mike Rihm <michael@rihm.com>
+Plan Account Tier production cutover
+
+=== 52c96e2bdda8b0b9b4b0842ab3e95af285048d6f
+Author: Mike Rihm <michael@rihm.com>
+Committer: Mike Rihm <michael@rihm.com>
+Merge branch 'main' into claude/wi-002-configure-account-tier-access
+
+=== f006a905a21641e1dad101885ae5dbd4393a5007
+Author: Mike Rihm <michael@rihm.com>
+Committer: Mike Rihm <michael@rihm.com>
+Merge branch 'main' into claude/wi-001-add-a-tier-picklist-field-to
+
+=== b43155dd34ed3c323bd567283f4b100621198b07
+Author: Mike Rihm <michael@rihm.com>
+Committer: Mike Rihm <michael@rihm.com>
+Record Account Tier effective access check
+
+=== f2c7b61bbc8341e16dfb7386d40d25a953c08fe3
+Author: Mike Rihm <michael@rihm.com>
+Committer: Mike Rihm <michael@rihm.com>
+Record Account Tier default and choice order checks
+
+=== 34ecdae30e9a89eb0274f8017cafdaf70b16a5cc
+Author: Mike Rihm <michael@rihm.com>
+Committer: Mike Rihm <michael@rihm.com>
+Record WI-002 profile behavior checks
+
+=== 9e01aebcedaadf302f4aafae81b7647670c9c6f0
+Author: Mike Rihm <michael@rihm.com>
+Committer: Mike Rihm <michael@rihm.com>
+Record WI-001 Tier field acceptance checks
+
+=== fb6531dbf904d625e733b7a4196ccd8c2f193907
+Author: Mike Rihm <michael@rihm.com>
+Committer: Mike Rihm <michael@rihm.com>
+Clarify WI-002 check results
+
+=== b7ae92c1c8b38c89616cbb71cff22f07f71ff267
+Author: Mike Rihm <michael@rihm.com>
+Committer: Mike Rihm <michael@rihm.com>
+Record WI-002 acceptance checks
+
+=== 84d61330fd0042c3808c6a4bba08496a53397199
+Author: Mike Rihm <michael@rihm.com>
+Committer: Mike Rihm <michael@rihm.com>
+Record Account Tier review responsibility
+
+=== c8fcfffe76e0ba340e23b38f98f49827c4284cbb
+Author: Mike Rihm <michael@rihm.com>
+Committer: Mike Rihm <michael@rihm.com>
+Record sandbox deployment and Account Tier checks
+
+=== 118c6bf377f1b18fd3f7c0dfe97532ab17d700ba
+Author: Mike Rihm <michael@rihm.com>
+Committer: Mike Rihm <michael@rihm.com>
+Merge Tier field dependency and combine deployment inventory
+
+=== 4a7eea0edf37a4983cbe13bead5a77e8eea50f05
+Author: Mike Rihm <michael@rihm.com>
+Committer: Mike Rihm <michael@rihm.com>
+Place Account Tier below Rating and prepare access steps
+
+=== 8e95727ecae6cce74e9348b2ef0b1e19c2e16e7f
+Author: Mike Rihm <michael@rihm.com>
+Committer: Mike Rihm <michael@rihm.com>
+Add Account Tier picklist field and deployment package
+
+=== d89f330e8ddc76b1c11358b401982edf77c08d79
+Author: Mike Rihm <michael@rihm.com>
+Committer: Mike Rihm <michael@rihm.com>
+Set up Toolkit V2 for Acme CRM
+
+=== cb7b2d68d1e3690ef9389dffe1589a4e71c50fb8
+Author: Mike Rihm <michael@rihm.com>
+Committer: Mike Rihm <michael@rihm.com>
+Initial commit
+

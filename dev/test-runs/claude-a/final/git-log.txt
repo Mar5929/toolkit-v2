@@ -1,12 +1,12 @@
 1b8fe07 Mike Rihm <michael@rihm.com> 2026-09-27 16:21:11 -0400
 WI-002: update greet requirements and system guide
 
-Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+<AI co-author line>
 ---
 dd37e4f Mike Rihm <michael@rihm.com> 2026-09-27 16:17:18 -0400
 WI-002: greet empty names as world, --version anywhere
 
-Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+<AI co-author line>
 ---
 658c9c4 Mike Rihm <michael@rihm.com> 2026-09-27 16:14:45 -0400
 WI-001: add greet CLI requirements and system guide
@@ -14,7 +14,7 @@ WI-001: add greet CLI requirements and system guide
 195d864 Mike Rihm <michael@rihm.com> 2026-09-27 16:08:05 -0400
 WI-001: add greet.js with --version and its tests
 
-Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+<AI co-author line>
 ---
 8d86fd9 Mike Rihm <michael@rihm.com> 2026-09-27 16:04:02 -0400
 Add Toolkit V2 project setup
@@ -22,7 +22,7 @@ Add Toolkit V2 project setup
 Project manual, rules, output style, Claude Code and Codex settings,
 toolkit config, and the project document folders and templates.
 
-Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+<AI co-author line>
 ---
 a665a8b Mike Rihm <michael@rihm.com> 2026-09-27 16:02:38 -0400
 Initial commit

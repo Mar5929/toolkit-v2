@@ -1,0 +1,21 @@
+MD5 (.memory/.toolkit-meta.json) = 3c2a267cb9c74bb0ad293428bb113cac
+MD5 (.memory/AGENTS.md) = c3f912eddfd74dfd116bfc1f1e2a7e56
+MD5 (.memory/CURRENT_FOCUS.md) = d11574a92bccd0522474ec3dded32d3d
+MD5 (.memory/MEMORY.md) = b12be22f8caf99524f6f1c07efd369b8
+MD5 (.memory/memory-criteria.md) = fee9a2c0f9746c852049dbc9ec2060bf
+MD5 (.memory/project_topic_template.md) = a0abdffc5b188ca8929595b195161bef
+MD5 (.memory/terminology-glossary.md) = 430ce2b6130fe355137c476cd5dc63e6
+MD5 (.memory/user_afternoon_salesforce_setup.md) = 92c085df8349ac6fb2cd8716ded1ee50
+MD5 (.memory/user_custom_field_description_help_text.md) = 357508f36b59053e39545419ee5b0190
+MD5 (.memory/user_salesforce_setup_screenshots.md) = a9bfbe3a750ff46e82f2ab95127ae1a6
+MD5 (.work-items/.toolkit-state.json) = e7e225da245f4c99bb31a66ced7721b8
+MD5 (.work-items/DASHBOARD.md) = f7e4ac34ab8fbde4f654c4252d5c06cd
+MD5 (.work-items/account-tier/WI-001-tier-field/DESIGN.md) = 0742c36307f9e6d113b6cb8bfd29de76
+MD5 (.work-items/account-tier/WI-001-tier-field/WI-002-tier-access-and-layout/WORK-ITEM.md) = cc960fc9e5d3dea8b53fda93ad92a1ee
+MD5 (.work-items/account-tier/WI-001-tier-field/WORK-ITEM.md) = 27a7cd18cc976979896fff6ec03b2372
+MD5 (.work-items/work-item-template/DESIGN.md) = 06963950258c0d39462ca2bfe293c072
+MD5 (.work-items/work-item-template/WORK-ITEM.md) = d1a94b44bdf3b00e2b743060ba57b0e8
+== .claude/worktrees/wi-001-add-a-tier-picklist-field-to
+f2c7b61 Record Account Tier default and choice order checks
+== .claude/worktrees/wi-002-configure-account-tier-access
+b43155d Record Account Tier effective access check

@@ -28,7 +28,7 @@ every install or update), and enabled = true for toolkit, which holds only
 project-setup and hooks that do nothing outside a Toolkit V2 project. Every
 other line is kept. Projects set up by toolkit init turn the other plugins on
 for themselves. It reports whether Claude Code has toolkit@toolkit-v2 on for
-every folder (claude plugin enable toolkit@toolkit-v2 does that).
+every folder (claude plugin enable toolkit@toolkit-v2 --scope user does that).
 Then it checks node, git, ntn (and whether it is signed in), ollama, and the
 local Hindsight server. --offline skips the checks that use the network or
 run ntn whoami. It changes nothing else. Projects ask the owner before this

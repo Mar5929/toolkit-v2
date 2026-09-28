@@ -1,0 +1,1 @@
+I ran it in the TFR-002 worktree: --weeks 2026-10-15 printed "2 weeks and 3 days" both ways round, and 2026-09-11 printed "2 weeks and 3 days ago". I approve the TFR-002 result.

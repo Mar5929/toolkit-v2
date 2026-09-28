@@ -1,0 +1,1 @@
+On a new Account, Tier starts blank and the list shows Gold, Silver, Bronze in that order. In Setup I checked effective access for Tier: only the Sales Manager and System Administrator profiles can edit it; nobody else has View All or Modify All on Accounts in this practice org.

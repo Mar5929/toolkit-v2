@@ -1,0 +1,63 @@
+{
+  "schema": 1,
+  "sessionId": "8d6ad833-fc27-4e26-96ec-b1aa1ffd4dd2",
+  "host": "claude",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-claude-local-r1",
+  "startedAt": "2026-09-28T19:57:52.652Z",
+  "turns": 1,
+  "turn": {
+    "key": "45650b81-f565-4be3-87db-95f55c6781ed",
+    "n": 1,
+    "startedAt": "2026-09-28T19:57:53.003Z",
+    "keep": null,
+    "baseline": {
+      "memoryMeta": 1790625461612.5134,
+      "hindsightMeta": null,
+      "memoryCache": null,
+      "workState": 1790625472705.6587,
+      "decisions": 1790625035174.46
+    },
+    "records": [
+      {
+        "kind": "work",
+        "what": "toolkit work new",
+        "at": "2026-09-28T19:58:08.028Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work new",
+        "at": "2026-09-28T19:58:12.667Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T19:58:17.827Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T19:58:18.562Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work history",
+        "at": "2026-09-28T19:58:22.006Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T19:58:28.712Z"
+      },
+      {
+        "kind": "memory",
+        "what": "toolkit memory focus",
+        "at": "2026-09-28T19:58:32.214Z"
+      }
+    ],
+    "edits": [],
+    "stopBlocked": false
+  },
+  "lastStopReason": null,
+  "source": "startup",
+  "updated": "2026-09-28T19:58:41.590Z"
+}

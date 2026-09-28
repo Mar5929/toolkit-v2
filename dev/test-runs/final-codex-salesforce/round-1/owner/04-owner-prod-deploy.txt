@@ -1,0 +1,7 @@
+$ cd <project root, on main>
+(step 10: snapshot of the production Account Layout and the four profiles' Account settings saved)
+$ sf project deploy start -x delivery/deployment/WI-001-tier-field/package.xml -o tkv2-prod
+{"status":0,"result":{"id":"0AfFAKE000DEPLOY3","status":"Succeeded","success":true,"checkOnly":false,"done":true,"numberComponentsDeployed":1,"numberComponentErrors":0},"warnings":[]}
+$ sf project deploy start -x delivery/deployment/WI-002-tier-access-layout/package.xml -o tkv2-prod
+{"status":0,"result":{"id":"0AfFAKE000DEPLOY3","status":"Succeeded","success":true,"checkOnly":false,"done":true,"numberComponentsDeployed":1,"numberComponentErrors":0},"warnings":[]}
+(Setup in tkv2-prod: Tier field permissions set: Sales Manager and System Administrator Read+Edit; Sales User and Read Only Read only. Checks: Tier below Rating; Sales Manager saved Gold; Sales User cannot edit; effective access shows only the two editing profiles.)

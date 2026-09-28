@@ -1,0 +1,337 @@
+PROMPT: Yes, I approve deploying WI-001, then WI-002 to tkv2-sbx, and then I'll do the manual profile steps.
+THREAD: 01a0ea35-9bb2-7952-8aac-827f4b9f4803
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Add a Tier picklist field to Account: 08 Build, In Progress, waiting on owner. Next action: Wait for owner approval of the ordered sandbox deployments; then give the exact commands for the owner to run from the two worktrees and... Continues with work-decide.
+- WI-002 Set Account Tier access and page layout: 08 Build, In Progress, waiting on owner. Next action: Wait for the ordered sandbox deployment approval in WI-001 Q-03; after WI-001 deploys, give the owner the WI-002 command and manual steps... Continues with work-decide.
+
+Waiting on the owner:
+- WI-001 Add a Tier picklist field to Account: Q-03: Do you approve the two sandbox deployments in order: WI-001 Account.Tier__c, then WI-002 Account layout, with the WI-002 profile steps applied afterward? Affects Sandbox release of R-01 through R-04. (work-decide)
+- WI-002 Set Account Tier access and page layout: Q-01: Approval for the ordered sandbox deployment and profile steps is requested in WI-001 Q-03; does that approval include WI-002? Affects Sandbox release of R-03 and R-04. (work-decide)
+
+Items: 2 in progress.
+
+Current focus:
+Last updated: 2026-09-28, chat, agent
+## Now
+- WI-001 Add a Tier picklist field to Account
+- WI-002 Set Account Tier access and page layout
+## Waiting on the owner
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks and Salesforce org guards in Codex: open Codex here, type /hooks, and trust them. Setup step; drop it when doctor stops reporting it.
+## Untracked to-dos
+None.
+## Next session starts with
+- Continue WI-001 Q-03 and WI-002 Q-01 from their Resume here sections: record the sandbox deployment decision, then hand Mike the ordered commands and WI-002 manual profile steps.
+
+Project memory (builtin): 1 record. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_custom_field_guidance: Every new custom field should have a description and help text
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2). Codex loads the project's .codex/ settings,
+
+[AGENT] I’ll record your approval for both work items, check the prepared packages and sandbox instructions, then give you the commands in order and the profile steps. I’m using the work-decide skill to record the decision.
+
+[CALL exec] cat SOUL.md PROJECT.md .claude/rules/{check-deployment-contents,component-tracker,confirm-salesforce-changes,humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,production-data-changes,project-file-locations,salesforce-org-safety,session-handoff,shared-repository-work,work-item-folders}.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/SKILL.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+cat: SOUL.md: No such file or directory
+# Acme CRM
+
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->
+
+## Purpose and intended outcome
+
+- Purpose: Salesforce work for the Acme sales team (README.md).
+- Intended outcome: The Acme sales team can rank their accounts and see the information they need on each account in Salesforce (owner, 2026-09-28).
+
+## Scope and boundaries
+
+- In scope: Account ranking and the information the sales team needs on each account in Salesforce (owner, 2026-09-28).
+- Outside scope: `<Important exclusions or adjacent owners.>`
+- Constraints: Agents do not deploy to or change data in `tkv2-prod`; sandbox deploys and data changes require the owner's approval and execution in Codex (`.claude/rules/salesforce-org-safety.md`).
+
+## Systems and environments
+
+| System or org | Purpose | Environment | Source of truth | Access notes |
+| --- | --- | --- | --- | --- |
+| `tkv2-sbx` | Practice Salesforce sandbox | Sandbox | The `sf` command on this computer | Use the alias with `-o tkv2-sbx`. |
+| `tkv2-prod` | Practice Salesforce production org | Production | The `sf` command on this computer | Agents use read-only commands; the owner runs production changes. |
+
+## People and ownership
+
+| Role | Person or team | Responsibility | Source / last confirmed |
+| --- | --- | --- | --- |
+| Project owner | Mike Rihm | Project decisions | Owner confirmation, 2026-09-28 |
+
+## Work and project records
+
+- Work tracker: `.work-items/` local folders, Git-ignored.
+- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)
+- Project decisions: [DECISIONS.md](DECISIONS.md)
+- Functional requirements: [requirements/](requirements/)
+- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`
+- System Guide: not enabled yet; `system-guide/` contains a template only.
+- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)
+- Memory backup or sync: automatic Toolkit V2 backups under `/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-salesforce/`.
+
+## Resources and project paths
+
+- Salesforce source: `force-app/` (`sfdx-project.json`).
+- Project-wide deployment manifest: `delivery/deployment/full-project-deployment-template/package.xml` after the API version and members are verified. Keep it as the full project component inventory; ordinary deployments use narrower work-item packages.
+- Work-item deployment manifests: `delivery/deployment/<work-item-id>-<short-name>/package.xml` when an item changes Sale
+
+[CALL exec] toolkit work decisions
+   toolkit work show WI-001
+   toolkit work show WI-002
+   cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/references/{recording-owner-answers,work-item-format,current-focus,toolkit-commands}.md
+   git worktree list
+   git status --short --branch
+   git remote
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+Warning: truncated output (original token count: 15463)
+Total output lines: 7
+
+{"i":0,"result":{"status":"fulfilled","value":{"chunk_id":"6ab542","wall_time_seconds":0.000003625,"exit_code":0,"original_token_count":135,"output":"2 decisions wait on the owner:\n\nWI-001 Add a Tier picklist field to Account\n  - Q-03: Do you approve the two sandbox deployments in order: WI-001 Account.Tier__c, then WI-002 Account layout, with the WI-002 profile steps applied afterward? Affects Sandbox release of R-01 through R-04. (work-decide)\n\nWI-002 Set Account Tier access and page layout\n  - Q-01: Approval for the ordered sandbox deployment and profile steps is requested in WI-001 Q-03; does that approval include WI-002? Affects Sandbox release of R-03 and R-04. (work-decide)\n"}}}
+{"i":1,"result":{"status":"fulfilled","value":{"chunk_id":"961422","wall_time_seconds":0.00000275,"exit_code":0,"original_token_count":3117,"output":"WI-001: Add a Tier picklist field to Account\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2/.work-items/account-tier/WI-001-tier-field/WORK-ITEM.md\nStage: 08 Build (In Progress) | Waiting on: owner | Continue with: work-decide\nParent: none | Sub-items: WI-002 | Design: approved (.work-items/account-tier/WI-001-tier-field/DESIGN.md)\nWorktree branch for this item: claude/wi-001-add-a-tier-picklist-field-to (folder .claude/worktrees/wi-001-add-a-tier-picklist-field-to)\n\n---\nid: WI-001\ntitle: Add a Tier picklist field to Account\ntype: build\nstage: 08-build\nstatus: In Progress\nparent: none\nwaiting_on: \"owner\"\npriority: medium\ndelivery: owner-led\nrequirements_approved: \"2026-09-28 by Mike Rihm\"\ndesign: approved\nresult_approved: \"no\"\nupdated: 2026-09-28\n---\n\n# WI-001: Add a Tier picklist field to Account\n\n## Overview\n\n**Goal:** Deliver the Account Tier picklist field with Gold, Silver, Bronze, no default, description, and help text; WI-002 owns access and page placement.\n\n**Current position:** Account.Tier__c field source and its narrow package are committed as 147aa3e. Sandbox validation succeeded with one component and no errors. WI-002 owns access and placement.\n\n**Next action:** Wait for owner approval of the ordered sandbox deployments; then give the exact commands for the owner to run from the two worktrees and check R-01 and R-02 after deployment.\n\n**Blockers:** Owner approval and execution of the two sandbox deployments are needed before org behavior can be checked.\n\n**Related items:** Sub-items: WI-002.\n\n## Roadmap\n\nA phase is complete when its tasks are complete and its exit result has been checked.\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 — Tier field | Account Tier picklist is defined with guidance | In Progress | R-01 and R-02 field checks pass | None. |\n| P2 — Access and pl
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/references/recording-owner-answers.md
+   cat .agents/skills/sf-deploy-check/SKILL.md
+   rg --files delivery/deployment .claude/worktrees/wi-001-add-a-tier-picklist-field-to/delivery/deployment .claude/worktrees/wi-002-set-account-tier-access-and/delivery/deployment
+   cat .memory/AGENTS.md .memory/memory-criteria.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/SKILL.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{"i":0,"result":{"status":"fulfilled","value":{"chunk_id":"6abdcd","wall_time_seconds":6.25e-7,"exit_code":0,"original_token_count":2084,"output":"<!-- Generated file. Source: plugins/work/shared/recording-owner-answers.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\n# Recording the owner's answers\n\nWhere each thing the owner says is saved, how to ask him a question, how to\nend a reply, and what to say when a save fails.\n\n## Contents\n\n1. Voice\n2. Where each answer goes\n3. Save it before the next question\n4. History notes\n5. Waiting on the owner\n6. Asking the owner\n7. Ending every reply\n8. Reporting a failed save\n9. Owner edits win\n10. Stages in plain words\n11. Handing over to another skill\n\n## 1. Voice\n\nEvery skill carries this line near its top:\n\n> Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\n\nHelper agents do not receive the output style. Each agent file carries its\nown writing rules.\n\n## 2. Where each answer goes\n\n| Information | Home | What to record |\n| --- | --- | --- |\n| Requirement or correction | The item's `Active requirements` (the `R-xx` block) and `Acceptance` | The new meaning, and Status Refining until approved |\n| Design choice | The item's design (`toolkit work design`) | The approach, proposed or approved, and why |\n| Open question | The item's `Open Questions` table | Question, what it affects, Open, who must answer |\n| Answer or decision about this item | The question's row, the section it changes, and one history note | The answer, who gave it, the date, and whether it is an approval |\n| Decision for the whole project | `DECISIONS.md`, through `work-decide` | Decision, why, who decided, what it replaces |\n| Outstanding task | The item's `Tasks` section | Work, Deliverable, Done when, Depends on |\n| Context that is not a requirement | `Notes` > `Decisions and context` | Only what the next session needs |\n| Build idea kept for later | `Notes` > `Solution options and considerations` | The idea and the `R-xx` it relates to |\n| A lasting fact, preference, or lesson | Project memory, through `memory-save` | One record |\n\nA choice about how agents deliver a goal (the delivery offer) is recorded\nonly by `work-delegate`.\n\n## 3. Save it before the next question\n\n- Save each settled answer in its home before moving to the next topic. An\n  unanswered question is also information: save it as an Open Questions row.\n- Open decisions never delay saving answers that are already settled.\n- Read the section back after saving. A command that exits `0` is not proof\n  by itself.\n- Check the item and memory before asking the owner something. Never ask\n  again what the record already answers.\n- When two sources disagree, keep the conflict open and ask. Never pick the\n  convenient answer.\n\n## 
+
+[CALL exec] toolkit work history WI-001 --note 'Owner said: "Yes, I approve deploying WI-001, then WI-002 to tkv2-sbx, and then I’ll do the manual profile steps."' --effect 'WI-001 and WI-002 sandbox deployments are approved in that order; hand the owner exact commands and profile instructions.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"e758a1","wall_time_seconds":0.000003625,"exit_code":0,"original_token_count":10,"output":"Added a Recent History row to WI-001.\n"}
+
+[CALL exec] toolkit work edit WI-001 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | Is the agreed goal for the sales team to assign one Tier to each Account and use it to rank accounts? Answer: Yes, confirmed by the owner on 2026-09-28. | R-01 | Answered | owner |
+| Q-02 | Should Tier be optional with no default value, or required or prefilled? Answer: Tier can be blank and has no default value, confirmed by the owner on 2026-09-28. | R-01 | Answered | owner |
+| Q-03 | Do you approve the two sandbox deployments in order: WI-001 Account.Tier__c, then WI-002 Account layout, with the WI-002 profile steps applied afterward? Answer: Yes, Mike Rihm approved deploying WI-001, then WI-002 to tkv2-sbx, and will do the manual profile steps afterward on 2026-09-28. | Sandbox release of R-01 through R-04 | Answered | owner |'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"4bef63","wall_time_seconds":0.000002667,"exit_code":0,"original_token_count":9,"output":"Saved \"Open Questions\" in WI-001.\n"}
+
+[CALL exec] toolkit work set WI-001 --waiting-on agent
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"159d9e","wall_time_seconds":0.000003,"exit_code":0,"original_token_count":22,"output":"Updated WI-001: waiting on agent.\nNow 08 Build (In Progress). Continue with work-on.\n"}
+
+[CALL exec] toolkit work history WI-002 --note 'Owner said: "Yes, I approve deploying WI-001, then WI-002 to tkv2-sbx, and then I’ll do the manual profile steps."' --effect 'WI-002 sandbox layout deployment is approved after WI-001; owner will apply manual profile steps afterward.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"77f81b","wall_time_seconds":0.000003458,"exit_code":0,"original_token_count":10,"output":"Added a Recent History row to WI-002.\n"}
+
+[CALL exec] toolkit work edit WI-002 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | Approval for the ordered sandbox deployment and profile steps is requested in WI-001 Q-03; does that approval include WI-002? Answer: Yes, Mike Rihm approved deploying WI-001, then WI-002 to tkv2-sbx, and will apply the manual profile steps afterward on 2026-09-28. | Sandbox release of R-03 and R-04 | Answered | owner |'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"01a12c","wall_time_seconds":0.000003875,"exit_code":0,"original_token_count":9,"output":"Saved \"Open Questions\" in WI-002.\n"}
+
+[CALL exec] toolkit work set WI-002 --waiting-on agent
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"ad3d18","wall_time_seconds":0.000004208,"exit_code":0,"original_token_count":22,"output":"Updated WI-002: waiting on agent.\nNow 08 Build (In Progress). Continue with work-on.\n"}
+
+[AGENT] Your approval is recorded for WI-001 and WI-002. I’m checking the two prepared deployment folders and the manual steps before I hand them over.
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-on/SKILL.md
+   cat .claude/worktrees/wi-001-add-a-tier-picklist-field-to/delivery/deployment/WI-001-tier-field/package.xml .claude/worktrees/wi-001-add-a-tier-picklist-field-to/delivery/deployment/WI-001-tier-field/DEPLOYMENT-RECORD.md
+   cat .claude/worktrees/wi-002-set-account-tier-access-and/delivery/deployment/WI-002-tier-access-and-layout/package.xml .claude/worktrees/wi-002-set-account-tier-access-and/delivery/deployment/WI-002-tier-access-and-layout/manual-steps.md .claude/worktrees/wi-002-set-account-tier-access-and/delivery/deployment/WI-002-tier-access-and-layout/DEPLOYMENT-RECORD.md
+   git status --short --branch
+   git status --short --branch
+   rg --files .claude/worktrees/wi-001-add-a-tier-picklist-field-to/force-app .claude/worktrees/wi-002-set-account-tier-access-and/force-app
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+{"i":0,"result":{"status":"fulfilled","value":{"chunk_id":"21893d","wall_time_seconds":9.58e-7,"exit_code":0,"original_token_count":2244,"output":"---\nname: work-on\ndescription: 'Starts, resumes, or logs a work item and builds it. Use whenever the owner asks to build, add, fix, or change something, names an item id to resume, says \"keep going\", or wants a bug or idea logged (\"put it in the backlog\"). Not for requirement edits (work-requirements) or handovers (work-delegate).'\n---\n\n# Work on\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nStarts or resumes one work item, plans it, and builds it; it never records an approval, Done, a merge, or a deploy. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.\n\n## Steps\n\n1. No project briefing in this conversation: run the briefing. Exit code 4: open `project-setup` and stop. Tell the owner each change listed under \"Changes found in the tracker\", one line each in the CLI's words, before other work.\n   `toolkit brief`\n2. A bare \"ok\", \"yes\", or \"looks good\" when this chat asked him nothing: start no work and ask what he wants. Otherwise find the item: the id he named, this worktree's item, or a title that matches. Two matches: ask one question naming both.\n   `toolkit work list`\n   `toolkit work show <id>`\n3. No item yet: size the request as a quick edit, log only, or a work item, and pick the type (`references/sizing-and-routing.md`, sections 1 to 3). He asks to be asked first (\"ask me questions\", \"grill me\"): open `work-requirements`, which creates the item, and ask nothing here. Otherwise title a new item in his words, say the title in one line, and save his exact words as the Starting request. Log only: reply \"Logged as WI-014 (bug, backlog). Not started.\" and stop.\n   `toolkit work new --title '<title>' --type <type> --stage 01-discovery`\n   `toolkit work edit <id> --section 'Starting request' --text '<his exact words>'`\n4. Route by where the item stands: go down the table in `references/sizing-and-routing.md`, section 4, take the first row that matches, and say the route in one line. The owner's decisions come first (`waiting_on: owner` opens `work-decide`). Then the delivery offer: the agent to-do \"Make the agent-led delivery offer\" for this item, or \"you drive\", opens `work-delegate`, and nothing is built until he answers. Stay here only for planning and building.\n   `toolkit work lifecycle`\n5. Plan (stage 06): Roadmap phases and Tasks from the design's Build and verification plan, in the formats in `references/planning.md` (sections 1 to 4).\n   `toolkit work set <id> --stage 06-implementation-plan`\n   `toolkit work edit <id> --section Roadmap --set-file <file>`\n   `toolkit work edit <id> --section Tasks --set-file <file
+
+[CALL exec] git diff main...HEAD -- force-app/main/default/objects/Account/fields/Tier__c.field-meta.xml delivery/deployment/WI-001-tier-field/package.xml
+   git diff main...HEAD -- 'force-app/main/default/layouts/Account-Account Layout.layout-meta.xml' delivery/deployment/WI-002-tier-access-and-layout/package.xml
+   cat .claude/worktrees/wi-001-add-a-tier-picklist-field-to/force-app/main/default/objects/Account/fields/Tier__c.field-meta.xml
+   rg -n 'Tier__c|Rating|layoutItems|flexipage|permission' '.claude/worktrees/wi-002-set-account-tier-access-and/force-app/main/default/layouts/Account-Account Layout.layout-meta.xml' .claude/worktrees/wi-002-set-account-tier-access-and/delivery/deployment/component-tracker.csv
+   toolkit memory focus --json
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"i":0,"result":{"status":"fulfilled","value":{"chunk_id":"cd2850","wall_time_seconds":0.000002833,"exit_code":0,"original_token_count":478,"output":"diff --git a/delivery/deployment/WI-001-tier-field/package.xml b/delivery/deployment/WI-001-tier-field/package.xml\nnew file mode 100644\nindex 0000000..54623f4\n--- /dev/null\n+++ b/delivery/deployment/WI-001-tier-field/package.xml\n@@ -0,0 +1,8 @@\n+<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n+<Package xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n+    <types>\n+        <members>Account.Tier__c</members>\n+        <name>CustomField</name>\n+    </types>\n+    <version>62.0</version>\n+</Package>\ndiff --git a/force-app/main/default/objects/Account/fields/Tier__c.field-meta.xml b/force-app/main/default/objects/Account/fields/Tier__c.field-meta.xml\nnew file mode 100644\nindex 0000000..d6c531c\n--- /dev/null\n+++ b/force-app/main/default/objects/Account/fields/Tier__c.field-meta.xml\n@@ -0,0 +1,30 @@\n+<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n+<CustomField xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n+    <fullName>Tier__c</fullName>\n+    <description>Sales team's ranking tier for an Account.</description>\n+    <inlineHelpText>Select Gold, Silver, or Bronze to rank this Account. Leave blank if no Tier has been assigned.</inlineHelpText>\n+    <label>Tier</label>\n+    <required>false</required>\n+    <type>Picklist</type>\n+    <valueSet>\n+        <restricted>true</restricted>\n+        <valueSetDefinition>\n+            <sorted>false</sorted>\n+            <value>\n+                <fullName>Gold</fullName>\n+                <default>false</default>\n+                <label>Gold</label>\n+            </value>\n+            <value>\n+                <fullName>Silver</fullName>\n+                <default>false</default>\n+                <label>Silver</label>\n+            </value>\n+            <value>\n+                <fullName>Bronze</fullName>\n+                <default>false</default>\n+                <label>Bronze</label>\n+            </value>\n+        </valueSetDefinition>\n+    </valueSet>\n+</CustomField>\n"}}}
+{"i":1,"result":{"status":"fulfilled","value":{"chunk_id":"d625c8","wall_time_seconds":0.000004,"exit_code":0,"original_token_count":742,"output":"diff --git a/delivery/deployment/WI-002-tier-access-and-layout/package.xml b/delivery/deployment/WI-002-tier-access-and-layout/package.xml\nnew file mode 100644\nindex 0000000..d494440\n--- /dev/null\n+++ b/delivery/deployment/WI-002-tier-access-and-layout/package.xml\n@@ -0,0 +1,8 @@\n+<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n+<Package xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n+    <types>\n+        <members>Account-Account Layout</members>\n+        <name>Layout</name>\n+    </types>\n+    <version>62.0</version>\n+</Package>\ndiff --git a/force-app/main/default/layouts/Account-Account Layout.layout-meta.xml b/force-app/main/default/layouts/Account-Account
+
+[CALL exec] rg -n -C 3 'WI-001|WI-002|P01|P1' PROJECT-ROADMAP.md
+   git log --oneline -3 -- 'force-app/main/default/layouts/Account-Account Layout.layout-meta.xml'
+   toolkit work decisions
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"i":0,"result":{"status":"fulfilled","value":{"chunk_id":"850a63","wall_time_seconds":0.000002583,"exit_code":0,"original_token_count":153,"output":"23-\n24-| Phase | Intended outcome | Exit condition | Depends on |\n25-| --- | --- | --- | --- |\n26:| `P01 — <phase name>` | `<result>` | `<evidence needed to finish>` | `<earlier phase or none>` |\n27-\n28:## P01 — <Phase name>\n29-\n30-**Outcome:** `<Result larger than one work unit.>`  \n31-**Exit condition:** `<Observable evidence that the phase is complete.>`  \n32-**Dependencies:** `<Real prerequisites, or none known.>`\n33-\n34:### P01-U01 — <Deliverable-sized work unit>\n35-\n36-**Deliverable:** `<Specific output or change from this unit.>`  \n37-**Done when:** `<Evidence for completing the unit.>`  \n"}}}
+{"i":1,"result":{"status":"fulfilled","value":{"chunk_id":"bd504c","wall_time_seconds":0.000004583,"exit_code":0,"original_token_count":15,"output":"a0bb6ee Add Account Tier layout and access steps for WI-002\n"}}}
+{"i":2,"result":{"status":"fulfilled","value":{"chunk_id":"f7bccd","wall_time_seconds":0.00000275,"exit_code":0,"original_token_count":9,"output":"Nothing is waiting on the owner.\n"}}}
+
+[CALL exec] toolkit work edit WI-001 --section 'Overview' --text '**Goal:** Deliver the Account Tier picklist field with Gold, Silver, Bronze, no default, description, and help text; WI-002 owns access and page placement.
+
+**Current position:** Account.Tier__c field source and its narrow package are committed as 147aa3e. Sandbox validation succeeded with one component and no errors. Mike Rihm approved the ordered WI-001 and WI-002 sandbox deployments on 2026-09-28. The WI-001 package contains only Account.Tier__c.
+
+**Next action:** Mike Rihm runs the WI-001 deploy command in its worktree, then reports the result. After deployment, check R-01 and R-02 in tkv2-sbx.
+
+**Blockers:** Owner execution of the sandbox deployment is needed before org behavior can be checked.
+
+**Related items:** Sub-items: WI-002.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"8a311a","wall_time_seconds":0.0000035,"exit_code":0,"original_token_count":7,"output":"Saved \"Overview\" in WI-001.\n"}
+
+[CALL exec] toolkit work edit WI-002 --section 'Overview' --text '**Goal:** Give Account viewers the approved Tier access and show Tier directly below Rating on their Account page.
+
+**Current position:** Account layout source, narrow package, and manual profile steps are prepared. Sandbox validation succeeded with one component and no errors. Mike Rihm approved the ordered WI-001 and WI-002 sandbox deployments on 2026-09-28. The WI-002 package contains only Account-Account Layout.
+
+**Next action:** After WI-001 deploys, Mike Rihm runs the WI-002 deploy command in its worktree and applies the manual profile steps. He reports the results so access and placement can be checked.
+
+**Blockers:** WI-001 deployment, owner execution of WI-002 deployment, and manual profile settings are pending.
+
+**Related items:** Parent WI-001 (R-03, R-04). Design: WI-001 approved design.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"ca4807","wall_time_seconds":0.0000035,"exit_code":0,"original_token_count":7,"output":"Saved \"Overview\" in WI-002.\n"}
+
+[CALL exec] toolkit work set WI-001 --waiting-on owner --note 'Approved sandbox deploy command handed to Mike Rihm; await execution and result.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"e96cd0","wall_time_seconds":0.000003041,"exit_code":0,"original_token_count":23,"output":"Updated WI-001: waiting on owner.\nNow 08 Build (In Progress). Continue with work-decide.\n"}
+
+[CALL exec] toolkit work set WI-002 --waiting-on owner --note 'Approved sandbox layout deploy and manual profile steps handed to Mike Rihm; await execution and result.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"23de8d","wall_time_seconds":0.000002708,"exit_code":0,"original_token_count":23,"output":"Updated WI-002: waiting on owner.\nNow 08 Build (In Progress). Continue with work-decide.\n"}
+
+[CALL exec] toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Add a Tier picklist field to Account
+- WI-002 Set Account Tier access and page layout
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks and Salesforce org guards in Codex: open Codex here, type /hooks, and trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 and WI-002 from their Resume here sections: after Mike runs the approved ordered sandbox deployments and manual profile steps, record the results and check R-01 through R-04.' --expect 0c0c676869653e7ea637849020db5894625ee69d946381479fda895c8e28901e
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"c7c975","wall_time_seconds":0.000002833,"exit_code":0,"original_token_count":15,"output":"Saved the current focus (21 lines). Version: cafb9f0523b2\n"}
+
+[CALL exec] toolkit work validate WI-001
+   toolkit work validate WI-002
+   toolkit work decisions
+   toolkit memory focus
+   toolkit doctor
+  -> Script completed
+Wall time 0.5 seconds
+Output:
+
+{"i":0,"result":{"status":"fulfilled","value":{"chunk_id":"c257a3","wall_time_seconds":5.42e-7,"exit_code":0,"original_token_count":25,"output":"Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.\n"}}}
+{"i":1,"result":{"status":"fulfilled","value":{"chunk_id":"bbadfa","wall_time_seconds":0.000002583,"exit_code":0,"original_token_count":25,"output":"Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.\n"}}}
+{"i":2,"result":{"status":"fulfilled","value":{"chunk_id":"f975fa","wall_time_seconds":9.17e-7,"exit_code":0,"original_token_count":147,"output":"2 decisions wait on the owner:\n\nWI-001 Add a Tier picklist field to Account\n  - WI-001 is waiting on the owner (08 Build). Next action: Mike Rihm runs the WI-001 deploy command in its worktree, then reports the result. After deployment, check R-01 and R-02 in tkv2-sbx. (work-decide)\n\nWI-002 Set Account Tier access and page layout\n  - WI-002 is waiting on the owner (08 Build). Next action: After WI-001 deploys, Mike Rihm runs the WI-002 deploy command in its worktree and applies the manual profile steps. He reports the results so access and placement can be checked. (work-decide)\n"}}}
+{"i":3,"result":{"status":"fulfilled","value":{"chunk_id":"a3e05f","wall_time_seconds":5.84e-7,"exit_code":0,"original_token_count":183,"output":"# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Add a Tier picklist field to Account\n- WI-002 Set Account Tier access and page layout\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks and Salesforce org guards in Codex: open Codex here, type /hooks, and trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 and WI-002 from their Resume here sections: after Mike runs the approved ordered sandbox deployments and manual profile steps, record the results and check R-01 through R-04.\n"}}}
+{"i":4,"result":{"status":"fulfilled","value":{"chunk_id":"f2bfdc","wall_time_seconds":0.065421708,"exit_code":1,"original_token_count":582,"output":"Toolkit doctor for Acme CRM (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2).\n\nWarnings (3):\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.\n   Fix: The owner opens Codex in this folder and trusts it when Codex asks.\n2. The 
+
+[AGENT] Your approval is recorded for both work items. Both narrow packages were validated against `tkv2-sbx`; neither has been deployed yet. Run these from the project root, in order.
+
+**1. Deploy WI-001**
+
+```sh
+cd .claude/worktrees/wi-001-add-a-tier-picklist-field-to
+sf project deploy start -x delivery/deployment/WI-001-tier-field/package.xml -o tkv2-sbx
+```
+
+Continue only if WI-001 succeeds.
+
+**2. Deploy WI-002**
+
+```sh
+cd ../wi-002-set-account-tier-access-and
+sf project deploy start -x delivery/deployment/WI-002-tier-access-and-layout/package.xml -o tkv2-sbx
+```
+
+Then follow [WI-002’s manual steps](</private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2/.claude/worktrees/wi-002-set-account-tier-access-and/delivery/deployment/WI-002-tier-access-and-layout/manual-steps.md>): give **Read and Edit** access to Sales Manager and System Administrator, and **Read only** access to other profiles that can view Accounts. Check for conflicting permission set grants and confirm Tier appears directly below Rating.
+
+Send me both deployment results after you’ve applied the profile settings so I can record them and check R-01 through R-04.
+
+SKILLS OPENED (SKILL.md read): ['work-decide', 'sf-deploy-check', 'memory-save', 'work-on']
+
+TOOLKIT COMMANDS:
+   toolkit work decisions
+   toolkit work show WI-001
+   toolkit work show WI-002
+   toolkit work history WI-001 --note 'Owner said: "Yes, I approve deploying WI-001, then WI-002 to tkv2-sbx, and then I’ll do the manual profile steps."' --effect 'WI-001 and WI-002 sandbox deployments are approved in that order
+   toolkit work edit WI-001 --section 'Open Questions' --text '
+   toolkit work set WI-001 --waiting-on agent
+   toolkit work history WI-002 --note 'Owner said: "Yes, I approve deploying WI-001, then WI-002 to tkv2-sbx, and then I’ll do the manual profile steps."' --effect 'WI-002 sandbox layout deployment is approved after WI-001
+   toolkit work edit WI-002 --section 'Open Questions' --text '
+   toolkit work set WI-002 --waiting-on agent
+   toolkit memory focus --json
+   toolkit work decisions
+   toolkit work edit WI-001 --section 'Overview' --text '**Goal:** Deliver the Account Tier picklist field with Gold, Silver, Bronze, no default, description, and help text
+   toolkit work edit WI-002 --section 'Overview' --text '**Goal:** Give Account viewers the approved Tier access and show Tier directly below Rating on their Account page.
+   toolkit work set WI-001 --waiting-on owner --note 'Approved sandbox deploy command handed to Mike Rihm
+   toolkit work set WI-002 --waiting-on owner --note 'Approved sandbox layout deploy and manual profile steps handed to Mike Rihm
+   toolkit memory focus --text '# Current focus
+   toolkit work validate WI-001
+   toolkit work validate WI-002
+   toolkit work decisions
+   toolkit memory focus
+   toolkit doctor

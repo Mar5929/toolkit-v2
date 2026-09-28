@@ -1,0 +1,57 @@
+$ git log --format=full (every commit, full message)
+commit b28c6401ecc03a93e2a101e2368ca1b82299b748
+Author: Mike Rihm <michael@rihm.com>
+Commit: Mike Rihm <michael@rihm.com>
+
+Record Account Tier production release and delivered behavior
+
+---
+commit e8c3087e299e4af6ccd9870c00e4669050e139fb
+Author: Mike Rihm <michael@rihm.com>
+Commit: Mike Rihm <michael@rihm.com>
+
+Merge WI-001 acceptance checks into WI-002
+
+---
+commit af88cab5564da2cd66781c1875168059a81cc284
+Author: Mike Rihm <michael@rihm.com>
+Commit: Mike Rihm <michael@rihm.com>
+
+Record WI-002 sandbox acceptance checks
+
+---
+commit ec5ebe197470a25811dd9d790d55ad2788c3dce8
+Author: Mike Rihm <michael@rihm.com>
+Commit: Mike Rihm <michael@rihm.com>
+
+Record WI-001 sandbox acceptance checks
+
+---
+commit a0bb6ee219b5a1c9c41f36d425847ef7cf8a684b
+Author: Mike Rihm <michael@rihm.com>
+Commit: Mike Rihm <michael@rihm.com>
+
+Add Account Tier layout and access steps for WI-002
+
+---
+commit 147aa3ef4a9245fcbff8537c2a9b1cc103e6b4b8
+Author: Mike Rihm <michael@rihm.com>
+Commit: Mike Rihm <michael@rihm.com>
+
+Add Account Tier picklist field for WI-001
+
+---
+commit 65072e2297642dc75ca812ac89351bb791a79dc4
+Author: Mike Rihm <michael@rihm.com>
+Commit: Mike Rihm <michael@rihm.com>
+
+Set up Toolkit V2 for Acme CRM
+
+---
+commit b8210ac548cee9a0be818a47667209a106c6aada
+Author: Mike Rihm <michael@rihm.com>
+Commit: Mike Rihm <michael@rihm.com>
+
+Initial commit
+
+---

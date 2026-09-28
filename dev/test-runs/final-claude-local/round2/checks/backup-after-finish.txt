@@ -1,0 +1,56 @@
+2026-09-28T22:40:27Z
+total 0
+drwxr-xr-x  5 michaelrihm  wheel  160 Sep 28 18:12 .
+drwxr-xr-x  7 michaelrihm  wheel  224 Sep 28 15:59 ..
+drwxr-xr-x  5 michaelrihm  wheel  160 Sep 28 16:14 greet-2026-09-28
+drwxr-xr-x  5 michaelrihm  wheel  160 Sep 28 16:16 greet-2026-09-28-161657
+drwxr-xr-x  5 michaelrihm  wheel  160 Sep 28 18:40 slug-2026-09-28
+
+-rw-r--r--  1 michaelrihm  wheel    331 Sep 28 18:40 /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/claude-local/slug-2026-09-28/memory/.toolkit-meta.json
+-rw-r--r--  1 michaelrihm  wheel   4242 Sep 28 18:40 /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/claude-local/slug-2026-09-28/memory/AGENTS.md
+-rw-r--r--  1 michaelrihm  wheel    503 Sep 28 18:40 /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/claude-local/slug-2026-09-28/memory/CURRENT_FOCUS.md
+-rw-r--r--  1 michaelrihm  wheel   1252 Sep 28 18:40 /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/claude-local/slug-2026-09-28/memory/MEMORY.md
+-rw-r--r--  1 michaelrihm  wheel    863 Sep 28 18:40 /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/claude-local/slug-2026-09-28/memory/feedback_commit_messages_without_item_id.md
+-rw-r--r--  1 michaelrihm  wheel   3248 Sep 28 18:40 /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/claude-local/slug-2026-09-28/memory/memory-criteria.md
+-rw-r--r--  1 michaelrihm  wheel    817 Sep 28 18:40 /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/claude-local/slug-2026-09-28/memory/project_mike_rihm_publishes_slug_releases_npm_personally.md
+-rw-r--r--  1 michaelrihm  wheel    961 Sep 28 18:40 /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/claude-local/slug-2026-09-28/memory/project_slug_docs_site_https_example_com_usage_page_people.md
+-rw-r--r--  1 michaelrihm  wheel    852 Sep 28 18:40 /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/claude-local/slug-2026-09-28/memory/project_slug_first_release_friday.md
+-rw-r--r--  1 michaelrihm  wheel   1814 Sep 28 18:40 /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/claude-local/slug-2026-09-28/memory/project_topic_template.md
+-rw-r--r--  1 michaelrihm  wheel   1121 Sep 28 18:40 /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/claude-local/slug-2026-09-28/memory/terminology-glossary.md
+-rw-r--r--  1 michaelrihm  wheel   1331 Sep 28 18:40 /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/claude-local/slug-2026-09-28/toolkit-export.json
+-rw-r--r--  1 michaelrihm  wheel   1843 Sep 28 18:40 /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/claude-local/slug-2026-09-28/work-items/.toolkit-state.json
+-rw-r--r--  1 michaelrihm  wheel    584 Sep 28 18:40 /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/claude-local/slug-2026-09-28/work-items/DASHBOARD.md
+-rw-r--r--  1 michaelrihm  wheel  16032 Sep 28 18:40 /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/claude-local/slug-2026-09-28/work-items/WI-001-build-the-slug-command/WI-002-max-length/WORK-ITEM.md
+-rw-r--r--  1 michaelrihm  wheel  14742 Sep 28 18:40 /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/claude-local/slug-2026-09-28/work-items/WI-001-build-the-slug-command/WORK-ITEM.md
+-rw-r--r--  1 michaelrihm  wheel   8954 Sep 28 18:40 /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/claude-local/slug-2026-09-28/work-items/work-item-template/DESIGN.md
+-rw-r--r--  1 michaelrihm  wheel   7524 Sep 28 18:40 /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/claude-local/slug-2026-09-28/work-items/work-item-template/WORK-ITEM.md
+
+id: WI-001
+stage: 14-spec-update
+status: Done
+id: WI-001
+stage: <01-discovery ... 14-spec-update>
+status: <Backlog | Ready | In Progress | In Review | Done | Cancelled>
+id: WI-002
+stage: 14-spec-update
+status: Done
+# Current focus
+
+Last updated: 2026-09-28, work-finish WI-001, agent
+
+## Now
+
+- None.
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+- None.
+
+## Next session starts with
+
+- No open work items. Ask the owner for the next thing to build.

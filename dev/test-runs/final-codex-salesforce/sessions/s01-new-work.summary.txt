@@ -1,0 +1,604 @@
+PROMPT: New work: add a Tier picklist field to Account so the sales team can rank their accounts.
+THREAD: 01a0ea1b-7332-7372-ab0c-ede6d43ef837
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The tracker has no open items. A new request starts a work item with the work-on skill.
+
+Current focus:
+Last updated: 2026-09-28, setup commit, agent
+## Now
+None.
+## Waiting on the owner
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks and Salesforce org guards in Codex: open Codex here, type /hooks, and trust them. Setup step; drop it when doctor stops reporting it.
+## Untracked to-dos
+None.
+## Next session starts with
+- Toolkit V2 setup is committed as 65072e2. Begin the first work item when requested; leave unconfirmed PROJECT.md outside scope and roadmap phases until the owner supplies them.
+
+Project memory (builtin): 0 records. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off. Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+- Codex ran this Toolkit V2 hook, but ~/.codex/config.toml has no trust entry for the Toolkit V2 hooks. Codex runs untrusted hooks only when it is started with --dangerously-bypass-hook-trust; a normal Codex session skips them. Fix: The owner opens /hooks in Codex and trusts the Toolkit V2 hooks; toolkit doctor checks it.
+- The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them. Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.
+
+Always-on rules. Claude Code loads them by itself; in Codex, each one is read at session start:
+- .claude/rules/check-deployment-contents.md: Check What a Deployment Includes
+- .claude/rules/component-tracker.md: Component Tracker
+- .claude/rules/confirm-salesforce-changes.md: Confirm Salesforce Changes
+- .claude/rules/humanize-outbound-text.md: Humanize Anything Sent to Another Person
+- .claude/rules/keep-work-item-current.md: Keep the Activ
+
+[AGENT] I’ll open a work item for the Account Tier field, then check the project requirements and Salesforce source to see what decisions the field needs. I’m using the work-on skill for this change.
+
+[CALL exec] cat SOUL.md PROJECT.md PROJECT-ROADMAP.md .claude/rules/{check-deployment-contents,component-tracker,confirm-salesforce-changes,humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,production-data-changes,project-file-locations,salesforce-org-safety,session-handoff,shared-repository-work,work-item-folders}.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-on/SKILL.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+cat: SOUL.md: No such file or directory
+# Acme CRM
+
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->
+
+## Purpose and intended outcome
+
+- Purpose: Salesforce work for the Acme sales team (README.md).
+- Intended outcome: The Acme sales team can rank their accounts and see the information they need on each account in Salesforce (owner, 2026-09-28).
+
+## Scope and boundaries
+
+- In scope: Account ranking and the information the sales team needs on each account in Salesforce (owner, 2026-09-28).
+- Outside scope: `<Important exclusions or adjacent owners.>`
+- Constraints: Agents do not deploy to or change data in `tkv2-prod`; sandbox deploys and data changes require the owner's approval and execution in Codex (`.claude/rules/salesforce-org-safety.md`).
+
+## Systems and environments
+
+| System or org | Purpose | Environment | Source of truth | Access notes |
+| --- | --- | --- | --- | --- |
+| `tkv2-sbx` | Practice Salesforce sandbox | Sandbox | The `sf` command on this computer | Use the alias with `-o tkv2-sbx`. |
+| `tkv2-prod` | Practice Salesforce production org | Production | The `sf` command on this computer | Agents use read-only commands; the owner runs production changes. |
+
+## People and ownership
+
+| Role | Person or team | Responsibility | Source / last confirmed |
+| --- | --- | --- | --- |
+| Project owner | Mike Rihm | Project decisions | Owner confirmation, 2026-09-28 |
+
+## Work and project records
+
+- Work tracker: `.work-items/` local folders, Git-ignored.
+- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)
+- Project decisions: [DECISIONS.md](DECISIONS.md)
+- Functional requirements: [requirements/](requirements/)
+- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`
+- System Guide: not enabled yet; `system-guide/` contains a template only.
+- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)
+- Memory backup or sync: automatic Toolkit V2 backups under `/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-salesforce/`.
+
+## Resources and project paths
+
+- Salesforce source: `force-app/` (`sfdx-project.json`).
+- Project-wide deployment manifest: `delivery/deployment/full-project-deployment-template/package.xml` after the API version and members are verified. Keep it as the full project component inventory; ordinary deployments use narrower work-item packages.
+- Work-item deployment manifests: `delivery/deployment/<work-item-id>-<short-name>/package.xml` when an item changes Sale
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-on/references/{sizing-and-routing,work-item-format,toolkit-commands,recording-owner-answers,current-focus}.md
+   git worktree list
+   git status --short --branch
+   git remote -v
+   rg --files force-app tests requirements .work-items | head -100
+   toolkit work list
+   cat DECISIONS.md .toolkit.json
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+Warning: truncated output (original token count: 14642)
+Total output lines: 1101
+
+## cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-on/references/{sizing-and-routing,work-item-format,toolkit-commands,recording-owner-answers,current-focus}.md
+# Sizing a request and routing an item
+
+How `work-on` decides between a quick edit, a logged item, and a worked item,
+which type to give it, and which skill continues it.
+
+## Contents
+
+1. Three sizes of request
+2. Owner messages and the right action
+3. Choosing the type
+4. Routing by where the item stands
+5. Several items at once
+6. Project roadmap units
+
+## 1. Three sizes of request
+
+- **Quick edit, no item.** One sitting, no choice for the owner, no change to
+  behavior recorded in `requirements/`, nothing bound for production. Do it
+  and report it in one line.
+- **Log only.** The owner says "later", "backlog", "park that", "not now", or
+  "log a bug". Check the list for a duplicate, create the item at
+  `01-discovery` with his exact words as the Starting request, reply
+  "Logged as WI-014 (bug, backlog). Not started." and stop.
+- **Work item.** Everything else. "New work", "track", "work item", or "done
+  properly" always makes an item. A request that grows past a quick edit
+  while you work becomes an item then, with his words as the Starting
+  request.
+
+Never make a work item for project setup. Setup steps the owner must do go in
+the reply. Only a step `toolkit doctor` checks (trusting the hooks in Codex
+`/hooks`, `ntn login`) also goes in the current focus under "Waiting on the
+owner", marked as a setup step, and leaves it once doctor stops reporting it.
+"Start a new session" goes in the reply only.
+
+A deliverable the owner named without saying what it should say or do ("write
+a short project brief"): create the item, add the content question as `Q-01`
+with the item waiting on him, and ask it in the reply before building.
+Never invent the content.
+
+## 2. Owner messages and the right action
+
+| The owner says | Right action |
+| --- | --- |
+| "Fix the typo in the README heading." | Quick edit. Fix it, say what changed in one line. No item. |
+| "What does the export function do?" | Answer the question. No item. |
+| "Log a bug: the export drops the last row. Not now." | Log only: check for a duplicate, create a `bug` item at `01-discovery` with his words, reply "Logged as WI-014 (bug, backlog). Not started." |
+| "Add a CSV export to the monthly report." | Work item, type `build`. Create it, then route: requirements are not approved, so open `work-requirements`. |
+| "Write a short project brief." | Work item, type `task`. Add `Q-01` "What should the brief cover?", set it waiting on the owner, ask the question. |
+| "Keep going." (no item named) | Continue this worktree's item, or the item the current focus says the next session starts with, or the one `toolkit work next` recommends. Say which in one line. |
+| "ok" (and this chat as
+
+[AGENT] The request is a Salesforce field change, so it needs a build work item and approved requirements. I found no existing work item or Salesforce source for the field. I’m recording the request now and will pin down the picklist values and how the team should use it.
+
+[CALL exec] toolkit work new --title 'Add a Tier picklist field to Account' --type build --stage 01-discovery
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Created WI-001: Add a Tier picklist field to Account (01 Discovery, Backlog) at .work-items/WI-001-add-a-tier-picklist-field-to-account/WORK-ITEM.md.
+Continue with work-requirements.
+
+
+[CALL exec] toolkit work edit WI-001 --section 'Starting request' --text 'New work: add a Tier picklist field to Account so the sales team can rank their accounts.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Starting request" in WI-001.
+
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-requirements/SKILL.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+---
+name: work-requirements
+description: 'Interviews the owner one question at a time, writes a work item''s requirements (R-01, R-02), checks them, and asks for his approval. Use when an item''s requirements are missing or the owner changes, adds, or drops one at any stage, or says "grill me", "ask me questions", or "check the spec".'
+---
+
+# Work requirements
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Interviews the owner and writes what the result must do, never how to build it; every answer lands in the work item. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Find the item as `work-on` does; none exists, create it with his words as the Starting request. Requirements already approved and no change asked: open the skill the item's "Continue with" names and stop.
+   `toolkit work show <id>`
+   `toolkit work new --title '<title>' --type <type> --stage 01-discovery`
+   `toolkit work edit <id> --section 'Starting request' --text '<his exact words>'`
+2. Move it to refinement once requirements are being written. Before the first question, read the item and what the project already knows (`references/interview.md`, section 2).
+   `toolkit work set <id> --stage 02-refinement`
+   `toolkit memory find '<topic>'`
+3. Restate the goal in one sentence ("So the goal is X?"). Write the Agreed goal after a yes, and always before asking for approval.
+   `toolkit work edit <id> --section 'Agreed goal' --text '<goal>'`
+4. Ask one question at a time, most basic first, each with a recommended answer and a short reason (`references/interview.md`, sections 3 and 4).
+5. Save each answer before the next question: `R-xx` blocks and the Acceptance list in the format in `references/requirement-format.md`; anything unanswered as an Open Questions row, with the item waiting on the owner while one of his is open.
+   `toolkit work edit <id> --section 'Active requirements' --set-file <file>`
+   `toolkit work edit <id> --section 'Open Questions' --append-row '| <next Q-id> | <question> | R-02 | Open | owner |'`
+   `toolkit work set <id> --waiting-on owner`
+6. A change to an approved requirement: edit the `R-xx`, keep the old wording in its Decision record, set it back to Refining, move the item to refinement, and say what the change affects when the item is past stage 03 (`references/interview.md`, section 7). The earlier approval stays on the record, and the stage command says so: it covered the requirements as they were, so ask him to approve the changed ones (step 8) before anything is built on them.
+   `toolkit work set <id> --stage 02-refinement`
+7. Spec check, before asking for approval and whenever the owner says "check the spec": brief the `requirements-analyst` and handle its findings (`references/spec-check.md`).
+8.
+
+[CALL exec] toolkit work show WI-001
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+WI-001: Add a Tier picklist field to Account
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2/.work-items/WI-001-add-a-tier-picklist-field-to-account/WORK-ITEM.md
+Stage: 01 Discovery (Backlog) | Waiting on: none | Continue with: work-requirements
+Parent: none | Sub-items: none | Design: none
+Worktree branch for this item: claude/wi-001-add-a-tier-picklist-field-to (folder .claude/worktrees/wi-001-add-a-tier-picklist-field-to)
+
+---
+id: WI-001
+title: Add a Tier picklist field to Account
+type: build
+stage: 01-discovery
+status: Backlog
+parent: none
+waiting_on: "none"
+priority: medium
+delivery: not-offered
+requirements_approved: "no"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-001: Add a Tier picklist field to Account
+
+<!-- Fill-in guide for a new local work item: create it with `toolkit work new`, which copies this folder, names the new folder, and sets the real ID in front matter and heading; keep the file name WORK-ITEM.md. Use stable phase, task, requirement, and question IDs for this item. In the front matter, keep one value from each list and change the fields with `toolkit work` commands; a blocked item has `waiting_on` set and its Blockers line filled, not a Blocked status. Replace every angle-bracket prompt with actual text in that same field, cell, or paragraph; do not leave the prompt in place. Keep the headings and field labels. Add or remove phase, task, question, and requirement examples to match the real work. Use the chosen tracker as the source of truth for status and links. Delete this guide after filling the item. -->
+
+## Overview
+
+<!-- Enter the current summary directly after each bold label below. Keep this section current; detailed tasks and decisions belong in their sections further down. -->
+
+**Goal:** <The outcome this work item is meant to achieve.>
+
+**Current position:** <What has been completed and where work stands now.>
+
+**Next action:** <The next specific action and its owner.>
+
+**Blockers:** <Blocking decision or dependency, or “None.”>
+
+**Related items:** <Roadmap unit, parent and related work item IDs (never folder paths), design, or external links.>
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading. Add one row per phase; set Status from actual progress, not from this example. List the phase's sub-item IDs under Sub-items, or write “None.” -->
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — <Phase 1 name> | <What this phase establishes> | In Progress | <Evidence that P1 is complete> | <WI-ids or “None.”> |
+| P2 — <Phase 2 name> | <What this phase delivers> | Not Started | <Evidence that P2 is complete> | <WI-ids or “None.”> |
+
+## Tasks
+
+<!-- Un
+
+[CALL exec] toolkit work set WI-001 --stage 02-refinement
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+Updated WI-001: stage 01 Discovery -> 02 Refinement (status Backlog).
+Now 02 Refinement (Backlog). Continue with work-requirements.
+
+
+[CALL exec] toolkit memory find 'Account Tier ranking picklist'
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+No memory records match "Account Tier ranking picklist".
+
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-requirements/references/interview.md requirements/SYSTEM-DATA-MODEL.md requirements/AGENTS.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+# Interviewing the owner
+
+How to run the requirements interview: what to read first, how to ask, how
+to handle "grill me", resuming, and corrections. Everything the owner says
+lands in the work item, never in a separate notes file.
+
+## Contents
+
+1. Aim at the outcome he wants
+2. Before the first question
+3. Asking
+4. "Grill me" and "ask me questions"
+5. Saving as you go
+6. Resuming an interview
+7. Corrections and changes
+8. An example exchange
+
+## 1. Aim at the outcome he wants
+
+- Work toward the outcome the owner wants, not only the words he used. Read a
+  rough answer in the context of that requirement's purpose and the rest of
+  the system, and ask focused follow-up questions until the real intent is
+  clear.
+- Say so when an answer would undermine his own goal, conflict with a stated
+  constraint, cause a problem elsewhere, or when a clearly better approach
+  exists. Name the concern, the tradeoff, and the direction you recommend,
+  then let him choose. Once he has heard the concern and decided, do it his
+  way.
+- Never quietly replace what he said with what you inferred.
+- Keep it light. Do not read every answer back for approval, do not challenge
+  every answer, and do not start designing while the goal is still open.
+
+## 2. Before the first question
+
+Read, so no question repeats an answer:
+
+- the item: Starting request, Agreed goal, every `R-xx`, Open Questions, and
+  Notes > Resume here;
+- the area's file in `requirements/`, and `requirements/SYSTEM-DATA-MODEL.md`
+  when data is involved;
+- the area's file in `system-guide/`;
+- project memory on the topic: `toolkit memory find '<topic>'`.
+
+Ask only what the records and the code cannot answer.
+
+## 3. Asking
+
+- One question at a time, in the reply text, never through a question tool.
+- Each question carries a recommended answer and a one-line reason, so the
+  owner can confirm, correct, or redirect it.
+- Settle upstream decisions before the ones that depend on them. Most basic
+  first: who uses it, what they must be able to do, then the rules, then the
+  exceptions.
+- Follow contradictions and vague words ("fast", "easy", "secure") until
+  they are resolved or recorded as open questions.
+- The owner does not know: add an Open Questions row with who can answer, and
+  go on with questions that do not depend on it. Offer a `researcher` when
+  the fact can be found.
+- He thinks out loud: let him. Save the settled parts as they come.
+- Brainstorming methods from other plugins may run inside this skill. The
+  answers still land in the work item.
+
+## 4. "Grill me" and "ask me questions"
+
+- "Grill me" means a deep interview: keep asking, one question at a time,
+  until every branch that could change the result is covered.
+- "Ask me questions first" means the interview comes before any build. It is
+  not a batch of questions in one message.
+- Near the end of every interview, ask: "What have we not touched that could
+  change this?"
+
+## 5. Saving as you
+
+[CALL exec] toolkit work show WI-001 --section 'Open Questions'
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+## Open Questions
+
+<!-- Add one row per unanswered decision, using a stable Q-ID. Write the exact question, affected requirement/task IDs, current status, and who can answer: `owner` for the project owner, or another person or role. Resolve or remove example rows as decisions are recorded; do not hide an open decision only in Notes. -->
+
+| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | <Specific unanswered question> | R-01, P1-T02 | Open | <owner, or another person or role> |
+
+
+[CALL exec] toolkit work edit WI-001 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | Is the agreed goal for the sales team to assign one Tier to each Account and use it to rank accounts? | R-01 | Open | owner |'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Open Questions" in WI-001.
+
+
+[CALL exec] toolkit work set WI-001 --waiting-on owner
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Updated WI-001: waiting on owner.
+Now 02 Refinement (Backlog). Continue with work-decide.
+
+
+[CALL exec] toolkit work edit WI-001 --section 'Overview' --text '**Goal:** Let the sales team rank Accounts using a Tier picklist.
+
+**Current position:** Request recorded; requirements are being refined.
+
+**Next action:** Owner confirms the intended ranking behavior, then specifies the Tier values.
+
+**Blockers:** Owner decision on Q-01 and approval of requirements before build.
+
+**Related items:** None.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Overview" in WI-001.
+
+
+[CALL exec] toolkit work edit WI-001 --section 'Resume here' --text 'Continue the requirements interview with Q-01. After the owner confirms the goal, ask for the Tier picklist values, then settle defaults, access, visibility, and acceptance before requesting requirements approval.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Resume here" in WI-001.
+
+
+[AGENT] WI-001 is in requirements refinement. I’ve recorded one decision for you: whether assigning a Tier to each Account is the ranking behavior you want. I’ll settle the values and any visibility needs after that answer.
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/SKILL.md .memory/AGENTS.md .memory/memory-criteria.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+---
+name: memory-save
+description: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says "remember this", "from now on", "forget that", or "remind me" with no time given, corrects the agent, or a hook says a save is due.'
+---
+
+# Memory save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Saves, corrects, or retires one memory record with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand.
+
+## Steps
+
+Track these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home ("Where other things go" below) and stop.
+2. Search for a record that already holds it, and read each hit with its version. The save's duplicate check compares wording, so only this search finds a record the new fact contradicts (for example "Mondays" against "Tuesdays").
+   `toolkit memory find '<topic>'`
+   `toolkit memory get <key> --json`
+3. Read the approval mode and apply "Approval policy" below. When it says ask, ask and wait.
+   `toolkit config get memory.approval`
+4. Write the description and body in the record format (`references/record-format.md`), then save with the form for the case ("Save forms" below).
+5. Exit code 2 saved nothing. Read the "Error:" line. Records listed: the duplicate check. "Changed since it was read": read it again and redo the change. Any other rule: fix the text as the message says. `references/replacing-and-retiring.md`, section 2, has each case.
+6. "Forget that": retire the record, with his words as the reason. Delete only when his own words say delete ("Approval policy").
+   `toolkit memory retire <key> --reason '<his words>'`
+7. An owner to-do with no work item, or a change to what is happening now: update the current focus (`references/current-focus.md`). A project term: update the glossary (`references/glossary.md`).
+8. A preference a project setting can enforce (for example "I hate tabs" and `.editorconfig`): save it, then offer that change too.
+9. Read the record back, check, and reply in one line ("Replies" below). End with the question still waiting for the owner, or the exact words that continue.
+   `toolkit memory get <key>`
+   `toolkit doctor`
+
+## Approval policy
+
+This is the only written copy of the memory approval policy.
+
+- The owner's own words are the approval: "remember", "from now on", "always", "never", "forget", or a correction. Save now, with `--approved-by <owner>`. That includes a fact about a named person he asks you to remember ("remember that Priya's last day is October 15").
+- `onboarding` mode
+
+[AGENT] I’m using the memory-save skill to update the current focus so another session can resume WI-001 at this question. The proposed field behavior stays in the work item.
+
+[CALL exec] toolkit memory focus --json
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{
+  "ok": true,
+  "backend": "builtin",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-28, setup commit, agent\n\n## Now\n\nNone.\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks and Salesforce org guards in Codex: open Codex here, type /hooks, and trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Toolkit V2 setup is committed as 65072e2. Begin the first work item when requested; leave unconfirmed PROJECT.md outside scope and roadmap phases until the owner supplies them.\n",
+  "version": "a83f63df02b5cf33ccea6d9fce5a159a2c63e4f10fd1a56b0175488418093593"
+}
+
+
+[CALL exec] toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Add a Tier picklist field to Account
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks and Salesforce org guards in Codex: open Codex here, type /hooks, and trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 from its Resume here: confirm the Account Tier goal in Q-01, then refine values and behavior.' --expect a83f63df02b5cf33ccea6d9fce5a159a2c63e4f10fd1a56b0175488418093593
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved the current focus (20 lines). Version: 5c68d186e2b7
+
+
+[CALL exec] toolkit memory focus
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+# Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Add a Tier picklist field to Account
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks and Salesforce org guards in Codex: open Codex here, type /hooks, and trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 from its Resume here: confirm the Account Tier goal in Q-01, then refine values and behavior.
+
+
+[CALL exec] toolkit work validate WI-001
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. 1 open question waits on the owner (toolkit work decisions lists it).
+
+
+[CALL exec] toolkit doctor
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Toolkit doctor for Acme CRM (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2).
+
+Warnings (3):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+3. The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them.
+   Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.
+
+Notes (6):
+- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.
+- delivery/deployment/full-project-deployment-template/package.xml was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- sfdx-project.json was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+
+Result: 0 problems and 3 warnings.
+
+
+[CALL exec] toolkit work history WI-001 --note 'Recorded the Account Tier request and opened requirements refinement; Q-01 asks the owner to confirm the ranking goal.' --effect 'Requirements and Salesforce field changes wait for the owner’s answer and approval.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Added a Recent History row to WI-001.
+
+
+[AGENT] I started **WI-001, “Add a Tier picklist field to Account,”** and recorded your request. It is in requirements refinement; the field has not been built.
+
+Is the goal for the sales team to assign one Tier to each Account and use it to rank accounts? I recommend yes, since that gives the field a clear purpose.
+
+SKILLS OPENED (SKILL.md read): ['work-on', 'work-requirements', 'memory-save']
+
+TOOLKIT COMMANDS:
+   toolkit work list
+   toolkit work new --title 'Add a Tier picklist field to Account' --type build --stage 01-discovery
+   toolkit work edit WI-001 --section 'Starting request' --text 'New work: add a Tier picklist field to Account so the sales team can rank their accounts.'
+   toolkit work show WI-001
+   toolkit work set WI-001 --stage 02-refinement
+   toolkit memory find 'Account Tier ranking picklist'
+   toolkit work show WI-001 --section 'Open Questions'
+   toolkit work edit WI-001 --section 'Open Questions' --text '
+   toolkit work set WI-001 --waiting-on owner
+   toolkit work edit WI-001 --section 'Overview' --text '**Goal:** Let the sales team rank Accounts using a Tier picklist.
+   toolkit work edit WI-001 --section 'Resume here' --text 'Continue the requirements interview with Q-01. After the owner confirms the goal, ask for the Tier picklist values, then settle defaults, access, visibility, and acceptance before requesting requirements approval.'
+   toolkit memory focus --json
+   toolkit memory focus --text '# Current focus
+   toolkit memory focus
+   toolkit work validate WI-001
+   toolkit doctor
+   toolkit work history WI-001 --note 'Recorded the Account Tier request and opened requirements refinement

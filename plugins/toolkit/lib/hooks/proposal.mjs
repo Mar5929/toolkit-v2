@@ -7,7 +7,9 @@
 // message asks "Save to memory: <summary>?" and no proposal was saved this
 // turn, the hook saves one itself with `toolkit memory save --proposal`: the
 // same command, the same duplicate and secret checks, the same record format.
-// The owner's yes is then `toolkit memory approve <key> --by <name>`, his no
+// The owner's yes is then `toolkit memory approve <key> --by <name>`, which
+// also takes out the body's "Do not rely on this" words
+// (lib/memory/proposals.mjs approvedProposalBody); his no is
 // `toolkit memory reject <key>`. A summary is proposed once per session; the
 // duplicate check stops a second record with the same meaning later.
 //
@@ -24,6 +26,10 @@
 // proposal itself.
 
 import { searchTerms } from '../memory/contract.mjs';
+import { HOOK_PROPOSAL_EVIDENCE, HOOK_PROPOSAL_WAIT } from '../memory/proposals.mjs';
+import { ownerWording } from '../memory/owner-wording.mjs';
+
+export { ownerWording };
 
 const QUESTION = /save\s+to\s+(?:(?:the\s+)?project(?:'s|’s)?\s+)?memory\s*[*_]*\s*:\s*[*_]*\s*(.+?)\s*\?/gi;
 /** Other ways of asking to save something to memory, each ending at its question mark in the same sentence. */
@@ -101,15 +107,30 @@ export function normalizeSummary(summary) {
 export function proposalType(summary, ownerName) {
   const s = String(summary ?? '');
   const owner = String(ownerName ?? '').trim();
-  const namesOwner = owner && new RegExp(`\\b${owner.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i').test(s);
+  const esc = (x) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const names = owner ? [owner, owner.split(/\s+/)[0]].map(esc).join('|') : null;
+  const namesOwner = names && new RegExp(`\\b(?:${names})\\b`, 'i').test(s);
+  // A preference the owner states is `user`, even when it is about working
+  // with the agent (final confirmation round 1, Hindsight run: "For small
+  // changes, Mike prefers working directly with the agent" was typed
+  // feedback because "the agent" was checked first).
+  const ownerSubject = `(?:${names ? `${names}|` : ''}the owner|you|he|she)`;
+  if (new RegExp(`\\b${ownerSubject}\\s+(?:\\w+\\s+)?(?:prefers?|likes?|wants?|hates?|dislikes?)\\b`, 'i').test(s)
+    && !/\b(?:you should|you must|stop doing)\b/i.test(s)) return 'user';
   if (/\b(?:the agent|agents?|you should|you must|stop doing|instead of)\b/i.test(s)) return 'feedback';
   if (namesOwner || /\b(?:the owner|prefers?|likes?|wants?)\b/i.test(s)) return 'user';
   return 'project';
 }
 
-/** A record name (slug) from a summary: its search words joined by dashes, at most 50 characters. */
-export function proposalName(summary) {
-  const words = searchTerms(summary).map((w) => w.replace(/[^a-z0-9]/g, '')).filter(Boolean);
+/**
+ * A record name (slug) from a summary: its search words joined by dashes, at
+ * most 50 characters. The type word is left out, because the key starts with
+ * the type (final confirmation round 1, Salesforce run:
+ * project_sandbox_deploy_checks_project_usually_take_longer).
+ */
+export function proposalName(summary, type = null) {
+  const skip = type ? String(type).toLowerCase() : null;
+  const words = searchTerms(summary).map((w) => w.replace(/[^a-z0-9]/g, '')).filter((w) => w && w !== skip);
   let name = '';
   for (const w of words) {
     const next = name ? `${name}-${w}` : w;
@@ -127,32 +148,61 @@ export function proposalDescription(summary) {
   return cut || s.slice(0, DESCRIPTION_MAX);
 }
 
-/** The record body in the model's topic format. */
-export function proposalBody(summary, date) {
-  const title = String(summary).replace(/\s+/g, ' ').trim();
-  const point = /[.!?]$/.test(title) ? title : `${title}.`;
+const TITLE_MAX = 100;
+
+/**
+ * The record title: the summary, or, when it is longer than 100 characters,
+ * the summary up to its last comma, semicolon, or dash before that, else up
+ * to its last whole word, with "..." to show it was cut (final confirmation
+ * round 1, Hindsight run: the title was cut at 80 characters, in the middle
+ * of "without helper agents").
+ */
+export function proposalTitle(summary) {
+  const s = String(summary ?? '').replace(/\s+/g, ' ').trim().replace(/[.!?]+$/, '');
+  if (s.length <= TITLE_MAX) return s;
+  const head = s.slice(0, TITLE_MAX + 1);
+  const clause = Math.max(head.lastIndexOf(', '), head.lastIndexOf('; '), head.lastIndexOf(' - '), head.lastIndexOf(' — '));
+  if (clause >= 40) return s.slice(0, clause);
+  return `${head.replace(/\s+\S*$/, '')}...`;
+}
+
+/**
+ * The record body in the model's topic format. `asked` is the question's
+ * own wording, quoted in the Evidence line; the rest uses `summary` (the
+ * owner-named wording from ownerWording).
+ */
+export function proposalBody(summary, date, asked = summary) {
+  const text = String(summary).replace(/\s+/g, ' ').trim();
+  const point = /[.!?]$/.test(text) ? text : `${text}.`;
+  const question = String(asked).replace(/\s+/g, ' ').trim();
   return [
-    `# ${title.length > 80 ? `${title.slice(0, 80).replace(/\s+\S*$/, '')}` : title}`,
+    `# ${proposalTitle(text)}`,
     '',
     `**Remember:** ${point}`,
     '',
     '**Why:** Not stated by the owner.',
     '',
-    '**How to apply:** Not stated by the owner. Do not rely on this until the owner approves it.',
+    `**How to apply:** Not stated by the owner. ${HOOK_PROPOSAL_WAIT}`,
     '',
-    `**Evidence and limits:** On ${date} the agent asked the owner "Save to memory: ${title}?" and the turn ended with no answer, so the toolkit's Stop hook saved it as a proposal.`,
+    `**Evidence and limits:** On ${date} the agent asked the owner "Save to memory: ${question}?" and the turn ended with no answer, ${HOOK_PROPOSAL_EVIDENCE}`,
     '',
   ].join('\n');
 }
 
-/** The toolkit memory save arguments for one proposal. */
+/**
+ * The toolkit memory save arguments for one proposal. The type is read from
+ * the question's own wording; the name, description, and body use the
+ * owner's name in place of a leading "you" (ownerWording).
+ */
 export function proposalArgs(summary, { ownerName, date, name } = {}) {
+  const type = proposalType(summary, ownerName);
+  const named = ownerWording(summary, ownerName);
   return [
     'memory', 'save',
-    '--type', proposalType(summary, ownerName),
-    '--name', name || proposalName(summary),
-    '--description', proposalDescription(summary),
-    '--body', proposalBody(summary, date),
+    '--type', type,
+    '--name', name || proposalName(named, type),
+    '--description', proposalDescription(named),
+    '--body', proposalBody(named, date, summary),
     '--source', `Agent question in a session, ${date}`,
     '--proposal',
     '--json',

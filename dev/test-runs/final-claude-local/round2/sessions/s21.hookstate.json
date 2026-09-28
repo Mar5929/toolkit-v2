@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "sessionId": "4524d411-6ae0-40dc-92e7-eeb896743172",
+  "host": "claude",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-claude-local-r2",
+  "startedAt": "2026-09-28T22:36:22.460Z",
+  "turns": 1,
+  "turn": {
+    "key": "050e706a-592d-497b-9c5e-d7d9e6b3f441",
+    "n": 1,
+    "startedAt": "2026-09-28T22:36:22.717Z",
+    "keep": "remember that",
+    "baseline": {
+      "memoryMeta": 1790634935613.5547,
+      "hindsightMeta": null,
+      "memoryCache": null,
+      "workState": 1790634982514.0212,
+      "decisions": 1790633555064.095
+    },
+    "records": [],
+    "edits": [],
+    "stopBlocked": true
+  },
+  "lastStopReason": "The owner asked this turn for something to be kept for later sessions, and nothing was recorded: no memory save, work item change, or decision. Record it with the memory-save skill (or work-on if it is a task), or say in one line why it was not recorded.",
+  "source": "startup",
+  "updated": "2026-09-28T22:36:28.938Z"
+}

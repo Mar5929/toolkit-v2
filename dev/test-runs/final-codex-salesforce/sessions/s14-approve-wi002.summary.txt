@@ -1,0 +1,180 @@
+PROMPT: Yes, I approve the WI-002 result.
+THREAD: 01a0ea42-75f1-7082-8e9d-3f79f9bad83b
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Add a Tier picklist field to Account: 11 User approval, In Progress. Next action: Continue work-finish: prepare WI-001 for pull request and merge decision. Continues with work-finish.
+- WI-002 Set Account Tier access and page layout: 11 User approval, In Progress, waiting on owner. Next action: Ask Mike Rihm to approve the WI-002 access and page layout result separately from WI-001. Continues with work-decide.
+
+Waiting on the owner:
+- WI-002 Set Account Tier access and page layout: WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)
+
+Items: 2 in progress.
+
+Current focus:
+Last updated: 2026-09-28, chat, agent
+## Now
+- WI-001 Add a Tier picklist field to Account
+- WI-002 Set Account Tier access and page layout
+## Waiting on the owner
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks and Salesforce org guards in Codex: open Codex here, type /hooks, and trust them. Setup step; drop it when doctor stops reporting it.
+## Untracked to-dos
+None.
+## Next session starts with
+- Continue WI-001 through work-finish after its recorded result approval; ask for WI-002 result approval separately, then continue its work-finish after approval.
+
+Memory proposals waiting on the owner (not facts: do not rely on them; work-decide asks him):
+- user_friday_availability: Mike Rihm is usually off on Fridays (proposed 2026-09-28)
+
+Project memory (builtin): 1 record, and 1 proposal the owner has not answered. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_custom_field_guidance: Every new custom field should have a description and help text
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off. Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+- Codex ran this Toolkit V2 hook
+
+[AGENT] I’ll record the WI-002 result approval, update its next step, and check the remaining decision.
+
+[CALL exec] toolkit work history WI-002 --note 'Owner said: Yes, I approve the WI-002 result.' --effect 'Result approved; work-finish continues.'
+  -> Script completed
+Wall time 0.6 seconds
+Output:
+
+{"chunk_id":"644a76","wall_time_seconds":0.087583042,"exit_code":0,"original_token_count":10,"output":"Added a Recent History row to WI-002.\n"}
+
+[CALL exec] toolkit work approve WI-002 --result --by 'Mike Rihm'
+  -> Script completed
+Wall time 0.5 seconds
+Output:
+
+{"chunk_id":"12e816","wall_time_seconds":0.070141875,"exit_code":0,"original_token_count":108,"output":"Recorded: result of WI-002 approved (2026-09-28 by Mike Rihm).\nIt is no longer waiting on the owner (waiting_on: none).\nNow 11 User approval (In Progress). Continue with work-finish.\nNote: WI-002's Overview still says \"Next action: Ask Mike Rihm to approve the WI-002 access and page layout result separately from WI-001.\". Write the step after this approval: toolkit work edit WI-002 --label 'Next action' --value '<next step>'.\n"}
+
+[CALL exec] toolkit work edit WI-002 --label 'Next action' --value 'Continue work-finish: prepare WI-002 for pull request and merge decision.'
+  -> Script completed
+Wall time 0.5 seconds
+Output:
+
+{"chunk_id":"39cced","wall_time_seconds":0.091207125,"exit_code":0,"original_token_count":8,"output":"Saved \"Next action\" in WI-002.\n"}
+
+[CALL exec] toolkit work set WI-002 --waiting-on agent
+  -> Script completed
+Wall time 0.5 seconds
+Output:
+
+{"chunk_id":"57afd8","wall_time_seconds":0.068345875,"exit_code":0,"original_token_count":25,"output":"Updated WI-002: waiting on agent.\nNow 11 User approval (In Progress). Continue with work-finish.\n"}
+
+[CALL exec] toolkit work decisions
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+1 decision waits on the owner:
+
+Memory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):
+  - user_friday_availability: Mike Rihm is usually off on Fridays. Saved 2026-09-28. Yes: toolkit memory approve user_friday_availability --by <name>. No: toolkit memory reject user_friday_availability. (work-decide)
+
+
+[CALL exec] toolkit memory get user_friday_availability
+   cat .memory/memory-criteria.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/references/proposals.md
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+{"i":0,"result":"---\nname: user_friday_availability\ndescription: Mike Rihm is usually off on Fridays\nmetadata:\n  type: user\nstatus: needs-review\nsource: Mike Rihm, in chat, 2026-09-28\nlast_verified: 2026-09-28\nauthorization: Proposed by the agent on 2026-09-28; the owner has not answered\nsupersedes: none\n---\n\n# Friday availability\n\n**Remember:** Mike Rihm is usually off on Fridays.\n\n**Why:** Not stated by the owner.\n\n**How to apply:** Avoid planning owner reviews or decisions for Fridays when scheduling work with him. Check exceptions with Mike.\n\n**Evidence and limits:** Mike Rihm, in chat, 2026-09-28. Usually, not every Friday.\n\n**Related memories:** None.\n\n**Authoritative records:** None.\n\n[toolkit: this is a proposal the owner has not answered. It is not a fact: do not rely on it. His yes: toolkit memory approve user_friday_availability --by <name>. His no: toolkit memory reject user_friday_availability.]\n"}
+{"i":1,"result":"# Memory criteria\n\nThis file is the project-specific selection policy: what is worth keeping in lasting memory. The approval policy, including onboarding and trusted mode, is in the `memory-save` skill, which saves with `toolkit memory save`. When the owner corrects what is worth saving, save the correction as a `feedback` memory with `memory-save`, as a general rule, without copying the rejected memory. Those `feedback` memories override this page.\n\n## Default test for lasting memory\n\nSave a topic when it concerns this project, has a credible source, would matter in a future session, would be costly or unreliable to reconstruct, and has no better maintained owner. Prefer updating an existing topic. A short pointer to an authoritative record can qualify when future sessions would otherwise miss that record.\n\n| Type and filename | Usually worth retaining | Route or reject instead |\n| --- | --- | --- |\n| `user_<topic>.md` | Relevant role, responsibility, working preference, or communication need the owner stated | Personal judgments, irrelevant biography, private details |\n| `feedback_<topic>.md` | Repeated or standing correction to how the agent should work; confirmed selection lesson | One-off irritation, a rejected fact restated as policy, an instruction already in `AGENTS.md` |\n| `project_<topic>.md` | Durable project constraint, rationale, technical landmark, or proven costly fix | A decision for the whole project (`DECISIONS.md`), code summary, schema copy, active ticket status, accepted requirement or design body |\n| `reference_<topic>.md` | Hard-to-rediscover route to a source, system, dashboard, or decision record, with why to open it | Entire outside page or a path already obvious in `PROJECT.md` or the project map |\n| `event_<topic>.md` | Significant project episode: what was done, what resulted, and where the output lives | Routine edit, tool call, raw error, daily progress log |\n\n## Working context is different\n\n`CURRENT
+
+[CALL exec] toolkit memory focus --json
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{
+  "ok": true,
+  "backend": "builtin",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Add a Tier picklist field to Account\n- WI-002 Set Account Tier access and page layout\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks and Salesforce org guards in Codex: open Codex here, type /hooks, and trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 through work-finish after its recorded result approval; ask for WI-002 result approval separately, then continue its work-finish after approval.\n",
+  "version": "69def177b6ae14f0e0e25273ff31399d82654a5718d21b689b6d3548a1550177"
+}
+
+
+[CALL exec] toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Add a Tier picklist field to Account
+- WI-002 Set Account Tier access and page layout
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks and Salesforce org guards in Codex: open Codex here, type /hooks, and trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 and WI-002 through work-finish after their recorded result approvals; prepare the changes for merge decisions.' --expect 69def177b6ae14f0e0e25273ff31399d82654a5718d21b689b6d3548a1550177
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"f7231f","wall_time_seconds":0.000003291,"exit_code":0,"original_token_count":15,"output":"Saved the current focus (21 lines). Version: 795c228482a4\n"}
+
+[CALL exec] toolkit memory focus
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+# Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Add a Tier picklist field to Account
+- WI-002 Set Account Tier access and page layout
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks and Salesforce org guards in Codex: open Codex here, type /hooks, and trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 and WI-002 through work-finish after their recorded result approvals; prepare the changes for merge decisions.
+
+
+[AGENT] Your **WI-002 result approval is recorded**. Both work items can now continue through their release steps.
+
+One decision remains: a proposed memory note that you are usually off on Fridays. I recommend saving it so future sessions avoid planning reviews with you for Fridays; “usually” leaves room for exceptions.
+
+Save to memory: Mike Rihm is usually off on Fridays?
+
+SKILLS OPENED (SKILL.md read): []
+
+TOOLKIT COMMANDS:
+   toolkit work history WI-002 --note 'Owner said: Yes, I approve the WI-002 result.' --effect 'Result approved
+   toolkit work approve WI-002 --result --by 'Mike Rihm'
+   toolkit work edit WI-002 --label 'Next action' --value 'Continue work-finish: prepare WI-002 for pull request and merge decision.'
+   toolkit work set WI-002 --waiting-on agent
+   toolkit work decisions
+   toolkit memory get user_friday_availability
+   toolkit memory focus --json
+   toolkit memory focus --text '# Current focus
+   toolkit memory focus

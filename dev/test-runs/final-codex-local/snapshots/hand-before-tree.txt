@@ -1,0 +1,8 @@
+.work-items/.toolkit-state.json
+.work-items/DASHBOARD.md
+.work-items/WI-001-build-slug-command-with-max-option/DESIGN.md
+.work-items/WI-001-build-slug-command-with-max-option/WI-002-build-basic-slug-command/WORK-ITEM.md
+.work-items/WI-001-build-slug-command-with-max-option/WI-003-add-max-length-option-to-slug-command/WORK-ITEM.md
+.work-items/WI-001-build-slug-command-with-max-option/WORK-ITEM.md
+.work-items/work-item-template/DESIGN.md
+.work-items/work-item-template/WORK-ITEM.md

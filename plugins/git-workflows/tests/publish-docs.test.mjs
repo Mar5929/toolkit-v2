@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, existsSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, existsSync, realpathSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname, basename } from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -488,5 +488,45 @@ test('the usage line shows the commit message in single quotes', () => {
   const source = localProject('usage-quotes', { 'README.md': '# Project\n' });
   const usage = run(process.execPath, [script, 'publish'], source);
   assert.equal(usage.status, 1);
-  assert.match(usage.stderr, /publish --message 'Commit message'/);
+  assert.match(usage.stderr, /publish \[--workspace <save folder>\] --message 'Commit message'/);
+});
+
+test('a project that Git-ignores .claude/worktrees/ gets its save folder there, and publish runs from the project folder with --workspace', () => {
+  const source = localProject('inside-save', {
+    '.gitignore': '.claude/worktrees/\n',
+    'README.md': '# Project\n',
+    'requirements/billing.md': '# Billing\n',
+  });
+  const started = run(process.execPath, [script, 'start', '--branch', 'main', '--', 'requirements/billing.md'], source);
+  assert.equal(started.status, 0, started.stderr);
+  const workspace = started.stdout.trim();
+  workspaces.push({ source, workspace });
+  assert.equal(realpathSync(dirname(workspace)), realpathSync(join(source, '.claude', 'worktrees')));
+  assert.match(basename(workspace), /^docsave-[0-9a-f]{8}$/);
+  assert.equal(git(source, 'status', '--porcelain'), '', 'the save folder is ignored in the main checkout');
+
+  write(join(workspace, 'requirements', 'billing.md'), '# Billing\n\nR-01 delivered.\n');
+  git(workspace, 'add', '--', 'requirements/billing.md');
+  // Run from the project folder, not from the save folder.
+  const published = run(process.execPath, [script, 'publish', '--workspace', workspace, '--message', 'Save the billing requirements'], source);
+  assert.equal(published.status, 0, published.stderr);
+  const head = git(workspace, 'rev-parse', 'HEAD');
+  assert.equal(published.stdout.trim(), `No remote: committed locally. ${head} is on main.`);
+  assert.equal(readFileSync(join(source, 'requirements', 'billing.md'), 'utf8'), '# Billing\n\nR-01 delivered.\n');
+  assert.equal(git(source, 'status', '--porcelain'), '');
+
+  // A linked worktree of the same project uses the main checkout's folder too.
+  git(source, 'worktree', 'add', '-q', '-b', 'side', join(source, '.claude', 'worktrees', 'side'));
+  const fromLinked = run(process.execPath, [script, 'start', '--branch', 'main', '--', 'README.md'], join(source, '.claude', 'worktrees', 'side'));
+  assert.equal(fromLinked.status, 0, fromLinked.stderr);
+  workspaces.push({ source, workspace: fromLinked.stdout.trim() });
+  assert.equal(realpathSync(dirname(fromLinked.stdout.trim())), realpathSync(join(source, '.claude', 'worktrees')));
+
+  const missing = run(process.execPath, [script, 'publish', '--workspace', join(source, 'nowhere'), '--message', 'x'], source);
+  assert.equal(missing.status, 1);
+  assert.match(missing.stderr, /The save folder .*nowhere was not found\. Give the path start printed\./);
+  // From the main checkout itself, without --workspace, publish refuses.
+  const wrong = run(process.execPath, [script, 'publish', '--message', 'x'], source);
+  assert.equal(wrong.status, 1);
+  assert.match(wrong.stderr, /not a publish-docs save workspace/);
 });

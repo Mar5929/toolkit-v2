@@ -1,0 +1,1 @@
+Ship it: WI-001 and WI-002. The whole tip command works the way I asked. There is no remote, so merge them into main here, then finish WI-002 and WI-001 and clean up the worktrees and branches.

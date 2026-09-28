@@ -1,0 +1,1 @@
+Yes. You want every new custom field to include a **description and help text**. (Project memory `user_custom_field_guidance`, approved by you on 2026-09-28.)

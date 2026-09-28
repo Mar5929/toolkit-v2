@@ -26,7 +26,10 @@ and a dry run, and update the installed toolkit plugins in both hosts.
 - `toolkit machine-setup` changes this computer: `~/.codex/config.toml`,
   `~/.local/bin/toolkit`, and `~/.config/toolkit-v2/`. Say that in one line
   and get the owner's yes before the first run on a computer. Both hosts ask
-  him before it runs. What it changes: `new-computer.md` in this folder.
+  him before it runs; that prompt is expected. In Codex, run it alone with
+  `sandbox_permissions` set to `require_escalated` and a one-line reason, or
+  it stays inside the sandbox and cannot write those files. What it changes:
+  `new-computer.md` in this folder.
 - Node 20 or later is required. When `node --version` is older or missing,
   tell the owner and ask before installing it.
 
@@ -65,6 +68,23 @@ and a dry run, and update the installed toolkit plugins in both hosts.
 6. Run doctor again until it reports 0 problems. A warning only the other
    host can clear (for example Codex hook trust, seen from Claude Code) is the
    owner's step.
+
+### Doctor findings that need more than `toolkit sync`
+
+Doctor prints a fix line for every finding. These are the ones whose fix is
+not sync, or not the agent's:
+
+| Finding id | What it means | Fix |
+| --- | --- | --- |
+| `backup-folder` | No backup folder is set | Ask the owner for a folder outside the project, then `toolkit config set backup.dir <folder>` (or `none`) |
+| `backup-old`, `backup-never` | The last backup is old, or there is none | `toolkit handoff-backup`; when the owner chose no backup folder, `toolkit export --to <folder>` or ask him for a folder |
+| `backup-unreachable` | The backup folder's drive is not there | Ask the owner to connect it, or to pick another folder |
+| `claude-ask-rules` | The Claude Code settings do not ask before the five ask-first commands | `toolkit sync`, after the owner's yes |
+| `codex-ask-rules` | `.codex/rules/toolkit.rules` does not ask before them | `toolkit sync`; a rules file the project changed: copy the `prompt` rules from the toolkit's `templates/codex/toolkit.rules` into it, above the general toolkit rule, with the owner's yes |
+| `codex-hook-trust`, `codex-sf-hook-trust` | Codex does not trust the Toolkit V2 hooks, or the Salesforce guards | The owner's step: `/hooks` in Codex |
+| `codex-hook-changed` | The hooks changed since Codex last ran them | The owner trusts them again in Codex `/hooks` |
+| `plugin-pointer` | The plugin-root pointer is missing, broken, or names a copy that is not installed | `toolkit machine-setup` from an installed copy, after the owner's yes |
+| `hook-errors` | A Toolkit V2 hook failed in the last 3 days, silently | Tell the owner, with the file doctor names; the warning ends 3 days after the last failure |
 
 ## Updating the toolkit
 

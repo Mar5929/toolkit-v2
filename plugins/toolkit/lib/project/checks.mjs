@@ -30,6 +30,9 @@
 //     than this one
 //   the current focus has the model's heading and "Last updated:" line, and a
 //     Notion project is not still on the older single Memory database
+//   hook failures: a Toolkit V2 hook that failed in the last few days, from
+//     <git common dir>/toolkit-v2/hook-errors.log (a quick check too, so the
+//     briefing shows it: a failed hook itself stays silent)
 //
 // A finding with `host` ('codex') can only be cleared in that host; toolkit
 // doctor run from the other host lists it without counting it in its exit code.
@@ -37,6 +40,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { run } from '../core/util.mjs';
+import { gitInfo } from '../core/config.mjs';
 import { hasSpan, spanBody, buildSpan, readRules } from './render.mjs';
 import { planManifest, projectHosts, readHosts, HOSTS_FIX, PROPOSAL_PATH, DEFAULT_PLUGIN_ROOT } from './manifest.mjs';
 import { MODEL_DIR } from './model-scaffold.mjs';
@@ -816,6 +820,60 @@ export function backupReachable(dir) {
  * - The owner chose no backup folder (backup.dir none): the older 7-day
  *   reminder, as a note.
  */
+/** How long a hook failure stays a warning, in days. */
+export const HOOK_ERRORS_DAYS = 3;
+export const HOOK_ERRORS_FILE = 'hook-errors.log';
+
+/** <git common dir>/toolkit-v2/hook-errors.log for a project, or null outside Git. */
+export function hookErrorsPath(project) {
+  const info = gitInfo(project.mainRoot || project.root);
+  return info ? path.join(info.commonDir, 'toolkit-v2', HOOK_ERRORS_FILE) : null;
+}
+
+/**
+ * The entries of a hook-errors.log text: [{ at (ms), time, event, first }].
+ * Each entry starts "<ISO time> <event>: <error>"; the lines after it, up to
+ * the next entry, are its stack.
+ */
+export function parseHookErrors(text) {
+  const out = [];
+  for (const line of String(text || '').split('\n')) {
+    const m = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z) ([a-z-]+): (.*)$/.exec(line);
+    if (!m) continue;
+    const at = Date.parse(m[1]);
+    if (Number.isNaN(at)) continue;
+    out.push({ at, time: m[1], event: m[2], first: m[3].trim() });
+  }
+  return out;
+}
+
+/**
+ * A Toolkit V2 hook that failed recently. A hook never stops the session and
+ * never prints its own error: it writes the error to
+ * <git common dir>/toolkit-v2/hook-errors.log and exits 0, so without this
+ * check a broken briefing, guard, or reminder goes unnoticed (skill-references
+ * audit, 2026-09-28). Failures older than HOOK_ERRORS_DAYS are not reported.
+ */
+export function checkHookErrors(project, findings, { now = Date.now() } = {}) {
+  const file = hookErrorsPath(project);
+  if (!file) return;
+  let text;
+  try {
+    text = fs.readFileSync(file, 'utf8');
+  } catch {
+    return;
+  }
+  const recent = parseHookErrors(text).filter((e) => now - e.at <= HOOK_ERRORS_DAYS * DAY && e.at <= now + DAY);
+  if (!recent.length) return;
+  const last = recent[recent.length - 1];
+  const events = [...new Set(recent.map((e) => e.event))];
+  const first = last.first.length > 200 ? `${last.first.slice(0, 197)}...` : last.first;
+  finding(findings, 'hook-errors', 'hooks', 'warning',
+    `A Toolkit V2 hook failed ${recent.length === 1 ? 'once' : `${recent.length} times`} in the last ${HOOK_ERRORS_DAYS} days (${events.join(', ')}). The last failure, ${last.event} at ${last.time}: ${first}. A failed hook stops nothing and prints nothing, so its briefing, checks, or reminders did not happen.`,
+    `Tell the owner. The full errors are in ${file}. This warning ends ${HOOK_ERRORS_DAYS} days after the last failure.`,
+    { count: recent.length, events, file });
+}
+
 export function checkBackup(project, findings, { now = Date.now(), env = process.env } = {}) {
   const c = project.config;
   const parts = backupParts(c);
@@ -909,6 +967,7 @@ export async function runChecks(project, opts = {}) {
   checkClaudeSettings(project, findings);
   checkCodexAskRules(project, findings, { pluginRoot });
   checkBackup(project, findings, { now: opts.now || Date.now(), env });
+  checkHookErrors(project, findings, { now: opts.now || Date.now() });
   if (quick) return { findings, plan: null };
   checkComputer(project, env, findings);
   checkCodexMachine(project, env, findings, { pluginRoot });

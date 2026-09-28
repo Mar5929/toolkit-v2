@@ -396,7 +396,7 @@ M  system-guide/GREET-CLI.md
 ASSISTANT: Staged diff matches the edits above. Committing and fast-forwarding main.
 TOOL Bash: git -C /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/claude-a/.claude/worktrees/wi-002-docs commit -m "WI-002: update greet requirements and system guide
 
-Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>"
+<AI co-author line>"
 HOOK PreToolUse:Bash outcome=success exit=0
 SYSTEM vcs_state_changed: {"type": "system", "subtype": "vcs_state_changed", "kind": "commit", "branch": "claude/wi-002-docs", "cwd": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/claude-a", "uuid": "fc2700d0-6093-406b-89ed-f89be08fec68", "session_id": "091566c1-d1f3-4bf3-86a0-9059649908a3"}
 HOOK PostToolUse:Bash outcome=success exit=0
@@ -407,11 +407,11 @@ HOOK PreToolUse:Bash outcome=success exit=0
 HOOK PostToolUse:Bash outcome=success exit=0
   RESULT: 1b8fe07 WI-002: update greet requirements and system guide
 
-Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+<AI co-author line>
 ---
 dd37e4f WI-002: greet empty names as world, --version anywhere
 
-Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+<AI co-author line>
 ---
 658c9c4 WI-001: add greet CLI requirements and system guide
 ---

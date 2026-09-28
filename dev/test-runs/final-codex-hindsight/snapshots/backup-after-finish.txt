@@ -1,0 +1,128 @@
+## backup folder after work finish (s17), Mon Sep 28 22:50:35 UTC 2026
+total 8
+drwxr-xr-x  5 michaelrihm  wheel  160 Sep 28 18:50 .
+drwxr-xr-x  4 michaelrihm  wheel  128 Sep 28 18:09 ..
+drwxr-xr-x  5 michaelrihm  wheel  160 Sep 28 18:50 memory-export
+-rw-r--r--  1 michaelrihm  wheel  845 Sep 28 18:50 toolkit-export.json
+drwxr-xr-x  6 michaelrihm  wheel  192 Sep 28 18:50 work-items
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-hindsight/greet-cli-final-h2-2026-09-28/memory-export:
+total 24
+drwxr-xr-x  5 michaelrihm  wheel  160 Sep 28 18:50 .
+drwxr-xr-x  5 michaelrihm  wheel  160 Sep 28 18:50 ..
+-rw-r--r--  1 michaelrihm  wheel  507 Sep 28 18:50 CURRENT_FOCUS.md
+-rw-r--r--  1 michaelrihm  wheel  274 Sep 28 18:50 toolkit-memory-export.json
+-rw-r--r--  1 michaelrihm  wheel  784 Sep 28 18:50 user_cli_flags_readme_examples.md
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-hindsight/greet-cli-final-h2-2026-09-28/work-items:
+total 16
+drwxr-xr-x  6 michaelrihm  wheel   192 Sep 28 18:50 .
+drwxr-xr-x  5 michaelrihm  wheel   160 Sep 28 18:50 ..
+-rw-r--r--  1 michaelrihm  wheel  1855 Sep 28 18:50 .toolkit-state.json
+-rw-r--r--  1 michaelrihm  wheel   588 Sep 28 18:50 DASHBOARD.md
+drwxr-xr-x  5 michaelrihm  wheel   160 Sep 28 18:50 WI-001-times-flag
+drwxr-xr-x  4 michaelrihm  wheel   128 Sep 28 18:50 work-item-template
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-hindsight/greet-cli-final-h2-2026-09-28/work-items/WI-001-times-flag:
+total 56
+drwxr-xr-x  5 michaelrihm  wheel    160 Sep 28 18:50 .
+drwxr-xr-x  6 michaelrihm  wheel    192 Sep 28 18:50 ..
+-rw-r--r--  1 michaelrihm  wheel   8817 Sep 28 18:50 DESIGN.md
+drwxr-xr-x  3 michaelrihm  wheel     96 Sep 28 18:50 WI-002-document-greet-flags-in-the-readme
+-rw-r--r--  1 michaelrihm  wheel  13397 Sep 28 18:50 WORK-ITEM.md
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-hindsight/greet-cli-final-h2-2026-09-28/work-items/WI-001-times-flag/WI-002-document-greet-flags-in-the-readme:
+total 16
+drwxr-xr-x  3 michaelrihm  wheel    96 Sep 28 18:50 .
+drwxr-xr-x  5 michaelrihm  wheel   160 Sep 28 18:50 ..
+-rw-r--r--  1 michaelrihm  wheel  6266 Sep 28 18:50 WORK-ITEM.md
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-hindsight/greet-cli-final-h2-2026-09-28/work-items/work-item-template:
+total 40
+drwxr-xr-x  4 michaelrihm  wheel   128 Sep 28 18:50 .
+drwxr-xr-x  6 michaelrihm  wheel   192 Sep 28 18:50 ..
+-rw-r--r--  1 michaelrihm  wheel  8954 Sep 28 18:50 DESIGN.md
+-rw-r--r--  1 michaelrihm  wheel  7524 Sep 28 18:50 WORK-ITEM.md
+--- toolkit-export.json
+{
+  "toolkit": "toolkit-v2",
+  "kind": "project-export",
+  "schema": 1,
+  "project": {
+    "name": "Greet CLI Final H2",
+    "key": "greet-cli-final-h2"
+  },
+  "exportedAt": "2026-09-28T22:50:16.977Z",
+  "from": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2",
+  "parts": [
+    {
+      "name": "work-items",
+      "from": ".work-items/",
+      "files": 7
+    }
+  ],
+  "files": [
+    "work-items/.toolkit-state.json",
+    "work-items/DASHBOARD.md",
+    "work-items/WI-001-times-flag/DESIGN.md",
+    "work-items/WI-001-times-flag/WI-002-document-greet-flags-in-the-readme/WORK-ITEM.md",
+    "work-items/WI-001-times-flag/WORK-ITEM.md",
+    "work-items/work-item-template/DESIGN.md",
+    "work-items/work-item-template/WORK-ITEM.md"
+  ]
+}
+--- memory-export/CURRENT_FOCUS.md
+# Current focus
+
+Last updated: 2026-09-28, work-finish, agent
+
+## Now
+
+None.
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- WI-001 and WI-002 are complete on local main. Await the next project request.
+--- memory-export files
+CURRENT_FOCUS.md
+toolkit-memory-export.json
+user_cli_flags_readme_examples.md
+{
+  "schema": 1,
+  "exportedAt": "2026-09-28T22:50:17.059Z",
+  "backend": "hindsight",
+  "from": "Hindsight bank greet-cli-final-h2 at http://127.0.0.1:8888",
+  "records": 1,
+  "retired": 0,
+  "files": [
+    "user_cli_flags_readme_examples.md",
+    "CURRENT_FOCUS.md"
+  ]
+}
+
+--- WI-001 front matter in backup
+---
+id: WI-001
+title: Add a --times flag to greet
+type: build
+stage: 14-spec-update
+status: Done
+parent: none
+waiting_on: "none"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: approved
+result_approved: "2026-09-28 by Mike Rihm"
+updated: 2026-09-28
+---
+

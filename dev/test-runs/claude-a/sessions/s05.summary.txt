@@ -275,7 +275,7 @@ index b781ea2..552093f 100644
  ## How to write replies
 TOOL Bash: git commit -q -m "WI-001: add greet.js with --version and its tests
 
-Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>" && git log --oneline -1
+<AI co-author line>" && git log --oneline -1
 HOOK PreToolUse:Bash outcome=success exit=0
 HOOK PostToolUse:Bash outcome=success exit=0
   RESULT: 195d864 WI-001: add greet.js with --version and its tests

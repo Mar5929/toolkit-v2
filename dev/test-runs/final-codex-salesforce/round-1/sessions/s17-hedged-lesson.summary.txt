@@ -1,0 +1,173 @@
+PROMPT: Hmm, looking back, the full permission inventory took a long time for one small picklist. Maybe for tiny fields like this a quick check of the four profiles would have been enough, I'm not sure.
+THREAD: 01a0e9d7-79a4-7290-84e5-52df28257b1c
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Add a Tier picklist field to Account: 11 User approval, In Progress, waiting on owner. Next action: Ask Mike Rihm to approve the WI-001 result after the separate WI-002 result review. Continues with work-decide.
+- WI-002 Configure Account Tier access and page layout: 11 User approval, In Progress, waiting on owner. Next action: Ask Mike Rihm to approve the WI-002 result separately. Continues with work-decide.
+
+Waiting on the owner:
+- WI-001 Add a Tier picklist field to Account: WI-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-001 --result --by <name>. (work-decide)
+- WI-002 Configure Account Tier access and page layout: WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)
+
+Items: 2 in progress.
+
+Current focus:
+Last updated: 2026-09-28, chat, agent
+## Now
+- WI-001 Add a Tier picklist field to Account
+- WI-002 Configure Account Tier access and page layout
+## Waiting on the owner
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, and trust the Toolkit V2 hooks and two Salesforce guards. Setup step; drop it when doctor stops reporting it.
+## Untracked to-dos
+None.
+## Next session starts with
+- Continue WI-002 and WI-001 from their Resume here sections: present WI-002 for separate result approval, then WI-001. Independent checks found R-01 through R-04 met at f2c7b61 and b43155d; the owner-reported sandbox checks are in the test plans. The checker made no direct org calls.
+
+Project memory (builtin): 3 records. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_afternoon_salesforce_setup: Plan owner-run Salesforce Setup steps for the afternoon
+- user_custom_field_description_help_text: Every new custom field should have a description and help text
+- user_salesforce_setup_screenshots: Prefer Salesforce Setup screenshots to long written checklists
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499
+
+[AGENT] I’ll check what the permission review was meant to catch, then give you a recommendation for small field changes. I’ll keep this as a proposal since you’re still weighing it.
+
+[CALL exec] cat SOUL.md PROJECT.md .claude/rules/{check-deployment-contents,component-tracker,confirm-salesforce-changes,humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,production-data-changes,project-file-locations,salesforce-org-safety,session-handoff,shared-repository-work,work-item-folders}.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+cat: SOUL.md: No such file or directory
+# Acme CRM
+
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->
+
+## Purpose and intended outcome
+
+- Purpose
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/sf-architect-solutioning/0.2.1/skills/sf-architect-solutioning/SKILL.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+---
+name: sf-architect-solutioning
+description: 'Answers Salesforce platform questions and plans Salesforce solutions, checking each fact against official Salesforce docs. Use whenever the owner asks a Salesforce platform question, even about a work item ("which Flow type", "Flow or Apex"), or solution-design needs a Salesforce specialist.'
+---
+
+# Salesforce Architect & Solutioning
+
+You are a **Certified Salesforce Technical Architect** with all Salesforce certifications. You approach every requirement with architectural rigor, recommend declarative-first solutions, verify platform facts against official documentation instead of memory, and produce a clear solution plan before any implementation begins.
+
+**Core principles: No code without a plan. No plan without clear requirements. No platform claim without a source.**
+
+---
+
+## Protocol
+
+Read the declared project context and existing requirement before asking intake
+questions. Use these phases as a default checklist, reusing completed work and
+adapting the sequence and detail to the project, use case, or individual item.
+Do not force a milestone structure or repeat an approval already given for the
+same scope. Actual approval, permission, and org boundaries remain in force.
+
+| Phase | What happens | Gate to next phase |
+|---|---|---|
+| 1. Intake | Read critically, push back, ask clarifying questions | Requirement is specific and testable |
+| 2. Project context | Find where this project keeps requirements, decisions, and designs; check for conflicts | Prior decisions checked |
+| 3. Verify | Confirm platform capabilities and current API version against official docs | Every capability claim has a source |
+| 4. Design | Design declarative and coded components, mapped to Well-Architected | User approves component designs |
+| 5. Plan | Present the solution plan with trade-offs | User approves the plan; identify the available implementation workflow |
+
+---
+
+## Phase 1: Requirement Intake
+
+When the user provides a requirement, feature request, or asks "how should we build X":
+
+### Read Critically
+
+- Do NOT accept the requirement at face value
+- Identify ambiguity, missing acceptance criteria, and unstated assumptions
+- Look for scope creep signals, conflicting requirements, and edge cases
+- Check for governor limit implications and security considerations
+- Identify the goal behind the stated solution; the user may be describing an implementation when a different approach serves the goal better
+
+### Ask Clarifying Questions
+
+Ask **one targeted question at a time**, with a recommendation and a short reason
+when useful. Check existing answers first. Keep unknowns open and suggestions
+labelled as proposals; apply clear draft corrections without another approval
+loop. Use the following topics only where information is missing:
+
+- **Who**: which users/personas? What are their permission levels?
+- **What**: exact behavior expected? What does "done" look like?
+- 
+
+[AGENT] I’m using the Salesforce solution guidance for the access question. I’ll check the WI-002 record and permission runbook so the recommendation fits this project’s actual setup.
+
+[CALL exec] toolkit work show WI-002 --path
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1/.work-items/account-tier/WI-001-tier-field/WI-002-tier-access-and-layout/WORK-ITEM.md
+
+
+[CALL exec] cat .work-items/account-tier/WI-001-tier-field/WI-002-tier-access-and-layout/WORK-ITEM.md tools/permissions/PERMISSIONS-RUNBOOK.md DECISIONS.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+---
+id: WI-002
+title: Configure Account Tier access and page layout
+type: build
+stage: 11-user-approval
+status: In Progress
+parent: WI-001
+waiting_on: "owner"
+priority: medium
+delivery: agent-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-002: Configure Account Tier access and page layout
+
+## Overview
+
+**Goal:** Give Account viewers the approved Tier access and show Tier directl
+
+[CALL exec] const r=await tools.web__run({search_query:[{"q":"site:help.salesforce.com field level security profile permission sets effective access field Salesforce"},{"q":"site:trailhead.salesforce.com field permissions profiles permission sets effective access Salesforce"}],response_length:"short"}); text(r);
+
+  -> Script completed
+Wall time 1.4 seconds
+Output:
+
+Enable Field-Level Security for Permission Sets during Field Creation (https://help.salesforce.com/s/articleView?id=sf.users_set_fls_permsets.htm&type=5)
+citeturn0search0 [wordlim: 200] Crawled: 4 months ago; To follow best practices for user access control, you plan to assign permissions through permission sets and permission set groups. ... Now when you create a field on an object, set field-level security on a field, or change a field’s type,
+
+[AGENT] I think a lighter check would be right for the next small field change in this practice org. For WI-002, the first inventory established that four profiles used Accounts and that active users had no permission set assignments. Once we knew that, checking the four profile grants and testing representative users was enough to keep the review focused.
+
+I wouldn’t make “four profiles only” a standing rule. Salesforce can also grant field access through permission sets and permission set groups, so a quick check should confirm whether those are in use before relying on profile results. [Salesforce: Control Who Sees What](https://help.salesforce.com/s/articleView?id=security_data_access.htm&language=en_US&type=5)
+
+The full inventory took longer than this picklist warranted. I’ll treat the shorter check as a proposal for similar changes, since you haven’t decided on a project rule.
+
+SKILLS OPENED (SKILL.md read): ['sf-architect-solutioning']
+
+TOOLKIT COMMANDS:
+   toolkit work show WI-002 --path

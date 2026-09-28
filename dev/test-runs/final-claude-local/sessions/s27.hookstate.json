@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "sessionId": "1dcd4a93-7552-4911-b907-cd620d5870be",
+  "host": "claude",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-claude-local-r1",
+  "startedAt": "2026-09-28T20:15:27.388Z",
+  "turns": 1,
+  "turn": {
+    "key": "26b5ad9a-6812-4886-9693-922b67438f85",
+    "n": 1,
+    "startedAt": "2026-09-28T20:15:27.674Z",
+    "keep": null,
+    "baseline": {
+      "memoryMeta": 1790626518020.67,
+      "hindsightMeta": null,
+      "memoryCache": null,
+      "workState": 1790626527443.5286,
+      "decisions": 1790625035174.46
+    },
+    "records": [],
+    "edits": [],
+    "stopBlocked": false
+  },
+  "lastStopReason": null,
+  "source": "startup",
+  "updated": "2026-09-28T20:15:37.833Z"
+}

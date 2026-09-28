@@ -1,3 +1,352 @@
+# Re-review 2026-09-28
+
+Reviewed on 2026-09-28, 19:36 to 19:55 EDT, by a reviewer who built none of
+this. The first review, from 12:30 to 13:20 the same day, follows below
+unchanged.
+
+State reviewed: commit `3adb722` plus 159 changed files and 7 new files in the
+working tree, none of them committed. Versions: `toolkit` 0.2.7, `work` 0.2.9,
+`memory` 0.2.7, `session-skills` 0.2.7, `git-workflows` 0.2.7,
+`sf-architect-solutioning` 0.2.1, marketplace metadata 0.2.9. These are the
+versions the five final runs used and the versions installed in Mike's Claude
+Code and Codex. No file under `plugins/` changed after 18:04 EDT; the final
+runs started at 18:06 EDT (22:06 UTC). So the final run evidence describes the
+code as it is now.
+
+No toolkit code or skill was changed. Nothing was staged or committed. Every
+result below comes from a command run in this re-review, unless it names an
+evidence file.
+
+## Verdict
+
+- Mike can use Toolkit V2 today in Claude Code and Codex, in all four setups.
+  All five final runs took a work item from start to Done on the current code.
+- One finding still blocks calling the goal met (R-B1). When Mike says "no
+  agent team", the agent skips the independent acceptance check. This
+  happened in 3 of the 5 final runs. It is the reason `final-codex-local` did
+  not pass, and its cause is still in the shipped text.
+- Of the first review's 20 findings: 14 are fixed, 4 are partly fixed, 1 waits
+  on Mike (M3), and 1 was wrong (I2). The change made for I2 made
+  `AGENTS.md` and `README.md` wrong (R-I1).
+- New in this re-review: 4 important findings and 12 minor ones. Each has a
+  fix.
+
+## Checks run in this re-review
+
+| Check | Result |
+| --- | --- |
+| `node --test "tests/**/*.test.mjs"` in `plugins/toolkit` | 928 tests: 925 pass, 0 fail, 3 skipped (slow `find --reflect`, Lore clone compare, live Notion), 91 seconds. The Hindsight live tests ran against `127.0.0.1:8888`. |
+| `node --test "plugins/git-workflows/tests/*.test.mjs"` | 14 pass, 0 fail. |
+| `node dev/tools/check-skills.mjs --quiet` | 29 `SKILL.md` files, 205 files in `references/`, `assets/`, and `scripts/` (159 of them generated copies), 7 agent files, 649 `toolkit` commands checked; 0 failures, 0 warnings, 16 notes. All 16 are recorded exceptions: 14 ported `sf-architect-solutioning` references without a Contents list (body unchanged, as Mike approved), and the step placement in the two copies of the model's `sf-component-tracker` skill. |
+| `node dev/tools/sync-skill-references.mjs --check` | 159 copies, 0 problems. |
+| `node dev/tools/import-model.mjs --check` | The copy matches the approved model folder (112 files, commit `5e7d7a0`). Every `CONDITIONS.json` rule matches. |
+| `claude plugin validate .` and `claude plugin validate ./plugins/<each>` | Passed for the marketplace and all six plugin folders (Claude Code 2.1.280). |
+| A copy of the tree as it would be committed (`git ls-files --cached --others --exclude-standard`, 605 files) in a scratch folder, then `node --test "tests/scaffold/*.test.mjs"` | 77 tests: 76 pass, 0 fail, 1 skipped. The Git-ignored template folders `scaffold/model/.memory/` and `.work-items/` are tracked and arrive. |
+| Manifests and caches | Both manifests of each plugin carry the same version. Both marketplace files list all six plugins. Each Codex cache copy in `~/.codex/plugins/cache/toolkit-v2/` equals its source folder, except `toolkit`'s `tests/notion/final-confirm.test.mjs`. |
+| `toolkit init` in scratch Git repositories (`HOME`, `CLAUDE_CONFIG_DIR`, `CODEX_HOME`, `TOOLKIT_V2_CONFIG_DIR` in scratch) | p1 local and built-in: done. p2 local, built-in, Salesforce: 114 files. p3 GitHub Issues, Claude Code only: doctor clean, no pointer warning. p4 Jira, Salesforce, Codex only: 105 files, no `CLAUDE.md`. p5 Notion with no root page known: refused, nothing written. p6 local and Hindsight: 29 files and a new bank (see "What this re-review left behind"). p1's `AGENTS.md` and rules name no Salesforce path. |
+| `toolkit work approve WI-001 --requirements` while the Agreed goal holds template text | Refused. The fix line uses single quotes, `'Owner said: <quote>'`, and "write an apostrophe as ’". |
+| `toolkit hook pre-tool --host claude` fed with 31 commands | Refused: a merge, a tag, a Git note, a commit, `gh release create` and `edit`, `gh issue create` and `comment`, and `gh pr comment` that carry an AI credit line; `git add -A`, `git add .`, `git add -A src/`; `git clean -fdx`; `git push --force` and `--force-with-lease`. Let through: a human co-author, "generated with make", `git clean -fd`, `git stash`, `git add src/a.js tests/`, `npm test`, `npx prettier --write "**/*.md"`. Also let through: `rm -rf .work-items` and `rm -rf .memory` (R-M10). |
+| `codex execpolicy check --rules plugins/toolkit/templates/codex/toolkit.rules` | `toolkit machine-setup`, `memory delete`, `memory import`, `import`, `hindsight service install`, and `start`: "prompt". `toolkit work list` and `memory save`: "allow". `toolkit --json memory delete k` is "allow" by the rules, and the CLI refuses that form (`lib/cli.mjs` line 351). |
+| Claude Code ask-first rules | `templates/settings/claude-toolkit.json` has the same five commands under `permissions.ask`. The captured `settings-reference.md` (line 1518): deny rules first, then ask, then allow; the first match decides. |
+| `toolkit memory save` with secrets, in scratch p1 | An `sk-ant-` key, "The admin password is ...", and a `ghp_` token: refused, exit 2. A password inside a database address (`postgres://admin:<password>@...`): saved (R-M9). |
+| `compareRecords` on the first review's I6 pair | `{"description":0.625,"body":0.625,"similar":true}`. |
+| Hook run time outside a V2 project | 0.06 to 0.09 seconds for each of the five hooks. |
+| Search of the 6,664 tracked and new files for AI credit lines | Found only in test inputs, the captured Claude Code docs, this file's first review, `dev/research/project-init-library.md`, `dev/test-runs/skill-references-check.md`, and `dev/test-runs/confirm-claude-local/` (R-M11). |
+| Secret search of the same files | Only the fake keys in two test files. |
+| Read-only sources | `claude-toolkit` clean at `9d4ea8d`. Mike's model folder clean on `main` at `efa2440`. The approved branch head is `5e7d7a0`. |
+| Issue 419 | The note linking Toolkit V2 is in its comments. |
+| Hindsight | `/health` healthy. 24 banks (R-M12). |
+| Mike's installs (read only) | `~/.config/toolkit-v2/plugin-root` names `~/.claude/plugins/cache/toolkit-v2/toolkit/0.2.7`. `~/.local/bin/toolkit version` prints 0.2.7. This review session's `PATH` holds `/Users/michaelrihm/Documents/Projects/toolkit-v2/plugins/toolkit/bin`, while every `claude-toolkit` plugin `bin` on it is under `~/.claude/plugins/cache/` (R-I1). |
+
+## The first review's findings now
+
+| Finding | Now | Evidence |
+| --- | --- | --- |
+| B1. No live pass on the current code | Mostly fixed | Five final runs on 0.2.7: four passed, `final-codex-local` did not (R-B1). |
+| I1. Any session could point `toolkit` at any copy | Fixed | `refreshPointer` in `lib/project/machine.mjs` runs only inside a V2 project, writes only a complete installed copy, prefers a cache copy, and never replaces a newer version. The wrapper also needs `scaffold/CONDITIONS.json`. The pointer names the 0.2.7 cache. |
+| I2. "Claude Code reads the plugins in place" | The finding was wrong | Claude Code does read a directory marketplace in place. The texts changed for I2 are now wrong (R-I1). |
+| I3. Codex-first setup could not work | Fixed | `README.md` Codex steps end with `node .../bin/toolkit machine-setup` and say what it changes. |
+| I4. Risky `toolkit` commands ran without asking | Fixed | See the two ask-first rows above. |
+| I5. An unanswered "Save to memory?" was dropped | Fixed | The Stop hook saved the proposal live in all five final runs. |
+| I6. Duplicate check missed a rewording | Fixed | Pair above. A copy in wholly other words is still saved (a design limit; `final-codex-hindsight` F3). |
+| I7. `'\''` in Codex | Fixed | The skills teach ’ in Codex; `pre-tool.mjs` adds a note for `'\''` and for an unmatched quote. No quoting failure in any final Codex run. |
+| I8. No backup on day one | Fixed | Setup asks for a backup folder; `work finish`, handoff, and a daily session start back up. Seen in four final runs. With a Notion tracker and Notion memory nothing is copied, and the toolkit says so; whether to export is Mike's decision. |
+| M1. AI credit guard missed merges, tags, releases, issues | Fixed | Pre-tool table above. |
+| M2. Memory accepted a secret | Mostly fixed | R-M9. |
+| M3. Test banks on Mike's Hindsight server | Waits on Mike | Now 24 banks (R-M12). |
+| M4. Doctor pointer warning in a Claude Code-only project | Fixed | p3. The message names the real pointer path. |
+| M5. Salesforce paths in a non-Salesforce `AGENTS.md` | Fixed | p1. |
+| M6. Double quotes in CLI fix lines | Fixed | Approve row above. |
+| M7. Two routing findings | Partly fixed | O27: settled by decision 6. O21: the `work-on` sentence is in (step 3, and a gotcha), but the routing messages were not run again (R-M8). |
+| M8. `model-review.md` out of date | Fixed | "Updated 2026-09-28"; names head `5e7d7a0`. |
+| M9. Evidence quotes AI credit lines | Partly fixed | `claude-a` and `open-bugs.md` are fixed; `confirm-claude-local` is not (R-M11). |
+| M10. Codex hook trust hash | Fixed in code | `recordCodexHooksSeen` and doctor compare the hooks file hash. Not tried live: Mike has not trusted the hooks yet. |
+| M11. `memory-find` named another plugin's file | Fixed | `memory-find/references/tracker-github.md` and `tracker-jira.md`. |
+
+## Final run evidence
+
+| Run | Host | Setup | Result | Open findings |
+| --- | --- | --- | --- | --- |
+| `final-claude-local`, round 2 | Claude Code | local, built-in | Passed | 4 low |
+| `final-codex-local`, round 2 | Codex | local, built-in | Not passed: the acceptance check was skipped under owner-led delivery | R-B1, 1 low |
+| `final-codex-hindsight`, round 2 | Codex | local, Hindsight | Passed | 4 low |
+| `final-codex-salesforce`, round 2 | Codex | local, built-in, Salesforce | Passed | 2 medium (question box; acceptance check), 7 small |
+| `final-notion`, round 2 | Codex and Claude Code | Notion tracker and memory, on Mike's real page | Passed | 1 medium (a passing remark saved as approved); acceptance check skipped; 3 low |
+| `install-everyday.md` | Both | Mike's own installs | `toolkit` on in every folder; the other five only in V2 projects | Finding 1: Claude Code reads this folder in place |
+
+In all five runs: a work item from `01-discovery` to Done with Mike's
+approvals, a sub-item made by a split, a hand move or rename that the next
+session reported, a preference saved and found in a later session, an
+unanswered "Save to memory?" saved as a proposal by the Stop hook and then
+approved or rejected, "Where are we?" and "What do you need from me?", a
+handoff, all five hooks seen, no `hook-errors.log`, no AI credit line in any
+commit, and no `toolkit` command that waited on a hidden prompt.
+
+## Finish items
+
+| # | Item | Verdict | Evidence |
+| --- | --- | --- | --- |
+| 1 | Model review | Met | `dev/model-review.md` is current. The import check passes. The parity test installs all 24 setups and passes, also from a copy of the tree as it would be committed. Merging the model branch is Mike's step. |
+| 2 | Plugins | Met | Validation passes for the marketplace and all six plugin folders. Both marketplace files list all six. Installed in Mike's Claude Code and Codex (`install-everyday.md`). |
+| 3 | Project init | Met | Six setups in this review; the `project-setup` interview in all five final runs. Rules, the Plain English style, and Salesforce parts install as chosen. |
+| 4 | Work items | Met | Local: all four local runs. Notion: `final-notion` on Mike's real page (stages, sub-item, Notion hand move and rename, Solution Design page renamed on the next sync). GitHub Issues and Jira: written instructions only, as Mike decided. |
+| 5 | Skills | Met, one gap | `dev/SKILL-INDEX.md` covers 26 skills and 7 agents; check-skills passes; routing round 3 plus a 16 of 16 spot check in each host after the skill references work (`skill-references-check.md`). Gap: R-M8. |
+| 6 | Hooks | Met, one gap | 925 tests pass. All five hooks ran in real Claude Code and real Codex sessions in the final runs. Gap: every Codex run used `--dangerously-bypass-hook-trust`, so trusting the hooks in `/hooks` has not been tried. That is Mike's step. |
+| 7 | Notion | Met | `notion-after.md`, `lore-layout.md`, and `final-notion` round 2: `ensure-root` passed on Mike's real page, each project row has its own Work Items database (board by stage, sub-items) and a Memory page in Lore's layout. Left for Mike: the look in the Notion app (open bug 70) and R-M12. |
+| 8 | Hindsight | Met | The service is healthy on `127.0.0.1:8888`. `final-codex-hindsight`: its own bank, a memory saved and found, clean deletes checked in the bank. |
+| 9 | Sample runs | Partly met | All four setups ran to Done on the current code. Four of five runs passed; `final-codex-local` did not (R-B1). |
+| 10 | Fixes and final review | Not met | R-B1 is open, and the fixes are not committed (R-I2). |
+| 11 | Report | Not met yet | The lead gives it after this review. |
+
+## Decisions of 2026-09-28
+
+| Decision | Verdict |
+| --- | --- |
+| (1) One requirements folder per area | Kept: `requirements/account-ranking/ACCOUNT-RANKING.md` in `final-codex-salesforce`. |
+| (2) No `git fetch` without a remote | Kept: "No remote" in every final run's `publish-docs`. |
+| (3) In Codex the owner runs sandbox deploys | Kept: `final-codex-salesforce` s08. |
+| (4) Template guides say "copy this file" | Kept in the scaffold copy (`tests/TEST-PLAN-TEMPLATE.md`, `system-guide/AREA-TEMPLATE.md`, and others). |
+| (5) Salesforce questions go to `sf-architect-solutioning` | Kept: the scaffold's `AGENTS.md` line 25. |
+| (6), (9) Salesforce skill wording | Kept: model commit `9a2a69b`. |
+| (7), (8) No deploy scripts; pipeline deploys guarded | Kept: `salesforce-org-safety.md` and `tests/scaffold/org-guard.test.mjs`. |
+| (10), (11) `toolkit` on in every folder; installed in Mike's hosts | Kept (`install-everyday.md`). In Claude Code it runs from this folder (R-I1). |
+| (12) Risky commands ask first in both hosts | Kept. |
+| (13) Backup folder and automatic backups | Kept. Notion projects: Mike's open decision. |
+| Goal adjustment: what must happen every time lives in the `toolkit` command or a hook | Not kept for the acceptance check (R-B1) or for memory approval (R-I4). |
+| Skills carry their own procedures in their own folders | Kept: every reference linked, 159 generated copies in step. |
+
+## Findings of this re-review
+
+### Blocking
+
+**R-B1. "No agent team" still skips the independent acceptance check.**
+
+- Evidence: `final-codex-local` s09: "The owner-led delivery choice also
+  ruled out helpers, so no independent checker will run." That run is "Not
+  passed" for this reason alone. The same happened in `final-codex-salesforce`
+  s10 and `final-notion` s08. Only `final-claude-local` ran the check (s06).
+  Round 1 found the same, and the skill-text fix did not hold.
+- Cause, still in the shipped text: `plugins/work/shared/helpers.md` section 6
+  says the acceptance checker needs no permission except for "an owner who
+  said no to helpers (for example a no to the team question in
+  `work-delegate`)", and "A "no" to the team question authorizes no helpers:
+  the main agent does the work itself and says that no independent check
+  ran". `work-delegate` `SKILL.md` line 43: "A no to the team question means
+  no helpers." Mike's words "no agent team" fit both the delivery offer and
+  that team question. `team-roles.md` line 58 and `work-check` line 35 say
+  the opposite. Nothing in `toolkit work approve --result` checks for an
+  independent check.
+- Why it matters: a solo developer approves results that no independent agent
+  checked, and is told his delivery choice caused it. The goal adjustment of
+  2026-09-28 says a step that must happen every time lives in the `toolkit`
+  command or a hook.
+- Fix: (1) in `helpers.md` section 6 and `work-delegate` line 43, say that a
+  no to the delivery offer or to the team question never removes the design
+  critic or the acceptance checker; only his words about the check itself do.
+  (2) `toolkit work set --stage 11-user-approval` and `toolkit work approve
+  --result` print a note when the item's history has no acceptance check
+  since its last build. (3) Run the sync tool, raise the versions, and run the
+  owner-led part of the Codex local run again. Save the result in
+  `dev/test-runs/`.
+
+### Important
+
+**R-I1. `AGENTS.md` and `README.md` say Claude Code runs a cached copy. It
+runs this folder in place.**
+
+- Evidence: this review session's `PATH` holds
+  `/Users/michaelrihm/Documents/Projects/toolkit-v2/plugins/toolkit/bin`,
+  while every `claude-toolkit` plugin `bin` on it is under
+  `~/.claude/plugins/cache/`. `installed_plugins.json` names the cache folder
+  `.../toolkit-v2/toolkit/0.2.7`, but that is not what runs. The captured
+  `plugins-manifest-reference.md` line 178 names "a plugin loaded in place
+  from a marketplace added as a local directory". `install-everyday.md`
+  Finding 1 and `final-claude-local` s03 show the same. The first review's
+  I2 read only `installed_plugins.json`.
+- Wrong texts: `AGENTS.md` "Versions" ("Neither reads this folder in place");
+  `README.md` "Install on this Mac" ("They do not read this folder
+  directly"); the `refreshPointer` comment in `lib/project/machine.mjs`
+  ("while the skills and hooks run from a cache copy").
+- Why it matters: every saved edit under `plugins/`, committed or not, is live
+  in Mike's everyday Claude Code at the next session start: the `toolkit`
+  plugin in every folder, all six plugins in V2 projects. Other sessions edit
+  this folder. A broken edit to `lib/` makes every `toolkit` hook exit 1: a
+  hook error on each tool call in every folder, and no guards in V2 projects
+  until it is fixed. Also, in Claude Code the hooks run this folder while the
+  `toolkit` command runs the 0.2.7 cache named by the pointer, and the two can
+  differ.
+- Fix: correct the three texts (Codex runs its cache copy; Claude Code runs a
+  directory marketplace in place; the version raise is still needed for
+  Codex and for `claude plugin update`). Then a decision for Mike, with this
+  recommendation: install his everyday Claude Code from a fixed copy (for
+  example a release folder or a Git source), so an unfinished edit here never
+  reaches his sessions. That option has not been tested yet.
+
+**R-I2. Two rounds of fixes are not committed, and Mike's installs run them.**
+
+- Evidence: `git status` lists 159 changed files and 7 new ones under
+  `plugins/`, including `plugins/toolkit/lib/memory/owner-wording.mjs`, which
+  `lib/memory/proposals.mjs` and `lib/hooks/proposal.mjs` import. `HEAD`
+  holds `toolkit` 0.2.5; Mike's Claude Code and Codex run 0.2.7.
+  `installed_plugins.json` records commit `3adb722` for the 0.2.7 installs.
+  The five final run folders and `install-everyday.md` (43 MB) are not
+  committed either.
+- Why it matters: nothing in Git records what Mike has installed. Another
+  session's `git checkout` or `git restore` in this folder would lose it, and
+  the evidence the report rests on.
+- Fix: commit the fix rounds and the evidence, paths staged by name,
+  `owner-wording.mjs` and the new tests included. Read the staged list first.
+
+**R-I3. The Codex setup interview used Codex's question box.**
+
+- Evidence: `final-codex-salesforce` finding 1: five setup questions went
+  through `request_user_input_async`. In `codex exec` the box is not shown;
+  after 30 seconds the agent wrote "None verified yet" for the build and test
+  command itself. `project-setup/references/interview.md` line 20 has the
+  rule; `project-setup/SKILL.md` does not. `memory-save`,
+  `work-requirements`, and `work-decide` carry it in `SKILL.md`.
+- Fix: add "Ask in the reply text, never through a question tool." to
+  `project-setup` `SKILL.md` Gotchas. Blocking question tools in Codex is on
+  Mike's decision list.
+
+**R-I4. A remark made in passing was saved as approved by Mike.**
+
+- Evidence: `final-notion` finding 1, sP1: "FYI, I only ever run tip-split on
+  my MacBook Air with Node 24." had no keep phrase. The agent saved it with
+  `--approved-by 'Mike Rihm'` into an existing record, which now says Mike
+  approved a save he never approved. The other remarks made in passing in the
+  final runs were handled as the skill says: asked first
+  (`final-codex-hindsight` s12, `final-claude-local` s11), saved as a
+  proposal (`final-codex-salesforce` s10), or kept in the work item's notes
+  (`final-claude-local` s10). So this is 1 of 5.
+- Why it matters: the approval line is how Mike and later sessions know a
+  memory is his. Only skill text holds this rule.
+- Fix: the hooks already know whether the turn's prompt had a keep phrase and
+  whether the last reply asked "Save to memory: ...?". When a `toolkit memory
+  save --approved-by` runs in a turn with neither, the PostToolUse hook tells
+  the agent to ask him or to save a proposal instead.
+
+### Minor
+
+**R-M1. The Stop hook makes the agent ask about an open proposal twice.**
+`final-claude-local` problem 1. `lib/hooks/stop.mjs` line 205 runs
+`looseQuestion()` without checking for a `needs-review` proposal the message
+names. Fix: skip that check when the message names an open proposal.
+
+**R-M2. `work-decide` recommends yes to a proposal without evidence.**
+`final-claude-local` problem 2. Fix: add the evidence rule from `memory-save`
+to `plugins/memory/shared/proposals.md` or to `work-decide` step 6.
+
+**R-M3. Doctor outside a project prints computer findings without their
+severity.** `final-claude-local` problem 3; seen again in this review in a
+plain folder. The agent then said setup "can't go ahead". Fix: print
+"Warning:" before each line in `notProjectReport` (`lib/commands/doctor.mjs`).
+
+**R-M4. A recommendation asked with a question is not saved with it.**
+`final-claude-local` problem 4 and `final-codex-local` finding 2. A fresh
+session cannot match "go with your recommendation". Fix: write the
+recommendation into the Open Questions row.
+
+**R-M5. After a hand rename, `toolkit work show` names a worktree that does
+not exist.** `final-notion` finding 3; `lib/commands/work.mjs` line 279 builds
+it from the current title. Fix: name the existing worktree on a branch that
+starts with `claude/<id>-`.
+
+**R-M6. Replies do not use the skills' fixed lines.** Memory reply lines
+paraphrased (`final-codex-hindsight` F1, `final-codex-salesforce` 7,
+`final-notion` 5); "Owner said:" rows not word for word
+(`final-codex-salesforce` 6); replies with no next step; the finish reply left
+out "No automatic backup" (`final-notion` 4). Every record was right.
+
+**R-M7. The Stop hook types an instruction to the agent as `project`.**
+`final-codex-hindsight` F2 (`proposalType` in `lib/hooks/proposal.mjs`).
+Fix: a summary that starts with a verb to the agent ("Ask", "Use", "Keep") is
+`feedback`.
+
+**R-M8. Routing was not run again after two changes.** The `work-on` step 3
+sentence for O21 and the shorter `work-decide` description (its "Not for a
+bare yes ..." clause was removed in `fe918aa`) came after routing round 3.
+The spot check at 15:00 and the final runs routed the phrases they used
+correctly. Fix: run the round 3 message set again in both hosts.
+
+**R-M9. `toolkit memory save` accepts a password inside a database
+address.** Tested: `postgres://admin:<password>@db.example.com:5432/app` was
+saved. Fix: also refuse `scheme://user:password@host`.
+
+**R-M10. The pre-tool hook lets `rm -rf .work-items` and `rm -rf .memory`
+through.** Both folders are Git-ignored and exist only on this disk and in
+backups. The hook already refuses `git clean -x` for the same reason. Fix:
+refuse a recursive delete of either folder in the main checkout, with the
+same message.
+
+**R-M11. The AI co-author line is still quoted in committed evidence.**
+`dev/test-runs/confirm-claude-local/` (`evidence.md`,
+`checks/hookcheck.json`, `harness/hookcheck.py`) and the first review below
+quote it. Test files under `plugins/toolkit/tests/` also hold it as guard
+input, and they ship with the plugin. Fix: before any GitHub repository,
+replace the evidence quotes with "<AI co-author line>", and build the test
+input from parts.
+
+**R-M12. Test data on Mike's own services.** Hindsight: 24 banks, all from
+tests (`acme-crm` and `acme-crm-2` to `-17`, six `greet-cli-...` banks, and
+`proj-p6` from this review). Notion, under his real page: the rows "Toolkit V2
+sample (safe to delete)" and two "Toolkit V2 final run (safe to delete)"
+(keys `tv2-final-run` and `tv2-final-run-2`), each with its databases. In his
+"All Projects" view the registry columns are hidden since a round 1 agent
+changed the view with a raw API call. Fix: list each for Mike and remove
+each after his yes; showing the columns is his step in Notion.
+
+Also small, from the Salesforce run and in the model, which needs Mike's yes:
+the Salesforce guard's message ends with two periods in Codex
+(`final-codex-salesforce` 9). An agent left a folder in `/tmp`
+(`final-codex-salesforce` 8).
+
+## For Mike
+
+- Trust the V2 hooks in Codex `/hooks`.
+- Merge the model branch `toolkit-v2/approved-changes`.
+- Decide: install your everyday Claude Code from a fixed copy (R-I1).
+- Decide: an automatic export for Notion projects.
+- Decide: block question boxes in Codex (R-I3).
+- Yes or no: delete the test banks and Notion test rows (R-M12).
+- In Notion: show the registry columns in "All Projects", and look at the
+  board columns and sub-item nesting (open bug 70).
+- The model changes still waiting: the roadmap's two-space line breaks, and
+  the guard message's two periods.
+
+## What this re-review left behind
+
+- One empty Hindsight bank, `proj-p6` (0 documents), on Mike's server:
+  `toolkit init --memory hindsight` in scratch folder p6 made it, because the
+  toolkit always uses the local server. It is on the R-M12 list for Mike.
+  Nothing else was written to Mike's `~/.claude`, `~/.codex`,
+  `~/.config/toolkit-v2`, Notion, the model folders, or `claude-toolkit`.
+- The scratch projects, the scratch home, and the scripts are in this
+  session's scratch folder.
+- The only file changed in this repository is this one.
+
+---
+
 # Final independent review (finish item 10)
 
 Reviewed on 2026-09-28, 12:30 to 13:20 EDT, at commit `437e754` ("Update

@@ -1,0 +1,224 @@
+PROMPT: About the Venmo memory you proposed: yes, keep it.
+THREAD: 01a0ea39-74e3-7aa2-a820-5f228c6c7836
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll use the memory-save procedure to accept the Venmo note and check that it’s stored.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/SKILL.md'
+  -> ---
+name: memory-save
+description: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says "remember this", "from now on", "forget that", or "remind me" with no time given, corrects the agent, or a hook says a save is due.'
+---
+
+# Memory save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Saves, corrects, or retires one memory record with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand.
+
+## Steps
+
+Track these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home ("Where other things go" below) and stop.
+2. Search for a record that already holds it, and read each hit with its version. The save's duplicate check compares wording, so only this search finds a record the new fact contradicts (for example "Mondays" against "Tuesdays").
+   `toolkit memory find '<topic>'`
+   `toolkit memory get <key> --json`
+3. Read the approval mode and apply "Approval policy" below. When it says ask, ask and wait.
+   `toolkit config get memory.approval`
+4. Write the description and body in the record format (`refer
+
+[CMD exit=0] /bin/zsh -lc 'cat .memory/memory-criteria.md'
+  -> # Memory criteria
+
+This file is the project-specific selection policy: what is worth keeping in lasting memory. The approval policy, including onboarding and trusted mode, is in the `memory-save` skill, which saves with `toolkit memory save`. When the owner corrects what is worth saving, save the co
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/references/proposals.md'
+  -> <!-- Generated file. Source: plugins/memory/shared/proposals.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Memory proposals
+
+Purpose: what a memory proposal is, how one is saved, and how the owner's yes
+or no is recorded.
+
+## Contents
+
+- What a proposal is
+- How a proposal is saved
+- Recording the owner's answer
+- Examples
+
+## What a proposal is
+
+A proposal is a memory record the owner has not approved yet. It exists so
+that a "Save to memory?" question he did not answer is kept, not lost.
+
+- It is saved with `--proposal`: status `needs-review`, authorization
+  "Proposed by the agent on <date>", and never an approver.
+- It is not a fact. The agent does not rely on it, and an answer never
+  presents it as true.
+- `toolkit memory find` leaves it out unless `--proposals` (or `--all`) is
+  given. `toolkit memory get` ends its text with a line saying it is a
+  proposal.
+- `toolkit work decisions` and the session briefing list it among the things
+  waiting on the owner, and the `work-decide` skill asks him about it.
+- The built-in index marks it "[proposal: not a fact until the owner
+  answers]". In Notion its Status is "proposed".
+- A proposal never replaces a record the owner approved. The CLI refuses a
+  proposal whose key is already a current or retired record.
+
+## How a proposal is saved
+
+1. The agent asks the question in exactly this form, at the end of its reply:
+   `Save to memory: <one-line summary>?` (bold is fine). Other wording, such
+   a
+
+[CMD exit=0] /bin/zsh -lc 'toolkit config get memory.approval'
+  -> onboarding
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory find 'Venmo'"
+  -> No memory records match "Venmo".
+1 saved proposal also matches; it is not a fact until the owner answers. toolkit memory find 'Venmo' --proposals shows it.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory get project_mike_rihm_friends_settle_split_bills_venmo_takes --json'
+  -> {
+  "ok": true,
+  "backend": "builtin",
+  "key": "project_mike_rihm_friends_settle_split_bills_venmo_takes",
+  "name": "mike-rihm-friends-settle-split-bills-venmo-takes",
+  "type": "project",
+  "description": "Mike Rihm and Mike's friends settle split bills in Venmo, which takes whole-cent amounts, so the round-up rule matters",
+  "status": "needs-review",
+  "stored_status": "needs-review",
+  "superseded_by": null,
+  "source": "Agent question in a session, 2026-09-28",
+  "saved": "2026-09-28",
+  "last_verified": "2026-09-28",
+  "authorization": "Proposed by the agent on 2026-09-28; the owner has not answered",
+  "approved_by": null,
+  "supersedes": [],
+  "body": "# Mike Rihm and Mike's friends settle split bills in Venmo, which takes whole-cent amounts\n\n**Remember:** Mike Rihm and Mike's friends settle split bills in Venmo, which takes whole-cent amounts, so the round-up rule matters.\n\n**Why:** Not stated by the owner.\n\n**How to apply:** Not stated by the owner. Do not rely on this until the owner approves it.\n\n**Evidence and limits:** On 2026-09-28 the agent asked the owner \"Save to memory: You and your friends settle split bills in Venmo, which takes whole-cent amounts, so the round-up rule matters?\" and the turn ended with no answer, so the toolkit's Stop hook saved it as a proposal.\n",
+  "version": "50f78533679bb3aa0fb632b919160fd9acac6b53a6651dcbd89715301c21bd63",
+  "text": "---\nname: project_mike_rihm_friends_settle_split_bills_venmo_takes\ndescription: Mike
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory approve project_mike_rihm_friends_settle_split_bills_venmo_takes --by 'Mike Rihm'"
+  -> Approved project_mike_rihm_friends_settle_split_bills_venmo_takes: it is now a current memory record, approved by Mike Rihm on 2026-09-28.
+Version: 9ab29d17555a
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory get project_mike_rihm_friends_settle_split_bills_venmo_takes'
+  -> ---
+name: project_mike_rihm_friends_settle_split_bills_venmo_takes
+description: Mike Rihm and Mike's friends settle split bills in Venmo, which takes whole-cent amounts, so the round-up rule matters
+metadata:
+  type: project
+status: current
+source: Agent question in a session, 2026-09-28
+last_verified: 2026-09-28
+authorization: Approved by Mike Rihm on 2026-09-28
+supersedes: none
+---
+
+# Mike Rihm and Mike's friends settle split bills in Venmo, which takes whole-cent amounts
+
+**Remember:** Mike Rihm and Mike's friends settle split bills in Venmo, which takes whole-cent amounts, so the round-up rule matters.
+
+**Why:** Not stated by the owner.
+
+**How to apply:** Not stated by the owner.
+
+**Evidence and limits:** On 2026-09-28 the agent asked the owner "Save to memory: You and your friends settle split bills in Venmo, which takes whole-cent amounts, so the round-up rule matters?" and the turn ended with no answer, so the toolkit's Stop hook saved it as a proposal. Mike Rihm approved it on 2026-09-28.
+
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for tipcalc (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r2).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (5):
+- The AGENTS.md Commands table has no verified build, test, or deploy commands yet. Add them once they are known and verified.
+- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's diff
+
+[AGENT] Saved to memory: you and your friends settle split bills in Venmo, which takes whole-cent amounts, so the round-up rule matters. Say “forget that” to undo.
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 196830, "cached_input_tokens": 177152, "cache_write_input_tokens": 0, "output_tokens": 626, "reasoning_output_tokens": 36}}
+
+SKILLS OPENED: ['memory-save']
+
+[HOOK CONTEXT ord=9] Project briefing: tipcalc (tipcalc), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Build the tip command with split option: 08 Build, In Progress. Next action: Owner reviews the WI-002 result. After its approval, complete WI-002 and then WI-001; merge only with separate owner approval. Continues with work-on.
+- WI-002 Add the --split option: 11 User approval, In Progress. Next action: Result approved. Keep WI-002 and WI-001 branches unmerged. Continue work-finish only when the owner asks to ship; get separate approval b... Continues with work-finish.
+
+Items: 2 in progress.
+
+Current focus:
+Last updated: 2026-09-28, chat, agent
+
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/SKILL.md",max_output_tokens:5000}),
+  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .memory/AGENTS.md .claude/rules/{humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,session-handoff,shared-repository-work,work-item-folders}.md",max_output_tokens:10000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"167d15\",\"wall_time_seconds\":0.000002917,\"exit_code\":0,\"original_token_count\":3621,\"output\":\"---\\nname: memory-save\\ndescription: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says \\\"remember this\\\", \\\"from now on\\\", \\\"forget that\\\", or \\\"remind me\\\" with no time given, corrects the agent, or a hook says a save is due.'\\n---\\n\\n# Memory save\\n\\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \\\"How to write replies\\\" section of `AGENTS.md`.\\nSaves, corrects, or retires one memory record with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand.\\n\\n## Steps\\n\\nTrack these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.\\n\\n1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home (\\\"Where other things go\\\" below) and stop.\\n2. Search for a record that already holds it, and read each hit with its version. The save's duplicate check compares wording, so only this search finds a record the new fact contradicts (for example \\\"Mondays\\\" against \\\"Tuesdays\\\").\\n   `toolkit memory find '<topic>'`\\n   `toolkit memory get <key> --json`\\n3. Read the approval mode and apply \\\"Approval policy\\\" below. When it says ask, ask and wait.\\n   `toolkit config get memory.approval`\\n4. Write the description and body in the record format (`references/record-format.md`), then save with the form for the case (\\\"Save forms\\\" below).\\n5. Exit code 2 saved nothing. Read the \\\"Error:\\\" line. Records listed: the duplicate check. \\\"Changed since it was read\\\": read it again and redo the change. Any other rule: fix the text as the message says. `references/replacing-and-retiring.md`, section 2, has each case.\\n6. \\\"Forget that\\\": retire the record, with his words as the reason. Delete only when his own words say delete (\\\"Approval policy\\\").\\n   `toolkit memory retire <key> --reason '<his words>'`\\n7. An owner to-do with no work it
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"cat .memory/memory-criteria.md",max_output_tokens:3000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/references/proposals.md",max_output_tokens:3500}),
+  tools.exec_command({cmd:"toolkit memory find 'Venmo'",max_output_tokens:2000}),
+  tools.exec_command({cmd:"toolkit config get memory.approval",max_output_tokens:1000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"a14b59\",\"wall_time_seconds\":0.00000225,\"exit_code\":0,\"original_token_count\":812,\"output\":\"# Memory criteria\\n\\nThis file is the project-specific selection policy: what is worth keeping in lasting memory. The approval policy, including onboarding and trusted mode, is in the `memory-save` skill, which saves with `toolkit memory save`. When the owner corrects what is worth saving, save the correction as a `feedback` memory with `memory-save`, as a general rule, without copying the rejected memory. Those `feedback` memories override this page.\\n\\n## Default test for lasting memory\\n\\nSave a topic when it concerns this project, has a credible source, would matter in a future session, would be costly or unreliable to reconstruct, and has no better maintained owner. Prefer updating an existing topic. A short pointer to an authoritative record can qualify when future sessions would otherwise miss that record.\\n\\n| Type and filename | Usually worth retaining | Route or reject instead |\\n| --- | --- | --- |\\n| `user_<topic>.md` | Relevant role, responsibility, working preference, or communication need the owner stated | Personal judgments, irrelevant biography, private details |\\n| `feedback_<topic>.md` | Repeated or standing correction to how the agent should work; confirmed selection lesson | One-off irritation, a rejected fact restated as policy, an instruction already in `AGENTS.md` |\\n| `project_<topic>.md` | Durable project constraint, rationale, technical landmark, or proven costly fix | A decision for the whole project (`DECISIONS.md`), code summary, schema copy, active ticket status, accepted requirement or design body |\\n| `reference_<topic>.md` | Hard-to-rediscover route to a source, system, dashboard, or decision record, with why to open it | Entire outside page or a path already obvious in `PROJECT.md` or the project map |\\n| `event_<topic>.md` | Significant project episode: what was done, what resulted, and where the output lives | Routine edit, tool call, raw error, daily progress log |\\n\\n## Working context is different\\n\\n`CURRENT_FOCUS.md` holds what is happening now: active work item IDs, what waits on the owner with no work item, untracked to-dos, and where the next session starts. It can change often. Keep a work item's detailed t
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory get project_mike_rihm_friends_settle_split_bills_venmo_takes --json",max_output_tokens:3000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\n  \"ok\": true,\n  \"backend\": \"builtin\",\n  \"key\": \"project_mike_rihm_friends_settle_split_bills_venmo_takes\",\n  \"name\": \"mike-rihm-friends-settle-split-bills-venmo-takes\",\n  \"type\": \"project\",\n  \"description\": \"Mike Rihm and Mike's friends settle split bills in Venmo, which takes whole-cent amounts, so the round-up rule matters\",\n  \"status\": \"needs-review\",\n  \"stored_status\": \"needs-review\",\n  \"superseded_by\": null,\n  \"source\": \"Agent question in a session, 2026-09-28\",\n  \"saved\": \"2026-09-28\",\n  \"last_verified\": \"2026-09-28\",\n  \"authorization\": \"Proposed by the agent on 2026-09-28; the owner has not answered\",\n  \"approved_by\": null,\n  \"supersedes\": [],\n  \"body\": \"# Mike Rihm and Mike's friends settle split bills in Venmo, which takes whole-cent amounts\\n\\n**Remember:** Mike Rihm and Mike's friends settle split bills in Venmo, which takes whole-cent amounts, so the round-up rule matters.\\n\\n**Why:** Not stated by the owner.\\n\\n**How to apply:** Not stated by the owner. Do not rely on this until the owner approves it.\\n\\n**Evidence and limits:** On 2026-09-28 the agent asked the owner \\\"Save to memory: You and your friends settle split bills in Venmo, which takes whole-cent amounts, so the round-up rule matters?\\\" and the turn ended with no answer, so the toolkit's Stop hook saved it as a proposal.\\n\",\n  \"version\": \"50f78533679bb3aa0fb632b919160fd9acac6b53a6651dcbd89715301c21bd63\",\n  \"text\": \"---\\nname: project_mike_rihm_friends_settle_split_bills_venmo_takes\\ndescription: Mike Rihm and Mike's friends settle split bills in Venmo, which takes whole-cent amounts, so the round-up rule matters\\nmetadata:\\n  type: project\\nstatus: needs-review\\nsource: Agent question in a session, 2026-09-28\\nlast_verified: 2026-09-28\\nauthorization: Proposed by the agent on 2026-09-28; the owner has not answered\\nsupersedes: none\\n---\\n\\n# Mike Rihm and Mike's friends settle split bills in Venmo, which takes whole-cent amounts\\n\\n**Remember:** Mike Rihm and Mike's friends settle split bills in Venmo, which takes whole-cent amounts, so the round-up rule matters.\\n\\n**Why:** Not stated by the owner.\\n\\n**How to apply:** Not stated by the owner. Do not rely on this until the owner approves it.\\n\\n**Evidence and limits:** On 2026-09-28 the agent asked th
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory approve project_mike_rihm_friends_settle_split_bills_venmo_takes --by 'Mike Rihm'",max_output_tokens:2000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Approved project_mike_rihm_friends_settle_split_bills_venmo_takes: it is now a current memory record, approved by Mike Rihm on 2026-09-28.\nVersion: 9ab29d17555a\n"}]
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"toolkit memory get project_mike_rihm_friends_settle_split_bills_venmo_takes",max_output_tokens:1800}),
+  tools.exec_command({cmd:"toolkit doctor",max_output_tokens:1800})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"830d88\",\"wall_time_seconds\":0.000003708,\"exit_code\":0,\"original_token_count\":253,\"output\":\"---\\nname: project_mike_rihm_friends_settle_split_bills_venmo_takes\\ndescription: Mike Rihm and Mike's friends settle split bills in Venmo, which takes whole-cent amounts, so the round-up rule matters\\nmetadata:\\n  type: project\\nstatus: current\\nsource: Agent question in a session, 2026-09-28\\nlast_verified: 2026-09-28\\nauthorization: Approved by Mike Rihm on 2026-09-28\\nsupersedes: none\\n---\\n\\n# Mike Rihm and Mike's friends settle split bills in Venmo, which takes whole-cent amounts\\n\\n**Remember:** Mike Rihm and Mike's friends settle split bills in Venmo, which takes whole-cent amounts, so the round-up rule matters.\\n\\n**Why:** Not stated by the owner.\\n\\n**How to apply:** Not stated by the owner.\\n\\n**Evidence and limits:** On 2026-09-28 the agent asked the owner \\\"Save to memory: You and your friends settle split bills in Venmo, which takes whole-cent amounts, so the round-up rule matters?\\\" and the turn ended with no answer, so the toolkit's Stop hook saved it as a proposal. Mike Rihm approved it on 2026-09-28.\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"810b14\",\"wall_time_seconds\":0.011830084,\"exit_code\":1,\"original_token_count\":451,\"output\":\"Toolkit doctor for tipcalc (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r2).\\n\\nWarnings (2):\\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.\\n   Fix: The owner opens Codex in this folder and trusts it when Codex asks.\\n2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).\\n   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\\n\\nNotes (5):\\n- The AGENTS.md Commands table has no verified build, test, or deploy command

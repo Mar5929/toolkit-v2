@@ -174,6 +174,10 @@ setup offers to run `git init` for you.
      old day folders yourself when you no longer want them. A second copy
      (clone) of the same project gets its own day folder, with 8 extra
      letters at the end of its name, so the two never write over each other.
+     When today's folder already holds more than the project has now (for
+     example on a new Mac, before you restore), the copy goes to a new folder
+     with the time added, like `acme-crm-2026-09-28-141503`, and today's
+     earlier folder is kept.
 3. Start a new session when setup finishes, so Claude Code loads the new
    settings and the Plain English style.
 
@@ -188,6 +192,11 @@ plugins. After that the project also works in Codex: open Codex in the folder,
 trust the folder, and trust the hooks (see below).
 
 To check or repair a project later, say **"check the setup"**.
+
+A hook that fails never stops your session and shows no error at that
+moment. It writes the error to `.git/toolkit-v2/hook-errors.log` in the
+project instead. For 3 days after a failure, `toolkit doctor` and the
+briefing at the start of each session warn about it, so the agent tells you.
 
 ### Notion memory
 

@@ -1,0 +1,6 @@
+{"type":"thread.started","thread_id":"01a0ea0e-249e-7261-a096-0b07d7d93f00"}
+{"type":"item.completed","item":{"id":"item_0","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
+{"type":"item.completed","item":{"id":"item_1","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_2","type":"agent_message","text":"Where should automatic backups of tipcalc’s work items and memory go? I recommend `~/Backups/toolkit`, outside the project and available to your computer’s usual backup. You can also choose another folder or say “no backups.”"}}
+{"type":"turn.completed","usage":{"input_tokens":269130,"cached_input_tokens":235008,"cache_write_input_tokens":0,"output_tokens":1138,"reasoning_output_tokens":222}}

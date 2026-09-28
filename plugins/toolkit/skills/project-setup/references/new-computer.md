@@ -63,10 +63,16 @@ toolkit machine-setup
 ```
 
 It changes this computer, so say so in one line and run it only after the
-owner's yes. It:
+owner's yes. Both hosts then ask him to confirm it. In Codex, run it alone
+with `sandbox_permissions` set to `require_escalated` and a one-line reason:
+the approval alone keeps it inside the sandbox, which cannot write `~/.codex`
+or `~/.local/bin`. It:
 
 - writes `~/.local/bin/toolkit`, the small script Codex uses to reach the
-  command, and the plugin-root pointer in `~/.config/toolkit-v2/`;
+  command, and the plugin-root pointer in `~/.config/toolkit-v2/`. The
+  pointer names the host's installed copy of the toolkit (its plugin cache
+  folder) whenever one of the same or a newer version exists, not the
+  toolkit-v2 folder itself;
 - in `~/.codex/config.toml`, sets `enabled = false` for every Toolkit V2
   plugin except `toolkit`, and `enabled = true` for `toolkit`, keeping every
   other line;

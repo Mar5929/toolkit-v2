@@ -1,0 +1,12 @@
+## Would the agent's search step (memory-save step 2) find the original for the synonym wording? Mon Sep 28 22:51:44 UTC 2026
+$ toolkit memory find 'sample run for every switch in the README'
+2 memory records are about "sample run for every switch in the README" (Hindsight recall, best first):
+- user_readme_sample_for_every_switch: The README gives a sample run for every switch the program accepts
+    # Sample run for every switch **Remember:** Mike wants the README to give a sample run for every switch the program accepts. **Why:** Not stated by the owner. *
+- user_cli_flags_readme_examples: List every command-line flag in the README with a short example
+    # README examples for CLI flags **Remember:** Mike prefers every command-line flag to be listed in the README with a short example. **Why:** Not stated by the o
+Read a record with toolkit memory get <key> before relying on it.
+This record may also be about it: Hindsight recall scored it above the rest, but it shares few of its words.
+- user_readme_under_one_page: Keep the README short: one screen or less
+Read one with toolkit memory get <key> before answering from it.
+exit=0

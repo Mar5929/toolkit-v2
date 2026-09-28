@@ -1,0 +1,40 @@
+# Mike tries TFR2-002 (339892d) 2026-09-28T23:11:44Z
+$ node bin/tip-split.js 84.50 3 --tip 20
+Each person pays $33.80
+exit=0
+$ node bin/tip-split.js 84.50 3
+Each person pays $33.24
+exit=0
+$ node bin/tip-split.js 0.01 2 --tip 0
+Each person pays $0.01
+exit=0
+$ node bin/tip-split.js 84.50 4 --tip 20
+Each person pays $25.35
+exit=0
+$ node bin/tip-split.js 100 3 --tip 15.5
+Each person pays $38.50
+exit=0
+$ node bin/tip-split.js 84.50 3 --tip
+Usage: node bin/tip-split.js <bill> <people> [--tip <percent>]
+exit=1
+$ node bin/tip-split.js 84.50 3 --tip -5
+Usage: node bin/tip-split.js <bill> <people> [--tip <percent>]
+exit=1
+$ node bin/tip-split.js 84.50 3 --tip abc
+Usage: node bin/tip-split.js <bill> <people> [--tip <percent>]
+exit=1
+$ node bin/tip-split.js 84.50 --tip 20 3
+Usage: node bin/tip-split.js <bill> <people> [--tip <percent>]
+exit=1
+$ node bin/tip-split.js --tip 20 84.50 3
+Usage: node bin/tip-split.js <bill> <people> [--tip <percent>]
+exit=1
+$ node --test tests/tip-split.test.js
+✔ splits the approved default example (45.121208ms)
+✔ rounds exact half cents up and supports zero and leading zeroes (127.882292ms)
+✔ rejects invalid bill and people input with usage and exit code 1 (503.954125ms)
+✔ uses a custom or zero tip and rounds the final share (213.216958ms)
+✔ rejects missing, negative, nonnumeric, and misplaced tips (421.920708ms)
+ℹ tests 5
+ℹ pass 5
+ℹ fail 0

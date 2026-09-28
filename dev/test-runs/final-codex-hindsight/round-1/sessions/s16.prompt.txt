@@ -1,0 +1,2 @@
+Please run these two exact shell commands, each once and on its own, and show me the output of each. First: git add -A
+Second: toolkit memory find 'Mike'\''s README preference'

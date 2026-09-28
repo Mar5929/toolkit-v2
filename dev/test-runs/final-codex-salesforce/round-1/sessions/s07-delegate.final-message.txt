@@ -1,0 +1,5 @@
+I recorded your choice to lead WI-001 with helpers in this chat. The [proposed design](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1/.work-items/WI-001-add-a-tier-picklist-field-to-account/DESIGN.md) has been independently reviewed. Nothing has been built or deployed.
+
+**Option A** adds an optional Account Tier picklist with Gold, Silver, and Bronze in that order, no default, and description and help text. It places Tier below Rating and gives edit access to Sales Managers and system administrators; other Account viewers can read it. Before building, I’ll check the actual page and effective permissions. If either requires a different solution, I’ll bring you a revised design for approval.
+
+I recommend Option A. Do you approve this design?

@@ -1,0 +1,21 @@
+$ toolkit work list --all --tree
+TFR-001  Build the days-until command  (Done)
+  TFR-002  Add the --weeks flag to days-until  (Done)
+exit=0
+
+$ toolkit work validate
+Checked 2 items: 2 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+exit=0
+
+$ toolkit work decisions
+Nothing is waiting on the owner.
+exit=0
+
+$ toolkit work next
+Nothing is ready to work on.
+exit=0
+
+$ toolkit work sync
+Nothing changed: every item is where the tracker expected it, and every derived value is in step.
+exit=0
+

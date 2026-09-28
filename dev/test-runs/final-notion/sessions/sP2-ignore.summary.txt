@@ -1,0 +1,190 @@
+PROMPT: Which folder do I run the TFR-002 result from?
+THREAD: 01a0e9d0-44b8-7660-af23-779e38f0c935
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll check the TFR-002 worktree and its run instructions so I can give you the exact folder and command.
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list --porcelain'
+  -> worktree /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1
+HEAD 0f2fac6b5cbec8eb19e6b1b0bca0b6140c5986cc
+branch refs/heads/main
+
+worktree /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-clau
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-status/SKILL.md'
+  -> ---
+name: work-status
+description: 'Reports where the project''s work items stand: progress, blockers, the next item, and decisions waiting on the owner. Use whenever the owner asks about project or item status, even one item, for example "where are we", "what''s next", or "is X done yet". Not for a chat recap; use session-summary.'
+---
+
+# Work status
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Reports where the work stands. This skill only reads: apart from the CLI's own sync (the history rows it writes for the owner's hand moves), it never changes an item, memory, or a file.
+
+## Steps
+
+1. Use the project briefing when this conversation has it and nothing changed since. Otherwise run it.
+   `toolkit brief`
+2. The owner named an item or an area: answer about that item only. Where it stands in plain words, what is done and left in its Roadmap, its blockers, and its next action.
+   `toolkit work show <id>`
+3. The whole project: read the tree, the recommended next item, the decisions waiting on the owner, and the current focus.
+   `toolkit work list --tree`
+   `toolkit work next`
+   `toolkit work decisions`
+   `toolkit memory focus`
+4. Answer in the order and shape in "How to answer" below. Say every stage in plain words with the item id ("WI-012 is in testing"); the labels come from the lifecycle.
+   `toolkit work lifecycle`
+5. For each problem, name t
+
+[CMD exit=0] /bin/zsh -lc "rg -n 'TFR-002|days-until|weeks' PROJECT-ROADMAP.md .claude/worktrees -g 'README.md' -g 'package.json' -g 'PROJECT-ROADMAP.md' -g 'AGENTS.md' -g 'days-until*'"
+  -> PROJECT-ROADMAP.md:20:days-until tells me how many days are left until a date I type, so I can count down to trips and deadlines.
+.claude/worktrees/tfr-001-build-the-days-until-command/AGENTS.md:9:days-until tells me how many days are left until a date I type, so I can count down to trips and deadli
+
+[CMD exit=0] /bin/zsh -lc 'cat .claude/worktrees/tfr-002-add-the-weeks-flag-to-days/README.md'
+  -> # days-until
+
+A tiny Node.js command that tells me how many days are left until a date.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show TFR-002'
+  -> TFR-002: Add the --weeks flag to days-until
+Location: https://app.notion.com/p/Add-the-weeks-flag-to-days-until-3e9b381da176815bb55ccfff40995905
+Stage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: none | Sub-items: none | Design: none
+Worktree branch for this item: claude/tfr-002-add-the-weeks-flag-to-days (folder .claude/worktrees/tfr-002-add-the-weeks-flag-to-days)
+
+---
+id: TFR-002
+title: Add the --weeks flag to days-until
+type: build
+stage: 11-user-approval
+status: In Progress
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+# TFR-002: Add the --weeks flag to days-until
+
+## Overview
+
+**Goal:** Add --weeks to the days-until command so it shows whole weeks and leftover days in either flag position.
+
+**Current position:** The --weeks result is built and tested on its own branch. Eight automated checks and direct CLI checks passed; the test plan is committed as af7015d.
+
+**Next action:** Ask Mike Rihm to approve the tested TFR-002 result separately. Do not merge until he authorizes merge.
+
+**Blockers:** Owner result approval is required before this item can be finished. Merge is not authorized.
+
+**Related items:** TFR-001 holds the approved requirements and design and the base-command commit.
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome
+
+[AGENT] Run it from the **TFR-002 worktree**, at `.claude/worktrees/tfr-002-add-the-weeks-flag-to-days` inside this project.
+
+From the project folder:
+
+```sh
+cd .claude/worktrees/tfr-002-add-the-weeks-flag-to-days
+node bin/days-until.js --weeks 2026-10-15
+```
+
+That folder contains the tested TFR-002 result.
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 236155, "cached_input_tokens": 205824, "cache_write_input_tokens": 0, "output_tokens": 1599, "reasoning_output_tokens": 656}}
+
+SKILLS OPENED: ['work-status']
+
+[HOOK CONTEXT ord=9] Project briefing: Toolkit V2 final run (safe to delete) (tv2-final-run), owner Mike Rihm. Work items: the Notion Work Items database (ids like TFR-001). Memory: Notion, in Lore's layout (a Memory page on the project row with Lore's databases). Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- TFR-001 Build the days-until command with a --weeks flag: 09 Testing, In Progress. Next action: After the separate TFR-002 result review, present the TFR-001 base command result for owner approval. Keep both branches unmerged until M... Continues with work-check.
+- TFR-002 Add the --weeks flag to days-until: 11 User approval, In Progress, waiting on owner. Next action: Ask Mike Rihm to approve the tested TFR-002 result separately. Do not merge until he authorizes mer
+
+[HOOK CONTEXT ord=52] Project briefing: Toolkit V2 final run (safe to delete) (tv2-final-run), owner Mike Rihm. Work items: the Notion Work Items database (ids like TFR-001). Memory: Notion, in Lore's layout (a Memory page on the project row with Lore's databases). Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- TFR-001 Build the days-until command with a --weeks flag: 09 Testing, In Progress. Next action: After the separate TFR-002 result review, present the TFR-001 base command result for owner approval. Keep both branches unmerged until M... Continues with work-check.
+- TFR-002 Add the --weeks flag to days-until: 11 User approval, In Progress, waiting on owner. Next action: Ask Mike Rihm to approve the tested TFR-002 result separately. Do not merge until he authorizes mer
+
+[HOOK CONTEXT ord=55] At the end of the last turn the toolkit saved the unanswered "Save to memory: you run days-until only on your MacBook Air with Node 24?" as a memory proposal: project_run_days_until_only_macbook_air_node_24. It is not a fact. If the owner answers it now, his yes is toolkit memory approve project_run_days_until_only_macbook_air_node_24 --by <name> and his no is toolkit memory reject project_run_days_until_only_macbook_air_node_24; otherwise work-decide asks him later.
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md",max_output_tokens:12000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.6/skills/memory-save/SKILL.md",max_output_tokens:12000}),
+  tools.exec_command({cmd:"git status --short --branch",max_output_tokens:1000})
+]); for(let i=0;i<r.length;i++)text({i,result:r[i]});
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"dfa89f\",\"wall_time_seconds\":4.59e-7,\"exit_code\":1,\"original_token_count\":3362,\"output\":\"cat: SOUL.md: No such file or directory\\n# Toolkit V2 final run (safe to delete)\\n\\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\\n\\n## Purpose and intended outcome\\n\\n- Purpose: Count down to trips and deadlines.\\n- Intended outcome: days-until tells me how many days are left until a date I type, so I can count down to trips and deadlines.\\n\\n## Scope and boundaries\\n\\n- In scope: accept a date and report how many days remain, for trips and deadlines.\\n- Outside scope: `<Important exclusions or adjacent owners.>`\\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\\n\\n## Systems and environments\\n\\n| System or org | Purpose | Environment | Source of truth | Access notes |\\n| --- | --- | --- | --- | --- |\\n| Notion | Work items and project memory | Notion workspace | [Project page](https://app.notion.com/p/Toolkit-V2-final-run-safe-to-delete-3e9b381da17681ccaa54cd9453f484ea) | The Notion CLI is signed in on this Mac. |\\n\\n## People and ownership\\n\\n| Role | Person or team | Responsibility | Source / last confirmed |\\n| --- | --- | --- | --- |\\n| Owner | Mike Rihm | Project decisions | Owner, 2026-09-28 |\\n\\n## Work and project records\\n\\n- Work tracker: [Work Items in Notion](https://app.notion.com/p/9450d0a8834a4de6b68845c7f1f78c12).\\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\\n- Project decisions: [DECISIONS.md](DECISIONS.md)\\n- Functional requirements: [requirements/](requirements/)\\n- Design home: with its Notion work item.\\n- System Guide: disabled; `system-guide/` contains only the template.\\n- Memory: the [Memory database in Notion](https://app.notion.com/p/a2d5b7e595da482381174849b144eec7) (the setup choice is in `.toolkit.json`).\\n- Memory backup or sync: Notion holds the live records. `backup.dir` in `.toolkit.json` records the owner's selected folder. A manual memory ex
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.6/skills/memory-save/references/memory-criteria.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.6/skills/memory-save/references/proposals.md",max_output_tokens:8500}),
+  tools.exec_command({cmd:"toolkit memory find 'MacBook Air Node 24 days-until'",max_output_tokens:2500}),
+  tools.exec_command({cmd:"toolkit config get memory.approval",max_output_tokens:1000})
+]); for(let i=0;i<r.length;i++)text({i,result:r[i]});
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.7 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"a302bc\",\"wall_time_seconds\":0.000003541,\"exit_code\":0,\"original_token_count\":2365,\"output\":\"<!-- Generated file. Source: plugins/toolkit/scaffold/model/.memory/memory-criteria.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\\n# Memory criteria\\n\\nThis file is the project-specific selection policy: what is worth keeping in lasting memory. The approval policy, including onboarding and trusted mode, is in the `memory-save` skill, which saves with `toolkit memory save`. When the owner corrects what is worth saving, save the correction as a `feedback` memory with `memory-save`, as a general rule, without copying the rejected memory. Those `feedback` memories override this page.\\n\\n## Default test for lasting memory\\n\\nSave a topic when it concerns this project, has a credible source, would matter in a future session, would be costly or unreliable to reconstruct, and has no better maintained owner. Prefer updating an existing topic. A short pointer to an authoritative record can qualify when future sessions would otherwise miss that record.\\n\\n| Type and filename | Usually worth retaining | Route or reject instead |\\n| --- | --- | --- |\\n| `user_<topic>.md` | Relevant role, responsibility, working preference, or communication need the owner stated | Personal judgments, irrelevant biography, private details |\\n| `feedback_<topic>.md` | Repeated or standing correction to how the agent should work; confirmed selection lesson | One-off irritation, a rejected fact restated as policy, an instruction already in `AGENTS.md` |\\n| `project_<topic>.md` | Durable project constraint, rationale, technical landmark, or proven costly fix | A decision for the whole project (`DECISIONS.md`), code summary, schema copy, active ticket status, accepted requirement or design body |\\n| `reference_<topic>.md` | Hard-to-rediscover route to a source, system, dashboard, or decision record, with why to open it | Entire outside page or a path already obvious in `PROJECT.md` or the project map |\\n| `event_<topic>.md` | Significant project episode: what was done, what resulted, and where the output lives | Routine edit, tool call, raw error, daily progress log |\\n\\n## Working context is different\\n\\n`CURRENT_FOCUS.md` holds what is happening now: acti
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"toolkit memory get user_plain_nodejs_tests --json",max_output_tokens:2000}),
+  tools.exec_command({cmd:"toolkit memory find 'MacBook Air Node 24' --proposals",max_output_tokens:1500})
+]); for(let i=0;i<r.length;i++)text({i,result:r[i]});
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.1 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"f1d8cd\",\"wall_time_seconds\":0.779280542,\"exit_code\":0,\"original_token_count\":513,\"output\":\"{\\n  \\\"ok\\\": true,\\n  \\\"backend\\\": \\\"notion\\\",\\n  \\\"key\\\": \\\"user_plain_nodejs_tests\\\",\\n  \\\"name\\\": \\\"plain-nodejs-tests\\\",\\n  \\\"type\\\": \\\"user\\\",\\n  \\\"description\\\": \\\"Prefer plain Node.js with no npm packages and tests using node:test\\\",\\n  \\\"status\\\": \\\"current\\\",\\n  \\\"stored_status\\\": \\\"current\\\",\\n  \\\"superseded_by\\\": null,\\n  \\\"source\\\": \\\"The owner, in chat, 2026-09-28\\\",\\n  \\\"saved\\\": \\\"2026-09-28\\\",\\n  \\\"last_verified\\\": \\\"2026-09-28\\\",\\n  \\\"authorization\\\": \\\"Approved by Mike on 2026-09-28\\\",\\n  \\\"approved_by\\\": \\\"Mike\\\",\\n  \\\"supersedes\\\": [],\\n  \\\"body\\\": \\\"# Node.js and test preferences\\\\n\\\\n**Remember:** The owner prefers plain Node.js with no npm packages, and tests written with the built-in node:test runner.\\\\n\\\\n**Why:** Not stated by the owner.\\\\n\\\\n**How to apply:** Use built-in Node.js APIs and node:test when building or testing this project.\\\\n\\\\n**Evidence and limits:** The owner, in chat, 2026-09-28. This is a preference, not an approved requirement for a specific work item.\\\\n\\\\n**Related memories:** None.\\\\n\\\\n**Authoritative records:** None.\\\\n\\\",\\n  \\\"version\\\": \\\"f7ba6fe6b6c287b6e74072c4c08e1063eaa92751821d395e5fa65b66c2720490\\\",\\n  \\\"text\\\": \\\"---\\\\nname: user_plain_nodejs_tests\\\\ndescription: Prefer plain Node.js with no npm packages and tests using node:test\\\\nmetadata:\\\\n  type: user\\\\nstatus: current\\\\nsource: The owner, in chat, 2026-09-28\\\\nlast_verified: 2026-09-28\\\\nauthorization: Approved by Mike on 2026-09-28\\\\nsupersedes: none\\\\n---\\\\n\\\\n# Node.js and test preferences\\\\n\\\\n**Remember:** The owner prefers plain Node.js with no npm packages, and tests written with the built-in node:test runner.\\\\n\\\\n**Why:** Not stated by the owner.\\\\n\\\\n**How to apply:** Use built-in Node.js APIs and node:test when building or testing this project.\\\\n\\\\n**Evidence and limits:** The owner, in chat, 2026-09-28. This is a preference, not an approved requirement for a specific work item.\\\\n\\\\n**Related memories:** None.\\\\n\\\\n**Author
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-status/SKILL.md",max_output_tokens:5000}),
+  tools.exec_command({cmd:"git worktree list --porcelain",max_output_tokens:2500}),
+  tools.exec_command({cmd:"rg -n 'TFR-002|days-until|weeks' PROJECT-ROADMAP.md .claude/worktrees -g 'README.md' -g 'package.json' -g 'PROJECT-ROADMAP.md' -g 'AGENTS.md' -g 'days-until*'",max_output_tokens:4000})
+]); for(let i=0;i<r.length;i++)text({i,result:r[i]});
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"76cbc5\",\"wall_time_seconds\":0.000002625,\"exit_code\":0,\"original_token_count\":1231,\"output\":\"---\\nname: work-status\\ndescription: 'Reports where the project''s work items stand: progress, blockers, the next item, and decisions waiting on the owner. Use whenever the owner asks about project or item status, even one item, for example \\\"where are we\\\", \\\"what''s next\\\", or \\\"is X done yet\\\". Not for a chat recap; use session-summary.'\\n---\\n\\n# Work status\\n\\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \\\"How to write replies\\\" section of `AGENTS.md`.\\nReports where the work stands. This skill only reads: apart from the CLI's own sync (the history rows it writes for the owner's hand moves), it never changes an item, memory, or a file.\\n\\n## Steps\\n\\n1. Use the project briefing when this conversation has it and nothing changed since. Otherwise run it.\\n   `toolkit brief`\\n2. The owner named an item or an area: answer about that item only. Where it stands in plain words, what is done and left in its Roadmap, its blockers, and its next action.\\n   `toolkit work show <id>`\\n3. The whole project: read the tree, the recommended next item, the decisions waiting on the owner, and the current focus.\\n   `toolkit work list --tree`\\n   `toolkit work next`\\n   `toolkit work decisions`\\n   `toolkit memory focus`\\n4. Answer in the order and shape in \\\"How to answer\\\" below. Say every stage in plain words with the item id (\\\"WI-012 is in testing\\\"); the labels come from the lifecycle.\\n   `toolkit work lifecycle`\\n5. For each problem, name the skill that fixes it, without running it: moved or missing items, `work-organize`; setup warnings, `project-setup`; decisions, `work-decide`.\\n6. \\\"Show the board\\\": local tracker, summarize `.work-items/DASHBOARD.md`; Notion, give the Work Items link (`references/tracker-notion.md`, \\\"The board link\\\").\\n   `toolkit config get notion.workItems.url`\\n7. End with one thing the owner can say next, for example \\\"Say 'what do you need from me' to go through the 2 decisions.\\\"\\n\\n## Gotchas\\n\\n- Run each `toolkit` command alone: never joined by `&&`, `;`, or a pipe, and never from a script (in Codex th
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"toolkit work show TFR-002",max_output_tokens:5500}),
+  tools.exec_command({cmd:"cat .claude/worktrees/tfr-002-add-the-weeks-flag-to-days/README.md",max_output_tokens:2000})
+]); for(let i=0;i<r.length;i++)text({i,result:r[i]});
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 2.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"28aff1\",\"wall_time_seconds\":1.920655583,\"exit_code\":0,\"original_token_count\":1771,\"output\":\"TFR-002: Add the --weeks flag to days-until\\nLocation: https://app.notion.com/p/Add-the-weeks-flag-to-days-until-3e9b381da176815bb55ccfff40995905\\nStage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide\\nParent: none | Sub-items: none | Design: none\\nWorktree branch for this item: claude/tfr-002-add-the-weeks-flag-to-days (folder .claude/worktrees/tfr-002-add-the-weeks-flag-to-days)\\n\\n---\\nid: TFR-002\\ntitle: Add the --weeks flag to days-until\\ntype: build\\nstage: 11-user-approval\\nstatus: In Progress\\nparent: none\\nwaiting_on: \\\"owner\\\"\\npriority: medium\\ndelivery: owner-led\\nrequirements_approved: \\\"2026-09-28 by Mike Rihm\\\"\\ndesign: none\\nresult_approved: \\\"no\\\"\\nupdated: 2026-09-28\\n---\\n# TFR-002: Add the --weeks flag to days-until\\n\\n## Overview\\n\\n**Goal:** Add --weeks to the days-until command so it shows whole weeks and leftover days in either flag position.\\n\\n**Current position:** The --weeks result is built and tested on its own branch. Eight automated checks and direct CLI checks passed; the test plan is committed as af7015d.\\n\\n**Next action:** Ask Mike Rihm to approve the tested TFR-002 result separately. Do not merge until he authorizes merge.\\n\\n**Blockers:** Owner result approval is required before this item can be finished. Merge is not authorized.\\n\\n**Related items:** TFR-001 holds the approved requirements and design and the base-command commit.\\n\\n## Roadmap\\n\\nA phase is complete when its tasks are complete and its exit result has been checked.\\n\\n| Phase | Outcome | Status | Exit result | Sub-items |\\n|---|---|---|---|---|\\n| P1 \u2014 Weeks display | Add --weeks before or after the date and format whole weeks and leftover days. | Done | TFR-001 R-02 and weeks-mode R-03 passed eight tests and direct CLI checks; commits e604d44 and af7015d. | None. |\\n\\n## Tasks\\n\\n### P1 \u2014 Weeks display\\n\\n- [x] **P1-T01 \u2014 Add flag parsing and weeks formatting** \u00b7 Done  \\n  **Work:** Extend the base command with --weeks in either argument position, whole weeks and leftover days, singular wording, zero-unit omission, and ago for past dates (TFR-001 R-02, R-

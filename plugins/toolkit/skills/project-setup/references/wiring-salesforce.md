@@ -15,6 +15,8 @@ toolkit config set salesforce.orgs.production <alias>
 
 The protected-org guards read these. Agents never deploy to production or
 change its data: the guards block it and hand the owner the command instead.
+In Codex the owner also runs every sandbox deploy and sandbox data change;
+the agent hands him the exact command with its `-o <sandbox>`.
 
 ## The API version
 

@@ -1,0 +1,3 @@
+Committed the Toolkit V2 setup on `main` as `d89f330` (`Set up Toolkit V2 for Acme CRM`). The working tree is clean. Local `.work-items/` and `.memory/` files were excluded.
+
+Tell me the first thing you want built.

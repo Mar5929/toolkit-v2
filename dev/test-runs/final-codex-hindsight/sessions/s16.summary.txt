@@ -1,0 +1,633 @@
+PROMPT: I approve the WI-001 command result and I approve the WI-002 README result. And no to that memory proposal about one question at a time: it fit this item, but I don't want it as a standing rule.
+THREAD: 01a0ea31-0124-72d1-9927-e97afb1516c7
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll record both result approvals, close the rejected memory proposal, and check what remains to finish each item.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/references/approvals.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/references/proposals.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-finish/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/references/proposals.md'
+  -> <!-- Generated file. Source: plugins/work/shared/approvals.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Approvals and gates
+
+The exact steps to ask for and record each owner approval, and what counts as
+one. Run each checklist in order; one wrong or missing command leaves the
+item in the wrong state.
+
+## Contents
+
+1. What counts as approval
+2. Requirements approval
+3. Design approval
+4. Result approval
+5. Done
+6. Cancel
+7. Delivery offer
+8. Project-wide decision
+9. Memory proposal
+10. Sub-items and approvals
+11. Standing merge instruction
+12. When an approve command refuses
+
+## 1. What counts as approval
+
+`toolkit work lifecycle` prints the gates and these rules. In short:
+
+- Only the owner's explicit words count. Quote them in a history note.
+- A question, a suggestion, a tentative answer ("probably B"), silence, or a
+  saved draft is not approval.
+- An approval covers only what was shown. It never covers merge, deployment,
+  spending, or publishing.
+- An approval survives later stages. A stage alone does not prove approval:
+  check the approval field (`toolkit work show <id>`).
+- A bare "yes", "ok", or "looks good" answers only a yes-or-no question asked
+  earlier in this conversation. When none was asked, or the waiting question
+  is not a yes-or-no question, show the decision with its choices and your
+  recommendation, and record nothing.
+- After a yes, save his words first, in a history note that starts with
+  `Owner said:`. Then run the 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 3 decisions wait on the owner:
+
+WI-001 Add a --times flag to greet
+  - WI-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-001 --result --by <name>. (work-decide)
+
+WI-002 Document greet flags in the README
+  - WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)
+
+Memory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):
+  - project_ask_one_requirements_question_time: Ask one requirements question at a time. Saved 2026-09-28. Yes: toolkit memory approve project_ask_one_requirements_question_time --by <name>. No: toolkit memory reject project_ask_one_requirements_question_time. (work-decide)
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001'
+  -> WI-001: Add a --times flag to greet
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/.work-items/WI-001-times-flag/WORK-ITEM.md
+Stage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: none | Sub-items: WI-002 | Design: approved (.work-items/WI-001-times-flag/DESIGN.md)
+Worktree branch for this item: claude/wi-001-add-a-times-flag-to-greet (folder .claude/worktrees/wi-001-add-a-times-flag-to-greet)
+
+---
+id: WI-001
+title: Add a --times flag to greet
+type: build
+stage: 11-user-approval
+status: In Progress
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: approved
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-001: Add a --times flag to greet
+
+## Overview
+
+**Goal:** Let greet print the same greeting N times, one per line, when --times N is given, while keeping the optional name and one-greeting default.
+
+**Current position:** R-01 is built and tested on the WI-001 branch at fe07ccb. An independent checker found R-01 met with no defects. WI-002 passed its separate check.
+
+**Next action:** Ask Mike to approve the WI-001 command result separately from WI-002's README result.
+
+**Blockers:** Result approval from Mike.
+
+**Related items:** Sub-items: WI-002.
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-002'
+  -> WI-002: Document greet flags in the README
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/.work-items/WI-001-times-flag/WI-002-document-greet-flags-in-the-readme/WORK-ITEM.md
+Stage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/WI-001-times-flag/DESIGN.md). Read it with: toolkit work design WI-001
+Worktree branch for this item: claude/wi-002-document-greet-flags-in-the (folder .claude/worktrees/wi-002-document-greet-flags-in-the)
+
+---
+id: WI-002
+title: Document greet flags in the README
+type: build
+stage: 11-user-approval
+status: In Progress
+parent: WI-001
+waiting_on: "owner"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-002: Document greet flags in the README
+
+## Overview
+
+**Goal:** Document every greet command-line flag in README.md with a short command and output example, as required by WI-001 R-02.
+
+**Current position:** README examples are built and checked against command output on the WI-002 branch at 17d584a. An independent checker found R-02 met with no defects.
+
+**Next action:** Ask Mike to approve the WI-002 README result separately from WI-001's command result.
+
+**Blockers:** Result approval from Mike.
+
+**Related
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history WI-001 --note 'Owner said: I approve the WI-001 command result.' --effect 'Result approved; work-finish continues.'"
+  -> Added a Recent History row to WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work approve WI-001 --result --by 'Mike Rihm'"
+  -> Recorded: result of WI-001 approved (2026-09-28 by Mike Rihm).
+It is no longer waiting on the owner (waiting_on: none).
+Now 11 User approval (In Progress). Continue with work-finish.
+Note: WI-001's Overview still says "Next action: Ask Mike to approve the WI-001 command result separately from WI-002's README result.". Write the step after this approval: toolkit work edit WI-001 --label 'Next action' --value '<next step>'.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --waiting-on agent'
+  -> Updated WI-001: waiting on agent.
+Now 11 User approval (In Progress). Continue with work-finish.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history WI-002 --note 'Owner said: I approve the WI-002 README result.' --effect 'Result approved; work-finish continues.'"
+  -> Added a Recent History row to WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work approve WI-002 --result --by 'Mike Rihm'"
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-002 --waiting-on agent'
+  -> Updated WI-002: waiting on agent.
+Now 11 User approval (In Progress). Continue with work-finish.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory reject project_ask_one_requirements_question_time'
+  -> Rejected project_ask_one_requirements_question_time: the owner said no, so the proposal was deleted.
+A rejected proposal is not saved again, here or under another name. When the owner gave a general rule about what to keep, save only that rule, as a feedback record.
+
+
+[AGENT] Both result approvals are recorded. I rejected the memory proposal; the one-question approach will remain specific to this item. I’ll now check the branches and prepare the next delivery step.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-finish/references/closing.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-finish/references/git-rules.md'
+  -> # Closing a work item
+
+The detail behind each `work-finish` step: the pull request and merge, a
+merge with no remote, deployment, the requirements baseline, sub-items,
+memory, leftover worktrees, Done, and cancel.
+
+## Contents
+
+1. Before anything ships
+2. Commit, push, and the pull request (stage 12)
+3. Merging
+4. No remote: the local merge
+5. Deployment (stage 13)
+6. Requirements baseline (stage 14)
+7. Sub-items
+8. Memory and the current focus
+9. Leftover worktrees and branches
+10. Done
+11. Cancel
+
+## 1. Before anything ships
+
+- The result approval is recorded (`toolkit work show <id>` shows
+  `result_approved`), or the owner said "ship it" or "mark it done" after he
+  saw the result, the gaps, and the evidence. Record that with his words
+  (`approvals.md`, "Result approval").
+- Never describe an unverified result as complete.
+- Done means the owner accepted the result. Cancelled means the work stopped
+  without it.
+- Stages that do not apply are skipped. Work with no repository change has no
+  pull request; work with no deployment has no deployment stage. A skipped
+  stage gets one history note saying so, so `toolkit work finish` has a
+  record of it.
+
+## 2. Commit, push, and the pull request (stage 12)
+
+- Commit the item's files on its branch, staged by name
+  (`claude/<prefix>-<number>-<slug>`, for example `claude/wi-007-csv-export`).
+  No `Co-Authored-By` line naming an AI and no "Generated with" line.
+- Push the branch. Never force-push.
+- Write the pull request title a
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## main
+
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2                                                      ec6e66b [main]
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/
+
+[CMD exit=0] /bin/zsh -lc 'git diff --name-only main...claude/wi-002-document-greet-flags-in-the'
+  -> README.md
+bin/greet.mjs
+test/greet.test.mjs
+tests/WI-001-TEST-PLAN.md
+tests/WI-002-TEST-PLAN.md
+
+
+[CMD exit=0] /bin/zsh -lc 'git remote'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git log --oneline -5'
+  -> ec6e66b Set up Toolkit V2
+ff07f6c Initial commit
+
+
+[CMD exit=0] /bin/zsh -lc "git branch --list '*wi-00*'"
+  -> + claude/wi-001-add-a-times-flag-to-greet
++ claude/wi-002-document-greet-flags-in-the
+
+
+[CMD exit=0] /bin/zsh -lc 'git diff --name-only main...claude/wi-001-add-a-times-flag-to-greet'
+  -> bin/greet.mjs
+test/greet.test.mjs
+tests/WI-001-TEST-PLAN.md
+
+
+[CMD exit=0] /bin/zsh -lc 'git merge-base --is-ancestor claude/wi-001-add-a-times-flag-to-greet claude/wi-002-document-greet-flags-in-the'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git log --oneline main..claude/wi-002-document-greet-flags-in-the'
+  -> 17d584a Record README example checks
+34db87d Merge branch 'claude/wi-001-add-a-times-flag-to-greet' into claude/wi-002-document-greet-flags-in-the
+fe07ccb Record times flag test plan
+69f4c52 Document greet times flag with example
+8b50ebf Add validated times flag to greet
+
+
+[CMD exit=0] /bin/zsh -lc 'cat DECISIONS.md'
+  -> # Decisions
+
+Decisions for the whole project. A decision about one work item stays in that
+item's Recent History. Add rows only with `toolkit decision add`, which gives
+each row the next ID. Never rewrite an old row. To change a decision, add a new
+row that names the ID it replaces.
+
+| ID | Date | D
+
+[CMD exit=0] /bin/zsh -lc 'git -C .claude/worktrees/wi-001-add-a-times-flag-to-greet status --short --branch'
+  -> ## claude/wi-001-add-a-times-flag-to-greet
+
+
+[CMD exit=0] /bin/zsh -lc 'git -C .claude/worktrees/wi-002-document-greet-flags-in-the status --short --branch'
+  -> ## claude/wi-002-document-greet-flags-in-the
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --label 'Next action' --value 'Ask Mike to approve one local merge of the WI-002 branch into main; it contains both approved results.'"
+  -> Saved "Next action" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --label 'Next action' --value 'Ask Mike to approve one local merge of this branch into main; it contains both approved results.'"
+  -> Saved "Next action" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --label 'Blockers' --value 'Local merge approval from Mike.'"
+  -> Saved "Blockers" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --label 'Blockers' --value 'Local merge approval from Mike.'"
+  -> Saved "Blockers" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --waiting-on owner'
+  -> Updated WI-001: waiting on owner.
+Now 11 User approval (In Progress). Continue with work-decide.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-002 --waiting-on owner'
+  -> Updated WI-002: waiting on owner.
+Now 11 User approval (In Progress). Continue with work-decide.
+
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/references/current-focus.md'
+  -> <!-- Generated file. Source: plugins/memory/shared/current-focus.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# The current focus
+
+Purpose: the format of the current focus, when to change it, and the exact
+read-change-save sequence, in every memory backend.
+
+## Contents
+
+- What the focus is for
+- The format
+- What goes in each section
+- When to check it
+- Read, change, save
+- A new project's focus
+- Examples
+- Checklist for a focus save
+
+## What the focus is for
+
+The current focus is the first thing the next session reads: the session
+briefing includes it. It says what is happening now and where the next
+session starts. It never repeats the tracker: a work item's status, tasks,
+and history stay in the work item.
+
+| Backend | Where the focus lives |
+| --- | --- |
+| Built-in | `.memory/CURRENT_FOCUS.md` in the main checkout |
+| Hindsight | The document `focus` in the project's bank |
+| Notion | The "Current focus" page under the project's page |
+
+The same commands read and save it in every backend. Never edit the file or
+the page by hand.
+
+## The format
+
+The model's format: a `# Current focus` title line, a `Last updated:` line,
+then exactly four `##` sections in this order, under 50 lines in total.
+
+```markdown
+# Current focus
+
+Last updated: <YYYY-MM-DD>, <source>, <person or agent>
+
+## Now
+
+## Waiting on the owner
+
+## Untracked to-dos
+
+## Next session starts with
+```
+
+What the command enforces:
+
+- It refuses a focus that lacks one of the four se
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus --json'
+  -> {
+  "ok": true,
+  "backend": "hindsight",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Add a --times flag to greet\n- WI-002 Document greet flags in the README\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 and WI-002 from their Resume here: ask Mike to approve each tested result separately, then follow work-finish for any approved item.\n",
+  "version": "e0d704168ea1e6a5214801188cd579fbd7a1a63c1bc61583f2e3ceae1afbaf01"
+}
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work edit --help'
+  -> toolkit work: Work items: create, list, show, change, approve, finish, and sync them. toolkit work lifecycle shows the stages.
+
+Usage:
+  toolkit work lifecycle
+  toolkit work new --title <t> [--type <t>] [--parent <id> [--covers R-02,R-03]] [--stage <s>] [--priority <p>] [--request <text>] [--group <folder>]
+  toolkit work list [--status <s>] [--waiting-on <w>] [--tree] [--all]
+  toolkit work show <id> [--section <heading>] [--path]
+  toolkit work edit <id> --section <heading> (--set-file <file|-> | --text <text>) | --section <heading> --append-row '<a | b | c>' | --label <name> --value <text> | --remove-guide
+  toolkit work set <id> [--stage <s>] [--waiting-on <w>] [--priority <p>] [--type <t>] [--delivery <d>] [--title <t>] [--parent <id|none>] [--reopen] [--note <why>]
+  toolkit work approve <id> --requirements|--design|--result --by <name>
+  toolkit work design <id> [--create] [--set-file <file|-> | --text <text>] [--status proposed|approved|superseded] [--by <name>]
+  toolkit work history <id> --note <text> [--effect <text>]
+  toolkit work move <id> --under <id|group|archive|root>
+  toolkit work finish <id> --by <name> --evidence <text> [--quote <owner's words>] [--allow-open-sub-items]
+  toolkit work cancel <id> --reason <text> [--by <name>]
+  toolkit work next
+  toolkit work decisions
+  toolkit work sync
+  toolkit work validate [<id|file>]
+
+--covers: a sub-item that delivers some of the parent's approved requirements
+links them (the text stays in the parent) and inheri
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Resume here' --text 'Both WI-001 and WI-002 results were approved by Mike Rihm on 2026-09-28. The WI-002 branch at 17d584a contains both results; main is at ec6e66b. Ask Mike to approve one local merge of the WI-002 branch into main. Then continue work-finish for WI-002 and WI-001.'"
+  -> Saved "Resume here" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --section 'Resume here' --text 'Both WI-001 and WI-002 results were approved by Mike Rihm on 2026-09-28. This branch at 17d584a contains both results; main is at ec6e66b. Ask Mike to approve one local merge of this branch into main. Then continue work-finish for WI-002 and WI-001.'"
+  -> Saved "Resume here" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Add a --times flag to greet
+- WI-002 Document greet flags in the README
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 and WI-002 from their Resume here: both resu
+  -> Saved the current focus (21 lines). Version: 5ca73dbabb8c
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 2 decisions wait on the owner:
+
+WI-001 Add a --times flag to greet
+  - WI-001 is waiting on the owner (11 User approval). Next action: Ask Mike to approve one local merge of the WI-002 branch into main; it contains both approved results. (work-decide)
+
+WI-002 Document greet flags in the README
+  - WI-002 is waiting on the owner (11 User approval). Next action: Ask Mike to approve one local merge of this branch into main; it contains both approved results. (work-decide)
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Add a --times flag to greet
+- WI-002 Document greet flags in the README
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 and WI-002 from their Resume here: both results are approved; ask Mike to approve one local merge of the WI-002 branch into main, then follow work-finish.
+
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for Greet CLI Final H2 (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (4):
+- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- README.md is the project's own file from before the toolkit, so sync lea
+
+[AGENT] I recorded your separate approvals for the WI-001 command result and the WI-002 README result. I rejected the memory proposal; the one-question approach will not become a standing rule.
+
+Both results are committed and checked. The WI-002 branch contains both, but neither has reached `main`. Result approval does not authorize a merge. **Do you approve one local merge of `claude/wi-002-document-greet-flags-in-the` into `main`?**
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 1441412, "cached_input_tokens": 1389952, "cache_write_input_tokens": 0, "output_tokens": 3291, "reasoning_output_tokens": 844}}
+
+SKILLS OPENED: ['work-finish']
+
+[HOOK CONTEXT ord=9] Project briefing: Greet CLI Final H2 (greet-cli-final-h2), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: the local Hindsight server. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Add a --times flag to greet: 11 User approval, In Progress, waiting on owner. Next action: Ask Mike to approve the WI-001 command result separately from WI-002's README result. Continues with work-decide.
+- WI-002 Document greet flags in the README: 11 User approval, In Progress, waiting on owner. Next action: Ask Mike to approve the WI-002 README result separately from WI-001's command result. Continues with work-decide.
+
+Waiting on the owner:
+- WI-001 Add a --times flag to greet: WI-001 is at 11 User approval: the owne
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r=await tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/{humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,session-handoff,shared-repository-work,work-item-folders}.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/SKILL.md","max_output_tokens":14000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "cat: SOUL.md: No such file or directory\n# Greet CLI Final H2\n\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\n\n## Purpose and intended outcome\n\n- Purpose: Provide a small, friendly greeting command.\n- Intended outcome: A small, friendly greeting command that Mike can grow with a few simple flags (Mike Rihm, 2026-09-28).\n\n## Scope and boundaries\n\n- In scope: The Node.js `greet` command in `bin/greet.mjs`.\n- Outside scope: `<Important exclusions or adjacent owners.>`\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\n\n## Systems and environments\n\n| System or org | Purpose | Environment | Source of truth | Access notes |\n| --- | --- | --- | --- | --- |\n| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |\n\n## People and ownership\n\n| Role | Person or team | Responsibility | Source / last confirmed |\n| --- | --- | --- | --- |\n| Owner | Mike Rihm | Project decisions | Mike Rihm, 2026-09-28 |\n\n## Work and project records\n\n- Work tracker: Local folders in `.work-items/`.\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\n- Project decisions: [DECISIONS.md](DECISIONS.md)\n- Functional requirements: [requirements/](requirements/)\n- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`\n- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`\n- Memory: this project's bank on the local Hindsight server (the setup choice is in `.toolkit.json`)\n- Memory backup or sync: Automatic Toolkit backup to `/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-hindsight`; restore with the Toolkit backup procedure.\n\n## Resources and project paths\n\n- Tests and checks: `npm test`, which runs `test/*.test.mjs` with Node.js (verified 2026-09-28).\n- Outside references: `ai-external-knowledge/INDEX.md`.\n\n## Operating conventions\n\n<Write only stable project-specific convent
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/references/approvals.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/references/proposals.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-finish/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/references/proposals.md","max_output_tokens":12500});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "<!-- Generated file. Source: plugins/work/shared/approvals.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\n# Approvals and gates\n\nThe exact steps to ask for and record each owner approval, and what counts as\none. Run each checklist in order; one wrong or missing command leaves the\nitem in the wrong state.\n\n## Contents\n\n1. What counts as approval\n2. Requirements approval\n3. Design approval\n4. Result approval\n5. Done\n6. Cancel\n7. Delivery offer\n8. Project-wide decision\n9. Memory proposal\n10. Sub-items and approvals\n11. Standing merge instruction\n12. When an approve command refuses\n\n## 1. What counts as approval\n\n`toolkit work lifecycle` prints the gates and these rules. In short:\n\n- Only the owner's explicit words count. Quote them in a history note.\n- A question, a suggestion, a tentative answer (\"probably B\"), silence, or a\n  saved draft is not approval.\n- An approval covers only what was shown. It never covers merge, deployment,\n  spending, or publishing.\n- An approval survives later stages. A stage alone does not prove approval:\n  check the approval field (`toolkit work show <id>`).\n- A bare \"yes\", \"ok\", or \"looks good\" answers only a yes-or-no question asked\n  earlier in this conversation. When none was asked, or the waiting question\n  is not a yes-or-no question, show the decision with its choices and your\n  recommendation, and record nothing.\n- After a yes, save his words first, in a history note that starts with\n  `Owner said:`. Then run the gate's commands. A command that refuses then\n  never loses his answer, and no later session asks him again.\n- `--by <owner>` is his name exactly as `toolkit config get project.owner`\n  prints it (for example \"Mike Rihm\", not \"Mike\"), so every approval names\n  him the same way.\n- When an approve command notes that the item's Overview still asks for\n  that approval (Next action), write the step after the approval with the\n  `toolkit work edit` command the note prints.\n\n| The owner says | After this question | It is |\n| --- | --- | --- |\n| \"Yes, approved.\" | \"Do you approve these requirements?\" | The requirements approval |\n| \"Go with B.\" | The design options with a recommendation | The choice and approval of Option B |\n| \"Looks good.\" | \"Do you approve this result?\" | The result approval |\n| \"Look
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work decisions","max_output_tokens":3000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "3 decisions wait on the owner:\n\nWI-001 Add a --times flag to greet\n  - WI-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-001 --result --by <name>. (work-decide)\n\nWI-002 Document greet flags in the README\n  - WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)\n\nMemory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):\n  - project_ask_one_requirements_question_time: Ask one requirements question at a time. Saved 2026-09-28. Yes: toolkit memory approve project_ask_one_requirements_question_time --by <name>. No: toolkit memory reject project_ask_one_requirements_question_time. (work-decide)\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show WI-001","max_output_tokens":6500});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "WI-001: Add a --times flag to greet\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/.work-items/WI-001-times-flag/WORK-ITEM.md\nStage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide\nParent: none | Sub-items: WI-002 | Design: approved (.work-items/WI-001-times-flag/DESIGN.md)\nWorktree branch for this item: claude/wi-001-add-a-times-flag-to-greet (folder .claude/worktrees/wi-001-add-a-times-flag-to-greet)\n\n---\nid: WI-001\ntitle: Add a --times flag to greet\ntype: build\nstage: 11-user-approval\nstatus: In Progress\nparent: none\nwaiting_on: \"owner\"\npriority: medium\ndelivery: owner-led\nrequirements_approved: \"2026-09-28 by Mike Rihm\"\ndesign: approved\nresult_approved: \"no\"\nupdated: 2026-09-28\n---\n\n# WI-001: Add a --times flag to greet\n\n## Overview\n\n**Goal:** Let greet print the same greeting N times, one per line, when --times N is given, while keeping the optional name and one-greeting default.\n\n**Current position:** R-01 is built and tested on the WI-001 branch at fe07ccb. An independent checker found R-01 met with no defects. WI-002 passed its separate check.\n\n**Next action:** Ask Mike to approve the WI-001 command result separately from WI-002's README result.\n\n**Blockers:** Result approval from Mike.\n\n**Related items:** Sub-items: WI-002.\n\n## Roadmap\n\nA phase is complete when its tasks are complete and its exit result has been checked.\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 \u2014 Command behavior | greet accepts --times N and prints validated repeated greetings. | Done | Command tests pass for valid and invalid inputs in R-01. | None. |\n| P2 \u2014 README documentation | Every greet flag has a short command and output example. | Done | WI-002 builds and checks README.md against R-02. | WI-002 |\n\n## Tasks\n\n### P1 \u2014 Command behavior\n\n- [x] **P1-T01 \u2014 Parse and print repeated greetings** \u00b7 Done  \n  **Work:** Implement R-01 in bin/greet.mjs using the approved design's Technical sequence step 1.  \n  **Deliverable:** Argument validation and one greeting per output line.  \n  **Done when:** Manual valid and invalid commands match R-01.  \n  **Depends on:** None.\n- [x] **P1-T02 \u2014 Test 
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show WI-002","max_output_tokens":4500});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "WI-002: Document greet flags in the README\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/.work-items/WI-001-times-flag/WI-002-document-greet-flags-in-the-readme/WORK-ITEM.md\nStage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide\nParent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/WI-001-times-flag/DESIGN.md). Read it with: toolkit work design WI-001\nWorktree branch for this item: claude/wi-002-document-greet-flags-in-the (folder .claude/worktrees/wi-002-document-greet-flags-in-the)\n\n---\nid: WI-002\ntitle: Document greet flags in the README\ntype: build\nstage: 11-user-approval\nstatus: In Progress\nparent: WI-001\nwaiting_on: \"owner\"\npriority: medium\ndelivery: owner-led\nrequirements_approved: \"2026-09-28 by Mike Rihm\"\ndesign: none\nresult_approved: \"no\"\nupdated: 2026-09-28\n---\n\n# WI-002: Document greet flags in the README\n\n## Overview\n\n**Goal:** Document every greet command-line flag in README.md with a short command and output example, as required by WI-001 R-02.\n\n**Current position:** README examples are built and checked against command output on the WI-002 branch at 17d584a. An independent checker found R-02 met with no defects.\n\n**Next action:** Ask Mike to approve the WI-002 README result separately from WI-001's command result.\n\n**Blockers:** Result approval from Mike.\n\n**Related items:** Parent WI-001 (R-02). Design: WI-001 approved Option A.\n\n## Roadmap\n\nA phase is complete when its tasks are complete and its exit result has been checked.\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 \u2014 README examples | README.md explains every flag with a short command and output example. | Done | The documented commands match the implemented CLI output. | None. |\n| P2 \u2014 Independent check | The README result is checked separately from WI-001. | Done | R-02 acceptance is checked and the result is presented to Mike for approval. | None. |\n\n## Tasks\n\n### P1 \u2014 README examples\n\n- [x] **P1-T01 \u2014 Document each flag** \u00b7 Done  \n  **Work:** List every implemented greet flag in README.md with a short command and output example.  \n  **Deliverable:** Up
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history WI-001 --note 'Owner said: I approve the WI-001 command result.' --effect 'Result approved; work-finish continues.'","max_output_tokens":1000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "Added a Recent History row to WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work approve WI-001 --result --by 'Mike Rihm'","max_output_tokens":1500});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "Recorded: result of WI-001 approved (2026-09-28 by Mike Rihm).\nIt is no longer waiting on the owner (waiting_on: none).\nNow 11 User approval (In Progress). Continue with work-finish.\nNote: WI-001's Overview still says \"Next action: Ask Mike to approve the WI-001 command result separately from WI-002's README result.\". Write the step after this approval: toolkit work edit WI-001 --label 'Next action' --value '<next step>'.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-001 --waiting-on agent","max_output_tokens":1000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.5 seconds\nOutput:\n"}, {"type": "input_text", "text": "Updated WI-001: waiting on agent.\nNow 11 User approval (In Progress). Continue with work-finish.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history WI-002 --note 'Owner said: I approve the WI-002 README result.' --effect 'Result approved; work-finish continues.'","max_output_tokens":1000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "Added a Recent History row to WI-002.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work approve WI-002 --result --by 'Mike Rihm'","max_output_tokens":1500});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "Recorded: result of WI-002 approved (2026-09-28 by Mike Rihm).\nIt is no longer waiting on the owner (waiting_on: none).\nNow 11 User approval (In Progress). Continue with work-finish.\nNote: WI-002's Overview still says \"Next action: Ask Mike to approve the WI-002 README result separately from WI-001's command result.\". Write the step after this approval: toolkit work edit WI-002 --label 'Next action' --value '<next step>'.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-002 --waiting-on agent","max_output_tokens":1000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.6 seconds\nOutput:\n"}, {"type": "input_text", "text": "Updated WI-002: waiting on agent.\nNow 11 User approval (In Progress). Continue with work-finish.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory reject project_ask_one_requirements_question_time","max_output_tokens":1200});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.5 seconds\nOutput:\n"}, {"type": "input_text", "text": "Rejected project_ask_one_requirements_question_time: the owner said no, so the proposal was deleted.\nA rejected proposal is not saved again, here or under another name. When the owner gave a general rule about what to keep, save only that rule, as a feedback record.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-finish/references/closing.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-finish/references/git-rules.md","max_output_tokens":13000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "# Closing a work item\n\nThe detail behind each `work-finish` step: the pull request and merge, a\nmerge with no remote, deployment, the requirements baseline, sub-items,\nmemory, leftover worktrees, Done, and cancel.\n\n## Contents\n\n1. Before anything ships\n2. Commit, push, and the pull request (stage 12)\n3. Merging\n4. No remote: the local merge\n5. Deployment (stage 13)\n6. Requirements baseline (stage 14)\n7. Sub-items\n8. Memory and the current focus\n9. Leftover worktrees and branches\n10. Done\n11. Cancel\n\n## 1. Before anything ships\n\n- The result approval is recorded (`toolkit work show <id>` shows\n  `result_approved`), or the owner said \"ship it\" or \"mark it done\" after he\n  saw the result, the gaps, and the evidence. Record that with his words\n  (`approvals.md`, \"Result approval\").\n- Never describe an unverified result as complete.\n- Done means the owner accepted the result. Cancelled means the work stopped\n  without it.\n- Stages that do not apply are skipped. Work with no repository change has no\n  pull request; work with no deployment has no deployment stage. A skipped\n  stage gets one history note saying so, so `toolkit work finish` has a\n  record of it.\n\n## 2. Commit, push, and the pull request (stage 12)\n\n- Commit the item's files on its branch, staged by name\n  (`claude/<prefix>-<number>-<slug>`, for example `claude/wi-007-csv-export`).\n  No `Co-Authored-By` line naming an AI and no \"Generated with\" line.\n- Push the branch. Never force-push.\n- Write the pull request title and description in plain words: what changed,\n  why, how it was checked, and the item id. Run the description through the\n  `unslop` skill, because other people read it. No line crediting an AI.\n- Set the stage:\n  `toolkit work set <id> --stage 12-pr-and-push`\n- In Codex, every Git write here needs the owner's approval and escalated\n  permissions (`git-rules.md`).\n\n## 3. Merging\n\nMerge only through `merge-and-clean-up`, and only when one of these holds:\n\n- the owner said yes to this merge; or\n- a standing merge instruction applies (`approvals.md`, \"Standing merge\n  instruction\"): it is recorded in `DECISIONS.md`, an `acceptance-checker`\n  that did not build the change found no blocking issue on that exact head\n  commit, and every check passes.\n\nA work item that says its merge needs the owner's approval 
+
+[CALL] const cmds=["git worktree list","git status --short --branch","git remote","git branch --list '*wi-00*'","git log --oneline -5","git diff --name-only main...claude/wi-001-add-a-times-flag-to-greet","git diff --name-only main...claude/wi-002-document-greet-flags-in-the"];const r=await Promise.allSettled(cmds.map(cmd=>tools.exec_command({cmd,max_output_tokens:1500})));r.forEach((x,i)=>text(cmds[i]+"\n"+(x.status==="fulfilled"?x.value.output:String(x.reason))))
+
+
+[CALL] const cmds=["git log --oneline main..claude/wi-002-document-greet-flags-in-the","git merge-base --is-ancestor claude/wi-001-add-a-times-flag-to-greet claude/wi-002-document-greet-flags-in-the","git -C .claude/worktrees/wi-001-add-a-times-flag-to-greet status --short --branch","git -C .claude/worktrees/wi-002-document-greet-flags-in-the status --short --branch","cat DECISIONS.md"];const r=await Promise.allSettled(cmds.map(cmd=>tools.exec_command({cmd,max_output_tokens:1500})));r.forEach((x,i)=>text(cmds[i]+"\n"+(x.status==="fulfilled"?x.value.output+"exit "+x.value.exit_code:String(x.reason))))
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --label 'Next action' --value 'Ask Mike to approve one local merge of the WI-002 branch into main; it contains both approved results.'","max_output_tokens":1000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Next action\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --label 'Next action' --value 'Ask Mike to approve one local merge of this branch into main; it contains both approved results.'","max_output_tokens":1000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Next action\" in WI-002.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --label 'Blockers' --value 'Local merge approval from Mike.'","max_output_tokens":1000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Blockers\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --label 'Blockers' --value 'Local merge approval from Mike.'","max_output_tokens":1000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Blockers\" in WI-002.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-001 --waiting-on owner","max_output_tokens":1000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Updated WI-001: waiting on owner.\nNow 11 User approval (In Progress). Continue with work-decide.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-002 --waiting-on owner","max_output_tokens":1000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Updated WI-002: waiting on owner.\nNow 11 User approval (In Progress). Continue with work-decide.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/references/current-focus.md","max_output_tokens":3500});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "<!-- Generated file. Source: plugins/memory/shared/current-focus.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\n# The current focus\n\nPurpose: the format of the current focus, when to change it, and the exact\nread-change-save sequence, in every memory backend.\n\n## Contents\n\n- What the focus is for\n- The format\n- What goes in each section\n- When to check it\n- Read, change, save\n- A new project's focus\n- Examples\n- Checklist for a focus save\n\n## What the focus is for\n\nThe current focus is the first thing the next session reads: the session\nbriefing includes it. It says what is happening now and where the next\nsession starts. It never repeats the tracker: a work item's status, tasks,\nand history stay in the work item.\n\n| Backend | Where the focus lives |\n| --- | --- |\n| Built-in | `.memory/CURRENT_FOCUS.md` in the main checkout |\n| Hindsight | The document `focus` in the project's bank |\n| Notion | The \"Current focus\" page under the project's page |\n\nThe same commands read and save it in every backend. Never edit the file or\nthe page by hand.\n\n## The format\n\nThe model's format: a `# Current focus` title line, a `Last updated:` line,\nthen exactly four `##` sections in this order, under 50 lines in total.\n\n```markdown\n# Current focus\n\nLast updated: <YYYY-MM-DD>, <source>, <person or agent>\n\n## Now\n\n## Waiting on the owner\n\n## Untracked to-dos\n\n## Next session starts with\n```\n\nWhat the command enforces:\n\n- It refuses a focus that lacks one of the four sections, has another\n  section, or is over 50 lines (exit code 2, nothing saved).\n- It adds the title line or the `Last updated:` line when either is missing,\n  and sets an older date to today. It cannot know the source or who wrote\n  it, so write the line yourself.\n\n## What goes in each section\n\n- **Last updated:** the date, the source (for example `handoff`,\n  `work-finish`, `chat`), and who wrote it (a person, or `agent`). Change it\n  on every save.\n- **Now:** the current outcome or area, with work item ids and titles only,\n  for example `- WI-012 CSV export`. Never a status or a stage: the tracker\n  holds those.\n- **Waiting on the owner:** a decision or action only the owner can take\n  that has no work item: what it is, who needs it, and when to check again.\n  Work items that wait on him are lis
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --json","max_output_tokens":2000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\n  \"ok\": true,\n  \"backend\": \"hindsight\",\n  \"kind\": \"focus\",\n  \"text\": \"# Current focus\\n\\nLast updated: 2026-09-28, chat, agent\\n\\n## Now\\n\\n- WI-001 Add a --times flag to greet\\n- WI-002 Document greet flags in the README\\n\\n## Waiting on the owner\\n\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\n\\n## Untracked to-dos\\n\\nNone.\\n\\n## Next session starts with\\n\\n- Continue WI-001 and WI-002 from their Resume here: ask Mike to approve each tested result separately, then follow work-finish for any approved item.\\n\",\n  \"version\": \"e0d704168ea1e6a5214801188cd579fbd7a1a63c1bc61583f2e3ceae1afbaf01\"\n}\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit --help","max_output_tokens":2000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "toolkit work: Work items: create, list, show, change, approve, finish, and sync them. toolkit work lifecycle shows the stages.\n\nUsage:\n  toolkit work lifecycle\n  toolkit work new --title <t> [--type <t>] [--parent <id> [--covers R-02,R-03]] [--stage <s>] [--priority <p>] [--request <text>] [--group <folder>]\n  toolkit work list [--status <s>] [--waiting-on <w>] [--tree] [--all]\n  toolkit work show <id> [--section <heading>] [--path]\n  toolkit work edit <id> --section <heading> (--set-file <file|-> | --text <text>) | --section <heading> --append-row '<a | b | c>' | --label <name> --value <text> | --remove-guide\n  toolkit work set <id> [--stage <s>] [--waiting-on <w>] [--priority <p>] [--type <t>] [--delivery <d>] [--title <t>] [--parent <id|none>] [--reopen] [--note <why>]\n  toolkit work approve <id> --requirements|--design|--result --by <name>\n  toolkit work design <id> [--create] [--set-file <file|-> | --text <text>] [--status proposed|approved|superseded] [--by <name>]\n  toolkit work history <id> --note <text> [--effect <text>]\n  toolkit work move <id> --under <id|group|archive|root>\n  toolkit work finish <id> --by <name> --evidence <text> [--quote <owner's words>] [--allow-open-sub-items]\n  toolkit work cancel <id> --reason <text> [--by <name>]\n  toolkit work next\n  toolkit work decisions\n  toolkit work sync\n  toolkit work validate [<id|file>]\n\n--covers: a sub-item that delivers some of the parent's approved requirements\nlinks them (the text stays in the parent) and inherits the parent's\nrequirements approval, so the owner is not asked twice.\n--quote: finish needs the owner's own words approving the result when no\nresult approval is recorded yet (toolkit work approve <id> --result records one).\nfinish then backs up .work-items/ and .memory/ (and Hindsight memory) to the\nbackup folder in .toolkit.json backup.dir, one folder per day; with no folder\nset it says how to set one.\n--set-file - reads the text from standard input. --text gives the text in\nthe command itself, so no file is needed.\n--remove-guide: removes the template's fill-in guide comment above Overview.\n\nExit codes: 0 ok, 1 error, 2 validation failure or a refused gate, 3 not supported for this tracker, 4 not a toolkit project.\nSkills find an item's file only with: toolkit work show <id> --path\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Resume here' --text 'Both WI-001 and WI-002 results were approved by Mike Rihm on 2026-09-28. The WI-002 branch at 17d584a contains both results; main is at ec6e66b. Ask Mike to approve one local merge of the WI-002 branch into main. Then continue work-finish for WI-002 and WI-001.'","max_output_tokens":1000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Resume here\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --section 'Resume here' --text 'Both WI-001 and WI-002 results were approved by Mike Rihm on 2026-09-28. This branch at 17d584a contains both results; main is at ec6e66b. Ask Mike to approve one local merge of this branch into main. Then continue work-finish for WI-002 and WI-001.'","max_output_tokens":1000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Resume here\" in WI-002.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --text '# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Add a --times flag to greet\n- WI-002 Document greet flags in the README\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 and WI-002 from their Resume here: both results are approved; ask Mike to approve one local merge of the WI-002 branch into main, then follow work-finish.' --expect e0d704168ea1e6a5214801188cd579fbd7a1a63c1bc61583f2e3ceae1afbaf01","max_output_tokens":1000});text(r.output)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved the current focus (21 lines). Version: 5ca73dbabb8c\n"}]
+
+[CALL] const cmds=["toolkit work decisions","toolkit memory focus","toolkit doctor"];for(const cmd of cmds){const r=await tools.exec_command({cmd,max_output_tokens:2200});text(cmd+"\n"+r.output)}
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.9 seconds\nOutput:\n"}, {"type": "input_text", "text": "toolkit work decisions\n2 decisions wait on the owner:\n\nWI-001 Add a --times flag to greet\n  - WI-001 is waiting on the owner (11 User approval). Next action: Ask Mike to approve one local merge of the WI-002 branch into main; it contains both approved results. (work-decide)\n\nWI-002 Document greet flags in the README\n  - WI-002 is waiting on the owner (11 User approval). Next action: Ask Mike to approve one local merge of this branch into main; it contains both approved results. (work-decide)\n"}, {"type": "input_text", "text": "toolkit memory focus\n# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Add a --times flag to greet\n- WI-002 Document greet flags in the README\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 and WI-002 from their Resume here: both results are approved; ask Mike to approve one local merge of the WI-002 branch into main, then follow work-finish.\n"}, {"type": "input_text", "text": "toolkit doctor\nToolkit doctor for Greet CLI Final H2 (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2).\n\nWarnings (2):\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.\n   Fix: The owner opens Codex in this folder and trusts it when Codex asks.\n2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).\n   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\n\nNotes (4):\n- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\n- PROJECT-ROADMAP.md wa

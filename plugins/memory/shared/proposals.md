@@ -32,16 +32,26 @@ that a "Save to memory?" question he did not answer is kept, not lost.
 ## How a proposal is saved
 
 1. The agent asks the question in exactly this form, at the end of its reply:
-   `Save to memory: <one-line summary>?`
+   `Save to memory: <one-line summary>?` (bold is fine). Other wording, such
+   as "Save it to memory?", has no one-line summary to save: the Stop hook
+   then stops the turn once and asks for this form.
 2. When the turn ends, the Stop hook reads that question. If no proposal was
    saved in this turn, the hook saves one from the summary alone. It never
-   saves the same summary twice in a session. The next turn's context says
-   what happened, in one of three notes:
+   saves the same summary twice in a session. A record that is only about the
+   same subject does not stop it. The next turn's context says what
+   happened, in one of five notes:
    - It saved the proposal, and names its key. His answer is recorded as in
      "Recording the owner's answer" below.
-   - It saved nothing, because memory already has a record like it, and
-     names that record. When he answers yes, update that record (read it
-     with `--json`, save with `--expect <version>`); never save a second one.
+   - It saved nothing, because memory already holds a proposal like it, and
+     names that proposal. His answer approves or rejects that proposal.
+   - It saved nothing, because memory already holds a record about the same
+     subject, and names it. Read it with `toolkit memory get <key>`. The same
+     fact in other words: keep it, or update it with `--expect <version>`. A
+     different fact: after his yes, save it with `--allow-similar` and
+     `--approved-by`. Never overwrite a record with a different fact.
+   - It saved nothing, because the text looks like a secret. Never save it.
+     After his yes, save only where the secret is kept ("The staging key is in
+     1Password under Staging").
    - The save failed. Save the proposal yourself in this turn, with the
      command in step 3, so it is kept until he answers.
 3. The agent may save the proposal itself in the same turn instead, with a
@@ -57,29 +67,26 @@ refuses the pair.
 
 ## Recording the owner's answer
 
-- **Yes, to a proposal the Stop hook saved.** Its Evidence and limits line
-  ends "so the toolkit's Stop hook saved it as a proposal". Its body has
-  only four of the six labels, and its How to apply line says "Do not rely
-  on this until the owner approves it." `approve` leaves the body as it is,
-  so never use it here, even though the hook's note names
-  `toolkit memory approve`. Always read it with `--json`, write the full body
-  in the record format, and save the same type and slug:
-
-  ```text
-  toolkit memory get <key> --json
-  toolkit memory save --type <type> --name <slug> --description '<one line>' --body-file <file> --expect <version> --approved-by <owner>
-  ```
-
-  That one save approves it too.
-- **Yes, to a proposal you saved with a full body that is right:**
+- **Yes, to a proposal as it stands** (one the Stop hook saved, or one you
+  saved with a full body that is right):
 
   ```text
   toolkit memory approve <key> --by <owner>
   ```
 
-  The record becomes `current`, "Approved by <owner> on <date>".
-- **Yes, but the body needs work:** the same full-body save as for the Stop
-  hook's proposal.
+  The record becomes `current`, "Approved by <owner> on <date>". A proposal
+  the Stop hook saved ends its Evidence and limits line "so the toolkit's
+  Stop hook saved it as a proposal". For that one, `approve` also takes the
+  words "Do not rely on this until the owner approves it." out of How to
+  apply and adds who approved it and when to the Evidence line.
+- **Yes, with a reason or a detail, or the body needs work:** read it with
+  `--json`, write the full body in the record format, and save the same type
+  and slug. That one save approves it too:
+
+  ```text
+  toolkit memory get <key> --json
+  toolkit memory save --type <type> --name <slug> --description '<one line>' --body-file <file> --expect <version> --approved-by <owner>
+  ```
 - **Yes, with a better name or type:** record his yes first, as above, then
   `toolkit memory rename <key> --to <new-key>`.
 - **No:**
@@ -103,16 +110,22 @@ refuses the pair.
   is about something else. The Stop hook saved the proposal
   `project_tests_run_before_every_commit`, and it stays until `work-decide`
   asks.
-- Later the owner says "yes, save that". The Stop hook saved it, so read it
-  with `--json`, write the full body, and save it:
+- Later the owner says "yes, save that":
+
+  ```text
+  toolkit memory approve project_tests_run_before_every_commit --by Mike
+  ```
+
+  Then reply: "Saved to memory: tests run before every commit. Say 'forget
+  that' to undo."
+- He says "yes, because CI is slow": his reason goes in the body, so read it
+  with `--json`, write the full body with that reason under **Why**, and save
+  it:
 
   ```text
   toolkit memory get project_tests_run_before_every_commit --json
   toolkit memory save --type project --name tests-run-before-every-commit --description 'Tests run before every commit' --body-file - --expect <version> --approved-by Mike <<'EOF'
   ```
-
-  Then reply: "Saved to memory: tests run before every commit. Say 'forget
-  that' to undo."
 - The owner says "no, that was only for last week". Run
   `toolkit memory reject project_tests_run_before_every_commit` and reply in
-  one line that it is not saved.
+  one line that it is not saved, then the next step.

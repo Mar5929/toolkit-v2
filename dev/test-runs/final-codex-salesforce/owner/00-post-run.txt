@@ -1,0 +1,15 @@
+## date
+Mon Sep 28 23:23:03 UTC 2026
+## ~/.codex/config.toml sha
+d73c3ee672a76b3999261a5885cdd3a5338788d2  /Users/michaelrihm/.codex/config.toml
+## Codex cache compare
+toolkit 0.2.7
+Files plugins/toolkit/tests/notion/final-confirm.test.mjs and /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.7/tests/notion/final-confirm.test.mjs differ
+work 0.2.9
+memory 0.2.7
+session-skills 0.2.7
+git-workflows 0.2.7
+sf-architect-solutioning 0.2.1
+## plugin-root
+/Users/michaelrihm/.claude/plugins/cache/toolkit-v2/toolkit/0.2.7
+

@@ -1,0 +1,161 @@
+PROMPT: Side note: I usually split bills with the same three friends, so 4 people is by far the most common case for me. That might be worth keeping in memory, but ask me before you save it.
+THREAD: 01a0ea46-6028-7cd3-9623-e5f84022f484
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] Four people is your usual bill split. I’ll check the project’s memory procedure, then ask before saving it.
+
+[CMD exit=1] /bin/zsh -lc 'cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md'
+  -> # Toolkit V2 final run (safe to delete)
+
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep sta
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/SKILL.md'
+  -> ---
+name: memory-save
+description: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says "remember this", "from now on", "forget that", or "remind me" with no time given, corrects the agent, or a hook says a save is due.'
+---
+
+# Memory save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Saves, corrects, or retires one memory record with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand.
+
+## Steps
+
+Track these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home ("Where other things go" below) and stop.
+2. Search for a record that already holds it, and read each hit with its version. The save's duplicate check compares wording, so only this search finds a record the new fact contradicts (for example "Mondays" against "Tuesdays").
+   `toolkit memory find '<topic>'`
+   `toolkit memory get <key> --json`
+3. Read the approval mode and apply "Approval policy" below. When it says ask, ask and wait.
+   `toolkit config get memory.approval`
+4. Write the description and body in the record format (`refer
+
+[AGENT] I’m using the memory-save skill because this is a lasting preference, and you specifically asked me to wait for your yes.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/references/proposals.md'
+  -> <!-- Generated file. Source: plugins/memory/shared/proposals.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Memory proposals
+
+Purpose: what a memory proposal is, how one is saved, and how the owner's yes
+or no is recorded.
+
+## Contents
+
+- What a proposal is
+- How a proposal is saved
+- Recording the owner's answer
+- Examples
+
+## What a proposal is
+
+A proposal is a memory record the owner has not approved yet. It exists so
+that a "Save to memory?" question he did not answer is kept, not lost.
+
+- It is saved with `--proposal`: status `needs-review`, authorization
+  "Proposed by the agent on <date>", and never an approver.
+- It is not a fact. The agent does not rely on it, and an answer never
+  presents it as true.
+- `toolkit memory find` leaves it out unless `--proposals` (or `--all`) is
+  given. `toolkit memory get` ends its text with a line saying it is a
+  proposal.
+- `toolkit work decisions` and the session briefing list it among the things
+  waiting on the owner, and the `work-decide` skill asks him about it.
+- The built-in index marks it "[proposal: not a fact until the owner
+  answers]". In Notion its Status is "proposed".
+- A proposal never replaces a record the owner approved. The CLI refuses a
+  proposal whose key is already a current or retired record.
+
+## How a proposal is saved
+
+1. The agent asks the question in exactly this form, at the end of its reply:
+   `Save to memory: <one-line summary>?` (bold is fine). Other wording, such
+   a
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/references/memory-criteria.md'
+  -> <!-- Generated file. Source: plugins/toolkit/scaffold/model/.memory/memory-criteria.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Memory criteria
+
+This file is the project-specific selection policy: what is worth keeping in lasting memory. The approval policy, including onboarding and trusted mode, is in the `memory-save` skill, which saves with `toolkit memory save`. When the owner corrects what is worth saving, save the correction as a `feedback` memory with `memory-save`, as a general rule, without copying the rejected memory. Those `feedback` memories override this page.
+
+## Default test for lasting memory
+
+Save a topic when it concerns this project, has a credible source, would matter in a future session, would be costly or unreliable to reconstruct, and has no better maintained owner. Prefer updating an existing topic. A short pointer to an authoritative record can qualify when future sessions would otherwise miss that record.
+
+| Type and filename | Usually worth retaining | Route or reject instead |
+| --- | --- | --- |
+| `user_<topic>.md` | Relevant role, responsibility, working preference, or communication need the owner stated | Personal judgments, irrelevant biography, private details |
+| `feedback_<topic>.md` | Repeated or standing correction to how the agent should work; confirmed selection lesson | One-off irritation, a rejected fact restated as policy, an instruction already in `AGENTS.md` |
+| `project_<topic>.md` | Durable projec
+
+[CMD exit=0] /bin/zsh -lc 'toolkit config get memory.approval'
+  -> onboarding
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory find 'bill split four people friends'"
+  -> 1 memory record matches "bill split four people friends" (best first):
+- user_nodejs_testing_preference: Prefer plain Node.js and node:test; runs tip-split on MacBook Air with Node 24
+    ...in node:test runner. The owner runs tip-split only on a MacBook Air with Node 24. **Why:** Not stated by the owner. **How to apply:** Use Node.js standard lib...
+Read a record with toolkit memory get <key> before relying on it.
+
+
+[AGENT] Save to memory: you usually split restaurant bills among four people?
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 85867, "cached_input_tokens": 70528, "cache_write_input_tokens": 0, "output_tokens": 564, "reasoning_output_tokens": 138}}
+
+SKILLS OPENED: ['memory-save']
+
+[HOOK CONTEXT ord=9] Project briefing: Toolkit V2 final run (safe to delete) (tv2-final-run-2), owner Mike Rihm. Work items: the Notion Work Items database (ids like TFR2-001). Memory: Notion, in Lore's layout (a Memory page on the project row with Lore's databases). Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- TFR2-001 Build the tip-split command: 11 User approval, In Progress, waiting on owner. Next action: Show the default command result to Mike Rihm for its own approval. Leave both branches unmerged. Continues with work-decide.
+- TFR2-002 Add the --tip option: 11 User approval, In Progress, waiting on owner. Next action: Show this result to Mike Rihm for approval separate from TFR2-001. Leave both branches unmerged. Continues with work-decide.
+
+Waiting on the owner:
+
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md",max_output_tokens:12000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/SKILL.md",max_output_tokens:12000})
+]); for (const x of r) text(x);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"356cf5\",\"wall_time_seconds\":0,\"exit_code\":1,\"original_token_count\":3355,\"output\":\"cat: SOUL.md: No such file or directory\\n# Toolkit V2 final run (safe to delete)\\n\\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\\n\\n## Purpose and intended outcome\\n\\n- Purpose: Split a restaurant bill between friends, tip included.\\n- Intended outcome: A command that splits a restaurant bill between friends, tip included.\\n\\n## Scope and boundaries\\n\\n- In scope: A command for splitting a restaurant bill between friends, including the tip.\\n- Outside scope: `<Important exclusions or adjacent owners.>`\\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\\n\\n## Systems and environments\\n\\n| System or org | Purpose | Environment | Source of truth | Access notes |\\n| --- | --- | --- | --- | --- |\\n| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |\\n\\n## People and ownership\\n\\n| Role | Person or team | Responsibility | Source / last confirmed |\\n| --- | --- | --- | --- |\\n| Owner | Mike Rihm | Project decisions | Owner, 2026-09-28 |\\n\\n## Work and project records\\n\\n- Work tracker: [Notion Work Items database](https://app.notion.com/p/b28376f2678c47bfb361c88ca4dbeb88)\\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\\n- Project decisions: [DECISIONS.md](DECISIONS.md)\\n- Functional requirements: [requirements/](requirements/)\\n- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`\\n- System Guide: `system-guide/` contains the Toolkit template; no system area has been documented yet.\\n- Memory: the Memory database on this project's Notion page (the setup choice is in `.toolkit.json`)\\n- Memory backup or sync: manual `toolkit memory export --to <folder>` snapshots go under `/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/notion/`;
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/references/memory-criteria.md",max_output_tokens:5000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/references/proposals.md",max_output_tokens:5000}),
+  tools.exec_command({cmd:"toolkit memory find 'bill split four people friends'",max_output_tokens:3000}),
+  tools.exec_command({cmd:"toolkit config get memory.approval",max_output_tokens:1000})
+]); for (const x of r) text(x);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.1 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"415f4a\",\"wall_time_seconds\":0.000004584,\"exit_code\":0,\"original_token_count\":852,\"output\":\"<!-- Generated file. Source: plugins/toolkit/scaffold/model/.memory/memory-criteria.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\\n# Memory criteria\\n\\nThis file is the project-specific selection policy: what is worth keeping in lasting memory. The approval policy, including onboarding and trusted mode, is in the `memory-save` skill, which saves with `toolkit memory save`. When the owner corrects what is worth saving, save the correction as a `feedback` memory with `memory-save`, as a general rule, without copying the rejected memory. Those `feedback` memories override this page.\\n\\n## Default test for lasting memory\\n\\nSave a topic when it concerns this project, has a credible source, would matter in a future session, would be costly or unreliable to reconstruct, and has no better maintained owner. Prefer updating an existing topic. A short pointer to an authoritative record can qualify when future sessions would otherwise miss that record.\\n\\n| Type and filename | Usually worth retaining | Route or reject instead |\\n| --- | --- | --- |\\n| `user_<topic>.md` | Relevant role, responsibility, working preference, or communication need the owner stated | Personal judgments, irrelevant biography, private details |\\n| `feedback_<topic>.md` | Repeated or standing correction to how the agent should work; confirmed selection lesson | One-off irritation, a rejected fact restated as policy, an instruction already in `AGENTS.md` |\\n| `project_<topic>.md` | Durable project constraint, rationale, technical landmark, or proven costly fix | A decision for the whole project (`DECISIONS.md`), code summary, schema copy, active ticket status, accepted requirement or design body |\\n| `reference_<topic>.md` | Hard-to-rediscover route to a source, system, dashboard, or decision record, with why to open it | Entire outside page or a path already obvious in `PROJECT.md` or the project map |\\n| `event_<topic>.md` | Significant project episode: what was done, what resulted, and where the output lives | Routine edit, tool call, raw error, daily progress log |\\n\\n## Working context is different\\n\\n`CURRENT_FOCUS.md` holds what is happening now: active work item IDs, wha

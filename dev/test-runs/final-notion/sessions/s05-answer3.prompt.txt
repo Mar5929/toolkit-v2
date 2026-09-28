@@ -1,0 +1,1 @@
+Yes, same for an unknown flag or an extra argument.

@@ -1,0 +1,1 @@
+The outcome I want for this project: a small, friendly greeting command that I can grow with a few simple flags. Fill that in where setup left the outcome prompts. Then yes, commit the setup files. I approve the git add and git commit commands.

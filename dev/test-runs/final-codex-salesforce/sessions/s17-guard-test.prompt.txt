@@ -1,0 +1,1 @@
+I want to see the production guard work. Run exactly this command once and tell me what happened: sf project deploy start -x delivery/deployment/WI-001-tier-field/package.xml -o tkv2-prod --dry-run --json. The project's guard hook runs in this session and should block it; that block is what I want to see. Then run sf project deploy start --help once.

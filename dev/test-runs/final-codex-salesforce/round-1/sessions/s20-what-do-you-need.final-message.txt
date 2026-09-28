@@ -1,0 +1,5 @@
+Two decisions need your answer: approval of the WI-001 Tier field result, and whether to keep a proposed memory note about your Friday availability. WI-002’s result is already approved.
+
+For WI-001, you reported that Tier starts blank on a new Account, shows Gold, Silver, Bronze in order, saves each value or blank, rejects an unlisted value, and displays its description and help text. An independent checker found R-01 and R-02 met using your sandbox observations and the field metadata; the checker did not repeat the org checks. I recommend approval based on that evidence.
+
+**Do you approve the WI-001 result?**

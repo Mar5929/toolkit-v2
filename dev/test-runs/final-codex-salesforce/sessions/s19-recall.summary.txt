@@ -1,0 +1,79 @@
+PROMPT: Do you remember how I like new custom fields to be set up?
+THREAD: 01a0ea4f-e1a5-76b3-9377-6cf643972eb2
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The tracker has no open items. A new request starts a work item with the work-on skill.
+
+Items: 2 done.
+
+Current focus:
+Last updated: 2026-09-28, work-finish, agent
+## Now
+None.
+## Waiting on the owner
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks and Salesforce org guards in Codex: open Codex here, type /hooks, and trust them. Setup step; drop it when doctor stops reporting it.
+## Untracked to-dos
+None.
+## Next session starts with
+- WI-001 and WI-002 are Done. Start the next requested work item; check the tracker and requirements before building.
+
+Memory proposals waiting on the owner (not facts: do not rely on them; work-decide asks him):
+- user_mike_rihm_usually_prefers_design_reviews_first: Mike Rihm usually prefers design reviews first thing in the morning (proposed 2026-09-28)
+
+Project memory (builtin): 2 records, and 1 proposal the owner has not answered. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_custom_field_guidance: Every new custom field should have a description and help text
+- user_friday_availability: Mike Rihm is usually off on Fridays
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off. Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+- Codex ran this Toolkit V2 hook, but ~/.codex/config.toml has no trust entry for the Toolkit V2 hooks. Codex runs untrusted hooks only when it is started with --dangerously-bypass-hook-trust; a normal Codex session skips them. Fix: The owner opens /hooks in Codex and trusts the Toolkit V2 hooks; toolkit doctor checks it.
+- The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them. Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.
+
+Always-on rules. Claude Code loads 
+
+[AGENT] I’ll check the saved project memory so I can give you the exact preference. I’m using the memory-find skill.
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-find/SKILL.md
+   cat SOUL.md PROJECT.md
+   for f in .claude/rules/check-deployment-contents.md .claude/rules/component-tracker.md .claude/rules/confirm-salesforce-changes.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/production-data-changes.md .claude/rules/project-file-locations.md .claude/rules/salesforce-org-safety.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md; do cat "$f"; done
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"i":0,"status":"fulfilled","value":{"chunk_id":"ce981e","wall_time_seconds":0.000003333,"exit_code":0,"original_token_count":1458,"output":"---\nname: memory-find\ndescription: 'Looks up what the project already recorded (memory, DECISIONS.md, work items, requirements, current focus) and cites the source of each answer. Use when the owner asks \"what did we decide\", \"do you remember\", or \"why did we\", and before asking him to repeat anything.'\n---\n\n# Memory find\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nFinds what the project already recorded and answers with a source for every fact. It only reads: it never changes memory, a work item, or a file.\n\n## Steps\n\nTrack these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.\n\n1. Check the session briefing and the current focus.\n   `toolkit memory focus`\n2. Search memory with the owner's words, then with the real names (component, setting, work item id).\n   `toolkit memory find '<query>'`\n3. Read every hit before using it, and check its status, dates, and scope (`references/record-format.md`). Hindsight sorts hits into three groups, and only the first group can give an answer (`references/memory-hindsight.md`).\n   `toolkit memory get <key>`\n4. Not found yet: search retired records and proposals too. A retired record shows what used to be true; a proposal is never a fact (`references/proposals.md`).\n   `toolkit memory find '<query>' --all`\n5. Search the other homes (\"Other homes\" below), and the glossary:\n   `toolkit memory glossary`\n   Local or Notion tracker:\n   `toolkit work list`\n   `toolkit work show <id> --section 'Recent History'`\n   `toolkit work show <id> --section Notes`\n   GitHub Issues or Jira: those `toolkit work` commands exit with code 3. Use the commands in section 4 of `references/tracker-github.md` or `references/tracker-jira.md`.\n6. Answer with a source and date for every fact (\"How to answer\" below). Sources disagree: show both, say which is newer, leave it open, and offer `memory-save` to correct the older one.\n7. Nothing found: say \"I don't know; nothing recorded says\", never a guess, then ask the owner once.\n8. End with the one question for the owner, or the exact words that continue. When he asked around a decision still waiting on him (\"before I approve this ...\"), end by asking that decision again.\n\n## Gotchas\n\n- A search hit is a pointer, not an answer. Read the record; its text is what you cite.\n- Hindsight results marked \"may be about it\" or \"closest\" are not answers. Answer only when the record's text says it; otherwise say it is not in memory.\n- `--reflect` (Hindsight) gives \"a summary, not a source\". Cite the records it used, after reading them.\n- A proposal (`needs-review`, \"Proposed by the 
+
+[CALL exec] toolkit memory focus
+   toolkit memory find 'custom field'
+   cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-find/references/record-format.md
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"i":0,"status":"fulfilled","value":{"chunk_id":"b1e7bb","wall_time_seconds":0.000002417,"exit_code":0,"original_token_count":144,"output":"# Current focus\n\nLast updated: 2026-09-28, work-finish, agent\n\n## Now\n\nNone.\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks and Salesforce org guards in Codex: open Codex here, type /hooks, and trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- WI-001 and WI-002 are Done. Start the next requested work item; check the tracker and requirements before building.\n"}}
+{"i":1,"status":"fulfilled","value":{"chunk_id":"6859d9","wall_time_seconds":0.00000425,"exit_code":0,"original_token_count":95,"output":"1 memory record matches \"custom field\" (best first):\n- user_custom_field_guidance: Every new custom field should have a description and help text\n    # Custom field guidance **Remember:** The owner prefers every new custom field to have a description and help text. **Why:** Not stated by the owner. **How t...\nRead a record with toolkit memory get <key> before relying on it.\n"}}
+{"i":2,"status":"fulfilled","value":{"chunk_id":"d44de2","wall_time_seconds":0.000002292,"exit_code":0,"original_token_count":2244,"output":"Warning: truncated output (original token count: 2244)\nTotal output lines: 192\n\n<!-- Generated file. Source: plugins/memory/shared/record-format.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\n# Memory record format\n\nPurpose: the exact shape of one memory record (type, key, description,\nfrontmatter, and body), the same in built-in, Hindsight, and Notion memory.\n\n## Contents\n\n- Types\n- Keys and file names\n- The description\n- Frontmatter\n- Body\n- Links between records\n- What never goes in a record\n- Passing the body to the command\n- Checklist before a save\n\nThe formats are the model project's: the topic template\n(`.memory/project_topic_template.md`), `MEMORY.md`, `CURRENT_FOCUS.md`,\n`memory-criteria.md`, and `terminology-glossary.md`. Only `toolkit memory`\ncommands write memory. They write the frontmatter from the flags; you write\nthe one-line description and the body.\n\n## Types\n\n| Type | Holds | Example key |\n| --- | --- | --- |\n| `user` | A role, responsibility, working preference, or communication need the owner stated | `user_plain_replies` |\n| `feedback` | A standing correction to how the agent works, or a lesson about what to save | `feedback_no_force_push` |\n| `project` | A lasting project constraint, reason, technical landmark, or costly fix | `project_deploy_window` |\n| `reference` | A hard-to-find route to a source, system, dashboard, or record, with why to open it | `reference_backup_folder` |\n| `event` | A significant project episode: what was done, 
+
+[CALL exec] toolkit memory get user_custom_field_guidance
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"029464","wall_time_seconds":0.000002292,"exit_code":0,"original_token_count":182,"output":"---\nname: user_custom_field_guidance\ndescription: Every new custom field should have a description and help text\nmetadata:\n  type: user\nstatus: current\nsource: Mike Rihm, in chat, 2026-09-28\nlast_verified: 2026-09-28\nauthorization: Approved by Mike Rihm on 2026-09-28\nsupersedes: none\n---\n\n# Custom field guidance\n\n**Remember:** The owner prefers every new custom field to have a description and help text.\n\n**Why:** Not stated by the owner.\n\n**How to apply:** Include a description and help text whenever adding a new custom field.\n\n**Evidence and limits:** The owner, in chat, 2026-09-28. Applies to new custom fields.\n\n**Related memories:** None.\n\n**Authoritative records:** WI-001 includes this preference for Account Tier.\n"}
+
+[AGENT] Yes. You want every new custom field to include a **description and help text**. (Project memory `user_custom_field_guidance`, approved by you on 2026-09-28.)
+
+SKILLS OPENED (SKILL.md read): ['memory-find']
+
+TOOLKIT COMMANDS:
+   toolkit memory focus
+   toolkit memory find 'custom field'
+   toolkit memory get user_custom_field_guidance

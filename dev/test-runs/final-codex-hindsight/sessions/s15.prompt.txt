@@ -1,0 +1,1 @@
+Before I approve anything: what did I tell you earlier about command-line flags and the README? Does the WI-002 change follow it?

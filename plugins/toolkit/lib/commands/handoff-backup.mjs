@@ -15,9 +15,12 @@ export const help = `Usage:
 Exports the Git-ignored .work-items/ and .memory/ folders (and the Hindsight
 memory, which lives on this computer too) to <backup.dir>/<project key>-<date>/,
 one folder per day, where backup.dir is the backup folder in .toolkit.json.
-toolkit work finish runs the same backup. With no backup folder set it changes
-nothing and says how to set one (toolkit config set backup.dir <folder>, or
-none). A project with nothing on this computer only (Notion tracker and Notion
+When today's folder already holds more files than the project has now (a
+fresh clone, or the project on a new computer), the backup goes to a new
+folder, <project key>-<date>-<HHMMSS>, and today's earlier backup is kept as
+it was. The work finish command runs the same backup. With no backup folder
+set it changes nothing and says how to set one (toolkit config set backup.dir
+<folder>, or none). A project with nothing on this computer only (Notion tracker and Notion
 memory) has nothing to back up. Exit 1 when the backup failed; the handoff
 then tells the owner.`;
 

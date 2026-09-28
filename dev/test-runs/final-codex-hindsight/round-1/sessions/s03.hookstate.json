@@ -1,0 +1,74 @@
+{
+  "schema": 1,
+  "sessionId": "01a0e995-a322-7561-ade2-a63b174f0d35",
+  "host": "codex",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r1",
+  "startedAt": "2026-09-28T19:54:55.516Z",
+  "turns": 1,
+  "turn": {
+    "key": "01a0e995-a389-72d2-b819-266e26e15b5a",
+    "n": 1,
+    "startedAt": "2026-09-28T19:54:55.675Z",
+    "keep": "remember that",
+    "baseline": {
+      "memoryMeta": null,
+      "hindsightMeta": 1790625275293.2341,
+      "memoryCache": 1790625275313.4038,
+      "workState": 1790625295576.856,
+      "decisions": 1790624963787.3772
+    },
+    "records": [
+      {
+        "kind": "work",
+        "what": "toolkit work history",
+        "at": "2026-09-28T19:55:41.300Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T19:55:45.489Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T19:55:56.890Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T19:56:01.637Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T19:56:07.846Z"
+      },
+      {
+        "kind": "memory",
+        "what": "toolkit memory save",
+        "at": "2026-09-28T19:56:18.310Z",
+        "description": "Document every command-line flag in the README"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T19:56:31.174Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T19:56:34.680Z"
+      },
+      {
+        "kind": "memory",
+        "what": "toolkit memory focus",
+        "at": "2026-09-28T19:56:43.476Z"
+      }
+    ],
+    "edits": [],
+    "stopBlocked": false
+  },
+  "lastStopReason": null,
+  "source": "startup",
+  "updated": "2026-09-28T19:57:27.905Z"
+}

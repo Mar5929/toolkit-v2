@@ -1,0 +1,20 @@
+$ GET /v1/default/banks/greet-cli-final-h/documents
+total 4
+ - user_document_env_vars_in_readme current ['type:user', 'status:current', 'kind:record']
+ - user_document_cli_flags_in_readme current ['type:user', 'status:current', 'kind:record']
+ - focus None ['kind:focus']
+ - feedback_small_changes_mike_prefers_working_directly_agent current ['type:feedback', 'status:current', 'kind:record']
+$ POST recall "environment variable README"
+results 4
+ - user_document_env_vars_in_readme --- name: user_document_env_vars_in_readme description: Document every environment variable in the README metadata:   ty
+ - user_document_cli_flags_in_readme --- name: user_document_cli_flags_in_readme description: Explain every command-line flag in the README metadata:   type:
+ - focus # Current focus  Last updated: 2026-09-28, work-finish, agent  ## Now  None.  ## Waiting on the owner  - Trust this fold
+ - feedback_small_changes_mike_prefers_working_directly_agent --- name: feedback_small_changes_mike_prefers_working_directly_agent description: For small changes, Mike prefers workin
+$ grep env_vars .git/toolkit-v2/memory-cache.json
+   1 env_vars_in_readme
+total 24
+drwxr-xr-x   5 michaelrihm  wheel   160 Sep 28 16:28 .
+drwxr-xr-x  14 michaelrihm  wheel   448 Sep 28 16:27 ..
+-rw-r--r--   1 michaelrihm  wheel   271 Sep 28 16:26 export.json
+-rw-r--r--   1 michaelrihm  wheel   423 Sep 28 16:28 hindsight-meta.json
+-rw-r--r--   1 michaelrihm  wheel  1735 Sep 28 16:28 memory-cache.json

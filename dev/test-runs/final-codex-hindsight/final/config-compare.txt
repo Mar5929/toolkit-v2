@@ -1,0 +1,36 @@
+## before
+Mon Sep 28 22:06:35 UTC 2026
+d73c3ee672a76b3999261a5885cdd3a5338788d2  /Users/michaelrihm/.codex/config.toml
+c98e473a897ad5f369c276e5e5b81081f31aa398  /Users/michaelrihm/.claude/settings.json
+plugin-root: /Users/michaelrihm/.claude/plugins/cache/toolkit-v2/toolkit/0.2.7
+/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/:
+0.2.7
+
+/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/:
+0.2.7
+
+/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/session-skills/:
+0.2.7
+
+/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/sf-architect-solutioning/:
+0.2.1
+
+/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/:
+0.2.7
+
+/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/:
+0.2.9
+banks: 42
+## after, Mon Sep 28 22:57:27 UTC 2026
+d73c3ee672a76b3999261a5885cdd3a5338788d2  /Users/michaelrihm/.codex/config.toml
+c98e473a897ad5f369c276e5e5b81081f31aa398  /Users/michaelrihm/.claude/settings.json
+plugin-root: /Users/michaelrihm/.claude/plugins/cache/toolkit-v2/toolkit/0.2.7
+{"status":"healthy","database":"connected","db_acquire_ms":0.9,"db_pool_waiting":0,"db_pool_in_use":0,"db_pool_max":100,"db_pool_idle":3}
+banks: 23
+greet-cli-final-h2 present: True
+== toolkit 0.2.7: diff -rq source vs Codex cache
+Files plugins/toolkit/tests/notion/final-confirm.test.mjs and /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.7/tests/notion/final-confirm.test.mjs differ
+== work 0.2.9: diff -rq source vs Codex cache
+== memory 0.2.7: diff -rq source vs Codex cache
+== session-skills 0.2.7: diff -rq source vs Codex cache
+== git-workflows 0.2.7: diff -rq source vs Codex cache

@@ -1,0 +1,619 @@
+PROMPT: I tried it: --tip 20 gives $33.80 and a bad tip gives the usage line. I approve the TFR2-002 result. Leave the memory note for later.
+THREAD: 01a0ea48-e4c5-7cc1-b268-b81c8ddd1bb8
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll record your TFR2-002 approval and leave the memory proposal pending. Then I’ll check what can be finished before a merge decision.
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history TFR2-002 --note 'Owner said: I tried it: --tip 20 gives "'$33.80 and a bad tip gives the usage line. I approve the TFR2-002 result. Leave the memory note for later.'"' --effect 'Result approved; work-finish continues. Owner directly checked the 20% example and bad tip. Memory proposal remains pending.'"
+  -> Added a Recent History row to TFR2-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work approve TFR2-002 --result --by 'Mike Rihm'"
+  -> Recorded: result of TFR2-002 approved (2026-09-28 by Mike Rihm).
+It is no longer waiting on the owner (waiting_on: none).
+Now 11 User approval (In Progress). Continue with work-finish.
+Note: TFR2-002's Overview still says "Next action: Show this result to Mike Rihm for approval separate from TFR2-001. Leave both branches unmerged.". Write the step after this approval: toolkit work edit TFR2-002 --label 'Next action' --value '<next step>'.
+
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-finish/SKILL.md'
+  -> ---
+name: work-finish
+description: 'Ships and closes an approved work item (pull request, merge, sandbox or production deployment, requirements update, Done), or cancels an item with the owner''s reason. Use when the owner says "ship it", "deploy it", "close it out", or "mark it done", or asks to cancel or drop an item.'
+---
+
+# Work finish
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Takes an approved item through the pull request, merge, deployment, and requirements update to Done, or cancels it; it never marks Done without the owner's approval and never runs a production deploy. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Check the result approval is recorded. Not recorded: show the result, the gaps, and the evidence, and ask. "Ship it" or "mark it done" after he saw the result counts: save his words first, then record it (`references/approvals.md`, section 4). Each sub-item needs its own.
+   `toolkit work show <id>`
+   `toolkit work history <id> --note 'Owner said: <quote>' --effect 'Result approved; work-finish continues.'`
+   `toolkit work approve <id> --result --by <owner>`
+2. Repository work: commit the item's files by name on its branch, push it, open the pull request, and set the stage (`references/closing.md`, section 2; `references/git-rules.md` before any G
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-finish/references/closing.md'
+  -> # Closing a work item
+
+The detail behind each `work-finish` step: the pull request and merge, a
+merge with no remote, deployment, the requirements baseline, sub-items,
+memory, leftover worktrees, Done, and cancel.
+
+## Contents
+
+1. Before anything ships
+2. Commit, push, and the pull request (stage 12)
+3. Merging
+4. No remote: the local merge
+5. Deployment (stage 13)
+6. Requirements baseline (stage 14)
+7. Sub-items
+8. Memory and the current focus
+9. Leftover worktrees and branches
+10. Done
+11. Cancel
+
+## 1. Before anything ships
+
+- The result approval is recorded (`toolkit work show <id>` shows
+  `result_approved`), or the owner said "ship it" or "mark it done" after he
+  saw the result, the gaps, and the evidence. Record that with his words
+  (`approvals.md`, "Result approval").
+- Never describe an unverified result as complete.
+- Done means the owner accepted the result. Cancelled means the work stopped
+  without it.
+- Stages that do not apply are skipped. Work with no repository change has no
+  pull request; work with no deployment has no deployment stage. A skipped
+  stage gets one history note saying so, so `toolkit work finish` has a
+  record of it.
+
+## 2. Commit, push, and the pull request (stage 12)
+
+- Commit the item's files on its branch, staged by name
+  (`claude/<prefix>-<number>-<slug>`, for example `claude/wi-007-csv-export`).
+  No `Co-Authored-By` line naming an AI and no "Generated with" line.
+- Push the branch. Never force-push.
+- Write the pull request title a
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-finish/references/git-rules.md'
+  -> <!-- Generated file. Source: plugins/git-workflows/shared/git-rules.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Git rules for Toolkit V2 skills
+
+Purpose: the Git rules every Toolkit V2 skill follows when it makes a branch,
+commits, merges, pushes, or removes a worktree, in Claude Code and in Codex.
+
+## Contents
+
+- Look before the first Git write
+- Branch and worktree names for a work item
+- Staging and committing
+- No AI credit
+- The Git-ignored toolkit folders
+- A project with no remote
+- The merge-safety check
+- A merge that stops on a conflict
+- Git writes in Codex
+- Checklist: one commit
+- Examples
+
+## Look before the first Git write
+
+Other sessions may work in the same repository at the same time. Before the
+first Git write in a session, run each of these on its own:
+
+```text
+git worktree list
+git status
+git remote
+```
+
+- `git remote` prints nothing: the project has no remote. Read "A project
+  with no remote" below before any fetch, pull, push, or pull request.
+- An unknown worktree, a branch that moved, or a change this session did not
+  make means another session is working. Do not change it. Tell the owner.
+- The shared primary checkout is the first entry `git worktree list` prints.
+  In it, never switch branches, reset, rebase, or stash.
+- Never commit, push, rebase, or delete another session's branch, and never
+  commit its uncommitted changes, even when they look finished.
+
+## Branch and worktree names for a work item
+
+A work item
+
+[CMD exit=0] /bin/zsh -lc 'git remote'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git status --short'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git diff --name-status main...claude/tfr2-002-add-the-tip-option'
+  -> A	bin/tip-split.js
+A	tests/TFR2-002-TEST-PLAN.md
+A	tests/tip-split.test.js
+
+
+[CMD exit=0] /bin/zsh -lc 'git -C .claude/worktrees/tfr2-001-build-the-tip-split-command status --short'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git log --oneline --decorate --graph --all -12'
+  -> * 339892d (claude/tfr2-002-add-the-tip-option) Record optional tip test results
+* dd7f00f Add optional tip percentage
+| * ff39be4 (claude/tfr2-001-build-the-tip-split-command) Record default command test results
+|/  
+* e9dd6fa Build default tip split command
+* 77fd652 (HEAD -> main) Set up Toolkit V
+
+[CMD exit=0] /bin/zsh -lc 'git diff --name-status main...claude/tfr2-001-build-the-tip-split-command'
+  -> A	bin/tip-split.js
+A	tests/TFR2-001-TEST-PLAN.md
+A	tests/tip-split.test.js
+
+
+[CMD exit=0] /bin/zsh -lc 'git -C .claude/worktrees/tfr2-002-add-the-tip-option status --short'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR2-002 --label 'Next action' --value 'Continue with work-finish after Mike Rihm authorizes the local merges; keep this branch unmerged until then.'"
+  -> Saved "Next action" in TFR2-002.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set TFR2-002 --waiting-on agent'
+  -> Updated TFR2-002: waiting on agent.
+Now 11 User approval (In Progress). Continue with work-finish.
+
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/references/work-item-format.md'
+  -> <!-- Generated file. Source: plugins/work/shared/work-item-format.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Work item and design format
+
+What a work item and its design hold, their exact section names, and how to
+change them with `toolkit work` commands without losing text.
+
+## Contents
+
+1. Where the record and the design live
+2. Header fields
+3. Sections of `WORK-ITEM.md`
+4. Sections of `DESIGN.md`
+5. Finding an item's file
+6. Changing one section
+7. Adding a table row
+8. Editing a record directly
+9. Titles
+10. Generated files
+11. Examples
+
+## 1. Where the record and the design live
+
+Every tracker uses the same body and the same design shape. Only the place
+differs.
+
+| Tracker | Work item | Design |
+| --- | --- | --- |
+| Local | `WORK-ITEM.md` in the item's folder under `.work-items/` | `DESIGN.md` beside it |
+| Notion | The item's page in the project's Work Items database | The item's "Solution Design" child page |
+| GitHub Issues | The issue body | One issue comment whose first line is `## Solution design` |
+| Jira | The issue description | One comment whose first line is "Solution design" |
+
+An item has one design home. Never make a separate design folder or a second
+design file.
+
+## 2. Header fields
+
+The header (frontmatter locally, properties in Notion) holds these fields.
+Only `toolkit work` commands change them.
+
+| Field | Values | Changed by |
+| --- | --- | --- |
+| `id` | `WI-001` (the project's prefix and a number) | `toolkit work
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show TFR2-001 --section 'Open Questions'"
+  -> ## Open Questions
+
+| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | What should the command do when the bill amount, person count, or tip percentage is missing or invalid? Answer: Print `Usage: node bin/tip-split.js <bill> <people> [--tip <percent>]` and exit with code 1. Owner, 2026-09-28. | R-01, R-02 | Answered | owner |
+| Q-02 | Which numeric bill and tip values are valid? Answer: A bill of $0 or more with at most two decimal places; a tip of 0% or more with no upper limit. Reject negative or nonnumeric values and fractional cents. Owner, 2026-09-28. | R-01, R-02 | Answered | owner |
+| Q-03 | When the calculated share is exactly half a cent, should the command round up to the next cent? Answer: Yes, round an exact half cent up. Owner, 2026-09-28. | R-01 | Answered | owner |
+| Q-04 | Would you like agents to take responsibility for delivering this, with you acting as product owner? | delivery for TFR2-001 and TFR2-002 | Answered | owner |
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR2-001 --section 'Open Questions' --append-row '| Q-05 | May we merge the approved TFR2-001 and TFR2-002 branches locally into main, keeping both test plans and the combined command? | delivery of TFR2-001 and TFR2-002 | Open | owner |'"
+  -> Saved "Open Questions" in TFR2-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR2-001 --label 'Current position' --value 'Both TFR2-001 and TFR2-002 results are approved by Mike Rihm. The tested branches remain unmerged; this repository has no remote.'"
+  -> Saved "Current position" in TFR2-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR2-001 --label 'Next action' --value 'Ask Mike Rihm to decide Q-05: authorize the two local merges into main. After merge, update requirements and system guide, then finish TFR2-002 and TFR2-001.'"
+  -> Saved "Next action" in TFR2-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR2-001 --label 'Blockers' --value 'Q-05 awaits owner merge authorization. Git writes are unavailable in this Codex session, so the owner must use an interactive session or terminal for the local merges.'"
+  -> Saved "Blockers" in TFR2-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR2-002 --label 'Current position' --value 'The optional tip result is approved by Mike Rihm. The tested branch at 339892d remains unmerged.'"
+  -> Saved "Current position" in TFR2-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR2-002 --label 'Next action' --value 'Wait for the TFR2-001 Q-05 merge decision; after its approved local merge, update delivered behavior and finish this sub-item.'"
+  -> Saved "Next action" in TFR2-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR2-002 --label 'Blockers' --value 'The TFR2-001 Q-05 decision on the local merges is pending.'"
+  -> Saved "Blockers" in TFR2-002.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set TFR2-001 --waiting-on owner'
+  -> Updated TFR2-001: waiting on owner.
+Now 11 User approval (In Progress). Continue with work-decide.
+
+
+[AGENT] Both approvals are recorded. I’ve mapped the local merge order and am checking the exact branch heads before asking you about the merge.
+
+[CMD exit=0] /bin/zsh -lc 'git diff --check main...claude/tfr2-001-build-the-tip-split-command'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git diff --check main...claude/tfr2-002-add-the-tip-option'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'node --test tests/tip-split.test.js'
+  -> ✔ splits the approved default example (52.918417ms)
+✔ rounds exact half cents up and supports zero and leading zeroes (144.3765ms)
+✔ rejects invalid bill and people input with usage and exit code 1 (577.957375ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms
+
+[CMD exit=0] /bin/zsh -lc 'node --test tests/tip-split.test.js'
+  -> ✔ splits the approved default example (51.107541ms)
+✔ rounds exact half cents up and supports zero and leading zeroes (146.031333ms)
+✔ rejects invalid bill and people input with usage and exit code 1 (576.673667ms)
+✔ uses a custom or zero tip and rounds the final share (235.482791ms)
+✔ rejects missi
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus --json'
+  -> {
+  "ok": true,
+  "backend": "notion",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- TFR2-001 Build the tip-split bill command\n- TFR2-002 Add the --tip option\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- TFR2-001 result approved. Ask for the separate TFR2-002 result approval, then continue with work-finish. Leave both branches unmerged until Mike Rihm authorizes merge.\n",
+  "version": "983c1b135705fe5b3fa79821b83f72b518fe60831cebb64b00a1550bf110c734"
+}
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- TFR2-001 Build the tip-split bill command
+- TFR2-002 Add the --tip option
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Both results are approved. Continue TFR2-001 Q-05: ask Mike Rihm 
+  -> Saved the current focus (21 lines). Version: 83de2210b62e
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- TFR2-001 Build the tip-split bill command
+- TFR2-002 Add the --tip option
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Both results are approved. Continue TFR2-001 Q-05: ask Mike Rihm to authorize local merges. This Codex session cannot write Git metadata; use an interactive session or terminal for merges. Leave the memory proposal pending.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate TFR2-002'
+  -> Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate TFR2-001'
+  -> Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. 1 open question waits on the owner (toolkit work decisions lists it).
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 2 decisions wait on the owner:
+
+TFR2-001 Build the tip-split bill command
+  - Q-05: May we merge the approved TFR2-001 and TFR2-002 branches locally into main, keeping both test plans and the combined command? Affects delivery of TFR2-001 and TFR2-002. (work-decide)
+
+Memory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):
+  - project_mike_rihm_usually_splits_restaurant_bills_among: Mike Rihm usually splits restaurant bills among four people. Saved 2026-09-28. Yes: toolkit memory approve project_mike_rihm_usually_splits_restaurant_bills_among --by <name>. No: toolkit memory reject project_mike_rihm_usually_splits_restaurant_bills_among. (work-decide)
+
+
+[AGENT] Your **TFR2-002 approval is recorded**. I reran both branch test suites: 3 passed for TFR2-001 and 5 passed for TFR2-002. The memory proposal remains pending, as you requested.
+
+The branches are still unmerged. I recommend merging both into `main` so the approved command and both test plans are together. This repository has no remote, so the merge is local. This Codex session cannot write Git metadata; the merge would need an interactive session or terminal.
+
+Do you authorize merging both approved branches into `main`?
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 2458324, "cached_input_tokens": 2391936, "cache_write_input_tokens": 0, "output_tokens": 6990, "reasoning_output_tokens": 2685}}
+
+SKILLS OPENED: ['work-finish']
+
+[HOOK CONTEXT ord=9] Project briefing: Toolkit V2 final run (safe to delete) (tv2-final-run-2), owner Mike Rihm. Work items: the Notion Work Items database (ids like TFR2-001). Memory: Notion, in Lore's layout (a Memory page on the project row with Lore's databases). Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- TFR2-001 Build the tip-split bill command: 11 User approval, In Progress, waiting on owner. Next action: Show the default command result to Mike Rihm for its own approval. Leave both branches unmerged. Continues with work-decide.
+- TFR2-002 Add the --tip option: 11 User approval, In Progress, waiting on owner. Next action: Show this result to Mike Rihm for approval separate from TFR2-001. Leave both branches unmerged. Continues with work-decide.
+
+Waiting on the ow
+
+[HOOK CONTEXT ord=65] Project briefing: Toolkit V2 final run (safe to delete) (tv2-final-run-2), owner Mike Rihm. Work items: the Notion Work Items database (ids like TFR2-001). Memory: Notion, in Lore's layout (a Memory page on the project row with Lore's databases). Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- TFR2-001 Build the tip-split bill command: 11 User approval, In Progress, waiting on owner. Next action: Show the default command result to Mike Rihm for its own approval. Leave both branches unmerged. Continues with work-decide.
+- TFR2-002 Add the --tip option: 11 User approval, In Progress, waiting on owner. Next action: Show this result to Mike Rihm for approval separate from TFR2-001. Leave both branches unmerged. Continues with work-decide.
+
+Waiting on the ow
+
+[HOOK CONTEXT ord=163] Project briefing: Toolkit V2 final run (safe to delete) (tv2-final-run-2), owner Mike Rihm. Work items: the Notion Work Items database (ids like TFR2-001). Memory: Notion, in Lore's layout (a Memory page on the project row with Lore's databases). Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- TFR2-001 Build the tip-split bill command: 11 User approval, In Progress. Next action: Continue with work-finish after the separate TFR2-002 result review; leave both branches unmerged until Mike Rihm authorizes merge. Continues with work-check.
+- TFR2-002 Add the --tip option: 11 User approval, In Progress, waiting on owner. Next action: Show this result to Mike Rihm for approval separate from TFR2-001. Leave both branches unmerged. Continues with work-decide.
+
+W
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat SOUL.md PROJECT.md",max_output_tokens:4000}),
+  tools.exec_command({cmd:"cat .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md",max_output_tokens:7000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/SKILL.md",max_output_tokens:6000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"5726dc\",\"wall_time_seconds\":0,\"exit_code\":1,\"original_token_count\":626,\"output\":\"cat: SOUL.md: No such file or directory\\n# Toolkit V2 final run (safe to delete)\\n\\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\\n\\n## Purpose and intended outcome\\n\\n- Purpose: Split a restaurant bill between friends, tip included.\\n- Intended outcome: A command that splits a restaurant bill between friends, tip included.\\n\\n## Scope and boundaries\\n\\n- In scope: A command for splitting a restaurant bill between friends, including the tip.\\n- Outside scope: `<Important exclusions or adjacent owners.>`\\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\\n\\n## Systems and environments\\n\\n| System or org | Purpose | Environment | Source of truth | Access notes |\\n| --- | --- | --- | --- | --- |\\n| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |\\n\\n## People and ownership\\n\\n| Role | Person or team | Responsibility | Source / last confirmed |\\n| --- | --- | --- | --- |\\n| Owner | Mike Rihm | Project decisions | Owner, 2026-09-28 |\\n\\n## Work and project records\\n\\n- Work tracker: [Notion Work Items database](https://app.notion.com/p/b28376f2678c47bfb361c88ca4dbeb88)\\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\\n- Project decisions: [DECISIONS.md](DECISIONS.md)\\n- Functional requirements: [requirements/](requirements/)\\n- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`\\n- System Guide: `system-guide/` contains the Toolkit template; no system area has been documented yet.\\n- Memory: the Memory database on this project's Notion page (the setup choice is in `.toolkit.json`)\\n- Memory backup or sync: manual `toolkit memory export --to <folder>` snapshots go under `/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpa
+
+[CALL] const r = await tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:4000}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 2.5 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"9c5f89\",\"wall_time_seconds\":2.172545917,\"exit_code\":0,\"original_token_count\":210,\"output\":\"3 decisions wait on the owner:\\n\\nTFR2-001 Build the tip-split bill command\\n  - TFR2-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve TFR2-001 --result --by <name>. (work-decide)\\n\\nTFR2-002 Add the --tip option\\n  - TFR2-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve TFR2-002 --result --by <name>. (work-decide)\\n\\nMemory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):\\n  - project_mike_rihm_usually_splits_restaurant_bills_among: Mike Rihm usually splits restaurant bills among four people. Saved 2026-09-28. Yes: toolkit memory approve project_mike_rihm_usually_splits_restaurant_bills_among --by <name>. No: toolkit memory reject project_mike_rihm_usually_splits_restaurant_bills_among. (work-decide)\\n\"}"}]
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"toolkit work show TFR2-001",max_output_tokens:8000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/references/approvals.md",max_output_tokens:6000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 2.5 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"1c4272\",\"wall_time_seconds\":2.200060042,\"exit_code\":0,\"original_token_count\":3691,\"output\":\"TFR2-001: Build the tip-split bill command\\nLocation: https://app.notion.com/p/Build-the-tip-split-bill-command-3e9b381da17681e8a739cde47e080e24\\nStage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide\\nParent: none | Sub-items: TFR2-002 | Design: approved (https://app.notion.com/p/TFR2-001-Build-the-tip-split-bill-command-solution-design-3e9b381da1768133a4fbecd575748cc7)\\nWorktree branch for this item: claude/tfr2-001-build-the-tip-split-bill (folder .claude/worktrees/tfr2-001-build-the-tip-split-bill)\\n\\n---\\nid: TFR2-001\\ntitle: Build the tip-split bill command\\ntype: build\\nstage: 11-user-approval\\nstatus: In Progress\\nparent: none\\nwaiting_on: \\\"owner\\\"\\npriority: medium\\ndelivery: owner-led\\nrequirements_approved: \\\"2026-09-28 by Mike Rihm\\\"\\ndesign: approved\\nresult_approved: \\\"no\\\"\\nupdated: 2026-09-28\\n---\\n# TFR2-001: Build the tip-split bill command\\n\\n## Overview\\n\\n**Goal:** Split a restaurant bill equally with an 18% default tip and an optional tip percentage.\\n\\n**Current position:** The default command is built on TFR2-001 branch at ff39be4. Its 3 tests pass, and the approved $84.50 example prints $33.24. TFR2-002 is a separate top-level item; its combined command passes 5 tests, including the zero-tip half-cent check.\\n\\n**Next action:** Show the default command result to Mike Rihm for its own approval. Leave both branches unmerged.\\n\\n**Blockers:** Owner result approval is pending.\\n\\n**Related items:** TFR2-002 covers R-02 and has a separate result review.\\n\\n## Roadmap\\n\\nA phase is complete when its tasks are complete and its exit result has been checked.\\n\\n| Phase | Outcome | Status | Exit result | Sub-items |\\n|---|---|---|---|---|\\n| P1 \u2014 Default tip command | The command splits a bill with the 18% default tip (R-01). | Done | The default example and invalid bill or people checks pass. | None. |\\n| P2 \u2014 Optional tip | The command accepts `--tip <percent>` (R-02). | In Progress | TFR2-002 passes its custom-tip and invalid-tip checks, including the R-01 half-cent example using `--tip 0`; its result is reviewed separately. | TFR2-002 |\\n\\n## Tasks\\n\\
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"git worktree list",max_output_tokens:1500}),
+  tools.exec_command({cmd:"cat .claude/worktrees/tfr2-001-build-the-tip-split-bill/tests/TFR2-001-TEST-PLAN.md",max_output_tokens:4000}),
+  tools.exec_command({cmd:"rg --files .claude/worktrees | rg 'tip-split|TEST-PLAN'",max_output_tokens:2000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+
+[CALL] const r=await tools.exec_command({cmd:"cat .claude/worktrees/tfr2-001-build-the-tip-split-command/tests/TFR2-001-TEST-PLAN.md",max_output_tokens:4000});text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history TFR2-001 --note 'Owner said: I ran it myself: 84.50 3 prints $33.24 and bad input prints the usage line. I approve the TFR2-001 result.' --effect 'Result approved; work-finish continues. Owner directly checked the default example and bad input.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"7f5187\",\"wall_time_seconds\":4.079783166,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Added a Recent History row to TFR2-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work approve TFR2-001 --result --by 'Mike Rihm'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 6.7 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"35658c\",\"wall_time_seconds\":6.379898041,\"exit_code\":0,\"original_token_count\":111,\"output\":\"Recorded: result of TFR2-001 approved (2026-09-28 by Mike Rihm).\\nIt is no longer waiting on the owner (waiting_on: none).\\nNow 11 User approval (In Progress). Continue with work-finish.\\nNote: TFR2-001's Overview still says \\\"Next action: Show the default command result to Mike Rihm for its own approval. Leave both branches unmerged.\\\". Write the step after this approval: toolkit work edit TFR2-001 --label 'Next action' --value '<next step>'.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit TFR2-001 --label 'Next action' --value 'Continue with work-finish after the separate TFR2-002 result review; leave both branches unmerged until Mike Rihm authorizes merge.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"e741ae\",\"wall_time_seconds\":3.877051416,\"exit_code\":0,\"original_token_count\":9,\"output\":\"Saved \\\"Next action\\\" in TFR2-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set TFR2-001 --waiting-on agent",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 5.6 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"426488\",\"wall_time_seconds\":5.294251125,\"exit_code\":0,\"original_token_count\":25,\"output\":\"Updated TFR2-001: waiting on agent.\\nNow 11 User approval (In Progress). Continue with work-finish.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work validate TFR2-001",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"ac6d5f\",\"wall_time_seconds\":4.085854291,\"exit_code\":0,\"original_token_count\":25,\"output\":\"Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 2.9 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"47a675\",\"wall_time_seconds\":2.53516025,\"exit_code\":0,\"original_token_count\":162,\"output\":\"2 decisions wait on the owner:\\n\\nTFR2-002 Add the --tip option\\n  - TFR2-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve TFR2-002 --result --by <name>. (work-decide)\\n\\nMemory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):\\n  - project_mike_rihm_usually_splits_restaurant_bills_among: Mike Rihm usually splits restaurant bills among four people. Saved 2026-09-28. Yes: toolkit memory approve project_mike_rihm_usually_splits_restaurant_bills_among --by <name>. No: toolkit memory reject project_mike_rihm_usually_splits_restaurant_bills_among. (work-decide)\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show TFR2-002",max_output_tokens:7500});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 6.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"fb6d31\",\"wall_time_seconds\":5.886404209,\"exit_code\":0,\"original_token_count\":1575,\"output\":\"TFR2-002: Add the --tip option\\nLocation: https://app.notion.com/p/Add-the-tip-option-3e9b381da17681329539cd4b097626cf\\nStage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide\\nParent: TFR2-001 | Sub-items: none | Design: none of its own; TFR2-001's design is approved (https://app.notion.com/p/TFR2-001-Build-the-tip-split-bill-command-solution-design-3e9b381da1768133a4fbecd575748cc7). Read it with: toolkit work design TFR2-001\\nWorktree branch for this item: claude/tfr2-002-add-the-tip-option (folder .claude/worktrees/tfr2-002-add-the-tip-option)\\n\\n---\\nid: TFR2-002\\ntitle: Add the --tip option\\ntype: build\\nstage: 11-user-approval\\nstatus: In Progress\\nparent: TFR2-001\\nwaiting_on: \\\"owner\\\"\\npriority: medium\\ndelivery: owner-led\\nrequirements_approved: \\\"2026-09-28 by Mike Rihm\\\"\\ndesign: none\\nresult_approved: \\\"no\\\"\\nupdated: 2026-09-28\\n---\\n# TFR2-002: Add the --tip option\\n\\n## Overview\\n\\n**Goal:** Let a person choose a nonnegative tip percentage with `--tip` and see the resulting equal share.\\n\\n**Current position:** The optional tip command is built on TFR2-002 branch at 339892d, based on the TFR2-001 default command. All 5 tests pass. The 20% example prints $33.80 and the zero-tip half-cent example prints $0.01.\\n\\n**Next action:** Show this result to Mike Rihm for approval separate from TFR2-001. Leave both branches unmerged.\\n\\n**Blockers:** Owner result approval is pending.\\n\\n**Related items:** Covers TFR2-001 R-02 and follows its approved Option A design. The owner made this item top-level in Notion.\\n\\n## Roadmap\\n\\nA phase is complete when its tasks are complete and its exit result has been checked.\\n\\n| Phase | Outcome | Status | Exit result | Sub-items |\\n|---|---|---|---|---|\\n| P1 \u2014 Optional tip | The command accepts a valid `--tip` value and replaces the default 18% (TFR2-001 R-02). | Done | The `--tip 20` and `--tip 0` examples and invalid-tip tests pass. | None. |\\n\\n## Tasks\\n\\n### P1 \u2014 Optional tip\\n\\n- [x] **P1-T01 \u2014 Add optional tip parsing** \u00b7 Done  \\n  **Work:** Add `--tip <percent>` parsing, exact decimal percentage handling, and validation to the parent command (TFR2-001 R-02; desi
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/SKILL.md",max_output_tokens:6000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"51a8ff\",\"wall_time_seconds\":0.000003167,\"exit_code\":0,\"original_token_count\":3621,\"output\":\"---\\nname: memory-save\\ndescription: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says \\\"remember this\\\", \\\"from now on\\\", \\\"forget that\\\", or \\\"remind me\\\" with no time given, corrects the agent, or a hook says a save is due.'\\n---\\n\\n# Memory save\\n\\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \\\"How to write replies\\\" section of `AGENTS.md`.\\nSaves, corrects, or retires one memory record with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand.\\n\\n## Steps\\n\\nTrack these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.\\n\\n1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home (\\\"Where other things go\\\" below) and stop.\\n2. Search for a record that already holds it, and read each hit with its version. The save's duplicate check compares wording, so only this search finds a record the new fact contradicts (for example \\\"Mondays\\\" against \\\"Tuesdays\\\").\\n   `toolkit memory find '<topic>'`\\n   `toolkit memory get <key> --json`\\n3. Read the approval mode and apply \\\"Approval policy\\\" below. When it says ask, ask and wait.\\n   `toolkit config get memory.approval`\\n4. Write the description and body in the record format (`references/record-format.md`), then save with the form for the case (\\\"Save forms\\\" below).\\n5. Exit code 2 saved nothing. Read the \\\"Error:\\\" line. Records listed: the duplicate check. \\\"Changed since it was read\\\": read it again and redo the change. Any other rule: fix the text as the message says. `references/replacing-and-retiring.md`, section 2, has each case.\\n6. \\\"Forget that\\\": retire the record, with his words as the reason. Delete only when his own words say delete (\\\"Approval policy\\\").\\n   `toolkit memory retire <key> --reason '<his words>'`\\n7. An owner to-do with no work item, or a change to what is happening now: update the cur
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/references/current-focus.md",max_output_tokens:4500});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"3940ab\",\"wall_time_seconds\":0.000003708,\"exit_code\":0,\"original_token_count\":1798,\"output\":\"<!-- Generated file. Source: plugins/memory/shared/current-focus.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\\n# The current focus\\n\\nPurpose: the format of the current focus, when to change it, and the exact\\nread-change-save sequence, in every memory backend.\\n\\n## Contents\\n\\n- What the focus is for\\n- The format\\n- What goes in each section\\n- When to check it\\n- Read, change, save\\n- A new project's focus\\n- Examples\\n- Checklist for a focus save\\n\\n## What the focus is for\\n\\nThe current focus is the first thing the next session reads: the session\\nbriefing includes it. It says what is happening now and where the next\\nsession starts. It never repeats the tracker: a work item's status, tasks,\\nand history stay in the work item.\\n\\n| Backend | Where the focus lives |\\n| --- | --- |\\n| Built-in | `.memory/CURRENT_FOCUS.md` in the main checkout |\\n| Hindsight | The document `focus` in the project's bank |\\n| Notion | The \\\"Current focus\\\" page under the project's page |\\n\\nThe same commands read and save it in every backend. Never edit the file or\\nthe page by hand.\\n\\n## The format\\n\\nThe model's format: a `# Current focus` title line, a `Last updated:` line,\\nthen exactly four `##` sections in this order, under 50 lines in total.\\n\\n```markdown\\n# Current focus\\n\\nLast updated: <YYYY-MM-DD>, <source>, <person or agent>\\n\\n## Now\\n\\n## Waiting on the owner\\n\\n## Untracked to-dos\\n\\n## Next session starts with\\n```\\n\\nWhat the command enforces:\\n\\n- It refuses a focus that lacks one of the four sections, has another\\n  section, or is over 50 lines (exit code 2, nothing saved).\\n- It adds the title line or the `Last updated:` line when either is missing,\\n  and sets an older date to today. It cannot know the source or who wrote\\n  it, so write the line yourself.\\n\\n## What goes in each section\\n\\n- **Last updated:** the date, the source (for example `handoff`,\\n  `work-finish`, `chat`), and who wrote it (a person, or `agent`). Change it\\n  on every save.\\n- **Now:** the current outcome or area, with work item ids and titles only,\\n  for example `- WI-012 CSV export`. Never a status or a stage: the tracker\\n  holds those.\
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --json",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 2.5 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"e46879\",\"wall_time_seconds\":2.186641625,\"exit_code\":0,\"original_token_count\":201,\"output\":\"{\\n  \\\"ok\\\": true,\\n  \\\"backend\\\": \\\"notion\\\",\\n  \\\"kind\\\": \\\"focus\\\",\\n  \\\"text\\\": \\\"# Current focus\\\\n\\\\nLast updated: 2026-09-28, chat, agent\\\\n\\\\n## Now\\\\n\\\\n- TFR2-001 Build the tip-split command\\\\n- TFR2-002 Add the --tip option\\\\n\\\\n## Waiting on the owner\\\\n\\\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\\\n\\\\n## Untracked to-dos\\\\n\\\\nNone.\\\\n\\\\n## Next session starts with\\\\n\\\\n- Continue TFR2-001 and TFR2-002 from their Resume here notes: both tested results await separate owner approvals; no merge is authorized yet.\\\\n\\\",\\n  \\\"version\\\": \\\"c5bb62a69299bb4876b43d820d4c419bb56d46a005e69209f985981b8cc13877\\\"\\n}\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --text '# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- TFR2-001 Build the tip-split bill command\n- TFR2-002 Add the --tip option\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- TFR2-001 result approved. Ask for the separate TFR2-002 result approval, then continue with work-finish. Leave both branches unmerged until Mike Rihm authorizes merge.\n' --expect c5bb62a69299bb4876b43d820d4c419bb56d46a005e69209f985981b8cc13877",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"65653e\",\"wall_time_seconds\":3.813564459,\"exit_code\":0,\"original_token_count\":15,\"output\":\"Saved the current focus (21 lines). Version: 983c1b135705\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.0 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"31fb47\",\"wall_time_seconds\":0.686810667,\"exit_code\":0,\"original_token_count\":165,\"output\":\"# Current focus\\n\\nLast updated: 2026-09-28, chat, agent\\n\\n## Now\\n\\n- TFR2-001 Build the tip-split bill command\\n- TFR2-002 Add the --tip option\\n\\n## Waiting on the owner\\n\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\n\\n## Untracked to-dos\\n\\nNone.\\n\\n## Next session starts with\\n\\n- TFR2-001 result approved. Ask for the separate TFR2-002 result approval, then continue with work-finish. Leave both branches unmerged until Mike Rihm authorizes merge.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit doctor",max_output_tokens:1500});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"75dd0b\",\"wall_time_seconds\":1.009661166,\"exit_code\":1,\"original_token_count\":425,\"output\":\"Toolkit doctor for Toolkit V2 final run (safe to delete) (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2).\\n\\nWarnings (2):\\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.\\n   Fix: The owner opens Codex in this folder and trusts it when Codex asks.\\n2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).\\n   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\\n\\nNotes (4):\\n- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\\n- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\\n- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\\n- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.\\n\\nResult: 0 problems and 2 warnings.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history TFR2-002 --note 'Owner said: I tried it: --tip 20 gives $33.80 and a bad tip gives the usage line. I approve the TFR2-002 result. Leave the memory note for later.' --effect 'Result approved; work-finish continues. Owner directly checked the 20% example and bad tip. Memory proposal remains pending.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 5.0 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"b68b33\",\"wall_time_seconds\":4.679471583,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Added a Recent History row to TFR2-002.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work approve TFR2-002 --result --by 'Mike Rihm'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"19ac37\",\"wall_time_seconds\":3.8564279580000003,\"exit_code\":0,\"original_token_count\":111,\"output\":\"Recorded: result of TFR2-002 approved (2026-09-28 by Mike Rihm).\\nIt is no longer waiting on the owner (waiting_on: none).\\nNow 11 User approval (In Progress). Continue with work-finish.\\nNote: TFR2-002's Overview still says \\\"Next action: Show this result to Mike Rihm for approval separate from TFR2-001. Leave both branches unmerged.\\\". Write the step after this approval: toolkit work edit TFR2-002 --label 'Next action' --value '<next step>'.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-finish/SKILL.md",max_output_tokens:6500});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"ee5542\",\"wall_time_seconds\":0.000003375,\"exit_code\":0,\"original_token_count\":2067,\"output\":\"---\\nname: work-finish\\ndescription: 'Ships and closes an approved work item (pull request, merge, sandbox or production deployment, requirements update, Done), or cancels an item with the owner''s reason. Use when the owner says \\\"ship it\\\", \\\"deploy it\\\", \\\"close it out\\\", or \\\"mark it done\\\", or asks to cancel or drop an item.'\\n---\\n\\n# Work finish\\n\\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \\\"How to write replies\\\" section of `AGENTS.md`.\\nTakes an approved item through the pull request, merge, deployment, and requirements update to Done, or cancels it; it never marks Done without the owner's approval and never runs a production deploy. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.\\n\\n## Steps\\n\\n1. Check the result approval is recorded. Not recorded: show the result, the gaps, and the evidence, and ask. \\\"Ship it\\\" or \\\"mark it done\\\" after he saw the result counts: save his words first, then record it (`references/approvals.md`, section 4). Each sub-item needs its own.\\n   `toolkit work show <id>`\\n   `toolkit work history <id> --note 'Owner said: <quote>' --effect 'Result approved; work-finish continues.'`\\n   `toolkit work approve <id> --result --by <owner>`\\n2. Repository work: commit the item's files by name on its branch, push it, open the pull request, and set the stage (`references/closing.md`, section 2; `references/git-rules.md` before any Git write).\\n   `toolkit work set <id> --stage 12-pr-and-push`\\n3. Merge through `merge-and-clean-up` only with the owner's yes to this merge, or a standing merge instruction with an independent check on the exact head (`references/closing.md`, section 3). No remote: the local merge (`references/closing.md`, section 4), then this note.\\n   `toolkit work history <id> --note 'No remote: merged locally into <default branch>.' --effect 'No pull request; no deployment.'`\\n4. Deployment, when the item needs one (`references/closing.md`, section 5). Production deploys and production data loads are the owner's to run. Salesforce: a sandbox validate runs; a sandbox deploy needs his yes 
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-finish/references/closing.md",max_output_tokens:6500}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-finish/references/git-rules.md",max_output_tokens:4000}),
+  tools.exec_command({cmd:"git remote",max_output_tokens:1000}),
+  tools.exec_command({cmd:"git status --short",max_output_tokens:1000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"8def50\",\"wall_time_seconds\":0.000003375,\"exit_code\":0,\"original_token_count\":2895,\"output\":\"# Closing a work item\\n\\nThe detail behind each `work-finish` step: the pull request and merge, a\\nmerge with no remote, deployment, the requirements baseline, sub-items,\\nmemory, leftover worktrees, Done, and cancel.\\n\\n## Contents\\n\\n1. Before anything ships\\n2. Commit, push, and the pull request (stage 12)\\n3. Merging\\n4. No remote: the local merge\\n5. Deployment (stage 13)\\n6. Requirements baseline (stage 14)\\n7. Sub-items\\n8. Memory and the current focus\\n9. Leftover worktrees and branches\\n10. Done\\n11. Cancel\\n\\n## 1. Before anything ships\\n\\n- The result approval is recorded (`toolkit work show <id>` shows\\n  `result_approved`), or the owner said \\\"ship it\\\" or \\\"mark it done\\\" after he\\n  saw the result, the gaps, and the evidence. Record that with his words\\n  (`approvals.md`, \\\"Result approval\\\").\\n- Never describe an unverified result as complete.\\n- Done means the owner accepted the result. Cancelled means the work stopped\\n  without it.\\n- Stages that do not apply are skipped. Work with no repository change has no\\n  pull request; work with no deployment has no deployment stage. A skipped\\n  stage gets one history note saying so, so `toolkit work finish` has a\\n  record of it.\\n\\n## 2. Commit, push, and the pull request (stage 12)\\n\\n- Commit the item's files on its branch, staged by name\\n  (`claude/<prefix>-<number>-<slug>`, for example `claude/wi-007-csv-export`).\\n  No `Co-Authored-By` line naming an AI and no \\\"Generated with\\\" line.\\n- Push the branch. Never force-push.\\n- Write the pull request title and description in plain words: what changed,\\n  why, how it was checked, and the item id. Run the description through the\\n  `unslop` skill, because other people read it. No line crediting an AI.\\n- Set the stage:\\n  `toolkit work set <id> --stage 12-pr-and-push`\\n- In Codex, every Git write here needs the owner's approval and escalated\\n  permissions (`git-rules.md`).\\n\\n## 3. Merging\\n\\nMerge only through `merge-and-clean-up`, and only when one of these holds:\\n\\n- the owner said yes to this merge; or\\n- a standing merge instruction applies (`approvals.md`, \\\"Standing merge\\n  i
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"git log --oneline --decorate --graph --all -12",max_output_tokens:2000}),
+  tools.exec_command({cmd:"git diff --name-status main...claude/tfr2-001-build-the-tip-split-command",max_output_tokens:2000}),
+  tools.exec_command({cmd:"git diff --name-status main...claude/tfr2-002-add-the-tip-option",max_output_tokens:2000}),
+  tools.exec_command({cmd:"git -C .claude/worktrees/tfr2-001-build-the-tip-split-command status --short",max_output_tokens:1000}),
+  tools.exec_command({cmd:"git -C .claude/worktrees/tfr2-002-add-the-tip-option status --short",max_output_tokens:1000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit TFR2-002 --label 'Next action' --value 'Continue with work-finish after Mike Rihm authorizes the local merges; keep this branch unmerged until then.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 5.0 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"71624b\",\"wall_time_seconds\":4.636440417,\"exit_code\":0,\"original_token_count\":9,\"output\":\"Saved \\\"Next action\\\" in TFR2-002.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set TFR2-002 --waiting-on agent",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"15df9d\",\"wall_time_seconds\":3.090347166,\"exit_code\":0,\"original_token_count\":25,\"output\":\"Updated TFR2-002: waiting on agent.\\nNow 11 User approval (In Progress). Continue with work-finish.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/references/work-item-format.md",max_output_tokens:4500});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"3e31e6\",\"wall_time_seconds\":0.000003375,\"exit_code\":0,\"original_token_count\":2930,\"output\":\"<!-- Generated file. Source: plugins/work/shared/work-item-format.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\\n# Work item and design format\\n\\nWhat a work item and its design hold, their exact section names, and how to\\nchange them with `toolkit work` commands without losing text.\\n\\n## Contents\\n\\n1. Where the record and the design live\\n2. Header fields\\n3. Sections of `WORK-ITEM.md`\\n4. Sections of `DESIGN.md`\\n5. Finding an item's file\\n6. Changing one section\\n7. Adding a table row\\n8. Editing a record directly\\n9. Titles\\n10. Generated files\\n11. Examples\\n\\n## 1. Where the record and the design live\\n\\nEvery tracker uses the same body and the same design shape. Only the place\\ndiffers.\\n\\n| Tracker | Work item | Design |\\n| --- | --- | --- |\\n| Local | `WORK-ITEM.md` in the item's folder under `.work-items/` | `DESIGN.md` beside it |\\n| Notion | The item's page in the project's Work Items database | The item's \\\"Solution Design\\\" child page |\\n| GitHub Issues | The issue body | One issue comment whose first line is `## Solution design` |\\n| Jira | The issue description | One comment whose first line is \\\"Solution design\\\" |\\n\\nAn item has one design home. Never make a separate design folder or a second\\ndesign file.\\n\\n## 2. Header fields\\n\\nThe header (frontmatter locally, properties in Notion) holds these fields.\\nOnly `toolkit work` commands change them.\\n\\n| Field | Values | Changed by |\\n| --- | --- | --- |\\n| `id` | `WI-001` (the project's prefix and a number) | `toolkit work new`; never reused |\\n| `title` | The owner's words for the request | `toolkit work set <id> --title` |\\n| `type` | `discovery`, `solution-design`, `build`, `data-load`, `repository-maintenance`, `research`, `task`, `bug`, `enhancement`, or another lower-case word | `toolkit work set <id> --type` |\\n| `stage` | `01-discovery` to `14-spec-update` | `toolkit work set <id> --stage`, `approve`, `finish`, `cancel` |\\n| `status` | Backlog, Ready, In Progress, In Review, Done, Cancelled | Follows the stage; Done and Cancelled only through `finish` and `cancel` |\\n| `parent` | An item id or `none` | `toolkit work new --parent`, `toolkit work move` |\\n| `waitin
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show TFR2-001 --section 'Open Questions'",max_output_tokens:2500});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 2.0 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"10ac3c\",\"wall_time_seconds\":1.699963583,\"exit_code\":0,\"original_token_count\":250,\"output\":\"## Open Questions\\n\\n| ID | Question | Affects | Status | Decision needed from |\\n|---|---|---|---|---|\\n| Q-01 | What should the command do when the bill amount, person count, or tip percentage is missing or invalid? Answer: Print `Usage: node bin/tip-split.js <bill> <people> [--tip <percent>]` and exit with code 1. Owner, 2026-09-28. | R-01, R-02 | Answered | owner |\\n| Q-02 | Which numeric bill and tip values are valid? Answer: A bill of $0 or more with at most two decimal places; a tip of 0% or more with no upper limit. Reject negative or nonnumeric values and fractional cents. Owner, 2026-09-28. | R-01, R-02 | Answered | owner |\\n| Q-03 | When the calculated share is exactly half a cent, should the command round up to the next cent? Answer: Yes, round an exact half cent up. Owner, 2026-09-28. | R-01 | Answered | owner |\\n| Q-04 | Would you like agents to take responsibility for delivering this, with you acting as product owner? | delivery for TFR2-001 and TFR2-002 | Answered | owner |\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit TFR2-001 --section 'Open Questions' --append-row '| Q-05 | May we merge the approved TFR2-001 and TFR2-002 branches locally into main, keeping both test plans and the combined command? | delivery of TFR2-001 and TFR2-002 | Open | owner |'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 6.5 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"6779f1\",\"wall_time_seconds\":6.211850583,\"exit_code\":0,\"original_token_count\":9,\"output\":\"Saved \\\"Open Questions\\\" in TFR2-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit TFR2-001 --label 'Current position' --value 'Both TFR2-001 and TFR2-002 results are approved by Mike Rihm. The tested branches remain unmerged; this repository has no remote.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"c40951\",\"wall_time_seconds\":3.98324,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Saved \\\"Current position\\\" in TFR2-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit TFR2-001 --label 'Next action' --value 'Ask Mike Rihm to decide Q-05: authorize the two local merges into main. After merge, update requirements and system guide, then finish TFR2-002 and TFR2-001.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 7.1 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"57686c\",\"wall_time_seconds\":6.801349084,\"exit_code\":0,\"original_token_count\":9,\"output\":\"Saved \\\"Next action\\\" in TFR2-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit TFR2-001 --label 'Blockers' --value 'Q-05 awaits owner merge authorization. Git writes are unavailable in this Codex session, so the owner must use an interactive session or terminal for the local merges.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"264270\",\"wall_time_seconds\":3.9373718330000003,\"exit_code\":0,\"original_token_count\":8,\"output\":\"Saved \\\"Blockers\\\" in TFR2-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit TFR2-002 --label 'Current position' --value 'The optional tip result is approved by Mike Rihm. The tested branch at 339892d remains unmerged.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 5.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"22136c\",\"wall_time_seconds\":5.075595,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Saved \\\"Current position\\\" in TFR2-002.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit TFR2-002 --label 'Next action' --value 'Wait for the TFR2-001 Q-05 merge decision; after its approved local merge, update delivered behavior and finish this sub-item.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.1 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"af6e44\",\"wall_time_seconds\":3.7392170829999998,\"exit_code\":0,\"original_token_count\":9,\"output\":\"Saved \\\"Next action\\\" in TFR2-002.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit TFR2-002 --label 'Blockers' --value 'The TFR2-001 Q-05 decision on the local merges is pending.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.9 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"5e08c9\",\"wall_time_seconds\":3.577332709,\"exit_code\":0,\"original_token_count\":8,\"output\":\"Saved \\\"Blockers\\\" in TFR2-002.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set TFR2-001 --waiting-on owner",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.5 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"8cd258\",\"wall_time_seconds\":3.133745625,\"exit_code\":0,\"original_token_count\":25,\"output\":\"Updated TFR2-001: waiting on owner.\\nNow 11 User approval (In Progress). Continue with work-decide.\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"node --test tests/tip-split.test.js",workdir:".claude/worktrees/tfr2-001-build-the-tip-split-command",max_output_tokens:2500}),
+  tools.exec_command({cmd:"node --test tests/tip-split.test.js",workdir:".claude/worktrees/tfr2-002-add-the-tip-option",max_output_tokens:2500}),
+  tools.exec_command({cmd:"git diff --check main...claude/tfr2-001-build-the-tip-split-command",max_output_tokens:1000}),
+  tools.exec_command({cmd:"git diff --check main...claude/tfr2-002-add-the-tip-option",max_output_tokens:1000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --json",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.5 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"2f485c\",\"wall_time_seconds\":3.172337209,\"exit_code\":0,\"original_token_count\":209,\"output\":\"{\\n  \\\"ok\\\": true,\\n  \\\"backend\\\": \\\"notion\\\",\\n  \\\"kind\\\": \\\"focus\\\",\\n  \\\"text\\\": \\\"# Current focus\\\\n\\\\nLast updated: 2026-09-28, chat, agent\\\\n\\\\n## Now\\\\n\\\\n- TFR2-001 Build the tip-split bill command\\\\n- TFR2-002 Add the --tip option\\\\n\\\\n## Waiting on the owner\\\\n\\\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\\\n\\\\n## Untracked to-dos\\\\n\\\\nNone.\\\\n\\\\n## Next session starts with\\\\n\\\\n- TFR2-001 result approved. Ask for the separate TFR2-002 result approval, then continue with work-finish. Leave both branches unmerged until Mike Rihm authorizes merge.\\\\n\\\",\\n  \\\"version\\\": \\\"983c1b135705fe5b3fa79821b83f72b518fe60831cebb64b00a1550bf110c734\\\"\\n}\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --text '# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- TFR2-001 Build the tip-split bill command\n- TFR2-002 Add the --tip option\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Both results are approved. Continue TFR2-001 Q-05: ask Mike Rihm to authorize local merges. This Codex session cannot write Git metadata; use an interactive session or terminal for merges. Leave the memory proposal pending.\n' --expect 983c1b135705fe5b3fa79821b83f72b518fe60831cebb64b00a1550bf110c734",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 5.7 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"f76ae3\",\"wall_time_seconds\":5.308500333,\"exit_code\":0,\"original_token_count\":15,\"output\":\"Saved the current focus (21 lines). Version: 83de2210b62e\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.0 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"630fd6\",\"wall_time_seconds\":0.697847041,\"exit_code\":0,\"original_token_count\":179,\"output\":\"# Current focus\\n\\nLast updated: 2026-09-28, chat, agent\\n\\n## Now\\n\\n- TFR2-001 Build the tip-split bill command\\n- TFR2-002 Add the --tip option\\n\\n## Waiting on the owner\\n\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\n\\n## Untracked to-dos\\n\\nNone.\\n\\n## Next session starts with\\n\\n- Both results are approved. Continue TFR2-001 Q-05: ask Mike Rihm to authorize local merges. This Codex session cannot write Git metadata; use an interactive session or terminal for merges. Leave the memory proposal pending.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work validate TFR2-002",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.5 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"b77b44\",\"wall_time_seconds\":3.200630667,\"exit_code\":0,\"original_token_count\":25,\"output\":\"Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work validate TFR2-001",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 7.8 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"5585e0\",\"wall_time_seconds\":7.438087292,\"exit_code\":0,\"original_token_count\":33,\"output\":\"Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. 1 open question waits on the owner (toolkit work decisions lists it).\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 2.8 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"755485\",\"wall_time_seconds\":2.472018958,\"exit_code\":0,\"original_token_count\":177,\"output\":\"2 decisions wait on the owner:\\n\\nTFR2-001 Build the tip-split bill command\\n  - Q-05: May we merge the approved TFR2-001 and TFR2-002 branches locally into main, keeping both test plans and the combined command? Affects delivery of TFR2-001 and TFR2-002. (work-decide)\\n\\nMemory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):\\n  - project_mike_rihm_usually_splits_restaurant_bills_among: Mike Rihm usually splits restaurant bills among four people. Saved 2026-09-28. Yes: toolkit memory approve project_mike_rihm_usually_splits_restaurant_bills_among --by <name>. No: toolkit memory reject project_mike_rihm_usually_splits_restaurant_bills_among. (work-decide)\\n\"}"}]

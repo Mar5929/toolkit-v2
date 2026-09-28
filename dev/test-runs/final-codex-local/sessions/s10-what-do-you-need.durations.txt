@@ -1,0 +1,4 @@
+0.22s :: 'const r = await tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifact'
+0.263s :: 'const a=await Promise.allSettled([\n tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:5000}),\n tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decid'
+0.261s :: 'const r=await Promise.allSettled([\n tools.exec_command({cmd:"toolkit work show WI-002",max_output_tokens:8000}),\n tools.exec_command({cmd:"toolkit work show WI-003",max_output_tokens:7000}),\n tools.exec_command({cmd:"git'
+MAX toolkit call seconds: 0.263

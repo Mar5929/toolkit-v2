@@ -1,0 +1,37 @@
+### Mon Sep 28 22:51:57 UTC 2026  key=user_readme_sample_for_every_switch  query='sample run for every switch'
+--- toolkit memory list --status all
+- user_cli_flags_readme_examples: List every command-line flag in the README with a short example
+- user_readme_sample_for_every_switch: The README gives a sample run for every switch the program accepts
+- user_readme_under_one_page: Keep the README short: one screen or less
+--- toolkit memory get user_readme_sample_for_every_switch
+---
+name: user_readme_sample_for_every_switch
+description: The README gives a sample run for every switch the program accepts
+metadata:
+  type: user
+exit=0
+--- toolkit memory find 'sample run for every switch' --all
+1 memory record is about "sample run for every switch" (Hindsight recall, best first):
+- user_readme_sample_for_every_switch: The README gives a sample run for every switch the program accepts
+    # Sample run for every switch **Remember:** Mike wants the README to give a sample run for every switch the program accepts. **Why:** Not stated by the owner. *
+Read a record with toolkit memory get <key> before relying on it.
+exit=0
+--- toolkit brief (memory part)
+Project memory (hindsight): 3 records, from the local copy. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_cli_flags_readme_examples: List every command-line flag in the README with a short example
+- user_readme_sample_for_every_switch: The README gives a sample run for every switch the program accepts
+- user_readme_under_one_page: Keep the README short: one screen or less
+--- grep -c user_readme_sample_for_every_switch .git/toolkit-v2/memory-cache.json
+1
+--- Hindsight bank documents
+4 ['focus', 'user_cli_flags_readme_examples', 'user_readme_sample_for_every_switch', 'user_readme_under_one_page']
+--- GET document user_readme_sample_for_every_switch
+200
+--- Hindsight recall 'sample run for every switch'
+4 results
+ - user_readme_sample_for_every_switch | --- name: user_readme_sample_for_every_switch description: The README gives a sample run for every switch the 
+ - user_cli_flags_readme_examples | --- name: user_cli_flags_readme_examples description: List every command-line flag in the README with a short 
+ - user_readme_under_one_page | --- name: user_readme_under_one_page description: "Keep the README short: one screen or less" metadata:   type
+ - focus | # Current focus  Last updated: 2026-09-28, work-finish, agent  ## Now  None.  ## Waiting on the owner  - Trust

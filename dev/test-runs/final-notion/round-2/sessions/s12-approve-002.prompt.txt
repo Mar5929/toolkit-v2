@@ -1,0 +1,1 @@
+I tried it: --tip 20 gives $33.80 and a bad tip gives the usage line. I approve the TFR2-002 result. Leave the memory note for later.

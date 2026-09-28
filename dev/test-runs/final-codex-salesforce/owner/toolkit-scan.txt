@@ -1,0 +1,165 @@
+toolkit command mentions: 358
+question-box calls: [('s00a-setup', 'request_user_input_async'), ('s00b-tracker', 'request_user_input_async'), ('s00c-memory', 'request_user_input_async'), ('s00d-soul', 'request_user_input_async'), ('s00f-after-init', 'request_user_input_async'), ('s00g-outcome', 'request_user_input_async')]
+longest wall times (s): [(1.9, 's06-approve-split'), (1.9, 's00a-setup'), (1.1, 's06-approve-split'), (1.1, 's06-approve-split'), (0.8, 's06-approve-split'), (0.7, 's18-close-out'), (0.6, 's22-handoff'), (0.6, 's14-approve-wi002')]
+FLAG s00a-setup eperm :: e":{"chunk_id":"37737c","wall_time_seconds":0,"exit_code":1,"original_token_count":130,"output":"The request to the Hindsight server at http://127.0.0.1:8888 was blocked before it left this computer (EPERM: connect EPERM 127.0.0.1:8888 - Local (0.0.0.0:0)). This is the Codex sandbox, not the server.\nThe Codex sandbox blocked the network for this command; the server itself may be fine. Run the too
+
+FLAG s00e-backup operation not permitted :: tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2/.agents/skills/sf-component-tracker/SKILL.md: EPERM: operation not permitted, mkdir '/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2/.agents/skil
+
+FLAG s00f-after-init prompt :: code":0,"original_token_count":285,"output":"{\n  \"ok\": true,\n  \"backend\": \"builtin\",\n  \"kind\": \"focus\",\n  \"text\": \"# Current focus\\n\\n<!-- Fill-in guide: replace each angle-bracket prompt directly under its heading with current, sourced project context. Add or remove bullets as needed. Name work items by ID; their detailed tasks and status stay in the work item, and only the nex
+
+FLAG s00f-after-init approval :: ct manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.\nRequests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.\n\nThis worktree is on branch ma
+
+FLAG s00g-outcome approval :: ct manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.\nRequests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.\n\nThis worktree is on branch ma
+
+FLAG s00g-outcome prompt :: filled","value":{"chunk_id":"41bed0","wall_time_seconds":0.000003208,"exit_code":0,"original_token_count":685,"output":"PROJECT.md:3:<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable proj
+
+FLAG s00g-outcome prompt ::  stops reporting it.\\n\\n## Untracked to-dos\\n\\nNone.\\n\\n## Next session starts with\\n\\n- Resume the project-setup skill: settle the build/test command row, leave unconfirmed scope and roadmap prompts visible, run doctor and brief, and offer the setup commit.\\n\",\n  \"version\": \"9ebf6a675794db9beec81e8cd64ac8823d6f85518336e1432c5a177d57ce9353\"\n}\n"}
+
+FLAG s00g-outcome approval :: ct manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.\nRequests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.\n\nThis worktree is on branch ma
+
+FLAG s00h-commit prompt :: s with\\n\\n- If the owner approves, commit the setup files by name after reviewing the staged list. Otherwise begin the first work item when requested; leave unconfirmed PROJECT.md scope and roadmap prompts until the owner supplies them.\\n\",\n  \"version\": \"7992dbf268bfb040ff2798528f21c5c2cbbcb4aeab12e3bc7a56edbd823506a0\"\n}\n"}}} {"i":3,"result":{"status":"fulfilled","value":{"chunk_id":"e3
+
+FLAG s01-new-work approval :: ta (`force-app/`),   or to anything bound for production is `build`, never `task`, even when it   looks small. A change to data is `data-load`. - `build` and `data-load` need the owner's requirements approval before stage   03. The CLI refuses a later stage without it. - A `task` with no open choices may skip the requirements approval and go   straight to planning. Put the reason in a history note
+
+FLAG s01-new-work approval :: ve requirements, create one R-ID subsection per explicit behavior. Fill every labeled field under each R-ID. Keep an item Refining until its required behavior and acceptance check are clear and owner approval is recorded; mark Superseded only with a replacement link. Put solution ideas in the final Notes subsection, not here. -->  **Overall status:** Refining   **Finalization rule:** Mark the over
+
+FLAG s01-new-work approval :: Script completed Wall time 0.2 seconds Output:  Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. 1 open question waits on the owner (toolkit work decisions lists it). 
+
+FLAG s02-values-remember rejected :: s questions.  ## The `R-xx` block  From the work item template. The name follows an em dash. Each field starts its own line, and every line but the last ends with two spaces.  ```markdown #### R-01 — Rejected requests show their reason  **Status:** Refining   **Applies to:** The person who submitted a request, after it is rejected.   **Required behavior:** The requester can see the rejection reaso
+
+FLAG s02-values-remember approval :: at, 2026-09-28. Applies to new custom fields.  **Related memories:** None.  **Authoritative records:** WI-001 includes this preference for Account Tier.  RESULT 1 Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. 1 open question waits on the owner (toolkit work decisions lists it).  RESULT 2 ## Open Questions  | ID | Question | Affects | Status | Decision needed from | |---|---|---|---|
+
+FLAG s03-rules approval :: ronze values are confirmed; requirements are being refined.  **Next action:** Owner decides whether Tier is optional with no default, required, or prefilled.  **Blockers:** Owner decision on Q-02 and approval of requirements before build.  **Related items:** None.  ## Roadmap  A phase is complete when its tasks are complete and its exit result has been checked.  <!-- Replace each example row with 
+
+FLAG s03-rules approval :: <What this represents to users.> - Required fields or links: <Accepted fields, identifiers, and relationships.> - Rules and exceptions: <Required constraints and when they do not apply.> - Source and approval: <Work item or owner decision, approver, and date.>  ## Shared definitions and access  <Definitions, ownership, privacy, and access requirements that apply across areas; link area-specific re
+
+FLAG s03-rules approval :: Script completed Wall time 0.2 seconds Output:  Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.  exit 0
+
+FLAG s03-rules approval :: d default behavior, access, and page layout placement are recorded in refining requirements.  **Next action:** Check the revised requirements, then ask the owner to approve them.  **Blockers:** Owner approval of requirements before design or build.  **Related items:** None.  ## Roadmap  A phase is complete when its tasks are complete and its exit result has been checked.  <!-- Replace each example
+
+FLAG s03-rules approval :: em. Setup step; drop it when doctor stops reporting it.  ## Untracked to-dos  None.  ## Next session starts with  - Continue WI-001 from its Resume here: record the owner’s answer to the requirements approval question, then move to design after approval.  2: Toolkit doctor for Acme CRM (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c749
+
+FLAG s04-approve-reqs approval :: ent are recorded in refining requirements. The requirements check found no functional gap.  **Next action:** Ask the owner to approve R-01 through R-04 and the acceptance checks.  **Blockers:** Owner approval of requirements before design or build.  **Related items:** None.  ## Roadmap  A phase is complete when its tasks are complete and its exit result has been checked.  <!-- Replace each example
+
+FLAG s04-approve-reqs approval :: `, and\n  `toolkit hindsight service install` or `start`. Get his yes in the reply\n  before you run one. The host then asks him to confirm the command (Claude\n  Code: a permission prompt; Codex: an approval). That prompt is expected, not\n  an error.\n- When the host refuses one of the five without asking him (Codex with\n  approvals off: \"approval required by policy, but AskForApproval is set 
+
+FLAG s04-approve-reqs approval :: Script completed Wall time 0.3 seconds Output:  {"chunk_id":"5ae330","wall_time_seconds":0.000002542,"exit_code":0,"original_token_count":25,"output":"Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.\n"}
+
+FLAG s04-approve-reqs rejected :: ction 3). Right after a supersede, the undo is a restore of the old record and a retire of the new one (same file, section 4).\n- A proposal: \"Saved as a proposal for your yes or no: <title>.\"\n- A rejected proposal: \"Not saved: <title>. I will not suggest it again.\", then the next step.\n- A retire: \"Retired from memory: <title>. Say 'bring it back' to restore it.\" His \"bring it back\" is 
+
+FLAG s04-approve-reqs approval :: ve requirements, create one R-ID subsection per explicit behavior. Fill every labeled field under each R-ID. Keep an item Refining until its required behavior and acceptance check are clear and owner approval is recorded; mark Superseded only with a replacement link. Put solution ideas in the final Notes subsection, not here. -->  **Overall status:** Finalized   **Finalization rule:** Mark the ove
+
+FLAG s04-approve-reqs approval :: p step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 from its Resume here: record the owner’s answer to the requirements approval question, then move to design after approval.\n",   "version": "68d1febbebafea12d0f8a6eaf1c38d1b13c9132b3710bd8693a82e8a3859e3d7" } 
+
+FLAG s04-approve-reqs approval :: Script completed Wall time 0.2 seconds Output:  Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner. 
+
+FLAG s05-keep-going approval :: ner said: Approved. | Requirements approved. | | 2026-09-28 | Independent requirements check found no functional gap in R-01 through R-04 and the acceptance checks. | Requirements are ready for owner approval; design and build remain gated. | | 2026-09-28 | Owner said: "No, it can be blank, with no default value. Only the Sales Manager profile and system administrators can edit it; everyone else w
+
+FLAG s05-keep-going approval :: ted Wall time 0.3 seconds Output:  ### Decisions and context  - The owner specified the field behavior, access, and placement on 2026-09-28. An independent requirements check found no functional gap. Approval of the complete requirements is still needed. 
+
+FLAG s05-keep-going approval :: option.\n"}}} {"i":1,"result":{"status":"fulfilled","value":{"chunk_id":"939afb","wall_time_seconds":0.000002333,"exit_code":0,"original_token_count":25,"output":"Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.\n"}}} {"i":2,"result":{"status":"fulfilled","value":{"chunk_id":"6e1b0b","wall_time_seconds":0.017215375,"exit_code":1,"original_token_coun
+
+FLAG s06-approve-split approval ::  git status --short  $ git remote  $ toolkit work decisions 1 decision waits on the owner:  WI-001 Add a Tier picklist field to Account   - The design for WI-001 is proposed and waits for the owner's approval. Approve with: toolkit work approve WI-001 --design --by <name>. (work-decide)  $ toolkit work show WI-001 WI-001: Add a Tier picklist field to Account Location: /private/tmp/claude-501/-User
+
+FLAG s06-approve-split approval :: ll says "Next action: Mike Rihm chooses and approves Option A or Option B for Tier field access. Then the agent fills Selected design and prepares the implementation plan.". Write the step after this approval: toolkit work edit WI-001 --label 'Next action' --value '<next step>'. 
+
+FLAG s06-approve-split approval :: Script completed Wall time 0.2 seconds Output:  Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner. 
+
+FLAG s06-approve-split approval :: ub-item of WI-001) at .work-items/WI-001-add-a-tier-picklist-field-to-account/WI-002-set-account-tier-access-and-page-layout/WORK-ITEM.md. It delivers WI-001 R-03, R-04 and inherits that requirements approval (2026-09-28 by Mike Rihm). WI-001's approved design covers it, so it starts at planning with no design of its own. Delivery: owner-led, as recorded for WI-001. Continue with work-on. 
+
+FLAG s06-approve-split approval :: 1 completion.  ## Recent History  | Date | Change or decision | Effect on the work | |---|---|---| | 2026-09-28 | Created as a sub-item of WI-001. It delivers WI-001 R-03, WI-001 R-04. | Requirements approval inherited from WI-001 (2026-09-28 by Mike Rihm); the owner is not asked again. WI-001's approved design covers it, so it needs no design of its own. Starts at 06 Implementation plan. Continue
+
+FLAG s06-approve-split approval :: 28. On 2026-09-28 he approved design Option A and directed that access and page layout be a sub-item. WI-001 builds only the field for R-01 and R-02. WI-002 delivers R-03 and R-04 under the inherited approvals. The parent keeps the original approved requirement text as the split record.' Saved "Decisions and context" in WI-001.  $ toolkit work edit WI-001 --section 'Resume here' --text 'Option A i
+
+FLAG s06-approve-split approval :: 1-T01.  ### P2 — Access and placement  - [ ] **P2-T01 — Complete WI-002** · Not Started     **Work:** Track WI-002 as the separate access and page layout build.     **Deliverable:** WI-002 result and approval.     **Done when:** WI-002 is completed or the owner directs otherwise.     **Depends on:** P1-T01.' Saved "Tasks" in WI-001.  $ toolkit work edit WI-002 --section Tasks --text '## Tasks  ###
+
+FLAG s06-approve-split rejected :: , section 3). Right after a supersede, the undo is a restore of the old record and a retire of the new one (same file, section 4). - A proposal: "Saved as a proposal for your yes or no: <title>." - A rejected proposal: "Not saved: <title>. I will not suggest it again.", then the next step. - A retire: "Retired from memory: <title>. Say 'bring it back' to restore it." His "bring it back" is the who
+
+FLAG s06-approve-split approval :: rsion has not changed since it was installed, so the project's differences from it stay as they are.  Result: 0 problems and 3 warnings.  $ toolkit work validate Checked 2 items: 2 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.  $ toolkit work decisions Nothing is waiting on the owner. 
+
+FLAG s07-after-move-build approval :: \n\n### P2 — Access and placement\n\n- [ ] **P2-T01 — Complete WI-002** · Not Started  \n  **Work:** Track WI-002 as the separate access and page layout build.  \n  **Deliverable:** WI-002 result and approval.  \n  **Done when:** WI-002 is completed or the owner directs otherwise.  \n  **Depends on:** P1-T01.\n\n## Recent History\n\n| Date | Change or decision | Effect on the work |\n|---|---|---|
+
+FLAG s07-after-move-build approval :: ync   toolkit work validate [<id|file>]  --covers: a sub-item that delivers some of the parent's approved requirements links them (the text stays in the parent) and inherits the parent's requirements approval, so the owner is not asked twice. --quote: finish needs the owner's own words approving the result when no result approval is recorded yet (toolkit work approve <id> --result records one). fi
+
+FLAG s07-after-move-build approval :: : record the sandbox deployment decision, then hand Mike the ordered commands and WI-002 manual profile steps.\n"} {"cmd":"toolkit work validate WI-001","result":"Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. 1 open question waits on the owner (toolkit work decisions lists it).\n"} {"cmd":"toolkit work validate WI-002","result":"Checked 1 item: 1 clean, 0 errors, 0 approval gate pro
+
+FLAG s08-approve-sbx-deploy approval :: , then WI-002 Account layout, with the WI-002 profile steps applied afterward? Affects Sandbox release of R-01 through R-04. (work-decide)\n\nWI-002 Set Account Tier access and page layout\n  - Q-01: Approval for the ordered sandbox deployment and profile steps is requested in WI-001 Q-03; does that approval include WI-002? Affects Sandbox release of R-03 and R-04. (work-decide)\n"}}} {"i":1,"resu
+
+FLAG s08-approve-sbx-deploy approval ::  seconds Output:  {"i":0,"result":{"status":"fulfilled","value":{"chunk_id":"c257a3","wall_time_seconds":5.42e-7,"exit_code":0,"original_token_count":25,"output":"Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.\n"}}} {"i":1,"result":{"status":"fulfilled","value":{"chunk_id":"bbadfa","wall_time_seconds":0.000002583,"exit_code":0,"original_token_coun
+
+FLAG s09-deployed-sidenote approval :: 1-T01.  ### P2 — Access and placement  - [ ] **P2-T01 — Complete WI-002** · Not Started     **Work:** Track WI-002 as the separate access and page layout build.     **Deliverable:** WI-002 result and approval.     **Done when:** WI-002 is completed or the owner directs otherwise.     **Depends on:** P1-T01.  ## Recent History  | Date | Change or decision | Effect on the work | |---|---|---| | 2026
+
+FLAG s09-deployed-sidenote approval :: kit uses the new path. It moved along with its parent WI-001's folder and is still its sub-item. | | 2026-09-28 | Created as a sub-item of WI-001. It delivers WI-001 R-03, WI-001 R-04. | Requirements approval inherited from WI-001 (2026-09-28 by Mike Rihm); the owner is not asked again. WI-001's approved design covers it, so it needs no design of its own. Starts at 06 Implementation plan. Continue
+
+FLAG s09-deployed-sidenote approval :: Requirements:** WI-001, R-01 through R-04   **Design status:** Approved   **Requirements checked:** WI-001 approved 2026-09-28; independent review 2026-09-28   **Last updated:** 2026-09-28   **Design approval:** Approved by Mike Rihm on 2026-09-28  ## What this design solves  Sales Managers and system administrators assign Gold, Silver, or Bronze to an Account. Other people who can see that Accoun
+
+FLAG s09-deployed-sidenote approval :: Script completed Wall time 0.3 seconds Output:  Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner. 
+
+FLAG s09-deployed-sidenote approval :: Script completed Wall time 0.3 seconds Output:  Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner. 
+
+FLAG s10-checks-friday rejected :: An explicit request to remember or correct is authorization for that specific change. - Ask before ambiguous, bulk, or irreversible deletion of unique content. Only the owner can change the mode. - A rejected candidate is not saved to another memory, a criteria example, the glossary, or a pending queue. Record only the general selection lesson, as a `feedback` memory, if the owner gave one. - The 
+
+FLAG s10-checks-friday rejected :: member:** Never force-push to any branch in this repository.  **Why:** The owner lost a day of work to a force-push on 2026-09-12.  **How to apply:** Use a merge or a new commit instead. If a push is rejected, pull first.  **Evidence and limits:** The owner, in chat, 2026-09-26. Applies to every branch, including work-item branches.  **Related memories:** [merge only by pull request](feedback_merg
+
+FLAG s10-checks-friday approval :: Script completed Wall time 0.3 seconds Output:  Updated WI-001: stage 09 Testing -> 11 User approval (status In Progress). Now 11 User approval (In Progress). Continue with work-decide. 
+
+FLAG s10-checks-friday approval :: Script completed Wall time 0.3 seconds Output:  Updated WI-002: stage 09 Testing -> 11 User approval (status In Progress). Now 11 User approval (In Progress). Continue with work-decide. 
+
+FLAG s10-checks-friday approval :: trees/wi-001-add-a-tier-picklist-field-to diff --check  $ git -C .claude/worktrees/wi-002-set-account-tier-access-and diff --check  $ toolkit work validate WI-001 Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.  $ toolkit work validate WI-002 Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.  $ toolki
+
+FLAG s10-checks-friday approval :: em. Setup step; drop it when doctor stops reporting it.  ## Untracked to-dos  None.  ## Next session starts with  - Continue WI-001 and WI-002 from their Resume here sections: ask for separate result approvals based on the four passed sandbox checks, then continue work-finish after approval.  $ toolkit doctor Toolkit doctor for Acme CRM (/private/tmp/claude-501/-Users-michaelrihm-Documents-Project
+
+FLAG s11-where-are-we approval :: Script completed Wall time 0.5 seconds Output:  toolkit work list --tree account-tier/ (group)   WI-001  Add a Tier picklist field to Account  (11 User approval, In Progress, waiting on owner)     WI-002  Set Account Tier access and page layout  (11 User approval, In Progress, waiting on owner)  toolkit work next Nothing is ready to work on.  3 decis
+
+FLAG s11-where-are-we approval :: ers-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2/.work-items/account-tier/WI-001-tier-field/WORK-ITEM.md Stage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide Parent: none | Sub-items: WI-002 | Design: approved (.work-items/account-tier/WI-001-tier-field/DESIGN.md) Worktree branch for t
+
+FLAG s12-what-do-you-need approval :: Warning: truncated output (original token count: 10516) Total output lines: 5  {"i":0,"result":"3 decisions wait on the owner:\n\nWI-001 Add a Tier picklist field to Account\n  - WI-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-001 --result --by <name>. (work-decide)\n\nWI-002 Set Account Tier access and page layout\n  - WI-002 is at 11 User approv
+
+FLAG s13-approve-wi001 approval :: s":0.000001916,"exit_code":0,"original_token_count":104,"output":"Recorded: result of WI-001 approved (2026-09-28 by Mike Rihm).\nIt is no longer waiting on the owner (waiting_on: none).\nNow 11 User approval (In Progress). Continue with work-finish.\nNote: WI-001's Overview still says \"Next action: Ask Mike Rihm to approve the WI-001 field result separately from WI-002.\". Write the step after t
+
+FLAG s13-approve-wi001 approval :: Script completed Wall time 0.3 seconds Output:  {"chunk_id":"c43d1b","wall_time_seconds":0.000002625,"exit_code":0,"original_token_count":25,"output":"Updated WI-001: waiting on agent.\nNow 11 User approval (In Progress). Continue with work-finish.\n"}
+
+FLAG s13-approve-wi001 approval :: Script completed Wall time 0.4 seconds Output:  2 decisions wait on the owner:  WI-002 Set Account Tier access and page layout   - WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)  Memory proposals (saved, not yet approved; agents do not rely on them until the o
+
+FLAG s13-approve-wi001 approval :: p step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 and WI-002 from their Resume here sections: ask for separate result approvals based on the four passed sandbox checks, then continue work-finish after approval.\n",   "version": "2bf9c74bdd3d9a9dac7366fab89a220362c8d35b83126b3ccedd98963d90117f" } 
+
+FLAG s13-approve-wi001 approval :: e /hooks, and trust them. Setup step; drop it when doctor stops reporting it.  ## Untracked to-dos  None.  ## Next session starts with  - Continue WI-001 through work-finish after its recorded result approval; ask for WI-002 result approval separately, then continue its work-finish after approval. 
+
+FLAG s14-approve-wi002 approval :: s":0.070141875,"exit_code":0,"original_token_count":108,"output":"Recorded: result of WI-002 approved (2026-09-28 by Mike Rihm).\nIt is no longer waiting on the owner (waiting_on: none).\nNow 11 User approval (In Progress). Continue with work-finish.\nNote: WI-002's Overview still says \"Next action: Ask Mike Rihm to approve the WI-002 access and page layout result separately from WI-001.\". Write
+
+FLAG s14-approve-wi002 approval :: Script completed Wall time 0.5 seconds Output:  {"chunk_id":"57afd8","wall_time_seconds":0.068345875,"exit_code":0,"original_token_count":25,"output":"Updated WI-002: waiting on agent.\nNow 11 User approval (In Progress). Continue with work-finish.\n"}
+
+FLAG s14-approve-wi002 rejected :: ave` skill, which saves with `toolkit memory save`. When the owner corrects what is worth saving, save the correction as a `feedback` memory with `memory-save`, as a general rule, without copying the rejected memory. Those `feedback` memories override this page.\n\n## Default test for lasting memory\n\nSave a topic when it concerns this project, has a credible source, would matter in a future sess
+
+FLAG s14-approve-wi002 approval :: , and trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 through work-finish after its recorded result approval; ask for WI-002 result approval separately, then continue its work-finish after approval.\n",   "version": "69def177b6ae14f0e0e25273ff31399d82654a5718d21b689b6d3548a1550177" } 
+
+FLAG s14-approve-wi002 approval ::  trust them. Setup step; drop it when doctor stops reporting it.  ## Untracked to-dos  None.  ## Next session starts with  - Continue WI-001 and WI-002 through work-finish after their recorded result approvals; prepare the changes for merge decisions. 
+
+FLAG s16-ship-it approval :: rs-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2/.work-items/account-tier/WI-001-tier-field/WORK-ITEM.md\nStage: 11 User approval (In Progress) | Waiting on: agent | Continue with: work-finish\nParent: none | Sub-items: WI-002 | Design: approved (.work-items/account-tier/WI-001-tier-field/DESIGN.md)\nWorktree branch for
+
+FLAG s16-ship-it approval :: Script completed Wall time 0.3 seconds Output:  {"chunk_id":"437c29","wall_time_seconds":0.000004083,"exit_code":0,"original_token_count":39,"output":"Updated WI-001: stage 11 User approval -> 12 Pull request and push (status In Review).\nNow 12 Pull request and push (In Review). Continue with work-finish.\n"}
+
+FLAG s16-ship-it approval :: Script completed Wall time 0.3 seconds Output:  {"chunk_id":"b9f5ae","wall_time_seconds":0.000011625,"exit_code":0,"original_token_count":39,"output":"Updated WI-002: stage 11 User approval -> 12 Pull request and push (status In Review).\nNow 12 Pull request and push (In Review). Continue with work-finish.\n"}
+
+FLAG s16-ship-it approval :: hem. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 and WI-002 through work-finish after their recorded result approvals; prepare the changes for merge decisions.\n",   "version": "795c228482a4974bb97385f06cb36640e1f84ba40bfae67c3a3bf301576ac571" } 
+
+FLAG s16-ship-it approval :: 28. On 2026-09-28 he approved design Option A and directed that access and page layout be a sub-item. WI-001 builds only the field for R-01 and R-02. WI-002 delivers R-03 and R-04 under the inherited approvals. The parent keeps the original approved requirement text as the split record.\\n\\n### Resume here\\n\\nWI-001 field source is committed as 147aa3e. Mike Rihm reported both sandbox deploys a
+
+FLAG s18-close-out approval :: \n\n### P2 — Access and placement\n\n- [ ] **P2-T01 — Complete WI-002** · Not Started  \n  **Work:** Track WI-002 as the separate access and page layout build.  \n  **Deliverable:** WI-002 result and approval.  \n  **Done when:** WI-002 is completed or the owner directs otherwise.  \n  **Depends on:** P1-T01.\n\n## Recent History\n\n| Date | Change or decision | Effect on the work |\n|---|---|---|
+
+FLAG s18-close-out rejected :: , section 3). Right after a supersede, the undo is a restore of the old record and a retire of the new one (same file, section 4). - A proposal: "Saved as a proposal for your yes or no: <title>." - A rejected proposal: "Not saved: <title>. I will not suggest it again.", then the next step. - A retire: "Retired from memory: <title>. Say 'bring it back' to restore it." His "bring it back" is the who
+
+FLAG s18-close-out approval :: Script completed Wall time 0.3 seconds Output:  {"chunk_id":"29007d","wall_time_seconds":0.000003833,"exit_code":0,"original_token_count":25,"output":"Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.\n"}
+
+FLAG s18-close-out approval :: Script completed Wall time 0.4 seconds Output:  {"chunk_id":"7a61e1","wall_time_seconds":0.013569833,"exit_code":0,"original_token_count":67,"output":"WI-002 is Done. Result approval: 2026-09-28 by Mike Rihm.\nBacked up .work-items/ and .memory/ to /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/
+
+FLAG s18-close-out approval :: 1-T01.  ### P2 — Access and placement  - [ ] **P2-T01 — Complete WI-002** · Not Started     **Work:** Track WI-002 as the separate access and page layout build.     **Deliverable:** WI-002 result and approval.     **Done when:** WI-002 is completed or the owner directs otherwise.     **Depends on:** P1-T01. 
+
+FLAG s18-close-out approval :: Script completed Wall time 0.3 seconds Output:  {"chunk_id":"a6f4ca","wall_time_seconds":0.000003041,"exit_code":0,"original_token_count":25,"output":"Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.\n"}
+
+FLAG s18-close-out approval :: Script completed Wall time 0.4 seconds Output:  {"chunk_id":"9b1ad5","wall_time_seconds":0.010335542,"exit_code":0,"original_token_count":67,"output":"WI-001 is Done. Result approval: 2026-09-28 by Mike Rihm.\nBacked up .work-items/ and .memory/ to /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/
+
+FLAG s19-recall rejected :: tter home (a requirement, a design, a\n  `DECISIONS.md` row). A short pointer under **Authoritative records** is\n  allowed when a future session would otherwise miss that record.\n- A fact the owner rejected, under the same or new words.\n\n## Passing the body to the command\n\n- Claude Code: pass it on standard input. Give `--body-file -`, then a quoted\n  heredoc, then the body, then a line hol
+
+FLAG s21-reject-morning rejected :: Script completed Wall time 0.3 seconds Output:  Rejected user_mike_rihm_usually_prefers_design_reviews_first: the owner said no, so the proposal was deleted. A rejected proposal is not saved again, here or under another name. When the owner gave a 
+

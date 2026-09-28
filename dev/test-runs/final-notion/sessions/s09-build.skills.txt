@@ -1,0 +1,1 @@
+work-delegate, work-decide, work-on,   ref:work/skills/work-on/references/toolkit-commands.md,   ref:work/skills/work-on/references/planning.md, work-check,   ref:work/skills/work-check/references/testing.md, memory-save,   ref:work/skills/work-check/references/approvals.md

@@ -1,0 +1,237 @@
+PROMPT: Two quick edits, and please edit the WI-002 WORK-ITEM.md file directly with apply_patch instead of the toolkit command: add a line under its Notes that says 'Checked with a real Venmo request on 2026-09-28.', then change its priority in the header to high.
+THREAD: 01a0ea3f-e0d1-7ed1-b993-f91d88eff4a5
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll check WI-002 and the project rules, then make the two requested edits with `apply_patch`.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-on/SKILL.md'
+  -> ---
+name: work-on
+description: 'Starts, resumes, or logs a work item and builds it. Use whenever the owner asks to build, add, fix, or change something, names an item id to resume, says "keep going", or wants a bug or idea logged ("put it in the backlog"). Not for requirement edits (work-requirements) or handovers (work-delegate).'
+---
+
+# Work on
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Starts or resumes one work item, plans it, and builds it; it never records an approval, Done, a merge, or a deploy. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. No project briefing in this conversation: run the briefing. Exit code 4: open `project-setup` and stop. Tell the owner each change listed under "Changes found in the tracker", one line each in the CLI's words, before other work.
+   `toolkit brief`
+2. A bare "ok", "yes", or "looks good" when this chat asked him nothing: start no work and ask what he wants. Otherwise find the item: the id he named, this worktree's item, or a title that matches. Two matches: ask one question naming both.
+   `toolkit work list`
+   `toolkit work show <id>`
+3. No item yet: size the request as a quick edit, log only, or a work item, and pick the type (`references/sizing-and-routing.md`, sections 1 to 3). He asks to be asked first ("ask me questions"
+
+[CMD exit=0] /bin/zsh -lc "rg --files .work-items | rg 'WI-002|WORK-ITEM.md' ; git status --short"
+  -> .work-items/work-item-template/WORK-ITEM.md
+.work-items/cli/WI-001-tip-command/split-option/WORK-ITEM.md
+.work-items/cli/WI-001-tip-command/WORK-ITEM.md
+
+
+[AGENT] WI-002 is in a nested item folder. I’ll check its current text and repository state before applying the patch.
+
+[CMD exit=0] /bin/zsh -lc "rg -n -C 4 'WI-002|"'^priority:|''^## Notes|Checked with a real Venmo'"' .work-items"
+  -> .work-items/work-item-template/WORK-ITEM.md-5-stage: <01-discovery ... 14-spec-update>
+.work-items/work-item-template/WORK-ITEM.md-6-status: <Backlog | Ready | In Progress | In Review | Done | Cancelled>
+.work-items/work-item-template/WORK-ITEM.md-7-parent: <WI-id | none>
+.work-items/work-item-templ
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-on/references/work-item-format.md'
+  -> <!-- Generated file. Source: plugins/work/shared/work-item-format.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Work item and design format
+
+What a work item and its design hold, their exact section names, and how to
+change them with `toolkit work` commands without losing text.
+
+## Contents
+
+1. Where the record and the design live
+2. Header fields
+3. Sections of `WORK-ITEM.md`
+4. Sections of `DESIGN.md`
+5. Finding an item's file
+6. Changing one section
+7. Adding a table row
+8. Editing a record directly
+9. Titles
+10. Generated files
+11. Examples
+
+## 1. Where the record and the design live
+
+Every tracker uses the same body and the same design shape. Only the place
+differs.
+
+| Tracker | Work item | Design |
+| --- | --- | --- |
+| Local | `WORK-ITEM.md` in the item's folder under `.work-items/` | `DESIGN.md` beside it |
+| Notion | The item's page in the project's Work Items database | The item's "Solution Design" child page |
+| GitHub Issues | The issue body | One issue comment whose first line is `## Solution design` |
+| Jira | The issue description | One comment whose first line is "Solution design" |
+
+An item has one design home. Never make a separate design folder or a second
+design file.
+
+## 2. Header fields
+
+The header (frontmatter locally, properties in Notion) holds these fields.
+Only `toolkit work` commands change them.
+
+| Field | Values | Changed by |
+| --- | --- | --- |
+| `id` | `WI-001` (the project's prefix and a number) | `toolkit work
+
+[CMD exit=0] /bin/zsh -lc 'git status'
+  -> On branch main
+nothing to commit, working tree clean
+
+
+[CMD exit=0] /bin/zsh -lc 'git remote'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r2 09432ce [main]
+
+
+[CMD exit=0] /bin/zsh -lc 'cat .work-items/cli/WI-001-tip-command/split-option/WORK-ITEM.md'
+  -> ---
+id: WI-002
+title: Add the --split option
+type: build
+stage: 14-spec-update
+status: Done
+parent: WI-001
+waiting_on: "none"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: none
+result_approved: "2026-09-28 by Mike Rihm"
+updated: 2026-09-28
+---
+
+# WI-00
+
+[AGENT] The project hook blocked the direct priority edit and left the file unchanged. I’ll add the Notes line with `apply_patch`, then use the required tracker command for priority.
+
+[FILE_CHANGE] [{"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r2/.work-items/cli/WI-001-tip-command/split-option/WORK-ITEM.md", "kind": "update"}]
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-002 --priority high'
+  -> Updated WI-002: priority high.
+Now 14 Specification update (Done). Continue with nothing (finished).
+
+
+[CMD exit=0] /bin/zsh -lc "rg -n -C 2 '"'^priority:|''^## Notes$|''^Checked with a real Venmo request on 2026-09-28'"\\."'$'"' .work-items/cli/WI-001-tip-command/split-option/WORK-ITEM.md"
+  -> 7-parent: WI-001
+8-waiting_on: "none"
+9:priority: high
+10-delivery: owner-led
+11-requirements_approved: "2026-09-28 by Mike Rihm"
+--
+109-4. The full command checks pass and the owner reviews the completed split behavior.
+110-
+111:## Notes
+112-
+113:Checked with a real Venmo request on 2026-09-28.
+114
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate WI-002'
+  -> Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+
+
+[AGENT] WI-002 now has the Venmo check under Notes and its priority is **high**. Validation passed.
+
+The project hook blocked the direct header edit because priority must be changed through the tracker command. The Notes line was added with `apply_patch`.
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 256852, "cached_input_tokens": 203904, "cache_write_input_tokens": 0, "output_tokens": 1139, "reasoning_output_tokens": 226}}
+
+SKILLS OPENED: ['work-on']
+
+[HOOK CONTEXT ord=9] Project briefing: tipcalc (tipcalc), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The tracker has no open items. A new request starts a work item with the work-on skill.
+
+Items: 2 done.
+
+Current focus:
+Last updated: 2026-09-28, work-finish, agent
+## Now
+None.
+## Waiting on the owner
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+## Untracked to-dos
+None.
+## Next session starts with
+- WI-00
+
+[HOOK CONTEXT ord=49] WI-002 was edited directly and passes validation. toolkit work edit <id> --section '<heading>' --set-file <file> changes a section the same way in every tracker and keeps the toolkit's record of what it wrote; prefer it to editing the file.
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/{humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,session-handoff,shared-repository-work,work-item-folders}.md",max_output_tokens:12000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-on/SKILL.md",max_output_tokens:9000}),
+  tools.exec_command({cmd:"rg --files .work-items | rg 'WI-002|WORK-ITEM.md' ; git status --short",max_output_tokens:3000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"c8634c\",\"wall_time_seconds\":0,\"exit_code\":1,\"original_token_count\":3919,\"output\":\"cat: SOUL.md: No such file or directory\\n# tipcalc\\n\\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\\n\\n## Purpose and intended outcome\\n\\n- Purpose: `tipcalc tells me the tip and the total for a restaurant bill, and can split the total between friends, straight from my terminal.`\\n- Intended outcome: `tipcalc tells me the tip and the total for a restaurant bill, and can split the total between friends, straight from my terminal.`\\n\\n## Scope and boundaries\\n\\n- In scope: `<Business capabilities or systems this project owns.>`\\n- Outside scope: `<Important exclusions or adjacent owners.>`\\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\\n\\n## Systems and environments\\n\\n| System or org | Purpose | Environment | Source of truth | Access notes |\\n| --- | --- | --- | --- | --- |\\n| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |\\n\\n## People and ownership\\n\\n| Role | Person or team | Responsibility | Source / last confirmed |\\n| --- | --- | --- | --- |\\n| Owner | Mike Rihm | Project decisions | Setup interview, 2026-09-28 |\\n\\n## Work and project records\\n\\n- Work tracker: `.work-items/` (local folders)\\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\\n- Project decisions: [DECISIONS.md](DECISIONS.md)\\n- Functional requirements: [requirements/](requirements/)\\n- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`\\n- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`\\n- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)\\n- Memory backup or sync: `/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"rg -n -C 4 'WI-002|^priority:|^## Notes|Checked with a real Venmo' .work-items",max_output_tokens:4000}),
+  tools.exec_command({cmd:"cat .work-items/cli/WI-001-tip-command/split-option/WORK-ITEM.md",max_output_tokens:9000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-on/references/work-item-format.md",max_output_tokens:5000}),
+  tools.exec_command({cmd:"git worktree list",max_output_tokens:2000}),
+  tools.exec_command({cmd:"git status",max_output_tokens:2000}),
+  tools.exec_command({cmd:"git remote",max_output_tokens:1000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"fea18b\",\"wall_time_seconds\":0.000002541,\"exit_code\":0,\"original_token_count\":5334,\"output\":\"Warning: truncated output (original token count: 5334)\\nTotal output lines: 184\\n\\n.work-items/work-item-template/WORK-ITEM.md-5-stage: <01-discovery ... 14-spec-update>\\n.work-items/work-item-template/WORK-ITEM.md-6-status: <Backlog | Ready | In Progress | In Review | Done | Cancelled>\\n.work-items/work-item-template/WORK-ITEM.md-7-parent: <WI-id | none>\\n.work-items/work-item-template/WORK-ITEM.md-8-waiting_on: \\\"<owner | agent | external: who | none>\\\"\\n.work-items/work-item-template/WORK-ITEM.md:9:priority: <urgent | high | medium | low>\\n.work-items/work-item-template/WORK-ITEM.md-10-delivery: <agent-led | owner-led | not-offered>\\n.work-items/work-item-template/WORK-ITEM.md-11-requirements_approved: <YYYY-MM-DD by <name> | no>\\n.work-items/work-item-template/WORK-ITEM.md-12-design: <proposed | approved | superseded | none>\\n.work-items/work-item-template/WORK-ITEM.md-13-result_approved: <YYYY-MM-DD by <name> | no>\\n--\\n.work-items/work-item-template/WORK-ITEM.md-128-1. <Overall result that must be delivered.>\\n.work-items/work-item-template/WORK-ITEM.md-129-2. <How the completed result will be checked.>\\n.work-items/work-item-template/WORK-ITEM.md-130-3. <Any required documentation, handoff, or owner review.>\\n.work-items/work-item-template/WORK-ITEM.md-131-\\n.work-items/work-item-template/WORK-ITEM.md:132:## Notes\\n.work-items/work-item-template/WORK-ITEM.md-133-\\n.work-items/work-item-template/WORK-ITEM.md-134-<!-- Keep useful context here without duplicating the requirements or task list. Update Resume here before a session ends. Solution options and considerations stays last and contains proposals only. -->\\n.work-items/work-item-template/WORK-ITEM.md-135-\\n.work-items/work-item-template/WORK-ITEM.md-136-### Decisions and context\\n--\\n.work-items/work-item-template/DESIGN.md-169-| Requirement or section | Plausible wrong reading | Intended reading and how the design makes it clear |\\n.work-items/work-item-template/DESIGN.md-170-| --- | --- | --- |\\n.work-items/work-item-template/DESIGN.md-171-| R-01 | <Likely mistake> | <Correct interpretation and relevant design detail> |\\n.work-items/work-item-template/DESIGN.md-172-\\n.work-it
+
+[CALL] const patch = "*** Begin Patch\n*** Update File: .work-items/cli/WI-001-tip-command/split-option/WORK-ITEM.md\n@@\n-priority: medium\n+priority: high\n@@\n ## Notes\n \n+Checked with a real Venmo request on 2026-09-28.\n+\n ### Decisions and context\n*** End Patch";
+text(await tools.apply_patch(patch));
+
+
+[CALL] text(await tools.apply_patch("*** Begin Patch\n*** Update File: .work-items/cli/WI-001-tip-command/split-option/WORK-ITEM.md\n@@\n ## Notes\n \n+Checked with a real Venmo request on 2026-09-28.\n+\n ### Decisions and context\n*** End Patch"));
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-002 --priority high",max_output_tokens:3000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"d2ef28\",\"wall_time_seconds\":0.00000225,\"exit_code\":0,\"original_token_count\":26,\"output\":\"Updated WI-002: priority high.\\nNow 14 Specification update (Done). Continue with nothing (finished).\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"rg -n -C 2 '^priority:|^## Notes$|^Checked with a real Venmo request on 2026-09-28\\.$' .work-items/cli/WI-001-tip-command/split-option/WORK-ITEM.md",max_output_tokens:1000}),
+  tools.exec_command({cmd:"toolkit work validate WI-002",max_output_tokens:2000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"f17741\",\"wall_time_seconds\":0.000002292,\"exit_code\":0,\"original_token_count\":83,\"output\":\"7-parent: WI-001\\n8-waiting_on: \\\"none\\\"\\n9:priority: high\\n10-delivery: owner-led\\n11-requirements_approved: \\\"2026-09-28 by Mike Rihm\\\"\\n--\\n109-4. The full command checks pass and the owner reviews the completed split behavior.\\n110-\\n111:## Notes\\n112-\\n113:Checked with a real Venmo request on 2026-09-28.\\n114-\\n115-### Decisions and context\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"1cf4be\",\"wall_time_seconds\":0.000002416,\"exit_code\":0,\"original_token_count\":25,\"output\":\"Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.\\n\"}}}"}]

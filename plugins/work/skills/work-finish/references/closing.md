@@ -102,10 +102,17 @@ Salesforce projects, in order:
       `package.xml`, `destructiveChanges.xml` when something is removed,
       `manual-steps.md`, and `DEPLOYMENT-RECORD.md`.
 - [ ] `sf-deploy-check` finds nothing that would ship too early.
-- [ ] A validate against the sandbox.
+- [ ] A validate against the sandbox. It needs no yes, in both hosts.
+- [ ] A sandbox deploy, when the item needs one: in Claude Code, only after
+      the owner's yes for that deploy, in this chat.
 - [ ] In Codex, the owner runs every sandbox deploy and sandbox data change,
       including `sf apex run` against a sandbox. Hand him the exact command
       with its `-o <sandbox>`; do not run it yourself, even after his yes.
+- [ ] Run each `sf` command directly, never from a script or file you wrote,
+      so the guard sees it (`salesforce-org-safety.md`).
+- [ ] A DevOps Center pipeline deploy (`sf project deploy pipeline start`,
+      `quick`, `resume`, or `validate`) goes to the owner: the command does
+      not name the org it reaches, and that org can be production.
 - [ ] A production deploy is handed to the owner: the exact command, what it
       deploys, and what to check afterwards. Agents never run it.
 - [ ] Production data changes go through `sf-data-change`, which builds the
@@ -188,6 +195,10 @@ Run the Done checklist in `approvals.md` first. Then:
   "Done on <date>: <evidence>", and set Blockers to "None.". A Done item that
   still names a deleted branch or a merge waiting for approval misleads the
   next reader.
+- Also before the finish command: take the item off the current focus
+  (section 8). The finish command makes the backup, and a focus changed after
+  it is not in that backup until the next one. If the finish command
+  refuses, put the item back on the focus.
 - `toolkit work finish <id> --by <owner> --evidence '<what shows it works>'`.
   The evidence names the test result, the pull request or commit, or what
   the owner saw. The command sets Next action to "None. Finished." and Notes >
@@ -197,6 +208,9 @@ Run the Done checklist in `approvals.md` first. Then:
 - The finish command then backs up `.work-items/` and `.memory/` (and
   Hindsight memory) to the owner's backup folder, and prints one line about
   it. Read that line:
+  - "No automatic backup: this project keeps its work items and memory
+    outside this computer ...": a Notion tracker with Notion memory. Nothing
+    is copied; say so in one line when the owner set a backup folder.
   - "Backed up ... to <folder>": say it in one line in the reply.
   - "No backup folder is set ...": ask the owner for a folder outside the
     project, as the one question of the reply. After his answer:

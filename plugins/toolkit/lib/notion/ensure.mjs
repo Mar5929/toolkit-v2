@@ -586,7 +586,8 @@ export async function ensureRoot({ client, rootPageId, stored = {}, check = fals
   const names = { ...props.names, ...(titleProp ? { title: titleProp[0] } : {}) };
   const statusOptions = statusProp && statusProp[1].status ? (statusProp[1].status.options || []).map((o) => o.name) : [];
   // The registry columns shown in the "All Projects" table (notion-design.md section 15, step 2).
-  const view = await ensureProjectsViewColumns(client, { databaseId: normalizeId(found.database.id), ids: props.ids, names: props.names, check });
+  const schemaIds = schemaProps.map(([, p]) => p.id).filter(Boolean);
+  const view = await ensureProjectsViewColumns(client, { databaseId: normalizeId(found.database.id), ids: props.ids, names: props.names, schemaIds, check });
   problems.push(...view.problems);
   return {
     rootPageId: root,
@@ -601,6 +602,7 @@ export async function ensureRoot({ client, rootPageId, stored = {}, check = fals
     created: found.created,
     added: [...props.added, ...props.optionsAdded, ...view.added],
     problems,
+    warnings: view.warnings,
   };
 }
 
@@ -615,10 +617,18 @@ function projectsTableView(views) {
  * "All Projects" table view (the Notion rebuild check: ensure-root added the
  * properties to the database but not to the view). A column the view already
  * lists, shown or hidden, is left as it is: a column Mike hid stays hidden.
- * Returns { added: ["All Projects view: Key", ...], problems }.
+ *
+ * The view is not what ensure-root is for, so it never stops the setup
+ * (final Notion run, 2026-09-28: Mike's "All Projects" view listed the column
+ * "eizm" of a deleted property, Notion refused the PATCH with 400
+ * validation_error, and the failed run saved no ids at all):
+ * - a listed column whose property is not in the data source schema
+ *   (`schemaIds`) is left out of the update, and a warning names it;
+ * - a Notion error from the update is a warning, not a thrown error.
+ * Returns { added: ["All Projects view: Key", ...], problems, warnings }.
  */
-export async function ensureProjectsViewColumns(client, { databaseId, ids, names = {}, check = false }) {
-  const out = { added: [], problems: [] };
+export async function ensureProjectsViewColumns(client, { databaseId, ids, names = {}, schemaIds = null, check = false }) {
+  const out = { added: [], problems: [], warnings: [] };
   let views;
   try {
     views = await listViews(client, databaseId);
@@ -641,11 +651,27 @@ export async function ensureProjectsViewColumns(client, { databaseId, ids, names
     out.problems.push(`The "${label}" view of the Projects database does not show the columns ${missing.map((p) => names[p.key] || p.name).join(', ')}.`);
     return out;
   }
-  const properties = [...listed.map((q) => ({ ...q })), ...missing.map((p) => ({ property_id: ids[p.key], visible: true }))];
+  const missingNames = missing.map((p) => names[p.key] || p.name).join(', ');
+  // Notion keeps a deleted property's column in a view's list, and refuses a
+  // list that names it. Only columns of properties that exist are sent back.
+  const inSchema = (q) => !Array.isArray(schemaIds) || schemaIds.some((id) => samePropertyId(id, q.property_id));
+  const kept = listed.filter(inSchema);
+  const stale = listed.filter((q) => !inSchema(q));
+  if (stale.length) {
+    out.warnings.push(`The "${label}" view listed ${stale.length === 1 ? 'a column' : `${stale.length} columns`} of a deleted property (${stale.map((q) => q.property_id).join(', ')}). ${stale.length === 1 ? 'It was' : 'They were'} left out of the view's column list.`);
+  }
+  const properties = [...kept.map((q) => ({ ...q })), ...missing.map((p) => ({ property_id: ids[p.key], visible: true }))];
   // The whole configuration is sent back with the new column list, so a
   // Notion that replaces the configuration keeps the view's other settings
   // (sort, wrap, grouping) either way (verifier, fix round 2).
-  const updated = await client.updateView(view.id, { configuration: { ...cfg, type: cfg.type || view.type || 'table', properties } });
+  let updated;
+  try {
+    updated = await client.updateView(view.id, { configuration: { ...cfg, type: cfg.type || view.type || 'table', properties } });
+  } catch (err) {
+    if (!isNotionError(err)) throw err;
+    out.warnings.push(`The "${label}" view of the Projects database could not be changed (${err.message}), so it does not show the columns ${missingNames}. The Projects database itself is ready. Tell the owner; he can show the columns in the Notion app. Never change his Notion view with ntn api.`);
+    return out;
+  }
   const back = (updated && updated.configuration && updated.configuration.properties) || [];
   const shown = missing.filter((p) => back.some((q) => samePropertyId(q.property_id, ids[p.key]) && q.visible !== false));
   out.added.push(...shown.map((p) => `${label} view: ${names[p.key] || p.name}`));
@@ -1145,6 +1171,7 @@ export async function ensureProject({ client, config, root, mainRoot, rootPageId
   const rootResult = await ensureRoot({ client, rootPageId: rootPageId || stored.rootPageId, stored: stored.projects || {}, check, projectsDatabaseId });
   report.added.push(...rootResult.added.map((a) => `Projects: ${a}`));
   report.problems.push(...rootResult.problems);
+  report.notes.push(...(rootResult.warnings || []));
   if (rootResult.created) report.created.push('Projects database');
   const projects = rootResult.projects;
   if (!projects) return { notion: stored, report };

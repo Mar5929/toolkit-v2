@@ -1,0 +1,1 @@
+project-setup,   ref:toolkit/skills/project-setup/references/interview.md,   ref:toolkit/skills/project-setup/references/toolkit-commands.md,   ref:toolkit/skills/project-setup/references/repair-and-update.md,   ref:toolkit/skills/project-setup/references/wiring-notion.md

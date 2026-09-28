@@ -1,0 +1,239 @@
+HOOK SessionStart:startup outcome=success exit=0
+  HOOK-OUTPUT: {"hookSpecificOutput": {"hookEventName": "SessionStart", "additionalContext": "Voice commands: voice on | voice off | voice status | voice read. Each is a standalone chat message. Current chat voice: OFF."}}
+
+HOOK SessionStart:startup outcome=success exit=0
+  HOOK-OUTPUT: {"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"Project briefing: slug (slug), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.\nProject manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-claude-local-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.\nRequests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.\n\nThis worktree is on branch main, which names no work item.\n\nNo item is Ready, In Progress, or In Review.\nThe tracker has no open items. A new request starts a work item with the work-on skill.\n\nCurrent focus:\nLast updated: 2026-09-28, setup, agent\n## Now\n- Toolkit V2 set up; no work items yet.\n## Waiting on the owner\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n## Untracked to-dos\n- Add the verified build and test commands to the AGENTS.md Commands table once the first code exists.\n## Next session starts with\n- Ask the owner for the first thing to build and start it with the work-on skill.\n\nProject memory (builtin): 0 records. toolkit memory find searches it; toolkit memory get <key> reads one record."}}
+
+HOOK UserPromptSubmit outcome=success exit=0
+HOOK UserPromptSubmit outcome=success exit=0
+INIT session=43254388-eb6f-43cc-88bf-d5bf21a29158 version=2.1.280 model=claude-opus-5-5[1m] permissionMode=acceptEdits cwd=/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-claude-local-r2
+INIT plugins=['playwright@claude-plugins-official', 'feature-dev@claude-plugins-official', 'skill-creator@claude-plugins-official', 'claude-code-setup@claude-plugins-official', 'swift-lsp@claude-plugins-official', 'impeccable@impeccable', 'obsidian@obsidian-skills', 'toolkit@toolkit-v2', 'work@toolkit-v2', 'memory@toolkit-v2', 'session-skills@toolkit-v2', 'git-workflows@toolkit-v2', 'humanizer@synced', 'Notion@synced', 'agents-md@builtin', 'telemetry@builtin']
+INIT non-V2 non-builtin plugins=['playwright@claude-plugins-official', 'feature-dev@claude-plugins-official', 'skill-creator@claude-plugins-official', 'claude-code-setup@claude-plugins-official', 'swift-lsp@claude-plugins-official', 'impeccable@impeccable', 'obsidian@obsidian-skills', 'humanizer@synced', 'Notion@synced'] error_fields={} mcp=[{'name': 'plugin:playwright:playwright', 'status': 'connected', 'source': 'plugin'}, {'name': 'Neon', 'status': 'connected', 'source': 'user'}, {'name': 'claude.ai Claude Docs', 'status': 'connected', 'source': 'claudeai'}, {'name': 'claude.ai Wispr Flow', 'status': 'connected', 'source': 'claudeai'}, {'name': 'claude.ai Excalidraw', 'status': 'connected', 'source': 'claudeai'}, {'name': 'claude.ai Origin', 'status': 'needs-auth', 'source': 'claudeai'}, {'name': 'claude.ai PubMed', 'status': 'connected', 'source': 'claudeai'}, {'name': 'claude.ai Google Drive', 'status': 'connected', 'source': 'claudeai'}, {'name': 'claude.ai Context7', 'status': 'connected', 'source': 'claudeai'}, {'name': 'claude.ai Notion', 'status': 'connected', 'source': 'claudeai'}, {'name': 'claude.ai Linear', 'status': 'connected', 'source': 'claudeai'}, {'name': 'claude.ai Todoist', 'status': 'connected', 'source': 'claudeai'}, {'name': 'claude.ai Google Calendar', 'status': 'connected', 'source': 'claudeai'}, {'name': 'claude.ai Gmail', 'status': 'connected', 'source': 'claudeai'}]
+INIT v2 skills=['skill-creator:skill-creator', 'claude-code-setup:claude-automation-recommender', 'impeccable:impeccable', 'obsidian:defuddle', 'obsidian:json-canvas', 'obsidian:obsidian-bases', 'obsidian:obsidian-cli', 'obsidian:obsidian-markdown', 'toolkit:project-setup', 'work:solution-design', 'work:work-check', 'work:work-decide', 'work:work-delegate', 'work:work-finish', 'work:work-on', 'work:work-organize', 'work:work-requirements', 'work:work-status', 'memory:memory-find', 'memory:memory-save', 'memory:memory-tidy', 'session-skills:braindump', 'session-skills:explain-simply', 'session-skills:handoff', 'session-skills:session-summary', 'session-skills:unslop', 'git-workflows:merge-and-clean-up', 'git-workflows:publish-docs', 'git-workflows:pull-latest', 'git-workflows:reset-to-remote', 'humanizer:humanizer', 'anthropic-skills:built-in-browser', 'anthropic-skills:canvas-design', 'anthropic-skills:chrome-browser', 'anthropic-skills:computer-use', 'anthropic-skills:deep-research', 'anthropic-skills:docs', 'anthropic-skills:docx', 'anthropic-skills:google-workspace', 'anthropic-skills:import-memory', 'anthropic-skills:llm-council', 'anthropic-skills:morning', 'anthropic-skills:pdf', 'anthropic-skills:pptx', 'anthropic-skills:skill-creator', 'anthropic-skills:web-artifacts-builder', 'anthropic-skills:xlsx']
+INIT output_style=Plain English
+TOOL Skill: skill=work:work-on args=New work: build the slug command. `node slug.js "Hello World"` should print `hello-world`. Track it as a work item and do it properly.
+  RESULT: Launching skill: work:work-on
+TOOL Read: /Users/michaelrihm/Documents/Projects/toolkit-v2/plugins/work/skills/work-on/references/sizing-and-routing.md
+  RESULT: 1	# Sizing a request and routing an item
+2	
+3	How `work-on` decides between a quick edit, a logged item, and a worked item,
+4	which type to give it, and which skill continues it.
+5	
+6	## Contents
+7	
+8	1. Three sizes of request
+9	2. Owner messages and the right action
+10	3. Choosing the type
+11	4. Routing by where the item stands
+12	5. Several items at once
+13	6. Project roadmap units
+14	
+15	## 1. Three sizes of request
+16	
+17	- **Quick edit, no item.** One sitting, no choice for the owner, no change to
+18	  behavior recorded in `requirements/`, nothing bound for production. Do it
+19	  and report it in one line.
+20	- **Log only.** The owner says "later", "backlog", "park that", "not now", or
+21	  "log a bug". Check the list for a duplicate, create the item at
+22	  `01-discovery` with his exact words as the Starting request, reply
+23	  "Logged as WI-014 (bug, backlog). Not started." and st... [7387 chars]
+TOOL Read: /Users/michaelrihm/Documents/Projects/toolkit-v2/plugins/work/skills/work-on/references/toolkit-commands.md
+  RESULT: 1	<!-- Generated file. Source: plugins/toolkit/shared/toolkit-commands.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+2	# Running `toolkit` commands
+3	
+4	Purpose: how to run a `toolkit` command in Claude Code and in Codex, how to
+5	pass text in one, and what each exit code means. Every skill that runs a
+6	`toolkit` command follows this file.
+7	
+8	## Contents
+9	
+10	- Running toolkit commands
+11	- Text in a command
+12	- Exit codes
+13	- Reporting a save
+14	- Reading output and updating what you read
+15	- Right and wrong examples
+16	
+17	## Running toolkit commands
+18	
+19	- Put each `toolkit` command on its own line and run it as a plain command,
+20	  in both hosts. Do not join it to another command with `&&`, `;`, or a pipe,
+21	  and do not wrap it in `$(...)`, a loop, or a script. This holds for read
+22	  commands too: `toolkit work decisions && toolkit work sho... [10823 chars]
+TOOL Bash: toolkit work list
+HOOK PreToolUse:Bash outcome=success exit=0
+HOOK PreToolUse:Bash outcome=success exit=0
+HOOK PostToolUse:Bash outcome=success exit=0
+  RESULT: No open work items. Add --all to include finished, cancelled, and archived ones.
+TOOL Bash: toolkit work new --title 'Build the slug command' --type build --stage 01-discovery
+HOOK PreToolUse:Bash outcome=success exit=0
+HOOK PreToolUse:Bash outcome=success exit=0
+HOOK PostToolUse:Bash outcome=success exit=0
+  RESULT: Created WI-001: Build the slug command (01 Discovery, Backlog) at .work-items/WI-001-build-the-slug-command/WORK-ITEM.md.
+Continue with work-requirements.
+TOOL Bash: toolkit work edit WI-001 --section 'Starting request' --set-file - <<'EOF'
+New work: build the slug command. `node slug.js "Hello World"` should print `hello-world`. Track it as a work item and do it properly.
+EOF
+HOOK PreToolUse:Bash outcome=success exit=0
+HOOK PreToolUse:Bash outcome=success exit=0
+HOOK PostToolUse:Bash outcome=success exit=0
+  RESULT: Saved "Starting request" in WI-001.
+ASSISTANT: Created WI-001 "Build the slug command". It needs approved requirements before building, so I'm opening work-requirements.
+TOOL Skill: skill=work:work-requirements args=WI-001
+  RESULT: Launching skill: work:work-requirements
+TOOL Read: /Users/michaelrihm/Documents/Projects/toolkit-v2/plugins/work/skills/work-requirements/references/interview.md
+  RESULT: 1	# Interviewing the owner
+2	
+3	How to run the requirements interview: what to read first, how to ask, how
+4	to handle "grill me", resuming, and corrections. Everything the owner says
+5	lands in the work item, never in a separate notes file.
+6	
+7	## Contents
+8	
+9	1. Aim at the outcome he wants
+10	2. Before the first question
+11	3. Asking
+12	4. "Grill me" and "ask me questions"
+13	5. Saving as you go
+14	6. Resuming an interview
+15	7. Corrections and changes
+16	8. An example exchange
+17	
+18	## 1. Aim at the outcome he wants
+19	
+20	- Work toward the outcome the owner wants, not only the words he used. Read a
+21	  rough answer in the context of that requirement's purpose and the rest of
+22	  the system, and ask focused follow-up questions until the real intent is
+23	  clear.
+24	- Say so when an answer would undermine his own goal, conflict with a stated
+25	  constraint, cause a problem elsew... [5604 chars]
+TOOL Bash: toolkit work set WI-001 --stage 02-refinement
+HOOK PreToolUse:Bash outcome=success exit=0
+HOOK PreToolUse:Bash outcome=success exit=0
+HOOK PostToolUse:Bash outcome=success exit=0
+  RESULT: Updated WI-001: stage 01 Discovery -> 02 Refinement (status Backlog).
+Now 02 Refinement (Backlog). Continue with work-requirements.
+TOOL Bash: toolkit memory find 'slug'
+HOOK PreToolUse:Bash outcome=success exit=0
+HOOK PreToolUse:Bash outcome=success exit=0
+HOOK PostToolUse:Bash outcome=success exit=0
+  RESULT: No memory records match "slug".
+TOOL Bash: ls requirements system-guide; cat PROJECT.md | head -40
+HOOK PreToolUse:Bash outcome=success exit=0
+HOOK PreToolUse:Bash outcome=success exit=0
+HOOK PostToolUse:Bash outcome=success exit=0
+  RESULT: requirements:
+AGENTS.md
+system-area-template
+SYSTEM-DATA-MODEL.md
+
+system-guide:
+AREA-TEMPLATE.md
+# slug
+
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->
+
+## Purpose and intended outcome
+
+- Purpose: `<Why this project exists.>`
+- Intended outcome: Turn a title into a URL slug from the command line.
+
+## Scope and boundaries
+
+- In scope: `<Business capabilities or systems this project owns.>`
+- Outside scope: `<Important exclusions or adjacent owners.>`
+- Constraints: `<Approved security, delivery, or operating constraints with sources.>`
+
+## Systems and environments
+
+| System or org | ... [2237 chars]
+TOOL Bash: toolkit work history WI-001 --note 'Requirements interview started. Next: owner confirms the goal sentence, then questions on input rules (special characters, accents, empty input).'
+HOOK PreToolUse:Bash outcome=success exit=0
+HOOK PreToolUse:Bash outcome=success exit=0
+HOOK PostToolUse:Bash outcome=success exit=0
+  RESULT: Added a Recent History row to WI-001.
+TOOL Bash: toolkit memory focus --json
+HOOK PreToolUse:Bash outcome=success exit=0
+HOOK PreToolUse:Bash outcome=success exit=0
+HOOK PostToolUse:Bash outcome=success exit=0
+  RESULT: {
+  "ok": true,
+  "backend": "builtin",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-28, setup, agent\n\n## Now\n\n- Toolkit V2 set up; no work items yet.\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\n- Add the verified build and test commands to the AGENTS.md Commands table once the first code exists.\n\n## Next session starts with\n\n- Ask the owner for the first thing to build and start it with the work-on skill.\n",
+  "version": "dd66eef1b11a918146837ff6cdba590be50dc399486dbac2b8de658699ecc60c"
+}
+TOOL Bash: toolkit memory focus --set-file - --expect dd66eef1b11a918146837ff6cdba590be50dc399486dbac2b8de658699ecc60c <<'EOF'
+# Current focus
+
+Last updated: 2026-09-28, WI-001 requirements, agent
+
+## Now
+
+- WI-001 Build the slug command: requirements interview in progress (stage 02).
+
+## Waiting on the owner
+
+- WI-001: confirm the goal sentence so the requirements interview can continue.
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+- Add the verified build and test commands to the AGENTS.md Commands table once the first code exists.
+
+## Next session starts with
+
+- Resume WI-001 with work-requirements.
+EOF
+HOOK PreToolUse:Bash outcome=success exit=0
+HOOK PreToolUse:Bash outcome=success exit=0
+HOOK PostToolUse:Bash outcome=success exit=0
+  RESULT: Saved the current focus (21 lines). Version: 2e9ef894a90e
+ASSISTANT: I haven't written any code yet. First I need to agree with you on exactly what the slug command should do, because "done properly" here means you approve the rules before I build.
+
+**What I've set up so far**
+- Created WI-001 "Build the slug command". This is the work item, the record that tracks this job.
+- Saved your request word for word on the item.
+- Moved WI-001 to 02 Refinement, the step where we settle the rules.
+- Updated the project's current focus (the note that tells the next session where to pick up) to point at WI-001.
+
+**First question: is this the goal?**
+
+So the goal is: you run `node slug.js "<any title>"` and it prints a clean web address piece. For example, "Hello World" becomes `hello-world`.
+
+Here are the rules I'd suggest:
+- Change everything to lowercase.
+- Change spaces and punctuation to single dashes.
+- Remove dashes at the start and end.
+- Turn accented letters into plain ones, so "Café" becomes `cafe`.
+
+I suggest this because it matches how most websites make slugs, so the results will look normal in a web address.
+
+Reply "yes" or tell me what to change. After that I'll ask a couple of short questions about unusual cases, such as what to print when no title is given.
+HOOK Stop outcome=success exit=0
+HOOK Stop outcome=success exit=0
+HOOK Stop outcome=success exit=0
+RESULT-END subtype=success is_error=False turns=17 cost=0.6810350000000001 duration_ms=36019
+PERMISSION-DENIALS: []
+FINAL: I haven't written any code yet. First I need to agree with you on exactly what the slug command should do, because "done properly" here means you approve the rules before I build.
+
+**What I've set up so far**
+- Created WI-001 "Build the slug command". This is the work item, the record that tracks this job.
+- Saved your request word for word on the item.
+- Moved WI-001 to 02 Refinement, the step where we settle the rules.
+- Updated the project's current focus (the note that tells the next session where to pick up) to point at WI-001.
+
+**First question: is this the goal?**
+
+So the goal is: you run `node slug.js "<any title>"` and it prints a clean web address piece. For example, "Hello World" becomes `hello-world`.
+
+Here are the rules I'd suggest:
+- Change everything to lowercase.
+- Change spaces and punctuation to single dashes.
+- Remove dashes at the start and end.
+- Turn accented letters into plain ones, so "Café" becomes `cafe`.
+
+I suggest this because it matches how most websites make slugs, so the results will look normal in a web address.
+
+Reply "yes" or tell me what to change. After that I'll ask a couple of short questions about unusual cases, such as what to print when no title is given.

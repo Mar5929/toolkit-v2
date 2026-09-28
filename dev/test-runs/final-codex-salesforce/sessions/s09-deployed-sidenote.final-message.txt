@@ -1,0 +1,5 @@
+I recorded both reported sandbox deploys and the profile settings. WI-001 and WI-002 are now in **Testing**. A sandbox query confirms the four Tier permission settings you described.
+
+Two checks remain before I can ask you to approve the results: the sandbox returns help text that differs from the committed field source, and the Account behavior and rendered page have not been checked. The short [numbered sandbox checks](</private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2/.claude/worktrees/wi-002-set-account-tier-access-and/delivery/deployment/WI-002-tier-access-and-layout/manual-steps.md>) cover these. Please run them and report the results, including the description and help text shown in Setup.
+
+The deployment records and test plans are written but uncommitted. Automatic approval review rejected `git add` because this Codex session cannot request Git write approval.

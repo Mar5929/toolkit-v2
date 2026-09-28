@@ -1,0 +1,222 @@
+{
+  "toolkit": "toolkit-v2",
+  "schema": 1,
+  "project": {
+    "name": "Toolkit V2 final run (safe to delete)",
+    "key": "tv2-final-run",
+    "owner": "Mike Rihm",
+    "created": "2026-09-28"
+  },
+  "tracker": {
+    "type": "notion",
+    "idPrefix": "TFR"
+  },
+  "memory": {
+    "type": "notion",
+    "approval": "onboarding"
+  },
+  "salesforce": {
+    "enabled": false
+  },
+  "hosts": [
+    "claude-code",
+    "codex"
+  ],
+  "declined": [
+    "SOUL.md"
+  ],
+  "backup": {
+    "dir": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/notion"
+  },
+  "notion": {
+    "rootPageId": "3e7b381d-a176-803f-a48f-e838ee648e67",
+    "projects": {
+      "databaseId": "3901f052-2c56-4603-ad56-7f5924655925",
+      "dataSourceId": "212cab42-22e0-4682-9fe1-a697a028331a",
+      "properties": {
+        "key": "EGxs",
+        "repository": "f%7C%7C%5B",
+        "localPath": "VNG%3F",
+        "tracker": "%7DhB%3E",
+        "memorySystem": "EEn%3E",
+        "salesforce": "NyXS",
+        "workItemsDataSource": "_m%3F%3B",
+        "memoryDataSource": "%3DgRM",
+        "setUpOn": "%5CVMx",
+        "title": "title"
+      }
+    },
+    "project": {
+      "pageId": "3e9b381d-a176-81cc-aa54-cd9453f484ea",
+      "url": "https://app.notion.com/p/Toolkit-V2-final-run-safe-to-delete-3e9b381da17681ccaa54cd9453f484ea",
+      "key": "tv2-final-run"
+    },
+    "workItems": {
+      "databaseId": "9450d0a8-834a-4de6-b688-45c7f1f78c12",
+      "dataSourceId": "5681a6a3-2c59-4604-9330-43e4dcaca0cc",
+      "url": "https://app.notion.com/p/9450d0a8834a4de6b68845c7f1f78c12",
+      "idPrefix": "TFR",
+      "properties": {
+        "title": "title",
+        "id": "bpzZ",
+        "stage": "y%5CiV",
+        "status": "%3FNO%5C",
+        "type": "kJaw",
+        "priority": "oEEl",
+        "waitingOn": "npYA",
+        "delivery": "cjYG",
+        "requirementsApproved": "%3E%40oU",
+        "design": "AZNM",
+        "designApproved": "%5Cge%40",
+        "resultApproved": "%3E~QZ",
+        "nextAction": "ayrJ",
+        "openOwnerQuestions": "DIrl",
+        "updated": "TUjK",
+        "archived": "%3FzES",
+        "lastEdited": "rzvt",
+        "parent": "U%3Cgi",
+        "subItems": "vPrt",
+        "blockedBy": "Aorp",
+        "blocking": "%3AYo%40"
+      },
+      "names": {
+        "title": "Work item",
+        "id": "ID",
+        "stage": "Stage",
+        "status": "Status",
+        "type": "Type",
+        "priority": "Priority",
+        "waitingOn": "Waiting on",
+        "delivery": "Delivery",
+        "requirementsApproved": "Requirements approved",
+        "design": "Design",
+        "designApproved": "Design approved",
+        "resultApproved": "Result approved",
+        "nextAction": "Next action",
+        "openOwnerQuestions": "Open owner questions",
+        "updated": "Updated",
+        "archived": "Archived",
+        "lastEdited": "Last edited",
+        "parent": "Parent item",
+        "subItems": "Sub-items",
+        "blockedBy": "Blocked by",
+        "blocking": "Blocking"
+      },
+      "views": {
+        "board": "3e9b381d-a176-81af-bd5e-000cd42b9b65",
+        "allItems": "d275ccc0-146d-4f30-9a80-1a2929dea62a"
+      }
+    },
+    "memory": {
+      "layout": "lore",
+      "lore": {
+        "version": "1.0.0",
+        "commit": "6e741b1bb91a36b47213f4d3af5bbdfaa2f2081d"
+      },
+      "pageId": "3e9b381d-a176-8189-b196-ccd4ac6760e2",
+      "pageUrl": "https://app.notion.com/p/Memory-3e9b381da1768189b196ccd4ac6760e2",
+      "databaseId": "a2d5b7e5-95da-4823-8117-4849b144eec7",
+      "dataSourceId": "80716c88-beaf-44a7-b64a-28700a355741",
+      "url": "https://app.notion.com/p/a2d5b7e595da482381174849b144eec7",
+      "databases": {
+        "projects": {
+          "databaseId": "90f6557a-150b-487a-a061-83e54b63f322",
+          "dataSourceId": "1f967a22-4e60-4445-920e-9712eaabebc0"
+        },
+        "topics": {
+          "databaseId": "54e0a74c-9443-47b2-b09b-79adc991c4d2",
+          "dataSourceId": "c6a79d2a-fab1-4090-8701-4ee359ec7906"
+        },
+        "memories": {
+          "databaseId": "a2d5b7e5-95da-4823-8117-4849b144eec7",
+          "dataSourceId": "80716c88-beaf-44a7-b64a-28700a355741"
+        },
+        "entities": {
+          "databaseId": "5dc71793-005f-4940-ac4c-01f6d6fe1cb0",
+          "dataSourceId": "9ea87e02-5151-4c2a-a3e2-caaa80f4607d"
+        },
+        "facts": {
+          "databaseId": "84cd0f25-ff4d-4a0b-a1d8-2cc226b90471",
+          "dataSourceId": "57ef7692-484e-4821-b228-0c5609278573"
+        }
+      },
+      "projectRowId": "3e9b381d-a176-81ae-ad84-ec1b0bc6f207",
+      "properties": {
+        "title": "title",
+        "keywords": "NZKv",
+        "synopsis": "%5EsBj",
+        "kind": "QSev",
+        "tags": "NXtx",
+        "status": "NwTS",
+        "source": "O%3AUr",
+        "author": "qxLZ",
+        "agent": "Loep",
+        "project": "b%7Bc%3C",
+        "supersedes": "%3ERD%3B",
+        "recordKey": "FzRx",
+        "supersededBy": "I%40JP",
+        "sourceNote": "AwiC",
+        "saved": "EGnj",
+        "lastVerified": "Yfq~",
+        "authorization": "DWEi",
+        "extra": "%3FTpT",
+        "lastEdited": "i%7BSw"
+      },
+      "names": {
+        "title": "Title",
+        "keywords": "Keywords",
+        "synopsis": "Synopsis",
+        "kind": "Kind",
+        "tags": "Tags",
+        "status": "Status",
+        "source": "Source",
+        "author": "Author",
+        "agent": "Agent",
+        "project": "Project",
+        "supersedes": "Supersedes",
+        "recordKey": "Record Key",
+        "supersededBy": "Superseded by",
+        "sourceNote": "Source note",
+        "saved": "Saved",
+        "lastVerified": "Last verified",
+        "authorization": "Authorization",
+        "extra": "Other fields",
+        "lastEdited": "Last edited"
+      },
+      "views": {
+        "index": "fd36fb0b-56f6-401b-850d-9938aef0106b",
+        "retired": "3e9b381d-a176-8141-a905-000ce19d3d3a"
+      },
+      "pages": {
+        "focus": "3e9b381d-a176-8145-99c4-c31c40179da2",
+        "glossary": "3e9b381d-a176-8154-9d57-c4a21bc473e9"
+      }
+    }
+  },
+  "hindsight": {},
+  "installed": {
+    ".claude/output-styles/plain-english.md": "b25d7be1b6a6034fc56d93ab80dee9fbe5a106cedacba6d6a3989d6b37946deb",
+    ".claude/rules/ai-external-knowledge.md": "c2140569c1dbe7592014f85e58f69314d09df74fe11ae48cbd47b08a3675c2e5",
+    ".claude/rules/humanize-outbound-text.md": "daa38057e72bde93a8057254d0ddcb220a4182e0636bd4f972552b53b520c561",
+    ".claude/rules/keep-work-item-current.md": "dd634b7d00ce9452eb9418ef682fe541c8a7565ff7bfe7eea5189dd997298867",
+    ".claude/rules/memory-review-and-save.md": "747e7ff3b70809c4bce3e871b7247e01569ef521c11df127c9a85d003690c62f",
+    ".claude/rules/plain-english-artifacts.md": "692f6de8c6a824ef783d755ba6c431881c6444617dccb27a27e8bb343f22db9e",
+    ".claude/rules/publish-project-documents.md": "648c65ba38051de3d8fef242507d1972d73a8f30819b0ad57f2cec38b4ad19bf",
+    ".claude/rules/session-handoff.md": "60931d847a07d936220aac03adedca0db2bb43b2a65b6b6da13e70a4cf299ff0",
+    ".claude/rules/shared-repository-work.md": "8949289069a076675c6f304ddb0b08ff97b725065b1260b42d3cf8b77403da41",
+    ".claude/settings.json": "2bfb6a8f289a23da757adeae2c5c0e480372ff62bcd7bf8b5a2a028e7cb4f396",
+    ".gitignore": "5bcfaee6ce14b5578db0a7bf82e115c7e2e521663a47eab2de27a29b538605dc",
+    "AGENTS.md": "1e84d1d3140ca2565324e7fd121886ad499bdde20ecd2dc2ec0eade3e943bbee",
+    "CLAUDE.md": "336cc4fbf19beaada7ccf9986414fa91851a8d7a07dfb3ccbe800a69eed0ab49",
+    "DECISIONS.md": "b7d509350bd8b19f828c719fee436c1d09dfaf49489258feef376bda1b6d55d4",
+    "PROJECT-ROADMAP.md": "62b9dfccb5fcfef83f30216a4fc28a1c97f7669af9007fdb55603c05ddd158c1",
+    "PROJECT.md": "8ea389fb4c29620cedea7018bc943fb4e5cffa65d3659c172e72212e3cbdb1b1",
+    "requirements/AGENTS.md": "2c4bdfbea0c113bd331f0e721550bee2ec0690eb574338dbf909177f9103df44",
+    "requirements/SYSTEM-DATA-MODEL.md": "5b21749de4389227ac5362c986fa0f00a2b17212b6b2b68a04904197219a47ee",
+    "requirements/system-area-template/AREA-TEMPLATE.md": "978be15d071c5930e8bf0bff0df2afcd2a46f9b57317dbb4cc433f4cbd86dd7a",
+    "system-guide/AREA-TEMPLATE.md": "248171aa53fdeda233167a0db9ad2111bca61ceda118e1abf25f564c98b7ecaa",
+    "tests/TEST-PLAN-TEMPLATE.md": "f255d1a458d77d485a8b0e0f6e5c83d16f753ef9e7badab9cbcdd480fa3e2c8d",
+    ".codex/config.toml": "bad02e45f1a9e1ae6d8e78f17a7f7f185d30f8773b585b5e876f9f237b72f656",
+    ".codex/rules/toolkit.rules": "fde5913aad0784765918bc9a98d39ba5b445b00203c32c13afe7d546d9d7f79b"
+  }
+}

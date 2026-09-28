@@ -1,0 +1,12 @@
+Both branches are merged into local `main`. The cutover plan is committed at `c4690fa`; this repository has no remote.
+
+**Production is still pending.** The project’s [Salesforce org safety rule](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1/.claude/rules/salesforce-org-safety.md) requires you to run production deployments. I checked production first: Tier is absent, and the layout package adds only Tier below Rating.
+
+Follow the [production cutover plan](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1/delivery/deployment/2026-09-28-account-tier/CUTOVER-PLAN.md). After its snapshot step, run these **in order** from the repository root:
+
+```bash
+sf project deploy start -x delivery/deployment/WI-001-tier-field/package.xml -o tkv2-prod
+sf project deploy start -x delivery/deployment/WI-002-tier-access-layout/package.xml -o tkv2-prod
+```
+
+Then set and verify the profile permissions in Setup as the plan specifies. Send me both deployment results and job IDs, plus the page and effective-access checks. WI-001 and WI-002 remain at Deployment until those results are recorded.

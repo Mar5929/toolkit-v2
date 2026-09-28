@@ -1,0 +1,483 @@
+PROMPT: I ran it in the WI-002 worktree and it printed what I expected. I approve the WI-002 result. No merge yet.
+THREAD: 01a0ea38-39ed-7632-b6a3-fa8f4b486b4c
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll record your approval for WI-002 and check the item’s next stage. I’ll leave the branches unmerged.
+
+[CMD exit=0] /bin/zsh -lc "pwd && rg --files -g 'SOUL.md' -g 'PROJECT.md' -g 'PROJECT-ROADMAP.md' -g 'DECISIONS.md' -g 'AGENTS.md' .claude/rules .work-items 2>/dev/null | head -100"
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r2
+
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/SKILL.md'
+  -> ---
+name: work-decide
+description: 'Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers. Use when he asks "what do you need from me", answers a waiting decision ("go with option B"), or states a project-wide decision.'
+---
+
+# Work decide
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Walks the owner through what waits on him, one decision at a time, and records each answer where it belongs. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Build the queue. The command lists each decision once: requirements waiting for approval, proposed designs, results at stage 11, Open Questions rows the owner decides, and memory proposals. Its "Agent to-do" lines are not decisions. A delivery offer belongs to `work-delegate`: open it after his other decisions.
+   `toolkit work decisions`
+2. He gave an answer without being asked ("approved", "go with B"): match it to exactly one waiting decision; when two could match, ask which, naming both. A bare "yes", "ok", or "looks good" with no question asked is not an answer (`references/approvals.md`, section 1).
+3. Otherwise start with the count and one short line for every waiting decision, memory proposals included ("3 decisions wait on you: the WI-004 design, the WI-006 result, and a 
+
+[CMD exit=0] /bin/zsh -lc 'for f in .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md; do cat "$f"; done'
+  -> # Humanize Anything Sent to Another Person
+
+Any text that will leave the project and be read by someone other than the owner
+is run through the `humanizer` skill before the owner sees the final version.
+Use the `unslop` skill when `humanizer` is not installed. That covers emails,
+chat messages, supp
+
+[CMD exit=0] /bin/zsh -lc 'rg --files --hidden .work-items | head -80; git status --short --branch'
+  -> .work-items/work-item-template/WORK-ITEM.md
+.work-items/work-item-template/DESIGN.md
+.work-items/cli/WI-001-tip-command/split-option/WORK-ITEM.md
+.work-items/cli/WI-001-tip-command/WORK-ITEM.md
+.work-items/cli/WI-001-tip-command/DESIGN.md
+.work-items/DASHBOARD.md
+.work-items/.toolkit-state.json
+## m
+
+[AGENT] I’m using the work-decide procedure to record the result approval. I’ll check the approval gate before updating the tracker.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/references/current-focus.md'
+  -> <!-- Generated file. Source: plugins/memory/shared/current-focus.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# The current focus
+
+Purpose: the format of the current focus, when to change it, and the exact
+read-change-save sequence, in every memory backend.
+
+## Contents
+
+- What the focus is for
+- The format
+- What goes in each section
+- When to check it
+- Read, change, save
+- A new project's focus
+- Examples
+- Checklist for a focus save
+
+## What the focus is for
+
+The current focus is the first thing the next session reads: the session
+briefing includes it. It says what is happening now and where the next
+session starts. It never repeats the tracker: a work item's status, tasks,
+and history stay in the work item.
+
+| Backend | Where the focus lives |
+| --- | --- |
+| Built-in | `.memory/CURRENT_FOCUS.md` in the main checkout |
+| Hindsight | The document `focus` in the project's bank |
+| Notion | The "Current focus" page under the project's page |
+
+The same commands read and save it in every backend. Never edit the file or
+the page by hand.
+
+## The format
+
+The model's format: a `# Current focus` title line, a `Last updated:` line,
+then exactly four `##` sections in this order, under 50 lines in total.
+
+```markdown
+# Current focus
+
+Last updated: <YYYY-MM-DD>, <source>, <person or agent>
+
+## Now
+
+## Waiting on the owner
+
+## Untracked to-dos
+
+## Next session starts with
+```
+
+What the command enforces:
+
+- It refuses a focus that lacks one of the four se
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/references/approvals.md'
+  -> <!-- Generated file. Source: plugins/work/shared/approvals.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Approvals and gates
+
+The exact steps to ask for and record each owner approval, and what counts as
+one. Run each checklist in order; one wrong or missing command leaves the
+item in the wrong state.
+
+## Contents
+
+1. What counts as approval
+2. Requirements approval
+3. Design approval
+4. Result approval
+5. Done
+6. Cancel
+7. Delivery offer
+8. Project-wide decision
+9. Memory proposal
+10. Sub-items and approvals
+11. Standing merge instruction
+12. When an approve command refuses
+
+## 1. What counts as approval
+
+`toolkit work lifecycle` prints the gates and these rules. In short:
+
+- Only the owner's explicit words count. Quote them in a history note.
+- A question, a suggestion, a tentative answer ("probably B"), silence, or a
+  saved draft is not approval.
+- An approval covers only what was shown. It never covers merge, deployment,
+  spending, or publishing.
+- An approval survives later stages. A stage alone does not prove approval:
+  check the approval field (`toolkit work show <id>`).
+- A bare "yes", "ok", or "looks good" answers only a yes-or-no question asked
+  earlier in this conversation. When none was asked, or the waiting question
+  is not a yes-or-no question, show the decision with its choices and your
+  recommendation, and record nothing.
+- After a yes, save his words first, in a history note that starts with
+  `Owner said:`. Then run the 
+
+[CMD exit=0] /bin/zsh -lc 'git remote'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r2                                                     e7ecdb2 [main]
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a0650
+
+[CMD exit=0] /bin/zsh -lc 'git status'
+  -> On branch main
+nothing to commit, working tree clean
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 2 decisions wait on the owner:
+
+WI-002 Add the --split option
+  - WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)
+
+Memory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):
+  - project_mike_rihm_friends_settle_split_bills_venmo_takes: Mike Rihm and Mike's friends settle split bills in Venmo, which takes whole-cent amounts, so the round-up rule matters. Saved 2026-09-28. Yes: toolkit memory approve project_mike_rihm_friends_settle_split_bills_venmo_takes --by <name>. No: toolkit memory reject project_mike_rihm_friends_settle_split_bills_venmo_takes. (work-decide)
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-002'
+  -> WI-002: Add the --split option
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r2/.work-items/cli/WI-001-tip-command/split-option/WORK-ITEM.md
+Stage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/cli/WI-001-tip-command/DESIGN.md). Read it with: toolkit work design WI-001
+Worktree branch for this item: claude/wi-002-add-the-split-option (folder .claude/worktrees/wi-002-add-the-split-option)
+
+---
+id: WI-002
+title: Add the --split option
+type: build
+stage: 11-user-approval
+status: In Progress
+parent: WI-001
+waiting_on: "owner"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-002: Add the --split option
+
+## Overview
+
+**Goal:** Add `--split` to the tip command and print the amount each person pays.
+
+**Current position:** Built and independently checked on branch claude/wi-002-add-the-split-option at commit a6d571c. The checker found WI-001 R-01 through R-03 met with no defects. Nine Node tests and 18 independent CLI cases passed.
+
+**Next action:** Owner reviews the split result and decides whether to approve it. Leave both WI-002 and WI-001 branches unmerged until the owner approves a merge.
+
+**Blockers:** Result approval waits on the owner
+
+[CMD exit=0] /bin/zsh -lc 'toolkit config get project.owner'
+  -> Mike Rihm
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history WI-002 --note 'Owner said: I ran it in the WI-002 worktree and it printed what I expected. I approve the WI-002 result. No merge yet.' --effect 'Result approved; work-finish continues. Both branches remain unmerged.'"
+  -> Added a Recent History row to WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work approve WI-002 --result --by 'Mike Rihm'"
+  -> Recorded: result of WI-002 approved (2026-09-28 by Mike Rihm).
+It is no longer waiting on the owner (waiting_on: none).
+Now 11 User approval (In Progress). Continue with work-finish.
+Note: WI-002's Overview still says "Next action: Owner reviews the split result and decides whether to approve it. Leave both WI-002 and WI-001 branches unmerged until the owner approves a merge.". Write the step after this approval: toolkit work edit WI-002 --label 'Next action' --value '<next step>'.
+
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-finish/SKILL.md'
+  -> ---
+name: work-finish
+description: 'Ships and closes an approved work item (pull request, merge, sandbox or production deployment, requirements update, Done), or cancels an item with the owner''s reason. Use when the owner says "ship it", "deploy it", "close it out", or "mark it done", or asks to cancel or drop an item.'
+---
+
+# Work finish
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Takes an approved item through the pull request, merge, deployment, and requirements update to Done, or cancels it; it never marks Done without the owner's approval and never runs a production deploy. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Check the result approval is recorded. Not recorded: show the result, the gaps, and the evidence, and ask. "Ship it" or "mark it done" after he saw the result counts: save his words first, then record it (`references/approvals.md`, section 4). Each sub-item needs its own.
+   `toolkit work show <id>`
+   `toolkit work history <id> --note 'Owner said: <quote>' --effect 'Result approved; work-finish continues.'`
+   `toolkit work approve <id> --result --by <owner>`
+2. Repository work: commit the item's files by name on its branch, push it, open the pull request, and set the stage (`references/closing.md`, section 2; `references/git-rules.md` before any G
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-002 --waiting-on agent'
+  -> Updated WI-002: waiting on agent.
+Now 11 User approval (In Progress). Continue with work-finish.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --label 'Next action' --value 'Result approved. Keep WI-002 and WI-001 branches unmerged. Continue work-finish only when the owner asks to ship; get separate approval before any merge.'"
+  -> Saved "Next action" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --label 'Blockers' --value 'Merge waits on separate owner approval.'"
+  -> Saved "Blockers" in WI-002.
+
+
+[AGENT] WI-002’s result approval is recorded. Both branches remain unmerged. I’m updating the resume note so the next session sees that merge still needs a separate decision.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/SKILL.md'
+  -> ---
+name: memory-save
+description: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says "remember this", "from now on", "forget that", or "remind me" with no time given, corrects the agent, or a hook says a save is due.'
+---
+
+# Memory save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Saves, corrects, or retires one memory record with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand.
+
+## Steps
+
+Track these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home ("Where other things go" below) and stop.
+2. Search for a record that already holds it, and read each hit with its version. The save's duplicate check compares wording, so only this search finds a record the new fact contradicts (for example "Mondays" against "Tuesdays").
+   `toolkit memory find '<topic>'`
+   `toolkit memory get <key> --json`
+3. Read the approval mode and apply "Approval policy" below. When it says ask, ask and wait.
+   `toolkit config get memory.approval`
+4. Write the description and body in the record format (`refer
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus --json'
+  -> {
+  "ok": true,
+  "backend": "builtin",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Build the tip command with split option\n- WI-002 Add the --split option\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-002 from its Resume here: split is built and checked on an unmerged branch; record the owner’s result decision.\n",
+  "version": "56541197236301fd68d33efe6c2f708437e6f4193cee55b3369fe828864c123f"
+}
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Build the tip command with split option
+- WI-002 Add the --split option
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-002 from its Resume here: result approved by Mik
+  -> Saved the current focus (21 lines). Version: a9ea3d049e9e
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate WI-002'
+  -> Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Build the tip command with split option
+- WI-002 Add the --split option
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-002 from its Resume here: result approved by Mike Rihm; keep WI-002 and WI-001 branches unmerged until separate merge approval.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 1 decision waits on the owner:
+
+Memory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):
+  - project_mike_rihm_friends_settle_split_bills_venmo_takes: Mike Rihm and Mike's friends settle split bills in Venmo, which takes whole-cent amounts, so the round-up rule matters. Saved 2026-09-28. Yes: toolkit memory approve project_mike_rihm_friends_settle_split_bills_venmo_takes --by <name>. No: toolkit memory reject project_mike_rihm_friends_settle_split_bills_venmo_takes. (work-decide)
+
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for tipcalc (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r2).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (5):
+- The AGENTS.md Commands table has no verified build, test, or deploy commands yet. Add them once they are known and verified.
+- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's diff
+
+[AGENT] WI-002’s result approval is recorded and validated. Both WI-002 and WI-001 remain unmerged; any merge needs your separate approval.
+
+One other decision remains: a proposed memory note says you and your friends settle split bills in Venmo, where whole-cent amounts make the round-up rule relevant. I recommend saving it if accurate because it explains the rule. Should I save it?
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 642875, "cached_input_tokens": 606464, "cache_write_input_tokens": 0, "output_tokens": 2377, "reasoning_output_tokens": 638}}
+
+SKILLS OPENED: ['work-decide', 'work-finish', 'memory-save']
+
+[HOOK CONTEXT ord=9] Project briefing: tipcalc (tipcalc), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Build the tip command with split option: 08 Build, In Progress. Next action: Owner reviews the WI-002 result. After its approval, complete WI-002 and then WI-001; merge only with separate owner approval. Continues with work-on.
+- WI-002 Add the --split option: 11 User approval, In Progress, waiting on owner. Next action: Owner reviews the split result and decides whether to approve it. Leave both WI-002 and WI-001 branches unmerged until the owner approves... Continues with work-decide.
+
+Waiting on the owner:
+- WI-002 Add the --split option: WI-
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await tools.exec_command({cmd:"pwd && rg --files -g 'SOUL.md' -g 'PROJECT.md' -g 'PROJECT-ROADMAP.md' -g 'DECISIONS.md' -g 'AGENTS.md' .claude/rules .work-items 2>/dev/null | head -100","max_output_tokens":3000}); text(r.output);
+
+
+[CALL] const rs=await Promise.allSettled([
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/SKILL.md","max_output_tokens":5000}),
+  tools.exec_command({cmd:"cat PROJECT.md PROJECT-ROADMAP.md DECISIONS.md SOUL.md 2>/dev/null","max_output_tokens":5000}),
+  tools.exec_command({cmd:"for f in .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md; do cat \"$f\"; done","max_output_tokens":10000}),
+  tools.exec_command({cmd:"rg --files --hidden .work-items | head -80; git status --short --branch","max_output_tokens":3000})
+]); rs.forEach((r,i)=>text(`RESULT ${i}\n${r.status==="fulfilled"?r.value.output:r.reason}`));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "RESULT 0\n---\nname: work-decide\ndescription: 'Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers. Use when he asks \"what do you need from me\", answers a waiting decision (\"go with option B\"), or states a project-wide decision.'\n---\n\n# Work decide\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nWalks the owner through what waits on him, one decision at a time, and records each answer where it belongs. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.\n\n## Steps\n\n1. Build the queue. The command lists each decision once: requirements waiting for approval, proposed designs, results at stage 11, Open Questions rows the owner decides, and memory proposals. Its \"Agent to-do\" lines are not decisions. A delivery offer belongs to `work-delegate`: open it after his other decisions.\n   `toolkit work decisions`\n2. He gave an answer without being asked (\"approved\", \"go with B\"): match it to exactly one waiting decision; when two could match, ask which, naming both. A bare \"yes\", \"ok\", or \"looks good\" with no question asked is not an answer (`references/approvals.md`, section 1).\n3. Otherwise start with the count and one short line for every waiting decision, memory proposals included (\"3 decisions wait on you: the WI-004 design, the WI-006 result, and a memory proposal about deploy days.\"). Then take them one at a time, the one blocking the most work first: what is decided, the choices, your recommendation and its main reason, and what happens after each answer. One decision per message, in the reply text.\n4. An approval: read the item, then run that gate's checklist in `references/approvals.md` (requirements: section 2; design: section 3; result: section 4).\n   `toolkit work show <id>`\n5. An Open Questions answer: save his words first, rewrite that row with the answer, the date, and Answered, then set `waiting_on` back (`references/recording-owner-answers.md`, sections 4 and 5).\n   `toolkit work history <id> --note 'Owner said: <quote>' --effect '<what the answer changes>'`\n   `toolkit work edit <id> --section 'Open Questions' --set-file <file>`\n   `toolkit work set 
+
+[CALL] const rs=await Promise.allSettled([
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/references/approvals.md","max_output_tokens":7000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/references/current-focus.md","max_output_tokens":3500}),
+  tools.exec_command({cmd:"git worktree list","max_output_tokens":1500}),
+  tools.exec_command({cmd:"git status","max_output_tokens":1500}),
+  tools.exec_command({cmd:"git remote","max_output_tokens":500})
+]); rs.forEach((r,i)=>text(`RESULT ${i}\n${r.status==="fulfilled"?r.value.output:r.reason}`));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "RESULT 0\n<!-- Generated file. Source: plugins/work/shared/approvals.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\n# Approvals and gates\n\nThe exact steps to ask for and record each owner approval, and what counts as\none. Run each checklist in order; one wrong or missing command leaves the\nitem in the wrong state.\n\n## Contents\n\n1. What counts as approval\n2. Requirements approval\n3. Design approval\n4. Result approval\n5. Done\n6. Cancel\n7. Delivery offer\n8. Project-wide decision\n9. Memory proposal\n10. Sub-items and approvals\n11. Standing merge instruction\n12. When an approve command refuses\n\n## 1. What counts as approval\n\n`toolkit work lifecycle` prints the gates and these rules. In short:\n\n- Only the owner's explicit words count. Quote them in a history note.\n- A question, a suggestion, a tentative answer (\"probably B\"), silence, or a\n  saved draft is not approval.\n- An approval covers only what was shown. It never covers merge, deployment,\n  spending, or publishing.\n- An approval survives later stages. A stage alone does not prove approval:\n  check the approval field (`toolkit work show <id>`).\n- A bare \"yes\", \"ok\", or \"looks good\" answers only a yes-or-no question asked\n  earlier in this conversation. When none was asked, or the waiting question\n  is not a yes-or-no question, show the decision with its choices and your\n  recommendation, and record nothing.\n- After a yes, save his words first, in a history note that starts with\n  `Owner said:`. Then run the gate's commands. A command that refuses then\n  never loses his answer, and no later session asks him again.\n- `--by <owner>` is his name exactly as `toolkit config get project.owner`\n  prints it (for example \"Mike Rihm\", not \"Mike\"), so every approval names\n  him the same way.\n- When an approve command notes that the item's Overview still asks for\n  that approval (Next action), write the step after the approval with the\n  `toolkit work edit` command the note prints.\n\n| The owner says | After this question | It is |\n| --- | --- | --- |\n| \"Yes, approved.\" | \"Do you approve these requirements?\" | The requirements approval |\n| \"Go with B.\" | The design options with a recommendation | The choice and approval of Option B |\n| \"Looks good.\" | \"Do you approve this result?\" | The result approval |
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work decisions","max_output_tokens":3000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "2 decisions wait on the owner:\n\nWI-002 Add the --split option\n  - WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)\n\nMemory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):\n  - project_mike_rihm_friends_settle_split_bills_venmo_takes: Mike Rihm and Mike's friends settle split bills in Venmo, which takes whole-cent amounts, so the round-up rule matters. Saved 2026-09-28. Yes: toolkit memory approve project_mike_rihm_friends_settle_split_bills_venmo_takes --by <name>. No: toolkit memory reject project_mike_rihm_friends_settle_split_bills_venmo_takes. (work-decide)\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show WI-002","max_output_tokens":7000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "WI-002: Add the --split option\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r2/.work-items/cli/WI-001-tip-command/split-option/WORK-ITEM.md\nStage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide\nParent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/cli/WI-001-tip-command/DESIGN.md). Read it with: toolkit work design WI-001\nWorktree branch for this item: claude/wi-002-add-the-split-option (folder .claude/worktrees/wi-002-add-the-split-option)\n\n---\nid: WI-002\ntitle: Add the --split option\ntype: build\nstage: 11-user-approval\nstatus: In Progress\nparent: WI-001\nwaiting_on: \"owner\"\npriority: medium\ndelivery: owner-led\nrequirements_approved: \"2026-09-28 by Mike Rihm\"\ndesign: none\nresult_approved: \"no\"\nupdated: 2026-09-28\n---\n\n# WI-002: Add the --split option\n\n## Overview\n\n**Goal:** Add `--split` to the tip command and print the amount each person pays.\n\n**Current position:** Built and independently checked on branch claude/wi-002-add-the-split-option at commit a6d571c. The checker found WI-001 R-01 through R-03 met with no defects. Nine Node tests and 18 independent CLI cases passed.\n\n**Next action:** Owner reviews the split result and decides whether to approve it. Leave both WI-002 and WI-001 branches unmerged until the owner approves a merge.\n\n**Blockers:** Result approval waits on the owner.\n\n**Related items:** Parent WI-001 (R-02, R-03); approved Option A design.\n\n## Roadmap\n\nA phase is complete when its tasks are complete and its exit result has been checked.\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 \u2014 Split option | The command validates --split and prints a per-person amount. | Done | R-02 and split cases of R-03 pass checks alongside the plain command checks. | None. |\n\n## Tasks\n\n### P1 \u2014 Split option\n\n- [x] **P1-T01 \u2014 Build split parsing and output** \u00b7 Done  \n  **Work:** Add --split validation and the rounded-up share to bin/tipcalc.js (WI-001 R-02 and split cases of R-03; approved design Technical sequence step 2).  \n  **Deliverable:** Optional second output line and corrective split errors.  \n  **Done when:** The even, uneven, hal
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit config get project.owner","max_output_tokens":500}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "Mike Rihm\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history WI-002 --note 'Owner said: I ran it in the WI-002 worktree and it printed what I expected. I approve the WI-002 result. No merge yet.' --effect 'Result approved; work-finish continues. Both branches remain unmerged.'","max_output_tokens":1200}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Added a Recent History row to WI-002.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work approve WI-002 --result --by 'Mike Rihm'","max_output_tokens":1500}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Recorded: result of WI-002 approved (2026-09-28 by Mike Rihm).\nIt is no longer waiting on the owner (waiting_on: none).\nNow 11 User approval (In Progress). Continue with work-finish.\nNote: WI-002's Overview still says \"Next action: Owner reviews the split result and decides whether to approve it. Leave both WI-002 and WI-001 branches unmerged until the owner approves a merge.\". Write the step after this approval: toolkit work edit WI-002 --label 'Next action' --value '<next step>'.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-finish/SKILL.md","max_output_tokens":6500}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "---\nname: work-finish\ndescription: 'Ships and closes an approved work item (pull request, merge, sandbox or production deployment, requirements update, Done), or cancels an item with the owner''s reason. Use when the owner says \"ship it\", \"deploy it\", \"close it out\", or \"mark it done\", or asks to cancel or drop an item.'\n---\n\n# Work finish\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nTakes an approved item through the pull request, merge, deployment, and requirements update to Done, or cancels it; it never marks Done without the owner's approval and never runs a production deploy. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.\n\n## Steps\n\n1. Check the result approval is recorded. Not recorded: show the result, the gaps, and the evidence, and ask. \"Ship it\" or \"mark it done\" after he saw the result counts: save his words first, then record it (`references/approvals.md`, section 4). Each sub-item needs its own.\n   `toolkit work show <id>`\n   `toolkit work history <id> --note 'Owner said: <quote>' --effect 'Result approved; work-finish continues.'`\n   `toolkit work approve <id> --result --by <owner>`\n2. Repository work: commit the item's files by name on its branch, push it, open the pull request, and set the stage (`references/closing.md`, section 2; `references/git-rules.md` before any Git write).\n   `toolkit work set <id> --stage 12-pr-and-push`\n3. Merge through `merge-and-clean-up` only with the owner's yes to this merge, or a standing merge instruction with an independent check on the exact head (`references/closing.md`, section 3). No remote: the local merge (`references/closing.md`, section 4), then this note.\n   `toolkit work history <id> --note 'No remote: merged locally into <default branch>.' --effect 'No pull request; no deployment.'`\n4. Deployment, when the item needs one (`references/closing.md`, section 5). Production deploys and production data loads are the owner's to run. Salesforce: a sandbox validate runs; a sandbox deploy needs his yes for that deploy, and in Codex he runs every sandbox deploy and sandbox data change himself, so give him the exact command with its `-o <sandbox>`. Run each `sf` comma
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-002 --waiting-on agent","max_output_tokens":1000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Updated WI-002: waiting on agent.\nNow 11 User approval (In Progress). Continue with work-finish.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --label 'Next action' --value 'Result approved. Keep WI-002 and WI-001 branches unmerged. Continue work-finish only when the owner asks to ship; get separate approval before any merge.'","max_output_tokens":1000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Next action\" in WI-002.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --label 'Blockers' --value 'Merge waits on separate owner approval.'","max_output_tokens":1000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Blockers\" in WI-002.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/SKILL.md","max_output_tokens":4500}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "---\nname: memory-save\ndescription: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says \"remember this\", \"from now on\", \"forget that\", or \"remind me\" with no time given, corrects the agent, or a hook says a save is due.'\n---\n\n# Memory save\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nSaves, corrects, or retires one memory record with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand.\n\n## Steps\n\nTrack these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.\n\n1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home (\"Where other things go\" below) and stop.\n2. Search for a record that already holds it, and read each hit with its version. The save's duplicate check compares wording, so only this search finds a record the new fact contradicts (for example \"Mondays\" against \"Tuesdays\").\n   `toolkit memory find '<topic>'`\n   `toolkit memory get <key> --json`\n3. Read the approval mode and apply \"Approval policy\" below. When it says ask, ask and wait.\n   `toolkit config get memory.approval`\n4. Write the description and body in the record format (`references/record-format.md`), then save with the form for the case (\"Save forms\" below).\n5. Exit code 2 saved nothing. Read the \"Error:\" line. Records listed: the duplicate check. \"Changed since it was read\": read it again and redo the change. Any other rule: fix the text as the message says. `references/replacing-and-retiring.md`, section 2, has each case.\n6. \"Forget that\": retire the record, with his words as the reason. Delete only when his own words say delete (\"Approval policy\").\n   `toolkit memory retire <key> --reason '<his words>'`\n7. An owner to-do with no work item, or a change to what is happening now: update the current focus (`references/current-focus.md`). A project term: update the glossary (`references/glossary.md`).\n8. A preference a project setting can enforce (for example \"I hate tabs\" and `.editorco
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --json","max_output_tokens":2500}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\n  \"ok\": true,\n  \"backend\": \"builtin\",\n  \"kind\": \"focus\",\n  \"text\": \"# Current focus\\n\\nLast updated: 2026-09-28, chat, agent\\n\\n## Now\\n\\n- WI-001 Build the tip command with split option\\n- WI-002 Add the --split option\\n\\n## Waiting on the owner\\n\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\n\\n## Untracked to-dos\\n\\nNone.\\n\\n## Next session starts with\\n\\n- Continue WI-002 from its Resume here: split is built and checked on an unmerged branch; record the owner\u2019s result decision.\\n\",\n  \"version\": \"56541197236301fd68d33efe6c2f708437e6f4193cee55b3369fe828864c123f\"\n}\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --text '# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Build the tip command with split option\n- WI-002 Add the --split option\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-002 from its Resume here: result approved by Mike Rihm; keep WI-002 and WI-001 branches unmerged until separate merge approval.\n' --expect 56541197236301fd68d33efe6c2f708437e6f4193cee55b3369fe828864c123f","max_output_tokens":1200}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved the current focus (21 lines). Version: a9ea3d049e9e\n"}]
+
+[CALL] const rs=await Promise.allSettled([
+  tools.exec_command({cmd:"toolkit work validate WI-002","max_output_tokens":1500}),
+  tools.exec_command({cmd:"toolkit work decisions","max_output_tokens":2000}),
+  tools.exec_command({cmd:"toolkit memory focus","max_output_tokens":1500}),
+  tools.exec_command({cmd:"toolkit doctor","max_output_tokens":2500})
+]); rs.forEach((r,i)=>text(`RESULT ${i}\n${r.status==="fulfilled"?r.value.output:r.reason}`));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "RESULT 0\nChecked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.\n"}, {"type": "input_text", "text": "RESULT 1\n1 decision waits on the owner:\n\nMemory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):\n  - project_mike_rihm_friends_settle_split_bills_venmo_takes: Mike Rihm and Mike's friends settle split bills in Venmo, which takes whole-cent amounts, so the round-up rule matters. Saved 2026-09-28. Yes: toolkit memory approve project_mike_rihm_friends_settle_split_bills_venmo_takes --by <name>. No: toolkit memory reject project_mike_rihm_friends_settle_split_bills_venmo_takes. (work-decide)\n"}, {"type": "input_text", "text": "RESULT 2\n# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Build the tip command with split option\n- WI-002 Add the --split option\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-002 from its Resume here: result approved by Mike Rihm; keep WI-002 and WI-001 branches unmerged until separate merge approval.\n"}, {"type": "input_text", "text": "RESULT 3\nToolkit doctor for tipcalc (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r2).\n\nWarnings (2):\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.\n   Fix: The owner opens Codex in this folder and trusts it when Codex asks.\n2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).\n   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\n\nNotes (5):\n- The AGENTS.md Commands table has no verified build, test, or deploy commands yet. Add them 

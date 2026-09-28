@@ -13,7 +13,7 @@ Walks the owner through what waits on him, one decision at a time, and records e
 1. Build the queue. The command lists each decision once: requirements waiting for approval, proposed designs, results at stage 11, Open Questions rows the owner decides, and memory proposals. Its "Agent to-do" lines are not decisions. A delivery offer belongs to `work-delegate`: open it after his other decisions.
    `toolkit work decisions`
 2. He gave an answer without being asked ("approved", "go with B"): match it to exactly one waiting decision; when two could match, ask which, naming both. A bare "yes", "ok", or "looks good" with no question asked is not an answer (`references/approvals.md`, section 1).
-3. Otherwise take the decisions one at a time, the one blocking the most work first: what is decided, the choices, your recommendation and its main reason, and what happens after each answer. One decision per message, in the reply text.
+3. Otherwise start with the count and one short line for every waiting decision, memory proposals included ("3 decisions wait on you: the WI-004 design, the WI-006 result, and a memory proposal about deploy days."). Then take them one at a time, the one blocking the most work first: what is decided, the choices, your recommendation and its main reason, and what happens after each answer. One decision per message, in the reply text.
 4. An approval: read the item, then run that gate's checklist in `references/approvals.md` (requirements: section 2; design: section 3; result: section 4).
    `toolkit work show <id>`
 5. An Open Questions answer: save his words first, rewrite that row with the answer, the date, and Answered, then set `waiting_on` back (`references/recording-owner-answers.md`, sections 4 and 5).
@@ -27,7 +27,8 @@ Walks the owner through what waits on him, one decision at a time, and records e
    `toolkit decision add --decision '<decision>' --why '<why>' --by <owner>`
 8. A "no" or a change: record it as the answer, move the item back (for example to refinement), and open the skill that redoes the work.
    `toolkit work set <id> --stage 02-refinement`
-9. Lead with "Not saved" if any write failed. Update the current focus when an answer changed an item's next step (`references/current-focus.md`). Empty queue: say so and offer `work-on` for unblocked items. End with the next decision's question or the exact words that continue.
+9. Lead with "Not saved" if any write failed. Update the current focus when an answer changed an item's next step (`references/current-focus.md`). After each recorded answer, list the decisions again and name what still waits on him, memory proposals included, by name ("One decision still waits: the memory proposal about Ghost slugs."). A decision an earlier reply said you would take next is taken next. Empty queue: say so and offer `work-on` for unblocked items. End with the next decision's question or the exact words that continue.
+   `toolkit work decisions`
 
 ## Gotchas
 

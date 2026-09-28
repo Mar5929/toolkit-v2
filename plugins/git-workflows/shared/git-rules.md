@@ -92,11 +92,14 @@ past it.
 
 `.work-items/` and `.memory/` are Git-ignored and live in the main checkout.
 
-- Never commit them, and never force them in with `git add -f`.
+- Never commit them, and never force them in with `git add -f`. The hook
+  refuses it.
 - Never run `git clean -x` or `git clean -X` in the main checkout. It deletes
   both folders, and Git cannot bring them back. The hook refuses it.
-- They change only through `toolkit work` and `toolkit memory` commands. The
-  backup is `toolkit export --to <folder>`.
+- They change only through `toolkit work` and `toolkit memory` commands.
+- Their backup is automatic: `toolkit work finish` and the handoff copy them
+  to the owner's backup folder (`toolkit handoff-backup` does the same on
+  request). `toolkit export --to <folder>` makes a one-off copy.
 
 ## A project with no remote
 

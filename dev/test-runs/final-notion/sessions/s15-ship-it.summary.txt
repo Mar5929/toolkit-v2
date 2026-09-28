@@ -1,0 +1,1659 @@
+PROMPT: Yes, I authorize both local merges into main in that order. Ship it: then mark both items done and clean up the worktrees and branches.
+THREAD: 01a0e9db-46a0-7ba0-b9c3-4220f174975b
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll merge TFR-001 into main, then update and merge TFR-002. I’ll check each result, mark both items Done, and remove their worktrees and branches.
+
+[CMD exit=1] /bin/zsh -lc 'cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md'
+  -> # Toolkit V2 final run (safe to delete)
+
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep sta
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-finish/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.6/skills/merge-and-clean-up/SKILL.md'
+  -> ---
+name: work-finish
+description: 'Ships and closes an approved work item (pull request, merge, sandbox or production deployment, requirements update, Done), or cancels an item with the owner''s reason. Use when the owner says "ship it", "deploy it", "close it out", or "mark it done", or asks to cancel or drop an item.'
+---
+
+# Work finish
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Takes an approved item through the pull request, merge, deployment, and requirements update to Done, or cancels it; it never marks Done without the owner's approval and never runs a production deploy. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Check the result approval is recorded. Not recorded: show the result, the gaps, and the evidence, and ask. "Ship it" or "mark it done" after he saw the result counts: save his words first, then record it (`references/approvals.md`, section 4). Each sub-item needs its own.
+   `toolkit work show <id>`
+   `toolkit work history <id> --note 'Owner said: <quote>' --effect 'Result approved; work-finish continues.'`
+   `toolkit work approve <id> --result --by <owner>`
+2. Repository work: commit the item's files by name on its branch, push it, open the pull request, and set the stage (`references/closing.md`, section 2; `references/git-rules.md` before any G
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch && git worktree list && git branch -vv'
+  -> ## main
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1                                                        0f2fac6 [main]
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit
+
+[AGENT] I’m using the project’s work-finish and local merge procedures. The two item branches are present, and main has no uncommitted changes. I’ll record your merge authorization on TFR-001 before changing Git history.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/SKILL.md PROJECT-ROADMAP.md DECISIONS.md .claude/rules/publish-project-documents.md'
+  -> ---
+name: work-decide
+description: 'Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers. Use when he asks "what do you need from me", answers a waiting decision ("go with option B"), or states a project-wide decision.'
+---
+
+# Work decide
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Walks the owner through what waits on him, one decision at a time, and records each answer where it belongs. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Build the queue. The command lists each decision once: requirements waiting for approval, proposed designs, results at stage 11, Open Questions rows the owner decides, and memory proposals. Its "Agent to-do" lines are not decisions. A delivery offer belongs to `work-delegate`: open it after his other decisions.
+   `toolkit work decisions`
+2. He gave an answer without being asked ("approved", "go with B"): match it to exactly one waiting decision; when two could match, ask which, naming both. A bare "yes", "ok", or "looks good" with no question asked is not an answer (`references/approvals.md`, section 1).
+3. Otherwise start with the count and one short line for every waiting decision, memory proposals included ("3 decisions wait on you: the WI-004 design, the WI-006 result, and a 
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-finish/references/closing.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-finish/references/approvals.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-finish/references/git-rules.md'
+  -> # Closing a work item
+
+The detail behind each `work-finish` step: the pull request and merge, a
+merge with no remote, deployment, the requirements baseline, sub-items,
+memory, leftover worktrees, Done, and cancel.
+
+## Contents
+
+1. Before anything ships
+2. Commit, push, and the pull request (stage 12)
+3. Merging
+4. No remote: the local merge
+5. Deployment (stage 13)
+6. Requirements baseline (stage 14)
+7. Sub-items
+8. Memory and the current focus
+9. Leftover worktrees and branches
+10. Done
+11. Cancel
+
+## 1. Before anything ships
+
+- The result approval is recorded (`toolkit work show <id>` shows
+  `result_approved`), or the owner said "ship it" or "mark it done" after he
+  saw the result, the gaps, and the evidence. Record that with his words
+  (`approvals.md`, "Result approval").
+- Never describe an unverified result as complete.
+- Done means the owner accepted the result. Cancelled means the work stopped
+  without it.
+- Stages that do not apply are skipped. Work with no repository change has no
+  pull request; work with no deployment has no deployment stage. A skipped
+  stage gets one history note saying so, so `toolkit work finish` has a
+  record of it.
+
+## 2. Commit, push, and the pull request (stage 12)
+
+- Commit the item's files on its branch, staged by name
+  (`claude/<prefix>-<number>-<slug>`, for example `claude/wi-007-csv-export`).
+  No `Co-Authored-By` line naming an AI and no "Generated with" line.
+- Push the branch. Never force-push.
+- Write the pull request title a
+
+[CMD exit=0] /bin/zsh -lc 'git remote -v'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-finish/references/work-item-format.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-finish/references/current-focus.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-finish/references/toolkit-commands.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-finish/references/tracker-notion.md'
+  -> <!-- Generated file. Source: plugins/work/shared/work-item-format.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Work item and design format
+
+What a work item and its design hold, their exact section names, and how to
+change them with `toolkit work` commands without losing text.
+
+## Contents
+
+1. Where the record and the design live
+2. Header fields
+3. Sections of `WORK-ITEM.md`
+4. Sections of `DESIGN.md`
+5. Finding an item's file
+6. Changing one section
+7. Adding a table row
+8. Editing a record directly
+9. Titles
+10. Generated files
+11. Examples
+
+## 1. Where the record and the design live
+
+Every tracker uses the same body and the same design shape. Only the place
+differs.
+
+| Tracker | Work item | Design |
+| --- | --- | --- |
+| Local | `WORK-ITEM.md` in the item's folder under `.work-items/` | `DESIGN.md` beside it |
+| Notion | The item's page in the project's Work Items database | The item's "Solution Design" child page |
+| GitHub Issues | The issue body | One issue comment whose first line is `## Solution design` |
+| Jira | The issue description | One comment whose first line is "Solution design" |
+
+An item has one design home. Never make a separate design folder or a second
+design file.
+
+## 2. Header fields
+
+The header (frontmatter locally, properties in Notion) holds these fields.
+Only `toolkit work` commands change them.
+
+| Field | Values | Changed by |
+| --- | --- | --- |
+| `id` | `WI-001` (the project's prefix and a number) | `toolkit work
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show TFR-001'
+  -> TFR-001: Build the days-until command
+Location: https://app.notion.com/p/Build-the-days-until-command-3e9b381da17681b7b7ccea07b01d5850
+Stage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: none | Sub-items: TFR-002 | Design: approved (https://app.notion.com/p/TFR-001-Build-the-days-until-command-with-a-weeks-flag-solution-design-3e9b381da17681859546d90fe3e13254)
+Worktree branch for this item: claude/tfr-001-build-the-days-until-command (folder .claude/worktrees/tfr-001-build-the-days-until-command)
+
+---
+id: TFR-001
+title: Build the days-until command
+type: build
+stage: 11-user-approval
+status: In Progress
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: approved
+result_approved: "2026-09-28 by Mike Rihm"
+updated: 2026-09-28
+---
+# TFR-001: Build the days-until command
+
+## Overview
+
+**Goal:** A person enters a date and sees the time remaining in days or, with --weeks, in weeks and days.
+
+**Current position:** The base command is built and tested on the TFR-001 branch. Five tests passed, and Mike Rihm tested and approved its result on 2026-09-28. TFR-002 adds --weeks on a separate branch; eight tests passed and its result is also approved.
+
+**Next action:** Ask Mike Rihm to authorize the local merges into main, TFR-001 first and TFR-002 second. Then continue work-finish for each item.
+
+**Blockers:** Local merges into main need owner authorization (Q-08).
+
+**Rela
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show TFR-002'
+  -> TFR-002: Add the --weeks flag to days-until
+Location: https://app.notion.com/p/Add-the-weeks-flag-to-days-until-3e9b381da176815bb55ccfff40995905
+Stage: 11 User approval (In Progress) | Waiting on: agent | Continue with: work-finish
+Parent: TFR-001 | Sub-items: none | Design: none of its own; TFR-001's design is approved (https://app.notion.com/p/TFR-001-Build-the-days-until-command-with-a-weeks-flag-solution-design-3e9b381da17681859546d90fe3e13254). Read it with: toolkit work design TFR-001
+Worktree branch for this item: claude/tfr-002-add-the-weeks-flag-to-days (folder .claude/worktrees/tfr-002-add-the-weeks-flag-to-days)
+
+---
+id: TFR-002
+title: Add the --weeks flag to days-until
+type: build
+stage: 11-user-approval
+status: In Progress
+parent: TFR-001
+waiting_on: "agent"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: none
+result_approved: "2026-09-28 by Mike Rihm"
+updated: 2026-09-28
+---
+# TFR-002: Add the --weeks flag to days-until
+
+## Overview
+
+**Goal:** Add --weeks to the days-until command so it shows whole weeks and leftover days in either flag position.
+
+**Current position:** The --weeks result is built and tested on its own branch. Eight automated checks and direct CLI checks passed; the test plan is committed as af7015d. Mike Rihm tested the output and approved the result on 2026-09-28. He separately approved the TFR-001 base result on 2026-09-28.
+
+**Next action:** After Mike Rihm answers TFR-001 Q-08, continue work-finis
+
+[CMD exit=0] /bin/zsh -lc "sed -n '110,210p' /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-finish/references/approvals.md"
+  -> 
+- [ ] The design is saved as proposed, and the item waits on the owner. Add no
+      Open Questions row for the design approval itself: a proposed design is
+      already listed as his decision.
+      `toolkit work design <id> --set-file <file> --status proposed`
+      `toolkit work set <id> --waiting-on owner`
+
+Ask: the options in one sentence each, your recommendation and its reason,
+what he will see when it is done, the main risks, and the build order. Then
+ask him to choose or approve.
+
+After his yes, or his choice of one option, in this order:
+
+- [ ] Save his words first, so no later session asks him again.
+      `toolkit work history <id> --note 'Owner said: <quote>' --effect 'Design approved; work-on plans the build.'`
+- [ ] Fill "Recommendation and owner decision": Owner decision (who, when,
+      where he said it) and Reason for decision (his reason only; never invent
+      one).
+- [ ] Fill every "Selected design" subsection and the "Build and verification
+      plan" (Technical sequence, and Acceptance checks with one row per
+      requirement). `work-check` reads those checks.
+- [ ] Remove every leftover template prompt. Leave the Design status line as
+      it is.
+- [ ] Save the design text.
+      `toolkit work design <id> --set-file <file>`
+- [ ] Record the approval. It adds its own history row. It refuses (exit
+      code 2, `design_not_filled`) while "Selected design" still says
+      "Pending owner decision" or holds the template prompt: save the filled
+     
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-finish/references/work-item-format.md'
+  -> <!-- Generated file. Source: plugins/work/shared/work-item-format.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Work item and design format
+
+What a work item and its design hold, their exact section names, and how to
+change them with `toolkit work` commands without losing text.
+
+## Contents
+
+1. Where the record and the design live
+2. Header fields
+3. Sections of `WORK-ITEM.md`
+4. Sections of `DESIGN.md`
+5. Finding an item's file
+6. Changing one section
+7. Adding a table row
+8. Editing a record directly
+9. Titles
+10. Generated files
+11. Examples
+
+## 1. Where the record and the design live
+
+Every tracker uses the same body and the same design shape. Only the place
+differs.
+
+| Tracker | Work item | Design |
+| --- | --- | --- |
+| Local | `WORK-ITEM.md` in the item's folder under `.work-items/` | `DESIGN.md` beside it |
+| Notion | The item's page in the project's Work Items database | The item's "Solution Design" child page |
+| GitHub Issues | The issue body | One issue comment whose first line is `## Solution design` |
+| Jira | The issue description | One comment whose first line is "Solution design" |
+
+An item has one design home. Never make a separate design folder or a second
+design file.
+
+## 2. Header fields
+
+The header (frontmatter locally, properties in Notion) holds these fields.
+Only `toolkit work` commands change them.
+
+| Field | Values | Changed by |
+| --- | --- | --- |
+| `id` | `WI-001` (the project's prefix and a number) | `toolkit work
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/SKILL.md'
+  -> ---
+name: work-decide
+description: 'Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers. Use when he asks "what do you need from me", answers a waiting decision ("go with option B"), or states a project-wide decision.'
+---
+
+# Work decide
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Walks the owner through what waits on him, one decision at a time, and records each answer where it belongs. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Build the queue. The command lists each decision once: requirements waiting for approval, proposed designs, results at stage 11, Open Questions rows the owner decides, and memory proposals. Its "Agent to-do" lines are not decisions. A delivery offer belongs to `work-delegate`: open it after his other decisions.
+   `toolkit work decisions`
+2. He gave an answer without being asked ("approved", "go with B"): match it to exactly one waiting decision; when two could match, ask which, naming both. A bare "yes", "ok", or "looks good" with no question asked is not an answer (`references/approvals.md`, section 1).
+3. Otherwise start with the count and one short line for every waiting decision, memory proposals included ("3 decisions wait on you: the WI-004 design, the WI-006 result, and a 
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-finish/references/git-rules.md'
+  -> <!-- Generated file. Source: plugins/git-workflows/shared/git-rules.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Git rules for Toolkit V2 skills
+
+Purpose: the Git rules every Toolkit V2 skill follows when it makes a branch,
+commits, merges, pushes, or removes a worktree, in Claude Code and in Codex.
+
+## Contents
+
+- Look before the first Git write
+- Branch and worktree names for a work item
+- Staging and committing
+- No AI credit
+- The Git-ignored toolkit folders
+- A project with no remote
+- The merge-safety check
+- A merge that stops on a conflict
+- Git writes in Codex
+- Checklist: one commit
+- Examples
+
+## Look before the first Git write
+
+Other sessions may work in the same repository at the same time. Before the
+first Git write in a session, run each of these on its own:
+
+```text
+git worktree list
+git status
+git remote
+```
+
+- `git remote` prints nothing: the project has no remote. Read "A project
+  with no remote" below before any fetch, pull, push, or pull request.
+- An unknown worktree, a branch that moved, or a change this session did not
+  make means another session is working. Do not change it. Tell the owner.
+- The shared primary checkout is the first entry `git worktree list` prints.
+  In it, never switch branches, reset, rebase, or stash.
+- Never commit, push, rebase, or delete another session's branch, and never
+  commit its uncommitted changes, even when they look finished.
+
+## Branch and worktree names for a work item
+
+A work item
+
+[CMD exit=0] /bin/zsh -lc 'cat PROJECT-ROADMAP.md'
+  -> # Project roadmap
+
+<!-- Fill-in guide: replace every angle-bracket prompt in the outcome, phase table, phase heading, and work-unit fields with this project's real text. Keep one overview row and one matching ## heading per phase. Under that heading, repeat the ### work-unit block for each deliverab
+
+[CMD exit=0] /bin/zsh -lc 'git -C .claude/worktrees/tfr-002-add-the-weeks-flag-to-days status --porcelain --untracked-files=all'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git status --porcelain --untracked-files=all'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git -C .claude/worktrees/tfr-001-build-the-days-until-command status --porcelain --untracked-files=all'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git diff --name-only main...claude/tfr-001-build-the-days-until-command'
+  -> bin/days-until.js
+test/days-until.test.js
+tests/TFR-001-TEST-PLAN.md
+
+
+[CMD exit=0] /bin/zsh -lc 'git log --oneline --graph --all -12'
+  -> * af7015d Record TFR-002 weeks display checks
+* e604d44 Add weeks display to days-until
+| * 48e56d4 Record TFR-001 base command checks
+|/  
+* 568ff86 Add base days-until command
+* 0f2fac6 Set up Toolkit V2
+* 989c0e4 Start days-until project
+
+
+[CMD exit=0] /bin/zsh -lc 'git merge-base claude/tfr-001-build-the-days-until-command claude/tfr-002-add-the-weeks-flag-to-days'
+  -> 568ff867d1bf57e56cebbb6662866cdcbdf0010e
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show TFR-001 --section 'Open Questions'"
+  -> ## Open Questions
+
+| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | Should the command count local calendar days, with today as 0, tomorrow as 1, and past dates as negative? Answer: yes, confirmed by Mike Rihm on 2026-09-28. | R-01, R-02 | Answered | owner |
+| Q-02 | How should --weeks display a past date so the negative value is clear? Answer: use ago, confirmed by Mike Rihm on 2026-09-28. | R-02 | Answered | owner |
+| Q-03 | Should a missing date or text outside YYYY-MM-DD also print a clear error and exit with code 1? Answer: print a short usage line and exit with code 1, confirmed by Mike Rihm on 2026-09-28. | R-03 | Answered | owner |
+| Q-04 | Should an unknown flag or an extra argument print the short usage line and exit with code 1? Answer: yes, confirmed by Mike Rihm on 2026-09-28. | R-03 | Answered | owner |
+| Q-05 | Should --weeks work before the date, after it, or in both positions? Answer: both positions, confirmed by Mike Rihm on 2026-09-28. | R-02, R-03 | Answered | owner |
+| Q-06 | With --weeks, should 1 use singular week or day, and what should today print? Answer: use 1 week and 1 day for one; omit a unit with a zero count; print 0 days for today, confirmed by Mike Rihm on 2026-09-28. | R-02 | Answered | owner |
+| Q-07 | Would you like agents to take responsibility for delivering this, with you acting as product owner? | delivery | Answered | owner |
+| Q-08 | May I merge the approved TFR-001 base branch and TFR-002 --
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 1 decision waits on the owner:
+
+TFR-001 Build the days-until command
+  - Q-08: May I merge the approved TFR-001 base branch and TFR-002 --weeks branch locally into main, in that order? Affects TFR-001 and TFR-002 delivery. (work-decide)
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history TFR-001 --note 'Owner said: Yes, I authorize both local merges into main in that order. Ship it: then mark both items done and clean up the worktrees and branches.' --effect 'Q-08 answered: merge TFR-001, then TFR-002 locally into main; finish both items and remove their branches and worktrees.'"
+  -> Added a Recent History row to TFR-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR-001 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | Should the command count local calendar days, with today as 0, tomorrow as 1, and past dates as negative? Answer: yes, confirmed by Mike Rihm on 2026-09-28. | R-01, R-02 | Answered | owner |
+| Q-02 | How should --weeks display a past date so the negative value is clear? Answer: use ago, confirmed by Mike Rihm on 2026-09-28. | R-02 | Answered | owner |
+| Q-03 | Should a missing date or text outside YYYY-MM-DD also print a clear err
+  -> Saved "Open Questions" in TFR-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set TFR-001 --waiting-on agent'
+  -> Updated TFR-001: waiting on agent.
+Now 11 User approval (In Progress). Continue with work-finish.
+
+
+[AGENT] Your authorization is recorded as TFR-001 Q-08. Both worktrees are clean, and the TFR-001 merge has no overlap with uncommitted files on main. I’m merging TFR-001 now, then I’ll update TFR-002 against that commit and rerun its checks.
+
+[CMD exit=0] /bin/zsh -lc 'git merge --ff-only claude/tfr-001-build-the-days-until-command'
+  -> Updating 0f2fac6..48e56d4
+Fast-forward
+ bin/days-until.js          | 63 +++++++++++++++++++++++++++++++++++++++++
+ test/days-until.test.js    | 70 ++++++++++++++++++++++++++++++++++++++++++++++
+ tests/TFR-001-TEST-PLAN.md | 26 +++++++++++++++++
+ 3 files changed, 159 insertions(+)
+ create mode 100644
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set TFR-001 --stage 12-pr-and-push'
+  -> Updated TFR-001: stage 11 User approval -> 12 Pull request and push (status In Review).
+Now 12 Pull request and push (In Review). Continue with work-finish.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history TFR-001 --note 'No remote: merged locally into main at 48e56d4.' --effect 'No pull request; no deployment.'"
+  -> Added a Recent History row to TFR-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'cat requirements/AGENTS.md .claude/rules/publish-project-documents.md'
+  -> # Functional requirements
+
+Keep one folder per durable business area, holding one maintained file. Start a new area by copying `system-area-template/` to a folder named for the area, then rename the copied `AREA-TEMPLATE.md` for the area, for example `requirements/billing/BILLING.md`. Leave `system-
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.6/skills/publish-docs/SKILL.md'
+  -> ---
+name: publish-docs
+description: 'Commits and pushes an agreed edit of committed project documents (requirements/, system-guide/, DECISIONS.md, PROJECT.md, PROJECT-ROADMAP.md, ai-external-knowledge/, delivery/) straight to the default branch. Use whenever such an edit is ready to save. Not for code, rules, skills, or .memory/.'
+---
+
+# Publish a documentation save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Save an agreed change to Git-tracked project documents straight to the default
+branch, with no pull request (rule: `.claude/rules/publish-project-documents.md`).
+
+1. **Confirm it is documentation in an allowed path**, not code, rules, skills,
+   hooks, settings, `.memory/`, or `.work-items/` (list below).
+2. **Start a save workspace** with the script in the `scripts/` folder beside
+   this `SKILL.md`. It fetches the remote (with no remote, it uses the local
+   default branch and says so), makes a sparse worktree beside the project,
+   and prints its path. Work only there for this save.
+
+   ```text
+   node <this skill's folder>/scripts/publish-docs.mjs start --branch <default-branch> -- <file> [more files]
+   ```
+
+3. **Make the edit there and stage the files by name.** Read the full staged
+   diff. Add `DECISIONS.md` rows only with `toolkit decision add`, run there.
+   After a change under `ai-external-knowledge/`, regenerate its index there
+   (
+
+[CMD exit=0] /bin/zsh -lc 'rg --files requirements system-guide tests'
+  -> tests/TFR-001-TEST-PLAN.md
+tests/TEST-PLAN-TEMPLATE.md
+requirements/AGENTS.md
+requirements/SYSTEM-DATA-MODEL.md
+requirements/system-area-template/AREA-TEMPLATE.md
+system-guide/AREA-TEMPLATE.md
+
+
+[CMD exit=0] /bin/zsh -lc 'git status --porcelain --untracked-files=all'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git diff --name-only main...claude/tfr-002-add-the-weeks-flag-to-days'
+  -> bin/days-until.js
+test/days-until.test.js
+tests/TFR-002-TEST-PLAN.md
+
+
+[CMD exit=0] /bin/zsh -lc "git merge main -m 'Merge main into TFR-002 weeks branch'"
+  -> Merge made by the 'ort' strategy.
+ tests/TFR-001-TEST-PLAN.md | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+ create mode 100644 tests/TFR-001-TEST-PLAN.md
+
+
+[CMD exit=0] /bin/zsh -lc 'git log -1 --oneline claude/tfr-002-add-the-weeks-flag-to-days'
+  -> 9666d71 Merge main into TFR-002 weeks branch
+
+
+[CMD exit=0] /bin/zsh -lc 'git diff --name-only main...claude/tfr-002-add-the-weeks-flag-to-days'
+  -> bin/days-until.js
+test/days-until.test.js
+tests/TFR-002-TEST-PLAN.md
+
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## claude/tfr-002-add-the-weeks-flag-to-days
+
+
+[CMD exit=0] /bin/zsh -lc 'node bin/days-until.js --weeks 2026-10-15'
+  -> 2 weeks and 3 days
+
+
+[CMD exit=0] /bin/zsh -lc 'node --test test/days-until.test.js'
+  -> ✔ counts local calendar dates throughout the day (1.054417ms)
+✔ accepts leap days and early years but rejects impossible dates (0.548ms)
+✔ counts calendar days across spring and fall daylight saving changes (41.700792ms)
+✔ CLI prints the day count for the local date (37.516458ms)
+✔ CLI separates imp
+
+[AGENT] TFR-001 is on main. I updated TFR-002 with that commit; its eight tests pass, and the direct `--weeks` check prints “2 weeks and 3 days.” I’m merging TFR-002 next.
+
+[CMD exit=0] /bin/zsh -lc 'git merge --ff-only claude/tfr-002-add-the-weeks-flag-to-days'
+  -> Updating 48e56d4..9666d71
+Fast-forward
+ bin/days-until.js          | 29 ++++++++++++++++++++++++-----
+ test/days-until.test.js    | 43 +++++++++++++++++++++++++++++++++++++++++--
+ tests/TFR-002-TEST-PLAN.md | 26 ++++++++++++++++++++++++++
+ 3 files changed, 91 insertions(+), 7 deletions(-)
+ create mo
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set TFR-002 --stage 12-pr-and-push'
+  -> Updated TFR-002: stage 11 User approval -> 12 Pull request and push (status In Review).
+Now 12 Pull request and push (In Review). Continue with work-finish.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history TFR-002 --note 'No remote: merged locally into main at 9666d71 after updating from TFR-001; eight tests and a direct CLI check passed.' --effect 'No pull request; no deployment.'"
+  -> Added a Recent History row to TFR-002.
+
+
+[CMD exit=0] /bin/zsh -lc 'cat requirements/SYSTEM-DATA-MODEL.md'
+  -> # System Data Model
+
+<!-- Fill-in guide: replace this comment with verified, accepted data model requirements for the whole system. Use the sections below for each shared entity or relationship; add one block per real item. Link the approving work item and date. Do not copy an unapproved technical d
+
+[CMD exit=0] /bin/zsh -lc 'cat requirements/system-area-template/AREA-TEMPLATE.md'
+  -> # <Functional area>
+
+<!-- Fill-in guide: copy this folder and rename the copied folder and file for the real business area. Replace <Functional area> and every angle-bracket prompt in the section, rule block, and list below with accepted content. Repeat the stable-rule subsection once per behavior; 
+
+[CMD exit=0] /bin/zsh -lc 'cat bin/days-until.js'
+  -> #!/usr/bin/env node
+
+'use strict';
+
+const MILLISECONDS_PER_DAY = 86_400_000;
+const USAGE = 'Usage: node bin/days-until.js [--weeks] YYYY-MM-DD';
+
+function calendarDayNumber(year, month, day) {
+  const date = new Date(0);
+  date.setUTCFullYear(year, month - 1, day);
+  date.setUTCHours(0, 0, 0, 0);
+  
+
+[CMD exit=0] /bin/zsh -lc 'cat tests/TFR-001-TEST-PLAN.md tests/TFR-002-TEST-PLAN.md'
+  -> # TFR-001 base command test plan
+
+## Scope
+
+Checks the base days-until command against TFR-001 R-01 and the default-mode part of R-03. TFR-002 checks `--weeks` separately.
+
+## Environment and data
+
+Node.js on the TFR-001 branch, commit 568ff86. Fixed dates in the automated tests include 2026-09-27 t
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## main
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show TFR-001 --section 'Roadmap'"
+  -> ## Roadmap
+
+A phase is complete when its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Base days-until command | Accept a valid date, count local calendar days, print signed day wording, and reject invalid default-mode input. | Done | R-01 and the default-mode part of R-03 passed five tests and direct CLI checks; commit 568ff86. | None. |
+| P2 — Weeks display | Add --weeks in either argument position and keep input errors correct in weeks mode. | In Progress | R-02 and the weeks-mode part of R-03 passed tests and direct CLI checks; Mike Rihm approved the TFR-002 result on 2026-09-28. Local merge is pending authorization. | TFR-002 |
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work list --tree'
+  -> TFR-001  Build the days-until command  (12 Pull request and push, In Review, waiting on agent)
+  TFR-002  Add the --weeks flag to days-until  (12 Pull request and push, In Review, waiting on agent)
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history TFR-001 --note 'Stage 13 skipped: this command runs locally; no deployment destination is configured.' --effect 'Continue to the requirements baseline.'"
+  -> Added a Recent History row to TFR-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history TFR-002 --note 'Stage 13 skipped: this command runs locally; no deployment destination is configured.' --effect 'Continue to the requirements baseline.'"
+  -> Added a Recent History row to TFR-002.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set TFR-001 --stage 14-spec-update'
+  -> Updated TFR-001: stage 12 Pull request and push -> 14 Specification update (status In Review).
+Now 14 Specification update (In Review). Continue with work-finish.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set TFR-002 --stage 14-spec-update'
+  -> Updated TFR-002: stage 12 Pull request and push -> 14 Specification update (status In Review).
+Now 14 Specification update (In Review). Continue with work-finish.
+
+
+[AGENT] Both branches are on main. I’m saving the delivered behavior in the project requirements, updating the roadmap, and then I’ll close the two work items.
+
+[CMD exit=0] /bin/zsh -lc 'node /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.6/skills/publish-docs/scripts/publish-docs.mjs start --branch main -- requirements/days-until/DAYS-UNTIL.md PROJECT-ROADMAP.md PROJECT.md'
+  -> No remote: this save will be committed locally on main; nothing is fetched or pushed.
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1-docsave-16803d2d
+
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## HEAD (no branch)
+
+
+[CMD exit=0] /bin/zsh -lc 'mkdir -p requirements/days-until'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc "cat > requirements/days-until/DAYS-UNTIL.md <<'EOF'
+# Days-until
+
+## Purpose and scope
+
+The command "'`node bin/days-until.js YYYY-MM-DD` tells a person how many local calendar days remain until a date. The optional `--weeks` flag shows the same difference in weeks and days.
+
+## Functional behavior
+
+### R-01 — Count local calendar days
+
+- Trigger or context: A person enters one valid date as `YYYY-MM-DD`.
+- Required behavior: Count calendar dates in the local time zone. Today is 0, tomorrow is 1, and past dates have negative counts. The time of day does not change the count.
+- Co
+  -> 
+
+[CMD exit=0] /bin/zsh -lc "cat > PROJECT-ROADMAP.md <<'EOF'
+# Project roadmap
+
+## Project outcome
+
+days-until tells me how many days are left until a date I type, so I can count down to trips and deadlines.
+
+## Phase overview
+
+| Phase | Intended outcome | Exit condition | Depends on |
+| --- | --- | --- | --- |
+| P01 — Base command | Enter a date and see the local calendar-day difference. | TFR-001's base result is tested, approved, and on main. Done 2026-09-28. | None |
+| P02 — Weeks display | Use "'`--weeks` to see whole weeks and leftover days. | TFR-002'"'s result is tested, approved, and on main. Done 
+  -> 
+
+[CMD exit=0] /bin/zsh -lc "perl -0pi -e 's@- Tests and checks: no verified commands yet; this repository has no application code or package scripts\\.@- Tests and checks: "'`node --test test/days-until.test.js` passed eight tests on 2026-09-28. Run `node bin/days-until.js YYYY-MM-DD` or add `--weeks` before or after the date.@'"' PROJECT.md"
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git add requirements/days-until/DAYS-UNTIL.md PROJECT-ROADMAP.md PROJECT.md'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git diff --cached --name-status'
+  -> M	PROJECT-ROADMAP.md
+M	PROJECT.md
+A	requirements/days-until/DAYS-UNTIL.md
+
+
+[CMD exit=0] /bin/zsh -lc 'git status --porcelain --untracked-files=all'
+  -> M  PROJECT-ROADMAP.md
+M  PROJECT.md
+A  requirements/days-until/DAYS-UNTIL.md
+
+
+[CMD exit=0] /bin/zsh -lc 'git diff --cached'
+  -> diff --git a/PROJECT-ROADMAP.md b/PROJECT-ROADMAP.md
+index 3b1548f..0ef9ffa 100644
+--- a/PROJECT-ROADMAP.md
++++ b/PROJECT-ROADMAP.md
+@@ -1,20 +1,5 @@
+ # Project roadmap
+ 
+-<!-- Fill-in guide: replace every angle-bracket prompt in the outcome, phase table, phase heading, and work-unit fields with thi
+
+[CMD exit=0] /bin/zsh -lc "node /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.6/skills/publish-docs/scripts/publish-docs.mjs publish --message 'Record delivered days-until behavior and roadmap'"
+  -> No remote: committed locally. b085699298b1a05dfc06931d5f751eb64156ee77 is on main.
+
+
+[CMD exit=0] /bin/zsh -lc 'git worktree remove /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1-docsave-16803d2d'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## main
+
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-finish/references/current-focus.md'
+  -> <!-- Generated file. Source: plugins/memory/shared/current-focus.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# The current focus
+
+Purpose: the format of the current focus, when to change it, and the exact
+read-change-save sequence, in every memory backend.
+
+## Contents
+
+- What the focus is for
+- The format
+- What goes in each section
+- When to check it
+- Read, change, save
+- A new project's focus
+- Examples
+- Checklist for a focus save
+
+## What the focus is for
+
+The current focus is the first thing the next session reads: the session
+briefing includes it. It says what is happening now and where the next
+session starts. It never repeats the tracker: a work item's status, tasks,
+and history stay in the work item.
+
+| Backend | Where the focus lives |
+| --- | --- |
+| Built-in | `.memory/CURRENT_FOCUS.md` in the main checkout |
+| Hindsight | The document `focus` in the project's bank |
+| Notion | The "Current focus" page under the project's page |
+
+The same commands read and save it in every backend. Never edit the file or
+the page by hand.
+
+## The format
+
+The model's format: a `# Current focus` title line, a `Last updated:` line,
+then exactly four `##` sections in this order, under 50 lines in total.
+
+```markdown
+# Current focus
+
+Last updated: <YYYY-MM-DD>, <source>, <person or agent>
+
+## Now
+
+## Waiting on the owner
+
+## Untracked to-dos
+
+## Next session starts with
+```
+
+What the command enforces:
+
+- It refuses a focus that lacks one of the four se
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1                                                        b085699 [main]
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show TFR-002 --section 'Roadmap'"
+  -> ## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Weeks display | Add --weeks before or after the date and format whole weeks and leftover days. | Done | TFR-001 R-02 and weeks-mode R-03 passed eight tests and direct CLI checks; commits e604d44 and af7015d. | None. |
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show TFR-001 --section 'Overview'"
+  -> ## Overview
+
+**Goal:** A person enters a date and sees the time remaining in days or, with --weeks, in weeks and days.
+
+**Current position:** The base command is built and tested on the TFR-001 branch. Five tests passed, and Mike Rihm tested and approved its result on 2026-09-28. TFR-002 adds --weeks on a separate branch; eight tests passed and its result is also approved.
+
+**Next action:** Ask Mike Rihm to authorize the local merges into main, TFR-001 first and TFR-002 second. Then continue work-finish for each item.
+
+**Blockers:** Local merges into main need owner authorization (Q-08).
+
+**Related items:** TFR-002 covers --weeks (R-02 and R-03) on its own branch; its result is approved.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show TFR-002 --section 'Overview'"
+  -> ## Overview
+
+**Goal:** Add --weeks to the days-until command so it shows whole weeks and leftover days in either flag position.
+
+**Current position:** The --weeks result is built and tested on its own branch. Eight automated checks and direct CLI checks passed; the test plan is committed as af7015d. Mike Rihm tested the output and approved the result on 2026-09-28. He separately approved the TFR-001 base result on 2026-09-28.
+
+**Next action:** After Mike Rihm answers TFR-001 Q-08, continue work-finish: merge TFR-001 into main, then update and merge this branch.
+
+**Blockers:** Local merges into main need owner authorization under TFR-001 Q-08.
+
+**Related items:** TFR-001 holds the approved requirements and design and the base-command commit.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show TFR-001 --section 'Roadmap'"
+  -> ## Roadmap
+
+A phase is complete when its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Base days-until command | Accept a valid date, count local calendar days, print signed day wording, and reject invalid default-mode input. | Done | R-01 and the default-mode part of R-03 passed five tests and direct CLI checks; commit 568ff86. | None. |
+| P2 — Weeks display | Add --weeks in either argument position and keep input errors correct in weeks mode. | In Progress | R-02 and the weeks-mode part of R-03 passed tests and direct CLI checks; Mike Rihm approved the TFR-002 result on 2026-09-28. Local merge is pending authorization. | TFR-002 |
+
+
+[AGENT] The requirements and roadmap are committed on main at `b085699`. I’m removing the two clean worktrees and their merged branches, then I’ll update and finish the tracker records.
+
+[CMD exit=0] /bin/zsh -lc 'git worktree remove .claude/worktrees/tfr-001-build-the-days-until-command'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git branch -d claude/tfr-001-build-the-days-until-command'
+  -> Deleted branch claude/tfr-001-build-the-days-until-command (was 48e56d4).
+
+
+[CMD exit=0] /bin/zsh -lc 'git worktree remove .claude/worktrees/tfr-002-add-the-weeks-flag-to-days'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git branch -d claude/tfr-002-add-the-weeks-flag-to-days'
+  -> Deleted branch claude/tfr-002-add-the-weeks-flag-to-days (was 9666d71).
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR-002 --section 'Overview' --text '**Goal:** Add --weeks to the days-until command so it shows whole weeks and leftover days in either flag position.
+
+**Current position:** Done on 2026-09-28: the --weeks result is on main at 9666d71. Eight automated checks and direct CLI checks passed; Mike Rihm tested and approved the result. The delivered behavior is recorded in requirements/days-until/DAYS-UNTIL.md at b085699.
+
+**Next action:** Finish this work item in the tracker.
+
+**Blockers:** None.
+
+**Related items:** TFR-001 holds the approved requirements and design 
+  -> Saved "Overview" in TFR-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history TFR-002 --note 'Delivered behavior recorded in requirements/days-until/DAYS-UNTIL.md; roadmap and project command updated at b085699. TFR-002 worktree and branch removed after their merge.' --effect 'Ready to mark Done; main contains the approved result and its requirements baseline.'"
+  -> Added a Recent History row to TFR-002.
+
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## main
+
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1 b085699 [main]
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show TFR-002 --section 'Overview'"
+  -> ## Overview
+
+**Goal:** Add --weeks to the days-until command so it shows whole weeks and leftover days in either flag position.
+
+**Current position:** Done on 2026-09-28: the --weeks result is on main at 9666d71. Eight automated checks and direct CLI checks passed; Mike Rihm tested and approved the result. The delivered behavior is recorded in `requirements/days-until/DAYS-UNTIL.md` at b085699.
+
+**Next action:** Finish this work item in the tracker.
+
+**Blockers:** None.
+
+**Related items:** TFR-001 holds the approved requirements and design and delivered the base command.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work finish TFR-002 --by 'Mike Rihm' --evidence 'Approved weeks result on main at 9666d71; eight node:test checks and direct CLI checks passed; requirements baseline committed at b085699.'"
+  -> TFR-002 is Done. Result approval: 2026-09-28 by Mike Rihm.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR-001 --section 'Roadmap' --text 'A phase is complete when its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Base days-until command | Accept a valid date, count local calendar days, print signed day wording, and reject invalid default-mode input. | Done | R-01 and the default-mode part of R-03 passed five tests and direct CLI checks; commit 568ff86 reached main through 48e56d4. | None. |
+| P2 — Weeks display | Add --weeks in either argument position and keep input errors correct in weeks mod
+  -> Saved "Roadmap" in TFR-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR-001 --section 'Overview' --text '**Goal:** A person enters a date and sees the time remaining in days or, with --weeks, in weeks and days.
+
+**Current position:** Done on 2026-09-28: the base command reached main at 48e56d4, and TFR-002 delivered --weeks at 9666d71. The combined eight-test run passed; Mike Rihm tested and approved both results. The delivered behavior is recorded in requirements/days-until/DAYS-UNTIL.md at b085699.
+
+**Next action:** Finish this work item in the tracker.
+
+**Blockers:** None.
+
+**Related items:** TFR-002 delivered --weeks (R-02 a
+  -> Saved "Overview" in TFR-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history TFR-001 --note 'Delivered behavior recorded in requirements/days-until/DAYS-UNTIL.md; roadmap and project command updated at b085699. Both worktrees and branches removed after their merges. TFR-002 is Done.' --effect 'Ready to mark Done; main contains both approved results and the requirements baseline.'"
+  -> Added a Recent History row to TFR-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work list --tree'
+  -> TFR-001  Build the days-until command  (14 Specification update, In Review, waiting on agent)
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show TFR-001 --section 'Roadmap'"
+  -> ## Roadmap
+
+A phase is complete when its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Base days-until command | Accept a valid date, count local calendar days, print signed day wording, and reject invalid default-mode input. | Done | R-01 and the default-mode part of R-03 passed five tests and direct CLI checks; commit 568ff86 reached main through 48e56d4. | None. |
+| P2 — Weeks display | Add --weeks in either argument position and keep input errors correct in weeks mode. | Done | R-02 and the weeks-mode part of R-03 passed eight tests and direct CLI checks; Mike Rihm approved the TFR-002 result on 2026-09-28; commit 9666d71 reached main. | TFR-002 |
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show TFR-001 --section 'Overview'"
+  -> ## Overview
+
+**Goal:** A person enters a date and sees the time remaining in days or, with --weeks, in weeks and days.
+
+**Current position:** Done on 2026-09-28: the base command reached main at 48e56d4, and TFR-002 delivered --weeks at 9666d71. The combined eight-test run passed; Mike Rihm tested and approved both results. The delivered behavior is recorded in `requirements/days-until/DAYS-UNTIL.md` at b085699.
+
+**Next action:** Finish this work item in the tracker.
+
+**Blockers:** None.
+
+**Related items:** TFR-002 delivered --weeks (R-02 and the weeks-mode part of R-03) and is Done.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work finish TFR-001 --by 'Mike Rihm' --evidence 'Approved base result on main at 48e56d4 and Done TFR-002 at 9666d71; combined eight node:test checks and direct CLI checks passed; requirements baseline committed at b085699.'"
+  -> TFR-001 is Done. Result approval: 2026-09-28 by Mike Rihm.
+
+
+[AGENT] TFR-001 and TFR-002 are both marked Done in the tracker. Their branches and worktrees are gone, and main is clean. I’m updating the current focus so the next session starts from the completed state.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.6/skills/memory-save/SKILL.md'
+  -> ---
+name: memory-save
+description: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says "remember this", "from now on", "forget that", or "remind me" with no time given, corrects the agent, or a hook says a save is due.'
+---
+
+# Memory save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Saves, corrects, or retires one memory record with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand.
+
+## Steps
+
+Track these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home ("Where other things go" below) and stop.
+2. Search for a record that already holds it, and read each hit with its version. The save's duplicate check compares wording, so only this search finds a record the new fact contradicts (for example "Mondays" against "Tuesdays").
+   `toolkit memory find '<topic>'`
+   `toolkit memory get <key> --json`
+3. Read the approval mode and apply "Approval policy" below. When it says ask, ask and wait.
+   `toolkit config get memory.approval`
+4. Write the description and body in the record format (`refer
+
+[CMD exit=0] /bin/zsh -lc 'git branch -vv'
+  -> * main b085699 Record delivered days-until behavior and roadmap
+
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1 b085699 [main]
+
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## main
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus --json'
+  -> {
+  "ok": true,
+  "backend": "notion",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- TFR-001 Build the days-until command\n- TFR-002 Add the --weeks flag to days-until\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue TFR-001 from its Resume here: both results are approved. Ask Mike Rihm to answer Q-08 about local merges into main; TFR-001 first, then TFR-002. Do not merge before authorization.\n",
+  "version": "777ef7c1b579dd7c86d4bce70980880bd5ee3b7a57aa76405944dc31fa4c2a8d"
+}
+
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for Toolkit V2 final run (safe to delete) (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (4):
+- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- README.md is the project's own file from before the toolkit, so sync le
+
+[AGENT] I’m using the project’s memory-save procedure to clear the completed items from the current focus. Toolkit doctor still reports the two existing Codex trust setup steps; the project work itself has no open item.
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-28, work-finish, agent
+
+## Now
+
+None.
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- No active work item. Ask Mike Rihm for the next thing to build; toolkit doctor still reports the two Codex trust setup steps.' -
+  -> Saved the current focus (20 lines). Version: 1efc81b7115f
+
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## main
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit config get backup.dir'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/notion
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-28, work-finish, agent
+
+## Now
+
+None.
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- No active work item. Ask Mike Rihm for the next thing to build; toolkit doctor still reports the two Codex trust setup steps.
+
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for Toolkit V2 final run (safe to delete) (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (4):
+- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- README.md is the project's own file from before the toolkit, so sync le
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show TFR-002'
+  -> TFR-002: Add the --weeks flag to days-until
+Location: https://app.notion.com/p/Add-the-weeks-flag-to-days-until-3e9b381da176815bb55ccfff40995905
+Stage: Done | Waiting on: none | Continue with: nothing (finished)
+Parent: TFR-001 | Sub-items: none | Design: none of its own; TFR-001's design is approved (https://app.notion.com/p/TFR-001-Build-the-days-until-command-with-a-weeks-flag-solution-design-3e9b381da17681859546d90fe3e13254). Read it with: toolkit work design TFR-001
+
+---
+id: TFR-002
+title: Add the --weeks flag to days-until
+type: build
+stage: 14-spec-update
+status: Done
+parent: TFR-001
+waiting_on: "none"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: none
+result_approved: "2026-09-28 by Mike Rihm"
+updated: 2026-09-28
+---
+# TFR-002: Add the --weeks flag to days-until
+
+## Overview
+
+**Goal:** Add --weeks to the days-until command so it shows whole weeks and leftover days in either flag position.
+
+**Current position:** Done on 2026-09-28. Approved weeks result on main at 9666d71; eight node:test checks and direct CLI checks passed; requirements baseline committed at b085699.
+
+**Next action:** None. Finished.
+
+**Blockers:** None.
+
+**Related items:** TFR-001 holds the approved requirements and design and delivered the base command.
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Weeks display | Ad
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show TFR-001'
+  -> TFR-001: Build the days-until command
+Location: https://app.notion.com/p/Build-the-days-until-command-3e9b381da17681b7b7ccea07b01d5850
+Stage: Done | Waiting on: none | Continue with: nothing (finished)
+Parent: none | Sub-items: TFR-002 | Design: approved (https://app.notion.com/p/TFR-001-Build-the-days-until-command-with-a-weeks-flag-solution-design-3e9b381da17681859546d90fe3e13254)
+
+---
+id: TFR-001
+title: Build the days-until command
+type: build
+stage: 14-spec-update
+status: Done
+parent: none
+waiting_on: "none"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: approved
+result_approved: "2026-09-28 by Mike Rihm"
+updated: 2026-09-28
+---
+# TFR-001: Build the days-until command
+
+## Overview
+
+**Goal:** A person enters a date and sees the time remaining in days or, with --weeks, in weeks and days.
+
+**Current position:** Done on 2026-09-28. Approved base result on main at 48e56d4 and Done TFR-002 at 9666d71; combined eight node:test checks and direct CLI checks passed; requirements baseline committed at b085699.
+
+**Next action:** None. Finished.
+
+**Blockers:** None.
+
+**Related items:** TFR-002 delivered --weeks (R-02 and the weeks-mode part of R-03) and is Done.
+
+## Roadmap
+
+A phase is complete when its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Base days-until command | Accept a valid date, count local calendar days, print signed day wording, and reject invalid defau
+
+[CMD exit=0] /bin/zsh -lc 'ls -la /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/notion'
+  -> total 0
+drwxr-xr-x  3 michaelrihm  wheel   96 Sep 28 15:59 .
+drwxr-xr-x  7 michaelrihm  wheel  224 Sep 28 15:59 ..
+drwxr-xr-x  3 michaelrihm  wheel   96 Sep 28 15:59 tv2-final-run-2026-09-28
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show TFR-002 --section 'Solution options and considerations'"
+  -> ### Solution options and considerations
+
+These are possibilities to evaluate, **not approved requirements or design decisions**.
+
+- **For R-01:** <Possible approach and the tradeoff or question it raises.>
+- **For R-02:** <Another option, constraint, or design consideration to investigate.>
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show TFR-002 --section 'Decisions and context'"
+  -> ### Decisions and context
+
+- Mike Rihm chose owner-led delivery on 2026-09-28 for the days-until goal. No agent team. Build Git commands were authorized; merge was not.
+- This item is top-level after an owner change in Notion. TFR-001 still holds the approved R-02 and R-03 text and approved Option A design.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show TFR-001 --section 'Decisions and context'"
+  -> ### Decisions and context
+
+- Design method: scan the empty repository first, then design one Node.js option using built-in features where they meet R-01 through R-03. The approved requirements leave no product choice that needs a second option.
+- Design review team: one requirements analyst, one architect, one critic; three agent runs in the first pass. No researcher is needed because no bounded external question is open.
+- Delivery for TFR-001 and its --weeks work: owner-led, chosen by Mike Rihm on 2026-09-28. No agent team. This agent builds and brings the results for separate reviews. Git worktree add, add, and commit are authorized for the build; merge is not authorized.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show TFR-001 --section 'Solution options and considerations'"
+  -> ### Solution options and considerations
+
+These are possibilities to evaluate, **not approved requirements or design decisions**.
+
+- **For R-01:** <Possible approach and the tradeoff or question it raises.>
+- **For R-02:** <Another option, constraint, or design consideration to investigate.>
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR-001 --section 'Decisions and context' --text '- Mike Rihm chose owner-led delivery on 2026-09-28. TFR-001 and TFR-002 were reviewed and approved separately.
+- Mike Rihm authorized local merges into main on 2026-09-28, TFR-001 first and TFR-002 second. Both merges and branch cleanup are complete.
+- The approved Option A design remains with TFR-001.'"
+  -> Saved "Decisions and context" in TFR-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR-002 --section 'Decisions and context' --text '- Mike Rihm chose owner-led delivery on 2026-09-28 for the days-until goal. TFR-002 received its own result review.
+- Mike Rihm authorized the local merge after TFR-001 on 2026-09-28. TFR-002 reached main at 9666d71, and its branch and worktree were removed.
+- TFR-002 is a sub-item of TFR-001. TFR-001 holds the approved R-02 and R-03 text and the approved Option A design.'"
+  -> Saved "Decisions and context" in TFR-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR-001 --section 'Solution options and considerations' --text 'None. The approved Option A design is retained with this item.'"
+  -> Saved "Solution options and considerations" in TFR-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR-002 --section 'Solution options and considerations' --text 'None. TFR-001 holds the approved design for this sub-item.'"
+  -> Saved "Solution options and considerations" in TFR-002.
+
+
+[CMD exit=0] /bin/zsh -lc 'find /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/notion -maxdepth 3 -type f -print'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/notion/tv2-final-run-2026-09-28/memory-export/CURRENT_FOCUS.md
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/notion/tv2-final-run-2026-09-28/memory-export/toolkit-memory-export.json
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/notion/tv2-final-run-2026-09-28/memory-export/terminology-glossary.md
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit handoff-backup --help'
+  -> toolkit handoff-backup: Back up .work-items/ and .memory/ (and Hindsight memory) to the project's backup folder; the handoff skill runs it last.
+
+Usage:
+  toolkit handoff-backup
+
+Exports the Git-ignored .work-items/ and .memory/ folders (and the Hindsight
+memory, which lives on this computer too) to <backup.dir>/<project key>-<date>/,
+one folder per day, where backup.dir is the backup folder in .toolkit.json.
+When today's folder already holds more files than the project has now (a
+fresh clone, or the project on a new computer), the backup goes to a new
+folder, <project key>-<date>-<HHMMSS>, and today's earlier backup is kept as
+it was. The work finish command runs the same backup. With no backup folder
+set it changes nothing and says how to set one (toolkit config set backup.dir
+<folder>, or none). A project with nothing on this computer only (Notion tracker and Notion
+memory) has nothing to back up. Exit 1 when the backup failed; the handoff
+then tells the owner.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit export --help'
+  -> toolkit export: Back up the Git-ignored .work-items/ and .memory/ folders to a folder (they exist on this computer only).
+
+Usage:
+  toolkit export --to <folder>
+
+Copies .work-items/ (with its state file) and .memory/, the parts this project
+uses, into <folder>/work-items and <folder>/memory, with toolkit-export.json
+describing the copy. The folder must be new, empty, or an earlier export. Use a
+folder outside the project. Hindsight and Notion memory are not included:
+toolkit memory export covers every memory backend. toolkit import --from
+<folder> restores it.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate TFR-002'
+  -> Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate TFR-001'
+  -> Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+
+
+[AGENT] TFR-001 and TFR-002 were merged locally into `main` in that order and marked Done. All eight tests passed. Both worktrees and branches are removed, and `main` is clean.
+
+The delivered behavior is recorded in [DAYS-UNTIL.md](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1/requirements/days-until/DAYS-UNTIL.md). There is no remote, so nothing was pushed.
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 3925513, "cached_input_tokens": 3835008, "cache_write_input_tokens": 0, "output_tokens": 14076, "reasoning_output_tokens": 3719}}
+
+SKILLS OPENED: ['work-finish', 'merge-and-clean-up', 'work-decide', 'work-decide', 'publish-docs', 'memory-save']
+
+[HOOK CONTEXT ord=9] Project briefing: Toolkit V2 final run (safe to delete) (tv2-final-run), owner Mike Rihm. Work items: the Notion Work Items database (ids like TFR-001). Memory: Notion, in Lore's layout (a Memory page on the project row with Lore's databases). Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- TFR-001 Build the days-until command: 11 User approval, In Progress, waiting on owner. Next action: Ask Mike Rihm to authorize the local merges into main, TFR-001 first and TFR-002 second. Then continue work-finish for each item. Continues with work-decide.
+- TFR-002 Add the --weeks flag to days-until: 11 User approval, In Progress. Next action: After Mike Rihm answers TFR-001 Q-08, continue work-finish: merge TFR-001 into main, then update and merge this branch. Con
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md",max_output_tokens:12000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-finish/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.6/skills/merge-and-clean-up/SKILL.md",max_output_tokens:16000}),
+  tools.exec_command({cmd:"git status --short --branch && git worktree list && git branch -vv",max_output_tokens:5000})
+]);
+for (let i=0;i<r.length;i++) text(JSON.stringify({task:i,result:r[i]}));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"task\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"3d8a30\",\"wall_time_seconds\":0.000013042,\"exit_code\":1,\"original_token_count\":3362,\"output\":\"# Toolkit V2 final run (safe to delete)\\n\\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\\n\\n## Purpose and intended outcome\\n\\n- Purpose: Count down to trips and deadlines.\\n- Intended outcome: days-until tells me how many days are left until a date I type, so I can count down to trips and deadlines.\\n\\n## Scope and boundaries\\n\\n- In scope: accept a date and report how many days remain, for trips and deadlines.\\n- Outside scope: `<Important exclusions or adjacent owners.>`\\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\\n\\n## Systems and environments\\n\\n| System or org | Purpose | Environment | Source of truth | Access notes |\\n| --- | --- | --- | --- | --- |\\n| Notion | Work items and project memory | Notion workspace | [Project page](https://app.notion.com/p/Toolkit-V2-final-run-safe-to-delete-3e9b381da17681ccaa54cd9453f484ea) | The Notion CLI is signed in on this Mac. |\\n\\n## People and ownership\\n\\n| Role | Person or team | Responsibility | Source / last confirmed |\\n| --- | --- | --- | --- |\\n| Owner | Mike Rihm | Project decisions | Owner, 2026-09-28 |\\n\\n## Work and project records\\n\\n- Work tracker: [Work Items in Notion](https://app.notion.com/p/9450d0a8834a4de6b68845c7f1f78c12).\\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\\n- Project decisions: [DECISIONS.md](DECISIONS.md)\\n- Functional requirements: [requirements/](requirements/)\\n- Design home: with its Notion work item.\\n- System Guide: disabled; `system-guide/` contains only the template.\\n- Memory: the [Memory database in Notion](https://app.notion.com/p/a2d5b7e595da482381174849b144eec7) (the setup choice is in `.toolkit.json`).\\n- Memory backup or sync: Notion holds the live records. `backup.dir` in `.toolkit.json` records the owner's selected folder. A manual memory export was made there on 2026-09-28. 
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-finish/references/closing.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-finish/references/approvals.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-finish/references/git-rules.md",max_output_tokens:22000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-finish/references/work-item-format.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-finish/references/current-focus.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-finish/references/toolkit-commands.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-finish/references/tracker-notion.md",max_output_tokens:17000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/SKILL.md PROJECT-ROADMAP.md DECISIONS.md .claude/rules/publish-project-documents.md",max_output_tokens:13000}),
+  tools.exec_command({cmd:"git remote -v",max_output_tokens:1000}),
+  tools.exec_command({cmd:"toolkit work show TFR-001",max_output_tokens:8500}),
+  tools.exec_command({cmd:"toolkit work show TFR-002",max_output_tokens:8500})
+]); for(let i=0;i<r.length;i++) text(JSON.stringify({task:i,result:r[i]}));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Warning: truncated output (original token count: 27275)\nTotal output lines: 6\n\n{\"task\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"adff0d\",\"wall_time_seconds\":7.09e-7,\"exit_code\":0,\"original_token_count\":8381,\"output\":\"# Closing a work item\\n\\nThe detail behind each `work-finish` step: the pull request and merge, a\\nmerge with no remote, deployment, the requirements baseline, sub-items,\\nmemory, leftover worktrees, Done, and cancel.\\n\\n## Contents\\n\\n1. Before anything ships\\n2. Commit, push, and the pull request (stage 12)\\n3. Merging\\n4. No remote: the local merge\\n5. Deployment (stage 13)\\n6. Requirements baseline (stage 14)\\n7. Sub-items\\n8. Memory and the current focus\\n9. Leftover worktrees and branches\\n10. Done\\n11. Cancel\\n\\n## 1. Before anything ships\\n\\n- The result approval is recorded (`toolkit work show <id>` shows\\n  `result_approved`), or the owner said \\\"ship it\\\" or \\\"mark it done\\\" after he\\n  saw the result, the gaps, and the evidence. Record that with his words\\n  (`approvals.md`, \\\"Result approval\\\").\\n- Never describe an unverified result as complete.\\n- Done means the owner accepted the result. Cancelled means the work stopped\\n  without it.\\n- Stages that do not apply are skipped. Work with no repository change has no\\n  pull request; work with no deployment has no deployment stage. A skipped\\n  stage gets one history note saying so, so `toolkit work finish` has a\\n  record of it.\\n\\n## 2. Commit, push, and the pull request (stage 12)\\n\\n- Commit the item's files on its branch, staged by name\\n  (`claude/<prefix>-<number>-<slug>`, for example `claude/wi-007-csv-export`).\\n  No `Co-Authored-By` line naming an AI and no \\\"Generated with\\\" line.\\n- Push the branch. Never force-push.\\n- Write the pull request title and description in plain words: what changed,\\n  why, how it was checked, and the item id. Run the description through the\\n  `unslop` skill, because other people read it. No line crediting an AI.\\n- Set the stage:\\n  `toolkit work set <id> --stage 12-pr-and-push`\\n- In Codex, every Git write here needs the owner's approval and escalated\\n  permissions (`git-rules.md`).\\n\\n## 3. Merging\\n\\nMerge only through `merge-and-clean-up`, and only when one of these holds:\\n\\n- the owner said yes to this merge; or\\
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-finish/references/git-rules.md",max_output_tokens:7500}),
+tools.exec_command({cmd:"sed -n '110,210p' /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-finish/references/approvals.md",max_output_tokens:6000}),
+tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-finish/references/work-item-format.md",max_output_tokens:5500}),
+tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/SKILL.md",max_output_tokens:6000}),
+tools.exec_command({cmd:"cat PROJECT-ROADMAP.md",max_output_tokens:3000}),
+tools.exec_command({cmd:"git status --porcelain --untracked-files=all",max_output_tokens:1000}),
+tools.exec_command({cmd:"git -C .claude/worktrees/tfr-001-build-the-days-until-command status --porcelain --untracked-files=all",max_output_tokens:1000}),
+tools.exec_command({cmd:"git -C .claude/worktrees/tfr-002-add-the-weeks-flag-to-days status --porcelain --untracked-files=all",max_output_tokens:1000})
+]);for(let i=0;i<r.length;i++)text(JSON.stringify({task:i,result:r[i]}));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"task\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"fa389a\",\"wall_time_seconds\":0.000002583,\"exit_code\":0,\"original_token_count\":2306,\"output\":\"<!-- Generated file. Source: plugins/git-workflows/shared/git-rules.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\\n# Git rules for Toolkit V2 skills\\n\\nPurpose: the Git rules every Toolkit V2 skill follows when it makes a branch,\\ncommits, merges, pushes, or removes a worktree, in Claude Code and in Codex.\\n\\n## Contents\\n\\n- Look before the first Git write\\n- Branch and worktree names for a work item\\n- Staging and committing\\n- No AI credit\\n- The Git-ignored toolkit folders\\n- A project with no remote\\n- The merge-safety check\\n- A merge that stops on a conflict\\n- Git writes in Codex\\n- Checklist: one commit\\n- Examples\\n\\n## Look before the first Git write\\n\\nOther sessions may work in the same repository at the same time. Before the\\nfirst Git write in a session, run each of these on its own:\\n\\n```text\\ngit worktree list\\ngit status\\ngit remote\\n```\\n\\n- `git remote` prints nothing: the project has no remote. Read \\\"A project\\n  with no remote\\\" below before any fetch, pull, push, or pull request.\\n- An unknown worktree, a branch that moved, or a change this session did not\\n  make means another session is working. Do not change it. Tell the owner.\\n- The shared primary checkout is the first entry `git worktree list` prints.\\n  In it, never switch branches, reset, rebase, or stash.\\n- Never commit, push, rebase, or delete another session's branch, and never\\n  commit its uncommitted changes, even when they look finished.\\n\\n## Branch and worktree names for a work item\\n\\nA work item's code work happens in its own worktree, on its own branch.\\n\\n| Part | Form | Example for `WI-007`, \\\"CSV export\\\" |\\n| --- | --- | --- |\\n| Branch | `claude/<prefix>-<number>-<slug>` | `claude/wi-007-csv-export` |\\n| Worktree folder | `.claude/worktrees/<prefix>-<number>-<slug>` | `.claude/worktrees/wi-007-csv-export` |\\n\\n- `<prefix>` is the item's own id prefix in lower case: `wi` for `WI-007`,\\n  `tv2` for `TV2-007`, `acme` for `ACME-007`.\\n- The session briefing and `merge-and-clean-up` find the item from the id in\\n  the branch name. A branch named `wi-001-<slug>` for item `TV2-001` is
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:2200}),
+tools.exec_command({cmd:"toolkit work show TFR-001 --section 'Open Questions'",max_output_tokens:3000}),
+tools.exec_command({cmd:"git log --oneline --graph --all -12",max_output_tokens:2500}),
+tools.exec_command({cmd:"git diff --name-only main...claude/tfr-001-build-the-days-until-command",max_output_tokens:1000}),
+tools.exec_command({cmd:"git merge-base claude/tfr-001-build-the-days-until-command claude/tfr-002-add-the-weeks-flag-to-days",max_output_tokens:200})
+]);for(let i=0;i<r.length;i++)text(JSON.stringify({task:i,result:r[i]}));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.7 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"task\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"0dd4f0\",\"wall_time_seconds\":4.351934542,\"exit_code\":0,\"original_token_count\":60,\"output\":\"1 decision waits on the owner:\\n\\nTFR-001 Build the days-until command\\n  - Q-08: May I merge the approved TFR-001 base branch and TFR-002 --weeks branch locally into main, in that order? Affects TFR-001 and TFR-002 delivery. (work-decide)\\n\"}}}"}, {"type": "input_text", "text": "{\"task\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"4322ca\",\"wall_time_seconds\":1.2842615,\"exit_code\":0,\"original_token_count\":399,\"output\":\"## Open Questions\\n\\n| ID | Question | Affects | Status | Decision needed from |\\n|---|---|---|---|---|\\n| Q-01 | Should the command count local calendar days, with today as 0, tomorrow as 1, and past dates as negative? Answer: yes, confirmed by Mike Rihm on 2026-09-28. | R-01, R-02 | Answered | owner |\\n| Q-02 | How should --weeks display a past date so the negative value is clear? Answer: use ago, confirmed by Mike Rihm on 2026-09-28. | R-02 | Answered | owner |\\n| Q-03 | Should a missing date or text outside YYYY-MM-DD also print a clear error and exit with code 1? Answer: print a short usage line and exit with code 1, confirmed by Mike Rihm on 2026-09-28. | R-03 | Answered | owner |\\n| Q-04 | Should an unknown flag or an extra argument print the short usage line and exit with code 1? Answer: yes, confirmed by Mike Rihm on 2026-09-28. | R-03 | Answered | owner |\\n| Q-05 | Should --weeks work before the date, after it, or in both positions? Answer: both positions, confirmed by Mike Rihm on 2026-09-28. | R-02, R-03 | Answered | owner |\\n| Q-06 | With --weeks, should 1 use singular week or day, and what should today print? Answer: use 1 week and 1 day for one; omit a unit with a zero count; print 0 days for today, confirmed by Mike Rihm on 2026-09-28. | R-02 | Answered | owner |\\n| Q-07 | Would you like agents to take responsibility for delivering this, with you acting as product owner? | delivery | Answered | owner |\\n| Q-08 | May I merge the approved TFR-001 base branch and TFR-002 --weeks branch locally into main, in that order? | TFR-001 and TFR-002 delivery | Open | owner |\\n\"}}}"}, {"type": "input_text", "text": "{\"task\":2,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"df8a72\",\"
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history TFR-001 --note 'Owner said: Yes, I authorize both local merges into main in that order. Ship it: then mark both items done and clean up the worktrees and branches.' --effect 'Q-08 answered: merge TFR-001, then TFR-002 locally into main; finish both items and remove their branches and worktrees.'",max_output_tokens:1500});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"10bae1\",\"wall_time_seconds\":4.082786833,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Added a Recent History row to TFR-001.\\n\"}"}]
+
+[CALL] const s=`| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | Should the command count local calendar days, with today as 0, tomorrow as 1, and past dates as negative? Answer: yes, confirmed by Mike Rihm on 2026-09-28. | R-01, R-02 | Answered | owner |
+| Q-02 | How should --weeks display a past date so the negative value is clear? Answer: use ago, confirmed by Mike Rihm on 2026-09-28. | R-02 | Answered | owner |
+| Q-03 | Should a missing date or text outside YYYY-MM-DD also print a clear error and exit with code 1? Answer: print a short usage line and exit with code 1, confirmed by Mike Rihm on 2026-09-28. | R-03 | Answered | owner |
+| Q-04 | Should an unknown flag or an extra argument print the short usage line and exit with code 1? Answer: yes, confirmed by Mike Rihm on 2026-09-28. | R-03 | Answered | owner |
+| Q-05 | Should --weeks work before the date, after it, or in both positions? Answer: both positions, confirmed by Mike Rihm on 2026-09-28. | R-02, R-03 | Answered | owner |
+| Q-06 | With --weeks, should 1 use singular week or day, and what should today print? Answer: use 1 week and 1 day for one; omit a unit with a zero count; print 0 days for today, confirmed by Mike Rihm on 2026-09-28. | R-02 | Answered | owner |
+| Q-07 | Would you like agents to take responsibility for delivering this, with you acting as product owner? | delivery | Answered | owner |
+| Q-08 | May I merge the approved TFR-001 base branch and TFR-002 --weeks bran
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 5.0 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"12e3b4\",\"wall_time_seconds\":4.6882245000000005,\"exit_code\":0,\"original_token_count\":9,\"output\":\"Saved \\\"Open Questions\\\" in TFR-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set TFR-001 --waiting-on agent",max_output_tokens:1000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.8 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"6b2195\",\"wall_time_seconds\":3.435452375,\"exit_code\":0,\"original_token_count\":25,\"output\":\"Updated TFR-001: waiting on agent.\\nNow 11 User approval (In Progress). Continue with work-finish.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"git merge --ff-only claude/tfr-001-build-the-days-until-command",sandbox_permissions:"require_escalated",justification:"Merge the approved TFR-001 branch locally into main as Mike authorized.",prefix_rule:["git","merge","--ff-only"],max_output_tokens:1500});text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set TFR-001 --stage 12-pr-and-push",max_output_tokens:1000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"16d856\",\"wall_time_seconds\":4.111207916,\"exit_code\":0,\"original_token_count\":40,\"output\":\"Updated TFR-001: stage 11 User approval -> 12 Pull request and push (status In Review).\\nNow 12 Pull request and push (In Review). Continue with work-finish.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history TFR-001 --note 'No remote: merged locally into main at 48e56d4.' --effect 'No pull request; no deployment.'",max_output_tokens:1000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"20ffbe\",\"wall_time_seconds\":4.063715042,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Added a Recent History row to TFR-001.\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"git diff --name-only main...claude/tfr-002-add-the-weeks-flag-to-days",max_output_tokens:1000}),
+tools.exec_command({cmd:"git status --porcelain --untracked-files=all",max_output_tokens:1000}),
+tools.exec_command({cmd:"cat requirements/AGENTS.md .claude/rules/publish-project-documents.md",max_output_tokens:6000}),
+tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.6/skills/publish-docs/SKILL.md",max_output_tokens:5000}),
+tools.exec_command({cmd:"rg --files requirements system-guide tests",max_output_tokens:2000})
+]);for(let i=0;i<r.length;i++)text(JSON.stringify({task:i,result:r[i]}));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"task\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"ca12b4\",\"wall_time_seconds\":0.000003042,\"exit_code\":0,\"original_token_count\":18,\"output\":\"bin/days-until.js\\ntest/days-until.test.js\\ntests/TFR-002-TEST-PLAN.md\\n\"}}}"}, {"type": "input_text", "text": "{\"task\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"ab9396\",\"wall_time_seconds\":5.83e-7,\"exit_code\":0,\"original_token_count\":0,\"output\":\"\"}}}"}, {"type": "input_text", "text": "{\"task\":2,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"fd383c\",\"wall_time_seconds\":0.000003292,\"exit_code\":0,\"original_token_count\":464,\"output\":\"# Functional requirements\\n\\nKeep one folder per durable business area, holding one maintained file. Start a new area by copying `system-area-template/` to a folder named for the area, then rename the copied `AREA-TEMPLATE.md` for the area, for example `requirements/billing/BILLING.md`. Leave `system-area-template/` itself unchanged for the next area. Record agreed functional behavior and its conditions, exceptions, and source. The active work item owns proposed changes, open questions, detailed tasks, and execution history. Update the area file at the agreed lifecycle point after confirming what was delivered. Link a design or work item when it explains a requirement; do not copy their task history here.\\n---\\npaths:\\n  - \\\"requirements/**\\\"\\n  - \\\"PROJECT-ROADMAP.md\\\"\\n  - \\\"PROJECT.md\\\"\\n  - \\\"DECISIONS.md\\\"\\n  - \\\"system-guide/**\\\"\\n  - \\\"ai-external-knowledge/**\\\"\\n  - \\\"**/README.md\\\"\\n---\\n# Publish Project Documents\\n\\n- In a copied Git repository, prepare each authorized documentation-only save in its own temporary Git worktree. Publish its commit directly to the default branch without a pull request.\\n- Rules, skills, hooks, prompts, settings, and code use a worktree and a pull request, even when written in Markdown.\\n- Saving a document does not approve its requirements or its build.\\n- Stage only this save's files, by name, in its worktree. Read the full staged diff.\\n- Never force-push or change another session's checkout. Resolve a remote advance in this save's worktree.\\n- An unpushed commit is unfinished. Verify the complete save reached the remote. In a repository with no remote (`git remote` prints nothing), t
+
+[CALL] const r=await tools.exec_command({cmd:"git merge main -m 'Merge main into TFR-002 weeks branch'",workdir:".claude/worktrees/tfr-002-add-the-weeks-flag-to-days",sandbox_permissions:"require_escalated",justification:"Update TFR-002 with the approved TFR-001 merge so it can fast-forward into main.",max_output_tokens:1500});text(r);
+
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"node --test test/days-until.test.js",workdir:".claude/worktrees/tfr-002-add-the-weeks-flag-to-days",max_output_tokens:3000}),
+tools.exec_command({cmd:"node bin/days-until.js --weeks 2026-10-15",workdir:".claude/worktrees/tfr-002-add-the-weeks-flag-to-days",max_output_tokens:500}),
+tools.exec_command({cmd:"git status --short --branch",workdir:".claude/worktrees/tfr-002-add-the-weeks-flag-to-days",max_output_tokens:500}),
+tools.exec_command({cmd:"git diff --name-only main...claude/tfr-002-add-the-weeks-flag-to-days",max_output_tokens:500}),
+tools.exec_command({cmd:"git log -1 --oneline claude/tfr-002-add-the-weeks-flag-to-days",max_output_tokens:500})
+]);for(let i=0;i<r.length;i++)text(JSON.stringify({task:i,result:r[i]}));
+
+
+[CALL] const r=await tools.exec_command({cmd:"git merge --ff-only claude/tfr-002-add-the-weeks-flag-to-days",sandbox_permissions:"require_escalated",justification:"Merge the approved and retested TFR-002 branch locally into main as Mike authorized.",prefix_rule:["git","merge","--ff-only"],max_output_tokens:1500});text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set TFR-002 --stage 12-pr-and-push",max_output_tokens:1000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.1 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"8035a1\",\"wall_time_seconds\":3.761101167,\"exit_code\":0,\"original_token_count\":40,\"output\":\"Updated TFR-002: stage 11 User approval -> 12 Pull request and push (status In Review).\\nNow 12 Pull request and push (In Review). Continue with work-finish.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history TFR-002 --note 'No remote: merged locally into main at 9666d71 after updating from TFR-001; eight tests and a direct CLI check passed.' --effect 'No pull request; no deployment.'",max_output_tokens:1000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 6.8 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"65673e\",\"wall_time_seconds\":6.51022075,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Added a Recent History row to TFR-002.\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"cat requirements/system-area-template/AREA-TEMPLATE.md",max_output_tokens:5000}),
+tools.exec_command({cmd:"cat requirements/SYSTEM-DATA-MODEL.md",max_output_tokens:1000}),
+tools.exec_command({cmd:"cat tests/TFR-001-TEST-PLAN.md tests/TFR-002-TEST-PLAN.md",max_output_tokens:3500}),
+tools.exec_command({cmd:"cat bin/days-until.js",max_output_tokens:3500}),
+tools.exec_command({cmd:"git status --short --branch",max_output_tokens:500}),
+tools.exec_command({cmd:"toolkit work list --tree",max_output_tokens:1500}),
+tools.exec_command({cmd:"toolkit work show TFR-001 --section 'Roadmap'",max_output_tokens:2000})
+]);for(let i=0;i<r.length;i++)text(JSON.stringify({task:i,result:r[i]}));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.9 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"task\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"c66c0d\",\"wall_time_seconds\":0.000002708,\"exit_code\":0,\"original_token_count\":409,\"output\":\"# <Functional area>\\n\\n<!-- Fill-in guide: copy this folder and rename the copied folder and file for the real business area. Replace <Functional area> and every angle-bracket prompt in the section, rule block, and list below with accepted content. Repeat the stable-rule subsection once per behavior; use the same rule ID in related evidence. Link the work item that approved each rule. Remove unused example lines and this guide after filling. -->\\n\\n## Purpose and scope\\n\\n<Describe the capability and users covered here. State meaningful exclusions and adjacent owners.>\\n\\n## Functional behavior\\n\\n### <Stable rule ID> \u2014 <Behavior or rule name>\\n\\n- Trigger or context: <When this behavior applies.>\\n- Required behavior: <What the system must do in observable terms.>\\n- Conditions and exceptions: <When the behavior changes or does not apply.>\\n- User or system outcome: <What should be visible or produced.>\\n- Source: <Approved decision, work item, or other authoritative record.>\\n- Delivery status and evidence: <Current delivered behavior, or a clearly labeled approved future requirement, with linked validation.>\\n\\n## Data and access rules\\n\\n<Business-owned fields, definitions, access expectations, and privacy constraints that apply to this area. Link to shared definitions rather than duplicating them.>\\n\\n## Integrations and dependencies\\n\\n<Other capabilities or systems this area depends on, including the owning records.>\\n\\n## Acceptance evidence\\n\\n<How the behavior is confirmed, including important examples or tests. Link to evidence when available.>\\n\\n## Change history\\n\\n- <Date \u2014 approved change \u2014 source or linked work item.>\\n\"}}}"}, {"type": "input_text", "text": "{\"task\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"b00d5c\",\"wall_time_seconds\":0.00000225,\"exit_code\":0,\"original_token_count\":304,\"output\":\"# System Data Model\\n\\n<!-- Fill-in guide: replace this comment with verified, accepted data model requirements for the whole system. Use the sections below for each shared entity or relationship; add one block per real item. Link the approving work item and date. Do not co
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history TFR-001 --note 'Stage 13 skipped: this command runs locally; no deployment destination is configured.' --effect 'Continue to the requirements baseline.'",max_output_tokens:1000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"8ede50\",\"wall_time_seconds\":3.975428542,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Added a Recent History row to TFR-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history TFR-002 --note 'Stage 13 skipped: this command runs locally; no deployment destination is configured.' --effect 'Continue to the requirements baseline.'",max_output_tokens:1000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 6.7 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"21da7b\",\"wall_time_seconds\":6.399141625,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Added a Recent History row to TFR-002.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set TFR-001 --stage 14-spec-update",max_output_tokens:1000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"0aa3ac\",\"wall_time_seconds\":3.992011625,\"exit_code\":0,\"original_token_count\":41,\"output\":\"Updated TFR-001: stage 12 Pull request and push -> 14 Specification update (status In Review).\\nNow 14 Specification update (In Review). Continue with work-finish.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set TFR-002 --stage 14-spec-update",max_output_tokens:1000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.9 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"9b9cd7\",\"wall_time_seconds\":3.583592792,\"exit_code\":0,\"original_token_count\":41,\"output\":\"Updated TFR-002: stage 12 Pull request and push -> 14 Specification update (status In Review).\\nNow 14 Specification update (In Review). Continue with work-finish.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"node /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.6/skills/publish-docs/scripts/publish-docs.mjs start --branch main -- requirements/days-until/DAYS-UNTIL.md PROJECT-ROADMAP.md PROJECT.md",sandbox_permissions:"require_escalated",justification:"Create the temporary documentation save worktree for the delivered days-until requirements, roadmap, and project command.",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.7 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"2612fc\",\"wall_time_seconds\":0.023963625,\"exit_code\":0,\"original_token_count\":63,\"output\":\"No remote: this save will be committed locally on main; nothing is fetched or pushed.\\n/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1-docsave-16803d2d\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"git status --short --branch",workdir:"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1-docsave-16803d2d",max_output_tokens:1000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"f0206b\",\"wall_time_seconds\":0.000003791,\"exit_code\":0,\"original_token_count\":5,\"output\":\"## HEAD (no branch)\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"mkdir -p requirements/days-until",workdir:"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1-docsave-16803d2d",sandbox_permissions:"require_escalated",justification:"Create the days-until requirements folder in the temporary documentation save worktree.",max_output_tokens:500});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.5 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"d071d6\",\"wall_time_seconds\":0.000002542,\"exit_code\":0,\"original_token_count\":0,\"output\":\"\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"cat > requirements/days-until/DAYS-UNTIL.md <<'EOF'\n# Days-until\n\n## Purpose and scope\n\nThe command `node bin/days-until.js YYYY-MM-DD` tells a person how many local calendar days remain until a date. The optional `--weeks` flag shows the same difference in weeks and days.\n\n## Functional behavior\n\n### R-01 — Count local calendar days\n\n- Trigger or context: A person enters one valid date as `YYYY-MM-DD`.\n- Required behavior: Count calendar dates in the local time zone. Today is 0, tomorrow is 1, and past dates have negative counts. The time of day does not change the count.\n- Conditions and exceptions: The date must exist on the calendar. An impossible date follows R-03.\n- User or system outcome: Print the signed count followed by `day` for 1 or -1 and `days` otherwise.\n- Source: TFR-001, approved by Mike Rihm on 2026-09-28.\n- Delivery status and evidence: Delivered in TFR-001; checked in `tests/TFR-001-TEST-PLAN.md` and the combined eight-test run on 2026-09-28.\n\n### R-02 — Show weeks and days\n\n- Trigger or context: A person puts `--weeks` before or after the date.\n- Required behavior: Show the absolute difference as whole weeks and leftover days. Use singular `week` or `day` for a count of 1. Omit a unit with a zero count; for example, print `3 days`, `2 weeks`, or `2 weeks and 3 days`. Print `0 days` for today. Add `ago` after a past date.\n- Conditions and exceptions: Both flag positions are valid. Today has no `a
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.6 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"4bcc5a\",\"wall_time_seconds\":0.000003208,\"exit_code\":0,\"original_token_count\":0,\"output\":\"\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"cat > PROJECT-ROADMAP.md <<'EOF'\n# Project roadmap\n\n## Project outcome\n\ndays-until tells me how many days are left until a date I type, so I can count down to trips and deadlines.\n\n## Phase overview\n\n| Phase | Intended outcome | Exit condition | Depends on |\n| --- | --- | --- | --- |\n| P01 — Base command | Enter a date and see the local calendar-day difference. | TFR-001's base result is tested, approved, and on main. Done 2026-09-28. | None |\n| P02 — Weeks display | Use `--weeks` to see whole weeks and leftover days. | TFR-002's result is tested, approved, and on main. Done 2026-09-28. | P01 |\n\n## P01 — Base command\n\n**Outcome:** The command accepts a real `YYYY-MM-DD` date, prints the signed local calendar-day difference, and reports invalid default-mode input.\n\n**Exit condition:** TFR-001 R-01 and the default-mode part of R-03 pass the checks in `tests/TFR-001-TEST-PLAN.md`, and the owner approves the result.\n**Dependencies:** None.\n\n### P01-U01 — Build the days-until command\n\n**Deliverable:** The base `node bin/days-until.js YYYY-MM-DD` command.\n\n**Done when:** The base result is tested, approved, and merged locally into main.\n\n**Depends on:** None.\n**Linked work item:** TFR-001.\n\n## P02 — Weeks display\n\n**Outcome:** The command accepts `--weeks` before or after the date, prints whole weeks and leftover days, and reports invalid weeks-mode input.\n\n**Exit condition:** TFR-001 R-02 and the weeks-mode p
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 2.7 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"0958d5\",\"wall_time_seconds\":0.000001791,\"exit_code\":0,\"original_token_count\":0,\"output\":\"\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"perl -0pi -e 's@- Tests and checks: no verified commands yet; this repository has no application code or package scripts\\.@- Tests and checks: `node --test test/days-until.test.js` passed eight tests on 2026-09-28. Run `node bin/days-until.js YYYY-MM-DD` or add `--weeks` before or after the date.@' PROJECT.md",workdir:"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1-docsave-16803d2d",sandbox_permissions:"require_escalated",justification:"Update PROJECT.md with the verified test and command now available on main.",max_output_tokens:500});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"7bc963\",\"wall_time_seconds\":0.0000025,\"exit_code\":0,\"original_token_count\":0,\"output\":\"\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"git add requirements/days-until/DAYS-UNTIL.md PROJECT-ROADMAP.md PROJECT.md",workdir:"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1-docsave-16803d2d",sandbox_permissions:"require_escalated",justification:"Stage only the approved days-until requirements, roadmap, and project command documentation.",max_output_tokens:500});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 2.5 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"d9c9fe\",\"wall_time_seconds\":0.000001708,\"exit_code\":0,\"original_token_count\":0,\"output\":\"\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"git diff --cached --name-status",workdir:"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1-docsave-16803d2d",max_output_tokens:1000}),
+tools.exec_command({cmd:"git diff --cached",workdir:"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1-docsave-16803d2d",max_output_tokens:7500}),
+tools.exec_command({cmd:"git status --porcelain --untracked-files=all",workdir:"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1-docsave-16803d2d",max_output_tokens:1000})
+]);for(let i=0;i<r.length;i++)text(JSON.stringify({task:i,result:r[i]}));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"task\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"d2e8c3\",\"wall_time_seconds\":0.000003125,\"exit_code\":0,\"original_token_count\":19,\"output\":\"M\\tPROJECT-ROADMAP.md\\nM\\tPROJECT.md\\nA\\trequirements/days-until/DAYS-UNTIL.md\\n\"}}}"}, {"type": "input_text", "text": "{\"task\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"56063b\",\"wall_time_seconds\":8.33e-7,\"exit_code\":0,\"original_token_count\":2191,\"output\":\"diff --git a/PROJECT-ROADMAP.md b/PROJECT-ROADMAP.md\\nindex 3b1548f..0ef9ffa 100644\\n--- a/PROJECT-ROADMAP.md\\n+++ b/PROJECT-ROADMAP.md\\n@@ -1,20 +1,5 @@\\n # Project roadmap\\n \\n-<!-- Fill-in guide: replace every angle-bracket prompt in the outcome, phase table, phase heading, and work-unit fields with this project's real text. Keep one overview row and one matching ## heading per phase. Under that heading, repeat the ### work-unit block for each deliverable-sized unit and link its canonical work item in the Linked work item field. Remove example rows and this guide after setup. -->\\n-\\n-Use this file for the project's phases and deliverable-sized work units. Link each unit to its work item when one exists. The work item holds its active requirements, open questions, detailed tasks, and execution history.\\n-\\n-```text\\n-PROJECT-ROADMAP.md\\n-\u2514\u2500\u2500 Phase\\n-    \u2514\u2500\u2500 Deliverable-sized work unit\\n-        \u2514\u2500\u2500 Linked work item\\n-            \u251c\u2500\u2500 Active requirements\\n-            \u251c\u2500\u2500 Open questions\\n-            \u251c\u2500\u2500 Detailed tasks\\n-            \u2514\u2500\u2500 Execution history\\n-```\\n-\\n ## Project outcome\\n \\n days-until tells me how many days are left until a date I type, so I can count down to trips and deadlines.\\n@@ -23,32 +8,46 @@ days-until tells me how many days are left until a date I type, so I can count d\\n \\n | Phase | Intended outcome | Exit condition | Depends on |\\n | --- | --- | --- | --- |\\n-| `P01 \u2014 <phase name>` | `<result>` | `<evidence needed to finish>` | `<earlier phase or none>` |\\n+| P01 \u2014 Base command | Enter a date and see the local calendar-day difference. | TFR-001's base result is tested, approved, and on main. Done 2026-09-28. | None |\\n+| P02 \u2014 Weeks display | Use `--weeks` to see whole weeks and leftover days. | TF
+
+[CALL] const r=await tools.exec_command({cmd:"node /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.6/skills/publish-docs/scripts/publish-docs.mjs publish --message 'Record delivered days-until behavior and roadmap'",workdir:"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1-docsave-16803d2d",sandbox_permissions:"require_escalated",justification:"Commit the reviewed requirements, roadmap, and project documentation locally on main.",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 5.8 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"77a18c\",\"wall_time_seconds\":0.072831333,\"exit_code\":0,\"original_token_count\":21,\"output\":\"No remote: committed locally. b085699298b1a05dfc06931d5f751eb64156ee77 is on main.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"git worktree remove /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1-docsave-16803d2d",sandbox_permissions:"require_escalated",justification:"Remove the clean temporary documentation save worktree after its commit reached main.",max_output_tokens:1000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 2.8 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"27498e\",\"wall_time_seconds\":0.00000275,\"exit_code\":0,\"original_token_count\":0,\"output\":\"\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"toolkit work show TFR-001 --section 'Overview'",max_output_tokens:1200}),
+tools.exec_command({cmd:"toolkit work show TFR-001 --section 'Roadmap'",max_output_tokens:1200}),
+tools.exec_command({cmd:"toolkit work show TFR-002 --section 'Overview'",max_output_tokens:1200}),
+tools.exec_command({cmd:"toolkit work show TFR-002 --section 'Roadmap'",max_output_tokens:1200}),
+tools.exec_command({cmd:"git status --short --branch",max_output_tokens:500}),
+tools.exec_command({cmd:"git worktree list",max_output_tokens:1000}),
+tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-finish/references/current-focus.md",max_output_tokens:2500})
+]);for(let i=0;i<r.length;i++)text(JSON.stringify({task:i,result:r[i]}));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.7 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"task\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"a191eb\",\"wall_time_seconds\":1.321277708,\"exit_code\":0,\"original_token_count\":175,\"output\":\"## Overview\\n\\n**Goal:** A person enters a date and sees the time remaining in days or, with --weeks, in weeks and days.\\n\\n**Current position:** The base command is built and tested on the TFR-001 branch. Five tests passed, and Mike Rihm tested and approved its result on 2026-09-28. TFR-002 adds --weeks on a separate branch; eight tests passed and its result is also approved.\\n\\n**Next action:** Ask Mike Rihm to authorize the local merges into main, TFR-001 first and TFR-002 second. Then continue work-finish for each item.\\n\\n**Blockers:** Local merges into main need owner authorization (Q-08).\\n\\n**Related items:** TFR-002 covers --weeks (R-02 and R-03) on its own branch; its result is approved.\\n\"}}}"}, {"type": "input_text", "text": "{\"task\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"494a85\",\"wall_time_seconds\":1.355907792,\"exit_code\":0,\"original_token_count\":179,\"output\":\"## Roadmap\\n\\nA phase is complete when its exit result has been checked.\\n\\n| Phase | Outcome | Status | Exit result | Sub-items |\\n|---|---|---|---|---|\\n| P1 \u2014 Base days-until command | Accept a valid date, count local calendar days, print signed day wording, and reject invalid default-mode input. | Done | R-01 and the default-mode part of R-03 passed five tests and direct CLI checks; commit 568ff86. | None. |\\n| P2 \u2014 Weeks display | Add --weeks in either argument position and keep input errors correct in weeks mode. | In Progress | R-02 and the weeks-mode part of R-03 passed tests and direct CLI checks; Mike Rihm approved the TFR-002 result on 2026-09-28. Local merge is pending authorization. | TFR-002 |\\n\"}}}"}, {"type": "input_text", "text": "{\"task\":2,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"e5f6cc\",\"wall_time_seconds\":1.317252458,\"exit_code\":0,\"original_token_count\":188,\"output\":\"## Overview\\n\\n**Goal:** Add --weeks to the days-until command so it shows whole weeks and leftover days in either flag position.\\n\\n**Current position:** The --weeks result is built and tested on its own branch. Eight automated checks and direct CLI checks passed; the test plan is committed as af7015d. Mike Ri
+
+[CALL] const r=await tools.exec_command({cmd:"git worktree remove .claude/worktrees/tfr-001-build-the-days-until-command",sandbox_permissions:"require_escalated",justification:"Remove TFR-001's clean worktree after its commit reached main, as Mike requested.",max_output_tokens:1000});text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"git branch -d claude/tfr-001-build-the-days-until-command",sandbox_permissions:"require_escalated",justification:"Delete TFR-001's locally merged branch after removing its clean worktree.",max_output_tokens:1000});text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"git worktree remove .claude/worktrees/tfr-002-add-the-weeks-flag-to-days",sandbox_permissions:"require_escalated",justification:"Remove TFR-002's clean worktree after its commit reached main, as Mike requested.",max_output_tokens:1000});text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"git branch -d claude/tfr-002-add-the-weeks-flag-to-days",sandbox_permissions:"require_escalated",justification:"Delete TFR-002's locally merged branch after removing its clean worktree.",max_output_tokens:1000});text(r);
+
+
+[CALL] const s=`**Goal:** Add --weeks to the days-until command so it shows whole weeks and leftover days in either flag position.
+
+**Current position:** Done on 2026-09-28: the --weeks result is on main at 9666d71. Eight automated checks and direct CLI checks passed; Mike Rihm tested and approved the result. The delivered behavior is recorded in requirements/days-until/DAYS-UNTIL.md at b085699.
+
+**Next action:** Finish this work item in the tracker.
+
+**Blockers:** None.
+
+**Related items:** TFR-001 holds the approved requirements and design and delivered the base command.`;
+const r=await tools.exec_command({cmd:"toolkit work edit TFR-002 --section 'Overview' --text '"+s+"'",max_output_tokens:1000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 5.0 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"800020\",\"wall_time_seconds\":4.650812666,\"exit_code\":0,\"original_token_count\":8,\"output\":\"Saved \\\"Overview\\\" in TFR-002.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history TFR-002 --note 'Delivered behavior recorded in requirements/days-until/DAYS-UNTIL.md; roadmap and project command updated at b085699. TFR-002 worktree and branch removed after their merge.' --effect 'Ready to mark Done; main contains the approved result and its requirements baseline.'",max_output_tokens:1000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"5da4f7\",\"wall_time_seconds\":3.902622709,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Added a Recent History row to TFR-002.\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"toolkit work show TFR-002 --section 'Overview'",max_output_tokens:1200}),
+tools.exec_command({cmd:"git status --short --branch",max_output_tokens:500}),
+tools.exec_command({cmd:"git worktree list",max_output_tokens:600})
+]);for(let i=0;i<r.length;i++)text(JSON.stringify({task:i,result:r[i]}));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.5 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"task\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"f18993\",\"wall_time_seconds\":1.220644541,\"exit_code\":0,\"original_token_count\":145,\"output\":\"## Overview\\n\\n**Goal:** Add --weeks to the days-until command so it shows whole weeks and leftover days in either flag position.\\n\\n**Current position:** Done on 2026-09-28: the --weeks result is on main at 9666d71. Eight automated checks and direct CLI checks passed; Mike Rihm tested and approved the result. The delivered behavior is recorded in `requirements/days-until/DAYS-UNTIL.md` at b085699.\\n\\n**Next action:** Finish this work item in the tracker.\\n\\n**Blockers:** None.\\n\\n**Related items:** TFR-001 holds the approved requirements and design and delivered the base command.\\n\"}}}"}, {"type": "input_text", "text": "{\"task\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"e530b1\",\"wall_time_seconds\":0.000002708,\"exit_code\":0,\"original_token_count\":2,\"output\":\"## main\\n\"}}}"}, {"type": "input_text", "text": "{\"task\":2,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"1c882d\",\"wall_time_seconds\":0.000003667,\"exit_code\":0,\"original_token_count\":41,\"output\":\"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1 b085699 [main]\\n\"}}}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work finish TFR-002 --by 'Mike Rihm' --evidence 'Approved weeks result on main at 9666d71; eight node:test checks and direct CLI checks passed; requirements baseline committed at b085699.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 6.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"d8eff7\",\"wall_time_seconds\":6.096003917,\"exit_code\":0,\"original_token_count\":15,\"output\":\"TFR-002 is Done. Result approval: 2026-09-28 by Mike Rihm.\\n\"}"}]
+
+[CALL] const s=`A phase is complete when its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Base days-until command | Accept a valid date, count local calendar days, print signed day wording, and reject invalid default-mode input. | Done | R-01 and the default-mode part of R-03 passed five tests and direct CLI checks; commit 568ff86 reached main through 48e56d4. | None. |
+| P2 — Weeks display | Add --weeks in either argument position and keep input errors correct in weeks mode. | Done | R-02 and the weeks-mode part of R-03 passed eight tests and direct CLI checks; Mike Rihm approved the TFR-002 result on 2026-09-28; commit 9666d71 reached main. | TFR-002 |`;
+const r=await tools.exec_command({cmd:"toolkit work edit TFR-001 --section 'Roadmap' --text '"+s+"'",max_output_tokens:1000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 5.9 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"648ca7\",\"wall_time_seconds\":5.558559708,\"exit_code\":0,\"original_token_count\":7,\"output\":\"Saved \\\"Roadmap\\\" in TFR-001.\\n\"}"}]
+
+[CALL] const s=`**Goal:** A person enters a date and sees the time remaining in days or, with --weeks, in weeks and days.
+
+**Current position:** Done on 2026-09-28: the base command reached main at 48e56d4, and TFR-002 delivered --weeks at 9666d71. The combined eight-test run passed; Mike Rihm tested and approved both results. The delivered behavior is recorded in requirements/days-until/DAYS-UNTIL.md at b085699.
+
+**Next action:** Finish this work item in the tracker.
+
+**Blockers:** None.
+
+**Related items:** TFR-002 delivered --weeks (R-02 and the weeks-mode part of R-03) and is Done.`;
+const r=await tools.exec_command({cmd:"toolkit work edit TFR-001 --section 'Overview' --text '"+s+"'",max_output_tokens:1000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 6.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"7ee751\",\"wall_time_seconds\":5.933681917,\"exit_code\":0,\"original_token_count\":8,\"output\":\"Saved \\\"Overview\\\" in TFR-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history TFR-001 --note 'Delivered behavior recorded in requirements/days-until/DAYS-UNTIL.md; roadmap and project command updated at b085699. Both worktrees and branches removed after their merges. TFR-002 is Done.' --effect 'Ready to mark Done; main contains both approved results and the requirements baseline.'",max_output_tokens:1000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 5.1 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"24e132\",\"wall_time_seconds\":4.743638333,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Added a Recent History row to TFR-001.\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"toolkit work show TFR-001 --section 'Overview'",max_output_tokens:1000}),
+tools.exec_command({cmd:"toolkit work show TFR-001 --section 'Roadmap'",max_output_tokens:1000}),
+tools.exec_command({cmd:"toolkit work list --tree",max_output_tokens:1000})
+]);for(let i=0;i<r.length;i++)text(JSON.stringify({task:i,result:r[i]}));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.6 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"task\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"e3e6a5\",\"wall_time_seconds\":1.2417552920000001,\"exit_code\":0,\"original_token_count\":148,\"output\":\"## Overview\\n\\n**Goal:** A person enters a date and sees the time remaining in days or, with --weeks, in weeks and days.\\n\\n**Current position:** Done on 2026-09-28: the base command reached main at 48e56d4, and TFR-002 delivered --weeks at 9666d71. The combined eight-test run passed; Mike Rihm tested and approved both results. The delivered behavior is recorded in `requirements/days-until/DAYS-UNTIL.md` at b085699.\\n\\n**Next action:** Finish this work item in the tracker.\\n\\n**Blockers:** None.\\n\\n**Related items:** TFR-002 delivered --weeks (R-02 and the weeks-mode part of R-03) and is Done.\\n\"}}}"}, {"type": "input_text", "text": "{\"task\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"c0d912\",\"wall_time_seconds\":1.244287916,\"exit_code\":0,\"original_token_count\":184,\"output\":\"## Roadmap\\n\\nA phase is complete when its exit result has been checked.\\n\\n| Phase | Outcome | Status | Exit result | Sub-items |\\n|---|---|---|---|---|\\n| P1 \u2014 Base days-until command | Accept a valid date, count local calendar days, print signed day wording, and reject invalid default-mode input. | Done | R-01 and the default-mode part of R-03 passed five tests and direct CLI checks; commit 568ff86 reached main through 48e56d4. | None. |\\n| P2 \u2014 Weeks display | Add --weeks in either argument position and keep input errors correct in weeks mode. | Done | R-02 and the weeks-mode part of R-03 passed eight tests and direct CLI checks; Mike Rihm approved the TFR-002 result on 2026-09-28; commit 9666d71 reached main. | TFR-002 |\\n\"}}}"}, {"type": "input_text", "text": "{\"task\":2,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"98f7d2\",\"wall_time_seconds\":0.878411292,\"exit_code\":0,\"original_token_count\":24,\"output\":\"TFR-001  Build the days-until command  (14 Specification update, In Review, waiting on agent)\\n\"}}}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work finish TFR-001 --by 'Mike Rihm' --evidence 'Approved base result on main at 48e56d4 and Done TFR-002 at 9666d71; combined eight node:test checks and direct CLI checks passed; requirements baseline committed at b085699.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 5.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"3edd82\",\"wall_time_seconds\":4.985840459,\"exit_code\":0,\"original_token_count\":15,\"output\":\"TFR-001 is Done. Result approval: 2026-09-28 by Mike Rihm.\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.6/skills/memory-save/SKILL.md",max_output_tokens:5500}),
+tools.exec_command({cmd:"toolkit memory focus --json",max_output_tokens:2500}),
+tools.exec_command({cmd:"toolkit doctor",max_output_tokens:3500}),
+tools.exec_command({cmd:"git status --short --branch",max_output_tokens:500}),
+tools.exec_command({cmd:"git worktree list",max_output_tokens:500}),
+tools.exec_command({cmd:"git branch -vv",max_output_tokens:500})
+]);for(let i=0;i<r.length;i++)text(JSON.stringify({task:i,result:r[i]}));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 2.8 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"task\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"1b1025\",\"wall_time_seconds\":0.000003208,\"exit_code\":0,\"original_token_count\":3310,\"output\":\"---\\nname: memory-save\\ndescription: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says \\\"remember this\\\", \\\"from now on\\\", \\\"forget that\\\", or \\\"remind me\\\" with no time given, corrects the agent, or a hook says a save is due.'\\n---\\n\\n# Memory save\\n\\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \\\"How to write replies\\\" section of `AGENTS.md`.\\nSaves, corrects, or retires one memory record with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand.\\n\\n## Steps\\n\\nTrack these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.\\n\\n1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home (\\\"Where other things go\\\" below) and stop.\\n2. Search for a record that already holds it, and read each hit with its version. The save's duplicate check compares wording, so only this search finds a record the new fact contradicts (for example \\\"Mondays\\\" against \\\"Tuesdays\\\").\\n   `toolkit memory find '<topic>'`\\n   `toolkit memory get <key> --json`\\n3. Read the approval mode and apply \\\"Approval policy\\\" below. When it says ask, ask and wait.\\n   `toolkit config get memory.approval`\\n4. Write the description and body in the record format (`references/record-format.md`), then save with the form for the case (\\\"Save forms\\\" below).\\n5. Exit code 2 saved nothing. Read the \\\"Error:\\\" line. Records listed: the duplicate check. \\\"Changed since it was read\\\": read it again and redo the change. Any other rule: fix the text as the message says. `references/replacing-and-retiring.md`, section 2, has each case.\\n6. \\\"Forget that\\\": retire the record, with his words as the reason. Delete only when his own words say delete (\\\"Approval policy\\\").\\n   `toolkit memory retire <key> --reason '<his words>'`\\n7. An owner to-do with no work
+
+[CALL] const s=`# Current focus
+
+Last updated: 2026-09-28, work-finish, agent
+
+## Now
+
+None.
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- No active work item. Ask Mike Rihm for the next thing to build; toolkit doctor still reports the two Codex trust setup steps.`;
+const r=await tools.exec_command({cmd:"toolkit memory focus --text '"+s+"' --expect 777ef7c1b579dd7c86d4bce70980880bd5ee3b7a57aa76405944dc31fa4c2a8d",max_output_tokens:1200});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"e7cdb6\",\"wall_time_seconds\":3.975589417,\"exit_code\":0,\"original_token_count\":15,\"output\":\"Saved the current focus (20 lines). Version: 1efc81b7115f\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"toolkit memory focus",max_output_tokens:1000}),
+tools.exec_command({cmd:"toolkit work show TFR-001",max_output_tokens:1400}),
+tools.exec_command({cmd:"toolkit work show TFR-002",max_output_tokens:1400}),
+tools.exec_command({cmd:"toolkit config get backup.dir",max_output_tokens:500}),
+tools.exec_command({cmd:"toolkit doctor",max_output_tokens:1200}),
+tools.exec_command({cmd:"git status --short --branch",max_output_tokens:500})
+]);for(let i=0;i<r.length;i++)text(JSON.stringify({task:i,result:r[i]}));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"task\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"7165b1\",\"wall_time_seconds\":0.636590791,\"exit_code\":0,\"original_token_count\":139,\"output\":\"# Current focus\\n\\nLast updated: 2026-09-28, work-finish, agent\\n\\n## Now\\n\\nNone.\\n\\n## Waiting on the owner\\n\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\n\\n## Untracked to-dos\\n\\nNone.\\n\\n## Next session starts with\\n\\n- No active work item. Ask Mike Rihm for the next thing to build; toolkit doctor still reports the two Codex trust setup steps.\\n\"}}}"}, {"type": "input_text", "text": "{\"task\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"b17d04\",\"wall_time_seconds\":3.937837167,\"exit_code\":0,\"original_token_count\":4520,\"output\":\"Warning: truncated output (original token count: 4520)\\nTotal output lines: 199\\n\\nTFR-001: Build the days-until command\\nLocation: https://app.notion.com/p/Build-the-days-until-command-3e9b381da17681b7b7ccea07b01d5850\\nStage: Done | Waiting on: none | Continue with: nothing (finished)\\nParent: none | Sub-items: TFR-002 | Design: approved (https://app.notion.com/p/TFR-001-Build-the-days-until-command-with-a-weeks-flag-solution-design-3e9b381da17681859546d90fe3e13254)\\n\\n---\\nid: TFR-001\\ntitle: Build the days-until command\\ntype: build\\nstage: 14-spec-update\\nstatus: Done\\nparent: none\\nwaiting_on: \\\"none\\\"\\npriority: medium\\ndelivery: owner-led\\nrequirements_approved: \\\"2026-09-28 by Mike Rihm\\\"\\ndesign: approved\\nresult_approved: \\\"2026-09-28 by Mike Rihm\\\"\\nupdated: 2026-09-28\\n---\\n# TFR-001: Build the days-until command\\n\\n## Overview\\n\\n**Goal:** A person enters a date and sees the time remaining in days or, with --weeks, in weeks and days.\\n\\n**Current position:** Done on 2026-09-28. Approved base result on main at 48e56d4 and Done TFR-002 at 9666d71; combined eight node:test checks and direct CLI checks passed; requirements baseline committed at b085699.\\n\\n**Next action:** None. Finished.\\n\\n**Blockers:** None.\\n\\n**Related items:** TFR-002 delivered --weeks (R-02 and the weeks-mode part of R-03) and is Done.\\n\\n
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"toolkit work show TFR-001 --section 'Decisions and context'",max_output_tokens:1200}),
+tools.exec_command({cmd:"toolkit work show TFR-002 --section 'Decisions and context'",max_output_tokens:1200}),
+tools.exec_command({cmd:"toolkit work show TFR-001 --section 'Solution options and considerations'",max_output_tokens:1000}),
+tools.exec_command({cmd:"toolkit work show TFR-002 --section 'Solution options and considerations'",max_output_tokens:1000}),
+tools.exec_command({cmd:"ls -la /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/notion",max_output_tokens:800})
+]);for(let i=0;i<r.length;i++)text(JSON.stringify({task:i,result:r[i]}));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 2.1 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"task\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"bb58be\",\"wall_time_seconds\":1.240561375,\"exit_code\":0,\"original_token_count\":171,\"output\":\"### Decisions and context\\n\\n- Design method: scan the empty repository first, then design one Node.js option using built-in features where they meet R-01 through R-03. The approved requirements leave no product choice that needs a second option.\\n- Design review team: one requirements analyst, one architect, one critic; three agent runs in the first pass. No researcher is needed because no bounded external question is open.\\n- Delivery for TFR-001 and its --weeks work: owner-led, chosen by Mike Rihm on 2026-09-28. No agent team. This agent builds and brings the results for separate reviews. Git worktree add, add, and commit are authorized for the build; merge is not authorized.\\n\"}}}"}, {"type": "input_text", "text": "{\"task\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"13d82a\",\"wall_time_seconds\":1.243182708,\"exit_code\":0,\"original_token_count\":78,\"output\":\"### Decisions and context\\n\\n- Mike Rihm chose owner-led delivery on 2026-09-28 for the days-until goal. No agent team. Build Git commands were authorized; merge was not.\\n- This item is top-level after an owner change in Notion. TFR-001 still holds the approved R-02 and R-03 text and approved Option A design.\\n\"}}}"}, {"type": "input_text", "text": "{\"task\":2,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"586ac4\",\"wall_time_seconds\":1.836692041,\"exit_code\":0,\"original_token_count\":73,\"output\":\"### Solution options and considerations\\n\\nThese are possibilities to evaluate, **not approved requirements or design decisions**.\\n\\n- **For R-01:** <Possible approach and the tradeoff or question it raises.>\\n- **For R-02:** <Another option, constraint, or design consideration to investigate.>\\n\"}}}"}, {"type": "input_text", "text": "{\"task\":3,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"3d0981\",\"wall_time_seconds\":1.2369649169999999,\"exit_code\":0,\"original_token_count\":73,\"output\":\"### Solution options and considerations\\n\\nThese are possibilities to evaluate, **not approved requirements or design decisions**.\\n\\n- **For R-01:** <Possible approach and the tradeoff or question it raises.>\\n- **For R-02:** <An
+
+[CALL] const s=`- Mike Rihm chose owner-led delivery on 2026-09-28. TFR-001 and TFR-002 were reviewed and approved separately.
+- Mike Rihm authorized local merges into main on 2026-09-28, TFR-001 first and TFR-002 second. Both merges and branch cleanup are complete.
+- The approved Option A design remains with TFR-001.`;
+const r=await tools.exec_command({cmd:"toolkit work edit TFR-001 --section 'Decisions and context' --text '"+s+"'",max_output_tokens:1000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.7 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"6d45ca\",\"wall_time_seconds\":4.396728625,\"exit_code\":0,\"original_token_count\":11,\"output\":\"Saved \\\"Decisions and context\\\" in TFR-001.\\n\"}"}]
+
+[CALL] const s=`- Mike Rihm chose owner-led delivery on 2026-09-28 for the days-until goal. TFR-002 received its own result review.
+- Mike Rihm authorized the local merge after TFR-001 on 2026-09-28. TFR-002 reached main at 9666d71, and its branch and worktree were removed.
+- TFR-002 is a sub-item of TFR-001. TFR-001 holds the approved R-02 and R-03 text and the approved Option A design.`;
+const r=await tools.exec_command({cmd:"toolkit work edit TFR-002 --section 'Decisions and context' --text '"+s+"'",max_output_tokens:1000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"568b49\",\"wall_time_seconds\":3.899531166,\"exit_code\":0,\"original_token_count\":11,\"output\":\"Saved \\\"Decisions and context\\\" in TFR-002.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit TFR-001 --section 'Solution options and considerations' --text 'None. The approved Option A design is retained with this item.'",max_output_tokens:1000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 5.1 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"202b12\",\"wall_time_seconds\":4.806474958,\"exit_code\":0,\"original_token_count\":14,\"output\":\"Saved \\\"Solution options and considerations\\\" in TFR-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit TFR-002 --section 'Solution options and considerations' --text 'None. TFR-001 holds the approved design for this sub-item.'",max_output_tokens:1000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"c5c819\",\"wall_time_seconds\":3.911405833,\"exit_code\":0,\"original_token_count\":14,\"output\":\"Saved \\\"Solution options and considerations\\\" in TFR-002.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"find /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/notion -maxdepth 3 -type f -print",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"239aab\",\"wall_time_seconds\":0.000002584,\"exit_code\":0,\"original_token_count\":152,\"output\":\"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/notion/tv2-final-run-2026-09-28/memory-export/CURRENT_FOCUS.md\\n/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/notion/tv2-final-run-2026-09-28/memory-export/toolkit-memory-export.json\\n/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/notion/tv2-final-run-2026-09-28/memory-export/terminology-glossary.md\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"toolkit handoff-backup --help",max_output_tokens:2000}),
+tools.exec_command({cmd:"toolkit export --help",max_output_tokens:2000}),
+tools.exec_command({cmd:"toolkit work validate TFR-001",max_output_tokens:1500}),
+tools.exec_command({cmd:"toolkit work validate TFR-002",max_output_tokens:1500})
+]);for(let i=0;i<r.length;i++)text(JSON.stringify({task:i,result:r[i]}));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.9 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"task\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"61b4b3\",\"wall_time_seconds\":0.00000375,\"exit_code\":0,\"original_token_count\":245,\"output\":\"toolkit handoff-backup: Back up .work-items/ and .memory/ (and Hindsight memory) to the project's backup folder; the handoff skill runs it last.\\n\\nUsage:\\n  toolkit handoff-backup\\n\\nExports the Git-ignored .work-items/ and .memory/ folders (and the Hindsight\\nmemory, which lives on this computer too) to <backup.dir>/<project key>-<date>/,\\none folder per day, where backup.dir is the backup folder in .toolkit.json.\\nWhen today's folder already holds more files than the project has now (a\\nfresh clone, or the project on a new computer), the backup goes to a new\\nfolder, <project key>-<date>-<HHMMSS>, and today's earlier backup is kept as\\nit was. The work finish command runs the same backup. With no backup folder\\nset it changes nothing and says how to set one (toolkit config set backup.dir\\n<folder>, or none). A project with nothing on this computer only (Notion tracker and Notion\\nmemory) has nothing to back up. Exit 1 when the backup failed; the handoff\\nthen tells the owner.\\n\"}}}"}, {"type": "input_text", "text": "{\"task\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"67462e\",\"wall_time_seconds\":7.5e-7,\"exit_code\":0,\"original_token_count\":142,\"output\":\"toolkit export: Back up the Git-ignored .work-items/ and .memory/ folders to a folder (they exist on this computer only).\\n\\nUsage:\\n  toolkit export --to <folder>\\n\\nCopies .work-items/ (with its state file) and .memory/, the parts this project\\nuses, into <folder>/work-items and <folder>/memory, with toolkit-export.json\\ndescribing the copy. The folder must be new, empty, or an earlier export. Use a\\nfolder outside the project. Hindsight and Notion memory are not included:\\ntoolkit memory export covers every memory backend. toolkit import --from\\n<folder> restores it.\\n\"}}}"}, {"type": "input_text", "text": "{\"task\":2,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"1c6619\",\"wall_time_seconds\":3.547192334,\"exit_code\":0,\"original_token_count\":25,\"output\":\"Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.\\n\"}}}"}, {"type": "input_text", "text": "{\"task\":3,\"result\":{\"status\":\"

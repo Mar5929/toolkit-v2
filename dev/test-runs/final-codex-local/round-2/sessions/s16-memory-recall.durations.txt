@@ -1,0 +1,5 @@
+0.236s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules'
+0.255s :: 'const r=await tools.exec_command({cmd:"toolkit memory focus",max_output_tokens:2000}); text(r.output);\n'
+0.228s :: 'const r=await Promise.allSettled([\ntools.exec_command({cmd:"toolkit memory find \'error messages tests\'",max_output_tokens:2500}),\ntools.exec_command({cmd:"toolkit memory find \'round up Venmo\'",max_output_tokens:2500})\n])'
+0.291s :: 'const r=await Promise.allSettled([\ntools.exec_command({cmd:"toolkit memory get user_coding_preferences",max_output_tokens:2500}),\ntools.exec_command({cmd:"toolkit memory get project_mike_rihm_friends_settle_split_bills_v'
+MAX toolkit call seconds: 0.291

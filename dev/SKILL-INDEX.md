@@ -181,7 +181,9 @@ or publishing.
 Each entry: the steps the first 40 lines of its `SKILL.md` carry (detail goes in
 `references/`), the `toolkit` commands it uses (ARCHITECTURE.md section 5;
 the commands first proposed in section 7.1 are now all listed there), agents,
-what it replaces, and the hooks that back it.
+what it replaces, and the hooks that back it. Where a step list here and a
+`SKILL.md` differ, the `SKILL.md` is the current one; section 1's
+descriptions must match word for word.
 
 ### 3.0 Shared text
 
@@ -236,52 +238,29 @@ match them.
 
 #### `work-on`
 
-- **Steps:**
-  1. A bare "ok", "yes", or "looks good" is not "keep going": when it is the
-     owner's whole message and this chat asked him nothing, start no work and
-     ask what he wants. No briefing in context: run `toolkit brief`. No
-     `.toolkit.json`: open `project-setup` and stop.
-  2. Find the item: the id the owner named (`toolkit work show <id>`), or a
-     title that matches the request in `toolkit work list`. Two possible
-     matches: ask one question. No match: it is new.
-  3. Size a new request. A quick edit (one sitting, no choice for the owner, no
-     behavior recorded in `requirements/`): do it and report it; no item.
-     "Later", "backlog", "park that": check `toolkit work list` for a
-     duplicate, then `toolkit work new --stage 01-discovery` with the owner's
-     words unchanged as the Starting request; reply "Logged as WI-014 (bug,
-     backlog). Not started." and stop. Anything else: `toolkit work new`, then
-     continue.
-  4. A substantial goal with no recorded delivery choice, or an owner who
-     hands the goal over in his own words: open `work-delegate` first.
-  5. Route by where the item stands, using `toolkit work show` and the
-     "Continue with" column of `toolkit work lifecycle`: requirements not
-     approved and the type is `build` or `data-load` (or the risk calls for it):
-     `work-requirements`; a change to a requirement (`R-xx`) at any stage:
-     `work-requirements`; more than one reasonable way to build it and no
-     approved design: `solution-design`; too big for one build: `work-organize`;
-     stages 09 to 11: `work-check`; stages 12 to 14: `work-finish`;
-     `waiting_on: owner`: ask that one question first (`work-decide`) and keep
-     working on anything it does not block. Say the route in one line ("WI-012
-     is waiting for your OK on the requirements; opening work-requirements.").
-     Never ask the owner which stage it is in.
-  6. Plan (`06-implementation-plan`): Roadmap phases `P1`, `P2` and tasks
-     `P1-T01` (Work, Deliverable, Done when, Depends on) from the design's
-     "Build and verification plan". Tracking setup (`07-tracking-setup`) only
-     when needed: the item's branch and worktree; the item's folder in
-     `delivery/deployment/` through `sf-component-tracker`.
-  7. Build (`08-build`) on the item's own branch and worktree. With a team: one
-     `builder` per independent task, one writer per path. Tests go with each
-     task. Tick a task only with evidence. A task whose "Done when" names the
-     owner: Open Questions row and `waiting_on: owner`. Salesforce:
-     `sf-component-tracker` on each metadata change; production data through
-     `sf-data-change`.
-  8. When the owner is needed: an Open Questions row with "Decision needed
-     from: owner", `toolkit work set <id> --waiting-on owner`, keep working on
-     tasks that do not depend on the answer, and tell the owner in one line.
-  9. Last task done: open `work-check`. This skill never records approvals,
-     Done, merges, or deploys.
-  10. Before stopping with work unfinished: Next action and Resume here are
-      current and `toolkit work validate <id>` is clean.
+- **Steps** (as in `SKILL.md` since the reference-files rewrite of 2026-09-28):
+  1. No briefing in context: `toolkit brief`; exit code 4: open
+     `project-setup` and stop. Tell the owner each "Changes found in the
+     tracker" line first.
+  2. A bare "ok", "yes", or "looks good" when this chat asked nothing: start
+     no work and ask what he wants. Otherwise find the item: the id he named,
+     this worktree's item, or a title that matches; two matches, one question.
+  3. No item yet: size the request (quick edit, log only, work item) and pick
+     the type. "Ask me questions first": open `work-requirements`, which
+     creates the item. Log only: reply "Logged as WI-014 (bug, backlog). Not
+     started." and stop.
+  4. Route by where the item stands (`references/sizing-and-routing.md`,
+     section 4): the owner's decisions first (`work-decide`), then the
+     delivery offer (`work-delegate`); stay only to plan and build.
+  5. Plan (stage 06): Roadmap phases and Tasks from the design's Build and
+     verification plan.
+  6. Tracking setup (stage 07): the item's worktree and branch.
+  7. Build (stage 08) task by task; tick a task only with evidence.
+  8. The owner is needed: an Open Questions row, `waiting_on: owner`, keep
+     working on what the answer does not block.
+  9. Last task done: open `work-check`. Stopping with work unfinished: the
+     planning checklist, then one question or the words that continue. The
+     final reply repeats every tracker change of the session.
 - **CLI:** `toolkit brief`, `toolkit work list`, `toolkit work show <id>`,
   `toolkit work new --title <t> [--type] [--parent <id>] [--stage]`,
   `toolkit work set <id> --stage|--waiting-on|--priority|--type`,
@@ -973,10 +952,13 @@ toolkit's `project-init` plugin still loads on this Mac (critique B3).
   1. Confirm the change is documentation in an allowed path, not code, rules,
      skills, hooks, settings, `.memory/`, or `.work-items/`.
   2. `publish-docs.mjs start --branch <default> -- <files>` from this skill's
-     `scripts/` folder (a separate sparse worktree).
+     `scripts/` folder (a separate sparse worktree in the project's
+     Git-ignored `.claude/worktrees/`, or beside the project when that folder
+     is not ignored).
   3. Make the edit there and stage the files by name.
-  4. `publish-docs.mjs publish --message "<message>"`: refuses other staged
-     paths, pushes without force, checks the remote has the commit.
+  4. `publish-docs.mjs publish --workspace <path> --message '<message>'`,
+     run from the project folder: refuses other staged paths, pushes without
+     force, checks the remote has the commit.
   5. Report the commit and that it reached the remote.
 - **CLI:** its own `scripts/publish-docs.mjs start|publish`.
 - **Agents:** none.
@@ -1138,7 +1120,7 @@ skills from other plugins installed on this Mac.
 | 10 | "We've decided to use Postgres everywhere." | `work-decide` | `memory-save`: a decision for the whole project belongs in `DECISIONS.md`. If the owner says "remember we decided ...", `memory-save` starts and its step 1 sends it to `work-decide`. |
 | 11 | "Grill me on the checkout flow." | `work-requirements` | `braindump` plays back without asking questions. Outside: `llm-council` claims "stress-test this", not "grill me". |
 | 12 | "Check the spec before you build." | `work-requirements` | `work-check` checks a finished build, not the requirements. |
-| 13 | "Change R-02 so only admins can export." | `work-requirements` | `work-on` claims "change something" but says it is not for requirement edits; its step 5 also sends a requirement change here. `work-decide` records answers; a change of meaning is rewritten and approved again here. |
+| 13 | "Change R-02 so only admins can export." | `work-requirements` | `work-on` claims "change something" but says it is not for requirement edits; its step 4 also sends a requirement change here. `work-decide` records answers; a change of meaning is rewritten and approved again here. |
 | 14 | "How should we build the CSV export?" | `solution-design` | `work-on` does the work; this asks about approach. In a Salesforce project `sf-architect-solutioning` is the specialist `solution-design` opens (proposed description). |
 | 15 | "Split this into smaller pieces." | `work-organize` | `work-on` opens `work-organize` itself when an item is too big; the phrase is only here. |
 | 16 | "Make WI-7 a sub-item of WI-3." | `work-organize` | `work-on` sets a parent only when it creates a new item. |

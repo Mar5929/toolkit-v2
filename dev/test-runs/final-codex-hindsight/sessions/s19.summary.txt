@@ -1,0 +1,215 @@
+PROMPT: I saved a copy of my README example preference by mistake: the one about a sample run for every switch. Delete that copy for good. I approve the delete command.
+THREAD: 01a0ea37-d2de-7831-b48f-08fe04746f77
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll use the memory-save procedure to remove the duplicate preference and verify which record remains.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/SKILL.md'
+  -> ---
+name: memory-save
+description: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says "remember this", "from now on", "forget that", or "remind me" with no time given, corrects the agent, or a hook says a save is due.'
+---
+
+# Memory save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Saves, corrects, or retires one memory record with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand.
+
+## Steps
+
+Track these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home ("Where other things go" below) and stop.
+2. Search for a record that already holds it, and read each hit with its version. The save's duplicate check compares wording, so only this search finds a record the new fact contradicts (for example "Mondays" against "Tuesdays").
+   `toolkit memory find '<topic>'`
+   `toolkit memory get <key> --json`
+3. Read the approval mode and apply "Approval policy" below. When it says ask, ask and wait.
+   `toolkit config get memory.approval`
+4. Write the description and body in the record format (`refer
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/references/memory-criteria.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/references/replacing-and-retiring.md'
+  -> <!-- Generated file. Source: plugins/toolkit/scaffold/model/.memory/memory-criteria.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Memory criteria
+
+This file is the project-specific selection policy: what is worth keeping in lasting memory. The approval policy, including onboarding and trusted mode, is in the `memory-save` skill, which saves with `toolkit memory save`. When the owner corrects what is worth saving, save the correction as a `feedback` memory with `memory-save`, as a general rule, without copying the rejected memory. Those `feedback` memories override this page.
+
+## Default test for lasting memory
+
+Save a topic when it concerns this project, has a credible source, would matter in a future session, would be costly or unreliable to reconstruct, and has no better maintained owner. Prefer updating an existing topic. A short pointer to an authoritative record can qualify when future sessions would otherwise miss that record.
+
+| Type and filename | Usually worth retaining | Route or reject instead |
+| --- | --- | --- |
+| `user_<topic>.md` | Relevant role, responsibility, working preference, or communication need the owner stated | Personal judgments, irrelevant biography, private details |
+| `feedback_<topic>.md` | Repeated or standing correction to how the agent should work; confirmed selection lesson | One-off irritation, a rejected fact restated as policy, an instruction already in `AGENTS.md` |
+| `project_<topic>.md` | Durable projec
+
+[CMD exit=0] /bin/zsh -lc 'toolkit config get memory.approval'
+  -> onboarding
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory find 'README sample run every switch'"
+  -> 3 memory records are about "README sample run every switch" (Hindsight recall, best first):
+- user_readme_sample_for_every_switch: The README gives a sample run for every switch the program accepts
+    # Sample run for every switch **Remember:** Mike wants the README to give a sample run for every switch the program accepts. **Why:** Not stated by the owner. *
+- user_cli_flags_readme_examples: List every command-line flag in the README with a short example
+    # README examples for CLI flags **Remember:** Mike prefers every command-line flag to be listed in the README with a short example. **Why:** Not stated by the o
+- user_readme_under_one_page: Keep the README short: one screen or less
+    # Short README **Remember:** Mike wants the README kept to one screen or less. **Why:** Not stated by the owner. **How to apply:** Keep README sections brief; m
+Read a record with toolkit memory get <key> before relying on it.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory get user_readme_sample_for_every_switch --json'
+  -> {
+  "ok": true,
+  "backend": "hindsight",
+  "key": "user_readme_sample_for_every_switch",
+  "name": "readme-sample-for-every-switch",
+  "type": "user",
+  "description": "The README gives a sample run for every switch the program accepts",
+  "status": "current",
+  "stored_status": "current",
+  "superseded_by": null,
+  "source": "Mike Rihm, terminal, 2026-09-28",
+  "saved": "2026-09-28",
+  "last_verified": "2026-09-28",
+  "authorization": "Approved by Mike Rihm on 2026-09-28",
+  "approved_by": "Mike Rihm",
+  "supersedes": [],
+  "body": "# Sample run for every switch\n\n**Remember:** Mike wants the README to give a sample run for every switch the program accepts.\n\n**Why:** Not stated by the owner.\n\n**How to apply:** When a switch is added or changed, add a sample run to the README.\n\n**Evidence and limits:** Mike Rihm, in a terminal test, 2026-09-28. Applies to this project.\n\n**Related memories:** None.\n\n**Authoritative records:** None.\n",
+  "version": "87b3eaa40201f63c2cd3cc7fd8ecf3d91104cf3e0f70dfb8cc0e81d73b360f3b",
+  "text": "---\nname: user_readme_sample_for_every_switch\ndescription: The README gives a sample run for every switch the program accepts\nmetadata:\n  type: user\nstatus: current\nsource: Mike Rihm, terminal, 2026-09-28\nlast_verified: 2026-09-28\nauthorization: Approved by Mike Rihm on 2026-09-28\nsupersedes: none\n---\n\n# Sample run for every switch\n\n**Remember:** Mike wants the README to give a sample run for every switch the program accepts.\n\n
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory get user_cli_flags_readme_examples --json'
+  -> {
+  "ok": true,
+  "backend": "hindsight",
+  "key": "user_cli_flags_readme_examples",
+  "name": "cli-flags-readme-examples",
+  "type": "user",
+  "description": "List every command-line flag in the README with a short example",
+  "status": "current",
+  "stored_status": "current",
+  "superseded_by": null,
+  "source": "Mike Rihm, in chat, 2026-09-28",
+  "saved": "2026-09-28",
+  "last_verified": "2026-09-28",
+  "authorization": "Approved by Mike Rihm on 2026-09-28",
+  "approved_by": "Mike Rihm",
+  "supersedes": [],
+  "body": "# README examples for CLI flags\n\n**Remember:** Mike prefers every command-line flag to be listed in the README with a short example.\n\n**Why:** Not stated by the owner.\n\n**How to apply:** When adding or changing a command-line flag, update the README list and give a short example for that flag.\n\n**Evidence and limits:** Mike Rihm, in chat, 2026-09-28. Applies to this project.\n\n**Related memories:** None.\n\n**Authoritative records:** WI-001 records the --times documentation requirement.\n",
+  "version": "6f5ae7fe53b725be9f7ab198fa63b8ab96b1f52a8f68c5c64ef58235ec9f0886",
+  "text": "---\nname: user_cli_flags_readme_examples\ndescription: List every command-line flag in the README with a short example\nmetadata:\n  type: user\nstatus: current\nsource: Mike Rihm, in chat, 2026-09-28\nlast_verified: 2026-09-28\nauthorization: Approved by Mike Rihm on 2026-09-28\nsupersedes: none\n---\n\n# README examples for CLI flags\n\n**Remember:** Mike prefers every c
+
+[AGENT] The “sample run for every switch” record is the duplicate you named. The separate record about listing every flag with a short example will stay. I’m deleting the duplicate now.
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory delete user_readme_sample_for_every_switch --owner-approved'
+  -> Deleted user_readme_sample_for_every_switch. This cannot be undone.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory find 'README sample run every switch' --all"
+  -> 
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for Greet CLI Final H2 (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (4):
+- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- README.md is the project's own file from before the toolkit, so sync lea
+
+[AGENT] Deleted the duplicate “sample run for every switch” memory record, as you requested. The preference to list every flag with a short example remains. The deletion cannot be undone.
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 197815, "cached_input_tokens": 177920, "cache_write_input_tokens": 0, "output_tokens": 798, "reasoning_output_tokens": 84}}
+
+SKILLS OPENED: ['memory-save']
+
+[HOOK CONTEXT ord=9] Project briefing: Greet CLI Final H2 (greet-cli-final-h2), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: the local Hindsight server. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The tracker has no open items. A new request starts a work item with the work-on skill.
+
+Items: 2 done.
+
+Current focus:
+Last updated: 2026-09-28, work-finish, agent
+## Now
+None.
+## Waiting on the owner
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+## Untracked to-dos
+None.
+## Next se
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/{humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,session-handoff,shared-repository-work,work-item-folders}.md",max_output_tokens:12000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/SKILL.md",max_output_tokens:8000}),
+]);
+for (const x of r) text(x.status==="fulfilled"?x.value.output:String(x.reason));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "cat: SOUL.md: No such file or directory\n# Greet CLI Final H2\n\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\n\n## Purpose and intended outcome\n\n- Purpose: Provide a small, friendly greeting command.\n- Intended outcome: A small, friendly greeting command that Mike can grow with a few simple flags (Mike Rihm, 2026-09-28).\n\n## Scope and boundaries\n\n- In scope: The Node.js `greet` command in `bin/greet.mjs`.\n- Outside scope: `<Important exclusions or adjacent owners.>`\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\n\n## Systems and environments\n\n| System or org | Purpose | Environment | Source of truth | Access notes |\n| --- | --- | --- | --- | --- |\n| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |\n\n## People and ownership\n\n| Role | Person or team | Responsibility | Source / last confirmed |\n| --- | --- | --- | --- |\n| Owner | Mike Rihm | Project decisions | Mike Rihm, 2026-09-28 |\n\n## Work and project records\n\n- Work tracker: Local folders in `.work-items/`.\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\n- Project decisions: [DECISIONS.md](DECISIONS.md)\n- Functional requirements: [requirements/](requirements/)\n- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`\n- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`\n- Memory: this project's bank on the local Hindsight server (the setup choice is in `.toolkit.json`)\n- Memory backup or sync: Automatic Toolkit backup to `/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-hindsight`; restore with the Toolkit backup procedure.\n\n## Resources and project paths\n\n- Tests and checks: `npm test`, which runs `test/*.test.mjs` with Node.js (verified 2026-09-28).\n- Outside references: `ai-external-knowledge/INDEX.md`.\n\n## Operating conventions\n\n<Write only stable project-specific convent
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/references/memory-criteria.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/references/replacing-and-retiring.md",max_output_tokens:11000}),
+  tools.exec_command({cmd:"toolkit memory find 'README sample run every switch'",max_output_tokens:3000}),
+  tools.exec_command({cmd:"toolkit config get memory.approval",max_output_tokens:1000})
+]);
+for (const x of r) text(x.status==="fulfilled"?x.value.output:String(x.reason));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "<!-- Generated file. Source: plugins/toolkit/scaffold/model/.memory/memory-criteria.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\n# Memory criteria\n\nThis file is the project-specific selection policy: what is worth keeping in lasting memory. The approval policy, including onboarding and trusted mode, is in the `memory-save` skill, which saves with `toolkit memory save`. When the owner corrects what is worth saving, save the correction as a `feedback` memory with `memory-save`, as a general rule, without copying the rejected memory. Those `feedback` memories override this page.\n\n## Default test for lasting memory\n\nSave a topic when it concerns this project, has a credible source, would matter in a future session, would be costly or unreliable to reconstruct, and has no better maintained owner. Prefer updating an existing topic. A short pointer to an authoritative record can qualify when future sessions would otherwise miss that record.\n\n| Type and filename | Usually worth retaining | Route or reject instead |\n| --- | --- | --- |\n| `user_<topic>.md` | Relevant role, responsibility, working preference, or communication need the owner stated | Personal judgments, irrelevant biography, private details |\n| `feedback_<topic>.md` | Repeated or standing correction to how the agent should work; confirmed selection lesson | One-off irritation, a rejected fact restated as policy, an instruction already in `AGENTS.md` |\n| `project_<topic>.md` | Durable project constraint, rationale, technical landmark, or proven costly fix | A decision for the whole project (`DECISIONS.md`), code summary, schema copy, active ticket status, accepted requirement or design body |\n| `reference_<topic>.md` | Hard-to-rediscover route to a source, system, dashboard, or decision record, with why to open it | Entire outside page or a path already obvious in `PROJECT.md` or the project map |\n| `event_<topic>.md` | Significant project episode: what was done, what resulted, and where the output lives | Routine edit, tool call, raw error, daily progress log |\n\n## Working context is different\n\n`CURRENT_FOCUS.md` holds what is happening now: active work item IDs, what waits on the owner with no work item, untracked to-dos, and where the next session starts. It can change often. Keep a work item's detailed tasks and status in that item.
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"toolkit memory get user_readme_sample_for_every_switch --json",max_output_tokens:3000}),
+  tools.exec_command({cmd:"toolkit memory get user_cli_flags_readme_examples --json",max_output_tokens:3000})
+]);
+for (const x of r) text(x.status==="fulfilled"?x.value.output:String(x.reason));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\n  \"ok\": true,\n  \"backend\": \"hindsight\",\n  \"key\": \"user_readme_sample_for_every_switch\",\n  \"name\": \"readme-sample-for-every-switch\",\n  \"type\": \"user\",\n  \"description\": \"The README gives a sample run for every switch the program accepts\",\n  \"status\": \"current\",\n  \"stored_status\": \"current\",\n  \"superseded_by\": null,\n  \"source\": \"Mike Rihm, terminal, 2026-09-28\",\n  \"saved\": \"2026-09-28\",\n  \"last_verified\": \"2026-09-28\",\n  \"authorization\": \"Approved by Mike Rihm on 2026-09-28\",\n  \"approved_by\": \"Mike Rihm\",\n  \"supersedes\": [],\n  \"body\": \"# Sample run for every switch\\n\\n**Remember:** Mike wants the README to give a sample run for every switch the program accepts.\\n\\n**Why:** Not stated by the owner.\\n\\n**How to apply:** When a switch is added or changed, add a sample run to the README.\\n\\n**Evidence and limits:** Mike Rihm, in a terminal test, 2026-09-28. Applies to this project.\\n\\n**Related memories:** None.\\n\\n**Authoritative records:** None.\\n\",\n  \"version\": \"87b3eaa40201f63c2cd3cc7fd8ecf3d91104cf3e0f70dfb8cc0e81d73b360f3b\",\n  \"text\": \"---\\nname: user_readme_sample_for_every_switch\\ndescription: The README gives a sample run for every switch the program accepts\\nmetadata:\\n  type: user\\nstatus: current\\nsource: Mike Rihm, terminal, 2026-09-28\\nlast_verified: 2026-09-28\\nauthorization: Approved by Mike Rihm on 2026-09-28\\nsupersedes: none\\n---\\n\\n# Sample run for every switch\\n\\n**Remember:** Mike wants the README to give a sample run for every switch the program accepts.\\n\\n**Why:** Not stated by the owner.\\n\\n**How to apply:** When a switch is added or changed, add a sample run to the README.\\n\\n**Evidence and limits:** Mike Rihm, in a terminal test, 2026-09-28. Applies to this project.\\n\\n**Related memories:** None.\\n\\n**Authoritative records:** None.\\n\",\n  \"valid\": true,\n  \"problems\": [],\n  \"proposal\": false\n}\n"}, {"type": "input_text", "text": "{\n  \"ok\": true,\n  \"backend\": \"hindsight\",\n  \"key\": \"user_cli_flags_readme_examples\",\n  \"name\": \"cli-flags-readme-examples\",\n  \"type\": \"user\",\n  \"description\": \"List every command-line flag in the README with a short example\",\n  \"status\": \"current\",\n  \"stored_status\": \"current\",\n  \"superseded_by\": null,\n  \"source\": \"Mike
+
+[CALL] const r = await tools.exec_command({cmd:"toolkit memory delete user_readme_sample_for_every_switch --owner-approved",sandbox_permissions:"require_escalated",justification:"May I permanently delete the duplicate README preference record you explicitly approved deleting?",prefix_rule:["toolkit","memory","delete"],max_output_tokens:3000}); text(r.output); text(`exit=${r.exit_code}`);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.0 seconds\nOutput:\n"}, {"type": "input_text", "text": "Deleted user_readme_sample_for_every_switch. This cannot be undone.\n"}, {"type": "input_text", "text": "exit=0"}]
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"toolkit memory find 'README sample run every switch' --all",max_output_tokens:3000}),
+  tools.exec_command({cmd:"toolkit doctor",max_output_tokens:3000})
+]);
+for (const x of r) text(x.status==="fulfilled"?x.value.output:String(x.reason));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "2 memory records are about \"README sample run every switch\" (Hindsight recall, best first):\n- user_cli_flags_readme_examples: List every command-line flag in the README with a short example\n    # README examples for CLI flags **Remember:** Mike prefers every command-line flag to be listed in the README with a short example. **Why:** Not stated by the o\n- user_readme_under_one_page: Keep the README short: one screen or less\n    # Short README **Remember:** Mike wants the README kept to one screen or less. **Why:** Not stated by the owner. **How to apply:** Keep README sections brief; m\nRead a record with toolkit memory get <key> before relying on it.\n"}, {"type": "input_text", "text": "Toolkit doctor for Greet CLI Final H2 (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2).\n\nWarnings (2):\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.\n   Fix: The owner opens Codex in this folder and trusts it when Codex asks.\n2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).\n   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\n\nNotes (4):\n- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\n- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\n- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\n- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.\n\nResu

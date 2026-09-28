@@ -1,0 +1,122 @@
+PROMPT: Before we close this out: is there anything from this work you think is worth keeping in project memory for next time?
+THREAD: 01a0e9d6-e2ef-7c21-afca-92426f87d6d5
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Add a Tier picklist field to Account: 11 User approval, In Progress, waiting on owner. Next action: Ask Mike Rihm to approve the WI-001 result after the separate WI-002 result review. Continues with work-decide.
+- WI-002 Configure Account Tier access and page layout: 11 User approval, In Progress, waiting on owner. Next action: Ask Mike Rihm to approve the WI-002 result separately. Continues with work-decide.
+
+Waiting on the owner:
+- WI-001 Add a Tier picklist field to Account: WI-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-001 --result --by <name>. (work-decide)
+- WI-002 Configure Account Tier access and page layout: WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)
+
+Items: 2 in progress.
+
+Current focus:
+Last updated: 2026-09-28, chat, agent
+## Now
+- WI-001 Add a Tier picklist field to Account
+- WI-002 Configure Account Tier access and page layout
+## Waiting on the owner
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, and trust the Toolkit V2 hooks and two Salesforce guards. Setup step; drop it when doctor stops reporting it.
+## Untracked to-dos
+None.
+## Next session starts with
+- Continue WI-002 and WI-001 from their Resume here sections: present WI-002 for separate result approval, then WI-001. Independent checks found R-01 through R-04 met at f2c7b61 and b43155d; the owner-reported sandbox checks are in the test plans. The checker made no direct org calls.
+
+Project memory (builtin): 3 records. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_afternoon_salesforce_setup: Plan owner-run Salesforce Setup steps for the afternoon
+- user_custom_field_description_help_text: Every new custom field should have a description and help text
+- user_salesforce_setup_screenshots: Prefer Salesforce Setup screenshots to long written checklists
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499
+
+[AGENT] I’ll check what the work items already record and suggest only anything that would help a future session.
+
+[CALL exec] cat SOUL.md PROJECT.md .claude/rules/memory-review-and-save.md .claude/rules/keep-work-item-current.md .claude/rules/work-item-folders.md .memory/AGENTS.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.6/skills/memory-save/SKILL.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+cat: SOUL.md: No such file or directory
+# Acme CRM
+
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->
+
+## Purpose and intended outcome
+
+- Purpose: Support the Acme sales team's account ranking and access to account information in Salesforce.
+- Intended outcome: The Acme sales team can rank their accounts and see the information they need on each account in Salesforce.
+
+## Scope and boundaries
+
+- In scope: Account ranking and account information for the Acme sales team in Salesforce.
+- Outside scope: `<Important exclusions or adjacent owners.>`
+- Constraints: `<Approved security, delivery, or operating constraints with sources.>`
+
+## Systems and environments
+
+| System or org | Purpose | Environment | Source of truth | Access notes |
+| --- | --- | --- | --- | --- |
+| Acme CRM (`tkv2-sbx`) | Practice Salesforce org for testing | Sandbox | `sf org list` and `sf org display -o tkv2-sbx --json`, 2026-09-28 | Agents may read it; Codex hands sandbox deploy and data-change commands to the owner. |
+| Acme CRM (`tkv2-prod`) | Practice Salesforce production org | Production | `sf org list`, 2026-09-28 | Agents may read it; the owner runs any production change. |
+
+## People and ownership
+
+| Role | Person or team | Responsibility | Source / last confirmed |
+| --- | --- | --- | --- |
+| Project owner | Mike Rihm | Makes project decisions | Setup answer and Git identity, 2026-09-28 |
+| Sales Manager and Tier reviewer | Dana Lee | Requested the Tier field and checks Account tiers every Monday | Mike Rihm, 2026-09-28 |
+
+## Work and project records
+
+- Work tracker: Local `.work-items/` folders, Git-ignored.
+- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)
+- Project decisions: [DECISIONS.md](DECISIONS.md)
+- Functional requirements: [requirements/](requirements/)
+- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`
+- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`
+- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)
+- Memory backup or sync: `/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-salesforce`; Toolkit V2 backs up local work items and memory there.
+
+## Resources and project paths
+
+- Salesforce source: `force-app/` as configured in `sfdx-project.json`.
+- Project-wide deployment manifest: `delivery/deployment/full-project-deployment-template/package.xml` after the API version and members are verified. Keep it as the full project component inventory; or
+
+[CALL exec] cat .memory/memory-criteria.md .memory/MEMORY.md .memory/CURRENT_FOCUS.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+# Memory criteria
+
+This file is the project-specific selection policy: what is worth keeping in lasting memory. The approval policy, including onboarding and trusted mode, is in the `memory-save` skill, which saves with `toolkit memory save`. When the owner corrects what is worth saving, save the correction as a `feedback` memory with `memory-save`, as a general rule, without copying the rejected memory. Those `feedback` memories override this page
+
+[CALL exec] toolkit work show WI-001
+   toolkit work show WI-002
+   cat .memory/user_afternoon_salesforce_setup.md .memory/user_custom_field_description_help_text.md .memory/user_salesforce_setup_screenshots.md
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"i":0,"result":"WI-001: Add a Tier picklist field to Account\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1/.work-items/account-tier/WI-001-tier-field/WORK-ITEM.md\nStage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide\nParent: none | Sub-items: WI-002 | Design: approved (.work-items/account-tier/WI-001-tier-field/DESIGN.md)\nWorktree branch for this item: claude/wi-001-add-a-tier-picklist-field-to (folder .claude/worktrees/wi-001-add-a-tier-picklist-field-to)\n\n---\nid: WI-001\ntitle: Add a Tier picklist field to Account\ntype: build\nstage: 11-user-approval\nstatus: In Progress\nparent: none\nwaiting_on: \"owner\"\npriority: medium\ndelivery: agent-led\nrequirements_approved: \"2026-09-28 by Mike Rihm\"\ndesign: approved\nresult_approved: \"no\"\nupdated: 2026-09-28\n---\n\n# WI-001: Add a Tier picklist field to Account\n\n## Overview\n\n**Goal:** Let the Acme sales team rank Accounts using a Tier field.\n\n**Current position:** The independent recheck of f2c7b61 found R-01 and R-02 met from Mike Rihm’s owner-reported sandbox observations and matching field metadata. Mike reported that a new Account starts with blank Tier, the displayed choices are Gold, Silver, Bronze in order, Gold, Silver, Bronze, and blank saved, Platinum was rejected through the API, the description is in Setup, and help text appears on hover. The checker did not repeat the org checks. WI-002 separately met R-03 and R-04 in its independent recheck.\n\n**Next action:** Ask Mike Rihm to approve the WI-001 result after the separate WI-002 result review.\n\n**Blockers:** Result approval waits on the owner.\n\n**Related items:** Sub-item WI-002 delivers R-03 and R-04.\n\n## Roadmap\n\nA phase is complete when its tasks are complete and its exit result has been checked.\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 — Tier field | Create the Account Tier field with approved values and field text. | Done | Field metadata and R-01/R-02 metadata checks passed; sandbox behavior checks await deployment. | None. |\n| P2 — Access and page layout | Configure field access and show Tier below Rating. | In Progress | WI-002 passes R-03/R-04 checks after owner-run sandbox steps. | WI-002 |\n\n## Tasks\n\n### P1 — Tier field\n\n- [x] **P1-T01 — Build Tier field** · Done  \n  **Work:** Create Account.Tier__c with the approved values, settings, description, and help text.  \n  **Deliverable:** Tier field metadata and its narrow WI-001 deployment package, committed as 8e95727.  \n  **Done when:** R-01/R-02 metadata checks passed: optional restricted picklist, Gold/Silver/Bronze order, no default, description and help text; sandbox check-only validation succeeded as job 0AfFAKE000VALID3.  \n  **Depends on:** WI-002 access and page inventory gate, completed 
+
+[AGENT] I don’t see a new lasting memory to add. The three reusable preferences from this work are already saved: include description and help text on new custom fields, favor Salesforce Setup screenshots over long checklists, and plan your manual Setup checks for the afternoon.
+
+The Tier rules, discretionary Gold revenue guidance, test evidence, and remaining approvals are in WI-001 and WI-002, where the next session can find them. The next step is your separate result review of WI-002, then WI-001.
+
+SKILLS OPENED (SKILL.md read): ['memory-save']
+
+TOOLKIT COMMANDS:
+   toolkit work show WI-001
+   toolkit work show WI-002

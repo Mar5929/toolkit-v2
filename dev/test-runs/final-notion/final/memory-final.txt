@@ -1,0 +1,38 @@
+$ toolkit memory list --status all
+- user_plain_nodejs_tests: Prefer plain Node.js with no npm packages and tests using node:test
+- project_run_days_until_only_macbook_air_node_24: you run days-until only on your MacBook Air with Node 24
+exit=0
+
+$ toolkit memory focus
+# Current focus
+
+Last updated: 2026-09-28, handoff, agent
+
+## Now
+
+None.
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- 2026-09-28 | days-until: TFR-001 and TFR-002 are Done, no open work items. Ask Mike Rihm for the next thing to build; start it with the work-on skill. toolkit doctor still reports the two Codex trust setup steps.
+exit=0
+
+$ toolkit memory status
+Backend: notion
+Where: the Memories database on the project's Notion Memory page (Lore layout) (https://app.notion.com/p/a2d5b7e595da482381174849b144eec7)
+Healthy: yes
+Last save: 2026-09-28T21:24:31.209Z
+Last export: 2026-09-28T20:01:03.574Z
+Records: 2 current, 0 needing review, 0 retired
+Notion Memory page (Lore layout): 2 records in use, 0 retired.
+exit=0
+

@@ -615,7 +615,8 @@ async function approve(argv, ctx, { project, driver }) {
   const { _, flags } = parseArgs(argv, { string: ['by', 'host'] });
   const key = requireKeyArg(_, 'approve');
   const by = str(flags, 'by');
-  const res = await approveRecord(driver, key, { by, today: today() });
+  const ownerName = project && project.config && project.config.project && project.config.project.owner;
+  const res = await approveRecord(driver, key, { by, today: today(), ownerName });
   if (res.changed) await afterWrite(project, driver);
   const lines = res.changed
     ? [`Approved ${res.key}: it is now a current memory record, approved by ${String(by).trim()} on ${today()}.`, `Version: ${short(res.version)}`]

@@ -1,0 +1,33 @@
+$ toolkit init --dir ... (the exact command the s00f reply gave)
+Set up Toolkit V2 in /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1.
+Acme CRM (acme-crm), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Added 112 files:
+  - .agents/skills/ (3 files)
+  - .claude/hooks/ (2 files)
+  - .claude/output-styles/ (1 file)
+  - .claude/ (2 files)
+  - .claude/rules/ (18 files)
+  - .claude/skills/ (3 files)
+  - .codex/ (2 files)
+  - (project folder) (8 files)
+  - .memory/ (6 files)
+  - .work-items/work-item-template/ (2 files)
+  - ai-external-knowledge/ (1 file)
+  - delivery/archive/ (1 file)
+  - delivery/data/ (5 files)
+  - delivery/deployment/ (9 files)
+  - requirements/ (2 files)
+  - requirements/system-area-template/ (1 file)
+  - system-guide/ (1 file)
+  - tests/ (1 file)
+  - tools/kb/ (40 files)
+  - tools/permissions/ (3 files)
+  - .codex/rules/ (1 file)
+Kept the project's own file (the toolkit never replaces it):
+  - README.md (kept the project's file)
+Wrote .toolkit.json last.
+Next:
+- Start a new Claude Code session in this project so it loads the settings, the hooks, and the Plain English style.
+- In Codex, the owner opens /hooks once and trusts the Toolkit V2 hooks. Codex skips plugin hooks until he does.
+- Run toolkit doctor to check the setup.
+exit=0

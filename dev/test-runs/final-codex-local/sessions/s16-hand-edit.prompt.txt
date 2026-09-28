@@ -1,0 +1,1 @@
+I want to see what happens with direct edits. Using your file edit tool (apply_patch), not a toolkit command: first add the line "Shipped to my blog on 2026-09-28." at the end of the Notes section of WI-003's WORK-ITEM.md. Then change the priority in WI-003's header from medium to low, also with apply_patch. Tell me what happened for each.

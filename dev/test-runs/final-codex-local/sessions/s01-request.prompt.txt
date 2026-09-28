@@ -1,0 +1,1 @@
+I want the slug command built. When I run node bin/slug.js "Hello World!" it should print hello-world. I also want a --max option that keeps the slug short, for example --max 20.

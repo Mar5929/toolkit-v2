@@ -1,0 +1,54 @@
+## backup folder after setup (s00g/s01), Mon Sep 28 22:12:18 UTC 2026
+total 8
+drwxr-xr-x  5 michaelrihm  wheel  160 Sep 28 18:11 .
+drwxr-xr-x  4 michaelrihm  wheel  128 Sep 28 18:09 ..
+drwxr-xr-x  4 michaelrihm  wheel  128 Sep 28 18:11 memory-export
+-rw-r--r--  1 michaelrihm  wheel  659 Sep 28 18:11 toolkit-export.json
+drwxr-xr-x  5 michaelrihm  wheel  160 Sep 28 18:11 work-items
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-hindsight/greet-cli-final-h2-2026-09-28/memory-export:
+total 16
+drwxr-xr-x  4 michaelrihm  wheel  128 Sep 28 18:11 .
+drwxr-xr-x  5 michaelrihm  wheel  160 Sep 28 18:11 ..
+-rw-r--r--  1 michaelrihm  wheel  605 Sep 28 18:11 CURRENT_FOCUS.md
+-rw-r--r--  1 michaelrihm  wheel  233 Sep 28 18:11 toolkit-memory-export.json
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-hindsight/greet-cli-final-h2-2026-09-28/work-items:
+total 16
+drwxr-xr-x  5 michaelrihm  wheel  160 Sep 28 18:11 .
+drwxr-xr-x  5 michaelrihm  wheel  160 Sep 28 18:11 ..
+-rw-r--r--  1 michaelrihm  wheel  195 Sep 28 18:11 .toolkit-state.json
+-rw-r--r--  1 michaelrihm  wheel  326 Sep 28 18:11 DASHBOARD.md
+drwxr-xr-x  4 michaelrihm  wheel  128 Sep 28 18:11 work-item-template
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-hindsight/greet-cli-final-h2-2026-09-28/work-items/work-item-template:
+total 40
+drwxr-xr-x  4 michaelrihm  wheel   128 Sep 28 18:11 .
+drwxr-xr-x  5 michaelrihm  wheel   160 Sep 28 18:11 ..
+-rw-r--r--  1 michaelrihm  wheel  8954 Sep 28 18:11 DESIGN.md
+-rw-r--r--  1 michaelrihm  wheel  7524 Sep 28 18:11 WORK-ITEM.md
+
+{
+  "toolkit": "toolkit-v2",
+  "kind": "project-export",
+  "schema": 1,
+  "project": {
+    "name": "Greet CLI Final H2",
+    "key": "greet-cli-final-h2"
+  },
+  "exportedAt": "2026-09-28T22:11:03.865Z",
+  "from": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2",
+  "parts": [
+    {
+      "name": "work-items",
+      "from": ".work-items/",
+      "files": 4
+    }
+  ],
+  "files": [
+    "work-items/.toolkit-state.json",
+    "work-items/DASHBOARD.md",
+    "work-items/work-item-template/DESIGN.md",
+    "work-items/work-item-template/WORK-ITEM.md"
+  ]
+}

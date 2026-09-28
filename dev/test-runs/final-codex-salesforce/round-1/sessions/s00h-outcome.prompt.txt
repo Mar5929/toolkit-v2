@@ -1,0 +1,1 @@
+The outcome: the Acme sales team can rank their accounts and see the information they need on each account in Salesforce.

@@ -1,0 +1,21 @@
+$ node bin/days-until.js 2026-12-25
+88 days
+exit=0
+$ node bin/days-until.js 2026-09-28
+0 days
+exit=0
+$ node bin/days-until.js 2026-09-29
+1 day
+exit=0
+$ node bin/days-until.js 2026-09-27
+-1 day
+exit=0
+$ node bin/days-until.js 2026-02-30
+Invalid date: 2026-02-30
+exit=1
+$ node bin/days-until.js 
+Usage: node bin/days-until.js [--weeks] YYYY-MM-DD
+exit=1
+$ node bin/days-until.js 2026-9-1
+Usage: node bin/days-until.js [--weeks] YYYY-MM-DD
+exit=1

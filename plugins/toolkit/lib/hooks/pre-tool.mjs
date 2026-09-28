@@ -117,7 +117,22 @@ function fileReader(cwd) {
   };
 }
 
+/**
+ * The PreToolUse hook. In Codex a refusal's reason is shown as
+ * "Command blocked by PreToolUse hook: <reason>. Command: ...", so a reason
+ * that ends with a period gets two (final confirmation round 1, Notion run:
+ * "then run toolkit index knowledge.."). The last period is left off there.
+ */
 export async function preTool(input, io) {
+  const out = await decide(input, io);
+  const hso = out && out.hookSpecificOutput;
+  if (io && io.host === 'codex' && hso && hso.permissionDecision === 'deny' && typeof hso.permissionDecisionReason === 'string') {
+    hso.permissionDecisionReason = hso.permissionDecisionReason.replace(/\.\s*$/, '');
+  }
+  return out;
+}
+
+async function decide(input, io) {
   const cwd = input.cwd || io.cwd;
   const tool = input.tool_name;
   const ti = input.tool_input || {};

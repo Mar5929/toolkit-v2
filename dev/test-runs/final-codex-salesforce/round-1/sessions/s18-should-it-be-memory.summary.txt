@@ -1,0 +1,93 @@
+PROMPT: Should that go in memory?
+THREAD: 01a0e9d7-79a4-7290-84e5-52df28257b1c
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Add a Tier picklist field to Account: 11 User approval, In Progress, waiting on owner. Next action: Ask Mike Rihm to approve the WI-001 result after the separate WI-002 result review. Continues with work-decide.
+- WI-002 Configure Account Tier access and page layout: 11 User approval, In Progress, waiting on owner. Next action: Ask Mike Rihm to approve the WI-002 result separately. Continues with work-decide.
+
+Waiting on the owner:
+- WI-001 Add a Tier picklist field to Account: WI-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-001 --result --by <name>. (work-decide)
+- WI-002 Configure Account Tier access and page layout: WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)
+
+Items: 2 in progress.
+
+Current focus:
+Last updated: 2026-09-28, chat, agent
+## Now
+- WI-001 Add a Tier picklist field to Account
+- WI-002 Configure Account Tier access and page layout
+## Waiting on the owner
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, and trust the Toolkit V2 hooks and two Salesforce guards. Setup step; drop it when doctor stops reporting it.
+## Untracked to-dos
+None.
+## Next session starts with
+- Continue WI-002 and WI-001 from their Resume here sections: present WI-002 for separate result approval, then WI-001. Independent checks found R-01 through R-04 met at f2c7b61 and b43155d; the owner-reported sandbox checks are in the test plans. The checker made no direct org calls.
+
+Project memory (builtin): 3 records. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_afternoon_salesforce_setup: Plan owner-run Salesforce Setup steps for the afternoon
+- user_custom_field_description_help_text: Every new custom field should have a description and help text
+- user_salesforce_setup_screenshots: Prefer Salesforce Setup screenshots to long written checklists
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499
+
+[AGENT] I’ll check the project’s memory criteria. Your comment sounded like a tentative idea, so I’ll make sure it isn’t saved as a settled preference.
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.6/skills/memory-save/SKILL.md .memory/memory-criteria.md .memory/AGENTS.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+---
+name: memory-save
+description: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says "remember this", "from now on", "forget that", or "remind me" with no time given, corrects the agent, or a hook says a save is due.'
+---
+
+# Memory save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Saves, corrects, or retires one memory record with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand.
+
+## Steps
+
+Track these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home ("Where other things go" below) and stop.
+2. Search for a record that already holds it, and read each hit with its version. The save's duplicate check compares wording, so only this search finds a record the new fact contradicts (for example "Mondays" against "Tuesdays").
+   `toolkit memory find '<topic>'`
+   `toolkit memory get <key> --json`
+3. Read the approval mode and apply "Approval policy" below. When it says ask, ask and wait.
+   `toolkit config get memory.approval`
+4. Write the description and body in the record format (`references/record-format.md`), then save with the form for the case ("Save forms" below).
+5. Exit code 2 saved nothing. Read the "Error:" line. Records listed: the duplicate check. "Changed since it was read": read it again and redo the change. Any other rule: fix the text as the message says. `references/replacing-and-retiring.md`, section 2, has each case.
+6. "Forget that": retire the record, with his words as the reason. Delete only when his own words say delete ("Approval policy").
+   `toolkit memory retire <key> --reason '<his words>'`
+7. An owner to-do with no work item, or a change to what is happening now: update the current focus (`references/current-focus.md`). A project term: update the glossary (`references/glossary.md`).
+8. A preference a project setting can enforce (for example "I hate tabs" and `.editorconfig`): save it, then offer that change too.
+9. Read the record back, check, and reply in one line ("Replies" below). End with the question still waiting for the owner, or the exact words that continue.
+   `toolkit memory get <key>`
+   `toolkit doctor`
+
+## Approval policy
+
+This is the only written copy of the memory approval policy.
+
+- The owner's own words are the approval: "remember", "from now on", "always", "never", "forget", or a correction. Save now, with `--approved-by <owner>`. That includes a fact about a named person he asks you to remember ("remember that Priya's last day is October 15").
+- `onboarding` mode
+
+[AGENT] No. You’re still weighing the idea, and one review taking too long isn’t yet a standing preference. I won’t save it to memory.
+
+If you decide to use a shorter access check for future small fields, that would belong in the project’s working instructions, with your approval.
+
+SKILLS OPENED (SKILL.md read): ['memory-save']
+
+TOOLKIT COMMANDS:

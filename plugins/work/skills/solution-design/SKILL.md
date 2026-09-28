@@ -25,7 +25,8 @@ Writes one design per work item with a small team of helper agents and asks the 
    `toolkit work design <id> --set-file <file> --status proposed`
    `toolkit work set <id> --waiting-on owner`
    `toolkit work history <id> --note 'Design proposed: <options and recommendation>'`
-9. Present the options, your recommendation, what he will see when it is done, the risks, and the build order, and ask him to choose or approve. His yes: run the design approval checklist in `references/approvals.md`, section 3, update the current focus (`references/current-focus.md`), and hand back to `work-on`.
+9. Present the options, your recommendation, what he will see when it is done, the risks, and the build order, and ask him to choose or approve. His yes: run the design approval checklist in `references/approvals.md`, section 3: fill "Selected design" with the option he chose and save it before the approval, which refuses while it says "Pending owner decision". Then update the current focus (`references/current-focus.md`) and hand back to `work-on`.
+   `toolkit work design <id> --set-file <file>`
    `toolkit work approve <id> --design --by <owner>`
 
 ## Gotchas
@@ -33,7 +34,11 @@ Writes one design per work item with a small team of helper agents and asks the 
 - Run each `toolkit` command alone: never joined by `&&`, `;`, or a pipe, and never from a script (in Codex that runs it inside the sandbox, where it fails). One-line values go in single quotes, never double quotes; an apostrophe inside them is `'\''` in Claude Code and ’ (U+2019) in Codex, or reword the text. Section and design text go on standard input (`--set-file -`) in Claude Code, and in `--text '<text>'` or a `mktemp -d` file in Codex (`references/toolkit-commands.md`, "Text in a command").
 - Local and Notion trackers: never write "Approved" in the Design status line. Only the approve command approves a design, all or nothing. When it fails, show the owner its error; never work around it by editing the design text. GitHub Issues and Jira have no approve command, so there the agent writes it after his yes.
 - One design home per item: `DESIGN.md` beside a local record, the Solution Design page in Notion, one issue comment in GitHub or Jira. Never a separate design folder.
-- Every design gets at least one critic, even a small one. Only a session with no agent tool at all, or an owner who said no to helpers, skips it; then the reply and the design's Notes say no critique ran.
+- Codex: start every helper with `fork_turns` set to `none`, never `all`. A helper that carries this conversation is not an independent check.
+- Every design gets at least one critic, even a small one. Only a session with no agent tool at all, or an owner who said no to helpers, skips it; then the reply and the design's Notes say no critique ran. Owner-led delivery ("no agent team") is not a no to helpers: the critic still runs (`references/team-roles.md`).
+- A save that prints "Note: The design of <id> has no ... sections": add those sections before asking the owner (step 9). The design he approves is the one a builder reads.
+- The design text changed after his approval (the save prints "The design was approved. A changed design may need the owner's approval again."): the reply says what changed, in one line, and asks him again when it changes what gets built. Never change an approved design without saying so.
+- Design text for `--set-file` or `--text` starts with the `---` line of its header, or with the heading. Header lines without the `---` fences are read as the header, and the save says so.
 - Drafts never go to a fixed name in `/tmp` or inside `.work-items/` (`references/design-process.md`, section 7).
 - Add no Open Questions row for the design approval itself: a proposed design is already listed as the owner's decision.
 - `sf-architect-solutioning` is a skill the main agent runs, not an agent. It starts no second interview.

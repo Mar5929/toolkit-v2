@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "sessionId": "01a0e9ab-3511-77c0-abe1-b6435de3ae4c",
+  "host": "codex",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r1",
+  "startedAt": "2026-09-28T20:18:28.524Z",
+  "turns": 1,
+  "turn": {
+    "key": "01a0e9ab-3578-76e3-b25f-3019613eba9f",
+    "n": 1,
+    "startedAt": "2026-09-28T20:18:28.703Z",
+    "keep": null,
+    "baseline": {
+      "memoryMeta": null,
+      "hindsightMeta": 1790626656714.856,
+      "memoryCache": 1790626656736.3042,
+      "workState": 1790626708589.656,
+      "decisions": 1790624963787.3772
+    },
+    "records": [],
+    "edits": [],
+    "stopBlocked": false
+  },
+  "lastStopReason": null,
+  "source": "startup",
+  "updated": "2026-09-28T20:18:55.359Z"
+}

@@ -920,8 +920,15 @@ export function validateRecord(input, opts = {}) {
     for (const t of tasks) {
       for (const d of t.dependsOn) if (!ids.has(d)) problem(warnings, 'missing_dependency', `${t.id} depends on ${d}, which is not a task in this item.`);
     }
+    // A phase may be delivered by sub-items alone (planning.md: "Each phase
+    // has one or more tasks, one or more sub-items, or both"). When every
+    // phase names a sub-item, the tasks live in the sub-items (final
+    // confirmation round 1, local run: the Done parent WI-001 kept this
+    // warning after WI-002 and WI-003 delivered its two phases).
+    const phases = parseRoadmap(body).filter((r) => !r.placeholder);
+    const bySubItems = phases.length > 0 && phases.every((r) => r.subItems.length > 0);
     if (planned) {
-      if (!tasks.length) problem(warnings, 'no_task_lines', `Tasks has no task lines ("- [ ] **P1-T01 — <name>** · <status>"). Write the tasks in the template's checkbox form (${PLAN_REF}).`);
+      if (!tasks.length && !bySubItems) problem(warnings, 'no_task_lines', `Tasks has no task lines ("- [ ] **P1-T01 — <name>** · <status>"). Write the tasks in the template's checkbox form (${PLAN_REF}).`);
       else if (tasks.some((t) => isPlaceholder(t.name))) problem(warnings, 'tasks_placeholder', `Tasks still has the template's example task (P1-T01 — <Task 1 name>). Replace it with the real tasks (${PLAN_REF}).`);
       if (hasSectionGuide(body, 'Tasks')) problem(warnings, 'section_guide_left', 'Tasks still has the template\'s fill-in guide comment. Write the section again without it.');
     }
@@ -1024,6 +1031,28 @@ export function validateDesign(input, opts = {}) {
   return { ok: errors.length === 0 && gates.length === 0, errors, warnings, gates };
 }
 
+function templateBody(templateText) {
+  try {
+    return parseDoc(String(templateText ?? '')).body;
+  } catch {
+    // A template without frontmatter is read as it is.
+    return String(templateText ?? '');
+  }
+}
+
+/**
+ * The "## " sections of the model's DESIGN.md template that a design does not
+ * have (Option comparison is optional). Checked when a design is saved as
+ * proposed too, so the design the owner approves is already complete (final
+ * confirmation round 1, Hindsight run: validate named five missing sections
+ * only after the approval, and the agent rewrote the approved design).
+ */
+export function missingDesignSections(body, templateText) {
+  const have = new Set(sectionNames(body).map(normalizeHeading));
+  const wanted = sectionNames(templateBody(templateText)).filter((s) => !OPTIONAL_DESIGN_SECTIONS.some((o) => normalizeHeading(o) === normalizeHeading(s)));
+  return wanted.filter((s) => !have.has(normalizeHeading(s)));
+}
+
 /** Design sections the model's template says to remove when they do not apply. */
 const OPTIONAL_DESIGN_SECTIONS = Object.freeze(['Option comparison']);
 /** Sections of an approved design that a builder reads, with the sub-sections each must keep. */
@@ -1040,15 +1069,8 @@ const BUILD_SECTIONS = Object.freeze(['Selected design', 'Build and verification
  */
 export function approvedDesignGaps(body, templateText) {
   const out = [];
-  let tplBody = String(templateText ?? '');
-  try {
-    tplBody = parseDoc(tplBody).body;
-  } catch {
-    // A template without frontmatter is read as it is.
-  }
-  const have = new Set(sectionNames(body).map(normalizeHeading));
-  const wanted = sectionNames(tplBody).filter((s) => !OPTIONAL_DESIGN_SECTIONS.some((o) => normalizeHeading(o) === normalizeHeading(s)));
-  const missing = wanted.filter((s) => !have.has(normalizeHeading(s)));
+  const tplBody = templateBody(templateText);
+  const missing = missingDesignSections(body, templateText);
   if (missing.length) {
     out.push({ code: 'design_section_missing', message: `The approved design has no ${missing.map((s) => `"## ${s}"`).join(', ')} section${missing.length === 1 ? '' : 's'}; the template has ${missing.length === 1 ? 'it' : 'them'}. A builder reads the whole design.` });
   }

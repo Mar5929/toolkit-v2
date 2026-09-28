@@ -1,0 +1,1 @@
+Yes. You want **every new custom field to have both a description and help text**. I should include and check both when planning or building one. (Saved project memory, approved by you on 2026-09-28.)

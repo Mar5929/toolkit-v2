@@ -60,9 +60,16 @@ present is job one, before any path or branch.
     toolkit work show <id> --section <heading>
     toolkit work design <id>
     toolkit work list
+    toolkit work decisions
     toolkit memory get <key>
     toolkit memory focus
+    toolkit doctor
     ```
+
+    `toolkit work decisions` lists what waits on the owner, memory proposals
+    included: use it for a claim that nothing (or something) waits on him.
+    `toolkit doctor` lists the setup steps still open: use it for a claim
+    about the owner's setup steps (for example trusting the hooks in Codex).
 
     Run each one alone, as its own command: never joined to another command
     with `&&`, `;`, or a pipe (in Codex that runs it inside the sandbox,

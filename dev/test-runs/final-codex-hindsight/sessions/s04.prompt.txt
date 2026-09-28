@@ -1,0 +1,1 @@
+Yes, positive whole numbers only, and a clear error for anything else.

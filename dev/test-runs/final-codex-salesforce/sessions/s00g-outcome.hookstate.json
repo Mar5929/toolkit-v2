@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "sessionId": "01a0ea0e-8d5f-7041-9b01-dad50e2cc550",
+  "host": "codex",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2",
+  "startedAt": "2026-09-28T22:12:49.822Z",
+  "turns": 2,
+  "turn": {
+    "key": "01a0ea16-a425-7322-973b-62cf42d7ffd1",
+    "n": 2,
+    "startedAt": "2026-09-28T22:15:49.999Z",
+    "keep": null,
+    "baseline": {
+      "memoryMeta": 1790633659509.103,
+      "hindsightMeta": null,
+      "memoryCache": null,
+      "workState": 1790633749888.2583,
+      "decisions": 1790633564051.7444
+    },
+    "records": [
+      {
+        "kind": "memory",
+        "what": "toolkit memory focus",
+        "at": "2026-09-28T22:16:34.565Z"
+      },
+      {
+        "kind": "memory",
+        "what": "toolkit memory focus",
+        "at": "2026-09-28T22:18:13.992Z"
+      }
+    ],
+    "edits": [],
+    "stopBlocked": false
+  },
+  "source": "resume",
+  "updated": "2026-09-28T22:18:33.347Z"
+}

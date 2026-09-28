@@ -1,0 +1,1 @@
+Before I approve WI-001: I also want a way to cap the slug length, like --max 20, cutting at a dash. Split that into its own sub-item under WI-001. Don't change WI-001's approved requirements.

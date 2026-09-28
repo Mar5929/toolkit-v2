@@ -19,6 +19,7 @@ import {
   isBlocked, DESIGN_SUFFIX, setDesignStatusLine, normalizeMeta, removeItemGuide, parseHistory,
   parseRoadmap, separateLabelLines, ensureDesignStatusLine, designStatusFromBody, isOpenOwnerQuestion, setQuestionStatus,
   linkRelatedItem, unlinkRelatedItem, addRoadmapSubItem, removeRoadmapSubItem, removeTemplateComments, removeHistoryRow,
+  missingDesignSections, getLabel,
 } from './model.mjs';
 import { RECORD_FILE, DESIGN_FILE, loadTemplate } from './templates.mjs';
 import { TRACKER_DIR } from './state.mjs';
@@ -571,7 +572,19 @@ export async function opApprove(tracker, project, id, { what, by, today } = {}) 
   const approval = formatApproval(date, who);
   const ownerName = ownerOf(project);
 
-  if (what === 'design') return approveDesign(tracker, id, { who, date, approval, ownerName });
+  if (what === 'design') {
+    const res = await approveDesign(tracker, id, { who, date, approval, ownerName });
+    let gaps = [];
+    try {
+      const d = await tracker.getDesign(res.id || id);
+      if (d) gaps = designSectionWarnings(tracker, project, res.id || id, d.body, { approved: true });
+    } catch {
+      // The approval is recorded; the section check is only a note.
+    }
+    const stale = staleNextAction(res.record ? { ...res.record, id: res.id || id } : null, 'design');
+    if (stale) gaps.push(stale);
+    return gaps.length ? { ...res, warnings: [...(res.warnings || []), ...gaps] } : res;
+  }
 
   return change(tracker, async () => {
     const rec = await mustGet(tracker, id);
@@ -594,7 +607,7 @@ export async function opApprove(tracker, project, id, { what, by, today } = {}) 
       if (goal !== null && isPlaceholder(goal)) {
         throw invalid(`${rec.id}'s Agreed goal still holds the template text, so the requirements approval was not recorded. Nothing was changed.`, {
           gate: 'goal_not_written',
-          fix: `Keep the owner's words first: toolkit work history ${rec.id} --note 'Owner’s words: <quote>'. Write the goal he was shown with the requirements: toolkit work edit ${rec.id} --section 'Agreed goal' --text '<goal>'. In single-quoted text, write an apostrophe as ’. Then run this command again; do not ask him again for the same approval.`,
+          fix: `Keep the owner's words first: toolkit work history ${rec.id} --note 'Owner said: <quote>'. Write the goal he was shown with the requirements: toolkit work edit ${rec.id} --section 'Agreed goal' --text '<goal>'. In single-quoted text, write an apostrophe as ’. Then run this command again; do not ask him again for the same approval.`,
         });
       }
       warnings = requirementWarnings(rec);
@@ -620,8 +633,24 @@ export async function opApprove(tracker, project, id, { what, by, today } = {}) 
     }
     if (closed.length) body = setQuestionStatus(body, closed, 'Answered');
     const back = verify(await save(tracker, rec, { meta: patch, body }), patch, rec.id);
+    const stale = staleNextAction(back || { id: rec.id, body }, what);
+    if (stale) warnings.push(stale);
     return { id: rec.id, what, approval, warnings, clearedWaiting, stillWaiting, closedQuestions: closed, record: back };
   });
+}
+
+/**
+ * A note when the Overview's Next action still asks for the approval just
+ * recorded (final confirmation round 1, Salesforce run: WI-001 said "Ask Mike
+ * to approve the WI-001 result" until it shipped). Null otherwise.
+ */
+export function staleNextAction(rec, what) {
+  const next = getLabel((rec && rec.body) || '', 'Next action', { section: 'Overview' });
+  if (!next || isPlaceholder(next)) return null;
+  const subject = { requirements: /requirement/i, design: /design/i, result: /result/i }[what];
+  if (!subject || !/approv/i.test(next) || !subject.test(next)) return null;
+  const id = rec.id || (rec.meta && rec.meta.id) || '<id>';
+  return `${id}'s Overview still says "Next action: ${String(next).replace(/\s+/g, ' ').trim()}". Write the step after this approval: toolkit work edit ${id} --label 'Next action' --value '<next step>'.`;
 }
 
 function waitingOnOwner(meta) {
@@ -854,13 +883,65 @@ export function designText(design, { status, approved, body } = {}) {
   return composeDoc(meta, b, DESIGN_FIELD_ORDER);
 }
 
+const BARE_HEADER_LINE = /^(work_item|status|approved)\s*:/;
+
+/**
+ * Design text that starts with work_item, status, or approved lines without
+ * the --- fences gets the fences, so those lines are read as the header
+ * (final confirmation round 1, Notion run: the three lines were saved as a
+ * paragraph at the top of the Solution Design page, above the old heading).
+ * Returns { text, keys }: keys lists the header lines found, empty when the
+ * text was left as it was.
+ */
+export function fenceBareDesignHeader(text) {
+  const s = String(text ?? '');
+  if (/^\uFEFF?---[ \t]*\r?\n/.test(s)) return { text: s, keys: [] };
+  const lines = s.split(/\r?\n/);
+  let i = 0;
+  while (i < lines.length && !lines[i].trim()) i += 1;
+  const start = i;
+  const keys = [];
+  while (i < lines.length && BARE_HEADER_LINE.test(lines[i].trim())) {
+    keys.push(BARE_HEADER_LINE.exec(lines[i].trim())[1]);
+    i += 1;
+  }
+  if (!keys.length) return { text: s, keys: [] };
+  const header = lines.slice(start, i).map((l) => l.trim());
+  return { text: ['---', ...header, '---', ...lines.slice(i)].join('\n'), keys };
+}
+
+/** Warning lines about "## " sections of the template a design does not have (empty when it has them all). */
+function designSectionWarnings(tracker, project, id, body, { approved = false } = {}) {
+  let tpl;
+  try {
+    tpl = templateText(tracker, project, DESIGN_FILE);
+  } catch {
+    return [];
+  }
+  const missing = missingDesignSections(body, tpl);
+  if (!missing.length) return [];
+  const list = missing.map((m) => `"## ${m}"`).join(', ');
+  return [approved
+    ? `The approved design of ${id} has no ${list} section${missing.length === 1 ? '' : 's'}. Adding ${missing.length === 1 ? 'it' : 'them'} now changes the text the owner approved: tell him what was added.`
+    : `The design of ${id} has no ${list} section${missing.length === 1 ? '' : 's'}; the template has ${missing.length === 1 ? 'it' : 'them'}. Add ${missing.length === 1 ? 'it' : 'them'} before you ask the owner to approve the design.`];
+}
+
 /**
  * Read, create, replace, or change the status of an item's design.
  * @param {{ create?: boolean, text?: string, status?: string, by?: string }} opts
  */
-export async function opDesign(tracker, project, id, { create, text, status, by, today } = {}) {
+export async function opDesign(tracker, project, id, { create, text: rawText, status, by, today } = {}) {
   const date = todayOf({ today });
   const rec = await mustGet(tracker, id);
+  const headerWarnings = [];
+  let text = rawText;
+  if (text !== undefined && text !== null) {
+    const fenced = fenceBareDesignHeader(text);
+    if (fenced.keys.length) {
+      text = fenced.text;
+      headerWarnings.push(`The text started with ${fenced.keys.join(', ')} line${fenced.keys.length === 1 ? '' : 's'} without the --- fences. ${fenced.keys.length === 1 ? 'It was' : 'They were'} read as the design's header, not saved as design text. Start the file with a --- line next time.`);
+    }
+  }
   let design = await tracker.getDesign(rec.id);
   if (status !== undefined && status !== null && !DESIGN_STATUSES.includes(status)) {
     throw invalid(`"${status}" is not a design status. Use ${DESIGN_STATUSES.join(', ')}.`);
@@ -879,7 +960,11 @@ export async function opDesign(tracker, project, id, { create, text, status, by,
     const who = String(by).trim();
     const res = await approveDesign(tracker, rec.id, { who, date, approval: formatApproval(date, who), ownerName: ownerOf(project) });
     const saved = await tracker.getDesign(rec.id);
-    return { id: rec.id, design: saved, changed: true, created, warnings: [...warnings, ...(res.warnings || [])], closedQuestions: res.closedQuestions, record: res.record };
+    // The proposed-design warning was for before the approval; after it, the
+    // warning says what adding the sections now means.
+    const gaps = saved ? designSectionWarnings(tracker, project, rec.id, saved.body, { approved: true }) : [];
+    const before = warnings.filter((w) => !/before you ask the owner to approve the design\.$/.test(w));
+    return { id: rec.id, design: saved, changed: true, created, warnings: [...headerWarnings.filter((w) => !before.includes(w)), ...before, ...(res.warnings || []), ...gaps], closedQuestions: res.closedQuestions, record: res.record };
   }
   const noEdit = (text === undefined || text === null) && (status === undefined || status === null);
   if (create && design && noEdit) return { id: rec.id, design, changed: false, existed: true };
@@ -930,6 +1015,10 @@ export async function opDesign(tracker, project, id, { create, text, status, by,
   const saved = await tracker.setDesign(rec.id, full, { create: !design });
   if (!saved || !saved.meta) throw new ToolkitError(EXIT.ERROR, `Saved but not verified: the design of ${rec.id} could not be read back.`, { id: rec.id });
   const newStatus = saved.meta.status;
+  warnings.unshift(...headerWarnings);
+  // A proposed design written with text is checked against the template's
+  // sections now, before the owner is asked to approve it.
+  if (newStatus === 'proposed' && text !== undefined && text !== null) warnings.push(...designSectionWarnings(tracker, project, rec.id, saved.body));
   const back = await change(tracker, async () => {
     const cur = await mustGet(tracker, rec.id);
     const body = addHistory(cur.body, history);
@@ -948,11 +1037,12 @@ function fixDesignHeading(body, rec) {
 // ------------------------------------------------------------------ history and edit
 
 /**
- * True when a history note starts by quoting the owner: "Owner's words:"
- * (with ' or ’), "Owner words:", "Owner said:", or the owner's name followed
- * by "said:", "'s words:", or ":" (sample run confirm-a: in Codex the
- * apostrophe escape failed, and agents wrote "Owner words:", "Mike said:",
- * and "Mike:" instead).
+ * True when a history note starts by quoting the owner. The skills write
+ * "Owner said:", which has no apostrophe to escape (sample run confirm-a: in
+ * Codex the apostrophe escape failed, and agents wrote "Owner words:",
+ * "Mike said:", and "Mike:" instead). Older notes and other forms still count:
+ * "Owner's words:" (with ' or ’), "Owner words:", or the owner's name followed
+ * by "said:", "'s words:", or ":".
  */
 export function quotesOwner(note, ownerName) {
   const text = String(note ?? '').trim();
@@ -973,7 +1063,8 @@ export async function opHistory(tracker, id, { note, effect, today } = {}) {
     // on the work" column is never empty (sample runs a and b, round 2).
     // A note that quotes the owner's answer ends the wait on him: its effect
     // names the step after the answer, not work-decide (sample run b, round 3:
-    // "Owner's words: All four passed ... | Continue with work-decide.").
+    // "Owner's words: All four passed ... | Continue with work-decide."; the
+    // skills now write "Owner said:").
     const ownerName = tracker.project && tracker.project.config && tracker.project.config.project && tracker.project.config.project.owner;
     const answered = quotesOwner(note, ownerName) && normalizeWaitingOn(rec.meta.waiting_on) === 'owner';
     const eff = effect && String(effect).trim() ? String(effect).trim()

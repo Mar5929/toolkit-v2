@@ -46,6 +46,7 @@ nothing in every case. Read the "Error:" line, then:
 | The Error line says | What to do |
 | --- | --- |
 | "... was not saved: memory already has a record like it", then a list of records | The duplicate check, below |
+| "... was not saved: memory already has a record about the same subject. Check whether it is the same fact." | The duplicate check, below. Only the subject matches, so it is often a different fact (step 4); never overwrite that record with this fact |
 | "... changed since it was read" | Another session or the owner changed it. Read it again with `--json`, redo the change on the new text, and save with the new version |
 | "... looks like it holds <a secret>" | Save only where the secret is kept (for example "The staging key is in 1Password under Staging"), never the secret |
 | "... is already a current record, so it was not saved as a proposal" | A proposal never replaces a record the owner approved. Ask him about the change in the conversation |
@@ -227,14 +228,22 @@ Checklist:
 
 - [ ] His words, or his yes to a numbered delete, cover this record.
 - [ ] You read the record and it is the one he means.
-- [ ] Run the delete, alone:
+- [ ] Run the delete, alone. In Codex, run it with `sandbox_permissions`
+      set to `require_escalated` and a one-line reason; the approval alone
+      keeps it inside the sandbox, where it cannot reach Hindsight or Notion:
 
       ```text
       toolkit memory delete <key> --owner-approved
       ```
 
+- [ ] The host refused the delete without asking him (Codex with approvals
+      off: "AskForApproval is set to Never"): say that this approval
+      setting is the cause, show him the exact command to run in a terminal,
+      and wait. Do not retire the record in its place unless he asks.
 - [ ] Read the report: the records whose links were repaired.
-- [ ] Reply with his words quoted. For a secret or an email address, also
+- [ ] Reply with his words quoted, in the reply line of `memory-save`
+      ("Deleted from memory, as you said: '<his words>'. This cannot be
+      undone."), and end with the next step. For a secret or an email address, also
       say that older backups still hold it (the day folders in the backup
       folder, and every memory export made before the delete) and that he
       removes those copies himself. With Notion memory, add that the page

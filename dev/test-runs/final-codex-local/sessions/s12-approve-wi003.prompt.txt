@@ -1,0 +1,1 @@
+In the WI-003 worktree, --max 5 and --max 6 both printed hello, and --max 0 and --max abc gave errors. I approve the WI-003 result. Still no merge yet.

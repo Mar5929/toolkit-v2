@@ -1,0 +1,1 @@
+Q-02: yes, cut that word at exactly the limit.

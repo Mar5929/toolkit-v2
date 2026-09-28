@@ -1,0 +1,17 @@
+PROMPT: Skip it for now.
+THREAD: 01a0ea0e-8d5f-7041-9b01-dad50e2cc550
+
+[AGENT] I’ll omit `SOUL.md`. Local work items and built-in memory need a backup location; that is the last setup choice before initialization.
+
+[CALL request_user_input_async] {"questions":[{"title":"Where should automatic backups of work items and memory go? I recommend `~/Backups/toolkit`, outside this project.","options":["~/Backups/toolkit (recommended)","No backups"]}]}
+  -> {"accepted":true}
+
+[CALL sleep] {"duration_ms":30000}
+  -> Wall time: 30.0053 seconds
+Sleep completed.
+
+[AGENT] Please choose a backup location in the question above. I recommend `~/Backups/toolkit`; Toolkit V2 cannot finish initialization until this choice is set.
+
+SKILLS OPENED (SKILL.md read): []
+
+TOOLKIT COMMANDS:

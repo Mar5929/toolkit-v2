@@ -1,0 +1,9 @@
+Tip: $10.00  Total: $60.00
+Each person pays: $20.00
+exit=0
+Tip: $0.00  Total: $10.00
+Each person pays: $3.34
+Error: Enter a bill amount of 0 or more with at most two decimal places.
+exit=1
+Error: Enter --split with a whole number of people of 1 or more.
+exit=1

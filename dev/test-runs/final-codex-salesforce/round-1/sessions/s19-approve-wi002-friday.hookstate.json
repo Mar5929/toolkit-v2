@@ -1,0 +1,63 @@
+{
+  "schema": 1,
+  "sessionId": "01a0e9d8-bf37-7fa2-ae19-327f5da52198",
+  "host": "codex",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1",
+  "startedAt": "2026-09-28T21:08:17.514Z",
+  "turns": 1,
+  "turn": {
+    "key": "01a0e9d8-bf9b-70e3-a93c-6f7166464381",
+    "n": 1,
+    "startedAt": "2026-09-28T21:08:17.673Z",
+    "keep": null,
+    "baseline": {
+      "memoryMeta": 1790629494172.3972,
+      "hindsightMeta": null,
+      "memoryCache": null,
+      "workState": 1790629697568.8784,
+      "decisions": 1790625050568.4336
+    },
+    "records": [
+      {
+        "kind": "work",
+        "what": "toolkit work history",
+        "at": "2026-09-28T21:08:33.051Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work approve",
+        "at": "2026-09-28T21:08:35.793Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work set",
+        "at": "2026-09-28T21:08:37.804Z"
+      },
+      {
+        "kind": "memory",
+        "what": "toolkit memory focus",
+        "at": "2026-09-28T21:08:56.752Z"
+      },
+      {
+        "kind": "memory",
+        "what": "toolkit memory save",
+        "at": "2026-09-28T21:09:02.945Z",
+        "proposal": true,
+        "description": "Mike Rihm is usually off on Fridays"
+      }
+    ],
+    "edits": [
+      {
+        "path": ".work-items/account-tier/WI-001-tier-field/WI-002-tier-access-and-layout/WORK-ITEM.md",
+        "id": "WI-002"
+      }
+    ],
+    "stopBlocked": false
+  },
+  "lastStopReason": null,
+  "source": "startup",
+  "updated": "2026-09-28T21:09:31.676Z",
+  "remindedEdits": [
+    ".work-items/account-tier/WI-001-tier-field/WI-002-tier-access-and-layout/WORK-ITEM.md"
+  ]
+}

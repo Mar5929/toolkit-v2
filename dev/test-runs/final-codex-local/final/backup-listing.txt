@@ -1,0 +1,19 @@
+  "exportedAt": "2026-09-28T20:32:38.220Z",
+backups/codex-local/slug-2026-09-28/memory/.toolkit-meta.json
+backups/codex-local/slug-2026-09-28/memory/AGENTS.md
+backups/codex-local/slug-2026-09-28/memory/CURRENT_FOCUS.md
+backups/codex-local/slug-2026-09-28/memory/MEMORY.md
+backups/codex-local/slug-2026-09-28/memory/memory-criteria.md
+backups/codex-local/slug-2026-09-28/memory/project_publish_blog_ghost_keeps_only_first_190_characters.md
+backups/codex-local/slug-2026-09-28/memory/project_topic_template.md
+backups/codex-local/slug-2026-09-28/memory/terminology-glossary.md
+backups/codex-local/slug-2026-09-28/memory/user_node_project_preference.md
+backups/codex-local/slug-2026-09-28/toolkit-export.json
+backups/codex-local/slug-2026-09-28/work-items/.toolkit-state.json
+backups/codex-local/slug-2026-09-28/work-items/DASHBOARD.md
+backups/codex-local/slug-2026-09-28/work-items/slug-cli/WI-001-slug/DESIGN.md
+backups/codex-local/slug-2026-09-28/work-items/slug-cli/WI-001-slug/WI-002-build-basic-slug-command/WORK-ITEM.md
+backups/codex-local/slug-2026-09-28/work-items/slug-cli/WI-001-slug/WORK-ITEM.md
+backups/codex-local/slug-2026-09-28/work-items/slug-cli/WI-001-slug/max-option/WORK-ITEM.md
+backups/codex-local/slug-2026-09-28/work-items/work-item-template/DESIGN.md
+backups/codex-local/slug-2026-09-28/work-items/work-item-template/WORK-ITEM.md

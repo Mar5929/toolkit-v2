@@ -1,0 +1,13 @@
+before:
+f8570208fafd350862d97242bd1b174c7ab2ebe3f3a1ff5317bcf4e50e9b6294  /Users/michaelrihm/.codex/config.toml
+d80a8b38a889647b43291d53c5a2a44dcebbbeeb313a2e82f4c8a0cca954e65b  /Users/michaelrihm/.claude/settings.json
+after:
+f8570208fafd350862d97242bd1b174c7ab2ebe3f3a1ff5317bcf4e50e9b6294  /Users/michaelrihm/.codex/config.toml
+d80a8b38a889647b43291d53c5a2a44dcebbbeeb313a2e82f4c8a0cca954e65b  /Users/michaelrihm/.claude/settings.json
+Mon Sep 28 23:04:36 UTC 2026
+toolkit 0.2.7 codex-cache diff lines: 1
+work 0.2.9 codex-cache diff lines: 0
+memory 0.2.7 codex-cache diff lines: 0
+session-skills 0.2.7 codex-cache diff lines: 0
+git-workflows 0.2.7 codex-cache diff lines: 0
+Files plugins/toolkit/tests/notion/final-confirm.test.mjs and /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.7/tests/notion/final-confirm.test.mjs differ

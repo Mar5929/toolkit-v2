@@ -37,7 +37,7 @@ The push was refused, or `publish` reports the remote is ahead.
 5. Run `publish` again:
 
    ```text
-   node <this skill's folder>/scripts/publish-docs.mjs publish --message '<plain commit message>'
+   node <this skill's folder>/scripts/publish-docs.mjs publish --workspace <save workspace path> --message '<plain commit message>'
    ```
 
 Ask the owner only when the meaning of the change, or who approved it, has

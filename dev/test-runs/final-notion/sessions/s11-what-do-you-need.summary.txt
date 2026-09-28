@@ -1,0 +1,212 @@
+PROMPT: What do you need from me?
+THREAD: 01a0e9d2-b181-7511-b981-21b76eed4774
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] TFR-002 is waiting for your approval. I’ll check its recorded result and open questions, then give you the exact decision it needs.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/SKILL.md'
+  -> ---
+name: work-decide
+description: 'Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers. Use when he asks "what do you need from me", answers a waiting decision ("go with option B"), or states a project-wide decision.'
+---
+
+# Work decide
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Walks the owner through what waits on him, one decision at a time, and records each answer where it belongs. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Build the queue. The command lists each decision once: requirements waiting for approval, proposed designs, results at stage 11, Open Questions rows the owner decides, and memory proposals. Its "Agent to-do" lines are not decisions. A delivery offer belongs to `work-delegate`: open it after his other decisions.
+   `toolkit work decisions`
+2. He gave an answer without being asked ("approved", "go with B"): match it to exactly one waiting decision; when two could match, ask which, naming both. A bare "yes", "ok", or "looks good" with no question asked is not an answer (`references/approvals.md`, section 1).
+3. Otherwise start with the count and one short line for every waiting decision, memory proposals included ("3 decisions wait on you: the WI-004 design, the WI-006 result, and a 
+
+[CMD exit=1] /bin/zsh -lc 'cat SOUL.md PROJECT.md DECISIONS.md'
+  -> cat: SOUL.md: No such file or directory
+# Toolkit V2 final run (safe to delete)
+
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes a
+
+[CMD exit=0] /bin/zsh -lc 'cat .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md'
+  -> # Humanize Anything Sent to Another Person
+
+Any text that will leave the project and be read by someone other than the owner
+is run through the `humanizer` skill before the owner sees the final version.
+Use the `unslop` skill when `humanizer` is not installed. That covers emails,
+chat messages, supp
+
+[AGENT] I’m using the work-decide process to check every pending decision, including the memory proposal.
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 2 decisions wait on the owner:
+
+TFR-002 Add the --weeks flag to days-until
+  - TFR-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve TFR-002 --result --by <name>. (work-decide)
+
+Memory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):
+  - project_run_days_until_only_macbook_air_node_24: you run days-until only on your MacBook Air with Node 24. Saved 2026-09-28. Yes: toolkit memory approve project_run_days_until_only_macbook_air_node_24 --by <name>. No: toolkit memory reject project_run_days_until_only_macbook_air_node_24. (work-decide)
+
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/approvals.md'
+  -> <!-- Generated file. Source: plugins/work/shared/approvals.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Approvals and gates
+
+The exact steps to ask for and record each owner approval, and what counts as
+one. Run each checklist in order; one wrong or missing command leaves the
+item in the wrong state.
+
+## Contents
+
+1. What counts as approval
+2. Requirements approval
+3. Design approval
+4. Result approval
+5. Done
+6. Cancel
+7. Delivery offer
+8. Project-wide decision
+9. Memory proposal
+10. Sub-items and approvals
+11. Standing merge instruction
+12. When an approve command refuses
+
+## 1. What counts as approval
+
+`toolkit work lifecycle` prints the gates and these rules. In short:
+
+- Only the owner's explicit words count. Quote them in a history note.
+- A question, a suggestion, a tentative answer ("probably B"), silence, or a
+  saved draft is not approval.
+- An approval covers only what was shown. It never covers merge, deployment,
+  spending, or publishing.
+- An approval survives later stages. A stage alone does not prove approval:
+  check the approval field (`toolkit work show <id>`).
+- A bare "yes", "ok", or "looks good" answers only a yes-or-no question asked
+  earlier in this conversation. When none was asked, or the waiting question
+  is not a yes-or-no question, show the decision with its choices and your
+  recommendation, and record nothing.
+- After a yes, save his words first, in a history note that starts with
+  `Owner said:`. Then run the 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show TFR-002'
+  -> TFR-002: Add the --weeks flag to days-until
+Location: https://app.notion.com/p/Add-the-weeks-flag-to-days-until-3e9b381da176815bb55ccfff40995905
+Stage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: TFR-001 | Sub-items: none | Design: none of its own; TFR-001's design is approved (https://app.notion.com/p/TFR-001-Build-the-days-until-command-with-a-weeks-flag-solution-design-3e9b381da17681859546d90fe3e13254). Read it with: toolkit work design TFR-001
+Worktree branch for this item: claude/tfr-002-add-the-weeks-flag-to-days (folder .claude/worktrees/tfr-002-add-the-weeks-flag-to-days)
+
+---
+id: TFR-002
+title: Add the --weeks flag to days-until
+type: build
+stage: 11-user-approval
+status: In Progress
+parent: TFR-001
+waiting_on: "owner"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+# TFR-002: Add the --weeks flag to days-until
+
+## Overview
+
+**Goal:** Add --weeks to the days-until command so it shows whole weeks and leftover days in either flag position.
+
+**Current position:** The --weeks result is built and tested on its own branch. Eight automated checks and direct CLI checks passed; the test plan is committed as af7015d.
+
+**Next action:** Ask Mike Rihm to approve the tested TFR-002 result separately. Do not merge until he authorizes merge.
+
+**Blockers:** Owner result approval is required before this item can be finished. Merge is not authoriz
+
+[CMD exit=0] /bin/zsh -lc 'cat .claude/worktrees/tfr-002-add-the-weeks-flag-to-days/tests/TFR-002-TEST-PLAN.md'
+  -> # TFR-002 weeks display test plan
+
+## Scope
+
+Checks `--weeks` against TFR-001 R-02 and the weeks-mode part of R-03. Also reruns the base tests for R-01.
+
+## Environment and data
+
+Node.js on the TFR-002 branch, commit e604d44. Automated tests use fixed day differences and local dates 17 days before a
+
+[CMD exit=0] /bin/zsh -lc 'rg --files .claude/worktrees/tfr-002-add-the-weeks-flag-to-days | head -40'
+  -> .claude/worktrees/tfr-002-add-the-weeks-flag-to-days/DECISIONS.md
+.claude/worktrees/tfr-002-add-the-weeks-flag-to-days/CLAUDE.md
+.claude/worktrees/tfr-002-add-the-weeks-flag-to-days/AGENTS.md
+.claude/worktrees/tfr-002-add-the-weeks-flag-to-days/system-guide/AREA-TEMPLATE.md
+.claude/worktrees/tfr-002
+
+[AGENT] I need **two decisions** from you: approval of the tested TFR-002 `--weeks` result, and whether to save a memory note saying you run `days-until` only on your MacBook Air with Node 24. I’ll take them one at a time.
+
+TFR-002 now shows whole weeks and leftover days with `--weeks` before or after the date. You can try it on its branch with `node bin/days-until.js --weeks 2026-10-15`. Eight automated tests and direct command checks passed. No known gaps remain; no independent agent check ran.
+
+I recommend approving the TFR-002 result. Approval lets me continue its review process; it does **not** authorize a merge. Do you approve this result?
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 184706, "cached_input_tokens": 160768, "cache_write_input_tokens": 0, "output_tokens": 1017, "reasoning_output_tokens": 335}}
+
+SKILLS OPENED: ['work-decide']
+
+[HOOK CONTEXT ord=9] Project briefing: Toolkit V2 final run (safe to delete) (tv2-final-run), owner Mike Rihm. Work items: the Notion Work Items database (ids like TFR-001). Memory: Notion, in Lore's layout (a Memory page on the project row with Lore's databases). Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- TFR-001 Build the days-until command: 09 Testing, In Progress. Next action: After the separate TFR-002 result review, present the TFR-001 base command result for owner approval. Keep both branches unmerged until M... Continues with work-check.
+- TFR-002 Add the --weeks flag to days-until: 11 User approval, In Progress, waiting on owner. Next action: Ask Mike Rihm to approve the tested TFR-002 result separately. Do not merge until he authorizes merge. Continues with w
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"cat SOUL.md PROJECT.md DECISIONS.md",max_output_tokens:6000}),
+  tools.exec_command({cmd:"cat .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md",max_output_tokens:10000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/SKILL.md",max_output_tokens:10000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"ff4fb4\",\"wall_time_seconds\":8.34e-7,\"exit_code\":1,\"original_token_count\":728,\"output\":\"cat: SOUL.md: No such file or directory\\n# Toolkit V2 final run (safe to delete)\\n\\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\\n\\n## Purpose and intended outcome\\n\\n- Purpose: Count down to trips and deadlines.\\n- Intended outcome: days-until tells me how many days are left until a date I type, so I can count down to trips and deadlines.\\n\\n## Scope and boundaries\\n\\n- In scope: accept a date and report how many days remain, for trips and deadlines.\\n- Outside scope: `<Important exclusions or adjacent owners.>`\\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\\n\\n## Systems and environments\\n\\n| System or org | Purpose | Environment | Source of truth | Access notes |\\n| --- | --- | --- | --- | --- |\\n| Notion | Work items and project memory | Notion workspace | [Project page](https://app.notion.com/p/Toolkit-V2-final-run-safe-to-delete-3e9b381da17681ccaa54cd9453f484ea) | The Notion CLI is signed in on this Mac. |\\n\\n## People and ownership\\n\\n| Role | Person or team | Responsibility | Source / last confirmed |\\n| --- | --- | --- | --- |\\n| Owner | Mike Rihm | Project decisions | Owner, 2026-09-28 |\\n\\n## Work and project records\\n\\n- Work tracker: [Work Items in Notion](https://app.notion.com/p/9450d0a8834a4de6b68845c7f1f78c12).\\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\\n- Project decisions: [DECISIONS.md](DECISIONS.md)\\n- Functional requirements: [requirements/](requirements/)\\n- Design home: with its Notion work item.\\n- System Guide: disabled; `system-guide/` contains only the template.\\n- Memory: the [Memory database in Notion](https://app.notion.com/p/a2d5b7e595da482381174849b144eec7) (the setup choice is in `.toolkit.json`).\\n- Memory backup or sync: Notion holds the live records. `backup.dir` in `.toolkit.json` records the owner's selected folder. A manual memory exp
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:6000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 2.5 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"03e23d\",\"wall_time_seconds\":2.141104375,\"exit_code\":0,\"original_token_count\":158,\"output\":\"2 decisions wait on the owner:\\n\\nTFR-002 Add the --weeks flag to days-until\\n  - TFR-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve TFR-002 --result --by <name>. (work-decide)\\n\\nMemory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):\\n  - project_run_days_until_only_macbook_air_node_24: you run days-until only on your MacBook Air with Node 24. Saved 2026-09-28. Yes: toolkit memory approve project_run_days_until_only_macbook_air_node_24 --by <name>. No: toolkit memory reject project_run_days_until_only_macbook_air_node_24. (work-decide)\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"toolkit work show TFR-002",max_output_tokens:10000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/approvals.md",max_output_tokens:10000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"932a47\",\"wall_time_seconds\":2.926570875,\"exit_code\":0,\"original_token_count\":1853,\"output\":\"TFR-002: Add the --weeks flag to days-until\\nLocation: https://app.notion.com/p/Add-the-weeks-flag-to-days-until-3e9b381da176815bb55ccfff40995905\\nStage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide\\nParent: TFR-001 | Sub-items: none | Design: none of its own; TFR-001's design is approved (https://app.notion.com/p/TFR-001-Build-the-days-until-command-with-a-weeks-flag-solution-design-3e9b381da17681859546d90fe3e13254). Read it with: toolkit work design TFR-001\\nWorktree branch for this item: claude/tfr-002-add-the-weeks-flag-to-days (folder .claude/worktrees/tfr-002-add-the-weeks-flag-to-days)\\n\\n---\\nid: TFR-002\\ntitle: Add the --weeks flag to days-until\\ntype: build\\nstage: 11-user-approval\\nstatus: In Progress\\nparent: TFR-001\\nwaiting_on: \\\"owner\\\"\\npriority: medium\\ndelivery: owner-led\\nrequirements_approved: \\\"2026-09-28 by Mike Rihm\\\"\\ndesign: none\\nresult_approved: \\\"no\\\"\\nupdated: 2026-09-28\\n---\\n# TFR-002: Add the --weeks flag to days-until\\n\\n## Overview\\n\\n**Goal:** Add --weeks to the days-until command so it shows whole weeks and leftover days in either flag position.\\n\\n**Current position:** The --weeks result is built and tested on its own branch. Eight automated checks and direct CLI checks passed; the test plan is committed as af7015d.\\n\\n**Next action:** Ask Mike Rihm to approve the tested TFR-002 result separately. Do not merge until he authorizes merge.\\n\\n**Blockers:** Owner result approval is required before this item can be finished. Merge is not authorized.\\n\\n**Related items:** TFR-001 holds the approved requirements and design and the base-command commit.\\n\\n## Roadmap\\n\\nA phase is complete when its tasks are complete and its exit result has been checked.\\n\\n| Phase | Outcome | Status | Exit result | Sub-items |\\n|---|---|---|---|---|\\n| P1 \u2014 Weeks display | Add --weeks before or after the date and format whole weeks and leftover days. | Done | TFR-001 R-02 and weeks-mode R-03 passed eight tests and direct CLI checks; commits e604d44 and af7015d. | None. |\\n\\n## Tasks\\n\\n### P1 \u2014 Weeks display\\n\\n- [x] **P1-T01 \u2014 Add flag parsing and w
+
+[CALL] const r=await tools.exec_command({cmd:"cat .claude/worktrees/tfr-002-add-the-weeks-flag-to-days/tests/TFR-002-TEST-PLAN.md",max_output_tokens:6000});text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"rg --files .claude/worktrees/tfr-002-add-the-weeks-flag-to-days | head -40",max_output_tokens:2000});text(r);
+

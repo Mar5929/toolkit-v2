@@ -1,0 +1,36 @@
+### Mon Sep 28 22:52:52 UTC 2026  key=user_readme_under_one_page  query='README one screen'
+--- toolkit memory list --status all
+- user_cli_flags_readme_examples: List every command-line flag in the README with a short example
+- user_readme_under_one_page: Keep the README short: one screen or less
+--- toolkit memory get user_readme_under_one_page
+---
+name: user_readme_under_one_page
+description: "Keep the README short: one screen or less"
+metadata:
+  type: user
+exit=0
+--- toolkit memory find 'README one screen' --all
+2 memory records are about "README one screen" (Hindsight recall, best first):
+- user_readme_under_one_page: Keep the README short: one screen or less
+    # Short README **Remember:** Mike wants the README kept to one screen or less. **Why:** Not stated by the owner. **How to apply:** Keep README sections brief; m
+- user_cli_flags_readme_examples: List every command-line flag in the README with a short example
+    # README examples for CLI flags **Remember:** Mike prefers every command-line flag to be listed in the README with a short example. **Why:** Not stated by the o
+Read a record with toolkit memory get <key> before relying on it.
+exit=0
+--- toolkit brief (memory part)
+Project memory (hindsight): 2 records, from the local copy. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_cli_flags_readme_examples: List every command-line flag in the README with a short example
+- user_readme_under_one_page: Keep the README short: one screen or less
+--- grep -c user_readme_under_one_page .git/toolkit-v2/memory-cache.json
+1
+--- Hindsight bank documents
+3 ['focus', 'user_cli_flags_readme_examples', 'user_readme_under_one_page']
+--- GET document user_readme_under_one_page
+200
+--- Hindsight recall 'README one screen'
+3 results
+ - user_readme_under_one_page | --- name: user_readme_under_one_page description: "Keep the README short: one screen or less" metadata:   type
+ - user_cli_flags_readme_examples | --- name: user_cli_flags_readme_examples description: List every command-line flag in the README with a short 
+ - focus | # Current focus  Last updated: 2026-09-28, work-finish, agent  ## Now  None.  ## Waiting on the owner  - Trust

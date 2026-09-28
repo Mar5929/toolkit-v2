@@ -1,0 +1,5 @@
+WI-001 and WI-002 are **Done**. I recorded your production deployment and access checks, updated the component tracker and delivered requirements, and committed the closeout to local `main` at `0f57d07`. Both item worktrees and branches were removed. The work tracker and memory were backed up.
+
+I recorded job `0AfFAKE000DEPLOY3` for both deployments exactly as you reported it. The remaining Codex folder and hook trust setup is still on the current focus.
+
+Tell me the next thing to build.

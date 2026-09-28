@@ -1,0 +1,83 @@
+{
+  "schema": 1,
+  "sessionId": "01a0e998-ae6f-7341-8337-ce4af1e9d9ec",
+  "host": "codex",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1",
+  "startedAt": "2026-09-28T19:58:14.213Z",
+  "turns": 1,
+  "turn": {
+    "key": "01a0e998-aedb-77f1-afad-23e4b759f53d",
+    "n": 1,
+    "startedAt": "2026-09-28T19:58:14.370Z",
+    "keep": null,
+    "baseline": {
+      "memoryMeta": 1790625471985.1885,
+      "hindsightMeta": null,
+      "memoryCache": null,
+      "workState": 1790625494266.0647,
+      "decisions": 1790625064779.889
+    },
+    "records": [
+      {
+        "kind": "work",
+        "what": "toolkit work history",
+        "at": "2026-09-28T19:58:39.979Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T19:58:45.579Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T19:58:58.521Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T19:59:07.555Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T19:59:11.863Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T19:59:14.448Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work set",
+        "at": "2026-09-28T19:59:24.586Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work set",
+        "at": "2026-09-28T19:59:55.976Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T20:00:01.867Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T20:00:05.094Z"
+      },
+      {
+        "kind": "memory",
+        "what": "toolkit memory focus",
+        "at": "2026-09-28T20:00:10.852Z"
+      }
+    ],
+    "edits": [],
+    "stopBlocked": false
+  },
+  "lastStopReason": null,
+  "source": "startup",
+  "updated": "2026-09-28T20:00:20.162Z"
+}

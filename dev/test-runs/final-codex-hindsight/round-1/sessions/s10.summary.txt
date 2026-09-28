@@ -1,0 +1,153 @@
+PROMPT: What do you need from me?
+TIME: 2026-09-28T20:18:26Z -> 2026-09-28T20:19:06Z
+
+[AGENT] WI-001 and WI-002 are waiting for your separate approval. I’ll check their recorded results so I can show you exactly what you’re approving.
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'cat PROJECT-ROADMAP.md README.md bin/greet.mjs'
+  -> # Project roadmap
+
+<!-- Fill-in guide: replace every angle-bracket prompt in the outcome, phase table, phase heading, and work-unit fields with this p
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001'
+  -> WI-001: Add --shout flag to greet CLI
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r1/.work-items/WI-001-add-shout-flag-to-greet-cli/WORK-ITEM.md
+Stage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: none | Sub-items: WI-002 | Design: approved (.work-items/WI-001-add-shout-flag-to-greet-cli/DESIGN.md)
+Worktree branch for this item: claude/wi-001-add-shout-flag-to-greet-cli (folder .claude/worktrees/wi-001-add-shout-flag-to-greet-cli)
+
+---
+id: WI-001
+title: Add --shout flag to greet CLI
+type: build
+stage: 11-user-approval
+status: In Progress
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike"
+design: approved
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-001: Add --shout flag to greet CLI
+
+## Overview
+
+**Goal:** Add --shout to the greet CLI so it prints the whole greeting in uppercase letters.
+
+**Current position:** R-01 is built and tested in commit 819bda7. WI-002 documents and checks R-02 separately in commit d961e1e. No helper agents were used.
+
+**Next action:** Present the tested CLI result for Mike’s approval, separate from WI-002’s README result.
+
+**Blockers:** Result approval and merge wait on Mike.
+
+**Related items:** WI-002 covers R-02 and requires its own build, check, and result approval.
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — CLI behavior | --shout prints uppercase named and default greetings in either flag position | Done | R-01 checks and npm test pass | None. |
+| P2 — README documentation | Readers can use --shout from the README example | Done | WI-002 builds and checks R-02 independently | WI-002 |
+
+## Tasks
+
+### P1 — CLI behavior
+
+- [x] **P1-T01 — Implement --shout** · Done  
+  **Work
+
+[CMD exit=0] /bin/zsh -lc 'git remote -v'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git status --short'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r1                                                      86f219e [main]
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r1/.claude/worktrees/wi-001-add-shout-flag-to-greet-cli 819bda7 [claude/wi-001-add-shout-flag-to-greet-cli]
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r1/.claude/worktrees/wi-002-document-shout-in-readme    d961e1e [claude/wi-002-document-shout-in-readme]
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-002'
+  -> WI-002: Document --shout in README
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r1/.work-items/WI-001-add-shout-flag-to-greet-cli/docs/WI-002-readme/WORK-ITEM.md
+Stage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/WI-001-add-shout-flag-to-greet-cli/DESIGN.md). Read it with: toolkit work design WI-001
+Worktree branch for this item: claude/wi-002-document-shout-in-readme (folder .claude/worktrees/wi-002-document-shout-in-readme)
+
+---
+id: WI-002
+title: Document --shout in README
+type: build
+stage: 11-user-approval
+status: In Progress
+parent: WI-001
+waiting_on: "owner"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-002: Document --shout in README
+
+## Overview
+
+**Goal:** Document --shout in README.md so a reader can understand and run it.
+
+**Current position:** README guidance is built in commit d961e1e. The exact documented command printed the shown output, and the combined branch passed npm test.
+
+**Next action:** Present the separately checked README result for Mike’s approval.
+
+**Blockers:** Result approval and merge wait on Mike.
+
+**Related items:** Parent WI-001 (R-02). Design: WI-001’s approved design.
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Document and verify | README explains --shout and shows a working command | Done | README command prints the documented output; R-02 checked separately | None. |
+
+## Tasks
+
+### P1 — Document and verify
+
+- [x] **P1-T01 — Write README flag guidance** · Done  
+  **Work:** Explain --shout and add a usable command with its expected output to REA
+
+[CMD exit=0] /bin/zsh -lc 'cat .claude/worktrees/wi-002-document-shout-in-readme/README.md .claude/worktrees/wi-002-document-shout-in-readme/bin/greet.mjs'
+  -> # greet
+
+A tiny command that prints a greeting.
+
+    node bin/greet.mjs Mike
+    Hello, Mike!
+
+Use `--shout` to print the whole greeting in uppercase.
+
+[AGENT] Three decisions wait on you: approval of the WI-001 CLI result, separate approval of the WI-002 README result, and a proposed memory preference.
+
+**First: WI-001.** The CLI prints the whole greeting in uppercase with `--shout`. It works before or after a name and with the default greeting. You can run `node bin/greet.mjs --shout Mike` in the WI-001 worktree to see `HELLO, MIKE!`.
+
+The recorded check passed all 5 tests and found no gaps. No independent agent checked it, as you requested direct work. I recommend approval based on those checks. This approval covers the CLI result only; I’ll show you the README result separately afterward.
+
+Do you approve this result?
+
+SKILLS OPENED: []
+ESCALATED CALLS: 0
+HOOK CONTEXTS: 1
+  * Project briefing: Greet CLI Final H (greet-cli-final-h), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: the local Hindsight server. Salesforce: no. Hosts: Claude Code and Codex. | Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r1/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle. | Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs. |  | This worktree is on branch main, which names no work item. |  | Active items: | - WI-001 Add --shout flag to greet CLI: 11 User approval, In Progress, waiting on owner. Next action: Present the tested CLI result for Mike’s approval, separate from WI-002’s README result. Continues with work-decide. | - WI-002 Document --shout in README: 11 User approval, In Progress, waiting on owner. Next action: Present the separately checked README result for Mike’s approval. Continues with work-decide. |  | Waiting on the owner: | - WI-001 Add --shout flag to greet CLI: WI-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-001 --result --by <name>. (work-decide) | - WI-002 Document --shout in README: WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide) |  | Items: 2 in progress. |  | Current focus: | Last updated: 2026-09-28, chat, agent | ## Now | - WI-001 Add --shout flag to greet CLI | - WI-002 Document --shout in README | ## Waiting on the owner | - Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it. | - Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, and trust them. Setup step; drop it when doctor stops reporting it. | ## Untracked to-dos | None. | ## Next session starts with | - Continue WI-001 and WI-002 from their Resume here notes: present each tested result for Mike’s separate approval, then handle the merge decision. |  | Memory proposals waiting on the owner (not facts: do not rely on them; work-decide asks him): | - feedback_small_changes_mike_prefers_working_directly_agent: For small changes, Mike prefers working directly with the agent without helper agents (proposed 2026-09-28) |  | Project memory (hindsight): 1 record, and 1 proposal the owner has not answered, from the local copy. toolkit memory find searches it; toolkit memory get <key> reads one record. |  | Memory records: | - user_document_cli_flags_in_readme: Document every command-line flag in the README |  | Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them): | - Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r1). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off. Fix: The owner opens Codex in this folder and trusts it when Codex asks. | - Codex ran this Toolkit V2 hook, but ~/.codex/config.toml has no trust entry for the Toolkit V2 hooks. Codex runs untrusted hooks only when it is started with --dangerously-bypass-hook-trust; a normal Codex session skips them. Fix: The owner opens /hooks in Codex and trusts the Toolkit V2 hooks; toolkit doctor checks it. |  | Always-on rules. Claude Code loads them by itself; in Codex, each one is read at session start: | - .claude/rules/humanize-outbound-text.md: Humanize Anything Sent to Another Person | - .claude/rules/keep-work-item-current.md: Keep the Active Work Item Accurate | - .claude/rules/memory-review-and-save.md: Review and Save Project Memory | - .claude/rules/plain-english-artifacts.md: Write Artifacts in Plain English | - .claude/rules/session-handoff.md: Prepare a Session Handoff | - .claude/rules/shared-repository-work.md: Work Safely in a Shared Repository | - .claude/rules/work-item-folders.md: Local Work-Item Folders |  | How to write replies (from AGENTS.md): | Claude Code applies the Plain English output style to chat. Codex and helper agents follow these lines instead. |  | - Start with the answer, result, or current status. Answer what was asked. Keep it short; add detail when asked. | - Use ordinary words. Explain an unfamiliar term the first time it matters. Use the exact name a system uses, the same way every time. | - Write literally: no metaphors, idioms, jokes, or picture words in place of the real name. State the point directly, without a "not this, but that" setup. | - Use paragraphs for a connected explanation, bullets for separate items or choices, and a heading only when it names what is under it. | - When asking for a decision, name the choice and the difference that matters, and recommend one. | - Use the exact status word: written, built, tested, merged, installed, or seen working. Say something works only when you saw it work. | - Leave out routine narration of process and helper activity. Give one direct line when the owner lost something, an action cannot be undone, work waits on the owner, or there is a cost.
+HOOKSTATE turns=1 keep=None records=[] stopBlocked=False lastStop=

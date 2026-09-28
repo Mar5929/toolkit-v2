@@ -1,0 +1,67 @@
+Mon Sep 28 22:34:33 UTC 2026
+.work-items/.toolkit-state.json
+.work-items/DASHBOARD.md
+.work-items/WI-001-add-a-times-flag-to-greet/DESIGN.md
+.work-items/WI-001-add-a-times-flag-to-greet/WI-002-document-greet-flags-in-the-readme/WORK-ITEM.md
+.work-items/WI-001-add-a-times-flag-to-greet/WORK-ITEM.md
+.work-items/work-item-template/DESIGN.md
+.work-items/work-item-template/WORK-ITEM.md
+
+{
+  "schema": 1,
+  "prefix": "WI",
+  "highWater": 2,
+  "fingerprint": "0ddbbad893fdf7b1791c05a556554c41e51ec16b3ecbc95fe89afa715fc76a6c",
+  "items": {
+    "WI-001": {
+      "path": "WI-001-add-a-times-flag-to-greet/WORK-ITEM.md",
+      "missing": false,
+      "owner": true,
+      "hash": "fc46135150bb792558c40366b1c9b0c937e356755fefe4016cde3716581eba4a",
+      "written": {
+        "title": "Add a --times flag to greet",
+        "heading": "WI-001: Add a --times flag to greet",
+        "type": "build",
+        "stage": "06-implementation-plan",
+        "status": "In Progress",
+        "parent": "none",
+        "parentSource": "none",
+        "requirements_approved": "2026-09-28 by Mike Rihm",
+        "overall": "Finalized",
+        "design": "approved",
+        "designSource": "approved",
+        "result_approved": "no",
+        "statusKept": false,
+        "overallKept": false,
+        "designKept": false,
+        "parentKept": false
+      }
+    },
+    "WI-002": {
+      "path": "WI-001-add-a-times-flag-to-greet/WI-002-document-greet-flags-in-the-readme/WORK-ITEM.md",
+      "missing": false,
+      "owner": true,
+      "hash": "6789a9a0b1d80810b46e3d16fadf02000dbfcab8dc175bfbf4f545df0cafe074",
+      "written": {
+        "title": "Document greet flags in the README",
+        "heading": "WI-002: Document greet flags in the README",
+        "type": "build",
+        "stage": "06-implementation-plan",
+        "status": "In Progress",
+        "parent": "WI-001",
+        "parentSource": "WI-001",
+        "requirements_approved": "2026-09-28 by Mike Rihm",
+        "overall": "Finalized",
+        "design": "none",
+        "designSource": "none",
+        "result_approved": "no",
+        "statusKept": false,
+        "overallKept": false,
+        "designKept": false,
+        "parentKept": false
+      }
+    }
+  },
+  "updated": "2026-09-28T22:33:41.380Z"
+}
+

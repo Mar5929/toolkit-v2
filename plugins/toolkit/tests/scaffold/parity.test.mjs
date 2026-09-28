@@ -9,7 +9,8 @@
 //   - a model file differs only by its setup markers (dropped with the blocks
 //     that do not apply), the project name filled on heading lines, the
 //     generated rules list in AGENTS.md, the Salesforce lines removed from
-//     .gitignore, the Salesforce entries removed from the settings, and the
+//     .gitignore and from the paths list of publish-project-documents.md,
+//     the Salesforce entries removed from the settings, and the
 //     toolkit's own entries merged into .gitignore and the settings;
 //   - a generated file (.memory/MEMORY.md, ai-external-knowledge/INDEX.md)
 //     is the model's file exactly, because a new project has no memory
@@ -315,6 +316,12 @@ function compare(root, setup) {
       assert.deepEqual(JSON.parse(got), modelJsonFor(f, setup));
       continue;
     }
+    if (rule('lineRemove', f)) {
+      const lr = rule('lineRemove', f);
+      const base = !setup.salesforce ? want.split('\n').filter((l) => !lr.lines.includes(l)).join('\n') : want;
+      assert.equal(got, base, `${f} is the model's file with the lines a lineRemove rule names taken out`);
+      continue;
+    }
     if ((CONDITIONS.generated || []).some((g) => g.path === f)) {
       assert.equal(got, want, `${f} is generated, and in a new project with no records it is the model's file exactly`);
       continue;
@@ -339,7 +346,7 @@ for (const setup of SETUPS) {
     const differing = compare(root, setup);
     // The files with setup markers or the name always differ; nothing else may,
     // except the settings and .gitignore merges named in CONDITIONS.json.
-    const allowed = new Set(['AGENTS.md', 'README.md', 'PROJECT.md', '.gitignore', '.claude/settings.json', '.codex/hooks.json']);
+    const allowed = new Set(['AGENTS.md', 'README.md', 'PROJECT.md', '.gitignore', '.claude/settings.json', '.codex/hooks.json', ...(CONDITIONS.lineRemove || []).map((r) => r.path)]);
     assert.deepEqual(differing.filter((f) => !allowed.has(f)), []);
   });
 }

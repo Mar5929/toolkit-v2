@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "sessionId": "01a0e990-0b27-7f51-8412-8d0b55e5c48f",
+  "host": "codex",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1",
+  "startedAt": "2026-09-28T19:51:35.997Z",
+  "turns": 1,
+  "turn": {
+    "key": "01a0e991-d731-7d80-9112-ef7e136ecc43",
+    "n": 1,
+    "startedAt": "2026-09-28T19:51:35.997Z",
+    "keep": null,
+    "baseline": null,
+    "records": [
+      {
+        "kind": "memory",
+        "what": "toolkit memory focus",
+        "at": "2026-09-28T19:51:35.997Z"
+      }
+    ],
+    "edits": [],
+    "stopBlocked": false
+  },
+  "updated": "2026-09-28T19:51:43.176Z"
+}

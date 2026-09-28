@@ -1,0 +1,6 @@
+{"type":"thread.started","thread_id":"01a0e990-0b27-7f51-8412-8d0b55e5c48f"}
+{"type":"item.completed","item":{"id":"item_0","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
+{"type":"item.completed","item":{"id":"item_1","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_2","type":"agent_message","text":"I’ll skip `SOUL.md`.\n\nWhere should automatic backups of `.work-items/` and `.memory/` go? I recommend `~/Backups/toolkit`, a folder outside the project that your computer’s backups can also cover. You can choose another folder or say “no backups.”"}}
+{"type":"turn.completed","usage":{"input_tokens":320286,"cached_input_tokens":301696,"cache_write_input_tokens":0,"output_tokens":1351,"reasoning_output_tokens":247}}

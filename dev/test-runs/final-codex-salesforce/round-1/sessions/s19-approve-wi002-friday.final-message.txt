@@ -1,0 +1,7 @@
+Your **WI-002 result approval is recorded**. Shipping it remains a separate decision.
+
+I’ve kept your usual Friday availability as a memory proposal. I need your permission before treating it as a standing preference.
+
+WI-001 is ready for its separate result review. Your sandbox checks found that Tier starts blank, offers Gold, Silver, and Bronze in order, saves those values or blank, and has a description and help text. An independent checker reviewed the field source and your observations; the checker made no direct org checks.
+
+**Do you approve the WI-001 result?**

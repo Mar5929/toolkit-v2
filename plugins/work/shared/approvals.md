@@ -37,6 +37,12 @@ item in the wrong state.
 - After a yes, save his words first, in a history note that starts with
   `Owner said:`. Then run the gate's commands. A command that refuses then
   never loses his answer, and no later session asks him again.
+- `--by <owner>` is his name exactly as `toolkit config get project.owner`
+  prints it (for example "Mike Rihm", not "Mike"), so every approval names
+  him the same way.
+- When an approve command notes that the item's Overview still asks for
+  that approval (Next action), write the step after the approval with the
+  `toolkit work edit` command the note prints.
 
 | The owner says | After this question | It is |
 | --- | --- | --- |
@@ -131,7 +137,10 @@ After his yes, or his choice of one option, in this order:
       it is.
 - [ ] Save the design text.
       `toolkit work design <id> --set-file <file>`
-- [ ] Record the approval. It adds its own history row.
+- [ ] Record the approval. It adds its own history row. It refuses (exit
+      code 2, `design_not_filled`) while "Selected design" still says
+      "Pending owner decision" or holds the template prompt: save the filled
+      design first, then run it again, without asking him again.
       `toolkit work approve <id> --design --by <owner>`
 - [ ] Hand the item back to the agent, unless another question is still open.
       `toolkit work set <id> --waiting-on agent`

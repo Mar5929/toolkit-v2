@@ -1,0 +1,492 @@
+PROMPT: Yes: the same greeting N times, one per line, and keep the optional name and the one-greeting default. Also, remember that I prefer every command-line flag to be listed in the README with a short example.
+THREAD: 01a0ea15-2418-7433-99ba-efa3b61f5cea
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll record the `--times` decision in WI-001 and save your README preference for future CLI changes.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-requirements/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/SKILL.md'
+  -> ---
+name: work-decide
+description: 'Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers. Use when he asks "what do you need from me", answers a waiting decision ("go with option B"), or states a project-wide decision.'
+---
+
+# Work decide
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Walks the owner through what waits on him, one decision at a time, and records each answer where it belongs. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Build the queue. The command lists each decision once: requirements waiting for approval, proposed designs, results at stage 11, Open Questions rows the owner decides, and memory proposals. Its "Agent to-do" lines are not decisions. A delivery offer belongs to `work-delegate`: open it after his other decisions.
+   `toolkit work decisions`
+2. He gave an answer without being asked ("approved", "go with B"): match it to exactly one waiting decision; when two could match, ask which, naming both. A bare "yes", "ok", or "looks good" with no question asked is not an answer (`references/approvals.md`, section 1).
+3. Otherwise start with the count and one short line for every waiting decision, memory proposals included ("3 decisions wait on you: the WI-004 design, the WI-006 result, and a 
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## main
+
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/references/{recording-owner-answers,work-item-format,current-focus}.md'
+  -> <!-- Generated file. Source: plugins/work/shared/recording-owner-answers.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Recording the owner's answers
+
+Where each thing the owner says is saved, how to ask him a question, how to
+end a reply, and what to say when a save fails.
+
+## Contents
+
+1. Voice
+2. Where each answer goes
+3. Save it before the next question
+4. History notes
+5. Waiting on the owner
+6. Asking the owner
+7. Ending every reply
+8. Reporting a failed save
+9. Owner edits win
+10. Stages in plain words
+11. Handing over to another skill
+
+## 1. Voice
+
+Every skill carries this line near its top:
+
+> Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+
+Helper agents do not receive the output style. Each agent file carries its
+own writing rules.
+
+## 2. Where each answer goes
+
+| Information | Home | What to record |
+| --- | --- | --- |
+| Requirement or correction | The item's `Active requirements` (the `R-xx` block) and `Acceptance` | The new meaning, and Status Refining until approved |
+| Design choice | The item's design (`toolkit work design`) | The approach, proposed or approved, and why |
+| Open question | The item's `Open Questions` table | Question, what it affects, Open, who must answer |
+| Answer or decision about this item | The question's row, the section it changes, and one history note | The answer, who gave it, the
+
+[CMD exit=0] /bin/zsh -lc 'git remote'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2 ec6e66b [main]
+
+
+[CMD exit=0] /bin/zsh -lc 'cat PROJECT-ROADMAP.md'
+  -> # Project roadmap
+
+<!-- Fill-in guide: replace every angle-bracket prompt in the outcome, phase table, phase heading, and work-unit fields with this project's real text. Keep one overview row and one matching ## heading per phase. Under that heading, repeat the ### work-unit block for each deliverab
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/references/{memory-criteria,record-format}.md'
+  -> <!-- Generated file. Source: plugins/toolkit/scaffold/model/.memory/memory-criteria.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Memory criteria
+
+This file is the project-specific selection policy: what is worth keeping in lasting memory. The approval policy, including onboarding and trusted mode, is in the `memory-save` skill, which saves with `toolkit memory save`. When the owner corrects what is worth saving, save the correction as a `feedback` memory with `memory-save`, as a general rule, without copying the rejected memory. Those `feedback` memories override this page.
+
+## Default test for lasting memory
+
+Save a topic when it concerns this project, has a credible source, would matter in a future session, would be costly or unreliable to reconstruct, and has no better maintained owner. Prefer updating an existing topic. A short pointer to an authoritative record can qualify when future sessions would otherwise miss that record.
+
+| Type and filename | Usually worth retaining | Route or reject instead |
+| --- | --- | --- |
+| `user_<topic>.md` | Relevant role, responsibility, working preference, or communication need the owner stated | Personal judgments, irrelevant biography, private details |
+| `feedback_<topic>.md` | Repeated or standing correction to how the agent should work; confirmed selection lesson | One-off irritation, a rejected fact restated as policy, an instruction already in `AGENTS.md` |
+| `project_<topic>.md` | Durable projec
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001'
+  -> WI-001: Add a --times flag to greet
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/.work-items/WI-001-add-a-times-flag-to-greet/WORK-ITEM.md
+Stage: 02 Refinement (Backlog) | Waiting on: owner | Continue with: work-decide
+Parent: none | Sub-items: none | Design: none
+Worktree branch for this item: claude/wi-001-add-a-times-flag-to-greet (folder .claude/worktrees/wi-001-add-a-times-flag-to-greet)
+
+---
+id: WI-001
+title: Add a --times flag to greet
+type: build
+stage: 02-refinement
+status: Backlog
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: not-offered
+requirements_approved: "no"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-001: Add a --times flag to greet
+
+<!-- Fill-in guide for a new local work item: create it with `toolkit work new`, which copies this folder, names the new folder, and sets the real ID in front matter and heading; keep the file name WORK-ITEM.md. Use stable phase, task, requirement, and question IDs for this item. In the front matter, keep one value from each list and change the fields with `toolkit work` commands; a blocked item has `waiting_on` set and its Blockers line filled, not a Blocked status. Replace every angle-bracket prompt with actual text in that same field, cell, or paragraph; do not leave the prompt in place. Keep the headings and field labels. Add or remove phase, task, question, and requiremen
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 1 decision waits on the owner:
+
+WI-001 Add a --times flag to greet
+  - Q-01: Should --times N print the same greeting N times, one per line, while preserving the optional name and current one-greeting default? Affects Agreed goal, R-01. (work-decide)
+
+
+[CMD exit=0] /bin/zsh -lc 'cat bin/greet.mjs README.md'
+  -> #!/usr/bin/env node
+// greet: prints a friendly greeting.
+// Usage: greet [name]
+export function greet(name = 'world') {
+  return `Hello, ${name}!`;
+}
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const args = process.argv.slice(2);
+  console.log(greet(args[0]));
+}
+# greet
+
+A tiny comman
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-requirements/references/{requirement-format,interview}.md'
+  -> # Writing a requirement
+
+How to write an `R-xx` block and the Acceptance list so someone who was not
+in the conversation can build and check the result.
+
+## What a requirement says
+
+- Plain words, no jargon. State the goal, what people must be able to do,
+  what must happen, and the rules that govern it.
+- Each requirement says what must be true and why, never how to build it. No
+  file paths, versions, tool choices, or build steps in a requirement.
+- Make behavior explicit: who is affected, when the rule applies, the
+  expected result, and the exceptions.
+- Every requirement has an acceptance check someone can observe.
+- Use only settled details. Leave missing decisions open as questions.
+
+## The `R-xx` block
+
+From the work item template. The name follows an em dash. Each field starts
+its own line, and every line but the last ends with two spaces.
+
+```markdown
+#### R-01 — Rejected requests show their reason
+
+**Status:** Refining  
+**Applies to:** The person who submitted a request, after it is rejected.  
+**Required behavior:** The requester can see the rejection reason on the request.  
+**Boundaries and exceptions:** Requests withdrawn by the requester have no reason.  
+**Acceptance check:** Reject a request with a reason; the requester sees that reason on the request.  
+**Decision record:** Owner, 2026-09-26, interview.  
+**Open questions:** None.
+```
+
+- Status words: Refining, Finalized, Superseded.
+- A new or changed requirement is Refining until the owner approves it.
+-
+
+[CMD exit=0] /bin/zsh -lc 'toolkit config get memory.approval'
+  -> onboarding
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory find 'README flags examples'"
+  -> No memory record is about "README flags examples".
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus --json'
+  -> {
+  "ok": true,
+  "backend": "hindsight",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Add a --times flag to greet\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 from its Resume here: ask Q-01 and record the answer before the next requirements question.\n",
+  "version": "802fec94148eff681b2a3c10fa8f09bf14cbeedf4987185d5c6ffc3e5ff45026"
+}
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history WI-001 --note 'Owner said: \"Yes: the same greeting N times, one per line, and keep the optional name and the one-greeting default.\"' --effect 'Q-01 answered; define the repeated output requirement and continue refinement.'"
+  -> Added a Recent History row to WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | Should --times N print the same greeting N times, one per line, while preserving the optional name and current one-greeting default? Answer: Yes: the same greeting N times, one per line, and keep the optional name and the one-greeting default. Mike Rihm, 2026-09-28. | Agreed goal, R-01 | Answered | owner |'"
+  -> Saved "Open Questions" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Agreed goal' --text 'Let greet print the same greeting N times, one per line, when --times N is given, while keeping the optional name and the current one-greeting default.'"
+  -> Saved "Agreed goal" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Active requirements' --text '#### R-01 — Repeat the greeting
+
+**Status:** Refining  
+**Applies to:** People running greet with or without --times N and an optional name.  
+**Required behavior:** With --times N, print the same greeting N times, one per line. The optional name still determines whom to greet. Without --times, print one greeting as today.  
+**Boundaries and exceptions:** Which values of N are valid and what happens for invalid values are open in Q-02.  
+**Acceptance check:** Run greet with a name and --times 3; see three identical 
+  -> Saved "Active requirements" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Acceptance' --text 'This work item can be accepted when:
+
+1. --times N prints the same greeting N times, one per line, with the optional name preserved.
+2. Without --times, greet still prints one greeting.
+3. The README lists --times with a short example, along with any other flags.
+4. Mike reviews the tested result.'"
+  -> Saved "Acceptance" in WI-001.
+
+
+[AGENT] Q-01 is recorded. I’ve also added the README examples to WI-001’s draft requirements and will save that as a standing preference. The remaining behavior to settle is which values `N` accepts.
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory save --type user --name cli-flags-readme-examples --description 'List every command-line flag in the README with a short example' --body '# README examples for CLI flags
+
+**Remember:** Mike prefers every command-line flag to be listed in the README with a short example.
+
+**Why:** Not stated by the owner.
+
+**How to apply:** When adding or changing a command-line flag, update the README list and give a short example for that flag.
+
+**Evidence and limits:** Mike Rihm, in chat, 2026-09-28. Applies to this project.
+
+**Related memories:** None.
+
+**Authoritative records:*
+  -> Saved to memory: user_cli_flags_readme_examples (new record).
+Where: Hindsight bank greet-cli-final-h2 at http://127.0.0.1:8888
+Version: 6f5ae7fe53b7
+Approved by: Mike Rihm
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | Should --times N print the same greeting N times, one per line, while preserving the optional name and current one-greeting default? Answer: Yes: the same greeting N times, one per line, and keep the optional name and the one-greeting default. Mike Rihm, 2026-09-28. | Agreed goal, R-01 | Answered | owner |
+| Q-02 | Should --times accept only positive whole numbers, and show an error for zero, negative, missing, or non-number values
+  -> Saved "Open Questions" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Overview' --text '**Goal:** Let greet print the same greeting N times, one per line, when --times N is given, while keeping the optional name and one-greeting default.
+
+**Current position:** The repeated output and README documentation requirements are recorded as drafts. Valid values for N remain open.
+
+**Next action:** Mike answers Q-02; agent records the input rule and continues the requirements interview.
+
+**Blockers:** Q-02 needs the owner’s answer.
+
+**Related items:** None.'"
+  -> Saved "Overview" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Resume here' --text 'Ask Mike Q-02 about valid --times values and invalid input. Save his answer in R-01 and Acceptance, then continue the requirements interview one question at a time. Requirements are not approved; do not build yet.'"
+  -> Saved "Resume here" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Add a --times flag to greet
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 from its Resume here: ask Q-02 about valid --times values and record the answer.' --expe
+  -> Saved the current focus (20 lines). Version: eb5ec2bfe08a
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001'
+  -> WI-001: Add a --times flag to greet
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/.work-items/WI-001-add-a-times-flag-to-greet/WORK-ITEM.md
+Stage: 02 Refinement (Backlog) | Waiting on: owner | Continue with: work-decide
+Parent: none | Sub-items: none | Design: none
+Worktree branch for this item: claude/wi-001-add-a-times-flag-to-greet (folder .claude/worktrees/wi-001-add-a-times-flag-to-greet)
+
+---
+id: WI-001
+title: Add a --times flag to greet
+type: build
+stage: 02-refinement
+status: Backlog
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: not-offered
+requirements_approved: "no"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-001: Add a --times flag to greet
+
+<!-- Fill-in guide for a new local work item: create it with `toolkit work new`, which copies this folder, names the new folder, and sets the real ID in front matter and heading; keep the file name WORK-ITEM.md. Use stable phase, task, requirement, and question IDs for this item. In the front matter, keep one value from each list and change the fields with `toolkit work` commands; a blocked item has `waiting_on` set and its Blockers line filled, not a Blocked status. Replace every angle-bracket prompt with actual text in that same field, cell, or paragraph; do not leave the prompt in place. Keep the headings and field labels. Add or remove phase, task, question, and requiremen
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate WI-001'
+  -> Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. 1 open question waits on the owner (toolkit work decisions lists it).
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory get user_cli_flags_readme_examples'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for Greet CLI Final H2 (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (4):
+- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- README.md is the project's own file from before the toolkit, so sync lea
+
+[AGENT] WI-001 now records your decision: `--times N` prints the same greeting N times, one per line, while keeping the optional name and one-greeting default. I also saved your preference to list every command-line flag in the README with a short example. Say “forget that” if you want me to remove the preference from memory.
+
+Should `--times` accept only positive whole numbers and show an error for zero, negative, missing, or non-number values? I recommend yes, so invalid input cannot produce a misleading number of greetings.
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 717043, "cached_input_tokens": 652544, "cache_write_input_tokens": 0, "output_tokens": 3157, "reasoning_output_tokens": 409}}
+
+SKILLS OPENED: ['work-decide', 'work-requirements', 'memory-save']
+
+[HOOK CONTEXT ord=9] Project briefing: Greet CLI Final H2 (greet-cli-final-h2), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: the local Hindsight server. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The backlog has 1 item; toolkit work next suggests which to take up.
+
+Waiting on the owner:
+- WI-001 Add a --times flag to greet: Q-01: Should --times N print the same greeting N times, one per line, while preserving the optional name and current one-greeting default? Affects Agreed goal, R-01. (work-decide)
+
+Items: 1 in the backlog.
+
+Current focus:
+Last updated: 2026-09-28, chat, agent
+## Now
+- WI-001 Add a --times flag to greet
+## Waiting on the owner
+- Trust this folder in Codex: open Codex here 
+
+[HOOK CONTEXT ord=12] The owner stated something to keep; memory-save records it, or work-on if it is a task.
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/{humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,session-handoff,shared-repository-work,work-item-folders}.md",max_output_tokens:12000}); text(r.output);
+
+
+[CALL] const r = await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-requirements/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/SKILL.md",max_output_tokens:18000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "---\nname: work-decide\ndescription: 'Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers. Use when he asks \"what do you need from me\", answers a waiting decision (\"go with option B\"), or states a project-wide decision.'\n---\n\n# Work decide\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nWalks the owner through what waits on him, one decision at a time, and records each answer where it belongs. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.\n\n## Steps\n\n1. Build the queue. The command lists each decision once: requirements waiting for approval, proposed designs, results at stage 11, Open Questions rows the owner decides, and memory proposals. Its \"Agent to-do\" lines are not decisions. A delivery offer belongs to `work-delegate`: open it after his other decisions.\n   `toolkit work decisions`\n2. He gave an answer without being asked (\"approved\", \"go with B\"): match it to exactly one waiting decision; when two could match, ask which, naming both. A bare \"yes\", \"ok\", or \"looks good\" with no question asked is not an answer (`references/approvals.md`, section 1).\n3. Otherwise start with the count and one short line for every waiting decision, memory proposals included (\"3 decisions wait on you: the WI-004 design, the WI-006 result, and a memory proposal about deploy days.\"). Then take them one at a time, the one blocking the most work first: what is decided, the choices, your recommendation and its main reason, and what happens after each answer. One decision per message, in the reply text.\n4. An approval: read the item, then run that gate's checklist in `references/approvals.md` (requirements: section 2; design: section 3; result: section 4).\n   `toolkit work show <id>`\n5. An Open Questions answer: save his words first, rewrite that row with the answer, the date, and Answered, then set `waiting_on` back (`references/recording-owner-answers.md`, sections 4 and 5).\n   `toolkit work history <id> --note 'Owner said: <quote>' --effect '<what the answer changes>'`\n   `toolkit work edit <id> --section 'Open Questions' --set-file <file>`\n   `toolkit work set <id> --wai
+
+[CALL] const base="/Users/michaelrihm/.codex/plugins/cache/toolkit-v2"; const r=await Promise.allSettled([
+tools.exec_command({cmd:"git worktree list",max_output_tokens:1000}),
+tools.exec_command({cmd:"git status --short --branch",max_output_tokens:1000}),
+tools.exec_command({cmd:"git remote",max_output_tokens:1000}),
+tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:1500}),
+tools.exec_command({cmd:"toolkit work show WI-001",max_output_tokens:5000}),
+tools.exec_command({cmd:"cat "+base+"/work/0.2.9/skills/work-decide/references/{recording-owner-answers,work-item-format,current-focus}.md",max_output_tokens:7000}),
+tools.exec_command({cmd:"cat "+base+"/memory/0.2.7/skills/memory-save/references/{memory-criteria,record-format}.md",max_output_tokens:7000}),
+tools.exec_command({cmd:"cat PROJECT-ROADMAP.md",max_output_tokens:2000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,result:x.status==="fulfilled"?x.value.output:String(x.reason)})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Warning: truncated output (original token count: 12794)\nTotal output lines: 8\n\n{\"i\":0,\"result\":\"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2 ec6e66b [main]\\n\"}\n{\"i\":1,\"result\":\"## main\\n\"}\n{\"i\":2,\"result\":\"\"}\n{\"i\":3,\"result\":\"1 decision waits on the owner:\\n\\nWI-001 Add a --times flag to greet\\n  - Q-01: Should --times N print the same greeting N times, one per line, while preserving the optional name and current one-greeting default? Affects Agreed goal, R-01. (work-decide)\\n\"}\n{\"i\":4,\"result\":\"WI-001: Add a --times flag to greet\\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/.work-items/WI-001-add-a-times-flag-to-greet/WORK-ITEM.md\\nStage: 02 Refinement (Backlog) | Waiting on: owner | Continue with: work-decide\\nParent: none | Sub-items: none | Design: none\\nWorktree branch for this item: claude/wi-001-add-a-times-flag-to-greet (folder .claude/worktrees/wi-001-add-a-times-flag-to-greet)\\n\\n---\\nid: WI-001\\ntitle: Add a --times flag to greet\\ntype: build\\nstage: 02-refinement\\nstatus: Backlog\\nparent: none\\nwaiting_on: \\\"owner\\\"\\npriority: medium\\ndelivery: not-offered\\nrequirements_approved: \\\"no\\\"\\ndesign: none\\nresult_approved: \\\"no\\\"\\nupdated: 2026-09-28\\n---\\n\\n# WI-001: Add a --times flag to greet\\n\\n<!-- Fill-in guide for a new local work item: create it with `toolkit work new`, which copies this folder, names the new folder, and sets the real ID in front matter and heading; keep the file name WORK-ITEM.md. Use stable phase, task, requirement, and question IDs for this item. In the front matter, keep one value from each list and change the fields with `toolkit work` commands; a blocked item has `waiting_on` set and its Blockers line filled, not a Blocked status. Replace every angle-bracket prompt with actual text in that same field, cell, or paragraph; do not leave the prompt in place. Keep the headings and field labels. Add or remove phase, task, question, and requirement examples to match the real work. Use the chosen tracker as the source of truth for status and links. Delete this guide after filling the item. -->\\n\\n## Overv
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"toolkit memory find 'README flags examples'",max_output_tokens:2000}),
+tools.exec_command({cmd:"toolkit config get memory.approval",max_output_tokens:300}),
+tools.exec_command({cmd:"cat bin/greet.mjs README.md",max_output_tokens:3000}),
+tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-requirements/references/{requirement-format,interview}.md",max_output_tokens:6000}),
+tools.exec_command({cmd:"toolkit memory focus --json",max_output_tokens:2000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x.status==="fulfilled"?x.value.output:String(x.reason)})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":\"No memory record is about \\\"README flags examples\\\".\\n\"}"}, {"type": "input_text", "text": "{\"i\":1,\"result\":\"onboarding\\n\"}"}, {"type": "input_text", "text": "{\"i\":2,\"result\":\"#!/usr/bin/env node\\n// greet: prints a friendly greeting.\\n// Usage: greet [name]\\nexport function greet(name = 'world') {\\n  return `Hello, ${name}!`;\\n}\\n\\nif (import.meta.url === `file://${process.argv[1]}`) {\\n  const args = process.argv.slice(2);\\n  console.log(greet(args[0]));\\n}\\n# greet\\n\\nA tiny command that prints a greeting.\\n\\n    node bin/greet.mjs Mike\\n    Hello, Mike!\\n\\nRun the tests with `npm test`.\\n\"}"}, {"type": "input_text", "text": "{\"i\":3,\"result\":\"# Writing a requirement\\n\\nHow to write an `R-xx` block and the Acceptance list so someone who was not\\nin the conversation can build and check the result.\\n\\n## What a requirement says\\n\\n- Plain words, no jargon. State the goal, what people must be able to do,\\n  what must happen, and the rules that govern it.\\n- Each requirement says what must be true and why, never how to build it. No\\n  file paths, versions, tool choices, or build steps in a requirement.\\n- Make behavior explicit: who is affected, when the rule applies, the\\n  expected result, and the exceptions.\\n- Every requirement has an acceptance check someone can observe.\\n- Use only settled details. Leave missing decisions open as questions.\\n\\n## The `R-xx` block\\n\\nFrom the work item template. The name follows an em dash. Each field starts\\nits own line, and every line but the last ends with two spaces.\\n\\n```markdown\\n#### R-01 \u2014 Rejected requests show their reason\\n\\n**Status:** Refining  \\n**Applies to:** The person who submitted a request, after it is rejected.  \\n**Required behavior:** The requester can see the rejection reason on the request.  \\n**Boundaries and exceptions:** Requests withdrawn by the requester have no reason.  \\n**Acceptance check:** Reject a request with a reason; the requester sees that reason on the request.  \\n**Decision record:** Owner, 2026-09-26, interview.  \\n**Open questions:** None.\\n```\\n\\n- Status words: Refining, Finalized, Superseded.\\n- A new or changed requirement is Refining until the owner approves it.\\n- After his approval: Status Finalized, and the Decision record adds who\\n  approved it
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history WI-001 --note 'Owner said: \"Yes: the same greeting N times, one per line, and keep the optional name and the one-greeting default.\"' --effect 'Q-01 answered; define the repeated output requirement and continue refinement.'",max_output_tokens:1000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Added a Recent History row to WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |\n|---|---|---|---|---|\n| Q-01 | Should --times N print the same greeting N times, one per line, while preserving the optional name and current one-greeting default? Answer: Yes: the same greeting N times, one per line, and keep the optional name and the one-greeting default. Mike Rihm, 2026-09-28. | Agreed goal, R-01 | Answered | owner |'",max_output_tokens:1000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Open Questions\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Agreed goal' --text 'Let greet print the same greeting N times, one per line, when --times N is given, while keeping the optional name and the current one-greeting default.'",max_output_tokens:1000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Agreed goal\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Active requirements' --text '#### R-01 — Repeat the greeting\n\n**Status:** Refining  \n**Applies to:** People running greet with or without --times N and an optional name.  \n**Required behavior:** With --times N, print the same greeting N times, one per line. The optional name still determines whom to greet. Without --times, print one greeting as today.  \n**Boundaries and exceptions:** Which values of N are valid and what happens for invalid values are open in Q-02.  \n**Acceptance check:** Run greet with a name and --times 3; see three identical greeting lines for that name. Run it without --times; see one greeting line.  \n**Decision record:** Mike Rihm, 2026-09-28, answer to Q-01.  \n**Open questions:** Q-02.\n\n#### R-02 — Explain flags in the README\n\n**Status:** Refining  \n**Applies to:** People reading the command documentation.  \n**Required behavior:** List every command-line flag, including --times, in the README with a short example for each.  \n**Boundaries and exceptions:** None identified.  \n**Acceptance check:** The README lists --times and shows a short command and its output; each other command-line flag, if any, also has a short example.  \n**Decision record:** Mike Rihm, 2026-09-28, stated README preference.  \n**Open questions:** None.'",max_output_tokens:1000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Active requirements\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Acceptance' --text 'This work item can be accepted when:\n\n1. --times N prints the same greeting N times, one per line, with the optional name preserved.\n2. Without --times, greet still prints one greeting.\n3. The README lists --times with a short example, along with any other flags.\n4. Mike reviews the tested result.'",max_output_tokens:1000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Acceptance\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory save --type user --name cli-flags-readme-examples --description 'List every command-line flag in the README with a short example' --body '# README examples for CLI flags\n\n**Remember:** Mike prefers every command-line flag to be listed in the README with a short example.\n\n**Why:** Not stated by the owner.\n\n**How to apply:** When adding or changing a command-line flag, update the README list and give a short example for that flag.\n\n**Evidence and limits:** Mike Rihm, in chat, 2026-09-28. Applies to this project.\n\n**Related memories:** None.\n\n**Authoritative records:** WI-001 records the --times documentation requirement.' --source 'Mike Rihm, in chat, 2026-09-28' --approved-by 'Mike Rihm'",max_output_tokens:1200});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved to memory: user_cli_flags_readme_examples (new record).\nWhere: Hindsight bank greet-cli-final-h2 at http://127.0.0.1:8888\nVersion: 6f5ae7fe53b7\nApproved by: Mike Rihm\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |\n|---|---|---|---|---|\n| Q-01 | Should --times N print the same greeting N times, one per line, while preserving the optional name and current one-greeting default? Answer: Yes: the same greeting N times, one per line, and keep the optional name and the one-greeting default. Mike Rihm, 2026-09-28. | Agreed goal, R-01 | Answered | owner |\n| Q-02 | Should --times accept only positive whole numbers, and show an error for zero, negative, missing, or non-number values? | R-01 | Open | owner |'",max_output_tokens:1000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Open Questions\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Overview' --text '**Goal:** Let greet print the same greeting N times, one per line, when --times N is given, while keeping the optional name and one-greeting default.\n\n**Current position:** The repeated output and README documentation requirements are recorded as drafts. Valid values for N remain open.\n\n**Next action:** Mike answers Q-02; agent records the input rule and continues the requirements interview.\n\n**Blockers:** Q-02 needs the owner’s answer.\n\n**Related items:** None.'",max_output_tokens:1000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Overview\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Resume here' --text 'Ask Mike Q-02 about valid --times values and invalid input. Save his answer in R-01 and Acceptance, then continue the requirements interview one question at a time. Requirements are not approved; do not build yet.'",max_output_tokens:1000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Resume here\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --text '# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Add a --times flag to greet\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 from its Resume here: ask Q-02 about valid --times values and record the answer.' --expect 802fec94148eff681b2a3c10fa8f09bf14cbeedf4987185d5c6ffc3e5ff45026",max_output_tokens:1000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved the current focus (20 lines). Version: eb5ec2bfe08a\n"}]
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"toolkit work show WI-001",max_output_tokens:5200}),
+tools.exec_command({cmd:"toolkit memory get user_cli_flags_readme_examples",max_output_tokens:1200}),
+tools.exec_command({cmd:"toolkit memory focus",max_output_tokens:1000}),
+tools.exec_command({cmd:"toolkit doctor",max_output_tokens:1300}),
+tools.exec_command({cmd:"toolkit work validate WI-001",max_output_tokens:1000}),
+tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:1000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x.status==="fulfilled"?x.value.output:String(x.reason)})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":\"WI-001: Add a --times flag to greet\\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/.work-items/WI-001-add-a-times-flag-to-greet/WORK-ITEM.md\\nStage: 02 Refinement (Backlog) | Waiting on: owner | Continue with: work-decide\\nParent: none | Sub-items: none | Design: none\\nWorktree branch for this item: claude/wi-001-add-a-times-flag-to-greet (folder .claude/worktrees/wi-001-add-a-times-flag-to-greet)\\n\\n---\\nid: WI-001\\ntitle: Add a --times flag to greet\\ntype: build\\nstage: 02-refinement\\nstatus: Backlog\\nparent: none\\nwaiting_on: \\\"owner\\\"\\npriority: medium\\ndelivery: not-offered\\nrequirements_approved: \\\"no\\\"\\ndesign: none\\nresult_approved: \\\"no\\\"\\nupdated: 2026-09-28\\n---\\n\\n# WI-001: Add a --times flag to greet\\n\\n<!-- Fill-in guide for a new local work item: create it with `toolkit work new`, which copies this folder, names the new folder, and sets the real ID in front matter and heading; keep the file name WORK-ITEM.md. Use stable phase, task, requirement, and question IDs for this item. In the front matter, keep one value from each list and change the fields with `toolkit work` commands; a blocked item has `waiting_on` set and its Blockers line filled, not a Blocked status. Replace every angle-bracket prompt with actual text in that same field, cell, or paragraph; do not leave the prompt in place. Keep the headings and field labels. Add or remove phase, task, question, and requirement examples to match the real work. Use the chosen tracker as the source of truth for status and links. Delete this guide after filling the item. -->\\n\\n## Overview\\n\\n**Goal:** Let greet print the same greeting N times, one per line, when --times N is given, while keeping the optional name and one-greeting default.\\n\\n**Current position:** The repeated output and README documentation requirements are recorded as drafts. Valid values for N remain open.\\n\\n**Next action:** Mike answers Q-02; agent records the input rule and continues the requirements interview.\\n\\n**Blockers:** Q-02 needs the owner\u2019s answer.\\n\\n**Related items:** None.\\n\\n## Roadmap\\n\\nA phase is complete when its tasks are complete and its exit result has been checked.\\n\\n<!-- Replace each exam

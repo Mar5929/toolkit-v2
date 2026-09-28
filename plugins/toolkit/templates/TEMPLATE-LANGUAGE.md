@@ -127,13 +127,17 @@ In a project that is not a Salesforce project:
   `skipFileWhenNoHooksLeft`, a file with no hooks left is not installed at
   all: `.codex/hooks.json` holds only the two Salesforce guards.
 - `lineRemove` takes the listed lines out of a model file (compared without
-  trailing spaces): the Salesforce CLI and `tools/kb/` lines of `.gitignore`.
+  trailing spaces): the Salesforce CLI and `tools/kb/` lines of `.gitignore`,
+  and the two Salesforce paths in the `paths:` list of
+  `.claude/rules/publish-project-documents.md`, so the rules table in
+  `AGENTS.md` names no Salesforce path.
 
 A Salesforce project gets the model's files with these entries in.
 
 When Salesforce is turned off later, sync applies the same removals to the
-project's `.claude/settings.json` and `.gitignore` when the project has not
-changed them (see "Sync"), so no hook is left that runs a Salesforce script the
+project's `.claude/settings.json`, `.gitignore`, and
+`publish-project-documents.md` when the project has not changed them (see
+"Sync"), so no hook is left that runs a Salesforce script the
 owner may delete. `.codex/hooks.json` holds only the Salesforce guards, so it
 is left over as a whole.
 

@@ -1,0 +1,2 @@
+d73c3ee672a76b3999261a5885cdd3a5338788d2  /Users/michaelrihm/.codex/config.toml
+c98e473a897ad5f369c276e5e5b81081f31aa398  /Users/michaelrihm/.claude/settings.json

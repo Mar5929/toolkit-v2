@@ -25,7 +25,7 @@ Explains what the owner changed in the tracker, asks only where his intent is un
 6. Validate, show a short tree of what changed, and add a history note only for the owner's reason.
    `toolkit work validate`
    `toolkit work history <id> --note 'Moved because the owner asked: <his words>'`
-7. Update the current focus when a split or a move changed an item's next step (`references/current-focus.md`). End with the one question for the owner, or the exact words that continue ("Say 'keep going' and I'll plan WI-008.").
+7. Update the current focus when a split or a move changed an item's next step (`references/current-focus.md`). The final reply repeats every tracker change of this session in the CLI's words, even when step 2 already said it: each report line, and each "Tell the owner in the reply" line a command printed. End with the one question for the owner, or the exact words that continue ("Say 'keep going' and I'll plan WI-008.").
 
 ## Gotchas
 

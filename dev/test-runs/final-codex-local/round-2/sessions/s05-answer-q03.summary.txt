@@ -1,0 +1,224 @@
+PROMPT: Yes, I approve that input rule.
+THREAD: 01a0ea1b-8379-7492-8f7d-c5e72e3d552f
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll check the wording of Q-03, record your approval against that rule, and update WI-001’s requirements.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-requirements/SKILL.md'
+  -> ---
+name: work-decide
+description: 'Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers. Use when he asks "what do you need from me", answers a waiting decision ("go with option B"), or states a project-wide decision.'
+---
+
+# Work decide
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Walks the owner through what waits on him, one decision at a time, and records each answer where it belongs. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Build the queue. The command lists each decision once: requirements waiting for approval, proposed designs, results at stage 11, Open Questions rows the owner decides, and memory proposals. Its "Agent to-do" lines are not decisions. A delivery offer belongs to `work-delegate`: open it after his other decisions.
+   `toolkit work decisions`
+2. He gave an answer without being asked ("approved", "go with B"): match it to exactly one waiting decision; when two could match, ask which, naming both. A bare "yes", "ok", or "looks good" with no question asked is not an answer (`references/approvals.md`, section 1).
+3. Otherwise start with the count and one short line for every waiting decision, memory proposals included ("3 decisions wait on you: the WI-004 design, the WI-006 result, and a 
+
+[CMD exit=0] /bin/zsh -lc 'rg --files .work-items | head -50; cat PROJECT-ROADMAP.md; git status --short'
+  -> .work-items/work-item-template/WORK-ITEM.md
+.work-items/work-item-template/DESIGN.md
+.work-items/WI-001-build-the-tip-command-with-split-option/WORK-ITEM.md
+.work-items/DASHBOARD.md
+# Project roadmap
+
+<!-- Fill-in guide: replace every angle-bracket prompt in the outcome, phase table, phase heading, 
+
+[AGENT] I’m using the work-decide and work-requirements procedures for this approval.
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r2 e7ecdb2 [main]
+
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/references/{recording-owner-answers,work-item-format,current-focus,toolkit-commands}.md'
+  -> <!-- Generated file. Source: plugins/work/shared/recording-owner-answers.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Recording the owner's answers
+
+Where each thing the owner says is saved, how to ask him a question, how to
+end a reply, and what to say when a save fails.
+
+## Contents
+
+1. Voice
+2. Where each answer goes
+3. Save it before the next question
+4. History notes
+5. Waiting on the owner
+6. Asking the owner
+7. Ending every reply
+8. Reporting a failed save
+9. Owner edits win
+10. Stages in plain words
+11. Handing over to another skill
+
+## 1. Voice
+
+Every skill carries this line near its top:
+
+> Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+
+Helper agents do not receive the output style. Each agent file carries its
+own writing rules.
+
+## 2. Where each answer goes
+
+| Information | Home | What to record |
+| --- | --- | --- |
+| Requirement or correction | The item's `Active requirements` (the `R-xx` block) and `Acceptance` | The new meaning, and Status Refining until approved |
+| Design choice | The item's design (`toolkit work design`) | The approach, proposed or approved, and why |
+| Open question | The item's `Open Questions` table | Question, what it affects, Open, who must answer |
+| Answer or decision about this item | The question's row, the section it changes, and one history note | The answer, who gave it, the
+
+[CMD exit=0] /bin/zsh -lc 'git remote'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git status'
+  -> On branch main
+nothing to commit, working tree clean
+
+
+[CMD exit=0] /bin/zsh -lc 'cat .work-items/WI-001-build-the-tip-command-with-split-option/WORK-ITEM.md'
+  -> ---
+id: WI-001
+title: Build the tip command with split option
+type: build
+stage: 02-refinement
+status: Backlog
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: not-offered
+requirements_approved: "no"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-001: Build the tip comma
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 1 decision waits on the owner:
+
+WI-001 Build the tip command with split option
+  - Q-03: Which bill amounts, percentages, and split counts are valid, and what should happen for missing or malformed input? Affects R-01, R-02. (work-decide)
+
+
+[CMD exit=1] /bin/zsh -lc "rg -n \"input rule|bill amounts|malformed|percent.*100|split count\" . --hidden -g '"'!node_modules'"' -g '"'!.git'"' -g '"'!.work-items/DASHBOARD.md'"'"
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001'
+  -> WI-001: Build the tip command with split option
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r2/.work-items/WI-001-build-the-tip-command-with-split-option/WORK-ITEM.md
+Stage: 02 Refinement (Backlog) | Waiting on: owner | Continue with: work-decide
+Parent: none | Sub-items: none | Design: none
+Worktree branch for this item: claude/wi-001-build-the-tip-command-with (folder .claude/worktrees/wi-001-build-the-tip-command-with)
+
+---
+id: WI-001
+title: Build the tip command with split option
+type: build
+stage: 02-refinement
+status: Backlog
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: not-offered
+requirements_approved: "no"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-001: Build the tip command with split option
+
+<!-- Fill-in guide for a new local work item: create it with `toolkit work new`, which copies this folder, names the new folder, and sets the real ID in front matter and heading; keep the file name WORK-ITEM.md. Use stable phase, task, requirement, and question IDs for this item. In the front matter, keep one value from each list and change the fields with `toolkit work` commands; a blocked item has `waiting_on` set and its Blockers line filled, not a Blocked status. Replace every angle-bracket prompt with actual text in that same field, cell, or paragraph; do not leave the prompt in place. Keep the headings and field labels. Add
+
+[AGENT] I can’t record the approval yet: WI-001 has Q-03 open, but its record does not contain the proposed input rule, so “that input rule” does not identify which values and errors you approved.
+
+I recommend accepting nonnegative bill amounts in dollars with at most two decimal places, percentages from 0 to 100, and whole-number split counts of at least 1. Missing or invalid input would produce a specific error message and a nonzero exit code. **Is that the rule you approved?**
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 184608, "cached_input_tokens": 150912, "cache_write_input_tokens": 0, "output_tokens": 929, "reasoning_output_tokens": 223}}
+
+SKILLS OPENED: ['work-decide', 'work-requirements']
+
+[HOOK CONTEXT ord=9] Project briefing: tipcalc (tipcalc), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The backlog has 1 item; toolkit work next suggests which to take up.
+
+Waiting on the owner:
+- WI-001 Build the tip command with split option: Q-03: Which bill amounts, percentages, and split counts are valid, and what should happen for missing or malformed input? Affects R-01, R-02. (work-decide)
+
+Items: 1 in the backlog.
+
+Current focus:
+Last updated: 2026-09-28, chat, agent
+## Now
+- WI-001 Build the tip command with split option
+## Waiting on the owner
+- Trust this folder in Codex: open Codex here and trust the folder when
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/{humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,session-handoff,shared-repository-work,work-item-folders}.md",max_output_tokens:14000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-requirements/SKILL.md",max_output_tokens:14000}),
+  tools.exec_command({cmd:"rg --files .work-items | head -50; cat PROJECT-ROADMAP.md; git status --short",max_output_tokens:7000})
+]); for (const x of r) text(x);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"fcce4a\",\"wall_time_seconds\":0,\"exit_code\":1,\"original_token_count\":3919,\"output\":\"cat: SOUL.md: No such file or directory\\n# tipcalc\\n\\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\\n\\n## Purpose and intended outcome\\n\\n- Purpose: `tipcalc tells me the tip and the total for a restaurant bill, and can split the total between friends, straight from my terminal.`\\n- Intended outcome: `tipcalc tells me the tip and the total for a restaurant bill, and can split the total between friends, straight from my terminal.`\\n\\n## Scope and boundaries\\n\\n- In scope: `<Business capabilities or systems this project owns.>`\\n- Outside scope: `<Important exclusions or adjacent owners.>`\\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\\n\\n## Systems and environments\\n\\n| System or org | Purpose | Environment | Source of truth | Access notes |\\n| --- | --- | --- | --- | --- |\\n| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |\\n\\n## People and ownership\\n\\n| Role | Person or team | Responsibility | Source / last confirmed |\\n| --- | --- | --- | --- |\\n| Owner | Mike Rihm | Project decisions | Setup interview, 2026-09-28 |\\n\\n## Work and project records\\n\\n- Work tracker: `.work-items/` (local folders)\\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\\n- Project decisions: [DECISIONS.md](DECISIONS.md)\\n- Functional requirements: [requirements/](requirements/)\\n- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`\\n- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`\\n- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)\\n- Memory backup or sync: `/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-local`; `tool
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"git worktree list",max_output_tokens:2000}),
+tools.exec_command({cmd:"git status",max_output_tokens:2000}),
+tools.exec_command({cmd:"git remote",max_output_tokens:2000}),
+tools.exec_command({cmd:"cat .work-items/WI-001-build-the-tip-command-with-split-option/WORK-ITEM.md",max_output_tokens:9000}),
+tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/references/{recording-owner-answers,work-item-format,current-focus,toolkit-commands}.md",max_output_tokens:13000})
+]); for(const x of r) text(x);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "Warning: truncated output (original token count: 12286)\nTotal output lines: 5\n\n{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"dcf57b\",\"wall_time_seconds\":0.000003917,\"exit_code\":0,\"original_token_count\":42,\"output\":\"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r2 e7ecdb2 [main]\\n\"}}\n{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"57dcb2\",\"wall_time_seconds\":0.000002,\"exit_code\":0,\"original_token_count\":14,\"output\":\"On branch main\\nnothing to commit, working tree clean\\n\"}}\n{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"61005b\",\"wall_time_seconds\":0.000003167,\"exit_code\":0,\"original_token_count\":0,\"output\":\"\"}}\n{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"42eda3\",\"wall_time_seconds\":0.000003125,\"exit_code\":0,\"original_token_count\":2428,\"output\":\"---\\nid: WI-001\\ntitle: Build the tip command with split option\\ntype: build\\nstage: 02-refinement\\nstatus: Backlog\\nparent: none\\nwaiting_on: \\\"owner\\\"\\npriority: medium\\ndelivery: not-offered\\nrequirements_approved: \\\"no\\\"\\ndesign: none\\nresult_approved: \\\"no\\\"\\nupdated: 2026-09-28\\n---\\n\\n# WI-001: Build the tip command with split option\\n\\n<!-- Fill-in guide for a new local work item: create it with `toolkit work new`, which copies this folder, names the new folder, and sets the real ID in front matter and heading; keep the file name WORK-ITEM.md. Use stable phase, task, requirement, and question IDs for this item. In the front matter, keep one value from each list and change the fields with `toolkit work` commands; a blocked item has `waiting_on` set and its Blockers line filled, not a Blocked status. Replace every angle-bracket prompt with actual text in that same field, cell, or paragraph; do not leave the prompt in place. Keep the headings and field labels. Add or remove phase, task, question, and requirement examples to match the real work. Use the chosen tracker as the source of truth for status and links. Delete this guide after filling the item. -->\\n\\n## Overview\\n\\n**Goal:** Build a terminal tip command that shows the tip, total, and optional per-person payment.\\n\\n**Current position:** The owner confirmed the goal, split output, split round-up rule, and tip rounding rule. Requ
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:4000});text(r)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"1ffdc0\",\"wall_time_seconds\":0.000003625,\"exit_code\":0,\"original_token_count\":60,\"output\":\"1 decision waits on the owner:\\n\\nWI-001 Build the tip command with split option\\n  - Q-03: Which bill amounts, percentages, and split counts are valid, and what should happen for missing or malformed input? Affects R-01, R-02. (work-decide)\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"rg -n \"input rule|bill amounts|malformed|percent.*100|split count\" . --hidden -g '!node_modules' -g '!.git' -g '!.work-items/DASHBOARD.md'",max_output_tokens:5000}),
+tools.exec_command({cmd:"toolkit work show WI-001",max_output_tokens:6500})
+]);for(const x of r)text(x)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"edc041\",\"wall_time_seconds\":0.000003083,\"exit_code\":1,\"original_token_count\":0,\"output\":\"\"}}"}, {"type": "input_text", "text": "{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"19a0e6\",\"wall_time_seconds\":0.000003,\"exit_code\":0,\"original_token_count\":2563,\"output\":\"WI-001: Build the tip command with split option\\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r2/.work-items/WI-001-build-the-tip-command-with-split-option/WORK-ITEM.md\\nStage: 02 Refinement (Backlog) | Waiting on: owner | Continue with: work-decide\\nParent: none | Sub-items: none | Design: none\\nWorktree branch for this item: claude/wi-001-build-the-tip-command-with (folder .claude/worktrees/wi-001-build-the-tip-command-with)\\n\\n---\\nid: WI-001\\ntitle: Build the tip command with split option\\ntype: build\\nstage: 02-refinement\\nstatus: Backlog\\nparent: none\\nwaiting_on: \\\"owner\\\"\\npriority: medium\\ndelivery: not-offered\\nrequirements_approved: \\\"no\\\"\\ndesign: none\\nresult_approved: \\\"no\\\"\\nupdated: 2026-09-28\\n---\\n\\n# WI-001: Build the tip command with split option\\n\\n<!-- Fill-in guide for a new local work item: create it with `toolkit work new`, which copies this folder, names the new folder, and sets the real ID in front matter and heading; keep the file name WORK-ITEM.md. Use stable phase, task, requirement, and question IDs for this item. In the front matter, keep one value from each list and change the fields with `toolkit work` commands; a blocked item has `waiting_on` set and its Blockers line filled, not a Blocked status. Replace every angle-bracket prompt with actual text in that same field, cell, or paragraph; do not leave the prompt in place. Keep the headings and field labels. Add or remove phase, task, question, and requirement examples to match the real work. Use the chosen tracker as the source of truth for status and links. Delete this guide after filling the item. -->\\n\\n## Overview\\n\\n**Goal:** Build a terminal tip command that shows the tip, total, and optional per-person payment.\\n\\n**Current position:** The owner confirmed the goal, split output, split round-up rule, and tip rounding rule. Requirements remain in refinement; no co

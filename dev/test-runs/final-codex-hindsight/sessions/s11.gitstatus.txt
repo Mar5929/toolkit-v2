@@ -1,0 +1,5 @@
+ec6e66b Set up Toolkit V2
+ff07f6c Initial commit
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2                                                      ec6e66b [main]
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/.claude/worktrees/wi-001-add-a-times-flag-to-greet   fe07ccb [claude/wi-001-add-a-times-flag-to-greet]
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/.claude/worktrees/wi-002-document-greet-flags-in-the 17d584a [claude/wi-002-document-greet-flags-in-the]

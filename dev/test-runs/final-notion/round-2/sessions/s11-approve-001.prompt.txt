@@ -1,0 +1,1 @@
+I ran it myself: 84.50 3 prints $33.24 and bad input prints the usage line. I approve the TFR2-001 result.

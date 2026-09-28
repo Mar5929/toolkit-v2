@@ -1,0 +1,834 @@
+PROMPT: Yes, I approve Option A. Then split it: make the access and page layout part its own sub-item under WI-001, so WI-001 is just the field itself.
+THREAD: 01a0e9b0-b5f4-75b2-ae2d-2795065d9703
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Add a Tier picklist field to Account: 04 Solution design, In Progress, waiting on owner. Next action: Mike decides whether to approve Option A. If approved, run the effective-access and assigned-page design gate before changing metadata. Continues with work-decide.
+
+Waiting on the owner:
+- WI-001 Add a Tier picklist field to Account: The design for WI-001 is proposed and waits for the owner's approval. Approve with: toolkit work approve WI-001 --design --by <name>. (work-decide)
+
+Items: 1 in progress.
+
+Current focus:
+Last updated: 2026-09-28, chat, agent
+## Now
+- WI-001 Add a Tier picklist field to Account
+## Waiting on the owner
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, and trust the Toolkit V2 hooks and two Salesforce guards. Setup step; drop it when doctor stops reporting it.
+## Untracked to-dos
+None.
+## Next session starts with
+- Continue WI-001 from its Resume here: seek Mike Rihm’s approval of proposed Option A in DESIGN.md. After approval, run the effective-access and assigned-page design gate before building.
+
+Project memory (builtin): 1 record. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_custom_field_description_help_text: Every new custom field should have a description and help text
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off. Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+- Codex ran this Toolkit V2 hook, but ~/.codex/config.toml has no trust entry for the Toolkit V2 hooks. Codex runs untrusted hooks only when it is started with --dangerously-bypass-hook-trust; a normal Codex session skips them. Fix: The owner opens /hooks in Codex and trusts the Toolkit V2 hooks; toolkit doctor checks it.
+- The Salesforce org guards in .codex/hooks.json are not trusted in 
+
+[AGENT] I’ll record your approval, then update the work items so WI-001 covers the field and a new sub-item covers access and page layout. I’ll check the design and tracker instructions before changing either.
+
+[CALL exec] pwd; cat SOUL.md PROJECT.md; for f in .claude/rules/{check-deployment-contents,component-tracker,confirm-salesforce-changes,humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,production-data-changes,project-file-locations,salesforce-org-safety,session-handoff,shared-repository-work,work-item-folders}.md; do cat "$f"; done
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1
+cat: SOUL.md: No such file or directory
+# Acme CRM
+
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup ch
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-organize/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-requirements/SKILL.md; cat PROJECT-ROADMAP.md DECISIONS.md; toolkit work show WI-001 --path; toolkit work lifecycle
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+---
+name: work-decide
+description: 'Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers. Use when he asks "what do you need from me", answers a waiting decision ("go with option B"), or states a project-wide decision.'
+---
+
+# Work decide
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Walks the owner through what waits on him, one decision at a time, and records each answer where it belongs. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Build the queue. The command lists each decision once: requirements waiting for approval, proposed designs, results at stage 11, Open Questions rows the owner decides, and memory proposals. Its "Agent to-do" lines are not decisions. A delivery offer belongs to `work-delegate`: open it after his other decisions.
+   `toolkit work decisions`
+2. He gave an answer without being asked ("approved", "go with B"): match it to exactly one waiting decision; when two could match, ask which, naming both. A bare "yes", "ok", or "looks good" with no question asked is not an answer (`references/approvals.md`, section 1).
+3. Otherwise start with the count and one short line for every waiting decision, memory proposals included ("3 decisions wait on you: the WI-004 design, the WI-006 result, and a memory proposal about deploy days."). Then take them one at a time, the one blocking the most work first: what is decided, the choices, your recommendation and its main reason, and what happens after each answer. One decision per message, in the reply text.
+4. An approval: read the item, then run that gate's checklist in `references/approvals.md` (requirements: section 2; design: section 3; result: section 4).
+   `toolkit work show <id>`
+5. An Open Questions answer: save his words first, rewrite that row with the answer, the date, and Answered, then set `waiting_on` back (`references/recording-owner-answers.md`, sections 4 and 5).
+   `toolkit work history <id> --note 'Owner said: <quote>' --effect '<what the answer changes>'`
+   `toolkit work edit <id> --section 'Open Questions' --set-file <file>`
+   `toolkit work set <id> --waiting-on agent`
+6. A memory proposal: show its one line and your recommendation. Yes: approve it. No: reject it, and never propose the same fact again (`references/proposals.md`).
+   `toolkit memory approve <key> --by <owner>`
+   `toolkit memory reject <key>`
+7. A decision for the whole project: add the row inside the `publish-docs` save workspace, in the order in `references/decisions-log.md`.
+   `toolkit decision add --decision '<decision>' --why '<why>' --by <owner>`
+8. A "no" or a change: record it as the answer, move the item back (for example to refinement), and open the skill that redoes the work.
+ 
+
+[HOOK CONTEXT] This shell command joins a toolkit command to other commands (&&, ;, a pipe, a heredoc, or cd). In Codex that runs the toolkit command inside the sandbox, which blocks Notion, Hindsight, and the main checkout's .work-items/ and .memory/ from a worktree, so it may fail or report the wrong cause. Run each toolkit command alone, as its own command; pass section text with --text '<text>' in single quotes, instead of a file written in the same command. In Codex write an apostrophe inside that text as ’ (U+2019), or reword it; never '\''.
+
+[AGENT] I found the proposed design and the tracker’s split procedure. I’m checking which requirements belong to each item so the recorded approval stays attached to the right scope.
+
+[CALL exec] cat .work-items/WI-001-add-a-tier-picklist-field-to-account/WORK-ITEM.md .work-items/WI-001-add-a-tier-picklist-field-to-account/DESIGN.md; cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/approvals.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-organize/references/moves.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+Warning: truncated output (original token count: 12214)
+Total output lines: 771
+
+---
+id: WI-001
+title: Add a Tier picklist field to Account
+type: build
+stage: 04-solution-design
+status: In Progress
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: agent-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: proposed
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-001: Add a Tier picklist field to Account
+
+## Overview
+
+**Goal:** Let the Acme sales team rank Accounts using a Tier field.
+
+**Current position:** Requirements R-01 through R-04 were approved by Mike Rihm on 2026-09-28. Mike accepted agent-led delivery with one team of helpers inside this chat. Option A is proposed in DESIGN.md and has had an independent review. No metadata has been built or deployed.
+
+**Next action:** Mike decides whether to approve Option A. If approved, run the effective-access and assigned-page design gate before changing metadata.
+
+**Blockers:** Design approval from Mike Rihm.
+
+**Related items:** None identified.
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading. Add one row per phase; set Status from actual progress, not from this example. List the phase's sub-item IDs under Sub-items, or write “None.” -->
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — <Phase 1 name> | <What this phase establishes> | In Progress | <Evidence that P1 is complete> | <WI-ids or “None.”> |
+| P2 — <Phase 2 name> | <What this phase delivers> | Not Started | <Evidence that P2 is complete> | <WI-ids or “None.”> |
+
+## Tasks
+
+<!-- Under each phase heading, add that phase's tasks only. Replace P1-T01 and similar example IDs with stable real IDs. Put the action after Work, its output after Deliverable, the completion proof after Done when, and real prerequisites after Depends on. Change the checkbox only when the completion proof is met. -->
+
+### P1 — <Phase 1 name>
+
+- [ ] **P1-T01 — <Task 1 name>** · In Progress  
+  **Work:** <The action to take.>  
+  **Deliverable:** <The file, decision, or other result.>  
+  **Done when:** <The observable completion check.>  
+  **Depends on:** <Task ID or “None.”>
+- [ ] **P1-T02 — <Task 2 name>** · Not Started  
+  **Work:** <The action to take.>  
+  **Deliverable:** <The expected result.>  
+  **Done when:** <The observable completion check.>  
+  **Depends on:** P1-T01.
+
+### P2 — <Phase 2 name>
+
+- [ ] **P2-T01 — <Task 1 name>** · Not Started  
+  **Work:** <The action to take.>  
+  **Deliverable:** <The expected result.>  
+  **Done when:** <The observable completion check.>  
+  **Depends on:** P1 completion.
+
+## Recent History
+
+| Date | Change or decision | Effect on the work |
+|---|---|---|
+| 2026-09-28 | Design proposed: Option A uses a restricted Account Tier picklist, Account Layout placement, and 
+
+[CALL exec] git worktree list; git status --short; git remote -v; cat .work-items/WI-001-add-a-tier-picklist-field-to-account/DESIGN.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1 d89f330 [main]
+---
+work_item: WI-001
+status: proposed
+approved: "no"
+---
+
+# WI-001: Add a Tier picklist field to Account — solution design
+
+**Requirements:** WI-001  
+**Design status:** Proposed  
+**Requirements checked:** WI-001 requirements approved 2026-09-28; independent requirements check 2026-09-28  
+**Last updated:** 2026-09-28  
+**Design approval:** Pending
+
+## What this design solves
+
+The Acme sales team needs to assign Gold, Silver, or Bronze to an Account so it can rank that Account. The field must remain optional, show who can edit it, and appear below Rating. This item ends with Tier assignment; it does not add a sorted list view or report.
+
+## Requirements and design readiness
+
+The owner approved R-01 through R-04 on 2026-09-28. A separate requirements analyst found no material gap. Exact field text is a design choice and is proposed below.
+
+| Requirement | Status in work item | Design coverage | Remaining decision or gap |
+| --- | --- | --- | --- |
+| R-01 — Assign Account Tiers | Finalized | Option A: `Account.Tier__c` | None |
+| R-02 — Explain the Tier field | Finalized | Option A: field description and help text | None |
+| R-03 — Control who can edit Tier | Finalized | Option A: profile field permissions and effective access check | Target org inventory is a design gate before build |
+| R-04 — Show Tier on the Account page layout | Finalized | Option A: Account Layout change | Assigned page check is a design gate before build |
+
+## What exists today
+
+On 2026-09-28, the `tkv2-sbx` Account describe showed Rating and no Tier field. The sandbox has Sales Manager, System Administrator, Sales User, and Read Only profiles, and a layout query returned one Account Layout. These reads do not establish all effective permissions or the rendered Lightning page. No `force-app/` source directory exists yet. Both the sandbox org display and `sfdx-project.json` report API version 62.0.
+
+## Constraints and assumptions
+
+| Type | Constraint or assumption | Source and status | Effect on the design |
+| --- | --- | --- | --- |
+| Constraint | Tier is optional, has no default, and offers Gold, Silver, Bronze in that order | WI-001 R-01; approved 2026-09-28 | No required rule, automatic value, or ranking report |
+| Constraint | Sales Manager and system administrators edit; other Account viewers read only | WI-001 R-03; approved 2026-09-28 | Check effective field access for every affected user group |
+| Constraint | Profile files are excluded and must not be deployed by CLI | `.claude/rules/permissions-source-control.md`; project rule | Profile field permissions need numbered manual release steps |
+| Constraint | Codex hands sandbox and production deploy commands to the owner | `.claude/rules/salesforce-org-safety.md`; project rule | The owner executes any
+
+[CALL exec] toolkit work decisions
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+1 decision waits on the owner:
+
+WI-001 Add a Tier picklist field to Account
+  - The design for WI-001 is proposed and waits for the owner's approval. Approve with: toolkit work approve WI-001 --design --by <name>. (work-decide)
+
+
+[CALL exec] toolkit work sync
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Nothing changed: every item is where the tracker expected it, and every derived value is in step.
+
+Dashboard: .work-items/DASHBOARD.md
+
+
+[CALL exec] toolkit work list --tree
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+WI-001  Add a Tier picklist field to Account  (04 Solution design, In Progress, waiting on owner)
+
+
+[CALL exec] toolkit work history WI-001 --note 'Owner said: Yes, I approve Option A. Then split it: make the access and page layout part its own sub-item under WI-001, so WI-001 is just the field itself.' --effect 'Option A approved; split implementation ownership so WI-001 directly builds the field and a child handles access and page layout.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Added a Recent History row to WI-001.
+
+
+[PATCH] files=['.work-items/WI-001-add-a-tier-picklist-field-to-account/DESIGN.md\\n@@\\n-**Owner decision:** Pending.  \\n-**Reason for decision:** Pending owner decision.\\n+**Owner decision:** Mike Rihm approved Option A on 2026-09-28 in this chat: “Yes, I approve Option A. Then split it: make the access and page layout part its own sub-item under WI-001, so WI-001 is just the field itself.”  \\n+**Reason for decision:** Mike did not state a reason for choosing Option A. He directed that access and page layout be a separate sub-item.\\n@@\\n-Pending owner decision.\\n+### Account Tier field — WI-001 direct work\\n+\\n+Create the optional, restricted `Account.Tier__c` picklist with Gold, Silver, Bronze in that order, no default, and the description and help text in Option A. This direct work covers R-01 and R-02.\\n+\\n+### Access and Account page layout — child work\\n+\\n+A sub-item under WI-001 covers R-03 and R-04. It inventories effective field access and assigned Account pages before metadata changes, then handles field permissions and places Tier directly below Rating where the verified page configuration requires it. Profile changes remain manual. If the inventory requires a different solution, revise the design and seek Mike’s approval before building that part.\\n@@\\n-If Option A is approved, run its first inventory step before any metadata change. Record the exact layout name, assigned page, Account-viewer access matrix, and effective permissions. Revise the design for another owner approval if the verified page or access does not match Option A. Then follow the remaining steps and record package contents and manual profile steps in WI-001 and its deployment record.\\n+Run Option A’s first inventory step before any metadata change. The access and page layout sub-item records the exact layout name, assigned page, Account-viewer access matrix, and effective permissions. Revise the design for another owner approval if the verified page or access does not match Option A. WI-001 builds only the field; the child handles access, layout, and its own deployment record. Verify the combined result against R-01 through R-04.\\n@@\\n-Option A is proposed. Mike Rihm chooses or requests a change. After approval, fill Selected design with Option A and record the approval before building.\\n+Mike Rihm approved Option A and asked for a split. Record the design approval, create the R-03/R-04 child, and run its effective-access and assigned-page gate before any metadata change.\\n*** End Patch"));']
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{}
+
+[HOOK CONTEXT] The design of WI-001 was edited directly and passes validation. toolkit work design <id> --set-file <file> (or --text '<text>') saves a design the same way in every tracker and keeps its status; prefer it to editing DESIGN.md.
+
+[CALL exec] toolkit work approve WI-001 --design --by 'Mike Rihm'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Recorded: design of WI-001 approved (2026-09-28 by Mike Rihm).
+It is no longer waiting on the owner (waiting_on: none).
+Now 04 Solution design (In Progress). Continue with solution-design.
+
+
+[AGENT] Option A is recorded as approved. I’m creating one child for R-03 and R-04. WI-001’s direct build will cover R-01 and R-02; the approved requirements will remain linked to the parent for tracking.
+
+[CALL exec] toolkit work set WI-001 --stage 05-breakdown
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Updated WI-001: stage 04 Solution design -> 05 Breakdown (status In Progress).
+Now 05 Breakdown (In Progress). Continue with work-organize.
+
+
+[CALL exec] toolkit work new --title 'Configure Account Tier access and page layout' --type build --parent WI-001 --covers R-03,R-04
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Created WI-002: Configure Account Tier access and page layout (06 Implementation plan, In Progress, sub-item of WI-001) at .work-items/WI-001-add-a-tier-picklist-field-to-account/WI-002-configure-account-tier-access-and-page/WORK-ITEM.md.
+It delivers WI-001 R-03, R-04 and inherits that requirements approval (2026-09-28 by Mike Rihm).
+WI-001's approved design covers it, so it starts at planning with no design of its own.
+Delivery: agent-led, as recorded for WI-001.
+Continue with work-on.
+
+
+[CALL exec] cat .work-items/WI-001-add-a-tier-picklist-field-to-account/WI-002-configure-account-tier-access-and-page/WORK-ITEM.md; cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-organize/references/current-focus.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-organize/references/work-item-format.md; cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.6/skills/memory-save/SKILL.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+---
+id: WI-002
+title: Configure Account Tier access and page layout
+type: build
+stage: 06-implementation-plan
+status: In Progress
+parent: WI-001
+waiting_on: "none"
+priority: medium
+delivery: agent-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-002: Configure Account Tier access and page layout
+
+## Overview
+
+<!-- Enter the current summary directly after each bold label below. Keep this section current; detailed tasks and decisions belong in their sections further down. -->
+
+**Goal:** <The outcome this work item is meant to achieve.>
+
+**Current position:** <What has been completed and where work stands now.>
+
+**Next action:** <The next specific action and its owner.>
+
+**Blockers:** <Blocking decision or dependency, or “None.”>
+
+**Related items:** Parent WI-001 (R-03, R-04). Design: WI-001's approved design.
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading. Add one row per phase; set Status from actual progress, not from this example. List the phase's sub-item IDs under Sub-items, or write “None.” -->
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — <Phase 1 name> | <What this phase establishes> | In Progress | <Evidence that P1 is complete> | <WI-ids or “None.”> |
+| P2 — <Phase 2 name> | <What this phase delivers> | Not Started | <Evidence that P2 is complete> | <WI-ids or “None.”> |
+
+## Tasks
+
+<!-- Under each phase heading, add that phase's tasks only. Replace P1-T01 and similar example IDs with stable real IDs. Put the action after Work, its output after Deliverable, the completion proof after Done when, and real prerequisites after Depends on. Change the checkbox only when the completion proof is met. -->
+
+### P1 — <Phase 1 name>
+
+- [ ] **P1-T01 — <Task 1 name>** · In Progress  
+  **Work:** <The action to take.>  
+  **Deliverable:** <The file, decision, or other result.>  
+  **Done when:** <The observable completion check.>  
+  **Depends on:** <Task ID or “None.”>
+- [ ] **P1-T02 — <Task 2 name>** · Not Started  
+  **Work:** <The action to take.>  
+  **Deliverable:** <The expected result.>  
+  **Done when:** <The observable completion check.>  
+  **Depends on:** P1-T01.
+
+### P2 — <Phase 2 name>
+
+- [ ] **P2-T01 — <Task 1 name>** · Not Started  
+  **Work:** <The action to take.>  
+  **Deliverable:** <The expected result.>  
+  **Done when:** <The observable completion check.>  
+  **Depends on:** P1 completion.
+
+## Recent History
+
+| Date | Change or decision | Effect on the work |
+|---|---|---|
+| 2026-09-28 | Created as a sub-item of WI-001. It delivers WI-001 R-03, WI-001 R-04. | Requirements approval inherited from WI-001 (2026-09-28 by Mike Rihm); the owner is not asked again. WI-001's approved design covers it, so it needs no design of its
+
+[PATCH] files=['.work-items/WI-001-add-a-tier-picklist-field-to-account/WORK-ITEM.md\\n@@\\n-**Current position:** Requirements R-01 through R-04 were approved by Mike Rihm on 2026-09-28. Mike accepted agent-led delivery with one team of helpers inside this chat. Option A is proposed in DESIGN.md and has had an independent review. No metadata has been built or deployed.\\n+**Current position:** Mike Rihm approved Option A on 2026-09-28 and directed a split. WI-001 directly builds only the Tier field (R-01 and R-02). WI-002 handles access and Account page layout (R-03 and R-04). The original approved requirements remain here as the parent record. No metadata has been built or deployed.\\n@@\\n-**Next action:** Mike decides whether to approve Option A. If approved, run the effective-access and assigned-page design gate before changing metadata.\\n+**Next action:** Agent runs WI-002’s effective-access and assigned-page design gate before changing metadata, then plans the field build in WI-001.\\n@@\\n-**Blockers:** Design approval from Mike Rihm.\\n+**Blockers:** None. The access and page inventory must pass before metadata changes.\\n@@\\n-**Related items:** None identified.\\n+**Related items:** WI-002 delivers R-03 and R-04.\\n@@\\n-| P1 — <Phase 1 name> | <What this phase establishes> | In Progress | <Evidence that P1 is complete> | <WI-ids or “None.”> |\\n-| P2 — <Phase 2 name> | <What this phase delivers> | Not Started | <Evidence that P2 is complete> | <WI-ids or “None.”> |\\n+| P1 — Tier field | Create the Account Tier field with approved values and field text. | Not Started | Field metadata and R-01/R-02 checks are complete. | None. |\\n+| P2 — Access and page layout | Configure field access and show Tier below Rating. | Not Started | WI-002 passes R-03/R-04 checks. | WI-002 |\\n@@\\n-### P1 — <Phase 1 name>\\n+### P1 — Tier field\\n@@\\n-- [ ] **P1-T01 — <Task 1 name>** · In Progress  \\n-  **Work:** <The action to take.>  \\n-  **Deliverable:** <The file, decision, or other result.>  \\n-  **Done when:** <The observable completion check.>  \\n-  **Depends on:** <Task ID or “None.”>\\n-- [ ] **P1-T02 — <Task 2 name>** · Not Started  \\n-  **Work:** <The action to take.>  \\n-  **Deliverable:** <The expected result.>  \\n-  **Done when:** <The observable completion check.>  \\n-  **Depends on:** P1-T01.\\n+- [ ] **P1-T01 — Build Tier field** · Not Started  \\n+  **Work:** Create Account.Tier__c with the approved values, settings, description, and help text.  \\n+  **Deliverable:** Tier field metadata and its narrow deployment package.  \\n+  **Done when:** R-01 and R-02 metadata checks pass.  \\n+  **Depends on:** WI-002 access and page inventory gate.\\n@@\\n-### P2 — <Phase 2 name>\\n+### P2 — Access and page layout\\n@@\\n-- [ ] **P2-T01 — <Task 1 name>** · Not Started  \\n-  **Work:** <The action to take.>  \\n-  **Deliverable:** <The expected result.>  \\n-  **Done when:** <The observable completion check.>  \\n-  **Depends on:** P1 completion.\\n+- [ ] **P2-T01 — Complete WI-002** · Not Started  \\n+  **Work:** Complete the access and Account page layout sub-item.  \\n+  **Deliverable:** WI-002 result and its own approval.  \\n+  **Done when:** WI-002 is finished.  \\n+  **Depends on:** P1 field build.\\n@@\\n-Requirements R-01 through R-04 were approved by Mike Rihm on 2026-09-28. Mike accepted agent-led delivery with helpers in this chat. A requirements analyst found no material gap. The Salesforce design in DESIGN.md is proposed as Option A, with a restricted Account.Tier__c picklist, Account Layout placement, and manual profile field permissions. A design critic reviewed it; the review led to explicit before-build checks for effective access and assigned page, and restricted picklist values. The item waits for Mike to approve or change Option A. After approval, run the effective-access and assigned-page design gate before any metadata change; return for revised design approval if the actual org needs a different solution.\\n+Requirements R-01 through R-04 and Option A were approved by Mike Rihm on 2026-09-28. The owner then split implementation: WI-001 directly builds only the restricted, optional Account.Tier__c field with its text (R-01/R-02); WI-002 handles field access and Account page layout (R-03/R-04). The original approved requirements remain in WI-001 for traceability. No metadata has been built. Continue with WI-002’s effective-access and assigned-page gate before any metadata change; return for revised design approval if the actual org needs a different solution.\\n*** End Patch"));']
+  -> Script failed
+Wall time 0.1 seconds
+Output:
+
+Script error:
+apply_patch verification failed: Failed to find expected lines in /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1/.work-items/WI-001-add-a-tier-picklist-field-to-account/WORK-ITEM.md:
+**Related items:** None identified.
+
+[CALL exec] toolkit work show WI-001 --section Overview
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+## Overview
+
+**Goal:** Let the Acme sales team rank Accounts using a Tier field.
+
+**Current position:** Requirements R-01 through R-04 were approved by Mike Rihm on 2026-09-28. Mike accepted agent-led delivery with one team of helpers inside this chat. Option A is proposed in DESIGN.md and has had an independent review. No metadata has been built or deployed.
+
+**Next action:** Mike decides whether to approve Option A. If approved, run the effective-access and assigned-page design gate before changing metadata.
+
+**Blockers:** Design approval from Mike Rihm.
+
+**Related items:** Sub-items: WI-002.
+
+
+[CALL exec] toolkit work edit WI-001 --section Overview --text '**Goal:** Let the Acme sales team rank Accounts using a Tier field.
+
+**Current position:** Mike Rihm approved Option A on 2026-09-28 and directed a split. WI-001 directly builds only the Tier field (R-01 and R-02). WI-002 handles access and Account page layout (R-03 and R-04). The original approved requirements remain here for traceability. No metadata has been built or deployed.
+
+**Next action:** Agent runs the WI-002 effective-access and assigned-page design gate before changing metadata, then plans the WI-001 field build.
+
+**Blockers:** None. The access and page inventory must pass before metadata changes.
+
+**Related items:** Sub-item WI-002 delivers R-03 and R-04.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Overview" in WI-001.
+
+
+[CALL exec] toolkit work edit WI-001 --section Roadmap --text 'A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Tier field | Create the Account Tier field with approved values and field text. | Not Started | Field metadata and R-01/R-02 checks are complete. | None. |
+| P2 — Access and page layout | Configure field access and show Tier below Rating. | Not Started | WI-002 passes R-03/R-04 checks. | WI-002 |'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Roadmap" in WI-001.
+
+
+[CALL exec] toolkit work edit WI-001 --section Tasks --text '### P1 — Tier field
+
+- [ ] **P1-T01 — Build Tier field** · Not Started  
+  **Work:** Create Account.Tier__c with the approved values, settings, description, and help text.  
+  **Deliverable:** Tier field metadata and its narrow deployment package.  
+  **Done when:** R-01 and R-02 metadata checks pass.  
+  **Depends on:** WI-002 access and page inventory gate.
+
+### P2 — Access and page layout
+
+- [ ] **P2-T01 — Complete WI-002** · Not Started  
+  **Work:** Complete the access and Account page layout sub-item.  
+  **Deliverable:** WI-002 result and its own approval.  
+  **Done when:** WI-002 is finished.  
+  **Depends on:** P1 field build.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Tasks" in WI-001.
+
+
+[CALL exec] toolkit work edit WI-001 --section 'Resume here' --text 'Requirements R-01 through R-04 and Option A were approved by Mike Rihm on 2026-09-28. The owner then split implementation: WI-001 directly builds only the optional, restricted Account.Tier__c field with description and help text (R-01/R-02); WI-002 handles field access and Account page layout (R-03/R-04). The original approved requirements remain in WI-001 for traceability. No metadata has been built. Continue with the WI-002 effective-access and assigned-page gate before any metadata change; return for revised design approval if the actual org needs a different solution.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Resume here" in WI-001.
+
+
+[CALL exec] toolkit work edit WI-002 --section Overview --text '**Goal:** Give Account viewers the approved Tier access and show Tier directly below Rating on the assigned Account page.
+
+**Current position:** Created under WI-001 after Mike Rihm approved Option A and requested the split. Covers approved WI-001 R-03 and R-04. No metadata or org settings have changed.
+
+**Next action:** Agent inventories effective Account and Tier field access and the assigned Account page before metadata changes.
+
+**Blockers:** None. A finding that needs a different solution requires revised design approval.
+
+**Related items:** Parent WI-001 builds the Tier field. WI-001 approved design covers this item.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Overview" in WI-002.
+
+
+[CALL exec] toolkit work edit WI-002 --section Roadmap --text 'A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Verify org access and page | Confirm effective access and assigned Account page. | Not Started | Access matrix and page assignment support approved Option A, or revised approval is recorded. | None. |
+| P2 — Configure access and layout | Set field permissions and show Tier directly below Rating. | Not Started | R-03/R-04 checks pass after owner-run deployment and manual steps. | None. |'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Roadmap" in WI-002.
+
+
+[CALL exec] toolkit work edit WI-002 --section Tasks --text '### P1 — Verify org access and page
+
+- [ ] **P1-T01 — Inventory effective access** · Not Started  
+  **Work:** Identify Account viewers and field permissions from profiles, permission sets, groups, and elevated grants.  
+  **Deliverable:** Access matrix.  
+  **Done when:** Every affected user group and conflicting grant is identified.  
+  **Depends on:** None.
+- [ ] **P1-T02 — Verify assigned page** · Not Started  
+  **Work:** Identify the assigned Account record page and layout for affected users.  
+  **Deliverable:** Page and layout assignment record.  
+  **Done when:** Option A can place Tier directly below Rating or a revised design is approved.  
+  **Depends on:** None.
+
+### P2 — Configure access and layout
+
+- [ ] **P2-T01 — Prepare access and layout changes** · Not Started  
+  **Work:** Update the verified Account Layout and prepare numbered manual profile permission steps.  
+  **Deliverable:** WI-002 deployment package and manual steps.  
+  **Done when:** The package contains only approved layout metadata and permission steps are reviewable.  
+  **Depends on:** P1 completion and WI-001 field metadata.
+- [ ] **P2-T02 — Check R-03 and R-04** · Not Started  
+  **Work:** Check effective permissions and rendered field order after the owner runs the sandbox changes.  
+  **Deliverable:** WI-002 test evidence.  
+  **Done when:** Editor profiles can edit, other Account viewers can only read, and Tier appears directly below Rating.  
+  **Depends on:** P2-T01.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Tasks" in WI-002.
+
+
+[CALL exec] toolkit work edit WI-002 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| — | None. | — | — | — |'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Open Questions" in WI-002.
+Warning after this edit: An Open Questions row has the ID "—", not a question id such as Q-01. Each row is one question; remove a row that is not a question (a "None" row is not needed).
+
+
+[CALL exec] toolkit work edit WI-002 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Open Questions" in WI-002.
+
+
+[CALL exec] toolkit work edit WI-002 --section 'Starting request' --text 'Mike Rihm approved Option A and asked: make the access and page layout part its own sub-item under WI-001, so WI-001 is just the field itself.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Starting request" in WI-002.
+
+
+[CALL exec] toolkit work edit WI-002 --section Acceptance --text 'This work item can be accepted when:
+
+1. A Sales Manager and a system administrator can edit Tier, while other people who can see an Account can read Tier but cannot edit it (WI-001 R-03).
+2. Tier appears directly below Rating on the assigned Account page layout (WI-001 R-04).
+3. The owner reviews this sub-item result separately.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Acceptance" in WI-002.
+
+
+[CALL exec] toolkit work edit WI-002 --section 'Decisions and context' --text 'Mike Rihm approved WI-001 Option A and requested this split on 2026-09-28. WI-002 inherits the approved WI-001 requirements R-03 and R-04 and its approved design. Profile metadata is excluded from CLI deployment; manual permission steps are required. WI-001 directly builds only the field.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Decisions and context" in WI-002.
+
+
+[CALL exec] toolkit work edit WI-002 --section 'Resume here' --text 'Start with read-only sandbox inventory of effective Account and Tier field access and the assigned Account page and layout. Record the access matrix and actual page assignment. If Option A does not fit the org, revise WI-001 DESIGN.md and seek Mike Rihm’s approval before metadata changes. Otherwise plan WI-002 access, layout, manual steps, and checks; WI-001 owns the field metadata.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved "Resume here" in WI-002.
+
+
+[CALL exec] toolkit work set WI-001 --stage 06-implementation-plan
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Updated WI-001: stage 05 Breakdown -> 06 Implementation plan (status In Progress).
+Now 06 Implementation plan (In Progress). Continue with work-on.
+
+
+[CALL exec] toolkit work list --tree
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+WI-001  Add a Tier picklist field to Account  (06 Implementation plan, In Progress)
+  WI-002  Configure Account Tier access and page layout  (06 Implementation plan, In Progress)
+
+
+[CALL exec] toolkit work validate
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Checked 2 items: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+WI-001 (.work-items/WI-001-add-a-tier-picklist-field-to-account/WORK-ITEM.md):
+  Design warning: The approved design has no "## Diagrams" section; the template has it. A builder reads the whole design.
+  Design warning: "## Selected design" in the approved design has no "### End-to-end flow", "### Components and responsibilities", "### Data, access, and integration details", "### Edge cases and failure behavior", "### Release and ongoing operation".
+
+
+[CALL exec] toolkit work show WI-001 --design
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+Warning: truncated output (original token count: 3241)
+Total output lines: 182
+
+WI-001: Add a Tier picklist field to Account
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1/.work-items/WI-001-add-a-tier-picklist-field-to-account/WORK-ITEM.md
+Stage: 06 Implementation plan (In Progress) | Waiting on: none | Continue with: work-on
+Parent: none | Sub-items: WI-002 | Design: approved (.work-items/WI-001-add-a-tier-picklist-field-to-account/DESIGN.md)
+Worktree branch for this item: claude/wi-001-add-a-tier-picklist-field-to (folder .claude/worktrees/wi-001-add-a-tier-picklist-field-to)
+
+---
+id: WI-001
+title: Add a Tier picklist field to Account
+type: build
+stage: 06-implementation-plan
+status: In Progress
+parent: none
+waiting_on: "none"
+priority: medium
+delivery: agent-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: approved
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-001: Add a Tier picklist field to Account
+
+## Overview
+
+**Goal:** Let the Acme sales team rank Accounts using a Tier field.
+
+**Current position:** Mike Rihm approved Option A on 2026-09-28 and directed a split. WI-001 directly builds only the Tier field (R-01 and R-02). WI-002 handles access and Account page layout (R-03 and R-04). The original approved requirements remain here for traceability. No metadata has been built or deployed.
+
+**Next action:** Agent runs the WI-002 effective-access and assigned-page design gate before changing metadata, then plans the WI-001 field build.
+
+**Blockers:** None. The access and page inventory must pass before metadata changes.
+
+**Related items:** Sub-item WI-002 delivers R-03 and R-04.
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Tier field | Create the Account Tier field with approved values and field text. | Not Started | Field metadata and R-01/R-02 checks are complete. | None. |
+| P2 — Access and page layout | Configure field access and show Tier below Rating. | Not Started | WI-002 passes R-03/R-04 checks. | WI-002 |
+
+## Tasks
+
+### P1 — Tier field
+
+- [ ] **P1-T01 — Build Tier field** · Not Started  
+  **Work:** Create Account.Tier__c with the approved values, settings, description, and help text.  
+  **Deliverable:** Tier field metadata and its narrow deployment package.  
+  **Done when:** R-01 and R-02 metadata checks pass.  
+  **Depends on:** WI-002 access and page inventory gate.
+
+### P2 — Access and page layout
+
+- [ ] **P2-T01 — Complete WI-002** · Not Started  
+  **Work:** Complete the access and Account page layout sub-item.  
+  **Deliverable:** WI-002 result and its own approval.  
+  **Done when:** WI-002 is finished.  
+  **Depends on:** P1 field build.
+
+## Recent History
+
+| Date | Change or decision | Effect on the wor
+
+[PATCH] files=['.work-items/WI-001-add-a-tier-picklist-field-to-account/DESIGN.md\\n@@\\n ## Selected design\\n \\n-### Account Tier field — WI-001 direct work\\n+### End-to-end flow\\n+\\n+WI-001 creates the field. WI-002 configures access and page placement after checking effective grants and assigned pages. The owner runs sandbox and production deployments; each item is checked against the requirements it delivers.\\n+\\n+### Components and responsibilities\\n \\n Create the optional, restricted `Account.Tier__c` picklist with Gold, Silver, Bronze in that order, no default, and the description and help text in Option A. This direct work covers R-01 and R-02.\\n \\n-### Access and Account page layout — child work\\n-\\n A sub-item under WI-001 covers R-03 and R-04. It inventories effective field access and assigned Account pages before metadata changes, then handles field permissions and places Tier directly below Rating where the verified page configuration requires it. Profile changes remain manual. If the inventory requires a different solution, revise the design and seek Mike’s approval before building that part.\\n+\\n+### Data, access, and integration details\\n+\\n+Existing Accounts keep a blank Tier until assigned. WI-002 checks all effective field grants, including permission sets and integration users. No Account object or record access is added, and no integration is introduced.\\n+\\n+### Edge cases and failure behavior\\n+\\n+Blank Tier is valid; values outside Gold, Silver, Bronze are rejected. If an assigned page or effective grant conflicts with Option A, stop metadata work and seek approval of a revised design.\\n+\\n+### Release and ongoing operation\\n+\\n+Keep field and layout packages with their respective work items. Record prior layout and access settings, and provide numbered manual profile steps. Recheck effective access when permissions change.\\n+\\n+## Diagrams\\n+\\n+The build order and responsibility split are stated in Selected design; no diagram is needed.\\n*** End Patch"));']
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{}
+
+[HOOK CONTEXT] The approved design of WI-001 was edited directly. The approval covered the design as it was: tell the owner what changed, record it with toolkit work history WI-001 --note 'Design text changed after approval: <what changed>', and ask him again when the change alters what gets built. toolkit work design WI-001 --set-file <file> records this row for you next time.
+
+[CALL exec] toolkit work history WI-001 --note 'Design text changed after approval: added selected-design headings and clarified the owner-requested WI-001/WI-002 responsibility split; no change to Option A components or behavior.' --effect 'The approved design remains Option A; the split assigns access and page work to WI-002.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Added a Recent History row to WI-001.
+
+
+[CALL exec] toolkit memory focus --json
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{
+  "ok": true,
+  "backend": "builtin",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Add a Tier picklist field to Account\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, and trust the Toolkit V2 hooks and two Salesforce guards. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 from its Resume here: seek Mike Rihm’s approval of proposed Option A in DESIGN.md. After approval, run the effective-access and assigned-page design gate before building.\n",
+  "version": "5ae45b6598e66f7837ae0a955bec528a0f2ce703590f05dbae8902f3bcfdb237"
+}
+
+
+[CALL exec] toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Add a Tier picklist field to Account
+- WI-002 Configure Account Tier access and page layout
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, and trust the Toolkit V2 hooks and two Salesforce guards. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-002 from its Resume here: run the read-only effective-access and assigned-page inventory before any metadata change. WI-001 directly builds the Tier field.' --expect 5ae45b6598e66f7837ae0a955bec528a0f2ce703590f05dbae8902f3bcfdb237
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Saved the current focus (21 lines). Version: 3eea37be7795
+
+
+[CALL exec] toolkit work validate
+   toolkit memory focus
+   toolkit doctor
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Checked 2 items: 2 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+
+# Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Add a Tier picklist field to Account
+- WI-002 Configure Account Tier access and page layout
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, and trust the Toolkit V2 hooks and two Salesforce guards. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-002 from its Resume here: run the read-only effective-access and assigned-page inventory before any metadata change. WI-001 directly builds the Tier field.
+
+Toolkit doctor for Acme CRM (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1).
+
+Warnings (3):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+3. The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them.
+   Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.
+
+Notes (6):
+- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.
+- delivery/deployment/full-project-deployment-template/package.xml was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- sfdx-project.json was c
+
+[AGENT] Option A is approved and recorded. I created **WI-002, “Configure Account Tier access and page layout,”** under WI-001.
+
+WI-001’s direct build now covers the Tier field (R-01 and R-02). WI-002 covers access and page placement (R-03 and R-04). The original approved requirements remain in WI-001 for tracking; both items pass tracker validation.
+
+No Salesforce metadata has changed. The next step is WI-002’s read-only access and assigned-page check before the field build.
+
+SKILLS OPENED (SKILL.md read): ['work-decide', 'work-organize', 'work-requirements', 'memory-save']
+
+TOOLKIT COMMANDS:
+   toolkit work show WI-001 --path
+   toolkit work lifecycle
+   toolkit work decisions
+   toolkit work sync
+   toolkit work list --tree
+   toolkit work history WI-001 --note 'Owner said: Yes, I approve Option A. Then split it: make the access and page layout part its own sub-item under WI-001, so WI-001 is just the field itself.' --effect 'Option A approved
+   toolkit work approve WI-001 --design --by 'Mike Rihm'
+   toolkit work set WI-001 --stage 05-breakdown
+   toolkit work new --title 'Configure Account Tier access and page layout' --type build --parent WI-001 --covers R-03,R-04
+   toolkit work show WI-001 --section Overview
+   toolkit work edit WI-001 --section Overview --text '**Goal:** Let the Acme sales team rank Accounts using a Tier field.
+   toolkit work edit WI-001 --section Roadmap --text 'A phase is complete when its tasks are complete and its exit result has been checked.
+   toolkit work edit WI-001 --section Tasks --text '### P1 — Tier field
+   toolkit work edit WI-001 --section 'Resume here' --text 'Requirements R-01 through R-04 and Option A were approved by Mike Rihm on 2026-09-28. The owner then split implementation: WI-001 directly builds only the optional, restricted Account.Tier__c field with description and help text (R-01/R-02)
+   toolkit work edit WI-002 --section Overview --text '**Goal:** Give Account viewers the approved Tier access and show Tier directly below Rating on the assigned Account page.
+   toolkit work edit WI-002 --section Roadmap --text 'A phase is complete when its tasks are complete and its exit result has been checked.
+   toolkit work edit WI-002 --section Tasks --text '### P1 — Verify org access and page
+   toolkit work edit WI-002 --section 'Open Questions' --text '
+   toolkit work edit WI-002 --section 'Open Questions' --text '
+   toolkit work edit WI-002 --section 'Starting request' --text 'Mike Rihm approved Option A and asked: make the access and page layout part its own sub-item under WI-001, so WI-001 is just the field itself.'
+   toolkit work edit WI-002 --section Acceptance --text 'This work item can be accepted when:
+   toolkit work edit WI-002 --section 'Decisions and context' --text 'Mike Rihm approved WI-001 Option A and requested this split on 2026-09-28. WI-002 inherits the approved WI-001 requirements R-03 and R-04 and its approved design. Profile metadata is excluded from CLI deployment
+   toolkit work edit WI-002 --section 'Resume here' --text 'Start with read-only sandbox inventory of effective Account and Tier field access and the assigned Account page and layout. Record the access matrix and actual page assignment. If Option A does not fit the org, revise WI-001 DESIGN.md and seek Mike Rihm’s approval before metadata changes. Otherwise plan WI-002 access, layout, manual steps, a
+   toolkit work set WI-001 --stage 06-implementation-plan
+   toolkit work list --tree
+   toolkit work validate
+   toolkit work show WI-001 --design
+   toolkit work history WI-001 --note 'Design text changed after approval: added selected-design headings and clarified the owner-requested WI-001/WI-002 responsibility split
+   toolkit memory focus --json
+   toolkit memory focus --text '# Current focus
+   toolkit work validate
+   toolkit memory focus
+   toolkit doctor

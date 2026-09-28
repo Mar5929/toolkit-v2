@@ -142,7 +142,9 @@ before you start it.
 
 ## 5. The background service
 
-After the owner's yes, run each command alone:
+After the owner's yes, run each command alone. The host asks him to confirm
+the install; in Codex, run it with `sandbox_permissions` set to
+`require_escalated` and a one-line reason ("Codex" below):
 
 ```text
 toolkit hindsight service install

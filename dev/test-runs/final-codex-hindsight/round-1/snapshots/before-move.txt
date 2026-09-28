@@ -1,0 +1,11 @@
+.work-items
+.work-items/.toolkit-state.json
+.work-items/DASHBOARD.md
+.work-items/WI-001-add-shout-flag-to-greet-cli
+.work-items/WI-001-add-shout-flag-to-greet-cli/DESIGN.md
+.work-items/WI-001-add-shout-flag-to-greet-cli/WI-002-document-shout-in-readme
+.work-items/WI-001-add-shout-flag-to-greet-cli/WI-002-document-shout-in-readme/WORK-ITEM.md
+.work-items/WI-001-add-shout-flag-to-greet-cli/WORK-ITEM.md
+.work-items/work-item-template
+.work-items/work-item-template/DESIGN.md
+.work-items/work-item-template/WORK-ITEM.md

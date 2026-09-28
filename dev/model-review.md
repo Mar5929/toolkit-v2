@@ -1,6 +1,6 @@
 # Model project review
 
-A short record for Mike. Updated 2026-09-26.
+A short record for Mike. Updated 2026-09-28.
 
 The model project is the exact source for every file a new project gets.
 `node dev/tools/import-model.mjs` copies it into
@@ -19,8 +19,12 @@ Mike approved all 23 on 2026-09-26 ("go with your recommendations on all of
 them"). They are in the model itself, on branch `toolkit-v2/approved-changes`
 of the model's Git repository (worktree
 `/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved`,
-head `9940854`). Mike's own model folder is unchanged until he merges.
-`dev/model-changes.md` has one line per item and the merge steps.
+first applied at `9940854`). Later commits on the same branch carry the
+fixes from the sample runs and Mike's decisions of 2026-09-28; the branch head
+the scaffold copy was taken from is `5e7d7a0` (recorded in
+`plugins/toolkit/scaffold/model/.import.json`). Mike's own model folder is
+unchanged until he merges. `dev/model-changes.md` has one line per item, every
+later commit, and the merge steps.
 
 | # | Change | Status |
 | --- | --- | --- |

@@ -41,6 +41,15 @@ before and after `toolkit init`.
    toolkit notion ensure-root
    ```
 
+   - It prints a "Warnings:" line (for example, the "All Projects" view could
+     not be changed): the ids are saved and setup goes on. Tell the owner the
+     warning in one line; showing a column in his view is his step in the
+     Notion app.
+   - It fails (exit code 1 or 2): stop, show the owner the error line, and
+     wait. Never change his Notion pages, databases, or views yourself with
+     `ntn api`, a script, or the Notion connector to get past it, and never
+     leave the error out of the final reply.
+
 ## What init does
 
 `toolkit init` runs `toolkit notion ensure-project` for you. It creates or
@@ -69,6 +78,9 @@ Every write outside the "AI Agent Second Brain" page is refused.
 
 ## Gotchas
 
+- The toolkit's `notion` commands are the only writes to the owner's Notion
+  during setup. A failure is reported to him, never worked around with
+  `ntn api ... -X PATCH` or another tool.
 - In Codex, Notion calls need the network, which the sandbox turns off. The
   project's `.codex/rules/toolkit.rules` lets `toolkit` commands run outside
   the sandbox. Before init that file does not exist yet, so Codex asks the

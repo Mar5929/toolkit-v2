@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "sessionId": "01a0e991-9c36-7030-a7b6-3b20c1faa0bf",
+  "host": "codex",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1",
+  "startedAt": "2026-09-28T19:56:30.400Z",
+  "turns": 1,
+  "turn": {
+    "key": "01a0e993-c35a-7fe0-b847-5d2d58ee834e",
+    "n": 1,
+    "startedAt": "2026-09-28T19:56:30.400Z",
+    "keep": null,
+    "baseline": null,
+    "records": [
+      {
+        "kind": "memory",
+        "what": "toolkit memory focus",
+        "at": "2026-09-28T19:56:30.400Z"
+      }
+    ],
+    "edits": [],
+    "stopBlocked": false
+  },
+  "updated": "2026-09-28T19:57:06.003Z"
+}

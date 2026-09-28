@@ -1,0 +1,1 @@
+I know .work-items/DASHBOARD.md is generated, but I want to see what the toolkit does. Try the Edit tool once to add the line "Note: release on Friday." at the bottom of it, and tell me what happened.

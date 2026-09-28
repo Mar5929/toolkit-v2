@@ -1,0 +1,1 @@
+work-on,   ref:work/skills/work-on/references/git-rules.md,   ref:work/skills/work-on/references/planning.md, work-check, memory-save

@@ -1,0 +1,216 @@
+PROMPT: Yes, I approve the WI-001 result.
+THREAD: 01a0ea42-75f1-7082-8e9d-3f79f9bad83b
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Add a Tier picklist field to Account: 11 User approval, In Progress, waiting on owner. Next action: Ask Mike Rihm to approve the WI-001 field result separately from WI-002. Continues with work-decide.
+- WI-002 Set Account Tier access and page layout: 11 User approval, In Progress, waiting on owner. Next action: Ask Mike Rihm to approve the WI-002 access and page layout result separately from WI-001. Continues with work-decide.
+
+Waiting on the owner:
+- WI-001 Add a Tier picklist field to Account: WI-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-001 --result --by <name>. (work-decide)
+- WI-002 Set Account Tier access and page layout: WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)
+
+Items: 2 in progress.
+
+Current focus:
+Last updated: 2026-09-28, chat, agent
+## Now
+- WI-001 Add a Tier picklist field to Account
+- WI-002 Set Account Tier access and page layout
+## Waiting on the owner
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks and Salesforce org guards in Codex: open Codex here, type /hooks, and trust them. Setup step; drop it when doctor stops reporting it.
+## Untracked to-dos
+None.
+## Next session starts with
+- Continue WI-001 and WI-002 from their Resume here sections: ask for separate result approvals based on the four passed sandbox checks, then continue work-finish after approval.
+
+Memory proposals waiting on the owner (not facts: do not rely on them; work-decide asks him):
+- user_friday_availability: Mike Rihm is usually off on Fridays (proposed 2026-09-28)
+
+Project memory (builtin): 1 record, and 1 proposal the owner has not answered. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_custom_field_guidance: Every new custom field should have a description and help text
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2). Codex loads the project's .codex/ settings, plugin sw
+
+[AGENT] I’ll record your WI-001 result approval, then bring you the WI-002 decision.
+
+[CALL exec] toolkit work history WI-001 --note 'Owner said: Yes, I approve the WI-001 result.' --effect 'Result approved; work-finish continues.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"30c964","wall_time_seconds":0.000004083,"exit_code":0,"original_token_count":10,"output":"Added a Recent History row to WI-001.\n"}
+
+[CALL exec] toolkit work approve WI-001 --result --by 'Mike Rihm'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"29c628","wall_time_seconds":0.000001916,"exit_code":0,"original_token_count":104,"output":"Recorded: result of WI-001 approved (2026-09-28 by Mike Rihm).\nIt is no longer waiting on the owner (waiting_on: none).\nNow 11 User approval (In Progress). Continue with work-finish.\nNote: WI-001's Overview still says \"Next action: Ask Mike Rihm to approve the WI-001 field result separately from WI-002.\". Write the step after this approval: toolkit work edit WI-001 --label 'Next action' --value '<next step>'.\n"}
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-finish/SKILL.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+---
+name: work-finish
+description: 'Ships and closes an approved work item (pull request, merge, sandbox or production deployment, requirements update, Done), or cancels an item with the owner''s reason. Use when the owner says "ship it", "deploy it", "close it out", or "mark it done", or asks to cancel or drop an item.'
+---
+
+# Work finish
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Takes an approved item through the pull request, merge, deployment, and requirements update to Done, or cancels it; it never marks Done without the owner's approval and never runs a production deploy. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Check the result approval is recorded. Not recorded: show the result, the gaps, and the evidence, and ask. "Ship it" or "mark it done" after he saw the result counts: save his words first, then record it (`references/approvals.md`, section 4). Each sub-item needs its own.
+   `toolkit work show <id>`
+   `toolkit work history <id> --note 'Owner said: <quote>' --effect 'Result approved; work-finish continues.'`
+   `toolkit work approve <id> --result --by <owner>`
+2. Repository work: commit the item's files by name on its branch, push it, open the pull request, and set the stage (`references/closing.md`, section 2; `references/git-rules.md` before any Git write).
+   `toolkit work set <id> --stage 12-pr-and-push`
+3. Merge through `merge-and-clean-up` only with the owner's yes to this merge, or a standing merge instruction with an independent check on the exact head (`references/closing.md`, section 3). No remote: the local merge (`references/closing.md`, section 4), then this note.
+   `toolkit work history <id> --note 'No remote: merged locally into <default branch>.' --effect 'No pull request; no deployment.'`
+4. Deployment, when the item needs one (`references/closing.md`, section 5). Production deploys and production data loads are the owner's to run. Salesforce: a sandbox validate runs; a sandbox deploy needs his yes for that deploy, and in Codex he runs every sandbox deploy and sandbox data change himself, so give him the exact command with its `-o <sandbox>`. Run each `sf` command directly, never from a script.
+   `toolkit work set <id> --stage 13-deployment`
+5. Requirements baseline: copy only delivered and approved behavior into the area's file in `requirements/`, update `system-guide/` when the structure changed, and save both with `publish-docs` (`references/closing.md`, section 6).
+   `toolkit work set <id> --stage 14-spec-update`
+6. Sub-items: list the open ones; each is finished, cancelled, or moved on its own (`references/closing.md`, section 7).
+   `toolkit work list --tree`
+7. Memory: at most one `event` record through `memory-save`, only when the episode will m
+
+[CALL exec] toolkit work edit WI-001 --label 'Next action' --value 'Continue work-finish: prepare WI-001 for pull request and merge decision.'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"2c39c5","wall_time_seconds":0.000002375,"exit_code":0,"original_token_count":8,"output":"Saved \"Next action\" in WI-001.\n"}
+
+[CALL exec] toolkit work set WI-001 --waiting-on agent
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"c43d1b","wall_time_seconds":0.000002625,"exit_code":0,"original_token_count":25,"output":"Updated WI-001: waiting on agent.\nNow 11 User approval (In Progress). Continue with work-finish.\n"}
+
+[CALL exec] toolkit work decisions
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+2 decisions wait on the owner:
+
+WI-002 Set Account Tier access and page layout
+  - WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)
+
+Memory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):
+  - user_friday_availability: Mike Rihm is usually off on Fridays. Saved 2026-09-28. Yes: toolkit memory approve user_friday_availability --by <name>. No: toolkit memory reject user_friday_availability. (work-decide)
+
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/references/current-focus.md
+   cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/SKILL.md
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"i":0,"result":"<!-- Generated file. Source: plugins/memory/shared/current-focus.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\n# The current focus\n\nPurpose: the format of the current focus, when to change it, and the exact\nread-change-save sequence, in every memory backend.\n\n## Contents\n\n- What the focus is for\n- The format\n- What goes in each section\n- When to check it\n- Read, change, save\n- A new project's focus\n- Examples\n- Checklist for a focus save\n\n## What the focus is for\n\nThe current focus is the first thing the next session reads: the session\nbriefing includes it. It says what is happening now and where the next\nsession starts. It never repeats the tracker: a work item's status, tasks,\nand history stay in the work item.\n\n| Backend | Where the focus lives |\n| --- | --- |\n| Built-in | `.memory/CURRENT_FOCUS.md` in the main checkout |\n| Hindsight | The document `focus` in the project's bank |\n| Notion | The \"Current focus\" page under the project's page |\n\nThe same commands read and save it in every backend. Never edit the file or\nthe page by hand.\n\n## The format\n\nThe model's format: a `# Current focus` title line, a `Last updated:` line,\nthen exactly four `##` sections in this order, under 50 lines in total.\n\n```markdown\n# Current focus\n\nLast updated: <YYYY-MM-DD>, <source>, <person or agent>\n\n## Now\n\n## Waiting on the owner\n\n## Untracked to-dos\n\n## Next session starts with\n```\n\nWhat the command enforces:\n\n- It refuses a focus that lacks one of the four sections, has another\n  section, or is over 50 lines (exit code 2, nothing saved).\n- It adds the title line or the `Last updated:` line when either is missing,\n  and sets an older date to today. It cannot know the source or who wrote\n  it, so write the line yourself.\n\n## What goes in each section\n\n- **Last updated:** the date, the source (for example `handoff`,\n  `work-finish`, `chat`), and who wrote it (a person, or `agent`). Change it\n  on every save.\n- **Now:** the current outcome or area, with work item ids and titles only,\n  for example `- WI-012 CSV export`. Never a status or a stage: the tracker\n  holds those.\n- **Waiting on the owner:** a decision or action only the owner can take\n  that has no work item: what it is, who needs it, and when to check again.\n  Work items that wait on him are listed by `toolkit work decisions`, not\n  here. A setup step (trust the hooks in Codex, sign in to Notion with\n  `ntn login`) stays only while `toolkit doctor` still reports it.\n- **Untracked to-dos:** things the owner asked for that have no work item.\n  When one becomes a work item, replace the line with the item's id under\n  Now.\n- **Next session starts with:** one entry: where to resume, what to read,\n  and the next action. It is replaced at each handoff, not added to.\n- Write \"None.\" in a section with nothing in it.\n- Keep it under 50 l
+
+[AGENT] WI-001’s result approval is recorded. I’m updating the handoff note so a later session continues from the approval rather than asking you for it again.
+
+[CALL exec] toolkit memory focus --json
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{
+  "ok": true,
+  "backend": "builtin",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Add a Tier picklist field to Account\n- WI-002 Set Account Tier access and page layout\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks and Salesforce org guards in Codex: open Codex here, type /hooks, and trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 and WI-002 from their Resume here sections: ask for separate result approvals based on the four passed sandbox checks, then continue work-finish after approval.\n",
+  "version": "2bf9c74bdd3d9a9dac7366fab89a220362c8d35b83126b3ccedd98963d90117f"
+}
+
+
+[CALL exec] toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Add a Tier picklist field to Account
+- WI-002 Set Account Tier access and page layout
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks and Salesforce org guards in Codex: open Codex here, type /hooks, and trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 through work-finish after its recorded result approval; ask for WI-002 result approval separately, then continue its work-finish after approval.' --expect 2bf9c74bdd3d9a9dac7366fab89a220362c8d35b83126b3ccedd98963d90117f
+  -> Script completed
+Wall time 0.6 seconds
+Output:
+
+{"chunk_id":"467d96","wall_time_seconds":0.0818,"exit_code":0,"original_token_count":15,"output":"Saved the current focus (21 lines). Version: 69def177b6ae\n"}
+
+[CALL exec] toolkit memory focus
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+# Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Add a Tier picklist field to Account
+- WI-002 Set Account Tier access and page layout
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks and Salesforce org guards in Codex: open Codex here, type /hooks, and trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 through work-finish after its recorded result approval; ask for WI-002 result approval separately, then continue its work-finish after approval.
+
+
+[AGENT] Your **WI-001 result approval is recorded**. Two decisions remain: the WI-002 result and a proposed memory note about Fridays.
+
+**WI-002:** You reported that Sales Managers and system administrators can edit Tier; Sales Users and Read Only users can see it but cannot edit it. All four profiles see Tier directly below Rating on the Account page. You can review those access and page checks in the sandbox. No acceptance gap was reported; no independent agent check ran. I recommend approving this result because your access and placement checks passed.
+
+Do you approve the WI-002 result?
+
+SKILLS OPENED (SKILL.md read): ['work-finish', 'memory-save']
+
+TOOLKIT COMMANDS:
+   toolkit work history WI-001 --note 'Owner said: Yes, I approve the WI-001 result.' --effect 'Result approved
+   toolkit work approve WI-001 --result --by 'Mike Rihm'
+   toolkit work edit WI-001 --label 'Next action' --value 'Continue work-finish: prepare WI-001 for pull request and merge decision.'
+   toolkit work set WI-001 --waiting-on agent
+   toolkit work decisions
+   toolkit memory focus --json
+   toolkit memory focus --text '# Current focus
+   toolkit memory focus

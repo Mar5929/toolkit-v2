@@ -1,0 +1,247 @@
+PROMPT: What do you need from me?
+THREAD: 01a0e9ab-ffb6-72b0-8f8c-d162c5165e48
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll check the pending owner decisions and give you the next concrete action.
+
+[AGENT] I’m using the work-decide procedure to check the approval queue and the review details for WI-002.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/approvals.md'
+  -> <!-- Generated file. Source: plugins/work/shared/approvals.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Approvals and gates
+
+The exact steps to ask for and record each owner approval, and what counts as
+one. Run each checklist in order; one wrong or missing command leaves the
+item in the wrong state.
+
+## Contents
+
+1. What counts as approval
+2. Requirements approval
+3. Design approval
+4. Result approval
+5. Done
+6. Cancel
+7. Delivery offer
+8. Project-wide decision
+9. Memory proposal
+10. Sub-items and approvals
+11. Standing merge instruction
+12. When an approve command refuses
+
+## 1. What counts as approval
+
+`toolkit work lifecycle` prints the gates and these rules. In short:
+
+- Only the owner's explicit words count. Quote them in a history note.
+- A question, a suggestion, a tentative answer ("probably B"), silence, or a
+  saved draft is not approval.
+- An approval covers only what was shown. It never covers merge, deployment,
+  spending, or publishing.
+- An approval survives later stages. A stage alone does not prove approval:
+  check the approval field (`toolkit work show <id>`).
+- A bare "yes", "ok", or "looks good" answers only a yes-or-no question asked
+  earlier in this conversation. When none was asked, or the waiting question
+  is not a yes-or-no question, show the decision with its choices and your
+  recommendation, and record nothing.
+- After a yes, save his words first, in a history note that starts with
+  `Owner said:`. Then run the 
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/proposals.md'
+  -> <!-- Generated file. Source: plugins/memory/shared/proposals.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Memory proposals
+
+Purpose: what a memory proposal is, how one is saved, and how the owner's yes
+or no is recorded.
+
+## Contents
+
+- What a proposal is
+- How a proposal is saved
+- Recording the owner's answer
+- Examples
+
+## What a proposal is
+
+A proposal is a memory record the owner has not approved yet. It exists so
+that a "Save to memory?" question he did not answer is kept, not lost.
+
+- It is saved with `--proposal`: status `needs-review`, authorization
+  "Proposed by the agent on <date>", and never an approver.
+- It is not a fact. The agent does not rely on it, and an answer never
+  presents it as true.
+- `toolkit memory find` leaves it out unless `--proposals` (or `--all`) is
+  given. `toolkit memory get` ends its text with a line saying it is a
+  proposal.
+- `toolkit work decisions` and the session briefing list it among the things
+  waiting on the owner, and the `work-decide` skill asks him about it.
+- The built-in index marks it "[proposal: not a fact until the owner
+  answers]". In Notion its Status is "proposed".
+- A proposal never replaces a record the owner approved. The CLI refuses a
+  proposal whose key is already a current or retired record.
+
+## How a proposal is saved
+
+1. The agent asks the question in exactly this form, at the end of its reply:
+   `Save to memory: <one-line summary>?` (bold is fine). Other wording, such
+   a
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 3 decisions wait on the owner:
+
+WI-002 Build basic slug command
+  - WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)
+
+WI-003 Add max length option to slug command
+  - WI-003 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-003 --result --by <name>. (work-decide)
+
+Memory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):
+  - project_publish_blog_ghost_keeps_only_first_190_characters: You publish your blog on Ghost, and Ghost keeps only the first 190 characters of a slug. Saved 2026-09-28. Yes: toolkit memory approve project_publish_blog_ghost_keeps_only_first_190_characters --by <name>. No: toolkit memory reject project_publish_blog_ghost_keeps_only_first_190_characters. (work-decide)
+
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1                                                        c062d63 [main]
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a0
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-002'
+  -> WI-002: Build basic slug command
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1/.work-items/slug-cli/WI-001-slug/WI-002-build-basic-slug-command/WORK-ITEM.md
+Stage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/slug-cli/WI-001-slug/DESIGN.md). Read it with: toolkit work design WI-001
+Worktree branch for this item: claude/wi-002-build-basic-slug-command (folder .claude/worktrees/wi-002-build-basic-slug-command)
+
+---
+id: WI-002
+title: Build basic slug command
+type: build
+stage: 11-user-approval
+status: In Progress
+parent: WI-001
+waiting_on: "owner"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-002: Build basic slug command
+
+## Overview
+
+**Goal:** Build the title-to-slug command for WI-001 R-01.
+
+**Current position:** Built and committed as d6f9221. Four automated checks and independent R-01 acceptance checks passed.
+
+**Next action:** Mike reviews and approves the WI-002 result. Leave the branch unmerged.
+
+**Blockers:** Result approval is needed before finishing. No build blocker remains.
+
+**Related items:** Parent WI-001 (R-01). Design: WI-001 approved Option A. WI-003 builds on this command.
+
+## Roadmap
+
+A phase is complete when 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-003'
+  -> WI-003: Add max length option to slug command
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1/.work-items/slug-cli/WI-001-slug/max-option/WORK-ITEM.md
+Stage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/slug-cli/WI-001-slug/DESIGN.md). Read it with: toolkit work design WI-001
+Worktree branch for this item: claude/wi-003-add-max-length-option-to-slug (folder .claude/worktrees/wi-003-add-max-length-option-to-slug)
+
+---
+id: WI-003
+title: Add max length option to slug command
+type: build
+stage: 11-user-approval
+status: In Progress
+parent: WI-001
+waiting_on: "owner"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-003: Add max length option to slug command
+
+## Overview
+
+**Goal:** Add `--max` to the slug command for WI-001 R-02.
+
+**Current position:** Built and committed as 4d20885 on top of WI-002. Seven automated checks and independent R-01 and R-02 acceptance checks passed.
+
+**Next action:** Mike reviews and approves the WI-003 result after WI-002. Leave the branch unmerged.
+
+**Blockers:** Result approval is needed before finishing. No build blocker remains.
+
+**Related items:** Parent WI-001 (R-02). Design: WI-001 approved Option A. D
+
+[AGENT] Three decisions wait on you: approve the WI-002 basic command result, approve the WI-003 `--max` result, and accept or reject a proposed memory about Ghost’s slug limit. We’ll take them in that order.
+
+**First, WI-002:** The command turns `Hello World!` into `hello-world` and `Café` into `cafe`; punctuation-only input exits with an error. Four automated checks and an independent acceptance check passed, with no reported gaps. You can try it from the WI-002 worktree with `node bin/slug.js "Hello World!"`.
+
+I recommend approving WI-002 so we can review WI-003 next. This approval does **not** authorize a merge. Do you approve the WI-002 result?
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 128542, "cached_input_tokens": 101504, "cache_write_input_tokens": 0, "output_tokens": 725, "reasoning_output_tokens": 117}}
+
+SKILLS OPENED: []
+
+[HOOK CONTEXT ord=9] Project briefing: slug (slug), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Build slug command with max option: 05 Breakdown, In Progress. Next action: Mike reviews the WI-002 and WI-003 results. No merge is authorized. Continues with work-organize.
+- WI-002 Build basic slug command: 11 User approval, In Progress, waiting on owner. Next action: Mike reviews and approves the WI-002 result. Leave the branch unmerged. Continues with work-decide.
+- WI-003 Add max length option to slug command: 11 User approval, In Progress, waiting on owner. Next action: Mike reviews and approves the WI-003 result after WI-002. Leave the branch u
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-curated-remote/app-6a314a7
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/SKILL.md",max_output_tokens:20000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "cat: SOUL.md: No such file or directory\n# slug\n\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\n\n## Purpose and intended outcome\n\n- Purpose: Turn typed titles into slugs for Mike Rihm\u2019s blog.\n- Intended outcome: slug turns any title I type into a clean, URL-friendly slug that I can paste into my blog.\n\n## Scope and boundaries\n\n- In scope: A Node.js command-line tool that turns a typed title into a URL-friendly slug.\n- Outside scope: `<Important exclusions or adjacent owners.>`\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\n\n## Systems and environments\n\n| System or org | Purpose | Environment | Source of truth | Access notes |\n| --- | --- | --- | --- | --- |\n| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |\n\n## People and ownership\n\n| Role | Person or team | Responsibility | Source / last confirmed |\n| --- | --- | --- | --- |\n| Project owner | Mike Rihm | Makes project decisions | Owner, 2026-09-28 |\n\n## Work and project records\n\n- Work tracker: `.work-items/` (local folders, Git-ignored)\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\n- Project decisions: [DECISIONS.md](DECISIONS.md)\n- Functional requirements: [requirements/](requirements/)\n- Design home: `DESIGN.md` beside each local work item\n- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`\n- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)\n- Memory backup or sync: `/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-local` via `toolkit handoff-backup`\n\n## Resources and project paths\n\n- Tests and checks: `<actual commands and locations>`\n- Outside references: `<source register or approved location>`\n\n## Operating conventions\n\n<Write only stable project-specific conventions here; link the source or governing rule. Write \u201
+
+[CALL] const a=await Promise.allSettled([
+ tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:5000}),
+ tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/approvals.md",max_output_tokens:8000}),
+ tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/proposals.md",max_output_tokens:3000})
+]); a.forEach((r,i)=>text(JSON.stringify({i,result:r})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"da7bc3\",\"wall_time_seconds\":0.000003625,\"exit_code\":0,\"original_token_count\":218,\"output\":\"3 decisions wait on the owner:\\n\\nWI-002 Build basic slug command\\n  - WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)\\n\\nWI-003 Add max length option to slug command\\n  - WI-003 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-003 --result --by <name>. (work-decide)\\n\\nMemory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):\\n  - project_publish_blog_ghost_keeps_only_first_190_characters: You publish your blog on Ghost, and Ghost keeps only the first 190 characters of a slug. Saved 2026-09-28. Yes: toolkit memory approve project_publish_blog_ghost_keeps_only_first_190_characters --by <name>. No: toolkit memory reject project_publish_blog_ghost_keeps_only_first_190_characters. (work-decide)\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"9d7a83\",\"wall_time_seconds\":0.000003125,\"exit_code\":0,\"original_token_count\":3300,\"output\":\"<!-- Generated file. Source: plugins/work/shared/approvals.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\\n# Approvals and gates\\n\\nThe exact steps to ask for and record each owner approval, and what counts as\\none. Run each checklist in order; one wrong or missing command leaves the\\nitem in the wrong state.\\n\\n## Contents\\n\\n1. What counts as approval\\n2. Requirements approval\\n3. Design approval\\n4. Result approval\\n5. Done\\n6. Cancel\\n7. Delivery offer\\n8. Project-wide decision\\n9. Memory proposal\\n10. Sub-items and approvals\\n11. Standing merge instruction\\n12. When an approve command refuses\\n\\n## 1. What counts as approval\\n\\n`toolkit work lifecycle` prints the gates and these rules. In short:\\n\\n- Only the owner's explicit words count. Quote them in a history note.\\n- A question, a suggestion, a tentative answer (\\\"probably B\\\"), silence, or a\\n  saved draft is not approval.\\n- An approval covers only what was shown. It never covers merge, deployment,\\n  spending, or publishing.\\n- An approval survives later stages
+
+[CALL] const r=await Promise.allSettled([
+ tools.exec_command({cmd:"toolkit work show WI-002",max_output_tokens:8000}),
+ tools.exec_command({cmd:"toolkit work show WI-003",max_output_tokens:7000}),
+ tools.exec_command({cmd:"git worktree list",max_output_tokens:2000})
+]);r.forEach((v,i)=>text(JSON.stringify({i,result:v})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"a07dcb\",\"wall_time_seconds\":9.16e-7,\"exit_code\":0,\"original_token_count\":1332,\"output\":\"WI-002: Build basic slug command\\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1/.work-items/slug-cli/WI-001-slug/WI-002-build-basic-slug-command/WORK-ITEM.md\\nStage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide\\nParent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/slug-cli/WI-001-slug/DESIGN.md). Read it with: toolkit work design WI-001\\nWorktree branch for this item: claude/wi-002-build-basic-slug-command (folder .claude/worktrees/wi-002-build-basic-slug-command)\\n\\n---\\nid: WI-002\\ntitle: Build basic slug command\\ntype: build\\nstage: 11-user-approval\\nstatus: In Progress\\nparent: WI-001\\nwaiting_on: \\\"owner\\\"\\npriority: medium\\ndelivery: owner-led\\nrequirements_approved: \\\"2026-09-28 by Mike Rihm\\\"\\ndesign: none\\nresult_approved: \\\"no\\\"\\nupdated: 2026-09-28\\n---\\n\\n# WI-002: Build basic slug command\\n\\n## Overview\\n\\n**Goal:** Build the title-to-slug command for WI-001 R-01.\\n\\n**Current position:** Built and committed as d6f9221. Four automated checks and independent R-01 acceptance checks passed.\\n\\n**Next action:** Mike reviews and approves the WI-002 result. Leave the branch unmerged.\\n\\n**Blockers:** Result approval is needed before finishing. No build blocker remains.\\n\\n**Related items:** Parent WI-001 (R-01). Design: WI-001 approved Option A. WI-003 builds on this command.\\n\\n## Roadmap\\n\\nA phase is complete when its tasks are complete and its exit result has been checked.\\n\\n| Phase | Outcome | Status | Exit result | Sub-items |\\n| --- | --- | --- | --- | --- |\\n| P1 \u2014 Basic command | A title becomes a slug | Done | WI-001 R-01 command cases passed | None. |\\n\\n## Tasks\\n\\n### P1 \u2014 Basic command\\n\\n- [x] **P1-T01 \u2014 Implement title conversion** \u00b7 Done  \\n  **Work:** Add `bin/slug.js` using WI-001 R-01 and the approved design end-to-end flow.  \\n  **Deliverable:** A command that converts titles and reports empty-content errors.  \\n  **Done when:** Hello World!, Caf\u00e9, and punctuation

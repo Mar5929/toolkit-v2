@@ -1,0 +1,1 @@
+Yes, I approve Option A. Then split it: make the access and page layout part its own sub-item under WI-001, so WI-001 is just the field itself.

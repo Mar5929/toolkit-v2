@@ -1,0 +1,36 @@
+$ git log --all --format="%h | %an <%ae> | %cn <%ce> | %s"
+6b1c812 | Mike Rihm <michael@rihm.com> | Mike Rihm <michael@rihm.com> | Document delivered tip split command
+56c44fe | Mike Rihm <michael@rihm.com> | Mike Rihm <michael@rihm.com> | Merge branch 'main' into claude/tfr2-002-add-the-tip-option
+339892d | Mike Rihm <michael@rihm.com> | Mike Rihm <michael@rihm.com> | Record optional tip test results
+ff39be4 | Mike Rihm <michael@rihm.com> | Mike Rihm <michael@rihm.com> | Record default command test results
+dd7f00f | Mike Rihm <michael@rihm.com> | Mike Rihm <michael@rihm.com> | Add optional tip percentage
+e9dd6fa | Mike Rihm <michael@rihm.com> | Mike Rihm <michael@rihm.com> | Build default tip split command
+77fd652 | Mike Rihm <michael@rihm.com> | Mike Rihm <michael@rihm.com> | Set up Toolkit V2
+cc81386 | Mike Rihm <michael@rihm.com> | Mike Rihm <michael@rihm.com> | Initial commit
+
+$ git log --all --format=%B | grep -i -E "co-authored|generated with|claude|codex|openai|anthropic|chatgpt|gpt"
+Merge branch 'main' into claude/tfr2-002-add-the-tip-option
+exit=0
+
+$ git status --short --branch
+## main
+$ git worktree list
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r2 6b1c812 [main]
+$ git branch -a
+* main
+
+$ node --test tests/tip-split.test.js (on main)
+✔ splits the approved default example (48.58825ms)
+✔ rounds exact half cents up and supports zero and leading zeroes (132.75925ms)
+✔ rejects invalid bill and people input with usage and exit code 1 (560.227083ms)
+✔ uses a custom or zero tip and rounds the final share (225.973541ms)
+✔ rejects missing, negative, nonnumeric, and misplaced tips (449.615417ms)
+ℹ tests 5
+ℹ pass 5
+ℹ fail 0
+
+$ grep attribution .claude/settings.json
+64:  "attribution": {
+65-    "commit": "",
+66-    "pr": "",
+67-    "sessionUrl": false

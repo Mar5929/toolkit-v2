@@ -1,0 +1,1 @@
+No, it can be blank, with no default value. Only the Sales Manager profile and system administrators can edit it; everyone else who can see Accounts can read it. Put it on the Account page layout right below Rating.

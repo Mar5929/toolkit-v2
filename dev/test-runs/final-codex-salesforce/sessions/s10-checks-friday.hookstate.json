@@ -1,0 +1,83 @@
+{
+  "schema": 1,
+  "sessionId": "01a0ea3e-006e-7e50-b680-c5fa035b64ca",
+  "host": "codex",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2",
+  "startedAt": "2026-09-28T22:58:48.532Z",
+  "turns": 1,
+  "turn": {
+    "key": "01a0ea3e-0102-7730-865c-2a217825eccb",
+    "n": 1,
+    "startedAt": "2026-09-28T22:58:48.708Z",
+    "keep": null,
+    "baseline": {
+      "memoryMeta": 1790636222520.432,
+      "hindsightMeta": null,
+      "memoryCache": null,
+      "workState": 1790636328594.5166,
+      "decisions": 1790633564051.7444
+    },
+    "records": [
+      {
+        "kind": "work",
+        "what": "toolkit work history",
+        "at": "2026-09-28T23:00:04.930Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work history",
+        "at": "2026-09-28T23:00:10.588Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work history",
+        "at": "2026-09-28T23:00:39.639Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work history",
+        "at": "2026-09-28T23:00:43.072Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work set",
+        "at": "2026-09-28T23:00:49.178Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work set",
+        "at": "2026-09-28T23:00:51.589Z"
+      },
+      {
+        "kind": "memory",
+        "what": "toolkit memory focus",
+        "at": "2026-09-28T23:01:02.749Z"
+      },
+      {
+        "kind": "memory",
+        "what": "toolkit memory save",
+        "at": "2026-09-28T23:01:08.178Z",
+        "proposal": true,
+        "description": "Mike Rihm is usually off on Fridays"
+      }
+    ],
+    "edits": [
+      {
+        "path": ".work-items/account-tier/WI-001-tier-field/WORK-ITEM.md",
+        "id": "WI-001"
+      },
+      {
+        "path": ".work-items/account-tier/WI-001-tier-field/WI-002-tier-access-and-layout/WORK-ITEM.md",
+        "id": "WI-002"
+      }
+    ],
+    "stopBlocked": false
+  },
+  "lastStopReason": null,
+  "source": "startup",
+  "updated": "2026-09-28T23:02:28.733Z",
+  "remindedEdits": [
+    ".work-items/account-tier/WI-001-tier-field/WORK-ITEM.md",
+    ".work-items/account-tier/WI-001-tier-field/WI-002-tier-access-and-layout/WORK-ITEM.md"
+  ]
+}

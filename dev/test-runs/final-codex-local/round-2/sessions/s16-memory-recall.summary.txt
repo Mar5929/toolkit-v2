@@ -1,0 +1,200 @@
+PROMPT: Do you remember how I like error messages and tests written? And why does the round-up rule matter to me?
+THREAD: 01a0ea3f-614c-7451-ad51-606f0f4a616a
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll check the project memory so I can give you the exact preferences and reason recorded there. I’m using the memory-find skill for this.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-find/SKILL.md'
+  -> ---
+name: memory-find
+description: 'Looks up what the project already recorded (memory, DECISIONS.md, work items, requirements, current focus) and cites the source of each answer. Use when the owner asks "what did we decide", "do you remember", or "why did we", and before asking him to repeat anything.'
+---
+
+# Memory find
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Finds what the project already recorded and answers with a source for every fact. It only reads: it never changes memory, a work item, or a file.
+
+## Steps
+
+Track these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+1. Check the session briefing and the current focus.
+   `toolkit memory focus`
+2. Search memory with the owner's words, then with the real names (component, setting, work item id).
+   `toolkit memory find '<query>'`
+3. Read every hit before using it, and check its status, dates, and scope (`references/record-format.md`). Hindsight sorts hits into three groups, and only the first group can give an answer (`references/memory-hindsight.md`).
+   `toolkit memory get <key>`
+4. Not found yet: search retired records and proposals too. A retired record shows what used to be true; a proposal is never a fact (`references/proposals.md`).
+   `toolkit memory find '<query>' --all`
+5. Search the other homes ("Other homes" below), and the gl
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-28, work-finish, agent
+
+## Now
+
+None.
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- WI-001 and WI-002 are finished on local main. Start with the next owner request.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory find 'round up Venmo'"
+  -> 1 memory record matches "round up Venmo" (best first):
+- project_mike_rihm_friends_settle_split_bills_venmo_takes: Mike Rihm and Mike's friends settle split bills in Venmo, which takes whole-cent amounts, so the round-up rule matters
+    ...nd Mike's friends settle split bills in Venmo, which takes whole-cent amounts **Remember:** Mike Rihm and Mike's friends settle split bills in Venmo, which tak...
+Read a record with toolkit memory get <key> before relying on it.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory find 'error messages tests'"
+  -> 1 memory record matches "error messages tests" (best first):
+- user_coding_preferences: Use actionable error messages and Node built-in node:test without npm test packages
+    ...rences **Remember:** The owner prefers error messages that tell him how to fix the problem. For tests, use Node’s built-in node:test runner and no npm packages...
+Read a record with toolkit memory get <key> before relying on it.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory get project_mike_rihm_friends_settle_split_bills_venmo_takes'
+  -> ---
+name: project_mike_rihm_friends_settle_split_bills_venmo_takes
+description: Mike Rihm and Mike's friends settle split bills in Venmo, which takes whole-cent amounts, so the round-up rule matters
+metadata:
+  type: project
+status: current
+source: Agent question in a session, 2026-09-28
+last_verified: 2026-09-28
+authorization: Approved by Mike Rihm on 2026-09-28
+supersedes: none
+---
+
+# Mike Rihm and Mike's friends settle split bills in Venmo, which takes whole-cent amounts
+
+**Remember:** Mike Rihm and Mike's friends settle split bills in Venmo, which takes whole-cent amounts, so the round-up rule matters.
+
+**Why:** Not stated by the owner.
+
+**How to apply:** Not stated by the owner.
+
+**Evidence and limits:** On 2026-09-28 the agent asked the owner "Save to memory: You and your friends settle split bills in Venmo, which takes whole-cent amounts, so the round-up rule matters?" and the turn ended with no answer, so the toolkit's Stop hook saved it as a proposal. Mike Rihm approved it on 2026-09-28.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory get user_coding_preferences'
+  -> ---
+name: user_coding_preferences
+description: Use actionable error messages and Node built-in node:test without npm test packages
+metadata:
+  type: user
+status: current
+source: Mike Rihm, in chat, 2026-09-28
+last_verified: 2026-09-28
+authorization: Approved by Mike Rihm on 2026-09-28
+supersedes: none
+---
+
+# Coding preferences
+
+**Remember:** The owner prefers error messages that tell him how to fix the problem. For tests, use Node’s built-in node:test runner and no npm packages.
+
+**Why:** Not stated by the owner.
+
+**How to apply:** When writing an error message, include a concrete corrective action. When adding tests, use node:test and avoid npm test dependencies.
+
+**Evidence and limits:** Mike Rihm, in chat, 2026-09-28. Applies to this project.
+
+**Related memories:** None.
+
+**Authoritative records:** None.
+
+
+[AGENT] Yes. You prefer **error messages that tell you how to fix the problem**. For tests, you prefer Node’s built-in `node:test` runner, with no npm test packages. (Memory: `user_coding_preferences`, approved 2026-09-28.)
+
+The round-up rule matters because you and your friends settle split bills in Venmo, which takes whole-cent amounts. (Memory: `project_mike_rihm_friends_settle_split_bills_venmo_takes`, approved 2026-09-28.)
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 139013, "cached_input_tokens": 126336, "cache_write_input_tokens": 0, "output_tokens": 593, "reasoning_output_tokens": 66}}
+
+SKILLS OPENED: ['memory-find']
+
+[HOOK CONTEXT ord=9] Project briefing: tipcalc (tipcalc), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The tracker has no open items. A new request starts a work item with the work-on skill.
+
+Items: 2 done.
+
+Current focus:
+Last updated: 2026-09-28, work-finish, agent
+## Now
+None.
+## Waiting on the owner
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+## Untracked to-dos
+None.
+## Next session starts with
+- WI-00
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md",max_output_tokens:12000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-find/SKILL.md",max_output_tokens:12000})
+]); for (const x of r) text(x);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"3d3f7e\",\"wall_time_seconds\":0,\"exit_code\":1,\"original_token_count\":3919,\"output\":\"cat: SOUL.md: No such file or directory\\n# tipcalc\\n\\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\\n\\n## Purpose and intended outcome\\n\\n- Purpose: `tipcalc tells me the tip and the total for a restaurant bill, and can split the total between friends, straight from my terminal.`\\n- Intended outcome: `tipcalc tells me the tip and the total for a restaurant bill, and can split the total between friends, straight from my terminal.`\\n\\n## Scope and boundaries\\n\\n- In scope: `<Business capabilities or systems this project owns.>`\\n- Outside scope: `<Important exclusions or adjacent owners.>`\\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\\n\\n## Systems and environments\\n\\n| System or org | Purpose | Environment | Source of truth | Access notes |\\n| --- | --- | --- | --- | --- |\\n| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |\\n\\n## People and ownership\\n\\n| Role | Person or team | Responsibility | Source / last confirmed |\\n| --- | --- | --- | --- |\\n| Owner | Mike Rihm | Project decisions | Setup interview, 2026-09-28 |\\n\\n## Work and project records\\n\\n- Work tracker: `.work-items/` (local folders)\\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\\n- Project decisions: [DECISIONS.md](DECISIONS.md)\\n- Functional requirements: [requirements/](requirements/)\\n- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`\\n- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`\\n- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)\\n- Memory backup or sync: `/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-local`; `tool
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus",max_output_tokens:2000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "# Current focus\n\nLast updated: 2026-09-28, work-finish, agent\n\n## Now\n\nNone.\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- WI-001 and WI-002 are finished on local main. Start with the next owner request.\n"}]
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"toolkit memory find 'error messages tests'",max_output_tokens:2500}),
+tools.exec_command({cmd:"toolkit memory find 'round up Venmo'",max_output_tokens:2500})
+]); for(const x of r) text(x);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"03d1e3\",\"wall_time_seconds\":0.000001875,\"exit_code\":0,\"original_token_count\":103,\"output\":\"1 memory record matches \\\"error messages tests\\\" (best first):\\n- user_coding_preferences: Use actionable error messages and Node built-in node:test without npm test packages\\n    ...rences **Remember:** The owner prefers error messages that tell him how to fix the problem. For tests, use Node\u2019s built-in node:test runner and no npm packages...\\nRead a record with toolkit memory get <key> before relying on it.\\n\"}}"}, {"type": "input_text", "text": "{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"9f48f0\",\"wall_time_seconds\":0.000003042,\"exit_code\":0,\"original_token_count\":118,\"output\":\"1 memory record matches \\\"round up Venmo\\\" (best first):\\n- project_mike_rihm_friends_settle_split_bills_venmo_takes: Mike Rihm and Mike's friends settle split bills in Venmo, which takes whole-cent amounts, so the round-up rule matters\\n    ...nd Mike's friends settle split bills in Venmo, which takes whole-cent amounts **Remember:** Mike Rihm and Mike's friends settle split bills in Venmo, which tak...\\nRead a record with toolkit memory get <key> before relying on it.\\n\"}}"}]
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"toolkit memory get user_coding_preferences",max_output_tokens:2500}),
+tools.exec_command({cmd:"toolkit memory get project_mike_rihm_friends_settle_split_bills_venmo_takes",max_output_tokens:2500})
+]); for(const x of r) text(x);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"ad9a26\",\"wall_time_seconds\":0.000001,\"exit_code\":0,\"original_token_count\":206,\"output\":\"---\\nname: user_coding_preferences\\ndescription: Use actionable error messages and Node built-in node:test without npm test packages\\nmetadata:\\n  type: user\\nstatus: current\\nsource: Mike Rihm, in chat, 2026-09-28\\nlast_verified: 2026-09-28\\nauthorization: Approved by Mike Rihm on 2026-09-28\\nsupersedes: none\\n---\\n\\n# Coding preferences\\n\\n**Remember:** The owner prefers error messages that tell him how to fix the problem. For tests, use Node\u2019s built-in node:test runner and no npm packages.\\n\\n**Why:** Not stated by the owner.\\n\\n**How to apply:** When writing an error message, include a concrete corrective action. When adding tests, use node:test and avoid npm test dependencies.\\n\\n**Evidence and limits:** Mike Rihm, in chat, 2026-09-28. Applies to this project.\\n\\n**Related memories:** None.\\n\\n**Authoritative records:** None.\\n\"}}"}, {"type": "input_text", "text": "{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"fb518c\",\"wall_time_seconds\":0.00000325,\"exit_code\":0,\"original_token_count\":253,\"output\":\"---\\nname: project_mike_rihm_friends_settle_split_bills_venmo_takes\\ndescription: Mike Rihm and Mike's friends settle split bills in Venmo, which takes whole-cent amounts, so the round-up rule matters\\nmetadata:\\n  type: project\\nstatus: current\\nsource: Agent question in a session, 2026-09-28\\nlast_verified: 2026-09-28\\nauthorization: Approved by Mike Rihm on 2026-09-28\\nsupersedes: none\\n---\\n\\n# Mike Rihm and Mike's friends settle split bills in Venmo, which takes whole-cent amounts\\n\\n**Remember:** Mike Rihm and Mike's friends settle split bills in Venmo, which takes whole-cent amounts, so the round-up rule matters.\\n\\n**Why:** Not stated by the owner.\\n\\n**How to apply:** Not stated by the owner.\\n\\n**Evidence and limits:** On 2026-09-28 the agent asked the owner \\\"Save to memory: You and your friends settle split bills in Venmo, which takes whole-cent amounts, so the round-up rule matters?\\\" and the turn ended with no answer, so the toolkit's Stop hook saved it as a proposal. Mike Rihm approved it on 2026-09-28.\\n\"}}"}]

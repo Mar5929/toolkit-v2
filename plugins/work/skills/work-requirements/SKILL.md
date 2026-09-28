@@ -24,7 +24,7 @@ Interviews the owner and writes what the result must do, never how to build it; 
    `toolkit work edit <id> --section 'Active requirements' --set-file <file>`
    `toolkit work edit <id> --section 'Open Questions' --append-row '| <next Q-id> | <question> | R-02 | Open | owner |'`
    `toolkit work set <id> --waiting-on owner`
-6. A change to an approved requirement: edit the `R-xx`, keep the old wording in its Decision record, set it back to Refining, move the item to refinement, and say what the change affects when the item is past stage 03 (`references/interview.md`, section 7).
+6. A change to an approved requirement: edit the `R-xx`, keep the old wording in its Decision record, set it back to Refining, move the item to refinement, and say what the change affects when the item is past stage 03 (`references/interview.md`, section 7). The earlier approval stays on the record, and the stage command says so: it covered the requirements as they were, so ask him to approve the changed ones (step 8) before anything is built on them.
    `toolkit work set <id> --stage 02-refinement`
 7. Spec check, before asking for approval and whenever the owner says "check the spec": brief the `requirements-analyst` and handle its findings (`references/spec-check.md`).
 8. Ask for approval and record his yes with the requirements checklist in `references/approvals.md`, section 2. Then a `build` or `data-load` item goes to `solution-design`, unless he agreed to skip the design.

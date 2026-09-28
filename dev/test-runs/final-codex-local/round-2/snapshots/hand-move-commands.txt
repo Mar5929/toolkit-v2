@@ -1,0 +1,5 @@
+# Mike moves and renames folders by hand in Finder, between sessions (run by the tester at the time below)
+mkdir .work-items/cli
+mv .work-items/WI-001-build-the-tip-command-with-split-option .work-items/cli/WI-001-tip-command
+mv .work-items/cli/WI-001-tip-command/WI-002-add-the-split-option .work-items/cli/WI-001-tip-command/split-option
+2026-09-28T22:35:56Z

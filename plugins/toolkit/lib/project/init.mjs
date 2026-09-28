@@ -108,7 +108,7 @@ export function buildInitConfig(root, opts, existing, { today, env = process.env
     : undefined;
   if (!existing) {
     if (!opts.name || !String(opts.name).trim()) {
-      throw new ToolkitError(EXIT.INVALID, 'Give the project name: toolkit init --name "<name>" --tracker <local|notion|github|jira> --memory <builtin|hindsight|notion>.');
+      throw new ToolkitError(EXIT.INVALID, "Give the project name: toolkit init --name '<name>' --tracker <local|notion|github|jira> --memory <builtin|hindsight|notion>.");
     }
     if (!opts.tracker) throw new ToolkitError(EXIT.INVALID, 'Say where work items live: --tracker local, notion, github, or jira.');
     if (!opts.memory) throw new ToolkitError(EXIT.INVALID, 'Say which memory system to use: --memory builtin, hindsight, or notion.');
@@ -403,6 +403,13 @@ export async function initProject(opts, io = {}) {
   if (config.hosts.includes('codex')) next.push('- In Codex, the owner opens /hooks once and trusts the Toolkit V2 hooks. Codex skips plugin hooks until he does.');
   if (!(config.backup && config.backup.dir) && (config.tracker.type === 'local' || ['builtin', 'hindsight'].includes(config.memory.type))) {
     next.push('- Ask the owner for a backup folder outside the project (for example ~/Backups/toolkit), then run toolkit config set backup.dir <folder>, or none when he wants no backup. The work items and memory are Git-ignored, so they exist only on this computer until they are backed up.');
+  }
+  // A Notion tracker with Notion memory keeps nothing on this computer, so
+  // the automatic backup copies nothing (final confirmation round 1, Notion
+  // run: the folder was saved with no word about it).
+  const dir = config.backup && config.backup.dir;
+  if (dir && dir !== 'none' && config.tracker.type !== 'local' && !['builtin', 'hindsight'].includes(config.memory.type)) {
+    next.push(`- Tell the owner: the backup folder ${dir} is saved, but this project keeps its work items and memory outside this computer, so the automatic backup copies nothing to it. toolkit memory export --to <folder> copies the memory by hand.`);
   }
   next.push('- Run toolkit doctor to check the setup.');
   lines.push(...next);

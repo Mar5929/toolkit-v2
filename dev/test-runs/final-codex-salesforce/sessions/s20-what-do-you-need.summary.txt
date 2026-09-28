@@ -1,0 +1,178 @@
+PROMPT: What do you need from me?
+THREAD: 01a0ea50-5ba1-7b10-8bcd-d5f74815ce41
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The tracker has no open items. A new request starts a work item with the work-on skill.
+
+Items: 2 done.
+
+Current focus:
+Last updated: 2026-09-28, work-finish, agent
+## Now
+None.
+## Waiting on the owner
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks and Salesforce org guards in Codex: open Codex here, type /hooks, and trust them. Setup step; drop it when doctor stops reporting it.
+## Untracked to-dos
+None.
+## Next session starts with
+- WI-001 and WI-002 are Done. Start the next requested work item; check the tracker and requirements before building.
+
+Memory proposals waiting on the owner (not facts: do not rely on them; work-decide asks him):
+- user_mike_rihm_usually_prefers_design_reviews_first: Mike Rihm usually prefers design reviews first thing in the morning (proposed 2026-09-28)
+
+Project memory (builtin): 2 records, and 1 proposal the owner has not answered. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_custom_field_guidance: Every new custom field should have a description and help text
+- user_friday_availability: Mike Rihm is usually off on Fridays
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off. Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+- Codex ran this Toolkit V2 hook, but ~/.codex/config.toml has no trust entry for the Toolkit V2 hooks. Codex runs untrusted hooks only when it is started with --dangerously-bypass-hook-trust; a normal Codex session skips them. Fix: The owner opens /hooks in Codex and trusts the Toolkit V2 hooks; toolkit doctor checks it.
+- The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them. Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.
+
+Always-on rules. Claude Code loads 
+
+[AGENT] I’ll check the project’s current decisions and setup items, then give you the specific actions that need you. I’m using the work-decide skill for this.
+
+[CALL exec] cat SOUL.md PROJECT.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/SKILL.md .claude/rules/*.md
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+cat: SOUL.md: No such file or directory
+# Acme CRM
+
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->
+
+## Purpose and intended outcome
+
+- Purpose: Salesforce work for the Acme sales team (README.md).
+- Intended outcome: The Acme sales team can rank their accounts and see the information they need on each account in Salesforce (owner, 2026-09-28).
+
+## Scope and boundaries
+
+- In scope: Account ranking and the information the sales team needs on each account in Salesforce (owner, 2026-09-28).
+- Outside scope: `<Important exclusions or adjacent owners.>`
+- Constraints: Agents do not deploy to or change data in `tkv2-prod`; sandbox deploys and data changes require the owner's approval and execution in Codex (`.claude/rules/salesforce-org-safety.md`).
+
+## Systems and environments
+
+| System or org | Purpose | Environment | Source of truth | Access notes |
+| --- | --- | --- | --- | --- |
+| `tkv2-sbx` | Practice Salesforce sandbox | Sandbox | The `sf` command on this computer | Use the alias with `-o tkv2-sbx`. |
+| `tkv2-prod` | Practice Salesforce production org | Production | The `sf` command on this computer | Agents use read-only commands; the owner runs production changes. |
+
+## People and ownership
+
+| Role | Person or team | Responsibility | Source / last confirmed |
+| --- | --- | --- | --- |
+| Project owner | Mike Rihm | Project decisions | Owner confirmation, 2026-09-28 |
+
+## Work and project records
+
+- Work tracker: `.work-items/` local folders, Git-ignored.
+- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)
+- Project decisions: [DECISIONS.md](DECISIONS.md)
+- Functional requirements: [requirements/](requirements/)
+- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`
+- System Guide: not enabled yet; `system-guide/` contains a template only.
+- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)
+- Memory backup or sync: automatic Toolkit V2 backups under `/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-salesforce/`.
+
+## Resources and project paths
+
+- Salesforce source: `force-app/` (`sfdx-project.json`).
+- Project-wide deployment manifest: `delivery/deployment/full-project-deployment-template/package.xml` after the API version and members are verified. Keep it as the full project component inventory; ordinary deployments use narrower work-item packages.
+- Work-item deployment manifests: `delivery/deployment/<work-item-id>-<short-name>/package.xml` when an item changes Sale
+
+[CALL exec] toolkit work decisions
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+1 decision waits on the owner:
+
+Memory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):
+  - user_mike_rihm_usually_prefers_design_reviews_first: Mike Rihm usually prefers design reviews first thing in the morning. Saved 2026-09-28. Yes: toolkit memory approve user_mike_rihm_usually_prefers_design_reviews_first --by <name>. No: toolkit memory reject user_mike_rihm_usually_prefers_design_reviews_first. (work-decide)
+
+
+[CALL exec] cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/references/proposals.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+<!-- Generated file. Source: plugins/memory/shared/proposals.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Memory proposals
+
+Purpose: what a memory proposal is, how one is saved, and how the owner's yes
+or no is recorded.
+
+## Contents
+
+- What a proposal is
+- How a proposal is saved
+- Recording the owner's answer
+- Examples
+
+## What a proposal is
+
+A proposal is a memory record the owner has not approved yet. It exists so
+that a "Save to memory?" question he did not answer is kept, not lost.
+
+- It is saved with `--proposal`: status `needs-review`, authorization
+  "Proposed by the agent on <date>", and never an approver.
+- It is not a fact. The agent does not rely on it, and an answer never
+  presents it as true.
+- `toolkit memory find` leaves it out unless `--proposals` (or `--all`) is
+  given. `toolkit memory get` ends its text with a line saying it is a
+  proposal.
+- `toolkit work decisions` and the session briefing list it among the things
+  waiting on the owner, and the `work-decide` skill asks him about it.
+- The built-in index marks it "[proposal: not a fact until the owner
+  answers]". In Notion its Status is "proposed".
+- A proposal never replaces a record the owner approved. The CLI refuses a
+  proposal whose key is already a current or retired record.
+
+## How a proposal is saved
+
+1. The agent asks the question in exactly this form, at the end of its reply:
+   `Save to memory: <one-line summary>?` (bold is fine). Other wording, such
+   as "Save it to memory?", has no one-line summary to save: the Stop hook
+   then stops the turn once and asks for this form.
+2. When the turn ends, the Stop hook reads that question. If no proposal was
+   saved in this turn, the hook saves one from the summary alone. It never
+   saves the same summary twice in a session. A record that is only about the
+   same subject does not stop it. The next turn's context says what
+   happened, in one of five notes:
+   - It saved the proposal, and names its key. His answer is recorded as in
+     "Recording the owner's answer" below.
+   - It saved nothing, because memory already holds a proposal like it, and
+     names that proposal. His answer approves or rejects that proposal.
+   - It saved nothing, because memory already holds a record about the same
+     subject, and names it. Read it with `toolkit memory get <key>`. The same
+     fact in other words: keep it, or update it with `--expect <version>`. A
+     different fact: after his yes, save it with `--allow-similar` and
+     `--approved-by`. Never overwrite a record with a different fact.
+   - It saved nothing, because the text looks like a secret. Never save it.
+     After his yes, save only where the secret is kept ("The staging key is in
+     1Password under Staging").
+   - The save failed. Save the proposal yourself in this turn, with the
+     command in step 3, so it is kept until he answers.
+3. The agent may save the proposal itself 
+
+[AGENT] One decision waits on you: a proposed memory note says you usually prefer design reviews first thing in the morning. **I recommend saving it if that is still accurate**, so future sessions can schedule review questions accordingly. Should I save it or discard it?
+
+Codex also needs two setup actions from you in this folder: trust the folder when prompted, then open `/hooks` and trust the Toolkit V2 hooks and both Salesforce org guards. No work items are currently open.
+
+SKILLS OPENED (SKILL.md read): ['work-decide']
+
+TOOLKIT COMMANDS:
+   toolkit work decisions

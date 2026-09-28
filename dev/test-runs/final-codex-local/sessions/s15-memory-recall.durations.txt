@@ -1,0 +1,5 @@
+0.187s :: 'const r = await tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifact'
+0.239s :: 'const r = await tools.exec_command({cmd:"toolkit memory focus",max_output_tokens:2000}); text(r.output);\n'
+0.226s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"toolkit memory find \'code tests Node.js\'",max_output_tokens:2000}),\n  tools.exec_command({cmd:"toolkit memory find \'Ghost long slugs\'",max_output_tokens:200'
+0.247s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"toolkit memory get user_node_project_preference",max_output_tokens:2000}),\n  tools.exec_command({cmd:"toolkit memory get project_publish_blog_ghost_keeps_on'
+MAX toolkit call seconds: 0.247

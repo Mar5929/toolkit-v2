@@ -1,0 +1,32 @@
+### Mon Sep 28 22:52:42 UTC 2026  key=user_readme_sample_for_every_switch  query='sample run for every switch'
+--- toolkit memory list --status all
+- user_cli_flags_readme_examples: List every command-line flag in the README with a short example
+- user_readme_under_one_page: Keep the README short: one screen or less
+--- toolkit memory get user_readme_sample_for_every_switch
+Error: There is no memory record with the key user_readme_sample_for_every_switch.
+Fix: Run toolkit memory list --status all to see the keys.
+exit=0
+--- toolkit memory find 'sample run for every switch' --all
+No memory record is about "sample run for every switch".
+Hindsight recall ranked these closest, but they score low and share few of its words, so none is known to be about it:
+- user_cli_flags_readme_examples: List every command-line flag in the README with a short example
+- user_readme_under_one_page: Keep the README short: one screen or less
+Do not answer from these. Read the first one with toolkit memory get <key>, and answer only if its text says it; otherwise say it is not in memory.
+exit=0
+--- toolkit brief (memory part)
+Project memory (hindsight): 2 records, from the local copy. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_cli_flags_readme_examples: List every command-line flag in the README with a short example
+- user_readme_under_one_page: Keep the README short: one screen or less
+--- grep -c user_readme_sample_for_every_switch .git/toolkit-v2/memory-cache.json
+0
+--- Hindsight bank documents
+3 ['focus', 'user_cli_flags_readme_examples', 'user_readme_under_one_page']
+--- GET document user_readme_sample_for_every_switch
+404
+--- Hindsight recall 'sample run for every switch'
+3 results
+ - user_cli_flags_readme_examples | --- name: user_cli_flags_readme_examples description: List every command-line flag in the README with a short 
+ - user_readme_under_one_page | --- name: user_readme_under_one_page description: "Keep the README short: one screen or less" metadata:   type
+ - focus | # Current focus  Last updated: 2026-09-28, work-finish, agent  ## Now  None.  ## Waiting on the owner  - Trust

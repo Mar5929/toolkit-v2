@@ -1,0 +1,1225 @@
+PROMPT: Approved.
+THREAD: 01a0e9b4-0f25-7a60-9677-e26ad453d071
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll record your approval for TFR-001’s requirements, then continue with the next step for that item.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-on/SKILL.md'
+  -> ---
+name: work-decide
+description: 'Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers. Use when he asks "what do you need from me", answers a waiting decision ("go with option B"), or states a project-wide decision.'
+---
+
+# Work decide
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Walks the owner through what waits on him, one decision at a time, and records each answer where it belongs. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Build the queue. The command lists each decision once: requirements waiting for approval, proposed designs, results at stage 11, Open Questions rows the owner decides, and memory proposals. Its "Agent to-do" lines are not decisions. A delivery offer belongs to `work-delegate`: open it after his other decisions.
+   `toolkit work decisions`
+2. He gave an answer without being asked ("approved", "go with B"): match it to exactly one waiting decision; when two could match, ask which, naming both. A bare "yes", "ok", or "looks good" with no question asked is not an answer (`references/approvals.md`, section 1).
+3. Otherwise start with the count and one short line for every waiting decision, memory proposals included ("3 decisions wait on you: the WI-004 design, the WI-006 result, and a 
+
+[CMD exit=1] /bin/zsh -lc 'cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md'
+  -> cat: SOUL.md: No such file or directory
+# Toolkit V2 final run (safe to delete)
+
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes a
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch && cat PROJECT-ROADMAP.md && toolkit work lifecycle'
+  -> ## main
+# Project roadmap
+
+<!-- Fill-in guide: replace every angle-bracket prompt in the outcome, phase table, phase heading, and work-unit fields with this project's real text. Keep one overview row and one matching ## heading per phase. Under that heading, repeat the ### work-unit block for each deliverable-sized unit and link its canonical work item in the Linked work item field. Remove example rows and this guide after setup. -->
+
+Use this file for the project's phases and deliverable-sized work units. Link each unit to its work item when one exists. The work item holds its active requirements, open questions, detailed tasks, and execution history.
+
+```text
+PROJECT-ROADMAP.md
+└── Phase
+    └── Deliverable-sized work unit
+        └── Linked work item
+            ├── Active requirements
+            ├── Open questions
+            ├── Detailed tasks
+            └── Execution history
+```
+
+## Project outcome
+
+days-until tells me how many days are left until a date I type, so I can count down to trips and deadlines.
+
+## Phase overview
+
+| Phase | Intended outcome | Exit condition | Depends on |
+| --- | --- | --- | --- |
+| `P01 — <phase name>` | `<result>` | `<evidence needed to finish>` | `<earlier phase or none>` |
+
+## P01 — <Phase name>
+
+**Outcome:** `<Result larger than one work unit.>`
+
+**Exit condition:** `<Observable evidence that the phase is complete.>`
+**Dependencies:** `<Real prerequisites, or none known.>`
+
+### P01-U01 — <Deliverable-sized work unit>
+
+**Deliverable:** 
+
+[AGENT] I’m using the work-decide procedure to match “Approved” to the pending requirement decision and save it on the item.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/approvals.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/current-focus.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/toolkit-commands.md'
+  -> <!-- Generated file. Source: plugins/work/shared/approvals.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Approvals and gates
+
+The exact steps to ask for and record each owner approval, and what counts as
+one. Run each checklist in order; one wrong or missing command leaves the
+item in the wrong state.
+
+## Contents
+
+1. What counts as approval
+2. Requirements approval
+3. Design approval
+4. Result approval
+5. Done
+6. Cancel
+7. Delivery offer
+8. Project-wide decision
+9. Memory proposal
+10. Sub-items and approvals
+11. Standing merge instruction
+12. When an approve command refuses
+
+## 1. What counts as approval
+
+`toolkit work lifecycle` prints the gates and these rules. In short:
+
+- Only the owner's explicit words count. Quote them in a history note.
+- A question, a suggestion, a tentative answer ("probably B"), silence, or a
+  saved draft is not approval.
+- An approval covers only what was shown. It never covers merge, deployment,
+  spending, or publishing.
+- An approval survives later stages. A stage alone does not prove approval:
+  check the approval field (`toolkit work show <id>`).
+- A bare "yes", "ok", or "looks good" answers only a yes-or-no question asked
+  earlier in this conversation. When none was asked, or the waiting question
+  is not a yes-or-no question, show the decision with its choices and your
+  recommendation, and record nothing.
+- After a yes, save his words first, in a history note that starts with
+  `Owner said:`. Then run the 
+
+[CMD exit=0] /bin/zsh -lc 'git remote'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git status'
+  -> On branch main
+nothing to commit, working tree clean
+
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1 0f2fac6 [main]
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 1 decision waits on the owner:
+
+TFR-001 Build the days-until command with a --weeks flag
+  - TFR-001 is waiting on the owner (02 Refinement). Next action: Owner reviews and approves the requirements. (work-decide)
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show TFR-001'
+  -> TFR-001: Build the days-until command with a --weeks flag
+Location: https://app.notion.com/p/Build-the-days-until-command-with-a-weeks-flag-3e9b381da17681b7b7ccea07b01d5850
+Stage: 02 Refinement (Backlog) | Waiting on: owner | Continue with: work-decide
+Parent: none | Sub-items: none | Design: none
+Worktree branch for this item: claude/tfr-001-build-the-days-until-command (folder .claude/worktrees/tfr-001-build-the-days-until-command)
+
+---
+id: TFR-001
+title: Build the days-until command with a --weeks flag
+type: build
+stage: 02-refinement
+status: Backlog
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: not-offered
+requirements_approved: "no"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+# TFR-001: Build the days-until command with a --weeks flag
+
+## Overview
+
+**Goal:** A person enters a date and sees the time remaining in days or, with --weeks, in weeks and days.
+
+**Current position:** Q-01 through Q-06 are answered and reflected in R-01 through R-03 and Acceptance. The independent requirements check found no material content gap.
+
+**Next action:** Owner reviews and approves the requirements.
+
+**Blockers:** Requirements approval.
+
+**Related items:** None.
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading. Add one row per phase; set Status from actual progress, not from this example. List the phase's
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/work-item-format.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/tracker-notion.md'
+  -> <!-- Generated file. Source: plugins/work/shared/work-item-format.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Work item and design format
+
+What a work item and its design hold, their exact section names, and how to
+change them with `toolkit work` commands without losing text.
+
+## Contents
+
+1. Where the record and the design live
+2. Header fields
+3. Sections of `WORK-ITEM.md`
+4. Sections of `DESIGN.md`
+5. Finding an item's file
+6. Changing one section
+7. Adding a table row
+8. Editing a record directly
+9. Titles
+10. Generated files
+11. Examples
+
+## 1. Where the record and the design live
+
+Every tracker uses the same body and the same design shape. Only the place
+differs.
+
+| Tracker | Work item | Design |
+| --- | --- | --- |
+| Local | `WORK-ITEM.md` in the item's folder under `.work-items/` | `DESIGN.md` beside it |
+| Notion | The item's page in the project's Work Items database | The item's "Solution Design" child page |
+| GitHub Issues | The issue body | One issue comment whose first line is `## Solution design` |
+| Jira | The issue description | One comment whose first line is "Solution design" |
+
+An item has one design home. Never make a separate design folder or a second
+design file.
+
+## 2. Header fields
+
+The header (frontmatter locally, properties in Notion) holds these fields.
+Only `toolkit work` commands change them.
+
+| Field | Values | Changed by |
+| --- | --- | --- |
+| `id` | `WI-001` (the project's prefix and a number) | `toolkit work
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history TFR-001 --note 'Owner said: \"Approved.\"' --effect 'Requirements approved; finalize R-01 through R-03 and record the approval.'"
+  -> Added a Recent History row to TFR-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show TFR-001 --section 'Active requirements'"
+  -> ### Active requirements
+
+#### R-01 — Count local calendar days
+
+**Status:** Refining  
+**Applies to:** A person who enters a date in the command.  
+**Required behavior:** Accept a date written as YYYY-MM-DD and print the number of local calendar days from today to that date. Today is 0, tomorrow is 1, and past dates are negative.  
+**Boundaries and exceptions:** Count calendar dates in the local time zone, regardless of the time of day. Invalid dates follow R-03.  
+**Acceptance check:** With the local date fixed, dates for today, tomorrow, and yesterday print 0, 1, and -1 respectively.  
+**Decision record:** Owner request and Q-01 answer, 2026-09-28.  
+**Open questions:** None.
+
+#### R-02 — Show weeks and days
+
+**Status:** Refining  
+**Applies to:** A person who supplies --weeks before or after a date.  
+**Required behavior:** Show the magnitude of the R-01 day count as whole weeks and leftover days. Use singular week or day for a count of 1 and plural weeks or days for other nonzero counts. Omit a unit whose count is 0, so the output can be 3 days, 2 weeks, or 2 weeks and 3 days. Print 0 days for today. For a past date, add ago after the weeks and days.  
+**Boundaries and exceptions:** Both argument orders are valid. Today has no ago suffix. Invalid input follows R-03.  
+**Acceptance check:** With the local date fixed, --weeks before and after a date 17 days away print 2 weeks and 3 days. A date 17 days in the past prints 2 weeks and 3 days ago. Dates 1, 3, 7, and 14 days aw
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR-001 --section 'Active requirements' --text '#### R-01 — Count local calendar days
+
+**Status:** Finalized  
+**Applies to:** A person who enters a date in the command.  
+**Required behavior:** Accept a date written as YYYY-MM-DD and print the number of local calendar days from today to that date. Today is 0, tomorrow is 1, and past dates are negative.  
+**Boundaries and exceptions:** Count calendar dates in the local time zone, regardless of the time of day. Invalid dates follow R-03.  
+**Acceptance check:** With the local date fixed, dates for today, tomorrow
+  -> Saved "Active requirements" in TFR-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work approve TFR-001 --requirements --by 'Mike Rihm'"
+  -> Recorded: requirements of TFR-001 approved (2026-09-28 by Mike Rihm).
+It is no longer waiting on the owner (waiting_on: none).
+Now 03 Requirements approved (Ready). Continue with solution-design.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set TFR-001 --waiting-on agent'
+  -> Updated TFR-001: waiting on agent.
+Now 03 Requirements approved (Ready). Continue with solution-design.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show TFR-001 --section 'Active requirements'"
+  -> ### Active requirements
+
+#### R-01 — Count local calendar days
+
+**Status:** Finalized  
+**Applies to:** A person who enters a date in the command.  
+**Required behavior:** Accept a date written as YYYY-MM-DD and print the number of local calendar days from today to that date. Today is 0, tomorrow is 1, and past dates are negative.  
+**Boundaries and exceptions:** Count calendar dates in the local time zone, regardless of the time of day. Invalid dates follow R-03.  
+**Acceptance check:** With the local date fixed, dates for today, tomorrow, and yesterday print 0, 1, and -1 respectively.  
+**Decision record:** Owner request and Q-01 answer, 2026-09-28. Approved by Mike Rihm on 2026-09-28: "Approved."  
+**Open questions:** None.
+
+#### R-02 — Show weeks and days
+
+**Status:** Finalized  
+**Applies to:** A person who supplies --weeks before or after a date.  
+**Required behavior:** Show the magnitude of the R-01 day count as whole weeks and leftover days. Use singular week or day for a count of 1 and plural weeks or days for other nonzero counts. Omit a unit whose count is 0, so the output can be 3 days, 2 weeks, or 2 weeks and 3 days. Print 0 days for today. For a past date, add ago after the weeks and days.  
+**Boundaries and exceptions:** Both argument orders are valid. Today has no ago suffix. Invalid input follows R-03.  
+**Acceptance check:** With the local date fixed, --weeks before and after a date 17 days away print 2 weeks and 3 days. A date 17 days in the past prints 2 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show TFR-001'
+  -> TFR-001: Build the days-until command with a --weeks flag
+Location: https://app.notion.com/p/Build-the-days-until-command-with-a-weeks-flag-3e9b381da17681b7b7ccea07b01d5850
+Stage: 03 Requirements approved (Ready) | Waiting on: agent | Continue with: solution-design
+Parent: none | Sub-items: none | Design: none
+Worktree branch for this item: claude/tfr-001-build-the-days-until-command (folder .claude/worktrees/tfr-001-build-the-days-until-command)
+
+---
+id: TFR-001
+title: Build the days-until command with a --weeks flag
+type: build
+stage: 03-requirements-approved
+status: Ready
+parent: none
+waiting_on: "agent"
+priority: medium
+delivery: not-offered
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+# TFR-001: Build the days-until command with a --weeks flag
+
+## Overview
+
+**Goal:** A person enters a date and sees the time remaining in days or, with --weeks, in weeks and days.
+
+**Current position:** Q-01 through Q-06 are answered and reflected in R-01 through R-03 and Acceptance. The independent requirements check found no material content gap.
+
+**Next action:** Owner reviews and approves the requirements.
+
+**Blockers:** Requirements approval.
+
+**Related items:** None.
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading. Add one row per phase; set Status from actual progre
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate TFR-001'
+  -> Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+
+
+[AGENT] The approval is recorded and validated. TFR-001 is now Ready; I’m updating its next step and preparing the design for your review.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/solution-design/SKILL.md'
+  -> ---
+name: solution-design
+description: 'Writes design options for how a work item gets built and asks the owner to choose and approve one. Use when approved requirements need a design, or the owner asks "how should we build this" or "give me design options". Not for a single Salesforce platform question; use sf-architect-solutioning.'
+---
+
+# Solution design
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Writes one design per work item with a small team of helper agents and asks the owner to choose and approve it; it never fills a requirements gap. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. A single Salesforce platform question that needs no design options (which Flow type fits, Flow or Apex): open `sf-architect-solutioning` and stop. Otherwise read the requirements. Not approved: open `work-requirements`, unless the owner asked for options first (`references/design-process.md`, section 2).
+   `toolkit work show <id> --section Requirements`
+2. Set the design stage when the requirements are approved or the item's type needs no approval. A `build` or `data-load` item without approved requirements keeps its stage (the CLI refuses the change).
+   `toolkit work set <id> --stage 04-solution-design`
+3. Brief the `requirements-analyst` and tell the owner plainly whether the requ
+
+[CMD exit=0] /bin/zsh -lc "rg --files -g '"'!AGENTS.md'"' -g '"'!*.md'"' -g '"'!*.json'"' -g '"'!*.toml'"' -g '"'!*.lock'"' -g '"'!*.yml'"' -g '"'!*.yaml'"' -g '"'!*.gitignore'"' | head -80"
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/solution-design/references/design-process.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/solution-design/references/team-roles.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/solution-design/references/helpers.md'
+  -> # The solution design process
+
+The detail behind each `solution-design` step: the readiness checklist, the
+way of working, the design record, research, the architect and critic loop,
+drafts in each host, and approval. The design's section names are in
+`work-item-format.md`, "Sections of `DESIGN.md`".
+
+## Contents
+
+1. Checklist before the design round
+2. Are the requirements ready?
+3. The way of working
+4. The design record
+5. Research
+6. Design and critique
+7. Drafts in each host
+8. Save, present, and approve
+9. Changing an approved design later
+
+The step numbers below are the steps in `SKILL.md`.
+
+## 1. Checklist before the design round
+
+Work through every item in order. Tick each one only when it is true.
+
+- [ ] **The requirements are read and understood**
+  - [ ] The item's Requirements, Open Questions, Notes, and approval state
+        are read
+  - [ ] The spec check ran (`requirements-analyst`)
+  - [ ] The goal is written in one paragraph in the design's "What this
+        design solves": who uses the result, what they need to accomplish,
+        what must be true afterward, and what the design leaves to another
+        item
+  - [ ] New build or existing build is known, and "What exists today" says
+        what the existing build does for this area, with observed facts kept
+        apart from assumptions
+  - [ ] Notes > Solution options and considerations are treated as ideas,
+        not requirements
+- [ ] **The requirements are ready to design from**
+  - [ ] Nothing is
+
+[CMD exit=0] /bin/zsh -lc 'git log --oneline -10'
+  -> 0f2fac6 Set up Toolkit V2
+989c0e4 Start days-until project
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set TFR-001 --stage 04-solution-design'
+  -> Updated TFR-001: stage 03 Requirements approved -> 04 Solution design (status In Progress).
+Now 04 Solution design (In Progress). Continue with solution-design.
+
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/solution-design/references/agent-requirements-analyst.md'
+  -> ---
+name: requirements-analyst
+description: Checks a work item's requirements before design or build. Finds missing pieces, places not explicit end to end, wording a builder could misread, build details inside requirements, and drift from the Agreed goal. Returns ready or not ready with a fix for each finding. Read-only.
+tools: Read, Glob, Grep
+model: opus
+---
+<!-- Generated file. Source: plugins/work/agents/requirements-analyst.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+
+# Requirements analyst
+
+Read the requirements as one whole and say whether they are ready to design
+or build from. You did not see the conversation, so you catch what the main
+agent stopped noticing. You advise; the owner decides. You change nothing.
+
+## Start with the brief
+
+- The brief pastes in the Agreed goal, the Starting request, every `R-xx`
+  block, the Acceptance list, the open questions, and the owner's recorded
+  rulings. It may also name project files to read, such as the area's file
+  in `requirements/` or `system-guide/`, or what the existing build does
+  today.
+- Treat only rulings the brief marks as approved by the owner as settled.
+  Proposals and unanswered questions stay open. Everything else is open to
+  your check.
+- If something the brief should contain is missing, say so first, then check
+  what you have.
+
+## Check readiness
+
+Read the requirements inside the larger system the result belongs to. Walk
+the whole flow start to finish as the person who uses 
+
+[AGENT] The design check will use one requirements analyst, one architect, and one critic. The requirements cover the command’s output and error cases, so I’m checking the implementation choices now.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/solution-design/references/agent-researcher.md'
+  -> ---
+name: researcher
+description: Answers one bounded research question for a work item from project evidence, official documentation, and community sources, labeling each finding by source type with its link and date. Read-only; it changes no record and makes no decision.
+tools: Read, Glob, Grep, WebSearch, WebFetch
+model: opus
+---
+<!-- Generated file. Source: plugins/work/agents/researcher.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+
+# Researcher
+
+Answer the one question in the brief. Read only. Return evidence so the main
+agent and the architect can decide what to trust, and the owner can decide
+what to build.
+
+## Start with the brief
+
+- The brief gives the work item id, the goal the finding serves, the exact
+  question, and the text you need (requirements, design sections). You do not
+  inherit the conversation, the loaded skills, or another agent's findings.
+- If essential context is missing or contradictory, say so in the report and
+  continue with the research that does not depend on it. Never turn a guess
+  into a fact.
+
+## Research the question
+
+- Check what the project already has before looking outside. A component,
+  setting, or pattern that already exists in the repository is project
+  evidence, and it comes with a file path and line numbers. Separate what is
+  built from what is only proposed or not yet checked.
+- For platform behavior, open the current official documentation and note the
+  version, the date, and any limit that ma
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work design TFR-001 --create'
+  -> Created the design of TFR-001 (proposed) at https://app.notion.com/p/TFR-001-Build-the-days-until-command-with-a-weeks-flag-solution-design-3e9b381da17681859546d90fe3e13254.
+It is proposed until the owner approves it: toolkit work approve <id> --design --by <name>.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work design TFR-001'
+  -> Design of TFR-001 (proposed) at https://app.notion.com/p/TFR-001-Build-the-days-until-command-with-a-weeks-flag-solution-design-3e9b381da17681859546d90fe3e13254
+
+---
+work_item: TFR-001
+status: proposed
+approved: "no"
+---
+# TFR-001: Build the days-until command with a --weeks flag — solution design
+
+<!-- Fill-in guide: keep this file beside the real `WORK-ITEM.md`, replace WI-001 and every angle-bracket prompt with the actual value in that exact heading, field, table cell, or paragraph, and delete this guide. Add rows or options where needed; remove unused example rows and optional sections. When the owner answers a question, update the relevant design section and the matching work-item record, then update Notes at the bottom. -->
+
+**Requirements:** TFR-001  
+**Design status:** Draft  
+**Requirements checked:** <Link to `WORK-ITEM.md` requirements and date checked>  
+**Last updated:** 2026-09-28  
+**Design approval:** Pending
+
+<!-- Keep this file with its work item. `WORK-ITEM.md` owns the agreed goal, active requirements, open questions, roadmap tasks, and execution history. This file explains how to meet those requirements. During an interview, update settled answers in the relevant design section and keep unresolved discussion and the exact next action in Notes at the bottom. A recommendation or saved draft is not owner approval. -->
+
+## What this design solves
+
+<In a short paragraph, say who uses the result, what they need to accomplish, and what must be true afterward. Li
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/solution-design/references/agent-design-architect.md'
+  -> ---
+name: design-architect
+description: Writes or fixes one solution design option for a work item, in a named draft file or in its reply, from the requirements, research findings, and the existing build. Verifies community claims before using them, prefers built-in mechanisms, and recommends a rewrite when that serves the requirements better.
+tools: Read, Glob, Grep, WebSearch, WebFetch, Write, Edit
+model: opus
+---
+<!-- Generated file. Source: plugins/work/agents/design-architect.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+
+# Design architect
+
+Write one design option that a junior intern could build from, or fix the one
+you are handed. When the brief names a draft file, write only to that file.
+When it names none (Claude Code), write no file at all and return the whole
+draft in your reply, in one fence of four backticks (````markdown), so the
+draft's own three-backtick code blocks do not end it early. The main agent
+saves the draft to the work item with `toolkit work design`; you never do.
+The design is a proposal until the owner approves it.
+
+## Contents
+
+- Start with the brief
+- Reason about the research
+- Decide the design
+- Fix rounds
+- Boundaries
+- Return
+- Writing
+
+## Start with the brief
+
+- The brief gives the work item id, the draft file path when there is one,
+  the design's current text (What this design solves, Requirements and design
+  readiness, What exists today, Constraints and assumptions, Notes), the way
+  of working the owner
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show TFR-001 --section 'Decisions and context'"
+  -> ### Decisions and context
+
+- <Useful decision or context that is not itself a requirement.>
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR-001 --section 'Decisions and context' --text '- Design method: scan the empty repository first, then design one Node.js option using built-in features where they meet R-01 through R-03. The approved requirements leave no product choice that needs a second option.
+- Design review team: one requirements analyst, one architect, one critic; three agent runs in the first pass. No researcher is needed because no bounded external question is open.'"
+  -> Saved "Decisions and context" in TFR-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'mktemp -d'
+  -> /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.3N4R4SA3T8
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus --json'
+  -> {
+  "ok": true,
+  "backend": "notion",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- TFR-001 Build the days-until command with a --weeks flag\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue TFR-001 from its Resume here: ask for requirements approval, then record it before solution design.\n",
+  "version": "15b618c5a6f4090e798e2ad2a887be4040ad0939b6e1b046b024863d4d17e6f3"
+}
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show TFR-001 --section 'Resume here'"
+  -> ### Resume here
+
+Show the final R-01 through R-03 and Acceptance to the owner and ask for explicit requirements approval. If approved, record the approval and continue to solution design. Build only after requirements approval.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show TFR-001 --section 'Overview'"
+  -> ## Overview
+
+**Goal:** A person enters a date and sees the time remaining in days or, with --weeks, in weeks and days.
+
+**Current position:** Q-01 through Q-06 are answered and reflected in R-01 through R-03 and Acceptance. The independent requirements check found no material content gap.
+
+**Next action:** Owner reviews and approves the requirements.
+
+**Blockers:** Requirements approval.
+
+**Related items:** None.
+
+
+[ITEM collab_tool_call ] {"id": "item_40", "type": "collab_tool_call", "tool": "wait", "sender_thread_id": "01a0e9b4-0f25-7a60-9677-e26ad453d071", "receiver_thread_ids": [], "prompt": null, "agents_states": {}, "status": "completed"}
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/solution-design/references/agent-design-critic.md'
+  -> ---
+name: design-critic
+description: Checks a draft solution design against every requirement and the plain-language writing rules. Returns one verdict per requirement (satisfied, partly satisfied, not satisfied) with evidence, then findings for the architect to fix. Read-only; it never edits or approves.
+tools: Read, Glob, Grep, WebSearch, WebFetch
+model: opus
+---
+<!-- Generated file. Source: plugins/work/agents/design-critic.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+
+# Design critic
+
+Check one draft design. Report where it fails the requirements, the goal, or
+the writing rules. You advise; the architect fixes; the owner decides. You
+are never the agent that wrote the draft.
+
+## Start with the brief
+
+- The brief gives the work item id, the draft file path (Codex) or the whole
+  draft pasted into the brief (Claude Code, where the architect writes no
+  file), the design's opening sections and Notes (What this design solves,
+  Requirements and design readiness, Constraints and assumptions, the owner's
+  rulings in Notes > Design changes during the interview), the way of working
+  the owner chose, and the requirements (Agreed goal, every `R-xx`,
+  Acceptance). Read those first, then the draft.
+  You do not inherit the conversation or another agent's findings.
+- Treat only rulings the brief marks as approved by the owner as settled.
+  Proposals and unanswered questions stay open. Do not infer approval for the
+  rest of the draft.
+
+## Check every 
+
+[ITEM collab_tool_call ] {"id": "item_42", "type": "collab_tool_call", "tool": "wait", "sender_thread_id": "01a0e9b4-0f25-7a60-9677-e26ad453d071", "receiver_thread_ids": [], "prompt": null, "agents_states": {}, "status": "completed"}
+
+[ITEM collab_tool_call ] {"id": "item_43", "type": "collab_tool_call", "tool": "wait", "sender_thread_id": "01a0e9b4-0f25-7a60-9677-e26ad453d071", "receiver_thread_ids": [], "prompt": null, "agents_states": {}, "status": "completed"}
+
+[AGENT] The requirements check found no gaps. I’m reviewing a single Node.js design, including local calendar dates and daylight saving time.
+
+[ITEM collab_tool_call ] {"id": "item_45", "type": "collab_tool_call", "tool": "wait", "sender_thread_id": "01a0e9b4-0f25-7a60-9677-e26ad453d071", "receiver_thread_ids": [], "prompt": null, "agents_states": {}, "status": "completed"}
+
+[CMD exit=0] /bin/zsh -lc 'cat /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.3N4R4SA3T8/option-a.md'
+  -> # TFR-001 — Days until a date
+
+**Requirements:** R-01 through R-03  
+**Design status:** Proposed  
+**Requirements checked:** Complete; approved by Mike Rihm on 2026-09-28  
+**Last updated:** 2026-09-28  
+**Design approval:** Pending owner decision
+
+## What this design solves
+
+A person runs `node bin
+
+[ITEM collab_tool_call ] {"id": "item_47", "type": "collab_tool_call", "tool": "wait", "sender_thread_id": "01a0e9b4-0f25-7a60-9677-e26ad453d071", "receiver_thread_ids": [], "prompt": null, "agents_states": {}, "status": "completed"}
+
+[ITEM collab_tool_call ] {"id": "item_48", "type": "collab_tool_call", "tool": "wait", "sender_thread_id": "01a0e9b4-0f25-7a60-9677-e26ad453d071", "receiver_thread_ids": [], "prompt": null, "agents_states": {}, "status": "completed"}
+
+[ITEM collab_tool_call ] {"id": "item_49", "type": "collab_tool_call", "tool": "wait", "sender_thread_id": "01a0e9b4-0f25-7a60-9677-e26ad453d071", "receiver_thread_ids": [], "prompt": null, "agents_states": {}, "status": "completed"}
+
+[ITEM collab_tool_call ] {"id": "item_50", "type": "collab_tool_call", "tool": "wait", "sender_thread_id": "01a0e9b4-0f25-7a60-9677-e26ad453d071", "receiver_thread_ids": [], "prompt": null, "agents_states": {}, "status": "completed"}
+
+[AGENT] The design review found three details to fix: rejecting year `0000`, spelling out singular week and day output, and making the daylight saving test reproducible. I’m correcting those before saving the proposal.
+
+[ITEM collab_tool_call ] {"id": "item_52", "type": "collab_tool_call", "tool": "wait", "sender_thread_id": "01a0e9b4-0f25-7a60-9677-e26ad453d071", "receiver_thread_ids": [], "prompt": null, "agents_states": {}, "status": "completed"}
+
+[ITEM collab_tool_call ] {"id": "item_53", "type": "collab_tool_call", "tool": "wait", "sender_thread_id": "01a0e9b4-0f25-7a60-9677-e26ad453d071", "receiver_thread_ids": [], "prompt": null, "agents_states": {}, "status": "completed"}
+
+[ITEM collab_tool_call ] {"id": "item_54", "type": "collab_tool_call", "tool": "wait", "sender_thread_id": "01a0e9b4-0f25-7a60-9677-e26ad453d071", "receiver_thread_ids": [], "prompt": null, "agents_states": {}, "status": "completed"}
+
+[CMD exit=0] /bin/zsh -lc 'cat /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.3N4R4SA3T8/option-a.md'
+  -> # TFR-001 — Days until a date
+
+**Requirements:** R-01 through R-03  
+**Design status:** Proposed  
+**Requirements checked:** Complete; approved by Mike Rihm on 2026-09-28  
+**Last updated:** 2026-09-28  
+**Design approval:** Pending owner decision
+
+## What this design solves
+
+A person runs `node bin
+
+[FILE_CHANGE] [{"path": "/var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.3N4R4SA3T8/option-a.md", "kind": "update"}]
+
+[ITEM collab_tool_call ] {"id": "item_57", "type": "collab_tool_call", "tool": "wait", "sender_thread_id": "01a0e9b4-0f25-7a60-9677-e26ad453d071", "receiver_thread_ids": [], "prompt": null, "agents_states": {}, "status": "completed"}
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work design TFR-001 --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.3N4R4SA3T8/option-a.md --status proposed'
+  -> Saved the design of TFR-001 (proposed) at https://app.notion.com/p/TFR-001-Build-the-days-until-command-with-a-weeks-flag-solution-design-3e9b381da17681859546d90fe3e13254.
+It is proposed until the owner approves it: toolkit work approve <id> --design --by <name>.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work design TFR-001'
+  -> Design of TFR-001 (proposed) at https://app.notion.com/p/TFR-001-Build-the-days-until-command-with-a-weeks-flag-solution-design-3e9b381da17681859546d90fe3e13254
+
+---
+work_item: TFR-001
+status: proposed
+approved: "no"
+---
+# TFR-001: Build the days-until command with a --weeks flag — solution design
+
+**Requirements:** TFR-001, R-01 through R-03  
+**Design status:** Proposed  
+**Requirements checked:** TFR-001 requirements, 2026-09-28; complete and approved by Mike Rihm  
+**Last updated:** 2026-09-28  
+**Design approval:** Pending owner decision
+
+## What this design solves
+
+A person runs `node bin/days-until.js 2026-12-25` to see the number of local calendar days until a date. Adding `--weeks` shows whole weeks and leftover days.
+
+## Requirements and design readiness
+
+| Requirement | What must work | Readiness |
+|---|---|---|
+| R-01 | Accept a real `YYYY-MM-DD` date and print its signed local calendar day difference: today `0`, tomorrow `1`, yesterday `-1`. | Complete and approved. |
+| R-02 | Accept `--weeks` before or after the date; show the magnitude as weeks and days, with correct singular forms, omitted zero units, and `ago` for past dates. | Complete and approved. |
+| R-03 | Give an invalid-date error for an impossible date; give short usage for missing or malformed dates, unknown flags, or extra arguments; exit `1`. | Complete and approved. |
+
+## What exists today
+
+The repository has no application code or verified build and test commands. This design starts with a small 
+
+[FILE_CHANGE] [{"path": "/var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.3N4R4SA3T8/option-a.md", "kind": "update"}]
+
+[FILE_CHANGE] [{"path": "/var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.3N4R4SA3T8/option-a.md", "kind": "update"}]
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work design TFR-001 --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.3N4R4SA3T8/option-a.md --status proposed'
+  -> Saved the design of TFR-001 (proposed) at https://app.notion.com/p/TFR-001-Build-the-days-until-command-with-a-weeks-flag-solution-design-3e9b381da17681859546d90fe3e13254.
+It is proposed until the owner approves it: toolkit work approve <id> --design --by <name>.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work design TFR-001'
+  -> Design of TFR-001 (proposed) at https://app.notion.com/p/TFR-001-Build-the-days-until-command-with-a-weeks-flag-solution-design-3e9b381da17681859546d90fe3e13254
+
+---
+work_item: TFR-001
+status: proposed
+approved: "no"
+---
+# TFR-001: Build the days-until command with a --weeks flag — solution design
+
+**Requirements:** TFR-001, R-01 through R-03  
+**Design status:** Proposed  
+**Requirements checked:** TFR-001 requirements, 2026-09-28; complete and approved by Mike Rihm  
+**Last updated:** 2026-09-28  
+**Design approval:** Pending owner decision
+
+## What this design solves
+
+A person runs `node bin/days-until.js 2026-12-25` to see the number of local calendar days until a date. Adding `--weeks` shows whole weeks and leftover days.
+
+## Requirements and design readiness
+
+| Requirement | What must work | Readiness |
+|---|---|---|
+| R-01 | Accept a real `YYYY-MM-DD` date and print its signed local calendar day difference: today `0`, tomorrow `1`, yesterday `-1`. | Complete and approved. |
+| R-02 | Accept `--weeks` before or after the date; show the magnitude as weeks and days, with correct singular forms, omitted zero units, and `ago` for past dates. | Complete and approved. |
+| R-03 | Give an invalid-date error for an impossible date; give short usage for missing or malformed dates, unknown flags, or extra arguments; exit `1`. | Complete and approved. |
+
+## What exists today
+
+The repository has no application code or verified build and test commands. This design starts with a small 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set TFR-001 --waiting-on owner'
+  -> Updated TFR-001: waiting on owner.
+Now 04 Solution design (In Progress). Continue with work-decide.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history TFR-001 --note 'Design proposed: Option A, one Node.js command with local calendar-day arithmetic; recommended for R-01 through R-03.' --effect 'Owner review and design approval needed before implementation.'"
+  -> Added a Recent History row to TFR-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show TFR-001 --section 'Overview'"
+  -> ## Overview
+
+**Goal:** A person enters a date and sees the time remaining in days or, with --weeks, in weeks and days.
+
+**Current position:** Q-01 through Q-06 are answered and reflected in R-01 through R-03 and Acceptance. The independent requirements check found no material content gap.
+
+**Next action:** Owner reviews and approves the requirements.
+
+**Blockers:** Requirements approval.
+
+**Related items:** None.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR-001 --section 'Overview' --text '**Goal:** A person enters a date and sees the time remaining in days or, with --weeks, in weeks and days.
+
+**Current position:** R-01 through R-03 are approved. A proposed design for one Node.js command passed the design review and is saved with this item.
+
+**Next action:** Owner reviews and approves or changes the proposed Option A design.
+
+**Blockers:** Design approval.
+
+**Related items:** None.'"
+  -> Saved "Overview" in TFR-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show TFR-001 --section 'Resume here'"
+  -> ### Resume here
+
+Show the final R-01 through R-03 and Acceptance to the owner and ask for explicit requirements approval. If approved, record the approval and continue to solution design. Build only after requirements approval.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit TFR-001 --section 'Resume here' --text 'Review proposed Option A in the Solution Design child page. Ask the owner to approve it or name changes. After approval, fill Selected design and Build and verification plan, record design approval, then continue with work-on.'"
+  -> Saved "Resume here" in TFR-001.
+
+
+[AGENT] Option A is saved in TFR-001 as a proposed design. It is waiting for your design decision; I’m updating the session handoff pointer and checking the tracker record.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.6/skills/memory-save/SKILL.md'
+  -> ---
+name: memory-save
+description: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says "remember this", "from now on", "forget that", or "remind me" with no time given, corrects the agent, or a hook says a save is due.'
+---
+
+# Memory save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Saves, corrects, or retires one memory record with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand.
+
+## Steps
+
+Track these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home ("Where other things go" below) and stop.
+2. Search for a record that already holds it, and read each hit with its version. The save's duplicate check compares wording, so only this search finds a record the new fact contradicts (for example "Mondays" against "Tuesdays").
+   `toolkit memory find '<topic>'`
+   `toolkit memory get <key> --json`
+3. Read the approval mode and apply "Approval policy" below. When it says ask, ask and wait.
+   `toolkit config get memory.approval`
+4. Write the description and body in the record format (`refer
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus --json'
+  -> {
+  "ok": true,
+  "backend": "notion",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- TFR-001 Build the days-until command with a --weeks flag\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue TFR-001 from its Resume here: ask for requirements approval, then record it before solution design.\n",
+  "version": "15b618c5a6f4090e798e2ad2a887be4040ad0939b6e1b046b024863d4d17e6f3"
+}
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- TFR-001 Build the days-until command with a --weeks flag
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue TFR-001 from its Resume here: ask for approval of proposed Option A in th
+  -> Saved the current focus (20 lines). Version: 4f22b7c214cf
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- TFR-001 Build the days-until command with a --weeks flag
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue TFR-001 from its Resume here: ask for approval of proposed Option A in the Solution Design page, then record the design decision before implementation.
+
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for Toolkit V2 final run (safe to delete) (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (4):
+- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- README.md is the project's own file from before the toolkit, so sync le
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 1 decision waits on the owner:
+
+TFR-001 Build the days-until command with a --weeks flag
+  - The design for TFR-001 is proposed and waits for the owner's approval. Approve with: toolkit work approve TFR-001 --design --by <name>. (work-decide)
+
+Agent to-do (the agent's step, not a decision the owner is waiting on):
+  - Make the agent-led delivery offer for TFR-001 (it is a build item past requirements). work-delegate asks the owner once per goal. (work-delegate)
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate TFR-001'
+  -> Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+
+
+[CMD exit=0] /bin/zsh -lc 'rm /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.3N4R4SA3T8/option-a.md'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'rmdir /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.3N4R4SA3T8'
+  -> 
+
+[AGENT] Your approval of TFR-001’s requirements is recorded and validated. I saved [Option A in the Solution Design page](https://app.notion.com/p/TFR-001-Build-the-days-until-command-with-a-weeks-flag-solution-design-3e9b381da17681859546d90fe3e13254) as a proposal.
+
+Option A uses one plain Node.js command. It counts local calendar days, formats `--weeks` output, and reports invalid input. Tests will cover daylight saving changes. The proposed default wording is a signed count such as `-1 day`.
+
+I recommend Option A because it covers all three approved requirements without npm packages. After approval, the build starts with input handling, then date counting and formatting, then tests.
+
+Do you approve Option A, including the proposed default wording?
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 5024741, "cached_input_tokens": 4929664, "cache_write_input_tokens": 0, "output_tokens": 12683, "reasoning_output_tokens": 2310}}
+
+SKILLS OPENED: ['work-decide', 'work-on', 'solution-design', 'memory-save']
+
+[HOOK CONTEXT ord=9] Project briefing: Toolkit V2 final run (safe to delete) (tv2-final-run), owner Mike Rihm. Work items: the Notion Work Items database (ids like TFR-001). Memory: Notion, in Lore's layout (a Memory page on the project row with Lore's databases). Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The backlog has 1 item; toolkit work next suggests which to take up.
+
+Waiting on the owner:
+- TFR-001 Build the days-until command with a --weeks flag: TFR-001 is waiting on the owner (02 Refinement). (work-decide)
+
+Items: 1 in the backlog. (Local copy of the Notion board from 2026-09-28T20:27:50.679Z.)
+
+Current focus:
+Last updated: 2026-09-28, chat, agent
+## Now
+- TFR-001 Build the days-until command with a --weeks flag
+## Waiting on the
+
+[HOOK CONTEXT ord=18] This shell command joins a toolkit command to other commands (&&, ;, a pipe, a heredoc, or cd). In Codex that runs the toolkit command inside the sandbox, which blocks Notion, Hindsight, and the main checkout's .work-items/ and .memory/ from a worktree, so it may fail or report the wrong cause. Run each toolkit command alone, as its own command; pass section text with --text '<text>' in single quotes, instead of a file written in the same command. In Codex write an apostrophe inside that text as ’ (U+2019), or reword it; never '\''.
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md",max_output_tokens:12000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-on/SKILL.md",max_output_tokens:18000}),
+  tools.exec_command({cmd:"git status --short --branch && cat PROJECT-ROADMAP.md && toolkit work lifecycle",max_output_tokens:12000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"7cfb1a\",\"wall_time_seconds\":7.08e-7,\"exit_code\":1,\"original_token_count\":3362,\"output\":\"cat: SOUL.md: No such file or directory\\n# Toolkit V2 final run (safe to delete)\\n\\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\\n\\n## Purpose and intended outcome\\n\\n- Purpose: Count down to trips and deadlines.\\n- Intended outcome: days-until tells me how many days are left until a date I type, so I can count down to trips and deadlines.\\n\\n## Scope and boundaries\\n\\n- In scope: accept a date and report how many days remain, for trips and deadlines.\\n- Outside scope: `<Important exclusions or adjacent owners.>`\\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\\n\\n## Systems and environments\\n\\n| System or org | Purpose | Environment | Source of truth | Access notes |\\n| --- | --- | --- | --- | --- |\\n| Notion | Work items and project memory | Notion workspace | [Project page](https://app.notion.com/p/Toolkit-V2-final-run-safe-to-delete-3e9b381da17681ccaa54cd9453f484ea) | The Notion CLI is signed in on this Mac. |\\n\\n## People and ownership\\n\\n| Role | Person or team | Responsibility | Source / last confirmed |\\n| --- | --- | --- | --- |\\n| Owner | Mike Rihm | Project decisions | Owner, 2026-09-28 |\\n\\n## Work and project records\\n\\n- Work tracker: [Work Items in Notion](https://app.notion.com/p/9450d0a8834a4de6b68845c7f1f78c12).\\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\\n- Project decisions: [DECISIONS.md](DECISIONS.md)\\n- Functional requirements: [requirements/](requirements/)\\n- Design home: with its Notion work item.\\n- System Guide: disabled; `system-guide/` contains only the template.\\n- Memory: the [Memory database in Notion](https://app.notion.com/p/a2d5b7e595da482381174849b144eec7) (the setup choice is in `.toolkit.json`).\\n- Memory backup or sync: Notion holds the live records. `backup.dir` in `.toolkit.json` records the owner's selected folder. A manual memory ex
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/approvals.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/current-focus.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/toolkit-commands.md",max_output_tokens:14000}),
+  tools.exec_command({cmd:"git worktree list",max_output_tokens:2000}),
+  tools.exec_command({cmd:"git status",max_output_tokens:2000}),
+  tools.exec_command({cmd:"git remote",max_output_tokens:2000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"4de18e\",\"wall_time_seconds\":0.000003125,\"exit_code\":0,\"original_token_count\":7532,\"output\":\"<!-- Generated file. Source: plugins/work/shared/approvals.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\\n# Approvals and gates\\n\\nThe exact steps to ask for and record each owner approval, and what counts as\\none. Run each checklist in order; one wrong or missing command leaves the\\nitem in the wrong state.\\n\\n## Contents\\n\\n1. What counts as approval\\n2. Requirements approval\\n3. Design approval\\n4. Result approval\\n5. Done\\n6. Cancel\\n7. Delivery offer\\n8. Project-wide decision\\n9. Memory proposal\\n10. Sub-items and approvals\\n11. Standing merge instruction\\n12. When an approve command refuses\\n\\n## 1. What counts as approval\\n\\n`toolkit work lifecycle` prints the gates and these rules. In short:\\n\\n- Only the owner's explicit words count. Quote them in a history note.\\n- A question, a suggestion, a tentative answer (\\\"probably B\\\"), silence, or a\\n  saved draft is not approval.\\n- An approval covers only what was shown. It never covers merge, deployment,\\n  spending, or publishing.\\n- An approval survives later stages. A stage alone does not prove approval:\\n  check the approval field (`toolkit work show <id>`).\\n- A bare \\\"yes\\\", \\\"ok\\\", or \\\"looks good\\\" answers only a yes-or-no question asked\\n  earlier in this conversation. When none was asked, or the waiting question\\n  is not a yes-or-no question, show the decision with its choices and your\\n  recommendation, and record nothing.\\n- After a yes, save his words first, in a history note that starts with\\n  `Owner said:`. Then run the gate's commands. A command that refuses then\\n  never loses his answer, and no later session asks him again.\\n\\n| The owner says | After this question | It is |\\n| --- | --- | --- |\\n| \\\"Yes, approved.\\\" | \\\"Do you approve these requirements?\\\" | The requirements approval |\\n| \\\"Go with B.\\\" | The design options with a recommendation | The choice and approval of Option B |\\n| \\\"Looks good.\\\" | \\\"Do you approve this result?\\\" | The result approval |\\n| \\\"Looks good.\\\" | \\\"Shall I split WI-12 into these three sub-items?\\\" | A yes to the split only, not a result appro
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:4000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.9 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"55979a\",\"wall_time_seconds\":1.543049584,\"exit_code\":0,\"original_token_count\":54,\"output\":\"1 decision waits on the owner:\\n\\nTFR-001 Build the days-until command with a --weeks flag\\n  - TFR-001 is waiting on the owner (02 Refinement). Next action: Owner reviews and approves the requirements. (work-decide)\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show TFR-001",max_output_tokens:13000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 2.1 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"9647fb\",\"wall_time_seconds\":1.82946175,\"exit_code\":0,\"original_token_count\":3005,\"output\":\"TFR-001: Build the days-until command with a --weeks flag\\nLocation: https://app.notion.com/p/Build-the-days-until-command-with-a-weeks-flag-3e9b381da17681b7b7ccea07b01d5850\\nStage: 02 Refinement (Backlog) | Waiting on: owner | Continue with: work-decide\\nParent: none | Sub-items: none | Design: none\\nWorktree branch for this item: claude/tfr-001-build-the-days-until-command (folder .claude/worktrees/tfr-001-build-the-days-until-command)\\n\\n---\\nid: TFR-001\\ntitle: Build the days-until command with a --weeks flag\\ntype: build\\nstage: 02-refinement\\nstatus: Backlog\\nparent: none\\nwaiting_on: \\\"owner\\\"\\npriority: medium\\ndelivery: not-offered\\nrequirements_approved: \\\"no\\\"\\ndesign: none\\nresult_approved: \\\"no\\\"\\nupdated: 2026-09-28\\n---\\n# TFR-001: Build the days-until command with a --weeks flag\\n\\n## Overview\\n\\n**Goal:** A person enters a date and sees the time remaining in days or, with --weeks, in weeks and days.\\n\\n**Current position:** Q-01 through Q-06 are answered and reflected in R-01 through R-03 and Acceptance. The independent requirements check found no material content gap.\\n\\n**Next action:** Owner reviews and approves the requirements.\\n\\n**Blockers:** Requirements approval.\\n\\n**Related items:** None.\\n\\n## Roadmap\\n\\nA phase is complete when its tasks are complete and its exit result has been checked.\\n\\n<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading. Add one row per phase; set Status from actual progress, not from this example. List the phase's sub-item IDs under Sub-items, or write \u201cNone.\u201d -->\\n\\n| Phase | Outcome | Status | Exit result | Sub-items |\\n|---|---|---|---|---|\\n| P1 \u2014 <Phase 1 name> | <What this phase establishes> | In Progress | <Evidence that P1 is complete> | <WI-ids or \u201cNone.\u201d> |\\n| P2 \u2014 <Phase 2 name> | <What this phase delivers> | Not Started | <Evidence that P2 is complete> | <WI-ids or \u201cNone.\u201d> |\\n\\n## Tasks\\n\\n<!-- Under each phase heading, add that phase's tasks only. Replace P1-T01 and similar example IDs with stable real IDs. Put the action after Work, its output after Deliverable, the completion proof after Done when, and re
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/work-item-format.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/tracker-notion.md",max_output_tokens:12000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"244094\",\"wall_time_seconds\":0.000003125,\"exit_code\":0,\"original_token_count\":4661,\"output\":\"<!-- Generated file. Source: plugins/work/shared/work-item-format.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\\n# Work item and design format\\n\\nWhat a work item and its design hold, their exact section names, and how to\\nchange them with `toolkit work` commands without losing text.\\n\\n## Contents\\n\\n1. Where the record and the design live\\n2. Header fields\\n3. Sections of `WORK-ITEM.md`\\n4. Sections of `DESIGN.md`\\n5. Finding an item's file\\n6. Changing one section\\n7. Adding a table row\\n8. Editing a record directly\\n9. Titles\\n10. Generated files\\n11. Examples\\n\\n## 1. Where the record and the design live\\n\\nEvery tracker uses the same body and the same design shape. Only the place\\ndiffers.\\n\\n| Tracker | Work item | Design |\\n| --- | --- | --- |\\n| Local | `WORK-ITEM.md` in the item's folder under `.work-items/` | `DESIGN.md` beside it |\\n| Notion | The item's page in the project's Work Items database | The item's \\\"Solution Design\\\" child page |\\n| GitHub Issues | The issue body | One issue comment whose first line is `## Solution design` |\\n| Jira | The issue description | One comment whose first line is \\\"Solution design\\\" |\\n\\nAn item has one design home. Never make a separate design folder or a second\\ndesign file.\\n\\n## 2. Header fields\\n\\nThe header (frontmatter locally, properties in Notion) holds these fields.\\nOnly `toolkit work` commands change them.\\n\\n| Field | Values | Changed by |\\n| --- | --- | --- |\\n| `id` | `WI-001` (the project's prefix and a number) | `toolkit work new`; never reused |\\n| `title` | The owner's words for the request | `toolkit work set <id> --title` |\\n| `type` | `discovery`, `solution-design`, `build`, `data-load`, `repository-maintenance`, `research`, `task`, `bug`, `enhancement`, or another lower-case word | `toolkit work set <id> --type` |\\n| `stage` | `01-discovery` to `14-spec-update` | `toolkit work set <id> --stage`, `approve`, `finish`, `cancel` |\\n| `status` | Backlog, Ready, In Progress, In Review, Done, Cancelled | Follows the stage; Done and Cancelled only through `finish` and `cancel` |\\n| `parent` | An item id or `none` | `toolkit work new --parent`, `toolkit work move` |\\n| `waitin
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history TFR-001 --note 'Owner said: \"Approved.\"' --effect 'Requirements approved; finalize R-01 through R-03 and record the approval.'",max_output_tokens:3000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 6.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"ec135a\",\"wall_time_seconds\":6.106445375,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Added a Recent History row to TFR-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show TFR-001 --section 'Active requirements'",max_output_tokens:7500});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"df2239\",\"wall_time_seconds\":1.055391666,\"exit_code\":0,\"original_token_count\":666,\"output\":\"### Active requirements\\n\\n#### R-01 \u2014 Count local calendar days\\n\\n**Status:** Refining  \\n**Applies to:** A person who enters a date in the command.  \\n**Required behavior:** Accept a date written as YYYY-MM-DD and print the number of local calendar days from today to that date. Today is 0, tomorrow is 1, and past dates are negative.  \\n**Boundaries and exceptions:** Count calendar dates in the local time zone, regardless of the time of day. Invalid dates follow R-03.  \\n**Acceptance check:** With the local date fixed, dates for today, tomorrow, and yesterday print 0, 1, and -1 respectively.  \\n**Decision record:** Owner request and Q-01 answer, 2026-09-28.  \\n**Open questions:** None.\\n\\n#### R-02 \u2014 Show weeks and days\\n\\n**Status:** Refining  \\n**Applies to:** A person who supplies --weeks before or after a date.  \\n**Required behavior:** Show the magnitude of the R-01 day count as whole weeks and leftover days. Use singular week or day for a count of 1 and plural weeks or days for other nonzero counts. Omit a unit whose count is 0, so the output can be 3 days, 2 weeks, or 2 weeks and 3 days. Print 0 days for today. For a past date, add ago after the weeks and days.  \\n**Boundaries and exceptions:** Both argument orders are valid. Today has no ago suffix. Invalid input follows R-03.  \\n**Acceptance check:** With the local date fixed, --weeks before and after a date 17 days away print 2 weeks and 3 days. A date 17 days in the past prints 2 weeks and 3 days ago. Dates 1, 3, 7, and 14 days away print 1 day, 3 days, 1 week, and 2 weeks respectively. Today prints 0 days.  \\n**Decision record:** Owner request and formatting answer, 2026-09-28; Q-02, Q-05, and Q-06 answers, 2026-09-28.  \\n**Open questions:** None.\\n\\n#### R-03 \u2014 Reject invalid input\\n\\n**Status:** Refining  \\n**Applies to:** A person who enters an impossible date, omits or malforms the date, supplies an unknown flag, or adds an extra argument.  \\n**Required behavior:** An impossible calendar date prints a clear error and exits with code 1. A missing or malformed date, unknown flag, or extra argument prints a short usage line and exits with code 1.  \\n**Boundaries and exceptions:** This applies with and without --weeks; 
+
+[CALL] const cmd = `toolkit work edit TFR-001 --section 'Active requirements' --text '#### R-01 — Count local calendar days
+
+**Status:** Finalized  
+**Applies to:** A person who enters a date in the command.  
+**Required behavior:** Accept a date written as YYYY-MM-DD and print the number of local calendar days from today to that date. Today is 0, tomorrow is 1, and past dates are negative.  
+**Boundaries and exceptions:** Count calendar dates in the local time zone, regardless of the time of day. Invalid dates follow R-03.  
+**Acceptance check:** With the local date fixed, dates for today, tomorrow, and yesterday print 0, 1, and -1 respectively.  
+**Decision record:** Owner request and Q-01 answer, 2026-09-28. Approved by Mike Rihm on 2026-09-28: \"Approved.\"  
+**Open questions:** None.
+
+#### R-02 — Show weeks and days
+
+**Status:** Finalized  
+**Applies to:** A person who supplies --weeks before or after a date.  
+**Required behavior:** Show the magnitude of the R-01 day count as whole weeks and leftover days. Use singular week or day for a count of 1 and plural weeks or days for other nonzero counts. Omit a unit whose count is 0, so the output can be 3 days, 2 weeks, or 2 weeks and 3 days. Print 0 days for today. For a past date, add ago after the weeks and days.  
+**Boundaries and exceptions:** Both argument orders are valid. Today has no ago suffix. Invalid input follows R-03.  
+**Acceptance check:** With the local date fixed, --weeks before and after a date 17 days away print 
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.1 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"feedb7\",\"wall_time_seconds\":3.7454532499999997,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Saved \\\"Active requirements\\\" in TFR-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work approve TFR-001 --requirements --by 'Mike Rihm'",max_output_tokens:3000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.1 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"3acdda\",\"wall_time_seconds\":3.75637025,\"exit_code\":0,\"original_token_count\":49,\"output\":\"Recorded: requirements of TFR-001 approved (2026-09-28 by Mike Rihm).\\nIt is no longer waiting on the owner (waiting_on: none).\\nNow 03 Requirements approved (Ready). Continue with solution-design.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set TFR-001 --waiting-on agent",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.8 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"6d4099\",\"wall_time_seconds\":3.4319395,\"exit_code\":0,\"original_token_count\":26,\"output\":\"Updated TFR-001: waiting on agent.\\nNow 03 Requirements approved (Ready). Continue with solution-design.\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"toolkit work validate TFR-001",max_output_tokens:3000}),
+  tools.exec_command({cmd:"toolkit work show TFR-001 --section 'Active requirements'",max_output_tokens:7500}),
+  tools.exec_command({cmd:"toolkit work show TFR-001",max_output_tokens:3500})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 5.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"846da4\",\"wall_time_seconds\":5.067060166,\"exit_code\":0,\"original_token_count\":25,\"output\":\"Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"15e7f9\",\"wall_time_seconds\":1.18395525,\"exit_code\":0,\"original_token_count\":703,\"output\":\"### Active requirements\\n\\n#### R-01 \u2014 Count local calendar days\\n\\n**Status:** Finalized  \\n**Applies to:** A person who enters a date in the command.  \\n**Required behavior:** Accept a date written as YYYY-MM-DD and print the number of local calendar days from today to that date. Today is 0, tomorrow is 1, and past dates are negative.  \\n**Boundaries and exceptions:** Count calendar dates in the local time zone, regardless of the time of day. Invalid dates follow R-03.  \\n**Acceptance check:** With the local date fixed, dates for today, tomorrow, and yesterday print 0, 1, and -1 respectively.  \\n**Decision record:** Owner request and Q-01 answer, 2026-09-28. Approved by Mike Rihm on 2026-09-28: \\\"Approved.\\\"  \\n**Open questions:** None.\\n\\n#### R-02 \u2014 Show weeks and days\\n\\n**Status:** Finalized  \\n**Applies to:** A person who supplies --weeks before or after a date.  \\n**Required behavior:** Show the magnitude of the R-01 day count as whole weeks and leftover days. Use singular week or day for a count of 1 and plural weeks or days for other nonzero counts. Omit a unit whose count is 0, so the output can be 3 days, 2 weeks, or 2 weeks and 3 days. Print 0 days for today. For a past date, add ago after the weeks and days.  \\n**Boundaries and exceptions:** Both argument orders are valid. Today has no ago suffix. Invalid input follows R-03.  \\n**Acceptance check:** With the local date fixed, --weeks before and after a date 17 days away print 2 weeks and 3 days. A date 17 days in the past prints 2 weeks and 3 days ago. Dates 1, 3, 7, and 14 days away print 1 day, 3 days, 1 week, and 2 weeks respectively. Today prints 0 days.  \\n**Decision record:** Owner request and formatting answer, 2026-09-28; Q-02, Q-05, and Q-06 answers, 2026-09-28. Approved by Mike Rihm on 2026-09-28: \\\"Approved.\\\"  \\n**Open questions:** None.\\n\\n#### R-0
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/solution-design/SKILL.md",max_output_tokens:14000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"fb546d\",\"wall_time_seconds\":0.000003291,\"exit_code\":0,\"original_token_count\":2127,\"output\":\"---\\nname: solution-design\\ndescription: 'Writes design options for how a work item gets built and asks the owner to choose and approve one. Use when approved requirements need a design, or the owner asks \\\"how should we build this\\\" or \\\"give me design options\\\". Not for a single Salesforce platform question; use sf-architect-solutioning.'\\n---\\n\\n# Solution design\\n\\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \\\"How to write replies\\\" section of `AGENTS.md`.\\nWrites one design per work item with a small team of helper agents and asks the owner to choose and approve it; it never fills a requirements gap. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.\\n\\n## Steps\\n\\n1. A single Salesforce platform question that needs no design options (which Flow type fits, Flow or Apex): open `sf-architect-solutioning` and stop. Otherwise read the requirements. Not approved: open `work-requirements`, unless the owner asked for options first (`references/design-process.md`, section 2).\\n   `toolkit work show <id> --section Requirements`\\n2. Set the design stage when the requirements are approved or the item's type needs no approval. A `build` or `data-load` item without approved requirements keeps its stage (the CLI refuses the change).\\n   `toolkit work set <id> --stage 04-solution-design`\\n3. Brief the `requirements-analyst` and tell the owner plainly whether the requirements are ready to design from. A missing requirement goes back to `work-requirements`.\\n4. Agree the way of working and pick the team (`references/design-process.md`, section 3; `references/team-roles.md`): at most one question, only when its answer changes the design. State the small team in one line; ask only about a larger one. Record both in Notes > Decisions and context.\\n5. Create the design in the item's one design home and fill its opening sections (`references/design-process.md`, section 4; headings in `references/work-item-format.md`, section 4).\\n   `toolkit work design <id> --create`\\n   `toolkit work design <id>`\\n6. Research: one `researcher` per open question, started together; in
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/solution-design/references/design-process.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/solution-design/references/team-roles.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/solution-design/references/helpers.md",max_output_tokens:18000}),
+  tools.exec_command({cmd:"rg --files -g '!AGENTS.md' -g '!*.md' -g '!*.json' -g '!*.toml' -g '!*.lock' -g '!*.yml' -g '!*.yaml' -g '!*.gitignore' | head -80",max_output_tokens:2000}),
+  tools.exec_command({cmd:"git log --oneline -10",max_output_tokens:2000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"cb8e9e\",\"wall_time_seconds\":0.000001708,\"exit_code\":0,\"original_token_count\":6806,\"output\":\"# The solution design process\\n\\nThe detail behind each `solution-design` step: the readiness checklist, the\\nway of working, the design record, research, the architect and critic loop,\\ndrafts in each host, and approval. The design's section names are in\\n`work-item-format.md`, \\\"Sections of `DESIGN.md`\\\".\\n\\n## Contents\\n\\n1. Checklist before the design round\\n2. Are the requirements ready?\\n3. The way of working\\n4. The design record\\n5. Research\\n6. Design and critique\\n7. Drafts in each host\\n8. Save, present, and approve\\n9. Changing an approved design later\\n\\nThe step numbers below are the steps in `SKILL.md`.\\n\\n## 1. Checklist before the design round\\n\\nWork through every item in order. Tick each one only when it is true.\\n\\n- [ ] **The requirements are read and understood**\\n  - [ ] The item's Requirements, Open Questions, Notes, and approval state\\n        are read\\n  - [ ] The spec check ran (`requirements-analyst`)\\n  - [ ] The goal is written in one paragraph in the design's \\\"What this\\n        design solves\\\": who uses the result, what they need to accomplish,\\n        what must be true afterward, and what the design leaves to another\\n        item\\n  - [ ] New build or existing build is known, and \\\"What exists today\\\" says\\n        what the existing build does for this area, with observed facts kept\\n        apart from assumptions\\n  - [ ] Notes > Solution options and considerations are treated as ideas,\\n        not requirements\\n- [ ] **The requirements are ready to design from**\\n  - [ ] Nothing is missing: every step, person, error case, state, boundary\\n        with another system, rule for what happens after, and way to tell it\\n        worked\\n  - [ ] Every requirement is explicit end to end: who does what, when, with\\n        what result, and what happens when it fails\\n  - [ ] Every place a builder could misread the wording is listed, with the\\n        wrong reading, the intended reading, and a rewording\\n  - [ ] Every requirement that does not fit the end-to-end experience is\\n        flagged with the reason\\n  - [ ] The owner ruled on every flag, and each ruling is in the design's
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set TFR-001 --stage 04-solution-design",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.1 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"9c48b5\",\"wall_time_seconds\":3.7295096660000002,\"exit_code\":0,\"original_token_count\":41,\"output\":\"Updated TFR-001: stage 03 Requirements approved -> 04 Solution design (status In Progress).\\nNow 04 Solution design (In Progress). Continue with solution-design.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/solution-design/references/agent-requirements-analyst.md",max_output_tokens:7000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"00aef4\",\"wall_time_seconds\":0.000003667,\"exit_code\":0,\"original_token_count\":1179,\"output\":\"---\\nname: requirements-analyst\\ndescription: Checks a work item's requirements before design or build. Finds missing pieces, places not explicit end to end, wording a builder could misread, build details inside requirements, and drift from the Agreed goal. Returns ready or not ready with a fix for each finding. Read-only.\\ntools: Read, Glob, Grep\\nmodel: opus\\n---\\n<!-- Generated file. Source: plugins/work/agents/requirements-analyst.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\\n\\n# Requirements analyst\\n\\nRead the requirements as one whole and say whether they are ready to design\\nor build from. You did not see the conversation, so you catch what the main\\nagent stopped noticing. You advise; the owner decides. You change nothing.\\n\\n## Start with the brief\\n\\n- The brief pastes in the Agreed goal, the Starting request, every `R-xx`\\n  block, the Acceptance list, the open questions, and the owner's recorded\\n  rulings. It may also name project files to read, such as the area's file\\n  in `requirements/` or `system-guide/`, or what the existing build does\\n  today.\\n- Treat only rulings the brief marks as approved by the owner as settled.\\n  Proposals and unanswered questions stay open. Everything else is open to\\n  your check.\\n- If something the brief should contain is missing, say so first, then check\\n  what you have.\\n\\n## Check readiness\\n\\nRead the requirements inside the larger system the result belongs to. Walk\\nthe whole flow start to finish as the person who uses the result. Then report:\\n\\n- **Ready or not ready.** Say plainly whether these requirements describe a\\n  complete, well-thought-out result in the context of the system it is part\\n  of. List what is still unclear. Use no score.\\n- **Missing.** Each step, person, error case, state, boundary with another\\n  system, rule for what happens after, or way to tell it worked, without\\n  which the goal cannot be met. One line each, with the fix.\\n- **Not explicit end to end.** Each requirement where a reader who was not in\\n  the conversation cannot say who does what, when, with what result, and what\\n  happens when it fails. Quote the wording and propose wording that makes it\\n  explicit.\\
+
+[CALL] {"task_name":"req_check","fork_turns":"none","message":"gAAAAABqus5d_TGtkth_mUU2x6Iwm10jAWmmoLzl4lF2Y1aFAsyWdHM-O1PQyPjj-L1LsNAsRdbLWo8HEKyv0nDW1namslpyT6v1pQ2b3TFRpJ47y55Hp0ojQzy3dLSZGPBKtM_akH9YNlI0JIghgwCbKtrcdKjtgcuJ3iEP90fgK7SduiVDtQ888zYYrQnkbfZMGUs0Tl3T-ejFYW7rrsTmsaHp_BHlVK6SDq8DZPKs9OQXLrgOJQe-jRpvh7RG20WuEnykbVpHeP7LQV62YM3TnpetRbcMJ_Qi3-btiWGvO2cdnlcDr93Kvvj6ykvwkOLsZsozEw0bgp28bk6lKFdjGnaQwh9PihmjrIFFQjFgn-P0x0e7FDUXQ0BuwulJbkm1dKKKhNSPw7vagD543O0ynRAxXB6zi6ZANPza8f3ywob7ATqtdG7NmsFSgnIucSO3PAJW565Z9JEsHv9zKR-nYcAiaRMmu06WPA3hRx43HMyNWB25jKHNcTj-CvoH0cc-EDUp7VCoBj6rSES6WT6KoHxaBaCQnfZviHKQx83UPxnC85iqL4o5I7v6tL43Amw7xjff7sshUsV06caIdMAZNE_7llz0GjtyK6gC6npHBRN_uUt27UpiXn2uajiP6jIZErFhQxrhnRsjfdvP3IPr9yxJ7hkffF1162tcAo9UtZHoqE6lKCJE_qiHRfIBR_dC3un8jpFjOY6XQ1E64ciP1-NAbo2hBVuZIJrPjwz2MssQg32VXU0G1zia-CI50-fkVtATA92RHt0m_cbYAs2mtESDLxbbevf7ZtwpQAzJ34tofxmLiSiM4VKqIXJ3ZLBt54Wwn3ERG2AjbRtfsQIFH6z8xz_9DjG5Hgz6rLfzGIfAAcP05vlAamiHqb6g4DCWy4O2tJbTO8NIkLvbQQ8MbKUYaTexuIEEXpOJyz6GfMXTUljZiNPPjyh6OeA1h_678GxDq-_6AISXOzUD24jjK4zRIDBn3glMleah0KrhZytdTB0n_97sTk5otsMCVZonTxxiOoc8Qgp3OgrikuxpZII2blhbDyhRXImC5UUJAKzwMFeKxUzGMmIEAOFP08im5XHFa1u6_GhG63mRowjInQjvshX5wFTtrNiFPlhD34EawqkLYtCqAwMIH77ZO4G9h9j6dZl0dGKjwOLh73OBsNjLFjyGAVq5UhIGCLKjLZm3VIQBeLGz-blQqorb4lU4UCoio33L1px7As_OB9-HZ3odJEUjuX94hiC2ldgrrdonPMf8S8x9b7kDXDCaUxIVvU2iuVvSc7HpvnA-ESbGquCe3jug9f_3T4MJ_fiT_ecmqOtwjxpNB8FCzsWA45dGUMK9MwEcyZM3olW22waZ-H35j3-1VZCSDALl9oVsPl0KVgiR_wBV6TfN_D4cecS_0ojyt6YwZedT68OFte1rIFdfeNXw0clI
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/solution-design/references/agent-researcher.md",max_output_tokens:6500});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"f842b7\",\"wall_time_seconds\":0.000003375,\"exit_code\":0,\"original_token_count\":1024,\"output\":\"---\\nname: researcher\\ndescription: Answers one bounded research question for a work item from project evidence, official documentation, and community sources, labeling each finding by source type with its link and date. Read-only; it changes no record and makes no decision.\\ntools: Read, Glob, Grep, WebSearch, WebFetch\\nmodel: opus\\n---\\n<!-- Generated file. Source: plugins/work/agents/researcher.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\\n\\n# Researcher\\n\\nAnswer the one question in the brief. Read only. Return evidence so the main\\nagent and the architect can decide what to trust, and the owner can decide\\nwhat to build.\\n\\n## Start with the brief\\n\\n- The brief gives the work item id, the goal the finding serves, the exact\\n  question, and the text you need (requirements, design sections). You do not\\n  inherit the conversation, the loaded skills, or another agent's findings.\\n- If essential context is missing or contradictory, say so in the report and\\n  continue with the research that does not depend on it. Never turn a guess\\n  into a fact.\\n\\n## Research the question\\n\\n- Check what the project already has before looking outside. A component,\\n  setting, or pattern that already exists in the repository is project\\n  evidence, and it comes with a file path and line numbers. Separate what is\\n  built from what is only proposed or not yet checked.\\n- For platform behavior, open the current official documentation and note the\\n  version, the date, and any limit that matters. A search result alone is not\\n  evidence. Say when a page is old or could not be opened.\\n- Then look at what people are doing: vendor blogs, Reddit, Stack Overflow,\\n  GitHub issues and discussions, and forums for the platform. Look for what\\n  people built, what broke, and what changed recently.\\n- Label every finding: official documentation, project evidence, or community\\n  claim. A community claim is what someone said online. Report it as a claim,\\n  with who said it, where, and when. You have not verified it and it is not a\\n  recommendation.\\n- Note when a source is newer than your own knowledge. Newer wins until\\n  someone checks it.\\n- If the research shows a requirem
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work design TFR-001 --create",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 10.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"04c41a\",\"wall_time_seconds\":10.002565292,\"session_id\":71426,\"original_token_count\":0,\"output\":\"\"}"}]
+
+[CALL] const r=await tools.write_stdin({session_id:71426,chars:"",yield_time_ms:1000,max_output_tokens:2000});text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work design TFR-001",max_output_tokens:7000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 2.6 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"bb07dc\",\"wall_time_seconds\":2.273771833,\"exit_code\":0,\"original_token_count\":2242,\"output\":\"Design of TFR-001 (proposed) at https://app.notion.com/p/TFR-001-Build-the-days-until-command-with-a-weeks-flag-solution-design-3e9b381da17681859546d90fe3e13254\\n\\n---\\nwork_item: TFR-001\\nstatus: proposed\\napproved: \\\"no\\\"\\n---\\n# TFR-001: Build the days-until command with a --weeks flag \u2014 solution design\\n\\n<!-- Fill-in guide: keep this file beside the real `WORK-ITEM.md`, replace WI-001 and every angle-bracket prompt with the actual value in that exact heading, field, table cell, or paragraph, and delete this guide. Add rows or options where needed; remove unused example rows and optional sections. When the owner answers a question, update the relevant design section and the matching work-item record, then update Notes at the bottom. -->\\n\\n**Requirements:** TFR-001  \\n**Design status:** Draft  \\n**Requirements checked:** <Link to `WORK-ITEM.md` requirements and date checked>  \\n**Last updated:** 2026-09-28  \\n**Design approval:** Pending\\n\\n<!-- Keep this file with its work item. `WORK-ITEM.md` owns the agreed goal, active requirements, open questions, roadmap tasks, and execution history. This file explains how to meet those requirements. During an interview, update settled answers in the relevant design section and keep unresolved discussion and the exact next action in Notes at the bottom. A recommendation or saved draft is not owner approval. -->\\n\\n## What this design solves\\n\\n<In a short paragraph, say who uses the result, what they need to accomplish, and what must be true afterward. Link to the agreed goal. State what this design covers and what it leaves to another work item.>\\n\\n## Requirements and design readiness\\n\\n<Say whether the work item's requirements are ready to design from. Do not use this design to fill a missing requirement; return gaps to `WORK-ITEM.md` for an owner decision.>\\n\\n| Requirement | Status in work item | Design coverage | Remaining decision or gap |\\n|---|---|---|---|\\n| R-01 \u2014 <Requirement heading> | <Refining / Finalized / Superseded> | <Option and section that address it, or Pending> | <Question ID or None> |\\n\\n## What exists today\\n\\n<For an existing build, describe verified current behavior, relevant files or configuration, and th
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/solution-design/references/agent-design-architect.md",max_output_tokens:7000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"79343d\",\"wall_time_seconds\":0.000003541,\"exit_code\":0,\"original_token_count\":1808,\"output\":\"---\\nname: design-architect\\ndescription: Writes or fixes one solution design option for a work item, in a named draft file or in its reply, from the requirements, research findings, and the existing build. Verifies community claims before using them, prefers built-in mechanisms, and recommends a rewrite when that serves the requirements better.\\ntools: Read, Glob, Grep, WebSearch, WebFetch, Write, Edit\\nmodel: opus\\n---\\n<!-- Generated file. Source: plugins/work/agents/design-architect.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\\n\\n# Design architect\\n\\nWrite one design option that a junior intern could build from, or fix the one\\nyou are handed. When the brief names a draft file, write only to that file.\\nWhen it names none (Claude Code), write no file at all and return the whole\\ndraft in your reply, in one fence of four backticks (````markdown), so the\\ndraft's own three-backtick code blocks do not end it early. The main agent\\nsaves the draft to the work item with `toolkit work design`; you never do.\\nThe design is a proposal until the owner approves it.\\n\\n## Contents\\n\\n- Start with the brief\\n- Reason about the research\\n- Decide the design\\n- Fix rounds\\n- Boundaries\\n- Return\\n- Writing\\n\\n## Start with the brief\\n\\n- The brief gives the work item id, the draft file path when there is one,\\n  the design's current text (What this design solves, Requirements and design\\n  readiness, What exists today, Constraints and assumptions, Notes), the way\\n  of working the owner chose, the requirements (Agreed goal, every `R-xx`,\\n  Acceptance), the research findings, and which option you are writing and\\n  how it must differ from the others.\\n- Read the existing build for this area yourself.\\n- Keep the design's section headings exactly as the project's `DESIGN.md`\\n  template has them. Your option is `### Option <letter> \u2014 <name>` under\\n  \\\"Design options\\\", with these subsections: Approach, End-to-end behavior,\\n  Requirement coverage (a table: Requirement, Build or reuse, Why it meets the\\n  requirement, How to check it), Technical shape (Components and files, Data\\n  and state, Access and security, Integrations, Operations), Tradeoffs and
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show TFR-001 --section 'Decisions and context'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.6 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"f43cb8\",\"wall_time_seconds\":1.247366292,\"exit_code\":0,\"original_token_count\":23,\"output\":\"### Decisions and context\\n\\n- <Useful decision or context that is not itself a requirement.>\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit TFR-001 --section 'Decisions and context' --text '- Design method: scan the empty repository first, then design one Node.js option using built-in features where they meet R-01 through R-03. The approved requirements leave no product choice that needs a second option.\n- Design review team: one requirements analyst, one architect, one critic; three agent runs in the first pass. No researcher is needed because no bounded external question is open.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"2ccd87\",\"wall_time_seconds\":3.917770833,\"exit_code\":0,\"original_token_count\":11,\"output\":\"Saved \\\"Decisions and context\\\" in TFR-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"mktemp -d",max_output_tokens:2000});text(r);
+
+
+[CALL] {"task_name":"design_architect","fork_turns":"none","message":"gAAAAABqus6nvZ01PAGledfsMOSGRXiCDQruK3vW84l2KkDVklkosEoEAQRXfmW893ELtsKVumjVK5NVaGDWnmas1PKscthxCHxHXmth9ISbr6YFshQllfSDYFJ3ZGregAgNdrQVMMxgJ0zmRwiuuWU1VCjPbneyHfoz9MNG6Uq-p8_0Jj9iUGq6eksA14UssREst7y1nHasdm5DbbjiSSMD-TkKgS5bEHl4_MCiiub3OUA_9MPOiMEmgIcRmIHhzXCbrFlwOBWXuxDCe59jBWj0Fvp9cXn-N1p54NJhJOto9UVcVnsm2HjKQGnSen4ThcRMaW4VF44PMTrzj8mcBqz6RK9rRaXnjDvpTz2dV38IArewtbNrJIQ8nb8e4UtmdEaTZVPxUVUjL8Cl_WnB9qQuGGPN56gvz6uSBcXSYv-YRJudn3gmknX5EwsDCCWbS1qKAfFvGaLm9SSgxRBFICAprOwxGNRYs5sXTcR4WeTWEQXsfZBpjwxD7P0k57MnYtHJt6OB4h8glzN3Grsz40Ae68lU_7HsFU48nvdLSSpYC6HIIEpN_0QfQC1G_iYsgD5ALW4r6LGPi7-1IK2Yir66T_FJ5EkPRbmSyw0S0IqQGrhs1Eg1D2dy25pr2XixhLqMmrF4bHoF3igM_k01ooTD0AGy9fzWKFthpPvYnawaW7A1fgiwuw4vPIdhPqusYWve8sVbqNdnmFcPQ3YY6MXABZlOzknUQ7wa-ngEs8od8xnfR520fNMrOgZteyQaYKb6-82uOfJXLtmDrB-LXPTrqf9LVI82WNT-qZF_EeClIotz3TFPX-59YJWhuiw0wkbwKHKGPAUrEurcpBaAZ8pqHLrDrA9E5VULltTSg-VWBQbSeeLgpGK51x89fHGrGcWiQ7ubwPlC68an8gohWNhbbzfw9yqfAkO-SKdpQJ6Yr8bveD4-94ZWvhqaO1Usxo86HTLCb7KjvaK0dLgzXTOBcmUOuXDxr2RKdDwWBNKH6XYDdcVJ3pnbdOveUB-9_k-sdk5py5MAEy6DAtPocewhkXlM6LgRc2LC3NUJm9cGXxuEBcZQlqemWE0RcmTfZBOeq_OJOKDDWuyviFV4h25AwxyPtIsrcjjkdFtxvHU1Ie-Jcv2S-lUT61khxq8c7BnqXTrjQHYt8AhNpVI2qwhDrI-3zjWaFpN_XXgHNeCItZuHDK44ly5wI6tmJGJXwWRI8_eH1h87v6zAU76KqmU10X9YOEu6IAMdLHVDBcL9Zc6RXrPT4cUZzAyYOJ-GDiy14hjNdeFjPjacdbEiIaOZtqyGuZX-2j9XwOLTRpXanmizsIO6zmOkO49N4Rgn0pDp4qgxdsAL56wp02wE39IA3sgCUBNEANam2kMdB3ftc53zQoixb6BxFXfg1V4wUtrtqM0rKBOnR7ZLDQWxRS6JOilDU
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"toolkit work show TFR-001 --section 'Overview'",max_output_tokens:2000}),
+  tools.exec_command({cmd:"toolkit work show TFR-001 --section 'Resume here'",max_output_tokens:2000}),
+  tools.exec_command({cmd:"toolkit memory focus --json",max_output_tokens:4000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.7 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"710604\",\"wall_time_seconds\":1.373582375,\"exit_code\":0,\"original_token_count\":105,\"output\":\"## Overview\\n\\n**Goal:** A person enters a date and sees the time remaining in days or, with --weeks, in weeks and days.\\n\\n**Current position:** Q-01 through Q-06 are answered and reflected in R-01 through R-03 and Acceptance. The independent requirements check found no material content gap.\\n\\n**Next action:** Owner reviews and approves the requirements.\\n\\n**Blockers:** Requirements approval.\\n\\n**Related items:** None.\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"ccc4c7\",\"wall_time_seconds\":1.368287625,\"exit_code\":0,\"original_token_count\":57,\"output\":\"### Resume here\\n\\nShow the final R-01 through R-03 and Acceptance to the owner and ask for explicit requirements approval. If approved, record the approval and continue to solution design. Build only after requirements approval.\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":2,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"5d04e0\",\"wall_time_seconds\":0.813012334,\"exit_code\":0,\"original_token_count\":190,\"output\":\"{\\n  \\\"ok\\\": true,\\n  \\\"backend\\\": \\\"notion\\\",\\n  \\\"kind\\\": \\\"focus\\\",\\n  \\\"text\\\": \\\"# Current focus\\\\n\\\\nLast updated: 2026-09-28, chat, agent\\\\n\\\\n## Now\\\\n\\\\n- TFR-001 Build the days-until command with a --weeks flag\\\\n\\\\n## Waiting on the owner\\\\n\\\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\\\n\\\\n## Untracked to-dos\\\\n\\\\nNone.\\\\n\\\\n## Next session starts with\\\\n\\\\n- Continue TFR-001 from its Resume here: ask for requirements approval, then record it before solution design.\\\\n\\\",\\n  \\\"version\\\": \\\"15b618c5a6f4090e798e2ad2a887be4040ad0939b6e1b046b024863d4d17e6f3\\\"\\n}\\n\"}}}"}]
+
+[CALL] {"timeout_ms":20000}
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/solution-design/references/agent-design-critic.md",max_output_tokens:6500});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"dc30c4\",\"wall_time_seconds\":0.000002417,\"exit_code\":0,\"original_token_count\":1272,\"output\":\"---\\nname: design-critic\\ndescription: Checks a draft solution design against every requirement and the plain-language writing rules. Returns one verdict per requirement (satisfied, partly satisfied, not satisfied) with evidence, then findings for the architect to fix. Read-only; it never edits or approves.\\ntools: Read, Glob, Grep, WebSearch, WebFetch\\nmodel: opus\\n---\\n<!-- Generated file. Source: plugins/work/agents/design-critic.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\\n\\n# Design critic\\n\\nCheck one draft design. Report where it fails the requirements, the goal, or\\nthe writing rules. You advise; the architect fixes; the owner decides. You\\nare never the agent that wrote the draft.\\n\\n## Start with the brief\\n\\n- The brief gives the work item id, the draft file path (Codex) or the whole\\n  draft pasted into the brief (Claude Code, where the architect writes no\\n  file), the design's opening sections and Notes (What this design solves,\\n  Requirements and design readiness, Constraints and assumptions, the owner's\\n  rulings in Notes > Design changes during the interview), the way of working\\n  the owner chose, and the requirements (Agreed goal, every `R-xx`,\\n  Acceptance). Read those first, then the draft.\\n  You do not inherit the conversation or another agent's findings.\\n- Treat only rulings the brief marks as approved by the owner as settled.\\n  Proposals and unanswered questions stay open. Do not infer approval for the\\n  rest of the draft.\\n\\n## Check every requirement\\n\\nFor each requirement, one line:\\n\\n- **Satisfied:** the draft names the mechanism, says why it meets the\\n  requirement, and says how to check it, and you agree with all three.\\n- **Partly satisfied:** one of the three is missing, weak, or only true in some\\n  cases. Say which.\\n- **Not satisfied:** the requirement is skipped, contradicted, or met by a\\n  claim the draft did not check. Say what is missing.\\n\\nThen check the draft as a whole:\\n\\n- **Goal.** Walk the flow start to finish as the person who uses the result.\\n  Report every step where the design breaks that flow, even when each\\n  requirement is met on its own.\\n- **Approach.** Where the draft builds custo
+
+[CALL] {"timeout_ms":20000}
+
+[CALL] {"timeout_ms":20000}
+
+[CALL] {"timeout_ms":20000}
+
+[CALL] const r=await tools.exec_command({cmd:"cat /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.3N4R4SA3T8/option-a.md",max_output_tokens:13000});text(r);
+
+
+[CALL] {"task_name":"design_critic","fork_turns":"none","message":"gAAAAABqus8YHxyuUtZQ-UOWd0IJLUcHKt2ZPYcPzFX8FoeUEQrxVfA13ysRnLURCz7Uh30p2eFh0U_XTuR9Bkz3c6M3g1yr7jM1FUDU7keQ_62rCGkV83f1Q-82Sf5sWEMP-ZslzaGu0oH7wgiHxHJFtuhkSra0If2G4v8XXSPwqRMCyVMoihZ1VALm2z8ANp6WMqHxs8hfhPDX5hrFTv2I8swQOKSRm6RG7yL2lS0Zsb62h8ZhomiCTTB90KErW76w6-BoMaMfeF7tHaLeWXVJxUDmf6mWZTCgp-fLeF4cntuEgWIC2S96Ng9ZNPSeEMrUP-bD6E-B230riKHcgIuSFze6k5clg-63rCbW7w13ml6NzXNvRoIqsOtpYwXxqQiF2FXso6vylBWjGJ6dau4x6J1DTieVIuj5zemdSjAudJBriS4Gy1SPFh0aA1JX9KJb-Ntzw7AA8mJCoJbsgW5Q0svcpRvsjQXhddSo7BD5eEY-obpD_wum3vjoJ0KpOSh8lA1JWBKAc9srMs5PkfdMTnsHJoL-PIngT0apmEhANVwAKBr_3x26DN8zTzqi2d3HPbqBA7NRDFGmeiA8UOBzP4S6Ljg3dJSnrbbsm0D6kKZCQlTzshxrBMs_kwqg5FfMJoYTvfi7EBINsLC_neOrN2ODVIffxn-ZdtPtDE2wuGto7F-YpHJHgGTnESI9ouEHue4jZ0nAoRCns9uzLkdGabRm57RyNb6maY6cEsk34idwGYPFYa_8Sg9fTSOu2AISZKyvTJs1QHaYlUP2lGKhP4O57stENNNvJHO-HTql3sXS6V7IlVThhm2pPiTrfRY_jmFJTvKeBOzKmDmBzkL-fY5NI6Nbscb8ob9Hm1lKs4brKrAZiD9T_BKMXunhEHnlAlViF139j-bAgvosc27ZH8lKatJUi8I7160tA8wF6Fpu6a5ztQiJlPIvSOnfV4BNbnJmvFUhaXjGFyUtgvuAy4C2tw67F5ka0hZk8UA65CMzXNXeWV_1vPbfryHTiCA5erZXMiXDzIPvsr6gYYyvz6jEKARlICEIDOZqGWK0cH2YSRRk53vpdo4aQSRjxtYp-7qw4YM9OgqN_cxQ5nqETrW1lpgCgW0vV165O4hdlZ0nHxzpd9AGu163JuUIiWthH75Ie8lc7ou0o27He34xR9zJuvJ8nbpy3CoJmAeAsUOJtEaZHDhxvf7GP2UzzO7wwdYQvDboFjo62-0PKpXqMRANNq9SjuzRAai0FE_XvvchJRSNKOl4Em-PjHjUP0JJ8t04ha5EwIm11-9Tou0oHYUcKICrE7WE0FFqjI8P-Fj_rA02GKdScwIo630LstcGBR1UqMGLhiRl8WBj4-rbL_FWthSgaWGPtR8vLBu-21ijGjaWz7GT2VsH-ndzlN8sYjLTfBhCr_-uFnbHm5M-Vajg-sBJ
+
+[CALL] {"timeout_ms":20000}
+
+[CALL] {"timeout_ms":20000}
+
+[CALL] {"target":"design_critic","message":"gAAAAABqus9FfR19HGtuQpqzbU4gfb0VdAbIYaESMrhMZIj5ePWVox8riITZK32kuT80NCYjf6XtUzOSH5700r7_QxZ0GheugIvbWTqOP6pobTphURZTSpPSeE3mBDvP3Y89itfKzOYAE-x6sJGu4v0mKGPfcF8hE81fEte0vxzMYAmRezDMJNMNq0tw2DUxAWHcdgvzpDRwcY9qdg-3OJZjNXX8eElxfPwfnHaKKp0OSvNN2d1LYfKKkAYKcw9k24D_AGJde0bEny320BF9Zw4hVnan4NewnMGqJOGPnmjJwpoGR1qdRwjFivg5seihqe8CqNNVRDqFDElOux0AojjrFkd2F5fgM3JJX4oGlr6a3wVxAgrfiTVZXOW6DG9CliBNH_Blhkh225Xu4BTGcPoZm69bMhrtcMaNBmy7gtbPwRXJ6DY1-DDy3vZWM58KqYbItvS5oJxbe57NMrpcT67xsHn-Sqo1wFjwdAm2xOEYx2Bh4s8L9fWZchwFeGG_hKP2Gg8j3V0opLcKFM9TsLr6efs3zphJnbVHg1kwjYNEAYhroe6AUTEA0O6JkYLUjfSWFL1MFPvfxbyzDQ1hvAzwH-DIenoVCG_76BbO-jmmVxfQY-rDaox72c6OjSB68OE-7DAe5PUyBuYDzPZodbkUEf8uah_AO0aFcJfSIcAllQzVwwORZwbD-ZV5F7znsE2VoIb1Cw0r-oZnbuNPJuTGwmbXJU64kVy6TVq6fFdaq4gpVn1-Q3loBkhb-WDyNBP32_BVtDk80c2Z_DFOiV5hxIsrDigztVTCJdgowJMTRbsG4sx3p_QFZcmtjuPpYuSGwmTI0gt7Av542hEWJJuYMp-kH-768ZZeJzqUpEamzocq6AqT2jn24mlWbVFH_6XEPNM8V3p5F3bJ1GxCMJXJdLsUC7lkJmRNbXJzWTwcmleHQf83DGapLl6mWOix99OBtJHpU9LjElRa_UT4K2qFV6wLHFFQ1YBsEEESd4uW1eTdnW4EcUFJ7pBqQ83oGYr_wB3QJVMBF556rKSJjSQexgIssgqbxNn-B4eMZ7QtMHeyp0G4InZV9kjskphMDn8XDWEQ9CgODZ-guD4j2DUIcavXQqtqfgjkxEUgORiG0CiiZGZrEkVIH14D9y9k-kZ7axpiCT_TkhsX8Z5G3TmEqYUmeDRp4wDHOuIVBW54LZywx4AbsoG5Xy_tbxx8T5MCAIhpnUH6GLpKmMQd35GdQ056THpqb-tthDd1SqzYis_wPC-8QNl6kw-tO04Anbv0H3SPHGFRRtcytHDoBugDDZ9Z6-jgot9h1C0l3KIwF17tGHV19CbqjgjGEBn8JnRhoQDq05vuZjEFRH80gmtBOMsZLh5y6yCdGWavPBE8lDkAgLP0RPZ2f089KU6qA6g2qVGNShpOzyMr1lbaNvDpjjvqn02jn7JN7Zunb2tNGvANXFsEeLZ
+
+[CALL] {"timeout_ms":20000}
+
+[CALL] {"timeout_ms":20000}
+
+[CALL] {"target":"design_architect","message":"gAAAAABqus92ELEB2eHst0Fyd-SirxLz3dUZQHsvwmpAv7K3Z0zA6tsRqM0LjYHDnarDkOSRmBzy5TG8XszSdIQfy6q8rGvoHgtzWH4DRoa9CATAG72dzgMAtjJC46tel-Pxv8q0PIvof8qdNPjBNkPwfleL1dGCZ26BciU7ewZ2tW73s6axZjvijFFyEUvAg3DrJR7DkNpSCwOCOrs9yjZcUcsfrdjwtS5PKW8JsTqFWKk-dUGx2GhXL1zhPplDPb9YAunNOBu1hX3Hb35kBd550TwQshhrkBknhACdlW2NH3E3Uv1eeCiF2hLSItje3-c2FOl9azeS2zae2kBxq9-gqC73B_wgn7LBuXA0i6kEwxl9fdh4oZWO31u-kcZ1vNSvIgBknZqwNEOyEF4VWzFaQgxFyHye_RNdtenV1FKRrKlKZKshXViTWvCIvLXQSyM71lWo1cHMz5fNYuudgsq_4bi50MdT7gR98wt9AvpI3pKm9DozKMO0d8MHx6hO6vYfAJcISxEmtrI35ecx7L4oIsIKekoFrEFmSCun1TkQrFgbCHIsyzexd-isWGL3BrAmSe2M27qsaQG74wVGcOKJP33rtFQRT7Fwr8pCcBr1R6s4UkrmKLgzezIP9PiIFQpIEfCHBJGhHHJ-DeovobXdjQVzMvl-y6bwxa_goLZ1ej_29G02IL7CTW2FxXpdG5BRrgi0QNuoeyBoXl6oAIqP53_P22ZoBZ3sli3e8Jgsn5o3BHvyrc9j1Yd3KRfQlEjM2AWEpS1-yqEzTMw58nQRJiwf6XY6DTsWejfjebO29K09KKZMHd0NrqOlWUiOOruSUD0LAWvhVCcNjRLi9SRBQR9xZga1DpMpPLIuGPhOZuO583Rmm5F0u0fRmYXC-QFw3UcmmngFKcw2ErTeA_u36wZgvEzlFFbIdRmiJgv7Kp9CVOiZw4dIfJ1l4SfDjsCGzNuQ2N0WxTUG7ZonlRAGzKtpfmuUQk2gTdqri2Z_PQ9-Zd0XVqqlyt90fEk9-Ib-W-0vGBGfTXCzQv2I3zIKMmDAHdpPeG3MNY7pWYxmMOq2fBWPXnoz3Hi2U1kXIZnpTs19JkG0"}
+
+[CALL] {"timeout_ms":20000}
+
+[CALL] {"timeout_ms":20000}
+
+[CALL] {"timeout_ms":20000}
+
+[CALL] const r=await tools.exec_command({cmd:"cat /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.3N4R4SA3T8/option-a.md",max_output_tokens:14000});text(r);
+
+
+[CALL] const patch = "*** Begin Patch\n*** Update File: /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.3N4R4SA3T8/option-a.md\n@@\n-**Requirements:** R-01 through R-03  \n+**Requirements:** TFR-001, R-01 through R-03  \n@@\n-**Requirements checked:** Complete; approved by Mike Rihm on 2026-09-28  \n+**Requirements checked:** TFR-001 requirements, 2026-09-28; complete and approved by Mike Rihm  \n@@\n-- **Date validation:** reject a parsed year less than `1` or greater than `9999` before constructing a date. Build a UTC `Date` from the remaining calendar fields, then compare its UTC year, month, and day back to the input. Use `setUTCFullYear(year, month - 1, day)` on a fresh date to avoid JavaScript's special handling of years `00` through `99` in `Date.UTC`. The round-trip check alone would accept year `0000`, so the explicit year check is required.\n+- **Date validation:** reject a parsed year less than `1` or greater than `9999` before constructing a date. Start with `new Date(0)`, set its UTC year, month, and day with `setUTCFullYear(year, month - 1, day)`, then compare its UTC fields back to the input. The initial date is at UTC midnight. This avoids JavaScript's special handling of years `00` through `99` in `Date.UTC`. The round-trip check alone would accept year `0000`, so the explicit year check is required.\n*** End Patch";
+text(await tools.apply_patch(patch));
+
+
+[CALL] {"target":"design_critic","message":"gAAAAABqus_WDbxlMFSB93FdmSw26NpZHadq4TbcYWrw3oOkEAFEZy3-_CMEV1MVXF88qGTNimXW02B2GQ8Tczt-vOvSBOWhxdssHtLo16enE_HegZ0D02zrNifVuSCvgh9c2qcctcNpOwg7iKfQ0LAqayUZk-49tsEXRponWLvy5RMMj0aWRIM1ThSIhc9i2fWhcFD_sAmNCJhK5PCfDa0SLbaXaUqtkT1OyeIjB4ol-25tiSYEXcw_1iY7joM_FOh8GjeL5VtL_UGnSIYpfvBRzw-Xkk2vvT-ggz6ZJHeopcvNbHFF84irxHNhUW2nb5TGwxNQutWJ_zl0mp_dcuuY--RZesITcc1V_trO4xv54cLIfyNpIfEogAhBocmoPlq63cVqohxaGTwnem80jPrlwUjb3Mf4d98z4lWXbl3jbRrA6658nwXQxi_QtK-gOXqHWRVJx5NBFqEZ8ApaLYjwJx-9KnGGu6Jyr-PjMEkH2PHKco1V2U7G7tdB0uPyDTnQLOcCx5-z0cBUk6C5EODIVv_cFzeOQGgQkeh1lt-aNqEqWBDrSX1S21YjJYZqfMmWmT_2X-zOuiXI_TCIXnW2zAPX-LOWRUL48V7m_-XGnLk9F_wedqkYvb1SpOd7084cUYJ8luPKi2XLztBmrqDtM5IAevgOKDkhMiW473cUR5cbfuCtZsQqNmGmQWt154q9fKoPKiOYzYcxoM3N9Wz3SSVS2dlgz7wIYjpa1plQAi85Ki7XZ_nSKStrepYOxLgzr02gCzSHZGPfUFEDPkKCyVLXC_5KecQxmS33iSmzQ263jOvAn4B13dxRBUiPlWBAf8VyCjGI8EAq2RXC0-l1XwTHeibpsw5SVpDwHG_Tua3GuikZVJtR0_x0MYRP2Dv4g4u1x-fq-H0DJSe5NgDMM9G7T9gnqzqc3ACe7NFukjykoxbsOEvOcHGcpwtlZwfmo73iWkaadvG4TdrnCH28qOWQB9ifvEyTHvHoAcuWpcQIOmty-fWaIx5J6yCeUD7E0cORqKEont9QbDqSuvC0Om5wm8HfLXSvnALl9VZk7lUTRfK8R74-RrE7aX8CTQH1CD67Ja66"}
+
+[CALL] {"timeout_ms":20000}
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work design TFR-001 --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.3N4R4SA3T8/option-a.md --status proposed",max_output_tokens:3000,yield_time_ms:30000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 14.8 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"097c81\",\"wall_time_seconds\":14.493963208,\"exit_code\":0,\"original_token_count\":66,\"output\":\"Saved the design of TFR-001 (proposed) at https://app.notion.com/p/TFR-001-Build-the-days-until-command-with-a-weeks-flag-solution-design-3e9b381da17681859546d90fe3e13254.\\nIt is proposed until the owner approves it: toolkit work approve <id> --design --by <name>.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work design TFR-001",max_output_tokens:11000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.5 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"7e77ab\",\"wall_time_seconds\":4.205064833,\"exit_code\":0,\"original_token_count\":2870,\"output\":\"Design of TFR-001 (proposed) at https://app.notion.com/p/TFR-001-Build-the-days-until-command-with-a-weeks-flag-solution-design-3e9b381da17681859546d90fe3e13254\\n\\n---\\nwork_item: TFR-001\\nstatus: proposed\\napproved: \\\"no\\\"\\n---\\n# TFR-001: Build the days-until command with a --weeks flag \u2014 solution design\\n\\n**Requirements:** TFR-001, R-01 through R-03  \\n**Design status:** Proposed  \\n**Requirements checked:** TFR-001 requirements, 2026-09-28; complete and approved by Mike Rihm  \\n**Last updated:** 2026-09-28  \\n**Design approval:** Pending owner decision\\n\\n## What this design solves\\n\\nA person runs `node bin/days-until.js 2026-12-25` to see the number of local calendar days until a date. Adding `--weeks` shows whole weeks and leftover days.\\n\\n## Requirements and design readiness\\n\\n| Requirement | What must work | Readiness |\\n|---|---|---|\\n| R-01 | Accept a real `YYYY-MM-DD` date and print its signed local calendar day difference: today `0`, tomorrow `1`, yesterday `-1`. | Complete and approved. |\\n| R-02 | Accept `--weeks` before or after the date; show the magnitude as weeks and days, with correct singular forms, omitted zero units, and `ago` for past dates. | Complete and approved. |\\n| R-03 | Give an invalid-date error for an impossible date; give short usage for missing or malformed dates, unknown flags, or extra arguments; exit `1`. | Complete and approved. |\\n\\n## What exists today\\n\\nThe repository has no application code or verified build and test commands. This design starts with a small Node.js command and tests.\\n\\n## Constraints and assumptions\\n\\n- Use plain Node.js and its built-in modules. Add no npm packages.\\n- Treat `YYYY-MM-DD` as a calendar date in the computer's local time zone. Do not interpret the input as a UTC timestamp.\\n- Accept years `0001` through `9999`. Year `0000` is not a real date in the ordinary calendar used by this command.\\n- Print one result line to standard output on success. Print errors and usage to standard error and exit `1` on invalid input.\\n- The proposed default output is a signed count with a unit, such as `1 day`, `0 days`, or `-1 day`. The sign carries the past direction in default mode.\\n- Sample the current local dat
+
+[CALL] const patch="*** Begin Patch\n*** Update File: /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.3N4R4SA3T8/option-a.md\n@@\n-6. With `--weeks`, take the absolute difference, divide it into whole weeks and leftover days, omit any zero unit unless the total is zero, and add `ago` when the signed difference is negative. Use `week` or `day` when that unit's count is `1`; otherwise use `weeks` or `days`. The complete examples are:\n-\n-   | Day difference | Expected `--weeks` output |\n-   | --- | --- |\n-   | `0` | `0 days` |\n-   | `1` / `-1` | `1 day` / `1 day ago` |\n-   | `3` / `-3` | `3 days` / `3 days ago` |\n-   | `7` / `-7` | `1 week` / `1 week ago` |\n-   | `14` / `-14` | `2 weeks` / `2 weeks ago` |\n-   | `17` / `-17` | `2 weeks and 3 days` / `2 weeks and 3 days ago` |\n+6. With `--weeks`, take the absolute difference, divide it into whole weeks and leftover days, omit any zero unit unless the total is zero, and add `ago` when the signed difference is negative. Use `week` or `day` when that unit's count is `1`; otherwise use `weeks` or `days`.\n+\n+Expected output examples for `--weeks`:\n+\n+- `0`: `0 days`.\n+- `1` and `-1`: `1 day` and `1 day ago`.\n+- `3` and `-3`: `3 days` and `3 days ago`.\n+- `7` and `-7`: `1 week` and `1 week ago`.\n+- `14` and `-14`: `2 weeks` and `2 weeks ago`.\n+- `17` and `-17`: `2 weeks and 3 days` and `2 weeks and 3 days ago`.\n*** End Patch";
+text(await tools.apply_patch(patch));
+
+
+[CALL] const patch="*** Begin Patch\n*** Update File: /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.3N4R4SA3T8/option-a.md\n@@\n-| R-02 | Order-independent `--weeks` parsing and one formatter for absolute weeks and remaining days. | Both flag positions work; `0`, `±1`, `±3`, `±7`, `±14`, and `±17` days match the complete output table above. |\n+| R-02 | Order-independent `--weeks` parsing and one formatter for absolute weeks and remaining days. | Both flag positions work; `0`, `±1`, `±3`, `±7`, `±14`, and `±17` days match the output examples above. |\n@@\n-3. Add default and weeks formatters. **Complete when:** `0`, `±1`, `±3`, `±7`, `±14`, and `±17` days match the complete output table above.\n+3. Add default and weeks formatters. **Complete when:** `0`, `±1`, `±3`, `±7`, `±14`, and `±17` days match the output examples above.\n*** End Patch";
+text(await tools.apply_patch(patch));
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work design TFR-001 --set-file /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.3N4R4SA3T8/option-a.md --status proposed",max_output_tokens:3000,yield_time_ms:30000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 10.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"dbeeac\",\"wall_time_seconds\":9.986624209,\"exit_code\":0,\"original_token_count\":66,\"output\":\"Saved the design of TFR-001 (proposed) at https://app.notion.com/p/TFR-001-Build-the-days-until-command-with-a-weeks-flag-solution-design-3e9b381da17681859546d90fe3e13254.\\nIt is proposed until the owner approves it: toolkit work approve <id> --design --by <name>.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work design TFR-001",max_output_tokens:8200});text(r.output.includes("Expected output examples for `--weeks`:")&&r.output.includes("- `17` and `-17`: `2 weeks and 3 days` and `2 weeks and 3 days ago`.")?"Design read-back: examples preserved; proposed status: "+r.output.split("\n")[0]:r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 2.5 seconds\nOutput:\n"}, {"type": "input_text", "text": "Design read-back: examples preserved; proposed status: Design of TFR-001 (proposed) at https://app.notion.com/p/TFR-001-Build-the-days-until-command-with-a-weeks-flag-solution-design-3e9b381da17681859546d90fe3e13254"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set TFR-001 --waiting-on owner",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.6 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"0d7d2d\",\"wall_time_seconds\":3.238702834,\"exit_code\":0,\"original_token_count\":25,\"output\":\"Updated TFR-001: waiting on owner.\\nNow 04 Solution design (In Progress). Continue with work-decide.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history TFR-001 --note 'Design proposed: Option A, one Node.js command with local calendar-day arithmetic; recommended for R-01 through R-03.' --effect 'Owner review and design approval needed before implementation.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.6 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"cc89ac\",\"wall_time_seconds\":4.251285333,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Added a Recent History row to TFR-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show TFR-001 --section 'Overview'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.8 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"c2f0b7\",\"wall_time_seconds\":1.4765525,\"exit_code\":0,\"original_token_count\":105,\"output\":\"## Overview\\n\\n**Goal:** A person enters a date and sees the time remaining in days or, with --weeks, in weeks and days.\\n\\n**Current position:** Q-01 through Q-06 are answered and reflected in R-01 through R-03 and Acceptance. The independent requirements check found no material content gap.\\n\\n**Next action:** Owner reviews and approves the requirements.\\n\\n**Blockers:** Requirements approval.\\n\\n**Related items:** None.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit TFR-001 --section 'Overview' --text '**Goal:** A person enters a date and sees the time remaining in days or, with --weeks, in weeks and days.\n\n**Current position:** R-01 through R-03 are approved. A proposed design for one Node.js command passed the design review and is saved with this item.\n\n**Next action:** Owner reviews and approves or changes the proposed Option A design.\n\n**Blockers:** Design approval.\n\n**Related items:** None.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"697add\",\"wall_time_seconds\":4.108661667,\"exit_code\":0,\"original_token_count\":8,\"output\":\"Saved \\\"Overview\\\" in TFR-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show TFR-001 --section 'Resume here'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"29798a\",\"wall_time_seconds\":1.07198275,\"exit_code\":0,\"original_token_count\":57,\"output\":\"### Resume here\\n\\nShow the final R-01 through R-03 and Acceptance to the owner and ask for explicit requirements approval. If approved, record the approval and continue to solution design. Build only after requirements approval.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit TFR-001 --section 'Resume here' --text 'Review proposed Option A in the Solution Design child page. Ask the owner to approve it or name changes. After approval, fill Selected design and Build and verification plan, record design approval, then continue with work-on.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.8 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"cccaff\",\"wall_time_seconds\":4.423672875,\"exit_code\":0,\"original_token_count\":8,\"output\":\"Saved \\\"Resume here\\\" in TFR-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.6/skills/memory-save/SKILL.md",max_output_tokens:8000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"a91aa2\",\"wall_time_seconds\":0.000002958,\"exit_code\":0,\"original_token_count\":3310,\"output\":\"---\\nname: memory-save\\ndescription: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says \\\"remember this\\\", \\\"from now on\\\", \\\"forget that\\\", or \\\"remind me\\\" with no time given, corrects the agent, or a hook says a save is due.'\\n---\\n\\n# Memory save\\n\\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \\\"How to write replies\\\" section of `AGENTS.md`.\\nSaves, corrects, or retires one memory record with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand.\\n\\n## Steps\\n\\nTrack these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.\\n\\n1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home (\\\"Where other things go\\\" below) and stop.\\n2. Search for a record that already holds it, and read each hit with its version. The save's duplicate check compares wording, so only this search finds a record the new fact contradicts (for example \\\"Mondays\\\" against \\\"Tuesdays\\\").\\n   `toolkit memory find '<topic>'`\\n   `toolkit memory get <key> --json`\\n3. Read the approval mode and apply \\\"Approval policy\\\" below. When it says ask, ask and wait.\\n   `toolkit config get memory.approval`\\n4. Write the description and body in the record format (`references/record-format.md`), then save with the form for the case (\\\"Save forms\\\" below).\\n5. Exit code 2 saved nothing. Read the \\\"Error:\\\" line. Records listed: the duplicate check. \\\"Changed since it was read\\\": read it again and redo the change. Any other rule: fix the text as the message says. `references/replacing-and-retiring.md`, section 2, has each case.\\n6. \\\"Forget that\\\": retire the record, with his words as the reason. Delete only when his own words say delete (\\\"Approval policy\\\").\\n   `toolkit memory retire <key> --reason '<his words>'`\\n7. An owner to-do with no work item, or a change to what is happening now: update the cur
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --json",max_output_tokens:2500});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.7 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"e4d998\",\"wall_time_seconds\":3.398401625,\"exit_code\":0,\"original_token_count\":190,\"output\":\"{\\n  \\\"ok\\\": true,\\n  \\\"backend\\\": \\\"notion\\\",\\n  \\\"kind\\\": \\\"focus\\\",\\n  \\\"text\\\": \\\"# Current focus\\\\n\\\\nLast updated: 2026-09-28, chat, agent\\\\n\\\\n## Now\\\\n\\\\n- TFR-001 Build the days-until command with a --weeks flag\\\\n\\\\n## Waiting on the owner\\\\n\\\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\\\n\\\\n## Untracked to-dos\\\\n\\\\nNone.\\\\n\\\\n## Next session starts with\\\\n\\\\n- Continue TFR-001 from its Resume here: ask for requirements approval, then record it before solution design.\\\\n\\\",\\n  \\\"version\\\": \\\"15b618c5a6f4090e798e2ad2a887be4040ad0939b6e1b046b024863d4d17e6f3\\\"\\n}\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --text '# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- TFR-001 Build the days-until command with a --weeks flag\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue TFR-001 from its Resume here: ask for approval of proposed Option A in the Solution Design page, then record the design decision before implementation.' --expect 15b618c5a6f4090e798e2ad2a887be4040ad0939b6e1b046b024863d4d17e6f3",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.1 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"e7c69b\",\"wall_time_seconds\":3.758093625,\"exit_code\":0,\"original_token_count\":15,\"output\":\"Saved the current focus (20 lines). Version: 4f22b7c214cf\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"toolkit memory focus",max_output_tokens:2000}),
+  tools.exec_command({cmd:"toolkit work validate TFR-001",max_output_tokens:2000}),
+  tools.exec_command({cmd:"toolkit doctor",max_output_tokens:3500}),
+  tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:1500})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.8 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"1a8395\",\"wall_time_seconds\":0.742638125,\"exit_code\":0,\"original_token_count\":159,\"output\":\"# Current focus\\n\\nLast updated: 2026-09-28, chat, agent\\n\\n## Now\\n\\n- TFR-001 Build the days-until command with a --weeks flag\\n\\n## Waiting on the owner\\n\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\n\\n## Untracked to-dos\\n\\nNone.\\n\\n## Next session starts with\\n\\n- Continue TFR-001 from its Resume here: ask for approval of proposed Option A in the Solution Design page, then record the design decision before implementation.\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"4ecb1f\",\"wall_time_seconds\":4.458286708,\"exit_code\":0,\"original_token_count\":25,\"output\":\"Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":2,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"9d3949\",\"wall_time_seconds\":1.5534355,\"exit_code\":1,\"original_token_count\":425,\"output\":\"Toolkit doctor for Toolkit V2 final run (safe to delete) (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1).\\n\\nWarnings (2):\\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.\\n   Fix: The owner opens Codex in this folder and trusts it when Codex asks.\\n2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).\\n   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\\n\\nNotes (4):\\n- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed,
+
+[CALL] const r=await tools.exec_command({cmd:"rm /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.3N4R4SA3T8/option-a.md",max_output_tokens:1000});text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"rmdir /var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.3N4R4SA3T8",max_output_tokens:1000});text(r);
+

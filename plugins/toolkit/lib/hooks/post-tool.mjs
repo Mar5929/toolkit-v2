@@ -8,8 +8,10 @@
 // - A .memory/ record changed by hand: rebuilds MEMORY.md under the lock.
 // - A shell command (not a toolkit command) that names a WORK-ITEM.md: checks
 //   that record after the command ran.
-// - The first direct body edit of a record in a session: one line saying that
-//   toolkit work edit is the way to change a record's text.
+// - The first direct body edit of each record file in a session: one line
+//   saying that toolkit work edit is the way to change a record's text (once
+//   per file, not once per session: sample run confirm-a, the second record
+//   edited by hand got nothing).
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -175,7 +177,7 @@ export async function postTool(input, io) {
       if (res.gates.length) {
         blocks.push(`The edit to ${rel} was saved, and it skips an approval gate for ${who}: ${listText(res.gates)} Put the previous value back, or ask the owner and record the answer with toolkit work approve ${res.id || '<id>'} (the work-decide skill).`);
       }
-      if (!res.errors.length && !res.gates.length) directEdits.push({ who, design: path.basename(f.path) === 'DESIGN.md' });
+      if (!res.errors.length && !res.gates.length) directEdits.push({ who, path: rel, design: path.basename(f.path) === 'DESIGN.md' });
       // An edit to an approved design is told every time, not once per session
       // (sample run confirm-a: the second direct edit, to an approved design, got no message).
       if (res.kind === 'design' && approvedDesignFile(f.path)) approvedDesigns.push(who);
@@ -186,21 +188,20 @@ export async function postTool(input, io) {
     const { reindexVault } = await import('../memory/builtin.mjs');
     await reindexVault(project.mainRoot || project.root);
   }
-  let remind = false;
+  let remind = [];
   const reminded = directEdits.filter((e) => !(e.design && approvedDesigns.includes(e.who)));
   if (edits.length || memoryTouched) {
     await updateSession(project, io.host, input, io.env, (state) => {
       const turn = currentTurn(state, input);
       for (const e of edits) if (!turn.edits.some((x) => x.path === e.path)) turn.edits.push(e);
       if (memoryTouched) turn.records.push({ kind: 'memory-file', what: 'a .memory/ record was edited', at: new Date().toISOString() });
-      // One reminder per session that toolkit work edit is the way to change a record's text.
-      if (reminded.length && !state.remindedBodyEdit) {
-        state.remindedBodyEdit = true;
-        remind = true;
-      }
+      // One reminder per record file per session that toolkit work edit is the way to change a record's text.
+      const seen = new Set(Array.isArray(state.remindedEdits) ? state.remindedEdits : []);
+      remind = reminded.filter((e) => !seen.has(e.path));
+      if (remind.length) state.remindedEdits = [...seen, ...remind.map((e) => e.path)].slice(-200);
     });
   }
-  if (remind) contexts.push(directEditNote(reminded));
+  if (remind.length) contexts.push(directEditNote(remind));
   for (const who of [...new Set(approvedDesigns)]) contexts.push(approvedDesignNote(who));
   return postToolOutput({ context: contexts.join('\n'), blockReason: blocks.join(' ') || null });
 }

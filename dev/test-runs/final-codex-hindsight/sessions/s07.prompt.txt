@@ -1,0 +1,1 @@
+Yes to both checks: --times 1.5 is an error, and --times 3 with no name prints three Hello, world! lines.

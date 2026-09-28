@@ -18,16 +18,16 @@ Takes an approved item through the pull request, merge, deployment, and requirem
    `toolkit work set <id> --stage 12-pr-and-push`
 3. Merge through `merge-and-clean-up` only with the owner's yes to this merge, or a standing merge instruction with an independent check on the exact head (`references/closing.md`, section 3). No remote: the local merge (`references/closing.md`, section 4), then this note.
    `toolkit work history <id> --note 'No remote: merged locally into <default branch>.' --effect 'No pull request; no deployment.'`
-4. Deployment, when the item needs one (`references/closing.md`, section 5). Production deploys and production data loads are the owner's to run.
+4. Deployment, when the item needs one (`references/closing.md`, section 5). Production deploys and production data loads are the owner's to run. Salesforce: a sandbox validate runs; a sandbox deploy needs his yes for that deploy, and in Codex he runs every sandbox deploy and sandbox data change himself, so give him the exact command with its `-o <sandbox>`. Run each `sf` command directly, never from a script.
    `toolkit work set <id> --stage 13-deployment`
 5. Requirements baseline: copy only delivered and approved behavior into the area's file in `requirements/`, update `system-guide/` when the structure changed, and save both with `publish-docs` (`references/closing.md`, section 6).
    `toolkit work set <id> --stage 14-spec-update`
 6. Sub-items: list the open ones; each is finished, cancelled, or moved on its own (`references/closing.md`, section 7).
    `toolkit work list --tree`
 7. Memory: at most one `event` record through `memory-save`, only when the episode will matter later.
-8. Before Done, run the Done checklist in `references/approvals.md`, section 5, with the Overview and Roadmap updates and the leftover worktrees in `references/closing.md`, sections 9 and 10. Then mark it Done. The command also backs up the tracker and memory: read its backup line. "No backup folder is set" or a line with "failed" goes to the owner as a question (`references/closing.md`, section 10).
+8. Before Done, run the Done checklist in `references/approvals.md`, section 5, with the Overview and Roadmap updates and the leftover worktrees in `references/closing.md`, sections 9 and 10. Take the item off the current focus now, before the finish command, so the backup it makes holds the new focus (`references/current-focus.md`); if the finish refuses, put the item back. Then mark it Done. The command also backs up the tracker and memory: read its backup line. "No backup folder is set" or a line with "failed" goes to the owner as a question (`references/closing.md`, section 10).
    `toolkit work finish <id> --by <owner> --evidence '<what shows it works>'`
-9. Take the item off the current focus (`references/current-focus.md`). Say whether the work reached the default branch. End with the one question (the merge, the deploy, a leftover branch, the backup folder) or "Tell me the next thing to build."
+9. Say whether the work reached the default branch. End with the one question (the merge, the deploy, a leftover branch, the backup folder) or "Tell me the next thing to build."
 10. Cancel instead: the owner's words are the reason; ask about each open sub-item first (`references/approvals.md`, section 6).
     `toolkit work cancel <id> --reason '<his words>'`
 
@@ -61,7 +61,7 @@ Takes an approved item through the pull request, merge, deployment, and requirem
 | [references/agent-acceptance-checker.md](references/agent-acceptance-checker.md) | Codex only: the text to give the worker |
 | [references/recording-owner-answers.md](references/recording-owner-answers.md) | The owner answers; history notes; a failed save |
 | [references/work-item-format.md](references/work-item-format.md) | Before editing Overview or the Roadmap |
-| [references/current-focus.md](references/current-focus.md) | Step 9: taking the item off the focus |
+| [references/current-focus.md](references/current-focus.md) | Step 8: taking the item off the focus |
 | [references/toolkit-commands.md](references/toolkit-commands.md) | Before a command that carries text, and on any exit code other than 0 |
 | [references/tracker-local.md](references/tracker-local.md) | `tracker.type` is `local` |
 | [references/tracker-notion.md](references/tracker-notion.md) | `tracker.type` is `notion` |

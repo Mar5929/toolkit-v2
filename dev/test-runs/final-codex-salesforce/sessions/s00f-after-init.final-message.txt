@@ -1,0 +1,5 @@
+Toolkit V2 is installed with local work items, built-in memory, and Salesforce guards. I recorded `tkv2-sbx`, `tkv2-prod`, API version `62.0`, and the practice-org simulation in [PROJECT.md](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2/PROJECT.md). The first backup succeeded. Doctor reports **0 problems and 3 warnings**.
+
+The warnings need your action in Codex: trust this project folder, then open `/hooks` and trust the Toolkit V2 hooks and two Salesforce guards. Start a new session afterward so Codex loads the project settings.
+
+The guides still need your intended outcome, and there is no verified build or test command yet. **What should Acme CRM accomplish for the sales team in one sentence?**

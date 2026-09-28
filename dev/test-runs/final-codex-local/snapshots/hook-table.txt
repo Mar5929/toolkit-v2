@@ -1,0 +1,30 @@
+| Session | SessionStart briefing | UserPromptSubmit (turn started; extra lines) | PreToolUse (block or note) | PostToolUse (records; notes) | Stop (state updated after last tool call) |
+|---|---|---|---|---|---|
+| s00a-setup | 0 | (no V2 project yet, no state) | - | - | - |
+| s00b-name | 0 | (no V2 project yet, no state) | - | - | - |
+| s00c-tracker | 0 | (no V2 project yet, no state) | - | - | - |
+| s00d-memory | 0 | (no V2 project yet, no state) | - | - | - |
+| s00e-salesforce | 0 | (no V2 project yet, no state) | - | - | - |
+| s00f-soul | 0 | (no V2 project yet, no state) | - | - | - |
+| s00g-backup | 0 | yes 19:51:35 | - | 1 | yes 19:51:43 |
+| s00h-outcome | 1 | yes 19:51:53 | - | 1 | yes 19:53:28 |
+| s01-request | 1 | yes 19:53:48 | - | 11 | yes 19:55:20 |
+| s02-remember | 1 | yes 19:55:30; The owner stated something to keep; memory-save records it, or work-on | - | 1 | yes 19:55:58 |
+| s03-answer | 1 | yes 19:56:08 | - | 8 | yes 19:58:06 |
+| s04-answer-q02 | 1 | yes 19:58:14 | - | 11 | yes 20:00:20 |
+| s05-approve-reqs | 1 | yes 20:00:41 | - | 7 | yes 20:01:54 |
+| s06-keep-going | 1 | yes 20:02:04 | - | 11 | yes 20:05:17 |
+| s07-approve-split | 1 | yes 20:05:34 | - | 28 | yes 20:10:09 |
+| s08-keep-going-build | 1 | yes 20:10:34 | note: This shell command joins a toolkit command to other commands | 22 | yes 20:17:21 |
+| sP1-propose | 1 | yes 20:17:47 | - | 1 | yes 20:18:01 |
+| sP2-ignore | 1 | yes 20:18:11; At the end of the last turn the toolkit saved the unanswered "Save to  | - | 0 | yes 20:18:24 |
+| s09-where-are-we | 1 | yes 20:18:37 | - | 0 | yes 20:19:05 |
+| s10-what-do-you-need | 1 | yes 20:19:20 | - | 0 | yes 20:19:46 |
+| s11-approve-wi002 | 1 | yes 20:20:14 | - | 6 | yes 20:21:28 |
+| s12-approve-wi003 | 1 | yes 20:21:45 | note: This shell command joins a toolkit command to other commands | 6 | yes 20:23:02 |
+| s13-approve-proposal | 1 | yes 20:23:25 | - | 1 | yes 20:23:57 |
+| s14-ship-it | 1 | yes 20:24:13 | - | 22 | yes 20:29:24 |
+| s15-memory-recall | 1 | yes 20:29:43 | - | 0 | yes 20:30:02 |
+| s16-hand-edit | 1 | yes 20:30:17 | block | 0; WI-003 was edited directly and passes validation. toolkit work edit <i | yes 20:30:56 |
+| s17-where-are-we-final | 1 | yes 20:31:08 | - | 0 | yes 20:31:25 |
+| s18-handoff | 1 | yes 20:31:36 | - | 1 | yes 20:33:48 |

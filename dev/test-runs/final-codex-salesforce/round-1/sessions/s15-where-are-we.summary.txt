@@ -1,0 +1,333 @@
+PROMPT: Where are we?
+THREAD: 01a0e9d6-2a48-7752-abc2-8cc5db184fc3
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Add a Tier picklist field to Account: 11 User approval, In Progress, waiting on owner. Next action: Ask Mike Rihm to approve the WI-001 result after the separate WI-002 result review. Continues with work-decide.
+- WI-002 Configure Account Tier access and page layout: 11 User approval, In Progress, waiting on owner. Next action: Ask Mike Rihm to approve the WI-002 result separately. Continues with work-decide.
+
+Waiting on the owner:
+- WI-001 Add a Tier picklist field to Account: WI-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-001 --result --by <name>. (work-decide)
+- WI-002 Configure Account Tier access and page layout: WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)
+
+Items: 2 in progress.
+
+Current focus:
+Last updated: 2026-09-28, chat, agent
+## Now
+- WI-001 Add a Tier picklist field to Account
+- WI-002 Configure Account Tier access and page layout
+## Waiting on the owner
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, and trust the Toolkit V2 hooks and two Salesforce guards. Setup step; drop it when doctor stops reporting it.
+## Untracked to-dos
+None.
+## Next session starts with
+- Continue WI-002 and WI-001 from their Resume here sections: present WI-002 for separate result approval, then WI-001. Independent checks found R-01 through R-04 met at f2c7b61 and b43155d; the owner-reported sandbox checks are in the test plans. The checker made no direct org calls.
+
+Project memory (builtin): 3 records. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_afternoon_salesforce_setup: Plan owner-run Salesforce Setup steps for the afternoon
+- user_custom_field_description_help_text: Every new custom field should have a description and help text
+- user_salesforce_setup_screenshots: Prefer Salesforce Setup screenshots to long written checklists
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499
+
+[AGENT] I’ll check the current work items and report what’s complete, what is waiting on you, and what comes next.
+
+[CALL exec] cat SOUL.md PROJECT.md .claude/rules/{check-deployment-contents,component-tracker,confirm-salesforce-changes,humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,production-data-changes,project-file-locations,salesforce-org-safety,session-handoff,shared-repository-work,work-item-folders}.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-status/SKILL.md
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+cat: SOUL.md: No such file or directory
+# Acme CRM
+
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->
+
+## Purpose and intended outcome
+
+- Purpose: Support the Acme sales team's account ranking and access to account information in Salesforce.
+- Intended outcome: The Acme sales team can rank their accounts and see the information they need on each account in Salesforce.
+
+## Scope and boundaries
+
+- In scope: Account ranking and account information for the Acme sales team in Salesforce.
+- Outside scope: `<Important exclusions or adjacent owners.>`
+- Constraints: `<Approved security, delivery, or operating constraints with sources.>`
+
+## Systems and environments
+
+| System or org | Purpose | Environment | Source of truth | Access notes |
+| --- | --- | --- | --- | --- |
+| Acme CRM (`tkv2-sbx`) | Practice Salesforce org for testing | Sandbox | `sf org list` and `sf org display -o tkv2-sbx --json`, 2026-09-28 | Agents may read it; Codex hands sandbox deploy and data-change commands to the owner. |
+| Acme CRM (`tkv2-prod`) | Practice Salesforce production org | Production | `sf org list`, 2026-09-28 | Agents may read it; the owner runs any production change. |
+
+## People and ownership
+
+| Role | Person or team | Responsibility | Source / last confirmed |
+| --- | --- | --- | --- |
+| Project owner | Mike Rihm | Makes project decisions | Setup answer and Git identity, 2026-09-28 |
+| Sales Manager and Tier reviewer | Dana Lee | Requested the Tier field and checks Account tiers every Monday | Mike Rihm, 2026-09-28 |
+
+## Work and project records
+
+- Work tracker: Local `.work-items/` folders, Git-ignored.
+- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)
+- Project decisions: [DECISIONS.md](DECISIONS.md)
+- Functional requirements: [requirements/](requirements/)
+- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`
+- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`
+- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)
+- Memory backup or sync: `/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-salesforce`; Toolkit V2 backs up local work items and memory there.
+
+## Resources and project paths
+
+- Salesforce source: `force-app/` as configured in `sfdx-project.json`.
+- Project-wide deployment manifest: `delivery/deployment/full-project-deployment-template/package.xml` after the API version and members are verified. Keep it as the full project component inventory; or
+
+[AGENT] I’m using the work-status procedure to read the tracker’s current state.
+
+[CALL exec] toolkit work list --tree
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+account-tier/ (group)
+  WI-001  Add a Tier picklist field to Account  (11 User approval, In Progress, waiting on owner)
+    WI-002  Configure Account Tier access and page layout  (11 User approval, In Progress, waiting on owner)
+
+
+[CALL exec] toolkit work next
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Nothing is ready to work on.
+
+2 decisions wait on the owner (work-decide; toolkit work decisions lists them).
+
+
+[CALL exec] toolkit work decisions
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+2 decisions wait on the owner:
+
+WI-001 Add a Tier picklist field to Account
+  - WI-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-001 --result --by <name>. (work-decide)
+
+WI-002 Configure Account Tier access and page layout
+  - WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)
+
+
+[CALL exec] toolkit memory focus
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+# Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Add a Tier picklist field to Account
+- WI-002 Configure Account Tier access and page layout
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, and trust the Toolkit V2 hooks and two Salesforce guards. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-002 and WI-001 from their Resume here sections: present WI-002 for separate result approval, then WI-001. Independent checks found R-01 through R-04 met at f2c7b61 and b43155d; the owner-reported sandbox checks are in the test plans. The checker made no direct org calls.
+
+
+[CALL exec] toolkit work lifecycle
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+Stages (the status follows the stage):
+  01-discovery              Backlog      Working out what the owner wants.                                    Continue with: work-requirements
+  02-refinement             Backlog      Turning that into requirements.                                      Continue with: work-requirements
+  03-requirements-approved  Ready        The owner approved the requirements.                                 Continue with: solution-design or work-on
+  04-solution-design        In Progress  Deciding how it gets built.                                          Continue with: solution-design
+  05-breakdown              In Progress  Splitting work that is too large.                                    Continue with: work-organize
+  06-implementation-plan    In Progress  Ordering the build steps.                                            Continue with: work-on
+  07-tracking-setup         In Progress  Creating build tracking when needed.                                 Continue with: work-on
+  08-build                  In Progress  Producing the requested change.                                      Continue with: work-on
+  09-testing                In Progress  Checking it against the requirements.                                Continue with: work-check
+  10-bug-fixing             In Progress  Fixing what testing found.                                           Continue with: work-check
+  11-user-approval          In Progress  The owner reviews the result.                                        Continue with: work-check
+  12-pr-and-push            In Review    Repository work is in a pushed pull request.                         Continue with: work-finish
+  13-deployment             In Review    The result is put where it belongs.                                  Continue with: work-finish
+  14-spec-update            In Review    Lasting specifications match the result.                             Continue with: work-finish
+  (Done)                    Done         Set only by toolkit work finish <id> --by <name> --evidence <text>.  Continue with: nothing (finished)
+  (Cancelled)               Cancelled    Set only by toolkit work cancel <id> --reason <text>.                Continue with: nothing (finished)
+  An item with waiting_on: owner continues with work-decide, whatever its stage.
+
+Statuses:
+  Backlog      Logged; requirements are still being worked out (stages 01-02).
+  Ready        Requirements approved; work can start (stage 03).
+  In Progress  The item is active (stages 04-11). It does not mean building has started.
+  In Review    The result is in a pull request, being deployed, or being written into the specifications (stages 12-14).
+  Done         The owner accepted the result. Set only by toolkit work finish.
+  Cancelled    Work stopped without the result. Set only by toolkit work cancel.
+
+Types:
+  discovery               Finding out what is needed.
+  solution-design    
+
+[CALL exec] toolkit work show WI-002
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+WI-002: Configure Account Tier access and page layout
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1/.work-items/account-tier/WI-001-tier-field/WI-002-tier-access-and-layout/WORK-ITEM.md
+Stage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/account-tier/WI-001-tier-field/DESIGN.md). Read it with: toolkit work design WI-001
+Worktree branch for this item: claude/wi-002-configure-account-tier-access (folder .claude/worktrees/wi-002-configure-account-tier-access)
+
+---
+id: WI-002
+title: Configure Account Tier access and page layout
+type: build
+stage: 11-user-approval
+status: In Progress
+parent: WI-001
+waiting_on: "owner"
+priority: medium
+delivery: agent-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-002: Configure Account Tier access and page layout
+
+## Overview
+
+**Goal:** Give Account viewers the approved Tier access and show Tier directly below Rating on the assigned Account page.
+
+**Current position:** R-03 and R-04 met in the independent recheck of b43155d. Mike Rihm reported that Sales Manager and System Administrator saved Tier, Sales User and Read Only could see Tier without editing, and Setup effective access allowed Tier editing only for Sales Manager and System Administrator profiles. He reported nobody else has View All or Modify All on Accounts in this practice org. Sandbox readback found the four intended profile grants and no active-user permission set assignments. Mike also saw Tier directly below Rating. The independent checker read local source and did not repeat the org checks.
+
+**Next action:** Ask Mike Rihm to approve the WI-002 result separately.
+
+**Blockers:** Result approval waits on the owner.
+
+**Related items:** Parent WI-001 builds the Tier field. WI-001 approved design covers this item.
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Verify org access and page | Confirm effective access and assigned Account page. | Done | Four Account-viewing profiles and Account Layout assignment recorded; Option A fits the inventoried page. | None. |
+| P2 — Configure access and layout | Set field permissions and show Tier directly below Rating. | Done | Owner-reported Sales Manager and Sales User behavior and page order, plus four profile grants in sandbox readback. | None. |
+
+## Tasks
+
+### P1 — Verify org access and page
+
+- [x] **P1-T01 — Inventory effective access** · Done  
+  **Work:** Identify Account viewers and field permissions from profiles, permission sets, groups, and elevated grants.  
+  **Deliverable:** Access matrix in Decisions
+
+[CALL exec] toolkit work show WI-001
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Warning: truncated output (original token count: 4208)
+Total output lines: 197
+
+WI-001: Add a Tier picklist field to Account
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1/.work-items/account-tier/WI-001-tier-field/WORK-ITEM.md
+Stage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: none | Sub-items: WI-002 | Design: approved (.work-items/account-tier/WI-001-tier-field/DESIGN.md)
+Worktree branch for this item: claude/wi-001-add-a-tier-picklist-field-to (folder .claude/worktrees/wi-001-add-a-tier-picklist-field-to)
+
+---
+id: WI-001
+title: Add a Tier picklist field to Account
+type: build
+stage: 11-user-approval
+status: In Progress
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: agent-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: approved
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-001: Add a Tier picklist field to Account
+
+## Overview
+
+**Goal:** Let the Acme sales team rank Accounts using a Tier field.
+
+**Current position:** The independent recheck of f2c7b61 found R-01 and R-02 met from Mike Rihm’s owner-reported sandbox observations and matching field metadata. Mike reported that a new Account starts with blank Tier, the displayed choices are Gold, Silver, Bronze in order, Gold, Silver, Bronze, and blank saved, Platinum was rejected through the API, the description is in Setup, and help text appears on hover. The checker did not repeat the org checks. WI-002 separately met R-03 and R-04 in its independent recheck.
+
+**Next action:** Ask Mike Rihm to approve the WI-001 result after the separate WI-002 result review.
+
+**Blockers:** Result approval waits on the owner.
+
+**Related items:** Sub-item WI-002 delivers R-03 and R-04.
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Tier field | Create the Account Tier field with approved values and field text. | Done | Field metadata and R-01/R-02 metadata checks passed; sandbox behavior checks await deployment. | None. |
+| P2 — Access and page layout | Configure field access and show Tier below Rating. | In Progress | WI-002 passes R-03/R-04 checks after owner-run sandbox steps. | WI-002 |
+
+## Tasks
+
+### P1 — Tier field
+
+- [x] **P1-T01 — Build Tier field** · Done  
+  **Work:** Create Account.Tier__c with the approved values, settings, description, and help text.  
+  **Deliverable:** Tier field metadata and its narrow WI-001 deployment package, committed as 8e95727.  
+  **Done when:** R-01/R-02 metadata checks passed: optional restricted picklist, Gold/Silver/Bronze order, no default, description and help text; sandbox check-only validation succeeded as job 0AfFAKE000VALID3.  
+  **Depends on:** WI-002 access and page inventory gate, comple
+
+[AGENT] Two results are waiting for your separate approval:
+
+- **WI-002 — Tier access and Account page layout:** Tested against the approved requirements. Your sandbox checks confirmed who can edit Tier and that it appears below Rating.
+- **WI-001 — Account Tier field:** Tested against the approved requirements. Your sandbox checks confirmed the values, blank default, saving behavior, description, and help text.
+
+Both remain **In Progress at user approval**. There is no other work item ready to start. Review WI-002 first, then WI-001. Say **“what do you need from me”** to go through the two approvals.
+
+SKILLS OPENED (SKILL.md read): ['work-status']
+
+TOOLKIT COMMANDS:
+   toolkit work list --tree
+   toolkit work next
+   toolkit work decisions
+   toolkit memory focus
+   toolkit work lifecycle
+   toolkit work show WI-002
+   toolkit work show WI-001

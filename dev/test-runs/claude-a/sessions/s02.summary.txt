@@ -95,7 +95,7 @@ Add Toolkit V2 project setup
 Project manual, rules, output style, Claude Code and Codex settings,
 toolkit config, and the project document folders and templates.
 
-Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+<AI co-author line>
 EOF
 git log --oneline -3; git status --short
 HOOK PreToolUse:Bash outcome=success exit=0

@@ -1,0 +1,5 @@
+Three decisions wait on you: approval of the WI-001 Tier field result, approval of the WI-002 access and page layout result, and whether to save a proposed note that you are usually off on Fridays. We’ll take them separately.
+
+**WI-001:** You reported that the sandbox field has Gold, Silver, and Bronze in order, starts blank, can be cleared, and has the agreed description and help text. You can review it in Account field Setup and on an Account record. No acceptance gap was reported; no independent agent check ran. I recommend approving this result because your field checks passed. This approval covers the field only; I’ll ask about WI-002 next.
+
+Do you approve the WI-001 result?

@@ -1,0 +1,1 @@
+I approve Option A. Before you build, split the --split option out into its own sub-item under WI-001, so the plain tip and total can be built and checked first.

@@ -53,7 +53,10 @@ const PARTS = [
 ];
 
 function skipName(name) {
-  return name === '.lock' || name.endsWith('.lock') || name.endsWith('.tmp') || name === '.DS_Store' || name.includes('.takeover');
+  // .obsidian/ is the owner's Obsidian window layout for .memory/. It changes
+  // whenever he opens the vault, so a backup of it would make every import
+  // report a conflict (skill-references review, 2026-09-28).
+  return name === '.lock' || name.endsWith('.lock') || name.endsWith('.tmp') || name === '.DS_Store' || name.includes('.takeover') || name === '.obsidian';
 }
 
 function isInside(child, parent) {
@@ -474,8 +477,36 @@ export function backupTarget(project, dir, date) {
 }
 
 /**
+ * True when today's backup folder already holds more files in a part than the
+ * project has in that folder now. A fresh clone, or the same project on a new
+ * computer, starts with only the templates; its first automatic backup must
+ * not replace the day's real backup (skill-references review, 2026-09-28:
+ * the session-start backup emptied today's memory/ and work-items/).
+ */
+export function backupWouldShrink(project, target, partNames) {
+  const mainRoot = project.mainRoot || project.root;
+  for (const p of PARTS) {
+    if (!partNames.includes(p.name)) continue;
+    const dest = path.join(target, p.name);
+    if (!fs.existsSync(dest)) continue;
+    const src = path.join(mainRoot, p.dir);
+    const have = fs.existsSync(src) ? walk(src, { skip: (name) => skipName(name) }).length : 0;
+    const kept = walk(dest, { skip: (name) => skipName(name) }).length;
+    if (have < kept) return true;
+  }
+  return false;
+}
+
+function clockStamp(date) {
+  return `${String(date.getHours()).padStart(2, '0')}${String(date.getMinutes()).padStart(2, '0')}${String(date.getSeconds()).padStart(2, '0')}`;
+}
+
+/**
  * The automatic backup: export this project's Git-ignored folders (and the
- * Hindsight memory) to today's folder under backup.dir. Never throws.
+ * Hindsight memory) to today's folder under backup.dir. When today's folder
+ * holds more files than the project has now (backupWouldShrink), the backup
+ * goes to a new folder, <today's folder>-<HHMMSS>, and the earlier one is
+ * kept as it was. Never throws.
  * Returns { status: 'done'|'not-set'|'declined'|'nothing'|'failed', dir,
  * parts, errors, line } (line: one sentence for the command's output, or null).
  */
@@ -492,7 +523,14 @@ export async function autoBackup(project, { env = process.env, now, fetch: fetch
     };
   }
   if (setting.declined) return { status: 'declined', parts: [], errors: [], line: null };
-  const target = backupTarget(project, setting.dir, localDate(env, now ? now() : null));
+  const stamp = now ? now() : new Date();
+  let target = backupTarget(project, setting.dir, localDate(env, stamp));
+  const files = parts.filter((p) => p.name !== 'memory-export');
+  let keptFolder = null;
+  if (files.length && backupWouldShrink(project, target, files.map((p) => p.name))) {
+    keptFolder = target;
+    target = `${target}-${clockStamp(stamp)}`;
+  }
   const done = [];
   const errors = [];
   try {
@@ -500,7 +538,6 @@ export async function autoBackup(project, { env = process.env, now, fetch: fetch
   } catch (err) {
     return { status: 'failed', dir: target, parts: [], errors: [err.message], line: `The automatic backup to ${target} failed: ${err.message}. Tell the owner (is the backup folder or drive there?); the work itself is saved.` };
   }
-  const files = parts.filter((p) => p.name !== 'memory-export');
   if (files.length) {
     try {
       const res = await exportProject(project, target, now ? { now } : {});
@@ -525,10 +562,11 @@ export async function autoBackup(project, { env = process.env, now, fetch: fetch
   if (errors.length && !done.length) {
     return { status: 'failed', dir: target, parts: [], errors, line: `The automatic backup to ${target} failed: ${errors.join('; ')}. Tell the owner; the work itself is saved.` };
   }
+  const kept = keptFolder ? ` Today's earlier backup in ${keptFolder} holds more files than the project has now, so it was kept as it was.` : '';
   const line = errors.length
-    ? `Backed up ${words(doneParts)} to ${target}, but not ${errors.join('; ')}. Tell the owner.`
-    : `Backed up ${words(doneParts)} to ${target}.`;
-  return { status: errors.length ? 'failed' : 'done', dir: target, parts: done, errors, line };
+    ? `Backed up ${words(doneParts)} to ${target}, but not ${errors.join('; ')}. Tell the owner.${kept}`
+    : `Backed up ${words(doneParts)} to ${target}.${kept}`;
+  return { status: errors.length ? 'failed' : 'done', dir: target, parts: done, errors, line, kept: keptFolder };
 }
 
 function writeExportRecord(project, record) {

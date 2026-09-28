@@ -341,7 +341,9 @@ toolkit version | help [command]
 toolkit init --name <n> [--key <k>] --tracker <local|notion|github|jira> --memory <builtin|hindsight|notion> [--salesforce] [--owner <name>] [--dir <path>] [--hosts claude-code,codex] [--decline SOUL.md] [--backup-dir <folder|none>]
 toolkit sync [--dry-run]                      add missing scaffold files; never overwrite a file whose hash changed
 toolkit doctor [--json]                       every problem with its fix; a warning only the other host can clear
-                                              (Codex trust, run from Claude Code) is listed but does not fail the run
+                                              (Codex trust, run from Claude Code) is listed but does not fail the run;
+                                              a hook failure in <git common dir>/toolkit-v2/hook-errors.log from the last
+                                              3 days is a warning (hook-errors), in the briefing too
 toolkit brief [--host claude|codex]           the session briefing
 toolkit machine-setup [--offline]             wrapper script and plugin-root pointer (only from an installed copy: a
                                               toolkit-v2 plugin cache folder or the registered marketplace source; a cache
@@ -352,18 +354,21 @@ toolkit machine-setup [--offline]             wrapper script and plugin-root poi
                                               registered it still writes the wrapper (fallback: the source folder) and the
                                               Codex plugin switches
 toolkit config get [<key>] | set <key> <value>   backup.dir: a full path outside the project, or none
-toolkit export --to <dir> | import --from <dir> [--dry-run] [--replace]    .work-items/ and .memory/ backup (I17);
-                                              export refuses a folder that holds another project's export
+toolkit export --to <dir> | import --from <dir> [--only work-items|memory] [--dry-run] [--replace]    .work-items/ and
+                                              .memory/ backup (I17); export refuses a folder that holds another project's
+                                              export; --only restores one part; both leave out .memory/.obsidian/
 toolkit handoff-backup                        the automatic backup (decision 13): .work-items/, .memory/, and Hindsight
                                               memory to <backup.dir>/<project key>-<YYYY-MM-DD>/ (a second clone with the
                                               same key adds -<8 letters of a hash of its folder>); the handoff skill runs
                                               it last and work finish runs the same; with no backup.dir it says how to set
-                                              one; exit 1 when the backup failed; old day folders are never deleted
+                                              one; exit 1 when the backup failed; old day folders are never deleted; when
+                                              today's folder holds more files than the project has now (a fresh clone or a
+                                              new computer), it writes <day folder>-<HHMMSS> and keeps the earlier one
 toolkit index knowledge [--check]             regenerate ai-external-knowledge/INDEX.md (I16)
-toolkit decision add --decision <t> --why <t> --by <name> [--replaces D-n]
+toolkit decision add --decision <t> --why <t> --by <name> [--replaces D-n] | list
 
 toolkit work lifecycle
-toolkit work new --title <t> [--type <t>] [--parent <id> [--covers R-02,R-03]] [--stage <s>] [--priority <p>]
+toolkit work new --title <t> [--type <t>] [--parent <id> [--covers R-02,R-03]] [--stage <s>] [--priority <p>] [--request <text>] [--group <folder>]
                                               a sub-item takes its parent's delivery value when the parent has agent-led or owner-led
 toolkit work list [--status <s>] [--waiting-on <w>] [--tree] [--all]
 toolkit work show <id> [--section <heading>] [--path] [--json]
@@ -384,14 +389,21 @@ toolkit work approve <id> --requirements|--design|--result --by <name>
                                               marks the open questions that asked for that approval Answered and prints
                                               "Marked Q-xx Answered" (JSON: closedQuestions); a design approval is all or
                                               nothing: design text alone never approves a design; --design refuses (exit 2)
-                                              while "## Selected design" still says "Pending owner decision" (confirm-a)
+                                              while "## Selected design" still says "Pending owner decision" (confirm-a);
+                                              after any approval, a note when the Overview's Next action still asks for it;
+                                              after --design, a note naming template sections the design lacks
 toolkit work design <id> [--create] [--set-file <f> | --text <t>] [--status proposed|approved|superseded]
+                                              text starting with work_item/status/approved lines without --- fences is
+                                              read as the header (with a note); a proposed design saved with text gets a
+                                              note naming the template's "## " sections it lacks (final confirmation 1)
 toolkit work history <id> --note <text> [--effect <text>]
 toolkit work move <id> --under <id|group|archive|root>
 toolkit work finish <id> --by <name> --evidence <text> [--quote <owner's words>] [--allow-open-sub-items]
-                                              then the automatic backup, as toolkit handoff-backup (JSON: backup)
+                                              then the automatic backup, as toolkit handoff-backup (JSON: backup); with
+                                              nothing on this computer to back up it says "No automatic backup: ..."
 toolkit work cancel <id> --reason <text>
-toolkit work next
+toolkit work next                             the next item; its count of decisions waiting on the owner includes memory
+                                              proposals, as toolkit work decisions does (JSON: waitingOnOwner, memoryProposals)
 toolkit work decisions                        everything waiting on the owner, memory proposals included (JSON:
                                               memoryProposals; count includes them; memoryProblem when memory cannot be read)
 toolkit work sync                             rescan, adopt, renumber duplicates, derive values, dashboard, report moves
@@ -405,11 +417,14 @@ toolkit memory save --type <t> --name <slug> --description <d> (--body <t> | --b
                                               or --allow-similar; refuses a secret (a key, token, private key, or password)
                                               in the description, source, or body without printing it;
                                               --proposal: an unanswered "Save to memory?" (needs-review, "Proposed by the agent on <date>")
-toolkit memory find <query> [--reflect] [--all] [--proposals]   proposals only with --proposals or --all; Hindsight lists
+toolkit memory find <query> [--reflect] [--type <t>] [--limit <n>] [--all] [--proposals]   proposals only with --proposals or --all; Hindsight lists
                                               as "about" only records that share the question's words or score 0.001 or more;
                                               a mid score "may be about it" (read it first); the rest "closest"; never a guess
 toolkit memory get <key> | list [--type] [--status]
-toolkit memory approve <key> --by <name>      the owner's yes: the record becomes current, "Approved by <name> on <date>"
+toolkit memory approve <key> --by <name>      the owner's yes: the record becomes current, "Approved by <name> on <date>";
+                                              a proposal the Stop hook saved also loses its "Do not rely on this" words, and
+                                              its Evidence line names who approved it and when; its title, Remember line, and
+                                              description name the owner in place of a leading "you"
 toolkit memory reject <key> [--reason <text>]   the owner's no to a proposal: it is deleted (Notion: moved to the trash);
                                               --reason is repeated in the output, not kept
 toolkit memory retire <key> [--superseded-by <key>] [--reason <text>] | restore <key>   --reason is kept in the retire note
@@ -424,6 +439,8 @@ toolkit memory reindex
 toolkit memory status                         last save time, counts, backend health
 
 toolkit notion ensure-root [--root-page <id>] [--projects-database <id>] [--check] | ensure-project [--project-name <n>] [--root-page <id>] [--projects-database <id>] [--check]
+                                              the "All Projects" view is a warning, never a stop: a column of a deleted
+                                              property is left out of the update, and a refused view update still saves the ids
 toolkit hindsight ensure-bank | health | service install|status|start|stop
 
 toolkit hook <session-start|user-prompt|pre-tool|post-tool|stop> --host <claude|codex>
@@ -440,11 +457,11 @@ use recorded real inputs from both hosts.
 
 | Event | Matcher | Does |
 | --- | --- | --- |
-| SessionStart | `startup\|resume\|clear\|compact\|fork` | Inside a V2 project only (decision 10: the toolkit plugin is on in every folder): refreshes the plugin-root pointer, only from an installed copy, never to an older version, and at the same version a plugin cache copy replaces the source folder (final review I1); in Codex records the hash of the `hooks/codex-hooks.json` it ran from in `~/.config/toolkit-v2/codex-hooks-seen.json`, which doctor compares with Codex's newest copy (M10); makes the automatic backup of `.work-items/` and `.memory/` when `backup.dir` is set and the last backup is more than a day old, and adds one line about it (decision 13); runs `work sync` (local); prints the briefing as `additionalContext`, about 6,000 characters max: this worktree's item, active items with their next skill, waiting on the owner, current focus, moves detected, setup warnings, a plain statement that `AGENTS.md` is the project manual. Codex adds the always-on rules list and the voice section. Notion and Hindsight read a Git-ignored cache (refreshed on every write) with 2-second timeouts and fail open (I9). The Notion check only reads the row properties to report the owner's moves; it writes nothing, and the next `toolkit work` command records the history rows (sample run c, round 2). |
+| SessionStart | `startup\|resume\|clear\|compact\|fork` | Inside a V2 project only (decision 10: the toolkit plugin is on in every folder): refreshes the plugin-root pointer, only from an installed copy, never to an older version, and at the same version a plugin cache copy replaces the source folder (final review I1); in Codex records the hash of the `hooks/codex-hooks.json` it ran from in `~/.config/toolkit-v2/codex-hooks-seen.json`, which doctor compares with Codex's newest copy (M10); makes the automatic backup of `.work-items/` and `.memory/` when `backup.dir` is set and the last backup is more than a day old, and adds one line about it (decision 13); runs `work sync` (local); prints the briefing as `additionalContext`, about 6,000 characters max: this worktree's item, active items with their next skill, waiting on the owner, current focus, moves detected, setup warnings (hook failures of the last 3 days included), the owner's setup steps in the focus that are done now (a focus line that names several steps is done only when all are; Codex hook trust is read from `~/.codex/config.toml`, never inferred from a hook that ran, because `--dangerously-bypass-hook-trust` runs untrusted hooks), a plain statement that `AGENTS.md` is the project manual. Codex adds the always-on rules list and the voice section. Notion and Hindsight read a Git-ignored cache (refreshed on every write) with 2-second timeouts and fail open (I9). The Notion check only reads the row properties to report the owner's moves; it writes nothing, and the next `toolkit work` command records the history rows (sample run c, round 2). |
 | UserPromptSubmit | none | Records the turn in session state; cheap tracker rescan (reports moves); when the prompt contains an explicit keep phrase ("remember that/this", "from now on", "don't ever", "note that", "going forward", "keep in mind"; never "do you remember", "never mind", "always fails"), adds one factual line: "The owner stated something to keep; memory-save records it, or work-on if it is a task." (I14) |
 | PreToolUse | Claude `Write\|Edit\|MultiEdit\|Bash`; Codex `^apply_patch$\|^Bash$` | Denies hand edits of generated files (`DASHBOARD.md`, `.toolkit-state.json`, `.memory/MEMORY.md`, `ai-external-knowledge/INDEX.md`) with the command to use; denies `git clean` with `-x`/`-X` in the main checkout (I17); denies `git add -A`, `git add .`, `git commit -a`, force pushes (the model's settings deny list, now in both hosts, P11); denies a `git commit`, `git merge`, `git tag`, or `git notes`, a `gh pr create`/`edit`/`comment`/`review`/`merge`, a `gh issue create`/`edit`/`comment`, a `gh release create`/`edit`, or a `gh api` call on a pull request, issue, or release path, whose text or message file gives an AI credit (a `Co-Authored-By` line naming an AI, a "Generated with" line, or "Generated with/by/using" in the middle of a line when an AI's name is one of the next three words; sample run claude-a; final review M1); denies a `toolkit` command whose double-quoted text holds a backtick, or that reads an unquoted here-document (`<<EOF`) holding a backtick or `$(...)`, because the shell would run that text (sample run a, round 3); adds a note when a double-quoted `toolkit` argument holds `$(...)`. Codex only: adds a note (additionalContext, never a refusal) when a `toolkit` command is joined to other commands, sits in a heredoc, or runs from a script or loop, because it then runs inside the sandbox (sample runs, round 2), and when a `toolkit` command writes an apostrophe as `'\''` (the command rule does not match it, so it runs inside the sandbox) or leaves a quote unmatched (Codex drops the backslash): write ’ (U+2019) or reword (final review I7). Salesforce projects: the protected-org and permission-set guards run here too, with every `ask` turned into `deny` in Codex (I8). |
-| PostToolUse | Claude `Write\|Edit\|MultiEdit\|Bash`; Codex `^apply_patch$\|^Bash$` | Records `toolkit memory save` / work-item edits in session state. After a work-item record changes: validates only (never rewrites the file, I2) and returns `additionalContext` with any error or gate question; `decision: block` only for a gate violation. A direct edit of an approved `DESIGN.md` gets a line every time (tell the owner, record a history note), outside the once-per-session reminder (confirm-a). After a `.memory/` topic change: reindex under the lock. |
-| Stop | none | Memory proposals (final review I5; goal adjustment 2): when `last_assistant_message` (both hosts) asks "Save to memory: <summary>?" (bold before the colon and "project memory" allowed; a sentence that reports an earlier question or a save does not count) and no `--proposal` save ran this turn, the hook runs `toolkit memory save --proposal` itself (same duplicate and secret checks; at most once per summary per session; never for a summary whose text this turn already saved; a summary that looks like a secret is never saved or repeated). A record found only because it is about the same subject does not stop it: the hook saves again with `--allow-similar`, because the owner reviews every proposal. It never blocks for this, and the next UserPromptSubmit names the key once; a refused save is named with the similar key ("about the same subject; check whether it is the same fact", or approve/reject when that key is a proposal), never with an instruction to update another record. Then, guarded by `stop_hook_active`, blocks at most once per turn when: the message asks to save something to memory in other words ("Save it to memory?", "saved as a standing preference?") and the turn saved nothing to memory (reason: ask it as "Save to memory: <one line>?" or save the proposal now); this turn had a keep phrase and nothing was recorded (a proposal the hook saved does not count; the block names it and the `toolkit memory approve` that records the owner's words); or a work-item record changed this turn and fails validation. Reason text never contains the keep phrases (P8). Otherwise silent. |
+| PostToolUse | Claude `Write\|Edit\|MultiEdit\|Bash`; Codex `^apply_patch$\|^Bash$` | Records `toolkit memory save` / work-item edits in session state. After a work-item record changes: validates only (never rewrites the file, I2) and returns `additionalContext` with any error or gate question; `decision: block` only for a gate violation. A direct edit of an approved `DESIGN.md` gets a line every time (tell the owner, record a history note); any other direct record edit gets the "use toolkit work edit" reminder once per file per session (confirm-a). After a `.memory/` topic change: reindex under the lock. |
+| Stop | none | Memory proposals (final review I5; goal adjustment 2): when `last_assistant_message` (both hosts) asks "Save to memory: <summary>?" (bold before the colon and "project memory" allowed; a sentence that reports an earlier question or a save does not count) and no `--proposal` save ran this turn, the hook runs `toolkit memory save --proposal` itself (same duplicate and secret checks; at most once per summary per session; never for a summary whose text this turn already saved; a summary that looks like a secret is never saved or repeated). A summary that starts with "you" is saved with the owner's name ("Mike Rihm publishes Mike's blog"), and the Evidence line quotes the question as asked; a preference the owner states is `user`, even about the agent; the key does not repeat its type word; a title over 100 characters is cut at a clause. A record found only because it is about the same subject does not stop it: the hook saves again with `--allow-similar`, because the owner reviews every proposal. It never blocks for this, and the next UserPromptSubmit names the key once; a refused save is named with the similar key ("about the same subject; check whether it is the same fact", or approve/reject when that key is a proposal), never with an instruction to update another record. Then, guarded by `stop_hook_active`, blocks at most once per turn when: the message asks to save something to memory in other words ("Save it to memory?", "saved as a standing preference?") and the turn saved nothing to memory (reason: ask it as "Save to memory: <one line>?" or save the proposal now); this turn had a keep phrase and nothing was recorded (a proposal the hook saved does not count; the block names it and the `toolkit memory approve` that records the owner's words, which also finishes the hook's body); or a work-item record changed this turn and fails validation. Reason text never contains the keep phrases (P8). Otherwise silent. |
 
 Session state: `$CLAUDE_PLUGIN_DATA` or `$PLUGIN_DATA`, else
 `<git-common-dir>/toolkit-v2/sessions/<session_id>.json` (B4).

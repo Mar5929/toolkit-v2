@@ -1,0 +1,7 @@
+./.toolkit-state.json
+./DASHBOARD.md
+./cli/WI-001-tip-command/DESIGN.md
+./cli/WI-001-tip-command/WORK-ITEM.md
+./cli/WI-001-tip-command/split-option/WORK-ITEM.md
+./work-item-template/DESIGN.md
+./work-item-template/WORK-ITEM.md

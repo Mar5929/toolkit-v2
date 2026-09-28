@@ -1,0 +1,341 @@
+PROMPT: Outcome: days-until tells me how many days are left until a date I type, so I can count down to trips and deadlines.
+THREAD: 01a0e991-9c36-7030-a7b6-3b20c1faa0bf
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll put that outcome into the project guides and fill the setup fields your earlier answers already establish. Then I’ll check what commands, if any, this repository can actually run.
+
+[CMD exit=0] /bin/zsh -lc 'cat .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/publish-project-documents.md'
+  -> # Humanize Anything Sent to Another Person
+
+Any text that will leave the project and be read by someone other than the owner
+is run through the `humanizer` skill before the owner sees the final version.
+Use the `unslop` skill when `humanizer` is not installed. That covers emails,
+chat messages, supp
+
+[CMD exit=0] /bin/zsh -lc 'cat PROJECT.md PROJECT-ROADMAP.md README.md DECISIONS.md'
+  -> # Toolkit V2 final run (safe to delete)
+
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep sta
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.6/skills/project-setup/SKILL.md'
+  -> ---
+name: project-setup
+description: 'Sets up Toolkit V2 in a new project, or checks, updates, and repairs an existing setup, including Notion and Hindsight. Use when the owner says "set up Toolkit V2", "set up this project", "check the setup", or "update the toolkit", or starts working on a new computer.'
+---
+
+# Project setup
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Sets up Toolkit V2, never the older claude-toolkit (its `project-init` skill).
+
+## Steps
+
+1. **Check the computer and the project.** `toolkit` not found, or doctor
+   reports a computer problem: `references/repair-and-update.md`, "Reaching
+   the `toolkit` command".
+   `toolkit doctor`
+2. **Pick the path.** `.toolkit.json` present: step 8. A new computer:
+   `references/new-computer.md`. Switching memory or tracker:
+   `references/switching.md`. Otherwise a new project: put the checklist
+   below in the plan tool (Claude Code: the task list; Codex: `update_plan`).
+3. **Interview**, one question per message, each with a recommendation:
+   name, tracker, memory, Salesforce, `SOUL.md`, backup folder. Look before
+   asking. `references/interview.md`. Notion or Hindsight chosen: do the
+   "Before init" part of its wiring file (step 5) now.
+4. **Run init** with the answers, then record what it has no flag for.
+   Inside Codex, say first that Codex will ask to run it outside the sandbox.
+   
+
+[CMD exit=0] /bin/zsh -lc "git status --short && rg --files --hidden -g '"'!.git/**'"' | sort && git log -1 --oneline"
+  -> ?? .claude/
+?? .codex/
+?? .gitignore
+?? .toolkit.json
+?? AGENTS.md
+?? CLAUDE.md
+?? DECISIONS.md
+?? PROJECT-ROADMAP.md
+?? PROJECT.md
+?? ai-external-knowledge/
+?? requirements/
+?? system-guide/
+?? tests/
+.claude/output-styles/plain-english.md
+.claude/rules/ai-external-knowledge.md
+.claude/rules/humani
+
+[CMD exit=0] /bin/zsh -lc "sed -n '1,20p' AGENTS.md && sed -n '100,115p' AGENTS.md"
+  -> Always execute work with the context in mind that the user will likely
+continue work across multiple AI coding sessions where the session context is
+cleared and picked up again. You must assist the user in helping establish
+that continuity across sessions while not adding context that might pollute
+
+
+[CMD exit=0] /bin/zsh -lc 'git remote'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1 989c0e4 [main]
+
+
+[FILE_CHANGE] [{"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1/AGENTS.md", "kind": "update"}, {"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1/PROJECT-ROADMAP.md", "kind": "update"}, {"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1/PROJECT.md", "kind": "update"}]
+
+[FILE_CHANGE] [{"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1/PROJECT.md", "kind": "update"}]
+
+[AGENT] I added your exact outcome to [AGENTS.md](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1/AGENTS.md), [PROJECT.md](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1/PROJECT.md), and the roadmap.
+
+The repository currently contains a README but no application code or package scripts. Should I record **“No verified build, test, or deploy commands yet”** in the agent guide? I recommend yes.
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 2311893, "cached_input_tokens": 2219264, "cache_write_input_tokens": 0, "output_tokens": 9830, "reasoning_output_tokens": 4292}}
+
+SKILLS OPENED: ['project-setup']
+
+[HOOK CONTEXT ord=348] Project briefing: Toolkit V2 final run (safe to delete) (tv2-final-run), owner Mike Rihm. Work items: the Notion Work Items database (ids like TFR-001). Memory: Notion, in Lore's layout (a Memory page on the project row with Lore's databases). Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The tracker has no open items. A new request starts a work item with the work-on skill.
+
+Current focus:
+Last updated: 2026-09-28, setup, agent
+## Now
+None.
+## Waiting on the owner
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting 
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/claude-toolkit/git-workflows/0.4.0/skills`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/claude
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.6/skills/project-setup/SKILL.md",max_output_tokens:20000}); text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "---\nname: project-setup\ndescription: 'Sets up Toolkit V2 in a new project, or checks, updates, and repairs an existing setup, including Notion and Hindsight. Use when the owner says \"set up Toolkit V2\", \"set up this project\", \"check the setup\", or \"update the toolkit\", or starts working on a new computer.'\n---\n\n# Project setup\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nSets up Toolkit V2, never the older claude-toolkit (its `project-init` skill).\n\n## Steps\n\n1. **Check the computer and the project.** `toolkit` not found, or doctor\n   reports a computer problem: `references/repair-and-update.md`, \"Reaching\n   the `toolkit` command\".\n   `toolkit doctor`\n2. **Pick the path.** `.toolkit.json` present: step 8. A new computer:\n   `references/new-computer.md`. Switching memory or tracker:\n   `references/switching.md`. Otherwise a new project: put the checklist\n   below in the plan tool (Claude Code: the task list; Codex: `update_plan`).\n3. **Interview**, one question per message, each with a recommendation:\n   name, tracker, memory, Salesforce, `SOUL.md`, backup folder. Look before\n   asking. `references/interview.md`. Notion or Hindsight chosen: do the\n   \"Before init\" part of its wiring file (step 5) now.\n4. **Run init** with the answers, then record what it has no flag for.\n   Inside Codex, say first that Codex will ask to run it outside the sandbox.\n   `references/running-init.md`.\n   `toolkit init --name '<name>' --key <key> --tracker <tracker> --memory <memory> --owner '<owner>' --backup-dir '<folder>' [--salesforce] [--decline SOUL.md]`\n5. **Finish wiring each choice**: `references/wiring-notion.md`,\n   `wiring-hindsight.md`, `wiring-github-jira.md`, `wiring-salesforce.md`.\n6. **Fill the setup guides** with facts the owner confirmed; the one-sentence\n   outcome is his to say. `references/finishing-setup.md`.\n7. **Finish:** backups, doctor at 0 problems, owner steps in the reply and the\n   focus, the first briefing, the report, the commit offer.\n   `references/finishing-setup.md`.\n8. **Repair or update:** one numbered table from doctor and the dry run; sync\n   only after a yes; doctor again until 0 problems.\n   `references/repair-and-update.md`.\n   `toolkit sync -
+
+[CALL] const base="/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.6/skills/project-setup/references/";
+const rs=await Promise.allSettled([
+ tools.exec_command({cmd:"pwd && rg --files -g '!node_modules' -g '!vendor' -g '!dist' -g '!build' | head -80 && ls -la",max_output_tokens:5000}),
+ tools.exec_command({cmd:"git status --short --branch && git remote -v && git log -1 --oneline",max_output_tokens:3000}),
+ tools.exec_command({cmd:"cat "+base+"toolkit-commands.md",max_output_tokens:8000}),
+ tools.exec_command({cmd:"cat "+base+"interview.md",max_output_tokens:12000})
+]); rs.forEach((r,i)=>text(JSON.stringify({i,result:r.status==="fulfilled"?r.value.output:String(r.reason)})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":\"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1\\nREADME.md\\ntotal 8\\ndrwxr-xr-x    4 michaelrihm  wheel   128 Sep 28 15:49 .\\ndrwxr-xr-x  135 michaelrihm  wheel  4320 Sep 28 15:50 ..\\ndrwxr-xr-x   12 michaelrihm  wheel   384 Sep 28 15:49 .git\\n-rw-r--r--    1 michaelrihm  wheel    88 Sep 28 15:49 README.md\\n\"}"}, {"type": "input_text", "text": "{\"i\":1,\"result\":\"## main\\n989c0e4 Start days-until project\\n\"}"}, {"type": "input_text", "text": "{\"i\":2,\"result\":\"<!-- Generated file. Source: plugins/toolkit/shared/toolkit-commands.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\\n# Running `toolkit` commands\\n\\nPurpose: how to run a `toolkit` command in Claude Code and in Codex, how to\\npass text in one, and what each exit code means. Every skill that runs a\\n`toolkit` command follows this file.\\n\\n## Contents\\n\\n- Running toolkit commands\\n- Text in a command\\n- Exit codes\\n- Reporting a save\\n- Reading output and updating what you read\\n- Right and wrong examples\\n\\n## Running toolkit commands\\n\\n- Put each `toolkit` command on its own line and run it as a plain command,\\n  in both hosts. Do not join it to another command with `&&`, `;`, or a pipe,\\n  and do not wrap it in `$(...)`, a loop, or a script. This holds for read\\n  commands too: `toolkit work decisions && toolkit work show WI-001` is two\\n  commands, run one after the other.\\n- Why, in Codex: the project's command rule (`.codex/rules/toolkit.rules`)\\n  runs a `toolkit` command outside the sandbox only when it is the whole\\n  command. A `toolkit` command joined to anything else (`&&`, `;`, a pipe, a\\n  heredoc, `cd ... &&`) or run from a script (for example Python's\\n  `subprocess`) runs inside the Codex sandbox. The sandbox blocks Notion, the\\n  local Hindsight server, and the main checkout's `.work-items/` and\\n  `.memory/` from a worktree, so the command fails or reports the wrong\\n  cause.\\n- The one thing a Claude Code command may carry is its own text on standard\\n  input (`--set-file -` with a quoted heredoc; \\\"Text in a command\\\", below).\\n- Five commands ask the owner first, in both hosts, because they are hard or\\n  impossible to undo: `toolkit machine-setup`, `toolkit me
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit doctor",max_output_tokens:10000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"775072\",\"wall_time_seconds\":0.000002792,\"exit_code\":4,\"original_token_count\":100,\"output\":\"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1 is not a Toolkit V2 project: there is no .toolkit.json with \\\"toolkit\\\": \\\"toolkit-v2\\\".\\ntoolkit init sets it up (the project-setup skill asks the questions first).\\n\\nThis computer: no problems found (Node, the plugin-root pointer, and the Codex wrapper).\\n\"}"}]
+
+[CALL] const rs=await Promise.allSettled([
+ tools.exec_command({cmd:"cat README.md",max_output_tokens:1000}),
+ tools.exec_command({cmd:"git config user.name",max_output_tokens:1000}),
+ tools.exec_command({cmd:"git rev-parse --show-toplevel",max_output_tokens:1000}),
+ tools.exec_command({cmd:"ls -la /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.6/skills/project-setup/references",max_output_tokens:2000})
+]);rs.forEach((r,i)=>text(JSON.stringify({i,result:r.status==="fulfilled"?r.value.output:String(r.reason)})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":\"# days-until\\n\\nA tiny Node.js command that tells me how many days are left until a date.\\n\"}"}, {"type": "input_text", "text": "{\"i\":1,\"result\":\"Mike Rihm\\n\"}"}, {"type": "input_text", "text": "{\"i\":2,\"result\":\"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1\\n\"}"}, {"type": "input_text", "text": "{\"i\":3,\"result\":\"total 280\\ndrwxr-xr-x  19 michaelrihm  staff    608 Sep 28 15:37 .\\ndrwxr-xr-x   4 michaelrihm  staff    128 Sep 28 15:37 ..\\n-rw-r--r--   1 michaelrihm  staff  11407 Sep 28 15:23 backup-and-restore.md\\n-rw-r--r--   1 michaelrihm  staff   7090 Sep 28 14:25 current-focus.md\\n-rw-r--r--   1 michaelrihm  staff   6220 Sep 28 14:15 finishing-setup.md\\n-rw-r--r--   1 michaelrihm  staff   9221 Sep 28 15:23 git-rules.md\\n-rw-r--r--   1 michaelrihm  staff   6643 Sep 28 15:23 installing-hindsight.md\\n-rw-r--r--   1 michaelrihm  staff   7880 Sep 28 15:23 interview.md\\n-rw-r--r--   1 michaelrihm  staff   4661 Sep 28 15:23 new-computer.md\\n-rw-r--r--   1 michaelrihm  staff   6203 Sep 28 15:23 repair-and-update.md\\n-rw-r--r--   1 michaelrihm  staff   7615 Sep 28 13:53 running-init.md\\n-rw-r--r--   1 michaelrihm  staff   2286 Sep 28 13:54 switching.md\\n-rw-r--r--   1 michaelrihm  staff   9838 Sep 28 15:23 toolkit-commands.md\\n-rw-r--r--   1 michaelrihm  staff  13536 Sep 28 14:39 tracker-github.md\\n-rw-r--r--   1 michaelrihm  staff  11730 Sep 28 14:39 tracker-jira.md\\n-rw-r--r--   1 michaelrihm  staff   1546 Sep 28 15:23 wiring-github-jira.md\\n-rw-r--r--   1 michaelrihm  staff   2543 Sep 28 15:23 wiring-hindsight.md\\n-rw-r--r--   1 michaelrihm  staff   3027 Sep 28 14:17 wiring-notion.md\\n-rw-r--r--   1 michaelrihm  staff   1810 Sep 28 15:23 wiring-salesforce.md\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.6/skills/project-setup/references/wiring-notion.md",max_output_tokens:6000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "# Wiring Notion\n\nPurpose: get Notion ready for a project whose tracker or memory is `notion`,\nbefore and after `toolkit init`.\n\n## Before init\n\n1. Check the Notion command-line tool is signed in:\n\n   ```text\n   ntn whoami\n   ```\n\n   In Codex, run it alone with `sandbox_permissions` set to\n   `require_escalated` and the reason \"Check the Notion sign-in.\" Before init\n   the project has no `.codex/rules/` file, so inside the sandbox `ntn whoami`\n   has no network and no keychain, and it fails even when the owner is signed\n   in.\n\n   It says no sign-in or token was found: the owner runs `ntn login` himself.\n   It opens a browser sign-in to his Notion account. Say so, wait for him to\n   say it is done, then run `ntn whoami` again. Never run `ntn login` for him.\n   Any other failure (a network, keychain, or sandbox error) is not a\n   sign-out: say what failed, and run it again outside the sandbox before you\n   send him to `ntn login`.\n\n2. Check the \"AI Agent Second Brain\" page and its Projects database. This\n   changes nothing:\n\n   ```text\n   toolkit notion ensure-root --check\n   ```\n\n   - It says no root page is known on this computer: ask the owner for the\n     link or id of his \"AI Agent Second Brain\" page, then run\n     `toolkit notion ensure-root --root-page <id or link>`.\n   - It lists missing parts: say what will be added, then run it without\n     `--check`. It only adds; it never deletes or trashes anything.\n\n   ```text\n   toolkit notion ensure-root\n   ```\n\n## What init does\n\n`toolkit init` runs `toolkit notion ensure-project` for you. It creates or\nrepairs:\n\n- this project's row in the Projects database;\n- a Work Items database, when the tracker is `notion` (board and table views,\n  the fourteen stages, sub-items);\n- a Memory page in Lore's layout, when the memory is `notion` (the Projects,\n  Topics, Memories, Entities, and Facts databases; the records are rows of\n  Memories), with the Current focus and Terminology glossary pages.\n\nIt saves the Notion ids in `.toolkit.json`. When `WI` is already used as an id\nprefix there, it may take another one: say the prefix it reports in one line.\n\n## After init, or to repair\n\nCheck the project's pages, then repair what is missing:\n\n```text\ntoolkit notion ensure-project --check\ntoolkit notion ensure-project --project-name '<name>
+
+[CALL] const r=await tools.exec_command({cmd:"ntn whoami",sandbox_permissions:"require_escalated",justification:"Check the Notion sign-in.",max_output_tokens:3000});text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit notion ensure-root --check",sandbox_permissions:"require_escalated",justification:"Check the Notion root page and Projects database before setup.",max_output_tokens:5000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 2.8 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"1031f1\",\"wall_time_seconds\":0.0000025,\"exit_code\":2,\"original_token_count\":34,\"output\":\"Error: No Notion root page is known yet.\\nFix: Run toolkit notion ensure-root --root-page <id or URL of the AI Agent Second Brain page>.\\n\"}"}]
+
+[DEV MSG kinds=['host_skills.instructions']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/claude-toolkit/git-workflows/0.4.0/skills`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/claude
+
+[DEV MSG kinds=['host_skills.instructions']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/claude-toolkit/git-workflows/0.4.0/skills`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/claude
+
+[CALL] const base="/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.6/skills/project-setup/references/";
+const rs=await Promise.allSettled([
+ tools.exec_command({cmd:"cat "+base+"running-init.md",max_output_tokens:12000}),
+ tools.exec_command({cmd:"cat "+base+"finishing-setup.md",max_output_tokens:12000}),
+ tools.exec_command({cmd:"cat "+base+"current-focus.md",max_output_tokens:9000}),
+ tools.exec_command({cmd:"cat "+base+"git-rules.md",max_output_tokens:10000})
+]);rs.forEach((r,i)=>text(JSON.stringify({i,result:r.status==="fulfilled"?r.value.output:String(r.reason)})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":\"# Running init, and what it installs\\n\\nPurpose: the exact `toolkit init` commands, what init writes and in what\\norder, what to do when it stops, and which files each setup answer installs.\\n\\n## Contents\\n\\n- The init command\\n- What init does, in order\\n- A failed or stopped run\\n- Running init inside Codex\\n- What init installs\\n- How the answers shape the files\\n\\n## The init command\\n\\nRun one of these alone, with the owner's answers. One-line values go in\\nsingle quotes; write an apostrophe inside them as `'\\\\''`.\\n\\n```text\\ntoolkit init --name '<name>' --key <key> --tracker <tracker> --memory <memory> --owner '<owner>' --backup-dir '<folder>'\\ntoolkit init --name '<name>' --key <key> --tracker <tracker> --memory <memory> --owner '<owner>' --backup-dir '<folder>' --salesforce\\n```\\n\\n- `--tracker`: `local`, `notion`, `github`, or `jira`.\\n- `--memory`: `builtin`, `hindsight`, or `notion`.\\n- `--backup-dir`: the folder from question 6, or `none`. Leave it out only\\n  with a Notion tracker and Notion memory.\\n- Add `--decline SOUL.md` after a no to question 5.\\n- `--hosts` defaults to both hosts (`claude-code,codex`). Leave it out unless\\n  the owner uses only one.\\n\\nExample:\\n\\n```text\\ntoolkit init --name 'Acme CRM' --key acme-crm --tracker local --memory builtin --owner 'Mike Rihm' --backup-dir '~/Backups/toolkit' --decline SOUL.md\\n```\\n\\nThen record what init has no flag for:\\n\\n```text\\ntoolkit config set tracker.idPrefix <prefix>\\ntoolkit config set salesforce.orgs.sandbox <alias>\\ntoolkit config set salesforce.orgs.production <alias>\\n```\\n\\nThe id prefix can change only before the first work item exists. The backup\\nfolder changes later with `toolkit config set backup.dir <folder>` (or\\n`none`).\\n\\n## What init does, in order\\n\\n1. Works out the settings from the flags.\\n2. Plans every file. A setup marker error stops here, before any write.\\n3. Hindsight memory: checks that the local server answers. Nothing is written\\n   yet.\\n4. Wires the backends: builds the Notion pages and databases\\n   (`toolkit notion ensure-project`) and the Hindsight bank\\n   (`toolkit hindsight ensure-bank`) when chosen.\\n5. Writes the files: in Codex's own folders (`.codex/`, `.agents/`) first,\\n   then the rest.\\n6. Builds `.work-items/DASHBOARD.md` and `.memor
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit notion ensure-root --root-page 'https://www.notion.so/3e7b381da176803fa48fe838ee648e67'",sandbox_permissions:"require_escalated",justification:"Connect the provided AI Agent Second Brain page and prepare its Projects database for Toolkit V2.",max_output_tokens:5000,yield_time_ms:30000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 7.9 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"363608\",\"wall_time_seconds\":2.7175024580000002,\"exit_code\":2,\"original_token_count\":48,\"output\":\"Error: Notion refused PATCH v1/views/8c1f6b71-1374-449a-8adf-1dc841ad3296 (400 validation_error): Property \\\"eizm\\\" not found in the database schema. Use a valid property ID or property name.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit notion ensure-root --check",sandbox_permissions:"require_escalated",justification:"Inspect the Notion root state after the setup validation error.",max_output_tokens:6000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.1 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"759055\",\"wall_time_seconds\":0.00000175,\"exit_code\":2,\"original_token_count\":34,\"output\":\"Error: No Notion root page is known yet.\\nFix: Run toolkit notion ensure-root --root-page <id or URL of the AI Agent Second Brain page>.\\n\"}"}]
+
+[CALL] const rs=await Promise.allSettled([
+ tools.exec_command({cmd:"toolkit help notion",max_output_tokens:8000}),
+ tools.exec_command({cmd:"ntn --help",max_output_tokens:5000}),
+ tools.exec_command({cmd:"rg -n 'Property.*not found|ensure-root|eizm' /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.6 -g '*.js' -g '*.mjs' | head -100",max_output_tokens:6000})
+]);rs.forEach((r,i)=>text(JSON.stringify({i,result:r.status==="fulfilled"?r.value.output:String(r.reason)})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":\"toolkit notion: Set up or repair the Notion Projects database and this project's Work Items and Memory databases.\\n\\nUsage:\\n  toolkit notion ensure-root [--root-page <id or URL>] [--projects-database <id or URL>] [--check]\\n  toolkit notion ensure-project [--project-name <name>] [--root-page <id or URL>] [--projects-database <id or URL>] [--check]\\n\\nensure-root makes sure the Projects database under the root page has the\\ntoolkit's registry properties (Key, Tracker, Memory system, and others).\\nensure-project builds or repairs this project's row, its Work Items database\\n(when tracker.type is notion), and its memory (when memory.type is notion): a\\n\\\"Memory\\\" page in the layout of Lore (github.com/makenotion/lore) holding the\\nProjects, Topics, Memories, Entities, and Facts databases, plus the Current\\nfocus and Terminology glossary pages. A project still on the older single\\nMemory database has its records copied into the Memories database and read\\nback; the old database is then renamed \\\"Old memory database (safe to delete)\\\".\\nBoth only add what is missing and never delete.\\n\\nThe root page is taken from --root-page, then .toolkit.json notion.rootPageId,\\nthen this computer's ~/.config/toolkit-v2/notion.json. Every write outside the\\nroot page is refused.\\n\\nThe Projects database is found by its stored id, then by the title \\\"Projects\\\"\\non the root page. --projects-database names it instead; it must be under the\\nroot page, and then the toolkit never creates a second one.\\n\\n--check reports what is missing without changing anything (exit 1 when\\nsomething is missing). Run it first on a root page that already has content.\\n\\nNeeds the Notion CLI: install with \\\"npm install -g ntn\\\" and sign in with\\n\\\"ntn login\\\". TOOLKIT_NTN_BIN points at another ntn program.\\n\"}"}, {"type": "input_text", "text": "{\"i\":1,\"result\":\"Notion CLI (Beta)\\n\\nUsage: ntn [OPTIONS] <COMMAND>\\n\\nCommands:\\n  api             Call the public Notion API (beta)\\n  auth            Inspect authentication credentials\\n  datasources     Manage data sources\\n  files           Manage file uploads (beta)\\n  pages           Manage pages\\n  notion-as-code  Manage Notion-as-Code projects (alpha). Not publicly available\\n  login           Log in to Notion\\n  logout          Log out of N
+
+[CALL] const r=await tools.exec_command({cmd:"sed -n '500,710p' /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.6/lib/notion/ensure.mjs",max_output_tokens:12000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "      index = await client.updateView(fresh.id, { name: 'Index', filter: inUse, sorts });\n      created.push('Index (renamed the default view)');\n    } else {\n      index = await client.createView({ database_id: databaseId, data_source_id: dataSourceId, name: 'Index', type: 'table', position: { type: 'start' }, filter: inUse, sorts });\n      created.push('Index');\n    }\n  }\n  if (index) out.index = normalizeId(index.id);\n\n  let old = byId(stored.retired) || views.find((v) => /^retired$/i.test(v.name || ''));\n  if (!old) {\n    if (check) problems.push(`The Retired view of the ${label} is missing.`);\n    else {\n      old = await client.createView({ database_id: databaseId, data_source_id: dataSourceId, name: 'Retired', type: 'table', position: { type: 'end' }, filter: retired, sorts });\n      created.push('Retired');\n    }\n  }\n  if (old) out.retired = normalizeId(old.id);\n  return { views: out, created, problems };\n}\n\n// ------------------------------------------------------------------ root\n\n/**\n * Make sure the Projects database under the root page has the registry properties.\n * opts: { client, rootPageId, stored: { databaseId, dataSourceId, properties }, check }\n * Returns { rootPageId, projects: { databaseId, dataSourceId, url, properties }, created, added, problems }.\n */\nexport async function ensureRoot({ client, rootPageId, stored = {}, check = false, projectsDatabaseId = null }) {\n  const root = normalizeId(rootPageId);\n  if (!root) throw new ToolkitError(EXIT.INVALID, 'ensure-root needs the root page id.');\n  const page = await tryGet(() => client.getPage(root));\n  if (!page) {\n    throw new ToolkitError(EXIT.ERROR, `The Notion root page ${root} was not found, or the \"Notion CLI\" connection cannot see it.`, {\n      fix: 'Check the id, then share the page with the Notion CLI connection in the Notion app.',\n    });\n  }\n  if (!usable(page)) {\n    const state = goneState(page) || 'trash';\n    throw new ToolkitError(EXIT.ERROR, `The Notion root page ${root} is ${state === 'archived' ? 'archived in Notion (it is not in the trash)' : 'in the Notion trash'}.`, {\n      state,\n      fix: `${restoreFix(state)} Or give another root page.`,\n    });\n  }\n\n  // A Projects database named on the command line must exist under the root page:\n  // the toolkit never makes a second Projects database in its 
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit notion ensure-root --root-page '3e7b381d-a176-803f-a48f-e838ee648e67' --check",sandbox_permissions:"require_escalated",justification:"Read the supplied Notion root page to identify the failed Projects view update.",max_output_tokens:6000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 6.1 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"1b644b\",\"wall_time_seconds\":2.838810542,\"exit_code\":1,\"original_token_count\":81,\"output\":\"The Projects database under the root page is in place: https://app.notion.com/p/3901f0522c564603ad567f5924655925\\nProblems:\\n  - The \\\"All Projects\\\" view of the Projects database does not show the columns Key, Repository, Local path, Tracker, Memory system, Salesforce, Work items data source, Memory data source, Set up on.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"ntn api --help",max_output_tokens:5000});text(r.output);
+
+
+[CALL] const r=await tools.exec_command({cmd:"rg -n 'listViews|updateView|getDatabase|getDataSource' /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.6/lib/notion/client.mjs",max_output_tokens:3000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "508:  getDatabase(id) { return this.get(`v1/databases/${normalizeId(id) || id}`); }\n510:  getDataSource(id) { return this.get(`v1/data_sources/${normalizeId(id) || id}`); }\n514:  updateView(id, body) { return this.patch(`v1/views/${normalizeId(id) || id}`, body); }\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"sed -n '500,520p' /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.6/lib/notion/client.mjs",max_output_tokens:2000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "  del(p, opts = {}) { return this.request('DELETE', p, opts); }\n\n  whoami() { return this.get('v1/users/me'); }\n  getPage(id) { return this.get(`v1/pages/${normalizeId(id) || id}`); }\n  createPage(body) { return this.post('v1/pages', body); }\n  updatePage(id, body) { return this.patch(`v1/pages/${normalizeId(id) || id}`, body); }\n  getMarkdown(id) { return this.get(`v1/pages/${normalizeId(id) || id}/markdown`); }\n  patchMarkdown(id, body) { return this.patch(`v1/pages/${normalizeId(id) || id}/markdown`, body); }\n  getDatabase(id) { return this.get(`v1/databases/${normalizeId(id) || id}`); }\n  createDatabase(body) { return this.post('v1/databases', body); }\n  getDataSource(id) { return this.get(`v1/data_sources/${normalizeId(id) || id}`); }\n  updateDataSource(id, body) { return this.patch(`v1/data_sources/${normalizeId(id) || id}`, body); }\n  getView(id) { return this.get(`v1/views/${normalizeId(id) || id}`); }\n  createView(body) { return this.post('v1/views', body); }\n  updateView(id, body) { return this.patch(`v1/views/${normalizeId(id) || id}`, body); }\n\n  /** Every row of a data source that matches, following next_cursor. */\n  async queryAll(dataSourceId, { filter, sorts, pageSize = 100, max = 10000 } = {}) {\n    const results = [];\n    let cursor;\n    const id = normalizeId(dataSourceId) || dataSourceId;\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"ntn api v1/views/8c1f6b71-1374-449a-8adf-1dc841ad3296",sandbox_permissions:"require_escalated",justification:"Inspect the existing Notion Projects view configuration to diagnose the invalid property.",max_output_tokens:8000});text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"ntn api v1/data_sources/212cab42-22e0-4682-9fe1-a697a028331a",sandbox_permissions:"require_escalated",justification:"Read the Projects database schema to compare its properties with the view.",max_output_tokens:10000});text(r);
+
+
+[CALL] const properties=[
+{property_id:"title",property_name:"Project",visible:true},
+{property_id:"[HDY",property_name:"Status",visible:true},
+{property_id:"Xx}R",property_name:"Priority",visible:true},
+{property_id:"S^Uv",property_name:"Owner",visible:true},
+{property_id:"pZlP",property_name:"Target Date",visible:true},
+{property_id:"ZnB\\",property_name:"Last Updated",visible:true},
+{property_id:"\\NfC",property_name:"Created",visible:true},
+{property_id:"M`u;",property_name:"Desired Outcome",visible:true}
+];
+const body=JSON.stringify({configuration:{type:"table",properties}});
+const r=await tools.exec_command({cmd:"ntn api v1/views/8c1f6b71-1374-449a-8adf-1dc841ad3296 -X PATCH --data '"+body+"'",sandbox_permissions:"require_escalated",justification:"Remove the stale deleted-property reference from the Notion Projects view so Toolkit V2 can finish setup.",max_output_tokens:3000});text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit notion ensure-root --root-page '3e7b381d-a176-803f-a48f-e838ee648e67'",sandbox_permissions:"require_escalated",justification:"Finish connecting the provided Notion root page after repairing its stale view column.",max_output_tokens:5000,yield_time_ms:30000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 5.9 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"2ef0af\",\"wall_time_seconds\":2.52929825,\"exit_code\":0,\"original_token_count\":90,\"output\":\"The Projects database under the root page is in place: https://app.notion.com/p/3901f0522c564603ad567f5924655925\\nNothing was missing.\\nSaved the root page and Projects ids for this computer in /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1-config/notion.json.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit init --name 'Toolkit V2 final run (safe to delete)' --key tv2-final-run --tracker notion --memory notion --owner 'Mike Rihm' --backup-dir '/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/notion' --decline SOUL.md",sandbox_permissions:"require_escalated",justification:"Set up Toolkit V2 in this project, including Codex and Claude Code files and the authorized Notion records.",max_output_tokens:10000,yield_time_ms:30000});text(r);
+
+  [OUT] "Script running with cell ID 14\nWall time 31.0 seconds\nOutput:\n"
+
+[CALL] {"cell_id":"14","yield_time_ms":20000,"max_tokens":10000}
+
+[CALL] const rs=await Promise.allSettled([
+ tools.exec_command({cmd:"toolkit notion ensure-project --check",sandbox_permissions:"require_escalated",justification:"Verify the Notion project, work board, and memory databases created by Toolkit V2.",max_output_tokens:6000,yield_time_ms:30000}),
+ tools.exec_command({cmd:"toolkit doctor",sandbox_permissions:"require_escalated",justification:"Check the completed Toolkit V2 project setup and both host integrations.",max_output_tokens:10000,yield_time_ms:30000}),
+ tools.exec_command({cmd:"rg --files -g '!*.git' -g '!node_modules' -g '!dist' -g '!build' -g '.*' -g '*' | head -100",max_output_tokens:4000}),
+ tools.exec_command({cmd:"git status --short && cat .toolkit.json && sed -n '1,240p' AGENTS.md",max_output_tokens:12000})
+]);rs.forEach((r,i)=>text(JSON.stringify({i,result:r.status==="fulfilled"?r.value:String(r.reason)})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 15.6 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"chunk_id\":\"afbc30\",\"wall_time_seconds\":11.180098208,\"exit_code\":0,\"original_token_count\":98,\"output\":\"Project page: https://app.notion.com/p/Toolkit-V2-final-run-safe-to-delete-3e9b381da17681ccaa54cd9453f484ea\\nWork Items database: https://app.notion.com/p/9450d0a8834a4de6b68845c7f1f78c12\\nMemory page (Lore layout): https://app.notion.com/p/Memory-3e9b381da1768189b196ccd4ac6760e2\\nMemories database: https://app.notion.com/p/a2d5b7e595da482381174849b144eec7\\nEverything was already in place.\\n\"}}"}, {"type": "input_text", "text": "{\"i\":1,\"result\":{\"chunk_id\":\"7d7b56\",\"wall_time_seconds\":1.001158916,\"exit_code\":1,\"original_token_count\":314,\"output\":\"Toolkit doctor for Toolkit V2 final run (safe to delete) (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1).\\n\\nWarnings (2):\\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.\\n   Fix: The owner opens Codex in this folder and trusts it when Codex asks.\\n2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).\\n   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\\n\\nNotes (2):\\n- The AGENTS.md Commands table has no verified build, test, or deploy commands yet. Add them once they are known and verified.\\n- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.\\n\\nResult: 0 problems and 2 warnings.\\n\"}}"}, {"type": "input_text", "text": "{\"i\":2,\"result\":{\"chunk_id\":\"7c8ad9\",\"wall_time_seconds\":7.5e-7,\"exit_code\":0,\"original_token_count\":387,\"output\":\".toolkit.json\\nDECISIONS.md\\nCLAUDE.md\\n.git/toolkit-v2/notion/scope.json\\n.git/toolkit-v2/notion/ensure.json\\n.git/COMMIT_EDITMSG\\n.git/index\\n.git/refs/heads/main\\n.git/hooks/push-to-checkout.sample\\n.g
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit handoff-backup",sandbox_permissions:"require_escalated",justification:"Create the first Toolkit V2 backup in the owner-selected folder.",max_output_tokens:5000,yield_time_ms:30000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"067630\",\"wall_time_seconds\":0.000002208,\"exit_code\":0,\"original_token_count\":22,\"output\":\"Nothing to back up: this project keeps its work items and memory outside this computer.\\n\"}"}]
+
+[CALL] const rs=await Promise.allSettled([
+ tools.exec_command({cmd:"toolkit memory focus --json",sandbox_permissions:"require_escalated",justification:"Read the new Notion current focus and its version before recording setup owner steps.",max_output_tokens:5000}),
+ tools.exec_command({cmd:"cat PROJECT.md && cat PROJECT-ROADMAP.md && cat README.md",max_output_tokens:7000}),
+ tools.exec_command({cmd:"cat .codex/config.toml && cat .claude/settings.json && cat CLAUDE.md",max_output_tokens:6000}),
+ tools.exec_command({cmd:"rg -n '<[^>]+>|Fill-in guide|WI-001|WI-002' AGENTS.md PROJECT.md PROJECT-ROADMAP.md README.md requirements/SYSTEM-DATA-MODEL.md",max_output_tokens:4000})
+]);rs.forEach((r,i)=>text(JSON.stringify({i,result:r.status==="fulfilled"?r.value.output:String(r.reason)})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":\"{\\n  \\\"ok\\\": true,\\n  \\\"backend\\\": \\\"notion\\\",\\n  \\\"kind\\\": \\\"focus\\\",\\n  \\\"text\\\": \\\"# Current focus\\\\n\\\\n<!-- Fill-in guide: replace each angle-bracket prompt directly under its heading with current, sourced project context. Add or remove bullets as needed. Name work items by ID; their detailed tasks and status stay in the work item, and only the next-session route goes here. Write \u201cNone\u201d in an empty section instead of leaving a sample bullet. Keep the file under 50 lines. Update Last updated and remove this guide after setup. -->\\\\n\\\\nLast updated: `<YYYY-MM-DD, source, and person or agent>`\\\\n\\\\n## Now\\\\n\\\\n- `<Current outcome or area, with its roadmap unit or active work item ID.>`\\\\n\\\\n## Waiting on the owner\\\\n\\\\n- `<A decision or action only the owner can take that has no work item; who needs it and when to check again.>`\\\\n\\\\n## Untracked to-dos\\\\n\\\\n- `<An unresolved owner request without a work item; replace it with the work item ID once one is created.>`\\\\n\\\\n## Next session starts with\\\\n\\\\n- `<Where to resume, what to read, and the next concrete action.>`\\\\n\\\",\\n  \\\"version\\\": \\\"be45feac02c38967ca64f2ef4c812460add37a6687551f508bb1e09f162eb48b\\\"\\n}\\n\"}"}, {"type": "input_text", "text": "{\"i\":1,\"result\":\"# Toolkit V2 final run (safe to delete)\\n\\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\\n\\n## Purpose and intended outcome\\n\\n- Purpose: `<Why this project exists.>`\\n- Intended outcome: `<What success means to the owner and users.>`\\n\\n## Scope and boundaries\\n\\n- In scope: `<Business capabilities or systems this project owns.>`\\n- Outside scope: `<Important exclusions or adjacent owners.>`\\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\\n\\n## Systems and environments\\n\\n| System or org | Purpose | Environment | Source of truth | Access notes |\\n| --- | --- | --- | --- | --- |\\n| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verifie
+
+[CALL] const focus="# Current focus\n\nLast updated: 2026-09-28, setup, agent\n\n## Now\n\nNone.\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Read the Toolkit V2 project briefing, AGENTS.md, and PROJECT.md; complete the remaining setup-guide fields from owner-confirmed facts.\n";
+const cmd="toolkit memory focus --text '"+focus+"' --expect be45feac02c38967ca64f2ef4c812460add37a6687551f508bb1e09f162eb48b";
+const r=await tools.exec_command({cmd,sandbox_permissions:"require_escalated",justification:"Record the remaining Codex trust steps in this project's Notion current focus.",max_output_tokens:3000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 10.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"64db8e\",\"wall_time_seconds\":6.912171667,\"exit_code\":0,\"original_token_count\":15,\"output\":\"Saved the current focus (20 lines). Version: 62a431eafc37\\n\"}"}]
+
+[CALL] const rs=await Promise.allSettled([
+ tools.exec_command({cmd:"toolkit memory focus",sandbox_permissions:"require_escalated",justification:"Verify the Notion current focus after saving the Codex setup steps.",max_output_tokens:4000}),
+ tools.exec_command({cmd:"toolkit brief",sandbox_permissions:"require_escalated",justification:"Show the first Toolkit V2 project briefing after setup.",max_output_tokens:7000})
+]);rs.forEach((r,i)=>text(JSON.stringify({i,result:r.status==="fulfilled"?r.value:String(r.reason)})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.9 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"chunk_id\":\"698129\",\"wall_time_seconds\":0.63414825,\"exit_code\":0,\"original_token_count\":140,\"output\":\"# Current focus\\n\\nLast updated: 2026-09-28, setup, agent\\n\\n## Now\\n\\nNone.\\n\\n## Waiting on the owner\\n\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\n\\n## Untracked to-dos\\n\\nNone.\\n\\n## Next session starts with\\n\\n- Read the Toolkit V2 project briefing, AGENTS.md, and PROJECT.md; complete the remaining setup-guide fields from owner-confirmed facts.\\n\"}}"}, {"type": "input_text", "text": "{\"i\":1,\"result\":{\"chunk_id\":\"fe52e8\",\"wall_time_seconds\":0.423329,\"exit_code\":0,\"original_token_count\":975,\"output\":\"Project briefing: Toolkit V2 final run (safe to delete) (tv2-final-run), owner Mike Rihm. Work items: the Notion Work Items database (ids like TFR-001). Memory: Notion, in Lore's layout (a Memory page on the project row with Lore's databases). Salesforce: no. Hosts: Claude Code and Codex.\\nProject manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.\\nRequests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.\\n\\nThis worktree is on branch main, which names no work item.\\n\\nNo item is Ready, In Progress, or In Review.\\nThe tracker has no open items. A new request starts a work item with the work-on skill.\\n\\nCurrent focus:\\nLast updated: 2026-09-28, setup, agent\\n## Now\\nNone.\\n## Waiting on the owner\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\n## Untracked to-dos\\nNone.\\n## Next session starts with\\n- Read the Toolkit V2 project briefing, AGENTS.md, and PROJECT.md; complete the remaining setup-guide fields from owner-confirmed facts.\\n\\nProject memory (notion): 0 records,
+
+[CALL] const r=await tools.exec_command({cmd:"rg -n '\\bWI-[0-9]+' --glob '!*.git/**' . .claude .codex requirements system-guide tests ai-external-knowledge",max_output_tokens:4000});text(r.output);
+
+
+[CALL] const patch="*** Begin Patch\n*** Update File: AGENTS.md\n@@\n-- IDs look like `WI-001` (the card's ID property; the prefix is `tracker.idPrefix` in `.toolkit.json`). Refer to work items by ID, never by link. The owner may move or rename cards; find them by ID and continue. Change `waiting_on`, the stage, and other fields with `toolkit work` commands.\n+- IDs look like `TFR-001` (the card's ID property; the prefix is `tracker.idPrefix` in `.toolkit.json`). Refer to work items by ID, never by link. The owner may move or rename cards; find them by ID and continue. Change `waiting_on`, the stage, and other fields with `toolkit work` commands.\n*** End Patch";
+text(await tools.apply_patch(patch));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{}"}]
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.approved_command_prefix_saved']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-curated-remote/app-6a314a7
+
+[CALL] const rs=await Promise.allSettled([
+ tools.exec_command({cmd:"cat .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/publish-project-documents.md",max_output_tokens:20000}),
+ tools.exec_command({cmd:"cat PROJECT.md PROJECT-ROADMAP.md README.md DECISIONS.md",max_output_tokens:10000}),
+ tools.exec_command({cmd:"git status --short && rg --files --hidden -g '!.git/**' | sort && git log -1 --oneline",max_output_tokens:5000}),
+ tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.6/skills/project-setup/SKILL.md",max_output_tokens:6000})
+]);rs.forEach((r,i)=>text(JSON.stringify({i,result:r.status==="fulfilled"?r.value.output:String(r.reason)})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":\"# Humanize Anything Sent to Another Person\\n\\nAny text that will leave the project and be read by someone other than the owner\\nis run through the `humanizer` skill before the owner sees the final version.\\nUse the `unslop` skill when `humanizer` is not installed. That covers emails,\\nchat messages, support case text and comments, GitHub issues, pull request\\ndescriptions, client documents, and any file made to hand to someone else.\\n\\nKeep every fact, name, id, number, and date exactly as it was. Write it in the\\nowner's voice, first person, when it goes out under their name.\\n\\nIt does not apply to chat replies to the owner, work items, project knowledge,\\ncode, or commit messages.\\n# Keep the Active Work Item Accurate\\n\\nThe work tracker is the source of truth for current work.\\n\\n- Before substantial work, use the `work-on` skill. Read the active item's requirements, state, next step, and blockers.\\n- Save the owner's decisions, requirements, and corrections in the item or its linked document before moving on.\\n- When the work needs the owner's decision, add it to the item's Open Questions with \\\"Decision needed from: owner\\\" and set the item's `waiting_on` to `owner`. The `work-decide` skill records the answer.\\n- `build` and `data-load` work needs approved requirements before it starts. A later stage does not revoke that approval.\\n- After the owner accepts agent-led delivery, ask how the team is arranged. That choice authorizes helpers for that goal only.\\n- Mark an item Done only after the owner approves the result.\\n- Before ending unfinished work, record the exact next step in the item.\\n\\n`toolkit work lifecycle` prints the stages, statuses, and approval gates. \\\"Where information goes\\\" in `AGENTS.md` is the routing table; the `work-delegate` skill holds the delivery offer and team questions, and the `handoff` skill holds the handoff steps.\\n# Review and Save Project Memory\\n\\nThis rule applies to the main agent. The project memory system is chosen at setup and recorded in `.toolkit.json`; with built-in memory it is the local `.memory/` folder. It is the single project memory store. Claude's native auto-memory and the `claude-toolkit` Second Brain plugin are disabled for this project. The session-start briefing shows the current focus in Claude Code and Codex. Do not tre
+
+[CALL] const rs=await Promise.allSettled([
+ tools.exec_command({cmd:"git worktree list",max_output_tokens:2000}),
+ tools.exec_command({cmd:"git remote",max_output_tokens:1000}),
+ tools.exec_command({cmd:"sed -n '1,20p' AGENTS.md && sed -n '100,115p' AGENTS.md",max_output_tokens:3000})
+]);rs.forEach((r,i)=>text(JSON.stringify({i,result:r.status==="fulfilled"?r.value.output:String(r.reason)})));
+
+
+[CALL] const patch="*** Begin Patch\n*** Update File: AGENTS.md\n@@\n-<One sentence describing this project and its outcome.> The owner named in `PROJECT.md` makes this project's decisions. The agent runs the project: it keeps the work tracker, memory, and project records current, and it does the technical work.\n+days-until tells me how many days are left until a date I type, so I can count down to trips and deadlines. The owner named in `PROJECT.md` makes this project's decisions. The agent runs the project: it keeps the work tracker, memory, and project records current, and it does the technical work.\n*** Update File: PROJECT.md\n@@\n-- Purpose: `<Why this project exists.>`\n-- Intended outcome: `<What success means to the owner and users.>`\n+- Purpose: Count down to trips and deadlines.\n+- Intended outcome: days-until tells me how many days are left until a date I type, so I can count down to trips and deadlines.\n@@\n-- Work tracker: `<one canonical service/project or local path>`\n+- Work tracker: [Work Items in Notion](https://app.notion.com/p/9450d0a8834a4de6b68845c7f1f78c12).\n@@\n-- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`\n+- Design home: with its Notion work item.\n@@\n-- Memory: the Memory database on this project's Notion page (the setup choice is in `.toolkit.json`)\n+- Memory: the [Memory database in Notion](https://app.notion.com/p/a2d5b7e595da482381174849b144eec7) (the setup choice is in `.toolkit.json`
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{}"}]
+
+[CALL] const patch="*** Begin Patch\n*** Update File: PROJECT.md\n@@\n-| `<role>` | `<name or unknown>` | `<decision or operating responsibility>` | `<source and date>` |\n+| Owner | Mike Rihm | Project decisions | Owner, 2026-09-28 |\n@@\n-- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`\n+- System Guide: disabled; `system-guide/` contains only the template.\n@@\n-- Outside references: `<source register or approved location>`\n+- Outside references: [ai-external-knowledge/INDEX.md](ai-external-knowledge/INDEX.md).\n@@\n-<Write only stable project-specific conventions here; link the source or governing rule. Write “None yet” if there are none.>\n+None yet.\n*** End Patch";
+text(await tools.apply_patch(patch));
+

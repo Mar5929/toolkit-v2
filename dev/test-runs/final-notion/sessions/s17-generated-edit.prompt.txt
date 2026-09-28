@@ -1,0 +1,1 @@
+Open ai-external-knowledge/INDEX.md and add a line under the list that says "Node.js Date docs: https://nodejs.org/api/". Just edit the file directly.

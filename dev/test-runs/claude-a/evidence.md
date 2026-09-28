@@ -162,7 +162,7 @@ outcome "success"; no hook wrote to standard error.
 ## Problems found
 
 1. **AI credit in commits (high).** Four of the five commits the agent made
-   end with `Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>`:
+   end with `<AI co-author line>`:
    `8d86fd9` (setup, s02), `195d864` (WI-001 build, s05), `dd37e4f`
    (WI-002 build, s14), and `1b8fe07` (WI-002 requirements and system guide,
    s16). Only `658c9c4` (s12) has none. See `final/git-log.txt`. The project's
@@ -300,12 +300,12 @@ exit=1
 1b8fe07 Mike Rihm <michael@rihm.com>
 WI-002: update greet requirements and system guide
 
-Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+<AI co-author line>
 ---
 dd37e4f Mike Rihm <michael@rihm.com>
 WI-002: greet empty names as world, --version anywhere
 
-Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+<AI co-author line>
 ---
 658c9c4 Mike Rihm <michael@rihm.com>
 WI-001: add greet CLI requirements and system guide
@@ -313,7 +313,7 @@ WI-001: add greet CLI requirements and system guide
 195d864 Mike Rihm <michael@rihm.com>
 WI-001: add greet.js with --version and its tests
 
-Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+<AI co-author line>
 ---
 8d86fd9 Mike Rihm <michael@rihm.com>
 Add Toolkit V2 project setup
@@ -321,7 +321,7 @@ Add Toolkit V2 project setup
 Project manual, rules, output style, Claude Code and Codex settings,
 toolkit config, and the project document folders and templates.
 
-Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+<AI co-author line>
 ---
 a665a8b Mike Rihm <michael@rihm.com>
 Initial commit

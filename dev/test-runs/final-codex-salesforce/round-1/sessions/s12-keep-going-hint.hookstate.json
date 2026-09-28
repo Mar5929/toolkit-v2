@@ -1,0 +1,84 @@
+{
+  "schema": 1,
+  "sessionId": "01a0e9c7-0658-7df3-8377-5dd1cd91019b",
+  "host": "codex",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1",
+  "startedAt": "2026-09-28T20:48:52.663Z",
+  "turns": 1,
+  "turn": {
+    "key": "01a0e9c7-06c3-7f82-a0d6-394cf8bbbe60",
+    "n": 1,
+    "startedAt": "2026-09-28T20:48:52.824Z",
+    "keep": null,
+    "baseline": {
+      "memoryMeta": 1790628434106.2808,
+      "hindsightMeta": null,
+      "memoryCache": null,
+      "workState": 1790628532720.6667,
+      "decisions": 1790625050568.4336
+    },
+    "records": [
+      {
+        "kind": "work",
+        "what": "toolkit work design",
+        "at": "2026-09-28T20:49:35.103Z"
+      },
+      {
+        "kind": "memory",
+        "what": "toolkit memory save",
+        "at": "2026-09-28T20:49:41.842Z",
+        "description": "Prefer Salesforce Setup screenshots to long written checklists"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work set",
+        "at": "2026-09-28T20:49:47.716Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work set",
+        "at": "2026-09-28T20:51:51.160Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work set",
+        "at": "2026-09-28T20:52:58.021Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T20:53:10.068Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T20:53:20.347Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T20:53:30.485Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work history",
+        "at": "2026-09-28T20:53:34.703Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work set",
+        "at": "2026-09-28T20:53:37.874Z"
+      },
+      {
+        "kind": "memory",
+        "what": "toolkit memory focus",
+        "at": "2026-09-28T20:53:53.505Z"
+      }
+    ],
+    "edits": [],
+    "stopBlocked": false
+  },
+  "lastStopReason": null,
+  "source": "startup",
+  "updated": "2026-09-28T20:54:07.748Z"
+}

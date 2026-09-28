@@ -1,0 +1,200 @@
+PROMPT: I ran it in Terminal and it finished: it added 112 files and wrote .toolkit.json last. Keep going with the setup.
+THREAD: 01a0ea0e-8d5f-7041-9b01-dad50e2cc550
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The tracker has no open items. A new request starts a work item with the work-on skill.
+
+Current focus: still the empty template from setup. The memory-save skill fills it with toolkit memory focus --text '<text>'.
+
+Project memory (builtin): 0 records. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off. Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+- Codex ran this Toolkit V2 hook, but ~/.codex/config.toml has no trust entry for the Toolkit V2 hooks. Codex runs untrusted hooks only when it is started with --dangerously-bypass-hook-trust; a normal Codex session skips them. Fix: The owner opens /hooks in Codex and trusts the Toolkit V2 hooks; toolkit doctor checks it.
+- The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them. Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.
+
+Always-on rules. Claude Code loads them by itself; in Codex, each one is read at session start:
+- .claude/rules/check-deployment-contents.md: Check What a Deployment Includes
+- .claude/rules/component-tracker.md: Component Tracker
+- .claude/rules/confirm-salesforce-changes.md: Confirm Salesforce Changes
+- .claude/rules/humanize-outbound-text.md: Humanize Anything Sent to Another Person
+- .claude/rules/keep-work-item-current.md: Keep the Active Work Item Accurate
+- .claude/rules/memory-review-and-save.md: Review and Save Project Memory
+- .claude/rules/plain-english-artifacts.md: Write Artifacts in Plain English
+- .claude/rules/production-data-changes.md: Production Data Changes
+- .claude/rules/project-file-locations.md: Where Project Files Go
+- .claude/rules/salesforce-org-safety.md: Salesforce Org Safety
+- .claude/rules/session-handoff.md: Prepare a Session Handoff
+- .claude/rules/shared-repository-work.md: Work Safely in a Shared Re
+
+[AGENT] The scaffold is installed. I’ll record the two org aliases and API version, fill only confirmed project facts, run the backup and doctor checks, and leave any unanswered template prompts visible.
+
+[CALL exec] cat 
+  -> Script completed
+Wall time 0.9 seconds
+Output:
+
+Warning: truncated output (original token count: 14387)
+Total output lines: 21
+
+{"path":"AGENTS.md","result":{"status":"fulfilled","value":{"chunk_id":"015551","wall_time_seconds":0.000004916,"exit_code":0,"original_token_count":3121,"output":"Always execute work with the context in mind that the user will likely\ncontinue work across multiple AI coding sessions where the session context is\ncleared and picked up again. You must assist the user in 
+
+[CALL exec] git worktree list
+   git status --short --branch
+   git remote -v
+   cat .claude/rules/confirm-salesforce-changes.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/production-data-changes.md .claude/rules/project-file-locations.md .claude/rules/salesforce-org-safety.md .claude/rules/publish-project-documents.md .claude/rules/record-deployment-steps.md
+   cat .memory/AGENTS.md .memory/memory-criteria.md
+   cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/SKILL.md
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"i":0,"result":{"status":"fulfilled","value":{"chunk_id":"f8bb7e","wall_time_seconds":0.000002417,"exit_code":0,"original_token_count":43,"output":"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2 b8210ac [main]\n"}}}
+{"i":1,"result":{"status":"fulfilled","value":{"chunk_id":"e9dc0d","wall_time_seconds":0.000002667,"exit_code":0,"original_token_count":71,"output":"## main\n?? .agents/\n?? .claude/\n?? .codex/\n?? .forceignore\n?? .gitignore\n?? .toolkit.json\n?? AGENTS.md\n?? CLAUDE.md\n?? DECISIONS.md\n?? PROJECT-ROADMAP.md\n?? PROJECT.md\n?? ai-external-knowledge/\n?? delivery/\n?? requirements/\n?? sfdx-project.json\n?? system-guide/\n?? tests/\n?? tools/\n"}}}
+{"i":2,"result":{"status":"fulfilled","value":{"chunk_id":"56a590","wall_time_seconds":0.000001167,"exit_code":0,"original_token_count":0,"output":""}}}
+{"i":3,"result":{"status":"fulfilled","value":{"chunk_id":"44b616","wall_time_seconds":5.83e-7,"exit_code":0,"original_token_count":3841,"output":"# Confirm Salesforce Changes\n\nConfirm intent and scope with the owner before you act on:\n- Object model: objects, fields, relationships, validation rules, record types.\n- Security and access: profiles, permission sets, permission set groups, sharing rules, field-level security.\n- Integrations: API connections, external data sources, named credentials, remote site settings, connector field mappings.\n- Data-source priority: which system wins for a field or object. Record the decision where the project keeps decisions.\n- Anything that contradicts the project's requirements or signed-off scope.\n\nState what you will change, which components it touches, and what could break. Then wait for the owner.\n# Review and Save Project Memory\n\nThis rule applies to the main agent. The project memory system is chosen at setup and recorded in `.toolkit.json`; with built-in memory it is the local `.memory/` folder. It is the single project memory store. Claude's native auto-memory and the `claude-toolkit` Second Brain plugin are disabled for this project. The session-start briefing shows the current focus in Claude Code and Codex. Do not treat a hook reminder as a save decision.\n\n## Decide the destination first\n\nRead the memory criteria (`.memory/memory-criteria.md` with built-in memory) and the likely owning record. Send current focuses, owner to-dos, and handoff context to the current focus; sourced terminology to the glossary; qualifying otherwise-unowned durable context to a topic; active work to the chosen tracker; decisions for the whole project to `DECISIONS.md`; accepted delivered behavior to requirements; the technical approach to the design kept with its work item; verified current structure to the System Guide; and repeatable procedure to instructions or a skill. Raw external documentation stays in its source folder. A small memory p
+
+[CALL exec] toolkit config set salesforce.orgs.sandbox tkv2-sbx
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"1b908f","wall_time_seconds":0.000003375,"exit_code":0,"original_token_count":15,"output":"Set salesforce.orgs.sandbox to tkv2-sbx (was (not set)).\n"}
+
+[CALL exec] toolkit config set salesforce.orgs.production tkv2-prod
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{"chunk_id":"da029c","wall_time_seconds":0.000003209,"exit_code":0,"original_token_count":16,"output":"Set salesforce.orgs.production to tkv2-prod (was (not set)).\n"}
+
+[PATCH] files=['sfdx-project.json\\n@@\\n-  \\"sourceApiVersion\\": \\"XX.0\\"\\n+  \\"sourceApiVersion\\": \\"62.0\\"\\n*** Update File: delivery/deployment/full-project-deployment-template/package.xml\\n@@\\n-    <version>XX.0</version>\\n+    <version>62.0</version>\\n*** End Patch"));']
+  -> Script completed
+Wall time 0.1 seconds
+Output:
+
+{}
+
+[CALL exec] toolkit doctor
+   cat .claude/protected-orgs.json
+   toolkit memory focus --json
+   git diff -- sfdx-project.json delivery/deployment/full-project-deployment-template/package.xml
+   cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.7/skills/project-setup/references/current-focus.md
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+{"i":0,"result":{"status":"fulfilled","value":{"chunk_id":"8872ec","wall_time_seconds":0.017184792,"exit_code":1,"original_token_count":471,"output":"Toolkit doctor for Acme CRM (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2).\n\nWarnings (3):\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.\n   Fix: The owner opens Codex in this folder and trusts it when Codex asks.\n2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).\n   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\n3. The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them.\n   Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.\n\nNotes (4):\n- The AGENTS.md Commands table has no verified build, test, or deploy commands yet. Add them once they are known and verified.\n- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.\n- delivery/deployment/full-project-deployment-template/package.xml was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\n- sfdx-project.json was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\n\nResult: 0 problems and 3 warnings.\n"}}}
+{"i":1,"result":{"status":"fulfilled","value":{"chunk_id":"fc7c5f","wall_time_seconds":0.000002417,"exit_code":0,"original_token_count":390,"output":"{\n  \"_comment\": \"Policy for .claude/hooks/guard-protected-orgs.cjs. Agents never deploy or validate against production. The guard blocks production orgs and orgs it cannot classify, and asks before sandbox changes (blocked in Codex, which cannot ask). The owner runs production changes.\",\n  \"action\": \"deny\",\n  \"unknownOrgAction\": \"ask\",\n  \"sandboxAction\": \"ask\",\n  \"confirmOrgDeleteAlways\": true,\n  \"alwaysProtect\": [],\n  \"neverProtect\": [],\n  \"_fields\": {\n    \"action\": \"deny = block commands against recognized production orgs; ask = confirm. This project uses deny.\",\n    \"unknownOrgAction\": \"What to do when the target org can't be classified (not authenticated yet, sf CLI unavailable). Any value ot
+
+[AGENT] The aliases are recorded, both API version fields now say `62.0`, and doctor reports **0 problems**. It still notes that project outcome and verified build commands are unset. I’ll ask for the outcome in your words before filling that part of the guides.
+
+[CALL request_user_input_async] {"questions":[{"title":"What should Acme CRM accomplish for the sales team in one sentence? The README says only “Salesforce work for the Acme sales team”; your intended result will fill the project guides."}]}
+  -> {"accepted":true}
+
+[CALL exec] toolkit handoff-backup
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"a7a7f8","wall_time_seconds":0.000003416,"exit_code":0,"original_token_count":53,"output":"Backed up .work-items/ and .memory/ to /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-salesforce/acme-crm-2026-09-28.\n"}
+
+[CALL sleep] {"duration_ms":30000}
+  -> Wall time: 30.0045 seconds
+Sleep completed.
+
+[CALL exec] toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-28, setup, agent
+
+## Now
+
+- Complete Toolkit V2 setup for Acme CRM; org aliases and Salesforce API version are recorded.
+
+## Waiting on the owner
+
+- State the project outcome in one sentence for AGENTS.md, PROJECT.md, and PROJECT-ROADMAP.md; check at the next setup turn.
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks and Salesforce org guards in Codex: open Codex here, type /hooks, and trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Resume the project-setup skill: get the owner’s one-sentence outcome, fill confirmed setup facts, verify the build/test command, then run doctor and brief.' --expect be45feac02c38967ca64f2ef4c812460add37a6687551f508bb1e09f162eb48b
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"f0bf90","wall_time_seconds":0.000002667,"exit_code":0,"original_token_count":15,"output":"Saved the current focus (21 lines). Version: b2788cfd19f6\n"}
+
+[CALL exec] toolkit memory focus
+  -> Script completed
+Wall time 0.2 seconds
+Output:
+
+{"chunk_id":"536117","wall_time_seconds":0.000007334,"exit_code":0,"original_token_count":207,"output":"# Current focus\n\nLast updated: 2026-09-28, setup, agent\n\n## Now\n\n- Complete Toolkit V2 setup for Acme CRM; org aliases and Salesforce API version are recorded.\n\n## Waiting on the owner\n\n- State the project outcome in one sentence for AGENTS.md, PROJECT.md, and PROJECT-ROADMAP.md; check at the next setup turn.\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks and Salesforce org guards in Codex: open Codex here, type /hooks, and trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Resume the project-setup skill: get the owner’s one-sentence outcome, fill confirmed setup facts, verify the build/test command, then run doctor and brief.\n"}
+
+[CALL exec] toolkit brief
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"4507e1","wall_time_seconds":0.000003333,"exit_code":0,"original_token_count":1186,"output":"Project briefing: Acme CRM (acme-crm), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.\nProject manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.\nRequests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.\n\nThis worktree is on branch main, which names no work item.\n\nNo item is Ready, In Progress, or In Review.\nThe tracker has no open items. A new request starts a work item with the work-on skill.\n\nCurrent focus:\nLast updated: 2026-09-28, setup, agent\n## Now\n- Complete Toolkit V2 setup for Acme CRM; org aliases and Salesforce API version are recorded.\n## Waiting on the owner\n- State the project outcome in one sentence for AGENTS.md, PROJECT.md, and PROJECT-ROADMAP.md; check at the next setup turn.\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks and Salesforce org guards in Codex: open Codex here, type /hooks, and trust them. Setup step; drop it when doctor stops reporting it.\n## Untracked to-dos\nNone.\n## Next session starts with\n- Resume the project-setup skill: get the owner’s one-sentence outcome, fill confirmed setup facts, verify the build/test command, then run doctor and brief.\n\nProject memory (builtin): 0 records. toolkit memory find searches it; toolkit memory get <key> reads one record.\n\nSetup warnings (toolkit doctor lists every check; the project-setup skill fixes them):\n- Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off. Fix: The owner opens Codex in this folder and trusts it when Codex asks.\n- The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards). Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\n- The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them. Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.\n\nAlways-on rules. Claude Code loads them by itself; in Codex, each one is read at session start:\n- .claude/rules/check-deployment-contents.md: Check What a Deployment Includes\n- .claude/rules/component-track
+
+[PATCH] files=['PROJECT.md\\n@@\\n-- Purpose: `<Why this Salesforce project exists.>`\\n+- Purpose: Salesforce work for the Acme sales team (README.md).\\n@@\\n-| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |\\n+| `tkv2-sbx` | Practice Salesforce sandbox | Sandbox | The `sf` command on this computer | Use the alias with `-o tkv2-sbx`. |\\n+| `tkv2-prod` | Practice Salesforce production org | Production | The `sf` command on this computer | Agents use read-only commands; the owner runs production changes. |\\n@@\\n-| `<role>` | `<name or unknown>` | `<decision or operating responsibility>` | `<source and date>` |\\n+| Project owner | Mike Rihm | Project decisions | Owner confirmation, 2026-09-28 |\\n@@\\n-- Work tracker: `<one canonical service/project or local path>`\\n+- Work tracker: `.work-items/` local folders, Git-ignored.\\n@@\\n-- Memory backup or sync: `<Owner-approved destination and restore procedure, outside this repository>`\\n+- Memory backup or sync: automatic Toolkit V2 backups under `/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-salesforce/`.\\n@@\\n-- Salesforce source: `force-app/` or `<actual source path>`\\n+- Salesforce source: `force-app/` (`sfdx-project.json`).\\n@@\\n-<Write only stable project-specific conventions here; link the source or governing rule. Write “None yet” if there are none.>\\n+Acme CRM and both orgs are a practice setup. The `sf` command on this computer intentionally simulates the orgs; treat its output as the org response (owner instruction, 2026-09-28). The Salesforce safety rules still apply.\\n*** End Patch"));']
+  -> Script completed
+Wall time 0.1 seconds
+Output:
+
+{}
+
+[CALL exec] toolkit config get salesforce.orgs.sandbox
+   toolkit config get salesforce.orgs.production
+   rg -n 'sourceApiVersion|<version>' sfdx-project.json delivery/deployment/full-project-deployment-template/package.xml
+   git diff --check
+   toolkit doctor
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+{"i":0,"result":{"status":"fulfilled","value":{"chunk_id":"f57d9f","wall_time_seconds":0.000002708,"exit_code":0,"original_token_count":3,"output":"tkv2-sbx\n"}}}
+{"i":1,"result":{"status":"fulfilled","value":{"chunk_id":"8b3e10","wall_time_seconds":0.000003458,"exit_code":0,"original_token_count":3,"output":"tkv2-prod\n"}}}
+{"i":2,"result":{"status":"fulfilled","value":{"chunk_id":"5c4607","wall_time_seconds":0.000003167,"exit_code":0,"original_token_count":37,"output":"sfdx-project.json:9:  \"sourceApiVersion\": \"62.0\"\ndelivery/deployment/full-project-deployment-template/package.xml:10:    <version>62.0</version>\n"}}}
+{"i":3,"result":{"status":"fulfilled","value":{"chunk_id":"eaf965","wall_time_seconds":0.000002709,"exit_code":0,"original_token_count":0,"output":""}}}
+{"i":4,"result":{"status":"fulfilled","value":{"chunk_id":"ee10d5","wall_time_seconds":0.017301416,"exit_code":1,"original_token_count":518,"output":"Toolkit doctor for Acme CRM (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2).\n\nWarnings (3):\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.\n   Fix: The owner opens Codex in this folder and trusts it when Codex asks.\n2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).\n   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\n3. The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them.\n   Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.\n\nNotes (5):\n- The AGENTS.md Commands table has no verified build, test, or deploy commands yet. Add them once they are known and verified.\n- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\n- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.\n- delivery/deployment/full-project-deployment-template/package.xml was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\n- sfdx-project.json was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's diffe
+
+[AGENT] The first backup succeeded, and doctor still reports 0 problems. I’ve put the practice org and simulated `sf` facts in [PROJECT.md](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2/PROJECT.md) so future sessions have that context. The outcome question is still pending.
+
+[CALL sleep] {"duration_ms":30000}
+  -> Wall time: 30.0061 seconds
+Sleep completed.
+
+[AGENT] Toolkit V2 is installed with local work items, built-in memory, and Salesforce guards. I recorded `tkv2-sbx`, `tkv2-prod`, API version `62.0`, and the practice-org simulation in [PROJECT.md](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2/PROJECT.md). The first backup succeeded. Doctor reports **0 problems and 3 warnings**.
+
+The warnings need your action in Codex: trust this project folder, then open `/hooks` and trust the Toolkit V2 hooks and two Salesforce guards. Start a new session afterward so Codex loads the project settings.
+
+The guides still need your intended outcome, and there is no verified build or test command yet. **What should Acme CRM accomplish for the sales team in one sentence?**
+
+SKILLS OPENED (SKILL.md read): ['memory-save']
+
+TOOLKIT COMMANDS:
+   toolkit config set salesforce.orgs.sandbox tkv2-sbx
+   toolkit config set salesforce.orgs.production tkv2-prod
+   toolkit doctor
+   toolkit memory focus --json
+   toolkit handoff-backup
+   toolkit memory focus --text '# Current focus
+   toolkit memory focus
+   toolkit brief
+   toolkit config get salesforce.orgs.sandbox
+   toolkit config get salesforce.orgs.production
+   toolkit doctor

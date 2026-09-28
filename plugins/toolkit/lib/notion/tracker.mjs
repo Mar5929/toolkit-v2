@@ -979,12 +979,20 @@ export class NotionTracker {
   }
 
   /**
-   * Moves only, from the row's properties: a parent changed by hand and the
-   * Archived box. No body is read and nothing is written, so it fits the
-   * session briefing's 2-second budget (sample run c, round 2).
+   * Moves only, from the row's properties: a parent changed by hand, the
+   * Archived box, and a title changed by hand. No body is read and nothing is
+   * written, so it fits the session briefing's 2-second budget (sample run c,
+   * round 2). The title is compared with the one the toolkit last wrote (final
+   * confirmation round 1, Notion run: the briefing named a hand re-parent but
+   * not the hand rename made in the same minute).
    */
   findMoves(page, id, report) {
     const cached = this.cache.items[id] || null;
+    const knownTitle = cached && cached.written ? cached.written.title : undefined;
+    const title = this.metaOf(page).title;
+    if (knownTitle !== undefined && knownTitle !== null && title && title !== knownTitle) {
+      report.ownerEdits.push({ id, field: 'title', from: knownTitle, to: title, note: 'The title was changed by hand in Notion.', location: page.url });
+    }
     const knownParent = this.knownParentOf(cached);
     const after = normalizeParent(this.parentIdOf(page), this.prefix);
     if (cached && knownParent !== undefined && normalizeParent(knownParent, this.prefix) !== after) {
@@ -1141,6 +1149,16 @@ export class NotionTracker {
       meta = rec.meta;
       read = { body: rec.body };
       report.changed = true;
+    }
+    // A title changed by hand also goes on the Solution Design page, as
+    // toolkit work set --title does (final confirmation round 1, Notion run:
+    // the design page kept the old title after Mike renamed the item).
+    if (write && r.ownerEdits.some((e) => e.field === 'title')) {
+      try {
+        if (await this.retitleDesign(id)) report.derived.push({ id, field: 'design page title', from: '', to: this.designTitle(id, meta.title || '') });
+      } catch (err) {
+        report.problems.push({ severity: 'warning', id, location: page.url, message: `The design page of ${id} still has the old title (${err.message}).` });
+      }
     }
     // An item made before "Design approved" started as "no" shows a blank
     // cell; it gets "no" like a new item (verifier, fix round 2). An item

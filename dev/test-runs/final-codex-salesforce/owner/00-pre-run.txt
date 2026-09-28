@@ -1,0 +1,39 @@
+## date
+Mon Sep 28 22:06:45 UTC 2026
+## codex
+codex-cli 0.157.0
+## ~/.codex/config.toml sha
+d73c3ee672a76b3999261a5885cdd3a5338788d2  /Users/michaelrihm/.codex/config.toml
+## toolkit-v2 plugin entries
+202:[plugins."toolkit@toolkit-v2"]
+203-enabled = true
+--
+205:[plugins."work@toolkit-v2"]
+206-enabled = false
+--
+208:[plugins."memory@toolkit-v2"]
+209-enabled = false
+--
+211:[plugins."session-skills@toolkit-v2"]
+212-enabled = false
+--
+214:[plugins."git-workflows@toolkit-v2"]
+215-enabled = false
+--
+217:[plugins."sf-architect-solutioning@toolkit-v2"]
+218-enabled = false
+## plugin versions (source) and Codex cache compare
+toolkit 0.2.7
+Files plugins/toolkit/tests/notion/final-confirm.test.mjs and /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.7/tests/notion/final-confirm.test.mjs differ
+work 0.2.9
+memory 0.2.7
+session-skills 0.2.7
+git-workflows 0.2.7
+sf-architect-solutioning 0.2.1
+## plugin-root
+/Users/michaelrihm/.claude/plugins/cache/toolkit-v2/toolkit/0.2.7
+
+## toolkit --version
+0.2.7
+## git HEAD
+3adb722 Update progress notes

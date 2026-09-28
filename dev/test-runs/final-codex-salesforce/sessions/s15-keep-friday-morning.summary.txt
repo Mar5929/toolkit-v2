@@ -1,0 +1,135 @@
+PROMPT: Yes, keep the Friday one. I usually do my design reviews first thing in the morning, with coffee.
+THREAD: 01a0ea42-75f1-7082-8e9d-3f79f9bad83b
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Add a Tier picklist field to Account: 11 User approval, In Progress. Next action: Continue work-finish: prepare WI-001 for pull request and merge decision. Continues with work-finish.
+- WI-002 Set Account Tier access and page layout: 11 User approval, In Progress. Next action: Continue work-finish: prepare WI-002 for pull request and merge decision. Continues with work-finish.
+
+Items: 2 in progress.
+
+Current focus:
+Last updated: 2026-09-28, chat, agent
+## Now
+- WI-001 Add a Tier picklist field to Account
+- WI-002 Set Account Tier access and page layout
+## Waiting on the owner
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks and Salesforce org guards in Codex: open Codex here, type /hooks, and trust them. Setup step; drop it when doctor stops reporting it.
+## Untracked to-dos
+None.
+## Next session starts with
+- Continue WI-001 and WI-002 through work-finish after their recorded result approvals; prepare the changes for merge decisions.
+
+Memory proposals waiting on the owner (not facts: do not rely on them; work-decide asks him):
+- user_friday_availability: Mike Rihm is usually off on Fridays (proposed 2026-09-28)
+
+Project memory (builtin): 1 record, and 1 proposal the owner has not answered. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_custom_field_guidance: Every new custom field should have a description and help text
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off. Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+- Codex ran this Toolkit V2 hook, but ~/.codex/config.toml has no trust entry for the Toolkit V2 hooks. Codex runs untrusted hooks only when it is started with --dangerously-bypass-hook-trust; a normal Codex session skips them. Fix: The owner opens /hooks in Codex and trusts the Toolkit V2 hooks; toolkit doctor
+
+[HOOK CONTEXT] The unanswered "Save to memory: Mike Rihm is usually off on Fridays?" was not saved again: memory already has the proposal user_friday_availability like it, which the owner has not answered. If he answers it now, his yes is toolkit memory approve <key> --by <name> and his no is toolkit memory reject <key>; otherwise work-decide asks him later.
+
+[AGENT] I’ll approve the Friday memory proposal. I’ll also check the memory rules for your morning design review preference before saving anything else.
+
+[CALL exec] toolkit memory approve user_friday_availability --by 'Mike Rihm'
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"chunk_id":"a0a638","wall_time_seconds":0.000004916,"exit_code":0,"original_token_count":33,"output":"Approved user_friday_availability: it is now a current memory record, approved by Mike Rihm on 2026-09-28.\nVersion: d1bac9f8511d\n"}
+
+[CALL exec] toolkit memory get user_friday_availability
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+---
+name: user_friday_availability
+description: Mike Rihm is usually off on Fridays
+metadata:
+  type: user
+status: current
+source: Mike Rihm, in chat, 2026-09-28
+last_verified: 2026-09-28
+authorization: Approved by Mike Rihm on 2026-09-28
+supersedes: none
+---
+
+# Friday availability
+
+**Remember:** Mike Rihm is usually off on Fridays.
+
+**Why:** Not stated by the owner.
+
+**How to apply:** Avoid planning owner reviews or decisions for Fridays when scheduling work with him. Check exceptions with Mike.
+
+**Evidence and limits:** Mike Rihm, in chat, 2026-09-28. Usually, not every Friday.
+
+**Related memories:** None.
+
+**Authoritative records:** None.
+
+
+[CALL exec] toolkit memory find 'design reviews morning coffee'
+   toolkit config get memory.approval
+   toolkit work decisions
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+{"i":0,"result":"1 memory record matches \"design reviews morning coffee\" (best first):\n- user_friday_availability: Mike Rihm is usually off on Fridays\n    ...**How to apply:** Avoid planning owner reviews or decisions for Fridays when scheduling work with him. Check exceptions with Mike. **Evidence and limits:** Mi...\nRead a record with toolkit memory get <key> before relying on it.\n"}
+{"i":1,"result":"onboarding\n"}
+{"i":2,"result":"Nothing is waiting on the owner.\n"}
+
+[CALL exec] toolkit doctor
+  -> Script completed
+Wall time 0.4 seconds
+Output:
+
+Toolkit doctor for Acme CRM (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2).
+
+Warnings (3):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+3. The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them.
+   Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.
+
+Notes (6):
+- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.
+- delivery/deployment/full-project-deployment-template/package.xml was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- sfdx-project.json was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+
+Result: 0 problems and 3 warnings.
+
+
+[AGENT] Saved to memory: you are usually off on Fridays. Say “forget that” to undo it.
+
+No work-item decisions are waiting on you. I recommend saving your morning design review preference for scheduling; I’ll leave out the coffee detail.
+
+Save to memory: Mike Rihm usually prefers design reviews first thing in the morning?
+
+SKILLS OPENED (SKILL.md read): []
+
+TOOLKIT COMMANDS:
+   toolkit memory approve user_friday_availability --by 'Mike Rihm'
+   toolkit memory get user_friday_availability
+   toolkit memory find 'design reviews morning coffee'
+   toolkit config get memory.approval
+   toolkit work decisions
+   toolkit doctor

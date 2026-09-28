@@ -41,7 +41,7 @@ Reports where the work stands. This skill only reads: apart from the CLI's own s
 - One line per item in progress: id, title, plain stage, what is left, and who it waits on.
 - The recommended next item and why, in one line.
 - Recently done: items finished since the last session, when the record shows it. Skip it when there are none.
-- Anything moved or broken, with the skill that fixes it.
+- Anything moved, renamed, or broken, with the skill that fixes it. Repeat every change the briefing or a `toolkit` command reported ("Re-parented: ...", "Renamed folder: ...", "Changed by hand: ..."), one line each, even when the owner made it himself.
 - Keep it short. The owner can ask about one item for detail.
 
 Example:

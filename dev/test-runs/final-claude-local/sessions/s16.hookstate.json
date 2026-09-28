@@ -1,0 +1,91 @@
+{
+  "schema": 1,
+  "sessionId": "01379e43-2f29-4a59-9408-c348ef8fb5d2",
+  "host": "claude",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-claude-local-r1",
+  "startedAt": "2026-09-28T20:03:04.012Z",
+  "turns": 2,
+  "turn": {
+    "key": "88f0268f-ed8a-47c3-b805-3b36ab352ca0",
+    "n": 2,
+    "startedAt": "2026-09-28T20:04:43.860Z",
+    "keep": null,
+    "baseline": {
+      "memoryMeta": 1790625870525.4365,
+      "hindsightMeta": null,
+      "memoryCache": null,
+      "workState": 1790625883733.8115,
+      "decisions": 1790625035174.46
+    },
+    "records": [
+      {
+        "kind": "work",
+        "what": "toolkit work history",
+        "at": "2026-09-28T20:04:49.268Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T20:04:54.668Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work set",
+        "at": "2026-09-28T20:04:55.244Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T20:04:58.832Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T20:05:06.709Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T20:05:12.779Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work history",
+        "at": "2026-09-28T20:05:24.139Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work set",
+        "at": "2026-09-28T20:05:24.872Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work set",
+        "at": "2026-09-28T20:05:30.763Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-28T20:05:32.315Z"
+      },
+      {
+        "kind": "memory",
+        "what": "toolkit memory focus",
+        "at": "2026-09-28T20:05:38.490Z"
+      }
+    ],
+    "edits": [
+      {
+        "path": ".work-items/WI-001-build-the-greet-command/WORK-ITEM.md",
+        "id": "WI-001"
+      }
+    ],
+    "stopBlocked": false
+  },
+  "lastStopReason": null,
+  "source": "resume",
+  "updated": "2026-09-28T20:05:44.505Z",
+  "remindedEdits": [
+    ".work-items/WI-001-build-the-greet-command/WORK-ITEM.md"
+  ]
+}

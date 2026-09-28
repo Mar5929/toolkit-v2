@@ -1,0 +1,5 @@
+0.185s :: 'const r = await tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/{humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,session-handoff,shared-repository-work,work-item'
+0.25s :: 'const r = await tools.exec_command({cmd:"toolkit memory find \'Ghost slug 190 characters\'",max_output_tokens:1000}); text(r.output);\n'
+0.238s :: 'const r = await tools.exec_command({cmd:"toolkit config get memory.approval",max_output_tokens:1000}); text(r.output);\n'
+0.277s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"git worktree list --porcelain",max_output_tokens:2000}),\n  tools.exec_command({cmd:"toolkit work show WI-003",max_output_tokens:5000})\n]); for (let i=0;i<r.'
+MAX toolkit call seconds: 0.277

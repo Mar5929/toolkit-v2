@@ -1,0 +1,341 @@
+PROMPT: Yes, go with your recommendation: the whole greeting in capitals, like HELLO, MIKE!, and the flag works before or after the name. Also, remember that I prefer every command-line flag to be documented in the README.
+TIME: 2026-09-28T19:54:53Z -> 2026-09-28T19:57:39Z
+
+[AGENT] I’ll record the `--shout` decision on WI-001, update the requirement, and save your README preference for future CLI changes.
+
+[AGENT] I’m using the work decision and memory procedures for this update. I’ll check the item’s current wording before saving your answer.
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r1 86f219e [main]
+
+
+[CMD exit=0] /bin/zsh -lc 'cat PROJECT-ROADMAP.md'
+  -> # Project roadmap
+
+<!-- Fill-in guide: replace every angle-bracket prompt in the outcome, phase table, phase heading, and work-unit fields with this p
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## main
+
+
+[CMD exit=0] /bin/zsh -lc 'git remote'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 1 decision waits on the owner:
+
+WI-001 Add --shout flag to greet CLI
+  - Q-01: Should --shout uppercase the whole greeting for both a supplied name and the default greeting? Affects R-01. (work-decide)
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001'
+  -> WI-001: Add --shout flag to greet CLI
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r1/.work-items/WI-001-add-shout-flag-to-greet-cli/WORK-ITEM.md
+Stage: 02 Refinement (Backlog) | Waiting on: owner | Continue with: work-decide
+Parent: none | Sub-items: none | Design: none
+Worktree branch for this item: claude/wi-001-add-shout-flag-to-greet-cli (folder .claude/worktrees/wi-001-add-shout-flag-to-greet-cli)
+
+---
+id: WI-001
+title: Add --shout flag to greet CLI
+type: build
+stage: 02-refinement
+status: Backlog
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: not-offered
+requirements_approved: "no"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-001: Add --shout flag to greet CLI
+
+<!-- Fill-in guide for a new local work item: create it with `toolkit work new`, which copies this folder, names the new folder, and sets the real ID in front matter and heading; keep the file name WORK-ITEM.md. Use stable phase, task, requirement, and question IDs for this item. In the front matter, keep one value from each list and change the fields with `toolkit work` commands; a blocked item has `waiting_on` set and its Blockers line filled, not a Blocked status. Replace every angle-bracket prompt with actual text in that same field, cell, or paragraph; do not leave the prompt in place. Keep the headings and field labels. Add or remove phase, task, question, and requirement examples to match the real work. Use the chosen tracker as the source of truth for status and links. Delete this guide after filling the item. -->
+
+## Overview
+
+**Goal:** Add --shout to the greet CLI so it prints the greeting in uppercase letters.
+
+**Current position:** The request is recorded and requirements are being refined.
+
+**Next action:** Mike answers Q-01 about named and default greetings.
+
+**Blockers:** Q-01 needs Mike’s answer before the requirements can be approved.
+
+**
+
+[CMD exit=0] /bin/zsh -lc 'cat README.md bin/greet.mjs'
+  -> # greet
+
+A tiny command that prints a greeting.
+
+    node bin/greet.mjs Mike
+    Hello, Mike!
+
+Run the tests with `npm test`.
+#!/usr/bin/env node
+// g
+
+[CMD exit=0] /bin/zsh -lc 'rg --files requirements system-guide'
+  -> system-guide/AREA-TEMPLATE.md
+requirements/AGENTS.md
+requirements/SYSTEM-DATA-MODEL.md
+requirements/system-area-template/AREA-TEMPLATE.md
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit config get memory.approval'
+  -> onboarding
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory find 'command-line flag README documentation'"
+  -> No memory record is about "command-line flag README documentation".
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history WI-001 --note 'Owner said: \"Yes, go with your recommendation: the whole greeting in capitals, like HELLO, MIKE"'!, and the flag works before or after the name. Also, remember that I prefer every command-line flag to be documented in the README."'"' --effect 'Q-01 answered; R-01 must cover named and default greetings and flag position; add README documentation requirement.'"
+  -> Added a Recent History row to WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | Should --shout uppercase the whole greeting for both a supplied name and the default greeting? | R-01 | Answered 2026-09-28: Yes, the whole greeting in capitals for both. | owner |'"
+  -> Saved "Open Questions" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Active requirements' --text '#### R-01 — Shout greeting
+
+**Status:** Refining  
+**Applies to:** Someone using the greet CLI with --shout, with a supplied name or with the default greeting.  
+**Required behavior:** The CLI prints the whole greeting in uppercase letters when --shout is present. The flag works before or after a supplied name.  
+**Boundaries and exceptions:** With no supplied name, the default greeting is also uppercase.  
+**Acceptance check:** Run the CLI with --shout before a name, after a name, and without a name. Each output is the entire greeting in capitals, including HELLO, MIKE"'! for Mike.  
+**Decision record:** Mike requested uppercase output on 2026-09-28 and clarified named and default greetings and flag position on 2026-09-28.  
+**Open questions:** None.
+
+#### R-02 — Document the flag
+
+**Status:** Refining  
+**Ap
+  -> Saved "Active requirements" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Acceptance' --text 'This work item can be accepted when:
+
+1. --shout prints the whole greeting in uppercase for both a supplied name and the default greeting (R-01).
+2. --shout works before or after a supplied name (R-01).
+3. The README documents --shout and shows how to use it (R-02).
+4. Mike reviews the tested result.'"
+  -> Saved "Acceptance" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Agreed goal' --text 'Add --shout to the greet CLI so it prints the whole greeting in capital letters for named and default greetings, accepts the flag before or after the name, and is documented in the README.'"
+  -> Saved "Agreed goal" in WI-001.
+
+
+[AGENT] WI-001 now records uppercase output for named and default greetings, either flag position, and README documentation. I’m saving the README preference as a standing memory so it also applies to later flags.
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory save --type user --name document-cli-flags-in-readme --description 'Document every command-line flag in the README' --body '# CLI flag documentation preference
+
+**Remember:** Mike prefers every command-line flag in this project to be documented in the README.
+
+**Why:** Not stated by the owner.
+
+**How to apply:** When adding or changing a command-line flag, update its README documentation and check it during review.
+
+**Evidence and limits:** Mike, in chat, 2026-09-28. Applies to this project.
+
+**Related memories:** None.
+
+**Authoritative records:** WI-001 records the --shout requirement.' --source 'Mike, in chat, 2026-09-28' --approved-by Mike"
+  -> Saved to memory: user_document_cli_flags_in_readme (new record).
+Where: Hindsight bank greet-cli-final-h at http://127.0.0.1:8888
+Version: fe879ce215fc
+Approved by: Mike
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show WI-001 --section 'Active requirements'"
+  -> ### Active requirements
+
+#### R-01 — Shout greeting
+
+**Status:** Refining  
+**Applies to:** Someone using the greet CLI with --shout, with a supplied name or with the default greeting.  
+**Required behavior:** The CLI prints the whole greeting in uppercase letters when --shout is present. The flag works before or after a supplied name.  
+**Boundaries and exceptions:** With no supplied name, the default greeting is also uppercase.  
+**Acceptance check:** Run the CLI with --shout before a name, after a name, and without a name. Each output is the entire greeting in capitals, including HELLO, MIKE! for Mike.  
+**Decision record:** Mike requested uppercase output on 2026-09-28 and clarified named and default greetings and flag position on 2026-09-28.  
+**Open questions:** None.
+
+#### R-02 — Document the flag
+
+**Status:** Refining  
+**Applies to:** Someone reading the CLI documentation.  
+**Required behavior:** The README documents --shout as a command-line flag, including what it does and how to use it.  
+**Boundaries and exceptions:** This follows Mike’s preference that every command-line flag be documented in the README.  
+**Acceptance check:** The README describes --shout and shows a usable command.  
+**Decision record:** Mike stated the standing documentation preference on 2026-09-28.  
+**Open questions:** None.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show WI-001 --section 'Open Questions'"
+  -> ## Open Questions
+
+| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | Should --shout uppercase the whole greeting for both a supplied name and the default greeting? | R-01 | Answered 2026-09-28: Yes, the whole greeting in capitals for both. | owner |
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory get user_document_cli_flags_in_readme'
+  -> ---
+name: user_document_cli_flags_in_readme
+description: Document every command-line flag in the README
+metadata:
+  type: user
+status: current
+source: Mike, in chat, 2026-09-28
+last_verified: 2026-09-28
+authorization: Approved by Mike on 2026-09-28
+supersedes: none
+---
+
+# CLI flag documentation preference
+
+**Remember:** Mike prefers every command-line flag in this project to be documented in the README.
+
+**Why:** Not stated by the owner.
+
+**How to apply:** When adding or changing a command-line flag, update its README documentation and check it during review.
+
+**Evidence and limits:** Mike, in chat, 2026-09-28. Applies to this project.
+
+**Related memories:** None.
+
+**Authoritative records:** WI-001 records the --shout requirement.
+
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for Greet CLI Final H (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r1).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r1). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (4):
+- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.
+
+Result: 0 problems and 2 warnings.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Overview' --text '**Goal:** Add --shout to the greet CLI so it prints the whole greeting in uppercase letters.
+
+**Current position:** Requirements are written and ready for Mike to review.
+
+**Next action:** Mike approves or changes the requirements.
+
+**Blockers:** Requirements approval is needed before design or build.
+
+**Related items:** None.'"
+  -> Saved "Overview" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Resume here' --text 'Review the settled --shout requirements and ask Mike for requirements approval. After approval, continue with solution-design.'"
+  -> Saved "Resume here" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus --json'
+  -> {
+  "ok": true,
+  "backend": "hindsight",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Add --shout flag to greet CLI\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, and trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 from its Resume here: ask Mike Q-01 about named and default greetings.\n",
+  "version": "e0e67e660e8050f53861e8b058adcfc4e3d32868f3a807eb7f457fe5eb60db59"
+}
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Add --shout flag to greet CLI
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, and trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 from its Resume here: ask Mike to approve the written requirements.' --expect e0e67e660e8050f53861e8b058adcfc4e3d32868f3a807eb7f457fe5eb60db59"
+  -> Saved the current focus (20 lines). Version: 2c39bc58b0ea
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show WI-001 --section 'Acceptance'"
+  -> ### Acceptance
+
+This work item can be accepted when:
+
+1. --shout prints the whole greeting in uppercase for both a supplied name and the default greeting (R-01).
+2. --shout works before or after a supplied name (R-01).
+3. The README documents --shout and shows how to use it (R-02).
+4. Mike reviews the tested result.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate WI-001'
+  -> Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Add --shout flag to greet CLI
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, and trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 from its Resume here: ask Mike to approve the written requirements.
+
+
+[ITEM collab_tool_call ] {"id": "item_36", "type": "collab_tool_call", "tool": "wait", "sender_thread_id": "01a0e995-a322-7561-ade2-a63b174f0d35", "receiver_thread_ids": [], "prompt": null, "agents_states": {}, "status": "completed"}
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 1 decision waits on the owner:
+
+WI-001 Add --shout flag to greet CLI
+  - WI-001 is waiting on the owner (02 Refinement). Next action: Mike approves or changes the requirements. (work-decide)
+
+
+[AGENT] WI-001 now records that `--shout` capitalizes the whole greeting for a supplied name or the default greeting, and works before or after the name. The written requirements also include documenting the flag in the README. I saved your preference that every command-line flag be documented there for future work.
+
+The requirements check found no open issues. **Do you approve these requirements?**
+
+SKILLS OPENED: ['work-decide', 'work-requirements', 'work-on', 'memory-save']
+ESCALATED CALLS: 0
+HOOK CONTEXTS: 2
+  * Project briefing: Greet CLI Final H (greet-cli-final-h), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: the local Hindsight server. Salesforce: no. Hosts: Claude Code and Codex. | Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r1/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle. | Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs. |  | This worktree is on branch main, which names no work item. |  | No item is Ready, In Progress, or In Review. | The backlog has 1 item; toolkit work next suggests which to take up. |  | Waiting on the owner: | - WI-001 Add --shout flag to greet CLI: Q-01: Should --shout uppercase the whole greeting for both a supplied name and the default greeting? Affects R-01. (work-decide) |  | Items: 1 in the backlog. |  | Current focus: | Last updated: 2026-09-28, chat, agent | ## Now | - WI-001 Add --shout flag to greet CLI | ## Waiting on the owner | - Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it. | - Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, and trust them. Setup step; drop it when doctor stops reporting it. | ## Untracked to-dos | None. | ## Next session starts with | - Continue WI-001 from its Resume here: ask Mike Q-01 about named and default greetings. |  | Project memory (hindsight): 0 records, from the local copy. toolkit memory find searches it; toolkit memory get <key> reads one record. |  | Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them): | - Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r1). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off. Fix: The owner opens Codex in this folder and trusts it when Codex asks. | - Codex ran this Toolkit V2 hook, but ~/.codex/config.toml has no trust entry for the Toolkit V2 hooks. Codex runs untrusted hooks only when it is started with --dangerously-bypass-hook-trust; a normal Codex session skips them. Fix: The owner opens /hooks in Codex and trusts the Toolkit V2 hooks; toolkit doctor checks it. |  | Always-on rules. Claude Code loads them by itself; in Codex, each one is read at session start: | - .claude/rules/humanize-outbound-text.md: Humanize Anything Sent to Another Person | - .claude/rules/keep-work-item-current.md: Keep the Active Work Item Accurate | - .claude/rules/memory-review-and-save.md: Review and Save Project Memory | - .claude/rules/plain-english-artifacts.md: Write Artifacts in Plain English | - .claude/rules/session-handoff.md: Prepare a Session Handoff | - .claude/rules/shared-repository-work.md: Work Safely in a Shared Repository | - .claude/rules/work-item-folders.md: Local Work-Item Folders |  | How to write replies (from AGENTS.md): | Claude Code applies the Plain English output style to chat. Codex and helper agents follow these lines instead. |  | - Start with the answer, result, or current status. Answer what was asked. Keep it short; add detail when asked. | - Use ordinary words. Explain an unfamiliar term the first time it matters. Use the exact name a system uses, the same way every time. | - Write literally: no metaphors, idioms, jokes, or picture words in place of the real name. State the point directly, without a "not this, but that" setup. | - Use paragraphs for a connected explanation, bullets for separate items or choices, and a heading only when it names what is under it. | - When asking for a decision, name the choice and the difference that matters, and recommend one. | - Use the exact status word: written, built, tested, merged, installed, or seen working. Say something works only when you saw it work. | - Leave out routine narration of process and helper activity. Give one direct line when the owner lost something, an action cannot be undone, work waits on the owner, or there is a cost.
+  * The owner stated something to keep; memory-save records it, or work-on if it is a task.
+HOOKSTATE turns=1 keep=remember that records=[('work', 'toolkit work history', None), ('work', 'toolkit work edit', None), ('work', 'toolkit work edit', None), ('work', 'toolkit work edit', None), ('work', 'toolkit work edit', None), ('memory', 'toolkit memory save', None), ('work', 'toolkit work edit', None), ('work', 'toolkit work edit', None), ('memory', 'toolkit memory focus', None)] stopBlocked=False lastStop=

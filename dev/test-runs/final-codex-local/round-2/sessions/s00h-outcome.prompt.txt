@@ -1,0 +1,1 @@
+The outcome: tipcalc tells me the tip and the total for a restaurant bill, and can split the total between friends, straight from my terminal. Use my words. Then commit the setup files.

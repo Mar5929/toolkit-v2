@@ -1,0 +1,795 @@
+PROMPT: Yes, go with your recommendation: no greeting and a failure exit status.
+THREAD: 01a0ea19-9310-76a0-bc8c-0899b3b654c4
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll record that decision for WI-001 and update its requirement.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/SKILL.md'
+  -> ---
+name: work-decide
+description: 'Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers. Use when he asks "what do you need from me", answers a waiting decision ("go with option B"), or states a project-wide decision.'
+---
+
+# Work decide
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Walks the owner through what waits on him, one decision at a time, and records each answer where it belongs. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Build the queue. The command lists each decision once: requirements waiting for approval, proposed designs, results at stage 11, Open Questions rows the owner decides, and memory proposals. Its "Agent to-do" lines are not decisions. A delivery offer belongs to `work-delegate`: open it after his other decisions.
+   `toolkit work decisions`
+2. He gave an answer without being asked ("approved", "go with B"): match it to exactly one waiting decision; when two could match, ask which, naming both. A bare "yes", "ok", or "looks good" with no question asked is not an answer (`references/approvals.md`, section 1).
+3. Otherwise start with the count and one short line for every waiting decision, memory proposals included ("3 decisions wait on you: the WI-004 design, the WI-006 result, and a 
+
+[CMD exit=0] /bin/zsh -lc 'cat .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md'
+  -> # Humanize Anything Sent to Another Person
+
+Any text that will leave the project and be read by someone other than the owner
+is run through the `humanizer` skill before the owner sees the final version.
+Use the `unslop` skill when `humanizer` is not installed. That covers emails,
+chat messages, supp
+
+[CMD exit=0] /bin/zsh -lc 'rg --files .work-items'
+  -> .work-items/WI-001-add-a-times-flag-to-greet/WORK-ITEM.md
+.work-items/work-item-template/WORK-ITEM.md
+.work-items/work-item-template/DESIGN.md
+.work-items/DASHBOARD.md
+
+
+[AGENT] I’m using the work-decide procedure to record your answer and clear the item’s waiting status.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/references/recording-owner-answers.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/references/work-item-format.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/references/current-focus.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/references/toolkit-commands.md'
+  -> <!-- Generated file. Source: plugins/work/shared/recording-owner-answers.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Recording the owner's answers
+
+Where each thing the owner says is saved, how to ask him a question, how to
+end a reply, and what to say when a save fails.
+
+## Contents
+
+1. Voice
+2. Where each answer goes
+3. Save it before the next question
+4. History notes
+5. Waiting on the owner
+6. Asking the owner
+7. Ending every reply
+8. Reporting a failed save
+9. Owner edits win
+10. Stages in plain words
+11. Handing over to another skill
+
+## 1. Voice
+
+Every skill carries this line near its top:
+
+> Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+
+Helper agents do not receive the output style. Each agent file carries its
+own writing rules.
+
+## 2. Where each answer goes
+
+| Information | Home | What to record |
+| --- | --- | --- |
+| Requirement or correction | The item's `Active requirements` (the `R-xx` block) and `Acceptance` | The new meaning, and Status Refining until approved |
+| Design choice | The item's design (`toolkit work design`) | The approach, proposed or approved, and why |
+| Open question | The item's `Open Questions` table | Question, what it affects, Open, who must answer |
+| Answer or decision about this item | The question's row, the section it changes, and one history note | The answer, who gave it, the
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## main
+
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2 ec6e66b [main]
+
+
+[CMD exit=0] /bin/zsh -lc 'git remote'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'cat .work-items/WI-001-add-a-times-flag-to-greet/WORK-ITEM.md'
+  -> ---
+id: WI-001
+title: Add a --times flag to greet
+type: build
+stage: 02-refinement
+status: Backlog
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: not-offered
+requirements_approved: "no"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-001: Add a --times flag to greet
+
+<!
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 1 decision waits on the owner:
+
+WI-001 Add a --times flag to greet
+  - Q-03: For an invalid --times value, should greet print no greeting and exit with a failure status after showing the error? Affects R-01. (work-decide)
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history WI-001 --note 'Owner said: \"Yes, go with your recommendation: no greeting and a failure exit status.\"' --effect 'Q-03 answered; R-01 and acceptance can be finalized for review.'"
+  -> Added a Recent History row to WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | Should --times N print the same greeting N times, one per line, while preserving the optional name and current one-greeting default? Answer: Yes: the same greeting N times, one per line, and keep the optional name and the one-greeting default. Mike Rihm, 2026-09-28. | Agreed goal, R-01 | Answered | owner |
+| Q-02 | Should --times accept only positive whole numbers, and show an error for zero, negative, missing, or non-number values
+  -> Saved "Open Questions" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --waiting-on agent'
+  -> Updated WI-001: waiting on agent.
+Now 02 Refinement (Backlog). Continue with work-requirements.
+
+
+[AGENT] Q-03 is recorded. I’ll fold it into R-01 and the acceptance checks, then review the draft for approval.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-requirements/SKILL.md'
+  -> ---
+name: work-requirements
+description: 'Interviews the owner one question at a time, writes a work item''s requirements (R-01, R-02), checks them, and asks for his approval. Use when an item''s requirements are missing or the owner changes, adds, or drops one at any stage, or says "grill me", "ask me questions", or "check the spec".'
+---
+
+# Work requirements
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Interviews the owner and writes what the result must do, never how to build it; every answer lands in the work item. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Find the item as `work-on` does; none exists, create it with his words as the Starting request. Requirements already approved and no change asked: open the skill the item's "Continue with" names and stop.
+   `toolkit work show <id>`
+   `toolkit work new --title '<title>' --type <type> --stage 01-discovery`
+   `toolkit work edit <id> --section 'Starting request' --text '<his exact words>'`
+2. Move it to refinement once requirements are being written. Before the first question, read the item and what the project already knows (`references/interview.md`, section 2).
+   `toolkit work set <id> --stage 02-refinement`
+   `toolkit memory find '<topic>'`
+3. Restate the goal in one sentence ("So the goal is X?"). Write t
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-requirements/references/requirement-format.md'
+  -> # Writing a requirement
+
+How to write an `R-xx` block and the Acceptance list so someone who was not
+in the conversation can build and check the result.
+
+## What a requirement says
+
+- Plain words, no jargon. State the goal, what people must be able to do,
+  what must happen, and the rules that govern it.
+- Each requirement says what must be true and why, never how to build it. No
+  file paths, versions, tool choices, or build steps in a requirement.
+- Make behavior explicit: who is affected, when the rule applies, the
+  expected result, and the exceptions.
+- Every requirement has an acceptance check someone can observe.
+- Use only settled details. Leave missing decisions open as questions.
+
+## The `R-xx` block
+
+From the work item template. The name follows an em dash. Each field starts
+its own line, and every line but the last ends with two spaces.
+
+```markdown
+#### R-01 — Rejected requests show their reason
+
+**Status:** Refining  
+**Applies to:** The person who submitted a request, after it is rejected.  
+**Required behavior:** The requester can see the rejection reason on the request.  
+**Boundaries and exceptions:** Requests withdrawn by the requester have no reason.  
+**Acceptance check:** Reject a request with a reason; the requester sees that reason on the request.  
+**Decision record:** Owner, 2026-09-26, interview.  
+**Open questions:** None.
+```
+
+- Status words: Refining, Finalized, Superseded.
+- A new or changed requirement is Refining until the owner approves it.
+-
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-requirements/references/spec-check.md'
+  -> # The spec check
+
+How to run the `requirements-analyst` check on an item's requirements and
+turn its findings into fixes or questions for the owner.
+
+## When it runs
+
+- Before asking for the requirements approval.
+- Whenever the owner says "check the spec".
+- Again after a change to an approved requirement.
+
+## The brief
+
+Give the `requirements-analyst` agent (Claude Code: `work:requirements-analyst`;
+Codex: the text of `references/agent-requirements-analyst.md`) this, pasted
+in, because it has no tracker access:
+
+1. The item id.
+2. The Starting request, the Agreed goal, every `R-xx` block, the Acceptance
+   list, and the open questions.
+3. The area's file in `requirements/` when one exists, so it can spot a
+   conflict.
+4. The job: "Check these requirements before design. Return ready or not
+   ready, then each finding with a fix."
+5. Files it may write: nothing.
+
+## What it returns
+
+Ready or not ready, then findings of these kinds, each with a fix:
+
+- missing pieces (a step, a person, an error case, a state, a boundary with
+  another system, a way to tell it worked);
+- places not explicit end to end;
+- wording a builder could misread;
+- build details inside requirements;
+- drift from the Agreed goal;
+- research or history in the wrong place.
+
+## Handling the findings
+
+- For each finding, propose a fix in plain words: what to change, where, and
+  what the line would say instead.
+- Change nothing without the owner's yes. Three findings or fewer: one
+  decision per message, in
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001 --path'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/.work-items/WI-001-add-a-times-flag-to-greet/WORK-ITEM.md
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show WI-001 --section 'Open Questions'"
+  -> ## Open Questions
+
+| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | Should --times N print the same greeting N times, one per line, while preserving the optional name and current one-greeting default? Answer: Yes: the same greeting N times, one per line, and keep the optional name and the one-greeting default. Mike Rihm, 2026-09-28. | Agreed goal, R-01 | Answered | owner |
+| Q-02 | Should --times accept only positive whole numbers, and show an error for zero, negative, missing, or non-number values? Answer: Yes, positive whole numbers only, and a clear error for anything else. Mike Rihm, 2026-09-28. | R-01 | Answered | owner |
+| Q-03 | For an invalid --times value, should greet print no greeting and exit with a failure status after showing the error? Answer: Yes, no greeting and a failure exit status. Mike Rihm, 2026-09-28. | R-01 | Answered | owner |
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Active requirements' --text '#### R-01 — Repeat the greeting
+
+**Status:** Refining  
+**Applies to:** People running greet with or without --times N and an optional name.  
+**Required behavior:** With --times N, print the same greeting N times, one per line. The optional name still determines whom to greet. Without --times, print one greeting as today. Accept N only when it is a positive whole number. For any other value, show a clear error, print no greeting, and exit with a failure status.  
+**Boundaries and exceptions:** Zero, negative, missi
+  -> Saved "Active requirements" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Acceptance' --text 'This work item can be accepted when:
+
+1. --times N prints the same greeting N times, one per line, with the optional name preserved, when N is a positive whole number.
+2. Without --times, greet still prints one greeting.
+3. Zero, negative, missing, and non-number values for --times each produce a clear error, no greeting, and a failure exit status.
+4. The README lists --times with a short example, along with any other flags.
+5. Mike reviews the tested result.'"
+  -> Saved "Acceptance" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Overview' --text '**Goal:** Let greet print the same greeting N times, one per line, when --times N is given, while keeping the optional name and one-greeting default.
+
+**Current position:** Q-01 through Q-03 are answered. The draft requirements include the invalid-input behavior and need a spec check before approval.
+
+**Next action:** Agent checks the draft requirements, then asks Mike to approve them.
+
+**Blockers:** Requirements approval from Mike is required before the build.
+
+**Related items:** None.'"
+  -> Saved "Overview" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Resume here' --text 'Q-03 is answered. Run the spec check on R-01, R-02, and Acceptance, then ask Mike to approve the requirements. Requirements are not approved; do not build yet.'"
+  -> Saved "Resume here" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'rg --files requirements bin test | head -80'
+  -> requirements/AGENTS.md
+requirements/SYSTEM-DATA-MODEL.md
+requirements/system-area-template/AREA-TEMPLATE.md
+test/greet.test.mjs
+bin/greet.mjs
+
+
+[CMD exit=0] /bin/zsh -lc 'cat bin/greet.mjs README.md'
+  -> #!/usr/bin/env node
+// greet: prints a friendly greeting.
+// Usage: greet [name]
+export function greet(name = 'world') {
+  return `Hello, ${name}!`;
+}
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const args = process.argv.slice(2);
+  console.log(greet(args[0]));
+}
+# greet
+
+A tiny comman
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate WI-001'
+  -> Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> Nothing is waiting on the owner.
+
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/SKILL.md'
+  -> ---
+name: memory-save
+description: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says "remember this", "from now on", "forget that", or "remind me" with no time given, corrects the agent, or a hook says a save is due.'
+---
+
+# Memory save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Saves, corrects, or retires one memory record with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand.
+
+## Steps
+
+Track these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home ("Where other things go" below) and stop.
+2. Search for a record that already holds it, and read each hit with its version. The save's duplicate check compares wording, so only this search finds a record the new fact contradicts (for example "Mondays" against "Tuesdays").
+   `toolkit memory find '<topic>'`
+   `toolkit memory get <key> --json`
+3. Read the approval mode and apply "Approval policy" below. When it says ask, ask and wait.
+   `toolkit config get memory.approval`
+4. Write the description and body in the record format (`refer
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus --json'
+  -> {
+  "ok": true,
+  "backend": "hindsight",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Add a --times flag to greet\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 from its Resume here: ask Q-03 about invalid --times behavior and record the answer.\n",
+  "version": "76360b0ef6886ad9fdadb5dbefaf2f2cdaac6a9f42df333c2fd8895d088e3811"
+}
+
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-requirements/references/agent-requirements-analyst.md'
+  -> ---
+name: requirements-analyst
+description: Checks a work item's requirements before design or build. Finds missing pieces, places not explicit end to end, wording a builder could misread, build details inside requirements, and drift from the Agreed goal. Returns ready or not ready with a fix for each finding. Read-only.
+tools: Read, Glob, Grep
+model: opus
+---
+<!-- Generated file. Source: plugins/work/agents/requirements-analyst.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+
+# Requirements analyst
+
+Read the requirements as one whole and say whether they are ready to design
+or build from. You did not see the conversation, so you catch what the main
+agent stopped noticing. You advise; the owner decides. You change nothing.
+
+## Start with the brief
+
+- The brief pastes in the Agreed goal, the Starting request, every `R-xx`
+  block, the Acceptance list, the open questions, and the owner's recorded
+  rulings. It may also name project files to read, such as the area's file
+  in `requirements/` or `system-guide/`, or what the existing build does
+  today.
+- Treat only rulings the brief marks as approved by the owner as settled.
+  Proposals and unanswered questions stay open. Everything else is open to
+  your check.
+- If something the brief should contain is missing, say so first, then check
+  what you have.
+
+## Check readiness
+
+Read the requirements inside the larger system the result belongs to. Walk
+the whole flow start to finish as the person who uses 
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/references/current-focus.md'
+  -> <!-- Generated file. Source: plugins/memory/shared/current-focus.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# The current focus
+
+Purpose: the format of the current focus, when to change it, and the exact
+read-change-save sequence, in every memory backend.
+
+## Contents
+
+- What the focus is for
+- The format
+- What goes in each section
+- When to check it
+- Read, change, save
+- A new project's focus
+- Examples
+- Checklist for a focus save
+
+## What the focus is for
+
+The current focus is the first thing the next session reads: the session
+briefing includes it. It says what is happening now and where the next
+session starts. It never repeats the tracker: a work item's status, tasks,
+and history stay in the work item.
+
+| Backend | Where the focus lives |
+| --- | --- |
+| Built-in | `.memory/CURRENT_FOCUS.md` in the main checkout |
+| Hindsight | The document `focus` in the project's bank |
+| Notion | The "Current focus" page under the project's page |
+
+The same commands read and save it in every backend. Never edit the file or
+the page by hand.
+
+## The format
+
+The model's format: a `# Current focus` title line, a `Last updated:` line,
+then exactly four `##` sections in this order, under 50 lines in total.
+
+```markdown
+# Current focus
+
+Last updated: <YYYY-MM-DD>, <source>, <person or agent>
+
+## Now
+
+## Waiting on the owner
+
+## Untracked to-dos
+
+## Next session starts with
+```
+
+What the command enforces:
+
+- It refuses a focus that lacks one of the four se
+
+[ITEM collab_tool_call ] {"id": "item_34", "type": "collab_tool_call", "tool": "wait", "sender_thread_id": "01a0ea19-9310-76a0-bc8c-0899b3b654c4", "receiver_thread_ids": [], "prompt": null, "agents_states": {}, "status": "completed"}
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show WI-001 --section 'Acceptance'"
+  -> ### Acceptance
+
+This work item can be accepted when:
+
+1. --times N prints the same greeting N times, one per line, with the optional name preserved, when N is a positive whole number.
+2. Without --times, greet still prints one greeting.
+3. Zero, negative, missing, and non-number values for --times each produce a clear error, no greeting, and a failure exit status.
+4. The README lists --times with a short example, along with any other flags.
+5. Mike reviews the tested result.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show WI-001 --section 'Overview'"
+  -> ## Overview
+
+**Goal:** Let greet print the same greeting N times, one per line, when --times N is given, while keeping the optional name and one-greeting default.
+
+**Current position:** Q-01 through Q-03 are answered. The draft requirements include the invalid-input behavior and need a spec check before approval.
+
+**Next action:** Agent checks the draft requirements, then asks Mike to approve them.
+
+**Blockers:** Requirements approval from Mike is required before the build.
+
+**Related items:** None.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show WI-001 --section 'Resume here'"
+  -> ### Resume here
+
+Q-03 is answered. Run the spec check on R-01, R-02, and Acceptance, then ask Mike to approve the requirements. Requirements are not approved; do not build yet.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show WI-001 --section 'Active requirements'"
+  -> ### Active requirements
+
+#### R-01 — Repeat the greeting
+
+**Status:** Refining  
+**Applies to:** People running greet with or without --times N and an optional name.  
+**Required behavior:** With --times N, print the same greeting N times, one per line. The optional name still determines whom to greet. Without --times, print one greeting as today. Accept N only when it is a positive whole number. For any other value, show a clear error, print no greeting, and exit with a failure status.  
+**Boundaries and exceptions:** Zero, negative, missing, and non-number values are invalid.  
+**Acceptance check:** Run greet with a name and --times 3; see three identical greeting lines for that name. Run it without --times; see one greeting line. Run it with zero, a negative number, a missing value, and a non-number value; see a clear error, no greeting, and a failure exit status for each.  
+**Decision record:** Mike Rihm, 2026-09-28, answers to Q-01, Q-02, and Q-03.  
+**Open questions:** None.
+
+#### R-02 — Explain flags in the README
+
+**Status:** Refining  
+**Applies to:** People reading the command documentation.  
+**Required behavior:** List every command-line flag, including --times, in the README with a short example for each.  
+**Boundaries and exceptions:** None identified.  
+**Acceptance check:** The README lists --times and shows a short command and its output; each other command-line flag, if any, also has a short example.  
+**Decision record:** Mike Rihm, 2026-09-28, stated READ
+
+[ITEM collab_tool_call ] {"id": "item_39", "type": "collab_tool_call", "tool": "wait", "sender_thread_id": "01a0ea19-9310-76a0-bc8c-0899b3b654c4", "receiver_thread_ids": [], "prompt": null, "agents_states": {}, "status": "completed"}
+
+[AGENT] The spec check found one choice to settle: where the optional name may appear relative to `--times N`. I’ll record it as Q-04 so the next session can resume from the same point.
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Open Questions' --append-row '| Q-04 | Should the optional name work both before and after --times N, as in greet Mike --times 3 and greet --times 3 Mike? | R-01 | Open | owner |'"
+  -> Saved "Open Questions" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --waiting-on owner'
+  -> Updated WI-001: waiting on owner.
+Now 02 Refinement (Backlog). Continue with work-decide.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Active requirements' --text '#### R-01 — Repeat the greeting
+
+**Status:** Refining  
+**Applies to:** People running greet with or without --times N and an optional name.  
+**Required behavior:** With --times N, print the same greeting N times, one per line. The optional name still determines whom to greet. Without --times, print one greeting as today. Accept N only when it is a positive whole number. For any other value, show a clear error, print no greeting, and exit with a failure status.  
+**Boundaries and exceptions:** Zero, negative, missi
+  -> Saved "Active requirements" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history WI-001 --note 'Spec check found that R-01 does not state where the optional name may appear relative to --times N.' --effect 'Q-04 awaits the owner before requirements approval.'"
+  -> Added a Recent History row to WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Overview' --text '**Goal:** Let greet print the same greeting N times, one per line, when --times N is given, while keeping the optional name and one-greeting default.
+
+**Current position:** Q-01 through Q-03 are answered. The spec check found that the accepted argument order is unclear in R-01.
+
+**Next action:** Mike answers Q-04; agent updates R-01 and Acceptance, then asks for requirements approval.
+
+**Blockers:** Q-04 and requirements approval from Mike are required before the build.
+
+**Related items:** None.'"
+  -> Saved "Overview" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Resume here' --text 'Ask Mike Q-04 about the accepted order of the optional name and --times N. Update R-01 and Acceptance with his answer, then ask for requirements approval. Requirements are not approved; do not build yet.'"
+  -> Saved "Resume here" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Add a --times flag to greet
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 from its Resume here: ask Q-04 about the order of the optional name and --times N.' --ex
+  -> Saved the current focus (20 lines). Version: 5fd04b780a8d
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate WI-001'
+  -> Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. 1 open question waits on the owner (toolkit work decisions lists it).
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Add a --times flag to greet
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 from its Resume here: ask Q-04 about the order of the optional name and --times N.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 1 decision waits on the owner:
+
+WI-001 Add a --times flag to greet
+  - Q-04: Should the optional name work both before and after --times N, as in greet Mike --times 3 and greet --times 3 Mike? Affects R-01. (work-decide)
+
+
+[AGENT] WI-001 now records your decision: an invalid `--times` value shows an error, prints no greeting, and exits with a failure status.
+
+The requirements check found one remaining choice. Should the optional name work in both positions—`greet Mike --times 3` and `greet --times 3 Mike`? I recommend both so the flag works wherever someone puts it.
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 1526386, "cached_input_tokens": 1475328, "cache_write_input_tokens": 0, "output_tokens": 4881, "reasoning_output_tokens": 614}}
+
+SKILLS OPENED: ['work-decide', 'work-requirements', 'memory-save']
+
+[HOOK CONTEXT ord=9] Project briefing: Greet CLI Final H2 (greet-cli-final-h2), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: the local Hindsight server. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The backlog has 1 item; toolkit work next suggests which to take up.
+
+Waiting on the owner:
+- WI-001 Add a --times flag to greet: Q-03: For an invalid --times value, should greet print no greeting and exit with a failure status after showing the error? Affects R-01. (work-decide)
+
+Items: 1 in the backlog.
+
+Current focus:
+Last updated: 2026-09-28, chat, agent
+## Now
+- WI-001 Add a --times flag to greet
+## Waiting on the owner
+- Trust this folder in Codex: open Codex here and trust the folder when it 
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat SOUL.md PROJECT.md PROJECT-ROADMAP.md",max_output_tokens:5000}),
+  tools.exec_command({cmd:"cat .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md",max_output_tokens:9000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/SKILL.md",max_output_tokens:5000}),
+  tools.exec_command({cmd:"rg --files .work-items",max_output_tokens:2000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,...x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"2b6357\",\"wall_time_seconds\":0,\"exit_code\":1,\"original_token_count\":1198,\"output\":\"cat: SOUL.md: No such file or directory\\n# Greet CLI Final H2\\n\\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\\n\\n## Purpose and intended outcome\\n\\n- Purpose: Provide a small, friendly greeting command.\\n- Intended outcome: A small, friendly greeting command that Mike can grow with a few simple flags (Mike Rihm, 2026-09-28).\\n\\n## Scope and boundaries\\n\\n- In scope: The Node.js `greet` command in `bin/greet.mjs`.\\n- Outside scope: `<Important exclusions or adjacent owners.>`\\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\\n\\n## Systems and environments\\n\\n| System or org | Purpose | Environment | Source of truth | Access notes |\\n| --- | --- | --- | --- | --- |\\n| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |\\n\\n## People and ownership\\n\\n| Role | Person or team | Responsibility | Source / last confirmed |\\n| --- | --- | --- | --- |\\n| Owner | Mike Rihm | Project decisions | Mike Rihm, 2026-09-28 |\\n\\n## Work and project records\\n\\n- Work tracker: Local folders in `.work-items/`.\\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\\n- Project decisions: [DECISIONS.md](DECISIONS.md)\\n- Functional requirements: [requirements/](requirements/)\\n- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`\\n- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`\\n- Memory: this project's bank on the local Hindsight server (the setup choice is in `.toolkit.json`)\\n- Memory backup or sync: Automatic Toolkit backup to `/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-hindsight`; restore with the Toolkit backup procedure.\\n\\n## Resources and project paths\\n\\n- Tests and checks: `npm test`, whi
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/references/recording-owner-answers.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/references/work-item-format.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/references/current-focus.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-decide/references/toolkit-commands.md",max_output_tokens:9000}),
+tools.exec_command({cmd:"git worktree list",max_output_tokens:1000}),
+tools.exec_command({cmd:"git status --short --branch",max_output_tokens:1000}),
+tools.exec_command({cmd:"git remote",max_output_tokens:1000}),
+tools.exec_command({cmd:"cat .work-items/WI-001-add-a-times-flag-to-greet/WORK-ITEM.md",max_output_tokens:5000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,...x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "Warning: truncated output (original token count: 11609)\nTotal output lines: 5\n\n{\"i\":0,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"f34bac\",\"wall_time_seconds\":0.000002416,\"exit_code\":0,\"original_token_count\":9361,\"output\":\"Warning: truncated output (original token count: 9361)\\nTotal output lines: 805\\n\\n<!-- Generated file. Source: plugins/work/shared/recording-owner-answers.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\\n# Recording the owner's answers\\n\\nWhere each thing the owner says is saved, how to ask him a question, how to\\nend a reply, and what to say when a save fails.\\n\\n## Contents\\n\\n1. Voice\\n2. Where each answer goes\\n3. Save it before the next question\\n4. History notes\\n5. Waiting on the owner\\n6. Asking the owner\\n7. Ending every reply\\n8. Reporting a failed save\\n9. Owner edits win\\n10. Stages in plain words\\n11. Handing over to another skill\\n\\n## 1. Voice\\n\\nEvery skill carries this line near its top:\\n\\n> Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \\\"How to write replies\\\" section of `AGENTS.md`.\\n\\nHelper agents do not receive the output style. Each agent file carries its\\nown writing rules.\\n\\n## 2. Where each answer goes\\n\\n| Information | Home | What to record |\\n| --- | --- | --- |\\n| Requirement or correction | The item's `Active requirements` (the `R-xx` block) and `Acceptance` | The new meaning, and Status Refining until approved |\\n| Design choice | The item's design (`toolkit work design`) | The approach, proposed or approved, and why |\\n| Open question | The item's `Open Questions` table | Question, what it affects, Open, who must answer |\\n| Answer or decision about this item | The question's row, the section it changes, and one history note | The answer, who gave it, the date, and whether it is an approval |\\n| Decision for the whole project | `DECISIONS.md`, through `work-decide` | Decision, why, who decided, what it replaces |\\n| Outstanding task | The item's `Tasks` section | Work, Deliverable, Done when, Depends on |\\n| Context that is not a requirement | `Notes` > `Decisions and context` | Only what the next session needs |\\n| Build idea kept for later | `Notes` > `Solution options and considerations` | The idea and the `R-xx
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"4eea99\",\"wall_time_seconds\":0.000003416,\"exit_code\":0,\"original_token_count\":56,\"output\":\"1 decision waits on the owner:\\n\\nWI-001 Add a --times flag to greet\\n  - Q-03: For an invalid --times value, should greet print no greeting and exit with a failure status after showing the error? Affects R-01. (work-decide)\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history WI-001 --note 'Owner said: \"Yes, go with your recommendation: no greeting and a failure exit status.\"' --effect 'Q-03 answered; R-01 and acceptance can be finalized for review.'",max_output_tokens:1500});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"5b325b\",\"wall_time_seconds\":0.000002833,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Added a Recent History row to WI-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |\n|---|---|---|---|---|\n| Q-01 | Should --times N print the same greeting N times, one per line, while preserving the optional name and current one-greeting default? Answer: Yes: the same greeting N times, one per line, and keep the optional name and the one-greeting default. Mike Rihm, 2026-09-28. | Agreed goal, R-01 | Answered | owner |\n| Q-02 | Should --times accept only positive whole numbers, and show an error for zero, negative, missing, or non-number values? Answer: Yes, positive whole numbers only, and a clear error for anything else. Mike Rihm, 2026-09-28. | R-01 | Answered | owner |\n| Q-03 | For an invalid --times value, should greet print no greeting and exit with a failure status after showing the error? Answer: Yes, no greeting and a failure exit status. Mike Rihm, 2026-09-28. | R-01 | Answered | owner |'",max_output_tokens:1500});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"901d90\",\"wall_time_seconds\":0.0000025,\"exit_code\":0,\"original_token_count\":9,\"output\":\"Saved \\\"Open Questions\\\" in WI-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-001 --waiting-on agent",max_output_tokens:1500});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"841d68\",\"wall_time_seconds\":0.000002791,\"exit_code\":0,\"original_token_count\":24,\"output\":\"Updated WI-001: waiting on agent.\\nNow 02 Refinement (Backlog). Continue with work-requirements.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-requirements/SKILL.md",max_output_tokens:7000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "---\nname: work-requirements\ndescription: 'Interviews the owner one question at a time, writes a work item''s requirements (R-01, R-02), checks them, and asks for his approval. Use when an item''s requirements are missing or the owner changes, adds, or drops one at any stage, or says \"grill me\", \"ask me questions\", or \"check the spec\".'\n---\n\n# Work requirements\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nInterviews the owner and writes what the result must do, never how to build it; every answer lands in the work item. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.\n\n## Steps\n\n1. Find the item as `work-on` does; none exists, create it with his words as the Starting request. Requirements already approved and no change asked: open the skill the item's \"Continue with\" names and stop.\n   `toolkit work show <id>`\n   `toolkit work new --title '<title>' --type <type> --stage 01-discovery`\n   `toolkit work edit <id> --section 'Starting request' --text '<his exact words>'`\n2. Move it to refinement once requirements are being written. Before the first question, read the item and what the project already knows (`references/interview.md`, section 2).\n   `toolkit work set <id> --stage 02-refinement`\n   `toolkit memory find '<topic>'`\n3. Restate the goal in one sentence (\"So the goal is X?\"). Write the Agreed goal after a yes, and always before asking for approval.\n   `toolkit work edit <id> --section 'Agreed goal' --text '<goal>'`\n4. Ask one question at a time, most basic first, each with a recommended answer and a short reason (`references/interview.md`, sections 3 and 4).\n5. Save each answer before the next question: `R-xx` blocks and the Acceptance list in the format in `references/requirement-format.md`; anything unanswered as an Open Questions row, with the item waiting on the owner while one of his is open.\n   `toolkit work edit <id> --section 'Active requirements' --set-file <file>`\n   `toolkit work edit <id> --section 'Open Questions' --append-row '| <next Q-id> | <question> | R-02 | Open | owner |'`\n   `toolkit work set <id> --waiting-on owner`\n6. A change to an approved requirement: edit the `R-xx`, keep the old wor
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-requirements/references/requirement-format.md",max_output_tokens:5000}),
+tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-requirements/references/spec-check.md",max_output_tokens:4500}),
+tools.exec_command({cmd:"toolkit work show WI-001 --path",max_output_tokens:1000}),
+tools.exec_command({cmd:"toolkit work show WI-001 --section 'Open Questions'",max_output_tokens:2000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,...x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"b012e7\",\"wall_time_seconds\":0.000002584,\"exit_code\":0,\"original_token_count\":905,\"output\":\"# Writing a requirement\\n\\nHow to write an `R-xx` block and the Acceptance list so someone who was not\\nin the conversation can build and check the result.\\n\\n## What a requirement says\\n\\n- Plain words, no jargon. State the goal, what people must be able to do,\\n  what must happen, and the rules that govern it.\\n- Each requirement says what must be true and why, never how to build it. No\\n  file paths, versions, tool choices, or build steps in a requirement.\\n- Make behavior explicit: who is affected, when the rule applies, the\\n  expected result, and the exceptions.\\n- Every requirement has an acceptance check someone can observe.\\n- Use only settled details. Leave missing decisions open as questions.\\n\\n## The `R-xx` block\\n\\nFrom the work item template. The name follows an em dash. Each field starts\\nits own line, and every line but the last ends with two spaces.\\n\\n```markdown\\n#### R-01 \u2014 Rejected requests show their reason\\n\\n**Status:** Refining  \\n**Applies to:** The person who submitted a request, after it is rejected.  \\n**Required behavior:** The requester can see the rejection reason on the request.  \\n**Boundaries and exceptions:** Requests withdrawn by the requester have no reason.  \\n**Acceptance check:** Reject a request with a reason; the requester sees that reason on the request.  \\n**Decision record:** Owner, 2026-09-26, interview.  \\n**Open questions:** None.\\n```\\n\\n- Status words: Refining, Finalized, Superseded.\\n- A new or changed requirement is Refining until the owner approves it.\\n- After his approval: Status Finalized, and the Decision record adds who\\n  approved it and when (\\\"Approved by Mike on 2026-09-28.\\\"). Do this for every\\n  approved block in one edit of `Active requirements`.\\n- A superseded requirement keeps its block, with Status Superseded and the id\\n  of the `R-xx` that replaced it in its Decision record.\\n- A changed approved requirement keeps its old wording in its Decision record\\n  (\\\"Was: ... Changed by the owner on 2026-09-28.\\\").\\n- Numbers are never reused. A new requirement takes the next free `R-` number.\\n\\nSave the whole subsection:\\n\\n```text\\ntoolkit work show <id> 
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Active requirements' --text '#### R-01 — Repeat the greeting\n\n**Status:** Refining  \n**Applies to:** People running greet with or without --times N and an optional name.  \n**Required behavior:** With --times N, print the same greeting N times, one per line. The optional name still determines whom to greet. Without --times, print one greeting as today. Accept N only when it is a positive whole number. For any other value, show a clear error, print no greeting, and exit with a failure status.  \n**Boundaries and exceptions:** Zero, negative, missing, and non-number values are invalid.  \n**Acceptance check:** Run greet with a name and --times 3; see three identical greeting lines for that name. Run it without --times; see one greeting line. Run it with zero, a negative number, a missing value, and a non-number value; see a clear error, no greeting, and a failure exit status for each.  \n**Decision record:** Mike Rihm, 2026-09-28, answers to Q-01, Q-02, and Q-03.  \n**Open questions:** None.\n\n#### R-02 — Explain flags in the README\n\n**Status:** Refining  \n**Applies to:** People reading the command documentation.  \n**Required behavior:** List every command-line flag, including --times, in the README with a short example for each.  \n**Boundaries and exceptions:** None identified.  \n**Acceptance check:** The README lists --times and shows a short command and its output; each other command-line fl
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"821933\",\"wall_time_seconds\":0.000006417,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Saved \\\"Active requirements\\\" in WI-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Acceptance' --text 'This work item can be accepted when:\n\n1. --times N prints the same greeting N times, one per line, with the optional name preserved, when N is a positive whole number.\n2. Without --times, greet still prints one greeting.\n3. Zero, negative, missing, and non-number values for --times each produce a clear error, no greeting, and a failure exit status.\n4. The README lists --times with a short example, along with any other flags.\n5. Mike reviews the tested result.'",max_output_tokens:1200});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"3dd3b8\",\"wall_time_seconds\":0.000003,\"exit_code\":0,\"original_token_count\":8,\"output\":\"Saved \\\"Acceptance\\\" in WI-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Overview' --text '**Goal:** Let greet print the same greeting N times, one per line, when --times N is given, while keeping the optional name and one-greeting default.\n\n**Current position:** Q-01 through Q-03 are answered. The draft requirements include the invalid-input behavior and need a spec check before approval.\n\n**Next action:** Agent checks the draft requirements, then asks Mike to approve them.\n\n**Blockers:** Requirements approval from Mike is required before the build.\n\n**Related items:** None.'",max_output_tokens:1200});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"072ab7\",\"wall_time_seconds\":0.000002542,\"exit_code\":0,\"original_token_count\":7,\"output\":\"Saved \\\"Overview\\\" in WI-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Resume here' --text 'Q-03 is answered. Run the spec check on R-01, R-02, and Acceptance, then ask Mike to approve the requirements. Requirements are not approved; do not build yet.'",max_output_tokens:1200});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"0681e7\",\"wall_time_seconds\":0.000003,\"exit_code\":0,\"original_token_count\":8,\"output\":\"Saved \\\"Resume here\\\" in WI-001.\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"rg --files requirements bin test | head -80",max_output_tokens:1200}),
+tools.exec_command({cmd:"cat bin/greet.mjs README.md",max_output_tokens:2500}),
+tools.exec_command({cmd:"toolkit work validate WI-001",max_output_tokens:1500}),
+tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:1200})
+]);r.forEach((x,i)=>text(JSON.stringify({i,...x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"404159\",\"wall_time_seconds\":0.000002125,\"exit_code\":0,\"original_token_count\":36,\"output\":\"requirements/AGENTS.md\\nrequirements/SYSTEM-DATA-MODEL.md\\nrequirements/system-area-template/AREA-TEMPLATE.md\\ntest/greet.test.mjs\\nbin/greet.mjs\\n\"}}"}, {"type": "input_text", "text": "{\"i\":1,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"a8156f\",\"wall_time_seconds\":0.000001417,\"exit_code\":0,\"original_token_count\":101,\"output\":\"#!/usr/bin/env node\\n// greet: prints a friendly greeting.\\n// Usage: greet [name]\\nexport function greet(name = 'world') {\\n  return `Hello, ${name}!`;\\n}\\n\\nif (import.meta.url === `file://${process.argv[1]}`) {\\n  const args = process.argv.slice(2);\\n  console.log(greet(args[0]));\\n}\\n# greet\\n\\nA tiny command that prints a greeting.\\n\\n    node bin/greet.mjs Mike\\n    Hello, Mike!\\n\\nRun the tests with `npm test`.\\n\"}}"}, {"type": "input_text", "text": "{\"i\":2,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"3e0339\",\"wall_time_seconds\":0.000003208,\"exit_code\":0,\"original_token_count\":25,\"output\":\"Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.\\n\"}}"}, {"type": "input_text", "text": "{\"i\":3,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"41691c\",\"wall_time_seconds\":0.000003166,\"exit_code\":0,\"original_token_count\":9,\"output\":\"Nothing is waiting on the owner.\\n\"}}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/SKILL.md",max_output_tokens:6500});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "---\nname: memory-save\ndescription: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says \"remember this\", \"from now on\", \"forget that\", or \"remind me\" with no time given, corrects the agent, or a hook says a save is due.'\n---\n\n# Memory save\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nSaves, corrects, or retires one memory record with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand.\n\n## Steps\n\nTrack these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.\n\n1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home (\"Where other things go\" below) and stop.\n2. Search for a record that already holds it, and read each hit with its version. The save's duplicate check compares wording, so only this search finds a record the new fact contradicts (for example \"Mondays\" against \"Tuesdays\").\n   `toolkit memory find '<topic>'`\n   `toolkit memory get <key> --json`\n3. Read the approval mode and apply \"Approval policy\" below. When it says ask, ask and wait.\n   `toolkit config get memory.approval`\n4. Write the description and body in the record format (`references/record-format.md`), then save with the form for the case (\"Save forms\" below).\n5. Exit code 2 saved nothing. Read the \"Error:\" line. Records listed: the duplicate check. \"Changed since it was read\": read it again and redo the change. Any other rule: fix the text as the message says. `references/replacing-and-retiring.md`, section 2, has each case.\n6. \"Forget that\": retire the record, with his words as the reason. Delete only when his own words say delete (\"Approval policy\").\n   `toolkit memory retire <key> --reason '<his words>'`\n7. An owner to-do with no work item, or a change to what is happening now: update the current focus (`references/current-focus.md`). A project term: update the glossary (`references/glossary.md`).\n8. A preference a project setting can enforce (for example \"I hate tabs\" and `.editorco
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --json",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"79d839\",\"wall_time_seconds\":0.00000375,\"exit_code\":0,\"original_token_count\":183,\"output\":\"{\\n  \\\"ok\\\": true,\\n  \\\"backend\\\": \\\"hindsight\\\",\\n  \\\"kind\\\": \\\"focus\\\",\\n  \\\"text\\\": \\\"# Current focus\\\\n\\\\nLast updated: 2026-09-28, chat, agent\\\\n\\\\n## Now\\\\n\\\\n- WI-001 Add a --times flag to greet\\\\n\\\\n## Waiting on the owner\\\\n\\\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\\\n\\\\n## Untracked to-dos\\\\n\\\\nNone.\\\\n\\\\n## Next session starts with\\\\n\\\\n- Continue WI-001 from its Resume here: ask Q-03 about invalid --times behavior and record the answer.\\\\n\\\",\\n  \\\"version\\\": \\\"76360b0ef6886ad9fdadb5dbefaf2f2cdaac6a9f42df333c2fd8895d088e3811\\\"\\n}\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.9/skills/work-requirements/references/agent-requirements-analyst.md",max_output_tokens:4000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "---\nname: requirements-analyst\ndescription: Checks a work item's requirements before design or build. Finds missing pieces, places not explicit end to end, wording a builder could misread, build details inside requirements, and drift from the Agreed goal. Returns ready or not ready with a fix for each finding. Read-only.\ntools: Read, Glob, Grep\nmodel: opus\n---\n<!-- Generated file. Source: plugins/work/agents/requirements-analyst.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\n\n# Requirements analyst\n\nRead the requirements as one whole and say whether they are ready to design\nor build from. You did not see the conversation, so you catch what the main\nagent stopped noticing. You advise; the owner decides. You change nothing.\n\n## Start with the brief\n\n- The brief pastes in the Agreed goal, the Starting request, every `R-xx`\n  block, the Acceptance list, the open questions, and the owner's recorded\n  rulings. It may also name project files to read, such as the area's file\n  in `requirements/` or `system-guide/`, or what the existing build does\n  today.\n- Treat only rulings the brief marks as approved by the owner as settled.\n  Proposals and unanswered questions stay open. Everything else is open to\n  your check.\n- If something the brief should contain is missing, say so first, then check\n  what you have.\n\n## Check readiness\n\nRead the requirements inside the larger system the result belongs to. Walk\nthe whole flow start to finish as the person who uses the result. Then report:\n\n- **Ready or not ready.** Say plainly whether these requirements describe a\n  complete, well-thought-out result in the context of the system it is part\n  of. List what is still unclear. Use no score.\n- **Missing.** Each step, person, error case, state, boundary with another\n  system, rule for what happens after, or way to tell it worked, without\n  which the goal cannot be met. One line each, with the fix.\n- **Not explicit end to end.** Each requirement where a reader who was not in\n  the conversation cannot say who does what, when, with what result, and what\n  happens when it fails. Quote the wording and propose wording that makes it\n  explicit.\n- **Misreading risks.** Each place a builder could take the wording too\n  literally, read it out of context, or read it two ways and build the wrong\n  thing.
+
+[CALL] {"task_name":"requirements_check","fork_turns":"none","message":"gAAAAABquugrN56Y8_MBWSywEjw86w6gA5yyCr5dw92hxQk7MkD7ensIySyY8LXxeq_--aTgME8oVlCM9WSpqdf4ER018LMoNCB7nHtzGb4ylPPax1ainRN_KV55XaKXhHQ8QeOY0UpzZi-FGE_xw4eliMY5CS45Kv1ayDbZfJf2_1yEOUrMqnqfQVEuR66M8pD5IicHtjBgKREAsOJt6pWqykLUTPUp55wfLw3SNGKyx0n_2kHqH7d1oDbti0zCx4uKl0-7mXCFf8VPfkKagk6hBscn7D1TFQbRBTBeZFx_TC4Ykj20GOCI7r0wu3sGplOybi38CWMNtOFGzuPjROIq-Zn06KMVolZlh1AD6sDqbRK7yE1IXVhsiDkRhz98adtwJDipWanKBI1n6viIUihFb849ROEDCjjynVWUH0LWBbf8b-wPZvC-r6tkp3hu8cVUYmkX9VX2DyqguFTPwKHs0rA9PfEqHzuGJv-ZFqXdwGVA4SDKz9wruxaObS4Xvww7R8KpeDHUacpuIH8VK_pV3sGOH3VH2UQzp_CLjZRY0NZbTSCluzud00H6lNLmNHGFj-fqdntVOZ9mWoubw-sxSqz0F9N6rzuX6QFduRkaV-QiK7O33zL7398z72DZ-kcvISVrs8G5uZNdjVzwFwuFrVw_RXX6pon8Z6w-ArrT4vfWtYPEk2pFQfq98XZIMHxyGnpNEmN_GZx14-ub9h8Z4U7IG-luLmqjT7fCNKA2mL2HatIjhIWmLVY-nEoDRkXceIGTr3b95D2MwvcEGAsXI98uEIsuBYbOKgY12ZrXpgSGf8HahXJfsQ7Jp5VQzJaVHME6fvBGxVFiKcXljSKQp12EA26M4GymBwatZgk-dOAhK1WErXQFVZH48H6fSwSGYZD6z6hh"}
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.7/skills/memory-save/references/current-focus.md",max_output_tokens:4000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "<!-- Generated file. Source: plugins/memory/shared/current-focus.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\n# The current focus\n\nPurpose: the format of the current focus, when to change it, and the exact\nread-change-save sequence, in every memory backend.\n\n## Contents\n\n- What the focus is for\n- The format\n- What goes in each section\n- When to check it\n- Read, change, save\n- A new project's focus\n- Examples\n- Checklist for a focus save\n\n## What the focus is for\n\nThe current focus is the first thing the next session reads: the session\nbriefing includes it. It says what is happening now and where the next\nsession starts. It never repeats the tracker: a work item's status, tasks,\nand history stay in the work item.\n\n| Backend | Where the focus lives |\n| --- | --- |\n| Built-in | `.memory/CURRENT_FOCUS.md` in the main checkout |\n| Hindsight | The document `focus` in the project's bank |\n| Notion | The \"Current focus\" page under the project's page |\n\nThe same commands read and save it in every backend. Never edit the file or\nthe page by hand.\n\n## The format\n\nThe model's format: a `# Current focus` title line, a `Last updated:` line,\nthen exactly four `##` sections in this order, under 50 lines in total.\n\n```markdown\n# Current focus\n\nLast updated: <YYYY-MM-DD>, <source>, <person or agent>\n\n## Now\n\n## Waiting on the owner\n\n## Untracked to-dos\n\n## Next session starts with\n```\n\nWhat the command enforces:\n\n- It refuses a focus that lacks one of the four sections, has another\n  section, or is over 50 lines (exit code 2, nothing saved).\n- It adds the title line or the `Last updated:` line when either is missing,\n  and sets an older date to today. It cannot know the source or who wrote\n  it, so write the line yourself.\n\n## What goes in each section\n\n- **Last updated:** the date, the source (for example `handoff`,\n  `work-finish`, `chat`), and who wrote it (a person, or `agent`). Change it\n  on every save.\n- **Now:** the current outcome or area, with work item ids and titles only,\n  for example `- WI-012 CSV export`. Never a status or a stage: the tracker\n  holds those.\n- **Waiting on the owner:** a decision or action only the owner can take\n  that has no work item: what it is, who needs it, and when to check again.\n  Work items that wait on him are lis
+
+[CALL] {"timeout_ms":20000}
+
+[CALL] {"target":"requirements_check","message":"gAAAAABquug8rW2T4oiK54KttMCgUMCDap3v-ucPnvVyDVCocED9v3nD84Ts8Iaa12EXHnh3uGYvTkTVUc8mtukHhNj_JHgIKyOZtcgnAFd8cq9WRJWxky7fQtUfxqEfz8tu546jSTpkjncGE-Biff3Q3axTBOLOyE72TxhGVrK_7LdwwslPQupLG48kKD_ZJiMAU04Sea4QSbKEd6b26Hag1Q9XdnHtxxW6xiljWf-jS9ErbX6vLFQnEs5d4jLUrishlm91RshsQyka4NAxeXjatapSa1o8EaD2lmyFPY2kojeqKW34DGA="}
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"toolkit work show WI-001 --section 'Active requirements'",max_output_tokens:2500}),
+tools.exec_command({cmd:"toolkit work show WI-001 --section 'Acceptance'",max_output_tokens:1200}),
+tools.exec_command({cmd:"toolkit work show WI-001 --section 'Overview'",max_output_tokens:1200}),
+tools.exec_command({cmd:"toolkit work show WI-001 --section 'Resume here'",max_output_tokens:1200})
+]);r.forEach((x,i)=>text(JSON.stringify({i,...x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"1d8e75\",\"wall_time_seconds\":7.91e-7,\"exit_code\":0,\"original_token_count\":387,\"output\":\"### Active requirements\\n\\n#### R-01 \u2014 Repeat the greeting\\n\\n**Status:** Refining  \\n**Applies to:** People running greet with or without --times N and an optional name.  \\n**Required behavior:** With --times N, print the same greeting N times, one per line. The optional name still determines whom to greet. Without --times, print one greeting as today. Accept N only when it is a positive whole number. For any other value, show a clear error, print no greeting, and exit with a failure status.  \\n**Boundaries and exceptions:** Zero, negative, missing, and non-number values are invalid.  \\n**Acceptance check:** Run greet with a name and --times 3; see three identical greeting lines for that name. Run it without --times; see one greeting line. Run it with zero, a negative number, a missing value, and a non-number value; see a clear error, no greeting, and a failure exit status for each.  \\n**Decision record:** Mike Rihm, 2026-09-28, answers to Q-01, Q-02, and Q-03.  \\n**Open questions:** None.\\n\\n#### R-02 \u2014 Explain flags in the README\\n\\n**Status:** Refining  \\n**Applies to:** People reading the command documentation.  \\n**Required behavior:** List every command-line flag, including --times, in the README with a short example for each.  \\n**Boundaries and exceptions:** None identified.  \\n**Acceptance check:** The README lists --times and shows a short command and its output; each other command-line flag, if any, also has a short example.  \\n**Decision record:** Mike Rihm, 2026-09-28, stated README preference.  \\n**Open questions:** None.\\n\"}}"}, {"type": "input_text", "text": "{\"i\":1,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"873c90\",\"wall_time_seconds\":0.00000225,\"exit_code\":0,\"original_token_count\":120,\"output\":\"### Acceptance\\n\\nThis work item can be accepted when:\\n\\n1. --times N prints the same greeting N times, one per line, with the optional name preserved, when N is a positive whole number.\\n2. Without --times, greet still prints one greeting.\\n3. Zero, negative, missing, and non-number values for --times each produce a clear error, no greeting, and a failure exit status.\\n4. The README lists --times with a short example
+
+[CALL] {"timeout_ms":30000}
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Open Questions' --append-row '| Q-04 | Should the optional name work both before and after --times N, as in greet Mike --times 3 and greet --times 3 Mike? | R-01 | Open | owner |'",max_output_tokens:1200});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"f3d57f\",\"wall_time_seconds\":0.000003209,\"exit_code\":0,\"original_token_count\":9,\"output\":\"Saved \\\"Open Questions\\\" in WI-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-001 --waiting-on owner",max_output_tokens:1200});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"45dde2\",\"wall_time_seconds\":0.000002666,\"exit_code\":0,\"original_token_count\":23,\"output\":\"Updated WI-001: waiting on owner.\\nNow 02 Refinement (Backlog). Continue with work-decide.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Active requirements' --text '#### R-01 — Repeat the greeting\n\n**Status:** Refining  \n**Applies to:** People running greet with or without --times N and an optional name.  \n**Required behavior:** With --times N, print the same greeting N times, one per line. The optional name still determines whom to greet. Without --times, print one greeting as today. Accept N only when it is a positive whole number. For any other value, show a clear error, print no greeting, and exit with a failure status.  \n**Boundaries and exceptions:** Zero, negative, missing, and non-number values are invalid. The accepted order of the optional name and --times N is open in Q-04.  \n**Acceptance check:** Run greet with a name and --times 3; see three identical greeting lines for that name. Run it without --times; see one greeting line. Run it with zero, a negative number, a missing value, and a non-number value; see a clear error, no greeting, and a failure exit status for each. Check the argument order after Q-04 is answered.  \n**Decision record:** Mike Rihm, 2026-09-28, answers to Q-01, Q-02, and Q-03.  \n**Open questions:** Q-04.\n\n#### R-02 — Explain flags in the README\n\n**Status:** Refining  \n**Applies to:** People reading the command documentation.  \n**Required behavior:** List every command-line flag, including --times, in the README with a short example for each.  \n**Boundaries and exceptions:** None identified
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"1c8290\",\"wall_time_seconds\":0.000002583,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Saved \\\"Active requirements\\\" in WI-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history WI-001 --note 'Spec check found that R-01 does not state where the optional name may appear relative to --times N.' --effect 'Q-04 awaits the owner before requirements approval.'",max_output_tokens:1200});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"93d86b\",\"wall_time_seconds\":0.000003333,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Added a Recent History row to WI-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Overview' --text '**Goal:** Let greet print the same greeting N times, one per line, when --times N is given, while keeping the optional name and one-greeting default.\n\n**Current position:** Q-01 through Q-03 are answered. The spec check found that the accepted argument order is unclear in R-01.\n\n**Next action:** Mike answers Q-04; agent updates R-01 and Acceptance, then asks for requirements approval.\n\n**Blockers:** Q-04 and requirements approval from Mike are required before the build.\n\n**Related items:** None.'",max_output_tokens:1200});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"f75439\",\"wall_time_seconds\":0.000003167,\"exit_code\":0,\"original_token_count\":7,\"output\":\"Saved \\\"Overview\\\" in WI-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Resume here' --text 'Ask Mike Q-04 about the accepted order of the optional name and --times N. Update R-01 and Acceptance with his answer, then ask for requirements approval. Requirements are not approved; do not build yet.'",max_output_tokens:1200});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"9922e4\",\"wall_time_seconds\":0.000003291,\"exit_code\":0,\"original_token_count\":8,\"output\":\"Saved \\\"Resume here\\\" in WI-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --text '# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Add a --times flag to greet\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 from its Resume here: ask Q-04 about the order of the optional name and --times N.' --expect 76360b0ef6886ad9fdadb5dbefaf2f2cdaac6a9f42df333c2fd8895d088e3811",max_output_tokens:1200});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"b85acd\",\"wall_time_seconds\":0.075704625,\"exit_code\":0,\"original_token_count\":15,\"output\":\"Saved the current focus (20 lines). Version: 5fd04b780a8d\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"toolkit memory focus",max_output_tokens:1600}),
+tools.exec_command({cmd:"toolkit work validate WI-001",max_output_tokens:1000}),
+tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:1000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,...x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"e56b36\",\"wall_time_seconds\":0.000002625,\"exit_code\":0,\"original_token_count\":138,\"output\":\"# Current focus\\n\\nLast updated: 2026-09-28, chat, agent\\n\\n## Now\\n\\n- WI-001 Add a --times flag to greet\\n\\n## Waiting on the owner\\n\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\n\\n## Untracked to-dos\\n\\nNone.\\n\\n## Next session starts with\\n\\n- Continue WI-001 from its Resume here: ask Q-04 about the order of the optional name and --times N.\\n\"}}"}, {"type": "input_text", "text": "{\"i\":1,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"03a13a\",\"wall_time_seconds\":0.000002917,\"exit_code\":0,\"original_token_count\":33,\"output\":\"Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. 1 open question waits on the owner (toolkit work decisions lists it).\\n\"}}"}, {"type": "input_text", "text": "{\"i\":2,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"455f09\",\"wall_time_seconds\":7.5e-7,\"exit_code\":0,\"original_token_count\":56,\"output\":\"1 decision waits on the owner:\\n\\nWI-001 Add a --times flag to greet\\n  - Q-04: Should the optional name work both before and after --times N, as in greet Mike --times 3 and greet --times 3 Mike? Affects R-01. (work-decide)\\n\"}}"}]

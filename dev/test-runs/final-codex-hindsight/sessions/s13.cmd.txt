@@ -1,0 +1,1 @@
+codex exec --json --sandbox workspace-write --dangerously-bypass-hook-trust -c model_reasoning_effort=medium -c notify=[] -c projects={<project>={trust_level=trusted}}  -C <project> resume 01a0ea2e-e1a6-7d43-86e3-1ae8050ddcd8 <prompt>

@@ -1,0 +1,7 @@
+0.047s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.6/skills/project-setup/SKILL.md",max_output_tokens:12000}),\n  tools.exec_command({cmd:"pw'
+0.203s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.6/skills/project-setup/SKILL.md",max_output_tokens:12000}),\n  tools.exec_command({cmd:"pw'
+0.255s :: 'const r=await Promise.allSettled([\n  tools.exec_command({cmd:"ls -la && rg --files -g \'!node_modules\' | head -100 && cat README.md && git remote -v",max_output_tokens:5000}),\n  tools.exec_command({cmd:"cat /Users/michael'
+0.266s :: 'const r=await tools.exec_command({cmd:"toolkit doctor",max_output_tokens:6000}); text(r);\n'
+0.178s :: 'const r=await Promise.allSettled([\n  tools.exec_command({cmd:"git rev-parse --show-toplevel",max_output_tokens:1000}),\n  tools.exec_command({cmd:"git config user.name",max_output_tokens:1000}),\n  tools.exec_command({cmd:'
+0.281s :: 'const r=await tools.exec_command({cmd:"toolkit hindsight health",max_output_tokens:2500}); text(r);\n'
+MAX toolkit call seconds: 0.281

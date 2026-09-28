@@ -1,0 +1,516 @@
+PROMPT: The outcome: slug turns any title I type into a clean, URL-friendly slug that I can paste into my blog. Your sentence is close, use mine. Then commit the setup files.
+THREAD: 01a0e990-0b27-7f51-8412-8d0b55e5c48f
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll use your outcome sentence in the project guides, fill only details this repo confirms, then verify and commit the setup files.
+
+[CMD exit=0] /bin/zsh -lc 'cat .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/session-handoff.md .claude/rules/work-item-folders.md'
+  -> # Humanize Anything Sent to Another Person
+
+Any text that will leave the project and be read by someone other than the owner
+is run through the `humanizer` skill before the owner sees the final version.
+Use the `unslop` skill when `humanizer` is not installed. That covers emails,
+chat messages, supp
+
+[CMD exit=0] /bin/zsh -lc 'cat PROJECT.md PROJECT-ROADMAP.md README.md && ls -la'
+  -> # slug
+
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list && git status --short --branch && git remote -v'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1 958a41b [main]
+## main
+?? .claude/
+?? .codex/
+?? .gitignore
+?? .toolkit.json
+?? AGENTS.md
+?? CLAUDE.md
+?? DECISIONS.md
+?? PROJECT-ROADMAP.md
+?? PROJE
+
+[FILE_CHANGE] [{"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1/AGENTS.md", "kind": "update"}, {"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1/PROJECT-ROADMAP.md", "kind": "update"}, {"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1/PROJECT.md", "kind": "update"}, {"path": "/pr
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus --json'
+  -> {
+  "ok": true,
+  "backend": "builtin",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-28, setup, agent\n\n## Now\n\nNone.\n\n## Waiting on the owner\n\n- State the intended outcome for slug in one sentence; needed to complete the project guides.\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Read PROJECT.md and the setup prompts; complete the guides from the owner’s confirmed outcome and verified commands, then run toolkit doctor.\n",
+  "version": "a725fd50abb78a54efe3a68fcf158caff5ae2ad3926eaa53c08d1f2aff996c60"
+}
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-28, setup, agent
+
+## Now
+
+None.
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Read PROJECT.md and PROJECT-ROADMAP.md, then ask Mike what he wants built first; the build, test, and deploy commands will be defined 
+  -> Saved the current focus (20 lines). Version: ab9556baac7c
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-28, setup, agent
+
+## Now
+
+None.
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Read PROJECT.md and PROJECT-ROADMAP.md, then ask Mike what he wants built first; the build, test, and deploy commands will be defined with the code.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit handoff-backup'
+  -> Backed up .work-items/ and .memory/ to /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-local/slug-2026-09-28.
+
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for slug (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (4):
+- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the t
+
+[CMD exit=0] /bin/zsh -lc 'toolkit brief'
+  -> Project briefing: slug (slug), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The tracker has no open items. A new request starts a work item with the work-on skill.
+
+Current focus:
+Last updated: 2026-09-28, setup, agent
+## Now
+None.
+## Waiting on the owner
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+## Untracked to-dos
+None.
+## Next session starts with
+- Read PROJECT.md and PROJECT-ROADMAP.md, then ask Mike what he wants built first; the build, test, and deploy commands will be defined with the code.
+
+Project memory (builtin): 0 records. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Setup warnings (toolkit doctor lists every check; the project-setup s
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.6/skills/project-setup/references/git-rules.md'
+  -> <!-- Generated file. Source: plugins/git-workflows/shared/git-rules.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Git rules for Toolkit V2 skills
+
+Purpose: the Git rules every Toolkit V2 skill follows when it makes a branch,
+commits, merges, pushes, or removes a worktree, in Claude Code and in Codex.
+
+## Contents
+
+- Look before the first Git write
+- Branch and worktree names for a work item
+- Staging and committing
+- No AI credit
+- The Git-ignored toolkit folders
+- A project with no remote
+- The merge-safety check
+- A merge that stops on a conflict
+- Git writes in Codex
+- Checklist: one commit
+- Examples
+
+## Look before the first Git write
+
+Other sessions may work in the same repository at the same time. Before the
+first Git write in a session, run each of these on its own:
+
+```text
+git worktree list
+git status
+git remote
+```
+
+- `git remote` prints nothing: the project has no remote. Read "A project
+  with no remote" below before any fetch, pull, push, or pull request.
+- An unknown worktree, a branch that moved, or a change this session did not
+  make means another session is working. Do not change it. Tell the owner.
+- The shared primary checkout is the first entry `git worktree list` prints.
+  In it, never switch branches, reset, rebase, or stash.
+- Never commit, push, rebase, or delete another session's branch, and never
+  commit its uncommitted changes, even when they look finished.
+
+## Branch and worktree names for a work item
+
+A work item
+
+[AGENT] The guides now use your sentence, the current focus is updated, and the backup and doctor checks are complete. I’m staging the setup files for the commit you requested.
+
+[CMD exit=0] /bin/zsh -lc 'git add .claude .codex .gitignore .toolkit.json AGENTS.md CLAUDE.md DECISIONS.md PROJECT-ROADMAP.md PROJECT.md README.md ai-external-knowledge requirements system-guide tests'
+  -> 
+
+[CMD exit=2] /bin/zsh -lc 'git diff --cached --check'
+  -> PROJECT-ROADMAP.md:30: trailing whitespace.
++**Outcome:** `<Result larger than one work unit.>`  
+PROJECT-ROADMAP.md:31: trailing whitespace.
++**Exit condition:** `<Observable evidence that the phase is complete.>`  
+PROJECT-ROADMAP.md:36: trailing whitespace.
++**Deliverable:** `<Specific output or 
+
+[CMD exit=0] /bin/zsh -lc 'git diff --cached'
+  -> diff --git a/.claude/output-styles/plain-english.md b/.claude/output-styles/plain-english.md
+new file mode 100644
+index 0000000..fdf62e5
+--- /dev/null
++++ b/.claude/output-styles/plain-english.md
+@@ -0,0 +1,35 @@
++---
++name: Plain English
++description: Clear, direct replies in ordinary words that ar
+
+[CMD exit=0] /bin/zsh -lc 'git diff --cached --name-status'
+  -> A	.claude/output-styles/plain-english.md
+A	.claude/rules/ai-external-knowledge.md
+A	.claude/rules/humanize-outbound-text.md
+A	.claude/rules/keep-work-item-current.md
+A	.claude/rules/memory-review-and-save.md
+A	.claude/rules/plain-english-artifacts.md
+A	.claude/rules/publish-project-documents.md
+A	.c
+
+[FILE_CHANGE] [{"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1/PROJECT-ROADMAP.md", "kind": "update"}]
+
+[CMD exit=0] /bin/zsh -lc 'git add PROJECT-ROADMAP.md'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git diff --cached --check'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git diff --cached -- .toolkit.json AGENTS.md PROJECT.md PROJECT-ROADMAP.md README.md .gitignore .codex/config.toml .codex/rules/toolkit.rules .claude/settings.json'
+  -> diff --git a/.claude/settings.json b/.claude/settings.json
+new file mode 100644
+index 0000000..c5f5761
+--- /dev/null
++++ b/.claude/settings.json
+@@ -0,0 +1,73 @@
++{
++  "autoMemoryEnabled": false,
++  "enabledPlugins": {
++    "second-brain@claude-toolkit": false,
++    "toolkit@toolkit-v2": true,
++    "work@toolkit-v2": true,
++    "memory@toolkit-v2": true,
++    "session-skills@toolkit-v2": true,
++    "git-workflows@toolkit-v2": true,
++    "sf-architect-solutioning@toolkit-v2": false,
++    "project-init@claude-toolkit": false,
++    "work-tracker@claude-toolkit": false,
++    "session-skills@claude-toolkit": false,
++    "git-workflows@claude-toolkit": false,
++    "hooks-library@claude-toolkit": false,
++    "system-guide@claude-toolkit": false,
++    "protocol-guard@claude-toolkit": false,
++    "sf-architect-solutioning@claude-toolkit": false
++  },
++  "outputStyle": "Plain English",
++  "permissions": {
++    "deny": [
++      "Bash(git add -A)",
++      "Bash(git add -A *)",
++      "Bash(git add --all)",
++      "Bash(git add --all *)",
++      "Bash(git add .)",
++      "Bash(git add . *)",
++      "Bash(git commit -a *)",
++      "Bash(git commit -am *)",
++      "Bash(git commit --all *)",
++      "Bash(git commit --no-verify *)",
++      "Bash(git commit * --no-verify)",
++      "Bash(git commit * --no-verify *)",
++      "Bash(git commit -n *)",
++      "Bash(git commit * -n)",
++      "Bash(git commit * -n *)",
++      "Bash(git push --force *)",
++      "Bash(git push * --force)",
++      "Bas
+
+[CMD exit=0] /bin/zsh -lc 'git diff --cached --stat && git status --short'
+  ->  .claude/output-styles/plain-english.md             |  35 ++++++
+ .claude/rules/ai-external-knowledge.md             |  31 ++++++
+ .claude/rules/humanize-outbound-text.md            |  13 +++
+ .claude/rules/keep-work-item-current.md            |  13 +++
+ .claude/rules/memory-review-and-save.md      
+
+[AGENT] The staged files contain the Toolkit V2 setup and the outcome you gave; the local tracker and memory files are excluded. The staged diff passes the whitespace check. I’ll commit it now.
+
+[CMD exit=0] /bin/zsh -lc "git commit -m 'Set up Toolkit V2 for slug'"
+  -> [main c062d63] Set up Toolkit V2 for slug
+ 27 files changed, 926 insertions(+), 1 deletion(-)
+ create mode 100644 .claude/output-styles/plain-english.md
+ create mode 100644 .claude/rules/ai-external-knowledge.md
+ create mode 100644 .claude/rules/humanize-outbound-text.md
+ create mode 100644 .claude/
+
+[CMD exit=0] /bin/zsh -lc "git show --pretty='' --name-only HEAD | rg '"'^'"\\.memory/|"'^'"\\.work-items/' || true"
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch && git log -1 --oneline'
+  -> ## main
+c062d63 Set up Toolkit V2 for slug
+
+
+[AGENT] Toolkit V2 is set up for `slug` and committed as `c062d63` (`Set up Toolkit V2 for slug`). The project guides use your outcome sentence. Local work items and built-in memory are configured, and their first backup succeeded. The Git working tree is clean.
+
+Doctor reports **0 problems** and two steps for you: trust this project folder when Codex asks, then open `/hooks` and trust the Toolkit V2 hooks. Start a new session afterward so Codex loads the project settings.
+
+The project still has planning prompts for phases and scope. Build and test commands will be added when the tool’s code exists.
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 1915142, "cached_input_tokens": 1832832, "cache_write_input_tokens": 0, "output_tokens": 6183, "reasoning_output_tokens": 1493}}
+
+SKILLS OPENED: []
+
+[HOOK CONTEXT ord=224] Project briefing: slug (slug), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The tracker has no open items. A new request starts a work item with the work-on skill.
+
+Current focus:
+Last updated: 2026-09-28, setup, agent
+## Now
+None.
+## Waiting on the owner
+- State the intended outcome for slug in one sentence; needed to complete the project guides.
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/claude-toolkit/git-workflows/0.4.0/skills`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/claude
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.6/skills/project-setup/SKILL.md",max_output_tokens:12000}),
+  tools.exec_command({cmd:"pwd && rg --files -g 'AGENTS.md' -g 'CLAUDE.md' -g '.codex/**' -g '.agents/**' -g 'package.json' -g '.gitignore' -g 'README*' | head -100 && git status --short --branch",max_output_tokens:4000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,result:x}));
+
+  [OUT] [{"type": "input_text", "text": "Script failed\nWall time 0.0 seconds\nOutput:\n"}, {"type": "input_text", "text": "Script error:\nSyntaxError: missing ) after argument list"}]
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.6/skills/project-setup/SKILL.md",max_output_tokens:12000}),
+  tools.exec_command({cmd:"pwd && rg --files -g 'AGENTS.md' -g 'CLAUDE.md' -g '.codex/**' -g '.agents/**' -g 'package.json' -g '.gitignore' -g 'README*' | head -100 && git status --short --branch",max_output_tokens:4000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"195383\",\"wall_time_seconds\":0.000004667,\"exit_code\":0,\"original_token_count\":1880,\"output\":\"---\\nname: project-setup\\ndescription: 'Sets up Toolkit V2 in a new project, or checks, updates, and repairs an existing setup, including Notion and Hindsight. Use when the owner says \\\"set up Toolkit V2\\\", \\\"set up this project\\\", \\\"check the setup\\\", or \\\"update the toolkit\\\", or starts working on a new computer.'\\n---\\n\\n# Project setup\\n\\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \\\"How to write replies\\\" section of `AGENTS.md`.\\nSets up Toolkit V2, never the older claude-toolkit (its `project-init` skill).\\n\\n## Steps\\n\\n1. **Check the computer and the project.** `toolkit` not found, or doctor\\n   reports a computer problem: `references/repair-and-update.md`, \\\"Reaching\\n   the `toolkit` command\\\".\\n   `toolkit doctor`\\n2. **Pick the path.** `.toolkit.json` present: step 8. A new computer:\\n   `references/new-computer.md`. Switching memory or tracker:\\n   `references/switching.md`. Otherwise a new project: put the checklist\\n   below in the plan tool (Claude Code: the task list; Codex: `update_plan`).\\n3. **Interview**, one question per message, each with a recommendation:\\n   name, tracker, memory, Salesforce, `SOUL.md`, backup folder. Look before\\n   asking. `references/interview.md`. Notion or Hindsight chosen: do the\\n   \\\"Before init\\\" part of its wiring file (step 5) now.\\n4. **Run init** with the answers, then record what it has no flag for.\\n   Inside Codex, say first that Codex will ask to run it outside the sandbox.\\n   `references/running-init.md`.\\n   `toolkit init --name '<name>' --key <key> --tracker <tracker> --memory <memory> --owner '<owner>' --backup-dir '<folder>' [--salesforce] [--decline SOUL.md]`\\n5. **Finish wiring each choice**: `references/wiring-notion.md`,\\n   `wiring-hindsight.md`, `wiring-github-jira.md`, `wiring-salesforce.md`.\\n6. **Fill the setup guides** with facts the owner confirmed; the one-sentence\\n   outcome is his to say. `references/finishing-setup.md`.\\n7. **Finish:** backups, doctor at 0 problems, owner steps in the reply and the\\n   focus, the first briefing, the report, the commit
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"ls -la && rg --files -g '!node_modules' | head -100 && cat README.md && git remote -v",max_output_tokens:5000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.6/skills/project-setup/references/interview.md",max_output_tokens:9000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.6/skills/project-setup/references/toolkit-commands.md",max_output_tokens:5000}),
+  tools.exec_command({cmd:"command -v toolkit || true",max_output_tokens:1000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"33e826\",\"wall_time_seconds\":6.67e-7,\"exit_code\":0,\"original_token_count\":81,\"output\":\"total 8\\ndrwxr-xr-x    4 michaelrihm  wheel   128 Sep 28 15:48 .\\ndrwxr-xr-x  130 michaelrihm  wheel  4160 Sep 28 15:48 ..\\ndrwxr-xr-x   12 michaelrihm  wheel   384 Sep 28 15:48 .git\\n-rw-r--r--    1 michaelrihm  wheel    67 Sep 28 15:48 README.md\\nREADME.md\\n# slug\\n\\nA tiny Node.js command-line tool. Mike is starting it now.\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"a51e40\",\"wall_time_seconds\":0.000001041,\"exit_code\":0,\"original_token_count\":1970,\"output\":\"# The setup interview\\n\\nPurpose: what to check before asking, and the exact wording of the six setup\\nquestions for a new project, each with its recommendation.\\n\\n## Contents\\n\\n- Rules for every question\\n- Look before asking\\n- Question 1: the project name\\n- Question 2: where work is tracked\\n- Question 3: where memory lives\\n- Question 4: Salesforce\\n- Question 5: SOUL.md\\n- Question 6: the backup folder\\n- After the answers\\n\\n## Rules for every question\\n\\n- One question per message, in the reply text, never through a question tool.\\n- Each question carries a recommendation and its main reason, so the owner\\n  can answer \\\"yes\\\" and move on.\\n- Ask in the order below. A question the repository already answers is\\n  confirmed in one line instead of asked.\\n- Record each answer on its checklist line in the plan tool as soon as it is\\n  given, for example `- [x] tracker: local`. A later turn may start without\\n  this skill loaded, and the plan tool keeps the answers until init runs.\\n\\n## Look before asking\\n\\nCheck these first, without asking:\\n\\n- Is this folder a Git repository? (`git rev-parse --show-toplevel`.) No\\n  repository: say so and offer `git init`. Toolkit V2 finds the project, the\\n  tracker, and memory through Git.\\n- Is the repository empty, or does it already hold code? Name the language\\n  and framework you see.\\n- `sfdx-project.json` present: this is a Salesforce project. Confirm it in one\\n  line instead of asking question 4.\\n- `.toolkit.json` present with `\\\"toolkit\\\": \\\"toolkit-v2\\\"`: this is a repair,\\n  not a new setup (`repair-and-update.md` in this
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit doctor",max_output_tokens:6000}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"0d80bc\",\"wall_time_seconds\":0.000004542,\"exit_code\":4,\"original_token_count\":101,\"output\":\"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1 is not a Toolkit V2 project: there is no .toolkit.json with \\\"toolkit\\\": \\\"toolkit-v2\\\".\\ntoolkit init sets it up (the project-setup skill asks the questions first).\\n\\nThis computer: no problems found (Node, the plugin-root pointer, and the Codex wrapper).\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"git rev-parse --show-toplevel",max_output_tokens:1000}),
+  tools.exec_command({cmd:"git config user.name",max_output_tokens:1000}),
+  tools.exec_command({cmd:"ls -la .toolkit.json AGENTS.md CLAUDE.md sfdx-project.json knowledge .memory .work-items 2>/dev/null",max_output_tokens:1000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"f96188\",\"wall_time_seconds\":6.25e-7,\"exit_code\":0,\"original_token_count\":38,\"output\":\"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"9325f5\",\"wall_time_seconds\":0.000004334,\"exit_code\":0,\"original_token_count\":3,\"output\":\"Mike Rihm\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":2,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"351de2\",\"wall_time_seconds\":0.000002416,\"exit_code\":1,\"original_token_count\":0,\"output\":\"\"}}}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit hindsight health",max_output_tokens:2500}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"252945\",\"wall_time_seconds\":0,\"exit_code\":1,\"original_token_count\":130,\"output\":\"The request to the Hindsight server at http://127.0.0.1:8888 was blocked before it left this computer (EPERM: connect EPERM 127.0.0.1:8888 - Local (0.0.0.0:0)). This is the Codex sandbox, not the server.\\nThe Codex sandbox blocked the network for this command; the server itself may be fine. Run the toolkit command alone on its own line (no &&, ;, pipe, heredoc, or script around it), so the project's .codex/rules/toolkit.rules runs it outside the sandbox, or ask the owner to approve running it outside the sandbox.\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.6/skills/project-setup/references/running-init.md",max_output_tokens:9000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.6/skills/project-setup/references/finishing-setup.md",max_output_tokens:12000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.6/skills/project-setup/references/current-focus.md",max_output_tokens:5000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"0efe2c\",\"wall_time_seconds\":0.000004792,\"exit_code\":0,\"original_token_count\":1904,\"output\":\"# Running init, and what it installs\\n\\nPurpose: the exact `toolkit init` commands, what init writes and in what\\norder, what to do when it stops, and which files each setup answer installs.\\n\\n## Contents\\n\\n- The init command\\n- What init does, in order\\n- A failed or stopped run\\n- Running init inside Codex\\n- What init installs\\n- How the answers shape the files\\n\\n## The init command\\n\\nRun one of these alone, with the owner's answers. One-line values go in\\nsingle quotes; write an apostrophe inside them as `'\\\\''`.\\n\\n```text\\ntoolkit init --name '<name>' --key <key> --tracker <tracker> --memory <memory> --owner '<owner>' --backup-dir '<folder>'\\ntoolkit init --name '<name>' --key <key> --tracker <tracker> --memory <memory> --owner '<owner>' --backup-dir '<folder>' --salesforce\\n```\\n\\n- `--tracker`: `local`, `notion`, `github`, or `jira`.\\n- `--memory`: `builtin`, `hindsight`, or `notion`.\\n- `--backup-dir`: the folder from question 6, or `none`. Leave it out only\\n  with a Notion tracker and Notion memory.\\n- Add `--decline SOUL.md` after a no to question 5.\\n- `--hosts` defaults to both hosts (`claude-code,codex`). Leave it out unless\\n  the owner uses only one.\\n\\nExample:\\n\\n```text\\ntoolkit init --name 'Acme CRM' --key acme-crm --tracker local --memory builtin --owner 'Mike Rihm' --backup-dir '~/Backups/toolkit' --decline SOUL.md\\n```\\n\\nThen record what init has no flag for:\\n\\n```text\\ntoolkit config set tracker.idPrefix <prefix>\\ntoolkit config set salesforce.orgs.sandbox <alias>\\ntoolkit config set salesforce.orgs.production <alias>\\n```\\n\\nThe id prefix can change only before the first work item exists. The backup\\nfolder changes later with `toolkit config set backup.dir <folder>` (or\\n`none`).\\n\\n## What init does, in order\\n\\n1. Works out the settings from the flags.\\n2. Plans every file. A setup marker error stops here, before any write.\\n3. Hindsight memory: checks that the local server answers. Nothing is written\\n   yet.\\n4. Wires the backends: builds the Notion pages and databases\\n   (`toolkit notion ensure-project`) and the Hindsight bank\\n   (`toolkit hindsight ensure-bank`) when cho
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit init --name 'slug' --key slug --tracker local --memory builtin --owner 'Mike Rihm' --backup-dir '/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-local' --decline SOUL.md",sandbox_permissions:"require_escalated",justification:"Set up Toolkit V2 in this project, including its protected .codex and .agents files.",max_output_tokens:8000}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 4.1 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"89b124\",\"wall_time_seconds\":0.178310209,\"exit_code\":0,\"original_token_count\":290,\"output\":\"Set up Toolkit V2 in /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1.\\nslug (slug), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.\\nAdded 33 files:\\n  - .claude/output-styles/ (1 file)\\n  - .claude/rules/ (9 files)\\n  - .claude/ (1 file)\\n  - (project folder) (6 files)\\n  - .memory/ (6 files)\\n  - .work-items/work-item-template/ (2 files)\\n  - ai-external-knowledge/ (1 file)\\n  - requirements/ (2 files)\\n  - requirements/system-area-template/ (1 file)\\n  - system-guide/ (1 file)\\n  - tests/ (1 file)\\n  - .codex/ (1 file)\\n  - .codex/rules/ (1 file)\\nKept the project's own file (the toolkit never replaces it):\\n  - README.md (kept the project's file)\\nWrote .toolkit.json last.\\nNext:\\n- Start a new Claude Code session in this project so it loads the settings, the hooks, and the Plain English style.\\n- In Codex, the owner opens /hooks once and trusts the Toolkit V2 hooks. Codex skips plugin hooks until he does.\\n- Run toolkit doctor to check the setup.\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"cat AGENTS.md",max_output_tokens:10000}),
+  tools.exec_command({cmd:"cat PROJECT.md PROJECT-ROADMAP.md README.md",max_output_tokens:10000}),
+  tools.exec_command({cmd:"cat .toolkit.json",max_output_tokens:4000}),
+  tools.exec_command({cmd:"git status --short",max_output_tokens:5000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"652c0b\",\"wall_time_seconds\":8.33e-7,\"exit_code\":0,\"original_token_count\":2515,\"output\":\"Always execute work with the context in mind that the user will likely\\ncontinue work across multiple AI coding sessions where the session context is\\ncleared and picked up again. You must assist the user in helping establish\\nthat continuity across sessions while not adding context that might pollute\\nfuture agents and skew them. Information must be curated and intentional.\\n\\n# slug: agent guide\\n\\n<!-- Project setup fill-in guide: toolkit init replaces <Project name>, keeps only the blocks for the tracker, memory system, and Salesforce choice made at setup, and writes the rules list. Then replace the one-sentence outcome below and the \\\"Build, test, or deploy\\\" row under Commands with this project's confirmed values. Change paths only when the installed folder differs. Remove this guide and every angle-bracket prompt before handing the guide to a new project agent. -->\\n\\n<One sentence describing this project and its outcome.> The owner named in `PROJECT.md` makes this project's decisions. The agent runs the project: it keeps the work tracker, memory, and project records current, and it does the technical work.\\n\\n## Every session\\n\\n- The session-start hook adds a \\\"Project briefing\\\" to your context: this worktree's work item, active items with the skill that continues each one, what waits on the owner, the current focus, moved items, and setup warnings. If there is no briefing, run `toolkit brief` and read it.\\n- Read `SOUL.md` (when the project has one) and `PROJECT.md`; read them again after resume, clear, or compaction.\\n- Anything to build, add, fix, or change, and \\\"keep going\\\": the `work-on` skill. It opens the work item; also read the item's phase in `PROJECT-ROADMAP.md`.\\n- A change to a requirement, such as R-01, at any stage: `work-requirements`.\\n- \\\"You drive\\\", \\\"take it from here\\\", \\\"run with it\\\", even about a named item: `work-delegate`.\\n- \\\"Where are we\\\": `work-status`. \\\"What do you need from me\\\" and approvals: `work-decide`.\\n- \\\"Remember\\\", \\\"from now on\\\", \\\"forget that\\\": `memory-save`. \\\"What did we decide\\\": `memory-find`.\\n- Open the matching skill or rule when the task
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit handoff-backup",max_output_tokens:3500}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"243313\",\"wall_time_seconds\":0.069491041,\"exit_code\":0,\"original_token_count\":51,\"output\":\"Backed up .work-items/ and .memory/ to /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-local/slug-2026-09-28.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit doctor",max_output_tokens:5500}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"2869d5\",\"wall_time_seconds\":0.000003292,\"exit_code\":1,\"original_token_count\":309,\"output\":\"Toolkit doctor for slug (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1).\\n\\nWarnings (2):\\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.\\n   Fix: The owner opens Codex in this folder and trusts it when Codex asks.\\n2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).\\n   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\\n\\nNotes (2):\\n- The AGENTS.md Commands table has no verified build, test, or deploy commands yet. Add them once they are known and verified.\\n- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.\\n\\nResult: 0 problems and 2 warnings.\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"cat .memory/AGENTS.md .claude/rules/publish-project-documents.md .claude/rules/plain-english-artifacts.md",max_output_tokens:8500}),
+  tools.exec_command({cmd:"cat .claude/rules/memory-review-and-save.md .claude/rules/shared-repository-work.md",max_output_tokens:8500}),
+  tools.exec_command({cmd:"cat requirements/AGENTS.md",max_output_tokens:3000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --json",max_output_tokens:4000}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"f582c2\",\"wall_time_seconds\":0.000004084,\"exit_code\":0,\"original_token_count\":285,\"output\":\"{\\n  \\\"ok\\\": true,\\n  \\\"backend\\\": \\\"builtin\\\",\\n  \\\"kind\\\": \\\"focus\\\",\\n  \\\"text\\\": \\\"# Current focus\\\\n\\\\n<!-- Fill-in guide: replace each angle-bracket prompt directly under its heading with current, sourced project context. Add or remove bullets as needed. Name work items by ID; their detailed tasks and status stay in the work item, and only the next-session route goes here. Write \u201cNone\u201d in an empty section instead of leaving a sample bullet. Keep the file under 50 lines. Update Last updated and remove this guide after setup. -->\\\\n\\\\nLast updated: `<YYYY-MM-DD, source, and person or agent>`\\\\n\\\\n## Now\\\\n\\\\n- `<Current outcome or area, with its roadmap unit or active work item ID.>`\\\\n\\\\n## Waiting on the owner\\\\n\\\\n- `<A decision or action only the owner can take that has no work item; who needs it and when to check again.>`\\\\n\\\\n## Untracked to-dos\\\\n\\\\n- `<An unresolved owner request without a work item; replace it with the work item ID once one is created.>`\\\\n\\\\n## Next session starts with\\\\n\\\\n- `<Where to resume, what to read, and the next concrete action.>`\\\\n\\\",\\n  \\\"version\\\": \\\"be45feac02c38967ca64f2ef4c812460add37a6687551f508bb1e09f162eb48b\\\"\\n}\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --text '# Current focus\n\nLast updated: 2026-09-28, setup, agent\n\n## Now\n\nNone.\n\n## Waiting on the owner\n\n- State the intended outcome for slug in one sentence; needed to complete the project guides.\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Read PROJECT.md and the setup prompts; complete the guides from the owner’s confirmed outcome and verified commands, then run toolkit doctor.' --expect be45feac02c38967ca64f2ef4c812460add37a6687551f508bb1e09f162eb48b",max_output_tokens:3000}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"25956f\",\"wall_time_seconds\":0.000002833,\"exit_code\":0,\"original_token_count\":15,\"output\":\"Saved the current focus (21 lines). Version: a725fd50abb7\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus",max_output_tokens:3000}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"91f6b0\",\"wall_time_seconds\":0.000005041,\"exit_code\":0,\"original_token_count\":166,\"output\":\"# Current focus\\n\\nLast updated: 2026-09-28, setup, agent\\n\\n## Now\\n\\nNone.\\n\\n## Waiting on the owner\\n\\n- State the intended outcome for slug in one sentence; needed to complete the project guides.\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\n\\n## Untracked to-dos\\n\\nNone.\\n\\n## Next session starts with\\n\\n- Read PROJECT.md and the setup prompts; complete the guides from the owner\u2019s confirmed outcome and verified commands, then run toolkit doctor.\\n\"}"}]
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.approved_command_prefix_saved']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"cat .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/session-handoff.md .claude/rules/work-item-folders.md",max_output_tokens:9000}),
+  tools.exec_command({cmd:"git worktree list && git status --short --branch && git remote -v",max_output_tokens:4000}),
+  tools.exec_command({cmd:"cat PROJECT.md PROJECT-ROADMAP.md README.md && ls -la",max_output_tokens:8000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+
+[CALL] text(await tools.apply_patch("*** Begin Patch\n*** Update File: AGENTS.md\n@@\n-<!-- Project setup fill-in guide: toolkit init replaces <Project name>, keeps only the blocks for the tracker, memory system, and Salesforce choice made at setup, and writes the rules list. Then replace the one-sentence outcome below and the \"Build, test, or deploy\" row under Commands with this project's confirmed values. Change paths only when the installed folder differs. Remove this guide and every angle-bracket prompt before handing the guide to a new project agent. -->\n-\n-<One sentence describing this project and its outcome.> The owner named in `PROJECT.md` makes this project's decisions. The agent runs the project: it keeps the work tracker, memory, and project records current, and it does the technical work.\n+slug turns any title I type into a clean, URL-friendly slug that I can paste into my blog. The owner named in `PROJECT.md` makes this project's decisions. The agent runs the project: it keeps the work tracker, memory, and project records current, and it does the technical work.\n@@\n-| Build, test, or deploy | `<Verified project commands and target environment; do not infer from this template.>` |\n+| Build, test, or deploy | No command yet; this repository has no `package.json` or source code. |\n*** Update File: PROJECT.md\n@@\n-- Purpose: `<Why this project exists.>`\n-- Intended outcome: `<What success means to the owner and users.>`\n+- Purpose: Turn typed titles into slugs 
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --json",max_output_tokens:3000}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"4b76bf\",\"wall_time_seconds\":0.000002583,\"exit_code\":0,\"original_token_count\":210,\"output\":\"{\\n  \\\"ok\\\": true,\\n  \\\"backend\\\": \\\"builtin\\\",\\n  \\\"kind\\\": \\\"focus\\\",\\n  \\\"text\\\": \\\"# Current focus\\\\n\\\\nLast updated: 2026-09-28, setup, agent\\\\n\\\\n## Now\\\\n\\\\nNone.\\\\n\\\\n## Waiting on the owner\\\\n\\\\n- State the intended outcome for slug in one sentence; needed to complete the project guides.\\\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\\\n\\\\n## Untracked to-dos\\\\n\\\\nNone.\\\\n\\\\n## Next session starts with\\\\n\\\\n- Read PROJECT.md and the setup prompts; complete the guides from the owner\u2019s confirmed outcome and verified commands, then run toolkit doctor.\\\\n\\\",\\n  \\\"version\\\": \\\"a725fd50abb78a54efe3a68fcf158caff5ae2ad3926eaa53c08d1f2aff996c60\\\"\\n}\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --text '# Current focus\n\nLast updated: 2026-09-28, setup, agent\n\n## Now\n\nNone.\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Read PROJECT.md and PROJECT-ROADMAP.md, then ask Mike what he wants built first; the build, test, and deploy commands will be defined with the code.' --expect a725fd50abb78a54efe3a68fcf158caff5ae2ad3926eaa53c08d1f2aff996c60",max_output_tokens:2000}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"4a3009\",\"wall_time_seconds\":0.00000225,\"exit_code\":0,\"original_token_count\":15,\"output\":\"Saved the current focus (20 lines). Version: ab9556baac7c\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus",max_output_tokens:2000}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"468828\",\"wall_time_seconds\":0.000001875,\"exit_code\":0,\"original_token_count\":143,\"output\":\"# Current focus\\n\\nLast updated: 2026-09-28, setup, agent\\n\\n## Now\\n\\nNone.\\n\\n## Waiting on the owner\\n\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\n\\n## Untracked to-dos\\n\\nNone.\\n\\n## Next session starts with\\n\\n- Read PROJECT.md and PROJECT-ROADMAP.md, then ask Mike what he wants built first; the build, test, and deploy commands will be defined with the code.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit handoff-backup",max_output_tokens:2000}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"343a48\",\"wall_time_seconds\":0.000002167,\"exit_code\":0,\"original_token_count\":51,\"output\":\"Backed up .work-items/ and .memory/ to /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-local/slug-2026-09-28.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit doctor",max_output_tokens:4000}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"2f9d13\",\"wall_time_seconds\":0.014874333,\"exit_code\":1,\"original_token_count\":419,\"output\":\"Toolkit doctor for slug (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1).\\n\\nWarnings (2):\\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.\\n   Fix: The owner opens Codex in this folder and trusts it when Codex asks.\\n2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).\\n   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\\n\\nNotes (4):\\n- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\\n- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\\n- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\\n- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.\\n\\nResult: 0 problems and 2 warnings.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit brief",max_output_tokens:4000}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"9b8968\",\"wall_time_seconds\":0.000002208,\"exit_code\":0,\"original_token_count\":967,\"output\":\"Project briefing: slug (slug), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.\\nProject manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.\\nRequests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.\\n\\nThis worktree is on branch main, which names no work item.\\n\\nNo item is Ready, In Progress, or In Review.\\nThe tracker has no open items. A new request starts a work item with the work-on skill.\\n\\nCurrent focus:\\nLast updated: 2026-09-28, setup, agent\\n## Now\\nNone.\\n## Waiting on the owner\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\n## Untracked to-dos\\nNone.\\n## Next session starts with\\n- Read PROJECT.md and PROJECT-ROADMAP.md, then ask Mike what he wants built first; the build, test, and deploy commands will be defined with the code.\\n\\nProject memory (builtin): 0 records. toolkit memory find searches it; toolkit memory get <key> reads one record.\\n\\nSetup warnings (toolkit doctor lists every check; the project-setup skill fixes them):\\n- Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off. Fix: The owner opens Codex in this folder and trusts it when Codex asks.\\n- The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards). Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\\n\\nAlways-on rules. Claude Code loads them by itself; in Codex, each on
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/toolkit/0.2.6/skills/project-setup/references/git-rules.md",max_output_tokens:5000}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"a47080\",\"wall_time_seconds\":0.000003875,\"exit_code\":0,\"original_token_count\":2306,\"output\":\"<!-- Generated file. Source: plugins/git-workflows/shared/git-rules.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\\n# Git rules for Toolkit V2 skills\\n\\nPurpose: the Git rules every Toolkit V2 skill follows when it makes a branch,\\ncommits, merges, pushes, or removes a worktree, in Claude Code and in Codex.\\n\\n## Contents\\n\\n- Look before the first Git write\\n- Branch and worktree names for a work item\\n- Staging and committing\\n- No AI credit\\n- The Git-ignored toolkit folders\\n- A project with no remote\\n- The merge-safety check\\n- A merge that stops on a conflict\\n- Git writes in Codex\\n- Checklist: one commit\\n- Examples\\n\\n## Look before the first Git write\\n\\nOther sessions may work in the same repository at the same time. Before the\\nfirst Git write in a session, run each of these on its own:\\n\\n```text\\ngit worktree list\\ngit status\\ngit remote\\n```\\n\\n- `git remote` prints nothing: the project has no remote. Read \\\"A project\\n  with no remote\\\" below before any fetch, pull, push, or pull request.\\n- An unknown worktree, a branch that moved, or a change this session did not\\n  make means another session is working. Do not change it. Tell the owner.\\n- The shared primary checkout is the first entry `git worktree list` prints.\\n  In it, never switch branches, reset, rebase, or stash.\\n- Never commit, push, rebase, or delete another session's branch, and never\\n  commit its uncommitted changes, even when they look finished.\\n\\n## Branch and worktree names for a work item\\n\\nA work item's code work happens in its own worktree, on its own branch.\\n\\n| Part | Form | Example for `WI-007`, \\\"CSV export\\\" |\\n| --- | --- | --- |\\n| Branch | `claude/<prefix>-<number>-<slug>` | `claude/wi-007-csv-export` |\\n| Worktree folder | `.claude/worktrees/<prefix>-<number>-<slug>` | `.claude/worktrees/wi-007-csv-export` |\\n\\n- `<prefix>` is the item's own id prefix in lower case: `wi` for `WI-007`,\\n  `tv2` for `TV2-007`, `acme` for `ACME-007`.\\n- The session briefing and `merge-and-clean-up` find the item from the id in\\n  the branch name. A branch named `wi-001-<slug>` for item `TV2-001` is not\\n  linked to that item.\\n- Make both with one comman
+
+[CALL] const r=await tools.exec_command({cmd:"git add .claude .codex .gitignore .toolkit.json AGENTS.md CLAUDE.md DECISIONS.md PROJECT-ROADMAP.md PROJECT.md README.md ai-external-knowledge requirements system-guide tests",sandbox_permissions:"require_escalated",justification:"Stage the Toolkit V2 setup files and updated project guides for the requested commit.",max_output_tokens:3000}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 3.5 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"56af63\",\"wall_time_seconds\":0.0000015,\"exit_code\":0,\"original_token_count\":0,\"output\":\"\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"git diff --cached --name-status",max_output_tokens:4000}),
+  tools.exec_command({cmd:"git diff --cached --check",max_output_tokens:3000}),
+  tools.exec_command({cmd:"git diff --cached",max_output_tokens:30000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+
+[CALL] text(await tools.apply_patch("*** Begin Patch\n*** Update File: PROJECT-ROADMAP.md\n@@\n-**Outcome:** `<Result larger than one work unit.>`  \n-**Exit condition:** `<Observable evidence that the phase is complete.>`  \n+**Outcome:** `<Result larger than one work unit.>`\n+**Exit condition:** `<Observable evidence that the phase is complete.>`\n@@\n-**Deliverable:** `<Specific output or change from this unit.>`  \n-**Done when:** `<Evidence for completing the unit.>`  \n-**Depends on:** `<Other unit or none.>`  \n+**Deliverable:** `<Specific output or change from this unit.>`\n+**Done when:** `<Evidence for completing the unit.>`\n+**Depends on:** `<Other unit or none.>`\n*** End Patch"));
+
+
+[CALL] const r=await tools.exec_command({cmd:"git add PROJECT-ROADMAP.md",sandbox_permissions:"require_escalated",justification:"Stage the whitespace correction in the setup roadmap.",max_output_tokens:1000}); text(r);
+
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"git diff --cached --check",max_output_tokens:1000}),
+  tools.exec_command({cmd:"git diff --cached --stat && git status --short",max_output_tokens:4000}),
+  tools.exec_command({cmd:"git diff --cached -- .toolkit.json AGENTS.md PROJECT.md PROJECT-ROADMAP.md README.md .gitignore .codex/config.toml .codex/rules/toolkit.rules .claude/settings.json",max_output_tokens:18000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"b3703c\",\"wall_time_seconds\":0.000001542,\"exit_code\":0,\"original_token_count\":0,\"output\":\"\"}}}"}, {"type": "input_text", "text": "{\"i\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"f27734\",\"wall_time_seconds\":0.000002292,\"exit_code\":0,\"original_token_count\":663,\"output\":\" .claude/output-styles/plain-english.md             |  35 ++++++\\n .claude/rules/ai-external-knowledge.md             |  31 ++++++\\n .claude/rules/humanize-outbound-text.md            |  13 +++\\n .claude/rules/keep-work-item-current.md            |  13 +++\\n .claude/rules/memory-review-and-save.md            |  21 ++++\\n .claude/rules/plain-english-artifacts.md           |  81 ++++++++++++++\\n .claude/rules/publish-project-documents.md         |  21 ++++\\n .claude/rules/session-handoff.md                   |   3 +\\n .claude/rules/shared-repository-work.md            |  22 ++++\\n .claude/rules/work-item-folders.md                 |  42 ++++++++\\n .claude/settings.json                              |  73 +++++++++++++\\n .codex/config.toml                                 |  42 ++++++++\\n .codex/rules/toolkit.rules                         |  95 ++++++++++++++++\\n .gitignore                                         |  10 ++\\n .toolkit.json                                      |  66 ++++++++++++\\n AGENTS.md                                          | 120 +++++++++++++++++++++\\n CLAUDE.md                                          |   1 +\\n DECISIONS.md                                       |   9 ++\\n PROJECT-ROADMAP.md                                 |  51 +++++++++\\n PROJECT.md                                         |  46 ++++++++\\n README.md                                          |   2 +-\\n ai-external-knowledge/INDEX.md                     |  11 ++\\n requirements/AGENTS.md                             |   3 +\\n requirements/SYSTEM-DATA-MODEL.md                  |  28 +++++\\n requirements/system-area-template/AREA-TEMPLATE.md |  34 ++++++\\n system-guide/AREA-TEMPLATE.md                      |  31 ++++++\\n tests/TEST-PLAN-TEMPLATE.md                        |  23 ++++\\n 27 files changed, 926 insertions(+), 1 deletion(-)\\nA  .claude/output-styles/plain-english.md\\nA  .claude/rules/ai-external-knowledge.md\\nA  .claude/rules/humanize-outbound-t
+
+[CALL] const r=await tools.exec_command({cmd:"git commit -m 'Set up Toolkit V2 for slug'",sandbox_permissions:"require_escalated",justification:"Commit the Toolkit V2 setup files as the owner requested.",max_output_tokens:4000}); text(r);
+
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"git status --short --branch && git log -1 --oneline",max_output_tokens:1000}),
+  tools.exec_command({cmd:"git show --pretty='' --name-only HEAD | rg '^\\.memory/|^\\.work-items/' || true",max_output_tokens:1000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+

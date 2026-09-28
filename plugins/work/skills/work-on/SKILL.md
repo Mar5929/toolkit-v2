@@ -15,7 +15,7 @@ Starts or resumes one work item, plans it, and builds it; it never records an ap
 2. A bare "ok", "yes", or "looks good" when this chat asked him nothing: start no work and ask what he wants. Otherwise find the item: the id he named, this worktree's item, or a title that matches. Two matches: ask one question naming both.
    `toolkit work list`
    `toolkit work show <id>`
-3. No item yet: size the request as a quick edit, log only, or a work item, and pick the type (`references/sizing-and-routing.md`, sections 1 to 3). Title a new item in his words, say the title in one line, and save his exact words as the Starting request. Log only: reply "Logged as WI-014 (bug, backlog). Not started." and stop.
+3. No item yet: size the request as a quick edit, log only, or a work item, and pick the type (`references/sizing-and-routing.md`, sections 1 to 3). He asks to be asked first ("ask me questions", "grill me"): open `work-requirements`, which creates the item, and ask nothing here. Otherwise title a new item in his words, say the title in one line, and save his exact words as the Starting request. Log only: reply "Logged as WI-014 (bug, backlog). Not started." and stop.
    `toolkit work new --title '<title>' --type <type> --stage 01-discovery`
    `toolkit work edit <id> --section 'Starting request' --text '<his exact words>'`
 4. Route by where the item stands: go down the table in `references/sizing-and-routing.md`, section 4, take the first row that matches, and say the route in one line. The owner's decisions come first (`waiting_on: owner` opens `work-decide`). Then the delivery offer: the agent to-do "Make the agent-led delivery offer" for this item, or "you drive", opens `work-delegate`, and nothing is built until he answers. Stay here only for planning and building.
@@ -31,7 +31,7 @@ Starts or resumes one work item, plans it, and builds it; it never records an ap
 8. The owner is needed: add an Open Questions row, set the item waiting on him, keep working on what the answer does not block, and ask in the reply (`references/recording-owner-answers.md`).
    `toolkit work edit <id> --section 'Open Questions' --append-row '| <next Q-id> | <question> | <affects> | Open | owner |'`
    `toolkit work set <id> --waiting-on owner`
-9. Last task done: open `work-check`. Stopping with work unfinished: run the checklist in `references/planning.md`, section 8, and end with the one question or the exact words that continue.
+9. Last task done: open `work-check`. Stopping with work unfinished: run the checklist in `references/planning.md`, section 8, and end with the one question or the exact words that continue. The final reply repeats every tracker change of this session in the CLI's words: each "Changes found in the tracker" line from step 1, and each "Tell the owner in the reply" line a command printed (a new title, a renamed folder).
    `toolkit work history <id> --note '<what changed>'`
    `toolkit work validate <id>`
 
@@ -41,10 +41,10 @@ Starts or resumes one work item, plans it, and builds it; it never records an ap
 - Setup steps are never work items. They go in the reply, and only a step the doctor command checks also goes in the current focus.
 - A deliverable the owner named without its content ("write a short project brief") gets `Q-01` and a question. Never invent the content.
 - A change to product behavior, Salesforce metadata, or anything bound for production is `build` (data changes: `data-load`), never `task`, even when it looks small.
-- "Ask me questions first" means create the item and open `work-requirements`. Never ask a batch of questions here.
+- "Ask me questions first" means `work-requirements`, which creates the item. Never ask a batch of questions here.
 - Build only on the item's own branch and worktree, never on the default branch. No remote (`git remote` prints nothing): never run `git fetch`.
 - A task whose "Done when" names the owner is his question, never ticked by the agent.
-- Salesforce: `sf-component-tracker` after each metadata change; production data only through `sf-data-change`.
+- Salesforce: `sf-component-tracker` after each metadata change; production data only through `sf-data-change`. Run each `sf` command directly, never from a script or file you wrote, so the guard sees it. A sandbox deploy or sandbox data change needs the owner's yes for that change; in Codex he runs it himself, so hand him the exact command with its `-o <sandbox>`.
 
 ## Agents
 

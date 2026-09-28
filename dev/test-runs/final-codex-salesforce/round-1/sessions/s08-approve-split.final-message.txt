@@ -1,0 +1,5 @@
+Option A is approved and recorded. I created **WI-002, “Configure Account Tier access and page layout,”** under WI-001.
+
+WI-001’s direct build now covers the Tier field (R-01 and R-02). WI-002 covers access and page placement (R-03 and R-04). The original approved requirements remain in WI-001 for tracking; both items pass tracker validation.
+
+No Salesforce metadata has changed. The next step is WI-002’s read-only access and assigned-page check before the field build.

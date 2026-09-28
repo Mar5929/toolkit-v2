@@ -1,0 +1,6 @@
+{"type":"thread.started","thread_id":"01a0ea0e-249e-7261-a096-0b07d7d93f00"}
+{"type":"item.completed","item":{"id":"item_0","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
+{"type":"item.completed","item":{"id":"item_1","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_2","type":"agent_message","text":"Where should tipcalc’s work items live? I recommend **local folders**: they work offline and need no other service. You can choose Notion for a board you can use on the web or phone, or GitHub Issues or Jira if you already track work there."}}
+{"type":"turn.completed","usage":{"input_tokens":125747,"cached_input_tokens":102144,"cache_write_input_tokens":0,"output_tokens":778,"reasoning_output_tokens":134}}

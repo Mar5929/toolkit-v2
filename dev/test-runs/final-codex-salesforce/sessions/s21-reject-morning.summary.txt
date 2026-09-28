@@ -1,0 +1,68 @@
+PROMPT: Discard it. It was just a passing comment, not a rule.
+THREAD: 01a0ea50-5ba1-7b10-8bcd-d5f74815ce41
+
+[HOOK CONTEXT] Project briefing: Acme CRM (acme-crm), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: yes. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The tracker has no open items. A new request starts a work item with the work-on skill.
+
+Items: 2 done.
+
+Current focus:
+Last updated: 2026-09-28, work-finish, agent
+## Now
+None.
+## Waiting on the owner
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks and Salesforce org guards in Codex: open Codex here, type /hooks, and trust them. Setup step; drop it when doctor stops reporting it.
+## Untracked to-dos
+None.
+## Next session starts with
+- WI-001 and WI-002 are Done. Start the next requested work item; check the tracker and requirements before building.
+
+Memory proposals waiting on the owner (not facts: do not rely on them; work-decide asks him):
+- user_mike_rihm_usually_prefers_design_reviews_first: Mike Rihm usually prefers design reviews first thing in the morning (proposed 2026-09-28)
+
+Project memory (builtin): 2 records, and 1 proposal the owner has not answered. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_custom_field_guidance: Every new custom field should have a description and help text
+- user_friday_availability: Mike Rihm is usually off on Fridays
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off. Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+- Codex ran this Toolkit V2 hook, but ~/.codex/config.toml has no trust entry for the Toolkit V2 hooks. Codex runs untrusted hooks only when it is started with --dangerously-bypass-hook-trust; a normal Codex session skips them. Fix: The owner opens /hooks in Codex and trusts the Toolkit V2 hooks; toolkit doctor checks it.
+- The Salesforce org guards in .codex/hooks.json are not trusted in Codex yet, so Codex does not run them. Fix: The owner opens /hooks in Codex in this project and trusts the two Salesforce guards.
+
+Always-on rules. Claude Code loads 
+
+[AGENT] I’ll discard that memory proposal and check that it no longer appears among your pending decisions. I’m using the work-decide skill to record your answer.
+
+[CALL exec] toolkit memory reject user_mike_rihm_usually_prefers_design_reviews_first
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Rejected user_mike_rihm_usually_prefers_design_reviews_first: the owner said no, so the proposal was deleted.
+A rejected proposal is not saved again, here or under another name. When the owner gave a general rule about what to keep, save only that rule, as a feedback record.
+
+
+[CALL exec] toolkit work decisions
+  -> Script completed
+Wall time 0.3 seconds
+Output:
+
+Nothing is waiting on the owner.
+
+
+[AGENT] Discarded. The design review comment is no longer a memory proposal, and no decisions are waiting on you.
+
+SKILLS OPENED (SKILL.md read): []
+
+TOOLKIT COMMANDS:
+   toolkit memory reject user_mike_rihm_usually_prefers_design_reviews_first
+   toolkit work decisions

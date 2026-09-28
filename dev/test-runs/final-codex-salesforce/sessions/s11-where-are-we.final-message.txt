@@ -1,0 +1,8 @@
+Both Account Tier items have passed their sandbox checks and are waiting for your **separate result approvals**:
+
+- **WI-001 — Tier field:** Gold, Silver, and Bronze, optional with no default. The field guidance and save behavior passed. Waiting for your approval of the field result.
+- **WI-002 — Access and page layout:** The reported checks passed for all four profiles; Tier appears below Rating. Waiting for your approval of the access and layout result.
+
+Neither item is Done, and no other work item is ready to start. One separate memory proposal also awaits your yes or no: whether to record that you are usually off on Fridays.
+
+Say **“what do you need from me”** to go through the three decisions.

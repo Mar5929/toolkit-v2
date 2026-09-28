@@ -1,0 +1,12 @@
+Before:
+.
+./WI-001-build-the-slug-command
+./WI-001-build-the-slug-command/WI-002-add-a-max-option-to-cap-slug-length
+./work-item-template
+2026-09-28T22:24:32Z
+mv WI-001-build-the-slug-command/WI-002-add-a-max-option-to-cap-slug-length WI-001-build-the-slug-command/WI-002-max-length
+After:
+.
+./WI-001-build-the-slug-command
+./WI-001-build-the-slug-command/WI-002-max-length
+./work-item-template

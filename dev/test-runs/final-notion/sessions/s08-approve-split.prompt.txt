@@ -1,0 +1,1 @@
+I approve Option A, with that default wording ("1 day", "-1 day"). Before you build, split the --weeks part into its own sub-item under TFR-001 so I can review it on its own.

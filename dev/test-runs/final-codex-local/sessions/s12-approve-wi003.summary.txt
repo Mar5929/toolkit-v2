@@ -1,0 +1,488 @@
+PROMPT: In the WI-003 worktree, --max 5 and --max 6 both printed hello, and --max 0 and --max abc gave errors. I approve the WI-003 result. Still no merge yet.
+THREAD: 01a0e9ae-30da-7a41-9169-c375a1a5e0f3
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll record your WI-003 result approval and leave both branches unmerged.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/SKILL.md'
+  -> ---
+name: work-decide
+description: 'Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers. Use when he asks "what do you need from me", answers a waiting decision ("go with option B"), or states a project-wide decision.'
+---
+
+# Work decide
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Walks the owner through what waits on him, one decision at a time, and records each answer where it belongs. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Build the queue. The command lists each decision once: requirements waiting for approval, proposed designs, results at stage 11, Open Questions rows the owner decides, and memory proposals. Its "Agent to-do" lines are not decisions. A delivery offer belongs to `work-delegate`: open it after his other decisions.
+   `toolkit work decisions`
+2. He gave an answer without being asked ("approved", "go with B"): match it to exactly one waiting decision; when two could match, ask which, naming both. A bare "yes", "ok", or "looks good" with no question asked is not an answer (`references/approvals.md`, section 1).
+3. Otherwise start with the count and one short line for every waiting decision, memory proposals included ("3 decisions wait on you: the WI-004 design, the WI-006 result, and a 
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch && toolkit work show WI-003'
+  -> ## main
+WI-003: Add max length option to slug command
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1/.work-items/slug-cli/WI-001-slug/max-option/WORK-ITEM.md
+Stage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/slug-cli/WI-001-slug/DESIGN.md). Read it with: toolkit work design WI-001
+Worktree branch for this item: claude/wi-003-add-max-length-option-to-slug (folder .claude/worktrees/wi-003-add-max-length-option-to-slug)
+
+---
+id: WI-003
+title: Add max length option to slug command
+type: build
+stage: 11-user-approval
+status: In Progress
+parent: WI-001
+waiting_on: "owner"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-003: Add max length option to slug command
+
+## Overview
+
+**Goal:** Add `--max` to the slug command for WI-001 R-02.
+
+**Current position:** Built and committed as 4d20885 on top of WI-002. Seven automated checks and independent R-01 and R-02 acceptance checks passed.
+
+**Next action:** Mike reviews and approves the WI-003 result after WI-002. Leave the branch unmerged.
+
+**Blockers:** Result approval is needed before finishing. No build blocker remains.
+
+**Related items:** Parent WI-001 (R-02). Design: WI-001 approved Opt
+
+[AGENT] I’m using the work-decide procedure to check the result gate and save your approval under WI-003.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/approvals.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/current-focus.md'
+  -> <!-- Generated file. Source: plugins/work/shared/approvals.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Approvals and gates
+
+The exact steps to ask for and record each owner approval, and what counts as
+one. Run each checklist in order; one wrong or missing command leaves the
+item in the wrong state.
+
+## Contents
+
+1. What counts as approval
+2. Requirements approval
+3. Design approval
+4. Result approval
+5. Done
+6. Cancel
+7. Delivery offer
+8. Project-wide decision
+9. Memory proposal
+10. Sub-items and approvals
+11. Standing merge instruction
+12. When an approve command refuses
+
+## 1. What counts as approval
+
+`toolkit work lifecycle` prints the gates and these rules. In short:
+
+- Only the owner's explicit words count. Quote them in a history note.
+- A question, a suggestion, a tentative answer ("probably B"), silence, or a
+  saved draft is not approval.
+- An approval covers only what was shown. It never covers merge, deployment,
+  spending, or publishing.
+- An approval survives later stages. A stage alone does not prove approval:
+  check the approval field (`toolkit work show <id>`).
+- A bare "yes", "ok", or "looks good" answers only a yes-or-no question asked
+  earlier in this conversation. When none was asked, or the waiting question
+  is not a yes-or-no question, show the decision with its choices and your
+  recommendation, and record nothing.
+- After a yes, save his words first, in a history note that starts with
+  `Owner said:`. Then run the 
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1                                                        c062d63 [main]
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a0
+
+[CMD exit=0] /bin/zsh -lc 'git status'
+  -> On branch main
+nothing to commit, working tree clean
+
+
+[CMD exit=0] /bin/zsh -lc 'git remote'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 2 decisions wait on the owner:
+
+WI-003 Add max length option to slug command
+  - WI-003 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-003 --result --by <name>. (work-decide)
+
+Memory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):
+  - project_publish_blog_ghost_keeps_only_first_190_characters: You publish your blog on Ghost, and Ghost keeps only the first 190 characters of a slug. Saved 2026-09-28. Yes: toolkit memory approve project_publish_blog_ghost_keeps_only_first_190_characters --by <name>. No: toolkit memory reject project_publish_blog_ghost_keeps_only_first_190_characters. (work-decide)
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history WI-003 --note 'Owner said: In the WI-003 worktree, --max 5 and --max 6 both printed hello, and --max 0 and --max abc gave errors. I approve the WI-003 result. Still no merge yet.' --effect 'Result approved; work-finish continues. No merge authorized.'"
+  -> Added a Recent History row to WI-003.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work approve WI-003 --result --by 'Mike Rihm'"
+  -> Recorded: result of WI-003 approved (2026-09-28 by Mike Rihm).
+It is no longer waiting on the owner (waiting_on: none).
+Now 11 User approval (In Progress). Continue with work-finish.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-003 --waiting-on agent'
+  -> Updated WI-003: waiting on agent.
+Now 11 User approval (In Progress). Continue with work-finish.
+
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-finish/SKILL.md'
+  -> ---
+name: work-finish
+description: 'Ships and closes an approved work item (pull request, merge, sandbox or production deployment, requirements update, Done), or cancels an item with the owner''s reason. Use when the owner says "ship it", "deploy it", "close it out", or "mark it done", or asks to cancel or drop an item.'
+---
+
+# Work finish
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Takes an approved item through the pull request, merge, deployment, and requirements update to Done, or cancels it; it never marks Done without the owner's approval and never runs a production deploy. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Check the result approval is recorded. Not recorded: show the result, the gaps, and the evidence, and ask. "Ship it" or "mark it done" after he saw the result counts: save his words first, then record it (`references/approvals.md`, section 4). Each sub-item needs its own.
+   `toolkit work show <id>`
+   `toolkit work history <id> --note 'Owner said: <quote>' --effect 'Result approved; work-finish continues.'`
+   `toolkit work approve <id> --result --by <owner>`
+2. Repository work: commit the item's files by name on its branch, push it, open the pull request, and set the stage (`references/closing.md`, section 2; `references/git-rules.md` before any G
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.6/skills/memory-save/SKILL.md'
+  -> ---
+name: memory-save
+description: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says "remember this", "from now on", "forget that", or "remind me" with no time given, corrects the agent, or a hook says a save is due.'
+---
+
+# Memory save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Saves, corrects, or retires one memory record with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand.
+
+## Steps
+
+Track these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home ("Where other things go" below) and stop.
+2. Search for a record that already holds it, and read each hit with its version. The save's duplicate check compares wording, so only this search finds a record the new fact contradicts (for example "Mondays" against "Tuesdays").
+   `toolkit memory find '<topic>'`
+   `toolkit memory get <key> --json`
+3. Read the approval mode and apply "Approval policy" below. When it says ask, ask and wait.
+   `toolkit config get memory.approval`
+4. Write the description and body in the record format (`refer
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus --json'
+  -> {
+  "ok": true,
+  "backend": "builtin",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Build slug command with max option\n- WI-002 Build basic slug command\n- WI-003 Add max length option to slug command\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-003 from its Resume here: ask Mike to review its tested result. WI-002 result is approved. Neither branch is authorized to merge.\n",
+  "version": "dcf1a5305f0bf6856426d51c7d3e91d74d2b33c9530c2a19779ef4149fb9497c"
+}
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate WI-003'
+  -> Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/work-item-format.md .memory/memory-criteria.md .memory/AGENTS.md'
+  -> <!-- Generated file. Source: plugins/work/shared/work-item-format.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Work item and design format
+
+What a work item and its design hold, their exact section names, and how to
+change them with `toolkit work` commands without losing text.
+
+## Contents
+
+1. Where the record and the design live
+2. Header fields
+3. Sections of `WORK-ITEM.md`
+4. Sections of `DESIGN.md`
+5. Finding an item's file
+6. Changing one section
+7. Adding a table row
+8. Editing a record directly
+9. Titles
+10. Generated files
+11. Examples
+
+## 1. Where the record and the design live
+
+Every tracker uses the same body and the same design shape. Only the place
+differs.
+
+| Tracker | Work item | Design |
+| --- | --- | --- |
+| Local | `WORK-ITEM.md` in the item's folder under `.work-items/` | `DESIGN.md` beside it |
+| Notion | The item's page in the project's Work Items database | The item's "Solution Design" child page |
+| GitHub Issues | The issue body | One issue comment whose first line is `## Solution design` |
+| Jira | The issue description | One comment whose first line is "Solution design" |
+
+An item has one design home. Never make a separate design folder or a second
+design file.
+
+## 2. Header fields
+
+The header (frontmatter locally, properties in Notion) holds these fields.
+Only `toolkit work` commands change them.
+
+| Field | Values | Changed by |
+| --- | --- | --- |
+| `id` | `WI-001` (the project's prefix and a number) | `toolkit work
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show WI-003 --section 'Overview'"
+  -> ## Overview
+
+**Goal:** Add `--max` to the slug command for WI-001 R-02.
+
+**Current position:** Built and committed as 4d20885 on top of WI-002. Seven automated checks and independent R-01 and R-02 acceptance checks passed.
+
+**Next action:** Mike reviews and approves the WI-003 result after WI-002. Leave the branch unmerged.
+
+**Blockers:** Result approval is needed before finishing. No build blocker remains.
+
+**Related items:** Parent WI-001 (R-02). Design: WI-001 approved Option A. Depends on WI-002 commit d6f9221.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-003 --section 'Overview' --text '**Goal:** Add "'`--max` to the slug command for WI-001 R-02.
+
+**Current position:** Built and committed as 4d20885 on top of WI-002. Seven automated checks and independent R-01 and R-02 acceptance checks passed. Mike checked --max 5, --max 6, --max 0, and --max abc in the WI-003 worktree and approved the result on 2026-09-28.
+
+**Next action:** Keep the branch unmerged as Mike directed. Continue with work-finish when he authorizes the merge.
+
+**Blockers:** Merge is not authorized yet. No build blocker remains.
+
+**Related items:
+  -> Saved "Overview" in WI-003.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-003 --section 'Resume here' --text 'WI-003 is built on claude/wi-003-add-max-length-option-to-slug at 4d20885, based on WI-002 commit d6f9221. Seven automated checks and independent R-01 and R-02 acceptance checks passed. Mike checked --max 5 and --max 6 (both printed hello), and --max 0 and --max abc (both gave errors), then approved the WI-003 result on 2026-09-28. He explicitly directed no merge yet. Keep the branch unmerged; continue with work-finish when he authorizes the merge.'"
+  -> Saved "Resume here" in WI-003.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Build slug command with max option
+- WI-002 Build basic slug command
+- WI-003 Add max length option to slug command
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-003 
+  -> Saved the current focus (22 lines). Version: c7146688c129
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Build slug command with max option
+- WI-002 Build basic slug command
+- WI-003 Add max length option to slug command
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-003 from its Resume here: Mike approved the tested result and directed no merge yet. WI-002 result is also approved. Keep both branches unmerged until he authorizes a merge.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-003'
+  -> WI-003: Add max length option to slug command
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1/.work-items/slug-cli/WI-001-slug/max-option/WORK-ITEM.md
+Stage: 11 User approval (In Progress) | Waiting on: agent | Continue with: work-finish
+Parent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/slug-cli/WI-001-slug/DESIGN.md). Read it with: toolkit work design WI-001
+Worktree branch for this item: claude/wi-003-add-max-length-option-to-slug (folder .claude/worktrees/wi-003-add-max-length-option-to-slug)
+
+---
+id: WI-003
+title: Add max length option to slug command
+type: build
+stage: 11-user-approval
+status: In Progress
+parent: WI-001
+waiting_on: "agent"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: none
+result_approved: "2026-09-28 by Mike Rihm"
+updated: 2026-09-28
+---
+
+# WI-003: Add max length option to slug command
+
+## Overview
+
+**Goal:** Add `--max` to the slug command for WI-001 R-02.
+
+**Current position:** Built and committed as 4d20885 on top of WI-002. Seven automated checks and independent R-01 and R-02 acceptance checks passed. Mike checked --max 5, --max 6, --max 0, and --max abc in the WI-003 worktree and approved the result on 2026-09-28.
+
+**Next action:** Keep the branch unmerged as Mike directed. Continue with work-finish when he authorizes the merge.
+
+**Blockers
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate WI-003'
+  -> Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for slug (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (4):
+- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the t
+
+[AGENT] WI-003’s result approval is recorded. I also recorded the four checks you ran and updated the next-session notes. WI-003 remains in progress; its branch is unmerged. I’ll wait for your separate merge authorization.
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 546476, "cached_input_tokens": 503936, "cache_write_input_tokens": 0, "output_tokens": 2132, "reasoning_output_tokens": 358}}
+
+SKILLS OPENED: ['work-decide', 'work-finish', 'memory-save']
+
+[HOOK CONTEXT ord=9] Project briefing: slug (slug), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Build slug command with max option: 05 Breakdown, In Progress. Next action: Mike reviews the WI-002 and WI-003 results. No merge is authorized. Continues with work-organize.
+- WI-002 Build basic slug command: 11 User approval, In Progress. Next action: Wait for Mike to authorize the WI-002 merge. Leave the branch unmerged. Continues with work-finish.
+- WI-003 Add max length option to slug command: 11 User approval, In Progress, waiting on owner. Next action: Mike reviews and approves the WI-003 result after WI-002. Leave the branch unmerged. Continues
+
+[HOOK CONTEXT ord=18] This shell command joins a toolkit command to other commands (&&, ;, a pipe, a heredoc, or cd). In Codex that runs the toolkit command inside the sandbox, which blocks Notion, Hindsight, and the main checkout's .work-items/ and .memory/ from a worktree, so it may fail or report the wrong cause. Run each toolkit command alone, as its own command; pass section text with --text '<text>' in single quotes, instead of a file written in the same command. In Codex write an apostrophe inside that text as ’ (U+2019), or reword it; never '\''.
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md",max_output_tokens:12000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/SKILL.md",max_output_tokens:12000}),
+  tools.exec_command({cmd:"git status --short --branch && toolkit work show WI-003",max_output_tokens:12000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,result:x})))
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"963458\",\"wall_time_seconds\":0,\"exit_code\":1,\"original_token_count\":3878,\"output\":\"cat: SOUL.md: No such file or directory\\n# slug\\n\\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\\n\\n## Purpose and intended outcome\\n\\n- Purpose: Turn typed titles into slugs for Mike Rihm\u2019s blog.\\n- Intended outcome: slug turns any title I type into a clean, URL-friendly slug that I can paste into my blog.\\n\\n## Scope and boundaries\\n\\n- In scope: A Node.js command-line tool that turns a typed title into a URL-friendly slug.\\n- Outside scope: `<Important exclusions or adjacent owners.>`\\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\\n\\n## Systems and environments\\n\\n| System or org | Purpose | Environment | Source of truth | Access notes |\\n| --- | --- | --- | --- | --- |\\n| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |\\n\\n## People and ownership\\n\\n| Role | Person or team | Responsibility | Source / last confirmed |\\n| --- | --- | --- | --- |\\n| Project owner | Mike Rihm | Makes project decisions | Owner, 2026-09-28 |\\n\\n## Work and project records\\n\\n- Work tracker: `.work-items/` (local folders, Git-ignored)\\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\\n- Project decisions: [DECISIONS.md](DECISIONS.md)\\n- Functional requirements: [requirements/](requirements/)\\n- Design home: `DESIGN.md` beside each local work item\\n- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`\\n- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)\\n- Memory backup or sync: `/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/codex-local` via `toolkit handoff-backup`\\n\\n## Resources and project paths\\n\\n- Tests and checks: `<actual commands and lo
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/approvals.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/current-focus.md",max_output_tokens:11000}),
+tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:4000}),
+tools.exec_command({cmd:"git worktree list",max_output_tokens:3000}),
+tools.exec_command({cmd:"git status",max_output_tokens:3000}),
+tools.exec_command({cmd:"git remote",max_output_tokens:1000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})))
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"40a3dd\",\"wall_time_seconds\":0.000002583,\"exit_code\":0,\"original_token_count\":5073,\"output\":\"<!-- Generated file. Source: plugins/work/shared/approvals.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\\n# Approvals and gates\\n\\nThe exact steps to ask for and record each owner approval, and what counts as\\none. Run each checklist in order; one wrong or missing command leaves the\\nitem in the wrong state.\\n\\n## Contents\\n\\n1. What counts as approval\\n2. Requirements approval\\n3. Design approval\\n4. Result approval\\n5. Done\\n6. Cancel\\n7. Delivery offer\\n8. Project-wide decision\\n9. Memory proposal\\n10. Sub-items and approvals\\n11. Standing merge instruction\\n12. When an approve command refuses\\n\\n## 1. What counts as approval\\n\\n`toolkit work lifecycle` prints the gates and these rules. In short:\\n\\n- Only the owner's explicit words count. Quote them in a history note.\\n- A question, a suggestion, a tentative answer (\\\"probably B\\\"), silence, or a\\n  saved draft is not approval.\\n- An approval covers only what was shown. It never covers merge, deployment,\\n  spending, or publishing.\\n- An approval survives later stages. A stage alone does not prove approval:\\n  check the approval field (`toolkit work show <id>`).\\n- A bare \\\"yes\\\", \\\"ok\\\", or \\\"looks good\\\" answers only a yes-or-no question asked\\n  earlier in this conversation. When none was asked, or the waiting question\\n  is not a yes-or-no question, show the decision with its choices and your\\n  recommendation, and record nothing.\\n- After a yes, save his words first, in a history note that starts with\\n  `Owner said:`. Then run the gate's commands. A command that refuses then\\n  never loses his answer, and no later session asks him again.\\n\\n| The owner says | After this question | It is |\\n| --- | --- | --- |\\n| \\\"Yes, approved.\\\" | \\\"Do you approve these requirements?\\\" | The requirements approval |\\n| \\\"Go with B.\\\" | The design options with a recommendation | The choice and approval of Option B |\\n| \\\"Looks good.\\\" | \\\"Do you approve this result?\\\" | The result approval |\\n| \\\"Looks good.\\\" | \\\"Shall I split WI-12 into these three sub-items?\\\" | A yes to the split only, not a result appro
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history WI-003 --note 'Owner said: In the WI-003 worktree, --max 5 and --max 6 both printed hello, and --max 0 and --max abc gave errors. I approve the WI-003 result. Still no merge yet.' --effect 'Result approved; work-finish continues. No merge authorized.'",max_output_tokens:3000});text(r)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"d7ca6d\",\"wall_time_seconds\":0.000003125,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Added a Recent History row to WI-003.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work approve WI-003 --result --by 'Mike Rihm'",max_output_tokens:3000});text(r)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"9e140e\",\"wall_time_seconds\":0.000004,\"exit_code\":0,\"original_token_count\":46,\"output\":\"Recorded: result of WI-003 approved (2026-09-28 by Mike Rihm).\\nIt is no longer waiting on the owner (waiting_on: none).\\nNow 11 User approval (In Progress). Continue with work-finish.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-003 --waiting-on agent",max_output_tokens:3000});text(r)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"b50a84\",\"wall_time_seconds\":0.000004667,\"exit_code\":0,\"original_token_count\":25,\"output\":\"Updated WI-003: waiting on agent.\\nNow 11 User approval (In Progress). Continue with work-finish.\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.6/skills/memory-save/SKILL.md",max_output_tokens:6000}),
+tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-finish/SKILL.md",max_output_tokens:6000}),
+tools.exec_command({cmd:"toolkit memory focus --json",max_output_tokens:3000}),
+tools.exec_command({cmd:"toolkit work validate WI-003",max_output_tokens:3000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})))
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"a26846\",\"wall_time_seconds\":9.59e-7,\"exit_code\":0,\"original_token_count\":3310,\"output\":\"---\\nname: memory-save\\ndescription: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says \\\"remember this\\\", \\\"from now on\\\", \\\"forget that\\\", or \\\"remind me\\\" with no time given, corrects the agent, or a hook says a save is due.'\\n---\\n\\n# Memory save\\n\\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \\\"How to write replies\\\" section of `AGENTS.md`.\\nSaves, corrects, or retires one memory record with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand.\\n\\n## Steps\\n\\nTrack these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.\\n\\n1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home (\\\"Where other things go\\\" below) and stop.\\n2. Search for a record that already holds it, and read each hit with its version. The save's duplicate check compares wording, so only this search finds a record the new fact contradicts (for example \\\"Mondays\\\" against \\\"Tuesdays\\\").\\n   `toolkit memory find '<topic>'`\\n   `toolkit memory get <key> --json`\\n3. Read the approval mode and apply \\\"Approval policy\\\" below. When it says ask, ask and wait.\\n   `toolkit config get memory.approval`\\n4. Write the description and body in the record format (`references/record-format.md`), then save with the form for the case (\\\"Save forms\\\" below).\\n5. Exit code 2 saved nothing. Read the \\\"Error:\\\" line. Records listed: the duplicate check. \\\"Changed since it was read\\\": read it again and redo the change. Any other rule: fix the text as the message says. `references/replacing-and-retiring.md`, section 2, has each case.\\n6. \\\"Forget that\\\": retire the record, with his words as the reason. Delete only when his own words say delete (\\\"Approval policy\\\").\\n   `toolkit memory retire <key> --reason '<his words>'`\\n7. An owner to-do with no work item, 
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.8/skills/work-decide/references/work-item-format.md .memory/memory-criteria.md .memory/AGENTS.md",max_output_tokens:7000});text(r)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"c114ef\",\"wall_time_seconds\":0.000002875,\"exit_code\":0,\"original_token_count\":4803,\"output\":\"<!-- Generated file. Source: plugins/work/shared/work-item-format.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\\n# Work item and design format\\n\\nWhat a work item and its design hold, their exact section names, and how to\\nchange them with `toolkit work` commands without losing text.\\n\\n## Contents\\n\\n1. Where the record and the design live\\n2. Header fields\\n3. Sections of `WORK-ITEM.md`\\n4. Sections of `DESIGN.md`\\n5. Finding an item's file\\n6. Changing one section\\n7. Adding a table row\\n8. Editing a record directly\\n9. Titles\\n10. Generated files\\n11. Examples\\n\\n## 1. Where the record and the design live\\n\\nEvery tracker uses the same body and the same design shape. Only the place\\ndiffers.\\n\\n| Tracker | Work item | Design |\\n| --- | --- | --- |\\n| Local | `WORK-ITEM.md` in the item's folder under `.work-items/` | `DESIGN.md` beside it |\\n| Notion | The item's page in the project's Work Items database | The item's \\\"Solution Design\\\" child page |\\n| GitHub Issues | The issue body | One issue comment whose first line is `## Solution design` |\\n| Jira | The issue description | One comment whose first line is \\\"Solution design\\\" |\\n\\nAn item has one design home. Never make a separate design folder or a second\\ndesign file.\\n\\n## 2. Header fields\\n\\nThe header (frontmatter locally, properties in Notion) holds these fields.\\nOnly `toolkit work` commands change them.\\n\\n| Field | Values | Changed by |\\n| --- | --- | --- |\\n| `id` | `WI-001` (the project's prefix and a number) | `toolkit work new`; never reused |\\n| `title` | The owner's words for the request | `toolkit work set <id> --title` |\\n| `type` | `discovery`, `solution-design`, `build`, `data-load`, `repository-maintenance`, `research`, `task`, `bug`, `enhancement`, or another lower-case word | `toolkit work set <id> --type` |\\n| `stage` | `01-discovery` to `14-spec-update` | `toolkit work set <id> --stage`, `approve`, `finish`, `cancel` |\\n| `status` | Backlog, Ready, In Progress, In Review, Done, Cancelled | Follows the stage; Done and Cancelled only through `finish` and `cancel` |\\n| `parent` | An item id or `none` | `toolkit work new --parent`, `toolkit work move` |\\n| `waitin
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show WI-003 --section 'Overview'",max_output_tokens:2000});text(r)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"0094d4\",\"wall_time_seconds\":0.000003584,\"exit_code\":0,\"original_token_count\":131,\"output\":\"## Overview\\n\\n**Goal:** Add `--max` to the slug command for WI-001 R-02.\\n\\n**Current position:** Built and committed as 4d20885 on top of WI-002. Seven automated checks and independent R-01 and R-02 acceptance checks passed.\\n\\n**Next action:** Mike reviews and approves the WI-003 result after WI-002. Leave the branch unmerged.\\n\\n**Blockers:** Result approval is needed before finishing. No build blocker remains.\\n\\n**Related items:** Parent WI-001 (R-02). Design: WI-001 approved Option A. Depends on WI-002 commit d6f9221.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-003 --section 'Overview' --text '**Goal:** Add `--max` to the slug command for WI-001 R-02.\n\n**Current position:** Built and committed as 4d20885 on top of WI-002. Seven automated checks and independent R-01 and R-02 acceptance checks passed. Mike checked --max 5, --max 6, --max 0, and --max abc in the WI-003 worktree and approved the result on 2026-09-28.\n\n**Next action:** Keep the branch unmerged as Mike directed. Continue with work-finish when he authorizes the merge.\n\n**Blockers:** Merge is not authorized yet. No build blocker remains.\n\n**Related items:** Parent WI-001 (R-02). Design: WI-001 approved Option A. Depends on WI-002 commit d6f9221.'",max_output_tokens:3000});text(r)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"156940\",\"wall_time_seconds\":0.00000375,\"exit_code\":0,\"original_token_count\":7,\"output\":\"Saved \\\"Overview\\\" in WI-003.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-003 --section 'Resume here' --text 'WI-003 is built on claude/wi-003-add-max-length-option-to-slug at 4d20885, based on WI-002 commit d6f9221. Seven automated checks and independent R-01 and R-02 acceptance checks passed. Mike checked --max 5 and --max 6 (both printed hello), and --max 0 and --max abc (both gave errors), then approved the WI-003 result on 2026-09-28. He explicitly directed no merge yet. Keep the branch unmerged; continue with work-finish when he authorizes the merge.'",max_output_tokens:3000});text(r)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"d90f91\",\"wall_time_seconds\":0.000003083,\"exit_code\":0,\"original_token_count\":8,\"output\":\"Saved \\\"Resume here\\\" in WI-003.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --text '# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Build slug command with max option\n- WI-002 Build basic slug command\n- WI-003 Add max length option to slug command\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-003 from its Resume here: Mike approved the tested result and directed no merge yet. WI-002 result is also approved. Keep both branches unmerged until he authorizes a merge.' --expect dcf1a5305f0bf6856426d51c7d3e91d74d2b33c9530c2a19779ef4149fb9497c",max_output_tokens:2000});text(r)
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"16a777\",\"wall_time_seconds\":0.000003417,\"exit_code\":0,\"original_token_count\":15,\"output\":\"Saved the current focus (22 lines). Version: c7146688c129\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"toolkit work show WI-003",max_output_tokens:3500}),
+tools.exec_command({cmd:"toolkit memory focus",max_output_tokens:1500}),
+tools.exec_command({cmd:"toolkit doctor",max_output_tokens:3500}),
+tools.exec_command({cmd:"toolkit work validate WI-003",max_output_tokens:1000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})))
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"791aa3\",\"wall_time_seconds\":0.000004417,\"exit_code\":0,\"original_token_count\":1518,\"output\":\"WI-003: Add max length option to slug command\\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-local-r1/.work-items/slug-cli/WI-001-slug/max-option/WORK-ITEM.md\\nStage: 11 User approval (In Progress) | Waiting on: agent | Continue with: work-finish\\nParent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/slug-cli/WI-001-slug/DESIGN.md). Read it with: toolkit work design WI-001\\nWorktree branch for this item: claude/wi-003-add-max-length-option-to-slug (folder .claude/worktrees/wi-003-add-max-length-option-to-slug)\\n\\n---\\nid: WI-003\\ntitle: Add max length option to slug command\\ntype: build\\nstage: 11-user-approval\\nstatus: In Progress\\nparent: WI-001\\nwaiting_on: \\\"agent\\\"\\npriority: medium\\ndelivery: owner-led\\nrequirements_approved: \\\"2026-09-28 by Mike Rihm\\\"\\ndesign: none\\nresult_approved: \\\"2026-09-28 by Mike Rihm\\\"\\nupdated: 2026-09-28\\n---\\n\\n# WI-003: Add max length option to slug command\\n\\n## Overview\\n\\n**Goal:** Add `--max` to the slug command for WI-001 R-02.\\n\\n**Current position:** Built and committed as 4d20885 on top of WI-002. Seven automated checks and independent R-01 and R-02 acceptance checks passed. Mike checked --max 5, --max 6, --max 0, and --max abc in the WI-003 worktree and approved the result on 2026-09-28.\\n\\n**Next action:** Keep the branch unmerged as Mike directed. Continue with work-finish when he authorizes the merge.\\n\\n**Blockers:** Merge is not authorized yet. No build blocker remains.\\n\\n**Related items:** Parent WI-001 (R-02). Design: WI-001 approved Option A. Depends on WI-002 commit d6f9221.\\n\\n## Roadmap\\n\\nA phase is complete when its tasks are complete and its exit result has been checked.\\n\\n| Phase | Outcome | Status | Exit result | Sub-items |\\n| --- | --- | --- | --- | --- |\\n| P1 \u2014 Maximum length | The existing command accepts `--max` | Done | WI-001 R-02 command cases passed; R-01 regression cases passed | None. |\\n\\n## Tasks\\n\\n### P1 \u2014 Maximum length\\n\\n- [x] **P1-T01 \u2014 Implement max argument** \

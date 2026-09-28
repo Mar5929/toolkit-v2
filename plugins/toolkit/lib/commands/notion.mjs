@@ -141,8 +141,9 @@ async function runEnsureRoot(flags, ctx) {
       : 'The Projects database is missing under the root page.',
     ...listLines('Added:', result.added),
     ...listLines('Problems:', result.problems),
+    ...listLines('Warnings:', result.warnings || []),
   ];
-  if (!result.added.length && !result.problems.length && result.projects) lines.push('Nothing was missing.');
+  if (!result.added.length && !result.problems.length && !(result.warnings || []).length && result.projects) lines.push('Nothing was missing.');
   if (machineFile) lines.push(`Saved the root page and Projects ids for this computer in ${machineFile}.`);
   if (configFile) lines.push(`Saved them in ${configFile}.`);
   out(ctx, lines, { ok: result.problems.length === 0, ...result, machineFile, configFile, calls: client.stats.calls });

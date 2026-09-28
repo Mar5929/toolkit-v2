@@ -1,0 +1,1 @@
+New work: build the slug command. `node slug.js "Hello World"` should print `hello-world`. Track it as a work item and do it properly.

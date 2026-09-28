@@ -1,0 +1,25 @@
+b085699 Mike Rihm <michael@rihm.com> 2026-09-28 17:16:18 -0400 | Record delivered days-until behavior and roadmap
+9666d71 Mike Rihm <michael@rihm.com> 2026-09-28 17:13:01 -0400 | Merge main into TFR-002 weeks branch
+af7015d Mike Rihm <michael@rihm.com> 2026-09-28 16:54:55 -0400 | Record TFR-002 weeks display checks
+48e56d4 Mike Rihm <michael@rihm.com> 2026-09-28 16:54:35 -0400 | Record TFR-001 base command checks
+e604d44 Mike Rihm <michael@rihm.com> 2026-09-28 16:53:26 -0400 | Add weeks display to days-until
+568ff86 Mike Rihm <michael@rihm.com> 2026-09-28 16:51:31 -0400 | Add base days-until command
+0f2fac6 Mike Rihm <michael@rihm.com> 2026-09-28 16:03:21 -0400 | Set up Toolkit V2
+989c0e4 Mike Rihm <michael@rihm.com> 2026-09-28 15:49:43 -0400 | Start days-until project
+
+* main
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-notion-r1 b085699 [main]
+
+$ git log --all --format=%B | grep -i -E "co-authored|generated with|claude|codex|openai|anthropic|chatgpt|gpt"
+grep exit=1
+
+$ node --test
+ℹ tests 8
+ℹ pass 8
+ℹ fail 0
+
+64:  "attribution": {
+65-    "commit": "",
+66-    "pr": "",
+67-    "sessionUrl": false
+68-  },

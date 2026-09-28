@@ -86,7 +86,8 @@ Check the focus before the reply ends when:
 - a work item's stage changes, or its next step changes to something the
   focus does not say. Check two things:
   1. Now lists the item (id and title). Add it when it is missing; take it
-     off when the item is Done or Cancelled.
+     off when the item is Done or Cancelled. For Done, take it off just
+     before `toolkit work finish`, which backs up the focus as it is then.
   2. Next session starts with does not name a step that is done or no longer
      next. Replace that line with the item's real next step, in one line that
      points at the item, for example "Continue WI-012 from its Resume here:

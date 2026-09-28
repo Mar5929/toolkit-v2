@@ -26,6 +26,11 @@ import { describeSetup } from './setup.mjs';
 import { runChecks } from './checks.mjs';
 
 export const BRIEF_MAX_CHARS = 6000;
+
+/** The Codex hook-trust finding, as a hook-delivered Codex briefing words it. */
+export const HOOK_RAN_UNTRUSTED = 'Codex ran this Toolkit V2 hook, but ~/.codex/config.toml has no trust entry for the Toolkit V2 hooks. Codex runs untrusted hooks only when it is started with --dangerously-bypass-hook-trust; a normal Codex session skips them.';
+export const HOOK_RAN_UNTRUSTED_FIX = 'The owner opens /hooks in Codex and trusts the Toolkit V2 hooks; toolkit doctor checks it.';
+
 const NEXT_ACTION_MAX = 140;
 
 function clip(text, max) {
@@ -304,27 +309,46 @@ export function staleFocusLine(focusText, items) {
  * current focus, and how to tell that each one is done. Without this, every
  * session copied them forward, even after the owner had done them (sample
  * runs a and d, round 3).
- *   test(line)       the focus line is this reminder
- *   done(facts)      it is done now; facts: { codexFolderTrusted, codexHooksTrusted, newClaudeSession }
+ *
+ * One focus line can name several steps ("Trust this project folder and the
+ * Toolkit V2 hooks, including the two Salesforce guards"). A line is done only
+ * when every step it names is done (sample run confirm-b, bug 1: that line was
+ * marked done on the Toolkit V2 hooks alone, and the agent then wrote that the
+ * owner had said trust was done).
+ *   names(line)   the focus line names this step
+ *   done(facts)   the step is done now; facts: { codexFolderTrusted,
+ *                 codexHooksTrusted, codexSfGuardsTrusted, newClaudeSession }
+ *   why           what shows it: a fact the toolkit read, never something
+ *                 the owner said or did
  */
+const HOOKS_WORD = /\bhooks?\b|\/hooks\b/i;
+const V2_HOOKS = /\b(?:toolkit(?:\s+v2)?|v2|plugin)\s+hooks?\b/i;
+const SF_GUARDS = /\bsalesforce\b[^.;]*\bguards?\b|\borg\s+guards?\b|\.codex\/hooks\.json/i;
 const SETUP_REMINDERS = Object.freeze([
   {
-    id: 'codex-hooks',
-    test: (l) => /\/hooks\b/i.test(l) || (/\btrust/i.test(l) && /\bhooks?\b/i.test(l)),
-    done: (f) => f.codexHooksTrusted,
-    // Worded as what was seen: a hook that ran, not a trust entry doctor may not find
-    // (sample run confirm-a: the briefing said "trusts" while doctor said "not trusted").
-    why: 'a Toolkit V2 hook ran in this Codex session (or Codex lists the hooks as trusted), so Codex runs them here',
+    id: 'codex-folder',
+    names: (l) => /\btrust/i.test(l) && (/\bfolder\b/i.test(l) || /\btrust\s+(?:this\s+|the\s+)?project\b(?!['’]s|\s+hooks?\b)/i.test(l) || (/\bproject\b/i.test(l) && !HOOKS_WORD.test(l))),
+    done: (f) => f.codexFolderTrusted,
+    why: 'Codex lists this project folder as trusted',
   },
   {
-    id: 'codex-folder',
-    test: (l) => /\btrust/i.test(l) && /\b(folder|project)\b/i.test(l) && !/\bhooks?\b/i.test(l),
-    done: (f) => f.codexFolderTrusted,
-    why: 'Codex trusts this project folder now',
+    id: 'codex-hooks',
+    names: (l) => V2_HOOKS.test(l) || (HOOKS_WORD.test(l) && /\btrust|\/hooks\b/i.test(l) && !SF_GUARDS.test(l)),
+    // The trust entry Codex keeps in ~/.codex/config.toml, the one doctor reads.
+    // A hook that ran is no proof: codex --dangerously-bypass-hook-trust runs
+    // hooks nobody trusted (sample runs confirm-a and confirm-b).
+    done: (f) => f.codexHooksTrusted,
+    why: 'Codex lists the Toolkit V2 hooks as trusted',
+  },
+  {
+    id: 'codex-sf-guards',
+    names: (l) => SF_GUARDS.test(l),
+    done: (f) => f.codexSfGuardsTrusted,
+    why: 'Codex lists the Salesforce org guards in .codex/hooks.json as trusted',
   },
   {
     id: 'new-claude-session',
-    test: (l) => /\b(start|open)\b[^.]*\bnew\b[^.]*\bsession\b/i.test(l) || /\bnext session\b[^.]*\b(settings|load)/i.test(l),
+    names: (l) => /\b(start|open)\b[^.]*\bnew\b[^.]*\bsession\b/i.test(l) || /\bnext session\b[^.]*\b(settings|load)/i.test(l),
     done: (f) => f.newClaudeSession,
     why: 'a new Claude Code session has started since setup, so it loaded the project settings',
   },
@@ -332,7 +356,8 @@ const SETUP_REMINDERS = Object.freeze([
 
 /**
  * The setup reminders in the focus's "Waiting on the owner" section that are
- * done: [{ line, why }]. facts: see SETUP_REMINDERS.
+ * done: [{ line, why }]. A line that names several steps is done only when
+ * all of them are. facts: see SETUP_REMINDERS.
  */
 export function doneSetupReminders(focusText, facts) {
   if (!String(focusText || '').trim()) return [];
@@ -342,8 +367,9 @@ export function doneSetupReminders(focusText, facts) {
   const out = [];
   for (const raw of waiting.lines) {
     const line = raw.replace(/^\s*[-*]\s+/, '').trim();
-    const r = SETUP_REMINDERS.find((x) => x.test(line));
-    if (r && r.done(facts)) out.push({ line, why: r.why });
+    const named = SETUP_REMINDERS.filter((x) => x.names(line));
+    if (!named.length || !named.every((x) => x.done(facts || {}))) continue;
+    out.push({ line, why: named.map((x) => x.why).join('; ') });
   }
   return out;
 }
@@ -353,15 +379,15 @@ async function setupFacts(project, { env, host, fromHook }) {
   const { codexTrust, codexHookTrustKeys, MARKETPLACE } = await import('./hosts.mjs');
   let folder = false;
   let hooks = false;
+  let sfGuards = false;
   try {
     folder = codexTrust(project.root, env) === 'trusted';
     hooks = codexHookTrustKeys(`toolkit@${MARKETPLACE}:`, env).length > 0;
+    sfGuards = codexHookTrustKeys(path.join(project.root, '.codex', 'hooks.json'), env).length > 0;
   } catch {
     // Codex's config cannot be read: nothing is marked done.
   }
-  // A Toolkit V2 hook that Codex ran means Codex runs them here.
-  if (fromHook && host === 'codex') hooks = true;
-  return { codexFolderTrusted: folder, codexHooksTrusted: hooks, newClaudeSession: Boolean(fromHook && host === 'claude') };
+  return { codexFolderTrusted: folder, codexHooksTrusted: hooks, codexSfGuardsTrusted: sfGuards, newClaudeSession: Boolean(fromHook && host === 'claude') };
 }
 
 function reminderSection(done) {
@@ -535,15 +561,20 @@ export async function buildBriefing(project, opts = {}) {
   // Codex trust matters only to a Codex session; toolkit doctor shows it everywhere.
   let findings = checks.findings.filter((f) => host === 'codex' || f.area !== 'codex');
   if (opts.fromHook && host === 'codex') {
-    // This text comes from a Toolkit V2 hook that Codex ran, so Codex runs the
-    // Toolkit V2 hooks here: a finding that says it skips them is false.
+    // This text comes from a Toolkit V2 hook that Codex ran. With no trust
+    // entry for the Toolkit V2 hooks, that happens only when Codex was started
+    // with --dangerously-bypass-hook-trust, so "Codex skips them" is not what
+    // this session sees, and "Codex trusts them" is not true either: the
+    // finding says both facts (sample runs confirm-a and confirm-b).
     // When the toolkit plugin is off for the whole computer, only the
     // project's own .codex/config.toml turned it on, and Codex reads that file
-    // only in a trusted folder, so the folder-trust finding is false too.
-    // toolkit doctor still reports both.
+    // only in a trusted folder, so the folder-trust finding is false here.
+    // toolkit doctor still reports both as they are.
     const { codexPluginOnEverywhere } = await import('./hosts.mjs');
     const folderTrusted = !codexPluginOnEverywhere('toolkit', env);
-    findings = findings.filter((f) => f.id !== 'codex-hook-trust' && !(folderTrusted && f.id === 'codex-trust'));
+    findings = findings
+      .filter((f) => !(folderTrusted && f.id === 'codex-trust'))
+      .map((f) => (f.id === 'codex-hook-trust' ? { ...f, message: HOOK_RAN_UNTRUSTED, fix: HOOK_RAN_UNTRUSTED_FIX } : f));
   }
   if (work.report && Array.isArray(work.report.problems)) {
     for (const p of work.report.problems) {

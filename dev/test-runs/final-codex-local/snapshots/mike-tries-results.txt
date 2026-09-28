@@ -1,0 +1,36 @@
+## WI-002 worktree
+$ node bin/slug.js "Hello World!"
+hello-world
+exit=0
+$ node bin/slug.js "Café au lait"
+cafe-au-lait
+exit=0
+$ node bin/slug.js "!!!"
+The title must contain a letter or number.
+exit=1
+## WI-003 worktree
+hello
+exit=0
+hello
+exit=0
+--max must be a positive whole number.
+exit=1
+--max must be a positive whole number.
+exit=1
+ℹ todo 0
+ℹ duration_ms 42.790542
+
+✖ failing tests:
+
+test at tests:1:1
+✖ tests (39.322125ms)
+  'test failed'
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 643.155417
+(Tester note: 'node --test tests/' fails on Node 25 because Node reads a folder name as one file; 'node --test tests/slug.test.js' is the right call. Not a project bug.)

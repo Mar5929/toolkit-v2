@@ -1,0 +1,1 @@
+Yes to local calendar days: today is 0, tomorrow is 1, and past dates are negative. With --weeks, print it like "2 weeks and 3 days". A date that is not a real date should print a clear error and exit with code 1.

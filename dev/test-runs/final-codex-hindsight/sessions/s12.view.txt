@@ -1,0 +1,31 @@
+PROMPT: Before I look at the results: I liked that you asked me one requirements question at a time. That was much easier for me to follow.
+TIME: 2026-09-28T22:42:16Z -> 2026-09-28T22:42:37Z
+
+[AGENT] I’ll save that as a preference for future requirements conversations, then return to the two results awaiting your review.
+
+[CMD exit=0] /bin/zsh -lc 'for f in .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md; do cat "$f"; done'
+  -> # Humanize Anything Sent to Another Person
+
+Any text that will leave the project and be read by someone other than the owner
+is run through the `human
+
+[CMD exit=0] /bin/zsh -lc 'toolkit config get memory.approval'
+  -> onboarding
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory find 'requirements question one at a time'"
+  -> No memory record is about "requirements question one at a time".
+Hindsight recall ranked these closest, but they score low and share few of its words, so none is known to be about it:
+- user_cli_flags_readme_examples: List every command-line flag in the README with a short example
+Do not answer from these. Read the first one with toolkit memory get <key>, and answer only if its text says it; otherwise say it is not in memory.
+
+
+[AGENT] I’m glad that pace helped. Save to memory: Ask one requirements question at a time?
+
+SKILLS OPENED: ['memory-save']
+ESCALATED CALLS: 0
+HOOK CONTEXTS: 1
+  * Project briefing: Greet CLI Final H2 (greet-cli-final-h2), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: the local Hindsight server. Salesforce: no. Hosts: Claude Code and Codex. | Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle. | Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs. |  | This worktree is on branch main, which names no work item. |  | Active items: | - WI-001 Add a --times flag to greet: 11 User approval, In Progress, waiting on owner. Next action: Ask Mike to approve the WI-001 command result separately from WI-002's README result. Continues with work-decide. | - WI-002 Document greet flags in the README: 11 User approval, In Progress, waiting on owner. Next action: Ask Mike to approve the WI-002 README result separately from WI-001's command result. Continues with work-decide. |  | Waiting on the owner: | - WI-001 Add a --times flag to greet: WI-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-001 --result --by <name>. (work-decide) | - WI-002 Document greet flags in the README: WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide) |  | Items: 2 in pro
+HOOKSTATE turns=1 keep=None records=[('memory', 'toolkit memory save --proposal (Stop hook)', 'project_ask_one_requirements_question_time')] stopBlocked=False lastStop=
+PROPOSAL NOTES: ['At the end of the last turn the toolkit saved the unanswered "Save to memory: Ask one requirements question at a time?" as a memory proposal: project_ask_one_requirements_question_time. It is not a fact. If the owner answers it now, his yes is toolkit memory approve project_ask_one_requirements_question_time --by <name> and his no is toolkit memory reject project_ask_one_requirements_question_time; otherwise work-decide asks him later.']
+PROPOSED SUMMARIES: ['ask one requirements question at a time']

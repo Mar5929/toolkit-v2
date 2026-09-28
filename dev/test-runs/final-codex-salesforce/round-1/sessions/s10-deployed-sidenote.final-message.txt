@@ -1,0 +1,5 @@
+Both sandbox deploys are recorded as **Succeeded**, based on your report. Sandbox readback confirms Tier is an optional Gold/Silver/Bronze picklist with no default, the four profile permission settings, and Account Layout assigned to all four profiles. WI-001 and WI-002 remain in progress until the Account page and save behavior are checked. I saved your preference to plan your Salesforce Setup steps for the afternoon.
+
+The [deployment records and component tracker](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r1/.claude/worktrees/wi-002-configure-account-tier-access/delivery/deployment/component-tracker.csv) are updated in the WI-002 worktree, but **uncommitted**. Codex’s automatic approval review rejected Git staging because approval is set to *Never*.
+
+This afternoon, can you check that Tier appears directly below Rating, that a Sales Manager can choose and save a Tier while a Sales User can read but cannot edit it, and that the field has a description in Setup?

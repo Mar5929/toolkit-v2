@@ -1,0 +1,6 @@
+{"type":"thread.started","thread_id":"01a0ea0e-249e-7261-a096-0b07d7d93f00"}
+{"type":"item.completed","item":{"id":"item_0","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
+{"type":"item.completed","item":{"id":"item_1","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_2","type":"agent_message","text":"Is tipcalc a Salesforce project? I recommend **no**: this is a Node.js command-line tool, and I found no Salesforce project file."}}
+{"type":"turn.completed","usage":{"input_tokens":211447,"cached_input_tokens":178048,"cache_write_input_tokens":0,"output_tokens":1042,"reasoning_output_tokens":215}}

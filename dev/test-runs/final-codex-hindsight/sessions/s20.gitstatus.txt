@@ -1,0 +1,9 @@
+8f16538 Record delivered greet behavior and structure
+17d584a Record README example checks
+34db87d Merge branch 'claude/wi-001-add-a-times-flag-to-greet' into claude/wi-002-document-greet-flags-in-the
+fe07ccb Record times flag test plan
+69f4c52 Document greet times flag with example
+8b50ebf Add validated times flag to greet
+ec6e66b Set up Toolkit V2
+ff07f6c Initial commit
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2 8f16538 [main]

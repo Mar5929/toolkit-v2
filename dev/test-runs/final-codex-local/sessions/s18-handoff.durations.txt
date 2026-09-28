@@ -1,0 +1,10 @@
+0.236s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules'
+0.199s :: 'const r=await Promise.allSettled([\n tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/session-skills/0.2.6/skills/handoff/references/save-memory-and-focus.md /Users/michaelrihm/.codex/plugin'
+0.246s :: 'const r=await tools.exec_command({cmd:"toolkit memory focus --json",max_output_tokens:3000});text(r);\n'
+0.318s :: 'const r=await Promise.allSettled([\ntools.exec_command({cmd:"toolkit doctor",max_output_tokens:3500}),\ntools.exec_command({cmd:"git worktree list",max_output_tokens:1000}),\ntools.exec_command({cmd:"git status",max_output_'
+0.306s :: 'const r=await tools.exec_command({cmd:"toolkit memory focus --text \'# Current focus\\n\\nLast updated: 2026-09-28, handoff, agent\\n\\n## Now\\n\\nNone.\\n\\n## Waiting on the owner\\n\\n- Trust this folder in Codex: open Codex he'
+0.243s :: 'const r=await tools.exec_command({cmd:"toolkit memory focus",max_output_tokens:3000});text(r);\n'
+0.201s :: 'const r=await Promise.allSettled([\ntools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/session-skills/0.2.6/skills/handoff/references/agent-handoff-verifier.md",max_output_tokens:6500}),\ntools'
+0.261s :: 'const r=await tools.exec_command({cmd:"toolkit handoff-backup",max_output_tokens:2000});text(r);\n'
+0.307s :: 'const r=await tools.exec_command({cmd:"toolkit doctor",max_output_tokens:1400});text(r);\n'
+MAX toolkit call seconds: 0.318

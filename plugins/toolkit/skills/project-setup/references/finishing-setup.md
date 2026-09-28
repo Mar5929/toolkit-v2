@@ -158,6 +158,9 @@ After a yes:
 - Stage the files init wrote, each by name. Never `git add -A` or
   `git add .`.
 - Read the staged list. No `.work-items/` or `.memory/` file may be in it.
+- `git diff --cached --check` lists template lines that end with two spaces.
+  They are Markdown line breaks from the model's templates: leave them, and
+  commit the files as init wrote them.
 - Commit with a plain message and no AI credit (for example
   `git commit -m 'Set up Toolkit V2'`).
 - Codex: each Git command alone, with escalated permissions, or run by the

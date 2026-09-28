@@ -1,0 +1,6 @@
+{"type":"thread.started","thread_id":"01a0ea0e-4db6-7a32-8217-2d5ae93f1c9b"}
+{"type":"item.completed","item":{"id":"item_0","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
+{"type":"item.completed","item":{"id":"item_1","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_2","type":"agent_message","text":"I’ll use local Hindsight for memory. I’ve recorded that its server is running on this Mac.\n\nIs this a Salesforce project? I recommend **no** because the repository has no `sfdx-project.json`. A yes would add Salesforce rules and deployment safeguards."}}
+{"type":"turn.completed","usage":{"input_tokens":186380,"cached_input_tokens":168448,"cache_write_input_tokens":0,"output_tokens":1213,"reasoning_output_tokens":340}}

@@ -1,0 +1,576 @@
+PROMPT: Keep going: build both items. I approve the git commands you need for it (worktree, add, commit).
+TIME: 2026-09-28T22:35:28Z -> 2026-09-28T22:42:03Z
+
+[AGENT] I’ll continue WI-001 and WI-002 through their work items, build the flag and README update, then run the project checks. I’ll use the Git commands you approved to save the work.
+
+[AGENT] I’m using the work-on procedure for each item. I’ll check their approved requirements and plans before changing files.
+
+[CMD exit=0] /bin/zsh -lc 'cat .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md'
+  -> # Humanize Anything Sent to Another Person
+
+Any text that will leave the project and be read by someone other than the owner
+is run through the `human
+
+[CMD exit=0] /bin/zsh -lc "git status --short --branch && rg --files -g '"'!node_modules'"' -g '"'!*.lock'"'"
+  -> ## main
+DECISIONS.md
+CLAUDE.md
+AGENTS.md
+system-guide/AREA-TEMPLATE.md
+PROJECT-ROADMAP.md
+package.json
+README.md
+requirements/AGENTS.md
+requirements/SYSTEM-DATA-MODEL.md
+requirements/system-area-template/AREA-TEMPLATE.md
+tests/TEST-PLAN-TEMPLATE.md
+PROJECT.md
+bin/greet.mjs
+test/greet.test.mjs
+ai-external-knowledge/INDEX.md
+
+
+[CMD exit=0] /bin/zsh -lc 'git status'
+  -> On branch main
+nothing to commit, working tree clean
+
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2 ec6e66b [main]
+
+
+[CMD exit=0] /bin/zsh -lc 'cat bin/greet.mjs test/greet.test.mjs README.md package.json'
+  -> #!/usr/bin/env node
+// greet: prints a friendly greeting.
+// Usage: greet [name]
+export function greet(name = 'world') {
+  return `Hello, ${name}!`;
+}
+
+[CMD exit=0] /bin/zsh -lc 'git remote'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-002'
+  -> WI-002: Document greet flags in the README
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/.work-items/WI-001-times-flag/WI-002-document-greet-flags-in-the-readme/WORK-ITEM.md
+Stage: 06 Implementation plan (In Progress) | Waiting on: none | Continue with: work-on
+Parent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/WI-001-times-flag/DESIGN.md). Read it with: toolkit work design WI-001
+Worktree branch for this item: claude/wi-002-document-greet-flags-in-the (folder .claude/worktrees/wi-002-document-greet-flags-in-the)
+
+---
+id: WI-002
+title: Document greet flags in the README
+type: build
+stage: 06-implementation-plan
+status: In Progress
+parent: WI-001
+waiting_on: "none"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-002: Document greet flags in the README
+
+## Overview
+
+**Goal:** Document every greet command-line flag in README.md with a short command and output example, as required by WI-001 R-02.
+
+**Current position:** Created as a separate sub-item. It inherits the approved requirement and Option A design from WI-001. Planning is next.
+
+**Next action:** Agent plans the README edit and its independent check with work-on after the --times behavior is implemented.
+
+**Blockers:** The --times command behavior must be
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001'
+  -> WI-001: Add a --times flag to greet
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/.work-items/WI-001-times-flag/WORK-ITEM.md
+Stage: 06 Implementation plan (In Progress) | Waiting on: agent | Continue with: work-on
+Parent: none | Sub-items: WI-002 | Design: approved (.work-items/WI-001-times-flag/DESIGN.md)
+Worktree branch for this item: claude/wi-001-add-a-times-flag-to-greet (folder .claude/worktrees/wi-001-add-a-times-flag-to-greet)
+
+---
+id: WI-001
+title: Add a --times flag to greet
+type: build
+stage: 06-implementation-plan
+status: In Progress
+parent: none
+waiting_on: "agent"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: approved
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-001: Add a --times flag to greet
+
+## Overview
+
+**Goal:** Let greet print the same greeting N times, one per line, when --times N is given, while keeping the optional name and one-greeting default.
+
+**Current position:** Requirements and Option A design approved. WI-002 covers README documentation as a separate sub-item; command planning is next.
+
+**Next action:** Agent plans the R-01 command build with work-on; WI-002 plans and checks R-02 separately.
+
+**Blockers:** None for planning. WI-002 documentation follows the implemented flag behavior.
+
+**Related items:** Sub-items: WI-002.
+
+## Roadmap
+
+A phase is complete when its tasks are 
+
+[CMD exit=0] /bin/zsh -lc 'cat .claude/rules/publish-project-documents.md'
+  -> ---
+paths:
+  - "requirements/**"
+  - "PROJECT-ROADMAP.md"
+  - "PROJECT.md"
+  - "DECISIONS.md"
+  - "system-guide/**"
+  - "ai-external-knowledge/**"
+  -
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work design WI-001'
+  -> Design of WI-001 (approved) at /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/.work-items/WI-001-times-flag/DESIGN.md
+
+---
+work_item: WI-001
+status: approved
+approved: "2026-09-28 by Mike Rihm"
+---
+# WI-001: Add a --times flag to greet — solution design
+
+**Requirements:** WI-001  
+**Design status:** Approved  
+**Requirements checked:** WI-001 requirements, approved 2026-09-28  
+**Last updated:** 2026-09-28  
+**Design approval:** Approved by Mike Rihm on 2026-09-28
+
+## What this design solves
+
+People running greet can ask for the same greeting a positive whole number of times, with or without a name. They see one line per greeting. Invalid values produce a clear error and a failure exit status. This design covers the command and tests in WI-001 and the README in its R-02 sub-item. Each has its own result check.
+
+## Requirements and design readiness
+
+The approved requirements are ready for design. Q-01 through Q-06 are answered, including name order, missing name, fractional input, and failure behavior.
+
+| Requirement | Status in work item | Design coverage | Remaining decision or gap |
+| --- | --- | --- | --- |
+| R-01 — Repeat the greeting | Finalized | Option A parses arguments, validates the count, and prints repeated lines. | None |
+| R-02 — Explain flags in the README | Finalized | Option A documents the flag with a command and output example. | None |
+
+## What exist
+
+[FILE_CHANGE] [{"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/.work-items/WI-001-times-flag/WORK-ITEM.md", "kind": "update"}]
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --stage 07-tracking-setup'
+  -> Updated WI-001: stage 06 Implementation plan -> 07 Tracking setup (status In Progress).
+Now 07 Tracking setup (In Progress). Continue with work-on.
+
+
+[AGENT] WI-001’s plan is recorded. I’m creating its dedicated worktree now, then I’ll implement the command and test its output and error cases.
+
+[CMD exit=0] /bin/zsh -lc 'git worktree add .claude/worktrees/wi-001-add-a-times-flag-to-greet -b claude/wi-001-add-a-times-flag-to-greet'
+  -> Preparing worktree (new branch 'claude/wi-001-add-a-times-flag-to-greet')
+HEAD is now at ec6e66b Set up Toolkit V2
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --stage 08-build'
+  -> Updated WI-001: stage 07 Tracking setup -> 08 Build (status In Progress).
+Now 08 Build (In Progress). Continue with work-on.
+
+
+[FILE_CHANGE] [{"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/.claude/worktrees/wi-001-add-a-times-flag-to-greet/bin/greet.mjs", "kind": "update"}]
+
+[FILE_CHANGE] [{"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/.claude/worktrees/wi-001-add-a-times-flag-to-greet/test/greet.test.mjs", "kind": "update"}]
+
+[FILE_CHANGE] [{"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/.claude/worktrees/wi-001-add-a-times-flag-to-greet/test/greet.test.mjs", "kind": "update"}]
+
+[CMD exit=0] /bin/zsh -lc 'npm test'
+  -> ✔ greets the world by default (0.516208ms)
+✔ greets a name (0.040292ms)
+✔ prints one greeting by default (79.028ms)
+✔ repeats greetings with the name 
+
+[AGENT] The command now accepts `--times N` with the name on either side. All six tests pass, including invalid values that must produce no greeting and a failure status. I’m saving WI-001’s code and tests on its branch.
+
+[CMD exit=0] /bin/zsh -lc 'git add bin/greet.mjs test/greet.test.mjs'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git diff --cached --name-status && git diff --cached'
+  -> M	bin/greet.mjs
+M	test/greet.test.mjs
+diff --git a/bin/greet.mjs b/bin/greet.mjs
+index 75de16f..42b2d54 100644
+--- a/bin/greet.mjs
++++ b/bin/greet.mjs
+@@ -1,11 +1,42 @@
+ #!/usr/bin/env node
+ // greet: prints a friendly greeting.
+-// Usage: greet [name]
++// Usage: greet [name] [--times N]
+ export function greet(name = 'world') {
+   return `Hello, ${name}!`;
+ }
+ 
++function parseArgs(args) {
++  let name;
++  let times = 1;
++  let seenTimes = false;
++
++  for (let index = 0; index < args.length; index += 1) {
++    const arg = args[index];
++    if (arg === '--times') {
++      if (seenTimes) throw new Error('--times may only be given once');
++      seenTimes = true;
++      const value = args[++index];
++      if (!value || !/^\d+$/.test(value) || !Number.isSafeInteger(Number(value)) || Number(value) < 1) {
++        throw new Error('--times requires a positive whole number');
++      }
++      times = Number(value);
++    } else if (arg.startsWith('-') || name !== undefined) {
++      throw new Error(`Unexpected argument: ${arg}`);
++    } else {
++      name = arg;
++    }
++  }
++
++  return { name, times };
++}
++
+ if (import.meta.url === `file://${process.argv[1]}`) {
+-  const args = process.argv.slice(2);
+-  console.log(greet(args[0]));
++  try {
++    const { name, times } = parseArgs(process.argv.slice(2));
++    const message = greet(name);
++    for (let index = 0; index < times; index += 1) console.log(message);
++  } catch (error) {
++    console.error(`greet: ${error.message}`);
++    process
+
+[CMD exit=0] /bin/zsh -lc "git commit -m 'Add validated times flag to greet'"
+  -> [claude/wi-001-add-a-times-flag-to-greet 8b50ebf] Add validated times flag to greet
+ 2 files changed, 92 insertions(+), 3 deletions(-)
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-002 --stage 07-tracking-setup'
+  -> Updated WI-002: stage 06 Implementation plan -> 07 Tracking setup (status In Progress).
+Now 07 Tracking setup (In Progress). Continue with work-on.
+
+
+[AGENT] WI-001’s code is committed. WI-002 depends on that new behavior, so I’m starting its worktree from the WI-001 commit and will check the README examples against the actual command.
+
+[CMD exit=0] /bin/zsh -lc 'git worktree add .claude/worktrees/wi-002-document-greet-flags-in-the -b claude/wi-002-document-greet-flags-in-the claude/wi-001-add-a-times-flag-to-greet'
+  -> Preparing worktree (new branch 'claude/wi-002-document-greet-flags-in-the')
+HEAD is now at 8b50ebf Add validated times flag to greet
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-002 --stage 08-build'
+  -> Updated WI-002: stage 07 Tracking setup -> 08 Build (status In Progress).
+Now 08 Build (In Progress). Continue with work-on.
+
+
+[FILE_CHANGE] [{"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/.claude/worktrees/wi-002-document-greet-flags-in-the/README.md", "kind": "update"}]
+
+[CMD exit=0] /bin/zsh -lc 'node bin/greet.mjs Mike --times 3'
+  -> Hello, Mike!
+Hello, Mike!
+Hello, Mike!
+
+
+[CMD exit=0] /bin/zsh -lc 'node bin/greet.mjs Mike'
+  -> Hello, Mike!
+
+
+[CMD exit=0] /bin/zsh -lc 'npm test'
+  -> ✔ greets the world by default (0.500542ms)
+✔ greets a name (0.03675ms)
+✔ prints one greeting by default (81.063708ms)
+✔ repeats greetings with the nam
+
+[CMD exit=0] /bin/zsh -lc 'git add README.md'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git diff --cached --name-status && git diff --cached'
+  -> M	README.md
+diff --git a/README.md b/README.md
+index df49ae7..bec9645 100644
+--- a/README.md
++++ b/README.md
+@@ -2,7 +2,22 @@
+ 
+ A tiny command that prints a greeting.
+ 
+-    node bin/greet.mjs Mike
+-    Hello, Mike!
++Run it with an optional name. With no name, it greets the world.
++
++```text
++$ node bin/greet.mjs Mike
++Hello, Mike!
++```
++
++## Flags
++
++`--times N` prints the same greeting N times, one per line. N must be a positive whole number. The name can appear before or after the flag.
++
++```text
++$ node bin/greet.mjs Mike --times 3
++Hello, Mike!
++Hello, Mike!
++Hello, Mike!
++```
+ 
+ Run the tests with `npm test`.
+
+
+[CMD exit=0] /bin/zsh -lc "git commit -m 'Document greet times flag with example'"
+  -> [claude/wi-002-document-greet-flags-in-the 69f4c52] Document greet times flag with example
+ 1 file changed, 17 insertions(+), 2 deletions(-)
+
+
+[AGENT] The README commands produce the output shown, and the full test suite passes on WI-002’s branch. Both commits are saved. I’m moving each item into its result check and recording the evidence for separate review.
+
+[CMD exit=0] /bin/zsh -lc 'cat tests/TEST-PLAN-TEMPLATE.md'
+  -> # <Feature or release> test plan
+
+<!-- Fill-in guide: copy this file and rename the copy for the work item or release being checked. Replace the title
+
+[FILE_CHANGE] [{"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/.claude/worktrees/wi-001-add-a-times-flag-to-greet/tests/WI-001-TEST-PLAN.md", "kind": "add"}]
+
+[CMD exit=0] /bin/zsh -lc 'git add tests/WI-001-TEST-PLAN.md'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git diff --cached --name-status && git diff --cached'
+  -> A	tests/WI-001-TEST-PLAN.md
+diff --git a/tests/WI-001-TEST-PLAN.md b/tests/WI-001-TEST-PLAN.md
+new file mode 100644
+index 0000000..3da1b5a
+--- /dev/null
++++ b/tests/WI-001-TEST-PLAN.md
+@@ -0,0 +1,25 @@
++# WI-001 command test plan
++
++## Scope
++
++WI-001 R-01: repeated greetings, optional name, default behavior, and invalid input. The README is checked under WI-002.
++
++## Environment and data
++
++Local Node.js command in the WI-001 worktree. Test inputs are command-line arguments; no stored data is needed.
++
++## Checks
++
++| Scenario | Expected result | Method or test | Evidence |
++| --- | --- | --- | --- |
++| No `--times`, with and without a name | One correct greeting line and success | `npm test` | `test/greet.test.mjs`, `prints one greeting by default` |
++| `--times 3`, with a name before and after the flag | Three identical named greeting lines and success | `npm test` | `test/greet.test.mjs`, `repeats greetings with the name before or after --times` |
++| `--times 3` without a name | Three `Hello, world!` lines and success | `npm test` | `test/greet.test.mjs`, `repeats greetings with the name before or after --times` |
++| Zero, negative, fractional, missing, non-number, and unsafe integer values | Clear error, empty standard output, and failure status | `npm test` | `test/greet.test.mjs`, `rejects invalid --times values before printing` |
++| Extra, duplicate, and unknown arguments | Clear error, empty standard output, and failure status | `npm test` | `test/greet.test.mjs`, `
+
+[CMD exit=0] /bin/zsh -lc "git commit -m 'Record times flag test plan'"
+  -> [claude/wi-001-add-a-times-flag-to-greet fe07ccb] Record times flag test plan
+ 1 file changed, 25 insertions(+)
+ create mode 100644 tests/WI-001-TEST-PLAN.md
+
+
+[CMD exit=0] /bin/zsh -lc 'git merge claude/wi-001-add-a-times-flag-to-greet'
+  -> Merge made by the 'ort' strategy.
+ tests/WI-001-TEST-PLAN.md | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+ create mode 100644 tests/WI-001-TEST-PLAN.md
+
+
+[FILE_CHANGE] [{"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/.claude/worktrees/wi-002-document-greet-flags-in-the/tests/WI-002-TEST-PLAN.md", "kind": "add"}]
+
+[CMD exit=0] /bin/zsh -lc 'git add tests/WI-002-TEST-PLAN.md'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git diff --cached --name-status && git diff --cached'
+  -> A	tests/WI-002-TEST-PLAN.md
+diff --git a/tests/WI-002-TEST-PLAN.md b/tests/WI-002-TEST-PLAN.md
+new file mode 100644
+index 0000000..0eeb0e5
+--- /dev/null
++++ b/tests/WI-002-TEST-PLAN.md
+@@ -0,0 +1,23 @@
++# WI-002 README test plan
++
++## Scope
++
++WI-002 covers WI-001 R-02: document every implemented command-line flag with a short command and output example.
++
++## Environment and data
++
++Local Node.js command in the WI-002 worktree. No stored data is needed.
++
++## Checks
++
++| Scenario | Expected result | Method or test | Evidence |
++| --- | --- | --- | --- |
++| List implemented flags | README.md lists `--times`, the only flag in `bin/greet.mjs` | Read the command and README.md | `bin/greet.mjs` and `README.md` |
++| Named greeting example | Output is `Hello, Mike!` | Run `node bin/greet.mjs Mike` | Command output checked 2026-09-28 |
++| `--times` example | Output is three `Hello, Mike!` lines | Run `node bin/greet.mjs Mike --times 3` | Command output checked 2026-09-28 |
++
++## Results and follow-up
++
++- Date and tester: 2026-09-28, agent.
++- Outcome: Pass. Both README commands produced the documented output, and `npm test` reported 6 tests, 6 passed, 0 failed.
++- Remaining issues: None found.
+
+
+[CMD exit=0] /bin/zsh -lc "git commit -m 'Record README example checks'"
+  -> [claude/wi-002-document-greet-flags-in-the 17d584a] Record README example checks
+ 1 file changed, 23 insertions(+)
+ create mode 100644 tests/WI-002-TEST-PLAN.md
+
+
+[AGENT] I’m using the work-check procedure’s independent reviewer now. It will check WI-001 at `fe07ccb` and WI-002 at `17d584a` against their separate acceptance checks.
+
+[FILE_CHANGE] [{"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/.work-items/WI-001-times-flag/WI-002-document-greet-flags-in-the-readme/WORK-ITEM.md", "kind": "update"}, {"path": "/private/tmp/claud
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --stage 09-testing'
+  -> Updated WI-001: stage 08 Build -> 09 Testing (status In Progress).
+Now 09 Testing (In Progress). Continue with work-check.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-002 --stage 09-testing'
+  -> Updated WI-002: stage 08 Build -> 09 Testing (status In Progress).
+Now 09 Testing (In Progress). Continue with work-check.
+
+
+[ITEM collab_tool_call ] {"id": "item_61", "type": "collab_tool_call", "tool": "wait", "sender_thread_id": "01a0ea28-a95a-7dc0-bd17-dec5e3a7c3c7", "receiver_thread_ids": [], "prompt": null, "agents_states": {}, "status": "completed"}
+
+[FILE_CHANGE] [{"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/.work-items/WI-001-times-flag/WI-002-document-greet-flags-in-the-readme/WORK-ITEM.md", "kind": "update"}, {"path": "/private/tmp/claud
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history WI-001 --note 'Checked R-01 at fe07ccb: npm test 6 passed, 0 failed; direct CLI checks 11 passed; independent checker found R-01 met and no defects; evidence tests/WI-001-TEST-PLAN.md; gaps none.' --effect 'WI-001 command result ready for separate owner approval.'"
+  -> Added a Recent History row to WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history WI-002 --note 'Checked R-02 at 17d584a: README commands matched output, npm test 6 passed, 0 failed; independent checker found R-02 met and no defects; evidence tests/WI-002-TEST-PLAN.md; gaps none.' --effect 'WI-002 README result ready for separate owner approval.'"
+  -> Added a Recent History row to WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --stage 11-user-approval --waiting-on owner'
+  -> Updated WI-001: stage 09 Testing -> 11 User approval (status In Progress); waiting on owner.
+Now 11 User approval (In Progress). Continue with work-decide.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-002 --stage 11-user-approval --waiting-on owner'
+  -> Updated WI-002: stage 09 Testing -> 11 User approval (status In Progress); waiting on owner.
+Now 11 User approval (In Progress). Continue with work-decide.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus --json'
+  -> {
+  "ok": true,
+  "backend": "hindsight",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Add a --times flag to greet\n- WI-002 Document greet flags in the README\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 from its Resume here: plan the R-01 command build with work-on, then build and check WI-002 separately after the flag behavior is ready.\n",
+  "version": "2e533b12e4d7cefb52850a989267eb6268707df63e385da8f64e5a5914d81a49"
+}
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Add a --times flag to greet
+- WI-002 Document greet flags in the README
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 and WI-002 from their Resume here: ask Mike to approve each tested result separately, then follow work-finish for any approved item.
+' --expect 2e533b12e4d7cefb52850a989267eb6268707df63e385da8f64e5a5914d81a49"
+  -> Saved the current focus (21 lines). Version: e0d704168ea1
+
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## main
+
+
+[CMD exit=0] /bin/zsh -lc 'git -C .claude/worktrees/wi-001-add-a-times-flag-to-greet status --short --branch'
+  -> ## claude/wi-001-add-a-times-flag-to-greet
+
+
+[CMD exit=0] /bin/zsh -lc 'git -C .claude/worktrees/wi-002-document-greet-flags-in-the status --short --branch'
+  -> ## claude/wi-002-document-greet-flags-in-the
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate WI-002'
+  -> Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate WI-001'
+  -> Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Add a --times flag to greet
+- WI-002 Document greet flags in the README
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 and WI-002 from their Resume here: ask Mike to approve each tested result separately, then follow work-finish for any approved item.
+
+
+[AGENT] Both items are **built, tested, and committed on their own branches**. They are waiting for separate result approvals; neither is merged into `main`.
+
+- **WI-001:** `--times N` prints N greeting lines. It accepts the name on either side of the flag and rejects invalid counts with an error, no greeting, and a failure status. Six tests passed, and the independent checker found R-01 met with no defects. Try it in [WI-001’s worktree](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/.claude/worktrees/wi-001-add-a-times-flag-to-greet/bin/greet.mjs): `node bin/greet.mjs Mike --times 3`.
+- **WI-002:** The [README](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/.claude/worktrees/wi-002-document-greet-flags-in-the/README.md) documents the only flag, `--times`, with a command and output example. Both documented commands matched their output. Six tests passed, and the independent checker found R-02 met with no defects.
+
+Do you approve the **WI-001 command result**? Separately, do you approve the **WI-002 README result**?
+
+SKILLS OPENED: ['work-on', 'work-check', 'memory-save']
+ESCALATED CALLS: 11
+  ^ git worktree add .claude/worktrees/wi-001-add-a-times-flag-to-greet -b claude/wi-001-add-a-times-flag-to-greet
+  ^ git add bin/greet.mjs test/greet.test.mjs
+  ^ git commit -m 'Add validated times flag to greet'
+  ^ git worktree add .claude/worktrees/wi-002-document-greet-flags-in-the -b claude/wi-002-document-greet-flags-in-the claude/wi-001-add-a-times-flag-to-greet
+  ^ git add README.md
+  ^ git commit -m 'Document greet times flag with example'
+  ^ git add tests/WI-001-TEST-PLAN.md
+  ^ git commit -m 'Record times flag test plan'
+  ^ git merge claude/wi-001-add-a-times-flag-to-greet
+  ^ git add tests/WI-002-TEST-PLAN.md
+  ^ git commit -m 'Record README example checks'
+HOOK CONTEXTS: 3
+  * Project briefing: Greet CLI Final H2 (greet-cli-final-h2), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: the local Hindsight server. Salesforce: no. Hosts: Claude Code and Codex. | Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r2/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle. | Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs. |  | This worktree is on branch main, which names no work item. |  | Active items: | - WI-001 Add a --times flag to greet: 06 Implementation plan, In Progress. Next action: Agent plans the R-01 command build with work-on; WI-002 plans and checks R-02 separately. Continues with work-on. | - WI-002 Document greet flags in the README: 06 Implementation plan, In Progress. Next action: Agent plans the README edit and its independent check with work-on after the --times behavior is implemented. Continues with work-on. |  | Items: 2 in progress. |  | Current focus: | Last updated: 2026-09-28, chat, agent | ## Now | - WI-001 Add a --times flag to greet | - WI-002 Document greet flags in the README | ## Waiting on the owner | - Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it. | - Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. S
+  * WI-001 was edited directly and passes validation. toolkit work edit <id> --section '<heading>' --set-file <file> changes a section the same way in every tracker and keeps the toolkit's record of what it wrote; prefer it to editing the file.
+  * WI-002 was edited directly and passes validation. toolkit work edit <id> --section '<heading>' --set-file <file> changes a section the same way in every tracker and keeps the toolkit's record of what it wrote; prefer it to editing the file.
+HOOKSTATE turns=1 keep=None records=[('work', 'toolkit work design', None), ('work', 'toolkit work set', None), ('work', 'toolkit work set', None), ('work', 'toolkit work set', None), ('work', 'toolkit work set', None), ('work', 'toolkit work set', None), ('work', 'toolkit work set', None), ('work', 'toolkit work history', None), ('work', 'toolkit work history', None), ('work', 'toolkit work set', None), ('work', 'toolkit work set', None), ('memory', 'toolkit memory focus', None)] stopBlocked=False lastStop=

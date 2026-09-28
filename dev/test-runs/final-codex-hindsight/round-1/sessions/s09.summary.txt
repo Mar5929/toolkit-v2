@@ -1,0 +1,167 @@
+PROMPT: From how this work has gone so far, is there anything about how I like to work that you would save to memory? Suggest it, but ask me first before saving anything.
+TIME: 2026-09-28T20:16:49Z -> 2026-09-28T20:17:39Z
+
+[AGENT] I’ll check the project’s existing memory and work notes, then suggest only a preference that seems useful across sessions. I’ll ask before saving it.
+
+[CMD exit=0] /bin/zsh -lc "pwd && rg --files -g 'SOUL.md' -g 'PROJECT.md' -g '.claude/rules/*.md' -g '.work-items/**/WORK-ITEM.md' -g '.memory/**' | head -80"
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsigh
+
+[CMD exit=0] /bin/zsh -lc "cat 'PROJECT.md'"
+  -> # Greet CLI Final H
+
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or 
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/humanize-outbound-text.md'"
+  -> # Humanize Anything Sent to Another Person
+
+Any text that will leave the project and be read by someone other than the owner
+is run through the `human
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/shared-repository-work.md'"
+  -> # Work Safely in a Shared Repository
+
+Other sessions edit this repository now. Before your first edit, run:
+
+```
+git worktree list
+git status
+git fetc
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/memory-review-and-save.md'"
+  -> # Review and Save Project Memory
+
+This rule applies to the main agent. The project memory system is chosen at setup and recorded in `.toolkit.json`; w
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/session-handoff.md'"
+  -> # Prepare a Session Handoff
+
+When the owner says he is clearing context or ending the session, or asks for a handoff, use the `handoff` skill, whateve
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/keep-work-item-current.md'"
+  -> # Keep the Active Work Item Accurate
+
+The work tracker is the source of truth for current work.
+
+- Before substantial work, use the `work-on` skill. R
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/plain-english-artifacts.md'"
+  -> # Write Artifacts in Plain English
+
+An artifact is something an agent generates for a person to look at: a
+diagram, a chart, a dashboard, a visualizat
+
+[CMD exit=1] /bin/zsh -lc "cat 'SOUL.md'"
+  -> cat: SOUL.md: No such file or directory
+
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/work-item-folders.md'"
+  -> # Local Work-Item Folders
+
+This project tracks work in local folders under `.work-items/`. The folder is
+Git-ignored, lives in the main checkout, and 
+
+[AGENT] I’m using the memory-save guidance to check whether the pattern is already recorded and whether it reflects your preference rather than just the current work item’s process.
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory find 'working preference README flags separate approval'"
+  -> 1 memory record is about "working preference README flags separate approval" (Hindsight recall, best first):
+- user_document_cli_flags_in_readme: Document every command-line flag in the README
+    # CLI flag documentation preference **Remember:** Mike prefers every command-line flag in this project to be documented in the README. **Why:** Not stated by th
+Read a record with toolkit memory get <key> before relying on it.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory get user_document_cli_flags_in_readme'
+  -> ---
+name: user_document_cli_flags_in_readme
+description: Document every command-line flag in the README
+metadata:
+  type: user
+status: current
+source: Mike, in chat, 2026-09-28
+last_verified: 2026-09-28
+authorization: Approved by Mike on 2026-09-28
+supersedes: none
+---
+
+# CLI flag documentation preference
+
+**Remember:** Mike prefers every command-line flag in this project to be documented in the README.
+
+**Why:** Not stated by the owner.
+
+**How to apply:** When adding or changing a command-line flag, update its README documentation and check it during review.
+
+**Evidence and limits:** Mike, in chat, 2026-09-28. Applies to this project.
+
+**Related memories:** None.
+
+**Authoritative records:** WI-001 records the --shout requirement.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001'
+  -> WI-001: Add --shout flag to greet CLI
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r1/.work-items/WI-001-add-shout-flag-to-greet-cli/WORK-ITEM.md
+Stage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: none | Sub-items: WI-002 | Design: approved (.work-items/WI-001-add-shout-flag-to-greet-cli/DESIGN.md)
+Worktree branch for this item: claude/wi-001-add-shout-flag-to-greet-cli (folder .claude/worktrees/wi-001-add-shout-flag-to-greet-cli)
+
+---
+id: WI-001
+title: Add --shout flag to greet CLI
+type: build
+stage: 11-user-approval
+status: In Progress
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike"
+design: approved
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-001: Add --shout flag to greet CLI
+
+## Overview
+
+**Goal:** Add --shout to the greet CLI so it prints the whole greeting in uppercase letters.
+
+**Current position:** R-01 is built and tested in commit 819bda7. WI-002 documents and checks R-02 separately in commit d961e1e. No helper agents were used.
+
+**Next action:** Present the tested CLI result for Mike’s approval, separate from WI-002’s README result.
+
+**Blockers:** Result approval and merge wait on Mike.
+
+**Related items:** WI-002 covers R-02 and requires its own build, check, and result approval.
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — CLI behavior | --shout prints uppercase named and default greetings in either flag position | Done | R-01 checks and npm test pass | None. |
+| P2 — README documentation | Readers can use --shout from the README example | Done | WI-002 builds and checks R-02 independently | WI-002 |
+
+## Tasks
+
+### P1 — CLI behavior
+
+- [x] **P1-T01 — Implement --shout** · Done  
+  **Work
+
+[CMD exit=0] /bin/zsh -lc 'toolkit config get memory.approval'
+  -> onboarding
+
+
+[AGENT] One possible preference is that, for small changes, you prefer working directly with me without helper agents. You chose that approach for `--shout`; I’d confirm before treating it as a standing preference. Your preference to document every CLI flag in the README is already saved.
+
+Save to memory: For small changes, Mike prefers working directly with the agent without helper agents?
+
+SKILLS OPENED: ['memory-save']
+ESCALATED CALLS: 0
+HOOK CONTEXTS: 1
+  * Project briefing: Greet CLI Final H (greet-cli-final-h), owner Mike. Work items: local folders in .work-items/ (ids like WI-001). Memory: the local Hindsight server. Salesforce: no. Hosts: Claude Code and Codex. | Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r1/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle. | Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs. |  | This worktree is on branch main, which names no work item. |  | Active items: | - WI-001 Add --shout flag to greet CLI: 11 User approval, In Progress, waiting on owner. Next action: Present the tested CLI result for Mike’s approval, separate from WI-002’s README result. Continues with work-decide. | - WI-002 Document --shout in README: 11 User approval, In Progress, waiting on owner. Next action: Present the separately checked README result for Mike’s approval. Continues with work-decide. |  | Waiting on the owner: | - WI-001 Add --shout flag to greet CLI: WI-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-001 --result --by <name>. (work-decide) | - WI-002 Document --shout in README: WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide) |  | Items: 2 in progress. |  | Current focus: | Last updated: 2026-09-28, chat, agent | ## Now | - WI-001 Add --shout flag to greet CLI | - WI-002 Document --shout in README | ## Waiting on the owner | - Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it. | - Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, and trust them. Setup step; drop it when doctor stops reporting it. | ## Untracked to-dos | None. | ## Next session starts with | - Continue WI-001 and WI-002 from their Resume here notes: present each tested result for Mike’s separate approval, then handle the merge decision. |  | Project memory (hindsight): 1 record, from the local copy. toolkit memory find searches it; toolkit memory get <key> reads one record. |  | Memory records: | - user_document_cli_flags_in_readme: Document every command-line flag in the README |  | Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them): | - Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-hindsight-r1). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off. Fix: The owner opens Codex in this folder and trusts it when Codex asks. | - Codex ran this Toolkit V2 hook, but ~/.codex/config.toml has no trust entry for the Toolkit V2 hooks. Codex runs untrusted hooks only when it is started with --dangerously-bypass-hook-trust; a normal Codex session skips them. Fix: The owner opens /hooks in Codex and trusts the Toolkit V2 hooks; toolkit doctor checks it. |  | Always-on rules. Claude Code loads them by itself; in Codex, each one is read at session start: | - .claude/rules/humanize-outbound-text.md: Humanize Anything Sent to Another Person | - .claude/rules/keep-work-item-current.md: Keep the Active Work Item Accurate | - .claude/rules/memory-review-and-save.md: Review and Save Project Memory | - .claude/rules/plain-english-artifacts.md: Write Artifacts in Plain English | - .claude/rules/session-handoff.md: Prepare a Session Handoff | - .claude/rules/shared-repository-work.md: Work Safely in a Shared Repository | - .claude/rules/work-item-folders.md: Local Work-Item Folders |  | How to write replies (from AGENTS.md): | Claude Code applies the Plain English output style to chat. Codex and helper agents follow these lines instead. |  | - Start with the answer, result, or current status. Answer what was asked. Keep it short; add detail when asked. | - Use ordinary words. Explain an unfamiliar term the first time it matters. Use the exact name a system uses, the same way every time. | - Write literally: no metaphors, idioms, jokes, or picture words in place of the real name. State the point directly, without a "not this, but that" setup. | - Use paragraphs for a connected explanation, bullets for separate items or choices, and a heading only when it names what is under it. | - When asking for a decision, name the choice and the difference that matters, and recommend one. | - Use the exact status word: written, built, tested, merged, installed, or seen working. Say something works only when you saw it work. | - Leave out routine narration of process and helper activity. Give one direct line when the owner lost something, an action cannot be undone, work waits on the owner, or there is a cost.
+HOOKSTATE turns=1 keep=None records=[('memory', 'toolkit memory save --proposal (Stop hook)', 'feedback_small_changes_mike_prefers_working_directly_agent')] stopBlocked=False lastStop=
+PROPOSAL NOTES: ['At the end of the last turn the toolkit saved the unanswered "Save to memory: For small changes, Mike prefers working directly with the agent without helper agents?" as a memory proposal: feedback_small_changes_mike_prefers_working_directly_agent. It is not a fact. If the owner answers it now, his yes is toolkit memory approve feedback_small_changes_mike_prefers_working_directly_agent --by <name> and his no is toolkit memory reject feedback_small_changes_mike_prefers_working_directly_agent; otherwise work-decide asks him later.']
+PROPOSED SUMMARIES: ['for small changes mike prefers working directly with the agent without helper agents']

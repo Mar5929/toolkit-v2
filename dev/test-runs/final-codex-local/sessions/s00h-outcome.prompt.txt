@@ -1,0 +1,1 @@
+The outcome: slug turns any title I type into a clean, URL-friendly slug that I can paste into my blog. Your sentence is close, use mine. Then commit the setup files.

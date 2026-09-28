@@ -25,7 +25,7 @@ import { stopOutput } from './output.mjs';
 import { findProject, baselineMoved } from './common.mjs';
 import { updateSession, turnKey } from './session.mjs';
 import { resolveRecorded } from './post-tool.mjs';
-import { proposalQuestions, looseQuestion, normalizeSummary, proposalArgs, proposalName } from './proposal.mjs';
+import { proposalQuestions, looseQuestion, normalizeSummary, proposalArgs, proposalName, proposalType, ownerWording } from './proposal.mjs';
 import { CLOSEST_WHY, compareRecords } from '../memory/similar.mjs';
 import { secretKind } from '../memory/contract.mjs';
 
@@ -133,7 +133,7 @@ export async function saveProposals(project, summaries, { cwd, env }) {
     let similar = similarOf(res);
     // The same name, but not the same meaning: try once more under another name.
     if (similar && similar.every((x) => x.why === 'the same key')) {
-      res = await runToolkit(proposalArgs(summary, { ownerName, date, name: `${proposalName(summary).slice(0, 47)}-2` }), { cwd, env });
+      res = await runToolkit(proposalArgs(summary, { ownerName, date, name: `${proposalName(ownerWording(summary, ownerName), proposalType(summary, ownerName)).slice(0, 47)}-2` }), { cwd, env });
       similar = similarOf(res);
     }
     // Only about the same subject: the owner reviews every proposal, so it is saved anyway.

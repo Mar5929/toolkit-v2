@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "sessionId": "01a0ea42-75f1-7082-8e9d-3f79f9bad83b",
+  "host": "codex",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2",
+  "startedAt": "2026-09-28T23:03:41.008Z",
+  "turns": 4,
+  "turn": {
+    "key": "01a0ea45-2816-77b3-aa08-d1f8d175396a",
+    "n": 4,
+    "startedAt": "2026-09-28T23:06:37.799Z",
+    "keep": null,
+    "baseline": {
+      "memoryMeta": 1790636765983.0757,
+      "hindsightMeta": null,
+      "memoryCache": null,
+      "workState": 1790636797672.651,
+      "decisions": 1790633564051.7444
+    },
+    "records": [
+      {
+        "kind": "memory",
+        "what": "toolkit memory approve",
+        "at": "2026-09-28T23:06:43.402Z"
+      },
+      {
+        "kind": "memory",
+        "what": "toolkit memory save --proposal (Stop hook)",
+        "proposal": true,
+        "key": "user_mike_rihm_usually_prefers_design_reviews_first",
+        "at": "2026-09-28T23:07:00.901Z"
+      }
+    ],
+    "edits": [],
+    "stopBlocked": false
+  },
+  "lastStopReason": null,
+  "source": "resume",
+  "updated": "2026-09-28T23:07:00.901Z",
+  "proposedSummaries": [
+    "mike rihm is usually off on fridays",
+    "mike rihm usually prefers design reviews first thing in the morning"
+  ],
+  "proposalNotes": [
+    "At the end of the last turn the toolkit saved the unanswered \"Save to memory: Mike Rihm usually prefers design reviews first thing in the morning?\" as a memory proposal: user_mike_rihm_usually_prefers_design_reviews_first. It is not a fact. If the owner answers it now, his yes is toolkit memory approve user_mike_rihm_usually_prefers_design_reviews_first --by <name> and his no is toolkit memory reject user_mike_rihm_usually_prefers_design_reviews_first; otherwise work-decide asks him later."
+  ]
+}

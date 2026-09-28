@@ -1,0 +1,8 @@
+WI-001’s design is [written and proposed](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/final-codex-salesforce-r2/.work-items/WI-001-add-a-tier-picklist-field-to-account/DESIGN.md). An independent review checked it against all four approved requirements.
+
+- **Option A — recommended:** Set Tier access by profile in each org. Sales Manager and System Administrator can edit; other Account viewers can read. This also covers future users with those profiles, but the profile settings require manual steps.
+- **Option B:** Use permission sets and assign them to individual users. More access configuration is kept in source, but assignments need upkeep when users join or change profiles.
+
+Both options add the optional Gold/Silver/Bronze field and place it below Rating. The build will also check whether the active Account page uses Dynamic Forms, which can control field placement separately from the page layout. [Salesforce’s field access guidance](https://trailhead.salesforce.com/content/learn/modules/data_security/data_security_fields) supports checking effective permissions as well as the page.
+
+**Please choose and approve Option A or Option B for WI-001.** The field, layout, and access changes have not been built or deployed.

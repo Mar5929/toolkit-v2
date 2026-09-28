@@ -29,7 +29,7 @@ const USAGE = `Usage:
   toolkit work new --title <t> [--type <t>] [--parent <id> [--covers R-02,R-03]] [--stage <s>] [--priority <p>] [--request <text>] [--group <folder>]
   toolkit work list [--status <s>] [--waiting-on <w>] [--tree] [--all]
   toolkit work show <id> [--section <heading>] [--path]
-  toolkit work edit <id> --section <heading> (--set-file <file|-> | --text <text>) | --section <heading> --append-row "<a | b | c>" | --label <name> --value <text> | --remove-guide
+  toolkit work edit <id> --section <heading> (--set-file <file|-> | --text <text>) | --section <heading> --append-row '<a | b | c>' | --label <name> --value <text> | --remove-guide
   toolkit work set <id> [--stage <s>] [--waiting-on <w>] [--priority <p>] [--type <t>] [--delivery <d>] [--title <t>] [--parent <id|none>] [--reopen] [--note <why>]
   toolkit work approve <id> --requirements|--design|--result --by <name>
   toolkit work design <id> [--create] [--set-file <file|-> | --text <text>] [--status proposed|approved|superseded] [--by <name>]
@@ -465,6 +465,11 @@ async function cmdFinish(ctx, tracker, project, args, changes) {
   const { autoBackup } = await import('../project/backup.mjs');
   const backup = await autoBackup(project, { env: ctx.env, fetch: ctx.fetch });
   if (backup.line) lines.push(backup.line);
+  else if (backup.status === 'nothing') {
+    // Said every time, so the reply never implies a backup was made (final
+    // confirmation round 1, Notion run: the finish printed nothing about it).
+    lines.push('No automatic backup: this project keeps its work items and memory outside this computer, so nothing was copied to a backup folder.');
+  }
   out(ctx, withChanges(changes, lines), {
     ok: true, id: res.id, status: 'Done', resultApproval: res.resultApproval, openSubItems: res.openSubItems, warnings: res.warnings || [], changes,
     backup: { status: backup.status, dir: backup.dir || null, parts: backup.parts, errors: backup.errors },
@@ -517,8 +522,19 @@ async function cmdNext(ctx, tracker, project, args, changes) {
     lines.push('', 'Also ready:');
     for (const o of others) lines.push(`  ${o.id} ${o.title} (${o.stageLabel}, ${o.status})`);
   }
-  if (decisions.length) lines.push('', `${decisions.length} decision${decisions.length === 1 ? ' waits' : 's wait'} on the owner (work-decide; toolkit work decisions lists them).`);
-  out(ctx, withChanges(changes, lines), { ok: true, next: pick ? summaryOf(pick) : null, reason, others, waitingOnOwner: decisions.length, worktree: wt, changes });
+  // Memory proposals wait on the owner too, and toolkit work decisions counts
+  // them, so this count does as well (final confirmation round 1, local run:
+  // next said 2 while decisions said 3, and nothing with only a proposal waiting).
+  const memory = await collectMemoryProposals(project, { env: ctx.env });
+  const waiting = decisions.length + memory.proposals.length;
+  if (waiting) {
+    const parts = [];
+    if (decisions.length) parts.push(`${decisions.length} about work items`);
+    if (memory.proposals.length) parts.push(`${memory.proposals.length} memory proposal${memory.proposals.length === 1 ? '' : 's'}`);
+    lines.push('', `${waiting} decision${waiting === 1 ? ' waits' : 's wait'} on the owner (${parts.join(', ')}; work-decide; toolkit work decisions lists them).`);
+  }
+  if (memory.problem) lines.push(`Note: ${memory.problem}`);
+  out(ctx, withChanges(changes, lines), { ok: true, next: pick ? summaryOf(pick) : null, reason, others, waitingOnOwner: waiting, memoryProposals: memory.proposals.length, worktree: wt, changes });
   return EXIT.OK;
 }
 

@@ -3,12 +3,19 @@
 // branch from an isolated, sparse, detached worktree.
 //
 //   publish-docs.mjs start --branch <default-branch> -- <file> [more files]
-//   publish-docs.mjs publish --message '<commit message>'
+//   publish-docs.mjs publish [--workspace <save folder>] --message '<commit message>'
 //
-// `start` checks every path, fetches the default branch, creates a worktree
-// beside the project, and prints its path. `publish` runs inside that worktree:
-// it refuses staged paths outside the save, commits, pushes without force, and
-// verifies that the remote has the commit.
+// `start` checks every path, fetches the default branch, creates a worktree,
+// and prints its path. The worktree goes in the main checkout's
+// .claude/worktrees/ when the project's .gitignore ignores that folder (every
+// Toolkit V2 project), so it is inside the folder the session may work in:
+// Claude Code then needs no approval to use it, and Codex may edit files there
+// (final confirmation round 1, Claude Code run: a save folder beside the
+// project needed an approval for every publish, and `claude -p` refused it).
+// Otherwise it goes beside the project. `publish` runs on that worktree, from
+// inside it or from anywhere with --workspace: it refuses staged paths outside
+// the save, commits, pushes without force, and verifies that the remote has
+// the commit.
 //
 // The save fetches and pushes `origin`; a repository with remotes but none
 // named `origin` is refused at start, with the names it has. A repository with
@@ -192,6 +199,23 @@ function publishLocally(workspace, branch, head) {
     throw new Error(`Committed ${head}, but ${branch} does not point at it. Keep the workspace and inspect it.`);
 }
 
+/** The main checkout of the repository that holds cwd (its linked worktrees share it). */
+function mainCheckout(cwd) {
+  const common = git(cwd, ['rev-parse', '--path-format=absolute', '--git-common-dir'], { allowFailure: true }).stdout.trim();
+  return common && basename(common) === '.git' ? dirname(common) : git(cwd, ['rev-parse', '--show-toplevel']).stdout.trim();
+}
+
+/**
+ * Where a new save workspace goes: <main checkout>/.claude/worktrees/docsave-<id>
+ * when Git ignores that path there, else <project>-docsave-<id> beside the project.
+ */
+export function workspaceFor(source, id) {
+  const main = mainCheckout(source);
+  const inside = `.claude/worktrees/docsave-${id}`;
+  if (git(main, ['check-ignore', '-q', '--', inside], { allowFailure: true }).status === 0) return join(main, inside);
+  return resolve(dirname(source), `${basename(source)}-docsave-${id}`);
+}
+
 function start(args) {
   const branchFlag = args.indexOf('--branch');
   const separator = args.indexOf('--');
@@ -208,7 +232,7 @@ function start(args) {
   const paths = generatedPaths(named);
   const local = !checkOrigin(source, branch);
   const base = local ? localBranchTip(source, branch) : fetchDefault(source, branch);
-  const workspace = resolve(dirname(source), `${basename(source)}-docsave-${randomUUID().slice(0, 8)}`);
+  const workspace = workspaceFor(source, randomUUID().slice(0, 8));
   if (existsSync(workspace)) throw new Error(`Save workspace already exists: ${workspace}`);
   git(source, ['worktree', 'add', '--no-checkout', '--detach', workspace, base]);
   const folders = new Set(SPARSE_BASE);
@@ -227,8 +251,12 @@ function start(args) {
 function publish(args) {
   const messageFlag = args.indexOf('--message');
   if (messageFlag < 0 || !args[messageFlag + 1])
-    throw new Error("Usage: publish-docs.mjs publish --message 'Commit message'");
-  const workspace = git(process.cwd(), ['rev-parse', '--show-toplevel']).stdout.trim();
+    throw new Error("Usage: publish-docs.mjs publish [--workspace <save folder>] --message 'Commit message'");
+  const workspaceFlag = args.indexOf('--workspace');
+  if (workspaceFlag >= 0 && (!args[workspaceFlag + 1] || !existsSync(args[workspaceFlag + 1])))
+    throw new Error(`The save folder ${args[workspaceFlag + 1] || '(none given)'} was not found. Give the path start printed.`);
+  const from = workspaceFlag >= 0 ? resolve(args[workspaceFlag + 1]) : process.cwd();
+  const workspace = git(from, ['rev-parse', '--show-toplevel']).stdout.trim();
   const file = markerPath(workspace);
   if (!existsSync(file)) throw new Error('This is not a publish-docs save workspace. Run start first.');
   const state = JSON.parse(readFileSync(file, 'utf8'));
@@ -278,7 +306,7 @@ function main(argv) {
     const [command, ...args] = argv;
     if (command === 'start') start(args);
     else if (command === 'publish') publish(args);
-    else throw new Error('Usage: publish-docs.mjs start --branch DEFAULT -- FILE... | publish --message TEXT');
+    else throw new Error('Usage: publish-docs.mjs start --branch DEFAULT -- FILE... | publish [--workspace FOLDER] --message TEXT');
   } catch (error) {
     process.stderr.write(`${error.message}\n`);
     process.exitCode = 1;

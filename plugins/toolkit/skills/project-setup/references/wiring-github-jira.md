@@ -12,8 +12,12 @@ path of that tracker's instructions.
 
 1. Show the owner the instructions for his tracker, in a few plain lines:
    where items live, how stages are shown, and what he must set up.
-2. GitHub: the stage, type, priority, and approval labels are created once,
-   and only after his yes. Never create a GitHub repository without his yes.
+2. GitHub: the labels are created once, and only after his yes: one
+   `stage:<stage>` label per stage, the `type:` and `priority:` labels,
+   `requirements-approved`, `design-proposed`, `design-approved`,
+   `result-approved`, `waiting-on:owner`, `delivery:agent-led`, and
+   `delivery:owner-led` (`tracker-github.md` in this folder names each use).
+   Never create a GitHub repository without his yes.
 3. Jira: the Stage field or labels, and the map from stages to Jira statuses,
    need his yes and often a Jira admin. Record the status map as a
    project-wide decision with `toolkit decision add`, saved through

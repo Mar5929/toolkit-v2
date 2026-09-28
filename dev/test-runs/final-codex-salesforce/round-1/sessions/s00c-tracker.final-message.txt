@@ -1,0 +1,1 @@
+Where should project memory live? I recommend the built-in `.memory/` folder. It’s private, fast, and needs no server.
