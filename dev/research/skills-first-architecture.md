@@ -138,7 +138,7 @@ track work in Notion.' The `-find` skill mirrors it for looking up.
 | --- | --- | --- |
 | Local + Obsidian | `local-memory-save`, `local-memory-find`, `local-memory-refine` | The concept file template (with a `work_items` property of links such as `[[WI-031]]`), the four prefixes, memory criteria, the decision record template, Current State rules, Obsidian link rules. |
 | Notion + Lore | `notion-memory-save`, `notion-memory-find`, `notion-memory-refine` | The Notion session's part: Lore's databases, Kind values, the Work items relation, and Lore's full property list (moved from `plugins/toolkit/lib/notion/lore-schema.mjs`, which goes with the program). Lore finds its databases and columns by exact name, so the "never rename or remove a Lore property" rule points to this list. |
-| Hindsight | None (Mike, 2026-09-29: "Hindsight has its own complete way. It's a whole memory engine") | The agent uses Hindsight's own MCP tools (`retain`, `recall`, `reflect`) on the project's bank at `127.0.0.1:8888/mcp/<bank>/`, with the delete tools hidden. The shared memory rule carries what Hindsight cannot know (what to keep, ask first, cite). Work item tags and a Current State home: research pending. |
+| Hindsight | None (Mike, 2026-09-29: "Hindsight has its own complete way. It's a whole memory engine") | The agent uses Hindsight's own MCP tools (`retain`, `recall`, `reflect`) on the project's bank at `127.0.0.1:8888/mcp/<bank>/`, with the delete tools hidden. The shared memory rule carries what Hindsight cannot know (what to keep, ask first, cite, and tag each memory `wi:<ID>`; find an item's memories with `tags_match: "any_strict"`, because the default also returns untagged ones). Current State is a local file, `memory/CURRENT_STATE.md` (Mike, 2026-09-29). Source: Hindsight 0.10.1 `mcp_tools.py:1009-1028`, `engine/search/tags.py:6-9`. |
 
 Description pattern (local shown):
 - save: 'Saves what the owner wants kept in this project's local memory: facts and lessons to a concept file, project-wide decisions to a decision record, instructions to the owner-preferences rule, each linked to its work items and saved after his yes, and keeps Current State current. Use when the owner says "remember this", "from now on", "we decided", or a reminder says a save may be due. Only for projects with local memory.'
@@ -206,7 +206,7 @@ What each hook prints:
   item, `SOUL.md`, `PROJECT.md`, and `owner-preferences.md`." If Current
   State is over its size limit or older than 7 days, one line asks for
   `memory-refine`. Notion reads the "Current state" page with `ntn`;
-  Hindsight reads the Current State document from the local server. If the
+  Hindsight projects print the local `memory/CURRENT_STATE.md`. If the
   read fails, one line says so and the session goes on. In Codex the
   sandbox blocks the keychain `ntn` needs, so this read may fail every time;
   the test projects check it, and if it fails the line tells the agent to

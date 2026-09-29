@@ -319,6 +319,15 @@ Interview answers (Mike, 2026-09-29, the interview session):
   short-term memory like Current State. Hindsight's `hindsight-coding-agents`
   add-on is not used (Cloud by default, machine-wide settings, saves whole
   transcripts without asking).
+- Hindsight research answered (2026-09-29): `retain` takes free-text tags
+  (for example `wi:WI-031`) and `recall` and `list_memories` filter by them,
+  using a strict match so untagged memories are left out; Hindsight has no
+  short-term memory of its own. Current State in a Hindsight project (Mike:
+  "just go with your recommendations", the agent's recommendation A): a
+  small local file, `memory/CURRENT_STATE.md`, printed by the session-start
+  hook even when the Hindsight server is off, and kept out of Hindsight's
+  long-term search. Reason shown: it works with the server off and keeps
+  old status notes out of search results.
 - Notion session reply (2026-09-29): no conflicts. Settled with Mike in that
   session: Phases and Tasks are Notion linked records (a database), not a
   checklist in the body (Mike: "Yes, linked records"; "we have a section
