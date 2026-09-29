@@ -148,6 +148,18 @@ Interview answers (Mike, 2026-09-29, the interview session):
   and the design.md will be the same." Notion and external trackers have
   comments; a local work item uses its Notes and Recent History sections
   instead. The Notion session is working this out with Mike.
+- Topic 5, memory sets: confirmed ("Perfect"). memory-refine is the skill
+  that used to be memory-tidy (Mike: "When I said 'memory refine,' I meant
+  the skill that used to be 'memory tidy.'"). It also clears old entries from
+  Current State.
+- No overlap, no traps (Mike, 2026-09-29): "Make sure that the agents
+  building are referencing official Anthropic and OpenAI documentation about
+  how to set up skills, hooks, and rules, and how things get loaded into
+  context for each of those harnesses. Make sure that, in the descriptions of
+  all the skills, all the hooks, and everything that is built, there is no
+  overlap where the agent can get confused or stuck. There are no landmines
+  that would trip the agent up ... Everything needs to be crystal clear about
+  the descriptions so the agent knows exactly when to invoke what."
 - Rename: "I want the file name to be 'Current State' instead of 'Current
   Focus'." Read as: `.memory/CURRENT_FOCUS.md` becomes
   `.memory/CURRENT_STATE.md` (the model's naming style), and the Notion
