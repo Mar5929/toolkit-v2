@@ -309,6 +309,16 @@ Interview answers (Mike, 2026-09-29, the interview session):
   the item, the reason Mike was shown ("reason shown: none" when there was
   none), his words, and the date; project-wide ones also go to memory.
   Every item in a list shown to Mike carries a one-line reason.
+- Hindsight memory set (Mike, 2026-09-29, on draft 2): no
+  `hindsight-memory-save`, `-find`, or `-refine` skills. Mike: "Yeah, I would
+  drop them." "Hindsight has its own complete way. It's a whole memory
+  engine, so we can't guide it. We can't change its schema, so to speak. I
+  don't know if we could tag each memory with a work item." A Hindsight
+  project uses Hindsight's own tools (retain, recall, reflect). Still to
+  check by research: work item tags, and whether Hindsight has its own
+  short-term memory like Current State. Hindsight's `hindsight-coding-agents`
+  add-on is not used (Cloud by default, machine-wide settings, saves whole
+  transcripts without asking).
 - Notion session reply (2026-09-29): no conflicts. Settled with Mike in that
   session: Phases and Tasks are Notion linked records (a database), not a
   checklist in the body (Mike: "Yes, linked records"; "we have a section
