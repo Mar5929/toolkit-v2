@@ -42,6 +42,40 @@ What this means:
 - Decisions made earlier today still hold: decisions live in memory, cite
   recalled knowledge, approvals stay on the work item, no backup folder.
 
+Corrections (Mike, 2026-09-29, after the first two diagrams):
+- Every storage option is built; the agent does not defer any. Work
+  tracking: local folders with Obsidian, Notion, GitHub Issues, Jira.
+  Memory: local with Obsidian, Notion in Lore's layout, Hindsight. (The
+  agent had marked GitHub and Hindsight "later" on its own; Mike: "You just
+  made a decision that we're going to do GitHub later, in hindsight. I don't
+  know why you just randomly decided that.")
+- One set of skills per storage option, and onboarding brings in only the
+  chosen sets with their hooks. His words: "We build out all those skills,
+  and then the project just brings in whatever skills we need. If we're
+  tracking the memory and work tracking in Notion, you bring in the Notion
+  memory save skills and Notion work tracking skills. If we're just doing it
+  locally, you do the local memory save skills and the local work tracking
+  skills, both with Obsidian. If we're doing Hindsight, we do the Hindsight
+  ones. We do an onboarding, and then we bring in the right skills and the
+  right hooks." Each set's skills hold the instructions for that tool (for
+  Notion: how to use the Notion CLI), its templates and fields, and
+  descriptions that say which project setup they are for.
+- Session start loads the current focus ("When the session starts, it should
+  load in the current focus, like we discussed").
+- Hooks fire by themselves at set moments; skills are instructions the agent
+  picks by their description.
+- The local memory module keeps the Davis shape of Mike's original model
+  (efa2440; package at /Users/michaelrihm/Downloads/davis-memory-system-package):
+  `CLAUDE.md` imports `.memory/MEMORY.md` and `.memory/CURRENT_FOCUS.md`, a
+  SessionStart hook (`.claude/hooks/toolkit-session-start.mjs`, 23 lines), a
+  UserPromptSubmit trigger (`memory_trigger.py`, 62 lines), and a Stop audit
+  (`memory_audit.py`, 73 lines). Mike: "Doesn't the local memory system
+  already have specific hooks? ... it's still that general shape if we do the
+  local memory system, right?" The approved changes had replaced these with
+  the `toolkit` program. Whether `scripts/memory.py` (505 lines) stays is
+  open. Notion and Hindsight modules get the same hook moments in their own
+  versions.
+
 ## Goal
 
 Build a new toolkit repository from scratch at
