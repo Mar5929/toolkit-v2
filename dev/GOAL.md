@@ -137,6 +137,9 @@ Interview answers (Mike, 2026-09-29, the interview session):
   knows when to keep it up to date, but the problem, I think, with the Davis
   project is that it just doesn't know when to clean it up and remove old
   stuff. Just make sure that you're accounting for that in your solution."
+- Topic 3, onboarding: confirmed ("yes"), with `PROJECT-ROADMAP.md` in the
+  list of files every project gets (Mike asked "What about project
+  roadmap.md?"; it was left out of the playback by mistake).
 - Rename: "I want the file name to be 'Current State' instead of 'Current
   Focus'." Read as: `.memory/CURRENT_FOCUS.md` becomes
   `.memory/CURRENT_STATE.md` (the model's naming style), and the Notion
