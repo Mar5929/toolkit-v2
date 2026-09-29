@@ -1,0 +1,1 @@
+No, keep the approved rounding. Each share rounds up, and whoever paid keeps the extra few cents.

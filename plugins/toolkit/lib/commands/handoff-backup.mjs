@@ -5,7 +5,7 @@
 import { parseArgs } from '../core/args.mjs';
 import { EXIT, out } from '../core/output.mjs';
 import { requireProject } from '../core/config.mjs';
-import { autoBackup } from '../project/backup.mjs';
+import { autoBackup, notionOnly, NOTION_KEEPS_HISTORY } from '../project/backup.mjs';
 
 export const summary = 'Back up .work-items/ and .memory/ (and Hindsight memory) to the project\'s backup folder; the handoff skill runs it last.';
 
@@ -30,7 +30,7 @@ export async function run(argv, ctx) {
   const res = await autoBackup(project, { env: ctx.env, fetch: ctx.fetch });
   const line = res.line
     || (res.status === 'declined' ? 'The owner chose no backup folder (backup.dir is none), so nothing was backed up.'
-      : res.status === 'nothing' ? 'Nothing to back up: this project keeps its work items and memory outside this computer.' : '');
+      : res.status === 'nothing' ? `Nothing to back up: ${notionOnly(project.config) ? NOTION_KEEPS_HISTORY : 'this project keeps its work items and memory outside this computer'}.` : '');
   out(ctx, line, { ok: res.status !== 'failed', status: res.status, dir: res.dir || null, parts: res.parts, errors: res.errors });
   return res.status === 'failed' ? EXIT.ERROR : EXIT.OK;
 }

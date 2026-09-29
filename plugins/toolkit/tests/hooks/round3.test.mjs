@@ -13,6 +13,7 @@ import { cleanup, initProject, tk } from '../project/helpers.mjs';
 import { fixture } from './fixtures.mjs';
 import { aiCreditLine, checkAiCredit, backtickInDoubleQuotes, backtickInUnquotedHeredoc, commandSources, recordKind, substitutionInDoubleQuotes, toolkitCommands } from '../../lib/hooks/shell.mjs';
 import { directEditNote } from '../../lib/hooks/post-tool.mjs';
+import { TRAILER_MODEL, TRAILER_LOWER, CODEX_TRAILER, COPILOT_TRAILER, GENERATED_LINK, GENERATED_CODEX, GENERATED_AI, TRAILER_IN_SENTENCE } from '../credit-lines.mjs';
 
 after(cleanup);
 
@@ -27,28 +28,28 @@ async function hook(root, env, host, event, input) {
   return { code: res.code, raw: res.stdout, out: res.stdout.trim() ? JSON.parse(res.stdout) : null };
 }
 
-const CLAUDE_TRAILER = 'Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>';
+const CLAUDE_TRAILER = TRAILER_MODEL;
 const HEREDOC_COMMIT = `git commit -m "$(cat <<'EOF'\nAdd the greet command\n\n${CLAUDE_TRAILER}\nEOF\n)"`;
-const PR_BODY = 'gh pr create --title "Greet" --body "## Summary\n- adds greet\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)"';
+const PR_BODY = `gh pr create --title "Greet" --body "## Summary\n- adds greet\n\n${GENERATED_LINK}"`;
 
 test('aiCreditLine finds a Co-Authored-By line naming an AI and a "Generated with" line naming one, and nothing else', () => {
   assert.equal(aiCreditLine(`Fix\n\n${CLAUDE_TRAILER}`), CLAUDE_TRAILER);
-  assert.ok(aiCreditLine('Co-authored-by: Codex <codex@openai.com>'));
-  assert.ok(aiCreditLine('Co-authored-by: GitHub Copilot <copilot@github.com>'));
-  assert.ok(aiCreditLine('🤖 Generated with [Claude Code](https://claude.com/claude-code)'));
-  assert.ok(aiCreditLine('Generated with AI'));
+  assert.ok(aiCreditLine(CODEX_TRAILER));
+  assert.ok(aiCreditLine(COPILOT_TRAILER));
+  assert.ok(aiCreditLine(GENERATED_LINK));
+  assert.ok(aiCreditLine(GENERATED_AI));
   assert.equal(aiCreditLine('Co-Authored-By: Jane Doe <jane@example.com>'), null, 'a human co-author is allowed');
   assert.equal(aiCreditLine('Generated with make docs'), null);
-  assert.equal(aiCreditLine('Deny commits with a Co-Authored-By: Claude line'), null, 'the words inside a sentence are not a credit line');
+  assert.equal(aiCreditLine(TRAILER_IN_SENTENCE), null, 'the words inside a sentence are not a credit line');
 });
 
 test('checkAiCredit reads -m, --trailer, a heredoc message, -F files, and gh pr text', () => {
   assert.equal(checkAiCredit(HEREDOC_COMMIT).what, 'commit');
   assert.equal(checkAiCredit(`git commit -m "Fix" -m "${CLAUDE_TRAILER}"`).line, CLAUDE_TRAILER);
-  assert.ok(checkAiCredit('git commit -m "Fix" --trailer "Co-authored-by: Claude <noreply@anthropic.com>"'));
+  assert.ok(checkAiCredit(`git commit -m "Fix" --trailer "${TRAILER_LOWER}"`));
   assert.ok(checkAiCredit('git commit -F msg.txt', { readFile: (f) => (f === 'msg.txt' ? `Fix\n\n${CLAUDE_TRAILER}\n` : null) }));
   assert.equal(checkAiCredit(PR_BODY).what, 'pull request');
-  assert.ok(checkAiCredit('gh pr edit 12 --body-file body.md', { readFile: () => 'Text\n\nGenerated with Codex\n' }));
+  assert.ok(checkAiCredit('gh pr edit 12 --body-file body.md', { readFile: () => `Text\n\n${GENERATED_CODEX}\n` }));
   assert.equal(checkAiCredit('git commit -m "Fix the greet command"'), null);
   assert.equal(checkAiCredit(`echo "${CLAUDE_TRAILER}"`), null, 'only a commit or a pull request is checked');
   assert.equal(checkAiCredit('git log --format=%B -1'), null);
@@ -135,9 +136,9 @@ test('PreToolUse notes $(...) in a toolkit argument, and does not blame toolkit 
 });
 
 test('checkAiCredit also reads gh api calls on a pull request path', () => {
-  const credit = '🤖 Generated with [Claude Code](https://claude.com/claude-code)';
+  const credit = GENERATED_LINK;
   assert.equal(checkAiCredit(`gh api repos/o/r/pulls -f title=Greet -f body="Adds greet\n\n${credit}"`).line, credit);
-  assert.equal(checkAiCredit('gh api -X PATCH repos/o/r/pulls/12 -F body=@b.md', { readFile: (f) => (f === 'b.md' ? 'Text\n\nGenerated with Codex\n' : null) }).what, 'pull request');
+  assert.equal(checkAiCredit('gh api -X PATCH repos/o/r/pulls/12 -F body=@b.md', { readFile: (f) => (f === 'b.md' ? `Text\n\n${GENERATED_CODEX}\n` : null) }).what, 'pull request');
   assert.ok(checkAiCredit('gh api repos/o/r/pulls --input pr.json', { readFile: () => JSON.stringify({ title: 'Greet', body: `Adds greet\n\n${CLAUDE_TRAILER}` }) }));
   assert.equal(checkAiCredit('gh api repos/o/r/pulls -f title=Greet -f body="Adds greet"'), null);
   assert.equal(checkAiCredit('gh api repos/o/r/issues/3/comments -f body="Looks good"'), null);
@@ -146,7 +147,7 @@ test('checkAiCredit also reads gh api calls on a pull request path', () => {
 test('PreToolUse refuses a gh api pull request body with an AI credit, in both hosts', async () => {
   const { root, env } = await initProject();
   for (const host of ['claude', 'codex']) {
-    const r = await hook(root, env, host, 'pre-tool', fixture(host, 'pre-tool.bash', vars(root, { COMMAND: 'gh api repos/o/r/pulls -f title=Greet -f body="Adds greet\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)"' })));
+    const r = await hook(root, env, host, 'pre-tool', fixture(host, 'pre-tool.bash', vars(root, { COMMAND: `gh api repos/o/r/pulls -f title=Greet -f body="Adds greet\n\n${GENERATED_LINK}"` })));
     assert.equal(r.out.hookSpecificOutput.permissionDecision, 'deny', host);
     assert.match(r.out.hookSpecificOutput.permissionDecisionReason, /pull request text gives an AI credit/);
   }

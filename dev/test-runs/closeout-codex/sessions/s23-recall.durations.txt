@@ -1,0 +1,5 @@
+0.222s :: 'const r = await tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifact'
+0.242s :: 'const r=await tools.exec_command({cmd:"toolkit memory focus","max_output_tokens":2000});text(r.output);\n'
+0.258s :: 'const r=await tools.exec_command({cmd:"toolkit memory find \'how I like work done\'","max_output_tokens":3000});text(r.output);\n'
+0.253s :: 'const r=await tools.exec_command({cmd:"toolkit memory get user_working_preferences","max_output_tokens":5000});text(r.output);\n'
+MAX toolkit call seconds: 0.258

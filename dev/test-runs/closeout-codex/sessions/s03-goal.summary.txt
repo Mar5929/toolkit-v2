@@ -1,0 +1,683 @@
+PROMPT: Yes, that is the goal. For --split, print a second line like "Each person pays: $20.00". When the total does not divide evenly, round each share up to the next cent so nobody is short.
+THREAD: 01a0eafa-3fa3-7702-bdcb-bf23655d8c60
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll record the split-output decision in WI-001, update R-02, and check what remains before the build can start.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-decide/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-requirements/SKILL.md'
+  -> ---
+name: work-decide
+description: 'Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers. Use when he asks "what do you need from me", answers a waiting decision ("go with option B"), or states a project-wide decision.'
+---
+
+# Work decide
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Walks the owner through what waits on him, one decision at a time, and records each answer where it belongs. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Build the queue. The command lists each decision once: requirements waiting for approval, proposed designs, results at stage 11, Open Questions rows the owner decides, and memory proposals. Its "Agent to-do" lines are not decisions. A delivery offer belongs to `work-delegate`: open it after his other decisions.
+   `toolkit work decisions`
+2. He gave an answer without being asked ("approved", "go with B"): match it to exactly one waiting decision; when two could match, ask which, naming both. A bare "yes", "ok", or "looks good" with no question asked is not an answer (`references/approvals.md`, section 1).
+3. Otherwise start with the count and one short line for every waiting decision, memory proposals included ("3 decisions wait on you: the WI-004 design, the WI-006 result, and a 
+
+[CMD exit=0] /bin/zsh -lc 'rg --files .work-items; cat PROJECT-ROADMAP.md; git status --short'
+  -> .work-items/work-item-template/WORK-ITEM.md
+.work-items/work-item-template/DESIGN.md
+.work-items/WI-001-build-the-tip-command/WORK-ITEM.md
+.work-items/DASHBOARD.md
+# Project roadmap
+
+<!-- Fill-in guide: replace every angle-bracket prompt in the outcome, phase table, phase heading, and work-unit fiel
+
+[AGENT] The answer resolves Q-01. I’m saving your wording in the item, then I’ll check the updated requirements for approval.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-decide/references/{recording-owner-answers,work-item-format,current-focus,toolkit-commands}.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-requirements/references/{requirement-format,spec-check,approvals}.md'
+  -> <!-- Generated file. Source: plugins/work/shared/recording-owner-answers.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Recording the owner's answers
+
+Where each thing the owner says is saved, how to ask him a question, how to
+end a reply, and what to say when a save fails.
+
+## Contents
+
+1. Voice
+2. Where each answer goes
+3. Save it before the next question
+4. History notes
+5. Waiting on the owner
+6. Asking the owner
+7. Ending every reply
+8. Reporting a failed save
+9. Owner edits win
+10. Stages in plain words
+11. Handing over to another skill
+
+## 1. Voice
+
+Every skill carries this line near its top:
+
+> Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+
+Helper agents do not receive the output style. Each agent file carries its
+own writing rules.
+
+## 2. Where each answer goes
+
+| Information | Home | What to record |
+| --- | --- | --- |
+| Requirement or correction | The item's `Active requirements` (the `R-xx` block) and `Acceptance` | The new meaning, and Status Refining until approved |
+| Design choice | The item's design (`toolkit work design`) | The approach, proposed or approved, and why |
+| Open question | The item's `Open Questions` table | Question and your recommendation, what it affects, Open, who must answer |
+| Answer or decision about this item | The question's row, the section it changes, and one history note | The 
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list; git status; git remote'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex b50508c [main]
+On branch main
+nothing to commit, working tree clean
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 1 decision waits on the owner:
+
+WI-001 Build the tip command
+  - Q-01: How should the per-person share appear in the output, and how should a share that is not an exact cent be rounded? Affects R-02. (work-decide)
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001'
+  -> WI-001: Build the tip command
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/.work-items/WI-001-build-the-tip-command/WORK-ITEM.md
+Stage: 02 Refinement (Backlog) | Waiting on: owner | Continue with: work-decide
+Parent: none | Sub-items: none | Design: none
+Worktree branch for this item: claude/wi-001-build-the-tip-command (folder .claude/worktrees/wi-001-build-the-tip-command)
+
+---
+id: WI-001
+title: Build the tip command
+type: build
+stage: 02-refinement
+status: Backlog
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: not-offered
+requirements_approved: "no"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-001: Build the tip command
+
+<!-- Fill-in guide for a new local work item: create it with `toolkit work new`, which copies this folder, names the new folder, and sets the real ID in front matter and heading; keep the file name WORK-ITEM.md. Use stable phase, task, requirement, and question IDs for this item. In the front matter, keep one value from each list and change the fields with `toolkit work` commands; a blocked item has `waiting_on` set and its Blockers line filled, not a Blocked status. Replace every angle-bracket prompt with actual text in that same field, cell, or paragraph; do not leave the prompt in place. Keep the headings and field labels. Add or remove phase, task, question, and requirement examples to match the real work. Use 
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-decide/references/current-focus.md'
+  -> <!-- Generated file. Source: plugins/memory/shared/current-focus.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# The current focus
+
+Purpose: the format of the current focus, when to change it, and the exact
+read-change-save sequence, in every memory backend.
+
+## Contents
+
+- What the focus is for
+- The format
+- What goes in each section
+- When to check it
+- Read, change, save
+- A new project's focus
+- Examples
+- Checklist for a focus save
+
+## What the focus is for
+
+The current focus is the first thing the next session reads: the session
+briefing includes it. It says what is happening now and where the next
+session starts. It never repeats the tracker: a work item's status, tasks,
+and history stay in the work item.
+
+| Backend | Where the focus lives |
+| --- | --- |
+| Built-in | `.memory/CURRENT_FOCUS.md` in the main checkout |
+| Hindsight | The document `focus` in the project's bank |
+| Notion | The "Current focus" page under the project's page |
+
+The same commands read and save it in every backend. Never edit the file or
+the page by hand.
+
+## The format
+
+The model's format: a `# Current focus` title line, a `Last updated:` line,
+then exactly four `##` sections in this order, under 50 lines in total.
+
+```markdown
+# Current focus
+
+Last updated: <YYYY-MM-DD>, <source>, <person or agent>
+
+## Now
+
+## Waiting on the owner
+
+## Untracked to-dos
+
+## Next session starts with
+```
+
+What the command enforces:
+
+- It refuses a focus that lacks one of the four se
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-decide/references/toolkit-commands.md'
+  -> <!-- Generated file. Source: plugins/toolkit/shared/toolkit-commands.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Running `toolkit` commands
+
+Purpose: how to run a `toolkit` command in Claude Code and in Codex, how to
+pass text in one, and what each exit code means. Every skill that runs a
+`toolkit` command follows this file.
+
+## Contents
+
+- Running toolkit commands
+- Text in a command
+- Exit codes
+- Reporting a save
+- Reading output and updating what you read
+- Right and wrong examples
+
+## Running toolkit commands
+
+- Put each `toolkit` command on its own line and run it as a plain command,
+  in both hosts. Do not join it to another command with `&&`, `;`, or a pipe,
+  and do not wrap it in `$(...)`, a loop, or a script. This holds for read
+  commands too: `toolkit work decisions && toolkit work show WI-001` is two
+  commands, run one after the other.
+- Why, in Codex: the project's command rule (`.codex/rules/toolkit.rules`)
+  runs a `toolkit` command outside the sandbox only when it is the whole
+  command. A `toolkit` command joined to anything else (`&&`, `;`, a pipe, a
+  heredoc, `cd ... &&`) or run from a script (for example Python's
+  `subprocess`) runs inside the Codex sandbox. The sandbox blocks Notion, the
+  local Hindsight server, and the main checkout's `.work-items/` and
+  `.memory/` from a worktree, so the command fails or reports the wrong
+  cause.
+- The one thing a Claude Code command may carry is its own text on standard
+  input
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show WI-001 --section 'Open Questions'"
+  -> ## Open Questions
+
+| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | How should the per-person share appear in the output, and how should a share that is not an exact cent be rounded? | R-02 | Open | owner |
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show WI-001 --section 'Acceptance'"
+  -> ### Acceptance
+
+This work item can be accepted when:
+
+1. With a bill of $50 and a 20% tip, the command prints exactly `Tip: $10.00  Total: $60.00` (R-01).
+2. With a split count of 3, the command shows each person’s share of the total in the format and rounding rule the owner approves (R-02).
+3. The owner reviews the tested result.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show WI-001 --section 'Active requirements'"
+  -> ### Active requirements
+
+#### R-01 — Show tip and total
+
+**Status:** Refining  
+**Applies to:** A person running the tip command with a bill amount and a tip percentage.  
+**Required behavior:** Calculate the tip from the bill amount and percentage, add it to the bill, and print the tip and total as dollar amounts with two decimal places. The tip and total appear on one line, with two spaces between them.  
+**Boundaries and exceptions:** None identified.  
+**Acceptance check:** Run `node bin/tipcalc.js 50 --percent 20`; the output is exactly `Tip: $10.00  Total: $60.00`.  
+**Decision record:** Owner request, 2026-09-28.  
+**Open questions:** None.
+
+#### R-02 — Divide the total between friends
+
+**Status:** Refining  
+**Applies to:** A person who includes a split count with the bill amount and tip percentage.  
+**Required behavior:** Divide the calculated total evenly by the split count and show each person’s share.  
+**Boundaries and exceptions:** The display format and rounding rule need the owner’s answer.  
+**Acceptance check:** Run the command with a split count of 3 and confirm it shows the per-person share; the exact output remains open.  
+**Decision record:** Owner request, 2026-09-28.  
+**Open questions:** Q-01.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history WI-001 --note 'Owner said: \"Yes, that is the goal. For --split, print a second line like \"Each person pays: "'$20.00". When the total does not divide evenly, round each share up to the next cent so nobody is short."'"' --effect 'Goal confirmed; Q-01 answered; update R-02 and check requirements.'"
+  -> 
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Agreed goal' --text 'Provide a terminal tip command that reports the tip and total for a restaurant bill and, when requested, shows each person’s share of the total.'"
+  -> 
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | How should the per-person share appear in the output, and how should a share that is not an exact cent be rounded? Answer: Print a second line like "'`Each person pays: $20.00`; round each share up to the next cent. Owner, 2026-09-28. | R-02 | Answered | owner |'"'"
+  -> Saved "Open Questions" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --waiting-on agent'
+  -> Updated WI-001: waiting on agent.
+Now 02 Refinement (Backlog). Continue with work-requirements.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Active requirements' --text '#### R-01 — Show tip and total
+
+**Status:** Refining  
+**Applies to:** A person running the tip command with a bill amount and a tip percentage.  
+**Required behavior:** Calculate the tip from the bill amount and percentage, add it to the bill, and print the tip and total as dollar amounts with two decimal places. The tip and total appear on one line, with two spaces between them.  
+**Boundaries and exceptions:** None identified.  
+**Acceptance check:** Run "'`node bin/tipcalc.js 50 --percent 20`; the output is exac
+  -> Saved "Active requirements" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Acceptance' --text 'This work item can be accepted when:
+
+1. With a bill of "'$50 and a 20% tip, the command prints exactly `Tip: $10.00  Total: $60.00` (R-01).
+2. With `--split 3` on that bill, it prints `Each person pays: $20.00` on a second line (R-02).
+3. With `--split 7` on that bill, it prints `Each person pays: $8.58` on a second line, rounding the share up to the next cent (R-02).
+4. The owner reviews the tested result.'"'"
+  -> Saved "Acceptance" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-requirements/references/agent-requirements-analyst.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-requirements/references/helpers.md'
+  -> ---
+name: requirements-analyst
+description: Checks a work item's requirements before design or build. Finds missing pieces, places not explicit end to end, wording a builder could misread, build details inside requirements, and drift from the Agreed goal. Returns ready or not ready with a fix for each finding. Read-only.
+tools: Read, Glob, Grep
+model: opus
+---
+<!-- Generated file. Source: plugins/work/agents/requirements-analyst.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+
+# Requirements analyst
+
+Read the requirements as one whole and say whether they are ready to design
+or build from. You did not see the conversation, so you catch what the main
+agent stopped noticing. You advise; the owner decides. You change nothing.
+
+## Start with the brief
+
+- The brief pastes in the Agreed goal, the Starting request, every `R-xx`
+  block, the Acceptance list, the open questions, and the owner's recorded
+  rulings. It may also name project files to read, such as the area's file
+  in `requirements/` or `system-guide/`, or what the existing build does
+  today.
+- Treat only rulings the brief marks as approved by the owner as settled.
+  Proposals and unanswered questions stay open. Everything else is open to
+  your check.
+- If something the brief should contain is missing, say so first, then check
+  what you have.
+
+## Check readiness
+
+Read the requirements inside the larger system the result belongs to. Walk
+the whole flow start to finish as the person who uses 
+
+[CMD exit=0] /bin/zsh -lc "rg --files requirements; toolkit work show WI-001 --section 'Requirements'"
+  -> requirements/AGENTS.md
+requirements/SYSTEM-DATA-MODEL.md
+requirements/system-area-template/AREA-TEMPLATE.md
+## Requirements
+
+<!-- Starting request records what was asked; Agreed goal records the outcome the owner accepted. Under Active requirements, create one R-ID subsection per explicit behavior. Fill every labeled field under each R-ID. Keep an item Refining until its required behavior and acceptance check are clear and owner approval is recorded; mark Superseded only with a replacement link. Put solution ideas in the final Notes subsection, not here. -->
+
+**Overall status:** Refining  
+**Finalization rule:** Mark the overall requirements Finalized only when the agreed goal, every active requirement, and acceptance have been reviewed and approved by the owner. Record who approved them and when.
+
+### Starting request
+
+I want the tip command built. When I run node bin/tipcalc.js 50 --percent 20 it should print "Tip: $10.00  Total: $60.00". I also want a --split option that divides the total between friends, like --split 3. Do not build anything until I approve the requirements.
+
+### Agreed goal
+
+Provide a terminal tip command that reports the tip and total for a restaurant bill and, when requested, shows each person’s share of the total.
+
+### Active requirements
+
+#### R-01 — Show tip and total
+
+**Status:** Refining  
+**Applies to:** A person running the tip command with a bill amount and a tip percentage.  
+**Required behavior:** Calculate the tip from the bill amount and pe
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Overview' --text '**Goal:** Provide a terminal tip command that reports the tip and total and can divide the total among friends.
+
+**Current position:** The owner confirmed the goal and answered the split display and rounding question. Requirements are being checked before approval. No application code has been built.
+
+**Next action:** Complete the requirements check, then ask the owner to approve the requirements.
+
+**Blockers:** Requirements approval is required before the build.
+
+**Related items:** None.'"
+  -> Saved "Overview" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Notes' --text '### Decisions and context
+
+- The owner confirmed the goal and settled Q-01 on 2026-09-28.
+
+### Resume here
+
+Complete the independent requirements check. If it finds no material gap, ask the owner to approve the requirements. Do not build before approval.
+
+### Solution options and considerations
+
+These are possibilities to evaluate, **not approved requirements or design decisions**.
+
+- The implementation should calculate money and upward share rounding without a floating point cent error.'"
+  -> Saved "Notes" in WI-001.
+
+
+[ITEM collab_tool_call ] {"id": "item_25", "type": "collab_tool_call", "tool": "wait", "sender_thread_id": "01a0eafa-3fa3-7702-bdcb-bf23655d8c60", "receiver_thread_ids": [], "prompt": null, "agents_states": {}, "status": "completed"}
+
+[AGENT] The independent check found one more money rule to settle before approval: how to round a tip that falls between cents, and whether the total uses that rounded tip. I’ll record it as the next question.
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history WI-001 --note 'Requirements check found that fractional-cent tip rounding and invalid-input behavior remain undefined.' --effect 'Resolve these questions before requesting requirements approval.'"
+  -> Added a Recent History row to WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | How should the per-person share appear in the output, and how should a share that is not an exact cent be rounded? Answer: Print a second line like "'`Each person pays: $20.00`; round each share up to the next cent. Owner, 2026-09-28. | R-02 | Answered | owner |
+| Q-02 | How should a tip with a fractional cent be rounded, and should Total use that rounded tip? Recommended: round Tip to the nearest cent, then add it to the bill for 
+  -> Saved "Open Questions" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --waiting-on owner'
+  -> Updated WI-001: waiting on owner.
+Now 02 Refinement (Backlog). Continue with work-decide.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | How should the per-person share appear in the output, and how should a share that is not an exact cent be rounded? Answer: Print a second line like "'`Each person pays: $20.00`; round each share up to the next cent. Owner, 2026-09-28. | R-02 | Answered | owner |
+| Q-02 | How should a tip with a fractional cent be rounded, and should Total use that rounded tip? Recommended: round Tip to the nearest cent, then add it to the bill for 
+  -> Saved "Open Questions" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Active requirements' --text '#### R-01 — Show tip and total
+
+**Status:** Refining  
+**Applies to:** A person running the tip command with a bill amount and a tip percentage.  
+**Required behavior:** Calculate the tip from the bill amount and percentage, add it to the bill, and print the tip and total as dollar amounts with two decimal places. The tip and total appear on one line, with two spaces between them.  
+**Boundaries and exceptions:** Fractional-cent tip rounding and invalid-input behavior remain open.  
+**Acceptance check:** Run "'`node
+  -> Saved "Active requirements" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Overview' --text '**Goal:** Provide a terminal tip command that reports the tip and total and can divide the total among friends.
+
+**Current position:** The owner confirmed the goal and answered the split display and rounding question. The requirements check found two remaining behavior questions. No application code has been built.
+
+**Next action:** Ask the owner Q-02 about fractional-cent tip rounding, then Q-03 about valid inputs, before requesting requirements approval.
+
+**Blockers:** Requirements approval is required before the build.
+
+**R
+  -> Saved "Overview" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Notes' --text '### Decisions and context
+
+- The owner confirmed the goal and settled Q-01 on 2026-09-28.
+- The independent requirements check found Q-02 and Q-03 on 2026-09-28.
+
+### Resume here
+
+Ask the owner Q-02, then Q-03, one at a time. Record each answer in the requirements and acceptance checks. Repeat the requirements check and request explicit approval. Do not build before approval.
+
+### Solution options and considerations
+
+These are possibilities to evaluate, **not approved requirements or design decisions**.
+
+- The implementation shou
+  -> Saved "Notes" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate WI-001'
+  -> Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. 2 open questions wait on the owner (toolkit work decisions lists them).
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 2 decisions wait on the owner:
+
+WI-001 Build the tip command
+  - Q-02: How should a tip with a fractional cent be rounded, and should Total use that rounded tip? Recommended: round Tip to the nearest cent, then add it to the bill for Total, so the displayed amounts add up. Affects R-01. (work-decide)
+  - Q-03: Which bill amounts, tip percentages, and split counts are valid, and what happens for invalid values? Recommended: accept nonnegative bill amounts and percentages, require a positive whole-number split count, and reject invalid values with an error, so division by zero and malformed input cannot produce a share. Affects R-01, R-02. (work-decide)
+
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.9/skills/memory-save/SKILL.md'
+  -> ---
+name: memory-save
+description: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says "remember this", "from now on", "forget that", or "remind me" with no time given, corrects the agent, or a hook says a save is due.'
+---
+
+# Memory save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Saves, corrects, or retires one fact in the project's memory with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand. Memory keeps one record per concept (for example `feedback_ways_of_working`, `project_billing`), with one `##` section per fact; an `event_` record holds one episode.
+
+## Steps
+
+Track these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home ("Where other things go" below) and stop.
+2. Find the concept it belongs in, and any section that already holds it. List the concepts of its type (title, summary, updated date), search, and read each likely concept whole, with its version. The save's duplicate check compares wording, so only this search finds a section the new fact contradicts (for example
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus --json'
+  -> {
+  "ok": true,
+  "backend": "builtin",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Build the tip command\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 from its Resume here: confirm the goal, settle Q-01, check the requirements, and request approval before building.\n",
+  "version": "e256d0984417d69beef6f41835caae76b395ff54ec06bcab150d7b04b174f467"
+}
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Build the tip command
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 from its Resume here: ask Q-02, then Q-03, check the requirements, and request approval before
+  -> Saved the current focus (20 lines). Version: 362a73cf4929
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Build the tip command
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 from its Resume here: ask Q-02, then Q-03, check the requirements, and request approval before building.
+
+
+[AGENT] I recorded your `--split` decision in WI-001: the share appears on a second line, and any fractional-cent share rounds up. The independent requirements check found two rules to settle before approval. The first is tip rounding.
+
+I recommend rounding the tip to the nearest cent, then adding that rounded tip to the bill so the printed amounts add up. **Should the command use that rule?**
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 1068929, "cached_input_tokens": 1016320, "cache_write_input_tokens": 0, "output_tokens": 5460, "reasoning_output_tokens": 637}}
+
+SKILLS OPENED: ['work-decide', 'work-requirements', 'memory-save']
+
+[HOOK CONTEXT ord=9] Project briefing: tipcalc (tipcalc), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The backlog has 1 item; toolkit work next suggests which to take up.
+
+Waiting on the owner:
+- WI-001 Build the tip command: Q-01: How should the per-person share appear in the output, and how should a share that is not an exact cent be rounded? Affects R-02. (work-decide)
+
+Items: 1 in the backlog.
+
+Current focus:
+Last updated: 2026-09-28, chat, agent
+## Now
+- WI-001 Build the tip command
+## Waiting on the owner
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops 
+
+[HOOK CONTEXT ord=79] This shell command joins a toolkit command to other commands (&&, ;, a pipe, a heredoc, or cd). In Codex that runs the toolkit command inside the sandbox, which blocks Notion, Hindsight, and the main checkout's .work-items/ and .memory/ from a worktree, so it may fail or report the wrong cause. Run each toolkit command alone, as its own command; pass section text with --text '<text>' in single quotes, instead of a file written in the same command. In Codex write an apostrophe inside that text as ’ (U+2019), or reword it; never '\''.
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/{humanize-outbound-text,keep-work-item-current,memory-review-and-save,plain-english-artifacts,session-handoff,shared-repository-work,work-item-folders}.md",max_output_tokens:12000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-decide/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-requirements/SKILL.md",max_output_tokens:12000}),
+  tools.exec_command({cmd:"rg --files .work-items; cat PROJECT-ROADMAP.md; git status --short",max_output_tokens:8000})
+]); for (let i=0;i<r.length;i++) text(`RESULT ${i}\n${r[i].status==="fulfilled"?r[i].value.output:r[i].reason}`);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "RESULT 0\n# tipcalc\n\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\n\n## Purpose and intended outcome\n\n- Purpose: tipcalc tells me the tip and the total for a restaurant bill, and can split the total between friends, straight from my terminal.\n- Intended outcome: tipcalc tells me the tip and the total for a restaurant bill, and can split the total between friends, straight from my terminal.\n\n## Scope and boundaries\n\n- In scope: tipcalc tells me the tip and the total for a restaurant bill, and can split the total between friends, straight from my terminal.\n- Outside scope: `<Important exclusions or adjacent owners.>`\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\n\n## Systems and environments\n\n| System or org | Purpose | Environment | Source of truth | Access notes |\n| --- | --- | --- | --- | --- |\n| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |\n\n## People and ownership\n\n| Role | Person or team | Responsibility | Source / last confirmed |\n| --- | --- | --- | --- |\n| Owner | Mike Rihm | Project decisions | Owner's setup answers, 2026-09-28 |\n\n## Work and project records\n\n- Work tracker: `.work-items/` in the main checkout (local folders, Git-ignored)\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\n- Project decisions: [DECISIONS.md](DECISIONS.md)\n- Functional requirements: [requirements/](requirements/)\n- Design home: `DESIGN.md` beside each local work item in `.work-items/`.\n- System Guide: disabled; `system-guide/` currently holds only the scaffold template.\n- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)\n- Memory backup or sync: `/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/closeout2-codex`; run `toolkit handoff-backup` to back up local work items and memory.\n\n## Resources and project paths\n\n- Tests and checks: No
+
+[CALL] const r=await Promise.allSettled([
+ tools.exec_command({cmd:"git worktree list; git status; git remote",max_output_tokens:3000}),
+ tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:3000}),
+ tools.exec_command({cmd:"toolkit work show WI-001",max_output_tokens:7000}),
+ tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-decide/references/{recording-owner-answers,work-item-format,current-focus,toolkit-commands}.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-requirements/references/{requirement-format,spec-check,approvals}.md",max_output_tokens:18000})
+]); for(let i=0;i<r.length;i++) text(`RESULT ${i}\n${r[i].status==="fulfilled"?r[i].value.output:r[i].reason}`);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.5 seconds\nOutput:\n"}, {"type": "input_text", "text": "Warning: truncated output (original token count: 16895)\nTotal output lines: 1472\n\nRESULT 0\n/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex b50508c [main]\nOn branch main\nnothing to commit, working tree clean\n\nRESULT 1\n1 decision waits on the owner:\n\nWI-001 Build the tip command\n  - Q-01: How should the per-person share appear in the output, and how should a share that is not an exact cent be rounded? Affects R-02. (work-decide)\n\nRESULT 2\nWI-001: Build the tip command\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/.work-items/WI-001-build-the-tip-command/WORK-ITEM.md\nStage: 02 Refinement (Backlog) | Waiting on: owner | Continue with: work-decide\nParent: none | Sub-items: none | Design: none\nWorktree branch for this item: claude/wi-001-build-the-tip-command (folder .claude/worktrees/wi-001-build-the-tip-command)\n\n---\nid: WI-001\ntitle: Build the tip command\ntype: build\nstage: 02-refinement\nstatus: Backlog\nparent: none\nwaiting_on: \"owner\"\npriority: medium\ndelivery: not-offered\nrequirements_approved: \"no\"\ndesign: none\nresult_approved: \"no\"\nupdated: 2026-09-28\n---\n\n# WI-001: Build the tip command\n\n<!-- Fill-in guide for a new local work item: create it with `toolkit work new`, which copies this folder, names the new folder, and sets the real ID in front matter and heading; keep the file name WORK-ITEM.md. Use stable phase, task, requirement, and question IDs for this item. In the front matter, keep one value from each list and change the fields with `toolkit work` commands; a blocked item has `waiting_on` set and its Blockers line filled, not a Blocked status. Replace every angle-bracket prompt with actual text in that same field, cell, or paragraph; do not leave the prompt in place. Keep the headings and field labels. Add or remove phase, task, question, and requirement examples to match the real work. Use the chosen tracker as the source of truth for status and links. Delete this guide after filling the item. -->\n\n## Overview\n\n**Goal:** Provide a terminal tip command that reports the tip and total and can divide the total among friends.\n\n**Current position:** The owner request and draft requ
+
+[CALL] const r=await Promise.allSettled([
+ tools.exec_command({cmd:"toolkit work show WI-001 --section 'Open Questions'",max_output_tokens:2000}),
+ tools.exec_command({cmd:"toolkit work show WI-001 --section 'Active requirements'",max_output_tokens:3500}),
+ tools.exec_command({cmd:"toolkit work show WI-001 --section 'Acceptance'",max_output_tokens:1500}),
+ tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-decide/references/current-focus.md",max_output_tokens:3000}),
+ tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-decide/references/toolkit-commands.md",max_output_tokens:4000})
+]);for(let i=0;i<r.length;i++)text(`RESULT ${i}\n${r[i].status==="fulfilled"?r[i].value.output:r[i].reason}`);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "RESULT 0\n## Open Questions\n\n| ID | Question | Affects | Status | Decision needed from |\n|---|---|---|---|---|\n| Q-01 | How should the per-person share appear in the output, and how should a share that is not an exact cent be rounded? | R-02 | Open | owner |\n"}, {"type": "input_text", "text": "RESULT 1\n### Active requirements\n\n#### R-01 \u2014 Show tip and total\n\n**Status:** Refining  \n**Applies to:** A person running the tip command with a bill amount and a tip percentage.  \n**Required behavior:** Calculate the tip from the bill amount and percentage, add it to the bill, and print the tip and total as dollar amounts with two decimal places. The tip and total appear on one line, with two spaces between them.  \n**Boundaries and exceptions:** None identified.  \n**Acceptance check:** Run `node bin/tipcalc.js 50 --percent 20`; the output is exactly `Tip: $10.00  Total: $60.00`.  \n**Decision record:** Owner request, 2026-09-28.  \n**Open questions:** None.\n\n#### R-02 \u2014 Divide the total between friends\n\n**Status:** Refining  \n**Applies to:** A person who includes a split count with the bill amount and tip percentage.  \n**Required behavior:** Divide the calculated total evenly by the split count and show each person\u2019s share.  \n**Boundaries and exceptions:** The display format and rounding rule need the owner\u2019s answer.  \n**Acceptance check:** Run the command with a split count of 3 and confirm it shows the per-person share; the exact output remains open.  \n**Decision record:** Owner request, 2026-09-28.  \n**Open questions:** Q-01.\n"}, {"type": "input_text", "text": "RESULT 2\n### Acceptance\n\nThis work item can be accepted when:\n\n1. With a bill of $50 and a 20% tip, the command prints exactly `Tip: $10.00  Total: $60.00` (R-01).\n2. With a split count of 3, the command shows each person\u2019s share of the total in the format and rounding rule the owner approves (R-02).\n3. The owner reviews the tested result.\n"}, {"type": "input_text", "text": "RESULT 3\n<!-- Generated file. Source: plugins/memory/shared/current-focus.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\n# The current focus\n\nPurpose: the format of the current focus, when to change it, and the exact\nread-change-save sequence, in every memory backend.\n\n## Contents\n\n- What the focus is for\n- The format\n- Wh
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history WI-001 --note 'Owner said: \"Yes, that is the goal. For --split, print a second line like \"Each person pays: $20.00\". When the total does not divide evenly, round each share up to the next cent so nobody is short.\"' --effect 'Goal confirmed; Q-01 answered; update R-02 and check requirements.'",max_output_tokens:1500});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Added a Recent History row to WI-001.\n"}]
+
+[CALL] const cmds=[
+"toolkit work edit WI-001 --section 'Agreed goal' --text 'Provide a terminal tip command that reports the tip and total for a restaurant bill and, when requested, shows each person’s share of the total.'",
+"toolkit work edit WI-001 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |\n|---|---|---|---|---|\n| Q-01 | How should the per-person share appear in the output, and how should a share that is not an exact cent be rounded? Answer: Print a second line like `Each person pays: $20.00`; round each share up to the next cent. Owner, 2026-09-28. | R-02 | Answered | owner |'",
+"toolkit work set WI-001 --waiting-on agent"
+];for(const cmd of cmds){const r=await tools.exec_command({cmd,max_output_tokens:1500});text(r.output);if(r.exit_code!==0)break;}
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Agreed goal\" in WI-001.\n"}, {"type": "input_text", "text": "Saved \"Open Questions\" in WI-001.\n"}, {"type": "input_text", "text": "Updated WI-001: waiting on agent.\nNow 02 Refinement (Backlog). Continue with work-requirements.\n"}]
+
+[CALL] const cmd="toolkit work edit WI-001 --section 'Active requirements' --text '#### R-01 — Show tip and total\n\n**Status:** Refining  \n**Applies to:** A person running the tip command with a bill amount and a tip percentage.  \n**Required behavior:** Calculate the tip from the bill amount and percentage, add it to the bill, and print the tip and total as dollar amounts with two decimal places. The tip and total appear on one line, with two spaces between them.  \n**Boundaries and exceptions:** None identified.  \n**Acceptance check:** Run `node bin/tipcalc.js 50 --percent 20`; the output is exactly `Tip: $10.00  Total: $60.00`.  \n**Decision record:** Owner request, 2026-09-28.  \n**Open questions:** None.\n\n#### R-02 — Divide the total between friends\n\n**Status:** Refining  \n**Applies to:** A person who includes a split count with the bill amount and tip percentage.  \n**Required behavior:** Divide the calculated total by the split count. Print the tip and total on the first line, then print each share on a second line in the form `Each person pays: $20.00`. Round each share up to the next cent when the division is not exact to a cent.  \n**Boundaries and exceptions:** Each displayed share must cover at least one equal share of the total; the sum of displayed shares may exceed the total by the rounding difference.  \n**Acceptance check:** With a $50 bill, 20% tip, and split count of 3, the second line is `Each person pays: $20.00`. With the same bill and tip split among 7
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Active requirements\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Acceptance' --text 'This work item can be accepted when:\n\n1. With a bill of $50 and a 20% tip, the command prints exactly `Tip: $10.00  Total: $60.00` (R-01).\n2. With `--split 3` on that bill, it prints `Each person pays: $20.00` on a second line (R-02).\n3. With `--split 7` on that bill, it prints `Each person pays: $8.58` on a second line, rounding the share up to the next cent (R-02).\n4. The owner reviews the tested result.'",max_output_tokens:1500});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Acceptance\" in WI-001.\n"}]
+
+[CALL] const r=await Promise.allSettled([
+ tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-requirements/references/agent-requirements-analyst.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-requirements/references/helpers.md",max_output_tokens:8000}),
+ tools.exec_command({cmd:"rg --files requirements; toolkit work show WI-001 --section 'Requirements'",max_output_tokens:6000})
+]);for(let i=0;i<r.length;i++)text(`RESULT ${i}\n${r[i].status==="fulfilled"?r[i].value.output:r[i].reason}`);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "RESULT 0\n---\nname: requirements-analyst\ndescription: Checks a work item's requirements before design or build. Finds missing pieces, places not explicit end to end, wording a builder could misread, build details inside requirements, and drift from the Agreed goal. Returns ready or not ready with a fix for each finding. Read-only.\ntools: Read, Glob, Grep\nmodel: opus\n---\n<!-- Generated file. Source: plugins/work/agents/requirements-analyst.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\n\n# Requirements analyst\n\nRead the requirements as one whole and say whether they are ready to design\nor build from. You did not see the conversation, so you catch what the main\nagent stopped noticing. You advise; the owner decides. You change nothing.\n\n## Start with the brief\n\n- The brief pastes in the Agreed goal, the Starting request, every `R-xx`\n  block, the Acceptance list, the open questions, and the owner's recorded\n  rulings. It may also name project files to read, such as the area's file\n  in `requirements/` or `system-guide/`, or what the existing build does\n  today.\n- Treat only rulings the brief marks as approved by the owner as settled.\n  Proposals and unanswered questions stay open. Everything else is open to\n  your check.\n- If something the brief should contain is missing, say so first, then check\n  what you have.\n\n## Check readiness\n\nRead the requirements inside the larger system the result belongs to. Walk\nthe whole flow start to finish as the person who uses the result. Then report:\n\n- **Ready or not ready.** Say plainly whether these requirements describe a\n  complete, well-thought-out result in the context of the system it is part\n  of. List what is still unclear. Use no score.\n- **Missing.** Each step, person, error case, state, boundary with another\n  system, rule for what happens after, or way to tell it worked, without\n  which the goal cannot be met. One line each, with the fix.\n- **Not explicit end to end.** Each requirement where a reader who was not in\n  the conversation cannot say who does what, when, with what result, and what\n  happens when it fails. Quote the wording and propose wording that makes it\n  explicit.\n- **Misreading risks.** Each place a builder could take the wording too\n  literally, read it out of context, or read it two ways and build the wrong
+
+[CALL] {"task_name":"spec_check","fork_turns":"none","message":"gAAAAABquyGopuRv_WI1CixfgEcQaNti-73Qa5Br5TYeqiRLFJYSvnaDbxEBFiRUjSoMciaks1q0M_D6cjZsv3O7AXHVuYcRzk9tleTsRPq4YC4G1Ut810r1My-LfDVMcqwmZoSLwH9Kxp3P6mL-_2my57yvK3B5fdDqBjgV-qyC0y9ALpgQ2dj3PQmJDnPn9WaNvyRCAgPzO4mxyKeNxfR8K_2IVYgc8sccD4y4zg9wYyytMEfhaB9Ky9IOGkGhkTU5ySc0hghpyjG3RIOoaGlkEuck-pRonQgqsz3lYMdZPbTaixA80uOdqM8lDGCrrU-qBB-digpa6ZD5VNIGpKD0YcG3LosoCoJ-l8j2INt0IUYVt-qlVrCB57Q6ulDbVUk1Sbp6OPO3ttKcYVu-Hdw6e9FkMMEl4Pxyk97YVtIDkcEQHM0bTvjs0nngUDFciIlsP2km0RVME7pw2zPIb1MIzhNMOp94se7L92iP67Hc1sWtnK6TiMlDm7g72Asokco21HXFGyX7-VE8NbhTYW2vVjC2HaMQ6EP0U6hiScfTpqhDFIVHtEz6DXj0S0kTtIZrwABqeu2WDA0TAMG8aG3BJ_4hmKW2OAQ5lW0UWf910u8YZ1DDQxckWPzkb4xzZX0cppZ38ltws_2TY3M0rhf2Bqx6lopx8Nd0in9C49ASu8MdkuKAF27hrKRokg9zzvSLVr3Posg_fUoNg1l6vFcktUjd6fmriO2M5g7zII8wEzCAM1lWXY1EnJu5wxqw7bbrWvoH34ps62_mNeIultsObJ01uzKZC76DUM6nkx6xojDJ35SbYRnWweGSxCUQLaNEewpDI5h0qFlywNyvSy-WPSfanV5fCDRVomghcvLgvee1kc6jIL9AFrz8gEpG-0Iu71PaGUqh2ki01L5rTkLbAgarP98PgIiRFGLQ18hYF3aFYAY9XavkN7sovZmOXWgx2yaorh38IdTukUpBQRwusmh8JFaxsrhx_8nCxpGD9BflXPgYaEnyUs1HZpOy2jqGylhM1WrlYAheJdJS6ypGzaAIzT81PELFInqS7ltgwm4SNzGyssvC8yLXb2AGBjJXvLAwDMxogNDOCJluGyP44e2vLxhf43Yb0CZZNBsd9Mt3GC9PkLS_HJPVWHxb5T-6XbSZK1ppkz_d318u5TGExHXfKadozezkiY-_-lYiFz36cLve_SWpwEW-ffpCSgXZQiUrccSaYotOZHNsjPJ-sDeoF9AwNQsgId9NSZzALGUl4QRKisgLZZ3t3U-9yfFG1xdDAQUcKUlXdSgzBPiZ4pMlbYQQzX9LoL6WPb5p6D_O7tYxVkBa_dX2P1E7FlD5vdAYgNMGXwJ6whQN8xAMTi6UwKo_mPMtwAlrxSsYTq3yAx4B5PFopnvw09TX0ArWO3KrIxco74GWJ0eYUe_VqY_pHh7Nic5
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Overview' --text '**Goal:** Provide a terminal tip command that reports the tip and total and can divide the total among friends.\n\n**Current position:** The owner confirmed the goal and answered the split display and rounding question. Requirements are being checked before approval. No application code has been built.\n\n**Next action:** Complete the requirements check, then ask the owner to approve the requirements.\n\n**Blockers:** Requirements approval is required before the build.\n\n**Related items:** None.'",max_output_tokens:1500});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Overview\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Notes' --text '### Decisions and context\n\n- The owner confirmed the goal and settled Q-01 on 2026-09-28.\n\n### Resume here\n\nComplete the independent requirements check. If it finds no material gap, ask the owner to approve the requirements. Do not build before approval.\n\n### Solution options and considerations\n\nThese are possibilities to evaluate, **not approved requirements or design decisions**.\n\n- The implementation should calculate money and upward share rounding without a floating point cent error.'",max_output_tokens:1500});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Notes\" in WI-001.\n"}]
+
+[CALL] {"timeout_ms":30000}
+
+[CALL] const cmds=[
+"toolkit work history WI-001 --note 'Requirements check found that fractional-cent tip rounding and invalid-input behavior remain undefined.' --effect 'Resolve these questions before requesting requirements approval.'",
+"toolkit work edit WI-001 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |\n|---|---|---|---|---|\n| Q-01 | How should the per-person share appear in the output, and how should a share that is not an exact cent be rounded? Answer: Print a second line like `Each person pays: $20.00`; round each share up to the next cent. Owner, 2026-09-28. | R-02 | Answered | owner |\n| Q-02 | How should a tip with a fractional cent be rounded, and should Total use that rounded tip? Recommended: round Tip to the nearest cent, then add it to the bill for Total, so the displayed amounts add up. | R-01 | Open | owner |'",
+"toolkit work set WI-001 --waiting-on owner"
+];for(const cmd of cmds){const r=await tools.exec_command({cmd,max_output_tokens:1500});text(r.output);if(r.exit_code!==0)break;}
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.8 seconds\nOutput:\n"}, {"type": "input_text", "text": "Added a Recent History row to WI-001.\n"}, {"type": "input_text", "text": "Saved \"Open Questions\" in WI-001.\n"}, {"type": "input_text", "text": "Updated WI-001: waiting on owner.\nNow 02 Refinement (Backlog). Continue with work-decide.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |\n|---|---|---|---|---|\n| Q-01 | How should the per-person share appear in the output, and how should a share that is not an exact cent be rounded? Answer: Print a second line like `Each person pays: $20.00`; round each share up to the next cent. Owner, 2026-09-28. | R-02 | Answered | owner |\n| Q-02 | How should a tip with a fractional cent be rounded, and should Total use that rounded tip? Recommended: round Tip to the nearest cent, then add it to the bill for Total, so the displayed amounts add up. | R-01 | Open | owner |\n| Q-03 | Which bill amounts, tip percentages, and split counts are valid, and what happens for invalid values? Recommended: accept nonnegative bill amounts and percentages, require a positive whole-number split count, and reject invalid values with an error, so division by zero and malformed input cannot produce a share. | R-01, R-02 | Open | owner |'",max_output_tokens:1500});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Open Questions\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Active requirements' --text '#### R-01 — Show tip and total\n\n**Status:** Refining  \n**Applies to:** A person running the tip command with a bill amount and a tip percentage.  \n**Required behavior:** Calculate the tip from the bill amount and percentage, add it to the bill, and print the tip and total as dollar amounts with two decimal places. The tip and total appear on one line, with two spaces between them.  \n**Boundaries and exceptions:** Fractional-cent tip rounding and invalid-input behavior remain open.  \n**Acceptance check:** Run `node bin/tipcalc.js 50 --percent 20`; the output is exactly `Tip: $10.00  Total: $60.00`.  \n**Decision record:** Owner request, 2026-09-28.  \n**Open questions:** Q-02, Q-03.\n\n#### R-02 — Divide the total between friends\n\n**Status:** Refining  \n**Applies to:** A person who includes `--split` and a split count with the bill amount and tip percentage.  \n**Required behavior:** Divide the calculated total by the split count. Print the tip and total on the first line, then print each share on a second line in the form `Each person pays: $20.00`. Round each share up to the next cent when the division is not exact to a cent.  \n**Boundaries and exceptions:** Each displayed share must cover at least one equal share of the total; the sum of displayed shares may exceed the total by the rounding difference. Valid split counts and invalid-input behavior remain open.  
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Active requirements\" in WI-001.\n"}]
+
+[CALL] const cmds=[
+"toolkit work edit WI-001 --section 'Overview' --text '**Goal:** Provide a terminal tip command that reports the tip and total and can divide the total among friends.\n\n**Current position:** The owner confirmed the goal and answered the split display and rounding question. The requirements check found two remaining behavior questions. No application code has been built.\n\n**Next action:** Ask the owner Q-02 about fractional-cent tip rounding, then Q-03 about valid inputs, before requesting requirements approval.\n\n**Blockers:** Requirements approval is required before the build.\n\n**Related items:** None.'",
+"toolkit work edit WI-001 --section 'Notes' --text '### Decisions and context\n\n- The owner confirmed the goal and settled Q-01 on 2026-09-28.\n- The independent requirements check found Q-02 and Q-03 on 2026-09-28.\n\n### Resume here\n\nAsk the owner Q-02, then Q-03, one at a time. Record each answer in the requirements and acceptance checks. Repeat the requirements check and request explicit approval. Do not build before approval.\n\n### Solution options and considerations\n\nThese are possibilities to evaluate, **not approved requirements or design decisions**.\n\n- The implementation should calculate money and upward share rounding without a floating point cent error.'",
+"toolkit work validate WI-001",
+"toolkit work decisions"
+];for(const cmd of cmds){const r=await tools.exec_command({cmd,max_output_tokens:2000});text(r.output);if(r.exit_code!==0)bre
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.0 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Overview\" in WI-001.\n"}, {"type": "input_text", "text": "Saved \"Notes\" in WI-001.\n"}, {"type": "input_text", "text": "Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. 2 open questions wait on the owner (toolkit work decisions lists them).\n"}, {"type": "input_text", "text": "2 decisions wait on the owner:\n\nWI-001 Build the tip command\n  - Q-02: How should a tip with a fractional cent be rounded, and should Total use that rounded tip? Recommended: round Tip to the nearest cent, then add it to the bill for Total, so the displayed amounts add up. Affects R-01. (work-decide)\n  - Q-03: Which bill amounts, tip percentages, and split counts are valid, and what happens for invalid values? Recommended: accept nonnegative bill amounts and percentages, require a positive whole-number split count, and reject invalid values with an error, so division by zero and malformed input cannot produce a share. Affects R-01, R-02. (work-decide)\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.9/skills/memory-save/SKILL.md",max_output_tokens:9000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "---\nname: memory-save\ndescription: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says \"remember this\", \"from now on\", \"forget that\", or \"remind me\" with no time given, corrects the agent, or a hook says a save is due.'\n---\n\n# Memory save\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nSaves, corrects, or retires one fact in the project's memory with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand. Memory keeps one record per concept (for example `feedback_ways_of_working`, `project_billing`), with one `##` section per fact; an `event_` record holds one episode.\n\n## Steps\n\nTrack these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.\n\n1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home (\"Where other things go\" below) and stop.\n2. Find the concept it belongs in, and any section that already holds it. List the concepts of its type (title, summary, updated date), search, and read each likely concept whole, with its version. The save's duplicate check compares wording, so only this search finds a section the new fact contradicts (for example \"Mondays\" against \"Tuesdays\").\n   `toolkit memory list --type <type>`\n   `toolkit memory find '<topic>'`\n   `toolkit memory get <key> --json`\n3. Read the approval mode and apply \"Approval policy\" below. When it says ask, ask and wait.\n   `toolkit config get memory.approval`\n4. Pick where it goes (\"Choosing the concept\" below), write the section text in the record format (`references/record-format.md`), and save with the form for the case (\"Save forms\" below).\n5. Exit code 2 saved nothing. Read the \"Error:\" line. \"Belongs in the concept <key>\": add it there with the command the \"Fix:\" line prints, or, when it is a different concept, save again with `--new-concept`. Records listed: the duplicate check. \"Changed since it was read\": read it again and redo the change. Any other rule: fix the text as the message says. `ref
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --json",max_output_tokens:2500});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\n  \"ok\": true,\n  \"backend\": \"builtin\",\n  \"kind\": \"focus\",\n  \"text\": \"# Current focus\\n\\nLast updated: 2026-09-28, chat, agent\\n\\n## Now\\n\\n- WI-001 Build the tip command\\n\\n## Waiting on the owner\\n\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\n\\n## Untracked to-dos\\n\\nNone.\\n\\n## Next session starts with\\n\\n- Continue WI-001 from its Resume here: confirm the goal, settle Q-01, check the requirements, and request approval before building.\\n\",\n  \"version\": \"e256d0984417d69beef6f41835caae76b395ff54ec06bcab150d7b04b174f467\"\n}\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --text '# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Build the tip command\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 from its Resume here: ask Q-02, then Q-03, check the requirements, and request approval before building.' --expect e256d0984417d69beef6f41835caae76b395ff54ec06bcab150d7b04b174f467",max_output_tokens:1500});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved the current focus (20 lines). Version: 362a73cf4929\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus",max_output_tokens:1500});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Build the tip command\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 from its Resume here: ask Q-02, then Q-03, check the requirements, and request approval before building.\n"}]

@@ -16,8 +16,9 @@ Track these steps in the host's plan tool (Claude Code: the task list; Codex: `u
    `toolkit memory focus`
 2. Search memory with the owner's words, then with the real names (component, setting, work item id).
    `toolkit memory find '<query>'`
-3. Read every hit before using it, and check its status, dates, and scope (`references/record-format.md`). Hindsight sorts hits into three groups, and only the first group can give an answer (`references/memory-hindsight.md`).
+3. Read the whole concept record of every hit before using it: a record holds one concept, with one `##` section per fact, and the hit shows only the part that matched. Check its status, its `updated` date, and each section's evidence and scope (`references/record-format.md`). Hindsight sorts hits into three groups, and only the first group can give an answer (`references/memory-hindsight.md`). No hit: list every concept's title and summary, and open the one whose subject fits.
    `toolkit memory get <key>`
+   `toolkit memory list`
 4. Not found yet: search retired records and proposals too. A retired record shows what used to be true; a proposal is never a fact (`references/proposals.md`).
    `toolkit memory find '<query>' --all`
 5. Search the other homes ("Other homes" below), and the glossary:
@@ -33,7 +34,7 @@ Track these steps in the host's plan tool (Claude Code: the task list; Codex: `u
 
 ## Gotchas
 
-- A search hit is a pointer, not an answer. Read the record; its text is what you cite.
+- A search hit is a pointer, not an answer. Read the whole concept; the section that says it is what you cite. Other sections of the same concept often hold the related facts the owner means.
 - Hindsight results marked "may be about it" or "closest" are not answers. Answer only when the record's text says it; otherwise say it is not in memory.
 - `--reflect` (Hindsight) gives "a summary, not a source". Cite the records it used, after reading them.
 - A proposal (`needs-review`, "Proposed by the agent") is not a fact. Say it is unapproved, or leave it out.
@@ -60,8 +61,8 @@ Track these steps in the host's plan tool (Claude Code: the task list; Codex: `u
 Lead with the answer, then the source in parentheses. Say how sure it is when the source is old or indirect, and quote the owner's recorded words when the exact words matter.
 
 - "Postgres, everywhere (DECISIONS.md D-4, 2026-09-12)."
-- "Deploys happen on Tuesdays after 6 pm (memory `project_deploy_window`, the owner, 2026-09-28). An older record said Mondays; it is superseded."
-- Two sources disagree: "Two records disagree. Memory `project_api_rate_limit` says 100 requests a minute (the owner, 2026-09-10). WI-014's Notes say 60 (2026-09-22), which is newer. I have left both as they are. Should I correct memory to 60?"
+- "Deploys happen on Tuesdays after 6 pm (memory `project_deploys`, section "Deploy window", the owner, 2026-09-28). The section said Mondays before that change."
+- Two sources disagree: "Two records disagree. Memory `project_api`, section "Rate limit", says 100 requests a minute (the owner, 2026-09-10). WI-014's Notes say 60 (2026-09-22), which is newer. I have left both as they are. Should I correct memory to 60?"
 - Nothing found: "I don't know; nothing recorded says which payment provider we chose. Which one did you pick?"
 
 ## Not this skill

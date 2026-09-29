@@ -208,9 +208,13 @@ Run the Done checklist in `approvals.md` first. Then:
 - The finish command then backs up `.work-items/` and `.memory/` (and
   Hindsight memory) to the owner's backup folder, and prints one line about
   it. Read that line:
+  - "No automatic backup: this project keeps its work items and memory in
+    Notion ...": Notion keeps each page's history and keeps deleted pages in
+    its trash, so no backup folder is needed (the owner's decision of
+    2026-09-28). Say nothing about backups unless he asks.
   - "No automatic backup: this project keeps its work items and memory
-    outside this computer ...": a Notion tracker with Notion memory. Nothing
-    is copied; say so in one line when the owner set a backup folder.
+    outside this computer ...": nothing is copied; say so in one line when
+    the owner set a backup folder.
   - "Backed up ... to <folder>": say it in one line in the reply.
   - "No backup folder is set ...": ask the owner for a folder outside the
     project, as the one question of the reply. After his answer:

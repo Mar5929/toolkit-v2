@@ -73,7 +73,9 @@ test('the delivery offer is an agent to-do, listed only from stage 03 to 07, and
   await newItem(dir, 'Asked part', ['--parent', asked]);
   await tk(dir, ['work', 'edit', asked, '--section', 'Open Questions', '--append-row', 'Q-01 | Shall a team of agents deliver this (agent-led delivery)? | P1 | Open | owner']);
   const r = await tk(dir, ['work', 'decisions', '--json']);
-  assert.deepEqual(r.json.agentTodos.map((t) => t.id), [big]);
+  assert.deepEqual(r.json.agentTodos.filter((t) => t.kind === 'delivery_offer').map((t) => t.id), [big]);
+  // The item at 11 has no acceptance check recorded: that is its own to-do (the owner's decision of 2026-09-28).
+  assert.deepEqual(r.json.agentTodos.filter((t) => t.kind === 'acceptance_check').map((t) => t.id), [late]);
   assert.ok(!r.json.decisions.some((d) => d.kind === 'delivery_offer'));
   const text = await tk(dir, ['work', 'decisions']);
   assert.match(text.stdout, /Agent to-do \(the agent's step, not a decision the owner is waiting on\):\n {2}- Make the agent-led delivery offer for WI-001/);

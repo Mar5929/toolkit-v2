@@ -307,6 +307,25 @@ export const GIT_REASONS = Object.freeze({
 });
 
 /**
+ * The paths a recursive rm (rm -r, -R, --recursive) in a command line deletes,
+ * as written (final re-review R-M10).
+ */
+export function recursiveRemovePaths(line) {
+  const out = [];
+  for (const words of allCommands(line)) {
+    const w = stripPrefix(words);
+    if (!w.length || base(w[0]) !== 'rm') continue;
+    const args = w.slice(1);
+    const dash = args.indexOf('--');
+    const before = dash >= 0 ? args.slice(0, dash) : args;
+    const recursive = before.some((o) => o === '--recursive' || /[rR]/.test(shortLetters(o)));
+    if (!recursive) continue;
+    out.push(...before.filter((a) => !a.startsWith('-')), ...(dash >= 0 ? args.slice(dash + 1) : []));
+  }
+  return out;
+}
+
+/**
  * Check one command line against the git rules (the model project's settings
  * deny list, and the git clean guard). Returns { rule, reason } or null.
  * opts.mainCheckout: the command runs in the main checkout (git clean -x applies);
@@ -352,7 +371,7 @@ export function checkGit(line, { mainCheckout = true, guardClean = true } = {}) 
 
 // ------------------------------------------------------------------ toolkit commands
 
-export const MEMORY_WRITES = Object.freeze(['save', 'approve', 'reject', 'retire', 'restore', 'rename', 'delete', 'import']);
+export const MEMORY_WRITES = Object.freeze(['save', 'approve', 'reject', 'retire', 'restore', 'rename', 'delete', 'merge', 'split', 'import']);
 export const WORK_WRITES = Object.freeze(['new', 'edit', 'set', 'approve', 'design', 'history', 'move', 'finish', 'cancel']);
 
 /**
@@ -389,7 +408,7 @@ export function recordKind(cmd) {
 // ------------------------------------------------------------------ AI credit
 
 // No AI credit on anything committed or pushed (AGENTS.md; sample run
-// claude-a found "Co-Authored-By: Claude ..." on four of five commits).
+// claude-a found an AI co-author trailer on four of five commits).
 const AI_NAMES = /(claude|anthropic|openai|chatgpt|\bgpt\b|\bgpt-|codex|copilot|gemini|cursor|devin|aider)/i;
 const AI_WORDS = /(claude|anthropic|openai|chatgpt|\bgpt\b|\bgpt-|codex|copilot|gemini|cursor|devin|aider|\bai\b|\bllm\b|artificial intelligence)/i;
 

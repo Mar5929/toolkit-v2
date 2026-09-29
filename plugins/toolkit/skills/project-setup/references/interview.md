@@ -118,15 +118,20 @@ no later sync brings it back. A yes: fill it with his words after init
 ## Question 6: the backup folder
 
 `.work-items/` (local tracker), `.memory/` (built-in memory), and Hindsight
-memory exist only on this computer. Ask where their automatic backups go:
+memory exist only on this computer. Ask where their automatic backups go.
+
+With a Notion tracker and Notion memory, skip this question (the owner's
+decision of 2026-09-28) and say why in one line:
+
+> No backup folder is needed: your work items and memory live in Notion, which keeps each page's history and keeps deleted pages in its trash.
+
+Then run init without `--backup-dir`. Otherwise ask:
 
 > Where should backups of the work items and memory go? I recommend `~/Backups/toolkit`: one folder outside every project, which your computer's own backup already covers. Each project gets its own dated folder inside it.
 
 - The answer goes to init as `--backup-dir <folder>`: a full path starting
   with `/` or `~/`, outside the project. Init refuses a folder inside it.
 - "No backups" goes to init as `--backup-dir none`.
-- With a Notion tracker and Notion memory, nothing lives only on this
-  computer: skip this question.
 
 With the folder set, `toolkit work finish` and every handoff back up by
 themselves.

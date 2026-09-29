@@ -6,21 +6,22 @@ description: 'Saves, corrects, or forgets one lasting fact in the project''s mem
 # Memory save
 
 Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
-Saves, corrects, or retires one memory record with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand.
+Saves, corrects, or retires one fact in the project's memory with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand. Memory keeps one record per concept (for example `feedback_ways_of_working`, `project_billing`), with one `##` section per fact; an `event_` record holds one episode.
 
 ## Steps
 
 Track these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
 
 1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home ("Where other things go" below) and stop.
-2. Search for a record that already holds it, and read each hit with its version. The save's duplicate check compares wording, so only this search finds a record the new fact contradicts (for example "Mondays" against "Tuesdays").
+2. Find the concept it belongs in, and any section that already holds it. List the concepts of its type (title, summary, updated date), search, and read each likely concept whole, with its version. The save's duplicate check compares wording, so only this search finds a section the new fact contradicts (for example "Mondays" against "Tuesdays").
+   `toolkit memory list --type <type>`
    `toolkit memory find '<topic>'`
    `toolkit memory get <key> --json`
 3. Read the approval mode and apply "Approval policy" below. When it says ask, ask and wait.
    `toolkit config get memory.approval`
-4. Write the description and body in the record format (`references/record-format.md`), then save with the form for the case ("Save forms" below).
-5. Exit code 2 saved nothing. Read the "Error:" line. Records listed: the duplicate check. "Changed since it was read": read it again and redo the change. Any other rule: fix the text as the message says. `references/replacing-and-retiring.md`, section 2, has each case.
-6. "Forget that": retire the record, with his words as the reason. Delete only when his own words say delete ("Approval policy").
+4. Pick where it goes ("Choosing the concept" below), write the section text in the record format (`references/record-format.md`), and save with the form for the case ("Save forms" below).
+5. Exit code 2 saved nothing. Read the "Error:" line. "Belongs in the concept <key>": add it there with the command the "Fix:" line prints, or, when it is a different concept, save again with `--new-concept`. Records listed: the duplicate check. "Changed since it was read": read it again and redo the change. Any other rule: fix the text as the message says. `references/replacing-and-retiring.md`, section 2, has each case.
+6. "Forget that" right after a section save: run the "Undo:" command the save printed (it removes that section). About a whole concept: retire it, with his words as the reason. Delete only when his own words say delete ("Approval policy").
    `toolkit memory retire <key> --reason '<his words>'`
 7. An owner to-do with no work item, or a change to what is happening now: update the current focus (`references/current-focus.md`). A project term: update the glossary (`references/glossary.md`).
 8. A preference a project setting can enforce (for example "I hate tabs" and `.editorconfig`): save it, then offer that change too.
@@ -41,25 +42,41 @@ This is the only written copy of the memory approval policy.
 - A delete needs his own words about that record ("delete it", "remove it for good"), or his yes to a numbered list that shows the delete. Do not ask again: the host asks him to confirm `toolkit memory delete`, and that prompt is the confirmation. "Forget that" is a retire, never a delete.
 - A yes covers only the change and the meaning shown. Silence is never a yes.
 - `--approved-by` is only for a change his words or his yes covered. Give his name exactly as the project settings hold it (`project.owner`, for example "Mike Rihm", not "Mike").
+- A concept's `authorization` line is the approval of the concept. A section save never changes it; when the save's approval differs, the CLI records it on that section's Evidence and limits line (`references/record-format.md`, "Frontmatter").
 - An unanswered "Save to memory?" stays a proposal until he answers (`references/proposals.md`). Never drop it, and never save it with an approver.
 - Only the owner switches the mode, in his own words ("you can save routine things without asking me"). Save his words as a `feedback` record with the date, then run one of:
   `toolkit config set memory.approval trusted`
   `toolkit config set memory.approval onboarding`
 
+## Choosing the concept
+
+- One concept is one subject a future session would look up as a whole: how he wants the agent to work (`feedback_ways_of_working`), the billing setup (`project_billing`), his role and habits (`user_profile`), where dashboards live (`reference_dashboards`).
+- The fact has the concept's type. Add it to the existing concept of that type whose title and summary cover it, as a new section. The heading names the sub-topic in a few words ("Force-push", "Refund window").
+- The concept already has a heading for this sub-topic: add under it with `--append`. The fact corrects what a section says: replace that section with `--expect`.
+- No concept of that type covers it: start a new one. Its slug and title name the concept, not the fact (`project_billing`, not `project_invoices_go_out_on_the_1st`), and its summary says what the whole concept covers.
+- An event is always its own record: one episode per `event_` record.
+- Two concepts fit: pick the one a future session would open first, and link the other from the section's **Related memories** line.
+
 ## Save forms
 
 `<file>` is `-` in Claude Code, with the body on standard input after a quoted heredoc (`<<'EOF'`). In Codex give `--body '<text>'` in place of `--body-file <file>`. `references/record-format.md` shows both.
 
-- A new record, from the owner's words or his yes:
-  `toolkit memory save --type <type> --name <slug> --description '<one line>' --body-file <file> --source '<person or document>, <YYYY-MM-DD>' --approved-by <owner>`
-- A new routine fact in `trusted` mode:
-  `toolkit memory save --type <type> --name <slug> --description '<one line>' --body-file <file> --source '<person or document>, <YYYY-MM-DD>'`
-- A question he has not answered yet:
-  `toolkit memory save --type <type> --name <slug> --description '<one line>' --body-file <file> --source '<person or document>, <YYYY-MM-DD>' --proposal`
-- An update of a record read in step 2, which his words or his yes covered:
+The section text (`<file>`) is the labels only: no `# ` title and no `##` heading; `--section` gives the heading.
+
+- A new fact for an existing concept, from the owner's words or his yes:
+  `toolkit memory save --concept <key> --section '<heading>' --body-file <file> --source '<person or document>, <YYYY-MM-DD>' --approved-by <owner>`
+- A new concept, with its first fact:
+  `toolkit memory save --type <type> --name <concept-slug> --description '<one-line summary of the concept>' --section '<heading>' --body-file <file> --source '<person or document>, <YYYY-MM-DD>' --approved-by <owner>`
+- In `trusted` mode, a routine fact the agent is sure of: either form without `--approved-by`.
+- A question he has not answered yet: either form with `--proposal` in place of `--approved-by`. With `--concept`, `--description` is the fact in one line; the concept changes only after his yes.
+- A correction of one section read in step 2, which his words or his yes covered:
+  `toolkit memory save --concept <key> --section '<heading>' --body-file <file> --expect <version> --approved-by <owner>`
+- One more fact under a heading the concept already has: add `--append` to the first form.
+- The concept's summary no longer covers it: add `--description '<new summary>'` to a section save.
+- An event (its own record):
+  `toolkit memory save --type event --name <slug> --description '<one line>' --body-file <file> --source '<person or document>, <YYYY-MM-DD>' --approved-by <owner>`
+- A whole record rewritten (rare; read it with `--json` first):
   `toolkit memory save --type <type> --name <slug> --description '<one line>' --body-file <file> --expect <version> --approved-by <owner>`
-- A routine update in `trusted` mode (the stored authorization is kept):
-  `toolkit memory save --type <type> --name <slug> --description '<one line>' --body-file <file> --expect <version>`
 - A new record that replaces an old one: add `--supersedes <old-key>` to a new-record form.
 - A better name, or a type that matches the content:
   `toolkit memory rename <key> --to <new-key>`
@@ -69,12 +86,14 @@ This is the only written copy of the memory approval policy.
 - Run each `toolkit` command alone, on its own line: never joined by `&&`, `;`, or a pipe, and never from a script. In Codex a joined command runs inside the sandbox, which blocks Hindsight, Notion, and the main checkout's `.memory/`.
 - Put one-line values (`--description`, `--source`, `--reason`) in single quotes. An apostrophe inside them: Claude Code writes `'\''`; Codex writes ’ (U+2019) or rewords, and never uses `'\''`, which runs the command inside the sandbox. Double quotes run backticks and `$(...)`, drop that text, and the save still says "Saved".
 - Never use a fixed file name such as `/tmp/memory.md`, and never write a file and run the command in one shell command.
-- Body labels are bold paragraphs (`**Remember:**`), never `## Remember` headings.
+- Body labels are bold paragraphs (`**Remember:**`), never `## Remember` headings. A `##` heading names a sub-topic; the CLI writes it from `--section`.
+- A save that starts a new file for a fact whose words match an existing concept is refused with "belongs in the concept <key>". Read that concept before adding `--new-concept`.
+- Replacing a section, and removing one, need `--expect <version>` from a `--json` read; adding a section does not.
 - **Why** is the owner's reason in his words, or exactly "Not stated by the owner." Never a reason you inferred.
-- In `onboarding` mode, a save with neither `--approved-by` nor `--proposal` is stored as "No approval recorded", and the save prints a "Note:" line about it. That is a mistake: fix it at once. Ask him, then save again with `--expect` and `--approved-by` after his yes, or with `--proposal` while he has not answered.
-- A save of an existing key without `--expect` saves nothing. Take the version from the `--json` read; the first 12 characters are enough. Keep that read: its old text is the undo for an update.
+- In `onboarding` mode, a save with neither `--approved-by` nor `--proposal` is stored as "No approval recorded" (a section save: "Saved on <date> with no approval recorded." on that section's Evidence and limits line), and the save prints a "Note:" line about it. That is a mistake: fix it at once. Ask him, then save again with `--expect` and `--approved-by` after his yes, or with `--proposal` while he has not answered.
+- A whole-record save of an existing key without `--expect` saves nothing. Take the version from the `--json` read; the first 12 characters are enough. Keep that read: its old text is the undo for an update.
 - Add `--allow-similar` only after reading every record the duplicate check listed.
-- A proposal the Stop hook saved holds only the one-line summary. His plain yes is `toolkit memory approve`, which takes out its "Do not rely on this" words; when he adds a reason or a detail, save the full body instead (`references/proposals.md`).
+- A proposal the Stop hook saved holds only the one-line summary. His plain yes is `toolkit memory approve`, which takes out its "Do not rely on this" words. A proposal that names no concept also needs `--concept <type>_<subject>`: the concept its fact goes in, an existing one or a new key named for its subject (with `--title` and `--description`). When he adds a reason or a detail, approve it first, then save its section with his words (`references/proposals.md`).
 - Never store email addresses, secrets, or work-item status. The CLI catches common secret shapes, not all. For a secret, save where it is kept, never the secret.
 - Ask the owner in the reply text, never through a question tool.
 - Say "proposal" only for a record saved with `--proposal` (by you or the Stop hook). When nothing was saved, say that nothing was saved, and ask.
@@ -102,10 +121,11 @@ A short memory pointer to a hard-to-find record is allowed; never copy the recor
 
 ## Replies
 
-Use these lines word for word, with the record's title. Every memory reply ends with the next step: the question still waiting for the owner (for example "Save to memory: <one line>?"), or the exact words that continue. Never end on what was not done ("I haven't saved anything.").
+Use these lines word for word, with the record's title, also when the memory line is one part of a longer reply. `toolkit memory save`, `approve`, and `reject` print the filled line ("Reply line for the owner, word for word"): copy it. Every memory reply ends with the next step: the question still waiting for the owner (for example "Save to memory: <one line>?"), or the exact words that continue. Never end on what was not done ("I haven't saved anything.").
 
-- A new record: "Saved to memory: <title>. Say 'forget that' to undo."
-- An update: "Updated in memory: <title>. Say 'undo that' to put back the old wording." His "undo that" is a save of the old text from the `--json` read (`references/replacing-and-retiring.md`, section 3). Right after a supersede, the undo is a restore of the old record and a retire of the new one (same file, section 4).
+- A new record or a new section: "Saved to memory: <title>. Say 'forget that' to undo." For a section, the title is "<heading> (in <concept title>)". His "forget that" right after a section save is the "Undo:" command the save printed.
+- An update: "Updated in memory: <title>. Say 'undo that' to put back the old wording." His "undo that" is a save of the old text from the `--json` read, or of the old section text (`previous`) (`references/replacing-and-retiring.md`, section 3). Right after a supersede, the undo is a restore of the old record and a retire of the new one (same file, section 4).
+- A removed section: "Removed from memory: <heading> (in <concept title>). Say 'undo that' to put it back."
 - A proposal: "Saved as a proposal for your yes or no: <title>."
 - A rejected proposal: "Not saved: <title>. I will not suggest it again.", then the next step.
 - A retire: "Retired from memory: <title>. Say 'bring it back' to restore it." His "bring it back" is the whole restore in `references/replacing-and-retiring.md`, section 7, not `toolkit memory restore` alone.
@@ -120,7 +140,8 @@ Use these lines word for word, with the record's title. Every memory reply ends 
 - When a reply asks "Save to memory: <summary>?" and no proposal was saved in that turn, the Stop hook tries to save one, and the next turn's context says what happened:
   - It saved a proposal and names its key: his yes approves that key, his no rejects it (`references/proposals.md`, "Recording the owner's answer").
   - Memory already holds a proposal like it, and names it: his answer approves or rejects that proposal.
-  - Memory already holds a record about the same subject, and names it: read it as in step 2. The same fact: keep it, or update it with `--expect`. A different fact and his yes: save it with `--allow-similar` and `--approved-by`. Never overwrite a record with a different fact.
+  - It saved a proposal for an existing concept ("for the concept <key>"): his yes adds the fact to that concept as a section.
+  - Memory already holds a record about the same subject, and names it: read it as in step 2. The same fact: keep it, or update it with `--expect`. A different fact and his yes: add it to that concept as a section, or save it with `--allow-similar` and `--approved-by`. Never overwrite a record with a different fact.
   - The text looks like a secret, so nothing was saved: never save it; after his yes, save only where the secret is kept.
   - The save failed: save the proposal yourself in this turn, with `--proposal`.
 

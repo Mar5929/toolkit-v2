@@ -15,11 +15,11 @@ Checks a finished build against every requirement with an independent checker, f
    `toolkit work design <id>`
    `toolkit work set <id> --stage 09-testing`
 2. Run the project's tests and every acceptance check the item lists. Several scenarios or manual steps: write a test plan in `tests/` on the item's branch (`references/testing.md`, sections 2 and 3).
-3. Brief the `acceptance-checker`, never the agent that built it, naming the branch and the exact commit (`references/testing.md`, section 4).
+3. Brief the `acceptance-checker`, never the agent that built it, naming the branch and the exact commit (`references/testing.md`, section 4). It runs before every result approval, whoever built the change (`references/helpers.md`, section 6).
 4. Failures: run the check and fix loop until clean, or until a failure needs an owner decision (`references/testing.md`, section 5).
    `toolkit work set <id> --stage 10-bug-fixing`
-5. Record what was checked, the evidence, and the gaps.
-   `toolkit work history <id> --note 'Checked: <what>; evidence: <where>; gaps: <gaps or none>'`
+5. Record what was checked, the checker's verdict, the evidence, and the gaps.
+   `toolkit work history <id> --note 'Checked: <what>; acceptance-checker: <its verdict>; evidence: <where>; gaps: <gaps or none>'`
 6. Ask for the result approval with the checklist in `references/approvals.md`, section 4: stage 11, the item waiting on the owner, the result shown as "Showing the result" says below, and one question: "Do you approve this result?"
    `toolkit work set <id> --stage 11-user-approval --waiting-on owner`
 7. His yes: save his words first, record the approval, hand the item back to the agent, and open `work-finish`. A requirement change goes to `work-requirements`; a fix becomes a task and continues here.
@@ -32,7 +32,7 @@ Checks a finished build against every requirement with an independent checker, f
 
 - Run each `toolkit` command alone: never joined by `&&`, `;`, or a pipe, and never from a script (in Codex that runs it inside the sandbox, where it fails). One-line values go in single quotes, never double quotes; an apostrophe inside them is `'\''` in Claude Code and ’ (U+2019) in Codex, or reword the text. Section text goes on standard input (`--set-file -`) in Claude Code, and in `--text '<text>'` or a `mktemp -d` file in Codex (`references/toolkit-commands.md`, "Text in a command").
 - The checker is never the agent or session that built the change. When no independent check could run, say so plainly before asking for approval.
-- Owner-led delivery ("no agent team for this one") is a delivery choice, not a no to the check: the `acceptance-checker` still runs. Only his words about the check itself ("skip the independent check") remove it.
+- The `acceptance-checker` runs before every result approval (the owner's decision of 2026-09-28). "No agent team", "owner-led", "I'll lead it myself", or a no to the team question decide only who builds; they never remove it. Only when this host has no way to start a worker, check the result yourself and say plainly that no independent check ran, and why. If he asks to skip it, remind him of that decision and ask whether he wants to change it (`references/helpers.md`, section 6).
 - The change is only in a worktree until it is merged. When the reply gives him a command to try, name the worktree folder and give the command with its folder, for example `cd <worktree path>` first.
 - A check that did not run is reported as not run, never as passed.
 - The test plan lives in `tests/` on the item's branch, committed there. Never in `.work-items/`, which Git ignores.
@@ -57,7 +57,7 @@ A "no": record his words, turn each named problem into a task or a requirement c
 - `acceptance-checker` (`references/agent-acceptance-checker.md`): step 3 and every re-check.
 - `builder` (`references/agent-builder.md`): fixes in step 4 when a team was recorded or the owner agreed; one builder per independent fix, one writer per path. In Codex the main agent first makes each builder's worktree (`references/helpers.md`, section 2, "Codex builders").
 - Brief them as `references/helpers.md` says.
-- Codex: this plugin's agents do not load there. Give the full text of this skill's `references/agent-<name>.md`, with the brief, to a native Codex worker: the `spawn_agent` tool, started without this conversation (`fork_turns` set to `none`), so a checker never shares the builder's thread. With no worker, do the work yourself and say that no independent check ran.
+- Codex: this plugin's agents do not load there. Give the full text of this skill's `references/agent-<name>.md`, with the brief, to a native Codex worker: the `spawn_agent` tool, started without this conversation (`fork_turns` set to `none`), so a checker never shares the builder's thread. Only when this host cannot start a worker (no `spawn_agent` tool) do the work yourself, and say that no independent check ran. The `acceptance-checker` still runs when the owner chose owner-led delivery or no agent team.
 
 ## References
 

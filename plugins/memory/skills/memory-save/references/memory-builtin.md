@@ -38,7 +38,7 @@ edits notes in Obsidian.
 
 | File | What it is | Written by |
 | --- | --- | --- |
-| `<type>_<slug>.md` | One record (a "topic"). Status `current`, `needs-review`, or `superseded` | `toolkit memory save`, `retire`, `restore`, `rename`, `approve` |
+| `<type>_<slug>.md` | One record (a "topic"): one concept or area, with a `##` section per fact; an `event_` file holds one episode. Status `current`, `needs-review`, or `superseded` | `toolkit memory save`, `retire`, `restore`, `rename`, `approve`, `merge`, `split` |
 | `archive/<key>.md` | An archived record (retired with no replacement) | `toolkit memory retire` |
 | `MEMORY.md` | The generated index | Every write command, and `toolkit memory reindex` |
 | `CURRENT_FOCUS.md` | The current focus | `toolkit memory focus` |
@@ -57,9 +57,11 @@ are records. The toolkit reads no other subfolder.
 The model's layout: its title and short paragraph, one `##` section per type
 (User, Feedback, Project, Reference, Event), then "Other memory views" (the
 current focus, the memory criteria, the glossary). Each record is one line:
+its title linked to its file, its one-line summary, and the date of its last
+change:
 
 ```markdown
-- [feedback_no_force_push.md](feedback_no_force_push.md) — Never force-push to any branch
+- [Ways of working](feedback_ways_of_working.md) — How the owner wants the agent to work (updated 2026-09-28)
 ```
 
 | Record | Its line |
@@ -67,7 +69,7 @@ current focus, the memory criteria, the glossary). Each record is one line:
 | Current | No mark |
 | Needs review | Ends with "[needs-review]" |
 | A proposal | Ends with "[proposal: not a fact until the owner answers]" |
-| Superseded | Stays, ends with "[superseded]"; its body starts with a line naming the replacement |
+| Superseded | Stays, ends with "[superseded]"; its body starts with a line naming the replacement. A record merged into a concept (`merge`) leaves the index: its facts are in the concept, which is listed |
 | Archived | Not listed; the file is in `archive/` |
 
 The index is a pointer list. Open a record before relying on its line. Never
@@ -78,8 +80,11 @@ bytes; the fix is a memory tidy, never cutting the index.
 ## 4. Links, the Obsidian way
 
 - A record links another record with a relative Markdown link to its file
-  name: `[deploy window](project_deploy_window.md)`. Obsidian shows the
-  link, and a backlink on the target, so a reverse link is optional.
+  name: `[billing](project_billing.md)`. Obsidian shows the link, and a
+  backlink on the target, so a reverse link is optional.
+- A link to one section adds `#` and the heading, each space written `%20`:
+  `[deploy window](project_deploys.md#Deploy%20window)`. Obsidian opens the
+  note at that heading.
 - The agent never writes `[[wikilinks]]`. The toolkit still reads and
   repairs a wikilink the owner typed.
 - Link only when it helps a future session find the record, and check the
@@ -100,6 +105,9 @@ changed:
 | --- | --- |
 | Renamed (`rename`, or a save with `--supersedes`) | A link to the new file |
 | Superseded (`retire --superseded-by`) | A link to the replacement |
+| Merged into a concept (`merge`) | A link to the concept's section that now holds it (`project_deploys.md#Deploy%20window`), also inside the concept itself |
+| Some of its sections moved (`split`) | A link to a moved section points at the concept that holds it now; a link to the whole note stays |
+| One section taken out (`save --remove`) | A link to that section points at the note itself |
 | Archived (`retire` alone) | The link text followed by "(archived)", no link |
 | Deleted (`delete`, or a rejected proposal) | The link text only, no link |
 | Restored, or saved as current again after being archived | The file moves out of `archive/`, and its own links keep working. Links in other notes that became "<words> (archived)" stay plain text: put each back (the full restore in `replacing-and-retiring.md`, section 7) |
@@ -161,8 +169,8 @@ toolkit memory status
 
 It prints the backend, where memory lives, the last save and the last
 export, the record counts, and each problem with its fix: an out-of-date
-index, a broken link, a name that does not match its file, a record in the
-wrong folder, a focus over 50 lines or without its title or `Last updated:`
+index, a broken link, a link to a section heading the note does not have, a
+name that does not match its file, a record in the wrong folder, a focus over 50 lines or without its title or `Last updated:`
 line, a file that is not mode 644, or a `.lock` left behind. Never delete a
 `.lock` by hand: the next toolkit command takes it over when the process
 that made it is gone or it is older than 30 seconds.

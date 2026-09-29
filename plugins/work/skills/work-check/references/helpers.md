@@ -45,7 +45,7 @@ Claude Code:
 Codex: the plugin's agents do not load there. Every skill that uses an agent
 carries this line:
 
-> Codex: this plugin's agents do not load there. Give the full text of this skill's `references/agent-<name>.md`, with the brief, to a native Codex worker: the `spawn_agent` tool, started without this conversation (`fork_turns` set to `none`), so a checker never shares the builder's thread. With no worker, do the work yourself and say that no independent check ran.
+> Codex: this plugin's agents do not load there. Give the full text of this skill's `references/agent-<name>.md`, with the brief, to a native Codex worker: the `spawn_agent` tool, started without this conversation (`fork_turns` set to `none`), so a checker never shares the builder's thread. Only when this host cannot start a worker (no `spawn_agent` tool) do the work yourself, and say that no independent check ran. The `acceptance-checker` still runs when the owner chose owner-led delivery or no agent team.
 
 - Read the agent file yourself and paste its whole text, then the brief, into
   the worker's message. The worker cannot open the skill folder for you.
@@ -142,17 +142,29 @@ Branch: claude/wi-012-csv-export. Tests: npm test -- reports.
 
 ## 6. When helpers are allowed
 
+- The acceptance check always runs (the owner's decision of 2026-09-28).
+  Before you ask the owner to approve a result, start one
+  `acceptance-checker` that did not build the change: in Claude Code with the
+  Agent tool, in Codex with a native worker given the agent's text (section
+  2). It needs no permission. His answers about delivery and the team decide
+  only who builds: "owner-led", "no agent team", "I'll lead it myself", and a
+  no to the team question in `work-delegate` never remove it. Only when this
+  host has no way to start a worker do you check the result yourself, and
+  then you say plainly that no independent check ran, and why.
+- If the owner asks to skip the acceptance check, say in one line that it
+  always runs before a result approval, as he decided, and ask whether he
+  wants to change that decision. Until he changes it, run it.
 - Outside agent-led delivery, a small bounded helper needs no permission: one
   `researcher` for one question, or one `requirements-analyst` check. Honor
   any limit the owner set.
 - The small design team (one requirements analyst, one architect, one
-  critic, and a researcher when a question is open) and the one
-  `acceptance-checker` of `work-check` need no permission. State them in one
-  line. The exception is an owner who said no to helpers (for example a no to
-  the team question in `work-delegate`).
+  critic, and a researcher when a question is open) needs no permission.
+  State it in one line. The exception is an owner who said no to helper
+  agents at all ("no helper agents at all"); that exception never covers the
+  acceptance check.
 - A larger team needs the owner's team-arrangement answer recorded by
   `work-delegate`, or his yes to the team a skill proposed.
-- A "no" to the team question authorizes no helpers: the main agent does the
-  work itself and says that no independent check ran.
+- A "no" to the team question authorizes no team: the main agent builds the
+  work itself. The design critic and the one acceptance checker still run.
 - Helpers never widen what the owner allowed: no merge, deployment,
   spending, or publishing beyond what was given.

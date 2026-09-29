@@ -67,13 +67,14 @@ test('toolkit memory approve names the owner in a proposal the Stop hook saved w
   const { root, env } = await initProject();
   const saved = await tk(root, ['memory', 'save', '--type', 'project', '--name', 'publish-blog-ghost', '--description', 'You publish your blog on Ghost', '--body', old, '--source', 'Agent question in a session, 2026-09-28', '--proposal'], { env });
   assert.equal(saved.code, 0, saved.stdout + saved.stderr);
-  const approved = await tk(root, ['memory', 'approve', 'project_publish_blog_ghost', '--by', 'Mike Rihm'], { env });
+  // Concept memory: the yes names the concept the fact starts (verifier, 2026-09-28).
+  const approved = await tk(root, ['memory', 'approve', 'project_publish_blog_ghost', '--by', 'Mike Rihm', '--concept', 'project_blog', '--title', 'Blog'], { env });
   assert.equal(approved.code, 0, approved.stdout + approved.stderr);
-  const rec = (await tk(root, ['memory', 'get', 'project_publish_blog_ghost', '--json'], { env })).json;
+  const rec = (await tk(root, ['memory', 'get', 'project_blog', '--json'], { env })).json;
   assert.equal(rec.status, 'current');
   // initProject's owner is "Mike".
   assert.equal(rec.description, 'Mike publishes Mike\'s blog on Ghost');
-  assert.match(rec.body, /^\*\*Remember:\*\* Mike publishes Mike's blog on Ghost\.$/m);
+  assert.match(rec.body, /^# Blog\n\n## Mike publishes Mike's blog on Ghost\n\n\*\*Remember:\*\* Mike publishes Mike's blog on Ghost\.$/m);
 });
 
 test('the Stop hook saves a second-person question with the owner\'s name', async () => {

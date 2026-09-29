@@ -9,7 +9,10 @@
 //    reject. A summary is saved at most once per session, never when the
 //    turn already saved the same text, and never when it looks like a
 //    secret. A record found only because it is about the same subject does
-//    not stop the save (the owner reviews every proposal). When the message
+//    not stop the save (the owner reviews every proposal). Concept memory
+//    (Mike, 2026-09-28): when the save says the fact belongs in an existing
+//    concept, the proposal names that concept and a section heading, and the
+//    owner's yes (toolkit memory approve) adds it there. When the message
 //    asks in other words ("Save it to memory?"), the hook blocks once and
 //    asks for the exact form or a proposal saved by the agent (verifier,
 //    2026-09-28: 3 of 4 live-run questions used other words).
@@ -25,7 +28,7 @@ import { stopOutput } from './output.mjs';
 import { findProject, baselineMoved } from './common.mjs';
 import { updateSession, turnKey } from './session.mjs';
 import { resolveRecorded } from './post-tool.mjs';
-import { proposalQuestions, looseQuestion, normalizeSummary, proposalArgs, proposalName, proposalType, ownerWording } from './proposal.mjs';
+import { proposalQuestions, looseQuestion, memoryQuestionAsked, namesOpenProposal, normalizeSummary, proposalArgs, proposalName, proposalType, ownerWording } from './proposal.mjs';
 import { CLOSEST_WHY, compareRecords } from '../memory/similar.mjs';
 import { secretKind } from '../memory/contract.mjs';
 
@@ -36,6 +39,15 @@ export const KEEP_REASON = 'The owner asked this turn for something to be kept f
 
 /** How long the hook waits for one proposal save (the Stop hook timeout is 15 seconds). */
 export const PROPOSAL_SAVE_MS = 10000;
+/**
+ * The time all proposal saves of one Stop hook may take together, counted
+ * from the start of the hook. The host stops the hook at 15 seconds, and the
+ * rest of the hook (session state, validation, output) needs the remainder
+ * (verifier, 2026-09-28: two saves in a row could each take 10 seconds).
+ */
+export const STOP_SAVE_BUDGET_MS = 11000;
+/** A save, or a second try, is not started with less time left than this. */
+export const MIN_SAVE_MS = 2500;
 
 async function invalidEdits(project, edits) {
   if (!edits || !edits.length) return [];
@@ -71,14 +83,21 @@ function sink() {
   return { write: (s) => { text += s; return true; }, get text() { return text; } };
 }
 
-/** Run one toolkit command in this process, with a deadline. Returns { code, json, stderr } or { timedOut: true }. */
-async function runToolkit(args, { cwd, env }) {
+/**
+ * Run one toolkit command in this process, with a deadline: PROPOSAL_SAVE_MS,
+ * or less when the hook's own deadline (a time in milliseconds) is nearer.
+ * Returns { code, json, stderr }, { timedOut: true, ms }, or, with less than
+ * MIN_SAVE_MS left, { skipped: true } without running it.
+ */
+async function runToolkit(args, { cwd, env, deadline: until = null }) {
+  const ms = Math.min(PROPOSAL_SAVE_MS, until === null ? PROPOSAL_SAVE_MS : until - Date.now());
+  if (ms < MIN_SAVE_MS) return { skipped: true };
   const { main } = await import('../cli.mjs');
   const stdout = sink();
   const stderr = sink();
   let timer;
   const deadline = new Promise((resolve) => {
-    timer = setTimeout(() => resolve({ timedOut: true }), PROPOSAL_SAVE_MS);
+    timer = setTimeout(() => resolve({ timedOut: true, ms }), ms);
   });
   const work = main(args, { cwd, env, stdout, stderr, stdin: '' }).then((code) => {
     let json = null;
@@ -97,7 +116,8 @@ async function runToolkit(args, { cwd, env }) {
 }
 
 function errorOf(res) {
-  if (res.timedOut) return `the save did not finish in ${PROPOSAL_SAVE_MS / 1000} seconds`;
+  if (res.skipped) return 'the Stop hook had too little time left to save it';
+  if (res.timedOut) return `the save did not finish in ${Math.round((res.ms || PROPOSAL_SAVE_MS) / 1000)} seconds`;
   // With --json the error is on standard output.
   const fromJson = res.json && res.json.error && typeof res.json.error.message === 'string' ? res.json.error.message : '';
   const text = String(fromJson || res.stderr || '').replace(/^Error:\s*/, '').split('\n')[0].trim();
@@ -106,9 +126,24 @@ function errorOf(res) {
 
 /** The similar records of a refused save: [{ key, proposal, why }], or null when the save was not refused for that. */
 function similarOf(res) {
-  if (res.timedOut || res.code !== 2 || !res.json || !res.json.error || !res.json.error.details) return null;
+  if (res.skipped || res.timedOut || res.code !== 2 || !res.json || !res.json.error || !res.json.error.details) return null;
   const list = res.json.error.details.similar;
   return Array.isArray(list) && list.length ? list : null;
+}
+
+/**
+ * The concept a refused save said the fact belongs in (concept memory):
+ * { concept, section }, or null when the save was not refused for that.
+ */
+function belongsOf(res) {
+  if (res.skipped || res.timedOut || res.code !== 2 || !res.json || !res.json.error || !res.json.error.details) return null;
+  const s = res.json.error.details.suggestion;
+  return s && s.concept ? { concept: s.concept, section: s.section || null } : null;
+}
+
+/** True when a section proposal was refused because a record with its name exists. */
+function nameTaken(res) {
+  return !res.skipped && !res.timedOut && res.code === 2 && res.json && res.json.error && /already has a record/.test(String(res.json.error.message || ''));
 }
 
 /**
@@ -117,10 +152,12 @@ function similarOf(res) {
  * matches: [{ key, proposal, why }] }], secret: [{ kind }], failed:
  * [{ summary, error }] }.
  */
-export async function saveProposals(project, summaries, { cwd, env }) {
+export async function saveProposals(project, summaries, { cwd, env, deadline = Date.now() + STOP_SAVE_BUDGET_MS }) {
   const out = { saved: [], similar: [], secret: [], failed: [] };
   const ownerName = project.config.project && project.config.project.owner;
   const date = localDate(env);
+  // Every save and every second try shares the hook's one deadline.
+  const run = (a) => runToolkit(a, { cwd, env, deadline });
   for (const summary of summaries) {
     // A secret is never saved, and never repeated in a note.
     const kind = secretKind(summary);
@@ -128,21 +165,34 @@ export async function saveProposals(project, summaries, { cwd, env }) {
       out.secret.push({ kind });
       continue;
     }
-    const args = proposalArgs(summary, { ownerName, date });
-    let res = await runToolkit(args, { cwd, env });
+    let args = proposalArgs(summary, { ownerName, date });
+    let res = await run(args);
+    // Concept memory: the fact belongs in an existing concept, so the proposal
+    // names that concept, and the owner's yes adds it there as a section.
+    const belongs = belongsOf(res);
+    let concept = null;
+    if (belongs) {
+      concept = belongs.concept;
+      args = proposalArgs(summary, { ownerName, date, concept, section: belongs.section });
+      res = await run(args);
+      if (nameTaken(res)) {
+        const base = proposalName(ownerWording(summary, ownerName), proposalType(summary, ownerName)).slice(0, 40);
+        res = await run(proposalArgs(summary, { ownerName, date, concept, section: belongs.section, name: `proposal-${base}-2` }));
+      }
+    }
     let similar = similarOf(res);
     // The same name, but not the same meaning: try once more under another name.
     if (similar && similar.every((x) => x.why === 'the same key')) {
-      res = await runToolkit(proposalArgs(summary, { ownerName, date, name: `${proposalName(ownerWording(summary, ownerName), proposalType(summary, ownerName)).slice(0, 47)}-2` }), { cwd, env });
+      res = await run(proposalArgs(summary, { ownerName, date, name: `${proposalName(ownerWording(summary, ownerName), proposalType(summary, ownerName)).slice(0, 47)}-2` }));
       similar = similarOf(res);
     }
     // Only about the same subject: the owner reviews every proposal, so it is saved anyway.
     if (similar && similar.every((x) => x.why === CLOSEST_WHY)) {
-      res = await runToolkit([...args, '--allow-similar'], { cwd, env });
+      res = await run([...args, '--allow-similar']);
       similar = similarOf(res);
     }
-    if (!res.timedOut && res.code === 0 && res.json && res.json.key) {
-      out.saved.push({ key: res.json.key, summary });
+    if (!res.skipped && !res.timedOut && res.code === 0 && res.json && res.json.key) {
+      out.saved.push({ key: res.json.key, summary, ...(concept ? { concept } : {}) });
     } else if (similar) {
       out.similar.push({ summary, matches: similar.map((x) => ({ key: x.key, proposal: Boolean(x.proposal), why: x.why })) });
     } else {
@@ -156,7 +206,13 @@ export async function saveProposals(project, summaries, { cwd, env }) {
 export function proposalNotes(result) {
   const lines = [];
   for (const s of result.saved) {
-    lines.push(`At the end of the last turn the toolkit saved the unanswered "Save to memory: ${s.summary}?" as a memory proposal: ${s.key}. It is not a fact. If the owner answers it now, his yes is toolkit memory approve ${s.key} --by <name> and his no is toolkit memory reject ${s.key}; otherwise work-decide asks him later.`);
+    const joins = s.concept ? ` for the concept ${s.concept} (his yes adds it there as a section)` : '';
+    // A proposal that names no concept starts one: the agent names it on the
+    // yes (toolkit memory approve refuses a one-fact proposal without --concept).
+    const yes = s.concept
+      ? `toolkit memory approve ${s.key} --by <name>`
+      : `toolkit memory approve ${s.key} --by <name> --concept ${conceptPrefix(s.key)}<subject> (the concept it goes in: an existing one, or a new one named for its subject, with --title and --description)`;
+    lines.push(`At the end of the last turn the toolkit saved the unanswered "Save to memory: ${s.summary}?" as a memory proposal${joins}: ${s.key}. It is not a fact. If the owner answers it now, his yes is ${yes} and his no is toolkit memory reject ${s.key}; otherwise work-decide asks him later.`);
   }
   for (const s of result.similar || []) {
     const proposals = s.matches.filter((m) => m.proposal).map((m) => m.key);
@@ -177,12 +233,19 @@ export function proposalNotes(result) {
   return lines;
 }
 
+/** The type prefix of a key, with its underscore: 'project_x' -> 'project_'. */
+function conceptPrefix(key) {
+  const m = /^([a-z]+_)/.exec(String(key ?? ''));
+  return m ? m[1] : '<type>_';
+}
+
 /** True when a summary is the same text as, or very like, a description the turn already saved. */
 function savedThisTurn(summary, descriptions) {
   return descriptions.some((d) => normalizeSummary(d) === normalizeSummary(summary) || compareRecords({ description: d }, { description: summary }).similar);
 }
 
 export async function stop(input, io) {
+  const started = Date.now();
   const cwd = input.cwd || io.cwd;
   const project = findProject(cwd);
   if (!project) return null;
@@ -201,8 +264,14 @@ export async function stop(input, io) {
     if (sameTurn && !turn.stopBlocked) pending = turn;
     const memoryWrites = sameTurn ? (turn.records || []).filter((r) => r.kind === 'memory') : [];
     const turnSavedProposal = memoryWrites.some((r) => r.proposal);
-    // Other wording: asked about once, when the turn saved nothing to memory.
-    if (!questions.length && !memoryWrites.length) loose = looseQuestion(message);
+    // The next prompt answers a memory question this reply asks (PostToolUse
+    // then lets a save with --approved-by through without a note).
+    state.lastReplyAskedMemory = memoryQuestionAsked(message);
+    // Other wording: asked about once, when the turn saved nothing to memory
+    // and the question is not about a proposal memory already holds (final
+    // run, claude-local problem 1: work-decide's question about an existing
+    // proposal was asked a second time).
+    if (!questions.length && !memoryWrites.length && !namesOpenProposal(message, state.proposedSummaries || [])) loose = looseQuestion(message);
     if (!questions.length) return;
     const done = new Set(state.proposedSummaries || []);
     const savedDescriptions = memoryWrites.map((r) => r.description).filter(Boolean);
@@ -224,7 +293,7 @@ export async function stop(input, io) {
   // 2. Save the unanswered questions as proposals. Never blocks.
   let savedNow = [];
   if (asked.length) {
-    const result = await saveProposals(project, asked, { cwd: project.root, env: io.env });
+    const result = await saveProposals(project, asked, { cwd: project.root, env: io.env, deadline: started + STOP_SAVE_BUDGET_MS });
     savedNow = result.saved;
     // When the owner's own keep phrase is still unrecorded, the block below
     // names the proposal to approve, so the next prompt does not call it unanswered.
@@ -249,7 +318,7 @@ export async function stop(input, io) {
   if (keepUnrecorded) {
     reasons.push(KEEP_REASON);
     // The owner's keep phrase is his approval: the proposal the hook just saved becomes a fact with his yes.
-    for (const s of savedNow) reasons.push(`The question "Save to memory: ${s.summary}?" was saved as the proposal ${s.key}; the owner's own words approve it: toolkit memory approve ${s.key} --by <owner>.`);
+    for (const s of savedNow) reasons.push(`The question "Save to memory: ${s.summary}?" was saved as the proposal ${s.key}; the owner's own words approve it: toolkit memory approve ${s.key} --by <owner>${s.concept ? '' : ` --concept ${conceptPrefix(s.key)}<subject>`}.`);
   }
   const bad = await invalidEdits(project, pending.edits);
   for (const b of bad) {

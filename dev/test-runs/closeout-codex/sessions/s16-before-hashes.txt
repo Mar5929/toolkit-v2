@@ -1,0 +1,17 @@
+f2e8e6e292358696a121fa7a31277095b15ffb21  .memory/.toolkit-meta.json
+76a0841d6f9da58c441a5fea5671a3c84ff3fb0c  .memory/AGENTS.md
+64a0eb692dc57dd0c9931b7ade600eb5beb3ff03  .memory/CURRENT_FOCUS.md
+b724ea5f9213cd1ac9fe14f91a6184fee8f62a5b  .memory/MEMORY.md
+7e02cd1f9acf362b49657d7ab5f8b92fbca86a62  .memory/memory-criteria.md
+89c4ecc5d48fa6d91bcc1fa85b1f6df7420f669a  .memory/project_money_calculation.md
+28ec14c4ef6928af5767b67e51b6b975a35ce09f  .memory/project_proposal_venmo_rejects_payments_with_a_fraction_of_a_cent.md
+d82f50c49a147a68fb5b286b58a521fc1db26a64  .memory/project_topic_template.md
+a97fce23eae6708933ea198494ecb55e0fc99684  .memory/terminology-glossary.md
+f0c99912b78470ba80fa13906b9186e95d907cb5  .memory/user_working_preferences.md
+f4852b7dc618be2ae72f879b0eba6bbaf3a472c5  .work-items/.toolkit-state.json
+bde3521371ec5b0f9b722226a2579a22a263bd4f  .work-items/DASHBOARD.md
+eed1c7b674b7ba104cbe032c8a23a32809bb14c9  .work-items/WI-001-build-the-plain-tip-and-total-command/DESIGN.md
+6dcb2e3671f155240e6b1181ccbd96630b19c142  .work-items/WI-001-build-the-plain-tip-and-total-command/WI-002-split-between-friends/WORK-ITEM.md
+49b1716c5edc9577695b9825ecf899baa122f239  .work-items/WI-001-build-the-plain-tip-and-total-command/WORK-ITEM.md
+9813e9dfcbfc3204c01b93c077f4b9277bcd9a14  .work-items/work-item-template/DESIGN.md
+5f8f505d377cc6c77c15b03aee1ccea8b96aa9f7  .work-items/work-item-template/WORK-ITEM.md

@@ -434,6 +434,20 @@ export function backupSetting(project, env = process.env) {
   return { dir: expandHome(v, env), raw: v };
 }
 
+/**
+ * True when the work items and the memory are both in Notion. Such a project
+ * needs no backup folder: Notion keeps each page's history and keeps deleted
+ * pages in its trash (the owner's decision of 2026-09-28, dev/GOAL.md). Setup
+ * does not ask for a folder, and doctor gives no backup warning.
+ */
+export function notionOnly(config) {
+  const c = config || {};
+  return ((c.tracker && c.tracker.type) || 'local') === 'notion' && ((c.memory && c.memory.type) || 'builtin') === 'notion';
+}
+
+/** Why a project with its work items and memory in Notion needs no backup folder. */
+export const NOTION_KEEPS_HISTORY = 'this project keeps its work items and memory in Notion, which keeps each page\'s history and keeps deleted pages in its trash';
+
 /** What an automatic backup covers for a project: [{ name, words }]. */
 export function backupParts(config) {
   const c = config || {};

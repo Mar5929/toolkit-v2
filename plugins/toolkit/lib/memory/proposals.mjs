@@ -17,13 +17,16 @@
 
 import { EXIT, ToolkitError } from '../core/output.mjs';
 import { today as localToday } from '../core/util.mjs';
-import { approvalText, assertKey, isProposal, loadDriver, notFound, storedStatus } from './contract.mjs';
+import {
+  approvalNote, approvalText, assertKey, bodyTitle, isProposal, loadDriver, notFound, proposalTarget, splitKey, storedStatus, titleFromName,
+} from './contract.mjs';
+import { editConceptText, editRecordWith, isOneFact, mergeSections, withBodyTitle } from './concepts.mjs';
 import { cacheIdentity, proposalRecords, readCache } from './startup.mjs';
 import { ownerWording } from './owner-wording.mjs';
 
-/** One proposal as listProposals gives it. */
+/** One proposal as listProposals gives it; concept: the concept it would join (concept memory), or null. */
 function row(r) {
-  return { key: r.key, description: r.description || '', saved: r.saved || '', source: r.source || '' };
+  return { key: r.key, description: r.description || '', saved: r.saved || '', source: r.source || '', ...(r.concept ? { concept: r.concept } : {}) };
 }
 
 /**
@@ -121,10 +124,27 @@ export function ownerWordedProposal(rec, ownerName) {
  * by <by> on <date>", verified today. A proposal the Stop hook saved also
  * loses its "Do not rely on this" words (approvedProposalBody), and a leading
  * "you" in it becomes the owner's name (ownerWordedProposal; `ownerName`,
- * else `by`). Refuses a record that is retired. Returns { key, version,
- * record, changed } (changed false when the record was already current).
+ * else `by`). Refuses a record that is retired.
+ *
+ * Concept memory (Mike, 2026-09-28): a proposal's fact goes into a concept.
+ * - A proposal that names an existing concept (its `concept` field), or
+ *   `concept` given here naming one, is added there as a section; the
+ *   proposal record goes. The concept's own authorization line is kept; the
+ *   section records this approval when it differs (approvalNote).
+ * - `concept` naming a key that does not exist yet starts that concept, with
+ *   `title` and `description` (or the proposal's), and the fact as its first
+ *   section; the proposal record goes.
+ * - `concept` equal to the proposal's own key approves it in place, as a
+ *   concept.
+ * - A one-fact proposal (no "##" section, not an event) with none of these is
+ *   refused (verifier, 2026-09-28): its key and title name the fact
+ *   ("project_tests_run_before_every_commit"), not a concept, so the agent
+ *   names the concept with `concept`.
+ * Returns { key, version, record, changed } (changed false when the record
+ * was already current), plus { merged, from, heading, action } when the fact
+ * went into another concept, and { created: true } when it started one.
  */
-export async function approveRecord(driver, key, { by, today = localToday(), ownerName = null } = {}) {
+export async function approveRecord(driver, key, { by, today = localToday(), ownerName = null, concept = null, title = null, description = null } = {}) {
   const k = assertKey(key);
   const who = String(by ?? '').replace(/\s+/g, ' ').trim();
   if (!who) {
@@ -138,18 +158,128 @@ export async function approveRecord(driver, key, { by, today = localToday(), own
       fix: `Restore it first with toolkit memory restore ${k}, then approve it.`,
     });
   }
+  const proposal = isProposal(rec);
+  const conceptKey = concept ? assertKey(concept) : null;
+  if (conceptKey && !proposal) {
+    throw new ToolkitError(EXIT.INVALID, `${k} is not a proposal, so --concept does not apply. Approve it with toolkit memory approve ${k} --by <name>; to move it into a concept, use toolkit memory merge.`, { key: k });
+  }
   if (rec.status === 'current') return { key: k, version: rec.version, record: rec, changed: false };
+  const approval = approvalText(who, today);
   const worded = ownerWordedProposal(rec, String(ownerName ?? '').trim() || who);
+  const body = approvedProposalBody(worded.body, who, today);
+  const target = proposal ? proposalTarget(rec) : null;
+  const heading = (target && target.section) || bodyTitle(body) || titleFromName(rec.name);
+  const summary = String(description ?? '').trim() || worded.description || rec.description;
+  const extra = rec.extra ? { ...rec.extra } : undefined;
+  if (extra) {
+    delete extra.concept;
+    delete extra.section;
+  }
+  const cleanExtra = extra ? { extra: Object.keys(extra).length ? extra : undefined } : {};
+
+  // Into another concept: the one --concept names, else the one the proposal names.
+  let intoKey = conceptKey && conceptKey !== k ? conceptKey : null;
+  if (!intoKey && !conceptKey && target) intoKey = target.concept;
+  if (intoKey) {
+    const parts = splitKey(intoKey);
+    if (conceptKey && parts.type !== rec.type) {
+      throw new ToolkitError(EXIT.INVALID, `${intoKey} is a ${parts.type} key and ${k} a ${rec.type} proposal, so nothing was approved. A concept's facts share its type: name a ${rec.type}_ concept.`, { key: k });
+    }
+    if (conceptKey && parts.type === 'event') {
+      throw new ToolkitError(EXIT.INVALID, `${intoKey} is an event. An event holds one episode, so a fact is not added to it.`, { key: k });
+    }
+    const there = await driver.get(intoKey);
+    if (there && conceptKey && (there.status === 'retired' || isProposal(there))) {
+      throw new ToolkitError(EXIT.INVALID, `${intoKey} is ${isProposal(there) ? 'a proposal the owner has not answered' : storedStatus(there)}, so nothing was approved.`, {
+        key: k,
+        fix: `Name a concept in use with --concept, or restore ${intoKey} first.`,
+      });
+    }
+    if (there && there.status !== 'retired' && !isProposal(there)) {
+      let placed = [];
+      const res = await editRecordWith(driver, intoKey, (stored) => {
+        const member = {
+          ...rec,
+          body: withBodyTitle(body, heading),
+          approvalNote: approvalNote(approval, stored.authorization, today),
+        };
+        const merged = mergeSections(stored.body, [member]);
+        placed = merged.placed;
+        const edited = editConceptText(stored.text, intoKey, { body: merged.body, day: today });
+        return { text: edited.text };
+      });
+      const removed = await driver.delete(k);
+      const p = placed[0] || {};
+      return {
+        key: intoKey, from: k, merged: true, heading: p.heading || heading, action: p.action || 'added',
+        version: res.version, record: res.record, changed: true, linksRepaired: removed.linksRepaired || [],
+      };
+    }
+    if (conceptKey) {
+      // A new concept, named by the agent, with this fact as its first section.
+      const conceptTitle = String(title ?? '').replace(/\s+/g, ' ').trim() || titleFromName(parts.name);
+      const shaped = mergeSections(`# ${conceptTitle}\n`, [{ ...rec, body: withBodyTitle(body, heading) }]);
+      const res = await driver.save({
+        type: rec.type,
+        name: parts.name,
+        description: summary,
+        source: rec.source,
+        status: 'current',
+        last_verified: today,
+        updated: today,
+        authorization: approval,
+        approved_by: who,
+        supersedes: [],
+        body: shaped.body,
+      }, { expect: 'absent' });
+      const removed = await driver.delete(k);
+      return {
+        key: res.key, from: k, created: true, heading: (shaped.placed[0] || {}).heading || heading, version: res.version, record: res.record,
+        changed: true, linksRepaired: removed.linksRepaired || [],
+      };
+    }
+  }
+
+  // In place. A one-fact proposal becomes a concept only under a name the agent gives.
+  const oneFact = proposal && rec.type !== 'event' && isOneFact(body);
+  if (oneFact && conceptKey !== k) {
+    const parts = splitKey(k);
+    let concepts = [];
+    try {
+      concepts = (await driver.list({ type: rec.type })).filter((r) => r.key !== k && r.status === 'current' && !(r.proposal || isProposal(r)));
+    } catch {
+      concepts = [];
+    }
+    const shown = concepts.slice(0, 10).map((c) => `${c.key} (${c.title || titleFromName(c.name)})`);
+    const missing = target ? ` It named the concept ${target.concept}, which is not in memory now.` : '';
+    throw new ToolkitError(EXIT.INVALID, [
+      `${k} was not approved yet: it starts a new concept, and its key and title name the fact, not a concept.${missing}`,
+      `Name the concept it goes in with --concept: an existing ${rec.type} concept${shown.length ? ` (${shown.join(', ')})` : ' (there is none yet)'}, or a new one named for its subject, for example ${parts.type}_testing for a fact about tests.`,
+    ].join(' '), {
+      key: k,
+      concepts: concepts.map((c) => c.key),
+      fix: `toolkit memory approve ${k} --by ${who.includes(' ') ? `'${who}'` : who} --concept ${parts.type}_<subject> (for a new concept, add --title '<Concept title>' and --description '<one-line summary of the concept>').`,
+    });
+  }
+  let inPlace = body;
+  if (oneFact) {
+    const conceptTitle = String(title ?? '').replace(/\s+/g, ' ').trim() || titleFromName(rec.name);
+    inPlace = mergeSections(`# ${conceptTitle}\n`, [{ ...rec, body }]).body;
+  } else if (title) {
+    inPlace = withBodyTitle(body, title);
+  }
   const res = await driver.save({
     ...rec,
-    description: worded.description || rec.description,
-    body: approvedProposalBody(worded.body, who, today),
+    ...cleanExtra,
+    description: summary,
+    body: inPlace,
     status: 'current',
-    authorization: approvalText(who, today),
+    authorization: approval,
     approved_by: who,
     last_verified: today,
+    updated: today,
   }, { expect: rec.version });
-  return { key: res.key, version: res.version, record: res.record, changed: true };
+  return { key: res.key, version: res.version, record: res.record, changed: true, conceptMissing: target && !conceptKey ? target.concept : null };
 }
 
 /**
@@ -169,5 +299,13 @@ export async function rejectProposal(driver, key) {
       fix: `To hide it, use toolkit memory retire ${k}. To delete it for good, the owner must say so: toolkit memory delete ${k} --owner-approved.`,
     });
   }
-  return driver.delete(k);
+  const res = await driver.delete(k);
+  return { ...res, title: recordTitle(rec) };
+}
+
+/** A record's title: its first "# " heading, else its description, else its key. */
+export function recordTitle(rec) {
+  const r = rec || {};
+  const h1 = /^#\s+(.+?)\s*$/m.exec(String(r.body || ''));
+  return (h1 && h1[1]) || String(r.description || '').trim() || String(r.key || '');
 }

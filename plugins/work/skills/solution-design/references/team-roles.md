@@ -53,14 +53,19 @@ Then pick a team, say why each role and count is there, and say how many
 agent runs the first pass takes. Cut what the item does not need. A small
 design still gets one requirements analyst and one critic: those two make the
 design loop stop for the right reason. A design with no critic is allowed
-only in a session with no agent tool, or when the owner said no to helpers.
-Then the reply and the design's Notes say that no critique ran.
+only in a session with no agent tool, or when the owner said no to helper
+agents at all. Then the reply and the design's Notes say that no critique
+ran.
 
-Owner-led delivery is not a no to helpers. "Owner-led", "no agent team", or
-"keep it owner-led" answers the delivery offer: the owner steers each step
-instead of a team running the whole goal. The design critic and the
-acceptance checker still run. Only his words about the check itself ("no
-helper agents at all", "skip the independent check") remove them.
+Owner-led delivery is not a no to helpers. "Owner-led", "no agent team",
+"keep it owner-led", "I'll lead it myself", or a no to the team question in
+`work-delegate` decides who builds: the owner steers each step instead of a
+team running the whole goal. The design critic still runs; only his words
+"no helper agents at all" remove it. The acceptance checker always runs
+before a result approval (the owner's decision of 2026-09-28): nothing he
+says about delivery, the team, or helpers removes it. Only a host with no way
+to start a worker means the main agent checks the result itself and says
+that no independent check ran (`helpers.md`, section 6).
 
 ## Example teams for a design
 

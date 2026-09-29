@@ -16,7 +16,8 @@
 // next briefing even when the refresh fails (Mike, 2026-09-27, "clean deletes").
 // The cache is <git common dir>/toolkit-v2/memory-cache.json: inside .git, so
 // it is never committed, and shared by every worktree of the project.
-// Each cached record: { key, type, description, status, proposal, saved, source }.
+// Each cached record: { key, type, description, status, proposal, saved, source }, and
+// concept for a proposal that names the concept it would join.
 
 import path from 'node:path';
 import { gitInfo } from '../core/config.mjs';
@@ -73,6 +74,8 @@ async function snapshot(driver, identity) {
     focus: focus.text || '',
     records: records.map((r) => ({
       key: r.key, type: r.type, description: r.description, status: r.status, proposal: Boolean(r.proposal), saved: r.saved || '', source: r.source || '',
+      // Concept memory: the concept a proposal would join.
+      ...(r.concept ? { concept: r.concept } : {}),
     })),
   };
 }
@@ -135,7 +138,7 @@ export function briefingText({ backend, focus, records }, { maxChars = 2500 } = 
   const index = live.map((r) => `- ${r.key}: ${r.description}${r.status === 'needs-review' ? ' (needs review)' : ''}`);
   if (index.length) lines.push('', 'Memory records:', ...index);
   if (proposals.length) {
-    lines.push('', 'Memory proposals the owner has not answered (not facts; do not rely on them):', ...proposals.map((r) => `- ${r.key}: ${r.description}`));
+    lines.push('', 'Memory proposals the owner has not answered (not facts; do not rely on them):', ...proposals.map((r) => `- ${r.key}: ${r.description}${r.concept ? ` (would be added to the concept ${r.concept})` : ''}`));
   }
   let text = lines.join('\n');
   if (text.length > maxChars) {

@@ -1,0 +1,12 @@
+0.237s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules'
+0.225s :: 'const r=await Promise.allSettled([\ntools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.8/skills/publish-docs/SKILL.md .claude/rules/publish-project-documents.md",max_output_t'
+0.198s :: 'const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.8/skills/publish-docs/references/git-rules.md",max_output_tokens:5000});text(r.output);\n'
+0.271s :: 'const r=await Promise.allSettled([\ntools.exec_command({cmd:"toolkit memory list --type project",max_output_tokens:3000}),\ntools.exec_command({cmd:"toolkit memory find \'MacBook Node operating environment\'",max_output_toke'
+0.263s :: 'const r=await Promise.allSettled([\ntools.exec_command({cmd:"toolkit memory get project_money_calculation --json",max_output_tokens:3000}),\ntools.exec_command({cmd:"toolkit memory get user_working_preferences --json",max_'
+0.312s :: 'const r=await tools.exec_command({cmd:"toolkit memory save --type project --name runtime-environment --description \'Where Mike runs tipcalc and the Node version he uses\' --section \'Supported usage\' --body \'# Runtime envi'
+0.263s :: 'const r=await Promise.allSettled([\ntools.exec_command({cmd:"toolkit memory save --help",max_output_tokens:5000}),\ntools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.9/skills/memory'
+0.256s :: 'const r=await tools.exec_command({cmd:"toolkit memory get project_runtime_environment",max_output_tokens:2500});text(r.output);\n'
+0.311s :: 'const r=await tools.exec_command({cmd:"toolkit doctor",max_output_tokens:1500});text(r.output);\n'
+0.291s :: 'const r=await Promise.allSettled([\ntools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.9/skills/memory-save/SKILL.md",max_output_tokens:7500}),\ntools.exec_command({cmd:"cat /Users/m'
+0.101s :: 'const r=await tools.exec_command({cmd:"toolkit memory delete project_runtime_environment --owner-approved",max_output_tokens:2000});text(r);\n'
+MAX toolkit call seconds: 0.312

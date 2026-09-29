@@ -70,7 +70,14 @@ test('a proposal saved again without the owner\'s answer stays a proposal; --sta
   const forced = await save(root, 'idea', 'An idea to keep', 'An idea.', ['--expect', v2, '--status', 'current']);
   assert.equal(forced.code, 2);
   assert.match(forced.stderr, /is a proposal the owner has not answered, so it cannot be saved as current/);
-  const yes = await save(root, 'idea', 'An idea to keep', 'An idea.', ['--expect', v2, '--approved-by', 'Mike', '--json']);
+  // A one-fact proposal is not approved by saving it again under its fact's
+  // key (verifier, 2026-09-28): approve --concept names the concept.
+  const oneFact = await save(root, 'idea', 'An idea to keep', 'An idea.', ['--expect', v2, '--approved-by', 'Mike']);
+  assert.equal(oneFact.code, 2);
+  assert.match(oneFact.stderr, /it is a proposal that starts a new concept, and its key names the fact/);
+  assert.match(oneFact.stderr, /toolkit memory approve project_idea --by 'Mike' --concept project_<subject>/);
+  // The full body as a concept approves it in the same save.
+  const yes = await runToolkit(['memory', 'save', '--type', 'project', '--name', 'idea', '--description', 'An idea to keep', '--body', '# Ideas\n\n## The idea\n\n**Remember:** An idea.\n', '--expect', v2, '--approved-by', 'Mike', '--json'], { cwd: root });
   assert.equal(yes.code, 0, yes.stderr);
   assert.equal(yes.json.proposal, false);
   const rec = (await runToolkit(['memory', 'get', 'project_idea', '--json'], { cwd: root })).json;
@@ -117,7 +124,7 @@ test('list and find mark a proposal; find names the proposals it left out', asyn
   const { root } = makeProject();
   await save(root, 'friday-release', 'Releases go out on Fridays', 'Releases go out on Fridays.', ['--proposal']);
   const list = await runToolkit(['memory', 'list'], { cwd: root });
-  assert.match(list.stdout, /^- project_friday_release \[proposal: the owner has not answered\]: Releases go out on Fridays$/m);
+  assert.match(list.stdout, /^- project_friday_release \[proposal: the owner has not answered\]: .+ — Releases go out on Fridays \(updated \d{4}-\d{2}-\d{2}\)$/m);
   const find = await runToolkit(['memory', 'find', 'releases', 'fridays'], { cwd: root });
   assert.match(find.stdout, /^No memory records match "releases fridays"\.\n1 saved proposal also matches; it is not a fact until the owner answers\. toolkit memory find 'releases fridays' --proposals shows it\.$/m, 'the printed command quotes the query so it runs as shown');
   const all = await runToolkit(['memory', 'find', 'releases', '--all', '--json'], { cwd: root });
@@ -172,8 +179,11 @@ test('Notion (Lore layout): a proposal is Status proposed, approve makes it acce
   assert.deepEqual((await driver.find('release day idea')).results, [], 'find leaves a proposal out');
   assert.equal((await driver.find('release day idea', { proposals: true })).results[0].key, 'project_release_day');
 
-  const ok = await approveRecord(driver, 'project_release_day', { by: 'Mike', today: '2026-09-28' });
+  // A one-fact proposal is approved under a concept name the agent gives; its own key keeps the same page.
+  await assert.rejects(approveRecord(driver, 'project_release_day', { by: 'Mike', today: '2026-09-28' }), (err) => err.code === 2 && /--concept project_<subject>/.test(err.details.fix));
+  const ok = await approveRecord(driver, 'project_release_day', { by: 'Mike', today: '2026-09-28', concept: 'project_release_day', title: 'Release day' });
   assert.equal(ok.changed, true);
+  assert.match((await driver.get('project_release_day')).body, /^# Release day\n\n## /);
   assert.deepEqual(statusOf('project_release_day'), { status: 'accepted', trash: false });
   assert.equal((await driver.get('project_release_day')).authorization, 'Approved by Mike on 2026-09-28');
   await assert.rejects(rejectProposal(driver, 'project_release_day'), (err) => err.code === 2);

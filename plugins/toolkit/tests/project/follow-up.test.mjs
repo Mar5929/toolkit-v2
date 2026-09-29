@@ -205,12 +205,15 @@ test('toolkit memory approve finishes a proposal the Stop hook saved: the "do no
   await tk(root, ['hook', 'stop', '--host', 'claude'], { env, stdin: JSON.stringify(fixture('claude', 'stop', { CWD: root, SESSION: session, TURN, MESSAGE: 'Done.\n\nSave to memory: Deploys happen on Tuesdays?' })) });
   const key = 'project_deploys_happen_tuesdays';
   assert.equal((await tk(root, ['memory', 'get', key, '--json'], { env })).json.status, 'needs-review');
-  const approved = await tk(root, ['memory', 'approve', key, '--by', 'Mike'], { env });
+  // Concept memory: the yes names the concept (verifier, 2026-09-28); the hook's proposal starts project_deploys.
+  const approved = await tk(root, ['memory', 'approve', key, '--by', 'Mike', '--concept', 'project_deploys', '--title', 'Deploys'], { env });
   assert.equal(approved.code, 0, approved.stdout + approved.stderr);
-  const rec = (await tk(root, ['memory', 'get', key, '--json'], { env })).json;
+  const rec = (await tk(root, ['memory', 'get', 'project_deploys', '--json'], { env })).json;
   assert.equal(rec.status, 'current');
+  assert.match(rec.body, /^# Deploys\n\n## Deploys happen on Tuesdays\n\n\*\*Remember:\*\* Deploys happen on Tuesdays\./);
   assert.doesNotMatch(rec.body, /Do not rely on this/);
   assert.match(rec.body, /Mike approved it on \d{4}-\d{2}-\d{2}\./);
+  assert.equal((await tk(root, ['memory', 'get', key], { env })).code, 1, 'the proposal record is gone');
 });
 
 // ------------------------------------------------------------------ CLI wording

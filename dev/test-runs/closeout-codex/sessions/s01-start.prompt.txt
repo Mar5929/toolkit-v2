@@ -1,0 +1,1 @@
+I want the tip command built. When I run node bin/tipcalc.js 50 --percent 20 it should print "Tip: $10.00  Total: $60.00". I also want a --split option that divides the total between friends, like --split 3. Do not build anything until I approve the requirements.

@@ -25,7 +25,8 @@ toolkit init --name '<name>' --key <key> --tracker <tracker> --memory <memory> -
 - `--tracker`: `local`, `notion`, `github`, or `jira`.
 - `--memory`: `builtin`, `hindsight`, or `notion`.
 - `--backup-dir`: the folder from question 6, or `none`. Leave it out only
-  with a Notion tracker and Notion memory.
+  with a Notion tracker and Notion memory: Notion keeps each page's history
+  and keeps deleted pages in its trash, so no folder is asked for.
 - Add `--decline SOUL.md` after a no to question 5.
 - `--hosts` defaults to both hosts (`claude-code,codex`). Leave it out unless
   the owner uses only one.

@@ -19,6 +19,7 @@ import { proposalQuestions, proposalName, proposalType, proposalArgs } from '../
 import { codexApostropheProblem, unmatchedQuote, checkAiCredit } from '../../lib/hooks/shell.mjs';
 import { APOSTROPHE_NOTES, aiCreditReason } from '../../lib/hooks/pre-tool.mjs';
 import { readCodexHooksSeen, codexHooksHash } from '../../lib/project/machine.mjs';
+import { TRAILER, GENERATED } from '../credit-lines.mjs';
 
 after(cleanup);
 
@@ -122,7 +123,7 @@ test('a keep phrase answered only with a question still blocks once: the owner\'
   const { root, env } = await initProject();
   const r = await turn(root, env, 'claude', { session: 'keep-q', prompt: 'Remember that deploys happen on Tuesdays.', message: 'Save to memory: deploys happen on Tuesdays?' });
   assert.match(r.stop.out.hookSpecificOutput.additionalContext, /nothing was recorded/);
-  assert.match(r.stop.out.hookSpecificOutput.additionalContext, /was saved as the proposal project_deploys_happen_tuesdays; the owner's own words approve it: toolkit memory approve project_deploys_happen_tuesdays --by <owner>\./);
+  assert.match(r.stop.out.hookSpecificOutput.additionalContext, /was saved as the proposal project_deploys_happen_tuesdays; the owner's own words approve it: toolkit memory approve project_deploys_happen_tuesdays --by <owner> --concept project_<subject>\./);
   assert.equal((await proposals(root, env)).length, 1, 'the question is kept as a proposal meanwhile');
   const next = await turn(root, env, 'claude', { session: 'keep-q', prompt: 'Thanks.', message: 'Done.' });
   assert.ok(!next.up.out || !/memory proposal/.test(next.up.out.hookSpecificOutput.additionalContext), 'the block already named it');
@@ -167,15 +168,15 @@ test('Codex: a toolkit command with the apostrophe escape, or an unmatched quote
 // ------------------------------------------------------------------ M1: AI credit
 
 test('the AI credit guard covers merges, tags, notes, releases, issues, and pull request comments', async () => {
-  const credit = 'Co-Authored-By: Claude <noreply@anthropic.com>';
+  const credit = TRAILER;
   const cases = [
     [`git merge --no-ff claude/wi-001-x -m 'Merge WI-001' -m '${credit}'`, 'commit'],
-    ["git tag -a v1.0 -m 'v1.0\n\nGenerated with Claude Code'", 'tag'],
+    [`git tag -a v1.0 -m 'v1.0\n\n${GENERATED}'`, 'tag'],
     [`git notes add -m '${credit}'`, 'note'],
-    ["gh release create v1.0 --notes 'Release 1.0\n\nGenerated with Claude Code'", 'release'],
-    ["gh issue create --title 'Bug' --body 'Steps.\n\nGenerated with Claude Code'", 'issue'],
-    ["gh issue comment 12 --body 'Fixed.\n\nGenerated with Claude Code'", 'issue'],
-    ["gh pr comment 7 --body 'Looks good.\n\nGenerated with Claude Code'", 'pull request'],
+    [`gh release create v1.0 --notes 'Release 1.0\n\n${GENERATED}'`, 'release'],
+    [`gh issue create --title 'Bug' --body 'Steps.\n\n${GENERATED}'`, 'issue'],
+    [`gh issue comment 12 --body 'Fixed.\n\n${GENERATED}'`, 'issue'],
+    [`gh pr comment 7 --body 'Looks good.\n\n${GENERATED}'`, 'pull request'],
   ];
   for (const [cmd, what] of cases) {
     const hit = checkAiCredit(cmd);
@@ -184,7 +185,7 @@ test('the AI credit guard covers merges, tags, notes, releases, issues, and pull
   }
   assert.equal(checkAiCredit("git merge --ff-only claude/wi-001-x"), null);
   assert.equal(checkAiCredit("gh issue create --title 'Bug' --body 'Co-Authored-By: Sam Lee <sam@example.com>'"), null, 'a person is not AI credit');
-  assert.match(aiCreditReason({ what: 'tag', line: 'Generated with Claude Code' }), /This tag message gives an AI credit.*No tag was made\./);
+  assert.match(aiCreditReason({ what: 'tag', line: GENERATED }), /This tag message gives an AI credit.*No tag was made\./);
 
   const { root, env } = await initProject();
   for (const host of HOSTS) {

@@ -12,17 +12,17 @@ Sets up Toolkit V2, never the older claude-toolkit (its `project-init` skill).
 
 1. **Check the computer and the project.** `toolkit` not found, or doctor
    reports a computer problem: `references/repair-and-update.md`, "Reaching
-   the `toolkit` command". A warning (the `plugin-pointer` one included)
-   never blocks init: note it and go on.
+   the `toolkit` command". A warning never blocks init: note it, go on.
    `toolkit doctor`
 2. **Pick the path.** `.toolkit.json` present: step 8. A new computer:
    `references/new-computer.md`. Switching memory or tracker:
    `references/switching.md`. Otherwise a new project: put the checklist
    below in the plan tool (Claude Code: the task list; Codex: `update_plan`).
-3. **Interview**, one question per message, each with a recommendation:
-   name, tracker, memory, Salesforce, `SOUL.md`, backup folder. Look before
-   asking. `references/interview.md`. Notion or Hindsight chosen: do the
-   "Before init" part of its wiring file (step 5) now.
+3. **Interview**, one question per message, in the reply text, each with a
+   recommendation: name, tracker, memory, Salesforce, `SOUL.md`, backup
+   folder (skipped when tracker and memory are both Notion: say Notion keeps
+   page history and a trash). Look first. `references/interview.md`. Notion
+   or Hindsight chosen: do the "Before init" part of its wiring file now.
 4. **Run init** with the answers, then record what it has no flag for.
    Inside Codex, first tell the owner that Codex will ask him to approve
    running init outside the sandbox. `references/running-init.md`.
@@ -44,12 +44,12 @@ Sets up Toolkit V2, never the older claude-toolkit (its `project-init` skill).
 ```text
 - [ ] Doctor run; computer problems fixed
 - [ ] Looked before asking: Git repository, code, sfdx-project.json, older toolkit files
-- [ ] Six answers: name (key, id prefix, owner), tracker, memory, Salesforce (org aliases), SOUL.md, backup folder
+- [ ] Six answers: name (key, id prefix, owner), tracker, memory, Salesforce (org aliases), SOUL.md, backup folder (not asked when tracker and memory are both Notion)
 - [ ] Notion signed in and root page known, or Hindsight answering, before init
 - [ ] toolkit init run; id prefix and Salesforce aliases recorded
 - [ ] Each choice wired: Notion, Hindsight, GitHub or Jira, Salesforce API version
 - [ ] Setup guides filled with confirmed facts; outcome asked for; prompts left listed
-- [ ] First backup made, or the owner's no-backup choice reported
+- [ ] First backup made, or the owner's no-backup choice reported, or (tracker and memory both Notion) Notion's page history and trash named as the backup
 - [ ] Doctor at 0 problems (warnings only the other host can clear are the owner's)
 - [ ] Owner steps in the reply; the ones doctor checks also in the current focus
 - [ ] First briefing shown; the report given
@@ -58,6 +58,10 @@ Sets up Toolkit V2, never the older claude-toolkit (its `project-init` skill).
 
 ## Gotchas
 
+- Ask each question in the reply text, never through a question box or
+  question tool (in Codex, `request_user_input_async` and the like): in
+  `codex exec` the box is never shown, and the turn ends with no answer.
+  Never answer a question for him after a wait; wait for his reply.
 - Never change an answer the owner gave (hosts, tracker, memory, Salesforce,
   `SOUL.md`) to get past a failed command, and never set up in another folder
   and copy it over. Stop, say what failed, and say what he must approve or

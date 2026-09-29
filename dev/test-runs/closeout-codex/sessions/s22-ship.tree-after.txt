@@ -1,0 +1,54 @@
+9dbf3c8 Record delivered tip command behavior
+421fcb7 Record WI-002 split acceptance checks
+f1471a4 Add split option to tipcalc command
+8f746be Record WI-001 command checks
+1fdedd4 Build plain tip and total command
+./.claude/output-styles/plain-english.md
+./.claude/rules/ai-external-knowledge.md
+./.claude/rules/humanize-outbound-text.md
+./.claude/rules/keep-work-item-current.md
+./.claude/rules/memory-review-and-save.md
+./.claude/rules/plain-english-artifacts.md
+./.claude/rules/publish-project-documents.md
+./.claude/rules/session-handoff.md
+./.claude/rules/shared-repository-work.md
+./.claude/rules/work-item-folders.md
+./.claude/settings.json
+./.codex/config.toml
+./.codex/rules/toolkit.rules
+./.gitignore
+./.memory/.toolkit-meta.json
+./.memory/AGENTS.md
+./.memory/CURRENT_FOCUS.md
+./.memory/MEMORY.md
+./.memory/memory-criteria.md
+./.memory/project_money_calculation.md
+./.memory/project_topic_template.md
+./.memory/terminology-glossary.md
+./.memory/user_working_preferences.md
+./.toolkit.json
+./.work-items/.toolkit-state.json
+./.work-items/DASHBOARD.md
+./.work-items/WI-001-build-the-plain-tip-and-total-command/DESIGN.md
+./.work-items/WI-001-build-the-plain-tip-and-total-command/WI-002-split-between-friends/WORK-ITEM.md
+./.work-items/WI-001-build-the-plain-tip-and-total-command/WORK-ITEM.md
+./.work-items/work-item-template/DESIGN.md
+./.work-items/work-item-template/WORK-ITEM.md
+./AGENTS.md
+./CLAUDE.md
+./DECISIONS.md
+./PROJECT-ROADMAP.md
+./PROJECT.md
+./README.md
+./ai-external-knowledge/INDEX.md
+./bin/tipcalc.js
+./requirements/AGENTS.md
+./requirements/SYSTEM-DATA-MODEL.md
+./requirements/system-area-template/AREA-TEMPLATE.md
+./requirements/tip/TIP.md
+./system-guide/AREA-TEMPLATE.md
+./system-guide/tip.md
+./tests/TEST-PLAN-TEMPLATE.md
+./tests/WI-001-TEST-PLAN.md
+./tests/WI-002-TEST-PLAN.md
+./tests/tipcalc.test.js

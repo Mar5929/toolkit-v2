@@ -1,0 +1,519 @@
+PROMPT: I want the tip command built. When I run node bin/tipcalc.js 50 --percent 20 it should print "Tip: $10.00  Total: $60.00". I also want a --split option that divides the total between friends, like --split 3. Do not build anything until I approve the requirements.
+THREAD: 01a0eaf7-eb29-7523-97ab-13db3a25523f
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll record this as a work item and draft the requirements for your review. I won’t build the command until you approve them.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-on/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-requirements/SKILL.md'
+  -> ---
+name: work-on
+description: 'Starts, resumes, or logs a work item and builds it. Use whenever the owner asks to build, add, fix, or change something, names an item id to resume, says "keep going", or wants a bug or idea logged ("put it in the backlog"). Not for requirement edits (work-requirements) or handovers (work-delegate).'
+---
+
+# Work on
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Starts or resumes one work item, plans it, and builds it; it never records an approval, Done, a merge, or a deploy. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. No project briefing in this conversation: run the briefing. Exit code 4: open `project-setup` and stop. Tell the owner each change listed under "Changes found in the tracker", one line each in the CLI's words, before other work.
+   `toolkit brief`
+2. A bare "ok", "yes", or "looks good" when this chat asked him nothing: start no work and ask what he wants. Otherwise find the item: the id he named, this worktree's item, or a title that matches. Two matches: ask one question naming both.
+   `toolkit work list`
+   `toolkit work show <id>`
+3. No item yet: size the request as a quick edit, log only, or a work item, and pick the type (`references/sizing-and-routing.md`, sections 1 to 3). He asks to be asked first ("ask me questions"
+
+[CMD exit=0] /bin/zsh -lc 'for f in .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md; do cat "$f"; done'
+  -> # Humanize Anything Sent to Another Person
+
+Any text that will leave the project and be read by someone other than the owner
+is run through the `humanizer` skill before the owner sees the final version.
+Use the `unslop` skill when `humanizer` is not installed. That covers emails,
+chat messages, supp
+
+[CMD exit=0] /bin/zsh -lc "cat PROJECT-ROADMAP.md; git status --short; rg --files -g 'AGENTS.md' -g 'package.json' -g 'bin/**' -g '.work-items/**' -g 'tests/**' | head -80"
+  -> # Project roadmap
+
+<!-- Fill-in guide: replace every angle-bracket prompt in the outcome, phase table, phase heading, and work-unit fields with this project's real text. Keep one overview row and one matching ## heading per phase. Under that heading, repeat the ### work-unit block for each deliverab
+
+[AGENT] I’m using the work-on and work-requirements procedures to save the request and prepare the approval draft.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-requirements/references/interview.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-requirements/references/requirement-format.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-requirements/references/approvals.md'
+  -> # Interviewing the owner
+
+How to run the requirements interview: what to read first, how to ask, how
+to handle "grill me", resuming, and corrections. Everything the owner says
+lands in the work item, never in a separate notes file.
+
+## Contents
+
+1. Aim at the outcome he wants
+2. Before the first question
+3. Asking
+4. "Grill me" and "ask me questions"
+5. Saving as you go
+6. Resuming an interview
+7. Corrections and changes
+8. An example exchange
+
+## 1. Aim at the outcome he wants
+
+- Work toward the outcome the owner wants, not only the words he used. Read a
+  rough answer in the context of that requirement's purpose and the rest of
+  the system, and ask focused follow-up questions until the real intent is
+  clear.
+- Say so when an answer would undermine his own goal, conflict with a stated
+  constraint, cause a problem elsewhere, or when a clearly better approach
+  exists. Name the concern, the tradeoff, and the direction you recommend,
+  then let him choose. Once he has heard the concern and decided, do it his
+  way.
+- Never quietly replace what he said with what you inferred.
+- Keep it light. Do not read every answer back for approval, do not challenge
+  every answer, and do not start designing while the goal is still open.
+
+## 2. Before the first question
+
+Read, so no question repeats an answer:
+
+- the item: Starting request, Agreed goal, every `R-xx`, Open Questions, and
+  Notes > Resume here;
+- the area's file in `requirements/`, and `requirements/SYSTEM-DATA-MODEL.md`
+  w
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-requirements/references/work-item-format.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-requirements/references/toolkit-commands.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-requirements/references/current-focus.md'
+  -> <!-- Generated file. Source: plugins/work/shared/work-item-format.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Work item and design format
+
+What a work item and its design hold, their exact section names, and how to
+change them with `toolkit work` commands without losing text.
+
+## Contents
+
+1. Where the record and the design live
+2. Header fields
+3. Sections of `WORK-ITEM.md`
+4. Sections of `DESIGN.md`
+5. Finding an item's file
+6. Changing one section
+7. Adding a table row
+8. Editing a record directly
+9. Titles
+10. Generated files
+11. Examples
+
+## 1. Where the record and the design live
+
+Every tracker uses the same body and the same design shape. Only the place
+differs.
+
+| Tracker | Work item | Design |
+| --- | --- | --- |
+| Local | `WORK-ITEM.md` in the item's folder under `.work-items/` | `DESIGN.md` beside it |
+| Notion | The item's page in the project's Work Items database | The item's "Solution Design" child page |
+| GitHub Issues | The issue body | One issue comment whose first line is `## Solution design` |
+| Jira | The issue description | One comment whose first line is "Solution design" |
+
+An item has one design home. Never make a separate design folder or a second
+design file.
+
+## 2. Header fields
+
+The header (frontmatter locally, properties in Notion) holds these fields.
+Only `toolkit work` commands change them.
+
+| Field | Values | Changed by |
+| --- | --- | --- |
+| `id` | `WI-001` (the project's prefix and a number) | `toolkit work
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list; git status --short; git remote -v'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex b50508c [main]
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work list'
+  -> No open work items. Add --all to include finished, cancelled, and archived ones.
+
+
+[AGENT] I’m recording “Build the tip command” as the work item. The requested tip and total output is clear; I’ll capture the split output as a question before asking for approval.
+
+[CMD exit=0] /bin/zsh -lc "toolkit work new --title 'Build the tip command' --type build --stage 01-discovery"
+  -> Created WI-001: Build the tip command (01 Discovery, Backlog) at .work-items/WI-001-build-the-tip-command/WORK-ITEM.md.
+Continue with work-requirements.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Starting request' --text 'I want the tip command built. When I run node bin/tipcalc.js 50 --percent 20 it should print \"Tip: "'$10.00  Total: $60.00". I also want a --split option that divides the total between friends, like --split 3. Do not build anything until I approve the requirements.'"'"
+  -> Saved "Starting request" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --stage 02-refinement'
+  -> Updated WI-001: stage 01 Discovery -> 02 Refinement (status Backlog).
+Now 02 Refinement (Backlog). Continue with work-requirements.
+
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-requirements/references/spec-check.md'
+  -> # The spec check
+
+How to run the `requirements-analyst` check on an item's requirements and
+turn its findings into fixes or questions for the owner.
+
+## When it runs
+
+- Before asking for the requirements approval.
+- Whenever the owner says "check the spec".
+- Again after a change to an approved requirement.
+
+## The brief
+
+Give the `requirements-analyst` agent (Claude Code: `work:requirements-analyst`;
+Codex: the text of `references/agent-requirements-analyst.md`) this, pasted
+in, because it has no tracker access:
+
+1. The item id.
+2. The Starting request, the Agreed goal, every `R-xx` block, the Acceptance
+   list, and the open questions.
+3. The area's file in `requirements/` when one exists, so it can spot a
+   conflict.
+4. The job: "Check these requirements before design. Return ready or not
+   ready, then each finding with a fix."
+5. Files it may write: nothing.
+
+## What it returns
+
+Ready or not ready, then findings of these kinds, each with a fix:
+
+- missing pieces (a step, a person, an error case, a state, a boundary with
+  another system, a way to tell it worked);
+- places not explicit end to end;
+- wording a builder could misread;
+- build details inside requirements;
+- drift from the Agreed goal;
+- research or history in the wrong place.
+
+## Handling the findings
+
+- For each finding, propose a fix in plain words: what to change, where, and
+  what the line would say instead.
+- Change nothing without the owner's yes. Three findings or fewer: one
+  decision per message, in
+
+[CMD exit=0] /bin/zsh -lc 'rg --files requirements system-guide tests'
+  -> tests/TEST-PLAN-TEMPLATE.md
+system-guide/AREA-TEMPLATE.md
+requirements/AGENTS.md
+requirements/SYSTEM-DATA-MODEL.md
+requirements/system-area-template/AREA-TEMPLATE.md
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory find 'tip command calculation split output rounding'"
+  -> No memory records match "tip command calculation split output rounding".
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001'
+  -> WI-001: Build the tip command
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/.work-items/WI-001-build-the-tip-command/WORK-ITEM.md
+Stage: 02 Refinement (Backlog) | Waiting on: none | Continue with: work-requirements
+Parent: none | Sub-items: none | Design: none
+Worktree branch for this item: claude/wi-001-build-the-tip-command (folder .claude/worktrees/wi-001-build-the-tip-command)
+
+---
+id: WI-001
+title: Build the tip command
+type: build
+stage: 02-refinement
+status: Backlog
+parent: none
+waiting_on: "none"
+priority: medium
+delivery: not-offered
+requirements_approved: "no"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-001: Build the tip command
+
+<!-- Fill-in guide for a new local work item: create it with `toolkit work new`, which copies this folder, names the new folder, and sets the real ID in front matter and heading; keep the file name WORK-ITEM.md. Use stable phase, task, requirement, and question IDs for this item. In the front matter, keep one value from each list and change the fields with `toolkit work` commands; a blocked item has `waiting_on` set and its Blockers line filled, not a Blocked status. Replace every angle-bracket prompt with actual text in that same field, cell, or paragraph; do not leave the prompt in place. Keep the headings and field labels. Add or remove phase, task, question, and requirement examples to match the real work. 
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Active requirements' --text '#### R-01 — Show tip and total
+
+**Status:** Refining  
+**Applies to:** A person running the tip command with a bill amount and a tip percentage.  
+**Required behavior:** Calculate the tip from the bill amount and percentage, add it to the bill, and print the tip and total as dollar amounts with two decimal places. The tip and total appear on one line, with two spaces between them.  
+**Boundaries and exceptions:** None identified.  
+**Acceptance check:** Run "'`node bin/tipcalc.js 50 --percent 20`; the output is exac
+  -> Saved "Active requirements" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Acceptance' --text 'This work item can be accepted when:
+
+1. With a bill of "'$50 and a 20% tip, the command prints exactly `Tip: $10.00  Total: $60.00` (R-01).
+2. With a split count of 3, the command shows each person’s share of the total in the format and rounding rule the owner approves (R-02).
+3. The owner reviews the tested result.'"'"
+  -> Saved "Acceptance" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | How should the per-person share appear in the output, and how should a share that is not an exact cent be rounded? | R-02 | Open | owner |'"
+  -> Saved "Open Questions" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Overview' --text '**Goal:** Provide a terminal tip command that reports the tip and total and can divide the total among friends.
+
+**Current position:** The owner request and draft requirements are recorded. No application code has been built.
+
+**Next action:** Owner confirms the goal, then answers the split display and rounding question before reviewing the full requirements for approval.
+
+**Blockers:** Requirements approval is required before the build.
+
+**Related items:** None.'"
+  -> Saved "Overview" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Resume here' --text 'Confirm the goal with the owner. Then settle Q-01, complete the requirements check, and ask for explicit requirements approval. Do not build before approval.'"
+  -> Saved "Resume here" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --waiting-on owner'
+  -> Updated WI-001: waiting on owner.
+Now 02 Refinement (Backlog). Continue with work-decide.
+
+
+[AGENT] WI-001 now holds the draft requirements, and it is waiting on your answers. I’m updating the next-session pointer so the approval gate stays clear if this chat ends.
+
+[CMD exit=0] /bin/zsh -lc 'cat .memory/AGENTS.md .memory/memory-criteria.md'
+  -> # Local project memory
+
+Keep future sessions oriented without turning every conversation into lasting memory. This folder is the project's built-in memory store and can be opened directly as an Obsidian vault. Active topics stay flat; filenames and YAML types agree. Git ignores this folder, so back 
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.9/skills/memory-save/SKILL.md'
+  -> ---
+name: memory-save
+description: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says "remember this", "from now on", "forget that", or "remind me" with no time given, corrects the agent, or a hook says a save is due.'
+---
+
+# Memory save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Saves, corrects, or retires one fact in the project's memory with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand. Memory keeps one record per concept (for example `feedback_ways_of_working`, `project_billing`), with one `##` section per fact; an `event_` record holds one episode.
+
+## Steps
+
+Track these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home ("Where other things go" below) and stop.
+2. Find the concept it belongs in, and any section that already holds it. List the concepts of its type (title, summary, updated date), search, and read each likely concept whole, with its version. The save's duplicate check compares wording, so only this search finds a section the new fact contradicts (for example
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus --json'
+  -> {
+  "ok": true,
+  "backend": "builtin",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-28, setup, agent\n\n## Now\n\nNone.\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Read the Toolkit V2 briefing and ask what the owner wants built first. The repository has no application code or verified build and test commands yet.\n",
+  "version": "ca76aeb3f1c246b53e9ba815507876eaac07acae3de6d5cd6a0a2f96f542158f"
+}
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate WI-001'
+  -> Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. 1 open question waits on the owner (toolkit work decisions lists it).
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Build the tip command
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 from its Resume here: confirm the goal, settle Q-01, check the requirements, and request appro
+  -> Saved the current focus (20 lines). Version: e256d0984417
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Build the tip command
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 from its Resume here: confirm the goal, settle Q-01, check the requirements, and request approval before building.
+
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for tipcalc (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (4):
+- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit'
+
+[AGENT] I started **WI-001, “Build the tip command,”** and saved your request as draft requirements. No command code has been built.
+
+Is the goal to print the tip and total for a bill, with an option to show each friend’s share? I recommend **yes**, since that matches the behavior you described. I’ll settle the split output with you next, then show you the full requirements for approval.
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 715391, "cached_input_tokens": 670336, "cache_write_input_tokens": 0, "output_tokens": 3397, "reasoning_output_tokens": 827}}
+
+SKILLS OPENED: ['work-on', 'work-requirements', 'memory-save']
+
+[HOOK CONTEXT ord=9] Project briefing: tipcalc (tipcalc), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The tracker has no open items. A new request starts a work item with the work-on skill.
+
+Current focus:
+Last updated: 2026-09-28, setup, agent
+## Now
+None.
+## Waiting on the owner
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+## Untracked to-dos
+None.
+## Next session starts with
+- Read the Toolkit V2 briefing and
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat PROJECT.md SOUL.md 2>/dev/null",max_output_tokens:4000}),
+  tools.exec_command({cmd:"for f in .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md; do cat \"$f\"; done",max_output_tokens:8000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-on/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-requirements/SKILL.md",max_output_tokens:12000}),
+  tools.exec_command({cmd:"cat PROJECT-ROADMAP.md; git status --short; rg --files -g 'AGENTS.md' -g 'package.json' -g 'bin/**' -g '.work-items/**' -g 'tests/**' | head -80",max_output_tokens:5000})
+]); r.forEach((x,i)=>text(`---${i}---\n${x.status==="fulfilled"?x.value.output:x.reason}`));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "---0---\n# tipcalc\n\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\n\n## Purpose and intended outcome\n\n- Purpose: tipcalc tells me the tip and the total for a restaurant bill, and can split the total between friends, straight from my terminal.\n- Intended outcome: tipcalc tells me the tip and the total for a restaurant bill, and can split the total between friends, straight from my terminal.\n\n## Scope and boundaries\n\n- In scope: tipcalc tells me the tip and the total for a restaurant bill, and can split the total between friends, straight from my terminal.\n- Outside scope: `<Important exclusions or adjacent owners.>`\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\n\n## Systems and environments\n\n| System or org | Purpose | Environment | Source of truth | Access notes |\n| --- | --- | --- | --- | --- |\n| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |\n\n## People and ownership\n\n| Role | Person or team | Responsibility | Source / last confirmed |\n| --- | --- | --- | --- |\n| Owner | Mike Rihm | Project decisions | Owner's setup answers, 2026-09-28 |\n\n## Work and project records\n\n- Work tracker: `.work-items/` in the main checkout (local folders, Git-ignored)\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\n- Project decisions: [DECISIONS.md](DECISIONS.md)\n- Functional requirements: [requirements/](requirements/)\n- Design home: `DESIGN.md` beside each local work item in `.work-items/`.\n- System Guide: disabled; `system-guide/` currently holds only the scaffold template.\n- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)\n- Memory backup or sync: `/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/closeout2-codex`; run `toolkit handoff-backup` to back up local work items and memory.\n\n## Resources and project paths\n\n- Tests and checks: No 
+
+[CALL] const base="/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills";
+const r=await Promise.allSettled([
+  tools.exec_command({cmd:`cat ${base}/work-requirements/references/interview.md ${base}/work-requirements/references/requirement-format.md ${base}/work-requirements/references/approvals.md`,max_output_tokens:13000}),
+  tools.exec_command({cmd:`cat ${base}/work-requirements/references/work-item-format.md ${base}/work-requirements/references/toolkit-commands.md ${base}/work-requirements/references/current-focus.md`,max_output_tokens:13000}),
+  tools.exec_command({cmd:"git worktree list; git status --short; git remote -v",max_output_tokens:3000}),
+  tools.exec_command({cmd:"toolkit work list",max_output_tokens:3000})
+]);r.forEach((x,i)=>text(`---${i}---\n${x.status==="fulfilled"?x.value.output:x.reason}`));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Warning: truncated output (original token count: 13212)\nTotal output lines: 1169\n\n---0---\n# Interviewing the owner\n\nHow to run the requirements interview: what to read first, how to ask, how\nto handle \"grill me\", resuming, and corrections. Everything the owner says\nlands in the work item, never in a separate notes file.\n\n## Contents\n\n1. Aim at the outcome he wants\n2. Before the first question\n3. Asking\n4. \"Grill me\" and \"ask me questions\"\n5. Saving as you go\n6. Resuming an interview\n7. Corrections and changes\n8. An example exchange\n\n## 1. Aim at the outcome he wants\n\n- Work toward the outcome the owner wants, not only the words he used. Read a\n  rough answer in the context of that requirement's purpose and the rest of\n  the system, and ask focused follow-up questions until the real intent is\n  clear.\n- Say so when an answer would undermine his own goal, conflict with a stated\n  constraint, cause a problem elsewhere, or when a clearly better approach\n  exists. Name the concern, the tradeoff, and the direction you recommend,\n  then let him choose. Once he has heard the concern and decided, do it his\n  way.\n- Never quietly replace what he said with what you inferred.\n- Keep it light. Do not read every answer back for approval, do not challenge\n  every answer, and do not start designing while the goal is still open.\n\n## 2. Before the first question\n\nRead, so no question repeats an answer:\n\n- the item: Starting request, Agreed goal, every `R-xx`, Open Questions, and\n  Notes > Resume here;\n- the area's file in `requirements/`, and `requirements/SYSTEM-DATA-MODEL.md`\n  when data is involved;\n- the area's file in `system-guide/`;\n- project memory on the topic: `toolkit memory find '<topic>'`.\n\nAsk only what the records and the code cannot answer.\n\n## 3. Asking\n\n- One question at a time, in the reply text, never through a question tool.\n- Each question carries a recommended answer and a one-line reason, so the\n  owner can confirm, correct, or redirect it.\n- Settle upstream decisions before the ones that depend on them. Most basic\n  first: who uses it, what they must be able to do, then the rules, then the\n  exceptions.\n- Follow contradictions and vague words (\"fast\", \"easy\", \"secure\") until\n  they are resolved or recorded as open questions.\n- The owner does not know: add an Open
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work new --title 'Build the tip command' --type build --stage 01-discovery",max_output_tokens:3000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Created WI-001: Build the tip command (01 Discovery, Backlog) at .work-items/WI-001-build-the-tip-command/WORK-ITEM.md.\nContinue with work-requirements.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Starting request' --text 'I want the tip command built. When I run node bin/tipcalc.js 50 --percent 20 it should print \"Tip: $10.00  Total: $60.00\". I also want a --split option that divides the total between friends, like --split 3. Do not build anything until I approve the requirements.'",max_output_tokens:3000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Starting request\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-001 --stage 02-refinement",max_output_tokens:3000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Updated WI-001: stage 01 Discovery -> 02 Refinement (status Backlog).\nNow 02 Refinement (Backlog). Continue with work-requirements.\n"}]
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"toolkit work show WI-001",max_output_tokens:7000}),
+  tools.exec_command({cmd:"toolkit memory find 'tip command calculation split output rounding'",max_output_tokens:3000}),
+  tools.exec_command({cmd:"rg --files requirements system-guide tests",max_output_tokens:3000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-requirements/references/spec-check.md",max_output_tokens:5000})
+]);r.forEach((x,i)=>text(`---${i}---\n${x.status==="fulfilled"?x.value.output:x.reason}`));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "---0---\nWI-001: Build the tip command\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/.work-items/WI-001-build-the-tip-command/WORK-ITEM.md\nStage: 02 Refinement (Backlog) | Waiting on: none | Continue with: work-requirements\nParent: none | Sub-items: none | Design: none\nWorktree branch for this item: claude/wi-001-build-the-tip-command (folder .claude/worktrees/wi-001-build-the-tip-command)\n\n---\nid: WI-001\ntitle: Build the tip command\ntype: build\nstage: 02-refinement\nstatus: Backlog\nparent: none\nwaiting_on: \"none\"\npriority: medium\ndelivery: not-offered\nrequirements_approved: \"no\"\ndesign: none\nresult_approved: \"no\"\nupdated: 2026-09-28\n---\n\n# WI-001: Build the tip command\n\n<!-- Fill-in guide for a new local work item: create it with `toolkit work new`, which copies this folder, names the new folder, and sets the real ID in front matter and heading; keep the file name WORK-ITEM.md. Use stable phase, task, requirement, and question IDs for this item. In the front matter, keep one value from each list and change the fields with `toolkit work` commands; a blocked item has `waiting_on` set and its Blockers line filled, not a Blocked status. Replace every angle-bracket prompt with actual text in that same field, cell, or paragraph; do not leave the prompt in place. Keep the headings and field labels. Add or remove phase, task, question, and requirement examples to match the real work. Use the chosen tracker as the source of truth for status and links. Delete this guide after filling the item. -->\n\n## Overview\n\n<!-- Enter the current summary directly after each bold label below. Keep this section current; detailed tasks and decisions belong in their sections further down. -->\n\n**Goal:** <The outcome this work item is meant to achieve.>\n\n**Current position:** <What has been completed and where work stands now.>\n\n**Next action:** <The next specific action and its owner.>\n\n**Blockers:** <Blocking decision or dependency, or \u201cNone.\u201d>\n\n**Related items:** <Roadmap unit, parent and related work item IDs (never folder paths), design, or external links.>\n\n## Roadmap\n\nA phase is complete when its tasks are complete and its exit result has been checked.\n\n<!-- Replace each example row with a rea
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Active requirements' --text '#### R-01 — Show tip and total\n\n**Status:** Refining  \n**Applies to:** A person running the tip command with a bill amount and a tip percentage.  \n**Required behavior:** Calculate the tip from the bill amount and percentage, add it to the bill, and print the tip and total as dollar amounts with two decimal places. The tip and total appear on one line, with two spaces between them.  \n**Boundaries and exceptions:** None identified.  \n**Acceptance check:** Run `node bin/tipcalc.js 50 --percent 20`; the output is exactly `Tip: $10.00  Total: $60.00`.  \n**Decision record:** Owner request, 2026-09-28.  \n**Open questions:** None.\n\n#### R-02 — Divide the total between friends\n\n**Status:** Refining  \n**Applies to:** A person who includes a split count with the bill amount and tip percentage.  \n**Required behavior:** Divide the calculated total evenly by the split count and show each person’s share.  \n**Boundaries and exceptions:** The display format and rounding rule need the owner’s answer.  \n**Acceptance check:** Run the command with a split count of 3 and confirm it shows the per-person share; the exact output remains open.  \n**Decision record:** Owner request, 2026-09-28.  \n**Open questions:** Q-01.'",max_output_tokens:3000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Active requirements\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Acceptance' --text 'This work item can be accepted when:\n\n1. With a bill of $50 and a 20% tip, the command prints exactly `Tip: $10.00  Total: $60.00` (R-01).\n2. With a split count of 3, the command shows each person’s share of the total in the format and rounding rule the owner approves (R-02).\n3. The owner reviews the tested result.'",max_output_tokens:3000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Acceptance\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |\n|---|---|---|---|---|\n| Q-01 | How should the per-person share appear in the output, and how should a share that is not an exact cent be rounded? | R-02 | Open | owner |'",max_output_tokens:3000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Open Questions\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Overview' --text '**Goal:** Provide a terminal tip command that reports the tip and total and can divide the total among friends.\n\n**Current position:** The owner request and draft requirements are recorded. No application code has been built.\n\n**Next action:** Owner confirms the goal, then answers the split display and rounding question before reviewing the full requirements for approval.\n\n**Blockers:** Requirements approval is required before the build.\n\n**Related items:** None.'",max_output_tokens:3000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Overview\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Resume here' --text 'Confirm the goal with the owner. Then settle Q-01, complete the requirements check, and ask for explicit requirements approval. Do not build before approval.'",max_output_tokens:3000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Resume here\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-001 --waiting-on owner",max_output_tokens:3000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Updated WI-001: waiting on owner.\nNow 02 Refinement (Backlog). Continue with work-decide.\n"}]
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"cat .memory/AGENTS.md .memory/memory-criteria.md",max_output_tokens:5000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.9/skills/memory-save/SKILL.md",max_output_tokens:6000}),
+  tools.exec_command({cmd:"toolkit memory focus --json",max_output_tokens:4000}),
+  tools.exec_command({cmd:"toolkit work validate WI-001",max_output_tokens:5000})
+]);r.forEach((x,i)=>text(`---${i}---\n${x.status==="fulfilled"?x.value.output:x.reason}`));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "---0---\n# Local project memory\n\nKeep future sessions oriented without turning every conversation into lasting memory. This folder is the project's built-in memory store and can be opened directly as an Obsidian vault. Active topics stay flat; filenames and YAML types agree. Git ignores this folder, so back it up with `toolkit memory export --to <folder outside this project>`.\n\n## Read and route\n\n- Read `CURRENT_FOCUS.md` at startup; the session briefing includes it. Read `MEMORY.md` as a short index, then open relevant topics and read each one whole. Check dates, scope, and the current source before acting on a remembered claim.\n- Read `memory-criteria.md` before selecting or changing memory. It holds the default eligibility rules; the `memory-save` skill holds the approval policy and the onboarding or trusted mode. Use the terminology glossary for project language, including distinct meanings across systems.\n- Link related notes inside this vault with relative Markdown links, such as `[account model](project_account_model.md)`. Obsidian shows backlinks to a note from the notes that link to it; a second reverse link is optional. Link only when the relationship helps retrieval, and check that the target exists. Keep tracker URLs and paths outside `.memory/` as source references rather than vault links.\n- Keep current tasks and owner-mentioned to-dos in `CURRENT_FOCUS.md`, naming work items by ID. Keep full tasks, status, requirements, history, and the work item's design together in the chosen tracker; verified system behavior in the System Guide; procedures in instructions or skills; and raw outside sources in their source folders.\n\n## Curate\n\n- Keep one topic file per concept or area, such as `feedback_ways_of_working.md` or `project_billing.md`, with a `##` heading for each sub-topic. Allowed prefixes and matching `metadata.type` values are `user`, `feedback`, `project`, `reference`, and `event`; an `event` file holds one episode. `project_topic_template.md` is a seed, not a saved memory. Each file starts with its title, a one-line summary (`description`), and the date of its last change (`updated`). Aim for a quick read; split a topic that grows too large.\n- Record source and date, status, scope, the durable point, why it matters, and how to apply it. Keep uncertainty explicit. Preserve extra YAML fields written by a host 
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --text '# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Build the tip command\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 from its Resume here: confirm the goal, settle Q-01, check the requirements, and request approval before building.' --expect ca76aeb3f1c246b53e9ba815507876eaac07acae3de6d5cd6a0a2f96f542158f",max_output_tokens:3000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved the current focus (20 lines). Version: e256d0984417\n"}]
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"toolkit memory focus",max_output_tokens:3000}),
+  tools.exec_command({cmd:"toolkit doctor",max_output_tokens:3000})
+]);r.forEach((x,i)=>text(`---${i}---\n${x.status==="fulfilled"?x.value.output:x.reason}`));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "---0---\n# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Build the tip command\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 from its Resume here: confirm the goal, settle Q-01, check the requirements, and request approval before building.\n"}, {"type": "input_text", "text": "---1---\nToolkit doctor for tipcalc (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex).\n\nWarnings (2):\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.\n   Fix: The owner opens Codex in this folder and trusts it when Codex asks.\n2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).\n   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\n\nNotes (4):\n- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\n- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\n- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\n- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.\n\nResult: 0 problems and 2 warnings.\n"}]

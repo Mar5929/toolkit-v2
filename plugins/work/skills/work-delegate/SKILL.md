@@ -23,7 +23,7 @@ The only skill that makes the agent-led delivery offer and records the answer; a
    `toolkit work set <id> --delivery agent-led`
    `toolkit work set <id> --waiting-on agent`
    `toolkit work history <id> --note 'Agent-led delivery accepted by <owner>: <his words>'`
-6. No, or a later revoke: record it the same way, and set `waiting_on` to `agent` when the agent still works on the item. Do not offer again for this goal unless it grows a lot or the owner asks.
+6. No, or a later revoke: record it the same way, and set `waiting_on` to `agent` when the agent still works on the item. Do not offer again for this goal unless it grows a lot or the owner asks. A no decides only who builds: the design critic and the one `acceptance-checker` before the result approval still run (`references/helpers.md`, section 6).
    `toolkit work set <id> --delivery owner-led`
    `toolkit work set <id> --waiting-on agent`
 7. Run the team through the skill that owns each stage (`references/agent-led-delivery.md`, section 4; `references/team-arrangements.md`). The main agent plans, briefs the helpers, gives one writer per path, and is the only writer of the work item.
@@ -40,7 +40,7 @@ The only skill that makes the agent-led delivery offer and records the answer; a
 - The `--delivery` command marks the offer's Open Questions row Answered and prints "Marked Q-xx Answered". Never edit that row by hand. When no other question for him is open, it also sets `waiting_on` to `none` ("It is no longer waiting on the owner"). Set `agent` right after it when the agent continues (steps 5 and 6); keep `owner` while another of his questions on the item is open.
 - A sub-item is part of its parent's goal: creating it under the parent copies the parent's delivery value. Set it only when it is missing or differs, with a note naming the parent.
 - The choice belongs to the named goal only. It does not carry over to another goal, a new item, or an unrelated sub-item.
-- Acceptance alone starts no helpers; the team arrangement answer does. A no to the team question means no helpers.
+- Acceptance alone starts no helpers; the team arrangement answer does. A no to the team question means no team: the main agent builds. It never removes the `acceptance-checker`, which runs before every result approval, whoever builds (`references/helpers.md`, section 6).
 - Delegation never widens merge, deployment, spending, or publishing. Every approval gate still applies, and approvals already given still count.
 - Missing tracker access is not a missing decision. Keep an unsaved choice in the handoff and save it when access returns.
 - A recorded lead or chat id is coordination information, not proof that an agent is still running.
@@ -49,7 +49,7 @@ The only skill that makes the agent-led delivery offer and records the answer; a
 ## Agents
 
 - `builder` (`references/agent-builder.md`), `researcher` (`references/agent-researcher.md`), and `acceptance-checker` (`references/agent-acceptance-checker.md`), briefed by the stage skill that uses them. Brief and size them as `references/helpers.md` and `references/team-roles.md` say. In Codex the main agent first makes each builder's worktree (`references/helpers.md`, section 2, "Codex builders"; Git writes: `references/git-rules.md`).
-- Codex: this plugin's agents do not load there. Give the full text of this skill's `references/agent-<name>.md`, with the brief, to a native Codex worker: the `spawn_agent` tool, started without this conversation (`fork_turns` set to `none`), so a checker never shares the builder's thread. With no worker, do the work yourself and say that no independent check ran.
+- Codex: this plugin's agents do not load there. Give the full text of this skill's `references/agent-<name>.md`, with the brief, to a native Codex worker: the `spawn_agent` tool, started without this conversation (`fork_turns` set to `none`), so a checker never shares the builder's thread. Only when this host cannot start a worker (no `spawn_agent` tool) do the work yourself, and say that no independent check ran. The `acceptance-checker` still runs when the owner chose owner-led delivery or no agent team.
 
 ## References
 

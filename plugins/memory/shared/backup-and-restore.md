@@ -28,6 +28,12 @@ A fresh clone or a new computer has none of the first three until they are
 restored. Never treat an empty tracker or an empty memory index there as
 "nothing was ever saved": restore first.
 
+A project with both its work items and its memory in Notion needs no backup
+folder (the owner's decision of 2026-09-28). Notion keeps each page's history
+and keeps deleted pages in its trash. Setup does not ask for a folder, the
+automatic backup copies nothing, and `toolkit doctor` gives no backup
+warning. Say that in one line when the owner asks about backups.
+
 ## The backup folder
 
 - The owner chooses one folder outside the project, for example
@@ -87,7 +93,8 @@ A failed backup never undoes the work; tell the owner the line it printed
 
 `toolkit doctor` warns when no backup folder is set, when the folder cannot
 be reached, and when the last backup is more than a day old. When the owner
-chose "none", it only notes backups older than 7 days.
+chose "none", it only notes backups older than 7 days. A project with both
+its work items and its memory in Notion gets no backup warning.
 
 ## Backing up by hand
 

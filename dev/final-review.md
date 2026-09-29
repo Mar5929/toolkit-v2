@@ -1,3 +1,222 @@
+# Close-out 2026-09-28
+
+Reviewed on 2026-09-28, 23:20 to 23:35 EDT, by a reviewer who built none of
+this. The re-review of 19:36 and the first review of 12:30 follow below
+unchanged.
+
+State reviewed: commit `51911ac` plus 165 changed files and 12 new files or
+folders in the working tree, none of them committed. Versions: `toolkit`
+0.2.9, `work` 0.2.11, `memory` 0.2.9, `session-skills` 0.2.9,
+`git-workflows` 0.2.8, `sf-architect-solutioning` 0.2.1, marketplace
+metadata 0.2.11. No file under `plugins/` changed after 22:10 EDT. The three
+close-out checks started at 22:13 and 22:15 EDT, so their evidence describes
+the code as it is now.
+
+No toolkit code or skill was changed. Nothing was staged or committed. This
+close-out changed only this file in the repository. Every result below comes
+from a command run in this close-out, unless it names an evidence file.
+
+## Verdict
+
+- The goal is not met yet. R-B1 is still open. In the Codex rerun, after
+  "No agent team for this one, I'll lead it myself", the agent asked Mike
+  "Do you approve the WI-001 result with that check outstanding?" with no
+  independent check (`closeout-codex` s10). It had read the new `work-check`
+  text and the new `toolkit work set --stage 11-user-approval` note. This
+  breaks Mike's decision of 2026-09-28 evening (1).
+- The `toolkit` command only prints notes about the check. In a scratch
+  project it recorded a result approval, and then finished the item as Done,
+  with no check recorded.
+- Concept memory is built and works in all three backends. In the Codex
+  rerun, three preferences said in three sessions landed in one file as
+  three sections. One medium bug (C1, reproduced here) can put a fact into an
+  unrelated concept.
+- R-I1 and R-I3 are done. R-I4 is fixed as the re-review asked (a note), but
+  in the live rerun the record still said "Approved by Mike Rihm" until Mike
+  said no. R-I2 is back: the close-out work is not committed, and Mike's
+  installs run versions that no commit holds.
+- The Claude Code rerun did not run. `claude auth status` still printed
+  `"loggedIn": false` at 23:27 EDT.
+
+## Checks run in this close-out
+
+| Check | Result |
+| --- | --- |
+| `node --test "tests/**/*.test.mjs"` in `plugins/toolkit` | 979 tests: 976 pass, 0 fail, 3 skipped (slow `find --reflect`, Lore clone compare, live Notion), 99 seconds. The Hindsight live tests ran against `127.0.0.1:8888`, which reported healthy. |
+| `node --test "plugins/git-workflows/tests/*.test.mjs"` | 14 pass, 0 fail. |
+| `node dev/tools/check-skills.mjs --quiet` | Exit 0. 29 `SKILL.md` files, 205 files in `references/`, `assets/`, and `scripts/` (159 generated copies), 7 agent files, 683 `toolkit` commands; 0 failures, 0 warnings, 16 notes (the recorded `sf-architect-solutioning` and `sf-component-tracker` exceptions). |
+| `node dev/tools/sync-skill-references.mjs --check` | Exit 0. 159 copies, 0 problems. |
+| `node dev/tools/import-model.mjs --check` | Exit 0. The copy matches the approved model folder (112 files, commit `648bf4e`). Every `CONDITIONS.json` rule matches. |
+| `claude plugin validate .` and `claude plugin validate ./plugins/<each>` | Passed for the marketplace and all six plugin folders (Claude Code 2.1.280). |
+| Manifests | Both manifests of each plugin carry the same version. Both marketplace files list all six plugins. `HEAD` holds `toolkit` 0.2.7, `work` 0.2.9, `memory` 0.2.7. |
+| Mike's installs (read only) | `~/.config/toolkit-v2/plugin-root` names `~/.claude/plugins/cache/toolkit-v2/toolkit/0.2.9`; `~/.local/bin/toolkit version` prints 0.2.9. The Claude Code 0.2.9 cache copy and the newest Codex cache copy of each plugin equal their source folders (`diff -rq` printed nothing). `installed_plugins.json` records commit `51911ac` for the 0.2.9 installs, and that commit holds 0.2.7. |
+| Acceptance check in a scratch project (`HOME`, `CLAUDE_CONFIG_DIR`, `CODEX_HOME`, `TOOLKIT_V2_CONFIG_DIR` in scratch; local tracker, built-in memory) | `work set WI-001 --stage 11-user-approval`: prints the note. A history note "acceptance-checker: none, owner requested no agent team" does not count: `work decisions` still lists "Start one acceptance-checker for WI-001". `work approve WI-001 --result --by 'Mike Rihm'`: approval recorded, note printed, exit 0. `work finish WI-001 --by 'Mike Rihm' --evidence 'Tests pass'`: "WI-001 is Done", with no word about the missing check. |
+| Concept memory, same scratch project | A new concept plus a second `--concept ... --section` save gave one file, `feedback_ways_of_working.md`, with a `# Ways of working` title, a summary, `updated: 2026-09-28`, and two `##` sections. `MEMORY.md` groups by prefix and shows title, summary, and updated date. A related fact in other words ("Write tests with node:test, no npm packages") was saved as a new file, `feedback_test_runner.md`: the duplicate check compares words only, so choosing the concept is the agent's job. |
+| C1, reproduced | With `project_output_format` (title "Output format", sections "Lines" and "Who reads it"), saving "Owner finds status tables easier to read than bullet lists" as a new project record was refused: "it belongs in the concept project_output_format ("Output format"), which shares its words (read)". `proposalType('you find tables easier to read than bullets in status replies')` returns `project`. |
+| R-I4 hooks, both hosts | `toolkit hook user-prompt` with "FYI, I only ever run tipcalc on my MacBook Air with Node 24.", then `toolkit hook post-tool` for `toolkit memory save ... --approved-by 'Mike Rihm'`: the note "This save says Mike Rihm approved it (--approved-by), but his message this turn has no keep phrase ...". A note only: no block, and the record is not changed. |
+| R-M3 | `toolkit doctor` in a plain folder prints "Warning:" before each computer line and "None of these blocks toolkit init." |
+| R-M9 | `postgres://admin:<password>@db.example.com:5432/app` refused, exit 2. |
+| R-M10 | `toolkit hook pre-tool`, both hosts: `rm -rf .memory` and `rm -r .work-items/` denied; `rm -rf /tmp/x` let through. |
+| R-M11 | Search of the 7,198 tracked and new files, captured docs left out: only descriptions of the no-credit rule, in `dev/research/project-init-library.md` and `dev/test-runs/skill-references-check.md`. Nothing under `plugins/`. |
+| F1 | `plugins/toolkit/lib/memory/hindsight.mjs` line 497 still builds the find snippet with `.slice(0, 160)`. |
+| Read-only sources | `claude-toolkit` clean at `9d4ea8d`. Mike's model folder clean at `efa2440`. The approved branch head is `648bf4e` by Mike Rihm <michael@rihm.com>, no AI credit, three files under `.memory/`. |
+| Hindsight | Healthy. 24 banks, the same list as the re-review. This close-out made none. |
+| Claude Code sign-in | `claude auth status`: `"loggedIn": false` at 23:27 EDT. |
+
+## Close-out evidence
+
+| Evidence | Result | What it shows |
+| --- | --- | --- |
+| `closeout-codex/evidence.md` | Not passed | 34 real `codex exec` turns on the current versions; each Codex cache copy equal to its source before and after. Setup asked six questions in the reply text. WI-001 and its sub-item WI-002 reached Done; the hand rename was reported. Every concept-memory check passed. Backups after each `work finish`. All five hooks ran; no `hook-errors.log`; no AI credit in `git log`. Failed: R-B1 (s10) and R-I4 (s24). Could not happen: the delivery offer, because the small-item rule recorded owner-led in s07, before the plan and the split. |
+| `closeout-claude/evidence.md` | Not run | Claude Code is signed out; s01 ended before any model turn. The project, backup folder, harness, and message plan are ready. A command-only check found C1 and C2. |
+| `concept-memory-backends.md` | Passed | One script in built-in, Notion (Lore layout, under Mike's real page), and Hindsight. Notion: 28 of 28 steps and 4 of 4 hand-edit steps equal to built-in, with the same stored text and SHA-256 versions. Hindsight: 25 of 28; the 3 differences are `memory find`, which searches by meaning by design, plus F1. |
+
+I read the three evidence files and confirmed their key lines in the session
+files: s10 records "acceptance-checker: none, owner requested no agent team"
+and ends "Do you approve the WI-001 result with that check outstanding?";
+s17 records "acceptance-checker: R-01 met on exact commit with no defects"
+before s18 runs `toolkit work approve WI-001 --result`; s24 shows the
+PostToolUse note after the `--approved-by` save. No turn called a question
+tool: every mention of `request_user_input` in the session files is skill
+text the agent read.
+
+## Finish items
+
+| # | Item | Verdict | Evidence |
+| --- | --- | --- | --- |
+| 1 | Model review | Met | `dev/model-review.md` is current (re-review). The import check passes at `648bf4e`, which adds concept memory to the model branch (`dev/model-changes.md` line 603). The parity tests pass in the suite. Merging the model branch is Mike's step. |
+| 2 | Plugins | Met | Validation passes for the marketplace and all six plugin folders. Both marketplace files list all six. The installed 0.2.9 copies equal the source. |
+| 3 | Project init | Met | Scratch init here. Codex rerun s00a to s00h: six questions, one per turn, in the reply text, the backup folder included. Notion-only projects skip the backup question (`project-setup/references/interview.md` line 126, `lib/project/backup.mjs` line 449, `tests/notion/close-out.test.mjs`); not seen live, because no Notion setup ran after this change. |
+| 4 | Work items | Met | Codex rerun: WI-001 from `01-discovery` to Done, WI-002 made by a split, the hand rename reported in s10. All four setups in the final runs (re-review). |
+| 5 | Skills | Met, one gap | check-skills and the sync check pass. No skill description changed in this round (the `SKILL.md` diffs hold no `description:` line). Gap: R-M8, the routing rerun, is still not done. |
+| 6 | Hooks | Met, two gaps | 976 tests pass; each hook fix is tested with both hosts' inputs. All five hooks ran live in the Codex rerun on the current code. Gaps: the current hook code has not run in a live Claude Code session (sign-in), and trusting the hooks in Codex `/hooks` is still untried (every run used `--dangerously-bypass-hook-trust`). |
+| 7 | Notion | Met | Re-review evidence, plus concept memory on Mike's real page: one Memories row per concept, and a rename keeps the same page. Open: F2. |
+| 8 | Hindsight | Met | Healthy. Concept check: one document per concept, HTTP 404 for the old key after a rename, test bank deleted. Open: F1 (low). |
+| 9 | Sample runs | Partly met | All four setups reached Done on 0.2.7 (re-review). On the current code only the Codex local run ran, and it did not pass (R-B1, R-I4). The Claude Code rerun did not run. |
+| 10 | Fixes and final review | Not met | R-B1 is open, and the close-out work is not committed (R-I2). |
+| 11 | Report | Not met yet | The lead gives it after this review. |
+
+## The re-review's findings now
+
+| Finding | Done? | Evidence |
+| --- | --- | --- |
+| R-B1. "No agent team" skips the acceptance check | Not done | The text is fixed: no "authorizes no helpers" or "means no helpers" is left under `plugins/`; `work/shared/helpers.md` section 6, `work-delegate/SKILL.md` lines 26, 43, and 52, and `work-check/SKILL.md` lines 35 and 60 say the check always runs. The notes print (tried here). But the live Codex rerun skipped the check in the build turn and asked for approval. `work-decide` caught it one session later (s17), before Mike approved (s18). If Mike had answered s10 with "I approve", the command would have recorded it, and `work finish` would have closed the item with no check. |
+| R-I1. Claude Code runs this folder in place | Done | `AGENTS.md` "Versions", `README.md` "Install on this Mac", the `refreshPointer` comment in `lib/project/machine.mjs`, and `repair-and-update.md` line 105 now say so. Mike's decision (install his everyday Claude Code from a fixed copy) is still open. |
+| R-I2. Work not committed | Done for the earlier rounds, back now | `82aefe9` committed the earlier fix rounds and the final run evidence. Now 165 changed files and 12 new ones are uncommitted: `lib/memory/concepts.mjs`, 8 new test files, and the three close-out evidence items among them. Mike's installs run 0.2.9, and no commit holds 0.2.9. |
+| R-I3. Codex setup used the question box | Done | `project-setup/SKILL.md` step 3 and its first Gotcha. Codex rerun: all six setup questions in the reply text. |
+| R-I4. A remark in passing saved as approved | Fixed as asked; the problem remains | The PostToolUse note fires in both hosts (tried here; live in s24, where the agent then told Mike and asked "Save to memory: ...?"). But the record said "Approved by Mike Rihm" until he said no and ran the delete himself (s25). Had he not answered, the false approval would have stayed. |
+| R-M1 to R-M7, R-M9 to R-M11 | Fixed | Builders' tests pass. Spot-checked here: R-M3, R-M9, R-M10, R-M11. |
+| R-M8 | Open | Routing not rerun. |
+| R-M12 | Open, Mike's yes | Same 24 banks. Add the Notion row "Toolkit V2 concept memory check (safe to delete)" (key `tv2-concept-check`). |
+
+Decisions of 2026-09-28, evening: (1) the acceptance check always runs: in
+the text and the notes, not in behavior (R-B1). (2) Notion-only projects skip
+the backup question: in the text, code, and tests; not seen live.
+
+## Concept memory
+
+Done for what Mike asked, with one medium bug and one type decision open.
+
+What Mike asked, and where it is shown:
+
+- One file per concept, the five prefixes kept: `user_working_preferences.md`
+  (three sections from s02, s08, s21) and `project_money_calculation.md` in
+  the Codex rerun; `feedback_ways_of_working.md` in the scratch project here.
+- Title, one-line summary, and updated date at the top of each file: the
+  scratch file here; `MEMORY.md` in the rerun.
+- New facts under a `##` heading in the concept they belong to; a new file
+  only for a new concept: `toolkit memory save --concept <key> --section
+  <heading>`, and the duplicate check names the concept ("it belongs in the
+  concept ...").
+- Events stay one file each: `suggestConcept` never suggests a concept for
+  an event (`lib/memory/concepts.mjs` line 427).
+- No starter files: the scratch `.memory/` held only the model's files until
+  the first save.
+- The index lists title, summary, and updated date, grouped by prefix: here
+  and in the rerun.
+- Built-in, Notion, and Hindsight store and change concepts the same way
+  (`concept-memory-backends.md`). Links between concepts keep their section
+  anchor through a rename.
+- The model changed only in `.memory/` (three files, commit `648bf4e`).
+
+Open:
+
+- **C1 (medium, reproduced here).** One shared word in a concept's title or
+  a section heading scores 2, which is `SUGGEST_AT`, so it is enough to
+  suggest that concept. `proposalType` types "you find ..." as `project`.
+  Together, the Stop hook can file a preference about status replies under
+  an unrelated project concept, and Mike's plain yes, recorded with `toolkit
+  memory approve`, puts it there. Fix: suggest a concept only on two or more
+  shared words, at least one in its key or title; type "you find", "you'd
+  rather", and "easier for you" as `user`.
+- **C2 (Mike's decision).** "How I like work done" can land in `user_` or
+  `feedback_`. The Codex rerun put all three preferences in `user_`; the
+  command-only check in `closeout-claude` put them in `feedback_`. A concept
+  holds one type, so a proposal typed `user` cannot be approved into a
+  `feedback_` concept. Needs one written rule in the model's
+  `memory-criteria.md` and in `proposalType`. Recommendation: how the agent
+  should work goes in `feedback_` (the goal's own example is
+  `feedback_ways_of_working.md`); facts about Mike himself go in `user_`.
+- **Codex rerun finding 4 (medium).** A keep-phrase fact about why a part of
+  the project exists (the Friday dinners, s06) went only into the work item,
+  which is now Done, so no memory holds it.
+- **Low:** the Stop hook's proposal does not record that Mike stated the fact
+  (rerun finding 5); an approved proposal's heading is the whole sentence
+  (6); a summary left stale for one session (9); "Always" gets no keep-phrase
+  line (10); the hook state counts `toolkit memory save --help` as a save
+  (11); F1, the Hindsight find snippet; undoing a removed section does not
+  restore links to its heading (builder's note).
+- **F2 (decision).** In Notion, links between concepts are saved as file
+  links (`project_invoicing.md`), not Notion page links, so a click in the
+  Notion app will likely not open the other page. Not tried in the app.
+- The builders' question on the "belongs in the concept" refusal (exit 2):
+  keep it. It saves nothing, the message says so, and it prints the command
+  that adds the fact to the concept.
+- Not yet seen in a live Claude Code session.
+
+## Before the goal can be called met
+
+1. **R-B1 in code.** Recommended: `toolkit work approve --result` refuses
+   (exit 2) when no "acceptance-checker: <verdict>" history note follows the
+   last move to stage 08 or 10, and prints the command that records one.
+   Allow a skip only with a flag that carries the reason: a host with no way
+   to start a worker, or Mike's own words changing his decision. `toolkit
+   work finish` refuses the same way. The command runs the same in both
+   hosts, while a Stop hook would have to guess from the reply's wording.
+   Then run the owner-led build turn again in Codex.
+2. **Commit** the close-out work and evidence, paths staged by name,
+   `lib/memory/concepts.mjs` and the new test files included. The lead does
+   this.
+3. **The Claude Code rerun**, after Mike runs `claude auth login`. It also
+   answers the open question in `closeout-claude`: which setup skill answers
+   "Set up this project with the toolkit." when the old `project-init`
+   plugin is loaded too.
+4. Recommended, not blocking: the C1 fix; R-I4 in code (the PostToolUse
+   hook or `toolkit memory save` turns such a save into a proposal); look at
+   the delivery offer again after the plan exists and when a sub-item is
+   added (rerun finding 3).
+
+## For Mike
+
+- Run `claude auth login` in a terminal, so the Claude Code rerun can go.
+- Decide C2: which prefix "how I like work done" uses.
+- Decide F2: file links or Notion page links between concepts in Notion.
+- Still open from the re-review: trust the V2 hooks in Codex `/hooks`; merge
+  the model branch `toolkit-v2/approved-changes` (now with `648bf4e`);
+  install your everyday Claude Code from a fixed copy (R-I1); yes or no to
+  deleting the test banks and Notion test rows (R-M12), now also
+  `tv2-concept-check`; the model's guard message with two periods.
+
+## What this close-out left behind
+
+- A scratch project and a scratch home in this session's scratch folder
+  (`scratchpad/closeout/`). Nothing was written to Mike's `~/.claude`,
+  `~/.codex`, `~/.config/toolkit-v2`, Notion, Hindsight, the model folders,
+  or `claude-toolkit`.
+- This close-out changed only this file in the repository.
+
+---
+
 # Re-review 2026-09-28
 
 Reviewed on 2026-09-28, 19:36 to 19:55 EDT, by a reviewer who built none of
@@ -632,10 +851,10 @@ backup on day one.**
 ### Minor
 
 **M1. The AI credit guard misses merges, tags, releases, and issues.** Tested:
-`git merge --no-ff ... -m "Co-Authored-By: Claude <noreply@anthropic.com>"`,
-`git tag -a v1.0 -m "... Generated with Claude Code"`,
-`gh release create ... --notes "Generated with Claude Code"`, and
-`gh issue create ... --body "Generated with Claude Code"` all passed the
+`git merge --no-ff ... -m "<AI co-author line>"`,
+`git tag -a v1.0 -m "... <AI Generated-with line>"`,
+`gh release create ... --notes "<AI Generated-with line>"`, and
+`gh issue create ... --body "<AI Generated-with line>"` all passed the
 pre-tool hook. `work-finish` writes merge commits with a message. Claude Code's
 `attribution` setting is the first defense there; in Codex the hook is the
 only one. Fix: extend `checkAiCredit` in `lib/hooks/shell.mjs` to `git merge`,
@@ -692,7 +911,7 @@ commits.
 **M9. Committed evidence quotes AI credit lines.** `dev/test-runs/claude-a/`
 (`final/git-log.txt`, `evidence.md`, `sessions/*.jsonl`) and
 `dev/test-runs/open-bugs.md` hold the exact trailer
-`Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>`. It is
+"<AI co-author line>" (replaced here on 2026-09-28, R-M11). It is
 evidence of a bug, not a credit for this repository, but a search of the
 repository finds it. Fix: before any GitHub repository exists, replace the
 quoted trailer with "<AI co-author line>".

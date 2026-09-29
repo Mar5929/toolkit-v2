@@ -19,6 +19,7 @@ import { fixture } from '../hooks/fixtures.mjs';
 import { compareVersions, hidesAttribution } from '../../lib/project/checks.mjs';
 import { doneSetupReminders } from '../../lib/project/brief.mjs';
 import { otherHost } from '../../lib/commands/doctor.mjs';
+import { TRAILER } from '../credit-lines.mjs';
 
 after(cleanup);
 
@@ -75,7 +76,7 @@ test('init writes the attribution and skill list settings, and doctor checks the
   settings.attribution = { commit: '', pr: '' };
   settings.skillListingBudgetFraction = 0.02;
   writeJson(settingsFile, settings);
-  writeJson(path.join(root, '.claude', 'settings.local.json'), { attribution: { commit: 'Co-Authored-By: Claude <noreply@anthropic.com>', pr: '' } });
+  writeJson(path.join(root, '.claude', 'settings.local.json'), { attribution: { commit: TRAILER, pr: '' } });
   const local = await tk(root, ['doctor', '--json'], { env });
   const f = local.json.findings.find((x) => x.id === 'claude-attribution');
   assert.ok(f);

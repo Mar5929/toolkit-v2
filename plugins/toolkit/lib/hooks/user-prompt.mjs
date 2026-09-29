@@ -14,7 +14,7 @@
 import { contextOutput } from './output.mjs';
 import { findProject, trackerType, recordBaseline } from './common.mjs';
 import { updateSession, startTurn } from './session.mjs';
-import { keepPhrase, KEEP_LINE } from './phrases.mjs';
+import { keepPhrase, saveWords, KEEP_LINE } from './phrases.mjs';
 
 async function rescan(project, io, lastReported) {
   if (trackerType(project) !== 'local') return { lines: [], fingerprint: null };
@@ -58,8 +58,15 @@ export async function userPrompt(input, io) {
   }
   const phrase = keepPhrase(prompt);
   await updateSession(project, io.host, input, io.env, (state) => {
+    // Whether the reply before this prompt asked the owner about memory: this
+    // prompt answers it (PostToolUse, a save that claims his approval).
+    const answersMemoryQuestion = Boolean(state.lastReplyAskedMemory);
+    state.lastReplyAskedMemory = false;
     const turn = startTurn(state, input);
+    turn.prompted = true;
     turn.keep = phrase;
+    turn.saveWords = saveWords(prompt);
+    turn.answersMemoryQuestion = answersMemoryQuestion;
     turn.baseline = recordBaseline(project);
     if (scan.fingerprint) state.trackerReported = scan.fingerprint;
   });

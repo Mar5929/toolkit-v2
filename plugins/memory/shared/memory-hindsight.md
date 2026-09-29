@@ -21,10 +21,16 @@ and how its search results differ from built-in and Notion memory.
   Cloud.
 - One memory bank per project, named by `hindsight.bank` in `.toolkit.json`.
   The `project-setup` skill creates it (`toolkit hindsight ensure-bank`).
-- Each record is one document whose id is the key. Its text is the record
-  exactly as a built-in `.memory/` file would hold it, so the formats and
-  commands are the same as in every backend. The current focus is the
-  document `focus`; the glossary is the document `glossary`.
+- Each record is one document whose id is the key: one document per
+  concept. Its text is the record exactly as a built-in `.memory/` file
+  would hold it, so the formats and commands are the same as in every
+  backend. A section save (`--concept ... --section ...`) writes the whole
+  document again, with every line it did not change kept as it was. The
+  current focus is the document `focus`; the glossary is the document
+  `glossary`.
+- Search finds the concept document, and the hit's text is the part of it
+  that matched. Read the whole concept with `toolkit memory get <key>`
+  before answering.
 - There is no `.memory/` folder. The memory criteria come from the copy of
   `memory-criteria.md` that the `memory-save` and `memory-tidy` skills carry
   in their references folder.

@@ -52,7 +52,7 @@ Starts or resumes one work item, plans it, and builds it; it never records an ap
 - `researcher` (`references/agent-researcher.md`): one per unknown found while planning or building.
 - `acceptance-checker` (`references/agent-acceptance-checker.md`): a plan check after step 5 when the plan has several builders, parallel tasks, or a shared environment. Paste in the requirements, the design's Build and verification plan, the Roadmap, and the Tasks.
 - Brief them as `references/helpers.md` says; size a team with `references/team-roles.md`.
-- Codex: this plugin's agents do not load there. Give the full text of this skill's `references/agent-<name>.md`, with the brief, to a native Codex worker: the `spawn_agent` tool, started without this conversation (`fork_turns` set to `none`), so a checker never shares the builder's thread. With no worker, do the work yourself and say that no independent check ran.
+- Codex: this plugin's agents do not load there. Give the full text of this skill's `references/agent-<name>.md`, with the brief, to a native Codex worker: the `spawn_agent` tool, started without this conversation (`fork_turns` set to `none`), so a checker never shares the builder's thread. Only when this host cannot start a worker (no `spawn_agent` tool) do the work yourself, and say that no independent check ran. The `acceptance-checker` still runs when the owner chose owner-led delivery or no agent team.
 
 ## References
 

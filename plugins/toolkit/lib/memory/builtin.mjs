@@ -2,7 +2,8 @@
 // model project's formats (the files in the model's .memory/ folder).
 //
 // Layout (all Git-ignored):
-//   .memory/<type>_<slug>.md        one topic per file: current, needs-review, or superseded
+//   .memory/<type>_<slug>.md        one concept or area per file (concept memory; lib/memory/concepts.mjs):
+//                                   current, needs-review, or superseded
 //   .memory/archive/<key>.md        archived topics (retired with no replacement)
 //   .memory/MEMORY.md               generated index in the model's layout; never edit it by hand
 //   .memory/CURRENT_FOCUS.md        the current focus (four sections, at most 50 lines)
@@ -47,8 +48,9 @@ import {
   assertFilter, brokenLinks, changeRecordStatus, changeSupersedes, checkExpect, countRecords, fitLinks, keywordScore,
   latestStatusNote, matchesFilter, normalizeDocument, normalizeRecord, notFound, parseRecord, rebaseLinks, recordSummary,
   renameRecordText, repairLinks, restoreNote, retireNote, searchTerms, serializeRecord, sortRecords, splitKey, storedStatus,
-  versionOf, focusLineCount, focusShapeProblems, isProposal,
+  versionOf, focusLineCount, focusShapeProblems, isProposal, bodyTitle, titleFromName, anchorHeading, findLinks, linkVaultPath, mergedInto,
 } from './contract.mjs';
+import { allHeadings, assertEditedText } from './concepts.mjs';
 
 export const backend = 'builtin';
 export const VAULT_DIR = '.memory';
@@ -117,11 +119,13 @@ export const PROPOSAL_MARK = 'proposal: not a fact until the owner answers';
 
 /**
  * The text of MEMORY.md for a list of summaries (with stored_status), in the
- * model's layout: the intro, one "## <Type>" section per type with one line per
- * topic in the vault root ("- [<file>](<file>) — <description>", plus
- * " [needs-review]" or " [superseded]", or " [PROPOSAL_MARK]" for a saved
- * proposal, whose `proposal` is true), then "## Other memory views".
- * With no topics it is the model's MEMORY.md byte for byte.
+ * model's layout: the intro, one "## <Type>" section per type (the prefix)
+ * with one line per concept file in the vault root: its title, linked to the
+ * file, its one-line summary, and the date of its last change
+ * ("- [<title>](<file>) — <summary> (updated <YYYY-MM-DD>)"; concept memory,
+ * Mike 2026-09-28), plus " [needs-review]" or " [superseded]", or
+ * " [PROPOSAL_MARK]" for a saved proposal, whose `proposal` is true. Then
+ * "## Other memory views". With no topics it is the model's MEMORY.md byte for byte.
  */
 export function buildIndex(entries) {
   const { intro, end } = indexFrame();
@@ -132,11 +136,18 @@ export function buildIndex(entries) {
     for (const e of ofType) {
       // A saved proposal is marked as one, so an agent reading only this index never takes it as a fact.
       const word = e.proposal ? ` [${PROPOSAL_MARK}]` : e.stored_status && e.stored_status !== 'current' ? ` [${e.stored_status}]` : '';
-      chunks.push(`- [${e.key}.md](${e.key}.md) — ${e.description}${word}\n`);
+      const title = linkText(e.title || e.key);
+      const date = e.updated ? ` (updated ${e.updated})` : '';
+      chunks.push(`- [${title}](${e.key}.md) — ${e.description}${date}${word}\n`);
     }
   }
   chunks.push(`\n${end}`);
   return chunks.join('');
+}
+
+/** A title as the words of a Markdown link: brackets would end the link, so they are taken out. */
+function linkText(title) {
+  return String(title).replace(/[[\]]/g, '').replace(/\s+/g, ' ').trim() || 'Untitled';
 }
 
 function rel(vault, file) {
@@ -174,6 +185,21 @@ function localDate(ms) {
   const d = new Date(ms);
   const pad = (n) => String(n).padStart(2, '0');
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
+/**
+ * The date shown as a record's last change (index and list): its `updated`
+ * field. A record written before concept memory has none; then its
+ * last_verified date, and only then the file's modified time, which a fresh
+ * clone or a memory import sets to that day for every file (verifier,
+ * 2026-09-28).
+ */
+export function shownUpdated(record) {
+  const r = record || {};
+  if (r.updated) return String(r.updated);
+  const verified = String(r.last_verified ?? '').trim();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(verified)) return verified;
+  return r.saved ? String(r.saved) : '';
 }
 
 /**
@@ -386,6 +412,32 @@ export class BuiltinDriver {
     });
   }
 
+  /**
+   * Change one stored record with the lock held for the whole change (concept
+   * memory: one section added or replaced). fn(stored) gives { text, ... }:
+   * the new stored text. The text is checked against the record rules and
+   * written as it is, so every line fn did not change keeps its exact bytes.
+   * expect: the caller's --expect, checked inside the lock. The record stays
+   * in its folder. Returns { key, version, created: false, record, ...what fn gave }.
+   */
+  async editRecord(key, fn, { expect } = {}) {
+    const k = assertKey(key);
+    return this.locked(() => {
+      this.prepareWrite();
+      const current = this.readStored(k);
+      if (!current) throw notFound(k, this.vault);
+      checkExpect(versionOf(current.text), expect, `The memory record ${k}`);
+      const out = fn(this.stored(current, k));
+      assertEditedText(out.text, k);
+      writeFile(current.path, out.text);
+      this.writeIndex();
+      this.touchMeta('update', k);
+      this.verify(current.path, out.text, k);
+      const { text: _text, ...rest } = out;
+      return { ...rest, key: k, version: versionOf(out.text), created: false, record: this.stored({ text: out.text, path: current.path }, k) };
+    });
+  }
+
   removeOtherCopy(key, keep) {
     for (const p of [this.activePath(key), this.archivePath(key)]) {
       if (p !== keep) fs.rmSync(p, { force: true });
@@ -401,7 +453,7 @@ export class BuiltinDriver {
   async list(filter = {}) {
     assertFilter(filter);
     const { entries } = this.scan();
-    return sortRecords(entries.map((e) => recordSummary(e.record)).filter((s) => matchesFilter(s, filter)));
+    return sortRecords(entries.map((e) => ({ ...recordSummary(e.record), updated: shownUpdated(e.record) })).filter((s) => matchesFilter(s, filter)));
   }
 
   /**
@@ -480,6 +532,19 @@ export class BuiltinDriver {
   }
 
   /**
+   * Repair links after a change the command made through other methods (for
+   * example sections moved to another concept by toolkit memory split), with
+   * the lock held. Returns { linksRepaired }.
+   */
+  async relink(change, { skip = [] } = {}) {
+    return this.locked(() => {
+      const linksRepaired = this.repairVault(change, { skip });
+      if (linksRepaired.length) this.writeIndex();
+      return { linksRepaired };
+    });
+  }
+
+  /**
    * Links in the notes, the focus, and the glossary that point at a note that
    * does not exist, including a relative link to a Markdown file outside the
    * vault (../...), such as a link an archived note kept after it moved.
@@ -500,6 +565,19 @@ export class BuiltinDriver {
     };
     for (const e of entries) {
       check(rel(this.vault, e.path), e.text, e.dir, `Correct the link, then save the note again with toolkit memory save and --expect <version> (toolkit memory get ${e.key} --json gives its text and version).`);
+    }
+    // Concept memory: a link to a section ("project_billing.md#Refund%20window") needs that heading in the note.
+    const byPath = new Map(entries.map((e) => [path.posix.join(e.dir || '', path.basename(e.path)), e]));
+    for (const e of entries) {
+      for (const link of findLinks(e.text)) {
+        if (link.kind !== 'md' || !link.anchor || link.anchor === '#') continue;
+        const where = linkVaultPath(link, e.dir);
+        const target = where && byPath.get(where.path);
+        if (!target) continue;
+        const wanted = anchorHeading(link.anchor);
+        if (allHeadings(target.record.body).some((h) => anchorHeading(h) === wanted)) continue;
+        out.push({ where: rel(this.vault, e.path), problem: `links to ${where.path}${link.anchor}, a section that ${target.key} does not have: ${link.full}. Correct the link (toolkit memory get ${target.key} shows its sections), then save the note again with toolkit memory save and --expect <version>.` });
+      }
     }
     for (const [file, cmd] of [[FOCUS_FILE, 'focus'], [GLOSSARY_FILE, 'glossary']]) {
       const text = readText(path.join(this.vault, file));
@@ -532,7 +610,7 @@ export class BuiltinDriver {
    * to the folder its status belongs in. Call with the lock held.
    */
   writeStatus(k, current, { status, supersededBy = null, note = '' }) {
-    const text = changeRecordStatus(current.text, { status, supersededBy, note }, k);
+    const text = changeRecordStatus(current.text, { status, supersededBy, note, updated: this.today() }, k);
     const { record } = parseRecord(text, k);
     const target = this.pathIn(folderFor(record), k);
     writeFile(target, text);
@@ -540,7 +618,12 @@ export class BuiltinDriver {
     return { text, target, record };
   }
 
-  async retire(key, { supersededBy, reason } = {}) {
+  /**
+   * anchor: a section of the replacement ("#Deploy%20window"), when this record
+   * was merged into a concept as that section; the retire note and the
+   * repaired links point there.
+   */
+  async retire(key, { supersededBy, reason, anchor = '' } = {}) {
     const k = assertKey(key);
     const by = supersededBy ? assertKey(supersededBy) : null;
     if (by && by === k) throw new ToolkitError(EXIT.INVALID, 'A record cannot be superseded by itself.');
@@ -563,14 +646,14 @@ export class BuiltinDriver {
           fix: `Restore it first with toolkit memory restore ${by}, or name a record that is in use.`,
         });
       }
-      const note = retireNote(this.today(), { reason, supersededBy: by });
+      const note = retireNote(this.today(), { reason, supersededBy: by, anchor: by ? anchor : '' });
       const { text, target } = this.writeStatus(k, current, { status: 'retired', supersededBy: by, note });
       if (successor) {
         const next = changeSupersedes(successor.text, { add: [k] });
         if (next !== successor.text) writeFile(successor.path, next);
       }
       const change = by
-        ? { kind: 'supersede', from: k, to: by, fromPath: `${k}.md`, toPath: `${by}.md` }
+        ? { kind: 'supersede', from: k, to: by, fromPath: `${k}.md`, toPath: `${by}.md`, ...(anchor ? { anchor } : {}) }
         : { kind: 'archive', from: k, fromPath: `${k}.md` };
       // The replacement is skipped too: its own words about the old note ("replaces [old](old.md)") stay.
       const linksRepaired = this.repairVault(change, { skip: by ? [k, by] : [k] });
@@ -699,12 +782,20 @@ export class BuiltinDriver {
 
   // ------------------------------------------------------------ index, meta, status
 
-  /** The text MEMORY.md should hold for the current records (topics in the vault root). */
+  /**
+   * The text MEMORY.md should hold for the current records (topics in the
+   * vault root). A record merged into a concept is left out: it is
+   * superseded, and its facts are in the concept, which is listed (verifier,
+   * 2026-09-28: after merging 6 records into 2 concepts, the index still
+   * listed all 6 beside the concepts).
+   */
   indexText(entries = this.scan().entries) {
-    const listed = entries.filter((e) => folderFor(e.record) !== ARCHIVE_DIR).map((e) => ({
+    const listed = entries.filter((e) => folderFor(e.record) !== ARCHIVE_DIR && !mergedInto(e.record)).map((e) => ({
       key: e.key,
       type: e.record.type,
+      title: bodyTitle(e.record.body) || titleFromName(e.record.name),
       description: e.record.description,
+      updated: shownUpdated(e.record),
       stored_status: storedStatus(e.record),
       proposal: isProposal(e.record),
     }));

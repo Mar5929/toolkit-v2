@@ -429,6 +429,9 @@ test('Notion tracker + Notion memory (fake ntn): databases are set up, ids saved
   const root = makeRepo();
   const res = await tk(root, ['init', '--name', 'Sample App', '--tracker', 'notion', '--memory', 'notion', '--owner', 'Mike'], { env });
   assert.equal(res.code, 0, res.stderr || res.stdout);
+  // No backup folder is asked for: Notion keeps each page's history and a trash (the owner's decision of 2026-09-28).
+  assert.match(res.stdout, /- Tell the owner: no backup folder is needed, because this project keeps its work items and memory in Notion, which keeps each page's history and keeps deleted pages in its trash\.$/m);
+  assert.doesNotMatch(res.stdout, /Ask the owner for a backup folder/);
   const cfg = config(root);
   assert.equal(cfg.tracker.type, 'notion');
   assert.ok(cfg.notion.workItems && cfg.notion.workItems.dataSourceId, 'Work Items ids saved');

@@ -71,6 +71,17 @@ async function checkNamedRecords(cmd, cwd, project) {
   return { contexts, blocks };
 }
 
+/**
+ * The fact a section save (concept memory: --concept <key> --section <heading>)
+ * saved, for the Stop hook's "was this proposed already" check: the text after
+ * **Remember:** in --body, else the heading. null when there is neither.
+ */
+export function sectionFact(heading, body) {
+  const m = /\*\*Remember:\*\*\s*([^\n]+)/.exec(String(body ?? ''));
+  const text = (m ? m[1] : String(heading ?? '')).replace(/\s+/g, ' ').trim();
+  return text || null;
+}
+
 /** The value of --<name> <value> or --<name>=<value> in a command's words, or null. */
 export function flagValue(args, name) {
   for (let i = 0; i < args.length; i++) {
@@ -88,21 +99,32 @@ async function onBash(input, io, cwd) {
   const found = toolkitCommands(cmd).map((c) => ({ c, kind: recordKind(c) })).filter((x) => x.kind);
   const project = (found.length && !commandFailed(input)) || namesRecord ? findProject(cwd) : null;
   if (!project) return null;
+  let approvalNote = null;
   if (found.length && !commandFailed(input)) {
     await updateSession(project, io.host, input, io.env, (state) => {
       const turn = currentTurn(state, input);
+      const approvedSave = found.find(({ c }) => c.group === 'memory' && c.sub === 'save' && !c.args.includes('--proposal') && flagValue(c.args, 'approved-by'));
+      if (approvedSave && turn.prompted && !turn.keep && !turn.saveWords && !turn.answersMemoryQuestion) {
+        approvalNote = passingRemarkNote(flagValue(approvedSave.c.args, 'approved-by'));
+      }
       for (const { c, kind } of found) {
         const rec = { kind, what: `toolkit ${c.group} ${c.sub}`, at: new Date().toISOString() };
         // The Stop hook saves an unanswered "Save to memory?" as a proposal unless the agent already did.
         if (c.group === 'memory' && c.sub === 'save' && c.args.includes('--proposal')) rec.proposal = true;
         // The description saved, so the Stop hook does not propose the same text again.
         if (c.group === 'memory' && c.sub === 'save') {
-          const d = flagValue(c.args, 'description');
+          // A section save (concept memory) may give no --description: its fact is the section's Remember line.
+          const d = flagValue(c.args, 'concept') && !c.args.includes('--proposal')
+            ? sectionFact(flagValue(c.args, 'section'), flagValue(c.args, 'body'))
+            : flagValue(c.args, 'description');
           if (d) rec.description = d.slice(0, 200);
+          const target = flagValue(c.args, 'concept');
+          if (target) rec.concept = target;
         }
         turn.records.push(rec);
       }
     });
+    if (approvalNote) return postToolOutput({ context: approvalNote, blockReason: null });
   }
   // A command that is not a toolkit command and names a record: check the record after it ran.
   if (namesRecord && !toolkitCommands(cmd).length) {
@@ -112,6 +134,18 @@ async function onBash(input, io, cwd) {
     if (contexts.length || blocks.length) return postToolOutput({ context: contexts.join('\n'), blockReason: blocks.join(' ') || null });
   }
   return null;
+}
+
+/**
+ * The note for a toolkit memory save --approved-by in a turn whose prompt had
+ * no keep phrase or other save words, and that did not answer a memory
+ * question (final re-review R-I4: a remark made in passing was saved as
+ * approved by the owner). Only a note: the owner may have asked in words the
+ * hook does not know.
+ */
+export function passingRemarkNote(by) {
+  const who = by ? String(by) : 'the owner';
+  return `This save says ${who} approved it (--approved-by), but his message this turn has no keep phrase or other words asking for a save ("remember that", "from now on", "save that"), and it does not answer a "Save to memory: ...?" question. A fact or preference he mentions in passing is a proposal, not an approval. Unless his words this turn clearly asked for it, tell him in the reply what was saved and ask "Save to memory: <one line>?"; if he says no, undo it as memory-save says. Next time, save such a remark with --proposal instead of --approved-by, or ask first.`;
 }
 
 const BODY_EDIT_NOTE = 'toolkit work edit <id> --section \'<heading>\' --set-file <file> changes a section the same way in every tracker and keeps the toolkit\'s record of what it wrote; prefer it to editing the file.';

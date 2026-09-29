@@ -55,9 +55,12 @@ One Checks row:
 
 ## 4. Briefing the acceptance checker
 
-The checker is never the agent or session that built the change. Brief the
-`acceptance-checker` (Claude Code: `work:acceptance-checker`; Codex: the text
-of `references/agent-acceptance-checker.md`) with, pasted in:
+The checker is never the agent or session that built the change. It runs
+before every result approval, whoever built the change: a delivery choice or
+a no to the team question never removes it (`helpers.md`, section 6). Brief
+the `acceptance-checker` (Claude Code: `work:acceptance-checker`; Codex: the
+text of `references/agent-acceptance-checker.md`, given to a `spawn_agent`
+worker with `fork_turns` set to `none`) with, pasted in:
 
 1. The item id.
 2. The Agreed goal, every `R-xx` with its acceptance check, and the
@@ -92,12 +95,18 @@ A check that did not run is reported as not run, never as passed.
 
 ## 6. Recording the result
 
-One history note that says what was checked, where the evidence is, and the
-gaps:
+One history note that says what was checked, the checker's verdict, where
+the evidence is, and the gaps. The words `acceptance-checker:` in the note
+are how `toolkit work` knows the check ran: without them, moving the item to
+stage 11 or recording the result approval prints a note that no independent
+check is recorded.
 
 ```text
-toolkit work history <id> --note 'Checked: R-01 to R-03 against commit 4f2a9c1; evidence: tests/WI-012-TEST-PLAN.md and the checker report; gaps: none' --effect 'Result approval asked.'
+toolkit work history <id> --note 'Checked: R-01 to R-03 against commit 4f2a9c1; acceptance-checker: R-01 to R-03 met; evidence: tests/WI-012-TEST-PLAN.md and the checker report; gaps: none' --effect 'Result approval asked.'
 ```
+
+When this host had no way to start a worker, write
+`acceptance-checker: none, <why>` and say so to the owner first.
 
 ## 7. Showing the result to the owner
 

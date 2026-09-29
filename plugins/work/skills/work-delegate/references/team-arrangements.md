@@ -19,8 +19,9 @@ owns the questions, when they are asked, and where the answers are recorded.
   owner may have changed it during the build.
 - The owner's choice of an arrangement authorizes focused, bounded helper
   agents for that goal only, within every other existing limit. Where the
-  owner answered no and no other helper authority exists, the main agent does
-  the work itself.
+  owner answered no and no other helper authority exists, the main agent
+  builds the work itself. It still starts one `acceptance-checker` before it
+  asks for the result approval (`helpers.md` in this folder, section 6).
 - On a host that cannot support the multi-chat arrangement below, the owner is
   asked only whether to run this one team. A yes chooses it.
 

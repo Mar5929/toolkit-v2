@@ -1,0 +1,1 @@
+Remember that tipcalc must always do its money math in whole cents, never in floating-point dollars. Floating-point gave me split shares like $33.339999 in my last calculator.

@@ -75,6 +75,10 @@ this computer, to `<backup folder>/<project key>-<YYYY-MM-DD>/`.
    report, with its fix.
 3. The owner chose no folder (`none`), or init ran without one: say in the
    report that nothing is backed up, and that doctor will keep noting it.
+4. Tracker and memory both in Notion: there is no folder and no first
+   backup. Say in the report, in one line, that Notion keeps each page's
+   history and keeps deleted pages in its trash, so no backup folder is
+   needed. Doctor gives no backup warning for this project.
 
 What each backup holds, and restoring: `backup-and-restore.md` in this
 folder.

@@ -9,7 +9,7 @@ clears.
 
 1. Choose the change
 2. Exit code 2: nothing was saved
-3. Update a record in place
+3. Update a record in place (and one section of a concept)
 4. Replace a record under a new key
 5. Retire a record
 6. Rename a record
@@ -22,6 +22,10 @@ clears.
 
 | Situation | Command | Undo |
 | --- | --- | --- |
+| A new fact about a concept memory already has | `toolkit memory save --concept <key> --section '<heading>'` (the `memory-save` skill) | Remove that section: the command prints it (section 3) |
+| One fact of a concept, corrected | `toolkit memory save --concept <key> --section '<heading>' --expect <version>` (section 3) | Save the old section text (`previous` in the `--json` output) with `--expect` |
+| "Forget that" about one fact of a concept | `toolkit memory save --concept <key> --section '<heading>' --remove --expect <version>` (section 3) | Save the old section text again as that section |
+| Small records that belong in one concept | `toolkit memory merge <key> ... --into <concept> --approved-by <owner>` (the `memory-tidy` skill) | Restore each record (section 7) and remove its section from the concept |
 | The same fact, corrected or better worded | Save the same type and slug with `--expect <version>` (section 3) | Save the old text from the `--json` read (section 3) |
 | A newer fact replaces an older record, under a new name | Save the new record with `--supersedes <old-key>` (section 4) | Restore the old record (section 7), then retire the new one |
 | Two records say the same thing | Update the one you keep; retire the other with `--superseded-by <kept-key>` | Restore it (section 7) |
@@ -48,6 +52,9 @@ nothing in every case. Read the "Error:" line, then:
 | --- | --- |
 | "... was not saved: memory already has a record like it", then a list of records | The duplicate check, below |
 | "... was not saved: memory already has a record about the same subject. Check whether it is the same fact." | The duplicate check, below. Only the subject matches, so it is often a different fact (step 4); never overwrite that record with this fact |
+| "... was not saved: it belongs in the concept <key>" | Read that concept. The fact belongs there: add it as a section with the command the "Fix:" line prints (`--concept <key> --section '<heading>'`, the same text and approval). It is a different concept: save it again with `--new-concept` |
+| "... already has a section "<heading>", so it was not changed" | To replace that section, read the concept with `--json` and save again with `--expect <version>`; to add under it, add `--append`; to keep both, give a new heading |
+| "... already holds this fact under "<heading>"" | That section already says it. Keep it, or change that section with `--section '<heading>' --expect <version>` |
 | "... changed since it was read" | Another session or the owner changed it. Read it again with `--json`, redo the change on the new text, and save with the new version |
 | "... looks like it holds <a secret>" | Save only where the secret is kept (for example "The staging key is in 1Password under Staging"), never the secret |
 | "... is already a current record, so it was not saved as a proposal" | A proposal never replaces a record the owner approved. Ask him about the change in the conversation |
@@ -121,6 +128,36 @@ verified, extra fields) are kept.
 **Undo right after an update** ("undo that"): save the old description and
 body from the `--json` read, with `--expect <version>`, where the version is
 the one the update printed. Reply: "Put back the old wording: <title>."
+
+**One section of a concept.** Most changes touch one fact, which is one
+section. The rest of the record is not changed:
+
+- Add a section (no `--expect` needed; a heading the concept already has is
+  refused):
+
+  ```text
+  toolkit memory save --concept <key> --section '<heading>' --body-file <file> --approved-by <owner>
+  ```
+
+- Replace the text of one section, after reading the concept with `--json`:
+
+  ```text
+  toolkit memory save --concept <key> --section '<heading>' --body-file <file> --expect <version> --approved-by <owner>
+  ```
+
+- Add a fact under a heading the concept already has: add `--append`.
+- Take one section out ("forget that" about one fact), after a `--json` read:
+
+  ```text
+  toolkit memory save --concept <key> --section '<heading>' --remove --expect <version> --approved-by <owner>
+  ```
+
+- Change the concept's summary with the same save: add `--description '<new summary>'`.
+
+The output's "Undo:" line gives the command that takes the change back
+(`--remove` right after an add), and the `--json` output holds the old section
+text as `previous`. Reply for a removed section: "Removed from memory:
+<heading> (in <concept title>). Say 'undo that' to put it back."
 
 ## 4. Replace a record under a new key
 
@@ -263,6 +300,7 @@ refresh fails.
 | Rename | Line under the new key | Old key removed | New document; old one deleted | Same page, new Record Key | Point at the new key |
 | Delete | Line and file removed | Removed | Document deleted | Page to the Notion trash | The link text only |
 | Reject a proposal | Line and file removed | Removed | Document deleted | Page to the Notion trash | The link text only |
+| Merge into a concept (`merge`) | Line removed: the concept's line covers its facts | Removed | Tagged retired | Status "superseded" | Point at the concept's section |
 
 The briefing cache is `<git common dir>/toolkit-v2/memory-cache.json`,
 shared by every worktree. Built-in memory has no cache: the briefing reads
@@ -278,6 +316,10 @@ shared by every worktree. Built-in memory has no cache: the briefing reads
 - The owner: "Forget what I said about tabs." Retire `user_prefers_spaces`
   with `--reason 'The owner: forget what I said about tabs.'`. Reply:
   "Retired from memory: prefers spaces. Say 'bring it back' to restore it."
+- The same, when it is one section ("Tabs") of `user_profile`: read
+  `user_profile` with `--json`, then
+  `toolkit memory save --concept user_profile --section 'Tabs' --remove --expect <version> --approved-by <owner>`.
+  Reply: "Removed from memory: Tabs (in Profile). Say 'undo that' to put it back."
 - A tidy finds `feedback_merge_by_pr` and `feedback_merge_only_by_pull_request`
   saying the same thing. Keep the clearer one, update it with anything the
   other adds, then:

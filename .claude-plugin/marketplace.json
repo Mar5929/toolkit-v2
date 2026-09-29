@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Toolkit V2: plugins that set up and run one solo developer's projects in Claude Code and Codex. The agent runs the project; the owner decides and steers.",
-    "version": "0.2.9"
+    "version": "0.2.11"
   },
   "plugins": [
     {

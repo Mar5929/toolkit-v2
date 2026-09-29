@@ -26,7 +26,7 @@ test('save from a worktree with --approved-by, then get, list, find (text and JS
   assert.equal(saved.json.approved_by, 'Mike');
   assert.equal(saved.json.path, path.join(root, '.memory', 'feedback_deploy_window.md'));
   const text = fs.readFileSync(saved.json.path, 'utf8');
-  assert.match(text, /^---\nname: feedback_deploy_window\ndescription: Rule about deploy-window\.\nmetadata:\n  type: feedback\nstatus: current\n/);
+  assert.match(text, /^---\nname: feedback_deploy_window\ndescription: Rule about deploy-window\.\nupdated: \d{4}-\d{2}-\d{2}\nmetadata:\n  type: feedback\nstatus: current\n/);
   assert.match(text, /^authorization: Approved by Mike on \d{4}-\d{2}-\d{2}$/m);
   assert.match(text, /^source: Mike, \d{4}-\d{2}-\d{2}$/m);
   assert.match(text, /^supersedes: none$/m);
@@ -39,7 +39,8 @@ test('save from a worktree with --approved-by, then get, list, find (text and JS
   const got = await runToolkit(['memory', 'get', 'feedback_deploy_window'], { cwd: root });
   assert.equal(got.stdout, text);
   const list = await runToolkit(['memory', 'list'], { cwd: wt });
-  assert.equal(list.stdout, '- feedback_deploy_window: Rule about deploy-window.\n- feedback_second_rule: Rule about second-rule.\n');
+  // Concept memory: each line gives the key, the title, the one-line summary, and the updated date.
+  assert.equal(list.stdout, `- feedback_deploy_window: Test record — Rule about deploy-window. (updated ${today()})\n- feedback_second_rule: Test record — Rule about second-rule. (updated ${today()})\n`);
   const found = await runToolkit(['memory', 'find', 'deploy', 'window', '--json'], { cwd: wt });
   assert.equal(found.json.results[0].key, 'feedback_deploy_window');
   const none = await runToolkit(['memory', 'find', 'zebra'], { cwd: wt });
@@ -64,11 +65,12 @@ test('save reads the body from standard input and takes missing fields from its 
   const res2 = await runToolkit(['memory', 'save', '--type', 'user', '--name', 'likes-short-replies', '--description', 'Mike wants short replies.', '--body-file', 'note.md'], { cwd: root });
   assert.equal(res2.code, 0, res2.stderr);
   // A body file in the model's own topic format (name = key, metadata.type) works too.
-  const model = '---\nname: project_billing_cycle\ndescription: Invoices go out on the 1st.\nmetadata:\n  type: project\nstatus: current\nsource: Mike, 2026-09-21\nlast_verified: 2026-09-21\nauthorization: Explicit request from Mike, 2026-09-21\nsupersedes: none\n---\n\n# Billing cycle\n\n**Remember:** Invoices go out on the 1st.\n';
+  const model = '---\nname: project_billing_cycle\ndescription: Invoices go out on the 1st.\nupdated: 2026-09-21\nmetadata:\n  type: project\nstatus: current\nsource: Mike, 2026-09-21\nlast_verified: 2026-09-21\nauthorization: Explicit request from Mike, 2026-09-21\nsupersedes: none\n---\n\n# Billing cycle\n\n**Remember:** Invoices go out on the 1st.\n';
   const res3 = await runToolkit(['memory', 'save', '--body-file', '-', '--json'], { cwd: root, stdin: model });
   assert.equal(res3.code, 0, res3.stdout + res3.stderr);
   assert.equal(res3.json.key, 'project_billing_cycle');
-  assert.equal(fs.readFileSync(path.join(root, '.memory', 'project_billing_cycle.md'), 'utf8'), model, 'saved exactly as the model writes it');
+  // Saved exactly as the model writes it, with the date of this save as its updated date.
+  assert.equal(fs.readFileSync(path.join(root, '.memory', 'project_billing_cycle.md'), 'utf8'), model.replace('updated: 2026-09-21', `updated: ${today()}`), 'saved exactly as the model writes it');
   const missing = await runToolkit(['memory', 'save', '--type', 'user', '--name', 'x', '--description', 'y', '--body-file', 'nope.md'], { cwd: root });
   assert.equal(missing.code, 2);
   assert.match(missing.stderr, /there is no such file/);
@@ -88,7 +90,7 @@ test('an update keeps the old source; --supersedes retires the old record', asyn
   assert.equal(old.json.superseded_by, 'feedback_new_rule');
   assert.match(fs.readFileSync(path.join(root, '.memory', 'feedback_new_rule.md'), 'utf8'), /^supersedes: feedback_old_rule$/m);
   const all = await runToolkit(['memory', 'list', '--status', 'all'], { cwd: root });
-  assert.match(all.stdout, /^- feedback_old_rule \[superseded by feedback_new_rule\]: Rule about old-rule\.$/m);
+  assert.match(all.stdout, /^- feedback_old_rule \[superseded by feedback_new_rule\]: Test record — Rule about old-rule\. \(updated \d{4}-\d{2}-\d{2}\)$/m);
   const bad = await runToolkit(saveArgs('third-rule', ['--supersedes', 'feedback_missing']), { cwd: root });
   assert.equal(bad.code, 1);
   assert.match(bad.stderr, /feedback_third_rule was saved, but feedback_missing was not retired/);

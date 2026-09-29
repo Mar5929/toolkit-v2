@@ -46,3 +46,18 @@ export function keepPhrase(prompt) {
 export function hasKeepPhrase(text) {
   return keepPhrase(text) !== null;
 }
+
+// Words that can tell the agent to save something, wider than the keep
+// phrases above: the memory-save skill counts "remember", "always", "never",
+// "forget", and a direct "save that" as the owner's approval. Used only to
+// decide whether a save that claims his approval gets a note (final re-review
+// R-I4: "FYI, I only ever run tip-split on my MacBook Air with Node 24." was
+// saved with --approved-by). A false match only leaves the note out.
+// An answer to the agent's own memory question is found from the last reply
+// instead (Stop records lastReplyAskedMemory), so "yes" is not in this list.
+const SAVE_WORDS = /\b(?:remember|memory|memori[sz]e|save|saved|always|never|forget|from\s+now\s+on|going\s+forward|keep\s+in\s+mind|note\s+that|make\s+a\s+note|write\s+(?:that|this|it)\s+down|(?:don['’]?t|do\s+not)\s+ever|stop\s+doing|instead)\b/i;
+
+/** True when the owner's own words in a prompt could tell the agent to save something. */
+export function saveWords(prompt) {
+  return keepPhrase(prompt) !== null || SAVE_WORDS.test(ownWords(prompt));
+}

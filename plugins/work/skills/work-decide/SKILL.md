@@ -14,14 +14,16 @@ Walks the owner through what waits on him, one decision at a time, and records e
    `toolkit work decisions`
 2. He gave an answer without being asked ("approved", "go with B"): match it to exactly one waiting decision; when two could match, ask which, naming both. A bare "yes", "ok", or "looks good" with no question asked is not an answer (`references/approvals.md`, section 1).
 3. Otherwise start with the count and one short line for every waiting decision, memory proposals included ("3 decisions wait on you: the WI-004 design, the WI-006 result, and a memory proposal about deploy days."). Then take them one at a time, the one blocking the most work first: what is decided, the choices, your recommendation and its main reason, and what happens after each answer. One decision per message, in the reply text.
-4. An approval: read the item, then run that gate's checklist in `references/approvals.md` (requirements: section 2; design: section 3; result: section 4).
+4. An approval: read the item, then run that gate's checklist in `references/approvals.md` (requirements: section 2; design: section 3; result: section 4). A result with no independent acceptance check since its last build (the command prints a note): open `work-check` first, which runs it whoever built the change.
    `toolkit work show <id>`
 5. An Open Questions answer: save his words first, rewrite that row with the answer, the date, and Answered, then set `waiting_on` back (`references/recording-owner-answers.md`, sections 4 and 5).
    `toolkit work history <id> --note 'Owner said: <quote>' --effect '<what the answer changes>'`
    `toolkit work edit <id> --section 'Open Questions' --set-file <file>`
    `toolkit work set <id> --waiting-on agent`
-6. A memory proposal: show its one line and your recommendation. Yes: approve it. No: reject it, and never propose the same fact again (`references/proposals.md`).
+6. A memory proposal: show its one line, and when it names a concept, the concept it would join. Recommend a yes only with evidence from this project (what he said, what happened, and when); with none, ask without a recommendation. Yes: approve it (a proposal for a concept is then added to it as a section). A proposal that names no concept: name the concept it goes in with `--concept`, an existing one of its type or a new key named for its subject, never for the fact (`references/proposals.md`, "Recording the owner's answer"). No: reject it, and never propose the same fact again.
+   `toolkit memory list --type <type>`
    `toolkit memory approve <key> --by <owner>`
+   `toolkit memory approve <key> --by <owner> --concept <type>_<subject> --title '<Concept title>' --description '<one-line summary of the concept>'`
    `toolkit memory reject <key>`
 7. A decision for the whole project: add the row inside the `publish-docs` save workspace, in the order in `references/decisions-log.md`.
    `toolkit decision add --decision '<decision>' --why '<why>' --by <owner>`
@@ -33,7 +35,7 @@ Walks the owner through what waits on him, one decision at a time, and records e
 ## Gotchas
 
 - Run each `toolkit` command alone: never joined by `&&`, `;`, or a pipe, and never from a script (in Codex that runs it inside the sandbox, where it fails). One-line values go in single quotes, never double quotes; an apostrophe inside them is `'\''` in Claude Code and ’ (U+2019) in Codex, or reword the text. Section text goes on standard input (`--set-file -`) in Claude Code, and in `--text '<text>'` or a `mktemp -d` file in Codex (`references/toolkit-commands.md`, "Text in a command").
-- Every decision carries a recommendation, even when it is the only one in the queue. A bare question is not enough.
+- Every decision carries a recommendation, even when it is the only one in the queue. A bare question is not enough. The one exception is a memory proposal with no evidence from this project (step 6).
 - Ask in the reply text, never through a question tool.
 - The approve command marks the Open Questions rows that asked for it Answered and prints "Marked Q-xx Answered". Never edit those rows again by hand.
 - `waiting_on`: `agent` when the agent continues, `none` when nothing waits, `owner` while another of his questions on that item is still open. The approve command sets `none` by itself.

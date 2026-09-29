@@ -12,12 +12,16 @@
 //     key,            the host's turn id (Codex turn_id, Claude prompt_id), when given
 //     n, startedAt,
 //     keep,           the keep phrase the owner used this turn, or null
+//     prompted        true when UserPromptSubmit started the turn
+//     saveWords       true when the prompt holds words that can ask for a save
+//     answersMemoryQuestion  true when the reply before the prompt asked about memory
 //     baseline,       file times at the start of the turn (a fallback record check)
 //     records: [{ kind: memory|work|decision|memory-file, what, at, proposal? }],
 //     edits:   [{ path, id }]   work-item records edited with Write, Edit, or apply_patch
 //     stopBlocked     true once Stop has kept this turn going
 //   },
 //   lastStopReason    the text Stop last gave (Codex turns it into a prompt; it is not a new request)
+//   lastReplyAskedMemory  true when the last reply asked the owner about memory (Stop sets it)
 //   trackerReported   the .work-items/ fingerprint whose changes UserPromptSubmit last reported
 //   proposedSummaries "Save to memory: <summary>?" questions already saved as proposals (normalized)
 //   proposalNotes     what Stop saved as proposals; the next UserPromptSubmit passes it on once

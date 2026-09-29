@@ -337,7 +337,7 @@ test('records use the model topic format: the same text as a built-in file, with
   const { driver, fake } = await setup();
   const res = await driver.save({ ...INPUT, approved_by: 'Mike', body: `# Tuesday deploys\n\n${BODY}` });
   const got = await driver.get('feedback_deploy_window');
-  assert.match(got.text, /^---\nname: feedback_deploy_window\ndescription: Deploy only on Tuesday mornings\nmetadata:\n  type: feedback\nstatus: current\n/);
+  assert.match(got.text, /^---\nname: feedback_deploy_window\ndescription: Deploy only on Tuesday mornings\nupdated: \d{4}-\d{2}-\d{2}\nmetadata:\n  type: feedback\nstatus: current\n/);
   assert.match(got.text, /\nauthorization: Approved by Mike on 2026-09-26\nsupersedes: none\n---\n\n# Tuesday deploys\n\n\*\*Remember:\*\*/);
   assert.match(got.text, /\*\*Related memories:\*\* WI-001/, 'the older Related label is written the model way');
   assert.equal(got.version, res.version);

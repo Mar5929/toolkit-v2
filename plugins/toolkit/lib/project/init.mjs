@@ -26,7 +26,7 @@ import { gitInfo, loadConfig, mainCheckoutRoot, saveConfig, CONFIG_FILE, TOOLKIT
 import { atomicWrite } from '../core/fsx.mjs';
 import { run } from '../core/util.mjs';
 import { planManifest, applyPlan, planLines, planSummary, setupDate, todayFor, readHosts } from './manifest.mjs';
-import { parseBackupDir } from './backup.mjs';
+import { parseBackupDir, notionOnly, NOTION_KEEPS_HISTORY } from './backup.mjs';
 import {
   newConfig, checkKey, keyFromName, checkChoice, parseHosts, parseDeclined, describeSetup, TRACKERS, MEMORIES,
 } from './setup.mjs';
@@ -406,9 +406,14 @@ export async function initProject(opts, io = {}) {
   }
   // A Notion tracker with Notion memory keeps nothing on this computer, so
   // the automatic backup copies nothing (final confirmation round 1, Notion
-  // run: the folder was saved with no word about it).
+  // run: the folder was saved with no word about it). Such a project needs no
+  // backup folder: Notion keeps each page's history and a trash (the owner's
+  // decision of 2026-09-28).
   const dir = config.backup && config.backup.dir;
-  if (dir && dir !== 'none' && config.tracker.type !== 'local' && !['builtin', 'hindsight'].includes(config.memory.type)) {
+  const saved = dir && dir !== 'none' ? ` The backup folder ${dir} is saved, but the automatic backup copies nothing to it; toolkit memory export --to <folder> copies the memory by hand when the owner asks.` : '';
+  if (notionOnly(config)) {
+    next.push(`- Tell the owner: no backup folder is needed, because ${NOTION_KEEPS_HISTORY}.${saved}`);
+  } else if (saved && config.tracker.type !== 'local' && !['builtin', 'hindsight'].includes(config.memory.type)) {
     next.push(`- Tell the owner: the backup folder ${dir} is saved, but this project keeps its work items and memory outside this computer, so the automatic backup copies nothing to it. toolkit memory export --to <folder> copies the memory by hand.`);
   }
   next.push('- Run toolkit doctor to check the setup.');

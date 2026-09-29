@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "sessionId": "01a0eb21-acba-7202-bf34-58d31b6fffdc",
+  "host": "codex",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex",
+  "startedAt": "2026-09-29T03:07:30.119Z",
+  "turns": 1,
+  "turn": {
+    "key": "01a0eb21-ad20-7500-b765-b9f36ef07b65",
+    "n": 1,
+    "startedAt": "2026-09-29T03:07:30.290Z",
+    "keep": null,
+    "baseline": {
+      "memoryMeta": 1790651201109.35,
+      "hindsightMeta": null,
+      "memoryCache": null,
+      "workState": 1790651250178.8,
+      "decisions": 1790648273816.2002
+    },
+    "records": [
+      {
+        "kind": "work",
+        "what": "toolkit work design",
+        "at": "2026-09-29T03:08:07.362Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work history",
+        "at": "2026-09-29T03:09:11.874Z"
+      }
+    ],
+    "edits": [],
+    "stopBlocked": false,
+    "prompted": true,
+    "saveWords": false,
+    "answersMemoryQuestion": false
+  },
+  "lastStopReason": null,
+  "source": "startup",
+  "updated": "2026-09-29T03:09:20.262Z",
+  "lastReplyAskedMemory": false
+}

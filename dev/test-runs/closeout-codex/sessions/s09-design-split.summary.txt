@@ -1,0 +1,1137 @@
+PROMPT: I approve Option A. Before you build, split the --split option out into its own sub-item under WI-001, so WI-001 is the plain tip and total and the sub-item is the split.
+THREAD: 01a0eb0f-e1aa-7990-9ccd-8dd4e4fe80b7
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll record your approval of Option A, then split the work so WI-001 covers the tip and total and a child item covers `--split`. I’ll check the approved scope and design before changing the tracker.
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/humanize-outbound-text.md'"
+  -> # Humanize Anything Sent to Another Person
+
+Any text that will leave the project and be read by someone other than the owner
+is run through the `humanizer` skill before the owner sees the final version.
+Use the `unslop` skill when `humanizer` is not installed. That covers emails,
+chat messages, supp
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-requirements/SKILL.md'"
+  -> ---
+name: work-requirements
+description: 'Interviews the owner one question at a time, writes a work item''s requirements (R-01, R-02), checks them, and asks for his approval. Use when an item''s requirements are missing or the owner changes, adds, or drops one at any stage, or says "grill me", "ask me questions", or "check the spec".'
+---
+
+# Work requirements
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Interviews the owner and writes what the result must do, never how to build it; every answer lands in the work item. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Find the item as `work-on` does; none exists, create it with his words as the Starting request. Requirements already approved and no change asked: open the skill the item's "Continue with" names and stop.
+   `toolkit work show <id>`
+   `toolkit work new --title '<title>' --type <type> --stage 01-discovery`
+   `toolkit work edit <id> --section 'Starting request' --text '<his exact words>'`
+2. Move it to refinement once requirements are being written. Before the first question, read the item and what the project already knows (`references/interview.md`, section 2).
+   `toolkit work set <id> --stage 02-refinement`
+   `toolkit memory find '<topic>'`
+3. Restate the goal in one sentence ("So the goal is X?"). Write t
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-decide/SKILL.md'"
+  -> ---
+name: work-decide
+description: 'Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers. Use when he asks "what do you need from me", answers a waiting decision ("go with option B"), or states a project-wide decision.'
+---
+
+# Work decide
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Walks the owner through what waits on him, one decision at a time, and records each answer where it belongs. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Build the queue. The command lists each decision once: requirements waiting for approval, proposed designs, results at stage 11, Open Questions rows the owner decides, and memory proposals. Its "Agent to-do" lines are not decisions. A delivery offer belongs to `work-delegate`: open it after his other decisions.
+   `toolkit work decisions`
+2. He gave an answer without being asked ("approved", "go with B"): match it to exactly one waiting decision; when two could match, ask which, naming both. A bare "yes", "ok", or "looks good" with no question asked is not an answer (`references/approvals.md`, section 1).
+3. Otherwise start with the count and one short line for every waiting decision, memory proposals included ("3 decisions wait on you: the WI-004 design, the WI-006 result, and a 
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-organize/SKILL.md'"
+  -> ---
+name: work-organize
+description: 'Splits work items into sub-items, nests or moves them, and reconciles item folders or Notion cards the owner moved, renamed, or deleted himself. Use when the owner says "break it down" or "put X under Y", says he moved folders or cards, or the briefing reports moved or missing items.'
+---
+
+# Work organize
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Explains what the owner changed in the tracker, asks only where his intent is unclear, and splits or moves items when he asks; it never moves anything on its own. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Rescan the tracker, then read the tree and the report: moved, renamed, nested or un-nested, archived, missing, duplicate id, adopted.
+   `toolkit work sync`
+   `toolkit work list --tree`
+2. Say each report line to the owner, one line each, before other work (`references/moves.md`, section 1). The CLI already wrote the history rows.
+3. Ask about each case that needs his intent, one at a time, with your recommendation: a missing or trashed item, a duplicate id, a sub-item under a finished parent, an item marked Done by hand, a skipped gate (`references/moves.md`, section 2).
+   `toolkit work cancel <id> --reason '<his words>'`
+4. Split (stage 05): propose the sub-items, ask once, then 
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-on/SKILL.md'"
+  -> ---
+name: work-on
+description: 'Starts, resumes, or logs a work item and builds it. Use whenever the owner asks to build, add, fix, or change something, names an item id to resume, says "keep going", or wants a bug or idea logged ("put it in the backlog"). Not for requirement edits (work-requirements) or handovers (work-delegate).'
+---
+
+# Work on
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Starts or resumes one work item, plans it, and builds it; it never records an approval, Done, a merge, or a deploy. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. No project briefing in this conversation: run the briefing. Exit code 4: open `project-setup` and stop. Tell the owner each change listed under "Changes found in the tracker", one line each in the CLI's words, before other work.
+   `toolkit brief`
+2. A bare "ok", "yes", or "looks good" when this chat asked him nothing: start no work and ask what he wants. Otherwise find the item: the id he named, this worktree's item, or a title that matches. Two matches: ask one question naming both.
+   `toolkit work list`
+   `toolkit work show <id>`
+3. No item yet: size the request as a quick edit, log only, or a work item, and pick the type (`references/sizing-and-routing.md`, sections 1 to 3). He asks to be asked first ("ask me questions"
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/session-handoff.md'"
+  -> # Prepare a Session Handoff
+
+When the owner says he is clearing context or ending the session, or asks for a handoff, use the `handoff` skill, whatever the session's length. When the session is long and the next step is complex, offer a handoff. Use the `handoff` skill. Before the handoff, review th
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/plain-english-artifacts.md'"
+  -> # Write Artifacts in Plain English
+
+An artifact is something an agent generates for a person to look at: a
+diagram, a chart, a dashboard, a visualization, a mockup, a slide deck, a
+published page, or a generated document. This rule is about the words inside
+one: the title, the headings, the labels, 
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/keep-work-item-current.md'"
+  -> # Keep the Active Work Item Accurate
+
+The work tracker is the source of truth for current work.
+
+- Before substantial work, use the `work-on` skill. Read the active item's requirements, state, next step, and blockers.
+- Save the owner's decisions, requirements, and corrections in the item or its lin
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/memory-review-and-save.md'"
+  -> # Review and Save Project Memory
+
+This rule applies to the main agent. The project memory system is chosen at setup and recorded in `.toolkit.json`; with built-in memory it is the local `.memory/` folder. It is the single project memory store. Claude's native auto-memory and the `claude-toolkit` Sec
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/shared-repository-work.md'"
+  -> # Work Safely in a Shared Repository
+
+Other sessions edit this repository now. Before your first edit, run:
+
+```
+git worktree list
+git status
+git fetch origin && git log --oneline -10
+```
+
+- No remote (`git remote` prints nothing): skip `git fetch`, and never report a fetch failure as a blocker.
+- A
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/work-item-folders.md'"
+  -> # Local Work-Item Folders
+
+This project tracks work in local folders under `.work-items/`. The folder is
+Git-ignored, lives in the main checkout, and is shared by every worktree. It is
+not backed up by Git: `toolkit export` is the backup.
+
+## An item is found by its ID, not its path
+
+- An item is a 
+
+[AGENT] I’m using the work-decision and work-organization procedures for this change. Your approval names Option A clearly; I’m checking how the tracker carries that approval into a child item.
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-organize/references/moves.md'"
+  -> # Moves, splits, and hand changes: cases
+
+What to ask or do for each change the tracker reports, how to split an item
+into sub-items, and how to move or archive items on request. What the CLI
+already does by itself is in `tracker-local.md` and `tracker-notion.md`.
+
+## Contents
+
+1. Reporting what the CLI already adapted
+2. Cases that need the owner
+3. Splitting an item (stage 05)
+4. Moving, grouping, and archiving
+5. Things never done here
+
+## 1. Reporting what the CLI already adapted
+
+Each report line is written to be said to the owner as it is. Say each one
+in the reply, one line each, before other work. Do not guess at a cause the
+line does not name. The CLI already wrote the history rows; add a note only
+for the owner's reason.
+
+| The line starts with | Example | Add |
+| --- | --- | --- |
+| `Moved:` | "Moved: WI-007 from WI-003-csv/WI-007-export to WI-007-export (moved by hand). It is now a top-level item. It was a sub-item of WI-003." | Nothing, unless a side effect in section 2 applies |
+| `Renamed folder:` | "Renamed folder: WI-002's folder was renamed by hand from wi-002-help to help-option; the item itself is the same. It is still a top-level item." | Nothing |
+| `Re-parented:` | "Re-parented: WI-009 was put under WI-004 in Notion by hand. Its parent is now WI-004. It was a top-level item." | Nothing, unless a side effect in section 2 applies |
+| `Archived:` | "Archived: WI-005 was archived in Notion by hand (its Archived box was ticked), so it is hidden from the boar
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-decide/references/approvals.md'"
+  -> <!-- Generated file. Source: plugins/work/shared/approvals.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Approvals and gates
+
+The exact steps to ask for and record each owner approval, and what counts as
+one. Run each checklist in order; one wrong or missing command leaves the
+item in the wrong state.
+
+## Contents
+
+1. What counts as approval
+2. Requirements approval
+3. Design approval
+4. Result approval
+5. Done
+6. Cancel
+7. Delivery offer
+8. Project-wide decision
+9. Memory proposal
+10. Sub-items and approvals
+11. Standing merge instruction
+12. When an approve command refuses
+
+## 1. What counts as approval
+
+`toolkit work lifecycle` prints the gates and these rules. In short:
+
+- Only the owner's explicit words count. Quote them in a history note.
+- A question, a suggestion, a tentative answer ("probably B"), silence, or a
+  saved draft is not approval.
+- An approval covers only what was shown. It never covers merge, deployment,
+  spending, or publishing.
+- An approval survives later stages. A stage alone does not prove approval:
+  check the approval field (`toolkit work show <id>`).
+- A bare "yes", "ok", or "looks good" answers only a yes-or-no question asked
+  earlier in this conversation. When none was asked, or the waiting question
+  is not a yes-or-no question, show the decision with its choices and your
+  recommendation, and record nothing.
+- After a yes, save his words first, in a history note that starts with
+  `Owner said:`. Then run the 
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-on/references/planning.md'"
+  -> # Planning and building a work item
+
+The Roadmap and Tasks formats, tracking setup, and the build rules for
+`work-on` stages 06 to 08.
+
+## Contents
+
+1. Roadmap and tasks
+2. The Roadmap format
+3. The Tasks format
+4. Status words and ticking a task
+5. Tracking setup (stage 07)
+6. Building (stage 08)
+7. Keeping the item current while building
+8. Checklist before stopping
+
+## 1. Roadmap and tasks
+
+- The Roadmap is an ordered list of phases from where the item stands to the
+  finished result. Name phases to fit the work. "Phase" (`P1`) is the item's
+  plan; "stage" (`08-build`) is the lifecycle. Never mix the two words.
+- Build the phases from the approved design's "Build and verification plan"
+  (its Technical sequence and Acceptance checks) and the chosen option's
+  Build order. With no design (a small item that skipped design with a
+  recorded reason), build them from the requirements.
+- A sub-item that inherits its parent's approved design is planned from the
+  parent's design: `toolkit work design <parent-id>`.
+- Each phase has one or more tasks, one or more sub-items, or both.
+- Keep detail in proportion. A one-hour fix needs one phase with one or two
+  tasks.
+- Link sources; do not copy them. A task names the `R-xx` it implements and
+  the design section it follows.
+
+## 2. The Roadmap format
+
+The table keeps these columns in every tracker. The phase name follows an em
+dash, as in the template.
+
+```markdown
+A phase is complete when its tasks are complete and its exit result 
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-on/references/git-rules.md'"
+  -> <!-- Generated file. Source: plugins/git-workflows/shared/git-rules.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Git rules for Toolkit V2 skills
+
+Purpose: the Git rules every Toolkit V2 skill follows when it makes a branch,
+commits, merges, pushes, or removes a worktree, in Claude Code and in Codex.
+
+## Contents
+
+- Look before the first Git write
+- Branch and worktree names for a work item
+- Staging and committing
+- No AI credit
+- The Git-ignored toolkit folders
+- A project with no remote
+- The merge-safety check
+- A merge that stops on a conflict
+- Git writes in Codex
+- Checklist: one commit
+- Examples
+
+## Look before the first Git write
+
+Other sessions may work in the same repository at the same time. Before the
+first Git write in a session, run each of these on its own:
+
+```text
+git worktree list
+git status
+git remote
+```
+
+- `git remote` prints nothing: the project has no remote. Read "A project
+  with no remote" below before any fetch, pull, push, or pull request.
+- An unknown worktree, a branch that moved, or a change this session did not
+  make means another session is working. Do not change it. Tell the owner.
+- The shared primary checkout is the first entry `git worktree list` prints.
+  In it, never switch branches, reset, rebase, or stash.
+- Never commit, push, rebase, or delete another session's branch, and never
+  commit its uncommitted changes, even when they look finished.
+
+## Branch and worktree names for a work item
+
+A work item
+
+[CMD exit=0] /bin/zsh -lc 'git remote'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex b50508c [main]
+
+
+[CMD exit=0] /bin/zsh -lc 'cat PROJECT-ROADMAP.md'
+  -> # Project roadmap
+
+<!-- Fill-in guide: replace every angle-bracket prompt in the outcome, phase table, phase heading, and work-unit fields with this project's real text. Keep one overview row and one matching ## heading per phase. Under that heading, repeat the ### work-unit block for each deliverab
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## main
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work design WI-001'
+  -> Design of WI-001 (proposed) at /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/.work-items/WI-001-build-the-tip-command/DESIGN.md
+
+---
+work_item: WI-001
+status: proposed
+approved: "no"
+---
+
+# WI-001: Build the tip command — solution design
+
+**Requirements:** WI-001  
+**Design status:** Draft  
+**Requirements checked:** [WI-001 requirements](WORK-ITEM.md#requirements), 2026-09-28  
+**Last updated:** 2026-09-28  
+**Design approval:** Pending
+
+## What this design solves
+
+A person running [WI-001's agreed goal](WORK-ITEM.md#agreed-goal) can see the tip and total for a restaurant bill and, when requested, each person's share. This design covers one terminal command and its checks. It does not add another way to run the calculation.
+
+## Requirements and design readiness
+
+The approved requirements describe a complete result for this small command. They settle accepted values, tip and total rounding, split rounding, output, and rejection of invalid values. The independent requirements check found no remaining gap. The command's internal parsing rules and error wording are implementation details; neither changes the required results.
+
+| Requirement | Status in work item | Design coverage | Remaining decision or gap |
+| --- | --- | --- | --- |
+| R-01 — Show tip and total | Finalized | Option A, end-to-end behavior, requirement coverage, and technical shape | None |
+| R-02 — Divide the tota
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 1 decision waits on the owner:
+
+WI-001 Build the tip command
+  - The design for WI-001 is proposed and waits for the owner's approval. Approve with: toolkit work approve WI-001 --design --by <name>. (work-decide)
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work list --tree'
+  -> WI-001  Build the tip command  (04 Solution design, In Progress, waiting on owner)
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001'
+  -> WI-001: Build the tip command
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/.work-items/WI-001-build-the-tip-command/WORK-ITEM.md
+Stage: 04 Solution design (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: none | Sub-items: none | Design: proposed (.work-items/WI-001-build-the-tip-command/DESIGN.md)
+Worktree branch for this item: claude/wi-001-build-the-tip-command (folder .claude/worktrees/wi-001-build-the-tip-command)
+
+---
+id: WI-001
+title: Build the tip command
+type: build
+stage: 04-solution-design
+status: In Progress
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: proposed
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-001: Build the tip command
+
+## Overview
+
+**Goal:** Provide a terminal tip command that reports the tip and total and can divide the total among friends.
+
+**Current position:** Requirements approved; Option A solution design proposed and independently reviewed. No application code has been built.
+
+**Next action:** Ask Mike Rihm to approve Option A solution design before building.
+
+**Blockers:** Design approval is required before the build.
+
+**Related items:** None.
+
+## Roadmap
+
+A phase is complete when its tasks are complete and its exit result has been checked.
+
+<!-- Replace each example row with a real phase. Keep its phase ID identical to the m
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work sync'
+  -> Nothing changed: every item is where the tracker expected it, and every derived value is in step.
+
+Dashboard: .work-items/DASHBOARD.md
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit config get project.owner'
+  -> Mike Rihm
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history WI-001 --note 'Owner said: I approve Option A. Before you build, split the --split option out into its own sub-item under WI-001, so WI-001 is the plain tip and total and the sub-item is the split.' --effect 'Approve Option A; create a child for R-02 before building R-01.'"
+  -> Added a Recent History row to WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "rg -n \"Selected design|Recommendation and owner decision|Build and verification plan\" .work-items/work-item-template /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/solution-design -g '*.md'"
+  -> /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/solution-design/assets/DESIGN.md:93:## Recommendation and owner decision
+/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/solution-design/assets/DESIGN.md:101:## Selected design
+/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/solution-design/assets/DESIGN.md:147:## Build and verification plan
+/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/solution-design/SKILL.md:28:9. Present the options, your recommendation, what he will see when it is done, the risks, and the build order, and ask him to choose or approve. His yes: run the design approval checklist in `references/approvals.md`, section 3: fill "Selected design" with the option he chose and save it before the approval, which refuses while it says "Pending owner decision". Then update the current focus (`references/current-focus.md`) and hand back to `work-on`.
+/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/solution-design/references/design-process.md:231:  the misreading table, and Notes. "Selected design" says "Pending owner
+/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/solution-design/references/design-process.md:241:  design" and into "Build and verification plan" (Technical sequence, and
+.work-items/work-item-template/DESIGN.md:92:## Recommendation and owner decision
+.work-items/work-item-template/DESIGN.md:100:## Selected design
+.work-items
+
+[CMD exit=0] /bin/zsh -lc "sed -n '90,165p' /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/solution-design/assets/DESIGN.md"
+  -> | --- | --- | --- | --- |
+| <Requirement coverage, effort, risk, operations, or another agreed criterion> | <Assessment> | <Assessment> | <Source or open question> |
+
+## Recommendation and owner decision
+
+**Recommendation:** <Option and reason, including the main cost or tradeoff. A recommendation is not approval.>  
+**Owner decision:** <Pending, or chosen option with who decided, when, and source.>  
+**Reason for decision:** <Owner's reason if given; do not invent one.>
+
+<!-- With a single option, keep the owner decision and remove the comparison and recommendation text. -->
+
+## Selected design
+
+<Before an option is chosen, write “Pending owner decision.” Afterward, make this the current buildable design. Update it when an interview answer changes the chosen approach; retain only useful option history above.>
+
+### End-to-end flow
+
+1. <Trigger, actor, and input.>
+2. <Steps, decisions, error paths, and handoffs in order.>
+3. <Result, user feedback, and what happens next.>
+
+### Components and responsibilities
+
+| Component or file | New, changed, or reused | Responsibility | Requirement IDs |
+| --- | --- | --- | --- |
+| <Exact name or path> | <New / Changed / Reused> | <Specific behavior> | R-01 |
+
+### Data, access, and integration details
+
+<Describe the chosen data model and state changes, access rules, system boundaries, interfaces, and ownership at enough detail for a builder to implement without guessing. State “Not applicable” for a genuinely unused area.>
+
+### Edge cases a
+
+[FILE_CHANGE] [{"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/.work-items/WI-001-build-the-tip-command/DESIGN.md", "kind": "update"}]
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work design WI-001 --set-file .work-items/WI-001-build-the-tip-command/DESIGN.md'
+  -> Saved the design of WI-001 (proposed) at /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/.work-items/WI-001-build-the-tip-command/DESIGN.md.
+It is proposed until the owner approves it: toolkit work approve <id> --design --by <name>.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work approve WI-001 --design --by 'Mike Rihm'"
+  -> Recorded: design of WI-001 approved (2026-09-28 by Mike Rihm).
+It is no longer waiting on the owner (waiting_on: none).
+Now 04 Solution design (In Progress). Continue with solution-design.
+Note: WI-001's Overview still says "Next action: Ask Mike Rihm to approve Option A solution design before building.". Write the step after this approval: toolkit work edit WI-001 --label 'Next action' --value '<next step>'.
+
+
+[AGENT] Option A is recorded as approved. I’m creating the R-02 child item for `--split` now. WI-001 will deliver the plain tip and total; the child will deliver the split output.
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --stage 05-breakdown'
+  -> Updated WI-001: stage 04 Solution design -> 05 Breakdown (status In Progress).
+Now 05 Breakdown (In Progress). Continue with work-organize.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work new --title 'Add the --split option' --type build --parent WI-001 --covers R-02"
+  -> Created WI-002: Add the --split option (06 Implementation plan, In Progress, sub-item of WI-001) at .work-items/WI-001-build-the-tip-command/WI-002-add-the-split-option/WORK-ITEM.md.
+It delivers WI-001 R-02 and inherits that requirements approval (2026-09-28 by Mike Rihm).
+WI-001's approved design covers it, so it starts at planning with no design of its own.
+Delivery: owner-led, as recorded for WI-001.
+Continue with work-on.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001 --path'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/.work-items/WI-001-build-the-tip-command/WORK-ITEM.md
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work list --tree'
+  -> WI-001  Build the tip command  (05 Breakdown, In Progress)
+  WI-002  Add the --split option  (06 Implementation plan, In Progress)
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-002'
+  -> WI-002: Add the --split option
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/.work-items/WI-001-build-the-tip-command/WI-002-add-the-split-option/WORK-ITEM.md
+Stage: 06 Implementation plan (In Progress) | Waiting on: none | Continue with: work-on
+Parent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/WI-001-build-the-tip-command/DESIGN.md). Read it with: toolkit work design WI-001
+Worktree branch for this item: claude/wi-002-add-the-split-option (folder .claude/worktrees/wi-002-add-the-split-option)
+
+---
+id: WI-002
+title: Add the --split option
+type: build
+stage: 06-implementation-plan
+status: In Progress
+parent: WI-001
+waiting_on: "none"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-002: Add the --split option
+
+## Overview
+
+<!-- Enter the current summary directly after each bold label below. Keep this section current; detailed tasks and decisions belong in their sections further down. -->
+
+**Goal:** <The outcome this work item is meant to achieve.>
+
+**Current position:** <What has been completed and where work stands now.>
+
+**Next action:** <The next specific action and its owner.>
+
+**Blockers:** <Blocking decision or dependency, or “None.”>
+
+**Related items:** Parent WI-001 (R-02). Design: WI-001's approved design.
+
+#
+
+[CMD exit=0] /bin/zsh -lc "toolkit work set WI-001 --title 'Build the plain tip and total command'"
+  -> Updated WI-001: title "Build the plain tip and total command" (was "Build the tip command").
+Now 05 Breakdown (In Progress). Continue with work-organize.
+The design heading now has the new title.
+Renamed its folder to match the new title: .work-items/WI-001-build-the-plain-tip-and-total-command/ (was .work-items/WI-001-build-the-tip-command/).
+Tell the owner in the reply: WI-001 is now called "Build the plain tip and total command" (was "Build the tip command"), and its folder is now .work-items/WI-001-build-the-plain-tip-and-total-command/.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section Roadmap --text 'A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Plain tip and total | The command prints the rounded tip and total | Not Started | R-01 command and error checks pass | None. |
+| P2 — Split option | The command also prints each person’s rounded-up share when requested | Not Started | WI-002 passes its R-02 checks and receives its own result approval | WI-002 |'"
+  -> Saved "Roadmap" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "sed -n '55,125p' /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-on/references/work-item-format.md"
+  -> | `updated` | `YYYY-MM-DD` | Every `toolkit work` write |
+
+`toolkit work lifecycle` prints the stage labels, the statuses, and the types.
+Blocked is not a status: an item that cannot move has `waiting_on` set and its
+Overview Blockers line filled.
+
+## 3. Sections of `WORK-ITEM.md`
+
+These are the headings `--section` takes. A `###` subsection can be named on
+its own, for example `--section 'Agreed goal'`.
+
+| Heading | What it holds |
+| --- | --- |
+| `Overview` | Goal, Current position, Next action (and who owns it), Blockers, Related items (ids, never paths) |
+| `Roadmap` | The phase table: Phase (`P1 — <name>`), Outcome, Status, Exit result, Sub-items |
+| `Tasks` | One `### P1 — <name>` heading per phase, with checkbox tasks `P1-T01` (Work, Deliverable, Done when, Depends on) |
+| `Recent History` | Dated rows: Date, Change or decision, Effect on the work (newest first) |
+| `Open Questions` | Rows: ID (`Q-01`), Question, Affects, Status, Decision needed from (`owner` for the owner) |
+| `Requirements` | Overall status and Finalization rule, then the subsections below |
+| `Starting request` | The owner's own words for the request |
+| `Agreed goal` | The outcome the owner agreed the item delivers |
+| `Active requirements` | One `#### R-01 — <name>` block per requirement |
+| `Acceptance` | The numbered list of what makes the whole item acceptable |
+| `Notes` | The subsections below |
+| `Decisions and context` | Context the next session needs that is not a requirement |
+| `Resume h
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --label 'Goal' --value 'Deliver the plain terminal command for tip and total; track the optional split in WI-002.'"
+  -> Saved "Goal" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --label 'Current position' --value 'Option A approved. WI-002 created for R-02. No application code has been built.'"
+  -> Saved "Current position" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --label 'Next action' --value 'Plan and build the R-01 tip and total command on WI-001’s branch.'"
+  -> Saved "Next action" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --label 'Blockers' --value 'None for planning; creating the code worktree needs Git write access in this Codex session.'"
+  -> Saved "Blockers" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --label 'Related items' --value 'WI-002 delivers the --split option (R-02).'"
+  -> Saved "Related items" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --label 'Goal' --value 'Add --split so the command prints each person’s share of the rounded total.'"
+  -> Saved "Goal" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --label 'Current position' --value 'Created under WI-001 for approved R-02; Option A design is inherited. No application code has been built.'"
+  -> Saved "Current position" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --label 'Next action' --value 'After WI-001’s plain tip and total command is built, implement and check --split on WI-002’s branch.'"
+  -> Saved "Next action" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --label 'Blockers' --value 'Depends on WI-001’s plain command and Git write access to create its worktree.'"
+  -> Saved "Blockers" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Tasks' --text '### P1 — Plain tip and total
+
+- [ ] **P1-T01 — Parse command inputs** · Not Started  
+  **Work:** Add bill and percentage argument validation using the approved Option A design (R-01).  
+  **Deliverable:** "'`bin/tipcalc.js` input parsing and errors.  
+  **Done when:** The sample command is accepted and invalid bill, percentage, or argument syntax exits nonzero with no result output.  
+  **Depends on:** None.
+- [ ] **P1-T02 — Calculate and print Tip and Total** · Not Started  
+  **Work:** Use exact decimal arithmetic and half-up 
+  -> Saved "Tasks" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --section 'Roadmap' --text 'A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Split output | The command prints each person’s share when --split is supplied | Not Started | R-02 split and invalid-count checks pass | None. |'"
+  -> Saved "Roadmap" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --section 'Tasks' --text '### P1 — Split output
+
+- [ ] **P1-T01 — Validate and calculate the split** · Not Started  
+  **Work:** Add a positive whole-number --split count and round each share upward from rounded Total cents (WI-001 R-02; Option A).  
+  **Deliverable:** Split calculation in "'`bin/tipcalc.js`.  
+  **Done when:** Splits of three and seven yield $20.00 and $8.58; invalid counts produce an error without a result.  
+  **Depends on:** WI-001 P1.
+- [ ] **P1-T02 — Check the split output** · Not Started  
+  **Work:** Extend process-level command c
+  -> Saved "Tasks" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --section 'Starting request' --text 'Owner, 2026-09-28: “Before you build, split the --split option out into its own sub-item under WI-001, so WI-001 is the plain tip and total and the sub-item is the split.”'"
+  -> Saved "Starting request" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --section 'Acceptance' --text 'This work item can be accepted when:
+
+1. With a "'$50 bill, 20% tip, and `--split 3`, the second line is exactly `Each person pays: $20.00` (WI-001 R-02).
+2. With the same bill and tip and `--split 7`, the second line is exactly `Each person pays: $8.58` (WI-001 R-02).
+3. Zero, negative, fractional, and malformed split counts produce an error instead of a share (WI-001 R-02).
+4. Mike Rihm reviews this sub-item’s tested result.'"'"
+  -> Saved "Acceptance" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| — | None open. | — | — | — |'"
+  -> Saved "Open Questions" in WI-002.
+Warning after this edit: An Open Questions row has the ID "—", not a question id such as Q-01. Each row is one question; remove a row that is not a question (a "None" row is not needed).
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --section 'Decisions and context' --text '- WI-001 R-02 and the Option A design govern this sub-item. The owner approved both on 2026-09-28.
+- The parent’s requirement text remains in WI-001, as required for a split.'"
+  -> Saved "Decisions and context" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --section 'Resume here' --text 'After WI-001 P1 is built, create WI-002’s worktree and branch, implement R-02, run the split checks, then seek this sub-item’s own result approval.'"
+  -> Saved "Resume here" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Resume here' --text 'Option A is approved. WI-002 covers R-02. Plan and build WI-001 P1 for the plain tip and total on its own branch. After P1, continue WI-002 for --split.'"
+  -> Saved "Resume here" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|'"
+  -> Saved "Open Questions" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --stage 06-implementation-plan'
+  -> Updated WI-001: stage 05 Breakdown -> 06 Implementation plan (status In Progress).
+Now 06 Implementation plan (In Progress). Continue with work-on.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate WI-001'
+  -> Checked 1 item: 0 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+WI-001 (.work-items/WI-001-build-the-plain-tip-and-total-command/WORK-ITEM.md):
+  Design warning: "## Build and verification plan" in the approved design still holds template text (pending owner decision). Write the chosen design there.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate WI-002'
+  -> Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work list --tree'
+  -> WI-001  Build the plain tip and total command  (06 Implementation plan, In Progress)
+  WI-002  Add the --split option  (06 Implementation plan, In Progress)
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> Nothing is waiting on the owner.
+
+
+[CMD exit=0] /bin/zsh -lc "rg -ni 'pending owner decision|<["'^>]+>'"' .work-items/WI-001-build-the-plain-tip-and-total-command/DESIGN.md"
+  -> 51:1. The person runs `node bin/tipcalc.js <bill> --percent <percentage>` and may add `--split <count>`, for example `node bin/tipcalc.js 50 --percent 20 --split 3`.
+96:1. Run `node bin/tipcalc.js <bill> --percent <percentage>` with optional `--split <count>`.
+146:| Acceptance item 9 | Show the test
+
+[CMD exit=0] /bin/zsh -lc "sed 's/WI-001 approval record, pending owner decision/WI-001 and WI-002 result approval records after their separate checks/' .work-items/WI-001-build-the-plain-tip-and-total-command/DESIGN.md > /private/tmp/tipcalc-design-approved.md"
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work design WI-001 --set-file /private/tmp/tipcalc-design-approved.md'
+  -> Saved the design of WI-001 (approved) at /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/.work-items/WI-001-build-the-plain-tip-and-total-command/DESIGN.md.
+Note: The design was approved. A changed design may need the owner's approval again.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate WI-001'
+  -> Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+
+
+[AGENT] The split is recorded: WI-001 covers the plain command, and WI-002 covers R-02. Both records validate. I’m moving to the WI-001 build and checking whether this session can create its required branch and worktree.
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.9/skills/memory-save/SKILL.md'"
+  -> ---
+name: memory-save
+description: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says "remember this", "from now on", "forget that", or "remind me" with no time given, corrects the agent, or a hook says a save is due.'
+---
+
+# Memory save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Saves, corrects, or retires one fact in the project's memory with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand. Memory keeps one record per concept (for example `feedback_ways_of_working`, `project_billing`), with one `##` section per fact; an `event_` record holds one episode.
+
+## Steps
+
+Track these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home ("Where other things go" below) and stop.
+2. Find the concept it belongs in, and any section that already holds it. List the concepts of its type (title, summary, updated date), search, and read each likely concept whole, with its version. The save's duplicate check compares wording, so only this search finds a section the new fact contradicts (for example
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-on/references/current-focus.md'"
+  -> <!-- Generated file. Source: plugins/memory/shared/current-focus.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# The current focus
+
+Purpose: the format of the current focus, when to change it, and the exact
+read-change-save sequence, in every memory backend.
+
+## Contents
+
+- What the focus is for
+- The format
+- What goes in each section
+- When to check it
+- Read, change, save
+- A new project's focus
+- Examples
+- Checklist for a focus save
+
+## What the focus is for
+
+The current focus is the first thing the next session reads: the session
+briefing includes it. It says what is happening now and where the next
+session starts. It never repeats the tracker: a work item's status, tasks,
+and history stay in the work item.
+
+| Backend | Where the focus lives |
+| --- | --- |
+| Built-in | `.memory/CURRENT_FOCUS.md` in the main checkout |
+| Hindsight | The document `focus` in the project's bank |
+| Notion | The "Current focus" page under the project's page |
+
+The same commands read and save it in every backend. Never edit the file or
+the page by hand.
+
+## The format
+
+The model's format: a `# Current focus` title line, a `Last updated:` line,
+then exactly four `##` sections in this order, under 50 lines in total.
+
+```markdown
+# Current focus
+
+Last updated: <YYYY-MM-DD>, <source>, <person or agent>
+
+## Now
+
+## Waiting on the owner
+
+## Untracked to-dos
+
+## Next session starts with
+```
+
+What the command enforces:
+
+- It refuses a focus that lacks one of the four se
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Open Questions' --append-row '| Q-05 | Create WI-001’s code worktree with the exact git worktree add command in an interactive terminal or a Codex session that can approve Git writes, then tell the agent to continue. | P1 tracking setup | Open | owner |'"
+  -> Saved "Open Questions" in WI-001.
+Note: Q-05 holds no recommendation. When you gave the owner one with the question, add it to the Question cell ("<question> Recommended: <answer>, because <reason>."), so a later session knows what "go with your recommendation" means.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --stage 07-tracking-setup --waiting-on owner'
+  -> Updated WI-001: stage 06 Implementation plan -> 07 Tracking setup (status In Progress); waiting on owner.
+Now 07 Tracking setup (In Progress). Continue with work-decide.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --label 'Current position' --value 'Option A approved; WI-002 covers R-02; both plans validate. No application code has been built. Creating WI-001’s worktree was rejected by this session’s approval policy.'"
+  -> Saved "Current position" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --label 'Next action' --value 'Mike Rihm creates WI-001’s worktree and branch with the recorded git command, then the agent builds P1 on that branch.'"
+  -> Saved "Next action" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --label 'Blockers' --value 'Git worktree creation was rejected because AskForApproval is Never in this session. Q-05 waits on Mike Rihm.'"
+  -> Saved "Blockers" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Resume here' --text 'Option A is approved. WI-002 covers R-02. The plain-command plan validates. This Codex session rejected git worktree add because AskForApproval is Never. Mike Rihm must run: git worktree add .claude/worktrees/wi-001-build-the-plain-tip-and-total-command -b claude/wi-001-build-the-plain-tip-and-total-command. Then build WI-001 P1 on that branch; WI-002 follows on its own branch.'"
+  -> Saved "Resume here" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history WI-001 --note 'Recorded Option A approval; created WI-002 for R-02; planned both items. Git worktree creation was rejected because AskForApproval is Never.' --effect 'No code was built; Q-05 waits for the worktree and branch before P1 can start.'"
+  -> Added a Recent History row to WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus --json'
+  -> {
+  "ok": true,
+  "backend": "builtin",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Build the tip command\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 from its Resume here: present Option A solution design and request explicit design approval before building.\n",
+  "version": "fabb7c8674d4f1c7bcfbe4d99ec8c820cdc26ab0b7fa319efa87166df3cd9bc5"
+}
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Build the plain tip and total command
+- WI-002 Add the --split option
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 from its Resume here: create its code worktree
+  -> Saved the current focus (21 lines). Version: 67334d5feb3f
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Build the plain tip and total command
+- WI-002 Add the --split option
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 from its Resume here: create its code worktree, then build P1 on its branch. WI-002 follows for --split.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate WI-001'
+  -> Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. 1 open question waits on the owner (toolkit work decisions lists it).
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate WI-002'
+  -> Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 1 decision waits on the owner:
+
+WI-001 Build the plain tip and total command
+  - Q-05: Create WI-001’s code worktree with the exact git worktree add command in an interactive terminal or a Codex session that can approve Git writes, then tell the agent to continue. Affects P1 tracking setup. (work-decide)
+
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for tipcalc (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (4):
+- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit'
+
+[AGENT] Option A is approved. I renamed WI-001 to **“Build the plain tip and total command”** and created WI-002 for `--split` (R-02). WI-001’s folder is now `.work-items/WI-001-build-the-plain-tip-and-total-command/`. Both plans validate. No code has been built.
+
+Automatic approval review rejected the Git worktree creation because this session has `AskForApproval` set to `Never`. Please run this from the project folder in a terminal, then tell me to continue:
+
+```sh
+git worktree add .claude/worktrees/wi-001-build-the-plain-tip-and-total-command -b claude/wi-001-build-the-plain-tip-and-total-command
+```
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 2383695, "cached_input_tokens": 2321152, "cache_write_input_tokens": 0, "output_tokens": 8405, "reasoning_output_tokens": 2034}}
+
+SKILLS OPENED: ['work-requirements', 'work-decide', 'work-organize', 'work-on', 'memory-save']
+
+[HOOK CONTEXT ord=9] Project briefing: tipcalc (tipcalc), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Build the tip command: 04 Solution design, In Progress, waiting on owner. Next action: Ask Mike Rihm to approve Option A solution design before building. Continues with work-decide.
+
+Waiting on the owner:
+- WI-001 Build the tip command: The design for WI-001 is proposed and waits for the owner's approval. Approve with: toolkit work approve WI-001 --design --by <name>. (work-decide)
+
+Items: 1 in progress.
+
+Current focus:
+Last updated: 2026-09-28, chat, agent
+## Now
+- WI-001 Build the tip command
+## Waiting on the owner
+- Trust this folder in Codex: op
+
+[HOOK CONTEXT ord=95] The design of WI-001 was edited directly and passes validation. toolkit work design <id> --set-file <file> (or --text '<text>') saves a design the same way in every tracker and keeps its status; prefer it to editing DESIGN.md.
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await tools.exec_command({cmd:"pwd && cat SOUL.md PROJECT.md .claaude/rules/humanize-outbound-text.md",max_output_tokens:2000}); text(r);
+
+
+[CALL] const paths=["/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-decide/SKILL.md","/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-organize/SKILL.md","/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-requirements/SKILL.md","/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-on/SKILL.md",".claude/rules/humanize-outbound-text.md",".claude/rules/keep-work-item-current.md",".claude/rules/memory-review-and-save.md",".claude/rules/plain-english-artifacts.md",".claude/rules/session-handoff.md",".claude/rules/shared-repository-work.md",".claude/rules/work-item-folders.md"]; const out=await Promise.allSettled(paths.map(p=>tools.exec_command({cmd:"cat '"+p+"'",max_output_tokens:6000}))); out.forEach((x,i)=>text(paths[i]+"\n"+(x.status==="fulfilled"?x.value.output:String(x.reason))));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Warning: truncated output (original token count: 10988)\nTotal output lines: 494\n\n/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-decide/SKILL.md\n---\nname: work-decide\ndescription: 'Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers. Use when he asks \"what do you need from me\", answers a waiting decision (\"go with option B\"), or states a project-wide decision.'\n---\n\n# Work decide\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nWalks the owner through what waits on him, one decision at a time, and records each answer where it belongs. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.\n\n## Steps\n\n1. Build the queue. The command lists each decision once: requirements waiting for approval, proposed designs, results at stage 11, Open Questions rows the owner decides, and memory proposals. Its \"Agent to-do\" lines are not decisions. A delivery offer belongs to `work-delegate`: open it after his other decisions.\n   `toolkit work decisions`\n2. He gave an answer without being asked (\"approved\", \"go with B\"): match it to exactly one waiting decision; when two could match, ask which, naming both. A bare \"yes\", \"ok\", or \"looks good\" with no question asked is not an answer (`references/approvals.md`, section 1).\n3. Otherwise start with the count and one short line for every waiting decision, memory proposals included (\"3 decisions wait on you: the WI-004 design, the WI-006 result, and a memory proposal about deploy days.\"). Then take them one at a time, the one blocking the most work first: what is decided, the choices, your recommendation and its main reason, and what happens after each answer. One decision per message, in the reply text.\n4. An approval: read the item, then run that gate's checklist in `references/approvals.md` (requirements: section 2; design: section 3; result: section 4). A result with no independent acceptance check since its last build (the command prints a note): open `work-check` first, which runs it whoever built the change.\n   `toolkit work show <id>`\n5. An Open Questions answer: save his words first, rewrite that 
+
+[CALL] const ps=["/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-decide/references/approvals.md","/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-organize/references/moves.md","/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-on/references/planning.md","/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-on/references/git-rules.md"];const a=await Promise.allSettled(ps.map(p=>tools.exec_command({cmd:"cat '"+p+"'",max_output_tokens:10000})));a.forEach((v,i)=>text(ps[i]+"\n"+(v.status==="fulfilled"?v.value.output:String(v.reason))));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-decide/references/approvals.md\n<!-- Generated file. Source: plugins/work/shared/approvals.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\n# Approvals and gates\n\nThe exact steps to ask for and record each owner approval, and what counts as\none. Run each checklist in order; one wrong or missing command leaves the\nitem in the wrong state.\n\n## Contents\n\n1. What counts as approval\n2. Requirements approval\n3. Design approval\n4. Result approval\n5. Done\n6. Cancel\n7. Delivery offer\n8. Project-wide decision\n9. Memory proposal\n10. Sub-items and approvals\n11. Standing merge instruction\n12. When an approve command refuses\n\n## 1. What counts as approval\n\n`toolkit work lifecycle` prints the gates and these rules. In short:\n\n- Only the owner's explicit words count. Quote them in a history note.\n- A question, a suggestion, a tentative answer (\"probably B\"), silence, or a\n  saved draft is not approval.\n- An approval covers only what was shown. It never covers merge, deployment,\n  spending, or publishing.\n- An approval survives later stages. A stage alone does not prove approval:\n  check the approval field (`toolkit work show <id>`).\n- A bare \"yes\", \"ok\", or \"looks good\" answers only a yes-or-no question asked\n  earlier in this conversation. When none was asked, or the waiting question\n  is not a yes-or-no question, show the decision with its choices and your\n  recommendation, and record nothing.\n- After a yes, save his words first, in a history note that starts with\n  `Owner said:`. Then run the gate's commands. A command that refuses then\n  never loses his answer, and no later session asks him again.\n- `--by <owner>` is his name exactly as `toolkit config get project.owner`\n  prints it (for example \"Mike Rihm\", not \"Mike\"), so every approval names\n  him the same way.\n- When an approve command notes that the item's Overview still asks for\n  that approval (Next action), write the step after the approval with the\n  `toolkit work edit` command the note prints.\n\n| The owner says | After this question | It is |\n| --- | --- | --- |\n| \"Yes, approved.\" | \"Do you approve these requirements?\" | The requirements approval |\n| \"Go with B.\" | The design options with a recommendation | The choice and ap
+
+[CALL] const cmds=["toolkit work decisions","toolkit work show WI-001","toolkit work design WI-001","toolkit work list --tree","git worktree list","git status --short --branch","git remote","cat PROJECT-ROADMAP.md"];const r=await Promise.allSettled(cmds.map(cmd=>tools.exec_command({cmd,max_output_tokens:7000})));r.forEach((v,i)=>text("COMMAND "+cmds[i]+"\n"+(v.status==="fulfilled"?v.value.output:String(v.reason))));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "COMMAND toolkit work decisions\n1 decision waits on the owner:\n\nWI-001 Build the tip command\n  - The design for WI-001 is proposed and waits for the owner's approval. Approve with: toolkit work approve WI-001 --design --by <name>. (work-decide)\n"}, {"type": "input_text", "text": "COMMAND toolkit work show WI-001\nWI-001: Build the tip command\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/.work-items/WI-001-build-the-tip-command/WORK-ITEM.md\nStage: 04 Solution design (In Progress) | Waiting on: owner | Continue with: work-decide\nParent: none | Sub-items: none | Design: proposed (.work-items/WI-001-build-the-tip-command/DESIGN.md)\nWorktree branch for this item: claude/wi-001-build-the-tip-command (folder .claude/worktrees/wi-001-build-the-tip-command)\n\n---\nid: WI-001\ntitle: Build the tip command\ntype: build\nstage: 04-solution-design\nstatus: In Progress\nparent: none\nwaiting_on: \"owner\"\npriority: medium\ndelivery: owner-led\nrequirements_approved: \"2026-09-28 by Mike Rihm\"\ndesign: proposed\nresult_approved: \"no\"\nupdated: 2026-09-28\n---\n\n# WI-001: Build the tip command\n\n## Overview\n\n**Goal:** Provide a terminal tip command that reports the tip and total and can divide the total among friends.\n\n**Current position:** Requirements approved; Option A solution design proposed and independently reviewed. No application code has been built.\n\n**Next action:** Ask Mike Rihm to approve Option A solution design before building.\n\n**Blockers:** Design approval is required before the build.\n\n**Related items:** None.\n\n## Roadmap\n\nA phase is complete when its tasks are complete and its exit result has been checked.\n\n<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading. Add one row per phase; set Status from actual progress, not from this example. List the phase's sub-item IDs under Sub-items, or write \u201cNone.\u201d -->\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 \u2014 <Phase 1 name> | <What this phase establishes> | In Progress | <Evidence that P1 is complete> | <WI-ids or \u201cNone.\u201d> |\n| P2 \u2014 <Phase 2 name> | <What this phase delivers> | Not Started | <Evidence that P2 is complete> | <WI-ids 
+
+[CALL] const cmds=["toolkit work sync","toolkit config get project.owner"];for(const c of cmds){const r=await tools.exec_command({cmd:c,max_output_tokens:2000});text(c+"\n"+r.output)}
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.5 seconds\nOutput:\n"}, {"type": "input_text", "text": "toolkit work sync\nNothing changed: every item is where the tracker expected it, and every derived value is in step.\n\nDashboard: .work-items/DASHBOARD.md\n"}, {"type": "input_text", "text": "toolkit config get project.owner\nMike Rihm\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history WI-001 --note 'Owner said: I approve Option A. Before you build, split the --split option out into its own sub-item under WI-001, so WI-001 is the plain tip and total and the sub-item is the split.' --effect 'Approve Option A; create a child for R-02 before building R-01.'",max_output_tokens:2000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Added a Recent History row to WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"rg -n \"Selected design|Recommendation and owner decision|Build and verification plan\" .work-items/work-item-template /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/solution-design -g '*.md'",max_output_tokens:3000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/solution-design/assets/DESIGN.md:93:## Recommendation and owner decision\n/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/solution-design/assets/DESIGN.md:101:## Selected design\n/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/solution-design/assets/DESIGN.md:147:## Build and verification plan\n/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/solution-design/SKILL.md:28:9. Present the options, your recommendation, what he will see when it is done, the risks, and the build order, and ask him to choose or approve. His yes: run the design approval checklist in `references/approvals.md`, section 3: fill \"Selected design\" with the option he chose and save it before the approval, which refuses while it says \"Pending owner decision\". Then update the current focus (`references/current-focus.md`) and hand back to `work-on`.\n/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/solution-design/references/design-process.md:231:  the misreading table, and Notes. \"Selected design\" says \"Pending owner\n/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/solution-design/references/design-process.md:241:  design\" and into \"Build and verification plan\" (Technical sequence, and\n.work-items/work-item-template/DESIGN.md:92:## Recommendation and owner decision\n.work-items/work-item-template/DESIGN.md:100:## Selected design\n.work-items/work-item-template/DESIGN.md:146:## Build and verification plan\n/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/solution-design/references/approvals.md:131:- [ ] Fill \"Recommendation and owner decision\": Owner decision (who, when,\n/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/solution-design/references/approvals.md:134:- [ ] Fill every \"Selected design\" subsection and the \"Build and verification\n/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/solution-design/references/approvals.md:142:      code 2, `design_not_filled`) while \"Selected design\" still says\n/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/solution-design/references/work-item-format.md:107:| `Recommendation and owner decision` | Recommendation, Owner decision, Reason for decision |\n/Users
+
+[CALL] const r=await tools.exec_command({cmd:"sed -n '90,165p' /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/solution-design/assets/DESIGN.md",max_output_tokens:4000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "| --- | --- | --- | --- |\n| <Requirement coverage, effort, risk, operations, or another agreed criterion> | <Assessment> | <Assessment> | <Source or open question> |\n\n## Recommendation and owner decision\n\n**Recommendation:** <Option and reason, including the main cost or tradeoff. A recommendation is not approval.>  \n**Owner decision:** <Pending, or chosen option with who decided, when, and source.>  \n**Reason for decision:** <Owner's reason if given; do not invent one.>\n\n<!-- With a single option, keep the owner decision and remove the comparison and recommendation text. -->\n\n## Selected design\n\n<Before an option is chosen, write \u201cPending owner decision.\u201d Afterward, make this the current buildable design. Update it when an interview answer changes the chosen approach; retain only useful option history above.>\n\n### End-to-end flow\n\n1. <Trigger, actor, and input.>\n2. <Steps, decisions, error paths, and handoffs in order.>\n3. <Result, user feedback, and what happens next.>\n\n### Components and responsibilities\n\n| Component or file | New, changed, or reused | Responsibility | Requirement IDs |\n| --- | --- | --- | --- |\n| <Exact name or path> | <New / Changed / Reused> | <Specific behavior> | R-01 |\n\n### Data, access, and integration details\n\n<Describe the chosen data model and state changes, access rules, system boundaries, interfaces, and ownership at enough detail for a builder to implement without guessing. State \u201cNot applicable\u201d for a genuinely unused area.>\n\n### Edge cases and failure behavior\n\n| Situation | Expected behavior | How it will be checked |\n| --- | --- | --- |\n| <Missing data, duplicate, denied access, integration outage, or other relevant case> | <Exact result and recovery> | <Test or observation> |\n\n### Release and ongoing operation\n\n<Describe deployment order, migration or backfill, rollback, monitoring, support handoff, and operating owner where relevant.>\n\n## Diagrams\n\n<Add Mermaid diagrams when they clarify the chosen flow, component relationships, data movement, states, or deployment. Give each diagram a descriptive heading and a one-sentence explanation. Keep diagrams consistent with the written design and update both when the design changes. Remove unused examples; a diagram does not replace the behavior and failure details above.>\n\n### <Diagram name and
+
+[CALL] const patch="*** Begin Patch\n*** Update File: .work-items/WI-001-build-the-tip-command/DESIGN.md\n@@\n-**Design status:** Draft  \n+**Design status:** Approved  \n@@\n-**Design approval:** Pending\n+**Design approval:** Option A approved by Mike Rihm on 2026-09-28 in chat.\n@@\n-**Owner decision:** Pending. Option A is a proposal until Mike Rihm approves it.\n+**Owner decision:** Mike Rihm approved Option A in chat on 2026-09-28 and directed that `--split` be a sub-item under WI-001 before building.  \n+**Reason for decision:** The owner gave no reason for choosing Option A.\n@@\n-Pending owner decision.\n+### End-to-end flow\n+\n+1. Run `node bin/tipcalc.js <bill> --percent <percentage>` with optional `--split <count>`.\n+2. Validate every argument. On invalid input, write an error to standard error, exit nonzero, and print no calculation.\n+3. Parse the decimal inputs exactly. Round Tip half up to cents, add the rounded Tip to the original bill, then round Total half up to cents.\n+4. Print `Tip: $10.00  Total: $60.00` for the $50 and 20% example. When `--split 3` is present, divide rounded Total cents by three, round any remainder upward, and print `Each person pays: $20.00` on a second line.\n+\n+### Components and responsibilities\n+\n+| Component or file | New, changed, or reused | Responsibility | Requirement IDs |\n+| --- | --- | --- | --- |\n+| `bin/tipcalc.js` | New | Parse and validate arguments; calculate and print Tip and Total | R-01 |\n+| `bin/tipcalc.js` spli
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work design WI-001 --set-file .work-items/WI-001-build-the-tip-command/DESIGN.md",max_output_tokens:1000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved the design of WI-001 (proposed) at /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/.work-items/WI-001-build-the-tip-command/DESIGN.md.\nIt is proposed until the owner approves it: toolkit work approve <id> --design --by <name>.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work approve WI-001 --design --by 'Mike Rihm'",max_output_tokens:1200});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Recorded: design of WI-001 approved (2026-09-28 by Mike Rihm).\nIt is no longer waiting on the owner (waiting_on: none).\nNow 04 Solution design (In Progress). Continue with solution-design.\nNote: WI-001's Overview still says \"Next action: Ask Mike Rihm to approve Option A solution design before building.\". Write the step after this approval: toolkit work edit WI-001 --label 'Next action' --value '<next step>'.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-001 --stage 05-breakdown",max_output_tokens:1000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Updated WI-001: stage 04 Solution design -> 05 Breakdown (status In Progress).\nNow 05 Breakdown (In Progress). Continue with work-organize.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work new --title 'Add the --split option' --type build --parent WI-001 --covers R-02",max_output_tokens:1800});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Created WI-002: Add the --split option (06 Implementation plan, In Progress, sub-item of WI-001) at .work-items/WI-001-build-the-tip-command/WI-002-add-the-split-option/WORK-ITEM.md.\nIt delivers WI-001 R-02 and inherits that requirements approval (2026-09-28 by Mike Rihm).\nWI-001's approved design covers it, so it starts at planning with no design of its own.\nDelivery: owner-led, as recorded for WI-001.\nContinue with work-on.\n"}]
+
+[CALL] const cmds=["toolkit work show WI-002","toolkit work show WI-001 --path","toolkit work list --tree"];const v=await Promise.allSettled(cmds.map(cmd=>tools.exec_command({cmd,max_output_tokens:5000})));v.forEach((x,i)=>text(cmds[i]+"\n"+(x.status==="fulfilled"?x.value.output:String(x.reason))));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "toolkit work show WI-002\nWI-002: Add the --split option\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/.work-items/WI-001-build-the-tip-command/WI-002-add-the-split-option/WORK-ITEM.md\nStage: 06 Implementation plan (In Progress) | Waiting on: none | Continue with: work-on\nParent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/WI-001-build-the-tip-command/DESIGN.md). Read it with: toolkit work design WI-001\nWorktree branch for this item: claude/wi-002-add-the-split-option (folder .claude/worktrees/wi-002-add-the-split-option)\n\n---\nid: WI-002\ntitle: Add the --split option\ntype: build\nstage: 06-implementation-plan\nstatus: In Progress\nparent: WI-001\nwaiting_on: \"none\"\npriority: medium\ndelivery: owner-led\nrequirements_approved: \"2026-09-28 by Mike Rihm\"\ndesign: none\nresult_approved: \"no\"\nupdated: 2026-09-28\n---\n\n# WI-002: Add the --split option\n\n## Overview\n\n<!-- Enter the current summary directly after each bold label below. Keep this section current; detailed tasks and decisions belong in their sections further down. -->\n\n**Goal:** <The outcome this work item is meant to achieve.>\n\n**Current position:** <What has been completed and where work stands now.>\n\n**Next action:** <The next specific action and its owner.>\n\n**Blockers:** <Blocking decision or dependency, or \u201cNone.\u201d>\n\n**Related items:** Parent WI-001 (R-02). Design: WI-001's approved design.\n\n## Roadmap\n\nA phase is complete when its tasks are complete and its exit result has been checked.\n\n<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading. Add one row per phase; set Status from actual progress, not from this example. List the phase's sub-item IDs under Sub-items, or write \u201cNone.\u201d -->\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 \u2014 <Phase 1 name> | <What this phase establishes> | In Progress | <Evidence that P1 is complete> | <WI-ids or \u201cNone.\u201d> |\n| P2 \u2014 <Phase 2 name> | <What this phase delivers> | Not Started | <Evidence that P2 is complete> | <WI-ids or \u201cNone.\u201d> |\n\n## Tasks\n\n<!-- Under each phase heading, add that phase's tasks only.
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-001 --title 'Build the plain tip and total command'",max_output_tokens:1000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Updated WI-001: title \"Build the plain tip and total command\" (was \"Build the tip command\").\nNow 05 Breakdown (In Progress). Continue with work-organize.\nThe design heading now has the new title.\nRenamed its folder to match the new title: .work-items/WI-001-build-the-plain-tip-and-total-command/ (was .work-items/WI-001-build-the-tip-command/).\nTell the owner in the reply: WI-001 is now called \"Build the plain tip and total command\" (was \"Build the tip command\"), and its folder is now .work-items/WI-001-build-the-plain-tip-and-total-command/.\n"}]
+
+[CALL] const t="A phase is complete when its tasks are complete and its exit result has been checked.\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 — Plain tip and total | The command prints the rounded tip and total | Not Started | R-01 command and error checks pass | None. |\n| P2 — Split option | The command also prints each person’s rounded-up share when requested | Not Started | WI-002 passes its R-02 checks and receives its own result approval | WI-002 |";const q="'"+t.replace(/'/g,"'\\''")+"'";const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section Roadmap --text "+q,max_output_tokens:1200});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Roadmap\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"sed -n '55,125p' /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-on/references/work-item-format.md",max_output_tokens:2500});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "| `updated` | `YYYY-MM-DD` | Every `toolkit work` write |\n\n`toolkit work lifecycle` prints the stage labels, the statuses, and the types.\nBlocked is not a status: an item that cannot move has `waiting_on` set and its\nOverview Blockers line filled.\n\n## 3. Sections of `WORK-ITEM.md`\n\nThese are the headings `--section` takes. A `###` subsection can be named on\nits own, for example `--section 'Agreed goal'`.\n\n| Heading | What it holds |\n| --- | --- |\n| `Overview` | Goal, Current position, Next action (and who owns it), Blockers, Related items (ids, never paths) |\n| `Roadmap` | The phase table: Phase (`P1 \u2014 <name>`), Outcome, Status, Exit result, Sub-items |\n| `Tasks` | One `### P1 \u2014 <name>` heading per phase, with checkbox tasks `P1-T01` (Work, Deliverable, Done when, Depends on) |\n| `Recent History` | Dated rows: Date, Change or decision, Effect on the work (newest first) |\n| `Open Questions` | Rows: ID (`Q-01`), Question, Affects, Status, Decision needed from (`owner` for the owner) |\n| `Requirements` | Overall status and Finalization rule, then the subsections below |\n| `Starting request` | The owner's own words for the request |\n| `Agreed goal` | The outcome the owner agreed the item delivers |\n| `Active requirements` | One `#### R-01 \u2014 <name>` block per requirement |\n| `Acceptance` | The numbered list of what makes the whole item acceptable |\n| `Notes` | The subsections below |\n| `Decisions and context` | Context the next session needs that is not a requirement |\n| `Resume here` | Where the next session picks up |\n| `Solution options and considerations` | Build ideas, linked to an `R-xx`; never requirements |\n\nThe `R-xx` block fields are Status (Refining, Finalized, Superseded), Applies\nto, Required behavior, Boundaries and exceptions, Acceptance check, Decision\nrecord, and Open questions. Each field starts its own line.\n\nIn the local and Notion trackers, the requirements approval command sets the\nRequirements \"Overall status\" line: never write that line by hand there.\nGitHub Issues and Jira have no approve command, so after the owner's yes the\nagent writes Finalized there itself (`tracker-github.md` or `tracker-jira.md`,\n\"The `toolkit work` steps\").\n\n## 4. Sections of `DESIGN.md`\n\nThe CLI writes the design's header fields: `work_item`, `status` (`proposed`,\n`approved`, `supersed
+
+[CALL] const pairs=[["WI-001","Goal","Deliver the plain terminal command for tip and total; track the optional split in WI-002."],["WI-001","Current position","Option A approved. WI-002 created for R-02. No application code has been built."],["WI-001","Next action","Plan and build the R-01 tip and total command on WI-001’s branch."],["WI-001","Blockers","None for planning; creating the code worktree needs Git write access in this Codex session."],["WI-001","Related items","WI-002 delivers the --split option (R-02)."]];for(const [id,label,value] of pairs){const q=s=>"'"+s.replace(/'/g,"'\\''")+"'";const cmd=`toolkit work edit ${id} --label ${q(label)} --value ${q(value)}`;const r=await tools.exec_command({cmd,max_output_tokens:600});text(r.output)}
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Goal\" in WI-001.\n"}, {"type": "input_text", "text": "Saved \"Current position\" in WI-001.\n"}, {"type": "input_text", "text": "Saved \"Next action\" in WI-001.\n"}, {"type": "input_text", "text": "Saved \"Blockers\" in WI-001.\n"}, {"type": "input_text", "text": "Saved \"Related items\" in WI-001.\n"}]
+
+[CALL] const pairs=[["WI-002","Goal","Add --split so the command prints each person’s share of the rounded total."],["WI-002","Current position","Created under WI-001 for approved R-02; Option A design is inherited. No application code has been built."],["WI-002","Next action","After WI-001’s plain tip and total command is built, implement and check --split on WI-002’s branch."],["WI-002","Blockers","Depends on WI-001’s plain command and Git write access to create its worktree."]];for(const [id,label,value] of pairs){const q=s=>"'"+s.replace(/'/g,"'\\''")+"'";const r=await tools.exec_command({cmd:`toolkit work edit ${id} --label ${q(label)} --value ${q(value)}`,max_output_tokens:600});text(r.output)}
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.1 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Goal\" in WI-002.\n"}, {"type": "input_text", "text": "Saved \"Current position\" in WI-002.\n"}, {"type": "input_text", "text": "Saved \"Next action\" in WI-002.\n"}, {"type": "input_text", "text": "Saved \"Blockers\" in WI-002.\n"}]
+
+[CALL] const edits=[["WI-001","Tasks","### P1 — Plain tip and total\n\n- [ ] **P1-T01 — Parse command inputs** · Not Started  \n  **Work:** Add bill and percentage argument validation using the approved Option A design (R-01).  \n  **Deliverable:** `bin/tipcalc.js` input parsing and errors.  \n  **Done when:** The sample command is accepted and invalid bill, percentage, or argument syntax exits nonzero with no result output.  \n  **Depends on:** None.\n- [ ] **P1-T02 — Calculate and print Tip and Total** · Not Started  \n  **Work:** Use exact decimal arithmetic and half-up cent rounding, then print the R-01 line.  \n  **Deliverable:** R-01 calculation and output in `bin/tipcalc.js`.  \n  **Done when:** The three exact R-01 examples and zero inputs produce the approved output.  \n  **Depends on:** P1-T01.\n- [ ] **P1-T03 — Check the plain command** · Not Started  \n  **Work:** Add process-level R-01 checks in `tests/tipcalc.test.js` and run them.  \n  **Deliverable:** Recorded R-01 test results.  \n  **Done when:** Every R-01 acceptance check passes, including invalid inputs.  \n  **Depends on:** P1-T02.\n\n### P2 — Split option\n\nWI-002 delivers this phase after P1. Its tasks and result approval stay in WI-002."],["WI-002","Roadmap","A phase is complete when its tasks are complete and its exit result has been checked.\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 — Split output | The command prints each person’s share when --split is supplie
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.8 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Tasks\" in WI-001.\n"}, {"type": "input_text", "text": "Saved \"Roadmap\" in WI-002.\n"}, {"type": "input_text", "text": "Saved \"Tasks\" in WI-002.\n"}]
+
+[CALL] const edits=[["WI-002","Starting request","Owner, 2026-09-28: “Before you build, split the --split option out into its own sub-item under WI-001, so WI-001 is the plain tip and total and the sub-item is the split.”"],["WI-002","Acceptance","This work item can be accepted when:\n\n1. With a $50 bill, 20% tip, and `--split 3`, the second line is exactly `Each person pays: $20.00` (WI-001 R-02).\n2. With the same bill and tip and `--split 7`, the second line is exactly `Each person pays: $8.58` (WI-001 R-02).\n3. Zero, negative, fractional, and malformed split counts produce an error instead of a share (WI-001 R-02).\n4. Mike Rihm reviews this sub-item’s tested result."],["WI-002","Open Questions","| ID | Question | Affects | Status | Decision needed from |\n|---|---|---|---|---|\n| — | None open. | — | — | — |"],["WI-002","Decisions and context","- WI-001 R-02 and the Option A design govern this sub-item. The owner approved both on 2026-09-28.\n- The parent’s requirement text remains in WI-001, as required for a split."],["WI-002","Resume here","After WI-001 P1 is built, create WI-002’s worktree and branch, implement R-02, run the split checks, then seek this sub-item’s own result approval."],["WI-001","Resume here","Option A is approved. WI-002 covers R-02. Plan and build WI-001 P1 for the plain tip and total on its own branch. After P1, continue WI-002 for --split."]];const q=s=>"'"+s.replace(/'/g,"'\\''")+"'";for(const [id,section,value] of edits){const r=await tools.exec_co
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 1.6 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Starting request\" in WI-002.\n"}, {"type": "input_text", "text": "Saved \"Acceptance\" in WI-002.\n"}, {"type": "input_text", "text": "Saved \"Open Questions\" in WI-002.\nWarning after this edit: An Open Questions row has the ID \"\u2014\", not a question id such as Q-01. Each row is one question; remove a row that is not a question (a \"None\" row is not needed).\n"}, {"type": "input_text", "text": "Saved \"Decisions and context\" in WI-002.\n"}, {"type": "input_text", "text": "Saved \"Resume here\" in WI-002.\n"}, {"type": "input_text", "text": "Saved \"Resume here\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |\n|---|---|---|---|---|'",max_output_tokens:600});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Open Questions\" in WI-002.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-001 --stage 06-implementation-plan",max_output_tokens:1000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Updated WI-001: stage 05 Breakdown -> 06 Implementation plan (status In Progress).\nNow 06 Implementation plan (In Progress). Continue with work-on.\n"}]
+
+[CALL] const cmds=["toolkit work validate WI-001","toolkit work validate WI-002","toolkit work list --tree","toolkit work decisions"];for(const c of cmds){const r=await tools.exec_command({cmd:c,max_output_tokens:1400});text(c+"\n"+r.output)}
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.9 seconds\nOutput:\n"}, {"type": "input_text", "text": "toolkit work validate WI-001\nChecked 1 item: 0 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.\nWI-001 (.work-items/WI-001-build-the-plain-tip-and-total-command/WORK-ITEM.md):\n  Design warning: \"## Build and verification plan\" in the approved design still holds template text (pending owner decision). Write the chosen design there.\n"}, {"type": "input_text", "text": "toolkit work validate WI-002\nChecked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.\n"}, {"type": "input_text", "text": "toolkit work list --tree\nWI-001  Build the plain tip and total command  (06 Implementation plan, In Progress)\n  WI-002  Add the --split option  (06 Implementation plan, In Progress)\n"}, {"type": "input_text", "text": "toolkit work decisions\nNothing is waiting on the owner.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"rg -ni 'pending owner decision|<[^>]+>' .work-items/WI-001-build-the-plain-tip-and-total-command/DESIGN.md",max_output_tokens:2000});text(r.output);
+
+
+[CALL] const r=await tools.exec_command({cmd:"sed 's/WI-001 approval record, pending owner decision/WI-001 and WI-002 result approval records after their separate checks/' .work-items/WI-001-build-the-plain-tip-and-total-command/DESIGN.md > /private/tmp/tipcalc-design-approved.md",max_output_tokens:600});text(r.output);
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work design WI-001 --set-file /private/tmp/tipcalc-design-approved.md",max_output_tokens:600});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved the design of WI-001 (approved) at /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/.work-items/WI-001-build-the-plain-tip-and-total-command/DESIGN.md.\nNote: The design was approved. A changed design may need the owner's approval again.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work validate WI-001",max_output_tokens:600});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"git worktree add .claude/worktrees/wi-001-build-the-plain-tip-and-total-command -b claude/wi-001-build-the-plain-tip-and-total-command",max_output_tokens:1200});text(r.output);text("exit_code="+r.exit_code);
+
+
+[CALL] const paths=["/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.9/skills/memory-save/SKILL.md","/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-on/references/current-focus.md"];const r=await Promise.allSettled(paths.map(p=>tools.exec_command({cmd:"cat '"+p+"'",max_output_tokens:5000})));r.forEach((x,i)=>text(paths[i]+"\n"+(x.status==="fulfilled"?x.value.output:String(x.reason))));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.9/skills/memory-save/SKILL.md\n---\nname: memory-save\ndescription: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says \"remember this\", \"from now on\", \"forget that\", or \"remind me\" with no time given, corrects the agent, or a hook says a save is due.'\n---\n\n# Memory save\n\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \"How to write replies\" section of `AGENTS.md`.\nSaves, corrects, or retires one fact in the project's memory with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand. Memory keeps one record per concept (for example `feedback_ways_of_working`, `project_billing`), with one `##` section per fact; an `event_` record holds one episode.\n\n## Steps\n\nTrack these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.\n\n1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home (\"Where other things go\" below) and stop.\n2. Find the concept it belongs in, and any section that already holds it. List the concepts of its type (title, summary, updated date), search, and read each likely concept whole, with its version. The save's duplicate check compares wording, so only this search finds a section the new fact contradicts (for example \"Mondays\" against \"Tuesdays\").\n   `toolkit memory list --type <type>`\n   `toolkit memory find '<topic>'`\n   `toolkit memory get <key> --json`\n3. Read the approval mode and apply \"Approval policy\" below. When it says ask, ask and wait.\n   `toolkit config get memory.approval`\n4. Pick where it goes (\"Choosing the concept\" below), write the section text in the record format (`references/record-format.md`), and save with the form for the case (\"Save forms\" below).\n5. Exit code 2 saved nothing. Read the \"Error:\" line. \"Belongs in the concept <key>\": add it there with the command the \"Fix:\" line prints, or, when it is a different concept, save again with `--new-concept`. Records listed: the duplicate check. \"Changed since it was read
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Open Questions' --append-row '| Q-05 | Create WI-001’s code worktree with the exact git worktree add command in an interactive terminal or a Codex session that can approve Git writes, then tell the agent to continue. | P1 tracking setup | Open | owner |'",max_output_tokens:1000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Open Questions\" in WI-001.\nNote: Q-05 holds no recommendation. When you gave the owner one with the question, add it to the Question cell (\"<question> Recommended: <answer>, because <reason>.\"), so a later session knows what \"go with your recommendation\" means.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-001 --stage 07-tracking-setup --waiting-on owner",max_output_tokens:900});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Updated WI-001: stage 06 Implementation plan -> 07 Tracking setup (status In Progress); waiting on owner.\nNow 07 Tracking setup (In Progress). Continue with work-decide.\n"}]
+
+[CALL] const pairs=[["Current position","Option A approved; WI-002 covers R-02; both plans validate. No application code has been built. Creating WI-001’s worktree was rejected by this session’s approval policy."],["Next action","Mike Rihm creates WI-001’s worktree and branch with the recorded git command, then the agent builds P1 on that branch."],["Blockers","Git worktree creation was rejected because AskForApproval is Never in this session. Q-05 waits on Mike Rihm."]];const q=s=>"'"+s.replace(/'/g,"'\\''")+"'";for(const [label,value] of pairs){const r=await tools.exec_command({cmd:`toolkit work edit WI-001 --label ${q(label)} --value ${q(value)}`,max_output_tokens:500});text(r.output)}
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.8 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Current position\" in WI-001.\n"}, {"type": "input_text", "text": "Saved \"Next action\" in WI-001.\n"}, {"type": "input_text", "text": "Saved \"Blockers\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Resume here' --text 'Option A is approved. WI-002 covers R-02. The plain-command plan validates. This Codex session rejected git worktree add because AskForApproval is Never. Mike Rihm must run: git worktree add .claude/worktrees/wi-001-build-the-plain-tip-and-total-command -b claude/wi-001-build-the-plain-tip-and-total-command. Then build WI-001 P1 on that branch; WI-002 follows on its own branch.'",max_output_tokens:600});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Resume here\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history WI-001 --note 'Recorded Option A approval; created WI-002 for R-02; planned both items. Git worktree creation was rejected because AskForApproval is Never.' --effect 'No code was built; Q-05 waits for the worktree and branch before P1 can start.'",max_output_tokens:600});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Added a Recent History row to WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --json",max_output_tokens:1600});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\n  \"ok\": true,\n  \"backend\": \"builtin\",\n  \"kind\": \"focus\",\n  \"text\": \"# Current focus\\n\\nLast updated: 2026-09-28, chat, agent\\n\\n## Now\\n\\n- WI-001 Build the tip command\\n\\n## Waiting on the owner\\n\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\n\\n## Untracked to-dos\\n\\nNone.\\n\\n## Next session starts with\\n\\n- Continue WI-001 from its Resume here: present Option A solution design and request explicit design approval before building.\\n\",\n  \"version\": \"fabb7c8674d4f1c7bcfbe4d99ec8c820cdc26ab0b7fa319efa87166df3cd9bc5\"\n}\n"}]
+
+[CALL] const t="# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Build the plain tip and total command\n- WI-002 Add the --split option\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 from its Resume here: create its code worktree, then build P1 on its branch. WI-002 follows for --split.\n";const q="'"+t.replace(/'/g,"'\\''")+"'";const r=await tools.exec_command({cmd:"toolkit memory focus --text "+q+" --expect fabb7c8674d4f1c7bcfbe4d99ec8c820cdc26ab0b7fa319efa87166df3cd9bc5",max_output_tokens:700});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved the current focus (21 lines). Version: 67334d5feb3f\n"}]
+
+[CALL] const cmds=["toolkit memory focus","toolkit work validate WI-001","toolkit work validate WI-002","toolkit work decisions"];for(const c of cmds){const r=await tools.exec_command({cmd:c,max_output_tokens:1200});text(c+"\n"+r.output)}
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.9 seconds\nOutput:\n"}, {"type": "input_text", "text": "toolkit memory focus\n# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Build the plain tip and total command\n- WI-002 Add the --split option\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 from its Resume here: create its code worktree, then build P1 on its branch. WI-002 follows for --split.\n"}, {"type": "input_text", "text": "toolkit work validate WI-001\nChecked 1 item: 1 clean, 0 errors, 0 approval gate problems. 1 open question waits on the owner (toolkit work decisions lists it).\n"}, {"type": "input_text", "text": "toolkit work validate WI-002\nChecked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.\n"}, {"type": "input_text", "text": "toolkit work decisions\n1 decision waits on the owner:\n\nWI-001 Build the plain tip and total command\n  - Q-05: Create WI-001\u2019s code worktree with the exact git worktree add command in an interactive terminal or a Codex session that can approve Git writes, then tell the agent to continue. Affects P1 tracking setup. (work-decide)\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit doctor",max_output_tokens:1500});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Toolkit doctor for tipcalc (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex).\n\nWarnings (2):\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.\n   Fix: The owner opens Codex in this folder and trusts it when Codex asks.\n2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).\n   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\n\nNotes (4):\n- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\n- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\n- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\n- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.\n\nResult: 0 problems and 2 warnings.\n"}]

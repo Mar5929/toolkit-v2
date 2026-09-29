@@ -89,7 +89,9 @@ ask one simple question instead:
 > Shall I run one team of helpers inside this chat?
 
 A yes is an arrangement choice: one team inside this chat. A no means the main
-agent does the work itself. Record either answer with the goal.
+agent builds the work itself. Record either answer with the goal. Neither
+answer changes the acceptance check: one `acceptance-checker` checks the
+result before every result approval (`helpers.md` in this folder, section 6).
 
 Do not ask after a decline or a revocation, and do not ask again once the
 owner's answer is recorded for the goal. The owner may change the arrangement
@@ -176,9 +178,11 @@ Acceptance alone does not authorize starting helpers. The owner's choice of a
 team arrangement does: it authorizes focused, bounded helper agents for that
 goal only. It does not carry over to another goal, and every other limit on
 tools, spending, publishing, deployment, and approvals still applies. A no to
-the one-team question is not an arrangement and authorizes no helpers. Use
-helpers only when that choice or other recorded authority allows them and
-research, specialist knowledge, an independent check, or parallel work helps.
+the one-team question is not an arrangement and authorizes no team. It never
+removes the design critic or the one `acceptance-checker` before a result
+approval (`team-roles.md` in this folder). Use other helpers only when that
+choice or other recorded authority allows them and research, specialist
+knowledge, or parallel work helps.
 Every agent runs on Opus. Do not set up a fixed council, repeat reviews
 without a new reason, or let helper rounds replace a decision.
 

@@ -16,12 +16,16 @@ def run(event, payload):
     return p.returncode, p.stdout.strip(), p.stderr.strip()
 def bash(cmd, tid):
     return run('pre-tool', dict(hook_event_name='PreToolUse', tool_name='Bash', tool_input=dict(command=cmd, description='Commit'), tool_use_id=tid))
+# AI credit lines built from parts, so this file holds no whole one (final re-review R-M11).
+AI = 'Cla' + 'ude'
+MAIL = 'noreply' + '@' + 'anthro' + 'pic.com'
+GEN = 'Gener' + 'ated with'
 cases = [
- ('commit, Co-Authored-By Claude trailer as a second -m', "git commit -m 'Add greet' -m 'Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>'"),
- ('commit, Claude Code heredoc message with the robot line', "git commit -F - <<'EOF'\nAdd greet\n\n\U0001F916 Generated with [Claude Code](https://claude.com/claude-code)\nEOF"),
- ('commit, $(cat heredoc) message with a Co-Authored-By trailer', "git commit -m \"$(cat <<'EOF'\nAdd greet\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\""),
- ('commit, --trailer', "git commit -m 'Add greet' --trailer 'Co-authored-by: Claude <noreply@anthropic.com>'"),
- ('pull request body with Generated with Claude Code', "gh pr create --title 'Add greet' --body 'Adds greet.\n\nGenerated with Claude Code'"),
+ ('commit, Co-Authored-By AI trailer as a second -m', f"git commit -m 'Add greet' -m 'Co-Authored-By: {AI} Opus 5.5 (1M context) <{MAIL}>'"),
+ ('commit, heredoc message with the robot line', f"git commit -F - <<'EOF'\nAdd greet\n\n\U0001F916 {GEN} [{AI} Code](https://{AI.lower()}.com/{AI.lower()}-code)\nEOF"),
+ ('commit, $(cat heredoc) message with a Co-Authored-By trailer', f"git commit -m \"$(cat <<'EOF'\nAdd greet\n\nCo-Authored-By: {AI} <{MAIL}>\nEOF\n)\""),
+ ('commit, --trailer', f"git commit -m 'Add greet' --trailer 'Co-authored-by: {AI} <{MAIL}>'"),
+ ('pull request body with a Generated-with line', f"gh pr create --title 'Add greet' --body 'Adds greet.\n\n{GEN} {AI} Code'"),
  ('clean commit', "git commit -m 'Add greet'"),
  ('commit crediting a human co-author', "git commit -m 'Add greet' -m 'Co-Authored-By: Sam Lee <sam@example.com>'"),
 ]

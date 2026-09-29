@@ -1,0 +1,6 @@
+{"type":"thread.started","thread_id":"01a0eaf2-4faa-7313-a68c-85dee54b705f"}
+{"type":"item.completed","item":{"id":"item_0","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
+{"type":"item.completed","item":{"id":"item_1","type":"error","message":"`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_2","type":"agent_message","text":"Where should tipcalc’s memory live? I recommend the built-in **`.memory/` folder**: it is private and needs no server. Notion is another option. Hindsight would need a separate server check before I could offer it as a ready choice."}}
+{"type":"turn.completed","usage":{"input_tokens":241550,"cached_input_tokens":223488,"cache_write_input_tokens":0,"output_tokens":1103,"reasoning_output_tokens":260}}

@@ -21,9 +21,13 @@ how Notion memory behaves differently from built-in and Hindsight memory.
   Projects database has a page named "Memory". It holds the five databases
   of Lore, Notion's open-source AI memory: Projects, Topics, Memories,
   Entities, and Facts.
-- Each memory record is one row of the Memories database. The page body is
-  the record's body (without its first `# Title` line, which Notion keeps in
-  the Title column).
+- Each memory record is one row of the Memories database: one row (page)
+  per concept. The page body is the record's body (without its first
+  `# Title` line, which Notion keeps in the Title column), with one heading
+  per section.
+- A section save (`--concept ... --section ...`) sends only that section to
+  Notion; the rest of the page is not written again, so an edit the owner
+  made in another section stays.
 - The current focus is the "Current focus" page and the glossary is the
   "Terminology glossary" page, both under the project's page.
 - There is no `.memory/` folder. The memory criteria come from the copy of
@@ -38,7 +42,8 @@ how Notion memory behaves differently from built-in and Hindsight memory.
 | --- | --- |
 | The key (`<type>_<slug>`) | Record Key (the toolkit finds a record by it), and Keywords |
 | The body's `# Title` line | Title |
-| `description` | Synopsis |
+| `description` (the concept's one-line summary) | Synopsis |
+| `updated` (the date of the last change) | Saved |
 | `metadata.type` | Tags (`user`, `feedback`, `project`, `reference`, or `event`) |
 | `status` | Status: current = accepted, needs-review and proposals = proposed, superseded = superseded, archived = deprecated |
 | `supersedes` | Supersedes (a link to the rows it replaced); Superseded by holds the replacement's key |
@@ -107,6 +112,9 @@ and the session goes on.
 ## Backup
 
 - Notion keeps the records, so the project needs no local copy to work.
+  With the work items in Notion too, the project needs no backup folder:
+  Notion keeps each page's history and keeps deleted pages in its trash
+  (the owner's decision of 2026-09-28).
 - `toolkit memory export --to <folder>` still makes a Markdown copy of every
   record, the focus, and the glossary; use it before switching backends or
   when the owner wants a copy, and before a memory tidy changes anything.

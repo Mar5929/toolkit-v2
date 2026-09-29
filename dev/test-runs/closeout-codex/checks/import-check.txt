@@ -1,0 +1,2 @@
+scaffold/model matches /Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved (112 files, commit 648bf4e94182dddc03717c1ddc21b9a446b2f94c). Every CONDITIONS.json rule matches the copy.
+exit=0

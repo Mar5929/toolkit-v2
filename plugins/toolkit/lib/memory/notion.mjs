@@ -54,6 +54,13 @@
 // was read at least two minutes after the page's last edit. get() and
 // reindex() always read the body from Notion; only find() uses the cache.
 //
+// Concept memory (Mike, 2026-09-28): one Memories row (page) per concept. The
+// Title column is the concept's title, Synopsis its one-line summary, and
+// Saved the date of its last change (the record's `updated`). A section save
+// (editRecord) sends only the section that changed, as an update_content
+// operation (planUpdate in lib/notion/markdown.mjs); the rest of the page is
+// not written again.
+//
 // Writes (save, retire, restore, delete, focus, glossary) hold a lock on this
 // computer's cache folder, so two toolkit commands cannot both create the same
 // new key. A body write is planned from a fresh read with the text read for the
@@ -72,6 +79,7 @@ import {
   serializeRecord, sortRecords, splitKey, supersedesList, titleFromName, versionOf, focusLineCount, FOCUS_MAX_LINES, isValidKey,
   focusShapeProblems, isProposal,
 } from './contract.mjs';
+import { assertEditedText } from './concepts.mjs';
 import { withLock } from '../core/lock.mjs';
 import { normalizeId, isNotionError } from '../notion/client.mjs';
 import { clientFor, notionCacheDir, readCache, writeCache } from '../notion/context.mjs';
@@ -264,7 +272,18 @@ export class NotionMemoryDriver {
   }
 
   summaryOf(page) {
-    if (this.lore) return this.loreSummaryOf(page);
+    const r = this.lore ? this.loreSummaryOf(page) : this.olderSummaryOf(page);
+    // Concept memory: the updated date is the Saved column; a proposal names the concept it would join.
+    r.updated = r.saved || '';
+    const other = this.otherFields(page);
+    if (other.extra && other.extra.concept) {
+      r.concept = String(other.extra.concept);
+      r.section = other.extra.section ? String(other.extra.section) : null;
+    }
+    return r;
+  }
+
+  olderSummaryOf(page) {
     const r = {};
     for (const [field, [key]] of Object.entries(FIELDS)) {
       const v = readValue(page, this.p[key]);
@@ -273,8 +292,10 @@ export class NotionMemoryDriver {
     r.superseded_by = r.superseded_by || null;
     r.authorization = authorizationOf(r.authorization);
     r.approved_by = approverFrom(r.authorization);
-    const word = r.status === 'retired' ? this.otherFields(page).word : null;
+    const other = this.otherFields(page);
+    const word = r.status === 'retired' ? other.word : null;
     if (word) r.stored_status = word;
+    if (other.heading) r.title = other.heading;
     return r;
   }
 
@@ -293,6 +314,8 @@ export class NotionMemoryDriver {
     r.superseded_by = r.superseded_by || null;
     r.approved_by = approverFrom(r.authorization);
     if (word && status === 'retired') r.stored_status = word;
+    const title = String(readValue(page, 'title') || '').trim();
+    if (title) r.title = title;
     return r;
   }
 
@@ -531,17 +554,25 @@ export class NotionMemoryDriver {
 
   async save(input, { expect } = {}) {
     const record = assertValidRecord(normalizeRecord(input, { today: this.today() }));
+    // The Saved column holds the record's `updated` date (concept memory).
+    record.saved = record.updated || record.saved;
     return this.writeRecord(record, expect, 'save');
   }
 
-  async writeRecord(record, expect, action) {
+  /**
+   * base: the body a section save (editRecord) started from. The version check
+   * was made on that read; here the body is planned from a fresh read with that
+   * base, so an edit made in Notion since then in another section is kept, and
+   * one in the same section is a conflict that saves nothing.
+   */
+  async writeRecord(record, expect, action, { base } = {}) {
     return this.locked(async () => {
       const label = `The memory record ${record.key}`;
       const existing = await this.findRow(record.key);
       // Read with the table style the last read used, so the version matches what get() gave.
       const current = existing ? await this.stored(existing, { useCache: false }) : null;
       try {
-        checkExpect(current ? current.version : null, expect, label);
+        if (base === undefined || !current) checkExpect(current ? current.version : null, expect, label);
       } catch (err) {
         this.saveCache(); // keep the fresh text just read, so the next get() is right
         throw err;
@@ -552,7 +583,7 @@ export class NotionMemoryDriver {
       if (existing) {
         pageId = existing.id;
         // Plan the body before any write: a conflict with an edit made in Notion since the read above saves nothing.
-        planned = await this.planBody(pageId, pageBody(record.body), pageBody(current.body), label);
+        planned = await this.planBody(pageId, pageBody(record.body), pageBody(base !== undefined ? base : current.body), label);
         await this.client.updatePage(pageId, { properties });
         await this.applyPlan(pageId, planned.plan);
       } else {
@@ -578,6 +609,35 @@ export class NotionMemoryDriver {
       }
       this.saveCache(action);
       return { key: record.key, version: stored.version, created: !existing, record: stored };
+    });
+  }
+
+  /**
+   * Change one record (concept memory: one section added or replaced), with
+   * this computer's memory lock held for the whole change. fn(stored) gives
+   * { text, ... }: the record's new text. The row is written by writeRecord,
+   * which plans the body from a fresh read with the record just read as its
+   * base, so only the section that changed is sent to Notion (update_content),
+   * and an edit the owner made in another section in the meantime is kept.
+   */
+  async editRecord(key, fn, { expect } = {}) {
+    const k = assertKey(key);
+    return this.locked(async () => {
+      const page = await this.findRow(k);
+      if (!page) throw notFound(k, this.location);
+      const current = await this.stored(page, { useCache: false });
+      try {
+        checkExpect(current.version, expect, `The memory record ${k}`);
+      } catch (err) {
+        this.saveCache();
+        throw err;
+      }
+      const out = fn(current);
+      const record = assertEditedText(out.text, k);
+      record.saved = record.updated || this.today();
+      const res = await this.writeRecord(record, current.version, 'save', { base: current.body });
+      const { text: _text, ...rest } = out;
+      return { ...rest, ...res, created: false };
     });
   }
 
@@ -645,9 +705,10 @@ export class NotionMemoryDriver {
       const page = await this.findRow(k);
       if (!page) throw notFound(k, this.location);
       const current = await this.stored(page, { useCache: false });
-      const text = changeRecordStatus(current.text, { status, supersededBy, note }, k);
+      const text = changeRecordStatus(current.text, { status, supersededBy, note, updated: this.today() }, k);
       const { record } = parseRecord(text, k);
       record.saved = this.today();
+      record.updated = this.today();
       const res = await this.writeRecord(record, current.version, action);
       return { key: k, version: res.version, record: res.record, before: current };
     });
@@ -664,14 +725,14 @@ export class NotionMemoryDriver {
     await this.save({ ...rec, supersedes: next }, { expect: rec.version });
   }
 
-  async retire(key, { supersededBy, reason } = {}) {
+  async retire(key, { supersededBy, reason, anchor = '' } = {}) {
     const k = assertKey(key);
     const by = supersededBy ? assertKey(supersededBy) : null;
     if (by && by === k) throw new ToolkitError(EXIT.INVALID, 'A record cannot be superseded by itself.');
-    const note = retireNote(this.today(), { reason, supersededBy: by });
+    const note = retireNote(this.today(), { reason, supersededBy: by, anchor: by ? anchor : '' });
     const res = await this.changeStatus(k, { status: 'retired', supersededBy: by, note }, 'retire');
     if (by) await this.changeSuccessor(by, { add: [k] });
-    const change = by ? { kind: 'supersede', from: k, to: by } : { kind: 'archive', from: k };
+    const change = by ? { kind: 'supersede', from: k, to: by, ...(anchor ? { anchor } : {}) } : { kind: 'archive', from: k };
     const repaired = await repairLinksWithDriver(this, change, { skip: by ? [k, by] : [k] });
     return { key: res.key, version: res.version, record: res.record, ...repairResult(repaired) };
   }

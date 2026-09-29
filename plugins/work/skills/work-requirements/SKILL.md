@@ -49,7 +49,7 @@ Interviews the owner and writes what the result must do, never how to build it; 
 - `requirements-analyst` (`references/agent-requirements-analyst.md`): the spec check in step 7. The brief is in `references/spec-check.md`.
 - `researcher` (`references/agent-researcher.md`): one per fact the owner cannot answer (a platform limit, what the existing build does).
 - Brief them as `references/helpers.md` says.
-- Codex: this plugin's agents do not load there. Give the full text of this skill's `references/agent-<name>.md`, with the brief, to a native Codex worker: the `spawn_agent` tool, started without this conversation (`fork_turns` set to `none`), so a checker never shares the builder's thread. With no worker, do the work yourself and say that no independent check ran.
+- Codex: this plugin's agents do not load there. Give the full text of this skill's `references/agent-<name>.md`, with the brief, to a native Codex worker: the `spawn_agent` tool, started without this conversation (`fork_turns` set to `none`), so a checker never shares the builder's thread. Only when this host cannot start a worker (no `spawn_agent` tool) do the work yourself, and say that no independent check ran.
 
 ## References
 

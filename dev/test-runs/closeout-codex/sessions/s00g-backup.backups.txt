@@ -1,0 +1,38 @@
+total 0
+drwxr-xr-x  3 michaelrihm  wheel   96 Sep 28 22:18 .
+drwxr-xr-x  9 michaelrihm  wheel  288 Sep 28 22:18 ..
+drwxr-xr-x  5 michaelrihm  wheel  160 Sep 28 22:18 tipcalc-2026-09-28
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/closeout2-codex/tipcalc-2026-09-28:
+total 8
+drwxr-xr-x  5 michaelrihm  wheel  160 Sep 28 22:18 .
+drwxr-xr-x  3 michaelrihm  wheel   96 Sep 28 22:18 ..
+drwxr-xr-x  8 michaelrihm  wheel  256 Sep 28 22:18 memory
+-rw-r--r--  1 michaelrihm  wheel  898 Sep 28 22:18 toolkit-export.json
+drwxr-xr-x  5 michaelrihm  wheel  160 Sep 28 22:18 work-items
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/closeout2-codex/tipcalc-2026-09-28/memory:
+total 56
+drwxr-xr-x  8 michaelrihm  wheel   256 Sep 28 22:18 .
+drwxr-xr-x  5 michaelrihm  wheel   160 Sep 28 22:18 ..
+-rw-r--r--  1 michaelrihm  wheel  4705 Sep 28 22:18 AGENTS.md
+-rw-r--r--  1 michaelrihm  wheel   964 Sep 28 22:18 CURRENT_FOCUS.md
+-rw-r--r--  1 michaelrihm  wheel   486 Sep 28 22:18 MEMORY.md
+-rw-r--r--  1 michaelrihm  wheel  3371 Sep 28 22:18 memory-criteria.md
+-rw-r--r--  1 michaelrihm  wheel  2236 Sep 28 22:18 project_topic_template.md
+-rw-r--r--  1 michaelrihm  wheel  1121 Sep 28 22:18 terminology-glossary.md
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/closeout2-codex/tipcalc-2026-09-28/work-items:
+total 16
+drwxr-xr-x  5 michaelrihm  wheel  160 Sep 28 22:18 .
+drwxr-xr-x  5 michaelrihm  wheel  160 Sep 28 22:18 ..
+-rw-r--r--  1 michaelrihm  wheel  195 Sep 28 22:18 .toolkit-state.json
+-rw-r--r--  1 michaelrihm  wheel  326 Sep 28 22:18 DASHBOARD.md
+drwxr-xr-x  4 michaelrihm  wheel  128 Sep 28 22:18 work-item-template
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/closeout2-codex/tipcalc-2026-09-28/work-items/work-item-template:
+total 40
+drwxr-xr-x  4 michaelrihm  wheel   128 Sep 28 22:18 .
+drwxr-xr-x  5 michaelrihm  wheel   160 Sep 28 22:18 ..
+-rw-r--r--  1 michaelrihm  wheel  8954 Sep 28 22:18 DESIGN.md
+-rw-r--r--  1 michaelrihm  wheel  7524 Sep 28 22:18 WORK-ITEM.md

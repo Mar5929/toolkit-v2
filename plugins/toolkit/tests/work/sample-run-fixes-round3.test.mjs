@@ -384,7 +384,7 @@ test('toolkit work decisions lists memory proposals that wait for the owner', as
   assert.equal(r.json.count, 1);
   const text = await tk(dir, ['work', 'decisions']);
   assert.match(text.stdout, /^1 decision waits on the owner:/m);
-  assert.match(text.stdout, /user_likes_short_replies: Mike likes short replies\. .*Yes: toolkit memory approve user_likes_short_replies --by <name>\. No: toolkit memory reject user_likes_short_replies\./);
+  assert.match(text.stdout, /user_likes_short_replies: Mike likes short replies\. .*Yes: toolkit memory approve user_likes_short_replies --by <name> --concept user_<subject>\. No: toolkit memory reject user_likes_short_replies\./);
 });
 
 test('collectOwnerDecisions leaves a draft design out only when its text was read', () => {

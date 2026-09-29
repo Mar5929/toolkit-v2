@@ -157,10 +157,15 @@ export function newestCacheCopy(env = process.env, atLeast = null) {
  *
  * - A plugin cache copy is preferred over the marketplace source folder. The
  *   source folder is the live working folder of the toolkit-v2 repository,
- *   which other sessions edit, while the skills and hooks run from a cache
- *   copy. So when pluginRoot is the source folder and a cache copy of the
- *   same or a newer version exists, that cache copy is written instead. The
- *   source folder is written only when no such cache copy exists.
+ *   which other sessions edit. Codex runs its skills and hooks from its cache
+ *   copy. Claude Code runs them from the source folder itself, because it
+ *   loads a plugin from a marketplace added as a local folder in place
+ *   (ai-external-knowledge/claude-code/plugins-manifest-reference.md,
+ *   "version"); so in Claude Code pluginRoot is the source folder. The
+ *   toolkit command should still run a fixed, installed version, so when
+ *   pluginRoot is the source folder and a cache copy of the same or a newer
+ *   version exists, that cache copy is written instead. The source folder
+ *   is written only when no such cache copy exists.
  * - A pointer that already names a complete, installed copy of a newer
  *   version is kept.
  * - At the same version, a pointer that names the source folder is replaced

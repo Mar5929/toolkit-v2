@@ -6,7 +6,10 @@
 //
 // Mapping (ARCHITECTURE section 7):
 //   record        document id = key; content = serializeRecord(record), stored exactly
-//                 (the model's topic format, the same text as a built-in .memory/ file);
+//                 (the model's topic format, the same text as a built-in .memory/ file).
+//                 Concept memory: one document per concept; a section save
+//                 (editRecord) writes the whole document again, with every line
+//                 it did not change kept as it was;
 //                 tags kind:record, type:<type>, status:<status> (the contract status:
 //                 current, needs-review, or retired);
 //                 metadata = the record's fields as strings (lists read them from here),
@@ -30,13 +33,20 @@
 //                 worktree and never committed)
 //
 // The server has no compare-and-swap, so `expect` is checked with a read just
-// before the write. With one person and one computer that gap is acceptable.
+// before the write. Every read-change-write (save, a section save, retire,
+// restore) holds this computer's Hindsight lock for the project
+// (<git common dir>/toolkit-v2/hindsight/.lock, shared by every worktree), as
+// the built-in and Notion drivers hold theirs (verifier, 2026-09-28: two
+// section saves to one concept could both read the old document, and the
+// second write lost the first one's section).
 //
 // Implements MemoryDriver from contract.mjs.
 
+import fs from 'node:fs';
 import path from 'node:path';
 import { gitInfo } from '../core/config.mjs';
 import { atomicWrite, readText } from '../core/fsx.mjs';
+import { withLock } from '../core/lock.mjs';
 import { EXIT, ToolkitError } from '../core/output.mjs';
 import { today as localToday } from '../core/util.mjs';
 import { DEFAULT_URL, HindsightClient, assertBankId } from '../hindsight/client.mjs';
@@ -46,8 +56,9 @@ import {
   approverFrom, changeRecordStatus, changeSupersedes, checkExpect, countRecords, focusLineCount, focusShapeProblems, isProposal,
   isProposalAuthorization, isValidKey, matchesFilter, normalizeDocument, normalizeRecord, notFound, parseRecord, recordSummary,
   renameRecordText, repairLinks, repairLinksWithDriver, repairResult, restoreNote, retireNote, searchTerms, serializeRecord,
-  sortRecords, splitKey, storedStatus, stripFrontmatter, versionOf, RECORD_TYPES,
+  sortRecords, splitKey, storedStatus, stripFrontmatter, versionOf, RECORD_TYPES, bodyTitle, proposalTarget, titleFromName,
 } from './contract.mjs';
+import { assertEditedText, sectionHeadings } from './concepts.mjs';
 
 export const backend = 'hindsight';
 export const RECORD_TAG = 'kind:record';
@@ -77,17 +88,20 @@ export const RECALL_GAP_FLOOR = 0.00005;
 const RECALL_WEAK_WORDS = new Set(('use uses used using can could should would may might must shall need needs '
   + 'want wants get gets got make makes there their they them then than not no any all some just also if my me us here now like').split(' '));
 export const META_NAME = 'hindsight-meta.json';
+/** The lock file of a project's Hindsight writes on this computer, in LOCK_FOLDER under the Git common dir. */
+export const LOCK_NAME = '.lock';
+export const LOCK_FOLDER = path.join('toolkit-v2', 'hindsight');
 
 /**
  * options: { root, mainRoot, config, fetch, now, timeoutMs, signal } (see contract.mjs).
  * A project with no hindsight.bank still gets a driver: status() reports the
  * missing bank, and every other method refuses with the fix.
  */
-export async function createDriver({ root, mainRoot, config, fetch: fetchFn, now, timeoutMs, signal } = {}) {
+export async function createDriver({ root, mainRoot, config, fetch: fetchFn, now, timeoutMs, signal, lockDir } = {}) {
   const hs = (config && config.hindsight) || {};
   const bank = hs.bank ? assertBankId(hs.bank) : null;
   const client = new HindsightClient({ url: hs.url || DEFAULT_URL, bank, fetch: fetchFn, timeoutMs, signal });
-  return new HindsightDriver({ client, now, projectRoot: mainRoot || root || null });
+  return new HindsightDriver({ client, now, projectRoot: mainRoot || root || null, lockDir });
 }
 
 function noBankError() {
@@ -143,23 +157,35 @@ export function recallMatches(query, hit, opts = {}) {
   return recallTier(query, hit, opts) === 'answer';
 }
 
-/** Metadata for a record: every field as a string. saved is the date of this write. */
+/**
+ * Metadata for a record: every field as a string. saved is the date of this
+ * write (the record's `updated` date when it has one). Concept memory adds the
+ * title, the updated date, the section headings (joined by " | "), and for a
+ * proposal the concept it would join, so list() gives them without reading
+ * each document.
+ */
 export function recordMetadata(record, { saved } = {}) {
+  const target = proposalTarget(record);
   return {
     kind: 'record',
     key: record.key,
     name: record.name,
     type: record.type,
+    title: bodyTitle(record.body) || titleFromName(record.name),
     description: record.description,
     status: record.status,
     stored_status: storedStatus(record),
     superseded_by: record.superseded_by || 'none',
     source: record.source,
-    saved: saved || record.saved || '',
+    saved: record.updated || saved || record.saved || '',
+    updated: record.updated || saved || record.saved || '',
     last_verified: record.last_verified,
     approved_by: record.approved_by || '',
     authorization: record.authorization || '',
     supersedes: (record.supersedes || []).join(', ') || 'none',
+    sections: sectionHeadings(record.body).join(' | '),
+    concept: target ? target.concept : '',
+    section: target && target.section ? target.section : '',
   };
 }
 
@@ -167,20 +193,27 @@ function summaryFromMetadata(id, meta) {
   const m = meta || {};
   const parts = splitKey(id) || {};
   const none = (v) => (v === undefined || v === null || v === '' || v === 'none' ? null : String(v));
-  return {
+  const out = {
     key: id,
     name: m.name || parts.name || '',
     type: m.type || parts.type || '',
+    title: m.title || titleFromName(m.name || parts.name || ''),
     description: m.description || '',
     status: m.status || '',
     stored_status: m.stored_status || storedStatus({ status: m.status, superseded_by: none(m.superseded_by) }),
     superseded_by: none(m.superseded_by),
     source: m.source || '',
     saved: m.saved || '',
+    updated: m.updated || m.saved || '',
     last_verified: m.last_verified || '',
     approved_by: none(m.approved_by) ?? approverFrom(m.authorization),
     proposal: m.status === 'needs-review' && isProposalAuthorization(m.authorization),
   };
+  if (m.concept && m.concept !== id) {
+    out.concept = m.concept;
+    out.section = m.section || null;
+  }
+  return out;
 }
 
 /** The YYYY-MM-DD part of an ISO time, or ''. */
@@ -202,7 +235,12 @@ function sameMetadata(a, b) {
 }
 
 export class HindsightDriver {
-  constructor({ client, now, projectRoot = null } = {}) {
+  /**
+   * lockDir: the folder of the write lock. By default <git common dir>/
+   * toolkit-v2/hindsight for the project (or <project>/.toolkit-cache/hindsight
+   * outside Git); a driver with no project and no lockDir takes no lock.
+   */
+  constructor({ client, now, projectRoot = null, lockDir = null } = {}) {
     this.backend = backend;
     this.client = client;
     this.bank = client.bank;
@@ -211,6 +249,36 @@ export class HindsightDriver {
     this.ready = false;
     this.projectRoot = projectRoot;
     this.metaFileCache = undefined;
+    this.lockDir = lockDir;
+  }
+
+  // ------------------------------------------------------------ the write lock
+
+  /** The folder of this project's Hindsight lock, or null when there is none to take. */
+  lockFolder() {
+    if (this.lockDir) return this.lockDir;
+    if (!this.projectRoot) return null;
+    const info = gitInfo(this.projectRoot);
+    return info && info.commonDir ? path.join(info.commonDir, LOCK_FOLDER) : path.join(this.projectRoot, '.toolkit-cache', 'hindsight');
+  }
+
+  /**
+   * Run a read-change-write with this computer's lock for the project, so two
+   * commands never write the same document from the same old text. A second
+   * command waits for the first (up to 10 seconds). When the lock folder
+   * cannot be written (a sandbox that makes the Git folder read-only), the
+   * write goes on without the lock, as before: the version check stays.
+   */
+  async locked(fn) {
+    const dir = this.lockFolder();
+    if (!dir) return fn();
+    try {
+      fs.mkdirSync(dir, { recursive: true });
+      fs.accessSync(dir, fs.constants.W_OK);
+    } catch {
+      return fn();
+    }
+    return withLock(dir, fn, { name: LOCK_NAME, staleMs: 120000 });
   }
 
   // ------------------------------------------------------------ local meta file
@@ -328,11 +396,36 @@ export class HindsightDriver {
     const record = assertValidRecord(normalizeRecord(input, { today: this.today() }));
     const text = serializeRecord(record);
     await this.ensureReady();
-    const current = await this.readDoc(record.key);
-    checkExpect(current ? versionOf(current.original_text) : null, expect, `The memory record ${record.key}`);
-    const back = await this.writeRecord(record.key, text, { saved: record.saved });
-    this.touchMeta(current ? 'update' : 'create', record.key);
-    return { key: record.key, version: versionOf(text), created: !current, record: this.stored(record.key, back) };
+    return this.locked(async () => {
+      const current = await this.readDoc(record.key);
+      checkExpect(current ? versionOf(current.original_text) : null, expect, `The memory record ${record.key}`);
+      const back = await this.writeRecord(record.key, text, { saved: record.saved });
+      this.touchMeta(current ? 'update' : 'create', record.key);
+      return { key: record.key, version: versionOf(text), created: !current, record: this.stored(record.key, back) };
+    });
+  }
+
+  /**
+   * Change one record's stored text (concept memory: one section added or
+   * replaced). fn(stored) gives { text, ... }; the whole document is written
+   * again with that exact text, so every line fn did not change keeps its
+   * bytes. The server has no compare-and-swap: --expect is checked with a read
+   * just before the write, as in save().
+   */
+  async editRecord(key, fn, { expect } = {}) {
+    const k = assertKey(key);
+    await this.ensureReady();
+    return this.locked(async () => {
+      const current = await this.readDoc(k);
+      if (!current) throw notFound(k, this.location);
+      checkExpect(versionOf(current.original_text), expect, `The memory record ${k}`);
+      const out = fn(this.stored(k, current));
+      const record = assertEditedText(out.text, k);
+      const back = await this.writeRecord(k, out.text, { saved: record.updated || this.today() });
+      this.touchMeta('update', k);
+      const { text: _text, ...rest } = out;
+      return { ...rest, key: k, version: versionOf(out.text), created: false, record: this.stored(k, back) };
+    });
   }
 
   async get(key) {
@@ -425,24 +518,28 @@ export class HindsightDriver {
   async changeStatus(key, { status, supersededBy = null, note = '' }) {
     const k = assertKey(key);
     await this.ensureReady();
-    const current = await this.readDoc(k);
-    if (!current) throw notFound(k, this.location);
-    const before = parseRecord(current.original_text, k).record;
-    const text = changeRecordStatus(current.original_text, { status, supersededBy, note }, k);
-    const back = await this.writeRecord(k, text);
-    this.touchMeta(status === 'retired' ? 'retire' : 'restore', k);
-    return { key: k, version: versionOf(text), record: this.stored(k, back), before };
+    return this.locked(async () => {
+      const current = await this.readDoc(k);
+      if (!current) throw notFound(k, this.location);
+      const before = parseRecord(current.original_text, k).record;
+      const text = changeRecordStatus(current.original_text, { status, supersededBy, note, updated: this.today() }, k);
+      const back = await this.writeRecord(k, text);
+      this.touchMeta(status === 'retired' ? 'retire' : 'restore', k);
+      return { key: k, version: versionOf(text), record: this.stored(k, back), before };
+    });
   }
 
   /** Add or remove a key in another record's `supersedes`. */
   async changeSuccessor(successorKey, change) {
-    const doc = await this.readDoc(successorKey);
-    if (!doc) return;
-    const next = changeSupersedes(doc.original_text, change);
-    if (next !== doc.original_text) await this.writeRecord(successorKey, next, { saved: (doc.document_metadata || {}).saved });
+    return this.locked(async () => {
+      const doc = await this.readDoc(successorKey);
+      if (!doc) return;
+      const next = changeSupersedes(doc.original_text, change);
+      if (next !== doc.original_text) await this.writeRecord(successorKey, next, { saved: (doc.document_metadata || {}).saved });
+    });
   }
 
-  async retire(key, { supersededBy, reason } = {}) {
+  async retire(key, { supersededBy, reason, anchor = '' } = {}) {
     const k = assertKey(key);
     const by = supersededBy ? assertKey(supersededBy) : null;
     if (by && by === k) throw new ToolkitError(EXIT.INVALID, 'A record cannot be superseded by itself.');
@@ -456,9 +553,9 @@ export class HindsightDriver {
         });
       }
     }
-    const res = await this.changeStatus(k, { status: 'retired', supersededBy: by, note: retireNote(this.today(), { reason, supersededBy: by }) });
+    const res = await this.changeStatus(k, { status: 'retired', supersededBy: by, note: retireNote(this.today(), { reason, supersededBy: by, anchor: by ? anchor : '' }) });
     if (by) await this.changeSuccessor(by, { add: [k] });
-    const change = by ? { kind: 'supersede', from: k, to: by } : { kind: 'archive', from: k };
+    const change = by ? { kind: 'supersede', from: k, to: by, ...(anchor ? { anchor } : {}) } : { kind: 'archive', from: k };
     const repaired = await repairLinksWithDriver(this, change, { skip: by ? [k, by] : [k] });
     return { key: res.key, version: res.version, record: res.record, ...repairResult(repaired) };
   }
@@ -475,22 +572,25 @@ export class HindsightDriver {
     const to = assertKey(toKey);
     if (k === to) throw new ToolkitError(EXIT.INVALID, `${k} already has that key.`, { key: k });
     await this.ensureReady();
-    const current = await this.readDoc(k);
-    if (!current) throw notFound(k, this.location);
-    if (await this.readDoc(to)) {
-      throw new ToolkitError(EXIT.INVALID, `${k} was not renamed: a record with the key ${to} already exists.`, {
-        key: k,
-        to,
-        fix: `Merge them instead: save what should stay in ${to}, then run toolkit memory retire ${k} --superseded-by ${to}.`,
-      });
-    }
-    const before = parseRecord(current.original_text, k).record;
-    const dir = storedStatus(before) === 'archived' ? 'archive' : '';
-    const change = { kind: 'rename', from: k, to, fromPath: dir ? `${dir}/${k}.md` : `${k}.md`, toPath: dir ? `${dir}/${to}.md` : `${to}.md` };
-    const text = repairLinks(renameRecordText(current.original_text, to), dir, change).text;
-    const back = await this.writeRecord(to, text, { saved: (current.document_metadata || {}).saved });
-    await this.client.deleteDocument(k);
-    this.touchMeta('rename', to);
+    const { change, text, back } = await this.locked(async () => {
+      const current = await this.readDoc(k);
+      if (!current) throw notFound(k, this.location);
+      if (await this.readDoc(to)) {
+        throw new ToolkitError(EXIT.INVALID, `${k} was not renamed: a record with the key ${to} already exists.`, {
+          key: k,
+          to,
+          fix: `Merge them instead: save what should stay in ${to}, then run toolkit memory retire ${k} --superseded-by ${to}.`,
+        });
+      }
+      const before = parseRecord(current.original_text, k).record;
+      const dir = storedStatus(before) === 'archived' ? 'archive' : '';
+      const renamed = { kind: 'rename', from: k, to, fromPath: dir ? `${dir}/${k}.md` : `${k}.md`, toPath: dir ? `${dir}/${to}.md` : `${to}.md` };
+      const newText = repairLinks(renameRecordText(current.original_text, to), dir, renamed).text;
+      const written = await this.writeRecord(to, newText, { saved: (current.document_metadata || {}).saved });
+      await this.client.deleteDocument(k);
+      this.touchMeta('rename', to);
+      return { change: renamed, text: newText, back: written };
+    });
     const repaired = await repairLinksWithDriver(this, change, { skip: [to] });
     return { key: to, from: k, version: versionOf(text), record: this.stored(to, back), ...repairResult(repaired) };
   }

@@ -319,17 +319,18 @@ forEachBackend('a saved proposal is not a fact until the owner answers; approve 
   if (name === 'builtin') {
     // An agent that reads only .memory/MEMORY.md (the model's AGENTS.md says to) sees it is a proposal.
     const index = fs.readFileSync(path.join(p.root, '.memory', 'MEMORY.md'), 'utf8');
-    assert.match(index, /^- \[project_release_day\.md\]\(project_release_day\.md\) — Releases go out on Fridays \[proposal: not a fact until the owner answers\]$/m);
+    assert.match(index, /^- \[[^\]]+\]\(project_release_day\.md\) — Releases go out on Fridays \(updated \d{4}-\d{2}-\d{2}\) \[proposal: not a fact until the owner answers\]$/m);
     assert.doesNotMatch(index, /needs-review/);
   }
 
-  // His yes.
-  const approved = await tk(p, ['memory', 'approve', 'project_release_day', '--by', 'Mike']);
+  // His yes. A one-fact proposal needs the concept named: here its own key (verifier, 2026-09-28).
+  await tk(p, ['memory', 'approve', 'project_release_day', '--by', 'Mike'], { code: 2 });
+  const approved = await tk(p, ['memory', 'approve', 'project_release_day', '--by', 'Mike', '--concept', 'project_release_day']);
   assert.match(approved.stdout, /^Approved project_release_day: it is now a current memory record, approved by Mike on \d{4}-\d{2}-\d{2}\./);
   const rec = (await tk(p, ['memory', 'get', 'project_release_day', '--json'])).json;
   assert.equal(rec.status, 'current');
   if (name === 'builtin') {
-    assert.match(fs.readFileSync(path.join(p.root, '.memory', 'MEMORY.md'), 'utf8'), /^- \[project_release_day\.md\]\(project_release_day\.md\) — Releases go out on Fridays$/m, 'approved: listed as a record');
+    assert.match(fs.readFileSync(path.join(p.root, '.memory', 'MEMORY.md'), 'utf8'), /^- \[[^\]]+\]\(project_release_day\.md\) — Releases go out on Fridays \(updated \d{4}-\d{2}-\d{2}\)$/m, 'approved: listed as a record');
   }
   assert.match(rec.authorization, /^Approved by Mike on \d{4}-\d{2}-\d{2}$/);
   assert.deepEqual((await findJson(p, 'releases fridays')).results.map((r) => r.key), ['project_release_day']);

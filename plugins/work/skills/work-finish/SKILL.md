@@ -10,7 +10,7 @@ Takes an approved item through the pull request, merge, deployment, and requirem
 
 ## Steps
 
-1. Check the result approval is recorded. Not recorded: show the result, the gaps, and the evidence, and ask. "Ship it" or "mark it done" after he saw the result counts: save his words first, then record it (`references/approvals.md`, section 4). Each sub-item needs its own.
+1. Check the result approval is recorded. Not recorded: when the history shows no `acceptance-checker` check of this result since its last build, run `work-check` first, which starts it (it runs whoever built the change). Then show the result, the gaps, and the evidence, and ask. "Ship it" or "mark it done" after he saw the result counts: save his words first, then record it (`references/approvals.md`, section 4). Each sub-item needs its own.
    `toolkit work show <id>`
    `toolkit work history <id> --note 'Owner said: <quote>' --effect 'Result approved; work-finish continues.'`
    `toolkit work approve <id> --result --by <owner>`
@@ -48,7 +48,7 @@ Takes an approved item through the pull request, merge, deployment, and requirem
 ## Agents
 
 - `acceptance-checker` (`references/agent-acceptance-checker.md`): the independent check of the exact head before a merge under a standing merge instruction. Brief it as `work-check` does and name the commit (`references/helpers.md`).
-- Codex: this plugin's agents do not load there. Give the full text of this skill's `references/agent-<name>.md`, with the brief, to a native Codex worker: the `spawn_agent` tool, started without this conversation (`fork_turns` set to `none`), so a checker never shares the builder's thread. With no worker, do the work yourself and say that no independent check ran. Without an independent check, a standing merge instruction does not apply: ask the owner.
+- Codex: this plugin's agents do not load there. Give the full text of this skill's `references/agent-<name>.md`, with the brief, to a native Codex worker: the `spawn_agent` tool, started without this conversation (`fork_turns` set to `none`), so a checker never shares the builder's thread. Only when this host cannot start a worker (no `spawn_agent` tool) do the work yourself, and say that no independent check ran. The `acceptance-checker` still runs when the owner chose owner-led delivery or no agent team. Without an independent check, a standing merge instruction does not apply: ask the owner.
 
 ## References
 

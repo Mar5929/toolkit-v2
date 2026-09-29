@@ -48,7 +48,11 @@ function notProjectReport(ctx, err) {
   const lines = [err.message, 'toolkit init sets it up (the project-setup skill asks the questions first).'];
   if (findings.length) {
     lines.push('', 'This computer:');
-    for (const f of findings) lines.push(`- ${f.message}${f.fix ? ` Fix: ${f.fix}` : ''}`);
+    // Each line says how much it matters: a warning never blocks toolkit init
+    // (final run, claude-local problem 3: setup stopped for a pointer warning).
+    const WORD = { problem: 'Problem', warning: 'Warning', note: 'Note' };
+    for (const f of findings) lines.push(`- ${WORD[f.severity] || 'Warning'}: ${f.message}${f.fix ? ` Fix: ${f.fix}` : ''}`);
+    if (!findings.some((f) => f.severity === 'problem')) lines.push('None of these blocks toolkit init.');
   } else {
     lines.push('', 'This computer: no problems found (Node, the plugin-root pointer, and the Codex wrapper).');
   }

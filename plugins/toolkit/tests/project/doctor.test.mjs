@@ -217,7 +217,12 @@ test('outside a project, doctor checks this computer only and exits 4', async ()
   assert.equal(res.code, 4);
   assert.match(res.stdout, /is not a Toolkit V2 project/);
   // The message names the pointer file this computer reads (TOOLKIT_V2_CONFIG_DIR), not a fixed ~/.config path (final review M4).
-  assert.ok(res.stdout.includes(`This computer:\n- ${path.join(env.TOOLKIT_V2_CONFIG_DIR, 'plugin-root')} is missing`), res.stdout);
+  // Each line carries its severity, so a warning is not read as a reason to stop setup (final run, claude-local problem 3).
+  assert.match(res.stdout, /This computer:\n- (?:Warning|Problem|Note): /);
+  assert.ok(res.stdout.includes(`: ${path.join(env.TOOLKIT_V2_CONFIG_DIR, 'plugin-root')} is missing`), res.stdout);
+  for (const line of res.stdout.split('\n').filter((l) => l.startsWith('- '))) assert.match(line, /^- (?:Warning|Problem|Note): /, line);
+  const json0 = await tk(path.dirname(env.HOME), ['doctor', '--json'], { env });
+  if (!json0.json.findings.some((f) => f.severity === 'problem')) assert.match(res.stdout, /None of these blocks toolkit init\./);
   const json = await tk(path.dirname(env.HOME), ['doctor', '--json'], { env });
   assert.equal(json.code, 4);
   assert.ok(json.json.findings.some((f) => f.id === 'wrapper-missing'));

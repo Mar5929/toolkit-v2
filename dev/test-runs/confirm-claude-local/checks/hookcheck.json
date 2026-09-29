@@ -2,46 +2,46 @@
  {
   "hook": "PreToolUse",
   "case": "commit, Co-Authored-By Claude trailer as a second -m",
-  "command": "git commit -m 'Add greet' -m 'Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>'",
+  "command": "git commit -m 'Add greet' -m '<AI co-author line>'",
   "exit": 0,
   "decision": "deny",
-  "stdout": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"This commit message gives an AI credit: \\\"Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>\\\". Nothing committed or pushed in this project carries an AI credit: no Co-Authored-By line naming an AI and no \\\"Generated with\\\" line. Remove that line and run the command again. Nothing was committed.\"}}",
+  "stdout": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"This commit message gives an AI credit: \\\"<AI co-author line>\\\". Nothing committed or pushed in this project carries an AI credit: no Co-Authored-By line naming an AI and no \\\"Generated with\\\" line. Remove that line and run the command again. Nothing was committed.\"}}",
   "stderr": ""
  },
  {
   "hook": "PreToolUse",
   "case": "commit, Claude Code heredoc message with the robot line",
-  "command": "git commit -F - <<'EOF'\nAdd greet\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\nEOF",
+  "command": "git commit -F - <<'EOF'\nAdd greet\n\n<AI Generated-with line>\nEOF",
   "exit": 0,
   "decision": "deny",
-  "stdout": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"This commit message gives an AI credit: \\\"🤖 Generated with [Claude Code](https://claude.com/claude-code)\\\". Nothing committed or pushed in this project carries an AI credit: no Co-Authored-By line naming an AI and no \\\"Generated with\\\" line. Remove that line and run the command again. Nothing was committed.\"}}",
+  "stdout": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"This commit message gives an AI credit: \\\"<AI Generated-with line>\\\". Nothing committed or pushed in this project carries an AI credit: no Co-Authored-By line naming an AI and no \\\"Generated with\\\" line. Remove that line and run the command again. Nothing was committed.\"}}",
   "stderr": ""
  },
  {
   "hook": "PreToolUse",
   "case": "commit, $(cat heredoc) message with a Co-Authored-By trailer",
-  "command": "git commit -m \"$(cat <<'EOF'\nAdd greet\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\"",
+  "command": "git commit -m \"$(cat <<'EOF'\nAdd greet\n\n<AI co-author line>\nEOF\n)\"",
   "exit": 0,
   "decision": "deny",
-  "stdout": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"This commit message gives an AI credit: \\\"Co-Authored-By: Claude <noreply@anthropic.com>\\\". Nothing committed or pushed in this project carries an AI credit: no Co-Authored-By line naming an AI and no \\\"Generated with\\\" line. Remove that line and run the command again. Nothing was committed.\"}}",
+  "stdout": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"This commit message gives an AI credit: \\\"<AI co-author line>\\\". Nothing committed or pushed in this project carries an AI credit: no Co-Authored-By line naming an AI and no \\\"Generated with\\\" line. Remove that line and run the command again. Nothing was committed.\"}}",
   "stderr": ""
  },
  {
   "hook": "PreToolUse",
   "case": "commit, --trailer",
-  "command": "git commit -m 'Add greet' --trailer 'Co-authored-by: Claude <noreply@anthropic.com>'",
+  "command": "git commit -m 'Add greet' --trailer '<AI co-author line>'",
   "exit": 0,
   "decision": "deny",
-  "stdout": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"This commit message gives an AI credit: \\\"Co-authored-by: Claude <noreply@anthropic.com>\\\". Nothing committed or pushed in this project carries an AI credit: no Co-Authored-By line naming an AI and no \\\"Generated with\\\" line. Remove that line and run the command again. Nothing was committed.\"}}",
+  "stdout": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"This commit message gives an AI credit: \\\"<AI co-author line>\\\". Nothing committed or pushed in this project carries an AI credit: no Co-Authored-By line naming an AI and no \\\"Generated with\\\" line. Remove that line and run the command again. Nothing was committed.\"}}",
   "stderr": ""
  },
  {
   "hook": "PreToolUse",
-  "case": "pull request body with Generated with Claude Code",
-  "command": "gh pr create --title 'Add greet' --body 'Adds greet.\n\nGenerated with Claude Code'",
+  "case": "pull request body with <AI Generated-with line>",
+  "command": "gh pr create --title 'Add greet' --body 'Adds greet.\n\n<AI Generated-with line>'",
   "exit": 0,
   "decision": "deny",
-  "stdout": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"This pull request text gives an AI credit: \\\"Generated with Claude Code\\\". Nothing committed or pushed in this project carries an AI credit: no Co-Authored-By line naming an AI and no \\\"Generated with\\\" line. Remove that line and run the command again. No pull request was created or changed.\"}}",
+  "stdout": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"This pull request text gives an AI credit: \\\"<AI Generated-with line>\\\". Nothing committed or pushed in this project carries an AI credit: no Co-Authored-By line naming an AI and no \\\"Generated with\\\" line. Remove that line and run the command again. No pull request was created or changed.\"}}",
   "stderr": ""
  },
  {

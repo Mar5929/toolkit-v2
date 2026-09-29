@@ -28,6 +28,14 @@ that a "Save to memory?" question he did not answer is kept, not lost.
   answers]". In Notion its Status is "proposed".
 - A proposal never replaces a record the owner approved. The CLI refuses a
   proposal whose key is already a current or retired record.
+- Concept memory: a proposal for a fact that belongs in an existing concept
+  is its own record that names that concept and a section heading (its
+  `concept` and `section` fields; the list shows "[proposal for <concept>:
+  the owner has not answered]", and `toolkit work decisions` says "A yes adds
+  it to the concept <concept>"). The concept itself does not change until his
+  yes. A proposal for a new concept names none: its key is made from the
+  fact's words (`project_tests_run_before_every_commit`), so on his yes you
+  name the concept it goes in with `approve --concept` (below).
 
 ## How a proposal is saved
 
@@ -40,8 +48,10 @@ that a "Save to memory?" question he did not answer is kept, not lost.
    saves the same summary twice in a session. A record that is only about the
    same subject does not stop it. The next turn's context says what
    happened, in one of five notes:
-   - It saved the proposal, and names its key. His answer is recorded as in
-     "Recording the owner's answer" below.
+   - It saved the proposal, and names its key. When the question's words
+     match an existing concept of the same type, the note also says "for the
+     concept <key>": his yes adds the fact there as a section. His answer is
+     recorded as in "Recording the owner's answer" below.
    - It saved nothing, because memory already holds a proposal like it, and
      names that proposal. His answer approves or rejects that proposal.
    - It saved nothing, because memory already holds a record about the same
@@ -56,7 +66,14 @@ that a "Save to memory?" question he did not answer is kept, not lost.
      command in step 3, so it is kept until he answers.
 3. The agent may save the proposal itself in the same turn instead, with a
    full body in the record format, so the record says exactly what was
-   meant:
+   meant. For a fact that belongs in an existing concept (the usual case),
+   name the concept and the section; the text is that section's labels:
+
+   ```text
+   toolkit memory save --concept <key> --section '<heading>' --description '<the fact in one line>' --body-file <file> --source '<person or document>, <YYYY-MM-DD>' --proposal
+   ```
+
+   For a fact that starts a new concept:
 
    ```text
    toolkit memory save --type <type> --name <slug> --description '<one line>' --body-file <file> --source '<person or document>, <YYYY-MM-DD>' --proposal
@@ -67,27 +84,63 @@ refuses the pair.
 
 ## Recording the owner's answer
 
-- **Yes, to a proposal as it stands** (one the Stop hook saved, or one you
-  saved with a full body that is right):
+When you ask him about a proposal, recommend a yes only with evidence from
+this project: what he said, what happened, and when. With none, ask without
+a recommendation ("I have no evidence either way."). This is the one
+exception to "every decision carries a recommendation" in `work-decide`.
+
+Ask about a saved proposal as "Save to memory: <one line>?" and say it to
+him: "you publish releases to npm yourself", not "Mike Rihm publishes ...".
+The record keeps his name; the question speaks to him.
+
+- **Yes, to a proposal that names a concept** (the list shows "[proposal
+  for <concept> ...]"):
 
   ```text
   toolkit memory approve <key> --by <owner>
   ```
 
-  The record becomes `current`, "Approved by <owner> on <date>". A proposal
-  the Stop hook saved ends its Evidence and limits line "so the toolkit's
-  Stop hook saved it as a proposal". For that one, `approve` also takes the
-  words "Do not rely on this until the owner approves it." out of How to
-  apply and adds who approved it and when to the Evidence line.
-- **Yes, with a reason or a detail, or the body needs work:** read it with
-  `--json`, write the full body in the record format, and save the same type
-  and slug. That one save approves it too:
+  Its fact is added to that concept, under its section heading (or under
+  that heading's existing section), and the proposal record is removed; the
+  output names the concept and the section.
+- **Yes, to a proposal that names no concept** (a new concept, or one whose
+  concept is gone): name the concept its fact goes in with `--concept`. Run
+  `toolkit memory list --type <type>` first. Name an existing concept of the
+  same type when the fact belongs there, or a new key named for the subject,
+  never for the fact (`project_testing`, not
+  `project_tests_run_before_every_commit`). A new concept also takes its
+  title and its one-line summary:
 
   ```text
-  toolkit memory get <key> --json
-  toolkit memory save --type <type> --name <slug> --description '<one line>' --body-file <file> --expect <version> --approved-by <owner>
+  toolkit memory approve <key> --by <owner> --concept <type>_<subject> --title '<Concept title>' --description '<one-line summary of the concept>'
   ```
-- **Yes, with a better name or type:** record his yes first, as above, then
+
+  The fact becomes a `## ` section of that concept, under the proposal's
+  title, and the proposal record is removed. When the proposal's own key
+  already names its subject, give that key to `--concept`: it is approved
+  where it is. Without `--concept`, `approve` refuses such a proposal and
+  lists the concepts of that type.
+
+  Either way the concept keeps its own authorization line. When his approval
+  differs from it, the section records it on its Evidence and limits line. A
+  proposal the Stop hook saved ends its Evidence and limits line "so the
+  toolkit's Stop hook saved it as a proposal". For that one, `approve` also
+  takes the words "Do not rely on this until the owner approves it." out of
+  How to apply and adds who approved it and when to the Evidence line.
+- **Yes, with a reason or a detail, or the body needs work:** approve it
+  first, as above, then change its section in the concept with his words
+  (read the concept with `--json` for the version):
+
+  ```text
+  toolkit memory approve <key> --by <owner> [--concept <type>_<subject> ...]
+  toolkit memory get <concept> --json
+  toolkit memory save --concept <concept> --section '<heading>' --body-file <file> --expect <version> --approved-by <owner>
+  ```
+
+  Saving a one-fact proposal again under its own key with `--approved-by` is
+  refused; a full body with `## ` sections approves it in that one save.
+- **Yes, with a better name or type:** record his yes with `--concept`
+  naming the better key, as above. To change a type, rename after the yes:
   `toolkit memory rename <key> --to <new-key>`.
 - **No:**
 
@@ -110,21 +163,25 @@ refuses the pair.
   is about something else. The Stop hook saved the proposal
   `project_tests_run_before_every_commit`, and it stays until `work-decide`
   asks.
-- Later the owner says "yes, save that":
+- Later the owner says "yes, save that". The list of project concepts
+  (`toolkit memory list --type project`) has none about testing, so the fact
+  starts one, named for its subject:
 
   ```text
-  toolkit memory approve project_tests_run_before_every_commit --by Mike
+  toolkit memory approve project_tests_run_before_every_commit --by Mike --concept project_testing --title 'Testing' --description 'How and when tests run'
   ```
 
-  Then reply: "Saved to memory: tests run before every commit. Say 'forget
-  that' to undo."
-- He says "yes, because CI is slow": his reason goes in the body, so read it
-  with `--json`, write the full body with that reason under **Why**, and save
-  it:
+  Then reply with the line the output gives: "Saved to memory: tests run
+  before every commit (in Testing). Say 'forget that' to undo." When
+  `project_testing` exists already, the same command without `--title` and
+  `--description` adds the fact to it as a section.
+- He says "yes, because CI is slow": record his yes, then put his reason in
+  the section under **Why**:
 
   ```text
-  toolkit memory get project_tests_run_before_every_commit --json
-  toolkit memory save --type project --name tests-run-before-every-commit --description 'Tests run before every commit' --body-file - --expect <version> --approved-by Mike <<'EOF'
+  toolkit memory approve project_tests_run_before_every_commit --by Mike --concept project_testing --title 'Testing' --description 'How and when tests run'
+  toolkit memory get project_testing --json
+  toolkit memory save --concept project_testing --section 'tests run before every commit' --body-file - --expect <version> --approved-by Mike <<'EOF'
   ```
 - The owner says "no, that was only for last week". Run
   `toolkit memory reject project_tests_run_before_every_commit` and reply in

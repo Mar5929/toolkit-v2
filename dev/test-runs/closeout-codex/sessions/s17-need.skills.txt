@@ -1,0 +1,1 @@
+work-decide,   ref:work/skills/work-decide/references/approvals.md, work-check,   ref:work/skills/work-check/references/agent-acceptance-checker.md,   ref:work/skills/work-check/references/helpers.md,   ref:work/skills/work-check/references/testing.md, spawn_agent:wi001_acceptance(fork_turns=none)

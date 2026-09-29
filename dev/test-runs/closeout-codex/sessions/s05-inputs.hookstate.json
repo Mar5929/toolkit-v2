@@ -1,0 +1,112 @@
+{
+  "schema": 1,
+  "sessionId": "01a0eafe-7014-75e0-a1a2-a6cb9e09fbe0",
+  "host": "codex",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex",
+  "startedAt": "2026-09-29T02:29:00.902Z",
+  "turns": 1,
+  "turn": {
+    "key": "01a0eafe-7076-78c0-bf51-ffe2861f56be",
+    "n": 1,
+    "startedAt": "2026-09-29T02:29:01.064Z",
+    "keep": null,
+    "baseline": {
+      "memoryMeta": 1790648922275.3662,
+      "hindsightMeta": null,
+      "memoryCache": null,
+      "workState": 1790648940955.7517,
+      "decisions": 1790648273816.2002
+    },
+    "records": [
+      {
+        "kind": "work",
+        "what": "toolkit work history",
+        "at": "2026-09-29T02:29:32.727Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-29T02:29:36.602Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-29T02:29:47.313Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-29T02:30:04.495Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-29T02:30:13.863Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-29T02:30:19.908Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-29T02:30:20.163Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work set",
+        "at": "2026-09-29T02:30:20.421Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-29T02:31:36.591Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work history",
+        "at": "2026-09-29T02:31:36.846Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-29T02:31:37.107Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-29T02:31:37.370Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work set",
+        "at": "2026-09-29T02:31:37.633Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-29T02:31:54.777Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-29T02:31:59.171Z"
+      },
+      {
+        "kind": "memory",
+        "what": "toolkit memory focus",
+        "at": "2026-09-29T02:32:09.694Z"
+      }
+    ],
+    "edits": [],
+    "stopBlocked": false,
+    "prompted": true,
+    "saveWords": false,
+    "answersMemoryQuestion": false
+  },
+  "lastStopReason": null,
+  "source": "startup",
+  "updated": "2026-09-29T02:32:18.405Z",
+  "lastReplyAskedMemory": false
+}

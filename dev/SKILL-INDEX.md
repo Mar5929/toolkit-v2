@@ -1069,8 +1069,10 @@ access of their own.
 
 Codex plugins do not load `agents/` (critique P13). Each calling skill uses the
 fallback in `references/helpers.md`: read the role file and pass its full text
-to a native Codex worker; with no worker, do the work and say no independent
-check ran. The current `work-guide` and `solution-design` skills already work
+to a native Codex worker; only when the host cannot start a worker, do the work
+and say no independent check ran. The `acceptance-checker` runs before every
+result approval, whoever built the change: owner-led delivery, "no agent team",
+or a no to the team question never removes it (Mike, 2026-09-28, evening). The current `work-guide` and `solution-design` skills already work
 this way (`session-skills.md` section 9). Generating
 `.codex/agents/<name>.toml` at init is a later option, not required here.
 

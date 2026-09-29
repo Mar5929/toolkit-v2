@@ -1,0 +1,1 @@
+mv .work-items/WI-001-build-the-plain-tip-and-total-command/WI-002-add-the-split-option .work-items/WI-001-build-the-plain-tip-and-total-command/WI-002-split-between-friends

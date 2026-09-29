@@ -94,10 +94,39 @@ export function looseQuestion(message) {
   return null;
 }
 
+/**
+ * True when a message asks the owner a question about memory: a sentence that
+ * ends in "?" and names memory, remembering, saving, keeping, or a proposal.
+ * His next prompt is then his answer to it.
+ */
+export function memoryQuestionAsked(message) {
+  const text = String(message ?? '');
+  const questions = text.match(/[^.?!\n]*\?/g) || [];
+  return questions.some((q) => /\b(?:memory|remember|save|saved|keep|kept|proposals?)\b/i.test(q));
+}
+
+/**
+ * True when a message is about a memory proposal that already exists: it says
+ * "memory proposal", names a record key, or quotes a summary this session
+ * already saved as a proposal. A loose question in such a message is about
+ * that proposal, not a new one, so the Stop hook does not ask for the exact
+ * form (final run, claude-local problem 1).
+ */
+export function namesOpenProposal(message, proposedSummaries = []) {
+  const text = String(message ?? '');
+  if (/\bmemory\s+proposals?\b|\bproposals?\s+(?:in|for|to)\s+memory\b/i.test(text)) return true;
+  if (/\b(?:user|feedback|project|reference|event)_[a-z0-9]+(?:_[a-z0-9]+)+\b/.test(text)) return true;
+  const words = normalizeSummary(text);
+  return proposedSummaries.some((s) => s && s.length > 10 && words.includes(s));
+}
+
 /** A summary reduced to its words, for "was this proposed already" checks. */
 export function normalizeSummary(summary) {
   return String(summary ?? '').toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, ' ').trim();
 }
+
+/** A summary that starts with a verb addressed to the agent. */
+const IMPERATIVE = /^(?:please\s+)?(?:(?:always|never|only)\s+)?(?:ask|use|keep|write|run|put|avoid|don['’]?t|do\s+not|stop|start|check|make|give|show|tell|say|add|leave|send|test|name|follow|call|list|skip|include|wait|confirm|prefer|read|open|explain|mention|commit|push|merge|deploy|save|let)\b/i;
 
 /**
  * The record type for a proposal (the model's memory-criteria.md): a working
@@ -118,6 +147,10 @@ export function proposalType(summary, ownerName) {
   if (new RegExp(`\\b${ownerSubject}\\s+(?:\\w+\\s+)?(?:prefers?|likes?|wants?|hates?|dislikes?)\\b`, 'i').test(s)
     && !/\b(?:you should|you must|stop doing)\b/i.test(s)) return 'user';
   if (/\b(?:the agent|agents?|you should|you must|stop doing|instead of)\b/i.test(s)) return 'feedback';
+  // An instruction to the agent with no subject ("Ask one requirements
+  // question at a time") is a standing correction: feedback (final run,
+  // codex-hindsight F2: it was typed project).
+  if (IMPERATIVE.test(s.trim())) return 'feedback';
   if (namesOwner || /\b(?:the owner|prefers?|likes?|wants?)\b/i.test(s)) return 'user';
   return 'project';
 }
@@ -193,10 +226,26 @@ export function proposalBody(summary, date, asked = summary) {
  * The toolkit memory save arguments for one proposal. The type is read from
  * the question's own wording; the name, description, and body use the
  * owner's name in place of a leading "you" (ownerWording).
+ * Concept memory (Mike, 2026-09-28): with concept (the existing concept the
+ * save named: "belongs in the concept X"), the proposal names that concept
+ * and a section heading, and the owner's yes adds it there.
  */
-export function proposalArgs(summary, { ownerName, date, name } = {}) {
+export function proposalArgs(summary, { ownerName, date, name, concept, section } = {}) {
   const type = proposalType(summary, ownerName);
   const named = ownerWording(summary, ownerName);
+  if (concept) {
+    return [
+      'memory', 'save',
+      '--concept', concept,
+      '--section', section || proposalTitle(named),
+      ...(name ? ['--name', name] : []),
+      '--description', proposalDescription(named),
+      '--body', proposalBody(named, date, summary),
+      '--source', `Agent question in a session, ${date}`,
+      '--proposal',
+      '--json',
+    ];
+  }
   return [
     'memory', 'save',
     '--type', type,

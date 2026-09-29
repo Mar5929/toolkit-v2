@@ -183,6 +183,22 @@ test('toolkit work finish says no backup was made when the tracker and memory ar
   assert.equal((await run(['work', 'approve', id, '--result', '--by', 'Mike Rihm'])).code, 0);
   const done = await run(['work', 'finish', id, '--by', 'Mike Rihm', '--evidence', 'The tests pass.']);
   assert.equal(done.code, 0, done.out + done.err);
-  assert.match(done.out, /No automatic backup: this project keeps its work items and memory outside this computer, so nothing was copied to a backup folder\./);
+  // Work items and memory both in Notion: Notion's page history and trash
+  // are the backup (the owner's decision of 2026-09-28).
+  assert.match(done.out, /No automatic backup: this project keeps its work items and memory in Notion, which keeps each page's history and keeps deleted pages in its trash, so nothing was copied to a backup folder\./);
   assert.equal(fs.existsSync(path.join(dir, 'backups')), false);
+  const handoff = await run(['handoff-backup']);
+  assert.equal(handoff.code, 0, handoff.out + handoff.err);
+  assert.match(handoff.out, /^Nothing to back up: this project keeps its work items and memory in Notion, which keeps each page's history and keeps deleted pages in its trash\.$/m);
+  // Doctor gives no backup warning for it, with or without a backup folder.
+  for (const backup of [{ dir: path.join(dir, 'backups') }, undefined]) {
+    const file = path.join(project, '.toolkit.json');
+    const config = JSON.parse(fs.readFileSync(file, 'utf8'));
+    if (backup) config.backup = backup;
+    else delete config.backup;
+    fs.writeFileSync(file, `${JSON.stringify(config, null, 2)}\n`);
+    const doctor = await run(['doctor', '--json']);
+    const findings = JSON.parse(doctor.out).findings;
+    assert.deepEqual(findings.filter((f) => f.area === 'backup' || /backup/i.test(f.id || '')), [], JSON.stringify(findings));
+  }
 });

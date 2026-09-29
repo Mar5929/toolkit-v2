@@ -33,7 +33,7 @@ own writing rules.
 | --- | --- | --- |
 | Requirement or correction | The item's `Active requirements` (the `R-xx` block) and `Acceptance` | The new meaning, and Status Refining until approved |
 | Design choice | The item's design (`toolkit work design`) | The approach, proposed or approved, and why |
-| Open question | The item's `Open Questions` table | Question, what it affects, Open, who must answer |
+| Open question | The item's `Open Questions` table | Question and your recommendation, what it affects, Open, who must answer |
 | Answer or decision about this item | The question's row, the section it changes, and one history note | The answer, who gave it, the date, and whether it is an approval |
 | Decision for the whole project | `DECISIONS.md`, through `work-decide` | Decision, why, who decided, what it replaces |
 | Outstanding task | The item's `Tasks` section | Work, Deliverable, Done when, Depends on |
@@ -119,6 +119,13 @@ toolkit work history WI-012 --note 'Build found the export API has a 10,000-row 
   question.
 - One question per message. Give your recommended answer and the main reason
   in one line, so he can confirm, correct, or redirect it.
+- A question you cannot record an answer to yet gets an Open Questions row,
+  and the recommendation goes in the row's Question cell, after the
+  question, for example "Which input rule? Recommended: bills of 0 or more
+  with at most two decimals, because ...". A later session then knows what
+  "go with your recommendation" means. When a row has no recommendation and he says "go
+  with your recommendation", say you cannot find the one he saw, give yours,
+  and ask; never present a new recommendation as the one he approved.
 - The one exception: more than three findings from the `work-requirements`
   spec check go in one numbered list he can answer in one message.
 - Never ask him which stage an item is in, or which helpers a small item

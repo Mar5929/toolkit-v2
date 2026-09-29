@@ -56,8 +56,12 @@ import { slugify, today as localToday } from '../core/util.mjs';
  * @property {string|null} superseded_by  the key of the record that replaced this one, or null
  * @property {string} source         who or what said it, with a date. A name, never an email address.
  * @property {string} saved          YYYY-MM-DD of the latest save, or '' when the backend does not know it.
- *                                   It is not part of the stored text: the built-in driver takes it
- *                                   from the file's change time, Hindsight and Notion from their own fields.
+ *                                   The stored `updated` date when the record has one; otherwise the
+ *                                   built-in driver takes it from the file's change time, Hindsight and
+ *                                   Notion from their own fields.
+ * @property {string} [updated]      YYYY-MM-DD of the last change, stored in the frontmatter (concept
+ *                                   memory: the index shows it). Every save sets it; a link repair keeps it.
+ * @property {string} [title]        the body's "# Title" line (summaries only; see recordSummary)
  * @property {string} last_verified  YYYY-MM-DD, or `unknown`
  * @property {string} authorization  what allowed the save, in the model's words: "Approved by Mike on
  *                                   2026-09-26", "Trusted grant", or the owner's explicit request
@@ -66,15 +70,19 @@ import { slugify, today as localToday } from '../core/util.mjs';
  * @property {object} [metadata]     the `metadata:` map when it holds more than `type` (kept as it was)
  * @property {object} [extra]        every other frontmatter key, kept as it was
  * @property {string} body           Markdown after the frontmatter, in the model's topic format:
- *                                   "# <Title>", then **Remember:**, **Why:**, **How to apply:**,
- *                                   **Evidence and limits:**, **Related memories:**, **Authoritative records:**
+ *                                   "# <Title>", then one "## <Sub-topic>" section per fact or group
+ *                                   of facts (concept memory; lib/memory/concepts.mjs), each with
+ *                                   **Remember:**, **Why:**, **How to apply:**, **Evidence and limits:**,
+ *                                   **Related memories:**, **Authoritative records:**. A record written
+ *                                   before concept memory has the labels with no "##" section.
  *
  * The stored form of a record is serializeRecord(record): the model project's
  * topic template YAML (.memory/project_topic_template.md), then the body:
  *
  *   ---
  *   name: <key>                      the file name without .md
- *   description: <one line>
+ *   description: <one line>          the concept's one-line summary
+ *   updated: <YYYY-MM-DD>            the date of the last change (concept memory)
  *   metadata:
  *     type: <type>
  *   status: <current | needs-review | superseded | archived>
@@ -215,9 +223,13 @@ export const RECORD_TYPES = Object.freeze(['user', 'feedback', 'project', 'refer
 export const RECORD_STATUSES = Object.freeze(['current', 'needs-review', 'retired']);
 /** The status words written in a stored record (the model's words). */
 export const STORED_STATUSES = Object.freeze(['current', 'needs-review', 'superseded', 'archived']);
-/** The model topic template's frontmatter keys, in the order they are written. */
+/**
+ * The model topic template's frontmatter keys, in the order they are written.
+ * `updated` (concept memory, Mike 2026-09-28) sits under the one-line summary,
+ * so the top of a file gives its summary and the date of its last change.
+ */
 export const FRONTMATTER_ORDER = Object.freeze([
-  'name', 'description', 'metadata', 'status', 'source', 'last_verified', 'authorization', 'supersedes',
+  'name', 'description', 'updated', 'metadata', 'status', 'source', 'last_verified', 'authorization', 'supersedes',
 ]);
 /** Keys of the older toolkit record format, still read. */
 export const LEGACY_FIELDS = Object.freeze(['type', 'superseded_by', 'saved', 'approved_by']);
@@ -335,6 +347,53 @@ export function approverFrom(authorization) {
   return m ? m[1].trim() : null;
 }
 
+// ---------------------------------------------------------------- approval of one fact in a concept
+//
+// Concept memory (verifier, 2026-09-28): a concept's `authorization` line is
+// the approval of the concept, and a save of one section never rewrites it.
+// A section whose approval differs from the concept's carries its own note on
+// its "**Evidence and limits:**" line, the way --source is recorded:
+// "Approved by Mike on 2026-09-28." or "Saved on 2026-09-28 with no approval
+// recorded." A section with no note has the concept's approval.
+
+/** The note for a section saved with no approval, in a concept that has one. */
+export function unapprovedNote(day) {
+  return `Saved on ${day} with no approval recorded.`;
+}
+
+/** Finds unapprovedNote() text in a section, with the space before it. */
+export const UNAPPROVED_NOTE_RE = /[ \t]*Saved on \d{4}-\d{2}-\d{2} with no approval recorded\./g;
+
+/** Who or what an authorization names, for comparing: 'mike rihm', 'no approval recorded', 'trusted grant'. */
+function approvalWho(authorization) {
+  const a = oneLine(authorization) || NO_AUTHORIZATION;
+  const who = approverFrom(a);
+  return (who || a.replace(/,?\s+on\s+\d{4}-\d{2}-\d{2}\.?$/i, '')).replace(/[.\s]+$/, '').toLowerCase();
+}
+
+/** True when two authorizations name the same approver ("Mike" and "Mike Rihm" count as the same). */
+export function sameApproval(a, b) {
+  const x = approvalWho(a);
+  const y = approvalWho(b);
+  if (x === y) return true;
+  if (!approverFrom(a) || !approverFrom(b)) return false;
+  return `${y} `.startsWith(`${x} `) || `${x} `.startsWith(`${y} `);
+}
+
+/**
+ * The approval note for one section of a concept: null when the save's
+ * authorization is the concept's own (the concept's line covers it) or a
+ * proposal's; otherwise "Approved by <name> on <date>.", "Saved on <date>
+ * with no approval recorded.", or the authorization text with the date.
+ */
+export function approvalNote(authorization, conceptAuthorization, day) {
+  const a = oneLine(authorization) || NO_AUTHORIZATION;
+  if (isProposalAuthorization(a) || sameApproval(a, conceptAuthorization)) return null;
+  if (a === NO_AUTHORIZATION) return unapprovedNote(day);
+  const text = a.replace(/[.\s]+$/, '');
+  return /\d{4}-\d{2}-\d{2}/.test(text) ? `${text}.` : `${text} on ${day}.`;
+}
+
 /**
  * The keys a `supersedes` value names, canonical and without repeats: 'none',
  * '', a key, 'a, b', or a list all work. Returns [] for none.
@@ -400,6 +459,73 @@ export function contractStatus(word) {
 export function titleFromName(name) {
   const words = String(name ?? '').replace(/[-_]+/g, ' ').trim();
   return words ? words[0].toUpperCase() + words.slice(1) : 'Memory';
+}
+
+/** The text of a body's first "# " line (outside fenced code), or null. */
+export function bodyTitle(body) {
+  let fence = null;
+  for (const line of String(body ?? '').split('\n')) {
+    const f = /^\s{0,3}(`{3,}|~{3,})/.exec(line);
+    if (fence) {
+      if (f && f[1][0] === fence[0] && f[1].length >= fence.length) fence = null;
+      continue;
+    }
+    if (f) {
+      fence = f[1];
+      continue;
+    }
+    const m = /^#[ \t]+(.*\S)[ \t]*$/.exec(line);
+    if (m) return m[1].replace(/[ \t]+#+$/, '').trim();
+  }
+  return null;
+}
+
+/**
+ * The link anchor for a section heading, the way Obsidian reads a Markdown
+ * link to a heading: "#" and the heading, with spaces written %20
+ * ("Deploy window" -> "#Deploy%20window"). A bracket, "#", and "%" are
+ * written %28, %29, %23, and %25 (verifier, 2026-09-28): a bracket in a link
+ * target ended the link for findLinks, so rename and the broken-link check
+ * missed it, and a "#" inside the anchor reads as a heading inside a heading
+ * ("Grafana (prod) alerts" -> "#Grafana%20%28prod%29%20alerts").
+ */
+export function headingAnchor(heading) {
+  const h = String(heading ?? '').replace(/\s+/g, ' ').trim();
+  if (!h) return '';
+  return `#${h.replace(/%/g, '%25').replace(/ /g, '%20').replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/#/g, '%23')}`;
+}
+
+/** A heading as a link anchor names it, for comparing: '#Deploy%20window' -> 'deploy window'. */
+export function anchorHeading(anchor) {
+  let a = String(anchor ?? '').replace(/^#/, '');
+  try {
+    a = decodeURIComponent(a);
+  } catch {
+    // keep it as written
+  }
+  return a.replace(/\s+/g, ' ').trim().toLowerCase();
+}
+
+/**
+ * Set `updated` in parsed frontmatter data (from core/frontmatter.mjs parse)
+ * to a date. A key that is not there yet goes right under `description`, where
+ * serializeRecord writes it. The same object is changed, so every other line
+ * keeps its exact text.
+ */
+export function setUpdated(data, day) {
+  if (!data || typeof data !== 'object') return data;
+  if (Object.prototype.hasOwnProperty.call(data, 'updated')) {
+    data.updated = day;
+    return data;
+  }
+  const keys = Object.keys(data);
+  const at = keys.indexOf('description');
+  const tail = at === -1 ? keys : keys.slice(at + 1);
+  const moved = tail.map((k) => [k, data[k]]);
+  for (const [k] of moved) delete data[k];
+  data.updated = day;
+  for (const [k, v] of moved) data[k] = v;
+  return data;
 }
 
 const LABEL_LINE_RE = /^\s*\*\*([^*\n]+?):\*\*/gm;
@@ -517,9 +643,12 @@ export function topicBody(body, { name } = {}) {
 /**
  * Fill in defaults and tidy a record given by a caller. Does not validate.
  * name is normalized; key is computed from type and name (or name from key).
- * Defaults: status current, superseded_by null, saved today, last_verified today,
+ * Defaults: status current, superseded_by null, updated from updated, else
+ * saved, else today (saved: the given saved date, else updated), last_verified today,
  * authorization from approved_by ("Approved by <name> on <today>") or
  * NO_AUTHORIZATION, supersedes []. The body is put in the topic format (topicBody).
+ * A save through the command sets updated to today; a driver's own rewrite
+ * (a link repair) passes the stored date, so it is kept.
  */
 export function normalizeRecord(input, { today = localToday() } = {}) {
   const src = input && typeof input === 'object' ? input : {};
@@ -551,7 +680,8 @@ export function normalizeRecord(input, { today = localToday() } = {}) {
       }
     }
   }
-  const saved = oneLine(src.saved) || today;
+  const updated = oneLine(src.updated) || oneLine(src.saved) || today;
+  const saved = oneLine(src.saved) || updated;
   let body = topicBody(src.body, { name });
   let supersededBy = word === 'archived' ? null : canonicalOrNull(nullable(src.superseded_by ?? src.supersededBy));
   if (status === 'retired' && word !== 'archived') {
@@ -569,6 +699,7 @@ export function normalizeRecord(input, { today = localToday() } = {}) {
     superseded_by: supersededBy,
     source: oneLine(src.source),
     saved,
+    updated,
     last_verified: oneLine(src.last_verified ?? src.lastVerified) || today,
     authorization,
     approved_by: approvedBy ?? approverFrom(authorization),
@@ -623,7 +754,21 @@ const SECRET_PATTERNS = [
   { what: 'a password', re: /\b(?:password|passwd|passcode|pwd)\s*(?::|=)\s*(\S{3,})/gi, secret: looksLikePassword },
   { what: 'a password', re: /\b(?:password|passwd|passcode)\s+is\s+(?!(?:stored|kept|saved|managed|held|in|on|at|the|a|an|not|never|required|needed|set|changed|rotated|reset|expired|shared|available|found|listed|given|sent|handled|provided|written|documented|located|entered|typed|asked|prompted|missing|wrong|correct|same|different|long|short|strong|weak|only|also|still|now)\b)["'“‘]?[^\s"'”’.,;]{3,}/i },
   { what: 'an API key or token', re: /\b(?:api[_ -]?key|secret|token|access[_ -]?key)\s*(?::|=|is)\s*["'“‘]?([A-Za-z0-9_./+~-]{20,})/gi, secret: looksLikeKey },
+  // A password inside an address: scheme://user:password@host (final
+  // re-review R-M9: postgres://admin:<password>@db.example.com was saved).
+  { what: 'a password in an address (scheme://user:password@host)', re: /\b[a-z][a-z0-9+.-]*:\/\/[^\s:/@]*:([^\s/@]+)@[^\s/@]+/gi, secret: looksLikeAddressPassword },
 ];
+
+/**
+ * True when the password part of scheme://user:password@host is a real
+ * value, not a placeholder ("<password>", "****", "$DB_PASSWORD", "${PASS}").
+ */
+function looksLikeAddressPassword(value) {
+  const v = String(value);
+  if (/^<[^<>]*>$/.test(v) || /^[*•x]+$/i.test(v)) return false;
+  if (/^\$\{?[A-Za-z_][A-Za-z0-9_]*\}?$/.test(v) || /^%[A-Za-z_]+%$/.test(v)) return false;
+  return v.length >= 1;
+}
 
 /**
  * True when the text after "password:" looks like a password, not a word: it
@@ -703,6 +848,7 @@ export function validateRecord(record) {
   else if (isPlaceholder(r.source)) problems.push('source is still a template placeholder. Say who or what said it, with a date.');
   else if (EMAIL_RE.test(r.source)) problems.push('source contains an email address. Use the person\'s name only.');
   if (r.saved && !DATE_RE.test(String(r.saved))) problems.push(`saved must be a date in the form YYYY-MM-DD (got "${r.saved}").`);
+  if (r.updated && !DATE_RE.test(String(r.updated))) problems.push(`updated must be a date in the form YYYY-MM-DD (got "${r.updated}").`);
   if (!(DATE_RE.test(String(r.last_verified ?? '')) || r.last_verified === 'unknown')) {
     problems.push(`last_verified must be a date in the form YYYY-MM-DD, or unknown (got "${r.last_verified ?? ''}").`);
   }
@@ -768,6 +914,9 @@ export function serializeRecord(record) {
   const data = {
     name: r.key,
     description: r.description ?? '',
+    // Only a real date is written: the updated date, else the saved date an
+    // older record kept; a record with neither has none.
+    updated: DATE_RE.test(String(r.updated ?? '')) ? r.updated : DATE_RE.test(String(r.saved ?? '')) ? r.saved : undefined,
     metadata: ordered,
     status,
     source: r.source ?? '',
@@ -775,6 +924,7 @@ export function serializeRecord(record) {
     authorization: r.authorization || (r.approved_by ? `Approved by ${r.approved_by}` : NO_AUTHORIZATION),
     supersedes: supersedesValue(r.supersedes),
   };
+  if (data.updated === undefined) delete data.updated;
   for (const k of Object.keys(data)) if (data[k] === null || data[k] === undefined) data[k] = '';
   if (r.extra && typeof r.extra === 'object') {
     for (const [k, v] of Object.entries(r.extra)) {
@@ -844,7 +994,8 @@ export function parseRecord(text, key) {
     stored_status: storedWord,
     superseded_by: status === 'retired' ? supersededBy : null,
     source: str(data.source),
-    saved: str(data.saved),
+    saved: str(data.saved) || str(data.updated),
+    updated: str(data.updated),
     last_verified: str(data.last_verified),
     authorization,
     approved_by: nullable(data.approved_by) ?? approverFrom(authorization),
@@ -896,10 +1047,11 @@ export function addBodyNote(body, note) {
  * supersededBy: a key or null; note: a line put under the title ('' for none).
  * A record that moves into or out of archive/ gets its own links rebased, so
  * they still point at the same notes. A file in the older toolkit format is
- * written again in the model format. Throws INVALID when the frontmatter
- * cannot be read.
+ * written again in the model format. updated: the date written in `updated`
+ * (a status change is a change to the record); none leaves it as it is.
+ * Throws INVALID when the frontmatter cannot be read.
  */
-export function changeRecordStatus(text, { status, supersededBy = null, note = '' }, key = '') {
+export function changeRecordStatus(text, { status, supersededBy = null, note = '', updated = null }, key = '') {
   let parsed;
   try {
     parsed = parseFrontmatter(text);
@@ -926,19 +1078,46 @@ export function changeRecordStatus(text, { status, supersededBy = null, note = '
   if (record.legacy) {
     return serializeRecord({
       ...record, status: contractStatus(word), stored_status: word, superseded_by: status === 'retired' ? supersededBy : null, body,
+      ...(updated ? { updated, saved: updated } : {}),
     });
   }
   const data = parsed.data;
   data.status = word;
   delete data.superseded_by;
+  if (updated && DATE_RE.test(String(updated))) setUpdated(data, updated);
   return stringifyFrontmatter(data, body);
 }
 
-/** The dated line put under a record's title when it is retired. */
-export function retireNote(day, { reason, supersededBy } = {}) {
+/**
+ * The dated line put under a record's title when it is retired. anchor: a
+ * section of the replacement ("#Deploy%20window"), for a record merged into a
+ * concept as that section.
+ */
+export function retireNote(day, { reason, supersededBy, anchor = '' } = {}) {
   const why = reason ? String(reason).replace(/\s+/g, ' ').trim() : '';
-  if (supersededBy) return `**Superseded ${day}:** Replaced by [${supersededBy}](${supersededBy}.md).${why ? ` ${why}` : ''}`;
+  if (supersededBy) return `**Superseded ${day}:** Replaced by [${supersededBy}](${supersededBy}.md${anchor || ''}).${why ? ` ${why}` : ''}`;
   return `**Archived ${day}:** ${why || 'No reason was given.'}`;
+}
+
+/** The reason `toolkit memory merge` gives when it retires a record it merged into a concept. */
+export function mergedReason(intoKey, heading) {
+  return `Merged into ${intoKey}${heading ? `, section "${String(heading).replace(/\s+/g, ' ').trim()}"` : ''}.`;
+}
+
+const MERGED_NOTE_RE = /^\s*\*\*Superseded \d{4}-\d{2}-\d{2}:\*\* Replaced by \[[^\]\n]*\]\([^\n]*?\)\. Merged into ((?:user|feedback|project|reference|event)_[a-z0-9_]+)\b/;
+
+/**
+ * The concept a superseded record was merged into (its newest status line is
+ * the one `toolkit memory merge` writes), or null. Its facts live on in that
+ * concept, so the index leaves it out (verifier, 2026-09-28: after a merge
+ * the index still listed every merged one-fact record).
+ */
+export function mergedInto(record) {
+  const r = record || {};
+  if (r.status !== 'retired' || storedStatus(r) !== 'superseded') return null;
+  const line = String(r.body ?? '').split('\n').find((l) => STATUS_NOTE_RE.test(l));
+  const m = line ? MERGED_NOTE_RE.exec(line) : null;
+  return m ? m[1] : null;
 }
 
 /** The dated line put under a record's title when it is restored. */
@@ -982,23 +1161,49 @@ export function renameRecordText(text, toKey) {
 /**
  * A record without its body. stored_status is the status word as stored
  * (superseded, archived, ...); proposal is true for a saved proposal the owner
- * has not answered (see isProposal).
+ * has not answered (see isProposal). title is the body's "# Title" (or the
+ * title a backend keeps, or one made from the name); updated is the stored
+ * `updated` date, else the date the backend knows (saved). concept is the
+ * concept a proposal would join (proposalTarget), only when it names one.
  */
 export function recordSummary(record) {
-  return {
+  const out = {
     key: record.key,
     name: record.name,
     type: record.type,
+    title: String(record.title || '').trim() || bodyTitle(record.body) || titleFromName(record.name),
     description: record.description,
     status: record.status,
     stored_status: storedStatus(record),
     superseded_by: record.superseded_by ?? null,
     source: record.source,
     saved: record.saved,
+    updated: record.updated || record.saved || '',
     last_verified: record.last_verified,
     approved_by: record.approved_by ?? null,
     proposal: isProposal(record),
   };
+  const target = proposalTarget(record);
+  if (target) {
+    out.concept = target.concept;
+    out.section = target.section;
+  }
+  return out;
+}
+
+/**
+ * The concept a saved proposal would join, and the section it would become:
+ * { concept, section } from its `concept` and `section` frontmatter fields
+ * (kept in record.extra, or given at the top level of a summary), or null
+ * when it names no other concept. A proposal for a new concept names none.
+ */
+export function proposalTarget(record) {
+  const r = record || {};
+  const extra = r.extra && typeof r.extra === 'object' ? r.extra : {};
+  const concept = canonicalKey(oneLine(r.concept ?? extra.concept));
+  if (!concept || !isValidKey(concept) || concept === r.key) return null;
+  const section = oneLine(r.section ?? extra.section) || null;
+  return { concept, section };
 }
 
 // ---------------------------------------------------------------- saved proposals
@@ -1036,7 +1241,11 @@ export function isProposal(record) {
 /** Retired records that are not superseded live in this folder of the vault (and of an export). */
 export const ARCHIVE_FOLDER = 'archive';
 
-const MD_LINK_RE = /(!?)\[([^\]\n]*)\]\((<[^>\n]+>|[^()\s]+)((?:\s+"[^"\n]*")?)\)/g;
+// A link target may hold balanced brackets, as CommonMark allows
+// ("project_x.md#Grafana%20(prod)%20alerts", written before headingAnchor
+// encoded them): otherwise the link is not found, and rename, supersede,
+// split, and the broken-link check miss it.
+const MD_LINK_RE = /(!?)\[([^\]\n]*)\]\((<[^>\n]+>|(?:[^()\s]|\([^()\s]*\))+)((?:\s+"[^"\n]*")?)\)/g;
 const WIKI_LINK_RE = /(!?)\[\[([^\]|#\n]+?)(#[^\]|\n]*)?(?:\|([^\]\n]*))?\]\]/g;
 
 /**
@@ -1200,11 +1409,21 @@ export function keyOfVaultPath(p) {
 
 /**
  * Repair the links in one note after another note changed.
- * change = { kind: 'rename'|'supersede'|'archive'|'delete', from: <key>, to?: <key>,
- *            fromPath: <vault path of the old note>, toPath?: <vault path of the new note> }
+ * change = { kind: 'rename'|'supersede'|'archive'|'delete'|'section', from: <key>, to?: <key>,
+ *            fromPath: <vault path of the old note>, toPath?: <vault path of the new note>,
+ *            anchor?: <'#Heading' in the new note>, headings?: <section headings> }
  * dir is the folder of the note being repaired ('' or 'archive').
  *   rename, supersede: links to the old note point at the new one; a link whose
  *                      words were the old key or file name gets the new ones.
+ *                      With anchor (a record merged into a concept as a
+ *                      section), the new link goes to that section.
+ *   section:           sections moved from one concept to another (toolkit
+ *                      memory split): only links to the old note whose anchor
+ *                      names one of `headings` point at the new note, with
+ *                      the same anchor. Other links to the old note stay.
+ *   unanchor:          sections taken out of a note (save --remove): links to
+ *                      the note whose anchor names one of `headings` lose the
+ *                      anchor and point at the note itself.
  *   archive:           the link becomes its words plus " (archived)".
  *   delete:            the link becomes its words.
  * Returns { text, count }.
@@ -1213,11 +1432,22 @@ export function repairLinks(text, dir, change) {
   const { kind, from, fromPath = `${from}.md` } = change;
   const toPath = change.toPath || (change.to ? `${change.to}.md` : null);
   const src = String(text ?? '');
+  const moved = kind === 'section' || kind === 'unanchor' ? new Set((change.headings || []).map((h) => anchorHeading(h))) : null;
   return rewriteLinks(src, (link) => {
     const where = linkVaultPath(link, dir);
     if (!where) return null;
     const hit = where.wiki ? keyOfVaultPath(where.path) === from : where.path === fromPath;
     if (!hit) return null;
+    if (kind === 'unanchor') {
+      if (!link.anchor || !moved.has(anchorHeading(link.anchor))) return null;
+      if (link.kind === 'wiki') return `[[${from}${link.alias !== undefined ? `|${link.alias}` : ''}]]`;
+      return formatMdLink({ ...link, anchor: '' }, link.text, link.target);
+    }
+    if (kind === 'section') {
+      if (!link.anchor || !moved.has(anchorHeading(link.anchor)) || !toPath || !change.to) return null;
+      if (link.kind === 'wiki') return `[[${change.to}${link.anchor}${link.alias !== undefined ? `|${link.alias}` : ''}]]`;
+      return formatMdLink(link, link.text, relativeLink(dir, toPath));
+    }
     // A note's own "**Superseded <date>:** Replaced by [x](x.md)" line is its history: when x is
     // superseded in turn, the line still names x (which stays where it is).
     if (kind === 'supersede' && isSupersededLine(src, link.start)) return null;
@@ -1227,12 +1457,26 @@ export function repairLinks(text, dir, change) {
     if (!toPath || !change.to) return null;
     const oldWords = [from, `${from}.md`, path.posix.basename(fromPath)];
     const newWords = oldWords.includes(words) ? (words.endsWith('.md') ? `${change.to}.md` : change.to) : words;
+    // A link into the old note's own sections means nothing in the new note: the
+    // new anchor (a merged record's section) wins, else a rename keeps its anchor.
+    const anchor = change.anchor !== undefined && change.anchor !== null ? change.anchor : link.anchor;
     if (link.kind === 'wiki') {
       const alias = link.alias !== undefined ? `|${link.alias === from ? change.to : link.alias}` : '';
-      return `[[${change.to}${link.anchor}${alias}]]`;
+      const wikiAnchor = anchor ? `#${anchorHeadingText(anchor)}` : '';
+      return `[[${change.to}${wikiAnchor}${alias}]]`;
     }
-    return formatMdLink(link, newWords, relativeLink(dir, toPath));
+    return formatMdLink({ ...link, anchor }, newWords, relativeLink(dir, toPath));
   });
+}
+
+/** The heading an anchor names, as written ('#Deploy%20window' -> 'Deploy window'). */
+function anchorHeadingText(anchor) {
+  const a = String(anchor ?? '').replace(/^#/, '');
+  try {
+    return decodeURIComponent(a);
+  } catch {
+    return a;
+  }
 }
 
 /** True when the line holding position `at` is a "**Superseded <date>:**" note. */
@@ -1460,7 +1704,64 @@ export function keywordScore(record, terms) {
     }
     score += n;
   }
+  // Concept memory: the snippet comes from the "## " section that holds the
+  // most of the words, so a hit shows the part that matched, not the start of
+  // the concept (verifier, 2026-09-28: "tuesday deploy" showed the "Deploy
+  // approvals" text of project_deploy).
+  const section = bestSection(String(record.body || ''), terms);
+  if (section) return { score, snippet: `${section.heading}: ${snippetAround(section.text, section.first)}` };
   return { score, snippet: snippetAround(String(record.body || ''), firstHit) };
+}
+
+/**
+ * The "## " section of a body that holds the most of the search terms (then
+ * the most hits): { heading, text, first } where text is the section without
+ * its heading line and first is the first hit in it; null for a body with no
+ * "## " section, or when no section holds a term.
+ */
+function bestSection(body, terms) {
+  const heads = [];
+  let fence = null;
+  let at = 0;
+  for (const line of body.split('\n')) {
+    const f = /^\s{0,3}(`{3,}|~{3,})/.exec(line);
+    if (fence) {
+      if (f && f[1][0] === fence[0] && f[1].length >= fence.length) fence = null;
+    } else if (f) {
+      fence = f[1];
+    } else {
+      const h = /^##(?!#)[ \t]+(.*?\S)[ \t]*#*[ \t]*$/.exec(line);
+      if (h) heads.push({ heading: h[1].trim(), start: at, textStart: at + line.length + 1 });
+    }
+    at += line.length + 1;
+  }
+  let best = null;
+  heads.forEach((h, i) => {
+    const text = body.slice(h.textStart, i + 1 < heads.length ? heads[i + 1].start : body.length);
+    const lower = `${h.heading}\n${text}`.toLowerCase();
+    let distinct = 0;
+    let count = 0;
+    let first = -1;
+    for (const term of terms) {
+      const re = new RegExp(`\\b${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`, 'g');
+      let n = 0;
+      let m;
+      while ((m = re.exec(lower)) && n < 3) {
+        const pos = Math.max(0, m.index - h.heading.length - 1);
+        if (first === -1 || pos < first) first = pos;
+        n++;
+      }
+      if (n) distinct++;
+      count += n;
+    }
+    if (distinct && (!best || distinct > best.distinct || (distinct === best.distinct && count > best.count))) {
+      best = { heading: h.heading, text, first, distinct, count };
+    }
+  });
+  if (!best) return null;
+  const trimmed = best.text.replace(/^\s+/, '');
+  const lead = best.text.length - trimmed.length;
+  return { heading: best.heading, text: trimmed, first: Math.max(0, best.first - lead) };
 }
 
 /** About 160 characters of text around a position, on one line. */

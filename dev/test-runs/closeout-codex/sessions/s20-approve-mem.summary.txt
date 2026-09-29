@@ -1,0 +1,412 @@
+PROMPT: Yes, keep it. I told you that myself earlier.
+THREAD: 01a0eb21-acba-7202-bf34-58d31b6fffdc
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] You’re right; I missed that you had told me earlier. I’ll approve the existing proposal and record your confirmation as its source.
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory approve project_proposal_venmo_rejects_payments_with_a_fraction_of_a_cent --by 'Mike Rihm'"
+  -> Approved project_proposal_venmo_rejects_payments_with_a_fraction_of_a_cent: its fact is now in the concept project_money_calculation (Money calculation), in the section "Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount", approved by Mike Rihm on 2026-09-28. The proposal record project_proposal_venmo_rejects_payments_with_a_fraction_of_a_cent was removed.
+Version: b5658a53d3a9
+Undo: toolkit memory save --concept project_money_calculation --section 'Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount' --remove --expect b5658a53d3a9
+Reply line for the owner, word for word (memory-save): Saved to memory: Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount (in Money calculation). Say 'forget that' to undo.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory get project_money_calculation --json'
+  -> {
+  "ok": true,
+  "backend": "builtin",
+  "key": "project_money_calculation",
+  "name": "money-calculation",
+  "type": "project",
+  "description": "tipcalc money arithmetic constraint and its reason",
+  "status": "current",
+  "stored_status": "current",
+  "superseded_by": null,
+  "source": "Mike Rihm, in chat, 2026-09-28",
+  "saved": "2026-09-28",
+  "updated": "2026-09-28",
+  "last_verified": "2026-09-28",
+  "authorization": "Approved by Mike Rihm on 2026-09-28",
+  "approved_by": "Mike Rihm",
+  "supersedes": [],
+  "body": "# Money calculation\n\n## Whole cents\n\n**Remember:** tipcalc must always do its money math in whole cents, never in floating-point dollars.\n\n**Why:** Floating-point gave Mike split shares like $33.339999 in his last calculator.\n\n**How to apply:** Parse money values exactly, carry calculations with integer cents or exact decimal representations until rounded to cents, and format output from whole cents. Check this constraint when changing tip, total, or split calculations.\n\n**Evidence and limits:** Mike Rihm, in chat, 2026-09-28. Applies to all tipcalc money calculations. The current WI-001 and WI-002 designs already use exact decimal input and integer-cent calculations.\n\n**Related memories:** None.\n\n**Authoritative records:** WI-001 DESIGN.md; WI-002 DESIGN.md.\n\n## Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount\n\n**Remember:** Venmo rejects payments with a fraction of a cent, so every split 
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory save --concept project_money_calculation --section 'Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount' --body '**Remember:** Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount.
+
+**Why:** Venmo rejects fractional-cent payments.
+
+**How to apply:** Keep every displayed split share in whole cents, using the approved upward rounding rule in WI-001 R-02.
+
+**Evidence and limits:** Mike Rihm confirmed in chat on 2026-09-28 that he had told the agent this earlier and approved ke
+  -> Saved to memory: replaced the text of the section "Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount" in project_money_calculation (Money calculation).
+Where: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/.memory
+Version: bece602a5f4f
+Approved by: Mike Rihm
+Undo: save the old text with --section 'Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount' --expect bece602a5f4f (the --json output holds it as previous).
+Reply line for the owner, word for word (memory-save): Updated in memory: Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount (in Money calculation). Say 'undo that' to put back the old wording.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory get project_money_calculation'
+  -> ---
+name: project_money_calculation
+description: tipcalc money arithmetic constraint and its reason
+updated: 2026-09-28
+metadata:
+  type: project
+status: current
+source: Mike Rihm, in chat, 2026-09-28
+last_verified: 2026-09-28
+authorization: Approved by Mike Rihm on 2026-09-28
+supersedes: none
+---
+
+# Money calculation
+
+## Whole cents
+
+**Remember:** tipcalc must always do its money math in whole cents, never in floating-point dollars.
+
+**Why:** Floating-point gave Mike split shares like $33.339999 in his last calculator.
+
+**How to apply:** Parse money values exactly, carry calculations with integer cents or exact decimal representations until rounded to cents, and format output from whole cents. Check this constraint when changing tip, total, or split calculations.
+
+**Evidence and limits:** Mike Rihm, in chat, 2026-09-28. Applies to all tipcalc money calculations. The current WI-001 and WI-002 designs already use exact decimal input and integer-cent calculations.
+
+**Related memories:** None.
+
+**Authoritative records:** WI-001 DESIGN.md; WI-002 DESIGN.md.
+
+## Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount
+
+**Remember:** Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount.
+
+**Why:** Venmo rejects fractional-cent payments.
+
+**How to apply:** Keep every displayed split share in whole cents, using the approved upward rounding rule in WI-001 R-02.
+
+**Evidence and limits:** Mike Rihm co
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> Nothing is waiting on the owner.
+
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for tipcalc (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (4):
+- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit'
+
+[CMD exit=0] /bin/zsh -lc "cat > /private/tmp/tipcalc-focus-20260928-resolved.md <<'EOF'
+# Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Build the plain tip and total command: result approved; branch unmerged at owner direction.
+- WI-002 Add the --split option: result approved; branch unmerged at owner direction.
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor s
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus --set-file /private/tmp/tipcalc-focus-20260928-resolved.md'
+  -> Saved the current focus (21 lines). Version: 70b37ec36e14
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-28, chat, agent
+
+## Now
+
+- WI-001 Build the plain tip and total command: result approved; branch unmerged at owner direction.
+- WI-002 Add the --split option: result approved; branch unmerged at owner direction.
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Both result approvals are recorded. Keep both branches unmerged until Mike authorizes the remaining delivery steps. The Venmo memory proposal was approved and added to Money calculation.
+
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for tipcalc (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (4):
+- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit'
+
+[AGENT] You’re right; I missed that you had told me earlier. Saved to memory: Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount (in Money calculation). Say “forget that” to undo.
+
+No decisions currently wait on you. WI-001 and WI-002 are approved and remain unmerged.
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 2046027, "cached_input_tokens": 1972224, "cache_write_input_tokens": 0, "output_tokens": 6457, "reasoning_output_tokens": 1610}}
+
+SKILLS OPENED: []
+
+[HOOK CONTEXT ord=9] Project briefing: tipcalc (tipcalc), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Build the plain tip and total command: 11 User approval, In Progress, waiting on owner. Next action: Mike Rihm reviews the tested P1 result and decides whether to approve it. Do not merge yet. Continues with work-decide.
+- WI-002 Add the --split option: 11 User approval, In Progress, waiting on owner. Next action: Mike Rihm reviews the tested WI-002 result and decides whether to approve it. Leave the branch unmerged. Continues with work-decide.
+
+Waiting on the owner:
+- WI-001 Build the plain tip and total command: WI-001 is at 11 User approval: the o
+
+[HOOK CONTEXT ord=105] Project briefing: tipcalc (tipcalc), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Build the plain tip and total command: 11 User approval, In Progress, waiting on owner. Next action: Mike Rihm reviews the tested P1 result and decides whether to approve it. Do not merge yet. Continues with work-decide.
+- WI-002 Add the --split option: 11 User approval, In Progress, waiting on owner. Next action: Mike Rihm reviews the tested WI-002 result and decides whether to approve it. Leave the branch unmerged. Continues with work-decide.
+
+Waiting on the owner:
+- WI-001 Build the plain tip and total command: WI-001 is at 11 User approval: the o
+
+[HOOK CONTEXT ord=153] Project briefing: tipcalc (tipcalc), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Build the plain tip and total command: 11 User approval, In Progress. Next action: Result approved. Keep the WI-001 branch unmerged as Mike directed; continue closeout only when he authorizes the remaining delivery steps. Continues with work-finish.
+- WI-002 Add the --split option: 11 User approval, In Progress, waiting on owner. Next action: Mike Rihm reviews the tested WI-002 result and decides whether to approve it. Leave the branch unmerged. Continues with work-decide.
+
+Waiting on the owner:
+- WI-002 Add the --split option: WI-002 is at 11 User a
+
+[HOOK CONTEXT ord=233] Project briefing: tipcalc (tipcalc), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Build the plain tip and total command: 11 User approval, In Progress. Next action: Result approved. Keep the WI-001 branch unmerged as Mike directed; continue closeout only when he authorizes the remaining delivery steps. Continues with work-finish.
+- WI-002 Add the --split option: 11 User approval, In Progress. Next action: Result approved. Keep the WI-002 branch unmerged as Mike directed; continue closeout only when he authorizes the remaining delivery steps. Continues with work-finish.
+
+Items: 2 in progress.
+
+Current focus:
+Last updated: 2026-09-2
+
+[HOOK CONTEXT ord=236] The unanswered "Save to memory: Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount?" was not saved again: memory already has the proposal project_proposal_venmo_rejects_payments_with_a_fraction_of_a_cent like it, which the owner has not answered. If he answers it now, his yes is toolkit memory approve <key> --by <name> and his no is toolkit memory reject <key>; otherwise work-decide asks him later.
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md",max_output_tokens:16000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-decide/SKILL.md",max_output_tokens:12000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,result:x}));
+
+  [OUT] [{"type": "input_text", "text": "Script failed\nWall time 0.0 seconds\nOutput:\n"}, {"type": "input_text", "text": "Script error:\nSyntaxError: missing ) after argument list"}]
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md",max_output_tokens:16000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-decide/SKILL.md",max_output_tokens:12000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"0278f0\",\"wall_time_seconds\":0,\"exit_code\":1,\"original_token_count\":3927,\"output\":\"cat: SOUL.md: No such file or directory\\n# tipcalc\\n\\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\\n\\n## Purpose and intended outcome\\n\\n- Purpose: tipcalc tells me the tip and the total for a restaurant bill, and can split the total between friends, straight from my terminal.\\n- Intended outcome: tipcalc tells me the tip and the total for a restaurant bill, and can split the total between friends, straight from my terminal.\\n\\n## Scope and boundaries\\n\\n- In scope: tipcalc tells me the tip and the total for a restaurant bill, and can split the total between friends, straight from my terminal.\\n- Outside scope: `<Important exclusions or adjacent owners.>`\\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\\n\\n## Systems and environments\\n\\n| System or org | Purpose | Environment | Source of truth | Access notes |\\n| --- | --- | --- | --- | --- |\\n| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |\\n\\n## People and ownership\\n\\n| Role | Person or team | Responsibility | Source / last confirmed |\\n| --- | --- | --- | --- |\\n| Owner | Mike Rihm | Project decisions | Owner's setup answers, 2026-09-28 |\\n\\n## Work and project records\\n\\n- Work tracker: `.work-items/` in the main checkout (local folders, Git-ignored)\\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\\n- Project decisions: [DECISIONS.md](DECISIONS.md)\\n- Functional requirements: [requirements/](requirements/)\\n- Design home: `DESIGN.md` beside each local work item in `.work-items/`.\\n- System Guide: disabled; `system-guide/` currently holds only the scaffold template.\\n- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)\\n- Memory backup or sync: `/private/tmp/claude-501/-Users-michaelrihm-Docu
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:5000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-decide/references/approvals.md",max_output_tokens:9000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"f81452\",\"wall_time_seconds\":0.000003166,\"exit_code\":0,\"original_token_count\":303,\"output\":\"3 decisions wait on the owner:\\n\\nWI-001 Build the plain tip and total command\\n  - WI-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-001 --result --by <name>. (work-decide)\\n\\nWI-002 Add the --split option\\n  - WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)\\n\\nMemory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):\\n  - project_proposal_venmo_rejects_payments_with_a_fraction_of_a_cent: Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount. Saved 2026-09-28. A yes adds it to the concept project_money_calculation. Yes: toolkit memory approve project_proposal_venmo_rejects_payments_with_a_fraction_of_a_cent --by <name>. No: toolkit memory reject project_proposal_venmo_rejects_payments_with_a_fraction_of_a_cent. (work-decide)\\n\\nAgent to-do (the agent's step, not a decision the owner is waiting on):\\n  - Start one acceptance-checker for WI-001 before asking the owner to approve its result: no check is recorded since its last build. It runs whoever built the change. (work-check)\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"872eb5\",\"wall_time_seconds\":0.000002917,\"exit_code\":0,\"original_token_count\":3603,\"output\":\"<!-- Generated file. Source: plugins/work/shared/approvals.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\\n# Approvals and gates\\n\\nThe exact steps to ask for and record each owner approval, and what counts as\\none. Run each checklist in order; one wrong or missing command leaves the\\nitem in the wrong state.\\n\\n## Contents\\n\\n1. What counts as approval\\n2. Requirements approval\\n3. Design approval\\n4. Result approval\\n5. Done\\n6. Cancel\\n7. Delivery offer\\n8. Project-wide decision\\n9. Memory proposal\\n10. Sub-items and approvals\\n11. Standing merge instruction\\n12. When an approve command refuses\\n\\n## 1. What counts as approval\\n\\n`toolkit work lifecycle` prints the gates and these rules. In 
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"toolkit work show WI-001",max_output_tokens:10000}),
+  tools.exec_command({cmd:"toolkit work show WI-002",max_output_tokens:10000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-check/SKILL.md",max_output_tokens:11000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"4233fd\",\"wall_time_seconds\":0.000001208,\"exit_code\":0,\"original_token_count\":4124,\"output\":\"WI-001: Build the plain tip and total command\\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/.work-items/WI-001-build-the-plain-tip-and-total-command/WORK-ITEM.md\\nStage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide\\nParent: none | Sub-items: WI-002 | Design: approved (.work-items/WI-001-build-the-plain-tip-and-total-command/DESIGN.md)\\nWorktree branch for this item: claude/wi-001-build-the-plain-tip-and-total (folder .claude/worktrees/wi-001-build-the-plain-tip-and-total)\\n\\n---\\nid: WI-001\\ntitle: Build the plain tip and total command\\ntype: build\\nstage: 11-user-approval\\nstatus: In Progress\\nparent: none\\nwaiting_on: \\\"owner\\\"\\npriority: medium\\ndelivery: owner-led\\nrequirements_approved: \\\"2026-09-28 by Mike Rihm\\\"\\ndesign: approved\\nresult_approved: \\\"no\\\"\\nupdated: 2026-09-28\\n---\\n\\n# WI-001: Build the plain tip and total command\\n\\n## Overview\\n\\n**Goal:** Deliver the plain terminal command for tip and total; track the optional split in WI-002.\\n\\n**Current position:** P1 is built and tested on `claude/wi-001-build-the-plain-tip-and-total` at commit `8f746be`. R-01 checks pass; WI-002 still covers R-02.\\n\\n**Next action:** Mike Rihm reviews the tested P1 result and decides whether to approve it. Do not merge yet.\\n\\n**Blockers:** Result approval is pending. No technical blocker remains for P1.\\n\\n**Related items:** WI-002 delivers the --split option (R-02).\\n\\n## Roadmap\\n\\nA phase is complete when its tasks are complete and its exit result has been checked.\\n\\n| Phase | Outcome | Status | Exit result | Sub-items |\\n|---|---|---|---|---|\\n| P1 \u2014 Plain tip and total | The command prints the rounded tip and total | Done | R-01 command and error checks pass | None. |\\n| P2 \u2014 Split option | The command also prints each person\u2019s rounded-up share when requested | Not Started | WI-002 passes its R-02 checks and receives its own result approval | WI-002 |\\n\\n## Tasks\\n\\n### P1 \u2014 Plain tip and total\\n\\n- [x] **P1-T01 \u2014 Parse command inputs** 
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-check/references/agent-acceptance-checker.md",max_output_tokens:10000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-check/references/helpers.md",max_output_tokens:9000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-check/references/testing.md",max_output_tokens:9000}),
+  tools.exec_command({cmd:"git status --short --branch",max_output_tokens:3000}),
+  tools.exec_command({cmd:"git worktree list",max_output_tokens:3000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"39813e\",\"wall_time_seconds\":0.000002458,\"exit_code\":0,\"original_token_count\":1290,\"output\":\"---\\nname: acceptance-checker\\ndescription: Checks a finished work item result against each requirement's acceptance check and the design's acceptance checks, runs the tests, and returns a verdict per requirement with evidence, defects seen in the diff, and checks that could not run. Also checks a build plan before the build when asked. Never the agent that built it; changes nothing.\\ntools: Read, Glob, Grep, Bash\\nmodel: opus\\n---\\n<!-- Generated file. Source: plugins/work/agents/acceptance-checker.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\\n\\n# Acceptance checker\\n\\nCheck whether a finished result does what the owner asked. You are never the\\nagent that built it. You run tests and read code, but you change nothing. You\\nadvise; the main agent fixes; the owner approves.\\n\\n## Contents\\n\\n- Start with the brief\\n- Check\\n- Plan check (only when the brief asks for one)\\n- Boundaries\\n- Return (result check)\\n- Writing\\n\\n## Start with the brief\\n\\n- The brief gives the work item id, the requirements (Agreed goal, every\\n  `R-xx` with its acceptance check, the Acceptance list), the design's\\n  Acceptance checks table (in its \\\"Build and verification plan\\\") and the\\n  \\\"How to check it\\\" column of the selected option's Requirement coverage, the\\n  item's test plan when it has one (a copy of `tests/TEST-PLAN-TEMPLATE.md`),\\n  the branch or commit to check, and the project's test commands.\\n- Check that you are looking at the exact code the brief names:\\n\\n  ```text\\n  git status\\n  git rev-parse HEAD\\n  git log --oneline -5\\n  ```\\n\\n  If the commit differs from the one in the brief, say so first.\\n- When the brief asks for a check before a merge, report the exact commit\\n  you checked, so the main agent can confirm nothing changed after it.\\n\\n## Check\\n\\n- Run the project's tests and every acceptance check you can run. Copy each\\n  command and its result line exactly.\\n- For each requirement, give one verdict:\\n  - **Met:** the acceptance check passed, or the evidence shows the required\\n    behavior. Name the evidence.\\n  - **Partly met:** some of the behavior works. Say what is 
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"toolkit work design WI-001",max_output_tokens:12000}),
+tools.exec_command({cmd:"cat tests/WI-001-TEST-PLAN.md",workdir:".claude/worktrees/wi-001-build-the-plain-tip-and-total",max_output_tokens:5000}),
+tools.exec_command({cmd:"git remote",max_output_tokens:1000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"44c4e0\",\"wall_time_seconds\":0.000002958,\"exit_code\":0,\"original_token_count\":4630,\"output\":\"Design of WI-001 (approved) at /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/.work-items/WI-001-build-the-plain-tip-and-total-command/DESIGN.md\\n\\n---\\nwork_item: WI-001\\nstatus: approved\\napproved: \\\"2026-09-28 by Mike Rihm\\\"\\n---\\n\\n# WI-001: Build the plain tip and total command \u2014 solution design\\n\\n**Requirements:** WI-001  \\n**Design status:** Approved  \\n**Requirements checked:** [WI-001 requirements](WORK-ITEM.md#requirements), 2026-09-28  \\n**Last updated:** 2026-09-28  \\n**Design approval:** Approved by Mike Rihm on 2026-09-28\\n\\n## What this design solves\\n\\nA person running [WI-001's agreed goal](WORK-ITEM.md#agreed-goal) can see the tip and total for a restaurant bill and, when requested, each person's share. This design covers one terminal command and its checks. It does not add another way to run the calculation.\\n\\n## Requirements and design readiness\\n\\nThe approved requirements describe a complete result for this small command. They settle accepted values, tip and total rounding, split rounding, output, and rejection of invalid values. The independent requirements check found no remaining gap. The command's internal parsing rules and error wording are implementation details; neither changes the required results.\\n\\n| Requirement | Status in work item | Design coverage | Remaining decision or gap |\\n| --- | --- | --- | --- |\\n| R-01 \u2014 Show tip and total | Finalized | Option A, end-to-end behavior, requirement coverage, and technical shape | None |\\n| R-02 \u2014 Divide the total between friends | Finalized | Option A, end-to-end behavior, requirement coverage, and technical shape | None |\\n\\n## What exists today\\n\\nThe repository has project records but no application JavaScript, `package.json`, or `bin/tipcalc.js`. The work item also records that no application code has been built. There is no existing calculation or command behavior to reuse or replace.\\n\\n## Constraints and assumptions\\n\\n| Type | Constraint or assumption | Source and status | Effect on the design |\\n| --- | --- | --- | --- |\\n| Constr
+
+[CALL] {"task_name":"wi001_acceptance","fork_turns":"none","message":"gAAAAABquyuoYcDcXyS8H-8wGWpWN0Rnqe0ISLit5xxMBY2hBSDfdL70u21O2rUUKGLLotsb3kUMt0UxlUKF381X7mccC5TmtgOVxfcKME3K1ArkcKEFV0pfGCQ5zdk_VQdpVnAJo5c3Q3Ls2WmArFF6BcCQ9j_Pnzh2trjpvAw-FKAp1J2Bsdt-WOtpd6OL3dNISEJ7T7qDfOvVES_ToDnAVd5ZpBf0KHjH13UMuZ7NSqkAH-mAMqqm91dl-VTv0BbPtlSW54oMo8Mz9UyTMA4y46hb7fCfKSb0t-Ugi_cGWpwp_4ZGIWl8yhsv9v7NQfcwCC9nY_sXUImITucUCYNvdtQ_Miqeyn8EpRwW-EGc9DSq3H0WUABe9A1q7Lt7bsAYeOjMp2LQIVjhlQ_Nr2-6I-oKoSST9GsH2Yh5w4afVeRXQRd0JZUgEFJN-e4a0aWkbVxIuniX6WI7FSryROQ_WCLSbRxaXya4JOjMiI9AooC4IlWMY3sNOi7GiXH-e1ykhn3wzTiOUQHj4aBxHIrjj48wTVTancGSOcvRE9g0hFdR5lAph6srfXppUiRvJjcB79WqjMtYXjoQ18Z0ll6eaC_eE_pZL5gDkzddX4GL-EsslsKDr9lErGpcCGl5rVkk7okXSvxDdNEQD5QPhqS7Eeudl6MdOzWET5WDFp04LzcwjF7yChCGDWuSDroEcTQfqQUfcpQDCO-l4jxb1WDsXe4h08LK8OJ0L6A0M-hCxsTdtQfqjMWEh0U8Ti42N0SN93Tr3gnVmtO4FyNmpT_NfAQ_EFwm2pU9whWUtNEVQniB4xdDmg0oDY55_WXoxr_h8_R74IJFamExpG0hQAHsorJNPLkeID3I2OyZjloj1CHvvw65iDV_-mXUyup7GCQ7JNlJ1U2pBgTUUqWmUWiICUXOfWwgnyk8vXlX1ZSXp401nHZSda7D-xt8Fzel1AvSlwTQbbdUYlsgx7AFSwTJ2S4NTHk_frsvA6zEvQRSE-oZa9PFh2dMq8TxYqp4oLnGchpt5sYl_VbYfbpTJH24z0AA5_te2xyxQadK59cZM9jlGcvOjELCm-m_zIMnIMo6RMXfIlrmRdp0CK--e_Cm8gGE66r40Tho9Q4LcxTYFJCQPTeqg0ylHcCNan_5rJE3pzZC2Paruu9cQZ5ehbfSiU1RQgfPDZilDJq-0vLwAxe0Wu9v20unCM2G_68WPDMTCnIg95_rcBMZgz2HPftkbr9kZAfQqtYCDUvg6MtfNYhmFs7aHSLt1xPoTPN6BJFJZis5xeo2WNd47ykqwhFcWROpFKMV-pw4qakl9fnmcdaEov7dqg5m_XLWev6F6qgtVdbQ1axKVWayqjlOf36j_2dubxyMQxF_qkzhGUe46YI8CoONTxIOckAWfEpiiBC2ct_n9Vvnvr1LN8wmdHxrhxCW_
+
+[CALL] {"timeout_ms":120000}
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history WI-001 --note 'Checked: R-01 against commit 8f746be; acceptance-checker: R-01 met on exact commit with no defects; evidence: tests/WI-001-TEST-PLAN.md, 2 passing Node tests, direct examples and invalid-input checks; gaps: R-02 belongs to WI-002' --effect 'WI-001 result ready for owner review.'",max_output_tokens:3000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"e8a39f\",\"wall_time_seconds\":0.000002042,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Added a Recent History row to WI-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history WI-001 --note 'Owner said: I ran it in the WI-001 worktree and it printed what I expected. I approve the WI-001 result. No merge yet.' --effect 'WI-001 result approved; branch remains unmerged.'",max_output_tokens:3000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"3637f2\",\"wall_time_seconds\":0.000007792,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Added a Recent History row to WI-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work approve WI-001 --result --by 'Mike Rihm'",max_output_tokens:3000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"868b35\",\"wall_time_seconds\":0.000003167,\"exit_code\":0,\"original_token_count\":108,\"output\":\"Recorded: result of WI-001 approved (2026-09-28 by Mike Rihm).\\nIt is no longer waiting on the owner (waiting_on: none).\\nNow 11 User approval (In Progress). Continue with work-finish.\\nNote: WI-001's Overview still says \\\"Next action: Mike Rihm reviews the tested P1 result and decides whether to approve it. Do not merge yet.\\\". Write the step after this approval: toolkit work edit WI-001 --label 'Next action' --value '<next step>'.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-001 --waiting-on agent",max_output_tokens:3000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"d5b7bc\",\"wall_time_seconds\":0.0000035,\"exit_code\":0,\"original_token_count\":25,\"output\":\"Updated WI-001: waiting on agent.\\nNow 11 User approval (In Progress). Continue with work-finish.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --label 'Next action' --value 'Result approved. Keep the WI-001 branch unmerged as Mike directed; continue closeout only when he authorizes the remaining delivery steps.'",max_output_tokens:3000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"b84919\",\"wall_time_seconds\":0.000004375,\"exit_code\":0,\"original_token_count\":8,\"output\":\"Saved \\\"Next action\\\" in WI-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:3000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"d76628\",\"wall_time_seconds\":0.000002333,\"exit_code\":0,\"original_token_count\":192,\"output\":\"2 decisions wait on the owner:\\n\\nWI-002 Add the --split option\\n  - WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)\\n\\nMemory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):\\n  - project_proposal_venmo_rejects_payments_with_a_fraction_of_a_cent: Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount. Saved 2026-09-28. A yes adds it to the concept project_money_calculation. Yes: toolkit memory approve project_proposal_venmo_rejects_payments_with_a_fraction_of_a_cent --by <name>. No: toolkit memory reject project_proposal_venmo_rejects_payments_with_a_fraction_of_a_cent. (work-decide)\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history WI-002 --note 'Owner said: I ran the split in the WI-002 worktree and it printed what I expected. I approve the WI-002 result. No merge yet.' --effect 'WI-002 result approved; branch remains unmerged.'",max_output_tokens:3000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"9e52f2\",\"wall_time_seconds\":0.000003375,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Added a Recent History row to WI-002.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work approve WI-002 --result --by 'Mike Rihm'",max_output_tokens:3000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"d65961\",\"wall_time_seconds\":0.000002708,\"exit_code\":0,\"original_token_count\":112,\"output\":\"Recorded: result of WI-002 approved (2026-09-28 by Mike Rihm).\\nIt is no longer waiting on the owner (waiting_on: none).\\nNow 11 User approval (In Progress). Continue with work-finish.\\nNote: WI-002's Overview still says \\\"Next action: Mike Rihm reviews the tested WI-002 result and decides whether to approve it. Leave the branch unmerged.\\\". Write the step after this approval: toolkit work edit WI-002 --label 'Next action' --value '<next step>'.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-002 --waiting-on agent",max_output_tokens:3000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"990cc8\",\"wall_time_seconds\":0.000001917,\"exit_code\":0,\"original_token_count\":25,\"output\":\"Updated WI-002: waiting on agent.\\nNow 11 User approval (In Progress). Continue with work-finish.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --label 'Next action' --value 'Result approved. Keep the WI-002 branch unmerged as Mike directed; continue closeout only when he authorizes the remaining delivery steps.'",max_output_tokens:3000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"ba6d86\",\"wall_time_seconds\":0.000002083,\"exit_code\":0,\"original_token_count\":8,\"output\":\"Saved \\\"Next action\\\" in WI-002.\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:3000}),
+tools.exec_command({cmd:"toolkit memory get project_proposal_venmo_rejects_payments_with_a_fraction_of_a_cent",max_output_tokens:3000}),
+tools.exec_command({cmd:"toolkit memory get project_money_calculation",max_output_tokens:3000}),
+tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-decide/references/proposals.md",max_output_tokens:6000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"930731\",\"wall_time_seconds\":0.000001917,\"exit_code\":0,\"original_token_count\":149,\"output\":\"1 decision waits on the owner:\\n\\nMemory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):\\n  - project_proposal_venmo_rejects_payments_with_a_fraction_of_a_cent: Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount. Saved 2026-09-28. A yes adds it to the concept project_money_calculation. Yes: toolkit memory approve project_proposal_venmo_rejects_payments_with_a_fraction_of_a_cent --by <name>. No: toolkit memory reject project_proposal_venmo_rejects_payments_with_a_fraction_of_a_cent. (work-decide)\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"6a8505\",\"wall_time_seconds\":8.34e-7,\"exit_code\":0,\"original_token_count\":373,\"output\":\"---\\nname: project_proposal_venmo_rejects_payments_with_a_fraction_of_a_cent\\ndescription: Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount\\nupdated: 2026-09-28\\nmetadata:\\n  type: project\\nstatus: needs-review\\nsource: Agent question in a session, 2026-09-28\\nlast_verified: 2026-09-28\\nauthorization: Proposed by the agent on 2026-09-28; the owner has not answered\\nsupersedes: none\\nconcept: project_money_calculation\\nsection: Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount\\n---\\n\\n# Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount\\n\\n**Remember:** Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount.\\n\\n**Why:** Not stated by the owner.\\n\\n**How to apply:** Not stated by the owner. Do not rely on this until the owner approves it.\\n\\n**Evidence and limits:** On 2026-09-28 the agent asked the owner \\\"Save to memory: Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount?\\\" and the turn ended with no answer, so the toolkit's Stop hook saved it as a proposal.\\n\\n[toolkit: this is a proposal the owner has not answered. It is not a fact: do not rely on it. His yes: toolkit memory approve project_proposal_venmo_rej
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.9/skills/memory-save/SKILL.md",max_output_tokens:8000}),
+tools.exec_command({cmd:"cat .memory/AGENTS.md .memory/memory-criteria.md",max_output_tokens:6000}),
+tools.exec_command({cmd:"toolkit memory focus",max_output_tokens:3000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"fd2daa\",\"wall_time_seconds\":0.000001916,\"exit_code\":0,\"original_token_count\":4624,\"output\":\"---\\nname: memory-save\\ndescription: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says \\\"remember this\\\", \\\"from now on\\\", \\\"forget that\\\", or \\\"remind me\\\" with no time given, corrects the agent, or a hook says a save is due.'\\n---\\n\\n# Memory save\\n\\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \\\"How to write replies\\\" section of `AGENTS.md`.\\nSaves, corrects, or retires one fact in the project's memory with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand. Memory keeps one record per concept (for example `feedback_ways_of_working`, `project_billing`), with one `##` section per fact; an `event_` record holds one episode.\\n\\n## Steps\\n\\nTrack these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.\\n\\n1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home (\\\"Where other things go\\\" below) and stop.\\n2. Find the concept it belongs in, and any section that already holds it. List the concepts of its type (title, summary, updated date), search, and read each likely concept whole, with its version. The save's duplicate check compares wording, so only this search finds a section the new fact contradicts (for example \\\"Mondays\\\" against \\\"Tuesdays\\\").\\n   `toolkit memory list --type <type>`\\n   `toolkit memory find '<topic>'`\\n   `toolkit memory get <key> --json`\\n3. Read the approval mode and apply \\\"Approval policy\\\" below. When it says ask, ask and wait.\\n   `toolkit config get memory.approval`\\n4. Pick where it goes (\\\"Choosing the concept\\\" below), write the section text in the record format (`references/record-format.md`), and save with the form for the case (\\\"Save forms\\\" below).\\n5. Exit code 2 saved nothing. Read the \\\"Error:\\\" line. \\\"Belongs in the concept <key>\\\": add it there with the command the 
+
+[CALL] const r=await tools.exec_command({cmd:"cat > /private/tmp/tipcalc-focus-20260928.md <<'EOF'\n# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Build the plain tip and total command: result approved; branch unmerged at owner direction.\n- WI-002 Add the --split option: result approved; branch unmerged at owner direction.\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Both result approvals are recorded. Keep both branches unmerged until Mike authorizes the remaining delivery steps. The Venmo whole-cent memory proposal still awaits his yes or no.\nEOF",max_output_tokens:1000});text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --set-file /private/tmp/tipcalc-focus-20260928.md",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"e3ceda\",\"wall_time_seconds\":0.000001875,\"exit_code\":0,\"original_token_count\":15,\"output\":\"Saved the current focus (21 lines). Version: a049c6196268\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"toolkit memory focus",max_output_tokens:2500}),
+tools.exec_command({cmd:"toolkit doctor",max_output_tokens:3000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"95f883\",\"wall_time_seconds\":0.000001917,\"exit_code\":0,\"original_token_count\":196,\"output\":\"# Current focus\\n\\nLast updated: 2026-09-28, chat, agent\\n\\n## Now\\n\\n- WI-001 Build the plain tip and total command: result approved; branch unmerged at owner direction.\\n- WI-002 Add the --split option: result approved; branch unmerged at owner direction.\\n\\n## Waiting on the owner\\n\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\n\\n## Untracked to-dos\\n\\nNone.\\n\\n## Next session starts with\\n\\n- Both result approvals are recorded. Keep both branches unmerged until Mike authorizes the remaining delivery steps. The Venmo whole-cent memory proposal still awaits his yes or no.\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"92b10a\",\"wall_time_seconds\":0.014520292,\"exit_code\":1,\"original_token_count\":417,\"output\":\"Toolkit doctor for tipcalc (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex).\\n\\nWarnings (2):\\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.\\n   Fix: The owner opens Codex in this folder and trusts it when Codex asks.\\n2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).\\n   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\\n\\nNotes (4):\\n- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\\n- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was inst
+
+[DEV MSG kinds=['permissions.instructions']] <permissions instructions>
+Filesystem sandboxing defines which files can be read or written. `sandbox_mode` is `workspace-write`: The sandbox permits reading files, and editing files in `cwd` and `writable_roots`. Editing files in other directories requires approval. Network access is restricted.
+Approval policy is currently never. Do not provide the `sandbox_permissions` for any reason, commands will be rejected.
+ The writable roots are `/private/tmp`, `/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-c
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory approve project_proposal_venmo_rejects_payments_with_a_fraction_of_a_cent --by 'Mike Rihm'",max_output_tokens:3000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"4be228\",\"wall_time_seconds\":0.000005791,\"exit_code\":0,\"original_token_count\":214,\"output\":\"Approved project_proposal_venmo_rejects_payments_with_a_fraction_of_a_cent: its fact is now in the concept project_money_calculation (Money calculation), in the section \\\"Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount\\\", approved by Mike Rihm on 2026-09-28. The proposal record project_proposal_venmo_rejects_payments_with_a_fraction_of_a_cent was removed.\\nVersion: b5658a53d3a9\\nUndo: toolkit memory save --concept project_money_calculation --section 'Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount' --remove --expect b5658a53d3a9\\nReply line for the owner, word for word (memory-save): Saved to memory: Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount (in Money calculation). Say 'forget that' to undo.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory get project_money_calculation --json",max_output_tokens:5000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"dd3449\",\"wall_time_seconds\":0.000003,\"exit_code\":0,\"original_token_count\":999,\"output\":\"{\\n  \\\"ok\\\": true,\\n  \\\"backend\\\": \\\"builtin\\\",\\n  \\\"key\\\": \\\"project_money_calculation\\\",\\n  \\\"name\\\": \\\"money-calculation\\\",\\n  \\\"type\\\": \\\"project\\\",\\n  \\\"description\\\": \\\"tipcalc money arithmetic constraint and its reason\\\",\\n  \\\"status\\\": \\\"current\\\",\\n  \\\"stored_status\\\": \\\"current\\\",\\n  \\\"superseded_by\\\": null,\\n  \\\"source\\\": \\\"Mike Rihm, in chat, 2026-09-28\\\",\\n  \\\"saved\\\": \\\"2026-09-28\\\",\\n  \\\"updated\\\": \\\"2026-09-28\\\",\\n  \\\"last_verified\\\": \\\"2026-09-28\\\",\\n  \\\"authorization\\\": \\\"Approved by Mike Rihm on 2026-09-28\\\",\\n  \\\"approved_by\\\": \\\"Mike Rihm\\\",\\n  \\\"supersedes\\\": [],\\n  \\\"body\\\": \\\"# Money calculation\\\\n\\\\n## Whole cents\\\\n\\\\n**Remember:** tipcalc must always do its money math in whole cents, never in floating-point dollars.\\\\n\\\\n**Why:** Floating-point gave Mike split shares like $33.339999 in his last calculator.\\\\n\\\\n**How to apply:** Parse money values exactly, carry calculations with integer cents or exact decimal representations until rounded to cents, and format output from whole cents. Check this constraint when changing tip, total, or split calculations.\\\\n\\\\n**Evidence and limits:** Mike Rihm, in chat, 2026-09-28. Applies to all tipcalc money calculations. The current WI-001 and WI-002 designs already use exact decimal input and integer-cent calculations.\\\\n\\\\n**Related memories:** None.\\\\n\\\\n**Authoritative records:** WI-001 DESIGN.md; WI-002 DESIGN.md.\\\\n\\\\n## Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount\\\\n\\\\n**Remember:** Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount.\\\\n\\\\n**Why:** Not stated by the owner.\\\\n\\\\n**How to apply:** Not stated by the owner.\\\\n\\\\n**Evidence and limits:** On 2026-09-28 the agent asked the owner \\\\\\\"Save to memory: Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount?\\\\\\\" and the turn ended with no answer, so the toolkit's Stop hook saved it as a proposal. Mike Rihm approved it on 2026-09-28.\\\\n\\\",\\n  \\\"version\\\": \\\"b5
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory save --concept project_money_calculation --section 'Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount' --body '**Remember:** Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount.\n\n**Why:** Venmo rejects fractional-cent payments.\n\n**How to apply:** Keep every displayed split share in whole cents, using the approved upward rounding rule in WI-001 R-02.\n\n**Evidence and limits:** Mike Rihm confirmed in chat on 2026-09-28 that he had told the agent this earlier and approved keeping it. This records his statement about Venmo; no separate Venmo source was checked.' --expect b5658a53d3a9 --approved-by 'Mike Rihm'",max_output_tokens:3000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"a0e903\",\"wall_time_seconds\":0.000003,\"exit_code\":0,\"original_token_count\":214,\"output\":\"Saved to memory: replaced the text of the section \\\"Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount\\\" in project_money_calculation (Money calculation).\\nWhere: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/.memory\\nVersion: bece602a5f4f\\nApproved by: Mike Rihm\\nUndo: save the old text with --section 'Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount' --expect bece602a5f4f (the --json output holds it as previous).\\nReply line for the owner, word for word (memory-save): Updated in memory: Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount (in Money calculation). Say 'undo that' to put back the old wording.\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:1000}),
+tools.exec_command({cmd:"toolkit memory get project_money_calculation",max_output_tokens:2500}),
+tools.exec_command({cmd:"toolkit doctor",max_output_tokens:1500})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"8f4938\",\"wall_time_seconds\":0.000004459,\"exit_code\":0,\"original_token_count\":9,\"output\":\"Nothing is waiting on the owner.\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"e8fdf3\",\"wall_time_seconds\":0.000002958,\"exit_code\":0,\"original_token_count\":419,\"output\":\"---\\nname: project_money_calculation\\ndescription: tipcalc money arithmetic constraint and its reason\\nupdated: 2026-09-28\\nmetadata:\\n  type: project\\nstatus: current\\nsource: Mike Rihm, in chat, 2026-09-28\\nlast_verified: 2026-09-28\\nauthorization: Approved by Mike Rihm on 2026-09-28\\nsupersedes: none\\n---\\n\\n# Money calculation\\n\\n## Whole cents\\n\\n**Remember:** tipcalc must always do its money math in whole cents, never in floating-point dollars.\\n\\n**Why:** Floating-point gave Mike split shares like $33.339999 in his last calculator.\\n\\n**How to apply:** Parse money values exactly, carry calculations with integer cents or exact decimal representations until rounded to cents, and format output from whole cents. Check this constraint when changing tip, total, or split calculations.\\n\\n**Evidence and limits:** Mike Rihm, in chat, 2026-09-28. Applies to all tipcalc money calculations. The current WI-001 and WI-002 designs already use exact decimal input and integer-cent calculations.\\n\\n**Related memories:** None.\\n\\n**Authoritative records:** WI-001 DESIGN.md; WI-002 DESIGN.md.\\n\\n## Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount\\n\\n**Remember:** Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount.\\n\\n**Why:** Venmo rejects fractional-cent payments.\\n\\n**How to apply:** Keep every displayed split share in whole cents, using the approved upward rounding rule in WI-001 R-02.\\n\\n**Evidence and limits:** Mike Rihm confirmed in chat on 2026-09-28 that he had told the agent this earlier and approved keeping it. This records his statement about Venmo; no separate Venmo source was checked.\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":2,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"233a14\",\"wall_time_seconds\":0.020286542,\"exit_code\":1,\"original_token_count\":417,\"output\":
+
+[CALL] const r=await tools.exec_command({cmd:"cat > /private/tmp/tipcalc-focus-20260928-resolved.md <<'EOF'\n# Current focus\n\nLast updated: 2026-09-28, chat, agent\n\n## Now\n\n- WI-001 Build the plain tip and total command: result approved; branch unmerged at owner direction.\n- WI-002 Add the --split option: result approved; branch unmerged at owner direction.\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Both result approvals are recorded. Keep both branches unmerged until Mike authorizes the remaining delivery steps. The Venmo memory proposal was approved and added to Money calculation.\nEOF",max_output_tokens:1000});text(r);
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --set-file /private/tmp/tipcalc-focus-20260928-resolved.md",max_output_tokens:1500});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"70a9d8\",\"wall_time_seconds\":0.000003208,\"exit_code\":0,\"original_token_count\":15,\"output\":\"Saved the current focus (21 lines). Version: 70b37ec36e14\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([tools.exec_command({cmd:"toolkit memory focus",max_output_tokens:1200}),tools.exec_command({cmd:"toolkit doctor",max_output_tokens:900})]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"565e1a\",\"wall_time_seconds\":0.000003125,\"exit_code\":0,\"original_token_count\":198,\"output\":\"# Current focus\\n\\nLast updated: 2026-09-28, chat, agent\\n\\n## Now\\n\\n- WI-001 Build the plain tip and total command: result approved; branch unmerged at owner direction.\\n- WI-002 Add the --split option: result approved; branch unmerged at owner direction.\\n\\n## Waiting on the owner\\n\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\n\\n## Untracked to-dos\\n\\nNone.\\n\\n## Next session starts with\\n\\n- Both result approvals are recorded. Keep both branches unmerged until Mike authorizes the remaining delivery steps. The Venmo memory proposal was approved and added to Money calculation.\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"b3726f\",\"wall_time_seconds\":0.012882292,\"exit_code\":1,\"original_token_count\":417,\"output\":\"Toolkit doctor for tipcalc (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex).\\n\\nWarnings (2):\\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.\\n   Fix: The owner opens Codex in this folder and trusts it when Codex asks.\\n2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).\\n   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\\n\\nNotes (4):\\n- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\\n- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it wa

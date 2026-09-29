@@ -91,11 +91,11 @@ shape Claude Code sends, in a copy of the test project. Full output:
 
 | Hook | Input | Result |
 | --- | --- | --- |
-| PreToolUse | `git commit -m 'Add greet' -m 'Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>'` | deny: "This commit message gives an AI credit: ... Remove that line and run the command again. Nothing was committed." |
-| PreToolUse | `git commit -F - <<'EOF'` with the line `🤖 Generated with [Claude Code](https://claude.com/claude-code)` | deny |
-| PreToolUse | `git commit -m "$(cat <<'EOF' ... Co-Authored-By: Claude <noreply@anthropic.com> ... EOF)"` | deny |
-| PreToolUse | `git commit -m 'Add greet' --trailer 'Co-authored-by: Claude <noreply@anthropic.com>'` | deny |
-| PreToolUse | `gh pr create --title 'Add greet' --body '... Generated with Claude Code'` | deny: "This pull request text gives an AI credit ... No pull request was created or changed." |
+| PreToolUse | `git commit -m 'Add greet' -m '<AI co-author line>'` | deny: "This commit message gives an AI credit: ... Remove that line and run the command again. Nothing was committed." |
+| PreToolUse | `git commit -F - <<'EOF'` with the line `<AI Generated-with line>` | deny |
+| PreToolUse | `git commit -m "$(cat <<'EOF' ... <AI co-author line> ... EOF)"` | deny |
+| PreToolUse | `git commit -m 'Add greet' --trailer '<AI co-author line>'` | deny |
+| PreToolUse | `gh pr create --title 'Add greet' --body '... <AI Generated-with line>'` | deny: "This pull request text gives an AI credit ... No pull request was created or changed." |
 | PreToolUse | `git commit -m 'Add greet'` | no output: the command may run |
 | PreToolUse | `git commit ... -m 'Co-Authored-By: Sam Lee <sam@example.com>'` (a person) | no output: the command may run |
 | UserPromptSubmit | "Remember that the greet demo is on Friday. Reply with only OK." | the keep reminder |

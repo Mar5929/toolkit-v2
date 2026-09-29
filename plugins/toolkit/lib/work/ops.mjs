@@ -23,7 +23,7 @@ import {
 } from './model.mjs';
 import { RECORD_FILE, DESIGN_FILE, loadTemplate } from './templates.mjs';
 import { TRACKER_DIR } from './state.mjs';
-import { isDesignQuestion, isResultQuestion, isDeliveryQuestion, isRequirementsQuestion } from './decisions.mjs';
+import { isDesignQuestion, isResultQuestion, isDeliveryQuestion, isRequirementsQuestion, acceptanceCheckRecorded, acceptanceCheckNote } from './decisions.mjs';
 
 const MAX_TRIES = 6;
 
@@ -324,6 +324,11 @@ export async function opSet(tracker, id, opts = {}, { today, dryRun = false, own
   const newStage = stageNumber(res.record.meta.stage);
   if (stage && newStage !== null && newStage < 3 && isApproved(res.record.meta.requirements_approved)) {
     res.notes.push(`${res.id} is back at ${stageShort(res.record.meta.stage)} with a recorded requirements approval (${res.record.meta.requirements_approved}). It stays on the record, but it covered the requirements as they were: after they change, ask the owner again and record his answer with toolkit work approve ${res.id} --requirements --by <name>.`);
+  }
+  // The acceptance check before a result approval (the owner's decision of
+  // 2026-09-28; final re-review R-B1): a note, never a refusal.
+  if (stage && newStage === 11 && !acceptanceCheckRecorded(res.record.body)) {
+    res.notes.push(`Note: ${acceptanceCheckNote(res.id, 'stage')}`);
   }
   // The delivery chosen for a goal covers the sub-items that were not asked about.
   if (res.deliveryChanged && ['agent-led', 'owner-led'].includes(res.record.meta.delivery)) {
@@ -628,6 +633,7 @@ export async function opApprove(tracker, project, id, { what, by, today } = {}) 
       patch.result_approved = approval;
       const n = stageNumber(rec.meta.stage);
       if (n !== null && n < 9) warnings.push(`${rec.id} is at ${stageShort(rec.meta.stage)}; a result is usually approved at 11 User approval.`);
+      if (!acceptanceCheckRecorded(rec.body)) warnings.push(acceptanceCheckNote(rec.id, 'approve'));
       effect = `The result can be shipped and finished (work-finish).${waitNote}`;
       body = addHistory(body, { date, change: `Result approved by ${who}.`, effect });
     }
@@ -1124,8 +1130,28 @@ export async function opEdit(tracker, id, { section, text, appendRow, label, val
     // The PostToolUse hook checks only direct file edits, so the command says
     // what its own edit broke (sample run a, round 3: a Roadmap status
     // "Complete" was saved with no word until validate ran two sessions later).
-    return { id: rec.id, changed: true, record: back, warnings: newProblems(tracker, rec, back) };
+    const warnings = newProblems(tracker, rec, back);
+    if (appendRow !== undefined && appendRow !== null) {
+      const note = questionRowNote(rec.id, section, appendRow, tracker.ownerName);
+      if (note) warnings.push({ level: 'note', code: 'QUESTION_WITHOUT_RECOMMENDATION', message: note });
+    }
+    return { id: rec.id, changed: true, record: back, warnings };
   });
+}
+
+/**
+ * A note for a new Open Questions row for the owner that holds no
+ * recommendation. A question asked with one keeps it in the row, so a later
+ * session knows what "go with your recommendation" means (final runs,
+ * claude-local problem 4 and codex-local finding 2: a fresh session could not
+ * match it, and one presented a new rule as the one he had approved).
+ */
+export function questionRowNote(id, section, rowText, ownerName = null) {
+  if (String(section || '').trim().toLowerCase() !== 'open questions') return null;
+  const cells = splitRowText(rowText);
+  const q = { id: cells[0] || '', question: cells[1] || '', affects: cells[2] || '', status: cells[3] || '', from: cells[4] || '', placeholder: false };
+  if (!isOpenOwnerQuestion(q, ownerName) || /\brecommend/i.test(q.question)) return null;
+  return `${q.id || 'The new question'} holds no recommendation. When you gave the owner one with the question, add it to the Question cell ("<question> Recommended: <answer>, because <reason>."), so a later session knows what "go with your recommendation" means.`;
 }
 
 /** Validation problems the saved record has that it did not have before the edit, as { level, message }. */

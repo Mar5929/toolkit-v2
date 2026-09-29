@@ -1,6 +1,6 @@
 {
   "name": "memory",
-  "version": "0.2.7",
+  "version": "0.2.9",
   "description": "Saves, finds, and tidies what a project should remember: lasting facts, the current focus, and the glossary, in the built-in .memory/ folder, local Hindsight, or Notion.",
   "author": {
     "name": "Mike Rihm",

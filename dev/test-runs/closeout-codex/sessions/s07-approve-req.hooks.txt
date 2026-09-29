@@ -1,0 +1,62 @@
+=== HOOK additional_context (ordinal 9, ts 2026-09-29T02:37:21.033Z)
+Project briefing: tipcalc (tipcalc), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The backlog has 1 item; toolkit work next suggests which to take up.
+
+Waiting on the owner:
+- WI-001 Build the tip command: WI-001 is waiting on the owner (02 Refinement). Next action: Request explicit requirements approval. (work-decide)
+
+Items: 1 in the backlog.
+
+Current focus:
+Last updated: 2026-09-28, chat, agent
+## Now
+- WI-001 Build the tip command
+## Waiting on the owner
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+## Untracked to-dos
+None.
+## Next session starts with
+- Continue WI-001 from its Resume here: request explicit requirements approval before design or build.
+
+Project memory (builtin): 1 record. toolkit memory find searches it; toolkit memory get <key> reads one record.
+
+Memory records:
+- user_working_preferences: How Mike prefers to review and approve results
+
+Setup warnings (toolkit doctor lists every check; the project-setup skill fixes them):
+- Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off. Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+- Codex ran this Toolkit V2 hook, but ~/.codex/config.toml has no trust entry for the Toolkit V2 hooks. Codex runs untrusted hooks only when it is started with --dangerously-bypass-hook-trust; a normal Codex session skips them. Fix: The owner opens /hooks in Codex and trusts the Toolkit V2 hooks; toolkit doctor checks it.
+
+Always-on rules. Claude Code loads them by itself; in Codex, each one is read at session start:
+- .claude/rules/humanize-outbound-text.md: Humanize Anything Sent to Another Person
+- .claude/rules/keep-work-item-current.md: Keep the Active Work Item Accurate
+- .claude/rules/memory-review-and-save.md: Review and Save Project Memory
+- .claude/rules/plain-english-artifacts.md: Write Artifacts in Plain English
+- .claude/rules/session-handoff.md: Prepare a Session Handoff
+- .claude/rules/shared-repository-work.md: Work Safely in a Shared Repository
+- .claude/rules/work-item-folders.md: Local Work-Item Folders
+
+How to write replies (from AGENTS.md):
+Claude Code applies the Plain English output style to chat. Codex and helper agents follow these lines instead.
+
+- Start with the answer, result, or current status. Answer what was asked. Keep it short; add detail when asked.
+- Use ordinary words. Explain an unfamiliar term the first time it matters. Use the exact name a system uses, the same way every time.
+- Write literally: no metaphors, idioms, jokes, or picture words in place of the real name. State the point directly, without a "not this, but that" setup.
+- Use paragraphs for a connected explanation, bullets for separate items or choices, and a heading only when it names what is under it.
+- When asking for a decision, name the choice and the difference that matters, and recommend one.
+- Use the exact status word: written, built, tested, merged, installed, or seen working. Say something works only when you saw it work.
+- Leave out routine narration of process and helper activity. Give one direct line when the owner lost something, an action cannot be undone, work waits on the owner, or there is a cost.
+
+=== HOOK BLOCK in tool output (ts 2026-09-29T02:37:58.953Z)
+[{'type': 'input_text', 'text': 'Script failed\nWall time 0.1 seconds\nOutput:\n'}, {'type': 'input_text', 'text': "Script error:\nCommand blocked by PreToolUse hook: .work-items/WI-001-build-the-tip-command/WORK-ITEM.md is a work item record, and a script would change it past the toolkit's checks and its record of what it wrote. Use toolkit work edit <id> --section '<heading>' --set-file <file> for text, and toolkit work set, approve, design, move, finish, or cancel for the header fields. Nothing was changed. Command: python3 - <<'PY'\nfrom pathlib import Path\np=Path('.work-items/WI-001-build-the-tip-command/WORK-ITEM.md')\ns=p.read_text()\na=s.index('#### R-01 — Show tip and total')\nb=s.index('### Acceptance',a)\nt=s[a:b]\nt=t.replace('**Status:** Refining', '**Status:** Finalized')\nt=t.replace('Owner clarified Total rounding, 2026-09-28.', 'Owner clarified Total rounding, 2026-09-28. Approved by Mike Rihm on 2026-09-28 after the owner said, “I approve the WI-001 requirements.”')\nPath('/tmp/wi-001-active-requirements.txt').write_text(t)\nPY"}]
+
+=== HOOK BLOCK in tool output (ts 2026-09-29T02:45:28.300Z)
+[{'type': 'input_text', 'text': 'Script failed\nWall time 0.1 seconds\nOutput:\n'}, {'type': 'input_text', 'text': "Script error:\nCommand blocked by PreToolUse hook: .work-items/WI-001-build-the-tip-command/WORK-ITEM.md is a work item record, and a script would change it past the toolkit's checks and its record of what it wrote. Use toolkit work edit <id> --section '<heading>' --set-file <file> for text, and toolkit work set, approve, design, move, finish, or cancel for the header fields. Nothing was changed. Command: python3 - <<'PY'\nfrom pathlib import Path\np=Path('/var/folders/rw/v2t0rhbs65g84mbl3h2ttfj40000gn/T/tmp.ocBiDrpNBM/option-a.md')\ns=p.read_text()\ns=s.replace('half-up integer division produce', 'half-up whole-number division, which discards fractions, produces')\ns=s.replace('.work-items/WI-001-build-the-tip-command/WORK-ITEM.md', 'WORK-ITEM.md')\np.write_text(s)\nPY"}]
+

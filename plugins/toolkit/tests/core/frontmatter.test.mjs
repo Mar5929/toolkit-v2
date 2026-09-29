@@ -487,7 +487,8 @@ for (const [label, root] of [['the approved model project', APPROVED_MODEL], ['t
 test('the model topic template: metadata.type is read from the nested map, and changing it keeps every other line', () => {
   const text = fs.readFileSync(templatePath('memory/topic'), 'utf8');
   const { data, body } = parse(text);
-  assert.deepEqual(Object.keys(data), ['name', 'description', 'metadata', 'status', 'source', 'last_verified', 'authorization', 'supersedes']);
+  // Concept memory (2026-09-28): the template's updated date sits under the one-line summary.
+  assert.deepEqual(Object.keys(data), ['name', 'description', 'updated', 'metadata', 'status', 'source', 'last_verified', 'authorization', 'supersedes']);
   assert.deepEqual(data.metadata, { type: 'project' });
   const next = update(text, { 'metadata.type': 'feedback', name: 'feedback_x', status: 'current' });
   const before = text.split('\n');

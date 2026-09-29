@@ -186,10 +186,10 @@ For step 7.
   satisfied) with evidence, plus findings on the goal, unnecessary custom
   work, sources, and writing. The critic is skipped only in a session with
   no agent tool at all (no Agent tool in Claude Code, no `spawn_agent` in
-  Codex), or when the owner said no to helpers. Then the reply and the
-  design's Notes say that no critique ran. Owner-led delivery ("no agent
-  team", "keep it owner-led") is a delivery choice, not a no to helpers: the
-  critic still runs.
+  Codex), or when the owner said no to helper agents at all. Then the reply
+  and the design's Notes say that no critique ran. Owner-led delivery ("no
+  agent team", "keep it owner-led") and a no to the team question are
+  delivery choices, not a no to helpers: the critic still runs.
 - **Fix loop.** Give the critic's findings to the architect. The architect
   fixes the draft and lists what changed. The critic checks again. Repeat
   until every requirement is satisfied and nothing material remains.

@@ -3,7 +3,8 @@
 //   .work-items/.toolkit-state.json, .memory/MEMORY.md,
 //   ai-external-knowledge/INDEX.md;
 // - git clean with -x or -X in the main checkout of a project that keeps
-//   Git-ignored data (critique I17);
+//   Git-ignored data (critique I17), and rm -r of .work-items/ or .memory/
+//   there (final re-review R-M10);
 // - git add -A / --all / ., git commit -a / --no-verify, and force pushes (the
 //   model project's settings deny list, now in both hosts, critique P11).
 // - shell writes of a work item record or a generated file, and file edits
@@ -36,7 +37,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { denyOutput, contextOutput } from './output.mjs';
 import { findProject, trackerType, memoryType } from './common.mjs';
-import { checkGit, toolkitCommands, allCommands, stripPrefix, checkAiCredit, backtickInDoubleQuotes, backtickInUnquotedHeredoc, substitutionInDoubleQuotes, codexApostropheProblem } from './shell.mjs';
+import { checkGit, toolkitCommands, allCommands, stripPrefix, checkAiCredit, backtickInDoubleQuotes, backtickInUnquotedHeredoc, substitutionInDoubleQuotes, codexApostropheProblem, recursiveRemovePaths } from './shell.mjs';
 import { editedPaths, generatedFile, mightMatter, GENERATED } from './paths.mjs';
 
 const RECORD_TEXT = /WORK-ITEM\.md|DESIGN\.md|DASHBOARD\.md|\.toolkit-state\.json|MEMORY\.md|INDEX\.md/;
@@ -117,6 +118,44 @@ function fileReader(cwd) {
   };
 }
 
+const DATA_FOLDERS = {
+  '.work-items': { uses: (project) => trackerType(project) === 'local', what: 'the work items' },
+  '.memory': { uses: (project) => memoryType(project) === 'builtin', what: 'the memory records' },
+};
+
+function realOrSame(p) {
+  try {
+    return fs.realpathSync(p);
+  } catch {
+    return p;
+  }
+}
+
+/**
+ * The data folder (.work-items or .memory) of the main checkout that a
+ * recursive rm deletes, whole or everything inside it, or null. Both folders
+ * are Git-ignored and exist only on this disk and in backups (final re-review
+ * R-M10; the git clean -x guard is refused for the same reason).
+ */
+export function removedDataFolder(paths, cwd, project) {
+  const root = project.mainRoot || project.root;
+  for (const raw of paths) {
+    const p = String(raw).replace(/\/\*$/, '').replace(/\/\.?$/, '').replace(/\/+$/, '');
+    if (!p || /[*?[]/.test(p)) continue;
+    const abs = realOrSame(path.resolve(cwd, p));
+    for (const [folder, info] of Object.entries(DATA_FOLDERS)) {
+      if (!info.uses(project)) continue;
+      if (abs === realOrSame(path.join(root, folder))) return { folder, what: info.what };
+    }
+  }
+  return null;
+}
+
+/** Why a recursive delete of a data folder is refused. */
+export function removeDataReason(hit) {
+  return `rm -r on ${hit.folder}/ deletes ${hit.what} of this project. ${hit.folder}/ is Git-ignored on purpose, so Git cannot bring it back. Nothing was deleted. To end one work item use toolkit work cancel, and to clean up memory use the memory-tidy skill; toolkit export --to <folder> makes a backup first. If the owner wants the folder gone, he deletes it himself.`;
+}
+
 /**
  * The PreToolUse hook. In Codex a refusal's reason is shown as
  * "Command blocked by PreToolUse hook: <reason>. Command: ...", so a reason
@@ -146,10 +185,15 @@ async function decide(input, io) {
     const backtick = cmd.includes('`') && TOOLKIT_TEXT.test(cmd) && backtickInDoubleQuotes(cmd);
     const heredoc = !backtick && cmd.includes('<<') && TOOLKIT_TEXT.test(cmd) && backtickInUnquotedHeredoc(cmd);
     const substitution = !backtick && !heredoc && cmd.includes('$(') && TOOLKIT_TEXT.test(cmd) && substitutionInDoubleQuotes(cmd);
-    if (!gitMatters && !recordMatters && !chainNote && !apostrophe && !credit && !backtick && !heredoc && !substitution) return null;
+    const removes = /\brm\b/.test(cmd) && /\.(?:work-items|memory)\b/.test(cmd) ? recursiveRemovePaths(cmd) : [];
+    if (!gitMatters && !recordMatters && !chainNote && !apostrophe && !credit && !backtick && !heredoc && !substitution && !removes.length) return null;
     const project = findProject(cwd);
     if (!project) return null;
     if (credit) return denyOutput(aiCreditReason(credit));
+    if (removes.length) {
+      const hit = removedDataFolder(removes, cwd, project);
+      if (hit) return denyOutput(removeDataReason(hit));
+    }
     if (backtick) return denyOutput(BACKTICK_REASON);
     if (heredoc) return denyOutput(HEREDOC_REASON);
     if (gitMatters) {

@@ -5,7 +5,7 @@ This file is the project-specific selection policy: what is worth keeping in las
 
 ## Default test for lasting memory
 
-Save a topic when it concerns this project, has a credible source, would matter in a future session, would be costly or unreliable to reconstruct, and has no better maintained owner. Prefer updating an existing topic. A short pointer to an authoritative record can qualify when future sessions would otherwise miss that record.
+Save a topic when it concerns this project, has a credible source, would matter in a future session, would be costly or unreliable to reconstruct, and has no better maintained owner. Prefer updating an existing topic: a new fact goes under a heading in the topic file for its concept, and a new file is only for a new concept. A short pointer to an authoritative record can qualify when future sessions would otherwise miss that record.
 
 | Type and filename | Usually worth retaining | Route or reject instead |
 | --- | --- | --- |
@@ -13,7 +13,7 @@ Save a topic when it concerns this project, has a credible source, would matter 
 | `feedback_<topic>.md` | Repeated or standing correction to how the agent should work; confirmed selection lesson | One-off irritation, a rejected fact restated as policy, an instruction already in `AGENTS.md` |
 | `project_<topic>.md` | Durable project constraint, rationale, technical landmark, or proven costly fix | A decision for the whole project (`DECISIONS.md`), code summary, schema copy, active ticket status, accepted requirement or design body |
 | `reference_<topic>.md` | Hard-to-rediscover route to a source, system, dashboard, or decision record, with why to open it | Entire outside page or a path already obvious in `PROJECT.md` or the project map |
-| `event_<topic>.md` | Significant project episode: what was done, what resulted, and where the output lives | Routine edit, tool call, raw error, daily progress log |
+| `event_<topic>.md` | Significant project episode, one per file: what was done, what resulted, and where the output lives | Routine edit, tool call, raw error, daily progress log |
 
 ## Working context is different
 

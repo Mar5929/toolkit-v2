@@ -31,6 +31,12 @@
 // Works with every backend through the MemoryDriver methods: list() gives the
 // descriptions; find() on the new record's words gives at most MAX_BODIES
 // records whose bodies are read with get().
+//
+// Concept memory (Mike, 2026-09-28): a record holds one fact per "## "
+// section, so the durable point of every section is compared (bodyPoints),
+// and a match names the section that holds the same fact. Which concept a new
+// fact belongs to is a different question, answered by suggestConcept in
+// lib/memory/concepts.mjs.
 
 import { isProposal, searchTerms } from './contract.mjs';
 
@@ -166,6 +172,41 @@ export function pointWords(body) {
   return bodyWords(pointText(body));
 }
 
+/**
+ * The durable points of a body, one per part (concept memory): the text before
+ * the first "## " section, then each section, each read with pointText().
+ * [{ heading, text }], heading null for the part before the first section.
+ * Parts with no search words are left out. A body with no "## " section gives
+ * one point, as pointText() does.
+ */
+export function bodyPoints(body) {
+  const parts = [];
+  let cur = { heading: null, lines: [] };
+  let fence = null;
+  for (const line of String(body ?? '').replace(/\r\n/g, '\n').split('\n')) {
+    const f = /^\s{0,3}(`{3,}|~{3,})/.exec(line);
+    if (fence) {
+      if (f && f[1][0] === fence[0] && f[1].length >= fence.length) fence = null;
+      cur.lines.push(line);
+      continue;
+    }
+    if (f) {
+      fence = f[1];
+      cur.lines.push(line);
+      continue;
+    }
+    const h = /^##(?!#)[ \t]+(.*\S)[ \t]*$/.exec(line);
+    if (h) {
+      parts.push(cur);
+      cur = { heading: h[1].trim(), lines: [] };
+      continue;
+    }
+    cur.lines.push(line);
+  }
+  parts.push(cur);
+  return parts.map((p) => ({ heading: p.heading, text: pointText(p.lines.join('\n')) })).filter((p) => bodyWords(p.text).length);
+}
+
 /** The share of words two lists have in common (0 to 1): shared / all. */
 export function overlap(a, b) {
   const A = new Set(a);
@@ -196,24 +237,42 @@ export function compareRecords(a, b) {
   const descOk = description === 1 || (new Set([...da, ...db]).size >= MIN_WORDS && description >= SIMILAR_AT);
   let body = 0;
   let bodyOk = false;
+  let closeBody = false;
+  let section = null;
   if (a.body !== undefined && b.body !== undefined) {
-    const ba = pointWords(a.body);
-    const bb = pointWords(b.body);
-    body = overlap(ba, bb);
-    bodyOk = Math.min(new Set(ba).size, new Set(bb).size) >= MIN_BODY_WORDS && body >= SIMILAR_AT;
+    // Concept memory: a record holds one point per "## " section, so every
+    // point of one is compared with every point of the other, and the section
+    // of b that matched is named.
+    let bestCounted = -1;
+    let closeAt = null;
+    for (const x of bodyPoints(a.body)) {
+      const wa = bodyWords(x.text);
+      for (const y of bodyPoints(b.body)) {
+        const wb = bodyWords(y.text);
+        const o = overlap(wa, wb);
+        if (o > body) body = o;
+        if (Math.min(new Set(wa).size, new Set(wb).size) < MIN_BODY_WORDS) continue;
+        if (o > bestCounted) {
+          bestCounted = o;
+          if (o >= SIMILAR_AT) section = y.heading;
+        }
+        if (!closeAt && o >= TOP_HIT_AT && !differsByValue(x.text, y.text)) closeAt = y;
+      }
+    }
+    bodyOk = bestCounted >= SIMILAR_AT;
+    closeBody = Boolean(closeAt);
+    if (!bodyOk && closeAt) section = closeAt.heading;
   }
   // Close enough when it is also the search's first match (findSimilar): the
   // same word minimums, and TOP_HIT_AT instead of SIMILAR_AT.
   // Not when the words that differ are names, values, or opposites (differsByValue).
   const descMin = Math.min(da.length, db.length);
   const closeDesc = descMin >= MIN_WORDS && description >= TOP_HIT_AT && !differsByValue(a.description, b.description);
-  const closeBody = bodyCounted(a, b) && body >= TOP_HIT_AT && !differsByValue(pointText(a.body), pointText(b.body));
-  return { description, body, similar: descOk || bodyOk, close: closeDesc || closeBody, why: descOk ? 'a very similar description' : bodyOk ? 'very similar text' : null };
-}
-
-function bodyCounted(a, b) {
-  if (a.body === undefined || b.body === undefined) return false;
-  return Math.min(new Set(pointWords(a.body)).size, new Set(pointWords(b.body)).size) >= MIN_BODY_WORDS;
+  return {
+    description, body, similar: descOk || bodyOk, close: closeDesc || closeBody,
+    why: descOk ? 'a very similar description' : bodyOk ? 'very similar text' : null,
+    section: descOk ? null : section,
+  };
 }
 
 /**
@@ -236,6 +295,8 @@ export async function findSimilar(driver, record, { skip = [] } = {}) {
       status: summary.status,
       proposal: Boolean(summary.proposal ?? isProposal(summary)),
       why: cmp.why,
+      // Concept memory: the section of that record that holds the same fact.
+      ...(cmp.section ? { section: cmp.section } : {}),
       score,
     });
   };

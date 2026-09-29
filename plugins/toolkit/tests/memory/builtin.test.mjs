@@ -10,6 +10,7 @@ import { EXIT } from '../../lib/core/output.mjs';
 import { FOCUS_SECTIONS, normalizeRecord, serializeRecord } from '../../lib/memory/contract.mjs';
 import { readTemplate, templatePath } from '../../lib/core/templates.mjs';
 import { addWorktree, body, cleanup, makeProject, runToolkit, tempDir } from './helpers.mjs';
+import { today } from '../../lib/core/util.mjs';
 
 after(cleanup);
 
@@ -64,14 +65,14 @@ test('save, get, list, find, retire, restore, delete: the full record lifecycle'
   assert.deepEqual((await d.list({ status: 'retired' })).map((r) => r.key), ['project_payments_api']);
   assert.equal((await d.find('payments')).results.length, 0);
   assert.equal((await d.find('payments', { all: true })).results.length, 1);
-  assert.match(fs.readFileSync(path.join(root, '.memory', 'MEMORY.md'), 'utf8'), /^- \[project_payments_api\.md\]\(project_payments_api\.md\) — About payments-api\. \[superseded\]$/m);
+  assert.match(fs.readFileSync(path.join(root, '.memory', 'MEMORY.md'), 'utf8'), /^- \[[^\]]+\]\(project_payments_api\.md\) — About payments-api\. \(updated \d{4}-\d{2}-\d{2}\) \[superseded\]$/m);
 
   const restored = await d.restore('project_payments_api');
   assert.equal(restored.record.status, 'needs-review');
   assert.equal(restored.record.superseded_by, null);
   assert.ok(fs.existsSync(file));
   assert.match(fs.readFileSync(path.join(root, '.memory', 'project_billing_cycle.md'), 'utf8'), /\nsupersedes: none\n/);
-  assert.match(fs.readFileSync(path.join(root, '.memory', 'MEMORY.md'), 'utf8'), /^- \[project_payments_api\.md\]\(project_payments_api\.md\) — About payments-api\. \[needs-review\]$/m);
+  assert.match(fs.readFileSync(path.join(root, '.memory', 'MEMORY.md'), 'utf8'), /^- \[[^\]]+\]\(project_payments_api\.md\) — About payments-api\. \(updated \d{4}-\d{2}-\d{2}\) \[needs-review\]$/m);
 
   // Archived: moved to archive/ and left out of the index.
   await d.retire('project_payments_api', { reason: 'Gone.' });
@@ -199,11 +200,11 @@ test('template files and the seed template are not records', async () => {
 
 test('MEMORY.md marks a saved proposal as not a fact, not as an ordinary record that needs review', () => {
   const text = buildIndex([
-    { key: 'project_release_day', type: 'project', description: 'Releases go out on Fridays', stored_status: 'needs-review', proposal: true },
-    { key: 'project_review_me', type: 'project', description: 'Needs a look', stored_status: 'needs-review' },
+    { key: 'project_release_day', type: 'project', title: 'Release day', description: 'Releases go out on Fridays', updated: '2026-09-26', stored_status: 'needs-review', proposal: true },
+    { key: 'project_review_me', type: 'project', title: 'Review me', description: 'Needs a look', updated: '2026-09-26', stored_status: 'needs-review' },
   ]);
-  assert.match(text, /^- \[project_release_day\.md\]\(project_release_day\.md\) — Releases go out on Fridays \[proposal: not a fact until the owner answers\]$/m);
-  assert.match(text, /^- \[project_review_me\.md\]\(project_review_me\.md\) — Needs a look \[needs-review\]$/m);
+  assert.match(text, /^- \[[^\]]+\]\(project_release_day\.md\) — Releases go out on Fridays \(updated \d{4}-\d{2}-\d{2}\) \[proposal: not a fact until the owner answers\]$/m);
+  assert.match(text, /^- \[[^\]]+\]\(project_review_me\.md\) — Needs a look \(updated \d{4}-\d{2}-\d{2}\) \[needs-review\]$/m);
 });
 
 test('the model .memory/ folder, copied as setup copies it, reindexes to the model MEMORY.md byte for byte', async () => {
@@ -252,11 +253,11 @@ test('links between notes: rename, supersede, archive, and delete repair every n
   assert.equal(renamed.key, 'reference_billing_rules');
   assert.deepEqual(renamed.linksRepaired.sort(), ['CURRENT_FOCUS.md', 'project_accounts', 'project_invoices']);
   assert.ok(!fs.existsSync(path.join(vault, 'project_billing.md')));
-  assert.match(read('reference_billing_rules.md'), /^---\nname: reference_billing_rules\ndescription: About billing\.\nmetadata:\n  type: reference\n/);
+  assert.match(read('reference_billing_rules.md'), /^---\nname: reference_billing_rules\ndescription: About billing\.\nupdated: \d{4}-\d{2}-\d{2}\nmetadata:\n  type: reference\n/);
   assert.match(read('project_accounts.md'), /\[billing\]\(reference_billing_rules\.md\) and \[the ledger\]\(project_ledger\.md\)/);
   assert.match(read('project_invoices.md'), /\[reference_billing_rules\]\(reference_billing_rules\.md\); \[accounts\]\(project_accounts\.md\)/);
   assert.match(read('CURRENT_FOCUS.md'), /See \[billing\]\(reference_billing_rules\.md\)/);
-  assert.match(read('MEMORY.md'), /## Reference\n\n- \[reference_billing_rules\.md\]\(reference_billing_rules\.md\) — About billing\./);
+  assert.match(read('MEMORY.md'), /## Reference\n\n- \[[^\]]+\]\(reference_billing_rules\.md\) — About billing\. \(updated \d{4}-\d{2}-\d{2}\)/);
   await assert.rejects(d.rename('project_ledger', 'project_accounts'), (err) => err.code === EXIT.INVALID && /already exists/.test(err.message));
 
   // Supersede (merge): links point at the replacement.
@@ -294,7 +295,7 @@ test('reindex writes a record in the older toolkit format in the model topic for
   const res = await d.reindex();
   assert.match(res.detail, /1 files written again in the model's topic format/);
   const text = fs.readFileSync(path.join(vault, 'feedback_old_rule.md'), 'utf8');
-  assert.equal(text, '---\nname: feedback_old_rule\ndescription: An old rule.\nmetadata:\n  type: feedback\nstatus: current\nsource: Mike, 2026-09-01\nlast_verified: 2026-09-01\nauthorization: Approved by Mike\nsupersedes: none\n---\n\n# Old rule\n\n**Remember:** x\n');
+  assert.equal(text, '---\nname: feedback_old_rule\ndescription: An old rule.\nupdated: 2026-09-01\nmetadata:\n  type: feedback\nstatus: current\nsource: Mike, 2026-09-01\nlast_verified: 2026-09-01\nauthorization: Approved by Mike\nsupersedes: none\n---\n\n# Old rule\n\n**Remember:** x\n');
   assert.equal((await d.get('feedback_old_rule')).approved_by, 'Mike');
 });
 
@@ -333,7 +334,7 @@ test('a hand-written superseded note stays in the vault root through reindex and
   assert.doesNotMatch(res.detail, /moved/);
   assert.equal(fs.readFileSync(file, 'utf8'), HAND_SUPERSEDED, 'the hand-written file is left exactly as it was');
   assert.ok(!fs.existsSync(path.join(vault, 'archive', 'project_hand_superseded.md')));
-  assert.match(fs.readFileSync(path.join(vault, 'MEMORY.md'), 'utf8'), /^- \[project_hand_superseded\.md\]\(project_hand_superseded\.md\) — The old release cadence, written by hand\. \[superseded\]$/m);
+  assert.match(fs.readFileSync(path.join(vault, 'MEMORY.md'), 'utf8'), /^- \[[^\]]+\]\(project_hand_superseded\.md\) — The old release cadence, written by hand\. \(updated \d{4}-\d{2}-\d{2}\) \[superseded\]$/m);
 
   const got = await d.get('project_hand_superseded');
   assert.equal(got.status, 'retired');
@@ -343,9 +344,9 @@ test('a hand-written superseded note stays in the vault root through reindex and
   assert.equal(listed.stored_status, 'superseded');
   assert.deepEqual((await d.status()).problems, [], 'no broken links and nothing out of place');
 
-  // The command shows the word too, and saving the note's own text changes nothing.
+  // The command shows the word too, and saving the note's own text changes nothing but its updated date.
   const list = await runToolkit(['memory', 'list', '--status', 'all'], { cwd: root });
-  assert.match(list.stdout, /^- project_hand_superseded \[superseded\]: The old release cadence, written by hand\.$/m);
+  assert.match(list.stdout, /^- project_hand_superseded \[superseded\]: .+ — The old release cadence, written by hand\. \(updated \d{4}-\d{2}-\d{2}\)$/m);
   const get = await runToolkit(['memory', 'get', 'project_hand_superseded'], { cwd: root });
   const f = path.join(tempDir(), 'note.md');
   fs.writeFileSync(f, get.stdout);
@@ -355,7 +356,7 @@ test('a hand-written superseded note stays in the vault root through reindex and
   assert.match(again.stderr, /project_hand_superseded \(retired\), the same key/);
   const saved = await runToolkit(['memory', 'save', '--body-file', f, '--expect', got.version], { cwd: root });
   assert.equal(saved.code, 0, saved.stderr);
-  assert.equal(fs.readFileSync(file, 'utf8'), HAND_SUPERSEDED);
+  assert.equal(fs.readFileSync(file, 'utf8'), HAND_SUPERSEDED.replace(/^(description: .*\n)/m, `$1updated: ${today()}\n`));
 });
 
 test('saving a superseded note from its own memory get text keeps it superseded, in place, with its links', async () => {
@@ -421,6 +422,7 @@ test('reindex of an older record with superseded_by keeps the replacement and st
     '---',
     'name: project_release_train',
     'description: The monthly release train.',
+    'updated: 2026-09-01',
     'metadata:',
     '  type: project',
     'status: superseded',
@@ -447,7 +449,7 @@ test('reindex of an older record with superseded_by keeps the replacement and st
   const again = await d.reindex();
   assert.doesNotMatch(again.detail, /moved|written again/);
   assert.equal(fs.readFileSync(file, 'utf8'), text);
-  assert.match(fs.readFileSync(path.join(vault, 'MEMORY.md'), 'utf8'), /^- \[project_release_train\.md\]\(project_release_train\.md\) — The monthly release train\. \[superseded\]$/m);
+  assert.match(fs.readFileSync(path.join(vault, 'MEMORY.md'), 'utf8'), /^- \[[^\]]+\]\(project_release_train\.md\) — The monthly release train\. \(updated \d{4}-\d{2}-\d{2}\) \[superseded\]$/m);
   assert.deepEqual((await d.status()).problems, []);
 });
 
@@ -527,7 +529,7 @@ test('MEMORY.md is generated, stable, and capped; reindex moves misplaced files'
   const index = fs.readFileSync(path.join(vault, 'MEMORY.md'), 'utf8');
   assert.ok(index.startsWith(readTemplate('memory/MEMORY').split('\n## User')[0]), 'the model intro');
   assert.ok(index.indexOf('## User') < index.indexOf('## Project'), 'types in fixed order');
-  assert.match(index, /^- \[project_one\.md\]\(project_one\.md\) — About one\.$/m);
+  assert.match(index, /^- \[[^\]]+\]\(project_one\.md\) — About one\. \(updated \d{4}-\d{2}-\d{2}\)$/m);
   assert.ok(index.endsWith(readTemplate('memory/MEMORY').slice(readTemplate('memory/MEMORY').indexOf('## Other memory views'))), 'the model "Other memory views" section');
   const again = await d.reindex();
   assert.equal(again.changed, 0);
@@ -561,7 +563,7 @@ test('the index is never cut; status reports it when it is over its budget', asy
   }
   await d.reindex();
   const index = fs.readFileSync(path.join(vault, 'MEMORY.md'), 'utf8');
-  assert.equal((index.match(/^- \[event_/gm) || []).length, n, 'every topic is listed');
+  assert.equal((index.match(/^- \[[^\]]+\]\(event_/gm) || []).length, n, 'every topic is listed');
   const st = await d.status();
   assert.ok(st.problems.some((p) => /over its budget/.test(p.problem)), JSON.stringify(st.problems));
 });

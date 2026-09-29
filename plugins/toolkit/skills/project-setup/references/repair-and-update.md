@@ -102,7 +102,10 @@ claude plugin update <plugin>@toolkit-v2
 
 Run the second command for each plugin: `toolkit`, `work`, `memory`,
 `session-skills`, `git-workflows`, `sf-architect-solutioning`. Then the owner
-starts a new session.
+starts a new session. When the marketplace is a folder on this computer,
+Claude Code runs the plugins' skills and hooks from that folder itself, so
+they are already current; the update refreshes the copy that the `toolkit`
+command runs (the plugin-root pointer).
 
 **Codex** runs a copy filed under the plugin's version, so a new version is
 added again:

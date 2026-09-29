@@ -1,0 +1,6 @@
+0.241s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat PROJECT.md",max_output_tokens:3000}),\n  tools.exec_command({cmd:"for f in .claude/rules/{humanize-outbound-text,keep-work-item-current,memory-review-and'
+0.283s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat .memory/memory-criteria.md",max_output_tokens:3000}),\n  tools.exec_command({cmd:"cat .memory/AGENTS.md",max_output_tokens:3000}),\n  tools.exec_command({'
+0.262s :: 'const r = await tools.exec_command({cmd:"toolkit memory list --type user",max_output_tokens:1000}); text(r.output);\n'
+0.306s :: 'const r = await tools.exec_command({cmd:"toolkit memory save --type user --name working-preferences --description \'How Mike prefers to review and approve results\' --section \'Try results before approval\' --body \'**Remembe'
+0.448s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"toolkit memory get user_working_preferences",max_output_tokens:2000}),\n  tools.exec_command({cmd:"toolkit doctor",max_output_tokens:2500})\n]); r.forEach((x,'
+MAX toolkit call seconds: 0.448

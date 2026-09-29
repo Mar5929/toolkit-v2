@@ -1,0 +1,491 @@
+PROMPT: FYI, I only ever run tipcalc on my MacBook Air with Node 24.
+THREAD: 01a0eb2c-a08a-7202-8465-daf527bdd9f7
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll record this as a project constraint so future sessions use the right platform and Node version.
+
+[CMD exit=0] /bin/zsh -lc 'cat .memory/AGENTS.md .memory/memory-criteria.md'
+  -> # Local project memory
+
+Keep future sessions oriented without turning every conversation into lasting memory. This folder is the project's built-in memory store and can be opened directly as an Obsidian vault. Active topics stay flat; filenames and YAML types agree. Git ignores this folder, so back 
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.9/skills/memory-save/SKILL.md'
+  -> ---
+name: memory-save
+description: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says "remember this", "from now on", "forget that", or "remind me" with no time given, corrects the agent, or a hook says a save is due.'
+---
+
+# Memory save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Saves, corrects, or retires one fact in the project's memory with `toolkit memory` commands, or sends the fact to its proper home. It never edits memory files by hand. Memory keeps one record per concept (for example `feedback_ways_of_working`, `project_billing`), with one `##` section per fact; an `event_` record holds one episode.
+
+## Steps
+
+Track these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+1. Decide the home with the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home ("Where other things go" below) and stop.
+2. Find the concept it belongs in, and any section that already holds it. List the concepts of its type (title, summary, updated date), search, and read each likely concept whole, with its version. The save's duplicate check compares wording, so only this search finds a section the new fact contradicts (for example
+
+[AGENT] This belongs in the project’s operating constraints. I’m checking the document procedure, then I’ll record the exact MacBook Air and Node 24 scope.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.8/skills/publish-docs/SKILL.md .claude/rules/publish-project-documents.md'
+  -> ---
+name: publish-docs
+description: 'Commits and pushes an agreed edit of committed project documents (requirements/, system-guide/, DECISIONS.md, PROJECT.md, PROJECT-ROADMAP.md, ai-external-knowledge/, delivery/) straight to the default branch. Use whenever such an edit is ready to save. Not for code, rules, skills, or .memory/.'
+---
+
+# Publish a documentation save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Save an agreed change to Git-tracked project documents straight to the default
+branch, with no pull request (rule: `.claude/rules/publish-project-documents.md`).
+
+1. **Confirm it is documentation in an allowed path**, not code, rules, skills,
+   hooks, settings, `.memory/`, or `.work-items/` (list below).
+2. **Start a save workspace** with the script in the `scripts/` folder beside
+   this `SKILL.md`. It fetches the remote (with no remote, it uses the local
+   default branch), makes a sparse worktree in `.claude/worktrees/` (beside
+   the project when Git does not ignore it), and prints its path. Work there.
+
+   ```text
+   node <this skill's folder>/scripts/publish-docs.mjs start --branch <default-branch> -- <file> [more files]
+   ```
+
+3. **Make the edit there and stage the files by name.** Read the full staged
+   diff. Add `DECISIONS.md` rows only with `toolkit decision add`, run there.
+   After a change under `ai-external-knowledge/`, regenera
+
+[CMD exit=0] /bin/zsh -lc 'cat .toolkit.json DECISIONS.md'
+  -> {
+  "toolkit": "toolkit-v2",
+  "schema": 1,
+  "project": {
+    "name": "tipcalc",
+    "key": "tipcalc",
+    "owner": "Mike Rihm",
+    "created": "2026-09-28"
+  },
+  "tracker": {
+    "type": "local",
+    "idPrefix": "WI"
+  },
+  "memory": {
+    "type": "builtin",
+    "approval": "onboarding"
+  },
+  "salesforce": {
+    "enabled": false
+  },
+  "hosts": [
+    "claude-code",
+    "codex"
+  ],
+  "declined": [
+    "SOUL.md"
+  ],
+  "backup": {
+    "dir": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/closeout2-codex"
+  },
+  "notion": {},
+  "hindsight": {},
+  "installed": {
+    ".claude/output-styles/plain-english.md": "b25d7be1b6a6034fc56d93ab80dee9fbe5a106cedacba6d6a3989d6b37946deb",
+    ".claude/rules/ai-external-knowledge.md": "c2140569c1dbe7592014f85e58f69314d09df74fe11ae48cbd47b08a3675c2e5",
+    ".claude/rules/humanize-outbound-text.md": "daa38057e72bde93a8057254d0ddcb220a4182e0636bd4f972552b53b520c561",
+    ".claude/rules/keep-work-item-current.md": "dd634b7d00ce9452eb9418ef682fe541c8a7565ff7bfe7eea5189dd997298867",
+    ".claude/rules/memory-review-and-save.md": "747e7ff3b70809c4bce3e871b7247e01569ef521c11df127c9a85d003690c62f",
+    ".claude/rules/plain-english-artifacts.md": "692f6de8c6a824ef783d755ba6c431881c6444617dccb27a27e8bb343f22db9e",
+    ".claude/rules/publish-project-documents.md": "648c65ba38051de3d8fef242507d1972d73a8f30819b0ad57f2cec38b4ad19bf",
+    ".claude/rules/session-handoff.m
+
+[CMD exit=0] /bin/zsh -lc 'git remote'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex 9dbf3c8 [main]
+
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## main
+
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.8/skills/publish-docs/references/git-rules.md'
+  -> <!-- Generated file. Source: plugins/git-workflows/shared/git-rules.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Git rules for Toolkit V2 skills
+
+Purpose: the Git rules every Toolkit V2 skill follows when it makes a branch,
+commits, merges, pushes, or removes a worktree, in Claude Code and in Codex.
+
+## Contents
+
+- Look before the first Git write
+- Branch and worktree names for a work item
+- Staging and committing
+- No AI credit
+- The Git-ignored toolkit folders
+- A project with no remote
+- The merge-safety check
+- A merge that stops on a conflict
+- Git writes in Codex
+- Checklist: one commit
+- Examples
+
+## Look before the first Git write
+
+Other sessions may work in the same repository at the same time. Before the
+first Git write in a session, run each of these on its own:
+
+```text
+git worktree list
+git status
+git remote
+```
+
+- `git remote` prints nothing: the project has no remote. Read "A project
+  with no remote" below before any fetch, pull, push, or pull request.
+- An unknown worktree, a branch that moved, or a change this session did not
+  make means another session is working. Do not change it. Tell the owner.
+- The shared primary checkout is the first entry `git worktree list` prints.
+  In it, never switch branches, reset, rebase, or stash.
+- Never commit, push, rebase, or delete another session's branch, and never
+  commit its uncommitted changes, even when they look finished.
+
+## Branch and worktree names for a work item
+
+A work item
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.9/skills/memory-save/references/record-format.md'
+  -> <!-- Generated file. Source: plugins/memory/shared/record-format.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Memory record format
+
+Purpose: the exact shape of one memory record (type, key, description,
+frontmatter, and body), the same in built-in, Hindsight, and Notion memory.
+
+## Contents
+
+- One record per concept
+- Types
+- Keys and file names
+- The description
+- Frontmatter
+- Body
+- Links between records
+- What never goes in a record
+- Passing the body to the command
+- Checklist before a save
+
+The formats are the model project's: the topic template
+(`.memory/project_topic_template.md`), `MEMORY.md`, `CURRENT_FOCUS.md`,
+`memory-criteria.md`, and `terminology-glossary.md`. Only `toolkit memory`
+commands write memory. They write the frontmatter from the flags; you write
+the one-line description and the body.
+
+## One record per concept
+
+Memory keeps one record per concept or area, not one per fact (the owner's
+decision of 2026-09-28). A concept is a subject a future session would look
+up as a whole: how the owner wants the agent to work, the billing setup, the
+deploy process. Examples: `feedback_ways_of_working`, `project_billing`,
+`user_profile`, `reference_dashboards`.
+
+- Each fact, or group of closely related facts, is one `## <Sub-topic>`
+  section inside its concept, with the labels in "Body" below.
+- A new fact goes into the concept it belongs to, as a new section or under
+  an existing heading. A new record is only for a new concept.
+- A
+
+[CMD exit=0] /bin/zsh -lc 'toolkit config get memory.approval'
+  -> onboarding
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory list --type project'
+  -> - project_money_calculation: Money calculation — tipcalc money arithmetic constraint and its reason (updated 2026-09-28)
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory find 'MacBook Node operating environment'"
+  -> 1 memory record matches "MacBook Node operating environment" (best first):
+- user_working_preferences: How Mike prefers reviews, tests, and commit messages
+    Test runner: ...member:** From now on, write tests with Node’s built-in node:test runner and use no npm packages for tests. **Why:** Not stated by the owner. **How to apply:*...
+Read a record with toolkit memory get <key> before relying on it.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory get user_working_preferences --json'
+  -> {
+  "ok": true,
+  "backend": "builtin",
+  "key": "user_working_preferences",
+  "name": "working-preferences",
+  "type": "user",
+  "description": "How Mike prefers reviews, tests, and commit messages",
+  "status": "current",
+  "stored_status": "current",
+  "superseded_by": null,
+  "source": "Mike Rihm, in chat, 2026-09-28",
+  "saved": "2026-09-28",
+  "updated": "2026-09-28",
+  "last_verified": "2026-09-28",
+  "authorization": "Approved by Mike Rihm on 2026-09-28",
+  "approved_by": "Mike Rihm",
+  "supersedes": [],
+  "body": "# Working preferences\n\n## Try results before approval\n\n**Remember:** Show Mike the exact command to try a result himself before asking him to approve it.\n\n**Why:** Not stated by the owner.\n\n**How to apply:** When requesting approval of a result, include the exact command he can run to try that result first.\n\n**Evidence and limits:** Mike Rihm, in chat, 2026-09-28. Applies to approval requests for results.\n\n**Related memories:** None.\n\n**Authoritative records:** None.\n\n## Test runner\n\n**Remember:** From now on, write tests with Node’s built-in node:test runner and use no npm packages for tests.\n\n**Why:** Not stated by the owner.\n\n**How to apply:** Use node:test for future tipcalc tests and do not add npm test packages.\n\n**Evidence and limits:** Mike Rihm, in chat, 2026-09-28. Applies to tests written from now on.\n\n**Related memories:** None.\n\n**Authoritative records:** None.\n\n## Commit messages\n\n**Remember:** Always keep commi
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory get project_money_calculation --json'
+  -> {
+  "ok": true,
+  "backend": "builtin",
+  "key": "project_money_calculation",
+  "name": "money-calculation",
+  "type": "project",
+  "description": "tipcalc money arithmetic constraint and its reason",
+  "status": "current",
+  "stored_status": "current",
+  "superseded_by": null,
+  "source": "Mike Rihm, in chat, 2026-09-28",
+  "saved": "2026-09-28",
+  "updated": "2026-09-28",
+  "last_verified": "2026-09-28",
+  "authorization": "Approved by Mike Rihm on 2026-09-28",
+  "approved_by": "Mike Rihm",
+  "supersedes": [],
+  "body": "# Money calculation\n\n## Whole cents\n\n**Remember:** tipcalc must always do its money math in whole cents, never in floating-point dollars.\n\n**Why:** Floating-point gave Mike split shares like $33.339999 in his last calculator.\n\n**How to apply:** Parse money values exactly, carry calculations with integer cents or exact decimal representations until rounded to cents, and format output from whole cents. Check this constraint when changing tip, total, or split calculations.\n\n**Evidence and limits:** Mike Rihm, in chat, 2026-09-28. Applies to all tipcalc money calculations. The current WI-001 and WI-002 designs already use exact decimal input and integer-cent calculations.\n\n**Related memories:** None.\n\n**Authoritative records:** WI-001 DESIGN.md; WI-002 DESIGN.md.\n\n## Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount\n\n**Remember:** Venmo rejects payments with a fraction of a cent, so every split 
+
+[AGENT] I found no existing runtime note. I’ll save this as the supported usage context for future tipcalc work.
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory save --type project --name runtime-environment --description 'Where Mike runs tipcalc and the Node version he uses' --section 'Supported usage' --body '# Runtime environment
+
+## Supported usage
+
+**Remember:** Mike only runs tipcalc on his MacBook Air with Node 24.
+
+**Why:** Not stated by the owner.
+
+**How to apply:** Use MacBook Air and Node 24 as the operating context when planning, building, and checking tipcalc changes.
+
+**Evidence and limits:** Mike Rihm, in chat, 2026-09-28. This describes his own usage; it does not establish compatibility with other environme
+  -> Saved to memory: project_runtime_environment (new record).
+Where: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/.memory
+Version: eab3ac9c8326
+Approved by: Mike Rihm
+Reply line for the owner, word for word (memory-save): Saved to memory: Runtime environment. Say 'forget that' to undo.
+
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.9/skills/memory-save/references/proposals.md'
+  -> <!-- Generated file. Source: plugins/memory/shared/proposals.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Memory proposals
+
+Purpose: what a memory proposal is, how one is saved, and how the owner's yes
+or no is recorded.
+
+## Contents
+
+- What a proposal is
+- How a proposal is saved
+- Recording the owner's answer
+- Examples
+
+## What a proposal is
+
+A proposal is a memory record the owner has not approved yet. It exists so
+that a "Save to memory?" question he did not answer is kept, not lost.
+
+- It is saved with `--proposal`: status `needs-review`, authorization
+  "Proposed by the agent on <date>", and never an approver.
+- It is not a fact. The agent does not rely on it, and an answer never
+  presents it as true.
+- `toolkit memory find` leaves it out unless `--proposals` (or `--all`) is
+  given. `toolkit memory get` ends its text with a line saying it is a
+  proposal.
+- `toolkit work decisions` and the session briefing list it among the things
+  waiting on the owner, and the `work-decide` skill asks him about it.
+- The built-in index marks it "[proposal: not a fact until the owner
+  answers]". In Notion its Status is "proposed".
+- A proposal never replaces a record the owner approved. The CLI refuses a
+  proposal whose key is already a current or retired record.
+- Concept memory: a proposal for a fact that belongs in an existing concept
+  is its own record that names that concept and a section heading (its
+  `concept` and `section` fields; the lis
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory save --help'
+  -> toolkit memory: Save, find, and manage project memory: records, the current focus, and the glossary.
+
+Usage:
+  toolkit memory save --type <t> --name <slug> --description <d> (--body <text> | --body-file <file|->)
+                      [--section <heading>] [--title <text>]
+                      [--approved-by <who>] [--authorization <text>] [--supersedes <key>] [--source <text>]
+                      [--status <s>] [--last-verified <YYYY-MM-DD|unknown>] [--expect <version|absent>]
+                      [--proposal] [--allow-similar | --new-concept]
+  toolkit memory save --concept <key> --section <heading> (--body <text> | --body-file <file|-> | --remove)
+                      [--append] [--description <d>] [--title <text>] [--approved-by <who> | --proposal]
+                      [--source <text>] [--last-verified <YYYY-MM-DD|unknown>] [--expect <version>] [--allow-similar]
+  toolkit memory find <query> [--reflect] [--type <t>] [--limit <n>] [--all] [--proposals]
+  toolkit memory get <key>
+  toolkit memory list [--type <t>] [--status <current|needs-review|retired|all>]
+  toolkit memory approve <key> --by <name> [--concept <key>] [--title <t>] [--description <d>]
+  toolkit memory reject <key> [--reason <text>]
+  toolkit memory retire <key> [--superseded-by <key>] [--reason <text>]
+  toolkit memory restore <key>
+  toolkit memory rename <key> --to <new-key>
+  toolkit memory delete <key> --owner-approved
+  toolkit memory merge <key> [<key> ...] --into <concept-key> --approved-by <
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory get project_runtime_environment'
+  -> ---
+name: project_runtime_environment
+description: Where Mike runs tipcalc and the Node version he uses
+updated: 2026-09-28
+metadata:
+  type: project
+status: current
+source: Mike Rihm, in chat, 2026-09-28
+last_verified: 2026-09-28
+authorization: Approved by Mike Rihm on 2026-09-28
+supersedes: none
+---
+
+# Runtime environment
+
+## Supported usage
+
+**Remember:** Mike only runs tipcalc on his MacBook Air with Node 24.
+
+**Why:** Not stated by the owner.
+
+**How to apply:** Use MacBook Air and Node 24 as the operating context when planning, building, and checking tipcalc changes.
+
+**Evidence and limits:** Mike Rihm, in chat, 2026-09-28. This describes his own usage; it does not establish compatibility with other environments.
+
+**Related memories:** None.
+
+**Authoritative records:** None.
+
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for tipcalc (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (4):
+- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit'
+
+[AGENT] I saved that you run tipcalc only on your MacBook Air with Node 24, but I marked the memory as approved too soon.
+
+Save to memory: you only run tipcalc on your MacBook Air with Node 24?
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 437089, "cached_input_tokens": 393984, "cache_write_input_tokens": 0, "output_tokens": 2387, "reasoning_output_tokens": 1146}}
+
+SKILLS OPENED: ['memory-save', 'publish-docs']
+
+[HOOK CONTEXT ord=9] Project briefing: tipcalc (tipcalc), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The tracker has no open items. A new request starts a work item with the work-on skill.
+
+Items: 2 done.
+
+Current focus:
+Last updated: 2026-09-28, work-finish, agent
+## Now
+None.
+## Waiting on the owner
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+## Untracked to-dos
+None.
+## Next session starts with
+- WI-001 and
+
+[HOOK CONTEXT ord=67] This save says Mike Rihm approved it (--approved-by), but his message this turn has no keep phrase or other words asking for a save ("remember that", "from now on", "save that"), and it does not answer a "Save to memory: ...?" question. A fact or preference he mentions in passing is a proposal, not an approval. Unless his words this turn clearly asked for it, tell him in the reply what was saved and ask "Save to memory: <one line>?"; if he says no, undo it as memory-save says. Next time, save such a remark with --proposal instead of --approved-by, or ask first.
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md",max_output_tokens:12000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.9/skills/memory-save/SKILL.md",max_output_tokens:12000}),
+  tools.exec_command({cmd:"cat .memory/AGENTS.md .memory/memory-criteria.md",max_output_tokens:8000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "Warning: truncated output (original token count: 10844)\nTotal output lines: 3\n\n{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"014c6f\",\"wall_time_seconds\":0,\"exit_code\":1,\"original_token_count\":3927,\"output\":\"cat: SOUL.md: No such file or directory\\n# tipcalc\\n\\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\\n\\n## Purpose and intended outcome\\n\\n- Purpose: tipcalc tells me the tip and the total for a restaurant bill, and can split the total between friends, straight from my terminal.\\n- Intended outcome: tipcalc tells me the tip and the total for a restaurant bill, and can split the total between friends, straight from my terminal.\\n\\n## Scope and boundaries\\n\\n- In scope: tipcalc tells me the tip and the total for a restaurant bill, and can split the total between friends, straight from my terminal.\\n- Outside scope: `<Important exclusions or adjacent owners.>`\\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\\n\\n## Systems and environments\\n\\n| System or org | Purpose | Environment | Source of truth | Access notes |\\n| --- | --- | --- | --- | --- |\\n| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |\\n\\n## People and ownership\\n\\n| Role | Person or team | Responsibility | Source / last confirmed |\\n| --- | --- | --- | --- |\\n| Owner | Mike Rihm | Project decisions | Owner's setup answers, 2026-09-28 |\\n\\n## Work and project records\\n\\n- Work tracker: `.work-items/` in the main checkout (local folders, Git-ignored)\\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\\n- Project decisions: [DECISIONS.md](DECISIONS.md)\\n- Functional requirements: [requirements/](requirements/)\\n- Design home: `DESIGN.md` beside each local work item in `.work-items/`.\\n- System Guide: disabled; `system-guide/` currently holds only the scaffold template.\\n- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.8/skills/publish-docs/SKILL.md .claude/rules/publish-project-documents.md",max_output_tokens:12000}),
+tools.exec_command({cmd:"git worktree list",max_output_tokens:2000}),
+tools.exec_command({cmd:"git status --short --branch",max_output_tokens:2000}),
+tools.exec_command({cmd:"git remote",max_output_tokens:2000}),
+tools.exec_command({cmd:"cat .toolkit.json DECISIONS.md",max_output_tokens:5000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"0b00db\",\"wall_time_seconds\":0.000002459,\"exit_code\":0,\"original_token_count\":2396,\"output\":\"---\\nname: publish-docs\\ndescription: 'Commits and pushes an agreed edit of committed project documents (requirements/, system-guide/, DECISIONS.md, PROJECT.md, PROJECT-ROADMAP.md, ai-external-knowledge/, delivery/) straight to the default branch. Use whenever such an edit is ready to save. Not for code, rules, skills, or .memory/.'\\n---\\n\\n# Publish a documentation save\\n\\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \\\"How to write replies\\\" section of `AGENTS.md`.\\nSave an agreed change to Git-tracked project documents straight to the default\\nbranch, with no pull request (rule: `.claude/rules/publish-project-documents.md`).\\n\\n1. **Confirm it is documentation in an allowed path**, not code, rules, skills,\\n   hooks, settings, `.memory/`, or `.work-items/` (list below).\\n2. **Start a save workspace** with the script in the `scripts/` folder beside\\n   this `SKILL.md`. It fetches the remote (with no remote, it uses the local\\n   default branch), makes a sparse worktree in `.claude/worktrees/` (beside\\n   the project when Git does not ignore it), and prints its path. Work there.\\n\\n   ```text\\n   node <this skill's folder>/scripts/publish-docs.mjs start --branch <default-branch> -- <file> [more files]\\n   ```\\n\\n3. **Make the edit there and stage the files by name.** Read the full staged\\n   diff. Add `DECISIONS.md` rows only with `toolkit decision add`, run there.\\n   After a change under `ai-external-knowledge/`, regenerate its index there\\n   (\\\"Step 3 in detail\\\") and stage `ai-external-knowledge/INDEX.md` too.\\n4. **Publish** from the project folder, naming the path `start` printed. It\\n   refuses other staged, unstaged, or untracked files and conflict markers;\\n   commits; pushes without force and checks the remote has the commit. No\\n   remote: it moves the local default branch forward. It stops, or the push\\n   is refused: open `references/recovery.md`.\\n\\n   ```text\\n   node <this skill's folder>/scripts/publish-docs.mjs publish --workspace <save workspace path> --message '<plain commit message>'\\n   ```\\n\\n5. **Report** the commit id and 
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/git-workflows/0.2.8/skills/publish-docs/references/git-rules.md",max_output_tokens:5000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "<!-- Generated file. Source: plugins/git-workflows/shared/git-rules.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\n# Git rules for Toolkit V2 skills\n\nPurpose: the Git rules every Toolkit V2 skill follows when it makes a branch,\ncommits, merges, pushes, or removes a worktree, in Claude Code and in Codex.\n\n## Contents\n\n- Look before the first Git write\n- Branch and worktree names for a work item\n- Staging and committing\n- No AI credit\n- The Git-ignored toolkit folders\n- A project with no remote\n- The merge-safety check\n- A merge that stops on a conflict\n- Git writes in Codex\n- Checklist: one commit\n- Examples\n\n## Look before the first Git write\n\nOther sessions may work in the same repository at the same time. Before the\nfirst Git write in a session, run each of these on its own:\n\n```text\ngit worktree list\ngit status\ngit remote\n```\n\n- `git remote` prints nothing: the project has no remote. Read \"A project\n  with no remote\" below before any fetch, pull, push, or pull request.\n- An unknown worktree, a branch that moved, or a change this session did not\n  make means another session is working. Do not change it. Tell the owner.\n- The shared primary checkout is the first entry `git worktree list` prints.\n  In it, never switch branches, reset, rebase, or stash.\n- Never commit, push, rebase, or delete another session's branch, and never\n  commit its uncommitted changes, even when they look finished.\n\n## Branch and worktree names for a work item\n\nA work item's code work happens in its own worktree, on its own branch.\n\n| Part | Form | Example for `WI-007`, \"CSV export\" |\n| --- | --- | --- |\n| Branch | `claude/<prefix>-<number>-<slug>` | `claude/wi-007-csv-export` |\n| Worktree folder | `.claude/worktrees/<prefix>-<number>-<slug>` | `.claude/worktrees/wi-007-csv-export` |\n\n- `<prefix>` is the item's own id prefix in lower case: `wi` for `WI-007`,\n  `tv2` for `TV2-007`, `acme` for `ACME-007`.\n- The session briefing and `merge-and-clean-up` find the item from the id in\n  the branch name. A branch named `wi-001-<slug>` for item `TV2-001` is not\n  linked to that item.\n- Make both with one command:\n\n  ```text\n  git worktree add .claude/worktrees/wi-007-csv-export -b claude/wi-007-csv-export\n  ```\n\n- Build on the item's branch, never on the default branch.\n\n## Stagi
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"toolkit memory list --type project",max_output_tokens:3000}),
+tools.exec_command({cmd:"toolkit memory find 'MacBook Node operating environment'",max_output_tokens:3000}),
+tools.exec_command({cmd:"toolkit config get memory.approval",max_output_tokens:1000}),
+tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.9/skills/memory-save/references/record-format.md",max_output_tokens:5000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"8648ac\",\"wall_time_seconds\":0.00000225,\"exit_code\":0,\"original_token_count\":31,\"output\":\"- project_money_calculation: Money calculation \u2014 tipcalc money arithmetic constraint and its reason (updated 2026-09-28)\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"f9a99c\",\"wall_time_seconds\":5.84e-7,\"exit_code\":0,\"original_token_count\":102,\"output\":\"1 memory record matches \\\"MacBook Node operating environment\\\" (best first):\\n- user_working_preferences: How Mike prefers reviews, tests, and commit messages\\n    Test runner: ...member:** From now on, write tests with Node\u2019s built-in node:test runner and use no npm packages for tests. **Why:** Not stated by the owner. **How to apply:*...\\nRead a record with toolkit memory get <key> before relying on it.\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":2,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"9381af\",\"wall_time_seconds\":0.000002917,\"exit_code\":0,\"original_token_count\":3,\"output\":\"onboarding\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":3,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"3c583a\",\"wall_time_seconds\":0.000002916,\"exit_code\":0,\"original_token_count\":3238,\"output\":\"<!-- Generated file. Source: plugins/memory/shared/record-format.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\\n# Memory record format\\n\\nPurpose: the exact shape of one memory record (type, key, description,\\nfrontmatter, and body), the same in built-in, Hindsight, and Notion memory.\\n\\n## Contents\\n\\n- One record per concept\\n- Types\\n- Keys and file names\\n- The description\\n- Frontmatter\\n- Body\\n- Links between records\\n- What never goes in a record\\n- Passing the body to the command\\n- Checklist before a save\\n\\nThe formats are the model project's: the topic template\\n(`.memory/project_topic_template.md`), `MEMORY.md`, `CURRENT_FOCUS.md`,\\n`memory-criteria.md`, and `terminology-glossary.md`. Only `toolkit memory`\\ncommands write memory. They write the frontmatter from the flags; you write\\nthe one-line description and the body.\\n\\n## One record per concept\\n\\nMemory keeps one record per concept or area, not one per fact (the owner's
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"toolkit memory get project_money_calculation --json",max_output_tokens:3000}),
+tools.exec_command({cmd:"toolkit memory get user_working_preferences --json",max_output_tokens:3000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"88b9cb\",\"wall_time_seconds\":0.000003,\"exit_code\":0,\"original_token_count\":998,\"output\":\"{\\n  \\\"ok\\\": true,\\n  \\\"backend\\\": \\\"builtin\\\",\\n  \\\"key\\\": \\\"project_money_calculation\\\",\\n  \\\"name\\\": \\\"money-calculation\\\",\\n  \\\"type\\\": \\\"project\\\",\\n  \\\"description\\\": \\\"tipcalc money arithmetic constraint and its reason\\\",\\n  \\\"status\\\": \\\"current\\\",\\n  \\\"stored_status\\\": \\\"current\\\",\\n  \\\"superseded_by\\\": null,\\n  \\\"source\\\": \\\"Mike Rihm, in chat, 2026-09-28\\\",\\n  \\\"saved\\\": \\\"2026-09-28\\\",\\n  \\\"updated\\\": \\\"2026-09-28\\\",\\n  \\\"last_verified\\\": \\\"2026-09-28\\\",\\n  \\\"authorization\\\": \\\"Approved by Mike Rihm on 2026-09-28\\\",\\n  \\\"approved_by\\\": \\\"Mike Rihm\\\",\\n  \\\"supersedes\\\": [],\\n  \\\"body\\\": \\\"# Money calculation\\\\n\\\\n## Whole cents\\\\n\\\\n**Remember:** tipcalc must always do its money math in whole cents, never in floating-point dollars.\\\\n\\\\n**Why:** Floating-point gave Mike split shares like $33.339999 in his last calculator.\\\\n\\\\n**How to apply:** Parse money values exactly, carry calculations with integer cents or exact decimal representations until rounded to cents, and format output from whole cents. Check this constraint when changing tip, total, or split calculations.\\\\n\\\\n**Evidence and limits:** Mike Rihm, in chat, 2026-09-28. Applies to all tipcalc money calculations. The current WI-001 and WI-002 designs already use exact decimal input and integer-cent calculations.\\\\n\\\\n**Related memories:** None.\\\\n\\\\n**Authoritative records:** WI-001 DESIGN.md; WI-002 DESIGN.md.\\\\n\\\\n## Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount\\\\n\\\\n**Remember:** Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount.\\\\n\\\\n**Why:** Venmo rejects fractional-cent payments.\\\\n\\\\n**How to apply:** Keep every displayed split share in whole cents, using the approved upward rounding rule in WI-001 R-02.\\\\n\\\\n**Evidence and limits:** Mike Rihm confirmed in chat on 2026-09-28 that he had told the agent this earlier and approved keeping it. This records his statement about Venmo; no separate Venmo source was check
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory save --type project --name runtime-environment --description 'Where Mike runs tipcalc and the Node version he uses' --section 'Supported usage' --body '# Runtime environment\n\n## Supported usage\n\n**Remember:** Mike only runs tipcalc on his MacBook Air with Node 24.\n\n**Why:** Not stated by the owner.\n\n**How to apply:** Use MacBook Air and Node 24 as the operating context when planning, building, and checking tipcalc changes.\n\n**Evidence and limits:** Mike Rihm, in chat, 2026-09-28. This describes his own usage; it does not establish compatibility with other environments.\n\n**Related memories:** None.\n\n**Authoritative records:** None.' --source 'Mike Rihm, in chat, 2026-09-28' --approved-by 'Mike Rihm'",max_output_tokens:3000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"0fa107\",\"wall_time_seconds\":0.000002667,\"exit_code\":0,\"original_token_count\":97,\"output\":\"Saved to memory: project_runtime_environment (new record).\\nWhere: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/.memory\\nVersion: eab3ac9c8326\\nApproved by: Mike Rihm\\nReply line for the owner, word for word (memory-save): Saved to memory: Runtime environment. Say 'forget that' to undo.\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"toolkit memory save --help",max_output_tokens:5000}),
+tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.9/skills/memory-save/references/proposals.md",max_output_tokens:6000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"ae15c8\",\"wall_time_seconds\":0.000002875,\"exit_code\":0,\"original_token_count\":1820,\"output\":\"toolkit memory: Save, find, and manage project memory: records, the current focus, and the glossary.\\n\\nUsage:\\n  toolkit memory save --type <t> --name <slug> --description <d> (--body <text> | --body-file <file|->)\\n                      [--section <heading>] [--title <text>]\\n                      [--approved-by <who>] [--authorization <text>] [--supersedes <key>] [--source <text>]\\n                      [--status <s>] [--last-verified <YYYY-MM-DD|unknown>] [--expect <version|absent>]\\n                      [--proposal] [--allow-similar | --new-concept]\\n  toolkit memory save --concept <key> --section <heading> (--body <text> | --body-file <file|-> | --remove)\\n                      [--append] [--description <d>] [--title <text>] [--approved-by <who> | --proposal]\\n                      [--source <text>] [--last-verified <YYYY-MM-DD|unknown>] [--expect <version>] [--allow-similar]\\n  toolkit memory find <query> [--reflect] [--type <t>] [--limit <n>] [--all] [--proposals]\\n  toolkit memory get <key>\\n  toolkit memory list [--type <t>] [--status <current|needs-review|retired|all>]\\n  toolkit memory approve <key> --by <name> [--concept <key>] [--title <t>] [--description <d>]\\n  toolkit memory reject <key> [--reason <text>]\\n  toolkit memory retire <key> [--superseded-by <key>] [--reason <text>]\\n  toolkit memory restore <key>\\n  toolkit memory rename <key> --to <new-key>\\n  toolkit memory delete <key> --owner-approved\\n  toolkit memory merge <key> [<key> ...] --into <concept-key> --approved-by <owner> [--title <t>] [--description <d>]\\n  toolkit memory split <key> --section <heading> [--section <heading> ...] --into <concept-key> --approved-by <owner>\\n                       [--title <t>] [--description <d>]\\n  toolkit memory tidy --plan\\n  toolkit memory focus [--set-file <file|-> | --text <text>] [--expect <version>]\\n  toolkit memory glossary [--set-file <file|-> | --text <text>] [--expect <version>]\\n  toolkit memory reindex\\n  toolkit memory status\\n  toolkit memory export --to <folder>\\n  toolkit memory import --from <folder> [--dry-run]\\n\\nConcept memory: one record per concept or area (feedback_ways_of_working,\\nproject_billing),
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory get project_runtime_environment",max_output_tokens:2500});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "---\nname: project_runtime_environment\ndescription: Where Mike runs tipcalc and the Node version he uses\nupdated: 2026-09-28\nmetadata:\n  type: project\nstatus: current\nsource: Mike Rihm, in chat, 2026-09-28\nlast_verified: 2026-09-28\nauthorization: Approved by Mike Rihm on 2026-09-28\nsupersedes: none\n---\n\n# Runtime environment\n\n## Supported usage\n\n**Remember:** Mike only runs tipcalc on his MacBook Air with Node 24.\n\n**Why:** Not stated by the owner.\n\n**How to apply:** Use MacBook Air and Node 24 as the operating context when planning, building, and checking tipcalc changes.\n\n**Evidence and limits:** Mike Rihm, in chat, 2026-09-28. This describes his own usage; it does not establish compatibility with other environments.\n\n**Related memories:** None.\n\n**Authoritative records:** None.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit doctor",max_output_tokens:1500});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Toolkit doctor for tipcalc (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex).\n\nWarnings (2):\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.\n   Fix: The owner opens Codex in this folder and trusts it when Codex asks.\n2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).\n   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\n\nNotes (4):\n- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\n- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\n- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\n- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can show the owner the toolkit's version, and merges it only after his yes.\n\nResult: 0 problems and 2 warnings.\n"}]

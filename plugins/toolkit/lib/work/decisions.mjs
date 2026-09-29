@@ -11,7 +11,7 @@ import { today as todayDate, run } from '../core/util.mjs';
 import { gitInfo } from '../core/config.mjs';
 import { readTemplate } from '../core/templates.mjs';
 import { isTerminal, isApproved, stageNumber, stageShort, typeNeedsRequirements } from './lifecycle.mjs';
-import { parseQuestions, isOpenOwnerQuestion, getLabel, parseRoadmap, checkGates, isTemplateRow, isPlaceholder, designHasOptions, designStatusFromBody } from './model.mjs';
+import { parseQuestions, parseHistory, isOpenOwnerQuestion, getLabel, parseRoadmap, checkGates, isTemplateRow, isPlaceholder, designHasOptions, designStatusFromBody } from './model.mjs';
 
 // ------------------------------------------------------------------ what waits on the owner
 
@@ -152,10 +152,11 @@ export function isDeliveryQuestion(q) {
 
 /**
  * The agent's own steps that the tracker shows: the agent-led delivery offer
- * that work-delegate makes once per big goal. Listed only while the offer can
- * still shape the work (stages 03 to 07), never for a finished item, and not
- * when an open question already asks it.
- * @returns {Array<{ id: string, title: string, kind: 'delivery_offer', what: string, detail: string, continueWith: string }>}
+ * that work-delegate makes once per big goal, and the acceptance check a
+ * result at 11 User approval still needs. The offer is listed only while it
+ * can still shape the work (stages 03 to 07), never for a finished item, and
+ * not when an open question already asks it.
+ * @returns {Array<{ id: string, title: string, kind: 'delivery_offer' | 'acceptance_check', what: string, detail: string, continueWith: string }>}
  */
 export function collectAgentTodos(items, { ownerName } = {}) {
   const out = [];
@@ -163,6 +164,11 @@ export function collectAgentTodos(items, { ownerName } = {}) {
     const meta = item.meta || {};
     const id = item.id || meta.id;
     if (item.archived || isTerminal(meta.status)) continue;
+    // A result at 11 User approval with no acceptance check since its last
+    // build: the agent starts one before asking (the owner's decision of 2026-09-28).
+    if (stageNumber(meta.stage) === 11 && !isApproved(meta.result_approved) && !acceptanceCheckRecorded(item.body || '')) {
+      out.push({ id, title: meta.title || '', kind: 'acceptance_check', what: acceptanceCheckNote(id, 'todo'), detail: 'It runs whoever built the change.', continueWith: 'work-check' });
+    }
     // The offer is made once per goal, at the top item: a sub-item is part of
     // its parent's goal (sample run d, round 2 listed both).
     const parent = item.parent !== undefined ? item.parent : meta.parent;
@@ -175,6 +181,73 @@ export function collectAgentTodos(items, { ownerName } = {}) {
     out.push({ id, title: meta.title || '', kind: 'delivery_offer', what: `Make the agent-led delivery offer for ${id} (${big}).`, detail: 'work-delegate asks the owner once per goal.', continueWith: 'work-delegate' });
   }
   return out;
+}
+
+// ------------------------------------------------------------------ the acceptance check
+
+// Before the owner is asked to approve a result, one acceptance-checker that
+// did not build the change checks it, whoever built it (the owner's decision
+// of 2026-09-28, dev/GOAL.md; final re-review R-B1: "no agent team" skipped
+// the check in 3 of 5 final runs). work-check records the check with a
+// history note that holds "acceptance-checker: <its verdict>". Only that
+// recorded form counts, with a verdict word in it (verifier, 2026-09-28: a
+// note "Asked whether to start the acceptance-checker" counted as a check).
+const CHECK_RAN = /\bacceptance[- ]checker(?:\s+agent)?(?:(?:'s|’s)\s+verdict)?\s*:\s*([^;\n]*)/gi;
+/** The verdict words of the acceptance-checker agent's report (plugins/work/agents/acceptance-checker.md). */
+const VERDICT = /\b(?:met|ready|pass(?:ed|es)?|fail(?:ed|s)?)\b/i;
+// Words that say the check itself did not run. Only these count: "gaps: a
+// manual step not run" in the same note is about the result, not the check.
+const CHECK_NOT_RAN = new RegExp([
+  String.raw`\bacceptance[- ]checker\s*:\s*(?:none|not run|skipped|did not run|could not run)\b`,
+  String.raw`\bno (?:independent|acceptance)(?: agent)?[- ]check(?:er)?\b`,
+  String.raw`\bwithout (?:an? )?(?:independent|acceptance)(?: agent)?[- ]check(?:er)?\b`,
+  String.raw`\b(?:independent|acceptance)(?: agent)?[- ]check(?:er)? (?:did not|could not|didn['’]t|couldn['’]t|was not|wasn['’]t) (?:run|start)`,
+].join('|'), 'i');
+/** A Recent History row that starts a build or a fix: a stage change to 08 Implementation or 10 Bug fixing. */
+const BUILD_ROW = /->\s*(?:08|10)\b/;
+
+/**
+ * True when the Recent History (newest first) shows an acceptance-checker
+ * check after the last build or fix. A check before that row checked older
+ * work, so it does not count.
+ */
+export function acceptanceCheckRecorded(body) {
+  for (const row of parseHistory(body)) {
+    const text = `${row.change} ${row.effect}`;
+    if (checkVerdict(text) && !CHECK_NOT_RAN.test(text)) return true;
+    if (BUILD_ROW.test(row.change)) return false;
+  }
+  return false;
+}
+
+/** True when a history text records "acceptance-checker: <verdict>" with a verdict word. */
+function checkVerdict(text) {
+  CHECK_RAN.lastIndex = 0;
+  let m;
+  while ((m = CHECK_RAN.exec(text)) !== null) {
+    if (VERDICT.test(m[1])) {
+      CHECK_RAN.lastIndex = 0;
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * The note for an item at 11 User approval (when: 'stage'), a result approved
+ * (when: 'approve'), or the decisions list (when: 'todo') with no acceptance
+ * check recorded since its last build.
+ */
+export function acceptanceCheckNote(id, when) {
+  const record = `record its verdict: toolkit work history ${id} --note 'Checked: <what>; acceptance-checker: <its verdict>; evidence: <where>; gaps: <gaps or none>'`;
+  const noWorker = 'Only when this host has no way to start a worker, check it yourself and tell the owner that no independent check ran, and why.';
+  if (when === 'approve') {
+    return `No acceptance-checker check of ${id} is recorded since its last build. The owner's approval is recorded, but the independent check comes before a result approval, whoever built the change: start one acceptance-checker now (work-check, step 3), tell the owner what it finds before work-finish goes on, and ${record}. ${noWorker}`;
+  }
+  if (when === 'todo') {
+    return `Start one acceptance-checker for ${id} before asking the owner to approve its result: no check is recorded since its last build.`;
+  }
+  return `${id} is at 11 User approval, and no acceptance-checker check is recorded since its last build. Before you ask the owner to approve the result, start one acceptance-checker that did not build it (work-check, step 3). It runs whoever built the change: "no agent team" or owner-led delivery does not remove it. Then ${record}. ${noWorker}`;
 }
 
 /** Why an item counts as big enough for the delivery offer, or null. */

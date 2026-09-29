@@ -276,7 +276,8 @@ async function cmdShow(ctx, tracker, project, args, changes) {
   const inherited = design ? null : await parentDesignOf(tracker, s.parent);
   const designText = design ? `${design.meta.status} (${design.location})`
     : inherited ? `none of its own; ${inherited.id}'s design is approved (${inherited.location}). Read it with: toolkit work design ${inherited.id}` : 'none';
-  const branch = worktreeBranch(rec.id, s.title);
+  // An existing worktree for the item keeps its name after a hand rename.
+  const branch = existingWorktree(project.mainRoot || project.root, rec.id) || worktreeBranch(rec.id, s.title);
   const header = [
     `${rec.id}: ${s.title}`,
     `Location: ${rec.path || rec.location}`,
@@ -306,6 +307,33 @@ export function worktreeBranch(id, title) {
   const slug = slugify(title || '', 30) || 'work';
   const name = `${String(id).toLowerCase()}-${slug}`;
   return { branch: `claude/${name}`, folder: `.claude/worktrees/${name}` };
+}
+
+/**
+ * The item's existing worktree: a checkout on a branch that starts with
+ * claude/<id in lower case>-. The branch keeps the title the item had when
+ * the worktree was made, so after a hand rename the name built from the new
+ * title names a worktree that does not exist (final run, Notion finding 3).
+ * @returns {{ branch: string, folder: string, existing: true } | null}
+ */
+export function existingWorktree(root, id) {
+  if (!root || !id) return null;
+  const res = runProgram('git', ['worktree', 'list', '--porcelain'], { cwd: root, timeoutMs: 10000 });
+  if (!res || res.code !== 0) return null;
+  const want = `claude/${String(id).toLowerCase()}-`;
+  let folder = null;
+  let best = null;
+  for (const line of String(res.stdout || '').split(/\r?\n/)) {
+    if (line.startsWith('worktree ')) folder = line.slice('worktree '.length).trim();
+    else if (line.startsWith('branch refs/heads/') && folder) {
+      const branch = line.slice('branch refs/heads/'.length).trim();
+      // The item's own branch is the shortest; a builder's branch made from it is longer.
+      if (branch.startsWith(want) && (!best || branch.length < best.branch.length)) best = { branch, folder };
+    }
+  }
+  if (!best) return null;
+  const rel = path.relative(root, best.folder);
+  return { branch: best.branch, folder: rel && !rel.startsWith('..') && !path.isAbsolute(rel) ? rel.split(path.sep).join('/') : best.folder, existing: true };
 }
 
 /** The parent's design when it is approved: { id, location, path }, else null. */
@@ -343,7 +371,7 @@ async function cmdEdit(ctx, tracker, project, args, changes) {
   const lines = [line];
   const warnings = res.warnings || [];
   // What the edit itself broke, so it is fixed now and not found sessions later.
-  for (const w of warnings) lines.push(`${w.level === 'error' ? 'Error' : w.level === 'question' ? 'Question for the owner' : 'Warning'} after this edit: ${w.message}`);
+  for (const w of warnings) lines.push(w.level === 'note' ? `Note: ${w.message}` : `${w.level === 'error' ? 'Error' : w.level === 'question' ? 'Question for the owner' : 'Warning'} after this edit: ${w.message}`);
   out(ctx, withChanges(changes, lines), { ok: true, id: res.id, changed: res.changed, location: res.record.location, warnings, changes });
   return EXIT.OK;
 }
@@ -468,7 +496,12 @@ async function cmdFinish(ctx, tracker, project, args, changes) {
   else if (backup.status === 'nothing') {
     // Said every time, so the reply never implies a backup was made (final
     // confirmation round 1, Notion run: the finish printed nothing about it).
-    lines.push('No automatic backup: this project keeps its work items and memory outside this computer, so nothing was copied to a backup folder.');
+    // Work items and memory both in Notion: Notion's page history and trash
+    // are the backup (the owner's decision of 2026-09-28).
+    const { notionOnly, NOTION_KEEPS_HISTORY } = await import('../project/backup.mjs');
+    lines.push(notionOnly(project.config)
+      ? `No automatic backup: ${NOTION_KEEPS_HISTORY}, so nothing was copied to a backup folder.`
+      : 'No automatic backup: this project keeps its work items and memory outside this computer, so nothing was copied to a backup folder.');
   }
   out(ctx, withChanges(changes, lines), {
     ok: true, id: res.id, status: 'Done', resultApproval: res.resultApproval, openSubItems: res.openSubItems, warnings: res.warnings || [], changes,
@@ -564,7 +597,12 @@ async function cmdDecisions(ctx, tracker, project, args, changes) {
       lines.push('', `Memory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):`);
       const sentence = (t) => { const x = String(t || '').trim(); return !x ? '(no description).' : /[.!?]$/.test(x) ? x : `${x}.`; };
       for (const p of proposals) {
-        lines.push(`  - ${p.key}: ${sentence(p.description)}${p.saved ? ` Saved ${p.saved}.` : ''} Yes: toolkit memory approve ${p.key} --by <name>. No: toolkit memory reject ${p.key}. (work-decide)`);
+        // Concept memory: a proposal that names a concept is added to it on a yes.
+        const joins = p.concept ? ` A yes adds it to the concept ${p.concept}.` : '';
+        // A proposal that names no concept starts one: the yes names it with --concept.
+        const typeWord = String(p.key).split('_')[0];
+        const yes = p.concept || typeWord === 'event' ? `toolkit memory approve ${p.key} --by <name>` : `toolkit memory approve ${p.key} --by <name> --concept ${typeWord}_<subject>`;
+        lines.push(`  - ${p.key}: ${sentence(p.description)}${p.saved ? ` Saved ${p.saved}.` : ''}${joins} Yes: ${yes}. No: toolkit memory reject ${p.key}. (work-decide)`);
       }
     }
   }

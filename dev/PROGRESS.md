@@ -167,6 +167,46 @@ Read `dev/GOAL.md` first. This file says where the work stands.
   memory in all backends and the model branch, verify, update installs,
   reruns in Codex and Claude Code plus a Notion and Hindsight concept check,
   independent confirmation. Then the final report.
+- Close-out fixes done in the working tree (not committed): R-B1 (skill text
+  plus `work set --stage 11`, `approve --result`, and `work decisions` notes
+  when no acceptance-checker history note follows the last build), Notion-only
+  backups, R-I1, R-I3, R-I4 (PostToolUse note), minor findings R-M1 to R-M7,
+  R-M9 to R-M11, and the final-run bugs. Versions: toolkit 0.2.8, work 0.2.10,
+  memory 0.2.8, session-skills 0.2.8, git-workflows 0.2.8, marketplace
+  0.2.10. Still open: R-M8 (routing re-run, live), R-M12 (Mike's yes), the
+  Salesforce guard's two periods (a model file; Mike's yes).
+- Concept memory built in the working tree (not committed): `lib/memory/concepts.mjs`;
+  `toolkit memory save --concept <key> --section <heading>` (add, replace
+  with --expect, --append, --remove), `merge`, `split`, `tidy --plan`; the
+  duplicate check names the concept a new fact belongs in; proposals name
+  their concept and approve adds them there; `updated` in the frontmatter;
+  index and list show title, summary, and updated date. Built-in, Hindsight
+  (one document per concept), and Notion (one row per concept; section saves
+  send update_content). Model branch commit `648bf4e` (three `.memory/`
+  files), imported; `dev/model-changes.md` "Concept memory". Skills and
+  shared text updated. New tests: `tests/memory/concepts.test.mjs`. Suite:
+  963 tests, 0 fail, 3 skipped by design. Versions: toolkit 0.2.9, memory
+  0.2.9, work 0.2.11, session-skills 0.2.9, marketplace 0.2.11. Next: the
+  lead commits, then installs, reruns, and a live Notion concept check.
+- Verifier fixes for concept memory (working tree, not committed): heading
+  anchors encode brackets, "#", and "%", and link parsing reads balanced
+  brackets; a section save, merge, split, and approve keep the concept's
+  authorization line (a fact whose approval differs gets it on its Evidence
+  line); Hindsight holds a local lock for every read-change-write; a one-fact
+  proposal is approved only with `approve --concept <key>` (existing concept,
+  new concept with --title and --description, or its own key), and saving it
+  again whole with --approved-by is refused; merged records leave MEMORY.md;
+  the index date falls back to last_verified; --type/--name --section keeps
+  an existing summary; --append adds no second Remember label; the
+  suggested heading breaks ties; find shows the matching section; rename
+  retargets waiting proposals; the Stop hook shares one 11-second deadline;
+  the acceptance check counts only "acceptance-checker: <verdict>". New
+  tests: `tests/memory/verifier-fixes.test.mjs`,
+  `tests/work/verifier-fixes.test.mjs`. Suite: 979 tests, 0 fail, 3 skipped.
+  No version raise: the working versions (toolkit 0.2.9 and the rest) are
+  not installed yet. Still open: the live owner-led Codex rerun for R-B1;
+  the model rule `keep-work-item-current.md` wording (Mike's yes); the lead's
+  call on "belongs in the concept" staying a refusal (exit 2).
 
 ## Last mile (2026-09-28, workflow `wf_93bccb2f-ec7`)
 

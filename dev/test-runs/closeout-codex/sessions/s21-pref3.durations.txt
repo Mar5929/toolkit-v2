@@ -1,0 +1,10 @@
+0.231s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat PROJECT.md",max_output_tokens:2500}),\n  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.2.9/skills/memory-save/'
+0.21s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat .memory/AGENTS.md .memory/memory-criteria.md",max_output_tokens:5000}),\n  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v'
+0.257s :: 'const r=await tools.exec_command({cmd:"toolkit memory list --type user",max_output_tokens:2000});text(r.output);\n'
+0.26s :: 'const r=await tools.exec_command({cmd:"toolkit memory find \'commit messages\'",max_output_tokens:2000});text(r.output);\n'
+0.224s :: 'const r=await tools.exec_command({cmd:"toolkit memory get user_working_preferences --json",max_output_tokens:3500});text(r.output);\n'
+0.254s :: 'const r=await tools.exec_command({cmd:"toolkit config get memory.approval",max_output_tokens:1000});text(r.output);\n'
+0.306s :: 'const r=await tools.exec_command({cmd:"toolkit memory save --concept user_working_preferences --section \'Commit messages\' --description \'How Mike prefers reviews, tests, and commit messages\' --body \'**Remember:** Always '
+0.258s :: 'const r=await tools.exec_command({cmd:"toolkit memory get user_working_preferences",max_output_tokens:2500});text(r.output);\n'
+0.315s :: 'const r=await tools.exec_command({cmd:"toolkit doctor",max_output_tokens:1000});text(r.output);\n'
+MAX toolkit call seconds: 0.315

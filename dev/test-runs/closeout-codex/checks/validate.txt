@@ -1,0 +1,4 @@
+Validating marketplace manifest: /Users/michaelrihm/Documents/Projects/toolkit-v2/.claude-plugin/marketplace.json
+
+✔ Validation passed
+exit=0

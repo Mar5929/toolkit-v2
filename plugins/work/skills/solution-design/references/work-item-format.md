@@ -160,6 +160,8 @@ full Markdown row in single quotes.
 A new question takes the next free `Q-` number: read the Open Questions
 section first and add one to the highest number there (`Q-01` when there is
 none). "Decision needed from" is `owner` for the owner, or a person or role.
+When you asked it with a recommendation, the Question cell holds both:
+the question, then "Recommended: <answer>, because <reason>."
 
 ```text
 toolkit work show <id> --section 'Open Questions'
@@ -214,7 +216,7 @@ Never edit these by hand or from the shell. The hooks refuse it.
 An Open Questions row for a content question the owner must answer:
 
 ```markdown
-| Q-01 | What should the project brief cover: goals only, or goals, users, and scope? | P1-T01 | Open | owner |
+| Q-01 | What should the project brief cover: goals only, or goals, users, and scope? Recommended: goals, users, and scope, because the build needs all three. | P1-T01 | Open | owner |
 ```
 
 A history note that records an owner's answer and says what it changes:

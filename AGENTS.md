@@ -168,17 +168,45 @@ claude plugin validate ./plugins/toolkit
   `description` and `hooks` at the top level, so no `$schema`). Any change to a
   Codex hook means Mike must trust it again in Codex `/hooks`; say so.
 - **Versions.** Both manifests of a plugin carry the same `name` and
-  `version`. Claude Code and Codex each run their own copy, filed under the
-  version (Claude Code: `~/.claude/plugins/cache/toolkit-v2/<plugin>/<version>`;
-  Codex: `~/.codex/plugins/cache/toolkit-v2/<plugin>/<version>`). Neither
-  reads this folder in place. So every shipped change raises `version` in
-  both manifests (and `metadata.version` in `.claude-plugin/marketplace.json`).
-  A change without a raise never reaches Mike's sessions, and nothing reports
+  `version`. The two hosts run the plugins in different ways:
+  - Codex runs its own copy, filed under the version
+    (`~/.codex/plugins/cache/toolkit-v2/<plugin>/<version>`). A change
+    reaches Codex only after the version is raised and `codex plugin add`
+    runs.
+  - Claude Code loads a plugin from a marketplace added as a local folder in
+    place (`ai-external-knowledge/claude-code/plugins-manifest-reference.md`,
+    `version`: such a plugin is "loaded in place" and is not pinned by its
+    version). Mike's `toolkit-v2` marketplace is this folder
+    (`~/.claude/plugins/known_marketplaces.json` records it with
+    `"source": "directory"` and this folder as `installLocation`), so his
+    Claude Code runs `plugins/<plugin>` here: skills, hooks, and `bin/` (the
+    session's `init` event and its `PATH` name this folder;
+    `dev/test-runs/install-everyday.md`, Finding 1). Every saved
+    edit under `plugins/`, committed or not, is live in his Claude Code at
+    its next session start: the `toolkit` plugin in every folder, all six in
+    V2 projects. A broken hook file makes a hook error on every tool call, so
+    keep `lib/` working at every save. `claude plugin install` and
+    `claude plugin update` still copy each plugin to
+    `~/.claude/plugins/cache/toolkit-v2/<plugin>/<version>`, and
+    `~/.claude/plugins/installed_plugins.json` names that copy, but a
+    session does not run it.
+  - The `toolkit` command, in a terminal and in both hosts, is
+    `~/.local/bin/toolkit`. It runs the copy named in
+    `~/.config/toolkit-v2/plugin-root`, a cache copy (see "The plugin-root
+    pointer" below). So in Claude Code the hooks run this folder while the
+    `toolkit` command runs the cache copy, and the two differ until the
+    cache copy is updated.
+
+  So every shipped change raises `version` in both manifests (and
+  `metadata.version` in `.claude-plugin/marketplace.json`). Without a raise,
+  Codex and the `toolkit` command never get the change, and nothing reports
   it. To install a raised version: `claude plugin marketplace update
-  toolkit-v2`, then `claude plugin update <plugin>@toolkit-v2`; for Codex,
+  toolkit-v2`, then `claude plugin update <plugin>@toolkit-v2` (it refreshes
+  the cache copy the `toolkit` command runs); for Codex,
   `codex plugin add <plugin>@toolkit-v2`, then `toolkit machine-setup` (it
-  switches the other V2 plugins off for every Codex folder again). Each of
-  these changes Mike's own setup, so ask him first.
+  switches the other V2 plugins off for every Codex folder again, and points
+  `plugin-root` at the newest cache copy). Each of these changes Mike's own
+  setup, so ask him first.
 - **Machine-wide plugins** (Mike, 2026-09-28, decision 10): `toolkit` is on
   for every folder in both hosts; it holds only `project-setup` and hooks that
   do nothing outside a V2 project. The other five V2 plugins are on only in V2

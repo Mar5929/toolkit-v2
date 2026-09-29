@@ -20,6 +20,7 @@ import { LOOSE_REASON } from '../../lib/hooks/stop.mjs';
 import { hasKeepPhrase } from '../../lib/hooks/phrases.mjs';
 import { compareRecords, differsByValue } from '../../lib/memory/similar.mjs';
 import { aiCreditLine, checkAiCredit } from '../../lib/hooks/shell.mjs';
+import { GENERATED, GENERATED_LOWER, TRAILER_IN_SENTENCE, WRITTEN_USING } from '../credit-lines.mjs';
 
 after(cleanup);
 
@@ -154,41 +155,59 @@ test('the closest-match rule does not stop a different fact: names, values, and 
   assert.equal(differsByValue('Document every command-line flag in the README', 'Explain each command-line flag in the README file'), false);
 });
 
-test('toolkit memory save: the production org alias is saved beside the staging one', async () => {
+test('toolkit memory save: the production org alias belongs in the staging alias concept, as its own section, never as an update', async () => {
+  // Concept memory (Mike, 2026-09-28): a new fact about the same subject goes
+  // into that concept as a section; the check names the concept and never
+  // tells the agent to overwrite the staging fact.
   const { root, env } = await initProject();
-  const save = (name, s) => tk(root, ['memory', 'save', '--type', 'project', '--name', name, '--description', s, '--body', `# ${s}\n\n**Remember:** ${s}.\n`, '--approved-by', 'Mike', '--json'], { env });
+  const save = (name, s, extra = []) => tk(root, ['memory', 'save', '--type', 'project', '--name', name, '--description', s, '--body', `# ${s}\n\n**Remember:** ${s}.\n`, '--approved-by', 'Mike', ...extra, '--json'], { env });
   assert.equal((await save('staging-org-alias', 'The staging org alias is acme-uat')).code, 0);
   const prod = await save('production-org-alias', 'The production org alias is acme-prod');
-  assert.equal(prod.code, 0, prod.stdout);
+  assert.equal(prod.code, 2, prod.stdout);
+  assert.match(prod.json.error.message, /belongs in the concept project_staging_org_alias/);
+  assert.equal(prod.json.error.details.suggestion.concept, 'project_staging_org_alias');
+  assert.doesNotMatch(prod.json.error.details.fix, /--expect/);
+  // As a section of that concept it is saved: a different value is a different fact.
+  const section = await tk(root, ['memory', 'save', '--concept', 'project_staging_org_alias', '--section', 'Production org alias', '--body', 'The production org alias is acme-prod.', '--approved-by', 'Mike', '--json'], { env });
+  assert.equal(section.code, 0, section.stdout);
+  assert.equal(section.json.section.action, 'added');
+  // Now the concept holds that fact, so a separate record of it is a duplicate, named by its section.
+  const again = await save('production-org-alias', 'The production org alias is acme-prod', ['--new-concept']);
+  assert.equal(again.code, 2, again.stdout);
+  assert.match(again.json.error.message, /project_staging_org_alias, in its section "Production org alias", very similar text/);
 });
 
-test('Stop hook: the production org alias question is saved as a proposal, and no note tells the agent to update the staging record', async () => {
+test('Stop hook: the production org alias question is saved as a proposal for the staging alias concept, and no note tells the agent to update the staging record', async () => {
   const { root, env } = await initProject();
   const s = 'The staging org alias is acme-uat';
   assert.equal((await tk(root, ['memory', 'save', '--type', 'project', '--name', 'staging-org-alias', '--description', s, '--body', `# ${s}\n\n**Remember:** ${s}.\n`, '--approved-by', 'Mike'], { env })).code, 0);
   const r = await turn(root, env, 'codex', { session: 'alias', message: 'Save to memory: The production org alias is acme-prod?' });
   assert.equal(r.stop.raw, '');
   const list = await proposals(root, env);
-  assert.deepEqual(list.map((x) => x.key), ['project_production_org_alias_acme_prod']);
+  assert.deepEqual(list.map((x) => x.key), ['project_proposal_the_production_org_alias_is_acme_prod']);
+  assert.equal(list[0].concept, 'project_staging_org_alias');
   const next = await turn(root, env, 'codex', { session: 'alias', prompt: 'Later.', message: 'OK.' });
   assert.doesNotMatch(context(next.up), /update that record|--expect/);
-  assert.match(context(next.up), /as a memory proposal: project_production_org_alias_acme_prod/);
+  assert.match(context(next.up), /as a memory proposal for the concept project_staging_org_alias \(his yes adds it there as a section\): project_proposal_the_production_org_alias_is_acme_prod/);
 });
 
-test('Stop hook: a question only about the same subject as a record is still saved as a proposal', async () => {
+test('Stop hook: a question about the same subject as a record is saved as a proposal for that concept', async () => {
   const { root, env } = await initProject();
   const s = 'Every work item needs a design';
   assert.equal((await tk(root, ['memory', 'save', '--type', 'project', '--name', 'items-need-design', '--description', s, '--body', `# ${s}\n\n**Remember:** ${s}.\n`, '--approved-by', 'Mike'], { env })).code, 0);
-  // The command alone stops it and says why, without telling the agent to overwrite the record.
+  // The command alone stops it and names the concept, without telling the agent to overwrite the record.
   const t = 'Every work item needs a test plan';
   const direct = await tk(root, ['memory', 'save', '--type', 'project', '--name', 'items-need-test-plan', '--description', t, '--body', `# ${t}\n\n**Remember:** ${t}.\n`, '--approved-by', 'Mike'], { env });
   assert.equal(direct.code, 2);
-  assert.match(direct.stderr, /about the same subject\. Check whether it is the same fact/);
-  assert.match(direct.stderr, /When this is a different fact, save it again with --allow-similar/);
-  // The Stop hook saves the proposal anyway: the owner reviews every proposal.
+  assert.match(direct.stderr, /belongs in the concept project_items_need_design/);
+  assert.match(direct.stderr, /When it is a different concept, save it again with --new-concept/);
+  assert.doesNotMatch(direct.stderr, /--expect/);
+  // The Stop hook saves the proposal anyway, for that concept: the owner reviews every proposal.
   const r = await turn(root, env, 'claude', { session: 'subject', message: `Save to memory: ${t}?` });
   assert.equal(r.stop.raw, '');
-  assert.deepEqual((await proposals(root, env)).map((x) => x.key), ['project_every_work_item_needs_test_plan']);
+  const list = await proposals(root, env);
+  assert.deepEqual(list.map((x) => x.key), ['project_proposal_every_work_item_needs_a_test_plan']);
+  assert.equal(list[0].concept, 'project_items_need_design');
 });
 
 // ------------------------------------------------------------------ minor 2: the notes
@@ -226,13 +245,13 @@ test('Stop hook: a question that holds a secret is not saved, and the note says 
 // ------------------------------------------------------------------ minor 9: AI credit mid-line
 
 test('the AI credit guard finds a credit in the middle of a line when an AI name follows', () => {
-  const tag = checkAiCredit('git tag -a v1.0 -m "Release 1.0. Generated with Claude Code"');
-  assert.deepEqual(tag, { what: 'tag', line: 'Release 1.0. Generated with Claude Code' });
-  const release = checkAiCredit("gh api repos/acme/app/releases -f tag_name=v1.0 -f 'name=Release 1.0, generated with Claude Code'");
+  const tag = checkAiCredit(`git tag -a v1.0 -m "Release 1.0. ${GENERATED}"`);
+  assert.deepEqual(tag, { what: 'tag', line: `Release 1.0. ${GENERATED}` });
+  const release = checkAiCredit(`gh api repos/acme/app/releases -f tag_name=v1.0 -f 'name=Release 1.0, ${GENERATED_LOWER}'`);
   assert.equal(release && release.what, 'release');
-  assert.ok(checkAiCredit('git commit -m "Docs update, written using ChatGPT"'));
+  assert.ok(checkAiCredit(`git commit -m "Docs update, ${WRITTEN_USING}"`));
   assert.equal(checkAiCredit('git commit -m "Fixtures generated with make"'), null);
   assert.equal(aiCreditLine('Notes written by Mike about the Codex hooks'), null);
   assert.equal(aiCreditLine('Tests made with the Codex CLI harness'), null);
-  assert.equal(aiCreditLine('Deny commits with a Co-Authored-By: Claude line'), null, 'a Co-Authored-By inside a sentence is not a credit line');
+  assert.equal(aiCreditLine(TRAILER_IN_SENTENCE), null, 'a Co-Authored-By inside a sentence is not a credit line');
 });

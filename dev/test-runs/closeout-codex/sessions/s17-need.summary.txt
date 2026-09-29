@@ -1,0 +1,464 @@
+PROMPT: What do you need from me?
+THREAD: 01a0eb21-acba-7202-bf34-58d31b6fffdc
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll check the two items waiting for your approval and tell you the specific decisions needed.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-decide/SKILL.md'
+  -> ---
+name: work-decide
+description: 'Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers. Use when he asks "what do you need from me", answers a waiting decision ("go with option B"), or states a project-wide decision.'
+---
+
+# Work decide
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Walks the owner through what waits on him, one decision at a time, and records each answer where it belongs. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Build the queue. The command lists each decision once: requirements waiting for approval, proposed designs, results at stage 11, Open Questions rows the owner decides, and memory proposals. Its "Agent to-do" lines are not decisions. A delivery offer belongs to `work-delegate`: open it after his other decisions.
+   `toolkit work decisions`
+2. He gave an answer without being asked ("approved", "go with B"): match it to exactly one waiting decision; when two could match, ask which, naming both. A bare "yes", "ok", or "looks good" with no question asked is not an answer (`references/approvals.md`, section 1).
+3. Otherwise start with the count and one short line for every waiting decision, memory proposals included ("3 decisions wait on you: the WI-004 design, the WI-006 result, and a 
+
+[AGENT] I’m using the work-decide procedure to check the approval record and the remaining memory proposal.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-decide/references/approvals.md'
+  -> <!-- Generated file. Source: plugins/work/shared/approvals.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Approvals and gates
+
+The exact steps to ask for and record each owner approval, and what counts as
+one. Run each checklist in order; one wrong or missing command leaves the
+item in the wrong state.
+
+## Contents
+
+1. What counts as approval
+2. Requirements approval
+3. Design approval
+4. Result approval
+5. Done
+6. Cancel
+7. Delivery offer
+8. Project-wide decision
+9. Memory proposal
+10. Sub-items and approvals
+11. Standing merge instruction
+12. When an approve command refuses
+
+## 1. What counts as approval
+
+`toolkit work lifecycle` prints the gates and these rules. In short:
+
+- Only the owner's explicit words count. Quote them in a history note.
+- A question, a suggestion, a tentative answer ("probably B"), silence, or a
+  saved draft is not approval.
+- An approval covers only what was shown. It never covers merge, deployment,
+  spending, or publishing.
+- An approval survives later stages. A stage alone does not prove approval:
+  check the approval field (`toolkit work show <id>`).
+- A bare "yes", "ok", or "looks good" answers only a yes-or-no question asked
+  earlier in this conversation. When none was asked, or the waiting question
+  is not a yes-or-no question, show the decision with its choices and your
+  recommendation, and record nothing.
+- After a yes, save his words first, in a history note that starts with
+  `Owner said:`. Then run the 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 3 decisions wait on the owner:
+
+WI-001 Build the plain tip and total command
+  - WI-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-001 --result --by <name>. (work-decide)
+
+WI-002 Add the --split option
+  - WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)
+
+Memory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):
+  - project_proposal_venmo_rejects_payments_with_a_fraction_of_a_cent: Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount. Saved 2026-09-28. A yes adds it to the concept project_money_calculation. Yes: toolkit memory approve project_proposal_venmo_rejects_payments_with_a_fraction_of_a_cent --by <name>. No: toolkit memory reject project_proposal_venmo_rejects_payments_with_a_fraction_of_a_cent. (work-decide)
+
+Agent to-do (the agent's step, not a decision the owner is waiting on):
+  - Start one acceptance-checker for WI-001 before asking the owner to approve its result: no check is recorded since its last build. It runs whoever built the change. (work-check)
+
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-check/SKILL.md'
+  -> ---
+name: work-check
+description: 'Tests a finished build against its work item''s requirements, fixes what fails, and asks the owner to approve the result. Use when the last build task is done, or the owner asks whether it is ready to ship or works, for example "is it ready", "test it", or "check it against what I asked for".'
+---
+
+# Work check
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Checks a finished build against every requirement with an independent checker, fixes what fails, and asks the owner to approve the result; it never merges, deploys, or marks Done. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Find the item as `work-on` does: the id he named, this worktree's item, or a title that matches; two matches, ask one question naming both. Read the requirements, the Acceptance list, the Tasks, and the design's Acceptance checks; a sub-item with no design of its own is checked against its parent's (`references/testing.md`, section 1). Then set the testing stage.
+   `toolkit work show <id>`
+   `toolkit work design <id>`
+   `toolkit work set <id> --stage 09-testing`
+2. Run the project's tests and every acceptance check the item lists. Several scenarios or manual steps: write a test plan in `tests/` on the item's branch (`references/testing.md`, sections 2 and 3).
+3
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-002'
+  -> WI-002: Add the --split option
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/.work-items/WI-001-build-the-plain-tip-and-total-command/WI-002-split-between-friends/WORK-ITEM.md
+Stage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/WI-001-build-the-plain-tip-and-total-command/DESIGN.md). Read it with: toolkit work design WI-001
+Worktree branch for this item: claude/wi-002-add-the-split-option (folder .claude/worktrees/wi-002-add-the-split-option)
+
+---
+id: WI-002
+title: Add the --split option
+type: build
+stage: 11-user-approval
+status: In Progress
+parent: WI-001
+waiting_on: "owner"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: none
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-002: Add the --split option
+
+## Overview
+
+**Goal:** Add --split so the command prints each person’s share of the rounded total.
+
+**Current position:** Split support and tests are committed on `claude/wi-002-add-the-split-option` at 421fcb7. Four command tests passed; an independent checker found R-02 met with no defects.
+
+**Next action:** Mike Rihm reviews the tested WI-002 result and decides whether to approve it. Leave the branch unmerged.
+
+**Blockers:** Waiting for WI-002 result approval from Mike Rihm.
+
+**Rela
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001'
+  -> WI-001: Build the plain tip and total command
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/.work-items/WI-001-build-the-plain-tip-and-total-command/WORK-ITEM.md
+Stage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: none | Sub-items: WI-002 | Design: approved (.work-items/WI-001-build-the-plain-tip-and-total-command/DESIGN.md)
+Worktree branch for this item: claude/wi-001-build-the-plain-tip-and-total (folder .claude/worktrees/wi-001-build-the-plain-tip-and-total)
+
+---
+id: WI-001
+title: Build the plain tip and total command
+type: build
+stage: 11-user-approval
+status: In Progress
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-28 by Mike Rihm"
+design: approved
+result_approved: "no"
+updated: 2026-09-28
+---
+
+# WI-001: Build the plain tip and total command
+
+## Overview
+
+**Goal:** Deliver the plain terminal command for tip and total; track the optional split in WI-002.
+
+**Current position:** P1 is built and tested on `claude/wi-001-build-the-plain-tip-and-total` at commit `8f746be`. R-01 checks pass; WI-002 still covers R-02.
+
+**Next action:** Mike Rihm reviews the tested P1 result and decides whether to approve it. Do not merge yet.
+
+**Blockers:** Result approval is pending. No technical blocker remains for P1.
+
+**Related items:** WI-002 delivers the --split option (R-02).
+
+## Ro
+
+[AGENT] WI-002 already has an independent check. WI-001 has passing tests but is missing that required check, so I’m completing it before asking you to approve WI-001.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-check/references/agent-acceptance-checker.md'
+  -> ---
+name: acceptance-checker
+description: Checks a finished work item result against each requirement's acceptance check and the design's acceptance checks, runs the tests, and returns a verdict per requirement with evidence, defects seen in the diff, and checks that could not run. Also checks a build plan before the build when asked. Never the agent that built it; changes nothing.
+tools: Read, Glob, Grep, Bash
+model: opus
+---
+<!-- Generated file. Source: plugins/work/agents/acceptance-checker.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+
+# Acceptance checker
+
+Check whether a finished result does what the owner asked. You are never the
+agent that built it. You run tests and read code, but you change nothing. You
+advise; the main agent fixes; the owner approves.
+
+## Contents
+
+- Start with the brief
+- Check
+- Plan check (only when the brief asks for one)
+- Boundaries
+- Return (result check)
+- Writing
+
+## Start with the brief
+
+- The brief gives the work item id, the requirements (Agreed goal, every
+  `R-xx` with its acceptance check, the Acceptance list), the design's
+  Acceptance checks table (in its "Build and verification plan") and the
+  "How to check it" column of the selected option's Requirement coverage, the
+  item's test plan when it has one (a copy of `tests/TEST-PLAN-TEMPLATE.md`),
+  the branch or commit to check, and the project's test commands.
+- Check that you are looking at the exact code the brief names:
+
+  ```text
+  git status
+  gi
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-check/references/helpers.md'
+  -> <!-- Generated file. Source: plugins/work/shared/helpers.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Working with helper agents
+
+How to start a helper agent in each host, what to put in its brief, and when
+helpers are allowed.
+
+## Contents
+
+1. The agents
+2. Starting an agent
+3. The brief
+4. A worked brief
+5. Rules
+6. When helpers are allowed
+
+## 1. The agents
+
+Every agent runs on Opus and carries its own writing rules. A skill that
+sizes a team also carries `team-roles.md`: what each role returns and how
+many of each to start.
+
+| Agent | What it does | Used by |
+| --- | --- | --- |
+| `requirements-analyst` | Checks requirements before design or build | `work-requirements`, `solution-design` |
+| `researcher` | Answers one bounded question with sources | `work-on`, `work-requirements`, `solution-design`, `work-delegate` |
+| `design-architect` | Writes or fixes one design option | `solution-design` |
+| `design-critic` | Checks a draft design against every requirement | `solution-design` |
+| `builder` | Builds one planned task in its own worktree | `work-on`, `work-check`, `work-delegate` |
+| `acceptance-checker` | Checks a result, or a build plan, against the requirements | `work-on`, `work-check`, `work-finish`, `work-delegate` |
+
+Each skill in the "Used by" column carries the agent's definition as
+`references/agent-<agent>.md`. In Codex, that text goes to the worker
+(section 2).
+
+## 2. Starting an agent
+
+Claude Code:
+
+- Start it with the Agent
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-check/references/testing.md'
+  -> # Testing a work item
+
+How `work-check` decides what to check, writes a test plan when one is
+needed, briefs the independent checker, runs the fix loop, and records the
+result.
+
+## Contents
+
+1. What to check against
+2. When a test plan is needed
+3. Writing the test plan
+4. Briefing the acceptance checker
+5. The check and fix loop
+6. Recording the result
+7. Showing the result to the owner
+
+## 1. What to check against
+
+Read these before running anything:
+
+- every `R-xx` block and its Acceptance check, and the item's Acceptance
+  list: `toolkit work show <id>`;
+- the design's "Build and verification plan" > Acceptance checks, and the
+  selected option's "How to check it" column: `toolkit work design <id>`
+  (it exits 1 when the item has no design);
+- a sub-item whose show output says "Design: none of its own; WI-012's design
+  is approved" is checked against the parent's design:
+  `toolkit work design <parent-id>`;
+- the Tasks section, to know what was built and on which branch.
+
+## 2. When a test plan is needed
+
+A test plan is needed when a check has several scenarios, a manual step, test
+data, or a release across environments. The item's own acceptance checks are
+enough when each one is a single automated test or a single observation.
+
+## 3. Writing the test plan
+
+- [ ] Work in the item's worktree, on its branch. Never on the default branch.
+- [ ] Copy `tests/TEST-PLAN-TEMPLATE.md` to `tests/<id>-TEST-PLAN.md`, for
+      example `tests/WI-012-TEST-PLAN.md`. Leave the template 
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex                                                        b50508c [main]
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## main
+
+
+[CMD exit=0] /bin/zsh -lc 'git remote'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'cat tests/WI-001-TEST-PLAN.md'
+  -> # WI-001 plain tip and total test plan
+
+## Scope
+
+Check R-01 and WI-001 acceptance items 1–3 and 6–7. WI-002 checks the split option separately.
+
+## Environment and data
+
+Node v25.8.1 on the local WI-001 worktree. The process checks run the command with the bill and percentage values listed below; n
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work design WI-001'
+  -> Design of WI-001 (approved) at /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/.work-items/WI-001-build-the-plain-tip-and-total-command/DESIGN.md
+
+---
+work_item: WI-001
+status: approved
+approved: "2026-09-28 by Mike Rihm"
+---
+
+# WI-001: Build the plain tip and total command — solution design
+
+**Requirements:** WI-001  
+**Design status:** Approved  
+**Requirements checked:** [WI-001 requirements](WORK-ITEM.md#requirements), 2026-09-28  
+**Last updated:** 2026-09-28  
+**Design approval:** Approved by Mike Rihm on 2026-09-28
+
+## What this design solves
+
+A person running [WI-001's agreed goal](WORK-ITEM.md#agreed-goal) can see the tip and total for a restaurant bill and, when requested, each person's share. This design covers one terminal command and its checks. It does not add another way to run the calculation.
+
+## Requirements and design readiness
+
+The approved requirements describe a complete result for this small command. They settle accepted values, tip and total rounding, split rounding, output, and rejection of invalid values. The independent requirements check found no remaining gap. The command's internal parsing rules and error wording are implementation details; neither changes the required results.
+
+| Requirement | Status in work item | Design coverage | Remaining decision or gap |
+| --- | --- | --- | --- |
+| R-01 — Show tip and total | Finalized | Option A, end-to-end b
+
+[ITEM collab_tool_call ] {"id": "item_19", "type": "collab_tool_call", "tool": "wait", "sender_thread_id": "01a0eb21-acba-7202-bf34-58d31b6fffdc", "receiver_thread_ids": [], "prompt": null, "agents_states": {}, "status": "completed"}
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history WI-001 --note 'Checked: R-01 against commit 8f746be; acceptance-checker: R-01 met on exact commit with no defects; evidence: tests/WI-001-TEST-PLAN.md, 2 passing Node tests, direct examples and invalid-input checks; gaps: R-02 belongs to WI-002' --effect 'WI-001 result ready for owner review.'"
+  -> Added a Recent History row to WI-001.
+
+
+[AGENT] Three decisions wait on you: approval of the WI-001 plain command, approval of the WI-002 split option, and whether to keep a proposed memory about whole-cent Venmo payments. We’ll take them one at a time.
+
+**First, WI-001:** The plain command prints the tip and total. In the [WI-001 worktree](/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/.claude/worktrees/wi-001-build-the-plain-tip-and-total), run `node bin/tipcalc.js 50 --percent 20` to see `Tip: $10.00  Total: $60.00`.
+
+Two tests passed, and an independent checker confirmed the required examples, rounding, and invalid-input behavior at commit `8f746be`. It found no defects. The split option has its own review under WI-002.
+
+I recommend approving WI-001 based on those checks. Approval lets me continue its closeout; it does not authorize a merge. **Do you approve this result?**
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 422592, "cached_input_tokens": 377728, "cache_write_input_tokens": 0, "output_tokens": 2598, "reasoning_output_tokens": 354}}
+
+SKILLS OPENED: ['work-decide', 'work-check']
+
+[HOOK CONTEXT ord=9] Project briefing: tipcalc (tipcalc), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Build the plain tip and total command: 11 User approval, In Progress, waiting on owner. Next action: Mike Rihm reviews the tested P1 result and decides whether to approve it. Do not merge yet. Continues with work-decide.
+- WI-002 Add the --split option: 11 User approval, In Progress, waiting on owner. Next action: Mike Rihm reviews the tested WI-002 result and decides whether to approve it. Leave the branch unmerged. Continues with work-decide.
+
+Waiting on the owner:
+- WI-001 Build the plain tip and total command: WI-001 is at 11 User approval: the o
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md",max_output_tokens:16000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-decide/SKILL.md",max_output_tokens:12000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,result:x}));
+
+  [OUT] [{"type": "input_text", "text": "Script failed\nWall time 0.0 seconds\nOutput:\n"}, {"type": "input_text", "text": "Script error:\nSyntaxError: missing ) after argument list"}]
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md",max_output_tokens:16000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-decide/SKILL.md",max_output_tokens:12000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"0278f0\",\"wall_time_seconds\":0,\"exit_code\":1,\"original_token_count\":3927,\"output\":\"cat: SOUL.md: No such file or directory\\n# tipcalc\\n\\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\\n\\n## Purpose and intended outcome\\n\\n- Purpose: tipcalc tells me the tip and the total for a restaurant bill, and can split the total between friends, straight from my terminal.\\n- Intended outcome: tipcalc tells me the tip and the total for a restaurant bill, and can split the total between friends, straight from my terminal.\\n\\n## Scope and boundaries\\n\\n- In scope: tipcalc tells me the tip and the total for a restaurant bill, and can split the total between friends, straight from my terminal.\\n- Outside scope: `<Important exclusions or adjacent owners.>`\\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\\n\\n## Systems and environments\\n\\n| System or org | Purpose | Environment | Source of truth | Access notes |\\n| --- | --- | --- | --- | --- |\\n| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |\\n\\n## People and ownership\\n\\n| Role | Person or team | Responsibility | Source / last confirmed |\\n| --- | --- | --- | --- |\\n| Owner | Mike Rihm | Project decisions | Owner's setup answers, 2026-09-28 |\\n\\n## Work and project records\\n\\n- Work tracker: `.work-items/` in the main checkout (local folders, Git-ignored)\\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\\n- Project decisions: [DECISIONS.md](DECISIONS.md)\\n- Functional requirements: [requirements/](requirements/)\\n- Design home: `DESIGN.md` beside each local work item in `.work-items/`.\\n- System Guide: disabled; `system-guide/` currently holds only the scaffold template.\\n- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)\\n- Memory backup or sync: `/private/tmp/claude-501/-Users-michaelrihm-Docu
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:5000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-decide/references/approvals.md",max_output_tokens:9000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"f81452\",\"wall_time_seconds\":0.000003166,\"exit_code\":0,\"original_token_count\":303,\"output\":\"3 decisions wait on the owner:\\n\\nWI-001 Build the plain tip and total command\\n  - WI-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-001 --result --by <name>. (work-decide)\\n\\nWI-002 Add the --split option\\n  - WI-002 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-002 --result --by <name>. (work-decide)\\n\\nMemory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):\\n  - project_proposal_venmo_rejects_payments_with_a_fraction_of_a_cent: Venmo rejects payments with a fraction of a cent, so every split share must be a whole-cent amount. Saved 2026-09-28. A yes adds it to the concept project_money_calculation. Yes: toolkit memory approve project_proposal_venmo_rejects_payments_with_a_fraction_of_a_cent --by <name>. No: toolkit memory reject project_proposal_venmo_rejects_payments_with_a_fraction_of_a_cent. (work-decide)\\n\\nAgent to-do (the agent's step, not a decision the owner is waiting on):\\n  - Start one acceptance-checker for WI-001 before asking the owner to approve its result: no check is recorded since its last build. It runs whoever built the change. (work-check)\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"872eb5\",\"wall_time_seconds\":0.000002917,\"exit_code\":0,\"original_token_count\":3603,\"output\":\"<!-- Generated file. Source: plugins/work/shared/approvals.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\\n# Approvals and gates\\n\\nThe exact steps to ask for and record each owner approval, and what counts as\\none. Run each checklist in order; one wrong or missing command leaves the\\nitem in the wrong state.\\n\\n## Contents\\n\\n1. What counts as approval\\n2. Requirements approval\\n3. Design approval\\n4. Result approval\\n5. Done\\n6. Cancel\\n7. Delivery offer\\n8. Project-wide decision\\n9. Memory proposal\\n10. Sub-items and approvals\\n11. Standing merge instruction\\n12. When an approve command refuses\\n\\n## 1. What counts as approval\\n\\n`toolkit work lifecycle` prints the gates and these rules. In 
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"toolkit work show WI-001",max_output_tokens:10000}),
+  tools.exec_command({cmd:"toolkit work show WI-002",max_output_tokens:10000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-check/SKILL.md",max_output_tokens:11000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"4233fd\",\"wall_time_seconds\":0.000001208,\"exit_code\":0,\"original_token_count\":4124,\"output\":\"WI-001: Build the plain tip and total command\\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/.work-items/WI-001-build-the-plain-tip-and-total-command/WORK-ITEM.md\\nStage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide\\nParent: none | Sub-items: WI-002 | Design: approved (.work-items/WI-001-build-the-plain-tip-and-total-command/DESIGN.md)\\nWorktree branch for this item: claude/wi-001-build-the-plain-tip-and-total (folder .claude/worktrees/wi-001-build-the-plain-tip-and-total)\\n\\n---\\nid: WI-001\\ntitle: Build the plain tip and total command\\ntype: build\\nstage: 11-user-approval\\nstatus: In Progress\\nparent: none\\nwaiting_on: \\\"owner\\\"\\npriority: medium\\ndelivery: owner-led\\nrequirements_approved: \\\"2026-09-28 by Mike Rihm\\\"\\ndesign: approved\\nresult_approved: \\\"no\\\"\\nupdated: 2026-09-28\\n---\\n\\n# WI-001: Build the plain tip and total command\\n\\n## Overview\\n\\n**Goal:** Deliver the plain terminal command for tip and total; track the optional split in WI-002.\\n\\n**Current position:** P1 is built and tested on `claude/wi-001-build-the-plain-tip-and-total` at commit `8f746be`. R-01 checks pass; WI-002 still covers R-02.\\n\\n**Next action:** Mike Rihm reviews the tested P1 result and decides whether to approve it. Do not merge yet.\\n\\n**Blockers:** Result approval is pending. No technical blocker remains for P1.\\n\\n**Related items:** WI-002 delivers the --split option (R-02).\\n\\n## Roadmap\\n\\nA phase is complete when its tasks are complete and its exit result has been checked.\\n\\n| Phase | Outcome | Status | Exit result | Sub-items |\\n|---|---|---|---|---|\\n| P1 \u2014 Plain tip and total | The command prints the rounded tip and total | Done | R-01 command and error checks pass | None. |\\n| P2 \u2014 Split option | The command also prints each person\u2019s rounded-up share when requested | Not Started | WI-002 passes its R-02 checks and receives its own result approval | WI-002 |\\n\\n## Tasks\\n\\n### P1 \u2014 Plain tip and total\\n\\n- [x] **P1-T01 \u2014 Parse command inputs** 
+
+[CALL] const r=await Promise.allSettled([
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-check/references/agent-acceptance-checker.md",max_output_tokens:10000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-check/references/helpers.md",max_output_tokens:9000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.2.11/skills/work-check/references/testing.md",max_output_tokens:9000}),
+  tools.exec_command({cmd:"git status --short --branch",max_output_tokens:3000}),
+  tools.exec_command({cmd:"git worktree list",max_output_tokens:3000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"39813e\",\"wall_time_seconds\":0.000002458,\"exit_code\":0,\"original_token_count\":1290,\"output\":\"---\\nname: acceptance-checker\\ndescription: Checks a finished work item result against each requirement's acceptance check and the design's acceptance checks, runs the tests, and returns a verdict per requirement with evidence, defects seen in the diff, and checks that could not run. Also checks a build plan before the build when asked. Never the agent that built it; changes nothing.\\ntools: Read, Glob, Grep, Bash\\nmodel: opus\\n---\\n<!-- Generated file. Source: plugins/work/agents/acceptance-checker.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\\n\\n# Acceptance checker\\n\\nCheck whether a finished result does what the owner asked. You are never the\\nagent that built it. You run tests and read code, but you change nothing. You\\nadvise; the main agent fixes; the owner approves.\\n\\n## Contents\\n\\n- Start with the brief\\n- Check\\n- Plan check (only when the brief asks for one)\\n- Boundaries\\n- Return (result check)\\n- Writing\\n\\n## Start with the brief\\n\\n- The brief gives the work item id, the requirements (Agreed goal, every\\n  `R-xx` with its acceptance check, the Acceptance list), the design's\\n  Acceptance checks table (in its \\\"Build and verification plan\\\") and the\\n  \\\"How to check it\\\" column of the selected option's Requirement coverage, the\\n  item's test plan when it has one (a copy of `tests/TEST-PLAN-TEMPLATE.md`),\\n  the branch or commit to check, and the project's test commands.\\n- Check that you are looking at the exact code the brief names:\\n\\n  ```text\\n  git status\\n  git rev-parse HEAD\\n  git log --oneline -5\\n  ```\\n\\n  If the commit differs from the one in the brief, say so first.\\n- When the brief asks for a check before a merge, report the exact commit\\n  you checked, so the main agent can confirm nothing changed after it.\\n\\n## Check\\n\\n- Run the project's tests and every acceptance check you can run. Copy each\\n  command and its result line exactly.\\n- For each requirement, give one verdict:\\n  - **Met:** the acceptance check passed, or the evidence shows the required\\n    behavior. Name the evidence.\\n  - **Partly met:** some of the behavior works. Say what is 
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"toolkit work design WI-001",max_output_tokens:12000}),
+tools.exec_command({cmd:"cat tests/WI-001-TEST-PLAN.md",workdir:".claude/worktrees/wi-001-build-the-plain-tip-and-total",max_output_tokens:5000}),
+tools.exec_command({cmd:"git remote",max_output_tokens:1000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"44c4e0\",\"wall_time_seconds\":0.000002958,\"exit_code\":0,\"original_token_count\":4630,\"output\":\"Design of WI-001 (approved) at /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/closeout2-codex/.work-items/WI-001-build-the-plain-tip-and-total-command/DESIGN.md\\n\\n---\\nwork_item: WI-001\\nstatus: approved\\napproved: \\\"2026-09-28 by Mike Rihm\\\"\\n---\\n\\n# WI-001: Build the plain tip and total command \u2014 solution design\\n\\n**Requirements:** WI-001  \\n**Design status:** Approved  \\n**Requirements checked:** [WI-001 requirements](WORK-ITEM.md#requirements), 2026-09-28  \\n**Last updated:** 2026-09-28  \\n**Design approval:** Approved by Mike Rihm on 2026-09-28\\n\\n## What this design solves\\n\\nA person running [WI-001's agreed goal](WORK-ITEM.md#agreed-goal) can see the tip and total for a restaurant bill and, when requested, each person's share. This design covers one terminal command and its checks. It does not add another way to run the calculation.\\n\\n## Requirements and design readiness\\n\\nThe approved requirements describe a complete result for this small command. They settle accepted values, tip and total rounding, split rounding, output, and rejection of invalid values. The independent requirements check found no remaining gap. The command's internal parsing rules and error wording are implementation details; neither changes the required results.\\n\\n| Requirement | Status in work item | Design coverage | Remaining decision or gap |\\n| --- | --- | --- | --- |\\n| R-01 \u2014 Show tip and total | Finalized | Option A, end-to-end behavior, requirement coverage, and technical shape | None |\\n| R-02 \u2014 Divide the total between friends | Finalized | Option A, end-to-end behavior, requirement coverage, and technical shape | None |\\n\\n## What exists today\\n\\nThe repository has project records but no application JavaScript, `package.json`, or `bin/tipcalc.js`. The work item also records that no application code has been built. There is no existing calculation or command behavior to reuse or replace.\\n\\n## Constraints and assumptions\\n\\n| Type | Constraint or assumption | Source and status | Effect on the design |\\n| --- | --- | --- | --- |\\n| Constr
+
+[CALL] {"task_name":"wi001_acceptance","fork_turns":"none","message":"gAAAAABquyuoYcDcXyS8H-8wGWpWN0Rnqe0ISLit5xxMBY2hBSDfdL70u21O2rUUKGLLotsb3kUMt0UxlUKF381X7mccC5TmtgOVxfcKME3K1ArkcKEFV0pfGCQ5zdk_VQdpVnAJo5c3Q3Ls2WmArFF6BcCQ9j_Pnzh2trjpvAw-FKAp1J2Bsdt-WOtpd6OL3dNISEJ7T7qDfOvVES_ToDnAVd5ZpBf0KHjH13UMuZ7NSqkAH-mAMqqm91dl-VTv0BbPtlSW54oMo8Mz9UyTMA4y46hb7fCfKSb0t-Ugi_cGWpwp_4ZGIWl8yhsv9v7NQfcwCC9nY_sXUImITucUCYNvdtQ_Miqeyn8EpRwW-EGc9DSq3H0WUABe9A1q7Lt7bsAYeOjMp2LQIVjhlQ_Nr2-6I-oKoSST9GsH2Yh5w4afVeRXQRd0JZUgEFJN-e4a0aWkbVxIuniX6WI7FSryROQ_WCLSbRxaXya4JOjMiI9AooC4IlWMY3sNOi7GiXH-e1ykhn3wzTiOUQHj4aBxHIrjj48wTVTancGSOcvRE9g0hFdR5lAph6srfXppUiRvJjcB79WqjMtYXjoQ18Z0ll6eaC_eE_pZL5gDkzddX4GL-EsslsKDr9lErGpcCGl5rVkk7okXSvxDdNEQD5QPhqS7Eeudl6MdOzWET5WDFp04LzcwjF7yChCGDWuSDroEcTQfqQUfcpQDCO-l4jxb1WDsXe4h08LK8OJ0L6A0M-hCxsTdtQfqjMWEh0U8Ti42N0SN93Tr3gnVmtO4FyNmpT_NfAQ_EFwm2pU9whWUtNEVQniB4xdDmg0oDY55_WXoxr_h8_R74IJFamExpG0hQAHsorJNPLkeID3I2OyZjloj1CHvvw65iDV_-mXUyup7GCQ7JNlJ1U2pBgTUUqWmUWiICUXOfWwgnyk8vXlX1ZSXp401nHZSda7D-xt8Fzel1AvSlwTQbbdUYlsgx7AFSwTJ2S4NTHk_frsvA6zEvQRSE-oZa9PFh2dMq8TxYqp4oLnGchpt5sYl_VbYfbpTJH24z0AA5_te2xyxQadK59cZM9jlGcvOjELCm-m_zIMnIMo6RMXfIlrmRdp0CK--e_Cm8gGE66r40Tho9Q4LcxTYFJCQPTeqg0ylHcCNan_5rJE3pzZC2Paruu9cQZ5ehbfSiU1RQgfPDZilDJq-0vLwAxe0Wu9v20unCM2G_68WPDMTCnIg95_rcBMZgz2HPftkbr9kZAfQqtYCDUvg6MtfNYhmFs7aHSLt1xPoTPN6BJFJZis5xeo2WNd47ykqwhFcWROpFKMV-pw4qakl9fnmcdaEov7dqg5m_XLWev6F6qgtVdbQ1axKVWayqjlOf36j_2dubxyMQxF_qkzhGUe46YI8CoONTxIOckAWfEpiiBC2ct_n9Vvnvr1LN8wmdHxrhxCW_
+
+[CALL] {"timeout_ms":120000}
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history WI-001 --note 'Checked: R-01 against commit 8f746be; acceptance-checker: R-01 met on exact commit with no defects; evidence: tests/WI-001-TEST-PLAN.md, 2 passing Node tests, direct examples and invalid-input checks; gaps: R-02 belongs to WI-002' --effect 'WI-001 result ready for owner review.'",max_output_tokens:3000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"e8a39f\",\"wall_time_seconds\":0.000002042,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Added a Recent History row to WI-001.\\n\"}"}]

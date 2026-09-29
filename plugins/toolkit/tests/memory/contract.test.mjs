@@ -119,6 +119,7 @@ test('serializeRecord writes the model topic template YAML; parseRecord reads it
     '---',
     'name: feedback_deploy_window',
     'description: Deploys happen on Tuesday mornings only.',
+    'updated: 2026-09-26',
     'metadata:',
     '  type: feedback',
     '  origin: chat',
@@ -186,7 +187,7 @@ test('a record in the older toolkit format is still read and is written again in
   assert.equal(record.approved_by, 'Mike');
   assert.equal(record.saved, '2026-09-01');
   const again = serializeRecord(record);
-  assert.match(again, /^---\nname: feedback_deploy_window\ndescription: Old one\nmetadata:\n  type: feedback\nstatus: superseded\n/);
+  assert.match(again, /^---\nname: feedback_deploy_window\ndescription: Old one\nupdated: \d{4}-\d{2}-\d{2}\nmetadata:\n  type: feedback\nstatus: superseded\n/);
   assert.match(again, /authorization: Approved by Mike\n/);
   assert.doesNotMatch(again, /^(type|saved|superseded_by|approved_by):/m);
 });

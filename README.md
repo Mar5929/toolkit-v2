@@ -71,10 +71,18 @@ role to a Codex worker instead.
 A marketplace is a list of plugins. This folder is the `toolkit-v2`
 marketplace. You add it once, then install its six plugins.
 
-Both Claude Code and Codex run their own copy of each plugin, filed under its
-version number. They do not read this folder directly, so a change here
-reaches them only after the version goes up and the plugin is updated (see
-"After a change in this folder" below).
+Codex runs its own copy of each plugin, filed under its version number. A
+change in this folder reaches Codex only after the version goes up and the
+plugin is updated (see "After a change in this folder" below).
+
+Claude Code works differently with a marketplace that is a folder on this
+Mac, like this one: it runs the plugins straight from this folder. A change
+saved here, even one not committed yet, is live in your Claude Code at the
+next session start. Claude Code also keeps a copy of each plugin, filed under
+its version number, but a session does not run that copy.
+
+The `toolkit` command itself runs an installed copy in both hosts, the one
+`toolkit machine-setup` names (see Codex below).
 
 ### Claude Code
 
@@ -151,6 +159,9 @@ toolkit machine-setup
 
 Start a new session in each host afterwards. `toolkit machine-setup` runs last
 because `codex plugin add` switches the plugin on for every folder again.
+Claude Code already runs the changed skills and hooks from this folder; the
+`claude plugin update` line refreshes the copy that the `toolkit` command
+runs.
 
 ## Set up a project
 
@@ -166,6 +177,8 @@ setup offers to run `git init` for you.
      Notion;
    - whether it is a Salesforce project;
    - a backup folder outside the project, for example `~/Backups/toolkit`.
+     This question is skipped when work items and memory both live in Notion:
+     Notion keeps each page's history and keeps deleted pages in its trash.
      Work items and built-in memory are not in Git, so they exist only on this
      Mac. The toolkit copies them to that folder by itself every time a work
      item is finished, at every handoff, and at the start of a session when a
@@ -198,13 +211,27 @@ moment. It writes the error to `.git/toolkit-v2/hook-errors.log` in the
 project instead. For 3 days after a failure, `toolkit doctor` and the
 briefing at the start of each session warn about it, so the agent tells you.
 
+### How memory is organized
+
+Memory works like Claude's project memory: one file per concept or area, not
+one file per fact. The five name prefixes stay (`user_`, `feedback_`,
+`project_`, `reference_`, `event_`), for example `feedback_ways_of_working.md`
+or `project_billing.md`. Each file starts with its title, a one-line summary,
+and the date it last changed, and holds one `##` section per fact. A new fact
+goes into the concept it belongs to; a new file is only for a new concept.
+An event file holds one episode. The index (`MEMORY.md`) lists each concept's
+title, summary, and date, grouped by prefix. In Hindsight each concept is one
+document, and in Notion one row. Memory saved before this change keeps
+working; the `memory-tidy` skill proposes merging those one-fact files into
+concepts, and changes nothing until you say yes.
+
 ### Notion memory
 
 When a project keeps memory in Notion, its row in the Projects database gets a
 page named "Memory". That page holds the five databases of Lore, Notion's
 open-source memory system for AI agents (github.com/makenotion/lore):
-Projects, Topics, Memories, Entities, and Facts. Each saved memory is one row
-in Memories. The "Current focus" and "Terminology glossary" pages stay under
+Projects, Topics, Memories, Entities, and Facts. Each memory concept is one
+row in Memories. The "Current focus" and "Terminology glossary" pages stay under
 the project row, as before.
 
 The agent still saves with the `toolkit memory` commands and still asks you

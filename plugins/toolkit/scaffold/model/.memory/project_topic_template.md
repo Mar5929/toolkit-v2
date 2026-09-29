@@ -1,6 +1,7 @@
 ---
 name: topic-template
 description: What future sessions would look here to remember
+updated: <YYYY-MM-DD of the last change>
 metadata:
   type: project
 status: template
@@ -12,7 +13,9 @@ supersedes: none
 
 # <Topic title>
 
-<!-- Fill-in guide: copy this file to a typed filename such as project_<topic>.md. Set name to that filename stem, metadata.type to the matching prefix, status to the real lifecycle state, and replace every angle-bracket prompt in front matter and body with sourced content. Put the durable point after Remember, its value after Why, future use after How to apply, and source/uncertainty after Evidence and limits. Remove this guide and the final template comment before saving. -->
+<!-- Fill-in guide: one topic file holds one concept or area, such as feedback_ways_of_working.md or project_billing.md; an event_ file holds one episode. Copy this file to a typed filename such as project_<topic>.md. Set name to that filename stem, description to a one-line summary of the whole topic, updated to the date of the last change, metadata.type to the matching prefix, status to the real lifecycle state, and replace every angle-bracket prompt in front matter and body with sourced content. Give each sub-topic its own ## heading with the labels below; a new fact about this concept gets a new ## section here, not a new file. Put the durable point after Remember, its value after Why, future use after How to apply, and source/uncertainty after Evidence and limits. Remove this guide and the final template comment before saving. -->
+
+## <Sub-topic>
 
 **Remember:** <One durable point or closely related set of facts. State scope and date where needed.>
 

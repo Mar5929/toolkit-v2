@@ -6,16 +6,17 @@ description: 'Reviews the project''s whole memory (.memory/, Hindsight, or Notio
 # Memory tidy
 
 Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
-Reviews all of memory, proposes one numbered list of changes, backs memory up, applies only what the owner approves, checks the result, and backs it up again.
+Reviews all of memory, proposes one numbered list of changes, backs memory up, applies only what the owner approves, checks the result, and backs it up again. Memory keeps one record per concept, with one `##` section per fact (`references/record-format.md`), so a tidy also merges small one-fact records into concepts and splits a concept that grew too large.
 
 ## Steps
 
 Track these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
 
-1. Check the setup and the backend, then list the records in use.
+1. Check the setup and the backend, list the records in use, and get the concept plan. The plan changes nothing: it names one-fact records to merge into concepts (with each `merge` command and a draft summary) and concepts that grew too large.
    `toolkit doctor`
    `toolkit memory status`
    `toolkit memory list`
+   `toolkit memory tidy --plan`
    `toolkit config get backup.dir`
 2. Review each record, the focus, and the glossary against `references/review-checklist.md`. Read each record you judge with its version.
    `toolkit memory get <key> --json`
@@ -23,7 +24,7 @@ Track these steps in the host's plan tool (Claude Code: the task list; Codex: `u
 3. Show one numbered list of proposed changes, each with its keys and reason, and ask once for the whole list (example in `references/review-checklist.md`). The list also names the folder the step 4 backup goes to.
 4. After his yes, and before any change, export memory to a new folder: `<backup.dir>/<project key>-before-tidy-<YYYY-MM-DD-HHMM>`, or `~/Backups/<project key>-before-tidy-<YYYY-MM-DD-HHMM>` when the backup folder is not set or is none. It works for every backend. Never the step 7 command here: it replaces today's backup folder, which may be the only copy of the state before the tidy.
    `toolkit memory export --to <new folder>`
-5. Apply only what the owner approved ("Approval" below), each with its command from `references/replacing-and-retiring.md`. The focus: `references/current-focus.md`. The glossary: `references/glossary.md`. A proposal: `references/proposals.md`.
+5. Apply only what the owner approved ("Approval" below), each with its command from `references/replacing-and-retiring.md`. A merge or a split: its command from the plan or `references/review-checklist.md`, with `--approved-by <owner>`. The focus: `references/current-focus.md`. The glossary: `references/glossary.md`. A proposal: `references/proposals.md`.
 6. Check. Fix each memory problem the output names, and check again until none is left. Report any you cannot fix without the owner.
    `toolkit memory status`
    `toolkit doctor`
@@ -46,7 +47,10 @@ Track these steps in the host's plan tool (Claude Code: the task list; Codex: `u
 
 - Retire before delete. A retired record can be restored; a deleted one cannot.
 - A correction in place saves the same type and slug with `--expect <version>` from the `--json` read. Without it the save is refused.
-- A merged record under a new key uses `--supersedes <old-key>`, which retires the old record. Retiring a duplicate that is not saved again uses `--superseded-by <kept-key>`. An archive with nothing to replace it uses `--reason '<the tidy reason>'`.
+- Small records that belong in one concept: the plan's `merge` command. Each record becomes a section of the concept and is retired as superseded by it; links to it point at its section, and it leaves the index. The concept keeps its own authorization line; a merged fact whose approval differs keeps it on its section's Evidence and limits line. A new concept needs `--description`: write a better summary than the plan's draft.
+- A concept that grew too large: `split` moves the named sections into another concept, and links to them follow (`references/review-checklist.md`).
+- `merge` and `split` refuse without `--approved-by <owner>`: his yes to the numbered list is that approval. Events are never merged: each episode stays its own record.
+- A duplicate record kept under a new key uses `--supersedes <old-key>`, which retires the old record. Retiring a duplicate that is not saved again uses `--superseded-by <kept-key>`. An archive with nothing to replace it uses `--reason '<the tidy reason>'`.
 - Exit code 2 saved nothing. Read the "Error:" line. Records listed: the duplicate check. "Changed since it was read": read it again and redo the change. Any other rule: fix the text as the message says (`references/replacing-and-retiring.md`, section 2).
 - After a rename, supersede, retire, or delete, the CLI repairs links in other notes and names each note it changed. Check that report, and fix any note it could not repair.
 - A restore by itself is not an undo: it leaves dated lines in the body and links in other notes as plain text (`references/replacing-and-retiring.md`, section 7).

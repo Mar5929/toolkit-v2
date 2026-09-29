@@ -28,6 +28,7 @@ model folder was not touched.
   - `9a2a69b` Use the tested sf-component-tracker description and fix old wording in two Salesforce skills (decisions (6) and (9); items 11 and 14)
   - `7faee75` Guard DevOps Center pipeline deploys, and state the Codex sandbox and script rules (decisions (3), (7), and (8); items 8, 12, and 13)
   - `5e7d7a0` Say which script lines the org guard checks, and that a script file run later is not checked (decision (7); item 12)
+  - `648bf4e` Keep one memory file per concept, with a heading per sub-topic, a summary, and an updated date (your concept memory decision of 2026-09-28; "Concept memory" below)
 - Full diff of `.memory/` and `.work-items/` from `efa2440` to the branch's
   last commit: `dev/model-changes-ignored-folders.diff` (made with
   `git diff efa2440 HEAD -- .memory .work-items` in the second folder).
@@ -133,7 +134,7 @@ Your model's `.memory/` and `.work-items/` files are tracked by Git even though 
    ```
    A=/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved
    M=/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project
-   cp "$A/.memory/AGENTS.md" "$A/.memory/CURRENT_FOCUS.md" "$A/.memory/MEMORY.md" "$A/.memory/memory-criteria.md" "$M/.memory/"
+   cp "$A/.memory/AGENTS.md" "$A/.memory/CURRENT_FOCUS.md" "$A/.memory/MEMORY.md" "$A/.memory/memory-criteria.md" "$A/.memory/project_topic_template.md" "$M/.memory/"
    rm "$M/.memory/CLAUDE.md"
    cp "$A/.work-items/work-item-template/WORK-ITEM.md" "$A/.work-items/work-item-template/DESIGN.md" "$M/.work-items/work-item-template/"
    ```
@@ -598,3 +599,53 @@ B. **Say that a sandbox validate still runs in Codex.**
      validate is not a deploy: the agent still runs it."
    - Recommendation: yes. It is small, and it keeps an agent from handing
      you a validate it may run itself.
+
+## Concept memory (your decision of 2026-09-28)
+
+You chose memory like Anthropic's project memory: one file per concept or
+area, keeping the five prefixes. Commit `648bf4e` on the branch changes the
+three memory files that described one fact per file, and nothing else. The
+five prefixes, the labels, the fill-in guide style, and every other line stay.
+
+- `.memory/AGENTS.md`, four bullets:
+  - "Read and route": open relevant topics "and read each one whole".
+  - "Curate", first bullet: one topic file per concept or area, such as
+    `feedback_ways_of_working.md` or `project_billing.md`, with a `##` heading
+    for each sub-topic; an `event` file holds one episode; each file starts
+    with its title, a one-line summary (`description`), and the date of its
+    last change (`updated`); split a topic that grows too large. It replaces
+    "Use a coherent topic file ... Keep one related topic per file".
+  - "Curate", third bullet: search for the topic a new fact belongs to, add
+    the fact under a heading there
+    (`toolkit memory save --concept <key> --section <heading>`), and create a
+    new file only for a new concept.
+  - "Curate", index bullet: the index holds one short line per active topic,
+    grouped by prefix: its title, summary, and updated date.
+- `.memory/memory-criteria.md`, two sentences: "Prefer updating an existing
+  topic" now goes on "a new fact goes under a heading in the topic file for
+  its concept, and a new file is only for a new concept"; the `event_` row
+  says "one per file".
+- `.memory/project_topic_template.md`: a new frontmatter line
+  `updated: <YYYY-MM-DD of the last change>` under `description`; a
+  `## <Sub-topic>` heading above the labels; the fill-in guide says one file
+  holds one concept, a new fact about it gets a new `##` section, and what
+  `description` and `updated` hold.
+- Not changed: `MEMORY.md` (its "One short link per active topic" sentence
+  is still true: each line is one link, now with the title as its words),
+  `CURRENT_FOCUS.md`, the glossary, and every rule.
+- Imported into `plugins/toolkit/scaffold/model/` (`import-model.mjs --check`
+  passes at `648bf4e`). `dev/model-changes-ignored-folders.diff` now runs to
+  `648bf4e`.
+- Bringing it in: the same merge as the rest of the branch ("How to bring the
+  changes into your model", step 2). The copy command in step 3 now includes
+  `.memory/project_topic_template.md`.
+
+What the toolkit does with it (no model change): `toolkit memory save
+--concept <key> --section <heading>` adds or changes one section and leaves
+the rest of the file as it was; the save's duplicate check names the concept
+a new fact belongs in; a proposal names the concept it would join, and your
+yes adds it there; `toolkit memory tidy --plan` proposes merging existing
+one-fact files into concepts, and `toolkit memory merge` and `split` run only
+with your yes. The same in Hindsight (one document per concept) and Notion
+(one Memories row per concept; a section save sends only that section).
+

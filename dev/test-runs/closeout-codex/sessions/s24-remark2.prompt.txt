@@ -1,0 +1,1 @@
+FYI, I only ever run tipcalc on my MacBook Air with Node 24.

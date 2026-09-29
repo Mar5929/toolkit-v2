@@ -64,12 +64,7 @@ async function notionWork(project, { cwd, env, pluginRoot, live }) {
       moves = reportLines(report);
       cache = readTrackerCache(mainRoot);
     } catch (err) {
-      const copy = Object.keys(cache.items).length ? 'The list below is the local copy from the last toolkit command.' : 'toolkit work list reads them.';
-      const fix = err && err.details && err.details.fix ? ` Fix: ${clip(err.details.fix, 200)}` : '';
-      const slow = err && (err.notionCode === 'deadline' || err.notionCode === 'timeout' || /did not answer in time|No answer within/.test(String(err.message)));
-      problem = slow
-        ? `The Notion work items could not be read in 2 seconds (${clip(err.message, 160)}). ${copy}`
-        : `The Notion work items could not be read: ${clip(err.message, 200)}${fix} ${copy}`;
+      problem = notionReadProblem(err, Object.keys(cache.items).length > 0);
     }
   }
   const prefix = String((project.config.notion && project.config.notion.workItems && project.config.notion.workItems.idPrefix) || (project.config.tracker && project.config.tracker.idPrefix) || 'WI');
@@ -542,6 +537,21 @@ export function fitSections(sections, maxChars) {
  *   fromHook: the SessionStart hook delivers the text (see the Codex trust findings below).
  * Returns { text, work, memory, findings }.
  */
+/**
+ * The briefing line when the Notion work items could not be read. The error
+ * message in brackets loses its own final period, so the line never ends
+ * ".)." (final run, Notion finding 5).
+ */
+export function notionReadProblem(err, hasCopy) {
+  const copy = hasCopy ? 'The list below is the local copy from the last toolkit command.' : 'toolkit work list reads them.';
+  const message = String((err && err.message) || err || '');
+  const fix = err && err.details && err.details.fix ? ` Fix: ${clip(err.details.fix, 200)}` : '';
+  const slow = err && (err.notionCode === 'deadline' || err.notionCode === 'timeout' || /did not answer in time|No answer within/.test(message));
+  return slow
+    ? `The Notion work items could not be read in 2 seconds (${clip(message, 160).replace(/([^.])\.$/, '$1')}). ${copy}`
+    : `The Notion work items could not be read: ${clip(message, 200)}${fix} ${copy}`;
+}
+
 export async function buildBriefing(project, opts = {}) {
   const env = opts.env || process.env;
   const host = opts.host === 'codex' ? 'codex' : 'claude';

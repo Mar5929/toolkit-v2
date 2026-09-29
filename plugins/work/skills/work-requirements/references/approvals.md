@@ -158,10 +158,14 @@ Asked by `work-check` at stage 11.
 
 Before asking:
 
-- [ ] The tests and every acceptance check ran, and an independent checker
-      reported, or you say plainly that no independent check ran.
+- [ ] The tests and every acceptance check ran, and one
+      `acceptance-checker` that did not build the change reported on the
+      exact commit. It runs every time: a delivery choice ("no agent team",
+      "owner-led") or a no to the team question never removes it. Only a host
+      with no way to start a worker means you check it yourself and say
+      plainly that no independent check ran.
 - [ ] The check is recorded in a history note (what was checked, the
-      evidence, the gaps).
+      checker's verdict, the evidence, the gaps).
 - [ ] The item is at stage 11 and waits on the owner. Add no Open Questions
       row: stage 11 already lists the result as his decision.
       `toolkit work set <id> --stage 11-user-approval --waiting-on owner`
@@ -220,6 +224,9 @@ memory) to the owner's backup folder and prints one line about it. Read that
 line:
 
 - "Backed up ... to <folder>": done. Say it in one line in the reply.
+- "No automatic backup: this project keeps its work items and memory in
+  Notion ...": Notion keeps each page's history and keeps deleted pages in
+  its trash, so no backup folder is needed. Nothing to ask.
 - "No backup folder is set ...": ask the owner for a folder outside the
   project, as a question in the reply. After his answer:
   `toolkit config set backup.dir <folder>` (or `none` when he wants no backup).
@@ -248,7 +255,9 @@ toolkit work set <id> --delivery owner-led
 ```
 
 A delivery answer never approves requirements, a design, or a result, and
-never widens merge, deployment, spending, or publishing.
+never widens merge, deployment, spending, or publishing. It decides only who
+builds: the acceptance checker still runs before every result approval
+(section 4).
 
 ## 8. Project-wide decision
 
@@ -274,8 +283,11 @@ toolkit memory approve <key> --by <owner>
 toolkit memory reject <key>
 ```
 
-A rejection deletes the proposal. Never propose the same fact again in other
-words.
+A proposal that names no concept needs the concept its fact goes in:
+`--concept <type>_<subject>`, an existing concept or a new one named for its
+subject (with `--title` and `--description`). The `memory-save` skill's
+proposals reference has the steps. A rejection deletes the proposal. Never
+propose the same fact again in other words.
 
 ## 10. Sub-items and approvals
 
