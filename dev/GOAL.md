@@ -7,7 +7,7 @@ answers live. Update it when he changes a decision.
 
 This overrides how the rest of this file says Toolkit V2 is built, and it
 replaces the 11 finish items below. A new goal and finish list follow once
-Mike approves the architecture. His words:
+Mike approves the architecture. His words (lightly edited; the exact message, 13:28 EDT, is in `dev/HISTORY.md`):
 
 "We should just switch to skills and timely hooks. You need to map out work
 tracking, progressing work through different stages, and memory saving and
@@ -50,7 +50,7 @@ Corrections (Mike, 2026-09-29, after the first two diagrams):
   made a decision that we're going to do GitHub later, in hindsight. I don't
   know why you just randomly decided that.")
 - One set of skills per storage option, and onboarding brings in only the
-  chosen sets with their hooks. His words: "We build out all those skills,
+  chosen sets with their hooks. His words (lightly edited; exact text in `dev/HISTORY.md`): "We build out all those skills,
   and then the project just brings in whatever skills we need. If we're
   tracking the memory and work tracking in Notion, you bring in the Notion
   memory save skills and Notion work tracking skills. If we're just doing it
@@ -69,7 +69,7 @@ Corrections (Mike, 2026-09-29, after the first two diagrams):
   `CLAUDE.md` imports `.memory/MEMORY.md` and `.memory/CURRENT_FOCUS.md`, a
   SessionStart hook (`.claude/hooks/toolkit-session-start.mjs`, 23 lines), a
   UserPromptSubmit trigger (`memory_trigger.py`, 62 lines), and a Stop audit
-  (`memory_audit.py`, 73 lines). Mike: "Doesn't the local memory system
+  (`memory_audit.py`, 73 lines). Mike (lightly edited; exact text in `dev/HISTORY.md` section 2.3): "Doesn't the local memory system
   already have specific hooks? ... it's still that general shape if we do the
   local memory system, right?" The approved changes had replaced these with
   the `toolkit` program. Whether `scripts/memory.py` (505 lines) stays is
@@ -292,7 +292,7 @@ steps that must always run the same way.
   to use it. Every description states what the skill does, why to use it,
   and when to use it (Mike, 2026-09-29), and every skill folder holds all
   the references, templates, examples, and scripts its steps need.
-- **Routing approvals** (Mike, 2026-09-27 night): (1) the model's
+- **Routing approvals** (Mike, 2026-09-28, 10:43 EDT; earlier recorded here as 2026-09-27 night): (1) the model's
   `.claude/rules/session-handoff.md` gets the new wording in
   `dev/model-changes.md` ("Proposed: handoff rule wording"); (2) the model's
   `AGENTS.md` gets two routing lines: changing a requirement goes to
