@@ -81,17 +81,19 @@ steps that must always run the same way.
   per process), and anything that must happen every time lives in the
   `toolkit` command or a hook, with the skill explaining it.
 - **Concept memory, like Anthropic's project memory** (Mike, 2026-09-28
-  night, with a screenshot of Claude's project Memory list: "Clinical
-  Principles", "Health Profile", "Health Advisor", "Ways Of Working"): in
-  local Markdown/Obsidian, Notion, and Hindsight, memory is one file (page,
+  night, with screenshots of Claude's Memory lists): in local
+  Markdown/Obsidian, Notion, and Hindsight, memory is one file (page,
   document) per concept or area, each with a title, a one-line summary, and
-  an updated date; new facts go into the concept they belong to, under a
-  heading; a new file only for a new concept. Files are named by concept
-  (`ways-of-working.md`, `project-profile.md`); the type (user, feedback,
-  project, reference, event) is a field inside the file. Setup creates two
-  starter concepts, "Ways of Working" and "Project Profile". The index lists
-  title, summary, and updated date. This changes the model's memory file
-  naming rule; it goes on the model branch.
+  an updated date at the top. New facts go into the concept they belong to,
+  under a heading; a new file only for a new concept. The agent can read the
+  whole concept at once, and files link each other where useful. Naming
+  (Mike's final choice): keep the model's five prefixes, `user_`,
+  `feedback_`, `project_`, `reference_`, `event_`, one file per concept
+  (for example `feedback_ways_of_working.md`, `project_billing.md`); events
+  stay as their own files. No starter files; concepts are created as they
+  come up. The index lists each concept's title, summary, and updated date,
+  grouped by prefix. The model's memory text changes only where it must
+  (concept files, not one file per fact); it goes on the model branch.
 - **Decisions of 2026-09-28, evening** (Mike): (1) "No agent team" decides
   only who builds. Before asking for the owner's result approval, the agent
   always starts one independent acceptance checker agent (in Codex, the
