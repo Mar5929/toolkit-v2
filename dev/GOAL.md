@@ -119,6 +119,42 @@ Corrections (Mike, 2026-09-29, after the first two diagrams):
   one topic at a time and asks him to confirm or correct each, before any
   design or build work.
 
+Interview answers (Mike, 2026-09-29, the interview session):
+- Topic 1, the goal: confirmed ("bingo nice job").
+- Topic 2, approved refinements stay: every change Mike approved to the
+  model and the memory formats stays (the 23 approved changes, concept
+  memory, the four prefixes, the rules, skills, and memory split, decisions
+  in memory). "The model is the exact source" means the model with those
+  approved changes.
+- The Davis shape is general, not literal. Mike: "don't take it super
+  literally, meaning we're going to bring back the Claude.md file instead of
+  agents.md, right? We're not doing that, but just the overall, general
+  shape, I guess, makes sense if we're going to do local memory." Keep the
+  decisions made since: "one Markdown file per concept", and links between
+  work items, decisions, memories, and facts.
+- Current focus is current state, and it gets cleaned up. Mike: "current
+  focus should be current state. ... I think it does it well, meaning that it
+  knows when to keep it up to date, but the problem, I think, with the Davis
+  project is that it just doesn't know when to clean it up and remove old
+  stuff. Just make sure that you're accounting for that in your solution."
+- Build from the official documentation. Mike: "use the Claude Code,
+  Anthropic, and OpenAI codex documentation on how to build the harness, how
+  to build hooks and skills and rules, and what the best practices, schema,
+  and syntax are. You should be following all of that." Firecrawl may be
+  used to get documentation; he also named "a new thing called Alexandria
+  with Firecrawl" (not checked yet).
+- Links between memory and work items: local memory links with Obsidian's
+  own links, Notion with Notion's own relations. How to link is the agent's
+  call, but the work item template must show the links. Mike: "we definitely
+  want a view in the work item template to say, 'Hey, here's some physical
+  link between them,' so it's easier for agents to navigate ... If the user
+  asks a general question, the agent could search through memories and then
+  go find relevant work items as well that are linked to it."
+- The Notion session: keep it up to date on decisions and structure. Which
+  session builds the rest of the Notion work tracker and the links, views,
+  and properties between memory and work items is the agent's call (Mike:
+  "I'm not sure how we should exactly leave it. Leave it up to you").
+
 ## Goal
 
 Build a new toolkit repository from scratch at
