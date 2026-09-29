@@ -160,9 +160,13 @@ Read `dev/GOAL.md` first. This file says where the work stands.
   finish items 1-8 met; 9 partly; 10 and 11 open.
 - Mike decided: the checker always runs, even with "no agent team"; Notion-
   only projects rely on Notion history for backup.
-- Running: close-out fixes (R-B1, R-I1 to R-I4, 12 minors, run bugs),
-  installs updated, reruns in Codex and Claude Code, independent
-  confirmation of the finish items. Then the final report.
+- Mike chose concept memory with the five prefixes (GOAL.md). The first
+  close-out workflow (`wf_68dc2118-661`) was stopped part way so concept
+  memory could be built before the reruns.
+- Running: workflow `wf_a579d931-b78`: finish close-out fixes, build concept
+  memory in all backends and the model branch, verify, update installs,
+  reruns in Codex and Claude Code plus a Notion and Hindsight concept check,
+  independent confirmation. Then the final report.
 
 ## Last mile (2026-09-28, workflow `wf_93bccb2f-ec7`)
 
