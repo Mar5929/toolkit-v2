@@ -283,6 +283,14 @@ Interview answers (Mike, 2026-09-29, the interview session):
   work item shows its memories in Obsidian's backlinks panel. Obsidian's
   `.obsidian/` folder is kept out of Git. Approved model change; every rule
   and skill naming those folders changes with it.
+- Open question 2, rewriting old model text (Mike: "yes"): the agent
+  rewrites, on the model branch `toolkit-v2/approved-changes` only (never
+  Mike's own model folder), the lines that name the removed program,
+  `.toolkit.json`, or `DECISIONS.md` (about 62 lines in 14 files), plus the
+  changes approved today (Current State, folder names, ID file names,
+  Questions and Answers). Each line keeps its meaning apart from approved
+  changes. Mike gets one list of every file, what changed, and why, before
+  he merges. A change to what a rule means waits for his yes.
 - Notion session reply (2026-09-29): no conflicts. Settled with Mike in that
   session: Phases and Tasks are Notion linked records (a database), not a
   checklist in the body (Mike: "Yes, linked records"; "we have a section
