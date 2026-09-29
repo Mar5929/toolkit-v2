@@ -98,6 +98,15 @@ Corrections (Mike, 2026-09-29, after the first two diagrams):
   everything: all the templates and all the decisions we made." The history
   is written to `dev/HISTORY.md`, and the handoff tells the next agent to
   read it first.
+- A GitHub ticket for this work (Mike, 2026-09-29): "After the Excalidraw
+  diagrams are refined, you need to show them to me, and then, once I
+  approve, we need to add them to the body of the GitHub issue to tackle
+  this. ... We need to rewrite the ticket to make sure that everything we
+  just talked about is all included in there." Today Toolkit V2 has no
+  GitHub issue of its own: it is tracked in `dev/GOAL.md` and
+  `dev/PROGRESS.md` in this local repository (no GitHub remote), with one
+  progress-log note on the related issue Mar5929/claude-toolkit#419. Where
+  the ticket lives is Mike's call; creating a GitHub repository needs his yes.
 
 ## Goal
 
