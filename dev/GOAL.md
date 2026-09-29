@@ -300,6 +300,10 @@ Interview answers (Mike, 2026-09-29, the interview session):
   index, grouped by prefix, in both hosts (a very small command, about 20 to
   30 lines; it replaces LLM edits and cannot drift). `local-memory-save`
   never touches the index; nobody edits it by hand.
+- Open question 4A, standing merge permission (Mike: "yes"): it lives in
+  the project's `.claude/rules/owner-preferences.md`;
+  `shared-repository-work.md` line 30 becomes "A standing merge instruction
+  in `owner-preferences.md` counts."
 - Notion session reply (2026-09-29): no conflicts. Settled with Mike in that
   session: Phases and Tasks are Notion linked records (a database), not a
   checklist in the body (Mike: "Yes, linked records"; "we have a section
