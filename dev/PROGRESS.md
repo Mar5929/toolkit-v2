@@ -152,6 +152,24 @@ Read `dev/GOAL.md` first. This file says where the work stands.
   Salesforce, Hindsight; Claude Code local; final independent review
   (`dev/final-review.md`). The Notion confirmation run waits for `ntn login`.
 
+## Rules, memory, and enforcement (2026-09-29, workflow `wf_a6663d9f-9c8`)
+
+- Committed `b503d34`: close-out fixes and concept memory (works the same in
+  built-in, Notion, and Hindsight). Confirmation review: items 1-8 met; 9
+  partly; 10 open because the Codex agent still skipped the checker after
+  "no agent team", and a passing remark was saved as approved.
+- Mike decided (GOAL.md): instructions in rules (`owner-preferences.md` or
+  machine-wide rules), procedures in skills, facts and unproven lessons in
+  memory (four prefixes, `feedback_` retired, "Gotchas and lessons"
+  sections, promotion to rule or skill after his yes).
+- Running: build the split, make the checker and the passing-remark
+  proposal enforced by the `toolkit` command, fix the review findings,
+  verify, update installs, rerun in Codex and (one session at a time) in
+  Claude Code, independent confirmation.
+- Claude Code is signed out again (`claude auth status`); Mike asked to run
+  `claude auth login`. Parallel `claude -p` test sessions are the likely
+  cause, so Claude test sessions now run one at a time.
+
 ## Close-out (2026-09-28 evening, workflow `wf_68dc2118-661`)
 
 - Final runs (committed `82aefe9`): Claude Code local, Codex Hindsight,
