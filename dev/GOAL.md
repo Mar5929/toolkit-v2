@@ -107,6 +107,17 @@ Corrections (Mike, 2026-09-29, after the first two diagrams):
   `dev/PROGRESS.md` in this local repository (no GitHub remote), with one
   progress-log note on the related issue Mar5929/claude-toolkit#419. Where
   the ticket lives is Mike's call; creating a GitHub repository needs his yes.
+- Mixed setups are allowed (Mike, 2026-09-29, "ok" to the recommendation):
+  onboarding brings in one work tracking set and one memory set separately,
+  so any mix works (for example local memory with Notion work tracking). A
+  memory always stores the work item's ID, plus the Notion page link when
+  the work items live in Notion (clickable from Obsidian); a Notion memory
+  that points at a local work item stores the ID as text.
+- The next session interviews Mike first (Mike, 2026-09-29: "make sure the
+  new agent will read all context and interview me to make sure it fully
+  understands"): after reading everything, it plays back its understanding
+  one topic at a time and asks him to confirm or correct each, before any
+  design or build work.
 
 ## Goal
 
