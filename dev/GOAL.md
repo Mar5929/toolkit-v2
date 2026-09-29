@@ -236,6 +236,15 @@ Interview answers (Mike, 2026-09-29, the interview session):
   when Mike picks Notion work tracking. Added: when a work item has a web
   address (a GitHub issue or a Jira ticket), the memory also stores that
   link.
+- Topic 11, the Notion session: confirmed ("good by me!"). The Notion
+  session builds everything inside Notion, including the properties,
+  relations, and the linked-memory view between memories and work items.
+  This session owns the overall design, onboarding, hooks, shared rules and
+  skills, the memory rules, and the local, GitHub, Jira, and Hindsight sets,
+  and writes the rules for when a link is filled in. It sends the Notion
+  session one update after the interview and reads its chat to confirm
+  receipt. Tasks as a Notion database or as a checklist in the body: follow
+  what Mike settles with the Notion session.
 - Rename: "I want the file name to be 'Current State' instead of 'Current
   Focus'." Read as: `.memory/CURRENT_FOCUS.md` becomes
   `.memory/CURRENT_STATE.md` (the model's naming style), and the Notion
