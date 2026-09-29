@@ -172,6 +172,29 @@ Interview answers (Mike, 2026-09-29, the interview session):
   Documentation to reference, from Mike:
   https://code.claude.com/docs/en/agent-sdk/hooks and
   https://code.claude.com/docs/en/hooks-guide, plus the OpenAI Codex pages.
+- Topic 7, what is inside a skill: confirmed ("Yes, that's correct"),
+  including the Notion session's two points (the Notion templates are a
+  Notion page template plus `DESIGN.md`; the sign-in reference says pages
+  are shared with the "Notion CLI" connection and `ntn` runs outside the
+  Codex sandbox).
+- New request, not designed yet (Mike, 2026-09-29): a skill for refining a
+  work item through an interview, saving each answer as it is given. His
+  words: "I use Claude Code or Codex frequently ... to help design the
+  roadmap for an entire work item, an epic, or a large piece of work. I try
+  to feed in meeting transcripts, other resources, references, and
+  documents, and try to make sense of everything and store a bunch of that
+  stuff as references for the work item." "It's crucial that the agent
+  knows, as a new requirement comes up, as the agent is interviewing me ...
+  the agent just needs to save things as I answer." "I'm asking the agent to
+  help me refine my idea and help me figure out things that I didn't think
+  of: what are some gotchas, and what should I be thinking about?" "Just
+  keep it in that file, because normally they're large pieces of work that
+  are spanning multiple days ... I can come back day after day in a new
+  session and just pick up exactly where I left off." "almost every work
+  item is going to go through this process of the agent interviewing me, me
+  answering, and just as I'm answering, boom, record it and ask me the next
+  question." He likes how this session keeps `dev/GOAL.md` and records each
+  question and answer.
 - Rename: "I want the file name to be 'Current State' instead of 'Current
   Focus'." Read as: `.memory/CURRENT_FOCUS.md` becomes
   `.memory/CURRENT_STATE.md` (the model's naming style), and the Notion
