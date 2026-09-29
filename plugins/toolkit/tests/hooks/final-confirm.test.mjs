@@ -41,10 +41,11 @@ test('the Stop hook proposal uses the owner\'s name, keeps the question\'s words
 });
 
 test('a preference the owner states is user, even about the agent; the type word is not repeated in the key; a long title is cut at a clause', () => {
-  assert.equal(proposalType('For small changes, Mike prefers working directly with the agent without helper agents', 'Mike Rihm'), 'user');
+  // Since 2026-09-29 a preference about how the agent works is a rule proposal (feedback_ is retired).
+  assert.equal(proposalType('For small changes, Mike prefers working directly with the agent without helper agents', 'Mike Rihm'), 'rule');
   assert.equal(proposalType('You prefer tabs over spaces', 'Mike Rihm'), 'user');
-  assert.equal(proposalType('The agent should run tests before asking', 'Mike'), 'feedback');
-  assert.equal(proposalType('You should stop adding comments, instead of asking', 'Mike'), 'feedback');
+  assert.equal(proposalType('The agent should run tests before asking', 'Mike'), 'rule');
+  assert.equal(proposalType('You should stop adding comments, instead of asking', 'Mike'), 'rule');
   assert.equal(proposalName('Sandbox deploy checks in this project usually take longer than 10 minutes', 'project'), 'sandbox-deploy-checks-usually-take-longer-than-10');
   assert.equal(proposalTitle('For small changes, Mike prefers working directly with the agent without helper agents'), 'For small changes, Mike prefers working directly with the agent without helper agents', 'under 100 characters: the whole summary');
   const long = 'For small changes, Mike prefers working directly with the agent without helper agents, and he asks for a short summary at the end of each change';

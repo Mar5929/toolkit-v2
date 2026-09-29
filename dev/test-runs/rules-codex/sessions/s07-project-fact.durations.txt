@@ -1,0 +1,9 @@
+0.238s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat SOUL.md PROJECT.md",max_output_tokens:5000}),\n  tools.exec_command({cmd:"cat .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-curren'
+0.264s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"sed -n \'1,135p\' /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.3.0/skills/memory-save/SKILL.md",max_output_tokens:7000}),\n  tools.exec_command('
+0.261s :: 'const r = await tools.exec_command({cmd:"toolkit memory list --type project",max_output_tokens:1500}); text(r)\n'
+0.259s :: 'const r = await tools.exec_command({cmd:"toolkit memory find \'monthly statements late fee total due\'",max_output_tokens:1500}); text(r)\n'
+0.261s :: 'const r = await tools.exec_command({cmd:"toolkit config get memory.approval",max_output_tokens:1500}); text(r)\n'
+0.334s :: 'const r = await tools.exec_command({cmd:"toolkit memory save --type project --name billing --description \'How feecalc totals are used in customer billing statements\' --section \'Monthly statements\' --body \'**Remember:** T'
+1.428s :: 'const r = await tools.exec_command({cmd:"toolkit memory get project_billing",max_output_tokens:2500}); text(r)\n'
+0.321s :: 'const r = await tools.exec_command({cmd:"toolkit doctor",max_output_tokens:2000}); text(r)\n'
+MAX toolkit call seconds: 1.428

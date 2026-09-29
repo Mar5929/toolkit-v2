@@ -239,7 +239,11 @@ export function describeRule(name, text) {
   } catch {
     // A rule whose frontmatter cannot be read is listed as always on.
   }
-  const paths = Array.isArray(data.paths) ? data.paths.map(String) : null;
+  // Claude Code reads `paths` as a YAML list or a comma-separated string
+  // (ai-external-knowledge/claude-code/memory.md, "Rule frontmatter reference").
+  let paths = null;
+  if (Array.isArray(data.paths)) paths = data.paths.map(String);
+  else if (typeof data.paths === 'string' && data.paths.trim()) paths = data.paths.split(',').map((p) => p.trim()).filter(Boolean);
   return {
     name,
     scoped: Boolean(paths),

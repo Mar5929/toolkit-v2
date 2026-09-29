@@ -56,7 +56,7 @@ import {
   approverFrom, changeRecordStatus, changeSupersedes, checkExpect, countRecords, focusLineCount, focusShapeProblems, isProposal,
   isProposalAuthorization, isValidKey, matchesFilter, normalizeDocument, normalizeRecord, notFound, parseRecord, recordSummary,
   renameRecordText, repairLinks, repairLinksWithDriver, repairResult, restoreNote, retireNote, searchTerms, serializeRecord,
-  sortRecords, splitKey, storedStatus, stripFrontmatter, versionOf, RECORD_TYPES, bodyTitle, proposalTarget, titleFromName,
+  sortRecords, splitKey, storedStatus, stripFrontmatter, versionOf, RECORD_TYPES, bodyTitle, matchingSectionSnippet, proposalTarget, titleFromName,
 } from './contract.mjs';
 import { assertEditedText, sectionHeadings } from './concepts.mjs';
 
@@ -496,13 +496,29 @@ export class HindsightDriver {
       const s = summaryFromMetadata(id, r.metadata);
       const snippet = stripFrontmatter(String(r.text || '')).replace(/\s+/g, ' ').trim().slice(0, 160);
       const score = r.scores && typeof r.scores.final === 'number' ? r.scores.final : null;
-      const hit = { key: id, name: s.name, type: s.type, description: s.description, status: s.status, stored_status: s.stored_status, superseded_by: s.superseded_by, proposal: s.proposal, score, snippet };
+      const hit = { key: id, name: s.name, type: s.type, description: s.description, status: s.status, stored_status: s.stored_status, superseded_by: s.superseded_by, proposal: s.proposal, score, snippet, chunk: stripFrontmatter(String(r.text || '')) };
       const tier = recallTier(q, { ...hit, text: stripFrontmatter(String(r.text || '')) }, { noise });
       if (tier === 'answer') {
         if (results.length < max) results.push(hit);
       } else if (tier === 'maybe' && maybe.length < 3) maybe.push(hit);
       else if (closest.length < 3) closest.push(hit);
     }
+    // The matching section (F1): recall returns a chunk, so the record is read
+    // for the hits that are shown as about the question, and the snippet
+    // names the "## " section that matched. A read that fails keeps the chunk.
+    const terms = searchTerms(q);
+    for (const hit of [...results, ...maybe]) {
+      try {
+        const doc = await this.readDoc(hit.key);
+        if (!doc) continue;
+        const section = matchingSectionSnippet(stripFrontmatter(doc.original_text), terms, hit.chunk || '');
+        if (section) hit.snippet = section;
+      } catch {
+        // The chunk's own words stay the snippet.
+      }
+      delete hit.chunk;
+    }
+    for (const hit of closest) delete hit.chunk;
     const out = { query: q, mode: 'recall', results, maybe, closest };
     if (reflect) {
       const started = Date.now();

@@ -31,6 +31,8 @@ test('a history note that only names the acceptance-checker leaves the to-do and
   await tk(dir, ['work', 'history', id, '--note', 'Asked whether to start the acceptance-checker']);
   const todo = await tk(dir, ['work', 'decisions', '--json']);
   assert.ok(todo.json.agentTodos.some((t) => t.id === id && t.kind === 'acceptance_check'), JSON.stringify(todo.json.agentTodos));
-  const approved = await tk(dir, ['work', 'approve', id, '--result', '--by', 'Mike Rihm']);
-  assert.match(approved.stdout, /No acceptance-checker check of WI-001 is recorded since its last build/);
+  // Since R-B1 in code (close-out 2026-09-28) the approval is refused, not recorded with a note.
+  const refused = await tk(dir, ['work', 'approve', id, '--result', '--by', 'Mike Rihm']);
+  assert.equal(refused.code, 2);
+  assert.match(refused.stderr, /no acceptance-checker verdict is recorded since its last move to 08 Build or 10 Bug fixing/);
 });

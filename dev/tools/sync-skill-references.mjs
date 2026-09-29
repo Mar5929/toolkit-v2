@@ -24,17 +24,25 @@
 // plugin keeps parallel edits apart: shared-references/work.json lists every
 // copy that lands in a work skill.
 //
-// Allowed sources: plugins/*/shared/**, plugins/*/agents/*.md, and
+// Allowed sources: plugins/*/shared/**, plugins/*/agents/*.md,
 // plugins/toolkit/scaffold/model/** (the model copy; run
-// dev/tools/import-model.mjs first). Allowed targets:
-// plugins/*/skills/*/references/* and plugins/*/skills/*/assets/*, one level
-// below the skill folder.
+// dev/tools/import-model.mjs first), and plugins/toolkit/templates/** (the
+// files the toolkit installs that the model does not hold, such as the Codex
+// command rules). Allowed targets: plugins/*/skills/*/references/* and
+// plugins/*/skills/*/assets/*, one level below the skill folder.
 //
 // Each copy is the source's bytes plus one header line that names the source.
-// When the source starts with a YAML frontmatter block (agent files, the
-// model's templates), the header goes on the line after the closing ---, so
-// the copy's frontmatter still parses. A file that carries the header but is
-// no longer listed is deleted. A file without the header is never touched.
+// A Markdown, HTML, or XML copy gets the header as an HTML comment
+// (<!-- Generated file. ... -->). A copy of a file whose comments start with
+// # (HASH_COMMENT_EXTENSIONS: Codex .rules files, TOML, YAML, shell, Python)
+// gets it as a # comment, because an HTML comment would break that file. Any
+// other file type is refused: it has no comment the header could go in.
+// When a Markdown source starts with a YAML frontmatter block (agent files,
+// the model's templates), the header goes on the line after the closing ---,
+// so the copy's frontmatter still parses. When a # source starts with a #!
+// line, the header goes on the line after it. A file that carries the header
+// but is no longer listed is deleted. A file without the header is never
+// touched.
 //
 // After a run that changed files, raise the plugin's version in both
 // manifests (and metadata.version in .claude-plugin/marketplace.json):
@@ -52,13 +60,24 @@ const TOOL = 'dev/tools/sync-skill-references.mjs';
 const MAIN_LIST = 'dev/tools/shared-references.json';
 const LIST_DIR = 'dev/tools/shared-references';
 
-export const HEADER_RE = /^<!-- Generated file\. Source: (.+?)\. Edit the source, then run node dev\/tools\/sync-skill-references\.mjs\. -->$/;
-const header = (source) => `<!-- Generated file. Source: ${source}. Edit the source, then run node ${TOOL}. -->`;
+export const HEADER_RE = /^(?:<!-- Generated file\. Source: (.+?)\. Edit the source, then run node dev\/tools\/sync-skill-references\.mjs\. -->|# Generated file\. Source: (.+?)\. Edit the source, then run node dev\/tools\/sync-skill-references\.mjs\.)$/;
+const HTML_COMMENT_EXTENSIONS = new Set(['.md', '.markdown', '.html', '.xml']);
+const HASH_COMMENT_EXTENSIONS = new Set(['.rules', '.toml', '.yaml', '.yml', '.sh', '.py']);
+const headerText = (source) => `Generated file. Source: ${source}. Edit the source, then run node ${TOOL}.`;
+
+/** The comment style a copy of this source gets: 'html', 'hash', or null (no comment syntax known). */
+function commentStyle(source) {
+  const ext = path.posix.extname(source).toLowerCase();
+  if (HTML_COMMENT_EXTENSIONS.has(ext)) return 'html';
+  if (HASH_COMMENT_EXTENSIONS.has(ext)) return 'hash';
+  return null;
+}
 
 const SOURCE_OK = [
   /^plugins\/[^/]+\/shared\/.+/,
   /^plugins\/[^/]+\/agents\/[^/]+\.md$/,
   /^plugins\/toolkit\/scaffold\/model\/.+/,
+  /^plugins\/toolkit\/templates\/.+/,
 ];
 export const TARGET_OK = /^plugins\/[^/]+\/skills\/[^/]+\/(references|assets)\/[^/]+$/;
 
@@ -122,7 +141,11 @@ function plan(entries, only) {
   for (const e of entries) {
     const source = e.source.replace(/^\.\//, '');
     if (!SOURCE_OK.some((re) => re.test(source))) {
-      problems.push(problem(e.list, `${e.where}: source ${source} is not under plugins/*/shared/, plugins/*/agents/, or plugins/toolkit/scaffold/model/.`));
+      problems.push(problem(e.list, `${e.where}: source ${source} is not under plugins/*/shared/, plugins/*/agents/, plugins/toolkit/scaffold/model/, or plugins/toolkit/templates/.`));
+      continue;
+    }
+    if (!commentStyle(source)) {
+      problems.push(problem(e.list, `${e.where}: source ${source} has a file type with no comment syntax this tool knows (${[...HTML_COMMENT_EXTENSIONS, ...HASH_COMMENT_EXTENSIONS].join(', ')}), so the copy could not carry its "Generated file" header.`));
       continue;
     }
     const as = (e.as || `references/${path.posix.basename(source)}`).replace(/^\.\//, '');
@@ -156,8 +179,16 @@ function plan(entries, only) {
 
 /** The copy's text: the source with the header line added. */
 function render(sourceText, source) {
-  const line = header(source);
   const eol = sourceText.includes('\r\n') ? '\r\n' : '\n';
+  if (commentStyle(source) === 'hash') {
+    const line = `# ${headerText(source)}`;
+    if (sourceText.startsWith('#!')) {
+      const cut = sourceText.indexOf(eol);
+      if (cut > 0) return `${sourceText.slice(0, cut + eol.length)}${line}${eol}${sourceText.slice(cut + eol.length)}`;
+    }
+    return `${line}${eol}${sourceText}`;
+  }
+  const line = `<!-- ${headerText(source)} -->`;
   if (sourceText.startsWith(`---${eol}`)) {
     const lines = sourceText.split(eol);
     const close = lines.indexOf('---', 1);
@@ -176,9 +207,11 @@ export function headerSource(text) {
   if (lines[0] === '---') {
     const close = lines.indexOf('---', 1);
     if (close > 0) start = close + 1;
+  } else if (lines[0] && lines[0].startsWith('#!')) {
+    start = 1;
   }
   const m = HEADER_RE.exec(lines[start] || '');
-  return m ? m[1] : null;
+  return m ? (m[1] || m[2]) : null;
 }
 
 /** Every generated file now in a skill folder: target -> source. */

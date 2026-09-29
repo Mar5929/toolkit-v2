@@ -1,0 +1,1 @@
+I approve Option A. Before you build, split the --cents option out into its own sub-item under WI-001, so WI-001 is only the dollar fee and total.

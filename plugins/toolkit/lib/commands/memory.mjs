@@ -28,16 +28,28 @@ import { today } from '../core/util.mjs';
 import {
   DESCRIPTION_MAX, FOCUS_SECTIONS, KNOWN_FIELDS, NO_AUTHORIZATION, UNAPPROVED_NOTE_RE, approvalNote, approvalText, assertKey, bodyTitle,
   canonicalKey, completeFocus, contractStatus, headingAnchor, isProposal, isProposalAuthorization, isValidKey, keyFor, loadDriver,
-  mergedReason, normalizeName, normalizeRecord, proposalTarget, proposalText, repairLinksWithDriver, repairResult, sameApproval, secretKind,
-  splitKey, storedStatus, supersededByFromBody, supersedesList, titleFromName, RECORD_TYPES,
+  mergedReason, normalizeName, normalizeRecord, proposalTarget, proposalText, repairLinksWithDriver, repairResult, sameApproval, searchTerms, secretKind,
+  splitKey, storedStatus, supersededByFromBody, supersedesList, titleFromName, RECORD_TYPES, ACTIVE_TYPES, isRetiredType, retiredTypeError,
 } from '../memory/contract.mjs';
+import { readTurnFacts, passingRemark } from '../hooks/turn-facts.mjs';
+import {
+  PROJECT_RULE_PATH, addEntry, assertArea, assertInstruction, changeRules, commitLine, refreshAgentsSpan,
+} from '../project/owner-rules.mjs';
+import { proposalType } from '../hooks/proposal.mjs';
+import { ownerWording } from '../memory/owner-wording.mjs';
+import { projectHosts } from '../project/manifest.mjs';
+import { slugify } from '../core/util.mjs';
+import {
+  LESSONS_HEADING, isRuleProposal, ruleTarget, ruleProposalText, addLesson, findLesson, lessonPoint, planPromotions, promotionMark, ruleArea,
+} from '../memory/lessons.mjs';
 import { forgetInCache, refreshCache } from '../memory/startup.mjs';
 import { exportMemory, importMemory } from '../memory/transfer.mjs';
-import { findSimilar, bodyPoints, bodyWords, overlap, SIMILAR_AT, CLOSEST_WHY } from '../memory/similar.mjs';
+import { findSimilar, bodyPoints, bodyWords, overlap, stems, SIMILAR_AT, CLOSEST_WHY } from '../memory/similar.mjs';
 import { approveRecord, rejectProposal, recordTitle } from '../memory/proposals.mjs';
 import {
   addEvidenceNote, assertHeading, conceptParts, editConceptText, editRecordWith, getSection, hasApprovalNote, isOneFact, mergeSections, newConceptBody,
   oldestDate, planTidy, rememberText, retargetLinks, sameHeading, sectionText, spliceSection, suggestConcept, withBodyTitle, withEvidence,
+  withLessonsSection,
 } from '../memory/concepts.mjs';
 
 export const summary = 'Save, find, and manage project memory: records, the current focus, and the glossary.';
@@ -47,14 +59,17 @@ export const help = `Usage:
                       [--section <heading>] [--title <text>]
                       [--approved-by <who>] [--authorization <text>] [--supersedes <key>] [--source <text>]
                       [--status <s>] [--last-verified <YYYY-MM-DD|unknown>] [--expect <version|absent>]
-                      [--proposal] [--allow-similar | --new-concept]
+                      [--proposal [--rule-section <area>]] [--allow-similar | --new-concept] [--not-a-rule]
   toolkit memory save --concept <key> --section <heading> (--body <text> | --body-file <file|-> | --remove)
                       [--append] [--description <d>] [--title <text>] [--approved-by <who> | --proposal]
                       [--source <text>] [--last-verified <YYYY-MM-DD|unknown>] [--expect <version>] [--allow-similar]
+                      [--not-a-rule]
+  toolkit memory save --concept <key> --lesson <heading> [--body <text> | --body-file <file|->] [--source <text>]
   toolkit memory find <query> [--reflect] [--type <t>] [--limit <n>] [--all] [--proposals]
   toolkit memory get <key>
   toolkit memory list [--type <t>] [--status <current|needs-review|retired|all>]
   toolkit memory approve <key> --by <name> [--concept <key>] [--title <t>] [--description <d>]
+                         (a rule proposal: [--section <area>] [--text <instruction>])
   toolkit memory reject <key> [--reason <text>]
   toolkit memory retire <key> [--superseded-by <key>] [--reason <text>]
   toolkit memory restore <key>
@@ -64,6 +79,8 @@ export const help = `Usage:
   toolkit memory split <key> --section <heading> [--section <heading> ...] --into <concept-key> --approved-by <owner>
                        [--title <t>] [--description <d>]
   toolkit memory tidy --plan
+  toolkit memory promote <key> --section <lesson heading> --to rule|skill [--rule-section <area>] [--text <t>]
+                         [--skill-name <name>] [--approved-by <owner>]
   toolkit memory focus [--set-file <file|-> | --text <text>] [--expect <version>]
   toolkit memory glossary [--set-file <file|-> | --text <text>] [--expect <version>]
   toolkit memory reindex
@@ -71,7 +88,7 @@ export const help = `Usage:
   toolkit memory export --to <folder>
   toolkit memory import --from <folder> [--dry-run]
 
-Concept memory: one record per concept or area (feedback_ways_of_working,
+Concept memory: one record per concept or area (user_profile,
 project_billing), with its title ("# " line), a one-line summary
 (description), and the date of its last change (updated) at the top. Each
 fact goes under a "## " heading in the concept it belongs to; a new record is
@@ -85,9 +102,12 @@ the proposal is saved as its own record that names the concept and section,
 added there when the owner approves it.
 save --type/--name with --section starts a new concept with that section (or
 adds the section when the concept exists). --title sets the "# " title.
-Types: ${RECORD_TYPES.join(', ')}. A key is <type>_<slug>, for example feedback_deploy_window.
+Types: ${ACTIVE_TYPES.join(', ')}. A key is <type>_<slug>, for example project_deploy_window.
+The feedback type is retired (Mike, 2026-09-29): an instruction for how the agent
+works is a rule (toolkit rule add), so a new feedback_ record or fact is refused.
+An older feedback_ record is still read; tidy --plan lists how to move it out.
 The key is also the file name without .md and the frontmatter name (the model's topic format).
-A key typed with dashes (feedback_deploy-window) finds the same record.
+A key typed with dashes (project_deploy-window) finds the same record.
 A --name longer than 60 characters is refused, not shortened.
 A body file that starts with frontmatter fills any field not given as a flag.
 --approved-by writes "authorization: Approved by <who> on <date>". With no approver
@@ -122,6 +142,32 @@ approve --concept <key> names the concept the fact goes in: an existing one
 (added as a section), a new one (started with --title and --description), or
 the proposal's own key. A one-fact proposal that names no concept is refused
 until --concept names one, because its key names the fact, not a concept.
+A rule proposal (--proposal --rule-section <area>, typed user) is the owner's
+instruction the agent asked about: his yes (approve) adds it to
+.claude/rules/owner-preferences.md in that section (--section and --text
+change them) and removes the proposal. An older feedback_ proposal is one too.
+--approved-by in a turn the hooks recorded with no keep phrase, no other save
+words, and no answer to a memory question saves a new record (also with
+--expect absent), a new section, or --append text as a proposal instead, even
+with the concept's --expect version, and says so: a remark made in passing is
+not an approval. A replacement of text already there (--expect <version>) is
+saved as given.
+An instruction the owner gave this turn with a keep phrase ("from now on",
+a correction), saved as a user_ or project_ record or section that is not a
+proposal, is refused (exit 2) when its Remember line reads as an instruction
+for how the agent works: it is a rule (toolkit rule add, printed). When it is
+a fact after all, save it again with --not-a-rule.
+--lesson <heading> records learned know-how under the concept's
+"## Gotchas and lessons" section, as a "### " heading with a Seen line; the
+same heading again adds today's date (on a day already there, only with a
+--source no entry of that day has: another session). A lesson seen in two or more sessions,
+one like it in another concept, or one the owner confirmed is a promotion
+candidate (tidy --plan). promote proposes it as a rule or a skill and changes
+nothing; with --approved-by (after his yes, in the turn he answers) it writes
+the rule, or a skill skeleton for the agent to fill, and marks the lesson
+promoted. With --approved-by in a turn the hooks recorded with no keep phrase,
+no other save words, and no answer to a question about memory or rules, it is
+refused (exit 2).
 reject records his no and deletes the proposal. reject --reason
 repeats his reason in the output; nothing keeps it, since the proposal is deleted.
 delete, reject, retire, and rename also take the record out of the local
@@ -141,7 +187,7 @@ moves it out of archive/ and keeps its links working.
 The current focus has four ## sections (${FOCUS_SECTIONS.join(', ')}) and at most 50 lines.
 Exit codes: 0 ok, 1 error or not found, 2 refused (a rule or a stale --expect), 3 not supported by this backend, 4 not a toolkit project.`;
 
-const SUBCOMMANDS = ['save', 'find', 'get', 'list', 'approve', 'reject', 'retire', 'restore', 'rename', 'delete', 'merge', 'split', 'tidy', 'focus', 'glossary', 'reindex', 'status', 'export', 'import'];
+const SUBCOMMANDS = ['save', 'find', 'get', 'list', 'approve', 'reject', 'retire', 'restore', 'rename', 'delete', 'merge', 'split', 'tidy', 'promote', 'focus', 'glossary', 'reindex', 'status', 'export', 'import'];
 
 export async function run(argv, ctx) {
   const [sub, ...rest] = argv;
@@ -177,7 +223,7 @@ function str(flags, name) {
 }
 
 function requireKeyArg(positionals, what) {
-  if (!positionals.length) throw new ToolkitError(EXIT.INVALID, `Give the key of the record to ${what}, for example: toolkit memory ${what} feedback_deploy_window.`);
+  if (!positionals.length) throw new ToolkitError(EXIT.INVALID, `Give the key of the record to ${what}, for example: toolkit memory ${what} project_deploy_window.`);
   if (positionals.length > 1) throw new ToolkitError(EXIT.INVALID, `Give one key, not ${positionals.length}.`);
   return positionals[0];
 }
@@ -218,6 +264,9 @@ function statusWord(status) {
 function statusFlag(r) {
   if (!r.status || r.status === 'current') return '';
   if (r.proposal || isProposal(r)) {
+    const extra = r.extra && typeof r.extra === 'object' ? r.extra : {};
+    const ruleSection = r.rule_section || extra.rule_section;
+    if (ruleSection || r.type === 'feedback') return ` [rule proposal for ${PROJECT_RULE_PATH}${ruleSection ? `, section "${ruleSection}"` : ''}: the owner has not answered]`;
     const target = proposalTarget(r);
     return target ? ` [proposal for ${target.concept}: the owner has not answered]` : ' [proposal: the owner has not answered]';
   }
@@ -263,9 +312,77 @@ function repairFields(res) {
 
 const SAVE_SPEC = {
   string: ['type', 'name', 'description', 'body', 'body-file', 'approved-by', 'authorization', 'supersedes', 'source', 'status',
-    'last-verified', 'expect', 'host', 'concept', 'section', 'title'],
-  boolean: ['proposal', 'allow-similar', 'new-concept', 'append', 'remove'],
+    'last-verified', 'expect', 'host', 'concept', 'section', 'title', 'rule-section', 'lesson'],
+  boolean: ['proposal', 'allow-similar', 'new-concept', 'append', 'remove', 'not-a-rule'],
 };
+
+/**
+ * A save that says the owner approved it (--approved-by), in a turn whose
+ * prompt the hooks recorded with no keep phrase, no other words asking for a
+ * save, and no answer to a memory question, is saved as a proposal instead
+ * (close-out 2026-09-28, R-I4 in code): a remark made in passing is not an
+ * approval. The hooks' turn facts come from lib/hooks/turn-facts.mjs.
+ * adds: the save stores something new: a new record (no --expect, or
+ * --expect absent), a new section of a concept, or more text under a section
+ * (--append), whatever --expect it carries (verifier, 2026-09-29: --expect
+ * absent and a new section saved with the concept's version were stored as
+ * approved). A change of text already there (a whole record or a section
+ * replaced with --expect <version>), --supersedes, and a removal are left as
+ * they are; the PostToolUse note still covers them. Changes flags in place and
+ * returns { by } when it did, else null.
+ */
+function passingRemarkDowngrade(flags, project, env, { adds = true } = {}) {
+  const by = str(flags, 'approved-by');
+  if (by === undefined || flags.proposal === true || flags.remove === true) return null;
+  // --supersedes retires an approved record, which a proposal never does.
+  if (!adds || str(flags, 'supersedes') !== undefined) return null;
+  const facts = readTurnFacts(project, env);
+  if (!passingRemark(facts)) return null;
+  flags.proposal = true;
+  delete flags['approved-by'];
+  delete flags.authorization;
+  return { by, host: facts.host || null, turn: facts.turn ?? null };
+}
+
+/** The output line for a save turned into a proposal (passingRemarkDowngrade). */
+export function downgradeLine(downgraded, key) {
+  const who = downgraded && downgraded.by ? downgraded.by : 'the owner';
+  return `Saved as a proposal, not as approved by ${who}: the hooks recorded no keep phrase, no other words asking for a save, and no answer to a memory question in his message this turn, so what he said is a remark made in passing. Tell him in the reply what was kept and ask "Save to memory: <one line>?". His yes: toolkit memory approve ${key} --by <name>${downgraded && downgraded.concept ? '' : ' (with --concept when it names none)'}; his no: toolkit memory reject ${key}.`;
+}
+
+/** The fact a save stores, on one line: its Remember line, else the fallback (the description or the heading). */
+function factLine(text, fallback) {
+  const m = /\*\*Remember:\*\*\s*([^\n]+)/.exec(String(text ?? ''));
+  return (m ? m[1] : String(fallback ?? '')).replace(/\s+/g, ' ').trim();
+}
+
+/**
+ * The refusal of an instruction saved to memory (verifier, 2026-09-29: in a
+ * Codex turn "From now on, write tests with Node's built-in node:test
+ * runner", the instruction was saved as a user_ section and nothing stopped
+ * it). Rules, skills, and memory each hold one kind of thing (Mike,
+ * 2026-09-29): an instruction the owner gives for how the agent works is a
+ * rule. A user_ or project_ save that is not a proposal is refused (exit 2)
+ * when the hooks recorded a keep phrase in the owner's message this turn and
+ * the fact reads as an instruction (proposalType 'rule': a verb to the agent,
+ * a correction, or a preference about how work is done). --not-a-rule says it
+ * is a fact after all. Returns the error, or null.
+ */
+function instructionRefusal(project, env, { type, fact, what, proposal, notARule }) {
+  if (proposal || notARule || !['user', 'project'].includes(String(type ?? '').trim().toLowerCase())) return null;
+  const text = String(fact ?? '').replace(/\s+/g, ' ').trim();
+  if (!text) return null;
+  const facts = readTurnFacts(project, env);
+  if (!facts || !facts.keep) return null;
+  const owner = project && project.config && project.config.project && project.config.project.owner;
+  if (proposalType(text, owner) !== 'rule') return null;
+  const instruction = ownerWording(text, owner);
+  const area = ruleArea(instruction);
+  return new ToolkitError(EXIT.INVALID, `${what} was not saved: "${instruction}" is an instruction for how the agent works, and the owner asked this turn for it to be kept. An instruction is a rule, not memory (rules, skills, and memory each hold one kind of thing).`, {
+    rule: { section: area, text: instruction },
+    fix: `Add it to the project rules in his words: toolkit rule add --section ${shellQuote(area)} --text ${shellQuote(instruction)} --source '<owner>, in chat'. When it is a fact about the owner or the project and not an instruction, save it again with --not-a-rule.`,
+  });
+}
 
 /** The owner's name, word by word: never a subject word when a fact is matched to a concept. */
 function ownerWords(project) {
@@ -300,7 +417,16 @@ async function save(argv, ctx, deps) {
   const { _, flags } = parseArgs(argv, SAVE_SPEC);
   if (_.length) throw new ToolkitError(EXIT.INVALID, `toolkit memory save takes no words outside flags (got "${_.join(' ')}"). Put the text in --body or --body-file.`);
   const concept = str(flags, 'concept');
-  if (concept !== undefined) return saveSection(flags, ctx, deps, { conceptKey: concept });
+  const lesson = str(flags, 'lesson');
+  if (lesson !== undefined) return saveLesson(flags, ctx, deps, { conceptKey: concept, heading: lesson });
+  if (concept !== undefined) {
+    if (str(flags, 'rule-section') !== undefined) throw new ToolkitError(EXIT.INVALID, '--rule-section saves a rule proposal, which joins no concept: leave out --concept.');
+    // saveSection decides the passing-remark downgrade once it knows whether the section is new.
+    return saveSection(flags, ctx, deps, { conceptKey: concept });
+  }
+  // A whole record: new unless --expect names a version of one already there.
+  const expectGiven = str(flags, 'expect');
+  const downgraded = passingRemarkDowngrade(flags, deps.project, ctx.env, { adds: expectGiven === undefined || expectGiven === 'absent' });
   if (flags.append === true || flags.remove === true) {
     throw new ToolkitError(EXIT.INVALID, `--${flags.remove === true ? 'remove' : 'append'} changes one section of a concept: give it with --concept <key> --section <heading>.`);
   }
@@ -323,8 +449,24 @@ async function save(argv, ctx, deps) {
     return f === undefined || f === null ? undefined : String(f);
   };
   // A body file in the model's format has metadata.type, and name is the whole key.
-  const type = pick('type', 'type', fileMeta.type);
+  // A rule proposal (--rule-section) is typed user: the owner's own preference.
+  const ruleSectionFlag = str(flags, 'rule-section');
+  const type = pick('type', 'type', fileMeta.type) ?? (ruleSectionFlag !== undefined ? 'user' : undefined);
   const name = pick('name', 'name');
+  let ruleExtra = null;
+  if (ruleSectionFlag !== undefined) {
+    if (flags.proposal !== true) {
+      throw new ToolkitError(EXIT.INVALID, '--rule-section saves a rule proposal for the owner\'s yes or no, so it goes with --proposal. When the owner asked for the rule himself, write it with toolkit rule add --section \'<area>\' --text \'<instruction>\' --source \'<who said it, where>\'.');
+    }
+    ruleExtra = { rule_section: assertArea(ruleSectionFlag), rule_scope: 'project' };
+  }
+  // feedback_ is retired (Mike, 2026-09-29): a new record of that type is an
+  // instruction, so it is a rule. --expect absent is a new record too; only
+  // --expect <version> (a change of a record already there) goes on.
+  if (type && isRetiredType(String(type).trim().toLowerCase()) && (expectGiven === undefined || expectGiven === 'absent')) {
+    const probe = name ? normalizeRecord({ type: 'feedback', name }) : null;
+    throw retiredTypeError(probe && isValidKey(probe.key) ? probe.key : null, 'toolkit memory save');
+  }
   const description = pick('description', 'description');
   const sectionFlag = str(flags, 'section');
   const title = str(flags, 'title');
@@ -334,7 +476,7 @@ async function save(argv, ctx, deps) {
     const probe = normalizeRecord({ type, name });
     if (RECORD_TYPES.includes(probe.type) && isValidKey(probe.key)) {
       const there = await driver.get(probe.key).catch(() => null);
-      if (there) return saveSection(flags, ctx, deps, { conceptKey: probe.key, bodyText, keepSummary: true });
+      if (there) return saveSection(flags, ctx, deps, { conceptKey: probe.key, bodyText, keepSummary: true, downgraded });
     }
   }
   const missing = [['type', type], ['name', name], ['description', description]].filter(([, v]) => !v).map(([n]) => `--${n}`);
@@ -343,7 +485,8 @@ async function save(argv, ctx, deps) {
   if (sectionFlag !== undefined) {
     heading = assertHeading(sectionFlag);
     const probe = normalizeRecord({ type, name });
-    bodyText = newConceptBody(title || titleFromName(probe.name), heading, sectionText(bodyText, heading));
+    // An event holds one episode, and --lesson never writes to one, so it gets no Gotchas and lessons section.
+    bodyText = newConceptBody(title || titleFromName(probe.name), heading, sectionText(bodyText, heading), { lessons: probe.type !== 'event' });
   } else if (title !== undefined) {
     bodyText = withBodyTitle(bodyText, title);
   }
@@ -359,7 +502,11 @@ async function save(argv, ctx, deps) {
     authorizationFlag: str(flags, 'authorization'),
     proposal: flags.proposal === true,
     allowSimilar: flags['allow-similar'] === true,
-    newConcept: flags['new-concept'] === true,
+    // A rule proposal joins no concept, so no concept is suggested for it.
+    newConcept: flags['new-concept'] === true || Boolean(ruleExtra),
+    ...(ruleExtra ? { extra: ruleExtra } : {}),
+    downgraded,
+    notARule: flags['not-a-rule'] === true,
     statusGiven: pick('status', 'status'),
     source: pick('source', 'source'),
     lastVerified: pick('last-verified', 'last_verified'),
@@ -392,6 +539,8 @@ async function saveRecord(ctx, { project, driver }, input) {
   let source = input.source;
   const probe = normalizeRecord({ type, name });
   const key = probe.key;
+  const notRule = instructionRefusal(project, ctx.env, { type: probe.type, fact: factLine(bodyText, description), what: key, proposal, notARule: input.notARule });
+  if (notRule) throw notRule;
   const existing = RECORD_TYPES.includes(probe.type) && probe.name ? await driver.get(key).catch(() => null) : null;
   if (proposal && existing && !isProposal(existing)) {
     throw new ToolkitError(EXIT.INVALID, `${key} is already a ${existing.status === 'retired' ? storedStatus(existing) : existing.status} record, so it was not saved as a proposal. A proposal never replaces a record the owner approved.`, {
@@ -539,9 +688,13 @@ async function saveRecord(ctx, { project, driver }, input) {
   const saved = result.record || {};
   const isProp = isProposal(saved.status ? saved : record);
   const target = input.target || null;
-  const lines = [isProp
-    ? `Saved to memory as a proposal: ${result.key} (${result.created ? 'new record' : 'updated'})${target ? `, for the concept ${target.concept}, section "${target.section}"` : ''}. It is not a fact until the owner answers. Record his yes with ${approveCommand({ ...record, key: result.key, extra: target ? { concept: target.concept } : record.extra })}${target ? ` (it is then added to ${target.concept})` : ''}, or his no with toolkit memory reject ${result.key}.`
-    : `Saved to memory: ${result.key} (${result.created ? 'new record' : 'updated'}).`];
+  const rule = record.extra && record.extra.rule_section ? { section: record.extra.rule_section, scope: record.extra.rule_scope || 'project' } : null;
+  const lines = [isProp && rule
+    ? `Saved to memory as a rule proposal: ${result.key} (${result.created ? 'new record' : 'updated'}). It is not a rule until the owner answers. His yes adds it to ${PROJECT_RULE_PATH}, section "${rule.section}": toolkit memory approve ${result.key} --by <name> (--section '<area>' names another section, --text '<instruction>' other words). His no: toolkit memory reject ${result.key}.`
+    : isProp
+      ? `Saved to memory as a proposal: ${result.key} (${result.created ? 'new record' : 'updated'})${target ? `, for the concept ${target.concept}, section "${target.section}"` : ''}. It is not a fact until the owner answers. Record his yes with ${approveCommand({ ...record, key: result.key, extra: target ? { concept: target.concept } : record.extra })}${target ? ` (it is then added to ${target.concept})` : ''}, or his no with toolkit memory reject ${result.key}.`
+      : `Saved to memory: ${result.key} (${result.created ? 'new record' : 'updated'}).`];
+  if (input.downgraded) lines.push(downgradeLine({ ...input.downgraded, concept: target ? target.concept : null }, result.key));
   lines.push(`Where: ${driver.location}`);
   lines.push(`Version: ${short(result.version)}`);
   if (approvedBy) lines.push(`Approved by: ${approvedBy}`);
@@ -570,6 +723,8 @@ async function saveRecord(ctx, { project, driver }, input) {
     authorization,
     proposal: isProp,
     ...(target ? { concept: target.concept, section: { heading: target.section, action: 'proposed' } } : {}),
+    ...(rule ? { rule } : {}),
+    ...(input.downgraded ? { downgraded: { from: 'approved-by', by: input.downgraded.by } } : {}),
     unapproved,
     retired,
     linksRepaired,
@@ -615,6 +770,8 @@ function belongsError(key, belongs, { heading, proposal }) {
 export function approveCommand(rec) {
   const r = rec || {};
   const plain = `toolkit memory approve ${r.key} --by <name>`;
+  const extra = r.extra && typeof r.extra === 'object' ? r.extra : {};
+  if (extra.rule_section || r.rule_section || r.type === 'feedback') return plain;
   if (proposalTarget(r) || r.type === 'event' || (r.body !== undefined && !isOneFact(r.body))) return plain;
   const parts = splitKey(r.key);
   return `${plain} --concept ${parts ? parts.type : '<type>'}_<subject> (the concept it goes in: an existing one, or a new one named for its subject, with --title and --description)`;
@@ -625,6 +782,12 @@ function approvalRecorded(text, authorization) {
   const who = /^approved by\s+(.+?)(?:\s+on\s+\d{4}-\d{2}-\d{2})?$/i.exec(String(authorization || '').trim());
   if (who) return new RegExp(`\\bApproved by ${who[1].replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i').test(String(text || ''));
   return String(text || '').includes(String(authorization || '').trim());
+}
+
+/** True when a text shares a search word (stem) with a heading. */
+function sharesWords(text, heading) {
+  const have = new Set(stems(searchTerms(text)));
+  return stems(searchTerms(heading)).some((w) => have.has(w));
 }
 
 /** The line for a save --type/--name --section that kept the concept's summary. */
@@ -657,7 +820,7 @@ function sectionTwin(record, heading, text) {
  * (Hindsight, Notion). Notion sends only the changed section. With --proposal
  * the fact is saved as its own proposal record that names this concept.
  */
-async function saveSection(flags, ctx, deps, { conceptKey, bodyText: given, keepSummary = false }) {
+async function saveSection(flags, ctx, deps, { conceptKey, bodyText: given, keepSummary = false, downgraded: early = null }) {
   const { project, driver } = deps;
   const key = assertKey(conceptKey);
   const sectionFlag = str(flags, 'section');
@@ -667,14 +830,15 @@ async function saveSection(flags, ctx, deps, { conceptKey, bodyText: given, keep
   const heading = assertHeading(sectionFlag);
   const remove = flags.remove === true;
   const append = flags.append === true;
-  const proposal = flags.proposal === true;
+  let downgraded = early;
+  let proposal = flags.proposal === true;
   if (remove && (append || proposal)) throw new ToolkitError(EXIT.INVALID, `--remove cannot go with --${append ? 'append' : 'proposal'}.`);
   if (str(flags, 'status') !== undefined) throw new ToolkitError(EXIT.INVALID, 'A section save keeps the concept\'s status. Leave out --status.');
   if (str(flags, 'supersedes') !== undefined) {
     throw new ToolkitError(EXIT.INVALID, 'A section save does not replace records. To move whole records into this concept, use toolkit memory merge <key> --into ' + key + ' --approved-by <owner>.');
   }
-  const approvedBy = str(flags, 'approved-by');
-  const authorizationFlag = str(flags, 'authorization');
+  let approvedBy = str(flags, 'approved-by');
+  let authorizationFlag = str(flags, 'authorization');
   if (proposal && (approvedBy !== undefined || authorizationFlag !== undefined)) {
     throw new ToolkitError(EXIT.INVALID, 'A proposal has no approver yet, so --proposal cannot go with --approved-by or --authorization. Save it as a proposal now, and record the owner\'s answer later with toolkit memory approve or reject.');
   }
@@ -709,6 +873,25 @@ async function saveSection(flags, ctx, deps, { conceptKey, bodyText: given, keep
       fix: `Ask him about it first: his yes is toolkit memory approve ${key} --by <name>, his no toolkit memory reject ${key}.`,
     });
   }
+  // What the save adds: a section the concept does not have yet, or more text under one.
+  const newSection = getSection(current.body, heading) === null;
+  // feedback_ is retired: no new fact goes into a feedback_ concept, whatever
+  // --expect it carries (verifier, 2026-09-29). Removing a section, or
+  // replacing one read with --expect (moving it out), still works.
+  if (isRetiredType(current.type) && !remove && (newSection || append || str(flags, 'expect') === undefined)) throw retiredTypeError(key, 'toolkit memory save');
+  // A remark made in passing: a new section, or text added under one, is saved
+  // as a proposal, even with the concept's --expect version (verifier,
+  // 2026-09-29). The proposal is a record of its own, so that version is not
+  // its version.
+  if (!downgraded && !remove) {
+    downgraded = passingRemarkDowngrade(flags, project, ctx.env, { adds: newSection || append });
+    if (downgraded) {
+      delete flags.expect;
+      proposal = true;
+      approvedBy = undefined;
+      authorizationFlag = undefined;
+    }
+  }
   const typeFlag = str(flags, 'type');
   if (typeFlag !== undefined && typeFlag !== current.type) {
     throw new ToolkitError(EXIT.INVALID, `--type ${typeFlag} does not match ${key}, which is a ${current.type} record. A concept's facts share its type; leave out --type, or save the fact to a ${typeFlag} concept.`, { key });
@@ -724,6 +907,10 @@ async function saveSection(flags, ctx, deps, { conceptKey, bodyText: given, keep
   // there was written for a new concept, so the concept keeps its summary and
   // the output says so (verifier, 2026-09-28: the summary was replaced
   // without a word). With --concept, --description sets the summary.
+  if (!remove) {
+    const notRule = instructionRefusal(project, ctx.env, { type: current.type, fact: factLine(text, heading), what: `The section "${heading}" of ${key}`, proposal, notARule: flags['not-a-rule'] === true });
+    if (notRule) throw notRule;
+  }
   const descriptionFlag = str(flags, 'description');
   const description = keepSummary && !proposal ? undefined : descriptionFlag;
   const summaryKept = keepSummary && !proposal && descriptionFlag !== undefined && oneLineOf(descriptionFlag) !== current.description;
@@ -770,6 +957,7 @@ async function saveSection(flags, ctx, deps, { conceptKey, bodyText: given, keep
       mode: approvalMode(project),
       extra: { concept: key, section: heading },
       target: { concept: key, section: heading },
+      downgraded,
     });
   }
 
@@ -885,8 +1073,18 @@ async function saveSection(flags, ctx, deps, { conceptKey, bodyText: given, keep
   const unapproved = authorization === NO_AUTHORIZATION && mode2 !== 'trusted';
   if (unapproved) lines.push(`Note: this change to ${key} was saved with no approval recorded. Memory is in onboarding mode, so the owner is asked first ("Save to memory: <one line>?"): save the section again with --approved-by <owner> and --expect ${short(res.version)} after his yes, or propose it with --proposal while he has not answered.`);
   if (relinked) lines.push(...repairLines(relinked));
+  // A summary that does not name the new sub-topic may be stale (close-out
+  // 2026-09-28, finding 9: "How Mike prefers to review" stayed after a test
+  // runner section was added).
+  if (action === 'added' && description === undefined && !sharesWords(stored.description || current.description, h)) {
+    lines.push(`Check the summary of ${key}: "${stored.description || current.description}" does not name "${h}". When it no longer covers the concept, save this section again with --description '<new one-line summary>' and --expect ${short(res.version)}.`);
+  }
   if (action === 'added') lines.push(`Undo: toolkit memory save --concept ${key} --section ${shellQuote(h)} --remove --expect ${short(res.version)}`);
-  else if (action === 'removed') lines.push(`Undo: save its old text again with toolkit memory save --concept ${key} --section ${shellQuote(h)} (the --json output holds the old text as previous).`);
+  else if (action === 'removed') {
+    const moved = (relinked && relinked.linksRepaired) || [];
+    // An undo adds the section back, but links changed by the removal stay on the concept (a builder's note of 2026-09-28).
+    lines.push(`Undo: save its old text again with toolkit memory save --concept ${key} --section ${shellQuote(h)} (the --json output holds the old text as previous).${moved.length ? ` The removal pointed the links in ${moved.join(', ')} at ${key}.md; after an undo, point them back at ${key}.md#${headingAnchor(h)} and save each with toolkit memory save.` : ''}`);
+  }
   else if (['replaced', 'appended', 'approved'].includes(action)) lines.push(`Undo: save the old text with --section ${shellQuote(h)} --expect ${short(res.version)} (the --json output holds it as previous).`);
   const named = `${h} (in ${conceptTitle})`;
   const reply = unapproved ? null : action === 'added' ? REPLY.saved(named) : action === 'removed' ? REPLY.removed(named) : REPLY.updated(named);
@@ -913,6 +1111,68 @@ async function saveSection(flags, ctx, deps, { conceptKey, bodyText: given, keep
     retired: null,
     ...repairFields(relinked),
   });
+  return EXIT.OK;
+}
+
+/**
+ * save --concept <key> --lesson <heading> [--body <text>] [--source <text>]:
+ * one lesson (learned know-how, not yet proven) under the concept's
+ * "## Gotchas and lessons" section, as a "### <heading>" with a Seen line
+ * (lib/memory/lessons.mjs). The same heading again is the same lesson seen in
+ * another session: today's date joins its Seen line. A lesson is the agent's
+ * own know-how, so it needs no approval; the owner's yes comes when it is
+ * promoted to a rule or a skill (toolkit memory promote).
+ */
+async function saveLesson(flags, ctx, deps, { conceptKey, heading: headingFlag }) {
+  const { project, driver } = deps;
+  if (conceptKey === undefined) {
+    throw new ToolkitError(EXIT.INVALID, 'A lesson goes in the concept it is about: give it with --concept <key> --lesson <heading>.');
+  }
+  for (const f of ['section', 'append', 'remove', 'proposal', 'approved-by', 'authorization', 'type', 'name', 'status', 'supersedes', 'rule-section']) {
+    if (flags[f] !== undefined) throw new ToolkitError(EXIT.INVALID, `--lesson does not take --${f}: a lesson is a "### " heading under "## ${LESSONS_HEADING}", with a Seen line for each session.`);
+  }
+  const key = assertKey(conceptKey);
+  const heading = assertHeading(headingFlag);
+  let text = await bodyInput(flags, ctx);
+  if (text !== undefined) {
+    const parsed = parseFrontmatter(text);
+    if (parsed.hasFrontmatter) text = parsed.body;
+    if (/^#{1,3}\s/m.test(text)) throw new ToolkitError(EXIT.INVALID, 'The lesson text holds a heading of its own. Give only the text under the lesson heading.');
+  }
+  const current = await driver.get(key);
+  if (!current) throw new ToolkitError(EXIT.ERROR, `There is no memory record ${key}, so the lesson was not saved.`, { key, fix: 'Run toolkit memory list to see the concepts.' });
+  if (current.status === 'retired' || isProposal(current)) {
+    throw new ToolkitError(EXIT.INVALID, `${key} is ${isProposal(current) ? 'a proposal the owner has not answered' : storedStatus(current)}, so the lesson was not saved.`, { key });
+  }
+  if (isRetiredType(current.type)) throw retiredTypeError(key, 'toolkit memory save --lesson');
+  if (current.type === 'event') throw new ToolkitError(EXIT.INVALID, `${key} is an event, which holds one episode. Save the lesson in the concept it is about.`, { key });
+  const day = today();
+  const source = str(flags, 'source');
+  // The same lesson already records today: nothing to write.
+  const probe = addLesson(getSection(current.body, LESSONS_HEADING), heading, { text: text || '', date: day, source: source || '' });
+  if (probe.action === 'unchanged') {
+    const seen = (findLesson(current.body, heading) || { seen: [] }).seen;
+    out(ctx, [`Nothing changed: the lesson "${probe.heading}" in ${key} already records ${day}.`], { ok: true, action: 'lesson', key, lesson: { heading: probe.heading, action: 'unchanged', seen }, version: current.version, backend: driver.backend });
+    return EXIT.OK;
+  }
+  const res = await editRecordWith(driver, key, (stored) => {
+    const had = getSection(stored.body, LESSONS_HEADING);
+    const added = addLesson(had, heading, { text: text || '', date: day, source: source || '' });
+    if (added.action === 'unchanged') return { text: stored.text, action: 'unchanged', heading: added.heading };
+    const edited = editConceptText(stored.text, key, { heading: LESSONS_HEADING, content: added.text, mode: 'set', day });
+    return { text: edited.text, action: added.action, heading: added.heading };
+  }, { expect: str(flags, 'expect') });
+  await afterWrite(project, driver);
+  const title = bodyTitle((res.record && res.record.body) || current.body) || titleFromName(current.name);
+  const lesson = findLesson((res.record && res.record.body) || '', res.heading || heading) || { seen: [] };
+  const lines = [res.action === 'added'
+    ? `Saved the lesson "${res.heading}" under "${LESSONS_HEADING}" in ${key} (${title}).`
+    : res.action === 'seen-again'
+      ? `The lesson "${res.heading}" in ${key} (${title}) came up again: ${day} was added to its Seen line (${lesson.seen.length} session${lesson.seen.length === 1 ? '' : 's'}).`
+      : `Nothing changed: the lesson "${res.heading}" in ${key} already records ${day}.`];
+  lines.push(`Version: ${short(res.version)}`);
+  if (lesson.seen.length >= 2) lines.push(`It came up in ${lesson.seen.length} sessions, so it may be ready to become a rule or a skill: propose it to the owner with toolkit memory promote ${key} --section ${shellQuote(res.heading || heading)} --to rule (or --to skill).`);
+  out(ctx, lines, { ok: true, action: 'lesson', key, lesson: { heading: res.heading || heading, action: res.action || 'unchanged', seen: lesson.seen }, version: res.version, backend: driver.backend });
   return EXIT.OK;
 }
 
@@ -1094,6 +1354,8 @@ async function rename(argv, ctx, { project, driver }) {
   const key = requireKeyArg(_, 'rename');
   const to = str(flags, 'to');
   if (!to) throw new ToolkitError(EXIT.INVALID, `Give the new key with --to, for example: toolkit memory rename ${key} --to project_new_name.`, { key });
+  const toParts = splitKey(canonicalKey(to));
+  if (toParts && isRetiredType(toParts.type)) throw retiredTypeError(null, `toolkit memory rename ${key} --to ${to}`);
   if (typeof driver.rename !== 'function') {
     throw new ToolkitError(EXIT.UNSUPPORTED, `The ${driver.backend} memory backend cannot rename a record.`, { key });
   }
@@ -1175,9 +1437,10 @@ function ownerYes(flags, what) {
 
 /** A concept to move facts into: the key, its type and name, and the record when it exists (checked). */
 async function targetConcept(driver, into) {
-  if (!into) throw new ToolkitError(EXIT.INVALID, 'Give the concept with --into <key>, for example --into feedback_ways_of_working.');
+  if (!into) throw new ToolkitError(EXIT.INVALID, 'Give the concept with --into <key>, for example --into project_release.');
   const key = assertKey(into);
   const parts = splitKey(key);
+  if (isRetiredType(parts.type)) throw retiredTypeError(key, `Moving facts into ${key}`);
   if (parts.type === 'event') {
     throw new ToolkitError(EXIT.INVALID, `${key} is an event. An event record holds one episode, so facts are not merged into it.`, { key });
   }
@@ -1197,7 +1460,7 @@ async function merge(argv, ctx, { project, driver }) {
   const target = await targetConcept(driver, str(flags, 'into'));
   const keys = [...new Set(_.map((k) => assertKey(k)))].filter((k) => k !== target.key);
   if (!keys.length) {
-    throw new ToolkitError(EXIT.INVALID, `Name the records to merge into ${target.key}, for example: toolkit memory merge feedback_one_question feedback_plain_replies --into ${target.key} --approved-by <owner>. toolkit memory tidy --plan proposes them.`);
+    throw new ToolkitError(EXIT.INVALID, `Name the records to merge into ${target.key}, for example: toolkit memory merge project_deploy_window project_release_steps --into ${target.key} --approved-by <owner>. toolkit memory tidy --plan proposes them.`);
   }
   const members = [];
   for (const k of keys) {
@@ -1206,7 +1469,8 @@ async function merge(argv, ctx, { project, driver }) {
     if (r.status === 'retired') throw new ToolkitError(EXIT.INVALID, `${k} is ${storedStatus(r)}, so nothing was merged. Merge only records in use.`, { key: k });
     if (isProposal(r)) throw new ToolkitError(EXIT.INVALID, `${k} is a proposal the owner has not answered, so nothing was merged. Ask him about it first (approve or reject).`, { key: k });
     if (r.type === 'event') throw new ToolkitError(EXIT.INVALID, `${k} is an event. An event stays its own record, so nothing was merged.`, { key: k });
-    if (r.type !== target.parts.type) {
+    // A feedback_ record's facts may move into a concept of another type (memory-tidy's migration).
+    if (r.type !== target.parts.type && !isRetiredType(r.type)) {
       throw new ToolkitError(EXIT.INVALID, `${k} is a ${r.type} record and ${target.key} a ${target.parts.type} concept, so nothing was merged. A concept's facts share its type.`, {
         key: k,
         fix: `When ${k} has the wrong type, rename it first: toolkit memory rename ${k} --to ${target.parts.type}_${splitKey(k).name.replace(/-/g, '_')}.`,
@@ -1254,7 +1518,7 @@ async function merge(argv, ctx, { project, driver }) {
       authorization,
       approved_by: by,
       supersedes: [],
-      body: retargetLinks(merged.body, members, target.key, placed),
+      body: withLessonsSection(retargetLinks(merged.body, members, target.key, placed)),
     }, { expect: 'absent' });
   }
   // Each record is now superseded by the concept; links to it go to its section.
@@ -1317,7 +1581,7 @@ async function split(argv, ctx, { project, driver }) {
   const source = await driver.get(sourceKey);
   if (!source) throw new ToolkitError(EXIT.ERROR, `There is no memory record with the key ${sourceKey}.`, { key: sourceKey, fix: 'Run toolkit memory list to see the keys.' });
   if (source.status === 'retired' || isProposal(source)) throw new ToolkitError(EXIT.INVALID, `${sourceKey} is ${isProposal(source) ? 'a proposal' : storedStatus(source)}, so nothing was moved.`, { key: sourceKey });
-  if (source.type !== target.parts.type) {
+  if (source.type !== target.parts.type && !isRetiredType(source.type)) {
     throw new ToolkitError(EXIT.INVALID, `${sourceKey} is a ${source.type} concept and ${target.key} a ${target.parts.type} one, so nothing was moved. A concept's facts share its type.`, { key: sourceKey });
   }
   const sections = conceptParts(source.body).sections;
@@ -1375,7 +1639,7 @@ async function split(argv, ctx, { project, driver }) {
       authorization,
       approved_by: by,
       supersedes: [],
-      body: merged.body,
+      body: withLessonsSection(merged.body),
     }, { expect: 'absent' });
   }
   // 2. The sections leave the source concept.
@@ -1434,6 +1698,9 @@ async function tidy(argv, ctx, { project, driver }) {
     if (r) records.push(r);
   }
   const plan = planTidy(records, { ignore: ownerWords(project) });
+  const ownerName = project && project.config && project.config.project && project.config.project.owner;
+  const migrate = feedbackMigration(records);
+  const promotions = planPromotions(records, { ownerName });
   const lines = [];
   if (!plan.merges.length && !plan.large.length) {
     lines.push('Nothing to merge or split: every record in use is a concept, or no two share a subject. Nothing was changed.');
@@ -1454,8 +1721,197 @@ async function tidy(argv, ctx, { project, driver }) {
     }
   }
   if (plan.stay.length) lines.push(`Stay as they are: ${plan.stay.map((s) => s.key).join(', ')}.`);
-  out(ctx, lines, { ok: true, action: 'tidy-plan', backend: driver.backend, changed: false, ...plan });
+  if (migrate.length) {
+    lines.push('', `feedback_ records to move out of memory (the type is retired: instructions are rules, facts go in concepts). Show each to the owner and run the commands only after his yes:`);
+    for (const m of migrate) {
+      lines.push(`- ${m.key} ("${m.title}"):`);
+      for (const part of m.parts) {
+        lines.push(`    "${part.heading}": ${part.point}`);
+        lines.push(`      An instruction: toolkit rule add --section ${shellQuote(part.area)} --text '<the instruction>' --source 'memory record ${m.key}, saved ${m.saved || 'earlier'}'`);
+        lines.push(part.whole
+          ? `      A fact: toolkit memory merge ${m.key} --into <user_ or project_ concept> --approved-by <owner> (it has no "## " sections, so the whole record moves)`
+          : `      A fact: toolkit memory split ${m.key} --section ${shellQuote(part.heading)} --into <user_ or project_ concept> --approved-by <owner> (or merge the whole record)`);
+      }
+      lines.push(`    Then, once every part has moved: toolkit memory retire ${m.key} --reason 'Moved to the rules and concepts' (a merge retires it already)`);
+    }
+  }
+  if (promotions.length) {
+    lines.push('', 'Lessons that proved themselves (promotion candidates). Propose each to the owner; nothing changes until his yes:');
+    for (const c of promotions) {
+      lines.push(`- "${c.heading}" in ${c.key} (${c.title}): ${c.why.join('; ')}.`);
+      lines.push(`    toolkit memory promote ${c.key} --section ${shellQuote(c.heading)} --to rule   (or --to skill for a procedure with steps)`);
+    }
+  }
+  out(ctx, lines, { ok: true, action: 'tidy-plan', backend: driver.backend, changed: false, ...plan, migrate, promotions });
   return EXIT.OK;
+}
+
+/**
+ * The feedback_ records still in use, each with its parts: [{ key, title,
+ * saved, parts: [{ heading, point, area }] }]. memory-tidy moves each
+ * instruction to the rules and each fact to a concept, after the owner's yes.
+ */
+export function feedbackMigration(records) {
+  const out = [];
+  for (const r of records) {
+    if (!r || r.type !== 'feedback' || r.status === 'retired' || isProposal(r)) continue;
+    const parts = conceptParts(r.body);
+    const title = parts.title || bodyTitle(r.body) || titleFromName(r.name);
+    const pieces = parts.sections.length
+      ? parts.sections.filter((x) => !sameHeading(x.heading, LESSONS_HEADING)).map((x) => ({ heading: x.heading, point: oneLineOf(rememberText(x.text) || x.text) }))
+      : [{ heading: title, point: oneLineOf(rememberText(r.body) || r.description), whole: true }];
+    out.push({ key: r.key, title, saved: r.updated || r.saved || '', parts: pieces.map((p) => ({ ...p, area: ruleArea(`${p.heading} ${p.point}`) })) });
+  }
+  return out;
+}
+
+// ---------------------------------------------------------------- promotion
+
+/**
+ * toolkit memory promote <key> --section <lesson heading> --to rule|skill
+ * (Mike, 2026-09-29): a lesson that proved itself becomes a rule or a skill.
+ * Without --approved-by it only prints the proposal for the owner and changes
+ * nothing. With the owner's yes (--approved-by):
+ *   rule   the instruction goes into .claude/rules/owner-preferences.md
+ *          (--rule-section, else the area its words name; --text, else the
+ *          lesson's own words), and the AGENTS.md rules list is rebuilt;
+ *   skill  a project skill skeleton is written (.claude/skills/<name>/SKILL.md,
+ *          or .agents/skills/ for a Codex-only project) for the agent to fill;
+ * and the lesson gets a Promoted line that names where it went.
+ */
+async function promote(argv, ctx, { project, driver }) {
+  const { _, flags } = parseArgs(argv, { string: ['section', 'to', 'rule-section', 'text', 'skill-name', 'approved-by', 'host'] });
+  const key = assertKey(requireKeyArg(_, 'promote'));
+  const headingFlag = str(flags, 'section');
+  if (!headingFlag) throw new ToolkitError(EXIT.INVALID, `Name the lesson with --section '<lesson heading>' (toolkit memory get ${key} shows them under "${LESSONS_HEADING}").`, { key });
+  const to = str(flags, 'to');
+  if (to !== 'rule' && to !== 'skill') throw new ToolkitError(EXIT.INVALID, 'Say where the lesson goes: --to rule (an instruction followed every time) or --to skill (a procedure with steps).', { key });
+  const rec = await driver.get(key);
+  if (!rec) throw new ToolkitError(EXIT.ERROR, `There is no memory record with the key ${key}.`, { key, fix: 'Run toolkit memory list to see the keys.' });
+  const ownerName = project && project.config && project.config.project && project.config.project.owner;
+  const lesson = findLesson(rec.body, headingFlag, { ownerName });
+  if (!lesson) {
+    throw new ToolkitError(EXIT.INVALID, `${key} has no lesson "${headingFlag}" under "${LESSONS_HEADING}".`, { key, fix: `toolkit memory get ${key} shows its lessons (the "### " headings under "${LESSONS_HEADING}").` });
+  }
+  if (lesson.promoted) {
+    throw new ToolkitError(EXIT.INVALID, `The lesson "${lesson.heading}" in ${key} was promoted already: ${lesson.promoted}`, { key });
+  }
+  const point = lessonPoint(lesson);
+  const day = today();
+  const by = str(flags, 'approved-by');
+  const title = bodyTitle(rec.body) || titleFromName(rec.name);
+  let plan;
+  if (to === 'rule') {
+    const section = assertArea(str(flags, 'rule-section') ?? ruleArea(`${lesson.heading} ${point}`));
+    const text = assertInstruction(str(flags, 'text') ?? point, secretKind);
+    plan = { to, file: PROJECT_RULE_PATH, section, text };
+  } else {
+    const name = slugify(str(flags, 'skill-name') ?? lesson.heading, 48);
+    if (!name) throw new ToolkitError(EXIT.INVALID, 'Give the skill a name with --skill-name <lower-case-words-with-dashes>.');
+    const hosts = projectHosts(project.config);
+    const dir = hosts.includes('claude-code') ? '.claude/skills' : '.agents/skills';
+    plan = { to, name, file: `${dir}/${name}/SKILL.md`, copyTo: hosts.includes('claude-code') && hosts.includes('codex') ? `.agents/skills/${name}/SKILL.md` : null };
+  }
+  const flagsLine = `--section ${shellQuote(lesson.heading)} --to ${to}${to === 'rule' ? ` --rule-section ${shellQuote(plan.section)} --text ${shellQuote(plan.text)}` : ` --skill-name ${plan.name}`}`;
+  if (!by) {
+    const ask = to === 'rule'
+      ? `Make this a project rule: ${plan.text.replace(/[.!?]+$/, '')}?`
+      : `Turn the lesson "${lesson.heading}" into a project skill (${plan.file})?`;
+    const lines = [
+      `Promotion proposal for the owner. Nothing was changed.`,
+      `Lesson "${lesson.heading}" in ${key} (${title}): ${point}`,
+      `Seen: ${lesson.seen.length ? lesson.seen.join(', ') : 'no date recorded'}${lesson.confirmed ? '; the owner confirmed it' : ''}.`,
+      to === 'rule' ? `It would be added to ${plan.file}, section "${plan.section}": ${plan.text}` : `A skill skeleton would be written at ${plan.file} for the agent to fill${plan.copyTo ? `, then copied to ${plan.copyTo} for Codex` : ''}.`,
+      `Ask him: "${ask}"`,
+      `After his yes: toolkit memory promote ${key} ${flagsLine} --approved-by <owner>`,
+    ];
+    out(ctx, lines, { ok: true, action: 'promote-plan', changed: false, key, lesson: { heading: lesson.heading, point, seen: lesson.seen }, plan, ask });
+    return EXIT.OK;
+  }
+  // The owner's yes is the approval (verifier, 2026-09-29: after "FYI the
+  // build looked fine." a promote --approved-by wrote a rule). As toolkit rule
+  // update does, it is refused when the hooks recorded no keep phrase, no other
+  // save words, and no answer to a question about memory or rules this turn.
+  if (passingRemark(readTurnFacts(project, ctx.env))) {
+    throw new ToolkitError(EXIT.INVALID, `The lesson "${lesson.heading}" was not promoted: the owner's message this turn does not ask for it (the hooks recorded no keep phrase, no other save words, and no answer to a question about memory or rules). A rule applies every session, so his yes comes first. Nothing was changed.`, {
+      key,
+      fix: `Run toolkit memory promote ${key} ${flagsLine} without --approved-by, ask him the question it prints, and run it with --approved-by in the turn he says yes.`,
+    });
+  }
+  const who = by.replace(/\s+/g, ' ').trim();
+  let where;
+  let result = {};
+  if (to === 'rule') {
+    const source = `${who} approved promoting the lesson "${lesson.heading}" from memory (${key})`;
+    let already = null;
+    try {
+      result = await changeRules('project', { root: project.root, env: ctx.env }, (doc) => addEntry(doc, plan.section, { text: plan.text, date: day, source }));
+    } catch (err) {
+      if (!(err && err.details && err.details.entry)) throw err;
+      already = err.details;
+    }
+    result.agentsUpdated = already ? false : refreshAgentsSpan(project.root).updated;
+    result.already = already;
+    where = `the project rule in \`${PROJECT_RULE_PATH}\`, section "${already ? already.section : plan.section}"`;
+  } else {
+    const abs = path.join(project.root, ...plan.file.split('/'));
+    if (fs.existsSync(abs)) {
+      throw new ToolkitError(EXIT.INVALID, `${plan.file} exists already, so no skeleton was written and the lesson was not marked.`, { key, fix: 'Give another name with --skill-name, or add the lesson to that skill by hand and mark it with this command after it.' });
+    }
+    fs.mkdirSync(path.dirname(abs), { recursive: true });
+    const skeleton = skillSkeleton(plan.name, lesson, { key, day, point });
+    fs.writeFileSync(abs, skeleton);
+    if (fs.readFileSync(abs, 'utf8') !== skeleton) throw new ToolkitError(EXIT.ERROR, `Saved but not verified: ${plan.file} does not read back as written.`);
+    result = { written: plan.file };
+    where = `the project skill \`${plan.file}\``;
+  }
+  const res = await editRecordWith(driver, key, (stored) => {
+    const section = getSection(stored.body, LESSONS_HEADING);
+    const marked = promotionMark(section, lesson.heading, { date: day, where });
+    if (marked === null) throw new ToolkitError(EXIT.ERROR, `The lesson "${lesson.heading}" is no longer in ${key}.`, { key });
+    return { text: editConceptText(stored.text, key, { heading: LESSONS_HEADING, content: marked, mode: 'set', day }).text };
+  });
+  await afterWrite(project, driver);
+  const lines = to === 'rule'
+    ? [
+      result.already
+        ? `${PROJECT_RULE_PATH} already has this instruction in "${result.already.section}" (line ${result.already.entry}); nothing was added there.`
+        : `Added to ${PROJECT_RULE_PATH}, section "${result.section}", as instruction ${result.n}: ${plan.text}`,
+      `The lesson "${lesson.heading}" in ${key} is marked promoted, with the rule's path and section.`,
+      ...(result.already ? [] : [commitLine(result.agentsUpdated, 'the owner approved this change')]),
+    ]
+    : [
+      `Wrote the skill skeleton ${plan.file}. Fill it now: the description (what it does, then when to use it, with two to four example phrases) and the steps, from the lesson.${plan.copyTo ? ` Then copy the finished file to ${plan.copyTo}, so Codex has it too.` : ''}`,
+      `The lesson "${lesson.heading}" in ${key} is marked promoted, with the skill's path.`,
+      `Commit the skill folder after it is filled: the owner approved this change.`,
+    ];
+  lines.push(`Version of ${key}: ${short(res.version)}`);
+  out(ctx, lines, { ok: true, action: 'promote', changed: true, key, to, plan, lesson: { heading: lesson.heading, promoted: day }, version: res.version, ...(to === 'rule' ? { rule: { section: result.already ? result.already.section : result.section, entry: result.already ? result.already.entry : result.n, agentsUpdated: result.agentsUpdated } } : { skill: plan.file, copyTo: plan.copyTo }) });
+  return EXIT.OK;
+}
+
+/** The SKILL.md skeleton a promoted lesson starts, for the agent to fill. */
+export function skillSkeleton(name, lesson, { key, day, point }) {
+  const title = String(lesson.heading).replace(/\s+/g, ' ').trim();
+  return [
+    '---',
+    `name: ${name}`,
+    "description: '<Fill in: what this skill does, then when to use it, with two to four example phrases the owner would say.>'",
+    '---',
+    '',
+    `# ${title}`,
+    '',
+    `<!-- Fill-in guide: toolkit memory promote wrote this skeleton on ${day} from the lesson "${title}" in the memory concept ${key}. Write the steps the agent follows every time, in order, one action each. Keep the frontmatter to name and description. Remove this guide when the skill is filled. -->`,
+    '',
+    '## Steps',
+    '',
+    '1. <First step>',
+    '',
+    '## Where this came from',
+    '',
+    `The lesson "${title}" in memory (${key}): ${point}`,
+    '',
+  ].join('\n');
 }
 
 // ---------------------------------------------------------------- reply lines
@@ -1478,10 +1934,21 @@ export function replyLine(reply) {
 // ---------------------------------------------------------------- the owner's answer to a proposal
 
 async function approve(argv, ctx, { project, driver }) {
-  const { _, flags } = parseArgs(argv, { string: ['by', 'concept', 'title', 'description', 'host'] });
+  const { _, flags } = parseArgs(argv, { string: ['by', 'concept', 'title', 'description', 'host', 'section', 'text'] });
   const key = requireKeyArg(_, 'approve');
   const by = str(flags, 'by');
   const ownerName = project && project.config && project.config.project && project.config.project.owner;
+  const concept = str(flags, 'concept');
+  if (concept !== undefined) {
+    const parts = splitKey(canonicalKey(concept));
+    if (parts && isRetiredType(parts.type)) throw retiredTypeError(null, `toolkit memory approve ${key} --concept ${concept}`);
+  }
+  // A rule proposal (or an older feedback_ proposal): the owner's yes writes the rule.
+  const pending = await driver.get(canonicalKey(key)).catch(() => null);
+  if (pending && isRuleProposal(pending) && concept === undefined) return approveRule(ctx, { project, driver }, pending, { by, ownerName, section: str(flags, 'section'), text: str(flags, 'text') });
+  if (str(flags, 'section') !== undefined || str(flags, 'text') !== undefined) {
+    throw new ToolkitError(EXIT.INVALID, '--section and --text name the rule section and words for a rule proposal; this record is not one. Use --concept to name the concept a fact goes in.');
+  }
   const description = str(flags, 'description');
   const res = await approveRecord(driver, key, {
     by, today: today(), ownerName, concept: str(flags, 'concept'), title: str(flags, 'title'), description: description === undefined ? null : oneLineOf(description),
@@ -1524,6 +1991,49 @@ async function approve(argv, ctx, { project, driver }) {
   return EXIT.OK;
 }
 
+/**
+ * The owner's yes to a rule proposal: the instruction goes into the project's
+ * .claude/rules/owner-preferences.md (toolkit rule add), the AGENTS.md rules
+ * list is rebuilt, and the proposal record is removed. An instruction the
+ * section already holds only removes the proposal.
+ */
+async function approveRule(ctx, { project, driver }, rec, { by, ownerName, section: sectionFlag, text: textFlag }) {
+  const who = String(by ?? '').replace(/\s+/g, ' ').trim();
+  if (!who) throw new ToolkitError(EXIT.INVALID, `Say who approved it: toolkit memory approve ${rec.key} --by <name>.`, { key: rec.key });
+  const target = ruleTarget(rec);
+  const section = assertArea(sectionFlag !== undefined ? sectionFlag : target.section);
+  const text = assertInstruction(textFlag !== undefined ? textFlag : ruleProposalText(rec, ownerName || who), secretKind);
+  const day = today();
+  const source = `${who} said yes to the agent's question`;
+  let written = null;
+  let already = null;
+  try {
+    written = await changeRules('project', { root: project.root, env: ctx.env }, (doc) => addEntry(doc, section, { text, date: day, source }));
+  } catch (err) {
+    if (!(err && err.details && err.details.entry)) throw err;
+    already = err.details;
+  }
+  const span = written ? refreshAgentsSpan(project.root) : { updated: false };
+  const removed = await driver.delete(rec.key);
+  await afterWrite(project, driver, { forget: [rec.key] });
+  const lines = already
+    ? [`${PROJECT_RULE_PATH} already has this instruction in "${already.section}" (line ${already.entry}), so nothing was added. The proposal ${rec.key} was removed from memory.`]
+    : [
+      `Approved ${rec.key}: added to ${PROJECT_RULE_PATH}, section "${written.section}", as instruction ${written.n}: ${text}`,
+      `The proposal record ${rec.key} was removed from memory.${span.updated ? ' The AGENTS.md rules list now names the file.' : ''}`,
+      commitLine(span.updated, 'the owner said yes to it'),
+      `Undo: toolkit rule update --section ${shellQuote(written.section)} --entry ${written.n} --remove`,
+    ];
+  lines.push(...repairLines(removed));
+  const reply = already ? null : `Added to the project rules: ${text} Say 'undo that' to take it out.`;
+  if (reply) lines.push(`Reply line for the owner, word for word (memory-save): ${reply}`);
+  out(ctx, lines, {
+    ok: true, action: 'approve', backend: driver.backend, key: rec.key, changed: true, approved_by: who, replyLine: reply, removed: true,
+    rule: already ? { file: PROJECT_RULE_PATH, section: already.section, entry: already.entry, alreadyThere: true } : { file: PROJECT_RULE_PATH, section: written.section, entry: written.n, text, created: written.created, agentsUpdated: span.updated },
+  });
+  return EXIT.OK;
+}
+
 async function reject(argv, ctx, { project, driver }) {
   const { _, flags } = parseArgs(argv, { string: ['reason', 'host'] });
   const key = requireKeyArg(_, 'reject');
@@ -1534,7 +2044,7 @@ async function reject(argv, ctx, { project, driver }) {
   const lines = [`Rejected ${res.key}: the owner said no, so the proposal was deleted.${where}`];
   if (reason && reason.trim()) lines.push(`His reason: ${reason.trim()}`);
   lines.push(...repairLines(res));
-  lines.push('A rejected proposal is not saved again, here or under another name. When the owner gave a general rule about what to keep, save only that rule, as a feedback record.');
+  lines.push('A rejected proposal is not saved again, here or under another name. When the owner gave a general rule about what to keep, write only that rule, with toolkit rule add.');
   const reply = REPLY.rejected(res.title || res.key);
   lines.push(replyLine(reply));
   out(ctx, lines, {
@@ -1641,6 +2151,7 @@ async function doImport(argv, ctx, { project, driver }) {
 }
 
 const HANDLERS = {
+  promote,
   save,
   find,
   get,

@@ -1,0 +1,1 @@
+work-decide,   ref:work/skills/work-decide/references/proposals.md

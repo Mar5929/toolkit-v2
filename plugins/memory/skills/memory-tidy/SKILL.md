@@ -1,18 +1,18 @@
 ---
 name: memory-tidy
-description: 'Reviews the project''s whole memory (.memory/, Hindsight, or Notion): merges duplicates, retires stale or contradicted records, trims the current focus, and backs it up. Use when the owner says "clean up memory" or "tidy memory", thinks memory is wrong or out of date, or toolkit doctor flags memory.'
+description: 'Reviews the project''s whole memory: merges duplicates, retires stale or contradicted records, trims the current focus, proposes proven lessons as rules or skills, and backs it up, so memory stays small and correct. Use when the owner says "clean up memory" or "tidy memory", thinks memory is wrong or out of date, a lesson keeps coming up ("turn that lesson into a skill"), or toolkit doctor flags memory.'
 ---
 
 # Memory tidy
 
 Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
-Reviews all of memory, proposes one numbered list of changes, backs memory up, applies only what the owner approves, checks the result, and backs it up again. Memory keeps one record per concept, with one `##` section per fact (`references/record-format.md`), so a tidy also merges small one-fact records into concepts and splits a concept that grew too large.
+Reviews all of memory, proposes one numbered list of changes, backs memory up, applies only what the owner approves, checks the result, and backs it up again. Memory keeps one record per concept, with one `##` section per fact (`references/record-format.md`), so a tidy also merges small one-fact records into concepts and splits a concept that grew too large. It moves older `feedback_` records out of memory (instructions to the rules, facts to concepts), and proposes lessons that proved themselves as rules or skills ("Promotion" below).
 
 ## Steps
 
 Track these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
 
-1. Check the setup and the backend, list the records in use, and get the concept plan. The plan changes nothing: it names one-fact records to merge into concepts (with each `merge` command and a draft summary) and concepts that grew too large.
+1. Check the setup and the backend, list the records in use, and get the concept plan. The plan changes nothing: it names one-fact records to merge into concepts (with each `merge` command and a draft summary), concepts that grew too large, `feedback_` records to move out (each part with its command), and lessons ready to promote.
    `toolkit doctor`
    `toolkit memory status`
    `toolkit memory list`
@@ -24,7 +24,7 @@ Track these steps in the host's plan tool (Claude Code: the task list; Codex: `u
 3. Show one numbered list of proposed changes, each with its keys and reason, and ask once for the whole list (example in `references/review-checklist.md`). The list also names the folder the step 4 backup goes to.
 4. After his yes, and before any change, export memory to a new folder: `<backup.dir>/<project key>-before-tidy-<YYYY-MM-DD-HHMM>`, or `~/Backups/<project key>-before-tidy-<YYYY-MM-DD-HHMM>` when the backup folder is not set or is none. It works for every backend. Never the step 7 command here: it replaces today's backup folder, which may be the only copy of the state before the tidy.
    `toolkit memory export --to <new folder>`
-5. Apply only what the owner approved ("Approval" below), each with its command from `references/replacing-and-retiring.md`. A merge or a split: its command from the plan or `references/review-checklist.md`, with `--approved-by <owner>`. The focus: `references/current-focus.md`. The glossary: `references/glossary.md`. A proposal: `references/proposals.md`.
+5. Apply only what the owner approved ("Approval" below), each with its command from `references/replacing-and-retiring.md`. A merge or a split: its command from the plan or `references/review-checklist.md`, with `--approved-by <owner>`. A `feedback_` record: its commands from the plan, then retire it. A promotion: `toolkit memory promote` with `--approved-by <owner>` ("Promotion" below). The focus: `references/current-focus.md`. The glossary: `references/glossary.md`. A proposal: `references/proposals.md`.
 6. Check. Fix each memory problem the output names, and check again until none is left. Report any you cannot fix without the owner.
    `toolkit memory status`
    `toolkit doctor`
@@ -43,7 +43,19 @@ Track these steps in the host's plan tool (Claude Code: the task list; Codex: `u
 - Propose a delete only for a secret, an email address, or a record he asked to delete; otherwise retire. His yes to a numbered delete is the approval; the host then asks him to confirm the command. Quote his words for each delete in the report. For a secret or an email address, tell him that older backups still hold it and that he removes those copies himself.
 - A restore runs only when he asks for one, after a dry run and his yes (`references/backup-and-restore.md`).
 
+## Promotion
+
+A lesson under a concept's "Gotchas and lessons" section is know-how the agent has not proven. The plan lists one as a candidate when it came up in two or more sessions (two entries on its Seen line: two dates, or one date with two different sources), when a lesson like it is in another concept, or when the owner confirmed it. For each candidate:
+
+1. Decide where it goes: an instruction followed every time is a rule; a procedure with steps is a skill.
+2. Get the proposal. It changes nothing and prints the question for the owner:
+   `toolkit memory promote <key> --section '<lesson heading>' --to rule`
+3. Put it on the numbered list with that question. After his yes, in the turn he answers, run the same command with `--approved-by <owner>`. Without his answer that turn, the command refuses. A rule goes into `.claude/rules/owner-preferences.md` (`--rule-section` and `--text` change the area and the words; layout: `assets/owner-preferences.md`). A skill gets a `SKILL.md` skeleton in `.claude/skills/<name>/`: fill in its description and steps from the lesson as `references/writing-a-project-skill.md` says, then copy it to `.agents/skills/<name>/` when the project also uses Codex.
+4. The lesson gets a Promoted line naming where it went, and stays as its history. Commit what the command's Commit line names: the first rule also changes the rules list in `AGENTS.md`, and that line says where two files may be committed. Commit the skill folder once it is filled.
+
 ## Gotchas
+
+- A `feedback_` record is a type memory no longer uses. Move each part on its own: an instruction with `toolkit rule add`, a fact with `toolkit memory split` into a `user_` or `project_` concept (a record with no `##` sections: `merge` or `rename` the whole record; the plan prints which), then retire the record (a merge retires it already). Doctor warns until none is left. An older `feedback_` proposal is a rule proposal: his yes writes it to the rules (`references/proposals.md`).
 
 - Retire before delete. A retired record can be restored; a deleted one cannot.
 - A correction in place saves the same type and slug with `--expect <version>` from the `--json` read. Without it the save is refused.
@@ -67,6 +79,9 @@ Track these steps in the host's plan tool (Claude Code: the task list; Codex: `u
 | `references/review-checklist.md` | Step 2 (what to look for), step 3 (the list), step 6 (the check loop), and the report |
 | `references/replacing-and-retiring.md` | Step 5: the command for each change, exit code 2, how to undo each change, what each change also clears |
 | `references/record-format.md` | Writing a merged or corrected record's description and body |
+| `assets/project_topic_template.md` | Step 5: the layout a merged or split concept must keep (frontmatter, one `##` section per fact, the last "Gotchas and lessons" section) |
+| `assets/owner-preferences.md` | Promotion to a rule, and moving a `feedback_` instruction to the rules: the layout of the rule file |
+| `references/writing-a-project-skill.md` | Promotion to a skill: filling the `SKILL.md` skeleton (the description, the steps, the files it needs) |
 | `references/current-focus.md` | Trimming or correcting the current focus |
 | `references/glossary.md` | Correcting the glossary |
 | `references/proposals.md` | A proposal on the list: his yes or no |

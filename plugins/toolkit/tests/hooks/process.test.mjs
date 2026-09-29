@@ -42,7 +42,7 @@ test('every event as a real child process, both hosts: exit 0, one JSON object o
   const v = { CWD: root, SESSION: 'proc-1', TURN: 'turn-1', PROMPT: 'From now on keep answers short.', COMMAND: 'git add -A', FILE: path.join(root, '.work-items', 'DASHBOARD.md'), PATCH: updatePatch('.work-items/DASHBOARD.md', 'a', 'b'), REL: '.work-items/DASHBOARD.md' };
   const claudeSteps = [
     ['SessionStart', 'session-start.startup', (o) => assert.match(o.hookSpecificOutput.additionalContext, /^Project briefing/)],
-    ['UserPromptSubmit', 'user-prompt', (o) => assert.match(o.hookSpecificOutput.additionalContext, /memory-save records it/)],
+    ['UserPromptSubmit', 'user-prompt', (o) => assert.match(o.hookSpecificOutput.additionalContext, /memory-save picks its home/)],
     ['PreToolUse', 'pre-tool.bash', (o) => assert.equal(o.hookSpecificOutput.permissionDecision, 'deny')],
     ['PreToolUse', 'pre-tool.write', (o) => assert.equal(o.hookSpecificOutput.permissionDecision, 'deny')],
     ['PostToolUse', 'post-tool.bash', (o) => assert.equal(o, null)],
@@ -54,7 +54,7 @@ test('every event as a real child process, both hosts: exit 0, one JSON object o
   }
   const codexSteps = [
     ['SessionStart', 'session-start.startup', (o) => assert.match(o.hookSpecificOutput.additionalContext, /How to write replies/)],
-    ['UserPromptSubmit', 'user-prompt', (o) => assert.match(o.hookSpecificOutput.additionalContext, /memory-save records it/)],
+    ['UserPromptSubmit', 'user-prompt', (o) => assert.match(o.hookSpecificOutput.additionalContext, /memory-save picks its home/)],
     ['PreToolUse', 'pre-tool.bash', (o) => assert.deepEqual(Object.keys(o), ['hookSpecificOutput'])],
     ['PreToolUse', 'pre-tool.apply-patch', (o) => assert.equal(o.hookSpecificOutput.permissionDecision, 'deny')],
     ['PostToolUse', 'post-tool.apply-patch', (o) => assert.equal(o, null)],

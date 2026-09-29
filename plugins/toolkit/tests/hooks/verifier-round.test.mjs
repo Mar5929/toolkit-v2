@@ -225,8 +225,10 @@ test('Stop hook: a question like an unanswered proposal names approve and reject
   const next = await turn(root, env, 'claude', { session: 'prop-2', prompt: 'Later.', message: 'OK.' });
   const note = context(next.up);
   assert.match(note, new RegExp(`memory already has the proposal ${prop.key} like it, which the owner has not answered`));
-  assert.match(note, /toolkit memory approve <key> --by <name>/);
-  assert.match(note, /toolkit memory reject <key>/);
+  // The one proposal is named in the commands, not a <key> placeholder (verifier, 2026-09-29).
+  assert.match(note, new RegExp(`toolkit memory approve ${prop.key} --by <name>`));
+  assert.match(note, new RegExp(`toolkit memory reject ${prop.key}`));
+  assert.doesNotMatch(note, /<key>/);
   assert.doesNotMatch(note, /--expect/);
 });
 

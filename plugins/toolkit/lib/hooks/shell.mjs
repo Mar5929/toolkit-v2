@@ -392,14 +392,25 @@ export function toolkitCommands(line) {
   return out;
 }
 
-/** What a toolkit command records: 'memory' for a memory write, 'work' for a work-item write, 'decision', or null. */
+export const RULE_WRITES = Object.freeze(['add', 'update']);
+
+/**
+ * What a toolkit command records: 'memory' for a memory write, 'rule' for a
+ * change to the owner's rules (toolkit rule add or update, or a lesson
+ * promoted with the owner's yes), 'work' for a work-item write, 'decision',
+ * or null. A rule is where an instruction the owner gives belongs (Mike,
+ * 2026-09-29), so the Stop hook counts it as recorded.
+ */
 export function recordKind(cmd) {
   if (!cmd || !cmd.group) return null;
   if (cmd.group === 'memory') {
     if (MEMORY_WRITES.includes(cmd.sub) && !(cmd.sub === 'import' && cmd.args.includes('--dry-run'))) return 'memory';
     if ((cmd.sub === 'focus' || cmd.sub === 'glossary') && cmd.args.some((a) => /^--(?:set-file|text)(?:=|$)/.test(a))) return 'memory';
+    // promote without --approved-by only prints the proposal; with it, a rule or a skill is written.
+    if (cmd.sub === 'promote' && cmd.args.some((a) => /^--approved-by(?:=|$)/.test(a))) return 'rule';
     return null;
   }
+  if (cmd.group === 'rule' && RULE_WRITES.includes(cmd.sub)) return 'rule';
   if (cmd.group === 'work' && WORK_WRITES.includes(cmd.sub)) return 'work';
   if (cmd.group === 'decision' && cmd.sub === 'add') return 'decision';
   return null;

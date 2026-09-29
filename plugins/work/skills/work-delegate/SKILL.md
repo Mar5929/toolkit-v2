@@ -1,6 +1,6 @@
 ---
 name: work-delegate
-description: 'Hands a work item''s goal to a team of agents with the owner as product owner: makes the delivery offer, records his choice, and runs the team. Use whenever the owner hands a goal over ("you drive", "take it from here"), even a named item, or work-on starts a large goal with no delivery choice.'
+description: 'Hands a work item''s goal to a team of agents with the owner as product owner: makes the delivery offer, records his choice, and runs the team, so he only makes the decisions. Use whenever the owner hands a goal over ("you drive", "take it from here"), even a named item, or work-on starts a large goal with no delivery choice.'
 ---
 
 # Work delegate

@@ -11,7 +11,7 @@ import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { makeProject, cleanup, tk, newItem, readRecord, recordPath, trackerDir, approveRequirements } from './helpers.mjs';
+import { makeProject, cleanup, tk, newItem, readRecord, recordPath, trackerDir, approveRequirements, recordCheck } from './helpers.mjs';
 import {
   parseDoc, parseHistory, getLabel, getSectionText, parseQuestions, parseRoadmap, getH1, separateLabelLines, inlineLabelSpan,
   designStatusLine, designStatusFromBody, setDesignStatusLine, ensureDesignStatusLine, designHasOptions, setQuestionStatus,
@@ -214,6 +214,7 @@ test('a design question and a result question are one decision with the approval
   assert.match(mine[0].detail, /Q-01 asks it: Do you approve the result/);
   const text = await tk(dir, ['work', 'decisions']);
   assert.match(text.stdout, /^2 decisions wait on the owner:/m);
+  await recordCheck(dir, b);
   const ok = await tk(dir, ['work', 'approve', b, '--result', '--by', 'Mike']);
   assert.match(ok.stdout, /Marked Q-01 Answered: it asked for this approval\./);
   r = await tk(dir, ['work', 'decisions', '--json']);
@@ -237,6 +238,7 @@ test('finish and cancel close the Overview, and a finished item continues with n
   const id = await newItem(dir, 'Shout', ['--type', 'task', '--stage', '08']);
   await tk(dir, ['work', 'edit', id, '--label', 'Current position', '--value', 'Built and checked on claude/wi-001-shout at f794cc6.']);
   await tk(dir, ['work', 'edit', id, '--label', 'Blockers', '--value', 'Local merge to main needs Mike\'s approval.']);
+  await recordCheck(dir, id);
   const f = await tk(dir, ['work', 'finish', id, '--by', 'Mike', '--evidence', 'Merged into main at 1b8fe07; 5 of 5 tests pass', '--quote', 'Ship it.']);
   assert.equal(f.code, 0, f.stderr);
   const body = parseDoc(await readRecord(dir, id)).body;

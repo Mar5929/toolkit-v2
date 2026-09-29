@@ -1,0 +1,36 @@
+$ git log --all --format="%h %an <%ae> %s"
+d935d1c Mike Rihm <michael@rihm.com> Record delivered late fee behavior
+0dda9ab Mike Rihm <michael@rihm.com> Merge main into WI-002 branch
+ca414e4 Mike Rihm <michael@rihm.com> Merge main into WI-001 branch
+d1c7d8a Mike Rihm <michael@rihm.com> Record WI-002 test results
+e5f2305 Mike Rihm <michael@rihm.com> Add optional cents output
+f3fbd78 Mike Rihm <michael@rihm.com> Show status as a table
+3b2bc38 Mike Rihm <michael@rihm.com> Name WI-001 test plan consistently
+ab319f5 Mike Rihm <michael@rihm.com> Build dollar late fee command
+2295c7a Mike Rihm <michael@rihm.com> Keep commit messages under 50 characters
+f83d1b6 Mike Rihm <michael@rihm.com> Set up Toolkit V2 for feecalc
+dec6214 Mike Rihm <michael@rihm.com> Initial commit
+
+$ git log --all --format=%B | grep -i -E "co-authored|generated with|claude|codex|openai|anthropic"
+(no match)
+
+$ git status --short; git worktree list; git branch -a
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex d935d1c [main]
+* main
+
+$ node bin/feecalc.js 200 --days 10
+Late fee: $5.00  Total due: $205.00
+$ node bin/feecalc.js 200 --days 10 --cents
+Late fee: $5.00  Total due: $205.00
+Total due in cents: 20500
+$ node bin/feecalc.js 0.40 --days 1 --cents
+Late fee: $0.00  Total due: $0.40
+Total due in cents: 40
+$ node --test
+ℹ tests 8
+ℹ pass 8
+ℹ fail 0
+
+$ ls .git/toolkit-v2
+export.json
+turns

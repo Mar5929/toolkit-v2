@@ -2,9 +2,9 @@
 
 - Publisher: Anthropic
 - Original documentation home: https://code.claude.com/docs/en/
-- Captured on: 2026-09-27
+- Captured on: 2026-09-27; four pages added or refreshed on 2026-09-29 (see Notes)
 - Captured with: the Firecrawl CLI 1.24.3, `firecrawl scrape <page URL>.md --format rawHtml`, which returns the Markdown source the site publishes for each page, unchanged.
-- Pages: 17
+- Pages: 20
 - Redistribution: Anthropic's published documentation, kept here as a private reference copy for this repository. Not shipped in any plugin.
 
 ## Project use
@@ -32,6 +32,9 @@ Read before writing or changing a Toolkit V2 skill, hook, plugin manifest, agent
 | `common-workflows.md` | Common workflows | https://code.claude.com/docs/en/common-workflows |
 | `settings-reference.md` | All settings (includes `skillListingBudgetFraction` and `skillListingMaxDescChars`) | https://code.claude.com/docs/en/settings-reference |
 | `context-window.md` | Explore the context window (includes what the skill listing costs and whether it survives compaction) | https://code.claude.com/docs/en/context-window |
+| `large-codebases.md` | Set up Claude Code in a monorepo or large codebase (per-directory CLAUDE.md compared with path-scoped rules) | https://code.claude.com/docs/en/large-codebases |
+| `debug-your-config.md` | Debug your configuration (why instructions and rules are not followed) | https://code.claude.com/docs/en/debug-your-config |
+| `claude-directory.md` | Explore the .claude directory (where rules, skills, and settings live, and when each loads) | https://code.claude.com/docs/en/claude-directory |
 
 ## Notes
 
@@ -40,3 +43,4 @@ Read before writing or changing a Toolkit V2 skill, hook, plugin manifest, agent
 - Links inside the pages are kept as published. Links that start with `/docs/en/` are relative to https://code.claude.com.
 - Each captured file starts with a header naming its source URL and capture date.
 - A larger capture of this site (164 pages, captured 2026-09-22) is in `/Users/michaelrihm/Documents/Projects/claude-toolkit/ai-external-knowledge/claude-code/`. That folder belongs to another repository and is read-only from here.
+- 2026-09-29: `large-codebases.md`, `debug-your-config.md`, and `claude-directory.md` were added for the rules audit in `dev/research/rules-best-practices.md`. `memory.md` was captured again the same day: the live page had added the `/doctor prompt-audit` paragraph under "Write effective instructions" and the `includeGitInstructions` line under "Claude isn't following my CLAUDE.md".

@@ -79,8 +79,8 @@ not sync, or not the agent's:
 | `backup-folder` | No backup folder is set | Ask the owner for a folder outside the project, then `toolkit config set backup.dir <folder>` (or `none`) |
 | `backup-old`, `backup-never` | The last backup is old, or there is none | `toolkit handoff-backup`; when the owner chose no backup folder, `toolkit export --to <folder>` or ask him for a folder |
 | `backup-unreachable` | The backup folder's drive is not there | Ask the owner to connect it, or to pick another folder |
-| `claude-ask-rules` | The Claude Code settings do not ask before the five ask-first commands | `toolkit sync`, after the owner's yes |
-| `codex-ask-rules` | `.codex/rules/toolkit.rules` does not ask before them | `toolkit sync`; a rules file the project changed: copy the `prompt` rules from the toolkit's `templates/codex/toolkit.rules` into it, above the general toolkit rule, with the owner's yes |
+| `claude-ask-rules` | The Claude Code settings do not ask before the ask-first commands | `toolkit sync`, after the owner's yes |
+| `codex-ask-rules` | `.codex/rules/toolkit.rules` does not ask before them | `toolkit sync`; a rules file the project changed: copy the `prompt` rules from this skill's `assets/codex-toolkit.rules` (the rules file `toolkit init` installs) into it, above the general toolkit rule, with the owner's yes. Leave out the asset's first line, the "Generated file" comment |
 | `codex-hook-trust`, `codex-sf-hook-trust` | Codex does not trust the Toolkit V2 hooks, or the Salesforce guards | The owner's step: `/hooks` in Codex |
 | `codex-hook-changed` | The hooks changed since Codex last ran them | The owner trusts them again in Codex `/hooks` |
 | `plugin-pointer` | The plugin-root pointer is missing, broken, or names a copy that is not installed | `toolkit machine-setup` from an installed copy, after the owner's yes |

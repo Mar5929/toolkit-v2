@@ -1,9 +1,13 @@
 // Concept memory (Mike, 2026-09-28, dev/GOAL.md "Concept memory, like
 // Anthropic's project memory"): one record per concept or area, in every
-// backend (a .memory/ file, a Hindsight document, a Notion Memories row). The
-// model's five prefixes stay: user_, feedback_, project_, reference_, event_
-// (for example feedback_ways_of_working, project_billing). An event_ record
-// holds one episode, so events stay their own files.
+// backend (a .memory/ file, a Hindsight document, a Notion Memories row).
+// Four prefixes (Mike, 2026-09-29, "Rules, skills, and memory each hold one
+// kind of thing"): user_, project_, reference_, event_ (for example
+// user_profile, project_billing). feedback_ is retired: instructions are rules
+// (toolkit rule add); an older feedback_ record is still read and moved out by
+// memory-tidy. An event_ record holds one episode, so events stay their own
+// files. Every other concept ends with a "## Gotchas and lessons" section
+// (lib/memory/lessons.mjs).
 //
 // A concept record has a title (its "# " line), a one-line summary (the
 // `description`), and the date of its last change (`updated`) at the top. Each
@@ -45,6 +49,8 @@ const SECTION_RE = /^##(?!#)[ \t]+(.*?\S)[ \t]*#*[ \t]*$/;
 const FENCE_RE = /^\s{0,3}(`{3,}|~{3,})/;
 const H1_RE = /^#(?!#)[ \t]+\S/;
 
+/** The section every concept ends with: learned know-how, each lesson a "### " heading (lib/memory/lessons.mjs). */
+export const LESSONS_HEADING = 'Gotchas and lessons';
 /** A concept this long is proposed for a split (toolkit memory tidy --plan; memory-tidy). */
 export const CONCEPT_MAX_LINES = 300;
 export const CONCEPT_MAX_SECTIONS = 20;
@@ -171,8 +177,15 @@ export function spliceSection(body, heading, content, { mode = 'set' } = {}) {
     return { body: finish(next), action: 'removed', heading: found.heading, previous };
   }
   if (!found) {
-    const next = [...trimBlank(lines), '', `## ${String(heading).replace(/\s+/g, ' ').trim()}`, '', ...contentLines];
-    return { body: finish(next), action: 'added', heading: String(heading).replace(/\s+/g, ' ').trim(), previous: null };
+    const h = String(heading).replace(/\s+/g, ' ').trim();
+    // A new fact goes before the concept's Gotchas and lessons section, which stays last.
+    const lessons = sameHeading(h, LESSONS_HEADING) ? null : sections.find((x) => sameHeading(x.heading, LESSONS_HEADING));
+    if (lessons) {
+      const next = [...trimBlank(lines.slice(0, lessons.start)), '', `## ${h}`, '', ...contentLines, '', ...lines.slice(lessons.start)];
+      return { body: finish(next), action: 'added', heading: h, previous: null };
+    }
+    const next = [...trimBlank(lines), '', `## ${h}`, '', ...contentLines];
+    return { body: finish(next), action: 'added', heading: h, previous: null };
   }
   const own = lines.slice(found.start + 1, found.end);
   const previous = trimBlank(own).join('\n');
@@ -182,7 +195,10 @@ export function spliceSection(body, heading, content, { mode = 'set' } = {}) {
   let action;
   if (mode === 'append') {
     if (previous && previous === text) return { body: finish(lines), action: 'unchanged', heading: found.heading, previous };
-    block = previous ? [...trimBlank(own), '', ...contentLines] : contentLines;
+    // A Gotchas and lessons section that says "None yet." takes the first lessons in its place.
+    const empty = (t) => t.trim() === 'None yet.';
+    if (sameHeading(found.heading, LESSONS_HEADING) && empty(text) && previous) return { body: finish(lines), action: 'unchanged', heading: found.heading, previous };
+    block = previous && !(sameHeading(found.heading, LESSONS_HEADING) && empty(previous)) ? [...trimBlank(own), '', ...contentLines] : contentLines;
     action = 'appended';
   } else {
     if (previous === text) return { body: finish(lines), action: 'unchanged', heading: found.heading, previous };
@@ -243,6 +259,24 @@ export function sectionText(text, heading, { remember = true } = {}) {
   return shaped;
 }
 
+const HEADING_TAIL = new Set(['a', 'an', 'the', 'of', 'with', 'to', 'for', 'in', 'on', 'and', 'or', 'by', 'at', 'from', 'as', 'that', 'is', 'are', 'be', 'so']);
+
+/**
+ * A section heading of a few words for a fact written as a sentence
+ * (close-out 2026-09-28, finding 6: "Venmo rejects payments with a fraction of
+ * a cent, so every split share must be a whole-cent amount" became a heading).
+ * The first clause (before a comma, semicolon, colon, or dash), at most seven
+ * words, without a closing article or preposition, and without its full stop.
+ */
+export function shortHeading(sentence) {
+  const text = String(sentence ?? '').replace(/\s+/g, ' ').trim().replace(/[.!?]+$/, '');
+  const clause = text.split(/\s*(?:[,;:]|\s[-–—]\s|\bso\b|\bbecause\b|\bwhich\b)\s*/i)[0] || text;
+  let words = clause.split(' ').filter(Boolean).slice(0, 7);
+  while (words.length > 2 && HEADING_TAIL.has(words[words.length - 1].toLowerCase())) words = words.slice(0, -1);
+  const h = words.join(' ').replace(/[.!?,;:]+$/, '');
+  return h ? h[0].toUpperCase() + h.slice(1) : text.slice(0, 60);
+}
+
 /** Check a section heading given with --section: one line, not empty, no "#" of its own. */
 export function assertHeading(heading) {
   const h = String(heading ?? '').replace(/\s+/g, ' ').trim().replace(/^#+\s*/, '');
@@ -265,9 +299,22 @@ export function withBodyTitle(body, title) {
   return finish(lines);
 }
 
-/** The body of a new concept: its title, then one section. */
-export function newConceptBody(title, heading, content) {
-  return `# ${String(title).replace(/\s+/g, ' ').trim()}\n\n## ${heading}\n\n${String(content).replace(/\s+$/, '')}\n`;
+/** The body of a new concept: its title, then one section, then the Gotchas and lessons section (left out with { lessons: false }, for an event). */
+export function newConceptBody(title, heading, content, { lessons = true } = {}) {
+  const body = `# ${String(title).replace(/\s+/g, ' ').trim()}\n\n## ${heading}\n\n${String(content).replace(/\s+$/, '')}\n`;
+  return lessons ? withLessonsSection(body) : body;
+}
+
+/**
+ * A concept body with its "## Gotchas and lessons" section (the model's topic
+ * template), added at the end with "None yet." when it is missing. A body
+ * with no "## " section (an older one-fact record) is left as it is.
+ */
+export function withLessonsSection(body) {
+  const text = String(body ?? '');
+  const { sections } = ranges(text);
+  if (!sections.length || sections.some((x) => sameHeading(x.heading, LESSONS_HEADING))) return text;
+  return finish([...trimBlank(text.replace(/\r\n/g, '\n').split('\n')), '', `## ${LESSONS_HEADING}`, '', 'None yet.']);
 }
 
 /**
@@ -374,6 +421,8 @@ const GENERIC = new Set([
   'agent', 'agents', 'owner', 'project', 'memory', 'record', 'note', 'thing', 'things', 'use', 'make', 'need', 'want',
   'work', 'always', 'never', 'fact', 'one', 'two', 'time', 'day', 'way', 'first', 'last', 'new', 'old', 'good', 'best',
   'each', 'every', 'all', 'only', 'more', 'less', 'same', 'other', 'get', 'set', 'run', 'keep', 'say', 'said',
+  // Every concept has a "Gotchas and lessons" section, so its words say nothing about which one.
+  'gotcha', 'gotchas', 'lesson', 'lessons', 'none', 'yet', 'seen',
 ]);
 
 function conceptStems(text, ignore) {
@@ -391,24 +440,38 @@ function slugWords(key) {
  * summary or a section's Remember line counts 1. Returns { score, shared }.
  */
 export function conceptScore(candidateStems, concept, { headings = [], points = '', ignore = new Set() } = {}) {
-  const strong = new Set(conceptStems(`${slugWords(concept.key)} ${concept.title || ''} ${headings.join(' ')}`, ignore));
+  const named = new Set(conceptStems(`${slugWords(concept.key)} ${concept.title || ''}`, ignore));
+  const strong = new Set([...named, ...conceptStems(headings.join(' '), ignore)]);
   const weak = new Set(conceptStems(`${concept.description || ''} ${points}`, ignore));
   let score = 0;
   const shared = [];
+  const inName = [];
   for (const s of new Set(candidateStems)) {
     if (strong.has(s)) {
       score += 2;
       shared.push(s);
+      if (named.has(s)) inName.push(s);
     } else if (weak.has(s)) {
       score += 1;
       shared.push(s);
     }
   }
-  return { score, shared };
+  return { score, shared, inName };
 }
 
-/** A concept is suggested when its score reaches this (two title words, or one title word, or two summary words). */
-export const SUGGEST_AT = 2;
+/**
+ * A concept is suggested only when a fact shares at least two words with it,
+ * at least one of them in its key or title, and the score reaches SUGGEST_AT
+ * (close-out 2026-09-28, C1: one shared word in a title or a section heading
+ * put a note about status replies into an unrelated output-format concept).
+ */
+export const SUGGEST_AT = 3;
+export const SUGGEST_MIN_SHARED = 2;
+
+/** True when a conceptScore result is enough to suggest that concept. */
+export function suggests(result) {
+  return Boolean(result) && result.score >= SUGGEST_AT && result.shared.length >= SUGGEST_MIN_SHARED && result.inName.length >= 1;
+}
 const DEEP_READS = 4;
 /** A type with this many concepts or fewer is read whole when a new fact is matched. */
 const READ_ALL = 12;
@@ -465,7 +528,7 @@ export async function suggestConcept(driver, candidate, { ignore = [] } = {}) {
     const headings = parts.sections.map((p) => p.heading);
     const points = parts.sections.map((p) => rememberText(p.text)).join(' ');
     const full = conceptScore(words, { ...x.s, title: (rec && bodyTitle(rec.body)) || x.s.title }, { headings, points, ignore: ign });
-    if (full.score < SUGGEST_AT) continue;
+    if (!suggests(full)) continue;
     if (best && (full.score < best.score || (full.score === best.score && best.key < x.s.key))) continue;
     // The section to add the fact under: the heading that shares the most
     // words with it; a tie goes to the section whose text shares more, and a
@@ -646,10 +709,9 @@ export function oldestDate(dates) {
 
 // ---------------------------------------------------------------- tidy plan
 
-/** The default concept for one-fact user_ or feedback_ records that share no subject word. */
+/** The default concept for one-fact user_ records that share no subject word. */
 export const DEFAULT_CONCEPTS = Object.freeze({
   user: { key: 'user_profile', title: 'Profile' },
-  feedback: { key: 'feedback_ways_of_working', title: 'Ways of working' },
 });
 
 /** A one-line summary for a new concept made from records: its title, then their descriptions. */
@@ -669,8 +731,9 @@ export function draftDescription(title, members) {
  *           retired record) to merge into a concept: an existing concept of the
  *           same type whose words they match (suggestConcept's scoring), or a
  *           new concept for two or more that share a subject word in their key
- *           or title. user_ and feedback_ records that share nothing go to
- *           user_profile and feedback_ways_of_working when there are two or more.
+ *           or title. user_ records that share nothing go to user_profile
+ *           when there are two or more. feedback_ records are left out: memory-tidy
+ *           moves them out of memory (rules and concepts).
  *   stay    [{ key, why }] one-fact records left as they are
  *   large   [{ key, title, lines, sections }] concepts over CONCEPT_MAX_LINES
  *           lines or CONCEPT_MAX_SECTIONS sections: candidates to split
@@ -678,7 +741,8 @@ export function draftDescription(title, members) {
  */
 export function planTidy(records, { ignore = [] } = {}) {
   const ign = new Set(ignore.flatMap((w) => searchTerms(w)));
-  const live = records.filter((r) => r && r.status !== 'retired' && !isProposal(r) && RECORD_TYPES.includes(r.type));
+  // feedback_ records are not merged: they move out of memory (memory-tidy's migration step).
+  const live = records.filter((r) => r && r.status !== 'retired' && !isProposal(r) && RECORD_TYPES.includes(r.type) && r.type !== 'feedback');
   const concepts = live.filter((r) => r.type !== 'event' && !isOneFact(r.body));
   const facts = live.filter((r) => r.type !== 'event' && isOneFact(r.body));
   const titleOf = (r) => bodyTitle(r.body) || titleFromName(r.name);
@@ -707,7 +771,7 @@ export function planTidy(records, { ignore = [] } = {}) {
         points: parts.sections.map((p) => rememberText(p.text)).join(' '),
         ignore: ign,
       });
-      if (s.score >= SUGGEST_AT && (!best || s.score > best.score)) best = { c, score: s.score };
+      if (suggests(s) && (!best || s.score > best.score)) best = { c, score: s.score };
     }
     if (best) add(best.c.key, { exists: true, type: best.c.type, title: titleOf(best.c), description: best.c.description }, f);
     else left.push(f);

@@ -18,7 +18,7 @@ future agents and skew them. Information must be curated and intentional.
 - A change to a requirement, such as R-01, at any stage: `work-requirements`.
 - "You drive", "take it from here", "run with it", even about a named item: `work-delegate`.
 - "Where are we": `work-status`. "What do you need from me" and approvals: `work-decide`.
-- "Remember", "from now on", "forget that": `memory-save`. "What did we decide": `memory-find`.
+- "Remember", "from now on", "always", "never", "forget that": `memory-save`. It puts an instruction for how the agent works in the rules and a fact in memory. "What did we decide": `memory-find`.
 - Open the matching skill or rule when the task needs its procedure. Method skills from other plugins (brainstorming, plans, debugging) may run inside these skills, never instead of them.
 <!-- if salesforce -->
 - Design work goes through `solution-design`; it opens `sf-architect-solutioning` as its specialist.
@@ -62,10 +62,11 @@ Do everything else yourself, record it, and report it. When you need a decision,
 | Agreed behavior, after delivery | The area's file in `requirements/`, at stage `14-spec-update` |
 | Verified structure of the current system | The area's file in `system-guide/` |
 | What is in progress, owner to-dos with no work item, where the next session starts | The current focus (`memory-save`) |
-| A lasting preference, correction, lesson, or hard-to-find reference | Memory (`memory-save`) |
+| The owner's preference or correction for how the agent works ("from now on", "always", "never") | `.claude/rules/owner-preferences.md` (`memory-save` runs `toolkit rule add`); for every project, `~/.claude/rules/` |
+| A lasting fact, an unproven lesson, or a hard-to-find reference | Memory (`memory-save`) |
 | Project terms | The glossary (`memory-save`) |
 | Outside documentation you capture | `ai-external-knowledge/`, one folder per topic |
-| How agents should work in this project | A rule in `.claude/rules/` or a skill, with the owner's yes; never memory |
+| How agents should work in this project, or a procedure that proved itself | A rule in `.claude/rules/` or a skill in `.claude/skills/`, with the owner's yes; never memory |
 <!-- if salesforce -->
 | Client brief, source file, message, or meeting note | `delivery/`, in the folder for that kind of file |
 | Production data load and backup files | `delivery/data/` (never committed) |
@@ -115,14 +116,14 @@ The toolkit writes the list between the two markers from the files in `.claude/r
 <!-- toolkit:rules:start -->
 Always on. Claude Code loads these at session start. Codex: read each one at session start.
 - `.claude/rules/check-deployment-contents.md`: Check What a Deployment Includes
-- `.claude/rules/component-tracker.md`: Component Tracker
+- `.claude/rules/component-tracker.md`: Keep the Component Tracker Current
 - `.claude/rules/confirm-salesforce-changes.md`: Confirm Salesforce Changes
 - `.claude/rules/humanize-outbound-text.md`: Humanize Anything Sent to Another Person
 - `.claude/rules/keep-work-item-current.md`: Keep the Active Work Item Accurate
 - `.claude/rules/memory-review-and-save.md`: Review and Save Project Memory
 - `.claude/rules/plain-english-artifacts.md`: Write Artifacts in Plain English
 - `.claude/rules/production-data-changes.md`: Production Data Changes
-- `.claude/rules/project-file-locations.md`: Where Project Files Go
+- `.claude/rules/project-file-locations.md`: Client-Work Folder: delivery/ or engagement/
 - `.claude/rules/salesforce-org-safety.md`: Salesforce Org Safety
 - `.claude/rules/session-handoff.md`: Prepare a Session Handoff
 - `.claude/rules/shared-repository-work.md`: Work Safely in a Shared Repository

@@ -172,14 +172,15 @@ test('the duplicate check compares every section and names the one that holds th
 
 test('a new concept starts with a section: title, summary, and updated date at the top; the index lists them by prefix', async () => {
   const { root } = makeProject();
-  await newConcept(root, 'feedback', 'ways-of-working', 'How Mike wants the agent to work with him', 'Questions', 'Ask one requirements question at a time.');
-  const text = read(root, 'feedback_ways_of_working.md');
-  assert.match(text, new RegExp(`^---\\nname: feedback_ways_of_working\\ndescription: How Mike wants the agent to work with him\\nupdated: ${DAY}\\nmetadata:\\n  type: feedback\\n`));
-  assert.match(text, /\n---\n\n# Ways of working\n\n## Questions\n\n\*\*Remember:\*\* Ask one requirements question at a time\.\n$/);
+  await newConcept(root, 'user', 'ways-of-working', 'How Mike wants the agent to work with him', 'Questions', 'Ask one requirements question at a time.');
+  const text = read(root, 'user_ways_of_working.md');
+  assert.match(text, new RegExp(`^---\\nname: user_ways_of_working\\ndescription: How Mike wants the agent to work with him\\nupdated: ${DAY}\\nmetadata:\\n  type: user\\n`));
+  // Every concept ends with its Gotchas and lessons section (Mike, 2026-09-29; the model's topic template).
+  assert.match(text, /\n---\n\n# Ways of working\n\n## Questions\n\n\*\*Remember:\*\* Ask one requirements question at a time\.\n\n## Gotchas and lessons\n\nNone yet\.\n$/);
   const index = read(root, 'MEMORY.md');
-  assert.match(index, new RegExp(`## Feedback\\n\\n- \\[Ways of working\\]\\(feedback_ways_of_working\\.md\\) — How Mike wants the agent to work with him \\(updated ${DAY}\\)\\n`));
+  assert.match(index, new RegExp(`## User\\n\\n- \\[Ways of working\\]\\(user_ways_of_working\\.md\\) — How Mike wants the agent to work with him \\(updated ${DAY}\\)\\n`));
   const list = await tk(root, ['memory', 'list']);
-  assert.equal(list.stdout, `- feedback_ways_of_working: Ways of working — How Mike wants the agent to work with him (updated ${DAY})\n`);
+  assert.equal(list.stdout, `- user_ways_of_working: Ways of working — How Mike wants the agent to work with him (updated ${DAY})\n`);
   const json = await tk(root, ['memory', 'list', '--json']);
   assert.equal(json.json.records[0].title, 'Ways of working');
   assert.equal(json.json.records[0].updated, DAY);
@@ -190,46 +191,49 @@ test('a new concept starts with a section: title, summary, and updated date at t
 
 test('a section is added without rewriting the rest; replacing one needs --expect; --append and --remove work; the output says how to undo', async () => {
   const { root } = makeProject();
-  await newConcept(root, 'feedback', 'ways-of-working', 'How Mike wants the agent to work with him', 'Questions', 'Ask one requirements question at a time.');
-  const file = path.join(root, '.memory', 'feedback_ways_of_working.md');
+  await newConcept(root, 'user', 'ways-of-working', 'How Mike wants the agent to work with him', 'Questions', 'Ask one requirements question at a time.');
+  const file = path.join(root, '.memory', 'user_ways_of_working.md');
   // The owner edits the note in Obsidian: a comment and odd spacing in a section this save does not touch.
   fs.writeFileSync(file, fs.readFileSync(file, 'utf8').replace('**Remember:** Ask', '<!-- keep -->\n**Remember:**   Ask'));
   const before = fs.readFileSync(file, 'utf8');
 
-  const add = await tk(root, ['memory', 'save', '--concept', 'feedback_ways_of_working', '--section', 'Replies', '--body', 'Keep replies short.', '--source', 'Mike, in chat, 2026-09-28', '--approved-by', 'Mike', '--json']);
+  const add = await tk(root, ['memory', 'save', '--concept', 'user_ways_of_working', '--section', 'Replies', '--body', 'Keep replies short.', '--source', 'Mike, in chat, 2026-09-28', '--approved-by', 'Mike', '--json']);
   assert.equal(add.json.section.action, 'added');
-  assert.equal(add.json.key, 'feedback_ways_of_working');
+  assert.equal(add.json.key, 'user_ways_of_working');
   assert.equal(add.json.replyLine, "Saved to memory: Replies (in Ways of working). Say 'forget that' to undo.");
   const after1 = fs.readFileSync(file, 'utf8');
   const [beforeHead, beforeBody] = before.split('\n---\n');
   const [afterHead, afterBody] = after1.split('\n---\n');
-  assert.ok(afterBody.startsWith(beforeBody.replace(/\n$/, '')), 'the old body is kept byte for byte');
-  assert.match(afterBody, /## Replies\n\n\*\*Remember:\*\* Keep replies short\.\n\n\*\*Evidence and limits:\*\* Mike, in chat, 2026-09-28\.\n$/);
+  const lessons = '\n## Gotchas and lessons\n\nNone yet.\n';
+  assert.ok(beforeBody.endsWith(lessons));
+  assert.ok(afterBody.startsWith(beforeBody.slice(0, -lessons.length).replace(/\n$/, '')), 'the old body is kept byte for byte');
+  assert.ok(afterBody.endsWith(lessons), 'the Gotchas and lessons section stays last');
+  assert.match(afterBody, /## Replies\n\n\*\*Remember:\*\* Keep replies short\.\n\n\*\*Evidence and limits:\*\* Mike, in chat, 2026-09-28\.\n\n## Gotchas and lessons\n/);
   assert.equal(afterHead, beforeHead, 'the frontmatter is the same (same day, same approval)');
 
   // The same heading again: refused without --expect, and nothing changes.
-  const refused = await tk(root, ['memory', 'save', '--concept', 'feedback_ways_of_working', '--section', 'replies', '--body', 'No tables.', '--approved-by', 'Mike'], { code: 2 });
+  const refused = await tk(root, ['memory', 'save', '--concept', 'user_ways_of_working', '--section', 'replies', '--body', 'No tables.', '--approved-by', 'Mike'], { code: 2 });
   assert.match(refused.stderr, /already has a section "replies", so it was not changed/);
   assert.match(refused.stderr, /--expect <version>.*--append/s);
   assert.equal(fs.readFileSync(file, 'utf8'), after1);
 
   // A stale --expect is refused; the right one replaces only that section.
-  await tk(root, ['memory', 'save', '--concept', 'feedback_ways_of_working', '--section', 'Replies', '--body', 'No tables.', '--expect', '0123456789ab', '--approved-by', 'Mike'], { code: 2 });
-  const got = await tk(root, ['memory', 'get', 'feedback_ways_of_working', '--json']);
-  const rep = await tk(root, ['memory', 'save', '--concept', 'feedback_ways_of_working', '--section', 'Replies', '--body', 'Keep replies under ten lines.', '--expect', got.json.version, '--approved-by', 'Mike', '--json']);
+  await tk(root, ['memory', 'save', '--concept', 'user_ways_of_working', '--section', 'Replies', '--body', 'No tables.', '--expect', '0123456789ab', '--approved-by', 'Mike'], { code: 2 });
+  const got = await tk(root, ['memory', 'get', 'user_ways_of_working', '--json']);
+  const rep = await tk(root, ['memory', 'save', '--concept', 'user_ways_of_working', '--section', 'Replies', '--body', 'Keep replies under ten lines.', '--expect', got.json.version, '--approved-by', 'Mike', '--json']);
   assert.equal(rep.json.section.action, 'replaced');
   assert.match(rep.json.previous, /Keep replies short/);
   assert.match(rep.json.replyLine, /^Updated in memory: Replies \(in Ways of working\)/);
   assert.ok(fs.readFileSync(file, 'utf8').includes('<!-- keep -->\n**Remember:**   Ask'), 'the other section is untouched');
 
   // --append adds under a heading it already has.
-  const app = await tk(root, ['memory', 'save', '--concept', 'feedback_ways_of_working', '--section', 'Replies', '--append', '--body', 'No tables in replies.', '--approved-by', 'Mike', '--json']);
+  const app = await tk(root, ['memory', 'save', '--concept', 'user_ways_of_working', '--section', 'Replies', '--append', '--body', 'No tables in replies.', '--approved-by', 'Mike', '--json']);
   assert.equal(app.json.section.action, 'appended');
   assert.match(getSection(parseFrontmatter(fs.readFileSync(file, 'utf8')).body, 'Replies'), /ten lines\.\n\nNo tables in replies\.$/, 'text added under a heading gets no second Remember label');
 
   // --remove needs --expect; the undo line of an add is a remove.
-  await tk(root, ['memory', 'save', '--concept', 'feedback_ways_of_working', '--section', 'Replies', '--remove'], { code: 2 });
-  const add2 = await tk(root, ['memory', 'save', '--concept', 'feedback_ways_of_working', '--section', 'Git', '--body', 'Never force-push.', '--approved-by', 'Mike']);
+  await tk(root, ['memory', 'save', '--concept', 'user_ways_of_working', '--section', 'Replies', '--remove'], { code: 2 });
+  const add2 = await tk(root, ['memory', 'save', '--concept', 'user_ways_of_working', '--section', 'Git', '--body', 'Never force-push.', '--approved-by', 'Mike']);
   const undo = /^Undo: (toolkit memory save .*)$/m.exec(add2.stdout)[1].split(' ').slice(1).map((w) => w.replace(/^'|'$/g, ''));
   const removed = await tk(root, [...undo, '--json']);
   assert.equal(removed.json.section.action, 'removed');
@@ -240,7 +244,7 @@ test('a section is added without rewriting the rest; replacing one needs --expec
   const missing = await tk(root, ['memory', 'save', '--concept', 'project_billing', '--section', 'Invoices', '--body', 'x', '--approved-by', 'Mike'], { code: 1 });
   assert.match(missing.stderr, /There is no memory record project_billing/);
   assert.match(missing.stderr, /--type project --name billing --description '<one-line summary of the concept>' --section 'Invoices'/);
-  await tk(root, ['memory', 'save', '--concept', 'feedback_ways_of_working', '--section', 'X', '--body', '**Remember:** a.\n\n## Y\n\nb', '--approved-by', 'Mike'], { code: 2 });
+  await tk(root, ['memory', 'save', '--concept', 'user_ways_of_working', '--section', 'X', '--body', '**Remember:** a.\n\n## Y\n\nb', '--approved-by', 'Mike'], { code: 2 });
   assert.deepEqual((await tk(root, ['memory', 'status', '--json'])).json.problems, []);
 });
 
@@ -261,7 +265,8 @@ test('two section saves at the same moment, from two processes, both land (the l
   const runs = await Promise.all(['Refund window', 'Invoice day', 'Tax rates'].map((h, i) => spawnToolkit(['memory', 'save', '--concept', 'project_billing', '--section', h, '--body', `Fact number ${i} about ${h}.`, '--approved-by', 'Mike'], { cwd: root })));
   for (const r of runs) assert.equal(r.code, 0, r.stderr);
   const parts = conceptParts(parseFrontmatter(read(root, 'project_billing.md')).body);
-  assert.deepEqual(parts.sections.map((s) => s.heading).sort(), ['Invoice day', 'Refund window', 'Stripe', 'Tax rates']);
+  assert.deepEqual(parts.sections.map((s) => s.heading).sort(), ['Gotchas and lessons', 'Invoice day', 'Refund window', 'Stripe', 'Tax rates']);
+  assert.equal(parts.sections[parts.sections.length - 1].heading, 'Gotchas and lessons', 'it stays last');
 });
 
 test('the duplicate check says which concept a new fact belongs in, instead of saving a second file; --new-concept overrides; events never get one', async () => {
@@ -297,61 +302,64 @@ test('suggestConcept reads the owner\'s name as no subject word and names the cl
   const { root } = makeProject();
   await newConcept(root, 'user', 'profile', 'Mike Rihm: role, working hours, and how he likes updates', 'Working hours', 'Mike works 9 to 5 Eastern.');
   const driver = await (await import('../../lib/memory/contract.mjs')).loadDriver(requireProject(root));
-  const s = await suggestConcept(driver, { key: 'user_update_style', type: 'user', name: 'update-style', description: 'Mike likes short updates' }, { ignore: ['Mike', 'Rihm'] });
-  assert.equal(s && s.key, 'user_profile', 'updates is a summary word of the profile');
+  const s = await suggestConcept(driver, { key: 'user_profile_updates', type: 'user', name: 'profile-updates', description: 'Mike likes short updates' }, { ignore: ['Mike', 'Rihm'] });
+  assert.equal(s && s.key, 'user_profile', 'profile is a key word and updates a summary word of the profile');
   assert.equal(await suggestConcept(driver, { key: 'user_mike_rihm', type: 'user', name: 'mike-rihm', description: 'Mike Rihm' }, { ignore: ['Mike', 'Rihm'] }), null);
-  const w = await suggestConcept(driver, { key: 'user_working_days', type: 'user', name: 'working-days', description: 'Working days are Monday to Thursday' }, { ignore: ['Mike'] });
+  const w = await suggestConcept(driver, { key: 'user_profile_working_days', type: 'user', name: 'profile-working-days', description: 'Working days are Monday to Thursday' }, { ignore: ['Mike'] });
   assert.equal(w.heading, 'Working hours');
+  // C1 (close-out 2026-09-28): one shared word, or words only in a section heading or the summary, is not enough.
+  assert.equal(await suggestConcept(driver, { key: 'user_update_style', type: 'user', name: 'update-style', description: 'Mike likes short updates' }, { ignore: ['Mike', 'Rihm'] }), null, 'no word in the key or title');
+  assert.equal(await suggestConcept(driver, { key: 'user_working_days', type: 'user', name: 'working-days', description: 'Working days are Monday to Thursday' }, { ignore: ['Mike'] }), null, 'only a section heading word');
 });
 
 // ------------------------------------------------------------------ proposals name their concept
 
 test('a proposal for an existing concept is its own record naming the concept; approve adds it there; reject deletes it', async () => {
   const { root } = makeProject();
-  await newConcept(root, 'feedback', 'ways-of-working', 'How Mike wants the agent to work with him', 'Questions', 'Ask one requirements question at a time.');
-  const prop = await tk(root, ['memory', 'save', '--concept', 'feedback_ways_of_working', '--section', 'Reply length', '--body', 'Keep replies under ten lines.', '--proposal', '--json']);
-  assert.equal(prop.json.key, 'feedback_proposal_reply_length');
+  await newConcept(root, 'user', 'ways-of-working', 'How Mike wants the agent to work with him', 'Questions', 'Ask one requirements question at a time.');
+  const prop = await tk(root, ['memory', 'save', '--concept', 'user_ways_of_working', '--section', 'Reply length', '--body', 'Keep replies under ten lines.', '--proposal', '--json']);
+  assert.equal(prop.json.key, 'user_proposal_reply_length');
   assert.equal(prop.json.proposal, true);
-  assert.equal(prop.json.concept, 'feedback_ways_of_working');
-  assert.match(read(root, 'feedback_proposal_reply_length.md'), /^concept: feedback_ways_of_working\nsection: Reply length\n/m);
-  assert.doesNotMatch(read(root, 'feedback_ways_of_working.md'), /Reply length/, 'the concept is not changed before the owner answers');
+  assert.equal(prop.json.concept, 'user_ways_of_working');
+  assert.match(read(root, 'user_proposal_reply_length.md'), /^concept: user_ways_of_working\nsection: Reply length\n/m);
+  assert.doesNotMatch(read(root, 'user_ways_of_working.md'), /Reply length/, 'the concept is not changed before the owner answers');
   const list = await tk(root, ['memory', 'list']);
-  assert.match(list.stdout, /^- feedback_proposal_reply_length \[proposal for feedback_ways_of_working: the owner has not answered\]: Reply length — Keep replies under ten lines\./m);
-  assert.match(read(root, 'MEMORY.md'), /\(feedback_proposal_reply_length\.md\) — Keep replies under ten lines\. \(updated [\d-]+\) \[proposal: not a fact until the owner answers\]/);
+  assert.match(list.stdout, /^- user_proposal_reply_length \[proposal for user_ways_of_working: the owner has not answered\]: Reply length — Keep replies under ten lines\./m);
+  assert.match(read(root, 'MEMORY.md'), /\(user_proposal_reply_length\.md\) — Keep replies under ten lines\. \(updated [\d-]+\) \[proposal for user_ways_of_working: not a fact until the owner answers\]/);
   const decisions = await tk(root, ['work', 'decisions']);
-  assert.match(decisions.stdout, /feedback_proposal_reply_length: Keep replies under ten lines\. Saved [\d-]+\. A yes adds it to the concept feedback_ways_of_working\./);
-  assert.deepEqual((await listProposals(requireProject(root))).map((p) => [p.key, p.concept]), [['feedback_proposal_reply_length', 'feedback_ways_of_working']]);
+  assert.match(decisions.stdout, /user_proposal_reply_length: Keep replies under ten lines\. Saved [\d-]+\. A yes adds it to the concept user_ways_of_working\./);
+  assert.deepEqual((await listProposals(requireProject(root))).map((p) => [p.key, p.concept]), [['user_proposal_reply_length', 'user_ways_of_working']]);
   // The same proposal name again is refused, never replaced.
-  await tk(root, ['memory', 'save', '--concept', 'feedback_ways_of_working', '--section', 'Reply length', '--body', 'Keep replies under five lines.', '--proposal'], { code: 2 });
+  await tk(root, ['memory', 'save', '--concept', 'user_ways_of_working', '--section', 'Reply length', '--body', 'Keep replies under five lines.', '--proposal'], { code: 2 });
 
-  const yes = await tk(root, ['memory', 'approve', 'feedback_proposal_reply_length', '--by', 'Mike', '--json']);
+  const yes = await tk(root, ['memory', 'approve', 'user_proposal_reply_length', '--by', 'Mike', '--json']);
   assert.equal(yes.json.merged, true);
-  assert.equal(yes.json.key, 'feedback_ways_of_working');
+  assert.equal(yes.json.key, 'user_ways_of_working');
   assert.equal(yes.json.section.heading, 'Reply length');
   assert.equal(yes.json.replyLine, "Saved to memory: Reply length (in Ways of working). Say 'forget that' to undo.");
-  assert.ok(!fs.existsSync(path.join(root, '.memory', 'feedback_proposal_reply_length.md')), 'the proposal record is gone');
-  const concept = read(root, 'feedback_ways_of_working.md');
+  assert.ok(!fs.existsSync(path.join(root, '.memory', 'user_proposal_reply_length.md')), 'the proposal record is gone');
+  const concept = read(root, 'user_ways_of_working.md');
   assert.match(concept, /## Reply length\n\n\*\*Remember:\*\* Keep replies under ten lines\./);
   assert.match(concept, new RegExp(`^authorization: Approved by Mike on ${DAY}$`, 'm'));
 
-  const second = await tk(root, ['memory', 'save', '--concept', 'feedback_ways_of_working', '--section', 'Tables', '--body', 'Never use tables in replies.', '--proposal', '--json']);
+  const second = await tk(root, ['memory', 'save', '--concept', 'user_ways_of_working', '--section', 'Tables', '--body', 'Never use tables in replies.', '--proposal', '--json']);
   const no = await tk(root, ['memory', 'reject', second.json.key, '--json']);
   assert.equal(no.json.deleted, true);
-  assert.doesNotMatch(read(root, 'feedback_ways_of_working.md'), /Tables/);
+  assert.doesNotMatch(read(root, 'user_ways_of_working.md'), /Tables/);
 
   // A proposal whose concept is gone: the yes names the concept it goes in
   // (verifier, 2026-09-28: it became a record named after its fact).
-  const third = await tk(root, ['memory', 'save', '--concept', 'feedback_ways_of_working', '--section', 'Emoji', '--body', 'No emoji in replies.', '--proposal', '--json']);
-  await tk(root, ['memory', 'retire', 'feedback_ways_of_working']);
+  const third = await tk(root, ['memory', 'save', '--concept', 'user_ways_of_working', '--section', 'Emoji', '--body', 'No emoji in replies.', '--proposal', '--json']);
+  await tk(root, ['memory', 'retire', 'user_ways_of_working']);
   const refused = await tk(root, ['memory', 'approve', third.json.key, '--by', 'Mike'], { code: 2 });
-  assert.match(refused.stderr, /It named the concept feedback_ways_of_working, which is not in memory now\./);
-  assert.match(refused.stderr, /--concept feedback_<subject>/);
+  assert.match(refused.stderr, /It named the concept user_ways_of_working, which is not in memory now\./);
+  assert.match(refused.stderr, /--concept user_<subject>/);
   assert.ok(fs.existsSync(path.join(root, '.memory', `${third.json.key}.md`)), 'nothing changed');
-  const own = await tk(root, ['memory', 'approve', third.json.key, '--by', 'Mike', '--concept', 'feedback_replies', '--title', 'Replies', '--description', 'How Mike wants replies written', '--json']);
+  const own = await tk(root, ['memory', 'approve', third.json.key, '--by', 'Mike', '--concept', 'user_replies', '--title', 'Replies', '--description', 'How Mike wants replies written', '--json']);
   assert.equal(own.json.created, true);
-  assert.equal(own.json.key, 'feedback_replies');
+  assert.equal(own.json.key, 'user_replies');
   assert.ok(!fs.existsSync(path.join(root, '.memory', `${third.json.key}.md`)), 'the proposal record is gone');
-  const replies = read(root, 'feedback_replies.md');
+  const replies = read(root, 'user_replies.md');
   assert.match(replies, /^description: How Mike wants replies written$/m);
   assert.match(replies, /\n# Replies\n\n## Emoji\n\n\*\*Remember:\*\* No emoji in replies\./);
   assert.doesNotMatch(replies, /^concept:/m);
@@ -359,33 +367,37 @@ test('a proposal for an existing concept is its own record naming the concept; a
 
 test('Stop hook: an unanswered question whose words match a concept is saved as a proposal for that concept', async () => {
   const { root } = makeProject();
-  await newConcept(root, 'feedback', 'ways-of-working', 'How Mike wants the agent to work with him', 'Replies', 'Keep replies plain.');
+  await newConcept(root, 'project', 'billing', 'Billing: Stripe invoices and refunds', 'Stripe', 'Stripe handles invoices and refunds.');
   const project = requireProject(root);
-  const res = await saveProposals(project, ['Keep replies under five lines'], { cwd: root, env: { ...process.env } });
-  assert.deepEqual(res.saved, [{ key: 'feedback_proposal_keep_replies_under_five_lines', summary: 'Keep replies under five lines', concept: 'feedback_ways_of_working' }]);
-  assert.match(proposalNotes(res)[0], /as a memory proposal for the concept feedback_ways_of_working \(his yes adds it there as a section\): feedback_proposal_keep_replies_under_five_lines/);
-  const yes = await tk(root, ['memory', 'approve', 'feedback_proposal_keep_replies_under_five_lines', '--by', 'Mike']);
-  assert.match(yes.stdout, /its fact is now in the concept feedback_ways_of_working/);
-  const concept = read(root, 'feedback_ways_of_working.md');
-  assert.match(concept, /## Keep replies under five lines\n\n\*\*Remember:\*\* Keep replies under five lines\./);
+  const res = await saveProposals(project, ['Billing refunds close after thirty days'], { cwd: root, env: { ...process.env } });
+  assert.deepEqual(res.saved, [{ key: 'project_proposal_billing_refunds_close_after_thirty_days', summary: 'Billing refunds close after thirty days', concept: 'project_billing' }]);
+  assert.match(proposalNotes(res)[0], /as a memory proposal for the concept project_billing \(his yes adds it there as a section\): project_proposal_billing_refunds_close_after_thirty_days/);
+  const yes = await tk(root, ['memory', 'approve', 'project_proposal_billing_refunds_close_after_thirty_days', '--by', 'Mike']);
+  assert.match(yes.stdout, /its fact is now in the concept project_billing/);
+  const concept = read(root, 'project_billing.md');
+  assert.match(concept, /## Billing refunds close after thirty days\n\n\*\*Remember:\*\* Billing refunds close after thirty days\./);
   assert.doesNotMatch(concept, /Do not rely on this/, 'the hook\'s waiting words are gone after the yes');
   // A question that matches no concept is still a proposal for a new concept.
   const other = await saveProposals(project, ['The staging database resets every Sunday night'], { cwd: root, env: { ...process.env } });
   assert.equal(other.saved.length, 1);
   assert.equal(other.saved[0].concept, undefined);
+  // An instruction for how the agent works is a rule proposal, never a memory concept (Mike, 2026-09-29).
+  const rule = await saveProposals(project, ['Keep replies under five lines'], { cwd: root, env: { ...process.env } });
+  assert.deepEqual(rule.saved, [{ key: 'user_rule_keep_replies_under_five_lines', summary: 'Keep replies under five lines', rule: 'Replies' }]);
+  assert.match(proposalNotes(rule)[0], /as a rule proposal: user_rule_keep_replies_under_five_lines\. .*\.claude\/rules\/owner-preferences\.md, section "Replies"/);
 });
 
 // ------------------------------------------------------------------ tidy --plan, merge, split
 
 test('a project with many one-fact files: tidy --plan proposes concepts and changes nothing; merge runs only with the owner\'s yes; links follow to the section', async () => {
   const { root } = makeProject();
-  await oneFact(root, 'feedback', 'no-force-push', 'Never force-push to any branch', 'Never force-push.');
-  await oneFact(root, 'feedback', 'plain-replies', 'Replies use plain English', 'Write replies in plain English.');
-  await oneFact(root, 'feedback', 'one-question', 'Ask one question at a time', 'Ask one question at a time.');
+  await oneFact(root, 'user', 'no-force-push', 'Never force-push to any branch', 'Never force-push.');
+  await oneFact(root, 'user', 'plain-replies', 'Replies use plain English', 'Write replies in plain English.');
+  await oneFact(root, 'user', 'one-question', 'Ask one question at a time', 'Ask one question at a time.');
   await oneFact(root, 'project', 'deploy-window', 'Deploys happen on Tuesdays after 6 pm', 'Deploys happen on Tuesdays after 6 pm.');
   await oneFact(root, 'project', 'deploy-checks', 'The deploy checks run in CI first', 'Run the deploy checks in CI. See [deploy window](project_deploy_window.md).');
   await oneFact(root, 'project', 'billing-provider', 'Stripe handles invoices', 'Stripe handles invoices.');
-  await oneFact(root, 'user', 'role', 'Mike is the only developer', 'Mike is the only developer.');
+  await oneFact(root, 'reference', 'role', 'Mike is the only developer', 'Mike is the only developer.');
   await tk(root, ['memory', 'save', '--type', 'event', '--name', 'moved-off-heroku', '--description', 'Moved off Heroku on 2026-09-01', '--body', 'Moved to Fly.', '--approved-by', 'Mike']);
   await tk(root, ['memory', 'focus', '--text', '# Current focus\n\n## Now\n\n- See [deploy window](project_deploy_window.md).\n\n## Waiting on the owner\n\nNone.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\nNone.\n']);
   const vault = path.join(root, '.memory');
@@ -395,10 +407,10 @@ test('a project with many one-fact files: tidy --plan proposes concepts and chan
   const plan = await tk(root, ['memory', 'tidy', '--plan', '--json']);
   assert.equal(plan.json.changed, false);
   assert.deepEqual(plan.json.merges.map((m) => [m.into, m.exists, m.members.map((x) => x.key)]), [
-    ['feedback_ways_of_working', false, ['feedback_no_force_push', 'feedback_one_question', 'feedback_plain_replies']],
+    ['user_profile', false, ['user_no_force_push', 'user_one_question', 'user_plain_replies']],
     ['project_deploy', false, ['project_deploy_checks', 'project_deploy_window']],
   ]);
-  assert.deepEqual(plan.json.stay.map((s) => s.key).sort(), ['event_moved_off_heroku', 'project_billing_provider', 'user_role']);
+  assert.deepEqual(plan.json.stay.map((s) => s.key).sort(), ['event_moved_off_heroku', 'project_billing_provider', 'reference_role']);
   const human = await tk(root, ['memory', 'tidy', '--plan']);
   assert.match(human.stdout, /^Concept memory plan\. Nothing was changed/);
   assert.match(human.stdout, /toolkit memory merge project_deploy_checks project_deploy_window --into project_deploy --title 'Deploy' --description '.+' --approved-by <owner>/);
@@ -428,16 +440,16 @@ test('a project with many one-fact files: tidy --plan proposes concepts and chan
   }
   assert.match(read(root, 'MEMORY.md'), /- \[Deploys\]\(project_deploys\.md\) — When and how deploys happen \(updated [\d-]+\)\n/);
 
-  // The feedback merge into the default concept, then the plan has nothing left to merge.
-  await tk(root, ['memory', 'merge', 'feedback_no_force_push', 'feedback_one_question', 'feedback_plain_replies', '--into', 'feedback_ways_of_working', '--description', 'How Mike wants the agent to work', '--approved-by', 'Mike']);
+  // The user facts merge into the default concept, then the plan has nothing left to merge.
+  await tk(root, ['memory', 'merge', 'user_no_force_push', 'user_one_question', 'user_plain_replies', '--into', 'user_profile', '--description', 'How Mike wants the agent to work', '--approved-by', 'Mike']);
   const after2 = await tk(root, ['memory', 'tidy', '--plan', '--json']);
   assert.deepEqual(after2.json.merges, []);
   // A later one-fact file whose words match an existing concept is planned into it.
-  await oneFact(root, 'project', 'deploy-freeze', 'No deploys during the December freeze', 'No deploys from Dec 20 to Jan 2.');
+  await oneFact(root, 'project', 'deploy-window-freeze', 'No deploys in the December freeze window', 'No deploys from Dec 20 to Jan 2.');
   const again = await tk(root, ['memory', 'tidy', '--plan', '--json']);
-  assert.deepEqual(again.json.merges.map((m) => [m.into, m.exists, m.members.map((x) => x.key)]), [['project_deploys', true, ['project_deploy_freeze']]]);
+  assert.deepEqual(again.json.merges.map((m) => [m.into, m.exists, m.members.map((x) => x.key)]), [['project_deploys', true, ['project_deploy_window_freeze']]]);
   // Merge refuses a different type, an event, and a proposal.
-  await tk(root, ['memory', 'merge', 'user_role', '--into', 'project_deploys', '--approved-by', 'Mike'], { code: 2 });
+  await tk(root, ['memory', 'merge', 'reference_role', '--into', 'project_deploys', '--approved-by', 'Mike'], { code: 2 });
   await tk(root, ['memory', 'merge', 'event_moved_off_heroku', '--into', 'project_deploys', '--approved-by', 'Mike'], { code: 2 });
 });
 
@@ -462,7 +474,7 @@ test('split moves sections to another concept, and links to those sections follo
   }
   const plan = await tk(root, ['memory', 'tidy', '--plan', '--json']);
   assert.deepEqual(plan.json.large.map((l) => l.key), ['project_billing']);
-  assert.match((await tk(root, ['memory', 'tidy', '--plan'])).stdout, /project_billing \("Billing"\) has 22 sections .* toolkit memory split project_billing --section '<heading>'/);
+  assert.match((await tk(root, ['memory', 'tidy', '--plan'])).stdout, /project_billing \("Billing"\) has 23 sections .* toolkit memory split project_billing --section '<heading>'/);
 });
 
 test('a removed section: links to it point at the concept itself; status reports a link to a section that does not exist', async () => {
@@ -582,7 +594,7 @@ test('Hindsight (live server): a concept saved with a section, a section added, 
   const add = await tk(root, ['memory', 'save', '--concept', 'project_billing', '--section', 'Refund window', '--body', 'Refunds are allowed for 30 days.', '--approved-by', 'Mike', '--json']);
   assert.equal(add.json.section.action, 'added');
   const got = await tk(root, ['memory', 'get', 'project_billing', '--json']);
-  assert.deepEqual(conceptParts(got.json.body).sections.map((s) => s.heading), ['Stripe', 'Refund window']);
+  assert.deepEqual(conceptParts(got.json.body).sections.map((s) => s.heading), ['Stripe', 'Refund window', 'Gotchas and lessons']);
   const list = await tk(root, ['memory', 'list']);
   assert.match(list.stdout, new RegExp(`^- project_billing: Billing — Billing: Stripe setup, invoices, and refunds \\(updated ${DAY}\\)$`, 'm'));
   const found = await tk(root, ['memory', 'find', 'refund window days', '--json']);

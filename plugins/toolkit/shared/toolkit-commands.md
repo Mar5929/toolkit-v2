@@ -30,28 +30,32 @@ pass text in one, and what each exit code means. Every skill that runs a
   cause.
 - The one thing a Claude Code command may carry is its own text on standard
   input (`--set-file -` with a quoted heredoc; "Text in a command", below).
-- Five commands ask the owner first, in both hosts, because they are hard or
-  impossible to undo: `toolkit machine-setup`, `toolkit memory delete`,
-  `toolkit memory import`, `toolkit import`, and
-  `toolkit hindsight service install` or `start`. Get his yes in the reply
-  before you run one. The host then asks him to confirm the command (Claude
+- Six commands ask the owner first, in both hosts, because they are hard or
+  impossible to undo, or change every project on this computer:
+  `toolkit machine-setup`, `toolkit memory delete`, `toolkit memory import`,
+  `toolkit import`, `toolkit hindsight service install` or `start`, and
+  `toolkit rule add --machine` or `toolkit rule update --machine` (write
+  `--machine` right after `add` or `update`). Get his yes in the reply before
+  you run one; his own words ("for all my projects, always ...") are that yes
+  for a rule. The host then asks him to confirm the command (Claude
   Code: a permission prompt; Codex: an approval). That prompt is expected, not
   an error.
-- When the host refuses one of the five without asking him (Codex with
+- When the host refuses one of the six without asking him (Codex with
   approvals off: "approval required by policy, but AskForApproval is set to
   Never"), say that the cause is that approval setting, show him the exact
   command to run himself in a terminal, and wait. Do nothing in its place
   that he did not ask for: a refused delete is not a retire.
-- In Codex, run each of those five alone, with `sandbox_permissions` set to
+- In Codex, run each of those six alone, with `sandbox_permissions` set to
   `require_escalated` and a one-line reason. The approval alone keeps the
   command inside the sandbox, where it fails: `toolkit memory delete` cannot
   reach Hindsight or Notion, `toolkit machine-setup` cannot write `~/.codex`
   or `~/.local/bin`, `toolkit hindsight service install` cannot write
-  `~/Library/LaunchAgents`, and `toolkit import` from a worktree cannot write
-  the main checkout.
+  `~/Library/LaunchAgents`, `toolkit rule add --machine` cannot write
+  `~/.claude/rules`, and `toolkit import` from a worktree cannot write the
+  main checkout.
 - Write `--json` and `--host` after the command words
   (`toolkit memory delete <key> --owner-approved --json`). The toolkit refuses
-  those five commands when a flag comes first, because the ask-first rules
+  those six commands when a flag comes first, because the ask-first rules
   would not match them.
 - Never change a work item or a memory record with a script or a shell write
   (Python, Node, `sed -i`, `cat >`, `tee`, `cp`). Use the `toolkit` command

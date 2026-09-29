@@ -158,3 +158,15 @@ export async function fillSelectedDesign(dir, id, text = 'Option A: one small co
   fs.writeFileSync(file, after);
   return file;
 }
+
+/**
+ * Record an acceptance-checker verdict in an item's history, as work-check
+ * does. toolkit work approve --result and toolkit work finish refuse without
+ * one since the item's last build (close-out 2026-09-28, R-B1 in code).
+ */
+export async function recordCheck(dir, id, { verdict = 'the requirements met', tkFn = null } = {}) {
+  const run = tkFn || ((args) => tk(dir, args));
+  const res = await run(['work', 'history', id, '--note', `Checked: the result; acceptance-checker: ${verdict}; evidence: the checker report; gaps: none`]);
+  if (res.code !== 0) throw new Error(`recordCheck ${id}: ${res.stderr}`);
+  return res;
+}

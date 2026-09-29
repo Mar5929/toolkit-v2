@@ -2,7 +2,8 @@
 // - R-B1: the acceptance check runs before every result approval, whoever
 //   built the change (the owner's decision of 2026-09-28). Moving an item to
 //   11 User approval or recording the result approval with no
-//   acceptance-checker check since the last build prints a note, and
+//   acceptance-checker check since the last build prints a note (the result
+//   approval itself is refused since R-B1 in code, 2026-09-29), and
 //   toolkit work decisions lists the check as the agent's to-do;
 // - R-M4: an Open Questions row for the owner that holds no recommendation
 //   gets a note, so a later session can match "go with your recommendation";
@@ -60,10 +61,10 @@ test('moving an item to 11 User approval with no acceptance check prints a note;
   assert.equal(check.continueWith, 'work-check');
   assert.ok(!todo.json.decisions.some((d) => d.kind === 'acceptance_check'), 'the check is the agent\'s step, not the owner\'s decision');
 
-  // The approval before the check: recorded, with a note.
+  // The approval before the check is refused (R-B1 in code), and nothing is recorded.
   const early = await tk(dir, ['work', 'approve', id, '--result', '--by', 'Mike Rihm']);
-  assert.equal(early.code, 0, early.stderr);
-  assert.match(early.stdout, /Note: No acceptance-checker check of WI-001 is recorded since its last build\. The owner's approval is recorded, but the independent check comes before a result approval, whoever built the change: start one acceptance-checker now/);
+  assert.equal(early.code, 2, early.stdout);
+  assert.match(early.stderr, /The result approval of WI-001 was not recorded: no acceptance-checker verdict is recorded since its last move to 08 Build or 10 Bug fixing/);
 
   // A second item: the check is recorded first, so nothing is said.
   const id2 = await newItem(dir, 'Split option', ['--type', 'task']);

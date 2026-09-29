@@ -18,7 +18,9 @@
 //    2026-09-28: 3 of 4 live-run questions used other words).
 // 2. Silent unless, once per turn:
 //    - the owner used an explicit keep phrase this turn and nothing was
-//      recorded (no memory save, work-item change, or decision), or
+//      recorded (no rule, memory save, work-item change, or decision; a rule
+//      counts from its command or from a change to an owner-preferences.md
+//      file, verifier 2026-09-29), or
 //    - a work-item record edited this turn still fails validation.
 //    Guarded by stop_hook_active. The reason never contains a keep phrase,
 //    because Codex turns it into a new user prompt. Output is JSON or nothing.
@@ -28,14 +30,14 @@ import { stopOutput } from './output.mjs';
 import { findProject, baselineMoved } from './common.mjs';
 import { updateSession, turnKey } from './session.mjs';
 import { resolveRecorded } from './post-tool.mjs';
-import { proposalQuestions, looseQuestion, memoryQuestionAsked, namesOpenProposal, normalizeSummary, proposalArgs, proposalName, proposalType, ownerWording } from './proposal.mjs';
+import { proposalQuestions, looseQuestion, memoryQuestionAsked, namesOpenProposal, normalizeSummary, proposalArgs, proposalName, proposalType, ownerWording, statedInPrompt, proposalRuleSection } from './proposal.mjs';
 import { CLOSEST_WHY, compareRecords } from '../memory/similar.mjs';
 import { secretKind } from '../memory/contract.mjs';
 
 /** The block for a question to save something to memory in other words than "Save to memory: <one line>?". */
 export const LOOSE_REASON = "You asked the owner to save something to memory. Ask it as 'Save to memory: <one line>?' or save it now with toolkit memory save ... --proposal.";
 
-export const KEEP_REASON = 'The owner asked this turn for something to be kept for later sessions, and nothing was recorded: no memory save, work item change, or decision. Record it with the memory-save skill (or work-on if it is a task), or say in one line why it was not recorded.';
+export const KEEP_REASON = 'The owner asked this turn for something to be kept for later sessions, and nothing was recorded: no rule, memory save, work item change, or decision. Record it with the memory-save skill, which picks its home (an instruction for how the agent works: toolkit rule add; a fact: memory), or with work-on if it is a task, or say in one line why it was not recorded.';
 
 /** How long the hook waits for one proposal save (the Stop hook timeout is 15 seconds). */
 export const PROPOSAL_SAVE_MS = 10000;
@@ -152,7 +154,7 @@ function nameTaken(res) {
  * matches: [{ key, proposal, why }] }], secret: [{ kind }], failed:
  * [{ summary, error }] }.
  */
-export async function saveProposals(project, summaries, { cwd, env, deadline = Date.now() + STOP_SAVE_BUDGET_MS }) {
+export async function saveProposals(project, summaries, { cwd, env, deadline = Date.now() + STOP_SAVE_BUDGET_MS, rules = new Set(), prompt = null }) {
   const out = { saved: [], similar: [], secret: [], failed: [] };
   const ownerName = project.config.project && project.config.project.owner;
   const date = localDate(env);
@@ -165,25 +167,33 @@ export async function saveProposals(project, summaries, { cwd, env, deadline = D
       out.secret.push({ kind });
       continue;
     }
-    let args = proposalArgs(summary, { ownerName, date });
+    // "Add to the project rules: X?", or an instruction for how the agent works: a rule proposal.
+    const ruleForm = rules.has(normalizeSummary(summary));
+    const rule = ruleForm || proposalType(summary, ownerName) === 'rule';
+    const stated = statedInPrompt(summary, prompt);
+    const base = { ownerName, date, rule, ruleForm, stated };
+    let args = proposalArgs(summary, base);
     let res = await run(args);
     // Concept memory: the fact belongs in an existing concept, so the proposal
     // names that concept, and the owner's yes adds it there as a section.
-    const belongs = belongsOf(res);
+    const belongs = rule ? null : belongsOf(res);
     let concept = null;
     if (belongs) {
       concept = belongs.concept;
-      args = proposalArgs(summary, { ownerName, date, concept, section: belongs.section });
+      // The section heading is a few words from the fact (close-out finding 6),
+      // not the whole sentence the refused save used as its title.
+      args = proposalArgs(summary, { ...base, concept });
       res = await run(args);
       if (nameTaken(res)) {
-        const base = proposalName(ownerWording(summary, ownerName), proposalType(summary, ownerName)).slice(0, 40);
-        res = await run(proposalArgs(summary, { ownerName, date, concept, section: belongs.section, name: `proposal-${base}-2` }));
+        const stem = proposalName(ownerWording(summary, ownerName), proposalType(summary, ownerName)).slice(0, 40);
+        res = await run(proposalArgs(summary, { ...base, concept, name: `proposal-${stem}-2` }));
       }
     }
     let similar = similarOf(res);
     // The same name, but not the same meaning: try once more under another name.
     if (similar && similar.every((x) => x.why === 'the same key')) {
-      res = await run(proposalArgs(summary, { ownerName, date, name: `${proposalName(ownerWording(summary, ownerName), proposalType(summary, ownerName)).slice(0, 47)}-2` }));
+      const stem = proposalName(ownerWording(summary, ownerName), rule ? 'user' : proposalType(summary, ownerName));
+      res = await run(proposalArgs(summary, { ...base, name: `${rule ? 'rule-' : ''}${stem}`.slice(0, 47).replace(/-+$/, '') + '-2' }));
       similar = similarOf(res);
     }
     // Only about the same subject: the owner reviews every proposal, so it is saved anyway.
@@ -192,9 +202,9 @@ export async function saveProposals(project, summaries, { cwd, env, deadline = D
       similar = similarOf(res);
     }
     if (!res.skipped && !res.timedOut && res.code === 0 && res.json && res.json.key) {
-      out.saved.push({ key: res.json.key, summary, ...(concept ? { concept } : {}) });
+      out.saved.push({ key: res.json.key, summary, ...(concept ? { concept } : {}), ...(rule ? { rule: proposalRuleSection(summary) } : {}) });
     } else if (similar) {
-      out.similar.push({ summary, matches: similar.map((x) => ({ key: x.key, proposal: Boolean(x.proposal), why: x.why })) });
+      out.similar.push({ summary, ...(ruleForm ? { ruleForm: true } : {}), matches: similar.map((x) => ({ key: x.key, proposal: Boolean(x.proposal), why: x.why })) });
     } else {
       out.failed.push({ summary, error: errorOf(res) });
     }
@@ -206,6 +216,10 @@ export async function saveProposals(project, summaries, { cwd, env, deadline = D
 export function proposalNotes(result) {
   const lines = [];
   for (const s of result.saved) {
+    if (s.rule) {
+      lines.push(`At the end of the last turn the toolkit saved the unanswered question about "${s.summary}" as a rule proposal: ${s.key}. It is an instruction for how the agent works, so a yes adds it to the project rules (.claude/rules/owner-preferences.md, section "${s.rule}"), not to memory. It is not a rule yet. If the owner answers it now, his yes is toolkit memory approve ${s.key} --by <name> (--section '<area>' for another section) and his no is toolkit memory reject ${s.key}; otherwise work-decide asks him later.`);
+      continue;
+    }
     const joins = s.concept ? ` for the concept ${s.concept} (his yes adds it there as a section)` : '';
     // A proposal that names no concept starts one: the agent names it on the
     // yes (toolkit memory approve refuses a one-fact proposal without --concept).
@@ -217,11 +231,18 @@ export function proposalNotes(result) {
   for (const s of result.similar || []) {
     const proposals = s.matches.filter((m) => m.proposal).map((m) => m.key);
     const records = s.matches.filter((m) => !m.proposal).map((m) => m.key);
+    // The question as it was asked: the rules form or the memory form.
+    const asked = s.ruleForm ? `"Add to the project rules: ${s.summary}?"` : `"Save to memory: ${s.summary}?"`;
     if (proposals.length) {
-      lines.push(`The unanswered "Save to memory: ${s.summary}?" was not saved again: memory already has the proposal ${proposals.join(', ')} like it, which the owner has not answered. If he answers it now, his yes is toolkit memory approve <key> --by <name> and his no is toolkit memory reject <key>; otherwise work-decide asks him later.`);
+      const [one] = proposals;
+      const answer = proposals.length === 1
+        ? `his yes is toolkit memory approve ${one} --by <name> and his no is toolkit memory reject ${one}`
+        : `his yes is toolkit memory approve <key> --by <name> and his no is toolkit memory reject <key>, with the key of the proposal he answered`;
+      lines.push(`The unanswered ${asked} was not saved again: memory already has the ${s.ruleForm ? 'rule proposal' : 'proposal'} ${proposals.join(', ')} like it, which the owner has not answered. If he answers it now, ${answer}; otherwise work-decide asks him later.`);
     }
     if (records.length) {
-      lines.push(`The unanswered "Save to memory: ${s.summary}?" was not saved as a proposal: memory already has ${records.join(', ')} about the same subject. Check whether it is the same fact (toolkit memory get <key>). If it is a different fact and the owner says yes, save it with toolkit memory save ... --allow-similar --approved-by <name>.`);
+      const check = records.length === 1 ? `toolkit memory get ${records[0]}` : 'toolkit memory get <key> for each';
+      lines.push(`The unanswered ${asked} was not saved as a proposal: memory already has ${records.join(', ')} about the same subject. Check whether it is the same fact (${check}). If it is a different fact and the owner says yes, save it with toolkit memory save ... --allow-similar --approved-by <name>.`);
     }
   }
   for (const s of result.secret || []) {
@@ -257,11 +278,15 @@ export async function stop(input, io) {
   let asked = [];
   let loose = null;
   const message = input.last_assistant_message;
-  const questions = proposalQuestions(message);
+  const asks = proposalQuestions(message, { withKind: true });
+  const questions = asks.map((a) => a.summary);
+  const rules = new Set(asks.filter((a) => a.rule).map((a) => normalizeSummary(a.summary)));
+  let prompt = null;
   await updateSession(project, io.host, input, io.env, (state) => {
     const turn = state.turn;
     const sameTurn = turn && !(key && turn.key && key !== turn.key);
     if (sameTurn && !turn.stopBlocked) pending = turn;
+    if (sameTurn && typeof turn.prompt === 'string') prompt = turn.prompt;
     const memoryWrites = sameTurn ? (turn.records || []).filter((r) => r.kind === 'memory') : [];
     const turnSavedProposal = memoryWrites.some((r) => r.proposal);
     // The next prompt answers a memory question this reply asks (PostToolUse
@@ -288,12 +313,12 @@ export async function stop(input, io) {
 
   // Measured before the hook saves anything itself: a proposal the hook saves
   // is not the owner's "remember that" being recorded.
-  const keepUnrecorded = Boolean(pending && pending.keep && !(pending.records && pending.records.length) && !baselineMoved(project, pending.baseline));
+  const keepUnrecorded = Boolean(pending && pending.keep && !(pending.records && pending.records.length) && !baselineMoved(project, pending.baseline, io.env));
 
   // 2. Save the unanswered questions as proposals. Never blocks.
   let savedNow = [];
   if (asked.length) {
-    const result = await saveProposals(project, asked, { cwd: project.root, env: io.env, deadline: started + STOP_SAVE_BUDGET_MS });
+    const result = await saveProposals(project, asked, { cwd: project.root, env: io.env, deadline: started + STOP_SAVE_BUDGET_MS, rules, prompt });
     savedNow = result.saved;
     // When the owner's own keep phrase is still unrecorded, the block below
     // names the proposal to approve, so the next prompt does not call it unanswered.
@@ -318,7 +343,11 @@ export async function stop(input, io) {
   if (keepUnrecorded) {
     reasons.push(KEEP_REASON);
     // The owner's keep phrase is his approval: the proposal the hook just saved becomes a fact with his yes.
-    for (const s of savedNow) reasons.push(`The question "Save to memory: ${s.summary}?" was saved as the proposal ${s.key}; the owner's own words approve it: toolkit memory approve ${s.key} --by <owner>${s.concept ? '' : ` --concept ${conceptPrefix(s.key)}<subject>`}.`);
+    for (const s of savedNow) {
+      reasons.push(s.rule
+        ? `The question about "${s.summary}" was saved as the rule proposal ${s.key}; the owner's own words approve it: toolkit memory approve ${s.key} --by <owner> (it is added to .claude/rules/owner-preferences.md).`
+        : `The question "Save to memory: ${s.summary}?" was saved as the proposal ${s.key}; the owner's own words approve it: toolkit memory approve ${s.key} --by <owner>${s.concept ? '' : ` --concept ${conceptPrefix(s.key)}<subject>`}.`);
+    }
   }
   const bad = await invalidEdits(project, pending.edits);
   for (const b of bad) {

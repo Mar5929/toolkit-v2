@@ -23,7 +23,10 @@ import {
 } from './model.mjs';
 import { RECORD_FILE, DESIGN_FILE, loadTemplate } from './templates.mjs';
 import { TRACKER_DIR } from './state.mjs';
-import { isDesignQuestion, isResultQuestion, isDeliveryQuestion, isRequirementsQuestion, acceptanceCheckRecorded, acceptanceCheckNote } from './decisions.mjs';
+import {
+  isDesignQuestion, isResultQuestion, isDeliveryQuestion, isRequirementsQuestion, acceptanceCheckRecorded, acceptanceCheckNote,
+  acceptanceCheckOrSkipRecorded, acceptanceCheckRefusal, NO_CHECK_WORDS, smallItemRecorded, grownReason, deliveryRelookNote,
+} from './decisions.mjs';
 
 const MAX_TRIES = 6;
 
@@ -224,7 +227,11 @@ export async function opNew(tracker, project, { title, type, parent, stage, prio
   // A sub-item is part of its parent's goal: the delivery the owner chose for
   // the parent covers it (sample run b, round 3: a sub-item built agent-led
   // kept delivery: not-offered).
-  const inheritedDelivery = par && ['agent-led', 'owner-led'].includes(par.meta.delivery) ? par.meta.delivery : null;
+  // Owner-led recorded by the small-item rule is not an answer for the goal:
+  // the split makes the parent bigger, so the offer is looked at again
+  // (close-out 2026-09-28, finding 3) and the sub-item waits for it.
+  const parentSmall = par ? smallItemRecorded(par) : false;
+  const inheritedDelivery = par && !parentSmall && ['agent-led', 'owner-led'].includes(par.meta.delivery) ? par.meta.delivery : null;
   const fields = {
     id: `${tracker.prefix || 'WI'}-000`,
     title: String(title).trim(),
@@ -274,7 +281,9 @@ export async function opNew(tracker, project, { title, type, parent, stage, prio
   }
   const record = await mustGet(tracker, id);
   verify(record, { title: fields.title, stage: s, type: t }, id);
-  return { id, record, covers: coverIds || [], inherited, parentDesign, inheritedDelivery };
+  const notes = [];
+  if (parentSmall) notes.push(deliveryRelookNote(parentId, `it has the sub-item ${id}`));
+  return { id, record, covers: coverIds || [], inherited, parentDesign, inheritedDelivery, notes };
 }
 
 // ------------------------------------------------------------------ set
@@ -329,6 +338,12 @@ export async function opSet(tracker, id, opts = {}, { today, dryRun = false, own
   // 2026-09-28; final re-review R-B1): a note, never a refusal.
   if (stage && newStage === 11 && !acceptanceCheckRecorded(res.record.body)) {
     res.notes.push(`Note: ${acceptanceCheckNote(res.id, 'stage')}`);
+  }
+  // "Small item" is judged on the plan (close-out 2026-09-28, finding 3): an
+  // earlier call gets a note, and work decisions lists the offer again if the
+  // item grows.
+  if (res.deliveryChanged && res.record.meta.delivery === 'owner-led' && note && /\bsmall\s+item\b/i.test(String(note)) && (stageNumber(res.record.meta.stage) ?? 0) < 6) {
+    res.notes.push(`${res.id} was recorded owner-led as a small item before its plan exists (stage 06). If the plan or a split makes it bigger (sub-items, two phases, or more than two tasks), toolkit work decisions lists the delivery offer again.`);
   }
   // The delivery chosen for a goal covers the sub-items that were not asked about.
   if (res.deliveryChanged && ['agent-led', 'owner-led'].includes(res.record.meta.delivery)) {
@@ -569,9 +584,11 @@ function requirementWarnings(rec) {
  * Record the owner's approval of the requirements, the design, or the result.
  * @param {{ what: 'requirements'|'design'|'result', by: string }} opts
  */
-export async function opApprove(tracker, project, id, { what, by, today } = {}) {
+export async function opApprove(tracker, project, id, { what, by, today, noIndependentCheck = null } = {}) {
   if (!['requirements', 'design', 'result'].includes(what)) throw invalid('Say what is approved: --requirements, --design, or --result.');
   if (!by || !String(by).trim()) throw invalid('--by <name> is required: the person who approved.');
+  const skipReason = checkSkipReason(noIndependentCheck);
+  if (skipReason !== null && what !== 'result') throw invalid('--no-independent-check applies only to a result approval (--result).');
   const who = String(by).trim();
   const date = todayOf({ today });
   const approval = formatApproval(date, who);
@@ -630,12 +647,22 @@ export async function opApprove(tracker, project, id, { what, by, today } = {}) 
       }
       body = addHistory(body, { date, change: `Requirements approved by ${who}.`, effect });
     } else {
+      // The acceptance check comes before a result approval, whoever built it
+      // (the owner's decision of 2026-09-28): refused without one (R-B1 in code).
+      const checked = acceptanceCheckRecorded(rec.body);
+      if (!checked && skipReason === null) {
+        const r = acceptanceCheckRefusal(rec.id, 'approve');
+        throw invalid(r.message, { gate: r.gate, fix: r.fix });
+      }
       patch.result_approved = approval;
       const n = stageNumber(rec.meta.stage);
       if (n !== null && n < 9) warnings.push(`${rec.id} is at ${stageShort(rec.meta.stage)}; a result is usually approved at 11 User approval.`);
-      if (!acceptanceCheckRecorded(rec.body)) warnings.push(acceptanceCheckNote(rec.id, 'approve'));
       effect = `The result can be shipped and finished (work-finish).${waitNote}`;
-      body = addHistory(body, { date, change: `Result approved by ${who}.`, effect });
+      const change = !checked
+        ? `Result approved by ${who} ${NO_CHECK_WORDS}: ${skipReason.replace(/[.\s]+$/, '')}.`
+        : `Result approved by ${who}.`;
+      if (!checked) warnings.push(`No independent acceptance check ran for ${rec.id}; the reason is in its history. Tell the owner so in the reply.`);
+      body = addHistory(body, { date, change, effect });
     }
     if (closed.length) body = setQuestionStatus(body, closed, 'Answered');
     const back = verify(await save(tracker, rec, { meta: patch, body }), patch, rec.id);
@@ -1061,6 +1088,13 @@ export function quotesOwner(note, ownerName) {
 
 export async function opHistory(tracker, id, { note, effect, today } = {}) {
   if (!note || !String(note).trim()) throw invalid('--note <text> is required.');
+  // Only toolkit work approve writes a result approval row; a note that reads
+  // like one could stand in for the acceptance check (verifier, 2026-09-29).
+  if (/^\s*Result approved by\b/i.test(String(note))) {
+    throw invalid('A note cannot record a result approval: that row is written by toolkit work approve --result. Nothing was changed.', {
+      fix: `Record the owner's words with --note 'Owner said: <his words>', and his approval with toolkit work approve ${id} --result --by <name>.`,
+    });
+  }
   const date = todayOf({ today });
   return change(tracker, async () => {
     const rec = await mustGet(tracker, id);
@@ -1135,8 +1169,24 @@ export async function opEdit(tracker, id, { section, text, appendRow, label, val
       const note = questionRowNote(rec.id, section, appendRow, tracker.ownerName);
       if (note) warnings.push({ level: 'note', code: 'QUESTION_WITHOUT_RECOMMENDATION', message: note });
     }
+    // A plan that makes a small item bigger: the delivery offer is looked at again.
+    const relook = grewPastSmall(rec, back);
+    if (relook) warnings.push({ level: 'note', code: 'DELIVERY_RELOOK', message: relook });
     return { id: rec.id, changed: true, record: back, warnings };
   });
+}
+
+/**
+ * The re-look note when an item recorded owner-led by the small-item rule is
+ * bigger after a change than before it (close-out 2026-09-28, finding 3), else null.
+ */
+export function grewPastSmall(before, after) {
+  const item = { id: after.id, meta: after.meta, body: after.body };
+  if (!smallItemRecorded(item)) return null;
+  const now = grownReason(item);
+  if (!now) return null;
+  const was = grownReason({ id: before.id, meta: before.meta, body: before.body });
+  return was === now ? null : deliveryRelookNote(after.id || after.meta.id, now);
 }
 
 /**
@@ -1191,9 +1241,10 @@ async function openSubItems(tracker, rec) {
  * result approval, it also needs the owner's own words approving the result
  * (--quote), and records that approval.
  */
-export async function opFinish(tracker, id, { by, evidence, quote, allowOpenSubItems = false, today } = {}) {
+export async function opFinish(tracker, id, { by, evidence, quote, allowOpenSubItems = false, today, noIndependentCheck = null } = {}) {
   if (!by || !String(by).trim()) throw invalid('--by <name> is required: the owner who approved the result.');
   if (!evidence || !String(evidence).trim()) throw invalid('--evidence <text> is required: what shows the result works.');
+  const skipReason = checkSkipReason(noIndependentCheck);
   const who = String(by).trim();
   const date = todayOf({ today });
   return change(tracker, async () => {
@@ -1213,6 +1264,12 @@ export async function opFinish(tracker, id, { by, evidence, quote, allowOpenSubI
         fix: `Finish or cancel them first, or add --allow-open-sub-items when the owner says the parent is done anyway.`,
       });
     }
+    // The acceptance check, or a recorded reason there was none (R-B1 in code).
+    const checked = acceptanceCheckOrSkipRecorded(rec.body, { resultApproved: isApproved(rec.meta.result_approved) });
+    if (!checked && skipReason === null) {
+      const r = acceptanceCheckRefusal(rec.id, 'finish');
+      throw invalid(r.message, { gate: r.gate, fix: r.fix });
+    }
     const patch = { status: 'Done', waiting_on: 'none', updated: date };
     const hadApproval = isApproved(rec.meta.result_approved);
     const words = quote && String(quote).trim() ? String(quote).trim() : null;
@@ -1231,12 +1288,24 @@ export async function opFinish(tracker, id, { by, evidence, quote, allowOpenSubI
     body = setResumeHere(body, `Finished on ${date}. Nothing to resume.`);
     body = addHistory(body, {
       date,
-      change: `Finished. ${hadApproval ? `Result approved earlier (${rec.meta.result_approved}); marked Done by ${who}.` : `Result approved by ${who}: "${words}"`}`,
+      change: `Finished. ${hadApproval ? `Result approved earlier (${rec.meta.result_approved}); marked Done by ${who}.` : `Result approved by ${who}: "${words}"`}${checked ? '' : ` Finished ${NO_CHECK_WORDS}: ${skipReason.replace(/[.\s]+$/, '')}.`}`,
       effect: `Evidence: ${String(evidence).trim()}${open.length ? ` Open sub-items left: ${open.map((k) => k.id).join(', ')}.` : ''}`,
     });
     const back = verify(await save(tracker, rec, { meta: patch, body }), { status: 'Done' }, rec.id);
     return { id: rec.id, record: back, openSubItems: open, resultApproval: back.meta.result_approved, warnings: finishWarnings(rec) };
   });
+}
+
+/**
+ * The reason given with --no-independent-check, or null when the flag was not
+ * given. The flag needs a reason: why this host could not start a worker.
+ */
+function checkSkipReason(noIndependentCheck) {
+  if (noIndependentCheck === null || noIndependentCheck === undefined || noIndependentCheck === false) return null;
+  const reason = typeof noIndependentCheck === 'string' ? noIndependentCheck : noIndependentCheck && noIndependentCheck.reason;
+  const t = String(reason ?? '').replace(/\s+/g, ' ').trim();
+  if (!t) throw invalid('--no-independent-check needs --reason <text>: why this host could not start an acceptance-checker. It is recorded in the item\'s history.');
+  return t;
 }
 
 function oneLine(text) {

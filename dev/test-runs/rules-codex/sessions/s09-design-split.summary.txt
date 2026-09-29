@@ -1,0 +1,997 @@
+PROMPT: I approve Option A. Before you build, split the --cents option out into its own sub-item under WI-001, so WI-001 is only the dollar fee and total.
+THREAD: 01a0edd8-267e-7603-80ea-a7a0f63e6cff
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll record your approval of Option A, move `--cents` into a sub-item, and update WI-001 so its scope covers only dollar amounts. I’ll check the item’s current requirements and design before changing them.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-decide/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-organize/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-requirements/SKILL.md'
+  -> ---
+name: work-decide
+description: 'Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers. Use when he asks "what do you need from me", answers a waiting decision ("go with option B"), or states a project-wide decision.'
+---
+
+# Work decide
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Walks the owner through what waits on him, one decision at a time, and records each answer where it belongs. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Build the queue. The command lists each decision once: requirements waiting for approval, proposed designs, results at stage 11, Open Questions rows the owner decides, and memory proposals. Its "Agent to-do" lines are not decisions. A delivery offer belongs to `work-delegate`: open it after his other decisions.
+   `toolkit work decisions`
+2. He gave an answer without being asked ("approved", "go with B"): match it to exactly one waiting decision; when two could match, ask which, naming both. A bare "yes", "ok", or "looks good" with no question asked is not an answer (`references/approvals.md`, section 1).
+3. Otherwise start with the count and one short line for every waiting decision, memory proposals included ("3 decisions wait on you: the WI-004 design, the WI-006 result, and a 
+
+[CMD exit=0] /bin/zsh -lc 'cat .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/owner-preferences.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md'
+  -> # Humanize Anything Sent to Another Person
+
+Any text that will leave the project and be read by someone other than the owner
+is run through the `humanizer` skill before the owner sees the final version.
+Use the `unslop` skill when `humanizer` is not installed. That covers emails,
+chat messages, supp
+
+[CMD exit=0] /bin/zsh -lc 'git status --short && rg --files .work-items tests .memory | head -80'
+  -> .memory/AGENTS.md
+.memory/project_billing.md
+.memory/terminology-glossary.md
+.memory/MEMORY.md
+.memory/memory-criteria.md
+.memory/CURRENT_FOCUS.md
+.memory/project_topic_template.md
+tests/TEST-PLAN-TEMPLATE.md
+.work-items/DASHBOARD.md
+.work-items/work-item-template/WORK-ITEM.md
+.work-items/work-item-
+
+[AGENT] I’m using the work-decision and work-organization procedures for the approval and split. The requirement procedure also applies because moving `--cents` changes what WI-001 is meant to deliver.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-organize/references/moves.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-decide/references/approvals.md'
+  -> # Moves, splits, and hand changes: cases
+
+What to ask or do for each change the tracker reports, how to split an item
+into sub-items, and how to move or archive items on request. What the CLI
+already does by itself is in `tracker-local.md` and `tracker-notion.md`.
+
+## Contents
+
+1. Reporting what the CLI already adapted
+2. Cases that need the owner
+3. Splitting an item (stage 05)
+4. Moving, grouping, and archiving
+5. Things never done here
+
+## 1. Reporting what the CLI already adapted
+
+Each report line is written to be said to the owner as it is. Say each one
+in the reply, one line each, before other work. Do not guess at a cause the
+line does not name. The CLI already wrote the history rows; add a note only
+for the owner's reason.
+
+| The line starts with | Example | Add |
+| --- | --- | --- |
+| `Moved:` | "Moved: WI-007 from WI-003-csv/WI-007-export to WI-007-export (moved by hand). It is now a top-level item. It was a sub-item of WI-003." | Nothing, unless a side effect in section 2 applies |
+| `Renamed folder:` | "Renamed folder: WI-002's folder was renamed by hand from wi-002-help to help-option; the item itself is the same. It is still a top-level item." | Nothing |
+| `Re-parented:` | "Re-parented: WI-009 was put under WI-004 in Notion by hand. Its parent is now WI-004. It was a top-level item." | Nothing, unless a side effect in section 2 applies |
+| `Archived:` | "Archived: WI-005 was archived in Notion by hand (its Archived box was ticked), so it is hidden from the boar
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-requirements/references/interview.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-requirements/references/requirement-format.md'
+  -> # Interviewing the owner
+
+How to run the requirements interview: what to read first, how to ask, how
+to handle "grill me", resuming, and corrections. Everything the owner says
+lands in the work item, never in a separate notes file.
+
+## Contents
+
+1. Aim at the outcome he wants
+2. Before the first question
+3. Asking
+4. "Grill me" and "ask me questions"
+5. Saving as you go
+6. Resuming an interview
+7. Corrections and changes
+8. An example exchange
+
+## 1. Aim at the outcome he wants
+
+- Work toward the outcome the owner wants, not only the words he used. Read a
+  rough answer in the context of that requirement's purpose and the rest of
+  the system, and ask focused follow-up questions until the real intent is
+  clear.
+- Say so when an answer would undermine his own goal, conflict with a stated
+  constraint, cause a problem elsewhere, or when a clearly better approach
+  exists. Name the concern, the tradeoff, and the direction you recommend,
+  then let him choose. Once he has heard the concern and decided, do it his
+  way.
+- Never quietly replace what he said with what you inferred.
+- Keep it light. Do not read every answer back for approval, do not challenge
+  every answer, and do not start designing while the goal is still open.
+
+## 2. Before the first question
+
+Read, so no question repeats an answer:
+
+- the item: Starting request, Agreed goal, every `R-xx`, Open Questions, and
+  Notes > Resume here;
+- the area's file in `requirements/`, and `requirements/SYSTEM-DATA-MODEL.md`
+  w
+
+[CMD exit=0] /bin/zsh -lc 'cat .work-items/WI-001-build-the-late-fee-command/WORK-ITEM.md .work-items/WI-001-build-the-late-fee-command/DESIGN.md'
+  -> ---
+id: WI-001
+title: Build the late fee command
+type: build
+stage: 04-solution-design
+status: In Progress
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: not-offered
+requirements_approved: "2026-09-29 by Mike Rihm"
+design: proposed
+result_approved: "no"
+updated: 2026-09-29
+---
+
+# WI-001
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list && git status && git remote'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex 2295c7a [main]
+On branch main
+nothing to commit, working tree clean
+
+
+[CMD exit=0] /bin/zsh -lc "sed -n '1,240p' /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-organize/references/moves.md"
+  -> # Moves, splits, and hand changes: cases
+
+What to ask or do for each change the tracker reports, how to split an item
+into sub-items, and how to move or archive items on request. What the CLI
+already does by itself is in `tracker-local.md` and `tracker-notion.md`.
+
+## Contents
+
+1. Reporting what the CLI already adapted
+2. Cases that need the owner
+3. Splitting an item (stage 05)
+4. Moving, grouping, and archiving
+5. Things never done here
+
+## 1. Reporting what the CLI already adapted
+
+Each report line is written to be said to the owner as it is. Say each one
+in the reply, one line each, before other work. Do not guess at a cause the
+line does not name. The CLI already wrote the history rows; add a note only
+for the owner's reason.
+
+| The line starts with | Example | Add |
+| --- | --- | --- |
+| `Moved:` | "Moved: WI-007 from WI-003-csv/WI-007-export to WI-007-export (moved by hand). It is now a top-level item. It was a sub-item of WI-003." | Nothing, unless a side effect in section 2 applies |
+| `Renamed folder:` | "Renamed folder: WI-002's folder was renamed by hand from wi-002-help to help-option; the item itself is the same. It is still a top-level item." | Nothing |
+| `Re-parented:` | "Re-parented: WI-009 was put under WI-004 in Notion by hand. Its parent is now WI-004. It was a top-level item." | Nothing, unless a side effect in section 2 applies |
+| `Archived:` | "Archived: WI-005 was archived in Notion by hand (its Archived box was ticked), so it is hidden from the boar
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-decide/references/current-focus.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-organize/references/work-item-format.md'
+  -> <!-- Generated file. Source: plugins/memory/shared/current-focus.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# The current focus
+
+Purpose: the format of the current focus, when to change it, and the exact
+read-change-save sequence, in every memory backend.
+
+## Contents
+
+- What the focus is for
+- The format
+- What goes in each section
+- When to check it
+- Read, change, save
+- A new project's focus
+- Examples
+- Checklist for a focus save
+
+## What the focus is for
+
+The current focus is the first thing the next session reads: the session
+briefing includes it. It says what is happening now and where the next
+session starts. It never repeats the tracker: a work item's status, tasks,
+and history stay in the work item.
+
+| Backend | Where the focus lives |
+| --- | --- |
+| Built-in | `.memory/CURRENT_FOCUS.md` in the main checkout |
+| Hindsight | The document `focus` in the project's bank |
+| Notion | The "Current focus" page under the project's page |
+
+The same commands read and save it in every backend. Never edit the file or
+the page by hand.
+
+## The format
+
+The model's format: a `# Current focus` title line, a `Last updated:` line,
+then exactly four `##` sections in this order, under 50 lines in total.
+
+```markdown
+# Current focus
+
+Last updated: <YYYY-MM-DD>, <source>, <person or agent>
+
+## Now
+
+## Waiting on the owner
+
+## Untracked to-dos
+
+## Next session starts with
+```
+
+What the command enforces:
+
+- It refuses a focus that lacks one of the four se
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-on/SKILL.md'
+  -> ---
+name: work-on
+description: 'Starts, resumes, or logs a work item and builds it. Use whenever the owner asks to build, add, fix, or change something, names an item id to resume, says "keep going", or wants a bug or idea logged ("put it in the backlog"). Not for requirement edits (work-requirements) or handovers (work-delegate).'
+---
+
+# Work on
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Starts or resumes one work item, plans it, and builds it; it never records an approval, Done, a merge, or a deploy. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. No project briefing in this conversation: run the briefing. Exit code 4: open `project-setup` and stop. Tell the owner each change listed under "Changes found in the tracker", one line each in the CLI's words, before other work.
+   `toolkit brief`
+2. A bare "ok", "yes", or "looks good" when this chat asked him nothing: start no work and ask what he wants. Otherwise find the item: the id he named, this worktree's item, or a title that matches. Two matches: ask one question naming both.
+   `toolkit work list`
+   `toolkit work show <id>`
+3. No item yet: size the request as a quick edit, log only, or a work item, and pick the type (`references/sizing-and-routing.md`, sections 1 to 3). He asks to be asked first ("ask me questions"
+
+[CMD exit=0] /bin/zsh -lc "sed -n '1,250p' .work-items/WI-001-build-the-late-fee-command/DESIGN.md"
+  -> ---
+work_item: WI-001
+status: proposed
+approved: "no"
+---
+
+# WI-001: Build the late fee command — solution design
+
+**Requirements:** WI-001  
+**Design status:** Draft  
+**Requirements checked:** R-01, R-02, R-03; approved by Mike Rihm on 2026-09-29  
+**Last updated:** 2026-09-29  
+**Design approval:
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work sync'
+  -> Nothing changed: every item is where the tracker expected it, and every derived value is in step.
+
+Dashboard: .work-items/DASHBOARD.md
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work list --tree'
+  -> WI-001  Build the late fee command  (04 Solution design, In Progress, waiting on owner)
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history WI-001 --note 'Owner said: I approve Option A. Before you build, split the --cents option out into its own sub-item under WI-001, so WI-001 is only the dollar fee and total.' --effect 'Option A approved with R-03 assigned to a child; WI-001 implementation covers R-01 and R-02.'"
+  -> Added a Recent History row to WI-001.
+
+
+[AGENT] The approved requirements separate cleanly: R-01 calculates the fee and total, R-02 prints dollars, and R-03 adds the `--cents` line. I’ve recorded your exact instruction. I’m assigning R-03 to the child while keeping WI-001’s direct build focused on R-01 and R-02.
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --stage 05-breakdown'
+  -> Updated WI-001: stage 04 Solution design -> 05 Breakdown (status In Progress).
+Now 05 Breakdown (In Progress). Continue with work-decide.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work new --title 'Add the --cents option' --type build --parent WI-001 --covers R-03"
+  -> Created WI-002: Add the --cents option (03 Requirements approved, Ready, sub-item of WI-001) at .work-items/WI-001-build-the-late-fee-command/WI-002-add-the-cents-option/WORK-ITEM.md.
+It delivers WI-001 R-03 and inherits that requirements approval (2026-09-29 by Mike Rihm).
+Continue with solution-design.
+
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-decide/references/current-focus.md'
+  -> <!-- Generated file. Source: plugins/memory/shared/current-focus.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# The current focus
+
+Purpose: the format of the current focus, when to change it, and the exact
+read-change-save sequence, in every memory backend.
+
+## Contents
+
+- What the focus is for
+- The format
+- What goes in each section
+- When to check it
+- Read, change, save
+- A new project's focus
+- Examples
+- Checklist for a focus save
+
+## What the focus is for
+
+The current focus is the first thing the next session reads: the session
+briefing includes it. It says what is happening now and where the next
+session starts. It never repeats the tracker: a work item's status, tasks,
+and history stay in the work item.
+
+| Backend | Where the focus lives |
+| --- | --- |
+| Built-in | `.memory/CURRENT_FOCUS.md` in the main checkout |
+| Hindsight | The document `focus` in the project's bank |
+| Notion | The "Current focus" page under the project's page |
+
+The same commands read and save it in every backend. Never edit the file or
+the page by hand.
+
+## The format
+
+The model's format: a `# Current focus` title line, a `Last updated:` line,
+then exactly four `##` sections in this order, under 50 lines in total.
+
+```markdown
+# Current focus
+
+Last updated: <YYYY-MM-DD>, <source>, <person or agent>
+
+## Now
+
+## Waiting on the owner
+
+## Untracked to-dos
+
+## Next session starts with
+```
+
+What the command enforces:
+
+- It refuses a focus that lacks one of the four se
+
+[CMD exit=0] /bin/zsh -lc 'cat .work-items/WI-001-build-the-late-fee-command/WI-002-add-the-cents-option/WORK-ITEM.md'
+  -> ---
+id: WI-002
+title: Add the --cents option
+type: build
+stage: 03-requirements-approved
+status: Ready
+parent: WI-001
+waiting_on: "none"
+priority: medium
+delivery: not-offered
+requirements_approved: "2026-09-29 by Mike Rihm"
+design: none
+result_approved: "no"
+updated: 2026-09-29
+---
+
+# WI-002: Add t
+
+[CMD exit=0] /bin/zsh -lc 'tail -75 .work-items/WI-001-build-the-late-fee-command/DESIGN.md'
+  -> #### Build order
+
+1. Add the CLI entry point and complete argument validation.
+2. Add exact amount parsing, fee rounding, total calculation, and formatting.
+3. Add the requested stdout/stderr paths, including the optional cents line.
+4. Run the acceptance checks and record the observed results in WI
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-002 --path'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex/.work-items/WI-001-build-the-late-fee-command/WI-002-add-the-cents-option/WORK-ITEM.md
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001 --path'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex/.work-items/WI-001-build-the-late-fee-command/WORK-ITEM.md
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section Overview --text '**Goal:** Provide a late fee command that reports the fee and total due in dollars.
+
+**Current position:** R-01 and R-02 remain the direct scope of WI-001. Mike approved Option A on 2026-09-29. WI-002 covers R-03, the optional cents output. No implementation has started.
+
+**Next action:** Complete the selected Option A design and plan the dollar command. Make the delivery offer before building.
+
+**Blockers:** Delivery choice before implementation.
+
+**Related items:** WI-002 adds the --cents option under R-03.'"
+  -> Saved "Overview" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section Roadmap --text 'A phase is complete when its tasks are complete and its exit result has been checked.
+
+| Phase | Outcome | Status | Exit result | Sub-items |
+|---|---|---|---|---|
+| P1 — Dollar fee and total | The command prints the late fee and total due in dollars. | Not Started | R-01 and R-02 acceptance checks pass. | None. |
+| P2 — Cents extension | The optional cents line is added after the dollar command. | Not Started | WI-002 passes its R-03 acceptance checks. | WI-002 |'"
+  -> Saved "Roadmap" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Agreed goal' --text 'Provide a command that calculates a 0.25% daily late fee on an invoice and prints the late fee and total due in dollars. WI-002 delivers the separately requested --cents option under R-03.'"
+  -> Saved "Agreed goal" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section Acceptance --text 'This work item can be accepted when:
+
+1. Running node bin/feecalc.js 200 --days 10 prints exactly \"Late fee: "'$5.00  Total due: $205.00" (R-01, R-02).
+2. Running the command with a missing or invalid input prints a clear error on standard error, exits unsuccessfully, and prints no total (R-01, R-02).
+3. The dollar command correctly rounds a half-cent fee up once and adds the rounded fee to the invoice amount (R-01).
+4. The owner approves the dollar command result. WI-002 has separate acceptance for the optional --cents outpu
+  -> Saved "Acceptance" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --section Overview --text '**Goal:** Add an optional --cents output line with the total due as whole cents.
+
+**Current position:** Created as a child of WI-001 for R-03. It inherits the requirements approval recorded on 2026-09-29. No implementation has started.
+
+**Next action:** Use the approved Option A design after WI-001 records it, then plan this extension after the dollar command.
+
+**Blockers:** WI-001 dollar command and its design approval.
+
+**Related items:** Parent WI-001 supplies the fee and dollar total; this item covers WI-001 R-03.'"
+  -> Saved "Overview" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --section 'Starting request' --text 'Mike Rihm asked on 2026-09-29: Before you build, split the --cents option out into its own sub-item under WI-001, so WI-001 is only the dollar fee and total. The original request asks the option to add a second line with the total due in whole cents for the billing API.'"
+  -> Saved "Starting request" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --section Acceptance --text 'This work item can be accepted when:
+
+1. Running node bin/feecalc.js 200 --days 10 --cents prints the dollar line followed by exactly \"Total due in cents: 20500\" (WI-001 R-03).
+2. Running node bin/feecalc.js 1 --days 2 --cents prints a total due of "'$1.01 and a cents line of 101 (WI-001 R-03).
+3. Running without --cents continues to print only the dollar line.
+4. The owner approves this sub-item result separately.'"'"
+  -> Saved "Acceptance" in WI-002.
+
+
+[AGENT] WI-002 now exists under WI-001 and inherits approval for R-03. I’ve changed WI-001’s goal and acceptance checks to the dollar output and given WI-002 its own cents checks. Next I’m updating the approved design so each item’s build steps match that split.
+
+[FILE_CHANGE] [{"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex/.work-items/WI-001-build-the-late-fee-command/DESIGN.md", "kind": "update"}]
+
+[CMD exit=0] /bin/zsh -lc "rg -n 'Owner decision|End-to-end flow|WI-002|Pending owner|Current position and next step' .work-items/WI-001-build-the-late-fee-command/DESIGN.md"
+  -> 17:Mike needs a command that computes an overdue invoice's late fee and total due in dollars. WI-002 adds the optional whole-cent output for the billing API after the dollar command is built. The calculation must be exact for valid input, including values beyond JavaScript's safe integer range.
+25:|
+
+[FILE_CHANGE] [{"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex/.work-items/WI-001-build-the-late-fee-command/DESIGN.md", "kind": "update"}]
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work design WI-001 --set-file .work-items/WI-001-build-the-late-fee-command/DESIGN.md'
+  -> Saved the design of WI-001 (proposed) at /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex/.work-items/WI-001-build-the-late-fee-command/DESIGN.md.
+It is proposed until the owner approves it: toolkit work approve <id> --design --by <name>.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work approve WI-001 --design --by 'Mike Rihm'"
+  -> Recorded: design of WI-001 approved (2026-09-29 by Mike Rihm).
+It is no longer waiting on the owner (waiting_on: none).
+Now 05 Breakdown (In Progress). Continue with work-organize.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-002'
+  -> WI-002: Add the --cents option
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex/.work-items/WI-001-build-the-late-fee-command/WI-002-add-the-cents-option/WORK-ITEM.md
+Stage: 03 Requirements approved (Ready) | Waiting on: none | Continue with: solution-design
+Parent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/WI-001-build-the-late-fee-command/DESIGN.md). Read it with: toolkit work design WI-001
+Worktree branch for this item: claude/wi-002-add-the-cents-option (folder .claude/worktrees/wi-002-add-the-cents-option)
+
+---
+id: WI-002
+title: Add the --cents option
+type: build
+stage: 03-requirements-approved
+status: Ready
+parent: WI-001
+waiting_on: "none"
+priority: medium
+delivery: not-offered
+requirements_approved: "2026-09-29 by Mike Rihm"
+design: none
+result_approved: "no"
+updated: 2026-09-29
+---
+
+# WI-002: Add the --cents option
+
+## Overview
+
+**Goal:** Add an optional --cents output line with the total due as whole cents.
+
+**Current position:** Created as a child of WI-001 for R-03. It inherits the requirements approval recorded on 2026-09-29. No implementation has started.
+
+**Next action:** Use the approved Option A design after WI-001 records it, then plan this extension after the dollar command.
+
+**Blockers:** WI-001 dollar command and its design approval.
+
+**Related items:** Parent WI-001 supplies the fee and dollar total; th
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-delegate/SKILL.md'
+  -> ---
+name: work-delegate
+description: 'Hands a work item''s goal to a team of agents with the owner as product owner: makes the delivery offer, records his choice, and runs the team. Use whenever the owner hands a goal over ("you drive", "take it from here"), even a named item, or work-on starts a large goal with no delivery choice.'
+---
+
+# Work delegate
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+The only skill that makes the agent-led delivery offer and records the answer; after a yes it runs the team through the skill that owns each stage. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Look for a delivery choice that covers this goal: the item's `delivery` value, its Notes > Decisions and context, and its parent's choice. A sub-item makes no offer. A quick question, a small edit, or a small item (one or two tasks, no sub-items) gets no offer: record owner-led with the reason and go on (`references/agent-led-delivery.md`, section 1).
+   `toolkit work show <id> --section 'Decisions and context'`
+   `toolkit work set <id> --delivery owner-led --note 'Small item: one or two tasks, so no delivery offer.'`
+2. No choice recorded: add the offer as an Open Questions row, set the item waiting on the owner, and give your recommendation with its main reason in one line before the 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate'
+  -> Checked 2 items: 2 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+
+None open.'"
+  -> Saved "Open Questions" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --section 'Decisions and context' --text '- Mike Rihm assigned the optional cents output to this sub-item on 2026-09-29 and approved Option A for the parent design. WI-002 inherits the approved R-03 requirement and uses the parent design.'"
+  -> Saved "Decisions and context" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --section 'Resume here' --text 'R-03 is approved through WI-001. The approved Option A design assigns the cents line to this child. Wait until WI-001 builds the dollar command, then plan and build the optional flag with separate checks and result approval.'"
+  -> Saved "Resume here" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --section 'Solution options and considerations' --text 'The approved Option A design in WI-001 specifies how this child adds the optional cents line. No separate solution choice is open.'"
+  -> Saved "Solution options and considerations" in WI-002.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Resume here' --text 'Mike approved Option A on 2026-09-29. WI-001 directly delivers R-01 and R-02: the dollar fee and total. WI-002 inherits R-03 and adds --cents later. Complete the delivery choice, plan WI-001 from the approved design, and build the dollar command before WI-002.'"
+  -> Saved "Resume here" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Decisions and context' --text '- Mike Rihm approved R-01 to R-03 on 2026-09-29.
+- Mike Rihm approved Option A on 2026-09-29 and instructed that --cents become sub-item WI-002 before any build. WI-001 directly builds only R-01 and R-02; WI-002 covers R-03 and has separate acceptance.
+- Design approach: use built-in Node.js features and exact integer-cent arithmetic. The approved design records the split.
+- The earlier design review passed independent critique before this scope split. No implementation has started.'"
+  -> Saved "Decisions and context" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-002 --section Overview --text '**Goal:** Add an optional --cents output line with the total due as whole cents.
+
+**Current position:** Created as a child of WI-001 for R-03. It inherits the requirements approval and approved Option A design recorded on 2026-09-29. No implementation has started.
+
+**Next action:** Plan this extension after WI-001 builds the dollar command.
+
+**Blockers:** WI-001 dollar command must be built first.
+
+**Related items:** Parent WI-001 supplies the fee and dollar total; this item covers WI-001 R-03.'"
+  -> Saved "Overview" in WI-002.
+
+
+[AGENT] Option A is recorded as approved. WI-001’s design now assigns the dollar command to WI-001 and the optional cents line to WI-002. I’m checking the tracker and updating the next-session pointer before the delivery step.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.3.0/skills/memory-save/SKILL.md .memory/AGENTS.md .memory/memory-criteria.md'
+  -> ---
+name: memory-save
+description: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says "remember this", "from now on", "forget that", or "remind me" with no time given, corrects the agent, or a hook says a save is due.'
+---
+
+# Memory save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Saves, corrects, or retires one fact in the project's memory with `toolkit memory` commands, or sends it to its proper home. It never edits memory files by hand. Rules, skills, and memory each hold one kind of thing (Mike, 2026-09-29): an instruction the agent follows every time goes in the rules (`toolkit rule add`), a procedure that proved itself in a skill, and a fact or an unproven lesson in memory. Memory keeps one record per concept (for example `user_profile`, `project_billing`), with one `##` section per fact and a last "Gotchas and lessons" section; an `event_` record holds one episode. The prefixes are `user_`, `project_`, `reference_`, and `event_`; `feedback_` is retired.
+
+## Steps
+
+Track these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+1. Decide the home. An instruction for how the agent works (a preference about how work is done, a correction, "from now on", "always", "never") is a rule: save it with `toolkit rule a
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> Nothing is waiting on the owner.
+
+Agent to-do (the agent's step, not a decision the owner is waiting on):
+  - Make the agent-led delivery offer for WI-001 (it has 1 sub-item). work-delegate asks the owner once per goal. (work-delegate)
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work list --tree'
+  -> WI-001  Build the late fee command  (05 Breakdown, In Progress)
+  WI-002  Add the --cents option  (03 Requirements approved, Ready)
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate'
+  -> Checked 2 items: 2 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+
+
+[CMD exit=0] /bin/zsh -lc "sed -n '1,125p' /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-delegate/references/agent-led-delivery.md"
+  -> # Agent-led delivery
+
+The rules for the delivery offer: when to make it, the exact questions, how
+to record the owner's answers, and what an acceptance allows. The four
+questions keep their exact wording. The choice is recorded in the work item's
+Notes > Decisions and context and in its `delivery` value, in every tracker.
+
+## Contents
+
+1. Offer once for the goal
+2. Ask how the team is arranged
+3. Record the choice
+4. Divide responsibility
+
+## 1. Offer once for the goal
+
+First read the item's `delivery` value and its Notes > Decisions and context
+to see whether the owner already accepted, declined, or revoked agent-led
+delivery for this goal. `not-offered` means no answer is recorded yet. Do not
+treat missing access as an undecided choice. When the records show no choice,
+ask exactly:
+
+> Would you like agents to take responsibility for delivering this, with you acting as product owner?
+
+`work-delegate` is the only skill that makes this offer or records its
+answer. `work-on`, `work-decide`, and the session briefing only point at it,
+so the owner is asked once, in one place.
+
+Do not make this offer for a simple question or quick edit, or for a small
+item (one or two tasks, no sub-items): record owner-led at once, with the
+reason, so the briefing stops listing the offer as an agent to-do.
+
+```text
+toolkit work set <id> --delivery owner-led --note 'Small item: one or two tasks, so no delivery offer.'
+```
+
+Judge "small" on the plan: an item before stage 06 has no plan yet, and the
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus --json'
+  -> {
+  "ok": true,
+  "backend": "builtin",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-29, chat, agent\n\n## Now\n\n- WI-001 Build the late fee command\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 from its Resume here: Mike needs to choose and approve the proposed Option A design before implementation.\n",
+  "version": "92c85a638510de5a657862ba87728616e967bc5464bbd061f2ddaef470ac98bd"
+}
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Open Questions' --append-row '| Q-05 | Would you like agents to take responsibility for delivering this, with you acting as product owner? | delivery | Open | owner |'"
+  -> Saved "Open Questions" in WI-001.
+Note: Q-05 holds no recommendation. When you gave the owner one with the question, add it to the Question cell ("<question> Recommended: <answer>, because <reason>."), so a later session knows what "go with your recommendation" means.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show WI-001 --section 'Open Questions'"
+  -> ## Open Questions
+
+| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | Answered 2026-09-29 by Mike Rihm: round the fee and the total to the nearest cent, with half a cent rounded up. | R-01, R-03 | Answered | owner |
+| Q-02 | Answered 2026-09-29 by Mike Rihm: invoice amounts of $0 or more with at most two decimal places, and whole numbers of days of 0 or more. | R-01 | Answered | owner |
+| Q-03 | Answered 2026-09-29 by Mike Rihm: a missing or invalid input produces a clear error on standard error, a failing exit, and no total printed. | R-01, R-02 | Answered | owner |
+| Q-04 | Answered 2026-09-29 by Mike Rihm: the total due is the invoice amount plus the rounded fee. | R-01, R-03 | Answered | owner |
+| Q-05 | Would you like agents to take responsibility for delivering this, with you acting as product owner? | delivery | Open | owner |
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | Answered 2026-09-29 by Mike Rihm: round the fee and the total to the nearest cent, with half a cent rounded up. | R-01, R-03 | Answered | owner |
+| Q-02 | Answered 2026-09-29 by Mike Rihm: invoice amounts of "'$0 or more with at most two decimal places, and whole numbers of days of 0 or more. | R-01 | Answered | owner |
+| Q-03 | Answered 2026-09-29 by Mike Rihm: a missing or invalid input produces a clear error on standard error, a
+  -> Saved "Open Questions" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --waiting-on owner'
+  -> Updated WI-001: waiting on owner.
+Now 05 Breakdown (In Progress). Continue with work-decide.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-29, chat, agent
+
+## Now
+
+- WI-001 Build the late fee command
+- WI-002 Add the --cents option
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 from its Resume here: Option A is approved and WI-002 cov
+  -> Saved the current focus (21 lines). Version: e6a9f1961c60
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-29, chat, agent
+
+## Now
+
+- WI-001 Build the late fee command
+- WI-002 Add the --cents option
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 from its Resume here: Option A is approved and WI-002 covers --cents. Resolve Q-05, then plan and build the dollar command.
+
+
+[CMD exit=0] /bin/zsh -lc 'git status --short'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 1 decision waits on the owner:
+
+WI-001 Build the late fee command
+  - Q-05: Would you like agents to take responsibility for delivering this, with you acting as product owner? Recommended: yes, because WI-001 now has a separate WI-002 extension and each result needs its own checks. Affects delivery. (work-decide)
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate'
+  -> Checked 2 items: 2 clean, 0 errors, 0 approval gate problems. 1 open question waits on the owner (toolkit work decisions lists it).
+
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for feecalc (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (4):
+- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's versio
+
+[AGENT] Option A is recorded as approved. WI-001 now covers the dollar late fee and total; **WI-002** is its sub-item for `--cents`. R-03 remains in WI-001 as the approved source requirement, with WI-002 assigned to deliver it. The tracker validates, and no build has started.
+
+The project’s work-delegate procedure requires a delivery choice before I build this split item. I recommend yes because the dollar command and cents extension need separate checks and result approvals.
+
+Would you like agents to take responsibility for delivering this, with you acting as product owner?
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 2887373, "cached_input_tokens": 2804096, "cache_write_input_tokens": 0, "output_tokens": 11278, "reasoning_output_tokens": 3412}}
+
+SKILLS OPENED: ['work-decide', 'work-organize', 'work-requirements', 'work-on', 'work-delegate', 'memory-save']
+
+[HOOK CONTEXT ord=9] Project briefing: feecalc (feecalc), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Build the late fee command: 04 Solution design, In Progress, waiting on owner. Next action: Mike chooses and approves Option A, or requests a design change. Then the agent completes the selected design and plans implementation. Continues with work-decide.
+
+Waiting on the owner:
+- WI-001 Build the late fee command: The design for WI-001 is proposed and waits for the owner's approval. Approve with: toolkit work approve WI-001 --design --by <name>. (work-decide)
+
+Agent to-do (not a decision the owner is waiting on):
+- WI-001 Build the late fee command: Make
+
+[HOOK CONTEXT ord=139] The design of WI-001 was edited directly and passes validation. toolkit work design <id> --set-file <file> (or --text '<text>') saves a design the same way in every tracker and keeps its status; prefer it to editing DESIGN.md.
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat SOUL.md PROJECT.md PROJECT-ROADMAP.md",max_output_tokens:5000}),
+  tools.exec_command({cmd:"cat .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/owner-preferences.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md",max_output_tokens:10000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-decide/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-organize/SKILL.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-requirements/SKILL.md",max_output_tokens:12000}),
+  tools.exec_command({cmd:"git status --short && rg --files .work-items tests .memory | head -80",max_output_tokens:3000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "Warning: truncated output (original token count: 10297)\nTotal output lines: 4\n\n{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"b699c8\",\"wall_time_seconds\":0,\"exit_code\":1,\"original_token_count\":1211,\"output\":\"cat: SOUL.md: No such file or directory\\n# feecalc\\n\\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\\n\\n## Purpose and intended outcome\\n\\n- Purpose: `<Why this project exists.>`\\n- Intended outcome: feecalc tells me the late fee and the total due on an overdue invoice, so I send the right amount to our billing API.\\n\\n## Scope and boundaries\\n\\n- In scope: `<Business capabilities or systems this project owns.>`\\n- Outside scope: `<Important exclusions or adjacent owners.>`\\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\\n\\n## Systems and environments\\n\\n| System or org | Purpose | Environment | Source of truth | Access notes |\\n| --- | --- | --- | --- | --- |\\n| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |\\n\\n## People and ownership\\n\\n| Role | Person or team | Responsibility | Source / last confirmed |\\n| --- | --- | --- | --- |\\n| Owner | Mike Rihm | Project decisions | Setup interview, 2026-09-29 |\\n\\n## Work and project records\\n\\n- Work tracker: `.work-items/` (local folders, Git-ignored)\\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\\n- Project decisions: [DECISIONS.md](DECISIONS.md)\\n- Functional requirements: [requirements/](requirements/)\\n- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`\\n- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`\\n- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)\\n- Memory backup or sync: `/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/rules-codex` (owner-a
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"cat .work-items/WI-001-build-the-late-fee-command/WORK-ITEM.md .work-items/WI-001-build-the-late-fee-command/DESIGN.md",max_output_tokens:11000}),
+tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-organize/references/moves.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-decide/references/approvals.md",max_output_tokens:10000}),
+tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-requirements/references/interview.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-requirements/references/requirement-format.md",max_output_tokens:10000}),
+tools.exec_command({cmd:"git worktree list && git status && git remote",max_output_tokens:3000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "Warning: truncated output (original token count: 15089)\nTotal output lines: 4\n\n{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"b7de9d\",\"wall_time_seconds\":0.000003375,\"exit_code\":0,\"original_token_count\":6786,\"output\":\"---\\nid: WI-001\\ntitle: Build the late fee command\\ntype: build\\nstage: 04-solution-design\\nstatus: In Progress\\nparent: none\\nwaiting_on: \\\"owner\\\"\\npriority: medium\\ndelivery: not-offered\\nrequirements_approved: \\\"2026-09-29 by Mike Rihm\\\"\\ndesign: proposed\\nresult_approved: \\\"no\\\"\\nupdated: 2026-09-29\\n---\\n\\n# WI-001: Build the late fee command\\n\\n## Overview\\n\\n**Goal:** Provide a late fee command that reports the fee, total due, and optional whole-cent total for billing.\\n\\n**Current position:** Requirements R-01 to R-03 are approved. Option A design is proposed and passed independent critique. No implementation has started.\\n\\n**Next action:** Mike chooses and approves Option A, or requests a design change. Then the agent completes the selected design and plans implementation.\\n\\n**Blockers:** Design approval before implementation.\\n\\n**Related items:** None.\\n\\n## Roadmap\\n\\nA phase is complete when its tasks are complete and its exit result has been checked.\\n\\n<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading. Add one row per phase; set Status from actual progress, not from this example. List the phase's sub-item IDs under Sub-items, or write \u201cNone.\u201d -->\\n\\n| Phase | Outcome | Status | Exit result | Sub-items |\\n|---|---|---|---|---|\\n| P1 \u2014 <Phase 1 name> | <What this phase establishes> | In Progress | <Evidence that P1 is complete> | <WI-ids or \u201cNone.\u201d> |\\n| P2 \u2014 <Phase 2 name> | <What this phase delivers> | Not Started | <Evidence that P2 is complete> | <WI-ids or \u201cNone.\u201d> |\\n\\n## Tasks\\n\\n<!-- Under each phase heading, add that phase's tasks only. Replace P1-T01 and similar example IDs with stable real IDs. Put the action after Work, its output after Deliverable, the completion proof after Done when, and real prerequisites after Depends on. Change the checkbox only when the completion proof is met. -->\\n\\n### P1 \u2014 <Phase 1 name>\\n\\n- [ ] **P1-T01 \u2014 <Task 1 name>** \u00b7 In Progress  \\n  **Work:** <The action t
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"sed -n '1,240p' /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-organize/references/moves.md",max_output_tokens:9000}),
+tools.exec_command({cmd:"sed -n '1,250p' .work-items/WI-001-build-the-late-fee-command/DESIGN.md",max_output_tokens:9000}),
+tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-decide/references/current-focus.md /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-organize/references/work-item-format.md",max_output_tokens:7000}),
+tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-on/SKILL.md",max_output_tokens:6000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Warning: truncated output (original token count: 13328)\nTotal output lines: 4\n\n{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"260cdd\",\"wall_time_seconds\":0.000003125,\"exit_code\":0,\"original_token_count\":1985,\"output\":\"# Moves, splits, and hand changes: cases\\n\\nWhat to ask or do for each change the tracker reports, how to split an item\\ninto sub-items, and how to move or archive items on request. What the CLI\\nalready does by itself is in `tracker-local.md` and `tracker-notion.md`.\\n\\n## Contents\\n\\n1. Reporting what the CLI already adapted\\n2. Cases that need the owner\\n3. Splitting an item (stage 05)\\n4. Moving, grouping, and archiving\\n5. Things never done here\\n\\n## 1. Reporting what the CLI already adapted\\n\\nEach report line is written to be said to the owner as it is. Say each one\\nin the reply, one line each, before other work. Do not guess at a cause the\\nline does not name. The CLI already wrote the history rows; add a note only\\nfor the owner's reason.\\n\\n| The line starts with | Example | Add |\\n| --- | --- | --- |\\n| `Moved:` | \\\"Moved: WI-007 from WI-003-csv/WI-007-export to WI-007-export (moved by hand). It is now a top-level item. It was a sub-item of WI-003.\\\" | Nothing, unless a side effect in section 2 applies |\\n| `Renamed folder:` | \\\"Renamed folder: WI-002's folder was renamed by hand from wi-002-help to help-option; the item itself is the same. It is still a top-level item.\\\" | Nothing |\\n| `Re-parented:` | \\\"Re-parented: WI-009 was put under WI-004 in Notion by hand. Its parent is now WI-004. It was a top-level item.\\\" | Nothing, unless a side effect in section 2 applies |\\n| `Archived:` | \\\"Archived: WI-005 was archived in Notion by hand (its Archived box was ticked), so it is hidden from the board and the briefing.\\\" | \\\"It is not cancelled.\\\" when the item was not finished |\\n| `Changed by hand:` | \\\"Changed by hand: WI-006 stage \\\"04-solution-design\\\" -> \\\"08-build\\\".\\\" | The question the CLI printed, when the change skipped a gate |\\n| `Renamed file:` | \\\"Renamed file: WI-004 is now ... (was WORK-ITEM.md), in the same folder.\\\" | Nothing |\\n| `Found again:` | \\\"Found again: WI-009 was missing and is back, now in WI-009-help.\\\" | Nothing |\\n| `Unarchived:` | \\\"Unarchived: WI-005 was taken out of the arch
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work sync",max_output_tokens:3000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"f798c9\",\"wall_time_seconds\":0.000003208,\"exit_code\":0,\"original_token_count\":34,\"output\":\"Nothing changed: every item is where the tracker expected it, and every derived value is in step.\\n\\nDashboard: .work-items/DASHBOARD.md\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work list --tree",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"7ea02f\",\"wall_time_seconds\":0.000002583,\"exit_code\":0,\"original_token_count\":22,\"output\":\"WI-001  Build the late fee command  (04 Solution design, In Progress, waiting on owner)\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history WI-001 --note 'Owner said: I approve Option A. Before you build, split the --cents option out into its own sub-item under WI-001, so WI-001 is only the dollar fee and total.' --effect 'Option A approved with R-03 assigned to a child; WI-001 implementation covers R-01 and R-02.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"3a9db2\",\"wall_time_seconds\":0.000002917,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Added a Recent History row to WI-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-001 --stage 05-breakdown",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"20859c\",\"wall_time_seconds\":0.000003542,\"exit_code\":0,\"original_token_count\":35,\"output\":\"Updated WI-001: stage 04 Solution design -> 05 Breakdown (status In Progress).\\nNow 05 Breakdown (In Progress). Continue with work-decide.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work new --title 'Add the --cents option' --type build --parent WI-001 --covers R-03",max_output_tokens:3000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"51be66\",\"wall_time_seconds\":0.000003,\"exit_code\":0,\"original_token_count\":77,\"output\":\"Created WI-002: Add the --cents option (03 Requirements approved, Ready, sub-item of WI-001) at .work-items/WI-001-build-the-late-fee-command/WI-002-add-the-cents-option/WORK-ITEM.md.\\nIt delivers WI-001 R-03 and inherits that requirements approval (2026-09-29 by Mike Rihm).\\nContinue with solution-design.\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"toolkit work show WI-001 --path",max_output_tokens:1200}),
+tools.exec_command({cmd:"toolkit work show WI-002 --path",max_output_tokens:1200}),
+tools.exec_command({cmd:"cat .work-items/WI-001-build-the-late-fee-command/WI-002-add-the-cents-option/WORK-ITEM.md",max_output_tokens:6500}),
+tools.exec_command({cmd:"tail -75 .work-items/WI-001-build-the-late-fee-command/DESIGN.md",max_output_tokens:5000}),
+tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-decide/references/current-focus.md",max_output_tokens:3500})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"b36bf1\",\"wall_time_seconds\":0.000001042,\"exit_code\":0,\"original_token_count\":51,\"output\":\"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex/.work-items/WI-001-build-the-late-fee-command/WORK-ITEM.md\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"69f792\",\"wall_time_seconds\":0.000003042,\"exit_code\":0,\"original_token_count\":58,\"output\":\"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex/.work-items/WI-001-build-the-late-fee-command/WI-002-add-the-cents-option/WORK-ITEM.md\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":2,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"10a489\",\"wall_time_seconds\":0.000005542,\"exit_code\":0,\"original_token_count\":1350,\"output\":\"---\\nid: WI-002\\ntitle: Add the --cents option\\ntype: build\\nstage: 03-requirements-approved\\nstatus: Ready\\nparent: WI-001\\nwaiting_on: \\\"none\\\"\\npriority: medium\\ndelivery: not-offered\\nrequirements_approved: \\\"2026-09-29 by Mike Rihm\\\"\\ndesign: none\\nresult_approved: \\\"no\\\"\\nupdated: 2026-09-29\\n---\\n\\n# WI-002: Add the --cents option\\n\\n## Overview\\n\\n<!-- Enter the current summary directly after each bold label below. Keep this section current; detailed tasks and decisions belong in their sections further down. -->\\n\\n**Goal:** <The outcome this work item is meant to achieve.>\\n\\n**Current position:** <What has been completed and where work stands now.>\\n\\n**Next action:** <The next specific action and its owner.>\\n\\n**Blockers:** <Blocking decision or dependency, or \u201cNone.\u201d>\\n\\n**Related items:** Parent WI-001 (R-03).\\n\\n## Roadmap\\n\\nA phase is complete when its tasks are complete and its exit result has been checked.\\n\\n<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading. Add one row per phase; set Status from actual progress, not from this example. List the phase's sub-item IDs under Sub-items, or write \u201cNone.\u201d -->\\n\\n| Phase | Outcome | Status | Exit result | Sub-items |\\n|---|---|---|---|---
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section Overview --text '**Goal:** Provide a late fee command that reports the fee and total due in dollars.\n\n**Current position:** R-01 and R-02 remain the direct scope of WI-001. Mike approved Option A on 2026-09-29. WI-002 covers R-03, the optional cents output. No implementation has started.\n\n**Next action:** Complete the selected Option A design and plan the dollar command. Make the delivery offer before building.\n\n**Blockers:** Delivery choice before implementation.\n\n**Related items:** WI-002 adds the --cents option under R-03.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"fa4823\",\"wall_time_seconds\":0.000003417,\"exit_code\":0,\"original_token_count\":7,\"output\":\"Saved \\\"Overview\\\" in WI-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section Roadmap --text 'A phase is complete when its tasks are complete and its exit result has been checked.\n\n| Phase | Outcome | Status | Exit result | Sub-items |\n|---|---|---|---|---|\n| P1 — Dollar fee and total | The command prints the late fee and total due in dollars. | Not Started | R-01 and R-02 acceptance checks pass. | None. |\n| P2 — Cents extension | The optional cents line is added after the dollar command. | Not Started | WI-002 passes its R-03 acceptance checks. | WI-002 |'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"e59d18\",\"wall_time_seconds\":0.000002833,\"exit_code\":0,\"original_token_count\":7,\"output\":\"Saved \\\"Roadmap\\\" in WI-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Agreed goal' --text 'Provide a command that calculates a 0.25% daily late fee on an invoice and prints the late fee and total due in dollars. WI-002 delivers the separately requested --cents option under R-03.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"d87ee1\",\"wall_time_seconds\":0.0000035,\"exit_code\":0,\"original_token_count\":8,\"output\":\"Saved \\\"Agreed goal\\\" in WI-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section Acceptance --text 'This work item can be accepted when:\n\n1. Running node bin/feecalc.js 200 --days 10 prints exactly \"Late fee: $5.00  Total due: $205.00\" (R-01, R-02).\n2. Running the command with a missing or invalid input prints a clear error on standard error, exits unsuccessfully, and prints no total (R-01, R-02).\n3. The dollar command correctly rounds a half-cent fee up once and adds the rounded fee to the invoice amount (R-01).\n4. The owner approves the dollar command result. WI-002 has separate acceptance for the optional --cents output (R-03).'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"2cff3c\",\"wall_time_seconds\":0.000003042,\"exit_code\":0,\"original_token_count\":8,\"output\":\"Saved \\\"Acceptance\\\" in WI-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --section Overview --text '**Goal:** Add an optional --cents output line with the total due as whole cents.\n\n**Current position:** Created as a child of WI-001 for R-03. It inherits the requirements approval recorded on 2026-09-29. No implementation has started.\n\n**Next action:** Use the approved Option A design after WI-001 records it, then plan this extension after the dollar command.\n\n**Blockers:** WI-001 dollar command and its design approval.\n\n**Related items:** Parent WI-001 supplies the fee and dollar total; this item covers WI-001 R-03.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"63545a\",\"wall_time_seconds\":0.000003167,\"exit_code\":0,\"original_token_count\":7,\"output\":\"Saved \\\"Overview\\\" in WI-002.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --section 'Starting request' --text 'Mike Rihm asked on 2026-09-29: Before you build, split the --cents option out into its own sub-item under WI-001, so WI-001 is only the dollar fee and total. The original request asks the option to add a second line with the total due in whole cents for the billing API.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"b96b02\",\"wall_time_seconds\":0.000003417,\"exit_code\":0,\"original_token_count\":9,\"output\":\"Saved \\\"Starting request\\\" in WI-002.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --section Acceptance --text 'This work item can be accepted when:\n\n1. Running node bin/feecalc.js 200 --days 10 --cents prints the dollar line followed by exactly \"Total due in cents: 20500\" (WI-001 R-03).\n2. Running node bin/feecalc.js 1 --days 2 --cents prints a total due of $1.01 and a cents line of 101 (WI-001 R-03).\n3. Running without --cents continues to print only the dollar line.\n4. The owner approves this sub-item result separately.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"e2083f\",\"wall_time_seconds\":0.000003167,\"exit_code\":0,\"original_token_count\":8,\"output\":\"Saved \\\"Acceptance\\\" in WI-002.\\n\"}"}]
+
+[CALL] const patch="*** Begin Patch\n*** Update File: .work-items/WI-001-build-the-late-fee-command/DESIGN.md\n@@\n-Mike needs a command that computes an overdue invoice's late fee and total due, including the integer cent amount to send to the billing API when requested. The calculation must be exact for valid input, including values beyond JavaScript's safe integer range.\n+Mike needs a command that computes an overdue invoice's late fee and total due in dollars. WI-002 adds the optional whole-cent output for the billing API after the dollar command is built. The calculation must be exact for valid input, including values beyond JavaScript's safe integer range.\n@@\n-| R-03 | `--cents` adds `Total due in cents: 20500`. For $1 and two days, fee is $0.01, total is $1.01, and cents is 101. | Print the optional second line from the same integer total cents. Test the half-cent case. | Ready. |\n+| R-03 | `--cents` adds `Total due in cents: 20500`. For $1 and two days, fee is $0.01, total is $1.01, and cents is 101. | WI-002 adds the optional second line from the same integer total cents. | Ready for WI-002 after WI-001 delivers the dollar command. |\n@@\n-Recommend Option A. It directly implements the approved formula and CLI without external dependencies or an unstated numeric ceiling. **Owner decision needed:** approve or revise Option A before implementation. The selected design remains pending until Mike records that decision.\n+Recommend Option A. It directly implements the approv
+
+[CALL] const r=await tools.exec_command({cmd:"rg -n 'Owner decision|End-to-end flow|WI-002|Pending owner|Current position and next step' .work-items/WI-001-build-the-late-fee-command/DESIGN.md",max_output_tokens:2500});text(r);
+
+
+[CALL] const patch="*** Begin Patch\n*** Update File: .work-items/WI-001-build-the-late-fee-command/DESIGN.md\n@@\n-| Invocation | WI-001 R-02/R-03 establish the example command and optional flag; exact parser shape is a design choice pending approval | Require one amount and exactly one `--days` followed by one days value; allow one optional `--cents` flag after the days value. Reject missing, extra, duplicate, and unknown arguments. |\n+| Invocation | WI-001 R-02/R-03 establish the example command and optional flag; Mike approved Option A and split delivery on 2026-09-29 | WI-001 requires one amount and exactly one `--days` followed by one days value. WI-002 later allows one optional `--cents` flag after the days value. Both reject missing, extra, duplicate, and unknown arguments. |\n@@\n-4. When `--cents` is present, write one additional line, `Total due in cents: <totalCents>`. Without that flag, write no second line.\n+4. WI-002 later accepts `--cents` and writes one additional line, `Total due in cents: <totalCents>`. WI-001 prints only the dollar line.\n@@\n-Examples: `node bin/feecalc.js 200 --days 10` yields `Late fee: $5.00  Total due: $205.00`. Adding `--cents` yields `Total due in cents: 20500` on the next line. `node bin/feecalc.js 1 --days 2 --cents` yields `Late fee: $0.01  Total due: $1.01` and then `Total due in cents: 101`.\n+Examples: WI-001 makes `node bin/feecalc.js 200 --days 10` yield `Late fee: $5.00  Total due: $205.00`. WI-002 makes adding `--cents` yield `
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work design WI-001 --set-file .work-items/WI-001-build-the-late-fee-command/DESIGN.md",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"e77bbc\",\"wall_time_seconds\":0.000003708,\"exit_code\":0,\"original_token_count\":83,\"output\":\"Saved the design of WI-001 (proposed) at /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex/.work-items/WI-001-build-the-late-fee-command/DESIGN.md.\\nIt is proposed until the owner approves it: toolkit work approve <id> --design --by <name>.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work approve WI-001 --design --by 'Mike Rihm'",max_output_tokens:2500});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"4a7a37\",\"wall_time_seconds\":0.000002958,\"exit_code\":0,\"original_token_count\":46,\"output\":\"Recorded: design of WI-001 approved (2026-09-29 by Mike Rihm).\\nIt is no longer waiting on the owner (waiting_on: none).\\nNow 05 Breakdown (In Progress). Continue with work-organize.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show WI-002",max_output_tokens:2500});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"ddfc69\",\"wall_time_seconds\":0.000002625,\"exit_code\":0,\"original_token_count\":1637,\"output\":\"WI-002: Add the --cents option\\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex/.work-items/WI-001-build-the-late-fee-command/WI-002-add-the-cents-option/WORK-ITEM.md\\nStage: 03 Requirements approved (Ready) | Waiting on: none | Continue with: solution-design\\nParent: WI-001 | Sub-items: none | Design: none of its own; WI-001's design is approved (.work-items/WI-001-build-the-late-fee-command/DESIGN.md). Read it with: toolkit work design WI-001\\nWorktree branch for this item: claude/wi-002-add-the-cents-option (folder .claude/worktrees/wi-002-add-the-cents-option)\\n\\n---\\nid: WI-002\\ntitle: Add the --cents option\\ntype: build\\nstage: 03-requirements-approved\\nstatus: Ready\\nparent: WI-001\\nwaiting_on: \\\"none\\\"\\npriority: medium\\ndelivery: not-offered\\nrequirements_approved: \\\"2026-09-29 by Mike Rihm\\\"\\ndesign: none\\nresult_approved: \\\"no\\\"\\nupdated: 2026-09-29\\n---\\n\\n# WI-002: Add the --cents option\\n\\n## Overview\\n\\n**Goal:** Add an optional --cents output line with the total due as whole cents.\\n\\n**Current position:** Created as a child of WI-001 for R-03. It inherits the requirements approval recorded on 2026-09-29. No implementation has started.\\n\\n**Next action:** Use the approved Option A design after WI-001 records it, then plan this extension after the dollar command.\\n\\n**Blockers:** WI-001 dollar command and its design approval.\\n\\n**Related items:** Parent WI-001 supplies the fee and dollar total; this item covers WI-001 R-03.\\n\\n## Roadmap\\n\\nA phase is complete when its tasks are complete and its exit result has been checked.\\n\\n<!-- Replace each example row with a real phase. Keep its phase ID identical to the matching Tasks heading. Add one row per phase; set Status from actual progress, not from this example. List the phase's sub-item IDs under Sub-items, or write \u201cNone.\u201d -->\\n\\n| Phase | Outcome | Status | Exit result | Sub-items |\\n|---|---|---|---|---|\\n| P1 \u2014 <Phase 1 name> | <What this phase establishes> | In Progress | <Evidence that P1 is complete> | <WI-ids or \u201cNone.\u201d> |\\n| P2 \u2014 <Phase 2 name> | <What this phas
+
+[CALL] const r=await tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-delegate/SKILL.md",max_output_tokens:5500});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"fee4a8\",\"wall_time_seconds\":0.0000025,\"exit_code\":0,\"original_token_count\":2366,\"output\":\"---\\nname: work-delegate\\ndescription: 'Hands a work item''s goal to a team of agents with the owner as product owner: makes the delivery offer, records his choice, and runs the team. Use whenever the owner hands a goal over (\\\"you drive\\\", \\\"take it from here\\\"), even a named item, or work-on starts a large goal with no delivery choice.'\\n---\\n\\n# Work delegate\\n\\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \\\"How to write replies\\\" section of `AGENTS.md`.\\nThe only skill that makes the agent-led delivery offer and records the answer; after a yes it runs the team through the skill that owns each stage. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.\\n\\n## Steps\\n\\n1. Look for a delivery choice that covers this goal: the item's `delivery` value, its Notes > Decisions and context, and its parent's choice. A sub-item makes no offer. A quick question, a small edit, or a small item (one or two tasks, no sub-items) gets no offer: record owner-led with the reason and go on (`references/agent-led-delivery.md`, section 1).\\n   `toolkit work show <id> --section 'Decisions and context'`\\n   `toolkit work set <id> --delivery owner-led --note 'Small item: one or two tasks, so no delivery offer.'`\\n2. No choice recorded: add the offer as an Open Questions row, set the item waiting on the owner, and give your recommendation with its main reason in one line before the question (for example \\\"I recommend yes: the item has three phases that helpers can build side by side.\\\"). Then ask exactly this as the last line of the reply: \\\"Would you like agents to take responsibility for delivering this, with you acting as product owner?\\\" \\\"You drive\\\" in his own words is already the answer.\\n   `toolkit work edit <id> --section 'Open Questions' --append-row '| <next Q-id> | Would you like agents to take responsibility for delivering this, with you acting as product owner? | delivery | Open | owner |'`\\n   `toolkit work set <id> --waiting-on owner`\\n3. Yes: ask the team question. Where the host lets this chat list, read, and message other chats and offer new chats to 
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work validate",max_output_tokens:3500});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"6d72b3\",\"wall_time_seconds\":0.000002958,\"exit_code\":0,\"original_token_count\":25,\"output\":\"Checked 2 items: 2 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |\n|---|---|---|---|---|\n\nNone open.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"b33f8a\",\"wall_time_seconds\":0.000002875,\"exit_code\":0,\"original_token_count\":9,\"output\":\"Saved \\\"Open Questions\\\" in WI-002.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --section 'Decisions and context' --text '- Mike Rihm assigned the optional cents output to this sub-item on 2026-09-29 and approved Option A for the parent design. WI-002 inherits the approved R-03 requirement and uses the parent design.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"087be6\",\"wall_time_seconds\":0.000003042,\"exit_code\":0,\"original_token_count\":11,\"output\":\"Saved \\\"Decisions and context\\\" in WI-002.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --section 'Resume here' --text 'R-03 is approved through WI-001. The approved Option A design assigns the cents line to this child. Wait until WI-001 builds the dollar command, then plan and build the optional flag with separate checks and result approval.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"ce3599\",\"wall_time_seconds\":0.000002459,\"exit_code\":0,\"original_token_count\":8,\"output\":\"Saved \\\"Resume here\\\" in WI-002.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --section 'Solution options and considerations' --text 'The approved Option A design in WI-001 specifies how this child adds the optional cents line. No separate solution choice is open.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"ae10af\",\"wall_time_seconds\":0.000003084,\"exit_code\":0,\"original_token_count\":14,\"output\":\"Saved \\\"Solution options and considerations\\\" in WI-002.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Resume here' --text 'Mike approved Option A on 2026-09-29. WI-001 directly delivers R-01 and R-02: the dollar fee and total. WI-002 inherits R-03 and adds --cents later. Complete the delivery choice, plan WI-001 from the approved design, and build the dollar command before WI-002.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"85a530\",\"wall_time_seconds\":0.00000325,\"exit_code\":0,\"original_token_count\":8,\"output\":\"Saved \\\"Resume here\\\" in WI-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Decisions and context' --text '- Mike Rihm approved R-01 to R-03 on 2026-09-29.\n- Mike Rihm approved Option A on 2026-09-29 and instructed that --cents become sub-item WI-002 before any build. WI-001 directly builds only R-01 and R-02; WI-002 covers R-03 and has separate acceptance.\n- Design approach: use built-in Node.js features and exact integer-cent arithmetic. The approved design records the split.\n- The earlier design review passed independent critique before this scope split. No implementation has started.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"de441b\",\"wall_time_seconds\":0.00000275,\"exit_code\":0,\"original_token_count\":11,\"output\":\"Saved \\\"Decisions and context\\\" in WI-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-002 --section Overview --text '**Goal:** Add an optional --cents output line with the total due as whole cents.\n\n**Current position:** Created as a child of WI-001 for R-03. It inherits the requirements approval and approved Option A design recorded on 2026-09-29. No implementation has started.\n\n**Next action:** Plan this extension after WI-001 builds the dollar command.\n\n**Blockers:** WI-001 dollar command must be built first.\n\n**Related items:** Parent WI-001 supplies the fee and dollar total; this item covers WI-001 R-03.'",max_output_tokens:2000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"64066a\",\"wall_time_seconds\":0.000002417,\"exit_code\":0,\"original_token_count\":7,\"output\":\"Saved \\\"Overview\\\" in WI-002.\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.3.0/skills/memory-save/SKILL.md .memory/AGENTS.md .memory/memory-criteria.md",max_output_tokens:7000}),
+tools.exec_command({cmd:"toolkit work list --tree",max_output_tokens:1000}),
+tools.exec_command({cmd:"toolkit work validate",max_output_tokens:2000}),
+tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:1200})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"899864\",\"wall_time_seconds\":0.000003,\"exit_code\":0,\"original_token_count\":8097,\"output\":\"Warning: truncated output (original token count: 8097)\\nTotal output lines: 249\\n\\n---\\nname: memory-save\\ndescription: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says \\\"remember this\\\", \\\"from now on\\\", \\\"forget that\\\", or \\\"remind me\\\" with no time given, corrects the agent, or a hook says a save is due.'\\n---\\n\\n# Memory save\\n\\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \\\"How to write replies\\\" section of `AGENTS.md`.\\nSaves, corrects, or retires one fact in the project's memory with `toolkit memory` commands, or sends it to its proper home. It never edits memory files by hand. Rules, skills, and memory each hold one kind of thing (Mike, 2026-09-29): an instruction the agent follows every time goes in the rules (`toolkit rule add`), a procedure that proved itself in a skill, and a fact or an unproven lesson in memory. Memory keeps one record per concept (for example `user_profile`, `project_billing`), with one `##` section per fact and a last \\\"Gotchas and lessons\\\" section; an `event_` record holds one episode. The prefixes are `user_`, `project_`, `reference_`, and `event_`; `feedback_` is retired.\\n\\n## Steps\\n\\nTrack these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.\\n\\n1. Decide the home. An instruction for how the agent works (a preference about how work is done, a correction, \\\"from now on\\\", \\\"always\\\", \\\"never\\\") is a rule: save it with `toolkit rule add` (\\\"Rules\\\" below) and stop. A fact about why a part of the project exists or how it is used is a `project_` concept fact, even while a work item for that part is open; the item may link to it. Anything else: use the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home (\\\"Where other things go\\\" below) and stop.\\n2. Find the concept it belongs in, and any section that already holds it. List the concepts of its type (title, 
+
+[CALL] const r=await tools.exec_command({cmd:"sed -n '1,125p' /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-delegate/references/agent-led-delivery.md",max_output_tokens:4700});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"90ff29\",\"wall_time_seconds\":0.000003,\"exit_code\":0,\"original_token_count\":1487,\"output\":\"# Agent-led delivery\\n\\nThe rules for the delivery offer: when to make it, the exact questions, how\\nto record the owner's answers, and what an acceptance allows. The four\\nquestions keep their exact wording. The choice is recorded in the work item's\\nNotes > Decisions and context and in its `delivery` value, in every tracker.\\n\\n## Contents\\n\\n1. Offer once for the goal\\n2. Ask how the team is arranged\\n3. Record the choice\\n4. Divide responsibility\\n\\n## 1. Offer once for the goal\\n\\nFirst read the item's `delivery` value and its Notes > Decisions and context\\nto see whether the owner already accepted, declined, or revoked agent-led\\ndelivery for this goal. `not-offered` means no answer is recorded yet. Do not\\ntreat missing access as an undecided choice. When the records show no choice,\\nask exactly:\\n\\n> Would you like agents to take responsibility for delivering this, with you acting as product owner?\\n\\n`work-delegate` is the only skill that makes this offer or records its\\nanswer. `work-on`, `work-decide`, and the session briefing only point at it,\\nso the owner is asked once, in one place.\\n\\nDo not make this offer for a simple question or quick edit, or for a small\\nitem (one or two tasks, no sub-items): record owner-led at once, with the\\nreason, so the briefing stops listing the offer as an agent to-do.\\n\\n```text\\ntoolkit work set <id> --delivery owner-led --note 'Small item: one or two tasks, so no delivery offer.'\\n```\\n\\nJudge \\\"small\\\" on the plan: an item before stage 06 has no plan yet, and the\\ncommand says so. The toolkit looks at the choice again when the item grows:\\nafter a split (`toolkit work new --parent`), or when the plan gets a second\\nphase or more than two tasks, the command prints a note and\\n`toolkit work decisions` lists the offer again as the agent's to-do. Then\\nmake the offer. A sub-item split from such an item stays `not-offered` until\\nthe offer is answered. The owner's own answer (\\\"no agent team\\\") is never\\nlooked at again this way.\\n\\nThe offer is made once, at the top item of the goal; a sub-item is part of\\nits parent's goal. `toolkit work new --parent` copies the parent's delivery\\nvalue to a new sub-item and says so (\\\"Deliv
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --json",max_output_tokens:1800});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"9c58c2\",\"wall_time_seconds\":0.000002833,\"exit_code\":0,\"original_token_count\":188,\"output\":\"{\\n  \\\"ok\\\": true,\\n  \\\"backend\\\": \\\"builtin\\\",\\n  \\\"kind\\\": \\\"focus\\\",\\n  \\\"text\\\": \\\"# Current focus\\\\n\\\\nLast updated: 2026-09-29, chat, agent\\\\n\\\\n## Now\\\\n\\\\n- WI-001 Build the late fee command\\\\n\\\\n## Waiting on the owner\\\\n\\\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\\\n\\\\n## Untracked to-dos\\\\n\\\\nNone.\\\\n\\\\n## Next session starts with\\\\n\\\\n- Continue WI-001 from its Resume here: Mike needs to choose and approve the proposed Option A design before implementation.\\\\n\\\",\\n  \\\"version\\\": \\\"92c85a638510de5a657862ba87728616e967bc5464bbd061f2ddaef470ac98bd\\\"\\n}\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Open Questions' --append-row '| Q-05 | Would you like agents to take responsibility for delivering this, with you acting as product owner? | delivery | Open | owner |'",max_output_tokens:1000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"adee82\",\"wall_time_seconds\":0.000003208,\"exit_code\":0,\"original_token_count\":68,\"output\":\"Saved \\\"Open Questions\\\" in WI-001.\\nNote: Q-05 holds no recommendation. When you gave the owner one with the question, add it to the Question cell (\\\"<question> Recommended: <answer>, because <reason>.\\\"), so a later session knows what \\\"go with your recommendation\\\" means.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show WI-001 --section 'Open Questions'",max_output_tokens:1700});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"9ea841\",\"wall_time_seconds\":0.000002959,\"exit_code\":0,\"original_token_count\":222,\"output\":\"## Open Questions\\n\\n| ID | Question | Affects | Status | Decision needed from |\\n|---|---|---|---|---|\\n| Q-01 | Answered 2026-09-29 by Mike Rihm: round the fee and the total to the nearest cent, with half a cent rounded up. | R-01, R-03 | Answered | owner |\\n| Q-02 | Answered 2026-09-29 by Mike Rihm: invoice amounts of $0 or more with at most two decimal places, and whole numbers of days of 0 or more. | R-01 | Answered | owner |\\n| Q-03 | Answered 2026-09-29 by Mike Rihm: a missing or invalid input produces a clear error on standard error, a failing exit, and no total printed. | R-01, R-02 | Answered | owner |\\n| Q-04 | Answered 2026-09-29 by Mike Rihm: the total due is the invoice amount plus the rounded fee. | R-01, R-03 | Answered | owner |\\n| Q-05 | Would you like agents to take responsibility for delivering this, with you acting as product owner? | delivery | Open | owner |\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |\n|---|---|---|---|---|\n| Q-01 | Answered 2026-09-29 by Mike Rihm: round the fee and the total to the nearest cent, with half a cent rounded up. | R-01, R-03 | Answered | owner |\n| Q-02 | Answered 2026-09-29 by Mike Rihm: invoice amounts of $0 or more with at most two decimal places, and whole numbers of days of 0 or more. | R-01 | Answered | owner |\n| Q-03 | Answered 2026-09-29 by Mike Rihm: a missing or invalid input produces a clear error on standard error, a failing exit, and no total printed. | R-01, R-02 | Answered | owner |\n| Q-04 | Answered 2026-09-29 by Mike Rihm: the total due is the invoice amount plus the rounded fee. | R-01, R-03 | Answered | owner |\n| Q-05 | Would you like agents to take responsibility for delivering this, with you acting as product owner? Recommended: yes, because WI-001 now has a separate WI-002 extension and each result needs its own checks. | delivery | Open | owner |'",max_output_tokens:1000});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"0daff1\",\"wall_time_seconds\":0.000003333,\"exit_code\":0,\"original_token_count\":9,\"output\":\"Saved \\\"Open Questions\\\" in WI-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-001 --waiting-on owner",max_output_tokens:1200});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"8f0a9d\",\"wall_time_seconds\":0.00000275,\"exit_code\":0,\"original_token_count\":24,\"output\":\"Updated WI-001: waiting on owner.\\nNow 05 Breakdown (In Progress). Continue with work-decide.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --text '# Current focus\n\nLast updated: 2026-09-29, chat, agent\n\n## Now\n\n- WI-001 Build the late fee command\n- WI-002 Add the --cents option\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 from its Resume here: Option A is approved and WI-002 covers --cents. Resolve Q-05, then plan and build the dollar command.' --expect 92c85a638510de5a657862ba87728616e967bc5464bbd061f2ddaef470ac98bd",max_output_tokens:1200});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"f5ef3d\",\"wall_time_seconds\":0.000003,\"exit_code\":0,\"original_token_count\":15,\"output\":\"Saved the current focus (21 lines). Version: e6a9f1961c60\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus",max_output_tokens:1400});text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"1a28fa\",\"wall_time_seconds\":0.000002875,\"exit_code\":0,\"original_token_count\":156,\"output\":\"# Current focus\\n\\nLast updated: 2026-09-29, chat, agent\\n\\n## Now\\n\\n- WI-001 Build the late fee command\\n- WI-002 Add the --cents option\\n\\n## Waiting on the owner\\n\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\n\\n## Untracked to-dos\\n\\nNone.\\n\\n## Next session starts with\\n\\n- Continue WI-001 from its Resume here: Option A is approved and WI-002 covers --cents. Resolve Q-05, then plan and build the dollar command.\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+tools.exec_command({cmd:"toolkit work validate",max_output_tokens:1200}),
+tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:1500}),
+tools.exec_command({cmd:"toolkit doctor",max_output_tokens:3500}),
+tools.exec_command({cmd:"git status --short",max_output_tokens:1000})
+]);r.forEach((x,i)=>text(JSON.stringify({i,result:x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"53b7bb\",\"wall_time_seconds\":0.000002917,\"exit_code\":0,\"original_token_count\":33,\"output\":\"Checked 2 items: 2 clean, 0 errors, 0 approval gate problems. 1 open question waits on the owner (toolkit work decisions lists it).\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"1f7565\",\"wall_time_seconds\":0.000003292,\"exit_code\":0,\"original_token_count\":79,\"output\":\"1 decision waits on the owner:\\n\\nWI-001 Build the late fee command\\n  - Q-05: Would you like agents to take responsibility for delivering this, with you acting as product owner? Recommended: yes, because WI-001 now has a separate WI-002 extension and each result needs its own checks. Affects delivery. (work-decide)\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":2,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"909e4d\",\"wall_time_seconds\":0.056501584,\"exit_code\":1,\"original_token_count\":415,\"output\":\"Toolkit doctor for feecalc (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex).\\n\\nWarnings (2):\\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.\\n   Fix: The owner opens Codex in this folder and trusts it when Codex asks.\\n2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).\\n   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\\n\\nNotes (4):\\n- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\\n- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\\n- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not c

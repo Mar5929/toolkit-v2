@@ -17,7 +17,7 @@ async function seeded() {
   for (const args of [
     ['work', 'new', '--title', 'Login page'],
     ['work', 'new', '--title', 'Password reset', '--parent', 'WI-001'],
-    ['memory', 'save', '--type', 'feedback', '--name', 'short-answers', '--description', 'The owner wants short answers', '--body', '## Remember\n\nShort answers.\n'],
+    ['memory', 'save', '--type', 'user', '--name', 'short-answers', '--description', 'The owner wants short answers', '--body', '## Remember\n\nShort answers.\n'],
   ]) {
     const r = await tk(root, args, { env });
     assert.equal(r.code, 0, `${args.join(' ')}: ${r.stderr || r.stdout}`);
@@ -34,7 +34,7 @@ test('export copies .work-items/ with its state file and .memory/, and records t
   assert.ok(files.includes('toolkit-export.json'));
   assert.ok(files.includes('work-items/.toolkit-state.json'), 'the state file is included');
   assert.ok(files.some((f) => /^work-items\/WI-001-[^/]+\/WI-002-[^/]+\/WORK-ITEM\.md$/.test(f)), 'the nested sub-item is included');
-  assert.ok(files.includes('memory/feedback_short_answers.md'));
+  assert.ok(files.includes('memory/user_short_answers.md'));
   assert.ok(!files.some((f) => f.endsWith('.lock')));
   const record = JSON.parse(read(path.join(root, '.git', 'toolkit-v2', 'export.json')));
   assert.equal(record.to, out);
@@ -56,22 +56,22 @@ test('import restores into a fresh project on another computer; a real differenc
   const fresh = await initProject();
   const dry = await tk(fresh.root, ['import', '--from', out, '--dry-run', '--json'], { env: fresh.env });
   assert.equal(dry.code, 0, dry.stderr);
-  assert.ok(dry.json.written.some((f) => f.endsWith('feedback_short_answers.md')));
-  assert.ok(!fs.existsSync(path.join(fresh.root, '.memory', 'feedback_short_answers.md')), 'the dry run wrote nothing');
+  assert.ok(dry.json.written.some((f) => f.endsWith('user_short_answers.md')));
+  assert.ok(!fs.existsSync(path.join(fresh.root, '.memory', 'user_short_answers.md')), 'the dry run wrote nothing');
   const res = await tk(fresh.root, ['import', '--from', out], { env: fresh.env });
   assert.equal(res.code, 0, res.stderr);
   const list = await tk(fresh.root, ['work', 'list', '--json'], { env: fresh.env });
   assert.equal(list.code, 0, list.stderr);
   assert.deepEqual(list.json.items.map((i) => i.id).sort(), ['WI-001', 'WI-002']);
-  const mem = await tk(fresh.root, ['memory', 'get', 'feedback_short_answers'], { env: fresh.env });
+  const mem = await tk(fresh.root, ['memory', 'get', 'user_short_answers'], { env: fresh.env });
   assert.equal(mem.code, 0, mem.stderr);
-  assert.match(read(path.join(fresh.root, '.memory', 'MEMORY.md')), /feedback_short_answers/);
+  assert.match(read(path.join(fresh.root, '.memory', 'MEMORY.md')), /user_short_answers/);
   const next = await tk(fresh.root, ['work', 'new', '--title', 'Third', '--json'], { env: fresh.env });
   assert.match(next.stdout, /WI-003/, 'ids continue after the imported high-water mark');
 
   // A project with its own different copy of a file: conflict, nothing written.
   const other = await seeded();
-  const focus = path.join(other.root, '.memory', 'feedback_short_answers.md');
+  const focus = path.join(other.root, '.memory', 'user_short_answers.md');
   fs.writeFileSync(focus, read(focus).replace('Short answers.', 'Long answers.'));
   const conflict = await tk(other.root, ['import', '--from', out], { env: other.env });
   assert.equal(conflict.code, 2);
@@ -111,7 +111,7 @@ test('import --only restores one part and leaves the other alone', async () => {
   const { root, env } = await seeded();
   const out = path.join(tempDir(), 'backup');
   assert.equal((await tk(root, ['export', '--to', out], { env })).code, 0);
-  const record = path.join(root, '.memory', 'feedback_short_answers.md');
+  const record = path.join(root, '.memory', 'user_short_answers.md');
   fs.writeFileSync(record, read(record).replace('Short answers.', 'Long answers.'));
   fs.rmSync(path.join(root, '.work-items'), { recursive: true, force: true });
   const all = await tk(root, ['import', '--from', out], { env });

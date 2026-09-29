@@ -1,6 +1,6 @@
 ---
 name: project-setup
-description: 'Sets up Toolkit V2 in a new project, or checks, updates, and repairs an existing setup, including Notion and Hindsight. Use when the owner says "set up Toolkit V2", "set up this project", "check the setup", or "update the toolkit", or starts working on a new computer.'
+description: 'Sets up Toolkit V2 in a new project, or checks, updates, and repairs an existing setup, including Notion and Hindsight, so every project runs the same files, rules, and hooks. Use when the owner says "set up Toolkit V2", "set up this project", "check the setup", or "update the toolkit", or starts using Toolkit V2 on a new computer.'
 ---
 
 # Project setup
@@ -132,3 +132,4 @@ Say each one plainly, with why, and wait. Never do them for him.
 | `references/git-rules.md` | The setup commit, and Git writes in Codex |
 | `references/tracker-github.md` | A GitHub Issues tracker: what agents do in place of `toolkit work` |
 | `references/tracker-jira.md` | A Jira tracker: what agents do in place of `toolkit work` |
+| `assets/codex-toolkit.rules` | Doctor reports `codex-ask-rules` and the project changed its `.codex/rules/toolkit.rules`: the ask-first rules to copy into it (`references/repair-and-update.md`, "Doctor findings") |

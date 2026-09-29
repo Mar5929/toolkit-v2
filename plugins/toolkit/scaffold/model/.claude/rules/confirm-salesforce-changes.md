@@ -1,6 +1,7 @@
 # Confirm Salesforce Changes
 
 Confirm intent and scope with the owner before you act on:
+
 - Object model: objects, fields, relationships, validation rules, record types.
 - Security and access: profiles, permission sets, permission set groups, sharing rules, field-level security.
 - Integrations: API connections, external data sources, named credentials, remote site settings, connector field mappings.

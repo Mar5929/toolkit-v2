@@ -139,7 +139,8 @@ For step 5.
 - `toolkit work design <id> --create` creates the design from the project's
   template (`.work-items/work-item-template/DESIGN.md` when present,
   otherwise the toolkit's copy of the model) in the item's one design home.
-  For GitHub or Jira, start the design comment from `assets/DESIGN.md`.
+  For GitHub or Jira, start the design comment from `assets/DESIGN.md`,
+  without its header fields and its "Generated file" comment.
 - `toolkit work design <id>` prints the current design. Paste the parts each
   agent needs into its brief.
 - The design's header fields (`work_item`, `status`, `approved`) are written

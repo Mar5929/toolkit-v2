@@ -1,0 +1,38 @@
+total 0
+drwxr-xr-x   3 michaelrihm  wheel   96 Sep 29 11:19 .
+drwxr-xr-x  10 michaelrihm  wheel  320 Sep 29 11:19 ..
+drwxr-xr-x   5 michaelrihm  wheel  160 Sep 29 11:19 feecalc-2026-09-29
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/rules-codex/feecalc-2026-09-29:
+total 8
+drwxr-xr-x  5 michaelrihm  wheel  160 Sep 29 11:19 .
+drwxr-xr-x  3 michaelrihm  wheel   96 Sep 29 11:19 ..
+drwxr-xr-x  8 michaelrihm  wheel  256 Sep 29 11:19 memory
+-rw-r--r--  1 michaelrihm  wheel  894 Sep 29 11:19 toolkit-export.json
+drwxr-xr-x  5 michaelrihm  wheel  160 Sep 29 11:19 work-items
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/rules-codex/feecalc-2026-09-29/memory:
+total 56
+drwxr-xr-x  8 michaelrihm  wheel   256 Sep 29 11:19 .
+drwxr-xr-x  5 michaelrihm  wheel   160 Sep 29 11:19 ..
+-rw-r--r--  1 michaelrihm  wheel  4973 Sep 29 11:19 AGENTS.md
+-rw-r--r--  1 michaelrihm  wheel   964 Sep 29 11:19 CURRENT_FOCUS.md
+-rw-r--r--  1 michaelrihm  wheel   472 Sep 29 11:19 MEMORY.md
+-rw-r--r--  1 michaelrihm  wheel  3675 Sep 29 11:19 memory-criteria.md
+-rw-r--r--  1 michaelrihm  wheel  2527 Sep 29 11:19 project_topic_template.md
+-rw-r--r--  1 michaelrihm  wheel  1121 Sep 29 11:19 terminology-glossary.md
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/rules-codex/feecalc-2026-09-29/work-items:
+total 16
+drwxr-xr-x  5 michaelrihm  wheel  160 Sep 29 11:19 .
+drwxr-xr-x  5 michaelrihm  wheel  160 Sep 29 11:19 ..
+-rw-r--r--  1 michaelrihm  wheel  195 Sep 29 11:19 .toolkit-state.json
+-rw-r--r--  1 michaelrihm  wheel  326 Sep 29 11:19 DASHBOARD.md
+drwxr-xr-x  4 michaelrihm  wheel  128 Sep 29 11:19 work-item-template
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/rules-codex/feecalc-2026-09-29/work-items/work-item-template:
+total 40
+drwxr-xr-x  4 michaelrihm  wheel   128 Sep 29 11:19 .
+drwxr-xr-x  5 michaelrihm  wheel   160 Sep 29 11:19 ..
+-rw-r--r--  1 michaelrihm  wheel  8954 Sep 29 11:19 DESIGN.md
+-rw-r--r--  1 michaelrihm  wheel  7524 Sep 29 11:19 WORK-ITEM.md

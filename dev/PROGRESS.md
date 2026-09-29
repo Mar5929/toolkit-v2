@@ -51,6 +51,58 @@ Next piece of work Mike asked for: the Notion work tracker refinement. His
 prompt is in `dev/next/notion-work-tracker-prompt.md`; run it in a new
 session in the toolkit-v2 folder after this goal is met.
 
+## Direction: skills-first (decided 2026-09-29; `dev/GOAL.md` "Direction change")
+
+Mike chose skills and timely hooks. He asked to see the plan before any
+work. Plan shown in chat: (0) snapshot commit of today's working tree;
+(1) read-only research of the captured Claude Code, Codex, and Anthropic
+skill pages plus OpenAI's "Harness engineering" article (captured to the
+session scratchpad as harness-openai.md, not yet in ai-external-knowledge/);
+(2) one short architecture document written with the Notion session:
+lifecycle map, skill list with descriptions, stages and approvals, memory
+save and recall with links to work items, the few small checks, reuse and
+delete lists; (3) review by the Notion session, one independent reviewer,
+then Mike; (4) new goal and finish list for his yes. Waiting on his yes and
+on one question: build only local + Obsidian and Notion + Lore first.
+
+### Earlier: direction question
+
+Mike: "I told you initially not to over-engineer this ... Why can't we just
+have skills that should be used, depending on what I select on a project?
+Why are we creating a whole custom program called Toolkit?" His goal said
+skills plus hooks (`dev/GOAL.md`, "Goal"); the build grew a `toolkit`
+program of about 37,000 lines (plugins/toolkit/lib) plus 23,000 lines of
+tests. Asked him: switch to skills-first (setup installs only the skills for
+his choices; skills use files, `ntn`, and Hindsight directly; a few small
+hook scripts for must-not-skip checks) or keep the program. Workflow
+`wf_a6663d9f-9c8` (live reruns of the program) was stopped at his message;
+resume with its script and run id if the program stays. Workflow
+`wf_6e6bebee-68e` (skill descriptions, self-contained skill folders) keeps
+running: its work is needed either way.
+
+## Open requests from Mike (not yet placed)
+
+- 2026-09-29: cite recalled knowledge, always (settled; `dev/GOAL.md`,
+  "Cite recalled knowledge, always"). Today only memory-find cites, and only
+  when it runs. Build after the descriptions workflow (`wf_6e6bebee-68e`)
+  stops editing skill files: one always-on line in the model's `AGENTS.md`
+  (reaches both hosts and helper agents); a "Sources" list in memory-find's
+  "How to answer"; a ready-to-copy source line in `toolkit memory get` and
+  `find` output; a Stop-hook check (once per turn) when the agent read a
+  record with `toolkit memory get` and the reply names no source; tests; a
+  real Claude Code and Codex session to see it work.
+
+- 2026-09-29: "What would be awesome is if memories could be tied to work
+  items in Notion." Reason: a decision or fact from a work item must be easy
+  for the agent to find later (example: the DECISIONS.md history had to be
+  dug out of a chat transcript; now written in `dev/model-changes.md` item 6).
+  Today a memory names work item IDs only as plain text under "Authoritative
+  records" and "Seen" (`plugins/memory/shared/record-format.md`). Proposed: a
+  "Work items" relation on the Memories database to the project's Work Items
+  database, filled from those IDs; the work item page shows its memories; the
+  agent loads an item's memories when it starts work on it. Where to build it
+  (this goal or the Notion work tracker refinement session) is Mike's call.
+
 ## Done
 
 - Repo folder created and `git init` run (local only).
@@ -205,8 +257,83 @@ session in the toolkit-v2 folder after this goal is met.
 
 - `wf_6e6bebee-68e`: every skill description says what, why, and when; every
   skill folder self-contained; checker extended; routing spot check.
+  Review fixes done in the working tree (not committed):
+  - Descriptions: all 23 plugin skill descriptions say what, why (", so
+    ..."), and when, 299 to 405 characters (`dev/SKILL-INDEX.md` section 1).
+    `memory-tidy` now names "turn that lesson into a skill"; `work-finish`,
+    `work-on`, `project-setup` ("starts using Toolkit V2 on a new
+    computer"), and `publish-docs` (names `work-finish` and `memory-save`)
+    were reworded; dated owner-decision text left `memory-save` and
+    `memory-find`.
+  - Self-contained folders: `project-setup` carries
+    `assets/codex-toolkit.rules`, a generated copy of
+    `plugins/toolkit/templates/codex/toolkit.rules`
+    (`sync-skill-references.mjs` now copies `plugins/toolkit/templates/**`
+    and gives a non-Markdown copy a `#` header line). Every step that copies
+    an asset template into a project says to leave out its "Generated file"
+    line.
+  - `check-skills.mjs`: a skill's own reference that names a plugin path
+    (`templates/...`, `lib/...`) fails; first words such as "Always" or
+    "Tools" are not job verbs. 0 failures, 0 warnings, 24 notes.
+  - Written rules: `AGENTS.md` "Skill descriptions" and
+    `dev/research/skill-writing-guide.md` (D4 300 to 450 characters, D6 why
+    clause, template, checks, Part 9 and 10) match what `check-skills`
+    enforces. `SKILL-INDEX.md` 3.2 (memory), 5.3 (update-config,
+    todoist-cli, skill-creator, obsidian-cli, graphify, machine-sync), 7.2,
+    and 9.1 (decisions 5 and 6) updated.
+  - Versions raised (not installed): work 0.3.1, memory 0.3.1,
+    session-skills 0.2.11, git-workflows 0.2.9, sf-architect-solutioning
+    0.2.2, marketplace 0.3.2; toolkit stays 0.3.1 (not installed yet).
+    `claude plugin validate` passes for the root and all six plugin folders.
+  - Routing check in Claude Code (project settings only, and Mike's own user
+    settings, skills, and plugins) and in Codex (a scratch Codex home with
+    the raised versions): `dev/test-runs/skill-routing-final.md`.
+  Next steps, in order:
+  1. Ask Mike before installing the raised versions (`AGENTS.md`,
+     "Versions": `claude plugin marketplace update toolkit-v2`, `claude
+     plugin update <plugin>@toolkit-v2`, `codex plugin add
+     <plugin>@toolkit-v2`, `toolkit machine-setup`).
+  2. After the live tests release `plugins/toolkit/lib/`: in
+     `lib/commands/memory.mjs` (promote output, about line 1884, and
+     `skillSkeleton`, about line 1899) change "what this skill does, then
+     when to use it" to "what it does, why (a short ', so ...' clause), then
+     when to use it, with two to four example phrases". Double each single
+     quote inside the YAML skeleton line, keep its `<Fill in: what this
+     skill does` start (`tests/memory/lessons.test.mjs` line 165 checks
+     it), and run that test.
+  3. Mike answers `SKILL-INDEX.md` 9.1 decisions 5 ("run the tests whenever
+     I stop": `update-config` or `memory-save`) and 6 ("remind me to call
+     the bank": `memory-save` or Todoist).
+  4. The Salesforce project skill descriptions wait for Mike's yes in
+     `dev/model-changes.md`.
+  5. Dated owner-decision notes are still in shared sources and one skill
+     (guide B12): `plugins/work/shared/helpers.md`, `team-roles.md`,
+     `plugins/memory/shared/record-format.md`, `memory-notion.md`,
+     `backup-and-restore.md`, `proposals.md`,
+     `project-setup/references/interview.md`, and `work-check/SKILL.md`
+     line 35.
 - `wf_7fbb6da1-7af`: every rule rewritten to Claude Code best practices on
   the model branch, owner-preferences format, `dev/tools/check-rules.mjs`.
+  Done in the working tree (not committed in this repository): model branch
+  commits `f9ec2df`, `8f04125`, `d655664`, imported; `dev/tools/check-rules.mjs`
+  and the `toolkit doctor` rule check (`lib/project/rule-lint.mjs`,
+  `rule-checks.mjs`); `toolkit rule add|update` size, vague, and conflict
+  warnings; toolkit 0.3.1; suite 1027 tests, 0 fail, 3 skipped. Record and
+  15 open questions: `dev/model-changes.md`, "Rules best practices" and
+  "Rules best practices: needs your yes". Next: Mike answers those; the
+  owner of `plugins/*/shared/` may shorten the owner-preferences purpose line
+  (same section, "Not done").
+  Review fixes: model commit `0b98c16` (headings, a split bullet, "for
+  example" in the org list), imported; doctor no longer reports the two
+  owner-preferences purpose lines as repeats; `rule add` compares with the
+  other project rules and `AGENTS.md`, prints the sections, and warns on a
+  close section name; the 4 KB limit is a warning until Mike answers item 11;
+  question 16 added. For the owner of `dev/SKILL-INDEX.md`: section 7.2 still
+  lists `work-on`, `work-decide`, `work-delegate`, `handoff`, and
+  `toolkit work lifecycle` for `keep-work-item-current.md`, and `toolkit
+  memory` commands for `memory-review-and-save.md`; after `8f04125` the first
+  names none of them and the second names only `toolkit memory get` and
+  `toolkit rule add`.
 
 ## Rules, memory, and enforcement (2026-09-29, workflow `wf_a6663d9f-9c8`)
 

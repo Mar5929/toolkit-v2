@@ -11,7 +11,7 @@ import { today as todayDate, run } from '../core/util.mjs';
 import { gitInfo } from '../core/config.mjs';
 import { readTemplate } from '../core/templates.mjs';
 import { isTerminal, isApproved, stageNumber, stageShort, typeNeedsRequirements } from './lifecycle.mjs';
-import { parseQuestions, parseHistory, isOpenOwnerQuestion, getLabel, parseRoadmap, checkGates, isTemplateRow, isPlaceholder, designHasOptions, designStatusFromBody } from './model.mjs';
+import { parseQuestions, parseHistory, parseTasks, isOpenOwnerQuestion, getLabel, parseRoadmap, checkGates, isTemplateRow, isPlaceholder, designHasOptions, designStatusFromBody } from './model.mjs';
 
 // ------------------------------------------------------------------ what waits on the owner
 
@@ -174,6 +174,14 @@ export function collectAgentTodos(items, { ownerName } = {}) {
     const parent = item.parent !== undefined ? item.parent : meta.parent;
     if (parent && String(parent).trim().toLowerCase() !== 'none') continue;
     const n = stageNumber(meta.stage) ?? 0;
+    // Owner-led recorded by the small-item rule is looked at again once the
+    // item grew: a split, a second phase, or more than two tasks (close-out
+    // 2026-09-28, finding 3), while the build has not finished.
+    const grown = smallItemRecorded(item) ? grownReason(item) : null;
+    if (grown && n >= 3 && n <= 8) {
+      out.push({ id, title: meta.title || '', kind: 'delivery_offer', what: deliveryRelookNote(id, grown), detail: 'work-delegate asks the owner once per goal.', continueWith: 'work-delegate' });
+      continue;
+    }
     if (n < 3 || n > 7) continue;
     if (meta.delivery && meta.delivery !== 'not-offered') continue;
     const big = bigReason(item);
@@ -203,7 +211,7 @@ const CHECK_NOT_RAN = new RegExp([
   String.raw`\bwithout (?:an? )?(?:independent|acceptance)(?: agent)?[- ]check(?:er)?\b`,
   String.raw`\b(?:independent|acceptance)(?: agent)?[- ]check(?:er)? (?:did not|could not|didn['’]t|couldn['’]t|was not|wasn['’]t) (?:run|start)`,
 ].join('|'), 'i');
-/** A Recent History row that starts a build or a fix: a stage change to 08 Implementation or 10 Bug fixing. */
+/** A Recent History row that starts a build or a fix: a stage change to 08 Build or 10 Bug fixing. */
 const BUILD_ROW = /->\s*(?:08|10)\b/;
 
 /**
@@ -218,6 +226,54 @@ export function acceptanceCheckRecorded(body) {
     if (BUILD_ROW.test(row.change)) return false;
   }
   return false;
+}
+
+/**
+ * The words a history row carries when a result was approved or finished
+ * without an independent check: `--no-independent-check --reason <text>`,
+ * allowed only when the host cannot start a worker (close-out 2026-09-28,
+ * R-B1 in code).
+ */
+export const NO_CHECK_WORDS = 'without an independent acceptance check';
+
+/**
+ * The Change column of the row `toolkit work approve --result
+ * --no-independent-check --reason <text>` writes, and only that row: "Result
+ * approved by <who> without an independent acceptance check: <reason>." A
+ * note that only holds the words (toolkit work history --note '... without an
+ * independent acceptance check yet') is not a skip (verifier, 2026-09-29).
+ */
+const SKIP_ROW = new RegExp(`^Result approved by \\S.*? ${NO_CHECK_WORDS}: \\S`);
+
+/**
+ * True when the Recent History (newest first), after the last build or fix,
+ * shows an acceptance-checker verdict, or the result approval row that
+ * --no-independent-check wrote (its reason is in that row). What toolkit work
+ * finish needs. With { resultApproved: false } (the item has no recorded
+ * result approval), only a verdict counts: a skip row is the approval's own
+ * row, so it cannot stand without it.
+ */
+export function acceptanceCheckOrSkipRecorded(body, { resultApproved = true } = {}) {
+  for (const row of parseHistory(body)) {
+    const text = `${row.change} ${row.effect}`;
+    if (checkVerdict(text) && !CHECK_NOT_RAN.test(text)) return true;
+    if (resultApproved && SKIP_ROW.test(String(row.change).trim())) return true;
+    if (BUILD_ROW.test(row.change)) return false;
+  }
+  return false;
+}
+
+/**
+ * The refusal of a result approval or a finish with no acceptance check
+ * recorded since the last build (exit 2). when: 'approve' or 'finish'.
+ */
+export function acceptanceCheckRefusal(id, when) {
+  const action = when === 'finish' ? `${id} was not finished` : `The result approval of ${id} was not recorded`;
+  return {
+    message: `${action}: no acceptance-checker verdict is recorded since its last move to 08 Build or 10 Bug fixing. One acceptance-checker that did not build it checks the result first, whoever built it: "no agent team" or owner-led delivery does not remove it (the owner's decision of 2026-09-28). Nothing was changed.`,
+    gate: 'acceptance_check_missing',
+    fix: `Start one acceptance-checker now (work-check, step 3), then record its verdict: toolkit work history ${id} --note 'Checked: <what>; acceptance-checker: <its verdict>; evidence: <where>; gaps: <gaps or none>'. Then run this command again. Only when this host has no way to start a worker: add --no-independent-check --reason '<why no worker could start>', and tell the owner no independent check ran.`,
+  };
 }
 
 /** True when a history text records "acceptance-checker: <verdict>" with a verdict word. */
@@ -248,6 +304,42 @@ export function acceptanceCheckNote(id, when) {
     return `Start one acceptance-checker for ${id} before asking the owner to approve its result: no check is recorded since its last build.`;
   }
   return `${id} is at 11 User approval, and no acceptance-checker check is recorded since its last build. Before you ask the owner to approve the result, start one acceptance-checker that did not build it (work-check, step 3). It runs whoever built the change: "no agent team" or owner-led delivery does not remove it. Then ${record}. ${noWorker}`;
+}
+
+/** The words that mark owner-led delivery recorded by the small-item rule (work-delegate, agent-led-delivery.md section 1). */
+const SMALL_ITEM = /\bsmall\s+item\b/i;
+
+/**
+ * True when an item's owner-led delivery was recorded by the small-item rule
+ * (its newest delivery history row says "Small item"), not by the owner's
+ * answer to the offer.
+ */
+export function smallItemRecorded(item) {
+  const meta = item.meta || {};
+  if (meta.delivery !== 'owner-led') return false;
+  for (const row of parseHistory(item.body || '')) {
+    const text = `${row.change} ${row.effect}`;
+    if (/\bdelivery\s+(?:owner-led|agent-led|not-offered)\b/i.test(row.change)) return SMALL_ITEM.test(text);
+  }
+  return false;
+}
+
+/**
+ * Why an item is no longer small, or null: sub-items, two or more roadmap
+ * phases, or more than two tasks.
+ */
+export function grownReason(item) {
+  const big = bigReason({ ...item, meta: { ...(item.meta || {}), type: 'task' } });
+  if (big) return big;
+  // The template's example tasks ("<Task 1 name>") are not tasks.
+  const tasks = parseTasks(item.body || '').filter((t) => !isPlaceholder(t.name));
+  if (tasks.length > 2) return `its plan has ${tasks.length} tasks`;
+  return null;
+}
+
+/** The note when an item recorded as small grew. */
+export function deliveryRelookNote(id, reason) {
+  return `${id} was recorded owner-led as a small item, and now ${reason}. Look at the delivery offer again (work-delegate, section 1 of agent-led-delivery.md): a small item is one or two tasks with no sub-items.`;
 }
 
 /** Why an item counts as big enough for the delivery offer, or null. */

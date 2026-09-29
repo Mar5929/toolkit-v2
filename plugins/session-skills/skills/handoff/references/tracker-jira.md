@@ -55,8 +55,8 @@ this file. Install or connect nothing without the owner's yes.
   in their assets folder: copy it from `## Overview` to the end, so every
   section exists.
 - A new design comment starts from the design template, `DESIGN.md`, which
-  the `solution-design` skill carries in its assets folder, without its
-  header fields.
+  the `solution-design`, `work-on`, and `work-organize` skills carry in their
+  assets folder, without its header fields and its "Generated file" comment.
 - Both open with a fill-in guide comment: follow it, then delete it.
 
 ## 4. The `toolkit work` steps in Jira
@@ -90,7 +90,7 @@ key. Where a step needs a search, the JQL is given.
 | `toolkit work set <id> --delivery agent-led` or `owner-led` | Add that `delivery-` label (remove the other one), mark the offer's Open Questions row Answered, and remove `waiting-on-owner` when no other question for him is open |
 | `toolkit work set <id> --title '<title>'` | Change the summary |
 | `toolkit work set <id> --type <type>` or `--priority <priority>` | Swap the `type-` label, or set the priority field |
-| `toolkit work design <id> --create` | Add the design comment, started from the design template (section 3), without its header fields |
+| `toolkit work design <id> --create` | Add the design comment, started from the design template (section 3), without its header fields and its "Generated file" comment |
 | `toolkit work design <id>` | Read the comment whose first line is "Solution design" (read every page of comments) |
 | `toolkit work design <id> --set-file <file>` or `--text` | Edit that comment in place |
 | `toolkit work design <id> ... --status proposed` | Edit the design comment with its Design status line set to Proposed, and add the `design-proposed` label |

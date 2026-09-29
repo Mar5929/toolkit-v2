@@ -170,6 +170,50 @@ export function pageBody(body) {
   return stripTitle(body).body;
 }
 
+/**
+ * Links between concepts in Notion (close-out 2026-09-28, F2). A file link
+ * between records ("[Billing](project_billing.md)") would not open anything in
+ * the Notion app, so on the page it becomes a link to the other record's page
+ * when that page exists:
+ *   - link text equal to that page's title: a page mention, <mention-page url="..."/>;
+ *   - other link text: a Notion link with the same text, [text](<page url>);
+ *   - a link to a section (#anchor) stays a file link: Notion drops the anchor
+ *     from a page link (tried in the test area on 2026-09-29).
+ * Read back, both become the file link again, so every backend stores the same
+ * text. Notion writes page URLs as https://app.notion.com/p/<id>.
+ */
+const FILE_LINK_RE = /\[([^\]\n]*)\]\(((?:user|feedback|project|reference|event)_[a-z0-9]+(?:_[a-z0-9]+)*)\.md\)/g;
+const NOTION_URL = '(?:https?://(?:app\\.notion\\.com/p|www\\.notion\\.so)/(?:[^"\\s)]*-)?)([0-9a-f]{32})';
+const MENTION_RE = new RegExp(`<mention-page url="${NOTION_URL}"\\s*(?:/>|>[^<]*</mention-page>)`, 'g');
+const PAGE_LINK_RE = new RegExp(`\\[([^\\]\\n]*)\\]\\(${NOTION_URL}\\)`, 'g');
+
+/** The URL Notion writes for a page id. */
+export function notionPageUrl(id) {
+  return `https://app.notion.com/p/${String(id).replace(/-/g, '')}`;
+}
+
+/** A body with its links between records turned into page mentions and page links. pages: key -> { id, title }. */
+export function toPageLinks(body, pages) {
+  return String(body ?? '').replace(FILE_LINK_RE, (all, text, key) => {
+    const page = pages.get(key);
+    if (!page) return all;
+    return text === page.title ? `<mention-page url="${notionPageUrl(page.id)}"/>` : `[${text}](${notionPageUrl(page.id)})`;
+  });
+}
+
+/** A body with page mentions and page links to records turned back into file links. byId: id (no dashes) -> { key, title }. */
+export function fromPageLinks(body, byId) {
+  return String(body ?? '')
+    .replace(MENTION_RE, (all, id) => {
+      const row = byId.get(id);
+      return row ? `[${row.title}](${row.key}.md)` : all;
+    })
+    .replace(PAGE_LINK_RE, (all, text, id) => {
+      const row = byId.get(id);
+      return row ? `[${text}](${row.key}.md)` : all;
+    });
+}
+
 /** The fields a write reads back and compares. */
 const COMPARED = ['type', 'name', 'description', 'status', 'superseded_by', 'source', 'saved', 'last_verified', 'authorization'];
 
@@ -237,6 +281,8 @@ export class NotionMemoryDriver {
    * inside the lock, so an entry another command just wrote is not lost.
    */
   async locked(fn) {
+    // A write may add, rename, or remove a row: the page-to-key map for links is read again after it.
+    this.linkRows = null;
     if (this.inLock || !this.useLock) return fn();
     return withLock(notionCacheDir(this.cacheRoot), async () => {
       this.inLock = true;
@@ -410,6 +456,46 @@ export class NotionMemoryDriver {
     return live[0] || null;
   }
 
+  /** The title a record's page shows (what a page mention displays). */
+  pageTitle(page) {
+    if (this.lore) return String(readValue(page, 'title') || '').trim();
+    const other = this.otherFields(page);
+    const summary = this.summaryOf(page);
+    return other.heading || titleFromName(summary.name || (splitKey(this.keyOf(page)) || {}).name);
+  }
+
+  /** The body with links to other records' pages (F2) turned into page mentions and page links, for sending. */
+  async pageLinks(body) {
+    const keys = [...new Set([...String(body ?? '').matchAll(FILE_LINK_RE)].map((m) => m[2]))];
+    if (!keys.length) return body;
+    const pages = new Map();
+    for (const key of keys) {
+      try {
+        const row = await this.findRow(key);
+        if (row) pages.set(key, { id: normalizeId(row.id), title: this.pageTitle(row) });
+      } catch {
+        // No row found: the file link stays.
+      }
+    }
+    return toPageLinks(body, pages);
+  }
+
+  /** The body read from Notion with page mentions and page links to records turned back into file links. */
+  async fileLinks(body) {
+    const text = String(body ?? '');
+    if (!/app\.notion\.com\/p\/|www\.notion\.so\//.test(text)) return text;
+    // One read of the rows serves every record read until the next write (find reads many).
+    if (!this.linkRows) {
+      const byId = new Map();
+      for (const row of await this.rows()) {
+        const key = this.keyOf(row);
+        if (isValidKey(key)) byId.set(normalizeId(row.id).replace(/-/g, ''), { key, title: this.pageTitle(row) });
+      }
+      this.linkRows = byId;
+    }
+    return fromPageLinks(text, this.linkRows);
+  }
+
   /**
    * A cached body can be used when the page was not edited since it was read,
    * and it was read at least CACHE_SAFE_MS after the page's last edit. Notion
@@ -438,7 +524,7 @@ export class NotionMemoryDriver {
       readAt = cached.readAt;
     } else {
       const md = await this.client.getMarkdown(page.id);
-      body = fromNotion(md.markdown || '', { tableStyle }).markdown;
+      body = await this.fileLinks(fromNotion(md.markdown || '', { tableStyle }).markdown);
       readAt = new Date(this.clock()).toISOString();
     }
     const summary = this.summaryOf(page);
@@ -583,14 +669,14 @@ export class NotionMemoryDriver {
       if (existing) {
         pageId = existing.id;
         // Plan the body before any write: a conflict with an edit made in Notion since the read above saves nothing.
-        planned = await this.planBody(pageId, pageBody(record.body), pageBody(base !== undefined ? base : current.body), label);
+        planned = await this.planBody(pageId, await this.pageLinks(pageBody(record.body)), await this.pageLinks(pageBody(base !== undefined ? base : current.body)), label);
         await this.client.updatePage(pageId, { properties });
         await this.applyPlan(pageId, planned.plan);
       } else {
         const page = await this.client.createPage({
           parent: { type: 'data_source_id', data_source_id: this.mem.dataSourceId },
           properties,
-          ...(pageBody(record.body).trim() ? { markdown: toNotion(pageBody(record.body)) } : {}),
+          ...(pageBody(record.body).trim() ? { markdown: toNotion(await this.pageLinks(pageBody(record.body))) } : {}),
         });
         this.client.trust(page.id);
         pageId = page.id;

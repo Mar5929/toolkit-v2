@@ -25,13 +25,22 @@
 // the Stop hook then asks the agent once to use the exact form or save the
 // proposal itself.
 
-import { searchTerms } from '../memory/contract.mjs';
+import { searchTerms, secretKind } from '../memory/contract.mjs';
 import { HOOK_PROPOSAL_EVIDENCE, HOOK_PROPOSAL_WAIT } from '../memory/proposals.mjs';
 import { ownerWording } from '../memory/owner-wording.mjs';
+import { shortHeading } from '../memory/concepts.mjs';
+import { ruleArea } from '../memory/lessons.mjs';
+import { stems } from '../memory/similar.mjs';
 
 export { ownerWording };
 
 const QUESTION = /save\s+to\s+(?:(?:the\s+)?project(?:'s|’s)?\s+)?memory\s*[*_]*\s*:\s*[*_]*\s*(.+?)\s*\?/gi;
+/**
+ * The question memory-save asks for an instruction (Mike, 2026-09-29: an
+ * instruction for how the agent works is a rule): "Add to the project rules:
+ * <one line>?". Its proposal is always a rule proposal.
+ */
+const RULE_QUESTION = /add\s+(?:this\s+|that\s+|it\s+)?to\s+(?:the\s+|your\s+)?(?:project(?:'s|’s)?\s+)?rules\s*[*_]*\s*:\s*[*_]*\s*(.+?)\s*\?/gi;
 /** Other ways of asking to save something to memory, each ending at its question mark in the same sentence. */
 const LOOSE = /\bsav(?:e|ed|ing)\b[^?\n.!]{0,80}\bmemory\b[^?\n.!]*\?|\bsaved\s+as\s+an?\s+(?:standing\s+|lasting\s+|permanent\s+)?(?:preference|rule|fact)\b[^?\n.!]*\?/gi;
 /** Words in the same sentence, before the question, that show it reports an earlier question or a save that happened. */
@@ -53,20 +62,31 @@ export function reportedAt(text, index) {
   return REPORTED.test(sentenceBefore(text, index));
 }
 
-/** The summaries of the "Save to memory: <summary>?" questions in a message, in order, without repeats. */
-export function proposalQuestions(message) {
+/**
+ * The summaries of the "Save to memory: <summary>?" and "Add to the project
+ * rules: <summary>?" questions in a message, in order, without repeats. With
+ * { withKind: true }: [{ summary, rule }] where rule is true for the rules form.
+ */
+export function proposalQuestions(message, { withKind = false } = {}) {
   const text = String(message ?? '');
+  const found = [];
+  for (const [re, rule] of [[QUESTION, false], [RULE_QUESTION, true]]) {
+    re.lastIndex = 0;
+    let m;
+    while ((m = re.exec(text)) !== null) {
+      if (reportedAt(text, m.index)) continue;
+      found.push({ at: m.index, summary: m[1].replace(/\s+/g, ' ').replace(WRAP, '').trim(), rule });
+    }
+    re.lastIndex = 0;
+  }
+  found.sort((a, b) => a.at - b.at);
   const out = [];
-  QUESTION.lastIndex = 0;
-  let m;
-  while ((m = QUESTION.exec(text)) !== null) {
-    if (reportedAt(text, m.index)) continue;
-    const summary = m[1].replace(/\s+/g, ' ').replace(WRAP, '').trim();
-    if (searchTerms(summary).length < 2) continue;
-    if (!out.some((s) => normalizeSummary(s) === normalizeSummary(summary))) out.push(summary);
+  for (const f of found) {
+    if (searchTerms(f.summary).length < 2) continue;
+    if (!out.some((s) => normalizeSummary(s.summary) === normalizeSummary(f.summary))) out.push({ summary: f.summary, rule: f.rule });
     if (out.length >= MAX_PER_TURN) break;
   }
-  return out;
+  return withKind ? out : out.map((x) => x.summary);
 }
 
 /**
@@ -77,11 +97,14 @@ export function proposalQuestions(message) {
 export function looseQuestion(message) {
   const text = String(message ?? '');
   QUESTION.lastIndex = 0;
-  if (QUESTION.test(text)) {
+  RULE_QUESTION.lastIndex = 0;
+  if (QUESTION.test(text) || RULE_QUESTION.test(text)) {
     QUESTION.lastIndex = 0;
+    RULE_QUESTION.lastIndex = 0;
     return null;
   }
   QUESTION.lastIndex = 0;
+  RULE_QUESTION.lastIndex = 0;
   LOOSE.lastIndex = 0;
   let m;
   while ((m = LOOSE.exec(text)) !== null) {
@@ -95,14 +118,17 @@ export function looseQuestion(message) {
 }
 
 /**
- * True when a message asks the owner a question about memory: a sentence that
- * ends in "?" and names memory, remembering, saving, keeping, or a proposal.
+ * True when a message asks the owner a question about memory or the rules: a
+ * sentence that ends in "?" and names memory, remembering, saving, keeping, a
+ * proposal, a rule, or a lesson to promote (toolkit memory promote asks "Make
+ * this a project rule: ...?" or "Turn the lesson ... into a project skill?").
  * His next prompt is then his answer to it.
  */
 export function memoryQuestionAsked(message) {
-  const text = String(message ?? '');
+  // A period inside a word (a file name such as SKILL.md, a version) does not end a sentence.
+  const text = String(message ?? '').replace(/\.(?=\S)/g, '\u00b7');
   const questions = text.match(/[^.?!\n]*\?/g) || [];
-  return questions.some((q) => /\b(?:memory|remember|save|saved|keep|kept|proposals?)\b/i.test(q));
+  return questions.some((q) => /\b(?:memory|remember|save|saved|keep|kept|proposals?|rules?|lessons?|promot\w*)\b/i.test(q));
 }
 
 /**
@@ -114,7 +140,7 @@ export function memoryQuestionAsked(message) {
  */
 export function namesOpenProposal(message, proposedSummaries = []) {
   const text = String(message ?? '');
-  if (/\bmemory\s+proposals?\b|\bproposals?\s+(?:in|for|to)\s+memory\b/i.test(text)) return true;
+  if (/\b(?:memory|rule)\s+proposals?\b|\bproposals?\s+(?:in|for|to)\s+memory\b/i.test(text)) return true;
   if (/\b(?:user|feedback|project|reference|event)_[a-z0-9]+(?:_[a-z0-9]+)+\b/.test(text)) return true;
   const words = normalizeSummary(text);
   return proposedSummaries.some((s) => s && s.length > 10 && words.includes(s));
@@ -126,12 +152,24 @@ export function normalizeSummary(summary) {
 }
 
 /** A summary that starts with a verb addressed to the agent. */
-const IMPERATIVE = /^(?:please\s+)?(?:(?:always|never|only)\s+)?(?:ask|use|keep|write|run|put|avoid|don['’]?t|do\s+not|stop|start|check|make|give|show|tell|say|add|leave|send|test|name|follow|call|list|skip|include|wait|confirm|prefer|read|open|explain|mention|commit|push|merge|deploy|save|let)\b/i;
+const IMPERATIVE = /^(?:please\s+)?(?:(?:always|never|only)\s+)?(?:ask|use|keep|write|run|put|avoid|don['’]?t|do\s+not|stop|start|check|make|give|show|tell|say|add|leave|send|test|name|follow|call|list|skip|include|wait|confirm|prefer|read|open|explain|mention|commit|push|merge|deploy|save|let|lead|answer|reply|respond|summari[sz]e|format|verify)\b/i;
+
+/** Words about how work is done: replies, questions, tests, commits, reviews, and the like. */
+const WORK_WORDS = /\b(?:repl(?:y|ies)|answers?|status|updates?|summar(?:y|ies)|bullets?|tables?|lists?|format\w*|explain\w*|explanations?|questions?|ask\w*|tests?|testing|commits?|branch\w*|merg\w*|pull\s+requests?|reviews?|approv\w*|messages?|code|comments?|naming|steps?|plans?|planning|designs?|work\s+items?|tasks?|delivery|helpers?|agents?|sessions?|handoffs?|wording|words|tone|emails?|docs?|documents?|changes?|results?|reports?|options?|recommend\w*|commands?|descriptions?|diffs?|screenshots?|examples?|links?|files?)\b/i;
 
 /**
- * The record type for a proposal (the model's memory-criteria.md): a working
- * preference the owner stated is `user`; a correction to how the agent works
- * is `feedback`; anything else is `project`.
+ * What an unanswered "Save to memory: <summary>?" proposes (Mike,
+ * 2026-09-29: rules, skills, and memory each hold one kind of thing):
+ *   'rule'     an instruction for how the agent works: the owner's preference
+ *              about how work is done ("you find tables easier to read than
+ *              bullets in status replies", "you'd rather ..."), a correction
+ *              ("you should", "stop doing", "the agent"), or an instruction
+ *              with no subject ("Ask one question at a time");
+ *   'user'     a fact about the owner himself (his role, his devices, a
+ *              preference that is not about the work);
+ *   'project'  anything else.
+ * (close-out 2026-09-28, C1: "you find ... easier" was typed project, and C2:
+ * the same preference could land in user_ or feedback_.)
  */
 export function proposalType(summary, ownerName) {
   const s = String(summary ?? '');
@@ -139,20 +177,41 @@ export function proposalType(summary, ownerName) {
   const esc = (x) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const names = owner ? [owner, owner.split(/\s+/)[0]].map(esc).join('|') : null;
   const namesOwner = names && new RegExp(`\\b(?:${names})\\b`, 'i').test(s);
-  // A preference the owner states is `user`, even when it is about working
-  // with the agent (final confirmation round 1, Hindsight run: "For small
-  // changes, Mike prefers working directly with the agent" was typed
-  // feedback because "the agent" was checked first).
   const ownerSubject = `(?:${names ? `${names}|` : ''}the owner|you|he|she)`;
-  if (new RegExp(`\\b${ownerSubject}\\s+(?:\\w+\\s+)?(?:prefers?|likes?|wants?|hates?|dislikes?)\\b`, 'i').test(s)
-    && !/\b(?:you should|you must|stop doing)\b/i.test(s)) return 'user';
-  if (/\b(?:the agent|agents?|you should|you must|stop doing|instead of)\b/i.test(s)) return 'feedback';
-  // An instruction to the agent with no subject ("Ask one requirements
-  // question at a time") is a standing correction: feedback (final run,
-  // codex-hindsight F2: it was typed project).
-  if (IMPERATIVE.test(s.trim())) return 'feedback';
-  if (namesOwner || /\b(?:the owner|prefers?|likes?|wants?)\b/i.test(s)) return 'user';
+  const prefers = new RegExp(`\\b${ownerSubject}(?:['’]d|\\s+would)?\\s+(?:\\w+\\s+)?(?:prefers?|likes?|wants?|hates?|dislikes?|rather|finds?|reads?|expects?|needs?)\\b`, 'i').test(s)
+    || /\beasier\s+for\s+(?:you|him|her|the owner)\b/i.test(s)
+    || (names && new RegExp(`\\beasier\\s+for\\s+(?:${names})\\b`, 'i').test(s));
+  if (/\b(?:the agent|agents?|you should|you must|stop doing|instead of)\b/i.test(s)) return 'rule';
+  // An instruction to the agent with no subject ("Ask one requirements question at a time").
+  if (IMPERATIVE.test(s.trim())) return 'rule';
+  // "you'd rather", "easier for you", "you find X easier": how he wants things done.
+  const compares = /\b(?:rather|easier|harder|clearer|faster)\b/i.test(s);
+  if (prefers) return WORK_WORDS.test(s) || compares ? 'rule' : 'user';
+  if (namesOwner || /\b(?:the owner)\b/i.test(s)) return 'user';
   return 'project';
+}
+
+/** The rule section a rule proposal names, from its words (lib/memory/lessons.mjs ruleArea). */
+export function proposalRuleSection(summary) {
+  return ruleArea(summary);
+}
+
+/**
+ * The part of the owner's prompt that states the fact a question proposes, or
+ * null (close-out 2026-09-28, finding 5: the proposal did not record that the
+ * owner stated it). The prompt counts when it shares at least half of the
+ * summary's words, or three of them. At most 200 characters; never a secret.
+ */
+export function statedInPrompt(summary, prompt) {
+  const text = String(prompt ?? '').replace(/\s+/g, ' ').trim();
+  if (!text || secretKind(text)) return null;
+  const want = stems(searchTerms(summary));
+  if (!want.length) return null;
+  const have = new Set(stems(searchTerms(text)));
+  const shared = want.filter((w) => have.has(w)).length;
+  if (shared < 3 && shared < want.length / 2) return null;
+  if (shared < 2) return null;
+  return text.length <= 200 ? text : `${text.slice(0, 197).replace(/\s+\S*$/, '')}...`;
 }
 
 /**
@@ -204,10 +263,17 @@ export function proposalTitle(summary) {
  * own wording, quoted in the Evidence line; the rest uses `summary` (the
  * owner-named wording from ownerWording).
  */
-export function proposalBody(summary, date, asked = summary) {
+export function proposalBody(summary, date, asked = summary, { stated = null, rule = false } = {}) {
   const text = String(summary).replace(/\s+/g, ' ').trim();
   const point = /[.!?]$/.test(text) ? text : `${text}.`;
   const question = String(asked).replace(/\s+/g, ' ').trim();
+  const form = rule ? 'Add to the project rules' : 'Save to memory';
+  const quoted = stated ? String(stated).replace(/"/g, '”') : null;
+  // His words keep their own closing mark; no second period after the quote (verifier, 2026-09-29).
+  const stop = quoted && /[.!?]$/.test(quoted) ? '' : '.';
+  const evidence = quoted
+    ? `On ${date} the owner wrote "${quoted}"${stop} The agent asked him "${form}: ${question}?" and the turn ended with no answer, ${HOOK_PROPOSAL_EVIDENCE}`
+    : `On ${date} the agent asked the owner "${form}: ${question}?" and the turn ended with no answer, ${HOOK_PROPOSAL_EVIDENCE}`;
   return [
     `# ${proposalTitle(text)}`,
     '',
@@ -217,7 +283,7 @@ export function proposalBody(summary, date, asked = summary) {
     '',
     `**How to apply:** Not stated by the owner. ${HOOK_PROPOSAL_WAIT}`,
     '',
-    `**Evidence and limits:** On ${date} the agent asked the owner "Save to memory: ${question}?" and the turn ended with no answer, ${HOOK_PROPOSAL_EVIDENCE}`,
+    `**Evidence and limits:** ${evidence}`,
     '',
   ].join('\n');
 }
@@ -230,17 +296,35 @@ export function proposalBody(summary, date, asked = summary) {
  * save named: "belongs in the concept X"), the proposal names that concept
  * and a section heading, and the owner's yes adds it there.
  */
-export function proposalArgs(summary, { ownerName, date, name, concept, section } = {}) {
-  const type = proposalType(summary, ownerName);
+export function proposalArgs(summary, { ownerName, date, name, concept, section, rule = null, ruleForm = false, stated = null } = {}) {
+  // rule: true when the question was "Add to the project rules: ...?" (ruleForm) or its words are an instruction.
+  const kind = rule === true || ruleForm ? 'rule' : proposalType(summary, ownerName);
   const named = ownerWording(summary, ownerName);
+  const bodyOpts = { stated, rule: Boolean(ruleForm) };
+  if (kind === 'rule') {
+    // A rule proposal (Mike, 2026-09-29): typed user, it names the rule
+    // section a yes adds it to, and it joins no memory concept.
+    return [
+      'memory', 'save',
+      '--type', 'user',
+      '--name', name || `rule-${proposalName(named, 'user')}`.slice(0, 55).replace(/-+$/, ''),
+      '--description', proposalDescription(named),
+      '--body', proposalBody(named, date, summary, bodyOpts),
+      '--source', `Agent question in a session, ${date}`,
+      '--rule-section', proposalRuleSection(summary),
+      '--proposal',
+      '--json',
+    ];
+  }
   if (concept) {
     return [
       'memory', 'save',
       '--concept', concept,
-      '--section', section || proposalTitle(named),
+      // A few words that name the sub-topic, not the whole sentence (close-out finding 6).
+      '--section', section || shortHeading(named),
       ...(name ? ['--name', name] : []),
       '--description', proposalDescription(named),
-      '--body', proposalBody(named, date, summary),
+      '--body', proposalBody(named, date, summary, bodyOpts),
       '--source', `Agent question in a session, ${date}`,
       '--proposal',
       '--json',
@@ -248,10 +332,10 @@ export function proposalArgs(summary, { ownerName, date, name, concept, section 
   }
   return [
     'memory', 'save',
-    '--type', type,
-    '--name', name || proposalName(named, type),
+    '--type', kind,
+    '--name', name || proposalName(named, kind),
     '--description', proposalDescription(named),
-    '--body', proposalBody(named, date, summary),
+    '--body', proposalBody(named, date, summary, bodyOpts),
     '--source', `Agent question in a session, ${date}`,
     '--proposal',
     '--json',

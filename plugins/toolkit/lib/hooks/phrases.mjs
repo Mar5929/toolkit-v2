@@ -1,11 +1,16 @@
 // The explicit phrases that mean "keep this for later sessions" (ARCHITECTURE
 // section 6, UserPromptSubmit; critique I14). Only explicit phrases count:
 // "remember that" or "remember this", "from now on", "don't ever", "note
-// that", "going forward", "keep in mind". Never "do you remember", "never
-// mind", or "always fails": broad words such as "always" and "never" alone are
-// not in the list, so ordinary sentences do not start a reminder.
+// that", "going forward", "keep in mind", and "Always ..." or "Never ..." as
+// the first word of a sentence, which is an instruction ("Always keep commit
+// messages under 60 characters": close-out 2026-09-28, finding 10). Never "do
+// you remember", "never mind", or "it always fails": "always" and "never"
+// inside a sentence do not start a reminder.
 
-export const KEEP_LINE = 'The owner stated something to keep; memory-save records it, or work-on if it is a task.';
+// The line names both homes (Mike, 2026-09-29, "Rules, skills, and memory
+// each hold one kind of thing"): an instruction for how the agent works is a
+// rule, a fact is memory. memory-save decides which.
+export const KEEP_LINE = 'The owner stated something to keep. memory-save picks its home: an instruction for how the agent works goes to the rules (toolkit rule add), a fact to memory; work-on if it is a task.';
 
 const PATTERNS = [
   { phrase: 'remember that', re: /\bremember\s+(?:that|this)\b/gi },
@@ -14,6 +19,8 @@ const PATTERNS = [
   { phrase: 'note that', re: /\bnote\s+that\b/gi },
   { phrase: 'going forward', re: /\bgoing\s+forward\b/gi },
   { phrase: 'keep in mind', re: /\bkeep\s+in\s+mind\b/gi },
+  // "Always" or "Never" opening a sentence, then a word that is not "mind".
+  { phrase: 'always or never', re: /(?:^\s*|[.!?]\s+|\n\s*(?:[-*]\s+)?)(?:please\s+)?(always|never)\s+(?!mind\b)[a-z]/gi },
 ];
 
 // "remember that" as a question or a negation is not an instruction to keep.
@@ -55,7 +62,22 @@ export function hasKeepPhrase(text) {
 // saved with --approved-by). A false match only leaves the note out.
 // An answer to the agent's own memory question is found from the last reply
 // instead (Stop records lastReplyAskedMemory), so "yes" is not in this list.
-const SAVE_WORDS = /\b(?:remember|memory|memori[sz]e|save|saved|always|never|forget|from\s+now\s+on|going\s+forward|keep\s+in\s+mind|note\s+that|make\s+a\s+note|write\s+(?:that|this|it)\s+down|(?:don['’]?t|do\s+not)\s+ever|stop\s+doing|instead)\b/i;
+// "Always" and "never" count when they tell someone what to do ("you always",
+// "please never", "should always") or open a sentence (keepPhrase), not in a
+// remark about how something behaves ("It always fails on Fridays.",
+// "I only ever run it on my MacBook"). A request about the rules or the
+// owner's preferences counts ("change that rule", "add it to the project
+// rules", "my preferences"; Mike, 2026-09-29), but not a rule the project
+// itself has: "FYI the validation rule on Account blocks the load" and "The
+// sharing rules look wrong" name Salesforce rules (verifier, 2026-09-29).
+const SAVE_WORDS = new RegExp([
+  String.raw`\b(?:remember|memory|memori[sz]e|save|saved|forget|from\s+now\s+on|going\s+forward|keep\s+in\s+mind|note\s+that|make\s+a\s+note|write\s+(?:that|this|it)\s+down|(?:don['’]?t|do\s+not)\s+ever|stop\s+doing|instead)\b`,
+  String.raw`\b(?:you|we|please|should|must|to|and)\s+(?:always|never)\b`,
+  String.raw`\b(?:add|make|change|update|remove|drop|keep)\s+(?:(?:that|this|it|the|my|your|a|an|as|project(?:['’]s)?|standing|new)\s+){0,3}(?:rules?|preferences?)\b`,
+  String.raw`\b(?:to|in|into|from|of)\s+(?:the\s+|my\s+|your\s+)?(?:project(?:['’]s)?\s+)?rules\b(?!\s+(?:on|for)\s+[A-Z])`,
+  String.raw`\b(?:project|standing|owner)\s+rules?\b`,
+  String.raw`\b(?:my|your)\s+preferences?\b`,
+].join('|'), 'i');
 
 /** True when the owner's own words in a prompt could tell the agent to save something. */
 export function saveWords(prompt) {

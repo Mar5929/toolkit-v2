@@ -1,0 +1,4 @@
+"About the billing API limit you saved, amounts under 50 cents: yes, always do that check first." keep= null saveWords= true
+"yes, always do that check first" keep= null saveWords= false
+"Yes. Always do that check first." keep= always or never saveWords= true
+"Always show status as a table." keep= always or never saveWords= true

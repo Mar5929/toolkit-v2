@@ -1,6 +1,6 @@
 ---
 name: pull-latest
-description: 'Brings the local repository up to date with its remote without losing or rewriting anything. Use when the owner says "get the latest", "pull the latest changes", "update from origin", or "grab what others pushed". Not for throwing away local work; use reset-to-remote.'
+description: 'Brings the local repository up to date with its remote by fetching and merging, without a rebase or a reset, so no local work or shared history is lost. Use when the owner says "get the latest", "pull the latest changes", "update from origin", or "grab what others pushed". Not for throwing away local work; use reset-to-remote.'
 ---
 
 # Pull the latest from the remote

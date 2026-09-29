@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "sessionId": "01a0ede9-fc3d-7a91-aaaf-e6d0b8a1814d",
+  "host": "codex",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex",
+  "startedAt": "2026-09-29T16:05:32.606Z",
+  "turns": 1,
+  "turn": {
+    "key": "01a0ede9-fca6-7240-bf6c-ef368f9daeb7",
+    "n": 1,
+    "startedAt": "2026-09-29T16:05:32.794Z",
+    "keep": null,
+    "baseline": {
+      "memoryMeta": 1790697905275.8843,
+      "hindsightMeta": null,
+      "memoryCache": null,
+      "workState": 1790697932679.3757,
+      "decisions": 1790695148134.4663,
+      "projectRules": 1790697663947.405,
+      "machineRules": null
+    },
+    "records": [
+      {
+        "kind": "memory",
+        "what": "toolkit memory save",
+        "at": "2026-09-29T16:06:11.305Z",
+        "description": "The billing API rejects amounts under 50 cents.",
+        "concept": "project_billing"
+      }
+    ],
+    "edits": [],
+    "stopBlocked": false,
+    "prompted": true,
+    "saveWords": true,
+    "prompt": "About the billing API limit you saved, amounts under 50 cents: yes, always do that check first.",
+    "answersMemoryQuestion": false
+  },
+  "lastStopReason": null,
+  "source": "startup",
+  "updated": "2026-09-29T16:06:20.595Z",
+  "lastReplyAskedMemory": false
+}

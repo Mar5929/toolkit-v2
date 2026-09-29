@@ -220,6 +220,33 @@ import { slugify, today as localToday } from '../core/util.mjs';
 
 export const MEMORY_BACKENDS = Object.freeze(['builtin', 'hindsight', 'notion']);
 export const RECORD_TYPES = Object.freeze(['user', 'feedback', 'project', 'reference', 'event']);
+/**
+ * The types memory saves new records in (Mike, 2026-09-29, dev/GOAL.md "Rules,
+ * skills, and memory each hold one kind of thing"): user_, project_,
+ * reference_, event_. `feedback` is retired: an instruction for how the agent
+ * works is a rule (toolkit rule add), not memory. RECORD_TYPES still holds it,
+ * so an older feedback_ record is read, listed, and moved out (memory-tidy),
+ * never lost.
+ */
+export const ACTIVE_TYPES = Object.freeze(['user', 'project', 'reference', 'event']);
+export const RETIRED_TYPES = Object.freeze(['feedback']);
+
+/** True for a type that no new record may use. */
+export function isRetiredType(type) {
+  return RETIRED_TYPES.includes(String(type ?? ''));
+}
+
+/**
+ * The refusal for a new feedback_ record or fact: instructions are rules now.
+ * what: the words for the change that was refused ("toolkit memory save").
+ */
+export function retiredTypeError(key, what = 'This save') {
+  return new ToolkitError(EXIT.INVALID, `${what} was refused: ${key ? `${key} is a feedback_ record, and ` : ''}the feedback_ type is retired. An instruction for how the agent works (a preference, a correction, "from now on", "always", "never") is a rule, not memory: toolkit rule add --section '<area>' --text '<instruction>' --source '<who said it, where>' (add --machine right after "add" when it is for every project). A fact goes in a user_, project_, reference_, or event_ concept. Nothing was saved.`, {
+    key: key || null,
+    retiredType: 'feedback',
+    fix: "toolkit rule add --section '<area>' --text '<instruction>' --source '<who said it, where>'",
+  });
+}
 export const RECORD_STATUSES = Object.freeze(['current', 'needs-review', 'retired']);
 /** The status words written in a stored record (the model's words). */
 export const STORED_STATUSES = Object.freeze(['current', 'needs-review', 'superseded', 'archived']);
@@ -1188,6 +1215,10 @@ export function recordSummary(record) {
     out.concept = target.concept;
     out.section = target.section;
   }
+  // A rule proposal names the rule section a yes adds it to (Mike, 2026-09-29).
+  const extra = record.extra && typeof record.extra === 'object' ? record.extra : {};
+  const ruleSection = oneLine(record.rule_section ?? extra.rule_section);
+  if (ruleSection) out.rule_section = ruleSection;
   return out;
 }
 
@@ -1762,6 +1793,47 @@ function bestSection(body, terms) {
   const trimmed = best.text.replace(/^\s+/, '');
   const lead = best.text.length - trimmed.length;
   return { heading: best.heading, text: trimmed, first: Math.max(0, best.first - lead) };
+}
+
+/**
+ * The snippet of the "## " section a search matched, for a backend whose
+ * search returns a piece of a record rather than the record (Hindsight recall
+ * returns a chunk): the section that holds the most of the search words, else
+ * the section that holds the returned piece. "<heading>: <text around the
+ * match>", or null when the body has no "## " section (close-out 2026-09-28,
+ * F1: Hindsight find showed the first 160 characters of the chunk).
+ */
+export function matchingSectionSnippet(body, terms, piece = '') {
+  const text = String(body ?? '');
+  const byWords = terms && terms.length ? bestSection(text, terms) : null;
+  if (byWords) return `${byWords.heading}: ${snippetAround(byWords.text, byWords.first)}`;
+  const flat = (s) => String(s ?? '').replace(/\s+/g, ' ').trim();
+  const probe = flat(piece).slice(0, 60);
+  if (!probe) return null;
+  // The "## " sections, outside fenced code, each with its own text.
+  const sections = [];
+  let fence = null;
+  for (const line of text.split('\n')) {
+    const f = /^\s{0,3}(`{3,}|~{3,})/.exec(line);
+    if (fence) {
+      if (f && f[1][0] === fence[0] && f[1].length >= fence.length) fence = null;
+    } else if (f) {
+      fence = f[1];
+    } else {
+      const h = /^##(?!#)[ \t]+(.*?\S)[ \t]*#*[ \t]*$/.exec(line);
+      if (h) {
+        sections.push({ heading: h[1].trim(), lines: [] });
+        continue;
+      }
+    }
+    if (sections.length) sections[sections.length - 1].lines.push(line);
+  }
+  for (const sec of sections) {
+    const own = flat(sec.lines.join('\n'));
+    const at = own.indexOf(probe);
+    if (at !== -1) return `${sec.heading}: ${snippetAround(own, at)}`;
+  }
+  return null;
 }
 
 /** About 160 characters of text around a position, on one line. */

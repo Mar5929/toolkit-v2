@@ -15,6 +15,8 @@ import { contextOutput } from './output.mjs';
 import { findProject, trackerType, recordBaseline } from './common.mjs';
 import { updateSession, startTurn } from './session.mjs';
 import { keepPhrase, saveWords, KEEP_LINE } from './phrases.mjs';
+import { writeTurnFacts } from './turn-facts.mjs';
+import { secretKind } from '../memory/contract.mjs';
 
 async function rescan(project, io, lastReported) {
   if (trackerType(project) !== 'local') return { lines: [], fingerprint: null };
@@ -57,6 +59,7 @@ export async function userPrompt(input, io) {
     lines.push(...scan.lines.map((l) => `- ${l}`));
   }
   const phrase = keepPhrase(prompt);
+  let facts = null;
   await updateSession(project, io.host, input, io.env, (state) => {
     // Whether the reply before this prompt asked the owner about memory: this
     // prompt answers it (PostToolUse, a save that claims his approval).
@@ -66,10 +69,27 @@ export async function userPrompt(input, io) {
     turn.prompted = true;
     turn.keep = phrase;
     turn.saveWords = saveWords(prompt);
+    // The owner's words, so a proposal the Stop hook saves can quote a fact he
+    // stated (close-out finding 5). Never a secret; at most 600 characters.
+    turn.prompt = secretKind(prompt) ? null : prompt.replace(/\s+/g, ' ').trim().slice(0, 600);
     turn.answersMemoryQuestion = answersMemoryQuestion;
-    turn.baseline = recordBaseline(project);
+    turn.baseline = recordBaseline(project, io.env);
     if (scan.fingerprint) state.trackerReported = scan.fingerprint;
+    facts = {
+      host: io.host,
+      turn: turn.n,
+      key: turn.key,
+      at: turn.startedAt,
+      prompted: true,
+      keep: turn.keep,
+      saveWords: turn.saveWords,
+      answersMemoryQuestion,
+    };
   });
+  // The facts a toolkit command run in this turn reads (lib/hooks/turn-facts.mjs):
+  // a save that claims the owner's approval in a turn with no keep phrase,
+  // save words, or answer to a memory question is saved as a proposal.
+  if (facts && input.session_id) writeTurnFacts(project, input.session_id, facts);
   if (phrase) lines.push(KEEP_LINE);
   return lines.length ? contextOutput('UserPromptSubmit', lines.join('\n')) : null;
 }

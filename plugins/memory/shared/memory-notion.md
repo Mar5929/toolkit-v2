@@ -43,7 +43,7 @@ how Notion memory behaves differently from built-in and Hindsight memory.
 | The body's `# Title` line | Title |
 | `description` (the concept's one-line summary) | Synopsis |
 | `updated` (the date of the last change) | Saved |
-| `metadata.type` | Tags (`user`, `feedback`, `project`, `reference`, or `event`) |
+| `metadata.type` | Tags (`user`, `project`, `reference`, or `event`; an older record may say `feedback`) |
 | `status` | Status: current = accepted, needs-review and proposals = proposed, superseded = superseded, archived = deprecated |
 | `supersedes` | Supersedes (a link to the rows it replaced); Superseded by holds the replacement's key |
 | `source`, `last_verified`, `authorization` | Source note, Last verified, Authorization |
@@ -51,6 +51,14 @@ how Notion memory behaves differently from built-in and Hindsight memory.
 
 Kind is always "note", Source is "manual", Author is the owner, and Agent is
 Claude Code or Codex.
+
+A link to another record (`[Billing](project_billing.md)`) is a link to that
+record's page on the Notion page, so a click in the Notion app opens it: a
+page mention when the link text is the page's title, else a Notion link with
+the same text. A link to one section (`#Refund%20window`) stays a file link,
+because Notion drops the section from a page link. `toolkit memory get` reads
+every one back as the file link, so the text is the same as in built-in
+memory. A rename keeps the page, so a page link follows it.
 
 ## Rules that keep Lore's layout working
 

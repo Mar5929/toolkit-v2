@@ -1,6 +1,6 @@
 ---
 name: work-check
-description: 'Tests a finished build against its work item''s requirements, fixes what fails, and asks the owner to approve the result. Use when the last build task is done, or the owner asks whether it is ready to ship or works, for example "is it ready", "test it", or "check it against what I asked for".'
+description: 'Tests a finished build against its work item''s requirements, with an independent checker every time, fixes what fails, and asks the owner to approve the result, so every result he approves was checked. Use when the last build task is done, or the owner asks whether it is ready to ship or works, for example "is it ready", "test it", or "check it against what I asked for".'
 ---
 
 # Work check
@@ -14,7 +14,7 @@ Checks a finished build against every requirement with an independent checker, f
    `toolkit work show <id>`
    `toolkit work design <id>`
    `toolkit work set <id> --stage 09-testing`
-2. Run the project's tests and every acceptance check the item lists. Several scenarios or manual steps: write a test plan in `tests/` on the item's branch (`references/testing.md`, sections 2 and 3).
+2. Run the project's tests and every acceptance check the item lists. Several scenarios or manual steps: write a test plan in `tests/` on the item's branch from the test plan template (`assets/TEST-PLAN-TEMPLATE.md`; `references/testing.md`, sections 2 and 3).
 3. Brief the `acceptance-checker`, never the agent that built it, naming the branch and the exact commit (`references/testing.md`, section 4). It runs before every result approval, whoever built the change (`references/helpers.md`, section 6).
 4. Failures: run the check and fix loop until clean, or until a failure needs an owner decision (`references/testing.md`, section 5).
    `toolkit work set <id> --stage 10-bug-fixing`
@@ -33,6 +33,7 @@ Checks a finished build against every requirement with an independent checker, f
 - Run each `toolkit` command alone: never joined by `&&`, `;`, or a pipe, and never from a script (in Codex that runs it inside the sandbox, where it fails). One-line values go in single quotes, never double quotes; an apostrophe inside them is `'\''` in Claude Code and ’ (U+2019) in Codex, or reword the text. Section text goes on standard input (`--set-file -`) in Claude Code, and in `--text '<text>'` or a `mktemp -d` file in Codex (`references/toolkit-commands.md`, "Text in a command").
 - The checker is never the agent or session that built the change. When no independent check could run, say so plainly before asking for approval.
 - The `acceptance-checker` runs before every result approval (the owner's decision of 2026-09-28). "No agent team", "owner-led", "I'll lead it myself", or a no to the team question decide only who builds; they never remove it. Only when this host has no way to start a worker, check the result yourself and say plainly that no independent check ran, and why. If he asks to skip it, remind him of that decision and ask whether he wants to change it (`references/helpers.md`, section 6).
+- The toolkit refuses the result approval (exit 2) until step 5's note with the checker's verdict is recorded after the last build. Record the note first. `--no-independent-check --reason '<why no worker could start>'` is only for a host that cannot start a worker, and the reason goes in the history.
 - The change is only in a worktree until it is merged. When the reply gives him a command to try, name the worktree folder and give the command with its folder, for example `cd <worktree path>` first.
 - A check that did not run is reported as not run, never as passed.
 - The test plan lives in `tests/` on the item's branch, committed there. Never in `.work-items/`, which Git ignores.
@@ -64,6 +65,7 @@ A "no": record his words, turn each named problem into a task or a requirement c
 | File | Open it when |
 | --- | --- |
 | [references/testing.md](references/testing.md) | Steps 1 to 5: what to check against, the test plan, the checker's brief, the fix loop |
+| [assets/TEST-PLAN-TEMPLATE.md](assets/TEST-PLAN-TEMPLATE.md) | Step 2: a test plan is needed and the project has no `tests/TEST-PLAN-TEMPLATE.md` of its own; also the sections to expect in one |
 | [references/approvals.md](references/approvals.md) | Steps 6 and 7: the result approval checklist; what counts as a yes |
 | [references/git-rules.md](references/git-rules.md) | Committing the test plan or a fix, and Git writes in Codex |
 | [references/helpers.md](references/helpers.md) | Before starting any agent |

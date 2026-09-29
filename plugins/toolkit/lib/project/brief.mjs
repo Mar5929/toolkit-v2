@@ -22,6 +22,7 @@ import { EXIT } from '../core/output.mjs';
 import { stageShort, continueWith, isTerminal } from '../work/lifecycle.mjs';
 import { parseFocus } from '../memory/contract.mjs';
 import { alwaysOnRules } from './render.mjs';
+import { ruleLocation } from './owner-rules.mjs';
 import { describeSetup } from './setup.mjs';
 import { runChecks } from './checks.mjs';
 
@@ -468,15 +469,20 @@ export function voiceSection(root) {
   return out.join('\n').trim().split('\n');
 }
 
-function codexSections(root) {
+function codexSections(root, env = process.env) {
   const sections = [];
   const rules = alwaysOnRules(root);
-  if (rules.length) {
+  // The owner's instructions for every project (toolkit rule add --machine)
+  // live in the Claude Code user rules folder, which Codex does not read by
+  // itself (Mike, 2026-09-29: rules, skills, and memory each hold one kind of thing).
+  const machine = ruleLocation('machine', { env });
+  const machineItem = fs.existsSync(machine.file) ? `- ${machine.file}: the owner's preferences for every project (read it too)` : null;
+  if (rules.length || machineItem) {
     sections.push({
       key: 'rules',
       priority: 8,
       header: 'Always-on rules. Claude Code loads them by itself; in Codex, each one is read at session start:',
-      items: rules.map((r) => `- .claude/rules/${r.name}: ${r.purpose}`),
+      items: [...rules.map((r) => `- .claude/rules/${r.name}: ${r.purpose}`), machineItem].filter(Boolean),
       more: 'The "Rules" section of AGENTS.md lists them all.',
     });
   }
@@ -618,7 +624,7 @@ export async function buildBriefing(project, opts = {}) {
     sections.push(...reminderSection(doneSetupReminders(memory.focus, facts)));
   }
   sections.push(...warningSection(findings));
-  if (host === 'codex') sections.push(...codexSections(project.root));
+  if (host === 'codex') sections.push(...codexSections(project.root, env));
 
   const text = fitSections(sections, maxChars);
   return { text, work, memory, findings };

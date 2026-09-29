@@ -1,6 +1,6 @@
 ---
 name: sf-architect-solutioning
-description: 'Answers Salesforce platform questions and plans Salesforce solutions, checking each fact against official Salesforce docs. Use whenever the owner asks a Salesforce platform question, even about a work item ("which Flow type", "Flow or Apex"), or solution-design needs a Salesforce specialist.'
+description: 'Answers Salesforce platform questions and plans Salesforce solutions, checking each fact against official Salesforce docs, so every design uses verified platform behavior. Use whenever the owner asks a Salesforce platform question, even about a work item ("which Flow type", "Flow or Apex"), or solution-design needs a Salesforce specialist.'
 ---
 
 # Salesforce Architect & Solutioning

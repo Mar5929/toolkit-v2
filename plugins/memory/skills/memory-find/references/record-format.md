@@ -7,11 +7,13 @@ frontmatter, and body), the same in built-in, Hindsight, and Notion memory.
 ## Contents
 
 - One record per concept
+- Instructions are rules, not memory
 - Types
 - Keys and file names
 - The description
 - Frontmatter
 - Body
+- Gotchas and lessons
 - Links between records
 - What never goes in a record
 - Passing the body to the command
@@ -27,9 +29,9 @@ the one-line description and the body.
 
 Memory keeps one record per concept or area, not one per fact (the owner's
 decision of 2026-09-28). A concept is a subject a future session would look
-up as a whole: how the owner wants the agent to work, the billing setup, the
-deploy process. Examples: `feedback_ways_of_working`, `project_billing`,
-`user_profile`, `reference_dashboards`.
+up as a whole: the billing setup, the deploy process, the owner's role.
+Examples: `project_billing`, `project_deploys`, `user_profile`,
+`reference_dashboards`.
 
 - Each fact, or group of closely related facts, is one `## <Sub-topic>`
   section inside its concept, with the labels in "Body" below.
@@ -44,19 +46,37 @@ deploy process. Examples: `feedback_ways_of_working`, `project_billing`,
 - A record written before this change holds one fact with no `##` section.
   It stays valid. `toolkit memory tidy --plan` proposes merging such records
   into concepts (the `memory-tidy` skill).
+- Every concept ends with a `## Gotchas and lessons` section ("Gotchas and
+  lessons" below). The CLI adds it, with "None yet.", to each new concept.
+
+## Instructions are rules, not memory
+
+Rules, skills, and memory each hold one kind of thing (the owner's decision
+of 2026-09-29):
+
+- An instruction the agent follows every time (a preference about how work
+  is done, a correction, "from now on", "always", "never") is a rule:
+  `.claude/rules/owner-preferences.md`, written with `toolkit rule add`
+  (`~/.claude/rules/` with `--machine` when it is for every project).
+- A procedure that proved itself is a skill (`.claude/skills/<name>/`).
+- Memory holds facts and know-how the agent has not proven yet.
+
+The `feedback_` type is retired. `toolkit memory save` refuses a new
+`feedback_` record or fact and prints the `toolkit rule add` command. An
+older `feedback_` record is still read; `memory-tidy` moves its instructions
+to the rules and its facts to concepts, after the owner's yes.
 
 ## Types
 
 | Type | Holds | Example concept key |
 | --- | --- | --- |
-| `user` | Roles, responsibilities, working preferences, or communication needs the owner stated | `user_profile` |
-| `feedback` | Standing corrections to how the agent works, and lessons about what to save | `feedback_ways_of_working` |
-| `project` | Lasting project constraints, reasons, technical landmarks, or costly fixes, one area per concept | `project_billing`, `project_deploys` |
+| `user` | Roles, responsibilities, and facts about the owner he stated (not how he wants the agent to work: that is a rule) | `user_profile` |
+| `project` | Lasting project constraints, reasons (why a part exists, how it is used), technical landmarks, or costly fixes, one area per concept | `project_billing`, `project_deploys` |
 | `reference` | Hard-to-find routes to sources, systems, dashboards, or records, with why to open each | `reference_dashboards` |
 | `event` | One significant project episode: what was done, the result, and where the output lives | `event_moved_off_heroku` |
 
-Every section of a concept has the concept's type: a `feedback` fact goes
-into a `feedback_` concept.
+Every section of a concept has the concept's type: a `project` fact goes
+into a `project_` concept.
 
 A type that does not match the content is fixed with
 `toolkit memory rename <key> --to <new-key>`, never by saving a second record.
@@ -64,10 +84,10 @@ A type that does not match the content is fixed with
 ## Keys and file names
 
 - `--name` is the slug: lower-case words joined by hyphens, naming the
-  concept, for example `ways-of-working` or `billing`. The CLI refuses a slug
+  concept, for example `deploys` or `billing`. The CLI refuses a slug
   over 60 characters; it never cuts one.
 - The key is `<type>_<slug>` with every hyphen turned into an underscore:
-  `--type feedback --name no-force-push` makes `feedback_no_force_push`.
+  `--type project --name deploy-window` makes `project_deploy_window`.
   `toolkit memory save` prints the key it made.
 - In built-in memory the key is also the file name without `.md` and the
   frontmatter `name`. The file name prefix and `metadata.type` always agree.
@@ -83,8 +103,8 @@ under 100 characters; the CLI refuses more than 150 and refuses more than one
 line. Change it with `--description` when a new section changes what the
 concept covers.
 
-- Good: `How the owner wants the agent to work: questions, replies, Git habits`
-- Too vague: `Preferences`
+- Good: `How deploys work: the window, the release branch, the checks`
+- Too vague: `Deploy notes`
 
 For an event, it is the one-line summary of the episode. For a proposal, it
 is the one-line fact the owner is asked about.
@@ -95,11 +115,11 @@ The CLI writes it. Never write it by hand. A saved record starts like this:
 
 ```yaml
 ---
-name: feedback_ways_of_working
-description: "How the owner wants the agent to work: questions, replies, Git habits"
+name: project_deploys
+description: "How deploys work: the window, the release branch, the checks"
 updated: 2026-09-28
 metadata:
-  type: feedback
+  type: project
 status: current
 source: The owner, in chat, 2026-09-26
 last_verified: 2026-09-26
@@ -113,13 +133,14 @@ supersedes: none
 | `name` | The key | `--type` and `--name` |
 | `description` | The concept's one-line summary | `--description` |
 | `updated` | The date of the last change. Every save sets it; a link repair keeps it | The CLI |
-| `metadata.type` | `user`, `feedback`, `project`, `reference`, or `event` | `--type` |
+| `metadata.type` | `user`, `project`, `reference`, or `event` (an older record may say `feedback`) | `--type` |
 | `status` | `current`; `needs-review` (also every proposal); `superseded` or `archived` for a retired record; `template` only on the seed template | `--proposal`, `retire`, `restore`, `approve` |
 | `source` | Who or what said it, with an absolute date | `--source` |
 | `last_verified` | The date the fact was last checked, or `unknown` | `--last-verified` |
 | `authorization` | The approval of the concept: "Approved by <name> on <date>", "Trusted grant", "No approval recorded", or "Proposed by the agent on <date>". A section save never changes it (see below) | `--approved-by`, trusted mode, `--proposal` when the record is made, or saved whole |
 | `supersedes` | The keys this record replaced (including records merged into it), or `none` | `--supersedes`, `merge` |
 | `concept`, `section` | A proposal only: the concept and heading its fact goes to on the owner's yes | `--concept` with `--proposal` |
+| `rule_section`, `rule_scope` | A rule proposal only: the section of `.claude/rules/owner-preferences.md` it goes to on the owner's yes | `--rule-section` with `--proposal` |
 
 A save of an existing key keeps every field the command does not give again,
 including fields another tool added. The CLI calls `superseded` and
@@ -143,35 +164,43 @@ paragraph. Never write a label as a heading such as `## Remember`; a `##`
 heading names a sub-topic.
 
 ```markdown
-# Ways of working
+# Deploys
 
-## Force-push
+## Deploy window
 
-**Remember:** Never force-push to any branch in this repository.
+**Remember:** Deploys go out on Tuesdays after 6 pm Eastern.
 
-**Why:** The owner lost a day of work to a force-push on 2026-09-12.
+**Why:** The owner said traffic is lowest then.
 
-**How to apply:** Use a merge or a new commit instead. If a push is rejected, pull first.
+**How to apply:** Plan release steps for Tuesday evening. Ask before any other time.
 
-**Evidence and limits:** The owner, in chat, 2026-09-26. Applies to every branch, including work-item branches.
+**Evidence and limits:** The owner, in chat, 2026-09-26. Applies to production only.
 
-**Related memories:** [pull requests](project_release_process.md#Pull%20requests)
+**Related memories:** [billing](project_billing.md)
 
 **Authoritative records:** `DECISIONS.md` D-4; WI-012.
 
-## Questions
+## Release branch
 
-**Remember:** Ask one requirements question at a time.
+**Remember:** Releases are cut from the `release` branch, never from `main`.
 
 **Why:** Not stated by the owner.
 
-**How to apply:** Put the question at the end of the reply text.
+**How to apply:** Merge `main` into `release` before a deploy.
 
 **Evidence and limits:** The owner, in chat, 2026-09-28.
 
 **Related memories:** None.
 
 **Authoritative records:** None.
+
+## Gotchas and lessons
+
+### The deploy check needs the VPN
+
+The deploy check fails with a timeout when the VPN is off. Turn it on first.
+
+**Seen:** 2026-09-27 (WI-012 build); 2026-09-29 (WI-014 build)
 ```
 
 - The heading names the sub-topic in a few words ("Force-push", "Deploy
@@ -192,6 +221,24 @@ heading names a sub-topic.
 - An event record has the same labels under its title, with or without a
   `##` section.
 
+## Gotchas and lessons
+
+The last section of every concept. It holds lessons the agent learned while
+working that are not proven yet: what happened and what to do, one `###`
+heading each, with a Seen line that gives the date (and the session or work
+item) of each time it came up.
+
+- Record one with `toolkit memory save --concept <key> --lesson '<heading>'`
+  and the text in `--body`. The same heading again is the same lesson seen
+  again: the CLI adds today's date to its Seen line.
+- A lesson needs no approval: nothing relies on it as a rule.
+- A lesson proves itself when it comes up in two or more sessions, when a
+  lesson like it is in another concept, or when the owner confirms it
+  ("**Owner confirmed:** <date>"). Then the agent proposes it as a rule or a
+  skill with `toolkit memory promote`; after the owner's yes the lesson gets a
+  line "**Promoted:** <date>, to <where>." and stays as its history.
+- An instruction the owner gives is never a lesson: it is a rule at once.
+
 ## Links between records
 
 - Link a related record with a relative Markdown link to its file name:
@@ -205,7 +252,10 @@ heading names a sub-topic.
   `requirements/` or `system-guide/`, tracker addresses) go under
   **Authoritative records** as plain text, not as links.
 - Write the same links in every backend. The body text is the same
-  everywhere, so a move between backends keeps them.
+  everywhere, so a move between backends keeps them. In Notion the page shows
+  a link to another record as a link to its page (a page mention when the
+  link text is that record's title); a link to a section stays a file link.
+  Reading it back gives the file link again.
 - The CLI repairs links to a record that is renamed, superseded, archived,
   deleted, merged into a concept (the link then goes to its section), or
   whose sections move to another concept (`split`), and names each record it
@@ -233,7 +283,7 @@ heading names a sub-topic.
   heredoc, then the body, then a line holding only `EOF`:
 
   ```text
-  toolkit memory save --concept feedback_ways_of_working --section 'Force-push' --body-file - --source 'The owner, in chat, 2026-09-26' --approved-by Mike <<'EOF'
+  toolkit memory save --concept project_deploys --section 'Deploy window' --body-file - --source 'The owner, in chat, 2026-09-26' --approved-by Mike <<'EOF'
   ```
 
 - For one section (`--concept ... --section ...`) the text is that section

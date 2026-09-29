@@ -1,0 +1,1 @@
+From now on keep commit messages under 50 characters.

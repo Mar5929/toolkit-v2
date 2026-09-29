@@ -14,6 +14,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { cleanup, initProject, read, tempDir, tk, PLUGIN_ROOT } from './helpers.mjs';
+import { recordCheck } from '../work/helpers.mjs';
 import { TOOLKIT_ASK_RULES } from '../../lib/project/checks.mjs';
 import { compareRecords, stem } from '../../lib/memory/similar.mjs';
 import { secretKind } from '../../lib/memory/contract.mjs';
@@ -49,11 +50,11 @@ test('Claude Code: the settings fragment asks before the risky toolkit commands,
 test('Codex: the command rules prompt before the risky toolkit commands, ahead of the general allow', () => {
   const text = read(RULES);
   const allowAt = text.indexOf('pattern = ["toolkit"],');
-  for (const p of ['["toolkit", "machine-setup"]', '["toolkit", "memory", ["delete", "import"]]', '["toolkit", "import"]', '["toolkit", "hindsight", "service", ["install", "start"]]']) {
+  for (const p of ['["toolkit", "machine-setup"]', '["toolkit", "memory", ["delete", "import"]]', '["toolkit", "import"]', '["toolkit", "hindsight", "service", ["install", "start"]]', '["toolkit", "rule", ["add", "update"], "--machine"]']) {
     const at = text.indexOf(`pattern = ${p}`);
     assert.ok(at > 0 && at < allowAt, `${p} comes before the general allow`);
   }
-  assert.equal((text.match(/decision = "prompt"/g) || []).length, 7, 'four toolkit prompt rules and three Git ones');
+  assert.equal((text.match(/decision = "prompt"/g) || []).length, 8, 'five toolkit prompt rules and three Git ones');
 });
 
 const codex = spawnSync('codex', ['--version'], { encoding: 'utf8' });
@@ -160,6 +161,7 @@ test('toolkit work finish and toolkit handoff-backup back up .work-items/ and .m
   // A finished item is backed up at once.
   await tk(root, ['work', 'new', '--title', 'Tidy the README', '--type', 'task'], { env });
   fs.rmSync(target, { recursive: true, force: true });
+  await recordCheck(root, 'WI-001', { tkFn: (a) => tk(root, a, { env }) });
   res = await tk(root, ['work', 'finish', 'WI-001', '--by', 'Mike', '--evidence', 'README tidied.', '--quote', 'Looks good, ship it.', '--json'], { env });
   assert.equal(res.code, 0, res.stdout + res.stderr);
   assert.equal(res.json.backup.status, 'done');

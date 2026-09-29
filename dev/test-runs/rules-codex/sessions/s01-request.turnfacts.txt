@@ -1,0 +1,14 @@
+01a0edbd-7d04-7203-aacc-fb17ca063f04.json
+01a0edc2-b7de-7ec0-8d9f-d441a60e85fd.json
+{
+  "schema": 1,
+  "sessionId": "01a0edc2-b7de-7ec0-8d9f-d441a60e85fd",
+  "host": "codex",
+  "turn": 1,
+  "key": "01a0edc2-b83f-7292-976a-8d64ea709243",
+  "at": "2026-09-29T15:22:38.916Z",
+  "prompted": true,
+  "keep": null,
+  "saveWords": false,
+  "answersMemoryQuestion": false
+}

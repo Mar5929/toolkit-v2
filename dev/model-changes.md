@@ -29,6 +29,11 @@ model folder was not touched.
   - `7faee75` Guard DevOps Center pipeline deploys, and state the Codex sandbox and script rules (decisions (3), (7), and (8); items 8, 12, and 13)
   - `5e7d7a0` Say which script lines the org guard checks, and that a script file run later is not checked (decision (7); item 12)
   - `648bf4e` Keep one memory file per concept, with a heading per sub-topic, a summary, and an updated date (your concept memory decision of 2026-09-28; "Concept memory" below)
+  - `5293d7c` Keep instructions in rules and facts in memory: four memory prefixes, a Gotchas and lessons section, and owner preferences as a rule (your decision of 2026-09-29; "Rules, skills, and memory" below)
+  - `f9ec2df` Write the general rules as headings and one instruction per bullet (your request of 2026-09-29; "Rules best practices" below)
+  - `8f04125` Keep only the work item and memory lines no other file holds (same)
+  - `d655664` Group the Salesforce rules under headings and name what they mean (same)
+  - `0b98c16` Put each rule line under a heading that names it, and split a long bullet (review fixes to the same)
 - Full diff of `.memory/` and `.work-items/` from `efa2440` to the branch's
   last commit: `dev/model-changes-ignored-folders.diff` (made with
   `git diff efa2440 HEAD -- .memory .work-items` in the second folder).
@@ -56,6 +61,9 @@ toolkit's `memory-save` skill, and that skill asks one line instead:
 4. **`.claude/RULES.md` removed.** `docs/toolkit-manual.md` did not exist in the model, so nothing else to remove. `AGENTS.md` lists the rules.
 5. **`README.md` shortened.** Now: purpose, Start here, Project records (links), Project memory (your Obsidian setup steps and the backup command, built-in memory only), and Project checks and release. Removed: the Toolkit setup section, the memory setup steps that used `scripts/memory.py` and the curator, the Toolkit files section, "Second Brain V2", and the `.toolkit-memory.json` mention.
 6. **`DECISIONS.md` added** at the root (the V2 template: an append-only table of ID, Date, Decision, Why, Decided by, Replaces). Also linked from `PROJECT.md` and added to the paths of `.claude/rules/publish-project-documents.md`.
+   - Why (recorded 2026-09-29, after Mike asked): the model had no single named place for whole-project decisions. One work item's decisions stayed in that item (`DESIGN.md` "Owner decision"); other decisions went to memory as `project_<topic>.md` ("otherwise-unowned decision" in `.memory/memory-criteria.md`); `CURRENT_FOCUS.md` listed up to three recent ones; and `.claude/rules/confirm-salesforce-changes.md` said "Record the decision where the project keeps decisions" without naming the place.
+   - How it was approved: the agent added it during the first build without asking. It was item 6 of the list Mike approved on 2026-09-26 at 18:45 EDT with "go with your recommendations on all of them". That list described it in one line ("a log of project-wide decisions. Recommend: keep.") and gave no reason, so Mike approved it without the reason above.
+   - Reversed (Mike, 2026-09-29): decisions move into memory as one record each, and `DECISIONS.md` is removed from the model. See `dev/GOAL.md`, "Decisions live in memory", and `dev/research/decisions-architecture.md`. Not built yet.
 7. **`.toolkit-memory.json` removed.** Toolkit init writes `.toolkit.json`. The memory line in `PROJECT.md` now names `.toolkit.json`, with one line per memory system.
 8. **`.claude/rules/work-item-folders.md` added** (the V2 rule). The example ID is written `WI-001`, the model's style, not a token. The toolkit must install it only for the local tracker.
 9. **Work item header fields.** `.work-items/work-item-template/WORK-ITEM.md` now has `id`, `title`, `type`, `stage`, `status`, `parent`, `waiting_on`, `priority`, `delivery`, `requirements_approved`, `design`, `result_approved`, `updated`. `active_phase` and `requirements_status` are gone. The `waiting_on` line is in double quotes, because the colon in `external: who` stops standard YAML readers (for example Python's) from reading an unquoted line. The toolkit writes a real value the same way, for example `waiting_on: "external: Acme IT"`.
@@ -634,8 +642,8 @@ five prefixes, the labels, the fill-in guide style, and every other line stay.
   is still true: each line is one link, now with the title as its words),
   `CURRENT_FOCUS.md`, the glossary, and every rule.
 - Imported into `plugins/toolkit/scaffold/model/` (`import-model.mjs --check`
-  passes at `648bf4e`). `dev/model-changes-ignored-folders.diff` now runs to
-  `648bf4e`.
+  passes at `648bf4e`). `dev/model-changes-ignored-folders.diff` ran to
+  `648bf4e` then; it now runs to `5293d7c` (next section).
 - Bringing it in: the same merge as the rest of the branch ("How to bring the
   changes into your model", step 2). The copy command in step 3 now includes
   `.memory/project_topic_template.md`.
@@ -649,3 +657,503 @@ one-fact files into concepts, and `toolkit memory merge` and `split` run only
 with your yes. The same in Hindsight (one document per concept) and Notion
 (one Memories row per concept; a section save sends only that section).
 
+
+## Rules, skills, and memory (your decision of 2026-09-29)
+
+You decided that rules, skills, and memory each hold one kind of thing:
+instructions the agent must follow every time go in rules, confirmed
+procedures in skills, and facts and unproven know-how in memory. Commit
+`5293d7c` on the branch changes six files, only where the old text said
+otherwise. The labels, the fill-in guide style, the concept format, and every
+other line stay.
+
+- `.memory/memory-criteria.md`: the opening paragraph says an instruction
+  for how the agent works (a working preference, a correction, "from now
+  on", "always", "never") is not memory; `memory-save` writes it to
+  `.claude/rules/owner-preferences.md` with `toolkit rule add`, and a
+  correction about what is worth saving is written there too. The types table
+  has four rows: the `feedback_` row is gone; the `user_` row keeps role,
+  responsibility, and facts the owner stated, and routes a working preference
+  or correction to the rule; the `project_` row names rationale as why a part
+  of the project exists or how it is used, and routes instructions to the
+  rule. One sentence adds lessons: a lesson not yet proven goes under the
+  concept's "Gotchas and lessons" heading, and is proposed as a rule or a
+  skill when it recurs or you confirm it.
+- `.memory/AGENTS.md`, three bullets: the owner's instructions live in
+  `.claude/rules/owner-preferences.md`; the allowed prefixes are `user`,
+  `project`, `reference`, and `event`, `feedback` is retired and an older
+  `feedback_` file is moved out with `memory-tidy`, and each file ends with a
+  `## Gotchas and lessons` section; a general selection lesson is written as
+  a rule, not as a `feedback` memory. The example file name is
+  `user_profile.md` in place of `feedback_ways_of_working.md`.
+- `.memory/project_topic_template.md`: a last section
+  `## Gotchas and lessons` with "None yet."; the fill-in guide says each
+  lesson is a `###` heading with a Seen line (the date of each session it came
+  up in), and that an instruction is a rule; the allowed types drop
+  `feedback`.
+- `.memory/MEMORY.md`: the empty `## Feedback` heading is gone. The toolkit
+  writes this file; an empty memory now reindexes to it byte for byte.
+- `AGENTS.md`: the routing line reads "Remember", "from now on", "always",
+  "never", "forget that": `memory-save`, which puts an instruction in the
+  rules and a fact in memory. In "Where information goes", the row "A lasting
+  preference, correction, lesson, or hard-to-find reference | Memory" became
+  two rows (the owner's preference or correction goes to
+  `.claude/rules/owner-preferences.md`, or `~/.claude/rules/` for every
+  project; a lasting fact, an unproven lesson, or a hard-to-find reference
+  goes to memory), and the "How agents should work" row also covers a
+  procedure that proved itself (a skill in `.claude/skills/`).
+- `.claude/rules/memory-review-and-save.md`, two sentences: the owner's
+  instructions go to `.claude/rules/owner-preferences.md`, never to memory;
+  a general selection rule is written with `toolkit rule add`, not as a
+  `feedback` memory.
+- Not changed: `CURRENT_FOCUS.md`, the glossary, the work item templates,
+  and every other rule. `.claude/rules/owner-preferences.md` is not in the
+  model: `toolkit rule add` creates it the first time you give an
+  instruction, and rebuilds the AGENTS.md rules list so Codex reads it.
+- Imported into `plugins/toolkit/scaffold/model/` (`import-model.mjs
+  --check` passes at `5293d7c`). `dev/model-changes-ignored-folders.diff`
+  now runs from `efa2440` to `5293d7c`.
+- Bringing it in: the same merge as the rest of the branch ("How to bring
+  the changes into your model", step 2).
+- Not in this commit, still waiting for your yes: the Salesforce guard's
+  Codex message that ends with two periods (".. Command:"), because
+  `.claude/hooks/guard-protected-orgs.cjs` ends its reason with a period and
+  Codex adds ". Command: ...". The fix would drop the last period when it
+  runs with `--host codex`, as the toolkit's own hook already does.
+
+What the toolkit does with it (no model change): `toolkit rule add|update|list`
+writes `.claude/rules/owner-preferences.md` (or, with `--machine` and your
+yes in the host, `~/.claude/rules/owner-preferences.md`); `toolkit memory
+save` refuses a new `feedback_` record and points at `toolkit rule add`;
+`toolkit doctor` reports older `feedback_` records and `toolkit memory tidy
+--plan` lists how to move each one; new concepts get the "Gotchas and
+lessons" section; `toolkit memory save --concept <key> --lesson <heading>`
+records a lesson; `toolkit memory promote` proposes a lesson as a rule or a
+skill and, after your yes, writes it and marks the lesson promoted.
+
+## Salesforce skill descriptions: what, why, when (proposed 2026-09-29, needs your yes)
+
+You asked on 2026-09-29 that every skill description say what the skill does,
+why to use it, and when to use it. The 23 plugin skills now do. Three of the
+model's Salesforce skills live in the model, so their new text waits for your
+yes. Only the `description:` line changes; the skill bodies stay as they are.
+
+Each new line keeps the current words and adds one ", so ..." clause: the
+outcome, or the risk the skill prevents. `sf-deploy-check` also says "Use
+when ... is about to run" in place of "Use before", because the check now
+wants a "Use when" clause. "Use first, before work-on, when" stays in the
+other two: routing round 3 showed it makes both hosts open them before
+`work-on`. The three lines passed `dev/tools/check-skills.mjs` in a scratch
+copy (what, why, when; at most 450 characters; no phrase another description
+quotes). They have not been through a routing check yet.
+
+Put the same line in both copies of each skill:
+`.claude/skills/<name>/SKILL.md` and `.agents/skills/<name>/SKILL.md`.
+
+- `sf-deploy-check` (347 characters):
+
+  ```yaml
+  description: 'Finds hitch-hikers: components or pending edits that would ship with a Salesforce deploy before their feature is ready, so no half-finished work reaches a shared org. Use when any deploy to a shared org (UAT, full copy, staging, or production) is about to run, including a deploy command for the owner. Not for running the deploy; use work-finish.'
+  ```
+
+- `sf-component-tracker` (359 characters):
+
+  ```yaml
+  description: 'Keeps the component tracker CSV, the master and per-work-item package.xml files, destructiveChanges.xml, and manual steps in sync, so each deploy ships exactly the components that are ready. Use first, before work-on, when Salesforce metadata under force-app/ is added, changed, renamed, or deleted, a deploy result comes back, or a deploy needs manual steps.'
+  ```
+
+- `sf-data-change` (318 characters):
+
+  ```yaml
+  description: 'Builds the owner''s package for a Salesforce production data change: load file, backup, numbered steps, success check, and undo steps, so he can run it safely and undo it. Use first, before work-on, when the owner asks to load, import, update, or delete production records, for example "load this file into production".'
+  ```
+
+After your yes: the lines go on the model branch `toolkit-v2/approved-changes`,
+`node dev/tools/import-model.mjs` brings them into the scaffold copy, rows 24
+to 26 of `dev/SKILL-INDEX.md` section 1 change to the same text (the checker
+compares them), and the checker's notes on these three skills go away. Until
+then the checker reports the missing why clause as a note, not a failure.
+
+## Rules best practices (2026-09-29)
+
+You asked on 2026-09-29: "Make sure the rules are written using Claude Code
+best practices." The checklist, with the page each item comes from, and the
+audit of every rule are in `dev/research/rules-best-practices.md`. Four
+commits on the branch rewrite the model's rules to that checklist; the fourth
+(`0b98c16`) holds the fixes from the review.
+
+- Each rule keeps its meaning. A line was taken out only when a file the
+  agent reads anyway already holds it (`AGENTS.md`, another rule, or a
+  skill); each change below names that file. The audit's "Needs Mike's yes"
+  items were not applied; they are in the next section.
+- Size: the 13 always-on rules of a Salesforce project went from 20,946 to
+  17,970 bytes (about 740 fewer tokens on every request). In a project
+  without Salesforce, the 7 always-on rules went from 13,292 to 10,854 bytes
+  (about 610 fewer tokens).
+- Imported: `node dev/tools/import-model.mjs` copied commit `0b98c16`, and
+  `--check` passes. `node dev/tools/check-rules.mjs` passes on the copy, with
+  one warning: `session-handoff.md` is one 498-character paragraph
+  (question 9).
+- Bringing it in: the same merge as the rest of the branch ("How to bring
+  the changes into your model", step 2).
+
+### Commit `f9ec2df`: the general rules
+
+- `ai-external-knowledge.md` (path-scoped): the two opening paragraphs are
+  now one reason line, which is your own sentence ("This information is used
+  to help ground the agent ..."), word for word. "Pulling a vendor's docs ...
+  is a normal thing to do here. It has one home." is now the first bullet
+  under "Where it goes"; one folder per topic and the `INDEX.md` line are
+  bullets. The three "raw source material" bullets are unchanged. The
+  `paths` value is in double quotes, like every other rule.
+- `humanize-outbound-text.md`: the three paragraphs are five bullets, with
+  the same words: run the text through `humanizer` (or `unslop` when
+  `humanizer` is not installed), what it covers, what it does not cover,
+  keep every fact, write in the owner's voice.
+- `plain-english-artifacts.md`: 3,686 bytes are now 3,451, about 6 percent
+  less. It went from 81 lines to 48, but most of that drop is wrapped lines
+  joined into one line each, which saves no bytes. The audit's target was
+  about 2,300 bytes; the rewrite kept every bullet and your example table,
+  so the file stays near its old size.
+  - Kept: the definition of an artifact, every bullet, your example table,
+    and the number sentence.
+  - Cut: sentences that repeat a bullet ("The reader opened it to learn
+    about that thing ...") and the "What this rule does not decide" heading,
+    which is now one last line ("Layout is the agent's choice ... This rule
+    decides the words.").
+  - The reason line said "a helper agent, a skill, or a Codex session ...
+    never sees it"; a skill runs in the main chat, which has the output
+    style, so it now says "Claude Code helper agents and Codex do not get the
+    output style".
+  - Since `0b98c16`, the first bullet under "Use the real name" (505
+    characters, four sentences) is three bullets: the instruction ("Call a
+    thing what the system calls it, every time."), the example (the real
+    names and the picture words), and the reason ("Never use a picture word
+    in place of the real name. That is figurative language: ...").
+- `publish-project-documents.md` (path-scoped): two lines are gone.
+  "Rules, skills, hooks, prompts, settings, and code use a worktree and a
+  pull request" is in `shared-repository-work.md` ("Code, rules, skills,
+  hooks, settings: use your own worktree") and in the `publish-docs` skill;
+  "Stage only this save's files, by name ... Read the full staged diff" is in
+  `shared-repository-work.md` and step 3 of `publish-docs`. The pointer to
+  `publish-docs` is now the lead line. "In a copied Git repository" is
+  unchanged (question 7 below). The two Salesforce `paths` lines are
+  unchanged, because `CONDITIONS.json` removes them by their exact text.
+- `shared-repository-work.md`: three headings (Before your first edit,
+  Where to work, Committing and merging) over the same lines. Since
+  `0b98c16`, "Never hand-edit a generated file" and the sequential-number
+  line are under "Committing and merging", as the audit placed them; they
+  were under "Where to work", which does not name them.
+- `shared-repository-work.md`, one meaning change: "A standing merge
+  instruction the owner gave for this project counts" now says "A standing
+  merge instruction recorded in `DECISIONS.md` counts". This narrows the
+  rule: a merge instruction you give in chat no longer counts until it is
+  recorded in `DECISIONS.md`. It matches `AGENTS.md` ("What the owner
+  decides": "unless `DECISIONS.md` records a standing merge instruction"),
+  so the two files no longer disagree. If you want the old, wider wording
+  back, say so; it is one line.
+
+### Commit `8f04125`: the work item and memory rules
+
+- `keep-work-item-current.md`: 8 instruction lines are now 3, plus a
+  pointer to `AGENTS.md`, "What the owner decides". Taken out, and where
+  each is held:
+  - "Before substantial work, use the `work-on` skill": `AGENTS.md`, "Every
+    session".
+  - Open Questions with "Decision needed from: owner" and `waiting_on`:
+    `AGENTS.md`, the paragraph under "What the owner decides".
+  - `build` and `data-load` work needs approved requirements: `AGENTS.md`,
+    "What the owner decides". The line only this rule has stays: "Moving an
+    item to a later stage does not revoke its requirements approval."
+  - "After the owner accepts agent-led delivery, ask how the team is
+    arranged": step 3 of the `work-delegate` skill.
+  - "Mark an item Done only after the owner approves the result": `AGENTS.md`,
+    "What the owner decides".
+  - The closing pointers (`toolkit work lifecycle`, the routing table,
+    `work-delegate`, `handoff`): `AGENTS.md`, "Work tracking" and "Where
+    information goes".
+  - Kept: save the owner's decisions and corrections in the item, the stage
+    line above, and record the exact next step before ending.
+- `memory-review-and-save.md`: four long paragraphs (one was 863
+  characters) are three headings and 12 bullets; 3,547 bytes are 2,512.
+  - Kept as bullets: it applies to the main agent; the one memory store is
+    the system in `.toolkit.json`; auto memory and the Second Brain plugin
+    are off; when to review memory; a hook reminder is not a save decision;
+    instructions go to `owner-preferences.md`; a small pointer is allowed;
+    `memory-save` is the only way to save; the approval mode and who changes
+    it; a yes covers only what was shown and silence is not a yes; an
+    unanswered question stays a proposal; withdraw a rejected item and write
+    a selection rule with `toolkit rule add`; focus-only and authorized
+    glossary changes need no question; group signals and never run two
+    writes at once; read back with `toolkit memory get` and run `toolkit
+    doctor`.
+  - Taken out: the list of where each kind of information goes (it is the
+    "Where information goes" table in `AGENTS.md`, and the rule now points to
+    it); the list of `toolkit memory` commands and the sentence about locks
+    (steps 2, 4, 6, 7, and 9 of the `memory-save` skill, and the commands
+    themselves).
+- `work-item-folders.md` (local tracker only): 42 lines are 21.
+  - Taken out: sub-items by location, groups, the reserved `archive/`, and
+    the folders the tracker ignores (the `work-organize` skill,
+    `references/tracker-local.md`, sections 3 and 4; the lead line now
+    points there); "Refer to items by ID everywhere" (`AGENTS.md`, "Work
+    tracking").
+  - Kept: what an item is, find by `toolkit work show <id> --path`, create
+    with `toolkit work new`, the owner may move folders, reconcile with
+    `work-organize`, never move items on your own, frontmatter only with
+    `toolkit work`, never hand-edit `DASHBOARD.md` or `.toolkit-state.json`,
+    keep the owner's other files, and `toolkit export` is the backup.
+
+### Commit `d655664`: the Salesforce rules and the rules list
+
+- `check-deployment-contents.md`: "a shared or higher org" is now "a shared
+  org (for example UAT, full copy, staging, or production)". `d655664` had
+  the list without "for example", which reads as complete and would leave out
+  a partial-copy, QA, or integration sandbox that several people share;
+  `0b98c16` added "for example", so the rule covers what "a shared or higher
+  org" covered. The `sf-deploy-check` skill's description still has the list
+  without "for example" (question 16).
+- `component-tracker.md`: the heading "Component Tracker" named a thing; it
+  is now "Keep the Component Tracker Current". The three lines are
+  unchanged.
+- `confirm-salesforce-changes.md`: a blank line before its list, so the list
+  is read as a list. No word changed.
+- `dependency-graph.md` (path-scoped): the eight lines are under four
+  headings (Impact questions, Keeping the notes current, Org access, and,
+  since `0b98c16`, Cross-check results). The
+  commands say `python3`, as `AGENTS.md` "Commands" does (on macOS only
+  `python3` is sure to exist). `tools/kb/README.md`, which the rule points
+  to, still says `python` in every example; change it to `python3` the next
+  time that file is edited. "Report both confirmation rates from the
+  cross-check" is now "When you report a cross-check from
+  `compare_dependencies.py`, give both confirmation rates." The line about
+  which scripts "may run" is unchanged (question 5 below).
+- `permissions-source-control.md` (path-scoped): the 17 bullets are grouped
+  in the order they happen: Fetching and editing, Committing, Deploying,
+  After a deploy. "re-add the grants in `RETRIEVE_BLIND_SPOTS`" now names
+  where that list is: `tools/permissions/permsets.py`. "click Recalculate" is
+  unchanged (question 8 below). The procedures pointer is in the lead.
+- `production-data-changes.md`: 8 lines are 5 bullets and a pointer.
+  - Taken out: "Reads ... are allowed in every org" and the sandbox yes
+    (the Allowed list of `salesforce-org-safety.md`, which the lead now names);
+    "Keep the exact backup or load files in the relevant local event folder.
+    Record the org, ... undo steps in the chosen work item and the owner
+    handoff" and "Follow the `sf-data-change` skill for the folder layout"
+    (step 3 of the `sf-data-change` skill).
+  - Kept: agents never write data to production by any tool; open
+    `sf-data-change` before replying and hand over the full package; a yes
+    covers one change in one chat; the two folder paths (the
+    `sf-data-change` skill names this rule as the place of the folder
+    layout, so they stay); never commit load or backup files.
+- `project-file-locations.md`: the heading "Where Project Files Go" was
+  wider than the rule; it is now "Client-Work Folder: delivery/ or
+  engagement/". The last line mixed a second topic: "Curated memory goes
+  through the `memory-save` skill ... the selected work tracker owns active
+  requirements and progress" is the `AGENTS.md` "Where information goes"
+  table, so it is gone; "Never create `delivery/knowledge-base/`" stays as its
+  own bullet.
+- `salesforce-org-safety.md`: the Enforcement paragraph (1,215 characters on
+  one line) is one bullet per sentence. Every word is the same, including the
+  lines for your decisions (3), (7), and (8). The Allowed and Never lists
+  are unchanged; they now have a blank line under their headings.
+- `record-deployment-steps.md` (path-scoped): a blank line after the
+  frontmatter, as in the other path-scoped rules. No word changed.
+- `AGENTS.md`: the rules list, rebuilt with the toolkit's own generator
+  (`buildSpan` in `plugins/toolkit/lib/project/render.mjs`) for the two new
+  headings. Nothing else in `AGENTS.md` changed.
+
+### Not changed
+
+- `session-handoff.md`: your approved, tested wording. Any change needs
+  your yes (question 9).
+
+### Toolkit changes that go with it (not the model)
+
+- `dev/tools/check-rules.mjs` (new): checks the model's rules and fails on
+  frontmatter that does not parse or holds a field other than `paths`; a
+  `paths` pattern that is invalid, over the 1,000-pattern brace budget, or
+  matches no file in the model (a pattern under `force-app/` or
+  `engagement/`, folders a project makes later, is allowed); a rule with no
+  `# ` heading, no instruction, or only vague ones; a numbered procedure of
+  5 or more steps (with the hint to move it to a skill); an always-on rule
+  over 200 lines (Claude Code's own target); the same instruction in two
+  rules, or never in one and do in the other with nearly the same words; an
+  `AGENTS.md` rules list that is not the generated one; and an
+  `owner-preferences.md` format that would fail these checks. It warns, and
+  does not fail, on: an always-on rule over 4,096 bytes (the number waits for
+  your yes, question 11, so no agent cuts your words to pass the check); a
+  list item or paragraph over 400 characters, or a paragraph over three
+  lines; emphasis ("IMPORTANT", "NEVER" in capitals, bold); a skill a rule
+  names that no V2 plugin or project skill holds, unless the rule says what
+  to do when it "is not installed"; and a command one rule forbids in a code
+  span ("Never `git add -A`") that another rule names with no never. It is in
+  the checks list of the repository `AGENTS.md`.
+- `toolkit doctor` runs the same structure checks on a project's rules and
+  on the owner's rules for every project (`plugins/toolkit/lib/project/rule-checks.mjs`,
+  checks in `rule-lint.mjs`). A warning, which fails doctor, only where
+  Claude Code would do something the owner did not mean: frontmatter it
+  cannot read, a pattern that can never match, or two lines with nearly the
+  same words where one says never. Everything else is a note, including an
+  `owner-preferences.md` over the limit and a command one rule forbids that
+  another names. A finding between the owner's file and a model rule is shown
+  on the owner's file, so nobody changes the model rule to fit his line. The
+  wording checks (length, emphasis, skill names) run only
+  on the model, because a project gets the model's text as it is. The two
+  `owner-preferences.md` files are compared by their instruction lines only:
+  the purpose line under each title is the toolkit's fixed text, nearly the
+  same in both, so doctor reported it as a repeat whenever both files
+  existed. Fixed; a test now covers both files.
+- `toolkit rule add` and `rule update` keep writing `owner-preferences.md`
+  in the checklist's format, and `check-rules.mjs` and a test now check it:
+  the `# ` title, one purpose line under it (unchanged), a `##` heading per
+  area, one instruction per bullet with its date and source, and no
+  frontmatter. After a change the command now prints a warning when the file
+  is over 4,096 bytes or 50 instructions, when the new line names nothing to
+  check ("Format code properly"), and when it repeats or contradicts a line
+  in the same file, the other scope's file, another project rule, or the
+  project's `AGENTS.md` (audit 2.5, finding 1). The change is still made.
+  After every add the command also prints the file's section names, the
+  other scope's section names, and every line of the section it wrote, and
+  tells the agent to compare the new line with them and with the rules the
+  session has loaded, so a conflict in other words is seen too. A new section
+  whose heading shares a word with an existing one ("Reply style" next to
+  "Replies") gets a warning with the commands to move the line (audit 2.5,
+  finding 6). Example: "Stage every file with git add -A before you commit."
+  now warns that `shared-repository-work.md` forbids `git add -A`, and
+  `toolkit doctor` shows the same as a note.
+- The `--machine` output now says "Codex reads it only in Toolkit V2
+  projects, through the session briefing" (it said the briefing names it,
+  which is true only in V2 projects), and every add says "Other open sessions
+  see it after their next start or compaction."
+- The `AGENTS.md` rules list now treats a `paths` value written as one
+  comma-separated string as path-scoped, as Claude Code does, and
+  `plugins/toolkit/templates/TEMPLATE-LANGUAGE.md` says so.
+- `toolkit` plugin version 0.3.1 (not installed in either host yet, so the
+  review fixes ship in the same version). Tests:
+  `plugins/toolkit/tests/project/rule-lint.test.mjs` (17 tests, including
+  doctor with both `owner-preferences.md` files, a `git add -A` line against
+  `shared-repository-work.md`, and a close section name); the lead line in
+  `tests/project/rules.test.mjs`.
+- Not done: a shorter purpose line. "Follow every line, every session" and
+  "Each line ends with the date and where the instruction came from" add
+  nothing the file does not already show. Dropping them means changing
+  `PROJECT_LEAD` and `MACHINE_LEAD` in `plugins/toolkit/lib/project/owner-rules.mjs`
+  and the first lines of `plugins/memory/shared/owner-preferences-template.md`
+  in one change (`check-skills.mjs` compares them), then running
+  `node dev/tools/sync-skill-references.mjs`. Another workflow owns
+  `shared/` today, so it waits.
+- Not done: `check-rules.mjs` does not check that every file path a rule
+  names exists (audit 2.8). Most named paths are files a project or a tool
+  makes later (`tools/kb/out/`, `tools/kb/_drift_pending.md`,
+  `.claude/rules/owner-preferences.md`, the `delivery/data/` folders), and
+  one is a folder the rule says never to create (`delivery/knowledge-base/`),
+  so the check would need a hand-kept list of them.
+- Not done: Claude Code also loads rules in subfolders of `.claude/rules/`;
+  the toolkit's rules list reads only the top folder (`readRules` in
+  `render.mjs` and `plannedRules` in `manifest.mjs`, audit 2.5 finding 10).
+  Both must change together.
+
+## Rules best practices: needs your yes
+
+Nothing below is applied. Each item changes what a rule says, removes or
+merges a rule file, or rewrites words you approved. The recommendations are
+the audit's (`dev/research/rules-best-practices.md`, 2.7).
+
+1. **Merge `record-deployment-steps.md` into `component-tracker.md`.** Both
+   send the agent to the `sf-component-tracker` skill, and the manual-step
+   rule loads only when the agent reads `delivery/deployment/`, not when it
+   changes metadata. `component-tracker.md` would get one bullet: "When
+   metadata needs an action the deploy cannot perform, add a step to the
+   work item's `manual-steps.md` in the same response; when unsure, add
+   it." The file goes, with its two entries in `CONDITIONS.json`.
+   Recommended: yes.
+2. **Shorten the Enforcement section of `salesforce-org-safety.md`.** It is
+   now ten bullets with your words; the agent needs four facts: which
+   commands the guard checks, production or unclassified is blocked and a
+   sandbox change asks, in Codex every ask is a block, and a script file run
+   later is not checked. The parsing details (`bash -c`, `$(...)`,
+   here-documents) would move to the guard's own header comment. About
+   1,300 fewer bytes on every request in a Salesforce project.
+   Recommended: yes, with the Codex line and the script line word for word.
+3. **`humanize-outbound-text.md`: name `unslop` only.** Toolkit V2 ships
+   `unslop`; `humanizer` is not installed and not shipped, so the agent looks
+   for it first every time. Or keep "`humanizer` when installed, otherwise
+   `unslop`". Recommended: `unslop` only.
+4. **`confirm-salesforce-changes.md`: "Record the decision in `DECISIONS.md`
+   (`work-decide`)."** in place of "where the project keeps decisions". It
+   narrows the meaning if some data-source decisions should stay in the work
+   item. Recommended: yes.
+5. **`dependency-graph.md`.** (a) Move "Answer 'what writes, reads, or breaks
+   if this changes' from the edge list ... cite it, and name what it cannot
+   see" into the Salesforce block of `AGENTS.md`: the question usually comes
+   before the agent reads a `force-app/` file, so this path-scoped rule is
+   not loaded yet. (b) What does "Only `pull_org_dependencies.py`,
+   `build_org_catalog.py`, and `compare_dependencies.py` may run, and only
+   `sf data query`" mean? `tools/kb/README.md` says `compare_dependencies.py`
+   contacts no org, and names four files that do: `org_api.py`,
+   `pull_org_dependencies.py`, `org_catalog.py`, and `build_org_catalog.py`.
+   Recommended: yes to (a); for (b), say which list is right.
+6. **`ai-external-knowledge.md`.** (a) Add "Write the topic's
+   `SOURCE-RECORD.md` (publisher, web address, capture date, coverage), then
+   run `toolkit index knowledge`; never edit `INDEX.md` by hand." In a V2
+   project the toolkit's hook already refuses a hand edit of `INDEX.md`, and
+   the rule does not say so. (b) Your line "This information is used to help
+   ground the agent ..." is the rule's reason line now; keep it or shorten
+   it? Recommended: yes to (a); (b) is your call.
+7. **`publish-project-documents.md`: what does "In a copied Git repository"
+   mean?** A cloned repository, a repository with a remote, or any project
+   repository? The line stays as it is until you say.
+8. **`permissions-source-control.md`: "ask the owner to click Recalculate on
+   the group in Setup"** in place of "click Recalculate on the group in
+   Setup". The agent cannot click in Setup. Recommended: yes.
+9. **`session-handoff.md`: leave it as it is?** It is one paragraph (the
+   checklist prefers bullets), but it is your approved wording and it passed
+   the handoff routing test 3 of 3. A change means running that test again.
+   Recommended: leave it.
+10. **`owner-preferences.md`: add "When two lines conflict, follow the newer
+    one and ask the owner which to keep."** `toolkit rule add` now warns when
+    a new line contradicts another, but the file does not say which line wins
+    when two are there. The date on each line makes "newer" checkable.
+    Recommended: yes.
+11. **The size limit for a rule that loads in every session: 4 KB or 50
+    instructions.** `toolkit rule add` warns past it, `toolkit doctor` shows a
+    note, and `check-rules.mjs` warns on a model rule over 4 KB (a warning,
+    not a failure, until you answer). The numbers are
+    the audit's proposal; the largest model rule is 3,766 bytes
+    (`salesforce-org-safety.md`). Recommended: keep them, or name other
+    numbers.
+12. **`AGENTS.md`: "Codex: at session start and after compaction, read the
+    always-on rules listed under Rules."** It says "at session start" only,
+    while line 16 already asks for `SOUL.md` and `PROJECT.md` again after
+    compaction, and a rule Codex read is summarized at compaction.
+    Recommended: yes.
+13. **The model's `ai-external-knowledge/INDEX.md` fill-in comment** says to
+    add table rows by hand. In a V2 project `toolkit index knowledge` writes
+    them and the hook refuses a hand edit. Say so in the comment?
+    Recommended: yes.
+14. **`keep-work-item-current.md`.** `dev/PROGRESS.md` lists an earlier
+    wording change for this rule as waiting for your yes. The rule is now
+    three lines (commit `8f04125` above); answer that item against the new
+    text:
+
+    ```markdown
+    # Keep the Active Work Item Accurate
+
+    The work tracker is the source of truth for current work. What needs the owner's approval, and how to ask for his decision: `AGENTS.md`, "What the owner decides".
+
+    - Save the owner's decisions, requirements, and corrections in the item or its linked document before moving on.
+    - Moving an item to a later stage does not revoke its requirements approval.
+    - Before ending unfinished work, record the exact next step in the item.
+    ```
+15. **A `--paths` option for `toolkit rule add`** (audit 2.5, finding 5): an
+    instruction about certain files ("In Apex classes, ...") would go to its
+    own path-scoped rule, not the always-on file. It changes your decision of
+    one `owner-preferences.md` with a heading per area. Recommended: not now;
+    the file is small.
+16. **`sf-deploy-check` description: "a shared org (UAT, full copy, staging,
+    or production)".** The list reads as complete, so a partial-copy, QA, or
+    integration sandbox that several people share seems left out. The rule
+    `check-deployment-contents.md` now says "for example" before the list.
+    Add "for example" to the description too, in both copies
+    (`.claude/skills/` and `.agents/skills/`), and in the proposed line in
+    "Salesforce skill descriptions" above? Recommended: yes.

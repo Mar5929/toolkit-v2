@@ -3,6 +3,45 @@
 Mike's goal, set 2026-09-26. This file is the single place the goal and his
 answers live. Update it when he changes a decision.
 
+## Direction change (Mike, 2026-09-29): skills and timely hooks, no custom program
+
+This overrides how the rest of this file says Toolkit V2 is built, and it
+replaces the 11 finish items below. A new goal and finish list follow once
+Mike approves the architecture. His words:
+
+"We should just switch to skills and timely hooks. You need to map out work
+tracking, progressing work through different stages, and memory saving and
+memory recalling. You need to define, throughout the lifecycle of a chat
+session that I have with an agent, when certain hooks are supposed to invoke
+certain skills. The skills need to have perfectly defined descriptions. I
+told you this in the beginning: we're just using out-of-the-box stuff. If I
+overengineer this and you write all the scripts and custom code, trying to
+change anything is a nightmare. You just need to have skills for Notion work
+tracking, Notion memory, or shared rules, but just separate storage. Work
+with [the Notion work tracker refinement session] on this architecture and
+also make sure that the Notion Lore memory system (if we store memory in
+Notion) can backlink memories, facts, entities, etc. to work items. They
+don't HAVE to be related to work items but this way we can traverse back to
+get physical links to the work items. Same with the local setup + Obsidian,
+same concept."
+
+What this means:
+- Toolkit V2 is rules, skills, and hooks, using each tool's own features
+  (files and Obsidian for local, Notion and its own command or connector,
+  Hindsight's own interface). The large `toolkit` program (about 37,000
+  lines in `plugins/toolkit/lib`) is retired, apart from whatever small hook
+  step cannot be done any other way.
+- Setup installs only the skills for the choices made (tracker, memory,
+  Salesforce). The shared rules are the same in every project.
+- A map of the chat session's lifecycle says which hook fires when, and which
+  skill it points the agent to.
+- Memories, facts, entities, and decisions can link to work items (not
+  required), so every work item can be reached from its memories: Notion
+  relations in Lore's layout, and links between notes in local memory with
+  Obsidian.
+- Decisions made earlier today still hold: decisions live in memory, cite
+  recalled knowledge, approvals stay on the work item, no backup folder.
+
 ## Goal
 
 Build a new toolkit repository from scratch at
@@ -115,6 +154,51 @@ steps that must always run the same way.
   owner's yes; memory-tidy looks for candidates. "Remember..." and "from now
   on..." still go through memory-save, which picks the home. This replaces
   the five-prefix naming in the concept-memory bullet above.
+- **Cite recalled knowledge, always** (Mike, 2026-09-29): "make sure that
+  the agents always, if they recall something from knowledge and use it in
+  their decision, cite that. And just briefly list where they got it from."
+  Applies in every project, every memory system (built-in, Hindsight,
+  Notion), every tracker, and both hosts, whenever the agent uses something
+  it recalled from project knowledge (memory, rules, DECISIONS.md, work
+  items, requirements, system guide, current focus) in an answer, a
+  recommendation, or a decision, not only inside memory-find. Form: the
+  source named where the fact is used, plus a brief list of sources at the
+  end of the reply.
+- **Decisions live in memory** (Mike, 2026-09-29, answering "Should every
+  decision move into memory as one record each, with DECISIONS.md removed
+  from the model? This reverses approved change 6." with "Yes, move to
+  memory"). Every decision already made, for the whole project or for one
+  or more work items, is one memory record, linked to the work items it
+  affects, listable for one work item and for the whole project by work
+  item, in every memory system and tracker. `DECISIONS.md` is removed from
+  the model (approved change 6 reversed). Mike's reason, in his words:
+  "Decisions are supposed to be in memory, I think. Decisions can be
+  related to a work item, and we need to have a way to say, 'Okay, for
+  this work item, here are the decisions.' Also, in memory, you could find
+  just a list of all the decisions and scope them by the work items."
+  Design and the remaining open questions: `dev/research/decisions-architecture.md`.
+- **Keep it simple: rules plus each tool's own features, no big wrapper**
+  (Mike, 2026-09-29, his words): "I don't want to overengineer this and
+  create excessive code that's just going to fail at some point. I'm not
+  trying to create tons and tons of scaffolding, like a whole harness that
+  can solve every single application that we could potentially choose for
+  work tracking ... shoving all that logic ... into one overall wrapper.
+  The whole point is, these are just rules. Notion can handle it a way
+  where you could backlink decisions from the memory bank ... to the work
+  items. I feel like we could just create modules ... I don't want to
+  create tons and tons of custom code that the agent is running, and that
+  code could potentially fail when I'm in the middle of a real project."
+  In the Notion session the same day he asked whether each tracker could
+  have its own commands chosen at setup instead of one command for all.
+- **Answers on the decisions design** (Mike, 2026-09-29, to the numbered
+  list with recommendations): (1) decisions are linked to work items and
+  work items link back, done simply (Notion's own backlinks, not new code);
+  (2) plain approvals stay on the work item: "correct"; (3) and (4) not
+  understood yet, explained again; (5) every memory links to its work
+  items: "yes, I guess that makes sense"; (6) no required backup folder:
+  "we don't need a backup folder. That's too much bloat."; timing: build
+  after the current goal, and work the architecture out together with the
+  "Notion work tracker refinement" session.
 - **Decisions of 2026-09-28, evening** (Mike): (1) "No agent team" decides
   only who builds. Before asking for the owner's result approval, the agent
   always starts one independent acceptance checker agent (in Codex, the

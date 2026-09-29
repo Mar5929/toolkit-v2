@@ -1,6 +1,11 @@
 // PostToolUse (ARCHITECTURE section 6):
-// - Bash: records toolkit memory writes, work-item writes, and decisions in
-//   session state, so Stop knows something was recorded (critique B4).
+// - Bash: records toolkit memory writes, rule changes (toolkit rule add or
+//   update, memory promote --approved-by), work-item writes, and decisions in
+//   session state, so Stop knows something was recorded (critique B4). Adds a
+//   note when a save, a rule change, or a promotion claims the owner's
+//   approval in a turn whose message did not ask for it, and when an
+//   instruction the owner gave this turn went to memory instead of the rules;
+//   the toolkit command refuses these itself when it can read the turn's facts.
 // - Write, Edit, MultiEdit, apply_patch on a work-item record: validates it
 //   (never rewrites it, critique I2) and returns any error or gate question as
 //   additionalContext. `decision: "block"` only for a gate violation, with a
@@ -96,17 +101,39 @@ async function onBash(input, io, cwd) {
   const cmd = input.tool_input && typeof input.tool_input.command === 'string' ? input.tool_input.command : '';
   const namesRecord = /WORK-ITEM\.md/.test(cmd);
   if (!/toolkit/.test(cmd) && !namesRecord) return null;
-  const found = toolkitCommands(cmd).map((c) => ({ c, kind: recordKind(c) })).filter((x) => x.kind);
+  // A command that only shows its help changed nothing (close-out finding 11:
+  // `toolkit memory save --help` counted as a save).
+  const found = toolkitCommands(cmd).map((c) => ({ c, kind: recordKind(c) })).filter((x) => x.kind && !asksHelp(x.c.args));
   const project = (found.length && !commandFailed(input)) || namesRecord ? findProject(cwd) : null;
   if (!project) return null;
   let approvalNote = null;
   if (found.length && !commandFailed(input)) {
+    // A memory save whose fact reads as an instruction (checked against the turn below).
+    let instructionCmd = null;
+    const saves = found.filter(({ c }) => c.group === 'memory' && c.sub === 'save');
+    if (saves.length) {
+      const { proposalType } = await import('./proposal.mjs');
+      const hit = saves.find(({ c }) => instructionSaved(c, cmd, project, proposalType));
+      if (hit) instructionCmd = hit.c;
+    }
     await updateSession(project, io.host, input, io.env, (state) => {
       const turn = currentTurn(state, input);
+      const passing = turn.prompted && !turn.keep && !turn.saveWords && !turn.answersMemoryQuestion;
       const approvedSave = found.find(({ c }) => c.group === 'memory' && c.sub === 'save' && !c.args.includes('--proposal') && flagValue(c.args, 'approved-by'));
-      if (approvedSave && turn.prompted && !turn.keep && !turn.saveWords && !turn.answersMemoryQuestion) {
+      // The toolkit command itself saved it as a proposal (R-I4 in code): nothing to add.
+      if (approvedSave && passing && !savedAsProposal(input)) {
         approvalNote = passingRemarkNote(flagValue(approvedSave.c.args, 'approved-by'));
       }
+      // A project rule written, or a lesson promoted, as the owner's decision in
+      // such a turn (verifier, 2026-09-29). The command refuses or proposes by
+      // itself when it can read the turn's facts; this note covers a shell with
+      // no session id.
+      const ruleChange = found.find(({ c }) => ruleApprovalClaim(c));
+      if (ruleChange && passing && !approvalNote && !savedAsProposal(input)) approvalNote = ruleRemarkNote(ruleChange.c);
+      // An instruction the owner gave this turn, saved to memory instead of the
+      // rules (verifier, 2026-09-29). The command refuses it when it can read
+      // the turn's facts; this note covers a shell with no session id.
+      if (instructionCmd && turn.keep && !approvalNote) approvalNote = instructionNote(instructionCmd);
       for (const { c, kind } of found) {
         const rec = { kind, what: `toolkit ${c.group} ${c.sub}`, at: new Date().toISOString() };
         // The Stop hook saves an unanswered "Save to memory?" as a proposal unless the agent already did.
@@ -134,6 +161,60 @@ async function onBash(input, io, cwd) {
     if (contexts.length || blocks.length) return postToolOutput({ context: contexts.join('\n'), blockReason: blocks.join(' ') || null });
   }
   return null;
+}
+
+/** True when a command's words ask for its help (--help or -h before a `--`). */
+function asksHelp(args) {
+  for (const a of args || []) {
+    if (a === '--') return false;
+    if (a === '--help' || a === '-h') return true;
+  }
+  return false;
+}
+
+/** True when the command's output says the toolkit saved it as a proposal instead of as approved (a memory save, or toolkit rule add). */
+function savedAsProposal(input) {
+  const r = input && input.tool_response;
+  const text = typeof r === 'string' ? r : r && typeof r === 'object' ? `${r.stdout || ''}\n${r.stderr || ''}` : '';
+  return /Saved as a proposal, not as approved|"downgraded":\s*\{|so it was saved as a rule proposal in memory|"action":\s*"rule-proposal"/.test(text);
+}
+
+/** True for a command that changes the project rules as the owner's decision: rule add or update (not --machine, which the host asks him about), or promote --approved-by. */
+function ruleApprovalClaim(c) {
+  if (c.group === 'rule' && (c.sub === 'add' || c.sub === 'update')) return !c.args.includes('--machine');
+  return c.group === 'memory' && c.sub === 'promote' && Boolean(flagValue(c.args, 'approved-by'));
+}
+
+/** The note for a rule written, or a lesson promoted, in a turn whose prompt did not ask for it. */
+export function ruleRemarkNote(c) {
+  const what = c.group === 'memory' ? 'This promote wrote a project rule or skill' : `This toolkit rule ${c.sub} changed the project rules`;
+  return `${what} as the owner's decision, but his message this turn has no keep phrase or other words asking for it ("add a rule", "change that rule"), and it does not answer a question about memory or rules. A rule applies in every session, so a remark made in passing is not an approval. Tell him in the reply what changed and ask "Keep this project rule: <one line>?"; if he says no, undo it with the Undo command the output printed (toolkit rule update --section '<area>' --entry <n> --remove). Next time, ask "Add to the project rules: <one line>?" first.`;
+}
+
+/**
+ * True when a command saved to a user_ or project_ memory record, not as a
+ * proposal and without --not-a-rule, a fact whose words read as an
+ * instruction for how the agent works (proposalType 'rule').
+ */
+function instructionSaved(c, line, project, proposalType) {
+  if (c.group !== 'memory' || c.sub !== 'save' || c.args.includes('--proposal') || c.args.includes('--not-a-rule')) return false;
+  if (flagValue(c.args, 'lesson') !== null || c.args.includes('--remove')) return false;
+  const concept = flagValue(c.args, 'concept');
+  const type = String(concept ? concept.split('_')[0] : flagValue(c.args, 'type') || '').toLowerCase();
+  if (type !== 'user' && type !== 'project') return false;
+  // The fact: the Remember line of --body, or of a here-document in the command line, else the description or the heading.
+  const body = flagValue(c.args, 'body');
+  const remember = /\*\*Remember:\*\*\s*([^\n]+)/.exec(body !== null ? body : String(line || ''));
+  const fact = (remember ? remember[1] : flagValue(c.args, 'description') || flagValue(c.args, 'section') || body || '').replace(/\s+/g, ' ').trim();
+  if (!fact) return false;
+  const owner = project && project.config && project.config.project && project.config.project.owner;
+  return proposalType(fact, owner) === 'rule';
+}
+
+/** The note for an instruction the owner gave this turn that was saved to memory. */
+export function instructionNote(c) {
+  const where = flagValue(c.args, 'concept') || [flagValue(c.args, 'type'), flagValue(c.args, 'name')].filter(Boolean).join('_') || 'memory';
+  return `This saved an instruction for how the agent works to memory (${where}), in a turn where the owner asked for it to be kept. An instruction is a rule, not memory: add it with toolkit rule add --section '<area>' --text '<the instruction>' --source '<owner>, in chat', then take it out of memory (a section: the Undo command the save printed; a new record: toolkit memory retire <key> --reason 'Moved to the project rules'). If it is a fact about the owner or the project and not an instruction, say so in one line.`;
 }
 
 /**

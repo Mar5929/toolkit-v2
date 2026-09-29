@@ -118,7 +118,11 @@ Salesforce projects, in order:
 - [ ] Production data changes go through `sf-data-change`, which builds the
       owner's package. The owner runs it.
 - [ ] A release of several items uses a copy of
-      `delivery/deployment/release-cutover-template/`.
+      `delivery/deployment/release-cutover-template/`. The project has no
+      such folder: copy this skill's `assets/CUTOVER-PLAN.md` and
+      `assets/RELEASE-NOTES.md` into the release folder instead. Leave out
+      each copy's first line, the "Generated file" comment: it names a
+      toolkit file, not a project one.
 
 Record the owner's report of the deploy in a history note.
 
@@ -133,7 +137,10 @@ Record the owner's report of the deploy in a history note.
   copy `requirements/system-area-template/` to a folder named for the area,
   then name the copied `AREA-TEMPLATE.md` for the area, for example
   `requirements/billing/BILLING.md`. Fill it as its guide says and delete the
-  guide. Leave `system-area-template/` unchanged for the next area.
+  guide. Leave `system-area-template/` unchanged for the next area. The
+  project has no `system-area-template/`: start the file from this skill's
+  `assets/requirements-area-template.md`, and leave out its first line, the
+  "Generated file" comment.
 - Rules that apply across areas go in `requirements/SYSTEM-DATA-MODEL.md`.
 - Copy only behavior that was delivered and approved. Behavior that was
   approved but not delivered is never written as shipped.
@@ -142,7 +149,10 @@ Record the owner's report of the deploy in a history note.
 - When the change altered the verified structure of the system, also update
   the area's file in `system-guide/` (a new area is a copy of
   `system-guide/AREA-TEMPLATE.md` named for the area, for example
-  `system-guide/billing.md`), with the observed facts and the date checked.
+  `system-guide/billing.md`, or of this skill's
+  `assets/system-guide-area-template.md` when the project has none, without
+  its first line, the "Generated file" comment), with the observed facts
+  and the date checked.
 - Save these files with the `publish-docs` skill. It commits them from its own
   worktree and pushes them; with no remote it commits them on the default
   branch locally and says "No remote: committed locally".

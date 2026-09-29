@@ -38,7 +38,8 @@ own writing rules.
 | Outstanding task | The item's `Tasks` section | Work, Deliverable, Done when, Depends on |
 | Context that is not a requirement | `Notes` > `Decisions and context` | Only what the next session needs |
 | Build idea kept for later | `Notes` > `Solution options and considerations` | The idea and the `R-xx` it relates to |
-| A lasting fact, preference, or lesson | Project memory, through `memory-save` | One record |
+| A lasting fact, or why a part of the project exists or how it is used ("remember that the split is for my Friday dinners") | Project memory, through `memory-save`: the `project_` concept for that part, even while this item is open; the item may link to it | One section |
+| An instruction for how the agent works ("from now on", "always", "never", a preference, a correction) | The rules, through `memory-save` (`toolkit rule add`) | One rule line |
 
 A choice about how agents deliver a goal (the delivery offer) is recorded
 only by `work-delegate`.

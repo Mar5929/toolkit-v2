@@ -1,5 +1,5 @@
 diff --git a/.memory/AGENTS.md b/.memory/AGENTS.md
-index 17d83c9..d494222 100644
+index 17d83c9..d90e94f 100644
 --- a/.memory/AGENTS.md
 +++ b/.memory/AGENTS.md
 @@ -1,28 +1,28 @@
@@ -16,12 +16,12 @@ index 17d83c9..d494222 100644
 +- Read `memory-criteria.md` before selecting or changing memory. It holds the default eligibility rules; the `memory-save` skill holds the approval policy and the onboarding or trusted mode. Use the terminology glossary for project language, including distinct meanings across systems.
  - Link related notes inside this vault with relative Markdown links, such as `[account model](project_account_model.md)`. Obsidian shows backlinks to a note from the notes that link to it; a second reverse link is optional. Link only when the relationship helps retrieval, and check that the target exists. Keep tracker URLs and paths outside `.memory/` as source references rather than vault links.
 -- Keep current tasks and owner-mentioned to-dos in `CURRENT_FOCUS.md`, with links to the chosen tracker. Keep full tasks, status, requirements, history, and the work item's design together in that tracker; verified system behavior in the System Guide; procedures in instructions or skills; and raw outside sources in their source folders.
-+- Keep current tasks and owner-mentioned to-dos in `CURRENT_FOCUS.md`, naming work items by ID. Keep full tasks, status, requirements, history, and the work item's design together in the chosen tracker; verified system behavior in the System Guide; procedures in instructions or skills; and raw outside sources in their source folders.
++- Keep current tasks and owner-mentioned to-dos in `CURRENT_FOCUS.md`, naming work items by ID. Keep full tasks, status, requirements, history, and the work item's design together in the chosen tracker; verified system behavior in the System Guide; the owner's instructions for how the agent works in `.claude/rules/owner-preferences.md` (`toolkit rule add`); procedures in skills; and raw outside sources in their source folders.
  
  ## Curate
  
 -- Use a coherent topic file such as `project_account_data_model.md`. Allowed prefixes and matching `metadata.type` values are `user`, `feedback`, `project`, `reference`, and `event`. `project_topic_template.md` is a seed, not a saved memory. Keep one related topic per file and aim for a quick read.
-+- Keep one topic file per concept or area, such as `feedback_ways_of_working.md` or `project_billing.md`, with a `##` heading for each sub-topic. Allowed prefixes and matching `metadata.type` values are `user`, `feedback`, `project`, `reference`, and `event`; an `event` file holds one episode. `project_topic_template.md` is a seed, not a saved memory. Each file starts with its title, a one-line summary (`description`), and the date of its last change (`updated`). Aim for a quick read; split a topic that grows too large.
++- Keep one topic file per concept or area, such as `user_profile.md` or `project_billing.md`, with a `##` heading for each sub-topic and a last `## Gotchas and lessons` section for lessons not yet proven. Allowed prefixes and matching `metadata.type` values are `user`, `project`, `reference`, and `event`; an `event` file holds one episode. The `feedback` prefix is retired: an older `feedback_` file is moved to the rules and concepts with `memory-tidy`. `project_topic_template.md` is a seed, not a saved memory. Each file starts with its title, a one-line summary (`description`), and the date of its last change (`updated`). Aim for a quick read; split a topic that grows too large.
  - Record source and date, status, scope, the durable point, why it matters, and how to apply it. Keep uncertainty explicit. Preserve extra YAML fields written by a host or imported record.
 -- Search for an existing topic before creating one. Correct, merge, or supersede in place where possible. Mark obsolete claims in both file text and index; do not leave an archived item reading as currently open.
 -- When renaming, merging, archiving, or deleting a topic, inspect links from other memory notes and repair any affected links. Do not leave a link pointing at a former active location.
@@ -43,7 +43,7 @@ index 17d83c9..d494222 100644
 -- Read back changes and run `python3 scripts/memory.py doctor` before reporting success. The curator does not edit requirements, work-item status, designs, deployments, or source code.
 +- Save through the `memory-save` skill, which holds the approval policy for onboarding and trusted mode. An explicit request to remember or correct is authorization for that specific change.
 +- Ask before ambiguous, bulk, or irreversible deletion of unique content. Only the owner can change the mode.
-+- A rejected candidate is not saved to another memory, a criteria example, the glossary, or a pending queue. Record only the general selection lesson, as a `feedback` memory, if the owner gave one.
++- A rejected candidate is not saved to another memory, a criteria example, the glossary, or a pending queue. Record only the general selection lesson, as a rule with `toolkit rule add`, if the owner gave one.
 +- The main agent writes this folder only with `toolkit memory` commands, for example `save`, `retire`, `focus`, `glossary`, and `reindex` (`toolkit memory --help` lists them all). They lock the folder, refuse stale edits, and rebuild the index. Never run parallel writers against the same topic.
 +- Read back changes with `toolkit memory get` and run `toolkit doctor` before reporting success. Memory work does not edit requirements, work-item status, designs, deployments, or source code.
 diff --git a/.memory/CLAUDE.md b/.memory/CLAUDE.md
@@ -110,10 +110,10 @@ index c38bca3..afb092a 100644
  
  - `<Where to resume, what to read, and the next concrete action.>`
 diff --git a/.memory/MEMORY.md b/.memory/MEMORY.md
-index c217c0d..653c5c9 100644
+index c217c0d..c49b2fe 100644
 --- a/.memory/MEMORY.md
 +++ b/.memory/MEMORY.md
-@@ -1,6 +1,6 @@
+@@ -1,13 +1,10 @@
  # Memory index
  
 -One short link per active topic. This file is generated by python3 scripts/memory.py reindex; open a topic before relying on it. Seed topic templates are excluded. In a new project, the sections stay empty until the curator saves real memories.
@@ -121,11 +121,18 @@ index c217c0d..653c5c9 100644
  
  ## User
  
+ 
+-## Feedback
+-
+-
+ ## Project
+ 
+ 
 diff --git a/.memory/memory-criteria.md b/.memory/memory-criteria.md
-index 2c34afc..a72f602 100644
+index 2c34afc..6184e01 100644
 --- a/.memory/memory-criteria.md
 +++ b/.memory/memory-criteria.md
-@@ -1,31 +1,22 @@
+@@ -1,31 +1,21 @@
 ----
 -mode: onboarding
 -trusted_by: none
@@ -139,19 +146,20 @@ index 2c34afc..a72f602 100644
 -# Memory criteria and trust
 -
 -This file is the project-specific selection policy. The default mode is **onboarding**. Only the owner can explicitly authorize **trusted** mode; record who granted it, when, and its scope in the frontmatter. Silence, elapsed time, or several approved cards do not change mode. The agent may propose improvements to these criteria during onboarding. Record a correction here as a general rule without copying a rejected memory into this file.
-+This file is the project-specific selection policy: what is worth keeping in lasting memory. The approval policy, including onboarding and trusted mode, is in the `memory-save` skill, which saves with `toolkit memory save`. When the owner corrects what is worth saving, save the correction as a `feedback` memory with `memory-save`, as a general rule, without copying the rejected memory. Those `feedback` memories override this page.
++This file is the project-specific selection policy: what is worth keeping in lasting memory. The approval policy, including onboarding and trusted mode, is in the `memory-save` skill, which saves with `toolkit memory save`. An instruction for how the agent works (a working preference, a correction, "from now on", "always", "never") is not memory: `memory-save` writes it to `.claude/rules/owner-preferences.md` with `toolkit rule add`. When the owner corrects what is worth saving, write the correction there as a general rule, without copying the rejected memory. Those rules override this page.
  
  ## Default test for lasting memory
  
 -Save a topic when it concerns this project, has a credible source, would matter in a future session, would be costly or unreliable to reconstruct, and has no better maintained owner. Prefer updating an existing topic. A short pointer to an authoritative record can qualify when future sessions would otherwise miss that record.
-+Save a topic when it concerns this project, has a credible source, would matter in a future session, would be costly or unreliable to reconstruct, and has no better maintained owner. Prefer updating an existing topic: a new fact goes under a heading in the topic file for its concept, and a new file is only for a new concept. A short pointer to an authoritative record can qualify when future sessions would otherwise miss that record.
++Save a topic when it concerns this project, has a credible source, would matter in a future session, would be costly or unreliable to reconstruct, and has no better maintained owner. Prefer updating an existing topic: a new fact goes under a heading in the topic file for its concept, and a new file is only for a new concept. A lesson the agent learned and has not proven yet goes under the concept's "Gotchas and lessons" heading; when it recurs or the owner confirms it, the agent proposes it as a rule or a skill. A short pointer to an authoritative record can qualify when future sessions would otherwise miss that record.
  
  | Type and filename | Usually worth retaining | Route or reject instead |
  | --- | --- | --- |
- | `user_<topic>.md` | Relevant role, responsibility, working preference, or communication need the owner stated | Personal judgments, irrelevant biography, private details |
- | `feedback_<topic>.md` | Repeated or standing correction to how the agent should work; confirmed selection lesson | One-off irritation, a rejected fact restated as policy, an instruction already in `AGENTS.md` |
+-| `user_<topic>.md` | Relevant role, responsibility, working preference, or communication need the owner stated | Personal judgments, irrelevant biography, private details |
+-| `feedback_<topic>.md` | Repeated or standing correction to how the agent should work; confirmed selection lesson | One-off irritation, a rejected fact restated as policy, an instruction already in `AGENTS.md` |
 -| `project_<topic>.md` | Durable project constraint, rationale, technical landmark, proven costly fix, or otherwise-unowned decision | Code summary, schema copy, active ticket status, accepted requirement or design body |
-+| `project_<topic>.md` | Durable project constraint, rationale, technical landmark, or proven costly fix | A decision for the whole project (`DECISIONS.md`), code summary, schema copy, active ticket status, accepted requirement or design body |
++| `user_<topic>.md` | Relevant role, responsibility, or fact about the owner he stated | Personal judgments, irrelevant biography, private details, a working preference or correction (a rule in `.claude/rules/owner-preferences.md`) |
++| `project_<topic>.md` | Durable project constraint, rationale (why a part of the project exists or how it is used), technical landmark, or proven costly fix | A decision for the whole project (`DECISIONS.md`), code summary, schema copy, active ticket status, accepted requirement or design body, an instruction for how the agent works (a rule) |
  | `reference_<topic>.md` | Hard-to-rediscover route to a source, system, dashboard, or decision record, with why to open it | Entire outside page or a path already obvious in `PROJECT.md` or the project map |
 -| `event_<topic>.md` | Significant project episode: what was done, what resulted, and where the output lives | Routine edit, tool call, raw error, daily progress log |
 +| `event_<topic>.md` | Significant project episode, one per file: what was done, what resulted, and where the output lives | Routine edit, tool call, raw error, daily progress log |
@@ -163,7 +171,7 @@ index 2c34afc..a72f602 100644
  
  ## Never save as lasting memory
  
-@@ -34,22 +25,6 @@ Save a topic when it concerns this project, has a credible source, would matter
+@@ -34,22 +24,6 @@ Save a topic when it concerns this project, has a credible source, would matter
  - Live status, pending approval, unshipped requirements, procedure steps, code restatements, or a current-system explanation that the code/System Guide owns.
  - A rejected candidate under a new name or wider wording. A rejection stands until the owner changes it.
  
@@ -189,7 +197,7 @@ index 2c34afc..a72f602 100644
 -| `<YYYY-MM-DD and owner correction>` | `<Rule about what counts or does not count, without repeating rejected content>` | `<How selection changes>` |
 +This folder is Git-ignored. Back it up with `toolkit memory export --to <folder outside this project>` and restore a fresh clone with `toolkit memory import --from <that folder>`. Linked worktrees resolve to one vault in the main checkout. A fresh clone or machine needs its memory restored before the agent treats an empty index as evidence that no memory exists.
 diff --git a/.memory/project_topic_template.md b/.memory/project_topic_template.md
-index d257c4b..57529ea 100644
+index d257c4b..8e277ea 100644
 --- a/.memory/project_topic_template.md
 +++ b/.memory/project_topic_template.md
 @@ -1,6 +1,7 @@
@@ -205,12 +213,22 @@ index d257c4b..57529ea 100644
  # <Topic title>
  
 -<!-- Fill-in guide: copy this file to a typed filename such as project_<topic>.md. Set name to that filename stem, metadata.type to the matching prefix, status to the real lifecycle state, and replace every angle-bracket prompt in front matter and body with sourced content. Put the durable point after Remember, its value after Why, future use after How to apply, and source/uncertainty after Evidence and limits. Remove this guide and the final template comment before saving. -->
-+<!-- Fill-in guide: one topic file holds one concept or area, such as feedback_ways_of_working.md or project_billing.md; an event_ file holds one episode. Copy this file to a typed filename such as project_<topic>.md. Set name to that filename stem, description to a one-line summary of the whole topic, updated to the date of the last change, metadata.type to the matching prefix, status to the real lifecycle state, and replace every angle-bracket prompt in front matter and body with sourced content. Give each sub-topic its own ## heading with the labels below; a new fact about this concept gets a new ## section here, not a new file. Put the durable point after Remember, its value after Why, future use after How to apply, and source/uncertainty after Evidence and limits. Remove this guide and the final template comment before saving. -->
++<!-- Fill-in guide: one topic file holds one concept or area, such as user_profile.md or project_billing.md; an event_ file holds one episode. Copy this file to a typed filename such as project_<topic>.md. Set name to that filename stem, description to a one-line summary of the whole topic, updated to the date of the last change, metadata.type to the matching prefix, status to the real lifecycle state, and replace every angle-bracket prompt in front matter and body with sourced content. Give each sub-topic its own ## heading with the labels below; a new fact about this concept gets a new ## section here, not a new file. Put the durable point after Remember, its value after Why, future use after How to apply, and source/uncertainty after Evidence and limits. Keep "Gotchas and lessons" as the last section: each lesson the agent learned and has not proven is a ### heading with a Seen line giving the date of each session it came up in. An instruction for how the agent works is a rule in .claude/rules/owner-preferences.md, not memory. Remove this guide and the final template comment before saving. -->
 +
 +## <Sub-topic>
  
  **Remember:** <One durable point or closely related set of facts. State scope and date where needed.>
  
+@@ -26,4 +29,8 @@ supersedes: none
+ 
+ **Authoritative records:** <Link or path to the requirement, design, work item, or other source outside this vault, when relevant.>
+ 
+-<!-- Rename the copied file to <type>_<topic>.md and set metadata.type to the same prefix. Allowed types: user, feedback, project, reference, event. Remove this comment and replace status: template before saving. -->
++## Gotchas and lessons
++
++None yet.
++
++<!-- Rename the copied file to <type>_<topic>.md and set metadata.type to the same prefix. Allowed types: user, project, reference, event. Remove this comment and replace status: template before saving. -->
 diff --git a/.work-items/work-item-template/DESIGN.md b/.work-items/work-item-template/DESIGN.md
 index 76ac5d7..7e1d965 100644
 --- a/.work-items/work-item-template/DESIGN.md

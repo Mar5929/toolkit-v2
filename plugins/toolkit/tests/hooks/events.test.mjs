@@ -7,7 +7,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { cleanup, git, initProject, makeHome, makeRepo, read, tempDir, testEnv, tk } from '../project/helpers.mjs';
 import { fixture, updatePatch } from './fixtures.mjs';
-import { hasKeepPhrase } from '../../lib/hooks/phrases.mjs';
+import { hasKeepPhrase, KEEP_LINE } from '../../lib/hooks/phrases.mjs';
 
 after(cleanup);
 
@@ -127,7 +127,7 @@ for (const host of HOSTS) {
     const v = vars(root, { PROMPT: 'From now on, answer in two lines.' });
     const up = await hook(root, env, host, 'user-prompt', fixture(host, 'user-prompt', v));
     assert.equal(up.out.hookSpecificOutput.hookEventName, 'UserPromptSubmit');
-    assert.equal(up.out.hookSpecificOutput.additionalContext, 'The owner stated something to keep; memory-save records it, or work-on if it is a task.');
+    assert.equal(up.out.hookSpecificOutput.additionalContext, KEEP_LINE);
     const stop1 = await hook(root, env, host, 'stop', fixture(host, 'stop', v));
     assert.equal(stop1.code, 0);
     const reason = host === 'codex' ? stop1.out.reason : stop1.out.hookSpecificOutput.additionalContext;

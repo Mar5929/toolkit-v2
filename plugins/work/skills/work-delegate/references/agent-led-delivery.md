@@ -34,6 +34,15 @@ reason, so the briefing stops listing the offer as an agent to-do.
 toolkit work set <id> --delivery owner-led --note 'Small item: one or two tasks, so no delivery offer.'
 ```
 
+Judge "small" on the plan: an item before stage 06 has no plan yet, and the
+command says so. The toolkit looks at the choice again when the item grows:
+after a split (`toolkit work new --parent`), or when the plan gets a second
+phase or more than two tasks, the command prints a note and
+`toolkit work decisions` lists the offer again as the agent's to-do. Then
+make the offer. A sub-item split from such an item stays `not-offered` until
+the offer is answered. The owner's own answer ("no agent team") is never
+looked at again this way.
+
 The offer is made once, at the top item of the goal; a sub-item is part of
 its parent's goal. `toolkit work new --parent` copies the parent's delivery
 value to a new sub-item and says so ("Delivery: agent-led, as recorded for

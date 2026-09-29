@@ -1,6 +1,6 @@
 ---
 name: handoff
-description: 'Updates the work item and current focus, then writes a checked prompt for a new session, or checks a pasted one. Use whenever the owner is about to clear context or end the session, even a short one or with a recap, for example "write a handoff", "start a new session", or "I''m stopping for today".'
+description: 'Updates the work item and current focus, then writes a checked prompt for a new session, or checks a pasted one, so nothing is lost when the context is cleared. Use whenever the owner is about to clear context or end the session, even a short one or with a recap, for example "write a handoff", "start a new session", or "I''m stopping for today".'
 ---
 
 # Handoff
@@ -21,9 +21,10 @@ Track the steps in the plan tool (Claude Code: task list; Codex: `update_plan`).
 3. **Save what must outlast the session:** unsaved "keep this" items and
    unanswered "Save to memory?" questions go to `memory-save`; then replace the
    focus entry "Next session starts with". `references/save-memory-and-focus.md`.
-4. **Draft the prompt; do not show it yet.** Fixed first line, goal, why,
-   where it is written down, what to read first, unsaved decisions, open
-   questions, one first action, a source kind per fact. `references/prompt-format.md`.
+4. **Draft the prompt; do not show it yet.** Start from
+   `assets/handoff-prompt-template.md`: fixed first line, goal, why, where it
+   is written down, what to read first, unsaved decisions, open questions,
+   one first action, a source kind per fact. `references/prompt-format.md`.
 5. **Check the draft** with `handoff-verifier`; act on every verdict as the
    table in `references/check-the-prompt.md` says.
 6. **Back up** the work items and memory that live only on this computer. Keep
@@ -95,10 +96,11 @@ a failed save, a second `/handoff`, no check wanted): open
 | --- | --- |
 | `references/update-the-work-item.md` | Step 2: finding the item, the Overview and Resume here text, stage, history note, read-back |
 | `references/save-memory-and-focus.md` | Step 3: memory saves and the "Next session starts with" entry |
+| `assets/handoff-prompt-template.md` | Step 4: the prompt's fixed first line and headings, to copy and fill |
 | `references/prompt-format.md` | Step 4: the parts of the prompt, source kinds, an example prompt |
 | `references/check-the-prompt.md` | Step 5, step 7's short list, and "/handoff check" |
 | `references/edge-cases.md` | Anything that does not follow the normal path: no work item, a refused stage move, a failed save or backup, a second `/handoff`, no check wanted |
-| `references/agent-handoff-verifier.md` | Step 5 in Codex: the checker's full text for a native worker (copy of `agents/handoff-verifier.md`) |
+| `references/agent-handoff-verifier.md` | Step 5 in Codex: the checker's full text for a native worker (the same text as the plugin's `handoff-verifier` agent) |
 | `references/toolkit-commands.md` | Before the first `toolkit` command: one command per call, text in a command, exit codes |
 | `references/work-item-format.md` | Step 2: section names, changing one section |
 | `references/recording-owner-answers.md` | Step 2: an owner decision this session has not recorded |

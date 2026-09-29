@@ -7,6 +7,7 @@
 import { contextOutput } from './output.mjs';
 import { findProject, trackerType } from './common.mjs';
 import { updateSession, sessionsDir, cleanupSessions } from './session.mjs';
+import { cleanupTurnFacts } from './turn-facts.mjs';
 
 export async function sessionStart(input, io) {
   const { host, env, pluginRoot } = io;
@@ -30,6 +31,7 @@ export async function sessionStart(input, io) {
     state.source = source;
   });
   cleanupSessions(sessionsDir(project, host, env));
+  cleanupTurnFacts(project);
 
   // The automatic backup, when a day has passed without one (decision 13):
   // work finish and handoff back up too, but a session that ends without

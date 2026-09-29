@@ -1,0 +1,29 @@
+01a0edbd-7d04-7203-aacc-fb17ca063f04.json
+01a0edc2-b7de-7ec0-8d9f-d441a60e85fd.json
+01a0edc5-61ed-74d1-9f63-8a616599c470.json
+01a0edc7-0edf-7391-b615-11d8504ea1a8.json
+01a0edca-2128-7832-b523-5e8111a94407.json
+01a0edcb-86da-7970-9963-e74098f7e616.json
+01a0edcd-5375-7903-9e43-95ab56b1fc3b.json
+01a0edcf-ad17-7640-ba29-7ec35c92b297.json
+01a0edd0-a098-76f0-8948-85395f491784.json
+01a0edd8-267e-7603-80ea-a7a0f63e6cff.json
+01a0eddc-7fac-7e52-b9d0-c4ffeb06470c.json
+01a0eddd-5c1d-7261-9b61-b78f5533a927.json
+01a0ede5-9d56-7131-9e81-e4af7203b409.json
+01a0ede6-4d13-72e3-8dd6-022169dc96e7.json
+01a0ede7-2239-7ec3-a6ed-ce61e3f105ad.json
+01a0ede7-d2bd-7f01-bb93-6fda0876f11c.json
+01a0ede9-fc3d-7a91-aaaf-e6d0b8a1814d.json
+{
+  "schema": 1,
+  "sessionId": "01a0ede9-fc3d-7a91-aaaf-e6d0b8a1814d",
+  "host": "codex",
+  "turn": 1,
+  "key": "01a0ede9-fca6-7240-bf6c-ef368f9daeb7",
+  "at": "2026-09-29T16:05:32.794Z",
+  "prompted": true,
+  "keep": null,
+  "saveWords": true,
+  "answersMemoryQuestion": false
+}

@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "sessionId": "01a0ede7-2239-7ec3-a6ed-ce61e3f105ad",
+  "host": "codex",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex",
+  "startedAt": "2026-09-29T16:02:25.977Z",
+  "turns": 1,
+  "turn": {
+    "key": "01a0ede7-232c-7192-b4c4-c77ff6aff3bf",
+    "n": 1,
+    "startedAt": "2026-09-29T16:02:26.363Z",
+    "keep": null,
+    "baseline": {
+      "memoryMeta": 1790697728880.5186,
+      "hindsightMeta": null,
+      "memoryCache": null,
+      "workState": 1790697746139.1162,
+      "decisions": 1790695148134.4663,
+      "projectRules": 1790697663947.405,
+      "machineRules": null
+    },
+    "records": [],
+    "edits": [],
+    "stopBlocked": false,
+    "prompted": true,
+    "saveWords": false,
+    "prompt": "Where are we?",
+    "answersMemoryQuestion": false
+  },
+  "lastStopReason": null,
+  "source": "startup",
+  "updated": "2026-09-29T16:03:00.253Z",
+  "lastReplyAskedMemory": false
+}

@@ -62,6 +62,30 @@ function writtenWords(words) {
 const SCRIPT_RUNNERS = new Set(['python', 'python3', 'node', 'ruby', 'perl', 'osascript', 'deno', 'bun']);
 
 /**
+ * Script calls that write a file without opening it, or that start another
+ * program: Python's shutil, os.replace, os.rename, os.link, os.system,
+ * subprocess, and a Path's replace (one argument, so not a string's
+ * replace(old, new)), rename, symlink_to, hardlink_to, touch, os.open,
+ * io.open, codecs.open, and fileinput; Node's copyFile, rename, cp, link,
+ * symlink, createWriteStream, open, fs.promises, and child_process; Ruby's
+ * FileUtils and File.rename; and system or exec.
+ */
+const MOVES = new RegExp([
+  String.raw`\bshutil\.`,
+  String.raw`\bos\.(?:replace|renames?|link|symlink|system|popen|spawn\w*|exec\w*|open)\s*\(`,
+  String.raw`\bsubprocess\b`,
+  String.raw`\.replace\(\s*(?:'[^'\n]*'|"[^"\n]*"|[^,()'"\n]*)\s*\)`,
+  String.raw`\.(?:rename|symlink_to|hardlink_to|link_to|touch)\(`,
+  String.raw`\b(?:io|codecs)\.open\(`,
+  String.raw`\bfileinput\b`,
+  String.raw`\b(?:copyFile|copyFileSync|rename|renameSync|cp|cpSync|link|linkSync|symlink|symlinkSync|createWriteStream|openSync|truncate|truncateSync)\s*\(`,
+  String.raw`\bfs\.(?:promises|open)\b`,
+  String.raw`\bchild_process\b|\b(?:execSync|execFileSync|spawnSync|execFile|spawn)\s*\(`,
+  String.raw`\bFileUtils\b|\bFile\.rename\b`,
+  String.raw`\b(?:system|exec)\s*\(`,
+].join('|'));
+
+/**
  * What a shell command writes that only toolkit commands may write.
  * Returns { rel, kind: 'record'|'generated', how } for the first one, or null.
  */
@@ -83,6 +107,12 @@ export function shellRecordWrite(command, cwd, project) {
     return w.length > 0 && SCRIPT_RUNNERS.has(base(w[0]).replace(/[0-9.]+$/, ''));
   });
   if (runsScript && WRITE_MARKERS.test(text)) {
+    // A script whose every write goes to a named file that is not a record
+    // (a temporary file, a draft) changes no work item, even when it reads
+    // one (close-out 2026-09-28, finding 7: a script that read WORK-ITEM.md
+    // and wrote /tmp/requirements.txt was refused).
+    const targets = scriptWriteTargets(text);
+    if (targets && targets.every((t) => !isRecordPath(at(t), project) && !generatedRel(at(t), project))) return null;
     const m = /[^\s'"`()]*(?:WORK-ITEM|DESIGN)\.md/.exec(text);
     if (m) {
       const abs = at(m[0]);
@@ -92,6 +122,44 @@ export function shellRecordWrite(command, cwd, project) {
     }
   }
   return null;
+}
+
+/**
+ * The files a script's text writes, when every write names its file as a
+ * quoted literal: open('<file>', 'w'), Path('<file>').write_text(...), a
+ * variable set to Path('<file>') or '<file>' and then written, and Node's
+ * writeFileSync('<file>', ...) or appendFileSync('<file>', ...). null when a
+ * write names its file some other way, so the caller cannot tell.
+ */
+export function scriptWriteTargets(text) {
+  const src = String(text || '');
+  // A quoted file name: 'x' or "x". Two groups; the value is whichever matched.
+  const LIT = `(?:'([^'\n]+)'|"([^"\n]+)")`;
+  const MODE = `['"](?:w|a|r\+|w\+|a\+)b?['"]`;
+  const vars = new Map();
+  for (const m of src.matchAll(new RegExp(`\\b([A-Za-z_]\\w*)\\s*=\\s*(?:(?:pathlib\\.)?Path\\(\\s*)?${LIT}`, 'g'))) vars.set(m[1], m[2] || m[3]);
+  const found = [];
+  let unknown = 0;
+  const add = (value) => {
+    if (value) found.push(value);
+    else unknown++;
+  };
+  // Writes that open a file: each must name it.
+  for (const m of src.matchAll(new RegExp(`\\bopen\\(\\s*(?:${LIT}|([A-Za-z_]\\w*)|[^,)]*)\\s*,\\s*${MODE}`, 'g'))) add(m[1] || m[2] || vars.get(m[3]));
+  for (const m of src.matchAll(new RegExp(`\\bPath\\(\\s*${LIT}\\s*\\)\\.(?:write_text|write_bytes)\\(`, 'g'))) add(m[1] || m[2]);
+  for (const m of src.matchAll(/\b([A-Za-z_]\w*)\.(?:write_text|write_bytes)\(/g)) add(vars.get(m[1]));
+  for (const m of src.matchAll(new RegExp(`\\b(?:writeFileSync|appendFileSync|writeFile)\\(\\s*(?:${LIT}|([A-Za-z_]\\w*)|[^,)]*)`, 'g'))) add(m[1] || m[2] || vars.get(m[3]));
+  // A shell redirect inside the script text names a record: never known.
+  if (/>\s*\S*(?:WORK-ITEM|DESIGN)\.md/.test(src)) unknown++;
+  // A copy, move, or rename writes the file it names without opening it
+  // (verifier, 2026-09-29: a script wrote /tmp/out.txt and then ran
+  // shutil.copy('/tmp/out.txt', '.../WORK-ITEM.md')), and a script that starts
+  // another program may write anything: never known.
+  if (MOVES.test(src)) unknown++;
+  // .write( on a file handle writes to a file opened above; other write
+  // markers (open(... 'r+'), write_text on an unknown value) were counted.
+  if (!found.length || unknown) return null;
+  return found;
 }
 
 function frontmatterOf(text) {

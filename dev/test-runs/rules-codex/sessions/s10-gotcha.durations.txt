@@ -1,0 +1,6 @@
+0.264s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat PROJECT.md",max_output_tokens:3000}),\n  tools.exec_command({cmd:"cat .claude/rules/{humanize-outbound-text,keep-work-item-current,memory-review-and-save'
+0.388s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat .memory/memory-criteria.md",max_output_tokens:4000}),\n  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.3.0/ski'
+0.266s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"toolkit memory get project_billing --json",max_output_tokens:3500}),\n  tools.exec_command({cmd:"git log --oneline -10",max_output_tokens:1000})\n]); r.forEac'
+0.34s :: 'const r = await tools.exec_command({cmd:"toolkit memory save --concept project_billing --section \'Billing API minimum\' --description \'How feecalc totals are used and the billing API minimum\' --body \'**Remember:** The bil'
+0.352s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"toolkit memory get project_billing",max_output_tokens:2500}),\n  tools.exec_command({cmd:"toolkit doctor",max_output_tokens:3000})\n]); r.forEach((x,i)=>text('
+MAX toolkit call seconds: 0.388

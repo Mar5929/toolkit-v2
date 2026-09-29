@@ -1,0 +1,1331 @@
+PROMPT: Yes, round the fee and the total to the nearest cent, with half a cent rounded up, like you said.
+THREAD: 01a0edc7-0edf-7391-b615-11d8504ea1a8
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll record the rounding decision in WI-001, update the requirements, and check what still needs your approval. I’m using the work-decide and work-requirements procedures.
+
+[CMD exit=0] /bin/zsh -lc "cat 'PROJECT.md'"
+  -> # feecalc
+
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and act
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/keep-work-item-current.md'"
+  -> # Keep the Active Work Item Accurate
+
+The work tracker is the source of truth for current work.
+
+- Before substantial work, use the `work-on` skill. Read the active item's requirements, state, next step, and blockers.
+- Save the owner's decisions, requirements, and corrections in the item or its lin
+
+[CMD exit=0] /bin/zsh -lc "cat 'PROJECT-ROADMAP.md'"
+  -> # Project roadmap
+
+<!-- Fill-in guide: replace every angle-bracket prompt in the outcome, phase table, phase heading, and work-unit fields with this project's real text. Keep one overview row and one matching ## heading per phase. Under that heading, repeat the ### work-unit block for each deliverab
+
+[CMD exit=1] /bin/zsh -lc "cat 'SOUL.md'"
+  -> cat: SOUL.md: No such file or directory
+
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/humanize-outbound-text.md'"
+  -> # Humanize Anything Sent to Another Person
+
+Any text that will leave the project and be read by someone other than the owner
+is run through the `humanizer` skill before the owner sees the final version.
+Use the `unslop` skill when `humanizer` is not installed. That covers emails,
+chat messages, supp
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/memory-review-and-save.md'"
+  -> # Review and Save Project Memory
+
+This rule applies to the main agent. The project memory system is chosen at setup and recorded in `.toolkit.json`; with built-in memory it is the local `.memory/` folder. It is the single project memory store. Claude's native auto-memory and the `claude-toolkit` Sec
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/session-handoff.md'"
+  -> # Prepare a Session Handoff
+
+When the owner says he is clearing context or ending the session, or asks for a handoff, use the `handoff` skill, whatever the session's length. When the session is long and the next step is complex, offer a handoff. Use the `handoff` skill. Before the handoff, review th
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/owner-preferences.md'"
+  -> # Owner Preferences
+
+How the owner wants the agent to work in this project. Follow every line, every session. Each line ends with the date and where the instruction came from. Change this file only with `toolkit rule add` or `toolkit rule update`, after the owner says so.
+
+## Git
+
+- Keep commit mess
+
+[CMD exit=0] /bin/zsh -lc "cat 'DECISIONS.md'"
+  -> # Decisions
+
+Decisions for the whole project. A decision about one work item stays in that
+item's Recent History. Add rows only with `toolkit decision add`, which gives
+each row the next ID. Never rewrite an old row. To change a decision, add a new
+row that names the ID it replaces.
+
+| ID | Date | D
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/plain-english-artifacts.md'"
+  -> # Write Artifacts in Plain English
+
+An artifact is something an agent generates for a person to look at: a
+diagram, a chart, a dashboard, a visualization, a mockup, a slide deck, a
+published page, or a generated document. This rule is about the words inside
+one: the title, the headings, the labels, 
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-decide/SKILL.md'"
+  -> ---
+name: work-decide
+description: 'Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers. Use when he asks "what do you need from me", answers a waiting decision ("go with option B"), or states a project-wide decision.'
+---
+
+# Work decide
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Walks the owner through what waits on him, one decision at a time, and records each answer where it belongs. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Build the queue. The command lists each decision once: requirements waiting for approval, proposed designs, results at stage 11, Open Questions rows the owner decides, and memory proposals. Its "Agent to-do" lines are not decisions. A delivery offer belongs to `work-delegate`: open it after his other decisions.
+   `toolkit work decisions`
+2. He gave an answer without being asked ("approved", "go with B"): match it to exactly one waiting decision; when two could match, ask which, naming both. A bare "yes", "ok", or "looks good" with no question asked is not an answer (`references/approvals.md`, section 1).
+3. Otherwise start with the count and one short line for every waiting decision, memory proposals included ("3 decisions wait on you: the WI-004 design, the WI-006 result, and a 
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/shared-repository-work.md'"
+  -> # Work Safely in a Shared Repository
+
+Other sessions edit this repository now. Before your first edit, run:
+
+```
+git worktree list
+git status
+git fetch origin && git log --oneline -10
+```
+
+- No remote (`git remote` prints nothing): skip `git fetch`, and never report a fetch failure as a blocker.
+- A
+
+[CMD exit=0] /bin/zsh -lc "cat '.claude/rules/work-item-folders.md'"
+  -> # Local Work-Item Folders
+
+This project tracks work in local folders under `.work-items/`. The folder is
+Git-ignored, lives in the main checkout, and is shared by every worktree. It is
+not backed up by Git: `toolkit export` is the backup.
+
+## An item is found by its ID, not its path
+
+- An item is a 
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-requirements/SKILL.md'"
+  -> ---
+name: work-requirements
+description: 'Interviews the owner one question at a time, writes a work item''s requirements (R-01, R-02), checks them, and asks for his approval. Use when an item''s requirements are missing or the owner changes, adds, or drops one at any stage, or says "grill me", "ask me questions", or "check the spec".'
+---
+
+# Work requirements
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Interviews the owner and writes what the result must do, never how to build it; every answer lands in the work item. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Find the item as `work-on` does; none exists, create it with his words as the Starting request. Requirements already approved and no change asked: open the skill the item's "Continue with" names and stop.
+   `toolkit work show <id>`
+   `toolkit work new --title '<title>' --type <type> --stage 01-discovery`
+   `toolkit work edit <id> --section 'Starting request' --text '<his exact words>'`
+2. Move it to refinement once requirements are being written. Before the first question, read the item and what the project already knows (`references/interview.md`, section 2).
+   `toolkit work set <id> --stage 02-refinement`
+   `toolkit memory find '<topic>'`
+3. Restate the goal in one sentence ("So the goal is X?"). Write t
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-on/SKILL.md'"
+  -> ---
+name: work-on
+description: 'Starts, resumes, or logs a work item and builds it. Use whenever the owner asks to build, add, fix, or change something, names an item id to resume, says "keep going", or wants a bug or idea logged ("put it in the backlog"). Not for requirement edits (work-requirements) or handovers (work-delegate).'
+---
+
+# Work on
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Starts or resumes one work item, plans it, and builds it; it never records an approval, Done, a merge, or a deploy. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. No project briefing in this conversation: run the briefing. Exit code 4: open `project-setup` and stop. Tell the owner each change listed under "Changes found in the tracker", one line each in the CLI's words, before other work.
+   `toolkit brief`
+2. A bare "ok", "yes", or "looks good" when this chat asked him nothing: start no work and ask what he wants. Otherwise find the item: the id he named, this worktree's item, or a title that matches. Two matches: ask one question naming both.
+   `toolkit work list`
+   `toolkit work show <id>`
+3. No item yet: size the request as a quick edit, log only, or a work item, and pick the type (`references/sizing-and-routing.md`, sections 1 to 3). He asks to be asked first ("ask me questions"
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-requirements/references/requirement-format.md'"
+  -> # Writing a requirement
+
+How to write an `R-xx` block and the Acceptance list so someone who was not
+in the conversation can build and check the result.
+
+## What a requirement says
+
+- Plain words, no jargon. State the goal, what people must be able to do,
+  what must happen, and the rules that govern it.
+- Each requirement says what must be true and why, never how to build it. No
+  file paths, versions, tool choices, or build steps in a requirement.
+- Make behavior explicit: who is affected, when the rule applies, the
+  expected result, and the exceptions.
+- Every requirement has an acceptance check someone can observe.
+- Use only settled details. Leave missing decisions open as questions.
+
+## The `R-xx` block
+
+From the work item template. The name follows an em dash. Each field starts
+its own line, and every line but the last ends with two spaces.
+
+```markdown
+#### R-01 — Rejected requests show their reason
+
+**Status:** Refining  
+**Applies to:** The person who submitted a request, after it is rejected.  
+**Required behavior:** The requester can see the rejection reason on the request.  
+**Boundaries and exceptions:** Requests withdrawn by the requester have no reason.  
+**Acceptance check:** Reject a request with a reason; the requester sees that reason on the request.  
+**Decision record:** Owner, 2026-09-26, interview.  
+**Open questions:** None.
+```
+
+- Status words: Refining, Finalized, Superseded.
+- A new or changed requirement is Refining until the owner approves it.
+-
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-decide/references/toolkit-commands.md'"
+  -> <!-- Generated file. Source: plugins/toolkit/shared/toolkit-commands.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Running `toolkit` commands
+
+Purpose: how to run a `toolkit` command in Claude Code and in Codex, how to
+pass text in one, and what each exit code means. Every skill that runs a
+`toolkit` command follows this file.
+
+## Contents
+
+- Running toolkit commands
+- Text in a command
+- Exit codes
+- Reporting a save
+- Reading output and updating what you read
+- Right and wrong examples
+
+## Running toolkit commands
+
+- Put each `toolkit` command on its own line and run it as a plain command,
+  in both hosts. Do not join it to another command with `&&`, `;`, or a pipe,
+  and do not wrap it in `$(...)`, a loop, or a script. This holds for read
+  commands too: `toolkit work decisions && toolkit work show WI-001` is two
+  commands, run one after the other.
+- Why, in Codex: the project's command rule (`.codex/rules/toolkit.rules`)
+  runs a `toolkit` command outside the sandbox only when it is the whole
+  command. A `toolkit` command joined to anything else (`&&`, `;`, a pipe, a
+  heredoc, `cd ... &&`) or run from a script (for example Python's
+  `subprocess`) runs inside the Codex sandbox. The sandbox blocks Notion, the
+  local Hindsight server, and the main checkout's `.work-items/` and
+  `.memory/` from a worktree, so the command fails or reports the wrong
+  cause.
+- The one thing a Claude Code command may carry is its own text on standard
+  input
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-requirements/references/approvals.md'"
+  -> <!-- Generated file. Source: plugins/work/shared/approvals.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Approvals and gates
+
+The exact steps to ask for and record each owner approval, and what counts as
+one. Run each checklist in order; one wrong or missing command leaves the
+item in the wrong state.
+
+## Contents
+
+1. What counts as approval
+2. Requirements approval
+3. Design approval
+4. Result approval
+5. Done
+6. Cancel
+7. Delivery offer
+8. Project-wide decision
+9. Memory proposal
+10. Sub-items and approvals
+11. Standing merge instruction
+12. When an approve command refuses
+
+## 1. What counts as approval
+
+`toolkit work lifecycle` prints the gates and these rules. In short:
+
+- Only the owner's explicit words count. Quote them in a history note.
+- A question, a suggestion, a tentative answer ("probably B"), silence, or a
+  saved draft is not approval.
+- An approval covers only what was shown. It never covers merge, deployment,
+  spending, or publishing.
+- An approval survives later stages. A stage alone does not prove approval:
+  check the approval field (`toolkit work show <id>`).
+- A bare "yes", "ok", or "looks good" answers only a yes-or-no question asked
+  earlier in this conversation. When none was asked, or the waiting question
+  is not a yes-or-no question, show the decision with its choices and your
+  recommendation, and record nothing.
+- After a yes, save his words first, in a history note that starts with
+  `Owner said:`. Then run the 
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-decide/references/recording-owner-answers.md'"
+  -> <!-- Generated file. Source: plugins/work/shared/recording-owner-answers.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Recording the owner's answers
+
+Where each thing the owner says is saved, how to ask him a question, how to
+end a reply, and what to say when a save fails.
+
+## Contents
+
+1. Voice
+2. Where each answer goes
+3. Save it before the next question
+4. History notes
+5. Waiting on the owner
+6. Asking the owner
+7. Ending every reply
+8. Reporting a failed save
+9. Owner edits win
+10. Stages in plain words
+11. Handing over to another skill
+
+## 1. Voice
+
+Every skill carries this line near its top:
+
+> Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+
+Helper agents do not receive the output style. Each agent file carries its
+own writing rules.
+
+## 2. Where each answer goes
+
+| Information | Home | What to record |
+| --- | --- | --- |
+| Requirement or correction | The item's `Active requirements` (the `R-xx` block) and `Acceptance` | The new meaning, and Status Refining until approved |
+| Design choice | The item's design (`toolkit work design`) | The approach, proposed or approved, and why |
+| Open question | The item's `Open Questions` table | Question and your recommendation, what it affects, Open, who must answer |
+| Answer or decision about this item | The question's row, the section it changes, and one history note | The 
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-requirements/references/helpers.md'"
+  -> <!-- Generated file. Source: plugins/work/shared/helpers.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Working with helper agents
+
+How to start a helper agent in each host, what to put in its brief, and when
+helpers are allowed.
+
+## Contents
+
+1. The agents
+2. Starting an agent
+3. The brief
+4. A worked brief
+5. Rules
+6. When helpers are allowed
+
+## 1. The agents
+
+Every agent runs on Opus and carries its own writing rules. A skill that
+sizes a team also carries `team-roles.md`: what each role returns and how
+many of each to start.
+
+| Agent | What it does | Used by |
+| --- | --- | --- |
+| `requirements-analyst` | Checks requirements before design or build | `work-requirements`, `solution-design` |
+| `researcher` | Answers one bounded question with sources | `work-on`, `work-requirements`, `solution-design`, `work-delegate` |
+| `design-architect` | Writes or fixes one design option | `solution-design` |
+| `design-critic` | Checks a draft design against every requirement | `solution-design` |
+| `builder` | Builds one planned task in its own worktree | `work-on`, `work-check`, `work-delegate` |
+| `acceptance-checker` | Checks a result, or a build plan, against the requirements | `work-on`, `work-check`, `work-finish`, `work-delegate` |
+
+Each skill in the "Used by" column carries the agent's definition as
+`references/agent-<agent>.md`. In Codex, that text goes to the worker
+(section 2).
+
+## 2. Starting an agent
+
+Claude Code:
+
+- Start it with the Agent
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-decide/references/work-item-format.md'"
+  -> <!-- Generated file. Source: plugins/work/shared/work-item-format.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Work item and design format
+
+What a work item and its design hold, their exact section names, and how to
+change them with `toolkit work` commands without losing text.
+
+## Contents
+
+1. Where the record and the design live
+2. Header fields
+3. Sections of `WORK-ITEM.md`
+4. Sections of `DESIGN.md`
+5. Finding an item's file
+6. Changing one section
+7. Adding a table row
+8. Editing a record directly
+9. Titles
+10. Generated files
+11. Examples
+
+## 1. Where the record and the design live
+
+Every tracker uses the same body and the same design shape. Only the place
+differs.
+
+| Tracker | Work item | Design |
+| --- | --- | --- |
+| Local | `WORK-ITEM.md` in the item's folder under `.work-items/` | `DESIGN.md` beside it |
+| Notion | The item's page in the project's Work Items database | The item's "Solution Design" child page |
+| GitHub Issues | The issue body | One issue comment whose first line is `## Solution design` |
+| Jira | The issue description | One comment whose first line is "Solution design" |
+
+An item has one design home. Never make a separate design folder or a second
+design file.
+
+## 2. Header fields
+
+The header (frontmatter locally, properties in Notion) holds these fields.
+Only `toolkit work` commands change them.
+
+| Field | Values | Changed by |
+| --- | --- | --- |
+| `id` | `WI-001` (the project's prefix and a number) | `toolkit work
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-decide/references/current-focus.md'"
+  -> <!-- Generated file. Source: plugins/memory/shared/current-focus.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# The current focus
+
+Purpose: the format of the current focus, when to change it, and the exact
+read-change-save sequence, in every memory backend.
+
+## Contents
+
+- What the focus is for
+- The format
+- What goes in each section
+- When to check it
+- Read, change, save
+- A new project's focus
+- Examples
+- Checklist for a focus save
+
+## What the focus is for
+
+The current focus is the first thing the next session reads: the session
+briefing includes it. It says what is happening now and where the next
+session starts. It never repeats the tracker: a work item's status, tasks,
+and history stay in the work item.
+
+| Backend | Where the focus lives |
+| --- | --- |
+| Built-in | `.memory/CURRENT_FOCUS.md` in the main checkout |
+| Hindsight | The document `focus` in the project's bank |
+| Notion | The "Current focus" page under the project's page |
+
+The same commands read and save it in every backend. Never edit the file or
+the page by hand.
+
+## The format
+
+The model's format: a `# Current focus` title line, a `Last updated:` line,
+then exactly four `##` sections in this order, under 50 lines in total.
+
+```markdown
+# Current focus
+
+Last updated: <YYYY-MM-DD>, <source>, <person or agent>
+
+## Now
+
+## Waiting on the owner
+
+## Untracked to-dos
+
+## Next session starts with
+```
+
+What the command enforces:
+
+- It refuses a focus that lacks one of the four se
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-requirements/references/agent-requirements-analyst.md'"
+  -> ---
+name: requirements-analyst
+description: Checks a work item's requirements before design or build. Finds missing pieces, places not explicit end to end, wording a builder could misread, build details inside requirements, and drift from the Agreed goal. Returns ready or not ready with a fix for each finding. Read-only.
+tools: Read, Glob, Grep
+model: opus
+---
+<!-- Generated file. Source: plugins/work/agents/requirements-analyst.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+
+# Requirements analyst
+
+Read the requirements as one whole and say whether they are ready to design
+or build from. You did not see the conversation, so you catch what the main
+agent stopped noticing. You advise; the owner decides. You change nothing.
+
+## Start with the brief
+
+- The brief pastes in the Agreed goal, the Starting request, every `R-xx`
+  block, the Acceptance list, the open questions, and the owner's recorded
+  rulings. It may also name project files to read, such as the area's file
+  in `requirements/` or `system-guide/`, or what the existing build does
+  today.
+- Treat only rulings the brief marks as approved by the owner as settled.
+  Proposals and unanswered questions stay open. Everything else is open to
+  your check.
+- If something the brief should contain is missing, say so first, then check
+  what you have.
+
+## Check readiness
+
+Read the requirements inside the larger system the result belongs to. Walk
+the whole flow start to finish as the person who uses 
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-requirements/references/spec-check.md'"
+  -> # The spec check
+
+How to run the `requirements-analyst` check on an item's requirements and
+turn its findings into fixes or questions for the owner.
+
+## When it runs
+
+- Before asking for the requirements approval.
+- Whenever the owner says "check the spec".
+- Again after a change to an approved requirement.
+
+## The brief
+
+Give the `requirements-analyst` agent (Claude Code: `work:requirements-analyst`;
+Codex: the text of `references/agent-requirements-analyst.md`) this, pasted
+in, because it has no tracker access:
+
+1. The item id.
+2. The Starting request, the Agreed goal, every `R-xx` block, the Acceptance
+   list, and the open questions.
+3. The area's file in `requirements/` when one exists, so it can spot a
+   conflict.
+4. The job: "Check these requirements before design. Return ready or not
+   ready, then each finding with a fix."
+5. Files it may write: nothing.
+
+## What it returns
+
+Ready or not ready, then findings of these kinds, each with a fix:
+
+- missing pieces (a step, a person, an error case, a state, a boundary with
+  another system, a way to tell it worked);
+- places not explicit end to end;
+- wording a builder could misread;
+- build details inside requirements;
+- drift from the Agreed goal;
+- research or history in the wrong place.
+
+## Handling the findings
+
+- For each finding, propose a fix in plain words: what to change, where, and
+  what the line would say instead.
+- Change nothing without the owner's yes. Three findings or fewer: one
+  decision per message, in
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex 2295c7a [main]
+
+
+[CMD exit=0] /bin/zsh -lc 'git remote'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## main
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001 --path'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex/.work-items/WI-001-build-the-late-fee-command/WORK-ITEM.md
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 1 decision waits on the owner:
+
+WI-001 Build the late fee command
+  - Q-01: For a fee with a fraction of a cent, should the fee and total due round to the nearest cent, with half a cent rounded up? Recommended: yes, because the displayed dollar amounts and whole-cent API amount will then agree. Affects R-01, R-03. (work-decide)
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001'
+  -> WI-001: Build the late fee command
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex/.work-items/WI-001-build-the-late-fee-command/WORK-ITEM.md
+Stage: 02 Refinement (Backlog) | Waiting on: owner | Continue with: work-decide
+Parent: none | Sub-items: none | Design: none
+Worktree branch for this item: claude/wi-001-build-the-late-fee-command (folder .claude/worktrees/wi-001-build-the-late-fee-command)
+
+---
+id: WI-001
+title: Build the late fee command
+type: build
+stage: 02-refinement
+status: Backlog
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: not-offered
+requirements_approved: "no"
+design: none
+result_approved: "no"
+updated: 2026-09-29
+---
+
+# WI-001: Build the late fee command
+
+<!-- Fill-in guide for a new local work item: create it with `toolkit work new`, which copies this folder, names the new folder, and sets the real ID in front matter and heading; keep the file name WORK-ITEM.md. Use stable phase, task, requirement, and question IDs for this item. In the front matter, keep one value from each list and change the fields with `toolkit work` commands; a blocked item has `waiting_on` set and its Blockers line filled, not a Blocked status. Replace every angle-bracket prompt with actual text in that same field, cell, or paragraph; do not leave the prompt in place. Keep the headings and field labels. Add or remove phase, task, question, and requirement examples to
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-requirements/references/approvals.md'"
+  -> <!-- Generated file. Source: plugins/work/shared/approvals.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Approvals and gates
+
+The exact steps to ask for and record each owner approval, and what counts as
+one. Run each checklist in order; one wrong or missing command leaves the
+item in the wrong state.
+
+## Contents
+
+1. What counts as approval
+2. Requirements approval
+3. Design approval
+4. Result approval
+5. Done
+6. Cancel
+7. Delivery offer
+8. Project-wide decision
+9. Memory proposal
+10. Sub-items and approvals
+11. Standing merge instruction
+12. When an approve command refuses
+
+## 1. What counts as approval
+
+`toolkit work lifecycle` prints the gates and these rules. In short:
+
+- Only the owner's explicit words count. Quote them in a history note.
+- A question, a suggestion, a tentative answer ("probably B"), silence, or a
+  saved draft is not approval.
+- An approval covers only what was shown. It never covers merge, deployment,
+  spending, or publishing.
+- An approval survives later stages. A stage alone does not prove approval:
+  check the approval field (`toolkit work show <id>`).
+- A bare "yes", "ok", or "looks good" answers only a yes-or-no question asked
+  earlier in this conversation. When none was asked, or the waiting question
+  is not a yes-or-no question, show the decision with its choices and your
+  recommendation, and record nothing.
+- After a yes, save his words first, in a history note that starts with
+  `Owner said:`. Then run the 
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-decide/references/current-focus.md'"
+  -> <!-- Generated file. Source: plugins/memory/shared/current-focus.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# The current focus
+
+Purpose: the format of the current focus, when to change it, and the exact
+read-change-save sequence, in every memory backend.
+
+## Contents
+
+- What the focus is for
+- The format
+- What goes in each section
+- When to check it
+- Read, change, save
+- A new project's focus
+- Examples
+- Checklist for a focus save
+
+## What the focus is for
+
+The current focus is the first thing the next session reads: the session
+briefing includes it. It says what is happening now and where the next
+session starts. It never repeats the tracker: a work item's status, tasks,
+and history stay in the work item.
+
+| Backend | Where the focus lives |
+| --- | --- |
+| Built-in | `.memory/CURRENT_FOCUS.md` in the main checkout |
+| Hindsight | The document `focus` in the project's bank |
+| Notion | The "Current focus" page under the project's page |
+
+The same commands read and save it in every backend. Never edit the file or
+the page by hand.
+
+## The format
+
+The model's format: a `# Current focus` title line, a `Last updated:` line,
+then exactly four `##` sections in this order, under 50 lines in total.
+
+```markdown
+# Current focus
+
+Last updated: <YYYY-MM-DD>, <source>, <person or agent>
+
+## Now
+
+## Waiting on the owner
+
+## Untracked to-dos
+
+## Next session starts with
+```
+
+What the command enforces:
+
+- It refuses a focus that lacks one of the four se
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-decide/references/toolkit-commands.md'"
+  -> <!-- Generated file. Source: plugins/toolkit/shared/toolkit-commands.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Running `toolkit` commands
+
+Purpose: how to run a `toolkit` command in Claude Code and in Codex, how to
+pass text in one, and what each exit code means. Every skill that runs a
+`toolkit` command follows this file.
+
+## Contents
+
+- Running toolkit commands
+- Text in a command
+- Exit codes
+- Reporting a save
+- Reading output and updating what you read
+- Right and wrong examples
+
+## Running toolkit commands
+
+- Put each `toolkit` command on its own line and run it as a plain command,
+  in both hosts. Do not join it to another command with `&&`, `;`, or a pipe,
+  and do not wrap it in `$(...)`, a loop, or a script. This holds for read
+  commands too: `toolkit work decisions && toolkit work show WI-001` is two
+  commands, run one after the other.
+- Why, in Codex: the project's command rule (`.codex/rules/toolkit.rules`)
+  runs a `toolkit` command outside the sandbox only when it is the whole
+  command. A `toolkit` command joined to anything else (`&&`, `;`, a pipe, a
+  heredoc, `cd ... &&`) or run from a script (for example Python's
+  `subprocess`) runs inside the Codex sandbox. The sandbox blocks Notion, the
+  local Hindsight server, and the main checkout's `.work-items/` and
+  `.memory/` from a worktree, so the command fails or reports the wrong
+  cause.
+- The one thing a Claude Code command may carry is its own text on standard
+  input
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-requirements/references/spec-check.md'"
+  -> # The spec check
+
+How to run the `requirements-analyst` check on an item's requirements and
+turn its findings into fixes or questions for the owner.
+
+## When it runs
+
+- Before asking for the requirements approval.
+- Whenever the owner says "check the spec".
+- Again after a change to an approved requirement.
+
+## The brief
+
+Give the `requirements-analyst` agent (Claude Code: `work:requirements-analyst`;
+Codex: the text of `references/agent-requirements-analyst.md`) this, pasted
+in, because it has no tracker access:
+
+1. The item id.
+2. The Starting request, the Agreed goal, every `R-xx` block, the Acceptance
+   list, and the open questions.
+3. The area's file in `requirements/` when one exists, so it can spot a
+   conflict.
+4. The job: "Check these requirements before design. Return ready or not
+   ready, then each finding with a fix."
+5. Files it may write: nothing.
+
+## What it returns
+
+Ready or not ready, then findings of these kinds, each with a fix:
+
+- missing pieces (a step, a person, an error case, a state, a boundary with
+  another system, a way to tell it worked);
+- places not explicit end to end;
+- wording a builder could misread;
+- build details inside requirements;
+- drift from the Agreed goal;
+- research or history in the wrong place.
+
+## Handling the findings
+
+- For each finding, propose a fix in plain words: what to change, where, and
+  what the line would say instead.
+- Change nothing without the owner's yes. Three findings or fewer: one
+  decision per message, in
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-decide/references/work-item-format.md'"
+  -> <!-- Generated file. Source: plugins/work/shared/work-item-format.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Work item and design format
+
+What a work item and its design hold, their exact section names, and how to
+change them with `toolkit work` commands without losing text.
+
+## Contents
+
+1. Where the record and the design live
+2. Header fields
+3. Sections of `WORK-ITEM.md`
+4. Sections of `DESIGN.md`
+5. Finding an item's file
+6. Changing one section
+7. Adding a table row
+8. Editing a record directly
+9. Titles
+10. Generated files
+11. Examples
+
+## 1. Where the record and the design live
+
+Every tracker uses the same body and the same design shape. Only the place
+differs.
+
+| Tracker | Work item | Design |
+| --- | --- | --- |
+| Local | `WORK-ITEM.md` in the item's folder under `.work-items/` | `DESIGN.md` beside it |
+| Notion | The item's page in the project's Work Items database | The item's "Solution Design" child page |
+| GitHub Issues | The issue body | One issue comment whose first line is `## Solution design` |
+| Jira | The issue description | One comment whose first line is "Solution design" |
+
+An item has one design home. Never make a separate design folder or a second
+design file.
+
+## 2. Header fields
+
+The header (frontmatter locally, properties in Notion) holds these fields.
+Only `toolkit work` commands change them.
+
+| Field | Values | Changed by |
+| --- | --- | --- |
+| `id` | `WI-001` (the project's prefix and a number) | `toolkit work
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history WI-001 --note 'Owner said: \"Yes, round the fee and the total to the nearest cent, with half a cent rounded up, like you said.\"' --effect 'Q-01 answered; R-01 and R-03 can state the rounding rule.'"
+  -> Added a Recent History row to WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show WI-001 --section 'Open Questions'"
+  -> ## Open Questions
+
+| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | For a fee with a fraction of a cent, should the fee and total due round to the nearest cent, with half a cent rounded up? Recommended: yes, because the displayed dollar amounts and whole-cent API amount will then agree. | R-01, R-03 | Open | owner |
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | Answered 2026-09-29 by Mike Rihm: round the fee and the total to the nearest cent, with half a cent rounded up. | R-01, R-03 | Answered | owner |'"
+  -> Saved "Open Questions" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Active requirements' --text '#### R-01 — Calculate the late fee
+
+**Status:** Refining  
+**Applies to:** An overdue invoice amount and the number of days late supplied to the command.  
+**Required behavior:** Calculate the late fee as 0.25% of the invoice amount for each day late, based on the original invoice amount. Add that fee to the invoice amount to get the total due. Round the fee and total due to the nearest cent, with half a cent rounded up.  
+**Boundaries and exceptions:** Input amount and days-late rules have not yet been settled.  
+*
+  -> Saved "Active requirements" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'rg --files requirements system-guide tests 2>/dev/null'
+  -> system-guide/AREA-TEMPLATE.md
+tests/TEST-PLAN-TEMPLATE.md
+requirements/AGENTS.md
+requirements/SYSTEM-DATA-MODEL.md
+requirements/system-area-template/AREA-TEMPLATE.md
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show WI-001 --section 'Open Questions'"
+  -> ## Open Questions
+
+| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | Answered 2026-09-29 by Mike Rihm: round the fee and the total to the nearest cent, with half a cent rounded up. | R-01, R-03 | Answered | owner |
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show WI-001 --section 'Active requirements'"
+  -> ### Active requirements
+
+#### R-01 — Calculate the late fee
+
+**Status:** Refining  
+**Applies to:** An overdue invoice amount and the number of days late supplied to the command.  
+**Required behavior:** Calculate the late fee as 0.25% of the invoice amount for each day late, based on the original invoice amount. Add that fee to the invoice amount to get the total due. Round the fee and total due to the nearest cent, with half a cent rounded up.  
+**Boundaries and exceptions:** Input amount and days-late rules have not yet been settled.  
+**Acceptance check:** For an invoice amount of $200 and 10 days late, the fee is $5.00 and the total due is $205.00. For an invoice amount of $1 and 2 days late, the half-cent fee rounds up to $0.01 and the total due is $1.01.  
+**Decision record:** Mike Rihm, 2026-09-29, starting request and rounding answer.  
+**Open questions:** None.
+
+#### R-02 — Print the dollar amounts
+
+**Status:** Refining  
+**Applies to:** A command run with an invoice amount and the days-late option.  
+**Required behavior:** Print one line containing the late fee and total due in dollars, each with two decimal places.  
+**Boundaries and exceptions:** No second line is requested unless the cents option is supplied.  
+**Acceptance check:** For an invoice amount of $200 and 10 days late, the first line is exactly "Late fee: $5.00  Total due: $205.00".  
+**Decision record:** Mike Rihm, 2026-09-29, starting request.  
+**Open questions:** None.
+
+#### R-03 — Print total due
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --waiting-on agent'
+  -> Updated WI-001: waiting on agent.
+Now 02 Refinement (Backlog). Continue with work-requirements.
+
+
+[AGENT] The rounding decision is recorded. I added a half-cent example to the requirements and am checking the full command behavior before asking you to approve them.
+
+[CMD exit=0] /bin/zsh -lc "cat '/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.3.0/skills/memory-save/SKILL.md'"
+  -> ---
+name: memory-save
+description: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says "remember this", "from now on", "forget that", or "remind me" with no time given, corrects the agent, or a hook says a save is due.'
+---
+
+# Memory save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Saves, corrects, or retires one fact in the project's memory with `toolkit memory` commands, or sends it to its proper home. It never edits memory files by hand. Rules, skills, and memory each hold one kind of thing (Mike, 2026-09-29): an instruction the agent follows every time goes in the rules (`toolkit rule add`), a procedure that proved itself in a skill, and a fact or an unproven lesson in memory. Memory keeps one record per concept (for example `user_profile`, `project_billing`), with one `##` section per fact and a last "Gotchas and lessons" section; an `event_` record holds one episode. The prefixes are `user_`, `project_`, `reference_`, and `event_`; `feedback_` is retired.
+
+## Steps
+
+Track these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+1. Decide the home. An instruction for how the agent works (a preference about how work is done, a correction, "from now on", "always", "never") is a rule: save it with `toolkit rule a
+
+[CMD exit=0] /bin/zsh -lc "cat '.memory/AGENTS.md'"
+  -> # Local project memory
+
+Keep future sessions oriented without turning every conversation into lasting memory. This folder is the project's built-in memory store and can be opened directly as an Obsidian vault. Active topics stay flat; filenames and YAML types agree. Git ignores this folder, so back 
+
+[CMD exit=0] /bin/zsh -lc "cat '.memory/memory-criteria.md'"
+  -> # Memory criteria
+
+This file is the project-specific selection policy: what is worth keeping in lasting memory. The approval policy, including onboarding and trusted mode, is in the `memory-save` skill, which saves with `toolkit memory save`. An instruction for how the agent works (a working prefere
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-29, chat, agent
+
+## Now
+
+- WI-001 Build the late fee command
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 from its Resume here: record the rounding answer, complete the requirements review, and ask for requirements approval before implementation.
+
+
+[ITEM collab_tool_call ] {"id": "item_51", "type": "collab_tool_call", "tool": "wait", "sender_thread_id": "01a0edc7-0edf-7391-b615-11d8504ea1a8", "receiver_thread_ids": [], "prompt": null, "agents_states": {}, "status": "completed"}
+
+[AGENT] The independent requirements check found three choices that affect the command: valid inputs, what happens on invalid input, and whether the total uses the rounded fee. I’ll record them in WI-001 and ask you the first choice.
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Open Questions' --append-row '| Q-02 | Which invoice amounts and day counts are valid? Recommended: amounts of "'$0 or more with at most two decimal places, and whole numbers of days of 0 or more, because both inputs then have clear units and valid cent amounts. | R-01 | Open | owner |'"'"
+  -> Saved "Open Questions" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Open Questions' --append-row '| Q-03 | What should happen when an input is missing or invalid? Recommended: print a clear error to standard error and exit unsuccessfully without a calculated total, because the billing API must not receive an amount from a bad command. | R-01, R-02 | Open | owner |'"
+  -> Saved "Open Questions" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Open Questions' --append-row '| Q-04 | Should the total due be the invoice amount plus the rounded fee? Recommended: yes, so the shown fee and total always agree. | R-01, R-03 | Open | owner |'"
+  -> Saved "Open Questions" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Active requirements' --text '#### R-01 — Calculate the late fee
+
+**Status:** Refining  
+**Applies to:** An overdue invoice amount and the number of days late supplied to the command.  
+**Required behavior:** Calculate the late fee as 0.25% of the invoice amount for each day late, based on the original invoice amount. Add that fee to the invoice amount to get the total due. Round the fee and total due to the nearest cent, with half a cent rounded up.  
+**Boundaries and exceptions:** Input amount and days-late rules have not yet been settled.  
+*
+  -> Saved "Active requirements" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history WI-001 --note 'Independent requirements check found unsettled input limits, invalid-input behavior, and the rounding order.' --effect 'Q-02 to Q-04 opened; work-requirements continues after owner answers.'"
+  -> Added a Recent History row to WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show WI-001 --section 'Overview'"
+  -> ## Overview
+
+**Goal:** Provide a late fee command that reports the fee, total due, and optional whole-cent total for billing.
+
+**Current position:** Requirements R-01 to R-03 are drafted. No implementation has started. Requirements are not approved.
+
+**Next action:** Mike answers Q-01 about rounding. The agent then completes the requirements review and asks Mike to approve the requirements.
+
+**Blockers:** Q-01 and requirements approval before implementation.
+
+**Related items:** None.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Overview' --text '**Goal:** Provide a late fee command that reports the fee, total due, and optional whole-cent total for billing.
+
+**Current position:** Requirements R-01 to R-03 are drafted, and Q-01 rounding is answered. An independent requirements check found three remaining decisions. No implementation has started. Requirements are not approved.
+
+**Next action:** Mike answers Q-02 about valid invoice amounts and day counts. Then the agent takes Q-03 and Q-04 one at a time, completes the requirements review, and asks Mike to approve the req
+  -> Saved "Overview" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show WI-001 --section 'Resume here'"
+  -> ### Resume here
+
+Read R-01 to R-03 and Q-01. Record the owner’s rounding answer, settle any remaining input rules, run the requirements check, and request explicit requirements approval. Do not implement the command before approval.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --section 'Resume here' --text 'Q-01 rounding is answered. Ask Q-02, Q-03, and Q-04 one at a time, saving each answer in the requirements and question row. Then rerun the independent requirements check and request explicit requirements approval. Do not implement the command before approval.'"
+  -> Saved "Resume here" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --waiting-on owner'
+  -> Updated WI-001: waiting on owner.
+Now 02 Refinement (Backlog). Continue with work-decide.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus --json'
+  -> {
+  "ok": true,
+  "backend": "builtin",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-29, chat, agent\n\n## Now\n\n- WI-001 Build the late fee command\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 from its Resume here: record the rounding answer, complete the requirements review, and ask for requirements approval before implementation.\n",
+  "version": "e50f7ec1f7bf41a9b4e2538b26b664dbe6690d85f8a7c8f78e81df4bdfa21f5d"
+}
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate WI-001'
+  -> Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. 3 open questions wait on the owner (toolkit work decisions lists them).
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 3 decisions wait on the owner:
+
+WI-001 Build the late fee command
+  - Q-02: Which invoice amounts and day counts are valid? Recommended: amounts of $0 or more with at most two decimal places, and whole numbers of days of 0 or more, because both inputs then have clear units and valid cent amounts. Affects R-01. (work-decide)
+  - Q-03: What should happen when an input is missing or invalid? Recommended: print a clear error to standard error and exit unsuccessfully without a calculated total, because the billing API must not receive an amount from a bad command. Affects R-01, R-02. (work-decide)
+  - Q-04: Should the total due be the invoice amount plus the rounded fee? Recommended: yes, so the shown fee and total always agree. Affects R-01, R-03. (work-decide)
+
+
+[AGENT] WI-001 now has Q-02 through Q-04 recorded, and the tracker validates cleanly. I’m updating the next-session note so these questions stay visible.
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-29, chat, agent
+
+## Now
+
+- WI-001 Build the late fee command
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 from its Resume here: Q-01 rounding is recorded. Ask Q-02, Q-03, and Q-04 one at a time, 
+  -> Saved the current focus (20 lines). Version: 0b41c4124382
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show WI-001 --section 'Overview'"
+  -> ## Overview
+
+**Goal:** Provide a late fee command that reports the fee, total due, and optional whole-cent total for billing.
+
+**Current position:** Requirements R-01 to R-03 are drafted, and Q-01 rounding is answered. An independent requirements check found three remaining decisions. No implementation has started. Requirements are not approved.
+
+**Next action:** Mike answers Q-02 about valid invoice amounts and day counts. Then the agent takes Q-03 and Q-04 one at a time, completes the requirements review, and asks Mike to approve the requirements.
+
+**Blockers:** Q-02 to Q-04 and requirements approval before implementation.
+
+**Related items:** None.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work show WI-001 --section 'Open Questions'"
+  -> ## Open Questions
+
+| ID | Question | Affects | Status | Decision needed from |
+|---|---|---|---|---|
+| Q-01 | Answered 2026-09-29 by Mike Rihm: round the fee and the total to the nearest cent, with half a cent rounded up. | R-01, R-03 | Answered | owner |
+| Q-02 | Which invoice amounts and day counts are valid? Recommended: amounts of $0 or more with at most two decimal places, and whole numbers of days of 0 or more, because both inputs then have clear units and valid cent amounts. | R-01 | Open | owner |
+| Q-03 | What should happen when an input is missing or invalid? Recommended: print a clear error to standard error and exit unsuccessfully without a calculated total, because the billing API must not receive an amount from a bad command. | R-01, R-02 | Open | owner |
+| Q-04 | Should the total due be the invoice amount plus the rounded fee? Recommended: yes, so the shown fee and total always agree. | R-01, R-03 | Open | owner |
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-29, chat, agent
+
+## Now
+
+- WI-001 Build the late fee command
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 from its Resume here: Q-01 rounding is recorded. Ask Q-02, Q-03, and Q-04 one at a time, then check the revised requirements and ask for approval before implementation.
+
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for feecalc (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (4):
+- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's versio
+
+[AGENT] Your rounding decision is recorded in WI-001: the fee and total due round to the nearest cent, with half a cent rounded up. The requirements are still awaiting approval; no implementation has started.
+
+The requirements check found three remaining choices. First, should the command accept invoice amounts of $0 or more with at most two decimal places, and whole numbers of days of 0 or more? I recommend yes, so both inputs have clear units.
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 1679006, "cached_input_tokens": 1612032, "cache_write_input_tokens": 0, "output_tokens": 7439, "reasoning_output_tokens": 1498}}
+
+SKILLS OPENED: ['work-decide', 'work-requirements', 'work-on', 'memory-save']
+
+[HOOK CONTEXT ord=9] Project briefing: feecalc (feecalc), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+No item is Ready, In Progress, or In Review.
+The backlog has 1 item; toolkit work next suggests which to take up.
+
+Waiting on the owner:
+- WI-001 Build the late fee command: Q-01: For a fee with a fraction of a cent, should the fee and total due round to the nearest cent, with half a cent rounded up? Recommended: yes, because the displayed dollar amounts and whole-cent... Affects R-01, R-03. (work-decide)
+
+Items: 1 in the backlog.
+
+Current focus:
+Last updated: 2026-09-29, chat, agent
+## Now
+- WI-001 Build the late fee command
+## Waiting on the owner
+- Trust this folder in Code
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const paths=["PROJECT.md","SOUL.md","PROJECT-ROADMAP.md","DECISIONS.md",".claude/rules/humanize-outbound-text.md",".claude/rules/keep-work-item-current.md",".claude/rules/memory-review-and-save.md",".claude/rules/owner-preferences.md",".claude/rules/plain-english-artifacts.md",".claude/rules/session-handoff.md",".claude/rules/shared-repository-work.md",".claude/rules/work-item-folders.md","/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-decide/SKILL.md","/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-requirements/SKILL.md"]; const r=await Promise.allSettled(paths.map(p=>tools.exec_command({cmd:`cat '${p}'`,max_output_tokens:12000}))); r.forEach((x,i)=>text(JSON.stringify({path:paths[i],result:x.status==="fulfilled"?x.value.output:String(x.reason)})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"path\":\"PROJECT.md\",\"result\":\"# feecalc\\n\\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\\n\\n## Purpose and intended outcome\\n\\n- Purpose: `<Why this project exists.>`\\n- Intended outcome: feecalc tells me the late fee and the total due on an overdue invoice, so I send the right amount to our billing API.\\n\\n## Scope and boundaries\\n\\n- In scope: `<Business capabilities or systems this project owns.>`\\n- Outside scope: `<Important exclusions or adjacent owners.>`\\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\\n\\n## Systems and environments\\n\\n| System or org | Purpose | Environment | Source of truth | Access notes |\\n| --- | --- | --- | --- | --- |\\n| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |\\n\\n## People and ownership\\n\\n| Role | Person or team | Responsibility | Source / last confirmed |\\n| --- | --- | --- | --- |\\n| Owner | Mike Rihm | Project decisions | Setup interview, 2026-09-29 |\\n\\n## Work and project records\\n\\n- Work tracker: `.work-items/` (local folders, Git-ignored)\\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\\n- Project decisions: [DECISIONS.md](DECISIONS.md)\\n- Functional requirements: [requirements/](requirements/)\\n- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`\\n- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`\\n- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)\\n- Memory backup or sync: `/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/rules-codex` (owner-approved backup folder; restore procedure still to be documented)\\n\\n## Resources and project paths\\n\\n- Tests and checks: `<actual commands and locations>`\\n- Outside references: `<source register or approved location>`\\n\\n## Operating convent
+
+[CALL] const base="/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/"; const files=[base+"work-on/SKILL.md",base+"work-decide/references/recording-owner-answers.md",base+"work-decide/references/work-item-format.md",base+"work-decide/references/current-focus.md",base+"work-decide/references/toolkit-commands.md",base+"work-requirements/references/spec-check.md",base+"work-requirements/references/approvals.md",base+"work-requirements/references/requirement-format.md",base+"work-requirements/references/helpers.md",base+"work-requirements/references/agent-requirements-analyst.md"]; const r=await Promise.allSettled(files.map(p=>tools.exec_command({cmd:`cat '${p}'`,max_output_tokens:12000}))); r.forEach((x,i)=>text(JSON.stringify({path:files[i],result:x.status==="fulfilled"?x.value.output:String(x.reason)})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Warning: truncated output (original token count: 21538)\nTotal output lines: 10\n\n{\"path\":\"/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-on/SKILL.md\",\"result\":\"---\\nname: work-on\\ndescription: 'Starts, resumes, or logs a work item and builds it. Use whenever the owner asks to build, add, fix, or change something, names an item id to resume, says \\\"keep going\\\", or wants a bug or idea logged (\\\"put it in the backlog\\\"). Not for requirement edits (work-requirements) or handovers (work-delegate).'\\n---\\n\\n# Work on\\n\\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \\\"How to write replies\\\" section of `AGENTS.md`.\\nStarts or resumes one work item, plans it, and builds it; it never records an approval, Done, a merge, or a deploy. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.\\n\\n## Steps\\n\\n1. No project briefing in this conversation: run the briefing. Exit code 4: open `project-setup` and stop. Tell the owner each change listed under \\\"Changes found in the tracker\\\", one line each in the CLI's words, before other work.\\n   `toolkit brief`\\n2. A bare \\\"ok\\\", \\\"yes\\\", or \\\"looks good\\\" when this chat asked him nothing: start no work and ask what he wants. Otherwise find the item: the id he named, this worktree's item, or a title that matches. Two matches: ask one question naming both.\\n   `toolkit work list`\\n   `toolkit work show <id>`\\n3. No item yet: size the request as a quick edit, log only, or a work item, and pick the type (`references/sizing-and-routing.md`, sections 1 to 3). He asks to be asked first (\\\"ask me questions\\\", \\\"grill me\\\"): open `work-requirements`, which creates the item, and ask nothing here. Otherwise title a new item in his words, say the title in one line, and save his exact words as the Starting request. Log only: reply \\\"Logged as WI-014 (bug, backlog). Not started.\\\" and stop.\\n   `toolkit work new --title '<title>' --type <type> --stage 01-discovery`\\n   `toolkit work edit <id> --section 'Starting request' --text '<his exact words>'`\\n4. Route by where the item stands: go down the table in `references/sizing-and-routing.md`, section 4, take the first row that matches, and say the
+
+[CALL] const cmds=["git worktree list","git status --short --branch","git remote","toolkit work decisions","toolkit work show WI-001","toolkit work show WI-001 --path"]; const r=await Promise.allSettled(cmds.map(cmd=>tools.exec_command({cmd,max_output_tokens:10000}))); r.forEach((x,i)=>text(JSON.stringify({cmd:cmds[i],result:x.status==="fulfilled"?x.value.output:String(x.reason)})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"cmd\":\"git worktree list\",\"result\":\"/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex 2295c7a [main]\\n\"}"}, {"type": "input_text", "text": "{\"cmd\":\"git status --short --branch\",\"result\":\"## main\\n\"}"}, {"type": "input_text", "text": "{\"cmd\":\"git remote\",\"result\":\"\"}"}, {"type": "input_text", "text": "{\"cmd\":\"toolkit work decisions\",\"result\":\"1 decision waits on the owner:\\n\\nWI-001 Build the late fee command\\n  - Q-01: For a fee with a fraction of a cent, should the fee and total due round to the nearest cent, with half a cent rounded up? Recommended: yes, because the displayed dollar amounts and whole-cent API amount will then agree. Affects R-01, R-03. (work-decide)\\n\"}"}, {"type": "input_text", "text": "{\"cmd\":\"toolkit work show WI-001\",\"result\":\"WI-001: Build the late fee command\\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex/.work-items/WI-001-build-the-late-fee-command/WORK-ITEM.md\\nStage: 02 Refinement (Backlog) | Waiting on: owner | Continue with: work-decide\\nParent: none | Sub-items: none | Design: none\\nWorktree branch for this item: claude/wi-001-build-the-late-fee-command (folder .claude/worktrees/wi-001-build-the-late-fee-command)\\n\\n---\\nid: WI-001\\ntitle: Build the late fee command\\ntype: build\\nstage: 02-refinement\\nstatus: Backlog\\nparent: none\\nwaiting_on: \\\"owner\\\"\\npriority: medium\\ndelivery: not-offered\\nrequirements_approved: \\\"no\\\"\\ndesign: none\\nresult_approved: \\\"no\\\"\\nupdated: 2026-09-29\\n---\\n\\n# WI-001: Build the late fee command\\n\\n<!-- Fill-in guide for a new local work item: create it with `toolkit work new`, which copies this folder, names the new folder, and sets the real ID in front matter and heading; keep the file name WORK-ITEM.md. Use stable phase, task, requirement, and question IDs for this item. In the front matter, keep one value from each list and change the fields with `toolkit work` commands; a blocked item has `waiting_on` set and its Blockers line filled, not a Blocked status. Replace every angle-bracket prompt with actual text in that same field, cell, or paragraph; do not leave the prompt in place. Keep the headings
+
+[CALL] const base="/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/";const files=[base+"work-requirements/references/spec-check.md",base+"work-requirements/references/approvals.md",base+"work-decide/references/current-focus.md",base+"work-decide/references/toolkit-commands.md",base+"work-decide/references/work-item-format.md"];const r=await Promise.allSettled(files.map(p=>tools.exec_command({cmd:`cat '${p}'`,max_output_tokens:7500})));r.forEach((x,i)=>text(JSON.stringify({path:files[i],output:x.status==="fulfilled"?x.value.output:String(x.reason)})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "Warning: truncated output (original token count: 12238)\nTotal output lines: 5\n\n{\"path\":\"/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-requirements/references/spec-check.md\",\"output\":\"# The spec check\\n\\nHow to run the `requirements-analyst` check on an item's requirements and\\nturn its findings into fixes or questions for the owner.\\n\\n## When it runs\\n\\n- Before asking for the requirements approval.\\n- Whenever the owner says \\\"check the spec\\\".\\n- Again after a change to an approved requirement.\\n\\n## The brief\\n\\nGive the `requirements-analyst` agent (Claude Code: `work:requirements-analyst`;\\nCodex: the text of `references/agent-requirements-analyst.md`) this, pasted\\nin, because it has no tracker access:\\n\\n1. The item id.\\n2. The Starting request, the Agreed goal, every `R-xx` block, the Acceptance\\n   list, and the open questions.\\n3. The area's file in `requirements/` when one exists, so it can spot a\\n   conflict.\\n4. The job: \\\"Check these requirements before design. Return ready or not\\n   ready, then each finding with a fix.\\\"\\n5. Files it may write: nothing.\\n\\n## What it returns\\n\\nReady or not ready, then findings of these kinds, each with a fix:\\n\\n- missing pieces (a step, a person, an error case, a state, a boundary with\\n  another system, a way to tell it worked);\\n- places not explicit end to end;\\n- wording a builder could misread;\\n- build details inside requirements;\\n- drift from the Agreed goal;\\n- research or history in the wrong place.\\n\\n## Handling the findings\\n\\n- For each finding, propose a fix in plain words: what to change, where, and\\n  what the line would say instead.\\n- Change nothing without the owner's yes. Three findings or fewer: one\\n  decision per message, in order. More than three: one numbered list he can\\n  answer in one message. That list is the only exception to one question per\\n  message.\\n- A dismissed finding stays dismissed for this item in this session.\\n- Two sources that disagree (the item and the area file in `requirements/`,\\n  for example): name both, quote the disagreement, and let the owner pick.\\n  Never silently prefer the newer or longer one.\\n- Do not turn the check into a rewrite. Personal wording taste is not a\\n  finding.\\n- A clean spec: say so in one line and move on to the 
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history WI-001 --note 'Owner said: \"Yes, round the fee and the total to the nearest cent, with half a cent rounded up, like you said.\"' --effect 'Q-01 answered; R-01 and R-03 can state the rounding rule.'",max_output_tokens:2000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Added a Recent History row to WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show WI-001 --section 'Open Questions'",max_output_tokens:2000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "## Open Questions\n\n| ID | Question | Affects | Status | Decision needed from |\n|---|---|---|---|---|\n| Q-01 | For a fee with a fraction of a cent, should the fee and total due round to the nearest cent, with half a cent rounded up? Recommended: yes, because the displayed dollar amounts and whole-cent API amount will then agree. | R-01, R-03 | Open | owner |\n"}]
+
+[CALL] const cmd="toolkit work edit WI-001 --section 'Open Questions' --text '| ID | Question | Affects | Status | Decision needed from |\n|---|---|---|---|---|\n| Q-01 | Answered 2026-09-29 by Mike Rihm: round the fee and the total to the nearest cent, with half a cent rounded up. | R-01, R-03 | Answered | owner |'";const r=await tools.exec_command({cmd,max_output_tokens:2000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Open Questions\" in WI-001.\n"}]
+
+[CALL] const body=`#### R-01 — Calculate the late fee
+
+**Status:** Refining  
+**Applies to:** An overdue invoice amount and the number of days late supplied to the command.  
+**Required behavior:** Calculate the late fee as 0.25% of the invoice amount for each day late, based on the original invoice amount. Add that fee to the invoice amount to get the total due. Round the fee and total due to the nearest cent, with half a cent rounded up.  
+**Boundaries and exceptions:** Input amount and days-late rules have not yet been settled.  
+**Acceptance check:** For an invoice amount of $200 and 10 days late, the fee is $5.00 and the total due is $205.00. For an invoice amount of $1 and 2 days late, the half-cent fee rounds up to $0.01 and the total due is $1.01.  
+**Decision record:** Mike Rihm, 2026-09-29, starting request and rounding answer.  
+**Open questions:** None.
+
+#### R-02 — Print the dollar amounts
+
+**Status:** Refining  
+**Applies to:** A command run with an invoice amount and the days-late option.  
+**Required behavior:** Print one line containing the late fee and total due in dollars, each with two decimal places.  
+**Boundaries and exceptions:** No second line is requested unless the cents option is supplied.  
+**Acceptance check:** For an invoice amount of $200 and 10 days late, the first line is exactly "Late fee: $5.00  Total due: $205.00".  
+**Decision record:** Mike Rihm, 2026-09-29, starting request.  
+**Open questions:** None.
+
+#### R-03 — Print total due in cents on 
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Active requirements\" in WI-001.\n"}]
+
+[CALL] const cmds=["toolkit work show WI-001 --section 'Open Questions'","toolkit work show WI-001 --section 'Active requirements'","rg --files requirements system-guide tests 2>/dev/null"];const r=await Promise.allSettled(cmds.map(cmd=>tools.exec_command({cmd,max_output_tokens:5000})));r.forEach((x,i)=>text(JSON.stringify({cmd:cmds[i],output:x.status==="fulfilled"?x.value.output:String(x.reason)})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"cmd\":\"toolkit work show WI-001 --section 'Open Questions'\",\"output\":\"## Open Questions\\n\\n| ID | Question | Affects | Status | Decision needed from |\\n|---|---|---|---|---|\\n| Q-01 | Answered 2026-09-29 by Mike Rihm: round the fee and the total to the nearest cent, with half a cent rounded up. | R-01, R-03 | Answered | owner |\\n\"}"}, {"type": "input_text", "text": "{\"cmd\":\"toolkit work show WI-001 --section 'Active requirements'\",\"output\":\"### Active requirements\\n\\n#### R-01 \u2014 Calculate the late fee\\n\\n**Status:** Refining  \\n**Applies to:** An overdue invoice amount and the number of days late supplied to the command.  \\n**Required behavior:** Calculate the late fee as 0.25% of the invoice amount for each day late, based on the original invoice amount. Add that fee to the invoice amount to get the total due. Round the fee and total due to the nearest cent, with half a cent rounded up.  \\n**Boundaries and exceptions:** Input amount and days-late rules have not yet been settled.  \\n**Acceptance check:** For an invoice amount of $200 and 10 days late, the fee is $5.00 and the total due is $205.00. For an invoice amount of $1 and 2 days late, the half-cent fee rounds up to $0.01 and the total due is $1.01.  \\n**Decision record:** Mike Rihm, 2026-09-29, starting request and rounding answer.  \\n**Open questions:** None.\\n\\n#### R-02 \u2014 Print the dollar amounts\\n\\n**Status:** Refining  \\n**Applies to:** A command run with an invoice amount and the days-late option.  \\n**Required behavior:** Print one line containing the late fee and total due in dollars, each with two decimal places.  \\n**Boundaries and exceptions:** No second line is requested unless the cents option is supplied.  \\n**Acceptance check:** For an invoice amount of $200 and 10 days late, the first line is exactly \\\"Late fee: $5.00  Total due: $205.00\\\".  \\n**Decision record:** Mike Rihm, 2026-09-29, starting request.  \\n**Open questions:** None.\\n\\n#### R-03 \u2014 Print total due in cents on request\\n\\n**Status:** Refining  \\n**Applies to:** A command run with the cents option.  \\n**Required behavior:** Add a second line with the total due as a whole number of cents for the billing API.  \\n**Boundaries and exceptions:** The cents value must represent the same rounded total due shown in dollars.  \\n**Acceptance check:
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-001 --waiting-on agent",max_output_tokens:2000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Updated WI-001: waiting on agent.\nNow 02 Refinement (Backlog). Continue with work-requirements.\n"}]
+
+[CALL] {"task_name":"requirements_check","fork_turns":"none","message":"gAAAAABqu9k7qOfT8UZ3XVqRna4TB1TNjPNbEO3l7f9qiytUzx6twsK7_tPFWfMaN1TCByYMUsUuUGas1gjX5pyzfmLOifAT0VBOk9SVrkrMRBfwA0fSOUQpbcrAVq1hti7Y5yzMAIfI0nfwDWNw_715mDS9SDqfAIMU8S2qTMJU9BeFiR0-a1Wcc__vuUV3CGSFUTxymbsCyCMcmrf8UbaGd38q7m4xIk4OWFWiTkHLfHo-lFKgcWI2JU8ELmPodjznQirrsUw-snB9QjZZeGlpHclmyFth1pZxsYMvReZmP4jt-JYqPm14F4MtSG6iExtypoWkTpdzDH5F9k9-oRFySy-ZfT9zw5BmJRm36bJ59iTVCC-kFWj6aLnK8wkIl7VSIUIcRvOA919xAmW9O1WZ11ySMVy_HtQiqDT_OBTLvp2wAwBy6fo93d7reVXkVrmURF24AjLMsKgN--vRp9tLyPrcYsKOn8GbAwiyiGS-MN3Xa9blCiZDEwgoCOihVQwbAbTWlEgdDfwjhXb24Fm8a8LG1vLS6LAWjNvDD1TNsQed5Z3doeePmZ3kBXyDVSToLCvmHrYscoV5Hd_GCxhRXXnDS9MyvRImFczIaXiY_I4pvATqfsg17Mf7SbKCThCRX4fKrDeGdpoESg3HS3BWkfW1bvLxakjRSMXXVd383CthMEhiS_wyQ66_ehcj5KDOH-cLlOMkdxakKMvKAm3iGleudrQLWEU4kwuj8ujGUeWELHUUDhH7ycUbhAtDDNSAQhcP6qSTE01xnFNOQPTnZj7LQTU7VLePuymbuzbDsAxx4GxC9fc67xXrLk3W1G9KSJb-X9T3TIzzH2g1TPdUf2Ej2HGcPltSCgkJzKjNn0VS-EDnb5FIxMpAIrqp8s3e6UUEkvrIlwAMq-PmaQyPyPuatFkIZmsTJSaHBNpXTzLZX7wo4MibyFwSGZkU8CajBY9wRLExFlEpDy3WVDzV5HR1_Qc7LSSDrk585PUCzoE_ls0bwm_I1Jp5GRBofVl4NXY_vaIvJBalbt-YGNrE7EZzxGz7_oNaIzVmsO6H6p0B25NySCTA56-OUkmvGfU0XQ8YGhJ4w35B1EF86wyNJE4QkaItDZwKHJnWzNvb4z3iCh2_Q_aR_Rwcx7MDmAa4O_rm98yc_LBf6fhxd2sRvDQKOyZfLlEAzcg2H263jSOp0QEaFAfHp1BDozvYjA7satxuz-nh1Bim3n_WBdrxFHGUCc3W_G8ysGlvT7RmHE4RgZ1Bnq-6DFRwJH7V1KufbJx4UQMsUDFFfC8SwNSCvzpv6YXIClI72YyzWqQAuqvDX0XelmO7jaBUAZe4daoORdZyrFZ8FFVfGVO4ZiQbU-PA2VyEfLhNCuLthHJ4_uaUn2WN7MYNmzgbYSjzyNEZHwFzltrbLBMPanVX7FcCn3Q
+
+[CALL] const files=[".memory/AGENTS.md",".memory/memory-criteria.md","/Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.3.0/skills/memory-save/SKILL.md"];const cmds=["toolkit memory focus",...files.map(p=>`cat '${p}'`)];const r=await Promise.allSettled(cmds.map(cmd=>tools.exec_command({cmd,max_output_tokens:6000})));r.forEach((x,i)=>text(JSON.stringify({cmd:cmds[i],output:x.status==="fulfilled"?x.value.output:String(x.reason)})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"cmd\":\"toolkit memory focus\",\"output\":\"# Current focus\\n\\nLast updated: 2026-09-29, chat, agent\\n\\n## Now\\n\\n- WI-001 Build the late fee command\\n\\n## Waiting on the owner\\n\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\n\\n## Untracked to-dos\\n\\nNone.\\n\\n## Next session starts with\\n\\n- Continue WI-001 from its Resume here: record the rounding answer, complete the requirements review, and ask for requirements approval before implementation.\\n\"}"}, {"type": "input_text", "text": "{\"cmd\":\"cat '.memory/AGENTS.md'\",\"output\":\"# Local project memory\\n\\nKeep future sessions oriented without turning every conversation into lasting memory. This folder is the project's built-in memory store and can be opened directly as an Obsidian vault. Active topics stay flat; filenames and YAML types agree. Git ignores this folder, so back it up with `toolkit memory export --to <folder outside this project>`.\\n\\n## Read and route\\n\\n- Read `CURRENT_FOCUS.md` at startup; the session briefing includes it. Read `MEMORY.md` as a short index, then open relevant topics and read each one whole. Check dates, scope, and the current source before acting on a remembered claim.\\n- Read `memory-criteria.md` before selecting or changing memory. It holds the default eligibility rules; the `memory-save` skill holds the approval policy and the onboarding or trusted mode. Use the terminology glossary for project language, including distinct meanings across systems.\\n- Link related notes inside this vault with relative Markdown links, such as `[account model](project_account_model.md)`. Obsidian shows backlinks to a note from the notes that link to it; a second reverse link is optional. Link only when the relationship helps retrieval, and check that the target exists. Keep tracker URLs and paths outside `.memory/` as source references rather than vault links.\\n- Keep current tasks and owner-mentioned to-dos in `CURRENT_FOCUS.md`, naming work items by ID. Keep full tasks, status, requirements, history, and the work item's design together in the chosen tracker; verified system behavior in the System Guide; the owner's in
+
+[CALL] {"timeout_ms":30000}
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Open Questions' --append-row '| Q-02 | Which invoice amounts and day counts are valid? Recommended: amounts of $0 or more with at most two decimal places, and whole numbers of days of 0 or more, because both inputs then have clear units and valid cent amounts. | R-01 | Open | owner |'",max_output_tokens:2000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Open Questions\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Open Questions' --append-row '| Q-03 | What should happen when an input is missing or invalid? Recommended: print a clear error to standard error and exit unsuccessfully without a calculated total, because the billing API must not receive an amount from a bad command. | R-01, R-02 | Open | owner |'",max_output_tokens:2000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Open Questions\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Open Questions' --append-row '| Q-04 | Should the total due be the invoice amount plus the rounded fee? Recommended: yes, so the shown fee and total always agree. | R-01, R-03 | Open | owner |'",max_output_tokens:2000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Open Questions\" in WI-001.\n"}]
+
+[CALL] const body=`#### R-01 — Calculate the late fee
+
+**Status:** Refining  
+**Applies to:** An overdue invoice amount and the number of days late supplied to the command.  
+**Required behavior:** Calculate the late fee as 0.25% of the invoice amount for each day late, based on the original invoice amount. Add that fee to the invoice amount to get the total due. Round the fee and total due to the nearest cent, with half a cent rounded up.  
+**Boundaries and exceptions:** Input amount and days-late rules have not yet been settled.  
+**Acceptance check:** For an invoice amount of $200 and 10 days late, the fee is $5.00 and the total due is $205.00. For an invoice amount of $1 and 2 days late, the half-cent fee rounds up to $0.01 and the total due is $1.01.  
+**Decision record:** Mike Rihm, 2026-09-29, starting request and rounding answer.  
+**Open questions:** Q-02, Q-03, Q-04.
+
+#### R-02 — Print the dollar amounts
+
+**Status:** Refining  
+**Applies to:** A command run with an invoice amount and the days-late option.  
+**Required behavior:** Print one line containing the late fee and total due in dollars, each with two decimal places.  
+**Boundaries and exceptions:** No second line is requested unless the cents option is supplied.  
+**Acceptance check:** For an invoice amount of $200 and 10 days late, the first line is exactly "Late fee: $5.00  Total due: $205.00".  
+**Decision record:** Mike Rihm, 2026-09-29, starting request.  
+**Open questions:** Q-03.
+
+#### R-03 — Print total due 
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Active requirements\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history WI-001 --note 'Independent requirements check found unsettled input limits, invalid-input behavior, and the rounding order.' --effect 'Q-02 to Q-04 opened; work-requirements continues after owner answers.'",max_output_tokens:2000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Added a Recent History row to WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show WI-001 --section 'Overview'",max_output_tokens:2000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "## Overview\n\n**Goal:** Provide a late fee command that reports the fee, total due, and optional whole-cent total for billing.\n\n**Current position:** Requirements R-01 to R-03 are drafted. No implementation has started. Requirements are not approved.\n\n**Next action:** Mike answers Q-01 about rounding. The agent then completes the requirements review and asks Mike to approve the requirements.\n\n**Blockers:** Q-01 and requirements approval before implementation.\n\n**Related items:** None.\n"}]
+
+[CALL] const body=`**Goal:** Provide a late fee command that reports the fee, total due, and optional whole-cent total for billing.
+
+**Current position:** Requirements R-01 to R-03 are drafted, and Q-01 rounding is answered. An independent requirements check found three remaining decisions. No implementation has started. Requirements are not approved.
+
+**Next action:** Mike answers Q-02 about valid invoice amounts and day counts. Then the agent takes Q-03 and Q-04 one at a time, completes the requirements review, and asks Mike to approve the requirements.
+
+**Blockers:** Q-02 to Q-04 and requirements approval before implementation.
+
+**Related items:** None.`;
+const r=await tools.exec_command({cmd:`toolkit work edit WI-001 --section 'Overview' --text '${body}'`,max_output_tokens:2000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Overview\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show WI-001 --section 'Resume here'",max_output_tokens:2000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "### Resume here\n\nRead R-01 to R-03 and Q-01. Record the owner\u2019s rounding answer, settle any remaining input rules, run the requirements check, and request explicit requirements approval. Do not implement the command before approval.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --section 'Resume here' --text 'Q-01 rounding is answered. Ask Q-02, Q-03, and Q-04 one at a time, saving each answer in the requirements and question row. Then rerun the independent requirements check and request explicit requirements approval. Do not implement the command before approval.'",max_output_tokens:2000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved \"Resume here\" in WI-001.\n"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-001 --waiting-on owner",max_output_tokens:2000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Updated WI-001: waiting on owner.\nNow 02 Refinement (Backlog). Continue with work-decide.\n"}]
+
+[CALL] const cmds=["toolkit work validate WI-001","toolkit work decisions","toolkit memory focus --json"];const r=await Promise.allSettled(cmds.map(cmd=>tools.exec_command({cmd,max_output_tokens:5000})));r.forEach((x,i)=>text(JSON.stringify({cmd:cmds[i],output:x.status==="fulfilled"?x.value.output:String(x.reason),exit:x.status==="fulfilled"?x.value.exit_code:null})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"cmd\":\"toolkit work validate WI-001\",\"output\":\"Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. 3 open questions wait on the owner (toolkit work decisions lists them).\\n\",\"exit\":0}"}, {"type": "input_text", "text": "{\"cmd\":\"toolkit work decisions\",\"output\":\"3 decisions wait on the owner:\\n\\nWI-001 Build the late fee command\\n  - Q-02: Which invoice amounts and day counts are valid? Recommended: amounts of $0 or more with at most two decimal places, and whole numbers of days of 0 or more, because both inputs then have clear units and valid cent amounts. Affects R-01. (work-decide)\\n  - Q-03: What should happen when an input is missing or invalid? Recommended: print a clear error to standard error and exit unsuccessfully without a calculated total, because the billing API must not receive an amount from a bad command. Affects R-01, R-02. (work-decide)\\n  - Q-04: Should the total due be the invoice amount plus the rounded fee? Recommended: yes, so the shown fee and total always agree. Affects R-01, R-03. (work-decide)\\n\",\"exit\":0}"}, {"type": "input_text", "text": "{\"cmd\":\"toolkit memory focus --json\",\"output\":\"{\\n  \\\"ok\\\": true,\\n  \\\"backend\\\": \\\"builtin\\\",\\n  \\\"kind\\\": \\\"focus\\\",\\n  \\\"text\\\": \\\"# Current focus\\\\n\\\\nLast updated: 2026-09-29, chat, agent\\\\n\\\\n## Now\\\\n\\\\n- WI-001 Build the late fee command\\\\n\\\\n## Waiting on the owner\\\\n\\\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\\\n\\\\n## Untracked to-dos\\\\n\\\\nNone.\\\\n\\\\n## Next session starts with\\\\n\\\\n- Continue WI-001 from its Resume here: record the rounding answer, complete the requirements review, and ask for requirements approval before implementation.\\\\n\\\",\\n  \\\"version\\\": \\\"e50f7ec1f7bf41a9b4e2538b26b664dbe6690d85f8a7c8f78e81df4bdfa21f5d\\\"\\n}\\n\",\"exit\":0}"}]
+
+[CALL] const body=`# Current focus
+
+Last updated: 2026-09-29, chat, agent
+
+## Now
+
+- WI-001 Build the late fee command
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-001 from its Resume here: Q-01 rounding is recorded. Ask Q-02, Q-03, and Q-04 one at a time, then check the revised requirements and ask for approval before implementation.
+`;
+if(body.includes("'"))throw Error("quote");const r=await tools.exec_command({cmd:`toolkit memory focus --text '${body}' --expect e50f7ec1f7bf41a9b4e2538b26b664dbe6690d85f8a7c8f78e81df4bdfa21f5d`,max_output_tokens:2000});text(r.output);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "Saved the current focus (20 lines). Version: 0b41c4124382\n"}]
+
+[CALL] const cmds=["toolkit memory focus","toolkit doctor","toolkit work show WI-001 --section 'Overview'","toolkit work show WI-001 --section 'Open Questions'"];const r=await Promise.allSettled(cmds.map(cmd=>tools.exec_command({cmd,max_output_tokens:3500})));r.forEach((x,i)=>text(JSON.stringify({cmd:cmds[i],output:x.status==="fulfilled"?x.value.output:String(x.reason)})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"cmd\":\"toolkit memory focus\",\"output\":\"# Current focus\\n\\nLast updated: 2026-09-29, chat, agent\\n\\n## Now\\n\\n- WI-001 Build the late fee command\\n\\n## Waiting on the owner\\n\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\n\\n## Untracked to-dos\\n\\nNone.\\n\\n## Next session starts with\\n\\n- Continue WI-001 from its Resume here: Q-01 rounding is recorded. Ask Q-02, Q-03, and Q-04 one at a time, then check the revised requirements and ask for approval before implementation.\\n\"}"}, {"type": "input_text", "text": "{\"cmd\":\"toolkit doctor\",\"output\":\"Toolkit doctor for feecalc (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex).\\n\\nWarnings (2):\\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.\\n   Fix: The owner opens Codex in this folder and trusts it when Codex asks.\\n2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).\\n   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\\n\\nNotes (4):\\n- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\\n- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\\n- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\\n- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's version was never installed. The project-setup skill can sh

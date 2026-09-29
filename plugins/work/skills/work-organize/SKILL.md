@@ -1,6 +1,6 @@
 ---
 name: work-organize
-description: 'Splits work items into sub-items, nests or moves them, and reconciles item folders or Notion cards the owner moved, renamed, or deleted himself. Use when the owner says "break it down" or "put X under Y", says he moved folders or cards, or the briefing reports moved or missing items.'
+description: 'Splits work items into sub-items, nests or moves them, and reconciles items the owner moved, renamed, or deleted by hand, so the tracker matches what he did and no item is lost. Use when the owner says "break it down" or "put X under Y", says he moved folders or Notion cards, or the briefing reports moved or missing items.'
 ---
 
 # Work organize
@@ -55,3 +55,4 @@ Explains what the owner changed in the tracker, asks only where his intent is un
 | [references/tracker-github.md](references/tracker-github.md) | A `toolkit work` command exits 3 in a GitHub Issues project |
 | [references/tracker-jira.md](references/tracker-jira.md) | A `toolkit work` command exits 3 in a Jira project |
 | [assets/WORK-ITEM.md](assets/WORK-ITEM.md) | GitHub or Jira: the body of a new child issue |
+| [assets/DESIGN.md](assets/DESIGN.md) | Step 4: the design's sections, to judge whether the parent's design covers a child or the child needs its own |

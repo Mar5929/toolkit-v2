@@ -1,6 +1,6 @@
 ---
 name: work-finish
-description: 'Ships and closes an approved work item (pull request, merge, sandbox or production deployment, requirements update, Done), or cancels an item with the owner''s reason. Use when the owner says "ship it", "deploy it", "close it out", or "mark it done", or asks to cancel or drop an item.'
+description: 'Ships and closes an approved work item (pull request, merge, deployment, requirements update, Done) after an independent check, or cancels one with the owner''s reason, so nothing ships unchecked or unapproved. Use when the owner says "ship it", "deploy it", "close it out", or "mark it done", or asks to cancel or drop an item.'
 ---
 
 # Work finish
@@ -10,7 +10,7 @@ Takes an approved item through the pull request, merge, deployment, and requirem
 
 ## Steps
 
-1. Check the result approval is recorded. Not recorded: when the history shows no `acceptance-checker` check of this result since its last build, run `work-check` first, which starts it (it runs whoever built the change). Then show the result, the gaps, and the evidence, and ask. "Ship it" or "mark it done" after he saw the result counts: save his words first, then record it (`references/approvals.md`, section 4). Each sub-item needs its own.
+1. Check the result approval is recorded. Not recorded: when the history shows no `acceptance-checker` check of this result since its last build, run `work-check` first, which starts it (it runs whoever built the change; the result approval and the finish are refused without it). Then show the result, the gaps, and the evidence, and ask. "Ship it" or "mark it done" after he saw the result counts: save his words first, then record it (`references/approvals.md`, section 4). Each sub-item needs its own.
    `toolkit work show <id>`
    `toolkit work history <id> --note 'Owner said: <quote>' --effect 'Result approved; work-finish continues.'`
    `toolkit work approve <id> --result --by <owner>`
@@ -18,9 +18,9 @@ Takes an approved item through the pull request, merge, deployment, and requirem
    `toolkit work set <id> --stage 12-pr-and-push`
 3. Merge through `merge-and-clean-up` only with the owner's yes to this merge, or a standing merge instruction with an independent check on the exact head (`references/closing.md`, section 3). No remote: the local merge (`references/closing.md`, section 4), then this note.
    `toolkit work history <id> --note 'No remote: merged locally into <default branch>.' --effect 'No pull request; no deployment.'`
-4. Deployment, when the item needs one (`references/closing.md`, section 5). Production deploys and production data loads are the owner's to run. Salesforce: a sandbox validate runs; a sandbox deploy needs his yes for that deploy, and in Codex he runs every sandbox deploy and sandbox data change himself, so give him the exact command with its `-o <sandbox>`. Run each `sf` command directly, never from a script.
+4. Deployment, when the item needs one (`references/closing.md`, section 5). Production deploys and production data loads are the owner's to run. Salesforce: a sandbox validate runs; a sandbox deploy needs his yes for that deploy, and in Codex he runs every sandbox deploy and sandbox data change himself, so give him the exact command with its `-o <sandbox>`. Run each `sf` command directly, never from a script. A Salesforce release of several items gets a cutover plan and release notes (`assets/CUTOVER-PLAN.md`, `assets/RELEASE-NOTES.md`).
    `toolkit work set <id> --stage 13-deployment`
-5. Requirements baseline: copy only delivered and approved behavior into the area's file in `requirements/`, update `system-guide/` when the structure changed, and save both with `publish-docs` (`references/closing.md`, section 6).
+5. Requirements baseline: copy only delivered and approved behavior into the area's file in `requirements/`, update `system-guide/` when the structure changed, and save both with `publish-docs` (`references/closing.md`, section 6). A new area starts from the area templates (`assets/requirements-area-template.md`, `assets/system-guide-area-template.md`).
    `toolkit work set <id> --stage 14-spec-update`
 6. Sub-items: list the open ones; each is finished, cancelled, or moved on its own (`references/closing.md`, section 7).
    `toolkit work list --tree`
@@ -55,6 +55,9 @@ Takes an approved item through the pull request, merge, deployment, and requirem
 | File | Open it when |
 | --- | --- |
 | [references/closing.md](references/closing.md) | Steps 2 to 9: the pull request, merging, no remote, deployment, the requirements baseline, sub-items, leftover worktrees, Done |
+| [assets/requirements-area-template.md](assets/requirements-area-template.md) | Step 5: a new business area in `requirements/` and the project has no `requirements/system-area-template/` |
+| [assets/system-guide-area-template.md](assets/system-guide-area-template.md) | Step 5: a new area in `system-guide/` and the project has no `system-guide/AREA-TEMPLATE.md` |
+| [assets/CUTOVER-PLAN.md](assets/CUTOVER-PLAN.md), [assets/RELEASE-NOTES.md](assets/RELEASE-NOTES.md) | Step 4: a Salesforce release of several items and the project has no `delivery/deployment/release-cutover-template/` |
 | [references/approvals.md](references/approvals.md) | Step 1 (result approval), step 8 (Done checklist), step 10 (cancel), and the standing merge instruction |
 | [references/git-rules.md](references/git-rules.md) | Before any commit, push, merge, or worktree removal, and every Git write in Codex |
 | [references/helpers.md](references/helpers.md) | Before starting the checker |

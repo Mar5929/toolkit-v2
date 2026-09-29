@@ -7,7 +7,7 @@ use `--body '<text>'` instead, with any apostrophe written ’ (U+2019).
 
 ## Contents
 
-1. A correction from the owner, into an existing concept
+1. A correction from the owner: a rule
 2. A fact the agent inferred, in onboarding mode
 3. A question the owner did not answer
 4. "Forget that"
@@ -18,53 +18,31 @@ use `--body '<text>'` instead, with any apostrophe written ’ (U+2019).
 9. The first fact of a new concept
 10. The check names the concept a fact belongs in
 
-## 1. A correction from the owner, into an existing concept
+## 1. A correction from the owner: a rule
 
 The owner: "Stop force-pushing. Never do that again."
 
-His words are the approval. Find the concept it belongs in:
+It is an instruction for how the agent works, so it is a rule, not memory,
+and his words are the approval. It is about Git, and nothing says it is for
+every project:
 
 ```text
-toolkit memory list --type feedback
-toolkit memory find 'force push'
+toolkit rule add --section 'Git' --text 'Never force-push to any branch in this repository.' --source 'Mike Rihm, in chat, 2026-09-28'
 ```
 
-The list shows `feedback_ways_of_working` ("Ways of working — How the owner
-wants the agent to work: questions, replies, Git habits"). Nothing mentions
-force-pushing yet. Read the concept whole, then add the fact as a section:
+The command adds one line to the Git section of
+`.claude/rules/owner-preferences.md` (made on first use), ending with the
+date and the source, and rebuilds the AGENTS.md rules list. Commit
+`.claude/rules/owner-preferences.md` (and `AGENTS.md` when the command says
+it changed): he asked for this change himself.
 
-```text
-toolkit memory get feedback_ways_of_working
-toolkit memory save --concept feedback_ways_of_working --section 'Force-push' --body-file - --source 'The owner, in chat, 2026-09-28' --approved-by Mike <<'EOF'
-```
+Reply (the line the command printed): "Added to the project rules: Never
+force-push to any branch in this repository. Say 'undo that' to take it
+out." His "undo that" is the `toolkit rule update ... --remove` command the
+output printed.
 
-The section text on standard input (labels only: the command writes the
-`## Force-push` heading), then a line holding only `EOF`:
-
-```markdown
-**Remember:** Never force-push to any branch in this repository.
-
-**Why:** Not stated by the owner.
-
-**How to apply:** Use a merge or a new commit. If a push is rejected, pull first.
-
-**Evidence and limits:** The owner, in chat, 2026-09-28. Applies to every branch.
-
-**Related memories:** None.
-
-**Authoritative records:** None.
-```
-
-The rest of `feedback_ways_of_working.md` is not changed. Read it back and
-check:
-
-```text
-toolkit memory get feedback_ways_of_working
-toolkit doctor
-```
-
-Reply (the line the command printed): "Saved to memory: Force-push (in Ways
-of working). Say 'forget that' to undo."
+Had he said "never force-push, in any of my projects", the same command gets
+`--machine` right after `add`, and the host asks him to confirm.
 
 ## 2. A fact the agent inferred, in onboarding mode
 
@@ -115,16 +93,16 @@ staging resets every Sunday."
 
 ## 4. "Forget that"
 
-Right after the section save in example 1, the owner says "forget that".
+Right after the section save in example 2, the owner says "forget that".
 Run the "Undo:" command that save printed, with no question. It takes that
 section out and leaves the rest of the concept:
 
 ```text
-toolkit memory save --concept feedback_ways_of_working --section 'Force-push' --remove --expect 3f9c2a1b7d4e
+toolkit memory save --concept project_testing --section 'Test command' --remove --expect 3f9c2a1b7d4e
 ```
 
-Reply: "Removed from memory: Force-push (in Ways of working). Say 'undo that'
-to put it back."
+Reply: "Removed from memory: Test command (in Testing). Say 'undo that' to
+put it back."
 
 "Forget everything about the old billing setup" is about a whole concept:
 retire it.
@@ -212,17 +190,24 @@ that section with `--expect`.
 | "Add dark mode to the backlog." | A work item, through `work-on` | "That is project work; starting a work item." |
 | "When I say 'job' I mean an Apex batch." | The glossary | "Added 'job' to the glossary." |
 | "Remember the login page must load in 2 seconds." | A requirement on the work item, through `work-requirements` | "That is a requirement; adding it to the work item." |
+| "From now on, lead every status reply with the answer." | `.claude/rules/owner-preferences.md`, with `toolkit rule add` (example 1) | The line the command prints: "Added to the project rules: ..." |
+| "Remember that the split feature is for my Friday dinners with friends." | The `project_` concept for that part (why it exists), even while a work item for it is open | "Saved to memory: ..." |
 
 ## 8. A preference a setting can enforce
 
 The owner: "I hate tabs. Always use spaces."
 
-Save it as a section of the `user` concept that holds his working
-preferences (for example `user_profile`, section "Tabs"), with his
-approval, as in example 1. Then offer the setting that enforces it:
+It is an instruction for how the agent works, so it is a rule (example 1),
+in the Code section:
 
-"Saved to memory: Tabs (in Profile). I can also add an `.editorconfig` rule
-so every editor uses spaces. Add it?"
+```text
+toolkit rule add --section 'Code' --text 'Indent with spaces, never tabs.' --source 'Mike Rihm, in chat, 2026-09-28'
+```
+
+Then offer the setting that enforces it:
+
+"Added to the project rules: Indent with spaces, never tabs. I can also add
+an `.editorconfig` rule so every editor uses spaces. Add it?"
 
 ## 9. The first fact of a new concept
 

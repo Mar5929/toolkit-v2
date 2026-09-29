@@ -66,6 +66,34 @@ test('a shell command that writes a work item record or a generated file is refu
   }
 });
 
+test('a script that reads a record and writes only other files is let through; a copy or move onto the record is not (finding 7; verifier, 2026-09-29)', async () => {
+  const { root, env, rel } = await project();
+  const py = (lines) => `python3 - <<'EOF'\n${lines.join('\n')}\nEOF`;
+  const allowed = [
+    // Close-out finding 7: read the record, write a draft somewhere else.
+    py([`text = open('${rel}').read()`, "out = open('/tmp/requirements.txt', 'w')", 'out.write(text.replace("a", "b"))', 'out.close()']),
+    py(['from pathlib import Path', `src = Path('${rel}').read_text()`, "Path('/tmp/draft.md').write_text(src.replace('Backlog', 'Ready'))"]),
+  ];
+  const refused = [
+    py([`text = open('${rel}').read()`, "open('/tmp/out.txt', 'w').write(text)", 'import shutil', `shutil.copy('/tmp/out.txt', '${rel}')`]),
+    py([`text = open('${rel}').read()`, "open('/tmp/out.txt', 'w').write(text)", 'import os', `os.replace('/tmp/out.txt', '${rel}')`]),
+    py(['from pathlib import Path', "Path('/tmp/out.txt').write_text('x')", `Path('/tmp/out.txt').replace('${rel}')`]),
+    `node -e "const fs=require('fs'); fs.writeFileSync('/tmp/out.txt', 'x'); fs.copyFileSync('/tmp/out.txt', '${rel}')"`,
+    py([`text = open('${rel}').read()`, "open('/tmp/out.txt', 'w').write(text)", 'import subprocess', `subprocess.run(['cp', '/tmp/out.txt', '${rel}'])`]),
+  ];
+  for (const host of ['claude', 'codex']) {
+    for (const cmd of allowed) {
+      const r = await hook(root, env, host, 'pre-tool', fixture(host, 'pre-tool.bash', vars(root, { COMMAND: cmd })));
+      assert.equal(r.raw, '', `${host}: ${cmd} is allowed`);
+    }
+    for (const cmd of refused) {
+      const r = await hook(root, env, host, 'pre-tool', fixture(host, 'pre-tool.bash', vars(root, { COMMAND: cmd })));
+      assert.ok(r.out, `${host}: ${cmd} is refused`);
+      assert.equal(r.out.hookSpecificOutput.permissionDecision, 'deny', `${host}: ${cmd}`);
+    }
+  }
+});
+
 test('a file edit that changes a record\'s header is refused; a body edit is allowed (Claude Code and Codex)', async () => {
   const { root, env, file, rel } = await project();
   const text = read(file);

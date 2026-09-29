@@ -10,7 +10,7 @@ import { openTracker, REQUIRED_METHODS, trackerInstructionsPath, unsupportedTrac
 import { LocalTracker } from '../../lib/work/local.mjs';
 import { requireProject } from '../../lib/core/config.mjs';
 import { EXIT } from '../../lib/core/output.mjs';
-import { opNew, opSet, opApprove, opFinish, opEdit, mustGet } from '../../lib/work/ops.mjs';
+import { opNew, opSet, opApprove, opFinish, opEdit, opHistory, mustGet } from '../../lib/work/ops.mjs';
 import { parseDoc, composeDoc, setH1, canonicalId } from '../../lib/work/model.mjs';
 
 after(cleanup);
@@ -179,6 +179,9 @@ test('the operations run the same way on any driver that implements the interfac
   assert.equal(rec.meta.stage, '03-requirements-approved');
   assert.equal(rec.meta.status, 'Ready');
   await opSet(t, 'WI-001', { stage: '11' });
+  // No acceptance check recorded yet: refused first (R-B1 in code, 2026-09-29).
+  await assert.rejects(opFinish(t, 'WI-001', { by: 'Mike', evidence: 'Works.', quote: 'Yes, it works.', today: '2026-09-26' }), (err) => err.code === EXIT.INVALID && err.details.gate === 'acceptance_check_missing');
+  await opHistory(t, 'WI-001', { note: 'Checked: the card; acceptance-checker: met; evidence: the report; gaps: none', today: '2026-09-26' });
   await assert.rejects(opFinish(t, 'WI-001', { by: 'Mike', evidence: 'Works.', today: '2026-09-26' }), (err) => err.code === EXIT.INVALID && err.details.gate === 'result_not_approved');
   const done = await opFinish(t, 'WI-001', { by: 'Mike', evidence: 'Works.', quote: 'Yes, it works.', today: '2026-09-26' });
   assert.equal(done.record.meta.status, 'Done');

@@ -1,6 +1,6 @@
 ---
 name: solution-design
-description: 'Writes design options for how a work item gets built and asks the owner to choose and approve one. Use when approved requirements need a design, or the owner asks "how should we build this" or "give me design options". Not for a single Salesforce platform question; use sf-architect-solutioning.'
+description: 'Writes design options for how a work item gets built and asks the owner to choose and approve one, so the build follows an approach he agreed to. Use when approved requirements need a design, or the owner asks "how should we build this" or "give me design options". Not for a single Salesforce platform question; use sf-architect-solutioning.'
 ---
 
 # Solution design

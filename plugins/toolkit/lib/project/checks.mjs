@@ -30,6 +30,8 @@
 //     than this one
 //   the current focus has the model's heading and "Last updated:" line, and a
 //     Notion project is not still on the older single Memory database
+//   rules: the project's .claude/rules/ and the owner's rules for every
+//     project, against Claude Code's guidance for rules (rule-checks.mjs)
 //   hook failures: a Toolkit V2 hook that failed in the last few days, from
 //     <git common dir>/toolkit-v2/hook-errors.log (a quick check too, so the
 //     briefing shows it: a failed hook itself stays silent)
@@ -53,6 +55,7 @@ import { readPointer, pointerPath, isCompleteRoot, isInstalledRoot, wrapperState
 import { readExportRecord, backupParts, backupSetting, BACKUP_MAX_AGE_DAYS } from './backup.mjs';
 import { projectCodexRules, ruleDecision } from './codex-rules.mjs';
 import { ASK_FIRST_COMMANDS } from '../cli.mjs';
+import { ruleFindings } from './rule-checks.mjs';
 
 export const AGENTS_MAX_BYTES = 24 * 1024;
 export const EXPORT_MAX_AGE_DAYS = 7;
@@ -80,6 +83,8 @@ export const TOOLKIT_ASK_RULES = Object.freeze([
   'Bash(toolkit hindsight service install *)',
   'Bash(toolkit hindsight service start)',
   'Bash(toolkit hindsight service start *)',
+  'Bash(toolkit rule add --machine *)',
+  'Bash(toolkit rule update --machine *)',
 ]);
 
 /** The skillListingBudgetFraction that the toolkit's Claude Code settings set (templates/settings/claude-toolkit.json). */
@@ -697,6 +702,7 @@ async function checkMemory(project, env, findings, { quick, fetch: fetchFn }) {
         if (!st.healthy && p.problem === 'does not exist.') continue;
         finding(findings, 'memory-problem', 'memory', 'warning', `${p.where} ${p.problem}`, /reindex/.test(p.problem) ? 'Run toolkit memory reindex.' : 'Run toolkit memory status for details.');
       }
+      if (st.healthy) retiredTypeFinding(findings, await driver.list({ type: 'feedback' }));
     } catch (err) {
       finding(findings, 'memory-error', 'memory', 'problem', `Built-in memory could not be read: ${err.message}`, 'Run toolkit memory status for details.');
     }
@@ -737,6 +743,22 @@ async function checkMemory(project, env, findings, { quick, fetch: fetchFn }) {
 }
 
 /**
+ * Memory records of the retired feedback_ type (Mike, 2026-09-29: an
+ * instruction for how the agent works is a rule, not memory). A warning with
+ * the migration step: memory-tidy moves each instruction to the rules and each
+ * fact to a concept, after the owner's yes.
+ */
+export function retiredTypeFinding(findings, records) {
+  const old = (records || []).filter((r) => r && r.type === 'feedback' && r.status !== 'retired');
+  if (!old.length) return;
+  const keys = old.map((r) => r.key);
+  finding(findings, 'memory-feedback-retired', 'memory', 'warning',
+    `Memory still holds ${old.length} feedback_ record${old.length === 1 ? '' : 's'} (${keys.join(', ')}). The feedback_ type is retired: an instruction for how the agent works is a rule in .claude/rules/owner-preferences.md, and a fact goes in a user_ or project_ concept.`,
+    'Run the memory-tidy skill: toolkit memory tidy --plan lists each part of these records with the toolkit rule add or toolkit memory split command that moves it; run each after the owner\'s yes, then retire the record.',
+    { keys });
+}
+
+/**
  * Hindsight and Notion: the current focus has the model's "# Current focus"
  * heading and a dated "Last updated:" line (built-in memory reports this in
  * toolkit memory status). A backend that cannot be read in 5 seconds is
@@ -749,7 +771,14 @@ async function checkFocusShape(project, env, findings, { fetch: fetchFn }) {
     const { loadDriver, focusShapeProblems } = await import('../memory/contract.mjs');
     const work = (async () => {
       const driver = await loadDriver(project, { env, fetch: fetchFn, timeoutMs: 5000, signal: controller.signal });
-      return driver.focusGet();
+      const focus = await driver.focusGet();
+      let old = [];
+      try {
+        old = await driver.list({ type: 'feedback' });
+      } catch {
+        old = [];
+      }
+      return { focus, old };
     })();
     work.catch(() => {});
     const deadline = new Promise((_, reject) => {
@@ -758,7 +787,8 @@ async function checkFocusShape(project, env, findings, { fetch: fetchFn }) {
         reject(new Error('no answer in 5 seconds'));
       }, 5000);
     });
-    const doc = await Promise.race([work, deadline]);
+    const { focus: doc, old } = await Promise.race([work, deadline]);
+    retiredTypeFinding(findings, old);
     for (const p of focusShapeProblems(doc && doc.text)) {
       finding(findings, 'memory-focus-shape', 'memory', 'warning', `The current focus ${p}`, 'Save it again with toolkit memory focus --text \'<text>\'; the command adds the heading and the "Last updated:" line when they are missing.');
     }
@@ -973,6 +1003,8 @@ export async function runChecks(project, opts = {}) {
   checkCodexMachine(project, env, findings, { pluginRoot });
   checkPlugins(project, env, findings);
   const plan = checkScaffold(project, env, findings, { pluginRoot });
+  // Rule files against Claude Code's guidance for rules (lib/project/rule-checks.mjs).
+  findings.push(...ruleFindings(project, { env }));
   checkSalesforce(project, findings, { pluginRoot });
   await checkTracker(project, env, findings, { quick, pluginRoot });
   await checkMemory(project, env, findings, { quick, fetch: opts.fetch });

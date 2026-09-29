@@ -151,6 +151,14 @@ Branch: claude/wi-012-csv-export. Tests: npm test -- reports.
   no to the team question in `work-delegate` never remove it. Only when this
   host has no way to start a worker do you check the result yourself, and
   then you say plainly that no independent check ran, and why.
+- The toolkit enforces it: `toolkit work approve <id> --result` and
+  `toolkit work finish` refuse (exit 2) until an
+  "acceptance-checker: <verdict>" history note follows the item's last move
+  to 08 or 10 (`work-check`, step 5). The only way past is
+  `--no-independent-check --reason '<why no worker could start>'`, which is
+  allowed only when this host has no way to start a worker, never because of
+  "no agent team" or a wish to go faster. The reason is recorded in the
+  item's history; tell the owner.
 - If the owner asks to skip the acceptance check, say in one line that it
   always runs before a result approval, as he decided, and ask whether he
   wants to change that decision. Until he changes it, run it.

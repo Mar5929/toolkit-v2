@@ -1,0 +1,1 @@
+Yes, round the fee and the total to the nearest cent, with half a cent rounded up, like you said.

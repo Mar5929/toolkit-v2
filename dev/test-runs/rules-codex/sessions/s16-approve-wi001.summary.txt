@@ -1,0 +1,613 @@
+PROMPT: I ran it in the WI-001 worktree and it printed what I expected. I approve the WI-001 result. No merge yet.
+THREAD: 01a0ede7-d2bd-7f01-bb93-6fda0876f11c
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll record your WI-001 result approval and keep the branch unmerged. Then I’ll check the remaining decision queue.
+
+[CMD exit=0] /bin/zsh -lc 'cat .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/owner-preferences.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md'
+  -> # Humanize Anything Sent to Another Person
+
+Any text that will leave the project and be read by someone other than the owner
+is run through the `humanizer` skill before the owner sees the final version.
+Use the `unslop` skill when `humanizer` is not installed. That covers emails,
+chat messages, supp
+
+[CMD exit=0] /bin/zsh -lc 'cat PROJECT.md'
+  -> # feecalc
+
+<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and act
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-finish/SKILL.md'
+  -> ---
+name: work-finish
+description: 'Ships and closes an approved work item (pull request, merge, sandbox or production deployment, requirements update, Done), or cancels an item with the owner''s reason. Use when the owner says "ship it", "deploy it", "close it out", or "mark it done", or asks to cancel or drop an item.'
+---
+
+# Work finish
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Takes an approved item through the pull request, merge, deployment, and requirements update to Done, or cancels it; it never marks Done without the owner's approval and never runs a production deploy. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Check the result approval is recorded. Not recorded: when the history shows no `acceptance-checker` check of this result since its last build, run `work-check` first, which starts it (it runs whoever built the change; the result approval and the finish are refused without it). Then show the result, the gaps, and the evidence, and ask. "Ship it" or "mark it done" after he saw the result counts: save his words first, then record it (`references/approvals.md`, section 4). Each sub-item needs its own.
+   `toolkit work show <id>`
+   `toolkit work history <id> --note 'Owner said: <quote>' --effect 'Result approved; work-finish continues.'`
+   `toolkit wor
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-decide/SKILL.md'
+  -> ---
+name: work-decide
+description: 'Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers. Use when he asks "what do you need from me", answers a waiting decision ("go with option B"), or states a project-wide decision.'
+---
+
+# Work decide
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Walks the owner through what waits on him, one decision at a time, and records each answer where it belongs. Track these steps with the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+## Steps
+
+1. Build the queue. The command lists each decision once: requirements waiting for approval, proposed designs, results at stage 11, Open Questions rows the owner decides, and memory proposals. Its "Agent to-do" lines are not decisions. A delivery offer belongs to `work-delegate`: open it after his other decisions.
+   `toolkit work decisions`
+2. He gave an answer without being asked ("approved", "go with B"): match it to exactly one waiting decision; when two could match, ask which, naming both. A bare "yes", "ok", or "looks good" with no question asked is not an answer (`references/approvals.md`, section 1).
+3. Otherwise start with the count and one short line for every waiting decision, memory proposals included ("3 decisions wait on you: the WI-004 design, the WI-006 result, and a 
+
+[CMD exit=0] /bin/zsh -lc 'git status'
+  -> On branch main
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   .claude/rules/owner-preferences.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex                                                     2295c7a [main]
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-decide/references/current-focus.md'
+  -> <!-- Generated file. Source: plugins/memory/shared/current-focus.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# The current focus
+
+Purpose: the format of the current focus, when to change it, and the exact
+read-change-save sequence, in every memory backend.
+
+## Contents
+
+- What the focus is for
+- The format
+- What goes in each section
+- When to check it
+- Read, change, save
+- A new project's focus
+- Examples
+- Checklist for a focus save
+
+## What the focus is for
+
+The current focus is the first thing the next session reads: the session
+briefing includes it. It says what is happening now and where the next
+session starts. It never repeats the tracker: a work item's status, tasks,
+and history stay in the work item.
+
+| Backend | Where the focus lives |
+| --- | --- |
+| Built-in | `.memory/CURRENT_FOCUS.md` in the main checkout |
+| Hindsight | The document `focus` in the project's bank |
+| Notion | The "Current focus" page under the project's page |
+
+The same commands read and save it in every backend. Never edit the file or
+the page by hand.
+
+## The format
+
+The model's format: a `# Current focus` title line, a `Last updated:` line,
+then exactly four `##` sections in this order, under 50 lines in total.
+
+```markdown
+# Current focus
+
+Last updated: <YYYY-MM-DD>, <source>, <person or agent>
+
+## Now
+
+## Waiting on the owner
+
+## Untracked to-dos
+
+## Next session starts with
+```
+
+What the command enforces:
+
+- It refuses a focus that lacks one of the four se
+
+[CMD exit=0] /bin/zsh -lc 'git remote'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-decide/references/proposals.md'
+  -> <!-- Generated file. Source: plugins/memory/shared/proposals.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Memory proposals
+
+Purpose: what a memory proposal is, how one is saved, and how the owner's yes
+or no is recorded.
+
+## Contents
+
+- What a proposal is
+- How a proposal is saved
+- Rule proposals
+- Recording the owner's answer
+- Examples
+
+## What a proposal is
+
+A proposal is a memory record the owner has not approved yet. It exists so
+that a "Save to memory?" question he did not answer is kept, not lost.
+
+- It is saved with `--proposal`: status `needs-review`, authorization
+  "Proposed by the agent on <date>", and never an approver.
+- It is not a fact. The agent does not rely on it, and an answer never
+  presents it as true.
+- `toolkit memory find` leaves it out unless `--proposals` (or `--all`) is
+  given. `toolkit memory get` ends its text with a line saying it is a
+  proposal.
+- `toolkit work decisions` and the session briefing list it among the things
+  waiting on the owner, and the `work-decide` skill asks him about it.
+- The built-in index marks it "[proposal: not a fact until the owner
+  answers]", or "[proposal for <concept>: ...]" when it names a concept. In
+  Notion its Status is "proposed".
+- A proposal never replaces a record the owner approved. The CLI refuses a
+  proposal whose key is already a current or retired record.
+- Concept memory: a proposal for a fact that belongs in an existing concept
+  is its own record that names th
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001'
+  -> WI-001: Build the late fee command
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex/.work-items/WI-001-build-the-late-fee-command/WORK-ITEM.md
+Stage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide
+Parent: none | Sub-items: WI-002 | Design: approved (.work-items/WI-001-build-the-late-fee-command/DESIGN.md)
+Worktree branch for this item: claude/wi-001-build-the-late-fee-command (folder .claude/worktrees/wi-001-build-the-late-fee-command)
+
+---
+id: WI-001
+title: Build the late fee command
+type: build
+stage: 11-user-approval
+status: In Progress
+parent: none
+waiting_on: "owner"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-29 by Mike Rihm"
+design: approved
+result_approved: "no"
+updated: 2026-09-29
+---
+
+# WI-001: Build the late fee command
+
+## Overview
+
+**Goal:** Provide a late fee command that reports the fee and total due in dollars.
+
+**Current position:** The dollar command is built and tested on commit 3b2bc38. Five automated tests passed. An independent checker found R-01 and R-02 met on that commit. WI-002 remains the separate cents extension.
+
+**Next action:** Mike reviews and approves the WI-001 dollar command result. The branch stays unmerged under his instruction.
+
+**Blockers:** Result approval from Mike Rihm; merge is withheld.
+
+**Related items:** WI-002 adds the --cents option under R-03.
+
+## Roadmap
+
+A phase is co
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 2 decisions wait on the owner:
+
+WI-001 Build the late fee command
+  - WI-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-001 --result --by <name>. (work-decide)
+
+Memory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):
+  - project_finance_team_runs_feecalc_every_monday_morning: the finance team runs feecalc every Monday morning. Saved 2026-09-29. Yes: toolkit memory approve project_finance_team_runs_feecalc_every_monday_morning --by <name> --concept project_<subject>. No: toolkit memory reject project_finance_team_runs_feecalc_every_monday_morning. (work-decide)
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work history WI-001 --note 'Owner said: I ran it in the WI-001 worktree and it printed what I expected. I approve the WI-001 result. No merge yet.' --effect 'Result approved; leave the WI-001 branch unmerged.'"
+  -> Added a Recent History row to WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work approve WI-001 --result --by 'Mike Rihm'"
+  -> Recorded: result of WI-001 approved (2026-09-29 by Mike Rihm).
+It is no longer waiting on the owner (waiting_on: none).
+Now 11 User approval (In Progress). Continue with work-finish.
+Note: WI-001's Overview still says "Next action: Mike reviews and approves the WI-001 dollar command result. The branch stays unmerged under his instruction.". Write the step after this approval: toolkit work edit WI-001 --label 'Next action' --value '<next step>'.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --label 'Next action' --value 'Leave the approved dollar command on commit 3b2bc38 unmerged until Mike authorizes a merge. Continue WI-002 separately.'"
+  -> Saved "Next action" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --label 'Blockers' --value 'Merge withheld by Mike Rihm; result approval is recorded.'"
+  -> Saved "Blockers" in WI-001.
+
+
+[CMD exit=0] /bin/zsh -lc "toolkit work edit WI-001 --label 'Current position' --value 'The dollar command is built and tested on commit 3b2bc38. Five automated tests passed, an independent checker found R-01 and R-02 met, and Mike Rihm approved the result on 2026-09-29. The branch remains unmerged under his instruction. WI-002 is the separate cents extension.'"
+  -> Saved "Current position" in WI-001.
+
+
+[FILE_CHANGE] [{"path": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex/.work-items/WI-001-build-the-late-fee-command/WORK-ITEM.md", "kind": "update"}]
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work set WI-001 --waiting-on agent'
+  -> Updated WI-001: waiting on agent.
+Now 11 User approval (In Progress). Continue with work-finish.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus --json'
+  -> {
+  "ok": true,
+  "backend": "builtin",
+  "kind": "focus",
+  "text": "# Current focus\n\nLast updated: 2026-09-29, chat, agent\n\n## Now\n\n- WI-001 Build the late fee command\n- WI-002 Add the --cents option\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-001 from its Resume here: ask Mike to approve the dollar command result on commit 3b2bc38; leave the branch unmerged.\n",
+  "version": "238d6dc6c7f004828205422e6eb9d63f85bdcafa82d78f69eaa4771b3cd2a651"
+}
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work validate WI-001'
+  -> Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 1 decision waits on the owner:
+
+Memory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):
+  - project_finance_team_runs_feecalc_every_monday_morning: the finance team runs feecalc every Monday morning. Saved 2026-09-29. Yes: toolkit memory approve project_finance_team_runs_feecalc_every_monday_morning --by <name> --concept project_<subject>. No: toolkit memory reject project_finance_team_runs_feecalc_every_monday_morning. (work-decide)
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory get project_finance_team_runs_feecalc_every_monday_morning'
+  -> ---
+name: project_finance_team_runs_feecalc_every_monday_morning
+description: the finance team runs feecalc every Monday morning
+updated: 2026-09-29
+metadata:
+  type: project
+status: needs-review
+source: Agent question in a session, 2026-09-29
+last_verified: 2026-09-29
+authorization: Proposed by the agent on 2026-09-29; the owner has not answered
+supersedes: none
+---
+
+# the finance team runs feecalc every Monday morning
+
+**Remember:** the finance team runs feecalc every Monday morning.
+
+**Why:** Not stated by the owner.
+
+**How to apply:** Not stated by the owner. Do not rely on this until the owner approves it.
+
+**Evidence and limits:** On 2026-09-29 the owner wrote "By the way, the finance team runs feecalc every Monday morning. Which folder do I try the WI-001 result from again?" The agent asked him "Save to memory: the finance team runs feecalc every Monday morning?" and the turn ended with no answer, so the toolkit's Stop hook saved it as a proposal.
+
+[toolkit: this is a proposal the owner has not answered. It is not a fact: do not rely on it. His yes: toolkit memory approve project_finance_team_runs_feecalc_every_monday_morning --by <name> --concept project_<subject> (the concept it goes in: an existing one, or a new one named for its subject, with --title and --description). His no: toolkit memory reject project_finance_team_runs_feecalc_every_monday_morning.]
+
+
+[AGENT] Your approval is recorded. WI-001 remains on its branch, with no merge. I’m updating the resume note, then I’ll present the remaining memory proposal for your decision.
+
+[CMD exit=0] /bin/zsh -lc 'cat AGENTS.md'
+  -> Always execute work with the context in mind that the user will likely
+continue work across multiple AI coding sessions where the session context is
+cleared and picked up again. You must assist the user in helping establish
+that continuity across sessions while not adding context that might pollute
+
+
+[CMD exit=0] /bin/zsh -lc 'cat .memory/AGENTS.md .memory/memory-criteria.md'
+  -> # Local project memory
+
+Keep future sessions oriented without turning every conversation into lasting memory. This folder is the project's built-in memory store and can be opened directly as an Obsidian vault. Active topics stay flat; filenames and YAML types agree. Git ignores this folder, so back 
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.3.0/skills/memory-save/SKILL.md'
+  -> ---
+name: memory-save
+description: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says "remember this", "from now on", "forget that", or "remind me" with no time given, corrects the agent, or a hook says a save is due.'
+---
+
+# Memory save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Saves, corrects, or retires one fact in the project's memory with `toolkit memory` commands, or sends it to its proper home. It never edits memory files by hand. Rules, skills, and memory each hold one kind of thing (Mike, 2026-09-29): an instruction the agent follows every time goes in the rules (`toolkit rule add`), a procedure that proved itself in a skill, and a fact or an unproven lesson in memory. Memory keeps one record per concept (for example `user_profile`, `project_billing`), with one `##` section per fact and a last "Gotchas and lessons" section; an `event_` record holds one episode. The prefixes are `user_`, `project_`, `reference_`, and `event_`; `feedback_` is retired.
+
+## Steps
+
+Track these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+1. Decide the home. An instruction for how the agent works (a preference about how work is done, a correction, "from now on", "always", "never") is a rule: save it with `toolkit rule a
+
+[CMD exit=0] /bin/zsh -lc 'cat PROJECT-ROADMAP.md'
+  -> # Project roadmap
+
+<!-- Fill-in guide: replace every angle-bracket prompt in the outcome, phase table, phase heading, and work-unit fields with this project's real text. Keep one overview row and one matching ## heading per phase. Under that heading, repeat the ### work-unit block for each deliverab
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory focus --text '# Current focus
+
+Last updated: 2026-09-29, chat, agent
+
+## Now
+
+- WI-001 Build the late fee command
+- WI-002 Add the --cents option
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-002 with solution-design. WI-001 result was approved on commi
+  -> Saved the current focus (21 lines). Version: 2b309860699a
+
+
+[CMD exit=0] /bin/zsh -lc 'git -C .claude/worktrees/wi-001-build-the-late-fee-command status --short --branch'
+  -> ## claude/wi-001-build-the-late-fee-command
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work decisions'
+  -> 1 decision waits on the owner:
+
+Memory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):
+  - project_finance_team_runs_feecalc_every_monday_morning: the finance team runs feecalc every Monday morning. Saved 2026-09-29. Yes: toolkit memory approve project_finance_team_runs_feecalc_every_monday_morning --by <name> --concept project_<subject>. No: toolkit memory reject project_finance_team_runs_feecalc_every_monday_morning. (work-decide)
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory focus'
+  -> # Current focus
+
+Last updated: 2026-09-29, chat, agent
+
+## Now
+
+- WI-001 Build the late fee command
+- WI-002 Add the --cents option
+
+## Waiting on the owner
+
+- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.
+- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.
+
+## Untracked to-dos
+
+None.
+
+## Next session starts with
+
+- Continue WI-002 with solution-design. WI-001 result was approved on commit 3b2bc38; leave its branch unmerged until Mike authorizes a merge.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit work show WI-001'
+  -> WI-001: Build the late fee command
+Location: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex/.work-items/WI-001-build-the-late-fee-command/WORK-ITEM.md
+Stage: 11 User approval (In Progress) | Waiting on: agent | Continue with: work-finish
+Parent: none | Sub-items: WI-002 | Design: approved (.work-items/WI-001-build-the-late-fee-command/DESIGN.md)
+Worktree branch for this item: claude/wi-001-build-the-late-fee-command (folder .claude/worktrees/wi-001-build-the-late-fee-command)
+
+---
+id: WI-001
+title: Build the late fee command
+type: build
+stage: 11-user-approval
+status: In Progress
+parent: none
+waiting_on: "agent"
+priority: medium
+delivery: owner-led
+requirements_approved: "2026-09-29 by Mike Rihm"
+design: approved
+result_approved: "2026-09-29 by Mike Rihm"
+updated: 2026-09-29
+---
+
+# WI-001: Build the late fee command
+
+## Overview
+
+**Goal:** Provide a late fee command that reports the fee and total due in dollars.
+
+**Current position:** The dollar command is built and tested on commit 3b2bc38. Five automated tests passed, an independent checker found R-01 and R-02 met, and Mike Rihm approved the result on 2026-09-29. The branch remains unmerged under his instruction. WI-002 is the separate cents extension.
+
+**Next action:** Leave the approved dollar command on commit 3b2bc38 unmerged until Mike authorizes a merge. Continue WI-002 separately.
+
+**Blockers:** Merge withheld by Mike Rihm;
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for feecalc (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (4):
+- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's versio
+
+[AGENT] | Item | Status |
+| --- | --- |
+| WI-001 result | Approved and recorded. Commit `3b2bc38` remains unmerged. |
+| WI-002 `--cents` option | Ready for design work. |
+| Memory proposal | Waiting for your decision. |
+
+You said the finance team runs feecalc every Monday morning. I recommend saving that schedule because it helps future sessions understand how the command is used. It is currently only a proposal.
+
+**Save to memory: the finance team runs feecalc every Monday morning?**
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 1027826, "cached_input_tokens": 968832, "cache_write_input_tokens": 0, "output_tokens": 4186, "reasoning_output_tokens": 1375}}
+
+SKILLS OPENED: ['work-finish', 'work-decide', 'memory-save']
+
+[HOOK CONTEXT ord=9] Project briefing: feecalc (feecalc), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Build the late fee command: 11 User approval, In Progress, waiting on owner. Next action: Mike reviews and approves the WI-001 dollar command result. The branch stays unmerged under his instruction. Continues with work-decide.
+- WI-002 Add the --cents option: 03 Requirements approved, Ready. Next action: Plan this extension after WI-001 builds the dollar command. Continues with solution-design.
+
+Waiting on the owner:
+- WI-001 Build the late fee command: WI-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-001
+
+[HOOK CONTEXT ord=60] Project briefing: feecalc (feecalc), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Build the late fee command: 11 User approval, In Progress, waiting on owner. Next action: Mike reviews and approves the WI-001 dollar command result. The branch stays unmerged under his instruction. Continues with work-decide.
+- WI-002 Add the --cents option: 03 Requirements approved, Ready. Next action: Plan this extension after WI-001 builds the dollar command. Continues with solution-design.
+
+Waiting on the owner:
+- WI-001 Build the late fee command: WI-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-001
+
+[HOOK CONTEXT ord=126] WI-001 was edited directly and passes validation. toolkit work edit <id> --section '<heading>' --set-file <file> changes a section the same way in every tracker and keeps the toolkit's record of what it wrote; prefer it to editing the file.
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat PROJECT.md; cat SOUL.md 2>/dev/null; cat .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/owner-preferences.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md",max_output_tokens:16000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-decide/SKILL.md",max_output_tokens:12000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,...x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"6ac631\",\"wall_time_seconds\":0.000003417,\"exit_code\":0,\"original_token_count\":4031,\"output\":\"# feecalc\\n\\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\\n\\n## Purpose and intended outcome\\n\\n- Purpose: `<Why this project exists.>`\\n- Intended outcome: feecalc tells me the late fee and the total due on an overdue invoice, so I send the right amount to our billing API.\\n\\n## Scope and boundaries\\n\\n- In scope: `<Business capabilities or systems this project owns.>`\\n- Outside scope: `<Important exclusions or adjacent owners.>`\\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\\n\\n## Systems and environments\\n\\n| System or org | Purpose | Environment | Source of truth | Access notes |\\n| --- | --- | --- | --- | --- |\\n| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |\\n\\n## People and ownership\\n\\n| Role | Person or team | Responsibility | Source / last confirmed |\\n| --- | --- | --- | --- |\\n| Owner | Mike Rihm | Project decisions | Setup interview, 2026-09-29 |\\n\\n## Work and project records\\n\\n- Work tracker: `.work-items/` (local folders, Git-ignored)\\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\\n- Project decisions: [DECISIONS.md](DECISIONS.md)\\n- Functional requirements: [requirements/](requirements/)\\n- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`\\n- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`\\n- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)\\n- Memory backup or sync: `/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/rules-codex` (owner-approved backup folder; restore procedure still to be documented)\\n\\n## Resources and project paths\\n\\n- Tests and checks: 
+
+[CALL] const r = await Promise.allSettled([
+ tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:4000}),
+ tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-decide/references/approvals.md",max_output_tokens:7000}),
+ tools.exec_command({cmd:"cat PROJECT-ROADMAP.md",max_output_tokens:3000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,...x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"9c5d8e\",\"wall_time_seconds\":0.049105583,\"exit_code\":0,\"original_token_count\":166,\"output\":\"2 decisions wait on the owner:\\n\\nWI-001 Build the late fee command\\n  - WI-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-001 --result --by <name>. (work-decide)\\n\\nMemory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):\\n  - project_finance_team_runs_feecalc_every_monday_morning: the finance team runs feecalc every Monday morning. Saved 2026-09-29. Yes: toolkit memory approve project_finance_team_runs_feecalc_every_monday_morning --by <name> --concept project_<subject>. No: toolkit memory reject project_finance_team_runs_feecalc_every_monday_morning. (work-decide)\\n\"}}"}, {"type": "input_text", "text": "{\"i\":1,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"8b8ab5\",\"wall_time_seconds\":0.000002292,\"exit_code\":0,\"original_token_count\":3603,\"output\":\"<!-- Generated file. Source: plugins/work/shared/approvals.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->\\n# Approvals and gates\\n\\nThe exact steps to ask for and record each owner approval, and what counts as\\none. Run each checklist in order; one wrong or missing command leaves the\\nitem in the wrong state.\\n\\n## Contents\\n\\n1. What counts as approval\\n2. Requirements approval\\n3. Design approval\\n4. Result approval\\n5. Done\\n6. Cancel\\n7. Delivery offer\\n8. Project-wide decision\\n9. Memory proposal\\n10. Sub-items and approvals\\n11. Standing merge instruction\\n12. When an approve command refuses\\n\\n## 1. What counts as approval\\n\\n`toolkit work lifecycle` prints the gates and these rules. In short:\\n\\n- Only the owner's explicit words count. Quote them in a history note.\\n- A question, a suggestion, a tentative answer (\\\"probably B\\\"), silence, or a\\n  saved draft is not approval.\\n- An approval covers only what was shown. It never covers merge, deployment,\\n  spending, or publishing.\\n- An approval survives later stages. A stage alone does not prove approval:\\n  check the approval field (`toolkit work show <id>`).\\n- A bare \\\"yes\\\", \\\"ok\\\", or \\\"looks good\\\" answers only a yes-or-no question asked\\n  earlier in this conversation. When none
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work show WI-001",max_output_tokens:12000}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"450eb7\",\"wall_time_seconds\":0.011419125,\"exit_code\":0,\"original_token_count\":3635,\"output\":\"WI-001: Build the late fee command\\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex/.work-items/WI-001-build-the-late-fee-command/WORK-ITEM.md\\nStage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide\\nParent: none | Sub-items: WI-002 | Design: approved (.work-items/WI-001-build-the-late-fee-command/DESIGN.md)\\nWorktree branch for this item: claude/wi-001-build-the-late-fee-command (folder .claude/worktrees/wi-001-build-the-late-fee-command)\\n\\n---\\nid: WI-001\\ntitle: Build the late fee command\\ntype: build\\nstage: 11-user-approval\\nstatus: In Progress\\nparent: none\\nwaiting_on: \\\"owner\\\"\\npriority: medium\\ndelivery: owner-led\\nrequirements_approved: \\\"2026-09-29 by Mike Rihm\\\"\\ndesign: approved\\nresult_approved: \\\"no\\\"\\nupdated: 2026-09-29\\n---\\n\\n# WI-001: Build the late fee command\\n\\n## Overview\\n\\n**Goal:** Provide a late fee command that reports the fee and total due in dollars.\\n\\n**Current position:** The dollar command is built and tested on commit 3b2bc38. Five automated tests passed. An independent checker found R-01 and R-02 met on that commit. WI-002 remains the separate cents extension.\\n\\n**Next action:** Mike reviews and approves the WI-001 dollar command result. The branch stays unmerged under his instruction.\\n\\n**Blockers:** Result approval from Mike Rihm; merge is withheld.\\n\\n**Related items:** WI-002 adds the --cents option under R-03.\\n\\n## Roadmap\\n\\nA phase is complete when its tasks are complete and its exit result has been checked.\\n\\n| Phase | Outcome | Status | Exit result | Sub-items |\\n|---|---|---|---|---|\\n| P1 \u2014 Dollar fee and total | The command prints the late fee and total due in dollars. | Done | R-01 and R-02 acceptance checks pass. | None. |\\n| P2 \u2014 Cents extension | WI-002 adds the optional cents line after the dollar command. | Not Started | WI-002 passes its R-03 acceptance checks. | WI-002 |\\n\\n## Tasks\\n\\n### P1 \u2014 Dollar fee and total\\n\\n- [x] **P1-T01 \u2014 Build the dollar command** \u00b7 Done  \\n  **Work:** Implement the approved Option A argument validation, exact fe
+
+[CALL] const r=await Promise.allSettled([
+ tools.exec_command({cmd:"git worktree list",max_output_tokens:1000}),
+ tools.exec_command({cmd:"git status --short --branch",max_output_tokens:1000}),
+ tools.exec_command({cmd:"git -C .claude/worktrees/wi-001-build-the-late-fee-command log -1 --oneline",max_output_tokens:1000}),
+ tools.exec_command({cmd:"node .claude/worktrees/wi-001-build-the-late-fee-command/bin/feecalc.js 200 --days 10",max_output_tokens:1000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,...x})));
+
+
+[CALL] const r=await Promise.allSettled([
+ tools.exec_command({cmd:"cat PROJECT.md",max_output_tokens:2000}),
+ tools.exec_command({cmd:"cat .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/owner-preferences.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md",max_output_tokens:11000}),
+ tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-decide/SKILL.md",max_output_tokens:5000}),
+ tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-finish/SKILL.md",max_output_tokens:7000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,...x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"28ea69\",\"wall_time_seconds\":0.000001,\"exit_code\":0,\"original_token_count\":599,\"output\":\"# feecalc\\n\\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\\n\\n## Purpose and intended outcome\\n\\n- Purpose: `<Why this project exists.>`\\n- Intended outcome: feecalc tells me the late fee and the total due on an overdue invoice, so I send the right amount to our billing API.\\n\\n## Scope and boundaries\\n\\n- In scope: `<Business capabilities or systems this project owns.>`\\n- Outside scope: `<Important exclusions or adjacent owners.>`\\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\\n\\n## Systems and environments\\n\\n| System or org | Purpose | Environment | Source of truth | Access notes |\\n| --- | --- | --- | --- | --- |\\n| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |\\n\\n## People and ownership\\n\\n| Role | Person or team | Responsibility | Source / last confirmed |\\n| --- | --- | --- | --- |\\n| Owner | Mike Rihm | Project decisions | Setup interview, 2026-09-29 |\\n\\n## Work and project records\\n\\n- Work tracker: `.work-items/` (local folders, Git-ignored)\\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\\n- Project decisions: [DECISIONS.md](DECISIONS.md)\\n- Functional requirements: [requirements/](requirements/)\\n- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`\\n- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`\\n- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)\\n- Memory backup or sync: `/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/rules-codex` (owner-approved backup folder; restore procedure still to be documented)\\n\\n## Resources and project paths\\n\\n- Tests and checks: `<ac
+
+[CALL] const r=await Promise.allSettled([
+ tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:2000}),
+ tools.exec_command({cmd:"toolkit work show WI-001",max_output_tokens:9000}),
+ tools.exec_command({cmd:"git worktree list",max_output_tokens:2000}),
+ tools.exec_command({cmd:"git status",max_output_tokens:2000}),
+ tools.exec_command({cmd:"git remote",max_output_tokens:1000}),
+ tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-decide/references/current-focus.md",max_output_tokens:3000}),
+ tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-decide/references/proposals.md",max_output_tokens:4000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,...x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"bd15a7\",\"wall_time_seconds\":0.000003667,\"exit_code\":0,\"original_token_count\":166,\"output\":\"2 decisions wait on the owner:\\n\\nWI-001 Build the late fee command\\n  - WI-001 is at 11 User approval: the owner reviews the result. Approve with: toolkit work approve WI-001 --result --by <name>. (work-decide)\\n\\nMemory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):\\n  - project_finance_team_runs_feecalc_every_monday_morning: the finance team runs feecalc every Monday morning. Saved 2026-09-29. Yes: toolkit memory approve project_finance_team_runs_feecalc_every_monday_morning --by <name> --concept project_<subject>. No: toolkit memory reject project_finance_team_runs_feecalc_every_monday_morning. (work-decide)\\n\"}}"}, {"type": "input_text", "text": "{\"i\":1,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"aaf198\",\"wall_time_seconds\":0.013572708,\"exit_code\":0,\"original_token_count\":3635,\"output\":\"WI-001: Build the late fee command\\nLocation: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex/.work-items/WI-001-build-the-late-fee-command/WORK-ITEM.md\\nStage: 11 User approval (In Progress) | Waiting on: owner | Continue with: work-decide\\nParent: none | Sub-items: WI-002 | Design: approved (.work-items/WI-001-build-the-late-fee-command/DESIGN.md)\\nWorktree branch for this item: claude/wi-001-build-the-late-fee-command (folder .claude/worktrees/wi-001-build-the-late-fee-command)\\n\\n---\\nid: WI-001\\ntitle: Build the late fee command\\ntype: build\\nstage: 11-user-approval\\nstatus: In Progress\\nparent: none\\nwaiting_on: \\\"owner\\\"\\npriority: medium\\ndelivery: owner-led\\nrequirements_approved: \\\"2026-09-29 by Mike Rihm\\\"\\ndesign: approved\\nresult_approved: \\\"no\\\"\\nupdated: 2026-09-29\\n---\\n\\n# WI-001: Build the late fee command\\n\\n## Overview\\n\\n**Goal:** Provide a late fee command that reports the fee and total due in dollars.\\n\\n**Current position:** The dollar command is built and tested on commit 3b2bc38. Five automated tests passed. An independent checker found R-01 and R-02 met on that commit. WI-002 remains the separate cents extension.\\n\\n**Next action:** Mike reviews and approves t
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work history WI-001 --note 'Owner said: I ran it in the WI-001 worktree and it printed what I expected. I approve the WI-001 result. No merge yet.' --effect 'Result approved; leave the WI-001 branch unmerged.'",max_output_tokens:2000}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"e6983d\",\"wall_time_seconds\":0.000003,\"exit_code\":0,\"original_token_count\":10,\"output\":\"Added a Recent History row to WI-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work approve WI-001 --result --by 'Mike Rihm'",max_output_tokens:2000}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"00c24e\",\"wall_time_seconds\":0.000003458,\"exit_code\":0,\"original_token_count\":113,\"output\":\"Recorded: result of WI-001 approved (2026-09-29 by Mike Rihm).\\nIt is no longer waiting on the owner (waiting_on: none).\\nNow 11 User approval (In Progress). Continue with work-finish.\\nNote: WI-001's Overview still says \\\"Next action: Mike reviews and approves the WI-001 dollar command result. The branch stays unmerged under his instruction.\\\". Write the step after this approval: toolkit work edit WI-001 --label 'Next action' --value '<next step>'.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --label 'Next action' --value 'Leave the approved dollar command on commit 3b2bc38 unmerged until Mike authorizes a merge. Continue WI-002 separately.'",max_output_tokens:2000}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"56bc35\",\"wall_time_seconds\":0.000002917,\"exit_code\":0,\"original_token_count\":8,\"output\":\"Saved \\\"Next action\\\" in WI-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --label 'Blockers' --value 'Merge withheld by Mike Rihm; result approval is recorded.'",max_output_tokens:2000}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"82910a\",\"wall_time_seconds\":0.000004,\"exit_code\":0,\"original_token_count\":7,\"output\":\"Saved \\\"Blockers\\\" in WI-001.\\n\"}"}]
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work edit WI-001 --label 'Current position' --value 'The dollar command is built and tested on commit 3b2bc38. Five automated tests passed, an independent checker found R-01 and R-02 met, and Mike Rihm approved the result on 2026-09-29. The branch remains unmerged under his instruction. WI-002 is the separate cents extension.'",max_output_tokens:2000}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"d69b8f\",\"wall_time_seconds\":0.000002875,\"exit_code\":0,\"original_token_count\":9,\"output\":\"Saved \\\"Current position\\\" in WI-001.\\n\"}"}]
+
+[CALL] text(await tools.apply_patch("*** Begin Patch\n*** Update File: .work-items/WI-001-build-the-late-fee-command/WORK-ITEM.md\n@@\n-WI-001 dollar command is built and tested at commit 3b2bc38 on branch claude/wi-001-build-the-late-fee-command. Five tests passed, and the independent checker reported R-01 and R-02 met on that commit. Await Mike result approval at stage 11. Do not merge until Mike explicitly authorizes it. WI-002 adds --cents later on its own item.\n+WI-001 dollar command is built and tested at commit 3b2bc38 on branch claude/wi-001-build-the-late-fee-command. Five tests passed, and the independent checker reported R-01 and R-02 met on that commit. Mike approved the result on 2026-09-29 after running it himself. Do not merge until Mike explicitly authorizes it. Continue WI-002 separately for --cents.\n*** End Patch"));
+
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit work set WI-001 --waiting-on agent",max_output_tokens:2000}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"4e8024\",\"wall_time_seconds\":0.000002917,\"exit_code\":0,\"original_token_count\":25,\"output\":\"Updated WI-001: waiting on agent.\\nNow 11 User approval (In Progress). Continue with work-finish.\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+ tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:2000}),
+ tools.exec_command({cmd:"toolkit work validate WI-001",max_output_tokens:2000}),
+ tools.exec_command({cmd:"toolkit memory focus --json",max_output_tokens:3000}),
+ tools.exec_command({cmd:"toolkit memory get project_finance_team_runs_feecalc_every_monday_morning",max_output_tokens:2000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,...x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"9d670c\",\"wall_time_seconds\":0.000001,\"exit_code\":0,\"original_token_count\":122,\"output\":\"1 decision waits on the owner:\\n\\nMemory proposals (saved, not yet approved; agents do not rely on them until the owner says yes or no):\\n  - project_finance_team_runs_feecalc_every_monday_morning: the finance team runs feecalc every Monday morning. Saved 2026-09-29. Yes: toolkit memory approve project_finance_team_runs_feecalc_every_monday_morning --by <name> --concept project_<subject>. No: toolkit memory reject project_finance_team_runs_feecalc_every_monday_morning. (work-decide)\\n\"}}"}, {"type": "input_text", "text": "{\"i\":1,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"fe1d69\",\"wall_time_seconds\":0.000003084,\"exit_code\":0,\"original_token_count\":25,\"output\":\"Checked 1 item: 1 clean, 0 errors, 0 approval gate problems. No open question waits on the owner.\\n\"}}"}, {"type": "input_text", "text": "{\"i\":2,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"ba1e11\",\"wall_time_seconds\":0.000002792,\"exit_code\":0,\"original_token_count\":198,\"output\":\"{\\n  \\\"ok\\\": true,\\n  \\\"backend\\\": \\\"builtin\\\",\\n  \\\"kind\\\": \\\"focus\\\",\\n  \\\"text\\\": \\\"# Current focus\\\\n\\\\nLast updated: 2026-09-29, chat, agent\\\\n\\\\n## Now\\\\n\\\\n- WI-001 Build the late fee command\\\\n- WI-002 Add the --cents option\\\\n\\\\n## Waiting on the owner\\\\n\\\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\\\n\\\\n## Untracked to-dos\\\\n\\\\nNone.\\\\n\\\\n## Next session starts with\\\\n\\\\n- Continue WI-001 from its Resume here: ask Mike to approve the dollar command result on commit 3b2bc38; leave the branch unmerged.\\\\n\\\",\\n  \\\"version\\\": \\\"238d6dc6c7f004828205422e6eb9d63f85bdcafa82d78f69eaa4771b3cd2a651\\\"\\n}\\n\"}}"}, {"type": "input_text", "text": "{\"i\":3,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"7ca1a1\",\"wall_time_seconds\":0.000002208,\"exit_code\":0,\"original_token_count\":348,\"output\":\"---\\nname: project_finance_team_runs_feecalc_every_monday_morning\\ndescription: the finance team runs fee
+
+[CALL] const r=await Promise.allSettled([
+ tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.3.0/skills/memory-save/SKILL.md",max_output_tokens:7000}),
+ tools.exec_command({cmd:"cat .memory/AGENTS.md .memory/memory-criteria.md",max_output_tokens:5000}),
+ tools.exec_command({cmd:"cat AGENTS.md",max_output_tokens:9000}),
+ tools.exec_command({cmd:"cat PROJECT-ROADMAP.md",max_output_tokens:2500})
+]); r.forEach((x,i)=>text(JSON.stringify({i,...x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "Warning: truncated output (original token count: 11527)\nTotal output lines: 4\n\n{\"i\":0,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"d58210\",\"wall_time_seconds\":9.58e-7,\"exit_code\":0,\"original_token_count\":5935,\"output\":\"---\\nname: memory-save\\ndescription: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says \\\"remember this\\\", \\\"from now on\\\", \\\"forget that\\\", or \\\"remind me\\\" with no time given, corrects the agent, or a hook says a save is due.'\\n---\\n\\n# Memory save\\n\\nVoice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the \\\"How to write replies\\\" section of `AGENTS.md`.\\nSaves, corrects, or retires one fact in the project's memory with `toolkit memory` commands, or sends it to its proper home. It never edits memory files by hand. Rules, skills, and memory each hold one kind of thing (Mike, 2026-09-29): an instruction the agent follows every time goes in the rules (`toolkit rule add`), a procedure that proved itself in a skill, and a fact or an unproven lesson in memory. Memory keeps one record per concept (for example `user_profile`, `project_billing`), with one `##` section per fact and a last \\\"Gotchas and lessons\\\" section; an `event_` record holds one episode. The prefixes are `user_`, `project_`, `reference_`, and `event_`; `feedback_` is retired.\\n\\n## Steps\\n\\nTrack these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.\\n\\n1. Decide the home. An instruction for how the agent works (a preference about how work is done, a correction, \\\"from now on\\\", \\\"always\\\", \\\"never\\\") is a rule: save it with `toolkit rule add` (\\\"Rules\\\" below) and stop. A fact about why a part of the project exists or how it is used is a `project_` concept fact, even while a work item for that part is open; the item may link to it. Anything else: use the memory criteria (`.memory/memory-criteria.md` with built-in memory, which wins; otherwise `references/memory-criteria.md`). Not memory: send it to its home (\\\"Where other things go\\\" below) and stop.\\n2. Find the concept it belongs in, and any section that already holds it. List the concepts of its type (title, summary, updated 
+
+[CALL] const r=await tools.exec_command({cmd:"toolkit memory focus --text '# Current focus\n\nLast updated: 2026-09-29, chat, agent\n\n## Now\n\n- WI-001 Build the late fee command\n- WI-002 Add the --cents option\n\n## Waiting on the owner\n\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\n\n## Untracked to-dos\n\nNone.\n\n## Next session starts with\n\n- Continue WI-002 with solution-design. WI-001 result was approved on commit 3b2bc38; leave its branch unmerged until Mike authorizes a merge.' --expect 238d6dc6c7f004828205422e6eb9d63f85bdcafa82d78f69eaa4771b3cd2a651",max_output_tokens:2000}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"0e9578\",\"wall_time_seconds\":0.000002791,\"exit_code\":0,\"original_token_count\":15,\"output\":\"Saved the current focus (21 lines). Version: 2b309860699a\\n\"}"}]
+
+[CALL] const r=await Promise.allSettled([
+ tools.exec_command({cmd:"toolkit memory focus",max_output_tokens:1500}),
+ tools.exec_command({cmd:"toolkit doctor",max_output_tokens:3500}),
+ tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:1000}),
+ tools.exec_command({cmd:"toolkit work show WI-001",max_output_tokens:2000}),
+ tools.exec_command({cmd:"git -C .claude/worktrees/wi-001-build-the-late-fee-command status --short --branch",max_output_tokens:1000})
+]); r.forEach((x,i)=>text(JSON.stringify({i,...x})));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"edfef2\",\"wall_time_seconds\":0.000002709,\"exit_code\":0,\"original_token_count\":157,\"output\":\"# Current focus\\n\\nLast updated: 2026-09-29, chat, agent\\n\\n## Now\\n\\n- WI-001 Build the late fee command\\n- WI-002 Add the --cents option\\n\\n## Waiting on the owner\\n\\n- Trust this folder in Codex: open Codex here and trust the folder when it asks. Setup step; drop it when doctor stops reporting it.\\n- Trust the Toolkit V2 hooks in Codex: open Codex here, type /hooks, trust them. Setup step; drop it when doctor stops reporting it.\\n\\n## Untracked to-dos\\n\\nNone.\\n\\n## Next session starts with\\n\\n- Continue WI-002 with solution-design. WI-001 result was approved on commit 3b2bc38; leave its branch unmerged until Mike authorizes a merge.\\n\"}}"}, {"type": "input_text", "text": "{\"i\":1,\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"07567d\",\"wall_time_seconds\":0.060067,\"exit_code\":1,\"original_token_count\":415,\"output\":\"Toolkit doctor for feecalc (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex).\\n\\nWarnings (2):\\n1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.\\n   Fix: The owner opens Codex in this folder and trusts it when Codex asks.\\n2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).\\n   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.\\n\\nNotes (4):\\n- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\\n- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.\\n- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed,

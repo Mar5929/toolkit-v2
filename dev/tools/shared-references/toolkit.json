@@ -24,6 +24,11 @@
     {
       "source": "plugins/work/shared/tracker-jira.md",
       "skills": ["toolkit/project-setup"]
+    },
+    {
+      "source": "plugins/toolkit/templates/codex/toolkit.rules",
+      "as": "assets/codex-toolkit.rules",
+      "skills": ["toolkit/project-setup"]
     }
   ]
 }

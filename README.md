@@ -213,11 +213,25 @@ briefing at the start of each session warn about it, so the agent tells you.
 
 ### How memory is organized
 
+Rules, skills, and memory each hold one kind of thing (your decision of
+2026-09-29). When you tell the agent how to work ("from now on ...",
+"always ...", "never ...", a correction), it writes a rule: one line in
+`.claude/rules/owner-preferences.md`, under a heading for its area, with the
+date and where it came from (`toolkit rule add`). For every project it goes
+in `~/.claude/rules/owner-preferences.md`, and the agent asks "this project or
+all projects?" only when your words leave it unclear. A procedure that proved
+itself becomes a skill. Memory keeps facts and lessons the agent has not
+proven yet.
+
 Memory works like Claude's project memory: one file per concept or area, not
-one file per fact. The five name prefixes stay (`user_`, `feedback_`,
-`project_`, `reference_`, `event_`), for example `feedback_ways_of_working.md`
-or `project_billing.md`. Each file starts with its title, a one-line summary,
-and the date it last changed, and holds one `##` section per fact. A new fact
+one file per fact. It uses four name prefixes (`user_`, `project_`,
+`reference_`, `event_`), for example `user_profile.md` or
+`project_billing.md`; the old `feedback_` prefix is retired, and
+`memory-tidy` moves an older `feedback_` file into the rules and concepts
+after your yes. Each file starts with its title, a one-line summary, and the
+date it last changed, holds one `##` section per fact, and ends with a
+"Gotchas and lessons" section. When a lesson comes up twice, or you confirm
+it, the agent asks whether to make it a rule or a skill. A new fact
 goes into the concept it belongs to; a new file is only for a new concept.
 An event file holds one episode. The index (`MEMORY.md`) lists each concept's
 title, summary, and date, grouped by prefix. In Hindsight each concept is one
@@ -321,8 +335,10 @@ The agent never does these for you. It tells you when each one is needed.
   (changes this Mac's Codex settings and the `toolkit` command),
   `toolkit memory delete` (a memory is gone for good), `toolkit import` and
   `toolkit memory import` (they can replace work items or memory from a
-  backup), and `toolkit hindsight service install` or `start` (a background
-  service). Every other `toolkit` command runs without asking. In Codex, the
+  backup), `toolkit hindsight service install` or `start` (a background
+  service), and `toolkit rule add --machine` or `toolkit rule update --machine`
+  (your rules for every project). Every other `toolkit` command runs without
+  asking. In Codex, the
   agent asks for these to run outside Codex's sandbox when it asks you;
   approved inside the sandbox, they fail. The toolkit refuses these commands
   when an option such as `--json` is typed before the command words

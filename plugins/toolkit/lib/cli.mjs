@@ -251,7 +251,7 @@ export function asksForHelp(args) {
 
 /**
  * The commands Claude Code and Codex ask the owner about before they run
- * (Mike, 2026-09-28, decision 12): the "ask" entries in
+ * (Mike, 2026-09-28, decision 12; the machine-wide rule, 2026-09-29): the "ask" entries in
  * templates/settings/claude-toolkit.json and the "prompt" rules in
  * templates/codex/toolkit.rules. Both match only when these words come right
  * after "toolkit", so main() refuses them when a global flag (--json, --host)
@@ -265,6 +265,10 @@ export const ASK_FIRST_COMMANDS = Object.freeze([
   ['import'],
   ['hindsight', 'service', 'install'],
   ['hindsight', 'service', 'start'],
+  // A rule for every project on this computer (Mike, 2026-09-29): the rule
+  // command refuses --machine anywhere but right after "add" or "update".
+  ['rule', 'add', '--machine'],
+  ['rule', 'update', '--machine'],
 ]);
 
 /** The ask-first command a group and its arguments start with, as words ("memory delete"), or null. */

@@ -30,6 +30,8 @@ const SAMPLES = {
   import: ['toolkit', 'import', '--from', 'backup'],
   'hindsight service install': ['toolkit', 'hindsight', 'service', 'install'],
   'hindsight service start': ['toolkit', 'hindsight', 'service', 'start'],
+  'rule add --machine': ['toolkit', 'rule', 'add', '--machine', '--section', 'Replies', '--text', 'Lead with the answer.', '--source', 'Mike in chat'],
+  'rule update --machine': ['toolkit', 'rule', 'update', '--machine', '--section', 'Replies', '--entry', '1', '--remove'],
 };
 
 // ------------------------------------------------------------------ I4 in Codex
@@ -38,7 +40,7 @@ test('Codex rules: every prompt rule for a toolkit command says to run it alone 
   const text = read(RULES);
   assert.match(text, /The approval alone does not move the command out of the sandbox/);
   const blocks = text.split('prefix_rule(').slice(1).filter((b) => /pattern = \["toolkit",/.test(b) && /decision = "prompt"/.test(b));
-  assert.equal(blocks.length, 4);
+  assert.equal(blocks.length, 5);
   for (const b of blocks) assert.match(b, /justification = "[^"]*Run it alone with sandbox_permissions require_escalated\."/);
 });
 
@@ -48,6 +50,8 @@ test('the rules reader gives the same decisions as the template means: prompt fo
   for (const words of Object.values(SAMPLES)) assert.equal(ruleDecision(rules, words), 'prompt', words.join(' '));
   assert.equal(ruleDecision(rules, ['toolkit', 'work', 'list']), 'allow');
   assert.equal(ruleDecision(rules, ['toolkit', 'hindsight', 'service', 'status']), 'allow');
+  assert.equal(ruleDecision(rules, ['toolkit', 'rule', 'add', '--section', 'Replies']), 'allow', 'a project rule needs no prompt');
+  assert.equal(ruleDecision(rules, ['toolkit', 'rule', 'list', '--machine']), 'allow');
   assert.equal(ruleDecision(rules, ['git', 'status']), null);
   assert.equal(ruleDecision(rules, ['git', 'commit', '-m', 'x']), 'prompt');
   // Every ask-first command also has a Claude Code ask rule.

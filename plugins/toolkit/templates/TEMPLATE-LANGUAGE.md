@@ -170,8 +170,10 @@ lines between the markers are replaced. Nobody edits between the markers.
 The span is built from every `*.md` file in the project's `.claude/rules/`,
 sorted by file name in plain character order:
 
-- A rule whose frontmatter has a `paths` list is path-scoped. Any other rule is
-  always on.
+- A rule whose frontmatter has `paths` is path-scoped: a list of patterns, or
+  one string of patterns separated by commas (`paths: "src/**, lib/**"`), as
+  Claude Code reads it. Any other rule is always on, including one whose
+  frontmatter cannot be read or whose `paths` string is empty.
 - The one-line purpose is the text of the rule's first `# ` heading.
 
 Exact output, with `\n` line endings:

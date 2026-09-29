@@ -150,21 +150,21 @@ test('the toolkit work and memory commands can use the Notion drivers the comman
 test('memory delete in a Notion project prints the driver\'s own detail: the page is in the Notion trash for 30 days', async () => {
   const { project, env, rootPageId } = setup({ tracker: 'local' });
   assert.equal((await toolkit(['notion', 'ensure-project', '--root-page', rootPageId], { cwd: project, env })).code, 0);
-  const saved = await toolkit(['memory', 'save', '--type', 'feedback', '--name', 'to-remove', '--description', 'A rule to remove', '--body', 'Rule.\n'], { cwd: project, env });
+  const saved = await toolkit(['memory', 'save', '--type', 'reference', '--name', 'to-remove', '--description', 'A note to remove', '--body', 'Note.\n'], { cwd: project, env });
   assert.equal(saved.code, 0, saved.err);
-  const refused = await toolkit(['memory', 'delete', 'feedback_to_remove'], { cwd: project, env });
+  const refused = await toolkit(['memory', 'delete', 'reference_to_remove'], { cwd: project, env });
   assert.equal(refused.code, 2);
   assert.match(refused.err, /moves it to the Notion trash, and Notion deletes it for good after 30 days/);
   assert.doesNotMatch(refused.err, /cannot be undone/);
-  const deleted = await toolkit(['memory', 'delete', 'feedback_to_remove', '--owner-approved', '--json'], { cwd: project, env });
+  const deleted = await toolkit(['memory', 'delete', 'reference_to_remove', '--owner-approved', '--json'], { cwd: project, env });
   assert.equal(deleted.code, 0, deleted.err);
   const json = JSON.parse(deleted.out);
   assert.equal(json.trash, true);
   assert.match(json.detail, /Notion trash/);
-  const text = await toolkit(['memory', 'save', '--type', 'feedback', '--name', 'second', '--description', 'Another rule', '--body', 'Rule.\n'], { cwd: project, env });
+  const text = await toolkit(['memory', 'save', '--type', 'reference', '--name', 'second', '--description', 'Another note', '--body', 'Note.\n'], { cwd: project, env });
   assert.equal(text.code, 0, text.err);
-  const human = await toolkit(['memory', 'delete', 'feedback_second', '--owner-approved'], { cwd: project, env });
+  const human = await toolkit(['memory', 'delete', 'reference_second', '--owner-approved'], { cwd: project, env });
   assert.equal(human.code, 0, human.err);
-  assert.match(human.out, /^Deleted feedback_second\. feedback_second was moved to the Notion trash\. Notion deletes it for good after 30 days; until then it can be restored from the trash in the Notion app\.\n$/);
+  assert.match(human.out, /^Deleted reference_second\. reference_second was moved to the Notion trash\. Notion deletes it for good after 30 days; until then it can be restored from the trash in the Notion app\.\n$/);
   assert.doesNotMatch(human.out, /cannot be undone/);
 });

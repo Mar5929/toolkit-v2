@@ -44,11 +44,12 @@ import { update as updateFrontmatter } from '../core/frontmatter.mjs';
 import { readTemplate } from '../core/templates.mjs';
 import { today as localToday } from '../core/util.mjs';
 import {
-  ARCHIVE_FOLDER, RECORD_TYPES, FOCUS_MAX_LINES, addBodyNote, assertKey, assertValidRecord, assertValidFocus, assertValidGlossary,
+  ARCHIVE_FOLDER, RECORD_TYPES, ACTIVE_TYPES, RETIRED_TYPES, FOCUS_MAX_LINES, addBodyNote, assertKey, assertValidRecord, assertValidFocus, assertValidGlossary,
   assertFilter, brokenLinks, changeRecordStatus, changeSupersedes, checkExpect, countRecords, fitLinks, keywordScore,
   latestStatusNote, matchesFilter, normalizeDocument, normalizeRecord, notFound, parseRecord, rebaseLinks, recordSummary,
   renameRecordText, repairLinks, restoreNote, retireNote, searchTerms, serializeRecord, sortRecords, splitKey, storedStatus,
   versionOf, focusLineCount, focusShapeProblems, isProposal, bodyTitle, titleFromName, anchorHeading, findLinks, linkVaultPath, mergedInto,
+  proposalTarget,
 } from './contract.mjs';
 import { allHeadings, assertEditedText } from './concepts.mjs';
 
@@ -117,6 +118,15 @@ export function indexFrame() {
 /** How MEMORY.md marks a saved proposal. */
 export const PROPOSAL_MARK = 'proposal: not a fact until the owner answers';
 
+/** The mark of one proposal: where the owner's yes puts it, when it names a place. */
+export function proposalMark(e) {
+  const extra = (e && e.extra) || {};
+  const rule = e && (e.rule_section || extra.rule_section);
+  if (rule || (e && e.type === 'feedback')) return `rule proposal${rule ? ` for .claude/rules/owner-preferences.md, section "${rule}"` : ''}: not a rule until the owner answers`;
+  if (e && e.concept) return `proposal for ${e.concept}: not a fact until the owner answers`;
+  return PROPOSAL_MARK;
+}
+
 /**
  * The text of MEMORY.md for a list of summaries (with stored_status), in the
  * model's layout: the intro, one "## <Type>" section per type (the prefix)
@@ -130,12 +140,17 @@ export const PROPOSAL_MARK = 'proposal: not a fact until the owner answers';
 export function buildIndex(entries) {
   const { intro, end } = indexFrame();
   const chunks = [intro];
-  for (const type of RECORD_TYPES) {
-    chunks.push(`\n## ${TYPE_TITLES[type]}\n\n`);
+  // Four prefixes (Mike, 2026-09-29). The retired feedback_ type gets a
+  // section only while such records are still there, so none is hidden.
+  const types = [...ACTIVE_TYPES, ...RETIRED_TYPES.filter((t) => entries.some((e) => e.type === t))];
+  for (const type of types) {
+    chunks.push(`\n## ${TYPE_TITLES[type]}${RETIRED_TYPES.includes(type) ? ' (retired type: memory-tidy moves these to the rules and concepts)' : ''}\n\n`);
     const ofType = entries.filter((e) => e.type === type).sort((a, b) => (a.key < b.key ? -1 : a.key > b.key ? 1 : 0));
     for (const e of ofType) {
-      // A saved proposal is marked as one, so an agent reading only this index never takes it as a fact.
-      const word = e.proposal ? ` [${PROPOSAL_MARK}]` : e.stored_status && e.stored_status !== 'current' ? ` [${e.stored_status}]` : '';
+      // A saved proposal is marked as one, so an agent reading only this index
+      // never takes it as a fact. It names where a yes puts it (close-out note:
+      // the index did not name a proposal's concept).
+      const word = e.proposal ? ` [${proposalMark(e)}]` : e.stored_status && e.stored_status !== 'current' ? ` [${e.stored_status}]` : '';
       const title = linkText(e.title || e.key);
       const date = e.updated ? ` (updated ${e.updated})` : '';
       chunks.push(`- [${title}](${e.key}.md) — ${e.description}${date}${word}\n`);
@@ -798,6 +813,8 @@ export class BuiltinDriver {
       updated: shownUpdated(e.record),
       stored_status: storedStatus(e.record),
       proposal: isProposal(e.record),
+      extra: e.record.extra || {},
+      concept: isProposal(e.record) ? ((proposalTarget(e.record) || {}).concept || null) : null,
     }));
     return buildIndex(listed);
   }

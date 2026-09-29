@@ -128,20 +128,20 @@ test('an approved section in an unapproved concept records its approval; the own
 
 test('merge and split keep an existing concept\'s authorization; a merged fact with no approval says so in its section', async () => {
   const { root } = makeProject();
-  await tk(root, ['memory', 'save', '--type', 'feedback', '--name', 'ways-of-working', '--description', 'How Mike wants the agent to work', '--section', 'Questions', '--body', 'Ask one question at a time.', '--approved-by', 'Anna']);
-  await tk(root, ['memory', 'save', '--type', 'feedback', '--name', 'no-tables', '--description', 'No tables in replies', '--body', '# No tables\n\n**Remember:** No tables in replies.\n', '--new-concept']);
-  await oneFact(root, 'feedback', 'short-replies', 'Short replies', 'Short replies', 'Keep replies short.');
-  await tk(root, ['memory', 'merge', 'feedback_no_tables', 'feedback_short_replies', '--into', 'feedback_ways_of_working', '--approved-by', 'Mike']);
-  const text = read(root, 'feedback_ways_of_working.md');
+  await tk(root, ['memory', 'save', '--type', 'user', '--name', 'ways-of-working', '--description', 'How Mike wants the agent to work', '--section', 'Questions', '--body', 'Ask one question at a time.', '--approved-by', 'Anna']);
+  await tk(root, ['memory', 'save', '--type', 'user', '--name', 'no-tables', '--description', 'No tables in replies', '--body', '# No tables\n\n**Remember:** No tables in replies.\n', '--new-concept']);
+  await oneFact(root, 'user', 'short-replies', 'Short replies', 'Short replies', 'Keep replies short.');
+  await tk(root, ['memory', 'merge', 'user_no_tables', 'user_short_replies', '--into', 'user_ways_of_working', '--approved-by', 'Mike']);
+  const text = read(root, 'user_ways_of_working.md');
   assert.match(text, /^authorization: Approved by Anna on /m, 'the concept keeps its own line');
   const body = parseFrontmatter(text).body;
   assert.match(getSection(body, 'No tables'), /with no approval recorded\.$/);
   assert.match(getSection(body, 'Short replies'), /Approved by Mike on 2026-09-\d\d\.$/, 'approved by someone other than the concept\'s approver');
 
-  const before = parseFrontmatter(read(root, 'feedback_ways_of_working.md')).data.authorization;
-  await tk(root, ['memory', 'split', 'feedback_ways_of_working', '--section', 'Short replies', '--into', 'feedback_replies', '--description', 'How replies are written', '--approved-by', 'Mike']);
-  assert.equal(parseFrontmatter(read(root, 'feedback_ways_of_working.md')).data.authorization, before, 'the source keeps its line');
-  assert.match(read(root, 'feedback_replies.md'), new RegExp(`^authorization: Approved by Mike on ${DAY}$`, 'm'), 'a concept the split starts has the owner\'s yes');
+  const before = parseFrontmatter(read(root, 'user_ways_of_working.md')).data.authorization;
+  await tk(root, ['memory', 'split', 'user_ways_of_working', '--section', 'Short replies', '--into', 'user_replies', '--description', 'How replies are written', '--approved-by', 'Mike']);
+  assert.equal(parseFrontmatter(read(root, 'user_ways_of_working.md')).data.authorization, before, 'the source keeps its line');
+  assert.match(read(root, 'user_replies.md'), new RegExp(`^authorization: Approved by Mike on ${DAY}$`, 'm'), 'a concept the split starts has the owner\'s yes');
 });
 
 // ------------------------------------------------------------------ 3. Hindsight lock
@@ -240,16 +240,16 @@ test('the Stop hook note and toolkit memory get tell the agent to name the conce
 
 test('records merged into a concept leave MEMORY.md; a plain supersede still shows [superseded]', async () => {
   const { root } = makeProject();
-  await oneFact(root, 'feedback', 'no-force-push', 'Never force-push', 'No force-push', 'Never force-push.');
-  await oneFact(root, 'feedback', 'plain-replies', 'Replies in plain English', 'Plain replies', 'Write replies in plain English.');
-  await oneFact(root, 'feedback', 'one-question', 'One question at a time', 'One question', 'Ask one question at a time.');
-  await tk(root, ['memory', 'merge', 'feedback_no_force_push', 'feedback_plain_replies', 'feedback_one_question', '--into', 'feedback_ways_of_working', '--title', 'Ways of working', '--description', 'How Mike wants the agent to work', '--approved-by', 'Mike']);
+  await oneFact(root, 'user', 'no-force-push', 'Never force-push', 'No force-push', 'Never force-push.');
+  await oneFact(root, 'user', 'plain-replies', 'Replies in plain English', 'Plain replies', 'Write replies in plain English.');
+  await oneFact(root, 'user', 'one-question', 'One question at a time', 'One question', 'Ask one question at a time.');
+  await tk(root, ['memory', 'merge', 'user_no_force_push', 'user_plain_replies', 'user_one_question', '--into', 'user_ways_of_working', '--title', 'Ways of working', '--description', 'How Mike wants the agent to work', '--approved-by', 'Mike']);
   const index = read(root, 'MEMORY.md');
-  const feedback = index.split('## Feedback')[1].split('## Project')[0].trim().split('\n');
-  assert.deepEqual(feedback, [`- [Ways of working](feedback_ways_of_working.md) — How Mike wants the agent to work (updated ${DAY})`]);
-  assert.ok(fs.existsSync(path.join(root, '.memory', 'feedback_no_force_push.md')), 'the file stays, so old links resolve');
+  const feedback = index.split('## User')[1].split('## Project')[0].trim().split('\n');
+  assert.deepEqual(feedback, [`- [Ways of working](user_ways_of_working.md) — How Mike wants the agent to work (updated ${DAY})`]);
+  assert.ok(fs.existsSync(path.join(root, '.memory', 'user_no_force_push.md')), 'the file stays, so old links resolve');
   const driver = await loadDriver(requireProject(root));
-  assert.equal(mergedInto(await driver.get('feedback_no_force_push')), 'feedback_ways_of_working');
+  assert.equal(mergedInto(await driver.get('user_no_force_push')), 'user_ways_of_working');
   assert.deepEqual((await tk(root, ['memory', 'status', '--json'])).json.problems, []);
 
   await oneFact(root, 'project', 'deploy-day', 'Deploys on Tuesdays', 'Deploy day', 'Deploys go out on Tuesdays.');
@@ -275,10 +275,11 @@ test('the "belongs in the concept" heading is the section that matches best, and
   await tk(root, ['memory', 'save', '--type', 'project', '--name', 'billing', '--description', 'Billing: invoices and refunds', '--section', 'Invoice run', '--body', 'Invoices go out on the 1st.', '--approved-by', 'Mike']);
   await tk(root, ['memory', 'save', '--concept', 'project_billing', '--section', 'Refunds', '--body', 'Refunds are paid back within 30 days.', '--approved-by', 'Mike']);
   const driver = await loadDriver(requireProject(root));
-  const s = await suggestConcept(driver, { key: 'project_refund_invoice_rule', type: 'project', name: 'refund-invoice-rule', description: 'Refunds after 30 days need a credit invoice' });
+  // Since C1 (close-out 2026-09-28) a concept is suggested only with a shared word in its key or title: "billing".
+  const s = await suggestConcept(driver, { key: 'project_billing_refund_invoice_rule', type: 'project', name: 'billing-refund-invoice-rule', description: 'Refunds after 30 days need a credit invoice' });
   assert.equal(s.key, 'project_billing');
   assert.equal(s.heading, 'Refunds');
-  const tie = await suggestConcept(driver, { key: 'project_refund_invoice_rule', type: 'project', name: 'refund-invoice', description: 'A refund invoice' });
+  const tie = await suggestConcept(driver, { key: 'project_billing_refund_invoice', type: 'project', name: 'billing-refund-invoice', description: 'A billing refund invoice' });
   assert.equal(tie.heading, null, 'a tie names no section');
 });
 

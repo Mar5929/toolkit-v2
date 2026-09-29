@@ -1,6 +1,6 @@
 ---
 name: merge-and-clean-up
-description: 'Merges one approved GitHub pull request and removes only that pull request''s branches and worktree, after its checks and the merge-safety check pass. Use when the owner or work-finish asks to merge a named pull request, for example "merge PR 12", "merge and clean up", or "land this pull request".'
+description: 'Merges one approved GitHub pull request and removes only that pull request''s branches and worktree, after its checks and the merge-safety check pass, so no unchecked change lands and no other session''s work is removed. Use when the owner or work-finish asks to merge a named pull request, for example "merge PR 12", "merge and clean up", or "land this pull request".'
 ---
 
 # Merge and clean up

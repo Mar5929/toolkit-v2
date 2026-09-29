@@ -1,0 +1,21 @@
+01a0edbd-7d04-7203-aacc-fb17ca063f04.json
+01a0edc2-b7de-7ec0-8d9f-d441a60e85fd.json
+01a0edc5-61ed-74d1-9f63-8a616599c470.json
+01a0edc7-0edf-7391-b615-11d8504ea1a8.json
+01a0edca-2128-7832-b523-5e8111a94407.json
+01a0edcb-86da-7970-9963-e74098f7e616.json
+01a0edcd-5375-7903-9e43-95ab56b1fc3b.json
+01a0edcf-ad17-7640-ba29-7ec35c92b297.json
+01a0edd0-a098-76f0-8948-85395f491784.json
+{
+  "schema": 1,
+  "sessionId": "01a0edd0-a098-76f0-8948-85395f491784",
+  "host": "codex",
+  "turn": 1,
+  "key": "01a0edd0-a0fc-78f0-a496-e07c3393df50",
+  "at": "2026-09-29T15:37:50.543Z",
+  "prompted": true,
+  "keep": null,
+  "saveWords": false,
+  "answersMemoryQuestion": false
+}

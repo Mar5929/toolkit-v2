@@ -6,7 +6,7 @@ bodies, reference files, hooks, and multi-agent workflows. Every rule names
 the captured file it comes from.
 
 Mike's decisions win over this guide. They are in `dev/GOAL.md` and the Rules
-section of `AGENTS.md`. Two of them shape everything below:
+section of `AGENTS.md`. Three of them shape everything below:
 
 - A skill's frontmatter holds only `name` and `description`, and the
   description matches `dev/SKILL-INDEX.md` section 1 word for word
@@ -14,6 +14,10 @@ section of `AGENTS.md`. Two of them shape everything below:
 - Skill descriptions must follow the official Claude Code and Codex best
   practices, so the agent knows exactly when to use each skill
   (`dev/GOAL.md`, 2026-09-27).
+- Every description says what the skill does, why to use it, and when to use
+  it, and every skill folder holds all the references, templates, examples,
+  and scripts its steps need (`dev/GOAL.md`, "Skills carry their own
+  procedures", 2026-09-29). D4, D6, and Part 5 carry this.
 
 ## How to read the citations
 
@@ -215,22 +219,37 @@ Toolkit V2 frontmatter holds only `name` and `description`.
 
 ### Length
 
-**D4. Aim for about 150 to 300 characters: one sentence on what the skill
-does, one on when to use it, and at most one short "Not for" clause.**
+**D4. Aim for about 300 to 450 characters: one sentence on what the skill
+does and why (a ", so ..." clause), one on when to use it, and at most one
+short "Not for" clause. `dev/tools/check-skills.mjs` fails a description over
+450 characters.**
 Agent Skills: "A few sentences to a short paragraph is usually right".
 Claude Code: every skill in the listing adds to the context on every turn,
 whether or not Claude ever uses it.
 (`ai-external-knowledge/anthropic-agent-skills/agentskills-optimizing-descriptions.md`
 "Writing effective descriptions"; `ai-external-knowledge/claude-code/skills.md`
 "Find unused skills")
-The number range is this guide's arithmetic, not an official figure. With the
-Codex fallback of 8,000 characters and 30 skills, each line spends about 50
-characters on name and path, which leaves about 215 characters of description
-per skill before Codex starts cutting. With a known context window the Codex
-budget is 2% of it, which is larger; the 8,000-character case is the crowded
-one. In Claude Code, every character adds to
-the 1% budget that decides which skills lose their description (1.2). Toolkit
-V2's descriptions measured 266 to 307 characters on 2026-09-27.
+The number range is this guide's arithmetic, not an official figure. The
+reason for 450 is in the comment above `MAX_DESCRIPTION` in
+`dev/tools/check-skills.mjs`: Mike's why clause (2026-09-29) adds about 40 to
+80 characters to the earlier aim of 150 to 300; 450 characters is about 110
+tokens, close to the "~100 tokens" the Agent Skills specification budgets
+for name and description together
+(`ai-external-knowledge/anthropic-agent-skills/agentskills-specification.md`
+"Progressive disclosure"), and far under the 1,024-character cap (D1). The
+cost: with the Codex fallback of 8,000 characters and 30 skills, each line
+spends about 50 characters on name and path, which leaves about 215
+characters of description per skill before Codex starts cutting. Codex cuts
+every description from the end
+(`ai-external-knowledge/codex/source-skills-render.md`
+`allocate_description_chars`), so the job and the main trigger go in the
+first 120 characters (D5), where the check reads them. With a known context
+window the Codex budget is 2% of it, which is larger; the 8,000-character
+case is the crowded one. In Claude Code, every character adds to the budget
+that decides which skills lose their description (1.2); new projects set
+`skillListingBudgetFraction` to 0.02. Toolkit V2's descriptions measured 266
+to 307 characters on 2026-09-27, and 299 to 405 after the why clauses
+(2026-09-29).
 
 **D5. Put the job and the main trigger in the first sentence.** Codex: "Front-load
 the key use case and trigger words", so the skill still matches when the host
@@ -240,11 +259,18 @@ skills"; `ai-external-knowledge/claude-code/skills.md` "Frontmatter reference")
 
 ### Voice and shape
 
-**D6. Start with a third-person verb that says what the skill does, then
-"Use when ...".** Example shape: "Summarizes uncommitted changes and flags
-anything risky. Use when the user asks what changed, wants a commit message,
-or asks to review their diff." This is Claude Code's own first example, and
-Codex's example has the same shape.
+**D6. Start with a third-person verb that says what the skill does, then why
+to use it (a ", so ..." clause: the outcome, or the risk the skill prevents),
+then "Use when ...".** Example shape: "Summarizes uncommitted changes and flags
+anything risky, so nothing risky is committed by accident. Use when the user
+asks what changed, wants a commit message, or asks to review their diff."
+Without the why clause, this is Claude Code's own first example, and Codex's
+example has the same shape. The why clause is Mike's rule (`dev/GOAL.md`,
+2026-09-29): it tells the agent what goes wrong when the skill is skipped.
+`dev/tools/check-skills.mjs` fails a description without a job verb in its
+first 120 characters, without a why clause (", so", "so that", "to keep",
+"to prevent", "which keeps", or "which prevents") before "Use when", or
+without a "Use when" clause.
 Never write "I can help you ..." or "You can use this to ...". Anthropic:
 "Always write in third person." Its reason: the description goes into the
 system prompt, and a mixed point of view makes skills harder to find.
@@ -352,15 +378,17 @@ for it by name or phrase, and its body must stop and confirm.
 ### Description template
 
 ```text
-<Third-person verb phrase: what it does, with the key nouns>. Use when <the
-owner's goal or the project state>, for example "<phrase>", "<phrase>", or
-"<phrase>". Not for <neighbor job>; use <neighbor-skill>.
+<Third-person verb phrase: what it does, with the key nouns>, so <outcome or
+risk prevented>. Use when <the owner's goal or the project state>, for
+example "<phrase>", "<phrase>", or "<phrase>". Not for <neighbor job>; use
+<neighbor-skill>.
 ```
 
 Checks for each description:
 
-- It is 1,024 characters or fewer, and about 150 to 300 (D1, D4).
+- It is 1,024 characters or fewer, and about 300 to 450 (D1, D4).
 - The first sentence alone says what the skill does (D5).
+- It has a why clause before "Use when" (D6).
 - No "I", "you", or "this skill" as the subject (D6).
 - It has a "Use when" part that names a situation, not just keywords (D8 to D11).
 - Any "Not for" clause names the competing skill (D12).
@@ -793,11 +821,11 @@ need more detail for Haiku."
 
 | Topic | Source A | Source B | This guide |
 | --- | --- | --- | --- |
-| Voice | Anthropic: "Always write in third person" (`skill-authoring-best-practices.md`). | Agent Skills: use imperative phrasing, "Use this skill when..." rather than "This skill does..." (`agentskills-optimizing-descriptions.md`). | Third-person verb for what it does, then "Use when ...". The official examples from Claude Code (`skills.md`), Anthropic (`skill-authoring-best-practices.md`), and Codex (`customization-overview.md`) all have this shape (D6). |
+| Voice | Anthropic: "Always write in third person" (`skill-authoring-best-practices.md`). | Agent Skills: use imperative phrasing, "Use this skill when..." rather than "This skill does..." (`agentskills-optimizing-descriptions.md`). | Third-person verb for what it does, a ", so ..." why clause, then "Use when ...". The official examples from Claude Code (`skills.md`), Anthropic (`skill-authoring-best-practices.md`), and Codex (`customization-overview.md`) all have this shape without the why clause, which is Mike's addition (D6). |
 | Keywords | Claude Code and Codex: include the words users say (`skills.md`, `best-practices.md`). | Codex 0.157.0 model instructions: do not use a skill "based solely on keywords" (Observed). Agent Skills: do not add words from failed prompts (`agentskills-optimizing-descriptions.md`). | Name the situation first; add a few real phrases as examples of it (D9, D10). |
 | How broad | Agent Skills: "Err on the side of being pushy" (`agentskills-optimizing-descriptions.md`). | Claude Code: if it triggers too often, "Make the description more specific" (`skills.md`). | Firm about the situation, narrow in scope, with a named neighbor where two compete (D12 to D14). |
 | Codex trigger rule | Source: "you must use that skill" when the task clearly matches (`source-skills-catalog-prompt.md`). | Model instructions seen in 0.157.0: "use reasonable judgement" (Observed). | Write so the match is clear either way; do not rely on "must use". |
-| Length cap | Claude Code: 1,536 characters (`skills.md`). | Agent Skills standard and Codex: 1,024 (`agentskills-specification.md`, `source-skills-render.md`). | 1,024 is the hard cap; aim for about 150 to 300 (D1, D4). |
+| Length cap | Claude Code: 1,536 characters (`skills.md`). | Agent Skills standard and Codex: 1,024 (`agentskills-specification.md`, `source-skills-render.md`). | 1,024 is the hard cap; aim for about 300 to 450, and `check-skills.mjs` fails over 450 (D1, D4). |
 | Naming pattern | Anthropic prefers gerunds (`skill-authoring-best-practices.md`). | The standard's and Codex's examples use nouns and actions (`agentskills-specification.md`, `customization-overview.md`). | Any one pattern, used everywhere. Toolkit V2's names are settled in `dev/SKILL-INDEX.md` (N4). |
 | Trigger text field | Claude Code reads `when_to_use` (`skills.md`). | Codex does not; it can show `metadata.short-description` instead (`source-skills-parser.md`). | Only `description` (D3). This is also Mike's rule in `AGENTS.md`. |
 | Claude Code list after compaction | Settings reference: Claude sees the skill listing each turn (`settings-reference.md`). | Context window page: the listing "is not re-injected after `/compact`" (`context-window.md`). | Unsettled. Observed: the list sits in the Skill tool's description, which supports "each turn". If routing after compaction matters, a `SessionStart` hook with matcher `compact` can restate it (H3). |
@@ -824,9 +852,9 @@ take to Mike. They are not settled decisions.
    plugins) helps. Raising `skillListingBudgetFraction` in the project's
    `.claude/settings.json` would help more; that is a setting change for Mike
    to approve.
-4. **Keep descriptions near their current length.** 266 to 307 characters
-   sits at the top of D4's range. New "Not for" clauses should replace words, not add a
-   third sentence of detail.
+4. **Keep descriptions near their current length.** 299 to 405 characters
+   (2026-09-29, with the why clauses) sits inside D4's range. New "Not for"
+   clauses should replace words, not add a third sentence of detail.
 5. **Risky skills need a description that limits them to explicit requests,
    plus a confirmation step in the body**, because Toolkit V2 frontmatter
    cannot set `disable-model-invocation` or `allow_implicit_invocation`

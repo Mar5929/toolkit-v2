@@ -8,7 +8,7 @@ import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { makeProject, cleanup, tk, newItem, readRecord, trackerDir, approveRequirements } from './helpers.mjs';
+import { makeProject, cleanup, tk, newItem, readRecord, trackerDir, approveRequirements, recordCheck } from './helpers.mjs';
 import { parseDoc, parseHistory, getSectionWhole } from '../../lib/work/model.mjs';
 import { reportLines } from '../../lib/work/report.mjs';
 
@@ -114,6 +114,7 @@ test('the template\'s item guide goes when the requirements are approved, and va
 test('a finished item shows only Done in the list, the tree, and the dashboard', async () => {
   const dir = makeProject();
   const id = await newItem(dir, 'Shipped', ['--type', 'task', '--stage', '09']);
+  await recordCheck(dir, id);
   await tk(dir, ['work', 'approve', id, '--result', '--by', 'Mike']);
   const fin = await tk(dir, ['work', 'finish', id, '--by', 'Mike', '--evidence', 'Tests pass.']);
   assert.equal(fin.code, 0, fin.stderr);

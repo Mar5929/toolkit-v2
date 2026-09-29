@@ -1,0 +1,135 @@
+{
+  "schema": 1,
+  "sessionId": "01a0edd0-a098-76f0-8948-85395f491784",
+  "host": "codex",
+  "project": "/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex",
+  "startedAt": "2026-09-29T15:37:50.375Z",
+  "turns": 1,
+  "turn": {
+    "key": "01a0edd0-a0fc-78f0-a496-e07c3393df50",
+    "n": 1,
+    "startedAt": "2026-09-29T15:37:50.543Z",
+    "keep": null,
+    "baseline": {
+      "memoryMeta": 1790696242643.4768,
+      "hindsightMeta": null,
+      "memoryCache": null,
+      "workState": 1790696270435.2102,
+      "decisions": 1790695148134.4663,
+      "projectRules": 1790695565691.5732,
+      "machineRules": null
+    },
+    "records": [
+      {
+        "kind": "work",
+        "what": "toolkit work history",
+        "at": "2026-09-29T15:38:09.882Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-29T15:38:28.270Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work approve",
+        "at": "2026-09-29T15:38:30.732Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-29T15:38:34.748Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work set",
+        "at": "2026-09-29T15:38:40.597Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work set",
+        "at": "2026-09-29T15:39:14.432Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work design",
+        "at": "2026-09-29T15:39:18.415Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work design",
+        "at": "2026-09-29T15:39:20.630Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-29T15:40:12.787Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-29T15:40:23.086Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-29T15:40:27.516Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work design",
+        "at": "2026-09-29T15:44:47.907Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work design",
+        "at": "2026-09-29T15:45:01.452Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work set",
+        "at": "2026-09-29T15:45:11.364Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work history",
+        "at": "2026-09-29T15:45:14.088Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-29T15:45:17.718Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-29T15:45:20.476Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work edit",
+        "at": "2026-09-29T15:45:24.972Z"
+      },
+      {
+        "kind": "memory",
+        "what": "toolkit memory focus",
+        "at": "2026-09-29T15:45:31.720Z"
+      },
+      {
+        "kind": "work",
+        "what": "toolkit work design",
+        "at": "2026-09-29T15:45:36.366Z"
+      }
+    ],
+    "edits": [],
+    "stopBlocked": false,
+    "prompted": true,
+    "saveWords": false,
+    "prompt": "I approve the WI-001 requirements.",
+    "answersMemoryQuestion": false
+  },
+  "lastStopReason": null,
+  "source": "startup",
+  "updated": "2026-09-29T15:45:48.907Z",
+  "lastReplyAskedMemory": false
+}

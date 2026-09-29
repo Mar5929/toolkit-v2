@@ -1,0 +1,3 @@
+0.252s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat PROJECT.md",max_output_tokens:2000}),\n  tools.exec_command({cmd:"cat .claude/rules/{humanize-outbound-text,keep-work-item-current,memory-review-and-save'
+0.255s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-on/references/sizing-and-routing.md",max_output_tokens:6000}),\n  tools.exec_co'
+MAX toolkit call seconds: 0.255

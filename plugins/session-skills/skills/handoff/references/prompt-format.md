@@ -1,7 +1,9 @@
 # Step 4: the handoff prompt
 
 Purpose: the parts of a handoff prompt, in order, the source kind each fact
-carries, and one complete example.
+carries, and one complete example. Draft every prompt from
+`assets/handoff-prompt-template.md`, which holds the fixed first line and the
+headings in this order.
 
 ## Contents
 

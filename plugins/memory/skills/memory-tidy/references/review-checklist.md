@@ -43,6 +43,25 @@ merges and splits below with their commands. Tick each line.
 - [ ] **A stale summary:** a concept whose `description` no longer covers
       its sections. Propose a new summary, saved with any section save and
       `--description`.
+- [ ] **`feedback_` records:** the type is retired. The plan lists each part
+      with its command. Propose, part by part: an instruction for how the
+      agent works to the rules, a fact to a `user_` or `project_` concept;
+      then retire the record. After his yes:
+
+      ```text
+      toolkit rule add --section '<area>' --text '<the instruction>' --source 'memory record <key>, saved <date>'
+      toolkit memory split <key> --section '<heading>' --into <user_ or project_ concept> --approved-by <owner>
+      toolkit memory retire <key> --reason 'Moved to the rules and concepts'
+      ```
+
+- [ ] **Lessons that proved themselves:** the plan's promotion candidates (a
+      lesson seen in two or more sessions, one like it in another concept, or
+      one the owner confirmed). Propose each as a rule or a skill with the
+      question `toolkit memory promote` prints (the skill's "Promotion"
+      section).
+- [ ] **An instruction saved as a fact:** a section that tells the agent how
+      to work ("always ...", "never ...", a preference about replies or
+      commits). Propose moving it to the rules, then removing the section.
 
 - [ ] **Duplicates:** two records with the same meaning. Propose: keep the
       clearer one, update it with anything the other adds, retire the other
@@ -94,15 +113,16 @@ once, at the end, for the whole list. Example:
 ```markdown
 Proposed changes to memory:
 
-1. Merge: keep `feedback_merge_only_by_pull_request`, retire `feedback_merge_by_pr` (same rule, older wording).
-2. Merge `feedback_no_force_push`, `feedback_plain_replies`, and `feedback_one_question` into a new concept `feedback_ways_of_working` ("Ways of working: questions, replies, Git habits"). Each becomes a section; links follow.
+1. Merge: keep `reference_billing_dashboard`, retire `reference_stripe_dashboard` (same link, older wording).
+2. Move `feedback_ways_of_working` out of memory: its "Force-push" and "Questions" sections are instructions, so they go to the project rules (Git and Questions); its "Laptop" section is a fact about you, so it goes to `user_profile`. Then retire it.
 3. Split the "Refunds" and "Disputes" sections out of `project_billing` (26 sections) into a new concept `project_refunds`.
 4. Retire `project_deploy_monday`: DECISIONS.md D-7 moved deploys to Tuesday on 2026-09-20.
-5. Rename `project_owner_prefers_spaces` to `user_prefers_spaces`: it is the owner's preference, not a project fact.
+5. Rename `project_owner_laptop` to `user_laptop`: it is a fact about you, not the project.
 6. Question: `project_api`, section "Rate limit", says 100 requests a minute; `reference_api_limits` says 60. Which is right?
 7. Proposal waiting since 2026-09-24: "staging resets every Sunday". Keep it or drop it?
 8. Trim the current focus from 58 to 41 lines: take WI-009 and WI-011 off Now (both Done).
 9. Delete `user_personal_email`: it holds an email address.
+10. Promote the lesson "The deploy check needs the VPN" in `project_deploys` (seen on 2026-09-27 and 2026-09-29) to a project rule: "Turn on the VPN before the deploy check."
 
 Before any change, I will export memory to ~/Backups/toolkit/shop-app-before-tidy-2026-09-28-1430.
 Say "yes to all", or give the numbers you want, and your answer to 6 and 7.
@@ -143,11 +163,12 @@ back <key>" means the whole restore in `replacing-and-retiring.md`, section
 ```markdown
 Memory is tidy. Changes:
 
-- Retired `feedback_merge_by_pr` (superseded by `feedback_merge_only_by_pull_request`). Undo: say "bring back feedback_merge_by_pr".
-- Merged `feedback_no_force_push`, `feedback_plain_replies`, and `feedback_one_question` into the new concept `feedback_ways_of_working`, one section each; links now point at those sections. Undo: say "undo the merge" (each record restored, its section taken out).
+- Retired `reference_stripe_dashboard` (superseded by `reference_billing_dashboard`). Undo: say "bring back reference_stripe_dashboard".
+- Moved `feedback_ways_of_working` out of memory: two instructions added to .claude/rules/owner-preferences.md (Git 1, Questions 1), the "Laptop" section moved to `user_profile`, and the record retired. Undo: say "undo the move".
+- Promoted the lesson "The deploy check needs the VPN" to the project rule "Turn on the VPN before the deploy check." (Testing 1). Undo: say "take that rule out".
 - Moved the "Refunds" and "Disputes" sections from `project_billing` into the new concept `project_refunds`. Undo: say "undo the split".
 - Retired `project_deploy_monday` (archived). Undo: say "bring back project_deploy_monday".
-- Renamed `project_owner_prefers_spaces` to `user_prefers_spaces`. Links in 2 notes updated. Undo: say "rename it back".
+- Renamed `project_owner_laptop` to `user_laptop`. Links in 2 notes updated. Undo: say "rename it back".
 - Deleted `user_personal_email`, as you said: "yes to all". This cannot be undone. Older backups still hold that email address: the day folders in ~/Backups/toolkit and the export made before this tidy. Delete those copies if you want it gone everywhere.
 - Current focus: 41 lines.
 - Backup before the changes: ~/Backups/toolkit/shop-app-before-tidy-2026-09-28-1430. Backup after: ~/Backups/toolkit/shop-app-2026-09-28.

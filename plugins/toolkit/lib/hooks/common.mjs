@@ -4,6 +4,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { gitInfo, requireProject } from '../core/config.mjs';
+import { claudeHome } from '../project/hosts.mjs';
+
+/** The owner's rule file (lib/project/owner-rules.mjs RULE_FILE_NAME). */
+const RULE_FILE = 'owner-preferences.md';
 
 /**
  * The Toolkit V2 project for a folder, or null. Every hook exits silently with
@@ -37,25 +41,36 @@ function mtime(file) {
 /**
  * The modification times of the files a record changes, taken when a turn
  * starts. Stop compares them again: when one moved, something was recorded
- * this turn even if the PostToolUse hook did not see the command.
+ * this turn even if the PostToolUse hook did not see the command. The owner's
+ * rule files count too (Mike, 2026-09-29: an instruction is recorded as a
+ * rule): the project's .claude/rules/owner-preferences.md, and the one in the
+ * Claude Code user rules folder for every project.
  */
-export function recordBaseline(project) {
+export function recordBaseline(project, env = process.env) {
   const mainRoot = project.mainRoot || project.root;
   const info = gitInfo(mainRoot);
   const common = info ? path.join(info.commonDir, 'toolkit-v2') : null;
+  let machineRules = null;
+  try {
+    machineRules = mtime(path.join(claudeHome(env || process.env), 'rules', RULE_FILE));
+  } catch {
+    machineRules = null;
+  }
   return {
     memoryMeta: mtime(path.join(mainRoot, '.memory', '.toolkit-meta.json')),
     hindsightMeta: common ? mtime(path.join(common, 'hindsight-meta.json')) : null,
     memoryCache: common ? mtime(path.join(common, 'memory-cache.json')) : null,
     workState: mtime(path.join(mainRoot, '.work-items', '.toolkit-state.json')),
     decisions: mtime(path.join(project.root, 'DECISIONS.md')),
+    projectRules: mtime(path.join(project.root, '.claude', 'rules', RULE_FILE)),
+    machineRules,
   };
 }
 
-/** True when a file in the baseline changed since it was taken. */
-export function baselineMoved(project, baseline) {
+/** True when a file in the baseline changed since it was taken (a file made this turn counts). */
+export function baselineMoved(project, baseline, env = process.env) {
   if (!baseline) return false;
-  const now = recordBaseline(project);
+  const now = recordBaseline(project, env);
   return Object.keys(now).some((k) => now[k] !== null && now[k] !== baseline[k]);
 }
 

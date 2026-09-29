@@ -55,8 +55,9 @@ test('proposalQuestions finds "Save to memory: <summary>?" with bold or quote ma
   assert.deepEqual(proposalQuestions('Should I save it to memory?'), [], 'only the exact question form');
   assert.deepEqual(proposalQuestions('Save to memory: yes?'), [], 'a summary needs at least two words that carry meaning');
   assert.equal(proposalName('Mike runs tally only on his Mac mini with Node 22'), 'mike-runs-tally-only-his-mac-mini-node-22');
-  assert.equal(proposalType('Mike prefers short replies', 'Mike'), 'user');
-  assert.equal(proposalType('The agent should run tests before asking', 'Mike'), 'feedback');
+  assert.equal(proposalType('Mike prefers short replies', 'Mike'), 'rule', 'a preference about the replies is a rule proposal');
+  assert.equal(proposalType('Mike prefers hiking on weekends', 'Mike'), 'user');
+  assert.equal(proposalType('The agent should run tests before asking', 'Mike'), 'rule');
   assert.equal(proposalType('Deploys happen on Tuesdays', 'Mike'), 'project');
   const args = proposalArgs('Deploys happen on Tuesdays', { ownerName: 'Mike', date: '2026-09-28' });
   assert.ok(args.includes('--proposal'));

@@ -1,6 +1,6 @@
 ---
 name: reset-to-remote
-description: 'Makes the local repository an exact copy of its remote, discarding local changes and branches the remote no longer has, after showing a plan. Use only when the owner asks for that in his own words, for example "wipe local", "match remote exactly", or "fresh start from remote".'
+description: 'Makes the local repository an exact copy of its remote, discarding local changes and branches the remote no longer has, after showing a plan, so a stale checkout starts clean and nothing is lost by surprise. Use only when the owner asks for that in his own words, for example "wipe local", "match remote exactly", or "fresh start from remote".'
 ---
 
 # Reset to remote

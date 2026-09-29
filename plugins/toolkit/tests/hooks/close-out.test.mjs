@@ -100,11 +100,11 @@ test('R-M1: a loose memory question about an existing memory proposal gets no St
   }
 });
 
-test('R-M7: a proposal summary that starts with a verb to the agent is feedback', () => {
-  assert.equal(proposalType('Ask one requirements question at a time', 'Mike Rihm'), 'feedback');
-  assert.equal(proposalType('Always run the tests before asking for a review', 'Mike Rihm'), 'feedback');
-  assert.equal(proposalType('Never deploy on Fridays', 'Mike Rihm'), 'feedback');
-  assert.equal(proposalType('You prefer tabs over spaces', 'Mike Rihm'), 'user', 'a preference he states is still user');
+test('R-M7: a proposal summary that starts with a verb to the agent is a rule proposal (feedback_ is retired, 2026-09-29)', () => {
+  assert.equal(proposalType('Ask one requirements question at a time', 'Mike Rihm'), 'rule');
+  assert.equal(proposalType('Always run the tests before asking for a review', 'Mike Rihm'), 'rule');
+  assert.equal(proposalType('Never deploy on Fridays', 'Mike Rihm'), 'rule');
+  assert.equal(proposalType('You prefer tabs over spaces', 'Mike Rihm'), 'user', 'a preference about something other than the work is a fact about him');
   assert.equal(proposalType('The staging sandbox is called uat2', 'Mike Rihm'), 'project');
 });
 

@@ -20,7 +20,7 @@ import { today as localToday } from '../core/util.mjs';
 import {
   approvalNote, approvalText, assertKey, bodyTitle, isProposal, loadDriver, notFound, proposalTarget, splitKey, storedStatus, titleFromName,
 } from './contract.mjs';
-import { editConceptText, editRecordWith, isOneFact, mergeSections, withBodyTitle } from './concepts.mjs';
+import { editConceptText, editRecordWith, isOneFact, mergeSections, withBodyTitle, withLessonsSection } from './concepts.mjs';
 import { cacheIdentity, proposalRecords, readCache } from './startup.mjs';
 import { ownerWording } from './owner-wording.mjs';
 
@@ -174,6 +174,8 @@ export async function approveRecord(driver, key, { by, today = localToday(), own
   if (extra) {
     delete extra.concept;
     delete extra.section;
+    delete extra.rule_section;
+    delete extra.rule_scope;
   }
   const cleanExtra = extra ? { extra: Object.keys(extra).length ? extra : undefined } : {};
 
@@ -230,7 +232,7 @@ export async function approveRecord(driver, key, { by, today = localToday(), own
         authorization: approval,
         approved_by: who,
         supersedes: [],
-        body: shaped.body,
+        body: withLessonsSection(shaped.body),
       }, { expect: 'absent' });
       const removed = await driver.delete(k);
       return {
@@ -264,7 +266,7 @@ export async function approveRecord(driver, key, { by, today = localToday(), own
   let inPlace = body;
   if (oneFact) {
     const conceptTitle = String(title ?? '').replace(/\s+/g, ' ').trim() || titleFromName(rec.name);
-    inPlace = mergeSections(`# ${conceptTitle}\n`, [{ ...rec, body }]).body;
+    inPlace = withLessonsSection(mergeSections(`# ${conceptTitle}\n`, [{ ...rec, body }]).body);
   } else if (title) {
     inPlace = withBodyTitle(body, title);
   }

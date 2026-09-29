@@ -1,0 +1,21 @@
+$ toolkit work new --title "Probe item" --type task
+Created WI-003: Probe item (01 Discovery, Backlog) at .work-items/WI-003-probe-item/WORK-ITEM.md.
+Continue with work-requirements.
+$ toolkit work set WI-003 --stage 08-implementation
+Error: "08-implementation" is not a stage. Stages: 01-discovery, 02-refinement, 03-requirements-approved, 04-solution-design, 05-breakdown, 06-implementation-plan, 07-tracking-setup, 08-build, 09-testing, 10-bug-fixing, 11-user-approval, 12-pr-and-push, 13-deployment, 14-spec-update.
+$ toolkit work set WI-003 --stage 09-testing
+Updated WI-003: stage 01 Discovery -> 09 Testing (status In Progress).
+Now 09 Testing (In Progress). Continue with work-check.
+$ toolkit work set WI-003 --stage 11-user-approval --waiting-on owner
+Updated WI-003: stage 09 Testing -> 11 User approval (status In Progress); waiting on owner.
+Now 11 User approval (In Progress). Continue with work-decide.
+Note: WI-003 is at 11 User approval, and no acceptance-checker check is recorded since its last build. Before you ask the owner to approve the result, start one acceptance-checker that did not build it (work-check, step 3). It runs whoever built the change: "no agent team" or owner-led delivery does not remove it. Then record its verdict: toolkit work history WI-003 --note 'Checked: <what>; acceptance-checker: <its verdict>; evidence: <where>; gaps: <gaps or none>'. Only when this host has no way to start a worker, check it yourself and tell the owner that no independent check ran, and why.
+exit=0
+$ toolkit work approve WI-003 --result --by "Mike Rihm"
+Error: The result approval of WI-003 was not recorded: no acceptance-checker verdict is recorded since its last move to 08 Build or 10 Bug fixing. One acceptance-checker that did not build it checks the result first, whoever built it: "no agent team" or owner-led delivery does not remove it (the owner's decision of 2026-09-28). Nothing was changed.
+Fix: Start one acceptance-checker now (work-check, step 3), then record its verdict: toolkit work history WI-003 --note 'Checked: <what>; acceptance-checker: <its verdict>; evidence: <where>; gaps: <gaps or none>'. Then run this command again. Only when this host has no way to start a worker: add --no-independent-check --reason '<why no worker could start>', and tell the owner no independent check ran.
+exit=2
+$ toolkit work finish WI-003 --by "Mike Rihm" --evidence "probe"
+Error: WI-003 was not finished: no acceptance-checker verdict is recorded since its last move to 08 Build or 10 Bug fixing. One acceptance-checker that did not build it checks the result first, whoever built it: "no agent team" or owner-led delivery does not remove it (the owner's decision of 2026-09-28). Nothing was changed.
+Fix: Start one acceptance-checker now (work-check, step 3), then record its verdict: toolkit work history WI-003 --note 'Checked: <what>; acceptance-checker: <its verdict>; evidence: <where>; gaps: <gaps or none>'. Then run this command again. Only when this host has no way to start a worker: add --no-independent-check --reason '<why no worker could start>', and tell the owner no independent check ran.
+exit=2

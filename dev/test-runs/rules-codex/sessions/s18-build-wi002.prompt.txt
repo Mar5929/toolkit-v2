@@ -1,0 +1,1 @@
+Keep going with WI-002, the --cents option. Same Git approval as before (worktree, branch, commits). Also commit the table rule change that is still pending. No merge yet.

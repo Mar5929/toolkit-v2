@@ -4,8 +4,9 @@
 # tracker and memory in the main checkout, which a worktree cannot reach.
 # Run each toolkit command on its own line so this rule matches it.
 #
-# Five toolkit commands change things that are hard or impossible to undo, so
-# Codex asks the owner before each one (Mike, 2026-09-28, decision 12). When
+# Seven toolkit commands change things that are hard or impossible to undo,
+# or change every project on this computer, so Codex asks the owner before
+# each one (Mike, 2026-09-28, decision 12; toolkit rule --machine, 2026-09-29). When
 # several rules match a command, the strictest decision wins, so these prompt
 # rules hold even though the general rule below allows every toolkit command.
 # The approval alone does not move the command out of the sandbox: the agent
@@ -14,8 +15,9 @@
 # runs inside the sandbox and fails. Inside it, toolkit memory delete cannot
 # reach Hindsight or Notion, toolkit machine-setup cannot write
 # ~/.codex/config.toml or ~/.local/bin, toolkit hindsight service install
-# cannot write ~/Library/LaunchAgents, and toolkit import run from a worktree
-# cannot write the main checkout. With approvals turned off (codex exec),
+# cannot write ~/Library/LaunchAgents, toolkit rule add --machine cannot write
+# ~/.claude/rules, and toolkit import run from a worktree cannot write the
+# main checkout. With approvals turned off (codex exec),
 # Codex refuses these commands without asking; the agent then shows the owner
 # the exact command to run in a terminal. The toolkit refuses these commands
 # when a flag such as --json is written before the command words, because
@@ -51,6 +53,14 @@ prefix_rule(
     justification = "This installs or starts the Hindsight background service on this computer. It runs only after the owner's yes. Run it alone with sandbox_permissions require_escalated.",
     match = ["toolkit hindsight service install", "toolkit hindsight service start"],
     not_match = ["toolkit hindsight service status", "toolkit hindsight health"],
+)
+
+prefix_rule(
+    pattern = ["toolkit", "rule", ["add", "update"], "--machine"],
+    decision = "prompt",
+    justification = "toolkit rule add --machine or update --machine changes the owner's rules for every project on this computer (~/.claude/rules/owner-preferences.md). It runs only after the owner's yes. Run it alone with sandbox_permissions require_escalated.",
+    match = ["toolkit rule add --machine --section Replies --text 'Lead with the answer.' --source 'Mike in chat'", "toolkit rule update --machine --section Replies --entry 1 --remove"],
+    not_match = ["toolkit rule add --section Replies --text 'Lead with the answer.' --source 'Mike in chat'", "toolkit rule list --machine"],
 )
 
 prefix_rule(

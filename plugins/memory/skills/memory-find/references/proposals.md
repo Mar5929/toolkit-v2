@@ -8,6 +8,7 @@ or no is recorded.
 
 - What a proposal is
 - How a proposal is saved
+- Rule proposals
 - Recording the owner's answer
 - Examples
 
@@ -26,7 +27,8 @@ that a "Save to memory?" question he did not answer is kept, not lost.
 - `toolkit work decisions` and the session briefing list it among the things
   waiting on the owner, and the `work-decide` skill asks him about it.
 - The built-in index marks it "[proposal: not a fact until the owner
-  answers]". In Notion its Status is "proposed".
+  answers]", or "[proposal for <concept>: ...]" when it names a concept. In
+  Notion its Status is "proposed".
 - A proposal never replaces a record the owner approved. The CLI refuses a
   proposal whose key is already a current or retired record.
 - Concept memory: a proposal for a fact that belongs in an existing concept
@@ -82,6 +84,46 @@ that a "Save to memory?" question he did not answer is kept, not lost.
 
 `--proposal` cannot go with `--approved-by` or `--authorization`; the CLI
 refuses the pair.
+
+When a save with `--approved-by` runs in a turn whose message from the owner
+held no keep phrase, no other words asking for a save, and no answer to a
+memory question (the hooks record this), the CLI saves a new record or
+section as a proposal instead and says so ("Saved as a proposal, not as
+approved"). Then ask him, as below.
+
+A proposal the Stop hook saved says what it came from on its Evidence and
+limits line: the question as asked, and, when the owner's message that turn
+stated the fact, his words ("On <date> the owner wrote "..."").
+
+## Rule proposals
+
+An instruction for how the agent works is a rule, not memory (the owner's
+decision of 2026-09-29). When the agent inferred one, it asks "Add to the
+project rules: <one line>?". An unanswered one, and a "Save to memory:
+<one line>?" question whose line is such an instruction (a preference about
+how work is done, a correction, a sentence that starts with a verb to the
+agent), is kept as a rule proposal: a proposal typed `user` whose
+`rule_section` field names the section of `.claude/rules/owner-preferences.md`
+it would join. The list shows "[rule proposal for .claude/rules/owner-preferences.md,
+section "<area>": the owner has not answered]".
+
+- Saving one yourself:
+
+  ```text
+  toolkit memory save --type user --name rule-<slug> --description '<the instruction in one line>' --body-file <file> --source '<person or document>, <YYYY-MM-DD>' --rule-section '<area>' --proposal
+  ```
+
+- His yes writes the rule and removes the proposal. The instruction is the
+  proposal's Remember line; `--text` gives better words, and `--section`
+  another area:
+
+  ```text
+  toolkit memory approve <key> --by <owner>
+  ```
+
+- His no: `toolkit memory reject <key>`, as for any proposal.
+- An older `feedback_` proposal is a rule proposal too: his yes writes it to
+  the rules, in the section `--section` names (General when none).
 
 ## Recording the owner's answer
 
@@ -152,8 +194,8 @@ The record keeps his name; the question speaks to him.
   The proposal is deleted (Notion: the Notion trash). A rejection stands:
   never propose the same fact again under other words, and never put it in
   the current focus, the glossary, or another record. When his no gives a
-  general rule about what to save ("don't keep my travel plans"), save only
-  that rule, as a `feedback` record.
+  general rule about what to save ("don't keep my travel plans"), write only
+  that rule, with `toolkit rule add`.
 - **No answer:** leave it. It stays a proposal until he answers, here or when
   `work-decide` asks.
 

@@ -327,10 +327,13 @@ error, 2 validation failure, 3 not supported for this tracker/backend, 4 not a
 toolkit project. Every write is read back; a failed read-back prints "saved but
 not verified" and exits 1.
 
-Six commands ask the owner first in both hosts (decision 12): `machine-setup`,
-`memory delete`, `memory import`, `import`, `hindsight service install`, and
-`hindsight service start` (`ASK_FIRST_COMMANDS` in `lib/cli.mjs`; the Claude
-Code `permissions.ask` entries and the Codex `prompt` rules). Both match only
+Eight commands ask the owner first in both hosts (decision 12): `machine-setup`,
+`memory delete`, `memory import`, `import`, `hindsight service install`,
+`hindsight service start`, and (Mike, 2026-09-29) `rule add --machine` and
+`rule update --machine` (`ASK_FIRST_COMMANDS` in `lib/cli.mjs`; the Claude
+Code `permissions.ask` entries and the Codex `prompt` rules). The rule command
+refuses `--machine` anywhere but right after `add` or `update`, because both
+hosts match the words in that order. Both match only
 when the command words come right after `toolkit`, so the CLI refuses these
 commands (exit 2) when `--json` or `--host` is written before them. In Codex
 the approval alone keeps the command inside the sandbox; the agent runs it
@@ -366,10 +369,37 @@ toolkit handoff-backup                        the automatic backup (decision 13)
                                               new computer), it writes <day folder>-<HHMMSS> and keeps the earlier one
 toolkit index knowledge [--check]             regenerate ai-external-knowledge/INDEX.md (I16)
 toolkit decision add --decision <t> --why <t> --by <name> [--replaces D-n] | list
+toolkit rule add [--machine] --section <area> --text <instruction> --source <who said it, where> [--date <YYYY-MM-DD>]
+toolkit rule update [--machine] --section <area> (--entry <n> | --match <words>) (--text <instruction> --source <t> | --remove)
+toolkit rule list [--machine | --project]
+                                              the owner's instructions for how the agent works (Mike, 2026-09-29: rules,
+                                              skills, and memory each hold one kind of thing): one line per instruction in its
+                                              area's "## " section of .claude/rules/owner-preferences.md (always on; made on
+                                              first use), ending "(<date>, <source>)"; lines the toolkit did not write are kept;
+                                              the AGENTS.md rules list is rebuilt so Codex reads the file (JSON: agentsUpdated);
+                                              --machine writes owner-preferences.md in ~/.claude/rules/ ($CLAUDE_CONFIG_DIR/rules/),
+                                              which the Codex briefing names; the same instruction twice in a section is refused
+                                              (exit 2); a secret is refused; every change holds a lock on the rules folder and is
+                                              read back; in a turn the hooks recorded with no keep phrase, no other save words,
+                                              and no answer to a memory or rule question (lib/hooks/turn-facts.mjs), a project
+                                              add saves a rule proposal in memory instead (toolkit memory save --proposal
+                                              --rule-section) and update is refused (exit 2); the output's Commit line names
+                                              the changed files: one file (the one-file exception in shared-repository-work.md),
+                                              or, on the first rule, the rule file and AGENTS.md (two files: commit in the
+                                              agent's own worktree, or ask the owner in the shared primary checkout); after an
+                                              add it prints the file's sections, the other scope's sections, and the lines of
+                                              the section it wrote (JSON: sections, sectionEntries, otherSections); warnings,
+                                              with the change still made (JSON: warnings): over 4 KB or 50 instructions, a line
+                                              that names nothing to check, a line that repeats or contradicts one in either
+                                              owner-preferences.md, another project rule, or AGENTS.md (the purpose line under
+                                              each owner file's title is not compared), and a new section whose heading shares
+                                              a word with one that exists (Mike, 2026-09-29, rules best practices)
 
 toolkit work lifecycle
 toolkit work new --title <t> [--type <t>] [--parent <id> [--covers R-02,R-03]] [--stage <s>] [--priority <p>] [--request <text>] [--group <folder>]
-                                              a sub-item takes its parent's delivery value when the parent has agent-led or owner-led
+                                              a sub-item takes its parent's delivery value when the parent has agent-led or owner-led,
+                                              except owner-led recorded by the small-item rule: then it stays not-offered and a note
+                                              says the parent's delivery offer is looked at again (JSON: notes; close-out finding 3)
 toolkit work list [--status <s>] [--waiting-on <w>] [--tree] [--all]
 toolkit work show <id> [--section <heading>] [--path] [--json]
                                               also prints "Worktree branch for this item: claude/<prefix>-<nnn>-<slug>
@@ -381,7 +411,9 @@ toolkit work show <id> [--section <heading>] [--path] [--json]
 toolkit work edit <id> --section <heading> --set-file <f> | --text <t> | --append-row <text> | --label <name> --value <t> | --remove-guide
                                               prints the validation warnings the saved section causes (JSON: warnings);
                                               a new Open Questions row for the owner with no "Recommend..." in its
-                                              Question cell gets a "Note:" (level note)
+                                              Question cell gets a "Note:" (level note); an edit that gives an item recorded
+                                              owner-led as a small item sub-items, two phases, or more than two tasks gets a
+                                              "Note:" (DELIVERY_RELOOK)
 toolkit work set <id> [--stage] [--waiting-on] [--priority] [--type] [--delivery] [--title] [--parent <id|none>] [--reopen] [--note <why>]
                                               a waiting_on-only change adds no history row (with --note it gets its own row);
                                               --delivery agent-led|owner-led marks the open delivery question Answered and
@@ -391,21 +423,33 @@ toolkit work set <id> [--stage] [--waiting-on] [--priority] [--type] [--delivery
                                               a stage moved to 11 with no acceptance-checker history note since the last
                                               move to 08 or 10 gets a note (decision of 2026-09-28, evening)
                                               (JSON: notes, folder, closedQuestions, warnings)
-toolkit work approve <id> --requirements|--design|--result --by <name>
+toolkit work approve <id> --requirements|--design|--result --by <name> [--no-independent-check --reason <text>]
+                                              --result refuses (exit 2, gate acceptance_check_missing) unless an
+                                              "acceptance-checker: <verdict>" history note follows the item's last move to 08 or
+                                              10 (close-out R-B1 in code); --no-independent-check --reason <text> (only when the
+                                              host cannot start a worker) records the reason in the history row
+                                              ("... without an independent acceptance check: <reason>");
                                               marks the open questions that asked for that approval Answered and prints
                                               "Marked Q-xx Answered" (JSON: closedQuestions); a design approval is all or
                                               nothing: design text alone never approves a design; --design refuses (exit 2)
                                               while "## Selected design" still says "Pending owner decision" (confirm-a);
                                               after any approval, a note when the Overview's Next action still asks for it;
                                               after --design, a note naming template sections the design lacks;
-                                              after --result with no acceptance-checker check since the last build, a note
 toolkit work design <id> [--create] [--set-file <f> | --text <t>] [--status proposed|approved|superseded]
                                               text starting with work_item/status/approved lines without --- fences is
                                               read as the header (with a note); a proposed design saved with text gets a
                                               note naming the template's "## " sections it lacks (final confirmation 1)
 toolkit work history <id> --note <text> [--effect <text>]
+                                              a note that starts "Result approved by" is refused (exit 2): only work approve
+                                              writes that row (verifier, 2026-09-29)
 toolkit work move <id> --under <id|group|archive|root>
-toolkit work finish <id> --by <name> --evidence <text> [--quote <owner's words>] [--allow-open-sub-items]
+toolkit work finish <id> --by <name> --evidence <text> [--quote <owner's words>] [--allow-open-sub-items] [--no-independent-check --reason <text>]
+                                              refuses (exit 2) unless an acceptance-checker verdict, or a result approval recorded
+                                              with --no-independent-check (only the row work approve writes, "Result approved by
+                                              <who> without an independent acceptance check: <reason>", and only while the item
+                                              has a recorded result approval; a note with those words does not count; verifier,
+                                              2026-09-29), follows the last move to 08 or 10; the flag records
+                                              its reason in the Finished row;
                                               then the automatic backup, as toolkit handoff-backup (JSON: backup); with
                                               nothing on this computer to back up it says "No automatic backup: ..."
 toolkit work cancel <id> --reason <text>
@@ -414,13 +458,43 @@ toolkit work next                             the next item; its count of decisi
 toolkit work decisions                        everything waiting on the owner, memory proposals included (JSON:
                                               memoryProposals; count includes them; memoryProblem when memory cannot be read);
                                               "Agent to-do" also lists an item at 11 with no acceptance check (kind
-                                              acceptance_check, continue with work-check)
+                                              acceptance_check, continue with work-check), and the delivery offer again for an
+                                              item recorded owner-led as a small item that grew (stages 03 to 08)
 toolkit work sync                             rescan, adopt, renumber duplicates, derive values, dashboard, report moves
 toolkit work validate [<id|file>]              summary: "<n> clean, <n> errors, <n> approval gate problems", then how many
                                               open questions wait on the owner
 
-toolkit memory save --type <t> --name <slug> --description <d> (--body <t> | --body-file <f>) [--section <heading>] [--title <t>] [--source <text>] [--approved-by <who>] [--authorization <text>] [--supersedes <key>] [--status <s>] [--last-verified <YYYY-MM-DD|unknown>] [--expect <version|absent>] [--proposal] [--allow-similar] [--new-concept]
-toolkit memory save --concept <key> --section <heading> (--body <t> | --body-file <f> | --remove) [--append] [--description <d>] [--title <t>] [--name <slug>] [--type <t>] [--source <text>] [--approved-by <who>] [--authorization <text>] [--last-verified <YYYY-MM-DD|unknown>] [--expect <version>] [--proposal] [--allow-similar] [--new-concept]
+toolkit memory save --type <t> --name <slug> --description <d> (--body <t> | --body-file <f>) [--section <heading>] [--title <t>] [--source <text>] [--approved-by <who>] [--authorization <text>] [--supersedes <key>] [--status <s>] [--last-verified <YYYY-MM-DD|unknown>] [--expect <version|absent>] [--proposal] [--allow-similar] [--new-concept] [--not-a-rule]
+toolkit memory save --concept <key> --section <heading> (--body <t> | --body-file <f> | --remove) [--append] [--description <d>] [--title <t>] [--name <slug>] [--type <t>] [--source <text>] [--approved-by <who>] [--authorization <text>] [--last-verified <YYYY-MM-DD|unknown>] [--expect <version>] [--proposal] [--allow-similar] [--new-concept] [--not-a-rule]
+toolkit memory save --concept <key> --lesson <heading> [--body <t> | --body-file <f>] [--source <text>]
+toolkit memory save --type user --name <slug> --description <d> --body <t> --proposal --rule-section <area>
+                                              four types (Mike, 2026-09-29): user, project, reference, event; a new feedback_
+                                              record or fact is refused (exit 2) with the toolkit rule add command, whatever
+                                              --expect it carries (--expect absent, or a new section or --append with the
+                                              concept's version: verifier, 2026-09-29); an older one is still read; replacing
+                                              one of its sections with --expect <version>, and --remove, still work;
+                                              an instruction the owner gave this turn with a keep phrase (the hooks' turn
+                                              facts), saved as a user_ or project_ record or section that is not a proposal, is
+                                              refused (exit 2) when its Remember line (else the description or heading) reads
+                                              as an instruction (proposalType 'rule'), with the toolkit rule add command
+                                              (JSON: rule { section, text }); --not-a-rule says it is a fact (verifier,
+                                              2026-09-29: the Codex rerun s08 saved "from now on, write tests with node:test"
+                                              as a user_ section);
+                                              --lesson: a "### <heading>" with a "**Seen:** <date> (<source>)" line under the
+                                              concept's "## Gotchas and lessons" section (made when missing, "None yet." taken
+                                              out); the same heading again adds today's date, and on a day already there an
+                                              entry with another source (a second session that day); no approval (the agent's
+                                              own know-how); a new concept gets the Gotchas and lessons section, last, and a
+                                              new section goes before it; an event does not (it holds one episode);
+                                              --rule-section: a rule proposal (typed user; frontmatter rule_section,
+                                              rule_scope), which approve writes to .claude/rules/owner-preferences.md;
+                                              --approved-by in a turn the hooks recorded with no keep phrase, no other save
+                                              words, and no answer to a memory question saves a new record (no --expect, or
+                                              --expect absent), a new section, or --append text as a proposal instead, even
+                                              with the concept's --expect version, and says so (JSON: downgraded; close-out
+                                              R-I4 in code; verifier, 2026-09-29); not a replacement of text already there
+                                              with --expect <version>, --supersedes, or --remove; an added section whose heading shares no
+                                              word with the concept's summary gets a line to check the summary
                                               concept memory (Mike, 2026-09-28): one record per concept, a "## " section
                                               per fact; --concept adds a section, replaces one (--expect), adds under one
                                               (--append), or removes one (--remove, --expect; links to it then point at the
@@ -444,13 +518,34 @@ toolkit memory find <query> [--reflect] [--type <t>] [--limit <n>] [--all] [--pr
                                               a mid score "may be about it" (read it first); the rest "closest"; never a guess
 toolkit memory get <key> | list [--type] [--status]   list: key, title, summary, updated date
 toolkit memory merge <key> [<key> ...] --into <key> --approved-by <owner> [--title <t>] [--description <d>]
+                                              a feedback_ record may merge into a concept of another type (migration); no
+                                              record merges into a feedback_ key;
                                               each record becomes a section of the concept (made when missing) and is
                                               retired as superseded by it; links follow to <concept>.md#<section>
 toolkit memory split <key> --section <heading> [--section <heading>] --into <key> --approved-by <owner> [--title <t>] [--description <d>]
                                               sections move to another concept; links to them follow
 toolkit memory tidy --plan                    changes nothing: which one-fact records to merge into which concepts
-                                              (merge commands with a draft summary), and concepts over 300 lines or 20 sections
-toolkit memory approve <key> --by <name> [--concept <key>] [--title <t>] [--description <d>]
+                                              (merge commands with a draft summary), and concepts over 300 lines or 20 sections;
+                                              feedback_ records to move out, each part with the rule add command and the split
+                                              command (merge for a record with no "## " sections; JSON: migrate, whole);
+                                              lessons that proved themselves: two or more sessions on the Seen line (dates, or
+                                              one date with different sources), a lesson sharing three words and half its words
+                                              in another concept, or "Owner confirmed" (JSON: promotions)
+toolkit memory promote <key> --section <lesson heading> --to rule|skill [--rule-section <area>] [--text <t>] [--skill-name <name>] [--approved-by <owner>]
+                                              without --approved-by: prints the proposal and the question for the owner, changes
+                                              nothing; with it: rule, the instruction goes into owner-preferences.md (and the
+                                              AGENTS.md list); skill, a SKILL.md skeleton at .claude/skills/<name>/ (or
+                                              .agents/skills/ for a Codex-only project) for the agent to fill; then the lesson
+                                              gets "**Promoted:** <date>, to <where>."; a lesson promoted once is refused;
+                                              --approved-by in a turn the hooks recorded with no keep phrase, no other save words,
+                                              and no answer to a memory or rule question is refused (exit 2), as rule update is
+                                              (verifier, 2026-09-29); the ask "Make this a project rule: ...?" or "Turn the
+                                              lesson ... into a project skill (...)?" counts as such a question for the answer
+toolkit memory approve <key> --by <name> [--concept <key>] [--title <t>] [--description <d>] [--section <area>] [--text <instruction>]
+                                              a rule proposal (rule_section, or an older feedback_ proposal): the instruction
+                                              (its Remember line with the owner named, or --text) is added to
+                                              .claude/rules/owner-preferences.md in its section (or --section), the AGENTS.md
+                                              rules list is rebuilt, and the proposal is removed (JSON: rule);
                                               the owner's yes: the record becomes current, "Approved by <name> on <date>";
                                               a proposal the Stop hook saved also loses its "Do not rely on this" words, and
                                               its Evidence line names who approved it and when; its title, Remember line, and
@@ -494,21 +589,34 @@ use recorded real inputs from both hosts.
 | Event | Matcher | Does |
 | --- | --- | --- |
 | SessionStart | `startup\|resume\|clear\|compact\|fork` | Inside a V2 project only (decision 10: the toolkit plugin is on in every folder): refreshes the plugin-root pointer, only from an installed copy, never to an older version, and at the same version a plugin cache copy replaces the source folder (final review I1); in Codex records the hash of the `hooks/codex-hooks.json` it ran from in `~/.config/toolkit-v2/codex-hooks-seen.json`, which doctor compares with Codex's newest copy (M10); makes the automatic backup of `.work-items/` and `.memory/` when `backup.dir` is set and the last backup is more than a day old, and adds one line about it (decision 13); runs `work sync` (local); prints the briefing as `additionalContext`, about 6,000 characters max: this worktree's item, active items with their next skill, waiting on the owner, current focus, moves detected, setup warnings (hook failures of the last 3 days included), the owner's setup steps in the focus that are done now (a focus line that names several steps is done only when all are; Codex hook trust is read from `~/.codex/config.toml`, never inferred from a hook that ran, because `--dangerously-bypass-hook-trust` runs untrusted hooks), a plain statement that `AGENTS.md` is the project manual. Codex adds the always-on rules list and the voice section. Notion and Hindsight read a Git-ignored cache (refreshed on every write) with 2-second timeouts and fail open (I9). The Notion check only reads the row properties to report the owner's moves; it writes nothing, and the next `toolkit work` command records the history rows (sample run c, round 2). |
-| UserPromptSubmit | none | Records the turn in session state; cheap tracker rescan (reports moves); when the prompt contains an explicit keep phrase ("remember that/this", "from now on", "don't ever", "note that", "going forward", "keep in mind"; never "do you remember", "never mind", "always fails"), adds one factual line: "The owner stated something to keep; memory-save records it, or work-on if it is a task." (I14). Also records whether the prompt holds wider save words ("remember", "save", "memory", "always", "never", "forget", "instead") and whether the reply before it asked the owner a memory question (set by Stop), for the PostToolUse approval note (re-review R-I4). |
-| PreToolUse | Claude `Write\|Edit\|MultiEdit\|Bash`; Codex `^apply_patch$\|^Bash$` | Denies hand edits of generated files (`DASHBOARD.md`, `.toolkit-state.json`, `.memory/MEMORY.md`, `ai-external-knowledge/INDEX.md`) with the command to use; denies `git clean` with `-x`/`-X` in the main checkout (I17), and `rm -r` of the main checkout's `.work-items/` (local tracker) or `.memory/` (built-in memory), whole or its contents (re-review R-M10); denies `git add -A`, `git add .`, `git commit -a`, force pushes (the model's settings deny list, now in both hosts, P11); denies a `git commit`, `git merge`, `git tag`, or `git notes`, a `gh pr create`/`edit`/`comment`/`review`/`merge`, a `gh issue create`/`edit`/`comment`, a `gh release create`/`edit`, or a `gh api` call on a pull request, issue, or release path, whose text or message file gives an AI credit (a `Co-Authored-By` line naming an AI, a "Generated with" line, or "Generated with/by/using" in the middle of a line when an AI's name is one of the next three words; sample run claude-a; final review M1); denies a `toolkit` command whose double-quoted text holds a backtick, or that reads an unquoted here-document (`<<EOF`) holding a backtick or `$(...)`, because the shell would run that text (sample run a, round 3); adds a note when a double-quoted `toolkit` argument holds `$(...)`. Codex only: adds a note (additionalContext, never a refusal) when a `toolkit` command is joined to other commands, sits in a heredoc, or runs from a script or loop, because it then runs inside the sandbox (sample runs, round 2), and when a `toolkit` command writes an apostrophe as `'\''` (the command rule does not match it, so it runs inside the sandbox) or leaves a quote unmatched (Codex drops the backslash): write ’ (U+2019) or reword (final review I7). Salesforce projects: the protected-org and permission-set guards run here too, with every `ask` turned into `deny` in Codex (I8). |
-| PostToolUse | Claude `Write\|Edit\|MultiEdit\|Bash`; Codex `^apply_patch$\|^Bash$` | Records `toolkit memory save` / work-item edits in session state. After a work-item record changes: validates only (never rewrites the file, I2) and returns `additionalContext` with any error or gate question; `decision: block` only for a gate violation. A direct edit of an approved `DESIGN.md` gets a line every time (tell the owner, record a history note); any other direct record edit gets the "use toolkit work edit" reminder once per file per session (confirm-a). After a `.memory/` topic change: reindex under the lock. A `toolkit memory save --approved-by` (not `--proposal`) in a turn whose prompt had no keep phrase or save words and did not answer a memory question gets a note: a remark made in passing is a proposal; ask "Save to memory: ...?" (re-review R-I4). |
-| Stop | none | Memory proposals (final review I5; goal adjustment 2): when `last_assistant_message` (both hosts) asks "Save to memory: <summary>?" (bold before the colon and "project memory" allowed; a sentence that reports an earlier question or a save does not count) and no `--proposal` save ran this turn, the hook runs `toolkit memory save --proposal` itself (same duplicate and secret checks; at most once per summary per session; never for a summary whose text this turn already saved; a summary that looks like a secret is never saved or repeated). A summary that starts with "you" is saved with the owner's name ("Mike Rihm publishes Mike's blog"), and the Evidence line quotes the question as asked; a preference the owner states is `user`, even about the agent; a summary that starts with a verb to the agent ("Ask one question at a time") is `feedback` (re-review R-M7); the key does not repeat its type word; a title over 100 characters is cut at a clause. A record found only because it is about the same subject does not stop it: the hook saves again with `--allow-similar`, because the owner reviews every proposal. It never blocks for this, and the next UserPromptSubmit names the key once; a refused save is named with the similar key ("about the same subject; check whether it is the same fact", or approve/reject when that key is a proposal), never with an instruction to update another record. Then, guarded by `stop_hook_active`, blocks at most once per turn when: the message asks to save something to memory in other words ("Save it to memory?", "saved as a standing preference?"), the turn saved nothing to memory, and the message is not about a memory proposal that exists (it says "memory proposal", names a record key, or quotes a summary this session proposed; re-review R-M1) (reason: ask it as "Save to memory: <one line>?" or save the proposal now); this turn had a keep phrase and nothing was recorded (a proposal the hook saved does not count; the block names it and the `toolkit memory approve` that records the owner's words, which also finishes the hook's body); or a work-item record changed this turn and fails validation. Reason text never contains the keep phrases (P8). Otherwise silent. |
+| UserPromptSubmit | none | Records the turn in session state; cheap tracker rescan (reports moves); when the prompt contains an explicit keep phrase ("remember that/this", "from now on", "don't ever", "note that", "going forward", "keep in mind", or "Always ..."/"Never ..." opening a sentence (close-out finding 10); never "do you remember", "never mind", "it always fails"), adds one factual line that names both homes: "The owner stated something to keep. memory-save picks its home: an instruction for how the agent works goes to the rules (toolkit rule add), a fact to memory; work-on if it is a task." (I14; Mike, 2026-09-29). Writes the turn's facts (prompted, keep phrase, save words, answers a memory question) to `<git common dir>/toolkit-v2/turns/<session id>.json`, which a `toolkit` command finds from `CLAUDE_CODE_SESSION_ID` (Claude Code) or `CODEX_THREAD_ID` (Codex) (`lib/hooks/turn-facts.mjs`; R-I4 in code), and keeps the prompt (no secret, 600 characters) in session state for the Stop hook's Evidence line. Also records whether the prompt holds wider save words ("remember", "save", "memory", "forget", "instead", "always" or "never" after "you", "we", "please", "should", "must", or "to", and a request about the rules or his preferences such as "change that rule", "add it to the project rules", "my preferences"; never a rule the project has, such as "the validation rule on Account" or "the sharing rules", and never "it always fails"; verifier, 2026-09-29) and whether the reply before it asked the owner a question about memory, the rules, or a lesson to promote (set by Stop; a period inside a file name does not end the question), for the PostToolUse approval note (re-review R-I4). |
+| PreToolUse | Claude `Write\|Edit\|MultiEdit\|Bash`; Codex `^apply_patch$\|^Bash$` | Denies hand edits of generated files (`DASHBOARD.md`, `.toolkit-state.json`, `.memory/MEMORY.md`, `ai-external-knowledge/INDEX.md`) with the command to use; denies `git clean` with `-x`/`-X` in the main checkout (I17), and `rm -r` of the main checkout's `.work-items/` (local tracker) or `.memory/` (built-in memory), whole or its contents (re-review R-M10); denies `git add -A`, `git add .`, `git commit -a`, force pushes (the model's settings deny list, now in both hosts, P11); denies a `git commit`, `git merge`, `git tag`, or `git notes`, a `gh pr create`/`edit`/`comment`/`review`/`merge`, a `gh issue create`/`edit`/`comment`, a `gh release create`/`edit`, or a `gh api` call on a pull request, issue, or release path, whose text or message file gives an AI credit (a `Co-Authored-By` line naming an AI, a "Generated with" line, or "Generated with/by/using" in the middle of a line when an AI's name is one of the next three words; sample run claude-a; final review M1); denies a `toolkit` command whose double-quoted text holds a backtick, or that reads an unquoted here-document (`<<EOF`) holding a backtick or `$(...)`, because the shell would run that text (sample run a, round 3); adds a note when a double-quoted `toolkit` argument holds `$(...)`. Codex only: adds a note (additionalContext, never a refusal) when a `toolkit` command is joined to other commands, sits in a heredoc, or runs from a script or loop, because it then runs inside the sandbox (sample runs, round 2), and when a `toolkit` command writes an apostrophe as `'\''` (the command rule does not match it, so it runs inside the sandbox) or leaves a quote unmatched (Codex drops the backslash): write ’ (U+2019) or reword (final review I7). A script (python, node) that names a work item record is let through when every file it writes is a quoted file name that is not a record and it copies, moves, or renames no file and starts no other program (`shutil`, `os.replace`, a Path's `replace` or `rename`, `subprocess`, `copyFileSync`, `child_process`, and the like: then it is refused as before) (`scriptWriteTargets` in `lib/hooks/records.mjs`; close-out finding 7; verifier, 2026-09-29). Salesforce projects: the protected-org and permission-set guards run here too, with every `ask` turned into `deny` in Codex (I8). |
+| PostToolUse | Claude `Write\|Edit\|MultiEdit\|Bash`; Codex `^apply_patch$\|^Bash$` | Records `toolkit memory save` / work-item edits in session state. After a work-item record changes: validates only (never rewrites the file, I2) and returns `additionalContext` with any error or gate question; `decision: block` only for a gate violation. A direct edit of an approved `DESIGN.md` gets a line every time (tell the owner, record a history note); any other direct record edit gets the "use toolkit work edit" reminder once per file per session (confirm-a). After a `.memory/` topic change: reindex under the lock. A `toolkit memory save --approved-by` (not `--proposal`) in a turn whose prompt had no keep phrase or save words and did not answer a memory question gets a note: a remark made in passing is a proposal; ask "Save to memory: ...?" (re-review R-I4); no note when the command's output says it saved a proposal itself. Records `toolkit rule add` and `update`, and `toolkit memory promote --approved-by`, as rule changes (kind `rule`). In such a turn, a project `rule add` or `update`, or a `promote --approved-by`, that went through (the command could not read the turn's facts: no session id) gets a note: ask "Keep this project rule: ...?", undo on a no. In a turn with a keep phrase, a `toolkit memory save` to a `user_` or `project_` record, not `--proposal` or `--not-a-rule`, whose Remember line (else description or heading) reads as an instruction (`proposalType` 'rule') gets a note: move it to the rules with `toolkit rule add` (verifier, 2026-09-29). A command run with `--help` records nothing (close-out finding 11). |
+| Stop | none | Memory proposals (final review I5; goal adjustment 2): when `last_assistant_message` (both hosts) asks "Save to memory: <summary>?" or "Add to the project rules: <summary>?" (bold before the colon and "project memory" allowed; a sentence that reports an earlier question or a save does not count) and no `--proposal` save ran this turn, the hook runs `toolkit memory save --proposal` itself. An instruction for how the agent works (the rules form, a preference about how work is done such as "you find tables easier ...", a correction, or a verb to the agent; `proposalType` 'rule') is saved as a rule proposal (`--rule-section`, typed user, no concept suggested; C1); a fact that belongs in a concept gets a heading of a few words (`shortHeading`; finding 6); when the owner's prompt that turn stated the fact, the Evidence line quotes it (`statedInPrompt`; finding 5) (same duplicate and secret checks; at most once per summary per session; never for a summary whose text this turn already saved; a summary that looks like a secret is never saved or repeated). A summary that starts with "you" is saved with the owner's name ("Mike Rihm publishes Mike's blog"), and the Evidence line quotes the question as asked (the owner's quoted words keep their own closing period, with none added after the quote); a preference the owner states about how work is done, a correction, and a summary that starts with a verb to the agent ("Ask one question at a time", "Lead every reply with the answer") are `rule` proposals, a fact about the owner himself is `user`, anything else `project` (`proposalType`; Mike, 2026-09-29, replacing re-review R-M7's `feedback`); the key does not repeat its type word; a title over 100 characters is cut at a clause. A record found only because it is about the same subject does not stop it: the hook saves again with `--allow-similar`, because the owner reviews every proposal. It never blocks for this, and the next UserPromptSubmit names the key once; a refused save is named with the similar key ("about the same subject; check whether it is the same fact", or approve/reject when that key is a proposal, with the key itself in the commands when there is one), in the form it was asked ("Add to the project rules: ...?" or "Save to memory: ...?"), never with an instruction to update another record. Then, guarded by `stop_hook_active`, blocks at most once per turn when: the message asks to save something to memory in other words ("Save it to memory?", "saved as a standing preference?"), the turn saved nothing to memory, and the message is not about a memory proposal that exists (it says "memory proposal", names a record key, or quotes a summary this session proposed; re-review R-M1) (reason: ask it as "Save to memory: <one line>?" or save the proposal now); this turn had a keep phrase and nothing was recorded: no rule (`toolkit rule add` or `update`, `memory promote --approved-by`, or a change to the project's `.claude/rules/owner-preferences.md` or the one in the Claude Code user rules folder, found by modification time; verifier, 2026-09-29), memory save, work item change, or decision (a proposal the hook saved does not count; the block names it and the `toolkit memory approve` that records the owner's words, which also finishes the hook's body; the reason names both homes: `toolkit rule add` for an instruction, memory for a fact); or a work-item record changed this turn and fails validation. Reason text never contains the keep phrases (P8). Otherwise silent. |
 
 Session state: `$CLAUDE_PLUGIN_DATA` or `$PLUGIN_DATA`, else
 `<git-common-dir>/toolkit-v2/sessions/<session_id>.json` (B4).
 
 ## 7. Memory
 
+- **Rules, skills, and memory** (Mike, 2026-09-29; GOAL "Rules, skills, and
+  memory each hold one kind of thing"): the owner's instructions for how the
+  agent works are rules (`toolkit rule add`: `.claude/rules/owner-preferences.md`,
+  or `~/.claude/rules/` with `--machine`); a procedure that proved itself is a
+  skill; memory holds facts and unproven know-how, with four prefixes (`user_`,
+  `project_`, `reference_`, `event_`). `feedback_` is retired: a new one is
+  refused, an older one is read, doctor warns (`memory-feedback-retired`), and
+  `tidy --plan` lists how to move it (`lib/memory/lessons.mjs`). Each concept
+  ends with "## Gotchas and lessons" (`--lesson`); a lesson seen in two
+  sessions, like one in another concept, or confirmed by the owner is a
+  promotion candidate (`toolkit memory promote`). A rule proposal is a
+  needs-review `user_` record with `rule_section`; approve writes the rule.
 - **Concept memory** (Mike, 2026-09-28; GOAL "Concept memory, like
   Anthropic's project memory"; `lib/memory/concepts.mjs`): one record (file,
-  Hindsight document, Notion Memories row) per concept or area, keeping the
-  five prefixes (`feedback_ways_of_working`, `project_billing`); an `event_`
-  record holds one episode. Title (`# ` line), one-line summary
+  Hindsight document, Notion Memories row) per concept or area
+  (`user_profile`, `project_billing`); an `event_` record holds one episode.
+  A concept is suggested for a new fact only on two or more shared words, one
+  of them in its key or title (C1). Title (`# ` line), one-line summary
   (`description`), and `updated` date at the top; one `## ` section per fact
   or group of facts. New facts go under a heading in their concept
   (`save --concept --section`); the save's duplicate check names the concept
@@ -530,7 +638,7 @@ Session state: `$CLAUDE_PLUGIN_DATA` or `$PLUGIN_DATA`, else
 - **Records:** the model's topic template (`.memory/project_topic_template.md`):
   frontmatter `name` (the file name without `.md`), `description` (one line),
   `updated` (the date of the last change),
-  `metadata.type` (`user | feedback | project | reference | event`), `status`
+  `metadata.type` (`user | project | reference | event`; `feedback` read only), `status`
   (`current | needs-review | superseded | archived`; the CLI calls the last
   two "retired"), `source`, `last_verified`, `authorization`, `supersedes`,
   and any extra keys kept. Key = `<type>_<slug>` (M1). Older toolkit records
@@ -549,7 +657,12 @@ Session state: `$CLAUDE_PLUGIN_DATA` or `$PLUGIN_DATA`, else
   with `tag_groups` excluding retired; `find --reflect` uses gpt-oss for a
   synthesized answer. No MCP registration: the CLI is the only writer (I12).
 - **Notion:** the project's Memory database; focus and glossary are child pages
-  of the project page.
+  of the project page. A link to another record is a page mention (link text
+  equal to its title) or a page link on the Notion page, and reads back as the
+  file link; a section link stays a file link, because Notion drops the anchor
+  (F2; tried in the test area on 2026-09-29).
+- **Hindsight find** reads each record it lists as about the question and
+  shows the "## " section that matched (F1; `matchingSectionSnippet`).
 - **Approval** (written once, in `memory-save`): `onboarding` (default) shows a
   one-line card and saves after a yes; an explicit owner instruction is itself
   the approval and is saved at once with a one-line notice; `trusted` saves

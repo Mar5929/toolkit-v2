@@ -1,6 +1,6 @@
 ---
 name: work-decide
-description: 'Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers. Use when he asks "what do you need from me", answers a waiting decision ("go with option B"), or states a project-wide decision.'
+description: 'Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers, so waiting work can continue and every approval is on record. Use when he asks "what do you need from me", answers a waiting decision ("go with option B"), or states a project-wide decision.'
 ---
 
 # Work decide

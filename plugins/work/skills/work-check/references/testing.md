@@ -37,8 +37,12 @@ enough when each one is a single automated test or a single observation.
 ## 3. Writing the test plan
 
 - [ ] Work in the item's worktree, on its branch. Never on the default branch.
-- [ ] Copy `tests/TEST-PLAN-TEMPLATE.md` to `tests/<id>-TEST-PLAN.md`, for
-      example `tests/WI-012-TEST-PLAN.md`. Leave the template unchanged.
+- [ ] Copy the project's `tests/TEST-PLAN-TEMPLATE.md` to
+      `tests/<id>-TEST-PLAN.md`, for example `tests/WI-012-TEST-PLAN.md`.
+      Leave the template unchanged. The project has no template: copy this
+      skill's `assets/TEST-PLAN-TEMPLATE.md` instead, which is the same
+      template as new projects get. Leave out its first line, the
+      "Generated file" comment: it names a toolkit file, not a project one.
 - [ ] Fill it as its guide comment says: Scope (the `R-xx` and items
       checked), Environment and data, one Checks row per scenario, then
       Results and follow-up. Delete the guide and the example row.

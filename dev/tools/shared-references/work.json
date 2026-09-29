@@ -91,7 +91,32 @@
     {
       "source": "plugins/toolkit/scaffold/model/.work-items/work-item-template/DESIGN.md",
       "as": "assets/DESIGN.md",
-      "skills": ["work/solution-design"]
+      "skills": ["work/solution-design", "work/work-on", "work/work-organize"]
+    },
+    {
+      "source": "plugins/toolkit/scaffold/model/tests/TEST-PLAN-TEMPLATE.md",
+      "as": "assets/TEST-PLAN-TEMPLATE.md",
+      "skills": ["work/work-check"]
+    },
+    {
+      "source": "plugins/toolkit/scaffold/model/requirements/system-area-template/AREA-TEMPLATE.md",
+      "as": "assets/requirements-area-template.md",
+      "skills": ["work/work-finish"]
+    },
+    {
+      "source": "plugins/toolkit/scaffold/model/system-guide/AREA-TEMPLATE.md",
+      "as": "assets/system-guide-area-template.md",
+      "skills": ["work/work-finish"]
+    },
+    {
+      "source": "plugins/toolkit/scaffold/model/delivery/deployment/release-cutover-template/CUTOVER-PLAN.md",
+      "as": "assets/CUTOVER-PLAN.md",
+      "skills": ["work/work-finish"]
+    },
+    {
+      "source": "plugins/toolkit/scaffold/model/delivery/deployment/release-cutover-template/RELEASE-NOTES.md",
+      "as": "assets/RELEASE-NOTES.md",
+      "skills": ["work/work-finish"]
     }
   ]
 }

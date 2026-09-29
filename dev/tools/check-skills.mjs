@@ -10,9 +10,27 @@
 //   - frontmatter has only `name` and `description`, and parses as YAML
 //     scalars Claude Code and Codex both read;
 //   - `name` equals the folder name;
-//   - `description` is at most 300 characters and identical to the
-//     description in dev/SKILL-INDEX.md section 1, and the skill sits in the
-//     plugin that table names;
+//   - `description` is at most 450 characters (MAX_DESCRIPTION says why) and
+//     identical to the description in dev/SKILL-INDEX.md section 1, and the
+//     skill sits in the plugin that table names;
+//   - `description` says what the skill does, why to use it, and when, in
+//     that order (Mike, 2026-09-29): it starts with a third-person verb that
+//     names the job, so the job is in the first 120 characters; a why clause
+//     (WHY_MARKERS, for example ", so approvals are recorded") comes next; then
+//     "Use when" or "Use whenever" (USE_CLAUSE); a "Not for" clause, when there
+//     is one, comes last. No em or en dash;
+//   - no phrase quoted in one description appears in another description
+//     (dev/SKILL-INDEX.md section 5.5): two skills that claim the same words
+//     make the host open the wrong one;
+//   - self-contained: every template SKILL.md names (a file name with
+//     "template" in it, or the name of a template a sync list copies into a
+//     skill's assets/) is in the skill folder, as the file itself or as a
+//     generated copy of it; every bare file name SKILL.md gives that is the
+//     name of a file in some skill's references/, assets/, or scripts/ is in
+//     this skill's folder too; and neither SKILL.md nor any of the skill's
+//     own (not generated) reference and asset files names a path in the
+//     plugin's own folders (plugins/, shared/, agents/, lib/, templates/,
+//     ...), which a skill cannot read;
 //   - no syntax Codex leaves as literal text: `when_to_use`, !`command`,
 //     ```! blocks, $ARGUMENTS, $0-$9, ${CLAUDE_*};
 //   - the numbered steps end within the first 40 lines;
@@ -55,6 +73,11 @@
 //     the source to edit.
 // Toolkit commands in a generated copy are checked once, in its source under
 // plugins/*/shared/ or plugins/*/agents/; the copy equals the source.
+// The rule file layout (plugins/memory/shared/owner-preferences-template.md,
+// copied into the memory skills' assets/) starts with the title and lead
+// paragraph `toolkit rule add` writes (newRuleText in
+// plugins/toolkit/lib/project/owner-rules.mjs), so the skills show the layout
+// the command really writes.
 //
 // Exit code 0 when there are no failures, 1 when there is at least one.
 // Node 20+, no dependencies.
@@ -74,7 +97,48 @@ const REQUIRED_VOICE_PLUGINS = new Set(['work', 'memory', 'toolkit']);
 const ALLOWED_SKILL_KEYS = new Set(['name', 'description']);
 const ALLOWED_AGENT_KEYS = new Set(['name', 'description', 'tools', 'model', 'isolation']);
 const GLOBAL_FLAGS = new Set(['--json']);
-const MAX_DESCRIPTION = 300;
+// Description length. dev/research/skill-writing-guide.md D4 aimed at 150 to
+// 300 characters for "what it does, then when". Mike's decision of 2026-09-29
+// (dev/GOAL.md, "Skills carry their own procedures") adds a why clause to
+// every description, about 40 to 80 characters more. 450 characters is about
+// 110 tokens: close to the "~100 tokens" the Agent Skills specification
+// budgets for name and description together (agentskills-specification.md,
+// "Progressive disclosure"), and far under the 1,024-character cap Codex and
+// the standard enforce (guide D1). When Codex's skill list is crowded it
+// shortens every description from the end (source-skills-render.md,
+// allocate_description_chars), so the job and the main trigger go in the
+// first JOB_WINDOW characters (guide D5); the job-verb check below reads them.
+const MAX_DESCRIPTION = 450;
+const JOB_WINDOW = 120;
+// The job: the description opens with a third-person verb ("Saves",
+// "Re-explains"), not "This", "Is", or an imperative "Use". The regular
+// expression can only see a capitalized word that ends in "s", so
+// NOT_JOB_VERBS lists common first words that end in "s" and are not verbs
+// ("Always saves ...", "Tools for git"), and a first word followed by "are"
+// or "is" is a plural noun ("Projects are listed"), not a verb. A following
+// "for" or "that" is not used as a sign: "Looks for" and "Checks that" are
+// real job verbs.
+const JOB_VERB = /^(?!(?:This|Its|Is|Was|Has|Does|Yes)\b)[A-Z][a-z]+(?:-[a-z]+)*s\b/;
+const NOT_JOB_VERBS = new Set([
+  'Always', 'Sometimes', 'Perhaps', 'Various', 'Thus', 'Tools', 'Helpers', 'Utilities', 'Notes', 'Projects',
+  'Skills', 'Plugins', 'Templates', 'Scripts',
+]);
+const NOT_A_VERB_NEXT = /^[A-Z][a-z]+(?:-[a-z]+)*s\s+(?:are|is)\b/;
+// The why clause: the outcome, or the risk the skill prevents. Tuned on the 26
+// plugin skill descriptions of 2026-09-29, which all use ", so ..."; the
+// others are the forms named when this check was asked for. A marker counts only after the job verb
+// and before the "Use" clause.
+const WHY_MARKERS = [/,\s+so\s/, /\bso that\b/, /\bto keep\b/, /\bto prevent\b/, /\bwhich keeps\b/, /\bwhich prevents\b/];
+// The when clause. "Use only when" is for a skill that must start only on the
+// owner's own words (guide D15); "Use first, before <skill>, when" is the form
+// routing round 3 proved for the Salesforce project skills.
+const USE_CLAUSE = /\bUse (?:only |first, before [a-z0-9-]+, )?when(?:ever)?\b/;
+const NOT_FOR = /\bNot (?:for|with)\b/;
+// Folders of a plugin (not of a skill) that a SKILL.md path must not point at:
+// a skill reads only files inside its own folder (guide Part 5).
+const OUTSIDE_SKILL_ROOTS = new Set(['plugins', 'dev', 'shared', 'agents', 'lib', 'bin', 'hooks', 'templates', 'scaffold', 'skills']);
+const OWNER_RULES_MODULE = 'plugins/toolkit/lib/project/owner-rules.mjs';
+const OWNER_RULES_LAYOUT = 'plugins/memory/shared/owner-preferences-template.md';
 const STEPS_LINE_LIMIT = 40;
 const CONTENTS_LINE_LIMIT = 100;
 // Skill subfolders whose files SKILL.md must name directly. agents/ is left
@@ -89,8 +153,8 @@ const AGENT_NAMES_FOR_FALLBACK = [
 // Skills with a recorded reason to differ. Their findings are reported as
 // notes, not failures.
 const SALESFORCE_OVERLAY = {
-  reason: 'project-local Salesforce overlay skill: body adapted from the model\'s copy, with a new description (SKILL-INDEX section 3); the step-placement and voice-line rules are for plugin skills',
-  downgrade: new Set(['steps', 'voice']),
+  reason: 'project-local Salesforce overlay skill: body adapted from the model\'s copy, with a new description (SKILL-INDEX section 3); the step-placement and voice-line rules are for plugin skills, and the model owns the file, so its what-why-when description waits for Mike\'s yes to the text proposed in dev/model-changes.md',
+  downgrade: new Set(['steps', 'voice', 'description-shape', 'description-overlap', 'names']),
 };
 const EXCEPTIONS = {
   'sf-architect-solutioning': {
@@ -691,6 +755,75 @@ function contentsFirst(text) {
   return false;
 }
 
+// ------------------------------------------------ description shape and names
+
+/**
+ * What, why, when: the problems with one description's shape, as messages
+ * (Mike, 2026-09-29; skill-writing-guide.md D5, D6, D12).
+ */
+function descriptionShape(d) {
+  const problems = [];
+  const head = d.slice(0, JOB_WINDOW);
+  let verb = head.match(JOB_VERB);
+  if (verb && (NOT_JOB_VERBS.has(verb[0]) || NOT_A_VERB_NEXT.test(head))) verb = null;
+  if (!verb) problems.push(`the first ${JOB_WINDOW} characters must name the job, starting with a third-person verb that says what the skill does (for example "Saves" or "Reports"); they start "${head.slice(0, 40)}"`);
+  const use = d.search(USE_CLAUSE);
+  if (use === -1) problems.push('no "Use when" or "Use whenever" clause that says when to use it, with the owner\'s words and situations');
+  const from = verb ? verb[0].length : 0;
+  let why = -1;
+  for (const re of WHY_MARKERS) {
+    const m = re.exec(d.slice(from));
+    if (m && (why === -1 || from + m.index < why)) why = from + m.index;
+  }
+  if (why === -1) problems.push('no why clause: after what the skill does, say the outcome or the risk it prevents, for example ", so approvals are recorded and nothing ships unchecked"');
+  else if (use !== -1 && why > use) problems.push('the why clause comes after "Use when"; the order is what it does, why, then when');
+  const notFor = d.search(NOT_FOR);
+  if (notFor !== -1 && use !== -1 && notFor < use) problems.push('the "Not for" clause comes before "Use when"; it goes last');
+  if (/[–—]/.test(d)) problems.push('an em or en dash; use a comma, a colon, or two sentences (Plain English)');
+  return problems;
+}
+
+/** The phrases a description quotes in double quotes, in lowercase. */
+function quotedPhrases(d) {
+  return [...d.matchAll(/"([^"]+)"/g)].map((m) => m[1].toLowerCase().trim()).filter(Boolean);
+}
+
+function escapeRegExp(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+const FILE_NAME = /(?:[A-Za-z0-9_.~-]+\/)*[A-Za-z0-9_-][A-Za-z0-9_.-]*\.(?:md|mjs|cjs|js|json|yaml|yml|csv|xml|txt|toml|py|sh|rules)\b/g;
+
+/**
+ * The file names a SKILL.md gives in its body: in code spans, link targets,
+ * and prose, outside fenced code. Placeholders (<...>, {...}, *, $) and web
+ * addresses are left out. Each item is { name, line }.
+ */
+function namedFiles(text) {
+  const out = [];
+  const lines = text.split('\n');
+  let fence = null;
+  for (let i = bodyStart(lines) - 1; i < lines.length; i += 1) {
+    const t = lines[i].trim();
+    const fm = t.match(/^(`{3,}|~{3,})/);
+    if (fm) {
+      if (!fence) fence = fm[1][0];
+      else if (t[0] === fence && /^(`{3,}|~{3,})\s*$/.test(t)) fence = null;
+      continue;
+    }
+    if (fence) continue;
+    const clean = lines[i].replace(/https?:\/\/\S+/g, ' ');
+    for (const m of clean.matchAll(FILE_NAME)) {
+      const before = clean[m.index - 1] || '';
+      if (/[<{$*/\w@]/.test(before)) continue; // part of a placeholder, a longer path, or an address
+      const after = clean[m.index + m[0].length] || '';
+      if (/[>}*]/.test(after)) continue;
+      out.push({ name: m[0].replace(/^\.\//, ''), line: i + 1 });
+    }
+  }
+  return out;
+}
+
 // ------------------------------------------------------------- the checks
 
 function lastStepLine(text) {
@@ -774,6 +907,7 @@ async function main() {
   }
 
   const seen = new Set();
+  const allDescriptions = [];
   for (const s of skillFiles) {
     const text = fs.readFileSync(s.file, 'utf8');
     const r = fileResult(rel(s.file));
@@ -798,6 +932,8 @@ async function main() {
     if (!description) flag('description', 'no `description` in the frontmatter');
     else {
       if (description.length > MAX_DESCRIPTION) flag('description-length', `description is ${description.length} characters (limit ${MAX_DESCRIPTION})`);
+      for (const m of descriptionShape(description)) flag('description-shape', `description: ${m}`);
+      allDescriptions.push({ folder: s.folder, description, flag });
       const entry = index.skills.get(s.folder);
       if (!entry) flag('description-index', `"${s.folder}" is not in dev/SKILL-INDEX.md section 1`);
       else {
@@ -870,6 +1006,41 @@ async function main() {
     for (const p of plain) r.warn.push(`line ${p.line}: a toolkit command outside backticks is not checked: "${p.text}"`);
   }
 
+  // No phrase quoted in one description appears in another (SKILL-INDEX
+  // section 5.5). The two copies of a scaffold skill count as one skill.
+  for (const d of allDescriptions) {
+    const said = new Set();
+    for (const o of allDescriptions) {
+      if (o.folder === d.folder) continue;
+      for (const q of quotedPhrases(o.description)) {
+        if (said.has(q)) continue;
+        if (new RegExp(`(?<![\\w'])${escapeRegExp(q)}(?![\\w'])`, 'i').test(d.description)) {
+          said.add(q);
+          d.flag('description-overlap', `description uses "${q}", which the ${o.folder} description quotes as its owner's words; two skills that claim the same words make the host open the wrong one (SKILL-INDEX section 5.5). Reword one of them.`);
+        }
+      }
+    }
+  }
+
+  // Generated copies. Planned here for the template names below; problems are
+  // reported after the folder checks.
+  const sync = syncSkillReferences({ check: true });
+  // Template names: each template a sync list copies into a skill's assets/,
+  // by its source name and its copy name. A file name with "template" in it
+  // is a template too.
+  const templateNames = new Set();
+  for (const c of sync.copies) {
+    if (!/\/assets\/[^/]+$/.test(c.target)) continue;
+    templateNames.add(path.posix.basename(c.source));
+    templateNames.add(path.posix.basename(c.target));
+  }
+  // Skill file names: every file in a plugin skill's references/, assets/, or scripts/.
+  const skillFileNames = new Set();
+  for (const s of skillFiles) {
+    if (s.scaffold) continue;
+    for (const f of skillFolderFiles(path.dirname(s.file))) skillFileNames.add(path.posix.basename(f));
+  }
+
   // Skill folders: links, one level deep, contents lists (skill-writing-guide R1 to R4, R6).
   for (const s of skillFiles) {
     const skillDir = path.dirname(s.file);
@@ -906,6 +1077,20 @@ async function main() {
         namedBy.get(hit.rel).add(from);
       }
 
+      // A skill's own reference (not a generated copy, whose source is
+      // checked where it is written) names no path in the plugin's own
+      // folders either: the agent following it cannot read that file.
+      if (from !== 'SKILL.md' && !generatedFrom) {
+        const reportedOut = new Set();
+        for (const n of namedFiles(text)) {
+          const first = n.name.includes('/') ? n.name.split('/')[0] : null;
+          if (!first || !OUTSIDE_SKILL_ROOTS.has(first) || reportedOut.has(n.name)) continue;
+          if (fs.existsSync(path.join(skillDir, n.name))) continue;
+          flagIn(r, 'names', `line ${n.line}: names "${n.name}", a file outside the skill folder, which the skill cannot read. Copy it into the skill folder (a dev/tools/shared-references/ entry for a shared source or template), link the copy from SKILL.md, and name the copy here.`);
+          reportedOut.add(n.name);
+        }
+      }
+
       // A reference over 100 lines starts with a contents list.
       if (from.startsWith('references/') && from.endsWith('.md')) {
         const lines = lineCount(text) - (generatedFrom ? 1 : 0);
@@ -924,12 +1109,62 @@ async function main() {
       if (others.length) flagIn(r, 'depth', `more than one level deep: SKILL.md does not link it; only ${others.join(', ')} does. Link it from SKILL.md with when to open it (R1, R2).`);
       else flagIn(r, 'depth', 'nothing links it: SKILL.md must link every file in references/, assets/, and scripts/, with when to open it (R1, R2, R6).');
     }
+
+    // Self-contained (Mike, 2026-09-29): the templates and skill files SKILL.md
+    // names are in the folder, as the file itself or as a generated copy of it.
+    const held = new Set(files.map((f) => path.posix.basename(f)));
+    for (const f of files) {
+      let src = null;
+      try {
+        src = headerSource(fs.readFileSync(path.join(skillDir, f), 'utf8'));
+      } catch {
+        src = null;
+      }
+      if (src) held.add(path.posix.basename(src));
+    }
+    const rSkill = fileResult(rel(s.file));
+    const reportedNames = new Set();
+    for (const n of namedFiles(skillText)) {
+      const name = n.name;
+      if (reportedNames.has(name) || /^(?:references|assets|scripts)\//.test(name) || name.startsWith('../')) continue; // the link check covers these
+      const base = path.posix.basename(name);
+      if (base === 'SKILL.md') continue;
+      const first = name.includes('/') ? name.split('/')[0] : null;
+      if (first && OUTSIDE_SKILL_ROOTS.has(first) && !fs.existsSync(path.join(skillDir, name))) {
+        flagIn(rSkill, 'names', `line ${n.line}: names "${name}", a file outside the skill folder, which the skill cannot read. Copy what the step needs into the folder (a dev/tools/shared-references/ entry for a shared source) and link it, or name the skill or agent it belongs to.`);
+        reportedNames.add(name);
+        continue;
+      }
+      if ((/template/i.test(base) || templateNames.has(base)) && !held.has(base)) {
+        flagIn(rSkill, 'names', `line ${n.line}: names the template "${name}", but the skill folder does not hold it. Copy it into assets/ with a dev/tools/shared-references/ entry, run node dev/tools/sync-skill-references.mjs, and link it from SKILL.md with when to open it.`);
+        reportedNames.add(name);
+        continue;
+      }
+      if (!first && skillFileNames.has(base) && !held.has(base)) {
+        flagIn(rSkill, 'names', `line ${n.line}: names "${name}", a file other skills carry in their folders, but this skill's folder does not hold it. Add it (a dev/tools/shared-references/ entry for a shared source) and link it from SKILL.md, or name the file this skill really holds.`);
+        reportedNames.add(name);
+      }
+    }
   }
 
   // Generated copies: the same check as node dev/tools/sync-skill-references.mjs --check.
-  const sync = syncSkillReferences({ check: true });
   report.copiesChecked = sync.copies.length;
   for (const p of sync.problems) fileResult(p.file).fail.push(`${p.message} Run node dev/tools/sync-skill-references.mjs.`);
+
+  // The rule file layout the memory skills carry starts with what
+  // `toolkit rule add` writes.
+  if (exists(OWNER_RULES_LAYOUT)) {
+    const r = fileResult(OWNER_RULES_LAYOUT);
+    try {
+      const mod = await import(pathToFileURL(path.join(ROOT, OWNER_RULES_MODULE)).href);
+      const layout = read(OWNER_RULES_LAYOUT);
+      const head = String(mod.newRuleText('project')).trimEnd();
+      if (!layout.startsWith(head)) r.fail.push(`does not start with the title and lead paragraph toolkit rule add writes (newRuleText('project') in ${OWNER_RULES_MODULE}). Copy them from there, then run node dev/tools/sync-skill-references.mjs.`);
+      if (mod.MACHINE_TITLE && !layout.includes(`"${mod.MACHINE_TITLE}"`)) r.fail.push(`does not name the title of the file for every project, "${mod.MACHINE_TITLE}" (MACHINE_TITLE in ${OWNER_RULES_MODULE}).`);
+    } catch (err) {
+      r.warn.push(`could not load ${OWNER_RULES_MODULE} to compare the rule file layout: ${err.message}`);
+    }
+  }
 
   // Index entries with no SKILL.md yet.
   const missing = [...index.skills.keys()].filter((n) => !seen.has(n));

@@ -36,9 +36,10 @@ only decides and steers. `README.md` explains it for Mike.
 | `dev/` | Goal, progress, plan, skill index, research, tools, and test runs. Not shipped. |
 | `dev/research/skill-writing-guide.md` | The rules for skill names, descriptions, and bodies, taken from `ai-external-knowledge/`. Every rule cites its page. |
 | `dev/tools/import-model.mjs` | Copies the model project into `plugins/toolkit/scaffold/model/`. `--check` compares the copy with the model and changes nothing. |
-| `dev/tools/sync-skill-references.mjs` | Copies each shared source (`plugins/<name>/shared/`, agent files, the model's work item and design templates) into the skills listed for it in `dev/tools/shared-references/<plugin>.json`, and deletes copies no list names. `--check` changes nothing; `--only <plugin>` limits it to one plugin's skills. |
+| `dev/tools/sync-skill-references.mjs` | Copies each shared source (`plugins/<name>/shared/`, agent files, the model's templates, and toolkit templates such as `templates/codex/toolkit.rules`) into the skills listed for it in `dev/tools/shared-references/<plugin>.json`, and deletes copies no list names. `--check` changes nothing; `--only <plugin>` limits it to one plugin's skills. |
 | `dev/tools/shared-references/` | One list per plugin (`<plugin>.json`) of the shared sources copied into that plugin's skills, and the skills that get each copy. |
 | `dev/tools/check-skills.mjs` | Checks every `SKILL.md`, reference, and agent file: frontmatter, descriptions against `dev/SKILL-INDEX.md`, `toolkit` commands against `dev/ARCHITECTURE.md` section 5, links, contents lists, and generated copies (see Rules, "Skill files"). |
+| `dev/tools/check-rules.mjs` | Checks the model's rule files in `scaffold/model/.claude/rules/` against Claude Code's guidance for rules (`dev/research/rules-best-practices.md`). Fails on: `paths` frontmatter and patterns, a missing heading, vague instructions, a numbered procedure, an always-on rule over 200 lines, repeated or contradicting lines, and the `AGENTS.md` rules list. Warns on: an always-on rule over 4 KB (a proposed number), a line or paragraph over 400 characters, emphasis, a skill name no plugin holds, and a command one rule forbids and another names. `--dir <folder>` checks another folder, such as the model branch before an import. `toolkit doctor` runs the structure checks on a project (`plugins/toolkit/lib/project/rule-checks.mjs`). |
 | `.claude/settings.json` | Settings for sessions working on this repository. `claudeMdExcludes` stops the copy's `CLAUDE.md`, `AGENTS.md` files, and `.claude/rules/` from loading as instructions here; they are for projects, not for this repository. |
 
 ## The model project and the scaffold copy
@@ -107,6 +108,7 @@ node --test 'plugins/git-workflows/tests/*.test.mjs'
 node dev/tools/check-skills.mjs
 node dev/tools/sync-skill-references.mjs --check
 node dev/tools/import-model.mjs --check
+node dev/tools/check-rules.mjs
 claude plugin validate .
 claude plugin validate ./plugins/toolkit
 ```
@@ -148,7 +150,7 @@ claude plugin validate ./plugins/toolkit
   writes `.work-items/DASHBOARD.md`, `.work-items/.toolkit-state.json`,
   `.memory/MEMORY.md`, and `ai-external-knowledge/INDEX.md`; the pre-tool hook
   refuses hand edits of them. A file in a skill's `references/` or `assets/`
-  whose first line (after any frontmatter) starts with "Generated file" is a
+  whose first line (after any frontmatter) is a "Generated file" comment is a
   copy: edit the source it names, then run
   `node dev/tools/sync-skill-references.mjs`.
 - **`dev/` is not shipped.** Claude Code and Codex install only
@@ -245,11 +247,23 @@ claude plugin validate ./plugins/toolkit
   that file; otherwise it names the file and the skills that carry it ("the
   `DESIGN.md` template in the `solution-design` skill's assets folder").
   Raise the version of every plugin whose copies changed.
+- **Rule files** (Mike, 2026-09-29) follow `dev/research/rules-best-practices.md`
+  Part 1: one topic per file, a `# ` heading, one specific instruction per
+  bullet, `paths` frontmatter only where the rule is about certain files,
+  short always-on rules, and procedures in skills. A change that alters a
+  rule's meaning waits for Mike's yes. The 4 KB limit for an always-on rule is
+  proposed, not decided: it waits for Mike's answer to item 11 in
+  `dev/model-changes.md` ("Rules best practices: needs your yes"), so
+  `check-rules.mjs` only warns on it. Never cut Mike's words to meet it.
+  `check-rules.mjs` checks the model's rules; `toolkit rule add` writes
+  `owner-preferences.md` in the same format.
 - **Skill descriptions** follow `dev/research/skill-writing-guide.md` Part 3
-  (Mike, 2026-09-27): in single quotes, what the skill does, then when to use
-  it, with two to four of the owner's example phrases, and a "Not for ...; use
-  <skill>" clause only where a neighbor skill competes. After changing one,
-  re-run the routing check (`dev/test-runs/skill-routing-r3.md` is the latest).
+  (Mike, 2026-09-27 and 2026-09-29): in single quotes, what the skill does (a
+  third-person verb first), why to use it (a ", so ..." clause), then when
+  ("Use when ..."), under 450 characters, with two to four of the owner's
+  example phrases, and a "Not for ...; use <skill>" clause only where a
+  neighbor skill competes. After changing one, re-run the routing check in
+  both hosts (`dev/test-runs/skill-routing-final.md` is the latest).
 - **Read the documentation before building a Claude Code or Codex piece.** The
   captured pages are in this repository's `ai-external-knowledge/` (index:
   `INDEX.md`): `claude-code/`, `codex/`, `anthropic-agent-skills/`, and
@@ -261,11 +275,14 @@ claude plugin validate ./plugins/toolkit
   columns by these exact names. The toolkit does not install or run Lore, and
   Lore's own saving and hooks stay off.
 - **Read-only sources.** Never change
-  `/Users/michaelrihm/Documents/Projects/claude-toolkit`,
-  `/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project`, or
+  `/Users/michaelrihm/Documents/Projects/claude-toolkit` or
+  `/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project` (Mike's
+  own model checkout). A change to the model needs Mike's approval and goes
+  on the branch `toolkit-v2/approved-changes` of the model's own Git
+  repository, in the worktree
   `/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved`.
-  A change to the model needs Mike's approval and goes on a branch of the
-  model's own Git repository, never into his checkout.
+  Write to that worktree only for a model change Mike approved, commit it as
+  Mike Rihm, stage paths by name, and add no AI credit.
 - **Tests stay in scratch folders.** Point `HOME`, `CLAUDE_CONFIG_DIR`,
   `CODEX_HOME`, and `TOOLKIT_V2_CONFIG_DIR` at a temporary folder. Never write
   to Mike's real `~/.claude`, `~/.codex`, Notion page, or Hindsight banks.

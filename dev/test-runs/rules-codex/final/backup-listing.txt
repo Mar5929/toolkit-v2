@@ -1,0 +1,56 @@
+total 0
+drwxr-xr-x   3 michaelrihm  wheel   96 Sep 29 11:19 .
+drwxr-xr-x  10 michaelrihm  wheel  320 Sep 29 11:19 ..
+drwxr-xr-x   5 michaelrihm  wheel  160 Sep 29 12:21 feecalc-2026-09-29
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/rules-codex/feecalc-2026-09-29:
+total 8
+drwxr-xr-x   5 michaelrihm  wheel   160 Sep 29 12:21 .
+drwxr-xr-x   3 michaelrihm  wheel    96 Sep 29 11:19 ..
+drwxr-xr-x  11 michaelrihm  wheel   352 Sep 29 12:21 memory
+-rw-r--r--   1 michaelrihm  wheel  1253 Sep 29 12:21 toolkit-export.json
+drwxr-xr-x   6 michaelrihm  wheel   192 Sep 29 12:21 work-items
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/rules-codex/feecalc-2026-09-29/memory:
+total 80
+drwxr-xr-x  11 michaelrihm  wheel   352 Sep 29 12:21 .
+drwxr-xr-x   5 michaelrihm  wheel   160 Sep 29 12:21 ..
+-rw-r--r--   1 michaelrihm  wheel   333 Sep 29 12:21 .toolkit-meta.json
+-rw-r--r--   1 michaelrihm  wheel  4973 Sep 29 12:21 AGENTS.md
+-rw-r--r--   1 michaelrihm  wheel   529 Sep 29 12:21 CURRENT_FOCUS.md
+-rw-r--r--   1 michaelrihm  wheel   822 Sep 29 12:21 MEMORY.md
+-rw-r--r--   1 michaelrihm  wheel  3675 Sep 29 12:21 memory-criteria.md
+-rw-r--r--   1 michaelrihm  wheel  1333 Sep 29 12:21 project_billing.md
+-rw-r--r--   1 michaelrihm  wheel   969 Sep 29 12:21 project_finance_team_runs_feecalc_every_monday_morning.md
+-rw-r--r--   1 michaelrihm  wheel  2527 Sep 29 12:21 project_topic_template.md
+-rw-r--r--   1 michaelrihm  wheel  1121 Sep 29 12:21 terminology-glossary.md
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/rules-codex/feecalc-2026-09-29/work-items:
+total 16
+drwxr-xr-x  6 michaelrihm  wheel   192 Sep 29 12:21 .
+drwxr-xr-x  5 michaelrihm  wheel   160 Sep 29 12:21 ..
+-rw-r--r--  1 michaelrihm  wheel  1848 Sep 29 12:21 .toolkit-state.json
+-rw-r--r--  1 michaelrihm  wheel   562 Sep 29 12:21 DASHBOARD.md
+drwxr-xr-x  5 michaelrihm  wheel   160 Sep 29 12:21 WI-001-build-the-late-fee-command
+drwxr-xr-x  4 michaelrihm  wheel   128 Sep 29 12:21 work-item-template
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/rules-codex/feecalc-2026-09-29/work-items/WI-001-build-the-late-fee-command:
+total 72
+drwxr-xr-x  5 michaelrihm  wheel    160 Sep 29 12:21 .
+drwxr-xr-x  6 michaelrihm  wheel    192 Sep 29 12:21 ..
+-rw-r--r--  1 michaelrihm  wheel  17926 Sep 29 12:21 DESIGN.md
+drwxr-xr-x  3 michaelrihm  wheel     96 Sep 29 12:21 WI-002-cents-for-billing-api
+-rw-r--r--  1 michaelrihm  wheel  14645 Sep 29 12:21 WORK-ITEM.md
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/rules-codex/feecalc-2026-09-29/work-items/WI-001-build-the-late-fee-command/WI-002-cents-for-billing-api:
+total 16
+drwxr-xr-x  3 michaelrihm  wheel    96 Sep 29 12:21 .
+drwxr-xr-x  5 michaelrihm  wheel   160 Sep 29 12:21 ..
+-rw-r--r--  1 michaelrihm  wheel  7085 Sep 29 12:21 WORK-ITEM.md
+
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/rules-codex/feecalc-2026-09-29/work-items/work-item-template:
+total 40
+drwxr-xr-x  4 michaelrihm  wheel   128 Sep 29 12:21 .
+drwxr-xr-x  6 michaelrihm  wheel   192 Sep 29 12:21 ..
+-rw-r--r--  1 michaelrihm  wheel  8954 Sep 29 12:21 DESIGN.md
+-rw-r--r--  1 michaelrihm  wheel  7524 Sep 29 12:21 WORK-ITEM.md

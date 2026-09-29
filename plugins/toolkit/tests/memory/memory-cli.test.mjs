@@ -13,7 +13,7 @@ after(cleanup);
 const FOCUS = `# Current focus\n\n${FOCUS_SECTIONS.map((h) => `## ${h}\n\n- WI-002\n`).join('\n')}`;
 
 function saveArgs(name, extra = []) {
-  return ['memory', 'save', '--type', 'feedback', '--name', name, '--description', `Rule about ${name}.`, '--body', body(`Rule ${name}.`), ...extra];
+  return ['memory', 'save', '--type', 'reference', '--name', name, '--description', `Rule about ${name}.`, '--body', body(`Rule ${name}.`), ...extra];
 }
 
 test('save from a worktree with --approved-by, then get, list, find (text and JSON)', async () => {
@@ -21,28 +21,28 @@ test('save from a worktree with --approved-by, then get, list, find (text and JS
   const wt = addWorktree(root);
   const saved = await runToolkit([...saveArgs('deploy-window', ['--approved-by', 'Mike']), '--json'], { cwd: wt });
   assert.equal(saved.code, 0, saved.stdout + saved.stderr);
-  assert.equal(saved.json.key, 'feedback_deploy_window');
+  assert.equal(saved.json.key, 'reference_deploy_window');
   assert.equal(saved.json.created, true);
   assert.equal(saved.json.approved_by, 'Mike');
-  assert.equal(saved.json.path, path.join(root, '.memory', 'feedback_deploy_window.md'));
+  assert.equal(saved.json.path, path.join(root, '.memory', 'reference_deploy_window.md'));
   const text = fs.readFileSync(saved.json.path, 'utf8');
-  assert.match(text, /^---\nname: feedback_deploy_window\ndescription: Rule about deploy-window\.\nupdated: \d{4}-\d{2}-\d{2}\nmetadata:\n  type: feedback\nstatus: current\n/);
+  assert.match(text, /^---\nname: reference_deploy_window\ndescription: Rule about deploy-window\.\nupdated: \d{4}-\d{2}-\d{2}\nmetadata:\n  type: reference\nstatus: current\n/);
   assert.match(text, /^authorization: Approved by Mike on \d{4}-\d{2}-\d{2}$/m);
   assert.match(text, /^source: Mike, \d{4}-\d{2}-\d{2}$/m);
   assert.match(text, /^supersedes: none$/m);
 
   const human = await runToolkit(saveArgs('second-rule'), { cwd: wt });
   assert.equal(human.code, 0);
-  assert.match(human.stdout, /^Saved to memory: feedback_second_rule \(new record\)\./);
-  assert.match(fs.readFileSync(path.join(root, '.memory', 'feedback_second_rule.md'), 'utf8'), /^source: Agent session, /m);
+  assert.match(human.stdout, /^Saved to memory: reference_second_rule \(new record\)\./);
+  assert.match(fs.readFileSync(path.join(root, '.memory', 'reference_second_rule.md'), 'utf8'), /^source: Agent session, /m);
 
-  const got = await runToolkit(['memory', 'get', 'feedback_deploy_window'], { cwd: root });
+  const got = await runToolkit(['memory', 'get', 'reference_deploy_window'], { cwd: root });
   assert.equal(got.stdout, text);
   const list = await runToolkit(['memory', 'list'], { cwd: wt });
   // Concept memory: each line gives the key, the title, the one-line summary, and the updated date.
-  assert.equal(list.stdout, `- feedback_deploy_window: Test record — Rule about deploy-window. (updated ${today()})\n- feedback_second_rule: Test record — Rule about second-rule. (updated ${today()})\n`);
+  assert.equal(list.stdout, `- reference_deploy_window: Test record — Rule about deploy-window. (updated ${today()})\n- reference_second_rule: Test record — Rule about second-rule. (updated ${today()})\n`);
   const found = await runToolkit(['memory', 'find', 'deploy', 'window', '--json'], { cwd: wt });
-  assert.equal(found.json.results[0].key, 'feedback_deploy_window');
+  assert.equal(found.json.results[0].key, 'reference_deploy_window');
   const none = await runToolkit(['memory', 'find', 'zebra'], { cwd: wt });
   assert.equal(none.code, 0);
   assert.match(none.stdout, /No memory records match "zebra"/);
@@ -80,20 +80,20 @@ test('an update keeps the old source; --supersedes retires the old record', asyn
   const { root } = makeProject();
   await runToolkit([...saveArgs('old-rule'), '--source', 'Mike in the kickoff call, 2026-09-01'], { cwd: root });
   await runToolkit(saveArgs('old-rule'), { cwd: root });
-  assert.match(fs.readFileSync(path.join(root, '.memory', 'feedback_old_rule.md'), 'utf8'), /^source: Mike in the kickoff call, 2026-09-01$/m);
-  const res = await runToolkit([...saveArgs('new-rule', ['--supersedes', 'feedback_old_rule']), '--json'], { cwd: root });
+  assert.match(fs.readFileSync(path.join(root, '.memory', 'reference_old_rule.md'), 'utf8'), /^source: Mike in the kickoff call, 2026-09-01$/m);
+  const res = await runToolkit([...saveArgs('new-rule', ['--supersedes', 'reference_old_rule']), '--json'], { cwd: root });
   assert.equal(res.code, 0, res.stdout);
-  assert.equal(res.json.retired, 'feedback_old_rule');
-  const old = await runToolkit(['memory', 'get', 'feedback_old_rule', '--json'], { cwd: root });
+  assert.equal(res.json.retired, 'reference_old_rule');
+  const old = await runToolkit(['memory', 'get', 'reference_old_rule', '--json'], { cwd: root });
   assert.equal(old.json.status, 'retired');
   assert.equal(old.json.stored_status, 'superseded');
-  assert.equal(old.json.superseded_by, 'feedback_new_rule');
-  assert.match(fs.readFileSync(path.join(root, '.memory', 'feedback_new_rule.md'), 'utf8'), /^supersedes: feedback_old_rule$/m);
+  assert.equal(old.json.superseded_by, 'reference_new_rule');
+  assert.match(fs.readFileSync(path.join(root, '.memory', 'reference_new_rule.md'), 'utf8'), /^supersedes: reference_old_rule$/m);
   const all = await runToolkit(['memory', 'list', '--status', 'all'], { cwd: root });
-  assert.match(all.stdout, /^- feedback_old_rule \[superseded by feedback_new_rule\]: Test record — Rule about old-rule\. \(updated \d{4}-\d{2}-\d{2}\)$/m);
-  const bad = await runToolkit(saveArgs('third-rule', ['--supersedes', 'feedback_missing']), { cwd: root });
+  assert.match(all.stdout, /^- reference_old_rule \[superseded by reference_new_rule\]: Test record — Rule about old-rule\. \(updated \d{4}-\d{2}-\d{2}\)$/m);
+  const bad = await runToolkit(saveArgs('third-rule', ['--supersedes', 'reference_missing']), { cwd: root });
   assert.equal(bad.code, 1);
-  assert.match(bad.stderr, /feedback_third_rule was saved, but feedback_missing was not retired/);
+  assert.match(bad.stderr, /reference_third_rule was saved, but reference_missing was not retired/);
 });
 
 test('stale --expect is refused with exit 2', async () => {
@@ -110,28 +110,28 @@ test('stale --expect is refused with exit 2', async () => {
 test('delete needs --owner-approved; retire and restore work by key', async () => {
   const { root } = makeProject();
   await runToolkit(saveArgs('to-remove'), { cwd: root });
-  const refused = await runToolkit(['memory', 'delete', 'feedback_to_remove'], { cwd: root });
+  const refused = await runToolkit(['memory', 'delete', 'reference_to_remove'], { cwd: root });
   assert.equal(refused.code, 2);
   assert.match(refused.stderr, /needs the owner's explicit approval/);
-  const fake = await runToolkit(['memory', 'delete', 'feedback_to_remove', '--owner-approved=x'], { cwd: root });
+  const fake = await runToolkit(['memory', 'delete', 'reference_to_remove', '--owner-approved=x'], { cwd: root });
   assert.equal(fake.code, 2);
-  assert.ok(fs.existsSync(path.join(root, '.memory', 'feedback_to_remove.md')));
+  assert.ok(fs.existsSync(path.join(root, '.memory', 'reference_to_remove.md')));
 
-  const retired = await runToolkit(['memory', 'retire', 'feedback_to_remove', '--reason', 'No longer true.'], { cwd: root });
+  const retired = await runToolkit(['memory', 'retire', 'reference_to_remove', '--reason', 'No longer true.'], { cwd: root });
   assert.equal(retired.code, 0);
-  assert.match(retired.stdout, /^Retired feedback_to_remove: it is archived\.$/m);
-  assert.match(retired.stdout, /Undo with: toolkit memory restore feedback_to_remove/);
-  assert.match((await runToolkit(['memory', 'list', '--status', 'retired'], { cwd: root })).stdout, /feedback_to_remove \[archived\]/);
-  const restored = await runToolkit(['memory', 'restore', 'feedback_to_remove'], { cwd: root });
+  assert.match(retired.stdout, /^Retired reference_to_remove: it is archived\.$/m);
+  assert.match(retired.stdout, /Undo with: toolkit memory restore reference_to_remove/);
+  assert.match((await runToolkit(['memory', 'list', '--status', 'retired'], { cwd: root })).stdout, /reference_to_remove \[archived\]/);
+  const restored = await runToolkit(['memory', 'restore', 'reference_to_remove'], { cwd: root });
   assert.equal(restored.code, 0);
   const list = await runToolkit(['memory', 'list', '--status', 'needs-review'], { cwd: root });
-  assert.match(list.stdout, /feedback_to_remove \[needs review\]/);
+  assert.match(list.stdout, /reference_to_remove \[needs review\]/);
 
-  const deleted = await runToolkit(['memory', 'delete', 'feedback_to_remove', '--owner-approved'], { cwd: root });
+  const deleted = await runToolkit(['memory', 'delete', 'reference_to_remove', '--owner-approved'], { cwd: root });
   assert.equal(deleted.code, 0, deleted.stderr);
-  assert.equal(deleted.stdout, 'Deleted feedback_to_remove. This cannot be undone.\n');
-  assert.ok(!fs.existsSync(path.join(root, '.memory', 'feedback_to_remove.md')));
-  const gone = await runToolkit(['memory', 'get', 'feedback_to_remove'], { cwd: root });
+  assert.equal(deleted.stdout, 'Deleted reference_to_remove. This cannot be undone.\n');
+  assert.ok(!fs.existsSync(path.join(root, '.memory', 'reference_to_remove.md')));
+  const gone = await runToolkit(['memory', 'get', 'reference_to_remove'], { cwd: root });
   assert.equal(gone.code, 1);
 });
 
@@ -171,7 +171,7 @@ test('status, reindex, export, and import through the command', async () => {
   const other = makeProject();
   const im = await runToolkit(['memory', 'import', '--from', dir], { cwd: other.root });
   assert.equal(im.code, 0, im.stdout);
-  assert.ok(fs.existsSync(path.join(other.root, '.memory', 'feedback_status_rule.md')));
+  assert.ok(fs.existsSync(path.join(other.root, '.memory', 'reference_status_rule.md')));
 });
 
 test('exit codes: not a project 4, unknown backend 2, missing driver 3, unknown subcommand 2', async () => {
@@ -214,13 +214,13 @@ test('exit codes: not a project 4, unknown backend 2, missing driver 3, unknown 
 
 test('an update keeps approved_by, other frontmatter fields, and last_verified unless given again', async () => {
   const { root } = makeProject();
-  const file = path.join(root, '.memory', 'feedback_kept_fields.md');
-  const input = '---\ntype: feedback\nname: kept-fields\ndescription: Rule about kept fields.\nsource: Mike, 2026-09-01\nlast_verified: 2026-09-01\nticket: WI-007\n---\n\n**Remember:** Keep them.\n';
+  const file = path.join(root, '.memory', 'reference_kept_fields.md');
+  const input = '---\ntype: reference\nname: kept-fields\ndescription: Rule about kept fields.\nsource: Mike, 2026-09-01\nlast_verified: 2026-09-01\nticket: WI-007\n---\n\n**Remember:** Keep them.\n';
   const first = await runToolkit(['memory', 'save', '--body-file', '-', '--approved-by', 'Mike'], { cwd: root, stdin: input });
   assert.equal(first.code, 0, first.stderr);
   assert.match(fs.readFileSync(file, 'utf8'), /^ticket: WI-007$/m);
 
-  const version = async () => (await runToolkit(['memory', 'get', 'feedback_kept_fields', '--json'], { cwd: root })).json.version;
+  const version = async () => (await runToolkit(['memory', 'get', 'reference_kept_fields', '--json'], { cwd: root })).json.version;
   const update = await runToolkit(saveArgs('kept-fields', ['--expect', await version()]), { cwd: root });
   assert.equal(update.code, 0, update.stderr);
   const text = fs.readFileSync(file, 'utf8');
@@ -230,8 +230,8 @@ test('an update keeps approved_by, other frontmatter fields, and last_verified u
   assert.match(text, /^source: Mike, 2026-09-01$/m);
 
   // A record that needed review and is saved again has just been checked.
-  await runToolkit(['memory', 'retire', 'feedback_kept_fields'], { cwd: root });
-  await runToolkit(['memory', 'restore', 'feedback_kept_fields'], { cwd: root });
+  await runToolkit(['memory', 'retire', 'reference_kept_fields'], { cwd: root });
+  await runToolkit(['memory', 'restore', 'reference_kept_fields'], { cwd: root });
   const reviewed = await runToolkit(saveArgs('kept-fields', ['--expect', await version()]), { cwd: root });
   assert.equal(reviewed.code, 0, reviewed.stderr);
   const after = fs.readFileSync(file, 'utf8');
@@ -244,31 +244,31 @@ test('an update keeps approved_by, other frontmatter fields, and last_verified u
 test('authorization: --authorization sets the words; trusted mode with no approver writes "Trusted grant"', async () => {
   const { root } = makeProject();
   await runToolkit(saveArgs('told-me', ['--authorization', 'Explicit request from Mike, 2026-09-26']), { cwd: root });
-  assert.match(fs.readFileSync(path.join(root, '.memory', 'feedback_told_me.md'), 'utf8'), /^authorization: Explicit request from Mike, 2026-09-26$/m);
+  assert.match(fs.readFileSync(path.join(root, '.memory', 'reference_told_me.md'), 'utf8'), /^authorization: Explicit request from Mike, 2026-09-26$/m);
   await runToolkit(saveArgs('plain'), { cwd: root });
-  assert.match(fs.readFileSync(path.join(root, '.memory', 'feedback_plain.md'), 'utf8'), /^authorization: No approval recorded$/m);
+  assert.match(fs.readFileSync(path.join(root, '.memory', 'reference_plain.md'), 'utf8'), /^authorization: No approval recorded$/m);
   const trusted = makeProject({ memory: { type: 'builtin', approval: 'trusted' } });
   await runToolkit(saveArgs('routine'), { cwd: trusted.root });
-  assert.match(fs.readFileSync(path.join(trusted.root, '.memory', 'feedback_routine.md'), 'utf8'), /^authorization: Trusted grant$/m);
+  assert.match(fs.readFileSync(path.join(trusted.root, '.memory', 'reference_routine.md'), 'utf8'), /^authorization: Trusted grant$/m);
 });
 
 test('rename moves the note and repairs links; status names a link to a note that does not exist', async () => {
   const { root } = makeProject();
   await runToolkit(saveArgs('deploy-window'), { cwd: root });
-  const linking = '# Release steps\n\n**Remember:** Follow the window.\n\n**Related memories:** [deploy window](feedback_deploy_window.md)\n';
+  const linking = '# Release steps\n\n**Remember:** Follow the window.\n\n**Related memories:** [deploy window](reference_deploy_window.md)\n';
   await runToolkit(['memory', 'save', '--type', 'project', '--name', 'release-steps', '--description', 'How a release goes.', '--body', linking], { cwd: root });
-  const res = await runToolkit(['memory', 'rename', 'feedback_deploy_window', '--to', 'feedback_release_window'], { cwd: root });
+  const res = await runToolkit(['memory', 'rename', 'reference_deploy_window', '--to', 'reference_release_window'], { cwd: root });
   assert.equal(res.code, 0, res.stderr);
-  assert.equal(res.stdout, 'Renamed feedback_deploy_window to feedback_release_window.\nLinks repaired in 1 note: project_release_steps.\n');
-  assert.match(fs.readFileSync(path.join(root, '.memory', 'project_release_steps.md'), 'utf8'), /\[deploy window\]\(feedback_release_window\.md\)/);
-  assert.ok(fs.existsSync(path.join(root, '.memory', 'feedback_release_window.md')));
-  const noTo = await runToolkit(['memory', 'rename', 'feedback_release_window'], { cwd: root });
+  assert.equal(res.stdout, 'Renamed reference_deploy_window to reference_release_window.\nLinks repaired in 1 note: project_release_steps.\n');
+  assert.match(fs.readFileSync(path.join(root, '.memory', 'project_release_steps.md'), 'utf8'), /\[deploy window\]\(reference_release_window\.md\)/);
+  assert.ok(fs.existsSync(path.join(root, '.memory', 'reference_release_window.md')));
+  const noTo = await runToolkit(['memory', 'rename', 'reference_release_window'], { cwd: root });
   assert.equal(noTo.code, 2);
-  const taken = await runToolkit(['memory', 'rename', 'feedback_release_window', '--to', 'project_release_steps'], { cwd: root });
+  const taken = await runToolkit(['memory', 'rename', 'reference_release_window', '--to', 'project_release_steps'], { cwd: root });
   assert.equal(taken.code, 2);
   assert.match(taken.stderr, /already exists/);
 
-  const del = await runToolkit(['memory', 'delete', 'feedback_release_window', '--owner-approved'], { cwd: root });
+  const del = await runToolkit(['memory', 'delete', 'reference_release_window', '--owner-approved'], { cwd: root });
   assert.match(del.stdout, /Links repaired in 1 note: project_release_steps\./);
   assert.match(fs.readFileSync(path.join(root, '.memory', 'project_release_steps.md'), 'utf8'), /\*\*Related memories:\*\* deploy window\n/);
 
@@ -290,25 +290,25 @@ test('a name over 60 characters is refused (exit 2) instead of being cut into an
 test('keys typed with dashes work for get, retire, --superseded-by, and --supersedes', async () => {
   const { root } = makeProject();
   await runToolkit(saveArgs('no-force-push'), { cwd: root });
-  const got = await runToolkit(['memory', 'get', 'feedback_no-force-push', '--json'], { cwd: root });
+  const got = await runToolkit(['memory', 'get', 'reference_no-force-push', '--json'], { cwd: root });
   assert.equal(got.code, 0, got.stderr);
-  assert.equal(got.json.key, 'feedback_no_force_push');
+  assert.equal(got.json.key, 'reference_no_force_push');
   await runToolkit(saveArgs('merge-only-by-pull-request'), { cwd: root });
-  const retired = await runToolkit(['memory', 'retire', 'feedback_no-force-push', '--superseded-by', 'feedback_merge-only-by-pull-request', '--json'], { cwd: root });
+  const retired = await runToolkit(['memory', 'retire', 'reference_no-force-push', '--superseded-by', 'reference_merge-only-by-pull-request', '--json'], { cwd: root });
   assert.equal(retired.code, 0, retired.stderr);
-  assert.equal(retired.json.superseded_by, 'feedback_merge_only_by_pull_request');
-  const saved = await runToolkit([...saveArgs('newest-rule', ['--supersedes', 'feedback_merge-only-by-pull-request']), '--json'], { cwd: root });
+  assert.equal(retired.json.superseded_by, 'reference_merge_only_by_pull_request');
+  const saved = await runToolkit([...saveArgs('newest-rule', ['--supersedes', 'reference_merge-only-by-pull-request']), '--json'], { cwd: root });
   assert.equal(saved.code, 0, saved.stderr);
-  assert.equal(saved.json.retired, 'feedback_merge-only-by-pull-request'.replace(/-/g, '_'));
+  assert.equal(saved.json.retired, 'reference_merge-only-by-pull-request'.replace(/-/g, '_'));
 });
 
 test('retire --superseded-by a key that does not exist is refused (exit 2) and changes nothing', async () => {
   const { root } = makeProject();
   await runToolkit(saveArgs('newer'), { cwd: root });
-  const res = await runToolkit(['memory', 'retire', 'feedback_newer', '--superseded-by', 'feedback_nothing_here'], { cwd: root });
+  const res = await runToolkit(['memory', 'retire', 'reference_newer', '--superseded-by', 'reference_nothing_here'], { cwd: root });
   assert.equal(res.code, 2);
-  assert.match(res.stderr, /feedback_newer was not retired: the replacement feedback_nothing_here does not exist/);
-  assert.match(fs.readFileSync(path.join(root, '.memory', 'feedback_newer.md'), 'utf8'), /^status: current$/m);
+  assert.match(res.stderr, /reference_newer was not retired: the replacement reference_nothing_here does not exist/);
+  assert.match(fs.readFileSync(path.join(root, '.memory', 'reference_newer.md'), 'utf8'), /^status: current$/m);
 });
 
 /** A local server that answers the two Hindsight requests find makes: the bank list and recall. */

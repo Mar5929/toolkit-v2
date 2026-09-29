@@ -180,6 +180,7 @@ test('toolkit work finish says no backup was made when the tracker and memory ar
   const made = await run(['work', 'new', '--title', 'Small fix', '--type', 'task', '--json']);
   assert.equal(made.code, 0, made.out + made.err);
   const id = JSON.parse(made.out).id;
+  assert.equal((await run(['work', 'history', id, '--note', 'Checked: the fix; acceptance-checker: met; evidence: the report; gaps: none'])).code, 0);
   assert.equal((await run(['work', 'approve', id, '--result', '--by', 'Mike Rihm'])).code, 0);
   const done = await run(['work', 'finish', id, '--by', 'Mike Rihm', '--evidence', 'The tests pass.']);
   assert.equal(done.code, 0, done.out + done.err);

@@ -2,7 +2,7 @@ import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { makeProject, cleanup, tk, newItem, readRecord, recordPath, readState, trackerDir, TODAY, approveRequirements, fillSelectedDesign } from './helpers.mjs';
+import { makeProject, cleanup, tk, newItem, readRecord, recordPath, readState, trackerDir, TODAY, approveRequirements, fillSelectedDesign, recordCheck } from './helpers.mjs';
 import { parseDoc, parseHistory, getLabel, parseQuestions, getH1 } from '../../lib/work/model.mjs';
 
 after(cleanup);
@@ -140,6 +140,7 @@ test('approve records requirements, design, and result approvals', async () => {
   assert.match(design.body, /^\*\*Design approval:\*\* Approved by Mike on \d{4}-\d{2}-\d{2}$/m);
   assert.equal(parseDoc(await readRecord(dir, id)).meta.design, 'approved');
 
+  await recordCheck(dir, id);
   const res = await tk(dir, ['work', 'approve', id, '--result', '--by', 'Mike']);
   assert.equal(res.code, 0);
   doc = parseDoc(await readRecord(dir, id));
@@ -204,16 +205,19 @@ test('history adds a row; finish and cancel set the terminal statuses with their
   assert.deepEqual([hist[0].change, hist[0].effect], ['Mike chose plain text.', 'No HTML template.']);
   assert.equal((await tk(dir, ['work', 'finish', id, '--by', 'Mike'])).code, 2, 'evidence required');
   const child = await newItem(dir, 'Subject line', ['--parent', id]);
+  await recordCheck(dir, id);
   const blocked = await tk(dir, ['work', 'finish', id, '--by', 'Mike', '--evidence', 'Sent a test email.']);
   assert.equal(blocked.code, 2);
   assert.match(blocked.stderr, /open sub-items: WI-002/);
   const cancel = await tk(dir, ['work', 'cancel', child, '--reason', 'Not needed after all.', '--json']);
   assert.equal(cancel.code, 0);
   // With no recorded result approval, Done needs the owner's own words.
+  await recordCheck(dir, id);
   const noWords = await tk(dir, ['work', 'finish', id, '--by', 'Mike', '--evidence', 'Sent a test email.', '--json']);
   assert.equal(noWords.code, 2, noWords.stdout);
   assert.equal(JSON.parse(noWords.stdout || noWords.stderr).error.details.gate, 'result_not_approved');
   assert.notEqual(parseDoc(await readRecord(dir, id)).meta.status, 'Done', 'nothing changed');
+  await recordCheck(dir, id);
   const fin = await tk(dir, ['work', 'finish', id, '--by', 'Mike', '--evidence', 'Sent a test email.', '--quote', 'Looks good, mark it done.', '--json']);
   assert.equal(fin.code, 0, fin.stdout);
   const doc = parseDoc(await readRecord(dir, id));
@@ -223,6 +227,7 @@ test('history adds a row; finish and cancel set the terminal statuses with their
   assert.match(hist[0].effect, /Evidence: Sent a test email\./);
   assert.match(hist[0].change, /Result approved by Mike: "Looks good, mark it done\."/);
   assert.doesNotMatch(doc.body, /Fill-in guide/, 'finishing removes the template\'s item guide');
+  await recordCheck(dir, id);
   assert.equal((await tk(dir, ['work', 'finish', id, '--by', 'Mike', '--evidence', 'x'])).code, 2, 'already Done');
   const list = await tk(dir, ['work', 'list', '--json']);
   assert.equal(list.json.items.length, 0, 'finished items are hidden by default');
@@ -237,6 +242,7 @@ test('history adds a row; finish and cancel set the terminal statuses with their
 test('finish refuses a build item with no requirements approval', async () => {
   const dir = makeProject();
   const id = await newItem(dir, 'Data import', ['--type', 'data-load']);
+  await recordCheck(dir, id);
   const r = await tk(dir, ['work', 'finish', id, '--by', 'Mike', '--evidence', 'Loaded.']);
   assert.equal(r.code, 2);
   assert.match(r.stderr, /no recorded requirements approval/);
@@ -364,6 +370,7 @@ test('the dashboard lists in-progress, ready, backlog, recently done, and the tr
   await approveRequirements(dir, b);
   await newItem(dir, 'Later');
   const d = await newItem(dir, 'Finished');
+  await recordCheck(dir, d);
   await tk(dir, ['work', 'finish', d, '--by', 'Mike', '--evidence', 'Done.', '--quote', 'Done, thanks.']);
   const dash = fs.readFileSync(path.join(trackerDir(dir), 'DASHBOARD.md'), 'utf8');
   assert.match(dash, /## In progress[\s\S]*\| WI-001 \| Building \| 08 Build \| In Progress \|  \| Write the parser \(agent\)\. \|/);
@@ -419,6 +426,7 @@ test('approving the result at 11 continues with work-finish, and an approval end
   await tk(dir, ['work', 'set', id, '--waiting-on', 'owner']);
   const before = await tk(dir, ['work', 'show', id, '--json']);
   assert.equal(before.json.item.continueWith, 'work-decide');
+  await recordCheck(dir, id);
   const r = await tk(dir, ['work', 'approve', id, '--result', '--by', 'Mike', '--json']);
   assert.equal(r.code, 0, r.stdout);
   assert.equal(r.json.clearedWaiting, true);
@@ -429,6 +437,7 @@ test('approving the result at 11 continues with work-finish, and an approval end
   const doc = parseDoc(await readRecord(dir, id));
   assert.match(parseHistory(doc.body)[0].effect, /No longer waiting on the owner\./);
   const noWait = await newItem(dir, 'Other', ['--type', 'task', '--stage', '11']);
+  await recordCheck(dir, noWait);
   const r2 = await tk(dir, ['work', 'approve', noWait, '--result', '--by', 'Mike', '--json']);
   assert.equal(r2.json.clearedWaiting, false);
 });

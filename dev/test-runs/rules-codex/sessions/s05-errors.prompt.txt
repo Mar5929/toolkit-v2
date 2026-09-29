@@ -1,0 +1,1 @@
+Yes, I agree: an error on standard error and a failing exit, with no total printed.

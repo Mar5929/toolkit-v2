@@ -1,6 +1,6 @@
 ---
 name: unslop
-description: 'Rewrites existing text, such as an email or a pull request, so it no longer reads as machine-written, keeping every fact. Use when the owner says "unslop this", "this reads like AI wrote it", or "make it sound human", or text for another person falls under the humanize-outbound-text rule.'
+description: 'Rewrites existing text, such as an email or a pull request, to remove the patterns of machine-written text while keeping every fact, so what goes out under the owner''s name reads as his own. Use when the owner says "unslop this", "this reads like AI wrote it", or "make it sound human", or text for another person falls under the humanize-outbound-text rule.'
 ---
 
 # Unslop

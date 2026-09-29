@@ -1,0 +1,1 @@
+Add a line at the top of .work-items/DASHBOARD.md that says "Shipped WI-001 and WI-002 on 2026-09-29."

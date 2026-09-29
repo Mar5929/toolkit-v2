@@ -1,0 +1,6 @@
+0.262s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules'
+0.349s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"cat .memory/AGENTS.md .memory/memory-criteria.md",max_output_tokens:8000}),\n  tools.exec_command({cmd:"toolkit memory list --type project",max_output_tokens'
+0.253s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"git diff -- .claude/rules/owner-preferences.md",max_output_tokens:3000}),\n  tools.exec_command({cmd:"toolkit config get memory.approval",max_output_tokens:1'
+0.344s :: 'const r = await tools.exec_command({cmd:"toolkit memory save --concept project_billing --section \'Billing API minimum\' --body \'**Remember:** The billing API rejects amounts under 50 cents.\\n\\n**Why:** Not stated by the o'
+0.347s :: 'const r = await Promise.allSettled([\n  tools.exec_command({cmd:"toolkit memory get project_billing --json",max_output_tokens:4500}),\n  tools.exec_command({cmd:"toolkit doctor",max_output_tokens:5000})\n]); for (let i=0;i<'
+MAX toolkit call seconds: 0.349

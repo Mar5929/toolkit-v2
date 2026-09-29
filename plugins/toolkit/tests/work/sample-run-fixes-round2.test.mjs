@@ -8,7 +8,7 @@ import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { makeProject, cleanup, tk, newItem, readRecord, recordPath, trackerDir, approveRequirements, TODAY, fillSelectedDesign } from './helpers.mjs';
+import { makeProject, cleanup, tk, newItem, readRecord, recordPath, trackerDir, approveRequirements, TODAY, fillSelectedDesign, recordCheck } from './helpers.mjs';
 import { parseDoc, parseHistory, getSectionText, getSectionWhole, getLabel } from '../../lib/work/model.mjs';
 import { checkHandChanges } from '../../lib/commands/work.mjs';
 import { collectOwnerDecisions, collectAgentTodos } from '../../lib/work/decisions.mjs';
@@ -196,6 +196,7 @@ test('finish closes Resume here and reports skipped stages and open phases; canc
   const dir = makeProject();
   const id = await newItem(dir, 'Greet', ['--type', 'task', '--stage', '11']);
   await tk(dir, ['work', 'edit', id, '--section', 'Roadmap', '--text', PLAN_TABLE]);
+  await recordCheck(dir, id);
   await tk(dir, ['work', 'approve', id, '--result', '--by', 'Mike']);
   const fin = await tk(dir, ['work', 'finish', id, '--by', 'Mike', '--evidence', 'Tests pass.', '--json']);
   assert.equal(fin.code, 0, fin.stderr);
@@ -211,6 +212,7 @@ test('finish closes Resume here and reports skipped stages and open phases; canc
 
   const noted = await newItem(dir, 'Noted', ['--type', 'task', '--stage', '11']);
   await tk(dir, ['work', 'history', noted, '--note', 'No remote: merged locally into main.']);
+  await recordCheck(dir, noted);
   const fin2 = await tk(dir, ['work', 'finish', noted, '--by', 'Mike', '--evidence', 'Works.', '--quote', 'Ship it.', '--json']);
   assert.deepEqual(fin2.json.warnings, [], 'the history note says what happened instead');
 

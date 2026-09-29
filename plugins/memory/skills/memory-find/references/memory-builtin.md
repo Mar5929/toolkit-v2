@@ -55,20 +55,22 @@ are records. The toolkit reads no other subfolder.
 ## 3. The index, `MEMORY.md`
 
 The model's layout: its title and short paragraph, one `##` section per type
-(User, Feedback, Project, Reference, Event), then "Other memory views" (the
+(User, Project, Reference, Event; an older project that still holds
+`feedback_` records gets a "Feedback (retired type ...)" section until
+`memory-tidy` moves them), then "Other memory views" (the
 current focus, the memory criteria, the glossary). Each record is one line:
 its title linked to its file, its one-line summary, and the date of its last
 change:
 
 ```markdown
-- [Ways of working](feedback_ways_of_working.md) — How the owner wants the agent to work (updated 2026-09-28)
+- [Deploys](project_deploys.md) — How deploys work: the window, the release branch, the checks (updated 2026-09-28)
 ```
 
 | Record | Its line |
 | --- | --- |
 | Current | No mark |
 | Needs review | Ends with "[needs-review]" |
-| A proposal | Ends with "[proposal: not a fact until the owner answers]" |
+| A proposal | Ends with "[proposal: not a fact until the owner answers]", or "[proposal for <concept>: ...]" when it names the concept a yes adds it to, or "[rule proposal for .claude/rules/owner-preferences.md, section "<area>": not a rule until the owner answers]" |
 | Superseded | Stays, ends with "[superseded]"; its body starts with a line naming the replacement. A record merged into a concept (`merge`) leaves the index: its facts are in the concept, which is listed |
 | Archived | Not listed; the file is in `archive/` |
 

@@ -53,8 +53,8 @@ here, so the agent does each step with the GitHub CLI (`gh`) and this file.
   in their assets folder: copy it from `## Overview` to the end, so every
   section exists.
 - A new design comment starts from the design template, `DESIGN.md`, which
-  the `solution-design` skill carries in its assets folder, without its
-  header fields.
+  the `solution-design`, `work-on`, and `work-organize` skills carry in their
+  assets folder, without its header fields and its "Generated file" comment.
 - Both open with a fill-in guide comment: follow it, then delete it.
 
 ## 4. The `toolkit work` steps in GitHub
@@ -88,7 +88,7 @@ instead. `<number>` is the issue number without `#`. Section 5 has the exact
 | `toolkit work set <id> --delivery agent-led` or `owner-led` | Add that `delivery:` label (remove the other one), mark the offer's Open Questions row Answered, and remove `waiting-on:owner` when no other question for him is open |
 | `toolkit work set <id> --title '<title>'` | `gh issue edit <number> --title '<title>'` |
 | `toolkit work set <id> --type <type>` or `--priority <priority>` | Swap the `type:` or `priority:` label |
-| `toolkit work design <id> --create` | Add the design comment, started from the design template (section 3), without its header fields |
+| `toolkit work design <id> --create` | Add the design comment, started from the design template (section 3), without its header fields and its "Generated file" comment |
 | `toolkit work design <id>` | Find the design comment and read its body (section 5, "The design comment") |
 | `toolkit work design <id> --set-file <file>` or `--text` | Edit the design comment in place (section 5) |
 | `toolkit work design <id> ... --status proposed` | Edit the design comment with its Design status line set to Proposed, and add the `design-proposed` label |

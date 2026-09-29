@@ -15,8 +15,35 @@ minimal draft (`skill-index-draft-minimal.md`) are marked "(from lifecycle)" or
 - **26 skills**: 22 in a project that is not Salesforce, plus 4 Salesforce
   skills that are enabled or installed only in Salesforce projects.
 - **7 agents**, all on Opus.
-- Every description is 300 characters or fewer (longest 300, shortest 267),
-  written in the third person, "what it does, then Use when", with the owner's
+- **What, why, when (2026-09-29).** Mike: "skills must have all the
+  references, artifacts, etc. in them and the descriptions must be perfectly
+  written to describe what it does, why to use it, and when to use it." Every
+  plugin skill description (rows 1 to 23) now states, in this order, what the
+  skill does (a third-person verb and the job, in the first 120 characters),
+  why to use it (a short ", so ..." clause: the outcome, or the risk it
+  prevents), and when ("Use when" or "Use whenever", with the owner's words),
+  plus "Not for" only where a neighbor skill competes. The trigger phrases and
+  "Not for" clauses from the routing rounds below are kept word for word. The
+  newest decisions are in them: `memory-save` sends "from now on", "always",
+  and "never" instructions to the owner-preferences rule and facts to a memory
+  concept; `memory-tidy` proposes proven lessons as rules or skills;
+  `work-check` and `work-finish` name the independent checker; `work-status`
+  no longer claims the owner's waiting decisions (the round 3 candidate for
+  V15). Rows 1 to 23 measure 299 to 405 characters; the limit in
+  `dev/tools/check-skills.mjs` is 450, and its comment says why. Rows 24 to 26
+  are the model's Salesforce skills: their what-why-when text is proposed in
+  `dev/model-changes.md` and waits for Mike, so the rows keep the model's
+  current text. `check-skills.mjs` now fails a description without the job
+  verb in its first 120 characters, a why clause, or a "Use when" clause, and
+  a `SKILL.md` that names a template or a skill file its folder does not hold.
+  Routing in Claude Code after the rewrite: 73 of 76 messages matched on the
+  first run (section 5.5). After the review fixes (same day), the review's
+  seven new messages and ten earlier ones matched every time in Claude Code
+  (project settings only, and Mike's own user settings and plugins) and in
+  Codex, apart from two messages that are Mike's call (section 9.1,
+  decisions 5 and 6); `dev/test-runs/skill-routing-final.md`.
+- Before 2026-09-29, every description was 300 characters or fewer, written in
+  the third person, "what it does, then Use when", with the owner's
   own words in quotes. Rewritten 2026-09-27 to
   `dev/research/skill-writing-guide.md` (Part 3): the situation and project
   state first, two to four example phrases, and a "Not for ...; use <skill>"
@@ -32,8 +59,11 @@ minimal draft (`skill-index-draft-minimal.md`) are marked "(from lifecycle)" or
   `handoff`. The check that followed is in section 5.5.
 - No quoted owner phrase appears in two descriptions. This was checked with a
   script over the exact text in section 1 (method in section 5.5).
-- The whole listing (names plus descriptions) is about 7,900 characters, or
-  about 6,600 in a project that is not Salesforce. The drafts measured about
+- The whole listing (names plus descriptions) is about 9,100 characters, or
+  about 7,800 in a project that is not Salesforce (2026-09-29; before the why
+  clauses, about 7,900 and 6,600). New projects set
+  `skillListingBudgetFraction` to 0.02 in Claude Code, and Codex uses 2% of
+  the context window. The drafts measured about
   8,700 (lifecycle), 8,000 (owner words), and 2,800 to 4,000 (minimal). Today's
   toolkit lists about 14,100 characters, and the listing on this Mac already
   drops descriptions (`session-skills.md` 8.1), so every name is chosen to say
@@ -52,29 +82,29 @@ minimal draft (`skill-index-draft-minimal.md`) are marked "(from lifecycle)" or
 
 | # | Plugin | Skill | Exact description | Chars | Jobs and stages covered | References (in the skill folder) |
 | --- | --- | --- | --- | --- | --- | --- |
-| 1 | work | `work-on` | Starts, resumes, or logs a work item and builds it. Use whenever the owner asks to build, add, fix, or change something, names an item id to resume, says "keep going", or wants a bug or idea logged ("put it in the backlog"). Not for requirement edits (work-requirements) or handovers (work-delegate). | 300 | First skill for any request to do work. Creates items at `01-discovery`; logs ideas for later; resumes an item. Runs `06-implementation-plan`, `07-tracking-setup`, `08-build`. Opens the stage skills below. | Own: `references/planning.md`, `references/sizing-and-routing.md`. Copies (15): agent-acceptance-checker.md, agent-builder.md, agent-researcher.md, current-focus.md, git-rules.md, helpers.md, recording-owner-answers.md, team-roles.md, toolkit-commands.md, tracker-github.md, tracker-jira.md, tracker-local.md, tracker-notion.md, work-item-format.md, WORK-ITEM.md. |
-| 2 | work | `work-status` | Reports where the project's work items stand: progress, blockers, the next item, and decisions waiting on the owner. Use whenever the owner asks about project or item status, even one item, for example "where are we", "what's next", or "is X done yet". Not for a chat recap; use session-summary. | 295 | Status of the project or one item; what comes next. Read-only at every stage. | Copies (7): recording-owner-answers.md, toolkit-commands.md, tracker-github.md, tracker-jira.md, tracker-local.md, tracker-notion.md, work-item-format.md. |
-| 3 | work | `work-decide` | Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers. Use when he asks "what do you need from me", answers a waiting decision ("go with option B"), or states a project-wide decision. | 243 | Every owner decision that arrives outside the skill that asked it: requirements approval (03), design approval (04), flagged tasks, result approval (11), open questions, an unanswered delivery offer. Project-wide decisions (`DECISIONS.md`). | Own: `references/decisions-log.md`. Copies (10): approvals.md, current-focus.md, proposals.md, recording-owner-answers.md, toolkit-commands.md, tracker-github.md, tracker-jira.md, tracker-local.md, tracker-notion.md, work-item-format.md. |
-| 4 | work | `work-requirements` | Interviews the owner one question at a time, writes a work item's requirements (R-01, R-02), checks them, and asks for his approval. Use when an item's requirements are missing or the owner changes, adds, or drops one at any stage, or says "grill me", "ask me questions", or "check the spec". | 292 | `01-discovery`, `02-refinement`, asking for `03-requirements-approved`; requirement changes at any later stage; the spec check. | Own: `references/interview.md`, `references/requirement-format.md`, `references/spec-check.md`. Copies (12): agent-requirements-analyst.md, agent-researcher.md, approvals.md, current-focus.md, helpers.md, recording-owner-answers.md, toolkit-commands.md, tracker-github.md, tracker-jira.md, tracker-notion.md, work-item-format.md, WORK-ITEM.md. |
-| 5 | work | `solution-design` | Writes design options for how a work item gets built and asks the owner to choose and approve one. Use when approved requirements need a design, or the owner asks "how should we build this" or "give me design options". Not for a single Salesforce platform question; use sf-architect-solutioning. | 295 | `04-solution-design` and asking for design approval. Runs `sf-architect-solutioning` as the Salesforce specialist. | Own: `references/design-process.md`. Copies (15): agent-design-architect.md, agent-design-critic.md, agent-requirements-analyst.md, agent-researcher.md, approvals.md, current-focus.md, helpers.md, recording-owner-answers.md, team-roles.md, toolkit-commands.md, tracker-github.md, tracker-jira.md, tracker-notion.md, work-item-format.md, DESIGN.md. |
-| 6 | work | `work-organize` | Splits work items into sub-items, nests or moves them, and reconciles item folders or Notion cards the owner moved, renamed, or deleted himself. Use when the owner says "break it down" or "put X under Y", says he moved folders or cards, or the briefing reports moved or missing items. | 284 | `05-breakdown`; sub-items; nesting, grouping, moving, archiving; reconciling moves, renames, deletions, and copies the owner made by hand in `.work-items/` or Notion. | Own: `references/moves.md`. Copies (10): approvals.md, current-focus.md, recording-owner-answers.md, toolkit-commands.md, tracker-github.md, tracker-jira.md, tracker-local.md, tracker-notion.md, work-item-format.md, WORK-ITEM.md. |
-| 7 | work | `work-check` | Tests a finished build against its work item's requirements, fixes what fails, and asks the owner to approve the result. Use when the last build task is done, or the owner asks whether it is ready to ship or works, for example "is it ready", "test it", or "check it against what I asked for". | 292 | `09-testing`, `10-bug-fixing`, asking for `11-user-approval`. | Own: `references/testing.md`. Copies (12): agent-acceptance-checker.md, agent-builder.md, approvals.md, current-focus.md, git-rules.md, helpers.md, recording-owner-answers.md, toolkit-commands.md, tracker-github.md, tracker-jira.md, tracker-notion.md, work-item-format.md. |
-| 8 | work | `work-finish` | Ships and closes an approved work item (pull request, merge, sandbox or production deployment, requirements update, Done), or cancels an item with the owner's reason. Use when the owner says "ship it", "deploy it", "close it out", or "mark it done", or asks to cancel or drop an item. | 284 | `12-pr-and-push`, `13-deployment`, `14-spec-update`, Done, Cancelled. | Own: `references/closing.md`. Copies (12): agent-acceptance-checker.md, approvals.md, current-focus.md, git-rules.md, helpers.md, recording-owner-answers.md, toolkit-commands.md, tracker-github.md, tracker-jira.md, tracker-local.md, tracker-notion.md, work-item-format.md. |
-| 9 | work | `work-delegate` | Hands a work item's goal to a team of agents with the owner as product owner: makes the delivery offer, records his choice, and runs the team. Use whenever the owner hands a goal over ("you drive", "take it from here"), even a named item, or work-on starts a large goal with no delivery choice. | 294 | Delivery offer, team-arrangement question, archive question; running helper agents at any stage. | Own: `references/agent-led-delivery.md`, `references/team-arrangements.md`. Copies (13): agent-acceptance-checker.md, agent-builder.md, agent-researcher.md, approvals.md, git-rules.md, helpers.md, recording-owner-answers.md, team-roles.md, toolkit-commands.md, tracker-github.md, tracker-jira.md, tracker-notion.md, work-item-format.md. |
-| 10 | memory | `memory-save` | Saves, corrects, or forgets one lasting fact in the project's memory, or sends it to the record where it belongs. Use when the owner says "remember this", "from now on", "forget that", or "remind me" with no time given, corrects the agent, or a hook says a save is due. | 269 | Save, correct, forget one record; current focus and untracked to-dos; glossary terms; routing other information to its home. Holds the only written copy of the memory approval policy. | Own: `references/examples.md`. Copies (10): current-focus.md, glossary.md, memory-builtin.md, memory-criteria.md, memory-hindsight.md, memory-notion.md, proposals.md, record-format.md, replacing-and-retiring.md, toolkit-commands.md. |
-| 11 | memory | `memory-find` | Looks up what the project already recorded (memory, DECISIONS.md, work items, requirements, current focus) and cites the source of each answer. Use when the owner asks "what did we decide", "do you remember", or "why did we", and before asking him to repeat anything. | 267 | Looking up past decisions, preferences, history, and references in every home. Read-only. | Copies (8): memory-builtin.md, memory-hindsight.md, memory-notion.md, proposals.md, record-format.md, toolkit-commands.md, tracker-github.md, tracker-jira.md. |
-| 12 | memory | `memory-tidy` | Reviews the project's whole memory (.memory/, Hindsight, or Notion): merges duplicates, retires stale or contradicted records, trims the current focus, and backs it up. Use when the owner says "clean up memory" or "tidy memory", thinks memory is wrong or out of date, or toolkit doctor flags memory. | 299 | Whole-memory review; duplicates; stale records; focus trim; backup and restore. | Own: `references/review-checklist.md`. Copies (11): backup-and-restore.md, current-focus.md, glossary.md, memory-builtin.md, memory-criteria.md, memory-hindsight.md, memory-notion.md, proposals.md, record-format.md, replacing-and-retiring.md, toolkit-commands.md. |
-| 13 | toolkit | `project-setup` | Sets up Toolkit V2 in a new project, or checks, updates, and repairs an existing setup, including Notion and Hindsight. Use when the owner says "set up Toolkit V2", "set up this project", "check the setup", or "update the toolkit", or starts working on a new computer. | 268 | New project (GOAL finish item 3); repair of an existing project; a new computer; switching the memory backend; Notion and Hindsight wiring. | Own: `references/finishing-setup.md`, `references/installing-hindsight.md`, `references/interview.md`, `references/new-computer.md`, `references/repair-and-update.md`, `references/running-init.md`, `references/switching.md`, `references/wiring-github-jira.md`, `references/wiring-hindsight.md`, `references/wiring-notion.md`, `references/wiring-salesforce.md`. Copies (6): backup-and-restore.md, current-focus.md, git-rules.md, toolkit-commands.md, tracker-github.md, tracker-jira.md. |
-| 14 | session-skills | `handoff` | Updates the work item and current focus, then writes a checked prompt for a new session, or checks a pasted one. Use whenever the owner is about to clear context or end the session, even a short one or with a recap, for example "write a handoff", "start a new session", or "I'm stopping for today". | 298 | Handoff between sessions at any stage; checking a pasted handoff prompt. | Own: `references/check-the-prompt.md`, `references/edge-cases.md`, `references/prompt-format.md`, `references/save-memory-and-focus.md`, `references/update-the-work-item.md`. Copies (13): agent-handoff-verifier.md, backup-and-restore.md, current-focus.md, git-rules.md, memory-criteria.md, proposals.md, recording-owner-answers.md, toolkit-commands.md, tracker-github.md, tracker-jira.md, tracker-local.md, tracker-notion.md, work-item-format.md. |
-| 15 | session-skills | `session-summary` | Recaps this chat as a table of the owner's requests, where each landed, and what still needs him. Use when he asks what happened in this chat, for example "recap this chat", "what did I ask for", or "what did we do today". Not with a handoff (handoff includes it) or for project status (work-status). | 300 | Recap of this conversation only. | None. |
-| 16 | session-skills | `braindump` | Plays back a loose brain dump in very simple words and waits for the owner to confirm before any work starts. Use when the owner types /braindump or says "here's a brain dump", "play that back", "tell me what you heard", or "make sure you understood before you start". | 268 | Confirming understanding before any work. No writes. | None. |
-| 17 | session-skills | `explain-simply` | Re-explains the last answer, a plan, or a named document as short plain bullets, keeping every number, name, and path. Use whenever the owner finds an answer too technical or hard to follow, or wants it in plainer words, for example "explain it like I'm five", "less jargon", or "I don't get it". | 296 | Re-explaining at a lower reading level. | None. |
-| 18 | session-skills | `unslop` | Rewrites existing text, such as an email or a pull request, so it no longer reads as machine-written, keeping every fact. Use when the owner says "unslop this", "this reads like AI wrote it", or "make it sound human", or text for another person falls under the humanize-outbound-text rule. | 289 | Removing machine-written patterns on request, and for outbound text under the `humanize-outbound-text.md` rule. | None. |
-| 19 | git-workflows | `merge-and-clean-up` | Merges one approved GitHub pull request and removes only that pull request's branches and worktree, after its checks and the merge-safety check pass. Use when the owner or work-finish asks to merge a named pull request, for example "merge PR 12", "merge and clean up", or "land this pull request". | 297 | The merge inside `12-pr-and-push`. | Copies (2): approvals.md, git-rules.md. |
-| 20 | git-workflows | `publish-docs` | Commits and pushes an agreed edit of committed project documents (requirements/, system-guide/, DECISIONS.md, PROJECT.md, PROJECT-ROADMAP.md, ai-external-knowledge/, delivery/) straight to the default branch. Use whenever such an edit is ready to save. Not for code, rules, skills, or .memory/. | 294 | Saving committed documents: the requirements baseline and System Guide at `14-spec-update`, `DECISIONS.md` rows, `PROJECT.md`, `PROJECT-ROADMAP.md`. Agent use. | Own: `references/recovery.md`, `scripts/publish-docs.mjs`. Copies (1): git-rules.md. |
-| 21 | git-workflows | `pull-latest` | Brings the local repository up to date with its remote without losing or rewriting anything. Use when the owner says "get the latest", "pull the latest changes", "update from origin", or "grab what others pushed". Not for throwing away local work; use reset-to-remote. | 268 | Updating a checkout. | Copies (1): git-rules.md. |
-| 22 | git-workflows | `reset-to-remote` | Makes the local repository an exact copy of its remote, discarding local changes and branches the remote no longer has, after showing a plan. Use only when the owner asks for that in his own words, for example "wipe local", "match remote exactly", or "fresh start from remote". | 277 | Destructive resync, only on the owner's explicit words. | Copies (1): git-rules.md. |
-| 23 | sf-architect-solutioning (Salesforce projects only) | `sf-architect-solutioning` | Answers Salesforce platform questions and plans Salesforce solutions, checking each fact against official Salesforce docs. Use whenever the owner asks a Salesforce platform question, even about a work item ("which Flow type", "Flow or Apex"), or solution-design needs a Salesforce specialist. | 292 | Salesforce specialist inside `04-solution-design`; Salesforce platform questions at any stage. Description rewritten with Mike's approval (2026-09-27); body unchanged, byte for byte. | Own: `architectural-patterns.md`, `doc-sources.md`, `naming-conventions.md`, `salesforce-well-architected.md`, `solution-plan-template.md`, `solutioning-checklist.md`, and 8 files in `references/metadata/`, one per metadata type. |
+| 1 | work | `work-on` | Starts, resumes, or logs a work item and builds it, so every change is tracked and work picks up where it stopped. Use whenever the owner asks to build, add, fix, or change something, names an item id to resume, says "keep going", or wants a bug or idea logged ("put it in the backlog"). Not for requirement edits (work-requirements) or handovers (work-delegate). | 363 | First skill for any request to do work. Creates items at `01-discovery`; logs ideas for later; resumes an item. Runs `06-implementation-plan`, `07-tracking-setup`, `08-build`. Opens the stage skills below. | Own: `references/planning.md`, `references/sizing-and-routing.md`. Copies (16): agent-acceptance-checker.md, agent-builder.md, agent-researcher.md, current-focus.md, git-rules.md, helpers.md, recording-owner-answers.md, team-roles.md, toolkit-commands.md, tracker-github.md, tracker-jira.md, tracker-local.md, tracker-notion.md, work-item-format.md, DESIGN.md, WORK-ITEM.md. |
+| 2 | work | `work-status` | Reports where the project's work items stand: progress, blockers, and the next item, so the answer comes from the tracker, not from guesses. Use whenever the owner asks about project or item status, even one item, for example "where are we", "what's next", or "is X done yet". Not for what he must decide (work-decide) or a chat recap (session-summary). | 353 | Status of the project or one item; what comes next. Read-only at every stage. | Copies (7): recording-owner-answers.md, toolkit-commands.md, tracker-github.md, tracker-jira.md, tracker-local.md, tracker-notion.md, work-item-format.md. |
+| 3 | work | `work-decide` | Takes the owner through the decisions his work items wait on, each with a recommendation, and records his answers, so waiting work can continue and every approval is on record. Use when he asks "what do you need from me", answers a waiting decision ("go with option B"), or states a project-wide decision. | 305 | Every owner decision that arrives outside the skill that asked it: requirements approval (03), design approval (04), flagged tasks, result approval (11), open questions, an unanswered delivery offer. Project-wide decisions (`DECISIONS.md`). | Own: `references/decisions-log.md`. Copies (10): approvals.md, current-focus.md, proposals.md, recording-owner-answers.md, toolkit-commands.md, tracker-github.md, tracker-jira.md, tracker-local.md, tracker-notion.md, work-item-format.md. |
+| 4 | work | `work-requirements` | Interviews the owner one question at a time, writes a work item's requirements (R-01, R-02), checks them, and asks for his approval, so nothing is built on a guess. Use when an item's requirements are missing or the owner changes, adds, or drops one at any stage, or says "grill me", "ask me questions", or "check the spec". | 324 | `01-discovery`, `02-refinement`, asking for `03-requirements-approved`; requirement changes at any later stage; the spec check. | Own: `references/interview.md`, `references/requirement-format.md`, `references/spec-check.md`. Copies (12): agent-requirements-analyst.md, agent-researcher.md, approvals.md, current-focus.md, helpers.md, recording-owner-answers.md, toolkit-commands.md, tracker-github.md, tracker-jira.md, tracker-notion.md, work-item-format.md, WORK-ITEM.md. |
+| 5 | work | `solution-design` | Writes design options for how a work item gets built and asks the owner to choose and approve one, so the build follows an approach he agreed to. Use when approved requirements need a design, or the owner asks "how should we build this" or "give me design options". Not for a single Salesforce platform question; use sf-architect-solutioning. | 342 | `04-solution-design` and asking for design approval. Runs `sf-architect-solutioning` as the Salesforce specialist. | Own: `references/design-process.md`. Copies (15): agent-design-architect.md, agent-design-critic.md, agent-requirements-analyst.md, agent-researcher.md, approvals.md, current-focus.md, helpers.md, recording-owner-answers.md, team-roles.md, toolkit-commands.md, tracker-github.md, tracker-jira.md, tracker-notion.md, work-item-format.md, DESIGN.md. |
+| 6 | work | `work-organize` | Splits work items into sub-items, nests or moves them, and reconciles items the owner moved, renamed, or deleted by hand, so the tracker matches what he did and no item is lost. Use when the owner says "break it down" or "put X under Y", says he moved folders or Notion cards, or the briefing reports moved or missing items. | 324 | `05-breakdown`; sub-items; nesting, grouping, moving, archiving; reconciling moves, renames, deletions, and copies the owner made by hand in `.work-items/` or Notion. | Own: `references/moves.md`. Copies (11): approvals.md, current-focus.md, recording-owner-answers.md, toolkit-commands.md, tracker-github.md, tracker-jira.md, tracker-local.md, tracker-notion.md, work-item-format.md, DESIGN.md, WORK-ITEM.md. |
+| 7 | work | `work-check` | Tests a finished build against its work item's requirements, with an independent checker every time, fixes what fails, and asks the owner to approve the result, so every result he approves was checked. Use when the last build task is done, or the owner asks whether it is ready to ship or works, for example "is it ready", "test it", or "check it against what I asked for". | 373 | `09-testing`, `10-bug-fixing`, asking for `11-user-approval`. | Own: `references/testing.md`. Copies (13): agent-acceptance-checker.md, agent-builder.md, approvals.md, current-focus.md, git-rules.md, helpers.md, recording-owner-answers.md, toolkit-commands.md, tracker-github.md, tracker-jira.md, tracker-notion.md, work-item-format.md, TEST-PLAN-TEMPLATE.md. |
+| 8 | work | `work-finish` | Ships and closes an approved work item (pull request, merge, deployment, requirements update, Done) after an independent check, or cancels one with the owner's reason, so nothing ships unchecked or unapproved. Use when the owner says "ship it", "deploy it", "close it out", or "mark it done", or asks to cancel or drop an item. | 327 | `12-pr-and-push`, `13-deployment`, `14-spec-update`, Done, Cancelled. | Own: `references/closing.md`. Copies (16): agent-acceptance-checker.md, approvals.md, current-focus.md, git-rules.md, helpers.md, recording-owner-answers.md, toolkit-commands.md, tracker-github.md, tracker-jira.md, tracker-local.md, tracker-notion.md, work-item-format.md, CUTOVER-PLAN.md, RELEASE-NOTES.md, requirements-area-template.md, system-guide-area-template.md. |
+| 9 | work | `work-delegate` | Hands a work item's goal to a team of agents with the owner as product owner: makes the delivery offer, records his choice, and runs the team, so he only makes the decisions. Use whenever the owner hands a goal over ("you drive", "take it from here"), even a named item, or work-on starts a large goal with no delivery choice. | 326 | Delivery offer, team-arrangement question, archive question; running helper agents at any stage. | Own: `references/agent-led-delivery.md`, `references/team-arrangements.md`. Copies (13): agent-acceptance-checker.md, agent-builder.md, agent-researcher.md, approvals.md, git-rules.md, helpers.md, recording-owner-answers.md, team-roles.md, toolkit-commands.md, tracker-github.md, tracker-jira.md, tracker-notion.md, work-item-format.md. |
+| 10 | memory | `memory-save` | Saves what the owner wants kept: instructions ("from now on", "always", "never") to the owner-preferences rule, facts to a memory concept, so later sessions follow them without being told again. Use when the owner says "remember this", "forget that", or "remind me" with no time given, corrects the agent, or a hook says a save is due. | 335 | Save, correct, forget one fact in its concept; instructions ("from now on", "always", "never", corrections) to `.claude/rules/owner-preferences.md` with `toolkit rule add`; the agent's own lessons under "Gotchas and lessons"; current focus and untracked to-dos; glossary terms; routing other information to its home. Holds the only written copy of the memory approval policy. | Own: `references/examples.md`. Copies (12): current-focus.md, glossary.md, memory-builtin.md, memory-criteria.md, memory-hindsight.md, memory-notion.md, proposals.md, record-format.md, replacing-and-retiring.md, toolkit-commands.md, owner-preferences.md, project_topic_template.md. |
+| 11 | memory | `memory-find` | Looks up what the project already recorded (memory, rules, DECISIONS.md, work items, requirements, current focus) and cites the source of each answer, so no answer is a guess. Use when the owner asks "what did we decide", "do you remember", or "why did we", and before asking him to repeat anything. | 299 | Looking up past decisions, preferences, history, and references in every home. Read-only. | Copies (9): memory-builtin.md, memory-hindsight.md, memory-notion.md, proposals.md, record-format.md, toolkit-commands.md, tracker-github.md, tracker-jira.md, owner-preferences.md. |
+| 12 | memory | `memory-tidy` | Reviews the project's whole memory: merges duplicates, retires stale or contradicted records, trims the current focus, proposes proven lessons as rules or skills, and backs it up, so memory stays small and correct. Use when the owner says "clean up memory" or "tidy memory", thinks memory is wrong or out of date, a lesson keeps coming up ("turn that lesson into a skill"), or toolkit doctor flags memory. | 405 | Whole-memory review; duplicates; stale records; merging one-fact records into concepts and splitting large ones; moving old `feedback_` records out; promoting proven lessons to rules or project skills (`toolkit memory promote`); focus trim; backup and restore. | Own: `references/review-checklist.md`, `references/writing-a-project-skill.md`. Copies (13): backup-and-restore.md, current-focus.md, glossary.md, memory-builtin.md, memory-criteria.md, memory-hindsight.md, memory-notion.md, proposals.md, record-format.md, replacing-and-retiring.md, toolkit-commands.md, owner-preferences.md, project_topic_template.md. |
+| 13 | toolkit | `project-setup` | Sets up Toolkit V2 in a new project, or checks, updates, and repairs an existing setup, including Notion and Hindsight, so every project runs the same files, rules, and hooks. Use when the owner says "set up Toolkit V2", "set up this project", "check the setup", or "update the toolkit", or starts using Toolkit V2 on a new computer. | 333 | New project (GOAL finish item 3); repair of an existing project; a new computer; switching the memory backend; Notion and Hindsight wiring. | Own: `references/finishing-setup.md`, `references/installing-hindsight.md`, `references/interview.md`, `references/new-computer.md`, `references/repair-and-update.md`, `references/running-init.md`, `references/switching.md`, `references/wiring-github-jira.md`, `references/wiring-hindsight.md`, `references/wiring-notion.md`, `references/wiring-salesforce.md`. Copies (7): backup-and-restore.md, current-focus.md, git-rules.md, toolkit-commands.md, tracker-github.md, tracker-jira.md, codex-toolkit.rules (in `assets/`, from `plugins/toolkit/templates/codex/toolkit.rules`). |
+| 14 | session-skills | `handoff` | Updates the work item and current focus, then writes a checked prompt for a new session, or checks a pasted one, so nothing is lost when the context is cleared. Use whenever the owner is about to clear context or end the session, even a short one or with a recap, for example "write a handoff", "start a new session", or "I'm stopping for today". | 346 | Handoff between sessions at any stage; checking a pasted handoff prompt. | Own: `references/check-the-prompt.md`, `references/edge-cases.md`, `references/prompt-format.md`, `references/save-memory-and-focus.md`, `references/update-the-work-item.md`, `assets/handoff-prompt-template.md`. Copies (13): agent-handoff-verifier.md, backup-and-restore.md, current-focus.md, git-rules.md, memory-criteria.md, proposals.md, recording-owner-answers.md, toolkit-commands.md, tracker-github.md, tracker-jira.md, tracker-local.md, tracker-notion.md, work-item-format.md. |
+| 15 | session-skills | `session-summary` | Recaps this chat as a table of the owner's requests, where each landed, and what still needs him, so he sees what is done and what is open. Use when he asks what happened in this chat, for example "recap this chat", "what did I ask for", or "what did we do today". Not with a handoff (handoff includes it) or for project status (work-status). | 342 | Recap of this conversation only. | None. |
+| 16 | session-skills | `braindump` | Plays back a loose brain dump in very simple words and waits for the owner to confirm before any work starts, so no work begins on a misunderstanding. Use when the owner types /braindump or says "here's a brain dump", "play that back", "tell me what you heard", or "make sure you understood before you start". | 309 | Confirming understanding before any work. No writes. | None. |
+| 17 | session-skills | `explain-simply` | Re-explains the last answer, a plan, or a named document as short plain bullets, keeping every number, name, and path, so the owner can follow it and no fact is lost. Use whenever the owner finds an answer too technical or hard to follow, or wants it in plainer words, for example "explain it like I'm five", "less jargon", or "I don't get it". | 344 | Re-explaining at a lower reading level. | None. |
+| 18 | session-skills | `unslop` | Rewrites existing text, such as an email or a pull request, to remove the patterns of machine-written text while keeping every fact, so what goes out under the owner's name reads as his own. Use when the owner says "unslop this", "this reads like AI wrote it", or "make it sound human", or text for another person falls under the humanize-outbound-text rule. | 358 | Removing machine-written patterns on request, and for outbound text under the `humanize-outbound-text.md` rule. | None. |
+| 19 | git-workflows | `merge-and-clean-up` | Merges one approved GitHub pull request and removes only that pull request's branches and worktree, after its checks and the merge-safety check pass, so no unchecked change lands and no other session's work is removed. Use when the owner or work-finish asks to merge a named pull request, for example "merge PR 12", "merge and clean up", or "land this pull request". | 366 | The merge inside `12-pr-and-push`. | Copies (2): approvals.md, git-rules.md. Codex interface file: `agents/openai.yaml` (display name, short description, and default prompt in the Codex app; Codex routes on the `SKILL.md` description, and the agent never reads this file). |
+| 20 | git-workflows | `publish-docs` | Commits and pushes an agreed edit of project documents straight to the default branch from its own save workspace, so no pull request is needed and other sessions' work is not touched. Use whenever an edit of requirements/, system-guide/, DECISIONS.md, PROJECT.md, PROJECT-ROADMAP.md, ai-external-knowledge/, or delivery/ is ready to save. Not for code (work-finish) or rules and memory (memory-save). | 401 | Saving committed documents: the requirements baseline and System Guide at `14-spec-update`, `DECISIONS.md` rows, `PROJECT.md`, `PROJECT-ROADMAP.md`. Agent use. | Own: `references/recovery.md`, `scripts/publish-docs.mjs`. Copies (1): git-rules.md. |
+| 21 | git-workflows | `pull-latest` | Brings the local repository up to date with its remote by fetching and merging, without a rebase or a reset, so no local work or shared history is lost. Use when the owner says "get the latest", "pull the latest changes", "update from origin", or "grab what others pushed". Not for throwing away local work; use reset-to-remote. | 328 | Updating a checkout. | Copies (1): git-rules.md. |
+| 22 | git-workflows | `reset-to-remote` | Makes the local repository an exact copy of its remote, discarding local changes and branches the remote no longer has, after showing a plan, so a stale checkout starts clean and nothing is lost by surprise. Use only when the owner asks for that in his own words, for example "wipe local", "match remote exactly", or "fresh start from remote". | 343 | Destructive resync, only on the owner's explicit words. | Copies (1): git-rules.md. |
+| 23 | sf-architect-solutioning (Salesforce projects only) | `sf-architect-solutioning` | Answers Salesforce platform questions and plans Salesforce solutions, checking each fact against official Salesforce docs, so every design uses verified platform behavior. Use whenever the owner asks a Salesforce platform question, even about a work item ("which Flow type", "Flow or Apex"), or solution-design needs a Salesforce specialist. | 341 | Salesforce specialist inside `04-solution-design`; Salesforce platform questions at any stage. Description rewritten with Mike's approval (2026-09-27); body unchanged, byte for byte. | Own: `architectural-patterns.md`, `doc-sources.md`, `naming-conventions.md`, `salesforce-well-architected.md`, `solution-plan-template.md`, `solutioning-checklist.md`, and 8 files in `references/metadata/`, one per metadata type. |
 | 24 | project-local, Salesforce overlay | `sf-deploy-check` | Finds hitch-hikers: components or pending edits that would ship with a Salesforce deploy before their feature is ready. Use before any deploy to a shared org (UAT, full copy, staging, or production), including a deploy command for the owner. Not for running the deploy; use work-finish. | 286 | `13-deployment`; any validate against a shared org. Agent use. | None: a project-local skill from the model copy, installed as `SKILL.md` only. |
 | 25 | project-local, Salesforce overlay | `sf-component-tracker` | Keeps the component tracker CSV, the master and per-work-item package.xml files, destructiveChanges.xml, and manual steps in sync. Use first, before work-on, when Salesforce metadata under force-app/ is added, changed, renamed, or deleted, a deploy result comes back, or a deploy needs manual steps. | 299 | `07-tracking-setup`, `08-build`, `10-bug-fixing`, `13-deployment`. Agent use. | None: a project-local skill from the model copy, installed as `SKILL.md` only. |
 | 26 | project-local, Salesforce overlay | `sf-data-change` | Builds the owner's package for a Salesforce production data change: load file, backup, numbered steps, success check, and undo steps. Use first, before work-on, when the owner asks to load, import, update, or delete production records, for example "load this file into production". | 281 | `08-build` and `13-deployment` of a `data-load` item. | None: a project-local skill from the model copy, installed as `SKILL.md` only. |
@@ -88,7 +118,7 @@ Notes on the table:
   `dev/tools/shared-references/`. Each skill's `SKILL.md` links every one of
   them in its References table, with when to open it, and
   `dev/tools/check-skills.mjs` fails when one is not linked, is missing, or
-  differs from its source. Counted on 2026-09-28.
+  differs from its source. Counted on 2026-09-29.
 - **Plugin names** follow ARCHITECTURE.md section 2. Critiques B3
   (`critique-architecture.md`) and P14 (`critique-platform.md`) show that
   `session-skills`, `git-workflows`, and `sf-architect-solutioning` have the same
@@ -212,7 +242,19 @@ A skill reads only files inside its own folder (Agent Skills specification,
   native worker.
 - The model's `WORK-ITEM.md` and `DESIGN.md` templates are copied into
   `assets/` of the skills that create GitHub or Jira issues or design
-  comments.
+  comments, or plan from a design (`DESIGN.md` also in `work-on` and
+  `work-organize`). Every other template a skill fills is copied the same way
+  (2026-09-29): the model's `tests/TEST-PLAN-TEMPLATE.md` into `work-check`;
+  the requirements and System Guide area templates and the release cutover
+  plan and release notes into `work-finish`; the memory concept template
+  (`.memory/project_topic_template.md`) into `memory-save` and `memory-tidy`.
+  The rule file layout for `.claude/rules/owner-preferences.md` has its source
+  in `plugins/memory/shared/owner-preferences-template.md`, copied as
+  `assets/owner-preferences.md` into `memory-save`, `memory-tidy`, and
+  `memory-find`; `check-skills.mjs` checks that it starts with the title and
+  lead paragraph `toolkit rule add` writes. A template only one skill uses is
+  that skill's own file: the handoff prompt template
+  (`handoff/assets/handoff-prompt-template.md`).
 - Other plugins' sources: `plugins/toolkit/shared/` (running `toolkit`
   commands), `plugins/git-workflows/shared/` (Git rules),
   `plugins/memory/shared/` (the current focus, record format, proposals,
@@ -222,8 +264,10 @@ A skill reads only files inside its own folder (Agent Skills specification,
   from `plugins/work/shared/helpers.md`. It also runs the same copy check as
   `node dev/tools/sync-skill-references.mjs --check`, and fails on a link to a
   file that does not exist, a link that leaves the skill folder, a file in
-  `references/`, `assets/`, or `scripts/` that `SKILL.md` does not link, and a
-  reference over 100 lines without a `## Contents` list.
+  `references/`, `assets/`, or `scripts/` that `SKILL.md` does not link, a
+  reference over 100 lines without a `## Contents` list, and a `SKILL.md`
+  that names a template, a skill file, or a plugin path its own folder does
+  not hold.
 - A shared source names a skill file by its path (`references/approvals.md`)
   only when every skill that gets the copy holds that file. Otherwise it names
   the file and the skills that carry it.
@@ -630,59 +674,104 @@ it do what I asked".
 
 #### `memory-save`
 
+Rules, skills, and memory each hold one kind of thing (GOAL.md, decision of
+2026-09-29): an instruction the agent follows every time goes in the rules, a
+procedure that proved itself in a skill, and a fact or an unproven lesson in
+memory.
+
 - **Steps:**
-  1. Decide the home first. Memory: a lasting preference, correction, fact
-     about the project or the owner, or hard-to-find reference. Elsewhere:
-     project work goes to `work-on`; a decision for the whole project to
-     `work-decide` (`DECISIONS.md`); a standing rule for how agents work in
-     this repository is proposed as a rule-file change; a personal to-do with
-     no work item goes to current focus "Untracked to-dos"; a project term to
-     the glossary.
-  2. Search first (`toolkit memory find`); update the existing record rather
-     than add a duplicate.
-  3. Approval, from `memory.approval` in `.toolkit.json`: the owner's own words
-     ("remember", "from now on", "always", "never", "forget", a correction) are
-     the approval, so save now. `onboarding`: something the agent inferred gets
-     one yes-or-no line first. `trusted`: routine facts the agent is sure of are
-     saved and reported. Always ask first for anything about a named person,
-     personal details, a hard delete, more than five records at once, or a
-     change to this policy.
-  4. Save with `toolkit memory save`: type (`user`, `feedback`, `project`,
-     `reference`, `event`), slug, one-line description, the source (`--source`,
-     a person or document with an absolute date), and a body with the model
-     topic template's labels: Remember, Why, How to apply, Evidence and limits
-     (source and an absolute date), Related memories (relative Markdown links,
-     Obsidian style), Authoritative records. A better name or type for the same
-     record: `toolkit memory rename <key> --to <new-key>`. The CLI writes the
-     model's frontmatter and repairs links on rename, merge, retire, and
-     delete.
-  5. "Forget that": `toolkit memory retire <key>` (can be undone); right after
-     a save, retire that record with no question (from lifecycle). Delete only
-     when the owner says delete: `toolkit memory delete <key> --owner-approved`.
-  6. Focus and to-dos: `toolkit memory focus --set-file <f>`, four sections,
-     under 50 lines, work item ids only, never their status. On a new project,
-     remove the focus's fill-in guide and write "None." in each section that
-     still holds only a template prompt. Glossary:
+  1. Decide the home first. An instruction for how the agent works (a
+     preference about how work is done, a correction, "from now on",
+     "always", "never") is a rule: `toolkit rule add` writes it to the
+     always-on project rule `.claude/rules/owner-preferences.md`, one `##`
+     section per area (Replies, Questions, Testing, Git, Work items, Memory,
+     General), one dated line per instruction; `--machine` writes Mike's
+     machine-wide `~/.claude/rules/` file when his words say every project
+     ("This project or all projects?" only when unclear). A fact about why a
+     part of the project exists or how it is used is a `project_` concept
+     fact. Anything else follows the memory criteria. Not memory: project
+     work goes to `work-on`; a decision for the whole project to
+     `work-decide` (`DECISIONS.md`); a requirement to `work-requirements`; a
+     procedure that proved itself to a project skill in `.claude/skills/`
+     (`memory-tidy`, "Promotion"); a to-do with no work item and no time to
+     the current focus "Untracked to-dos"; a to-do with a time to the host's
+     scheduling tool; a project term to the glossary.
+  2. Find the concept it belongs in: list the concepts of its type, search,
+     and read each likely concept whole with its version. The save's
+     duplicate check compares wording, so only this search finds a section
+     the new fact contradicts.
+  3. Approval, from `memory.approval` in `.toolkit.json`. The owner's own
+     words ("remember", "from now on", "always", "never", "forget", a
+     correction) are the approval: a fact is saved with `--approved-by`, an
+     instruction with `toolkit rule add`. The hooks check this: with no keep
+     phrase or memory answer recorded in his message, an `--approved-by` save
+     is stored as a proposal and `toolkit rule add` as a rule proposal.
+     `onboarding` (the default): something the agent inferred gets one line
+     first, "Save to memory: <one line>?" for a fact or "Add to the project
+     rules: <one line>?" for an instruction. `trusted`: a routine fact the
+     agent is sure of is saved and reported. Always ask first for a named
+     person or personal details he did not ask to keep, more than five
+     records at once, or a change to this policy. A delete needs his own
+     words about that record.
+  4. Save in the concept format. Four prefixes: `user_`, `project_`,
+     `reference_`, `event_`; `feedback_` is retired, and a new `feedback_`
+     save is refused. One record per concept (for example `project_billing`),
+     one `##` section per fact with the model topic template's labels
+     (Remember, Why, How to apply, Evidence and limits, Related memories,
+     Authoritative records), and a last "Gotchas and lessons" section. An
+     `event_` record holds one episode. Save forms: a new section in an
+     existing concept (`--concept`, `--section`), a new concept with its
+     first fact (`--type`, `--name`, `--description`, `--section`), one more
+     fact under an existing heading (`--append`), a correction (`--expect`),
+     a proposal (`--proposal` in place of `--approved-by`), a replacement
+     (`--supersedes`), and a better name (`toolkit memory rename`).
+  5. Exit code 2 saved nothing: "belongs in the concept <key>" (add it there,
+     or `--new-concept` for a different concept), records listed by the
+     duplicate check, or "changed since it was read".
+  6. "Forget that" right after a section save runs the "Undo:" command the
+     save printed. A whole concept is retired with his words as the reason.
+     A delete only on his own words: `toolkit memory delete <key>
+     --owner-approved`.
+  7. Focus and to-dos: `toolkit memory focus --set-file <f>` (four sections,
+     under 50 lines, work item ids only, never their status). Glossary:
      `toolkit memory glossary --set-file <f>`.
-  7. A preference a project setting can enforce (for example "I hate tabs" and
-     `.editorconfig`): save it, then offer that change too.
-  8. Tell the owner in one line: "Saved to memory: <title>. Say 'forget that'
-     to undo." A failed save is reported first as "Not saved". Never store
-     work-item status, secrets, or email addresses.
-- **CLI:** `toolkit memory find <query>`, `toolkit memory get <key>`,
-  `toolkit memory save --type <t> --name <slug> --description <d> --body-file <f> --source <text> [--approved-by <name>]`,
+  8. A preference a project setting can enforce (for example "I hate tabs"
+     and `.editorconfig`): add the rule, then offer the setting change. A
+     gotcha or lesson the agent learned itself goes under the concept's
+     "Gotchas and lessons" section with `--lesson`, with no approval. When
+     it came up in two or more sessions, a lesson like it is in another
+     concept, or the owner confirms it, propose it as a rule or a skill
+     (`memory-tidy`, "Promotion").
+  9. Read the record back, run `toolkit doctor`, and reply with the line the
+     command printed: "Saved to memory: <title>. Say 'forget that' to undo."
+     or "Added to the project rules: ...". A failed save starts with "Not
+     saved". Never store work-item status, secrets, or email addresses.
+- **CLI:** `toolkit rule add --section <area> --text <t> --source <s> [--machine]`,
+  `toolkit rule list`,
+  `toolkit rule update --section <area> --entry <n> --text <t> --source <s>` (or `--remove`),
+  `toolkit memory list --type <t>`, `toolkit memory find <query>`,
+  `toolkit memory get <key> [--json]`, `toolkit config get memory.approval`,
+  `toolkit memory save --concept <key> --section <heading> --body-file <f> --source <s> [--approved-by <owner> | --proposal] [--append] [--expect <v>]`,
+  `toolkit memory save --type <t> --name <slug> --description <d> --section <heading> --body-file <f> --source <s> [--approved-by <owner> | --proposal]`,
+  `toolkit memory save --concept <key> --lesson <heading> --body <text> --source <s>`,
+  `toolkit memory approve <key> --by <owner>`,
   `toolkit memory rename <key> --to <new-key>`,
-  `toolkit memory retire <key>`, `toolkit memory restore <key>`,
+  `toolkit memory retire <key> --reason <words>`, `toolkit memory restore <key>`,
   `toolkit memory delete <key> --owner-approved`,
-  `toolkit memory focus --set-file <f>`, `toolkit memory glossary --set-file <f>`.
+  `toolkit memory focus --set-file <f>`, `toolkit memory glossary --set-file <f>`,
+  `toolkit doctor`.
 - **Agents:** none. The model's `memory-curator` is dropped (ARCHITECTURE.md
   section 7).
 - **Replaces:** `second-brain:knowledge-save` and its aliases `remember` and
   `retire`; the model's `memory-curator` agent and the body of
   `memory-curator-dispatch.md`.
-- **Backed by:** UserPromptSubmit adds the reminder line (section 7.2); Stop
-  blocks once when the owner asked to remember and no save ran; PostToolUse
-  reindexes `.memory/`.
+- **Backed by:** UserPromptSubmit adds the reminder line when the owner's
+  message holds a keep phrase ("remember that", "from now on", "don't
+  ever", "note that", "going forward", "keep in mind", or a sentence that
+  starts "Always" or "Never"); Stop blocks once when a keep phrase got no
+  save, rule, work-item change, or decision in the turn, and saves an
+  unanswered "Save to memory?" or "Add to the project rules?" question as a
+  proposal; PostToolUse reindexes `.memory/`.
 
 #### `memory-find`
 
@@ -712,32 +801,63 @@ it do what I asked".
 #### `memory-tidy`
 
 - **Steps:**
-  1. Run `toolkit doctor` and `toolkit memory list`.
-  2. Find duplicates, contradictions, stale records (replaced by a later
-     decision, or not verified for a long time), records that copy work-item
-     status, and a current focus over 50 lines.
-  3. Show one numbered list of proposed changes (merge, retire, correct, trim),
-     each with its reason.
-  4. Ask once for the whole list. Anything about a person, any hard delete, or
-     more than five changes needs the owner's yes; quote his words for a
-     delete.
-  5. Apply with `toolkit memory save`, `retire`, `restore`, and `rename` (a
-     file name whose prefix does not match `metadata.type`); trim the focus
-     with `toolkit memory focus --set-file`.
-  6. Back up with `toolkit memory export --to <folder>`; restore with
-     `toolkit memory import --from <folder>`; say when the last backup was made.
-  7. Report what changed by key and how to undo it (`toolkit memory restore`).
-- **CLI:** `toolkit doctor`, `toolkit memory list`, `toolkit memory get <key>`,
+  1. Check the setup and the backend, list the records, and get the concept
+     plan: `toolkit memory tidy --plan` changes nothing and names one-fact
+     records to merge into concepts (each with its `merge` command and a
+     draft summary), concepts that grew too large, `feedback_` records to
+     move out (each part with its command), and lessons ready to promote.
+  2. Review each record, the focus, and the glossary against
+     `references/review-checklist.md`: duplicates, contradictions, stale
+     records, records that copy work-item status, a focus over 50 lines.
+  3. Show one numbered list of proposed changes (merge, split, move a
+     `feedback_` record, promote a lesson, retire, correct, trim), each with
+     its keys and reason, and ask once for the whole list. The list names
+     the folder the step 4 backup goes to.
+  4. After his yes, and before any change, export memory to a new folder
+     (`<backup.dir>/<project key>-before-tidy-<YYYY-MM-DD-HHMM>`).
+  5. Apply only what he approved. A merge or a split with `--approved-by
+     <owner>`. A `feedback_` record: an instruction with `toolkit rule add`,
+     a fact with `toolkit memory split` into a `user_` or `project_`
+     concept, then retire the record. A promotion ("Promotion" below). A
+     correction with `--expect`; a retire with `--superseded-by` or
+     `--reason`.
+  6. Check with `toolkit memory status` and `toolkit doctor` until no memory
+     problem is left.
+  7. Back up the result (`toolkit handoff-backup`; Notion memory with
+     `toolkit memory export --to <new folder>`).
+  8. Report each change by key, with the words that undo it, and where the
+     step 4 backup is.
+- **Promotion:** a lesson under a concept's "Gotchas and lessons" section is
+  a candidate when it came up in two or more sessions, a lesson like it is
+  in another concept, or the owner confirmed it. An instruction followed
+  every time becomes a rule; a procedure with steps becomes a skill.
+  `toolkit memory promote <key> --section <lesson> --to rule|skill` prints
+  the question for the owner and changes nothing; after his yes, the same
+  command with `--approved-by <owner>` writes the rule to
+  `.claude/rules/owner-preferences.md`, or a `SKILL.md` skeleton to
+  `.claude/skills/<name>/`, which the agent fills as
+  `references/writing-a-project-skill.md` says (what, why, when in the
+  description) and copies to `.agents/skills/<name>/` when the project
+  also uses Codex. The lesson keeps a Promoted line naming where it went.
+- **CLI:** `toolkit doctor`, `toolkit memory status`, `toolkit memory list`,
+  `toolkit memory tidy --plan`, `toolkit config get backup.dir`,
+  `toolkit memory get <key> --json`, `toolkit memory focus --json`,
+  `toolkit memory export --to <dir>`,
+  `toolkit memory merge <key> <key> --into <concept> --approved-by <owner>`,
+  `toolkit memory split <key> --section <heading> --into <key> --approved-by <owner>`,
+  `toolkit memory promote <key> --section <lesson> --to rule|skill [--approved-by <owner>]`,
+  `toolkit rule add --section <area> --text <t> --source <s>`,
   `toolkit memory save`, `toolkit memory retire <key>`,
   `toolkit memory restore <key>`, `toolkit memory rename <key> --to <new-key>`,
   `toolkit memory delete <key> --owner-approved`,
-  `toolkit memory focus --set-file <f>`, `toolkit memory export --to <dir>`,
+  `toolkit memory focus --set-file <f>`, `toolkit handoff-backup`,
   `toolkit memory import --from <dir>`.
 - **Agents:** none.
 - **Replaces:** `second-brain:knowledge-review` and its alias `reflect`; the
   model's `scripts/memory.py doctor` and `reindex` use; the tidy duties of the
   model's curator.
-- **Backed by:** PreToolUse refuses hand edits of `.memory/MEMORY.md`.
+- **Backed by:** PreToolUse refuses hand edits of `.memory/MEMORY.md`;
+  `toolkit doctor` warns while any `feedback_` record is left.
 
 ### 3.3 toolkit plugin
 
@@ -1181,6 +1301,8 @@ description; the quoted phrase decides:
 | change | `work-on` (change something in the product), `work-requirements` (the owner changes, adds, or drops a requirement) | A requirement (`R-xx`) goes to `work-requirements`; `work-on` says it is not for requirement edits. |
 | recap | `session-summary` ("recap this chat"), `handoff` (a recap asked together with leaving), `work-status` (not for a recap) | A recap alone: `session-summary`. A recap with a handoff or with leaving: `handoff`, which shows the `session-summary` table first. |
 | hand over | `work-delegate` (the owner hands a goal over to agents), `work-on` (not for handovers), `handoff` (hands the session to a new session) | Handing the work to agents is `work-delegate`; handing the conversation to a new session is `handoff`. |
+| rule | `memory-save` (saves an instruction to the owner-preferences rule), `memory-find` (looks up the rules), `memory-tidy` (proposes lessons as rules), `project-setup` (installs the rule files), `publish-docs` (not for rules) | An instruction to keep is `memory-save`; a question about one is `memory-find`; the rule files themselves are `project-setup`'s. |
+| checker, check | `work-check` (an independent checker every time), `work-finish` (ships after an independent check), `merge-and-clean-up` (its checks and the merge-safety check) | Checking a finished build is `work-check`; `work-finish` and `merge-and-clean-up` only require that a check ran. |
 
 ### 5.3 Skills from other plugins that compete for the same words
 
@@ -1200,6 +1322,11 @@ These cannot be removed by V2's own descriptions.
 | Built-in `/init`, `/status`, `/memory`, `/recap`, `/review`, `/plan`, `/tasks`, `/resume` | typed commands | not skills | No V2 skill uses a built-in command name (checked against `platform-best-practices.md` 2.12). |
 | `claude-toolkit` plugins (`work-tracker`, `second-brain`, `session-skills`, `git-workflows`, `project-init`, `system-guide`, `hooks-library`, `sf-architect-solutioning`) | every job here; `handoff`, `solution-design`, `pull-latest` and others have the same names | the V2 skill | `project-setup` turns them off per project in both hosts; `toolkit doctor` reports any that are on (critiques B3, P14). Before init, in a folder with no project settings, both sets load: Mike starts setup with `/project-setup` (Codex `$project-setup`), a name no current plugin uses. |
 | Hindsight MCP tools (retain, recall) | "remember" | `memory-save` | Expose only recall to agents; saves go through the CLI (`hindsight.md` 11). |
+| Built-in `update-config` skill (Claude Code): it claims "from now on when X", "each time X", "whenever X", and "before/after X" as hook work in `settings.json` | "from now on", "whenever", "always" | `memory-save` for an instruction the agent follows in its own work ("From now on, always answer in bullets", "Never use tabs in this project"); `update-config` for something the host must run on an event with no agent step (a hook) | `memory-save`'s description sends "from now on", "always", and "never" instructions to the owner-preferences rule. A message that asks for an action on an event ("From now on, run the tests whenever I stop") fits both: Mike's call (section 9.1, decision 5); results in section 5.5. |
+| `todoist-cli` (Mike's user skill: "tasks, inbox, today") and Mike's machine-wide `CLAUDE.md` ("For anything involving Todoist ... use the `td` command-line tool") | "remind me", "add a task" | `memory-save` for a project to-do with no time and no work item (the current focus, "Untracked to-dos"); `todoist-cli` for Mike's own tasks outside the project | "Remind me to call the bank." fits both: Mike's call (section 9.1, decision 6); results in section 5.5. |
+| `skill-creator:skill-creator` and `anthropic-skills:skill-creator` ("Create new skills, modify and improve existing skills") | "turn that into a skill", "make a skill" | `memory-tidy` for a lesson already in project memory: it runs `toolkit memory promote`, writes the lesson's Promoted line, and fills the skill as `references/writing-a-project-skill.md` says; `skill-creator` for a new skill that does not start from a memory lesson | `memory-tidy`'s description names "turn that lesson into a skill". |
+| `obsidian:obsidian-cli` ("search vault content") and `graphify` (Mike's user skill: "any question about a codebase ... or project content") | "search my notes", "what did we decide" | `memory-find` inside a V2 project; `obsidian-cli` for Mike's own Obsidian vault; `graphify` for code structure when `graphify-out/` exists | `memory-find`'s description names what the project recorded and "before asking him to repeat anything". |
+| `project-init:machine-sync` (claude-toolkit, on for the whole machine: "setting up a new computer", "I have a new laptop") | "new computer", "new laptop" | `project-setup` for Toolkit V2 on a new computer; `machine-sync` for the claude-toolkit machine-wide rule and hook | `project-setup`'s description says "starts using Toolkit V2 on a new computer". |
 
 ### 5.4 What this check depends on
 
@@ -1269,6 +1396,62 @@ holding a copy of Mike's Codex settings):
   miss comes from the model's `session-handoff.md` rule ("Skip this for small
   edits"), not from a description; the proposed rule change waits for Mike in
   `dev/model-changes.md`.
+
+**Check of the what-why-when text (2026-09-29).** `dev/tools/check-skills.mjs`
+now runs the section 5.5 checks on every description itself, with Mike's new
+order: a third-person job verb at the start (inside the first 120
+characters), a why clause after it (", so", "so that", "to keep", "to
+prevent", "which keeps", or "which prevents"), then "Use when", "Use
+whenever", "Use only when", or "Use first, before <skill>, when", with any
+"Not for" clause last; at most 450 characters; no em or en dash; and no phrase
+quoted in one description found as whole words in another. Result on rows 1
+to 23: 0 problems. A first draft failed the phrase check twice: "always"
+(quoted in `memory-save`) also stood in the `work-check` text, and "never" in
+`pull-latest`; both were reworded. Rows 24 to 26 have no why clause, and row
+24 says "Use before" instead of "Use when"; the checker reports them as notes
+until Mike approves their new text.
+
+Routing, Claude Code only (2026-09-29, Claude Code 2.1.280 on claude-opus-5-5, one fresh session
+per message, the round 3 runner and test projects, `--plugin-dir` pointing at
+a copy of `plugins/` taken after these edits, every session with the 22 V2
+plugin skills, 23 in Salesforce projects, and no plugin errors): 73 of the 76
+round 3 messages opened the expected skill first. All 43 index messages, all
+6 "none" messages, and all 5 round 2 retests matched. The 3 others: M14
+opened `solution-design`, which round 3 said future rounds should expect;
+O21 opened `work-on`, as in round 3 (its step 3 sends "ask me questions first"
+to `work-requirements`); V11 opened `solution-design` once, then `work-on` in
+2 of 2 repeat runs. Codex has not been run on the new text; that needs a
+scratch Codex home with the plugins added again at a raised version.
+
+**Check after the review fixes (2026-09-29).** The new `memory-tidy`,
+`work-finish`, `work-on`, `project-setup`, and `publish-docs` text ran
+against the review's seven new messages ("From now on, always answer in
+bullets.", "Never use tabs in this project.", "Why does the build always
+fail?", "From now on, run the tests whenever I stop.", "Remind me to call
+the bank.", "Turn that lesson about the export into a skill.", "Search my
+notes for the billing decision.") and ten earlier messages for the changed
+skills, in three setups: Claude Code with project settings only (44
+skills), Claude Code with Mike's own user settings, skills, `CLAUDE.md`,
+and enabled plugins (76 skills, including `todoist-cli`, `graphify`,
+`obsidian-cli`, `skill-creator`, and `update-config`), and Codex with the
+raised versions. Every message with one expected skill matched in every run:
+35 of 35, 25 of 25, and 25 of 25. "Turn that lesson about the export into a
+skill." opened `memory-tidy` 9 of 9 times, never `skill-creator`. The two
+messages that fit two homes are Mike's call (section 9.1, decisions 5 and
+6). Details: `dev/test-runs/skill-routing-final.md`, section "Earlier check
+the same day, after the review fixes".
+
+**Final spot check (2026-09-29).** After Mike's Claude Code copies were
+updated to the raised versions (his Codex copies already had them), 20
+messages (18 from section 5.1, plus "Remember that I prefer short commit
+messages." and "From now on, use tables in status.") ran once each in fresh
+Codex sessions and, one at a time, in fresh Claude Code sessions with his
+user settings, in a test project with real work items. The first skill was
+right in 20 of 20 Codex sessions and 20 of 20 Claude Code sessions. The
+session read a reference its skill's References table names for the case in
+13 of 13 Codex and 10 of 12 Claude Code sessions where a step needs one, and
+no session read only a wrong reference. Details:
+`dev/test-runs/skill-routing-final.md`.
 
 ---
 
@@ -1361,10 +1544,14 @@ Adopting a record with no id and renumbering a copied folder are handled by
   `work-requirements`; the **SessionStart** briefing names `work-decide`,
   `work-organize`, and `project-setup` as in 5.4.
 - **Rules** (the model's names, all applied on branch
-  `toolkit-v2/approved-changes`): `keep-work-item-current.md` (`work-on`,
-  `work-decide`, `work-delegate`, `handoff`, `toolkit work lifecycle`);
-  `session-handoff.md` (`handoff`, memory through `memory-save`);
-  `memory-review-and-save.md` (`memory-save`, `toolkit memory` commands);
+  `toolkit-v2/approved-changes`): `keep-work-item-current.md` names no skill
+  or command since the rules rewrite (model commit `8f04125`); it points at
+  `AGENTS.md`, "What the owner decides";
+  `session-handoff.md` (`handoff`, `toolkit memory focus`, memory through
+  `memory-save`);
+  `memory-review-and-save.md` (`memory-save`, `work-decide`, `toolkit rule
+  add` for the owner's instructions, `toolkit memory get` and `toolkit
+  doctor` before a save is reported);
   `humanize-outbound-text.md` (`humanizer`, falling back to `unslop`);
   `work-item-folders.md`, local tracker only (moves handled by
   `work-organize`); `publish-project-documents.md` (`publish-docs`, with
@@ -1432,6 +1619,32 @@ Current skills not listed as "kept" in section 3:
 4. **Machine-wide no-AI-credit rule and hook.** Today `machine-sync` installs
    them. They stay from the current toolkit on this Mac; decide whether V2 needs
    its own copy.
+5. **"From now on, run the tests whenever I stop."** An instruction that
+   asks for an action on an event fits both `memory-save` (a line in
+   `.claude/rules/owner-preferences.md`, which the agent follows when it
+   remembers) and Claude Code's built-in `update-config` (a hook in
+   `.claude/settings.json`, which runs every time with no agent step).
+   Routing on 2026-09-29 (section 5.5): Claude Code with project settings
+   only opened `update-config` in 2 of 3 runs and `memory-save` in 1; with
+   Mike's own user settings and plugins, `update-config` in 3 of 3; Codex,
+   which has no `update-config`, opened `memory-save` in 3 of 3. Recommended:
+   `update-config` in Claude Code, because GOAL.md (decisions of 2026-09-28)
+   puts anything that must happen every time in a hook or the `toolkit`
+   command; `memory-save` in Codex. No description change is needed for
+   that; if Mike wants `memory-save` to also offer the hook, that is a
+   change to its body.
+6. **"Remind me to call the bank."** A personal errand with no time fits
+   `memory-save` ("remind me" with no time: the current focus, "Untracked
+   to-dos") and Mike's `todoist-cli` skill (his machine-wide `CLAUDE.md`
+   sends anything about Todoist through `td`). Routing on 2026-09-29: with
+   project settings only, and in Codex, every run opened `memory-save`; with
+   Mike's own user skills and `CLAUDE.md`, Claude Code opened `todoist-cli`
+   in 2 of 3 runs and went straight to `td` in the third. Recommended:
+   personal errands go to Todoist, which is what his own setup already
+   does, and project to-dos stay in the current focus. Making that explicit
+   adds one line to `memory-save`'s "Where other things go" table ("a
+   personal errand outside the project: the owner's task app"); that is a
+   meaning change, so it waits for his yes.
 
 ### 9.2 If the independent check finds problems, change these first
 

@@ -1,6 +1,6 @@
 {
   "name": "git-workflows",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "Four Git skills that stay safe when several agent sessions share one repository: pull-latest, reset-to-remote, merge-and-clean-up, and publish-docs.",
   "author": {
     "name": "Mike Rihm",

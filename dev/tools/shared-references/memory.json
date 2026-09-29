@@ -52,6 +52,16 @@
     {
       "source": "plugins/work/shared/tracker-jira.md",
       "skills": ["memory/memory-find"]
+    },
+    {
+      "source": "plugins/toolkit/scaffold/model/.memory/project_topic_template.md",
+      "as": "assets/project_topic_template.md",
+      "skills": ["memory/memory-save", "memory/memory-tidy"]
+    },
+    {
+      "source": "plugins/memory/shared/owner-preferences-template.md",
+      "as": "assets/owner-preferences.md",
+      "skills": ["memory/memory-save", "memory/memory-tidy", "memory/memory-find"]
     }
   ]
 }

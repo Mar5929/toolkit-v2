@@ -1,0 +1,5 @@
+0.26s :: 'const r=await Promise.allSettled([\n  tools.exec_command({cmd:"cat PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/owner-pre'
+0.258s :: 'const r=await tools.exec_command({cmd:"toolkit work decisions",max_output_tokens:5000}); text(r)\n'
+0.343s :: 'const r=await Promise.allSettled([\ntools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/work/0.3.0/skills/work-decide/references/proposals.md",max_output_tokens:5000}),\ntools.exec_command({cmd:'
+0.258s :: 'const r=await tools.exec_command({cmd:"toolkit memory get project_finance_team_runs_feecalc_every_monday_morning",max_output_tokens:3000}); text(r)\n'
+MAX toolkit call seconds: 0.343

@@ -1,0 +1,1 @@
+Yes, the total due is the invoice amount plus the rounded fee.

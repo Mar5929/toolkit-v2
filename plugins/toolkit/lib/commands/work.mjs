@@ -31,11 +31,11 @@ const USAGE = `Usage:
   toolkit work show <id> [--section <heading>] [--path]
   toolkit work edit <id> --section <heading> (--set-file <file|-> | --text <text>) | --section <heading> --append-row '<a | b | c>' | --label <name> --value <text> | --remove-guide
   toolkit work set <id> [--stage <s>] [--waiting-on <w>] [--priority <p>] [--type <t>] [--delivery <d>] [--title <t>] [--parent <id|none>] [--reopen] [--note <why>]
-  toolkit work approve <id> --requirements|--design|--result --by <name>
+  toolkit work approve <id> --requirements|--design|--result --by <name> [--no-independent-check --reason <text>]
   toolkit work design <id> [--create] [--set-file <file|-> | --text <text>] [--status proposed|approved|superseded] [--by <name>]
   toolkit work history <id> --note <text> [--effect <text>]
   toolkit work move <id> --under <id|group|archive|root>
-  toolkit work finish <id> --by <name> --evidence <text> [--quote <owner's words>] [--allow-open-sub-items]
+  toolkit work finish <id> --by <name> --evidence <text> [--quote <owner's words>] [--allow-open-sub-items] [--no-independent-check --reason <text>]
   toolkit work cancel <id> --reason <text> [--by <name>]
   toolkit work next
   toolkit work decisions
@@ -45,6 +45,12 @@ const USAGE = `Usage:
 --covers: a sub-item that delivers some of the parent's approved requirements
 links them (the text stays in the parent) and inherits the parent's
 requirements approval, so the owner is not asked twice.
+--result and finish refuse (exit 2) until an "acceptance-checker: <verdict>"
+history note follows the item's last move to 08 or 10 (work-check records it).
+--no-independent-check --reason <text> skips it only when this host cannot
+start a worker; the reason is recorded in the item's history, in the result
+approval row. Only that row counts for finish; a history note cannot start
+with "Result approved by" (exit 2).
 --quote: finish needs the owner's own words approving the result when no
 result approval is recorded yet (toolkit work approve <id> --result records one).
 finish then backs up .work-items/ and .memory/ (and Hindsight memory) to the
@@ -64,7 +70,7 @@ export function help() {
 const SPEC = {
   string: ['title', 'type', 'parent', 'stage', 'priority', 'request', 'group', 'status', 'waiting-on', 'section', 'set-file', 'append-row',
     'label', 'value', 'delivery', 'by', 'under', 'evidence', 'reason', 'note', 'effect', 'host', 'covers', 'quote', 'text'],
-  boolean: ['tree', 'all', 'path', 'requirements', 'design', 'result', 'create', 'reopen', 'allow-open-sub-items', 'json', 'remove-guide'],
+  boolean: ['tree', 'all', 'path', 'requirements', 'design', 'result', 'create', 'reopen', 'allow-open-sub-items', 'json', 'remove-guide', 'no-independent-check'],
 };
 
 function has(flags, name) {
@@ -75,6 +81,12 @@ function one(flags, name) {
   const v = flags[name];
   if (Array.isArray(v)) return v[v.length - 1];
   return v;
+}
+
+/** --no-independent-check with its --reason, as { reason }, or null when the flag was not given. */
+function skipFlag(f) {
+  if (f['no-independent-check'] !== true) return null;
+  return { reason: one(f, 'reason') ?? '' };
 }
 
 function needId(args, sub) {
@@ -177,8 +189,9 @@ async function cmdNew(ctx, tracker, project, args, changes) {
   if (res.covers && res.covers.length) lines.push(`It delivers ${s.parent} ${res.covers.join(', ')} and inherits that requirements approval (${res.inherited}).`);
   if (res.parentDesign) lines.push(`${res.parentDesign}'s approved design covers it, so it starts at planning with no design of its own.`);
   if (res.inheritedDelivery) lines.push(`Delivery: ${res.inheritedDelivery}, as recorded for ${s.parent}.`);
+  for (const n of res.notes || []) lines.push(`Note: ${n}`);
   lines.push(`Continue with ${s.continueWith}.`);
-  out(ctx, withChanges(changes, lines), { ok: true, id: res.id, item: s, path: res.record.path || null, changes });
+  out(ctx, withChanges(changes, lines), { ok: true, id: res.id, item: s, path: res.record.path || null, notes: res.notes || [], changes });
   return EXIT.OK;
 }
 
@@ -421,7 +434,7 @@ async function cmdApprove(ctx, tracker, project, args, changes) {
   const f = args.flags;
   const whats = ['requirements', 'design', 'result'].filter((w) => f[w]);
   if (whats.length !== 1) throw new ToolkitError(EXIT.INVALID, 'Give exactly one of --requirements, --design, or --result.');
-  const res = await opApprove(tracker, project, id, { what: whats[0], by: one(f, 'by'), today: tracker.today ? tracker.today() : undefined });
+  const res = await opApprove(tracker, project, id, { what: whats[0], by: one(f, 'by'), today: tracker.today ? tracker.today() : undefined, noIndependentCheck: skipFlag(f) });
   const s = summaryOf(res.record);
   const lines = [`Recorded: ${res.what} of ${res.id} approved (${res.approval}).`];
   if (res.clearedWaiting) lines.push('It is no longer waiting on the owner (waiting_on: none).');
@@ -484,7 +497,7 @@ async function cmdMove(ctx, tracker, project, args, changes) {
 async function cmdFinish(ctx, tracker, project, args, changes) {
   const id = needId(args, 'finish');
   const f = args.flags;
-  const res = await opFinish(tracker, id, { by: one(f, 'by'), evidence: one(f, 'evidence'), quote: one(f, 'quote'), allowOpenSubItems: Boolean(f['allow-open-sub-items']), today: tracker.today ? tracker.today() : undefined });
+  const res = await opFinish(tracker, id, { by: one(f, 'by'), evidence: one(f, 'evidence'), quote: one(f, 'quote'), allowOpenSubItems: Boolean(f['allow-open-sub-items']), today: tracker.today ? tracker.today() : undefined, noIndependentCheck: skipFlag(f) });
   const lines = [`${res.id} is Done. Result approval: ${res.resultApproval}.`];
   if (res.openSubItems.length) lines.push(`Open sub-items left: ${res.openSubItems.map((k) => `${k.id} (${k.status})`).join(', ')}.`);
   for (const w of res.warnings || []) lines.push(`Note: ${w}`);

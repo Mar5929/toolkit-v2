@@ -353,7 +353,10 @@ test('rename keeps the page and repairs links in other records; archive and dele
   await driver.save({ type: 'project', name: 'release', description: 'How a release goes', source: 'Mike, 2026-09-26', body: '# Release\n\n**Remember:** Follow the window.\n\n**Related memories:** [deploy window](feedback_deploy_window.md)\n' });
   const renamed = await driver.rename('feedback_deploy_window', 'feedback_release_window');
   assert.equal(renamed.key, 'feedback_release_window');
-  assert.deepEqual(renamed.linksRepaired, ['project_release']);
+  // F2 (close-out 2026-09-28): the link is a Notion page link on the page, and
+  // a rename keeps the page, so the link follows with no repair and reads back
+  // as the new file link.
+  assert.deepEqual(renamed.linksRepaired, []);
   assert.equal(await driver.get('feedback_deploy_window'), null);
   assert.match((await driver.get('feedback_release_window')).text, /^---\nname: feedback_release_window\n/);
   assert.match((await driver.get('project_release')).body, /\[deploy window\]\(feedback_release_window\.md\)/);
@@ -367,7 +370,8 @@ test('rename keeps the page and repairs links in other records; archive and dele
 test('link repair goes on past a row that cannot be saved, and names it', async () => {
   const { driver, fake, client } = await setup();
   await driver.save(INPUT);
-  const linking = (name) => ({ type: 'project', name, description: `About ${name}`, source: 'Mike, 2026-09-26', body: `# ${name}\n\n**Remember:** Follow the window.\n\n**Related memories:** [deploy window](feedback_deploy_window.md)\n` });
+  // A link to a section stays a file link in Notion (F2), so the rename repairs it.
+  const linking = (name) => ({ type: 'project', name, description: `About ${name}`, source: 'Mike, 2026-09-26', body: `# ${name}\n\n**Remember:** Follow the window.\n\n**Related memories:** [deploy window](feedback_deploy_window.md#Tuesday%20deploys)\n` });
   await driver.save(linking('handmade'));
   await driver.save(linking('release'));
   // Mike made this row with the New button and left the description empty.
@@ -379,8 +383,8 @@ test('link repair goes on past a row that cannot be saved, and names it', async 
   assert.deepEqual(renamed.linksRepaired, ['project_release']);
   assert.deepEqual(renamed.linksFailed.map((f) => f.key), ['project_handmade']);
   assert.match(renamed.linksFailed[0].reason, /description is missing/i);
-  assert.match((await driver.get('project_release')).body, /\[deploy window\]\(feedback_release_window\.md\)/);
-  assert.match((await driver.get('project_handmade')).body, /\[deploy window\]\(feedback_deploy_window\.md\)/, 'left as it was');
+  assert.match((await driver.get('project_release')).body, /\[deploy window\]\(feedback_release_window\.md#Tuesday%20deploys\)/);
+  assert.match((await driver.get('project_handmade')).body, /\[deploy window\]\(feedback_deploy_window\.md#Tuesday%20deploys\)/, 'left as it was');
 });
 
 test('a superseded record that names no replacement stays superseded, as in built-in memory', async () => {
@@ -396,4 +400,22 @@ test('a superseded record that names no replacement stays superseded, as in buil
   assert.equal(got.superseded_by, null);
   const listed = (await driver.list({ status: 'all' })).find((r) => r.key === 'feedback_deploy_window');
   assert.equal(listed.stored_status, 'superseded');
+});
+
+test('F2: a link to another record is a page mention or a page link in Notion, and reads back as the file link', async () => {
+  const { driver, fake } = await setup();
+  await driver.save({ type: 'project', name: 'billing', description: 'Billing: Stripe invoices and refunds', source: 'Mike, 2026-09-26', body: '# Billing\n\n## Refunds\n\n**Remember:** Refunds within 30 days.\n' });
+  const body = '# Release\n\n**Remember:** Follow the window.\n\n**Related memories:** [Billing](project_billing.md), [the billing notes](project_billing.md), [refunds](project_billing.md#Refunds), and [gone](project_gone.md).\n';
+  const saved = await driver.save({ type: 'project', name: 'release', description: 'How a release goes', source: 'Mike, 2026-09-26', body });
+  const billingId = fake.pages ? Object.values(fake.pages).find((p) => recordKeyOf(p) === 'project_billing').id : null;
+  const page = Object.values(fake.pages).find((p) => recordKeyOf(p) === 'project_release');
+  const md = fake.markdownOf(page);
+  const url = `https://app.notion.com/p/${billingId.replace(/-/g, '')}`;
+  assert.ok(md.includes(`<mention-page url="${url}"/>`), `the title as text: a page mention\n${md}`);
+  assert.ok(md.includes(`[the billing notes](${url})`), 'other text: a Notion link to the page');
+  assert.ok(md.includes('[refunds](project_billing.md#Refunds)'), 'a section link stays a file link');
+  assert.ok(md.includes('[gone](project_gone.md)'), 'no page for the key: the file link stays');
+  const got = await driver.get('project_release');
+  assert.ok(got.body.includes('**Related memories:** [Billing](project_billing.md), [the billing notes](project_billing.md), [refunds](project_billing.md#Refunds), and [gone](project_gone.md).'), got.body);
+  assert.equal(got.version, saved.version, 'the same text as built-in memory');
 });

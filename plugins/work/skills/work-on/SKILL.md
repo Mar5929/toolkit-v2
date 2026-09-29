@@ -1,6 +1,6 @@
 ---
 name: work-on
-description: 'Starts, resumes, or logs a work item and builds it. Use whenever the owner asks to build, add, fix, or change something, names an item id to resume, says "keep going", or wants a bug or idea logged ("put it in the backlog"). Not for requirement edits (work-requirements) or handovers (work-delegate).'
+description: 'Starts, resumes, or logs a work item and builds it, so every change is tracked and work picks up where it stopped. Use whenever the owner asks to build, add, fix, or change something, names an item id to resume, says "keep going", or wants a bug or idea logged ("put it in the backlog"). Not for requirement edits (work-requirements) or handovers (work-delegate).'
 ---
 
 # Work on
@@ -20,7 +20,7 @@ Starts or resumes one work item, plans it, and builds it; it never records an ap
    `toolkit work edit <id> --section 'Starting request' --text '<his exact words>'`
 4. Route by where the item stands: go down the table in `references/sizing-and-routing.md`, section 4, take the first row that matches, and say the route in one line. The owner's decisions come first (`waiting_on: owner` opens `work-decide`). Then the delivery offer: the agent to-do "Make the agent-led delivery offer" for this item, or "you drive", opens `work-delegate`, and nothing is built until he answers. Stay here only for planning and building.
    `toolkit work lifecycle`
-5. Plan (stage 06): Roadmap phases and Tasks from the design's Build and verification plan, in the formats in `references/planning.md` (sections 1 to 4).
+5. Plan (stage 06): Roadmap phases and Tasks from the design's Build and verification plan (the design's sections: `assets/DESIGN.md`), in the formats in `references/planning.md` (sections 1 to 4).
    `toolkit work set <id> --stage 06-implementation-plan`
    `toolkit work edit <id> --section Roadmap --set-file <file>`
    `toolkit work edit <id> --section Tasks --set-file <file>`
@@ -73,3 +73,4 @@ Starts or resumes one work item, plans it, and builds it; it never records an ap
 | [references/tracker-github.md](references/tracker-github.md) | A `toolkit work` command exits 3 in a GitHub Issues project |
 | [references/tracker-jira.md](references/tracker-jira.md) | A `toolkit work` command exits 3 in a Jira project |
 | [assets/WORK-ITEM.md](assets/WORK-ITEM.md) | GitHub or Jira: the body of a new issue |
+| [assets/DESIGN.md](assets/DESIGN.md) | Step 5: the design's sections, to find its Build and verification plan and the chosen option's Build order; a design that does not work (its Notes) |

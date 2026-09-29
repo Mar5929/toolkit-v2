@@ -1,6 +1,6 @@
 ---
 name: work-status
-description: 'Reports where the project''s work items stand: progress, blockers, the next item, and decisions waiting on the owner. Use whenever the owner asks about project or item status, even one item, for example "where are we", "what''s next", or "is X done yet". Not for a chat recap; use session-summary.'
+description: 'Reports where the project''s work items stand: progress, blockers, and the next item, so the answer comes from the tracker, not from guesses. Use whenever the owner asks about project or item status, even one item, for example "where are we", "what''s next", or "is X done yet". Not for what he must decide (work-decide) or a chat recap (session-summary).'
 ---
 
 # Work status

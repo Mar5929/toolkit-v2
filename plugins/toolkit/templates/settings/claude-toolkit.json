@@ -39,7 +39,9 @@
       "Bash(toolkit hindsight service install)",
       "Bash(toolkit hindsight service install *)",
       "Bash(toolkit hindsight service start)",
-      "Bash(toolkit hindsight service start *)"
+      "Bash(toolkit hindsight service start *)",
+      "Bash(toolkit rule add --machine *)",
+      "Bash(toolkit rule update --machine *)"
     ]
   }
 }

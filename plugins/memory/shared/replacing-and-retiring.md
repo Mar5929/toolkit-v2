@@ -119,7 +119,9 @@ verified, extra fields) are kept.
   that needs review gets today's date when it is saved.
 - `--expect` refuses the save (exit code 2) when the record changed since
   you read it. Read it again and redo the change on the new text.
-- `--expect absent` saves only when the key does not exist yet.
+- `--expect absent` saves only when the key does not exist yet. It is a new
+  record, so after a remark he made in passing an `--approved-by` save with
+  it is stored as a proposal, like any new record or section.
 - Without `--expect`, a save of an existing key is refused by the duplicate
   check.
 - The text form of `toolkit memory get` shows no version; use `--json`.
@@ -312,19 +314,21 @@ shared by every worktree. Built-in memory has no cache: the briefing reads
   line, save the same type and slug with `--expect <version>` and
   `--approved-by <owner>`. Reply: "Updated in memory: deploy window is
   Tuesday. Say 'undo that' to put back the old wording."
-- The owner: "Forget what I said about tabs." Retire `user_prefers_spaces`
-  with `--reason 'The owner: forget what I said about tabs.'`. Reply:
-  "Retired from memory: prefers spaces. Say 'bring it back' to restore it."
-- The same, when it is one section ("Tabs") of `user_profile`: read
-  `user_profile` with `--json`, then
-  `toolkit memory save --concept user_profile --section 'Tabs' --remove --expect <version> --approved-by <owner>`.
-  Reply: "Removed from memory: Tabs (in Profile). Say 'undo that' to put it back."
-- A tidy finds `feedback_merge_by_pr` and `feedback_merge_only_by_pull_request`
+- The owner: "Forget what I said about the Friday demos." Retire
+  `project_friday_demos` with `--reason 'The owner: forget what I said about the Friday demos.'`.
+  Reply: "Retired from memory: Friday demos. Say 'bring it back' to restore it."
+- The same, when it is one section ("Friday demos") of `project_release`: read
+  `project_release` with `--json`, then
+  `toolkit memory save --concept project_release --section 'Friday demos' --remove --expect <version> --approved-by <owner>`.
+  Reply: "Removed from memory: Friday demos (in Release). Say 'undo that' to put it back."
+- An instruction he takes back ("forget that rule about tables") is a rule,
+  not memory: `toolkit rule list`, then `toolkit rule update --section '<area>' --entry <n> --remove`.
+- A tidy finds `reference_stripe_dashboard` and `reference_billing_dashboard`
   saying the same thing. Keep the clearer one, update it with anything the
   other adds, then:
 
   ```text
-  toolkit memory retire feedback_merge_by_pr --superseded-by feedback_merge_only_by_pull_request
+  toolkit memory retire reference_stripe_dashboard --superseded-by reference_billing_dashboard
   ```
 
 - The owner: "Delete the note about my old address." That is his approval.

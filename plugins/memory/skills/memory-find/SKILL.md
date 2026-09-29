@@ -1,6 +1,6 @@
 ---
 name: memory-find
-description: 'Looks up what the project already recorded (memory, DECISIONS.md, work items, requirements, current focus) and cites the source of each answer. Use when the owner asks "what did we decide", "do you remember", or "why did we", and before asking him to repeat anything.'
+description: 'Looks up what the project already recorded (memory, rules, DECISIONS.md, work items, requirements, current focus) and cites the source of each answer, so no answer is a guess. Use when the owner asks "what did we decide", "do you remember", or "why did we", and before asking him to repeat anything.'
 ---
 
 # Memory find
@@ -21,8 +21,9 @@ Track these steps in the host's plan tool (Claude Code: the task list; Codex: `u
    `toolkit memory list`
 4. Not found yet: search retired records and proposals too. A retired record shows what used to be true; a proposal is never a fact (`references/proposals.md`).
    `toolkit memory find '<query>' --all`
-5. Search the other homes ("Other homes" below), and the glossary:
+5. Search the other homes ("Other homes" below), the glossary, and the owner's rules:
    `toolkit memory glossary`
+   `toolkit rule list`
    Local or Notion tracker:
    `toolkit work list`
    `toolkit work show <id> --section 'Recent History'`
@@ -37,7 +38,9 @@ Track these steps in the host's plan tool (Claude Code: the task list; Codex: `u
 - A search hit is a pointer, not an answer. Read the whole concept; the section that says it is what you cite. Other sections of the same concept often hold the related facts the owner means.
 - Hindsight results marked "may be about it" or "closest" are not answers. Answer only when the record's text says it; otherwise say it is not in memory.
 - `--reflect` (Hindsight) gives "a summary, not a source". Cite the records it used, after reading them.
-- A proposal (`needs-review`, "Proposed by the agent") is not a fact. Say it is unapproved, or leave it out.
+- A proposal (`needs-review`, "Proposed by the agent") is not a fact. Say it is unapproved, or leave it out. A rule proposal is not a rule either.
+- An instruction for how the agent works is a rule, not memory. An older `feedback_` record may still hold one: cite it, and say it is waiting to move to the rules (`memory-tidy`).
+- A lesson under a concept's "Gotchas and lessons" section is the agent's own know-how, not something the owner said. Cite it as a lesson, with its Seen dates.
 - A superseded record's body starts with a line naming its replacement. Answer from the replacement.
 - A fact in a work item is about that item only. Say so when the owner seems to ask about the whole project.
 - Project-wide decisions live in `DECISIONS.md` (ids like `D-4`), not in memory.
@@ -55,6 +58,7 @@ Track these steps in the host's plan tool (Claude Code: the task list; Codex: `u
 | The project's purpose and plan | `PROJECT.md`, `PROJECT-ROADMAP.md` |
 | Outside documentation | `ai-external-knowledge/INDEX.md` |
 | What a project word means | The glossary |
+| How he told the agent to work ("what did I say about replies") | The rules: `.claude/rules/owner-preferences.md` in this project, and `~/.claude/rules/owner-preferences.md` for every project (step 5 lists both; layout: `assets/owner-preferences.md`) |
 
 ## How to answer
 
@@ -83,3 +87,4 @@ Lead with the answer, then the source in parentheses. Say how sure it is when th
 | `references/tracker-github.md` | Step 5, when the project tracks work in GitHub Issues: section 4 |
 | `references/tracker-jira.md` | Step 5, when the project tracks work in Jira: section 4 |
 | `references/toolkit-commands.md` | A `toolkit` command fails, is refused by a hook, or prints an exit code you need to act on |
+| `assets/owner-preferences.md` | Step 5: reading a rule file, to cite one instruction with its area, date, and source |

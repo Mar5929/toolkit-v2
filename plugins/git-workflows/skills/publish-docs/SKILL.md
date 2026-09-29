@@ -1,6 +1,6 @@
 ---
 name: publish-docs
-description: 'Commits and pushes an agreed edit of committed project documents (requirements/, system-guide/, DECISIONS.md, PROJECT.md, PROJECT-ROADMAP.md, ai-external-knowledge/, delivery/) straight to the default branch. Use whenever such an edit is ready to save. Not for code, rules, skills, or .memory/.'
+description: 'Commits and pushes an agreed edit of project documents straight to the default branch from its own save workspace, so no pull request is needed and other sessions'' work is not touched. Use whenever an edit of requirements/, system-guide/, DECISIONS.md, PROJECT.md, PROJECT-ROADMAP.md, ai-external-knowledge/, or delivery/ is ready to save. Not for code (work-finish) or rules and memory (memory-save).'
 ---
 
 # Publish a documentation save

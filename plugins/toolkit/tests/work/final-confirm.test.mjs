@@ -3,7 +3,7 @@
 
 import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
-import { makeProject, cleanup, tk, newItem, readRecord } from './helpers.mjs';
+import { makeProject, cleanup, tk, newItem, readRecord, recordCheck } from './helpers.mjs';
 import { parseDoc, validateRecord, newRecordText } from '../../lib/work/model.mjs';
 import { fenceBareDesignHeader, staleNextAction } from '../../lib/work/ops.mjs';
 import { readTemplate } from '../../lib/core/templates.mjs';
@@ -88,6 +88,7 @@ test('codex-salesforce: approving a result whose Next action still asks for it g
   const id = await newItem(dir, 'Brief', ['--type', 'task']);
   const edit = await tk(dir, ['work', 'edit', id, '--label', 'Next action', '--value', `Ask Mike to approve the ${id} result.`]);
   assert.equal(edit.code, 0, edit.stdout + edit.stderr);
+  await recordCheck(dir, id);
   const res = await tk(dir, ['work', 'approve', id, '--result', '--by', 'Mike Rihm']);
   assert.equal(res.code, 0, res.stdout + res.stderr);
   assert.match(res.stdout, /Overview still says "Next action: Ask Mike to approve the .* result\.". Write the step after this approval/);

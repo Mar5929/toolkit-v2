@@ -1,0 +1,279 @@
+PROMPT: About the billing API limit you saved, amounts under 50 cents: yes, always do that check first.
+THREAD: 01a0ede9-fc3d-7a91-aaaf-e6d0b8a1814d
+
+[ITEM error ] {"id": "item_0", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[ITEM error ] {"id": "item_1", "type": "error", "message": "`--dangerously-bypass-hook-trust` is enabled. Enabled hooks may run without review for this invocation."}
+
+[AGENT] I’ll check the saved billing note and update it with your instruction to check the 50-cent minimum first.
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.3.0/skills/memory-save/SKILL.md'
+  -> ---
+name: memory-save
+description: 'Saves, corrects, or forgets one lasting fact in the project''s memory, or sends it to the record where it belongs. Use when the owner says "remember this", "from now on", "forget that", or "remind me" with no time given, corrects the agent, or a hook says a save is due.'
+---
+
+# Memory save
+
+Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
+Saves, corrects, or retires one fact in the project's memory with `toolkit memory` commands, or sends it to its proper home. It never edits memory files by hand. Rules, skills, and memory each hold one kind of thing (Mike, 2026-09-29): an instruction the agent follows every time goes in the rules (`toolkit rule add`), a procedure that proved itself in a skill, and a fact or an unproven lesson in memory. Memory keeps one record per concept (for example `user_profile`, `project_billing`), with one `##` section per fact and a last "Gotchas and lessons" section; an `event_` record holds one episode. The prefixes are `user_`, `project_`, `reference_`, and `event_`; `feedback_` is retired.
+
+## Steps
+
+Track these steps in the host's plan tool (Claude Code: the task list; Codex: `update_plan`), not in the reply.
+
+1. Decide the home. An instruction for how the agent works (a preference about how work is done, a correction, "from now on", "always", "never") is a rule: save it with `toolkit rule a
+
+[CMD exit=0] /bin/zsh -lc 'cat .memory/AGENTS.md .memory/memory-criteria.md'
+  -> # Local project memory
+
+Keep future sessions oriented without turning every conversation into lasting memory. This folder is the project's built-in memory store and can be opened directly as an Obsidian vault. Active topics stay flat; filenames and YAML types agree. Git ignores this folder, so back 
+
+[CMD exit=0] /bin/zsh -lc 'cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.3.0/skills/memory-save/references/record-format.md'
+  -> <!-- Generated file. Source: plugins/memory/shared/record-format.md. Edit the source, then run node dev/tools/sync-skill-references.mjs. -->
+# Memory record format
+
+Purpose: the exact shape of one memory record (type, key, description,
+frontmatter, and body), the same in built-in, Hindsight, and Notion memory.
+
+## Contents
+
+- One record per concept
+- Instructions are rules, not memory
+- Types
+- Keys and file names
+- The description
+- Frontmatter
+- Body
+- Gotchas and lessons
+- Links between records
+- What never goes in a record
+- Passing the body to the command
+- Checklist before a save
+
+The formats are the model project's: the topic template
+(`.memory/project_topic_template.md`), `MEMORY.md`, `CURRENT_FOCUS.md`,
+`memory-criteria.md`, and `terminology-glossary.md`. Only `toolkit memory`
+commands write memory. They write the frontmatter from the flags; you write
+the one-line description and the body.
+
+## One record per concept
+
+Memory keeps one record per concept or area, not one per fact (the owner's
+decision of 2026-09-28). A concept is a subject a future session would look
+up as a whole: the billing setup, the deploy process, the owner's role.
+Examples: `project_billing`, `project_deploys`, `user_profile`,
+`reference_dashboards`.
+
+- Each fact, or group of closely related facts, is one `## <Sub-topic>`
+  section inside its concept, with the labels in "Body" below.
+- A new fact goes into the concept it belongs to, as a new section or under
+  an existing heading. A new record i
+
+[CMD exit=0] /bin/zsh -lc 'git status --short --branch'
+  -> ## main
+ M .claude/rules/owner-preferences.md
+
+
+[CMD exit=0] /bin/zsh -lc 'git worktree list'
+  -> /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex                                                     2295c7a [main]
+/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-
+
+[CMD exit=0] /bin/zsh -lc 'git remote'
+  -> 
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory find 'billing API 50 cents minimum'"
+  -> 1 memory record matches "billing API 50 cents minimum" (best first):
+- project_billing: How feecalc totals are used and the billing API minimum
+    Billing API minimum: **Remember:** The billing API rejects amounts under 50 cents. **Why:** Not stated by the owner. **How to apply:** Check this limit when specifying or sending...
+Read a record with toolkit memory get <key> before relying on it.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory get project_billing --json'
+  -> {
+  "ok": true,
+  "backend": "builtin",
+  "key": "project_billing",
+  "name": "billing",
+  "type": "project",
+  "description": "How feecalc totals are used and the billing API minimum",
+  "status": "current",
+  "stored_status": "current",
+  "superseded_by": null,
+  "source": "Mike Rihm, in chat, 2026-09-29",
+  "saved": "2026-09-29",
+  "updated": "2026-09-29",
+  "last_verified": "2026-09-29",
+  "authorization": "Approved by Mike Rihm on 2026-09-29",
+  "approved_by": "Mike Rihm",
+  "supersedes": [],
+  "body": "# Billing\n\n## Monthly statements\n\n**Remember:** The totals feecalc calculates go into monthly statements that the finance team sends to customers on the 1st of each month.\n\n**Why:** Not stated by the owner.\n\n**How to apply:** Consider the monthly statement as a downstream use when changing how feecalc calculates or presents totals.\n\n**Evidence and limits:** Mike Rihm, in chat, 2026-09-29. This states where the totals are used and when statements are sent; it does not specify when feecalc runs.\n\n**Related memories:** None.\n\n**Authoritative records:** None.\n\n## Billing API minimum\n\n**Remember:** The billing API rejects amounts under 50 cents.\n\n**Why:** Not stated by the owner.\n\n**How to apply:** Check this limit when specifying or sending an amount to the billing API.\n\n**Evidence and limits:** Mike Rihm, in chat, 2026-09-29. The owner did not specify whether the limit applies to the late fee alone or the total due.\n\n**Related memories:** None.\n\n*
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory list --type project'
+  -> - project_billing: Billing — How feecalc totals are used and the billing API minimum (updated 2026-09-29)
+- project_finance_team_runs_feecalc_every_monday_morning [proposal: the owner has not answered]: the finance team runs feecalc every Monday morning — the finance team runs feecalc every Monday morning (updated 2026-09-29)
+
+
+[CMD exit=0] /bin/zsh -lc 'cat PROJECT-ROADMAP.md'
+  -> # Project roadmap
+
+<!-- Fill-in guide: replace every angle-bracket prompt in the outcome, phase table, phase heading, and work-unit fields with this project's real text. Keep one overview row and one matching ## heading per phase. Under that heading, repeat the ### work-unit block for each deliverab
+
+[CMD exit=0] /bin/zsh -lc 'git diff -- .claude/rules/owner-preferences.md'
+  -> diff --git a/.claude/rules/owner-preferences.md b/.claude/rules/owner-preferences.md
+index 4d12f44..cdd20be 100644
+--- a/.claude/rules/owner-preferences.md
++++ b/.claude/rules/owner-preferences.md
+@@ -5,3 +5,7 @@ How the owner wants the agent to work in this project. Follow every line, every
+ ## Git
+
+[CMD exit=0] /bin/zsh -lc 'toolkit config get memory.approval'
+  -> onboarding
+
+
+[AGENT] The saved note already says the billing API rejects amounts under 50 cents. I’ll update it to say the limit must be checked first. The note still leaves open whether the limit applies to the late fee or the total due.
+
+[CMD exit=0] /bin/zsh -lc "toolkit memory save --concept project_billing --section 'Billing API minimum' --body '**Remember:** The billing API rejects amounts under 50 cents.
+
+**Why:** Not stated by the owner.
+
+**How to apply:** Always check this limit first when specifying or sending an amount to the billing API.
+
+**Evidence and limits:** Mike Rihm, in chat, 2026-09-29. The owner did not specify whether the limit applies to the late fee alone or the total due.
+
+**Related memories:** None.
+
+**Authoritative records:** None.' --expect 980e3d0bf3aa6a87c244b11a368ae8283e4b952d9f56e780b0c6692b428fb793 --approve
+  -> Saved to memory: replaced the text of the section "Billing API minimum" in project_billing (Billing).
+Where: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex/.memory
+Version: ecc31df4c946
+Approved by: Mike Rihm
+Undo: save the old text with --section 'Billing API minimum' --expect ecc31df4c946 (the --json output holds it as previous).
+Reply line for the owner, word for word (memory-save): Updated in memory: Billing API minimum (in Billing). Say 'undo that' to put back the old wording.
+
+
+[CMD exit=0] /bin/zsh -lc 'toolkit memory get project_billing --json'
+  -> {
+  "ok": true,
+  "backend": "builtin",
+  "key": "project_billing",
+  "name": "billing",
+  "type": "project",
+  "description": "How feecalc totals are used and the billing API minimum",
+  "status": "current",
+  "stored_status": "current",
+  "superseded_by": null,
+  "source": "Mike Rihm, in chat, 2026-09-29",
+  "saved": "2026-09-29",
+  "updated": "2026-09-29",
+  "last_verified": "2026-09-29",
+  "authorization": "Approved by Mike Rihm on 2026-09-29",
+  "approved_by": "Mike Rihm",
+  "supersedes": [],
+  "body": "# Billing\n\n## Monthly statements\n\n**Remember:** The totals feecalc calculates go into monthly statements that the finance team sends to customers on the 1st of each month.\n\n**Why:** Not stated by the owner.\n\n**How to apply:** Consider the monthly statement as a downstream use when changing how feecalc calculates or presents totals.\n\n**Evidence and limits:** Mike Rihm, in chat, 2026-09-29. This states where the totals are used and when statements are sent; it does not specify when feecalc runs.\n\n**Related memories:** None.\n\n**Authoritative records:** None.\n\n## Billing API minimum\n\n**Remember:** The billing API rejects amounts under 50 cents.\n\n**Why:** Not stated by the owner.\n\n**How to apply:** Always check this limit first when specifying or sending an amount to the billing API.\n\n**Evidence and limits:** Mike Rihm, in chat, 2026-09-29. The owner did not specify whether the limit applies to the late fee alone or the total due.\n\n**Related memories:
+
+[CMD exit=1] /bin/zsh -lc 'toolkit doctor'
+  -> Toolkit doctor for feecalc (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex).
+
+Warnings (2):
+1. Codex does not trust this folder (/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex). Codex loads the project's .codex/ settings, plugin switches, and hooks only in a trusted folder. Trust is tied to the folder path, so moving the project turns it off.
+   Fix: The owner opens Codex in this folder and trusts it when Codex asks.
+2. The Toolkit V2 hooks are not trusted in Codex yet, so Codex skips them (no briefing, no memory reminder, no guards).
+   Fix: The owner opens /hooks in Codex once and trusts the Toolkit V2 hooks.
+
+Notes (4):
+- AGENTS.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT-ROADMAP.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- PROJECT.md was changed by the project, so sync leaves it alone. The toolkit's own version has not changed since it was installed, so the project's differences from it stay as they are.
+- README.md is the project's own file from before the toolkit, so sync leaves it alone and the toolkit's versio
+
+[AGENT] Updated in memory: Billing API minimum (in Billing). Say “undo that” to put back the old wording.
+
+| Status | Detail |
+| --- | --- |
+| Saved | Always check the 50-cent limit first when specifying or sending an amount to the billing API. |
+| Left untouched | An existing uncommitted change to the owner preferences file appears to belong to another session. |
+EVENT {"type": "turn.completed", "usage": {"input_tokens": 230837, "cached_input_tokens": 196864, "cache_write_input_tokens": 0, "output_tokens": 2039, "reasoning_output_tokens": 1026}}
+
+SKILLS OPENED: ['memory-save']
+
+[HOOK CONTEXT ord=9] Project briefing: feecalc (feecalc), owner Mike Rihm. Work items: local folders in .work-items/ (ids like WI-001). Memory: built-in memory in .memory/. Salesforce: no. Hosts: Claude Code and Codex.
+Project manual: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex/AGENTS.md. Stages, statuses, and approval gates: toolkit work lifecycle.
+Requests go through the matching skill first: its first step checks whether the request fits, before any toolkit command runs.
+
+This worktree is on branch main, which names no work item.
+
+Active items:
+- WI-001 Build the late fee command: 11 User approval, In Progress. Next action: Leave the approved dollar command on commit 3b2bc38 unmerged until Mike authorizes a merge. Continue WI-002 separately. Continues with work-finish.
+- WI-002 Add the --cents option: 03 Requirements approved, Ready. Next action: Plan this extension after WI-001 builds the dollar command. Continues with solution-design.
+
+Items: 1 in progress, 1 ready.
+
+Current focus:
+Last updated: 2026-09-29, chat, agent
+## Now
+- WI-001 Build the late fee command
+- WI-002 Add the --cents option
+## Waiti
+
+===== ROLLOUT TOOL CALLS (ground truth) =====
+
+[DEV MSG kinds=['host_skills.instructions', 'permissions.instructions', 'collaboration_mode.instructions', 'plugins.recommendations']] <skills_instructions>
+## Skills
+A skill is a set of local instructions to follow that is stored in a `SKILL.md` file. Below is the list of skills that can be used. Each entry includes a name, description, and a short path that can be expanded into an absolute path using the skill roots table.
+### Skill roots
+- `r0` = `/Users/michaelrihm/.codex/skills`
+- `r1` = `/Users/michaelrihm/.agents/skills`
+- `r2` = `/Users/michaelrihm/.codex/skills/.system`
+- `r3` = `/Users/michaelrihm/.codex/plugins/cache/openai-bundled`
+- `r4` = `/Users/michaelrihm/.codex/plugins/cache/openai-primary-runtime`
+- `r5` = 
+
+[DEV MSG kinds=['multi_agent.role_instructions']] <multi_agent_role>You are `/root`, the primary agent in a team of agents collaborating to fulfill the user's goals.
+
+At the start of your turn, you are the active agent.
+You can spawn sub-agents to handle subtasks, and those sub-agents can spawn their own sub-agents.
+All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools.
+
+You can use `spawn_agent` to create a new agent, `followup_task` to give an existing agent a new task and trigger a turn, and `send_message` to pass a message to a running agent
+
+[DEV MSG kinds=['multi_agent.mode_instructions']] <multi_agent_mode>Any earlier instruction enabling proactive multi-agent delegation no longer applies. Do not spawn sub-agents unless the user or applicable AGENTS.md/skill instructions explicitly ask for sub-agents, delegation, or parallel agent work.</multi_agent_mode>
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat SOUL.md PROJECT.md .claude/rules/humanize-outbound-text.md .claude/rules/keep-work-item-current.md .claude/rules/memory-review-and-save.md .claude/rules/owner-preferences.md .claude/rules/plain-english-artifacts.md .claude/rules/session-handoff.md .claude/rules/shared-repository-work.md .claude/rules/work-item-folders.md",max_output_tokens:15000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.3.0/skills/memory-save/SKILL.md",max_output_tokens:12000})
+]); for (const x of r) text(x);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "Warning: truncated output (original token count: 10210)\nTotal output lines: 2\n\n{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"65e0ae\",\"wall_time_seconds\":0,\"exit_code\":1,\"original_token_count\":4041,\"output\":\"cat: SOUL.md: No such file or directory\\n# feecalc\\n\\n<!-- Fill-in guide: replace <Project name> and every angle-bracket prompt with verified information in that exact field, row, or paragraph. Add a table row for each real system and owner. Remove unused optional routes after the owner's setup choices; keep stable project facts here and active tasks in the chosen tracker. Delete this guide after setup. -->\\n\\n## Purpose and intended outcome\\n\\n- Purpose: `<Why this project exists.>`\\n- Intended outcome: feecalc tells me the late fee and the total due on an overdue invoice, so I send the right amount to our billing API.\\n\\n## Scope and boundaries\\n\\n- In scope: `<Business capabilities or systems this project owns.>`\\n- Outside scope: `<Important exclusions or adjacent owners.>`\\n- Constraints: `<Approved security, delivery, or operating constraints with sources.>`\\n\\n## Systems and environments\\n\\n| System or org | Purpose | Environment | Source of truth | Access notes |\\n| --- | --- | --- | --- | --- |\\n| `<name>` | `<role>` | `<sandbox, production, etc.>` | `<verified location>` | `<how access is managed>` |\\n\\n## People and ownership\\n\\n| Role | Person or team | Responsibility | Source / last confirmed |\\n| --- | --- | --- | --- |\\n| Owner | Mike Rihm | Project decisions | Setup interview, 2026-09-29 |\\n\\n## Work and project records\\n\\n- Work tracker: `.work-items/` (local folders, Git-ignored)\\n- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)\\n- Project decisions: [DECISIONS.md](DECISIONS.md)\\n- Functional requirements: [requirements/](requirements/)\\n- Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`\\n- System Guide: `<Enabled at system-guide/ with .system-guide.json, or disabled>`\\n- Local memory: `.memory/` (built-in memory, flat, Git-ignored, and usable as an Obsidian vault; the setup choice is in `.toolkit.json`)\\n- Memory backup or sync: `/private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/backups/rules-codex` (owner-approved backup folde
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"cat .memory/AGENTS.md .memory/memory-criteria.md",max_output_tokens:8000}),
+  tools.exec_command({cmd:"toolkit memory list --type project",max_output_tokens:3000}),
+  tools.exec_command({cmd:"toolkit memory find 'billing API 50 cents minimum'",max_output_tokens:3000}),
+  tools.exec_command({cmd:"toolkit memory get project_billing --json",max_output_tokens:7000}),
+  tools.exec_command({cmd:"cat /Users/michaelrihm/.codex/plugins/cache/toolkit-v2/memory/0.3.0/skills/memory-save/references/record-format.md",max_output_tokens:8000}),
+  tools.exec_command({cmd:"git worktree list",max_output_tokens:3000}),
+  tools.exec_command({cmd:"git status --short --branch",max_output_tokens:3000}),
+  tools.exec_command({cmd:"git remote",max_output_tokens:1000})
+]); for (let i=0;i<r.length;i++) text(JSON.stringify({i,result:r[i]}));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"e1aa48\",\"wall_time_seconds\":0.000004125,\"exit_code\":0,\"original_token_count\":2162,\"output\":\"# Local project memory\\n\\nKeep future sessions oriented without turning every conversation into lasting memory. This folder is the project's built-in memory store and can be opened directly as an Obsidian vault. Active topics stay flat; filenames and YAML types agree. Git ignores this folder, so back it up with `toolkit memory export --to <folder outside this project>`.\\n\\n## Read and route\\n\\n- Read `CURRENT_FOCUS.md` at startup; the session briefing includes it. Read `MEMORY.md` as a short index, then open relevant topics and read each one whole. Check dates, scope, and the current source before acting on a remembered claim.\\n- Read `memory-criteria.md` before selecting or changing memory. It holds the default eligibility rules; the `memory-save` skill holds the approval policy and the onboarding or trusted mode. Use the terminology glossary for project language, including distinct meanings across systems.\\n- Link related notes inside this vault with relative Markdown links, such as `[account model](project_account_model.md)`. Obsidian shows backlinks to a note from the notes that link to it; a second reverse link is optional. Link only when the relationship helps retrieval, and check that the target exists. Keep tracker URLs and paths outside `.memory/` as source references rather than vault links.\\n- Keep current tasks and owner-mentioned to-dos in `CURRENT_FOCUS.md`, naming work items by ID. Keep full tasks, status, requirements, history, and the work item's design together in the chosen tracker; verified system behavior in the System Guide; the owner's instructions for how the agent works in `.claude/rules/owner-preferences.md` (`toolkit rule add`); procedures in skills; and raw outside sources in their source folders.\\n\\n## Curate\\n\\n- Keep one topic file per concept or area, such as `user_profile.md` or `project_billing.md`, with a `##` heading for each sub-topic and a last `## Gotchas and lessons` section for lessons not yet proven. Allowed prefixes and matching `metadata.type` values are `user`, `project`, `reference`, and `event`; an `event` file holds one episode. The `feedback` prefix is retired: an older `feedback_` file is moved to the rules
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"git diff -- .claude/rules/owner-preferences.md",max_output_tokens:3000}),
+  tools.exec_command({cmd:"toolkit config get memory.approval",max_output_tokens:1000}),
+  tools.exec_command({cmd:"cat PROJECT-ROADMAP.md",max_output_tokens:5000})
+]); for (let i=0;i<r.length;i++) text(JSON.stringify({i,result:r[i]}));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"ffa703\",\"wall_time_seconds\":0.000003958,\"exit_code\":0,\"original_token_count\":116,\"output\":\"diff --git a/.claude/rules/owner-preferences.md b/.claude/rules/owner-preferences.md\\nindex 4d12f44..cdd20be 100644\\n--- a/.claude/rules/owner-preferences.md\\n+++ b/.claude/rules/owner-preferences.md\\n@@ -5,3 +5,7 @@ How the owner wants the agent to work in this project. Follow every line, every\\n ## Git\\n \\n - Keep commit messages under 50 characters. (2026-09-29, Mike Rihm, in chat)\\n+\\n+## Replies\\n+\\n+- Always show status as a table. (2026-09-29, Mike Rihm, in chat)\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":1,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"8cb47c\",\"wall_time_seconds\":0.000002958,\"exit_code\":0,\"original_token_count\":3,\"output\":\"onboarding\\n\"}}}"}, {"type": "input_text", "text": "{\"i\":2,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"35d5eb\",\"wall_time_seconds\":0.000002917,\"exit_code\":0,\"original_token_count\":603,\"output\":\"# Project roadmap\\n\\n<!-- Fill-in guide: replace every angle-bracket prompt in the outcome, phase table, phase heading, and work-unit fields with this project's real text. Keep one overview row and one matching ## heading per phase. Under that heading, repeat the ### work-unit block for each deliverable-sized unit and link its canonical work item in the Linked work item field. Remove example rows and this guide after setup. -->\\n\\nUse this file for the project's phases and deliverable-sized work units. Link each unit to its work item when one exists. The work item holds its active requirements, open questions, detailed tasks, and execution history.\\n\\n```text\\nPROJECT-ROADMAP.md\\n\u2514\u2500\u2500 Phase\\n    \u2514\u2500\u2500 Deliverable-sized work unit\\n        \u2514\u2500\u2500 Linked work item\\n            \u251c\u2500\u2500 Active requirements\\n            \u251c\u2500\u2500 Open questions\\n            \u251c\u2500\u2500 Detailed tasks\\n            \u2514\u2500\u2500 Execution history\\n```\\n\\n## Project outcome\\n\\nfeecalc tells me the late fee and the total due on an overdue invoice, so I send the right amount to our billing API.\\n\\n## Phase overview\\n\\n| Phase | Intended outcome | Exit condition | Depends on |\\n| --- | --- | --- 
+
+[CALL] const r = await tools.exec_command({cmd:"toolkit memory save --concept project_billing --section 'Billing API minimum' --body '**Remember:** The billing API rejects amounts under 50 cents.\n\n**Why:** Not stated by the owner.\n\n**How to apply:** Always check this limit first when specifying or sending an amount to the billing API.\n\n**Evidence and limits:** Mike Rihm, in chat, 2026-09-29. The owner did not specify whether the limit applies to the late fee alone or the total due.\n\n**Related memories:** None.\n\n**Authoritative records:** None.' --expect 980e3d0bf3aa6a87c244b11a368ae8283e4b952d9f56e780b0c6692b428fb793 --approved-by 'Mike Rihm'",max_output_tokens:3000}); text(r);
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"chunk_id\":\"a8e63b\",\"wall_time_seconds\":0.000003042,\"exit_code\":0,\"original_token_count\":146,\"output\":\"Saved to memory: replaced the text of the section \\\"Billing API minimum\\\" in project_billing (Billing).\\nWhere: /private/tmp/claude-501/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/scratchpad/runs/rules-codex/.memory\\nVersion: ecc31df4c946\\nApproved by: Mike Rihm\\nUndo: save the old text with --section 'Billing API minimum' --expect ecc31df4c946 (the --json output holds it as previous).\\nReply line for the owner, word for word (memory-save): Updated in memory: Billing API minimum (in Billing). Say 'undo that' to put back the old wording.\\n\"}"}]
+
+[CALL] const r = await Promise.allSettled([
+  tools.exec_command({cmd:"toolkit memory get project_billing --json",max_output_tokens:4500}),
+  tools.exec_command({cmd:"toolkit doctor",max_output_tokens:5000})
+]); for (let i=0;i<r.length;i++) text(JSON.stringify({i,result:r[i]}));
+
+  [OUT] [{"type": "input_text", "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"}, {"type": "input_text", "text": "{\"i\":0,\"result\":{\"status\":\"fulfilled\",\"value\":{\"chunk_id\":\"7f32fe\",\"wall_time_seconds\":0.000002792,\"exit_code\":0,\"original_token_count\":826,\"output\":\"{\\n  \\\"ok\\\": true,\\n  \\\"backend\\\": \\\"builtin\\\",\\n  \\\"key\\\": \\\"project_billing\\\",\\n  \\\"name\\\": \\\"billing\\\",\\n  \\\"type\\\": \\\"project\\\",\\n  \\\"description\\\": \\\"How feecalc totals are used and the billing API minimum\\\",\\n  \\\"status\\\": \\\"current\\\",\\n  \\\"stored_status\\\": \\\"current\\\",\\n  \\\"superseded_by\\\": null,\\n  \\\"source\\\": \\\"Mike Rihm, in chat, 2026-09-29\\\",\\n  \\\"saved\\\": \\\"2026-09-29\\\",\\n  \\\"updated\\\": \\\"2026-09-29\\\",\\n  \\\"last_verified\\\": \\\"2026-09-29\\\",\\n  \\\"authorization\\\": \\\"Approved by Mike Rihm on 2026-09-29\\\",\\n  \\\"approved_by\\\": \\\"Mike Rihm\\\",\\n  \\\"supersedes\\\": [],\\n  \\\"body\\\": \\\"# Billing\\\\n\\\\n## Monthly statements\\\\n\\\\n**Remember:** The totals feecalc calculates go into monthly statements that the finance team sends to customers on the 1st of each month.\\\\n\\\\n**Why:** Not stated by the owner.\\\\n\\\\n**How to apply:** Consider the monthly statement as a downstream use when changing how feecalc calculates or presents totals.\\\\n\\\\n**Evidence and limits:** Mike Rihm, in chat, 2026-09-29. This states where the totals are used and when statements are sent; it does not specify when feecalc runs.\\\\n\\\\n**Related memories:** None.\\\\n\\\\n**Authoritative records:** None.\\\\n\\\\n## Billing API minimum\\\\n\\\\n**Remember:** The billing API rejects amounts under 50 cents.\\\\n\\\\n**Why:** Not stated by the owner.\\\\n\\\\n**How to apply:** Always check this limit first when specifying or sending an amount to the billing API.\\\\n\\\\n**Evidence and limits:** Mike Rihm, in chat, 2026-09-29. The owner did not specify whether the limit applies to the late fee alone or the total due.\\\\n\\\\n**Related memories:** None.\\\\n\\\\n**Authoritative records:** None.\\\\n\\\\n## Gotchas and lessons\\\\n\\\\nNone yet.\\\\n\\\",\\n  \\\"version\\\": \\\"ecc31df4c94633544deab223e0f4955635c8b6f5c1cb21d985175bb76e7be477\\\",\\n  \\\"text\\\": \\\"---\\\\nname: project_billing\\\\ndescription: How feecalc totals are used and the billing API minimum\\\\nupdated: 2026-09-29\\\\nmetadata:\\\\n  type: project\\\\nstatus: current\\\\

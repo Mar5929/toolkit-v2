@@ -1,6 +1,6 @@
 ---
 name: session-summary
-description: 'Recaps this chat as a table of the owner''s requests, where each landed, and what still needs him. Use when he asks what happened in this chat, for example "recap this chat", "what did I ask for", or "what did we do today". Not with a handoff (handoff includes it) or for project status (work-status).'
+description: 'Recaps this chat as a table of the owner''s requests, where each landed, and what still needs him, so he sees what is done and what is open. Use when he asks what happened in this chat, for example "recap this chat", "what did I ask for", or "what did we do today". Not with a handoff (handoff includes it) or for project status (work-status).'
 ---
 
 # Session summary

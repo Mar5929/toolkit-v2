@@ -11,7 +11,7 @@ import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { makeProject, cleanup, tk, newItem, readRecord, recordPath } from './helpers.mjs';
+import { makeProject, cleanup, tk, newItem, readRecord, recordPath, recordCheck } from './helpers.mjs';
 import { openTracker } from '../../lib/work/driver.mjs';
 import { requireProject } from '../../lib/core/config.mjs';
 import { opApprove } from '../../lib/work/ops.mjs';
@@ -114,6 +114,7 @@ test('approve --design clears the owner wait only when no other owner question i
   // The result approval: no other question open, so the wait ends.
   const b = await newItem(dir, 'Result', ['--type', 'task', '--stage', '11']);
   await tk(dir, ['work', 'set', b, '--waiting-on', 'owner']);
+  await recordCheck(dir, b);
   const ok = await tk(dir, ['work', 'approve', b, '--result', '--by', 'Mike']);
   assert.match(ok.stdout, /It is no longer waiting on the owner \(waiting_on: none\)\./);
 });
