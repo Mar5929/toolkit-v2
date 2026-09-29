@@ -2,6 +2,50 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## Resume here (written 2026-09-29, before context compaction)
+
+The lead session is `a06506e8` in the claude-toolkit folder. Its /goal is
+active: finish the 11 items in GOAL.md and post the final checklist with
+proof plus the plain-English report for Mike.
+
+Running now (each writes its results to its journal and to `dev/`):
+1. `wf_a6663d9f-9c8` rules/skills/memory split + enforcement: build, verify,
+   fix, and installs done (toolkit, work, memory 0.3.0 in both hosts); Codex
+   rerun, Claude rerun (one session at a time), and the confirmation review
+   still running. Evidence: `dev/test-runs/rules-codex/`, `rules-claude/`;
+   review goes to the top of `dev/final-review.md`.
+2. `wf_6e6bebee-68e` every skill description says what, why, when; every
+   skill folder self-contained; check-skills extended; routing spot check
+   (`dev/test-runs/skill-routing-final.md`).
+3. `wf_7fbb6da1-7af` rules rewritten to Claude Code best practices on the
+   model branch; owner-preferences format; `dev/tools/check-rules.mjs`.
+Journals: `~/.claude/projects/-Users-michaelrihm-Documents-Projects-claude-toolkit/a06506e8-ae0d-406f-b493-aee9388c7499/subagents/workflows/<run id>/journal.jsonl`.
+
+When all three finish: commit (stage paths by name, `git add -f` the
+scaffold model `.memory` and `.work-items`), run every check (tests,
+check-skills, sync --check, import-model --check, check-rules, claude plugin
+validate), fix anything left, then post the 11-item checklist with proof and
+the report.
+
+For Mike in the final report (his decisions or steps):
+- Merge the model branch: `git merge toolkit-v2/approved-changes` in his
+  model folder (worktree at `toolkit-v2-model-project-approved`).
+- Trust the V2 hooks once in Codex `/hooks`.
+- Delete test data (needs his yes): about 20 Hindsight test banks
+  (`acme-crm-*`, `greet-cli-*`, `proj-p6`, `tkv2-test-*`), the Notion test area
+  page and the "(safe to delete)" rows, the leftover research store
+  `hindsight-v2-research`.
+- How many days of automatic backups to keep.
+- Open proposals in `dev/model-changes.md` ("needs your yes") and the audit
+  proposals (reset-to-remote only on request in Codex; block question boxes
+  in Codex; Salesforce skill reference split).
+- Claude Code sign-in kept expiring during tests; Claude test sessions now
+  run one at a time.
+
+Next piece of work Mike asked for: the Notion work tracker refinement. His
+prompt is in `dev/next/notion-work-tracker-prompt.md`; run it in a new
+session in the toolkit-v2 folder after this goal is met.
+
 ## Done
 
 - Repo folder created and `git init` run (local only).
