@@ -23,8 +23,9 @@ Documentation citations: `CC/` is `ai-external-knowledge/claude-code/`,
 - Each tool is used its own way: plain files and Obsidian, Notion through
   `ntn` or the Notion connector, GitHub through `gh`, Jira through the
   Atlassian connector or `acli`, Hindsight through its local server.
-- The same stages, statuses, approvals, `WORK-ITEM.md` body, and `DESIGN.md`
-  everywhere; only where they are stored changes.
+- The same stages, statuses, approvals, `WORK-ITEM.md` sections, and
+  `DESIGN.md` everywhere; only where they are stored changes. Notion keeps
+  phases and tasks as linked records shown as live views on the item page.
 
 ## 2. What ships, and where it runs
 
@@ -40,7 +41,11 @@ Why copied into the project and not turned on as plugins: the Codex IDE
 extension loads no plugins, Codex honors project plugin switches only in
 trusted projects (CX/config-reference.md:1459-1462), and a plugin's hooks
 would run in every project on the Mac. "Update the toolkit" is the same
-onboarding skill copying the newer files in again.
+onboarding skill copying the newer files in again. Copying files does not
+change a project's Notion databases, so the update also runs
+`notion-work-track`'s "bring this workspace up to the current template"
+step: it adds missing properties, views, and relations, and never removes
+or renames anything.
 
 Claude Code reads only `.claude/skills/` and Codex only `.agents/skills/`
 (neither documents the other's folder). Recommended: one real copy in
@@ -66,12 +71,18 @@ Notion for memory. Then it:
    `.codex/hooks.json`.
 4. Fills `AGENTS.md` once: project name, the tracker and memory choice, the
    routing table (section 5), and the rules list.
-5. Notion: makes the project's Notion pages from the template and records
-   their links in `PROJECT.md` (Notion session). Hindsight: creates the
+5. Asks Mike to sign in to the chosen tools (`ntn login`, `gh auth login`,
+   Jira) and waits, because nothing can be created before that.
+6. Notion: picks which template to copy (work only, memory only, or both,
+   depending on the mix), proposes the Work Items ID prefix (Notion allows
+   one database per prefix in a workspace), makes the project's pages, and
+   records the links and prefix in `PROJECT.md` "Toolkit settings". The
+   first time, the template itself is built once in Mike's workspace; its
+   "this page" filters can be set only in the Notion app, so Mike may need to
+   click once (Notion session, test behavior 3). Hindsight: creates the
    project's memory bank.
-6. Tells Mike the two things only he does: sign in (`ntn login`, `gh auth
-   login`, Jira), and in Codex trust the project and its hooks once in
-   `/hooks` (CX/hooks.md:65, 72-77).
+7. Tells Mike to trust the project and its hooks once in Codex `/hooks`
+   (CX/hooks.md:65, 72-77).
 
 ## 4. Skills
 
@@ -110,12 +121,12 @@ and `grill-me` become `work-refine` (Mike's decision). `work-decide` joins
 | Set | Skills | What its folder holds |
 | --- | --- | --- |
 | Local + Obsidian | `local-work-track`, `local-work-find` | How to make an item folder under `work-items/` (next ID = highest `id:` plus one; make the folder first, then check for a duplicate), fields, stages, the `WORK-ITEM.md` and `DESIGN.md` templates, how to find items from a git worktree (the first path of `git worktree list`), how to notice items Mike moved (find by `id:`, never by path). |
-| Notion | `notion-work-track`, `notion-work-find` | The Notion session's part: `ntn` calls, sign-in (pages shared with the "Notion CLI" connection; `ntn` runs outside the Codex sandbox), the property list, the page template plus `DESIGN.md`, Phases and Tasks as linked records. |
+| Notion | `notion-work-track`, `notion-work-find` | The Notion session's part: `ntn` calls, sign-in (pages shared with the "Notion CLI" connection; `ntn` runs outside the Codex sandbox), the page template plus `DESIGN.md`, Phases and Tasks as linked records, and the full written definition of the template (every property, relation, view, and order), so a damaged template can be rebuilt and an older project brought up to date. |
 | GitHub Issues | `github-work-track`, `github-work-find` | `gh` steps from today's `tracker-github.md`: one issue per item, the body in `WORK-ITEM.md` form, labels for stage, approvals, and waiting-on, sub-issues for children, the design as one comment. |
 | Jira | `jira-work-track`, `jira-work-find` | Steps from today's `tracker-jira.md`: the Atlassian connector or `acli`, the description in `WORK-ITEM.md` form, the six statuses mapped once at setup, sub-tasks or child issues. |
 
 Description pattern (Notion shown): 'Creates and changes work items in this
-project's Notion workspace with ntn: new items from the template, fields,
+project's Notion workspace with ntn or the Notion connector: new items from the template, fields,
 stage and status, phases, tasks, questions and answers, comments, and
 attachments, so every change lands the same way. Use whenever the owner or a
 work skill needs a work item created or changed. Only for projects that
@@ -126,7 +137,7 @@ track work in Notion.' The `-find` skill mirrors it for looking up.
 | Set | Skills | What its folder holds |
 | --- | --- | --- |
 | Local + Obsidian | `local-memory-save`, `local-memory-find`, `local-memory-refine` | The concept file template (with a `work_items` property of links such as `[[WI-031]]`), the four prefixes, memory criteria, the decision record template, Current State rules, Obsidian link rules. |
-| Notion + Lore | `notion-memory-save`, `notion-memory-find`, `notion-memory-refine` | The Notion session's part: Lore's databases, Kind values, the Work items relation. |
+| Notion + Lore | `notion-memory-save`, `notion-memory-find`, `notion-memory-refine` | The Notion session's part: Lore's databases, Kind values, the Work items relation, and Lore's full property list (moved from `plugins/toolkit/lib/notion/lore-schema.mjs`, which goes with the program). Lore finds its databases and columns by exact name, so the "never rename or remove a Lore property" rule points to this list. |
 | Hindsight | `hindsight-memory-save`, `hindsight-memory-find`, `hindsight-memory-refine` | The local server at `127.0.0.1:8888`, one bank per project, documents keyed by concept, `wi:<ID>` tags for work item links. |
 
 Description pattern (local shown):
@@ -196,7 +207,12 @@ What each hook prints:
   State is over its size limit or older than 7 days, one line asks for
   `memory-refine`. Notion reads the "Current state" page with `ntn`;
   Hindsight reads the Current State document from the local server. If the
-  read fails, one line says so and the session goes on.
+  read fails, one line says so and the session goes on. In Codex the
+  sandbox blocks the keychain `ntn` needs, so this read may fail every time;
+  the test projects check it, and if it fails the line tells the agent to
+  read the page with `notion-memory-find`. After `compact` in a Notion
+  project, "re-read the active work item" means `notion-work-find`, not
+  opening a file.
 - Prompt reminder: "This may be something to keep. Use <memory save skill>;
   it decides whether anything is saved." The skill name is written in at
   onboarding.
@@ -230,7 +246,9 @@ trusts them again (CX/hooks.md:72-77).
 - Every decision: a row in the work item's Questions and Answers (Mike's
   words, date, marked as a decision).
 - Project-wide decisions also: a memory record with one sentence, how to
-  apply it, and a link back to the item's row. Local format: question 4.
+  apply it, and a link back to the work item naming the Q-ID of its
+  Questions and Answers row (a single table row cannot be linked to in
+  Notion). Local format: question 4.
 - Every memory stores the IDs of its work items, plus a link when there is
   one: `[[WI-031]]` in Obsidian, the Notion page, the GitHub issue, or the
   Jira ticket. Both in Notion: a two-way relation and a "Linked memory" view
@@ -288,7 +306,11 @@ a file moved by hand. Also:
 - Hook tests: every row in section 6 seen firing; the Stop check's false
   alarms counted; the helper-returned hook with a background helper; hooks
   from inside a git worktree.
-- Notion: the six behaviors in the Notion session's section 8.
+- Notion: the six behaviors in the Notion session's section 8; updating an
+  existing Notion project after a template change; the `ntn` session-start
+  read in Codex. Notion test projects run in the private Notion test area
+  (`dev/test-runs/notion-test-area.json`), never on Mike's real "AI Agent
+  Second Brain" page unless he says yes.
 - An independent review, then a plain report to Mike.
 
 ## 12. Questions for Mike (one at a time, with the draft)
@@ -312,4 +334,8 @@ a file moved by hand. Also:
    `dev/test-runs/install-everyday.md`) before the program is deleted.
 9. A GitHub test repository and a Jira site for test projects 3 and 4.
 10. Later lists: the 16 rules questions, the 13 model-review items, and the
-    test data to delete in Notion and Hindsight.
+    test data to delete: about 20 Hindsight test banks and the stopped
+    `hindsight-v2-research` store; in Notion, "Toolkit V2 sample (safe to
+    delete)", "Notion tracker sample (safe to delete)", the "Old structure
+    (safe to delete)" page, and the "Tracker run ..." and "Experiment ..."
+    pages in the private test area.
