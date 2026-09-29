@@ -224,6 +224,11 @@ Interview answers (Mike, 2026-09-29, the interview session):
   - Mike: "make sure the skills mention that and any relevant corresponding
     instruction/rule files for codex and claude."
   Citing recalled knowledge, as already settled, confirmed.
+- Topic 9, Done and approvals: confirmed ("Yeah I think that is right").
+  The agent raised that local `.work-items/` and `.memory/` are kept out of
+  Git, so they exist only on this Mac, and offered one onboarding line about
+  Time Machine or iCloud. Mike: "no don't need the onboarding line". No
+  backup folder and no backup line.
 - Rename: "I want the file name to be 'Current State' instead of 'Current
   Focus'." Read as: `.memory/CURRENT_FOCUS.md` becomes
   `.memory/CURRENT_STATE.md` (the model's naming style), and the Notion
