@@ -201,6 +201,29 @@ Interview answers (Mike, 2026-09-29, the interview session):
   and folded into this new skill (Mike: "the older session skills can just
   be retired and deleted and moved into this new one"). spec-check,
   work-guide, and track-tasks are still open.
+- Topic 8, decisions and citing: decisions change as follows (Mike, "yes
+  love that", to the agent's proposal after he said "I probably would want
+  the decisions just to be persisted right in the work item.md ... and then
+  we could also say, 'Is this something that's significant enough to be a
+  general memory?' ... I feel like a memory decision is sort of
+  project-wide, like architectural stuff"):
+  - Every decision made while working an item is saved right away in that
+    item's `WORK-ITEM.md` (or the item's page in another tracker), with
+    Mike's words and the date. Always.
+  - A decision also becomes a memory record only when it matters beyond the
+    item. Test: "Will a later work item, or an agent working on something
+    else, need to follow this?" Project-wide and architectural decisions:
+    yes. Item-only choices: no.
+  - The agent asks "This looks project-wide. Save it to memory too?" when a
+    decision looks project-wide, and once more over the item's decisions
+    when the item finishes.
+  - The memory record holds the decision in one sentence plus how to apply
+    it, and links back to the item for the full reasoning (no full copy).
+  - This replaces "every decision is one memory record" in "Decisions live
+    in memory" below. `DECISIONS.md` stays removed.
+  - Mike: "make sure the skills mention that and any relevant corresponding
+    instruction/rule files for codex and claude."
+  Citing recalled knowledge, as already settled, confirmed.
 - Rename: "I want the file name to be 'Current State' instead of 'Current
   Focus'." Read as: `.memory/CURRENT_FOCUS.md` becomes
   `.memory/CURRENT_STATE.md` (the model's naming style), and the Notion
