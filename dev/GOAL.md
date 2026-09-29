@@ -140,6 +140,14 @@ Interview answers (Mike, 2026-09-29, the interview session):
 - Topic 3, onboarding: confirmed ("yes"), with `PROJECT-ROADMAP.md` in the
   list of files every project gets (Mike asked "What about project
   roadmap.md?"; it was left out of the playback by mistake).
+- Topic 4, work tracking sets: confirmed ("Yes, this is great"), with one
+  note. In Notion the work item page can be more dynamic: "the roadmap
+  section of the work item.md, the tasks, and the phases can be a dynamic
+  view of the related sub-work items, grouped into their phases, and show
+  the whole roadmap. ... the overall shape and structure of the work item.md
+  and the design.md will be the same." Notion and external trackers have
+  comments; a local work item uses its Notes and Recent History sections
+  instead. The Notion session is working this out with Mike.
 - Rename: "I want the file name to be 'Current State' instead of 'Current
   Focus'." Read as: `.memory/CURRENT_FOCUS.md` becomes
   `.memory/CURRENT_STATE.md` (the model's naming style), and the Notion
