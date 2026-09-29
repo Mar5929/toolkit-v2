@@ -122,7 +122,9 @@ steps that must always run the same way.
   clear SKILL.md and reference files inside its own folder for the
   step-by-step details, following Anthropic's and OpenAI's official skill
   and hook guidance. Descriptions say exactly what each skill does and when
-  to use it.
+  to use it. Every description states what the skill does, why to use it,
+  and when to use it (Mike, 2026-09-29), and every skill folder holds all
+  the references, templates, examples, and scripts its steps need.
 - **Routing approvals** (Mike, 2026-09-27 night): (1) the model's
   `.claude/rules/session-handoff.md` gets the new wording in
   `dev/model-changes.md` ("Proposed: handoff rule wording"); (2) the model's
