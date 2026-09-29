@@ -245,6 +245,8 @@ Interview answers (Mike, 2026-09-29, the interview session):
   session one update after the interview and reads its chat to confirm
   receipt. Tasks as a Notion database or as a checklist in the body: follow
   what Mike settles with the Notion session.
+- Topic 12, the GitHub ticket and diagrams: confirmed ("yes coorect").
+  Topics 1 to 12 of the playback are done.
 - Rename: "I want the file name to be 'Current State' instead of 'Current
   Focus'." Read as: `.memory/CURRENT_FOCUS.md` becomes
   `.memory/CURRENT_STATE.md` (the model's naming style), and the Notion
