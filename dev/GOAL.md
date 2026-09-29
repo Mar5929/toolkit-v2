@@ -291,6 +291,15 @@ Interview answers (Mike, 2026-09-29, the interview session):
   Questions and Answers). Each line keeps its meaning apart from approved
   changes. Mike gets one list of every file, what changed, and why, before
   he merges. A change to what a rule means waits for his yes.
+- Open question 3, `scripts/memory.py` (Mike: "Yeah, yeah."): the 505-line
+  Davis script is left out; the local memory skills edit the Markdown files
+  directly. Mike raised that having an LLM rewrite the index is expensive
+  ("Having the index rewritten by an LLM is quite expensive, right?"), so
+  `MEMORY.md` becomes a generated file: the session-start hook reads each
+  memory file's title, one-line summary, and updated date and writes the
+  index, grouped by prefix, in both hosts (a very small command, about 20 to
+  30 lines; it replaces LLM edits and cannot drift). `local-memory-save`
+  never touches the index; nobody edits it by hand.
 - Notion session reply (2026-09-29): no conflicts. Settled with Mike in that
   session: Phases and Tasks are Notion linked records (a database), not a
   checklist in the body (Mike: "Yes, linked records"; "we have a section
