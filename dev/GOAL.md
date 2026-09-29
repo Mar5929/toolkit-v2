@@ -94,6 +94,21 @@ steps that must always run the same way.
   come up. The index lists each concept's title, summary, and updated date,
   grouped by prefix. The model's memory text changes only where it must
   (concept files, not one file per fact); it goes on the model branch.
+- **Rules, skills, and memory each hold one kind of thing** (Mike,
+  2026-09-29): instructions the agent must follow every time (owner
+  preferences, corrections, "from now on", "always", "never") go in rules:
+  one always-on project rule `.claude/rules/owner-preferences.md` with a
+  heading per area, or Mike's machine-wide `~/.claude/rules/` when it
+  applies to every project (ask only when unclear). Confirmed repeatable
+  procedures go in skills (toolkit skills, or a project skill in
+  `.claude/skills/`). Memory holds facts and unproven learned know-how:
+  four prefixes `user_`, `project_`, `reference_`, `event_`; `feedback_` is
+  retired; each concept file has a "Gotchas and lessons" section. Promotion:
+  when a lesson proves itself (it recurs, or the owner confirms it), the
+  agent proposes turning it into a rule or skill and writes it after the
+  owner's yes; memory-tidy looks for candidates. "Remember..." and "from now
+  on..." still go through memory-save, which picks the home. This replaces
+  the five-prefix naming in the concept-memory bullet above.
 - **Decisions of 2026-09-28, evening** (Mike): (1) "No agent team" decides
   only who builds. Before asking for the owner's result approval, the agent
   always starts one independent acceptance checker agent (in Codex, the
