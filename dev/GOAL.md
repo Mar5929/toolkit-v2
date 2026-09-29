@@ -160,6 +160,18 @@ Interview answers (Mike, 2026-09-29, the interview session):
   overlap where the agent can get confused or stuck. There are no landmines
   that would trip the agent up ... Everything needs to be crystal clear about
   the descriptions so the agent knows exactly when to invoke what."
+- Topic 6, when hooks fire: confirmed ("Yes") with two changes Mike asked
+  for. (1) The "remember" reminder listens for Davis's full phrase list
+  (`efa2440:.claude/hooks/_memory_patterns.py`, 11 groups: remember,
+  forget, save or correct memory, corrections, standing preferences, people
+  changes, focus changes, tool or vendor changes, moved references, current
+  work, lessons) plus decision phrases ("we decided", "let's go with", "go
+  with option"). The reminder is a hint; the memory save skill decides.
+  (2) After each commit, a hook reminds the agent to update the work item's
+  history and status, and Current State if it changed (work track skill).
+  Documentation to reference, from Mike:
+  https://code.claude.com/docs/en/agent-sdk/hooks and
+  https://code.claude.com/docs/en/hooks-guide, plus the OpenAI Codex pages.
 - Rename: "I want the file name to be 'Current State' instead of 'Current
   Focus'." Read as: `.memory/CURRENT_FOCUS.md` becomes
   `.memory/CURRENT_STATE.md` (the model's naming style), and the Notion
