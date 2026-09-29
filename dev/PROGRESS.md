@@ -53,6 +53,11 @@ session in the toolkit-v2 folder after this goal is met.
 
 ## Direction: skills-first (decided 2026-09-29; `dev/GOAL.md` "Direction change")
 
+Status 14:40 EDT: ready to hand off. `dev/HISTORY.md` (full history, checked)
+and `dev/next/handoff-2026-09-29.md` (read everything, interview Mike first)
+are committed. Diagrams in `dev/diagrams/` wait for Mike's approval before
+they go into a GitHub issue; where that issue lives is his call.
+
 Status 14:01 EDT: Mike's corrections recorded in `dev/GOAL.md` ("Corrections
 (Mike, 2026-09-29, after the first two diagrams)"); diagrams redrawn in chat;
 handoff prompt in `dev/next/handoff-2026-09-29.md` (commits 1c634fc, 8454538,
