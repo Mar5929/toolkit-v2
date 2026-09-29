@@ -137,6 +137,11 @@ Interview answers (Mike, 2026-09-29, the interview session):
   knows when to keep it up to date, but the problem, I think, with the Davis
   project is that it just doesn't know when to clean it up and remove old
   stuff. Just make sure that you're accounting for that in your solution."
+- Rename: "I want the file name to be 'Current State' instead of 'Current
+  Focus'." Read as: `.memory/CURRENT_FOCUS.md` becomes
+  `.memory/CURRENT_STATE.md` (the model's naming style), and the Notion
+  "Current focus" page becomes "Current state". This is a model change Mike
+  asked for; it goes on the model branch with the other approved changes.
 - Build from the official documentation. Mike: "use the Claude Code,
   Anthropic, and OpenAI codex documentation on how to build the harness, how
   to build hooks and skills and rules, and what the best practices, schema,
