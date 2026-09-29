@@ -195,6 +195,12 @@ Interview answers (Mike, 2026-09-29, the interview session):
   answering, and just as I'm answering, boom, record it and ask me the next
   question." He likes how this session keeps `dev/GOAL.md` and records each
   question and answer.
+  Mike agreed to design this as interview topic 13, after topics 8 to 12
+  ("I like your recommendation, but we can get back to it on topic 13").
+  The old session skills `requirements-helper` and `grill-me` are retired
+  and folded into this new skill (Mike: "the older session skills can just
+  be retired and deleted and moved into this new one"). spec-check,
+  work-guide, and track-tasks are still open.
 - Rename: "I want the file name to be 'Current State' instead of 'Current
   Focus'." Read as: `.memory/CURRENT_FOCUS.md` becomes
   `.memory/CURRENT_STATE.md` (the model's naming style), and the Notion
