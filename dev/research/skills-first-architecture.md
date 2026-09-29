@@ -138,7 +138,7 @@ track work in Notion.' The `-find` skill mirrors it for looking up.
 | --- | --- | --- |
 | Local + Obsidian | `local-memory-save`, `local-memory-find`, `local-memory-refine` | The concept file template (with a `work_items` property of links such as `[[WI-031]]`), the four prefixes, memory criteria, the decision record template, Current State rules, Obsidian link rules. |
 | Notion + Lore | `notion-memory-save`, `notion-memory-find`, `notion-memory-refine` | The Notion session's part: Lore's databases, Kind values, the Work items relation, and Lore's full property list (moved from `plugins/toolkit/lib/notion/lore-schema.mjs`, which goes with the program). Lore finds its databases and columns by exact name, so the "never rename or remove a Lore property" rule points to this list. |
-| Hindsight | `hindsight-memory-save`, `hindsight-memory-find`, `hindsight-memory-refine` | The local server at `127.0.0.1:8888`, one bank per project, documents keyed by concept, `wi:<ID>` tags for work item links. |
+| Hindsight | None (Mike, 2026-09-29: "Hindsight has its own complete way. It's a whole memory engine") | The agent uses Hindsight's own MCP tools (`retain`, `recall`, `reflect`) on the project's bank at `127.0.0.1:8888/mcp/<bank>/`, with the delete tools hidden. The shared memory rule carries what Hindsight cannot know (what to keep, ask first, cite). Work item tags and a Current State home: research pending. |
 
 Description pattern (local shown):
 - save: 'Saves what the owner wants kept in this project's local memory: facts and lessons to a concept file, project-wide decisions to a decision record, instructions to the owner-preferences rule, each linked to its work items and saved after his yes, and keeps Current State current. Use when the owner says "remember this", "from now on", "we decided", or a reminder says a save may be due. Only for projects with local memory.'
@@ -163,7 +163,7 @@ Question 5 below.
 ### 4.6 Count and overlap
 
 A project gets 16 shared + 2 work + 3 memory = 21 skills, 25 with
-Salesforce. Pairs most likely to be confused, each tested by the routing
+Salesforce (18 and 22 with Hindsight memory, which has no toolkit skills). Pairs most likely to be confused, each tested by the routing
 test: `work-refine` / `braindump`; `work-status` / `session-summary`;
 `work-on` / `work-delegate`; `<memory>-find` / `<tracker>-work-find`;
 `handoff` / `<memory>-save`; `<memory>-save` / Claude Code's built-in
