@@ -273,6 +273,8 @@ Interview answers (Mike, 2026-09-29, the interview session):
   reads the sources, interviews one question at a time with a
   recommendation, names gotchas and what Mike has not thought of, saves each
   answer at once, and resumes at the first open question in a new session.
+- Interview finished (Mike, 2026-09-29): "I feel like you understand."
+  Next: the open questions, one at a time.
 - Notion session reply (2026-09-29): no conflicts. Settled with Mike in that
   session: Phases and Tasks are Notion linked records (a database), not a
   checklist in the body (Mike: "Yes, linked records"; "we have a section
