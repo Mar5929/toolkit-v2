@@ -8,8 +8,6 @@
    "type": "text",
    "x": 40,
    "y": 16,
-   "width": 742.5000000000001,
-   "height": 37.5,
    "angle": 0,
    "strokeColor": "#1e1e1e",
    "backgroundColor": "transparent",
@@ -30,8 +28,10 @@
    "link": null,
    "locked": false,
    "text": "What's inside a skill: a folder, not one file",
-   "originalText": "What's inside a skill: a folder, not one file",
    "fontSize": 30,
+   "width": 742.5000000000001,
+   "height": 37.5,
+   "originalText": "What's inside a skill: a folder, not one file",
    "fontFamily": 2,
    "textAlign": "left",
    "verticalAlign": "top",
@@ -44,8 +44,6 @@
    "type": "text",
    "x": 40,
    "y": 58,
-   "width": 712.8000000000001,
-   "height": 22.5,
    "angle": 0,
    "strokeColor": "#757575",
    "backgroundColor": "transparent",
@@ -66,8 +64,10 @@
    "link": null,
    "locked": false,
    "text": "Example: the Notion work tracking skill. Every skill set has this shape.",
-   "originalText": "Example: the Notion work tracking skill. Every skill set has this shape.",
    "fontSize": 18,
+   "width": 712.8000000000001,
+   "height": 22.5,
+   "originalText": "Example: the Notion work tracking skill. Every skill set has this shape.",
    "fontFamily": 2,
    "textAlign": "left",
    "verticalAlign": "top",
@@ -80,8 +80,6 @@
    "type": "rectangle",
    "x": 40,
    "y": 105,
-   "width": 330,
-   "height": 60,
    "angle": 0,
    "strokeColor": "#f59e0b",
    "backgroundColor": "#fff3bf",
@@ -107,7 +105,9 @@
    ],
    "updated": 1,
    "link": null,
-   "locked": false
+   "locked": false,
+   "width": 330,
+   "height": 60
   },
   {
    "id": "f0_label",
@@ -150,8 +150,6 @@
    "type": "line",
    "x": 70,
    "y": 165,
-   "width": 0,
-   "height": 510,
    "angle": 0,
    "strokeColor": "#757575",
    "backgroundColor": "transparent",
@@ -171,6 +169,8 @@
    "updated": 1,
    "link": null,
    "locked": false,
+   "width": 0,
+   "height": 510,
    "points": [
     [
      0,
@@ -181,10 +181,10 @@
      510
     ]
    ],
+   "endArrowhead": null,
    "startBinding": null,
    "endBinding": null,
    "startArrowhead": null,
-   "endArrowhead": null,
    "lastCommittedPoint": null,
    "elbowed": false
   },
@@ -193,8 +193,6 @@
    "type": "line",
    "x": 70,
    "y": 225,
-   "width": 40,
-   "height": 0,
    "angle": 0,
    "strokeColor": "#757575",
    "backgroundColor": "transparent",
@@ -214,6 +212,8 @@
    "updated": 1,
    "link": null,
    "locked": false,
+   "width": 40,
+   "height": 0,
    "points": [
     [
      0,
@@ -224,10 +224,10 @@
      0
     ]
    ],
+   "endArrowhead": null,
    "startBinding": null,
    "endBinding": null,
    "startArrowhead": null,
-   "endArrowhead": null,
    "lastCommittedPoint": null,
    "elbowed": false
   },
@@ -236,8 +236,6 @@
    "type": "rectangle",
    "x": 110,
    "y": 190,
-   "width": 560,
-   "height": 70,
    "angle": 0,
    "strokeColor": "#8b5cf6",
    "backgroundColor": "#d0bfff",
@@ -263,7 +261,9 @@
    ],
    "updated": 1,
    "link": null,
-   "locked": false
+   "locked": false,
+   "width": 560,
+   "height": 70
   },
   {
    "id": "f1_label",
@@ -306,8 +306,6 @@
    "type": "line",
    "x": 70,
    "y": 315,
-   "width": 40,
-   "height": 0,
    "angle": 0,
    "strokeColor": "#757575",
    "backgroundColor": "transparent",
@@ -327,6 +325,8 @@
    "updated": 1,
    "link": null,
    "locked": false,
+   "width": 40,
+   "height": 0,
    "points": [
     [
      0,
@@ -337,10 +337,10 @@
      0
     ]
    ],
+   "endArrowhead": null,
    "startBinding": null,
    "endBinding": null,
    "startArrowhead": null,
-   "endArrowhead": null,
    "lastCommittedPoint": null,
    "elbowed": false
   },
@@ -349,8 +349,6 @@
    "type": "rectangle",
    "x": 110,
    "y": 280,
-   "width": 560,
-   "height": 70,
    "angle": 0,
    "strokeColor": "#4a9eed",
    "backgroundColor": "#a5d8ff",
@@ -376,7 +374,9 @@
    ],
    "updated": 1,
    "link": null,
-   "locked": false
+   "locked": false,
+   "width": 560,
+   "height": 70
   },
   {
    "id": "f2_label",
@@ -419,8 +419,6 @@
    "type": "line",
    "x": 70,
    "y": 405,
-   "width": 40,
-   "height": 0,
    "angle": 0,
    "strokeColor": "#757575",
    "backgroundColor": "transparent",
@@ -440,6 +438,8 @@
    "updated": 1,
    "link": null,
    "locked": false,
+   "width": 40,
+   "height": 0,
    "points": [
     [
      0,
@@ -450,10 +450,10 @@
      0
     ]
    ],
+   "endArrowhead": null,
    "startBinding": null,
    "endBinding": null,
    "startArrowhead": null,
-   "endArrowhead": null,
    "lastCommittedPoint": null,
    "elbowed": false
   },
@@ -462,8 +462,6 @@
    "type": "rectangle",
    "x": 110,
    "y": 370,
-   "width": 560,
-   "height": 70,
    "angle": 0,
    "strokeColor": "#4a9eed",
    "backgroundColor": "#a5d8ff",
@@ -489,7 +487,9 @@
    ],
    "updated": 1,
    "link": null,
-   "locked": false
+   "locked": false,
+   "width": 560,
+   "height": 70
   },
   {
    "id": "f3_label",
@@ -517,8 +517,8 @@
    "updated": 1,
    "link": null,
    "locked": false,
-   "text": "references/sign-in.md\nwhat to sign in as, what to do if signed out",
-   "originalText": "references/sign-in.md\nwhat to sign in as, what to do if signed out",
+   "text": "references/sign-in.md\nsign-in, sharing pages, ntn outside the Codex sandbox",
+   "originalText": "references/sign-in.md\nsign-in, sharing pages, ntn outside the Codex sandbox",
    "fontSize": 18,
    "fontFamily": 2,
    "textAlign": "center",
@@ -532,8 +532,6 @@
    "type": "line",
    "x": 70,
    "y": 495,
-   "width": 40,
-   "height": 0,
    "angle": 0,
    "strokeColor": "#757575",
    "backgroundColor": "transparent",
@@ -553,6 +551,8 @@
    "updated": 1,
    "link": null,
    "locked": false,
+   "width": 40,
+   "height": 0,
    "points": [
     [
      0,
@@ -563,10 +563,10 @@
      0
     ]
    ],
+   "endArrowhead": null,
    "startBinding": null,
    "endBinding": null,
    "startArrowhead": null,
-   "endArrowhead": null,
    "lastCommittedPoint": null,
    "elbowed": false
   },
@@ -575,8 +575,6 @@
    "type": "rectangle",
    "x": 110,
    "y": 460,
-   "width": 560,
-   "height": 70,
    "angle": 0,
    "strokeColor": "#4a9eed",
    "backgroundColor": "#a5d8ff",
@@ -602,7 +600,9 @@
    ],
    "updated": 1,
    "link": null,
-   "locked": false
+   "locked": false,
+   "width": 560,
+   "height": 70
   },
   {
    "id": "f4_label",
@@ -645,8 +645,6 @@
    "type": "line",
    "x": 70,
    "y": 585,
-   "width": 40,
-   "height": 0,
    "angle": 0,
    "strokeColor": "#757575",
    "backgroundColor": "transparent",
@@ -666,6 +664,8 @@
    "updated": 1,
    "link": null,
    "locked": false,
+   "width": 40,
+   "height": 0,
    "points": [
     [
      0,
@@ -676,10 +676,10 @@
      0
     ]
    ],
+   "endArrowhead": null,
    "startBinding": null,
    "endBinding": null,
    "startArrowhead": null,
-   "endArrowhead": null,
    "lastCommittedPoint": null,
    "elbowed": false
   },
@@ -688,8 +688,6 @@
    "type": "rectangle",
    "x": 110,
    "y": 550,
-   "width": 560,
-   "height": 70,
    "angle": 0,
    "strokeColor": "#22c55e",
    "backgroundColor": "#b2f2bb",
@@ -715,7 +713,9 @@
    ],
    "updated": 1,
    "link": null,
-   "locked": false
+   "locked": false,
+   "width": 560,
+   "height": 70
   },
   {
    "id": "f5_label",
@@ -743,8 +743,8 @@
    "updated": 1,
    "link": null,
    "locked": false,
-   "text": "assets/WORK-ITEM.md \u00b7 assets/DESIGN.md\nthe templates it fills in",
-   "originalText": "assets/WORK-ITEM.md \u00b7 assets/DESIGN.md\nthe templates it fills in",
+   "text": "assets/: Notion page template + DESIGN.md\nthe templates it fills in",
+   "originalText": "assets/: Notion page template + DESIGN.md\nthe templates it fills in",
    "fontSize": 18,
    "fontFamily": 2,
    "textAlign": "center",
@@ -758,8 +758,6 @@
    "type": "line",
    "x": 70,
    "y": 675,
-   "width": 40,
-   "height": 0,
    "angle": 0,
    "strokeColor": "#757575",
    "backgroundColor": "transparent",
@@ -779,6 +777,8 @@
    "updated": 1,
    "link": null,
    "locked": false,
+   "width": 40,
+   "height": 0,
    "points": [
     [
      0,
@@ -789,10 +789,10 @@
      0
     ]
    ],
+   "endArrowhead": null,
    "startBinding": null,
    "endBinding": null,
    "startArrowhead": null,
-   "endArrowhead": null,
    "lastCommittedPoint": null,
    "elbowed": false
   },
@@ -801,8 +801,6 @@
    "type": "rectangle",
    "x": 110,
    "y": 640,
-   "width": 560,
-   "height": 70,
    "angle": 0,
    "strokeColor": "#757575",
    "backgroundColor": "#f1f3f5",
@@ -828,7 +826,9 @@
    ],
    "updated": 1,
    "link": null,
-   "locked": false
+   "locked": false,
+   "width": 560,
+   "height": 70
   },
   {
    "id": "f6_label",
@@ -871,8 +871,6 @@
    "type": "rectangle",
    "x": 730,
    "y": 180,
-   "width": 430,
-   "height": 110,
    "angle": 0,
    "strokeColor": "#f59e0b",
    "backgroundColor": "#fff3bf",
@@ -898,7 +896,9 @@
    ],
    "updated": 1,
    "link": null,
-   "locked": false
+   "locked": false,
+   "width": 430,
+   "height": 110
   },
   {
    "id": "n1_label",
@@ -941,8 +941,6 @@
    "type": "arrow",
    "x": 730,
    "y": 230,
-   "width": -58,
-   "height": -5,
    "angle": 0,
    "strokeColor": "#f59e0b",
    "backgroundColor": "transparent",
@@ -962,6 +960,8 @@
    "updated": 1,
    "link": null,
    "locked": false,
+   "width": -58,
+   "height": -5,
    "points": [
     [
      0,
@@ -972,10 +972,10 @@
      -5
     ]
    ],
+   "endArrowhead": "arrow",
    "startBinding": null,
    "endBinding": null,
    "startArrowhead": null,
-   "endArrowhead": "arrow",
    "lastCommittedPoint": null,
    "elbowed": false
   },
@@ -984,8 +984,6 @@
    "type": "text",
    "x": 730,
    "y": 320,
-   "width": 316.8,
-   "height": 67.5,
    "angle": 0,
    "strokeColor": "#1e1e1e",
    "backgroundColor": "transparent",
@@ -1005,9 +1003,11 @@
    "updated": 1,
    "link": null,
    "locked": false,
-   "text": "The agent reads SKILL.md first.\nIt opens a reference or template\nonly when a step needs it.",
-   "originalText": "The agent reads SKILL.md first.\nIt opens a reference or template\nonly when a step needs it.",
+   "text": "The agent reads SKILL.md first.\nIt opens a reference or template\nonly when a step needs it.\nIt never reads outside its folder.",
    "fontSize": 18,
+   "width": 336.6,
+   "height": 90.0,
+   "originalText": "The agent reads SKILL.md first.\nIt opens a reference or template\nonly when a step needs it.\nIt never reads outside its folder.",
    "fontFamily": 2,
    "textAlign": "left",
    "verticalAlign": "top",
@@ -1019,9 +1019,7 @@
    "id": "n3",
    "type": "text",
    "x": 730,
-   "y": 430,
-   "width": 319.0,
-   "height": 25.0,
+   "y": 455,
    "angle": 0,
    "strokeColor": "#6d28d9",
    "backgroundColor": "transparent",
@@ -1042,8 +1040,10 @@
    "link": null,
    "locked": false,
    "text": "How to build skills and hooks",
-   "originalText": "How to build skills and hooks",
    "fontSize": 20,
+   "width": 319.0,
+   "height": 25.0,
+   "originalText": "How to build skills and hooks",
    "fontFamily": 2,
    "textAlign": "left",
    "verticalAlign": "top",
@@ -1055,9 +1055,7 @@
    "id": "n4",
    "type": "text",
    "x": 730,
-   "y": 462,
-   "width": 396.00000000000006,
-   "height": 120.0,
+   "y": 487,
    "angle": 0,
    "strokeColor": "#1e1e1e",
    "backgroundColor": "transparent",
@@ -1077,9 +1075,11 @@
    "updated": 1,
    "link": null,
    "locked": false,
-   "text": "code.claude.com/docs/en/skills\ncode.claude.com/docs/en/hooks\ncode.claude.com/docs/en/best-practices\nplatform.claude.com/docs/en/agents-and-tools/\n    agent-skills/best-practices\nor use the skill-creator skill",
-   "originalText": "code.claude.com/docs/en/skills\ncode.claude.com/docs/en/hooks\ncode.claude.com/docs/en/best-practices\nplatform.claude.com/docs/en/agents-and-tools/\n    agent-skills/best-practices\nor use the skill-creator skill",
+   "text": "code.claude.com/docs/en/skills\ncode.claude.com/docs/en/hooks\ncode.claude.com/docs/en/best-practices\nplatform.claude.com/docs/en/agents-and-tools/\n    agent-skills/best-practices\nlearn.chatgpt.com/docs/build-skills\nlearn.chatgpt.com/docs/hooks\nor use the skill-creator skill",
    "fontSize": 16,
+   "width": 396.00000000000006,
+   "height": 160.0,
+   "originalText": "code.claude.com/docs/en/skills\ncode.claude.com/docs/en/hooks\ncode.claude.com/docs/en/best-practices\nplatform.claude.com/docs/en/agents-and-tools/\n    agent-skills/best-practices\nlearn.chatgpt.com/docs/build-skills\nlearn.chatgpt.com/docs/hooks\nor use the skill-creator skill",
    "fontFamily": 2,
    "textAlign": "left",
    "verticalAlign": "top",
