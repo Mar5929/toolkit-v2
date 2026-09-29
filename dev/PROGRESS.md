@@ -42,6 +42,11 @@ For Mike in the final report (his decisions or steps):
 - Claude Code sign-in kept expiring during tests; Claude test sessions now
   run one at a time.
 
+A parallel session "Notion work tracker refinement"
+(`local_88e38575-4d95-4bec-8792-3936ba60ddf5`, started 2026-09-29 11:49 EDT)
+works in this same toolkit-v2 folder. Before committing here, check
+`git status` for files that session changed and leave them out.
+
 Next piece of work Mike asked for: the Notion work tracker refinement. His
 prompt is in `dev/next/notion-work-tracker-prompt.md`; run it in a new
 session in the toolkit-v2 folder after this goal is met.
