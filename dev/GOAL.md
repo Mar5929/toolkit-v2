@@ -304,6 +304,11 @@ Interview answers (Mike, 2026-09-29, the interview session):
   the project's `.claude/rules/owner-preferences.md`;
   `shared-repository-work.md` line 30 becomes "A standing merge instruction
   in `owner-preferences.md` counts."
+- Open question 4B, bulk approvals (Mike: "yes"): a "yes to all" is saved
+  as one row per item in the work item's Questions and Answers, each with
+  the item, the reason Mike was shown ("reason shown: none" when there was
+  none), his words, and the date; project-wide ones also go to memory.
+  Every item in a list shown to Mike carries a one-line reason.
 - Notion session reply (2026-09-29): no conflicts. Settled with Mike in that
   session: Phases and Tasks are Notion linked records (a database), not a
   checklist in the body (Mike: "Yes, linked records"; "we have a section

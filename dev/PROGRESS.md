@@ -53,6 +53,19 @@ session in the toolkit-v2 folder after this goal is met.
 
 ## Direction: skills-first (decided 2026-09-29; `dev/GOAL.md` "Direction change")
 
+Status 2026-09-29, evening (session "Handoff document review and
+interview", branch `claude/skills-first-interview`, worktree
+`.claude/worktrees/skills-first-interview`, not merged to main yet): the
+interview is finished. Mike confirmed all 13 topics and answered the four
+open questions; every answer is in `dev/GOAL.md`, "Interview answers", in
+his words. The Notion session has the answers that affect Notion and found
+no conflicts. Next: draft 2 of `dev/research/skills-first-architecture.md`
+and the updated diagrams, sent to the Notion session first, then shown to
+Mike as a short outline. Still to ask Mike, with draft 2: the smaller open
+items in `dev/HISTORY.md` section 5.2 (spec-check, work-guide, track-tasks;
+`.toolkit.json` and the Jira status list; the rules and model-review lists;
+the everyday install; where the GitHub ticket lives).
+
 Status 14:40 EDT: ready to hand off. `dev/HISTORY.md` (full history, checked)
 and `dev/next/handoff-2026-09-29.md` (read everything, interview Mike first)
 are committed. Diagrams in `dev/diagrams/` wait for Mike's approval before
