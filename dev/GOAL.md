@@ -247,6 +247,16 @@ Interview answers (Mike, 2026-09-29, the interview session):
   what Mike settles with the Notion session.
 - Topic 12, the GitHub ticket and diagrams: confirmed ("yes coorect").
   Topics 1 to 12 of the playback are done.
+- Topic 13, piece 1 (Mike: "Yeah I think that makes sense"): in
+  `WORK-ITEM.md`, "Open Questions" becomes "Questions and Answers", with two
+  added columns: the owner's answer in his words, and the date. Every
+  question the agent asks gets a row; the agent fills the answer as soon as
+  Mike gives it, updates the goal or requirement it affects, and asks the
+  next question. A row that decides something is marked as a decision; the
+  item's decisions are those rows (project-wide ones also go to memory, per
+  topic 8). Unanswered rows stay at the top, so a new session resumes at the
+  first open question. Recent History logs progress and names the Q-ID
+  instead of repeating the decision. This is an approved model change.
 - Rename: "I want the file name to be 'Current State' instead of 'Current
   Focus'." Read as: `.memory/CURRENT_FOCUS.md` becomes
   `.memory/CURRENT_STATE.md` (the model's naming style), and the Notion
