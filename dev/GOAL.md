@@ -94,6 +94,12 @@ steps that must always run the same way.
   come up. The index lists each concept's title, summary, and updated date,
   grouped by prefix. The model's memory text changes only where it must
   (concept files, not one file per fact); it goes on the model branch.
+- **Rules follow Claude Code best practices** (Mike, 2026-09-29): every
+  project rule and the owner-preferences rule format are written to the
+  official guidance (one topic per file, specific checkable instructions,
+  `paths:` frontmatter only where a rule applies to certain files, short
+  always-on rules, procedures moved to skills), keeping each rule's meaning;
+  meaning changes wait for Mike's yes. A checker enforces the format.
 - **Rules, skills, and memory each hold one kind of thing** (Mike,
   2026-09-29): instructions the agent must follow every time (owner
   preferences, corrections, "from now on", "always", "never") go in rules:

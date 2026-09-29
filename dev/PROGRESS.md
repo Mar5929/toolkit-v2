@@ -152,6 +152,13 @@ Read `dev/GOAL.md` first. This file says where the work stands.
   Salesforce, Hindsight; Claude Code local; final independent review
   (`dev/final-review.md`). The Notion confirmation run waits for `ntn login`.
 
+## Also running (2026-09-29)
+
+- `wf_6e6bebee-68e`: every skill description says what, why, and when; every
+  skill folder self-contained; checker extended; routing spot check.
+- `wf_7fbb6da1-7af`: every rule rewritten to Claude Code best practices on
+  the model branch, owner-preferences format, `dev/tools/check-rules.mjs`.
+
 ## Rules, memory, and enforcement (2026-09-29, workflow `wf_a6663d9f-9c8`)
 
 - Committed `b503d34`: close-out fixes and concept memory (works the same in
@@ -169,6 +176,17 @@ Read `dev/GOAL.md` first. This file says where the work stands.
 - Claude Code is signed out again (`claude auth status`); Mike asked to run
   `claude auth login`. Parallel `claude -p` test sessions are the likely
   cause, so Claude test sessions now run one at a time.
+- Build done in the working tree (not committed; the lead commits): versions
+  `toolkit`, `memory`, `work` 0.3.0, `session-skills` 0.2.10, marketplace
+  0.3.0. Suite 1004 tests: 1001 pass, 3 skipped. `toolkit rule add|update|list`;
+  `feedback_` refused and migrated (doctor, `tidy --plan`); `--lesson`,
+  `promote`, rule proposals; R-B1 (approve --result and finish refuse without
+  a checker verdict; `--no-independent-check --reason`) and R-I4 (the command
+  saves a proposal, from the hooks' turn facts) in code; C1, F1, F2, the
+  delivery re-look, and the close-out minors. Model branch commit `5293d7c`
+  (`dev/model-changes.md`, "Rules, skills, and memory"), imported.
+- Not done here: the Codex and Claude Code reruns, the routing rerun (R-M8),
+  the model guard's double period (Mike's yes), and Mike's installs.
 
 ## Close-out (2026-09-28 evening, workflow `wf_68dc2118-661`)
 
