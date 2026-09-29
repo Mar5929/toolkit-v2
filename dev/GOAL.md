@@ -229,6 +229,13 @@ Interview answers (Mike, 2026-09-29, the interview session):
   Git, so they exist only on this Mac, and offered one onboarding line about
   Time Machine or iCloud. Mike: "no don't need the onboarding line". No
   backup folder and no backup line.
+- Topic 10, mixed setups: confirmed ("cool good. go with your
+  recommendations"). Any mix works; every memory stores the work item ID;
+  a two-way Notion relation when both are in Notion; the Notion page link
+  when only the work items are in Notion; onboarding suggests Notion memory
+  when Mike picks Notion work tracking. Added: when a work item has a web
+  address (a GitHub issue or a Jira ticket), the memory also stores that
+  link.
 - Rename: "I want the file name to be 'Current State' instead of 'Current
   Focus'." Read as: `.memory/CURRENT_FOCUS.md` becomes
   `.memory/CURRENT_STATE.md` (the model's naming style), and the Notion
