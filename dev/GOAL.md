@@ -75,6 +75,29 @@ Corrections (Mike, 2026-09-29, after the first two diagrams):
   the `toolkit` program. Whether `scripts/memory.py` (505 lines) stays is
   open. Notion and Hindsight modules get the same hook moments in their own
   versions.
+- Name (Mike, 2026-09-29): "I want the memory skill to be called
+  memory-refine." Read as: the skill that was `memory-tidy` becomes
+  `memory-refine` (per storage set, for example `notion-memory-refine`).
+  Mike to correct if he meant a different skill.
+- Marking Done (Mike, 2026-09-29, on "a written rule, with the item's history
+  quoting your words"): "that's fine. I should be able to mark a work item
+  done, right? It should ask me." The agent asks Mike before it marks an item
+  Done and records his words and the date in the item's history; Mike can
+  also mark an item Done himself. A written rule, no hook.
+- Guidance for building skills and hooks (Mike, 2026-09-29): give the
+  official URLs for Claude Code best practices, or use the skill-creator
+  skill. A skill is a folder, not one `SKILL.md`: it holds references,
+  templates, examples, and full instruction files, for example how to use
+  the Notion CLI, what to sign in as, and which fields and templates to use.
+- Save the Excalidraw diagrams, enrich them where something is missing, and
+  include them in the handoff (Mike, 2026-09-29).
+- The next agent must know the whole history (Mike, 2026-09-29): "It needs
+  to know not to overengineer this. It needs to know all the history of
+  everything that we went through in this whole chat session and work item.
+  It needs to preserve and read up on all that history. It needs to know
+  everything: all the templates and all the decisions we made." The history
+  is written to `dev/HISTORY.md`, and the handoff tells the next agent to
+  read it first.
 
 ## Goal
 
