@@ -267,6 +267,12 @@ Interview answers (Mike, 2026-09-29, the interview session):
   Requirements, Questions and Answers, Notes. No folding markup: Obsidian
   folds headings itself, and the Notion template uses a toggle heading. The
   Overview's "Next action" names the next open question.
+- Topic 13, piece 4 (Mike: "one skill"): the shared "requirements" skill
+  and the refinement skill are one skill, `work-refine` (working name). It
+  takes an item from a rough idea to approved requirements and a roadmap:
+  reads the sources, interviews one question at a time with a
+  recommendation, names gotchas and what Mike has not thought of, saves each
+  answer at once, and resumes at the first open question in a new session.
 - Notion session reply (2026-09-29): no conflicts. Settled with Mike in that
   session: Phases and Tasks are Notion linked records (a database), not a
   checklist in the body (Mike: "Yes, linked records"; "we have a section
