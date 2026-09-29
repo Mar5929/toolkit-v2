@@ -267,6 +267,12 @@ Interview answers (Mike, 2026-09-29, the interview session):
   Requirements, Questions and Answers, Notes. No folding markup: Obsidian
   folds headings itself, and the Notion template uses a toggle heading. The
   Overview's "Next action" names the next open question.
+- Notion session reply (2026-09-29): no conflicts. Settled with Mike in that
+  session: Phases and Tasks are Notion linked records (a database), not a
+  checklist in the body (Mike: "Yes, linked records"; "we have a section
+  that actually shows the tasks, and they're actual records"); a phase is
+  still not a work item. In Notion, Questions and Answers stays a text table
+  under a toggle heading, not a database, the same as `WORK-ITEM.md`.
 - Rename: "I want the file name to be 'Current State' instead of 'Current
   Focus'." Read as: `.memory/CURRENT_FOCUS.md` becomes
   `.memory/CURRENT_STATE.md` (the model's naming style), and the Notion
