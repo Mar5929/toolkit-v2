@@ -257,6 +257,16 @@ Interview answers (Mike, 2026-09-29, the interview session):
   topic 8). Unanswered rows stay at the top, so a new session resumes at the
   first open question. Recent History logs progress and names the Q-ID
   instead of repeating the decision. This is an approved model change.
+- Topic 13, pieces 2 and 3 (Mike: "perfect"): source material (meeting
+  transcripts, documents) goes in a `references/` folder inside each local
+  work item folder (kept out of Git with `.work-items/`), or as attachments
+  on the Notion page, GitHub issue, or Jira ticket; the item has a short
+  "Sources" list, one line per file (what it is, what was taken from it);
+  anything drawn from a source cites it. Questions and Answers moves down,
+  just above Notes; section order: Overview, Roadmap, Tasks, Recent History,
+  Requirements, Questions and Answers, Notes. No folding markup: Obsidian
+  folds headings itself, and the Notion template uses a toggle heading. The
+  Overview's "Next action" names the next open question.
 - Rename: "I want the file name to be 'Current State' instead of 'Current
   Focus'." Read as: `.memory/CURRENT_FOCUS.md` becomes
   `.memory/CURRENT_STATE.md` (the model's naming style), and the Notion
