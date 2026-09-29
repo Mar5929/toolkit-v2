@@ -53,6 +53,14 @@ session in the toolkit-v2 folder after this goal is met.
 
 ## Direction: skills-first (decided 2026-09-29; `dev/GOAL.md` "Direction change")
 
+Status 14:01 EDT: Mike's corrections recorded in `dev/GOAL.md` ("Corrections
+(Mike, 2026-09-29, after the first two diagrams)"); diagrams redrawn in chat;
+handoff prompt in `dev/next/handoff-2026-09-29.md` (commits 1c634fc, 8454538,
+2354215). The design review workflow `wf_4ed8e485-f07` has finished its four
+reviews and is writing `dev/research/skills-first-architecture-review.md`.
+The 11 finish items are replaced; a new goal waits for Mike's approval of the
+architecture.
+
 Mike chose skills and timely hooks. He asked to see the plan before any
 work. Plan shown in chat: (0) snapshot commit of today's working tree;
 (1) read-only research of the captured Claude Code, Codex, and Anthropic
