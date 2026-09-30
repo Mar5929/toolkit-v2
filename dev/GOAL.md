@@ -337,8 +337,11 @@ Interview answers (Mike, 2026-09-29, the interview session):
   - Skills are copied into each project; only onboarding is a machine-wide
     plugin. Reason shown: the Codex IDE extension loads no plugins, and
     plugin hooks would fire in every project.
-  - One copy of each skill with a link from Codex's folder: not understood
-    yet; explained again, open.
+  - One copy of each skill: the real files in `.claude/skills/`, and
+    `.agents/skills/` a link to that folder (Mike, after it was explained:
+    "Go with your recommendations"). Reason shown: one set of files, so a
+    fix reaches both hosts; Codex follows linked folders. If the test
+    projects show a problem, two copies instead.
   - `work-decide` joins `work-status`; `work-organize` is split between the
     track skills and `work-on`. Reason shown: three skills claimed "what do
     you need from me".
