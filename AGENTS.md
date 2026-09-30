@@ -288,4 +288,6 @@ claude plugin validate ./plugins/toolkit
   to Mike's real `~/.claude`, `~/.codex`, Notion page, or Hindsight banks.
 - **Git.** Several agents may work in this folder at once. Change only the
   files you were given. Stage paths by name; never `git add -A`, `git add .`,
-  or `git commit -a`. No GitHub repository until Mike says yes.
+  or `git commit -a`. The GitHub repository is `Mar5929/toolkit-v2`
+  (private, created 2026-09-29 with Mike's yes); the work is tracked in its
+  issue #1. Push `main` only with Mike's yes.

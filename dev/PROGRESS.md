@@ -53,6 +53,17 @@ session in the toolkit-v2 folder after this goal is met.
 
 ## Direction: skills-first (decided 2026-09-29; `dev/GOAL.md` "Direction change")
 
+Status 2026-09-29, late evening: draft 2 of
+`dev/research/skills-first-architecture.md` is written, reviewed by the
+Notion session, and its questions answered by Mike (`dev/GOAL.md`,
+"Interview answers"). The three diagrams in `dev/diagrams/` are approved and
+redrawn. The work is merged into `main`, pushed to the new private
+repository `Mar5929/toolkit-v2`, and tracked in its issue #1
+(https://github.com/Mar5929/toolkit-v2/issues/1), which holds the goal, the
+decisions, and the diagrams. Next: write the new goal and finish list at the
+top of `dev/GOAL.md` and get Mike's yes to build; then switch off the old
+program's everyday install before deleting it.
+
 Status 2026-09-29, evening (session "Handoff document review and
 interview", branch `claude/skills-first-interview`, worktree
 `.claude/worktrees/skills-first-interview`, not merged to main yet): the
