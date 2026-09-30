@@ -3,6 +3,79 @@
 Mike's goal, set 2026-09-26. This file is the single place the goal and his
 answers live. Update it when he changes a decision.
 
+## Goal and finish list (proposed 2026-09-29; waiting for Mike's yes)
+
+This replaces the 11 finish items at the bottom of this file. The design is
+`dev/research/skills-first-architecture.md` (draft 2) with the answers in
+"Interview answers" below; the work is tracked in
+https://github.com/Mar5929/toolkit-v2/issues/1.
+
+**Goal.** Build Toolkit V2 as rules, skills, and a few small hooks, with no
+custom program, and prove it with real test projects in Claude Code and
+Codex. A new project set up by onboarding matches Mike's model plus the
+skill sets and hooks for his choices, and the agent then runs the project
+while Mike only decides.
+
+**Size limit.** The only code a project runs is the three small hook
+commands in draft 2 section 9 (about 15 to 30 lines each) and the model's
+Salesforce guards. If anything more seems needed, stop and ask Mike first,
+with the size in plain numbers.
+
+**Finish items.** The goal is met only when each item is shown in the chat
+with real proof (command output, file listings, screenshots, or links).
+
+1. **Old program switched off, then removed.** With Mike's yes, the
+   everyday install is undone using `dev/test-runs/install-everyday.md`, so
+   no session on the Mac runs the old hooks. Then `plugins/toolkit/lib`, its
+   tests, the `toolkit` command, `publish-docs.mjs`, and
+   `sync-skill-references.mjs` are deleted.
+2. **Model updated.** On the model branch, the approved changes are made:
+   the folder renames, `WI-031.md` file names, Current State, Questions and
+   Answers, Sources and `references/`, the decision record template,
+   `DECISIONS.md` and `.toolkit.json` removed, the routing and citing lines,
+   and the rewrite of every line that names the old program. Mike gets one
+   list of every changed file with the reason, before he merges.
+3. **Skills built.** Every skill in draft 2 section 4 is a folder with its
+   references, templates, and examples, written from the official Anthropic
+   and OpenAI docs or the skill-creator skill. Every description says what,
+   why, and when. `claude plugin validate` passes.
+4. **No overlap.** A routing test of about 20 owner requests, 3 runs each,
+   in both hosts, picks the right skill every time, after fixes.
+5. **Onboarding works** for each test setup: the new project holds the model
+   files, the chosen skill sets (Codex's skill folder linked to Claude
+   Code's), the hooks, the filled `AGENTS.md`, and nothing from an option
+   not chosen.
+6. **Hooks seen working.** Every hook in draft 2 section 6 is seen firing in
+   a real Claude Code session, and every Codex row in a real Codex session,
+   including from inside a git worktree. The end-of-reply check's false
+   alarms are counted and Mike decides whether it stays.
+7. **Test projects run end to end**, Claude Code sessions one at a time:
+   - local + Obsidian work, local memory, Salesforce (Claude Code and Codex);
+   - Notion work, Notion memory (Claude Code and Codex), in the private
+     Notion test area;
+   - GitHub Issues work, Hindsight memory (a private test repository,
+     created after Mike's final yes);
+   - Notion work, local memory.
+   Each takes one work item from a rough idea and a meeting transcript,
+   through `work-refine`, a sub-item, a design, a build, the independent
+   check, and Mike's Done, with a file moved by hand. Decisions land in the
+   item; project-wide ones also in memory; memory and work item links work
+   (clickable in Obsidian and Notion, tags in Hindsight).
+8. **Memory tests pass:** a fresh session resumes from Current State, a
+   corrected fact replaces the old one, the agent says "I don't know"
+   instead of guessing, nothing leaks between projects, and old entries
+   leave Current State.
+9. **Notion checks pass:** the Notion session's six behaviors, and bringing
+   an existing Notion project up to a changed template.
+10. **Independent review** of the whole build finds no blocking issue, and
+    every finding is fixed or put to Mike.
+11. **Report.** Mike gets a short plain report: what works, what was tested,
+    and what is still open. Issue #1 is updated with the results.
+
+Not in this goal: Jira (deferred by Mike), the 16 rules questions and 13
+model-review items (a later short list), and deleting test data (Mike's yes
+first).
+
 ## Direction change (Mike, 2026-09-29): skills and timely hooks, no custom program
 
 This overrides how the rest of this file says Toolkit V2 is built, and it
@@ -683,7 +756,7 @@ Rules on the way:
 - Ask Mike only for decisions that are his, logins, money, or anything that
   cannot be undone.
 
-## Finish items (11)
+## Finish items (11) (replaced 2026-09-29; see "Goal and finish list" at the top)
 
 The goal is met only when Claude has shown each item in the conversation,
 with real command output, file listings, or links as proof.
