@@ -64,6 +64,17 @@ decisions, and the diagrams. Next: write the new goal and finish list at the
 top of `dev/GOAL.md` and get Mike's yes to build; then switch off the old
 program's everyday install before deleting it.
 
+Status 2026-09-29, 20:32: Mike approved the new goal and finish list (top of
+`dev/GOAL.md`, with his two test scenarios). Finish item 1, first half, is
+done with his yes: `toolkit@toolkit-v2` is off in `~/.claude/settings.json`
+(line 111) and `~/.codex/config.toml` (line 203); `~/.local/bin/toolkit` and
+`~/.config/toolkit-v2/` were moved, not deleted. Backups and the moved files
+are in `/Users/michaelrihm/Documents/Projects/toolkit-v2-install-backup-2026-09-29/`.
+Undo: flip the two lines back and move the two items back. Sessions that
+were already open keep the old hooks until they restart, so the program's
+code (`plugins/toolkit/lib` and the rest of finish item 1) is deleted only
+after Mike has restarted his open sessions.
+
 Status 2026-09-29, evening (session "Handoff document review and
 interview", branch `claude/skills-first-interview`, worktree
 `.claude/worktrees/skills-first-interview`, not merged to main yet): the
