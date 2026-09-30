@@ -367,6 +367,15 @@ Interview answers (Mike, 2026-09-29, the interview session):
     future thing." This is Mike's own call; Jira is deferred.
   - Later, as a separate list: the 16 rules questions, the 13 model-review
     items, and the test data to delete.
+- The GitHub ticket (Mike, 2026-09-29: "Yeah, go with your
+  recommendation"): merge today's work into `main`, create the private
+  repository `Mar5929/toolkit-v2`, push `main`, and open issue #1 "Toolkit
+  V2: skills-first rebuild" holding the goal, the decisions, and the three
+  diagrams, linked to `Mar5929/claude-toolkit#419` (whose body stays as it
+  is). Reason shown: the pictures live in the repository so the issue can
+  show them; `claude-toolkit` stays unchanged.
+- `unslop` is retired (Mike, 2026-09-29: "I don't think we need the unslop
+  skill anymore").
 - Notion session reply (2026-09-29): no conflicts. Settled with Mike in that
   session: Phases and Tasks are Notion linked records (a database), not a
   checklist in the body (Mike: "Yes, linked records"; "we have a section

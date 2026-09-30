@@ -96,7 +96,7 @@ own folder. Descriptions stay under about 350 characters, so the whole list
 fits Codex's 8,000-character budget (CX/build-skills.md:45-46) and Claude
 Code's (set higher with `skillListingBudgetFraction`, CC/settings-reference.md:2915).
 
-### 4.1 Skills in every project (16)
+### 4.1 Skills in every project (15)
 
 | Skill | Description (draft) |
 | --- | --- |
@@ -108,7 +108,7 @@ Code's (set higher with `skillListingBudgetFraction`, CC/settings-reference.md:2
 | `work-finish` | 'Ships and closes an approved work item, or cancels one, asking the owner before marking it Done and recording his words, so only the owner closes work. Use when the owner says "ship it", "close it", "mark it done", or "cancel WI-031".' |
 | `work-status` | 'Reports where the project's work stands: what is in progress, what waits on the owner, the questions he needs to answer, and what is next, so he can decide quickly. Use when the owner says "where are we", "what do you need from me", or "what's next". Not for a recap of this chat; use session-summary.' |
 | `handoff` | Kept; steps rewritten to update the work item and Current State through the project's sets. |
-| `braindump`, `explain-simply`, `session-summary`, `unslop` | Kept as they are. |
+| `braindump`, `explain-simply`, `session-summary` | Kept as they are. `unslop` is retired (Mike, 2026-09-29). |
 | `pull-latest`, `reset-to-remote`, `merge-and-clean-up`, `publish-docs` | Kept; `publish-docs` loses its 324-line script for written git steps. |
 
 Changes from diagram 1: "requirements" and the old `requirements-helper`
@@ -162,8 +162,8 @@ Question 5 below.
 
 ### 4.6 Count and overlap
 
-A project gets 16 shared + 2 work + 3 memory = 21 skills, 25 with
-Salesforce (18 and 22 with Hindsight memory, which has no toolkit skills). Pairs most likely to be confused, each tested by the routing
+A project gets 15 shared + 2 work + 3 memory = 20 skills, 24 with
+Salesforce (17 and 21 with Hindsight memory, which has no toolkit skills). Pairs most likely to be confused, each tested by the routing
 test: `work-refine` / `braindump`; `work-status` / `session-summary`;
 `work-on` / `work-delegate`; `<memory>-find` / `<tracker>-work-find`;
 `handoff` / `<memory>-save`; `<memory>-save` / Claude Code's built-in
