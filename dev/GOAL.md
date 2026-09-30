@@ -328,6 +328,42 @@ Interview answers (Mike, 2026-09-29, the interview session):
   hook even when the Hindsight server is off, and kept out of Hindsight's
   long-term search. Reason shown: it works with the server off and keeps
   old status notes out of search results.
+- Draft 2 answers (Mike, 2026-09-29: "I think I approved the diagrams";
+  "we could copy the skills into each project. That's fine"; "I would go
+  through recommendations for all of them"). Each item with the reason he
+  was shown:
+  - The three diagrams (redrawn 2026-09-29) are approved. Reason shown: they
+    match everything decided today.
+  - Skills are copied into each project; only onboarding is a machine-wide
+    plugin. Reason shown: the Codex IDE extension loads no plugins, and
+    plugin hooks would fire in every project.
+  - One copy of each skill with a link from Codex's folder: not understood
+    yet; explained again, open.
+  - `work-decide` joins `work-status`; `work-organize` is split between the
+    track skills and `work-on`. Reason shown: three skills claimed "what do
+    you need from me".
+  - Project-wide decisions in local memory are `decision_<name>.md` files, a
+    fifth prefix. Reason shown: each decision gets its own ID, work item
+    links, and history, and they are easy to list.
+  - Helper agents are brief files inside the skill that starts them. Reason
+    shown: nothing to register; the same in both hosts.
+  - `.toolkit.json` is removed; its settings go to a "Toolkit settings"
+    section in `PROJECT.md`. Reason shown: one file fewer, project facts in
+    one place.
+  - `spec-check`, `work-guide`, and `track-tasks` are retired, folded into
+    `work-refine`, `AGENTS.md`, and Current State. Reason shown: each job is
+    covered elsewhere, and fewer skills overlap less.
+  - The everyday install of the old program is switched off, with the
+    written undo steps, before the program is deleted. Reason shown:
+    otherwise every Claude Code session on the Mac gets hook errors.
+  - A private GitHub test repository for test project 3 (the agent confirms
+    once more right before creating it).
+  - Jira: no test, and the Jira skills may wait. Mike: "I don't have a Jira
+    test account ... we don't need to test Jira ... we probably don't even
+    need to create the skills right now. It could just maybe be like a
+    future thing." This is Mike's own call; Jira is deferred.
+  - Later, as a separate list: the 16 rules questions, the 13 model-review
+    items, and the test data to delete.
 - Notion session reply (2026-09-29): no conflicts. Settled with Mike in that
   session: Phases and Tasks are Notion linked records (a database), not a
   checklist in the body (Mike: "Yes, linked records"; "we have a section
