@@ -75,6 +75,51 @@ were already open keep the old hooks until they restart, so the program's
 code (`plugins/toolkit/lib` and the rest of finish item 1) is deleted only
 after Mike has restarted his open sessions.
 
+### Build plan (approved goal; overnight run started 2026-09-29)
+
+Mike: "I want to wake up tomorrow morning and have it built ... allow you to
+just use a team of agents to build it." The goal and finish list are at the
+top of `dev/GOAL.md`; the design is `dev/research/skills-first-architecture.md`
+(draft 2) plus "Interview answers" in `dev/GOAL.md`, which win where they
+differ. Tracked in https://github.com/Mar5929/toolkit-v2/issues/1.
+
+Where the work happens:
+- Toolkit repository: branch `claude/v2-build`, worktree
+  `.claude/worktrees/v2-build`. Nothing is merged to `main` or pushed until
+  Mike says yes in the morning, and not before he has restarted his open
+  sessions (they still run the old hooks from `plugins/toolkit/` in the main
+  folder).
+- Model: branch `toolkit-v2/approved-changes` in
+  `/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved`.
+  Mike merges it himself after seeing the list of changed files.
+- Notion: the "Notion work tracker refinement" session builds everything
+  inside Notion and the Notion skill folders from its
+  `dev/research/notion-skills-first.md`. If it cannot, the build team writes
+  the Notion skill folders from that design and says so.
+
+Stages, each a separate workflow, each checked before the next:
+1. Model changes on the model branch (draft 2 section 10), with
+   `dev/model-changes-2026-09-30.md` listing every file, what changed, and
+   why, for Mike.
+2. Build: `plugins/toolkit/` keeps one skill, `project-setup`, whose
+   `assets/` hold the model copy, every skill set, the shared skills, the
+   three hook commands, and the settings snippets (draft 2 sections 2 to 9).
+   The other V2 plugins are retired; both marketplace files list only
+   `toolkit`. The old program (`lib/`, `bin/`, `tests/`, the dev tools draft
+   2 removes) is deleted on the branch only.
+3. Checks: `claude plugin validate`, the reduced skill checker, the rules
+   checker, and the routing test (about 20 requests, 3 runs, both hosts).
+4. Test projects with Mike's two scenarios (`dev/GOAL.md`, "Goal and finish
+   list"): an agent plays Mike. Claude Code test sessions one at a time.
+   Evidence in `dev/test-runs/v2-skills-first/`.
+5. Independent review, fixes, then the report for Mike and an issue #1
+   update.
+
+Rules for the build: no code beyond the three hook commands (stop and write
+the size down for Mike if more seems needed); no AI credit; stage files by
+name; tests in scratch folders; never delete Notion or Hindsight data; never
+change Mike's own model folder, `claude-toolkit`, or his settings.
+
 Status 2026-09-29, evening (session "Handoff document review and
 interview", branch `claude/skills-first-interview`, worktree
 `.claude/worktrees/skills-first-interview`, not merged to main yet): the
