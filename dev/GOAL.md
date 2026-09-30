@@ -3,7 +3,30 @@
 Mike's goal, set 2026-09-26. This file is the single place the goal and his
 answers live. Update it when he changes a decision.
 
-## Goal and finish list (proposed 2026-09-29; waiting for Mike's yes)
+## Goal and finish list (approved by Mike, 2026-09-29: "Okay, yeah, that's great")
+
+Test scenarios (Mike, 2026-09-29, with the approval): the test projects
+simulate real, large features, and an agent plays the owner, so the agent
+under test interviews him, helps "get the thoughts out of your head", and
+refines a rough idea while he changes things along the way. Mike's words:
+"start with like one large feature that you would need to break down";
+"setting up the whole security and permissions architecture in like a large
+greenfield org for a client ... the client is going to move from their
+existing org to a new greenfield org ... they have like 15 different
+personas ... should all those personas be moved over or should we merge
+some"; and "the whole like end-to-end process of ... the user's experience
+for an iOS application for ... how they would log financial transactions".
+Each run initializes the project, refines the rough idea, breaks it into
+work items, makes decisions, and progresses the items, with requirement
+shifts, changed roadmap phases, and work moved along the way. The check:
+"does everything sort of fit cleanly".
+
+- Salesforce greenfield security and permissions (15 personas, merge or
+  move): local + Obsidian work, local memory, Salesforce, in Claude Code
+  and Codex; again, shorter, with Notion work and local memory.
+- iOS app, logging financial transactions end to end: Notion work, Notion
+  memory, in Claude Code and Codex; again, shorter, with GitHub Issues work
+  and Hindsight memory.
 
 This replaces the 11 finish items at the bottom of this file. The design is
 `dev/research/skills-first-architecture.md` (draft 2) with the answers in
