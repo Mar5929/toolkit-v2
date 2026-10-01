@@ -153,10 +153,11 @@ Every block ends with the line `<!-- endif -->`.
 | Work item ID prefix (local work items) | The prefix he confirmed, for example `WI` |
 | Salesforce org aliases | Written as `salesforce.md` in this folder shows: the label line, then one nested bullet per org (alias, which org it is, its purpose; mark production). The backtick rule above does not apply to this line. |
 
-The Notion links and prefix, the GitHub repository, and the Hindsight bank
-are filled by the service steps (`notion.md`, `github.md`, and
-`hindsight.md` in this folder). Leave their prompts until then. Keep the
-section's own fill-in guide comment: later sessions read it.
+The Notion links and prefix, the GitHub repository, and the Hindsight bank,
+server, and dashboard lines are filled by the service steps (`notion.md`,
+`github.md`, and `hindsight-on-vps.md` in this folder). Leave their
+prompts until then. Keep the section's own fill-in guide comment: later
+sessions read it.
 
 ## Salesforce entries in shared files
 

@@ -52,6 +52,14 @@ project. It asks you to sign in where needed (`ntn login` for Notion,
 or the Hindsight memory bank. It finishes by running its checks and offering
 to commit.
 
+Hindsight memory lives on your Hindsight server on the Hostinger VPS
+(`https://memory-api.mrihm-memory.com`), one memory bank per project.
+Nothing of Hindsight is installed on your Mac except Hindsight's
+coding-agent add-on, which saves each session to the project's bank in
+Claude Code and Codex. Setup shows you every change the add-on makes to
+your Claude Code and Codex settings before it installs it. Setup then opens
+the bank in the dashboard, `https://memory.mrihm-memory.com`.
+
 Start a new session afterwards, so the new files load. In Codex, also trust
 the project folder and its hooks (`/hooks`).
 
@@ -88,7 +96,7 @@ Each project gets one work tracking set and one memory set:
 | Work items in GitHub Issues | `github-work-track` |
 | Memory in local files | `local-memory-save`, `local-memory-find`, `local-memory-refine` (cleans up) |
 | Memory in Notion | `notion-memory-save`, `notion-memory-find`, `notion-memory-refine` |
-| Memory in Hindsight | None. The agent uses Hindsight's own save and search tools. |
+| Memory in Hindsight | None. Hindsight's coding-agent add-on saves each session to the project's bank, and the agent uses its save and search tools. |
 | Salesforce | `sf-architect-solutioning`, `sf-deploy-check`, `sf-component-tracker`, `sf-data-change` |
 
 A project ends up with 17 skills, or 21 in a Salesforce project (14 or 18 with
@@ -163,6 +171,13 @@ codex plugin add toolkit@toolkit-v2
 
 Start a new session in each app afterwards.
 
+With Hindsight memory, the memory itself stays on your VPS, so nothing is
+copied to a new Mac and there is no backup step. On a new Mac, say **"update
+the toolkit"** in each Hindsight project. The agent names the server the
+project uses and what this Mac is missing. After your yes, you enter the API
+key yourself in Terminal, and the agent installs Hindsight's coding-agent
+add-on with the same settings.
+
 ## What only you can do
 
 The agent never does these for you. It tells you when each one is needed.
@@ -171,11 +186,14 @@ The agent never does these for you. It tells you when each one is needed.
   terminal.
 - **Trust the project in Codex**: trust the folder the first time you open
   it, then trust its hooks with `/hooks`. Do it again after the hooks change.
-- **Approve the Hindsight server** when Claude Code asks, in a Hindsight
-  project.
+- **Enter the Hindsight API key** in Terminal, with the two lines the agent
+  gives you. Never paste it into the chat.
+- **Sign in to the Hindsight dashboard** with its own access key, which is
+  not the API key.
 - **Say yes or no** to anything outside the project folder or that cannot be
   undone: new Notion pages, a GitHub repository or labels, a Hindsight
-  memory bank, an install, a production deploy, or a production data load.
+  memory bank, the Hindsight add-on's changes to your Claude Code and Codex
+  settings, an install, a production deploy, or a production data load.
 - **Mark work Done**, or tell the agent it may.
 
 ## Where things are

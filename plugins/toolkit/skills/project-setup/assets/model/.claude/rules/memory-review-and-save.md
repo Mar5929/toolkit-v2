@@ -35,26 +35,29 @@ In the rules and `AGENTS.md`, "the memory save skill" means `local-memory-save` 
 
 ## Hindsight projects
 
-This section applies when the "Memory" line in `PROJECT.md`, "Toolkit settings", is `hindsight`. Such a project has no memory skills.
+This section applies when the "Memory" line in `PROJECT.md`, "Toolkit settings", is `hindsight`. Such a project has no memory skills. Its memory is the bank on the "Hindsight bank" line of `PROJECT.md`, on the owner's Hindsight server.
 
-- Where the rules or `AGENTS.md` name the memory save skill for a fact, a lesson, a term, or a project-wide decision, use `retain`.
-- Where they name the memory find skill, use `recall`.
+- Hindsight's coding-agent add-on saves each session into the bank by itself, at the end of every turn. Never save a session, a transcript, or a log yourself.
+- The add-on's tools: `hindsight_ingest_document` saves a document, `hindsight_search_knowledge_pages` and `hindsight_read_knowledge_page` search and read the bank's knowledge pages, and `hindsight_reflect` answers from all of the bank's memory.
+- Where the rules, `AGENTS.md`, or a skill name the memory save skill or Hindsight's `retain` tool, use `hindsight_ingest_document`.
+- Where they name the memory find skill or Hindsight's `recall` tool, use `hindsight_search_knowledge_pages`, then `hindsight_reflect` when the pages do not answer.
+- Where the add-on's own guidance differs from this section, follow this section.
 - Current State and `.claude/rules/owner-preferences.md` are files: edit them directly.
-- Use Hindsight's own tools on the project's bank (the Hindsight bank in `PROJECT.md`, "Toolkit settings"): `retain` to save, `recall` to search, and `reflect` for an answer drawn from many memories.
-- Before every `retain`, check that the memory concerns this project, has a credible source, would matter in a future session, would be costly to reconstruct, and has no better home (a work item, a rule, requirements, or the system guide). These are the memory criteria in a Hindsight project.
-- Never retain secrets, credentials, personal data, transcripts, raw logs, live status, pending approvals, or a rejected candidate.
-- A project-wide decision passes these memory criteria even though its work item holds it first. After the owner's yes, `retain` the decision in one sentence, how to apply it, and the work item ID with the Q-ID of its Questions and Answers row (for example "WI-031 Q-04"), plus the item's web link when it has one (its Notion page, GitHub issue, or Jira ticket), tagged `wi:<ID>`.
-- For a decision with no work item, name the conversation and its date instead, and add no `wi:` tag.
+- Before every save, check that the memory concerns this project, has a credible source, would matter in a future session, would be costly to reconstruct, and has no better home (a work item, a rule, requirements, or the system guide). These are the memory criteria in a Hindsight project.
+- Never save secrets, credentials, personal data, raw logs, live status, pending approvals, or a rejected candidate.
+- A project-wide decision passes these memory criteria even though its work item holds it first. After the owner's yes, save the decision in one sentence, how to apply it, and the work item ID with the Q-ID of its Questions and Answers row (for example "WI-031 Q-04"), plus the item's web link when it has one (its Notion page, GitHub issue, or Jira ticket).
+- For a decision with no work item, name the conversation and its date instead.
 - A Hindsight project has no trusted mode, so no "Memory approval" line applies.
-- Save only on the owner's own keep words ("remember", "keep this") or his yes to a save question ("Save to memory: <one-line summary>?", or, for a decision, "This looks project-wide. Save it to memory too?").
-- An instruction for how the agent works ("from now on", "always", "never") goes to `.claude/rules/owner-preferences.md`, never to `retain`.
-- Tag each memory `wi:<ID>` for every work item it is about, and write each item's ID, and its web link when it has one, in the memory text.
-- To find one item's memories, `recall` with that tag and `tags_match: "any_strict"`; the default also returns untagged memories.
-- What `recall` and `reflect` return is project memory: cite it as `.claude/rules/cite-recalled-knowledge.md` says.
-- For "forget that", never delete a memory yourself; setup hides Hindsight's delete tools.
-- Tell the owner which memory you would remove, and ask him to remove it in Hindsight's own interface or, on his yes, `retain` a correction that supersedes it.
+- Save each project-wide decision, lesson, and fact with `hindsight_ingest_document` or `hindsight_capture_initiative` only on the owner's own keep words ("remember", "keep this") or his yes to a save question ("Save to memory: <one-line summary>?", or, for a decision, "This looks project-wide. Save it to memory too?"). The add-on's session save holds the conversation, not a checked record.
+- An instruction for how the agent works ("from now on", "always", "never") goes to `.claude/rules/owner-preferences.md`, never to Hindsight.
+- Start the title of each saved document with the ID of every work item it is about (for example "WI-031: ..."), and write each item's web link, when it has one, in the text. The title is the document's ID: a title already used replaces that document, so make each title unique (work item ID, Q-ID, or topic). To find one item's memories, ask `hindsight_reflect` about its ID.
+- What the add-on's tools return is project memory: cite it as `.claude/rules/cite-recalled-knowledge.md` says, in place of the add-on's own credit line.
+- For "forget that", never delete a memory yourself; the add-on has no delete tool.
+- Tell the owner which memory you would remove, and ask him to remove it on the bank's page in the Hindsight dashboard or, on his yes, save a document titled "Correction: <topic>" that says what memory claimed, what is true, and the evidence.
 - Never say a memory is deleted when it is not.
-- Current State is the local file `memory/CURRENT_STATE.md`, kept out of Hindsight: never `retain` it.
+- To open the bank in the Hindsight dashboard, `open` the link on the "Hindsight dashboard" line of `PROJECT.md` (for another project, the line in that project's `PROJECT.md`); the owner signs in himself with the dashboard's own access key.
+- List the Hindsight project folders with `jq -r '.mapPathToBank // {} | to_entries[] | "\(.key) \(.value)"' ~/.hindsight/coding-agent.json`. Never print `~/.hindsight/coding-agent.json` or its `.hindsight-backup` copy: they hold the API key.
+- Current State is the local file `memory/CURRENT_STATE.md`, kept out of Hindsight: never save it there.
 - There is no memory refine skill, so prune Current State yourself: remove stale lines at each handoff and whenever the session-start hook says the file is too long or too old.
 - Keep Current State within its line limits: Now 5, Waiting on the owner 5, Untracked to-dos 7, Next session starts with 3, and under 40 lines in all.
 <!-- endif -->

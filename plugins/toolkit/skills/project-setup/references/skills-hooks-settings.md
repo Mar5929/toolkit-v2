@@ -46,7 +46,7 @@ Then copy the sets for the choices:
 | Work items in GitHub Issues | `<skill folder>/assets/.skill-sets/github-work/.` | `github-work-track` |
 | Memory local | `<skill folder>/assets/.skill-sets/local-memory/.` | `local-memory-save`, `local-memory-find`, `local-memory-refine` |
 | Memory in Notion | `<skill folder>/assets/.skill-sets/notion-memory/.` | `notion-memory-save`, `notion-memory-find`, `notion-memory-refine` |
-| Memory in Hindsight | nothing | none: the agent uses Hindsight's own tools |
+| Memory in Hindsight | nothing | none: the agent uses the tools of Hindsight's coding-agent add-on (`hindsight-on-vps.md` in this folder) |
 | Salesforce | `<skill folder>/assets/.salesforce/sf-architect-solutioning` | `sf-architect-solutioning`; the model copy already put `sf-component-tracker`, `sf-data-change`, and `sf-deploy-check` there |
 
 ## Hook commands

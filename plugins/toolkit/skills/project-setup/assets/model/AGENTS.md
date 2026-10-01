@@ -129,7 +129,7 @@ Give every item in a list of choices or recommendations you show the owner a one
 - Memory is in the databases on this project's Notion page, in Lore's layout (links in `PROJECT.md`); Current State is its "Current state" page. Change memory only through the memory skills; `work-finish` and `handoff` also update that page.
 <!-- endif -->
 <!-- if memory=hindsight -->
-- Memory is this project's bank on the local Hindsight server (named in `PROJECT.md`). There are no memory skills: where this file names the memory save or find skill, use `retain` or `recall`, and edit Current State directly. `.claude/rules/memory-review-and-save.md`, "Hindsight projects", says how.
+- Memory is this project's bank on the owner's Hindsight server; Hindsight's coding-agent add-on saves each session there. No memory skills: `.claude/rules/memory-review-and-save.md`, "Hindsight projects", names the tool that replaces each one, and how to open the dashboard.
 <!-- endif -->
 - Every memory names the work items it concerns by ID, with a link when there is one. Search memory before asking the owner to repeat something. Never store secrets, email addresses, or work-item status.
 
@@ -182,8 +182,8 @@ Pick a skill by the situation; the examples only help you match it. This list st
 - A Notion plugin's own search, find, or capture commands and skills (names starting `Notion:`, or `notion:` in Codex) never replace the memory skills: they reach the whole Notion workspace, not only this project's memory.
 <!-- endif -->
 <!-- if memory=hindsight -->
-- The owner wants a fact kept, corrected, or forgotten, or gives a standing instruction: Hindsight's `retain` tool, only on his keep words or his yes. An instruction for how the agent works goes in `.claude/rules/owner-preferences.md`, never in a settings hook or the `update-config` skill. Examples: "remember", "from now on", "always", "never", "whenever you ...", "each time you ...", "forget that".
-- What was recorded or decided before, or why: Hindsight's `recall` tool, and the work track skill for decisions saved in work items. `work-refine` and `solution-design` recall themselves, so planning and design open those skills first; before any other recommendation, `recall` first. Examples: "what did we decide", "do we know", "why did we".
+- The owner wants a fact kept, corrected, or forgotten, or gives a standing instruction: `hindsight_ingest_document`, only on his keep words or his yes. An instruction for how the agent works goes in `.claude/rules/owner-preferences.md`, never in a settings hook or the `update-config` skill. Examples: "remember", "from now on", "always", "never", "whenever you ...", "each time you ...", "forget that".
+- What was recorded or decided before, or why: `hindsight_search_knowledge_pages`, then `hindsight_reflect`, and the work track skill for decisions saved in work items. `work-refine` and `solution-design` search memory themselves, so planning and design open those skills first; before any other recommendation, search first. Examples: "what did we decide", "do we know", "why did we".
 - A review of all memory, or Current State has grown: edit `memory/CURRENT_STATE.md` directly within its line limits. Never merge or delete a Hindsight memory yourself; name one that looks wrong or stale and follow `.claude/rules/memory-review-and-save.md`, "Hindsight projects". Examples: "refine memory", "clean up Current State".
 <!-- endif -->
 - Never use `anthropic-skills:consolidate-memory` in this project. It edits Claude Code's own memory folder, which this project turns off. For any memory clean-up, follow the "refine memory" line above.

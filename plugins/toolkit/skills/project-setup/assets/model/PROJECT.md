@@ -42,7 +42,7 @@
 - Local memory: `memory/` (local memory, flat and Git-ignored; the whole project folder opens as an Obsidian vault; the setup choice is under "Toolkit settings" below)
 <!-- endif -->
 <!-- if memory=hindsight -->
-- Memory store: this project's bank on the local Hindsight server, and Current State in `memory/CURRENT_STATE.md` (the setup choice is under "Toolkit settings" below)
+- Memory store: this project's bank on the owner's Hindsight server, and Current State in `memory/CURRENT_STATE.md` (the setup choice, the bank, the server address, and the dashboard link are under "Toolkit settings" below)
 <!-- endif -->
 <!-- if memory=notion -->
 - Memory store: the memory databases on this project's Notion page, in Lore's layout (the setup choice is under "Toolkit settings" below)
@@ -92,7 +92,9 @@
 - Notion memory: `<links to the project's memory page, its Lore databases (Projects, Topics, Memories, Entities, Facts), and the "Current state" page>`
 <!-- endif -->
 <!-- if memory=hindsight -->
-- Hindsight bank: `<bank name on the local Hindsight server>`
+- Hindsight bank: `<bank ID on the Hindsight server>`
+- Hindsight server: `<API address of the Hindsight server>`
+- Hindsight dashboard: `<link to this bank in the Hindsight dashboard>`
 <!-- endif -->
 <!-- if salesforce -->
 - Salesforce org aliases: `<one line per org: alias, which org it is, and its purpose; mark production>`

@@ -193,8 +193,8 @@ node --test 'dev/tests/*.test.mjs'
     folder, never `../`.
   - Shared skills never assume one tracker or memory. They say "the
     project's work track skill", "memory save skill", or "memory find skill" (`AGENTS.md` names which one a project has), and for
-    Hindsight memory "Hindsight's retain and recall tools, as the memory rule
-    says".
+    Hindsight memory "Hindsight's retain and recall tools", which the memory
+    rule's "Hindsight projects" section maps to the add-on's tools.
 - **Wording and overlap review** (Mike, 2026-09-30). New or changed text in
   a skill, reference, template, example, helper brief, or
   `dev/build-shared/` source is reviewed by a separate agent against
@@ -266,10 +266,16 @@ node --test 'dev/tests/*.test.mjs'
 - **Notion tests** run only in the private Notion test area named in
   `dev/test-runs/notion-test-area.json`, never on Mike's real "AI Agent
   Second Brain" page unless he says yes.
-- **Hindsight memory has no toolkit skills.** The agent uses Hindsight's own
-  `retain`, `recall`, and `reflect` tools, tags each memory `wi:<ID>`, and
-  keeps Current State in the local file `memory/CURRENT_STATE.md`. Tests use
-  only banks made for the test, never Mike's own.
+- **Hindsight memory** is on Mike's Hostinger VPS (API
+  `https://memory-api.mrihm-memory.com`, dashboard
+  `https://memory.mrihm-memory.com`), one bank per project, never on the Mac
+  and never Hindsight Cloud. Hindsight's coding-agent add-on, installed
+  machine-wide with his yes, saves each session and gives the agent its
+  `hindsight_*` tools, so there are no toolkit memory skills; Current State
+  stays in `memory/CURRENT_STATE.md`. The API key lives in
+  `~/.hindsight/coding-agent.json` (or, by his choice, `HINDSIGHT_API_TOKEN`
+  in `~/.zshenv`), never in a repository. Tests use only banks made for the
+  test, with his yes, never his own.
 - **Jira is deferred** by Mike: no Jira skills now.
 - **Read-only sources.** Never change
   `/Users/michaelrihm/Documents/Projects/claude-toolkit` or

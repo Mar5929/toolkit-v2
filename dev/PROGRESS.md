@@ -4,6 +4,23 @@ Read `dev/GOAL.md` first. This file says where the work stands.
 
 ## Resume here (2026-09-29, overnight build)
 
+### Hindsight on the VPS (2026-10-01, branch claude/hindsight-vps, toolkit 0.5.1, not committed)
+
+- Built: `references/hindsight-on-vps.md` replaces `hindsight.md` and
+  `installing-hindsight.md`. It covers the server and key, one bank per
+  project, Hindsight's coding-agent add-on pointed at the VPS, the
+  save-and-search check, the dashboard, checking a Hindsight project, and a
+  new computer. Model commit 5a3d52b (memory rule) is copied into the
+  scaffold copy. Decisions: `dev/GOAL.md` ("Hindsight setup decisions").
+- Reviewed once: 13 findings, applied except the routing test, which needs
+  live sessions.
+- Next: the wording, overlap, and best-practices reviews on the changed
+  text, the routing test in both hosts for the model's Hindsight routing
+  lines, then commit (stage by name; two new files are untracked and two
+  references are deleted). Mike's steps: install the add-on, enter the API
+  key in his Terminal, trust the add-on's hooks in Codex `/hooks`, sign in
+  to the dashboard. None of these has been run.
+
 ### Now (2026-10-01, about 17:10)
 
 - Toolkit 0.4.9 (3e3ae62): morning fixes (0.4.8, 169bbc8: memory question

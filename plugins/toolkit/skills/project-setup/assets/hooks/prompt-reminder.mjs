@@ -29,8 +29,8 @@ const PHRASES = {
   lesson: /\b(?:lesson learned|root cause|significant fix|important discovery)\b/i,
   decision: new RegExp(`\\b(?:${ASKED}we decided|let'?s go with|go with option)\\b`, 'i'),
 };
-const HINDSIGHT = "A fact is kept with Hindsight's retain tool and an instruction by a direct edit"
-  + ' of .claude/rules/owner-preferences.md, as the memory rule says; the rule decides';
+const HINDSIGHT = 'A fact is kept with the hindsight_ingest_document tool and an instruction by a'
+  + ' direct edit of .claude/rules/owner-preferences.md, as the memory rule says; the rule decides';
 const DECISION = " A decision that answers an open question is saved by the skill the work item's"
   + " Next action names; any other decision goes in the work item's Questions and Answers first,"
   + " with the project's work track skill.";

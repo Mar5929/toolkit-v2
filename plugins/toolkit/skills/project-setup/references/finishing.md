@@ -135,7 +135,7 @@ file).
 - [ ] Services, Notion work items: the "A new project" check under "Checks after any of these" in the notion-work-track setup file (notion.md gives its path)
 - [ ] Services, Notion memory with work items not in Notion: the Notion block in PROJECT.md holds every id that `notion-build/setup.md` in this skill lists under "Recording the links in PROJECT.md", and the "Current state" page shows its first lines (ntn api v1/pages/<Current state page id>/markdown < /dev/null | jq -r .markdown)
 - [ ] Services, GitHub Issues: the checks under "Checks after either" in the github-work-track setup file (github.md gives its path)
-- [ ] Services, Hindsight: the checks in hindsight.md
+- [ ] Services, Hindsight: "Check a Hindsight project" in hindsight-on-vps.md
 - [ ] git status --short lists nothing under work-items/ or memory/
 ```
 
@@ -156,9 +156,10 @@ do them for him.
 | Set the page layout of each database in the new project templates in the Projects database (the clicks are in the Notion setup files) | Only the Notion app can set it; every project copied from the templates keeps it. | Notion, when setup built the templates |
 | `gh auth login` in a terminal | Signs the GitHub command-line tool in. | GitHub Issues, when `gh auth status` fails |
 | Trust the project folder in Codex | Until then Codex ignores the project's `.codex/config.toml` and `.codex/hooks.json`. Trust is tied to the folder path, so it is needed again after a move. | Always, the first time he opens the project in Codex |
-| Trust the hooks in Codex: type `/hooks` and trust them | Codex skips a hook until it is trusted, and again after any change to its entry in `.codex/hooks.json`. A change to a `.mjs` file it runs is not reviewed again. | Always; again after "update the toolkit" changes an entry in `.codex/hooks.json` |
+| Trust the hooks in Codex: type `/hooks` and trust them | Codex skips a hook until it is trusted, and again after any change to its entry in `.codex/hooks.json`. A change to a `.mjs` file it runs is not reviewed again. | Always; again after "update the toolkit" changes an entry in `.codex/hooks.json`; with Hindsight, also the add-on's hooks after it is installed |
 | Connect the project's Salesforce org (`sf org login web --alias <alias>`) and tell the agent the alias | The agent never picks or signs in to an org itself. | Salesforce, when the project's org does not exist yet or is not connected |
-| Approve the `hindsight` server in Claude Code | Claude Code asks once before it uses a server from `.mcp.json`. | Hindsight |
+| Enter the Hindsight API key in his own Terminal window, with the two lines in `hindsight-on-vps.md` ("The access key"), never in the chat | The add-on and setup read it from `~/.hindsight/coding-agent.json`; the agent never sees it. | Hindsight, when the key is not set yet |
+| Sign in to the Hindsight dashboard with its own access key | The dashboard asks for that key, not the API key, before it shows the bank. | Hindsight, the first time he opens it |
 | Open the project folder as an Obsidian vault | To browse work items and memory with their links (the project's `README.md` says how). | Local work items or local memory; optional |
 | Start a new session in each host | The skills, hooks, and settings load at session start. | Always |
 | Say yes to committing the setup files | New worktree sessions (the Claude desktop app, the Codex app) see only committed files. | Always |
@@ -171,7 +172,8 @@ A short, plain report, in this order:
    how many skills, the three hook commands, and each line added to
    `owner-preferences.md`, in his words.
 2. What was made outside this folder: Notion pages, the GitHub repository
-   and labels, the Hindsight bank.
+   and labels, the Hindsight bank, and the add-on's changes in `~/.claude`,
+   `~/.codex`, and `~/.hindsight`.
 3. What was skipped, and why.
 4. What the owner must do himself, each with why.
 5. The final checks: all passed, or each one that did not, with its fix.
