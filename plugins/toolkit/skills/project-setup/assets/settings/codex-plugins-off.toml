@@ -1,0 +1,37 @@
+# What a Toolkit V2 project sets in Codex: it turns off the older claude-toolkit plugins and raises
+# the limit for the list of skills. Onboarding adds these lines to the project's .codex/config.toml;
+# Codex reads them once the project is trusted.
+
+[plugins."git-workflows@claude-toolkit"]
+enabled = false
+
+[plugins."hooks-library@claude-toolkit"]
+enabled = false
+
+[plugins."project-init@claude-toolkit"]
+enabled = false
+
+[plugins."protocol-guard@claude-toolkit"]
+enabled = false
+
+[plugins."second-brain@claude-toolkit"]
+enabled = false
+
+[plugins."session-skills@claude-toolkit"]
+enabled = false
+
+[plugins."sf-architect-solutioning@claude-toolkit"]
+enabled = false
+
+[plugins."system-guide@claude-toolkit"]
+enabled = false
+
+[plugins."work-tracker@claude-toolkit"]
+enabled = false
+
+# Codex shortens every skill description when the list is longer than 2% of the model's context
+# window. This sets that limit to 10000 tokens, the largest value Codex accepts here, which is
+# more than the 2% default for any model with a context window under 500,000 tokens. A short list
+# still uses only the room it needs.
+[skills]
+max_context_tokens = 10000

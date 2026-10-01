@@ -219,10 +219,10 @@ Toolkit V2 frontmatter holds only `name` and `description`.
 
 ### Length
 
-**D4. Aim for about 300 to 450 characters: one sentence on what the skill
+**D4. Aim for about 300 to 400 characters: one sentence on what the skill
 does and why (a ", so ..." clause), one on when to use it, and at most one
 short "Not for" clause. `dev/tools/check-skills.mjs` fails a description over
-450 characters.**
+400 characters.**
 Agent Skills: "A few sentences to a short paragraph is usually right".
 Claude Code: every skill in the listing adds to the context on every turn,
 whether or not Claude ever uses it.
@@ -230,9 +230,9 @@ whether or not Claude ever uses it.
 "Writing effective descriptions"; `ai-external-knowledge/claude-code/skills.md`
 "Find unused skills")
 The number range is this guide's arithmetic, not an official figure. The
-reason for 450 is in the comment above `MAX_DESCRIPTION` in
-`dev/tools/check-skills.mjs`: Mike's why clause (2026-09-29) adds about 40 to
-80 characters to the earlier aim of 150 to 300; 450 characters is about 110
+limit is 400 (`MAX_DESCRIPTION` in `dev/tools/check-skills.mjs`, and the
+build `AGENTS.md`): Mike's why clause (2026-09-29) adds about 40 to 80
+characters to the earlier aim of 150 to 300; 400 characters is about 100
 tokens, close to the "~100 tokens" the Agent Skills specification budgets
 for name and description together
 (`ai-external-knowledge/anthropic-agent-skills/agentskills-specification.md`
@@ -386,7 +386,7 @@ example "<phrase>", "<phrase>", or "<phrase>". Not for <neighbor job>; use
 
 Checks for each description:
 
-- It is 1,024 characters or fewer, and about 300 to 450 (D1, D4).
+- It is 1,024 characters or fewer, and about 300 to 400 (D1, D4).
 - The first sentence alone says what the skill does (D5).
 - It has a why clause before "Use when" (D6).
 - No "I", "you", or "this skill" as the subject (D6).
@@ -825,7 +825,7 @@ need more detail for Haiku."
 | Keywords | Claude Code and Codex: include the words users say (`skills.md`, `best-practices.md`). | Codex 0.157.0 model instructions: do not use a skill "based solely on keywords" (Observed). Agent Skills: do not add words from failed prompts (`agentskills-optimizing-descriptions.md`). | Name the situation first; add a few real phrases as examples of it (D9, D10). |
 | How broad | Agent Skills: "Err on the side of being pushy" (`agentskills-optimizing-descriptions.md`). | Claude Code: if it triggers too often, "Make the description more specific" (`skills.md`). | Firm about the situation, narrow in scope, with a named neighbor where two compete (D12 to D14). |
 | Codex trigger rule | Source: "you must use that skill" when the task clearly matches (`source-skills-catalog-prompt.md`). | Model instructions seen in 0.157.0: "use reasonable judgement" (Observed). | Write so the match is clear either way; do not rely on "must use". |
-| Length cap | Claude Code: 1,536 characters (`skills.md`). | Agent Skills standard and Codex: 1,024 (`agentskills-specification.md`, `source-skills-render.md`). | 1,024 is the hard cap; aim for about 300 to 450, and `check-skills.mjs` fails over 450 (D1, D4). |
+| Length cap | Claude Code: 1,536 characters (`skills.md`). | Agent Skills standard and Codex: 1,024 (`agentskills-specification.md`, `source-skills-render.md`). | 1,024 is the hard cap; aim for about 300 to 400, and `check-skills.mjs` fails over 400 (D1, D4). |
 | Naming pattern | Anthropic prefers gerunds (`skill-authoring-best-practices.md`). | The standard's and Codex's examples use nouns and actions (`agentskills-specification.md`, `customization-overview.md`). | Any one pattern, used everywhere. Toolkit V2's names are settled in `dev/SKILL-INDEX.md` (N4). |
 | Trigger text field | Claude Code reads `when_to_use` (`skills.md`). | Codex does not; it can show `metadata.short-description` instead (`source-skills-parser.md`). | Only `description` (D3). This is also Mike's rule in `AGENTS.md`. |
 | Claude Code list after compaction | Settings reference: Claude sees the skill listing each turn (`settings-reference.md`). | Context window page: the listing "is not re-injected after `/compact`" (`context-window.md`). | Unsettled. Observed: the list sits in the Skill tool's description, which supports "each turn". If routing after compaction matters, a `SessionStart` hook with matcher `compact` can restate it (H3). |

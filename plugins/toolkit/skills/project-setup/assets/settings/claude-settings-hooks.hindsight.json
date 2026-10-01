@@ -1,0 +1,67 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact|fork",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/session-start.mjs",
+              "--memory",
+              "hindsight"
+            ],
+            "timeout": 30,
+            "statusMessage": "Loading Current State"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/prompt-reminder.mjs",
+              "--skill",
+              "hindsight"
+            ],
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(git *)",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/codex-after-commit.mjs"
+            ],
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo",
+            "args": [
+              "{\"hookSpecificOutput\":{\"hookEventName\":\"PostToolUse\",\"additionalContext\":\"A helper agent ran or was started. If it works on a work item or sub-item, update that item's status, Recent History, and Current state with the work track skill once its report is in. A helper with no work item of its own (a researcher, reviewer, critic, checker, or verifier) needs nothing.\"}}"
+            ],
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

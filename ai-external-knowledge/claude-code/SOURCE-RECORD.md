@@ -2,9 +2,9 @@
 
 - Publisher: Anthropic
 - Original documentation home: https://code.claude.com/docs/en/
-- Captured on: 2026-09-27; four pages added or refreshed on 2026-09-29 (see Notes)
+- Captured on: 2026-09-27; four pages added or refreshed on 2026-09-29, and one added on 2026-09-30 (see Notes)
 - Captured with: the Firecrawl CLI 1.24.3, `firecrawl scrape <page URL>.md --format rawHtml`, which returns the Markdown source the site publishes for each page, unchanged.
-- Pages: 20
+- Pages: 21
 - Redistribution: Anthropic's published documentation, kept here as a private reference copy for this repository. Not shipped in any plugin.
 
 ## Project use
@@ -23,6 +23,7 @@ Read before writing or changing a Toolkit V2 skill, hook, plugin manifest, agent
 | `plugin-evals.md` | Test plugins with evals | https://code.claude.com/docs/en/plugin-evals |
 | `hooks.md` | Hooks reference | https://code.claude.com/docs/en/hooks |
 | `hooks-guide.md` | Automate actions with hooks | https://code.claude.com/docs/en/hooks-guide |
+| `agent-sdk-hooks.md` | Intercept and control agent behavior with hooks (Agent SDK callback hooks) | https://code.claude.com/docs/en/agent-sdk/hooks |
 | `sub-agents.md` | Create custom subagents | https://code.claude.com/docs/en/sub-agents |
 | `agents.md` | Run agents in parallel | https://code.claude.com/docs/en/agents |
 | `workflows.md` | Orchestrate subagents at scale with dynamic workflows | https://code.claude.com/docs/en/workflows |
@@ -44,3 +45,4 @@ Read before writing or changing a Toolkit V2 skill, hook, plugin manifest, agent
 - Each captured file starts with a header naming its source URL and capture date.
 - A larger capture of this site (164 pages, captured 2026-09-22) is in `/Users/michaelrihm/Documents/Projects/claude-toolkit/ai-external-knowledge/claude-code/`. That folder belongs to another repository and is read-only from here.
 - 2026-09-29: `large-codebases.md`, `debug-your-config.md`, and `claude-directory.md` were added for the rules audit in `dev/research/rules-best-practices.md`. `memory.md` was captured again the same day: the live page had added the `/doctor prompt-audit` paragraph under "Write effective instructions" and the `includeGitInstructions` line under "Claude isn't following my CLAUDE.md".
+- 2026-09-30: `agent-sdk-hooks.md` was added. Mike named it in the interview (Topic 6) as one of the two pages to read before building the hooks. It covers hooks written as code in an Agent SDK app; Toolkit V2 uses settings-file hooks (`hooks.md`). What it changes for the build is in `dev/research/skills-first-architecture.md`, section 6.

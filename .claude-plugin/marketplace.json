@@ -5,39 +5,14 @@
     "email": "michael@rihm.com"
   },
   "metadata": {
-    "description": "Toolkit V2: plugins that set up and run one solo developer's projects in Claude Code and Codex. The agent runs the project; the owner decides and steers.",
-    "version": "0.3.2"
+    "description": "Toolkit V2: one plugin, toolkit, whose project-setup skill sets up and updates one solo developer's projects in Claude Code and Codex. The agent runs the project; the owner decides and steers.",
+    "version": "0.5.0"
   },
   "plugins": [
     {
       "name": "toolkit",
       "source": "./plugins/toolkit",
-      "description": "The Toolkit V2 runtime: the toolkit command, the hooks that brief each session and check work items and memory, and the project-setup skill that sets up or repairs a project. Its hooks do nothing outside a Toolkit V2 project."
-    },
-    {
-      "name": "work",
-      "source": "./plugins/work",
-      "description": "Runs a project's work items from first idea to done: nine skills and six agents for requirements, solution design, sub-items, building, checking, and shipping, with the owner approving each gate. Works with a local .work-items/ folder or Notion."
-    },
-    {
-      "name": "memory",
-      "source": "./plugins/memory",
-      "description": "Saves, finds, and tidies what a project should remember: lasting facts, the current focus, and the glossary, in the built-in .memory/ folder, local Hindsight, or Notion."
-    },
-    {
-      "name": "session-skills",
-      "source": "./plugins/session-skills",
-      "description": "Five conversation skills: handoff writes a checked prompt for a new session, session-summary recaps this chat, braindump plays back a brain dump, explain-simply re-explains in plain bullets, and unslop removes machine-written patterns from text."
-    },
-    {
-      "name": "git-workflows",
-      "source": "./plugins/git-workflows",
-      "description": "Four Git skills that stay safe when several agent sessions share one repository: pull-latest, reset-to-remote, merge-and-clean-up, and publish-docs."
-    },
-    {
-      "name": "sf-architect-solutioning",
-      "source": "./plugins/sf-architect-solutioning",
-      "description": "Salesforce solution architect skill. Takes a requirement, pushes back on vagueness, verifies platform facts against official Salesforce docs (live fetch, never memory), designs declarative-first to Well-Architected standards, and produces an approved solution plan before any build. Project-agnostic: discovers each project's requirement/decision locations from its own AGENTS.md and rules."
+      "description": "Sets up Toolkit V2 in a project: copies the model files, the chosen work tracking and memory skills, and their hooks."
     }
   ]
 }

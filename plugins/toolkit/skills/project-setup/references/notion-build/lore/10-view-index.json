@@ -1,0 +1,56 @@
+{
+  "database_id": "{{MEMORIES_DB}}",
+  "data_source_id": "{{MEMORIES_DS}}",
+  "name": "Index",
+  "type": "table",
+  "position": {
+    "type": "start"
+  },
+  "filter": {
+    "or": [
+      {
+        "property": "{{M_STATUS}}",
+        "select": {
+          "equals": "accepted"
+        }
+      },
+      {
+        "property": "{{M_STATUS}}",
+        "select": {
+          "equals": "proposed"
+        }
+      }
+    ]
+  },
+  "sorts": [
+    {
+      "property": "{{M_RECORD_KEY}}",
+      "direction": "ascending"
+    }
+  ],
+  "configuration": {
+    "type": "table",
+    "properties": [
+      {
+        "property_id": "{{M_RECORD_KEY}}",
+        "visible": true
+      },
+      {
+        "property_id": "{{M_KIND}}",
+        "visible": true
+      },
+      {
+        "property_id": "{{M_STATUS}}",
+        "visible": true
+      },
+      {
+        "property_id": "{{M_SAVED}}",
+        "visible": true
+      },
+      {
+        "property_id": "{{M_SYNOPSIS}}",
+        "visible": true
+      }
+    ]
+  }
+}

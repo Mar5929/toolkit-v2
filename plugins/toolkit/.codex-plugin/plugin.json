@@ -1,7 +1,7 @@
 {
   "name": "toolkit",
-  "version": "0.3.1",
-  "description": "The Toolkit V2 runtime: the toolkit command, the hooks that brief each session and check work items and memory, and the project-setup skill that sets up or repairs a project. Its hooks do nothing outside a Toolkit V2 project.",
+  "version": "0.5.0",
+  "description": "Sets up Toolkit V2 in a project: copies the model files, the chosen work tracking and memory skills, and their hooks.",
   "author": {
     "name": "Mike Rihm",
     "email": "michael@rihm.com"
@@ -14,11 +14,10 @@
     "memory"
   ],
   "skills": "./skills/",
-  "hooks": "./hooks/codex-hooks.json",
   "interface": {
     "displayName": "Toolkit V2",
-    "shortDescription": "Set up a project and run the Toolkit V2 command and hooks.",
-    "longDescription": "The runtime every Toolkit V2 project needs. The project-setup skill asks where to track work, which memory to use, and whether it is a Salesforce project, then copies the model scaffold and applies your answers: the matching parts of AGENTS.md, the rules list, and the settings. The toolkit command keeps work items and memory in order. The hooks give each session a short project briefing, report work items moved by hand, and stop hand edits of generated files. Outside a Toolkit V2 project the hooks do nothing.",
+    "shortDescription": "Set up a project with Toolkit V2, or check or update its setup.",
+    "longDescription": "Holds one skill, project-setup. It asks where to track work, which memory to use, and whether it is a Salesforce project, then copies the model project, the skills for those choices, three small hook commands, and their settings into the project. It also checks and updates an existing setup. The plugin itself has no hooks and no command, so it runs nothing in other projects.",
     "developerName": "Mike Rihm",
     "category": "Productivity",
     "capabilities": [

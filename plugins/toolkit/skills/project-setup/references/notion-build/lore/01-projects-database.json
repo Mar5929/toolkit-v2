@@ -1,0 +1,64 @@
+{
+  "parent": {
+    "type": "page_id",
+    "page_id": "{{MEMORY_PAGE_ID}}"
+  },
+  "title": [
+    {
+      "type": "text",
+      "text": {
+        "content": "Projects"
+      }
+    }
+  ],
+  "is_inline": true,
+  "icon": {
+    "type": "emoji",
+    "emoji": "🗂️"
+  },
+  "initial_data_source": {
+    "properties": {
+      "Name": {
+        "title": {}
+      },
+      "Type": {
+        "select": {
+          "options": [
+            {
+              "name": "project",
+              "color": "blue"
+            },
+            {
+              "name": "person",
+              "color": "green"
+            },
+            {
+              "name": "agent",
+              "color": "purple"
+            }
+          ]
+        }
+      },
+      "Path": {
+        "rich_text": {}
+      },
+      "Status": {
+        "select": {
+          "options": [
+            {
+              "name": "active",
+              "color": "green"
+            },
+            {
+              "name": "archived",
+              "color": "gray"
+            }
+          ]
+        }
+      },
+      "Description": {
+        "rich_text": {}
+      }
+    }
+  }
+}

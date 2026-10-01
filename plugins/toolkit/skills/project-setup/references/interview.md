@@ -1,147 +1,142 @@
 # The setup interview
 
-Purpose: what to check before asking, and the exact wording of the six setup
-questions for a new project, each with its recommendation.
+Purpose: what to check before asking, the five questions for a new project
+with their recommendations, and the plan the owner says yes to before any
+file is written.
+
+Ask one question per message, in this order, each with a recommendation and
+its main reason. When the folder already answers a question, confirm it in
+one line instead.
 
 ## Contents
 
-- Rules for every question
 - Look before asking
-- Question 1: the project name
-- Question 2: where work is tracked
+- Question 1: the name and the owner
+- Question 2: where work items live
 - Question 3: where memory lives
 - Question 4: Salesforce
 - Question 5: SOUL.md
-- Question 6: the backup folder
-- After the answers
-
-## Rules for every question
-
-- One question per message, in the reply text, never through a question tool.
-- Each question carries a recommendation and its main reason, so the owner
-  can answer "yes" and move on.
-- Ask in the order below. A question the repository already answers is
-  confirmed in one line instead of asked.
-- Record each answer on its checklist line in the plan tool as soon as it is
-  given, for example `- [x] tracker: local`. A later turn may start without
-  this skill loaded, and the plan tool keeps the answers until init runs.
+- The plan to confirm
 
 ## Look before asking
 
-Check these first, without asking:
+Run each command alone. None of them changes anything.
 
-- Is this folder a Git repository? (`git rev-parse --show-toplevel`.) No
-  repository: say so and offer `git init`. Toolkit V2 finds the project, the
-  tracker, and memory through Git.
-- Is the repository empty, or does it already hold code? Name the language
-  and framework you see.
-- `sfdx-project.json` present: this is a Salesforce project. Confirm it in one
-  line instead of asking question 4.
-- `.toolkit.json` present with `"toolkit": "toolkit-v2"`: this is a repair,
-  not a new setup (`repair-and-update.md` in this folder).
-- Files from an older toolkit setup (for example a `knowledge/` folder, or a
-  `CLAUDE.md` with more than the line `@AGENTS.md`): tell the owner what you
-  found. Toolkit V2 adds its own files and turns the older toolkit's plugins
-  off for this project. It does not move or delete the old files. Ask before
-  touching them. A file the project already has is kept, never overwritten.
-- The owner name: `git config user.name`.
-- `ntn whoami` (only for Notion): signed in or not. In Codex, run it outside
-  the sandbox (`wiring-notion.md` in this folder, step 1); inside it, the
-  check fails even when the owner is signed in.
-- `toolkit hindsight health`: the local server answers or not. Run it
-  before the memory question, so the question offers Hindsight only when it
-  answers (Question 3).
+| Check | Command | What it tells you |
+| --- | --- | --- |
+| A Git repository | `git rev-parse --show-toplevel` | No repository: the hooks and skills need Git. Offer `git init`; if he says no, stop and say why. It prints a folder other than this one (compare `pwd -P`): this folder sits inside another repository. Stop: Toolkit V2 is set up at a repository's root, because the hooks and skills find `.claude/hooks/`, `work-items/`, and `memory/` from the Git root. Recommend setting up the root, or `git init` here only when this folder is its own project. |
+| A linked worktree | `git worktree list --porcelain` (its first line, `worktree <path>`, is the main checkout), compared with `git rev-parse --show-toplevel` | They differ: this session runs in a linked worktree. Stop before copying anything. Setup must run in the main checkout, `<path>`, because `memory/` and `work-items/` are Git-ignored and live only there, and the setup commit must land on the default branch. Ask him to start the setup session in that folder. |
+| The owner's name | `git config user.name` | The name to suggest in question 1. |
+| A GitHub remote | `git remote -v` | Name it when you ask question 2. |
+| Code already here | `ls -a` | Name the language and framework you see. |
+| Salesforce | `sfdx-project.json` present | Confirm Salesforce in one line instead of asking question 4. |
+| An earlier setup | `PROJECT.md` with a filled "Toolkit settings" section | Already set up: go back to SKILL.md, "Pick the path". |
+| The retired program | `.toolkit.json` present | Stop and tell the owner (SKILL.md, "Pick the path"). |
+| An older claude-toolkit setup | `knowledge/`, `.memory/`, `.work-items/`, files in `.claude/rules/`, or a `CLAUDE.md` with more than `@AGENTS.md` | Tell him what you found. Toolkit V2 adds its own files and turns the older toolkit's plugins off in this project. It never moves or deletes the old files; ask before touching them. |
+| Hindsight running | `curl -s -m 2 http://127.0.0.1:8888/health` | `"status":"healthy"` means question 3 may offer Hindsight. |
 
-## Question 1: the project name
+## Question 1: the name and the owner
 
-Confirm the name, key, id prefix, and owner in one line:
+Suggest the project's name and, as the owner, the name from
+`git config user.name`. The name goes into the headings of `AGENTS.md`,
+`README.md`, and `PROJECT.md`. The owner is the person named in `PROJECT.md`
+who makes the project's decisions.
 
-> I'll call this project "Acme CRM" (short key `acme-crm`, work item ids `WI-001`, `WI-002`, owner Mike). Is that right?
+## Question 2: where work items live
 
-- The key is the name in lower case, with words joined by hyphens. It names
-  the Hindsight memory bank and appears in the Notion page title.
-- The id prefix is `WI` unless the owner wants another (for example `ACME`).
-  Another prefix is set right after init, before any item exists.
+Recommend local folders with Obsidian: the fastest, they work offline, and
+they need no sign-in.
 
-## Question 2: where work is tracked
-
-> Where should work items live? I recommend local folders on this computer: they are the fastest, work offline, and need nothing else set up. Choose Notion if you want to see and change the board on your phone or the web. GitHub Issues and Jira are possible, but the toolkit only gives written instructions for them.
-
-| Choice | `--tracker` | Good when | What to know |
+| Choice | "Tracker" value | Good when | What to know |
 | --- | --- | --- | --- |
-| Local folders | `local` | A solo project on one computer | Items live in `.work-items/`, which Git ignores. They stay on this computer and are backed up to the backup folder (question 6). |
-| Notion | `notion` | The owner wants the board on his phone or the web | Needs `ntn` signed in. Each project gets its own Work Items database under the "AI Agent Second Brain" page. |
-| GitHub Issues | `github` | The code and the team already live in GitHub | No driver: agents follow written instructions with `gh`. Labels are created once, with a yes. |
-| Jira | `jira` | A client requires Jira | No driver: agents follow written instructions with the Jira tool the owner connects. |
+| Local folders with Obsidian | `local` | A solo project on one computer | Items live in `work-items/`, which Git ignores, so they exist only on this computer. The whole project folder opens as an Obsidian vault. |
+| Notion | `notion` | He wants the board on his phone or the web | Needs `ntn` signed in. The project's pages are made from the templates in his Notion Projects database. |
+| GitHub Issues | `github` | The code already lives on GitHub | Needs `gh` signed in and a GitHub repository. Labels are created once, after his yes. An item's ID is its issue number, such as `#12`. |
+
+Jira is not offered: it is not built yet (the owner deferred it). If he
+asks for Jira, say so and recommend one of the three above.
+
+With local folders, confirm the ID prefix in one line (IDs look like
+`WI-001`; keep `WI`?). With Notion, the Notion setup proposes the prefix
+later (`notion.md` in this folder), because Notion allows each prefix in
+only one database of a workspace.
 
 ## Question 3: where memory lives
 
-> Where should the project's memory live? I recommend the built-in `.memory/` folder: it is private, fast, and needs no server.
+Recommend local memory with Obsidian: it is private, fast, and needs no
+server.
 
-Offer Hindsight by name only when `toolkit hindsight health` answered (Look
-before asking): "Hindsight is running on this Mac; choose it if you want
-search by meaning across many memories." When it did not answer, say that
-Hindsight would need to be installed first, and that the install downloads
-about 13 GB (`installing-hindsight.md` in this folder).
+- When work items are in Notion, recommend Notion memory instead, so work
+  and memory sit together, link to each other, and he can read both on his
+  phone.
+- Offer Hindsight by name when its health check answered, for search by
+  meaning across many memories. When it did not answer, check the
+  background service as `hindsight.md` in this folder says ("The server").
+  Installed but stopped: offer Hindsight and say it needs starting (after
+  his yes). Not installed: say it would have to be installed first, and
+  that the install downloads about 13 GB (`installing-hindsight.md` in this
+  folder).
 
-When the tracker is Notion, recommend Notion instead: "I recommend Notion, so
-work and memory sit together and you can read both on your phone."
-
-| Choice | `--memory` | Good when | What to know |
+| Choice | "Memory" value | Good when | What to know |
 | --- | --- | --- | --- |
-| Built-in `.memory/` | `builtin` | Most projects | Files in the main checkout, Git-ignored, on this computer only. Backed up to the owner's backup folder. |
-| Local Hindsight | `hindsight` | Many memories, and search by meaning matters | The local server at `127.0.0.1:8888` must be running (a background service on this Mac). One memory bank per project. Never Hindsight Cloud. |
-| Notion | `notion` | The tracker is Notion, or the owner reads memory on his phone | The project's Memory page in Notion, in the layout of Lore (Notion's open-source AI memory): the records are rows of its Memories database. Needs `ntn` signed in. |
+| Local with Obsidian | `local` | Most projects | Files in `memory/`, which Git ignores, on this computer only. With local work items, memories link items as `[[WI-031]]`. |
+| Notion, in Lore's layout | `notion` | Work items are in Notion, or he reads memory on his phone | A Memory page holding Lore's databases, plus "Current state" and "Terminology glossary" pages. Needs `ntn` signed in. |
+| Hindsight | `hindsight` | Many memories, and search by meaning matters | The local server at `127.0.0.1:8888`, one memory bank per project, never Hindsight Cloud. No memory skills: the agent uses Hindsight's own `retain`, `recall`, and `reflect` tools. Current State is the local file `memory/CURRENT_STATE.md`. |
+
+Any mix of work tracking and memory works, for example Notion work items
+with local memory.
 
 ## Question 4: Salesforce
 
-Skip the yes-or-no question when `sfdx-project.json` answered it; confirm in
-one line instead.
+Skip the question when `sfdx-project.json` answered it. Otherwise recommend
+no when the file is absent. A yes adds the Salesforce rules and skills, the
+org guards, and the `delivery/` folder.
 
-> Is this a Salesforce project? I recommend no, because I found no `sfdx-project.json`. A yes adds the Salesforce rules, the deploy and data-change skills, the protected-org guards, and the `delivery/` folder.
+For a Salesforce project, ask for the org aliases, one question per
+message. Show the aliases on this computer first with `sf org list` (it
+only reads).
 
-For a Salesforce project, ask for the org aliases, one question at a time.
-Show the aliases on this computer first (`sf org list`, a read-only command):
+1. The sandbox the agents may deploy to for testing. Recommend an alias
+   only when its name matches this project or the owner said it is this
+   project's. When none of the listed orgs is for this project, recommend
+   "none yet" (`salesforce.md` in this folder, "The org aliases"). In
+   Codex, he runs those deploys himself.
+2. Production. Agents never deploy there or change its data; the guards
+   block it and hand him the command instead.
 
-> Which org alias is the sandbox the agents may deploy to for testing (in Codex you run those deploys yourself)? I see `acme-uat` and `acme-dev`; I recommend `acme-uat`.
-
-> Which org alias is production? Agents never deploy there or change its data; the guards block it and hand you the command instead. I see `acme-prod`.
+The API version comes after the plan, in step 7, as its own question when it
+cannot be read (`salesforce.md` in this folder, "The API version").
 
 ## Question 5: SOUL.md
 
-> Do you want a SOUL.md that tells the agent how you like to work? I recommend skipping it for now; you can add it later.
+`SOUL.md` is a short page on how he likes the agent to work with him.
+Recommend not now.
 
-A no goes to init as `--decline SOUL.md`, so the file is never installed and
-no later sync brings it back. A yes: fill it with his words after init
-(`finishing-setup.md` in this folder).
+- Yes: keep it in the setup copy and fill it with his words while finishing
+  (`finishing.md` in this folder).
+- No: leave it out of the setup copy.
 
-## Question 6: the backup folder
+## The plan to confirm
 
-`.work-items/` (local tracker), `.memory/` (built-in memory), and Hindsight
-memory exist only on this computer. Ask where their automatic backups go.
+After the answers, say in a few lines what will happen, and wait for his
+yes. Start with his answers in one short line: the name and the owner,
+where work items live (with the ID prefix for local folders; with Notion it
+is asked later), where memory lives, Salesforce (and the org aliases), and
+`SOUL.md`. Say that you will copy the model project's files for his choices
+into this folder, add the skills and the 3 small hook commands (give the
+skill count), and turn the older claude-toolkit plugins off for this
+project only. Name every thing that will be created outside the project
+folder:
 
-With a Notion tracker and Notion memory, skip this question (the owner's
-decision of 2026-09-28) and say why in one line:
+| Choice | Say |
+| --- | --- |
+| Notion (work, memory, or both) | "make this project's pages in your Notion from the templates in your Projects database" (and, when they do not exist yet, ask about building them separately: `notion.md` in this folder) |
+| GitHub Issues | "create the work item labels in <owner>/<repository> that it does not have yet (up to 36: each item's stage, type, priority, who it waits on, who builds it, and your approvals; its other labels stay as they are)", and "create the private repository <owner>/<name>; after the setup commit I'll ask before I push the default branch to it" when there is none yet |
+| Hindsight | "create the memory bank <bank> on your local Hindsight server" |
+| Local work and local memory | "nothing outside this folder" |
 
-> No backup folder is needed: your work items and memory live in Notion, which keeps each page's history and keeps deleted pages in its trash.
+Skill counts: 13 shared, plus 1 for the work tracking set, plus 3 for local
+or Notion memory (none for Hindsight), plus 4 for Salesforce.
 
-Then run init without `--backup-dir`. Otherwise ask:
-
-> Where should backups of the work items and memory go? I recommend `~/Backups/toolkit`: one folder outside every project, which your computer's own backup already covers. Each project gets its own dated folder inside it.
-
-- The answer goes to init as `--backup-dir <folder>`: a full path starting
-  with `/` or `~/`, outside the project. Init refuses a folder inside it.
-- "No backups" goes to init as `--backup-dir none`.
-
-With the folder set, `toolkit work finish` and every handoff back up by
-themselves.
-
-## After the answers
-
-Say what will happen in three or four lines, then run init:
-
-> I'll now copy the model scaffold and apply your answers: the project's folders and files from the model project, AGENTS.md with only the parts for your choices, the rules, and the settings; turn on the Toolkit V2 plugins for this project only (and turn the older toolkit's plugins off here); set up local folders for work and built-in memory. Nothing outside this folder changes.
-
-Adjust the last part to the answers (for example "build the Notion Work Items
-database under your AI Agent Second Brain page"). Running init, and what it
-installs: `running-init.md` in this folder.
+His yes covers exactly what the plan names. Anything else created outside
+the folder later needs its own yes.

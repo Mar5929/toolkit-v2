@@ -191,25 +191,30 @@ test: `work-refine` / `braindump`; `work-status` / `session-summary`;
 
 | Moment | Claude Code (`.claude/settings.json`) | Codex (`.codex/hooks.json`) | Agent then uses |
 | --- | --- | --- | --- |
-| Session starts, resumes, clears, or was compacted | SessionStart `startup\|resume\|clear\|compact`; plain output is added to context (CC/hooks.md:1177; cap 10,000 characters, :929) | SessionStart, same four matchers; plain output is added (CX/hooks.md:426, 658; about 2,500 tokens, :529) | the memory find skill when it needs more |
+| Session starts, resumes, clears, was compacted, or was forked | SessionStart `startup\|resume\|clear\|compact\|fork` (`fork` since v2.1.214, CC/hooks.md:314); plain output is added to context (CC/hooks.md:1177; cap 10,000 characters, :929) | SessionStart `startup\|resume\|clear\|compact` (Codex has no `fork`); plain output is added (CX/hooks.md:426, 658; about 2,500 tokens, :529) | the memory find skill when it needs more |
 | Mike's message matches Davis's phrase list or a decision phrase | UserPromptSubmit, no matcher (CC/hooks.md:331) | UserPromptSubmit (CX/hooks.md:995) | the memory save skill |
-| After a commit | PostToolUse `Bash` with `if: "Bash(git commit *)"`; the text goes in `additionalContext` (CC/hooks.md:433, 2027) | PostToolUse `Bash`; the command checks `tool_input.command` (CX/hooks.md:909, 927) | the work track skill |
-| A helper agent returns | PostToolUse on the `Agent` tool (CC/hooks.md:2418) | None: SubagentStop cannot add text for the main agent (CX/hooks.md:1031-1056); `work-delegate` carries it | the work track skill |
-| End of each reply | Stop hook of type prompt: checks only the reply text for an unsaved decision or instruction and a recalled fact with no source (CC/hooks.md:2542, 3524-3579). Kept only if tests show it rarely fires wrongly. | None: prompt hooks are skipped (CX/hooks.md:200) | the memory save skill |
+| After a commit | PostToolUse `Bash` with `if: "Bash(git *)"`, running `.claude/hooks/codex-after-commit.mjs` (the same command Codex runs), which checks `tool_input.command` and returns `additionalContext` (CC/hooks.md:433, 2027) | PostToolUse `Bash`; the command checks `tool_input.command` (CX/hooks.md:909, 927) | the work track skill |
+| A helper agent returns | PostToolUse on the `Agent` tool (CC/hooks.md:2418) | PostToolUse `^(collaboration)?(spawn_agent\|wait_agent)$` with fixed text (CX/hooks.md:457). Codex 0.157.0 names the tools `collaborationspawn_agent` and `collaborationwait_agent` in hook input. Tested in `cx-hooks`: it fires after `spawn_agent` and after each `wait_agent`. `work-delegate` also carries it | the work track skill |
+| End of each reply | Dropped by Mike on 2026-10-01 ("Drop it"), after the test numbers: 126 checks in real Claude Code sessions, 1 fire, and that 1 was a false alarm (pasted call notes read as his instruction); 0 real catches. It was a Stop hook of type prompt that checked only the reply text for an unsaved decision or instruction and a recalled fact with no source (CC/hooks.md:2542, 3524-3579). Saving is covered by the prompt reminder row above and the memory rules. | None: prompt hooks are skipped (CX/hooks.md:200) | none |
 | Before marking Done | No hook: a written rule | Same | `work-finish` |
 | Risky git, AI credit | Permission deny and ask rules (the model's), `attribution` set to empty (CC/settings-reference.md:3783) | The model's Salesforce guards only | none |
 
 What each hook prints:
 - Session start: Current State; with local memory it first rebuilds
   `memory/MEMORY.md` from each memory file's title, summary, and updated
-  date, then prints it. After `compact` it adds: "Re-read the active work
-  item, `SOUL.md`, `PROJECT.md`, and `owner-preferences.md`." If Current
+  date, then prints it. After `compact` it adds: "Before you answer the
+  next message, re-read the active work item with the project's work find
+  skill, then `PROJECT.md`, `SOUL.md` if the project has one, and
+  `owner-preferences.md`." If Current
   State is over its size limit or older than 7 days, one line asks for
-  `memory-refine`. Notion reads the "Current state" page with `ntn`;
+  the memory refine skill (`local-memory-refine` or `notion-memory-refine`;
+  Hindsight: a direct edit, as the memory rule says). Notion reads the "Current state" page with `ntn`;
   Hindsight projects print the local `memory/CURRENT_STATE.md`. If the
-  read fails, one line says so and the session goes on. In Codex the
-  sandbox blocks the keychain `ntn` needs, so this read may fail every time;
-  the test projects check it, and if it fails the line tells the agent to
+  read fails, one line says so and the session goes on. Codex runs hook
+  commands outside its sandbox (tested with codex-cli 0.157.0 in
+  `cx-hooks` and `cx-onboard-ios-notion`), so this read works in every
+  sandbox mode. The agent's own `ntn` calls are still sandboxed. If the
+  read fails (not signed in, or no network), one line tells the agent to
   read the page with `notion-memory-find`. After `compact` in a Notion
   project, "re-read the active work item" means `notion-work-find`, not
   opening a file.
@@ -219,8 +224,9 @@ What each hook prints:
 - After a commit: "You just committed. Update the work item's Recent History
   and status, and Current State if it changed."
 - Helper agent returned: "Update that helper's work item status and
-  history." To test: whether it fires when a background helper finishes
-  (not documented).
+  history." Tested: in Claude Code it fires when a background helper
+  starts, not when it finishes (`cc-hooks` s07); in Codex it fires after
+  `spawn_agent` and after each `wait_agent` (`cx-hooks`).
 
 Hooks in worktrees: `work-items/` and `memory/` are kept out of Git, so they
 exist only in the main checkout. Claude Code keeps `$CLAUDE_PROJECT_DIR`
@@ -231,6 +237,15 @@ every hook command finds the main checkout itself from
 it. Codex runs changed hooks only after Mike
 trusts them again (CX/hooks.md:72-77).
 
+The Agent SDK hooks page (CC/agent-sdk-hooks.md; Mike named it in Topic 6)
+covers callback hooks passed in code (`options.hooks`). Toolkit V2 uses
+settings-file hooks (CC/hooks.md), so the table does not change. An SDK
+session loads the project's settings-file hooks by default
+(CC/agent-sdk-hooks.md:31), so these hooks run there too. Its rule that a
+timed-out UserPromptSubmit hook blocks the message (:797) is for callbacks
+only; a timed-out command hook drops its reminder and the message goes
+through (CC/hooks.md:1337).
+
 ## 7. Current State stays current
 
 - Four sections as today: Now, Waiting on the owner, Untracked to-dos, Next
@@ -239,7 +254,8 @@ trusts them again (CX/hooks.md:72-77).
   item's line, answering a question removes its "waiting" line, `handoff`
   rewrites "Next session starts with".
 - The session-start hook flags a file that is too long or too old;
-  `memory-refine` prunes it.
+  the memory refine skill prunes it (Hindsight: the agent edits the file
+  directly).
 
 ## 8. Decisions and links
 
@@ -259,12 +275,17 @@ trusts them again (CX/hooks.md:72-77).
 
 | Code | Size | Why it cannot be a skill |
 | --- | --- | --- |
-| Session-start command, one per memory set | about 30 lines each | A hook must print Current State; the local one also writes the index, which saves LLM work and cannot drift (Mike, open question 3). |
-| Prompt reminder command | about 30 lines | Matches Davis's phrase list; one file for both hosts. |
-| Codex after-commit check | about 15 lines | Codex has no `if` filter, so a command reads `tool_input.command`. |
-| Claude Code after-commit and helper-returned hooks | one line each, no file | Fixed text. |
+| Session-start command, `session-start.mjs`: one file for all three memory sets (`--memory local\|notion\|hindsight`), run by both hosts | 75 lines, as built | A hook must print Current State; with local memory it also writes the index, which saves LLM work and cannot drift (Mike, open question 3). |
+| Prompt reminder command, `prompt-reminder.mjs` | 51 lines, as built | Matches Davis's phrase list; one file for both hosts. |
+| After-commit check, `codex-after-commit.mjs`, run by both hosts | 16 lines, as built | Codex has no `if` filter, so a command reads `tool_input.command`. Claude Code runs the same command behind `if: "Bash(git *)"`, because `Bash(git commit *)` misses forms such as `git -C <folder> commit`. |
+| Claude Code helper-returned hook | one line, no file | Fixed text. |
 | The model's Salesforce guards and graph hook | unchanged | Mike's model. |
 | `dev/tools/check-rules.mjs`, a smaller `check-skills.mjs` | dev only, not shipped | Format and description checks. |
+
+The sizes as built count lines of at most 100 characters
+(`dev/tests/hooks.test.mjs` checks both). Session-start and the prompt
+reminder are over the goal's "about 15 to 30 lines each" with every job
+kept.
 
 Removed: `plugins/toolkit/lib` (36,952 lines), its tests (22,838), the
 `toolkit` command and wrapper, `publish-docs.mjs`,
@@ -301,11 +322,27 @@ Each runs one work item from idea to Done: `work-refine` with a meeting
 transcript, a sub-item, a design, a build, the check, and Mike's Done, plus
 a file moved by hand. Also:
 - Routing test: about 20 requests, 3 runs each, in both hosts.
+- Routing test with Mike's real skills: a scratch home shows only the
+  project's skills, but on Mike's Mac other skills compete (project-init,
+  todoist-cli, the synced Notion plugin, consolidate-memory, impeccable,
+  obsidian-cli, update-config), and Codex shortens descriptions from the
+  end to fit 2% of the context window (CX/source-skills-render.md). So run
+  it once per host with his user skills and plugins visible: a read-only
+  copy of `~/.claude` and `~/.codex` as the scratch home, or their
+  descriptions pasted into the check. Add these requests: "set up this
+  project" in an empty folder; "add a task to phase 2" and "I made the
+  sandbox, mark it done" in local and Notion projects; "check this
+  handoff" with a pasted prompt; "design this screen" in the iOS project;
+  "clean up memory" in the Hindsight project. In Codex, look for the
+  "omitted from this bounded skills list" line or cut-off descriptions;
+  if either shows up, report the numbers to Mike (turning off plugins such
+  as vercel in V2 projects is his call).
 - Memory tests: fresh-session resume, a corrected fact replaces the old one,
   "I don't know" instead of a guess, no leak between projects.
-- Hook tests: every row in section 6 seen firing; the Stop check's false
-  alarms counted; the helper-returned hook with a background helper; hooks
-  from inside a git worktree.
+- Hook tests: every row in section 6 seen firing (the end-of-reply row was
+  dropped on 2026-10-01; its false alarms were counted first); the
+  helper-returned hook with a background helper; hooks from inside a git
+  worktree.
 - Notion: the six behaviors in the Notion session's section 8; updating an
   existing Notion project after a template change; the `ntn` session-start
   read in Codex. Notion test projects run in the private Notion test area

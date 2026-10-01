@@ -39,10 +39,16 @@ Codex. A new project set up by onboarding matches Mike's model plus the
 skill sets and hooks for his choices, and the agent then runs the project
 while Mike only decides.
 
-**Size limit.** The only code a project runs is the three small hook
-commands in draft 2 section 9 (about 15 to 30 lines each) and the model's
-Salesforce guards. If anything more seems needed, stop and ask Mike first,
-with the size in plain numbers.
+**Code limit** (replaces "about 15 to 30 lines each", which the agent had
+written in; Mike, 2026-09-30: "go with your recommendations"). The only code
+a project runs is the three hook commands (session-start, prompt-reminder,
+codex-after-commit) and, in a Salesforce project, the model's own
+Salesforce code (its two guards, its graph Stop hook, and the scripts in
+`tools/`), kept as Mike's model has it. Each hook command
+does one job; can never break a session (on any error it prints one line
+and exits normally); needs nothing installed beyond Node; is covered by
+tests; and stays short enough to read in one sitting. A new command, or a
+new job for one, needs Mike's yes first, with its size in plain numbers.
 
 **Finish items.** The goal is met only when each item is shown in the chat
 with real proof (command output, file listings, screenshots, or links).
@@ -71,7 +77,9 @@ with real proof (command output, file listings, screenshots, or links).
 6. **Hooks seen working.** Every hook in draft 2 section 6 is seen firing in
    a real Claude Code session, and every Codex row in a real Codex session,
    including from inside a git worktree. The end-of-reply check's false
-   alarms are counted and Mike decides whether it stays.
+   alarms are counted and Mike decides whether it stays. (Mike dropped the
+   end-of-reply check on 2026-10-01; see "Interview answers", Morning
+   answers.)
 7. **Test projects run end to end**, Claude Code sessions one at a time:
    - local + Obsidian work, local memory, Salesforce (Claude Code and Codex);
    - Notion work, Notion memory (Claude Code and Codex), in the private
@@ -472,6 +480,66 @@ Interview answers (Mike, 2026-09-29, the interview session):
   show them; `claude-toolkit` stays unchanged.
 - `unslop` is retired (Mike, 2026-09-29: "I don't think we need the unslop
   skill anymore").
+- A current state for each work item (Mike, 2026-09-30, not decided yet):
+  "I feel like work items definitely need a current state sort of tracker.
+  I'm not sure if that should be separate from the work item.md or separate
+  from the description of the work item. We'd have to think about that
+  really, really hard and make sure that this is a sound decision ... I'm
+  not sure if that's a separate state.md file that sits alongside the work
+  item, or if, in Notion, it would be sort of a subpage within the work item
+  itself. Or if we just want to maybe have the agent keep a current state in
+  the description ... and add ... to the template, if it doesn't already
+  handle that."
+  Decided (Mike, 2026-09-30: "go with your recommendation"): the current
+  state lives inside the work item, at the top. The Overview's middle part
+  becomes a "Current state" block with fixed lines (Where it stands, Next
+  action, Waiting on, Blockers, Last updated), rewritten in place after each
+  step, never appended to; history goes to Recent History; it has line
+  limits; the Notes "Resume here" subsection is removed and folded into it.
+  No separate STATE.md and no Notion subpage. The project Current State keeps
+  one line per active item pointing to it. Reason shown: one place, the
+  first thing an agent and Mike see, no duplication with "Resume here".
+- Notion property order (Mike, 2026-09-30): "all the properties on page
+  layouts and stuff, and Kanban boards with their statuses, should be sorted
+  in the right way. Right now, I see created date as a property at the very
+  top of the page, and that doesn't really make sense. All the properties
+  should be grouped in ways that make sense." Relayed to the Notion session,
+  which proposes a grouped order, applies it in the test area, and shows
+  Mike before anything is created in his real workspace.
+- The hook size limit (Mike, 2026-09-30): "I didn't set that limit. I guess
+  an AI set that limit of 15 to 30 lines each ... Does that limit make
+  sense? Should we keep it?" True: the agent wrote "about 15 to 30 lines
+  each" into the proposed goal (commit 86fe5ca) from its own estimate in
+  draft 2 section 9. Mike's own words were about no custom code that can
+  fail mid-project; the handoff said "a very small command". Decided (Mike,
+  "go with your recommendations for each"): the line count is replaced by
+  five rules (see "Code limit" at the top). Reason shown: a line count is a
+  rough stand-in; the real risk, code failing mid-project, is covered by
+  "never breaks a session" and the tests.
+- Notion layout decisions (Mike, 2026-09-30, "go with your recommendations
+  for each"): (1) the Notion session's grouped order is approved (Work Items:
+  pinned ID, Status, Stage, Waiting on, Priority; sections Plan, About,
+  Approvals, Links and files; hidden Phase order and Archived; the same
+  approach for Phases, Tasks, Memories, Projects, Facts, Entities). Reason
+  shown: what Mike checks most sits at the top, agent-only fields hidden.
+  (2) The agent sets the layouts itself in the Notion app through Mike's own
+  signed-in Chrome, in the private test area only, starting with the "work
+  and memory" template and testing that a copy keeps the layout. Mike asked:
+  "can you use Playwright, or whatever you recommend, to actually open up a
+  browser ... and you can reorder things yourself". Reason: the API cannot
+  set page layout (developers.notion.com property object reference;
+  notion.com/help/layouts), and this saves Mike the clicks.
+- Overnight test permissions (Mike, 2026-09-29, "Yes" to both): (1) create
+  a throwaway private GitHub repository for the GitHub + Hindsight test
+  project (for example `Mar5929/toolkit-v2-test-ios`); (2) run Codex test
+  sessions in a separate scratch Codex setup that skips the hook-trust
+  prompt for those test folders only (Codex's one-run switch), never
+  touching his real Codex settings.
+- Notion skill sets built and tested by the Notion session (commit 82aaaa6,
+  copied into `claude/v2-build`); no Notion-app click is needed for new
+  items. Waiting on Mike in the morning: one look at a test board for field
+  and column order; his yes before the "Toolkit V2 templates" page is
+  created in his real workspace; deleting the Notion test pages.
 - Notion session reply (2026-09-29): no conflicts. Settled with Mike in that
   session: Phases and Tasks are Notion linked records (a database), not a
   checklist in the body (Mike: "Yes, linked records"; "we have a section
@@ -500,6 +568,243 @@ Interview answers (Mike, 2026-09-29, the interview session):
   session builds the rest of the Notion work tracker and the links, views,
   and properties between memory and work items is the agent's call (Mike:
   "I'm not sure how we should exactly leave it. Leave it up to you").
+- When the product-owner and agent-team offer is made (Mike, 2026-09-30,
+  "yes, go with your recommendation"): for a clearly large item, right after
+  `work-refine` plays back his idea at the start of refinement; for an item
+  that grows large later, when it does; `work-on` still checks once before
+  building; small items never get it. A yes covers the whole goal
+  (refinement research, design, build, check); Mike stays product owner and
+  still approves the requirements, the design, and the result. Built as text
+  in two skills only (`work-refine` and `work-delegate`'s
+  `delivery-offer.md`), no code: Mike, "I don't want to build overly complex
+  architecture ... with a bunch of custom code ... use out-of-the-box stuff
+  as much as possible, like skills, hooks, instructions". Made after the
+  stage 3 run, tested in stage 4.
+- Voice-to-text (Mike, 2026-09-30): every project's `AGENTS.md` says he
+  dictates most messages, and to ask one short question when a message is
+  unclear before acting (model commit d9f61ef). He will review the model's
+  `AGENTS.md` in full later.
+- Reviewers for skill wording and descriptions (Mike, 2026-09-30): "As
+  we're building, too, I want someone to be reviewing the skills to make
+  sure, again, all the descriptions make sense. There's no overlap that
+  could trip up an agent. We're trying to just keep things clean and clear.
+  For any wording that we add within these skills, you need to have a
+  reviewer to make sure that it's plain, clear, concise, with no jargon or
+  figurative language. There shouldn't be anything that an agent could
+  interpret differently every time unless it's intended to be interpreted
+  differently every time." Built as a rule in `AGENTS.md` ("Wording and
+  overlap review") with two checklists, `dev/reviews/wording-review.md` and
+  `dev/reviews/overlap-review.md`, and a full review of every skill.
+- Review question A6 settled (Mike, 2026-09-30): "You can uninstall those
+  skills. I don't need them anymore, like the llm-council and impeccable
+  skills." Removed from his machine the same day: the `impeccable` Claude
+  Code plugin and its marketplace, `~/.claude/skills/llm-council`, and
+  `~/.codex/skills/impeccable` (the two folders moved to
+  `~/Documents/Projects/toolkit-v2-install-backup-2026-09-30/removed-skills/`).
+  A second `llm-council` comes from his claude.ai account's skills
+  (`~/.claude/skills/synced/`); it goes away only when turned off there. So
+  the model's line 76 does not name either skill; review finding 2.14's new
+  `solution-design` description still applies.
+- Situation, not trigger words (Mike, 2026-09-30, on review question A7):
+  "as the user, you can't expect me to remember all these key trigger
+  words, right? This should not just become sort of a matrix grid of trigger
+  words that I have to sort of remember, right? Again, we don't want to make
+  this a hard-coded nightmare of just trigger words." Read as: the agent
+  tells skills apart by where the work stands (the item's stage, what is
+  open or waiting on him), never by special words he must say; example
+  phrases in descriptions only help the host match. So A7 changes from
+  "give me design options" to a situation line (an open interview question
+  keeps "options" in `work-refine`; after requirements approval, options
+  mean `solution-design`), and A2 (more words in the reminder hook's phrase
+  list) is now recommended no. Added to `dev/reviews/overlap-review.md` as
+  the principle and check O8; every review fix is checked against it before
+  it is applied.
+- Stepping back on routing (Mike, 2026-09-30): "Is this the right
+  architecture? If you think about this holistically, is this the right
+  approach? You should always be taking that sort of perspective of stepping
+  back before we're about to design something technically." Proposal put to
+  him: the work item says what's next (its Next action names the next
+  skill; the main rule is to read Current state and do its Next action; the
+  phrase routing lines shrink to a few examples kept as insurance). His
+  answer: "have the independent reviewers check the idea against the docs
+  and look for weak spots, and then bring it back to me and ask me first."
+- `AGENTS.md` as a routing map (Mike, 2026-09-30, same answer): "couldn't the
+  agents.md be a routing map, right? Under 200 lines, max 200 lines. We
+  should definitely have: a map of the repository, maybe with a bullet point
+  for each root-level repository folder; maybe some sub-bullet points for
+  some of their critical subfolders under those; maybe a couple sentences
+  about what should be stored in there and when. Outside of that, we should
+  have any project-specific things that are very critical that the agent
+  needs to know every time ... definitely the routing map and a couple
+  sentences per critical folder, so the agent knows what information goes
+  where and when and why. Under 200 lines, or max, absolutely max, 250. It
+  should keep just a brief sentence about what the agent should read on
+  startup. It should definitely list out the skills that are going to be
+  available, maybe with a quick note about them, like a reminder to evaluate
+  them." Checked by the same independent review before any change; the
+  model's `AGENTS.md` is 276 lines today.
+- Track this build as a Toolkit V2 work item (Mike, 2026-09-30): "This is
+  the one thing that the work tracker skills are directly trying to solve
+  for. This whole chat session could also be another test ... It's a
+  massive work item that can be split up into a bunch of subtasks, but
+  everything should be stored in one place. That's updated as we go so that
+  we know we can keep track of everything, the current state of it, and all
+  that stuff." And: "We could turn this into a V2 work item in the GitHub
+  format ... and then we could also build the Notion templates now too. I
+  feel like we could track that as its own work item and hand it off to the
+  other session." So GitHub issue #1 in Mar5929/toolkit-v2 becomes the work
+  item for the whole build, in the github-work-track format (Current state,
+  Questions and Answers with every open decision, one sub-issue per big
+  piece, Recent History), kept current by both sessions. The real "Toolkit
+  V2 templates" page in his Notion workspace is built now (reversing "after
+  the tests pass" the same day), from the test templates so the layouts set
+  in Chrome are kept, then brought up to date; it is its own sub-issue,
+  owned by the Notion session (handoff sent 2026-09-30).
+  Where it goes (Mike, 2026-09-30, question box): "Inside AI Agent Second
+  Brain (Recommended)": a new subpage at the bottom of "AI Agent Second
+  Brain" (3e7b381d-a176-803f-a48f-e838ee648e67), below its Projects
+  database. Separate item for Mike, not changed yet: that page's intro text
+  is out of date (it describes a Stage board, one Memory database, and a
+  "Current focus" page).
+- Database templates (Mike, 2026-09-30, looking at the real templates):
+  "You can actually create templates in the databases themselves, right?
+  I'm confused: why didn't you create the templates in the databases?" The
+  templates are plain pages the agent copies through the API, so a project
+  or work item he makes by hand with "New" gets no template. Recommended:
+  the project templates become templates of the Projects database in "AI
+  Agent Second Brain", and the work item template the default template of
+  each Work Items database. Sent to the Notion session to test in the test
+  area first (API support, copies' relations and views, clicks needed).
+- Overnight go-ahead (Mike, 2026-09-30, question box, before bed): "routing
+  plus review, which is your recommendation" (yes to the routing and
+  AGENTS.md report's 5 recommendations and to every recommended answer in
+  the 111-question baseline review), "but just be on the lookout for any
+  other anti-patterns we sort of identified earlier. Again, the intention
+  and the expected behavior, from my perspective, from the user's
+  perspective, is that I just want to be able to make decisions and have
+  the coding agent manage everything. I don't want to have to remember a
+  bunch of things about how this whole harness and toolkit works ... I
+  don't want to have to remember a bunch of trigger words. The reason,
+  again, the principle initially, why we're keeping it simple is because
+  it's easily adjustable. It's just a bunch of skills, hooks, and rules.
+  We're just using the out-of-the-box recommended harness development
+  components to build this. We're not building a bunch of custom code.
+  Again, the reviewers need to go through and check to see: I've said this
+  a bunch of times, are the skills set up based on Claude Code and Codex
+  best practices? ... how to set up the skills; how to add more detailed
+  references and artifacts; how you should set up your AGENTS.md file; how
+  you should set up the .claude/rules files; how to add paths to those
+  rules so they are only invoked by the agents in different areas; etc.
+  ... All this stuff should be grounded in best practices." Built as a
+  third reviewer checklist, `dev/reviews/best-practices-review.md`, used on
+  every change with the other two.
+- Cost and model for tests (Mike, 2026-09-30): "for the full Salesforce and
+  iOS scenarios, if you could use a team of Sonnet agents to do those, I
+  don't want to spend millions and millions and millions of tokens doing
+  them. We just need to have a very targeted test plan for those scenarios.
+  ... I can't just exhaust my weekly limits with that one task, right? We
+  need to be surgical about this and plan to use Sonnet 5.5 where
+  appropriate." So: stage 4 gets a short, targeted test plan (each check
+  tied to a finish item, nothing already proven in stage 3 repeated); its
+  driver agents (the agent playing Mike, the checkers) run on Sonnet; the
+  sessions under test run on Sonnet 5.5 except where a check needs the
+  model Mike uses every day; every workflow logs its token use and stops
+  short of the weekly limit. The same care applies to the overnight fix and
+  review workflows: Sonnet for mechanical fixing and checking, the main
+  model only for judgment calls.
+- Morning answers (Mike, 2026-10-01, question box): the ~40 small tracker
+  questions: "Let me read them first" (nothing applied until he has);
+  Notion database templates: "Yes, I'll do clicks in Chrome (Recommended)"
+  (the build session clicks, the Notion session fills, "Project: work and
+  memory" becomes the Projects default, "Project workspace" kept until he
+  says delete); the end-of-reply check: "Drop it (Recommended)"; the
+  ChatGPT-account plugins in Codex: "Leave them on" (accept that about 1
+  Codex session in 10 sees shortened descriptions).
+- Notion board fix (Mike, 2026-10-01, question box): "Yes, and delete the
+  old 3 (Recommended)": three fresh templates in his Projects database, the
+  content moved into them by the Notion session, and the three emptied
+  templates from 2026-10-01 deleted (to Notion's trash). And "Yes
+  (Recommended)" to one throwaway project, "Template check (safe to
+  delete)", in his real Projects database for an end-to-end check, deleted
+  only with his yes.
+- Notion follow-ups (Mike, 2026-10-01): #6 Q-01 "you can do this in Chrome
+  by hand" (the missing layout groupings, done by the build session in
+  Chrome); #6 Q-04 "yes, you can delete the Notion test leftovers" (the
+  test area, "Toolkit V2 templates", the old "Project workspace" template,
+  and "Template check (safe to delete)"; the test area and Template check
+  wait until the running tests no longer use them).
+- Skill best-practices audit (Mike, 2026-10-01): "use a team of 3 opus 5.5
+  agents to handle this separate workstream": audit every Toolkit V2 skill
+  against Anthropic's skill best practices, from the video "Everything You
+  Know About Skills IS OUTDATED" (full transcript, or stop and ask him) and
+  https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
+  (docs win on conflicts); one checklist tagged video / docs / both; per
+  skill pass or fail per item with fixes ranked by severity, plus
+  toolkit-wide structural changes; "Do NOT edit any skills until I've
+  reviewed the report."
+- Audit follow-up (Mike, 2026-10-01): a fourth Opus agent as technical
+  lead plans the fixes, and "a couple Sonnet 5.5 agents actually execute and
+  update the skills"; question box: "Start; hold changes to behavior
+  (Recommended)". His words: "It shouldn't really change any behavior,
+  right? We're just modifying the skills to match ... we just need to
+  refactor the skills to make sure that they're aligning with this new
+  insight that we have on how Claude Code handles skills and how the
+  harness works ... optimize the skills based on how Anthropic says we
+  should create them. It shouldn't change behavior." And on pace: "we're
+  coming up on 3 days here ... we can't overengineer this ... We just need
+  to follow [the official documentation]." So the refactor keeps what each
+  skill does; any fix that would change behavior or a settled decision is
+  held for him; the routing test confirms no behavior changed.
+- Keep every work stream tracked and current (Mike, 2026-09-30): "keep
+  track of all these work streams, please. Keep them up to date." The
+  tracker is GitHub issue #1 (the work item for the whole build) and its
+  sub-issues.
+- Salesforce production org (Mike, 2026-09-30, after a stage 3 test agent
+  ran a read-only `sf org display` against it): "You can log out of that
+  production environment. We don't need it." Done the same day: `sf org
+  logout --target-org PRODUCTION` (a client's production org), and at his next
+  request ("log out of the full copy sandbox too") that client's full-copy
+  sandbox (`FULL_COPY`). No Salesforce org
+  is connected on the Mac now. The test project did not need a restart: a fresh setup session
+  set it up correctly; the skill fix (never touch an org the project has not
+  named) is in the stage 3 fix round.
+- Skill cut (Mike, 2026-10-01). He found a 336-line `approvals.md` with a
+  table of what "ok" and "looks good" mean, and phrase tables in other
+  skills: "Claude fucking knows what that means." The skills were about
+  40,500 lines, more than the 37,000-line program V2 replaced. Five Opus
+  reviewers proposed per-skill cuts
+  (`dev/reviews/skill-cut-2026-10-01/proposals.md`); Mike: "just go - build
+  it". Done in commit 89ab393 (0.5.0): work-on, work-status, and the three
+  work find skills removed; the rest cut to 14,290 lines; model commits
+  dcbf9ff and d3dcd65.
+- What a skill holds (Mike, 2026-10-01): "Operational procedures, policies,
+  rules, templates, sequence of operations, if-then workflow statements."
+  Also allowed, from the official guides: a when-to-use description,
+  gotchas (specific tool facts Claude would get wrong, never general
+  advice), checklists, check-and-fix loops, short output examples, facts
+  Claude cannot know, and defaults instead of menus. It is a menu, not a
+  requirement. Never: how to reason, what English words mean, or anything
+  Claude already does right. The test for every line: would Claude get the
+  job wrong without it? Added to `dev/reviews/best-practices-review.md` as
+  P0.
+- One work-item skill (Mike, 2026-10-01, "Yes"): plan one skill for the
+  whole work item lifecycle, with a short map in `SKILL.md` (purpose, the
+  stages and status fields, where his yes is needed, an index), one short
+  reference per stage (refine, design, delegate, check, finish), the
+  helper agent briefs, the tracker's storage file chosen at setup, and the
+  templates. The tracker skill folds in; memory stays separate. Plan first,
+  shown to him before building.
+- Hindsight on his VPS (Mike, 2026-10-01): API
+  `https://memory-api.mrihm-memory.com`, dashboard
+  `https://memory.mrihm-memory.com`, Hindsight and Ollama on a Hostinger VPS
+  behind Caddy; one bank per coding project; never install Hindsight or
+  Ollama on the Mac, never Hindsight Cloud, never an OpenAI key; he enters
+  any access key himself. Setup offers the VPS and asks before making a
+  bank; a small skill opens a project's bank in the dashboard; projects on
+  the Mac's local server keep working. On testing: "We don't need to test
+  everything." The coding-agent add-on: recommended off, not yet confirmed.
+  This replaces "one local server on this Mac" (2026-09-26) for new
+  projects. Built after the work-item skill.
 
 ## Goal
 

@@ -1,0 +1,10 @@
+{
+  "properties": {
+    "Phase column": {
+      "formula": {
+        "expression": "if(empty(prop(\"Phase order\")), \"No phase\", (if(prop(\"Phase order\") < 10, \"0\", \"\") + format(prop(\"Phase order\"))) + \" · \" + format(prop(\"Phase name\")))"
+      },
+      "description": "The item's phase with its place in the plan (\"02 · Build the form\"), so boards show phases in plan order."
+    }
+  }
+}

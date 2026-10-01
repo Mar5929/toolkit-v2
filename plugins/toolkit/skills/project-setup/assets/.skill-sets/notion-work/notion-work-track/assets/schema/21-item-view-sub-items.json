@@ -1,0 +1,64 @@
+{
+  "create_database": {
+    "parent": {
+      "type": "page_id",
+      "page_id": "{{ITEM_PAGE_ID}}"
+    },
+    "position": {
+      "type": "after_block",
+      "block_id": "{{AFTER_BLOCK_ID}}"
+    }
+  },
+  "data_source_id": "{{WORK_ITEMS_DS}}",
+  "name": "Sub-items",
+  "type": "board",
+  "filter": {
+    "property": "{{P_PARENT_ITEM}}",
+    "relation": {
+      "contains": "{{ITEM_PAGE_ID}}"
+    }
+  },
+  "sorts": [
+    {
+      "property": "{{P_PRIORITY}}",
+      "direction": "ascending"
+    },
+    {
+      "property": "{{P_ID}}",
+      "direction": "ascending"
+    }
+  ],
+  "configuration": {
+    "type": "board",
+    "group_by": {
+      "type": "formula",
+      "property_id": "{{P_PHASE_COLUMN}}",
+      "group_by": {
+        "type": "text",
+        "group_by": "exact",
+        "sort": {
+          "type": "ascending"
+        }
+      },
+      "hide_empty_groups": true
+    },
+    "properties": [
+      {
+        "property_id": "{{P_ID}}",
+        "visible": true
+      },
+      {
+        "property_id": "{{P_STATUS}}",
+        "visible": true
+      },
+      {
+        "property_id": "{{P_STAGE}}",
+        "visible": true
+      },
+      {
+        "property_id": "{{P_WAITING_ON}}",
+        "visible": true
+      }
+    ]
+  }
+}

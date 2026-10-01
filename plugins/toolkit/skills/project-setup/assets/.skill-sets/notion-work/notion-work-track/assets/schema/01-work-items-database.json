@@ -1,0 +1,300 @@
+{
+  "parent": {
+    "type": "page_id",
+    "page_id": "{{PROJECT_PAGE_ID}}"
+  },
+  "title": [
+    {
+      "type": "text",
+      "text": {
+        "content": "Work Items"
+      }
+    }
+  ],
+  "is_inline": true,
+  "icon": {
+    "type": "emoji",
+    "emoji": "🗂️"
+  },
+  "initial_data_source": {
+    "properties": {
+      "Work item": {
+        "title": {}
+      },
+      "ID": {
+        "unique_id": {
+          "prefix": null
+        }
+      },
+      "Status": {
+        "status": {
+          "options": [
+            {
+              "name": "Backlog",
+              "color": "gray",
+              "group": "To-do"
+            },
+            {
+              "name": "Ready",
+              "color": "blue",
+              "group": "To-do"
+            },
+            {
+              "name": "In Progress",
+              "color": "yellow",
+              "group": "In progress"
+            },
+            {
+              "name": "In Review",
+              "color": "purple",
+              "group": "In progress"
+            },
+            {
+              "name": "Done",
+              "color": "green",
+              "group": "Complete"
+            },
+            {
+              "name": "Cancelled",
+              "color": "brown",
+              "group": "Complete"
+            }
+          ]
+        }
+      },
+      "Stage": {
+        "select": {
+          "options": [
+            {
+              "name": "01-discovery",
+              "color": "gray",
+              "description": "Working out what the owner wants."
+            },
+            {
+              "name": "02-refinement",
+              "color": "gray",
+              "description": "Turning that into requirements."
+            },
+            {
+              "name": "03-requirements-approved",
+              "color": "blue",
+              "description": "The owner approved the requirements."
+            },
+            {
+              "name": "04-solution-design",
+              "color": "purple",
+              "description": "Deciding how it gets built."
+            },
+            {
+              "name": "05-breakdown",
+              "color": "purple",
+              "description": "Splitting work that is too large."
+            },
+            {
+              "name": "06-implementation-plan",
+              "color": "purple",
+              "description": "Ordering the build steps."
+            },
+            {
+              "name": "07-tracking-setup",
+              "color": "purple",
+              "description": "Creating build tracking when needed."
+            },
+            {
+              "name": "08-build",
+              "color": "orange",
+              "description": "Producing the requested change."
+            },
+            {
+              "name": "09-testing",
+              "color": "yellow",
+              "description": "Checking it against the requirements."
+            },
+            {
+              "name": "10-bug-fixing",
+              "color": "red",
+              "description": "Fixing what testing found."
+            },
+            {
+              "name": "11-user-approval",
+              "color": "pink",
+              "description": "The owner reviews the result."
+            },
+            {
+              "name": "12-pr-and-push",
+              "color": "green",
+              "description": "Repository work is in a pushed pull request."
+            },
+            {
+              "name": "13-deployment",
+              "color": "green",
+              "description": "The result is put where it belongs."
+            },
+            {
+              "name": "14-spec-update",
+              "color": "green",
+              "description": "Lasting specifications match the result."
+            }
+          ]
+        }
+      },
+      "Waiting on": {
+        "select": {
+          "options": [
+            {
+              "name": "owner",
+              "color": "red"
+            },
+            {
+              "name": "agent",
+              "color": "blue"
+            },
+            {
+              "name": "external",
+              "color": "orange"
+            },
+            {
+              "name": "none",
+              "color": "gray"
+            }
+          ]
+        },
+        "description": "Who the item waits on. The Current state Waiting on line on the page says who and for what."
+      },
+      "Type": {
+        "select": {
+          "options": [
+            {
+              "name": "discovery",
+              "description": "Finding out what is needed."
+            },
+            {
+              "name": "solution-design",
+              "description": "Designing how something gets built."
+            },
+            {
+              "name": "build",
+              "description": "Producing a change. Needs approved requirements before stage 03."
+            },
+            {
+              "name": "data-load",
+              "description": "Loading or changing data. Needs approved requirements before stage 03."
+            },
+            {
+              "name": "repository-maintenance",
+              "description": "Keeping the repository in order."
+            },
+            {
+              "name": "research",
+              "description": "Answering a question with sources."
+            },
+            {
+              "name": "task",
+              "description": "A small piece of work."
+            },
+            {
+              "name": "bug",
+              "description": "Something that does not work as it should."
+            },
+            {
+              "name": "enhancement",
+              "description": "An improvement to something that works."
+            }
+          ]
+        }
+      },
+      "Priority": {
+        "select": {
+          "options": [
+            {
+              "name": "urgent",
+              "color": "red"
+            },
+            {
+              "name": "high",
+              "color": "orange"
+            },
+            {
+              "name": "medium",
+              "color": "yellow"
+            },
+            {
+              "name": "low",
+              "color": "gray"
+            }
+          ]
+        }
+      },
+      "Tags": {
+        "multi_select": {
+          "options": []
+        },
+        "description": "Free labels. Add new ones as needed."
+      },
+      "Next action": {
+        "rich_text": {},
+        "description": "A copy of the Current state \"Next action\" line, so a board card shows it."
+      },
+      "Requirements approved": {
+        "rich_text": {},
+        "description": "\"YYYY-MM-DD by <name>\", or \"no\"."
+      },
+      "Design": {
+        "select": {
+          "options": [
+            {
+              "name": "none",
+              "color": "gray"
+            },
+            {
+              "name": "proposed",
+              "color": "yellow"
+            },
+            {
+              "name": "approved",
+              "color": "green"
+            },
+            {
+              "name": "superseded",
+              "color": "brown"
+            }
+          ]
+        }
+      },
+      "Design approved": {
+        "rich_text": {},
+        "description": "\"YYYY-MM-DD by <name>\", or \"no\"."
+      },
+      "Result approved": {
+        "rich_text": {},
+        "description": "\"YYYY-MM-DD by <name>\", or \"no\". Done needs this or the owner's own words."
+      },
+      "Delivery": {
+        "select": {
+          "options": [
+            {
+              "name": "not-offered",
+              "color": "gray"
+            },
+            {
+              "name": "agent-led",
+              "color": "blue"
+            },
+            {
+              "name": "owner-led",
+              "color": "green"
+            }
+          ]
+        }
+      },
+      "Files": {
+        "files": {},
+        "description": "Source files and attachments. Each one has a line in the page's Sources list."
+      },
+      "Archived": {
+        "checkbox": {},
+        "description": "Hidden from the boards."
+      }
+    }
+  }
+}

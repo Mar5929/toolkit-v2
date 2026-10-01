@@ -1,0 +1,52 @@
+{
+  "parent": {
+    "type": "page_id",
+    "page_id": "{{PROJECT_PAGE_ID}}"
+  },
+  "title": [
+    {
+      "type": "text",
+      "text": {
+        "content": "Tasks"
+      }
+    }
+  ],
+  "is_inline": true,
+  "icon": {
+    "type": "emoji",
+    "emoji": "✅"
+  },
+  "initial_data_source": {
+    "properties": {
+      "Task": {
+        "title": {}
+      },
+      "Task ID": {
+        "rich_text": {},
+        "description": "P1-T01 form. Stable: never reused or renumbered."
+      },
+      "Done": {
+        "checkbox": {},
+        "description": "Ticked only when \"Done when\" is met."
+      },
+      "Order": {
+        "number": {
+          "format": "number"
+        },
+        "description": "Order inside the phase."
+      },
+      "Work": {
+        "rich_text": {},
+        "description": "The action to take."
+      },
+      "Deliverable": {
+        "rich_text": {},
+        "description": "The file, decision, or other result."
+      },
+      "Done when": {
+        "rich_text": {},
+        "description": "The observable completion check."
+      }
+    }
+  }
+}

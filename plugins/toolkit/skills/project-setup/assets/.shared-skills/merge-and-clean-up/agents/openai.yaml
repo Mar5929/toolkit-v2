@@ -1,0 +1,4 @@
+interface:
+  display_name: "Merge and Clean Up"
+  short_description: "Merge a PR and remove only its branch and worktree"
+  default_prompt: "Use $merge-and-clean-up to merge pull request <number> and remove only its branch and worktree."

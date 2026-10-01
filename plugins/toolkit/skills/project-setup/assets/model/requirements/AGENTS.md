@@ -1,0 +1,3 @@
+# Functional requirements
+
+Keep one folder per durable business area, holding one maintained file. Start a new area by copying `system-area-template/` to a folder named for the area, then rename the copied `AREA-TEMPLATE.md` for the area, for example `requirements/billing/BILLING.md`. Leave `system-area-template/` itself unchanged for the next area. Record agreed functional behavior and its conditions, exceptions, and source. The active work item owns proposed changes, Questions and Answers, detailed tasks, and execution history. Update the area file at the agreed lifecycle point after confirming what was delivered. Link a design or work item when it explains a requirement; do not copy their task history here.

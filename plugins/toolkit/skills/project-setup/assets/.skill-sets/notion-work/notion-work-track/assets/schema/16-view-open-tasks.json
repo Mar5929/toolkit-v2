@@ -1,0 +1,50 @@
+{
+  "database_id": "{{TASKS_DB}}",
+  "data_source_id": "{{TASKS_DS}}",
+  "name": "Open tasks",
+  "type": "table",
+  "position": {
+    "type": "start"
+  },
+  "filter": {
+    "property": "{{T_DONE}}",
+    "checkbox": {
+      "equals": false
+    }
+  },
+  "sorts": [
+    {
+      "property": "{{T_ORDER}}",
+      "direction": "ascending"
+    }
+  ],
+  "configuration": {
+    "type": "table",
+    "group_by": {
+      "type": "relation",
+      "property_id": "{{T_WORK_ITEM}}",
+      "sort": {
+        "type": "ascending"
+      },
+      "hide_empty_groups": true
+    },
+    "properties": [
+      {
+        "property_id": "{{T_TASK_ID}}",
+        "visible": true
+      },
+      {
+        "property_id": "{{T_DONE}}",
+        "visible": true
+      },
+      {
+        "property_id": "{{T_DONE_WHEN}}",
+        "visible": true
+      },
+      {
+        "property_id": "{{T_PHASE}}",
+        "visible": true
+      }
+    ]
+  }
+}

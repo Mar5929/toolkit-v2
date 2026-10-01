@@ -1,135 +1,154 @@
 ---
 name: project-setup
-description: 'Sets up Toolkit V2 in a new project, or checks, updates, and repairs an existing setup, including Notion and Hindsight, so every project runs the same files, rules, and hooks. Use when the owner says "set up Toolkit V2", "set up this project", "check the setup", or "update the toolkit", or starts using Toolkit V2 on a new computer.'
+description: 'Sets up, checks, or updates Toolkit V2 in a project, or changes where work items or memory are kept, by copying the model project, skills, and hooks, so projects run the same files. Use when the owner says "set up this project", "initialize this project", "update the toolkit", or "check the setup". Not for a Git pull; use pull-latest. Not for the older claude-toolkit (project-init, project-sync).'
 ---
 
 # Project setup
 
-Voice: write to the owner in plain English. Claude Code: follow the project's Plain English output style. Codex: follow the "How to write replies" section of `AGENTS.md`.
-Sets up Toolkit V2, never the older claude-toolkit (its `project-init` skill).
+Sets up Toolkit V2 in a project, or brings a Toolkit V2 project up to date;
+never the older claude-toolkit (its `project-init` and `project-sync`
+skills). There is no setup program: you copy and edit the files yourself,
+from this skill's `assets/` folder. This skill's folder is the folder that
+holds this `SKILL.md`; both hosts show its path when they load the skill.
 
-## Steps
+## Pick the path
 
-1. **Check the computer and the project.** `toolkit` not found, or doctor
-   reports a computer problem: `references/repair-and-update.md`, "Reaching
-   the `toolkit` command". A warning never blocks init: note it, go on.
-   `toolkit doctor`
-2. **Pick the path.** `.toolkit.json` present: step 8. A new computer:
-   `references/new-computer.md`. Switching memory or tracker:
-   `references/switching.md`. Otherwise a new project: put the checklist
-   below in the plan tool (Claude Code: the task list; Codex: `update_plan`).
-3. **Interview**, one question per message, in the reply text, each with a
-   recommendation: name, tracker, memory, Salesforce, `SOUL.md`, backup
-   folder (skipped when tracker and memory are both Notion: say Notion keeps
-   page history and a trash). Look first. `references/interview.md`. Notion
-   or Hindsight chosen: do the "Before init" part of its wiring file now.
-4. **Run init** with the answers, then record what it has no flag for.
-   Inside Codex, first tell the owner that Codex will ask him to approve
-   running init outside the sandbox. `references/running-init.md`.
-   `toolkit init --name '<name>' --key <key> --tracker <tracker> --memory <memory> --owner '<owner>' --backup-dir '<folder>' [--salesforce] [--decline SOUL.md]`
-5. **Finish wiring each choice**: `references/wiring-notion.md`,
-   `wiring-hindsight.md`, `wiring-github-jira.md`, `wiring-salesforce.md`.
-6. **Fill the setup guides** with facts the owner confirmed; the one-sentence
-   outcome is his to say. `references/finishing-setup.md`.
-7. **Finish:** backups, doctor at 0 problems, owner steps in the reply and the
-   focus, the first briefing, the report, the commit offer.
-   `references/finishing-setup.md`.
-8. **Repair or update:** one numbered table from doctor and the dry run; sync
-   only after a yes; doctor again until 0 problems.
-   `references/repair-and-update.md`.
-   `toolkit sync --dry-run`
+Check the first case before the others: a setup that stopped part way also
+has a filled "Toolkit settings" section.
 
-## New project checklist
+- `PROJECT.md` "Toolkit settings" is filled, but a service line still shows
+  its prompt (with Notion: "Work item ID prefix", "Notion work items", or
+  "Notion memory"; with GitHub Issues: "GitHub repository"; with Hindsight:
+  "Hindsight bank"), `{{CURRENT_STATE_PAGE_ID}}` is still in
+  `.claude/settings.json` or `.codex/hooks.json`, or Current State still
+  has its fill-in guide: setup stopped part way. Say so in one line, take
+  the choices from "Toolkit settings", and continue at step 7 of "New
+  project", then step 8.
+- `PROJECT.md` has a filled "Toolkit settings" section: the project is set
+  up. Update the toolkit: `references/update.md`. Check the setup: build a
+  fresh setup copy and compare (`references/update.md`, steps 1 and 2), run
+  the final checks (`references/finishing.md`) without fixing any that
+  fail, and report each difference and each failed check with the fix you
+  recommend. Change nothing in the project; only the session-start hook run
+  in the final checks may rebuild the generated `memory/MEMORY.md`. Change a
+  setup choice (where work items or memory live, or the Memory approval
+  mode): `references/update.md`, "Changing a setup choice".
+- Set up `SOUL.md` in a set-up project: copy `assets/model/SOUL.md` into
+  the project when it has none, fill it with his own words as
+  `references/finishing.md`, "SOUL.md", says, and offer to commit it.
+- The folder has `.toolkit.json`: the retired `toolkit` program set it up.
+  Tell the owner, and ask whether to set it up again as a new project.
+  Nothing is removed.
+- He asks to update the toolkit or check the setup, the folder has no
+  filled "Toolkit settings" section, and it has older claude-toolkit files
+  (`references/interview.md`, "Look before asking"): before any setup
+  question, ask whether he means the older toolkit (its `project-sync`
+  skill) or moving this project to Toolkit V2. Recommend the older toolkit,
+  because the folder holds its files and no Toolkit V2 settings. For the
+  older toolkit, stop and say `project-sync` is the skill for it. For
+  Toolkit V2, continue as a new project.
+- Otherwise it is a new project. Put the eight steps below in the plan tool
+  (Claude Code: the task list; Codex: `update_plan`; when the host has none,
+  continue without it). Record each answer he gives as a checked line (for
+  example `- [x] Work items: local`): a later turn may start without this
+  skill loaded.
 
-```text
-- [ ] Doctor run; computer problems fixed
-- [ ] Looked before asking: Git repository, code, sfdx-project.json, older toolkit files
-- [ ] Six answers: name (key, id prefix, owner), tracker, memory, Salesforce (org aliases), SOUL.md, backup folder (not asked when tracker and memory are both Notion)
-- [ ] Notion signed in and root page known, or Hindsight answering, before init
-- [ ] toolkit init run; id prefix and Salesforce aliases recorded
-- [ ] Each choice wired: Notion, Hindsight, GitHub or Jira, Salesforce API version
-- [ ] Setup guides filled with confirmed facts; outcome asked for; prompts left listed
-- [ ] First backup made, or the owner's no-backup choice reported, or (tracker and memory both Notion) Notion's page history and trash named as the backup
-- [ ] Doctor at 0 problems (warnings only the other host can clear are the owner's)
-- [ ] Owner steps in the reply; the ones doctor checks also in the current focus
-- [ ] First briefing shown; the report given
-- [ ] Commit offer made; commit only after a yes
-```
+## New project
+
+1. **Look, then interview**, one question per message, each with a
+   recommendation: the name and owner, where work items live, where memory
+   lives, Salesforce, `SOUL.md`. `references/interview.md`.
+2. **Show the plan and wait for his yes.** Name every thing that will be
+   made outside this folder. `references/interview.md`, "The plan to
+   confirm".
+3. **Ask for the sign-ins the choices need now** (`ntn login` for Notion,
+   `gh auth login` for GitHub), so he can do them while you copy.
+   `references/notion.md`, `references/github.md`.
+4. **Build the setup copy** in a scratch folder: the model, minus what the
+   choices leave out, the setup markers resolved, the name and "Toolkit
+   settings" filled, the rules list written. `references/setup-copy.md`.
+5. **Add the skills, the three hook commands, and the settings** to the
+   setup copy. `references/skills-hooks-settings.md`.
+6. **Put it into the project** and make the `.agents/skills` link. Never
+   replace a file the project already has without showing the difference
+   and asking. `references/placing-files.md`.
+7. **Set up each service**, once its sign-in is done: Notion pages, the
+   GitHub repository and labels, the Hindsight bank and its MCP entries, the
+   Salesforce facts. `references/notion.md`, `references/github.md`,
+   `references/hindsight.md`, `references/salesforce.md`.
+8. **Finish**: fill the prompts in the copied files with facts he confirms,
+   write Current State, run the final checks, name his own steps, report,
+   and offer the commit. `references/finishing.md`.
 
 ## Gotchas
 
-- Ask each question in the reply text, never through a question box or
-  question tool (in Codex, `request_user_input_async` and the like): in
-  `codex exec` the box is never shown, and the turn ends with no answer.
-  Never answer a question for him after a wait; wait for his reply.
-- Never change an answer the owner gave (hosts, tracker, memory, Salesforce,
-  `SOUL.md`) to get past a failed command, and never set up in another folder
-  and copy it over. Stop, say what failed, and say what he must approve or
-  run.
-- Setup is never a work item. Never create one for setup steps, and never add
-  made-up owner questions to finish setup.
-- The project's one-sentence outcome is the owner's answer, never a sentence
-  worked out from the code, the tests, or the README.
-- Init wires Notion and Hindsight itself, so it stops when `ntn` is not signed
-  in, no Notion root page is known, or the Hindsight server does not answer.
-  Get the backend ready before init.
-- Inside Codex, init writes `.codex/` and `.agents/` first, which the sandbox
-  refuses. It must run outside the sandbox, with the owner's approval.
-- The machine-setup command changes `~/.codex/config.toml`. Get the owner's
-  yes before its first run on a computer.
-- Nothing is created outside this project without a yes: no GitHub
-  repository, no Jira fields, no paid service, no Notion pages outside the "AI
-  Agent Second Brain" page.
-- Every step is safe to run again. Init writes `.toolkit.json` last, and a
-  second run reuses what an earlier run made.
-- `git diff --check` reports the scaffold's Markdown templates, because some
-  of their lines end with two spaces: a Markdown line break. Leave them.
-  Never change a scaffold file to pass a check.
-- When the Notion setup (ensure-root or ensure-project) fails, or prints a
-  warning about the owner's Notion pages, stop and tell the owner what it
-  printed. Never change his Notion pages or views with `ntn api` or any other
-  tool to get past it.
-- Run each `toolkit` command alone, on its own line, in both hosts; one-line
-  values in single quotes (`references/toolkit-commands.md`).
-
-## Steps only the owner can do
-
-Say each one plainly, with why, and wait. Never do them for him.
-
-- **`ntn login`**: signs the Notion command-line tool into his Notion account.
-  It opens a browser sign-in. Needed only for Notion, and only when
-  `ntn whoami` fails.
-- **Trust this project folder in Codex**: open Codex in the project folder
-  and trust it when Codex asks. Until he does, Codex ignores the project's
-  `.codex/config.toml`, which turns the other Toolkit V2 plugins on. Trust is
-  tied to the folder path, so it is needed again after the folder moves.
-- **Trust the hooks in Codex**: open Codex in the project, type `/hooks`, and
-  trust the Toolkit V2 hooks. Codex skips plugin hooks until he does. Needed
-  again after the hooks change or the project folder moves.
-- **Approve Codex running init outside its sandbox**, when setup runs inside
-  Codex, or run the command init printed in a terminal.
-- **Start a new session** after setup, so the host loads the new settings, the
-  Plain English style, and the Toolkit V2 skills.
+- Ask each question in the reply text, never through a question tool: in
+  `codex exec` the box is never shown and the turn ends with no answer.
+  Never answer a question for him, even when he does not reply.
+- Never change an answer he gave (work items, memory, Salesforce) to get
+  past a failure. Never get past a failure by setting the project up in
+  some other folder and copying it over; the scratch setup copy in steps 4
+  to 6 is the normal path. Stop, say what failed, and say what he must
+  approve or run.
+- Set up a new project in its main checkout, never from a worktree, even
+  when a machine-wide rule asks for one: the Git-ignored `memory/` and
+  `work-items/` must live there. Only `references/update.md` uses a
+  worktree.
+- Nothing is made outside the project folder without his yes: no Notion
+  page, no GitHub repository or label, no Hindsight bank, no install. The
+  plan he approved covers only what it named. The only other files written
+  outside it are the scratch folders (`references/setup-copy.md`, "Make the
+  scratch folder"; a folder for a Notion body) and, after his yes to each
+  step, what `references/installing-hindsight.md` installs. Never save a
+  path, a file list, or a diff in a file. Remove each scratch folder once
+  its step is done (the setup copy after the final checks), so nothing from
+  setup is left in `/tmp`, `$TMPDIR`, or the session scratchpad.
+- Codex: the sandbox refuses to create `.codex/` and `.agents/`, keeps
+  `.git/` read-only, and blocks the network. Run each command that writes
+  those folders, each Git write, and each `ntn`, `gh`, `curl`, and `sf`
+  call alone (one exception: the Hindsight bank's name check and creation
+  in `references/hindsight.md`), with `sandbox_permissions` set to
+  `require_escalated` and a one-line reason. Keep a `| jq` filter in the
+  same command. Never join two such commands. Refused without asking (as in
+  `codex exec`): show him the exact command to run in a terminal, and wait.
+  Never drop the Codex files to get past a refusal.
+- Never change anything in this skill's `assets/` folder: it is the source
+  for every project.
+- The model's `.agents/skills/` folder is never copied. A project's
+  `.agents/skills` is a link to `.claude/skills`, so there is one copy of
+  each skill.
+- Never write a script into a project. The only code a project runs is the
+  three hook commands and, in a Salesforce project, the model's own
+  Salesforce code: the two guards, the graph Stop hook, and the scripts in
+  `tools/`.
+- Jira is not offered yet. Hindsight memory has no memory skills: the agent
+  uses Hindsight's own tools.
+- Setup is never a work item. The project's one-sentence outcome is the
+  owner's answer, never a sentence worked out from the code.
 
 ## References
 
 | File | Open it when |
 | --- | --- |
-| `references/interview.md` | Step 3: what to check before asking, and the six questions with their recommendations |
-| `references/running-init.md` | Step 4: the init commands, what init writes and installs, a failed run, init inside Codex |
-| `references/wiring-notion.md` | The tracker or memory is Notion: before init, and to check or repair it after |
-| `references/wiring-hindsight.md` | The memory is Hindsight: before init, and to check or repair it after |
-| `references/installing-hindsight.md` | Hindsight or Ollama is not installed on this Mac: the installs, the first start, the service |
-| `references/wiring-github-jira.md` | The tracker is GitHub Issues or Jira |
-| `references/wiring-salesforce.md` | A Salesforce project: org aliases and the API version |
-| `references/finishing-setup.md` | Steps 6 and 7: the setup guides, `SOUL.md`, backups, doctor, owner steps in the focus, the report, the commit offer |
-| `references/repair-and-update.md` | Step 1 when `toolkit` is not found; step 8; updating the installed plugins |
-| `references/new-computer.md` | The owner starts on a new computer |
-| `references/switching.md` | The owner wants another memory backend or tracker |
-| `references/toolkit-commands.md` | Before the first `toolkit` command: one command per call, text in a command, exit codes |
-| `references/current-focus.md` | Step 7: the focus format and the version check |
-| `references/backup-and-restore.md` | Backups, and restoring on a new computer |
-| `references/git-rules.md` | The setup commit, and Git writes in Codex |
-| `references/tracker-github.md` | A GitHub Issues tracker: what agents do in place of `toolkit work` |
-| `references/tracker-jira.md` | A Jira tracker: what agents do in place of `toolkit work` |
-| `assets/codex-toolkit.rules` | Doctor reports `codex-ask-rules` and the project changed its `.codex/rules/toolkit.rules`: the ask-first rules to copy into it (`references/repair-and-update.md`, "Doctor findings") |
+| `references/interview.md` | Steps 1 and 2: what to check before asking, the five questions with their recommendations, and the plan to confirm |
+| `references/setup-copy.md` | Step 4, and step 1 of an update: the scratch folder, what never ships, what each choice leaves out, the setup markers, "Toolkit settings", the Salesforce entries, the owner-preferences rule, the rules list |
+| `references/skills-hooks-settings.md` | Step 5: which skills each choice adds, the hook commands, the settings snippets and how to merge them, the older plugins turned off |
+| `references/placing-files.md` | Step 6: copying into the project, files it already has, the `.agents/skills` link |
+| `references/notion.md` | Work items or memory in Notion: the sign-in, his yes, which Notion setup to follow, the links |
+| `references/notion-build/setup.md` | Memory in Notion: the memory steps of a new project, the links in `PROJECT.md`, bringing memory up to date, building the memory part of a template |
+| `references/notion-build/lore-layout.md` | Memory in Notion: Lore's databases and every column, the views, the property order and page layout |
+| `references/notion-build/memory-page.md`, `references/notion-build/project-page-memory-only.md` | Building the Notion templates: the text of the Memory page and of the "Project: memory only" page |
+| `references/notion-build/lore/` | Building or updating Notion memory: the 16 request files for Lore's databases, columns, and views, named in `lore-layout.md` and `setup.md` |
+| `references/github.md` | Work items in GitHub Issues: the sign-in, the repository, the labels |
+| `references/hindsight.md` | Memory in Hindsight: the server, the bank, its tool limit, the MCP entries |
+| `references/installing-hindsight.md` | Hindsight or Ollama is not installed on this Mac |
+| `references/salesforce.md` | A Salesforce project: the org aliases and the API version |
+| `references/finishing.md` | Step 8: the prompts in the copied files, `SOUL.md`, Current State, the final checks, the owner's steps, the report, the commit offer |
+| `references/update.md` | Update the toolkit, check the setup, or change a setup choice |
+| `assets/model/` | Step 4: the model project, copied whole into the scratch folder |
+| `assets/owner-preferences.md` | Step 4: the starting `.claude/rules/owner-preferences.md` every project gets |
+| `assets/.shared-skills/` | Step 5: the skills every project gets |
+| `assets/.skill-sets/` | Step 5: one folder per work tracking or memory set (`local-work`, `notion-work`, `github-work`, `local-memory`, `notion-memory`) |
+| `assets/.salesforce/sf-architect-solutioning/` | Step 5, Salesforce projects only |
+| `assets/hooks/` | Step 5: the three hook commands |
+| `assets/settings/` | Step 5: the settings snippets for each choice |

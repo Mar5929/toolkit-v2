@@ -1,7 +1,7 @@
 {
   "name": "toolkit",
-  "version": "0.3.1",
-  "description": "The Toolkit V2 runtime: the toolkit command, the hooks that brief each session and check work items and memory, and the project-setup skill that sets up or repairs a project. Its hooks do nothing outside a Toolkit V2 project.",
+  "version": "0.5.0",
+  "description": "Sets up Toolkit V2 in a project: copies the model files, the chosen work tracking and memory skills, and their hooks.",
   "author": {
     "name": "Mike Rihm",
     "email": "michael@rihm.com"
@@ -12,6 +12,5 @@
     "hooks",
     "work-items",
     "memory"
-  ],
-  "defaultEnabled": false
+  ]
 }

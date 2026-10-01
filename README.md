@@ -1,363 +1,190 @@
 # Toolkit V2
 
-Toolkit V2 is a set of plugins for Claude Code and Codex. It sets up a project
-folder so the agent can run the project for you. You make the decisions and
-steer. The agent does the work, tracks it, and remembers what matters.
+Toolkit V2 sets up a project folder so the agent can run the project for you
+in Claude Code or Codex. You make the decisions and steer. The agent does the
+work, tracks it, and remembers what matters.
 
-It has three parts:
+It is written instructions plus three small hooks. There is no program to
+install, run, or keep working (your decision of 2026-09-29).
 
-- **Scaffold.** The folders and template files every project starts with, such
-  as `AGENTS.md` (the project manual the agent reads), `requirements/`, and the
-  work item template. The scaffold is an exact copy of your model project
-  (`toolkit-v2-model-project`). Change the model, and new projects follow it.
-- **Skills.** Written instructions the agent picks from, one per job. There are
-  22 skills in every project and 4 more in Salesforce projects.
-- **The `toolkit` command and hooks.** `toolkit` is a small program that keeps
-  work items and memory in order. Hooks are steps Claude Code and Codex run by
-  themselves at set moments. For example, every session starts with a short
-  briefing on where the project stands.
+## The parts
 
-Toolkit V2 is separate from your current toolkit (`claude-toolkit`). Installing
-it changes nothing in your current projects.
+- **Your model project** (`toolkit-v2-model-project`) is the source of every
+  file a new project gets: `AGENTS.md` (the project manual the agent reads),
+  `PROJECT.md`, `PROJECT-ROADMAP.md`, the rules, and the templates. The
+  toolkit keeps an exact copy of it.
+- **Skills** are written instructions, one per job. The agent picks one from
+  what you say, by reading each skill's short description.
+- **Rules** are instructions the agent always follows, such as "ask before
+  deploying". They come from your model.
+- **Hooks** are small commands Claude Code and Codex run by themselves at set
+  moments, for example when a session starts.
 
-## Plugins and skills
+## One plugin, one skill
 
-In Claude Code you can start a skill by typing `/<skill>`. In Codex you type
-`$<skill>`. You rarely need to: the agent picks the skill from what you say.
+The toolkit is one plugin, `toolkit`, with one skill, `project-setup`. It is
+switched on for every folder, so "set up this project" works anywhere. It has
+no hooks, so it does nothing in your other projects.
 
-Each skill has a short description that tells the agent what the skill does
-and when to use it. The descriptions follow the official Claude Code and Codex
-guidance, saved in `ai-external-knowledge/`. In the latest test, the agent
-picked the right skill first for 74 of 76 test messages in Claude Code and 72
-of 76 in Codex (`dev/test-runs/skill-routing-r3.md`).
+Setup copies everything a project needs into the project itself. That way the
+project works the same in Claude Code, the Codex app, and the Codex extension
+in your code editor, which loads no plugins.
 
-| Plugin | Skill | What it does | You might say |
-| --- | --- | --- | --- |
-| `toolkit` | `project-setup` | Sets up Toolkit V2 in a project, or checks, updates, and repairs it. | "set up this project", "check the setup", "update the toolkit" |
-| `work` | `work-on` | Starts, continues, or logs a piece of work, and builds it. | "build this", "keep going" |
-| `work` | `work-status` | Shows what is in progress, what is blocked, and what comes next. Changes nothing. | "where are we", "what's next" |
-| `work` | `work-decide` | Walks you through each decision waiting on you, one at a time. | "what do you need from me" |
-| `work` | `work-requirements` | Asks you questions one at a time and writes down what the work must do. | "grill me", "check the spec" |
-| `work` | `solution-design` | Works out how to build it and gives you design options to approve. | "how should we build this" |
-| `work` | `work-organize` | Splits big work into sub-items, moves items, and notices folders you moved by hand. | "break it down", "put X under Y", "I moved some folders around" |
-| `work` | `work-check` | Tests the finished work against every requirement, fixes what fails, and shows you the result. | "is it ready", "test it" |
-| `work` | `work-finish` | Ships and closes a work item after you approve it, or cancels it. | "ship it", "mark it done" |
-| `work` | `work-delegate` | Hands a goal to a team of agents, with you as the product owner. | "you drive", "take it from here" |
-| `memory` | `memory-save` | Saves, corrects, or forgets one lasting fact. | "remember this", "from now on" |
-| `memory` | `memory-find` | Finds what the project already knows and says where it came from. | "what did we decide", "do you remember" |
-| `memory` | `memory-tidy` | Cleans up memory: merges duplicates, retires old facts, makes a backup. | "clean up memory" |
-| `session-skills` | `handoff` | Writes a checked prompt a new session can start from. | "write a handoff", "I'm stopping for today" |
-| `session-skills` | `session-summary` | Shows what you asked for in this chat and where each request landed. | "recap this chat" |
-| `session-skills` | `braindump` | Plays back a loose brain dump in simple words before any work starts. | "here's a brain dump" |
-| `session-skills` | `explain-simply` | Explains the last answer again as short, plain bullets. | "explain it like I'm five" |
-| `session-skills` | `unslop` | Rewrites text so it no longer sounds machine-written. | "unslop this" |
-| `git-workflows` | `pull-latest` | Brings your copy of the code up to date, safely. | "get the latest" |
-| `git-workflows` | `reset-to-remote` | Makes your copy an exact match of the remote copy (for example on GitHub). It deletes local changes, so it runs only when you clearly ask. | "wipe local", "fresh start from remote" |
-| `git-workflows` | `merge-and-clean-up` | Merges a pull request and removes only its branches and worktree. | "merge and clean up" |
-| `git-workflows` | `publish-docs` | Saves an agreed document change straight to the main branch. The agent uses it after editing documents. | (agent use) |
-| `sf-architect-solutioning` | `sf-architect-solutioning` | Answers Salesforce platform questions and plans Salesforce solutions, checking each fact against official Salesforce documentation. Salesforce projects only. | "Flow or Apex", "which Flow type" |
-| (copied into Salesforce projects) | `sf-deploy-check` | Finds components that would ship with a deploy before they are ready. | (agent use) |
-| (copied into Salesforce projects) | `sf-component-tracker` | Keeps the component tracker and `package.xml` files in step with the metadata. | (agent use) |
-| (copied into Salesforce projects) | `sf-data-change` | Builds your package for a production data change: load file, backup, steps, and undo steps. | "load this file into production" |
+## Set up a project
 
-Helper agents: the `work` plugin has six (`requirements-analyst`, `researcher`,
-`design-architect`, `design-critic`, `builder`, `acceptance-checker`), and
-`session-skills` has one (`handoff-verifier`). All of them run on Opus. Codex
-plugins cannot carry agents, so in Codex the skill hands the agent's written
-role to a Codex worker instead.
+Open Claude Code or Codex in the project folder and say **"set up this
+project"**. The agent asks one question at a time and recommends an answer:
+
+- the project's name and owner;
+- where work items live: local folders (read them in Obsidian), Notion, or
+  GitHub Issues (Jira is for later);
+- where memory lives: local files (read them in Obsidian), Notion, or
+  Hindsight;
+- whether it is a Salesforce project;
+- whether you want a `SOUL.md`.
+
+Any mix works, for example work items in Notion and memory in local files.
+
+It shows you the plan and waits for your yes. Then it copies your model's
+files, the skills for your answers, the hooks, and the settings into the
+project. It asks you to sign in where needed (`ntn login` for Notion,
+`gh auth login` for GitHub), then sets up the Notion pages, the GitHub labels,
+or the Hindsight memory bank. It finishes by running its checks and offering
+to commit.
+
+Start a new session afterwards, so the new files load. In Codex, also trust
+the project folder and its hooks (`/hooks`).
+
+Later, say **"check the setup"** to see what differs (it changes nothing), or
+**"update the toolkit"** to bring a project up to date. It shows every change
+first and never overwrites a file you changed without asking.
+
+## Skills every project gets (13)
+
+| Skill | What it does | You might say |
+| --- | --- | --- |
+| `work-refine` | Turns a rough idea, meeting notes, and documents into agreed requirements and a roadmap. It asks one question at a time and saves each answer at once. | "help me plan this", "what am I missing" |
+| `solution-design` | Gives you design options for how to build an item, with a recommendation. | "how should we build it" |
+| `work-delegate` | Hands a work item to a team of helper agents, with you as the product owner. | "you drive", "take it from here" |
+| `work-check` | Has an independent checker test the result, then asks you to approve it. | "is it ready", "test it" |
+| `work-finish` | Ships and closes an approved item, or cancels one. It asks you before marking it Done. | "ship it", "mark it done" |
+| `handoff` | Saves where things stand and writes a checked prompt for a new session. | "write a handoff" |
+| `braindump` | Plays back a loose brain dump in simple words before any work starts. | "here's a brain dump" |
+| `explain-simply` | Explains the last answer again as short, plain bullets. | "explain it like I'm five" |
+| `session-summary` | Shows what you asked for in this chat and where each request landed. | "recap this chat" |
+| `pull-latest` | Brings your copy of the code up to date, safely. | "get the latest" |
+| `reset-to-remote` | Makes your copy an exact match of the remote copy. It deletes local changes, so it runs only when you clearly ask. | "wipe local" |
+| `merge-and-clean-up` | Merges an approved pull request and removes only its branches. | "merge and clean up" |
+| `publish-docs` | Saves an agreed document change straight to the main branch. | "publish the docs" |
+
+## Skills for your choices
+
+Each project gets one work tracking set and one memory set:
+
+| Your choice | Skills it adds |
+| --- | --- |
+| Work items in local folders | `local-work-track` (finds, creates, and changes items) |
+| Work items in Notion | `notion-work-track` |
+| Work items in GitHub Issues | `github-work-track` |
+| Memory in local files | `local-memory-save`, `local-memory-find`, `local-memory-refine` (cleans up) |
+| Memory in Notion | `notion-memory-save`, `notion-memory-find`, `notion-memory-refine` |
+| Memory in Hindsight | None. The agent uses Hindsight's own save and search tools. |
+| Salesforce | `sf-architect-solutioning`, `sf-deploy-check`, `sf-component-tracker`, `sf-data-change` |
+
+A project ends up with 17 skills, or 21 in a Salesforce project (14 or 18 with
+Hindsight memory). Building, and saying where the work stands, need no skill:
+the project's `AGENTS.md` says how. `dev/SKILL-INDEX.md` lists every skill with its exact
+description.
+
+## The hooks
+
+| When | What happens |
+| --- | --- |
+| A session starts, resumes, or its context is compacted | The agent is shown Current State: a short list of what is happening now and what waits on you. With local memory, the hook first rebuilds the memory index, `memory/MEMORY.md`. When Current State is too long or older than 7 days, it asks the agent to clean it up. |
+| You say something worth keeping ("remember this", "from now on", "we decided", and similar) | A one-line reminder names the memory save skill. The skill decides whether anything is saved, and asks you first. |
+| After a commit | A reminder to update the work item's history and status, and Current State if it changed. |
+| A helper agent starts or reports back | A reminder to update that helper's work item. |
+
+There is no hook for marking work Done. The agent asks you first, and
+records your words and the date.
+
+## How work and memory fit together
+
+- Every work item goes through the same stages and statuses, wherever it is
+  stored.
+- Each work item has a Questions and Answers table. Your answer is saved the
+  moment you give it, and unanswered questions stay at the top, so a new
+  session picks up at the first open one.
+- Every decision is saved in its work item first. When a decision matters
+  beyond that item, the agent asks "This looks project-wide. Save it to
+  memory too?"
+- An independent checker agent tests the work before you are asked to
+  approve it. Only you mark an item Done.
+- "From now on" instructions become a line in the project's
+  `.claude/rules/owner-preferences.md`.
+- When the agent uses something it recalled, it says where it came from and
+  ends with a short Sources list.
+- You can move files by hand. The agent finds work items by their ID, notices
+  the move, and carries on.
+
+## When you change your model project
+
+In this folder, ask an agent to **"refresh the model copy"**. It copies your
+model into the toolkit, runs the checks, and raises the toolkit's version
+number. Then say **"update the toolkit"** in each project that should get the
+change.
+
+Right now the copy comes from
+`/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved`,
+the folder with the changes you approved. After you merge those changes into
+your model, the copy comes from your model folder.
 
 ## Install on this Mac (one time)
 
-A marketplace is a list of plugins. This folder is the `toolkit-v2`
-marketplace. You add it once, then install its six plugins.
-
-Codex runs its own copy of each plugin, filed under its version number. A
-change in this folder reaches Codex only after the version goes up and the
-plugin is updated (see "After a change in this folder" below).
-
-Claude Code works differently with a marketplace that is a folder on this
-Mac, like this one: it runs the plugins straight from this folder. A change
-saved here, even one not committed yet, is live in your Claude Code at the
-next session start. Claude Code also keeps a copy of each plugin, filed under
-its version number, but a session does not run that copy.
-
-The `toolkit` command itself runs an installed copy in both hosts, the one
-`toolkit machine-setup` names (see Codex below).
-
-### Claude Code
+Each of these changes your own setup, so an agent asks you before it runs
+them.
 
 ```bash
 claude plugin marketplace add /Users/michaelrihm/Documents/Projects/toolkit-v2
 claude plugin install toolkit@toolkit-v2
-claude plugin install work@toolkit-v2
-claude plugin install memory@toolkit-v2
-claude plugin install session-skills@toolkit-v2
-claude plugin install git-workflows@toolkit-v2
-claude plugin install sf-architect-solutioning@toolkit-v2
 claude plugin enable toolkit@toolkit-v2 --scope user
-```
-
-The plugins install switched off, and that is on purpose. The last line
-switches one of them, `toolkit`, on for every folder. It holds only the
-`project-setup` skill and hooks that do nothing outside a Toolkit V2 project,
-so "set up this project" works in any folder. The other five stay off: your
-current toolkit has plugins with the same names (`session-skills`,
-`git-workflows`, `sf-architect-solutioning`). Each Toolkit V2 project switches
-the other Toolkit V2 plugins on, and the old ones off, in its own settings.
-The two sets never load in the same project.
-
-To check: `claude plugin list` shows `toolkit` as enabled and the other five
-as disabled.
-
-### Codex
-
-```bash
 codex plugin marketplace add /Users/michaelrihm/Documents/Projects/toolkit-v2
 codex plugin add toolkit@toolkit-v2
-codex plugin add work@toolkit-v2
-codex plugin add memory@toolkit-v2
-codex plugin add session-skills@toolkit-v2
-codex plugin add git-workflows@toolkit-v2
-codex plugin add sf-architect-solutioning@toolkit-v2
-node /Users/michaelrihm/Documents/Projects/toolkit-v2/plugins/toolkit/bin/toolkit machine-setup
 ```
 
-`codex plugin add` switches each plugin on for every folder. The last line,
-`toolkit machine-setup`, puts that right and sets up the `toolkit` command for
-Codex and your terminal:
-
-- it switches the other five Toolkit V2 plugins off for every folder in
-  `~/.codex/config.toml` and leaves `toolkit` on, and keeps every other line
-  of that file;
-- it writes `~/.local/bin/toolkit`, a small script that runs the installed
-  toolkit, and `~/.config/toolkit-v2/plugin-root`, which names that installed
-  copy. It names the copy Codex or Claude Code made at install time, not this
-  folder, because other agent sessions edit this folder while they work. This
-  folder is named only when neither host has a copy of the same or a newer
-  version;
-- it checks Node.js, Git, `ntn`, Ollama, and the Hindsight server.
-
-Each project's own `.codex/config.toml` switches on the plugins it needs. Codex
-reads a project's settings only after you trust the project folder, which Codex
-asks about the first time you open it.
-
-To check: `codex plugin list` shows the six plugins, and `toolkit version`
-in a terminal prints the toolkit's version.
-
-### After a change in this folder
-
-Every change that should reach Claude Code or Codex raises `version` in the
-plugin's two manifests (`.claude-plugin/plugin.json` and
-`.codex-plugin/plugin.json`, the same number in both). Then:
+After a change to the toolkit, the version number goes up, and these bring
+the new version in:
 
 ```bash
 claude plugin marketplace update toolkit-v2
-claude plugin update <plugin>@toolkit-v2
-codex plugin add <plugin>@toolkit-v2
-toolkit machine-setup
+claude plugin update toolkit@toolkit-v2
+codex plugin add toolkit@toolkit-v2
 ```
 
-Start a new session in each host afterwards. `toolkit machine-setup` runs last
-because `codex plugin add` switches the plugin on for every folder again.
-Claude Code already runs the changed skills and hooks from this folder; the
-`claude plugin update` line refreshes the copy that the `toolkit` command
-runs.
+Start a new session in each app afterwards.
 
-## Set up a project
-
-Do this once per project. The folder must be a Git repository; if it is not,
-setup offers to run `git init` for you.
-
-1. Start Claude Code in the project folder and say **"set up this project"**.
-2. Answer the questions. The agent asks one at a time and recommends an answer
-   each time:
-   - the project name;
-   - where to track work: local folders, Notion, GitHub Issues, or Jira;
-   - where to keep memory: the built-in `.memory/` folder, local Hindsight, or
-     Notion;
-   - whether it is a Salesforce project;
-   - a backup folder outside the project, for example `~/Backups/toolkit`.
-     This question is skipped when work items and memory both live in Notion:
-     Notion keeps each page's history and keeps deleted pages in its trash.
-     Work items and built-in memory are not in Git, so they exist only on this
-     Mac. The toolkit copies them to that folder by itself every time a work
-     item is finished, at every handoff, and at the start of a session when a
-     day has passed without a copy. It makes one folder per project per day,
-     named like `acme-crm-2026-09-28`, and never deletes an old one; delete
-     old day folders yourself when you no longer want them. A second copy
-     (clone) of the same project gets its own day folder, with 8 extra
-     letters at the end of its name, so the two never write over each other.
-     When today's folder already holds more than the project has now (for
-     example on a new Mac, before you restore), the copy goes to a new folder
-     with the time added, like `acme-crm-2026-09-28-141503`, and today's
-     earlier folder is kept.
-3. Start a new session when setup finishes, so Claude Code loads the new
-   settings and the Plain English style.
-
-Setup copies your model project's files into the folder, byte for byte. It
-leaves out the parts you did not choose: `.work-items/` unless you track work
-in local folders, `.memory/` unless you use built-in memory, and the
-Salesforce files unless it is a Salesforce project. It keeps only the parts of
-`AGENTS.md`, `README.md`, and `PROJECT.md` that match your answers, puts the
-project name in their headings, lists the project's rules in `AGENTS.md`, adds
-the settings for both Claude Code and Codex, and switches on the right
-plugins. After that the project also works in Codex: open Codex in the folder,
-trust the folder, and trust the hooks (see below).
-
-To check or repair a project later, say **"check the setup"**.
-
-A hook that fails never stops your session and shows no error at that
-moment. It writes the error to `.git/toolkit-v2/hook-errors.log` in the
-project instead. For 3 days after a failure, `toolkit doctor` and the
-briefing at the start of each session warn about it, so the agent tells you.
-
-### How memory is organized
-
-Rules, skills, and memory each hold one kind of thing (your decision of
-2026-09-29). When you tell the agent how to work ("from now on ...",
-"always ...", "never ...", a correction), it writes a rule: one line in
-`.claude/rules/owner-preferences.md`, under a heading for its area, with the
-date and where it came from (`toolkit rule add`). For every project it goes
-in `~/.claude/rules/owner-preferences.md`, and the agent asks "this project or
-all projects?" only when your words leave it unclear. A procedure that proved
-itself becomes a skill. Memory keeps facts and lessons the agent has not
-proven yet.
-
-Memory works like Claude's project memory: one file per concept or area, not
-one file per fact. It uses four name prefixes (`user_`, `project_`,
-`reference_`, `event_`), for example `user_profile.md` or
-`project_billing.md`; the old `feedback_` prefix is retired, and
-`memory-tidy` moves an older `feedback_` file into the rules and concepts
-after your yes. Each file starts with its title, a one-line summary, and the
-date it last changed, holds one `##` section per fact, and ends with a
-"Gotchas and lessons" section. When a lesson comes up twice, or you confirm
-it, the agent asks whether to make it a rule or a skill. A new fact
-goes into the concept it belongs to; a new file is only for a new concept.
-An event file holds one episode. The index (`MEMORY.md`) lists each concept's
-title, summary, and date, grouped by prefix. In Hindsight each concept is one
-document, and in Notion one row. Memory saved before this change keeps
-working; the `memory-tidy` skill proposes merging those one-fact files into
-concepts, and changes nothing until you say yes.
-
-### Notion memory
-
-When a project keeps memory in Notion, its row in the Projects database gets a
-page named "Memory". That page holds the five databases of Lore, Notion's
-open-source memory system for AI agents (github.com/makenotion/lore):
-Projects, Topics, Memories, Entities, and Facts. Each memory concept is one
-row in Memories. The "Current focus" and "Terminology glossary" pages stay under
-the project row, as before.
-
-The agent still saves with the `toolkit memory` commands and still asks you
-before it saves. Lore itself is not installed, its automatic saving and hooks
-stay off, and there is no new sign-in. If you install Lore later, its tools can
-read the same rows.
-
-A project set up before this change has a single "Memory" database, and it
-keeps working until `toolkit notion ensure-project` runs for that project.
-That command copies each record into the new layout, reads each one back, and
-renames the old database "Old memory database (safe to delete)". Nothing is
-deleted. You can delete that old database yourself once you are happy.
-
-### Starting a new project from Codex
-
-The `toolkit` plugin is on for every Codex folder, so you can also open Codex
-in a new folder and say **"set up Toolkit V2 in this project"**. Codex's
-sandbox protects the `.codex/` folder, so Codex asks you once to run
-`toolkit init` outside the sandbox. Or run `toolkit init` in a terminal in the
-project folder first, then open Codex there, trust the folder, and say
-**"finish setting up Toolkit V2"**:
-
-```bash
-toolkit init --name "Acme CRM" --tracker local --memory builtin --hosts claude-code,codex --backup-dir ~/Backups/toolkit
-```
-
-Add `--salesforce` for a Salesforce project and `--decline SOUL.md` if you do
-not want a `SOUL.md`. `--backup-dir none` records that you want no backup
-folder.
-
-In Codex, Git commands that change the repository (`git add`, `git commit`,
-`git worktree add`, `git merge`, `git push`, `git branch -d`) need your
-approval each time: Codex's sandbox keeps `.git/` read-only, and the project's
-`.codex/rules/toolkit.rules` makes Codex ask you before each one. The agent
-asks for each one with escalated permissions, so the command you approve runs
-outside the sandbox; an approval without escalation still runs inside it and
-fails. When Codex runs with approvals turned off, it refuses these commands
-without asking, and the agent shows you the exact command to run in a terminal.
-
-## When you change your model project
-
-Your model project is where every project file comes from. The toolkit keeps
-its own copy of it in `plugins/toolkit/scaffold/model/`. The copy does not
-follow your edits by itself, so after you change the model:
-
-1. Commit your change in the model project, so the copy records which version
-   it came from. (Uncommitted edits are copied too; the copy notes that they
-   were not committed.)
-2. In this folder, ask an agent to **"refresh the scaffold from my model"**.
-   It runs `node dev/tools/import-model.mjs`, which copies the model again,
-   then runs the checks. One of them sets up a test project for every mix of
-   answers (24 in all) and compares each one with your model, file by file.
-3. If the copy stops with a message about `CONDITIONS.json`, your change
-   touched a file that installs only in some projects. For example, you
-   renamed a Salesforce rule. `plugins/toolkit/scaffold/CONDITIONS.json` is
-   the list of those files, and the agent updates it to match.
-4. The agent raises the toolkit's version number, so Claude Code and Codex
-   pick up the new copy after the update commands in "After a change in this
-   folder".
-5. In each existing project, say **"update the toolkit"**. The agent shows what
-   would change first. It never overwrites a file you changed in that project.
-
-Right now the toolkit copies from
-`/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved`,
-the folder that holds the 23 changes you approved. After you merge those
-changes into your model (`dev/model-changes.md` has the steps), the copy
-switches to your own model folder.
-
-## What you must do yourself
+## What only you can do
 
 The agent never does these for you. It tells you when each one is needed.
 
-- **`ntn login`**: signs the Notion command-line tool into your Notion account.
-  It opens a browser sign-in. Needed only when the project uses Notion for work
-  items or memory.
-- **Trust the hooks in Codex**: open Codex in the project, type `/hooks`, and
-  trust the Toolkit V2 hooks. Codex skips plugin hooks until you do. Do it again
-  after the hooks change or after you move the project folder.
-- **Trust the project folder in Codex**: Codex asks the first time you open it.
-  Without it, Codex ignores the project's settings.
-- **Say yes or no to anything that cannot be undone or costs money**: a new
-  GitHub repository, a production deploy, a production data load, starting the
-  Hindsight background service, and Notion pages outside the "AI Agent Second
-  Brain" page.
-- **Approve the toolkit commands that ask first.** In every Toolkit V2 project,
-  Claude Code and Codex ask you before these run: `toolkit machine-setup`
-  (changes this Mac's Codex settings and the `toolkit` command),
-  `toolkit memory delete` (a memory is gone for good), `toolkit import` and
-  `toolkit memory import` (they can replace work items or memory from a
-  backup), `toolkit hindsight service install` or `start` (a background
-  service), and `toolkit rule add --machine` or `toolkit rule update --machine`
-  (your rules for every project). Every other `toolkit` command runs without
-  asking. In Codex, the
-  agent asks for these to run outside Codex's sandbox when it asks you;
-  approved inside the sandbox, they fail. The toolkit refuses these commands
-  when an option such as `--json` is typed before the command words
-  (`toolkit --json memory delete ...`), because the ask-first rules would not
-  catch that form.
+- **Sign in**: `ntn login` for Notion, `gh auth login` for GitHub, in a
+  terminal.
+- **Trust the project in Codex**: trust the folder the first time you open
+  it, then trust its hooks with `/hooks`. Do it again after the hooks change.
+- **Approve the Hindsight server** when Claude Code asks, in a Hindsight
+  project.
+- **Say yes or no** to anything outside the project folder or that cannot be
+  undone: new Notion pages, a GitHub repository or labels, a Hindsight
+  memory bank, an install, a production deploy, or a production data load.
+- **Mark work Done**, or tell the agent it may.
 
 ## Where things are
 
-- `plugins/`: the six plugins. This is everything Claude Code and Codex install.
-- `plugins/toolkit/scaffold/model/`: the copy of your model project that
-  setup installs. Nobody edits it by hand.
-- `plugins/toolkit/scaffold/CONDITIONS.json`: which model files install only
-  for some answers (local work items, built-in memory, Salesforce, or one of
-  Claude Code and Codex).
-- `dev/tools/import-model.mjs`: the tool that copies your model project into
-  the toolkit.
+- `plugins/toolkit/`: the plugin. Its `skills/project-setup/assets/` folder
+  holds the model copy, every skill, the hooks, and the settings.
+- `dev/`: the goal, progress, design, research, checks, and test runs. It is
+  not installed anywhere.
 - `ai-external-knowledge/`: saved copies of the official Claude Code, Codex,
-  and Agent Skills documentation, used to build the skills and hooks.
-  `INDEX.md` lists what is there. It is not installed anywhere.
-- `dev/`: the goal, the build plan, research, and test runs. It is not
-  installed anywhere.
+  and Agent Skills documentation, used to build the skills and hooks. It is
+  not installed anywhere.
 - `AGENTS.md`: instructions for agents working on Toolkit V2 itself.

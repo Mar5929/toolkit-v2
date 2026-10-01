@@ -19,3 +19,10 @@ node_modules/
 
 # Logs from local runs
 *.log
+
+# Raw test records stay on this Mac: they hold the owner's email and client names (2026-10-01)
+/dev/test-runs/v2-skills-first/
+/dev/test-runs/notion-skill-sets-tools/
+/dev/test-runs/notion-skill-sets.md
+/dev/test-runs/notion-layouts-set-by-hand.md
+/dev/test-runs/codex-dot-folders.md

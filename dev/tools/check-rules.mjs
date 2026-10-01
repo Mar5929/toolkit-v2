@@ -4,9 +4,9 @@
 // checker enforces the format). The checklist and its sources:
 // dev/research/rules-best-practices.md, Part 1.
 //
-//   node dev/tools/check-rules.mjs                 check plugins/toolkit/scaffold/model/.claude/rules/
+//   node dev/tools/check-rules.mjs                 check plugins/toolkit/skills/project-setup/assets/model/.claude/rules/
 //   node dev/tools/check-rules.mjs --dir <folder>  check another project folder (for example the model
-//                                                  branch folder before an import)
+//                                                  branch folder before a refresh)
 //
 // It fails (exit 1) when a rule:
 //   - has frontmatter that does not parse, holds a field other than `paths`,
@@ -14,16 +14,16 @@
 //     "/", more than 1,000 patterns after brace expansion);
 //   - has a `paths` pattern that matches no file in the folder, unless the
 //     pattern is under a folder a project creates later (FOLDERS_MADE_LATER in
-//     plugins/toolkit/lib/project/rule-lint.mjs);
+//     dev/tools/rule-lint.mjs);
 //   - does not start with a "# " heading, or has no instruction, or only vague
 //     ones ("properly", "as needed") that name nothing to check;
 //   - holds a numbered procedure of 5 or more steps (move it to a skill);
 //   - loads in every session (no `paths`) and is over 200 lines;
 //   - repeats an instruction in another rule, or says never where another
 //     rule says do in nearly the same words.
-// It also fails when the AGENTS.md rules list is not the one the toolkit
-// builds from the rule files, and when the owner-preferences.md format that
-// `toolkit rule add` writes would itself fail these checks.
+// It also fails when the AGENTS.md rules list is not the one the rule files
+// give, and when the owner-preferences.md template that project-setup copies
+// into a project (assets/owner-preferences.md) would itself fail these checks.
 //
 // It warns, and does not fail, when a rule:
 //   - loads in every session and is over 4,096 bytes. The number is a
@@ -33,12 +33,16 @@
 //   - has a list item or paragraph over 400 characters, or a paragraph over
 //     three lines, or emphasis ("IMPORTANT", "NEVER" in capitals, bold)
 //     (dev/research/rules-best-practices.md, 2.8);
-//   - names a skill ("the `x` skill") that no V2 plugin and no project skill
-//     in the folder holds, unless it says what to do when that skill "is not
+//   - names a skill ("the `x` skill") that project-setup does not ship and no
+//     project skill in the folder holds, unless it says what to do when that skill "is not
 //     installed";
 //   - forbids a command in a code span ("Never `git add -A`") that another
 //     rule names without a never: a possible contradiction for a person to
 //     read.
+// It also prints, as information and never as a warning, how many bytes load in every
+// session in three setups (the rules without `paths` plus AGENTS.md, with the setup markers
+// resolved and the rules each setup leaves out removed). No ceiling for that total is set:
+// it waits for Mike's answer (dev/reviews/best-practices-review.md, question 9).
 // Not checked: that every file path a rule names exists. Most are files a
 // project or a tool makes later (`tools/kb/out/`, `.claude/rules/owner-preferences.md`,
 // `delivery/data/...`), so the check would need a hand-kept list of them.
@@ -47,14 +51,17 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
-  FOLDERS_MADE_LATER, RULE_LIMITS, firstFolder, globMatches, globProblems, lintRule, lintRuleSet, lintText, namedSkills, parseRule, ruleSize,
-} from '../../plugins/toolkit/lib/project/rule-lint.mjs';
-import { buildSpan, hasSpan, readRules, spanBody } from '../../plugins/toolkit/lib/project/render.mjs';
-import { addEntry, newRuleText, parseRuleDoc, serializeRuleDoc, RULE_FILE_NAME } from '../../plugins/toolkit/lib/project/owner-rules.mjs';
+  FOLDERS_MADE_LATER, RULE_LIMITS, buildSpan, firstFolder, globMatches, globProblems, hasSpan, lintRule, lintRuleSet, lintText, namedSkills, parseRule, readRules, ruleSize, spanBody,
+} from './rule-lint.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(HERE, '..', '..');
-const DEFAULT_DIR = path.join(REPO, 'plugins', 'toolkit', 'scaffold', 'model');
+const SETUP = path.join(REPO, 'plugins', 'toolkit', 'skills', 'project-setup');
+const DEFAULT_DIR = path.join(SETUP, 'assets', 'model');
+/** The owner's rule file. Its lines are the owner's own, so they are compared by list item only. */
+const RULE_FILE_NAME = 'owner-preferences.md';
+/** The owner-preferences.md template project-setup copies into a project's .claude/rules/. */
+const OWNER_TEMPLATE = path.join(SETUP, 'assets', RULE_FILE_NAME);
 
 const SKIP_DIRS = new Set(['.git', 'node_modules', '__pycache__', '.sfdx', '.sf']);
 
@@ -96,7 +103,7 @@ function listFiles(root) {
   return out.filter((f) => f !== '.import.json');
 }
 
-/** The skill names a rule may name: every V2 plugin's skills and the folder's own project skills. */
+/** The skill names a rule may name: project-setup, every skill it ships, and the folder's own project skills. */
 function knownSkills(dir) {
   const names = new Set();
   const add = (parent) => {
@@ -106,8 +113,16 @@ function knownSkills(dir) {
       // No such folder.
     }
   };
-  const plugins = path.join(REPO, 'plugins');
-  for (const p of fs.readdirSync(plugins, { withFileTypes: true })) if (p.isDirectory()) add(path.join(plugins, p.name, 'skills'));
+  add(path.join(REPO, 'plugins', 'toolkit', 'skills'));
+  const assets = path.join(SETUP, 'assets');
+  add(path.join(assets, '.shared-skills'));
+  add(path.join(assets, '.salesforce'));
+  const sets = path.join(assets, '.skill-sets');
+  try {
+    for (const e of fs.readdirSync(sets, { withFileTypes: true })) if (e.isDirectory()) add(path.join(sets, e.name));
+  } catch {
+    // No skill sets.
+  }
   add(path.join(dir, '.claude', 'skills'));
   add(path.join(dir, '.agents', 'skills'));
   return names;
@@ -117,6 +132,69 @@ function knownSkills(dir) {
 function shown(dir) {
   const rel = path.relative(REPO, dir);
   return rel && !rel.startsWith('..') ? rel : dir;
+}
+
+/** The setups whose always-on size is printed. */
+const SETUPS = [
+  { name: 'local work and memory, no Salesforce', tracker: 'local', memory: 'local', salesforce: false },
+  { name: 'Notion work and memory, no Salesforce', tracker: 'notion', memory: 'notion', salesforce: false },
+  { name: 'local work, Hindsight memory, Salesforce', tracker: 'local', memory: 'hindsight', salesforce: true },
+];
+
+/** Keep the blocks whose setup marker holds and delete every marker line (project-setup/references/setup-copy.md, "Setup markers"). */
+function resolveMarkers(text, setup) {
+  const holds = (condition) => {
+    if (condition === 'salesforce') return setup.salesforce;
+    if (condition === 'not salesforce') return !setup.salesforce;
+    if (condition === 'tracker=local or memory=local') return setup.tracker === 'local' || setup.memory === 'local';
+    const m = condition.match(/^(tracker|memory)=(\w+)$/);
+    return m ? setup[m[1]] === m[2] : false;
+  };
+  const out = [];
+  let keep = true;
+  for (const line of text.split('\n')) {
+    const t = line.trim();
+    const open = t.match(/^<!-- if (.+) -->$/);
+    if (open) keep = holds(open[1]);
+    else if (t === '<!-- endif -->') keep = true;
+    else if (keep) out.push(line);
+  }
+  return out.join('\n').replace(/<!-- Project setup fill-in guide[\s\S]*?-->\n?/, '');
+}
+
+/** The rules a project without Salesforce leaves out: the bullets of "The Salesforce list" in setup-copy.md. */
+function salesforceRuleNames() {
+  const file = path.join(SETUP, 'references', 'setup-copy.md');
+  if (!fs.existsSync(file)) return [];
+  const text = fs.readFileSync(file, 'utf8');
+  const at = text.indexOf('The Salesforce list (only a Salesforce project keeps these):');
+  if (at === -1) return [];
+  const lines = [];
+  for (const line of text.slice(at).split('\n').slice(1)) {
+    if (line.trim() === '' && !lines.length) continue;
+    if (line.startsWith('- ') || line.startsWith('  ')) lines.push(line);
+    else break;
+  }
+  return [...lines.join('\n').matchAll(/`([\w-]+\.md)`/g)].map((m) => m[1]);
+}
+
+/** Bytes that load in every session in each setup: always-on rules plus AGENTS.md, and the owner-preferences.md template. */
+function setupTotals(dir, raw, rules) {
+  const salesforce = new Set(salesforceRuleNames());
+  const agentsFile = path.join(dir, 'AGENTS.md');
+  const agents = fs.existsSync(agentsFile) ? fs.readFileSync(agentsFile, 'utf8') : '';
+  const ownerTemplate = fs.existsSync(OWNER_TEMPLATE) ? Buffer.byteLength(fs.readFileSync(OWNER_TEMPLATE, 'utf8')) : 0;
+  return SETUPS.map((setup) => {
+    let bytes = Buffer.byteLength(resolveMarkers(agents, setup)) + ownerTemplate;
+    for (const r of raw) {
+      const parsed = rules.find((x) => x.name === r.name);
+      if (!parsed || parsed.scoped) continue;
+      if (!setup.salesforce && salesforce.has(r.name)) continue;
+      if (setup.tracker !== 'local' && r.name === 'work-item-folders.md') continue;
+      bytes += Buffer.byteLength(resolveMarkers(r.text, setup));
+    }
+    return { name: setup.name, bytes };
+  });
 }
 
 function main() {
@@ -136,34 +214,39 @@ function main() {
     for (const s of namedSkills(rule)) {
       // A skill the project may not have is fine when the rule says what to do without it ("when `humanizer` is not installed").
       if (skills.has(s.name) || rule.text.includes(`\`${s.name}\` is not installed`)) continue;
-      findings.push({ rule: rule.name, line: s.line, check: 'skill', severity: 'warning', message: `The rule names the \`${s.name}\` skill, which no V2 plugin and no project skill in ${shown(dir)} holds, and does not say what to do when it is not installed.`, fix: 'Name a skill that exists, or add what to do when it is not installed.' });
+      findings.push({ rule: rule.name, line: s.line, check: 'skill', severity: 'warning', message: `The rule names the \`${s.name}\` skill, which project-setup does not ship and no project skill in ${shown(dir)} holds, and does not say what to do when it is not installed.`, fix: 'Name a skill that exists, or add what to do when it is not installed.' });
     }
     // A pattern must match a file the project has, or name a folder it makes later.
     for (const p of rule.paths || []) {
       if (globProblems(p) || files.some((f) => globMatches(p, f))) continue;
       const folder = firstFolder(p);
       if (folder && FOLDERS_MADE_LATER[folder]) continue;
-      findings.push({ rule: rule.name, line: 1, check: 'glob', severity: 'error', message: `The paths pattern "${p}" matches no file in ${shown(dir)}, so the rule never loads.`, fix: `Fix the pattern, or add its folder to FOLDERS_MADE_LATER in plugins/toolkit/lib/project/rule-lint.mjs with the reason a project creates it later.` });
+      findings.push({ rule: rule.name, line: 1, check: 'glob', severity: 'error', message: `The paths pattern "${p}" matches no file in ${shown(dir)}, so the rule never loads.`, fix: `Fix the pattern, or add its folder to FOLDERS_MADE_LATER in dev/tools/rule-lint.mjs with the reason a project creates it later.` });
     }
   }
   findings.push(...lintRuleSet(rules, { listItemsOnly: [RULE_FILE_NAME] }));
 
-  // The AGENTS.md rules list is the toolkit's own (R26).
+  // The AGENTS.md rules list matches the rule files (R26).
   const agentsFile = path.join(dir, 'AGENTS.md');
   if (fs.existsSync(agentsFile)) {
     const agents = fs.readFileSync(agentsFile, 'utf8');
     if (hasSpan(agents) && spanBody(agents) !== buildSpan(raw)) {
-      findings.push({ rule: 'AGENTS.md', line: null, check: 'rules-list', severity: 'error', message: 'The rules list in AGENTS.md is not the list the toolkit builds from the rule files (a heading, a paths list, or a file changed).', fix: 'Rebuild the list between the toolkit:rules markers with buildSpan(readRules(<folder>)) from plugins/toolkit/lib/project/render.mjs, in the model, then import again.' });
+      findings.push({ rule: 'AGENTS.md', line: null, check: 'rules-list', severity: 'error', message: 'The rules list in AGENTS.md is not the list the rule files give (a heading, a paths list, or a file changed).', fix: 'On the model branch, rewrite the list between the toolkit:rules markers to match buildSpan(readRules(<folder>)) in dev/tools/rule-lint.mjs, then refresh the model copy.' });
     }
   }
 
-  // The owner-preferences.md format `toolkit rule add` writes passes the same checks.
-  const sample = parseRuleDoc(newRuleText('project'));
-  addEntry(sample, 'Replies', { text: 'Lead every status reply with the answer.', date: '2026-09-29', source: 'check-rules sample' });
-  addEntry(sample, 'Testing', { text: 'Run `npm test` before you say a change works.', date: '2026-09-29', source: 'check-rules sample' });
-  const sampleRule = parseRule(RULE_FILE_NAME, serializeRuleDoc(sample));
-  for (const x of [...lintRule(sampleRule, { ownerFile: true }), ...lintText(sampleRule)]) {
-    findings.push({ ...x, rule: `${RULE_FILE_NAME} (the format toolkit rule add writes)` });
+  // The owner-preferences.md template project-setup copies passes the same
+  // checks once it holds instructions: two sample lines in its layout are
+  // added under their areas before it is checked.
+  if (!fs.existsSync(OWNER_TEMPLATE)) {
+    findings.push({ rule: RULE_FILE_NAME, line: null, check: 'owner-template', severity: 'error', message: `${shown(OWNER_TEMPLATE)} does not exist.`, fix: 'Restore the template project-setup copies into a project.' });
+  } else {
+    const template = fs.readFileSync(OWNER_TEMPLATE, 'utf8').replace(/\s*$/, '\n');
+    const sample = `${template}\n## Replies\n\n- Lead every status reply with the answer. (2026-09-29, check-rules sample, in chat)\n\n## Testing\n\n- Run \`npm test\` before you say a change works. (2026-09-29, check-rules sample, in chat)\n`;
+    const sampleRule = parseRule(RULE_FILE_NAME, sample);
+    for (const x of [...lintRule(sampleRule, { ownerFile: true }), ...lintText(sampleRule)]) {
+      findings.push({ ...x, rule: `${shown(OWNER_TEMPLATE)} (with two sample lines)` });
+    }
   }
 
   const errors = findings.filter((x) => x.severity === 'error');
@@ -172,6 +255,7 @@ function main() {
   const alwaysBytes = always.reduce((n, r) => n + ruleSize(r).bytes, 0);
   const largest = [...always].sort((a, b) => ruleSize(b).bytes - ruleSize(a).bytes)[0];
   console.log(`check-rules: ${rules.length} rules in ${shown(rulesDir)}: ${always.length} always on (${alwaysBytes} bytes in all; largest ${largest ? `${largest.name}, ${ruleSize(largest).bytes} bytes` : 'none'}; proposed limit ${RULE_LIMITS.alwaysOnBytes} bytes each, a warning until Mike says yes), ${rules.length - always.length} path-scoped.`);
+  console.log(`check-rules: bytes that load in every session (always-on rules plus AGENTS.md, setup markers resolved): ${setupTotals(dir, raw, rules).map((t) => `${t.name}, ${t.bytes}`).join('; ')}. No ceiling is set for this total yet; it waits for Mike's answer.`);
   for (const x of [...errors, ...warnings]) {
     console.log(`${x.severity === 'error' ? 'Error' : 'Warning'}: ${x.rule}${x.line ? `, line ${x.line}` : ''}: ${x.message}${x.fix ? ` Fix: ${x.fix}` : ''}`);
   }

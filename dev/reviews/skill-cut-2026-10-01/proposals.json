@@ -1,0 +1,1737 @@
+[
+ {
+  "group": "work-1",
+  "skills": [
+   {
+    "name": "work-refine",
+    "files": 13,
+    "lines": 2371,
+    "verdict": "keep and cut",
+    "job": "Runs Mike's planning interview: one question at a time with a recommendation, each answer saved in the work item at once, until he approves the requirements.",
+    "remove": [
+     "SKILL.md: the 'Voice' line; the output style and AGENTS.md already set it (1 line).",
+     "SKILL.md step 1: the long chain for finding the item; AGENTS.md already says it (4 lines).",
+     "SKILL.md: two test-run patches, 'name the item in the reply's first line' and 'a bare what am I missing' (3 lines).",
+     "SKILL.md: the 'Options' gotcha; the AGENTS.md Skills list already says it (5 lines).",
+     "SKILL.md: the 'Remember...' and 'brain dump' gotchas; the memory rule and the description cover them (3 lines).",
+     "interview.md 'The aim': coaching on how to think and when to disagree (14 lines).",
+     "interview.md: the 10-topic list of things he may not have thought of (people, data, law, rollout); Claude knows it (28 lines).",
+     "interview.md: the 11-row table of what to do when he says 'go with your recommendation', 'probably B', 'I don't know', 'stop asking' (20 lines).",
+     "interview.md: 'Grill me means ask in more detail' (4 lines).",
+     "interview.md: read-first list, when to stop, resuming, pausing; each repeats a SKILL.md step (about 75 lines).",
+     "changes.md: the 'what a change affects' checklist and the hand-edit section (26 lines).",
+     "readiness-check.md: the two sample finding messages and the 'check the spec' phrase list (25 lines).",
+     "roadmap-and-breakdown.md: phase-shift rules; the same table is in work-on, work-delegate, and the format file (22 lines).",
+     "roadmap-and-breakdown.md: project roadmap and sub-item approval sections; repeated in work-on and approvals (31 lines).",
+     "sources.md: how to read a source, sources that disagree, a new source later, secrets (about 55 lines).",
+     "examples: the whole Salesforce personas example (164 lines).",
+     "examples: the iOS walkthrough after its first exchange (about 120 lines).",
+     "Shared copy work-item-format.md: not needed; the work track skill writes items (411 lines).",
+     "Shared copy approvals.md: not needed; it holds the 7-row table of what 'yes', 'ok', 'looks good' mean (336 lines).",
+     "Shared copy decisions-and-memory.md: not needed; the always-on keep-work-item-current rule has the project-wide question (275 lines)."
+    ],
+    "merge": [
+     "interview.md's 6-row 'he settles X, update Y' table into SKILL.md step 7 (about 9 lines); delete interview.md.",
+     "changes.md core into SKILL.md step 8: new 'Change to Q-03' row, old row Superseded, R-xx back to Refining, approve the change only (about 12 lines); delete changes.md.",
+     "readiness-check.md core into SKILL.md step 11: fix wording yourself, a real change becomes a question, more than three findings as one numbered list (about 6 lines); delete the file.",
+     "approvals.md section 4, the requirements approval checklist, into SKILL.md step 12 (about 10 lines)."
+    ],
+    "keep": [
+     "The question format block: Q-ID, Recommended, Watch out, Not yet covered.",
+     "Save each answer before the next question; lead with 'Not saved' if a save fails.",
+     "Only the owner's words answer; a tentative answer stays Open.",
+     "The goal question first: 'So the goal is ...?'",
+     "Team offer timing for a clearly large item, and the four split tests.",
+     "Where sources go: references/ folder, Notion attachment (link lasts one hour), GitHub '## Source:' comment, Salesforce delivery/.",
+     "The Sources line format and YYYY-MM-DD-<name> file names.",
+     "Never delete a requirement, row, or phase; mark it Superseded or Cancelled.",
+     "Resume at the first open question; pause with 'Say keep refining WI-031'.",
+     "Helper briefs requirements-analyst.md and researcher.md (shared copies; needed).",
+     "Salesforce: client files stay in delivery/; platform questions go to sf-architect-solutioning."
+    ],
+    "size_after_lines": 466,
+    "decisions_touched": [
+     "Team offer: GOAL 'for a clearly large item, right after work-refine plays back his idea ... Built as text in two skills only'. Kept; only the explanation is shorter.",
+     "Spec check: GOAL 'spec-check, work-guide, and track-tasks are retired, folded into work-refine'. The readiness check stays; only its file merges into SKILL.md."
+    ]
+   },
+   {
+    "name": "solution-design",
+    "files": 10,
+    "lines": 2312,
+    "verdict": "keep and cut",
+    "job": "Gives Claude the design template, where the design is saved in each tracker, and Mike's steps: options, a critic check, and his choice recorded.",
+    "remove": [
+     "SKILL.md: the 'Voice' line, the plan-tool line, and the paragraph defining 'the work track skill' (9 lines).",
+     "SKILL.md: long sample Next action sentences in steps 8, 10, 11; the always-on rule has the forms (about 12 lines).",
+     "SKILL.md: step 11 memory-offer detail; the always-on rule has it (about 8 lines).",
+     "SKILL.md gotchas that repeat steps or rules: 'not approval', 'save first', 'every question gets a row', 'approval never covers a merge', 'superseded records' (about 20 lines).",
+     "SKILL.md: how to start a helper (Agent tool, opus, no fork); each brief already says it (4 lines).",
+     "design-process.md sections 1-3: checklist, readiness questions, what to search; they repeat steps 1-6 (about 75 lines).",
+     "design-process.md: the 'a gap costs one question here, a design round there' coaching (3 lines).",
+     "design-process.md sections 6-9: research, critic loop, presenting, recording; they repeat the briefs and approvals (about 130 lines).",
+     "design-process.md section 10: half repeats work-refine's change steps (about 25 lines).",
+     "examples/design-walkthrough.md: everything but 'The reply to the owner' (about 130 lines).",
+     "Shared copy work-item-format.md: not needed; only 3 lines on where the design lives are used (411 lines).",
+     "Shared copy approvals.md: not needed beyond the design approval checklist (336 lines).",
+     "Shared copy decisions-and-memory.md: not needed; always-on rules cover it (275 lines)."
+    ],
+    "merge": [
+     "From design-process.md into SKILL.md: design front matter (work_item, status, approved), Design status values, and after-approval changes (back to proposed; old option marked 'Superseded by Option C') (about 20 lines). Delete design-process.md.",
+     "approvals.md section 5, the design approval checklist, into SKILL.md step 10 (about 10 lines)."
+    ],
+    "keep": [
+     "assets/DESIGN.md, the model's design template (185 lines).",
+     "Design home per tracker: DESIGN.md beside <ID>.md, Notion 'Solution Design' child page, GitHub '## Solution design' comment.",
+     "One design per item; never a second file or a draft in work-items/.",
+     "Defaults: two options that differ in approach; built-in first.",
+     "One architect per option, at least one critic, fix rounds until 'Clean'; two-round disagreements go to Mike.",
+     "Requirement gaps, and choices that change a requirement, go back to work-refine first.",
+     "Build order becomes Tasks under existing phases; never renumber.",
+     "A sub-item covered by its parent's design needs no design.",
+     "Salesforce: sf-architect-solutioning is the platform specialist, run by the main agent.",
+     "Helper briefs design-architect.md, design-critic.md, researcher.md (shared copies; needed)."
+    ],
+    "size_after_lines": 751,
+    "decisions_touched": []
+   },
+   {
+    "name": "work-on",
+    "files": 11,
+    "lines": 2388,
+    "verdict": "delete; merge about 8 lines into AGENTS.md (a model change that needs Mike's yes)",
+    "job": "none: Claude already knows how to build, test, and commit, and the rest is already in the always-on rules and AGENTS.md.",
+    "remove": [
+     "SKILL.md (150 lines): its Salesforce gotchas repeat the always-on Salesforce rules.",
+     "starting-and-resuming.md (223): the 'owner says, which item' table and the 13-row routing table (same as the stage table).",
+     "starting-and-resuming.md: the 8-row table of hand changes; also in the format file and work-item-folders rule.",
+     "starting-and-resuming.md: the size table with the phrase list 'later', 'backlog', 'park that', 'not now'.",
+     "building.md (228): the plan format, already in the WORK-ITEM.md template.",
+     "building.md: how to build, test, and commit; 'end each line with two spaces' (a Markdown fact).",
+     "building.md: the 9-row 'when the build finds a problem' table and the 'before you stop' checklist; the rule covers both.",
+     "splitting-and-replanning.md (158): the third copy of the split and phase-change rules.",
+     "examples keep-going.md and split-and-replan.md (159 lines).",
+     "Shared copies git-rules, work-item-format, approvals, decisions-and-memory, builder-brief (1,470 lines)."
+    ],
+    "merge": [
+     "AGENTS.md: before building, if the plan has sub-items, more than one phase, or more than two tasks and delivery is not-offered, open work-delegate.",
+     "AGENTS.md: build on the item's own worktree and branch; tick each task with its evidence; after the last task, open work-check.",
+     "AGENTS.md: a wrong requirement goes to work-refine; a design that fails goes to solution-design.",
+     "AGENTS.md: 'start the next item' order: started work, then the next PROJECT-ROADMAP unit whose dependencies are Done, then the highest-priority Ready item.",
+     "Running two or more builders becomes work-delegate's job; it already holds builder-brief.md.",
+     "AGENTS.md's 'route by the item's fields' line points to the stage table in the work track skill, not to work-on.",
+     "Splitting after approval uses work-refine's split tests and the work track skill."
+    ],
+    "keep": [
+     "Nothing as a separate skill. The four AGENTS.md lines above carry what is unique."
+    ],
+    "size_after_lines": 0,
+    "decisions_touched": [
+     "GOAL: 'work-on still checks once before building' (team offer timing). Kept as an AGENTS.md line.",
+     "GOAL: 'work-organize is split between the track skills and work-on'. Splitting would move to work-refine and the track skill.",
+     "Model AGENTS.md Skills list and keep-work-item-current.md name work-on as one of 'the six stage skills' for Next action; changing either needs Mike's yes."
+    ]
+   },
+   {
+    "name": "work-delegate",
+    "files": 11,
+    "lines": 2361,
+    "verdict": "keep and cut",
+    "job": "Runs Mike's hand-over: the product-owner offer, one team or a main chat that coordinates other chats, a team list in the parent item, and recording each helper's return.",
+    "remove": [
+     "SKILL.md: the 'Voice', plan-tool, and 'work track skill means' lines (8 lines).",
+     "SKILL.md step 4: record steps; the always-on rule says how to record an answer (5 lines).",
+     "SKILL.md step 8: the update list repeats running-the-team.md section 4 (about 12 lines).",
+     "SKILL.md step 10: the owner-gate list; AGENTS.md 'What the owner decides' has it (about 9 lines).",
+     "SKILL.md step 11 and gotchas repeating rules: checker always runs, decision rows, 'do not narrate helpers', Current State line (about 20 lines).",
+     "delivery-offer.md: the 7-step record list, two sample rows, the 'tracker cannot be read' case, 'judgment on a lot' (about 30 lines).",
+     "team-arrangements.md: what a yes or no to the team question means; section 2 restating the lead's job (about 15 lines).",
+     "running-the-team.md: the phase-change table, the fourth copy in this group (about 30 lines).",
+     "running-the-team.md: owner gates and checking-and-finishing; AGENTS.md and the stage table cover them (about 35 lines).",
+     "running-the-team.md: 'use your judgment' lines and the how-to-start-a-helper block (about 15 lines).",
+     "examples/delegated-run.md (92 lines).",
+     "Shared copies work-item-format (411), approvals (336), decisions-and-memory (275): not needed.",
+     "Shared copy acceptance-checker-brief.md (160): only used for a plan check before parallel builders; 'one writer per file' does the job."
+    ],
+    "merge": [
+     "delivery-offer.md into SKILL.md step 2: when to offer, the exact question, delivery values, a revoke, a yes widens nothing (about 20 lines). Delete the file."
+    ],
+    "keep": [
+     "The exact offer question: 'Would you like agents to take responsibility for delivering this, with you acting as product owner?'",
+     "Offer rules: sub-items, more than one phase, or more than two tasks; small items never; sub-items take the parent's answer.",
+     "His own 'you drive' counts as a yes; a yes widens no merge, deploy, or spending.",
+     "The two team questions and the archive question, word for word.",
+     "Main Orchestrator rules: only it writes the work items and merges; archive chats, never delete.",
+     "The team list template in the parent's Notes, 'Context'.",
+     "After a helper returns: check its files, run its tests, merge into the item branch, remove its worktree, tick the task.",
+     "Resume in a new session: 'git log --oneline <item branch>..<builder branch>' for each builder.",
+     "Codex with approvals off ('codex exec'): no builder worktrees, one builder at a time.",
+     "Helpers run on Opus.",
+     "Shared copies builder-brief.md (needed) and git-rules.md (only two sections used: builder worktree names and Codex Git writes)."
+    ],
+    "size_after_lines": 633,
+    "decisions_touched": [
+     "GOAL: 'Built as text in two skills only (work-refine and work-delegate's delivery-offer.md), no code'. The text stays in work-delegate; only the file merges into SKILL.md.",
+     "GOAL: '\"No agent team\" decides only who builds ... always starts one independent acceptance checker'. Kept in the always-on rule and work-check; only the repeat here goes.",
+     "Dropping the checker's plan check before parallel builders changes behavior. It is not in GOAL.md, but Mike should know."
+    ]
+   }
+  ],
+  "group_notes": "All four skills carry the same three shared copies (work-item-format, approvals, decisions-and-memory), which make up 4,088 of the group's 9,432 lines, and the always-on rule keep-work-item-current.md plus AGENTS.md already say most of it. The rules for adding, merging, dropping, or reordering phases are written four times (work-refine, work-on, work-delegate, and work-item-format section 7); keep one copy, in the work track skill. Six files say 'never ask through a question tool', which conflicts with Mike's global rule to ask through the question box; GOAL.md does not settle it, so it is his call. If every proposal is taken, the group drops from 9,432 lines to about 1,850, plus about 8 lines added to AGENTS.md."
+ },
+ {
+  "group": "work-2",
+  "skills": [
+   {
+    "name": "work-check",
+    "files": 8,
+    "lines": 1664,
+    "verdict": "keep and cut",
+    "job": "Holds the independent checker's brief, which must be pasted word for word into a fresh helper agent, plus the test plan steps; one line in AGENTS.md cannot hold that, so it stays a skill, at about a fifth of its size.",
+    "remove": [
+     "work-item-format.md copy (411 lines): the work find and track skills already carry it and make every change",
+     "approvals.md copy (336): includes the 7-row table of what 'yes', 'ok', 'looks good', 'ship it' mean; AGENTS.md and keep-work-item-current.md already hold the approval rules",
+     "git-rules.md copy (282): the always-on shared-repository-work.md rule covers it; keep one line on Codex",
+     "TEST-PLAN-TEMPLATE.md fallback copy (23): every project already gets tests/TEST-PLAN-TEMPLATE.md from the model",
+     "testing.md section 4, 'Starting the acceptance checker' (19): repeats the brief's 'For the main agent' part",
+     "testing.md section 1 reading list (18): repeats the checker's job block",
+     "testing.md Salesforce paragraph (11): repeats salesforce-org-safety.md",
+     "testing.md bullets on asking the owner and reading the item back (~20): repeat AGENTS.md and the track skill",
+     "SKILL.md gotcha saying 'looks good' to another question is not approval (4)",
+     "SKILL.md gotchas that repeat rules: approval never covers a merge, never mark Done, item moved by hand, project Current State (~14)",
+     "SKILL.md 9-line gotcha on which reply may ask 'Save it to memory too?' (a test-run timing patch)",
+     "SKILL.md coaching on which item he means (4), the Voice lines (3), the line explaining why rows are saved (2)",
+     "'Checker never built it' and 'new commit needs a new check': each said 3 times (~10)",
+     "Example sections 2, 3, and 5 (~70): table rows the track skill writes anyway"
+    ],
+    "merge": [
+     "What is left of testing.md (~45 lines) moves into SKILL.md; delete testing.md",
+     "From work-finish: one line for the rare re-check before a standing-instruction merge (a pass on the new head is enough there)"
+    ],
+    "keep": [
+     "acceptance-checker.md (shared copy, needed): the brief and job block",
+     "Stage moves 09-testing, 10-bug-fixing, 11-user-approval, and result_approved: YYYY-MM-DD by <name>",
+     "The result approval row and the exact last line 'Do you approve this result?'",
+     "Result reply order: what it does, how to see it (cd to the worktree), evidence, gaps, Sources, the question",
+     "The checker runs every time; if Mike asks to skip it, say so and ask if he wants to change that",
+     "Test plan file tests/<ID>-test-plan.md, committed on the item's branch, never in work-items/",
+     "Sub-item checked against its parent's design; no approved requirements means stop and use work-refine",
+     "Codex: each Git write runs alone with escalated permissions (one line)",
+     "The example reply to the owner and the filled job block"
+    ],
+    "size_after_lines": 300,
+    "decisions_touched": []
+   },
+   {
+    "name": "work-finish",
+    "files": 11,
+    "lines": 2359,
+    "verdict": "keep and cut",
+    "job": "Holds the order and storage places for stages 12 to 14 (pull request, deploy, writing delivered behavior into requirements/ with publish-docs, Salesforce delivery/deployment/ folders) and the Done and memory questions; AGENTS.md is already 258 lines, over Mike's 200-250 cap, so this stays a small skill.",
+    "remove": [
+     "work-item-format.md copy (411): the track skill makes every change",
+     "approvals.md copy (336): keep only its 5-line Done checklist, inline",
+     "git-rules.md copy (282): shared-repository-work.md covers it; keep 3 lines inline",
+     "decisions-and-memory.md copy (275): the memory save skill holds it; keep the one question text",
+     "acceptance-checker.md copy (160): used only for one rare re-check; send that case to work-check",
+     "close.md (183): repeats approvals' Done and Cancel lists and the memory-offer rules",
+     "spec-update.md sections 2-4 (~50): repeat requirements/AGENTS.md and the area template's rule block",
+     "salesforce-deployment.md who-may-run table and never-lists (~70): repeat salesforce-org-safety.md",
+     "ship.md git push and gh pr create commands, conflict steps, and waiting-form strings (~70)",
+     "ship.md local-merge recipe (~40): word for word the same as git-rules 'A project with no remote'",
+     "SKILL.md gotchas that repeat rules (~30): only owner marks Done, one question per reply, cite sources, no AI credit, never store status in memory",
+     "SKILL.md gotcha that 'mark WI-031 done' answers the Done question (phrase meaning) (3)",
+     "'Part of #12' written 4 times in this folder; keep once (~6)",
+     "Voice lines and 'track steps with the host's plan tool' lines (6)",
+     "close.md test-run patches: issue closed by a 'Closes #12' merge, add the hand-Done row only once (~10)",
+     "Example sections 2-4 (~75): rows the track skill writes, Current State before and after, the cancel replay"
+    ],
+    "merge": [
+     "close.md's Done, Cancel, sub-item, Current State, and memory-offer steps (~20 lines) into SKILL.md; delete close.md",
+     "spec-update.md's unique lines (~8) into SKILL.md step 5; delete spec-update.md",
+     "The standing-merge re-check: one line in work-check instead of a 160-line brief copy here"
+    ],
+    "keep": [
+     "Order: approval check, PR (12), merge question, deploy (13), spec update (14), Done question, memory offer, report",
+     "Merge is its own question row; a standing merge instruction counts only with its three checks",
+     "PR body says 'Part of #12', never 'Closes #12' (GitHub would close the item without his yes)",
+     "No remote: git merge --ff-only from the main checkout",
+     "Non-Salesforce deploys use only the command written in AGENTS.md or PROJECT.md; owner runs production",
+     "Salesforce: delivery/deployment/<ID>-<short-name>/, validate first, sf-deploy-check, DEPLOYMENT-RECORD.md outcome",
+     "Only Finalized requirements the checker marked Met go into requirements/, Source = item ID and Q-ID, saved with publish-docs",
+     "Done only on his yes or when he marks it himself (never undo); lines 'Done on <date>: <evidence>' and 'None. Finished.'",
+     "Ask 'These look project-wide. Save them to memory too?' once at finish",
+     "Remove the item's line from the project's Current State at Done or Cancel",
+     "Leftover branches: offer to remove only merged, clean ones, after his yes, never --force",
+     "Codex: each Git write and gh call alone, escalated",
+     "A trimmed example of the finish conversation (~50 lines)"
+    ],
+    "size_after_lines": 250,
+    "decisions_touched": [
+     "Dropping the acceptance-checker copy moves the rare re-check (head moved before a standing-instruction merge) to work-check. GOAL: 'Open question 4A, standing merge permission (Mike: \"yes\"): it lives in the project's .claude/rules/owner-preferences.md' and 'the agent always starts one independent acceptance checker agent'. Behavior stays the same only if work-check gets the one-line exception."
+    ]
+   },
+   {
+    "name": "work-status",
+    "files": 7,
+    "lines": 1513,
+    "verdict": "merge into AGENTS.md (rewrite its existing one-line entry; a model change that needs Mike's yes)",
+    "job": "none: the work find skills already have 'The board', 'What waits on the owner', and 'What is next' lookups, and AGENTS.md already says to ask one decision at a time with a recommendation and save the answer at once.",
+    "remove": [
+     "approvals.md copy (336)",
+     "work-item-format.md copy (411)",
+     "decisions-and-memory.md copy (275)",
+     "taking-decisions.md (162): includes an 8-row table of decision kinds that only points to other skills",
+     "taking-decisions.md: an 8-row table of what 'Later', 'Probably B', 'I don't know', 'go with your recommendations' mean",
+     "taking-decisions.md ordering and 'what is next' rules: repeat the work find skill's 'What is next' lookup",
+     "decision-walkthrough.md example (142)",
+     "status-report.md example (68): local-work-find already has its own 66-line status-report example",
+     "SKILL.md (119): read steps repeat the work find skill; gotchas repeat AGENTS.md (bare 'yes', approval never covers a merge, only owner marks Done)"
+    ],
+    "merge": [
+     "Into AGENTS.md's work-status line (~2 lines): read Current State, the work find lookups, and memory records marked needs-review or proposed",
+     "Same line: list what waits on him first (item ID, Q-ID, what it blocks), then in progress, then your next step; ask one at a time",
+     "Drop 'use work-status' from the 3 work-find, session-summary, and explain-simply descriptions, and local-memory-save saving.md",
+     "Model files that name work-status: memory-review-and-save.md line 28 and plain-english.md line 33"
+    ],
+    "keep": [
+     "If Mike says no: a ~40-line SKILL.md (report order, one decision at a time, memory proposals, delivery offers go to work-delegate) plus the status-report example, about 80 lines",
+     "Nothing else is needed either way"
+    ],
+    "size_after_lines": 0,
+    "decisions_touched": [
+     "Draft 2 answers (Mike, 2026-09-29): '`work-decide` joins `work-status`; `work-organize` is split between the track skills and `work-on`. Reason shown: three skills claimed \"what do you need from me\".' Removing the skill changes this approved skill list.",
+     "Memory additions (Mike, 2026-09-27): 'an unanswered \"Save to memory?\" becomes a `needs-review` record ... listed under \"what do you need from me\" (work-decide) until Mike approves or rejects it'. The new AGENTS.md line must keep this.",
+     "Finish item 4: 'A routing test of about 20 owner requests, 3 runs each, in both hosts' must be run again for 'where are we' and 'what do you need from me'."
+    ]
+   },
+   {
+    "name": "handoff",
+    "files": 7,
+    "lines": 933,
+    "verdict": "keep and cut",
+    "job": "Saves work items and Current State before the prompt, then writes the prompt from a fixed template with the fixed AI-generated first line and has an independent verifier agent check every claim, which Claude would not do the same way on its own.",
+    "remove": [
+     "decisions-and-memory.md copy (275): handoff needs only the memory question and Current State's 4 section limits; inline 3 lines",
+     "prompt-format.md (82): its 7 parts repeat the template, its source-kinds table repeats the verifier brief, its Wording list repeats AGENTS.md",
+     "edge-cases.md (28): 22-row table, mostly common sense ('owner wants only the prompt: do what he asks', 'nothing to keep: say so')",
+     "Step 2 hand-change check and Current state wording rules (~14): repeat local-work-find and keep-work-item-current.md",
+     "Step 3 filter of which Q&A rows to offer to memory (~18): the same filter as work-finish and decisions-and-memory",
+     "Step 4 Current State rules (~10): repeat decisions-and-memory section 10",
+     "'Opening another skill' section (7): how to call a skill in Claude Code or Codex; Claude knows",
+     "Test-run patches (~12): the unfinished docsave- worktree (in 4 files), the hook that asks to update the verifier's work item",
+     "Gotcha that a test claim with no output stays 'not confirmed' (2): the verifier brief says it",
+     "The fixed first line is written out 6 times; keep it in the template and one SKILL line (~6)",
+     "Voice line (1) and 'track steps with the host's plan tool' (3)",
+     "Template fill-in guide (~8): repeats prompt-format.md"
+    ],
+    "merge": [
+     "2 edge-case rows into SKILL.md gotchas: Current State missing (don't create it, suggest project-setup); no helper tool (check yourself, say so in the prompt)",
+     "The 4 source kinds (file, repository, owner, worked out) as one line in step 5; definitions stay in the verifier brief"
+    ],
+    "keep": [
+     "Order: update work items, offer memory, update Current State, draft, verify, show; saves always before the prompt",
+     "Only items this session worked on; never pick one just because it is open",
+     "Fixed first line: 'This handoff prompt is AI-generated and may contain hallucinations...'",
+     "Template headings: Goal, Your task, Read first, Decisions not yet saved, Open questions, First action, Repository",
+     "handoff-verifier.md (shared copy, needed): verdicts Wrong, Unchecked, Missing, Skipped; at most two verifier runs",
+     "A failed save never blocks the prompt; lead with 'Not saved' or 'Saved but not verified'",
+     "work-items/ and memory/ live only in the main checkout; read Current State right before editing it",
+     "'/handoff check' mode for a pasted prompt",
+     "The example of what the owner sees (~70 lines)"
+    ],
+    "size_after_lines": 430,
+    "decisions_touched": []
+   }
+  ],
+  "group_notes": "Together these four skills drop from 6,469 lines to about 980, and almost nothing removed changes behavior, because the same rules already sit in always-on files (AGENTS.md, keep-work-item-current.md, shared-repository-work.md, salesforce-org-safety.md). The four big shared copies (work-item-format, approvals, git-rules, decisions-and-memory) make up about 3,600 of those lines, and the work track, work find, and memory skills already carry them. Every skill also opens with the same 'Voice' line and 'work find / work track skill' paragraph that AGENTS.md already gives. I do not recommend merging work-check into work-finish: the model's keep-work-item-current.md rule names both as stage skills, and Mike's result approval sits between them."
+ },
+ {
+  "group": "trackers",
+  "skills": [
+   {
+    "name": "local-work-track",
+    "files": 10,
+    "lines": 2194,
+    "verdict": "keep and cut (and take in local-work-find)",
+    "job": "Says where local items live (only in the main checkout's work-items/, found by their id: line), how to number and create one without clashing with another session, and the exact file formats to write.",
+    "remove": [
+     "references/approvals.md, a shared copy (336 lines). This skill only records approvals, and items.md already says which field to set",
+     "references/work-item-format.md, a shared copy (411). The template, the always-on rule keep-work-item-current.md and the work skills already hold it",
+     "assets/WORK-ITEM.md (160) and assets/DESIGN.md (185): exact copies of the project's own work-items/work-item-template/ files",
+     "examples/new-item-walkthrough.md (122) and replan-and-move-walkthrough.md (74). They repeat the reference commands and carry a stale 'not run yet' note",
+     "SKILL.md 'Voice:' paragraph (3). AGENTS.md and the output style already say it",
+     "SKILL.md 'How a work item is stored in folders' (24). It repeats the always-on model rule work-item-folders.md",
+     "SKILL.md rules that repeat keep-work-item-current.md: save decisions, save each answer at once, the memory question (about 8)",
+     "items.md 'Current state' section (39): the three Next action forms and the list of six skills, already in the rule and the template",
+     "items.md 'Waiting on and blockers' and the 'Recent History gets a row when' list (about 25)",
+     "items.md 'Questions and Answers' rule bullets (about 40 of 60). Keep only where a row goes and the one before-and-after row",
+     "items.md 'Requirements' paragraph (9) and the 'only the owner's own words count' lines (3)",
+     "items.md steps to convert older items that have 'Current position' or 'Resume here' (8). This patch was for pages made during testing",
+     "items.md lines that coach judgment: pick a type 'using your judgment', reopen 'weighing his reason', say a shortened title (about 8)",
+     "planning.md 8-row 'Changing the plan' table (about 12). It explains how to move rows in a Markdown table",
+     "planning.md lines that say to ask first when 'phase 2' might mean P02 or 'task 3' could be two tasks (about 10). These patched one test run",
+     "planning.md 'Helper agents and their items' (6). It repeats a SKILL.md rule",
+     "folders.md 'The main checkout', 'What counts as an item' and 'Levels and parents' (about 35). They repeat the model rule",
+     "folders.md step-by-step mv and mkdir for groups and moves (about 25)",
+     "The MAIN= line and its 'each shell starts fresh' note, written in 8 places across both skills. Keep it once",
+     "The 'Not saved' / 'Saved but not verified' reply rule, written in 12 files across this group. Keep it once in SKILL.md"
+    ],
+    "merge": [
+     "local-work-find's gotchas (folders to skip, archive left out, Obsidian drops quotes) move into SKILL.md Gotchas (about 8 lines)",
+     "local-work-find's grep commands (one item, the board, open questions, a parent's tree, search) move into a new references/lookups.md (about 50)",
+     "local-work-find's hand-changes.md (its 3 check commands and a shorter findings table) moves into folders.md (about 45)",
+     "A 5-line table of which stage gives which status replaces the shared format copy (Notion's items.md already has this table)"
+    ],
+    "keep": [
+     "Items live only in the main checkout, the first path git worktree list prints. Never commit work-items/, not even with -f",
+     "The next-ID grep, mkdir without -p, the duplicate check, and renumbering only your own new item",
+     "Find an item by its id: line, never by its path, with the grep flags that skip the template, references/ and DESIGN.md",
+     "The front matter values for a new item, and the step that copies the template",
+     "Quotes in front matter (a title with a colon; waiting_on is always quoted), `\\|` and <br> in table cells, and [[WI-031]] instead of [[WI-031|name]]",
+     "The approval field form 'YYYY-MM-DD by <name>', plus '(from WI-012)' for a sub-item",
+     "The task block form (two spaces at line ends), phase and task IDs that are never reused, and 'Merged into P1' / 'Dropped: <reason>'",
+     "Codex sandbox: writing from a worktree to the main checkout asks for approval. Never write the item into the worktree",
+     "zsh: a * pattern that matches nothing stops the whole command (tested)",
+     "Hand-change check: the owner's moves win, folders win over parent:, and questions go one at a time with a recommendation",
+     "One-line rules: Done only after his yes (he may set it himself), never delete, move or archive only when he asks, helpers never edit items",
+     "Archive lives in work-items/archive/, archived IDs still count, and memories link with work_items: [\"[[WI-031]]\"]"
+    ],
+    "size_after_lines": 440,
+    "decisions_touched": [
+     "Draft 2 section 4.2 (approved 2026-09-29) lists 'the WORK-ITEM.md and DESIGN.md templates' in the local set. Removing the asset copies relies on the model's own copy in work-items/work-item-template/, which every local project gets.",
+     "Taking in local-work-find: see that entry."
+    ]
+   },
+   {
+    "name": "local-work-find",
+    "files": 6,
+    "lines": 910,
+    "verdict": "merge into local-work-track",
+    "job": "none. Claude can grep the item files itself once local-work-track gives the folder, the id: lookup and the folders to skip.",
+    "remove": [
+     "references/work-item-format.md, a shared copy (411). It is a second copy in the same project",
+     "examples/status-report.md (66) and moved-by-hand.md (54): replays of the commands' output",
+     "SKILL.md 'Voice:' paragraph (3) and the table that picks a lookup (8)",
+     "queries.md 'What waits on the owner' and 'What is next' (about 55). work-status and work-on already own these, and work-on has its own order for the next item",
+     "queries.md 'Reporting the answer' and the board's status-group order (about 12): how to word a report",
+     "queries.md 'An item's linked memory' (7). That is the memory find skill's job",
+     "hand-changes.md 'How to report a finding' and 6 sample questions to the owner, written out (about 15)",
+     "hand-changes.md 'When to check' list (8). It repeats SKILL.md step 4"
+    ],
+    "merge": [
+     "The grep lookups (one item, the board, open question rows, a parent's tree, search) move into local-work-track references/lookups.md",
+     "The hand-change check commands and findings table move into local-work-track folders.md",
+     "The gotchas (folders to skip, three-digit IDs, values without quotes from Obsidian) move into local-work-track SKILL.md"
+    ],
+    "keep": [
+     "The exact grep commands with their skip flags",
+     "The hand-change check and the findings that need the owner (Mike, 2026-09-26: 'When Mike moves files or folders, the agent detects it and adapts')"
+    ],
+    "size_after_lines": 0,
+    "decisions_touched": [
+     "Draft 2 section 4.2, approved 2026-09-29 (Topic 4: 'Yes, this is great'): 'Work tracking sets (pick one; 2 skills each)', local-work-track and local-work-find.",
+     "The model rule work-item-folders.md says 'find items with the local-work-find skill', and the model's AGENTS.md (lines 32 and 158) names the work find skill. Changing either is a model change, so it needs Mike's yes.",
+     "The session-start hook and 33 shared-skill files say 'the work find skill'. All of them would change to 'the work track skill'.",
+     "If Mike says no: shrink it to SKILL.md plus one lookups file (about 100 lines) and drop its format copy."
+    ]
+   },
+   {
+    "name": "notion-work-track",
+    "files": 33,
+    "lines": 3399,
+    "verdict": "keep and cut (and take in notion-work-find)",
+    "job": "Holds the exact ntn calls, the Notion property names, how page text is edited, and the steps to build and update the templates, none of which Claude can guess.",
+    "remove": [
+     "SKILL.md 'Voice:' paragraph (3)",
+     "SKILL.md gotchas used only in setup: a copied project has no prefix; group-by needs property ids (about 5). setup.md and ntn-basics.md already have them",
+     "items.md 'Current state' rules: the Next action forms and the list of six skills (about 22 of 30), already in the always-on rule and the page template",
+     "items.md 'Recent History rows' list of when to add a row (about 10)",
+     "items.md 'Questions and Answers' rules said again (about 30 of 58). Keep the `<td>` row shape, the tab quirk and where a row goes",
+     "items.md 'Requirements' paragraph (8) and 'only the owner's own words count' (3)",
+     "items.md's two citations of work-item-format.md. This skill does not carry that file",
+     "planning.md lines that say to ask first when 'phase 2' might mean P02 or 'task 3' could be two tasks (about 8). These patched one test run",
+     "planning.md 'Helper agents and their items' (7). It repeats SKILL.md",
+     "notes-files-links.md explanation of what comments are for (about 6)",
+     "setup.md: the three conversions for older formats in step 4 and the older-template checks in step 1 (about 28), for pages made before 2026-09-30",
+     "workspace.md tables of Work Items, Phases, Tasks and Relations properties (about 75). The schema JSON files hold the same definition",
+     "workspace.md 'The work item page' (about 30). It repeats assets/work-item-page.md",
+     "workspace.md 'Rules the data model keeps' (about 14). It repeats the SKILL.md rules",
+     "examples/new-item-walkthrough.md (113) and replan-walkthrough.md (45). They repeat items.md and carry stale 'recorded before database templates' and 'not run yet' notes"
+    ],
+    "merge": [
+     "notion-work-find's calls (find an item by number, the board query, the three tree queries, file download, the checks for empty titles and missing templates) move into a new references/queries.md here (about 110)",
+     "notion-work-find's gotchas (results come 100 at a time with next_cursor, relations come back as ids, views show as `<database>` lines) move into SKILL.md (about 5)"
+    ],
+    "keep": [
+     "The shared copies ntn-basics.md and notion-access.md are needed: end every call with < /dev/null, sign in through the 'Notion CLI' connection, and escalate each call in Codex",
+     "The new-item JSON with every property name and default value, and 'template: default'",
+     "Wait for the template before editing, never apply a template twice, and never use replace_content on an item page",
+     "The `<td>`-per-line row shapes for Questions and Answers and Recent History, with backslashes doubled in JSON",
+     "The approval properties (Requirements approved, Design approved, Result approved), written 'YYYY-MM-DD by <name>'",
+     "Copy the Next action line into the Next action property in the same step",
+     "Phases and Tasks as records: reorder by changing Order, never Phase ID; a task's only status is its Done box",
+     "File upload: at most 20 MB, attach within one hour, send the whole Files list back",
+     "Assets: work-item-page.md, design-page.md, project-page.md and the 20 schema JSON files (1,620 lines in all)",
+     "Property order and the page layout clicks (Mike, 2026-09-30), the views table, and his rule that the agent sets the layout in Chrome only in the test area",
+     "One-line rules: Done only on his yes, never delete (archive it or ask him), his Notion edits win, and no real work goes into a template"
+    ],
+    "size_after_lines": 3100,
+    "decisions_touched": [
+     "Finish item 9, 'bringing an existing Notion project up to a changed template': cutting the three older-format conversions is safe only if no real project was made from the old 'Project workspace' template. Mike said on 2026-10-01 to keep that template until he says delete.",
+     "Optional, not proposed: move setup.md, workspace.md, project-page.md and the 20 schema files (about 1,885 lines) into project-setup, because only setup and 'update the toolkit' use them. Draft 2 section 4.2 puts 'the full written definition of the template' in this skill set, so this needs Mike's yes.",
+     "Taking in notion-work-find: see that entry."
+    ]
+   },
+   {
+    "name": "notion-work-find",
+    "files": 6,
+    "lines": 698,
+    "verdict": "merge into notion-work-track",
+    "job": "Only a few query facts: find an item by its unique_id number, leave out rows with no title, and file links expire in one hour. These fit in notion-work-track.",
+    "remove": [
+     "references/ntn-basics.md (219) and notion-access.md (120), shared copies. The same files sit in notion-work-track in the same project",
+     "references/fields.md (45). It repeats workspace.md, the schema files and the page template",
+     "examples/status-report.md (30), a run from 2026-09-29, before the current template",
+     "SKILL.md 'Voice:' paragraph (3) and the table that picks a query (10)",
+     "queries.md 'What waits on the owner' and 'What is next' (about 20). work-status and work-on own these. This includes the patch 'never pick his item when two are equally urgent'",
+     "queries.md 'Reporting the answer' (5) and 'An item's linked memory' (7). work-status and the memory find skill own these"
+    ],
+    "merge": [
+     "The exact query calls move into notion-work-track references/queries.md",
+     "The gotchas (next_cursor, relation ids, `<database>` lines) move into notion-work-track SKILL.md"
+    ],
+    "keep": [
+     "The unique_id 'equals' filter, the board query's Archived and empty-title filters, and the three tree queries",
+     "v1/search matches titles only, so narrow the list first and then read the page text",
+     "File addresses last one hour: download a fresh copy with curl into a scratch folder, and escalate in Codex",
+     "The checks for cards with no title and pages without the template"
+    ],
+    "size_after_lines": 0,
+    "decisions_touched": [
+     "Draft 2 section 4.2, approved 2026-09-29: two skills per tracker, notion-work-track and notion-work-find.",
+     "The model's AGENTS.md (line 162) and the session-start hook name the work find skill, and draft 2 says that after compaction 're-read the active work item' means notion-work-find. Both change with the merge, and the AGENTS.md change needs Mike's yes.",
+     "If Mike says no: keep SKILL.md and queries.md plus its two ntn copies (about 490 lines), and drop fields.md and the example."
+    ]
+   },
+   {
+    "name": "github-work-track",
+    "files": 14,
+    "lines": 2604,
+    "verdict": "keep and cut (and take in github-work-find)",
+    "job": "Holds the label scheme (36 labels), the issue-body template, the rules for sub-issues and the design comment, and the gh quirks for keeping work items as GitHub issues.",
+    "remove": [
+     "references/approvals.md, a shared copy (336). labels.md and items.md say which label to set; the rules are in keep-work-item-current.md and the stage skills",
+     "references/work-item-format.md, a shared copy (411). labels.md lists every stage, and WORK-ITEM.md is the body template",
+     "assets/DESIGN.md (185). The same file is in solution-design, and this skill only needs to say the design is one comment that starts '## Solution design'",
+     "examples/new-item-walkthrough.md (135) and replan-walkthrough.md (63). They say they are 'an illustration, not a recorded run' and repeat items.md",
+     "SKILL.md 'Voice:' paragraph (3)",
+     "items.md rules repeated from elsewhere: Current state (about 24 of 27), the Recent History list (about 10), Questions and Answers (about 28 of 41), Requirements (11)",
+     "items.md's six-step order for recording an approval (about 14). Keep the label table",
+     "items.md conversion of the older Overview with 'Current position' and 'Resume here' (8), and the same note in setup.md (5). This patch was for pages made during testing",
+     "items.md 'Show a stage to the owner by name' and 'Archive: GitHub has none, tell the owner' (about 4)",
+     "labels.md 'Rules for labels' (about 12). It repeats items.md and SKILL.md",
+     "planning.md 8-row 'Changing the plan' table (about 12), the P02 and 'task 3' ask-first lines (about 9), and 'Helper agents' (7)",
+     "notes-files-links.md: what comments are for (about 6), 'Links between items' (about 11), and 'Memory that names an item' (about 7, the memory skill's job)",
+     "The 'never write Closes #12' rule, written in 3 files of this skill. Keep it once, in notes-files-links.md, with the full list of words"
+    ],
+    "merge": [
+     "github-work-find's queries move into a new references/queries.md here (about 80): the board command (status taken from the stage label), the open-question filter, the sub_issues tree call, the closed and updated date searches, and the check for issues without the layout",
+     "github-work-find's gotchas move into SKILL.md (about 4): gh issue list returns only 30 without --limit, gh api needs --paginate, 'No parent issue found' means a top-level issue",
+     "github-work-find fields.md moves into labels.md (about 3): a closed issue's stateReason COMPLETED means Done, NOT_PLANNED or DUPLICATE means Cancelled, and someone else's comment never counts as the owner's answer",
+     "solution-design writes the design from its own assets/DESIGN.md, and this skill only stores it as the comment. This changes the wording of solution-design step 4"
+    ],
+    "keep": [
+     "The shared copies gh-basics.md and gh-access.md are needed: always pass -R <repo>, sub-issue calls need the numeric id, and in Codex each gh command runs alone, escalated",
+     "assets/WORK-ITEM.md: GitHub projects have no work-items/ folder, so this is the body template",
+     "The 36 labels with their colors and descriptions, and the map from field to label",
+     "gh issue create with labels and single-quote escaping, and close --reason completed or 'not planned'",
+     "The design comment: first line '## Solution design', edited in place with PATCH, with a part 2 past 60,000 characters",
+     "The 65,536-character body limit and the length check; text sources posted as '## Source:' comments with four backticks; the owner drags in other files himself",
+     "Never 'Closes/Fixes/Resolves #12' or the Development-panel link; write 'Part of #12', and reopen the issue if GitHub closed it",
+     "Create labels or repositories only after the owner's yes, never make a repository public, and no AI credit in issues",
+     "One-line rules: close an issue as completed only on his yes (he may close it himself), never delete, and his browser edits win"
+    ],
+    "size_after_lines": 1390,
+    "decisions_touched": [
+     "Taking in github-work-find: see that entry."
+    ]
+   },
+   {
+    "name": "github-work-find",
+    "files": 6,
+    "lines": 686,
+    "verdict": "merge into github-work-track",
+    "job": "none. Claude knows gh well, and the few facts needed (status comes from the stage label, stateReason, the sub_issues call, always -R) fit in github-work-track.",
+    "remove": [
+     "references/gh-basics.md (181) and gh-access.md (126), shared copies. The same files are in github-work-track, and this skill even carries write steps it never uses",
+     "references/fields.md (49). It repeats labels.md and the body template",
+     "examples/status-report.md (44), 'an illustration, not a recorded run'",
+     "SKILL.md 'Voice:' paragraph (3) and the table that picks a query (12)",
+     "queries.md steps that build 'What waits on the owner' and 'What is next' (about 35). work-status and work-on own these. This includes the patch 'never pick for him when two tie'",
+     "queries.md 'Reporting the answer' (7) and 'An item's linked memory' (6)",
+     "queries.md 'Blocked items' command (about 8). Claude can read the Blockers line itself"
+    ],
+    "merge": [
+     "The board command, open-question filter, sub_issues tree call, closed and updated date searches, and the no-layout check move into github-work-track references/queries.md",
+     "The gh gotchas (30-issue default, --paginate, 'No parent issue found') move into github-work-track SKILL.md"
+    ],
+    "keep": [
+     "Status is not stored: read it from the stage label while the issue is open, and from stateReason once it is closed",
+     "GitHub search with 'in:title,body' leaves comments out"
+    ],
+    "size_after_lines": 0,
+    "decisions_touched": [
+     "Draft 2 section 4.2, approved 2026-09-29: two skills per tracker, github-work-track and github-work-find.",
+     "The model's AGENTS.md (line 167) names github-work-find. Changing it is a model change, so it needs Mike's yes.",
+     "If Mike says no: keep SKILL.md and queries.md plus its two gh copies (about 410 lines), and drop fields.md and the example."
+    ]
+   }
+  ],
+  "group_notes": "In a project, every rule about Current state, Questions and Answers, approvals and Done is written up to five times: the WORK-ITEM.md template comments, the always-on model rule keep-work-item-current.md, the shared work-item-format.md and approvals.md copies, and each tracker's items.md. Keep the template and the rule, and cut the tracker files down to how each thing is stored. notion-work-track already works without the work-item-format.md and approvals.md copies (it even cites a format file it does not carry), so the local and GitHub track skills can drop both copies too. Folding each find skill into its track skill cuts about 2,300 lines, but it reaches into the model's AGENTS.md, the model rule work-item-folders.md, the session-start hook and 33 shared-skill files, so it needs Mike's yes first; across the group the six skills go from 10,491 lines to about 4,930."
+ },
+ {
+  "group": "memory-session-git",
+  "skills": [
+   {
+    "name": "local-memory-save",
+    "files": 10,
+    "lines": 1359,
+    "verdict": "keep and cut",
+    "job": "Tells Claude where each kind of thing goes in the project's memory/ folder, the file template, when to ask Mike first, and the exact reply wording.",
+    "remove": [
+     "The 'Voice' paragraph that repeats the output style and AGENTS.md (3 lines)",
+     "The 14-row 'What goes where' table: memory-criteria.md and the memory rule already say it (14 lines)",
+     "Approval coaching: 'recommend a yes only with evidence', 'silence is never a yes', a repeated proposal bullet (about 12 lines)",
+     "Rules that repeat memory/AGENTS.md: read fresh, no two writes at once, never edit MEMORY.md, no secrets, full dates (about 10 lines)",
+     "Gotchas said elsewhere: MEMORY.md updates next session, feedback_ retired, decisions never copy reasoning (about 8 lines)",
+     "saving.md 'Find the memory folder': the 10th copy of 'memory/ is in the main checkout' (13 lines)",
+     "saving.md grep command walk-throughs Claude already knows (about 15 lines)",
+     "saving.md 'A decision made with no work item': repeats the decisions text (9 lines)",
+     "saving.md 'Current State': repeats the template guide, memory/AGENTS.md, and memory-criteria.md (about 18 lines)",
+     "saving.md rules steps for a missing owner-preferences.md, the AGENTS.md list edit, and the 'wc -lc AGENTS.md' size check: setup always creates the file (about 8 lines)",
+     "saving.md step 7: offer an .editorconfig change or a permissions.deny entry (5 lines)",
+     "saving.md commit explanation for a rules bullet; the shared-repository rule covers it (about 5 lines)",
+     "Other saving.md sections cut down to the steps and formats only (about 130 lines)",
+     "Example 2 (decision record) and example 3 (rule): repeat record-format.md and saving.md (about 60 lines)",
+     "Examples 1 and 4 trimmed (about 25 lines)",
+     "4 fallback templates that are byte-for-byte the project's own memory/ files: topic, decision, CURRENT_STATE, glossary (97 lines)",
+     "assets/owner-preferences.md: setup already creates that file in every project (35 lines)",
+     "Copy of decisions-and-memory.md: the 3 parts save uses are already in saving.md and memory-criteria.md (275 lines)"
+    ],
+    "merge": [
+     "The project-wide decision steps live only in saving.md, not also in a decisions copy",
+     "'memory/ is in the main checkout; from Codex in a worktree, write outside the sandbox' becomes one line in SKILL.md"
+    ],
+    "keep": [
+     "Approval modes, onboarding and trusted, read from the 'Memory approval' line in PROJECT.md",
+     "The exact questions: 'Save to memory: <one line>?', 'Add to the project rules: <one line>?', 'This looks project-wide. Save it to memory too?'",
+     "'From now on' instructions go to .claude/rules/owner-preferences.md, ending (date, name, in chat)",
+     "'All my projects' instructions go to ~/.claude/rules/ and ~/.codex/AGENTS.md",
+     "Unanswered saves stay as marked proposals plus one 'Waiting on the owner' line in Current State",
+     "When a file may be deleted, and the retire and supersede marks",
+     "Gotcha: put each work_items entry in quotes, or '#12' is dropped as a comment",
+     "Gotchas: labels are bold, not headings; skip seed files marked status: template",
+     "Reply lines with the undo words ('Say forget that to undo')",
+     "Copy of record-format.md (header fields, status list, work item link forms); the shared-text reviewer trims it"
+    ],
+    "size_after_lines": 593,
+    "decisions_touched": [
+     "AGENTS.md size cap (Mike, 2026-09-30: 'Under 200 lines, or max, absolutely max, 250'): the 'wc -lc AGENTS.md' check only runs when owner-preferences.md is missing, which setup prevents. Cutting it removes one place the cap is checked."
+    ]
+   },
+   {
+    "name": "local-memory-find",
+    "files": 5,
+    "lines": 955,
+    "verdict": "keep and cut",
+    "job": "Barely needed, because Claude can already search files. It only adds where memory lives, what each file status means, and the work item search pattern.",
+    "remove": [
+     "The 'Voice' paragraph (3 lines)",
+     "The 6-row 'Pick where to look' table: the folder map in AGENTS.md covers it (9 lines)",
+     "The citing rule and the 'I don't know' rule: the always-on cite-recalled-knowledge.md rule covers both (about 12 lines)",
+     "Coaching gotchas such as 'a search hit is a pointer, not an answer' (about 6 lines)",
+     "Other SKILL.md trims (about 24 lines)",
+     "All of search.md: grep commands, a second where-to-look table, citing examples, wording for disagreements (195 lines)",
+     "Copy of record-format.md: find only needs the status meanings (328 lines)",
+     "Copy of decisions-and-memory.md: find only uses its citing section, which is an always-on rule (275 lines)",
+     "find-walkthrough.md, a sample cited answer (73 lines)"
+    ],
+    "merge": [
+     "About 10 lines of status and search-pattern facts move from search.md and record-format.md into SKILL.md",
+     "Could instead be folded into local-memory-save (see group notes)"
+    ],
+    "keep": [
+     "memory/ lives in the main checkout; a worktree or a fresh clone has none",
+     "Only status: current is a fact; 'Proposal, not approved yet' sections and lessons are not",
+     "A superseded file names its replacement: answer from that one",
+     "An item's own decisions are in its Questions and Answers, not memory",
+     "Search pattern 'WI-031([^0-9]|$)' so WI-031 does not match WI-0310",
+     "Read only: offer local-memory-save to fix a wrong fact"
+    ],
+    "size_after_lines": 30,
+    "decisions_touched": []
+   },
+   {
+    "name": "local-memory-refine",
+    "files": 7,
+    "lines": 1202,
+    "verdict": "keep and cut",
+    "job": "Gives the clean-up steps for memory/: plan first, wait for Mike's yes, then merge, retire, fix links, prune Current State, and promote proven lessons.",
+    "remove": [
+     "The 'Voice' paragraph (3 lines)",
+     "SKILL.md Rules and Gotchas that repeat refine.md and the save skill (about 25 lines)",
+     "Other SKILL.md trims (about 12 lines)",
+     "refine.md 'Find the memory folder' copy (12 lines)",
+     "refine.md Current State steps that repeat the template and the limits in memory/AGENTS.md (about 18 lines)",
+     "refine.md grep and wc command listings Claude knows (about 15 lines)",
+     "refine.md 'Superseding and retiring' and 'Proposals': repeat record-format.md and the save skill (about 20 lines)",
+     "Other refine.md sections shortened (about 100 lines)",
+     "Copy of decisions-and-memory.md: refine only uses the Current State limits, already in the template (275 lines)",
+     "Copy of writing-a-project-skill.md: Claude can write a skill; only 4 project facts are needed (135 lines)",
+     "assets/owner-preferences.md: setup creates that file in every project (35 lines)",
+     "refine-walkthrough.md: repeats the report template already in refine.md (72 lines)"
+    ],
+    "merge": [
+     "4 facts from writing-a-project-skill.md move into refine.md: the path .claude/skills/<name>/, .agents/skills is a link to it, the header holds only name and description, and one line goes in AGENTS.md's skills list"
+    ],
+    "keep": [
+     "Plan first: one numbered line per change with a reason, then wait for Mike's yes",
+     "Only 2 changes skip the plan: dropping untrue Current State lines, and removing a secret at once",
+     "Never delete a memory file; supersede or retire it with the marks",
+     "Event and decision files are never merged into a concept; repoint links after a rename or merge",
+     "Moving old feedback_ files into the rules and concept files",
+     "Lesson promotion: seen in 2+ sessions or confirmed \u2192 propose a rule or skill, write after yes, mark 'Promoted'",
+     "Mike's edits in Obsidian win",
+     "Codex: edits to the main checkout's memory/ run outside the sandbox",
+     "Copy of record-format.md (marks table, link forms)"
+    ],
+    "size_after_lines": 478,
+    "decisions_touched": []
+   },
+   {
+    "name": "notion-memory-save",
+    "files": 32,
+    "lines": 2673,
+    "verdict": "keep and cut",
+    "job": "Gives the exact Lore database and column names, the ntn command forms, and the record templates for saving to Notion memory, plus when to ask Mike first.",
+    "remove": [
+     "The 'Voice' paragraph (3 lines)",
+     "The 'What goes where' table: record-mapping.md 'Kinds of record' and the memory rule hold it (10 lines)",
+     "Step 4's full column list: record-mapping.md holds it (8 lines)",
+     "Approval bullets that coach or repeat the rule: evidence, silence, 'a yes covers only', lesson details (about 18 lines)",
+     "Rules that repeat the steps and gotchas (about 7 lines)",
+     "Reference-table rows for the setup files that move out (about 12 lines)",
+     "Other SKILL.md trims (about 25 lines)",
+     "saving.md 'After a save': repeats SKILL.md steps 5 to 7 and notion-access.md (8 lines)",
+     "saving.md rules steps: missing-file branch, AGENTS.md list edit, 'wc -lc' check, commit explanation, .editorconfig and permissions.deny offer (about 18 lines)",
+     "Other saving.md repeats shortened (about 75 lines)",
+     "assets/owner-preferences.md: setup creates that file in every project (35 lines)",
+     "save-walkthrough.md trimmed (about 12 lines)"
+    ],
+    "merge": [
+     "setup.md (new project, PROJECT.md links, updating the layout, building the template) moves to project-setup (144 lines)",
+     "lore-layout.md (full Lore schema, views, property order, Notion layout clicks) moves to project-setup (230 lines)",
+     "The 18 Lore request files in assets/lore/ move to project-setup, every name unchanged (1,298 lines)",
+     "memory-page.md and project-page-memory-only.md, used only to build a template, move to project-setup (9 lines)"
+    ],
+    "keep": [
+     "Lore names exactly: Record Key, Keywords, Synopsis, Kind, Tags, Status, Source, Author, Agent, Project, Saved",
+     "More exact Lore names: Source note, Last verified, Authorization, Work item IDs, Work items, Decided At, Supersedes, Superseded by",
+     "Status names: accepted, proposed, superseded, deprecated",
+     "Approval modes and the 3 exact questions (same as local)",
+     "Tool fact: end every ntn call with '< /dev/null'; never pkill or killall",
+     "Tool facts: sending a relation or Tags value replaces the whole list; escape < and >; no '# Title' in the body",
+     "Tool fact: a 404 means the page is not shared with the 'Notion CLI' connection",
+     "Codex: run each ntn call alone, outside the sandbox",
+     "Templates: concept-record.md, decision-record.md, current-state.md, terminology-glossary.md",
+     "One full JSON example of a real saved decision record",
+     "Shared copies it needs: record-mapping, current-state, ntn-basics, notion-access"
+    ],
+    "size_after_lines": 761,
+    "decisions_touched": [
+     "'Each set's skills hold the instructions for that tool..., its templates and fields' (Mike, 2026-09-29). Moving the Lore build files to project-setup takes the build templates out of the Notion memory set. Every Lore database and column name stays exactly as it is."
+    ]
+   },
+   {
+    "name": "notion-memory-find",
+    "files": 6,
+    "lines": 677,
+    "verdict": "keep and cut",
+    "job": "Gives the exact ntn query filters on Lore's Memories columns. Reading and citing are already covered by Claude and an always-on rule.",
+    "remove": [
+     "The 'Voice' paragraph (3 lines)",
+     "The step table that repeats queries.md (11 lines)",
+     "Citing and 'I don't know' rules that repeat the always-on cite rule (about 8 lines)",
+     "Gotchas that repeat the save skill and ntn-basics: 404, relation only in Notion (about 6 lines)",
+     "Other SKILL.md trims (about 15 lines)",
+     "queries.md 'Citing what you found': repeats the cite rule (8 lines)",
+     "queries.md sign-in failure paragraph: repeats notion-access.md (4 lines)",
+     "Other queries.md trims (about 20 lines)",
+     "find-walkthrough.md: same record and queries as queries.md and the save example (41 lines)"
+    ],
+    "merge": [
+     "Could instead be folded into notion-memory-save (see group notes)"
+    ],
+    "keep": [
+     "Exact query filters on Record Key, Title, Synopsis, Status, Kind, Tags, Work items, and Work item IDs",
+     "Tool fact: the API's search matches page titles only, so query the columns instead",
+     "Leave out superseded and deprecated records unless Mike asks for history",
+     "A row with no Record Key was not made by the toolkit",
+     "An item's own decisions are in its Questions and Answers",
+     "Shared copies it needs: record-mapping, ntn-basics, notion-access"
+    ],
+    "size_after_lines": 561,
+    "decisions_touched": []
+   },
+   {
+    "name": "notion-memory-refine",
+    "files": 8,
+    "lines": 916,
+    "verdict": "keep and cut",
+    "job": "Gives the Notion clean-up steps (plan, Mike's yes, merge, retire, relink, prune Current state) with the Lore column and status names.",
+    "remove": [
+     "The 'Voice' paragraph (3 lines)",
+     "Rules and Gotchas that repeat refine.md and the save skill (about 25 lines)",
+     "Other SKILL.md trims (about 10 lines)",
+     "refine.md 'Plan first': repeats SKILL.md step 4 (7 lines)",
+     "refine.md Current state steps that repeat current-state.md (about 12 lines)",
+     "Other refine.md trims (about 35 lines)",
+     "Copy of writing-a-project-skill.md: only 4 project facts are needed (135 lines)",
+     "refine-walkthrough.md: repeats 'The report' section (42 lines)"
+    ],
+    "merge": [
+     "The same 4 project-skill facts as local-memory-refine move into refine.md"
+    ],
+    "keep": [
+     "The listing query and every column it reads",
+     "Merge steps: move sections; join Work item IDs and Work items; set Superseded by and Supersedes",
+     "Retire = Status deprecated plus a '## Retired' section; never delete a record",
+     "Proposals: Status proposed; Mike's yes \u2192 accepted; his no \u2192 deprecated",
+     "Links: read the relation, change it, send the whole list back",
+     "Lesson promotion to a rule (through notion-memory-save) or a project skill, after Mike's yes",
+     "Rows with no Record Key are listed for Mike",
+     "Shared copies it needs: current-state, record-mapping, ntn-basics, notion-access"
+    ],
+    "size_after_lines": 647,
+    "decisions_touched": []
+   },
+   {
+    "name": "braindump",
+    "files": 1,
+    "lines": 72,
+    "verdict": "keep and cut",
+    "job": "Makes Claude play back a loose brain dump and stop for Mike's yes before doing anything, in a fixed order: goal, asks, unsure parts, questions.",
+    "remove": [
+     "The 'Voice' line (1 line)",
+     "'The words' section that repeats the plain-English style (about 7 lines)",
+     "'Where this stops': repeats step 7 (4 lines)",
+     "'What counts as the dump' cut to one line (4 lines)",
+     "The hook-reminder gotcha cut to one line (5 lines)"
+    ],
+    "merge": [],
+    "keep": [
+     "No work until his yes; the playback is the whole first turn",
+     "The order: goal, numbered asks, unsure parts ('I think you mean X, but you might mean Y'), questions with recommendations",
+     "A correction replays only the corrected part",
+     "After the yes, open the skill AGENTS.md names: work-refine to plan, work-on to build",
+     "Keep every number, name, and file path",
+     "Not a dump: a 1 or 2 sentence request; meeting notes to plan go to work-refine"
+    ],
+    "size_after_lines": 50,
+    "decisions_touched": []
+   },
+   {
+    "name": "explain-simply",
+    "files": 1,
+    "lines": 99,
+    "verdict": "keep and cut",
+    "job": "Gives the fixed rewrite format: one-line bullets in 4 to 6 groups with headings, 25 bullets at most, and every number, name, and path kept.",
+    "remove": [
+     "The 'Voice' line (1 line)",
+     "Gotcha 'a simple explanation that dropped the numbers is vaguer': repeats step 3 (3 lines)",
+     "Gotcha 'do not run a new search': repeats step 5 (3 lines)",
+     "'The shape' section, folded into step 2 (3 lines)",
+     "'Honesty' bullets Claude already follows: say what is unknown, say what failed, never hide a gap (4 lines)",
+     "Lines that repeat the plain-English style: no jargon, no figures of speech (about 3 lines)"
+    ],
+    "merge": [],
+    "keep": [
+     "Format: 4 to 6 groups under bold headings, one-line bullets, 25 at most",
+     "The 6 kinds of facts that always stay",
+     "Name the thing itself; never 'Option B' alone",
+     "A technical name keeps its spelling plus four plain words; no em dashes or section signs",
+     "Say in one bullet what was left out to fit 25 bullets",
+     "'What I need from you' only when Mike has something to do",
+     "The example (it is the template)"
+    ],
+    "size_after_lines": 82,
+    "decisions_touched": []
+   },
+   {
+    "name": "session-summary",
+    "files": 1,
+    "lines": 143,
+    "verdict": "keep and cut",
+    "job": "Gives the fixed recap template: a 4-column table with 8 status words and symbols, then a 'Still open, and it needs you' block.",
+    "remove": [
+     "The 'Voice' line (1 line)",
+     "'Count the asks' coaching ('would this have come up at all if...') and its list, cut to 3 lines plus the example (about 18 lines)",
+     "'Keep the owner's words' cut to one line (about 9 lines)",
+     "'Be honest about status' opening paragraph: Claude already reports honestly (4 lines)",
+     "'Summarizing a session other than this one': repeats step 1 (6 lines)",
+     "Gotcha 'no title, no story' trimmed (2 lines)"
+    ],
+    "merge": [],
+    "keep": [
+     "Table columns: #, What you asked, Status, Result",
+     "The 8 status words with their symbols",
+     "The '### \ud83d\udd34 Still open, and it needs you' block, or 'Nothing needed from you.'",
+     "One row per request, not per step (short form, with the example)",
+     "The 'Earlier requests I can no longer see' row when earlier chat was trimmed",
+     "The one-time offer to turn open requests into work items or Current State to-dos",
+     "The example table"
+    ],
+    "size_after_lines": 103,
+    "decisions_touched": []
+   },
+   {
+    "name": "pull-latest",
+    "files": 2,
+    "lines": 414,
+    "verdict": "keep and cut",
+    "job": "Gives Mike's safe-update rules for a shared project folder: fetch and merge only, never rebase, reset, or push, and stop on another session's work.",
+    "remove": [
+     "The 'Voice' line (1 line)",
+     "Step 4's explanation of why rebase and reset are risky (5 lines)",
+     "Step 1 sub-bullets shortened (about 10 lines)",
+     "'Step 3 in detail' coaching on judging whose commits they are, cut to 4 lines (about 20 lines)",
+     "'Step 5 in detail' report list cut to 3 lines (about 9 lines)",
+     "The Codex gotcha's per-command example reasons (about 4 lines)",
+     "Gotcha 'work-items/ and memory/ are ignored, so a pull never changes them' (1 line)",
+     "References table (about 7 lines)",
+     "Copy of git-rules.md: the 3 parts it points to are already in SKILL.md or fit in 2 lines (282 lines)"
+    ],
+    "merge": [
+     "The 2-line conflict rule from git-rules.md moves into the SKILL.md gotchas"
+    ],
+    "keep": [
+     "Stop cases: no remote, no upstream, upstream not on origin, uncommitted changes, main folder on a non-default branch",
+     "'git fetch --prune origin' then 'git pull --ff-only'; if they split, 'git pull --no-rebase --no-edit'",
+     "Never push, rebase, reset, stash, or switch branches",
+     "On a conflict: 'git merge --abort' unless Mike asked to resolve it; never '--no-edit' after a conflict",
+     "Codex: fetch, pull, and merge --abort each run alone, outside the sandbox",
+     "Report incoming commits and the final state; pushing is Mike's call"
+    ],
+    "size_after_lines": 75,
+    "decisions_touched": []
+   },
+   {
+    "name": "reset-to-remote",
+    "files": 2,
+    "lines": 496,
+    "verdict": "keep and cut",
+    "job": "Gives the wipe-and-match-remote steps, with the safety checks and a plan Mike must approve before any local work is thrown away.",
+    "remove": [
+     "The 'Voice' line (1 line)",
+     "Steps 1 to 6 summary that repeats the 'in detail' sections; merged into one list (about 32 lines)",
+     "'Never do these' list that repeats the steps (8 lines)",
+     "Explanations Claude knows: why not stash, why -D not -d, what 'git branch -f' does, why the wrong lockfile matters (about 10 lines)",
+     "The lockfile table, cut to one line (6 lines)",
+     "Other trims (about 37 lines)",
+     "Copy of git-rules.md: the Codex and no-remote rules are already in SKILL.md (282 lines)"
+    ],
+    "merge": [],
+    "keep": [
+     "Run only on Mike's own words; show the plan and get his yes before anything destructive",
+     "Stop checks: no origin, uncommitted changes, stashes, other worktrees, and ask whether another session is working",
+     "Find the default branch from origin/HEAD; never assume main",
+     "Plan groups: reset (with the commits that will be lost), delete ([gone]), keep (no upstream)",
+     "The word-for-word shared-folder line in the plan",
+     "Never 'git clean -x' or '-X': it deletes work-items/, memory/, and .obsidian/",
+     "Never git pull, never 'fetch --force', never push",
+     "Codex: each Git write and the install run alone, outside the sandbox"
+    ],
+    "size_after_lines": 120,
+    "decisions_touched": []
+   },
+   {
+    "name": "merge-and-clean-up",
+    "files": 5,
+    "lines": 975,
+    "verdict": "keep and cut",
+    "job": "Gives the exact gh merge command with --match-head-commit, the merge-safety check, and the five proofs needed before deleting a branch or worktree.",
+    "remove": [
+     "The 'Voice' line (1 line)",
+     "SKILL.md steps, Gotchas, and Safety rules that summarize merge-steps.md (about 100 lines)",
+     "Explanations Claude knows: why a later push matters, why a squash breaks 'branch -d', the paragraph on choosing a merge method (about 15 lines)",
+     "Step 7 report wording that appears twice (about 10 lines)",
+     "Other repeats trimmed (about 77 lines)",
+     "Copy of approvals.md: only the standing-merge conditions are used, and merge-steps already lists them (336 lines)",
+     "Copy of git-rules.md: the Codex, merge-safety, branch-name, and no-remote parts are already in merge-steps (282 lines)"
+    ],
+    "merge": [
+     "merge-steps.md becomes the body of SKILL.md: one file instead of two"
+    ],
+    "keep": [
+     "Find the exact pull request with 'gh pr view'; record headRefOid; the local branch must match it",
+     "Mike's yes to this merge, or the standing merge instruction with its 3 conditions on this exact commit",
+     "PR checks: open, not a draft, mergeable, checks passed; 'no checks reported' is not a failure",
+     "Merge-safety check: compare the changed files with the main folder's status; stop on any overlap",
+     "'gh pr merge --squash --delete-branch --match-head-commit <headRefOid>'; never an admin flag",
+     "Auto-merge or a merge queue means it is not merged yet: remove nothing",
+     "The 5 proofs before removing a worktree or branch; -D only for this PR's own branch",
+     "Codex: every Git write and gh call runs alone, outside the sandbox",
+     "Never mark the item Done; work-finish does that",
+     "agents/openai.yaml, the Codex app's display name (4 lines)"
+    ],
+    "size_after_lines": 154,
+    "decisions_touched": []
+   },
+   {
+    "name": "publish-docs",
+    "files": 3,
+    "lines": 583,
+    "verdict": "keep and cut",
+    "job": "Gives Mike's process for saving document edits straight to the default branch from a temporary worktree, which files count as documents, and how to recover a refused push.",
+    "remove": [
+     "The 'Voice' line (1 line)",
+     "Explanations Claude knows: why the save worktree is detached, what 'diff --check' finds (about 6 lines)",
+     "Step 2 default-branch fallbacks cut to 3 lines (about 7 lines)",
+     "Gotchas that repeat the rule file: unpushed means unfinished, saving is not approval, memory/ and work-items/ are ignored (about 10 lines)",
+     "The accepted-files list, which repeats the rule file's paths (about 12 lines)",
+     "The 'use your judgment' paragraph on documents that go with code, cut to 2 lines (6 lines)",
+     "'Carrying an edit across' shortened (about 10 lines)",
+     "Other SKILL.md trims (about 10 lines)",
+     "recovery.md 'Never do these': repeats SKILL.md and the rule (8 lines)",
+     "Other recovery.md trims (about 46 lines)",
+     "Copy of git-rules.md: it only needs 'no AI credit' and the Codex rule, both already in SKILL.md (282 lines)"
+    ],
+    "merge": [],
+    "keep": [
+     "Save worktree .claude/worktrees/docsave-<slug>, detached at origin/<default>; check Git ignores the folder first",
+     "Stage by name; the 4 checks, including '-c core.whitespace=-blank-at-eol diff --cached --check'",
+     "Push HEAD:<default>, never force; with no remote, 'merge --ff-only' or 'push . HEAD:<default>'",
+     "Confirm with 'branch -r --contains', then remove the save worktree",
+     "Refused files: delivery/data/, instruction files, code, settings, .json, hidden files, ignored paths",
+     "Recovery: rebase only inside the save worktree, 'rebase --continue' with core.editor=true, keep every INDEX.md row",
+     "Codex: every Git write runs alone, outside the sandbox",
+     "Never touch another session's docsave- worktree"
+    ],
+    "size_after_lines": 185,
+    "decisions_touched": []
+   }
+  ],
+  "group_notes": "These 13 skills are 10,564 lines today; after these cuts about 3,840 stay, and 1,681 lines of Notion build files move to project-setup instead of being deleted. About 2,100 of the lines that stay are copies of shared texts (record-format, record-mapping, ntn-basics, notion-access, current-state) at today's length, so the shared-text reviewer's cuts will shrink them further. The find skills are barely needed because Claude can search on its own, but the model's AGENTS.md, the session-start hook, and about 35 skill files name them, so I recommend keeping each one tiny; folding them into the save skills would need Mike's yes on a model change, while refine stays because Mike named it and the hook points to it. Two things are removed from every skill: the same 'Voice' paragraph at the top, and the line 'memory/ is in the main checkout', which appears in about 10 places."
+ },
+ {
+  "group": "shared-setup",
+  "skills": [
+   {
+    "name": "shared: approvals.md",
+    "files": 10,
+    "lines": 336,
+    "verdict": "merge into work-refine, solution-design, work-check, work-finish, work-status, merge-and-clean-up, and the three work-track skills",
+    "job": "Know which field each approval sets in each tracker, and that the checker always runs before a result approval; Claude already knows the rest.",
+    "remove": [
+     "10 copies cost 3,360 lines in total",
+     "The 7-row table of what \"Yes, approved\", \"Go with B\", \"Looks good\", \"ok\", and \"Ship it\" mean (10 lines)",
+     "The bullets on what a bare \"yes\", \"ok\", or \"looks good\" answers (16 lines)",
+     "\"How to ask the owner\": ask in the reply, end every reply with one question, check records first (14 lines)",
+     "The 6-step recording procedure; keep-work-item-current.md already says it (28 lines)",
+     "Pre-ask checklists that repeat each asking skill's own steps (about 25 lines)",
+     "The bulk-yes section and its 2 example rows; keep-work-item-current.md already says it (14 lines)",
+     "The \"Closes #12\" paragraph, also in git-rules.md and setup's github.md (5 lines)",
+     "The 16-line contents list"
+    ],
+    "merge": [
+     "Requirements approval field steps go to work-refine only",
+     "Design approval field steps go to solution-design only",
+     "Independent check and result approval go to work-check only",
+     "Done, Cancel, and sub-item rules go to work-finish only",
+     "Standing merge instruction goes to work-finish and merge-and-clean-up",
+     "\"What waits on the owner\" list goes to work-status only",
+     "The tracker field table: each work-track skill gets its own column",
+     "Result: about 110 lines in total, each piece written once"
+    ],
+    "keep": [
+     "His yes is needed for requirements, design, result, Done, cancel, and each merge",
+     "The checker always runs before a result approval, even with no agent team",
+     "Done only on his yes; he may mark Done himself; never undo it",
+     "Standing merge counts only when the checker passed that exact commit",
+     "Which field each approval sets in local, Notion, and GitHub",
+     "A sub-item never asks him to approve the same requirement twice"
+    ],
+    "size_after_lines": 0,
+    "decisions_touched": [
+     "\"Before asking for the owner's result approval, the agent always starts one independent acceptance checker agent\" (2026-09-28 evening): kept, moved to work-check",
+     "\"The agent asks Mike before it marks an item Done ... Mike can also mark an item Done himself\": kept, moved to work-finish",
+     "Open question 4A, standing merge permission in owner-preferences.md: kept",
+     "Open question 4B, a \"yes to all\" saved as one row per item: the removed section is already in keep-work-item-current.md",
+     "Section 2 bans the question box; PROGRESS.md open question (2) says this clashes with Mike's own rule and is not decided"
+    ]
+   },
+   {
+    "name": "shared: work-item-format.md",
+    "files": 10,
+    "lines": 411,
+    "verdict": "keep and cut",
+    "job": "Know the 14 stages with their status and next skill, the header field values, and where each part lives in each tracker.",
+    "remove": [
+     "10 copies cost 4,110 lines in total",
+     "\"Sections, in order\": section table, Current state lines, 3 Next action forms; the template and keep-work-item-current.md say it word for word (about 100 lines)",
+     "The 30-line Questions and Answers rules list; keep-work-item-current.md has it",
+     "\"Choose type: use the first value that fits\" list (13 lines)",
+     "\"Reopened item: use your judgment\" and \"show a stage by its name\" (8 lines)",
+     "Hand-change detection section (38 lines); work-item-folders.md covers it",
+     "\"Saving a change\": read fresh, change only what is needed, read back (17 lines)",
+     "\"One shape in every tracker\" intro, repeats AGENTS.md (15 lines)",
+     "The 13-line contents list",
+     "Drop the copy from local-work-find, which only reads items"
+    ],
+    "merge": [],
+    "keep": [
+     "The 14-stage table with status and usual skill",
+     "The 6 statuses; Blocked is not a status, use waiting_on",
+     "Header field values and new-item defaults",
+     "The 8 Questions and Answers column meanings",
+     "Three levels; a phase is never a work item; task IDs",
+     "One design per item; design moves none, proposed, approved",
+     "Where each part lives in local, Notion, and GitHub",
+     "Never delete a requirement; mark it Superseded with the Q-ID"
+    ],
+    "size_after_lines": 150,
+    "decisions_touched": [
+     "\"When Mike moves files or folders, the agent detects it and adapts\" (Settled decisions): keep 3 lines, since work-item-folders.md covers only local folders",
+     "Topic 13 piece 1, Questions and Answers rows: stays in the template and keep-work-item-current.md",
+     "Current state block at the top of the item (2026-09-30): stays in the template and the rule"
+    ]
+   },
+   {
+    "name": "shared: decisions-and-memory.md",
+    "files": 10,
+    "lines": 275,
+    "verdict": "keep and cut",
+    "job": "Know the exact project-wide memory question and how a memory links to a work item in each tracker and memory mix.",
+    "remove": [
+     "10 copies cost 2,750 lines in total",
+     "\"Where each kind of thing goes\" table; same as AGENTS.md \"Where information goes\" (13 lines)",
+     "\"A decision made with no work item\"; same rows in AGENTS.md (12 lines)",
+     "\"Citing what you recalled\"; same as cite-recalled-knowledge.md (23 lines)",
+     "Current State format, line limits, and removal list; same as the CURRENT_STATE.md template (49 lines)",
+     "The project-wide test and its 4 examples; decision_template.md has it (15 lines)",
+     "\"Instructions, procedures, and lessons\"; memory-review-and-save.md has it (17 lines)",
+     "Per-system decision record table; each memory skill has its own (12 lines)",
+     "Drop the copy from work-on, work-delegate, solution-design, work-status, local-memory-find"
+    ],
+    "merge": [],
+    "keep": [
+     "The exact question \"This looks project-wide. Save it to memory too?\" and asking it alone in that reply",
+     "The link table for every work-item and memory mix",
+     "Full Hindsight tool names mcp__hindsight__retain and recall; tags_match \"any_strict\"",
+     "Codex: the write to ~/.codex/AGENTS.md runs alone, escalated",
+     "Superseded and withdrawn decision records"
+    ],
+    "size_after_lines": 55,
+    "decisions_touched": [
+     "Topic 8: \"make sure the skills mention that\"; keep the question in work-refine and work-finish, not only in the rule",
+     "Topic 10, mixed setups and link forms: kept",
+     "\"Rules, skills, and memory each hold one kind of thing\": stays in memory-review-and-save.md"
+    ]
+   },
+   {
+    "name": "shared: git-rules.md",
+    "files": 9,
+    "lines": 282,
+    "verdict": "keep and cut",
+    "job": "Know the branch and worktree names, the Codex sandbox steps for Git writes, and the merge for a project with no remote.",
+    "remove": [
+     "9 copies cost 2,538 lines in total",
+     "\"Look before the first Git write\"; same as shared-repository-work.md (22 lines)",
+     "\"Staging and committing\"; same as the rule (15 lines)",
+     "\"No AI credit\" section; keep one line for Codex (12 lines)",
+     "Landing bullets that repeat the rule (12 lines)",
+     "\"The merge safety check\" commands; the rule has them (15 lines)",
+     "\"Checklist: one commit\" (10 lines) and \"Examples\" (28 lines)",
+     "The \"Closes #12\" paragraph; keep it once in github-work-track (5 lines)",
+     "Drop the copy from project-setup"
+    ],
+    "merge": [],
+    "keep": [
+     "Branch claude/wi-007-<slug> and worktree folder names",
+     "Always git -C <main checkout>, and why",
+     "Builder worktree made from the item's branch",
+     "Never git commit --no-edit after a conflict",
+     "No remote: git merge --ff-only from the main checkout",
+     "Never git clean -x in the main checkout",
+     "Codex: each Git write alone, require_escalated; \"approval required by policy\" means show the command"
+    ],
+    "size_after_lines": 100,
+    "decisions_touched": [
+     "\"No AI credit in commits\": Codex has no setting for it, so one line stays",
+     "Every merge needs his yes, and open question 4A: stays in shared-repository-work.md",
+     "\"Skip git fetch when there is no remote\" (2026-09-28, item 2): kept"
+    ]
+   },
+   {
+    "name": "shared: owner-preferences.md",
+    "files": 3,
+    "lines": 35,
+    "verdict": "delete",
+    "job": "none",
+    "remove": [
+     "The 7 empty area sections with sample lines (21 lines)",
+     "The long layout comment (1 long line)",
+     "All 3 copies in local-memory-save, local-memory-refine, notion-memory-save (105 lines)"
+    ],
+    "merge": [
+     "Setup already writes this file in every project from its own 5-line asset"
+    ],
+    "keep": [
+     "project-setup's 5-line assets/owner-preferences.md, with the area names in its layout note"
+    ],
+    "size_after_lines": 0,
+    "decisions_touched": [
+     "\"one always-on project rule .claude/rules/owner-preferences.md with a heading per area\": the area list stays in setup's asset"
+    ]
+   },
+   {
+    "name": "shared: writing-a-project-skill.md",
+    "files": 2,
+    "lines": 135,
+    "verdict": "keep and cut",
+    "job": "Know where a project skill goes, the frontmatter Codex accepts, and the AGENTS.md Skills line; Claude knows how to write a skill.",
+    "remove": [
+     "The skill skeleton (23 lines)",
+     "The description rules and example (28 lines)",
+     "The body rules (12 lines)",
+     "\"Finishing\": read the file back (7 lines)",
+     "The contents list (9 lines)"
+    ],
+    "merge": [],
+    "keep": [
+     "Put it in .claude/skills/<name>/; .agents/skills is a link (check with ls -la)",
+     "Frontmatter is only name and description; no when_to_use, $ARGUMENTS, ${CLAUDE_*}, or ! commands",
+     "Add one line to the AGENTS.md Skills list",
+     "Mark the lesson **Promoted:** with the date",
+     "Write it only after the owner's yes"
+    ],
+    "size_after_lines": 20,
+    "decisions_touched": [
+     "Promotion: \"the agent proposes turning it into a rule or skill and writes it after the owner's yes\": kept"
+    ]
+   },
+   {
+    "name": "shared: helper-briefs/acceptance-checker.md",
+    "files": 3,
+    "lines": 160,
+    "verdict": "keep and cut",
+    "job": "Start the independent checker the same way every time, with the job block and the report form it must return.",
+    "remove": [
+     "\"Writing\" paragraph; the same 7 lines end all 7 briefs",
+     "\"Check\" coaching: follow the flow as the user, do not invent findings (10 lines)",
+     "Read-only Git command list in \"Boundaries\" (10 lines)",
+     "\"What you receive\", which repeats the job block (11 lines)"
+    ],
+    "merge": [],
+    "keep": [
+     "When: always before a result approval; a plan check before parallel builders; a new head under standing merge",
+     "How: Agent tool, general-purpose, model opus, never a fork; Codex spawn_agent with fork_turns none, wait_agent",
+     "The job block",
+     "Check the exact commit named",
+     "Verdicts: Met, Partly met, Not met, Not run",
+     "Plan check: tasks on the same file or sandbox org never run at once",
+     "The return form"
+    ],
+    "size_after_lines": 85,
+    "decisions_touched": [
+     "\"the agent always starts one independent acceptance checker agent\" (2026-09-28 evening): kept whole"
+    ]
+   },
+   {
+    "name": "shared: helper-briefs/builder.md",
+    "files": 2,
+    "lines": 166,
+    "verdict": "keep and cut",
+    "job": "Start a builder helper in its own worktree with the job block, and merge its branch back the same way every time.",
+    "remove": [
+     "\"Commit\" rules that repeat git-rules: stage by name, no AI credit, never push (12 lines)",
+     "\"Build\" coaching: follow the design, build no more, choose which tests (10 lines)",
+     "\"Writing\" paragraph (7 lines)",
+     "\"What you receive\", which repeats the job block (9 lines)",
+     "Scratch-file and dependency lines (4 lines)"
+    ],
+    "merge": [],
+    "keep": [
+     "Make the builder worktree from the item's branch",
+     "codex exec: no builder worktrees, one builder at a time, commit nothing",
+     "The start method",
+     "After the report: run its tests, check its files, merge, remove its worktree",
+     "The job block",
+     "Never touch work-items/ or memory/",
+     "Ignore the Codex after-commit reminder",
+     "Never deploy or touch a production org",
+     "Commit message starts with the task ID",
+     "The return form"
+    ],
+    "size_after_lines": 80,
+    "decisions_touched": []
+   },
+   {
+    "name": "shared: helper-briefs/design-architect.md",
+    "files": 1,
+    "lines": 153,
+    "verdict": "keep and cut",
+    "job": "Start one design-option helper per option with the job block and get back the option in the template's shape.",
+    "remove": [
+     "\"Reason about the research\": official vs community claims, same text in researcher and critic (8 lines)",
+     "The list of DESIGN.md headings, which the template already holds (12 lines)",
+     "\"Writing\" paragraph (7 lines)",
+     "\"What you receive\", which repeats the job block (9 lines)",
+     "Most of \"Boundaries\" (8 lines down to 2)"
+    ],
+    "merge": [],
+    "keep": [
+     "One architect per option; two only when there is a real choice",
+     "The design team needs no permission; name it in one line",
+     "The start method and job block",
+     "Check the requirements first; if incomplete, return the gaps and stop",
+     "Built-in first",
+     "Return the option in a four-backtick fence",
+     "Fix-round rules"
+    ],
+    "size_after_lines": 70,
+    "decisions_touched": []
+   },
+   {
+    "name": "shared: helper-briefs/design-critic.md",
+    "files": 1,
+    "lines": 139,
+    "verdict": "keep and cut",
+    "job": "Start a critic that checks each draft option against every requirement and returns a verdict table.",
+    "remove": [
+     "The \"Writing\" check for figurative phrases and idioms (6 lines)",
+     "\"Writing\" paragraph (7 lines)",
+     "\"Sources\" coaching on which sources to open first (5 lines)",
+     "\"What you receive\" (8 lines)",
+     "Most of \"Boundaries\" (8 lines down to 2)"
+    ],
+    "merge": [],
+    "keep": [
+     "Never the helper that wrote the draft",
+     "Stop at Clean, or when the owner decided what remains",
+     "Disagreement after two rounds goes to the owner as one question",
+     "The job block",
+     "Per requirement: Satisfied, Partly satisfied, Not satisfied",
+     "The return form and what Clean means"
+    ],
+    "size_after_lines": 60,
+    "decisions_touched": []
+   },
+   {
+    "name": "shared: helper-briefs/handoff-verifier.md",
+    "files": 1,
+    "lines": 234,
+    "verdict": "keep and cut",
+    "job": "Start a read-only checker that tests each claim in a handoff prompt against files and the tracker.",
+    "remove": [
+     "The paragraph on why a guess in a handoff is harmful (5 lines)",
+     "The 6-row goal verdict table and the task-vs-goal example (17 lines)",
+     "\"Job three\": the list of sentence types that sound settled (15 lines)",
+     "\"What you do not do\" (8 lines)",
+     "\"Writing\" paragraph (6 lines)",
+     "The read-only command list (10 lines down to 2)",
+     "The four source kinds, explained at length (14 lines down to 4)"
+    ],
+    "merge": [],
+    "keep": [
+     "The job block",
+     "It cannot read Notion or Hindsight: paste their text",
+     "How to open an item by ID: grep the id line, gh issue view",
+     "The AI-notice first line is not a claim",
+     "Skipped when gh fails",
+     "The report form"
+    ],
+    "size_after_lines": 110,
+    "decisions_touched": []
+   },
+   {
+    "name": "shared: helper-briefs/requirements-analyst.md",
+    "files": 1,
+    "lines": 133,
+    "verdict": "keep and cut",
+    "job": "Start a fresh helper that says whether the requirements are ready, before the owner approves them.",
+    "remove": [
+     "\"Check readiness\": the 7 kinds of findings to look for (27 lines)",
+     "\"What you receive\" (6 lines)",
+     "\"Writing\" paragraph (6 lines)",
+     "Most of \"Boundaries\" (7 lines down to 2)"
+    ],
+    "merge": [],
+    "keep": [
+     "When: before requirements approval, on \"check the spec\", after a change",
+     "Needs no permission",
+     "The start method and job block",
+     "Wording fixes go straight in; changes to what he asked become Q&A rows",
+     "Three findings or fewer: one per message; more: one numbered list",
+     "The return form"
+    ],
+    "size_after_lines": 55,
+    "decisions_touched": [
+     "One question at a time with a recommendation (Topic 13 piece 4): the one-per-message line is kept"
+    ]
+   },
+   {
+    "name": "shared: helper-briefs/researcher.md",
+    "files": 2,
+    "lines": 124,
+    "verdict": "keep and cut",
+    "job": "Start a read-only helper for one research question and get back labeled, sourced findings.",
+    "remove": [
+     "The list of where to look: vendor blogs, Stack Overflow, GitHub, Reddit (12 lines)",
+     "The note on sources newer than its own knowledge (5 lines)",
+     "\"What you receive\" (7 lines)",
+     "\"Writing\" paragraph (6 lines)",
+     "Most of \"Boundaries\" (8 lines down to 2)"
+    ],
+    "merge": [],
+    "keep": [
+     "One researcher per question; no permission needed",
+     "The start method and job block",
+     "Results are evidence; record them in Notes Context or the design's sources",
+     "Label each finding: official, project, or community",
+     "The return form"
+    ],
+    "size_after_lines": 55,
+    "decisions_touched": []
+   },
+   {
+    "name": "shared: notion/notion-access.md",
+    "files": 5,
+    "lines": 120,
+    "verdict": "keep and cut",
+    "job": "Know how to reach the owner's Notion with ntn, what only he can do, and the Codex sandbox steps.",
+    "remove": [
+     "Error rows for 429 and 500, which Claude already handles (4 lines)",
+     "The read-back and \"Not saved\" paragraph, repeated in 4 shared files (5 lines)",
+     "\"Limits and pacing\" (7 lines down to 2)",
+     "Official documentation links (8 lines down to 2)",
+     "Connector tool-name mapping (8 lines down to 2)",
+     "The contents list (10 lines)"
+    ],
+    "merge": [],
+    "keep": [
+     "Use ntn first; the connector only when ntn cannot run",
+     "ntn whoami; ntn login is his step; never ask for a token",
+     "404 means the page is not shared with \"Notion CLI\"; his fix in the app",
+     "Codex: each ntn call alone, escalated, jq in the same command",
+     "codex exec refuses: show him the command",
+     "All ids come from PROJECT.md \"Toolkit settings\"",
+     "Error rows 401, 404, 400, 409",
+     "2,000 characters per text piece; ntn api --docs"
+    ],
+    "size_after_lines": 85,
+    "decisions_touched": [
+     "Topic 7: \"pages are shared with the Notion CLI connection and ntn runs outside the Codex sandbox\": kept"
+    ]
+   },
+   {
+    "name": "shared: notion/ntn-basics.md",
+    "files": 5,
+    "lines": 219,
+    "verdict": "keep and cut",
+    "job": "Know the exact ntn call forms and the Notion quirks that break edits.",
+    "remove": [
+     "The scratch-folder paragraph, same text in gh-basics and setup-copy (11 lines)",
+     "The 17-line jq filter for reading properties",
+     "Query-parameter and quick-list notes (5 lines)",
+     "The contents list (11 lines)",
+     "Part of \"Ids\" (5 lines)"
+    ],
+    "merge": [],
+    "keep": [
+     "End every ntn api call with < /dev/null, or it hangs",
+     "Never pkill or killall by pattern",
+     "The placeholder table for asset bodies",
+     "Notion Markdown escaping and toggle rules",
+     "update_content: old_str must match exactly once",
+     "Never replace_content on a work item page",
+     "Templates fill in the background: poll every 5 seconds",
+     "Never apply a template to a template"
+    ],
+    "size_after_lines": 175,
+    "decisions_touched": []
+   },
+   {
+    "name": "shared: notion/record-mapping.md",
+    "files": 3,
+    "lines": 112,
+    "verdict": "keep and cut",
+    "job": "Know which Lore column holds which part of a memory record.",
+    "remove": [
+     "The \"Kinds of record\" prefix table, same as local record-format and memory/AGENTS.md (13 lines)",
+     "The paragraph that instructions go to owner-preferences.md, repeated in about 10 files (5 lines)",
+     "\"One record, one row\" (6 lines down to 2)",
+     "The contents list (9 lines)"
+    ],
+    "merge": [],
+    "keep": [
+     "The column table with Lore's column names",
+     "Always-set columns: Kind, Source, Author, Agent, Project",
+     "Decision record: Decided At; Alternatives and Consequences only when he named them",
+     "Status mapping to Lore",
+     "Body sections",
+     "Work item links: Work item IDs text plus relation",
+     "Entities and Facts only when he wants them"
+    ],
+    "size_after_lines": 80,
+    "decisions_touched": [
+     "\"Notion memory uses Lore's layout\": column names kept exactly"
+    ]
+   },
+   {
+    "name": "shared: notion/current-state.md",
+    "files": 2,
+    "lines": 51,
+    "verdict": "keep and cut",
+    "job": "Know how to read and edit the Notion \"Current state\" page with ntn.",
+    "remove": [
+     "The four-section limits table, same as the CURRENT_STATE.md template (12 lines)",
+     "The \"Keeping it true\" removal list, same as memory/AGENTS.md (10 lines)"
+    ],
+    "merge": [],
+    "keep": [
+     "Page id from PROJECT.md",
+     "The ntn read command",
+     "Edit with update_content; remove a line with empty new_str; update \"Last updated\" in the same call",
+     "Over the limit: run notion-memory-refine"
+    ],
+    "size_after_lines": 20,
+    "decisions_touched": [
+     "\"Current focus ... gets cleaned up\" (Topic 2 interview): the limits stay in the template and memory rule"
+    ]
+   },
+   {
+    "name": "shared: github/gh-access.md",
+    "files": 2,
+    "lines": 126,
+    "verdict": "keep and cut",
+    "job": "Know how to reach the project's GitHub issues with gh, what only the owner can do, and the Codex steps.",
+    "remove": [
+     "Official documentation links (11 lines)",
+     "Error rows Claude handles: rate limit, 500, network (4 lines)",
+     "The read-back and \"Not saved\" paragraph (5 lines)",
+     "The contents list (9 lines)"
+    ],
+    "merge": [],
+    "keep": [
+     "Use gh even when a connector exists",
+     "gh auth status; repo scope; gh auth login is his step",
+     "Always -R <repo>; never {owner}/{repo}",
+     "Repository from PROJECT.md, never guessed from the remote",
+     "Codex: each gh call alone, escalated",
+     "Label not found: ask before creating",
+     "422 causes; 65,536-character limit; --limit 200; --paginate",
+     "gh cannot attach files; sub-issue calls need the number id"
+    ],
+    "size_after_lines": 95,
+    "decisions_touched": []
+   },
+   {
+    "name": "shared: github/gh-basics.md",
+    "files": 2,
+    "lines": 181,
+    "verdict": "keep and cut",
+    "job": "Know the exact gh command forms for issue bodies, labels, comments, and sub-issues.",
+    "remove": [
+     "The temporary-folder section, same text in ntn-basics (12 lines)",
+     "\"Reading many issues\" basics (12 lines down to 4)",
+     "\"Checking that a write was saved\" table (13 lines)",
+     "The contents list (12 lines)"
+    ],
+    "merge": [],
+    "keep": [
+     "Issue view JSON fields",
+     "The jq that pulls one body section",
+     "Body edit: read fresh, edit, --body-file",
+     "Swap labels in one call",
+     "Comments: list and edit by id; start agent notes with \"Agent:\"",
+     "Sub-issues: -F, number id, replace_parent, delete path ends sub_issue",
+     "\"No parent issue found\" is an answer",
+     "gh issue list never returns pull requests"
+    ],
+    "size_after_lines": 135,
+    "decisions_touched": []
+   },
+   {
+    "name": "shared: local-memory/record-format.md",
+    "files": 3,
+    "lines": 328,
+    "verdict": "keep and cut",
+    "job": "Know how to mark a memory file as proposed, superseded, retired, or withdrawn; the templates hold the rest.",
+    "remove": [
+     "\"The files in memory/\" table; same as memory/AGENTS.md (16 lines)",
+     "\"One file per concept\"; same as memory/AGENTS.md and the template (13 lines)",
+     "Prefix table; same as memory/AGENTS.md (19 lines)",
+     "Front matter example and field table; the template has them (37 lines)",
+     "Body example and label rules; same as project_topic_template.md (47 lines)",
+     "Decision record example; same as decision_template.md (34 lines)",
+     "Work item link table; same as the template's fill-in guide (23 lines)",
+     "\"What never goes in a memory file\"; memory-criteria.md has it (14 lines)",
+     "\"Checklist before a save\" (13 lines)"
+    ],
+    "merge": [],
+    "keep": [
+     "The status table and what the index shows for each",
+     "The proposal, superseded, retired, and withdrawn marking forms",
+     "Section links use %20 for spaces",
+     "Split a concept at about 20 sections or 300 lines; file names up to 60 characters",
+     "Gotchas and lessons: Seen line, the proved-itself test, Promoted line"
+    ],
+    "size_after_lines": 75,
+    "decisions_touched": [
+     "Memory additions (2026-09-27) item 1, unanswered saves become needs-review records: kept in the status table",
+     "Concept memory, \"one file per concept\": stays in the template and memory/AGENTS.md"
+    ]
+   },
+   {
+    "name": "project-setup",
+    "files": 13,
+    "lines": 2384,
+    "verdict": "keep and cut",
+    "job": "Install the model project, the right skill sets, hooks, and settings for the owner's choices; Claude cannot guess the file lists, markers, or settings.",
+    "remove": [
+     "references/git-rules.md copy (282 lines); SKILL.md and finishing.md already hold what setup needs",
+     "SKILL.md \"New project checklist\", repeats the 8 steps (15 lines)",
+     "SKILL.md \"Steps only the owner can do\", same table in finishing.md (10 lines)",
+     "SKILL.md gotchas repeated in references: question-tool ban, backup history line, auto-memory, two-space lines (about 20 lines)",
+     "SKILL.md \"Write to the owner in plain English\" paragraph (4 lines)",
+     "interview.md: the 8 quoted sample questions (about 20 lines)",
+     "interview.md \"Rules for every question\", repeats SKILL.md (12 lines)",
+     "setup-copy.md: the before/after marker example (16 lines)",
+     "skills-hooks-settings.md: general JSON and TOML merge rules (about 15 lines)",
+     "skills-hooks-settings.md: the \"Check\" block of jq and grep one-liners (about 50 lines)",
+     "The Codex escalation paragraph repeated in 6 references (about 40 lines)",
+     "notion.md: sign-in steps and the < /dev/null note from the Notion skills (about 25 lines)",
+     "github.md: the \"Closes #12\" gotcha (4 lines)",
+     "salesforce.md: gotchas that repeat the body (about 8 lines)",
+     "finishing.md: commit-offer staging rules (about 10 lines)",
+     "update.md: AGENTS.md limit explanation and where-to-move list (about 20 lines)",
+     "update.md: cleanup of the retired program's files and old end-of-reply hook, if no real project has them (about 10 lines)"
+    ],
+    "merge": [
+     "Move the 53-line Hindsight service file out of installing-hindsight.md into assets/ as a file",
+     "Codex escalation rule: once, in SKILL.md Gotchas",
+     "Owner's-steps list: once, in finishing.md",
+     "Old end-of-reply hook and old Codex matcher handling: update.md only"
+    ],
+    "keep": [
+     "\"Pick the path\": stopped part way, check, update, older toolkit",
+     "The 8 steps and the References table",
+     "Look-before checks: Git root, linked worktree, Hindsight health",
+     "The five questions, their values, and the recommendations",
+     "The plan to confirm, naming everything made outside the folder",
+     "Exact removal lists, setup markers, Toolkit settings lines, Salesforce settings entries",
+     "The rules-list format between the marker lines",
+     "Which skill sets each choice copies; the settings snippet table",
+     "max_context_tokens = 10000 for Codex; plugins-off discovery",
+     "rsync -rlt, not -a; the files-already-there table; the .agents/skills link",
+     "Notion Projects database search: title column Project, not Lore's Name",
+     "Hindsight bank creation, tool limit, MCP entries; never codex mcp add",
+     "Salesforce org aliases and API version only from orgs he named",
+     "Final checks, the commit offer, and the update steps"
+    ],
+    "size_after_lines": 1620,
+    "decisions_touched": [
+     "One question at a time with a recommendation: kept as one line in interview.md",
+     "Question-box ban (\"never through a question tool\"): PROGRESS.md open question (2) says this clashes with Mike's own rule; not decided",
+     "Salesforce production org (2026-09-30): \"never touch an org the project has not named\": kept",
+     "Code limit: the only code a project runs is the three hooks and the model's Salesforce code: kept"
+    ]
+   },
+   {
+    "name": "hook: session-start.mjs",
+    "files": 1,
+    "lines": 76,
+    "verdict": "keep and cut",
+    "job": "Needed: prints Current State at session start and rebuilds memory/MEMORY.md, which Mike asked for.",
+    "remove": [
+     "The compaction message telling the agent to re-read files; not in GOAL.md (4 lines)"
+    ],
+    "merge": [],
+    "keep": [
+     "Print Current State: local file or Notion page",
+     "The prune reminder at 40 lines or 7 days old",
+     "Rebuild MEMORY.md from each file's title, description, and date",
+     "Prints one line and exits normally on any error"
+    ],
+    "size_after_lines": 72,
+    "decisions_touched": [
+     "\"When the session starts, it should load in the current focus\" (Direction change): kept",
+     "Open question 3: MEMORY.md is generated by the session-start hook: kept",
+     "\"it just doesn't know when to clean it up\" (Topic 2 interview): the prune reminder kept"
+    ]
+   },
+   {
+    "name": "hook: prompt-reminder.mjs",
+    "files": 1,
+    "lines": 56,
+    "verdict": "keep and cut",
+    "job": "Needed only because Mike asked: it matches his message against phrase patterns and prints one hint to consider a memory save.",
+    "remove": [
+     "The 4 extra sentences on where decisions, instructions, transcripts, and Hindsight saves go; the memory rule says this (about 10 lines)",
+     "The \"remind me what we decided\" exception pattern (2 lines)",
+     "The \"whenever you are ready\" exceptions (3 lines)"
+    ],
+    "merge": [],
+    "keep": [
+     "Davis's 11 phrase groups plus \"we decided\", \"let's go with\", \"go with option\"",
+     "Strip pasted content before matching",
+     "Prints nothing on an error"
+    ],
+    "size_after_lines": 40,
+    "decisions_touched": [
+     "Topic 6 (1): the reminder listens for Davis's 11 phrase groups plus decision phrases: kept",
+     "\"Situation, not trigger words\" (A2): no new phrases; nothing added"
+    ]
+   },
+   {
+    "name": "hook: codex-after-commit.mjs",
+    "files": 1,
+    "lines": 19,
+    "verdict": "keep and cut",
+    "job": "Needed: after a commit, reminds the agent to update the work item's history and status, as Mike asked.",
+    "remove": [],
+    "merge": [],
+    "keep": [
+     "The whole 19-line file, including the skip for helper agents' commits"
+    ],
+    "size_after_lines": 19,
+    "decisions_touched": [
+     "Topic 6 (2): \"After each commit, a hook reminds the agent to update the work item's history and status\": kept"
+    ]
+   },
+   {
+    "name": "sf-architect-solutioning",
+    "files": 15,
+    "lines": 3821,
+    "verdict": "Mike's own; his call",
+    "job": "Salesforce architect steps: read requirements critically, check platform facts against official Salesforce docs, design declarative first, write a solution plan.",
+    "remove": [],
+    "merge": [],
+    "keep": [
+     "SKILL.md (186 lines): 5 phases: intake, project context, verify against docs, design, solution plan",
+     "Solution plan template (171) and solutioning checklist (53)",
+     "Doc sources (122), naming conventions (226), architectural patterns (269), Well-Architected (282)",
+     "8 metadata guides: objects and fields 568, flows 532, custom metadata 334, approvals 252, layouts 224, permission sets 222, platform events 201, validation rules 179"
+    ],
+    "size_after_lines": 3821,
+    "decisions_touched": [
+     "\"Port ... sf-architect-solutioning as is\" (Settled decisions, 2026-09-26)",
+     "\"Mike approved rewriting the sf-architect-solutioning description only (body unchanged)\""
+    ]
+   }
+  ],
+  "group_notes": "Copies of the 20 shared texts make up 18,583 lines, nearly half of all skill text. Four of them account for 12,758 of those lines (approvals, work-item-format, decisions-and-memory, git-rules), because each is copied into 8 to 10 skills. Most of their text repeats files every project already loads: the model's AGENTS.md, keep-work-item-current.md, shared-repository-work.md, memory-review-and-save.md, cite-recalled-knowledge.md, and the work item, Current State, and memory templates. With the cuts above, and each text copied only into the skills that use it, those 18,583 lines drop to about 5,700, and no settled decision of Mike's is lost."
+ }
+]

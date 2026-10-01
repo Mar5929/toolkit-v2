@@ -1,0 +1,68 @@
+{
+  "create_database": {
+    "parent": {
+      "type": "page_id",
+      "page_id": "{{ITEM_PAGE_ID}}"
+    },
+    "position": {
+      "type": "after_block",
+      "block_id": "{{AFTER_BLOCK_ID}}"
+    }
+  },
+  "data_source_id": "{{MEMORIES_DS}}",
+  "name": "Linked memory",
+  "type": "table",
+  "filter": {
+    "and": [
+      {
+        "property": "{{M_WORK_ITEMS}}",
+        "relation": {
+          "contains": "{{ITEM_PAGE_ID}}"
+        }
+      },
+      {
+        "property": "{{M_STATUS}}",
+        "select": {
+          "does_not_equal": "superseded"
+        }
+      },
+      {
+        "property": "{{M_STATUS}}",
+        "select": {
+          "does_not_equal": "deprecated"
+        }
+      }
+    ]
+  },
+  "sorts": [
+    {
+      "property": "{{M_SAVED}}",
+      "direction": "descending"
+    }
+  ],
+  "configuration": {
+    "type": "table",
+    "group_by": {
+      "type": "select",
+      "property_id": "{{M_KIND}}",
+      "sort": {
+        "type": "ascending"
+      },
+      "hide_empty_groups": true
+    },
+    "properties": [
+      {
+        "property_id": "{{M_STATUS}}",
+        "visible": true
+      },
+      {
+        "property_id": "{{M_SAVED}}",
+        "visible": true
+      },
+      {
+        "property_id": "{{M_SYNOPSIS}}",
+        "visible": true
+      }
+    ]
+  }
+}

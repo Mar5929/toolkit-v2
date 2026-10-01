@@ -2,7 +2,348 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
-## Resume here (written 2026-09-29, before context compaction)
+## Resume here (2026-09-29, overnight build)
+
+### Now (2026-10-01, about 17:10)
+
+- Toolkit 0.4.9 (3e3ae62): morning fixes (0.4.8, 169bbc8: memory question
+  after a project-wide decision, approved-requirement change goes back for
+  approval, all item fields read, end-of-reply check dropped) and the Notion
+  database templates (merge 0fd99e6, review in
+  dev/reviews/2026-10-01-notion-db-templates-review.md).
+- Mike's real Notion: templates are now Projects database templates;
+  "Project: work and memory" is the default; template cards hidden;
+  "Template check (safe to delete)" exists. Open for him on #6: Q-01
+  (layout groupings) and Q-04 (deleting test leftovers). The Notion session
+  has nothing else open.
+- Claude Code test home signed in again by Mike at about 17:00. Running:
+  workflow wf_f39029f9-a02 (update projects to 0.4.9, stage 3 re-checks,
+  Claude Code routing after-run on Opus with --max-turns 3, stage 4 Claude
+  Code half on Sonnet, one fix round with reviewers, release, tracker).
+- Also running (17:20): Notion layout groupings by a Chrome helper agent
+  (Mike: "do this in Chrome by hand"); Notion deletions by the Notion
+  session (now: "Toolkit V2 templates" and "Project workspace"; later, after
+  the Claude Code tests: the test area and "Template check"); the skill
+  best-practices audit, workflow wf_c142bee6-3e8 (3 Opus auditors, report in
+  dev/reviews/skill-audit-2026-10-01/, then an Opus lead plans a behavior-preserving refactor, Sonnet agents apply it, the three reviewers check it, and a short routing test confirms no behavior changed; behavior changes held for Mike).
+- Skill audit done: dev/reviews/skill-audit-2026-10-01/report.md (commit
+  ad1cfbb; 70 checks; 64 wording/layout fixes, 49 held). Pass 1 (wording
+  and layout only, behavior kept) runs in worktree
+  .claude/worktrees/skill-audit-fixes on branch claude/skill-audit-fixes,
+  workflow wf_b7f9f051-899 (Opus lead, Sonnet executors, reviewers); merge
+  into claude/v2-build after the Claude Code tests finish. The 49 held fixes
+  wait for Mike: he is reading report section 5 first (2026-10-01).
+- Waiting on Mike: the ~40 small tracker questions (he is reading them);
+  scrubbing raw transcripts before any push (#9); merge approval.
+
+### Overnight results (2026-10-01, by 08:30)
+
+- Stage 3 done: commit 08231ab (0.4.5). Claude Code re-runs blocked: its
+  test sign-in expired ("OAuth session expired and could not be
+  refreshed"); Mike signs in again.
+- Applied as one change, reviewed by the three checklists: 1d5bf73 (0.4.6;
+  model commits 7a6928d, dfc6ba5, later 593d423): the AGENTS.md routing map
+  (155 to 180 lines per setup), the main rule, Next action forms, every
+  approved review answer, the earlier team offer, the voice line copy.
+- Best-practices sweep (26 fixes), Codex routing after-run, Codex update
+  path, and stage 4 Codex runs: e82954a (0.4.7). Codex routing 68 of 84 by
+  the strict rule, 82 of 84 counting the work find read as the item read
+  (#4 Q-06). Stage 4 Codex: Salesforce 19 of 27 checks pass, iOS Notion 18
+  pass, 8 partly, 3 fail. Bugs to fix next: no "save to memory too?" after
+  a project-wide decision; an approved requirement changed inside a design
+  without asking; the iOS simulator launched after "dont deploy anything";
+  a hand-made Phase change not noticed; update.md issues.
+- Open questions for Mike: in the tracker issues (#1 to #7), each with a
+  recommended answer. Raw transcripts in 08231ab must be scrubbed before
+  any push.
+- Morning answer applied in 0.4.8 (Mike, 2026-10-01: "Drop it"; 126
+  checks, 1 false alarm, 0 real catches): the
+  end-of-reply check (the `Stop` hook of type `prompt`) is out of the three
+  Claude Code settings snippets, `skills-hooks-settings.md`, `update.md`
+  (an old one in a project is listed and removed after his yes), `README.md`,
+  `dev/tests/hooks.test.mjs`, and the table in
+  `dev/research/skills-first-architecture.md` section 6. The model never
+  held it (its only `Stop` hook is the Salesforce graph hook), so no model
+  change. Diagram 2 in `dev/diagrams/` still shows the row. The reminder
+  hook and the rules that cover saving stay. Mike also answered "Leave
+  them on" for the ChatGPT-account plugins in Codex (no change).
+- 0.4.8 (this release): the three bugs from the stage 4 Codex runs are
+  fixed in the shared texts and skills (re-test pending, #7): the "save to
+  memory too?" question now comes as the reply's one question after a
+  project-wide decision; an approved requirement changed inside a design
+  choice goes to `work-refine` for his approval first; every read of an
+  item checks every routing field, so a hand change to Phase is noticed.
+  Also in 0.4.8: the `.codex/hooks.json` description merge rule and check,
+  and the order for fitting a too-long `AGENTS.md` (`update.md`). Not
+  applied, because they are open questions for Mike: the simulator as
+  deploying (#7 Q-10), the bare "ok" rule (#7 Q-08), the handoff on "thats
+  enough for today" (#7 Q-06), and the rest of the ~40 tracker questions.
+  Notion skill files were not touched (the Notion session owns them): the
+  "one question" order and the routing-field read still need copying into
+  the Notion skills.
+
+### Overnight plan (Mike, 2026-09-30, before bed: "routing plus review";
+### "we can run stage 4 overnight too, then we just keep progressing things")
+
+In order, each step reviewed with the three checklists in `dev/reviews/`
+and run cheaply (Sonnet for mechanical work and test driving; see
+`dev/GOAL.md`, "Cost and model for tests"):
+1. Stage 3 finishes (workflow `wf_eeefdaec-4be`): Codex routing and hooks,
+   fixes, re-runs, commit. Check its evidence for Mike's email and client
+   org names before any push.
+2. Issue #1 becomes the build's work item with sub-issues (workflow
+   `wf_42387678-99d`); send the Notion session its sub-issue number; keep
+   every sub-issue current after each step below.
+3. Apply, as one change: the routing and AGENTS.md report's 5
+   recommendations, the baseline review's recommended answers (111
+   questions, by the "situation first, trigger words as insurance"
+   principle), the earlier team offer, the voice-to-text line copy. Model
+   changes on the model branch as Mike Rihm, listed in
+   `dev/model-changes-2026-09-30.md`. Routing test before and after in both
+   hosts.
+   DONE 2026-10-01. Model branch commits 7a6928d (AGENTS.md as a map; work
+   items name the next skill) and dfc6ba5 (the review answers that change a
+   model file). The build side (skills, shared texts, setup references,
+   hook text) and the refreshed model copy (matches model commit 593d423)
+   are in the toolkit 0.4.6 release commit. The routing test after the
+   change is not recorded in `dev/test-runs/` yet.
+4. Full best-practices review (`dev/reviews/best-practices-review.md`) and
+   its fixes.
+   DONE 2026-10-01. Model branch commits e189a8e and 593d423 (two review
+   rounds on AGENTS.md, the Next action form, and the roadmap line); the
+   build-side fixes are in the toolkit 0.4.6 release commit. Checks at
+   0.4.6 passed; the largest setup's AGENTS.md is 179 lines and 20,236
+   bytes once setup removes the fill-in guide.
+5. Stage 4 with a short targeted plan, Sonnet drivers.
+6. Morning report for Mike. Put to him, as separate yeses: (a) switch the
+   real Notion templates to Notion database templates (the Notion
+   session's final recommendation, commit 0c34b28 on
+   worktree-notion-work-tracker: project templates as Projects database
+   templates with "Project: work and memory" as default; an empty-titled
+   default Work Items template; every Work Items view filtered "Work item
+   is not empty"; queries skip the templates list; untitled cards listed
+   for him, never deleted); (b) the clicks in his real Projects database
+   (by Chrome or by him); (c) later, deleting the plain "Toolkit V2
+   templates" page and the test area. The edit lists are ready, not
+   applied: dev/test-runs/notion-db-template-edits.md, commit 450dd8a on
+   worktree-notion-work-tracker (before and after text per file, each with
+   its Notion source; section 11 is the click-by-click migration). Notes
+   for Mike: queries use the same empty-title filter as the views; the
+   no-Projects-database fallback is removed (stop and ask; does not affect
+   him); until he says yes to deleting it, new projects also get a copy of
+   the old plain "Work item template" page, which nothing reads.
+
+### Stage 3 results (workflow `wf_eeefdaec-4be`, committed 2026-10-01)
+
+Evidence: `dev/test-runs/v2-skills-first/`, one folder per step; each
+`evidence.md` starts with its result, and `rerun-1.md` and `rerun-2.md` hold
+the two fix rounds. The toolkit went from 0.4.3 to 0.4.5, installed in both
+test homes.
+
+- Onboarding: 6 live setups, all worked. Claude Code: `sf-greenfield`
+  (local, Salesforce; second try, the first read a production org Mike had
+  not named, now fixed), `ios-money-notion` (Notion work and memory, prefix
+  `IOC`), `ios-money-github` (GitHub Issues, Hindsight bank
+  `tkv2-test-ios-github`, pushed to `Mar5929/toolkit-v2-test-ios`),
+  `sf-greenfield-notion` (Notion work prefix `SFN`, local memory,
+  Salesforce). Codex: `sf-greenfield` and `ios-money-notion` (prefix `IOX`),
+  each set up twice more on fresh copies (`-r1`, `-r2`) to check the fixes.
+- Routing, 3 runs per request: Claude Code 77 of 81 right first, Codex 76
+  of 81. With Mike's own skills and plugins visible: Claude Code 60 of 63,
+  Codex 26 of 27. No competing skill (Notion plugin, `todoist-cli`,
+  `update-config`, `project-init`, and the rest) won in either host. The
+  one real miss: a finished task the owner describes without naming it ("I
+  made the sandbox, mark it done").
+- Hooks: every Claude Code hook row fired in real sessions (162 hook runs,
+  all exit 0). Codex: three of four rows fired; the helper reminder did not,
+  because Codex names its helper tools differently. The corrected matcher
+  was proven live.
+- Fixed in two rounds (0.4.4, then 0.4.5): 21 project-setup findings (never
+  read a Salesforce org the owner did not name; one question per message;
+  "none yet" for an org that does not exist; nothing left outside the
+  project); the three track skill descriptions now cover a task the owner
+  says is done; `ntn api` calls end with `< /dev/null` and never `pkill`;
+  the handoff check reads Notion with `ntn`, not the connector; no plan
+  tool in `codex exec`; the Codex helper matcher; the plugins-off lists;
+  the end-of-reply check and pasted notes; the prompt reminder's phrases;
+  Notion body files no longer left in `/private/tmp`.
+- Checks at this commit: both `claude plugin validate` runs pass;
+  check-skills passed (0 errors, 16 warnings on Mike's own Salesforce
+  skills); check-rules passed (2 warnings); 28 of 28 hook tests pass. No
+  fixer changed the model branch. The model copy matches model commit
+  35e2177; only d9f61ef (voice-to-text) waits for the refresh below.
+- Still open (each with its exact fix in the step's latest `rerun-*.md`):
+  - Blocker: the Claude Code test home is still signed out. At 03:22 on
+    2026-10-01, after Mike ran the sign-in again, `claude auth status`
+    still printed `"loggedIn": false`, and the home's `.claude.json` has not
+    changed since 2026-09-30 18:37. A third try of the same command will
+    not help; the sign-in is not being saved for this folder. Every Claude
+    Code re-run waits on it: `cc-onboard-ios-github-hindsight`,
+    `cc-onboard-sf-notion-local`, routing R04, R12, and R22, and the s04
+    and s13 end-of-reply checks.
+  - Must-fix, Codex (`cx-routing` round 2, finding 1): add `[skills]` and
+    `max_context_tokens = 10000` to `codex-plugins-off.toml`, with the
+    `skills-hooks-settings.md` and `dev/tests/hooks.test.mjs` edits, so the
+    ChatGPT account plugins no longer make Codex cut every description.
+  - Should-fix: `prompt-reminder.mjs` line 8 (recall questions such as "is
+    that what we decided?" print the decision hint again, `cc-routing`);
+    `finishing.md` "The commit offer" (stage files from
+    `git status --short --untracked-files=all`, never a folder,
+    `cx-onboard-sf-local`); `finishing.md` line 122 (the after-commit
+    self-check sets off Codex's after-commit hook, `cx-hooks`).
+  - Questions for Mike, for the morning report: keep the end-of-reply
+    check; may agents read his own `~/.claude` and `~/.codex` to check a
+    setup step (recommended: no); the `AGENTS.md` routing line for a
+    described task (recommended: not yet); the ChatGPT account and OpenAI
+    plugins in V2 projects (recommended: the `[skills]` fix first, then
+    test again); a `[skills]` line or switching off the six older
+    claude-toolkit plugins in his own `~/.codex/config.toml`; moving one
+    client's rules out of `~/.codex/AGENTS.md`.
+  - Before any push: 129 evidence files hold Mike's email address. Check
+    the evidence for client org names too (overnight plan, item 1).
+- Test projects, each its own Git repository, on 0.4.5 and clean:
+  `/Users/michaelrihm/.toolkit-v2-test-projects/claude/` `sf-greenfield`,
+  `ios-money-notion`, `ios-money-github`, `sf-greenfield-notion`,
+  `routing-local`, `routing-notion`, `routing-github`; and
+  `/Users/michaelrihm/.toolkit-v2-test-projects/codex/` `sf-greenfield`
+  (plus `-r1`, `-r2`), `ios-money-notion` (plus `-r1`, `-r2`),
+  `routing-local`, `routing-notion`, `routing-github`. The
+  `routing-empty-*`, `remote-plugin-probe-*`, and `routing-local-rs2-*`
+  folders are routing probes, not projects to keep working in.
+- Next: stage 4 (overnight plan item 5; items 2 to 4 come first in that
+  list). The end-to-end tests continue in the onboarded projects above,
+  following `dev/test-runs/v2-skills-first/stage-4-plan.md`. Claude Code
+  stage 4 sessions wait on the sign-in.
+
+- Where: branch `claude/v2-build`, worktree `.claude/worktrees/v2-build`.
+  Nothing is merged to `main` or pushed until Mike says yes.
+- Goal: the finish list at the top of `dev/GOAL.md` (approved 2026-09-29).
+  The build plan is below under "Build plan".
+- Stage: 2 of 5 (build) is in progress. The old program is deleted on this
+  branch. `plugins/toolkit/` holds one skill, `project-setup`, with its
+  shared skills, skill sets, Salesforce skill, three hook commands, and
+  settings snippets. The committed copy in `assets/model/` matches the
+  model branch at 35e2177 (the eighth model commit of 2026-09-30: the
+  Hindsight routing line now matches the local and Notion lines). 45a9e2d
+  before it holds the Current state edits and the memory find routing
+  lines, all listed in `dev/model-changes-2026-09-30.md`. Stage 2c
+  (build commit bf4d584) fixed every review finding but three questions
+  for Mike (below, "Open questions from stage 2c"); its last fix round
+  was not re-checked, so stage 3 starts with one read-only check of it. The model branch
+  folder has no uncommitted edits.
+- Open questions from stage 2c (in the report for Mike; nothing waits on
+  them): (1) two hook reminders print nothing on an error, but the Code
+  limit says "prints one line"; recommended: change the rule to "prints at
+  most one line". (2) Skills say never use the question box; Mike's own
+  quiet-while-working rule says use it; recommended: ban it in Codex only.
+  (3) work-on always makes a new worktree; Mike's parallel-agent rule says
+  stay in the app's worktree; recommended: build there and rename its
+  branch to the item's branch name.
+- Model commit d9f61ef (the voice-to-text lines in `AGENTS.md`, Mike
+  2026-09-30) is on the model branch but not yet in `assets/model/`: the
+  stage 3 onboardings were running against the copy. Refresh the copy
+  (AGENTS.md "Refresh the model copy") once stage 3 finishes.
+- For Mike, later: he wants to review the model's `AGENTS.md` in full
+  (Mike, 2026-09-30).
+- After stage 3, before stage 4: make the delivery offer earlier (Mike,
+  2026-09-30, `dev/GOAL.md` Interview answers, "When the product-owner and
+  agent-team offer is made"). Text only: one step in `work-refine`
+  SKILL.md (after the first playback, a clearly large item with no
+  `delivery` answer opens `work-delegate`; the same when an item grows
+  large), and one line in `work-delegate` references/delivery-offer.md
+  section 2. `work-on`'s check stays. No description changes.
+- After stage 3, also: (1) apply the verified findings of the full wording
+  and overlap review (`dev/reviews/2026-09-30-baseline-review.md`, being
+  commit 93c4496: 29 overlap and 1,032 wording findings, 111 questions in
+  section 4), each fix re-read by a reviewer. Nothing is applied until Mike
+  has read section 4 and answered (Mike, 2026-09-30: "Wait, I'll read the
+  file");
+  (2) run the wording review on every skill line stage 3's fix rounds
+  changed (stage 3 started before the review rule, so its fixers had no
+  reviewer); (3) after any description change, the routing test again in
+  both hosts. Every later workflow that edits skill text includes these
+  review steps (`AGENTS.md`, "Wording and overlap review").
+- Checks that exist now, run from the repository root:
+  - `claude plugin validate .` and `claude plugin validate ./plugins/toolkit`
+  - `node dev/tools/check-skills.mjs` (add `--model <folder>` to compare
+    the templates with the model worktree instead of the copy)
+  - `node dev/tools/check-rules.mjs --dir plugins/toolkit/skills/project-setup/assets/model`
+  - `node --test 'dev/tests/*.test.mjs'`
+- Left to do: the routing test (finish item 4, both hosts;
+  include `notion-work-track`, `notion-work-find`, `notion-memory-save`,
+  `local-work-track`, `github-work-track`, and `work-finish`, whose
+  descriptions changed,
+  and the request "mark task 3 done" (a track skill, not `work-finish`) in
+  local, Notion, and GitHub projects; "help me plan this" and "design this"
+  in local and Notion memory projects (`work-refine` or `solution-design`
+  must open before `local-memory-find` or `notion-memory-find`, whose
+  descriptions changed); "why did we" in local and Notion memory projects
+  (`local-memory-find` or `notion-memory-find` must open); also one run
+  per host with Mike's real user
+  skills and plugins visible, as `dev/research/skills-first-architecture.md`
+  section 11 says), the test projects (items 5 to 9), the independent
+  review, and the report for Mike (item 11).
+  - In the runs with Mike's real plugins visible, test these pairs, 3 runs
+    each, in both hosts where the competing skill exists: "add a task to
+    phase 2" in a Notion project (`notion-work-track` against
+    `Notion:create-task`, `Notion:tasks:plan`, `Notion:tasks:build`, and
+    `todoist-cli`) and in local and GitHub projects (the track skill
+    against his user skill `todoist-cli`, where his machine-wide
+    `CLAUDE.md` also sends task work to `td`); "help me plan this <Notion
+    page link>" in a Notion project (`work-refine` against
+    `Notion:tasks:plan`); "build it" and "pick up WI-31 <Notion page
+    link>" in a Notion project (`work-on` against `Notion:tasks:build`);
+    "show me WI-31" in a Notion project (`notion-work-find` against
+    `Notion:find` and `Notion:search`); "what did we decide about the
+    personas" in a Notion memory project (`notion-memory-find` against
+    `Notion:search` and `Notion:find`); "mark task 3 done" in local,
+    Notion, and GitHub projects (the track skill against his user skill
+    `todoist-cli`); "clean up memory" in local and Notion projects
+    (`local-memory-refine` and `notion-memory-refine` against
+    `anthropic-skills:consolidate-memory`); "from now on always run the
+    tests first" in a local memory project and a Notion memory project,
+    Claude Code only (`local-memory-save` and `notion-memory-save` against
+    the built-in `update-config`, which won N4 in 3 of 3 runs with Mike's
+    own setup in `dev/test-runs/skill-routing-final.md`; this also tests
+    the prompt-reminder hook's "never a settings hook" line). The plugins-off
+    settings turn off only the old `claude-toolkit` plugins, so these stay
+    visible. If a competitor wins, put the fix to Mike; do not turn its
+    plugin off yourself. Turning the Notion plugin off in a project could
+    also remove the Notion connector the Notion skills may use.
+- Test-run setup: run every test onboarding and test session in scratch
+  homes, never in Mike's own. His hosts cannot find `project-setup` now:
+  `toolkit@toolkit-v2` is off in `~/.claude/settings.json` (line 111) and
+  `~/.codex/config.toml` (lines 202-203), his `toolkit-v2` marketplace is
+  the main checkout on `main`, which still holds the old program, and his
+  Codex cache has only 0.3.1. Set `CLAUDE_CONFIG_DIR` and `CODEX_HOME` to
+  scratch folders, then:
+  - Claude Code: `claude plugin marketplace add /Users/michaelrihm/Documents/Projects/toolkit-v2/.claude/worktrees/v2-build`,
+    then `claude plugin install toolkit@toolkit-v2`.
+  - Codex: `codex plugin marketplace add` with the same folder, then
+    `codex plugin add toolkit@toolkit-v2` (0.4.0). The scratch Codex home
+    needs its own sign-in, which is Mike's step; never copy his
+    `auth.json` (`dev/research/critique-platform.md`, P16).
+- Open for Mike:
+  - Switch `toolkit@toolkit-v2` back on in `~/.claude/settings.json` and
+    `~/.codex/config.toml` only after `claude/v2-build` is merged to
+    `main`, then run `codex plugin add toolkit@toolkit-v2`. Before the
+    merge, switching it on brings back the old program's hooks. Ask Mike
+    before each step, because each changes his setup.
+  - Hook size: the line count is gone. Mike replaced "about 15 to 30
+    lines each" with the five Code limit rules at the top of `dev/GOAL.md`
+    (2026-09-30). `session-start.mjs` is 75 lines (about 5,270
+    characters), `prompt-reminder.mjs` 51 (about 3,180), and
+    `codex-after-commit.mjs` 16, each line at most 100 characters. The
+    commands wait on Mike's answer about those rules; leave them unchanged
+    until he gives it.
+  - The three model Salesforce skills (`sf-deploy-check`,
+    `sf-component-tracker`, `sf-data-change`) have no ", so ..." clause
+    saying why to use them. Adding one is a model change and needs his yes.
+
+## Earlier resume note (2026-09-29, before the direction change; out of date)
+
+This note describes the retired program's phase. Its 11 items, `sync
+--check`, and `import-model --check` no longer exist. Kept for history only.
 
 The lead session is `a06506e8` in the claude-toolkit folder. Its /goal is
 active: finish the 11 items in GOAL.md and post the final checklist with
@@ -74,6 +415,36 @@ Undo: flip the two lines back and move the two items back. Sessions that
 were already open keep the old hooks until they restart, so the program's
 code (`plugins/toolkit/lib` and the rest of finish item 1) is deleted only
 after Mike has restarted his open sessions.
+
+### Status 2026-09-30, 11:50
+
+- Stage 1 (model changes) done: model branch commits 07aa775, 6c2576d,
+  7c01cd8 (Codex skills folder is a link), 19de933, 588d196, 35f2334. Change
+  list for Mike: `dev/model-changes-2026-09-30.md`.
+- Stage 2 (build) done: commit 6d293c0. Stage 2b fixes committed as a
+  checkpoint (4958fcb) because the weekly usage limit stopped the workflow
+  before its last review round and its commit step. Nothing on disk was
+  lost: the model branch and the build branch were both clean after the
+  checkpoint.
+- Checks at 4958fcb: check-skills passed (0 errors, 16 warnings on Mike's
+  own Salesforce skills), check-rules passed (2 warnings), 27 of 27 hook
+  tests pass, both `claude plugin validate` runs pass.
+- Hook command sizes: Mike replaced the line count with the Code limit
+  rules (`dev/GOAL.md`, top). session-start.mjs 75 lines,
+  prompt-reminder.mjs 51, codex-after-commit.mjs 16. Waiting on Mike's
+  answer about those rules.
+- A current state for each work item: decided (Mike, 2026-09-30, "go with
+  your recommendation"; `dev/GOAL.md`). Built in the model branch folder,
+  the shared texts in `dev/build-shared/`, and all three work sets
+  (`local-work`, `notion-work`, `github-work`).
+- Review round after the usage limit: done. Model commit 45a9e2d; the
+  build commit is the one named "Work item Current state block; review
+  round after the usage limit". Checks after it: check-skills passed (0
+  errors, 16 warnings on Mike's own Salesforce skills), check-rules passed
+  (2 warnings: `memory-review-and-save.md` size, `session-handoff.md`
+  paragraph of 573 characters), 27 of 27 hook tests pass, both
+  `claude plugin validate` runs pass.
+- Next: stage 3 (live checks) and stage 4 (test projects).
 
 ### Build plan (approved goal; overnight run started 2026-09-29)
 
@@ -244,6 +615,13 @@ running: its work is needed either way.
 - A builder ran the model's `tools/kb` tests inside the model folder at 15:57,
   which created and then removed `__pycache__` folders. No file content
   changed, but folder modification times did.
+- Owner step after the V2 merge (needs Mike's yes): turn `toolkit` back on.
+  The 2026-09-29 switch-off left `"toolkit@toolkit-v2": false` in
+  `~/.claude/settings.json` and the plugin off in `~/.codex/config.toml`,
+  and that choice outlasts the manifest (which no longer sets
+  `defaultEnabled: false`). Run `claude plugin enable toolkit@toolkit-v2
+  --scope user`, and turn the plugin on again in Codex. Until then
+  `project-setup` loads nowhere.
 
 ## In progress
 

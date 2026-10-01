@@ -1,0 +1,52 @@
+{
+  "description": "Toolkit V2 hooks for this project in Codex: Current State at session start, a memory reminder when the owner uses a keep or decision phrase, a work item reminder after each commit, and a work item reminder when a helper agent starts or reports back.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "^(startup|resume|clear|compact)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$(git rev-parse --show-toplevel)/.claude/hooks/session-start.mjs\" --memory local",
+            "timeout": 30,
+            "statusMessage": "Loading Current State",
+            "additionalContextLimit": 4000
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$(git rev-parse --show-toplevel)/.claude/hooks/prompt-reminder.mjs\" --skill local-memory-save",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "^Bash$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$(git rev-parse --show-toplevel)/.claude/hooks/codex-after-commit.mjs\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "^(collaboration)?(spawn_agent|wait_agent)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PostToolUse\",\"additionalContext\":\"A helper agent ran or was started. If it works on a work item or sub-item, update the status, Recent History, and Current state of that item with the work track skill once its report is in. A helper with no work item of its own (a researcher, reviewer, critic, checker, or verifier) needs nothing.\"}}'",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

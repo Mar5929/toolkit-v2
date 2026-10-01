@@ -1,0 +1,36 @@
+{
+  "parent": {
+    "type": "page_id",
+    "page_id": "{{MEMORY_PAGE_ID}}"
+  },
+  "title": [
+    {
+      "type": "text",
+      "text": {
+        "content": "Topics"
+      }
+    }
+  ],
+  "is_inline": true,
+  "icon": {
+    "type": "emoji",
+    "emoji": "📑"
+  },
+  "initial_data_source": {
+    "properties": {
+      "Name": {
+        "title": {}
+      },
+      "Project": {
+        "relation": {
+          "data_source_id": "{{LORE_PROJECTS_DS}}",
+          "type": "dual_property",
+          "dual_property": {}
+        }
+      },
+      "Description": {
+        "rich_text": {}
+      }
+    }
+  }
+}

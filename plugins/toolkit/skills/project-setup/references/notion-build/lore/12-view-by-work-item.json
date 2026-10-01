@@ -1,0 +1,40 @@
+{
+  "database_id": "{{MEMORIES_DB}}",
+  "data_source_id": "{{MEMORIES_DS}}",
+  "name": "By work item",
+  "type": "table",
+  "position": {
+    "type": "end"
+  },
+  "sorts": [
+    {
+      "property": "{{M_SAVED}}",
+      "direction": "descending"
+    }
+  ],
+  "configuration": {
+    "type": "table",
+    "group_by": {
+      "type": "relation",
+      "property_id": "{{M_WORK_ITEMS}}",
+      "sort": {
+        "type": "ascending"
+      },
+      "hide_empty_groups": true
+    },
+    "properties": [
+      {
+        "property_id": "{{M_KIND}}",
+        "visible": true
+      },
+      {
+        "property_id": "{{M_STATUS}}",
+        "visible": true
+      },
+      {
+        "property_id": "{{M_SYNOPSIS}}",
+        "visible": true
+      }
+    ]
+  }
+}

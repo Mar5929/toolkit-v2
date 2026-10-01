@@ -1,0 +1,13 @@
+{
+  "properties": {
+    "Work items": {
+      "relation": {
+        "data_source_id": "{{WORK_ITEMS_DS}}",
+        "type": "dual_property",
+        "dual_property": {
+          "synced_property_name": "Entities"
+        }
+      }
+    }
+  }
+}

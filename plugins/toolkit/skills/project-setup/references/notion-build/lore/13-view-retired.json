@@ -1,0 +1,48 @@
+{
+  "database_id": "{{MEMORIES_DB}}",
+  "data_source_id": "{{MEMORIES_DS}}",
+  "name": "Retired",
+  "type": "table",
+  "position": {
+    "type": "end"
+  },
+  "filter": {
+    "or": [
+      {
+        "property": "{{M_STATUS}}",
+        "select": {
+          "equals": "superseded"
+        }
+      },
+      {
+        "property": "{{M_STATUS}}",
+        "select": {
+          "equals": "deprecated"
+        }
+      }
+    ]
+  },
+  "sorts": [
+    {
+      "property": "{{M_SAVED}}",
+      "direction": "descending"
+    }
+  ],
+  "configuration": {
+    "type": "table",
+    "properties": [
+      {
+        "property_id": "{{M_RECORD_KEY}}",
+        "visible": true
+      },
+      {
+        "property_id": "{{M_STATUS}}",
+        "visible": true
+      },
+      {
+        "property_id": "{{M_SUPERSEDED_BY}}",
+        "visible": true
+      }
+    ]
+  }
+}
