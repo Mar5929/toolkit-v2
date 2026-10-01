@@ -828,6 +828,19 @@ Interview answers (Mike, 2026-09-29, the interview session):
   the Mac's server get a short note only. (This replaces "a small skill
   opens a project's bank in the dashboard; projects on the Mac's local
   server keep working" above.)
+- Hindsight runs as Hindsight (Mike, 2026-10-01): "hindsight can just
+  operate as the normal hindsight solution - we can still note in the
+  project rules somewhere what we consider to be 'project memory'. Maybe if
+  it is hindsight we add this note about project memory towards the top of
+  agents.md". So a Hindsight project's `AGENTS.md` starts with a short
+  "Project memory" section: the bank, the add-on saving and recalling by
+  itself, what counts as project memory, and the dashboard link. The memory
+  rule's Hindsight section keeps only the tool mapping, the key safety
+  line, "forget that", and Current State. The toolkit no longer requires
+  keep words before a save, and standing instructions are not routed to
+  `owner-preferences.md` in a Hindsight project. Model commit f10d19a. The
+  code scan's US$2 is the add-on's own default cap per scan, not a toolkit
+  limit; whether to keep the scan is still open.
 
 ## Goal
 

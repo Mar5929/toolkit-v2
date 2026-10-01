@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Toolkit V2: one plugin, toolkit, whose project-setup skill sets up and updates one solo developer's projects in Claude Code and Codex. The agent runs the project; the owner decides and steers.",
-    "version": "0.5.1"
+    "version": "0.5.2"
   },
   "plugins": [
     {

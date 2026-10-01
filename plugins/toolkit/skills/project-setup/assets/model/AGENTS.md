@@ -12,6 +12,16 @@ future agents and skew them. Information must be curated and intentional.
 
 The owner dictates most messages with voice-to-text, so a message may have wrong words, missing punctuation, or more than one possible meaning. When a message is unclear or could mean two different things, ask one short question before you act on it.
 
+<!-- if memory=hindsight -->
+## Project memory
+
+This project's memory is Hindsight, on the owner's server, in the bank named in `PROJECT.md`. Hindsight's coding-agent add-on saves each session and brings back what is relevant by itself; use its tools as it describes.
+
+- Project memory is what a later session on this project needs and could not easily rebuild: decisions and why they were made, lessons learned, and facts about the project's people, systems, and limits.
+- It is never a secret, a key, personal data, or where work stands now: that belongs in the work items and in `memory/CURRENT_STATE.md`.
+- To open the bank in the Hindsight dashboard, open the "Hindsight dashboard" link in `PROJECT.md`.
+<!-- endif -->
+
 ## Every session
 
 - The session-start hook adds Current State to your context: what is in progress, what waits on the owner, untracked to-dos, and where the next session starts.
@@ -129,7 +139,7 @@ Give every item in a list of choices or recommendations you show the owner a one
 - Memory is in the databases on this project's Notion page, in Lore's layout (links in `PROJECT.md`); Current State is its "Current state" page. Change memory only through the memory skills; `work-finish` and `handoff` also update that page.
 <!-- endif -->
 <!-- if memory=hindsight -->
-- Memory is this project's bank on the owner's Hindsight server; Hindsight's coding-agent add-on saves each session there. No memory skills: `.claude/rules/memory-review-and-save.md`, "Hindsight projects", names the tool that replaces each one, and how to open the dashboard.
+- Memory is Hindsight: see "Project memory" at the top.
 <!-- endif -->
 - Every memory names the work items it concerns by ID, with a link when there is one. Search memory before asking the owner to repeat something. Never store secrets, email addresses, or work-item status.
 
@@ -182,9 +192,7 @@ Pick a skill by the situation; the examples only help you match it. This list st
 - A Notion plugin's own search, find, or capture commands and skills (names starting `Notion:`, or `notion:` in Codex) never replace the memory skills: they reach the whole Notion workspace, not only this project's memory.
 <!-- endif -->
 <!-- if memory=hindsight -->
-- The owner wants a fact kept, corrected, or forgotten, or gives a standing instruction: `hindsight_ingest_document`, only on his keep words or his yes. An instruction for how the agent works goes in `.claude/rules/owner-preferences.md`, never in a settings hook or the `update-config` skill. Examples: "remember", "from now on", "always", "never", "whenever you ...", "each time you ...", "forget that".
-- What was recorded or decided before, or why: `hindsight_search_knowledge_pages`, then `hindsight_reflect`, and the work track skill for decisions saved in work items. `work-refine` and `solution-design` search memory themselves, so planning and design open those skills first; before any other recommendation, search first. Examples: "what did we decide", "do we know", "why did we".
-- A review of all memory, or Current State has grown: edit `memory/CURRENT_STATE.md` directly within its line limits. Never merge or delete a Hindsight memory yourself; name one that looks wrong or stale and follow `.claude/rules/memory-review-and-save.md`, "Hindsight projects". Examples: "refine memory", "clean up Current State".
+- Memory: Hindsight's add-on and its tools (see "Project memory" at the top). Current State is the file `memory/CURRENT_STATE.md`: edit it directly, within its line limits.
 <!-- endif -->
 - Never use `anthropic-skills:consolidate-memory` in this project. It edits Claude Code's own memory folder, which this project turns off. For any memory clean-up, follow the "refine memory" line above.
 <!-- if salesforce -->
