@@ -871,6 +871,22 @@ Interview answers (Mike, 2026-09-29, the interview session):
   branch are no longer copied in. The same day: the memory criteria became
   storage-neutral and live only in `managing-project-memory`, and the
   model's `memory/AGENTS.md` became a short pointer to that skill.
+- One Notion project template (Mike, 2026-10-02): "use ONE Notion project
+  template for every Toolkit V2 project, so his work-item and memory
+  layouts live in one place." He chose "Yes, rename to Project": the
+  Projects database keeps only "Project: work and memory", renamed
+  "Project"; "Project: work only" and "Project: memory only" went to
+  Notion's trash (the four older templates were already there). Setup
+  makes every Notion project from "Project", then removes the part kept
+  elsewhere: the memory pages when memory is local or in Hindsight, the
+  work databases when work items are local or on GitHub. Moving memory
+  into Notion later copies the memory part back from the template. His
+  own template edits are the truth: the project brief is Overview/Context,
+  Goals, and Success criteria, with a "Project Memory" heading; the work
+  item template has numbered Goals, a Current state that opens and closes,
+  and "Linked Github PRs". The same day he chose to restore the work item
+  template from the trash, to trash a blank card in the template, and to
+  keep that template's title empty ("Clear only the work item one").
 
 ## Goal
 

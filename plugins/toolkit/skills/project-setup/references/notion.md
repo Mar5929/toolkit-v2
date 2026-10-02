@@ -8,7 +8,7 @@ Notion setup steps to follow, and where the links go.
 items, and `notion-build/setup.md` holds them for memory; setup follows
 them. Setup makes only these Notion calls itself: `ntn whoami`; the
 `ntn api v1/search` call in "Where the project page goes"; the one
-`update_content` call that writes the project's outcome on its page
+write of the project's outcome into its row
 (`finishing.md` in this folder, step 1 of "Fill the prompts"); and the one
 read of the "Current state" page in the Services check of "Final checks"
 in `finishing.md`.
@@ -42,17 +42,15 @@ files.
 - Nothing is made in his real Notion workspace without his yes. The plan he
   approved (`interview.md`, "The plan to confirm") covers this project's
   pages when it named them.
-- The three project templates in his Projects database are built once per
-  workspace, the first time any project needs them. Building them is its
-  own question, asked when any of the three does not exist yet: "Your
-  Projects database has no project templates yet. I need you to make them
-  in the Notion app: five empty templates (three in your Projects
-  database, and one in the Work Items database of each template that
-  tracks work), three choices of 'Set as default', and the page layout of
-  the databases inside the templates. I give you the clicks in small
-  groups and fill in everything else. Then every Notion project, and every
-  card you make with New, starts from them. Go ahead?" When only some are
-  missing, say which ones and ask only for the clicks for those.
+- The "Project" template in his Projects database is built once per
+  workspace, the first time any project needs it. Building it is its own
+  question, asked when it does not exist yet: "Your Projects database has
+  no Project template yet. I need you to make it in the Notion app: two
+  empty templates (one in your Projects database, one in the Work Items
+  database inside it), two choices of 'Set as default', and the page
+  layout of the databases inside it. I give you the clicks in small groups
+  and fill in everything else. Then every Notion project, and every card
+  you make with New, starts from it. Go ahead?"
 - When the owner says this project is a test, make its Notion pages only
   under the test page he names, never under his real pages unless he says
   so.
@@ -82,7 +80,7 @@ them:
    asking. When more than one is left, list each with its link and ask
    which one, recommending the one that holds his other projects. When he
    has none, stop, tell him a Notion project needs a Projects database
-   because the templates live in one, and ask him to make one in Notion.
+   because the template lives in one, and ask him to make one in Notion.
 4. Use the id he confirms as `<projects-data-source-id>`.
 
 When the owner names a page to put the project under, still run step 1,
@@ -96,11 +94,12 @@ name another page.
 
 ## Which steps to follow
 
-| Work items | Memory | Projects database template | Follow |
-| --- | --- | --- | --- |
-| Notion | Notion | "Project: work and memory" | `notion-build/work-setup.md`, "A new project" (its step 7 runs the memory steps in `notion-build/setup.md`) |
-| Notion | local or Hindsight | "Project: work only" | `notion-build/work-setup.md`, "A new project" |
-| local or GitHub | Notion | "Project: memory only" | `notion-build/setup.md`, "A new project" |
+Every Notion project is made from the one Projects database template,
+"Project", which holds both the work items part and the memory part. Follow
+`notion-build/work-setup.md`, "A new project", for work items, memory, or
+both in Notion. It makes the project page, removes the part this project
+keeps elsewhere, and runs the memory steps in `notion-build/setup.md` when
+memory is in Notion.
 
 The ID prefix: the work setup proposes one from the project name (two to
 four capital letters) and asks the owner. Notion allows each prefix in only
@@ -136,6 +135,7 @@ Notion project, run "Bringing a project up to the current template" in
 `notion-build/work-setup.md`, and "Bringing memory up to the current
 layout" in `notion-build/setup.md`, for the parts the project keeps in
 Notion. Both only add what is missing; they never remove, rename, or
-retype anything. A project with a Stage property also needs "From Stage to
-State" in `notion-build/work-setup.md`. Tell the owner in one short list
+retype anything, except the one view that the memory step names. A project
+with a Stage property also needs "From Stage to State" in
+`notion-build/work-setup.md`. Tell the owner in one short list
 what was added.

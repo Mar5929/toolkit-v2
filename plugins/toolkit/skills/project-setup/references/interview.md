@@ -49,7 +49,7 @@ they need no sign-in.
 | Choice | "Tracker" value | Good when | What to know |
 | --- | --- | --- | --- |
 | Local folders with Obsidian | `local` | A solo project on one computer | Items live in `work-items/`, which Git ignores, so they exist only on this computer. The whole project folder opens as an Obsidian vault. |
-| Notion | `notion` | He wants the board on his phone or the web | Needs `ntn` signed in. The project's pages are made from the templates in his Notion Projects database. |
+| Notion | `notion` | He wants the board on his phone or the web | Needs `ntn` signed in. The project's pages are made from the "Project" template in his Notion Projects database. |
 | GitHub Issues | `github` | The code already lives on GitHub | Needs `gh` signed in and a GitHub repository. Labels are created once, after his yes. An item's ID is its issue number, such as `#12`. |
 
 Jira is not offered: it is not built yet (the owner deferred it). If he
@@ -130,7 +130,7 @@ folder:
 
 | Choice | Say |
 | --- | --- |
-| Notion (work, memory, or both) | "make this project's pages in your Notion from the templates in your Projects database" (and, when they do not exist yet, ask about building them separately: `notion.md` in this folder) |
+| Notion (work, memory, or both) | "make this project's pages in your Notion from the Project template in your Projects database" (and, when it does not exist yet, ask about building it separately: `notion.md` in this folder) |
 | GitHub Issues | "create the work item labels in <owner>/<repository> that it does not have yet (up to 30: each item's State, type, priority, who it waits on, who builds it, and your approvals; its other labels stay as they are)", and "create the private repository <owner>/<name>; after the setup commit I'll ask before I push the default branch to it" when there is none yet |
 | Hindsight | "create the memory bank <bank> on your Hindsight server (or use this project's own bank), and install Hindsight's coding-agent add-on for Claude Code and Codex, or add this project to it; that changes files in `~/.claude`, `~/.codex`, and `~/.hindsight`, and I'll show you each change before I make it" |
 | Local work and local memory | "nothing outside this folder" |

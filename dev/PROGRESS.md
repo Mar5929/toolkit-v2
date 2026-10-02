@@ -8,7 +8,7 @@ Read `dev/GOAL.md` first. This file says where the work stands.
 The Toolkit V2 build is tracked as work items in the Notion project "Toolkit V2" (https://app.notion.com/p/Toolkit-V2-3edb381da17681eeb7ddd0a6d662f9b2). Older sections below are history.
 
 ### Now (in progress)
-- Notion: an agent is bringing the three shared project templates up to the new State and Status lists and setting the TKV prefix on the Toolkit V2 project.
+- One Notion project template, 0.7.7: Mike's Projects database now has one template, "Project" (work items and memory). Setup makes every Notion project from it and removes the part kept elsewhere; the steps were tested live on two throwaway projects (trashed). Its work item template was found in Notion's trash and restored with Mike's yes. Waiting on Mike's OK to land on main.
 - A review folder where Mike can read and edit every file a project gets, then hand his edits back: next, after this commit.
 
 ### Just done (2026-10-01 to 2026-10-02)

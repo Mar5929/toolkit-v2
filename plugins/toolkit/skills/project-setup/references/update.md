@@ -252,7 +252,10 @@ Where work items or memory live, for example "move memory to Notion":
    snippets (`skills-hooks-settings.md`, "Merge rules"); he trusts the
    changed Codex hooks again in `/hooks`.
 4. Run the service step for the new choice (`notion.md`, `github.md`, or
-   `hindsight-on-vps.md`). Memory moved out of Hindsight: after his yes,
+   `hindsight-on-vps.md`). When the project already has work items or
+   memory in Notion and adds the other one, make no second project page:
+   follow `notion-build/work-setup.md`, "Adding work items or memory
+   later". Memory moved out of Hindsight: after his yes,
    also remove the project folder from `mapPathToBank` and `optInPaths` in
    `~/.hindsight/coding-agent.json`, so the add-on stops saving there.
 5. Move the records one at a time, with a preview of each and his yes, and

@@ -150,10 +150,10 @@ has a filled "Toolkit settings" section.
 | `references/skills-hooks-settings.md` | Step 5: which skills each choice adds, the hook commands, the settings snippets and how to merge them, the older plugins turned off |
 | `references/placing-files.md` | Step 6: copying into the project, files it already has, the `.agents/skills` link |
 | `references/notion.md` | Work items or memory in Notion: the sign-in, his yes, which Notion setup to follow, the links |
-| `references/notion-build/work-setup.md` | Work items in Notion: the steps of a new project, the links in `PROJECT.md`, bringing a project up to the current template, moving from Stage to State, building the templates, the checks |
+| `references/notion-build/work-setup.md` | Work items or memory in Notion: the steps of a new project, removing the part kept elsewhere, the links in `PROJECT.md`, adding work items or memory later, bringing a project up to the current template, moving from Stage to State, building the template, the checks |
 | `references/notion-build/work-layout.md` | Work items in Notion: the database views, the property order and page layout, the request bodies |
 | `references/notion-build/setup.md` | Memory in Notion: the memory steps of a new project, the links in `PROJECT.md`, bringing memory up to date, building the memory part of a template. Lore's databases, columns, views, and request files are in the Notion `storing-project-memory` skill, in `assets/.skill-sets/notion-memory/` |
-| `references/notion-build/project-page.md`, `references/notion-build/work-item-page.md`, `references/notion-build/memory-page.md`, `references/notion-build/project-page-memory-only.md` | Building the Notion templates: the text of the project page, the work item template, the Memory page, and the "Project: memory only" page |
+| `references/notion-build/project-page.md`, `references/notion-build/work-item-page.md`, `references/notion-build/memory-page.md` | Building the Notion template: the text of the project page, the work item template, and the Memory page |
 | `references/github.md` | Work items in GitHub Issues: the sign-in, the repository, the labels, bringing a project up to date, the checks |
 | `references/hindsight-on-vps.md` | Memory in Hindsight: what runs on the VPS, the access key, the bank, the coding-agent add-on, the save-and-search check, opening the dashboard, checking a Hindsight project, a new computer |
 | `references/salesforce.md` | A Salesforce project: Salesforce's skills check, the org aliases, and the API version |

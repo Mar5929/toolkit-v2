@@ -39,14 +39,10 @@ this order:
    `PROJECT-ROADMAP.md`.
 
    With the project page in Notion (work items or memory there), also
-   write his sentence on that page: replace
-   `\<One sentence: the result this project should produce.\>` under
-   "Project brief", "Outcome" with one `update_content` call
-   ("Reading and changing page text" in the project's
-   `.claude/skills/using-notion-cli/references/ntn-commands.md`),
-   then read the page back.
-   Leave "Success criteria" until he names one, and list it with the
-   prompts left.
+   put his sentence in the "Desired Outcome" field of the project's row in
+   Notion, then read the row back. The page's "Project brief" prompts
+   (Overview/Context, Goals, Success criteria) stay until he gives them:
+   list them with the prompts left.
 
    Until he answers, leave the outcome prompts in `AGENTS.md`,
    `README.md`, `PROJECT.md`, and `PROJECT-ROADMAP.md`, and list them in the
@@ -132,8 +128,8 @@ file).
 - [ ] PROJECT.md "People and ownership" names the owner: grep -n '^| Owner |' PROJECT.md
 - [ ] The older plugins are off here: jq '.enabledPlugins' .claude/settings.json
 - [ ] Salesforce projects only: Salesforce's skills are installed (`salesforce.md` in this skill, "Salesforce's skills"); when they are not, report it and give `npx skills add forcedotcom/sf-skills`
-- [ ] Services, Notion work items: the "A new project" check under "Checks after any of these" in notion-build/work-setup.md in this skill
-- [ ] Services, Notion memory with work items not in Notion: the Notion block in PROJECT.md holds every id that `notion-build/setup.md` in this skill lists under "Recording the links in PROJECT.md", and the "Current state" page shows its first lines (ntn api v1/pages/<Current state page id>/markdown < /dev/null | jq -r .markdown)
+- [ ] Services, Notion work items or memory: the "A new project" check under "Checks after any of these" in notion-build/work-setup.md in this skill
+- [ ] Services, Notion memory: the Notion block in PROJECT.md holds every id that `notion-build/setup.md` in this skill lists under "Recording the links in PROJECT.md", and the "Current state" page shows its first lines (ntn api v1/pages/<Current state page id>/markdown < /dev/null | jq -r .markdown)
 - [ ] Services, GitHub Issues: the checks under "Checks after either" in github.md in this skill
 - [ ] Services, Hindsight: "Check a Hindsight project" in hindsight-on-vps.md
 - [ ] git status --short lists nothing under work-items/ or memory/
@@ -153,7 +149,7 @@ do them for him.
 | --- | --- | --- |
 | `ntn login` in a terminal | Signs the Notion command-line tool into his account; it opens a browser. | Notion, when `ntn whoami` fails |
 | Share his Notion root page with "Notion CLI" | The agent can reach only shared pages. | Notion, when a call returns 404 |
-| Set the page layout of each database in the new project templates in the Projects database (the clicks are in the Notion setup files) | Only the Notion app can set it; every project copied from the templates keeps it. | Notion, when setup built the templates |
+| Set the page layout of each database in the new "Project" template in the Projects database (the clicks are in the Notion setup files) | Only the Notion app can set it; every project copied from the template keeps it. | Notion, when setup built the template |
 | `gh auth login` in a terminal | Signs the GitHub command-line tool in. | GitHub Issues, when `gh auth status` fails |
 | Trust the project folder in Codex | Until then Codex ignores the project's `.codex/config.toml` and `.codex/hooks.json`. Trust is tied to the folder path, so it is needed again after a move. | Always, the first time he opens the project in Codex |
 | Trust the hooks in Codex: type `/hooks` and trust them | Codex skips a hook until it is trusted, and again after any change to its entry in `.codex/hooks.json`. A change to a `.mjs` file it runs is not reviewed again. | Always; again after "update the toolkit" changes an entry in `.codex/hooks.json`; with Hindsight, also the add-on's hooks after it is installed |

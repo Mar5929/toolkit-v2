@@ -40,7 +40,7 @@ This project keeps its work items in Notion. This skill says where each thing is
 - The Roadmap, Sub-items, and Tasks sections of a page are views, shown in the page text only as `<database …>` lines. Read their rows with the tree queries in `references/searching.md`.
 - Attach an uploaded file within one hour of uploading it. After that the upload expires.
 - Never delete a page, row, phase, or task. Take it out of view instead: set a phase to Cancelled, or tick an item's Archived. When the owner wants it deleted, ask him to delete it himself in Notion.
-- Never add work to a template: the three project templates in the owner's Projects database, or the Work Items database's work item template. Every copy takes it along.
+- Never add work to a template: the "Project" template in the owner's Projects database, or the Work Items database's work item template. Every copy takes it along.
 - When the owner drags a card on the Board, only its Status changes, so State and Status no longer match.
 
 ## Hand-offs
