@@ -5,7 +5,7 @@ description: 'Stores and finds this project''s memory in Notion, in Lore''s five
 
 # Storing project memory in Notion
 
-This project keeps its memory in Notion. `managing-project-memory` decides what to save and when, and hands every read and save to this skill. This skill says where each thing is stored in Notion and how to read and save it. It never decides what is worth keeping or when to ask the owner.
+This project keeps its memory in Notion. This skill says where each thing is stored in Notion and how to read and save it. It never decides what is worth keeping or when to ask the owner.
 
 ## Where memory is stored
 
@@ -20,7 +20,7 @@ This project keeps its memory in Notion. `managing-project-memory` decides what 
 
 ## Steps for any look-up or save
 
-1. Read the ids from `PROJECT.md`. Before your first `ntn` call of the session, follow `using-notion-cli`. It covers sign-in, Codex, the shape of every call, and errors.
+1. Read the ids from `PROJECT.md`. Before your first `ntn` call of the session, follow `using-notion-cli`.
 2. Read what you will look at or change, fresh in this turn. The owner edits in Notion, so never answer from an earlier read.
 3. Make the change with the file named in Files below.
 4. Read the page back and check every change is there. A change that is not there is not saved: say so. Give the caller each page's title and link: the `url` in the page's answer.
@@ -35,6 +35,14 @@ This project keeps its memory in Notion. `managing-project-memory` decides what 
 - Record Key is the toolkit's own column, and Lore finds nothing by it. Always fill Keywords with the same key too.
 - The page body has no `# Title` line: the title is the Title column.
 - A row with no Record Key was not made by the toolkit. Searches leave it out, and a listing shows it as "(no key)". Tell the owner it exists. He can give it a Record Key, ask for its content to be saved as a page, or leave it.
+
+## Hand-offs
+
+| For | Use |
+| --- | --- |
+| Deciding what to save and when, and what each Current state section holds | `managing-project-memory` |
+| Every `ntn` call: sign-in, Codex, the shape of every call, and errors | `using-notion-cli` |
+| Finding a work item's page id | `tracking-work-items` |
 
 ## Files
 

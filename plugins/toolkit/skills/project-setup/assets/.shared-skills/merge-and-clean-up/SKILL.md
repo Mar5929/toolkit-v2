@@ -147,7 +147,7 @@ the same repository and belongs to this pull request, then
 When step 1 found a work item: from `managing-work-items`, add nothing (it
 adds the Recent History row); asked directly, add one row, "Merged pull
 request #<number> as <merge commit>.", with `tracking-work-items`. Never
-change the State or mark anything Done; `managing-work-items` does that.
+change the State or mark anything Done.
 
 Verify: the pull request is merged; the base worktree matches its upstream and
 is clean; the head branch and its worktree are gone; every unrelated worktree
@@ -169,8 +169,16 @@ remains.
   to `require_escalated`, with a one-line reason). If Codex refuses without
   asking, show the owner the exact command and wait.
 - No remote (`git remote` prints nothing): there is no pull request, so this
-  skill does not apply. Never fetch. Tell the owner in one line;
-  `managing-work-items` does the local merge.
+  skill does not apply. Never fetch. Tell the owner in one line.
+
+## Hand-offs
+
+| For | Use |
+| --- | --- |
+| The merge note on the work item, when the owner asked directly | `tracking-work-items` |
+| Changing the work item's State, or marking it Done | `managing-work-items` |
+| Shipping an approved work item | `managing-work-items` |
+| No remote: the local merge | `managing-work-items` |
 
 ## References
 

@@ -38,8 +38,14 @@ Two shapes:
 
 A tracker can be wrong both ways: it can show a component as missing from an org that already has it, or as deployed when it is not. Only a read-only check of the target org shows what it already has.
 
+## Hand-offs
+
+| For | Use |
+| --- | --- |
+| The component tracker this check reads | `sf-component-tracker` |
+| Checking whether a work item is ready, or running the deploy | `managing-work-items` |
+
 ## Related
 
 - `salesforce-org-safety.md`: the read-only verify in step 4 is allowed there.
-- `sf-component-tracker` skill: the tracker this check reads.
 - The production-org guard blocks a production deploy by an agent. This check runs before the owner gets the command.

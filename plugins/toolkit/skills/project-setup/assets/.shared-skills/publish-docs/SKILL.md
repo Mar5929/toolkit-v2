@@ -120,9 +120,8 @@ own, with `git -C <folder>` so it never depends on the current folder.
 - Any path Git ignores.
 
 A refused file stays refused even under a path the rule accepts. Rules, skills,
-prompts, hooks, settings, and code use a pull request
-(`managing-work-items`). A document edit that would be wrong on the default branch
-without the code change it describes goes in that code's pull request.
+prompts, hooks, settings, and code use a pull request. A document edit that
+would be wrong on the default branch without the code change it describes goes in that code's pull request.
 
 ## Carrying an edit across
 
@@ -140,6 +139,14 @@ new one.
   file, or an untracked copy of a new one.
 
 Never discard another session's changes.
+
+## Hand-offs
+
+| For | Use |
+| --- | --- |
+| A pull request for rules, skills, prompts, hooks, settings, or code, or a work item's requirements | `managing-work-items` |
+| A save that cannot finish now: the next action in its work item | `tracking-work-items` |
+| A save that cannot finish now: the next action in the handoff | `handoff` |
 
 ## References
 

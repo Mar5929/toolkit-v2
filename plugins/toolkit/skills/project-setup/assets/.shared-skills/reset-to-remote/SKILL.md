@@ -12,8 +12,8 @@ and deletes branches whose remote branch is gone.
 
 ## Steps
 
-1. **Run only on the owner's own words** asking for a destructive reset. A
-   plain "get the latest" is `pull-latest`. Even when he says "just do it",
+1. **Run only on the owner's own words** asking for a destructive reset.
+   Even when he says "just do it",
    change nothing until he says yes to the step 4 plan.
 2. **Stop when work is at risk.** Run each on its own: `git remote -v`,
    `git status --porcelain`, `git stash list`, `git worktree list --porcelain`.
@@ -91,3 +91,9 @@ and deletes branches whose remote branch is gone.
   (`sandbox_permissions` set to `require_escalated`, with a one-line reason).
   If Codex refuses without asking, show the owner the exact commands and ask
   him to run them.
+
+## Hand-offs
+
+| For | Use |
+| --- | --- |
+| A routine update, such as "get the latest" | `pull-latest` |

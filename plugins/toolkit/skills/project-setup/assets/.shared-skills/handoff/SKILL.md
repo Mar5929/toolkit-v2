@@ -10,10 +10,6 @@ prompt that session can start from. Never ask the owner to wait before he
 clears context, and never hold back the prompt because a save or the check
 failed.
 
-Memory is saved with `managing-project-memory`. A Hindsight project has
-no memory skills: use Hindsight's tools as `AGENTS.md`, "Project memory",
-says.
-
 ## Steps
 
 1. **Find this session's work items.** Only items this session worked on:
@@ -102,10 +98,19 @@ prompt. Nothing is saved in this mode.
 - A failed save never blocks the prompt. Lead with "Not saved" (the write
   failed) or "Saved but not verified" (the read-back differs), name the
   write, and put its content in the prompt.
-- A save that changed a Git-tracked document (for example `requirements/` or
-  `PROJECT.md`) is saved with `publish-docs`, not in this skill.
-- Current State is missing: do not create it. Say so, suggest
-  `project-setup` ("check the setup"), and put the entry in the prompt.
+- Current State is missing: do not create it. Say so, suggest the setup
+  check, and put the entry in the prompt.
+
+## Hand-offs
+
+| For | Use |
+| --- | --- |
+| Reading and updating this session's work items | `tracking-work-items` |
+| Saving to memory | `managing-project-memory` (Hindsight: `AGENTS.md`, "Project memory") |
+| Notion memory: the "Current state" page | `managing-project-memory` |
+| A save that changed a Git-tracked document, such as `requirements/` or `PROJECT.md` | `publish-docs` |
+| The recap table, when the owner also asked for one | `session-summary` |
+| Current State is missing | `project-setup` ("check the setup") |
 
 ## References
 

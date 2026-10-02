@@ -62,3 +62,10 @@ now.
   `git commit --no-edit` after a conflict.
 - A dirty working tree may hold another session's work: never stash, commit,
   or discard it.
+
+## Hand-offs
+
+| For | Use |
+| --- | --- |
+| Throwing away local work to match the remote exactly | `reset-to-remote` |
+| A toolkit update | `project-setup` |

@@ -25,9 +25,8 @@ line and ask for it.
    lines, then ask again.
 7. **After a yes**, the playback is the agreed scope; ask before doing work
    outside it. Then open the skill the project's `AGENTS.md` names for that
-   work (Claude Code: the Skill tool; Codex: read its `SKILL.md`). A rough
-   idea to plan goes to `managing-work-items`; a clear change to build needs
-   no skill.
+   work (Claude Code: the Skill tool; Codex: read its `SKILL.md`). A clear
+   change to build needs no skill.
 
 Every number, name, file path, and system the dump mentioned stays in the
 playback.
@@ -36,7 +35,12 @@ playback.
 
 - A request of one or two sentences that does not ask for a playback is not a
   dump: do it.
-- Meeting notes, or a dump he asks only to plan, go to `managing-work-items`.
 - A hook reminder says something may be worth keeping: save nothing before
-  his yes. Name it in the playback; after the yes, open
-  `managing-project-memory` (Hindsight: `AGENTS.md`, "Project memory").
+  his yes. Name it in the playback.
+
+## Hand-offs
+
+| For | Use |
+| --- | --- |
+| A rough idea to plan, meeting notes, or a dump he asks only to plan | `managing-work-items` |
+| Something worth keeping, after his yes | `managing-project-memory` (Hindsight: `AGENTS.md`, "Project memory") |

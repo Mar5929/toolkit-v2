@@ -64,3 +64,9 @@ What I need from you:
 1. Re-export the board with the Item ID column switched on.
 2. Say yes to the plan, or tell me what to change.
 ```
+
+## Hand-offs
+
+| For | Use |
+| --- | --- |
+| Reading a work item by its ID | `tracking-work-items` |

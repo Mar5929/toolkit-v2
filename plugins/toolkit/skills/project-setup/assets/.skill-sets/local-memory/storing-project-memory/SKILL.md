@@ -5,7 +5,7 @@ description: 'Saves, finds, and changes project memory as Markdown files in the 
 
 # Storing project memory (local files)
 
-This skill holds the storage: where each part of memory is saved in local files, and how to find it again. `managing-project-memory` decides what to save, when, and with whose OK, and hands every read and save to this skill. This skill never decides what to keep, an approval, or what to tell the owner.
+This skill holds the storage: where each part of memory is saved in local files, and how to find it again. It never decides what to keep, an approval, or what to tell the owner.
 
 ## Where memory lives
 
@@ -30,6 +30,12 @@ This skill holds the storage: where each part of memory is saved in local files,
 - Never `git add` anything under `memory/`, not even with `-f`.
 - Memory lives only in the main checkout. From a worktree, change it there; never copy it into the worktree. In Codex, the sandbox can block a session in a worktree from writing outside it. The write then asks for approval or fails with a sandbox error: ask the owner to approve it. Never write the memory into the worktree instead.
 - In zsh, a `*` pattern that matches nothing stops the whole command. Use the commands in `references/searching.md` as written.
+
+## Hand-offs
+
+| For | Use |
+| --- | --- |
+| Deciding what to save, when, and with whose OK | `managing-project-memory` |
 
 ## Files
 

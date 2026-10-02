@@ -5,7 +5,7 @@ description: 'Keeps project memory true and small: saves facts, lessons, decisio
 
 # Managing project memory
 
-This skill holds the process: what is worth keeping, when to ask the owner, and how to decide. It never says where memory is kept. For every read and every write, use `storing-project-memory`.
+This skill holds the process: what is worth keeping, when to ask the owner, and how to decide. It never says where memory is kept.
 
 ## How memory is kept
 
@@ -35,12 +35,23 @@ Never say a memory is deleted when it is not.
   - a change to this policy.
 - No question in either mode: a lesson (report it in one line), a change to Current State alone, and glossary upkeep he already authorized.
 - A question he leaves unanswered stays a proposal: `references/saving.md`, "Proposals".
-- When he changes the mode, change the line with the `project-setup` skill, never in `.claude/rules/owner-preferences.md`.
+- When he changes the mode, change the "Memory approval" line in `PROJECT.md`, as Hand-offs says, never `.claude/rules/owner-preferences.md`.
 
 ## Every time
 
 - Read a record fresh before you change it, and read it back after. Never run two writes to the same record at once.
 - His own edits win. Ask before you fix a record he changed by hand.
+
+## Hand-offs
+
+| For | Use |
+| --- | --- |
+| Every read and every write of memory | `storing-project-memory` |
+| Reading a work item: its status, decisions, and requirements | `tracking-work-items` |
+| A changed decision: the work item's new row | `managing-work-items` |
+| Changing the memory approval mode | `project-setup` |
+| A finished item's Current State line | `managing-work-items` |
+| A handoff, and the "Next session starts with" line | `handoff` |
 
 ## Files
 

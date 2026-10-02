@@ -68,7 +68,12 @@ Start every helper as a new helper that does not see this conversation. Never a 
 | Saving a decision that matters beyond this item | `managing-project-memory` (Hindsight: `AGENTS.md`, "Project memory") |
 | Updating the project's Current State | edit `memory/CURRENT_STATE.md` when the project has that file, otherwise `managing-project-memory` |
 | Merging a pull request | `merge-and-clean-up` |
+| Saving a change to documents only | `publish-docs` |
 | A Salesforce platform question | Salesforce's skills |
+| Salesforce: updating the component tracker | `sf-component-tracker` |
+| Salesforce: checking a deploy to a shared org | `sf-deploy-check` |
+| Salesforce: a production data change | `sf-data-change` |
+| Pull request text, and Salesforce release notes that go to a client | `humanizer` (`.claude/rules/humanize-outbound-text.md`) |
 
 ## Files
 

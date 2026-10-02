@@ -5,7 +5,7 @@ description: 'Saves, finds, and changes work items as GitHub issues, so managing
 
 # Tracking work items on GitHub
 
-This skill holds the storage: where each part of a work item lives in GitHub Issues, and the `gh` commands that read and change it. It never decides what happens next. `managing-work-items` decides, and hands every read and every save to this skill.
+This skill holds the storage: where each part of a work item lives in GitHub Issues, and the `gh` commands that read and change it. It never decides what happens next.
 
 ## How an item is stored
 
@@ -16,7 +16,6 @@ This skill holds the storage: where each part of a work item lives in GitHub Iss
 - A sub-item is a GitHub sub-issue, up to three levels. A phase is a Roadmap row in the body. A task is a checkbox line under its phase.
 - The design is one comment whose first line is `## Solution design`. Source files and the agent's notes are comments.
 - The repository is the "GitHub repository" line in `PROJECT.md`, under "Toolkit settings". It is `<repo>` in every command.
-- To move the items to another tracker, use the project-setup skill.
 
 ## After every write
 
@@ -30,6 +29,14 @@ Read the change back and check it says what you wrote. A failed write is "Not sa
 - The body is one piece of text. Change it only with the steps in `references/gh-commands.md`, "Changing the body": the owner may have edited it in the browser.
 - Create nothing but issues and comments without the owner's yes. The labels are the one exception, asked once at setup.
 - Never delete an issue, a comment, or a label. Close or cancel the issue instead. Remove a sub-issue link only to move an item.
+
+## Hand-offs
+
+| For | Use |
+| --- | --- |
+| Deciding what happens next: what to save, a State, or an approval | `managing-work-items` |
+| Moving the items to another tracker | `project-setup` |
+| Recording the GitHub repository when the line is empty | `project-setup` |
 
 ## Files
 

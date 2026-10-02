@@ -5,7 +5,7 @@ description: 'Stores and finds work items in the project''s Notion databases for
 
 # Tracking work items in Notion
 
-This project keeps its work items in Notion. `managing-work-items` decides what to save and when. This skill says where each thing is stored in Notion and how to read and save it. Run every `ntn` call with `using-notion-cli`: sign-in, Codex, the shape of each call, and errors are there.
+This project keeps its work items in Notion. This skill says where each thing is stored in Notion and how to read and save it. It never decides what to save or when.
 
 ## Where things are stored
 
@@ -41,8 +41,17 @@ This project keeps its work items in Notion. `managing-work-items` decides what 
 - Attach an uploaded file within one hour of uploading it. After that the upload expires.
 - Never delete a page, row, phase, or task. Take it out of view instead: set a phase to Cancelled, or tick an item's Archived. When the owner wants it deleted, ask him to delete it himself in Notion.
 - Never add work to a template: the three project templates in the owner's Projects database, or the Work Items database's work item template. Every copy takes it along.
-- When the owner drags a card on the Board, only its Status changes, so State and Status no longer match. `managing-work-items` says what to do.
-- Moving work items to another tracker is the `project-setup` skill's job.
+- When the owner drags a card on the Board, only its Status changes, so State and Status no longer match.
+
+## Hand-offs
+
+| For | Use |
+| --- | --- |
+| Deciding what to save and when | `managing-work-items` |
+| A State and Status that no longer match | `managing-work-items` |
+| Every `ntn` call: sign-in, Codex, the shape of each call, and errors | `using-notion-cli` |
+| Moving work items to another tracker | `project-setup` |
+| Restoring a missing database template | `project-setup` |
 
 ## Files
 

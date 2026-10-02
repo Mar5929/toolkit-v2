@@ -60,8 +60,14 @@ delivery/data/
 
 Give the owner the handoff in the reply: both file paths, which file is which, the numbered steps, the success check, and the undo steps. "You'll need to update those records" is not a handoff.
 
+## Hand-offs
+
+| For | Use |
+| --- | --- |
+| A manual deploy step, such as a pre-deploy snapshot for rollback | `sf-component-tracker` |
+
 ## Related rules
 
 - `production-data-changes.md`: the always-loaded safety rule and folder layout for data changes.
 - `salesforce-org-safety.md`: which commands are allowed against an org.
-- `record-deployment-steps.md`: record a manual step when a deploy needs an action the deploy cannot perform. The `sf-component-tracker` skill lists a pre-deploy snapshot for rollback as one such step.
+- `record-deployment-steps.md`: record a manual step when a deploy needs an action the deploy cannot perform.

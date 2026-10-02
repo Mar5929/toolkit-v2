@@ -5,7 +5,7 @@ description: 'Shows how to run ntn, Notion''s command-line tool, for the Notion 
 
 # Using the Notion command line
 
-`ntn` is Notion's own command-line tool. `ntn api <path>` calls the Notion API as the "Notion CLI" connection the owner signed in with. `tracking-work-items` and `storing-project-memory` say what to read and save in Notion. This skill says how to run each call. It never says what to store.
+`ntn` is Notion's own command-line tool. `ntn api <path>` calls the Notion API as the "Notion CLI" connection the owner signed in with. This skill says how to run each call. It never says what to store.
 
 ## Before your first call in a session
 
@@ -30,6 +30,13 @@ The Codex sandbox blocks network access and the keychain, so `ntn` fails inside 
 
 - Sending a relation, Files, or Tags value replaces the whole list. Read the current list first and send it all back with your change.
 - Query results come in pages of 100. When `has_more` is true, send the same query again with `"start_cursor": "<next_cursor>"`.
+
+## Hand-offs
+
+| For | Use |
+| --- | --- |
+| What to read and save for a work item | `tracking-work-items` |
+| What to read and save for project memory | `storing-project-memory` |
 
 ## Files
 

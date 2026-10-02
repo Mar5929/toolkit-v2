@@ -24,20 +24,16 @@ each one stand, and what still needs me.
 4. **Name another skill only in this case.** When a request is still open and nothing in
    this conversation shows it saved as a work item or in Current State, end
    the open block with one offer that covers every such request: turn each
-   into a work item (`managing-work-items`) or an untracked to-do
-   in Current State (`managing-project-memory`; a Hindsight project:
-   edit `memory/CURRENT_STATE.md` directly).
-   Make the offer once.
+   into a work item or an untracked to-do in Current State, with the skill
+   named for each in Hand-offs, below. Make the offer once.
 5. **Change nothing.** If the owner says yes to the offer, make each change
-   he chose with the skill the offer names for it.
+   he chose with that skill.
 
 ## Gotchas
 
 - No title above the table, no story of the work, no wrap-up, no third part.
   If something went wrong or surprised you, it goes in the `Result` cell of
   the request it came from.
-- A recap asked for together with a handoff belongs to `handoff`, which shows
-  this table first and then the handoff.
 - If part of the session is no longer visible to you, add a final row: its
   `What you asked` cell reads "Earlier requests I can no longer see", and its
   `Status` and `Result` cells stay empty. Never invent a request.
@@ -92,3 +88,11 @@ Two work item files there have conflicting changes. I did not touch it.
    `.claude/worktrees/rule-consolidation` and its branch are still there.
    Tell me once that merge is done, and I will remove both.
 ````
+
+## Hand-offs
+
+| For | Use |
+| --- | --- |
+| Turning an open request into a work item | `managing-work-items` |
+| Adding an untracked to-do to Current State | `managing-project-memory` (Hindsight: edit `memory/CURRENT_STATE.md` directly) |
+| A recap asked for together with a handoff: it shows this table first, then the handoff | `handoff` |
