@@ -202,11 +202,11 @@ A project set up before toolkit 0.6.0 has a Stage property and the Status
 options Backlog, Ready, In Progress, In Review, Done, and Cancelled. Run
 this after step 1 above has added the State property.
 
-1. Only the Notion app can add a status option. Ask the owner to add these
-   Status options, each in its group, to the Work Items database of the
-   project and of the two project templates that track work, and wait until
-   he says they are done: Not Started (To-do), Preparing (In progress),
-   Blocked (In progress).
+1. Add the Status options Not Started (To-do), Preparing (In progress), and
+   Blocked (In progress) to the project's Work Items database with one
+   `PATCH v1/data_sources/<work-items-data-source-id>` call. The call
+   replaces the whole list, so send every option the database has now plus
+   the new ones, each with its group (`database-layout.md`).
 2. Set each work item's State and Status as `update.md`, "Work items from
    Stage to State", says (`database-layout.md`, "Setting State and
    Status").

@@ -2,6 +2,37 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+
+## Current State (2026-10-02)
+
+The Toolkit V2 build is tracked as work items in the Notion project "Toolkit V2" (https://app.notion.com/p/Toolkit-V2-3edb381da17681eeb7ddd0a6d662f9b2). Older sections below are history.
+
+### Now (in progress)
+- Notion: an agent is bringing the three shared project templates up to the new State and Status lists and setting the TKV prefix on the Toolkit V2 project.
+- A review folder where Mike can read and edit every file a project gets, then hand his edits back: next, after this commit.
+
+### Just done (2026-10-01 to 2026-10-02)
+- Skill cut, 0.5.0 (7b51260). Hindsight on the VPS, 0.5.1 and 0.5.2 (855f1fc, 3169dd3). Work tracking rebuilt as managing-work-items and tracking-work-items, 0.6.0 (a0eda0b). Memory rebuilt as managing-project-memory, storing-project-memory, and using-notion-cli, 0.7.0 (49b1e8f). Memory clean-ups, and V2's own copy of the starter files is now the source, 0.7.1 (b62520c).
+- Claude Code mods researched (1fa01f6): dev/research/claude-code-mods.md and dev/research/mods-for-memory.md.
+- Notion project "Toolkit V2" made, with the Backlog item "Evaluate Claude Code mods".
+- DragonFly move review (read only, kept off Git because it names the client): what moving DragonFly from the old toolkit to V2 deletes, keeps, converts, and adds.
+- The voice-to-text line is now in the repository's AGENTS.md, the setup skill, and every project's AGENTS.md (0.7.2).
+
+### Waiting on Mike
+- Start the live tests of the rebuilt work-tracking and memory skills (about an hour, test sign-ins).
+- After the tests: turn the toolkit plugin on in his Claude Code and install the new version in Codex.
+- DragonFly: the five decisions in the review (which computer, where memory lives, which production guard, one file for DragonFly's own safety lines, keeping the data-change READMEs).
+- Mods: which supervisor checks to build, if any, after the tests.
+- Hindsight live run whenever he sets up a Hindsight project: his key, the add-on install, the dashboard sign-in.
+
+### Still to do
+- A move-over step in project-setup for projects on the old toolkit: list what is deleted, kept, converted, and added; act after the owner's OK.
+- Rebuild the Git skills and the session skills with the same pattern.
+- Routing test in both apps for the renamed skills.
+- From the DragonFly review: V2's production guard lets `sf apex test run` through against production; make it block that too (needs Mike's yes).
+
+### Next session starts with
+- Read this section, then the Notion project "Toolkit V2".
 ## Resume here (2026-09-29, overnight build)
 
 ### Hindsight on the VPS (2026-10-01, branch claude/hindsight-vps, toolkit 0.5.1, not committed)

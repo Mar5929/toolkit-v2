@@ -1,5 +1,7 @@
 # AGENTS.md: working on Toolkit V2
 
+The user dictates most messages with voice-to-text, so words may be misheard, missing, or out of order. Read for what the user means rather than the literal wording, and ask one short question when a message is unclear or could mean two things.
+
 This repository builds Toolkit V2 for Mike Rihm, a solo developer. The agent
 runs each of his projects; Mike only decides and steers. `README.md` explains
 it for Mike.

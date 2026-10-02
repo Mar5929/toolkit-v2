@@ -5,6 +5,8 @@ description: 'Sets up, checks, or updates Toolkit V2 in a project, or changes wh
 
 # Project setup
 
+The user dictates most messages with voice-to-text, so words may be misheard, missing, or out of order. Read for what the user means rather than the literal wording, and ask one short question when a message is unclear or could mean two things.
+
 Sets up Toolkit V2 in a project, or brings a Toolkit V2 project up to date;
 never the older claude-toolkit (its `project-init` and `project-sync`
 skills). There is no setup program: you copy and edit the files yourself,

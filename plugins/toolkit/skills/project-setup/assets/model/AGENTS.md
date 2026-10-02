@@ -10,7 +10,7 @@ future agents and skew them. Information must be curated and intentional.
 
 <One sentence describing this project and its outcome.> The owner named in `PROJECT.md` makes this project's decisions. The agent runs the project: it keeps the work tracker, memory, and project records current, and it does the technical work.
 
-The owner dictates most messages with voice-to-text, so a message may have wrong words, missing punctuation, or more than one possible meaning. When a message is unclear or could mean two different things, ask one short question before you act on it.
+The user dictates most messages with voice-to-text, so words may be misheard, missing, or out of order. Read for what the user means rather than the literal wording, and ask one short question when a message is unclear or could mean two things.
 
 <!-- if memory=hindsight -->
 ## Project memory

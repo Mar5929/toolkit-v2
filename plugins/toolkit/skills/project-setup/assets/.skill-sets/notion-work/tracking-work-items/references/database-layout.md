@@ -78,7 +78,7 @@ The sections of a work item's page are in `page-layout.md`.
 
 With memory in Notion, the memory setup adds the Memories, Facts, and Entities relations.
 
-Status options can be changed only in the Notion app, not through the API. Tell the owner when one is missing.
+Status options can be changed through the API (`PATCH v1/data_sources/<id>`), but the call replaces the whole list: always send every option, each with its group. An option left out is deleted.
 
 ## Phases properties
 
