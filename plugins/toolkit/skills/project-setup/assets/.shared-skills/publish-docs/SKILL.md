@@ -1,6 +1,6 @@
 ---
 name: publish-docs
-description: 'Commits project document edits (requirements/, system guide, PROJECT-ROADMAP.md, PROJECT.md, READMEs) to the default branch, so it needs no pull request and touches no other session. Use when the owner asked for or approved a document edit, or says "publish the docs" or "save the docs to main". Not for a work item''s requirements; use work-refine. Not for code, rules, or skills; use work-finish.'
+description: 'Commits project document edits (requirements/, system guide, PROJECT-ROADMAP.md, PROJECT.md, READMEs) to the default branch, so it needs no pull request and touches no other session. Use when the owner asked for or approved a document edit, or says "publish the docs" or "save the docs to main". Not for a work item''s requirements, or for code, rules, or skills; use managing-work-items.'
 ---
 
 # Publish a documentation save
@@ -18,8 +18,8 @@ own, with `git -C <folder>` so it never depends on the current folder.
    not ignored by Git (`git -C <main> check-ignore <file>` printing the path
    means ignored). `<main>` is the main checkout: the first path
    `git worktree list` prints. Save only an edit the owner asked for or said yes to, or one
-   another skill tells you to save with this skill (for example `work-finish`,
-   step 5). That covers the push in step 7.
+   another skill tells you to save with this skill (for example
+   `managing-work-items`, in Reflecting). That covers the push in step 7.
 2. **Look first.** Run `git -C <session folder> worktree list`,
    `git -C <session folder> status`, and `git -C <session folder> remote`,
    each on its own. `<session folder>` is the folder this session works in.
@@ -121,7 +121,7 @@ own, with `git -C <folder>` so it never depends on the current folder.
 
 A refused file stays refused even under a path the rule accepts. Rules, skills,
 prompts, hooks, settings, and code use a pull request
-(`work-finish`). A document edit that would be wrong on the default branch
+(`managing-work-items`). A document edit that would be wrong on the default branch
 without the code change it describes goes in that code's pull request.
 
 ## Carrying an edit across

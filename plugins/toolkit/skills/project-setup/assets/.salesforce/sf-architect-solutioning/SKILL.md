@@ -1,6 +1,6 @@
 ---
 name: sf-architect-solutioning
-description: 'Answers Salesforce platform questions, checking each fact against official Salesforce docs, so every design uses verified platform behavior. Use whenever the owner asks a Salesforce platform question that needs no design options, even about a work item ("which Flow type", "Flow or Apex"), or solution-design asks for platform facts. Not for planning or design; use work-refine or solution-design.'
+description: 'Answers Salesforce platform questions, checking each fact against official Salesforce docs, so every design uses verified platform behavior. Use whenever the owner asks a Salesforce platform question that needs no design options, even about a work item ("which Flow type", "Flow or Apex"), or managing-work-items asks for platform facts. Not for planning or design; use managing-work-items.'
 ---
 
 # Salesforce Architect & Solutioning
@@ -12,7 +12,7 @@ You are a **Certified Salesforce Technical Architect** with all Salesforce certi
 ## Which phases to run
 
 - The owner asks a Salesforce platform question that needs no design options: run Phase 3 only. Answer with the official source and stop.
-- `solution-design` opens this skill: run Phase 3 for the facts it asks for, and use Phase 2's client conventions and Phase 4's metadata references and patterns for the components it names. Return the findings to `solution-design`. Do not run Phase 1's interview and do not write Phase 5's plan: `work-refine` holds the requirements and `solution-design` writes the design.
+- `managing-work-items` opens this skill: run Phase 3 for the facts it asks for, and use Phase 2's client conventions and Phase 4's metadata references and patterns for the components it names. Return the findings to `managing-work-items`. Do not run Phase 1's interview and do not write Phase 5's plan: `managing-work-items` holds the requirements and writes the design.
 
 ---
 
@@ -86,11 +86,11 @@ This skill is project-agnostic. Never assume a folder structure. Discover where 
 3. **Check client conventions**: a `## Client Metadata Conventions` section in the project's AGENTS.md overrides Well-Architected defaults where they conflict. Also apply `references/naming-conventions.md` for standard naming.
 4. **If the project declares no locations**, ask the owner where the solution plan and design decisions should be recorded. Do not invent a folder structure.
 
-Record settled answers, decisions, and next steps in the work item with the
-project's work track skill; the work item is their one full record. When
-`solution-design` opened this skill, return Salesforce design findings to
-`solution-design`; do not start another interview and do not write a second
-design.
+Record settled answers, decisions, and next steps in the work item with
+`tracking-work-items`; the work item is their one full record. When
+`managing-work-items` opened this skill, return Salesforce design findings to
+`managing-work-items`; do not start another interview and do not write a
+second design.
 
 ---
 

@@ -29,21 +29,21 @@ mkdir -p <copy>/.claude/skills
 cp -R <skill folder>/assets/.shared-skills/. <copy>/.claude/skills/
 ```
 
-The shared skills are the same in every project (13): `work-refine`,
-`solution-design`, `work-delegate`, `work-check`, `work-finish`, `handoff`,
-`braindump`, `explain-simply`, `session-summary`, `pull-latest`,
+The shared skills are the same in every project (9): `managing-work-items`,
+`handoff`, `braindump`, `explain-simply`, `session-summary`, `pull-latest`,
 `reset-to-remote`, `merge-and-clean-up`, `publish-docs`. They name no
-tracker or memory system: they say "the work track skill" and "the memory
-save skill", and the "Skills" section of `AGENTS.md` names which one the
-project has.
+tracker or memory system. Every work tracking set holds one skill with the
+same name, `tracking-work-items`, so the shared skills name it directly.
+They say "the memory save skill", and the "Skills" section of `AGENTS.md`
+names which one the project has.
 
 Then copy the sets for the choices:
 
 | Choice | Copy into `<copy>/.claude/skills/` | Skills |
 | --- | --- | --- |
-| Work items local | `<skill folder>/assets/.skill-sets/local-work/.` | `local-work-track` |
-| Work items in Notion | `<skill folder>/assets/.skill-sets/notion-work/.` | `notion-work-track` |
-| Work items in GitHub Issues | `<skill folder>/assets/.skill-sets/github-work/.` | `github-work-track` |
+| Work items local | `<skill folder>/assets/.skill-sets/local-work/.` | `tracking-work-items` |
+| Work items in Notion | `<skill folder>/assets/.skill-sets/notion-work/.` | `tracking-work-items` |
+| Work items in GitHub Issues | `<skill folder>/assets/.skill-sets/github-work/.` | `tracking-work-items` |
 | Memory local | `<skill folder>/assets/.skill-sets/local-memory/.` | `local-memory-save`, `local-memory-find`, `local-memory-refine` |
 | Memory in Notion | `<skill folder>/assets/.skill-sets/notion-memory/.` | `notion-memory-save`, `notion-memory-find`, `notion-memory-refine` |
 | Memory in Hindsight | nothing | none: the agent uses the tools of Hindsight's coding-agent add-on (`hindsight-on-vps.md` in this folder) |

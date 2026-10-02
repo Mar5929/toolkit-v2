@@ -109,7 +109,7 @@ An instruction for how the agent works, a preference, or a correction of it is a
   ntn api v1/pages/<record-page-id> -X PATCH -d '{"properties":{"Work items":{"relation":[{"id":"<item-page-id>"}]}}}' < /dev/null
   ```
 
-  Find an item's page id with the notion-work-track skill, or:
+  Find an item's page id with `tracking-work-items`, or:
   `ntn api v1/data_sources/{{WORK_ITEMS_DS}}/query -d '{"filter":{"property":"ID","unique_id":{"equals":3}}}' < /dev/null | jq -r '.results[0].id'`.
 - The item's page now shows the record under "Linked memory"; its "Memories" property lists it.
 

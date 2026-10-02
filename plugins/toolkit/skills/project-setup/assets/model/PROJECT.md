@@ -86,7 +86,7 @@
 <!-- endif -->
 <!-- if tracker=jira -->
 - Jira project: `<project key>`
-- Jira status list: `<the Jira status used for each work item status: Backlog, Ready, In Progress, In Review, Done, Cancelled>`
+- Jira status list: `<the Jira status used for each work item status: Not Started, Preparing, In Progress, Blocked, Done, Cancelled>`
 <!-- endif -->
 <!-- if memory=notion -->
 - Notion memory: `<links to the project's memory page, its Lore databases (Projects, Topics, Memories, Entities, Facts), and the "Current state" page>`

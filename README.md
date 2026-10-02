@@ -67,15 +67,11 @@ Later, say **"check the setup"** to see what differs (it changes nothing), or
 **"update the toolkit"** to bring a project up to date. It shows every change
 first and never overwrites a file you changed without asking.
 
-## Skills every project gets (13)
+## Skills every project gets (9)
 
 | Skill | What it does | You might say |
 | --- | --- | --- |
-| `work-refine` | Turns a rough idea, meeting notes, and documents into agreed requirements and a roadmap. It asks one question at a time and saves each answer at once. | "help me plan this", "what am I missing" |
-| `solution-design` | Gives you design options for how to build an item, with a recommendation. | "how should we build it" |
-| `work-delegate` | Hands a work item to a team of helper agents, with you as the product owner. | "you drive", "take it from here" |
-| `work-check` | Has an independent checker test the result, then asks you to approve it. | "is it ready", "test it" |
-| `work-finish` | Ships and closes an approved item, or cancels one. It asks you before marking it Done. | "ship it", "mark it done" |
+| `managing-work-items` | Runs each work item from idea to Done. It works out the requirements with you one question at a time, then designs, builds, has an independent checker test the result, tidies up, and merges or deploys. It stops for your OK on the requirements, the design, the result, each merge, and Done. It saves and looks up items with `tracking-work-items`. | "help me plan this", "how should we build it", "is it ready", "ship it" |
 | `handoff` | Saves where things stand and writes a checked prompt for a new session. | "write a handoff" |
 | `braindump` | Plays back a loose brain dump in simple words before any work starts. | "here's a brain dump" |
 | `explain-simply` | Explains the last answer again as short, plain bullets. | "explain it like I'm five" |
@@ -91,17 +87,17 @@ Each project gets one work tracking set and one memory set:
 
 | Your choice | Skills it adds |
 | --- | --- |
-| Work items in local folders | `local-work-track` (finds, creates, and changes items) |
-| Work items in Notion | `notion-work-track` |
-| Work items in GitHub Issues | `github-work-track` |
+| Work items in local folders | `tracking-work-items` (saves, finds, and changes items in the `work-items/` folder) |
+| Work items in Notion | `tracking-work-items` (the Notion version) |
+| Work items in GitHub Issues | `tracking-work-items` (the GitHub version) |
 | Memory in local files | `local-memory-save`, `local-memory-find`, `local-memory-refine` (cleans up) |
 | Memory in Notion | `notion-memory-save`, `notion-memory-find`, `notion-memory-refine` |
 | Memory in Hindsight | None. Hindsight's coding-agent add-on saves each session to the project's bank, and the agent uses its save and search tools. |
 | Salesforce | `sf-architect-solutioning`, `sf-deploy-check`, `sf-component-tracker`, `sf-data-change` |
 
-A project ends up with 17 skills, or 21 in a Salesforce project (14 or 18 with
-Hindsight memory). Building, and saying where the work stands, need no skill:
-the project's `AGENTS.md` says how. `dev/SKILL-INDEX.md` lists every skill with its exact
+A project ends up with 13 skills, or 17 in a Salesforce project (10 or 14 with
+Hindsight memory). Saying where the work stands needs no skill: the
+project's `AGENTS.md` says how. `dev/SKILL-INDEX.md` lists every skill with its exact
 description.
 
 ## The hooks
@@ -118,7 +114,7 @@ records your words and the date.
 
 ## How work and memory fit together
 
-- Every work item goes through the same stages and statuses, wherever it is
+- Every work item goes through the same States and statuses, wherever it is
   stored.
 - Each work item has a Questions and Answers table. Your answer is saved the
   moment you give it, and unanswered questions stay at the top, so a new

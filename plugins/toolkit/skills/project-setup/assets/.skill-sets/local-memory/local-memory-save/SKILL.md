@@ -9,7 +9,7 @@ Memory is Markdown files in `memory/` in the main checkout (the first path `git 
 
 ## Steps
 
-1. **Decide the home** with `memory/memory-criteria.md`. Nothing qualifies: save nothing. A hook reminder is only a hint. An instruction for how the agent works, or a correction of it, is a rule, never memory and never a settings hook (`references/saving.md`, "The owner's instructions"). A decision about one work item is its Questions and Answers row (work track skill).
+1. **Decide the home** with `memory/memory-criteria.md`. Nothing qualifies: save nothing. A hook reminder is only a hint. An instruction for how the agent works, or a correction of it, is a rule, never memory and never a settings hook (`references/saving.md`, "The owner's instructions"). A decision about one work item is its Questions and Answers row (`tracking-work-items`).
 2. **Find the concept first** (`references/saving.md`). The same fact is already there: save nothing and say where. A section says something different: it is a correction.
 3. **Check approval** ("Approval" below). When it says ask, ask in the exact form and wait.
 4. **Write the change** (`references/saving.md`). Name its work items in `work_items`.

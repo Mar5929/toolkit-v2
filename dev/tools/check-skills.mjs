@@ -9,12 +9,15 @@
 // For project-setup and every SKILL.md under it, plus the model's .claude/skills/ (its
 // .agents/skills/ is skipped: a second copy that onboarding never copies):
 //   - the frontmatter holds only name and description, and name equals the folder name;
-//   - the description is single-quoted on one line, under 400 characters, starts with a
-//     third-person verb, has a ", so" why clause, then a "Use when" clause ("Use whenever",
-//     "Use only when", "Use before", and "Use first, before <skill>, when" count too);
-//     every "; use <skill>" names a skill that exists (a shared skill may say "; use the work
-//     track skill", since each project has a different one);
-//   - the description and folder match dev/SKILL-INDEX.md word for word;
+//   - the name is lowercase letters, digits, and hyphens, at most 64 characters, and holds
+//     neither "anthropic" nor "claude";
+//   - the description is single-quoted on one line, under 500 characters, starts with a
+//     third-person verb that says what the skill does, and has a sentence that starts with
+//     "Use" saying when to use it; every "; use <skill>" names a skill that exists;
+//   - the SKILL.md body (after the frontmatter) is under 500 lines;
+//   - the description and folder match dev/SKILL-INDEX.md word for word (the three work
+//     tracking sets each hold a skill named tracking-work-items, so a name may have one row
+//     per folder);
 //   - no when_to_use, $ARGUMENTS, !`command`, or ${CLAUDE_*}: Codex shows them as text;
 //   - SKILL.md links every file in the skill folder (a link to a folder covers what is in it),
 //     every link resolves, and no link leaves the folder with ../;
@@ -27,10 +30,9 @@
 //   - the lists that setup-copy.md, skills-hooks-settings.md, and interview.md keep by hand match
 //     the model and the skill folders: the Salesforce list, the files that hold setup markers,
 //     the shared skills, each set's skills, and the skill counts;
-//   - the Next action forms kept by hand in three places say the same: the Working, Waiting,
-//     Finished, and "Never name a work track ..." lines of dev/build-shared/work-item-format.md
-//     and the model's .claude/rules/keep-work-item-current.md, and the Next action prompt of
-//     notion-work-track's assets/work-item-page.md and the model's WORK-ITEM.md.
+//   - the Next action prompt kept by hand in project-setup's references/notion-build/
+//     work-item-page.md (the Notion work item template's text) says the same as the model's
+//     WORK-ITEM.md.
 // Findings on the model's own skills are warnings: changing them is a model change that needs
 // Mike's yes (AGENTS.md). So is a missing contents list in sf-architect-solutioning, whose body
 // is Mike's text: a change there needs his yes. The run fails (exit 1) on any error.
@@ -50,19 +52,21 @@ const HAS_MODEL = fs.existsSync(path.join(MODEL, 'AGENTS.md'));
 // body was reworded on 2026-09-30, both with his yes (review answers B48 and C12 to C26). The
 // contents rule is a warning for it.
 const MIKES_BODY = new Set(['sf-architect-solutioning']);
-const MAX_DESCRIPTION = 400;
+const MAX_DESCRIPTION = 500;
+const MAX_BODY_LINES = 500;
+const MAX_NAME = 64;
+const NAME = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const CONTENTS_OVER = 100;
 const VERB = /^[A-Z][a-z]+(?:-[a-z]+)?s\b/;
-const WHY = /,\s+so\s/;
-const USE = /\bUse (?:when(?:ever)?|only when|before|first, before [a-z0-9-]+, when)\b/;
+const USE = /(?:^|[.!?]\s+)Use\b/;
 const LITERAL = [[/\$ARGUMENTS\b/, '$ARGUMENTS'], [/!`/, '!`command`'], [/\$\{CLAUDE_/, '${CLAUDE_*}']];
 const TOOLKIT_COMMAND = /\btoolkit (?:brief|config|decision|doctor|export|handoff-backup|hindsight|hook|import|index|init|machine-setup|memory|notion|rule|sync|version|work)\b|\bbin\/toolkit\b/;
 const TEXT_FILE = /\.(?:md|mjs|cjs|js|json|toml|ya?ml|rules|txt|csv|sh)$/;
 const PATH_SPAN = /^(?:\.\/)?(?:references|assets|examples|scripts|agents)\/\S*$/;
 // Skill assets that are copies of model files: path under project-setup/assets -> path in the model.
 const MODEL_COPIES = {
-  '.shared-skills/solution-design/assets/DESIGN.md': 'work-items/work-item-template/DESIGN.md',
-  '.skill-sets/github-work/github-work-track/assets/WORK-ITEM.md': 'work-items/work-item-template/WORK-ITEM.md',
+  '.shared-skills/managing-work-items/assets/work-item-template.md': 'work-items/work-item-template/WORK-ITEM.md',
+  '.shared-skills/managing-work-items/assets/design-template.md': 'work-items/work-item-template/DESIGN.md',
 };
 
 const findings = [];
@@ -135,14 +139,17 @@ function frontmatter(file, text, level) {
 
 // ------------------------------------------------------------------ the index
 
+// Rows are keyed by folder: the three work tracking sets each hold a skill named tracking-work-items.
+const indexDir = (folder) => (folder.startsWith('assets/model/') ? path.join(MODEL, folder.slice('assets/model/'.length)) : path.join(SETUP, folder));
 const index = new Map();
 for (const [i, line] of read(INDEX).split('\n').entries()) {
   const m = line.match(/^\|\s*`([a-z0-9-]+)`\s*\|\s*`([^`]+)`\s*\|\s*(.+?)\s*\|\s*$/);
   if (!m) continue;
-  if (index.has(m[1])) report('error', INDEX, `line ${i + 1}: ${m[1]} is listed twice`);
-  index.set(m[1], { folder: m[2], description: m[3], line: i + 1 });
+  const dir = path.resolve(indexDir(m[2]));
+  if (index.has(dir)) report('error', INDEX, `line ${i + 1}: ${m[2]} is listed twice`);
+  index.set(dir, { name: m[1], folder: m[2], description: m[3], line: i + 1 });
 }
-const indexDir = (folder) => (folder.startsWith('assets/model/') ? path.join(MODEL, folder.slice('assets/model/'.length)) : path.join(SETUP, folder));
+const indexNames = new Set([...index.values()].map((row) => row.name));
 
 // ------------------------------------------------------------------ find the skills
 
@@ -150,7 +157,7 @@ const setupSkillDirs = walk(SETUP).filter((f) => path.basename(f) === 'SKILL.md'
 const modelSkillDirs = walk(path.join(MODEL, '.claude/skills')).filter((f) => path.basename(f) === 'SKILL.md').map(path.dirname);
 const skills = [...setupSkillDirs.map((dir) => ({ dir, model: false })), ...modelSkillDirs.map((dir) => ({ dir, model: true }))];
 const allDirs = skills.map((s) => s.dir);
-const names = new Set([...skills.map((s) => path.basename(s.dir)), ...index.keys()]);
+const names = new Set([...skills.map((s) => path.basename(s.dir)), ...indexNames]);
 if (!HAS_MODEL) notes.push(`The model copy ${shown(MODEL)} is not there yet: the model's skills, its template copies, and links into assets/model/ were not checked.`);
 
 // ------------------------------------------------------------------ check each skill
@@ -165,27 +172,27 @@ for (const { dir, model } of skills) {
   if (fm) {
     const name = fm.raw.get('name');
     if (name !== folderName) report(level, skillFile, `name is "${name}", but the folder is "${folderName}"`);
+    if (!NAME.test(name ?? '') || name.length > MAX_NAME) report(level, skillFile, `name "${name}" must be lowercase letters, digits, and single hyphens, at most ${MAX_NAME} characters`);
+    if (/anthropic|claude/.test(name ?? '')) report(level, skillFile, `name "${name}" must not contain "anthropic" or "claude"`);
     const rawDescription = fm.raw.get('description') ?? '';
     const quoted = rawDescription.match(/^'((?:[^']|'')*)'$/);
     if (!quoted) report(level, skillFile, 'the description is not one single-quoted line');
     description = quoted ? quoted[1].replace(/''/g, "'") : rawDescription;
     if (description.length >= MAX_DESCRIPTION) report(level, skillFile, `the description is ${description.length} characters; it must be under ${MAX_DESCRIPTION}`);
     if (!VERB.test(description)) report(level, skillFile, `the description must start with a third-person verb that says what the skill does ("Saves", "Reports"); it starts "${description.slice(0, 30)}"`);
-    const why = description.search(WHY);
-    const use = description.search(USE);
-    if (use === -1) report(level, skillFile, 'the description has no "Use when" clause');
-    if (why === -1) report(level, skillFile, 'the description has no ", so ..." clause saying why to use it');
-    else if (use !== -1 && why > use) report(level, skillFile, 'the ", so ..." clause must come before "Use when"');
-    for (const m of description.matchAll(/; use (?!the work track skill\b)([a-z][a-z0-9-]*)/g)) if (!names.has(m[1])) report(level, skillFile, `the description sends the agent to "${m[1]}", which is no skill`);
+    if (!USE.test(description)) report(level, skillFile, 'the description has no sentence starting with "Use" that says when to use the skill');
+    for (const m of description.matchAll(/; use ([a-z][a-z0-9-]*)/g)) if (!names.has(m[1])) report(level, skillFile, `the description sends the agent to "${m[1]}", which is no skill`);
+    const bodyLines = text.split('\n').length - 1 - fm.close - (text.endsWith('\n') ? 1 : 0);
+    if (bodyLines >= MAX_BODY_LINES) report(level, skillFile, `the body is ${bodyLines} lines; it must be under ${MAX_BODY_LINES}: move details into references/`);
   }
   for (const [re, label] of LITERAL) if (re.test(text)) report(level, skillFile, `uses ${label}, which Codex shows as literal text`);
 
-  // The index: every skill has a row, with this folder and this description word for word.
-  const row = index.get(folderName);
-  if (!row) report('error', INDEX, `${folderName} has no row (folder ${shown(dir)})`);
+  // The index: every skill has a row for its folder, with its name and its description word for word.
+  const row = index.get(path.resolve(dir));
+  if (!row) report('error', INDEX, `${folderName} has no row for its folder ${shown(dir)}`);
   else {
-    if (path.resolve(indexDir(row.folder)) !== dir) report('error', INDEX, `line ${row.line}: ${folderName} is in ${shown(dir)}, not ${row.folder}`);
-    if (description !== null && row.description !== description) report('error', INDEX, `line ${row.line}: the description of ${folderName} differs from its SKILL.md`);
+    if (row.name !== folderName) report('error', INDEX, `line ${row.line}: the row for ${row.folder} names ${row.name}, but the skill there is ${folderName}`);
+    if (description !== null && row.description !== description) report('error', INDEX, `line ${row.line}: the description of ${folderName} (${row.folder}) differs from its SKILL.md`);
   }
 
   // The skill's own files: nested skills and the model copy are checked on their own.
@@ -226,10 +233,9 @@ for (const { dir, model } of skills) {
 
 // ------------------------------------------------------------------ index rows, model copies
 
-for (const [name, row] of index) {
-  const dir = indexDir(row.folder);
+for (const [dir, row] of index) {
   if (row.folder.startsWith('assets/model/') && !HAS_MODEL) continue;
-  if (!fs.existsSync(path.join(dir, 'SKILL.md'))) report('error', INDEX, `line ${row.line}: ${name} has no SKILL.md in ${row.folder}`);
+  if (!fs.existsSync(path.join(dir, 'SKILL.md'))) report('error', INDEX, `line ${row.line}: ${row.name} has no SKILL.md in ${row.folder}`);
 }
 if (HAS_MODEL) {
   for (const [copy, original] of Object.entries(MODEL_COPIES)) {
@@ -239,7 +245,7 @@ if (HAS_MODEL) {
     else if (read(a) !== read(b)) report('error', a, `differs from the model's ${original}; copy the model's file over it`);
   }
   // The Next action prompt is written by hand in two places; they must match.
-  const pageFile = path.join(SETUP, 'assets/.skill-sets/notion-work/notion-work-track/assets/work-item-page.md');
+  const pageFile = path.join(SETUP, 'references/notion-build/work-item-page.md');
   const templateFile = path.join(MODEL, 'work-items/work-item-template/WORK-ITEM.md');
   const prompt = (text) => text.replace(/\\/g, '').match(/\*\*Next action:\*\* (.*?)(?:<br>|\n|$)/)?.[1];
   if (!fs.existsSync(pageFile) || !fs.existsSync(templateFile)) report('error', pageFile, `this file or ${shown(templateFile)} is missing, so the Next action prompts were not compared`);

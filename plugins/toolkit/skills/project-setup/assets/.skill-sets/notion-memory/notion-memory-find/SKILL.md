@@ -1,6 +1,6 @@
 ---
 name: notion-memory-find
-description: 'Searches this project''s Notion memory, Current state, and memories linked to work items, and cites each source, so each answer comes from what was agreed. Use when the owner asks what was decided or recorded before, or why, such as "what did we decide", "do we know", or "search Notion for it". Not for planning or design; use work-refine or solution-design. Only for projects with Notion memory.'
+description: 'Searches this project''s Notion memory, Current state, and memories linked to work items, and cites each source, so each answer comes from what was agreed. Use when the owner asks what was decided or recorded before, or why, such as "what did we decide", "do we know", or "search Notion for it". Not for planning or design; use managing-work-items. Only for projects with Notion memory.'
 ---
 
 # Notion memory: find
@@ -10,7 +10,7 @@ This project keeps its memory in Notion, in Lore's layout. Every lookup of what 
 ## Steps
 
 1. Read the ids from `PROJECT.md`, section "Toolkit settings", Notion block. Before any `ntn` call, see `references/notion-access.md` (sign-in; in Codex, run each `ntn` call alone, outside the sandbox).
-2. Pick the query in `references/queries.md`. Where one work item stands is the project's work track skill.
+2. Pick the query in `references/queries.md`. Where one work item stands: `tracking-work-items`.
 3. Read the records fresh in this turn, including their bodies, and answer with the facts, cited (`.claude/rules/cite-recalled-knowledge.md`).
 
 ## Rules

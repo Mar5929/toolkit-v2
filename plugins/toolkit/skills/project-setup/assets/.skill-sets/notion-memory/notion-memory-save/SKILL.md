@@ -9,7 +9,7 @@ This project keeps its memory in Notion, in Lore's layout. Every save, correctio
 
 ## Steps
 
-1. **Decide the home** (`references/record-mapping.md`, "One record, one row"). Nothing qualifies: save nothing. A hook reminder is only a hint. Never save secrets, credentials, email addresses, transcripts, raw logs, or work item status. An instruction for how the agent works is a rule, never memory and never a settings hook (`references/saving.md`, "The owner's instructions"). A decision about one work item is its Questions and Answers row (work track skill).
+1. **Decide the home** (`references/record-mapping.md`, "One record, one row"). Nothing qualifies: save nothing. A hook reminder is only a hint. Never save secrets, credentials, email addresses, transcripts, raw logs, or work item status. An instruction for how the agent works is a rule, never memory and never a settings hook (`references/saving.md`, "The owner's instructions"). A decision about one work item is its Questions and Answers row (`tracking-work-items`).
 2. **Check approval** ("Approval" below). When it says ask, ask in the exact form and wait. Before any `ntn` call, see `references/notion-access.md` (sign-in; in Codex, run each `ntn` call alone, outside the sandbox).
 3. Read the ids from `PROJECT.md`, section "Toolkit settings", Notion block.
 4. **Find the concept first** (`references/saving.md`, "Before a save"). Add to it, or make a new record, or a decision record.

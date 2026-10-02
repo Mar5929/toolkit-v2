@@ -4,7 +4,7 @@ A real run in the private Notion test area (2026-09-29), project "iOS money
 log", work items and memory both in Notion.
 
 While refining IML-1, the owner answered Q-01: "Amount, date, category.
-Notes are optional." The work track skill saved it as Q-01 in IML-1. Every
+Notes are optional." `tracking-work-items` saved it as Q-01 in IML-1. Every
 later screen and import must follow it, so the agent asked "This looks
 project-wide. Save it to memory too?" and the owner said "yes".
 

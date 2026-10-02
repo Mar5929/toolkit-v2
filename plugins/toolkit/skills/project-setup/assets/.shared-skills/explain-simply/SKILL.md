@@ -12,7 +12,7 @@ Rewrite something as short bullets the owner can read once and act on.
    in this conversation that explained or reported something, not one that
    only acknowledged or asked a question. With none, say so in one line and
    ask what to explain. Read a file first. Read a work item by its ID with
-   the project's work track skill (`AGENTS.md` names it), never by a path.
+   `tracking-work-items`, never by a path.
 2. **Bullets only, no paragraphs.** 4 to 6 groups under short bold headings
    that are plain phrases, not "Overview" or "Summary". One idea and one line
    per bullet, 25 bullets at most. If you left part of the source out to fit,

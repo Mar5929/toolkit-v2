@@ -62,7 +62,7 @@ Does the draft state the overarching goal (what the work is trying to achieve, n
 ### Job two: check every checkable claim
 
 - Every file and folder path, and every claim about what a file says: does it exist, and does it say that? If a path is close to a real one, name the real one.
-- Every branch, worktree, commit, pull request, issue, and work item ID: is it the one named, in the state the draft says (for a work item: its stage, `waiting_on`, the lines of its Current state, and its first open question)?
+- Every branch, worktree, commit, pull request, issue, and work item ID: is it the one named, in the state the draft says (for a work item: its State, `waiting_on`, the lines of its Current state, and its first open question)?
 - Every number, count, date, and duration, including any the draft worked out from others: work it out again.
 - Every claim that something was run, passed, failed, or was verified: with no command output behind it, Unchecked.
 - Anything carried over from an earlier handoff prompt is not a source: check it from scratch.

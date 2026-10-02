@@ -29,7 +29,7 @@ Every item has a Status and a State. The State says where the work is. The Statu
 - A parent item stays in Building until every sub-item is Done or Cancelled. Then it goes through the Testing Loop as a whole.
 - An item with nothing to merge or deploy (research, a decision, a document) goes from Reflecting straight to asking him to mark it Done.
 - **Backlog:** add the idea in his words and do not start the interview until he asks to start it.
-- **Blocked:** stuck on something outside the work, such as missing access, another team, or a piece that must be finished first. Waiting for the owner's answer is not Blocked. Write what it waits on and who can clear it. When it is cleared, return to the State it was in.
+- **Blocked:** stuck on something outside the work, such as missing access, another team, or a piece that must be finished first. Waiting for the owner's answer is not Blocked. Write what it waits on, who can clear it, and the State it left, in the Current state's Blockers line. When it is cleared, return to that State.
 - **Done and Cancelled:** only on his word. Cancelling keeps the item and every record in it.
 
 ## The owner's OK
@@ -44,19 +44,29 @@ Stop and ask the owner before each of these. Record his OK only when he answers 
 
 ## Every time
 
-- Read the item fresh with `tracking-work-items` before you act. When the owner changed it by hand, his change wins.
+- Read the item fresh with `tracking-work-items` before you act. When the owner changed it by hand, his change wins, except a State and Status that no longer match the table: tell him in one line, ask which State it is with your recommendation, then set both.
 - Save after each step, not at the end, then read the item back. When a save fails, start the reply with "Not saved".
 - After each step, rewrite the item's Current state in place, as the template says.
 - Never delete a requirement, a question row, or a phase. Mark it superseded or cancelled.
 - Levels: an item can stand alone or have sub-items, up to three levels (item → sub-item → sub-item). Any item can break its work into a checklist of tasks, grouped by phase. Never add a fourth level; make it a task instead.
+
+## Starting a helper
+
+Start every helper as a new helper that does not see this conversation. Never a fork.
+
+- Claude Code: the Agent tool, `subagent_type` set to `general-purpose` and `model` set to `opus`.
+- Codex: the `spawn_agent` tool with `fork_turns` set to `none`. Wait for its report with `wait_agent`.
+- The message: everything under "Brief for the helper" in the helper's file, word for word, then the job block, filled in. The helper sees nothing else.
 
 ## Hand-offs
 
 | For | Use |
 | --- | --- |
 | Every read and every save of a work item | `tracking-work-items` |
-| Searching what the project already decided, and saving a decision that matters beyond this item | `managing-project-memory` |
-| A merge | `managing-git-changes` |
+| Searching what the project already decided | the memory find skill (Hindsight: its `recall` tool) |
+| Saving a decision that matters beyond this item | the memory save skill (Hindsight: its `retain` tool) |
+| Updating the project's Current State | edit `memory/CURRENT_STATE.md` when the project has that file, otherwise the memory save skill |
+| Merging a pull request | `merge-and-clean-up` |
 | A Salesforce platform question | `sf-architect-solutioning` |
 
 ## Files
@@ -68,7 +78,7 @@ Stop and ask the owner before each of these. Record his OK only when he answers 
 | [references/building.md](references/building.md) | The item is in Building, or the owner wants a team of helper agents. |
 | [references/testing-loop.md](references/testing-loop.md) | The item is in the Testing Loop. |
 | [references/reflecting.md](references/reflecting.md) | The item is in Reflecting. |
-| [references/deploying.md](references/deploying.md) | The item is in Deploying. |
+| [references/deploying.md](references/deploying.md) | The item is in Deploying, or is being marked Done or Cancelled. |
 | [references/salesforce-deploying.md](references/salesforce-deploying.md) | Deploying in a Salesforce project. |
 | [references/requirements-analyst-brief.md](references/requirements-analyst-brief.md) | Starting the helper that checks the requirements are complete. |
 | [references/researcher-brief.md](references/researcher-brief.md) | Starting a helper to look up a fact for planning or design. |

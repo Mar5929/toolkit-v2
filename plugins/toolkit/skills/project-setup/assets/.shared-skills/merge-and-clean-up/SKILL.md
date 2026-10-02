@@ -1,6 +1,6 @@
 ---
 name: merge-and-clean-up
-description: 'Merges one approved GitHub pull request, then removes only its branches and worktree, after its checks and the merge-safety check pass, so nothing unchecked is merged and no other session''s work is removed. Use when work-finish asks, or the owner names a pull request: "merge PR 12", "merge and clean up", "land this pull request". Not for shipping an approved work item; use work-finish.'
+description: 'Merges one approved GitHub pull request, then removes only its branches and worktree, after its checks and the merge-safety check pass, so nothing unchecked is merged and no other session''s work is removed. Use when managing-work-items asks, or the owner names a pull request: "merge PR 12", "merge and clean up", "land this pull request". Not for shipping an approved work item; use managing-work-items.'
 ---
 
 # Merge and clean up
@@ -42,7 +42,7 @@ Neither of these: stop and ask.
   reported no blocking issue on it; every check passes on it; the work item
   does not say its merge needs the owner's approval.
 
-When you came here from `work-finish`, it has already asked or checked.
+When you came here from `managing-work-items`, it has already asked or checked.
 
 ## Step 3: check the pull request on GitHub
 
@@ -144,19 +144,18 @@ the same repository and belongs to this pull request, then
 
 ## Step 7: work item note and report
 
-When step 1 found a work item: from `work-finish`, add nothing (it adds the
-Recent History row); asked directly, add one row, "Merged pull request
-#<number> as <merge commit>.", with the project's work track skill
-(`AGENTS.md` names it). Never change the stage or mark anything Done;
-`work-finish` does that.
+When step 1 found a work item: from `managing-work-items`, add nothing (it
+adds the Recent History row); asked directly, add one row, "Merged pull
+request #<number> as <merge commit>.", with `tracking-work-items`. Never
+change the State or mark anything Done; `managing-work-items` does that.
 
 Verify: the pull request is merged; the base worktree matches its upstream and
 is clean; the head branch and its worktree are gone; every unrelated worktree
 remains.
 
-- From `work-finish`: say the pull request link, the merge commit, and the
-  cleanup result in one line, then go on with the rest of `work-finish`
-  step 3.
+- From `managing-work-items`: say the pull request link, the merge commit,
+  and the cleanup result in one line, then go on with the rest of its
+  Deploying steps.
 - Asked directly: the pull request link, the merge commit, whether the base
   worktree is up to date and clean, the cleanup result, and whether the Recent
   History row was saved (a failed save starts that line with "Not saved"). End
@@ -171,7 +170,7 @@ remains.
   asking, show the owner the exact command and wait.
 - No remote (`git remote` prints nothing): there is no pull request, so this
   skill does not apply. Never fetch. Tell the owner in one line;
-  `work-finish` does the local merge.
+  `managing-work-items` does the local merge.
 
 ## References
 

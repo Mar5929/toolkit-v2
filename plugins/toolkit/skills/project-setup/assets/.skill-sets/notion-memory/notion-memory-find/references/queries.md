@@ -62,7 +62,7 @@ ntn api v1/data_sources/{{MEMORIES_DS}}/query -d '{"filter":{"and":[{"property":
 ```
 
 An item's own decisions are not here: they are the rows with "yes" in
-Decision? in that item's Questions and Answers (the work track skill).
+Decision? in that item's Questions and Answers (`tracking-work-items`).
 
 ## Reading a record
 

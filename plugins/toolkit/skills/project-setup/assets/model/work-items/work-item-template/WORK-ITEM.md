@@ -2,8 +2,8 @@
 id: WI-001
 title: <Work item title>
 type: <discovery | solution-design | build | data-load | repository-maintenance | research | task | bug | enhancement>
-stage: <01-discovery ... 14-spec-update>
-status: <Backlog | Ready | In Progress | In Review | Done | Cancelled>
+state: <Backlog | Refining Requirements | Designing | Building | Testing Loop | Reflecting | Deploying | Blocked | Done | Cancelled>
+status: <Not Started | Preparing | In Progress | Blocked | Done | Cancelled>
 parent: <WI-id | none>
 waiting_on: "<owner | agent | external: who | none>"
 priority: <urgent | high | medium | low>
@@ -16,7 +16,7 @@ updated: <YYYY-MM-DD>
 
 # WI-001: <Work item title>
 
-<!-- Fill-in guide for a new work item: create it with the work track skill. For a local item it creates `work-items/<ID>-<short-slug>/` with a `references/` folder, copies this file into it named by the item's ID (for example `WI-031.md`), and sets the real ID in front matter and heading. `solution-design` copies `DESIGN.md` in when a design starts. `WORK-ITEM.md` is the name of this template only. Find an item by its `id:` field, never by its path; the owner may move or rename item folders by hand. Put source files, such as meeting transcripts and documents (in a Salesforce project, a client file stays in `delivery/` and the Sources list names its path), in the item's `references/` folder (or attach them to the item in Notion, GitHub, or Jira) and list each one under Notes, Sources. Use stable phase, task, requirement, and question IDs for this item. In the front matter, keep one value from each list and change the fields with the work track skill; a blocked item has `waiting_on` set and its Current state Waiting on and Blockers lines filled, not a Blocked status. Mark the item Done only after the owner says yes: ask him first, record his words and the date as a Questions and Answers row, and name its Q-ID in Recent History; he may also mark it Done himself. Replace every angle-bracket prompt with actual text in that same field, cell, or paragraph; do not leave the prompt in place. Keep the headings and field labels. Add or remove phase, task, question, and requirement examples to match the real work. Use the chosen tracker as the source of truth for status and links. Delete this guide after filling the item. -->
+<!-- Fill-in guide for a new work item: create it with `tracking-work-items`, which saves this file under the item's ID and sets the real ID in front matter and heading. `tracking-work-items` makes the design when a design starts. `WORK-ITEM.md` is the name of this template only. Find an item by its `id:` field, never by its path; the owner may move or rename item folders by hand. Save source files, such as meeting transcripts and documents (in a Salesforce project, a client file stays in `delivery/` and the Sources list names its path), with `tracking-work-items`, and list each one under Notes, Sources. A sub-item's `parent` names the item above it. Use stable phase, task, requirement, and question IDs for this item. In the front matter, keep one value from each list and change the fields with `tracking-work-items`; the status follows from the state, as `managing-work-items` says. A blocked item has state and status Blocked, `waiting_on` set, and its Current state Waiting on and Blockers lines filled. Replace every angle-bracket prompt with actual text in that same field, cell, or paragraph; do not leave the prompt in place. Keep the headings and field labels. Add or remove phase, task, question, and requirement examples to match the real work. Use the chosen tracker as the source of truth for status and links. Delete this guide after filling the item. -->
 
 ## Overview
 
@@ -26,11 +26,11 @@ updated: <YYYY-MM-DD>
 
 ### Current state
 
-<!-- Fill-in guide for Current state: the five lines under this heading say where the item stands right now, so a new session or the owner can pick up from them alone. Rewrite these lines in place after each step (a task finished, a question asked or answered, a stage or `waiting_on` change, a pause, the end of a session); never add a line, a date list, or a log to them. History goes to Recent History as a new row. Keep each line to one or two sentences. -->
+<!-- Fill-in guide for Current state: the five lines under this heading say where the item stands right now, so a new session or the owner can pick up from them alone. Rewrite these lines in place after each step (a task finished, a question asked or answered, a state or `waiting_on` change, a pause, the end of a session); never add a line, a date list, or a log to them. History goes to Recent History as a new row. Keep each line to one or two sentences. -->
 
 **Where it stands:** <What is done and where work stands now.>
 
-**Next action:** <One of three forms. Working: “<Who>: <the exact next step, one sentence>, with <skill>.” Example: “Agent: write two design options for the permission set groups, with solution-design.” A build step names no skill: “Agent: build the entry screen for WI-031.” Waiting: “Waiting on Mike: Q-07 (<the question in a few words>). After his answer: <step>, with <skill>.” Example: “Waiting on Mike: Q-07 (merge or move the 15 personas). After his answer: finish R-04, with work-refine.” Finished or cancelled: “None. Finished.” or, for a cancelled item, “None. Cancelled.” <skill> is one of the five stage skills: work-refine, solution-design, work-delegate, work-check, or work-finish.>
+**Next action:** <One of three forms. Working: “<Who>: <the exact next step, one sentence>.” Example: “Agent: write two design options for the permission set groups.” Waiting: “Waiting on Mike: Q-07 (<the question in a few words>). After his answer: <step>.” Example: “Waiting on Mike: Q-07 (merge or move the 15 personas). After his answer: finish R-04.” Finished or cancelled: “None. Finished.” or, for a cancelled item, “None. Cancelled.”>
 
 **Waiting on:** <Who the item waits on and for what, matching `waiting_on`, for example “Mike: Q-07.”; or “Nothing.”>
 
@@ -78,7 +78,7 @@ A phase is complete when its tasks are complete, its sub-items are Done or Cance
 
 ## Recent History
 
-<!-- Add one row, newest first, for each of these changes: a stage, `waiting_on`, blocker, or next action change for a reason a later reader could not see; an answer, approval, rejection, or decision; the independent checker's report; a plan change; a change the owner made by hand; a finished result. This table is the item's history; the Overview's Current state says only where the item stands now. Put the date in column 1, what happened in column 2, and its effect or next action in column 3. For a decision, name its Q-ID (for example “Q-04 answered”) instead of repeating it; the decision itself is the row in Questions and Answers. Remove the placeholder row when the first real entry is added. -->
+<!-- Add one row, newest first, for each of these changes: a state, `waiting_on`, blocker, or next action change for a reason a later reader could not see; an answer, approval, rejection, or decision; the independent checker's report; a plan change; a change the owner made by hand; a finished result. This table is the item's history; the Overview's Current state says only where the item stands now. Put the date in column 1, what happened in column 2, and its effect or next action in column 3. For a decision, name its Q-ID (for example “Q-04 answered”) instead of repeating it; the decision itself is the row in Questions and Answers. Remove the placeholder row when the first real entry is added. -->
 
 | Date | Change or decision | Effect on the work |
 |---|---|---|
@@ -148,9 +148,9 @@ This work item can be accepted when:
 
 ### Sources
 
-<!-- One line per source: a file in this item's `references/` folder, a file attached to the item in Notion, GitHub, or Jira, or a project file named by its path (a Salesforce client file stays in `delivery/`): what it is and what was taken from it. Wherever the item uses something drawn from a source, name that source. Write “None.” when the item has no sources. -->
+<!-- One line per source: a file saved with the item (`tracking-work-items` says how), or a project file named by its path (a Salesforce client file stays in `delivery/`): what it is and what was taken from it. Wherever the item uses something drawn from a source, name that source. Write “None.” when the item has no sources. -->
 
-- `references/<file name>`: <What it is, for example “kickoff meeting transcript, YYYY-MM-DD.”> Taken from it: <The requirement, question, or task IDs it informed.>
+- <File name>: <What it is, for example “kickoff meeting transcript, YYYY-MM-DD.”> Taken from it: <The requirement, question, or task IDs it informed.>
 
 ### Solution options and considerations
 

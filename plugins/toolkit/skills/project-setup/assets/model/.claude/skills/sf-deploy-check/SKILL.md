@@ -1,6 +1,6 @@
 ---
 name: sf-deploy-check
-description: 'Finds components or edits that a Salesforce deploy would ship beyond the intended change, so no unfinished or unintended work reaches a shared org. Use when a deploy to a shared org (UAT, full copy, staging, or production) is about to run, or before the owner gets a deploy command. Not for checking whether a work item is ready; use work-check. Not for running the deploy; use work-finish.'
+description: 'Finds components or edits that a Salesforce deploy would ship beyond the intended change, so no unfinished or unintended work reaches a shared org. Use when a deploy to a shared org (UAT, full copy, staging, or production) is about to run, or before the owner gets a deploy command. Not for testing whether a work item is ready, or for running the deploy; use managing-work-items.'
 ---
 
 # Salesforce deploy hitch-hiker check

@@ -4,8 +4,8 @@ Purpose: what setup does when work items, memory, or both live in Notion:
 the sign-in, the owner's yes before anything is made in his workspace, which
 Notion setup steps to follow, and where the links go.
 
-The Notion skill sets hold the Notion steps for work items, and
-`notion-build/setup.md` in this folder holds them for memory; setup follows
+`notion-build/work-setup.md` in this folder holds the Notion steps for work
+items, and `notion-build/setup.md` holds them for memory; setup follows
 them. Setup makes only these Notion calls itself: `ntn whoami`; the
 `ntn api v1/search` call in "Where the project page goes"; the one
 `update_content` call that writes the project's outcome on its page
@@ -98,16 +98,9 @@ name another page.
 
 | Work items | Memory | Projects database template | Follow |
 | --- | --- | --- | --- |
-| Notion | Notion | "Project: work and memory" | `notion-work-track` setup, "A new project" (its step 7 runs the memory steps in `notion-build/setup.md`) |
-| Notion | local or Hindsight | "Project: work only" | `notion-work-track` setup, "A new project" |
+| Notion | Notion | "Project: work and memory" | `notion-build/work-setup.md`, "A new project" (its step 7 runs the memory steps in `notion-build/setup.md`) |
+| Notion | local or Hindsight | "Project: work only" | `notion-build/work-setup.md`, "A new project" |
 | local or GitHub | Notion | "Project: memory only" | `notion-build/setup.md`, "A new project" |
-
-Open the project's own copy of the work skill,
-`.claude/skills/notion-work-track/SKILL.md`, and follow its References
-table to `references/setup.md`. Every path in that file works from that
-skill's folder. In an update, use the copy in your update worktree: step 3
-of `update.md` has replaced it. Where that file names the memory skill's
-setup, use `notion-build/setup.md` in this folder.
 
 The ID prefix: the work setup proposes one from the project name (two to
 four capital letters) and asks the owner. Notion allows each prefix in only
@@ -139,8 +132,10 @@ grep -n '{{' .claude/settings.json .codex/hooks.json
 ## Updating a Notion project
 
 Copying newer skill files changes nothing in Notion. For an update in a
-Notion project, run "Bringing a project up to the current template" in the
-work setup file, and "Bringing memory up to the current layout" in
-`notion-build/setup.md`, for the parts the project keeps in Notion. Both
-only add what is missing; they never remove, rename, or retype anything.
-Tell the owner in one short list what was added.
+Notion project, run "Bringing a project up to the current template" in
+`notion-build/work-setup.md`, and "Bringing memory up to the current
+layout" in `notion-build/setup.md`, for the parts the project keeps in
+Notion. Both only add what is missing; they never remove, rename, or
+retype anything. A project with a Stage property also needs "From Stage to
+State" in `notion-build/work-setup.md`. Tell the owner in one short list
+what was added.

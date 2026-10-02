@@ -41,15 +41,15 @@ through `gh`, and Hindsight through its own MCP tools.
 | `plugins/toolkit/.codex-plugin/plugin.json` | The Codex manifest: the same `name` and `version`, `"skills": "./skills/"`, and an `interface` block. |
 | `<setup>SKILL.md`, `<setup>references/` | Onboarding, "check the setup", and "update the toolkit". |
 | `<setup>assets/model/` | An exact copy of Mike's model project. Never edited by hand (see "The model project and its copy"). |
-| `<setup>assets/.shared-skills/<name>/` | The 13 skills every project gets. |
-| `<setup>assets/.skill-sets/<set>/<name>/` | One work tracking set and one memory set per project: `local-work`, `notion-work`, `github-work`, `local-memory`, `notion-memory`. |
+| `<setup>assets/.shared-skills/<name>/` | The 9 skills every project gets. |
+| `<setup>assets/.skill-sets/<set>/<name>/` | One work tracking set and one memory set per project: `local-work`, `notion-work`, `github-work`, `local-memory`, `notion-memory`. Each work tracking set holds one skill, `tracking-work-items`. |
 | `<setup>assets/.salesforce/sf-architect-solutioning/` | The Salesforce architect skill. Its description was rewritten on 2026-09-27, and its body was reworded and given a "Which phases to run" section on 2026-09-30, both with Mike's yes. The model holds the other three Salesforce skills. |
-| (the three folders above) | Their names start with a dot on purpose. Codex loads every `SKILL.md` under a plugin's `skills/` folder as a plugin skill, in every folder on the computer, but skips folders whose names start with a dot. Without the dot, 23 project skills would load machine-wide. Tested in scratch Codex homes with and without the dots: `dev/test-runs/codex-dot-folders.md`. |
+| (the three folders above) | Their names start with a dot on purpose. Codex loads every `SKILL.md` under a plugin's `skills/` folder as a plugin skill, in every folder on the computer, but skips folders whose names start with a dot. Without the dot, 19 project skills would load machine-wide. Tested in scratch Codex homes with and without the dots: `dev/test-runs/codex-dot-folders.md`. |
 | `<setup>assets/hooks/` | The three hook commands: `session-start.mjs`, `prompt-reminder.mjs`, `codex-after-commit.mjs`. |
 | `<setup>assets/settings/` | The snippets onboarding merges into a project's `.claude/settings.json`, `.codex/hooks.json`, and `.codex/config.toml` for each choice. |
 | `ai-external-knowledge/` | Official Claude Code, Codex, Agent Skills, and Anthropic engineering pages, captured with Firecrawl. `INDEX.md` lists them; each folder's `SOURCE-RECORD.md` gives every page's web address. Not shipped. |
 | `dev/` | Goal, progress, design, research, diagrams, test runs, tools, and tests. Not shipped. |
-| `dev/build-shared/` | The source of every text several skills hold word for word: `git-rules.md`, `helper-briefs/`, and the texts the Notion, GitHub, and local memory sets share, in `notion/`, `github/`, and `local-memory/`. |
+| `dev/build-shared/` | The source of every text several skills hold word for word: `helper-briefs/handoff-verifier.md`, and the texts the Notion and local memory sets share, in `notion/` and `local-memory/`. |
 | `dev/tools/check-skills.mjs` | Checks every skill `project-setup` ships (see "Checks"). |
 | `dev/tools/check-rules.mjs` | Checks the model's rule files against Claude Code's guidance for rules (`dev/research/rules-best-practices.md`). |
 | `dev/tools/rule-lint.mjs` | The checks `check-rules.mjs` runs, and the `AGENTS.md` rules list the rule files give. Dev only: nothing under `plugins/` imports it. |
@@ -126,13 +126,15 @@ node --test 'dev/tests/*.test.mjs'
 - `claude plugin validate .` checks the marketplace; `./plugins/toolkit`
   checks the plugin, its manifest, and its skill.
 - `check-skills.mjs` checks project-setup and every skill under it: only
-  `name` and `description` in the frontmatter, `name` equal to the folder,
-  the description's shape and its row in `dev/SKILL-INDEX.md`, every file
+  `name` and `description` in the frontmatter, `name` equal to the folder
+  and in the allowed form, the description's shape and its row in
+  `dev/SKILL-INDEX.md`, a `SKILL.md` body under 500 lines, every file
   linked from `SKILL.md`, no link leaving the folder, a contents list in
   every reference over 100 lines, no command of the retired program, every
   shared copy equal to its source, and every model template copy equal to
   the model. It also checks that the Next action prompt in the Notion work
-  item page matches the model's `WORK-ITEM.md`. `--model <folder>`
+  item template's text (`<setup>references/notion-build/work-item-page.md`)
+  matches the model's `WORK-ITEM.md`. `--model <folder>`
   checks against another model folder, such as the model worktree before a
   refresh. Warnings are on text that is Mike's (the model's own skills, and
   the body of `sf-architect-solutioning`): they do not fail the run.
@@ -176,25 +178,29 @@ node --test 'dev/tests/*.test.mjs'
 - **Skills.** A skill is a folder: `SKILL.md`, plus `references/`,
   `assets/` (templates), and `examples/` as needed. No scripts inside
   skills: steps are file edits, `git`, `gh`, `ntn`, or MCP tool calls.
-  - The frontmatter holds only `name` (equal to the folder name) and
-    `description`. No `when_to_use`, `$ARGUMENTS`, `` !`command` ``, or
+  - The frontmatter holds only `name` (equal to the folder name: lowercase
+    letters, digits, and hyphens, at most 64 characters, without
+    "anthropic" or "claude") and `description`. No `when_to_use`, `$ARGUMENTS`, `` !`command` ``, or
     `${CLAUDE_*}`: Codex shows them as literal text.
-  - The description is in single quotes and under 400 characters. It starts
-    with a third-person verb saying what the skill does, then ", so ..."
-    saying why, then "Use when ..." with two to four of the owner's own
-    phrases, and "Not for ...; use <skill>." only where a neighbor skill
-    competes. A set's skills say which projects they are for ("Only for
-    projects that track work locally.").
+  - The description is in single quotes and under 500 characters, written
+    in the third person: it starts with a verb saying what the skill does,
+    then a sentence starting "Use" saying when to use it. That sentence may
+    be a little pushy ("Use this whenever ..."). Add "Not for ...; use
+    <skill>." only where a neighbor skill competes. A set's skills say which
+    projects they are for ("Only for projects that track work locally.").
   - The description matches `dev/SKILL-INDEX.md` word for word. After you
     change one, run the routing test again in both hosts.
-  - `SKILL.md` is short: the steps, then a References table that links every
-    file in the folder with when to open it. A reference over 100 lines
+  - `SKILL.md` is short, and always under 500 lines: the steps, then a
+    References table that links every file in the folder with when to open
+    it. A reference over 100 lines
     starts with a `## Contents` list. A skill reads only files inside its own
     folder, never `../`.
-  - Shared skills never assume one tracker or memory. They say "the
-    project's work track skill", "memory save skill", or "memory find skill" (`AGENTS.md` names which one a project has), and for
-    Hindsight memory "Hindsight's retain and recall tools", which the memory
-    rule's "Hindsight projects" section maps to the add-on's tools.
+  - Shared skills never assume one tracker or memory. For work items they
+    name `tracking-work-items`: every work tracking set holds a skill of
+    that name. For memory they say "memory save skill" or "memory find
+    skill" (`AGENTS.md` names which one a project has), and for Hindsight
+    memory "Hindsight's retain and recall tools", which the memory rule's
+    "Hindsight projects" section maps to the add-on's tools.
 - **Wording and overlap review** (Mike, 2026-09-30). New or changed text in
   a skill, reference, template, example, helper brief, or
   `dev/build-shared/` source is reviewed by a separate agent against

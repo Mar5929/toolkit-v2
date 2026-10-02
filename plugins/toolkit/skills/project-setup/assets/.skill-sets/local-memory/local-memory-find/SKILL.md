@@ -1,6 +1,6 @@
 ---
 name: local-memory-find
-description: 'Searches this project''s local memory, rules, requirements, and memories linked to work items, and cites every source, so each answer comes from what was agreed. Use when the owner asks what was decided or recorded before, or why, such as "what did we decide", "do we know", or "search my notes". Not for planning or design; use work-refine or solution-design. Only for projects with local memory.'
+description: 'Searches this project''s local memory, rules, requirements, and memories linked to work items, and cites every source, so each answer comes from what was agreed. Use when the owner asks what was decided or recorded before, or why, such as "what did we decide", "do we know", or "search my notes". Not for planning or design; use managing-work-items. Only for projects with local memory.'
 ---
 
 # Local memory: find

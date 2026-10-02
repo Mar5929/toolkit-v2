@@ -10,7 +10,7 @@ This handoff prompt is AI-generated and may contain hallucinations, skewed conte
 
 ## Read first
 
-1. <The work item: open <ID> with <the work track skill AGENTS.md names, for example local-work-track>, especially its Current state (the five lines at the top of its Overview) and the first open question.>
+1. <The work item: open <ID> with `tracking-work-items`, especially its Current state (the five lines at the top of its Overview) and the first open question.>
 2. <The design, when there is one, and which option is approved.>
 3. <The files being changed, with the line to start from.>
 

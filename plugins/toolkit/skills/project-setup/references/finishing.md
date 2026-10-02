@@ -42,9 +42,10 @@ this order:
    write his sentence on that page: replace
    `\<One sentence: the result this project should produce.\>` under
    "Project brief", "Outcome" with one `update_content` call
-   (`references/ntn-basics.md` in the project's Notion skill,
-   `.claude/skills/notion-work-track/`, or with memory only in Notion
-   `.claude/skills/notion-memory-save/`; "Reading and changing page text"),
+   ("Reading and changing page text" in the project's
+   `.claude/skills/tracking-work-items/references/ntn-commands.md`, or with
+   memory only in Notion
+   `.claude/skills/notion-memory-save/references/ntn-basics.md`),
    then read the page back.
    Leave "Success criteria" until he names one, and list it with the
    prompts left.
@@ -132,9 +133,9 @@ file).
 - [ ] PROJECT.md "Toolkit settings" holds no prompt, except one that waits on the owner
 - [ ] PROJECT.md "People and ownership" names the owner: grep -n '^| Owner |' PROJECT.md
 - [ ] The older plugins are off here: jq '.enabledPlugins' .claude/settings.json
-- [ ] Services, Notion work items: the "A new project" check under "Checks after any of these" in the notion-work-track setup file (notion.md gives its path)
+- [ ] Services, Notion work items: the "A new project" check under "Checks after any of these" in notion-build/work-setup.md in this skill
 - [ ] Services, Notion memory with work items not in Notion: the Notion block in PROJECT.md holds every id that `notion-build/setup.md` in this skill lists under "Recording the links in PROJECT.md", and the "Current state" page shows its first lines (ntn api v1/pages/<Current state page id>/markdown < /dev/null | jq -r .markdown)
-- [ ] Services, GitHub Issues: the checks under "Checks after either" in the github-work-track setup file (github.md gives its path)
+- [ ] Services, GitHub Issues: the checks under "Checks after either" in github.md in this skill
 - [ ] Services, Hindsight: "Check a Hindsight project" in hindsight-on-vps.md
 - [ ] git status --short lists nothing under work-items/ or memory/
 ```

@@ -1,6 +1,6 @@
 ---
 name: braindump
-description: 'Plays back a loose brain dump in very simple words and waits for the owner''s yes before any work starts, so nothing is planned, built, or saved on a misunderstanding. Use when he wants his brain dump checked first, such as "here''s a brain dump", "play that back", "tell me what you heard", or "make sure you understood before you start". Not for a brain dump he asks only to plan; use work-refine.'
+description: 'Plays back a loose brain dump in very simple words and waits for the owner''s yes before any work starts, so nothing is planned, built, or saved on a misunderstanding. Use when he wants his brain dump checked first, such as "here''s a brain dump", "play that back", "tell me what you heard", or "make sure you understood before you start". Not for a brain dump he asks only to plan; use managing-work-items.'
 ---
 
 # Brain dump playback
@@ -26,8 +26,8 @@ line and ask for it.
 7. **After a yes**, the playback is the agreed scope; ask before doing work
    outside it. Then open the skill the project's `AGENTS.md` names for that
    work (Claude Code: the Skill tool; Codex: read its `SKILL.md`). A rough
-   idea to plan goes to `work-refine`; a clear change to build needs no
-   skill.
+   idea to plan goes to `managing-work-items`; a clear change to build needs
+   no skill.
 
 Every number, name, file path, and system the dump mentioned stays in the
 playback.
@@ -36,7 +36,7 @@ playback.
 
 - A request of one or two sentences that does not ask for a playback is not a
   dump: do it.
-- Meeting notes, or a dump he asks only to plan, are `work-refine`'s job.
+- Meeting notes, or a dump he asks only to plan, go to `managing-work-items`.
 - A hook reminder says something may be worth keeping: save nothing before
   his yes. Name it in the playback; after the yes, open the project's memory
   save skill (a Hindsight project: the `retain` tool).

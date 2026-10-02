@@ -1,0 +1,70 @@
+{
+  "database_id": "{{WORK_ITEMS_DB}}",
+  "data_source_id": "{{WORK_ITEMS_DS}}",
+  "name": "All items",
+  "type": "table",
+  "position": {
+    "type": "end"
+  },
+  "filter": {
+    "and": [
+      {
+        "property": "{{P_ARCHIVED}}",
+        "checkbox": {
+          "equals": false
+        }
+      },
+      {
+        "property": "title",
+        "title": {
+          "is_not_empty": true
+        }
+      }
+    ]
+  },
+  "sorts": [
+    {
+      "property": "{{P_ID}}",
+      "direction": "ascending"
+    }
+  ],
+  "configuration": {
+    "type": "table",
+    "subtasks": {
+      "property_id": "{{P_PARENT_ITEM}}",
+      "display_mode": "show",
+      "filter_scope": "parents_and_subitems",
+      "toggle_column_id": "title"
+    },
+    "properties": [
+      {
+        "property_id": "{{P_ID}}",
+        "visible": true
+      },
+      {
+        "property_id": "{{P_STATUS}}",
+        "visible": true
+      },
+      {
+        "property_id": "{{P_STATE}}",
+        "visible": true
+      },
+      {
+        "property_id": "{{P_WAITING_ON}}",
+        "visible": true
+      },
+      {
+        "property_id": "{{P_PRIORITY}}",
+        "visible": true
+      },
+      {
+        "property_id": "{{P_PHASE}}",
+        "visible": true
+      },
+      {
+        "property_id": "{{P_TAGS}}",
+        "visible": true
+      }
+    ]
+  }
+}

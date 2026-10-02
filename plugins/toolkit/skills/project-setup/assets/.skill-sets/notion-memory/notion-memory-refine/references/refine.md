@@ -47,7 +47,7 @@ A record about something that changes (a vendor, a process, a person's role) who
 
 ## Current state
 
-Follow `current-state.md`: read it and the work items it names (status with the project's work track skill), and remove every line that is no longer true. Move each to-do that now has a work item to Now as the item's ID, unless Now already names that item. Rewrite "Next session starts with" when it is out of date. A section still over its limit: put the true lines you propose to cut on the plan, each with its reason, choosing the ones the next session is least likely to need. Never propose cutting an open owner to-do only to meet a limit: offer him a work item for it instead. Removing a line that is no longer true needs no plan. Tell the owner what was removed.
+Follow `current-state.md`: read it and the work items it names (status with `tracking-work-items`), and remove every line that is no longer true. Move each to-do that now has a work item to Now as the item's ID, unless Now already names that item. Rewrite "Next session starts with" when it is out of date. A section still over its limit: put the true lines you propose to cut on the plan, each with its reason, choosing the ones the next session is least likely to need. Never propose cutting an open owner to-do only to meet a limit: offer him a work item for it instead. Removing a line that is no longer true needs no plan. Tell the owner what was removed.
 
 ## Lessons that should become rules or skills
 

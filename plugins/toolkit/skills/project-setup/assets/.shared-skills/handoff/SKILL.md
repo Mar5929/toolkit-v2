@@ -10,8 +10,8 @@ prompt that session can start from. Never ask the owner to wait before he
 clears context, and never hold back the prompt because a save or the check
 failed.
 
-`AGENTS.md`, "Skills", names this project's work track and
-memory save skills. A Hindsight project has no memory skills: use
+`AGENTS.md`, "Skills", names this project's memory save skill. A
+Hindsight project has no memory skills: use
 Hindsight's retain and recall tools
 (`.claude/rules/memory-review-and-save.md`, "Hindsight projects").
 
@@ -23,11 +23,11 @@ Hindsight's retain and recall tools
    belongs to `WI-007`), and any this session changed. Never pick an item
    only because it is open: another session may be working on it. None: ask
    the owner which item, if any. "None": skip step 2.
-2. **Update each of those work items** with the work track skill, reading it
-   first. Add a Questions and Answers row for each
+2. **Update each of those work items** with `tracking-work-items`, reading
+   it first. Add a Questions and Answers row for each
    answer or decision from this session that is not there yet. Rewrite the
    item's Current state in place so a new session can pick up from it alone
-   (`.claude/rules/keep-work-item-current.md`). Change stage and
+   (`.claude/rules/keep-work-item-current.md`). Change the State and
    `waiting_on` only when they changed in this session. Add one Recent
    History row "Handoff: <where work stopped>". Read the item back.
 3. **Offer what is worth keeping to memory:** something the owner said to

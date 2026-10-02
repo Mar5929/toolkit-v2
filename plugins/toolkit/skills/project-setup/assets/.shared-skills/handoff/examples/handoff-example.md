@@ -13,7 +13,7 @@ Main checkout: /Users/mike/Projects/acme-billing
 Tracker: local (work-items/ in the main checkout)
 Memory: local (memory/ in the main checkout)
 Sources for claims:
-- "WI-007 is at stage 08-build": file, WI-007 front matter
+- "WI-007 is in the Building State": file, WI-007 front matter
 - "Option A is approved": file, WI-007 DESIGN.md header
 - "branch claude/wi-007-csv-export": repository, git worktree list
 - "credit notes show negative amounts": owner, his words "just make them negative"
@@ -55,7 +55,7 @@ credit note exports with the same columns as an invoice and the tests in
 
 ## Read first
 
-1. WI-007, opened with `local-work-track`: its Current state, and Q-06.
+1. WI-007, opened with `tracking-work-items`: its Current state, and Q-06.
 2. `DESIGN.md` in WI-007's folder: Option A is approved.
 3. `src/export.js`, from line 40.
 
@@ -72,7 +72,7 @@ credit note exports with the same columns as an invoice and the tests in
 
 ## First action
 
-Open WI-007 with `local-work-track`, then read `src/export.js` from line 40.
+Open WI-007 with `tracking-work-items`, then read `src/export.js` from line 40.
 
 ## Repository
 

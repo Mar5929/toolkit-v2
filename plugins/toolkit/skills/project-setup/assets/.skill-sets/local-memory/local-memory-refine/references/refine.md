@@ -27,7 +27,7 @@ Keep memory small and true: Current State first, then merge duplicates, supersed
 
 ## Current State
 
-1. Read `memory/CURRENT_STATE.md` and the status of every work item it names (work track skill).
+1. Read `memory/CURRENT_STATE.md` and the status of every work item it names (`tracking-work-items`).
 2. Remove every line that is no longer true, and tell the owner what was removed (no plan needed): a finished or cancelled item under Now; an answered question under "Waiting on the owner"; a memory proposal he has answered; a to-do that now has a work item (put the item's ID under Now, unless it is already there or the item is Done or Cancelled). A Now line that copies an item's status or next step: cut it to the ID and a few words.
 3. Rewrite "Next session starts with" when it is out of date, set "Last updated:", and remove any fill-in guide comment or sample bullet still there.
 4. A section still over its limit holds only true lines: put the lines you would cut on the plan. Never cut an open owner to-do to fit: offer him a work item for it instead.
@@ -49,7 +49,7 @@ Put each on the plan as a yes-or-no question with its one-line reason. His yes: 
 
 ## Links to work items
 
-- Each `work_items` entry must name an item that exists: a file `<ID>.md` under `work-items/` in the main checkout, or the work track skill for another tracker. A local item moved by hand keeps its file name, so `[[WI-031]]` still works.
+- Each `work_items` entry must name an item that exists: a file `<ID>.md` under `work-items/` in the main checkout, or `tracking-work-items` for another tracker. A local item moved by hand keeps its file name, so `[[WI-031]]` still works.
 - An item that cannot be found: tell the owner. Plan: take it out of `work_items` and keep its ID under **Authoritative records** with "(not found, <date>)".
 - Wrong form (an unquoted entry, or `[[WI-031]]` in a project whose items are in Notion or GitHub): fix it.
 - A file clearly about an item but not linked to it: propose the link.

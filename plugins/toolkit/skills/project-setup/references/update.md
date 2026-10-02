@@ -14,6 +14,7 @@ how to change a setup choice.
   - Updating AGENTS.md
 - 4. What the toolkit no longer ships
 - 5. Services
+  - Work items from Stage to State
 - 6. Checks and report
 - Changing a setup choice
 
@@ -125,7 +126,10 @@ grep -n '^## ' <copy>/AGENTS.md
 - A folder in `.claude/skills/` that is not in the setup copy: when an
   earlier Toolkit V2 setup put it there (a retired skill), list it and
   remove it only after his yes. When it is his own project skill, or you
-  are not sure, leave it and ask.
+  are not sure, leave it and ask. Toolkit 0.6.0 retired `work-refine`,
+  `solution-design`, `work-delegate`, `work-check`, `work-finish`,
+  `local-work-track`, `notion-work-track`, and `github-work-track`:
+  `managing-work-items` and `tracking-work-items` replace them.
 - A rule in `.claude/rules/` that the model no longer has (for example
   `hindsight-memory.md`): list it, remove it only after his yes, then
   rebuild the rules list.
@@ -150,9 +154,47 @@ grep -n '^## ' <copy>/AGENTS.md
 - Hindsight projects: "Check a Hindsight project" in `hindsight-on-vps.md`;
   fix each failure only after his yes. Name the server the project uses in
   the report.
-- GitHub Issues projects: "Bringing a project up to date" in
-  `.claude/skills/github-work-track/references/setup.md` in your update
-  worktree; add missing labels only after his yes.
+- GitHub Issues projects: `github.md`, "Bringing a project up to date";
+  add missing labels only after his yes.
+- Local work items set up before toolkit 0.6.0 (a `stage:` line in the
+  items): "Work items from Stage to State" below, in the main checkout.
+
+### Work items from Stage to State
+
+Before toolkit 0.6.0, each work item had a stage (`01-discovery` to
+`14-spec-update`) and the statuses Backlog, Ready, In Progress, In Review,
+Done, and Cancelled. The stage is now the State. After his yes, give each
+work item its State, using the first row that matches:
+
+| Old value | New State |
+| --- | --- |
+| Status Done or Cancelled | Done or Cancelled, the same |
+| Status Backlog | Backlog |
+| Stage 01 or 02 | Refining Requirements |
+| Stage 03 or 04 | Designing |
+| Stage 05 to 08 | Building |
+| Stage 09 to 11 | Testing Loop |
+| Stage 12 or 13 | Deploying |
+| Stage 14 | Reflecting |
+
+- Set the Status that goes with the new State (the Status and State table
+  in `managing-work-items`' `SKILL.md`) in the same change.
+- Local: every item in `work-items/`, sub-items and `archive/` included.
+  Replace the `stage:` line with a `state:` line, and set `status:` and
+  `updated:` in the same edit.
+- Notion: every row of Work Items, archived ones included, after "From
+  Stage to State" in `notion-build/work-setup.md` has added the State
+  property and the Status options.
+- GitHub: open issues only, after the `state:` labels exist (`github.md`,
+  "Bringing a project up to date", step 3). A closed issue's labels are
+  ignored.
+- A Next action that ends ", with <skill>." (one of the retired skills
+  above): remove that ending, so it matches a form in
+  `.claude/rules/keep-work-item-current.md`. In Notion, change the page's
+  Current state and the Next action property together.
+- Add a Recent History row to each changed item: "Toolkit update: stage
+  <old> is now State <new>." Change nothing else in the item.
+- Tell the owner in one short list how many items moved to each State.
 
 ## 6. Checks and report
 

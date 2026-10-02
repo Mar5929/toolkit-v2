@@ -2,7 +2,7 @@
 
 This project tracks work in local folders under `work-items/`: Git-ignored, in the main checkout, and shared by every worktree. From a git worktree, the main checkout is the first path `git worktree list` prints.
 
-Find, create, change, and move items with the `local-work-track` skill, which also covers sub-items, groups, and `archive/`.
+Find, create, change, and move items with the `tracking-work-items` skill, which also covers sub-items, groups, and `archive/`.
 
 ## Finding and creating items
 
@@ -18,10 +18,10 @@ Find, create, change, and move items with the `local-work-track` skill, which al
 ## When the owner moves folders
 
 - The owner may move, rename, nest, or group item folders by hand. Find each item again by its `id:`, report what moved, and continue.
-- When two items share an `id:`, or an item named in Current State, the roadmap, or another item cannot be found, tell the owner and fix it with the `local-work-track` skill.
-- Never move, group, archive, or rename items on your own initiative. When the owner asks, use the `local-work-track` skill.
+- When two items share an `id:`, or an item named in Current State, the roadmap, or another item cannot be found, tell the owner and fix it with the `tracking-work-items` skill.
+- Never move, group, archive, or rename items on your own initiative. When the owner asks, use the `tracking-work-items` skill.
 
 ## Editing items
 
-- Change front matter fields (stage, status, parent, waiting on, approvals) and body sections with the `local-work-track` skill.
+- Change front matter fields (state, status, parent, waiting on, approvals) and body sections with the `tracking-work-items` skill.
 - Keep any other files the owner put in an item folder.

@@ -130,11 +130,11 @@ folder:
 | Choice | Say |
 | --- | --- |
 | Notion (work, memory, or both) | "make this project's pages in your Notion from the templates in your Projects database" (and, when they do not exist yet, ask about building them separately: `notion.md` in this folder) |
-| GitHub Issues | "create the work item labels in <owner>/<repository> that it does not have yet (up to 36: each item's stage, type, priority, who it waits on, who builds it, and your approvals; its other labels stay as they are)", and "create the private repository <owner>/<name>; after the setup commit I'll ask before I push the default branch to it" when there is none yet |
+| GitHub Issues | "create the work item labels in <owner>/<repository> that it does not have yet (up to 30: each item's State, type, priority, who it waits on, who builds it, and your approvals; its other labels stay as they are)", and "create the private repository <owner>/<name>; after the setup commit I'll ask before I push the default branch to it" when there is none yet |
 | Hindsight | "create the memory bank <bank> on your Hindsight server (or use this project's own bank), and install Hindsight's coding-agent add-on for Claude Code and Codex, or add this project to it; that changes files in `~/.claude`, `~/.codex`, and `~/.hindsight`, and I'll show you each change before I make it" |
 | Local work and local memory | "nothing outside this folder" |
 
-Skill counts: 13 shared, plus 1 for the work tracking set, plus 3 for local
+Skill counts: 9 shared, plus 1 for the work tracking set, plus 3 for local
 or Notion memory (none for Hindsight), plus 4 for Salesforce.
 
 His yes covers exactly what the plan names. Anything else created outside

@@ -56,7 +56,7 @@ His no: save nothing and do not offer it again. No answer: add one line under "W
 - Replace the text of its section, with the new source and date on **Evidence and limits**. The old wording does not stay beside it. Set `updated` and `last_verified` to today. Keep the old text in your reply so "undo that" can put it back.
 - Search the other files (concepts, Current State, the glossary) for the old value and correct each one.
 - A whole concept replaced: make the new file with `supersedes: <old name>`, mark the old one superseded (`record-format.md`, "Proposals, superseded, and retired text"), and point links to the old file at the new one.
-- A decision that changes: the work item gets a new row first (work track skill). After his yes, a new decision file with `supersedes:`, and the old one becomes `superseded`. A decision he withdraws with no replacement becomes `withdrawn`.
+- A decision that changes: the work item gets a new row first (`tracking-work-items`). After his yes, a new decision file with `supersedes:`, and the old one becomes `superseded`. A decision he withdraws with no replacement becomes `withdrawn`.
 
 ## "Forget that", retiring, and deleting
 

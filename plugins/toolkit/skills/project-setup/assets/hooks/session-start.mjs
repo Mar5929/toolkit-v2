@@ -7,7 +7,7 @@ import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 
 const COMPACTED = 'Context was just compacted. Before you answer the next message, re-read the'
-  + " active work item with the project's work track skill, then PROJECT.md, SOUL.md if the project"
+  + ' active work item with tracking-work-items, then PROJECT.md, SOUL.md if the project'
   + ' has one, and .claude/rules/owner-preferences.md. In Codex, also re-read each always-on rule'
   + ' listed under Rules in AGENTS.md.';
 const NEW_INDEX = '<!-- Generated file: the session-start hook rebuilds this index from each'

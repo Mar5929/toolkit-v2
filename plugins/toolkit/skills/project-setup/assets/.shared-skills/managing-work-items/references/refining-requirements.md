@@ -7,7 +7,7 @@ Takes an item from a rough idea, meeting notes, or documents to requirements the
 1. **Start or pick up.**
    - New work: create the item in State Refining Requirements, titled in his words, with his words as the Starting request. Choose its `type` from the template's list.
    - An existing item with open questions: say in one line what is settled, then ask the first open question again. Never start the interview over.
-2. **Read what the project already knows.** Search memory with `managing-project-memory`, related items with `tracking-work-items`, and the area's files in `requirements/` and `system-guide/`. Save each new source before you use it (Sources, below).
+2. **Read what the project already knows.** Search memory with the memory find skill, related items with `tracking-work-items`, and the area's files in `requirements/` and `system-guide/`. Save each new source before you use it (Sources, below).
 3. **Agree the goal first.** Ask "So the goal is <one sentence>?" After his yes, write the Agreed goal.
 4. **Offer a helper team once.** After the goal, when the item is clearly large (a part of it meets a split test below) and `delivery` is `not-offered`, ask once whether he wants a team of helper agents to build it, and record his answer in `delivery`. A sub-item takes its parent's answer.
 5. **Interview one question at a time,** in the question format below. Ask first what later questions depend on. Ask about each vague word ("fast", "all users") until a tester could check it. Add the question's row before the reply ends, set `waiting_on` to the owner, and name its Q-ID in the Current state.
@@ -19,7 +19,7 @@ Takes an item from a rough idea, meeting notes, or documents to requirements the
    - a fact that is not a requirement: Notes, Context;
    - an idea for how to build it: Notes, "Solution options and considerations", naming its `R-xx`.
 
-   When the answer decides something a later item or another agent must follow, the next question is "This looks project-wide. Save it to memory too?", and on his yes, save it with `managing-project-memory`.
+   When the answer decides something a later item or another agent must follow, the next question is "This looks project-wide. Save it to memory too?", and on his yes, save it with the memory save skill.
 7. **Handle a change** to an earlier answer or an approved requirement.
    - Never rewrite the old row. Add "Change to Q-03: <the question now>" with his words and the date, and set the old row to "Superseded by Q-09".
    - Each `R-xx` it changes goes back to Refining, keeping the old wording ("Was: ...; changed by Q-12").
@@ -34,7 +34,7 @@ Takes an item from a rough idea, meeting notes, or documents to requirements the
     - set `requirements_approved` to `YYYY-MM-DD by <name>`;
     - move the item to the next State he agreed to;
     - a sub-item that these requirements cover: write "Covers <parent ID> R-xx, approved there.", give it the same approval with "(from <parent ID>)", and move it to the same next State. It skips its own interview.
-12. **Pausing before approval:** the Current state names what is settled and the first open Q-ID. The project's Current State names the item under "Now" (`managing-project-memory`).
+12. **Pausing before approval:** the Current state names what is settled and the first open Q-ID. The project's Current State names the item under "Now".
 
 ## The question format
 
@@ -52,7 +52,7 @@ Not yet covered: <what this affects that he has not raised>.
 ## Sources
 
 - Save a transcript, document, or file before you use it, with `tracking-work-items`. Pasted text is saved exactly as pasted, named `YYYY-MM-DD-<short-name>.md`. Never edit a saved source; corrections go in the item.
-- Salesforce projects: a client file stays in `delivery/` and is saved there with `managing-git-changes`, never copied into the item.
+- Salesforce projects: a client file stays in `delivery/` and is saved there with `publish-docs`, never copied into the item.
 - Add one line per source under Notes, "Sources": where it is, what it is, and the IDs taken from it. Name the source again wherever the item uses it.
 - From a source: a stated behavior becomes an `R-xx` at Refining citing the source; something another person decided becomes a question asking the owner to confirm it; a gap becomes a question with your recommendation; other facts go under Notes, Context. Tell him how many requirements and questions it gave, then ask the first question.
 

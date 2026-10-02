@@ -19,9 +19,8 @@ Notion root page, the page that holds his projects, with the "Notion CLI"
 connection (`notion-access.md`, "Which pages the agent can reach").
 
 1. **Which template.** Work and memory both in Notion: onboarding uses the
-   Projects database template "Project: work and memory" (the
-   notion-work-track skill's setup steps make the project page; continue at
-   step 3). Memory only (work items local or on GitHub): use the template
+   Projects database template "Project: work and memory" (`work-setup.md`
+   makes the project page; continue at step 3). Memory only (work items local or on GitHub): use the template
    "Project: memory only", as a row of the owner's own Projects database
    (`<projects-data-source-id>`, title column `Project`; not Lore's
    Projects database on a Memory page, whose title column is `Name`):
@@ -36,8 +35,8 @@ connection (`notion-access.md`, "Which pages the agent can reach").
    (`ntn-basics.md`, "Database templates"). The templates live in the
    Projects database; if the owner has no Projects database, stop and ask
    him to make one in Notion; if the templates list has no "Project: memory
-   only", build the templates first (the notion-work-track skill's setup,
-   "Building the templates").
+   only", build the templates first (`work-setup.md`, "Building the
+   templates").
 2. **Wait** until the copy is filled: the project page lists Memory,
    Current state, and Terminology glossary (`ntn-basics.md`).
 3. **Find the memory databases** on the Memory page, and each one's data
@@ -100,17 +99,17 @@ retype anything.
    `09-memories-work-items-relation.json`, `09-facts-work-items-relation.json`,
    and `09-entities-work-items-relation.json` to their data sources, and add
    a "Linked memory" view to the work item template, the Work Items
-   database's default template (the notion-work-track skill's setup).
+   database's default template (`work-setup.md`).
 4. Views: add a missing view from its file in `lore/`.
 5. Tell the owner in one short list what was added.
 
 ## Building the memory part of a template
 
-Used by the template build in the notion-work-track skill's setup (and for
+Used by the template build in `work-setup.md` (and for
 the Projects database template "Project: memory only", made the same way
 with `project-page-memory-only.md` as its page text). "The template
 page" below is the Projects database template being built: "Project: work
-and memory" when the notion-work-track skill's build calls this, or
+and memory" when `work-setup.md` calls this, or
 "Project: memory only" when it is built on its own.
 
 1. Under the template page, `POST v1/pages` a page titled "Memory" with
