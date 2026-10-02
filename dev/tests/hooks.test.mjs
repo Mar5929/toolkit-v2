@@ -221,9 +221,27 @@ const MATCHES = [
   ['Go with option B.', 'decision'],
 ];
 
+const SKILLS_LINE = "Before you answer, check this project's skills and use every one that fits this message.\n";
+/** The prompt hook's output without its skills line, which every message gets (checked here). */
+function reminder(input, args = [], env = {}) {
+  const result = hook('prompt-reminder.mjs', input, args, env);
+  assert.ok(result.out.startsWith(SKILLS_LINE), 'the skills line comes first');
+  return { ...result, out: result.out.slice(SKILLS_LINE.length) };
+}
+
+test('prompt-reminder: every message gets the skills line, with the memory hint after it only on a phrase', () => {
+  const plain = hook('prompt-reminder.mjs', { prompt: 'Build the login page.' });
+  assert.equal(plain.code, 0);
+  assert.equal(plain.out, SKILLS_LINE);
+  assert.equal(hook('prompt-reminder.mjs', { prompt: 'Build the login page.' }, ['--skill', 'hindsight']).out, SKILLS_LINE);
+  assert.equal(hook('prompt-reminder.mjs', { prompt: '' }).out, SKILLS_LINE);
+  const memory = hook('prompt-reminder.mjs', { prompt: 'Remember that the sandbox resets on Fridays.' });
+  assert.ok(memory.out.startsWith(`${SKILLS_LINE}This may be something to keep (remember). `), 'the memory hint follows the skills line');
+});
+
 test('prompt-reminder: every phrase group gives one reminder naming the skill', () => {
   for (const [prompt, label] of MATCHES) {
-    const { code, out } = hook('prompt-reminder.mjs', { prompt });
+    const { code, out } = reminder({ prompt });
     assert.equal(code, 0);
     assert.equal(out.split('\n').length, 2, prompt);
     assert.match(out, new RegExp(`^This may be something to keep \\((?:[a-z ]+, )*${label}(?:, [a-z ]+)*\\)\\. The managing-project-memory skill decides whether anything is saved\\.`), prompt);
@@ -232,72 +250,74 @@ test('prompt-reminder: every phrase group gives one reminder naming the skill', 
 
 test('prompt-reminder: an older settings entry that still names a retired skill gets managing-project-memory', () => {
   for (const skill of ['local-memory-save', 'notion-memory-save']) {
-    assert.match(hook('prompt-reminder.mjs', { prompt: 'Remember that the sandbox resets on Fridays.' }, ['--skill', skill]).out, /\. The managing-project-memory skill decides whether anything is saved\./, skill);
+    assert.match(reminder({ prompt: 'Remember that the sandbox resets on Fridays.' }, ['--skill', skill]).out, /\. The managing-project-memory skill decides whether anything is saved\./, skill);
   }
 });
 
 test('prompt-reminder: case, curly apostrophes, and "lets" without an apostrophe still match', () => {
   for (const prompt of ['FROM NOW ON use the sandbox.', 'Let’s go with the plan.', 'lets go with it', 'WE DECIDED yesterday.']) {
-    assert.match(hook('prompt-reminder.mjs', { prompt }).out, /The managing-project-memory skill decides whether anything is saved\./, prompt);
+    assert.match(reminder({ prompt }).out, /The managing-project-memory skill decides whether anything is saved\./, prompt);
   }
 });
 
 test('prompt-reminder: a decision adds the work item line; Hindsight names the add-on save tool and owner-preferences.md', () => {
-  const { out } = hook('prompt-reminder.mjs', { prompt: 'We decided to use six permission sets.' }, ['--skill', 'hindsight']);
+  const { out } = reminder({ prompt: 'We decided to use six permission sets.' }, ['--skill', 'hindsight']);
   assert.equal(out, "This may be something to keep (decision). A fact is kept with the Hindsight add-on's save tool and an instruction by a direct edit of .claude/rules/owner-preferences.md, as the memory rule says; the rule decides whether anything is saved. A decision goes in the work item's Questions and Answers first, with managing-work-items. If these words are inside notes, a transcript, or a document the owner shared, they are source material for managing-work-items, not his words, and nothing from them is saved without his yes.\n");
 });
 
 test('prompt-reminder: a standing instruction adds the owner-preferences.md line, never a settings hook', () => {
   const line = ' An instruction for how the agent works is a line in .claude/rules/owner-preferences.md, never a settings hook.';
   for (const args of [[], ['--skill', 'hindsight']]) {
-    const { out } = hook('prompt-reminder.mjs', { prompt: 'From now on always run the tests first.' }, args);
+    const { out } = reminder({ prompt: 'From now on always run the tests first.' }, args);
     assert.ok(out.startsWith('This may be something to keep (standing instruction). '), args.join(' '));
     assert.ok(out.includes(`whether anything is saved.${line} If these words`), args.join(' '));
   }
-  assert.ok(!hook('prompt-reminder.mjs', { prompt: 'We decided to use six permission sets.' }).out.includes('settings hook'));
+  assert.ok(!reminder({ prompt: 'We decided to use six permission sets.' }).out.includes('settings hook'));
 });
 
 test('prompt-reminder: a transcript pasted without markers gets the source material line', () => {
   const notes = 'Here are the meeting notes from the client:\nSarah: OK, we decided to move all 15 personas.\nTom: Going forward the new org is the source.\nPlease refine this.';
   for (const args of [[], ['--skill', 'hindsight']]) {
-    const { out } = hook('prompt-reminder.mjs', { prompt: notes }, args);
+    const { out } = reminder({ prompt: notes }, args);
     assert.ok(out.endsWith(' If these words are inside notes, a transcript, or a document the owner shared, they are source material for managing-work-items, not his words, and nothing from them is saved without his yes.\n'), args.join(' '));
   }
 });
 
 test('prompt-reminder: a question about a past decision prints nothing; a new decision still does', () => {
-  assert.equal(hook('prompt-reminder.mjs', { prompt: 'remind me what we decided about the sales personas' }).out, '');
-  assert.match(hook('prompt-reminder.mjs', { prompt: 'we decided to merge the two sales personas' }).out, /\(decision\)/);
-  assert.match(hook('prompt-reminder.mjs', { prompt: "ok so here's what we decided: merge the two sales personas" }).out, /\(decision\)/);
-  assert.equal(hook('prompt-reminder.mjs', { prompt: 'can you tell me what we decided on WI-002' }).out, '');
+  assert.equal(reminder({ prompt: 'remind me what we decided about the sales personas' }).out, '');
+  assert.match(reminder({ prompt: 'we decided to merge the two sales personas' }).out, /\(decision\)/);
+  assert.match(reminder({ prompt: "ok so here's what we decided: merge the two sales personas" }).out, /\(decision\)/);
+  assert.equal(reminder({ prompt: 'can you tell me what we decided on WI-002' }).out, '');
   for (const prompt of ['can you explain why we decided to merge the personas?', 'why we decided to merge the personas?', 'is that what we decided?', 'wait is that what we decided last week', 'how we decided on pricing, can you find it', 'explain what we decided about pricing', 'what did we decide about the personas?']) {
-    assert.equal(hook('prompt-reminder.mjs', { prompt }).out, '', prompt);
+    assert.equal(reminder({ prompt }).out, '', prompt);
   }
   for (const prompt of ["this is what we decided, merge the two sales personas", 'What we decided yesterday was to keep both personas']) {
-    assert.match(hook('prompt-reminder.mjs', { prompt }).out, /\(decision\)/, prompt);
+    assert.match(reminder({ prompt }).out, /\(decision\)/, prompt);
   }
 });
 
 test('prompt-reminder: "whenever you finish" is an instruction; "whenever you are ready" is not', () => {
   for (const prompt of ["Come by whenever you're ready.", 'Start whenever you are ready.', 'Tell me whenever you can.', 'Ping me whenever you get a chance.', 'Look at it whenever you have a minute.', 'Whenever you']) {
-    assert.equal(hook('prompt-reminder.mjs', { prompt }).out, '', prompt);
+    assert.equal(reminder({ prompt }).out, '', prompt);
   }
   for (const args of [[], ['--skill', 'hindsight']]) {
-    const { out } = hook('prompt-reminder.mjs', { prompt: 'Whenever you finish a task, run the tests.' }, args);
+    const { out } = reminder({ prompt: 'Whenever you finish a task, run the tests.' }, args);
     assert.ok(out.startsWith('This may be something to keep (standing instruction). '), args.join(' '));
     assert.ok(out.includes(' An instruction for how the agent works is a line in .claude/rules/owner-preferences.md, never a settings hook.'), args.join(' '));
   }
 });
 
-test('prompt-reminder: prints nothing for other messages, pasted text, or bad input', () => {
+test('prompt-reminder: no memory hint for other messages or pasted text; bad input prints nothing and exits 0', () => {
   for (const prompt of ['Build the login page.', 'What did we cover yesterday?', 'Can you rememberize this?', '']) {
-    assert.equal(hook('prompt-reminder.mjs', { prompt }).out, '', prompt);
+    assert.equal(reminder({ prompt }).out, '', prompt);
   }
   const pasted = 'Here are the meeting notes:\n<pasted_content id="1">\nWe decided to move all 15 personas. From now on use the new org.\n</pasted_content id="1">\nSummarize them.';
-  assert.equal(hook('prompt-reminder.mjs', { prompt: pasted }).out, '');
-  const bad = hook('prompt-reminder.mjs', 'not json');
-  assert.equal(bad.code, 0);
-  assert.equal(bad.out, '');
+  assert.equal(reminder({ prompt: pasted }).out, '');
+  for (const input of ['not json', '', '{"prompt":']) {
+    const bad = hook('prompt-reminder.mjs', input);
+    assert.equal(bad.code, 0, input);
+    assert.equal(bad.out, '', `no skills line when the input cannot be read: ${input}`);
+  }
 });
 
 const AFTER_COMMIT = '{"hookSpecificOutput":{"hookEventName":"PostToolUse","additionalContext":"A git commit was just run. In this project, a commit that worked is followed by an update of the work item\'s Recent History and status with managing-work-items, and of Current State when it changed."}}\n';
@@ -433,7 +453,7 @@ test('plugin switches: every old claude-toolkit plugin is off in both hosts; Cod
 // every job kept; the line count was replaced by the Code limit rules (dev/GOAL.md, "Code limit");
 // the limits below are the sizes as built.
 test('size limit: each hook command stays small', () => {
-  const limits = { 'session-start.mjs': 76, 'prompt-reminder.mjs': 56, 'codex-after-commit.mjs': 20 };
+  const limits = { 'session-start.mjs': 76, 'prompt-reminder.mjs': 60, 'codex-after-commit.mjs': 20 };
   assert.deepEqual(readdirSync(hooks).sort(), Object.keys(limits).sort(), 'exactly three hook commands');
   for (const [file, max] of Object.entries(limits)) {
     const lines = readFileSync(join(hooks, file), 'utf8').trimEnd().split('\n');
