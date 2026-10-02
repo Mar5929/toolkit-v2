@@ -220,7 +220,7 @@ Changing the plan is a change to rows:
 
 After a plan change, list the item's phases (`searching.md`, "A parent's full tree") and check the order.
 
-A task whose Status is empty or does not match Done (made by hand, made before the column existed, or ticked by hand): set Status from Done. Not ticked: Not Started, or leave In Progress. Ticked: Done, or Cancelled when its title starts with "Cancelled: ".
+A task whose Status is empty or does not match Done (made by hand, made before the column existed, or ticked by hand): set Status from Done. Not ticked: Not Started, but leave a task that is already In Progress as it is. Ticked: Done, or Cancelled when its title starts with "Cancelled: ".
 
 ## Links, tags, and files
 

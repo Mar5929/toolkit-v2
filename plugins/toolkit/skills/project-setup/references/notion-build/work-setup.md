@@ -273,8 +273,8 @@ owner may have added his own columns and views, and they stay.
    condition. Its grouping and sub-items stay. Leave the owner's own views
    as they are.
    A table view whose columns are out of the order in `work-layout.md` gets
-   the column order (template build, step 10). A view made from an asset
-   that has a column off which its asset turns on: turn it on in the same
+   the column order (template build, step 10). When a view made from an asset
+   hides a column that the asset now shows, show that column in the same
    `PATCH v1/views/<id>`. The API cannot read
    the page layout: when the owner says a project's pages show properties
    in the wrong order or the wrong sections, give him the layout clicks in
