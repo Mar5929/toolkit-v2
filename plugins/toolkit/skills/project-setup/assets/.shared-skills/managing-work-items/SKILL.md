@@ -40,7 +40,8 @@ Stop and ask the owner before each of these. Record his OK only when he answers 
 2. Choosing the design, at the end of Designing.
 3. Approving the finished result, at the end of the Testing Loop, after the separate checker has tested it.
 4. Each merge into the main branch, in Deploying, unless his standing merge permission in `.claude/rules/owner-preferences.md` covers it. A helper agent's merge into the item's own branch needs no OK.
-5. Marking the item Done.
+5. Each deploy to an environment other people use, such as a test or staging environment. A production deploy is his to run.
+6. Marking the item Done.
 
 ## Every time
 
