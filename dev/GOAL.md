@@ -841,6 +841,29 @@ Interview answers (Mike, 2026-09-29, the interview session):
   `owner-preferences.md` in a Hindsight project. Model commit f10d19a. The
   code scan's US$2 is the add-on's own default cap per scan, not a toolkit
   limit; whether to keep the scan is still open.
+- Work tracking rebuilt (Mike, 2026-10-01): two skills, chosen over one
+  work skill with storage inside. `managing-work-items` holds the process
+  and never names a storage tool; `tracking-work-items` holds storage only,
+  in a local, a Notion, and a GitHub version, and a project gets only its
+  own. The field is "State" ("Stages should be called 'state'"), and Status
+  follows from it: Not Started → Backlog; Preparing → Refining
+  Requirements; In Progress → Designing, Building, Testing Loop, Reflecting,
+  Deploying; Blocked; Done; Cancelled. Levels: "just one work item level or
+  ... max three levels", with a checklist of tasks on any item. Item files
+  stay named by ID (`WI-031.md`). His OK: requirements, design choice,
+  finished result, each merge into the main branch (unless his standing
+  merge permission covers it), each deploy to an environment other people
+  use ("Yes, ask before deploys"), and Done. His six fixes: any item, bugs
+  too, can go through Designing; nothing to deploy goes from Reflecting to
+  Done; a parent stays in Building until its sub-items finish; covered
+  sub-items skip Refining; waiting for his answer is not Blocked; helper
+  merges into an item's branch need no OK. Reflecting: "make sure that
+  everything is clean and tidy, and that we reflect on the work that we
+  just did and make sure to check if anything needs to go into the system
+  guide or if there's anything left over that should be saved to memory".
+  Landed on main before the live tests ("Main now, test after").
+- Hindsight code scan (Mike, 2026-10-01): "Keep the code scan". The US$2
+  per scan is the add-on's own default cap.
 
 ## Goal
 
