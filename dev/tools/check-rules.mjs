@@ -146,9 +146,10 @@ function resolveMarkers(text, setup) {
   const holds = (condition) => {
     if (condition === 'salesforce') return setup.salesforce;
     if (condition === 'not salesforce') return !setup.salesforce;
-    if (condition === 'tracker=local or memory=local') return setup.tracker === 'local' || setup.memory === 'local';
-    const m = condition.match(/^(tracker|memory)=(\w+)$/);
-    return m ? setup[m[1]] === m[2] : false;
+    return condition.split(' or ').some((part) => {
+      const m = part.trim().match(/^(tracker|memory)=(\w+)$/);
+      return m ? setup[m[1]] === m[2] : false;
+    });
   };
   const out = [];
   let keep = true;

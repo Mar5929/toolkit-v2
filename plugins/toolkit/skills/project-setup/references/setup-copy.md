@@ -113,6 +113,7 @@ at either end, is exactly one of these:
 | `<!-- if tracker=local -->`, `tracker=notion`, `tracker=github`, `tracker=jira` | work items are in that tracker (`jira` never, until Jira is built) |
 | `<!-- if memory=local -->`, `memory=notion`, `memory=hindsight` | memory is in that system |
 | `<!-- if tracker=local or memory=local -->` | work items are local, memory is local, or both |
+| `<!-- if tracker=notion or memory=notion -->` | work items are in Notion, memory is in Notion, or both |
 
 Every block ends with the line `<!-- endif -->`.
 

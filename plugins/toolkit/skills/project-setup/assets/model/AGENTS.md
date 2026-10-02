@@ -139,6 +139,9 @@ Give every item in a list of choices or recommendations you show the owner a one
 <!-- if memory=hindsight -->
 - Memory is Hindsight: see "Project memory" at the top.
 <!-- endif -->
+<!-- if tracker=notion or memory=notion -->
+- When you create or update something in Notion, fill or update every field on that record you have information for.
+<!-- endif -->
 - Every memory names the work items it concerns by ID, with a link when there is one. Search memory before asking the owner to repeat something. Never store secrets, email addresses, or work-item status.
 
 ## Skills
