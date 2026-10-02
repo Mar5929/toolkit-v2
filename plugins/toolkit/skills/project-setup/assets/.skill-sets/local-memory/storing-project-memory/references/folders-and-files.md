@@ -15,7 +15,6 @@ memory/                                  in the main checkout only; Git ignores 
 ├── AGENTS.md                            the folder's own rules; part of the setup, not a memory
 ├── CURRENT_STATE.md                     what is true now; the start-of-session hook prints it
 ├── MEMORY.md                            the index; the same hook rebuilds it; never edited by hand
-├── memory-criteria.md                   what is worth keeping
 ├── terminology-glossary.md              the glossary: one table row per term
 ├── project_topic_template.md            the seed for a concept file; never a memory
 ├── decision_template.md                 the seed for a decision file; never a memory
@@ -40,9 +39,8 @@ memory/                                  in the main checkout only; Git ignores 
 | `decision_` | `decision` | one decision that matters beyond its work item |
 
 - The name is `<prefix>_<name>.md`: lower-case words joined by underscores, naming the concept, not one fact.
-- `memory-criteria.md` says what is worth keeping under each prefix.
 - A file with none of these five prefixes is left out of the index. `feedback_` is a retired prefix: an old `feedback_` file is marked in `record-format.md`, "Marks for what is not current", once its content has moved.
-- `CURRENT_STATE.md`, `MEMORY.md`, `memory-criteria.md`, `terminology-glossary.md`, and the two seeds have fixed names and no prefix of the five.
+- `CURRENT_STATE.md`, `MEMORY.md`, `terminology-glossary.md`, and the two seeds have fixed names and no prefix of the five.
 
 ## Size limits
 

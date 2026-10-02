@@ -40,7 +40,7 @@ through `gh`, and Hindsight through its own MCP tools.
 | `plugins/toolkit/.claude-plugin/plugin.json` | The Claude Code manifest. |
 | `plugins/toolkit/.codex-plugin/plugin.json` | The Codex manifest: the same `name` and `version`, `"skills": "./skills/"`, and an `interface` block. |
 | `<setup>SKILL.md`, `<setup>references/` | Onboarding, "check the setup", and "update the toolkit". |
-| `<setup>assets/model/` | An exact copy of Mike's model project. Never edited by hand (see "The model project and its copy"). |
+| `<setup>assets/model/` | The model project: the source for every project file. Edited here directly (see "The model project and its copy"). |
 | `<setup>assets/.shared-skills/<name>/` | The 9 skills every project gets. |
 | `<setup>assets/.skill-sets/<set>/<name>/` | The skills for each choice. Work tracking: `local-work`, `notion-work`, or `github-work`, each holding one skill, `tracking-work-items`. Memory (local or Notion): `memory-process`, holding `managing-project-memory` (the process), plus `local-memory` or `notion-memory`, each holding its own `storing-project-memory` (storage only). `notion-tools`, holding `using-notion-cli`, goes to every project with work items or memory in Notion. |
 | `<setup>assets/.salesforce/sf-architect-solutioning/` | The Salesforce architect skill. Its description was rewritten on 2026-09-27, and its body was reworded and given a "Which phases to run" section on 2026-09-30, both with Mike's yes. The model holds the other three Salesforce skills. |
@@ -67,16 +67,14 @@ What a project gets from onboarding:
 
 ## The model project and its copy
 
-The model project is the exact source for every project file (`dev/GOAL.md`).
-The toolkit ships an exact copy of it in `<setup>assets/model/`.
-`project-setup` applies the owner's choices while it copies; the copy itself
-is never changed by hand.
+`<setup>assets/model/` is the source for every project file. Mike, 2026-10-02:
+his model folder outside this repository "is sort of just like a throwaway
+folder ... as long as we have the structure set up properly in V2". So edit
+`<setup>assets/model/` directly, and never copy his outside model folder in
+again. A change that alters what a project file means still needs his yes.
+`project-setup` applies the owner's choices while it copies the model into a
+project.
 
-- The model is Mike's Git repository at
-  `/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project`. The
-  approved changes are on its branch `toolkit-v2/approved-changes`, checked
-  out at `/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved`.
-  Until Mike merges that branch, copy from the second folder.
 - The setup markers in the model's `AGENTS.md`, `README.md`, `PROJECT.md`,
   and `.claude/rules/memory-review-and-save.md` (`<!-- if salesforce -->`,
   `<!-- if not salesforce -->`, `<!-- if tracker=... -->`,
@@ -86,30 +84,14 @@ is never changed by hand.
   resolved by the agent during setup, following `<setup>references/setup-copy.md`.
   A new marker form in the model also needs a row in that file's "Setup
   markers" table.
+- The model's own `.gitignore` hides its `memory/` and `work-items/`
+  templates from this repository's Git. Stage a new file there with
+  `git add -f <path>`, by name, or a clean clone sets up projects without it.
 - Some skill templates are copies of model files (`dev/SKILL-INDEX.md`,
-  section 8). `check-skills.mjs` fails when one differs from the model copy.
-
-### Refresh the model copy
-
-1. Read the change in the model folder. Never write there.
-2. Note the model's branch and commit, and whether it has uncommitted edits:
-   `git -C <model folder> log -1 --oneline` and
-   `git -C <model folder> status --short`. Uncommitted edits are copied too;
-   tell Mike when there are some.
-3. Copy it:
-   `rsync -a --delete --exclude .git --exclude .vscode --exclude .sfdx --exclude __pycache__ --exclude '*.pyc' --exclude .DS_Store <model folder>/ plugins/toolkit/skills/project-setup/assets/model/`
-   The excluded files are local to one computer, and project-setup's "Never
-   copied" list removes them anyway (approved model change 22).
-4. The model's `.gitignore` is copied too, and it hides the copy's `memory/`
-   and `work-items/` templates from this repository's Git. Stage new files
-   there with `git add -f <path>`, by name, or a clean clone sets up projects
-   without those templates.
-5. Copy each model template a skill holds over its skill copy (the list is in
-   `dev/SKILL-INDEX.md`, section 8).
-6. Run every check below. A failure in a skill means the skill must follow
-   the model's new format; never change the copy to make a check pass.
-7. Raise the plugin version (see Rules, "Versions"). Existing projects get
-   the change when the owner says "update the toolkit" in each one.
+  section 8). `check-skills.mjs` fails when one differs from the model file:
+  change both together.
+- After a change, run every check below and raise the plugin version.
+  Existing projects get it when the owner says "update the toolkit".
 
 ## Checks
 
@@ -165,9 +147,6 @@ node --test 'dev/tests/*.test.mjs'
   No other script goes into a skill or a project. A new command, or a new
   job for one, needs Mike's yes first, with its size in plain numbers: do not
   write it; stop and tell him.
-- **Never edit the model copy by hand.** A change to a project file is a
-  change to the model, made on the model branch with Mike's approval, then
-  copied with the refresh steps above.
 - **Shared texts.** Text several skills need is copied into each skill,
   because a skill reads only files inside its own folder. Edit the source in
   `dev/build-shared/`, then copy it over every copy (the first line of each
@@ -301,13 +280,10 @@ node --test 'dev/tests/*.test.mjs'
   test, with his yes, never his own.
 - **Jira is deferred** by Mike: no Jira skills now.
 - **Read-only sources.** Never change
-  `/Users/michaelrihm/Documents/Projects/claude-toolkit` or
-  `/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project` (Mike's
-  own model checkout). A model change needs Mike's approval and goes on the
-  branch `toolkit-v2/approved-changes`, in the worktree
+  `/Users/michaelrihm/Documents/Projects/claude-toolkit`,
+  `/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project`, or
   `/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved`.
-  Write there only for a change Mike approved, commit it as Mike Rihm, stage
-  paths by name, and add no AI credit.
+  The model project now lives in `<setup>assets/model/`.
 - **Tests stay in scratch folders.** Point `HOME`, `CLAUDE_CONFIG_DIR`, and
   `CODEX_HOME` at a temporary folder. Never write to Mike's real `~/.claude`,
   `~/.codex`, Notion pages, or Hindsight banks.

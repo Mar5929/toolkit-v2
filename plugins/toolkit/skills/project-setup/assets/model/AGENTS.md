@@ -58,7 +58,7 @@ Git keeps each path below unless its line says Git ignores it.
 - `work-items/`: the work tracker, one folder per item (`<ID>.md`, `DESIGN.md`, and `references/` for its source files) and the form, `work-item-template/`. Git ignores it, so it is only in the main checkout (the first path `git worktree list` prints), shared by every worktree. `.claude/rules/work-item-folders.md` covers the layout, IDs, and moves.
 <!-- endif -->
 <!-- if memory=local -->
-- `memory/`: Current State, the index `MEMORY.md` (the session-start hook writes it; never edit it), what is worth saving (`memory-criteria.md`), the glossary, decision records, and topic notes. Git ignores it, so it is only in the main checkout. Read its `AGENTS.md` before editing.
+- `memory/`: Current State, the index `MEMORY.md` (the session-start hook writes it; never edit it), the glossary, decision records, and topic notes. Git ignores it, so it is only in the main checkout. Read its `AGENTS.md` before editing.
 <!-- endif -->
 <!-- if memory=hindsight -->
 - `memory/CURRENT_STATE.md`: Current State, the only memory file in the project folder. Git ignores it.

@@ -4,13 +4,13 @@ The exact commands that read memory from `memory/`. They only read.
 
 - Start each command with the `MAIN=` line from `SKILL.md`, "Every time", step 1.
 - Replace `billing|invoice` with the words to search, joined by `|`. Replace `WI-031` with the work item ID, written as the tracker shows it (`WI-031`, `WI-31`, or `#12`).
-- Keep the flags as written. They skip the seeds, the folder's `AGENTS.md`, the index `MEMORY.md`, and `memory-criteria.md`.
+- Keep the flags as written. They skip the seeds, the folder's `AGENTS.md`, and the index `MEMORY.md`.
 - A command lists file names. Open a file to read it.
 
 ## Every file's summary and status
 
 ```bash
-grep -rHE --include='*.md' --exclude='*_template.md' --exclude=AGENTS.md --exclude=MEMORY.md --exclude=memory-criteria.md '^(description|status|updated):' "$MAIN/memory"
+grep -rHE --include='*.md' --exclude='*_template.md' --exclude=AGENTS.md --exclude=MEMORY.md '^(description|status|updated):' "$MAIN/memory"
 ```
 
 - The lines from one file are one memory. A file with no `status:` line has no header.
@@ -19,7 +19,7 @@ grep -rHE --include='*.md' --exclude='*_template.md' --exclude=AGENTS.md --exclu
 ## By topic
 
 ```bash
-grep -rliE --include='*.md' --exclude='*_template.md' --exclude=AGENTS.md --exclude=MEMORY.md --exclude=memory-criteria.md 'billing|invoice' "$MAIN/memory"
+grep -rliE --include='*.md' --exclude='*_template.md' --exclude=AGENTS.md --exclude=MEMORY.md 'billing|invoice' "$MAIN/memory"
 ```
 
 This also searches `CURRENT_STATE.md` and `terminology-glossary.md`.
@@ -29,13 +29,13 @@ This also searches `CURRENT_STATE.md` and `terminology-glossary.md`.
 Every mention of the item, in a header or in the text:
 
 ```bash
-grep -rlE --include='*.md' --exclude='*_template.md' --exclude=AGENTS.md --exclude=MEMORY.md --exclude=memory-criteria.md 'WI-031([^0-9]|$)' "$MAIN/memory"
+grep -rlE --include='*.md' --exclude='*_template.md' --exclude=AGENTS.md --exclude=MEMORY.md 'WI-031([^0-9]|$)' "$MAIN/memory"
 ```
 
 Only the files that list the item in `work_items`:
 
 ```bash
-grep -rlE --include='*.md' --exclude='*_template.md' --exclude=AGENTS.md --exclude=MEMORY.md --exclude=memory-criteria.md '^ +- +"(\[\[)?WI-031([^0-9]|$)' "$MAIN/memory"
+grep -rlE --include='*.md' --exclude='*_template.md' --exclude=AGENTS.md --exclude=MEMORY.md '^ +- +"(\[\[)?WI-031([^0-9]|$)' "$MAIN/memory"
 ```
 
 - The ending `([^0-9]|$)` stops `WI-031` from also matching `WI-0310`.
@@ -44,14 +44,14 @@ grep -rlE --include='*.md' --exclude='*_template.md' --exclude=AGENTS.md --exclu
 ## By status
 
 ```bash
-grep -rlE --include='*.md' --exclude='*_template.md' --exclude=AGENTS.md --exclude=MEMORY.md --exclude=memory-criteria.md '^status: *"?needs-review"?' "$MAIN/memory"
+grep -rlE --include='*.md' --exclude='*_template.md' --exclude=AGENTS.md --exclude=MEMORY.md '^status: *"?needs-review"?' "$MAIN/memory"
 ```
 
 - Replace `needs-review` with `current`, `superseded`, `retired`, or `withdrawn` (`record-format.md`, "Status").
 - Proposals, both whole files and single sections, carry the words `Proposal, not approved yet:`:
 
 ```bash
-grep -rn --include='*.md' --exclude='*_template.md' --exclude=AGENTS.md --exclude=MEMORY.md --exclude=memory-criteria.md 'Proposal, not approved yet:' "$MAIN/memory"
+grep -rn --include='*.md' --exclude='*_template.md' --exclude=AGENTS.md --exclude=MEMORY.md 'Proposal, not approved yet:' "$MAIN/memory"
 ```
 
 ## Lessons

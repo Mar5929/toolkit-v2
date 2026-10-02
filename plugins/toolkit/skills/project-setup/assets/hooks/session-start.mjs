@@ -13,7 +13,7 @@ const COMPACTED = 'Context was just compacted. Before you answer the next messag
 const NEW_INDEX = '<!-- Generated file: the session-start hook rebuilds this index from each'
   + " memory file's title, description, and updated date, grouped by prefix. Do not edit it by"
   + ' hand. -->\n\n# Memory index\n\n## User\n\n## Other memory views\n\n'
-  + '- [Current state](CURRENT_STATE.md)\n- [Memory criteria](memory-criteria.md)\n'
+  + '- [Current state](CURRENT_STATE.md)\n'
   + '- [Terminology glossary](terminology-glossary.md)\n';
 const arg = (name, i = process.argv.indexOf(`--${name}`)) => i > 1 && process.argv[i + 1];
 const memory = arg('memory') || 'local';

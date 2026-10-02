@@ -864,6 +864,13 @@ Interview answers (Mike, 2026-09-29, the interview session):
   Landed on main before the live tests ("Main now, test after").
 - Hindsight code scan (Mike, 2026-10-01): "Keep the code scan". The US$2
   per scan is the add-on's own default cap.
+- The model project lives in V2 (Mike, 2026-10-02): his outside model
+  folder "is sort of just like a throwaway folder ... as long as we have the
+  structure set up properly in V2". `<setup>assets/model/` is now the source
+  and is edited directly; the outside folder and its `approved-changes`
+  branch are no longer copied in. The same day: the memory criteria became
+  storage-neutral and live only in `managing-project-memory`, and the
+  model's `memory/AGENTS.md` became a short pointer to that skill.
 
 ## Goal
 

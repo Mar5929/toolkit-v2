@@ -55,7 +55,6 @@ test('session-start, local: rebuilds MEMORY.md grouped by prefix and prints Curr
     'project_old_plan.md': record('project_old_plan', 'The old plan', 'superseded'),
     'project_topic_template.md': record('project_topic_template', 'What future sessions would look here to remember', 'template'),
     'decision_template.md': record('decision_template', 'The decision in one short line', 'template'),
-    'memory-criteria.md': '# Memory criteria\n',
   });
   const { code, out } = hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'local']);
   assert.equal(code, 0);

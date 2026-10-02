@@ -68,7 +68,6 @@ const PATH_SPAN = /^(?:\.\/)?(?:references|assets|examples|scripts|agents)\/\S*$
 const MODEL_COPIES = {
   '.shared-skills/managing-work-items/assets/work-item-template.md': 'work-items/work-item-template/WORK-ITEM.md',
   '.shared-skills/managing-work-items/assets/design-template.md': 'work-items/work-item-template/DESIGN.md',
-  '.skill-sets/memory-process/managing-project-memory/references/memory-criteria.md': 'memory/memory-criteria.md',
 };
 
 const findings = [];
