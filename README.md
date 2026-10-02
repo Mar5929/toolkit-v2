@@ -110,7 +110,8 @@ description.
 | When | What happens |
 | --- | --- |
 | A session starts, resumes, or its context is compacted | The agent is shown Current State: a short list of what is happening now and what waits on you. With local memory, the hook first rebuilds the memory index, `memory/MEMORY.md`. When Current State is too long or older than 7 days, it asks the agent to clean it up. |
-| You say something worth keeping ("remember this", "from now on", "we decided", and similar) | A one-line reminder names `managing-project-memory` (with Hindsight, the add-on's tools). The skill decides whether anything is saved, and asks you first. |
+| You send any message | The agent is told to check the project's skills and use every one that fits, before it answers. |
+| You say something worth keeping ("remember this", "from now on", "we decided", and similar) | A second one-line reminder names `managing-project-memory` (with Hindsight, the add-on's tools). The skill decides whether anything is saved, and asks you first. |
 | After a commit | A reminder to update the work item's history and status, and Current State if it changed. |
 | A helper agent starts or reports back | A reminder to update that helper's work item. |
 
