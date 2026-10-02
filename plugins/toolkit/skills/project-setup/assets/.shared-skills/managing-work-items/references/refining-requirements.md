@@ -29,11 +29,11 @@ Takes an item from a rough idea, meeting notes, or documents to requirements the
 8. **Shape the roadmap** (Roadmap and sub-items, below).
 9. **Stop asking** when every requirement has a required behavior and an acceptance check, no open question affects a requirement, the roadmap has its phases, and the split is settled. Ask once: "What have we not talked about yet that could change this?"
 10. **Check readiness** before asking for approval, and after any change to an approved requirement. Start the requirements analyst helper (`requirements-analyst-brief.md`). Fix wording that changes nothing he asked for yourself, and say so in one line. A finding that would change what he asked for becomes a question with your recommendation. More than three findings go to him as one numbered list.
-11. **Ask for his OK on the requirements.** Show the Agreed goal, each requirement in one line, and the Acceptance list, and end the reply with exactly "Do you approve these requirements?" After his yes, save his words first, then:
+11. **Ask for his OK on the requirements.** Show the Agreed goal, each requirement in one line, the Acceptance list, and your recommended next State with its reason (Designing or Building, as `SKILL.md` says). End the reply with exactly "Do you approve these requirements?" After his yes, save his words first, then:
     - each approved `R-xx` and the Requirements "Overall status" go to Finalized, with "Approved `YYYY-MM-DD` by `<name>` (Q-xx)";
     - set `requirements_approved` to `YYYY-MM-DD by <name>`;
-    - a sub-item that covers some of these requirements: write "Covers <parent ID> R-xx, approved there." and give it the same approval with "(from <parent ID>)";
-    - move the item to Designing, or to Building when it skips Designing.
+    - move the item to the next State he agreed to;
+    - a sub-item that these requirements cover: write "Covers <parent ID> R-xx, approved there.", give it the same approval with "(from <parent ID>)", and move it to the same next State. It skips its own interview.
 12. **Pausing before approval:** the Current state names what is settled and the first open Q-ID. The project's Current State names the item under "Now" (`managing-project-memory`).
 
 ## The question format
@@ -62,7 +62,7 @@ Not yet covered: <what this affects that he has not raised>.
 - During refining, add a task only for work refining itself needs, such as "P1-T01 — Get the current persona list from the client".
 - Propose a split into sub-items when a part of the work can be approved, built, or shipped on its own; is for other people or another area of the system; needs its own design; or is large enough that the owner will want to track it by itself. Never split for a single step (that is a task).
 - Show the split in one message: each sub-item's title, a one-line reason, its phase, and the parent requirements it covers. Ask "Shall I split WI-012 into these 4 sub-items?" His yes covers the split only.
-- After his yes, create each sub-item in State Refining Requirements with the parent's ID, a Starting request quoting the part it covers, and the parent's `R-xx` IDs. List each sub-item's ID in its phase on the parent.
+- After his yes, create each sub-item with the parent's ID, a Starting request quoting the part it covers, and the parent's `R-xx` IDs, in State Refining Requirements. When the parent's requirements are already approved and cover it, create it in the parent's next State with the approval copied from the parent instead. List each sub-item's ID in its phase on the parent.
 
 ## Gotchas
 

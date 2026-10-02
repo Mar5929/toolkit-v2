@@ -25,9 +25,11 @@ Every item has a Status and a State. The State says where the work is. The Statu
 | Cancelled | Cancelled | none | |
 
 - An item moves to the next State only when "Move on when" is true for the State it is in.
-- Only a `build` or `data-load` item goes through Designing, unless the owner agreed to skip it. Every other item goes from Refining Requirements to Building.
+- Any item, a bug included, can go through Designing. When asking him to approve the requirements, recommend the next State: Designing when there is more than one sensible way to build it or the change is risky, otherwise Building.
+- A parent item stays in Building until every sub-item is Done or Cancelled. Then it goes through the Testing Loop as a whole.
+- An item with nothing to merge or deploy (research, a decision, a document) goes from Reflecting straight to asking him to mark it Done.
 - **Backlog:** add the idea in his words and do not start the interview until he asks to start it.
-- **Blocked:** write what it waits on and who can clear it. When it is cleared, return to the State it was in.
+- **Blocked:** stuck on something outside the work, such as missing access, another team, or a piece that must be finished first. Waiting for the owner's answer is not Blocked. Write what it waits on and who can clear it. When it is cleared, return to the State it was in.
 - **Done and Cancelled:** only on his word. Cancelling keeps the item and every record in it.
 
 ## The owner's OK
@@ -37,7 +39,7 @@ Stop and ask the owner before each of these. Record his OK only when he answers 
 1. Approving the requirements, at the end of Refining Requirements.
 2. Choosing the design, at the end of Designing.
 3. Approving the finished result, at the end of the Testing Loop, after the separate checker has tested it.
-4. Each merge, in Deploying.
+4. Each merge into the main branch, in Deploying, unless his standing merge permission in `.claude/rules/owner-preferences.md` covers it. A helper agent's merge into the item's own branch needs no OK.
 5. Marking the item Done.
 
 ## Every time
@@ -46,7 +48,7 @@ Stop and ask the owner before each of these. Record his OK only when he answers 
 - Save after each step, not at the end, then read the item back. When a save fails, start the reply with "Not saved".
 - After each step, rewrite the item's Current state in place, as the template says.
 - Never delete a requirement, a question row, or a phase. Mark it superseded or cancelled.
-- Levels: parent item → sub-item → task → checklist. A task is one step with a "Done when" check, and its checklist holds the small steps inside it. Phases group an item's tasks. A sub-item that needs its own sub-items becomes a parent item instead.
+- Levels: an item can stand alone or have sub-items, up to three levels (item → sub-item → sub-item). Any item can break its work into a checklist of tasks, grouped by phase. Never add a fourth level; make it a task instead.
 
 ## Hand-offs
 
