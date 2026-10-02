@@ -162,7 +162,7 @@ Pick a skill by the situation; the examples only help you match it. This list st
 - Updating this repository from its remote, keeping local work: `pull-latest`. Examples: "get the latest", "pull the latest changes", "sync with remote".
 - The owner asks, in his own words, to discard local work and match the remote exactly: `reset-to-remote`. Examples: "wipe local and match the remote", "fresh start from remote".
 - Merging a pull request, when the owner names it ("merge PR 12") or `managing-work-items` asks, and removing its branch and worktree: `merge-and-clean-up`.
-- Saving an agreed edit to a committed project document (`requirements/`, `system-guide/`, `PROJECT-ROADMAP.md`, `PROJECT.md`, a README) to the default branch: `publish-docs`.
+- Saving an agreed edit to a committed project document (`requirements/`, `system-guide/`, `PROJECT.md`, a README) to the default branch: `publish-docs`. A change to the project's phases goes to `managing-work-items` first, even in a local project's `PROJECT-ROADMAP.md`.
 <!-- if tracker=notion -->
 - Read and change this project's work items only through `tracking-work-items` and `managing-work-items`, whatever Notion tool is at hand (a `Notion:` plugin command, the connector, or the browser), even when a message holds a Notion page link. The `Notion:tasks:build` command can mark an item Done without the owner's yes.
 <!-- endif -->

@@ -9,9 +9,11 @@
   "filter": {
     "and": [
       {
-        "property": "{{T_WORK_ITEM}}",
-        "relation": {
-          "is_empty": true
+        "property": "{{T_TASK_TYPE}}",
+        "formula": {
+          "string": {
+            "equals": "Project"
+          }
         }
       },
       {

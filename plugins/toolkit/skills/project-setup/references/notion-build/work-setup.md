@@ -56,6 +56,12 @@ in the Notion app, then run "Checks after any of these". When a check
 fails, build a new one ("Building the templates": steps 1 to 13 for
 "Project", steps 11 to 13 for the work item template).
 
+Bring "Project" up to the current toolkit layout (the `assets/schema/`
+files, `work-layout.md`, `project-page.md`, and `work-item-page.md`) at
+every update ("Bringing a project up to the current template", step 5)
+and before every copy ("A new project", step 1), so a new project never
+starts behind the toolkit.
+
 If the Projects database has no "Project", not even in the trash, build
 it first ("Building the templates" below). Never add real work to a template: a copy takes
 everything on the template with it.
@@ -68,13 +74,19 @@ under (`ntn-commands.md`, "Access and sign-in").
 
 1. **Take the template's id:** "Project" in the templates list, not in
    the trash ("Where the templates live"). With work items in Notion, check
-   it is current: find its Work Items database (list the template page's
-   children, as in step 4 below), list that database's templates, and read
-   the default one
-   (`ntn api v1/pages/<id>/markdown < /dev/null | jq -r .markdown`).
-   Compare its Overview and Notes with `work-item-page.md`. When it lacks a
-   section, bring the template up to date first ("Bringing a project up to
-   the current template", steps 4 and 5), after the owner's yes, then copy.
+   it is current, reading only: find its Work Items, Phases, and Tasks
+   databases (list the template page's children, as in step 4 below).
+   Compare each database's properties, relations, and views with the
+   `assets/schema/` files and `work-layout.md`, as "Bringing a project up
+   to the current template", steps 1 to 3, does. Then list the Work Items
+   database's templates, read the default one
+   (`ntn api v1/pages/<id>/markdown < /dev/null | jq -r .markdown`), and
+   compare its sections and guide paragraphs with `work-item-page.md`, and
+   the template page's text with `project-page.md`. When anything is
+   missing or differs, bring the template up to date first, after the
+   owner's yes: "Bringing a project up to the current template", steps 1
+   to 4, run on "Project", and its memory part (`setup.md`, "Bringing
+   memory up to the current layout"). Then copy.
 2. **Pick the ID prefix** (work items in Notion). Propose one from the
    project name (two to four capital letters, for example "IML" for "iOS
    money log") and ask the owner. Notion allows each prefix in only one
@@ -254,7 +266,8 @@ owner may have added his own columns and views, and they stay.
    owner. A select or status missing an option: send every option it has
    now plus the new one (`database-layout.md`). A project with a
    Stage property: "From Stage to State" below, after this step.
-2. **Relations and the rollup**, the same way, from files 04 to 07b.
+2. **Relations, the rollup, and the columns made from them**, the same
+   way, from files 04 to 07d.
 3. **Views.** List their ids, then read each one's name, one call per id:
 
    ```bash
@@ -262,7 +275,8 @@ owner may have added his own columns and views, and they stay.
    ntn api v1/views/<view-id> < /dev/null | jq -r '.name'
    ```
 
-   Create each missing view from its asset (fill the placeholders first).
+   Create each missing view from its asset (fill the placeholders first),
+   in file order (10 to 19b).
    Each view named Board, By state, All items, Roadmap, Waiting on Mike,
    Top-level items, or By project phase (files 10 to 14, 17, and 18) whose
    filter lacks
@@ -283,6 +297,14 @@ owner may have added his own columns and views, and they stay.
    "All phases" and "All tasks" have no asset; when one is missing, send
    `{"database_id":"<id>","data_source_id":"<id>","name":"All phases","type":"table","sorts":[{"property":"Order","direction":"ascending"}]}`
    (or "All tasks") as `POST v1/views`.
+   "Project phases" and "Project tasks" are the first tabs of Phases and
+   Tasks, so the project page shows only the project's roadmap and its own
+   tasks (`work-layout.md`). A view made from its asset in file order goes
+   first by itself. One that exists but is not first: the API cannot move
+   a view (https://developers.notion.com/reference/update-a-view takes
+   only `name`, `filter`, `sorts`, `quick_filters`, and `configuration`),
+   so give the owner the click (drag its tab to the left end, on the
+   project page) and wait until he says it is done.
    Then the project page's text: when the paragraph under its `# Work`
    heading differs from `project-page.md`, replace that paragraph with one
    `update_content` call.
@@ -374,7 +396,8 @@ the templates are built.
    template (the asset says `null`); each project sets its own after the
    copy.
 5. Their data source ids (`jq '.data_sources[0].id'` on each answer).
-6. The relations and rollup: files 04, 05, 06, then 07, then 07b.
+6. The relations and rollup: files 04, 05, 06, then 07, then 07b, then
+   07c and 07d.
 7. Property ids for each database (`ntn-commands.md`, "Filling a body from an
    asset").
 8. Views: files 10, 11, 13, 14, 17, 15, 16 as `POST v1/views`. Then rename each

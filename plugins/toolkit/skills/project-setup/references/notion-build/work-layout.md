@@ -29,16 +29,19 @@ Every view has a set order (the owner's decision).
 | Work Items | Waiting on Mike | table | Waiting on = owner, open items; by Priority, then ID. |
 | Work Items | Top-level items | table | Items with no parent; by Priority, then ID; shows Blocked by and Blocking, the order between top-level items. |
 | Work Items | By project phase | board | Items with no parent; columns by Phase column (each item's project phase, in plan order; "No phase" for one not placed yet), empty columns hidden; cards by Priority, then ID; archived hidden. Cards show ID, Status, State, Waiting on, Next action. |
-| Phases | Project phases | table | The project's own phases: rows with no Work item; by Order. The first view, so the project page shows it. |
+| Phases | Project phases | table | The project's own phases: Phase type is Project; by Order. Its Sub-items column lists each phase's top-level items. The first tab. |
 | Phases | By item | table | Grouped by Work item; by Order. |
-| Phases | All phases | table | By Order (the database's first view, renamed). |
-| Tasks | Project tasks | table | The project's own tasks: rows with no Work item; by Order. The first view, so the project page shows it. |
+| Phases | All phases | table | By Order, with the Phase type column (the database's first view, renamed). A later tab. |
+| Tasks | Project tasks | table | The project's own tasks: Task type is Project; by Order. The first tab. |
 | Tasks | Open tasks | table | Not done; grouped by Work item; by Order. |
-| Tasks | All tasks | table | By Order (the database's first view, renamed). |
+| Tasks | All tasks | table | By Order, with the Task type column (the database's first view, renamed). A later tab. |
 
-The project page shows each database with its first view. The project's
-roadmap is the "Project phases" view and the "By project phase" board; its
-own tasks are the "Project tasks" view (owner's structure, 2026-10-02).
+The project page shows each database on its first tab. So Phases shows
+only the project's roadmap, and Tasks only the project's own tasks; an
+item's phases and tasks show on that item's page, and "All phases" and
+"All tasks" list everything (the owner's decisions, 2026-10-02). Work
+Items opens on "Board", with every item; "By project phase" is a later
+tab.
 
 Every table view shows its columns in the order of "Property order and
 page layout".
@@ -61,8 +64,8 @@ app).
 | Database | Heading (pinned at the top) | Sections, in order | Hidden |
 | --- | --- | --- | --- |
 | Work Items | ID, Status, State, Waiting on, Priority | Plan: Parent item, Sub-items, Phase, Phases, Tasks, Blocked by, Blocking, Related · About: Next action, Type, Tags · Approvals: Requirements approved, Design, Design approved, Result approved, Delivery · Links and files: Memories, Facts, Entities, Files | Phase order, Phase name, Phase column, Archived |
-| Phases | Phase ID, Order, Status | Plan: Outcome, Exit result · Links: Work item, Sub-items, Tasks | none |
-| Tasks | Task ID, Status, Who does it, Done, Order | Work: Work, Deliverable, Done when · Links: Work item, Phase, Depends on | none |
+| Phases | Phase ID, Phase type, Order, Status | Plan: Outcome, Exit result · Links: Work item, Sub-items, Tasks | none |
+| Tasks | Task ID, Task type, Status, Who does it, Done, Order | Work: Work, Deliverable, Done when · Links: Work item, Phase, Depends on | none |
 
 - **Table views** list the properties in the order heading, then sections,
   then hidden, each with `"visible": true` or `false`. A view that shows
@@ -96,5 +99,6 @@ app).
 | `01-work-items-database.json`, `02-phases-database.json`, `03-tasks-database.json` | `POST v1/databases`: each database with its own properties. The ID has no prefix in a template; each project sets its own after the copy. |
 | `04-work-items-relations.json`, `05-phases-relations.json`, `06-tasks-relations.json` | `PATCH v1/data_sources/<id>`: the relations, once all three exist. |
 | `07-work-items-rollup.json`, then `07b-work-items-phase-column.json` | `PATCH v1/data_sources/<id>`: Phase order and Phase name, once Phase exists; then Phase column, which reads them. |
+| `07c-phases-phase-type.json`, `07d-tasks-task-type.json` | `PATCH v1/data_sources/<id>` on Phases and on Tasks: Phase type and Task type, formulas that read Work item, so they can never disagree with it. |
 | `10-view-board.json` to `19b-view-project-tasks.json` | `POST v1/views` (12 is sent as `PATCH v1/views/<default view id>`, renaming the database's first view). |
 | `20-item-view-phases.json` to `23-item-view-linked-memory.json` | `POST v1/views` with `create_database`: the views inside the work item template. |

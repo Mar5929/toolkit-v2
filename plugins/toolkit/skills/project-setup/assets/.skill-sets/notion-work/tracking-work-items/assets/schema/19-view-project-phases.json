@@ -7,9 +7,11 @@
     "type": "start"
   },
   "filter": {
-    "property": "{{PH_WORK_ITEM}}",
-    "relation": {
-      "is_empty": true
+    "property": "{{PH_PHASE_TYPE}}",
+    "formula": {
+      "string": {
+        "equals": "Project"
+      }
     }
   },
   "sorts": [

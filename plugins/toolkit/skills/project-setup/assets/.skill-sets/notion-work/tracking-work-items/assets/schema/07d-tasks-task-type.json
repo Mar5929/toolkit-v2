@@ -1,0 +1,10 @@
+{
+  "properties": {
+    "Task type": {
+      "formula": {
+        "expression": "if(empty(prop(\"Work item\")), \"Project\", \"Work item\")"
+      },
+      "description": "Project for one of the project's own tasks (no Work item); Work item for a task of a work item. Fills itself from Work item."
+    }
+  }
+}

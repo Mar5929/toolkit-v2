@@ -10,4 +10,4 @@
 - [ ] \<Measurable success criteria for each of the goals\>
 # Project Memory
 # Work
-The Work Items database holds every work item; its "By project phase" board shows the top-level items under the project's phases. Phases holds the project's own phases (its first view, "Project phases") and each top-level item's phases. Tasks holds the project's own tasks, which belong to no work item (its first view, "Project tasks"), and each item's tasks. An item's phases and tasks show inside its page.
+The Work Items database holds every work item; its "By project phase" tab shows the top-level items under the project's phases. Here, Phases shows the project's roadmap: its own phases, each with its top-level items. Tasks shows the project's own tasks, which belong to no work item. An item's phases and tasks show on that item's page; the "All phases" and "All tasks" tabs list everything.

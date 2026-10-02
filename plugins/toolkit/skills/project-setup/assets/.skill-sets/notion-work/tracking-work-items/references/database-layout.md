@@ -92,6 +92,7 @@ Changing the Status options replaces the whole list: always send every option, e
 | Status | Select | Not Started, In Progress, Done, Cancelled. |
 | Outcome | Text | What the phase establishes. |
 | Exit result | Text | The evidence that the phase is complete. |
+| Phase type | Formula | `Project` when Work item is empty, otherwise `Work item`. It fills itself; never set it. |
 | Work item | Relation to Work Items | The top-level item whose plan it is. Empty for a project phase. A sub-item is linked only to phases Cancelled when it changed level. The other side is Phases. |
 | Sub-items, Tasks | Relations | Filled from the other side. For a project phase, Sub-items lists its top-level items. |
 
@@ -108,6 +109,7 @@ Changing the Status options replaces the whole list: always send every option, e
 | Deliverable | Text | The file, decision, or other result. |
 | Done when | Text | The observable completion check. |
 | Who does it | Select | agent or owner. |
+| Task type | Formula | `Project` when Work item is empty, otherwise `Work item`. It fills itself; never set it. |
 | Work item | Relation to Work Items | The item it belongs to. Empty for a project task. The other side is Tasks. |
 | Phase | Relation to Phases | Its phase, for a top-level item's task. Empty for a sub-item's task and for a project task. The other side is Tasks. |
 | Depends on | Relation to Tasks | The tasks it waits for. |
@@ -233,7 +235,7 @@ When a move changes an item's level, or an item made before toolkit 0.8.0 is a s
 
 ## The project's phases and tasks
 
-A project phase is a row of Phases whose "Work item" is empty and whose Phase ID has two digits (`P01`). A project task is a row of Tasks whose "Work item" and "Phase" are both empty, with a Task ID like `PT-01`. A row with an empty "Work item" and another ID was made by hand: ask the owner whether it belongs to the project or to an item. The project page shows them in the Phases view "Project phases", the Tasks view "Project tasks", and the Work Items board "By project phase". `searching.md`, "The project's phases and tasks", reads them.
+A project phase is a row of Phases whose "Work item" is empty and whose Phase ID has two digits (`P01`); its Phase type shows `Project`. A project task is a row of Tasks whose "Work item" and "Phase" are both empty, with a Task ID like `PT-01`; its Task type shows `Project`. A row with an empty "Work item" and another ID was made by hand: ask the owner whether it belongs to the project or to an item. The project page shows them in the Phases view "Project phases", the Tasks view "Project tasks", and the Work Items board "By project phase". `searching.md`, "The project's phases and tasks", reads them.
 
 Add a project phase. Phase ID is the next unused project number; Order is its place among the project phases:
 

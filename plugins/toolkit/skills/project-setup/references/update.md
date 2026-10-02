@@ -248,6 +248,12 @@ what a step names, and each item keeps its task IDs.
    view comes with the views (`notion-build/work-setup.md`). GitHub:
    nothing now; the "Project tasks" issue is made with the first project
    task.
+   Notion: add Phase type and Task type, and make "Project phases" and
+   "Project tasks" the first tabs, in the project and in the shared
+   "Project" template (`notion-build/work-setup.md`, "Bringing a project
+   up to the current template", steps 2, 3, and 5). Then give the owner
+   the page-layout clicks to pin Phase type and Task type
+   (`notion-build/work-layout.md`, "Property order and page layout").
 5. Add a Recent History row to each changed item ("Toolkit update: the
    levels structure of toolkit 0.8.0.", and what changed), and tell the
    owner in one short list what changed.
