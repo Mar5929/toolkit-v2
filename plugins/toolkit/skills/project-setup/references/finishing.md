@@ -33,10 +33,10 @@ this order:
    Ask it even when he described the project earlier in the chat: offer
    his earlier words as the suggestion, and write nothing until he
    answers. After his answer, put his sentence in place of the outcome
-   prompt in all four places at once: the outcome line of `AGENTS.md`, the
+   prompt in every place at once: the outcome line of `AGENTS.md`, the
    one-sentence line under the title of `README.md`,
-   "Intended outcome" in `PROJECT.md`, and "Project outcome" in
-   `PROJECT-ROADMAP.md`.
+   "Intended outcome" in `PROJECT.md`, and, with local work items,
+   "Project outcome" in `PROJECT-ROADMAP.md`.
 
    With the project page in Notion (work items or memory there), also
    put his sentence in the "Desired Outcome" field of the project's row in
@@ -45,8 +45,8 @@ this order:
    list them with the prompts left.
 
    Until he answers, leave the outcome prompts in `AGENTS.md`,
-   `README.md`, `PROJECT.md`, and `PROJECT-ROADMAP.md`, and list them in the
-   report.
+   `README.md`, `PROJECT.md`, and `PROJECT-ROADMAP.md` (local work items),
+   and list them in the report.
 2. **The "Build, test, or deploy" row** under "Commands" in `AGENTS.md`.
    Ask, with a recommendation from what the repository shows (for example
    `npm test`). A new, empty project: leave the prompt and list it.
@@ -58,8 +58,11 @@ this order:
    nothing more for these files: leave their prompts and list them in the
    report. In a project with code, list in the report each value you took
    from the repository, so he can correct it.
-4. **`PROJECT-ROADMAP.md` and `requirements/SYSTEM-DATA-MODEL.md`**: fill
-   them only when the owner already knows the facts. On a new project they
+4. **`PROJECT-ROADMAP.md` (local work items) and
+   `requirements/SYSTEM-DATA-MODEL.md`**: fill them only when the owner
+   already knows the facts. A project with work items in Notion or GitHub
+   has no `PROJECT-ROADMAP.md`: its phases go in the tracker, later, with
+   `managing-work-items`. On a new project they
    usually stay as they are; list them as prompts left. The data model gets
    only accepted requirements, never a guess.
 5. Delete each fill-in guide comment when its own text says to. Keep the
@@ -112,7 +115,7 @@ file).
 
 ```text
 - [ ] No setup marker left (command grep: see setup-copy.md; passes when it prints nothing, exit 1): command grep -rns -e '<!-- if ' -e '<!-- endif' AGENTS.md README.md PROJECT.md .claude/rules $(ls -d memory work-items 2>/dev/null)
-- [ ] Nothing from an option not chosen: ls -a shows work-items/ only with local work items, memory/ only with local or Hindsight memory (Hindsight: only CURRENT_STATE.md in it), and delivery/, tools/, sfdx-project.json only in a Salesforce project
+- [ ] Nothing from an option not chosen: ls -a shows work-items/ and PROJECT-ROADMAP.md only with local work items, memory/ only with local or Hindsight memory (Hindsight: only CURRENT_STATE.md in it), and delivery/, tools/, sfdx-project.json only in a Salesforce project
 - [ ] Skills: ls .claude/skills is exactly the list for the choices (skills-hooks-settings.md), each with a SKILL.md
 - [ ] The link: ls -la .agents shows skills -> ../.claude/skills
 - [ ] Hook commands: ls .claude/hooks shows session-start.mjs, prompt-reminder.mjs, codex-after-commit.mjs (plus the two guards in a Salesforce project)
@@ -176,7 +179,8 @@ A short, plain report, in this order:
 5. The final checks: all passed, or each one that did not, with its fix.
 6. The prompts left, grouped by file, each with the fact it needs in a few
    words. Find them with
-   `grep -n '<[A-Za-z][^>]*>' AGENTS.md README.md PROJECT.md PROJECT-ROADMAP.md | grep -v '<!--'`,
+   `grep -n '<[A-Za-z][^>]*>' AGENTS.md README.md PROJECT.md | grep -v '<!--'`,
+   and, with local work items, the same `grep` on `PROJECT-ROADMAP.md`,
    then skip lines where the angle brackets are part of a file name or
    path pattern, not a prompt: `<ID>.md`, `<ID>-<short-slug>/`,
    `<ID>-test-plan.md`, `decision_<short-name>.md`, and

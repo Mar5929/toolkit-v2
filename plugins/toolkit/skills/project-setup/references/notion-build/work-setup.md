@@ -263,8 +263,9 @@ owner may have added his own columns and views, and they stay.
    ```
 
    Create each missing view from its asset (fill the placeholders first).
-   Each view named Board, By state, All items, Roadmap, Waiting on Mike, or
-   Top-level items (files 10, 11, 12, 13, 14, and 17) whose filter lacks
+   Each view named Board, By state, All items, Roadmap, Waiting on Mike,
+   Top-level items, or By project phase (files 10 to 14, 17, and 18) whose
+   filter lacks
    `{"property":"title","title":{"is_not_empty":true}}` gets it: read the
    view's filter (`ntn api v1/views/<id> < /dev/null | jq -c .filter`), then
    send `PATCH v1/views/<id>` with only `filter`:
@@ -282,6 +283,9 @@ owner may have added his own columns and views, and they stay.
    "All phases" and "All tasks" have no asset; when one is missing, send
    `{"database_id":"<id>","data_source_id":"<id>","name":"All phases","type":"table","sorts":[{"property":"Order","direction":"ascending"}]}`
    (or "All tasks") as `POST v1/views`.
+   Then the project page's text: when the paragraph under its `# Work`
+   heading differs from `project-page.md`, replace that paragraph with one
+   `update_content` call.
 4. **The work item template**: the default template of the project's Work
    Items database (its id from the templates list). A project made from the
    older template pages has a plain "Work item template" page and no
@@ -292,7 +296,10 @@ owner may have added his own columns and views, and they stay.
    the plain page is no longer used and he may delete it. Then compare the
    template's sections with `work-item-page.md` and add a missing
    section or view the same way the template build does; skip "Linked
-   memory" in a project without Notion memory. Do the same for the
+   memory" in a project without Notion memory. Replace, with one
+   `update_content` call, each guide paragraph under Roadmap, Sub-items,
+   and Tasks, and the Related items prompt, that differs from
+   `work-item-page.md`; the owner's own text elsewhere stays. Do the same for the
    columns of the template's Tasks view (file 22). Items made earlier keep
    their own Tasks view; turn its new columns on only when you next change
    that item. Items made
@@ -374,12 +381,15 @@ the templates are built.
    database's first view: Work Items' to "All items" with the body of 12
    (send only `name`, `filter`, `sorts`, `configuration` as
    `PATCH v1/views/<id>`), Phases' to "All phases", Tasks' to "All tasks"
-   (sorted by Order).
+   (sorted by Order). Then files 18, 19, and 19b, in that order: 19 and
+   19b go first in their databases, so the project page shows the
+   project's phases and tasks.
 9. `setup.md`, "Building the memory part of a template", steps 5 to 7:
    the links between the memory databases and Work Items, the Memories
    views, and their column order.
 10. Column order: for each table view (All items, Roadmap, Waiting on Mike,
-    Top-level items, By item, All phases, Open tasks, All tasks), send
+    Top-level items, Project phases, By item, All phases, Project tasks,
+    Open tasks, All tasks), send
     `PATCH v1/views/<id>` with only
     `{"configuration":{"type":"table","properties":[…]}}`: every property of
     the database in the order of `work-layout.md`, "Property order and page

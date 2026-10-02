@@ -55,7 +55,7 @@ Only when the result must go beyond the default branch. A Salesforce project: `s
    - every Roadmap phase the item completed says Done.
 2. **Ask.** Add the row, with Next action "Waiting on Mike: Q-12 (mark WI-031 Done). After his answer: record Done and close the item." Put the evidence in one line first (the checker's verdict and commit, the merged pull request, the deploy result). End the reply with "Mark WI-031 Done?"
 3. **After his yes,** save his words first. Set the State to Done and `waiting_on` to `none`, and rewrite the Current state: Where it stands "Done on `YYYY-MM-DD`: <evidence>.", Next action "None. Finished.", Waiting on "Nothing.", Blockers "None."
-4. **Update the project's Current State** (`SKILL.md`, "Hand-offs"): remove the item's line under "Now" and its lines under "Waiting on the owner", rewrite a "Next session starts with" line that names it, and set "Last updated:".
+4. **Update the project's Current State** (`SKILL.md`, "Hand-offs"): remove the item's line under "Now" and its lines under "Waiting on the owner", rewrite a "Next session starts with" line that names it, and set "Last updated:". A top-level item: check its project phase, as `SKILL.md`, "Levels", says.
 5. **After a "no":** record his words, turn each problem into a task, and move the item back to Building. After the fix, the Testing Loop runs again before you ask again.
 6. **Report:** whether the work reached the default branch and what was deployed. End with the leftover branches and worktrees question below. Nothing to ask: "Tell me the next thing to build."
 

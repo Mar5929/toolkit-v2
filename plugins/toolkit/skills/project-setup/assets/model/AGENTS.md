@@ -48,14 +48,16 @@ This project's memory is Hindsight, on the owner's server, in the bank named in 
 Git keeps each path below unless its line says Git ignores it.
 
 - `PROJECT.md`: purpose, scope, owners, systems, and "Toolkit settings" (setup choices, ID prefix, links, Salesforce org aliases).
-- `PROJECT-ROADMAP.md`: phases (`P01`) and work units, each naming its work item ID. Read an item's work unit in this file before you build it.
+<!-- if tracker=local -->
+- `PROJECT-ROADMAP.md`: the project's phases (`P01`) and the top-level work items in each.
+<!-- endif -->
 - `SOUL.md`, when the project has one: the owner's working style. `README.md`: the introduction for people.
 - `requirements/`: agreed behavior by area, updated when an item reaches Reflecting. Read its `AGENTS.md` before editing.
 - `system-guide/`: the verified structure of the current system, one file per area; open it for questions about structure, connections, or impact.
 - `tests/`: test plans and checks; the Testing Loop writes an item's test plan here, never in the tracker.
 - `ai-external-knowledge/`: outside documentation you capture, one folder per topic; `INDEX.md` lists them.
 <!-- if tracker=local -->
-- `work-items/`: the work tracker, one folder per item (`<ID>.md`, `DESIGN.md`, and `references/` for its source files) and the form, `work-item-template/`. Git ignores it, so it is only in the main checkout (the first path `git worktree list` prints), shared by every worktree. `.claude/rules/work-item-folders.md` covers the layout, IDs, and moves.
+- `work-items/`: the work tracker, one folder per item (`<ID>.md`, `DESIGN.md`, and `references/` for its source files), the project's own tasks in `PROJECT-TASKS.md`, and the form, `work-item-template/`. Git ignores it, so it is only in the main checkout (the first path `git worktree list` prints), shared by every worktree. `.claude/rules/work-item-folders.md` covers the layout, IDs, and moves.
 <!-- endif -->
 <!-- if memory=local -->
 - `memory/`: Current State, the index `MEMORY.md` (the session-start hook writes it; never edit it), the glossary, decision records, and topic notes. Git ignores it, so it is only in the main checkout. Read its `AGENTS.md` before editing.
@@ -94,6 +96,7 @@ Give every item in a list of choices or recommendations you show the owner a one
 | Information | Home |
 | --- | --- |
 | New request, idea, or bug | A new work item (`managing-work-items`) |
+| An administrative task for the project that belongs to no work item | The project's tasks (`managing-work-items`) |
 <!-- if not salesforce -->
 | Requirements, Questions and Answers, tasks, progress, history, design, and source files of one change | That work item |
 <!-- endif -->
@@ -105,7 +108,7 @@ Give every item in a list of choices or recommendations you show the owner a one
 | A decision a later work item, or an agent working on something else, will need to follow | Also a memory record, after the owner's yes, that links back to the item and names the Q-ID (the memory save skill) |
 | A project-wide decision that belongs to no work item | Straight to a memory record, after the owner's yes (the memory save skill) |
 | A decision about something that is not a work item yet | A new work item, with the decision as its first Questions and Answers row |
-| What is in progress (one line per active work item, pointing to it), owner to-dos with no work item, where the next session starts | Current State (the memory save skill) |
+| What is in progress (one line per active work item, pointing to it), owner to-dos that are neither a work item nor a project task, where the next session starts | Current State (the memory save skill) |
 | The owner's preference or correction for how the agent works ("from now on", "always", "never") | `.claude/rules/owner-preferences.md` (the memory save skill), never a host setting or hook; for every project, `~/.claude/rules/owner-preferences.md` and `~/.codex/AGENTS.md` |
 | A lasting fact, an unproven lesson, or a hard-to-find reference | Memory (the memory save skill) |
 | Project terms | The glossary (the memory save skill) |
@@ -117,11 +120,11 @@ Give every item in a list of choices or recommendations you show the owner a one
 - IDs look like `WI-001` (the prefix is "Work item ID prefix" in `PROJECT.md` under "Toolkit settings").
 <!-- endif -->
 <!-- if tracker=notion -->
-- The tracker is the Work Items database on this project's page in Notion (links in `PROJECT.md`); the owner's edits to cards win.
+- The tracker is the Work Items database on this project's page in Notion (links in `PROJECT.md`); the owner's edits to cards win. The project's phases and its project tasks are in its Phases and Tasks databases, shown on the project page.
 - IDs look like `WI-31` (the card's ID property, no leading zeros). Find a card by its ID, even after the owner moves or renames it.
 <!-- endif -->
 <!-- if tracker=github -->
-- The tracker is GitHub Issues in the repository named in `PROJECT.md` under "Toolkit settings". Sub-items are sub-issues; `waiting_on`, the state, and other fields are the labels `tracking-work-items` names.
+- The tracker is GitHub Issues in the repository named in `PROJECT.md` under "Toolkit settings". Sub-items are sub-issues; `waiting_on`, the state, and other fields are the labels `tracking-work-items` names. The project's phases are milestones, and its project tasks are in the pinned "Project tasks" issue.
 - An item's ID is its issue number, written `#12`. In file and folder names, write the number without `#`, for example `12-test-plan.md`.
 <!-- endif -->
 <!-- if tracker=jira -->
@@ -129,7 +132,7 @@ Give every item in a list of choices or recommendations you show the owner a one
 - An item's ID is its Jira key, for example `ACME-42`.
 <!-- endif -->
 - This project has one tracker; never copy items into a second tracker or a local list. Refer to items by ID, never by path or link. `managing-work-items` holds the states, statuses, and approval points.
-- Keep each design with its item after delivery. The roadmap names items by ID; item detail stays in the tracker.
+- Keep each design with its item after delivery. The project's roadmap names items by ID; item detail stays with the item.
 <!-- if memory=local -->
 - Change memory only through `managing-project-memory`; `managing-work-items` and `handoff` also edit `memory/CURRENT_STATE.md`.
 <!-- endif -->
@@ -148,9 +151,9 @@ Give every item in a list of choices or recommendations you show the owner a one
 
 Pick a skill by the situation; the examples only help you match it. This list stays in your context after compaction; the host's own skill list may be shortened or dropped. Method skills from other plugins (brainstorming, plans, debugging) may run inside these skills, never instead of them.
 
-- Anything about a work item, from a new idea to Done: `managing-work-items`.
+- Anything about a work item, from a new idea to Done, and the project's phases and project tasks: `managing-work-items`.
 - Saving or looking up a work item's record: `tracking-work-items` (`managing-work-items` uses it).
-- To start the next item, take started work first, then the next `PROJECT-ROADMAP.md` unit whose dependencies are Done, then the highest-priority Backlog item.
+- To start the next item, take started work first, then the next item in the earliest project phase that is not Done (`tracking-work-items` reads the project's phases), then the highest-priority Backlog item.
 - Where the project's work stands, what is next, or what waits on the owner: read Current State, the open items and questions (`tracking-work-items`), and memory records marked `needs-review` or `proposed`. Ask one decision at a time with your recommendation, and save each answer the moment he gives it. One item's open requirements questions go to `managing-work-items`. Examples: "where are we", "what do you need from me", "what's next".
 - The owner ends the session or clears context, or pastes a handoff to check: `handoff`. Examples: "write a handoff", "I'm clearing context", "start a new session".
 - A brain dump the owner wants played back before any work starts: `braindump`; one he asks only to plan goes to `managing-work-items`. Examples: "/braindump", "play that back", "tell me what you heard".
@@ -164,7 +167,7 @@ Pick a skill by the situation; the examples only help you match it. This list st
 - Read and change this project's work items only through `tracking-work-items` and `managing-work-items`, whatever Notion tool is at hand (a `Notion:` plugin command, the connector, or the browser), even when a message holds a Notion page link. The `Notion:tasks:build` command can mark an item Done without the owner's yes.
 <!-- endif -->
 - A decision that answers no open question ("we decided", "let's go with"): a Questions and Answers row marked `Decision?` yes in its work item, with `managing-work-items`. "Where information goes" says what else, and where it goes with no work item.
-- A project to-do the owner wants to be reminded of, with no time given: the work item it concerns (`managing-work-items`), else "Untracked to-dos" in Current State (the memory save skill); a personal errand goes to Todoist. Example: "remind me to ...".
+- A project to-do the owner wants to be reminded of, with no time given: the work item it concerns, or, for administrative work that belongs to no work item, the project's tasks (both `managing-work-items`); else "Untracked to-dos" in Current State (the memory save skill); a personal errand goes to Todoist. Example: "remind me to ...".
 <!-- if memory=local -->
 - The owner wants something kept, corrected, or forgotten, gives a standing instruction, or asks what was recorded or decided before and why; a change to Current State; a review or clean-up of all memory: `managing-project-memory`. Work on an item opens `managing-work-items` first, which searches memory itself; before any other recommendation, search memory with `managing-project-memory`.
 - Where and how memory is stored: `storing-project-memory`; `managing-project-memory` uses it for every read and write.

@@ -10,7 +10,7 @@ Current State is where the project stands right now. It is not lasting memory: i
 | --- | --- | --- |
 | Now | One active work item per line: its ID and a few words on what it is for ("WI-031: logging a transaction"). Where it stands, its next action, and what it waits on stay in the item's own Current state. Never copy them here. | 5 |
 | Waiting on the owner | A decision or action only the owner can take that has no work item, or a save question he has not answered: who needs it and when to check again. | 5 |
-| Untracked to-dos | An owner request that has no work item. When one is made, replace the line with the item's ID under Now. | 7 |
+| Untracked to-dos | An owner request that has no work item and is not a project task. When an item is made for it, replace the line with the item's ID under Now; when it becomes a project task, remove the line. | 7 |
 | Next session starts with | Where to resume (for a work item, its ID), what to read, and the next concrete action. | 3 |
 
 The whole of Current State stays under 40 lines.
@@ -20,9 +20,9 @@ The whole of Current State stays under 40 lines.
 - Update it when a save changes it. A change to Current State alone needs no memory question.
 - Read it fresh first. When a line changes, replace that line. Never add one beside the old one.
 - Remove a line the moment it stops being true. `managing-work-items` removes an item's line when the item finishes, `handoff` rewrites "Next session starts with", and this skill removes a waiting line when the owner answers and prunes the rest.
-- An owner to-do with no work item goes under Untracked to-dos. Offer him a work item for it.
+- An owner to-do that has no work item and is not a project task goes under Untracked to-dos. Offer him a work item or a project task for it (`managing-work-items`).
 - A to-do with a set time ("at 9 tomorrow") does not go in Current State. Tell him it needs a reminder at that time, and offer to set one with the host's scheduled task tool when there is one.
-- Never remove an unresolved owner to-do only to meet a limit. Offer him a work item for it instead.
+- Never remove an unresolved owner to-do only to meet a limit. Offer him a work item or a project task for it instead.
 - The lines for a save question he has not answered are written and removed as `references/saving.md`, "Proposals", says.
 
 ## Pruning

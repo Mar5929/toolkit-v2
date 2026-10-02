@@ -40,9 +40,11 @@ The front matter is the block between the two `---` lines at the top of `<ID>.md
 
 ## Roadmap and Tasks
 
-- A **phase** is one row of the Roadmap table, in plan order. It has a stable phase ID (`P1`, `P2`), an Outcome, a Status (Not Started, In Progress, Done, Cancelled), an Exit result, and a Sub-items cell. A phase is never a work item.
+A top-level item (`parent: none`) has a Roadmap and its tasks under phase headings. A sub-item has no Roadmap: its tasks are one plain list (the template's sub-item form). `managing-work-items`, "Levels", says why.
+
+- A **phase** (top-level item only) is one row of the Roadmap table, in plan order. It has a stable phase ID (`P1`, `P2`), an Outcome, a Status (Not Started, In Progress, Done, Cancelled), an Exit result, and a Sub-items cell. A phase is never a work item.
 - Each phase has a matching `### P2 — <name>` heading under Tasks, with the same ID and name, in the same order as the rows.
-- A **task** is a checkbox block under its phase heading, with a stable task ID (`P2-T01`). Every line of the block except the last ends with two spaces, which Markdown reads as a line break:
+- A **task** is a checkbox block, with a stable task ID: under its phase heading in a top-level item (`P2-T01`), or in the plain list in a sub-item (`T01`). Every line of the block except the last ends with two spaces, which Markdown reads as a line break:
 
   ```markdown
   - [ ] **P2-T01 — Save a transaction** · Not Started  
@@ -53,25 +55,31 @@ The front matter is the block between the two `---` lines at the top of `<ID>.md
     **Depends on:** None.
   ```
 
-- A **sub-item** is its own item, in a folder inside this item's folder. Its ID sits in the Sub-items cell of the phase it delivers, as `[[WI-033]]`. A sub-item sits in one phase only, and that phase is one of this item's own.
+- A **sub-item** is its own item, in a folder inside this item's folder. Its parent lists it once, as `[[WI-033]]`: a top-level parent in the Sub-items cell of one of its phases; a level-2 parent in its `**Sub-items:**` line under Tasks, with no phase. This file and `folders-and-files.md` call either one the parent's sub-item list.
 - Phase and task IDs are never reused, even when a cancelled one had a lower number. A moved task or phase keeps its ID: `P2-T03` stays `P2-T03` under P3.
 
 Adding:
 
 - **A phase:** add a row where it belongs in the order, with the next unused number for this item, and its `### P3 — <name>` heading at the same place in Tasks. The first real phase replaces the template's example rows and headings (`P1 — <Phase 1 name>`).
-- **A task:** add the block under its phase heading, after that phase's last task. Its ID is the phase ID plus the next unused number in that phase: `P2-T04`. "Depends on" names task IDs, a phase ("P1 completion."), or "None.".
-- **A sub-item:** after making it (`folders-and-files.md`, "Creating an item's folder and ID"), add `[[WI-033]]` to the Sub-items cell of the phase it delivers (replace "None."; separate several with commas), add a Recent History row on the parent ("Sub-item [[WI-033]] created: <title>."), and set the parent's `updated:`.
+- **A task:** in a top-level item, add the block under its phase heading, after that phase's last task; its ID is the phase ID plus the next unused number in that phase: `P2-T04`. In a sub-item, add it at the end of the list; its ID is `T` plus the next unused number in the item: `T05`. "Depends on" names task IDs, a phase ("P1 completion."), or "None.".
+- **A sub-item:** after making it (`folders-and-files.md`, "Creating an item's folder and ID"), add `[[WI-033]]` to the parent's sub-item list (replace "None."; separate several with commas), add a Recent History row on the parent ("Sub-item [[WI-033]] created: <title>."), and set the parent's `updated:`.
+- **A new item's plan form:** as the template's guide comments under Roadmap and Tasks say for the item's level.
 
 Changing:
 
 - **Merge two phases:** move the second phase's tasks and sub-items to the first. Set the second row's Status to Cancelled and its Exit result to "Merged into P1". Its heading stays, with the line "Merged into P1." under it.
 - **Drop a phase:** move or cancel each of its tasks and sub-items first. Then set its Status to Cancelled and its Exit result to "Dropped: <reason>".
-- Only the template's example rows, headings, and tasks are deleted. A cancelled real one stays, with its history.
+- Only the template's example rows, headings, and tasks are deleted. A cancelled real one stays, with its history. The one exception is "An item that changes level", below.
 - Read the plan back after a change. The rows and headings must list the same IDs in the same order:
 
   ```bash
   grep -nE '^\| *P[0-9]+ —|^### P[0-9]+ —' "<item file>"
   ```
+
+An item that changes level (a move, or an item made before toolkit 0.8.0 whose sub-items still have phases):
+
+- **Phases to a plain list** (the item is now a sub-item): under `## Tasks`, write the `**Sub-items:**` line with every ID from its Sub-items cells (or "None."), then every task block in plan order, each keeping its ID, status, and ticks. Delete the `### P1 — ...` headings and the whole `## Roadmap` section. Add one Recent History row that keeps what was deleted: "Phases removed, because a sub-item has no phases: P1 — <name> (<status>; <outcome>), P2 — ... Tasks kept with their IDs."
+- **A plain list to phases** (the item is now top-level): add the template's `## Roadmap` section above `## Tasks` with one phase, `P1`, named as the owner approves; put the `### P1 — <name>` heading above the task blocks, which keep their IDs; move the IDs from the `**Sub-items:**` line into P1's Sub-items cell and delete that line. New tasks take `P1-T` IDs. Add a Recent History row.
 
 A task's writes:
 
@@ -155,7 +163,7 @@ After:
 After the folder and file exist (`folders-and-files.md`, "Creating an item's folder and ID"):
 
 - **Front matter:** the ID, the title in the owner's words, a `type` from the template's list, `state` and `status` for the item's first State, `parent` the parent's ID or `none`, `waiting_on: "none"`, `priority: medium`, `delivery: not-offered`, both approvals `no`, `design: none`, and `updated` today.
-- **Overview:** the heading `# WI-032: <title>`, the Goal, and the Current state lines: Where it stands "Created on `YYYY-MM-DD`; not started.", Next action in one of the template's forms, Waiting on "Nothing.", Blockers "None.", Last updated today. Related items: the parent as `[[WI-012]]`, or "None.".
+- **Overview:** the heading `# WI-032: <title>`, the Goal, and the Current state lines: Where it stands "Created on `YYYY-MM-DD`; not started.", Next action in one of the template's forms, Waiting on "Nothing.", Blockers "None.", Last updated today. Related items: the parent as `[[WI-012]]`; for a top-level item, its project phase ("Project phase P01.") once it has one; or "None.".
 - **Requirements and Recent History:** the Starting request in the owner's words, and, replacing the placeholder row, "Created from the owner's request."
 - Leave the other prompts to be filled as the work goes. Delete the comment that starts "Fill-in guide for a new work item" once no angle-bracket prompt is left in the item.
-- A sub-item is also linked from its parent (see "Roadmap and Tasks").
+- A sub-item is also linked from its parent's sub-item list (see "Roadmap and Tasks"). A top-level item is also listed under its project phase (`project-roadmap-and-tasks.md`).

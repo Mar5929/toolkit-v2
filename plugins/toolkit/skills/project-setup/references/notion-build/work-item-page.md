@@ -4,13 +4,13 @@
 ### Current state {toggle="true"}
 	Where this item stands now. Rewrite these five lines in place after each step; never add to them. History goes in Recent History. Keep each line to one or two sentences.
 	**Where it stands:** \<What is done and where work stands now.\><br>**Next action:** \<One of three forms. Working: “\<Who\>: \<the exact next step, one sentence\>.” Example: “Agent: write two design options for the permission set groups.” Waiting: “Waiting on Mike: Q-07 (\<the question in a few words\>). After his answer: \<step\>.” Example: “Waiting on Mike: Q-07 (merge or move the 15 personas). After his answer: finish R-04.” Finished or cancelled: “None. Finished.” or, for a cancelled item, “None. Cancelled.”\><br>**Waiting on:** \<Who the item waits on and for what, matching the Waiting on property, or "Nothing."\><br>**Blockers:** \<Blocking decision or dependency, or "None."\><br>**Last updated:** \<YYYY-MM-DD, and who: the owner or the agent.\>
-	**Related items:** \<The `PROJECT-ROADMAP.md` work unit (for example P01-U01), parent and related work item IDs, design, or external links.\>
+	**Related items:** \<For a top-level item, its project phase (for example P01); for a sub-item, its parent. Related work item IDs, design, or external links.\>
 ## Roadmap
-A phase is complete when its tasks are complete, its sub-items are Done or Cancelled, and its exit result has been checked. Each phase is a row in the Phases database; add, reorder, merge, or drop phases there.
+Only a top-level item has phases, at least one; a sub-item has none, so this stays empty. A phase is complete when its tasks are complete, its sub-items are Done or Cancelled, and its exit result has been checked. Each phase is a row in the Phases database; add, reorder, merge, or drop phases there.
 ## Sub-items
-The sub-items of this item, one column per phase. Move a card to another column to move it to another phase.
+The sub-items of this item, one column per phase. Move a card to another column to move it to another phase. A sub-item's own sub-items have no phase.
 ## Tasks
-One row per task, grouped by phase. Tick Done only when its "Done when" check is met.
+One row per task, grouped by phase; a sub-item's tasks have no phase. Tick Done only when its "Done when" check is met.
 ## Recent History
 <table header-row="true">
 <tr><td>Date</td><td>Change or decision</td><td>Effect on the work</td></tr>

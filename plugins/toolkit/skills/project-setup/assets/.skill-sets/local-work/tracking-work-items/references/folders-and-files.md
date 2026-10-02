@@ -20,6 +20,7 @@ This is how `work-items/` looks in a project, with one item that stands alone, o
 
 ```text
 work-items/                          in the main checkout only; Git ignores it
+├── PROJECT-TASKS.md                 the project's own tasks; not an item
 ├── work-item-template/              the blank form; never an item
 │   ├── WORK-ITEM.md                 the form for an item's main file
 │   ├── DESIGN.md                    the form for a design
@@ -53,7 +54,8 @@ work-items/                          in the main checkout only; Git ignores it
 
 - An item is a folder named `<ID>-<short-slug>` holding `<ID>.md`, plus `DESIGN.md` when it has its own design and a `references/` folder.
 - A sub-item's folder sits inside its parent's folder. Level 1 is an item at the top of `work-items/`, in a group, or at the top of `archive/`; each item folder nested inside another is one level deeper.
-- The nesting, the sub-item's `parent:` line, and its parent's Sub-items cell say the same thing: WI-003 holds `parent: WI-002`, and the Sub-items cell of the phase of WI-002 that it delivers names `[[WI-003]]`.
+- The nesting, the sub-item's `parent:` line, and its parent's sub-item list say the same thing: WI-003 holds `parent: WI-002`, and the Sub-items cell of the phase of WI-002 that it delivers names `[[WI-003]]`. WI-004 holds `parent: WI-003`, and the `**Sub-items:**` line of WI-003 names `[[WI-004]]` (`field-mapping.md`, "Roadmap and Tasks").
+- Beside the item folders, `work-items/` holds `PROJECT-TASKS.md`, the project's own tasks (`project-roadmap-and-tasks.md`). It is not an item.
 
 ## Creating an item's folder and ID
 
@@ -97,7 +99,7 @@ Fill the item's fields afterwards with `field-mapping.md`, "A new item's startin
 
 The owner may move, rename, nest, copy, or delete item folders and files in Finder or Obsidian, and edit fields in Obsidian's Properties panel. His change wins: never undo it, and never move a folder back on your own. Run the three checks in `searching.md`, "Check for hand changes":
 
-1. The first lists every item's file, ID, and `parent:`. For each item, compare its parent by folders (the nearest folder above it that holds an item file; `none` at the top of `work-items/`, in a group, or at the top of `archive/`), its `parent:` line, the Sub-items cells of both parents (`grep -nE '^\| *P[0-9]+ —' "<parent file>"`), its file name (`<ID>.md`), and its level (three item folders above it is a fourth level).
+1. The first lists every item's file, ID, and `parent:`. For each item, compare its parent by folders (the nearest folder above it that holds an item file; `none` at the top of `work-items/`, in a group, or at the top of `archive/`), its `parent:` line, the sub-item lists of both parents (`grep -nE '^\| *P[0-9]+ —|^\*\*Sub-items:\*\*' "<parent file>"`), its file name (`<ID>.md`), and its level (three item folders above it is a fourth level).
 2. The second prints each ID that two files share.
 3. The third prints template copies the owner made by hand.
 
@@ -105,8 +107,8 @@ Also check that each ID you are about to use exists. An ID no file holds is miss
 
 Folders win over `parent:`. Tell the owner each finding in one line, then record it:
 
-- **The folders say parent X, `parent:` says Y or `none`, and X's Sub-items cells do not list it:** the owner moved the folder. Set `parent: X`, move the item from Y's Sub-items cell to the cell of the phase of X it serves (name the phase), and add "Moved by hand" rows on the item, X, and Y.
-- **The item sits at the top level or in a group, and `parent:` names an item:** set `parent: none`, remove it from the old parent's Sub-items cell, and add rows on both.
+- **The folders say parent X, `parent:` says Y or `none`, and X's sub-item list does not name it:** the owner moved the folder. Set `parent: X`, move the item from Y's sub-item list to X's (when X is top-level, to the cell of the phase of X it serves; name the phase), and add "Moved by hand" rows on the item, X, and Y. When its level changed, also follow `field-mapping.md`, "An item that changes level".
+- **The item sits at the top level or in a group, and `parent:` names an item:** set `parent: none`, remove it from the old parent's sub-item list, and add rows on both. It is now top-level: follow `field-mapping.md`, "An item that changes level", and ask the owner which project phase it goes under.
 - **The item sits in `archive/` with no Recent History row saying so:** add a row "Archived by hand". The `state` stays.
 - **The file name is not `<ID>.md`:** it is still the item. Tell him `[[WI-031]]` links no longer reach it, and offer to rename it back.
 - **A template copy with a real title:** a hand-made item ("A hand-made item").
@@ -114,15 +116,15 @@ Folders win over `parent:`. Tell the owner each finding in one line, then record
 - **`state`, `status`, `waiting_on`, an approval field, or `design` differs from the Current state and the latest Recent History row:** his value wins. Add a row "Changed by hand: <field> <old> to <new>". When `state` and `status` no longer match each other, `managing-work-items` says what to do.
 - **A task ticked, or rows or tasks moved between phases:** that is his plan now. Add a Recent History row.
 
-Only the folder name changed: nothing to fix. After a move, make `parent:` match the folder the item sits in and each parent's Sub-items cells list exactly its sub-items, with a Recent History row on each parent whose list changed.
+Only the folder name changed: nothing to fix. After a move, make `parent:` match the folder the item sits in and each parent's sub-item list names exactly its sub-items, with a Recent History row on each parent whose list changed.
 
 ## Findings that need the owner
 
 Ask one at a time, with your recommendation, and save the question and his answer as a Questions and Answers row on the item.
 
-- `parent:` changed but the folder did not, and the old parent's Sub-items cells still list it: move the folder under the new parent? Recommend yes.
+- `parent:` changed but the folder did not, and the old parent's sub-item list still names it: move the folder under the new parent? Recommend yes.
 - Two files with one ID: which is the original? Then give the copy the next free ID ("Two items with one ID").
-- A missing item: did he remove it on purpose, or move it? On purpose: remove the lines that name it (the parent's Sub-items cell), and record his words on the parent. Moved: ask where.
+- A missing item: did he remove it on purpose, or move it? On purpose: remove the lines that name it (the parent's sub-item list), and record his words on the parent. Moved: ask where.
 - Four levels deep: move it up, or turn it into tasks? Recommend moving it up.
 - A sub-item under a Done or Cancelled parent: keep it there, or move it to the top level?
 
@@ -133,7 +135,7 @@ Only when the owner asks.
 1. **Level check.** The deepest item moving, with its sub-items, must end at level 3 at most (level 1 is the top). A move that would make a fourth level: say so, and recommend another parent or turning the deepest items into tasks.
 2. **Move the folder** with `mv`, with its sub-items inside it. Check the target has no folder of the same name first.
 3. **Fields.** `parent:` becomes the new parent's ID, or `none`. Set `updated:`.
-4. **Roadmaps.** Remove its `[[WI-007]]` from the old parent's Sub-items cell ("None." when the cell is empty). Add it to the new parent's cell for the phase the owner names. When he names none, ask which phase, with your recommendation (a Questions and Answers row).
+4. **Sub-item lists and the roadmap.** Remove its `[[WI-007]]` from the old parent's sub-item list ("None." when the list is empty). Add it to the new parent's list: under a top-level parent, in the cell of the phase the owner names; when he names none, ask which phase, with your recommendation (a Questions and Answers row). Moved to the top level: list it under a project phase (`project-roadmap-and-tasks.md`). Moved from the top level: remove it from its project phase. When its level changed, follow `field-mapping.md`, "An item that changes level".
 5. **Recent History** on the item, the old parent, and the new parent, with the owner's words or Q-ID: "Moved under [[WI-003]] at the owner's request (Q-05)."
 6. **Read back.** The item is found by its ID at the new path, and its sub-items are found under it.
 
@@ -147,7 +149,7 @@ Only when the owner asks.
 
 - Only when the owner asks: `mv` the item folder into `work-items/archive/` (`mkdir -p` it when missing).
 - Archiving is not cancelling: the `state` stays. Add a Recent History row: "Archived at the owner's request."
-- An item moves to the archive with its sub-items. A sub-item archived on its own leaves its parent: say so in one line first; then set `parent: none`, remove it from the parent's Sub-items cell, and add a Recent History row on both.
+- An item moves to the archive with its sub-items. A sub-item archived on its own leaves its parent: say so in one line first; then set `parent: none`, remove it from the parent's sub-item list, and add a Recent History row on both.
 - The board leaves `archive/` out. Archived IDs still count for the next ID.
 - To bring an item back, move its folder out of `archive/` to the place the owner names (the top of `work-items/` when he names none; under a parent, also follow "Moving an item under another parent"), and add a Recent History row.
 

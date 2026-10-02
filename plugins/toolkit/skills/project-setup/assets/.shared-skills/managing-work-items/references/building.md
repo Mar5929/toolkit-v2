@@ -17,10 +17,10 @@ Takes an item with approved requirements, and an approved design when it has one
 
 ## Build, task by task
 
-1. Read the item's tasks and design. Take the first task whose Depends on line is met. Before you start it, set it In Progress, and its phase too when the phase is Not Started.
+1. Read the item's tasks and design. Take the first task whose Depends on line is met. Before you start it, set it In Progress, and, in a top-level item, its phase too when the phase is Not Started.
 2. Work in the item's own worktree on its own branch, never on the default branch (see "Git for a build"). Build what the requirements ask and no more. Work the requirements need that no task covers: add its task first, then do it.
 3. Tick the task only when its Done when proof is met, and save the proof (the command and its exact result line, or what you saw) in Recent History. A task partly done stays open, and you add a task for what is left.
-4. A task you cannot check in one go: split it into smaller tasks. A part that can be approved, built, or shipped on its own: propose a sub-item, as `refining-requirements.md`, "Roadmap and sub-items", says.
+4. A task you cannot check in one go: split it into smaller tasks. A part that can be approved, built, or shipped on its own: propose a sub-item, as `refining-requirements.md`, "Roadmap, tasks, and sub-items", says.
 
 ## Who builds
 
@@ -30,7 +30,7 @@ The offer is first made in Refining Requirements (`refining-requirements.md`, st
 
 - **He hands the item over in his own words** (for example "you drive"): that is his yes. Add an answered row for it and do not ask the offer.
 - **`not-offered`, he has not handed it over, and the plan has sub-items, more than one phase, or more than two tasks:** make the offer now. Add it as an open row with your recommendation and set `waiting_on` to the owner. Make the last line of the reply exactly "Would you like agents to take responsibility for delivering this, with you acting as product owner?" Build nothing until he answers.
-- **A small item** (one phase, one or two tasks, no sub-items) gets no offer. Set `delivery: owner-led` and add a Recent History row: "Small item: one phase, one or two tasks, no sub-items, so no delivery offer." His own later "you drive" still counts.
+- **A small item** (at most one phase, one or two tasks, no sub-items) gets no offer. Set `delivery: owner-led` and add a Recent History row: "Small item: at most one phase, one or two tasks, no sub-items, so no delivery offer." His own later "you drive" still counts.
 - **His yes:** `delivery: agent-led`. A yes widens nothing: no merge, deployment, spending, publishing, or sign-in beyond what he already allowed, and every OK in `SKILL.md` still applies. It holds across sessions for this goal only.
 - **His no:** `delivery: owner-led`. Ask no team question and build the tasks as he steers.
 - **He takes the work back:** add an answered row "Change to <old Q-ID>: ..." with his words, mark the row that recorded his yes "Superseded by <new Q-ID>", set `delivery: owner-led`, and start no new helper. Ask whether the helpers still running finish or stop.
@@ -70,11 +70,11 @@ This chat, the Main Orchestrator, and every chat lead run on the most capable mo
 ## Plan the team
 
 - Build only after the requirements are approved, and the design when the item has one.
-- Start from the design's build order and the parent's Roadmap: its phases, sub-items, and tasks. A phase is never a work item; it groups sub-items and tasks.
+- Start from the design's build order and the top-level item's Roadmap: its phases, with their tasks and level-2 sub-items, and each sub-item's task list (`SKILL.md`, "Levels").
 - One builder per task that can run on its own. Tasks of one sub-item that depend on each other run one after another. A sub-item that needs another sub-item's code starts after that code is merged into its own item branch. The lead may build a small task itself.
 - Make what is missing with `tracking-work-items`:
-  - a sub-item: `parent` set to the parent, a phase that is one of the parent's phases, `delivery` set to the parent's value, and `requirements_approved` copied from the parent when it covers the parent's requirements;
-  - a task: `P1-T01 — <name>` with Work, Deliverable, Done when, Who does it, and Depends on, on the lowest-level item it belongs to.
+  - a sub-item: `parent` set to the parent, its phase as `SKILL.md`, "Levels", says, `delivery` set to the parent's value, and `requirements_approved` copied from the parent when it covers the parent's requirements;
+  - a task: `P1-T01 — <name>` in a top-level item, or `T01 — <name>` in a sub-item, with Work, Deliverable, Done when, Who does it, and Depends on, on the lowest-level item it belongs to.
 - One writer per file at a time. Tasks that need the same file, or the same shared environment (a sandbox org, a database, a test service), run one after another, in the order their Depends on lines give.
 - Start only as many builders as you can check and merge as they return.
 - Tell him the team in one line ("Team for P2: three builders, one per sub-item."). His arrangement answer already allows it; do not ask again.
@@ -118,7 +118,7 @@ This chat, the Main Orchestrator, and every chat lead run on the most capable mo
 For each builder:
 
 1. Make its worktree and branch, as above.
-2. Set its sub-item to State Building and `waiting_on` to the agent. Set its task and that task's phase In Progress. Add its line to the parent's team list.
+2. Set its sub-item to State Building and `waiting_on` to the agent. Set its task In Progress, and the task's phase too when it has one. Add its line to the parent's team list.
 3. Start it with `builder-brief.md` and the filled job block. Start builders that do not depend on each other at the same time.
 
 ## When a helper returns
@@ -133,7 +133,7 @@ Do this for each helper as soon as it returns, before you start another helper o
    - **The sub-item.** Every task done: move it to the Testing Loop. Tasks left: it stays in Building. `waiting_on`: the agent, or the owner when the report raised a question for him.
    - **Recent History on the sub-item.** One row: "Builder returned: P1-T01 done, commit 3f9c2ab, tests pass. Gaps: none."
    - **Recent History on the parent.** One row naming the sub-item: "WI-041 P1-T01 built (3f9c2ab)."
-   - **The phase.** Done when every task in it is Done, every sub-item in it is Done or Cancelled, and its exit result was checked.
+   - **The phase** (a top-level item's). Done when every task in it is Done, every sub-item in it is Done or Cancelled, and its exit result was checked.
    - **The team list.** Remove the helper's line.
 5. Start the next helper whose dependencies are now met.
 
@@ -147,11 +147,11 @@ The owner changes his mind, a helper finds a problem, a check fails, or a phase 
 - Ask him first when a change drops or merges work he approved. A new or changed requirement goes to `refining-requirements.md`; a changed design goes to `designing.md`.
 - A running helper whose task moved to another phase keeps going.
 - A running helper whose task was dropped, or whose requirement or design changed: stop it, or let it finish and do not merge its branch. Keep the branch until he agrees the work is dropped. Start a new helper with the new brief when the work is still needed.
-- A change that drops or moves a work item named in `PROJECT-ROADMAP.md`: update its line and save it with `publish-docs`.
+- A change that drops a top-level item, or moves it to another project phase: change the project's roadmap with `tracking-work-items`, after his yes.
 
 ## Resume in a new session
 
-- Read the parent fresh: its Current state first, then the team list, Roadmap, and each listed sub-item.
+- Read the parent fresh: its Current state first, then the team list, its Roadmap or task list, and each listed sub-item.
 - After compaction in the same session, a helper may still be running: wait for its report.
 - In a new session, builders from the old session are not running. A chat under a Main Orchestrator may still be running: message it and wait for its report before you start anything for its sub-item.
 - For each builder line, look at the builder's branch with `git log --oneline <item branch>..<builder branch>`:

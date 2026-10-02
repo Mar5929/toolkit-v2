@@ -22,10 +22,12 @@
 ## Project records
 
 - [PROJECT.md](PROJECT.md): purpose, scope, systems, and owners.
-- [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md): phases and deliverable-sized work units.
+<!-- if tracker=local -->
+- [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md): the project's phases and the top-level work items in each.
+<!-- endif -->
 - [requirements/](requirements/): accepted functional behavior by area.
 - [AGENTS.md](AGENTS.md): how the agent works in this project, where each kind of information goes, and the full project map.
-- Active work, each item's design, and its decisions: the work tracker chosen at setup, recorded in `PROJECT.md` under "Toolkit settings". Every decision made while working an item is saved in its Questions and Answers first; a project-wide decision, after the owner's yes, also gets a memory record.
+- Active work, each item's design and decisions, and the project's own tasks: the work tracker chosen at setup, recorded in `PROJECT.md` under "Toolkit settings". Every decision made while working an item is saved in its Questions and Answers first; a project-wide decision, after the owner's yes, also gets a memory record.
 
 <!-- if tracker=local or memory=local -->
 ## Browse in Obsidian

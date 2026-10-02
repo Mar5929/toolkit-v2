@@ -11,6 +11,7 @@ Find, create, change, and move items with the `tracking-work-items` skill, which
 - The front matter `id:` (for example `WI-031`) is the item's identity. Find an item by its `id:` field, never by its path; the folder name and location may change.
 - Keep the file name `<ID>.md` when you create or move an item, so links such as `[[WI-031]]` keep working. If the owner renames the file, still find the item by its `id:`.
 - `work-items/work-item-template/` is the form, not an item. A new item's `<ID>.md` is a copy of its `WORK-ITEM.md`; only the template carries that name.
+- `work-items/PROJECT-TASKS.md` holds the project's own tasks, which belong to no work item. It is not an item.
 - The next ID is the highest `id:` anywhere under `work-items/`, `archive/` included and the template left out, plus one. With no items yet, the first ID is the prefix from `PROJECT.md` "Toolkit settings" plus `-001`. IDs are never reused.
 - Create the new item's folder, `work-items/<ID>-<short-slug>/`, first. Then check every folder under `work-items/` at any depth (sub-items are nested, and `archive/` is a subfolder), the template left out, for another folder whose name starts with `<ID>-` or another item with the same `id:`.
 - If a duplicate appears, the later item takes the next free number. Treat your own new item as the later one: renumber it and check again. Never renumber an item you did not just create.

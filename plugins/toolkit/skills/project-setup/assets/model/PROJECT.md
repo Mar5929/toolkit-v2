@@ -33,7 +33,15 @@
 ## Work and project records
 
 - Work tracker: set under "Toolkit settings" below.
-- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md)
+<!-- if tracker=local -->
+- Project roadmap: [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md). Project tasks: `work-items/PROJECT-TASKS.md`.
+<!-- endif -->
+<!-- if tracker=notion -->
+- Project roadmap and project tasks: the Phases and Tasks databases on the project page in Notion.
+<!-- endif -->
+<!-- if tracker=github -->
+- Project roadmap: the repository's milestones, one per project phase. Project tasks: the pinned "Project tasks" issue.
+<!-- endif -->
 - Decisions: every decision made while working an item is saved in its Questions and Answers first; a project-wide decision, after the owner's yes, also gets a memory record.
 - Functional requirements: [requirements/](requirements/)
 - Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`

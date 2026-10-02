@@ -5,7 +5,7 @@ description: 'Runs every work item in this project from idea to Done: refining r
 
 # Managing work items
 
-This skill holds the process: what each state means, what to do in it, and when to stop for the owner's OK. It never says where items are saved. For every read and every save, use `tracking-work-items`.
+This skill holds the process: what each state means, how work is split into levels, what to do in each state, and when to stop for the owner's OK. It never says where items are saved. For every read and every save, use `tracking-work-items`.
 
 ## Status and State
 
@@ -32,6 +32,27 @@ Every item has a Status and a State. The State says where the work is. The Statu
 - **Blocked:** stuck on something outside the work, such as missing access, another team, or a piece that must be finished first. Waiting for the owner's answer is not Blocked. Write what it waits on, who can clear it, and the State it left, in the Current state's Blockers line. When it is cleared, return to that State.
 - **Done and Cancelled:** only on his word. Cancelling keeps the item and every record in it.
 
+## Levels
+
+Every project holds its work in the same four levels, whatever its tracker. `tracking-work-items` says where each part is saved.
+
+| Level | Its phases | What it holds |
+| --- | --- | --- |
+| The project | Project phases `P01`, `P02`, and so on: the project's roadmap | Its top-level items, each under exactly one project phase. Its project tasks: administrative tasks that belong to no work item, in one plain list with no phases. |
+| Top-level item (level 1) | Its own phases `P1`, `P2`, and so on: the item's roadmap. At least one phase, even for a small item | Its tasks and its level-2 sub-items, each under one of its phases. |
+| Level-2 sub-item | None | One plain task list, and its level-3 sub-items. |
+| Level-3 sub-item | None | One plain task list. |
+
+- A project phase (`P01`) and an item's phase (`P1`) are different things. A project phase groups top-level items. An item's phase groups that item's tasks and level-2 sub-items. A phase is never a work item.
+- Every task belongs to exactly one place: the project, or one work item. A task in an item is a step toward that item's goal. Work the goal does not need, even a small fix found along the way, is a new Backlog work item, never a task here. A project task is administrative work for the project as a whole, for example renewing a domain or inviting a collaborator.
+- Task IDs: `P1-T01` in a top-level item (its phase, then its number), `T01` in a sub-item, and `PT-01` for a project task. IDs are never reused.
+- Work a project task like an item's task: set it In Progress before you start it, and tick it only when its Done when check is met. An open project task whose Who does it is `owner` waits on the owner: name it whenever you report what waits on him.
+- Never add a fourth level; make it a task instead.
+- When it is unclear whether something is a project task, a new work item, a sub-item, or a task in an item, ask the owner one short question with your recommendation, and save nothing until he answers.
+- A top-level item gets its phases in Refining Requirements. It goes under a project phase when the owner places it, and at the latest when it leaves Backlog; when he has named none by then, ask which, with your recommendation.
+- The project's phases change only with his yes. Propose new phases, or a change to them, as one question, each with a one-line reason. A project with no phases yet: propose them the first time an item leaves Backlog.
+- Set a project phase In Progress when its first item leaves Backlog. When the last open item in it becomes Done or Cancelled, ask him in your next reply whether the phase is Done.
+
 ## The owner's OK
 
 Stop and ask the owner before each of these. Record his OK only when he answers the question you asked.
@@ -50,7 +71,6 @@ Stop and ask the owner before each of these. Record his OK only when he answers 
 - After each step, rewrite the item's Current state in place, as the template says.
 - The project's Current State lists under "Now" every item that has left Backlog and is not Done or Cancelled: add the item's line when it leaves Backlog ("Hand-offs", "Updating the project's Current State").
 - Never delete a requirement, a question row, or a phase. Mark it superseded or cancelled.
-- Levels: an item can stand alone or have sub-items, up to three levels (item → sub-item → sub-item). Any item can break its work into a checklist of tasks, grouped by phase. A task is a step toward this item's goal. Work the goal does not need, even a small fix found along the way, is a new Backlog work item, never a task here. Never add a fourth level; make it a task instead.
 
 ## Starting a helper
 
@@ -64,7 +84,7 @@ Start every helper as a new helper that does not see this conversation. Never a 
 
 | For | Use |
 | --- | --- |
-| Every read and every save of a work item | `tracking-work-items` |
+| Every read and every save of a work item, a project phase, or a project task | `tracking-work-items` |
 | Searching what the project already decided | `managing-project-memory` (Hindsight: `AGENTS.md`, "Project memory") |
 | Saving a decision that matters beyond this item | `managing-project-memory` (Hindsight: `AGENTS.md`, "Project memory") |
 | Updating the project's Current State | edit `memory/CURRENT_STATE.md` when the project has that file, otherwise `managing-project-memory` |

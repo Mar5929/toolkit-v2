@@ -18,7 +18,7 @@ Looks back on the work just done, after the owner approved the result and before
 4. **Project documents and the system guide are updated.**
    - Read `requirements/AGENTS.md`. Write into `requirements/` only the Finalized requirements the checker marked Met, each Source naming the item ID and Q-ID. Tell him in one line about a Finalized one that was not marked Met.
    - Update `system-guide/` only when the verified structure changed and `PROJECT.md` does not say it is unused.
-   - Update `PROJECT.md`, `PROJECT-ROADMAP.md`, or a README only when the item made what it says out of date.
+   - Update `PROJECT.md` or a README only when the item made what it says out of date. A change to the project's roadmap is saved with `tracking-work-items`.
    - Save each with `publish-docs`, and add a Recent History row naming each file saved and the commit.
 
 ## When it is done

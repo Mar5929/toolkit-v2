@@ -15,6 +15,7 @@ how to change a setup choice.
 - 4. What the toolkit no longer ships
 - 5. Services
   - Work items from Stage to State
+  - The levels structure (toolkit 0.8.0)
 - 6. Checks and report
 - Changing a setup choice
 
@@ -170,6 +171,8 @@ grep -n '^## ' <copy>/AGENTS.md
   add missing labels only after his yes.
 - Local work items set up before toolkit 0.6.0 (a `stage:` line in the
   items): "Work items from Stage to State" below, in the main checkout.
+- Every project set up before toolkit 0.8.0: "The levels structure
+  (toolkit 0.8.0)" below, after the service step for its tracker.
 
 ### Work items from Stage to State
 
@@ -207,6 +210,47 @@ work item its State, using the first row that matches:
 - Add a Recent History row to each changed item: "Toolkit update: stage
   <old> is now State <new>." Change nothing else in the item.
 - Tell the owner in one short list how many items moved to each State.
+
+### The levels structure (toolkit 0.8.0)
+
+Since toolkit 0.8.0, only the project and its top-level items have phases:
+a sub-item's tasks are one plain list, and the project has its own phases
+(`P01`) and its own tasks (`managing-work-items`, "Levels"). The storage
+files named here are in each tracker's `tracking-work-items` skill, in this
+skill's `assets/.skill-sets/`. Show the owner every change below in one
+numbered list, and make each only after his yes. Nothing is deleted except
+what a step names, and each item keeps its task IDs.
+
+1. **Sub-items that have phases.** List every level-2 and level-3 item that
+   still has a phase that is not Cancelled, or a task under a phase. Convert each one with "An item that
+   changes level", "Phases to a plain list": local, `field-mapping.md`;
+   Notion, `database-layout.md`; GitHub, `issue-layout.md`. A level-3 item
+   that sits under a phase of its level-2 parent leaves that phase.
+2. **Top-level items with no phase.** List each one that has left Backlog
+   and has no phase. Give it one phase, as "A plain list to phases" says,
+   named as the owner approves.
+3. **The project's roadmap.**
+   - Local: `PROJECT-ROADMAP.md` stays. When it still has work units
+     (`### P01-U01` headings), show him the new version: each phase lists
+     the top-level items its units named (`project-roadmap-and-tasks.md`),
+     and a unit with no item is listed for him to keep as a new Backlog
+     item or drop. Save it with `publish-docs` after his yes.
+   - Notion or GitHub: the phases move into the tracker. When the project
+     folder has a `PROJECT-ROADMAP.md`, add each of its phases as a project
+     phase, with the items its units named (Notion: `database-layout.md`,
+     "The project's phases and tasks"; GitHub:
+     `project-roadmap-and-tasks.md`). Then ask whether to remove the file
+     in your worktree; it stays until he says yes.
+   - A project with no phases yet gets none now: `managing-work-items`
+     proposes them when the next item leaves Backlog.
+4. **Project tasks.** Local: `work-items/PROJECT-TASKS.md` comes in with
+   the missing files, in the main checkout. Notion: the "Project tasks"
+   view comes with the views (`notion-build/work-setup.md`). GitHub:
+   nothing now; the "Project tasks" issue is made with the first project
+   task.
+5. Add a Recent History row to each changed item ("Toolkit update: the
+   levels structure of toolkit 0.8.0.", and what changed), and tell the
+   owner in one short list what changed.
 
 ## 6. Checks and report
 

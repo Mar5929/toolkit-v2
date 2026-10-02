@@ -134,8 +134,9 @@ Copying newer skill files changes nothing in Notion. For an update in a
 Notion project, run "Bringing a project up to the current template" in
 `notion-build/work-setup.md`, and "Bringing memory up to the current
 layout" in `notion-build/setup.md`, for the parts the project keeps in
-Notion. Both only add what is missing; they never remove, rename, or
-retype anything, except the one view that the memory step names. A project
+Notion. Both only add what is missing and bring the toolkit's own guide
+paragraphs up to date; they never remove, rename, or retype anything,
+except the one view that the memory step names. A project
 with a Stage property also needs "From Stage to State" in
 `notion-build/work-setup.md`. Tell the owner in one short list
 what was added.

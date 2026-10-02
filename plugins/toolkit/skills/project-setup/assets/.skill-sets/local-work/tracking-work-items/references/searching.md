@@ -43,10 +43,10 @@ The parent's folder is the folder of its file.
 
 ```bash
 grep -rHE --include='*.md' --exclude-dir=references --exclude=DESIGN.md '^(id|title|state|status|parent|waiting_on):' "<parent folder>"
-grep -nE '^\| *P[0-9]+ —|^- \[ \] \*\*P[0-9]+-T[0-9]+' "<item file>"
+grep -nE '^\| *P[0-9]+ —|^\*\*Sub-items:\*\*|^- \[ \] \*\*(P[0-9]+-)?T[0-9]+' "<item file>"
 ```
 
-The second shows an item's phases, their Sub-items cells, and its open tasks. A sub-item no Sub-items cell names goes last, under "No phase".
+The second shows an item's sub-item list and its open tasks: a top-level item's phases with their Sub-items cells, or a sub-item's `**Sub-items:**` line. Under a top-level item, a sub-item no Sub-items cell names goes last, under "No phase".
 
 ## Search by words or by a field
 

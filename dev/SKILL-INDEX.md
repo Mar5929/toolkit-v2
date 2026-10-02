@@ -248,8 +248,10 @@ the sets apart (draft 2, section 4.6).
   a pull request he names ("merge PR 12"), or one `managing-work-items`
   hands over, goes to `merge-and-clean-up`.
 - `publish-docs` and `managing-work-items` for "update the roadmap": the
-  `PROJECT-ROADMAP.md` file, or one item's plan. When it is unclear, ask one
-  short question.
+  project's phases and one item's plan both go to `managing-work-items`
+  (since 0.8.0, a local project's `PROJECT-ROADMAP.md` is changed through
+  `tracking-work-items`, which saves it with `publish-docs`). A plain
+  document edit he already approved may still go to `publish-docs`.
 - `project-setup` and `pull-latest` for "update": Toolkit V2's own files, or
   this repository's Git remote.
 - `managing-project-memory` and `managing-work-items` for "help me plan

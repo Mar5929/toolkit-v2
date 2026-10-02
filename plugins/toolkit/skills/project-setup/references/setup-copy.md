@@ -61,7 +61,7 @@ Remove from `<copy>`:
 
 | Choice | Remove |
 | --- | --- |
-| Work items are not local | `work-items/` and `.claude/rules/work-item-folders.md` |
+| Work items are not local | `work-items/`, `.claude/rules/work-item-folders.md`, and `PROJECT-ROADMAP.md` (the project's phases live in Notion or GitHub instead) |
 | Memory is local | nothing |
 | Memory is Hindsight | every file in `memory/` except `CURRENT_STATE.md`: `find <copy>/memory -mindepth 1 ! -name CURRENT_STATE.md -exec rm -rf {} +` |
 | Memory is Notion | `memory/` |

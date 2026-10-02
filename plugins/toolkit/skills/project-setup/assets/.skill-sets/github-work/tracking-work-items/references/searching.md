@@ -41,7 +41,7 @@ map([.labels[].name] as $l | {number, title,
 | ["#\(.number)", (.state // "no state"), (.pri // "-"), (.wait // "-"), .title, .next] | @tsv'
 ```
 
-"no state" is an issue without the layout (see the last query). Leave out closed issues unless the owner asks.
+"no state" is an issue without the layout (see the last query), or the "Project tasks" issue, whose body starts with `## Project tasks`: it is not a work item, so leave it out. Leave out closed issues unless the owner asks.
 
 ## What waits on the owner
 
@@ -65,7 +65,7 @@ Three levels at most. Run it again for each sub-issue to reach the third level:
 gh api --paginate repos/<repo>/issues/<number>/sub_issues --jq '.[] | [.number, .state, ([.labels[].name | select(startswith("state:"))] | first // "-"), .title] | @tsv'
 ```
 
-Read the parent's Roadmap for the phase each sub-issue belongs to. A sub-issue no Roadmap row names goes last, under "No phase". A fourth level: tell the owner which issue is at level 4.
+For a top-level parent, read its Roadmap for the phase each sub-issue belongs to; a sub-issue no Roadmap row names goes last, under "No phase". A level-2 parent has no Roadmap: its `**Sub-items:**` line lists its sub-issues. The project's phases and its project tasks: `project-roadmap-and-tasks.md`. A fourth level: tell the owner which issue is at level 4.
 
 ## Search
 
@@ -91,7 +91,7 @@ An issue updated since then with no matching Recent History row was likely chang
 An open issue with no `## Overview`, or without exactly one state label (most often one the owner opened in the browser):
 
 ```text
-gh issue list -R <repo> --state open --limit 200 --json number,title,labels,body --jq '.[] | select((.body | contains("## Overview") | not) or ([.labels[].name | select(startswith("state:"))] | length != 1)) | "#\(.number)\t\(.title)"'
+gh issue list -R <repo> --state open --limit 200 --json number,title,labels,body --jq '.[] | select((.body // "") | startswith("## Project tasks") | not) | select((.body | contains("## Overview") | not) or ([.labels[].name | select(startswith("state:"))] | length != 1)) | "#\(.number)\t\(.title)"'
 ```
 
 Tell the owner. For no `## Overview` or no state label, offer to add the layout (`issue-layout.md`, "An issue made by hand"). For two or more state labels, see `labels.md`, "A label the owner changed by hand".

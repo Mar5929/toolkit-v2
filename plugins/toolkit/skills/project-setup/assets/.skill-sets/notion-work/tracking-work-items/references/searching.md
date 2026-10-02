@@ -1,6 +1,6 @@
 # Searching: the queries
 
-The exact calls that read items, phases, and tasks from the Work Items, Phases, and Tasks databases. They only read.
+The exact calls that read items, phases, and tasks, the project's own included, from the Work Items, Phases, and Tasks databases. They only read.
 
 ## Contents
 
@@ -8,6 +8,7 @@ The exact calls that read items, phases, and tasks from the Work Items, Phases, 
 - The board
 - What waits on the owner
 - A parent's full tree
+- The project's phases and tasks
 - Search
 - Reading a source file
 - Pages without the template
@@ -64,13 +65,26 @@ ntn api v1/data_sources/{{PHASES_DS}}/query -d '{"filter":{"property":"Work item
 ntn api v1/data_sources/{{TASKS_DS}}/query -d '{"filter":{"and":[{"property":"Work item","relation":{"contains":"<page-id>"}},{"property":"Done","checkbox":{"equals":false}}]},"sorts":[{"property":"Order","direction":"ascending"}]}' < /dev/null
 ```
 
-Repeat the first query for each sub-item to reach the third level. A sub-item with no phase goes last, under "No phase". When there is a fourth level, tell the owner which item is at level 4.
+Repeat the first query for each sub-item to reach the third level. Under a top-level item, a sub-item with no phase goes last, under "No phase". A sub-item has no phases: the second query returns nothing for it, or only phases Cancelled when it changed level, and its tasks are one list in Order. When there is a fourth level, tell the owner which item is at level 4.
 
 List an item's phases with their Phase ID, name, and Status:
 
 ```bash
 ntn api v1/data_sources/{{PHASES_DS}}/query -d '{"filter":{"property":"Work item","relation":{"contains":"<item-page-id>"}},"sorts":[{"property":"Order","direction":"ascending"}]}' < /dev/null | jq -r '.results[] | "\(.id)\t\(.properties["Phase ID"].rich_text[0].plain_text)\t\(.properties.Phase.title[0].plain_text)\t\(.properties.Status.select.name)"'
 ```
+
+## The project's phases and tasks
+
+```bash
+# the project's phases, in order
+ntn api v1/data_sources/{{PHASES_DS}}/query -d '{"filter":{"property":"Work item","relation":{"is_empty":true}},"sorts":[{"property":"Order","direction":"ascending"}]}' < /dev/null | jq -r '.results[] | "\(.id)\t\(.properties["Phase ID"].rich_text[0].plain_text // "")\t\(.properties.Phase.title[0].plain_text // "")\t\(.properties.Status.select.name // "")"'
+# the top-level items, with the project phase each sits under
+ntn api v1/data_sources/{{WORK_ITEMS_DS}}/query -d '{"filter":{"and":[{"property":"Parent item","relation":{"is_empty":true}},{"property":"Archived","checkbox":{"equals":false}},{"property":"Work item","title":{"is_not_empty":true}}]},"sorts":[{"property":"Phase order","direction":"ascending"},{"property":"ID","direction":"ascending"}],"page_size":100}' < /dev/null | jq -r '.results[] | "\(.properties.ID.unique_id.prefix)-\(.properties.ID.unique_id.number)\t\(.properties["Phase column"].formula.string // "")\t\(.properties["Work item"].title | map(.plain_text) | join(""))"'
+# the open project tasks, in order
+ntn api v1/data_sources/{{TASKS_DS}}/query -d '{"filter":{"and":[{"property":"Work item","relation":{"is_empty":true}},{"property":"Phase","relation":{"is_empty":true}},{"property":"Done","checkbox":{"equals":false}}]},"sorts":[{"property":"Order","direction":"ascending"}]}' < /dev/null | jq -r '.results[] | "\(.id)\t\(.properties["Task ID"].rich_text[0].plain_text // "")\t\(.properties.Task.title[0].plain_text // "")\t\(.properties.Status.select.name // "")\t\(.properties["Who does it"].select.name // "")"'
+```
+
+A top-level item whose Phase column says "No phase" is under no project phase yet.
 
 ## Search
 

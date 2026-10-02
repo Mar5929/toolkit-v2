@@ -12,6 +12,8 @@ How a project looks in Notion, every property of its three databases with its op
 - Creating an item
 - Setting State and Status
 - Phases and tasks
+- An item that changes level
+- The project's phases and tasks
 - Links, tags, and files
 - Moving an item under another parent
 - A card the owner made by hand
@@ -24,8 +26,8 @@ Projects database (the owner's; its title column is "Project")
     ├── Work Items                     database; its default template is the work item template, with an empty title
     │   └── WI-31 Log a transaction    one row: a work item, with its own page
     │       └── WI-31: Log a transaction — solution design    child page, once a design exists
-    ├── Phases                         database; one row per phase of an item's plan
-    ├── Tasks                          database; one row per task
+    ├── Phases                         database; one row per phase: the project's phases (P01) and each top-level item's (P1)
+    ├── Tasks                          database; one row per task: the project's tasks and each item's
     └── Memory, Current state, Terminology glossary    only with memory in Notion
 ```
 
@@ -71,7 +73,7 @@ The sections of a work item's page are in `page-layout.md`.
 | Parent item | Relation to Work Items | Two-way. The other side is Sub-items. |
 | Blocked by | Relation to Work Items | Two-way. The other side is Blocking. This item cannot finish until the other item is Done. |
 | Related | Relation to Work Items | One-way. Connected items, no order. |
-| Phase | Relation to Phases | The phase of the parent that this item belongs to. |
+| Phase | Relation to Phases | The phase this item sits under: for a top-level item, its project phase; for a level-2 sub-item, one of its parent's phases. Empty for a level-3 sub-item. |
 | Phases, Tasks | Relations | Filled from the other side. |
 | Phase order, Phase name | Rollups of Phase | Phase order is only for sorting views, and Phase name only for the Phase column. |
 | Phase column | Formula | The item's phase with its place in the plan ("02 · Build the form"), so boards show phases in plan order. |
@@ -85,29 +87,29 @@ Changing the Status options replaces the whole list: always send every option, e
 | Property | Type | Holds |
 | --- | --- | --- |
 | Phase | Title | The phase's name. |
-| Phase ID | Text | P1, P2, ... Stable: never reused or renumbered. |
+| Phase ID | Text | `P1`, `P2`, ... for an item's phases; `P01`, `P02`, ... for the project's phases. Stable: never reused or renumbered. |
 | Order | Number | The phase's place in the plan. Reordering changes only this. |
 | Status | Select | Not Started, In Progress, Done, Cancelled. |
 | Outcome | Text | What the phase establishes. |
 | Exit result | Text | The evidence that the phase is complete. |
-| Work item | Relation to Work Items | The item whose plan it is. The other side is Phases. |
-| Sub-items, Tasks | Relations | Filled from the other side. |
+| Work item | Relation to Work Items | The top-level item whose plan it is. Empty for a project phase. A sub-item is linked only to phases Cancelled when it changed level. The other side is Phases. |
+| Sub-items, Tasks | Relations | Filled from the other side. For a project phase, Sub-items lists its top-level items. |
 
 ## Tasks properties
 
 | Property | Type | Holds |
 | --- | --- | --- |
 | Task | Title | The task's name. |
-| Task ID | Text | `P1-T01` form. Stable: never reused or renumbered. |
+| Task ID | Text | `P1-T01` in a top-level item, `T01` in a sub-item, `PT-01` for a project task. Stable: never reused or renumbered. |
 | Done | Checkbox | Ticked exactly when Status is Done or Cancelled. Views and searches filter on it. |
 | Status | Select | Not Started, In Progress, Done, Cancelled. |
-| Order | Number | The order inside the phase. |
+| Order | Number | The order inside the phase, or inside a plain list (a sub-item's tasks, or the project tasks). |
 | Work | Text | The action to take. |
 | Deliverable | Text | The file, decision, or other result. |
 | Done when | Text | The observable completion check. |
 | Who does it | Select | agent or owner. |
-| Work item | Relation to Work Items | The item it belongs to. The other side is Tasks. |
-| Phase | Relation to Phases | Its phase. The other side is Tasks. |
+| Work item | Relation to Work Items | The item it belongs to. Empty for a project task. The other side is Tasks. |
+| Phase | Relation to Phases | Its phase, for a top-level item's task. Empty for a sub-item's task and for a project task. The other side is Tasks. |
 | Depends on | Relation to Tasks | The tasks it waits for. |
 
 ## Creating an item
@@ -133,8 +135,8 @@ Replace `{{…}}` with the ids in `PROJECT.md`. State and Status are the values 
  "template": {"type": "default"}}
 ```
 
-- Leave out "Parent item" and "Phase" for a top-level item.
-- Use only a phase whose "Work item" is that parent.
+- A top-level item: leave out "Parent item". Its "Phase" is its project phase ("The project's phases and tasks", below); leave it out until the owner has named one.
+- A level-2 sub-item: its "Phase" is one of its parent's phases, a row whose "Work item" is that parent. A level-3 sub-item: leave out "Phase".
 - Send it with `ntn api v1/pages -d @new.json < /dev/null`. The answer holds the page `id`, its `url`, and the new ID (`.properties.ID.unique_id`: prefix and number).
 - When Notion refuses because the database has no default template, tell the owner. The project-setup skill rebuilds the templates.
 
@@ -150,9 +152,9 @@ Waiting on is set the same way, with `{"Waiting on":{"select":{"name":"owner"}}}
 
 ## Phases and tasks
 
-A sub-item is in a phase when its "Phase" is one of its parent's phases. The item's page shows the phases, sub-items, and tasks live, so there is nothing to copy into its text.
+Only a top-level item has phases. A level-2 sub-item is in a phase when its "Phase" is one of its parent's phases. A sub-item's tasks have no "Phase": they are one plain list, in Order. The item's page shows the phases, sub-items, and tasks live, so there is nothing to copy into its text.
 
-Add a phase. Order is its place; Phase ID is the next unused number for this item, and a cancelled phase's ID is never reused:
+Add a phase to a top-level item. Order is its place; Phase ID is the next unused number for this item, and a cancelled phase's ID is never reused:
 
 ```bash
 ntn api v1/pages -d '{"parent":{"type":"data_source_id","data_source_id":"{{PHASES_DS}}"},
@@ -165,7 +167,7 @@ ntn api v1/pages -d '{"parent":{"type":"data_source_id","data_source_id":"{{PHAS
   "Work item":{"relation":[{"id":"<item-page-id>"}]}}}' < /dev/null | jq -r .id
 ```
 
-Add a task. "Depends on" takes the page ids of the tasks it waits for:
+Add a task. "Depends on" takes the page ids of the tasks it waits for. For a sub-item's task, leave out "Phase"; its Task ID is `T` and the next unused number in the item (`T05`):
 
 ```bash
 ntn api v1/pages -d '{"parent":{"type":"data_source_id","data_source_id":"{{TASKS_DS}}"},
@@ -222,6 +224,33 @@ After a plan change, list the item's phases (`searching.md`, "A parent's full tr
 
 A task whose Status is empty or does not match Done (made by hand, made before the column existed, or ticked by hand): set Status from Done. Not ticked: Not Started, but leave a task that is already In Progress as it is. Ticked: Done, or Cancelled when its title starts with "Cancelled: ".
 
+## An item that changes level
+
+When a move changes an item's level, or an item made before toolkit 0.8.0 is a sub-item that still has phases:
+
+- **Phases to a plain list** (the item is now a sub-item). Read its phases and tasks (`searching.md`, "A parent's full tree"). Give its tasks new Orders 1, 2, 3, ... in plan order (phase Order, then task Order), and empty each task's "Phase" (`{"Phase":{"relation":[]}}`). Each task keeps its Task ID, Status, and Done. Empty "Phase" on each of its sub-items. Set each of its phases to Cancelled, with Exit result "Removed: a sub-item has no phases. Its tasks are now one plain list." Add one Recent History row on the item naming each phase removed.
+- **A plain list to phases** (the item is now top-level). Add phase `P1`, named as the owner approves, and set it as "Phase" on each of its tasks and sub-items. The tasks keep their IDs; new tasks take `P1-T` IDs. Set its own "Phase" to the project phase the owner names. Add a Recent History row.
+
+## The project's phases and tasks
+
+A project phase is a row of Phases whose "Work item" is empty and whose Phase ID has two digits (`P01`). A project task is a row of Tasks whose "Work item" and "Phase" are both empty, with a Task ID like `PT-01`. A row with an empty "Work item" and another ID was made by hand: ask the owner whether it belongs to the project or to an item. The project page shows them in the Phases view "Project phases", the Tasks view "Project tasks", and the Work Items board "By project phase". `searching.md`, "The project's phases and tasks", reads them.
+
+Add a project phase. Phase ID is the next unused project number; Order is its place among the project phases:
+
+```bash
+ntn api v1/pages -d '{"parent":{"type":"data_source_id","data_source_id":"{{PHASES_DS}}"},
+  "properties":{"Phase":{"title":[{"text":{"content":"Discovery"}}]},
+  "Phase ID":{"rich_text":[{"text":{"content":"P01"}}]},
+  "Order":{"number":1},
+  "Status":{"select":{"name":"Not Started"}},
+  "Outcome":{"rich_text":[{"text":{"content":"The project's scope is agreed."}}]},
+  "Exit result":{"rich_text":[{"text":{"content":"The owner approves the scope."}}]}}}' < /dev/null | jq -r .id
+```
+
+Put a top-level item in a project phase, or move it, with the same "Phase" call as for a sub-item, above. Check first that the phase's "Work item" is empty and its Phase ID has two digits. Write the phase in the item's Related items line too: "Project phase P01." Merging, dropping, and reordering project phases follow the same table as an item's phases, with top-level items in place of sub-items.
+
+Add a project task: the same call as a task, without "Work item" and "Phase", with Task ID `PT-` and the next unused number (`PT-04`), and Order its place in the list. Starting, ticking, and cancelling are the same calls as for any task.
+
 ## Links, tags, and files
 
 Links. Send the whole list of page ids for the property:
@@ -268,8 +297,9 @@ Files. A meeting transcript, document, or other source goes in the Files propert
 ## Moving an item under another parent
 
 1. Count the levels for the item and every level under it, as in step 1 of "Create an item" in `SKILL.md`.
-2. Set "Parent item" to the new parent. Set "Phase" to the new parent's phase that `managing-work-items` gives, or ask the owner which one. Never keep a phase of the old parent.
-3. Add Recent History rows on the item, the old parent, and the new parent.
+2. Set "Parent item" to the new parent, or empty it to make the item top-level. Set "Phase": under a top-level parent, the parent's phase that `managing-work-items` gives, or ask the owner which one; under a level-2 parent, empty; at the top level, the project phase the owner names. Never keep a phase of the old parent.
+3. When its level changed, follow "An item that changes level".
+4. Add Recent History rows on the item, the old parent, and the new parent.
 
 When the owner changed "Parent item" by hand, add the same history rows on your next change.
 

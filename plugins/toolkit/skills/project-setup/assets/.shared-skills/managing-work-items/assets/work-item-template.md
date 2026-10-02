@@ -38,9 +38,11 @@ updated: <YYYY-MM-DD>
 
 **Last updated:** <YYYY-MM-DD, and who: the owner or the agent.>
 
-**Related items:** <The `PROJECT-ROADMAP.md` work unit (for example P01-U01), parent and related work item IDs (never folder paths), design, or external links. Memories that name this item: Obsidian's Backlinks panel for a local item; an agent finds them with the memory find skill by this ID.>
+**Related items:** <For a top-level item, its project phase (for example P01); for a sub-item, its parent's ID. Related work item IDs (never folder paths), design, or external links. Memories that name this item: Obsidian's Backlinks panel for a local item; an agent finds them with the memory find skill by this ID.>
 
 ## Roadmap
+
+<!-- Only a top-level item (`parent: none`) has a Roadmap, with at least one phase. A sub-item has no phases: delete this whole Roadmap section, and use the sub-item form at the end of Tasks. -->
 
 A phase is complete when its tasks are complete, its sub-items are Done or Cancelled, and its exit result has been checked.
 
@@ -53,7 +55,7 @@ A phase is complete when its tasks are complete, its sub-items are Done or Cance
 
 ## Tasks
 
-<!-- Under each phase heading, add that phase's tasks only. Replace P1-T01 and similar example IDs with stable real IDs. Put the action after Work, its output after Deliverable, the completion proof after Done when, `agent` or `owner` after Who does it (`owner` for a step only the owner can take, such as a production deploy, a sign-in, or a check he must make himself), and real prerequisites after Depends on. Change the checkbox only when the completion proof is met. -->
+<!-- A top-level item: under each phase heading, add that phase's tasks only, and delete the sub-item form at the end of this section. A sub-item: delete the phase headings and their tasks, and keep only the sub-item form. Replace P1-T01, T01, and similar example IDs with stable real IDs. Put the action after Work, its output after Deliverable, the completion proof after Done when, `agent` or `owner` after Who does it (`owner` for a step only the owner can take, such as a production deploy, a sign-in, or a check he must make himself), and real prerequisites after Depends on. Change the checkbox only when the completion proof is met. -->
 
 ### P1 — <Phase 1 name>
 
@@ -78,6 +80,17 @@ A phase is complete when its tasks are complete, its sub-items are Done or Cance
   **Done when:** <The observable completion check.>  
   **Who does it:** <agent | owner>  
   **Depends on:** P1 completion.
+
+<!-- Sub-item form: a sub-item's tasks in one plain list, numbered T01, T02, and so on, after the line that lists its own sub-items. -->
+
+**Sub-items:** <A level-2 sub-item: the IDs of its level-3 sub-items, or “None.” A level-3 sub-item: “None.”>
+
+- [ ] **T01 — <Task 1 name>** · Not Started  
+  **Work:** <The action to take.>  
+  **Deliverable:** <The expected result.>  
+  **Done when:** <The observable completion check.>  
+  **Who does it:** <agent | owner>  
+  **Depends on:** <Task ID or “None.”>
 
 ## Recent History
 
