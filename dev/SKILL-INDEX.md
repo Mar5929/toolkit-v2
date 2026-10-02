@@ -28,10 +28,11 @@ the routing rounds for the retired skills) is in Git history.
   `storing-project-memory` (local files with Obsidian, or Notion in Lore's
   layout). Hindsight memory has no toolkit skills.
 - **Notion**: work items or memory in Notion add `using-notion-cli`, once.
-- **Salesforce projects** add 4 skills.
+- **Salesforce projects** add 3 skills, plus Salesforce's own skills
+  (`forcedotcom/sf-skills`), which the owner installs.
 - A project has 9 + 1 + 2 = 12 skills, 13 with work items or memory in
   Notion; with Hindsight memory, 10, or 11 with work items in Notion.
-  Salesforce adds 4.
+  Salesforce adds 3.
 
 ## 1. Onboarding (the `toolkit` plugin)
 
@@ -148,19 +149,19 @@ once.
 | --- | --- | --- |
 | `using-notion-cli` | `assets/.skill-sets/notion-tools/using-notion-cli/` | Shows how to run ntn, Notion's command-line tool, for the Notion storage skills: sign-in, Codex permissions, the calls every Notion step uses, and fixes for failed calls, so reads and saves in Notion work the first time. Use before any ntn call, when ntn will not sign in or cannot find a page, in Codex, and whenever a Notion call fails. tracking-work-items and storing-project-memory use it for every call. Only for projects that keep work or memory in Notion. |
 
-## 6. Salesforce projects (4)
+## 6. Salesforce projects (3)
 
-`sf-architect-solutioning` is copied from `assets/.salesforce/`. Its
-description was rewritten on 2026-09-27, and its body was reworded and given
-a "Which phases to run" section on 2026-09-30, both with Mike's yes. The
-other three are the model's own project skills: they arrive with the model
-copy, and a change to them is a model change that needs Mike's yes. The
+Salesforce's own skills (`forcedotcom/sf-skills`, installed with
+`npx skills add forcedotcom/sf-skills`) answer Salesforce platform questions.
+Toolkit V2 ships no Salesforce architect skill (Mike, 2026-10-02); setup only
+checks that Salesforce's skills are installed and gives him the command. The
+three skills below are the model's own project skills: they arrive with the
+model copy, and a change to them is a model change that needs Mike's yes. The
 model's `.agents/skills` is a link to `.claude/skills`; onboarding removes it
 from the setup copy and makes the project's own link.
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `sf-architect-solutioning` | `assets/.salesforce/sf-architect-solutioning/` | Answers Salesforce platform questions, checking each fact against official Salesforce docs, so every design uses verified platform behavior. Use whenever the owner asks a Salesforce platform question that needs no design options, even about a work item ("which Flow type", "Flow or Apex"), or managing-work-items asks for platform facts. Not for planning or design; use managing-work-items. |
 | `sf-deploy-check` | `assets/model/.claude/skills/sf-deploy-check/` | Finds components or edits that a Salesforce deploy would ship beyond the intended change, so no unfinished or unintended work reaches a shared org. Use when a deploy to a shared org (UAT, full copy, staging, or production) is about to run, or before the owner gets a deploy command. Not for testing whether a work item is ready, or for running the deploy; use managing-work-items. |
 | `sf-component-tracker` | `assets/model/.claude/skills/sf-component-tracker/` | Keeps the component tracker CSV, the master and per-work-item package.xml files, destructiveChanges.xml, and manual steps in sync, so no changed component is left out of a deploy. Use when Salesforce metadata under force-app/ is added, changed, renamed, or deleted (open it before building and update the records in the same response), a deploy result comes back, or a deploy needs manual steps. |
 | `sf-data-change` | `assets/model/.claude/skills/sf-data-change/` | Builds the owner's handoff for a Salesforce production data change: load file, backup, numbered steps, success check, and undo steps, so no agent writes production data and every change can be undone. Use when the owner asks to load, import, update, or delete production records, even inside a build, for example "load this file into production". |
@@ -255,9 +256,6 @@ the sets apart (draft 2, section 4.6).
   this" and "design this": `managing-work-items` opens first and searches
   memory with `managing-project-memory` itself (the model's `AGENTS.md`
   says so). Check which skill opens first.
-- `managing-work-items` and `sf-architect-solutioning`: a Salesforce
-  platform question that needs no design options goes to
-  `sf-architect-solutioning`, even about a work item.
 
 Machine-wide skills on Mike's Mac that also match (check O7 in
 `dev/reviews/overlap-review.md`):

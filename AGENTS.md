@@ -45,8 +45,7 @@ through `gh`, and Hindsight through its own MCP tools.
 | `<setup>assets/model/` | The model project: the source for every project file. Edited here directly (see "The model project and its copy"). |
 | `<setup>assets/.shared-skills/<name>/` | The 9 skills every project gets. |
 | `<setup>assets/.skill-sets/<set>/<name>/` | The skills for each choice. Work tracking: `local-work`, `notion-work`, or `github-work`, each holding one skill, `tracking-work-items`. Memory (local or Notion): `memory-process`, holding `managing-project-memory` (the process), plus `local-memory` or `notion-memory`, each holding its own `storing-project-memory` (storage only). `notion-tools`, holding `using-notion-cli`, goes to every project with work items or memory in Notion. |
-| `<setup>assets/.salesforce/sf-architect-solutioning/` | The Salesforce architect skill. Its description was rewritten on 2026-09-27, and its body was reworded and given a "Which phases to run" section on 2026-09-30, both with Mike's yes. The model holds the other three Salesforce skills. |
-| (the three folders above) | Their names start with a dot on purpose. Codex loads every `SKILL.md` under a plugin's `skills/` folder as a plugin skill, in every folder on the computer, but skips folders whose names start with a dot. Without the dot, 17 project skills would load machine-wide. Tested in scratch Codex homes with and without the dots: `dev/test-runs/codex-dot-folders.md`. |
+| (the two folders above) | Their names start with a dot on purpose. Codex loads every `SKILL.md` under a plugin's `skills/` folder as a plugin skill, in every folder on the computer, but skips folders whose names start with a dot. Without the dot, 16 project skills would load machine-wide. Tested in scratch Codex homes with and without the dots: `dev/test-runs/codex-dot-folders.md`. |
 | `<setup>assets/hooks/` | The three hook commands: `session-start.mjs`, `prompt-reminder.mjs`, `codex-after-commit.mjs`. |
 | `<setup>assets/settings/` | The snippets onboarding merges into a project's `.claude/settings.json`, `.codex/hooks.json`, and `.codex/config.toml` for each choice. |
 | `ai-external-knowledge/` | Official Claude Code, Codex, Agent Skills, and Anthropic engineering pages, captured with Firecrawl. `INDEX.md` lists them; each folder's `SOURCE-RECORD.md` gives every page's web address. Not shipped. |
@@ -120,8 +119,8 @@ node --test 'dev/tests/*.test.mjs'
   item template's text (`<setup>references/notion-build/work-item-page.md`)
   matches the model's `WORK-ITEM.md`. `--model <folder>`
   checks against another model folder, such as the model worktree before a
-  refresh. Warnings are on text that is Mike's (the model's own skills, and
-  the body of `sf-architect-solutioning`): they do not fail the run.
+  refresh. Warnings are on text that is Mike's (the model's own skills): they
+  do not fail the run.
 - Keep the quotes around the test pattern, so Node reads it, not the shell.
   A folder name instead of a pattern fails on the Node 25 installed here.
 - Codex has no validate command. To prove Codex accepts the plugin, install

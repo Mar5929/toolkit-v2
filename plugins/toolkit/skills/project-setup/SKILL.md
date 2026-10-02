@@ -80,9 +80,15 @@ has a filled "Toolkit settings" section.
    and asking. `references/placing-files.md`.
 7. **Set up each service**, once its sign-in is done: Notion pages, the
    GitHub repository and labels, the Hindsight bank and Hindsight's
-   coding-agent add-on, the Salesforce facts. `references/notion.md`,
+   coding-agent add-on, the Salesforce facts. For a Salesforce project, also
+   check that Salesforce's skills are installed on this computer or in the
+   project (`~/.claude/skills`, the project's `.claude/skills`,
+   `~/.agents/skills`, or the plugin list). When they are not, tell the owner
+   and give him `npx skills add forcedotcom/sf-skills` to run himself; setup
+   never installs them. `references/notion.md`,
    `references/github.md`, `references/hindsight-on-vps.md`,
-   `references/salesforce.md`.
+   `references/salesforce.md` (it starts with checking that Salesforce's
+   skills are installed).
 8. **Finish**: fill the prompts in the copied files with facts he confirms,
    write Current State, run the final checks, name his own steps, report,
    and offer the commit. `references/finishing.md`.
@@ -150,13 +156,12 @@ has a filled "Toolkit settings" section.
 | `references/notion-build/project-page.md`, `references/notion-build/work-item-page.md`, `references/notion-build/memory-page.md`, `references/notion-build/project-page-memory-only.md` | Building the Notion templates: the text of the project page, the work item template, the Memory page, and the "Project: memory only" page |
 | `references/github.md` | Work items in GitHub Issues: the sign-in, the repository, the labels, bringing a project up to date, the checks |
 | `references/hindsight-on-vps.md` | Memory in Hindsight: what runs on the VPS, the access key, the bank, the coding-agent add-on, the save-and-search check, opening the dashboard, checking a Hindsight project, a new computer |
-| `references/salesforce.md` | A Salesforce project: the org aliases and the API version |
+| `references/salesforce.md` | A Salesforce project: Salesforce's skills check, the org aliases, and the API version |
 | `references/finishing.md` | Step 8: the prompts in the copied files, `SOUL.md`, Current State, the final checks, the owner's steps, the report, the commit offer |
 | `references/update.md` | Update the toolkit, check the setup, or change a setup choice |
 | `assets/model/` | Step 4: the model project, copied whole into the scratch folder |
 | `assets/owner-preferences.md` | Step 4: the starting `.claude/rules/owner-preferences.md` every project gets |
 | `assets/.shared-skills/` | Step 5: the skills every project gets |
 | `assets/.skill-sets/` | Step 5: the skills for each choice: work tracking (`local-work`, `notion-work`, `github-work`), memory (`memory-process`, `local-memory`, `notion-memory`), and Notion's command-line tool (`notion-tools`) |
-| `assets/.salesforce/sf-architect-solutioning/` | Step 5, Salesforce projects only |
 | `assets/hooks/` | Step 5: the three hook commands |
 | `assets/settings/` | Step 5: the settings snippets for each choice |

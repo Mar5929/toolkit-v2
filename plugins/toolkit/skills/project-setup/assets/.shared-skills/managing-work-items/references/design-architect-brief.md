@@ -18,7 +18,7 @@ Owner's decisions: <answered Questions and Answers rows marked Decision? yes>
 Design so far: <What this design solves, Requirements and design readiness,
   What exists today, Constraints and assumptions, Notes>
 Research findings: <the researcher's report, or "none">
-Salesforce findings: <from sf-architect-solutioning, or "not a Salesforce project">
+Salesforce findings: <from Salesforce's skills, or "not a Salesforce project">
 Where the existing build is: <folders and files to read>
 Fix round: <the critic's findings to fix, or "first draft">
 ```

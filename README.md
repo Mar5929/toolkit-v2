@@ -93,7 +93,7 @@ Each project gets the skills for where its work items and memory live:
 | Memory in local files | `managing-project-memory` (decides what to keep, asks you, corrects, forgets, finds, and cleans up), `storing-project-memory` (saves and finds it as files in `memory/`) |
 | Memory in Notion | `managing-project-memory`, `storing-project-memory` (the Notion version), `using-notion-cli` |
 | Memory in Hindsight | None. Hindsight's coding-agent add-on saves each session to the project's bank, and the agent uses its save and search tools. |
-| Salesforce | `sf-architect-solutioning`, `sf-deploy-check`, `sf-component-tracker`, `sf-data-change` |
+| Salesforce | `sf-deploy-check`, `sf-component-tracker`, `sf-data-change`; Salesforce's own skills (`forcedotcom/sf-skills`) are installed by you, and setup checks for them |
 
 Memory is kept by concept, like a wiki: one record per concept, added to as
 it grows. `using-notion-cli` comes once, even with work items and memory
@@ -101,7 +101,7 @@ both in Notion.
 
 A project ends up with 12 skills, or 13 when work items or memory are in
 Notion. With Hindsight memory it has 10, or 11 with work items in Notion. A
-Salesforce project has 4 more. Saying where the work stands needs no skill: the
+Salesforce project has 3 more, plus Salesforce's own skills. Saying where the work stands needs no skill: the
 project's `AGENTS.md` says how. `dev/SKILL-INDEX.md` lists every skill with its exact
 description.
 

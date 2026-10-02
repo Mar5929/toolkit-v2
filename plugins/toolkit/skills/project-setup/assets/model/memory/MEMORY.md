@@ -22,5 +22,4 @@ One short line per active memory file, with a link to it. Open a file before rel
 ## Other memory views
 
 - [Current state](CURRENT_STATE.md)
-- [Memory criteria](memory-criteria.md)
 - [Terminology glossary](terminology-glossary.md)

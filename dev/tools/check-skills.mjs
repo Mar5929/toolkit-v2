@@ -35,8 +35,7 @@
 //     work-item-page.md (the Notion work item template's text) says the same as the model's
 //     WORK-ITEM.md.
 // Findings on the model's own skills are warnings: changing them is a model change that needs
-// Mike's yes (AGENTS.md). So is a missing contents list in sf-architect-solutioning, whose body
-// is Mike's text: a change there needs his yes. The run fails (exit 1) on any error.
+// Mike's yes (AGENTS.md). The run fails (exit 1) on any error.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -49,10 +48,6 @@ const argv = process.argv.slice(2);
 const MODEL = argv.includes('--model') ? path.resolve(argv[argv.indexOf('--model') + 1] || '.') : path.join(SETUP, 'assets/model');
 const HAS_MODEL = fs.existsSync(path.join(MODEL, 'AGENTS.md'));
 
-// Its body and references are Mike's text. The description was rewritten on 2026-09-27, and the
-// body was reworded on 2026-09-30, both with his yes (review answers B48 and C12 to C26). The
-// contents rule is a warning for it.
-const MIKES_BODY = new Set(['sf-architect-solutioning']);
 const MAX_DESCRIPTION = 500;
 const MAX_BODY_LINES = 500;
 const MAX_NAME = 64;
@@ -217,7 +212,7 @@ for (const { dir, model } of skills) {
     const lines = body.split('\n').length - (body.endsWith('\n') ? 1 : 0);
     if (/^(references|examples)\//.test(rel) && lines > CONTENTS_OVER) {
       const heading = proseLines(body).find((l) => /^#{2,6}\s/.test(l.text));
-      if (!heading || !/^#{2,6}\s+(?:Table of )?Contents\s*$/i.test(heading.text)) report(MIKES_BODY.has(folderName) ? 'warning' : level, f, `${lines} lines: a reference over ${CONTENTS_OVER} lines starts with a "## Contents" section`);
+      if (!heading || !/^#{2,6}\s+(?:Table of )?Contents\s*$/i.test(heading.text)) report(level, f, `${lines} lines: a reference over ${CONTENTS_OVER} lines starts with a "## Contents" section`);
     }
   }
   for (const f of own.filter((x) => TEXT_FILE.test(x))) {
@@ -297,7 +292,7 @@ if (HAS_MODEL) {
     const modelSkills = dirs(path.join(MODEL, '.claude/skills'));
     for (const name of modelSkills) if (!name.startsWith('sf-')) report('error', copyFile, `the model has the skill ${name}, but the Salesforce list takes only sf-* folders and every other skill is copied from this skill's assets/`);
     const row = hooksText.split('\n').find((l) => l.startsWith('| Salesforce |')) ?? '';
-    const rowSkills = ticks(row).filter((t) => t.startsWith('sf-') && t !== 'sf-architect-solutioning').sort();
+    const rowSkills = ticks(row).filter((t) => t.startsWith('sf-')).sort();
     if (!same(rowSkills, modelSkills.filter((n) => n.startsWith('sf-')))) report('error', hooksFile, `its Salesforce row names ${rowSkills.join(', ') || 'no model skills'}, but the model has ${modelSkills.join(', ')}`);
     modelSf = modelSkills.filter((n) => n.startsWith('sf-')).length;
   }
@@ -335,7 +330,7 @@ if (HAS_MODEL) {
   if (!interview) report('error', interviewFile, 'has no "N shared, plus N for the work tracking set, ..." sentence in the expected shape');
   else {
     const count = (set) => dirs(setDir(set)).length;
-    const want = [sharedDirs.length, Math.max(...['local-work', 'notion-work', 'github-work'].map(count)), count('memory-process') + Math.max(...['local-memory', 'notion-memory'].map(count)), count('notion-tools'), 1 + modelSf];
+    const want = [sharedDirs.length, Math.max(...['local-work', 'notion-work', 'github-work'].map(count)), count('memory-process') + Math.max(...['local-memory', 'notion-memory'].map(count)), count('notion-tools'), modelSf];
     if (interview.slice(1).map(Number).join() !== want.join()) report('error', interviewFile, `its skill counts are ${interview.slice(1).join(', ')}, but the folders give ${want.join(', ')}`);
   }
 }
@@ -347,6 +342,6 @@ const warnings = findings.filter((x) => x.level === 'warning');
 console.log(`check-skills: ${skills.length} skills checked (${setupSkillDirs.length} in project-setup, ${modelSkillDirs.length} from the model), ${index.size} rows in dev/SKILL-INDEX.md.`);
 for (const x of [...errors, ...warnings]) console.log(`${x.level === 'error' ? 'Error' : 'Warning'}: ${x.file}: ${x.message}`);
 for (const n of notes) console.log(`Note: ${n}`);
-if (warnings.length) console.log('Warnings do not fail the run. They are on the model\'s own skills and on sf-architect-solutioning\'s body, which are Mike\'s text: a change there needs his yes.');
+if (warnings.length) console.log('Warnings do not fail the run. They are on the model\'s own skills, which are Mike\'s text: a change there needs his yes.');
 console.log(`check-skills: ${errors.length ? 'failed' : 'passed'}, ${errors.length} error${errors.length === 1 ? '' : 's'}, ${warnings.length} warning${warnings.length === 1 ? '' : 's'}.`);
 process.exit(errors.length ? 1 : 0);

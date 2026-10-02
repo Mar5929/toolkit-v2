@@ -49,7 +49,7 @@ Notion, copy `notion-tools` once.
 | Memory local | `<skill folder>/assets/.skill-sets/memory-process/.` and `<skill folder>/assets/.skill-sets/local-memory/.` | `managing-project-memory`, `storing-project-memory` |
 | Memory in Notion | `<skill folder>/assets/.skill-sets/memory-process/.`, `<skill folder>/assets/.skill-sets/notion-memory/.`, and `<skill folder>/assets/.skill-sets/notion-tools/.` | `managing-project-memory`, `storing-project-memory`, `using-notion-cli` |
 | Memory in Hindsight | nothing | none: the agent uses the tools of Hindsight's coding-agent add-on (`hindsight-on-vps.md` in this folder) |
-| Salesforce | `<skill folder>/assets/.salesforce/sf-architect-solutioning` | `sf-architect-solutioning`; the model copy already put `sf-component-tracker`, `sf-data-change`, and `sf-deploy-check` there |
+| Salesforce | nothing | none: the model copy already put `sf-component-tracker`, `sf-data-change`, and `sf-deploy-check` there; Salesforce's own skills are installed by the owner (`salesforce.md` in this folder) |
 
 ## Hook commands
 
@@ -143,7 +143,7 @@ grep -o 'plugins\."[^"]*"' ~/.codex/config.toml
 
 For each name that ends in `@claude-toolkit`, and each `@toolkit-v2` name
 other than `toolkit@toolkit-v2` (the retired `work`, `memory`,
-`session-skills`, `git-workflows`, and `sf-architect-solutioning` plugins),
+`session-skills`, `git-workflows`, and Salesforce architect plugins),
 that the snippets do not already name:
 
 - add `"<name>": false` under `enabledPlugins` in

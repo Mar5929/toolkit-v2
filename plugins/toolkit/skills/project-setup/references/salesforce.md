@@ -3,8 +3,25 @@
 Purpose: the Salesforce facts setup records: the org aliases, written while
 you build the setup copy, and the API version, written after the files are
 in place. Everything else a Salesforce project needs comes with the model:
-the rules, the `sf-*` skills, the two org guards, `delivery/`, and
-`tools/`.
+the rules, the three `sf-*` skills, the two org guards, `delivery/`, and
+`tools/`. Salesforce's own skills come from Salesforce, not from setup.
+
+## Salesforce's skills
+
+Salesforce publishes official skills (`forcedotcom/sf-skills`). A Salesforce
+project relies on them for platform questions and Salesforce work. Check
+that they are installed on this computer or in the project, by looking in
+the host's skill folders (`~/.claude/skills`, the project's `.claude/skills`,
+`~/.agents/skills`) or the plugin list. When they are not there, tell the
+owner and give him this command to run himself:
+
+```text
+npx skills add forcedotcom/sf-skills
+```
+
+Setup never installs them itself. Add a line to the report, and a Current
+State "Waiting on the owner" line (`finishing.md` in this folder), when he
+has not installed them yet.
 
 ## The org aliases
 
@@ -77,5 +94,4 @@ Leave `XX.0` in the two work item templates,
 
 - Setup only reads orgs (`sf org list`, `sf org display`). Never run a
   deploy, a data command, or anything that changes an org during setup.
-- A Salesforce platform question is for `sf-architect-solutioning`, not for
-  setup.
+- A Salesforce platform question is for Salesforce's skills, not for setup.

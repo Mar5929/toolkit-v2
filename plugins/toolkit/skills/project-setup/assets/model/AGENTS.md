@@ -176,7 +176,7 @@ Pick a skill by the situation; the examples only help you match it. This list st
 <!-- endif -->
 - Never use `anthropic-skills:consolidate-memory` in this project. It edits Claude Code's own memory folder, which this project turns off. For any memory clean-up, use the memory line above.
 <!-- if salesforce -->
-- A Salesforce platform question, even about a work item: `sf-architect-solutioning`.
+- Salesforce's official skills (`forcedotcom/sf-skills`) are installed for this project: keep them in mind for every Salesforce task, while this project's rules, the three Salesforce skills, and the guards still decide what may be deployed or changed.
 - Salesforce metadata under `force-app/` added, changed, renamed, or deleted, a deploy result, or manual deploy steps: `sf-component-tracker`, before building.
 - Loading, importing, updating, or deleting production records: `sf-data-change`, before building.
 - When a deploy to a shared org is about to run, or before the owner gets a deploy command: `sf-deploy-check`.

@@ -89,7 +89,8 @@ with local memory.
 
 Skip the question when `sfdx-project.json` answered it. Otherwise recommend
 no when the file is absent. A yes adds the Salesforce rules and skills, the
-org guards, and the `delivery/` folder.
+org guards, and the `delivery/` folder. Setup then checks that Salesforce's
+own skills are installed (`salesforce.md` in this folder).
 
 For a Salesforce project, ask for the org aliases, one question per
 message. Show the aliases on this computer first with `sf org list` (it
@@ -136,7 +137,7 @@ folder:
 
 Skill counts: 9 shared, plus 1 for the work tracking set, plus 2 for local
 or Notion memory (none for Hindsight), plus 1 for Notion work items or
-memory (`using-notion-cli`, once), plus 4 for Salesforce.
+memory (`using-notion-cli`, once), plus 3 for Salesforce.
 
 His yes covers exactly what the plan names. Anything else created outside
 the folder later needs its own yes.

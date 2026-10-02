@@ -68,7 +68,7 @@ Start every helper as a new helper that does not see this conversation. Never a 
 | Saving a decision that matters beyond this item | `managing-project-memory` (Hindsight: `AGENTS.md`, "Project memory") |
 | Updating the project's Current State | edit `memory/CURRENT_STATE.md` when the project has that file, otherwise `managing-project-memory` |
 | Merging a pull request | `merge-and-clean-up` |
-| A Salesforce platform question | `sf-architect-solutioning` |
+| A Salesforce platform question | Salesforce's skills |
 
 ## Files
 

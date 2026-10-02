@@ -5,13 +5,13 @@ Takes an item with approved requirements to one design: options, a recommendatio
 ## Steps
 
 1. **Read the item:** the Agreed goal, every `R-xx`, the Acceptance list, Questions and Answers, Notes with Sources, every routing field including `design`, and the design itself when one exists. A design in progress: resume from the item's Current state and the design's Notes, "Open design questions".
-   - A single Salesforce platform question that needs no options ("Flow or Apex?"): open `sf-architect-solutioning` and stop.
+   - A single Salesforce platform question that needs no options ("Flow or Apex?"): use Salesforce's skills and stop.
    - Requirements not approved yet: a missing or changed requirement goes to `refining-requirements.md`. Go on only when the owner asked for options first. Then keep the item in Refining Requirements and the design `proposed`, and say his requirements approval is still needed. Otherwise stop and tell him the approval comes first.
 2. **Search memory first** with `managing-project-memory`: project-wide decisions, constraints, earlier designs of the area, and lessons. Also read `.claude/rules/owner-preferences.md`, the area's `requirements/` and `system-guide/` files, and the existing build. List every source you use, to cite it.
 3. **Check the requirements are ready:** nothing missing, each one explicit from start to finish, no likely misreading. Gaps go back to `refining-requirements.md`.
 4. **Start the design:** set the State to Designing (unless step 1 kept the item in Refining Requirements) and `design: proposed`. Create the design from the template, keeping every heading. Fill the header lines and the opening sections. Design status is Draft when created, In review when saved as proposed, then Approved or Superseded.
 5. **Settle the way of working:** at most one question, only when its answer changes the design. Default: two options that differ in approach when the requirements leave a real choice, built-in mechanisms first.
-6. **Research:** one researcher per research question (`researcher-brief.md`). Start together the ones whose questions do not depend on each other's answers. In a Salesforce project, open `sf-architect-solutioning` for platform facts.
+6. **Research:** one researcher per research question (`researcher-brief.md`). Start together the ones whose questions do not depend on each other's answers. In a Salesforce project, use Salesforce's skills for platform facts.
 7. **Design and critique:** one architect per option (`design-architect-brief.md`), one critic per draft (`design-critic-brief.md`), and fix rounds until the critic returns "Clean" or the owner has decided every finding that remains. A finding still disputed after two rounds goes to him as one question. A requirement no design can meet goes back to `refining-requirements.md`, never in as a design compromise.
 8. **Save as proposed:** merge the drafts into the design, with "Selected design" saying "Pending owner decision.". Add the choice question as a Questions and Answers row with your recommendation, and set `waiting_on` to the owner. Add a Recent History row.
 9. **Present and ask:** each option in one sentence, your recommendation and its reason, what he will see when it is done, the main risks, and the build order. Cite each recalled source where you use it. Put a short Sources list after the rest of the reply, and the question on the last line, after that list.
@@ -29,5 +29,5 @@ A change he asks for after approval, or a build that shows the design does not w
 - Never fill a requirement gap in the design. A gap goes to `refining-requirements.md`.
 - One design per item. Never a second design or a draft saved elsewhere. Helpers return their drafts in their replies; write no temporary files.
 - Every design gets at least one critic, even a small one. Owner-led delivery or "no agent team" decides who builds, not whether the critic runs. Only a host that cannot start a helper, or an owner who said no to helper agents at all, skips it. Then say in the reply and the design's Notes that no independent critique ran.
-- `sf-architect-solutioning` is a skill the main agent runs, not a helper. Here it returns findings to this design and starts no second interview.
+- Salesforce's skills are used by the main agent, not by a helper. Here they return findings to this design and start no second interview.
 - A sub-item built from its parent's approved design needs no design of its own. Say so and move it to Building.
