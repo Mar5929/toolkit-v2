@@ -33,6 +33,10 @@ has a filled "Toolkit settings" section.
   in the final checks may rebuild the generated `memory/MEMORY.md`. Change a
   setup choice (where work items or memory live, or the Memory approval
   mode): `references/update.md`, "Changing a setup choice".
+- He asks to open a project's Hindsight dashboard, or a Hindsight project is
+  set up but this computer lacks its key or the add-on (a new computer):
+  `references/hindsight-on-vps.md`, "Open the dashboard" or "A new
+  computer".
 - Set up `SOUL.md` in a set-up project: copy `assets/model/SOUL.md` into
   the project when it has none, fill it with his own words as
   `references/finishing.md`, "SOUL.md", says, and offer to commit it.
@@ -73,9 +77,10 @@ has a filled "Toolkit settings" section.
    replace a file the project already has without showing the difference
    and asking. `references/placing-files.md`.
 7. **Set up each service**, once its sign-in is done: Notion pages, the
-   GitHub repository and labels, the Hindsight bank and its MCP entries, the
-   Salesforce facts. `references/notion.md`, `references/github.md`,
-   `references/hindsight.md`, `references/salesforce.md`.
+   GitHub repository and labels, the Hindsight bank and Hindsight's
+   coding-agent add-on, the Salesforce facts. `references/notion.md`,
+   `references/github.md`, `references/hindsight-on-vps.md`,
+   `references/salesforce.md`.
 8. **Finish**: fill the prompts in the copied files with facts he confirms,
    write Current State, run the final checks, name his own steps, report,
    and offer the commit. `references/finishing.md`.
@@ -98,19 +103,21 @@ has a filled "Toolkit settings" section.
   page, no GitHub repository or label, no Hindsight bank, no install. The
   plan he approved covers only what it named. The only other files written
   outside it are the scratch folders (`references/setup-copy.md`, "Make the
-  scratch folder"; a folder for a Notion body) and, after his yes to each
-  step, what `references/installing-hindsight.md` installs. Never save a
-  path, a file list, or a diff in a file. Remove each scratch folder once
-  its step is done (the setup copy after the final checks), so nothing from
-  setup is left in `/tmp`, `$TMPDIR`, or the session scratchpad.
+  scratch folder"; a folder for a Notion body) and, after his yes, the
+  Hindsight add-on's files and settings (`references/hindsight-on-vps.md`,
+  "4. The add-on"). Never save a path, a file list, or a diff in a file.
+  Remove each scratch folder once its step is done (the setup copy after
+  the final checks), so nothing from setup is left in `/tmp`, `$TMPDIR`, or
+  the session scratchpad.
 - Codex: the sandbox refuses to create `.codex/` and `.agents/`, keeps
   `.git/` read-only, and blocks the network. Run each command that writes
-  those folders, each Git write, and each `ntn`, `gh`, `curl`, and `sf`
-  call alone (one exception: the Hindsight bank's name check and creation
-  in `references/hindsight.md`), with `sandbox_permissions` set to
-  `require_escalated` and a one-line reason. Keep a `| jq` filter in the
-  same command. Never join two such commands. Refused without asking (as in
-  `codex exec`): show him the exact command to run in a terminal, and wait.
+  those folders or a file in the home folder outside the project
+  (`~/.hindsight/`, `~/.claude/`, `~/.codex/`), each Git write, and
+  each `ntn`, `gh`, `curl`, `npx`, `open`, and `sf` call alone, with
+  `sandbox_permissions` set to `require_escalated` and a one-line reason.
+  Keep a `| jq` filter in the same command. Never join two such commands.
+  Refused without asking (as in `codex exec`): show him the exact command
+  to run in a terminal, and wait.
   Never drop the Codex files to get past a refusal.
 - Never change anything in this skill's `assets/` folder: it is the source
   for every project.
@@ -122,7 +129,7 @@ has a filled "Toolkit settings" section.
   Salesforce code: the two guards, the graph Stop hook, and the scripts in
   `tools/`.
 - Jira is not offered yet. Hindsight memory has no memory skills: the agent
-  uses Hindsight's own tools.
+  uses the tools of Hindsight's coding-agent add-on.
 - Setup is never a work item. The project's one-sentence outcome is the
   owner's answer, never a sentence worked out from the code.
 
@@ -140,8 +147,7 @@ has a filled "Toolkit settings" section.
 | `references/notion-build/memory-page.md`, `references/notion-build/project-page-memory-only.md` | Building the Notion templates: the text of the Memory page and of the "Project: memory only" page |
 | `references/notion-build/lore/` | Building or updating Notion memory: the 16 request files for Lore's databases, columns, and views, named in `lore-layout.md` and `setup.md` |
 | `references/github.md` | Work items in GitHub Issues: the sign-in, the repository, the labels |
-| `references/hindsight.md` | Memory in Hindsight: the server, the bank, its tool limit, the MCP entries |
-| `references/installing-hindsight.md` | Hindsight or Ollama is not installed on this Mac |
+| `references/hindsight-on-vps.md` | Memory in Hindsight: what runs on the VPS, the access key, the bank, the coding-agent add-on, the save-and-search check, opening the dashboard, checking a Hindsight project, a new computer |
 | `references/salesforce.md` | A Salesforce project: the org aliases and the API version |
 | `references/finishing.md` | Step 8: the prompts in the copied files, `SOUL.md`, Current State, the final checks, the owner's steps, the report, the commit offer |
 | `references/update.md` | Update the toolkit, check the setup, or change a setup choice |

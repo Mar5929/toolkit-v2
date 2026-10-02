@@ -118,9 +118,10 @@ Built and tested by the Notion session (commit `82aaaa6`).
 ### 4.3 Hindsight
 
 None (Mike, 2026-09-29: "Hindsight has its own complete way. It's a whole
-memory engine"). The agent uses Hindsight's own `retain`, `recall`, and
-`reflect` tools, tags each memory `wi:<ID>`, and keeps Current State in the
-local file `memory/CURRENT_STATE.md`. The model's memory rule says how.
+memory engine"). Hindsight's coding-agent add-on saves each session to the
+project's bank on Mike's VPS; the agent uses the add-on's `hindsight_*`
+tools and keeps Current State in the local file `memory/CURRENT_STATE.md`.
+The model's memory rule says how.
 
 ## 5. Salesforce projects (4)
 

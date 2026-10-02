@@ -135,6 +135,10 @@ grep -n '^## ' <copy>/AGENTS.md
   it and any group or event it leaves empty; the snippet's handler replaces
   the Codex one. The `Stop` hook that runs `tools/kb/graph_freshness_hook.py`
   is the model's Salesforce hook: leave it.
+- A `hindsight` entry in `.mcp.json` or a `[mcp_servers.hindsight]` table
+  in `.codex/config.toml`: the project was set up for the old Hindsight
+  server on the Mac. List it, and follow "A project on the old Mac server"
+  in `hindsight-on-vps.md`.
 - Files from the retired `toolkit` program (`.toolkit.json`, `DECISIONS.md`,
   `.codex/rules/toolkit.rules`, `.toolkit-cache/`): list them; delete only
   after his yes. Records in old `.work-items/` or `.memory/` folders are
@@ -143,8 +147,9 @@ grep -n '^## ' <copy>/AGENTS.md
 ## 5. Services
 
 - Notion projects: `notion.md`, "Updating a Notion project".
-- Hindsight projects: read the bank's tool list back and compare the MCP
-  entries with `hindsight.md`; fix only after his yes.
+- Hindsight projects: "Check a Hindsight project" in `hindsight-on-vps.md`;
+  fix each failure only after his yes. Name the server the project uses in
+  the report.
 - GitHub Issues projects: "Bringing a project up to date" in
   `.claude/skills/github-work-track/references/setup.md` in your update
   worktree; add missing labels only after his yes.
@@ -189,9 +194,15 @@ Where work items or memory live, for example "move memory to Notion":
    snippets (`skills-hooks-settings.md`, "Merge rules"); he trusts the
    changed Codex hooks again in `/hooks`.
 4. Run the service step for the new choice (`notion.md`, `github.md`, or
-   `hindsight.md`).
+   `hindsight-on-vps.md`). Memory moved out of Hindsight: after his yes,
+   also remove the project folder from `mapPathToBank` and `optInPaths` in
+   `~/.hindsight/coding-agent.json`, so the add-on stops saving there.
 5. Move the records one at a time, with a preview of each and his yes, and
    read each one back in its new place. Nothing is deleted from the old
-   tracker or memory system.
+   tracker or memory system. Into Hindsight: the add-on's tools load only in
+   the next session, so write each record with one `POST .../memories`, as
+   `hindsight-on-vps.md` "5. Save and search" shows, with `document_id` set
+   to the record's ID and `async` `true`. Read it back with that file's
+   search command after its operation is `completed`.
 6. Remove the old set's skills only after the records are moved and he says
    yes.

@@ -35,26 +35,10 @@ In the rules and `AGENTS.md`, "the memory save skill" means `local-memory-save` 
 
 ## Hindsight projects
 
-This section applies when the "Memory" line in `PROJECT.md`, "Toolkit settings", is `hindsight`. Such a project has no memory skills.
+This section applies when the "Memory" line in `PROJECT.md`, "Toolkit settings", is `hindsight`. Hindsight runs as its coding-agent add-on is designed: it saves each session and brings back what is relevant by itself. `AGENTS.md`, "Project memory", says what counts as project memory.
 
-- Where the rules or `AGENTS.md` name the memory save skill for a fact, a lesson, a term, or a project-wide decision, use `retain`.
-- Where they name the memory find skill, use `recall`.
-- Current State and `.claude/rules/owner-preferences.md` are files: edit them directly.
-- Use Hindsight's own tools on the project's bank (the Hindsight bank in `PROJECT.md`, "Toolkit settings"): `retain` to save, `recall` to search, and `reflect` for an answer drawn from many memories.
-- Before every `retain`, check that the memory concerns this project, has a credible source, would matter in a future session, would be costly to reconstruct, and has no better home (a work item, a rule, requirements, or the system guide). These are the memory criteria in a Hindsight project.
-- Never retain secrets, credentials, personal data, transcripts, raw logs, live status, pending approvals, or a rejected candidate.
-- A project-wide decision passes these memory criteria even though its work item holds it first. After the owner's yes, `retain` the decision in one sentence, how to apply it, and the work item ID with the Q-ID of its Questions and Answers row (for example "WI-031 Q-04"), plus the item's web link when it has one (its Notion page, GitHub issue, or Jira ticket), tagged `wi:<ID>`.
-- For a decision with no work item, name the conversation and its date instead, and add no `wi:` tag.
-- A Hindsight project has no trusted mode, so no "Memory approval" line applies.
-- Save only on the owner's own keep words ("remember", "keep this") or his yes to a save question ("Save to memory: <one-line summary>?", or, for a decision, "This looks project-wide. Save it to memory too?").
-- An instruction for how the agent works ("from now on", "always", "never") goes to `.claude/rules/owner-preferences.md`, never to `retain`.
-- Tag each memory `wi:<ID>` for every work item it is about, and write each item's ID, and its web link when it has one, in the memory text.
-- To find one item's memories, `recall` with that tag and `tags_match: "any_strict"`; the default also returns untagged memories.
-- What `recall` and `reflect` return is project memory: cite it as `.claude/rules/cite-recalled-knowledge.md` says.
-- For "forget that", never delete a memory yourself; setup hides Hindsight's delete tools.
-- Tell the owner which memory you would remove, and ask him to remove it in Hindsight's own interface or, on his yes, `retain` a correction that supersedes it.
-- Never say a memory is deleted when it is not.
-- Current State is the local file `memory/CURRENT_STATE.md`, kept out of Hindsight: never `retain` it.
-- There is no memory refine skill, so prune Current State yourself: remove stale lines at each handoff and whenever the session-start hook says the file is too long or too old.
-- Keep Current State within its line limits: Now 5, Waiting on the owner 5, Untracked to-dos 7, Next session starts with 3, and under 40 lines in all.
+- Where a rule, `AGENTS.md`, or a skill names the memory save or find skill, or Hindsight's `retain` or `recall` tool, use the add-on's tools for saving and searching.
+- Never print `~/.hindsight/coding-agent.json` or its `.hindsight-backup` copy: they hold the API key. To list the Hindsight project folders: `jq -r '.mapPathToBank // {} | to_entries[] | "\(.key) \(.value)"' ~/.hindsight/coding-agent.json`.
+- The add-on cannot delete a memory. For "forget that", say which memory is wrong and ask the owner to remove it on the bank's page in the dashboard. Never say a memory is deleted when it is not.
+- Current State is the local file `memory/CURRENT_STATE.md`, kept out of Hindsight. Remove stale lines at each handoff and whenever the session-start hook says the file is too long or too old. Keep it within its limits: Now 5, Waiting on the owner 5, Untracked to-dos 7, Next session starts with 3, and under 40 lines in all.
 <!-- endif -->

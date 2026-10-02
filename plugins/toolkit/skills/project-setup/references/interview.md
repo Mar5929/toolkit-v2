@@ -33,7 +33,6 @@ Run each command alone. None of them changes anything.
 | An earlier setup | `PROJECT.md` with a filled "Toolkit settings" section | Already set up: go back to SKILL.md, "Pick the path". |
 | The retired program | `.toolkit.json` present | Stop and tell the owner (SKILL.md, "Pick the path"). |
 | An older claude-toolkit setup | `knowledge/`, `.memory/`, `.work-items/`, files in `.claude/rules/`, or a `CLAUDE.md` with more than `@AGENTS.md` | Tell him what you found. Toolkit V2 adds its own files and turns the older toolkit's plugins off in this project. It never moves or deletes the old files; ask before touching them. |
-| Hindsight running | `curl -s -m 2 http://127.0.0.1:8888/health` | `"status":"healthy"` means question 3 may offer Hindsight. |
 
 ## Question 1: the name and the owner
 
@@ -69,19 +68,19 @@ server.
 - When work items are in Notion, recommend Notion memory instead, so work
   and memory sit together, link to each other, and he can read both on his
   phone.
-- Offer Hindsight by name when its health check answered, for search by
-  meaning across many memories. When it did not answer, check the
-  background service as `hindsight.md` in this folder says ("The server").
-  Installed but stopped: offer Hindsight and say it needs starting (after
-  his yes). Not installed: say it would have to be installed first, and
-  that the install downloads about 13 GB (`installing-hindsight.md` in this
-  folder).
+- Offer Hindsight by name, for search by meaning across many memories. It
+  is the owner's Hindsight server on his VPS; nothing is installed on this
+  Mac except Hindsight's coding-agent add-on.
+- When he picks Hindsight, explain that setup in plain words from
+  `hindsight-on-vps.md` in this folder ("What runs where"), then ask whether
+  to create a separate memory bank for this project (or use the one this
+  project already has); recommend yes. A no: ask question 3 again.
 
 | Choice | "Memory" value | Good when | What to know |
 | --- | --- | --- | --- |
 | Local with Obsidian | `local` | Most projects | Files in `memory/`, which Git ignores, on this computer only. With local work items, memories link items as `[[WI-031]]`. |
 | Notion, in Lore's layout | `notion` | Work items are in Notion, or he reads memory on his phone | A Memory page holding Lore's databases, plus "Current state" and "Terminology glossary" pages. Needs `ntn` signed in. |
-| Hindsight | `hindsight` | Many memories, and search by meaning matters | The local server at `127.0.0.1:8888`, one memory bank per project, never Hindsight Cloud. No memory skills: the agent uses Hindsight's own `retain`, `recall`, and `reflect` tools. Current State is the local file `memory/CURRENT_STATE.md`. |
+| Hindsight | `hindsight` | Many memories, and search by meaning matters | His Hindsight server on the VPS, one memory bank per project, never Hindsight Cloud. Hindsight's coding-agent add-on, installed once on this computer, saves each session to the bank. No memory skills: the agent uses the add-on's tools. Current State is the local file `memory/CURRENT_STATE.md`. |
 
 Any mix of work tracking and memory works, for example Notion work items
 with local memory.
@@ -132,7 +131,7 @@ folder:
 | --- | --- |
 | Notion (work, memory, or both) | "make this project's pages in your Notion from the templates in your Projects database" (and, when they do not exist yet, ask about building them separately: `notion.md` in this folder) |
 | GitHub Issues | "create the work item labels in <owner>/<repository> that it does not have yet (up to 36: each item's stage, type, priority, who it waits on, who builds it, and your approvals; its other labels stay as they are)", and "create the private repository <owner>/<name>; after the setup commit I'll ask before I push the default branch to it" when there is none yet |
-| Hindsight | "create the memory bank <bank> on your local Hindsight server" |
+| Hindsight | "create the memory bank <bank> on your Hindsight server (or use this project's own bank), and install Hindsight's coding-agent add-on for Claude Code and Codex, or add this project to it; that changes files in `~/.claude`, `~/.codex`, and `~/.hindsight`, and I'll show you each change before I make it" |
 | Local work and local memory | "nothing outside this folder" |
 
 Skill counts: 13 shared, plus 1 for the work tracking set, plus 3 for local

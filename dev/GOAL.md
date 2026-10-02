@@ -805,6 +805,42 @@ Interview answers (Mike, 2026-09-29, the interview session):
   everything." The coding-agent add-on: recommended off, not yet confirmed.
   This replaces "one local server on this Mac" (2026-09-26) for new
   projects. Built after the work-item skill.
+- Hindsight setup decisions (Mike, 2026-10-01, later the same day): the
+  VPS is the only Hindsight server; nothing of Hindsight or Ollama is
+  installed on the Mac, and the Mac install steps are dropped. Hindsight's
+  coding-agent add-on is on ("Turn it on", replacing "not used" of
+  2026-09-29 and "recommended off" above). It points at the VPS, maps each
+  project's folder to that project's bank, stays off in every other folder,
+  and recalls the `world` and `experience` fact types, because observations
+  are off on the VPS. Setup asks before it changes his machine-wide Claude
+  Code and Codex settings, and Toolkit V2 adds no project MCP entry named
+  `hindsight` of its own. The `project-setup` skill does all of it: when he
+  picks Hindsight, the agent explains the VPS setup in plain words, asks
+  whether to create a separate bank for the project, checks the API, creates
+  the bank or reuses the project's own, saves its ID in `PROJECT.md`,
+  connects Claude Code and Codex, and proves it with one save and one
+  search. Keys never go into a repository, a log, or the chat; he enters
+  each key himself. The agent opens the bank in the dashboard after setup
+  and whenever he asks; he signs in to the dashboard himself. No backup
+  step. "Check the setup", "update the toolkit", and the new-computer steps
+  say which server a project uses. No scripts in skills or projects. No
+  dashboard skill: the memory rule and setup open the dashboard. Projects on
+  the Mac's server get a short note only. (This replaces "a small skill
+  opens a project's bank in the dashboard; projects on the Mac's local
+  server keep working" above.)
+- Hindsight runs as Hindsight (Mike, 2026-10-01): "hindsight can just
+  operate as the normal hindsight solution - we can still note in the
+  project rules somewhere what we consider to be 'project memory'. Maybe if
+  it is hindsight we add this note about project memory towards the top of
+  agents.md". So a Hindsight project's `AGENTS.md` starts with a short
+  "Project memory" section: the bank, the add-on saving and recalling by
+  itself, what counts as project memory, and the dashboard link. The memory
+  rule's Hindsight section keeps only the tool mapping, the key safety
+  line, "forget that", and Current State. The toolkit no longer requires
+  keep words before a save, and standing instructions are not routed to
+  `owner-preferences.md` in a Hindsight project. Model commit f10d19a. The
+  code scan's US$2 is the add-on's own default cap per scan, not a toolkit
+  limit; whether to keep the scan is still open.
 
 ## Goal
 
