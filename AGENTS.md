@@ -6,6 +6,11 @@ This repository builds Toolkit V2 for Mike Rihm, a solo developer. The agent
 runs each of his projects; Mike only decides and steers. `README.md` explains
 it for Mike.
 
+All work on Toolkit V2 is tracked in Notion, in the Toolkit V2 project
+(page ID `3edb381d-a176-81ee-b7dd-d0a6d662f9b2`). Its work items, with IDs
+starting TKV, are in the Work Items data source
+`b22b381d-a176-8301-a22c-0766e27d8dc9`.
+
 Toolkit V2 is rules, skills, and three small hooks. There is no custom
 program (Mike, 2026-09-29). It ships as one plugin, `toolkit`, for Claude Code
 and Codex, with one skill, `project-setup`. That skill sets up a project by
@@ -306,5 +311,5 @@ node --test 'dev/tests/*.test.mjs'
 - **Git.** Several agents may work in this repository at once. Change only
   the files you were given. Stage paths by name; never `git add -A`,
   `git add .`, or `git commit -a`. The GitHub repository is
-  `Mar5929/toolkit-v2` (private); the work is tracked in its issue #1. Push
+  `Mar5929/toolkit-v2` (private). Push
   `main` only with Mike's yes.
