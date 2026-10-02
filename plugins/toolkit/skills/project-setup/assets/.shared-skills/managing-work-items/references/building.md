@@ -17,8 +17,8 @@ Takes an item with approved requirements, and an approved design when it has one
 
 ## Build, task by task
 
-1. Read the item's tasks and design. Take the first task whose Depends on line is met.
-2. Work in the item's own worktree on its own branch, never on the default branch (see "Git for a build"). Build what the requirements ask and no more.
+1. Read the item's tasks and design. Take the first task whose Depends on line is met. Before you start it, set it In Progress, and its phase too when the phase is Not Started.
+2. Work in the item's own worktree on its own branch, never on the default branch (see "Git for a build"). Build what the requirements ask and no more. Work the requirements need that no task covers: add its task first, then do it.
 3. Tick the task only when its Done when proof is met, and save the proof (the command and its exact result line, or what you saw) in Recent History. A task partly done stays open, and you add a task for what is left.
 4. A task you cannot check in one go: split it into smaller tasks. A part that can be approved, built, or shipped on its own: propose a sub-item, as `refining-requirements.md`, "Roadmap and sub-items", says.
 
@@ -74,7 +74,7 @@ This chat, the Main Orchestrator, and every chat lead run on the most capable mo
 - One builder per task that can run on its own. Tasks of one sub-item that depend on each other run one after another. A sub-item that needs another sub-item's code starts after that code is merged into its own item branch. The lead may build a small task itself.
 - Make what is missing with `tracking-work-items`:
   - a sub-item: `parent` set to the parent, a phase that is one of the parent's phases, `delivery` set to the parent's value, and `requirements_approved` copied from the parent when it covers the parent's requirements;
-  - a task: `P1-T01 — <name>` with Work, Deliverable, Done when, and Depends on, on the lowest-level item it belongs to.
+  - a task: `P1-T01 — <name>` with Work, Deliverable, Done when, Who does it, and Depends on, on the lowest-level item it belongs to.
 - One writer per file at a time. Tasks that need the same file, or the same shared environment (a sandbox org, a database, a test service), run one after another, in the order their Depends on lines give.
 - Start only as many builders as you can check and merge as they return.
 - Tell him the team in one line ("Team for P2: three builders, one per sub-item."). His arrangement answer already allows it; do not ask again.

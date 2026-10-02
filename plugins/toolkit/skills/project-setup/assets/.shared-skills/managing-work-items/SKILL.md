@@ -48,8 +48,9 @@ Stop and ask the owner before each of these. Record his OK only when he answers 
 - Read the item fresh with `tracking-work-items` before you act. When the owner changed it by hand, his change wins, except a State and Status that no longer match the table: tell him in one line, ask which State it is with your recommendation, then set both.
 - Save after each step, not at the end, then read the item back. When a save fails, start the reply with "Not saved".
 - After each step, rewrite the item's Current state in place, as the template says.
+- The project's Current State lists under "Now" every item that has left Backlog and is not Done or Cancelled: add the item's line when it leaves Backlog ("Hand-offs", "Updating the project's Current State").
 - Never delete a requirement, a question row, or a phase. Mark it superseded or cancelled.
-- Levels: an item can stand alone or have sub-items, up to three levels (item → sub-item → sub-item). Any item can break its work into a checklist of tasks, grouped by phase. Never add a fourth level; make it a task instead.
+- Levels: an item can stand alone or have sub-items, up to three levels (item → sub-item → sub-item). Any item can break its work into a checklist of tasks, grouped by phase. A task is a step toward this item's goal. Work the goal does not need, even a small fix found along the way, is a new Backlog work item, never a task here. Never add a fourth level; make it a task instead.
 
 ## Starting a helper
 

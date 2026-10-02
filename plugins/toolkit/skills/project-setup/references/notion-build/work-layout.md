@@ -14,7 +14,7 @@ in those files.
 - Property order and page layout
 - The request bodies in assets
 
-No assignee, points, effort, dates, or time tracking (the owner's decision).
+No assignee, points, effort, dates, or time tracking (the owner's decision); a task's Who does it says only agent or owner.
 
 ## Views of the databases
 
@@ -55,7 +55,7 @@ app).
 | --- | --- | --- | --- |
 | Work Items | ID, Status, State, Waiting on, Priority | Plan: Parent item, Sub-items, Phase, Phases, Tasks, Blocked by, Blocking, Related · About: Next action, Type, Tags · Approvals: Requirements approved, Design, Design approved, Result approved, Delivery · Links and files: Memories, Facts, Entities, Files | Phase order, Phase name, Phase column, Archived |
 | Phases | Phase ID, Order, Status | Plan: Outcome, Exit result · Links: Work item, Sub-items, Tasks | none |
-| Tasks | Task ID, Done, Order | Work: Work, Deliverable, Done when · Links: Work item, Phase, Depends on | none |
+| Tasks | Task ID, Status, Who does it, Done, Order | Work: Work, Deliverable, Done when · Links: Work item, Phase, Depends on | none |
 
 - **Table views** list the properties in the order heading, then sections,
   then hidden, each with `"visible": true` or `false`. A view that shows

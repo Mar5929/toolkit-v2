@@ -40,6 +40,14 @@
         "visible": true
       },
       {
+        "property_id": "{{T_STATUS}}",
+        "visible": true
+      },
+      {
+        "property_id": "{{T_WHO_DOES_IT}}",
+        "visible": true
+      },
+      {
         "property_id": "{{T_DONE}}",
         "visible": true
       },

@@ -2,6 +2,8 @@
 
 The work tracker is the source of truth for current work. What needs the owner's approval, and how to ask for his decision: `AGENTS.md`, "What the owner decides". Run work items with `managing-work-items`.
 
+While you work an item, keep its whole record true, not only its Current state: each task's status and who does it, each phase's status, and every field you have information for.
+
 ## Current state
 
 - Each work item's Overview holds its Current state: five lines (Where it stands, Next action, Waiting on, Blockers, Last updated) that say where the item stands now.

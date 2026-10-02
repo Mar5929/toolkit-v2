@@ -81,6 +81,7 @@ Newest first. Insert the row right below the table's `|---|---|---|` line. For a
 - A **sub-item** is its own issue and a sub-issue of the item. Its phase is the Roadmap row whose Sub-items cell names it, as `#14`. Its own Related items line says "Parent #12, phase P2."
 - A **task** is a checkbox line under its phase's heading, in the template's form. End each of its lines with two spaces: they keep the lines apart when GitHub shows the body.
 - **Link a sub-item:** make it a sub-issue of its parent (`gh-commands.md`, "Sub-issues"), then put `#<number>` in the Sub-items cell of its phase's Roadmap row on the parent. Replace "None." the first time.
+- **Start a task:** change the status after `·` to In Progress, in one body write.
 - **Tick a task:** change `- [ ]` to `- [x]` and the status after `·` to Done, in one body write. The owner may tick a box in the browser; that counts.
 - **Move a task or sub-item to another phase:** move its lines, or move `#<number>` from one Sub-items cell to the other, and update the sub-item's Related items line.
 - **Move an item under another parent:** count the levels for the item and every level under it first. Add it to the new parent with `replace_parent=true`, or remove it from its parent to make it top level. Take `#<number>` out of the old parent's Sub-items cell, put it in the new parent's, and update the item's Related items.

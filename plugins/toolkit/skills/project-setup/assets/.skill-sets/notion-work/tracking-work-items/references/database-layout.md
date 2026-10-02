@@ -99,11 +99,13 @@ Changing the Status options replaces the whole list: always send every option, e
 | --- | --- | --- |
 | Task | Title | The task's name. |
 | Task ID | Text | `P1-T01` form. Stable: never reused or renumbered. |
-| Done | Checkbox | Ticked when the task is done or cancelled. A task has no other status. |
+| Done | Checkbox | Ticked exactly when Status is Done or Cancelled. Views and searches filter on it. |
+| Status | Select | Not Started, In Progress, Done, Cancelled. |
 | Order | Number | The order inside the phase. |
 | Work | Text | The action to take. |
 | Deliverable | Text | The file, decision, or other result. |
 | Done when | Text | The observable completion check. |
+| Who does it | Select | agent or owner. |
 | Work item | Relation to Work Items | The item it belongs to. The other side is Tasks. |
 | Phase | Relation to Phases | Its phase. The other side is Tasks. |
 | Depends on | Relation to Tasks | The tasks it waits for. |
@@ -170,23 +172,31 @@ ntn api v1/pages -d '{"parent":{"type":"data_source_id","data_source_id":"{{TASK
   "properties":{"Task":{"title":[{"text":{"content":"List the required fields"}}]},
   "Task ID":{"rich_text":[{"text":{"content":"P1-T01"}}]},
   "Order":{"number":1},
+  "Status":{"select":{"name":"Not Started"}},
   "Work":{"rich_text":[{"text":{"content":"List the fields with the owner."}}]},
   "Deliverable":{"rich_text":[{"text":{"content":"The field list."}}]},
   "Done when":{"rich_text":[{"text":{"content":"The owner approves the list."}}]},
+  "Who does it":{"select":{"name":"agent"}},
   "Work item":{"relation":[{"id":"<item-page-id>"}]},
   "Phase":{"relation":[{"id":"<phase-page-id>"}]}}}' < /dev/null | jq -r .id
+```
+
+Start a task:
+
+```bash
+ntn api v1/pages/<task-page-id> -X PATCH -d '{"properties":{"Status":{"select":{"name":"In Progress"}}}}' < /dev/null
 ```
 
 Tick a task:
 
 ```bash
-ntn api v1/pages/<task-page-id> -X PATCH -d '{"properties":{"Done":{"checkbox":true}}}' < /dev/null
+ntn api v1/pages/<task-page-id> -X PATCH -d '{"properties":{"Done":{"checkbox":true},"Status":{"select":{"name":"Done"}}}}' < /dev/null
 ```
 
-Cancel a task. It has no Cancelled status, so tick Done and start its title with "Cancelled: ":
+Cancel a task: set Status Cancelled, tick Done, and start its title with "Cancelled: ":
 
 ```bash
-ntn api v1/pages/<task-page-id> -X PATCH -d '{"properties":{"Done":{"checkbox":true},"Task":{"title":[{"text":{"content":"Cancelled: List the required fields"}}]}}}' < /dev/null
+ntn api v1/pages/<task-page-id> -X PATCH -d '{"properties":{"Done":{"checkbox":true},"Status":{"select":{"name":"Cancelled"}},"Task":{"title":[{"text":{"content":"Cancelled: List the required fields"}}]}}}' < /dev/null
 ```
 
 Put an existing sub-item in a phase by setting its "Phase". Check first that the phase's "Work item" is the parent:
@@ -209,6 +219,8 @@ Changing the plan is a change to rows:
 | A phase is done | Set Status Done. |
 
 After a plan change, list the item's phases (`searching.md`, "A parent's full tree") and check the order.
+
+A task whose Status is empty or does not match Done (made by hand, made before the column existed, or ticked by hand): set Status from Done. Not ticked: Not Started, or leave In Progress. Ticked: Done, or Cancelled when its title starts with "Cancelled: ".
 
 ## Links, tags, and files
 

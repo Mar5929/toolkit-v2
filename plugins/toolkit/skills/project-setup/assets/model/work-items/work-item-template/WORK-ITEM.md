@@ -53,7 +53,7 @@ A phase is complete when its tasks are complete, its sub-items are Done or Cance
 
 ## Tasks
 
-<!-- Under each phase heading, add that phase's tasks only. Replace P1-T01 and similar example IDs with stable real IDs. Put the action after Work, its output after Deliverable, the completion proof after Done when, and real prerequisites after Depends on. Change the checkbox only when the completion proof is met. -->
+<!-- Under each phase heading, add that phase's tasks only. Replace P1-T01 and similar example IDs with stable real IDs. Put the action after Work, its output after Deliverable, the completion proof after Done when, `agent` or `owner` after Who does it (`owner` for a step only the owner can take, such as a production deploy, a sign-in, or a check he must make himself), and real prerequisites after Depends on. Change the checkbox only when the completion proof is met. -->
 
 ### P1 — <Phase 1 name>
 
@@ -61,11 +61,13 @@ A phase is complete when its tasks are complete, its sub-items are Done or Cance
   **Work:** <The action to take.>  
   **Deliverable:** <The file, decision, or other result.>  
   **Done when:** <The observable completion check.>  
+  **Who does it:** <agent | owner>  
   **Depends on:** <Task ID or “None.”>
 - [ ] **P1-T02 — <Task 2 name>** · Not Started  
   **Work:** <The action to take.>  
   **Deliverable:** <The expected result.>  
   **Done when:** <The observable completion check.>  
+  **Who does it:** <agent | owner>  
   **Depends on:** P1-T01.
 
 ### P2 — <Phase 2 name>
@@ -74,6 +76,7 @@ A phase is complete when its tasks are complete, its sub-items are Done or Cance
   **Work:** <The action to take.>  
   **Deliverable:** <The expected result.>  
   **Done when:** <The observable completion check.>  
+  **Who does it:** <agent | owner>  
   **Depends on:** P1 completion.
 
 ## Recent History

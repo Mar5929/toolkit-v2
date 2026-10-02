@@ -27,7 +27,30 @@
       },
       "Done": {
         "checkbox": {},
-        "description": "Ticked only when \"Done when\" is met."
+        "description": "Ticked exactly when Status is Done or Cancelled."
+      },
+      "Status": {
+        "select": {
+          "options": [
+            {
+              "name": "Not Started",
+              "color": "gray"
+            },
+            {
+              "name": "In Progress",
+              "color": "yellow"
+            },
+            {
+              "name": "Done",
+              "color": "green"
+            },
+            {
+              "name": "Cancelled",
+              "color": "brown"
+            }
+          ]
+        },
+        "description": "Not Started, In Progress, Done, or Cancelled."
       },
       "Order": {
         "number": {
@@ -46,6 +69,21 @@
       "Done when": {
         "rich_text": {},
         "description": "The observable completion check."
+      },
+      "Who does it": {
+        "select": {
+          "options": [
+            {
+              "name": "agent",
+              "color": "blue"
+            },
+            {
+              "name": "owner",
+              "color": "orange"
+            }
+          ]
+        },
+        "description": "Who does the task: agent or owner."
       }
     }
   }

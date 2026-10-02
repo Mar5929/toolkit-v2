@@ -247,6 +247,9 @@ owner may have added his own columns and views, and they stay.
    ntn api v1/data_sources/<data-source-id> -X PATCH -d '{"properties":{"<Name>": <spec from the asset>}}' < /dev/null
    ```
 
+   After adding the Tasks Status property, set each task's Status from Done
+   (`database-layout.md`, "Phases and tasks").
+
    A property with the right name but another type: leave it and tell the
    owner. A select or status missing an option: send every option it has
    now plus the new one (`database-layout.md`). A project with a
@@ -270,7 +273,9 @@ owner may have added his own columns and views, and they stay.
    condition. Its grouping and sub-items stay. Leave the owner's own views
    as they are.
    A table view whose columns are out of the order in `work-layout.md` gets
-   the column order (template build, step 10). The API cannot read
+   the column order (template build, step 10). A view made from an asset
+   that has a column off which its asset turns on: turn it on in the same
+   `PATCH v1/views/<id>`. The API cannot read
    the page layout: when the owner says a project's pages show properties
    in the wrong order or the wrong sections, give him the layout clicks in
    `work-layout.md`, "Property order and page layout".
@@ -287,7 +292,10 @@ owner may have added his own columns and views, and they stay.
    the plain page is no longer used and he may delete it. Then compare the
    template's sections with `work-item-page.md` and add a missing
    section or view the same way the template build does; skip "Linked
-   memory" in a project without Notion memory. Items made
+   memory" in a project without Notion memory. Do the same for the
+   columns of the template's Tasks view (file 22). Items made earlier keep
+   their own Tasks view; turn its new columns on only when you next change
+   that item. Items made
    earlier keep their pages; add a missing section to one only when you
    next change that item.
 5. **The "Project" template** in the Projects database. Its data source id
