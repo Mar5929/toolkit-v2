@@ -47,10 +47,14 @@ ntn api v1/data_sources/<projects-data-source-id>/templates < /dev/null | jq -r 
 
 The list also shows templates that are in Notion's trash. Before you use
 one, check `ntn api v1/pages/<template-id> < /dev/null | jq .in_trash` is
-`false`. A template in the trash cannot be used: tell the owner which one,
-and take it out of the trash (`PATCH v1/pages/<id>` with
-`{"in_trash":false}`) after his yes. While the work item template is in
-the trash, New makes blank cards.
+`false`. A template in the trash cannot be used, and New makes blank
+cards while the work item template is there. Never restore a template
+through the API (`in_trash` false): Notion's documentation does not say it
+comes back as a template, and on 2026-10-02 one restored that way did not
+give the owner a working template. Ask the owner to restore it from Trash
+in the Notion app, then run "Checks after any of these". When a check
+fails, build a new one ("Building the templates": steps 1 to 13 for
+"Project", steps 11 to 13 for the work item template).
 
 If the Projects database has no "Project", not even in the trash, build
 it first ("Building the templates" below). Never add real work to a template: a copy takes
@@ -336,8 +340,8 @@ the templates are built.
    he says they are done: the arrow beside "New" → "+ New template" → title
    "Project" → close it. Then the arrow beside "New" → "…" beside
    "Project" → "Set as default" → "All views". Read its id from the
-   templates list. Write the lines of `project-page.md` above `# Work` into
-   it (the page is empty, so `replace_content` is safe here):
+   templates list (not in the trash). Write the lines of `project-page.md`
+   above `# Work` into it (the page is empty, so `replace_content` is safe here):
    `ntn api v1/pages/<template-id>/markdown -X PATCH -d @body.json < /dev/null`
    with `{"type":"replace_content","replace_content":{"new_str":"<those lines>"}}`.
    The steps below use the template's id as `{{PROJECT_PAGE_ID}}`. Pages
@@ -380,12 +384,25 @@ the templates are built.
     close it; then the arrow beside "New" → "…" beside the new template
     (it shows as "New page") → "Set as default" → "All views". The title
     must stay empty: a template's title is put in front of every title the
-    owner types on a card. Read its id: the template with `is_default`
-    true in the Work Items templates list. Write `work-item-page.md`
-    into it with `replace_content` (the page is empty). When this rebuilds
-    a damaged template, tell the owner that sections he added himself in
-    the Notion app are not in the file, so he adds them again.
-12. Its views: read its blocks, and for each of Roadmap, Sub-items, Tasks,
+    owner types on a card. Read its id: the template in the Work Items
+    templates list with `is_default` true and not in the trash. When its
+    page is empty, write `work-item-page.md` into it with
+    `replace_content`; when this rebuilds a damaged template, tell the
+    owner that sections he added himself in the Notion app are not in the
+    file, so he adds them again. When the owner already pasted his text
+    into it, write nothing: compare its section headings with
+    `work-item-page.md` and tell him which are missing.
+12. Its views. First, the owner may have pasted views in from another
+    page; each keeps a filter that names that page. For each
+    `<database …>` line in the template's text, read its view's filter
+    (`ntn api v1/views database_id==<id> < /dev/null`, then
+    `ntn api v1/views/<view-id> < /dev/null | jq .filter`). When the
+    filter names a page other than this template, delete that view's block
+    (`ntn api v1/blocks/<id> -X DELETE < /dev/null`, with the block id from
+    the template's children list, as in "Removing the part a project keeps
+    elsewhere"). These are views
+    inside the template, never the Work Items, Phases, or Tasks databases.
+    Then read its blocks, and for each of Roadmap, Sub-items, Tasks,
     and Linked memory take the id of the paragraph just under the heading
     as `{{AFTER_BLOCK_ID}}`, `{{ITEM_PAGE_ID}}` the work item template's id, and send
     files 20 to 23 as `POST v1/views`. Each answer's `parent.database_id` is

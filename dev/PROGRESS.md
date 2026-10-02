@@ -8,7 +8,7 @@ Read `dev/GOAL.md` first. This file says where the work stands.
 The Toolkit V2 build is tracked as work items in the Notion project "Toolkit V2" (https://app.notion.com/p/Toolkit-V2-3edb381da17681eeb7ddd0a6d662f9b2). Older sections below are history.
 
 ### Now (in progress)
-- One Notion project template, 0.7.7: Mike's Projects database now has one template, "Project" (work items and memory). Setup makes every Notion project from it and removes the part kept elsewhere; the steps were tested live on two throwaway projects (trashed). Its work item template was found in Notion's trash and restored with Mike's yes. Waiting on Mike's OK to land on main.
+- One Notion project template, 0.7.7: Mike's Projects database now has one template, "Project" (work items and memory). Setup makes every Notion project from it and removes the part kept elsewhere; the steps were tested live on two throwaway projects (trashed). Landed (485caff). Its work item template was in Notion's trash; restoring it through the API did not give Mike a working template, so he made a new one in the app and the agent rebuilt its four views (tested on a throwaway project). 0.7.8 replaces the toolkit's API-restore instruction: the owner restores in the app, or a new template is built.
 - A review folder where Mike can read and edit every file a project gets, then hand his edits back: next, after this commit.
 
 ### Just done (2026-10-01 to 2026-10-02)

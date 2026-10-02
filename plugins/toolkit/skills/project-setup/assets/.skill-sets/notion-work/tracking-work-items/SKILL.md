@@ -51,7 +51,7 @@ This project keeps its work items in Notion. This skill says where each thing is
 | A State and Status that no longer match | `managing-work-items` |
 | Every Notion read or write: sign-in, Codex, the shape of each call, and errors | `using-notion-cli` |
 | Moving work items to another tracker | `project-setup` |
-| Restoring a missing database template | `project-setup` |
+| Rebuilding a missing database template | `project-setup` |
 
 ## Files
 

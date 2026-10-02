@@ -134,7 +134,7 @@ Replace `{{…}}` with the ids in `PROJECT.md`. State and Status are the values 
 - Leave out "Parent item" and "Phase" for a top-level item.
 - Use only a phase whose "Work item" is that parent.
 - Send it with `ntn api v1/pages -d @new.json < /dev/null`. The answer holds the page `id`, its `url`, and the new ID (`.properties.ID.unique_id`: prefix and number).
-- When Notion refuses because the database has no default template, tell the owner. The project-setup skill restores the templates.
+- When Notion refuses because the database has no default template, tell the owner. The project-setup skill rebuilds the templates.
 
 ## Setting State and Status
 
