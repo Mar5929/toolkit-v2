@@ -83,20 +83,25 @@ first and never overwrites a file you changed without asking.
 
 ## Skills for your choices
 
-Each project gets one work tracking set and one memory set:
+Each project gets the skills for where its work items and memory live:
 
 | Your choice | Skills it adds |
 | --- | --- |
 | Work items in local folders | `tracking-work-items` (saves, finds, and changes items in the `work-items/` folder) |
-| Work items in Notion | `tracking-work-items` (the Notion version) |
+| Work items in Notion | `tracking-work-items` (the Notion version), `using-notion-cli` (how to run Notion's command-line tool, `ntn`) |
 | Work items in GitHub Issues | `tracking-work-items` (the GitHub version) |
-| Memory in local files | `local-memory-save`, `local-memory-find`, `local-memory-refine` (cleans up) |
-| Memory in Notion | `notion-memory-save`, `notion-memory-find`, `notion-memory-refine` |
+| Memory in local files | `managing-project-memory` (decides what to keep, asks you, corrects, forgets, finds, and cleans up), `storing-project-memory` (saves and finds it as files in `memory/`) |
+| Memory in Notion | `managing-project-memory`, `storing-project-memory` (the Notion version), `using-notion-cli` |
 | Memory in Hindsight | None. Hindsight's coding-agent add-on saves each session to the project's bank, and the agent uses its save and search tools. |
 | Salesforce | `sf-architect-solutioning`, `sf-deploy-check`, `sf-component-tracker`, `sf-data-change` |
 
-A project ends up with 13 skills, or 17 in a Salesforce project (10 or 14 with
-Hindsight memory). Saying where the work stands needs no skill: the
+Memory is kept by concept, like a wiki: one record per concept, added to as
+it grows. `using-notion-cli` comes once, even with work items and memory
+both in Notion.
+
+A project ends up with 12 skills, or 13 when work items or memory are in
+Notion. With Hindsight memory it has 10, or 11 with work items in Notion. A
+Salesforce project has 4 more. Saying where the work stands needs no skill: the
 project's `AGENTS.md` says how. `dev/SKILL-INDEX.md` lists every skill with its exact
 description.
 
@@ -105,7 +110,7 @@ description.
 | When | What happens |
 | --- | --- |
 | A session starts, resumes, or its context is compacted | The agent is shown Current State: a short list of what is happening now and what waits on you. With local memory, the hook first rebuilds the memory index, `memory/MEMORY.md`. When Current State is too long or older than 7 days, it asks the agent to clean it up. |
-| You say something worth keeping ("remember this", "from now on", "we decided", and similar) | A one-line reminder names the memory save skill. The skill decides whether anything is saved, and asks you first. |
+| You say something worth keeping ("remember this", "from now on", "we decided", and similar) | A one-line reminder names `managing-project-memory` (with Hindsight, the add-on's tools). The skill decides whether anything is saved, and asks you first. |
 | After a commit | A reminder to update the work item's history and status, and Current State if it changed. |
 | A helper agent starts or reports back | A reminder to update that helper's work item. |
 
@@ -126,6 +131,9 @@ records your words and the date.
   approve it. Only you mark an item Done.
 - "From now on" instructions become a line in the project's
   `.claude/rules/owner-preferences.md`.
+- A memory that is out of date is retired or marked replaced, so its
+  history stays. One that is no longer needed, or was saved by mistake, is
+  deleted only after your yes, or when you ask.
 - When the agent uses something it recalled, it says where it came from and
   ends with a short Sources list.
 - You can move files by hand. The agent finds work items by their ID, notices

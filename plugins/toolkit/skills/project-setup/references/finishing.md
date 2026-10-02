@@ -43,9 +43,7 @@ this order:
    `\<One sentence: the result this project should produce.\>` under
    "Project brief", "Outcome" with one `update_content` call
    ("Reading and changing page text" in the project's
-   `.claude/skills/tracking-work-items/references/ntn-commands.md`, or with
-   memory only in Notion
-   `.claude/skills/notion-memory-save/references/ntn-basics.md`),
+   `.claude/skills/using-notion-cli/references/ntn-commands.md`),
    then read the page back.
    Leave "Success criteria" until he names one, and list it with the
    prompts left.
@@ -125,7 +123,7 @@ file).
 - [ ] Settings are valid: jq empty .claude/settings.json (and .codex/hooks.json, and .mcp.json when present)
 - [ ] Every hook command the settings name exists in .claude/hooks/, and no {{ placeholder is left: grep -n '{{' .claude/settings.json .codex/hooks.json
 - [ ] The session-start hook prints Current State: node .claude/hooks/session-start.mjs --memory <memory> </dev/null (Notion memory: add --page <Current state page id>). Codex with Notion memory: run it escalated; inside the sandbox it prints "could not be read here", which is the sandbox and not a setup failure
-- [ ] The prompt reminder answers a "remember this" message: echo '{"prompt":"remember this: we use Postgres"}' | node .claude/hooks/prompt-reminder.mjs --skill <local-memory-save, notion-memory-save, or hindsight>
+- [ ] The prompt reminder answers a "remember this" message: echo '{"prompt":"remember this: we use Postgres"}' | node .claude/hooks/prompt-reminder.mjs (Hindsight memory: add --skill hindsight)
 - [ ] The after-commit reminder answers a commit: printf '{"tool_input":{"command":"git %s -m x"}}' commit | node .claude/hooks/codex-after-commit.mjs
 - [ ] The AGENTS.md rules list names exactly the files in .claude/rules/
 - [ ] AGENTS.md is within its limits: wc -lc AGENTS.md prints 200 lines or less and 20,480 bytes or less (Claude Code recommends under 200 lines; Codex stops reading instruction files at 32,768 bytes in all, ~/.codex/AGENTS.md included). When either is over, say so in the report and never cut lines from it

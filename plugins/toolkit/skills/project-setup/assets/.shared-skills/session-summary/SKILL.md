@@ -25,9 +25,8 @@ each one stand, and what still needs me.
    this conversation shows it saved as a work item or in Current State, end
    the open block with one offer that covers every such request: turn each
    into a work item (`managing-work-items`) or an untracked to-do
-   in Current State (the project's memory save skill; a Hindsight project:
-   edit `memory/CURRENT_STATE.md` directly). `AGENTS.md` names the memory
-   save skill.
+   in Current State (`managing-project-memory`; a Hindsight project:
+   edit `memory/CURRENT_STATE.md` directly).
    Make the offer once.
 5. **Change nothing.** If the owner says yes to the offer, make each change
    he chose with the skill the offer names for it.

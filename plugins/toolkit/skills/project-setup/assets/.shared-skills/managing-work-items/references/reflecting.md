@@ -14,7 +14,7 @@ Looks back on the work just done, after the owner approved the result and before
    - Take the item's Questions and Answers rows with Decision? `yes`. Leave out approvals, the Done or cancel row, merge and deploy yeses, Superseded rows, and decisions already offered.
    - Add a lesson the build or the tests taught that a later item would otherwise find out again (a platform limit, an approach that failed).
    - Keep only what a later item, or an agent working on something else, would need to follow. Add one row per decision ("Save Q-04 to memory too?") and ask "These look project-wide. Save them to memory too?"
-   - His yes: save with the memory save skill. A no: never offer it again. Nothing to offer: say so in one line.
+   - His yes: save with `managing-project-memory`. A no: never offer it again. Nothing to offer: say so in one line.
 4. **Project documents and the system guide are updated.**
    - Read `requirements/AGENTS.md`. Write into `requirements/` only the Finalized requirements the checker marked Met, each Source naming the item ID and Q-ID. Tell him in one line about a Finalized one that was not marked Met.
    - Update `system-guide/` only when the verified structure changed and `PROJECT.md` does not say it is unused.

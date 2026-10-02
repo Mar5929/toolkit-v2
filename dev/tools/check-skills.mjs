@@ -29,7 +29,8 @@
 //   - a skill asset copied from the model (MODEL_COPIES) equals the model's file;
 //   - the lists that setup-copy.md, skills-hooks-settings.md, and interview.md keep by hand match
 //     the model and the skill folders: the Salesforce list, the files that hold setup markers,
-//     the shared skills, each set's skills, and the skill counts;
+//     the shared skills, the skills each choice copies (a row may copy several sets, such as
+//     memory-process and local-memory), every set folder named by a row, and the skill counts;
 //   - the Next action prompt kept by hand in project-setup's references/notion-build/
 //     work-item-page.md (the Notion work item template's text) says the same as the model's
 //     WORK-ITEM.md.
@@ -67,6 +68,7 @@ const PATH_SPAN = /^(?:\.\/)?(?:references|assets|examples|scripts|agents)\/\S*$
 const MODEL_COPIES = {
   '.shared-skills/managing-work-items/assets/work-item-template.md': 'work-items/work-item-template/WORK-ITEM.md',
   '.shared-skills/managing-work-items/assets/design-template.md': 'work-items/work-item-template/DESIGN.md',
+  '.skill-sets/memory-process/managing-project-memory/references/memory-criteria.md': 'memory/memory-criteria.md',
 };
 
 const findings = [];
@@ -318,19 +320,23 @@ if (HAS_MODEL) {
     const named = ticks(shared[2]).sort();
     if (Number(shared[1]) !== named.length || !same(named, sharedDirs)) report('error', hooksFile, `it lists ${shared[1]} shared skills (${named.length} names), but assets/.shared-skills holds ${sharedDirs.length}: ${sharedDirs.join(', ')}`);
   }
-  const setCounts = {};
+  // Each row of the choices table copies one or more sets; its Skills cell names what they hold.
+  const setDir = (set) => path.join(SETUP, 'assets/.skill-sets', set);
+  const rowSets = new Set();
   for (const line of hooksText.split('\n')) {
-    const m = line.startsWith('|') ? line.match(/assets\/\.skill-sets\/([\w-]+)\/\./) : null;
-    if (!m) continue;
+    const sets = line.startsWith('|') ? [...new Set([...line.matchAll(/assets\/\.skill-sets\/([\w-]+)\/\./g)].map((m) => m[1]))] : [];
+    if (!sets.length) continue;
+    sets.forEach((set) => rowSets.add(set));
     const named = ticks(line.split('|')[3] ?? '').sort();
-    const actual = dirs(path.join(SETUP, 'assets/.skill-sets', m[1]));
-    if (!same(named, actual)) report('error', hooksFile, `its row for ${m[1]} names ${named.join(', ')}, but the folder holds ${actual.join(', ')}`);
-    setCounts[m[1]] = actual.length;
+    const actual = sets.flatMap((set) => dirs(setDir(set))).sort();
+    if (!same(named, actual)) report('error', hooksFile, `its row for ${sets.join(' and ')} names ${named.join(', ')}, but the folders hold ${actual.join(', ')}`);
   }
-  const interview = read(interviewFile).replace(/\s+/g, ' ').match(/(\d+) shared, plus (\d+) for the work tracking set, plus (\d+) for local or Notion memory \(none for Hindsight\), plus (\d+) for Salesforce/);
+  for (const set of dirs(path.join(SETUP, 'assets/.skill-sets'))) if (!rowSets.has(set)) report('error', hooksFile, `no row of its choices table copies assets/.skill-sets/${set}/, so no project gets its skills`);
+  const interview = read(interviewFile).replace(/\s+/g, ' ').match(/(\d+) shared, plus (\d+) for the work tracking set, plus (\d+) for local or Notion memory \(none for Hindsight\), plus (\d+) for Notion work items or memory \(`using-notion-cli`, once\), plus (\d+) for Salesforce/);
   if (!interview) report('error', interviewFile, 'has no "N shared, plus N for the work tracking set, ..." sentence in the expected shape');
   else {
-    const want = [sharedDirs.length, Math.max(...['local-work', 'notion-work', 'github-work'].map((k) => setCounts[k] ?? 0)), Math.max(...['local-memory', 'notion-memory'].map((k) => setCounts[k] ?? 0)), 1 + modelSf];
+    const count = (set) => dirs(setDir(set)).length;
+    const want = [sharedDirs.length, Math.max(...['local-work', 'notion-work', 'github-work'].map(count)), count('memory-process') + Math.max(...['local-memory', 'notion-memory'].map(count)), count('notion-tools'), 1 + modelSf];
     if (interview.slice(1).map(Number).join() !== want.join()) report('error', interviewFile, `its skill counts are ${interview.slice(1).join(', ')}, but the folders give ${want.join(', ')}`);
   }
 }

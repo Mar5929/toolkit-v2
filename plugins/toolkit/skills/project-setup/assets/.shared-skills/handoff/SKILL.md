@@ -10,10 +10,9 @@ prompt that session can start from. Never ask the owner to wait before he
 clears context, and never hold back the prompt because a save or the check
 failed.
 
-`AGENTS.md`, "Skills", names this project's memory save skill. A
-Hindsight project has no memory skills: use
-Hindsight's retain and recall tools
-(`.claude/rules/memory-review-and-save.md`, "Hindsight projects").
+Memory is saved with `managing-project-memory`. A Hindsight project has
+no memory skills: use Hindsight's tools as `AGENTS.md`, "Project memory",
+says.
 
 ## Steps
 
@@ -36,14 +35,14 @@ Hindsight's retain and recall tools
    project-wide decision not yet offered. For a decision, add a row in its
    item's Questions and Answers and ask "This looks project-wide. Save it to
    memory too?" ("These look project-wide. Save them to memory too?" for
-   several); a no keeps it from being offered again. Hand each yes to the
-   memory save skill (Hindsight: `retain` a fact or decision after his yes,
-   and write an instruction straight into `owner-preferences.md`). Nothing
-   to keep: say so in one line.
+   several); a no keeps it from being offered again. Hand each yes to
+   `managing-project-memory` (Hindsight: save a fact or decision with the
+   add-on's tools after his yes, and write an instruction straight into
+   `owner-preferences.md`). Nothing to keep: say so in one line.
 4. **Update Current State.** Local and Hindsight memory: edit
    `memory/CURRENT_STATE.md` in the main checkout directly. Notion memory:
-   the "Current state" page, with `notion-memory-save`; make no memory
-   record. Read it right before you change it, then:
+   the "Current state" page, with `managing-project-memory`; make no
+   memory record. Read it right before you change it, then:
    - Rewrite "Next session starts with": one pointer per work item ("Continue
      WI-007 from its Current state. Goal: <one line>."), or with no work item
      a short note: the goal, where work stopped, the next action, and open
@@ -52,8 +51,6 @@ Hindsight's retain and recall tools
      under Now, and a line under Waiting on the owner for each save question
      he has not answered. Set "Last updated:" to the date, `handoff`, and
      `agent`.
-   - Limits: Now 5 lines, Waiting on the owner 5, Untracked to-dos 7, Next
-     session starts with 3.
 5. **Draft the prompt; do not show it yet.** Start from
    `assets/handoff-prompt-template.md`, written as instructions to an agent
    that knows nothing about this session. Keep a source for every claim: file,

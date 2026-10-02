@@ -31,13 +31,13 @@ try {
     : read('CURRENT_STATE.md')).trim();
   if (state) out.push('Current State:', state);
   else if (memory === 'notion') out.push('The Notion Current state page could not be read here.'
-    + ' Read it with the notion-memory-find skill.');
+    + ' Read it with the storing-project-memory skill.');
   else out.push(`memory/CURRENT_STATE.md is missing or empty in ${dirname(dir)}.`);
   // A prune request when Current State is 40 lines or more (the limit is under 40), or 7 days old.
   const lines = state.split('\n').length;
   const updated = state.match(/Last updated:\W*(\d{4}-\d{2}-\d{2})/i)?.[1];
   const days = Math.floor((Date.now() - Date.parse(updated)) / 864e5) || 0;
-  const refine = ['local', 'notion'].includes(memory) ? `the ${memory}-memory-refine skill`
+  const refine = ['local', 'notion'].includes(memory) ? 'the managing-project-memory skill'
     : 'a direct edit, as the memory rule says';
   const size = lines >= 40 ? `${lines} lines (limit: under 40)` : `${days} days old`;
   if (lines >= 40 || days > 7) out.push(`Current State is ${size}. Prune it with ${refine}.`);
@@ -64,7 +64,7 @@ try {
     out.push('', 'Memory index (memory/MEMORY.md):', index.trim());
   }
 } catch (error) {
-  const where = memory === 'notion' ? 'the Current state page, with the notion-memory-find skill'
+  const where = memory === 'notion' ? 'the Current state page, with storing-project-memory'
     : 'memory/CURRENT_STATE.md in the main checkout';
   const why = String(error.message).split('\n')[0];
   out.push(`The session-start hook stopped early (${why}). Read Current State yourself: ${where}.`);

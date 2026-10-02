@@ -144,10 +144,8 @@ has a filled "Toolkit settings" section.
 | `references/notion.md` | Work items or memory in Notion: the sign-in, his yes, which Notion setup to follow, the links |
 | `references/notion-build/work-setup.md` | Work items in Notion: the steps of a new project, the links in `PROJECT.md`, bringing a project up to the current template, moving from Stage to State, building the templates, the checks |
 | `references/notion-build/work-layout.md` | Work items in Notion: the database views, the property order and page layout, the request bodies |
-| `references/notion-build/setup.md` | Memory in Notion: the memory steps of a new project, the links in `PROJECT.md`, bringing memory up to date, building the memory part of a template |
-| `references/notion-build/lore-layout.md` | Memory in Notion: Lore's databases and every column, the views, the property order and page layout |
+| `references/notion-build/setup.md` | Memory in Notion: the memory steps of a new project, the links in `PROJECT.md`, bringing memory up to date, building the memory part of a template. Lore's databases, columns, views, and request files are in the Notion `storing-project-memory` skill, in `assets/.skill-sets/notion-memory/` |
 | `references/notion-build/project-page.md`, `references/notion-build/work-item-page.md`, `references/notion-build/memory-page.md`, `references/notion-build/project-page-memory-only.md` | Building the Notion templates: the text of the project page, the work item template, the Memory page, and the "Project: memory only" page |
-| `references/notion-build/lore/` | Building or updating Notion memory: the 16 request files for Lore's databases, columns, and views, named in `lore-layout.md` and `setup.md` |
 | `references/github.md` | Work items in GitHub Issues: the sign-in, the repository, the labels, bringing a project up to date, the checks |
 | `references/hindsight-on-vps.md` | Memory in Hindsight: what runs on the VPS, the access key, the bank, the coding-agent add-on, the save-and-search check, opening the dashboard, checking a Hindsight project, a new computer |
 | `references/salesforce.md` | A Salesforce project: the org aliases and the API version |
@@ -156,7 +154,7 @@ has a filled "Toolkit settings" section.
 | `assets/model/` | Step 4: the model project, copied whole into the scratch folder |
 | `assets/owner-preferences.md` | Step 4: the starting `.claude/rules/owner-preferences.md` every project gets |
 | `assets/.shared-skills/` | Step 5: the skills every project gets |
-| `assets/.skill-sets/` | Step 5: one folder per work tracking or memory set (`local-work`, `notion-work`, `github-work`, `local-memory`, `notion-memory`) |
+| `assets/.skill-sets/` | Step 5: the skills for each choice: work tracking (`local-work`, `notion-work`, `github-work`), memory (`memory-process`, `local-memory`, `notion-memory`), and Notion's command-line tool (`notion-tools`) |
 | `assets/.salesforce/sf-architect-solutioning/` | Step 5, Salesforce projects only |
 | `assets/hooks/` | Step 5: the three hook commands |
 | `assets/settings/` | Step 5: the settings snippets for each choice |

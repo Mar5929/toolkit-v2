@@ -129,7 +129,19 @@ grep -n '^## ' <copy>/AGENTS.md
   are not sure, leave it and ask. Toolkit 0.6.0 retired `work-refine`,
   `solution-design`, `work-delegate`, `work-check`, `work-finish`,
   `local-work-track`, `notion-work-track`, and `github-work-track`:
-  `managing-work-items` and `tracking-work-items` replace them.
+  `managing-work-items` and `tracking-work-items` replace them. Toolkit
+  0.7.0 retired `local-memory-save`, `local-memory-find`,
+  `local-memory-refine`, `notion-memory-save`, `notion-memory-find`, and
+  `notion-memory-refine`: `managing-project-memory` and
+  `storing-project-memory` replace them, and a project with work items or
+  memory in Notion also gets `using-notion-cli`. The memory records stay
+  as they are.
+- Toolkit 0.7.0 changed the prompt reminder's entry for local and Notion
+  memory, so the owner trusts the hooks again in Codex `/hooks`. The
+  session-start hook keeps the header of `memory/MEMORY.md` (the text above
+  `## User`), so in a local memory project it may still name
+  `local-memory-save`: change only that name to `managing-project-memory`,
+  in the main checkout.
 - A rule in `.claude/rules/` that the model no longer has (for example
   `hindsight-memory.md`): list it, remove it only after his yes, then
   rebuild the rules list.
@@ -230,8 +242,12 @@ Where work items or memory live, for example "move memory to Notion":
 3. Build a fresh setup copy for the new choices and compare, as above. The
    blocks in `AGENTS.md`, `README.md`, `PROJECT.md`, and
    `.claude/rules/memory-review-and-save.md` for the old choice are replaced
-   with the new choice's blocks, after he sees them. The new set's skills
-   are added. A new memory choice also replaces the toolkit's hook handlers
+   with the new choice's blocks, after he sees them. The new choice's
+   skills are added. Its storage skill (`tracking-work-items` or
+   `storing-project-memory`) has the old one's name and replaces it: read
+   the old one first, because step 5 reads the old records its way (this
+   skill's `assets/.skill-sets/` also holds it). A new memory choice also
+   replaces the toolkit's hook handlers
    in `.claude/settings.json` and `.codex/hooks.json` with the new choice's
    snippets (`skills-hooks-settings.md`, "Merge rules"); he trusts the
    changed Codex hooks again in `/hooks`.
@@ -246,5 +262,7 @@ Where work items or memory live, for example "move memory to Notion":
    `hindsight-on-vps.md` "5. Save and search" shows, with `document_id` set
    to the record's ID and `async` `true`. Read it back with that file's
    search command after its operation is `completed`.
-6. Remove the old set's skills only after the records are moved and he says
-   yes.
+6. Remove the skills the new choices no longer need (for example
+   `using-notion-cli` when nothing is left in Notion, or
+   `managing-project-memory` and `storing-project-memory` when memory moved
+   to Hindsight) only after the records are moved and he says yes.

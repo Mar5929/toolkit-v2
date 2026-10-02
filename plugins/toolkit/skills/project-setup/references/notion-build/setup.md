@@ -2,8 +2,14 @@
 
 Purpose: the memory steps of onboarding, bringing an older project's
 memory up to the current layout, and building the memory part of a
-template. `ntn-basics.md`, `notion-access.md`, and `current-state.md` are in
-the notion-memory-save skill's `references/` folder.
+template. `database-layout.md`, `views-and-layout.md`,
+`current-state-page.md`, and the `assets/` files are in the Notion
+`storing-project-memory` skill,
+`assets/.skill-sets/notion-memory/storing-project-memory/` in this skill.
+`ntn-commands.md` is in the `using-notion-cli` skill,
+`assets/.skill-sets/notion-tools/using-notion-cli/references/` in this skill;
+running `ntn` in Codex is in that skill's `SKILL.md`. The other files named
+here are in this folder.
 
 ## Contents
 
@@ -16,7 +22,7 @@ the notion-memory-save skill's `references/` folder.
 
 Before anything: the owner has signed in (`ntn login`) and shared his
 Notion root page, the page that holds his projects, with the "Notion CLI"
-connection (`notion-access.md`, "Which pages the agent can reach").
+connection (`ntn-commands.md`, "Access and sign-in").
 
 1. **Which template.** Work and memory both in Notion: onboarding uses the
    Projects database template "Project: work and memory" (`work-setup.md`
@@ -32,13 +38,14 @@ connection (`notion-access.md`, "Which pages the agent can reach").
    ```
 
    Find the template's id in the Projects database's templates list
-   (`ntn-basics.md`, "Database templates"). The templates live in the
+   (`ntn-commands.md`, "Database templates"). The templates live in the
    Projects database; if the owner has no Projects database, stop and ask
    him to make one in Notion; if the templates list has no "Project: memory
    only", build the templates first (`work-setup.md`, "Building the
    templates").
 2. **Wait** until the copy is filled: the project page lists Memory,
-   Current state, and Terminology glossary (`ntn-basics.md`).
+   Current state, and Terminology glossary (`ntn-commands.md`, "Waiting for
+   a template").
 3. **Find the memory databases** on the Memory page, and each one's data
    source:
 
@@ -57,7 +64,8 @@ connection (`notion-access.md`, "Which pages the agent can reach").
    ```
 5. **Record the links** in `PROJECT.md` (next section) and read them back.
 6. **Fill the Current state page** with the project's first lines
-   (`current-state.md`).
+   (`current-state-page.md`, "Changing it"; `references/finishing.md` in
+   this skill says what they are).
 
 ## Recording the links in PROJECT.md
 
@@ -82,13 +90,13 @@ first):
 ## Bringing memory up to the current layout
 
 Onboarding's "update the toolkit" runs this. Compare the project with
-`lore-layout.md` and add only what is missing; never remove, rename, or
-retype anything.
+`database-layout.md` and `views-and-layout.md`, and add only what is
+missing; never remove, rename, or retype anything.
 
 1. For each of Lore's databases and the toolkit's columns, list what the
    data source has
    (`ntn api v1/data_sources/<id> < /dev/null | jq -r '.properties | keys[]'`)
-   and add each missing column alone, from its file in `lore/`.
+   and add each missing column alone, from its file in `assets/schema/`.
 2. A select missing an option (for example a Tags type): read the options
    (`ntn api v1/data_sources/<memories-ds> < /dev/null | jq -c '.properties.Tags.multi_select.options'`)
    and send all of them plus the missing ones:
@@ -100,7 +108,7 @@ retype anything.
    and `09-entities-work-items-relation.json` to their data sources, and add
    a "Linked memory" view to the work item template, the Work Items
    database's default template (`work-setup.md`).
-4. Views: add a missing view from its file in `lore/`.
+4. Views: add a missing view from its file in `assets/schema/`.
 5. Tell the owner in one short list what was added.
 
 ## Building the memory part of a template
@@ -114,7 +122,7 @@ and memory" when `work-setup.md` calls this, or
 
 1. Under the template page, `POST v1/pages` a page titled "Memory" with
    `memory-page.md` as `"markdown"`.
-2. Lore's databases, in order, from `lore/01…05` with
+2. Lore's databases, in order, from `assets/schema/01…05` with
    `{{MEMORY_PAGE_ID}}` the Memory page and each relation's
    `{{…_DS}}` the data source made before it.
 3. Then 06 (Lore's own Memories relations) and 07 (the toolkit's columns)
@@ -122,7 +130,8 @@ and memory" when `work-setup.md` calls this, or
    the body).
 4. With work items in the same template: the three 09 files, each as
    `PATCH v1/data_sources/<id>` to its own database.
-5. Property ids of Memories (`ntn-basics.md`), then the views: rename the
+5. Property ids of Memories (`ntn-commands.md`, "Filling a body from an
+   asset"), then the views: rename the
    first view with 10 (send only its `name`, `filter`, `sorts`, and
    `configuration` as `PATCH v1/views/<first view id>`), and create 11, 12
    (or `12-view-by-work-item-ids.json` without work items), and 13 as
@@ -130,15 +139,16 @@ and memory" when `work-setup.md` calls this, or
 6. Column order: each table view of Memories (Index, Decisions, By work
    item, Retired) and the first view of Facts, Entities, Topics, and
    Projects gets `{"configuration":{"type":"table","properties":[…]}}` as
-   `PATCH v1/views/<id>`: every property in the order of `lore-layout.md`,
-   "Property order and page layout", hidden ones `false`. Then the page
+   `PATCH v1/views/<id>`: every property in the order of
+   `views-and-layout.md`, "Property order and page layout", hidden ones
+   `false`. Then the page
    layout of Memories, Facts, Entities, and Projects, which only the Notion
    app can set, once per template (every copy keeps it): ask the owner to
-   set it, give him the clicks from `lore-layout.md`, "Property order and
+   set it, give him the clicks from `views-and-layout.md`, "Property order and
    page layout", one database at a time, and wait until he says it is
    done. Never set the page layout yourself unless the owner names the
    Notion page as his private test area and says you may use his signed-in
    Chrome.
 7. Under the template page, a "Current state" page from
-   the notion-memory-save skill's `assets/current-state.md` and a "Terminology glossary" page from
-   its `assets/terminology-glossary.md`.
+   `assets/current-state.md` and a "Terminology glossary" page from
+   `assets/terminology-glossary.md`.

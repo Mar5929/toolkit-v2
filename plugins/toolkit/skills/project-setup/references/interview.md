@@ -134,8 +134,9 @@ folder:
 | Hindsight | "create the memory bank <bank> on your Hindsight server (or use this project's own bank), and install Hindsight's coding-agent add-on for Claude Code and Codex, or add this project to it; that changes files in `~/.claude`, `~/.codex`, and `~/.hindsight`, and I'll show you each change before I make it" |
 | Local work and local memory | "nothing outside this folder" |
 
-Skill counts: 9 shared, plus 1 for the work tracking set, plus 3 for local
-or Notion memory (none for Hindsight), plus 4 for Salesforce.
+Skill counts: 9 shared, plus 1 for the work tracking set, plus 2 for local
+or Notion memory (none for Hindsight), plus 1 for Notion work items or
+memory (`using-notion-cli`, once), plus 4 for Salesforce.
 
 His yes covers exactly what the plan names. Anything else created outside
 the folder later needs its own yes.

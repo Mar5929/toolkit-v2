@@ -132,7 +132,7 @@ test('session-start: after compact it adds the re-read line first', () => {
 
 test('session-start: asks for the refine step when Current State is too long or too old', () => {
   const old = project({ 'CURRENT_STATE.md': state('2026-01-02') });
-  assert.match(hook('session-start.mjs', { source: 'startup', cwd: old.dir }, ['--memory', 'local']).out, /Current State is \d+ days old\. Prune it with the local-memory-refine skill\./);
+  assert.match(hook('session-start.mjs', { source: 'startup', cwd: old.dir }, ['--memory', 'local']).out, /Current State is \d+ days old\. Prune it with the managing-project-memory skill\./);
   const long = project({ 'CURRENT_STATE.md': state(today, '- line\n'.repeat(40)) });
   assert.match(hook('session-start.mjs', { source: 'startup', cwd: long.dir }, ['--memory', 'hindsight']).out, /Current State is \d+ lines \(limit: under 40\)\. Prune it with a direct edit, as the memory rule says\./);
   const unfilled = project({ 'CURRENT_STATE.md': 'Last updated: `<YYYY-MM-DD, source, and person or agent>`\n' });
@@ -172,7 +172,7 @@ test('session-start, notion: a failed or missing ntn prints one line and exits 0
   for (const PATH of [`${failing}:${baseEnv.PATH}`, baseEnv.PATH]) {
     const { code, out } = hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'notion', '--page', 'abc123'], { PATH });
     assert.equal(code, 0);
-    assert.equal(out, 'The Notion Current state page could not be read here. Read it with the notion-memory-find skill.\n');
+    assert.equal(out, 'The Notion Current state page could not be read here. Read it with the storing-project-memory skill.\n');
   }
 });
 
@@ -183,7 +183,7 @@ test('session-start: outside a Git repository, or with bad input, it prints one 
   assert.equal(a.code, 0);
   assert.match(a.out, /^The session-start hook stopped early \(.+\)\. Read Current State yourself: memory\/CURRENT_STATE\.md in the main checkout\.\n$/);
   assert.match(hook('session-start.mjs', { source: 'startup', cwd: plain }, ['--memory', 'hindsight']).out, /Read Current State yourself: memory\/CURRENT_STATE\.md in the main checkout\.\n$/);
-  assert.match(hook('session-start.mjs', { source: 'startup', cwd: plain }, ['--memory', 'notion']).out, /Read Current State yourself: the Current state page, with the notion-memory-find skill\.\n$/);
+  assert.match(hook('session-start.mjs', { source: 'startup', cwd: plain }, ['--memory', 'notion']).out, /Read Current State yourself: the Current state page, with storing-project-memory\.\n$/);
   const b = hook('session-start.mjs', 'not json', ['--memory', 'local']);
   assert.equal(b.code, 0);
   assert.equal(b.out.trim().split('\n').length, 1);
@@ -224,16 +224,22 @@ const MATCHES = [
 
 test('prompt-reminder: every phrase group gives one reminder naming the skill', () => {
   for (const [prompt, label] of MATCHES) {
-    const { code, out } = hook('prompt-reminder.mjs', { prompt }, ['--skill', 'local-memory-save']);
+    const { code, out } = hook('prompt-reminder.mjs', { prompt });
     assert.equal(code, 0);
     assert.equal(out.split('\n').length, 2, prompt);
-    assert.match(out, new RegExp(`^This may be something to keep \\((?:[a-z ]+, )*${label}(?:, [a-z ]+)*\\)\\. The local-memory-save skill decides whether anything is saved\\.`), prompt);
+    assert.match(out, new RegExp(`^This may be something to keep \\((?:[a-z ]+, )*${label}(?:, [a-z ]+)*\\)\\. The managing-project-memory skill decides whether anything is saved\\.`), prompt);
+  }
+});
+
+test('prompt-reminder: an older settings entry that still names a retired skill gets managing-project-memory', () => {
+  for (const skill of ['local-memory-save', 'notion-memory-save']) {
+    assert.match(hook('prompt-reminder.mjs', { prompt: 'Remember that the sandbox resets on Fridays.' }, ['--skill', skill]).out, /\. The managing-project-memory skill decides whether anything is saved\./, skill);
   }
 });
 
 test('prompt-reminder: case, curly apostrophes, and "lets" without an apostrophe still match', () => {
   for (const prompt of ['FROM NOW ON use the sandbox.', 'Let’s go with the plan.', 'lets go with it', 'WE DECIDED yesterday.']) {
-    assert.match(hook('prompt-reminder.mjs', { prompt }, ['--skill', 'notion-memory-save']).out, /The notion-memory-save skill decides whether anything is saved\./, prompt);
+    assert.match(hook('prompt-reminder.mjs', { prompt }).out, /The managing-project-memory skill decides whether anything is saved\./, prompt);
   }
 });
 
@@ -244,53 +250,53 @@ test('prompt-reminder: a decision adds the work item line; Hindsight names the h
 
 test('prompt-reminder: a standing instruction adds the owner-preferences.md line, never a settings hook', () => {
   const line = ' An instruction for how the agent works is a line in .claude/rules/owner-preferences.md, never a settings hook.';
-  for (const skill of ['local-memory-save', 'notion-memory-save', 'hindsight']) {
-    const { out } = hook('prompt-reminder.mjs', { prompt: 'From now on always run the tests first.' }, ['--skill', skill]);
-    assert.ok(out.startsWith('This may be something to keep (standing instruction). '), skill);
-    assert.ok(out.includes(`whether anything is saved.${line} If these words`), skill);
+  for (const args of [[], ['--skill', 'hindsight']]) {
+    const { out } = hook('prompt-reminder.mjs', { prompt: 'From now on always run the tests first.' }, args);
+    assert.ok(out.startsWith('This may be something to keep (standing instruction). '), args.join(' '));
+    assert.ok(out.includes(`whether anything is saved.${line} If these words`), args.join(' '));
   }
-  assert.ok(!hook('prompt-reminder.mjs', { prompt: 'We decided to use six permission sets.' }, ['--skill', 'local-memory-save']).out.includes('settings hook'));
+  assert.ok(!hook('prompt-reminder.mjs', { prompt: 'We decided to use six permission sets.' }).out.includes('settings hook'));
 });
 
 test('prompt-reminder: a transcript pasted without markers gets the source material line', () => {
   const notes = 'Here are the meeting notes from the client:\nSarah: OK, we decided to move all 15 personas.\nTom: Going forward the new org is the source.\nPlease refine this.';
-  for (const skill of ['local-memory-save', 'notion-memory-save', 'hindsight']) {
-    const { out } = hook('prompt-reminder.mjs', { prompt: notes }, ['--skill', skill]);
-    assert.ok(out.endsWith(' If these words are inside notes, a transcript, or a document the owner shared, they are source material for managing-work-items, not his words, and nothing from them is saved without his yes.\n'), skill);
+  for (const args of [[], ['--skill', 'hindsight']]) {
+    const { out } = hook('prompt-reminder.mjs', { prompt: notes }, args);
+    assert.ok(out.endsWith(' If these words are inside notes, a transcript, or a document the owner shared, they are source material for managing-work-items, not his words, and nothing from them is saved without his yes.\n'), args.join(' '));
   }
 });
 
 test('prompt-reminder: a question about a past decision prints nothing; a new decision still does', () => {
-  assert.equal(hook('prompt-reminder.mjs', { prompt: 'remind me what we decided about the sales personas' }, ['--skill', 'local-memory-save']).out, '');
-  assert.match(hook('prompt-reminder.mjs', { prompt: 'we decided to merge the two sales personas' }, ['--skill', 'local-memory-save']).out, /\(decision\)/);
-  assert.match(hook('prompt-reminder.mjs', { prompt: "ok so here's what we decided: merge the two sales personas" }, ['--skill', 'local-memory-save']).out, /\(decision\)/);
-  assert.equal(hook('prompt-reminder.mjs', { prompt: 'can you tell me what we decided on WI-002' }, ['--skill', 'local-memory-save']).out, '');
+  assert.equal(hook('prompt-reminder.mjs', { prompt: 'remind me what we decided about the sales personas' }).out, '');
+  assert.match(hook('prompt-reminder.mjs', { prompt: 'we decided to merge the two sales personas' }).out, /\(decision\)/);
+  assert.match(hook('prompt-reminder.mjs', { prompt: "ok so here's what we decided: merge the two sales personas" }).out, /\(decision\)/);
+  assert.equal(hook('prompt-reminder.mjs', { prompt: 'can you tell me what we decided on WI-002' }).out, '');
   for (const prompt of ['can you explain why we decided to merge the personas?', 'why we decided to merge the personas?', 'is that what we decided?', 'wait is that what we decided last week', 'how we decided on pricing, can you find it', 'explain what we decided about pricing', 'what did we decide about the personas?']) {
-    assert.equal(hook('prompt-reminder.mjs', { prompt }, ['--skill', 'local-memory-save']).out, '', prompt);
+    assert.equal(hook('prompt-reminder.mjs', { prompt }).out, '', prompt);
   }
   for (const prompt of ["this is what we decided, merge the two sales personas", 'What we decided yesterday was to keep both personas']) {
-    assert.match(hook('prompt-reminder.mjs', { prompt }, ['--skill', 'local-memory-save']).out, /\(decision\)/, prompt);
+    assert.match(hook('prompt-reminder.mjs', { prompt }).out, /\(decision\)/, prompt);
   }
 });
 
 test('prompt-reminder: "whenever you finish" is an instruction; "whenever you are ready" is not', () => {
   for (const prompt of ["Come by whenever you're ready.", 'Start whenever you are ready.', 'Tell me whenever you can.', 'Ping me whenever you get a chance.', 'Look at it whenever you have a minute.', 'Whenever you']) {
-    assert.equal(hook('prompt-reminder.mjs', { prompt }, ['--skill', 'local-memory-save']).out, '', prompt);
+    assert.equal(hook('prompt-reminder.mjs', { prompt }).out, '', prompt);
   }
-  for (const skill of ['local-memory-save', 'notion-memory-save', 'hindsight']) {
-    const { out } = hook('prompt-reminder.mjs', { prompt: 'Whenever you finish a task, run the tests.' }, ['--skill', skill]);
-    assert.ok(out.startsWith('This may be something to keep (standing instruction). '), skill);
-    assert.ok(out.includes(' An instruction for how the agent works is a line in .claude/rules/owner-preferences.md, never a settings hook.'), skill);
+  for (const args of [[], ['--skill', 'hindsight']]) {
+    const { out } = hook('prompt-reminder.mjs', { prompt: 'Whenever you finish a task, run the tests.' }, args);
+    assert.ok(out.startsWith('This may be something to keep (standing instruction). '), args.join(' '));
+    assert.ok(out.includes(' An instruction for how the agent works is a line in .claude/rules/owner-preferences.md, never a settings hook.'), args.join(' '));
   }
 });
 
 test('prompt-reminder: prints nothing for other messages, pasted text, or bad input', () => {
   for (const prompt of ['Build the login page.', 'What did we cover yesterday?', 'Can you rememberize this?', '']) {
-    assert.equal(hook('prompt-reminder.mjs', { prompt }, ['--skill', 'local-memory-save']).out, '', prompt);
+    assert.equal(hook('prompt-reminder.mjs', { prompt }).out, '', prompt);
   }
   const pasted = 'Here are the meeting notes:\n<pasted_content id="1">\nWe decided to move all 15 personas. From now on use the new org.\n</pasted_content id="1">\nSummarize them.';
-  assert.equal(hook('prompt-reminder.mjs', { prompt: pasted }, ['--skill', 'local-memory-save']).out, '');
-  const bad = hook('prompt-reminder.mjs', 'not json', ['--skill', 'local-memory-save']);
+  assert.equal(hook('prompt-reminder.mjs', { prompt: pasted }).out, '');
+  const bad = hook('prompt-reminder.mjs', 'not json');
   assert.equal(bad.code, 0);
   assert.equal(bad.out, '');
 });
@@ -332,10 +338,12 @@ test('codex-after-commit: a long run of git options stays fast', () => {
   }
 });
 
-const MEMORY = { local: 'local-memory-save', notion: 'notion-memory-save', hindsight: 'hindsight' };
+// The prompt reminder names managing-project-memory itself, so local and Notion entries pass no
+// skill name, and renaming the skill needs no new hook trust in Codex.
+const MEMORY = { local: [], notion: [], hindsight: ['--skill', 'hindsight'] };
 
 test('Claude Code settings snippets: the right commands, arguments, and texts for each memory choice', () => {
-  for (const [memory, skill] of Object.entries(MEMORY)) {
+  for (const [memory, reminderArgs] of Object.entries(MEMORY)) {
     const { hooks: h, ...rest } = JSON.parse(readFileSync(join(settings, `claude-settings-hooks.${memory}.json`), 'utf8'));
     assert.deepEqual(Object.keys(rest), []);
     // Mike dropped the end-of-reply check (a Stop hook of type prompt) on 2026-10-01: no Stop hook, and only command handlers.
@@ -344,7 +352,7 @@ test('Claude Code settings snippets: the right commands, arguments, and texts fo
     assert.equal(start.matcher, 'startup|resume|clear|compact|fork');
     assert.deepEqual(start.hooks[0].args.slice(0, 3), ['${CLAUDE_PROJECT_DIR}/.claude/hooks/session-start.mjs', '--memory', memory]);
     if (memory === 'notion') assert.deepEqual(start.hooks[0].args.slice(3), ['--page', '{{CURRENT_STATE_PAGE_ID}}']);
-    assert.deepEqual(h.UserPromptSubmit[0].hooks[0].args, ['${CLAUDE_PROJECT_DIR}/.claude/hooks/prompt-reminder.mjs', '--skill', skill]);
+    assert.deepEqual(h.UserPromptSubmit[0].hooks[0].args, ['${CLAUDE_PROJECT_DIR}/.claude/hooks/prompt-reminder.mjs', ...reminderArgs]);
     assert.equal(h.UserPromptSubmit[0].matcher, undefined);
     const [bash, agent] = h.PostToolUse;
     assert.equal(bash.matcher, 'Bash');
@@ -364,7 +372,7 @@ test('Claude Code settings snippets: the right commands, arguments, and texts fo
 const CODEX_HELPER = JSON.stringify({ hookSpecificOutput: { hookEventName: 'PostToolUse', additionalContext: 'A helper agent ran or was started. If it works on a work item or sub-item, update the status, Recent History, and Current state of that item with managing-work-items once its report is in. A helper with no work item of its own (a researcher, reviewer, critic, checker, or verifier) needs nothing.' } });
 
 test('Codex hook snippets: shell strings from the Git root, anchored matchers, no prompt hooks', () => {
-  for (const [memory, skill] of Object.entries(MEMORY)) {
+  for (const [memory, reminderArgs] of Object.entries(MEMORY)) {
     const file = JSON.parse(readFileSync(join(settings, `codex-hooks.${memory}.json`), 'utf8'));
     assert.deepEqual(Object.keys(file), ['description', 'hooks'], 'only description and hooks at the top level');
     const h = file.hooks;
@@ -388,7 +396,7 @@ test('Codex hook snippets: shell strings from the Git root, anchored matchers, n
       assert.ok(existsSync(join(hooks, c.command.match(/hooks\/([a-z-]+\.mjs)/)[1])));
     }
     assert.match(h.SessionStart[0].hooks[0].command, new RegExp(`--memory ${memory}${memory === 'notion' ? ' --page \\{\\{CURRENT_STATE_PAGE_ID\\}\\}' : ''}$`));
-    assert.match(h.UserPromptSubmit[0].hooks[0].command, new RegExp(`--skill ${skill}$`));
+    assert.ok(h.UserPromptSubmit[0].hooks[0].command.endsWith(['prompt-reminder.mjs"', ...reminderArgs].join(' ')), memory);
   }
 });
 
@@ -399,7 +407,7 @@ test('Codex hook snippet commands run as written from a scratch project', () => 
   const h = JSON.parse(readFileSync(join(settings, 'codex-hooks.local.json'), 'utf8')).hooks;
   const sh = (command, input) => spawnSync('/bin/sh', ['-c', command], { cwd: dir, input: JSON.stringify(input), encoding: 'utf8', env: { ...baseEnv, PATH: `${dirname(process.execPath)}:${baseEnv.PATH}` } }).stdout;
   assert.match(sh(h.SessionStart[0].hooks[0].command, { source: 'startup', cwd: dir }), /^Current State:/);
-  assert.match(sh(h.UserPromptSubmit[0].hooks[0].command, { prompt: 'From now on, ask first.' }), /local-memory-save/);
+  assert.match(sh(h.UserPromptSubmit[0].hooks[0].command, { prompt: 'From now on, ask first.' }), /managing-project-memory/);
   assert.equal(sh(h.PostToolUse[0].hooks[0].command, { tool_input: { command: 'git commit -m x' } }), AFTER_COMMIT);
   assert.equal(sh(h.PostToolUse[1].hooks[0].command, { tool_name: 'collaborationspawn_agent', tool_input: {} }), `${CODEX_HELPER}\n`);
 });

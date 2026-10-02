@@ -27,9 +27,7 @@
             "type": "command",
             "command": "node",
             "args": [
-              "${CLAUDE_PROJECT_DIR}/.claude/hooks/prompt-reminder.mjs",
-              "--skill",
-              "notion-memory-save"
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/prompt-reminder.mjs"
             ],
             "timeout": 10
           }

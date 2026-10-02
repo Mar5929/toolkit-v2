@@ -42,7 +42,7 @@ Related items is the paragraph just below it.
 
 ## Changing the text
 
-- Read the page text, then change it with `update_content` (`ntn-commands.md`, "Reading and changing page text").
+- Read the page text, then change it with `update_content` (`using-notion-cli`, "Reading and changing page text").
 - Keep every heading, label, and view line.
 - Only Overview, Recent History, Requirements, Questions and Answers, and Notes are text. Never change the text of Roadmap, Sub-items, Tasks, or Linked memory.
 
@@ -108,7 +108,7 @@ ntn api v1/pages -d @design.json < /dev/null
 
 - `"parent": {"type": "page_id", "page_id": "<item-page-id>"}`.
 - The title is `"<ID>: <item title> — solution design"`, for example "WI-31: Log a transaction — solution design". When the item's title changes, rename the design page too.
-- `"markdown"` is the design template text `managing-work-items` opened from its `assets/`, written as Notion markdown (`ntn-commands.md`, "Reading and changing page text"), with the work item ID filled in. Leave out its front matter and its `<!-- … -->` guide comments: the Design property holds that information. Write each table as a `<table header-row="true">`.
+- `"markdown"` is the design template text `managing-work-items` opened from its `assets/`, written as Notion markdown (`using-notion-cli`, "Reading and changing page text"), with the work item ID filled in. Leave out its front matter and its `<!-- … -->` guide comments: the Design property holds that information. Write each table as a `<table header-row="true">`.
 - Then set the item's Design to `proposed`.
 - The design page may have its own subpages. They stay under it.
 

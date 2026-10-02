@@ -23,7 +23,7 @@ Find it by its number, the part after the prefix (`WI-31` is 31), never by its t
 ntn api v1/data_sources/{{WORK_ITEMS_DS}}/query -d '{"filter":{"and":[{"property":"ID","unique_id":{"equals":31}},{"property":"Work item","title":{"is_not_empty":true}}]}}' < /dev/null | jq -r '.results[] | "\(.id)\t\(.url)"'
 ```
 
-No result: the item may be in the trash or outside this project. Tell the owner, and never make a second item with the same title. Otherwise read its properties (`ntn-commands.md`, "Reading properties") and its text (`ntn-commands.md`, "Reading and changing page text"), starting with the Overview's Current state.
+No result: the item may be in the trash or outside this project. Tell the owner, and never make a second item with the same title. Otherwise read its properties (`using-notion-cli`, "Reading properties") and its text (`using-notion-cli`, "Reading and changing page text"), starting with the Overview's Current state.
 
 ## The board
 
@@ -88,13 +88,13 @@ A transcript or document saved on an item sits in its Files property. The item's
 ntn api v1/pages/<page-id> < /dev/null | jq -r '.properties.Files.files[] | "\(.name)\t\(.file.url // .external.url)"'
 ```
 
-A Notion file address lasts one hour, so download the file right away into a scratch folder outside the project (`ntn-commands.md`, "Sending a body"):
+A Notion file address lasts one hour, so download the file right away into a scratch folder outside the project (`using-notion-cli`, "Sending a body"):
 
 ```bash
 curl -sfL '<url>' -o '<scratch folder>/<name>'
 ```
 
-Read it whole there, then remove the scratch folder. When `curl` fails, the address has expired: read the page again to get a new address. In Codex, run `curl` as its own command with escalated permissions, the same as `ntn` (`ntn-commands.md`, "In Codex"). A Salesforce client file is never attached: its Sources line names its `delivery/` path, so read it there.
+Read it whole there, then remove the scratch folder. When `curl` fails, the address has expired: read the page again to get a new address. In Codex, run `curl` as its own command with escalated permissions, the same as `ntn` (`using-notion-cli`, "In Codex"). A Salesforce client file is never attached: its Sources line names its `delivery/` path, so read it there.
 
 ## Pages without the template
 

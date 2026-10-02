@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // UserPromptSubmit hook for Claude Code and Codex: when the owner's message has a keep or decision
-// phrase, it prints one hint naming the memory save skill, which decides. Else it prints nothing.
-// Usage: node prompt-reminder.mjs --skill local-memory-save|notion-memory-save|hindsight
+// phrase, it prints one hint naming managing-project-memory, which decides. Else it prints nothing.
+// Usage: node prompt-reminder.mjs [--skill hindsight]. The skill name lives here, not in the
+// settings, so a rename changes only this file and Codex needs no new hook trust.
 import { readFileSync } from 'node:fs';
 
 // A question about a past decision ("remind me what we decided", "why we decided") stays quiet.
@@ -40,13 +41,13 @@ const SOURCE = ' If these words are inside notes, a transcript, or a document th
   + ' saved without his yes.';
 try {
   const i = process.argv.indexOf('--skill');
-  const skill = (i > 1 && process.argv[i + 1]) || 'memory save';
+  const hindsight = i > 1 && process.argv[i + 1] === 'hindsight';
   // Pasted text, such as a meeting transcript, is source material, not the owner speaking.
   const prompt = String(JSON.parse(readFileSync(0, 'utf8')).prompt ?? '')
     .replace(/<pasted_content\b[^>]*>[\s\S]*?<\/pasted_content\b[^>]*>/g, '')
     .replace(/[‘’]/g, "'");
   const found = Object.keys(PHRASES).filter((label) => PHRASES[label].test(prompt));
-  const decides = skill === 'hindsight' ? HINDSIGHT : `The ${skill} skill decides`;
+  const decides = hindsight ? HINDSIGHT : 'The managing-project-memory skill decides';
   if (found.length) process.stdout.write(`This may be something to keep (${found.join(', ')}).`
     + ` ${decides} whether anything is saved.${found.includes('decision') ? DECISION : ''}`
     + `${found.includes('standing instruction') ? INSTRUCTION : ''}${SOURCE}\n`);

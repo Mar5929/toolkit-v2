@@ -42,14 +42,14 @@ through `gh`, and Hindsight through its own MCP tools.
 | `<setup>SKILL.md`, `<setup>references/` | Onboarding, "check the setup", and "update the toolkit". |
 | `<setup>assets/model/` | An exact copy of Mike's model project. Never edited by hand (see "The model project and its copy"). |
 | `<setup>assets/.shared-skills/<name>/` | The 9 skills every project gets. |
-| `<setup>assets/.skill-sets/<set>/<name>/` | One work tracking set and one memory set per project: `local-work`, `notion-work`, `github-work`, `local-memory`, `notion-memory`. Each work tracking set holds one skill, `tracking-work-items`. |
+| `<setup>assets/.skill-sets/<set>/<name>/` | The skills for each choice. Work tracking: `local-work`, `notion-work`, or `github-work`, each holding one skill, `tracking-work-items`. Memory (local or Notion): `memory-process`, holding `managing-project-memory` (the process), plus `local-memory` or `notion-memory`, each holding its own `storing-project-memory` (storage only). `notion-tools`, holding `using-notion-cli`, goes to every project with work items or memory in Notion. |
 | `<setup>assets/.salesforce/sf-architect-solutioning/` | The Salesforce architect skill. Its description was rewritten on 2026-09-27, and its body was reworded and given a "Which phases to run" section on 2026-09-30, both with Mike's yes. The model holds the other three Salesforce skills. |
-| (the three folders above) | Their names start with a dot on purpose. Codex loads every `SKILL.md` under a plugin's `skills/` folder as a plugin skill, in every folder on the computer, but skips folders whose names start with a dot. Without the dot, 19 project skills would load machine-wide. Tested in scratch Codex homes with and without the dots: `dev/test-runs/codex-dot-folders.md`. |
+| (the three folders above) | Their names start with a dot on purpose. Codex loads every `SKILL.md` under a plugin's `skills/` folder as a plugin skill, in every folder on the computer, but skips folders whose names start with a dot. Without the dot, 17 project skills would load machine-wide. Tested in scratch Codex homes with and without the dots: `dev/test-runs/codex-dot-folders.md`. |
 | `<setup>assets/hooks/` | The three hook commands: `session-start.mjs`, `prompt-reminder.mjs`, `codex-after-commit.mjs`. |
 | `<setup>assets/settings/` | The snippets onboarding merges into a project's `.claude/settings.json`, `.codex/hooks.json`, and `.codex/config.toml` for each choice. |
 | `ai-external-knowledge/` | Official Claude Code, Codex, Agent Skills, and Anthropic engineering pages, captured with Firecrawl. `INDEX.md` lists them; each folder's `SOURCE-RECORD.md` gives every page's web address. Not shipped. |
 | `dev/` | Goal, progress, design, research, diagrams, test runs, tools, and tests. Not shipped. |
-| `dev/build-shared/` | The source of every text several skills hold word for word: `helper-briefs/handoff-verifier.md`, and the texts the Notion and local memory sets share, in `notion/` and `local-memory/`. |
+| `dev/build-shared/` | The source of every text several skills hold word for word: today only `helper-briefs/handoff-verifier.md`. |
 | `dev/tools/check-skills.mjs` | Checks every skill `project-setup` ships (see "Checks"). |
 | `dev/tools/check-rules.mjs` | Checks the model's rule files against Claude Code's guidance for rules (`dev/research/rules-best-practices.md`). |
 | `dev/tools/rule-lint.mjs` | The checks `check-rules.mjs` runs, and the `AGENTS.md` rules list the rule files give. Dev only: nothing under `plugins/` imports it. |
@@ -87,7 +87,7 @@ is never changed by hand.
   A new marker form in the model also needs a row in that file's "Setup
   markers" table.
 - Some skill templates are copies of model files (`dev/SKILL-INDEX.md`,
-  section 7). `check-skills.mjs` fails when one differs from the model copy.
+  section 8). `check-skills.mjs` fails when one differs from the model copy.
 
 ### Refresh the model copy
 
@@ -105,7 +105,7 @@ is never changed by hand.
    there with `git add -f <path>`, by name, or a clean clone sets up projects
    without those templates.
 5. Copy each model template a skill holds over its skill copy (the list is in
-   `dev/SKILL-INDEX.md`, section 7).
+   `dev/SKILL-INDEX.md`, section 8).
 6. Run every check below. A failure in a skill means the skill must follow
    the model's new format; never change the copy to make a check pass.
 7. Raise the plugin version (see Rules, "Versions"). Existing projects get
@@ -197,10 +197,19 @@ node --test 'dev/tests/*.test.mjs'
     folder, never `../`.
   - Shared skills never assume one tracker or memory. For work items they
     name `tracking-work-items`: every work tracking set holds a skill of
-    that name. For memory they say "memory save skill" or "memory find
-    skill" (`AGENTS.md` names which one a project has), and for Hindsight
-    memory "Hindsight's retain and recall tools", which the memory rule's
-    "Hindsight projects" section maps to the add-on's tools.
+    that name. For memory they name `managing-project-memory`, which every
+    project with local or Notion memory has; a Hindsight project has no
+    memory skills, so they point it to "Project memory" in the project's
+    `AGENTS.md`.
+  - Memory skills (Mike, 2026-10-01). `managing-project-memory` holds the
+    process, the same for local and Notion memory: it never names a
+    storage tool, file, folder, database, or command, and hands every read
+    and write to `storing-project-memory`. Each version of
+    `storing-project-memory` holds storage only, never a process rule. Both
+    Notion storage skills (`tracking-work-items` and
+    `storing-project-memory`) run `ntn` through `using-notion-cli` and never
+    repeat its sign-in, Codex, or error text. Each instruction lives in
+    exactly one file.
 - **Wording and overlap review** (Mike, 2026-09-30). New or changed text in
   a skill, reference, template, example, helper brief, or
   `dev/build-shared/` source is reviewed by a separate agent against
@@ -227,7 +236,11 @@ node --test 'dev/tests/*.test.mjs'
   `memory/` are kept out of Git, so they exist only in the main checkout:
   `session-start.mjs` finds it with `git rev-parse --git-common-dir`, and so
   works from inside a Git worktree. Any change to a Codex hook means Mike
-  must trust it again in Codex `/hooks`; say so.
+  must trust it again in Codex `/hooks`; say so. Codex trusts the entry in
+  `.codex/hooks.json`, not the `.mjs` file it runs, so the memory skill
+  names live in `session-start.mjs` and `prompt-reminder.mjs`, and the
+  snippets pass none: renaming a memory skill changes only those files and
+  needs no new trust.
 - **Versions.** Both manifests carry the same `name` and `version`. Every
   shipped change raises `version` in both, and `metadata.version` in
   `.claude-plugin/marketplace.json`.
@@ -266,9 +279,13 @@ node --test 'dev/tests/*.test.mjs'
   `SOURCE-RECORD.md`.
 - **Notion memory uses Lore's layout.** Never rename or remove a Lore
   database or property: Lore finds them by their exact names. The layout is
-  in `<setup>references/notion-build/` (`lore-layout.md` and `lore/`). The toolkit does not install or run Lore, and Lore's own
-  saving and hooks stay off. Before moving to a newer Lore, compare that
-  layout list with Lore's `src/notion/schema.ts` again.
+  in the Notion `storing-project-memory` skill,
+  `<setup>assets/.skill-sets/notion-memory/storing-project-memory/`: every
+  database and column in `references/database-layout.md`, the views and
+  page layout in `references/views-and-layout.md`, and the request files in
+  `assets/schema/`. The toolkit does not install or run Lore, and Lore's own
+  saving and hooks stay off. Before moving to a newer Lore, compare
+  `database-layout.md` with Lore's `src/notion/schema.ts` again.
 - **Notion tests** run only in the private Notion test area named in
   `dev/test-runs/notion-test-area.json`, never on Mike's real "AI Agent
   Second Brain" page unless he says yes.

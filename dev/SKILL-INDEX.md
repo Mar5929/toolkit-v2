@@ -23,11 +23,15 @@ the routing rounds for the retired skills) is in Git history.
 - **Work tracking sets**, one per project, 1 skill each, always named
   `tracking-work-items`: local folders with Obsidian, Notion, or GitHub
   Issues. Jira is deferred by Mike: no Jira skills.
-- **Memory sets**, one per project, 3 skills each: local files with Obsidian,
-  or Notion in Lore's layout. Hindsight memory has no toolkit skills.
+- **Memory**: local or Notion memory adds 2 skills, `managing-project-memory`
+  (the process, the same for both) and the project's own version of
+  `storing-project-memory` (local files with Obsidian, or Notion in Lore's
+  layout). Hindsight memory has no toolkit skills.
+- **Notion**: work items or memory in Notion add `using-notion-cli`, once.
 - **Salesforce projects** add 4 skills.
-- A project has 9 + 1 + 3 = 13 skills, or 17 with Salesforce; with Hindsight
-  memory, 10 or 14.
+- A project has 9 + 1 + 2 = 12 skills, 13 with work items or memory in
+  Notion; with Hindsight memory, 10, or 11 with work items in Notion.
+  Salesforce adds 4.
 
 ## 1. Onboarding (the `toolkit` plugin)
 
@@ -38,10 +42,10 @@ the routing rounds for the retired skills) is in Git history.
 ## 2. Shared skills (every project, 9)
 
 They never assume one tracker or memory. Every work tracking set holds a
-skill named `tracking-work-items`, so they name it directly. For memory they
-say "memory save skill" and "memory find skill", and the "Skills" section of
-the project's `AGENTS.md` names which ones it has. In a Hindsight project
-they say "Hindsight's retain and recall tools, as the memory rule says".
+skill named `tracking-work-items`, and every project with local or Notion
+memory has `managing-project-memory`, so they name both directly. A
+Hindsight project has no memory skills: they send it to "Project memory" in
+the project's `AGENTS.md`.
 
 `managing-work-items` runs every work item through its States and hands
 every read and save to `tracking-work-items`. A work item's Next action
@@ -94,27 +98,38 @@ in project-setup's `references/notion-build/` (`work-setup.md`,
 None. Mike deferred Jira on 2026-09-29 ("It could just maybe be like a future
 thing").
 
-## 4. Memory sets (one per project)
+## 4. Memory (local or Notion memory)
 
-### 4.1 Local files and Obsidian (`assets/.skill-sets/local-memory/`)
+A project with local or Notion memory gets two skills (Mike, 2026-10-01):
+`managing-project-memory`, the process, the same for both, which never names
+a storage tool; and its own version of `storing-project-memory`, storage
+only. Memory is kept by concept, like a wiki: one record per concept, not
+one per fact. `check-skills.mjs` matches these rows by folder.
 
-| Skill | Folder | Description |
-| --- | --- | --- |
-| `local-memory-save` | `assets/.skill-sets/local-memory/local-memory-save/` | Saves facts, lessons, and project-wide decisions to local memory, changes to Current State, and "from now on" instructions to project rules, never settings.json hooks, so later sessions follow them. Use when the owner wants something kept, corrected, or forgotten, such as "remember this", "whenever you ...", or "forget that". Not for a handoff; use handoff. Only for projects with local memory. |
-| `local-memory-find` | `assets/.skill-sets/local-memory/local-memory-find/` | Searches this project's local memory, rules, requirements, and memories linked to work items, and cites every source, so each answer comes from what was agreed. Use when the owner asks what was decided or recorded before, or why, such as "what did we decide", "do we know", or "search my notes". Not for planning or design; use managing-work-items. Only for projects with local memory. |
-| `local-memory-refine` | `assets/.skill-sets/local-memory/local-memory-refine/` | Reviews all this project's local memory: merges duplicates, retires stale files, fixes work item links, prunes Current State, and proposes proven lessons as rules or skills, so memory stays small and true. Use when the owner says "refine memory" or "clean up memory", or the session-start hook says so. Not for fixing one memory; use local-memory-save. Only for projects with local memory. |
-
-### 4.2 Notion in Lore's layout (`assets/.skill-sets/notion-memory/`)
-
-Built and tested by the Notion session (commit `82aaaa6`).
+### 4.1 The process (`assets/.skill-sets/memory-process/`)
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `notion-memory-save` | `assets/.skill-sets/notion-memory/notion-memory-save/` | Saves facts, lessons, and project-wide decisions to Notion memory, changes to Current state, and "from now on" instructions to project rules, never settings.json hooks, so later sessions follow them. Use when the owner wants something kept, corrected, or forgotten, such as "remember this", "whenever you ...", or "forget that". Not for a handoff; use handoff. Only for projects with Notion memory. |
-| `notion-memory-find` | `assets/.skill-sets/notion-memory/notion-memory-find/` | Searches this project's Notion memory, Current state, and memories linked to work items, and cites each source, so each answer comes from what was agreed. Use when the owner asks what was decided or recorded before, or why, such as "what did we decide", "do we know", or "search Notion for it". Not for planning or design; use managing-work-items. Only for projects with Notion memory. |
-| `notion-memory-refine` | `assets/.skill-sets/notion-memory/notion-memory-refine/` | Reviews all this project's Notion memory: merges duplicates, retires stale records, fixes work item links, prunes Current state, and proposes proven lessons as rules or skills, so memory stays small and true. Use when the owner says "refine memory" or "clean up memory", or the session-start hook says so. Not for fixing one memory; use notion-memory-save. Only for projects with Notion memory. |
+| `managing-project-memory` | `assets/.skill-sets/memory-process/managing-project-memory/` | Keeps project memory true and small: saves facts, lessons, decisions, glossary terms, and Current State; corrects, retires, or deletes what is wrong; writes "from now on" instructions to the project rules; finds what was recorded before; tidies all memory. Use whenever the owner says "remember this", "forget that", "from now on", "what did we decide", or "clean up memory", or a hook says to review memory, even if he does not name this skill. Not for a handoff; use handoff. |
 
-### 4.3 Hindsight
+### 4.2 Local files and Obsidian (`assets/.skill-sets/local-memory/`)
+
+| Skill | Folder | Description |
+| --- | --- | --- |
+| `storing-project-memory` | `assets/.skill-sets/local-memory/storing-project-memory/` | Saves, finds, and changes project memory as Markdown files in the memory folder, so managing-project-memory reads and writes every memory the same way. Use when a memory must be read, saved, searched, renamed, retired, or deleted, such as "which memory files link to WI-031". Not for deciding what to keep or when to ask; use managing-project-memory. Only for projects with local memory. |
+
+### 4.3 Notion in Lore's layout (`assets/.skill-sets/notion-memory/`)
+
+Lore's database definitions are in its `assets/schema/`, and their columns,
+views, and page layout in `references/database-layout.md` and
+`references/views-and-layout.md`. Project-setup's
+`references/notion-build/setup.md` sends them.
+
+| Skill | Folder | Description |
+| --- | --- | --- |
+| `storing-project-memory` | `assets/.skill-sets/notion-memory/storing-project-memory/` | Stores and finds this project's memory in Notion, in Lore's five databases and the Current state page, for managing-project-memory, so every memory lands in the right column and page section. Use when a memory or the Current state must be read, saved, changed, searched, linked to a work item, merged, or deleted, or when the glossary is edited. Not for deciding what to keep or when to ask; use managing-project-memory. Only for projects with Notion memory. |
+
+### 4.4 Hindsight
 
 None (Mike, 2026-09-29: "Hindsight has its own complete way. It's a whole
 memory engine"). Hindsight's coding-agent add-on saves each session to the
@@ -122,7 +137,18 @@ project's bank on Mike's VPS; the agent uses the add-on's `hindsight_*`
 tools and keeps Current State in the local file `memory/CURRENT_STATE.md`.
 The model's memory rule says how.
 
-## 5. Salesforce projects (4)
+## 5. Notion's command-line tool (`assets/.skill-sets/notion-tools/`)
+
+Every project with work items or memory in Notion gets it, once. Both Notion
+storage skills (`tracking-work-items` and `storing-project-memory`) send
+every `ntn` call through it, so sign-in, Codex steps, and errors are written
+once.
+
+| Skill | Folder | Description |
+| --- | --- | --- |
+| `using-notion-cli` | `assets/.skill-sets/notion-tools/using-notion-cli/` | Shows how to run ntn, Notion's command-line tool, for the Notion storage skills: sign-in, Codex permissions, the calls every Notion step uses, and fixes for failed calls, so reads and saves in Notion work the first time. Use before any ntn call, when ntn will not sign in or cannot find a page, in Codex, and whenever a Notion call fails. tracking-work-items and storing-project-memory use it for every call. Only for projects that keep work or memory in Notion. |
+
+## 6. Salesforce projects (4)
 
 `sf-architect-solutioning` is copied from `assets/.salesforce/`. Its
 description was rewritten on 2026-09-27, and its body was reworded and given
@@ -139,7 +165,7 @@ from the setup copy and makes the project's own link.
 | `sf-component-tracker` | `assets/model/.claude/skills/sf-component-tracker/` | Keeps the component tracker CSV, the master and per-work-item package.xml files, destructiveChanges.xml, and manual steps in sync, so no changed component is left out of a deploy. Use when Salesforce metadata under force-app/ is added, changed, renamed, or deleted (open it before building and update the records in the same response), a deploy result comes back, or a deploy needs manual steps. |
 | `sf-data-change` | `assets/model/.claude/skills/sf-data-change/` | Builds the owner's handoff for a Salesforce production data change: load file, backup, numbered steps, success check, and undo steps, so no agent writes production data and every change can be undone. Use when the owner asks to load, import, update, or delete production records, even inside a build, for example "load this file into production". |
 
-## 6. Helper briefs
+## 7. Helper briefs
 
 Each helper is a brief file inside the skill that starts it (Mike, draft 2
 answers): the skill starts a general helper agent with that brief, the same
@@ -156,7 +182,7 @@ runs before the owner is asked to approve a result (Mike, 2026-09-28).
 | Acceptance checker | `managing-work-items`: `references/acceptance-checker-brief.md` |
 | Handoff verifier | `handoff`: `references/handoff-verifier.md`, a copy of `dev/build-shared/helper-briefs/handoff-verifier.md` |
 
-## 7. Shared texts
+## 8. Shared texts
 
 A skill reads only files in its own folder, so text several skills need is
 copied into each one. The source is in `dev/build-shared/`, and each copy's
@@ -166,11 +192,6 @@ first line names it. Edit the source, then copy it over every copy
 
 | Source | Skills that hold a copy (in `references/`, unless the row says `assets/`) |
 | --- | --- |
-| `notion/ntn-basics.md` | `notion-memory-find`, `notion-memory-save`, `notion-memory-refine` |
-| `notion/notion-access.md` | `notion-memory-find`, `notion-memory-save`, `notion-memory-refine` |
-| `notion/record-mapping.md` | `notion-memory-find`, `notion-memory-save`, `notion-memory-refine` |
-| `notion/current-state.md` | `notion-memory-save`, `notion-memory-refine` |
-| `local-memory/record-format.md` | `local-memory-save`, `local-memory-refine` |
 | `helper-briefs/handoff-verifier.md` | `handoff` |
 
 Some skill templates are copies of the model's files. They are refreshed with
@@ -181,8 +202,9 @@ fails when one differs from the model:
 | --- | --- |
 | `managing-work-items`: `assets/work-item-template.md` | `work-items/work-item-template/WORK-ITEM.md` |
 | `managing-work-items`: `assets/design-template.md` | `work-items/work-item-template/DESIGN.md` |
+| `managing-project-memory`: `references/memory-criteria.md` | `memory/memory-criteria.md` |
 
-## 8. Neighbors the routing test watches
+## 9. Neighbors the routing test watches
 
 Each pair is kept apart by the situation each description names early: what
 is open or waiting on the owner, or what he is doing right now
@@ -199,15 +221,21 @@ the sets apart (draft 2, section 4.6).
 - `managing-work-items` and `braindump`: a brain dump he asks only to plan
   goes to `managing-work-items`; one he wants played back first goes to
   `braindump`.
-- The memory find skill and `tracking-work-items`: what was recorded, or
+- `managing-project-memory` and `tracking-work-items`: what was recorded, or
   where one item stands.
-- `handoff` and the memory save skill: the owner ends the session, or wants
-  one thing kept. A handoff saves only what the owner says yes to.
-- The memory save skill and the memory refine skill: one memory kept,
-  corrected, or forgotten, or a review of all memory.
-- The memory save skill and Claude Code's built-in `update-config` for "from
-  now on" and "whenever you ...": an instruction for how the agent works is a
-  line in `.claude/rules/owner-preferences.md`, never a settings hook.
+- `managing-project-memory` and `storing-project-memory`: deciding what to
+  keep, correct, or forget goes to `managing-project-memory`, which hands
+  each read and save to `storing-project-memory`; only a lookup opens
+  `storing-project-memory` alone ("which memory files link to WI-031").
+- `handoff` and `managing-project-memory`: the owner ends the session, or
+  wants one thing kept. A handoff saves only what the owner says yes to.
+- `managing-project-memory` and Claude Code's built-in `update-config` for
+  "from now on" and "whenever you ...": an instruction for how the agent
+  works is a line in `.claude/rules/owner-preferences.md`, never a settings
+  hook.
+- `using-notion-cli` and the two Notion storage skills: how to run `ntn`,
+  or a Notion call that failed, opens `using-notion-cli`; a work item or a
+  memory to read or save opens the storage skill, which uses it.
 - `handoff` and `managing-work-items` for "check it": a pasted handoff
   prompt ("check this handoff") goes to `handoff`; testing a work item goes
   to `managing-work-items` (the Testing Loop).
@@ -223,11 +251,10 @@ the sets apart (draft 2, section 4.6).
   short question.
 - `project-setup` and `pull-latest` for "update": Toolkit V2's own files, or
   this repository's Git remote.
-- The memory find skill and `managing-work-items` for "help me plan this"
-  and "design this": the memory find skill's "Not for planning or design;
-  use managing-work-items." clause keeps them apart, so
-  `managing-work-items` opens first and runs the memory find skill itself.
-  Check which skill opens first.
+- `managing-project-memory` and `managing-work-items` for "help me plan
+  this" and "design this": `managing-work-items` opens first and searches
+  memory with `managing-project-memory` itself (the model's `AGENTS.md`
+  says so). Check which skill opens first.
 - `managing-work-items` and `sf-architect-solutioning`: a Salesforce
   platform question that needs no design options goes to
   `sf-architect-solutioning`, even about a work item.
@@ -238,13 +265,15 @@ Machine-wide skills on Mike's Mac that also match (check O7 in
 - `project-setup` and the older claude-toolkit's `project-init` for
   "initialize this project" in a folder with no setup yet.
 - `managing-work-items`, `tracking-work-items`, and the Notion plugin's own
-  commands (`Notion:tasks:build` and the rest), and the memory find skill and `Notion:search`: the model's
-  `AGENTS.md` says the plugin never replaces the project's skills.
-- The memory refine skill and `anthropic-skills:consolidate-memory`: the
+  commands (`Notion:tasks:build` and the rest), and `managing-project-memory`
+  and `Notion:search`: the model's `AGENTS.md` says the plugin never
+  replaces the project's skills.
+- `managing-project-memory` and `anthropic-skills:consolidate-memory`: the
   model's `AGENTS.md` says never to use `consolidate-memory`.
-- `local-memory-find` and `obsidian:obsidian-cli` for "search my notes".
+- `managing-project-memory` (local memory) and `obsidian:obsidian-cli` for
+  "search my notes".
 
-## 9. Retired skills
+## 10. Retired skills
 
 - `work-refine`, `solution-design`, `work-delegate`, `work-check`, and
   `work-finish` became `managing-work-items`, and `local-work-track`,
@@ -256,8 +285,13 @@ Machine-wide skills on Mike's Mac that also match (check O7 in
   work track skills and `work-on`.
 - `work-on` and `work-status` became lines in the model's `AGENTS.md`, and
   each work find skill joined its work track skill (Mike, 2026-10-01).
+- `local-memory-save`, `local-memory-find`, `local-memory-refine`,
+  `notion-memory-save`, `notion-memory-find`, and `notion-memory-refine`
+  became `managing-project-memory` and the two versions of
+  `storing-project-memory`. The `ntn` text that each of them and the Notion
+  `tracking-work-items` held became `using-notion-cli` (Mike, 2026-10-01).
 - `memory-save`, `memory-find`, and `memory-tidy` became one set per storage
-  option; `memory-tidy` is now `local-memory-refine` and
+  option; `memory-tidy` became `local-memory-refine` and
   `notion-memory-refine`.
 - `spec-check`, `work-guide`, and `track-tasks` were folded into
   `work-refine`, `AGENTS.md`, and Current State.

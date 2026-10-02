@@ -82,7 +82,7 @@ Map the requirement to system areas:
 This skill is project-agnostic. Never assume a folder structure. Discover where each project keeps its state:
 
 1. **Read the project's AGENTS.md and rules** (`.claude/rules/` if present). They declare where requirements, design decisions, work items, and deployment state live (a ticketing system, a hub doc, local markdown, a tracker file, or a mix).
-2. **Check prior decisions**: the work item's Questions and Answers rows marked `Decision?` yes, and project-wide decisions in memory (the project's memory find skill, or Hindsight's `recall` tool). Flag any conflict between the new requirement and an existing decision before designing around it.
+2. **Check prior decisions**: the work item's Questions and Answers rows marked `Decision?` yes, and project-wide decisions in memory (`managing-project-memory`; Hindsight: `AGENTS.md`, "Project memory"). Flag any conflict between the new requirement and an existing decision before designing around it.
 3. **Check client conventions**: a `## Client Metadata Conventions` section in the project's AGENTS.md overrides Well-Architected defaults where they conflict. Also apply `references/naming-conventions.md` for standard naming.
 4. **If the project declares no locations**, ask the owner where the solution plan and design decisions should be recorded. Do not invent a folder structure.
 

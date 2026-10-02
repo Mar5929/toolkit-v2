@@ -2,10 +2,13 @@
 
 Purpose: the Notion steps onboarding runs for a new project, the one-time
 build of the templates, bringing an older project up to the current
-template, and rebuilding a damaged template. `ntn-commands.md`,
-`database-layout.md`, and the `assets/schema/` files are in the Notion
-`tracking-work-items` skill, `assets/.skill-sets/notion-work/tracking-work-items/`
-in this skill. The other files named here are in this folder.
+template, and rebuilding a damaged template. `database-layout.md` and the
+`assets/schema/` files are in the Notion `tracking-work-items` skill,
+`assets/.skill-sets/notion-work/tracking-work-items/` in this skill.
+`ntn-commands.md` is in the `using-notion-cli` skill,
+`assets/.skill-sets/notion-tools/using-notion-cli/references/` in this skill;
+running `ntn` in Codex is in that skill's `SKILL.md`. The other files named
+here are in this folder.
 
 ## Contents
 
@@ -51,7 +54,7 @@ takes everything on the template with it.
 
 Before anything: the owner has signed in (`ntn login`) and shared, with
 the "Notion CLI" connection, the top-level Notion page his projects go
-under (`ntn-commands.md`, "Access").
+under (`ntn-commands.md`, "Access and sign-in").
 
 1. **Pick the template** from the table above, from the owner's two setup
    answers, and take its id from the templates list. Then check it is

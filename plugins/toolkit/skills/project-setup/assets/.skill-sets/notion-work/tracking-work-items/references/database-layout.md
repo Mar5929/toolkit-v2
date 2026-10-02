@@ -231,7 +231,7 @@ ntn api v1/pages/<page-id> -X PATCH -d '{"properties":{"Tags":{"multi_select":[{
 
 Files. A meeting transcript, document, or other source goes in the Files property, with one line in the page's Notes, Sources.
 
-1. Upload the file. The limit is 20 MB; for a bigger file, tell the owner it is too big to upload this way. Text the owner pasted is written first to a scratch folder outside the project, named `YYYY-MM-DD-<short-name>.md` (`ntn-commands.md`, "Sending a body"). Remove the scratch folder once the Files property is saved and read back.
+1. Upload the file. The limit is 20 MB; for a bigger file, tell the owner it is too big to upload this way. Text the owner pasted is written first to a scratch folder outside the project, named `YYYY-MM-DD-<short-name>.md` (`using-notion-cli`, "Sending a body"). Remove the scratch folder once the Files property is saved and read back.
 
    ```bash
    ntn files create --filename "<name>" --content-type "<type>" --json < "<path>" | jq -r '.id, .status'
@@ -267,7 +267,7 @@ A card made with "New" or "+ New page" gets the work item template's sections by
 
 1. Give such a card State Backlog and Status Not Started, and the other defaults of "Creating an item".
 2. Add a Recent History row: "Made in Notion by hand."
-3. A page made with "Empty" in the New menu, or made before the project had a default template, has an empty body (fewer than five blocks). Give it the default template; its properties are kept. Read the id of the template with `is_default` true (`ntn-commands.md`, "Database templates"), then wait for the content (`ntn-commands.md`, "Waiting for a template"):
+3. A page made with "Empty" in the New menu, or made before the project had a default template, has an empty body (fewer than five blocks). Give it the default template; its properties are kept. Read the id of the template with `is_default` true (`using-notion-cli`, "Database templates"), then wait for the content (`using-notion-cli`, "Waiting for a template"):
 
    ```bash
    ntn api v1/pages/<page-id> -X PATCH -d '{"template":{"type":"template_id","template_id":"<default-template-id>"}}' < /dev/null

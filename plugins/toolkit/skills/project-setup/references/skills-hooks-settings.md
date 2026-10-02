@@ -33,19 +33,21 @@ The shared skills are the same in every project (9): `managing-work-items`,
 `handoff`, `braindump`, `explain-simply`, `session-summary`, `pull-latest`,
 `reset-to-remote`, `merge-and-clean-up`, `publish-docs`. They name no
 tracker or memory system. Every work tracking set holds one skill with the
-same name, `tracking-work-items`, so the shared skills name it directly.
-They say "the memory save skill", and the "Skills" section of `AGENTS.md`
-names which one the project has.
+same name, `tracking-work-items`, and every local or Notion memory project
+gets `managing-project-memory`, so the shared skills name both directly. A
+Hindsight project has no memory skills: they send it to "Project memory" in
+`AGENTS.md`.
 
-Then copy the sets for the choices:
+Then copy the sets for the choices. With work items and memory both in
+Notion, copy `notion-tools` once.
 
 | Choice | Copy into `<copy>/.claude/skills/` | Skills |
 | --- | --- | --- |
 | Work items local | `<skill folder>/assets/.skill-sets/local-work/.` | `tracking-work-items` |
-| Work items in Notion | `<skill folder>/assets/.skill-sets/notion-work/.` | `tracking-work-items` |
+| Work items in Notion | `<skill folder>/assets/.skill-sets/notion-work/.` and `<skill folder>/assets/.skill-sets/notion-tools/.` | `tracking-work-items`, `using-notion-cli` |
 | Work items in GitHub Issues | `<skill folder>/assets/.skill-sets/github-work/.` | `tracking-work-items` |
-| Memory local | `<skill folder>/assets/.skill-sets/local-memory/.` | `local-memory-save`, `local-memory-find`, `local-memory-refine` |
-| Memory in Notion | `<skill folder>/assets/.skill-sets/notion-memory/.` | `notion-memory-save`, `notion-memory-find`, `notion-memory-refine` |
+| Memory local | `<skill folder>/assets/.skill-sets/memory-process/.` and `<skill folder>/assets/.skill-sets/local-memory/.` | `managing-project-memory`, `storing-project-memory` |
+| Memory in Notion | `<skill folder>/assets/.skill-sets/memory-process/.`, `<skill folder>/assets/.skill-sets/notion-memory/.`, and `<skill folder>/assets/.skill-sets/notion-tools/.` | `managing-project-memory`, `storing-project-memory`, `using-notion-cli` |
 | Memory in Hindsight | nothing | none: the agent uses the tools of Hindsight's coding-agent add-on (`hindsight-on-vps.md` in this folder) |
 | Salesforce | `<skill folder>/assets/.salesforce/sf-architect-solutioning` | `sf-architect-solutioning`; the model copy already put `sf-component-tracker`, `sf-data-change`, and `sf-deploy-check` there |
 

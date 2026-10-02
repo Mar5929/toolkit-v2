@@ -38,5 +38,5 @@ playback.
   dump: do it.
 - Meeting notes, or a dump he asks only to plan, go to `managing-work-items`.
 - A hook reminder says something may be worth keeping: save nothing before
-  his yes. Name it in the playback; after the yes, open the project's memory
-  save skill (a Hindsight project: the `retain` tool).
+  his yes. Name it in the playback; after the yes, open
+  `managing-project-memory` (Hindsight: `AGENTS.md`, "Project memory").

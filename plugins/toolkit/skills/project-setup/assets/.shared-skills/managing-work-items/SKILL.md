@@ -64,9 +64,9 @@ Start every helper as a new helper that does not see this conversation. Never a 
 | For | Use |
 | --- | --- |
 | Every read and every save of a work item | `tracking-work-items` |
-| Searching what the project already decided | the memory find skill (Hindsight: its `recall` tool) |
-| Saving a decision that matters beyond this item | the memory save skill (Hindsight: its `retain` tool) |
-| Updating the project's Current State | edit `memory/CURRENT_STATE.md` when the project has that file, otherwise the memory save skill |
+| Searching what the project already decided | `managing-project-memory` (Hindsight: `AGENTS.md`, "Project memory") |
+| Saving a decision that matters beyond this item | `managing-project-memory` (Hindsight: `AGENTS.md`, "Project memory") |
+| Updating the project's Current State | edit `memory/CURRENT_STATE.md` when the project has that file, otherwise `managing-project-memory` |
 | Merging a pull request | `merge-and-clean-up` |
 | A Salesforce platform question | `sf-architect-solutioning` |
 

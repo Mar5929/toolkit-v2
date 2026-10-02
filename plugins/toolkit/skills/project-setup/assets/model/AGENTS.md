@@ -32,7 +32,7 @@ This project's memory is Hindsight, on the owner's server, in the bank named in 
 - If Current State is missing from your context, read `memory/CURRENT_STATE.md` in the main checkout (the first path `git worktree list` prints).
 <!-- endif -->
 <!-- if memory=notion -->
-- If Current State is missing from your context, read the "Current state" page with `notion-memory-find`.
+- If Current State is missing from your context, read the "Current state" page with `storing-project-memory`.
 <!-- endif -->
 - Read `SOUL.md` (when the project has one) and `PROJECT.md`; read them again after resume, clear, or compaction.
 - Before editing files in a folder that has its own `AGENTS.md` (for example `requirements/`), read that file.
@@ -106,7 +106,7 @@ Give every item in a list of choices or recommendations you show the owner a one
 | A project-wide decision that belongs to no work item | Straight to a memory record, after the owner's yes (the memory save skill) |
 | A decision about something that is not a work item yet | A new work item, with the decision as its first Questions and Answers row |
 | What is in progress (one line per active work item, pointing to it), owner to-dos with no work item, where the next session starts | Current State (the memory save skill) |
-| The owner's preference or correction for how the agent works ("from now on", "always", "never") | `.claude/rules/owner-preferences.md` (the memory save skill); for every project, `~/.claude/rules/` |
+| The owner's preference or correction for how the agent works ("from now on", "always", "never") | `.claude/rules/owner-preferences.md` (the memory save skill), never a settings hook or the `update-config` skill; for every project, `~/.claude/rules/` |
 | A lasting fact, an unproven lesson, or a hard-to-find reference | Memory (the memory save skill) |
 | Project terms | The glossary (the memory save skill) |
 | How agents should work in this project, or a procedure that proved itself | A rule in `.claude/rules/` or a skill in `.claude/skills/`, with the owner's yes; never memory |
@@ -131,10 +131,10 @@ Give every item in a list of choices or recommendations you show the owner a one
 - This project has one tracker; never copy items into a second tracker or a local list. Refer to items by ID, never by path or link. `managing-work-items` holds the states, statuses, and approval points.
 - Keep each design with its item after delivery. The roadmap names items by ID; item detail stays in the tracker.
 <!-- if memory=local -->
-- Change memory only through `local-memory-save` and `local-memory-refine`; `managing-work-items` and `handoff` also edit `memory/CURRENT_STATE.md`.
+- Change memory only through `managing-project-memory`; `managing-work-items` and `handoff` also edit `memory/CURRENT_STATE.md`.
 <!-- endif -->
 <!-- if memory=notion -->
-- Memory is in the databases on this project's Notion page, in Lore's layout (links in `PROJECT.md`); Current State is its "Current state" page. Change memory only through the memory skills; `managing-work-items` and `handoff` also update that page.
+- Memory is in the databases on this project's Notion page, in Lore's layout (links in `PROJECT.md`); Current State is its "Current state" page. Change memory only through `managing-project-memory`; `managing-work-items` and `handoff` also update that page.
 <!-- endif -->
 <!-- if memory=hindsight -->
 - Memory is Hindsight: see "Project memory" at the top.
@@ -163,20 +163,18 @@ Pick a skill by the situation; the examples only help you match it. This list st
 - A decision that answers no open question ("we decided", "let's go with"): a Questions and Answers row marked `Decision?` yes in its work item, with `managing-work-items`. "Where information goes" says what else, and where it goes with no work item.
 - A project to-do the owner wants to be reminded of, with no time given: the work item it concerns (`managing-work-items`), else "Untracked to-dos" in Current State (the memory save skill); a personal errand goes to Todoist. Example: "remind me to ...".
 <!-- if memory=local -->
-- The owner wants something kept, corrected, or forgotten, or gives a standing instruction: `local-memory-save` (the memory save skill). It puts a fact in memory and a project-wide decision in a memory record. An instruction for how the agent works goes in `.claude/rules/owner-preferences.md`, never in a settings hook or the `update-config` skill. Examples: "remember", "from now on", "always", "never", "whenever you ...", "each time you ...", "forget that".
-- What was recorded or decided before, or why: `local-memory-find` (the memory find skill). `managing-work-items` searches memory itself, so work on an item opens it first; before any other recommendation, search with `local-memory-find`. Examples: "what did we decide", "do we know", "why did we".
-- A review of all memory, or Current State has grown: `local-memory-refine` (the memory refine skill); fixing one memory is the memory save skill's job. Examples: "refine memory", "clean up memory".
+- The owner wants something kept, corrected, or forgotten, gives a standing instruction, or asks what was recorded or decided before and why; a change to Current State; a review or clean-up of all memory: `managing-project-memory`. Work on an item opens `managing-work-items` first, which searches memory itself; before any other recommendation, search memory with `managing-project-memory`.
+- Where and how memory is stored: `storing-project-memory`; `managing-project-memory` uses it for every read and write.
 <!-- endif -->
 <!-- if memory=notion -->
-- The owner wants something kept, corrected, or forgotten, or gives a standing instruction: `notion-memory-save` (the memory save skill). It puts a fact in memory and a project-wide decision in a memory record. An instruction for how the agent works goes in `.claude/rules/owner-preferences.md`, never in a settings hook or the `update-config` skill. Examples: "remember", "from now on", "always", "never", "whenever you ...", "each time you ...", "forget that".
-- What was recorded or decided before, or why, also when the owner says to search Notion for it: `notion-memory-find` (the memory find skill). `managing-work-items` searches memory itself, so work on an item opens it first; before any other recommendation, search with `notion-memory-find`. Examples: "what did we decide", "do we know", "why did we".
-- A review of all memory, or Current State has grown: `notion-memory-refine` (the memory refine skill); fixing one memory is the memory save skill's job. Examples: "refine memory", "clean up memory".
-- A Notion plugin's own search, find, or capture commands and skills (names starting `Notion:`, or `notion:` in Codex) never replace the memory skills: they reach the whole Notion workspace, not only this project's memory.
+- The owner wants something kept, corrected, or forgotten, gives a standing instruction, or asks what was recorded or decided before and why; a change to Current State; a review or clean-up of all memory: `managing-project-memory`. Work on an item opens `managing-work-items` first, which searches memory itself; before any other recommendation, search memory with `managing-project-memory`.
+- Where and how memory is stored: `storing-project-memory`; `managing-project-memory` uses it for every read and write.
+- A Notion plugin's own search, find, or capture commands and skills (names starting `Notion:`, or `notion:` in Codex) never replace `managing-project-memory`, even when the owner says to search Notion: they reach the whole Notion workspace, not only this project's memory.
 <!-- endif -->
 <!-- if memory=hindsight -->
 - Memory: Hindsight's add-on and its tools (see "Project memory" at the top). Current State is the file `memory/CURRENT_STATE.md`: edit it directly, within its line limits.
 <!-- endif -->
-- Never use `anthropic-skills:consolidate-memory` in this project. It edits Claude Code's own memory folder, which this project turns off. For any memory clean-up, follow the "refine memory" line above.
+- Never use `anthropic-skills:consolidate-memory` in this project. It edits Claude Code's own memory folder, which this project turns off. For any memory clean-up, use the memory line above.
 <!-- if salesforce -->
 - A Salesforce platform question, even about a work item: `sf-architect-solutioning`.
 - Salesforce metadata under `force-app/` added, changed, renamed, or deleted, a deploy result, or manual deploy steps: `sf-component-tracker`, before building.

@@ -20,7 +20,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"$(git rev-parse --show-toplevel)/.claude/hooks/prompt-reminder.mjs\" --skill local-memory-save",
+            "command": "node \"$(git rev-parse --show-toplevel)/.claude/hooks/prompt-reminder.mjs\"",
             "timeout": 10
           }
         ]
