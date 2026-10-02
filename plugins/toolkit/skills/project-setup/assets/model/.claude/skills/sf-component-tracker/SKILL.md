@@ -65,14 +65,14 @@ Rules for the master manifest:
 
 ## Step 3: types kept out of the manifest
 
-These types cannot be deployed safely by a CLI manifest today: profiles, duplicate rules, matching rules, and compact-layout assignments. They move by change set or by hand.
+These types cannot be deployed safely by a manifest today: profiles, duplicate rules, matching rules, and compact-layout assignments. They move by change set or by hand.
 
 - Add a tracker row for them. The tracker is the full inventory.
 - Keep them out of the master manifest.
 - Add their deploy as a step in the relevant `manual-steps.md`: which change set to build, which assignment to make, in what order.
 - Name the exclusions in the master manifest's header comment.
 
-Permission sets are not on this list. They get a normal tracker row and a normal manifest member. They deploy by CLI to a sandbox only after a clean `permsets.py preflight` (`permissions-source-control.md`). Set their org flags like any other component's (see "Org flags").
+Permission sets are not on this list. They get a normal tracker row and a normal manifest member. They deploy to a sandbox only after a clean `permsets.py preflight` (`permissions-source-control.md`). Set their org flags like any other component's (see "Org flags").
 
 ## Step 4: manual steps (`manual-steps.md`)
 

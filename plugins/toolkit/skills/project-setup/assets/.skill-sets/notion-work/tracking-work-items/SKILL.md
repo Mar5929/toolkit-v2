@@ -18,7 +18,7 @@ This project keeps its work items in Notion. This skill says where each thing is
 
 ## Steps for any look-up or save
 
-1. Read the ids from `PROJECT.md`. Open `using-notion-cli` before your first `ntn` call.
+1. Read the ids from `PROJECT.md`. Before your first Notion read or write in a session, whatever tool you use, open `using-notion-cli`.
 2. Read what you will look at or change, fresh in this turn. The owner edits in Notion, so never answer from an earlier read.
 3. Make the change with the section named in the Files table below.
 4. Read the changed page or row back. Notion saves all of an `update_content` call or none of it, so a call it refused changed nothing.
@@ -34,7 +34,7 @@ This project keeps its work items in Notion. This skill says where each thing is
 
 ## Gotchas
 
-- Never use `replace_content` on a work item page: the views in it block it, and it would rewrite the owner's edits.
+- Never replace a work item page's whole text (for example with `replace_content`): the views in it block it, and it would rewrite the owner's edits.
 - Notion lists the work item template as a row of Work Items, with an empty title and usually ID 1. Leave out rows with an empty title in every Work Items query, except "Cards with no title" in `references/searching.md`.
 - Leave out archived items unless the owner asks for them.
 - The Roadmap, Sub-items, and Tasks sections of a page are views, shown in the page text only as `<database …>` lines. Read their rows with the tree queries in `references/searching.md`.
@@ -49,7 +49,7 @@ This project keeps its work items in Notion. This skill says where each thing is
 | --- | --- |
 | Deciding what to save and when | `managing-work-items` |
 | A State and Status that no longer match | `managing-work-items` |
-| Every `ntn` call: sign-in, Codex, the shape of each call, and errors | `using-notion-cli` |
+| Every Notion read or write: sign-in, Codex, the shape of each call, and errors | `using-notion-cli` |
 | Moving work items to another tracker | `project-setup` |
 | Restoring a missing database template | `project-setup` |
 

@@ -1,6 +1,6 @@
 ---
 name: using-notion-cli
-description: 'Shows how to run ntn, Notion''s command-line tool, for the Notion storage skills: sign-in, Codex permissions, the calls every Notion step uses, and fixes for failed calls, so reads and saves in Notion work the first time. Use before any ntn call, when ntn will not sign in or cannot find a page, in Codex, and whenever a Notion call fails. tracking-work-items and storing-project-memory use it for every call. Only for projects that keep work or memory in Notion.'
+description: 'Shows how to run ntn, Notion''s command-line tool, for the Notion storage skills: sign-in, Codex permissions, the calls every Notion step uses, and fixes for failed calls, so reads and saves in Notion work the first time. Use before any Notion read or write, when ntn will not sign in or cannot find a page, in Codex, and whenever a Notion call fails. tracking-work-items and storing-project-memory use it for every call. Only for projects that keep work or memory in Notion.'
 ---
 
 # Using the Notion command line
@@ -26,10 +26,13 @@ The Codex sandbox blocks network access and the keychain, so `ntn` fails inside 
 - Ask for escalated permissions (`sandbox_permissions` set to `require_escalated`) with a one-line reason, for example "Read this project's page in Notion." Never change the Codex sandbox mode for the whole session.
 - With approvals turned off (`codex exec`), Codex refuses the escalation. Show the owner the exact command, ask him to run it in a terminal, and wait for its output.
 
-## Gotchas
+## Any Notion write
 
-- Sending a relation, Files, or Tags value replaces the whole list. Read the current list first and send it all back with your change.
-- Query results come in pages of 100. When `has_more` is true, send the same query again with `"start_cursor": "<next_cursor>"`.
+- A relation, Files, or Tags value you send replaces the whole list. Read the current list first and send it all back with your change.
+- Query results come 100 at a time. Read every page of results before you act on them.
+- Never remove a database view line or a child page line from a page's text.
+- Never apply a template twice to the same page.
+- Never apply a template to a template page: it turns the template into a row that shows on the owner's boards.
 
 ## Hand-offs
 

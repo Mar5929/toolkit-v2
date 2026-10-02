@@ -20,7 +20,7 @@ This project keeps its memory in Notion. This skill says where each thing is sto
 
 ## Steps for any look-up or save
 
-1. Read the ids from `PROJECT.md`. Before your first `ntn` call of the session, follow `using-notion-cli`.
+1. Read the ids from `PROJECT.md`. Before your first Notion read or write in a session, whatever tool you use, open `using-notion-cli`.
 2. Read what you will look at or change, fresh in this turn. The owner edits in Notion, so never answer from an earlier read.
 3. Make the change with the file named in Files below.
 4. Read the page back and check every change is there. A change that is not there is not saved: say so. Give the caller each page's title and link: the `url` in the page's answer.
@@ -41,7 +41,7 @@ This project keeps its memory in Notion. This skill says where each thing is sto
 | For | Use |
 | --- | --- |
 | Deciding what to save and when, and what each Current state section holds | `managing-project-memory` |
-| Every `ntn` call: sign-in, Codex, the shape of every call, and errors | `using-notion-cli` |
+| Every Notion read or write: sign-in, Codex, the shape of every call, and errors | `using-notion-cli` |
 | Finding a work item's page id | `tracking-work-items` |
 
 ## Files

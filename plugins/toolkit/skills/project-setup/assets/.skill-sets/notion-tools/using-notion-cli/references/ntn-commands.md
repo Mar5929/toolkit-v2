@@ -80,7 +80,7 @@ Copy the asset to the scratch folder and replace every placeholder with its valu
 ntn api v1/data_sources/<data-source-id>/query -d '{"filter": …, "sorts": […], "page_size": 100}' < /dev/null
 ```
 
-- The answer's `.results` are the rows (pages). More than 100 rows come in pages (`SKILL.md`, "Gotchas").
+- The answer's `.results` are the rows (pages). More than 100 rows come in pages (`SKILL.md`, "Any Notion write"): when `has_more` is true, send the same query again with `"start_cursor": "<next_cursor>"`.
 - A filter names a property and a condition, for example `{"property":"ID","unique_id":{"equals":31}}`, `{"property":"Status","status":{"equals":"In Progress"}}`, `{"property":"Parent item","relation":{"contains":"<page-id>"}}`, or `{"property":"Archived","checkbox":{"equals":false}}`. Combine them with `{"and":[…]}` or `{"or":[…]}`.
 
 ## Reading and changing page text
@@ -98,7 +98,7 @@ What the text looks like:
 - A line break inside one block is `<br>`.
 - A table is `<table header-row="true">` with one `<td>` per line.
 - A toggle heading is `## Questions and Answers {toggle="true"}`. Its contents are indented with one tab, except the lines of a table's rows (`<tr>`, `<td>`, `</tr>`), which have no tab.
-- A view of a database inside the page is one line, `<database url="…" …>Title</database>`. A child page is `<page url="…">Title</page>`. Never remove these lines.
+- A view of a database inside the page is one line, `<database url="…" …>Title</database>`. A child page is `<page url="…">Title</page>`. Before you change a page that holds them, see `SKILL.md`, "Any Notion write".
 
 Change text with exact replacements, built from a fresh read:
 
@@ -126,7 +126,7 @@ A page made or changed with `"template"` is filled in the background: the answer
 ntn api v1/blocks/<page-id>/children page_size==100 < /dev/null | jq '.results | length'
 ```
 
-A work item made from the template has more than 20 blocks. A project page made from a project template shows its databases as `child_database` blocks. Stop checking after two minutes and tell the owner the template did not finish. Never apply a template twice to the same page.
+A work item made from the template has more than 20 blocks. A project page made from a project template shows its databases as `child_database` blocks. Stop checking after two minutes and tell the owner the template did not finish.
 
 ## Database templates
 
@@ -136,7 +136,7 @@ List a database's templates, with the default one marked:
 ntn api v1/data_sources/<data-source-id>/templates < /dev/null | jq -r '.templates[] | "\(.id)\t\(.is_default)\t\(.name)"'
 ```
 
-A page made with `"template":{"type":"default"}` gets the default template. Notion refuses it when the database has no default. Only the Notion app can make a template or set the default. Never apply a template to a template (`template_id` on a template page): it turns the template into a row that shows on the owner's boards.
+A page made with `"template":{"type":"default"}` gets the default template. Notion refuses it when the database has no default. Only the Notion app can make a template or set the default. `template_id` applies a template; see `SKILL.md`, "Any Notion write", before you send it.
 
 ## Ids
 

@@ -203,10 +203,11 @@ options Backlog, Ready, In Progress, In Review, Done, and Cancelled. Run
 this after step 1 above has added the State property.
 
 1. Add the Status options Not Started (To-do), Preparing (In progress), and
-   Blocked (In progress) to the project's Work Items database with one
-   `PATCH v1/data_sources/<work-items-data-source-id>` call. The call
-   replaces the whole list, so send every option the database has now plus
-   the new ones, each with its group (`database-layout.md`).
+   Blocked (In progress) to the project's Work Items database in one
+   change (for example one `PATCH v1/data_sources/<work-items-data-source-id>`
+   call). Changing the Status options replaces the whole list, so send every
+   option the database has now plus the new ones, each with its group
+   (`database-layout.md`).
 2. Set each work item's State and Status as `update.md`, "Work items from
    Stage to State", says (`database-layout.md`, "Setting State and
    Status").

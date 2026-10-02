@@ -86,7 +86,7 @@ Answering Q-01:
 
 ## Comments
 
-Comments sit beside the page, apart from its text. Comments made through `ntn` show the owner's name, because `ntn` signs in as him. Start the agent's notes with "Agent:" so they can be told apart.
+Comments sit beside the page, apart from its text. Every comment the agent writes shows the owner's name, because the agent signs in as him. Start each one with "Agent:".
 
 ```bash
 ntn api v1/comments -d '{"parent":{"page_id":"<page-id>"},"markdown":"Agent: helper finished **P1-T02**; 12 tests pass."}' < /dev/null | jq -r .id

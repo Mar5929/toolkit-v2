@@ -106,7 +106,7 @@ Give every item in a list of choices or recommendations you show the owner a one
 | A project-wide decision that belongs to no work item | Straight to a memory record, after the owner's yes (the memory save skill) |
 | A decision about something that is not a work item yet | A new work item, with the decision as its first Questions and Answers row |
 | What is in progress (one line per active work item, pointing to it), owner to-dos with no work item, where the next session starts | Current State (the memory save skill) |
-| The owner's preference or correction for how the agent works ("from now on", "always", "never") | `.claude/rules/owner-preferences.md` (the memory save skill), never a settings hook or the `update-config` skill; for every project, `~/.claude/rules/` |
+| The owner's preference or correction for how the agent works ("from now on", "always", "never") | `.claude/rules/owner-preferences.md` (the memory save skill), never a host setting or hook; for every project, `~/.claude/rules/owner-preferences.md` and `~/.codex/AGENTS.md` |
 | A lasting fact, an unproven lesson, or a hard-to-find reference | Memory (the memory save skill) |
 | Project terms | The glossary (the memory save skill) |
 | How agents should work in this project, or a procedure that proved itself | A rule in `.claude/rules/` or a skill in `.claude/skills/`, with the owner's yes; never memory |
@@ -161,7 +161,7 @@ Pick a skill by the situation; the examples only help you match it. This list st
 - Merging a pull request, when the owner names it ("merge PR 12") or `managing-work-items` asks, and removing its branch and worktree: `merge-and-clean-up`.
 - Saving an agreed edit to a committed project document (`requirements/`, `system-guide/`, `PROJECT-ROADMAP.md`, `PROJECT.md`, a README) to the default branch: `publish-docs`.
 <!-- if tracker=notion -->
-- A Notion plugin's own commands and skills (names starting `Notion:`, or `notion:` in Codex) never replace this project's skills for its work items, even when a message holds a Notion page link; `Notion:tasks:build` marks an item Done without the owner's yes.
+- Read and change this project's work items only through `tracking-work-items` and `managing-work-items`, whatever Notion tool is at hand (a `Notion:` plugin command, the connector, or the browser), even when a message holds a Notion page link. The `Notion:tasks:build` command can mark an item Done without the owner's yes.
 <!-- endif -->
 - A decision that answers no open question ("we decided", "let's go with"): a Questions and Answers row marked `Decision?` yes in its work item, with `managing-work-items`. "Where information goes" says what else, and where it goes with no work item.
 - A project to-do the owner wants to be reminded of, with no time given: the work item it concerns (`managing-work-items`), else "Untracked to-dos" in Current State (the memory save skill); a personal errand goes to Todoist. Example: "remind me to ...".
@@ -172,12 +172,12 @@ Pick a skill by the situation; the examples only help you match it. This list st
 <!-- if memory=notion -->
 - The owner wants something kept, corrected, or forgotten, gives a standing instruction, or asks what was recorded or decided before and why; a change to Current State; a review or clean-up of all memory: `managing-project-memory`. Work on an item opens `managing-work-items` first, which searches memory itself; before any other recommendation, search memory with `managing-project-memory`.
 - Where and how memory is stored: `storing-project-memory`; `managing-project-memory` uses it for every read and write.
-- A Notion plugin's own search, find, or capture commands and skills (names starting `Notion:`, or `notion:` in Codex) never replace `managing-project-memory`, even when the owner says to search Notion: they reach the whole Notion workspace, not only this project's memory.
+- Read and change this project's memory only through `managing-project-memory`, whatever Notion tool is at hand (a `Notion:` plugin command, the connector, or the browser), even when a message holds a Notion page link or the owner says to search Notion.
 <!-- endif -->
 <!-- if memory=hindsight -->
 - Memory: Hindsight's add-on and its tools (see "Project memory" at the top). Current State is the file `memory/CURRENT_STATE.md`: edit it directly, within its line limits.
 <!-- endif -->
-- Never use `anthropic-skills:consolidate-memory` in this project. It edits Claude Code's own memory folder, which this project turns off. For any memory clean-up, use the memory line above.
+- Never save project memory in a host's own memory feature (Claude Code's auto-memory, Codex Memories) or another plugin's (for example `anthropic-skills:consolidate-memory`). For any memory clean-up, use the memory line above.
 <!-- if salesforce -->
 - Salesforce's official skills (`forcedotcom/sf-skills`) are installed for this project: keep them in mind for every Salesforce task, while this project's rules, the three Salesforce skills, and the guards still decide what may be deployed or changed.
 - Salesforce metadata under `force-app/` added, changed, renamed, or deleted, a deploy result, or manual deploy steps: `sf-component-tracker`, before building.

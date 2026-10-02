@@ -30,7 +30,7 @@ const PHRASES = {
   lesson: /\b(?:lesson learned|root cause|significant fix|important discovery)\b/i,
   decision: new RegExp(`\\b(?:${ASKED}we decided|let'?s go with|go with option)\\b`, 'i'),
 };
-const HINDSIGHT = 'A fact is kept with the hindsight_ingest_document tool and an instruction by a'
+const HINDSIGHT = 'A fact is kept with the Hindsight add-on\'s save tool and an instruction by a'
   + ' direct edit of .claude/rules/owner-preferences.md, as the memory rule says; the rule decides';
 const DECISION = " A decision goes in the work item's Questions and Answers first, with"
   + ' managing-work-items.';

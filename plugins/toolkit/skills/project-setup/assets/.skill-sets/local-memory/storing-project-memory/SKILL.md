@@ -19,7 +19,7 @@ This skill holds the storage: where each part of memory is saved in local files,
 
 1. Find the main checkout. `memory/` lives only there, even when this session runs in a worktree: `MAIN="$(git worktree list --porcelain | sed -n '1s/^worktree //p')"`. Each shell command starts fresh, so begin every command that uses `$MAIN` with that line and a `;`, in the same command. It prints nothing when the project is not a Git repository: then set `MAIN` to the project folder, the one that holds `AGENTS.md`. Never run a command with an empty `MAIN`. No `memory/` folder there: stop and tell the owner. A fresh clone and another computer have none, so an empty result there shows nothing about what was recorded.
 2. Read the whole file in this turn, and again right before you change it: the owner edits files by hand in Obsidian, and a newer edit must not be overwritten.
-3. Make the change with the matching reference (Files below). Use the file edit tool: change only the lines that change, keep every other line, heading, and bold label, and set `updated` to today.
+3. Make the change with the matching reference (Files below). Change only the lines that change, keep every other line, heading, and bold label, and set `updated` to today. Never rewrite the whole file.
 4. Read the file back. Check that what you wrote is there and that the file passes `references/record-format.md`, "A file is right when". After a delete, check that the file is gone. Report a failed save or a different read-back as `managing-project-memory` says.
 
 ## Gotchas

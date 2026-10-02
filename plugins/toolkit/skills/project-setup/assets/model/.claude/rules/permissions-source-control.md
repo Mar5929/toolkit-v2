@@ -29,7 +29,7 @@ A permission set retrieve is complete since API 40.0. A permission set deploy re
 - A preflight receipt expires after 30 minutes. Re-run it before the deploy.
 - To remove grants on purpose, re-run the preflight with `--accept-removals`.
 - Deploy to a sandbox only, with the owner's yes in the same chat. The owner runs production.
-- Never use `--ignore-conflicts` on a permission file.
+- Never skip the conflict check (`--ignore-conflicts`, or the same option in any deploy tool) on a permission file.
 - Profiles are excluded. Never deploy a profile from source.
 - Never edit or disable `.claude/hooks/guard-permission-set-deploy.cjs`. If the hook matches quoted text in another command, put the text in a file.
 

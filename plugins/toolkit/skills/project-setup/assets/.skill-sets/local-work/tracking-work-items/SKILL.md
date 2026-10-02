@@ -18,19 +18,19 @@ This skill holds the storage: where each part of a work item is saved in local f
 1. Find the main checkout. `work-items/` lives only there, even when this session runs in a worktree: `MAIN="$(git worktree list --porcelain | sed -n '1s/^worktree //p')"`. Each shell command starts fresh, so begin every command that uses `$MAIN` with that line and a `;`, in the same command. It prints nothing when the project is not a Git repository: then set `MAIN` to the project folder, the one that holds `AGENTS.md`. Never run a command with an empty `MAIN`. No `work-items/` folder there: stop and tell the owner the setup is incomplete.
 2. Find the item's file by its `id:` line (`references/searching.md`). Read the whole file in this turn, and again right before you change it: the owner edits and moves items by hand.
 3. Run the hand-change check (`references/folders-and-files.md`) at the first lookup of a session, before a move or a new sub-item, and whenever an item is not where you read it before, an ID has two files or none, or an item's folder, `parent:`, and its parent's Sub-items cell disagree. Tell the owner each finding in one line, record it, and carry on.
-4. Make the change with the matching reference (Files below). Edit with the file edit tool: change only the lines that change, keep every other line, heading, and bold label as the template has it, and set `updated:` to today. Name other items as `[[WI-031]]` in an item's text, never by folder path; `parent:` stays a plain ID.
+4. Make the change with the matching reference (Files below). Change only the lines that change, keep every other line, heading, and bold label as the template has it, and set `updated:` to today. Never rewrite the whole file. Name other items as `[[WI-031]]` in an item's text, never by folder path; `parent:` stays a plain ID.
 5. Read the file back and check every change was saved. A failed edit is "Not saved", as `managing-work-items` says. The edits worked but the read-back differs: start the reply with "Saved but not verified" and say what differs.
 
 ## Gotchas
 
-- Items live only in the main checkout, the first path `git worktree list` prints. From a worktree, change the item there; never copy it into a worktree. Never `git add` anything under `work-items/`, not even with `-f`.
+- Items live only in the main checkout, the first path `git worktree list` prints. From a worktree, change the item there, on any host; never copy or write it into the worktree. When a host blocks the write outside the worktree (for example the Codex sandbox, which asks for approval or fails with a sandbox error), ask the owner to approve it.
+- Never `git add` anything under `work-items/`, not even with `-f`.
 - Every lookup except the word search skips `references/` folders (source files may hold their own `id:` lines), `DESIGN.md` files (their `status:` is the design's), and `work-item-template/`. Never drop those flags. Leave out `archive/` unless the owner asks for archived items.
-- An edit must match the old text exactly, table spacing included. When it fails, read the file again: the owner may have changed it. Never rewrite a whole item file.
+- An edit must match the old text exactly, table spacing included. When it fails, read the file again: the owner may have changed it.
 - A `|` inside a table cell ends the cell: write `\|`. A table cell holds one line: join lines with `<br>`. Write `[[WI-031]]`, never `[[WI-031|a name]]`, in a table.
 - Values may lose their quotes when the owner edits them in Obsidian's Properties panel (`waiting_on: owner`). The commands match both.
 - IDs have three digits: the owner's "WI-31" is `WI-031`.
 - The template's example rows and tasks hold angle-bracket prompts (`<Specific unanswered question>`, `<Phase 1 name>`). They are prompts: replace them with real rows, and never count them as real.
-- In Codex, the sandbox can block a session in a worktree from writing outside it. The write to the main checkout then asks for approval or fails with a sandbox error: ask the owner to approve it. Never write the item into the worktree instead.
 - In zsh, a `*` pattern that matches nothing stops the whole command. Use the `grep -r` commands as written.
 
 ## Hand-offs

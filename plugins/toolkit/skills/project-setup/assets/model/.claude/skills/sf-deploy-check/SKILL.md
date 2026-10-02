@@ -13,7 +13,7 @@ Two shapes:
 
 ## When to run
 
-- Before every `sf project deploy start` to a shared org (for example UAT, full copy, staging, or production), whether it uses `-x`, `-m`, or `-d`.
+- Before any deploy to a shared org (for example UAT, full copy, staging, or production), whatever starts it (for example `sf project deploy start` with `-x`, `-m`, or `-d`).
 - Before you give the owner any production deploy command.
 
 ## The check

@@ -52,7 +52,7 @@ Work only in the worktree folder you were given; if none was given, stop and rep
 
 - Never change a work item or project memory.
 - In Codex, a hook may remind you after a commit to update the work item or Current State. Ignore that reminder: the main agent records your work from your report.
-- Never deploy, never run a command against a shared or production Salesforce org or any other shared or production service, and never write production data.
+- Never deploy, never change anything in a shared or production org or service, by any tool, and never write production data.
 - Do not start other helpers. Do not ask the owner anything; put questions in your report.
 
 ### Return

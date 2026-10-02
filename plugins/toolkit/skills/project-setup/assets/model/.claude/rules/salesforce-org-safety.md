@@ -19,9 +19,9 @@ Applies to every agent and subagent. Read-only against every org, except the san
 - Never delete metadata from an org: `sf project delete source`, `force:source:delete`.
 - Never delete an org or sandbox.
 - Never use `force:mdapi:deploy`, `force:source:push`, or `force:source:deploy` without a manifest. Use `sf project deploy start`.
-- Never deploy, validate, write data, or run Apex without an explicit `-o <sandbox>`. Never trust the default org.
+- Never deploy, validate, write data, or run Apex without naming the target sandbox explicitly (`-o <sandbox>` for `sf`). Never trust the default org.
 - Never write or run a script, or any other file, that deploys, validates, writes data, or runs Apex. Run each `sf` command directly, so the guard sees it.
-- Never CLI-deploy a profile.
+- Never deploy a profile.
 - Never deploy a permission set without a clean `permsets.py preflight`. `sf project deploy validate` and `preview` do not detect removed grants.
 - Never add a production username or alias to `neverProtect` or to any sandbox allow-list.
 - Never rewrite a blocked command to get past a guard hook. Never edit a guard to weaken it. Ask the owner.

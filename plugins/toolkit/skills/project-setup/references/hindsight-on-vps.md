@@ -332,15 +332,17 @@ project", and remove its old `hindsight` entries from `.mcp.json` and
 
 ## Gotchas
 
-- Never print the key. Never `cat` or `jq .` a settings file in
-  `~/.hindsight/`, use `curl -v`, `set -x`, `env`, or `printenv`, or show a
-  command line with the key written in it. Read the settings with
+- Never open or show `~/.hindsight/coding-agent.json` or its
+  `.hindsight-backup` copy whole, with any tool (for example `cat`,
+  `jq .`, or a file read tool): they hold the API key. Never print the key
+  (for example with `curl -v`, `set -x`, `env`, or `printenv`), and never
+  show a command line with the key written in it. Read the settings with
   `jq 'del(.. | .apiToken?)'`, which removes every `apiToken`, also the ones
   under `paths`, `banks`, and `harnesses`. Show an MCP entry only as step
   4.1 does: an older entry can hold the key in its headers or `env`.
-- `~/.hindsight/coding-agent.json.hindsight-backup` also holds the key.
-  Never print it. After a key change, offer to delete it, and delete it
-  only after his yes.
+- After a key change, offer to delete
+  `~/.hindsight/coding-agent.json.hindsight-backup`, and delete it only
+  after his yes.
 - Never ask him to type a key into the chat. When he pastes one there,
   tell him it was seen in the chat and recommend that he change it on the
   server.

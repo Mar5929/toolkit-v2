@@ -31,6 +31,15 @@ finding with no source is dropped.
   or list of owner phrases and what they mean, advice on how to think, an
   explanation of something Claude already knows, a rule repeated in
   another file, or a line added to patch one test run.
+- **P0a Tie each rule to the job, not the tool** (Mike, 2026-10-02). Write
+  the condition and the subject of a rule as the thing being done ("when
+  you create or change anything in Notion", "before any deploy to a shared
+  org"), not as the tool that usually does it. Name a tool only when the
+  tool itself is the requirement, or as an example in brackets after the
+  general words. Keep tool syntax, sign-in steps, and error tables in the
+  tool's own how-to file, and keep every rule that protects data or
+  approvals in the file the agent opens for the job. When a line names one
+  host, check whether the other host needs it too.
 - **P1 Skills.** Folder layout, frontmatter, description, `SKILL.md` size
   and order, Gotchas, templates, checklists, and validation steps follow
   the skill-writing guide Parts 2 to 5 and the pages it cites. References

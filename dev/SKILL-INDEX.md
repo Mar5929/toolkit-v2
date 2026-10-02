@@ -147,7 +147,7 @@ once.
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `using-notion-cli` | `assets/.skill-sets/notion-tools/using-notion-cli/` | Shows how to run ntn, Notion's command-line tool, for the Notion storage skills: sign-in, Codex permissions, the calls every Notion step uses, and fixes for failed calls, so reads and saves in Notion work the first time. Use before any ntn call, when ntn will not sign in or cannot find a page, in Codex, and whenever a Notion call fails. tracking-work-items and storing-project-memory use it for every call. Only for projects that keep work or memory in Notion. |
+| `using-notion-cli` | `assets/.skill-sets/notion-tools/using-notion-cli/` | Shows how to run ntn, Notion's command-line tool, for the Notion storage skills: sign-in, Codex permissions, the calls every Notion step uses, and fixes for failed calls, so reads and saves in Notion work the first time. Use before any Notion read or write, when ntn will not sign in or cannot find a page, in Codex, and whenever a Notion call fails. tracking-work-items and storing-project-memory use it for every call. Only for projects that keep work or memory in Notion. |
 
 ## 6. Salesforce projects (3)
 
