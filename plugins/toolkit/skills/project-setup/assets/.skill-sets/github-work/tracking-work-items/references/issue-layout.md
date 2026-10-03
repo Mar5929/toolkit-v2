@@ -55,7 +55,7 @@ Each requirement is one block in the body under `## Requirements`, in the order 
 - **Original verbatim requirement:** "I want to type in what I spent and have it saved."
 - **Goal:** A person can record one expense in a few seconds.
 
-**Functional, Process, Logic, Schema, etc. Requirements**
+**Functional Requirements**
 
 1. The form takes an amount, a date, and a category.
 2. Saving with no amount shows "Enter an amount" and saves nothing.

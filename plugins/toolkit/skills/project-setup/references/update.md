@@ -286,8 +286,8 @@ what a step names, and each item keeps its task IDs.
 
 Since toolkit 0.8.1, the Requirements section of a work item holds one
 block for each requirement, headed "Requirement <number>: <short name>":
-the original requirement word for word, its goal, a numbered list of
-requirements, and a numbered list of Acceptance Criteria
+the original requirement word for word, its goal, its numbered Functional
+Requirements, and its numbered Acceptance Criteria
 (`managing-work-items`, `references/refining-requirements.md`). Text in
 angle brackets in a template is an instruction, and an item an agent
 creates or changes keeps none.
@@ -302,7 +302,10 @@ creates or changes keeps none.
   Requirements section of an existing item in an update, in any tracker.
   The skills read the older layout as it is. An item moves to the new
   layout only when the owner asks for that item (`managing-work-items`,
-  `references/refining-requirements.md`, "The Requirements layout").
+  `references/refining-requirements.md`, "The Requirements layout"). An
+  item that labels its Functional Requirements "Functional, Process,
+  Logic, Schema, etc. Requirements" (the label before toolkit 0.8.4) keeps
+  that label.
 - Tell the owner in one line that new items get the new layout and
   existing items keep theirs.
 

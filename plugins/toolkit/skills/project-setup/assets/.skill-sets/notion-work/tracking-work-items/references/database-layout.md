@@ -115,7 +115,7 @@ Changing the Status options replaces the whole list: always send every option, e
 
 ## Creating an item
 
-Replace `{{…}}` with the ids in `PROJECT.md`. State and Status are the values `managing-work-items` gave you. The other values are the defaults for a new item; use another value only when `managing-work-items` says so.
+Replace `{{…}}` with the ids in `PROJECT.md`. State and Status are the values `managing-work-items` gave you. Type is the value it chose from the `type` list of its work item template; the Type row of "Work Items properties" holds the same options. The other values are the defaults for a new item; use another value only when `managing-work-items` says so.
 
 ```json
 {"parent": {"type": "data_source_id", "data_source_id": "{{WORK_ITEMS_DS}}"},

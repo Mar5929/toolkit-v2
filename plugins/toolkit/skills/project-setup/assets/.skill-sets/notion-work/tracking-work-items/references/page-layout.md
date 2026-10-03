@@ -53,6 +53,7 @@ Related items is the paragraph just below it.
 - Keep every heading, label, and view line.
 - Only Overview, Recent History, Requirements, Questions and Answers, Notes, and Linked Github PRs are text. Never change the text of Roadmap, Sub-items, Tasks, or Linked memory.
 - To delete lines, send them in `old_str` together with one neighbouring line that stays, and send only that neighbouring line as `new_str`.
+- A page that holds the "Embed Github" block ("Pull request links" below) answers every read and write of its text with `truncated: true` and the embed's block id in `unknown_block_ids`. That is expected and needs no action.
 
 ## Filling a new item
 
@@ -92,7 +93,7 @@ Each requirement is one block under the Requirements heading, in the order of it
 - **Original verbatim requirement: **"I want to type in what I spent and have it saved."
 - **Goal**: A person can record one expense in a few seconds.
 <details>
-<summary>**Functional, Process, Logic, Schema, etc. Requirements**</summary>
+<summary>**Functional Requirements**</summary>
 	1. The form takes an amount, a date, and a category.
 	2. Saving with no amount shows "Enter an amount" and saves nothing.
 </details>
@@ -106,7 +107,7 @@ Each requirement is one block under the Requirements heading, in the order of it
 The lines inside a toggle start with one tab.
 
 - **A new requirement:** insert its block before the Questions and Answers heading line, with the next unused number: `old_str` is that line as read (`# Questions and Answers {toggle="true"}` in the current template), and `new_str` is the block followed by that line. Take the form from the block above, never from a prompt left on a page.
-- **A new line:** add it after the last line of its list. `old_str` is that last line, with the lines around it when it does not match exactly once.
+- **A new line:** add it after the last line of its list. `old_str` is that last line, with the lines around it when it does not match exactly once. For a list with no line yet, `old_str` is the toggle's `<summary>` line, again with the lines around it when it does not match exactly once, and `new_str` is that line followed by the new line, which starts with one tab.
 - **A part with nothing to write yet:** keep its label and write nothing after it. A list with no line yet is the `<details>`, `<summary>`, and `</details>` lines alone.
 
 ## Saving a question and its answer
@@ -117,7 +118,7 @@ The table sits under the toggle heading "Questions and Answers" (`# Questions an
 - **An answer:** replace the row. Put his words in quotes under Answer, the date as `YYYY-MM-DD`, Decision? `yes` or `no`, and Status `Answered`. Then move the row below the last open row (remove it, and insert it after the last open row), so answered rows are newest first.
 - **A superseded row:** change only its Status, to `Superseded by Q-09`. Never edit its other cells.
 - **Waiting on:** set the property for who the open rows wait on (`database-layout.md`, "Setting State and Status").
-- **Row shape:** match the rows exactly as the page returns them, each `<td>` on its own line. Inside the toggle, only the `<table …>` and `</table>` lines and the line of text above the table start with a tab. The rows do not.
+- **Row shape:** match the rows exactly as the page returns them, each `<td>` on its own line. Inside the toggle, only the `<table …>` and `</table>` lines and the line of text above the table start with a tab. The rows do not. A second line inside a cell, such as a question's "Recommended:" line, is sent as `<br>`, which is what Notion stores.
 
 Answering Q-01:
 
@@ -128,7 +129,7 @@ Answering Q-01:
 
 ## Pull request links
 
-The section "Linked Github PRs" holds an "Embed Github" block that only the Notion app can make or fill. The page text shows it as one `<unknown … alt="external_object_instance"/>` line: never change or remove that line. A pull request that `managing-work-items` says to record on the item goes here, not under Related items, as a plain link on its own line right under the heading: `old_str` is the "Linked Github PRs" heading line as read, and `new_str` is that line followed by `[<repository>#<number>: <title>](<pull request address>)`. Add one line for each pull request. When the page has no "Linked Github PRs" section, put the link under Related items. The owner may put the same pull request in the embed himself.
+The section "Linked Github PRs" holds an "Embed Github" block that only the Notion app can make or fill. The page text shows it as one `<unknown … alt="external_object_instance"/>` line: never change or remove that line. A pull request that `managing-work-items` says to record on the item goes here, not under Related items, as a plain link on its own line right under the heading: `old_str` is the "Linked Github PRs" heading line as read, and `new_str` is that line followed by `[<repository>#<number>: <title>](<pull request address>)`. Write `<repository>` as `owner/repo`. Add one line for each pull request. When the page has no "Linked Github PRs" section, put the link under Related items. The owner may put the same pull request in the embed himself.
 
 ## Comments
 

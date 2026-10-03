@@ -110,7 +110,7 @@ Each requirement is one block under `## Requirements`, in the order of its numbe
 - **Original verbatim requirement:** "I want to type in what I spent and have it saved."
 - **Goal:** A person can record one expense in a few seconds.
 
-**Functional, Process, Logic, Schema, etc. Requirements**
+**Functional Requirements**
 
 1. The form takes an amount, a date, and a category.
 2. Saving with no amount shows "Enter an amount" and saves nothing.
@@ -188,7 +188,7 @@ After:
 After the folder and file exist (`folders-and-files.md`, "Creating an item's folder and ID"):
 
 - **Front matter:** the ID, the title in the owner's words, a `type` from the template's list, `state` and `status` for the item's first State, `parent` the parent's ID or `none`, `waiting_on: "none"`, `priority: medium`, `delivery: not-offered`, both approvals `no`, `design: none`, and `updated` today.
-- **Overview:** the heading `# WI-032: <title>`, the Goal, and the Current state lines: Where it stands "Created on `YYYY-MM-DD`; not started.", Next action in one of the template's forms, Waiting on "Nothing.", Blockers "None.", Last updated today. Related items: the parent as `[[WI-012]]`; for a top-level item, its project phase ("Project phase P01.") once it has one; or "None.".
+- **Overview:** the heading `# WI-032: <title>`, the Goal, and the Current state lines: Where it stands "Created on `YYYY-MM-DD`; not started.", Next action in one of the template's forms, Waiting on "Nothing.", Blockers "None.", Last updated today. Related items: the parent as `[[WI-012]]`; for a top-level item, its project phase ("Project phase P01.") once it has one (before that: `managing-work-items`, "Levels").
 - **Requirements:** one block for each requirement `managing-work-items` gave you, in place of the template's pattern block ("Requirements" above). When the project's template still has the older layout (it holds `**Overall status:**`), replace everything between the `## Requirements` heading and the `## Questions and Answers` heading with the blocks.
 - **Recent History:** "Created from the owner's request.", in place of the placeholder row.
 - **Every other angle-bracket prompt is deleted,** so none is left in the item (`managing-work-items`, "Every time"). Delete the example phase rows, the example phase headings and tasks, and the example question rows. In a sub-item, delete the whole `## Roadmap` section and write `**Sub-items:** None.`; in a top-level item, delete the sub-item form. Under Notes, delete the prompt lines under Context and "Solution options and considerations", and write "None." under Sources. Keep every heading, table header, label, and `<!-- ... -->` guide comment, except the comment that starts "Fill-in guide for a new work item": delete it.
