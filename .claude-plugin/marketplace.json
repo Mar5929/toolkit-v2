@@ -5,14 +5,19 @@
     "email": "michael@rihm.com"
   },
   "metadata": {
-    "description": "Toolkit V2: one plugin, toolkit, whose project-setup skill sets up and updates one solo developer's projects in Claude Code and Codex. The agent runs the project; the owner decides and steers.",
-    "version": "0.8.4"
+    "description": "Toolkit V2: the toolkit plugin, whose project-setup skill sets up and updates one solo developer's projects in Claude Code and Codex, and the workstreams plugin, a side panel for Claude Code that lists a project's work items. The agent runs the project; the owner decides and steers.",
+    "version": "0.8.5"
   },
   "plugins": [
     {
       "name": "toolkit",
       "source": "./plugins/toolkit",
       "description": "Sets up Toolkit V2 in a project, or moves a project from the older toolkit onto it: copies the model files, the chosen work tracking and memory skills, and their hooks."
+    },
+    {
+      "name": "workstreams",
+      "source": "./plugins/workstreams",
+      "description": "Shows the project's Notion work items, the chat each one belongs to, and the running helper agents in a side panel. Open it with /streams. Claude Code only."
     }
   ]
 }
