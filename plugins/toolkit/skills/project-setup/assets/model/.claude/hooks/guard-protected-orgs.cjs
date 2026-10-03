@@ -6,7 +6,7 @@
  * guarded Salesforce CLI verb against an org that classifies as PRODUCTION, it
  * returns a "confirm before running" decision so the change cannot happen by
  * accident. A guarded verb is anything that changes an org or runs its Apex
- * tests: a deploy or deploy validate, a data write, anonymous Apex, an Apex
+ * or Flow tests: a deploy or deploy validate, a data write, anonymous Apex, a
  * test run, a metadata delete, or an org delete.
  *
  * Policy is data-driven from .claude/protected-orgs.json, which this project
@@ -14,12 +14,12 @@
  * file is missing:
  *   - protect: any production org (auto-detected via `sf org list`)
  *   - action: ask  (confirm; nothing is hard-blocked)
- *   - watch:  deploys, validates, data writes, anonymous Apex, Apex test
- *             runs, deletes
+ *   - watch:  deploys, validates, data writes, anonymous Apex, test runs,
+ *             deletes
  *   - sandboxAction: ask. The salesforce-org-safety rule allows sandbox
  *             deploys, data writes and anonymous Apex only after the owner says
  *             yes, so the hook asks for them on a sandbox or scratch org too. A
- *             deploy validate or an Apex test run on a sandbox needs no yes and
+ *             deploy validate or a test run on a sandbox needs no yes and
  *             passes silently.
  *
  * Set action to "deny" for a project whose written rule says an agent may never
@@ -162,11 +162,13 @@ const GUARDED = [
     'force:data:bulk:upsert', 'force:data:bulk:delete', 'force:data:tree:import',
   ]],
   ['apex', ['apex:run', 'force:apex:execute']],
-  // An Apex test run is not a read: it runs Apex code in the target org. The
-  // safety rule forbids it in production and allows it on a sandbox with no
-  // yes, so it has its own category. `sf logic run test` runs Apex and Flow
-  // tests (checked against sf 2.142.7). `sf apex get test` only reads.
-  ['apexTest', ['apex:run:test', 'force:apex:test:run', 'logic:run:test']],
+  // An Apex or Flow test run is not a read: it runs Apex code or flows in the
+  // target org. The safety rule forbids it in production and allows it on a
+  // sandbox with no yes, so it has its own category. `sf logic run test` runs
+  // Apex and Flow tests (checked against sf 2.142.7). `sf apex get test` and
+  // `sf flow get test` only read. Agentforce agent tests (`sf agent test run`)
+  // are not checked.
+  ['testRun', ['apex:run:test', 'force:apex:test:run', 'logic:run:test', 'flow:run:test']],
   ['metadataDelete', ['project:delete:source', 'force:source:delete']],
 ];
 // Real commands whose names hold every word of a guarded name and more. They
@@ -182,7 +184,7 @@ const NOT_GUARDED_KEYS = new Set(NOT_GUARDED.map((name) => nameKey(name.split(':
 
 // Categories the safety rule allows on a sandbox or scratch org without the
 // owner's yes. Everything else asks there, unless sandboxAction is "allow".
-const SANDBOX_SILENT = new Set(['validate', 'apexTest']);
+const SANDBOX_SILENT = new Set(['validate', 'testRun']);
 
 // Categories whose target org is never on the command line. No -o, setting,
 // or default org is taken for them: each is judged as a command with no

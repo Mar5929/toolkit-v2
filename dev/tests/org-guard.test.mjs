@@ -61,10 +61,10 @@ function guard(command, { host = 'claude', defaultOrg = '' } = {}) {
   return { decision: out.permissionDecision, reason: out.permissionDecisionReason };
 }
 
-// The three commands that start Apex tests in an org, then the same commands in
+// The four commands that start Apex or Flow tests in an org, then the same commands in
 // another word order or with colons, which the sf CLI reads as the same command.
-const TEST_RUNS = ['sf apex run test', 'sfdx force:apex:test:run', 'sf logic run test'];
-const OTHER_FORMS = ['sf apex test run', 'sf test run apex', 'sf apex:run:test', 'sf force apex test run', 'sf logic:run:test', 'sf run logic test'];
+const TEST_RUNS = ['sf apex run test', 'sfdx force:apex:test:run', 'sf logic run test', 'sf flow run test'];
+const OTHER_FORMS = ['sf apex test run', 'sf test run apex', 'sf apex:run:test', 'sf force apex test run', 'sf logic:run:test', 'sf run logic test', 'sf flow:run:test', 'sf run flow test'];
 const ALL_FORMS = [...TEST_RUNS, ...OTHER_FORMS];
 /** The full command: the old sfdx name takes -u, the others -o. */
 const run = (name, org) => `${name} -l RunLocalTests ${name.startsWith('sfdx') ? '-u' : '-o'} ${org}`;
@@ -73,15 +73,15 @@ test('the starter project policy blocks production', () => {
   assert.equal(JSON.parse(readFileSync(join(project, '.claude/protected-orgs.json'), 'utf8')).action, 'deny');
 });
 
-test('an Apex test run against production is blocked, under every name and form', () => {
+test('a test run against production is blocked, under every name and form', () => {
   for (const name of ALL_FORMS) {
     const r = guard(run(name, 'acme-prod'));
     assert.equal(r.decision, 'deny', name);
-    assert.match(r.reason, /Guarded 'apexTest' command: 'acme-prod' is a PRODUCTION org\. BLOCKED/, name);
+    assert.match(r.reason, /Guarded 'testRun' command: 'acme-prod' is a PRODUCTION org\. BLOCKED/, name);
   }
 });
 
-test('an Apex test run against an org the guard cannot classify is blocked', () => {
+test('a test run against an org the guard cannot classify is blocked', () => {
   for (const name of TEST_RUNS) {
     const r = guard(run(name, 'someone-else'));
     assert.equal(r.decision, 'deny', name);
@@ -92,7 +92,7 @@ test('an Apex test run against an org the guard cannot classify is blocked', () 
   assert.match(none.reason, /no resolvable target org/);
 });
 
-test('an Apex test run against a sandbox or scratch org passes with no question', () => {
+test('a test run against a sandbox or scratch org passes with no question', () => {
   for (const name of ALL_FORMS) {
     for (const org of ['acme-uat', 'acme-scratch']) assert.equal(guard(run(name, org)).decision, 'allow', `${name}, ${org}`);
   }
@@ -105,7 +105,7 @@ test('with no -o, the default org decides', () => {
   assert.equal(guard('sf apex run test -l RunLocalTests', { defaultOrg: 'acme-uat' }).decision, 'allow');
 });
 
-test('in Codex an Apex test run is blocked on production and passes on a sandbox', () => {
+test('in Codex a test run is blocked on production and passes on a sandbox', () => {
   for (const name of TEST_RUNS) {
     assert.equal(guard(run(name, 'acme-prod'), { host: 'codex' }).decision, 'deny', name);
     assert.equal(guard(run(name, 'acme-uat'), { host: 'codex' }).decision, 'allow', name);
@@ -119,6 +119,8 @@ test('help and reading test results pass, in production too', () => {
     'sf logic run test --help',
     'sf apex get test -i 707000000000001 -o acme-prod',
     'sf logic get test -i 707000000000001 -o acme-prod',
+    'sf flow run test --help',
+    'sf flow get test -i 707000000000001 -o acme-prod',
     'sfdx force:apex:test:report -i 707000000000001 -u acme-prod',
   ];
   for (const command of reads) {
@@ -150,8 +152,7 @@ const OTHER_COMMANDS = [
   ['sf data query -q "SELECT Id FROM Account" -o acme-prod', 'allow', 'allow'],
   ['sf project retrieve start -m ApexClass -o acme-prod', 'allow', 'allow'],
   ['sf deploy metadata report -o acme-prod', 'allow', 'allow'],
-  // Not decided yet (an open question for the owner): Flow tests and agent tests are not checked.
-  ['sf flow run test -o acme-prod', 'allow', 'allow'],
+  // The owner's choice (TKV-6, Q-02): Agentforce agent tests are not checked.
   ['sf agent test run -o acme-prod', 'allow', 'allow'],
   ['git status --short', 'allow', 'allow'],
 ];
