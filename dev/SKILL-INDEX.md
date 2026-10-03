@@ -7,7 +7,8 @@ Every skill Toolkit V2 ships, its folder, and its description word for word.
 the routing rounds for the retired skills) is in Git history.
 
 - Folders are relative to `plugins/toolkit/skills/project-setup/`.
-- In a project, every skill except `project-setup` sits in
+- In a project, every skill except `project-setup` and
+  `choosing-outside-tools` sits in
   `.claude/skills/<name>/`, and `.agents/skills` is a link to
   `.claude/skills`, so Claude Code and Codex read the same files.
 - A description is changed in its `SKILL.md` and in this file in the same
@@ -19,6 +20,9 @@ the routing rounds for the retired skills) is in Git history.
 
 - **1 onboarding skill**, `project-setup`, in the `toolkit` plugin. It is on
   for every folder in both hosts and is never copied into a project.
+- **1 tool list skill**, `choosing-outside-tools`, in the `toolkit` plugin
+  (TKV-18). It is on for every folder in both hosts and is never copied into
+  a project. It lists the outside tool the owner uses for each kind of job.
 - **9 shared skills** that every project gets.
 - **Work tracking sets**, one per project, 1 skill each, always named
   `tracking-work-items`: local folders with Obsidian, Notion, or GitHub
@@ -34,11 +38,12 @@ the routing rounds for the retired skills) is in Git history.
   Notion; with Hindsight memory, 10, or 11 with work items in Notion.
   Salesforce adds 3.
 
-## 1. Onboarding (the `toolkit` plugin)
+## 1. The `toolkit` plugin's own skills (onboarding and the tool list)
 
 | Skill | Folder | Description |
 | --- | --- | --- |
 | `project-setup` | `./` | Sets up, checks, or updates Toolkit V2 in a project, moves an older claude-toolkit project onto it, or changes where work items or memory live, so projects run the same files. Use when the owner says "toolkit v2", "set up this project", "initialize this project", or "update the toolkit". Not for a Git pull; use pull-latest. Not for running the older claude-toolkit (project-sync). |
+| `choosing-outside-tools` | `../choosing-outside-tools/` | Lists the outside tool the owner uses for each kind of job and how to set it up, so every computer uses the same tool. Use when he asks for a job on the list, such as "make an explainer video", and no skill for that tool is on this computer; when he asks which tool he uses for a job; or when he says "add this to my tool list". Not for doing the job when a skill for that tool is on this computer. |
 
 ## 2. Shared skills (every project, 9)
 
