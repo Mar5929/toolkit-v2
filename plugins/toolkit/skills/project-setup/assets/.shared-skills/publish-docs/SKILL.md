@@ -7,8 +7,11 @@ description: 'Commits project document edits (requirements/, system guide, PROJE
 
 Save a change to Git-tracked project documents straight to the default
 branch, with no pull request, from a temporary Git worktree of its own (rule:
-`.claude/rules/publish-project-documents.md`). Run each Git command on its
-own, with `git -C <folder>` so it never depends on the current folder.
+`.claude/rules/publish-project-documents.md`). Only the agreed document edit
+reaches the default branch, no other session's files change, and the save
+is finished only when step 8 finds its commit on the default branch. Run
+each Git command on its own, with `git -C <folder>` so it never depends on
+the current folder.
 
 ## Steps
 
@@ -17,9 +20,10 @@ own, with `git -C <folder>` so it never depends on the current folder.
    `.png`, `.jpg`, `.jpeg`, `.gif`, `.svg`, or `.pdf`, not refused below, and
    not ignored by Git (`git -C <main> check-ignore <file>` printing the path
    means ignored). `<main>` is the main checkout: the first path
-   `git worktree list` prints. Save only an edit the owner asked for or said yes to, or one
-   another skill tells you to save with this skill (for example
-   `managing-work-items`, in Reflecting). That covers the push in step 7.
+   `git worktree list` prints. Save only an edit the owner asked for or said
+   yes to, or one another skill tells you to save with this skill (for
+   example `managing-work-items`, in Reflecting). That covers the push in
+   step 7.
 2. **Look first.** Run `git -C <session folder> worktree list`,
    `git -C <session folder> status`, and `git -C <session folder> remote`,
    each on its own. `<session folder>` is the folder this session works in.
@@ -33,15 +37,16 @@ own, with `git -C <folder>` so it never depends on the current folder.
      `origin/<default>`. If it fails, run `git -C <main> fetch origin` and try
      again, then read the "HEAD branch" line of
      `git -C <main> remote show origin`; "(unknown)" means the remote has no
-     branches, so ask the owner whether to push the default branch first. With no remote, it is the branch
-     the main checkout has (`git -C <main> branch --show-current`).
+     branches, so ask the owner whether to push the default branch first.
+     With no remote, it is the branch the main checkout has
+     (`git -C <main> branch --show-current`).
 3. **Start the save worktree** inside the main checkout, named
    `.claude/worktrees/docsave-<short-slug>` (for example
    `docsave-roadmap-phase-2`). First
    `git -C <main> check-ignore .claude/worktrees/docsave-<short-slug>` must
-   print the path. It prints nothing: stop, and tell the owner the project's `.gitignore` lacks the
-   `.claude/worktrees/` line every project gets; adding it is a settings
-   change, not a document save. Then:
+   print the path. It prints nothing: stop, and tell the owner the project's
+   `.gitignore` lacks the `.claude/worktrees/` line every project gets;
+   adding it is a settings change, not a document save. Then:
 
    ```text
    git -C <main> fetch origin <default>
@@ -74,10 +79,12 @@ own, with `git -C <folder>` so it never depends on the current folder.
    - With a remote: `git -C <save> push origin HEAD:<default>`. Never force.
      Refused because the default branch has commits the save does not: open
      `references/recovery.md`, "The default branch advanced".
-   - No remote: move the local default branch forward in the checkout that has
-     it, normally the main checkout:
-     `git -C <main> merge --ff-only <commit id>`. When no checkout has it:
-     `git -C <save> push . HEAD:<default>`. Refused: open
+   - No remote: first run `git -C <main> status --porcelain`. A file of this
+     save listed there that is not this session's own copy is another
+     session's work: stop, name it, and ask the owner. Then move the local
+     default branch forward in the checkout that has it, normally the main
+     checkout: `git -C <main> merge --ff-only <commit id>`. When no checkout
+     has it: `git -C <save> push . HEAD:<default>`. Refused: open
      `references/recovery.md`.
 8. **Verify, clean up, report.**
    - With a remote: `git -C <save> fetch origin <default>`, then
@@ -96,16 +103,17 @@ own, with `git -C <folder>` so it never depends on the current folder.
 
 ## Gotchas
 
-- Codex keeps `.git/` read-only and turns the network off. Every Git write
-  here runs alone, outside the sandbox (`sandbox_permissions` set to
-  `require_escalated`, with a one-line reason). If Codex refuses without
-  asking, show the owner the exact command and wait.
 - Never make, stage, or commit this save's edit in the main checkout, and
   never start a save from inside another save worktree. Other `docsave-`
   worktrees in `git worktree list` belong to other sessions: do not change or
   remove them.
 - Never edit a captured page in `ai-external-knowledge/` to make it agree with
   the project.
+- In Codex the sandbox keeps `.git/` read-only and blocks the network. Run
+  each Git write and each network call in this skill, `references/recovery.md`
+  included, alone, with escalated permissions (`sandbox_permissions` set to
+  `require_escalated`, with a one-line reason). When Codex refuses without
+  asking, show the owner the exact command and ask him to run it.
 
 ## Refused files
 
@@ -119,9 +127,10 @@ own, with `git -C <folder>` so it never depends on the current folder.
   anywhere, in any letter case.
 - Any path Git ignores.
 
-A refused file stays refused even under a path the rule accepts. Rules, skills,
-prompts, hooks, settings, and code use a pull request. A document edit that
-would be wrong on the default branch without the code change it describes goes in that code's pull request.
+A refused file stays refused even under a path the rule accepts. Rules,
+skills, prompts, hooks, settings, and code use a pull request. A document
+edit that would be wrong on the default branch without the code change it
+describes goes in that code's pull request.
 
 ## Carrying an edit across
 

@@ -3,8 +3,7 @@
 What to do when the push or the fast-forward in step 7 is refused, the default
 branch got new commits during the save, or the save cannot finish now.
 `<main>` is the main checkout and `<save>` is the save worktree, as in
-`SKILL.md`. Codex: each Git command here runs alone, outside the sandbox
-(`sandbox_permissions` set to `require_escalated`, with a one-line reason).
+`SKILL.md`.
 
 ## The default branch advanced
 

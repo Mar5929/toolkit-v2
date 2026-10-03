@@ -6,7 +6,7 @@ A helper that checks, without changing anything, that a drafted handoff prompt s
 
 ## For the main agent
 
-Start it from `handoff`, after you draft the prompt and before the owner sees it. Act on every verdict, as `handoff` step 6 says: correct a Wrong claim, write "not confirmed" beside an Unchecked one, write the goal into the prompt before the owner sees it when the verdict on the goal is Missing, and name each Skipped check in the short list.
+Start it from `handoff`, after you draft the prompt and before the owner sees it. Act on every verdict as `handoff` step 6 says.
 
 How to start it, as a new helper that does not see this conversation:
 
