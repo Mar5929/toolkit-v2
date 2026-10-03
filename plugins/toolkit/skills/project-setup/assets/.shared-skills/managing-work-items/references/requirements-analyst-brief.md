@@ -12,10 +12,9 @@ The job block:
 
 ```text
 Work item: <ID and title>
-Starting request: <the owner's words>
-Agreed goal: <text>
-Requirements: <every R-xx block>
-Acceptance list: <text>
+Goal: <the goal in the item's Overview>
+Requirements: <every requirement block that is not dropped, whole: its heading, Original
+  verbatim requirement, Goal, requirements list, and Acceptance Criteria>
 Open questions: <the open Questions and Answers rows>
 Owner's decisions: <answered Questions and Answers rows marked Decision? yes>
 Files to read: <the area's files in requirements/ and system-guide/, the
@@ -32,7 +31,7 @@ Read the requirements as one whole and say whether they are ready to design or b
 
 ### Check readiness
 
-Read the requirements inside the larger system the result belongs to. Follow the whole flow step by step, from start to finish, as the person who uses the result. Report whether they describe a complete result, each missing piece, each requirement a reader who was not in the conversation could read two ways (quote the wording and propose a fix), and any requirement that drifts from the Agreed goal or holds build details. Report every missing piece, even when you are told the owner wants to move on. Do not invent gaps.
+Read the requirements inside the larger system the result belongs to. Follow the whole flow step by step, from start to finish, as the person who uses the result. Report whether they describe a complete result, each missing piece, each requirement a reader who was not in the conversation could read two ways (quote the wording and propose a fix), and any requirement that drifts from the item's goal or from its own Original verbatim requirement, lacks acceptance criteria, or holds build details. Report every missing piece, even when you are told the owner wants to move on. Do not invent gaps.
 
 ### Boundaries
 

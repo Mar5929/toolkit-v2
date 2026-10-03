@@ -46,7 +46,7 @@ The sections of a work item's page are in `page-layout.md`.
 | `requirements_approved`, `result_approved` | Requirements approved, Result approved. |
 | (the design approval) | Design approved. The model's work item file has no field for it. |
 | `updated` | No property. The Current state "Last updated" line holds it. |
-| Goal, Current state, Related items, Recent History, Requirements, Questions and Answers, Notes | The page text (`page-layout.md`). |
+| Goal, Current state, Related items, Recent History, Requirements, Questions and Answers, Notes | The page text (`page-layout.md`). The page calls the goal "Goals", a numbered list. |
 | Next action (a Current state line) | The page text, and a copy in the Next action property. |
 | Phases and their Roadmap | Rows of Phases. |
 | Tasks | Rows of Tasks. |
@@ -293,7 +293,7 @@ Files. A meeting transcript, document, or other source goes in the Files propert
    ]}}}
    ```
 
-3. Add its line under Sources, with an `update_content` call. The first time, replace the template's example line. Example: `- interview-2.txt — second owner interview; the three login methods (R-03).`
+3. Add its line under Sources, with an `update_content` call. When the template's example line is still there, replace it. Example: `- interview-2.txt — second owner interview; the three login methods (R-03).`
 
 ## Moving an item under another parent
 
@@ -309,7 +309,7 @@ When the owner changed "Parent item" by hand, add the same history rows on your 
 A card made with "New" or "+ New page" gets the work item template's sections by itself. Its other properties are empty unless the template holds a value, so its State is empty.
 
 1. Give such a card State Backlog and Status Not Started, and the other defaults of "Creating an item".
-2. Add a Recent History row: "Made in Notion by hand."
+2. Add a Recent History row: "Made in Notion by hand." In the same call, delete the template's note and every prompt he left unfilled, keeping everything he wrote (`page-layout.md`, "Filling a new item").
 3. A page made with "Empty" in the New menu, or made before the project had a default template, has an empty body (fewer than five blocks). Give it the default template; its properties are kept. Read the id of the template with `is_default` true (`using-notion-cli`, "Database templates"), then wait for the content (`using-notion-cli`, "Waiting for a template"):
 
    ```bash

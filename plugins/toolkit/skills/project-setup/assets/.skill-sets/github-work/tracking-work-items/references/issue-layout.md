@@ -6,6 +6,7 @@ How one work item is laid out in its issue, and how each part is written. The he
 
 - The picture
 - Creating an issue
+- Requirements
 - Questions and Answers
 - Recent History
 - Phases, tasks, and sub-items
@@ -39,16 +40,43 @@ A project set up for GitHub keeps no work item files in its folders. It has the 
 
 ## Creating an issue
 
-1. Make the body in a temporary folder. Take the work item template text `managing-work-items` opened from its `assets/`, from the line `## Overview` to the end. Leave out the front matter, the `# WI-001: ...` title line, and the fill-in guide above `## Overview`. Fill it as the template's guide says.
+1. Make the body in a temporary folder. Take the work item template text `managing-work-items` opened from its `assets/`, from the line `## Overview` to the end. Leave out the front matter, the `# WI-001: ...` title line, and the fill-in guide above `## Overview`. Fill it as the template's guide says, and leave no angle-bracket prompt in the body (`managing-work-items`, "Every time"): write one block for each requirement `managing-work-items` gave you in place of the template's pattern block ("Requirements" below); delete the example phase rows, the example phase headings and tasks, the example question rows, and the prompt lines under Notes; and write "None." under Sources. Keep every heading, table header, label, and `<!-- ... -->` guide comment.
 2. Write IDs as `#12` wherever the template says a work item ID. Keep the plan form the template's guide gives for the item's level: a top-level item keeps the Roadmap; a sub-item keeps only the sub-item form under Tasks. For a level-2 sub-item, Related items says "Parent #12, phase P2."; for a level-3 sub-item, "Parent #14."; for a top-level item, "Project phase P01." once it has one.
 3. Create the issue with its labels (`gh-commands.md`, "Creating an issue"): the State `managing-work-items` gives it, the type, and the priority (`priority:medium` when none is named). Add no other label.
 4. A sub-item: count its levels, then link it to its parent ("Phases, tasks, and sub-items"). A top-level item: put it in its project phase's milestone once the owner has named one (`project-roadmap-and-tasks.md`).
+
+## Requirements
+
+Each requirement is one block in the body under `## Requirements`, in the order of its number. `managing-work-items` says what goes in each part. A block looks like this:
+
+```markdown
+### Requirement 1: Save a transaction
+
+- **Original verbatim requirement:** "I want to type in what I spent and have it saved."
+- **Goal:** A person can record one expense in a few seconds.
+
+**Functional, Process, Logic, Schema, etc. Requirements**
+
+1. The form takes an amount, a date, and a category.
+2. Saving with no amount shows "Enter an amount" and saves nothing.
+
+**Acceptance Criteria:**
+
+1. A saved transaction shows in the list with the same amount, date, and category.
+2. Saving with no amount leaves the list unchanged.
+```
+
+- **A new requirement:** add its block after the last one, with the next unused number. Take the form from the block above, never from a prompt left in a body.
+- **A new line:** add it at the end of its numbered list.
+- **A part with nothing to write yet:** keep its label and write nothing after it.
+- Never write `#1` for a requirement: GitHub reads it as an issue number.
+- An issue made before toolkit 0.8.1 has the older layout (`### Starting request`, `### Agreed goal`, `#### R-01 — <title>` blocks of labeled lines, `### Acceptance`). Read and change it in the layout it has. Rewrite it into this layout only when the owner asks.
 
 ## Questions and Answers
 
 The table sits in the body under `## Questions and Answers`. Columns, in order: ID, Question, Answer, Date answered, Decision?, Affects, Status, Decision needed from. In any table, write `|` in a cell as `\|` and a line break as `<br>`.
 
-- **A new row:** its ID is the highest Q-ID in this item plus one. Insert it after the last open row, or right after the separator line when none is open, so open rows stay on top, oldest first. Status `Open`. Decision needed from `owner`, or another person or role. When the owner must answer, add `waiting-on:owner`. When someone else must, add `waiting-on:external`.
+- **A new row:** its ID is the highest Q-ID in this item plus one. Insert it after the last open row, or right after the separator line when none is open, so open rows stay on top, oldest first. When the template's two example rows are still there, delete them in the same write. Status `Open`. Decision needed from `owner`, or another person or role. When the owner must answer, add `waiting-on:owner`. When someone else must, add `waiting-on:external`.
 - **An answer:** put his words in quotes under Answer, the date as `YYYY-MM-DD`, Decision? `yes` or `no`, and Status `Answered`. Then move the row to just below the last open row, so answered rows are newest first. After his last open question is answered, swap `waiting-on:owner` for `waiting-on:agent` when you carry on with the work, or remove it. Keep it while another question of his is open.
 - **A superseded row:** change only its Status, to `Superseded by Q-09`. Never edit its other cells.
 
@@ -152,7 +180,7 @@ Comments sit below the body.
 An issue the owner opened in the browser has his text and no layout: no `## Overview` in the body, or no state label.
 
 1. Ask him in one line: "#15 was made by hand in GitHub, so it does not have the usual work item sections and labels. Should I add them?"
-2. On his yes, make a new body from the template ("Creating an issue", step 1), with his text word for word as the Starting request. Write it with `gh issue edit`.
+2. On his yes, make a new body from the template ("Creating an issue", step 1), with his text word for word as the Original verbatim requirement of Requirement 1. Write it with `gh issue edit`.
 3. Add `state:backlog` and `priority:medium`. Ask him the type unless his text makes it plain (a report of something broken is `type:bug`).
 4. Add a Recent History row: "Made by hand in GitHub; the work item layout was added."
 

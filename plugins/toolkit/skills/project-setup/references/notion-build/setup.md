@@ -90,7 +90,9 @@ step 3 and the one heading in step 5.
    (grouped by the Work item IDs column) is replaced: remove it, then
    create `12-view-by-work-item.json`. In the work item template, the Work
    Items database's default template, add the "Linked memory" heading and
-   its paragraph from `work-item-page.md` after the Notes section, then its
+   its paragraph from `work-item-page.md` after the Notes section (before
+   "Linked Github PRs" when the template has it), with the heading at the
+   level the template's other sections have, then its
    view from file 23 only (`work-setup.md`, "Building the templates", step
    12).
 4. Views: add a missing view from its file in `assets/schema/`.

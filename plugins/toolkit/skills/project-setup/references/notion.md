@@ -137,7 +137,10 @@ layout" in `notion-build/setup.md`, for the parts the project keeps in
 Notion. Both only add what is missing and bring the toolkit's own guide
 paragraphs up to date; they never remove, rename, or retype anything,
 except what those sections name: one Memories view, one Current state
-heading, and the Tasks "Done" checkbox and Status type. A project
+heading, the Tasks "Done" checkbox and Status type, and the Requirements
+section of a work item template that still has the layout from before
+toolkit 0.8.1. The parts of the work item template that the owner wrote
+himself, and every existing work item, stay as they are. A project
 with a Stage property also needs "From Stage to State" in
 `notion-build/work-setup.md`, and one with a Tasks "Done" checkbox needs
 "From the Done checkbox to Status" there. Tell the owner in one short list
