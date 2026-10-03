@@ -25,6 +25,9 @@ Rewrite something as short bullets the owner can read once and act on.
 4. **End with a numbered "What I need from you"** only when there is
    something for the owner to do.
 5. **Do not research again.** Explain what is already established.
+6. **Before you send, check the facts.** Read the source once more: every
+   fact of the kinds step 3 lists must be in a bullet, unless it is in a
+   part you left out and named under step 2. Add any that is missing.
 
 ## The words
 
