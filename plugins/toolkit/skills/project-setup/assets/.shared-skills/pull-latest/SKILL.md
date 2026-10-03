@@ -27,6 +27,10 @@ now.
      on a branch other than the default branch. Your own worktree on your
      own branch is fine.
 
+   In your own worktree, a stop for no checked-out branch or a dirty working
+   tree ends only the work on your own branch: run step 2 first, then stop,
+   and add step 5's line on the main checkout to the line saying why.
+
    The default branch: `git symbolic-ref --short refs/remotes/origin/HEAD`
    prints `origin/<default>`. If it fails, read the "HEAD branch" line of
    `git remote show origin`. Never assume `main`.
@@ -35,7 +39,6 @@ now.
    shows the default branch and a working tree that is not dirty, as step 1
    counts it, run `git -C <main checkout> pull --ff-only`. On another
    branch, dirty, or a pull that fails: leave the main checkout as it is.
-   Never merge, switch branches, reset, or stash there.
 3. **The branch has an upstream** (`git status -sb` shows
    `...origin/<branch>` after the branch name): run `git pull --ff-only`.
    - Diverged ("Not possible to fast-forward"): run

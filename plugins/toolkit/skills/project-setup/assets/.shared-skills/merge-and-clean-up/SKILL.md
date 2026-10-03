@@ -128,13 +128,14 @@ Then remove nothing, and tell the owner the state.
 ## Step 6: update the base worktree, then remove only the merged worktree and branches
 
 Run `git -C <base-worktree> fetch --prune origin` and
-`git -C <base-worktree> status --porcelain`. An uncommitted file in the base
-worktree blocks this step only when it is also in step 4's list of the files
-this pull request changed. Any other uncommitted file blocks nothing: leave
-it as it is. Not blocked: run `git -C <base-worktree> pull --ff-only`. If
-the base worktree holds a blocking file, is on another branch, or cannot
-fast-forward, leave it untouched, skip the local cleanup, and report the
-blocker. Never reset, stash, switch, or rebase it.
+`git -C <base-worktree> status --porcelain`. A blocking file is an
+uncommitted file in the base worktree that is also in step 4's list of the
+files this pull request changed. Leave every other uncommitted file as it
+is. With no blocking file and the base worktree on the base branch, run
+`git -C <base-worktree> pull --ff-only`. With a blocking file, the base
+worktree on another branch, or a pull that fails: change nothing in the base
+worktree, skip the local cleanup, and report which of the three it was.
+Never reset, stash, switch, or rebase it.
 
 Remove nothing unless all five proofs hold:
 

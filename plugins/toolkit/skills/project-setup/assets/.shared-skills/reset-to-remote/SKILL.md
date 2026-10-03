@@ -64,7 +64,7 @@ step 2, this session's own too when it is not the main checkout.
    `npm install`; `yarn.lock`: `yarn install`; `bun.lockb` or `bun.lock`:
    `bun install`).
    - No lockfile: write "No lockfile, so no install."
-   - Several lockfiles: ask which package manager.
+   - Several lockfiles: ask which package manager before you show the plan.
    - `command -v <installer>` prints nothing: write "`<installer>` is not
      installed, so the install is skipped." Never install it.
 
@@ -76,9 +76,10 @@ step 2, this session's own too when it is not the main checkout.
    `git branch -D <branch>` for each branch to delete. Then confirm the
    branches: run the step 4 `git for-each-ref` command again. Each branch of
    the Reset group must show an empty track column, and no branch of the
-   Delete group may be listed. Anything else: stop and report it. Then run
-   the install command the plan named, from the main checkout's root folder.
-   The plan named none: run no install.
+   Delete group may be listed, except a branch Git refused to delete
+   (Gotchas). Anything else: stop and report it. Then run the install
+   command the plan named, from the main checkout's root folder. The plan
+   named none: run no install.
 6. **Report** the default branch and its new head commit, the branches reset,
    deleted, and kept, the commits discarded (short id and subject), and
    whether the install ran and changed anything, or why it was skipped. End
