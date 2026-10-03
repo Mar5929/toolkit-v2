@@ -31,15 +31,15 @@ In order:
 9. **Linked memory** (view): the memory records that link to the item. Only with memory in Notion.
 10. **Linked Github PRs** (text, and an embed the owner fills in the Notion app): the item's pull requests ("Pull request links" below).
 
-- A section heading is level 1 (`# Overview`), and a heading inside a section is level 2 (`## Current state`).
+- In the current template, a section heading is level 1 (`# Overview`), and a heading inside a section is level 2 (`## Current state`). A project whose template was made before toolkit 0.8.1 can have them one level lower. Match a heading by its words, at the level you read, and write a new heading at the level the page uses for that kind of heading.
 - The template's first block is a note for the agent, in a callout. It says what `managing-work-items`, "Every time", says about text in angle brackets. A page you create or change never keeps it ("Filling a new item").
-- An item made before toolkit 0.8.1 has its headings one level lower (`## Overview`, `### Current state`), the older Requirements layout, and no "Linked Github PRs". Read and change it as it is, with the text you read. Give it the current layout only when the owner asks.
+- An item made before toolkit 0.8.1 has the older Requirements layout and no "Linked Github PRs". Read and change it as it is, with the text you read. Give it the current layout only when the owner asks.
 
 The Solution Design is a child page. The page text shows it as a `<page url="…">` line. Each view shows in the page text as one `<database url="…">` line: change the rows in its database, never the line.
 
 ## Where Current state sits
 
-Current state is under the Overview's `## Current state` heading, after a short guide paragraph. It is one text block of five lines joined by `<br>`:
+Current state is under the Overview's "Current state" heading, after a short guide paragraph. It is one text block of five lines joined by `<br>`:
 
 ```text
 **Where it stands:** …<br>**Next action:** …<br>**Waiting on:** …<br>**Blockers:** …<br>**Last updated:** …
@@ -58,7 +58,7 @@ Related items is the paragraph just below it.
 
 After the template's content is there, send one `update_content` call that leaves no `\<…\>` prompt on the page (`managing-work-items`, "Every time").
 
-- **Replace** with what `managing-work-items` told you to save: the Goals, the Current state lines, Related items, the first Recent History row (in place of the example row), and one block for each requirement, in place of the template's pattern block ("Requirements" below).
+- **Replace** with what `managing-work-items` told you to save: the Goals, the Current state lines, Related items, the first Recent History row (in place of the example row), and one block for each requirement, in place of the template's pattern block ("Requirements" below). When the project's template still has the older layout (the page holds `**Overall status:**`), replace everything between the Requirements heading and the Questions and Answers heading with the blocks.
 - **Delete** the rest: the callout note at the top (its three lines); the line `\<Every requirement must follow this structure below\>`; the two example rows of Questions and Answers; the prompt lines under Context, Sources, and "Solution options and considerations"; and the prompt line under "Linked Github PRs".
 - **Keep** every heading, label, guide paragraph, table header row, and view line, and the embed line under "Linked Github PRs".
 
@@ -85,7 +85,7 @@ When the template's example row (`\<YYYY-MM-DD\>`) is still there, replace that 
 
 ## Requirements
 
-Each requirement is one block under `# Requirements`, in the order of its number. `managing-work-items` says what goes in each part. The two lists are toggles. A block, as the page text shows it:
+Each requirement is one block under the Requirements heading, in the order of its number. `managing-work-items` says what goes in each part. The two lists are toggles. A block, as the page text shows it:
 
 ```text
 ## Requirement 1: Save a transaction
@@ -105,15 +105,13 @@ Each requirement is one block under `# Requirements`, in the order of its number
 
 The lines inside a toggle start with one tab.
 
-- **A new requirement:** insert its block before the `# Questions and Answers {toggle="true"}` line, with the next unused number: `old_str` is that line, and `new_str` is the block followed by that line. Take the form from the block above, never from a prompt left on a page.
+- **A new requirement:** insert its block before the Questions and Answers heading line, with the next unused number: `old_str` is that line as read (`# Questions and Answers {toggle="true"}` in the current template), and `new_str` is the block followed by that line. Take the form from the block above, never from a prompt left on a page.
 - **A new line:** add it after the last line of its list. `old_str` is that last line, with the lines around it when it does not match exactly once.
 - **A part with nothing to write yet:** keep its label and write nothing after it. A list with no line yet is the `<details>`, `<summary>`, and `</details>` lines alone.
-- **A dropped requirement:** keep its block and add the Q-ID to its heading: `## Requirement 3: Export to PDF (dropped, Q-12)`.
-- `R-01` in a question row, a task, or the design means "Requirement 1".
 
 ## Saving a question and its answer
 
-The table sits under the toggle heading `# Questions and Answers {toggle="true"}`. Its columns, in order: ID, Question, Answer, Date answered, Decision?, Affects, Status, Decision needed from.
+The table sits under the toggle heading "Questions and Answers" (`# Questions and Answers {toggle="true"}` in the current template). Its columns, in order: ID, Question, Answer, Date answered, Decision?, Affects, Status, Decision needed from.
 
 - **A new row:** its ID is the highest Q-ID in the table plus one. Insert it after the last open row, or right after the header row when none is open, so open rows stay on top, oldest first. `old_str` is the last open row as read, and `new_str` is that row followed by the new one. Status is `Open`. When the template's two example rows (Q-02 open, Q-01 answered) are still there, delete them in the same call.
 - **An answer:** replace the row. Put his words in quotes under Answer, the date as `YYYY-MM-DD`, Decision? `yes` or `no`, and Status `Answered`. Then move the row below the last open row (remove it, and insert it after the last open row), so answered rows are newest first.
@@ -130,7 +128,7 @@ Answering Q-01:
 
 ## Pull request links
 
-The section "Linked Github PRs" holds an "Embed Github" block that only the Notion app can make or fill. The page text shows it as one `<unknown … alt="external_object_instance"/>` line: never change or remove that line. When the item gets a pull request, add it as a plain link on its own line right under the heading: `old_str` is the `# Linked Github PRs` line, and `new_str` is that line followed by `[<repository>#<number>: <title>](<pull request address>)`. Add one line for each pull request. The owner may put the same pull request in the embed himself.
+The section "Linked Github PRs" holds an "Embed Github" block that only the Notion app can make or fill. The page text shows it as one `<unknown … alt="external_object_instance"/>` line: never change or remove that line. A pull request that `managing-work-items` says to record on the item goes here, not under Related items, as a plain link on its own line right under the heading: `old_str` is the "Linked Github PRs" heading line as read, and `new_str` is that line followed by `[<repository>#<number>: <title>](<pull request address>)`. Add one line for each pull request. The owner may put the same pull request in the embed himself.
 
 ## Comments
 

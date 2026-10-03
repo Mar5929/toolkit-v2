@@ -26,7 +26,13 @@ the agent can make this change, and the owner does not need to click
 anything.
 
 After the type change, the filter of "Open tasks" was empty. It must be
-set after the change.
+set after the change. `work-setup.md` now also saves the filter of every
+Tasks view before the change and puts back each one that changed. That
+step was added after this test and has not been run.
+
+`work-setup.md` states only the rules that follow from this test: the
+agent makes the call, and the filters are put back after it. The account
+of the test is kept here.
 
 ## Faults found in the documents, fixed on 2026-10-03
 

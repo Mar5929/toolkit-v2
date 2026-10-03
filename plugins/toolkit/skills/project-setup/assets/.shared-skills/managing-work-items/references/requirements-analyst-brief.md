@@ -13,7 +13,7 @@ The job block:
 ```text
 Work item: <ID and title>
 Goal: <the goal in the item's Overview>
-Requirements: <every requirement block, whole: its heading, Original
+Requirements: <every requirement block that is not dropped, whole: its heading, Original
   verbatim requirement, Goal, requirements list, and Acceptance Criteria>
 Open questions: <the open Questions and Answers rows>
 Owner's decisions: <answered Questions and Answers rows marked Decision? yes>

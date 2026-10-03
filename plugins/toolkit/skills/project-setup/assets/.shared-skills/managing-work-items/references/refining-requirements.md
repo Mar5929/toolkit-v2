@@ -15,7 +15,7 @@ Each requirement is one block, headed "Requirement <number>: <short name>". `tra
 
 - Requirements are numbered 1, 2, 3 in the order they are added. Everywhere else (Questions and Answers, tasks, the design, reports), name a requirement in the short form `R-01`, which means "Requirement 1".
 - The item's goal is the goal in its Overview, together with each requirement's Goal. Acceptance is each requirement's Acceptance Criteria; the item has no other acceptance list.
-- Approval is never written in the Requirements section. It is recorded in `requirements_approved` (who and when) and in the Questions and Answers row that holds his yes.
+- Approval is never written in the Requirements section. It is recorded in `requirements_approved` (who and when) and in the Questions and Answers row that holds his yes. A requirement is approved only when `requirements_approved` holds a date and no row that asks him to approve it is open.
 - An item made before toolkit 0.8.1 can have the older layout: a Starting request, an Agreed goal, `R-01` blocks of labeled lines, and one Acceptance list. Read it as it is: the Starting request holds his words, "Required behavior" and "Boundaries and exceptions" are the requirements list, and "Acceptance check" and the Acceptance list are the criteria. Move an item to this layout only when the owner asks for that item. Then each requirement keeps its number and every word of his, a Superseded one becomes a dropped one, and you show him the new section before you save it.
 
 ## Steps
@@ -40,7 +40,8 @@ Each requirement is one block, headed "Requirement <number>: <short name>". `tra
    - Never rewrite the old row. Add "Change to Q-03: <the question now>" with his words and the date, and set the old row to "Superseded by Q-09".
    - Change the lines of each `R-xx` it affects, and keep the old wording in the Recent History row ("R-02 was: ...; changed by Q-12"). Never change an Original verbatim requirement: add his new words after it, with the date and the Q-ID.
    - When the old answer was saved to memory, ask "This changes a decision saved in memory. Save the new decision and mark the old one as replaced?"
-   - A changed approved requirement needs his OK again for that change only: add the row "Do you approve the change to R-02?" and ask it. While that row is open, the change waits for his approval. The others stay approved, and `requirements_approved` stays as it is. A design it affects goes back to Designing.
+   - After the requirements were approved, a changed requirement and a new one each need his OK for that requirement only: add the row "Do you approve the change to R-02?", or "Do you approve R-05?" for a new one, and ask it. While that row is open, that requirement is not approved: design, build, and test nothing from it. The others stay approved, and `requirements_approved` stays as it is. A design it affects goes back to Designing.
+   - On his no, put the old lines back from that Recent History row, or mark a new requirement dropped, and save his words in the row.
    - A new requirement takes the next free number. A dropped one keeps its block, with " (dropped, <Q-ID>)" added to its heading: "Requirement 3: Export to PDF (dropped, Q-12)". Numbers are never reused.
 8. **Shape the plan** (Roadmap, tasks, and sub-items, below).
 9. **Stop asking** when every requirement has its Goal, at least one line in its requirements list, and at least one line in its Acceptance Criteria, no open question affects a requirement, a top-level item's roadmap has at least one phase, and the split is settled. Ask once: "What have we not talked about yet that could change this?"
@@ -48,7 +49,7 @@ Each requirement is one block, headed "Requirement <number>: <short name>". `tra
 11. **Ask for his OK on the requirements.** Show the goal, each requirement in one line with its Acceptance Criteria, and your recommended next State with its reason (Designing or Building, as `SKILL.md` says). Add the row "Do you approve these requirements?" (Affects: every `R-xx`), and end the reply with exactly that question. After his yes, save his words and the date in that row first (Decision? `yes`), then:
     - set `requirements_approved` to `YYYY-MM-DD by <name>`;
     - move the item to the next State he agreed to;
-    - a sub-item that these requirements cover: give it the same approval with "(from <parent ID>)", add the Recent History row "Covers <parent ID> R-xx, approved there.", and move it to the same next State. It skips its own interview.
+    - a sub-item that these requirements cover: bring the lines it copied from the parent up to the approved wording, give it the same approval with "(from <parent ID>)", add the Recent History row "Covers <parent ID> R-xx, approved there.", and move it to the same next State. It skips its own interview.
 12. **Pausing before approval:** the Current state names what is settled and the first open Q-ID. The project's Current State names the item under "Now".
 
 ## The question format
@@ -79,7 +80,7 @@ The levels, and which ones have phases, are in `SKILL.md`, "Levels".
 - During refining, add a task only for work refining itself needs, such as "P1-T01 — Get the current persona list from the client" (in a sub-item, "T01 — ...").
 - Propose a split into sub-items when a part of the work can be approved, built, or shipped on its own; is for other people or another area of the system; needs its own design; or is large enough that the owner will want to track it by itself. Never split for a single step (that is a task).
 - Show the split in one message: each sub-item's title, a one-line reason, the parent's phase it goes under (a level-2 sub-item only), and the parent requirements it covers. Ask "Shall I split WI-012 into these 4 sub-items?" His yes covers the split only.
-- After his yes, create each sub-item with the parent's ID, in State Refining Requirements, with one requirement for each parent requirement it covers: its Original verbatim requirement quotes the parent's words for that part and names where they are from ("from <parent ID> R-02"). When the parent's requirements are already approved and cover it, create it in the parent's next State with the approval copied from the parent instead. List each level-2 sub-item's ID under its phase on the top-level parent; a level-3 sub-item is listed on its level-2 parent, with no phase.
+- After his yes, create each sub-item with the parent's ID, in State Refining Requirements, with one requirement for each parent requirement it covers: its Original verbatim requirement quotes the parent's words for that part and names where they are from ("from <parent ID> R-02"), and its requirements list and Acceptance Criteria copy the parent's lines it covers, word for word. When the parent's requirements are already approved and cover it, create it in the parent's next State with the approval copied from the parent instead. List each level-2 sub-item's ID under its phase on the top-level parent; a level-3 sub-item is listed on its level-2 parent, with no phase.
 
 ## Gotchas
 

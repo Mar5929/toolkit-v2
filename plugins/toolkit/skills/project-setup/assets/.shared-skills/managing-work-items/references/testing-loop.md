@@ -5,7 +5,7 @@ Tests a finished build against every requirement's Acceptance Criteria, always w
 ## Steps
 
 1. **Check the item can be tested.**
-   - Requirements not approved, or a change to a requirement that still waits for his approval: stop and use `refining-requirements.md`.
+   - Requirements not approved, or a row that asks him to approve a new or changed requirement is still open: stop and use `refining-requirements.md`.
    - A sub-item with no design of its own is checked against its parent's approved design and the parent's requirements it covers.
    - A parent is checked as a whole, across its sub-items. Each sub-item keeps its own result approval.
 2. **Run the checks** in the item's worktree at its head commit (`git -C <worktree> rev-parse HEAD`), never on the default branch. Commit every build change first, with no AI credit: the checker checks a commit. Run the project's tests (`AGENTS.md`, "Commands") and every check of the Acceptance Criteria you can, and keep each command and its exact result line. A check that needs what you lack (a real device, a sign-in, the owner looking at a screen) is "not run", with what would run it. Never report it as passed.

@@ -340,10 +340,9 @@ through the API, after the owner's yes.
    by the words of its heading, whatever its heading level.
    - **A missing section or view:** add it the same way the template build
      does, with its heading at the level the template's other sections
-     have. Skip "Linked memory" in a project without Notion memory. A
-     missing "Linked Github PRs" gets its heading and its prompt line at
-     the end of the page; its embed is the owner's to add (template build,
-     step 11).
+     have. Skip "Linked memory" in a project without Notion memory. Never
+     add "Linked Github PRs" here: it comes only with the owner's yes to
+     the Requirements layout, below.
    - **The toolkit's own guide text:** replace, with one `update_content`
      call, each guide paragraph under Roadmap, Sub-items, and Tasks, and
      the Related items prompt, that differs from `work-item-page.md`.
@@ -352,17 +351,20 @@ through the API, after the owner's yes.
      items of this project should get the current layout. After his yes,
      replace everything from the line under the Requirements heading to
      the line above the "Questions and Answers" heading with the same
-     lines of `work-item-page.md`, and add the note at the top (the
+     lines of `work-item-page.md`, add the note at the top (the
      callout that starts "If you are an agent creating or changing this
-     page") as the first block, in one `update_content` call. Write the
-     `Requirement` heading one level below the template's section
-     headings.
+     page") as the first block, and add the "Linked Github PRs" heading
+     and its prompt line at the end of the page, in one `update_content`
+     call. Write the `Requirement` heading one level below the template's
+     section headings. The embed under "Linked Github PRs" is the owner's
+     to add (template build, step 11). Before his yes, and after a no, add
+     none of the three.
    - **Everything else is the owner's and is never changed:** the level of
      each heading, the note at the top (its words, or that he removed it),
      a Requirements section in any other form, the "Linked Github PRs"
-     section and its embed, and any text he added. The owner edits this template himself in Notion
-     (he rewrote it on 2026-10-03), and his version wins over
-     `work-item-page.md`. When one of these parts differs from the file,
+     section and its embed (or that it is missing), and any text he
+     added. The owner edits this template himself in Notion, and his
+     version wins over `work-item-page.md`. When one of these parts differs from the file,
      change nothing and tell him in one line what differs.
 
    Do the same for the
@@ -433,7 +435,11 @@ owner the steps first and act only after his yes.
    each task whose Status disagrees with Done (ticked but Not Started or
    In Progress; not ticked but Done or Cancelled), and ask which is right.
    Then save every task's page id and Status in a file in a scratch
-   folder (`ntn-commands.md`, "Sending a body").
+   folder (`ntn-commands.md`, "Sending a body"). Save there also the
+   name and filter of every view of the Tasks database (the view ids as
+   in "Bringing a project up to the current template", step 3, then
+   `ntn api v1/views/<view-id> < /dev/null | jq -c '{id, name, filter}'`
+   for each).
 3. Status of type select: change its type yourself, with one call. The
    owner clicks nothing; his yes to these steps covers it. Take the
    `Status` spec out of `03-tasks-database.json`
@@ -443,14 +449,13 @@ owner the steps first and act only after his yes.
    ntn api v1/data_sources/<tasks-data-source-id> -X PATCH -d '{"properties":{"Status": <the Status spec from 03-tasks-database.json>}}' < /dev/null | jq -c '.properties.Status | {id, type}'
    ```
 
-   The answer must show type `status`. Tested on 2026-10-03 on a throwaway
-   project: Notion accepted the call, the property kept its id, each
-   option landed in its group, and every task kept its Status. Notion's
-   pages do not promise that
+   The answer must show type `status`. When Notion refuses the call,
+   or accepts it but the type is not `status`: stop, tell the owner what
+   it answered, and change nothing more. Notion's pages do not promise
+   that a type change keeps the values
    (https://developers.notion.com/reference/update-data-source-properties:
    "Changing a type can make existing values unreadable in the new
-   type"), so the list from step 2 is the way back. When Notion refuses
-   the call, tell the owner what it answered and stop.
+   type"), so the list from step 2 is the way back.
 4. Read Status again. Each option must be in its group: Not Started in
    To-do, In Progress in In progress, Done and Cancelled in Complete. When
    one is not, send the whole list from `03-tasks-database.json`, each
@@ -459,9 +464,16 @@ owner the steps first and act only after his yes.
    the option into its group. Then read every task's Status and compare
    it with the list from step 2. Set each one that differs or is empty
    back to its saved Status.
-5. Set the filter of the Tasks view "Open tasks". Do it after the type
-   change in step 3, never before: the change can clear this view's
-   filter (it was empty after the change in the test on 2026-10-03).
+5. Put the view filters back. A type change can clear the filter of a
+   view, so do this after step 3, never before. Read the filter of every
+   Tasks view again and compare it with the one saved in step 2. For each
+   view whose filter changed, send the saved filter back with
+   `PATCH v1/views/<id>` and only `{"filter": <the saved filter>}`; where
+   the saved filter tests Status as `select`, write `status` in its
+   place. Read it back. A filter Notion refuses, or one that still
+   differs: tell the owner the view's name and its saved filter, and
+   leave that view as it is.
+   Then set the filter of the Tasks view "Open tasks", whatever it held.
    File `16-view-open-tasks.json` is a whole view body, so take only its
    `filter` object out of it, with `{{T_STATUS}}` the id of Status as
    read after step 3, and send `PATCH v1/views/<id>` with only

@@ -69,8 +69,7 @@ Each requirement is one block in the body under `## Requirements`, in the order 
 - **A new requirement:** add its block after the last one, with the next unused number. Take the form from the block above, never from a prompt left in a body.
 - **A new line:** add it at the end of its numbered list.
 - **A part with nothing to write yet:** keep its label and write nothing after it.
-- **A dropped requirement:** keep its block and add the Q-ID to its heading: `### Requirement 3: Export to PDF (dropped, Q-12)`.
-- `R-01` in a question row, a task, or the design means "Requirement 1". Never write `#1` for a requirement: GitHub reads it as an issue number.
+- Never write `#1` for a requirement: GitHub reads it as an issue number.
 - An issue made before toolkit 0.8.1 has the older layout (`### Starting request`, `### Agreed goal`, `#### R-01 — <title>` blocks of labeled lines, `### Acceptance`). Read and change it in the layout it has. Rewrite it into this layout only when the owner asks.
 
 ## Questions and Answers

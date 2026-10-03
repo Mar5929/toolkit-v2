@@ -41,7 +41,7 @@ First check that you are looking at the exact commit named, from the folder you 
   - **Met:** every line of its Acceptance Criteria passed, or the evidence shows it is true. Name the evidence.
   - **Partly met:** some of the lines hold. Say which do not.
   - **Not met:** the behavior is missing or wrong. Say what you saw.
-  - **Not run:** the check could not run here. Say why and what would run it. Never report a check that did not run as passed.
+  - **Not run:** the check could not run here, or the requirement has no line under Acceptance Criteria. Say why and what would run it. Never report a check that did not run as passed, and never report a requirement with no Acceptance Criteria as Met.
 - Read the diff of the branch against the branch it started from. Report defects: broken edge cases, missing error handling the requirements ask for, behavior nobody asked for, files changed that the design did not name, and anything unfinished.
 
 ### Boundaries

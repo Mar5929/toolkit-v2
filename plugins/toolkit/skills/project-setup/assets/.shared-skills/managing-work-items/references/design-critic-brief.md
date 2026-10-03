@@ -10,8 +10,8 @@ The job block:
 
 ```text
 Work item: <ID and title>
-Requirements: <the goal in the item's Overview, and every requirement block,
-  whole, with its Acceptance Criteria>
+Requirements: <the goal in the item's Overview, and every requirement block
+  that is not dropped, whole, with its Acceptance Criteria>
 Owner's decisions: <answered Questions and Answers rows marked Decision? yes,
   and the design's Notes, "Design changes during the interview">
 Design so far: <What this design solves, Requirements and design readiness,
