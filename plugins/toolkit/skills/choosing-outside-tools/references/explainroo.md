@@ -17,6 +17,7 @@ It is set up when the folder `~/Documents/Projects/explainroo` holds the file `b
 ## The owner's choices
 
 - **No corner label.** Set `"watermark": false` in every video's `video.json`. Never set `watermark` to a text.
+- **No drawing sounds.** Set `"sfx": "minimal"` in every video's `video.json`. It removes the sounds drawings make by themselves when they appear (pencil, pop, whoosh, tick, typing). Scene-change sounds, the voice, and the music stay. Sounds added with `s.sfx` or an element's `sfx` option also stay, so add none unless the owner asks.
 - **Where videos go.** Create each video in the explainroo folder, under `videos/<short-name>`, unless the owner names another place. Never create a video folder inside the project the chat was opened in.
 - **Handing it over.** When the session has a tool that sends files to the owner, send him the finished `out/video.mp4`. Then tell him where the file is, how long it is, and what the `verify` command said.
 
