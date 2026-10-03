@@ -301,11 +301,10 @@ creates or changes keeps none.
 - **Existing work items stay as they are.** Never rewrite the
   Requirements section of an existing item in an update, in any tracker.
   The skills read the older layout as it is. An item moves to the new
-  layout only when the owner asks for that item (`managing-work-items`,
-  `references/refining-requirements.md`, "The Requirements layout"). An
-  item that labels its Functional Requirements "Functional, Process,
-  Logic, Schema, etc. Requirements" (the label before toolkit 0.8.4) keeps
-  that label.
+  layout only when the owner asks for that item, and an item that holds
+  the older label of its Functional Requirements (from before toolkit
+  0.8.4) keeps it (`managing-work-items`,
+  `references/refining-requirements.md`, "The Requirements layout").
 - Tell the owner in one line that new items get the new layout and
   existing items keep theirs.
 

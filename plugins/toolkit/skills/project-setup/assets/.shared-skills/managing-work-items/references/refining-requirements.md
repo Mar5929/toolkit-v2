@@ -17,12 +17,12 @@ Each requirement is one block, headed "Requirement <number>: <short name>". `tra
 - The item's goal is the goal in its Overview, together with each requirement's Goal. Acceptance is each requirement's Acceptance Criteria; the item has no other acceptance list.
 - Approval is never written in the Requirements section. It is recorded in `requirements_approved` (who and when) and in the Questions and Answers row that holds his yes. A requirement is approved only when `requirements_approved` holds a date and no row that asks him to approve it is open.
 - An item made before toolkit 0.8.1 can have the older layout: a Starting request, an Agreed goal, `R-01` blocks of labeled lines, and one Acceptance list. Read it as it is: the Starting request holds his words, "Required behavior" and "Boundaries and exceptions" are the Functional Requirements, and "Acceptance check" and the Acceptance list are the criteria. Move an item to this layout only when the owner asks for that item. Then each requirement keeps its number and every word of his, a Superseded one becomes a dropped one, and you show him the new section before you save it.
-- An item made before toolkit 0.8.4 can label the Functional Requirements "Functional, Process, Logic, Schema, etc. Requirements". It is the same list: keep the label the item has.
+- An item made before toolkit 0.8.4 can label the Functional Requirements "Functional, Process, Logic, Schema, etc. Requirements". It is the same list: existing blocks keep their label, and a new block gets "Functional Requirements".
 
 ## Steps
 
 1. **Start or pick up.**
-   - New work: create the item in State Refining Requirements, titled in his words. Give it one requirement for each separate thing he asked for, with his words for it as its Original verbatim requirement. Choose its `type` from the template's list.
+   - New work: create the item in State Refining Requirements, titled in his words. Give it one requirement for each separate thing he asked for, with his words for it as its Original verbatim requirement.
    - An existing item with open questions: say in one line what is settled, then ask the first open question again. Never start the interview over.
 2. **Read what the project already knows.** Search memory with `managing-project-memory`, related items with `tracking-work-items`, and the area's files in `requirements/` and `system-guide/`. Save each new source before you use it (Sources, below).
 3. **Agree the goal first.** Ask "So the goal is <one sentence>?" After his yes, write it as the goal in the item's Overview.

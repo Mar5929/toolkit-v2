@@ -95,7 +95,7 @@ What the text looks like:
 
 - Each block is one line. There are no blank lines.
 - A literal `<` `>` `|` `*` `$` is written with a backslash: `\<Goal\>`.
-- A line break inside one block is `<br>`.
+- A line break inside one block or table cell is `<br>`.
 - A table is `<table header-row="true">` with one `<td>` per line.
 - A toggle heading is `# Questions and Answers {toggle="true"}`. Its contents are indented with one tab, except the lines of a table's rows (`<tr>`, `<td>`, `</tr>`), which have no tab.
 - A toggle is a `<details>` line, a `<summary>…</summary>` line with its title, its contents indented with one tab, and a `</details>` line. A callout is a `<callout icon="…" color="…">` line, its text indented with one tab, and a `</callout>` line.
