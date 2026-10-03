@@ -71,7 +71,7 @@ Notion project later runs all four.
 Onboarding's "update the toolkit" runs this. Compare the project with
 `database-layout.md` and `views-and-layout.md`, and add only what is
 missing; never remove, rename, or retype anything, except the one view in
-step 3.
+step 3 and the one heading in step 5.
 
 1. For each of Lore's databases and the toolkit's columns, list what the
    data source has
@@ -94,7 +94,12 @@ step 3.
    view from file 23 only (`work-setup.md`, "Building the templates", step
    12).
 4. Views: add a missing view from its file in `assets/schema/`.
-5. Tell the owner in one short list what was added.
+5. The "Current state" page: a page set up before toolkit 0.8.0 has an
+   "Untracked to-dos" heading, which `assets/current-state.md` no longer
+   has. In the "Project" template the heading holds only its prompt line:
+   remove both with one `update_content` call. In a project, `update.md`,
+   "The levels structure (toolkit 0.8.0)", step 6, moves its lines first.
+6. Tell the owner in one short list what was added.
 
 ## Building the memory part of a template
 

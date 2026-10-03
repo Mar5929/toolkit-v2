@@ -22,26 +22,26 @@ Every view has a set order (the owner's decision).
 
 | Database | View | Type | Grouping, filter, and order |
 | --- | --- | --- | --- |
+| Work Items | By project phase | board | Items with no parent; columns by Phase column (each item's project phase, in plan order; "No phase" for one not placed yet), empty columns hidden; cards by Priority, then ID; archived hidden. Cards show ID, Status, State, Waiting on, Next action. The first tab. |
 | Work Items | Board | board | Columns by Status, in status order (Not Started to Cancelled); cards by Priority, then ID; archived hidden. Cards show ID, State, Waiting on, Priority, Parent item, Next action. No created or edited time. |
 | Work Items | All items | table | Sub-items nested under their parent; by ID; archived hidden. |
 | Work Items | By state | board | Columns by State, in option order, empty columns hidden; open items only; cards by Priority, then ID. |
 | Work Items | Roadmap | table | Items that have a parent, grouped by Parent item; rows by Phase order, then ID. No dates. |
 | Work Items | Waiting on Mike | table | Waiting on = owner, open items; by Priority, then ID. |
 | Work Items | Top-level items | table | Items with no parent; by Priority, then ID; shows Blocked by and Blocking, the order between top-level items. |
-| Work Items | By project phase | board | Items with no parent; columns by Phase column (each item's project phase, in plan order; "No phase" for one not placed yet), empty columns hidden; cards by Priority, then ID; archived hidden. Cards show ID, Status, State, Waiting on, Next action. |
 | Phases | Project phases | table | The project's own phases: Phase type is Project; by Order. Its Sub-items column lists each phase's top-level items. The first tab. |
 | Phases | By item | table | Grouped by Work item; by Order. |
 | Phases | All phases | table | By Order, with the Phase type column (the database's first view, renamed). A later tab. |
 | Tasks | Project tasks | table | The project's own tasks: Task type is Project; by Order. The first tab. |
-| Tasks | Open tasks | table | Not done; grouped by Work item; by Order. |
+| Tasks | Open tasks | table | Status is Not Started or In Progress; grouped by Work item; by Order. |
 | Tasks | All tasks | table | By Order, with the Task type column (the database's first view, renamed). A later tab. |
 
 The project page shows each database on its first tab. So Phases shows
 only the project's roadmap, and Tasks only the project's own tasks; an
 item's phases and tasks show on that item's page, and "All phases" and
-"All tasks" list everything (the owner's decisions, 2026-10-02). Work
-Items opens on "Board", with every item; "By project phase" is a later
-tab.
+"All tasks" list everything. Work Items opens on "By project phase": the
+top-level items under the project's phases. "Board" is the next tab, with
+every item (the owner's decisions, 2026-10-02 and 2026-10-03).
 
 Every table view shows its columns in the order of "Property order and
 page layout".
@@ -65,7 +65,7 @@ app).
 | --- | --- | --- | --- |
 | Work Items | ID, Status, State, Waiting on, Priority | Plan: Parent item, Sub-items, Phase, Phases, Tasks, Blocked by, Blocking, Related · About: Next action, Type, Tags · Approvals: Requirements approved, Design, Design approved, Result approved, Delivery · Links and files: Memories, Facts, Entities, Files | Phase order, Phase name, Phase column, Archived |
 | Phases | Phase ID, Phase type, Order, Status | Plan: Outcome, Exit result · Links: Work item, Sub-items, Tasks | none |
-| Tasks | Task ID, Task type, Status, Who does it, Done, Order | Work: Work, Deliverable, Done when · Links: Work item, Phase, Depends on | none |
+| Tasks | Task ID, Task type, Status, Who does it, Order | Work: Work, Deliverable, Done when · Links: Work item, Phase, Depends on | none |
 
 - **Table views** list the properties in the order heading, then sections,
   then hidden, each with `"visible": true` or `false`. A view that shows

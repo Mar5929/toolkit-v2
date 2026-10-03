@@ -102,8 +102,7 @@ Changing the Status options replaces the whole list: always send every option, e
 | --- | --- | --- |
 | Task | Title | The task's name. |
 | Task ID | Text | `P1-T01` in a top-level item, `T01` in a sub-item, `PT-01` for a project task. Stable: never reused or renumbered. |
-| Done | Checkbox | Ticked exactly when Status is Done or Cancelled. Views and searches filter on it. |
-| Status | Select | Not Started, In Progress, Done, Cancelled. |
+| Status | Status | Not Started, In Progress, Done, Cancelled. A task is open while its Status is Not Started or In Progress; views and searches filter on it. |
 | Order | Number | The order inside the phase, or inside a plain list (a sub-item's tasks, or the project tasks). |
 | Work | Text | The action to take. |
 | Deliverable | Text | The file, decision, or other result. |
@@ -176,7 +175,7 @@ ntn api v1/pages -d '{"parent":{"type":"data_source_id","data_source_id":"{{TASK
   "properties":{"Task":{"title":[{"text":{"content":"List the required fields"}}]},
   "Task ID":{"rich_text":[{"text":{"content":"P1-T01"}}]},
   "Order":{"number":1},
-  "Status":{"select":{"name":"Not Started"}},
+  "Status":{"status":{"name":"Not Started"}},
   "Work":{"rich_text":[{"text":{"content":"List the fields with the owner."}}]},
   "Deliverable":{"rich_text":[{"text":{"content":"The field list."}}]},
   "Done when":{"rich_text":[{"text":{"content":"The owner approves the list."}}]},
@@ -188,19 +187,19 @@ ntn api v1/pages -d '{"parent":{"type":"data_source_id","data_source_id":"{{TASK
 Start a task:
 
 ```bash
-ntn api v1/pages/<task-page-id> -X PATCH -d '{"properties":{"Status":{"select":{"name":"In Progress"}}}}' < /dev/null
+ntn api v1/pages/<task-page-id> -X PATCH -d '{"properties":{"Status":{"status":{"name":"In Progress"}}}}' < /dev/null
 ```
 
-Tick a task:
+Finish a task (`managing-work-items` calls this ticking it):
 
 ```bash
-ntn api v1/pages/<task-page-id> -X PATCH -d '{"properties":{"Done":{"checkbox":true},"Status":{"select":{"name":"Done"}}}}' < /dev/null
+ntn api v1/pages/<task-page-id> -X PATCH -d '{"properties":{"Status":{"status":{"name":"Done"}}}}' < /dev/null
 ```
 
-Cancel a task: set Status Cancelled, tick Done, and start its title with "Cancelled: ":
+Cancel a task: set Status Cancelled, and start its title with "Cancelled: ":
 
 ```bash
-ntn api v1/pages/<task-page-id> -X PATCH -d '{"properties":{"Done":{"checkbox":true},"Status":{"select":{"name":"Cancelled"}},"Task":{"title":[{"text":{"content":"Cancelled: List the required fields"}}]}}}' < /dev/null
+ntn api v1/pages/<task-page-id> -X PATCH -d '{"properties":{"Status":{"status":{"name":"Cancelled"}},"Task":{"title":[{"text":{"content":"Cancelled: List the required fields"}}]}}}' < /dev/null
 ```
 
 Put an existing sub-item in a phase by setting its "Phase". Check first that the phase's "Work item" is the parent:
@@ -224,13 +223,13 @@ Changing the plan is a change to rows:
 
 After a plan change, list the item's phases (`searching.md`, "A parent's full tree") and check the order.
 
-A task whose Status is empty or does not match Done (made by hand, made before the column existed, or ticked by hand): set Status from Done. Not ticked: Not Started, but leave a task that is already In Progress as it is. Ticked: Done, or Cancelled when its title starts with "Cancelled: ".
+A task whose Status is empty (made by hand): set it to Not Started. A Tasks database that still has a "Done" checkbox, or a Status of type select, was set up before toolkit 0.8.0: tell the owner that "update the toolkit" converts it. Until it is converted, send and read the Tasks Status with the type the database has (`"select"` in place of `"status"`, in the calls here and in `searching.md`), and tick Done, where it exists, exactly when Status is Done or Cancelled.
 
 ## An item that changes level
 
 When a move changes an item's level, or an item made before toolkit 0.8.0 is a sub-item that still has phases:
 
-- **Phases to a plain list** (the item is now a sub-item). Read its phases and tasks (`searching.md`, "A parent's full tree"). Give its tasks new Orders 1, 2, 3, ... in plan order (phase Order, then task Order), and empty each task's "Phase" (`{"Phase":{"relation":[]}}`). Each task keeps its Task ID, Status, and Done. Empty "Phase" on each of its sub-items. Set each of its phases to Cancelled, with Exit result "Removed: a sub-item has no phases. Its tasks are now one plain list." Add one Recent History row on the item naming each phase removed.
+- **Phases to a plain list** (the item is now a sub-item). Read its phases and tasks (`searching.md`, "A parent's full tree"). Give its tasks new Orders 1, 2, 3, ... in plan order (phase Order, then task Order), and empty each task's "Phase" (`{"Phase":{"relation":[]}}`). Each task keeps its Task ID and Status. Empty "Phase" on each of its sub-items. Set each of its phases to Cancelled, with Exit result "Removed: a sub-item has no phases. Its tasks are now one plain list." Add one Recent History row on the item naming each phase removed.
 - **A plain list to phases** (the item is now top-level). Add phase `P1`, named as the owner approves, and set it as "Phase" on each of its tasks and sub-items. The tasks keep their IDs; new tasks take `P1-T` IDs. Set its own "Phase" to the project phase the owner names. Add a Recent History row.
 
 ## The project's phases and tasks
@@ -251,7 +250,7 @@ ntn api v1/pages -d '{"parent":{"type":"data_source_id","data_source_id":"{{PHAS
 
 Put a top-level item in a project phase, or move it, with the same "Phase" call as for a sub-item, above. Check first that the phase's "Work item" is empty and its Phase ID has two digits. Write the phase in the item's Related items line too: "Project phase P01." Merging, dropping, and reordering project phases follow the same table as an item's phases, with top-level items in place of sub-items.
 
-Add a project task: the same call as a task, without "Work item" and "Phase", with Task ID `PT-` and the next unused number (`PT-04`), and Order its place in the list. Starting, ticking, and cancelling are the same calls as for any task.
+Add a project task: the same call as a task, without "Work item" and "Phase", with Task ID `PT-` and the next unused number (`PT-04`), and Order its place in the list. Starting, finishing, and cancelling are the same calls as for any task.
 
 ## Links, tags, and files
 

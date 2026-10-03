@@ -25,28 +25,28 @@
         "rich_text": {},
         "description": "P1-T01 form. Stable: never reused or renumbered."
       },
-      "Done": {
-        "checkbox": {},
-        "description": "Ticked exactly when Status is Done or Cancelled."
-      },
       "Status": {
-        "select": {
+        "status": {
           "options": [
             {
               "name": "Not Started",
-              "color": "gray"
+              "color": "gray",
+              "group": "To-do"
             },
             {
               "name": "In Progress",
-              "color": "yellow"
+              "color": "yellow",
+              "group": "In progress"
             },
             {
               "name": "Done",
-              "color": "green"
+              "color": "green",
+              "group": "Complete"
             },
             {
               "name": "Cancelled",
-              "color": "brown"
+              "color": "brown",
+              "group": "Complete"
             }
           ]
         },

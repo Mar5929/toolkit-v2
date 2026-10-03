@@ -7,10 +7,20 @@
     "type": "start"
   },
   "filter": {
-    "property": "{{T_DONE}}",
-    "checkbox": {
-      "equals": false
-    }
+    "and": [
+      {
+        "property": "{{T_STATUS}}",
+        "status": {
+          "does_not_equal": "Done"
+        }
+      },
+      {
+        "property": "{{T_STATUS}}",
+        "status": {
+          "does_not_equal": "Cancelled"
+        }
+      }
+    ]
   },
   "sorts": [
     {
@@ -39,10 +49,6 @@
       },
       {
         "property_id": "{{T_WHO_DOES_IT}}",
-        "visible": true
-      },
-      {
-        "property_id": "{{T_DONE}}",
         "visible": true
       },
       {

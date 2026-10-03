@@ -46,10 +46,6 @@
         "visible": true
       },
       {
-        "property_id": "{{T_DONE}}",
-        "visible": true
-      },
-      {
         "property_id": "{{T_DONE_WHEN}}",
         "visible": true
       },

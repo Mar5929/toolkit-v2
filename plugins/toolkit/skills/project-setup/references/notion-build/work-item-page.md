@@ -10,7 +10,7 @@ Only a top-level item has phases, at least one; a sub-item has none, so this sta
 ## Sub-items
 The sub-items of this item, one column per phase. Move a card to another column to move it to another phase. A sub-item's own sub-items have no phase.
 ## Tasks
-One row per task, grouped by phase; a sub-item's tasks have no phase. Tick Done only when its "Done when" check is met.
+One row per task, grouped by phase; a sub-item's tasks have no phase. Set a task's Status to Done only when its "Done when" check is met.
 ## Recent History
 <table header-row="true">
 <tr><td>Date</td><td>Change or decision</td><td>Effect on the work</td></tr>

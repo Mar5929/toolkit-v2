@@ -217,7 +217,9 @@ Since toolkit 0.8.0, only the project and its top-level items have phases:
 a sub-item's tasks are one plain list, and the project has its own phases
 (`P01`) and its own tasks (`managing-work-items`, "Levels"). The storage
 files named here are in each tracker's `tracking-work-items` skill, in this
-skill's `assets/.skill-sets/`. Show the owner every change below in one
+skill's `assets/.skill-sets/`. The same release gives a Notion task one
+status field (step 5) and removes "Untracked to-dos" from Current State
+(step 6). Show the owner every change below in one
 numbered list, and make each only after his yes. Nothing is deleted except
 what a step names, and each item keeps its task IDs.
 
@@ -248,13 +250,26 @@ what a step names, and each item keeps its task IDs.
    view comes with the views (`notion-build/work-setup.md`). GitHub:
    nothing now; the "Project tasks" issue is made with the first project
    task.
-   Notion: add Phase type and Task type, and make "Project phases" and
-   "Project tasks" the first tabs, in the project and in the shared
+   Notion: add Phase type and Task type, and make "By project phase",
+   "Project phases", and "Project tasks" the first tabs, in the project and in the shared
    "Project" template (`notion-build/work-setup.md`, "Bringing a project
    up to the current template", steps 2, 3, and 5). Then give the owner
    the page-layout clicks to pin Phase type and Task type
    (`notion-build/work-layout.md`, "Property order and page layout").
-5. Add a Recent History row to each changed item ("Toolkit update: the
+5. **Task status in Notion.** A task has one status field, Status, and no
+   "Done" checkbox: `notion-build/work-setup.md`, "From the Done checkbox
+   to Status", in the project and in the shared "Project" template.
+6. **Untracked to-dos.** Current State no longer has an "Untracked to-dos"
+   section. For each line under it, propose where it goes: the work item
+   it concerns, a project task for administrative work, or a new Backlog
+   item for other project work (`managing-work-items`). Move each line
+   where he approves, then remove the heading (local or Hindsight memory:
+   `memory/CURRENT_STATE.md` in the main checkout; Notion memory: the
+   "Current state" page, and the same page of the shared "Project"
+   template, `notion-build/setup.md`, "Bringing memory up to the current
+   layout", step 5). A section that says "None." needs no question:
+   remove the heading.
+7. Add a Recent History row to each changed item ("Toolkit update: the
    levels structure of toolkit 0.8.0.", and what changed), and tell the
    owner in one short list what changed.
 

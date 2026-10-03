@@ -20,6 +20,7 @@ here are in this folder.
 - Adding work items or memory later
 - Bringing a project up to the current template
 - From Stage to State
+- From the Done checkbox to Status
 - Building the templates (first time, or a damaged one)
 - Checks after any of these
 
@@ -81,8 +82,10 @@ under (`ntn-commands.md`, "Access and sign-in").
    to the current template", steps 1 to 3, does. Then list the Work Items
    database's templates, read the default one
    (`ntn api v1/pages/<id>/markdown < /dev/null | jq -r .markdown`), and
-   compare its sections and guide paragraphs with `work-item-page.md`, and
-   the template page's text with `project-page.md`. When anything is
+   compare its sections and guide paragraphs with `work-item-page.md`,
+   the template page's text with `project-page.md`, and the headings of
+   its "Current state" page with `assets/current-state.md` (`setup.md`).
+   When anything is
    missing or differs, bring the template up to date first, after the
    owner's yes: "Bringing a project up to the current template", steps 1
    to 4, run on "Project", and its memory part (`setup.md`, "Bringing
@@ -244,7 +247,9 @@ stay on the page that holds them. A moved page keeps its id.
 Onboarding's "update the toolkit" runs this. Copying newer skill files
 changes nothing in Notion, so compare the project with the `assets/schema/`
 files and `work-layout.md` and add only what is missing. Never remove, rename, or retype anything; the
-owner may have added his own columns and views, and they stay.
+owner may have added his own columns and views, and they stay. The only
+exceptions are the Tasks "Done" checkbox and the type of the Tasks Status
+("From the Done checkbox to Status" below).
 
 1. **Properties.** For each database, list what it has:
 
@@ -259,11 +264,12 @@ owner may have added his own columns and views, and they stay.
    ntn api v1/data_sources/<data-source-id> -X PATCH -d '{"properties":{"<Name>": <spec from the asset>}}' < /dev/null
    ```
 
-   After adding the Tasks Status property, set each task's Status from Done
-   (`database-layout.md`, "Phases and tasks").
+   A Tasks database with a "Done" checkbox, or a Status that is missing
+   or of type select: "From the Done checkbox to Status" below, after
+   this step. When Status is missing, add it first, from file 03.
 
-   A property with the right name but another type: leave it and tell the
-   owner. A select or status missing an option: send every option it has
+   Any other property with the right name but another type: leave it and
+   tell the owner. A select or status missing an option: send every option it has
    now plus the new one (`database-layout.md`). A project with a
    Stage property: "From Stage to State" below, after this step.
 2. **Relations, the rollup, and the columns made from them**, the same
@@ -297,10 +303,13 @@ owner may have added his own columns and views, and they stay.
    "All phases" and "All tasks" have no asset; when one is missing, send
    `{"database_id":"<id>","data_source_id":"<id>","name":"All phases","type":"table","sorts":[{"property":"Order","direction":"ascending"}]}`
    (or "All tasks") as `POST v1/views`.
-   "Project phases" and "Project tasks" are the first tabs of Phases and
-   Tasks, so the project page shows only the project's roadmap and its own
-   tasks (`work-layout.md`). A view made from its asset in file order goes
-   first by itself. One that exists but is not first: the API cannot move
+   "By project phase", "Project phases", and "Project tasks" are the
+   first tabs of Work Items, Phases, and Tasks, so the project page shows
+   the top-level items under the project's phases, the project's roadmap,
+   and its own tasks (`work-layout.md`). Each of the three goes first when
+   it is the last view made in its database, as the file order makes it.
+   When one is not first (it existed already, or a missing "Board", "By
+   item", or "Open tasks" was made after it): the API cannot move
    a view (https://developers.notion.com/reference/update-a-view takes
    only `name`, `filter`, `sorts`, `quick_filters`, and `configuration`),
    so give the owner the click (drag its tab to the left end, on the
@@ -325,8 +334,8 @@ owner may have added his own columns and views, and they stay.
    columns of the template's Tasks view (file 22). Items made earlier keep
    their own Tasks view; turn its new columns on only when you next change
    that item. Items made
-   earlier keep their pages; add a missing section to one only when you
-   next change that item.
+   earlier keep their pages; add a missing section to one, and replace its
+   Tasks guide paragraph, only when you next change that item.
 5. **The "Project" template** in the Projects database. Its data source id
    is on the "Projects database" line of the Notion block in `PROJECT.md`.
    When the block has none (an older project), read it from the project
@@ -361,6 +370,58 @@ this after step 1 above has added the State property.
    stage" view, and the Status options Backlog, Ready, and In Review stay:
    never remove them. Tell the owner he may delete them himself in Notion
    once no item uses them.
+
+## From the Done checkbox to Status
+
+A project set up before toolkit 0.8.0 has a "Done" checkbox on Tasks and a
+Tasks Status of type select, or no Tasks Status. Since 0.8.0 a task has one field for this:
+Status, of Notion's status type (the owner's decision, 2026-10-03). Run
+this on the project's Tasks database, and on the Tasks database of
+"Project". These steps retype one property and remove one, so show the
+owner the steps first and act only after his yes.
+
+1. Read what the database has:
+
+   ```bash
+   ntn api v1/data_sources/<tasks-data-source-id> < /dev/null | jq -c '.properties | {Status: .Status.type, Done: (.Done.type // "none")}'
+   ```
+
+   Status `status` and Done `none`: it is current; run only the check in
+   step 6.
+2. While Done still exists, make each task's Status agree with it. Set a
+   Status from Done like this: not ticked, Not Started; ticked, Done, or
+   Cancelled when its title starts with "Cancelled: ". When Status was
+   added in this run, set every task's Status this way and ask nothing.
+   Otherwise set only the tasks that have no Status, list for the owner
+   each task whose Status disagrees with Done (ticked but Not Started or
+   In Progress; not ticked but Done or Cancelled), and ask which is right.
+   Then save every task's page id and Status in a file in a scratch
+   folder (`ntn-commands.md`, "Sending a body").
+3. Status of type select: ask the owner to change the type of the Status
+   property to "Status" in the Notion app (the Status column's name →
+   "Edit property" → "Type"), and wait until he says it is done. Notion's
+   pages do not say which values a type change keeps
+   (https://developers.notion.com/reference/update-data-source-properties:
+   "Changing a type can make existing values unreadable in the new
+   type"), so the list from step 2 is the way back.
+4. Read Status again. Each option must be in its group: Not Started in
+   To-do, In Progress in In progress, Done and Cancelled in Complete. When
+   one is not, send the whole list from `03-tasks-database.json`, each
+   option with its group (`database-layout.md`), and read it back. When a
+   group still differs, give the owner the click: in "Edit property", drag
+   the option into its group. Then read every task's Status and compare
+   it with the list from step 2. Set each one that differs or is empty
+   back to its saved Status.
+5. Set the filter of the Tasks view "Open tasks" to the filter in
+   `16-view-open-tasks.json`, with `{{T_STATUS}}` the id of Status read
+   after step 3, since a retyped property can have a new id
+   (`PATCH v1/views/<id>` with only `filter`). Then remove the checkbox:
+   `PATCH v1/data_sources/<tasks-data-source-id>` with
+   `{"properties":{"Done":null}}`.
+6. Check: the call in step 1 shows Status `status` and
+   Done `none`, and "Open tasks" lists only tasks that are Not Started or
+   In Progress. When either fails, tell the owner what you see and stop;
+   do not repeat step 5.
 
 ## Building the templates (first time, or a damaged one)
 
@@ -404,9 +465,10 @@ the templates are built.
    database's first view: Work Items' to "All items" with the body of 12
    (send only `name`, `filter`, `sorts`, `configuration` as
    `PATCH v1/views/<id>`), Phases' to "All phases", Tasks' to "All tasks"
-   (sorted by Order). Then files 18, 19, and 19b, in that order: 19 and
-   19b go first in their databases, so the project page shows the
-   project's phases and tasks.
+   (sorted by Order). Then files 18, 19, and 19b, in that order: each
+   goes first in its database, so the project page shows the top-level
+   items under the project's phases, the project's phases, and the
+   project's tasks.
 9. `setup.md`, "Building the memory part of a template", steps 5 to 7:
    the links between the memory databases and Work Items, the Memories
    views, and their column order.

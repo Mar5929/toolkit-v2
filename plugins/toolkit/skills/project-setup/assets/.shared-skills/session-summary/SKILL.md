@@ -22,10 +22,9 @@ each one stand, and what still needs me.
    `### 🔴 Still open, and it needs you`. When nothing needs the owner, keep
    the heading and write "Nothing needed from you."
 4. **Name another skill only in this case.** When a request is still open and nothing in
-   this conversation shows it saved as a work item, a project task, or in
-   Current State, end the open block with one offer that covers every such
-   request: turn each into a work item, a project task, or an untracked
-   to-do in Current State, with the skill named for each in Hand-offs,
+   this conversation shows it saved as a work item or a project task, end
+   the open block with one offer that covers every such request: turn each
+   into a work item or a project task, with the skill named in Hand-offs,
    below. Make the offer once.
 5. **Change nothing.** If the owner says yes to the offer, make each change
    he chose with that skill.
@@ -95,5 +94,4 @@ Two work item files there have conflicting changes. I did not touch it.
 | For | Use |
 | --- | --- |
 | Turning an open request into a work item or a project task | `managing-work-items` |
-| Adding an untracked to-do to Current State | `managing-project-memory` (Hindsight: edit `memory/CURRENT_STATE.md` directly) |
 | A recap asked for together with a handoff: it shows this table first, then the handoff | `handoff` |

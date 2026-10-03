@@ -24,7 +24,7 @@ This project's memory is Hindsight, on the owner's server, in the bank named in 
 
 ## Every session
 
-- The session-start hook adds Current State to your context: what is in progress, what waits on the owner, untracked to-dos, and where the next session starts.
+- The session-start hook adds Current State to your context: what is in progress, what waits on the owner, and where the next session starts.
 <!-- if memory=local -->
 - If Current State is missing from your context, read `memory/CURRENT_STATE.md` in the main checkout (the first path `git worktree list` prints).
 <!-- endif -->
@@ -108,7 +108,7 @@ Give every item in a list of choices or recommendations you show the owner a one
 | A decision a later work item, or an agent working on something else, will need to follow | Also a memory record, after the owner's yes, that links back to the item and names the Q-ID (the memory save skill) |
 | A project-wide decision that belongs to no work item | Straight to a memory record, after the owner's yes (the memory save skill) |
 | A decision about something that is not a work item yet | A new work item, with the decision as its first Questions and Answers row |
-| What is in progress (one line per active work item, pointing to it), owner to-dos that are neither a work item nor a project task, where the next session starts | Current State (the memory save skill) |
+| What is in progress (one line per active work item, pointing to it), where the next session starts | Current State (the memory save skill) |
 | The owner's preference or correction for how the agent works ("from now on", "always", "never") | `.claude/rules/owner-preferences.md` (the memory save skill), never a host setting or hook; for every project, `~/.claude/rules/owner-preferences.md` and `~/.codex/AGENTS.md` |
 | A lasting fact, an unproven lesson, or a hard-to-find reference | Memory (the memory save skill) |
 | Project terms | The glossary (the memory save skill) |
@@ -167,7 +167,7 @@ Pick a skill by the situation; the examples only help you match it. This list st
 - Read and change this project's work items only through `tracking-work-items` and `managing-work-items`, whatever Notion tool is at hand (a `Notion:` plugin command, the connector, or the browser), even when a message holds a Notion page link. The `Notion:tasks:build` command can mark an item Done without the owner's yes.
 <!-- endif -->
 - A decision that answers no open question ("we decided", "let's go with"): a Questions and Answers row marked `Decision?` yes in its work item, with `managing-work-items`. "Where information goes" says what else, and where it goes with no work item.
-- A project to-do the owner wants to be reminded of, with no time given: the work item it concerns, or, for administrative work that belongs to no work item, the project's tasks (both `managing-work-items`); else "Untracked to-dos" in Current State (the memory save skill); a personal errand goes to Todoist. Example: "remind me to ...".
+- A project to-do the owner wants to be reminded of, with no time given: the work item it concerns; for administrative work that belongs to no work item, the project's tasks; for other project work, a new Backlog work item (all three with `managing-work-items`). A personal errand goes to Todoist. Example: "remind me to ...".
 <!-- if memory=local -->
 - The owner wants something kept, corrected, or forgotten, gives a standing instruction, or asks what was recorded or decided before and why; a change to Current State; a review or clean-up of all memory: `managing-project-memory`. Work on an item opens `managing-work-items` first, which searches memory itself; before any other recommendation, search memory with `managing-project-memory`.
 - Where and how memory is stored: `storing-project-memory`; `managing-project-memory` uses it for every read and write.

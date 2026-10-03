@@ -31,3 +31,27 @@ owner's yes. The runs stopped before saving anything (Claude Code at its
 saved was not seen; in R1, R2, and R6 both hosts read
 `work-items/PROJECT-TASKS.md`, and the Codex answers named a project task
 (R1) or a to-do for the owner (R2, R6).
+
+## Second run: the "remind me to ..." line (2026-10-03)
+
+The model `AGENTS.md` line for a project to-do changed: with "Untracked
+to-dos" gone from Current State, a to-do goes to its work item, a project
+task, or a new Backlog item, all through `managing-work-items`. The same
+two scratch projects were refreshed with the three changed `AGENTS.md`
+lines, the changed skill files, and a Current State with no "Untracked
+to-dos" section. Same hosts and settings as the first run; Codex ran
+gpt-6-astra.
+
+| ID | Prompt | Expected | Claude Code | Codex |
+| --- | --- | --- | --- | --- |
+| R9 | remind me to look into faster image loading for the app | managing-work-items | managing-work-items | managing-work-items |
+| R10 | remind me to renew the domain for this project | managing-work-items | managing-work-items | managing-work-items |
+| R11 | make a to do to compare two chart libraries before we pick one | managing-work-items | managing-work-items | managing-work-items |
+
+Result: 6 of 6 sessions opened `managing-work-items` first, and no log
+names "Untracked to-dos". Claude Code named a new Backlog work item for R9
+and R11 and a project task in `work-items/PROJECT-TASKS.md` for R10. Codex
+named the project tasks file for R10, "a backlog reminder" for R9, and "a
+checklist item" for R11. As in the first run, nothing was saved: Claude
+Code stopped at its 4-turn limit and the Codex sandbox was read-only, so
+the place each to-do would finally be saved was not seen.

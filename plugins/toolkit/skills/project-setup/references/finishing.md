@@ -96,13 +96,12 @@ Local or Hindsight memory: write the first lines of
 `memory/CURRENT_STATE.md` now. Notion memory: the Notion memory setup wrote
 these lines on the "Current state" page in step 7 of "New project"
 (`notion.md` in this folder); now bring its "Waiting on the owner" lines up
-to date. Keep the four headings and their line limits:
+to date. Keep the three headings and their line limits:
 
 - Last updated: the date, "setup", and "agent".
 - Now: "None."
 - Waiting on the owner: one line for each owner step still open (below),
   each ending "Setup step; remove this line when it is done."
-- Untracked to-dos: "None."
 - Next session starts with: "Ask the owner for the first thing to build."
 
 Then delete the file's fill-in guide comment, as it says.

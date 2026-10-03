@@ -4,7 +4,7 @@
   "name": "By project phase",
   "type": "board",
   "position": {
-    "type": "end"
+    "type": "start"
   },
   "filter": {
     "and": [
