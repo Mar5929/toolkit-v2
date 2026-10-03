@@ -13,7 +13,8 @@ The job block:
 ```text
 Work item: <ID and title>
 Option: <letter and short name>, and how it must differ from the others
-Requirements: <Agreed goal, every R-xx block, the Acceptance list>
+Requirements: <the goal in the item's Overview, and every requirement block
+  that is not dropped, whole, with its Acceptance Criteria>
 Owner's decisions: <answered Questions and Answers rows marked Decision? yes>
 Design so far: <What this design solves, Requirements and design readiness,
   What exists today, Constraints and assumptions, Notes>

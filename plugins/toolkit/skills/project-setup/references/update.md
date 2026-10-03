@@ -16,6 +16,7 @@ how to change a setup choice.
 - 5. Services
   - Work items from Stage to State
   - The levels structure (toolkit 0.8.0)
+  - The Requirements layout (toolkit 0.8.1)
 - 6. Checks and report
 - Changing a setup choice
 
@@ -179,6 +180,8 @@ grep -n '^## ' <copy>/AGENTS.md
   items): "Work items from Stage to State" below, in the main checkout.
 - Every project set up before toolkit 0.8.0: "The levels structure
   (toolkit 0.8.0)" below, after the service step for its tracker.
+- Every project set up before toolkit 0.8.1: "The Requirements layout
+  (toolkit 0.8.1)" below.
 
 ### Work items from Stage to State
 
@@ -278,6 +281,30 @@ what a step names, and each item keeps its task IDs.
 7. Add a Recent History row to each changed item ("Toolkit update: the
    levels structure of toolkit 0.8.0.", and what changed), and tell the
    owner in one short list what changed.
+
+### The Requirements layout (toolkit 0.8.1)
+
+Since toolkit 0.8.1, the Requirements section of a work item holds one
+block for each requirement, headed "Requirement <number>: <short name>":
+the original requirement word for word, its goal, a numbered list of
+requirements, and a numbered list of Acceptance Criteria
+(`managing-work-items`, `references/refining-requirements.md`). Text in
+angle brackets in a template is an instruction, and an item an agent
+creates or changes keeps none.
+
+- **New items get the new layout** through the work item template. Local:
+  the template files in `work-items/work-item-template/` are "Other model
+  files" in section 3; take the toolkit's after his yes. Notion:
+  `notion-build/work-setup.md`, "Bringing a project up to the current
+  template", step 4. GitHub: nothing to do; the template comes with the
+  skills.
+- **Existing work items stay as they are.** Never rewrite the
+  Requirements section of an existing item in an update, in any tracker.
+  The skills read the older layout as it is. An item moves to the new
+  layout only when the owner asks for that item (`managing-work-items`,
+  `references/refining-requirements.md`, "The Requirements layout").
+- Tell the owner in one line that new items get the new layout and
+  existing items keep theirs.
 
 ## 6. Checks and report
 

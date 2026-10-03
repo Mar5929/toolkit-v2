@@ -21,7 +21,7 @@ Only when the item changed files and the project has a remote. Without one, go t
 - `git -C <item worktree> rev-parse HEAD` must equal the commit the checker passed (Recent History). A different head: start the checker on the new head (`testing-loop.md`, step 4). A pass there is enough.
 - Push the branch, never with force, and open the pull request with the body in a file. Write the title and description in plain words, with no AI credit: what changed, why, how it was checked, and the item's ID. Run them through `humanizer` (`.claude/rules/humanize-outbound-text.md`).
 - The pull request text must never close the item by itself, because only he marks it Done. `tracking-work-items` says how to name the item in it.
-- Put the pull request number under the item's Related items and add the Recent History row "Pull request #14 opened."
+- Record the pull request on the item with `tracking-work-items` (under the item's Related items, unless that skill names another place) and add the Recent History row "Pull request #14 opened."
 
 ## The merge
 

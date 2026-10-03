@@ -29,7 +29,7 @@ grep -rHE --include='*.md' --exclude-dir=work-item-template --exclude-dir=refere
 
 ## Open questions
 
-Open rows are at the top of each table. Only a row with Status `Open` counts; leave out rows that still hold the template prompt:
+Open rows are at the top of each table. Only a row with Status `Open` counts. Leave out a row that is still the template's example (its question is `<Specific unanswered question>`); an item the owner made by hand can hold one:
 
 ```bash
 grep -rHE --include='*.md' --exclude-dir=work-item-template --exclude-dir=references --exclude-dir=archive --exclude=DESIGN.md '^\| *Q-[0-9]+ *\|.*\| *Open *\|' "$MAIN/work-items"

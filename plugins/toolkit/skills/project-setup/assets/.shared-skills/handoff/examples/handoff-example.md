@@ -45,7 +45,7 @@ This handoff prompt is AI-generated and may contain hallucinations, skewed conte
 
 Invoices must export to the bank's CSV format, so the owner stops retyping
 them into the bank portal each Friday. Written down in WI-007
-(Requirements, Agreed goal; R-01 to R-03).
+(Overview, Goal; R-01 to R-03).
 
 ## Your task
 

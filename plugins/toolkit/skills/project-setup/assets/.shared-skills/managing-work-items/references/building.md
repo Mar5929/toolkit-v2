@@ -69,7 +69,7 @@ This chat, the Main Orchestrator, and every chat lead run on the most capable mo
 
 ## Plan the team
 
-- Build only after the requirements are approved, and the design when the item has one.
+- Build only after the requirements are approved, and the design when the item has one. A requirement with an open row that asks him to approve it is not approved: build nothing from it.
 - Start from the design's build order and the top-level item's Roadmap: its phases, with their tasks and level-2 sub-items, and each sub-item's task list (`SKILL.md`, "Levels").
 - One builder per task that can run on its own. Tasks of one sub-item that depend on each other run one after another. A sub-item that needs another sub-item's code starts after that code is merged into its own item branch. The lead may build a small task itself.
 - Make what is missing with `tracking-work-items`:
