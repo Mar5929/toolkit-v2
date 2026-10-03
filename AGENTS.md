@@ -179,8 +179,10 @@ node --test 'dev/tests/*.test.mjs'
   works in every project with no Notion: he was told about 450 lines, and it
   was about 540 lines (`register.tsx`, `types/index.d.ts`) plus about 290
   lines of tests. With the Dismiss buttons (his yes, 2026-10-03, told about
-  45 more lines) it is about 620 lines plus about 370 lines of tests. Tell
-  him the size again before it grows.
+  45 more lines) it was about 620 lines plus about 370 lines of tests. With
+  the Done button and one card per chat (his yes and his idea, 2026-10-03,
+  told about 30 more lines) it is about 650 lines plus about 415 lines of
+  tests. Tell him the size again before it grows.
   - It is installed once per computer in Claude Code. Nothing of it is copied
     into a project, so the code limit for projects stands.
   - Each chat reports its own work. The plugin gives the agent one tool,
@@ -206,12 +208,16 @@ node --test 'dev/tests/*.test.mjs'
     `~/.claude/projects/<folder>/<chat id>/custom-title.json` each time, so a
     chat renamed in the sidebar shows its new name. A chat named "Main
     Orchestrator" is listed first.
-  - The panel is not told when Mike archives a chat, so each card has a
-    Dismiss button. The dismissed cards are in one file for the project,
-    `_dismissed.json`, beside the chats' files, so every chat's panel hides
-    them. A dismissed piece of work shows again when it is reported again. A
-    dismissed chat, with its work, shows again when Mike writes to it or it
-    reports work.
+  - The panel shows one card per chat, with that chat's pieces of work inside
+    it, each with a colored status label (Mike's layout, 2026-10-03). The
+    work finished in the last day is listed below the cards.
+  - Mike's own presses are kept in one file for the project,
+    `_dismissed.json`, beside the chats' files, so every chat's panel shows
+    the same. Done moves a piece of work to the finished list. Dismiss hides
+    a piece of work. "Dismiss chat" hides a chat and its work: the panel is
+    not told when Mike archives a chat. A press on a piece of work holds
+    until the work is reported again. A dismissed chat shows again when Mike
+    writes to it or it reports work.
   - It writes only its own files under `~/.claude/workstreams/`. It never
     writes to a project, to Notion, or to a chat file, and it runs no other
     program.
