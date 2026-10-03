@@ -5,10 +5,11 @@ description: 'Brings the local repository up to date with its remote by fetching
 
 # Pull the latest from the remote
 
-Bring the current checkout up to date with its remote without losing local
-work or rewriting a commit. Never rebase, reset, stash, switch branches, or
-push: pushing is the owner's decision. Other sessions may be working in this
-repository right now.
+Bring the current checkout up to date with its remote, and from your own
+worktree the main checkout too, without losing local work or rewriting a
+commit. Never rebase, reset, stash, switch branches, or push: pushing is the
+owner's decision. Other sessions may be working in this repository right
+now.
 
 ## Steps
 
@@ -29,7 +30,12 @@ repository right now.
    The default branch: `git symbolic-ref --short refs/remotes/origin/HEAD`
    prints `origin/<default>`. If it fails, read the "HEAD branch" line of
    `git remote show origin`. Never assume `main`.
-2. **Fetch:** `git fetch --prune origin`.
+2. **Fetch:** `git fetch --prune origin`. In your own worktree, update the
+   main checkout next: run `git -C <main checkout> status -sb`. When it
+   shows the default branch and a working tree that is not dirty, as step 1
+   counts it, run `git -C <main checkout> pull --ff-only`. On another
+   branch, dirty, or a pull that fails: leave the main checkout as it is.
+   Never merge, switch branches, reset, or stash there.
 3. **The branch has an upstream** (`git status -sb` shows
    `...origin/<branch>` after the branch name): run `git pull --ff-only`.
    - Diverged ("Not possible to fast-forward"): run
@@ -53,6 +59,12 @@ repository right now.
    - "ahead of origin/<branch> by N commits; you decide whether to push";
    - with no upstream: "holds everything on origin/<default>", or "N commits
      behind origin/<default>; not merged".
+
+   From your own worktree, add one line on the main checkout: "The main
+   project folder is updated to <short commit id>.", "The main project
+   folder was already up to date.", or "I left the main project folder
+   alone: <it is on branch X | it has uncommitted changes | the pull
+   error>."
 
    End with the one question the owner must answer, or else the exact words
    he can say to start the next step.

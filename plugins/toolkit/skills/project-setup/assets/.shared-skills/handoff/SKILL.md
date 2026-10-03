@@ -17,7 +17,8 @@ and never hold back the prompt because a save or the check failed.
    count), the one this worktree's branch names (`claude/wi-007-<slug>`
    belongs to `WI-007`), and any this session changed. Never pick an item
    only because it is open: another session may be working on it. None: ask
-   the owner which item, if any. "None": skip step 2.
+   the owner which item, if any. "None": in step 2, update only the project
+   tasks.
 2. **Update each of those work items** with `tracking-work-items`, reading
    it first. Make its whole record true, as
    `.claude/rules/keep-work-item-current.md` says. Add a Questions and
@@ -25,7 +26,10 @@ and never hold back the prompt because a save or the check failed.
    there yet. Rewrite the item's Current state in place so a new session can
    pick up from it alone. Change the State and `waiting_on` only when they
    changed in this session. Add one Recent History row "Handoff: <where work
-   stopped>". Read the item back.
+   stopped>". Read the item back. Then update each project task (`PT-01`: a
+   task that belongs to no work item) this session worked on, by the step 1
+   test: read it with `tracking-work-items`, make its status and who does
+   it true, as `managing-work-items`, "Levels", says, and read it back.
 3. **Offer what is worth keeping to memory.** At a handoff, save only what
    the owner asked to keep or says yes to here. `managing-project-memory`
    says what is worth keeping, how to ask, and how to save (Hindsight:
@@ -103,7 +107,8 @@ nothing.
 
 | For | Use |
 | --- | --- |
-| Reading and updating this session's work items | `tracking-work-items` |
+| Reading and updating this session's work items and project tasks | `tracking-work-items` |
+| What a project task is, and when to tick it | `managing-work-items` |
 | Saving to memory | `managing-project-memory` (Hindsight: `AGENTS.md`, "Project memory") |
 | Notion memory: Current State | `managing-project-memory` |
 | A save that changed a Git-tracked document, such as `requirements/` or `PROJECT.md` | `publish-docs` |

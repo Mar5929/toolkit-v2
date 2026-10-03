@@ -128,9 +128,13 @@ Then remove nothing, and tell the owner the state.
 ## Step 6: update the base worktree, then remove only the merged worktree and branches
 
 Run `git -C <base-worktree> fetch --prune origin` and
-`git -C <base-worktree> pull --ff-only`. If the base worktree is dirty, on
-another branch, or cannot fast-forward, leave it untouched, skip the local
-cleanup, and report the blocker. Never reset, stash, switch, or rebase it.
+`git -C <base-worktree> status --porcelain`. An uncommitted file in the base
+worktree blocks this step only when it is also in step 4's list of the files
+this pull request changed. Any other uncommitted file blocks nothing: leave
+it as it is. Not blocked: run `git -C <base-worktree> pull --ff-only`. If
+the base worktree holds a blocking file, is on another branch, or cannot
+fast-forward, leave it untouched, skip the local cleanup, and report the
+blocker. Never reset, stash, switch, or rebase it.
 
 Remove nothing unless all five proofs hold:
 
@@ -165,18 +169,18 @@ adds the Recent History row); asked directly, add one row, "Merged pull
 request #<number> as <merge commit>.", with `tracking-work-items`. Never
 change the State or mark anything Done.
 
-Verify: the pull request is merged; the base worktree matches its upstream and
-is clean; the head branch and its worktree are gone; every unrelated worktree
-remains.
+Verify: the pull request is merged; the base worktree matches its upstream;
+the head branch and its worktree are gone; every unrelated worktree remains.
 
 - From `managing-work-items`: say the pull request link, the merge commit,
   and the cleanup result in one line, then go on with the rest of its
   Deploying steps.
 - Asked directly: the pull request link, the merge commit, whether the base
-  worktree is up to date and clean, the cleanup result, and whether the Recent
-  History row was saved (a failed save starts that line with "Not saved"). End
-  with the one question for the owner, or the exact words that continue ("Say
-  'finish WI-007' and I'll close the work item.").
+  worktree is up to date, any uncommitted files left in it, the cleanup
+  result, and whether the Recent History row was saved (a failed save starts
+  that line with "Not saved"). End with the one question for the owner, or
+  the exact words that continue ("Say 'finish WI-007' and I'll close the
+  work item.").
 
 ## Gotchas
 
@@ -197,9 +201,3 @@ remains.
 | Shipping an approved work item | `managing-work-items` |
 | A merge under the standing merge instruction | `managing-work-items` |
 | No remote: the local merge | `managing-work-items` |
-
-## References
-
-| File | Open it when |
-| --- | --- |
-| [agents/openai.yaml](agents/openai.yaml) | Never during the work: it holds the display name the Codex app shows |
