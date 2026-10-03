@@ -1,19 +1,26 @@
 ---
 name: project-setup
-description: 'Sets up, checks, or updates Toolkit V2 in a project, or changes where work items or memory are kept, by copying the model project, skills, and hooks, so projects run the same files. Use when the owner says "set up this project", "initialize this project", "update the toolkit", or "check the setup". Not for a Git pull; use pull-latest. Not for the older claude-toolkit (project-init, project-sync).'
+description: 'Sets up, checks, or updates Toolkit V2 in a project, moves an older claude-toolkit project onto it, or changes where work items or memory live, so projects run the same files. Use when the owner says "toolkit v2", "set up this project", "initialize this project", or "update the toolkit". Not for a Git pull; use pull-latest. Not for running the older claude-toolkit (project-sync).'
 ---
 
 # Project setup
 
 The user dictates most messages with voice-to-text, so words may be misheard, missing, or out of order. Read for what the user means rather than the literal wording, and ask one short question when a message is unclear or could mean two things.
 
-Sets up Toolkit V2 in a project, or brings a Toolkit V2 project up to date;
-never the older claude-toolkit (its `project-init` and `project-sync`
+Sets up Toolkit V2 in a project, brings a Toolkit V2 project up to date,
+or moves a project that was set up another way onto Toolkit V2. It never
+runs the older claude-toolkit (its `project-init` and `project-sync`
 skills). There is no setup program: you copy and edit the files yourself,
 from this skill's `assets/` folder. This skill's folder is the folder that
 holds this `SKILL.md`; both hosts show its path when they load the skill.
 
 ## Pick the path
+
+The folder decides whether this is a new project, a project already on
+Toolkit V2, or a project to move over, whatever words he used. "Toolkit v2"
+with nothing else means: bring this folder onto Toolkit V2 by the path that
+fits. For a setup, an update, a check, or a move, say which path it is in
+one line before the first question.
 
 Check the first case before the others: a setup that stopped part way also
 has a filled "Toolkit settings" section.
@@ -27,8 +34,9 @@ has a filled "Toolkit settings" section.
   the choices from "Toolkit settings", and continue at step 7 of "New
   project", then step 8.
 - `PROJECT.md` has a filled "Toolkit settings" section: the project is set
-  up. Update the toolkit: `references/update.md`. Check the setup: build a
-  fresh setup copy and compare (`references/update.md`, steps 1 and 2), run
+  up. Update the toolkit, also when he says only "toolkit v2":
+  `references/update.md`. Check the setup: build a fresh setup copy and
+  compare (`references/update.md`, steps 1 and 2), run
   the final checks (`references/finishing.md`) without fixing any that
   fail, and report each difference and each failed check with the fix you
   recommend. Change nothing in the project; only the session-start hook run
@@ -42,17 +50,20 @@ has a filled "Toolkit settings" section.
 - Set up `SOUL.md` in a set-up project: copy `assets/model/SOUL.md` into
   the project when it has none, fill it with his own words as
   `references/finishing.md`, "SOUL.md", says, and offer to commit it.
-- The folder has `.toolkit.json`: the retired `toolkit` program set it up.
-  Tell the owner, and ask whether to set it up again as a new project.
-  Nothing is removed.
-- He asks to update the toolkit or check the setup, the folder has no
-  filled "Toolkit settings" section, and it has older claude-toolkit files
-  (`references/interview.md`, "Look before asking"): before any setup
-  question, ask whether he means the older toolkit (its `project-sync`
-  skill) or moving this project to Toolkit V2. Recommend the older toolkit,
-  because the folder holds its files and no Toolkit V2 settings. For the
-  older toolkit, stop and say `project-sync` is the skill for it. For
-  Toolkit V2, continue as a new project.
+- No filled "Toolkit settings" section, and the main checkout holds any of
+  these: `AGENTS.md`, `CLAUDE.md`, `.work-items/`, `.toolkit.json`, or a
+  file in `.claude/`, `.codex/`, or `.agents/` other than
+  `.claude/settings.local.json` and `.claude/worktrees/`. The folder has an
+  earlier setup (the older claude-toolkit, the retired `toolkit` program,
+  or agent files made by hand), even when it is one hand-written
+  `AGENTS.md`: move it over, `references/move-over.md`. One case asks
+  first: the folder holds older claude-toolkit files, and he asked to
+  update the toolkit or check the setup without naming Toolkit V2. Before
+  any setup question, ask whether he means the older toolkit (its
+  `project-sync` skill) or moving this project to Toolkit V2. Recommend
+  the older toolkit, because the folder holds its files and no Toolkit V2
+  settings. For the older toolkit, stop and say `project-sync` is the
+  skill for it. For Toolkit V2, move it over.
 - Otherwise it is a new project. Put the eight steps below in the plan tool
   (Claude Code: the task list; Codex: `update_plan`; when the host has none,
   continue without it). Record each answer he gives as a checked line (for
@@ -105,8 +116,8 @@ has a filled "Toolkit settings" section.
   approve or run.
 - Set up a new project in its main checkout, never from a worktree, even
   when a machine-wide rule asks for one: the Git-ignored `memory/` and
-  `work-items/` must live there. Only `references/update.md` uses a
-  worktree.
+  `work-items/` must live there. Only `references/update.md` and
+  `references/move-over.md` use a worktree.
 - Nothing is made outside the project folder without his yes: no Notion
   page, no GitHub repository or label, no Hindsight bank, no install. The
   plan he approved covers only what it named. The only other files written
@@ -159,6 +170,8 @@ has a filled "Toolkit settings" section.
 | `references/salesforce.md` | A Salesforce project: Salesforce's skills check, the org aliases, and the API version |
 | `references/finishing.md` | Step 8: the prompts in the copied files, `SOUL.md`, Current State, the final checks, the owner's steps, the report, the commit offer |
 | `references/update.md` | Update the toolkit, check the setup, or change a setup choice |
+| `references/move-over.md` | Moving a project that was set up another way onto Toolkit V2: which earlier setup it is, his choices, reading the project, sorting each piece, the list and its template, the order of the changes after his yes, carrying over old records, finishing |
+| `references/old-toolkit-pieces.md` | A move-over, steps 2, 3, and 6: the old toolkit's plugins, rules, hook commands, tools, and knowledge files with what Toolkit V2 has in their place, the old records, and how an old work item and old memory map to the Toolkit V2 form |
 | `assets/model/` | Step 4: the model project, copied whole into the scratch folder |
 | `assets/owner-preferences.md` | Step 4: the starting `.claude/rules/owner-preferences.md` every project gets |
 | `assets/.shared-skills/` | Step 5: the skills every project gets |

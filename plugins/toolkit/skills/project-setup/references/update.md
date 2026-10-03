@@ -159,7 +159,13 @@ grep -n '^## ' <copy>/AGENTS.md
 - Files from the retired `toolkit` program (`.toolkit.json`, `DECISIONS.md`,
   `.codex/rules/toolkit.rules`, `.toolkit-cache/`): list them; delete only
   after his yes. Records in old `.work-items/` or `.memory/` folders are
-  his: never delete them; ask him how to move them.
+  his: never delete them. A folder that `PROJECT.md` names as old records
+  kept as history is left alone. For any other, ask whether to carry its
+  records over, as `move-over.md` says ("6. Carry over the old records").
+- A `pre-commit` Git hook of this copy whose text names `check-knowledge`
+  (`ls "$(git rev-parse --git-path hooks)"`): the older claude-toolkit
+  installed it, and it stops commits once its tools are gone. List it;
+  remove it only after his yes.
 
 ## 5. Services
 

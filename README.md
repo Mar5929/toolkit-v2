@@ -23,7 +23,8 @@ install, run, or keep working (your decision of 2026-09-29).
 ## One plugin, one skill
 
 The toolkit is one plugin, `toolkit`, with one skill, `project-setup`. It is
-switched on for every folder, so "set up this project" works anywhere. It has
+switched on for every folder, so "toolkit v2" or "set up this project"
+works anywhere. It has
 no hooks, so it does nothing in your other projects.
 
 Setup copies everything a project needs into the project itself. That way the
@@ -66,6 +67,34 @@ the project folder and its hooks (`/hooks`).
 Later, say **"check the setup"** to see what differs (it changes nothing), or
 **"update the toolkit"** to bring a project up to date. It shows every change
 first and never overwrites a file you changed without asking.
+
+## Say "toolkit v2" in any project
+
+Say **"toolkit v2"** in a project folder and the agent works out which of
+three cases the folder is, and tells you in one line:
+
+- **A new project** (no agent files yet): it runs the setup above.
+- **A project already on Toolkit V2**: it runs "update the toolkit".
+- **A project set up with the older claude-toolkit, or by hand**: it moves
+  the project over.
+
+The move-over first asks the same setup questions, with answers suggested
+from what the project already has. Then it reads the project and shows you
+one list:
+
+- **Delete**: old toolkit pieces that Toolkit V2 replaces or does not need.
+- **Add**: the new Toolkit V2 files.
+- **Update**: things you have that change, such as `AGENTS.md`, the
+  settings, and your old work items and memory.
+- **Kept untouched**: your code, your client files, and your own rules,
+  skills, and hooks.
+- **Your call**: anything it will not guess, each with a recommendation.
+
+Every line has a one-line reason. Nothing changes until you say yes, and
+nothing of yours is deleted. Your old work items and memory stay where they
+are; the ones still in use are carried over into the Toolkit V2 form, and
+you see the first one before the rest are done. The changes are made on the
+agent's own branch and reach your main branch only after your yes.
 
 ## Skills every project gets (9)
 

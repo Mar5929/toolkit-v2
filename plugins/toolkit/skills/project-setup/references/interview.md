@@ -31,8 +31,7 @@ Run each command alone. None of them changes anything.
 | Code already here | `ls -a` | Name the language and framework you see. |
 | Salesforce | `sfdx-project.json` present | Confirm Salesforce in one line instead of asking question 4. |
 | An earlier setup | `PROJECT.md` with a filled "Toolkit settings" section | Already set up: go back to SKILL.md, "Pick the path". |
-| The retired program | `.toolkit.json` present | Stop and tell the owner (SKILL.md, "Pick the path"). |
-| An older claude-toolkit setup | `knowledge/`, `.memory/`, `.work-items/`, files in `.claude/rules/`, or a `CLAUDE.md` with more than `@AGENTS.md` | Tell him what you found. Toolkit V2 adds its own files and turns the older toolkit's plugins off in this project. It never moves or deletes the old files; ask before touching them. |
+| An earlier setup that is not Toolkit V2 | Any file SKILL.md, "Pick the path", lists for a move, such as `AGENTS.md`, `.work-items/`, or `.toolkit.json` | Not a new project: go back to SKILL.md, "Pick the path". |
 
 ## Question 1: the name and the owner
 

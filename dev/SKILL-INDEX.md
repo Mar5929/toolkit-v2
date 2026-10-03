@@ -38,7 +38,7 @@ the routing rounds for the retired skills) is in Git history.
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `project-setup` | `./` | Sets up, checks, or updates Toolkit V2 in a project, or changes where work items or memory are kept, by copying the model project, skills, and hooks, so projects run the same files. Use when the owner says "set up this project", "initialize this project", "update the toolkit", or "check the setup". Not for a Git pull; use pull-latest. Not for the older claude-toolkit (project-init, project-sync). |
+| `project-setup` | `./` | Sets up, checks, or updates Toolkit V2 in a project, moves an older claude-toolkit project onto it, or changes where work items or memory live, so projects run the same files. Use when the owner says "toolkit v2", "set up this project", "initialize this project", or "update the toolkit". Not for a Git pull; use pull-latest. Not for running the older claude-toolkit (project-sync). |
 
 ## 2. Shared skills (every project, 9)
 
@@ -263,7 +263,10 @@ Machine-wide skills on Mike's Mac that also match (check O7 in
 `dev/reviews/overlap-review.md`):
 
 - `project-setup` and the older claude-toolkit's `project-init` for
-  "initialize this project" in a folder with no setup yet.
+  "initialize this project" in a folder with no setup yet, and its
+  `project-sync` for "toolkit v2" or "sync this project" in a project the
+  older toolkit set up: "toolkit v2" goes to `project-setup`, which moves
+  the project over (since 0.8.3).
 - `managing-work-items`, `tracking-work-items`, and the Notion plugin's own
   commands (`Notion:tasks:build` and the rest), and `managing-project-memory`
   and `Notion:search`: the model's `AGENTS.md` says the plugin never
