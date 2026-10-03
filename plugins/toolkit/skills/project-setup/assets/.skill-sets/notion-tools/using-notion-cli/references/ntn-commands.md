@@ -60,7 +60,7 @@ The bodies in a storage skill's `assets/schema/` hold `{{PLACEHOLDERS}}`:
 | `{{CURRENT_STATE_PAGE_ID}}`, `{{GLOSSARY_PAGE_ID}}` | Those pages | `PROJECT.md` |
 | `{{PROJECT_PAGE_ID}}`, `{{MEMORY_PAGE_ID}}` | The template or project page, and its Memory page, being built | The page you just made (setup) |
 | `{{ITEM_PAGE_ID}}`, `{{AFTER_BLOCK_ID}}` | The work item template, and the block a view goes after | The template build (setup) |
-| `{{P_<NAME>}}`, `{{PH_<NAME>}}`, `{{T_<NAME>}}`, `{{M_<NAME>}}` | The id of a property of Work Items (P), Phases (PH), Tasks (T), or Memories (M). `<NAME>` is the property's name in capitals with spaces turned into underscores: "Waiting on" is `{{P_WAITING_ON}}`. | The command below |
+| `{{P_<NAME>}}`, `{{PH_<NAME>}}`, `{{T_<NAME>}}`, `{{M_<NAME>}}` | The id of a property of Work Items (P), Phases (PH), Tasks (T), or Memories (M). `<NAME>` is the property's name in capitals with spaces and hyphens turned into underscores: "Waiting on" is `{{P_WAITING_ON}}`, and "Sub-items" of Phases is `{{PH_SUB_ITEMS}}`. | The command below |
 
 List a database's property ids:
 

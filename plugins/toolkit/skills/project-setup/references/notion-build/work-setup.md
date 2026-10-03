@@ -249,7 +249,8 @@ changes nothing in Notion, so compare the project with the `assets/schema/`
 files and `work-layout.md` and add only what is missing. Never remove, rename, or retype anything; the
 owner may have added his own columns and views, and they stay. The only
 exceptions are the Tasks "Done" checkbox and the type of the Tasks Status
-("From the Done checkbox to Status" below).
+("From the Done checkbox to Status" below): the agent makes both changes
+through the API, after the owner's yes.
 
 1. **Properties.** For each database, list what it has:
 
@@ -257,11 +258,13 @@ exceptions are the Tasks "Done" checkbox and the type of the Tasks Status
    ntn api v1/data_sources/<data-source-id> < /dev/null | jq -r '.properties | to_entries[] | "\(.key)\t\(.value.type)"'
    ```
 
-   For each property in the `assets/schema/` files (01 to 03) that is
-   missing, send its spec from the matching file, alone:
+   Files 01 to 03 are bodies that create a whole database, so they are
+   never sent here. For each property in them that is missing, take that
+   one property's spec out of the file's `initial_data_source.properties`
+   and send it alone:
 
    ```bash
-   ntn api v1/data_sources/<data-source-id> -X PATCH -d '{"properties":{"<Name>": <spec from the asset>}}' < /dev/null
+   ntn api v1/data_sources/<data-source-id> -X PATCH -d '{"properties":{"<Name>": <that property's spec from the file>}}' < /dev/null
    ```
 
    A Tasks database with a "Done" checkbox, or a Status that is missing
@@ -272,8 +275,14 @@ exceptions are the Tasks "Done" checkbox and the type of the Tasks Status
    tell the owner. A select or status missing an option: send every option it has
    now plus the new one (`database-layout.md`). A project with a
    Stage property: "From Stage to State" below, after this step.
-2. **Relations, the rollup, and the columns made from them**, the same
-   way, from files 04 to 07d.
+2. **Relations, the rollup, and the columns made from them**, from files
+   04 to 07d. Each of these files is already a whole body with its
+   `properties` wrapper: never take a spec out of it and wrap it again.
+   Fill the placeholders in a copy and send the copy as it is
+   (`PATCH v1/data_sources/<data-source-id>` with `-d @<copy>`). Send a
+   file only when a property in it is missing. When the database already
+   has some of the file's properties, remove those from the copy first,
+   so only the missing ones are sent.
 3. **Views.** List their ids, then read each one's name, one call per id:
 
    ```bash
@@ -397,13 +406,23 @@ owner the steps first and act only after his yes.
    In Progress; not ticked but Done or Cancelled), and ask which is right.
    Then save every task's page id and Status in a file in a scratch
    folder (`ntn-commands.md`, "Sending a body").
-3. Status of type select: ask the owner to change the type of the Status
-   property to "Status" in the Notion app (the Status column's name →
-   "Edit property" → "Type"), and wait until he says it is done. Notion's
-   pages do not say which values a type change keeps
+3. Status of type select: change its type yourself, with one call. The
+   owner clicks nothing; his yes to these steps covers it. Take the
+   `Status` spec out of `03-tasks-database.json`
+   (`initial_data_source.properties.Status`) and send it alone:
+
+   ```bash
+   ntn api v1/data_sources/<tasks-data-source-id> -X PATCH -d '{"properties":{"Status": <the Status spec from 03-tasks-database.json>}}' < /dev/null | jq -c '.properties.Status | {id, type}'
+   ```
+
+   The answer must show type `status`. Tested on 2026-10-03 on a throwaway
+   project: Notion accepted the call, the property kept its id, each
+   option landed in its group, and every task kept its Status. Notion's
+   pages do not promise that
    (https://developers.notion.com/reference/update-data-source-properties:
    "Changing a type can make existing values unreadable in the new
-   type"), so the list from step 2 is the way back.
+   type"), so the list from step 2 is the way back. When Notion refuses
+   the call, tell the owner what it answered and stop.
 4. Read Status again. Each option must be in its group: Not Started in
    To-do, In Progress in In progress, Done and Cancelled in Complete. When
    one is not, send the whole list from `03-tasks-database.json`, each
@@ -412,10 +431,13 @@ owner the steps first and act only after his yes.
    the option into its group. Then read every task's Status and compare
    it with the list from step 2. Set each one that differs or is empty
    back to its saved Status.
-5. Set the filter of the Tasks view "Open tasks" to the filter in
-   `16-view-open-tasks.json`, with `{{T_STATUS}}` the id of Status read
-   after step 3, since a retyped property can have a new id
-   (`PATCH v1/views/<id>` with only `filter`). Then remove the checkbox:
+5. Set the filter of the Tasks view "Open tasks". Do it after the type
+   change in step 3, never before: the change can clear this view's
+   filter (it was empty after the change in the test on 2026-10-03).
+   File `16-view-open-tasks.json` is a whole view body, so take only its
+   `filter` object out of it, with `{{T_STATUS}}` the id of Status as
+   read after step 3, and send `PATCH v1/views/<id>` with only
+   `{"filter": <that object>}`. Then remove the checkbox:
    `PATCH v1/data_sources/<tasks-data-source-id>` with
    `{"properties":{"Done":null}}`.
 6. Check: the call in step 1 shows Status `status` and
