@@ -178,8 +178,11 @@ node --test 'dev/tests/*.test.mjs'
     `mcp__workstreams__report`, and one short instruction at the start of
     each chat. The agent sends a name, a status, and the next step. This
     costs a few tokens per report, plus the instruction and the tool's
-    listing in every chat. The instruction tells the agent to skip questions
-    and one-step requests, and a helper agent's report is not saved.
+    listing in every chat. A piece of work is Mike's "workstream" (his words,
+    2026-10-03: "a significant piece of work ... a work item or some large
+    task that I'm tracking"). The instruction tells the agent to report only
+    those, never the steps inside one, a question, or a small chore. One chat
+    may report several, and a helper agent's report is not saved.
   - The plugin also notes, at no token cost, whether each chat is working,
     asking Mike a question, or stopped, his last message to it, and how many
     helper agents it runs.
