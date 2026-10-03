@@ -7,6 +7,8 @@ Read `dev/GOAL.md` first. This file says where the work stands.
 
 The Toolkit V2 build is tracked as work items in the Notion project "Toolkit V2" (https://app.notion.com/p/Toolkit-V2-3edb381da17681eeb7ddd0a6d662f9b2). Older sections below are history.
 
+- 2026-10-03: Wrote `dev/research/project-knowledge-proposal.md` and created Backlog item TKV-19, "Structure knowledge across complex projects." The proposal covers cross-item questions, source intake, people, target architecture, domain maps, and change propagation. Made a 107-second Explainroo video in `~/Documents/Projects/explainroo/videos/toolkit-knowledge-before-after/out/video.mp4` to show the current and proposed states; its final audio check understood all narration. No model or skill changes are approved or built. Next: another agent reviews the proposal with Mike and refines the item.
+
 ### Now (in progress)
 - One Notion project template, 0.7.7: Mike's Projects database now has one template, "Project" (work items and memory). Setup makes every Notion project from it and removes the part kept elsewhere; the steps were tested live on two throwaway projects (trashed). Landed (485caff). Its work item template was in Notion's trash; restoring it through the API did not give Mike a working template, so he made a new one in the app and the agent rebuilt its four views (tested on a throwaway project). 0.7.8 replaces the toolkit's API-restore instruction: the owner restores in the app, or a new template is built.
 - A review folder where Mike can read and edit every file a project gets, then hand his edits back: next, after this commit.
