@@ -6,7 +6,8 @@
 //                     plugins/toolkit/skills/project-setup/assets/model, for example the model
 //                     branch worktree before the copy is refreshed.
 //
-// For project-setup and every SKILL.md under it, plus the model's .claude/skills/ (its
+// For project-setup and every SKILL.md under it, the plugin's other skills beside
+// project-setup (the tool list), plus the model's .claude/skills/ (its
 // .agents/skills/ is skipped: a second copy that onboarding never copies):
 //   - the frontmatter holds only name and description, and name equals the folder name;
 //   - the name is lowercase letters, digits, and hyphens, at most 64 characters, and holds
@@ -151,7 +152,9 @@ const indexNames = new Set([...index.values()].map((row) => row.name));
 
 const setupSkillDirs = walk(SETUP).filter((f) => path.basename(f) === 'SKILL.md' && !inside(f, path.join(SETUP, 'assets/model'))).map(path.dirname);
 const modelSkillDirs = walk(path.join(MODEL, '.claude/skills')).filter((f) => path.basename(f) === 'SKILL.md').map(path.dirname);
-const skills = [...setupSkillDirs.map((dir) => ({ dir, model: false })), ...modelSkillDirs.map((dir) => ({ dir, model: true }))];
+// The plugin's own skills beside project-setup (the tool list): on in every folder, never copied into a project.
+const pluginSkillDirs = walk(path.dirname(SETUP)).filter((f) => path.basename(f) === 'SKILL.md' && !inside(f, SETUP)).map(path.dirname);
+const skills = [...setupSkillDirs.map((dir) => ({ dir, model: false })), ...pluginSkillDirs.map((dir) => ({ dir, model: false })), ...modelSkillDirs.map((dir) => ({ dir, model: true }))];
 const allDirs = skills.map((s) => s.dir);
 const names = new Set([...skills.map((s) => path.basename(s.dir)), ...indexNames]);
 if (!HAS_MODEL) notes.push(`The model copy ${shown(MODEL)} is not there yet: the model's skills, its template copies, and links into assets/model/ were not checked.`);
@@ -339,7 +342,7 @@ if (HAS_MODEL) {
 
 const errors = findings.filter((x) => x.level === 'error');
 const warnings = findings.filter((x) => x.level === 'warning');
-console.log(`check-skills: ${skills.length} skills checked (${setupSkillDirs.length} in project-setup, ${modelSkillDirs.length} from the model), ${index.size} rows in dev/SKILL-INDEX.md.`);
+console.log(`check-skills: ${skills.length} skills checked (${setupSkillDirs.length} in project-setup, ${pluginSkillDirs.length} beside it in the plugin, ${modelSkillDirs.length} from the model), ${index.size} rows in dev/SKILL-INDEX.md.`);
 for (const x of [...errors, ...warnings]) console.log(`${x.level === 'error' ? 'Error' : 'Warning'}: ${x.file}: ${x.message}`);
 for (const n of notes) console.log(`Note: ${n}`);
 if (warnings.length) console.log('Warnings do not fail the run. They are on the model\'s own skills, which are Mike\'s text: a change there needs his yes.');

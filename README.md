@@ -22,12 +22,20 @@ exception is the workstream panel for Claude Code (your decision of
 - **Hooks** are small commands Claude Code and Codex run by themselves at set
   moments, for example when a session starts.
 
-## The main plugin and its one skill
+## The main plugin and its two skills
 
-The toolkit's main plugin is `toolkit`, with one skill, `project-setup`. It is
-switched on for every folder, so "toolkit v2" or "set up this project"
+The toolkit's main plugin is `toolkit`. Its main skill is `project-setup`. The
+plugin is switched on for every folder, so "toolkit v2" or "set up this project"
 works anywhere. It has
 no hooks, so it does nothing in your other projects.
+
+Its second skill, `choosing-outside-tools`, is your tool list. It holds one
+row for each kind of job you use an outside tool for, such as explainer
+videos: the tool you chose, where it comes from, how to set it up, and your
+choices for it. The toolkit does not ship those tools. When you ask for a job
+on the list, the agent uses your tool. When the tool is not on that computer,
+the agent says so and sets it up only after your yes. To add a tool, say "add
+this to my tool list" in a chat opened in this repository.
 
 Setup copies everything a project needs into the project itself. That way the
 project works the same in Claude Code, the Codex app, and the Codex extension
