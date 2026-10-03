@@ -116,6 +116,7 @@ ntn api v1/pages/<page-id>/markdown -X PATCH -d @edit.json < /dev/null
 ```
 
 - `old_str` must match the page text exactly once, as read, backslashes included (in JSON each `\` is written `\\`). When it matches nothing or more than once, Notion refuses and nothing changes: read the page again, then copy `old_str` again or add nearby text to it until it matches once.
+- Inside a table, end `old_str` and `new_str` the same way: when `old_str` ends with `\n`, `new_str` ends with `\n` too. Calls that did not do this lost everything after the table, with no error from Notion; the cause is not confirmed.
 - Several replacements in one call are applied in order. Notion saves all of them or none of them.
 - After the call, read the page again and check the new text is there.
 
