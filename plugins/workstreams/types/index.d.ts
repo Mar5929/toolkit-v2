@@ -23,14 +23,30 @@ export type Chat = {
   // The start of the owner's last message to the chat.
   asked: string
   at: number
+  // When the owner last wrote to the chat, or the chat last reported work.
+  // A dismissed chat shows again only after this moves on.
+  active?: number
   // The ids of the helper agents running now.
   helpers: string[]
   streams: Stream[]
 }
 
-// What the panel draws: the project's chats as last read, the id of the chat
-// the panel is in, and when the read happened.
-export type Board = { chats: Chat[]; note: string; here: string; at: number }
+// The cards the owner dismissed, and when: pieces of work by their name in
+// lower case, and chats by their id. One file for the project holds it.
+export type Hidden = {
+  streams: Record<string, number>
+  chats: Record<string, number>
+}
+
+// What the panel draws: the project's chats as last read, the dismissed
+// cards, the id of the chat the panel is in, and when the read happened.
+export type Board = {
+  chats: Chat[]
+  hidden: Hidden
+  note: string
+  here: string
+  at: number
+}
 
 declare module 'claude-code' {
   interface PluginState {

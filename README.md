@@ -54,6 +54,10 @@ that project and what each one is working on. It needs no Notion.
   a question, or stopped, your last message to it, and how many helper
   agents it runs. A chat named "Main Orchestrator" is listed first.
 - **Done today.** The work finished in the last day.
+- **Dismiss.** Every card has a Dismiss button. Use it after you archive a
+  chat, because the panel is not told about that. A dismissed card is hidden
+  in every chat's panel. It comes back if the work is reported again, or if
+  you write to that chat again.
 - Each chat's agent reports its own work with a small tool the plugin gives
   it. That costs a few tokens per report, plus one short instruction at the
   start of each chat. Opening and refreshing the panel costs none.

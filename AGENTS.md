@@ -177,8 +177,10 @@ node --test 'dev/tests/*.test.mjs'
   The one other piece of code the toolkit ships. The first version (TKV-12)
   listed Notion work items. Mike had it rebuilt the same day (TKV-14) so it
   works in every project with no Notion: he was told about 450 lines, and it
-  is about 540 lines (`register.tsx`, `types/index.d.ts`) plus about 290
-  lines of tests. Tell him the size again before it grows.
+  was about 540 lines (`register.tsx`, `types/index.d.ts`) plus about 290
+  lines of tests. With the Dismiss buttons (his yes, 2026-10-03, told about
+  45 more lines) it is about 620 lines plus about 370 lines of tests. Tell
+  him the size again before it grows.
   - It is installed once per computer in Claude Code. Nothing of it is copied
     into a project, so the code limit for projects stands.
   - Each chat reports its own work. The plugin gives the agent one tool,
@@ -204,6 +206,12 @@ node --test 'dev/tests/*.test.mjs'
     `~/.claude/projects/<folder>/<chat id>/custom-title.json` each time, so a
     chat renamed in the sidebar shows its new name. A chat named "Main
     Orchestrator" is listed first.
+  - The panel is not told when Mike archives a chat, so each card has a
+    Dismiss button. The dismissed cards are in one file for the project,
+    `_dismissed.json`, beside the chats' files, so every chat's panel hides
+    them. A dismissed piece of work shows again when it is reported again. A
+    dismissed chat, with its work, shows again when Mike writes to it or it
+    reports work.
   - It writes only its own files under `~/.claude/workstreams/`. It never
     writes to a project, to Notion, or to a chat file, and it runs no other
     program.
