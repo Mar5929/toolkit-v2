@@ -1,9 +1,11 @@
 import { expect, mock, test } from 'claude-code/testing'
 import type { On } from 'claude-code'
 
-const SOURCE = 'b22b381d-a176-8301-a22c-0766e27d8dc9'
-const PAGE_7 = '11111111-2222-3333-4444-555555555555'
-const PAGE_3 = '33333333-2222-3333-4444-555555555555'
+import type { Chat, Stream } from '../types'
+
+const NOW = 1_800_000_000_000
+const MINUTE = 60 * 1000
+const SHARED = '/Users/me/.claude/workstreams/-Users-me-my-project'
 const PANE = {
   plugin: 'workstreams',
   component: 'Pane',
@@ -16,224 +18,272 @@ const PANE = {
   },
 } as const
 
-const page = (number: number, title: string, status: string, waiting: string) => ({
-  id: number === 7 ? PAGE_7 : number === 3 ? PAGE_3 : `page-${number}`,
-  properties: {
-    ID: { unique_id: { prefix: 'TKV', number } },
-    'Work item': { title: [{ plain_text: title }] },
-    Status: { status: { name: status } },
-    'Waiting on': { select: { name: waiting } },
-  },
+const stream = (name: string, status: Stream['status'], next: string, at = NOW): Stream => ({
+  name,
+  status,
+  next,
+  at,
 })
 
-const output = (stdout: string, exitCode = 0) => ({
-  value: {
-    exitCode,
-    stdout,
-    stderr: '',
-    isStdoutTruncated: false,
-    isStderrTruncated: false,
-  },
+// Another chat's saved record, and the name Claude Code holds for that chat.
+const chatFiles = (id: string, title: string, chat: Partial<Chat>) => ({
+  [`${SHARED}/${id}.json`]: JSON.stringify({
+    id,
+    dir: '-Users-me-my-project',
+    name: '',
+    state: 'stopped',
+    asked: '',
+    at: NOW,
+    helpers: [],
+    streams: [],
+    ...chat,
+  }),
+  [`/Users/me/.claude/projects/-Users-me-my-project/${id}/custom-title.json`]:
+    JSON.stringify({ customTitle: title }),
 })
 
-const MAC = {
-  root: '/Users/me/my.project',
-  shell: '/bin/sh',
-  // The toolkit repository's own form, in AGENTS.md.
-  read: (path: string) =>
-    path.endsWith('AGENTS.md') ? `Work Items data source\n\`${SOURCE}\`.` : '',
-}
-
-// A project that names the data source and whose Notion holds four items.
-// `scan` is what the scan of the saved chats prints. Only `shell` runs it.
-const project = (on: On, scan = '==writes==\n', { root, shell, read } = MAC) => {
-  const ran: string[][] = []
-  mock.env(on, {})
-  mock.clock(on)
+// A chat with id "here", and a disk held in memory.
+const world = (
+  on: On,
+  files: Record<string, string> = {},
+  { root = '/Users/me/my.project', env = { HOME: '/Users/me' } as Record<string, string> } = {},
+) => {
+  const disk = new Map(Object.entries(files))
+  mock.env(on, env)
+  mock.clock(on, { now: NOW })
   on('session.id', async () => ({ value: 'here' }))
-  on('ui.open', async () => ({ value: { isPlaced: true } }))
   on('session.root', async () => ({ value: root }))
-  on('fs.read', async (_, e) => ({ value: read(e.path) }))
-  on('process.run', async (_, e) => {
-    ran.push([...e.argv])
+  on('ui.open', async () => ({ value: { isPlaced: true } }))
+  on('ui.panes', async () => ({
+    value: [{ id: 'workstreams', title: 'Workstreams', isShown: true, isFocused: false }],
+  }))
+  on('fs.write', async (_, e) => {
+    disk.set(e.path, e.text)
 
-    if (e.argv[2]?.includes('==writes==')) {
-      return e.argv[0] === shell ? output(scan) : output('', 127)
-    }
-
-    return output(
-      JSON.stringify({
-        results: [
-          page(7, 'Fix the tracker', 'In Progress', 'owner'),
-          page(3, 'Move old projects', 'Not Started', 'agent'),
-          page(9, 'Prompt hook', 'Done', 'none'),
-          page(6, 'Dropped idea', 'Cancelled', 'none'),
-        ],
-      }),
-    )
+    return { value: undefined }
   })
+  on('fs.read', async (_, e) =>
+    disk.has(e.path) ? { value: disk.get(e.path) } : { deny: 'No such file.' },
+  )
+  on('fs.list', async (_, e) => ({
+    value: [...disk.keys()]
+      .filter(path => path.startsWith(`${e.path}/`))
+      .map(path => ({
+        name: path.slice(`${e.path}/`.length),
+        kind: 'file',
+        size: 1,
+        mtimeMs: NOW,
+        isLink: false,
+      })),
+  }))
 
-  return ran
+  return disk
 }
 
-const named = (chat: string, name: string) =>
-  `./p/${chat}.jsonl:${JSON.stringify({ type: 'custom-title', customTitle: name })}`
+const saved = (disk: Map<string, string>, path = `${SHARED}/here.json`): Chat =>
+  JSON.parse(disk.get(path) ?? '{}')
 
-test('lists work items by status on each surface', async ($, on) => {
-  const ran = project(on)
+test('shows each piece of work as a card with its chat, on each surface', async ($, on) => {
+  const disk = world(on, {
+    ...chatFiles('here', 'Panel work', {}),
+    ...chatFiles('aaa', 'Main Orchestrator', {
+      at: NOW - 4 * MINUTE,
+      asked: 'Should I land this?',
+      helpers: ['agent-1', 'agent-2'],
+      streams: [stream('Fix login (TKV-7)', 'needs_owner', 'Mike approves the merge.')],
+    }),
+  })
 
-  // The command returns at once; the panel fills in as the reads finish.
-  await $.command.run({ command: 'streams' })
-
-  for (const surface of ['terminal', 'desktop'] as const) {
-    const ui = await $.ui.mount({ ...PANE, surface })
-
-    expect(await ui.find({ text: /Needs you \(1\)/ })).toBeDefined()
-    expect(await ui.find({ text: /^TKV-7 · In progress$/ })).toBeDefined()
-    expect(await ui.find({ text: /^Fix the tracker$/ })).toBeDefined()
-    expect(await ui.find({ text: /Not started \(1\)/ })).toBeDefined()
-    expect(await ui.find({ text: /Done \(1\)/ })).toBeDefined()
-    expect(await ui.find({ text: /Dropped idea/ })).toBeUndefined()
-    await ui.unmount()
-  }
-
-  expect(ran[0]).toContain(`v1/data_sources/${SOURCE}/query`)
-  // The scan gets the project's folder name and the open items' page ids.
-  expect(ran[1]?.[4]).toBe('-Users-me-my-project')
-  expect(ran[1]?.[5]).toContain(PAGE_7)
-})
-
-test('says so when the project names no Notion work items', async ($, on) => {
-  on('ui.open', async () => ({ value: { isPlaced: true } }))
-  on('session.root', async () => ({ value: '/project' }))
-  on('fs.read', async () => ({ value: 'No ids here.' }))
-
-  await $.command.run({ command: 'streams' })
-  const ui = await $.ui.mount({ ...PANE, surface: 'terminal' })
-
-  expect(await ui.find({ text: /No Notion work items/ })).toBeDefined()
-})
-
-test('names the chat that last changed each item', async ($, on) => {
-  project(
-    on,
-    [
-      named('aaa', 'Old name'),
-      named('aaa', 'Main Orchestrator'),
-      named('here', 'Panel work'),
-      '==writes==',
-      `./p/aaa.jsonl\t2026-10-02T10:00:00Z\t${PAGE_7}`,
-      `./p/here/subagents/agent-1.jsonl\t2026-10-03T10:00:00Z\t${PAGE_7.replaceAll('-', '')}`,
-      `./p/aaa.jsonl\t2026-10-03T09:00:00Z\t${PAGE_3}`,
-      '',
-    ].join('\n'),
-  )
+  const answer = await $.tool.call({
+    tool: 'mcp__workstreams__report',
+    name: 'Build panel',
+    status: 'in_progress',
+    next: 'Write the tests.',
+  })
+  expect(answer.result).toBe('Saved: Build panel.')
+  expect(saved(disk).streams).toMatchObject([{ name: 'Build panel', status: 'in_progress' }])
 
   await $.command.run({ command: 'streams' })
 
   for (const surface of ['terminal', 'desktop'] as const) {
     const ui = await $.ui.mount({ ...PANE, surface })
 
-    expect(await ui.find({ text: /^TKV-7 · In progress$/ })).toBeDefined()
-    expect(await ui.find({ text: /^ this chat $/ })).toBeDefined()
-    expect(await ui.find({ text: /^ Main Orchestrator $/ })).toBeDefined()
+    expect(await ui.find({ text: /^Workstreams \(2\)$/ })).toBeDefined()
+    // What needs the owner comes first.
+    const labels = await ui.findAll({ type: 'Text', text: /^ (NEEDS YOU|IN PROGRESS) $/ })
+    expect(labels.map(one => one.text)).toEqual([' NEEDS YOU ', ' IN PROGRESS '])
+    expect(await ui.find({ text: /^Chat: Main Orchestrator · stopped 4 min ago$/ })).toBeDefined()
+    expect(await ui.find({ text: /^Next: Mike approves the merge\.$/ })).toBeDefined()
+    expect(await ui.find({ text: /^Chat: Panel work \(this chat\) · stopped just now$/ })).toBeDefined()
+    // The chat named Main Orchestrator is the first chat.
+    const names = await ui.findAll({
+      type: 'Text',
+      text: /^(Main Orchestrator|Panel work \(this chat\))$/,
+    })
+    expect(names.map(one => one.text)).toEqual(['Main Orchestrator', 'Panel work (this chat)'])
+    expect(await ui.find({ text: /^You: Should I land this\?$/ })).toBeDefined()
+    expect(await ui.find({ text: /^Helper agents running: 2$/ })).toBeDefined()
     await ui.unmount()
   }
 })
 
-test('puts a chat named after an item ahead of the last change', async ($, on) => {
-  project(
-    on,
-    [
-      named('aaa', 'Main Orchestrator'),
-      named('bbb', 'TKV-3 move-over'),
-      named('ccc', 'TKV-31 other work'),
-      '==writes==',
-      `./p/aaa.jsonl\t2026-10-03T09:00:00Z\t${PAGE_3}`,
-      '',
-    ].join('\n'),
-  )
+test('says so when no chat has reported', async ($, on) => {
+  world(on)
 
   await $.command.run({ command: 'streams' })
   const ui = await $.ui.mount({ ...PANE, surface: 'terminal' })
 
-  expect(await ui.find({ text: /^ TKV-3 move-over $/ })).toBeDefined()
-  expect(await ui.find({ text: /Main Orchestrator/ })).toBeUndefined()
+  expect(await ui.find({ text: /No chat has reported a piece of work yet/ })).toBeDefined()
 })
 
-test('reads a set-up project on Windows', async ($, on) => {
-  const ran = project(
-    on,
-    [
-      named('aaa', 'Main Orchestrator'),
-      '==writes==',
-      `./p/aaa.jsonl\t2026-10-03T09:00:00Z\t${PAGE_3}`,
-      '',
-    ].join('\r\n'),
-    {
-      root: 'C:\\Users\\me\\my project',
-      shell: 'C:\\Program Files\\Git\\bin\\sh.exe',
-      // The form project setup writes into PROJECT.md's Notion block.
-      read: path =>
-        path.endsWith('PROJECT.md')
-          ? `### Notion\n- Work Items: database 0123, data source ${SOURCE}\n`
-          : '',
-    },
-  )
-
-  await $.command.run({ command: 'streams' })
-  const ui = await $.ui.mount({ ...PANE, surface: 'desktop' })
-
-  expect(await ui.find({ text: /^ Main Orchestrator $/ })).toBeDefined()
-  expect(ran[0]).toContain(`v1/data_sources/${SOURCE}/query`)
-  expect(ran.at(-1)?.[0]).toBe('C:\\Program Files\\Git\\bin\\sh.exe')
-  expect(ran.at(-1)?.[4]).toBe('C--Users-me-my-project')
-})
-
-test('reads a chat in a worktree under the main project', async ($, on) => {
-  const ran = project(on, '==writes==\n', {
-    ...MAC,
-    root: '/Users/me/my.project/.claude/worktrees/fix-1',
+test('shows one card for work two chats report, and lists finished work', async ($, on) => {
+  world(on, {
+    ...chatFiles('aaa', 'Main Orchestrator', {
+      streams: [stream('Fix login', 'in_progress', 'Old step.', NOW - MINUTE)],
+    }),
+    ...chatFiles('bbb', 'Login chat', {
+      streams: [
+        stream('fix login', 'blocked', 'Waiting on the API key.'),
+        stream('Rename files', 'done', ''),
+      ],
+    }),
   })
 
   await $.command.run({ command: 'streams' })
   const ui = await $.ui.mount({ ...PANE, surface: 'terminal' })
 
-  expect(await ui.find({ text: /Needs you \(1\)/ })).toBeDefined()
-  expect(ran.at(-1)?.[4]).toBe('-Users-me-my-project')
+  expect(await ui.find({ text: /^Workstreams \(1\)$/ })).toBeDefined()
+  // The newest report gives the status and the next step.
+  expect(await ui.find({ text: /^ BLOCKED $/ })).toBeDefined()
+  expect(await ui.find({ text: /^Next: Waiting on the API key\.$/ })).toBeDefined()
+  expect(await ui.findAll({ type: 'Text', text: /^Chat: / })).toHaveLength(2)
+  expect(await ui.find({ text: /^✓ Rename files · Login chat$/ })).toBeDefined()
 })
 
-test('says so when Notion cannot be read, and when the chats cannot', async ($, on) => {
-  let isNotionUp = false
-  mock.env(on, {})
-  mock.clock(on)
-  on('session.id', async () => ({ value: 'here' }))
-  on('ui.open', async () => ({ value: { isPlaced: true } }))
-  on('session.root', async () => ({ value: MAC.root }))
-  on('fs.read', async (_, e) => ({ value: MAC.read(e.path) }))
-  on('process.run', async (_, e) =>
-    isNotionUp && e.argv[1] === 'api'
-      ? output(JSON.stringify({ results: [page(7, 'Fix the tracker', 'In Progress', 'owner')] }))
-      : output('', 1),
-  )
+test('follows what the chat is doing', async ($, on) => {
+  const disk = world(on)
+  const seen: string[] = []
+  on('prompt.submit', async (_, e) => ({ text: e.text }))
+  on('turn.start', async (_, e) => ({ turnId: e.turnId }))
+  on('turn.complete', async (_, e) => ({ text: e.answer }))
+  on('tool.call', async () => {
+    seen.push(saved(disk).state)
 
-  await $.command.run({ command: 'streams' })
-  const ui = await $.ui.mount({ ...PANE, surface: 'terminal' })
-  expect(await ui.find({ text: /Could not read Notion/ })).toBeDefined()
+    return { result: 'answered' }
+  })
 
-  isNotionUp = true
-  await ui.press({ key: 'refresh' })
-  expect(await ui.find({ text: /Could not read the saved chats/ })).toBeDefined()
-  expect(await ui.find({ text: /^Fix the tracker$/ })).toBeDefined()
+  await $.prompt.submit({ text: 'Fix the login bug', wait: false, origin: { kind: 'composer' } })
+  await $.prompt.submit({ text: 'A task finished.', wait: false, origin: { kind: 'task-notification' } })
+  expect(saved(disk)).toMatchObject({ asked: 'Fix the login bug', name: 'Fix the login bug' })
+
+  await $.turn.start({ text: 'Fix the login bug', turnId: 't1' })
+  expect(saved(disk).state).toBe('working')
+
+  await $.tool.call({ tool: 'AskUserQuestion', questions: [] })
+  expect(seen).toEqual(['asking'])
+  expect(saved(disk).state).toBe('working')
+
+  await $.turn.complete({
+    turnId: 't1',
+    answer: 'Done.',
+    durationMs: 1,
+    isAborted: false,
+    reason: 'answer',
+  })
+  expect(saved(disk).state).toBe('stopped')
 })
 
-test('lists a helper agent while it runs', async ($, on) => {
-  project(on)
+test('keeps the reported work of a chat that is opened again', async ($, on) => {
+  const disk = world(on, {
+    ...chatFiles('here', 'Panel work', {
+      streams: [stream('Build panel', 'in_progress', 'Write the tests.')],
+    }),
+  })
+  on('turn.start', async (_, e) => ({ turnId: e.turnId }))
+
+  // The reopened chat holds no record of its own yet.
+  await $.turn.start({ text: 'Carry on', turnId: 't1' })
+
+  expect(saved(disk)).toMatchObject({
+    state: 'working',
+    streams: [{ name: 'Build panel', status: 'in_progress' }],
+  })
+})
+
+test('counts the helper agents and takes no report from one', async ($, on) => {
+  const disk = world(on)
   on('agent.spawn', async () => ({ model: 'm', agentId: 'agent-1' }))
-  on('turn.complete', async () => ({}))
+  on('turn.start', async (_, e) => ({ turnId: e.turnId }))
+  on('turn.complete', async (_, e) => ({ text: e.answer }))
 
+  await $.turn.start({ text: 'Go', turnId: 't1' })
   await $.agent.spawn({ prompt: 'Read the docs.', description: 'Read the docs' })
-  const ui = await $.ui.mount({ ...PANE, surface: 'terminal' })
-  expect(await ui.find({ text: /Helpers running \(1\)/ })).toBeDefined()
-  expect(await ui.find({ text: /Read the docs/ })).toBeDefined()
+  expect(saved(disk)).toMatchObject({ state: 'working', helpers: ['agent-1'] })
+
+  const answer = await $.tool.call({
+    tool: 'mcp__workstreams__report',
+    agentId: 'agent-1',
+    name: 'A helper step',
+    status: 'in_progress',
+    next: '',
+  })
+  expect(answer.result).toContain('Not saved')
+
+  await $.turn.complete({
+    turnId: 't2',
+    agentId: 'agent-1',
+    answer: 'Read.',
+    durationMs: 1,
+    isAborted: false,
+    reason: 'answer',
+  })
+  // The helper ended; the chat itself is still working.
+  expect(saved(disk)).toMatchObject({ state: 'working', helpers: [], streams: [] })
+})
+
+test('tells each chat once to report its work', async ($, on) => {
+  world(on)
+  on('prompt.context', async (_, e) => ({ blocks: e.blocks }))
+
+  const made = await $.prompt.context({ blocks: [{ name: 'currentDate', text: 'today' }] })
+
+  expect(made.blocks.map(block => block.name)).toEqual(['currentDate', 'workstreams'])
+  expect(made.blocks[1]?.text).toContain('mcp__workstreams__report')
+})
+
+test('counts a chat in a worktree as part of the project', async ($, on) => {
+  const disk = world(on, {}, { root: '/Users/me/my.project/.claude/worktrees/fix-1' })
+
+  await $.tool.call({ tool: 'mcp__workstreams__report', name: 'Fix', status: 'done', next: '' })
+
+  expect(saved(disk).dir).toBe('-Users-me-my-project--claude-worktrees-fix-1')
+})
+
+test('saves under the Windows home folder', async ($, on) => {
+  const disk = world(on, {}, {
+    root: 'C:\\Users\\me\\proj',
+    env: { USERPROFILE: 'C:\\Users\\me' },
+  })
+
+  await $.tool.call({ tool: 'mcp__workstreams__report', name: 'Fix', status: 'odd', next: 'Go.' })
+
+  // This test runs on a Mac, where a path starting "C:" is not a full path,
+  // so the test's disk sees it with the current folder in front.
+  const path = [...disk.keys()][0] ?? ''
+  expect(path.endsWith('C:\\Users\\me/.claude/workstreams/C--Users-me-proj/here.json')).toBe(true)
+  // A status the tool does not know counts as in progress.
+  expect(saved(disk, path).streams).toMatchObject([{ name: 'Fix', status: 'in_progress' }])
+})
+
+test('uses the folder Claude Code keeps the chat in, once it is known', async ($, on) => {
+  const disk = world(on)
+  on('classic.UserPromptSubmit', async () => ({}))
+
+  await $.classic.UserPromptSubmit({
+    prompt: 'Hello',
+    transcript_path: '/Users/me/.claude/projects/-Users-me-other/here.jsonl',
+  })
+  await $.tool.call({ tool: 'mcp__workstreams__report', name: 'Fix', status: 'done', next: '' })
+
+  expect(disk.has('/Users/me/.claude/workstreams/-Users-me-other/here.json')).toBe(true)
 })

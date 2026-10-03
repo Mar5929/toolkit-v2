@@ -36,20 +36,28 @@ in your code editor, which loads no plugins.
 ## The workstream panel
 
 A second plugin, `workstreams`, adds a side panel to Claude Code. Type
-`/streams` in a project that tracks work in Notion.
+`/streams` in any project folder. It shows the Claude chats you have going in
+that project and what each one is working on. It needs no Notion.
 
-- It lists the open work items in groups: Needs you, In progress, Preparing,
-  Blocked, and Not started. It also lists the 5 most recently changed Done
-  items and the helper agents running in this chat.
-- Each open item shows the chat it belongs to as a highlighted label. That is
-  a chat whose name holds the item's ID, such as "TKV-5". Otherwise it is the
-  chat whose agent last changed the item in Notion.
-- Opening or refreshing it uses no tokens. Finding the chats takes a few
-  seconds.
-- It works in the Claude Code terminal and the desktop app on Mac. It is
-  written to work on Windows too, but that has not been tried yet. It does
-  not work in Codex, and it shows nothing for projects that track work in
-  local files or GitHub.
+- **Workstreams.** One card per piece of work: its name, its status (Needs
+  you, Blocked, or In progress), the chat handling it, and the next step.
+  What needs you comes first.
+- **Chats.** One card per chat: its name, whether it is working, asking you
+  a question, or stopped, your last message to it, and how many helper
+  agents it runs. A chat named "Main Orchestrator" is listed first.
+- **Done today.** The work finished in the last day.
+- Each chat's agent reports its own work with a small tool the plugin gives
+  it. That costs a few tokens per report, plus one short instruction at the
+  start of each chat. Opening and refreshing the panel costs none.
+- The agent reports work that takes more than one step. A chat you only
+  asked a quick question shows as a chat, with no piece of work.
+- A chat renamed in the sidebar shows its new name in the panel.
+- A chat appears after its next message once the plugin is installed. A chat
+  in a worktree under the project's `.claude/worktrees/` folder counts as
+  the same project.
+- It is built for the Claude Code terminal and the desktop app, on Mac and
+  Windows. So far it has run only in the terminal on Mac. It does not work
+  in Codex.
 
 Install it once per computer:
 
