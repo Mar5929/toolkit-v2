@@ -128,7 +128,7 @@ Answering Q-01:
 
 ## Pull request links
 
-The section "Linked Github PRs" holds an "Embed Github" block that only the Notion app can make or fill. The page text shows it as one `<unknown … alt="external_object_instance"/>` line: never change or remove that line. A pull request that `managing-work-items` says to record on the item goes here, not under Related items, as a plain link on its own line right under the heading: `old_str` is the "Linked Github PRs" heading line as read, and `new_str` is that line followed by `[<repository>#<number>: <title>](<pull request address>)`. Add one line for each pull request. The owner may put the same pull request in the embed himself.
+The section "Linked Github PRs" holds an "Embed Github" block that only the Notion app can make or fill. The page text shows it as one `<unknown … alt="external_object_instance"/>` line: never change or remove that line. A pull request that `managing-work-items` says to record on the item goes here, not under Related items, as a plain link on its own line right under the heading: `old_str` is the "Linked Github PRs" heading line as read, and `new_str` is that line followed by `[<repository>#<number>: <title>](<pull request address>)`. Add one line for each pull request. When the page has no "Linked Github PRs" section, put the link under Related items. The owner may put the same pull request in the embed himself.
 
 ## Comments
 
