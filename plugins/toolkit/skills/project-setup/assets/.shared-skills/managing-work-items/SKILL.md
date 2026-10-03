@@ -28,7 +28,7 @@ Every item has a Status and a State. The State says where the work is. The Statu
 - Any item, a bug included, can go through Designing. When asking him to approve the requirements, recommend the next State: Designing when there is more than one sensible way to build it or the change is risky, otherwise Building.
 - A parent item stays in Building until every sub-item is Done or Cancelled. Then it goes through the Testing Loop as a whole.
 - An item with nothing to merge or deploy (research, a decision, a document) goes from Reflecting straight to asking him to mark it Done.
-- **Backlog:** add the idea in his words, as the Original verbatim requirement of Requirement 1, and do not start the interview until he asks to start it.
+- **Backlog:** add the idea in his words, as the Original verbatim requirement of Requirement 1, and do not start the interview until he asks to start it. The item's Next action is in the template's Working form and names the first step for when he starts it, for example "Agent: when the owner starts this item, agree its goal with him."
 - **Blocked:** stuck on something outside the work, such as missing access, another team, or a piece that must be finished first. Waiting for the owner's answer is not Blocked. Write what it waits on, who can clear it, and the State it left, in the Current state's Blockers line. When it is cleared, return to that State.
 - **Done and Cancelled:** only on his word. Cancelling keeps the item and every record in it.
 
@@ -49,7 +49,7 @@ Every project holds its work in the same four levels, whatever its tracker. `tra
 - Work a project task like an item's task: set it In Progress before you start it, and tick it only when its Done when check is met. An open project task whose Who does it is `owner` waits on the owner: name it whenever you report what waits on him.
 - Never add a fourth level; make it a task instead.
 - When it is unclear whether something is a project task, a new work item, a sub-item, or a task in an item, ask the owner one short question with your recommendation, and save nothing until he answers.
-- A top-level item gets its phases in Refining Requirements. It goes under a project phase when the owner places it, and at the latest when it leaves Backlog; when he has named none by then, ask which, with your recommendation.
+- A top-level item gets its phases in Refining Requirements. It goes under a project phase when the owner places it, and at the latest when it leaves Backlog; when he has named none by then, ask which, with your recommendation. Until it has one, its Related items line says "No project phase yet."
 - The project's phases change only with his yes. Propose new phases, or a change to them, as one question, each with a one-line reason. A project with no phases yet: propose them the first time an item leaves Backlog.
 - Set a project phase In Progress when its first item leaves Backlog. When the last open item in it becomes Done or Cancelled, ask him in your next reply whether the phase is Done.
 
@@ -70,8 +70,9 @@ Stop and ask the owner before each of these. Record his OK only when he answers 
 - Save after each step, not at the end, then read the item back. When a save fails, start the reply with "Not saved".
 - After each step, rewrite the item's Current state in place, as the template says.
 - The project's Current State lists under "Now" every item that has left Backlog and is not Done or Cancelled: add the item's line when it leaves Backlog ("Hand-offs", "Updating the project's Current State").
+- Every new item, in any State, gets a `type`: choose it from the template's list.
 - Never delete a requirement, a question row, or a phase. Mark it dropped, superseded, or cancelled.
-- **Text in angle brackets is an instruction, never content.** A work item template holds prompts in angle brackets (`<What happened>`) that say what to write there. Whenever you create or change an item, replace each prompt with real content, or delete it when there is nothing to write yet, so no item you have touched holds one. Delete only the prompt and keep its heading or label; an example row, task, or requirement block made only of prompts goes whole. Delete any note for the agent that the template holds, as `tracking-work-items` says. Write the next requirement, row, or task in the form `tracking-work-items` gives, never by copying a prompt left on a page. The rule covers only the template's own prompts: real content may hold angle brackets (code such as `Map<Id, Account>`). The template itself keeps its prompts, and the design keeps its own until it is approved (`references/designing.md`).
+- **Text in angle brackets is an instruction, never content.** A work item template holds prompts in angle brackets (`<What happened>`) that say what to write there. Whenever you create or change an item, replace each prompt with real content, or delete it when there is nothing to write yet, so no item you have touched holds one. Delete only the prompt and keep its heading or label: a part of a requirement left empty this way, such as its Goal, is filled when the requirement is refined. An example row, task, or requirement block made only of prompts goes whole. Delete any note for the agent that the template holds, as `tracking-work-items` says. Write the next requirement, row, or task in the form `tracking-work-items` gives, never by copying a prompt left on a page. The rule covers only the template's own prompts: real content may hold angle brackets (code such as `Map<Id, Account>`). The template itself keeps its prompts, and the design keeps its own until it is approved (`references/designing.md`).
 
 ## Starting a helper
 

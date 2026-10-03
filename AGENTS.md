@@ -318,9 +318,13 @@ node --test 'dev/tests/*.test.mjs'
   `assets/schema/`. The toolkit does not install or run Lore, and Lore's own
   saving and hooks stay off. Before moving to a newer Lore, compare
   `database-layout.md` with Lore's `src/notion/schema.ts` again.
-- **Notion tests** run only in the private Notion test area named in
-  `dev/test-runs/notion-test-area.json`, never on Mike's real "AI Agent
-  Second Brain" page unless he says yes.
+- **Notion tests** run only in a throwaway project made from Mike's
+  "Project" template and named "<what it tests> (safe to delete)". Make it
+  only after his yes, and move it to the trash after he has looked. Never
+  test on his real projects, his templates, or his "AI Agent Second Brain"
+  page unless he says yes. The earlier test area
+  (`dev/test-runs/notion-test-area.json`) was deleted and is no longer used
+  (Mike, 2026-10-03).
 - **Hindsight memory** is on Mike's Hostinger VPS (API
   `https://memory-api.mrihm-memory.com`, dashboard
   `https://memory.mrihm-memory.com`), one bank per project, never on the Mac

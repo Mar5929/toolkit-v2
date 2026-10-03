@@ -109,9 +109,9 @@ A phase is complete when its tasks are complete, its sub-items are Done or Cance
 - **Original verbatim requirement:** <i.e. from the user, stakeholder, etc.>
 - **Goal:** <What this requirement achieves, in one sentence>
 
-**Functional, Process, Logic, Schema, etc. Requirements**
+**Functional Requirements**
 
-1. <Requirement 1>
+1. <One line each: system behavior, process steps, business rules, and data model>
 2. <Requirement 2>
 3. <etc…>
 

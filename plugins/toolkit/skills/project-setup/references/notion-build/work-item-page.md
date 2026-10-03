@@ -25,8 +25,8 @@ One row per task, grouped by phase; a sub-item's tasks have no phase. Set a task
 - **Original verbatim requirement: **\<i.e. from the user, stakeholder, etc.\>
 - **Goal**: \<What this requirement achieves, in one sentence\>
 <details>
-<summary>**Functional, Process, Logic, Schema, etc. Requirements**</summary>
-	1. \<Requirement 1\>
+<summary>**Functional Requirements**</summary>
+	1. \<One line each: system behavior, process steps, business rules, and data model\>
 	2. \<Requirement 2\>
 	3. \<etc…\>
 </details>
