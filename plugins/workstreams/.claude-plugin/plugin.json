@@ -1,0 +1,16 @@
+{
+  "name": "workstreams",
+  "version": "0.8.6",
+  "description": "Shows the project's Notion work items, the chat each one belongs to, and the running helper agents in a side panel. Open it with /streams. Claude Code only.",
+  "author": {
+    "name": "Mike Rihm",
+    "email": "michael@rihm.com"
+  },
+  "keywords": [
+    "toolkit-v2",
+    "work-items",
+    "notion",
+    "mod"
+  ],
+  "types": "./types/index.d.ts"
+}

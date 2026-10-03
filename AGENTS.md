@@ -19,6 +19,11 @@ three hook commands, and the settings. Each tool is used its own way: plain
 files and Obsidian, Notion through `ntn` or the Notion connector, GitHub
 through `gh`, and Hindsight through its own MCP tools.
 
+One exception (Mike, 2026-10-03): a second plugin, `workstreams`, for Claude
+Code only. It is a mod: code that runs inside Claude Code and draws a side
+panel. `/streams` lists the project's Notion work items and the chat each one
+belongs to. See "Workstreams plugin" under Rules.
+
 ## Read first
 
 - `dev/GOAL.md`: Mike's goal and his decisions. Read "Goal and finish list"
@@ -42,8 +47,10 @@ through `gh`, and Hindsight through its own MCP tools.
 
 | Path | What is there |
 | --- | --- |
-| `.claude-plugin/marketplace.json` | The `toolkit-v2` marketplace for Claude Code. It lists one plugin, `toolkit`. |
-| `.agents/plugins/marketplace.json` | The same marketplace for Codex, with `policy` and `category`. |
+| `.claude-plugin/marketplace.json` | The `toolkit-v2` marketplace for Claude Code. It lists two plugins, `toolkit` and `workstreams`. |
+| `.agents/plugins/marketplace.json` | The marketplace for Codex, with `policy` and `category`. It lists only `toolkit`: Codex cannot run a mod. |
+| `plugins/workstreams/` | The `workstreams` plugin: its manifest, the mod in `hooks/register.tsx`, the shell script that reads the saved chats in `hooks/scan.mjs`, its tests in `hooks/register.test.tsx`, and the types of its stored values in `types/index.d.ts`. |
+| `dev/tests/workstreams-scan.test.mjs` | Runs `hooks/scan.mjs` on made-up chat files in a scratch folder. |
 | `plugins/toolkit/.claude-plugin/plugin.json` | The Claude Code manifest. |
 | `plugins/toolkit/.codex-plugin/plugin.json` | The Codex manifest: the same `name` and `version`, `"skills": "./skills/"`, and an `interface` block. |
 | `<setup>SKILL.md`, `<setup>references/` | Onboarding, "check the setup", "update the toolkit", and the move-over for a project set up with the older toolkit or by hand (`references/move-over.md`, `references/old-toolkit-pieces.md`). |
@@ -106,6 +113,8 @@ Run them from the repository root before you hand work back.
 ```bash
 claude plugin validate .
 claude plugin validate ./plugins/toolkit
+claude plugin validate ./plugins/workstreams
+claude plugin test ./plugins/workstreams
 node dev/tools/check-skills.mjs
 node dev/tools/check-rules.mjs --dir plugins/toolkit/skills/project-setup/assets/model
 node --test 'dev/tests/*.test.mjs'
@@ -113,6 +122,10 @@ node --test 'dev/tests/*.test.mjs'
 
 - `claude plugin validate .` checks the marketplace; `./plugins/toolkit`
   checks the plugin, its manifest, and its skill.
+- `claude plugin validate ./plugins/workstreams` reads the mod the way
+  Claude Code will and lists what it hooks and calls. `claude plugin test`
+  runs `hooks/register.test.tsx` without a session, on the terminal and the
+  desktop app.
 - `check-skills.mjs` checks project-setup and every skill under it: only
   `name` and `description` in the frontmatter, `name` equal to the folder
   and in the allowed form, the description's shape and its row in
@@ -153,13 +166,44 @@ node --test 'dev/tests/*.test.mjs'
   No other script goes into a skill or a project. A new command, or a new
   job for one, needs Mike's yes first, with its size in plain numbers: do not
   write it; stop and tell him.
+- **Workstreams plugin** (Mike, 2026-10-03, work item TKV-12). The one other
+  piece of code the toolkit ships. When he said yes he was told about 350
+  lines plus about 150 lines of tests. After the review fixes it is about
+  460 lines (`register.tsx`, `scan.mjs`, `types/index.d.ts`) plus about 350
+  lines of tests. Tell him the size again before it grows.
+  - It is installed once per computer in Claude Code. Nothing of it is copied
+    into a project, so the code limit for projects stands.
+  - Its hooks run in every Claude Code session on that computer. At session
+    start they add the `/streams` command. They note each helper agent that
+    starts and ends. After each turn they read Notion again, only while the
+    panel is open.
+  - It only reads: the project's `PROJECT.md` (or this repository's
+    `AGENTS.md`) for the Work Items data source id, Notion through `ntn`,
+    and the chat files Claude Code saves under `~/.claude/projects/`. It
+    never writes to Notion, to a project, or to a chat file.
+  - A chat is named on an item when the chat's name holds the item's ID.
+    Otherwise it is the chat whose agent, or its helper agents, last changed
+    the item's Notion page.
+  - It works only for projects that track work in Notion. A new job for it,
+    or another tracker, needs Mike's yes first, with its size.
+  - A mod can never break a session: Claude Code skips a hook that fails.
+    Keep every failure to one short line in the panel.
+  - Read `ai-external-knowledge/claude-code/mods/` and
+    `dev/research/claude-code-mods.md` before changing it. The mods API is
+    early access and may change between Claude Code releases.
+  - The scan of the chat files is the shell script in `hooks/scan.mjs`.
+    `dev/tests/workstreams-scan.test.mjs` runs it with the Mac's own tools on
+    made-up chat files. On Windows it runs in the shell that comes with Git
+    for Windows; no test here covers that, so Mike tests `/streams` on his
+    Windows computer after a change to the scan.
 - **Shared texts.** Text several skills need is copied into each skill,
   because a skill reads only files inside its own folder. Edit the source in
   `dev/build-shared/`, then copy it over every copy (the first line of each
   copy names its source; `grep -rl 'dev/build-shared/<file>' plugins` lists
   them). Never edit a copy.
-- **`dev/` is not shipped.** Claude Code and Codex install only
-  `plugins/toolkit/`. Nothing shipped reads a file under `dev/`.
+- **`dev/` is not shipped.** Claude Code installs only `plugins/toolkit/` and
+  `plugins/workstreams/`, and Codex only `plugins/toolkit/`. Nothing shipped
+  reads a file under `dev/`.
 - **Skills.** A skill is a folder: `SKILL.md`, plus `references/`,
   `assets/` (templates), and `examples/` as needed. No scripts inside
   skills: steps are file edits, `git`, `gh`, `ntn`, or MCP tool calls.
@@ -226,9 +270,10 @@ node --test 'dev/tests/*.test.mjs'
   names live in `session-start.mjs` and `prompt-reminder.mjs`, and the
   snippets pass none: renaming a memory skill changes only those files and
   needs no new trust.
-- **Versions.** Both manifests carry the same `name` and `version`. Every
-  shipped change raises `version` in both, and `metadata.version` in
-  `.claude-plugin/marketplace.json`.
+- **Versions.** Both `toolkit` manifests carry the same `name` and `version`.
+  Every shipped change raises `version` in both, in
+  `plugins/workstreams/.claude-plugin/plugin.json`, and `metadata.version` in
+  `.claude-plugin/marketplace.json`, so the toolkit has one version number.
   - Codex runs its own copy, filed under the version
     (`~/.codex/plugins/cache/toolkit-v2/toolkit/<version>`). A change reaches
     Codex only after the version is raised and `codex plugin add
@@ -247,7 +292,9 @@ node --test 'dev/tests/*.test.mjs'
 - **Machine-wide plugin** (Mike, 2026-09-28, and draft 2): `toolkit` is on
   for every folder in both hosts. It holds only `project-setup` and no hooks,
   so "set up this project" works in an empty folder and nothing runs in
-  other projects.
+  other projects. `workstreams` is on for every folder in Claude Code only,
+  and its hooks run there ("Workstreams plugin" above says what they do). In
+  a project with no Notion work items, `/streams` says so.
 - **Rule files** live in the model and follow
   `dev/research/rules-best-practices.md` Part 1: one topic per file, a `# `
   heading, one specific instruction per bullet, `paths` frontmatter only

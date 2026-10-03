@@ -5,7 +5,9 @@ in Claude Code or Codex. You make the decisions and steer. The agent does the
 work, tracks it, and remembers what matters.
 
 It is written instructions plus three small hooks. There is no program to
-install, run, or keep working (your decision of 2026-09-29).
+install, run, or keep working (your decision of 2026-09-29). The one
+exception is the workstream panel for Claude Code (your decision of
+2026-10-03), described below.
 
 ## The parts
 
@@ -20,9 +22,9 @@ install, run, or keep working (your decision of 2026-09-29).
 - **Hooks** are small commands Claude Code and Codex run by themselves at set
   moments, for example when a session starts.
 
-## One plugin, one skill
+## The main plugin and its one skill
 
-The toolkit is one plugin, `toolkit`, with one skill, `project-setup`. It is
+The toolkit's main plugin is `toolkit`, with one skill, `project-setup`. It is
 switched on for every folder, so "toolkit v2" or "set up this project"
 works anywhere. It has
 no hooks, so it does nothing in your other projects.
@@ -30,6 +32,30 @@ no hooks, so it does nothing in your other projects.
 Setup copies everything a project needs into the project itself. That way the
 project works the same in Claude Code, the Codex app, and the Codex extension
 in your code editor, which loads no plugins.
+
+## The workstream panel
+
+A second plugin, `workstreams`, adds a side panel to Claude Code. Type
+`/streams` in a project that tracks work in Notion.
+
+- It lists the open work items in groups: Needs you, In progress, Preparing,
+  Blocked, and Not started. It also lists the 5 most recently changed Done
+  items and the helper agents running in this chat.
+- Each open item shows the chat it belongs to as a highlighted label. That is
+  a chat whose name holds the item's ID, such as "TKV-5". Otherwise it is the
+  chat whose agent last changed the item in Notion.
+- Opening or refreshing it uses no tokens. Finding the chats takes a few
+  seconds.
+- It works in the Claude Code terminal and the desktop app on Mac. It is
+  written to work on Windows too, but that has not been tried yet. It does
+  not work in Codex, and it shows nothing for projects that track work in
+  local files or GitHub.
+
+Install it once per computer:
+
+```bash
+claude plugin install workstreams@toolkit-v2
+```
 
 ## Set up a project
 

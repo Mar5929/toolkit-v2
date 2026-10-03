@@ -138,7 +138,7 @@ grep -n '^## ' <copy>/AGENTS.md
   `storing-project-memory` replace them, and a project with work items or
   memory in Notion also gets `using-notion-cli`. The memory records stay
   as they are.
-- Toolkit 0.8.5 dropped `agents/openai.yaml` from `merge-and-clean-up`: it
+- Toolkit 0.8.6 dropped `agents/openai.yaml` from `merge-and-clean-up`: it
   held only the display name the Codex app showed. The "Toolkit skills" row
   in section 3 lists it with the files the new copy lacks; give this as its
   reason.
