@@ -70,7 +70,8 @@ Stop and ask the owner before each of these. Record his OK only when he answers 
 - Save after each step, not at the end, then read the item back. When a save fails, start the reply with "Not saved".
 - After each step, rewrite the item's Current state in place, as the template says.
 - The project's Current State lists under "Now" every item that has left Backlog and is not Done or Cancelled: add the item's line when it leaves Backlog ("Hand-offs", "Updating the project's Current State").
-- Never delete a requirement, a question row, or a phase. Mark it superseded or cancelled.
+- Never delete a requirement, a question row, or a phase. Mark it dropped, superseded, or cancelled.
+- **Text in angle brackets is an instruction, never content.** A work item template holds prompts in angle brackets (`<What happened>`) that say what to write there. Whenever you create or change an item, replace each prompt with real content, or delete it when there is nothing to write yet, so no item you have touched holds one. Delete only the prompt and keep its heading or label; an example row, task, or requirement block made only of prompts goes whole. Delete any note for the agent that the template holds, as `tracking-work-items` says. Write the next requirement, row, or task in the form `tracking-work-items` gives, never by copying a prompt left on a page. The rule covers only the template's own prompts: real content may hold angle brackets (code such as `Map<Id, Account>`). The template itself keeps its prompts.
 
 ## Starting a helper
 

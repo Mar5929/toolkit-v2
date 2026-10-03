@@ -160,7 +160,7 @@ Only when the owner asks.
 
 ## A hand-made item
 
-- A copy with a real title (its `title:` is not `<Work item title>`): give it the next ID ("Creating an item's folder and ID", steps 2 and 3), set `id:` and the heading, rename its file to `<ID>.md`, fill any empty field with the new-item value (`field-mapping.md`), and add a Recent History row: "Made by hand by the owner; given the ID WI-034." Keep his folder name. Tell him in one line.
+- A copy with a real title (its `title:` is not `<Work item title>`): give it the next ID ("Creating an item's folder and ID", steps 2 and 3), set `id:` and the heading, rename its file to `<ID>.md`, fill any empty field with the new-item value and delete every template prompt he left unfilled (`field-mapping.md`, "A new item's starting values"), keeping everything he wrote, and add a Recent History row: "Made by hand by the owner; given the ID WI-034." Keep his folder name. Tell him in one line.
 - A file named `WORK-ITEM.md` outside the template is always a hand copy.
 
 ## Two items with one ID

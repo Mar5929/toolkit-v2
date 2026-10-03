@@ -97,7 +97,8 @@ What the text looks like:
 - A literal `<` `>` `|` `*` `$` is written with a backslash: `\<Goal\>`.
 - A line break inside one block is `<br>`.
 - A table is `<table header-row="true">` with one `<td>` per line.
-- A toggle heading is `## Questions and Answers {toggle="true"}`. Its contents are indented with one tab, except the lines of a table's rows (`<tr>`, `<td>`, `</tr>`), which have no tab.
+- A toggle heading is `# Questions and Answers {toggle="true"}`. Its contents are indented with one tab, except the lines of a table's rows (`<tr>`, `<td>`, `</tr>`), which have no tab.
+- A toggle is a `<details>` line, a `<summary>…</summary>` line with its title, its contents indented with one tab, and a `</details>` line. A callout is a `<callout icon="…" color="…">` line, its text indented with one tab, and a `</callout>` line.
 - A view of a database inside the page is one line, `<database url="…" …>Title</database>`. A child page is `<page url="…">Title</page>`. Before you change a page that holds them, see `SKILL.md`, "Any Notion write".
 
 Change text with exact replacements, built from a fresh read:

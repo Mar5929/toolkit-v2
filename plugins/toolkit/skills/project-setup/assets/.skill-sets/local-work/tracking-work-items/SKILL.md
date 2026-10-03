@@ -32,7 +32,7 @@ This skill holds the storage: where each part of a work item is saved in local f
 - A `|` inside a table cell ends the cell: write `\|`. A table cell holds one line: join lines with `<br>`. Write `[[WI-031]]`, never `[[WI-031|a name]]`, in a table.
 - Values may lose their quotes when the owner edits them in Obsidian's Properties panel (`waiting_on: owner`). The commands match both.
 - IDs have three digits: the owner's "WI-31" is `WI-031`.
-- The template's example rows and tasks hold angle-bracket prompts (`<Specific unanswered question>`, `<Phase 1 name>`). They are prompts: replace them with real rows, and never count them as real.
+- Text in angle brackets that comes from the template (`<Specific unanswered question>`, `<Phase 1 name>`) is a prompt, never content. Leave none in an item you create or change (`managing-work-items`, "Every time"; `references/field-mapping.md`, "A new item's starting values"). An item the owner made by hand, or one no agent has changed since toolkit 0.8.1, can still hold example rows and tasks: never count them as real.
 - In zsh, a `*` pattern that matches nothing stops the whole command. Use the `grep -r` commands as written.
 
 ## Hand-offs

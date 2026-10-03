@@ -2,7 +2,7 @@ This handoff prompt is AI-generated and may contain hallucinations, skewed conte
 
 ## Goal
 
-<What the whole piece of work is trying to achieve, in one or two plain sentences, and why it matters.> Written down in <the work item ID and section, for example WI-014, Requirements, Agreed goal; a requirements/ file; or an issue or pull request number>.
+<What the whole piece of work is trying to achieve, in one or two plain sentences, and why it matters.> Written down in <the work item ID and section, for example WI-014, Overview, Goal; a requirements/ file; or an issue or pull request number>.
 
 ## Your task
 

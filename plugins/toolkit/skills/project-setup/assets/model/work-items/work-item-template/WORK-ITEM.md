@@ -16,7 +16,7 @@ updated: <YYYY-MM-DD>
 
 # WI-001: <Work item title>
 
-<!-- Fill-in guide for a new work item: create it with `tracking-work-items`, which saves this file under the item's ID and sets the real ID in front matter and heading. `tracking-work-items` makes the design when a design starts. `WORK-ITEM.md` is the name of this template only. Find an item by its `id:` field, never by its path; the owner may move or rename item folders by hand. Save source files, such as meeting transcripts and documents (in a Salesforce project, a client file stays in `delivery/` and the Sources list names its path), with `tracking-work-items`, and list each one under Notes, Sources. A sub-item's `parent` names the item above it. Use stable phase, task, requirement, and question IDs for this item. In the front matter, keep one value from each list and change the fields with `tracking-work-items`; the status follows from the state, as `managing-work-items` says. A blocked item has state and status Blocked, `waiting_on` set, and its Current state Waiting on and Blockers lines filled. Replace every angle-bracket prompt with actual text in that same field, cell, or paragraph; do not leave the prompt in place. Keep the headings and field labels. Add or remove phase, task, question, and requirement examples to match the real work. Use the chosen tracker as the source of truth for status and links. Delete this guide after filling the item. -->
+<!-- Fill-in guide for a new work item: create it with `tracking-work-items`, which saves this file under the item's ID and sets the real ID in front matter and heading. `tracking-work-items` makes the design when a design starts. `WORK-ITEM.md` is the name of this template only. Find an item by its `id:` field, never by its path; the owner may move or rename item folders by hand. Save source files, such as meeting transcripts and documents (in a Salesforce project, a client file stays in `delivery/` and the Sources list names its path), with `tracking-work-items`, and list each one under Notes, Sources. A sub-item's `parent` names the item above it. Use stable phase, task, requirement, and question IDs for this item. In the front matter, keep one value from each list and change the fields with `tracking-work-items`; the status follows from the state, as `managing-work-items` says. A blocked item has state and status Blocked, `waiting_on` set, and its Current state Waiting on and Blockers lines filled. Text in angle brackets tells you what to write in that same field, cell, or paragraph: replace it with real content, or delete it when there is nothing to write yet, so no angle-bracket prompt is left in the item. Keep the headings and field labels. Delete each example phase, task, question, and requirement the item does not have yet; `tracking-work-items` gives the form for the next one. Use the chosen tracker as the source of truth for status and links. Delete this guide when you create the item. -->
 
 ## Overview
 
@@ -102,48 +102,24 @@ A phase is complete when its tasks are complete, its sub-items are Done or Cance
 
 ## Requirements
 
-<!-- Starting request records what was asked; Agreed goal records the outcome the owner accepted. Under Active requirements, create one R-ID subsection per explicit behavior. Fill every labeled field under each R-ID. Keep a requirement Refining until its required behavior and acceptance check are clear and owner approval is recorded. Mark a dropped or replaced requirement Superseded, with the reason and the Q-ID in its Decision record, and a link to its replacement when there is one. Put solution ideas in the final Notes subsection, not here. -->
+<!-- Every requirement follows the structure below: one block per requirement, numbered 1, 2, 3 in the order they are added. After Original verbatim requirement, put the words of the owner, or of the stakeholder or source that asked for it, word for word. In each numbered list, write one line per thing that must be true, exact enough to check. A dropped requirement keeps its block, with " (dropped, Q-ID)" added to its heading; a number is never reused. Everywhere else, name a requirement in the short form R-01, which means Requirement 1. Approval is recorded in `requirements_approved` and in Questions and Answers, not here. Put solution ideas in the final Notes subsection, not here. -->
 
-**Overall status:** Refining  
-**Finalization rule:** Mark the overall requirements Finalized only when the agreed goal, every active requirement, and acceptance have been reviewed and approved by the owner. Record who approved them and when.
+### Requirement <number>: <short name>
 
-### Starting request
+- **Original verbatim requirement:** <i.e. from the user, stakeholder, etc.>
+- **Goal:** <What this requirement achieves, in one sentence>
 
-<The owner’s original request, in his words.>
+**Functional, Process, Logic, Schema, etc. Requirements**
 
-### Agreed goal
+1. <Requirement 1>
+2. <Requirement 2>
+3. <etc…>
 
-<The outcome the owner has agreed this work item should deliver.>
+**Acceptance Criteria:**
 
-### Active requirements
-
-#### R-01 — <Required outcome>
-
-**Status:** <Refining | Finalized | Superseded>  
-**Applies to:** <Who or what is affected, and when this requirement applies.>  
-**Required behavior:** <Exactly what must happen or be true.>  
-**Boundaries and exceptions:** <Where the requirement does not apply, or “None identified.”>  
-**Acceptance check:** <What someone can observe to confirm this requirement is met.>  
-**Decision record:** <Source of the requirement; if Finalized, who approved it and when; if an answer changed it, that Q-ID. If Superseded, the reason, the Q-ID of the answer that dropped or replaced it, and a link to its replacement when there is one.>  
-**Open questions:** <Question IDs or “None.”>
-
-#### R-02 — <Required outcome>
-
-**Status:** <Refining | Finalized | Superseded>  
-**Applies to:** <Who or what is affected, and when.>  
-**Required behavior:** <Exactly what must happen or be true.>  
-**Boundaries and exceptions:** <Exceptions or “None identified.”>  
-**Acceptance check:** <Observable proof.>  
-**Decision record:** <Source and approval details, or the Q-ID that changed it.>  
-**Open questions:** <Question IDs or “None.”>
-
-### Acceptance
-
-This work item can be accepted when:
-
-1. <Overall result that must be delivered.>
-2. <How the completed result will be checked.>
-3. <Any required documentation, handoff, or owner review.>
+1. <Acceptance Criteria 1>
+2. <Acceptance Criteria 2>
+3. <etc…>
 
 ## Questions and Answers
 

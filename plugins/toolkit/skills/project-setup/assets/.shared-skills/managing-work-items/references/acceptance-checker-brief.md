@@ -14,10 +14,9 @@ The job block:
 ```text
 Work item: <ID and title>
 Folder, branch, and commit to check: <full path>, <branch>, <commit hash>
-Agreed goal: <text>
-Requirements: <every R-xx block that is not Superseded, with its Acceptance
-  check>
-Acceptance list: <text>
+Goal: <the goal in the item's Overview>
+Requirements: <every requirement block that is not dropped, whole, with its
+  Acceptance Criteria>
 Design acceptance checks: <the "Acceptance checks" table of the design's
   "Build and verification plan", and the "How to check it" column of the
   selected option's Requirement coverage>
@@ -37,10 +36,10 @@ You check whether a finished result does what the owner asked. You did not build
 
 First check that you are looking at the exact commit named, from the folder you were given: run `git -C <folder> status`, `git -C <folder> rev-parse HEAD`, and `git -C <folder> log --oneline -5`. If the commit differs, say so first, then check the commit you found and name it in the verdict.
 
-- Run the project's tests and every acceptance check you can run. Copy each command and its result line exactly.
-- For each requirement, give one verdict:
-  - **Met:** the acceptance check passed, or the evidence shows the required behavior. Name the evidence.
-  - **Partly met:** some of the behavior works. Say what is missing.
+- Run the project's tests and every check you can run for each requirement's Acceptance Criteria. Copy each command and its result line exactly.
+- For each requirement, read every line of its Acceptance Criteria and give one verdict:
+  - **Met:** every line of its Acceptance Criteria passed, or the evidence shows it is true. Name the evidence.
+  - **Partly met:** some of the lines hold. Say which do not.
   - **Not met:** the behavior is missing or wrong. Say what you saw.
   - **Not run:** the check could not run here. Say why and what would run it. Never report a check that did not run as passed.
 - Read the diff of the branch against the branch it started from. Report defects: broken edge cases, missing error handling the requirements ask for, behavior nobody asked for, files changed that the design did not name, and anything unfinished.

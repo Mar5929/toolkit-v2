@@ -60,7 +60,12 @@ A top-level item (`parent: none`) has a Roadmap and its tasks under phase headin
 
 Adding:
 
-- **A phase:** add a row where it belongs in the order, with the next unused number for this item, and its `### P3 — <name>` heading at the same place in Tasks. The first real phase replaces the template's example rows and headings (`P1 — <Phase 1 name>`).
+- **A phase:** add a row where it belongs in the order, with the next unused number for this item, and its `### P3 — <name>` heading at the same place in Tasks. When the template's example rows and headings (`P1 — <Phase 1 name>`) are still there, the first real phase replaces them. A row looks like this:
+
+  ```markdown
+  | P3 — Monthly report | A report of spending by category | Not Started | The report matches the test data | None. |
+  ```
+
 - **A task:** in a top-level item, add the block under its phase heading, after that phase's last task; its ID is the phase ID plus the next unused number in that phase: `P2-T04`. In a sub-item, add it at the end of the list; its ID is `T` plus the next unused number in the item: `T05`. "Depends on" names task IDs, a phase ("P1 completion."), or "None.".
 - **A sub-item:** after making it (`folders-and-files.md`, "Creating an item's folder and ID"), add `[[WI-033]]` to the parent's sub-item list (replace "None."; separate several with commas), add a Recent History row on the parent ("Sub-item [[WI-033]] created: <title>."), and set the parent's `updated:`.
 - **A new item's plan form:** as the template's guide comments under Roadmap and Tasks say for the item's level.
@@ -89,7 +94,7 @@ A task's writes:
 
 ## Recent History
 
-The table under `## Recent History` has three columns: Date, Change or decision, Effect on the work. Add rows newest first: insert the row right after the separator line. The first real row replaces the template's placeholder row (`| <YYYY-MM-DD> | ...`). For a decision, name its Q-ID instead of repeating it. The template's comment says which changes get a row.
+The table under `## Recent History` has three columns: Date, Change or decision, Effect on the work. Add rows newest first: insert the row right after the separator line. When the template's placeholder row (`| <YYYY-MM-DD> | ...`) is still there, the first real row replaces it. For a decision, name its Q-ID instead of repeating it. The template's comment says which changes get a row.
 
 ```markdown
 | 2026-09-30 | Q-02 answered: Face ID only. | R-03 updated; next action is Q-03. |
@@ -97,9 +102,31 @@ The table under `## Recent History` has three columns: Date, Change or decision,
 
 ## Requirements
 
-- `**Overall status:**` under `## Requirements` is `Refining` or `Finalized`.
-- The Starting request and the Agreed goal are paragraphs under their headings.
-- Each requirement is a `#### R-01 — <title>` block of labeled lines. Its `**Status:**` is `Refining`, `Finalized`, or `Superseded`. A superseded requirement stays, with the reason and the Q-ID in its Decision record line.
+Each requirement is one block under `## Requirements`, in the order of its number. `managing-work-items` says what goes in each part. A block looks like this:
+
+```markdown
+### Requirement 1: Save a transaction
+
+- **Original verbatim requirement:** "I want to type in what I spent and have it saved."
+- **Goal:** A person can record one expense in a few seconds.
+
+**Functional, Process, Logic, Schema, etc. Requirements**
+
+1. The form takes an amount, a date, and a category.
+2. Saving with no amount shows "Enter an amount" and saves nothing.
+
+**Acceptance Criteria:**
+
+1. A saved transaction shows in the list with the same amount, date, and category.
+2. Saving with no amount leaves the list unchanged.
+```
+
+- **A new requirement:** add its block after the last one, with the next unused number. Take the form from the block above, never from a prompt left in an item.
+- **A new line:** add it at the end of its numbered list.
+- **A part with nothing to write yet:** keep its label and write nothing after it.
+- **A dropped requirement:** keep its block and add the Q-ID to its heading: `### Requirement 3: Export to PDF (dropped, Q-12)`.
+- `R-01` in a question row, a task, or the design means "Requirement 1".
+- An item made before toolkit 0.8.1 has the older layout (`### Starting request`, `### Agreed goal`, `#### R-01 — <title>` blocks of labeled lines, `### Acceptance`). Read and change it in the layout it has. Rewrite it into this layout only when the owner asks.
 
 ## Questions and Answers
 
@@ -128,7 +155,7 @@ After:
 
 - Copy each source file into the item's `references/` folder and keep its name. Text the owner pasted is saved as `YYYY-MM-DD-<short-name>.md`, exactly as pasted. Never edit a source after saving it.
 - In a Salesforce project a client file stays in `delivery/`; the Sources line names its `delivery/` path.
-- Add one line under Notes, "Sources", for each source (replace the template's example line the first time):
+- Add one line under Notes, "Sources", for each source (the first one replaces "None.", or the template's example line when it is still there):
   `` - `references/2026-09-30-kickoff-transcript.md`: kickoff meeting transcript, 2026-09-30. Taken from it: R-01, Q-02. ``
 
 ## Approvals
@@ -164,6 +191,14 @@ After the folder and file exist (`folders-and-files.md`, "Creating an item's fol
 
 - **Front matter:** the ID, the title in the owner's words, a `type` from the template's list, `state` and `status` for the item's first State, `parent` the parent's ID or `none`, `waiting_on: "none"`, `priority: medium`, `delivery: not-offered`, both approvals `no`, `design: none`, and `updated` today.
 - **Overview:** the heading `# WI-032: <title>`, the Goal, and the Current state lines: Where it stands "Created on `YYYY-MM-DD`; not started.", Next action in one of the template's forms, Waiting on "Nothing.", Blockers "None.", Last updated today. Related items: the parent as `[[WI-012]]`; for a top-level item, its project phase ("Project phase P01.") once it has one; or "None.".
-- **Requirements and Recent History:** the Starting request in the owner's words, and, replacing the placeholder row, "Created from the owner's request."
-- Leave the other prompts to be filled as the work goes. Delete the comment that starts "Fill-in guide for a new work item" once no angle-bracket prompt is left in the item.
+- **Requirements:** one block for each requirement `managing-work-items` gave you, in place of the template's pattern block ("Requirements" above).
+- **Recent History:** "Created from the owner's request.", in place of the placeholder row.
+- **Every other angle-bracket prompt is deleted,** so none is left in the item (`managing-work-items`, "Every time"). Delete the example phase rows, the example phase headings and tasks, and the example question rows. In a sub-item, delete the whole `## Roadmap` section and write `**Sub-items:** None.`; in a top-level item, delete the sub-item form. Under Notes, delete the prompt lines under Context and "Solution options and considerations", and write "None." under Sources. Keep every heading, table header, label, and `<!-- ... -->` guide comment, except the comment that starts "Fill-in guide for a new work item": delete it.
+- **Check** that no prompt is left:
+
+  ```bash
+  grep -nE '<[^!>][^>]*>' "<item file>"
+  ```
+
+  A line it prints that holds a template prompt is not finished. `<br>` and angle brackets in real content (code such as `Map<Id, Account>`) are fine.
 - A sub-item is also linked from its parent's sub-item list (see "Roadmap and Tasks"). A top-level item is also listed under its project phase (`project-roadmap-and-tasks.md`).

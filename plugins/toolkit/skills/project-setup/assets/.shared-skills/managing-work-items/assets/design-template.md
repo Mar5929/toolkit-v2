@@ -14,11 +14,11 @@ approved: "no"
 **Last updated:** <YYYY-MM-DD>  
 **Design approval:** <Owner, date, and decision source if approved; otherwise Pending>
 
-<!-- Keep this file with its work item. The work item's main file, not this file, holds the agreed goal, its Current state (where work stands and the exact next action), active requirements, Questions and Answers (which holds the item's decisions), its Roadmap and Tasks, and its Recent History. This file explains how to meet those requirements. During an interview, update settled answers in the relevant design section, keep unresolved discussion in Notes at the bottom, and keep the next action in the work item's Current state. A recommendation or saved draft is not owner approval. -->
+<!-- Keep this file with its work item. The work item's main file, not this file, holds the goal, its Current state (where work stands and the exact next action), the requirements, Questions and Answers (which holds the item's decisions), its Roadmap and Tasks, and its Recent History. This file explains how to meet those requirements. During an interview, update settled answers in the relevant design section, keep unresolved discussion in Notes at the bottom, and keep the next action in the work item's Current state. A recommendation or saved draft is not owner approval. -->
 
 ## What this design solves
 
-<In a short paragraph, say who uses the result, what they need to accomplish, and what must be true afterward. Link to the agreed goal. State what this design covers and what it leaves to another work item.>
+<In a short paragraph, say who uses the result, what they need to accomplish, and what must be true afterward. Link to the work item's goal. State what this design covers and what it leaves to another work item.>
 
 ## Requirements and design readiness
 
@@ -26,7 +26,7 @@ approved: "no"
 
 | Requirement | Status in work item | Design coverage | Remaining decision or gap |
 | --- | --- | --- | --- |
-| R-01 — <Requirement heading> | <Refining / Finalized / Superseded> | <Option and section that address it, or Pending> | <Question ID or None> |
+| R-01 — <Requirement short name> | <Approved / Not approved yet / Dropped> | <Option and section that address it, or Pending> | <Question ID or None> |
 
 ## What exists today
 
@@ -152,7 +152,7 @@ flowchart TD
 
 ### Acceptance checks
 
-| Requirement or acceptance item | Verification method | Expected result | Evidence location |
+| Requirement or acceptance criterion | Verification method | Expected result | Evidence location |
 | --- | --- | --- | --- |
 | R-01 | <Test, review, or demonstration> | <Observable pass condition> | <Where evidence will be recorded> |
 

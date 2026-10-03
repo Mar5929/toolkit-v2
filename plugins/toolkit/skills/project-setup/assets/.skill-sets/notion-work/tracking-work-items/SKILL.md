@@ -14,7 +14,7 @@ This project keeps its work items in Notion. This skill says where each thing is
 - A **task** is a row of Tasks. A top-level item's task is linked to its item and its phase. A sub-item's task is linked to its item only: a sub-item has no phases. A project task is linked to neither.
 - A sub-item is a work item whose "Parent item" names the item above it. A top-level item's "Phase" is its project phase.
 - The project page shows the project's phases, its top-level items by project phase, and its project tasks (`references/database-layout.md`, "The project's phases and tasks").
-- Every item's page is made from the Work Items database's default template, the work item template. `references/page-layout.md` lists its sections. Five are text: Overview, Recent History, Requirements, Questions and Answers, Notes. Four are live views of other databases: Roadmap, Sub-items, Tasks, Linked memory.
+- Every item's page is made from the Work Items database's default template, the work item template. `references/page-layout.md` lists its sections. Six are text: Overview, Recent History, Requirements, Questions and Answers, Notes, Linked Github PRs. Four are live views of other databases: Roadmap, Sub-items, Tasks, Linked memory.
 - The Solution Design page is a child page of the item.
 - The ids of the databases and pages are in `PROJECT.md`, section "Toolkit settings", Notion block. Never search the workspace for them.
 
@@ -60,7 +60,7 @@ This project keeps its work items in Notion. This skill says where each thing is
 | File | Open it when |
 | --- | --- |
 | [references/database-layout.md](references/database-layout.md) | Checking what a property holds; creating or changing an item's properties, phases, tasks, links, tags, or files; an item that changes level; or the project's phases and tasks. |
-| [references/page-layout.md](references/page-layout.md) | Changing an item's text: Current state, Recent History, Questions and Answers, or the Solution Design page; or adding a comment. |
+| [references/page-layout.md](references/page-layout.md) | Changing an item's text: Current state, Recent History, Requirements, Questions and Answers, a pull request link, or the Solution Design page; or adding a comment. |
 | [references/searching.md](references/searching.md) | Finding or reading items: one item, the board, what waits on the owner, a parent's tree, the project's phases and tasks, a search, a saved source file, cards with no title. |
 | [assets/schema/01-work-items-database.json](assets/schema/01-work-items-database.json), [02-phases-database.json](assets/schema/02-phases-database.json), [03-tasks-database.json](assets/schema/03-tasks-database.json) | Creating the databases, or adding a missing property. |
 | [assets/schema/04-work-items-relations.json](assets/schema/04-work-items-relations.json), [05-phases-relations.json](assets/schema/05-phases-relations.json), [06-tasks-relations.json](assets/schema/06-tasks-relations.json), [07-work-items-rollup.json](assets/schema/07-work-items-rollup.json), [07b-work-items-phase-column.json](assets/schema/07b-work-items-phase-column.json), [07c-phases-phase-type.json](assets/schema/07c-phases-phase-type.json), [07d-tasks-task-type.json](assets/schema/07d-tasks-task-type.json) | Creating the relations and the columns made from them, or adding a missing one. |

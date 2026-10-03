@@ -89,7 +89,9 @@ under (`ntn-commands.md`, "Access and sign-in").
    missing or differs, bring the template up to date first, after the
    owner's yes: "Bringing a project up to the current template", steps 1
    to 4, run on "Project", and its memory part (`setup.md`, "Bringing
-   memory up to the current layout"). Then copy.
+   memory up to the current layout"). Step 4 there says which parts of
+   the work item template are the owner's and are never changed. Then
+   copy.
 2. **Pick the ID prefix** (work items in Notion). Propose one from the
    project name (two to four capital letters, for example "IML" for "iOS
    money log") and ask the owner. Notion allows each prefix in only one
@@ -334,16 +336,42 @@ through the API, after the owner's yes.
    then fill the new template as the opening paragraph of "Building the
    templates" and its steps 11 and 12 say (text, then views). Tell the owner
    the plain page is no longer used and he may delete it. Then compare the
-   template's sections with `work-item-page.md` and add a missing
-   section or view the same way the template build does; skip "Linked
-   memory" in a project without Notion memory. Replace, with one
-   `update_content` call, each guide paragraph under Roadmap, Sub-items,
-   and Tasks, and the Related items prompt, that differs from
-   `work-item-page.md`; the owner's own text elsewhere stays. Do the same for the
+   template with `work-item-page.md`, section by section. Match a section
+   by the words of its heading, whatever its heading level.
+   - **A missing section or view:** add it the same way the template build
+     does, with its heading at the level the template's other sections
+     have. Skip "Linked memory" in a project without Notion memory. A
+     missing "Linked Github PRs" gets its heading and its prompt line at
+     the end of the page; its embed is the owner's to add (template build,
+     step 11).
+   - **The toolkit's own guide text:** replace, with one `update_content`
+     call, each guide paragraph under Roadmap, Sub-items, and Tasks, and
+     the Related items prompt, that differs from `work-item-page.md`.
+   - **The Requirements layout from before toolkit 0.8.1** (the section
+     holds the line `**Overall status:**`): ask the owner whether new
+     items of this project should get the current layout. After his yes,
+     replace everything from the line under the Requirements heading to
+     the line above the "Questions and Answers" heading with the same
+     lines of `work-item-page.md`, and add the note at the top (the
+     callout that starts "If you are an agent creating or changing this
+     page") as the first block, in one `update_content` call. Write the
+     `Requirement` heading one level below the template's section
+     headings.
+   - **Everything else is the owner's and is never changed:** the level of
+     each heading, the note at the top (its words, or that he removed it),
+     a Requirements section in any other form, the "Linked Github PRs"
+     section and its embed, and any text he added. The owner edits this template himself in Notion
+     (he rewrote it on 2026-10-03), and his version wins over
+     `work-item-page.md`. When one of these parts differs from the file,
+     change nothing and tell him in one line what differs.
+
+   Do the same for the
    columns of the template's Tasks view (file 22). Items made earlier keep
    their own Tasks view; turn its new columns on only when you next change
    that item. Items made
-   earlier keep their pages; add a missing section to one, and replace its
+   earlier keep their pages, and their Requirements section is never
+   rewritten (`update.md`, "The Requirements layout (toolkit 0.8.1)"); add
+   a missing section to one, and replace its
    Tasks guide paragraph, only when you next change that item.
 5. **The "Project" template** in the Projects database. Its data source id
    is on the "Projects database" line of the Notion block in `PROJECT.md`.
@@ -517,6 +545,13 @@ the templates are built.
     file, so he adds them again. When the owner already pasted his text
     into it, write nothing: compare its section headings with
     `work-item-page.md` and tell him which are missing.
+    The file leaves out one block the API cannot write: the "Embed
+    Github" block under "Linked Github PRs". Ask the owner to add it by
+    hand in the Notion app, under that section's prompt line, and wait
+    until he says it is done or says he does not want it. In an item, the
+    agent adds each pull request as a plain link under the heading (the
+    Notion `tracking-work-items` skill, `page-layout.md`, "Pull request
+    links").
 12. Its views. First, the owner may have pasted views in from another
     page; each keeps a filter that names that page. For each
     `<database …>` line in the template's text, read its view's filter
