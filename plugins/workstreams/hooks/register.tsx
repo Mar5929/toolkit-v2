@@ -1,7 +1,7 @@
 import { atom, read, update } from 'claude-code'
 import type { EngineInterface, Register } from 'claude-code'
 
-import type { Chat, ChatState, Stream, StreamStatus } from '../types'
+import type { Chat, ChatState, Hidden, Stream, StreamStatus } from '../types'
 
 const PANE = 'workstreams'
 const TITLE = 'Workstreams'
@@ -15,6 +15,8 @@ const MAX_STREAMS = 20
 const DONE_SHOWN = 5
 // How often an open panel reads the chats again, in milliseconds.
 const REFRESH = 10 * 1000
+// The project's file of dismissed cards, beside the chats' files.
+const HIDDEN_FILE = '_dismissed.json'
 
 const STATUSES: readonly StreamStatus[] = [
   'needs_owner',
@@ -36,16 +38,18 @@ const OWNER = ['composer', 'bridge', 'sdk']
 
 // What every chat reads once, at its start.
 const INSTRUCTION =
-  'Workstream panel: the owner follows the pieces of work across his chats in a side panel. ' +
-  'For work that takes more than one step, call mcp__workstreams__report (load it with ' +
-  'ToolSearch first if it is deferred) when you start it, when its status changes, before you ' +
-  'stop to wait for the owner, and when it is done. Skip questions and one-step requests. ' +
-  'Helper agents do not report. Give a short name (with the work item ID when there is one), ' +
-  'the status, and the next step in one short sentence. Report each piece of work separately. ' +
-  'Do not mention the report in your reply.'
+  'Workstream panel: the owner follows his significant pieces of work across his chats in a ' +
+  'side panel. A piece of work counts when it is a work item, or a large task the owner asked ' +
+  'for and is following. Call mcp__workstreams__report (load it with ToolSearch first if it is ' +
+  'deferred) when you start one, when its status changes, before you stop to wait for the ' +
+  'owner, and when it is done. Do not report the steps inside a piece of work, questions, or ' +
+  'small chores. Helper agents do not report. Give a short name (with the work item ID when ' +
+  'there is one), the status, and the next step in one short sentence. Report each piece of ' +
+  'work separately. Do not mention the report in your reply.'
 
 const board = atom({ plugin: 'workstreams', key: 'board' } as const, {
   chats: [],
+  hidden: { streams: {}, chats: {} },
   note: '',
   here: '',
   at: 0,
@@ -151,6 +155,15 @@ const nameOf = async ($: EngineInterface, config: string, chat: Chat) => {
   return chat.name || 'Unnamed chat'
 }
 
+// The project's file of dismissed cards; empty when there is none yet.
+const readHidden = async ($: EngineInterface, folder: string): Promise<Hidden> => {
+  const kept = await $.fs
+    .read(`${folder}/${HIDDEN_FILE}`)
+    .then(JSON.parse, () => undefined)
+
+  return { streams: { ...kept?.streams }, chats: { ...kept?.chats } }
+}
+
 // Reads the record of every chat in this project.
 const load = async ($: EngineInterface) => {
   try {
@@ -158,9 +171,15 @@ const load = async ($: EngineInterface) => {
     const folder = `${config}/workstreams/${projectOf(await chatDir($))}`
     const at = await $.clock.now()
     const here = await $.session.id()
+    const hidden = await readHidden($, folder)
     const files = await $.fs.list(folder).catch(() => [])
     const recent = files
-      .filter(file => file.name.endsWith('.json') && at - file.mtimeMs < KEEP)
+      .filter(
+        file =>
+          file.name.endsWith('.json') &&
+          file.name !== HIDDEN_FILE &&
+          at - file.mtimeMs < KEEP,
+      )
       .sort((a, b) => b.mtimeMs - a.mtimeMs)
       .slice(0, MAX_CHATS)
     const chats: Chat[] = []
@@ -177,10 +196,27 @@ const load = async ($: EngineInterface) => {
       }
     }
 
-    await update($, board, () => ({ chats, note: '', here, at }))
+    await update($, board, () => ({ chats, hidden, note: '', here, at }))
   } catch {
     await update($, board, now => ({ ...now, note: 'Could not read the chats.' }))
   }
+}
+
+// Hides one card for every chat's panel: a piece of work by its name, or a
+// chat by its id. The card shows again when the work is reported again, or
+// when the owner writes to the chat again.
+const dismiss = async ($: EngineInterface, kind: keyof Hidden, key: string) => {
+  try {
+    const config = await configDir($)
+    const folder = `${config}/workstreams/${projectOf(await chatDir($))}`
+    const hidden = await readHidden($, folder)
+    hidden[kind][key] = await $.clock.now()
+    await $.fs.write(`${folder}/${HIDDEN_FILE}`, JSON.stringify(hidden))
+  } catch {
+    // The card stays; the owner can press again.
+  }
+
+  await load($)
 }
 
 const loadIfShown = async ($: EngineInterface) => {
@@ -197,9 +233,10 @@ export const register: Register = on => {
     await $.tool.register({
       name: 'report',
       description:
-        'Reports one piece of work this chat is doing to the workstream panel the owner reads. ' +
-        'Call it when work of more than one step starts, when its status changes, before ' +
-        'stopping to wait for the owner, and when it is done.',
+        'Reports one significant piece of work this chat is doing (a work item, or a large task ' +
+        'the owner asked for and is following) to the workstream panel the owner reads. Call it ' +
+        'when the work starts, when its status changes, before stopping to wait for the owner, ' +
+        'and when it is done. Not for the steps inside it or for small chores.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -265,10 +302,12 @@ export const register: Register = on => {
     const said = e.text.trim()
 
     if (said !== '' && !said.startsWith('/') && OWNER.includes(e.origin?.kind ?? '')) {
+      const active = await $.clock.now()
       await change($, chat => ({
         ...chat,
         asked: said.slice(0, 120),
         name: chat.name || said.slice(0, 40),
+        active,
       }))
     }
 
@@ -315,6 +354,7 @@ export const register: Register = on => {
     }
     await change($, chat => ({
       ...chat,
+      active: at,
       streams: [
         ...chat.streams.filter(
           one =>
@@ -369,12 +409,17 @@ export const register: Register = on => {
 
   on('ui.render', { component: 'Pane', requestId: PANE }, async ($, e) => {
     const { Box, Button, Text } = $.ui.resolve(e)
-    const { chats, note, here, at } = await read($, board)
+    const { chats: saved, hidden, note, here, at } = await read($, board)
     const shownName = (chat: Chat) =>
       chat.id === here ? `${chat.name} (this chat)` : chat.name
+    // A dismissed chat stays out until the owner writes to it, or it reports
+    // work, again. Its pieces of work go with it.
+    const chats = saved.filter(
+      chat => (hidden.chats[chat.id] ?? 0) < (chat.active ?? chat.at),
+    )
 
     // One entry per piece of work: the newest report, and every chat on it.
-    const works = new Map<string, { stream: Stream; chats: Chat[] }>()
+    const works = new Map<string, { key: string; stream: Stream; chats: Chat[] }>()
 
     for (const chat of chats) {
       for (const stream of chat.streams) {
@@ -382,17 +427,21 @@ export const register: Register = on => {
         const held = works.get(key)
 
         works.set(key, {
+          key,
           stream: held && held.stream.at > stream.at ? held.stream : stream,
           chats: [...(held?.chats ?? []), chat],
         })
       }
     }
 
-    const all = [...works.values()].sort(
-      (a, b) =>
-        STATUSES.indexOf(a.stream.status) - STATUSES.indexOf(b.stream.status) ||
-        b.stream.at - a.stream.at,
-    )
+    // A dismissed piece of work stays out until it is reported again.
+    const all = [...works.values()]
+      .filter(work => (hidden.streams[work.key] ?? 0) < work.stream.at)
+      .sort(
+        (a, b) =>
+          STATUSES.indexOf(a.stream.status) - STATUSES.indexOf(b.stream.status) ||
+          b.stream.at - a.stream.at,
+      )
     const open = all.filter(work => work.stream.status !== 'done')
     const done = all
       .filter(work => work.stream.status === 'done' && at - work.stream.at < DAY)
@@ -440,7 +489,7 @@ export const register: Register = on => {
             next message.
           </Text>
         )}
-        {open.map(work => (
+        {open.map((work, index) => (
           <Box
             flexDirection="column"
             borderStyle="round"
@@ -460,11 +509,19 @@ export const register: Register = on => {
             {work.stream.next !== '' && (
               <Text wrap="wrap">Next: {work.stream.next}</Text>
             )}
+            <Box>
+              <Button
+                key={`dismiss-work-${index}`}
+                label="Dismiss"
+                dimColor
+                onPress={() => dismiss($, 'streams', work.key)}
+              />
+            </Box>
           </Box>
         ))}
 
         {heading(`Chats (${active.length})`)}
-        {active.map(chat => (
+        {active.map((chat, index) => (
           <Box
             flexDirection="column"
             borderStyle="round"
@@ -485,6 +542,14 @@ export const register: Register = on => {
             {chat.helpers.length > 0 && (
               <Text dimColor>Helper agents running: {chat.helpers.length}</Text>
             )}
+            <Box>
+              <Button
+                key={`dismiss-chat-${index}`}
+                label="Dismiss"
+                dimColor
+                onPress={() => dismiss($, 'chats', chat.id)}
+              />
+            </Box>
           </Box>
         ))}
 

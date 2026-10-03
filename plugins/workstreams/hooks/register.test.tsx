@@ -287,3 +287,84 @@ test('uses the folder Claude Code keeps the chat in, once it is known', async ($
 
   expect(disk.has('/Users/me/.claude/workstreams/-Users-me-other/here.json')).toBe(true)
 })
+
+test('dismisses a piece of work until it is reported again', async ($, on) => {
+  const report = (status: Stream['status'], at: number) =>
+    chatFiles('aaa', 'Main Orchestrator', {
+      streams: [stream('Fix login', status, 'Mike approves.', at)],
+    })
+  const disk = world(on, report('needs_owner', NOW - MINUTE))
+
+  await $.command.run({ command: 'streams' })
+
+  for (const surface of ['terminal', 'desktop'] as const) {
+    const ui = await $.ui.mount({ ...PANE, surface })
+    expect(await ui.find({ type: 'Text', text: /^Fix login$/ })).toBeDefined()
+
+    await ui.press({ key: 'dismiss-work-0' })
+    expect(await ui.find({ type: 'Text', text: /^Fix login$/ })).toBeUndefined()
+    // The chat's own card stays.
+    expect(await ui.find({ type: 'Text', text: /^Main Orchestrator$/ })).toBeDefined()
+    expect(JSON.parse(disk.get(`${SHARED}/_dismissed.json`) ?? '{}')).toMatchObject({
+      streams: { 'fix login': NOW },
+    })
+
+    // The chat reports the work again: its card is back.
+    for (const [path, text] of Object.entries(report('blocked', NOW + MINUTE))) {
+      disk.set(path, text)
+    }
+
+    await ui.press({ key: 'refresh' })
+    expect(await ui.find({ type: 'Text', text: /^Fix login$/ })).toBeDefined()
+
+    // Put the disk back for the next surface.
+    disk.delete(`${SHARED}/_dismissed.json`)
+    for (const [path, text] of Object.entries(report('needs_owner', NOW - MINUTE))) {
+      disk.set(path, text)
+    }
+
+    await ui.press({ key: 'refresh' })
+    await ui.unmount()
+  }
+})
+
+test('dismisses a chat and its work until the owner writes to it again', async ($, on) => {
+  const old = (at: number, active: number) =>
+    chatFiles('aaa', 'Old chat', {
+      at,
+      active,
+      streams: [stream('Old work', 'in_progress', 'Next.', NOW - MINUTE)],
+    })
+  const disk = world(on, {
+    ...old(NOW - MINUTE, NOW - MINUTE),
+    ...chatFiles('bbb', 'Live chat', {
+      active: NOW,
+      streams: [stream('Live work', 'in_progress', 'Next.')],
+    }),
+  })
+  const put = (files: Record<string, string>) => {
+    for (const [path, text] of Object.entries(files)) {
+      disk.set(path, text)
+    }
+  }
+
+  await $.command.run({ command: 'streams' })
+  const ui = await $.ui.mount({ ...PANE, surface: 'terminal' })
+
+  // The newest chat is first, so the old chat is the second card.
+  await ui.press({ key: 'dismiss-chat-1' })
+  expect(await ui.find({ type: 'Text', text: /^Old chat$/ })).toBeUndefined()
+  expect(await ui.find({ type: 'Text', text: /^Old work$/ })).toBeUndefined()
+  expect(await ui.find({ type: 'Text', text: /^Live work$/ })).toBeDefined()
+
+  // The chat closing saves its record again: it stays dismissed.
+  put(old(NOW + MINUTE, NOW - MINUTE))
+  await ui.press({ key: 'refresh' })
+  expect(await ui.find({ type: 'Text', text: /^Old chat$/ })).toBeUndefined()
+
+  // The owner writes to the chat again: it is back, with its work.
+  put(old(NOW + MINUTE, NOW + MINUTE))
+  await ui.press({ key: 'refresh' })
+  expect(await ui.find({ type: 'Text', text: /^Old chat$/ })).toBeDefined()
+  expect(await ui.find({ type: 'Text', text: /^Old work$/ })).toBeDefined()
+})

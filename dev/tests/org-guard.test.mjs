@@ -150,6 +150,9 @@ const OTHER_COMMANDS = [
   ['sf data query -q "SELECT Id FROM Account" -o acme-prod', 'allow', 'allow'],
   ['sf project retrieve start -m ApexClass -o acme-prod', 'allow', 'allow'],
   ['sf deploy metadata report -o acme-prod', 'allow', 'allow'],
+  // Not decided yet (an open question for the owner): Flow tests and agent tests are not checked.
+  ['sf flow run test -o acme-prod', 'allow', 'allow'],
+  ['sf agent test run -o acme-prod', 'allow', 'allow'],
   ['git status --short', 'allow', 'allow'],
 ];
 
@@ -161,6 +164,7 @@ test('every other command gets the decision it got before', () => {
 });
 
 test('the guard called only the stand-in sf, and only for the two org lookups', () => {
+  guard('sf apex run test', { defaultOrg: 'acme-uat' }); // makes both lookups, so this test also passes alone
   const made = [...new Set(readFileSync(calls, 'utf8').trim().split('\n'))].sort();
   assert.deepEqual(made, LOOKUPS);
 });

@@ -13,11 +13,16 @@ starting TKV, are in the Work Items data source
 
 Toolkit V2 is rules, skills, and three small hooks. There is no custom
 program (Mike, 2026-09-29). It ships as one plugin, `toolkit`, for Claude Code
-and Codex, with one skill, `project-setup`. That skill sets up a project by
+and Codex. Its main skill is `project-setup`. That skill sets up a project by
 copying files: the model project, the skills for the owner's choices, the
 three hook commands, and the settings. Each tool is used its own way: plain
 files and Obsidian, Notion through `ntn` or the Notion connector, GitHub
 through `gh`, and Hindsight through its own MCP tools.
+
+The `toolkit` plugin holds one more skill, `choosing-outside-tools` (Mike,
+2026-10-03, work item TKV-18): the list of the outside tool he uses for each
+kind of job, such as explainroo for explainer videos. It is text only. The
+toolkit ships none of those tools.
 
 One exception (Mike, 2026-10-03): a second plugin, `workstreams`, for Claude
 Code only. It is a mod: code that runs inside Claude Code and draws a side
@@ -54,6 +59,7 @@ chat handling each one, and each chat's state. It uses no Notion. See
 | `plugins/toolkit/.claude-plugin/plugin.json` | The Claude Code manifest. |
 | `plugins/toolkit/.codex-plugin/plugin.json` | The Codex manifest: the same `name` and `version`, `"skills": "./skills/"`, and an `interface` block. |
 | `<setup>SKILL.md`, `<setup>references/` | Onboarding, "check the setup", "update the toolkit", and the move-over for a project set up with the older toolkit or by hand (`references/move-over.md`, `references/old-toolkit-pieces.md`). |
+| `plugins/toolkit/skills/choosing-outside-tools/` | The owner's tool list: `SKILL.md` holds one row per job, and `references/` holds one file per tool (where it comes from, how to set it up, and the owner's choices). Never copied into a project. |
 | `<setup>assets/model/` | The model project: the source for every project file. Edited here directly (see "The model project and its copy"). |
 | `<setup>assets/.shared-skills/<name>/` | The 9 skills every project gets. |
 | `<setup>assets/.skill-sets/<set>/<name>/` | The skills for each choice. Work tracking: `local-work`, `notion-work`, or `github-work`, each holding one skill, `tracking-work-items`. Memory (local or Notion): `memory-process`, holding `managing-project-memory` (the process), plus `local-memory` or `notion-memory`, each holding its own `storing-project-memory` (storage only). `notion-tools`, holding `using-notion-cli`, goes to every project with work items or memory in Notion. |
@@ -67,6 +73,7 @@ chat handling each one, and each chat's state. It uses no Notion. See
 | `dev/tools/check-rules.mjs` | Checks the model's rule files against Claude Code's guidance for rules (`dev/research/rules-best-practices.md`). |
 | `dev/tools/rule-lint.mjs` | The checks `check-rules.mjs` runs, and the `AGENTS.md` rules list the rule files give. Dev only: nothing under `plugins/` imports it. |
 | `dev/tests/hooks.test.mjs` | Tests the three hook commands and the settings snippets in scratch folders. |
+| `dev/tests/org-guard.test.mjs` | Tests the model's Salesforce org guard, `guard-protected-orgs.cjs`, with the model's `protected-orgs.json`, in a scratch folder with a stand-in `sf`. No org is reached. |
 | `.claude/settings.json` | Settings for sessions working on this repository. `claudeMdExcludes` stops the model copy's `CLAUDE.md`, `AGENTS.md` files, and rules from loading as instructions here: they are for projects, not for this repository. |
 
 What a project gets from onboarding:
@@ -126,7 +133,8 @@ node --test 'dev/tests/*.test.mjs'
   Claude Code will and lists what it hooks and calls. `claude plugin test`
   runs `hooks/register.test.tsx` without a session, on the terminal and the
   desktop app.
-- `check-skills.mjs` checks project-setup and every skill under it: only
+- `check-skills.mjs` checks project-setup, every skill under it, and the
+  plugin's other skills (`choosing-outside-tools`): only
   `name` and `description` in the frontmatter, `name` equal to the folder
   and in the allowed form, the description's shape and its row in
   `dev/SKILL-INDEX.md`, a `SKILL.md` body under 500 lines, every file
@@ -170,16 +178,21 @@ node --test 'dev/tests/*.test.mjs'
   The one other piece of code the toolkit ships. The first version (TKV-12)
   listed Notion work items. Mike had it rebuilt the same day (TKV-14) so it
   works in every project with no Notion: he was told about 450 lines, and it
-  is about 540 lines (`register.tsx`, `types/index.d.ts`) plus about 290
-  lines of tests. Tell him the size again before it grows.
+  was about 540 lines (`register.tsx`, `types/index.d.ts`) plus about 290
+  lines of tests. With the Dismiss buttons (his yes, 2026-10-03, told about
+  45 more lines) it is about 620 lines plus about 370 lines of tests. Tell
+  him the size again before it grows.
   - It is installed once per computer in Claude Code. Nothing of it is copied
     into a project, so the code limit for projects stands.
   - Each chat reports its own work. The plugin gives the agent one tool,
     `mcp__workstreams__report`, and one short instruction at the start of
     each chat. The agent sends a name, a status, and the next step. This
     costs a few tokens per report, plus the instruction and the tool's
-    listing in every chat. The instruction tells the agent to skip questions
-    and one-step requests, and a helper agent's report is not saved.
+    listing in every chat. A piece of work is Mike's "workstream" (his words,
+    2026-10-03: "a significant piece of work ... a work item or some large
+    task that I'm tracking"). The instruction tells the agent to report only
+    those, never the steps inside one, a question, or a small chore. One chat
+    may report several, and a helper agent's report is not saved.
   - The plugin also notes, at no token cost, whether each chat is working,
     asking Mike a question, or stopped, his last message to it, and how many
     helper agents it runs.
@@ -194,6 +207,12 @@ node --test 'dev/tests/*.test.mjs'
     `~/.claude/projects/<folder>/<chat id>/custom-title.json` each time, so a
     chat renamed in the sidebar shows its new name. A chat named "Main
     Orchestrator" is listed first.
+  - The panel is not told when Mike archives a chat, so each card has a
+    Dismiss button. The dismissed cards are in one file for the project,
+    `_dismissed.json`, beside the chats' files, so every chat's panel hides
+    them. A dismissed piece of work shows again when it is reported again. A
+    dismissed chat, with its work, shows again when Mike writes to it or it
+    reports work.
   - It writes only its own files under `~/.claude/workstreams/`. It never
     writes to a project, to Notion, or to a chat file, and it runs no other
     program.
@@ -266,6 +285,11 @@ node --test 'dev/tests/*.test.mjs'
   Code and Codex pages, out of the box, and nothing Mike must remember
   (Mike, 2026-09-30). Every workflow that edits skill text includes these
   steps.
+- **The tool list** (`choosing-outside-tools`). A row holds a tool Mike
+  chose; never add one he has not chosen. A new tool is one row in its
+  `SKILL.md` and one file in its `references/`. When the new kind of job is
+  not named in the description, add it there and in `dev/SKILL-INDEX.md`,
+  then run the routing test again.
 - **Adding, renaming, or removing a skill** changes its folder,
   `dev/SKILL-INDEX.md`, `<setup>references/skills-hooks-settings.md`,
   `README.md`, and the routing lines in the model's `AGENTS.md`. The last one
@@ -302,9 +326,11 @@ node --test 'dev/tests/*.test.mjs'
     when the owner says "update the toolkit" in each project.
   - Each install command changes Mike's own setup, so ask him first.
 - **Machine-wide plugin** (Mike, 2026-09-28, and draft 2): `toolkit` is on
-  for every folder in both hosts. It holds only `project-setup` and no hooks,
-  so "set up this project" works in an empty folder and nothing runs in
-  other projects. `workstreams` is on for every folder in Claude Code only,
+  for every folder in both hosts. It holds `project-setup` and
+  `choosing-outside-tools`, and no hooks, so "set up this project" works in
+  an empty folder, the tool list is on every computer, and nothing runs in
+  other projects. A third skill in this plugin needs Mike's yes first: every
+  chat in both hosts reads each one's description. `workstreams` is on for every folder in Claude Code only,
   and its hooks run there ("Workstreams plugin" above says what they do).
 - **Rule files** live in the model and follow
   `dev/research/rules-best-practices.md` Part 1: one topic per file, a `# `

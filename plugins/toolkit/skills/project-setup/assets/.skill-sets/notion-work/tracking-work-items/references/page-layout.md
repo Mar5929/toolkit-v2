@@ -52,7 +52,8 @@ Related items is the paragraph just below it.
 - Read the page text, then change it with `update_content` (`using-notion-cli`, "Reading and changing page text").
 - Keep every heading, label, and view line.
 - Only Overview, Recent History, Requirements, Questions and Answers, Notes, and Linked Github PRs are text. Never change the text of Roadmap, Sub-items, Tasks, or Linked memory.
-- To delete lines, send them in `old_str` together with one neighbouring line that stays, and send only that neighbouring line as `new_str`.
+- To delete lines, send them in `old_str` together with one neighbouring line that stays, and send only that neighbouring line as `new_str`. For the two example rows of Questions and Answers, the neighbouring line is the `</table>` line under them.
+- After a call that deletes lines, read the page again and compare it with the text you read before the call: every line you did not delete or change must still be there. Write a lost heading or paragraph again from the earlier text. When a `<database …>`, `<page …>`, or `<unknown …>` line is lost, stop and tell the owner which line is lost: it cannot be put back as text.
 - A page that holds the "Embed Github" block ("Pull request links" below) answers reads and writes of its text with `truncated: true` and the embed's block id in `unknown_block_ids`. When `unknown_block_ids` holds only that block's id, this needs no action.
 
 ## Filling a new item

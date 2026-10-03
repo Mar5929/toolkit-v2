@@ -164,8 +164,8 @@ const GUARDED = [
   ['apex', ['apex:run', 'force:apex:execute']],
   // An Apex test run is not a read: it runs Apex code in the target org. The
   // safety rule forbids it in production and allows it on a sandbox with no
-  // yes, so it has its own category. `sf logic run test` runs Apex tests under
-  // another name (checked against sf 2.142.7). `sf apex get test` only reads.
+  // yes, so it has its own category. `sf logic run test` runs Apex and Flow
+  // tests (checked against sf 2.142.7). `sf apex get test` only reads.
   ['apexTest', ['apex:run:test', 'force:apex:test:run', 'logic:run:test']],
   ['metadataDelete', ['project:delete:source', 'force:source:delete']],
 ];
