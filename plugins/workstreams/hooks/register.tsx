@@ -36,13 +36,14 @@ const OWNER = ['composer', 'bridge', 'sdk']
 
 // What every chat reads once, at its start.
 const INSTRUCTION =
-  'Workstream panel: the owner follows the pieces of work across his chats in a side panel. ' +
-  'For work that takes more than one step, call mcp__workstreams__report (load it with ' +
-  'ToolSearch first if it is deferred) when you start it, when its status changes, before you ' +
-  'stop to wait for the owner, and when it is done. Skip questions and one-step requests. ' +
-  'Helper agents do not report. Give a short name (with the work item ID when there is one), ' +
-  'the status, and the next step in one short sentence. Report each piece of work separately. ' +
-  'Do not mention the report in your reply.'
+  'Workstream panel: the owner follows his significant pieces of work across his chats in a ' +
+  'side panel. A piece of work counts when it is a work item, or a large task the owner asked ' +
+  'for and is following. Call mcp__workstreams__report (load it with ToolSearch first if it is ' +
+  'deferred) when you start one, when its status changes, before you stop to wait for the ' +
+  'owner, and when it is done. Do not report the steps inside a piece of work, questions, or ' +
+  'small chores. Helper agents do not report. Give a short name (with the work item ID when ' +
+  'there is one), the status, and the next step in one short sentence. Report each piece of ' +
+  'work separately. Do not mention the report in your reply.'
 
 const board = atom({ plugin: 'workstreams', key: 'board' } as const, {
   chats: [],
@@ -197,9 +198,10 @@ export const register: Register = on => {
     await $.tool.register({
       name: 'report',
       description:
-        'Reports one piece of work this chat is doing to the workstream panel the owner reads. ' +
-        'Call it when work of more than one step starts, when its status changes, before ' +
-        'stopping to wait for the owner, and when it is done.',
+        'Reports one significant piece of work this chat is doing (a work item, or a large task ' +
+        'the owner asked for and is following) to the workstream panel the owner reads. Call it ' +
+        'when the work starts, when its status changes, before stopping to wait for the owner, ' +
+        'and when it is done. Not for the steps inside it or for small chores.',
       inputSchema: {
         type: 'object',
         properties: {

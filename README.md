@@ -49,8 +49,10 @@ that project and what each one is working on. It needs no Notion.
 - Each chat's agent reports its own work with a small tool the plugin gives
   it. That costs a few tokens per report, plus one short instruction at the
   start of each chat. Opening and refreshing the panel costs none.
-- The agent reports work that takes more than one step. A chat you only
-  asked a quick question shows as a chat, with no piece of work.
+- The agent reports only a significant piece of work: a work item, or a
+  large task you asked for and are following. It does not report the steps
+  inside one, a quick question, or a small chore. A chat with nothing to
+  report still shows as a chat. One chat can show several pieces of work.
 - A chat renamed in the sidebar shows its new name in the panel.
 - A chat appears after its next message once the plugin is installed. A chat
   in a worktree under the project's `.claude/worktrees/` folder counts as
