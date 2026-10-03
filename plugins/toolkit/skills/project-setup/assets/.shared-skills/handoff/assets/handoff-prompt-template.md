@@ -16,7 +16,7 @@ This handoff prompt is AI-generated and may contain hallucinations, skewed conte
 
 ## Decisions not yet saved
 
-- <A decision nobody saved, with its source ("owner, this session" or "worked out, this session") and "saved nowhere; not confirmed". Include every memory save the owner declined or cut in `SKILL.md` step 3, unless he asked not to keep it. Use your judgment: give the reason for a decision when, without it, the next session could reverse or redo the decision. Write "None." when nothing is left unsaved.>
+- <A decision nobody saved, with its source ("owner, this session" or "worked out, this session") and "saved nowhere; not confirmed". Include each save question from `SKILL.md` step 3 that the owner has not answered. Leave out a save he said no to. Use your judgment: give the reason for a decision when, without it, the next session could reverse or redo the decision. Write "None." when nothing is left unsaved.>
 
 ## Open questions
 

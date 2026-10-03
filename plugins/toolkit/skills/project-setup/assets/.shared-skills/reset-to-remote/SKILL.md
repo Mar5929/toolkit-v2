@@ -5,16 +5,22 @@ description: 'Makes the local repository an exact copy of its remote, discarding
 
 # Reset to remote
 
-Make a local repository an exact copy of its remote: the safe equivalent of
-deleting the folder and cloning again, without losing remote-tracking refs or
-local tool setup. It discards local commits on branches that have an upstream
-and deletes branches whose remote branch is gone.
+Make a local repository an exact copy of its remote: discard local commits
+on branches that have an upstream, and delete branches whose remote branch
+is gone. Discard nothing the owner did not see in the plan and say yes to,
+and never touch another session's work.
+
+The reset happens in the main checkout (the first path `git worktree list`
+prints). Run every Git command below as `git -C <main checkout> ...`: from
+another worktree, Git refuses to check out or reset a branch the main
+checkout holds. Every other worktree is one of the "other worktrees" in
+step 2, this session's own too when it is not the main checkout.
 
 ## Steps
 
 1. **Run only on the owner's own words** asking for a destructive reset.
-   Even when he says "just do it",
-   change nothing until he says yes to the step 4 plan.
+   Even when he says "just do it", change nothing until he says yes to the
+   step 4 plan.
 2. **Stop when work is at risk.** Run each on its own: `git remote -v`,
    `git status --porcelain`, `git stash list`, `git worktree list --porcelain`.
    - No remote: nothing to reset to; never fetch. No `origin` (for example it
@@ -58,10 +64,11 @@ and deletes branches whose remote branch is gone.
    `git reset --hard <upstream>` for the current branch,
    `git branch -f <branch> <upstream>` for each other branch to reset, and
    `git branch -D <branch>` for each branch to delete. Then run the installer
-   for the lockfile in the repository root (`pnpm-lock.yaml`: `pnpm install`;
-   `package-lock.json`: `npm install`; `yarn.lock`: `yarn install`;
-   `bun.lockb` or `bun.lock`: `bun install`); skip it with no lockfile, and
-   ask which package manager when there are several.
+   for the lockfile in the main checkout's root folder, from that folder
+   (`pnpm-lock.yaml`: `pnpm install`; `package-lock.json`: `npm install`;
+   `yarn.lock`: `yarn install`; `bun.lockb` or `bun.lock`: `bun install`);
+   skip it with no lockfile, and ask which package manager when there are
+   several.
 6. **Report** the default branch and its new head commit, the branches reset,
    deleted, and kept, the commits discarded (short id and subject), and
    whether the install ran and changed anything. End with the one question the
@@ -80,17 +87,21 @@ and deletes branches whose remote branch is gone.
   share. No other worktree exists." or "This switches branches and resets them
   in the project folder that other sessions share. You confirmed no other
   session is working here."
+- Git refuses to delete a branch that another worktree has checked out. Tell
+  the owner, and leave the branch and the worktree as they are. Never remove
+  a worktree to get past the refusal.
 - `work-items/`, `memory/`, and `.obsidian/` are Git-ignored, so the reset
   leaves them as they are. Never run `git clean` with `-x` or `-X`: it deletes
   them, and Git cannot bring them back.
 - Never run `git pull`, never use `--force` on `git fetch`, and never push.
 - In Claude Code the project's settings ask the owner before every
   `git reset --hard` and every `git clean`. That prompt is expected.
-- Codex keeps `.git/` read-only and turns the network off. Each Git write, the
-  `gh pr list` check, and the lockfile install run alone, outside the sandbox
+- In Codex the sandbox keeps `.git/` read-only and blocks the network. Run
+  each Git write and each network call (the `gh pr list` check and the
+  lockfile install included) alone, with escalated permissions
   (`sandbox_permissions` set to `require_escalated`, with a one-line reason).
-  If Codex refuses without asking, show the owner the exact commands and ask
-  him to run them.
+  When Codex refuses without asking, show the owner the exact command and
+  ask him to run it.
 
 ## Hand-offs
 

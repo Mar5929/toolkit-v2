@@ -30,8 +30,8 @@ Rewrite something as short bullets the owner can read once and act on.
 
 - Name the thing itself. "Option B" or "risk 1" alone means nothing to
   someone reading once.
-- A technical name keeps its exact spelling, plus four plain words saying what
-  it is.
+- A technical name keeps its exact spelling, plus up to four plain words
+  saying what it is.
 - No em dashes. No section signs; write "section 7".
 
 ## Example shape

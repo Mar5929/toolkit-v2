@@ -24,9 +24,8 @@ line and ask for it.
 6. **A correction** gets a playback of only the corrected part, in one or two
    lines, then ask again.
 7. **After a yes**, the playback is the agreed scope; ask before doing work
-   outside it. Then open the skill the project's `AGENTS.md` names for that
-   work (Claude Code: the Skill tool; Codex: read its `SKILL.md`). A clear
-   change to build needs no skill.
+   outside it. Then use the skill the project's `AGENTS.md` names for that
+   work.
 
 Every number, name, file path, and system the dump mentioned stays in the
 playback.

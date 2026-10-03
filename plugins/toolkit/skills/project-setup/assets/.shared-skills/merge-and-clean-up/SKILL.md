@@ -6,15 +6,15 @@ description: 'Merges one approved GitHub pull request, then removes only its bra
 # Merge and clean up
 
 Merge one exact pull request, confirm GitHub reports it merged, then remove
-only its worktree and branches. Run each command on its own. Ask which pull
-request when more than one could match.
-Read the project's `AGENTS.md` and `.claude/rules/` first: they decide required
-checks, merge method, and who may merge.
+only its worktree and branches. Merge only the head commit that was checked
+and approved, and never stash, reset, switch, or discard another session's
+work. Run each command on its own. Ask which pull request when more than one
+could match.
 
 ## Step 1: resolve the exact pull request
 
 ```text
-gh pr view --json number,url,state,headRefName,headRefOid,baseRefName,isCrossRepository,title,body
+gh pr view --json number,url,state,headRefName,headRefOid,baseRefName,isCrossRepository,title,body,commits
 git worktree list --porcelain
 ```
 
@@ -37,12 +37,12 @@ Neither of these: stop and ask.
   up" counts only when the pull request is clear from a number, a URL, or the
   current branch. A bare "yes" counts only when it answers a question about
   this merge. His result approval of a work item never covers the merge.
-- The standing merge instruction in `.claude/rules/owner-preferences.md`, only
-  when all three hold on this exact head commit: the independent checker
-  reported no blocking issue on it; every check passes on it; the work item
-  does not say its merge needs the owner's approval.
+- `managing-work-items` sent you here: it has already asked him, or checked
+  his standing merge instruction.
 
-When you came here from `managing-work-items`, it has already asked or checked.
+A standing merge instruction in `.claude/rules/owner-preferences.md` is
+applied only by `managing-work-items` (Deploying), which holds its
+conditions. Reached any other way, it does not count here: ask.
 
 ## Step 3: check the pull request on GitHub
 
@@ -59,8 +59,8 @@ match step 1.
   the head branch and commit match what you plan to remove.
 - Closed without merging, or a failed check: stop and report.
 - `gh pr checks` exits nonzero when no checks exist. That is not a failure.
-  Run any required local checks the project names, and say plainly when no
-  automated check exists.
+  Run the checks the project's `AGENTS.md` names under "Commands", and say
+  plainly when no automated check exists.
 - Pending checks: when the owner asked you to finish the merge, wait with
   `gh pr checks <number> --repo <owner/repo> --watch`, then run step 3 again.
   Otherwise stop and tell him which are running.
@@ -87,19 +87,35 @@ to commit, stash, or wait. Never touch the main checkout's changes.
 
 ## Step 5: merge
 
+Use `--squash` unless the owner or the project's rules name another method
+(`--merge` or `--rebase`).
+
+The merge must put no AI credit on the base branch: no `Co-Authored-By:` line
+naming an AI and no "Generated with" line. Look for one in the title, the
+description, and each commit message that step 1 read:
+
+- In the title or description: remove it with
+  `gh pr edit <number> --repo <owner/repo>` and `--title` or `--body-file`.
+- In a commit message, with `--squash`: GitHub writes the new commit's
+  message from the commits' messages, so add
+  `--subject '<title> (#<number>)'` and
+  `--body '<what changed, in one or two plain sentences>'` to the merge
+  command. Never write a word that closes an issue or a work item in them.
+- In a commit message, with `--merge` or `--rebase`: the commits reach the
+  base branch as they are. Stop and tell the owner.
+
 ```text
 gh pr merge <number> --repo <owner/repo> --squash --delete-branch --match-head-commit <headRefOid>
 ```
 
-Use `--squash` unless the owner or the project's rules name another method
-(`--merge` or `--rebase`). Leave out `--delete-branch` for a fork. Never add
-an admin or protection-bypass flag. Never leave out `--match-head-commit` or
-fill it with a newer commit.
+Leave out `--delete-branch` for a fork. Never add an admin or
+protection-bypass flag. Never leave out `--match-head-commit` or fill it with
+a newer commit.
 
 - Refused because the head no longer matches: a new commit arrived. Stop,
   report it, and run steps 1 to 4 again on it. The owner's yes covers only
-  the head he was shown, so ask again unless the standing instruction's three
-  conditions hold on the new head.
+  the head he was shown, so ask again. From `managing-work-items`: go back to
+  its merge step with the new head.
 - Any other refusal: stop and tell the owner the error.
 
 Then run `gh pr view <number> --repo <owner/repo> --json state,mergeCommit,url`.
@@ -164,10 +180,11 @@ remains.
 
 ## Gotchas
 
-- Codex keeps `.git/` read-only and turns the network off. Every Git write and
-  every `gh` call runs alone, outside the sandbox (`sandbox_permissions` set
-  to `require_escalated`, with a one-line reason). If Codex refuses without
-  asking, show the owner the exact command and wait.
+- In Codex the sandbox keeps `.git/` read-only and blocks the network. Run
+  each Git write and each network call (every `gh` call included) alone,
+  with escalated permissions (`sandbox_permissions` set to
+  `require_escalated`, with a one-line reason). When Codex refuses without
+  asking, show the owner the exact command and ask him to run it.
 - No remote (`git remote` prints nothing): there is no pull request, so this
   skill does not apply. Never fetch. Tell the owner in one line.
 
@@ -178,6 +195,7 @@ remains.
 | The merge note on the work item, when the owner asked directly | `tracking-work-items` |
 | Changing the work item's State, or marking it Done | `managing-work-items` |
 | Shipping an approved work item | `managing-work-items` |
+| A merge under the standing merge instruction | `managing-work-items` |
 | No remote: the local merge | `managing-work-items` |
 
 ## References
