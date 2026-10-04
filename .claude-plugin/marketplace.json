@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Toolkit V2: the toolkit plugin, whose project-setup skill sets up and updates one solo developer's projects in Claude Code and Codex, and the workstreams plugin, a side panel for Claude Code that lists the work a project's chats are doing. The agent runs the project; the owner decides and steers.",
-    "version": "0.8.13"
+    "version": "0.8.14"
   },
   "plugins": [
     {

@@ -83,7 +83,7 @@ const world = (
 const saved = (disk: Map<string, string>, path = `${SHARED}/here.json`): Chat =>
   JSON.parse(disk.get(path) ?? '{}')
 
-test('shows each piece of work as a card with its chat, on each surface', async ($, on) => {
+test('shows one card per chat with its pieces of work inside, on each surface', async ($, on) => {
   const disk = world(on, {
     ...chatFiles('here', 'Panel work', {}),
     ...chatFiles('aaa', 'Main Orchestrator', {
@@ -108,19 +108,24 @@ test('shows each piece of work as a card with its chat, on each surface', async 
   for (const surface of ['terminal', 'desktop'] as const) {
     const ui = await $.ui.mount({ ...PANE, surface })
 
-    expect(await ui.find({ text: /^Workstreams \(2\)$/ })).toBeDefined()
-    // What needs the owner comes first.
-    const labels = await ui.findAll({ type: 'Text', text: /^ (NEEDS YOU|IN PROGRESS) $/ })
-    expect(labels.map(one => one.text)).toEqual([' NEEDS YOU ', ' IN PROGRESS '])
-    expect(await ui.find({ text: /^Chat: Main Orchestrator · stopped 4 min ago$/ })).toBeDefined()
-    expect(await ui.find({ text: /^Next: Mike approves the merge\.$/ })).toBeDefined()
-    expect(await ui.find({ text: /^Chat: Panel work \(this chat\) · stopped just now$/ })).toBeDefined()
-    // The chat named Main Orchestrator is the first chat.
-    const names = await ui.findAll({
+    expect(await ui.find({ type: 'Text', text: /^Chats \(2\) · Workstreams \(2\)$/ })).toBeDefined()
+    // Each chat's card holds the chat's name, then its pieces of work. The
+    // chat named Main Orchestrator is the first card.
+    const lines = await ui.findAll({
       type: 'Text',
-      text: /^(Main Orchestrator|Panel work \(this chat\))$/,
+      text: /^(Main Orchestrator|Panel work \(this chat\)|Fix login \(TKV-7\)|Build panel| NEEDS YOU | IN PROGRESS )$/,
     })
-    expect(names.map(one => one.text)).toEqual(['Main Orchestrator', 'Panel work (this chat)'])
+    expect(lines.map(one => one.text)).toEqual([
+      'Main Orchestrator',
+      ' NEEDS YOU ',
+      'Fix login (TKV-7)',
+      'Panel work (this chat)',
+      ' IN PROGRESS ',
+      'Build panel',
+    ])
+    expect(await ui.find({ text: /^Stopped 4 min ago$/ })).toBeDefined()
+    expect(await ui.find({ text: /^Next: Mike approves the merge\.$/ })).toBeDefined()
+    expect(await ui.find({ text: /^Next: Write the tests\.$/ })).toBeDefined()
     expect(await ui.find({ text: /^You: Should I land this\?$/ })).toBeDefined()
     expect(await ui.find({ text: /^Helper agents running: 2$/ })).toBeDefined()
     await ui.unmount()
@@ -133,10 +138,10 @@ test('says so when no chat has reported', async ($, on) => {
   await $.command.run({ command: 'streams' })
   const ui = await $.ui.mount({ ...PANE, surface: 'terminal' })
 
-  expect(await ui.find({ text: /No chat has reported a piece of work yet/ })).toBeDefined()
+  expect(await ui.find({ text: /No chat in this project has reported yet/ })).toBeDefined()
 })
 
-test('shows one card for work two chats report, and lists finished work', async ($, on) => {
+test('shows work two chats report in both cards, and lists finished work', async ($, on) => {
   world(on, {
     ...chatFiles('aaa', 'Main Orchestrator', {
       streams: [stream('Fix login', 'in_progress', 'Old step.', NOW - MINUTE)],
@@ -152,12 +157,53 @@ test('shows one card for work two chats report, and lists finished work', async 
   await $.command.run({ command: 'streams' })
   const ui = await $.ui.mount({ ...PANE, surface: 'terminal' })
 
-  expect(await ui.find({ text: /^Workstreams \(1\)$/ })).toBeDefined()
-  // The newest report gives the status and the next step.
-  expect(await ui.find({ text: /^ BLOCKED $/ })).toBeDefined()
+  expect(await ui.find({ type: 'Text', text: /^Chats \(2\) · Workstreams \(2\)$/ })).toBeDefined()
+  // Each chat's card shows the work as that chat reported it.
+  expect(await ui.find({ type: 'Text', text: /^ IN PROGRESS $/ })).toBeDefined()
+  expect(await ui.find({ type: 'Text', text: /^ BLOCKED $/ })).toBeDefined()
   expect(await ui.find({ text: /^Next: Waiting on the API key\.$/ })).toBeDefined()
-  expect(await ui.findAll({ type: 'Text', text: /^Chat: / })).toHaveLength(2)
   expect(await ui.find({ text: /^✓ Rename files · Login chat$/ })).toBeDefined()
+})
+
+test('moves a piece of work to the finished list when the owner presses Done', async ($, on) => {
+  const report = (at: number) =>
+    chatFiles('aaa', 'Main Orchestrator', {
+      streams: [stream('Fix login', 'needs_owner', 'Mike approves.', at)],
+    })
+  const disk = world(on, report(NOW - MINUTE))
+
+  await $.command.run({ command: 'streams' })
+
+  for (const surface of ['terminal', 'desktop'] as const) {
+    const ui = await $.ui.mount({ ...PANE, surface })
+    expect(await ui.find({ type: 'Text', text: /^Fix login$/ })).toBeDefined()
+
+    await ui.press({ key: 'done-0-0' })
+    expect(await ui.find({ type: 'Text', text: /^Fix login$/ })).toBeUndefined()
+    expect(await ui.find({ type: 'Text', text: /^Done today \(1\)$/ })).toBeDefined()
+    expect(await ui.find({ text: /^✓ Fix login · Main Orchestrator$/ })).toBeDefined()
+    expect(JSON.parse(disk.get(`${SHARED}/_dismissed.json`) ?? '{}')).toMatchObject({
+      done: { 'fix login': NOW },
+    })
+
+    // The chat reports the work again: it is open again, and not finished.
+    for (const [path, text] of Object.entries(report(NOW + MINUTE))) {
+      disk.set(path, text)
+    }
+
+    await ui.press({ key: 'refresh' })
+    expect(await ui.find({ type: 'Text', text: /^Fix login$/ })).toBeDefined()
+    expect(await ui.find({ text: /^✓ Fix login/ })).toBeUndefined()
+
+    // Put the disk back for the next surface.
+    disk.delete(`${SHARED}/_dismissed.json`)
+    for (const [path, text] of Object.entries(report(NOW - MINUTE))) {
+      disk.set(path, text)
+    }
+
+    await ui.press({ key: 'refresh' })
+    await ui.unmount()
+  }
 })
 
 test('follows what the chat is doing', async ($, on) => {
@@ -301,7 +347,7 @@ test('dismisses a piece of work until it is reported again', async ($, on) => {
     const ui = await $.ui.mount({ ...PANE, surface })
     expect(await ui.find({ type: 'Text', text: /^Fix login$/ })).toBeDefined()
 
-    await ui.press({ key: 'dismiss-work-0' })
+    await ui.press({ key: 'dismiss-0-0' })
     expect(await ui.find({ type: 'Text', text: /^Fix login$/ })).toBeUndefined()
     // The chat's own card stays.
     expect(await ui.find({ type: 'Text', text: /^Main Orchestrator$/ })).toBeDefined()

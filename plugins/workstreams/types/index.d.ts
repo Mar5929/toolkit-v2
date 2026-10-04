@@ -31,18 +31,22 @@ export type Chat = {
   streams: Stream[]
 }
 
-// The cards the owner dismissed, and when: pieces of work by their name in
-// lower case, and chats by their id. One file for the project holds it.
-export type Hidden = {
+// What the owner pressed in the panel, and when. A piece of work is named in
+// lower case; a chat is named by its id. One file for the project holds it.
+export type Marks = {
+  // Pieces of work the owner marked Done.
+  done: Record<string, number>
+  // Pieces of work the owner dismissed.
   streams: Record<string, number>
+  // Chats the owner dismissed.
   chats: Record<string, number>
 }
 
-// What the panel draws: the project's chats as last read, the dismissed
-// cards, the id of the chat the panel is in, and when the read happened.
+// What the panel draws: the project's chats as last read, the owner's marks,
+// the id of the chat the panel is in, and when the read happened.
 export type Board = {
   chats: Chat[]
-  hidden: Hidden
+  marks: Marks
   note: string
   here: string
   at: number
