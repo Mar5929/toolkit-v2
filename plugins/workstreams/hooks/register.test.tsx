@@ -90,44 +90,105 @@ test('shows one card per chat with its pieces of work inside, on each surface', 
       at: NOW - 4 * MINUTE,
       asked: 'Should I land this?',
       helpers: ['agent-1', 'agent-2'],
-      streams: [stream('Fix login (TKV-7)', 'needs_owner', 'Mike approves the merge.')],
+      streams: [
+        {
+          ...stream('Fix the login page', 'needs_owner', 'Mike approves the merge.'),
+          about: 'You asked for the login page to stop logging people out.',
+        },
+      ],
     }),
   })
 
   const answer = await $.tool.call({
     tool: 'mcp__workstreams__report',
-    name: 'Build panel',
+    name: 'Build the panel',
+    about: 'You asked for one place to see every chat and its work.',
     status: 'in_progress',
     next: 'Write the tests.',
   })
-  expect(answer.result).toBe('Saved: Build panel.')
-  expect(saved(disk).streams).toMatchObject([{ name: 'Build panel', status: 'in_progress' }])
+  expect(answer.result).toBe('Saved: Build the panel.')
+  // A later report keeps the reminder as first written.
+  await $.tool.call({
+    tool: 'mcp__workstreams__report',
+    name: 'Build the panel',
+    about: 'Another text.',
+    status: 'in_progress',
+    next: 'Write the tests.',
+  })
+  expect(saved(disk).streams).toMatchObject([
+    {
+      name: 'Build the panel',
+      about: 'You asked for one place to see every chat and its work.',
+      status: 'in_progress',
+    },
+  ])
 
   await $.command.run({ command: 'streams' })
 
   for (const surface of ['terminal', 'desktop'] as const) {
     const ui = await $.ui.mount({ ...PANE, surface })
 
-    expect(await ui.find({ type: 'Text', text: /^Chats \(2\) · Workstreams \(2\)$/ })).toBeDefined()
-    // Each chat's card holds the chat's name, then its pieces of work. The
-    // chat named Main Orchestrator is the first card.
+    expect(await ui.find({ type: 'Text', text: /^2 chats · 2 workstreams$/ })).toBeDefined()
+    // Each card names the chat, then lists its work: the name, then the About,
+    // Status, and Next lines. The chat named Main Orchestrator is first.
     const lines = await ui.findAll({
       type: 'Text',
-      text: /^(Main Orchestrator|Panel work \(this chat\)|Fix login \(TKV-7\)|Build panel| NEEDS YOU | IN PROGRESS )$/,
+      text: /^(Chat|Main Orchestrator|Panel work \(this chat\)|Workstreams \(1\)|Fix the login page|Build the panel|About|Status|Next| Needs you | In progress |You asked for .*|Mike approves the merge\.|Write the tests\.)$/,
     })
     expect(lines.map(one => one.text)).toEqual([
+      'Chat',
       'Main Orchestrator',
-      ' NEEDS YOU ',
-      'Fix login (TKV-7)',
+      'Workstreams (1)',
+      'Fix the login page',
+      'About',
+      'You asked for the login page to stop logging people out.',
+      'Status',
+      ' Needs you ',
+      'Next',
+      'Mike approves the merge.',
+      'Chat',
       'Panel work (this chat)',
-      ' IN PROGRESS ',
-      'Build panel',
+      'Workstreams (1)',
+      'Build the panel',
+      'About',
+      'You asked for one place to see every chat and its work.',
+      'Status',
+      ' In progress ',
+      'Next',
+      'Write the tests.',
     ])
     expect(await ui.find({ text: /^Stopped 4 min ago$/ })).toBeDefined()
-    expect(await ui.find({ text: /^Next: Mike approves the merge\.$/ })).toBeDefined()
-    expect(await ui.find({ text: /^Next: Write the tests\.$/ })).toBeDefined()
-    expect(await ui.find({ text: /^You: Should I land this\?$/ })).toBeDefined()
+    expect(await ui.find({ text: /^You said: Should I land this\?$/ })).toBeDefined()
     expect(await ui.find({ text: /^Helper agents running: 2$/ })).toBeDefined()
+    await ui.unmount()
+  }
+})
+
+test('folds and unfolds a chat card, and says what needs the owner when folded', async ($, on) => {
+  const disk = world(on, {
+    ...chatFiles('aaa', 'Main Orchestrator', {
+      streams: [
+        stream('Fix the login page', 'needs_owner', 'Mike approves.'),
+        stream('Rename the files', 'in_progress', 'The agent renames them.'),
+      ],
+    }),
+  })
+
+  await $.command.run({ command: 'streams' })
+
+  for (const surface of ['terminal', 'desktop'] as const) {
+    const ui = await $.ui.mount({ ...PANE, surface })
+    expect(await ui.find({ type: 'Text', text: /^Fix the login page$/ })).toBeDefined()
+
+    await ui.press({ key: 'fold-0' })
+    expect(await ui.find({ type: 'Text', text: /^Fix the login page$/ })).toBeUndefined()
+    expect(await ui.find({ type: 'Text', text: /^Workstreams \(2\) · 1 needs you$/ })).toBeDefined()
+    expect(await ui.find({ type: 'Text', text: /^Main Orchestrator$/ })).toBeDefined()
+    expect(JSON.parse(disk.get(`${SHARED}/_dismissed.json`) ?? '{}').folded.aaa).toBe(NOW)
+
+    await ui.press({ key: 'fold-0' })
+    expect(await ui.find({ type: 'Text', text: /^Fix the login page$/ })).toBeDefined()
+    expect(await ui.find({ type: 'Text', text: /^Workstreams \(2\)$/ })).toBeDefined()
     await ui.unmount()
   }
 })
@@ -157,11 +218,11 @@ test('shows work two chats report in both cards, and lists finished work', async
   await $.command.run({ command: 'streams' })
   const ui = await $.ui.mount({ ...PANE, surface: 'terminal' })
 
-  expect(await ui.find({ type: 'Text', text: /^Chats \(2\) · Workstreams \(2\)$/ })).toBeDefined()
+  expect(await ui.find({ type: 'Text', text: /^2 chats · 2 workstreams$/ })).toBeDefined()
   // Each chat's card shows the work as that chat reported it.
-  expect(await ui.find({ type: 'Text', text: /^ IN PROGRESS $/ })).toBeDefined()
-  expect(await ui.find({ type: 'Text', text: /^ BLOCKED $/ })).toBeDefined()
-  expect(await ui.find({ text: /^Next: Waiting on the API key\.$/ })).toBeDefined()
+  expect(await ui.find({ type: 'Text', text: /^ In progress $/ })).toBeDefined()
+  expect(await ui.find({ type: 'Text', text: /^ Blocked $/ })).toBeDefined()
+  expect(await ui.find({ type: 'Text', text: /^Waiting on the API key\.$/ })).toBeDefined()
   expect(await ui.find({ text: /^✓ Rename files · Login chat$/ })).toBeDefined()
 })
 
