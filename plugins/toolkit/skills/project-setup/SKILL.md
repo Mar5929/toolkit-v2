@@ -83,7 +83,9 @@ has a filled "Toolkit settings" section.
    `references/notion.md`, `references/github.md`.
 4. **Build the setup copy** in a scratch folder: the model, minus what the
    choices leave out, the setup markers resolved, the name and "Toolkit
-   settings" filled, the rules list written. `references/setup-copy.md`.
+   settings" filled, the rules list written. Include the model's
+   `project-wide-records/` for every tracker and memory choice.
+   `references/setup-copy.md`.
 5. **Add the skills, the three hook commands, and the settings** to the
    setup copy. `references/skills-hooks-settings.md`.
 6. **Put it into the project** and make the `.agents/skills` link. Never

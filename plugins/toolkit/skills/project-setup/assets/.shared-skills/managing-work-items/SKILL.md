@@ -1,6 +1,6 @@
 ---
 name: managing-work-items
-description: 'Runs every work item in this project from idea to Done: refining requirements by interview, designing, building, the testing loop, reflecting, and deploying, and stops for the owner''s OK at each approval point. Use this whenever the owner mentions a work item, a feature, a bug, a plan, requirements, a design, a build, testing, or shipping, even if he does not name this skill.'
+description: 'Runs a work item from idea to Done through requirements, design, build, testing, reflection, and deployment, keeping its tracker current and asking for the owner''s approval at each gate. Use when the owner asks to plan, change, build, test, or ship an item. When a source, question, or target direction affects other items, also use managing-project-wide-records.'
 ---
 
 # Managing work items
@@ -87,6 +87,7 @@ Start every helper as a new helper that does not see this conversation. Never a 
 | For | Use |
 | --- | --- |
 | Every read and every save of a work item, a project phase, or a project task | `tracking-work-items` |
+| A source, question, person, domain map, or target direction shared by several items | `managing-project-wide-records` |
 | Searching what the project already decided | `managing-project-memory` (Hindsight: `AGENTS.md`, "Project memory") |
 | Saving a decision that matters beyond this item | `managing-project-memory` (Hindsight: `AGENTS.md`, "Project memory") |
 | Updating the project's Current State | edit `memory/CURRENT_STATE.md` when the project has that file, otherwise `managing-project-memory` |

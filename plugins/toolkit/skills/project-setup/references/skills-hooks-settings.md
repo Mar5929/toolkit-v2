@@ -29,7 +29,8 @@ mkdir -p <copy>/.claude/skills
 cp -R <skill folder>/assets/.shared-skills/. <copy>/.claude/skills/
 ```
 
-The shared skills are the same in every project (9): `managing-work-items`,
+The shared skills are the same in every project (10): `managing-work-items`,
+`managing-project-wide-records`,
 `handoff`, `braindump`, `explain-simply`, `session-summary`, `pull-latest`,
 `reset-to-remote`, `merge-and-clean-up`, `publish-docs`. They name no
 tracker or memory system. Every work tracking set holds one skill with the

@@ -54,6 +54,7 @@ Git keeps each path below unless its line says Git ignores it.
 - `SOUL.md`, when the project has one: the owner's working style. `README.md`: the introduction for people.
 - `requirements/`: agreed behavior by area, updated when an item reaches Reflecting. Read its `AGENTS.md` before editing.
 - `system-guide/`: the verified structure of the current system, one file per area; open it for questions about structure, connections, or impact.
+- `project-wide-records/`: domain maps, questions shared by several items, people and authority, shared target direction, and intake receipts. Read its `AGENTS.md` before editing; its records link to the work tracker, sources, requirements, system guide, and memory.
 - `tests/`: test plans and checks; the Testing Loop writes an item's test plan here, never in the tracker.
 - `ai-external-knowledge/`: outside documentation you capture, one folder per topic; `INDEX.md` lists them.
 <!-- if tracker=local -->
@@ -107,8 +108,11 @@ Give every item in a list of choices or recommendations you show the owner a one
 | A decision made while working an item, or about an existing one when none was open (ask the owner which item when unclear) | That item's Questions and Answers: a row marked Decision? yes, with the owner's words and the date |
 | A decision a later work item, or an agent working on something else, will need to follow | Also a memory record, after the owner's yes, that links back to the item and names the Q-ID (the memory save skill) |
 | A project-wide decision that belongs to no work item | Straight to a memory record, after the owner's yes (the memory save skill) |
+| A question that affects several items, and the checks needed after its answer changes | `project-wide-records/questions/` (`managing-project-wide-records`); keep the authoritative answer in the owning item's Questions and Answers or the project-wide decision source |
+| A route through one business domain, shared target direction, or detailed decision authority | Respectively `project-wide-records/domains/`, `target-architecture/`, or `people/`; link to the authoritative records |
+| A source that affects several items and the record of where its findings went | Preserve the original in its existing source home; put only the processing receipt in `project-wide-records/intake/` |
 | A decision about something that is not a work item yet | A new work item, with the decision as its first Questions and Answers row |
-| What is in progress (one line per active work item, pointing to it), where the next session starts | Current State (the memory save skill) |
+| What is in progress (one line per active work item, pointing to it), where the next session starts | Current State (the memory save skill); link a shared question only while it blocks active work |
 | The owner's preference or correction for how the agent works ("from now on", "always", "never") | `.claude/rules/owner-preferences.md` (the memory save skill), never a host setting or hook; for every project, `~/.claude/rules/owner-preferences.md` and `~/.codex/AGENTS.md` |
 | A lasting fact, an unproven lesson, or a hard-to-find reference | Memory (the memory save skill) |
 | Project terms | The glossary (the memory save skill) |
@@ -152,6 +156,7 @@ Give every item in a list of choices or recommendations you show the owner a one
 Pick a skill by the situation; the examples only help you match it. This list stays in your context after compaction; the host's own skill list may be shortened or dropped. Method skills from other plugins (brainstorming, plans, debugging) may run inside these skills, never instead of them.
 
 - Anything about a work item, from a new idea to Done, and the project's phases and project tasks: `managing-work-items`.
+- A source, question, person, or target direction that spans several items, or a route through one domain: `managing-project-wide-records`. One item's questions, design, and execution stay with `managing-work-items`.
 - Saving or looking up a work item's record: `tracking-work-items` (`managing-work-items` uses it).
 - To start the next item, take started work first, then the next item in the earliest project phase that is not Done (`tracking-work-items` reads the project's phases), then the highest-priority Backlog item.
 - Where the project's work stands, what is next, or what waits on the owner: read Current State, the open items and questions (`tracking-work-items`), and memory records marked `needs-review` or `proposed`. Ask one decision at a time with your recommendation, and save each answer the moment he gives it. One item's open requirements questions go to `managing-work-items`. Examples: "where are we", "what do you need from me", "what's next".
@@ -162,7 +167,7 @@ Pick a skill by the situation; the examples only help you match it. This list st
 - Updating this repository from its remote, keeping local work: `pull-latest`. Examples: "get the latest", "pull the latest changes", "sync with remote".
 - The owner asks, in his own words, to discard local work and match the remote exactly: `reset-to-remote`. Examples: "wipe local and match the remote", "fresh start from remote".
 - Merging a pull request, when the owner names it ("merge PR 12") or `managing-work-items` asks, and removing its branch and worktree: `merge-and-clean-up`.
-- Saving an agreed edit to a committed project document (`requirements/`, `system-guide/`, `PROJECT.md`, a README) to the default branch: `publish-docs`. A change to the project's phases goes to `managing-work-items` first, even in a local project's `PROJECT-ROADMAP.md`.
+- Saving an agreed edit to a committed project document (`requirements/`, `system-guide/`, `project-wide-records/` records, `PROJECT.md`, a README) to the default branch: `publish-docs`. An edit to `project-wide-records/AGENTS.md` changes instructions and follows the reviewed instruction-file route. A change to the project's phases goes to `managing-work-items` first, even in a local project's `PROJECT-ROADMAP.md`.
 <!-- if tracker=notion -->
 - Read and change this project's work items only through `tracking-work-items` and `managing-work-items`, whatever Notion tool is at hand (a `Notion:` plugin command, the connector, or the browser), even when a message holds a Notion page link. The `Notion:tasks:build` command can mark an item Done without the owner's yes.
 <!-- endif -->
@@ -228,7 +233,7 @@ Path-scoped. Claude Code loads each one when it reads a matching file. Codex: op
 | `ai-external-knowledge/**` | `.claude/rules/ai-external-knowledge.md` |
 | `force-app/**`, `tools/kb/**` | `.claude/rules/dependency-graph.md` |
 | `force-app/**/permissionsets/**`, `force-app/**/permissionsetgroups/**`, `force-app/**/profiles/**` | `.claude/rules/permissions-source-control.md` |
-| `requirements/**`, `PROJECT-ROADMAP.md`, `PROJECT.md`, `system-guide/**`, `tools/permissions/PERMISSIONS-RUNBOOK.md`, `ai-external-knowledge/**`, `delivery/**`, `**/README.md` | `.claude/rules/publish-project-documents.md` |
+| `requirements/**`, `PROJECT-ROADMAP.md`, `PROJECT.md`, `system-guide/**`, `project-wide-records/**`, `tools/permissions/PERMISSIONS-RUNBOOK.md`, `ai-external-knowledge/**`, `delivery/**`, `**/README.md` | `.claude/rules/publish-project-documents.md` |
 | `delivery/deployment/**`, `engagement/deployment/**` | `.claude/rules/record-deployment-steps.md` |
 <!-- toolkit:rules:end -->
 

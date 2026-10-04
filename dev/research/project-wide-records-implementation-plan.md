@@ -1,6 +1,6 @@
 # Plan: standard project-wide records in Toolkit V2
 
-Status: Proposed plan for TKV-19, for Mike's review. No Toolkit V2 behavior described here has been built or approved. [Workflow diagrams](project-wide-records-workflows.md) show the intended behavior.
+Status: Mike approved execution on 2026-10-04. Implementation is in progress under TKV-19. [Workflow diagrams](project-wide-records-workflows.md) show the intended behavior.
 
 ## Outcome
 
@@ -91,7 +91,7 @@ No new command, project hook job, settings snippet, Notion database, Hindsight i
 
 ## Build order and review gates
 
-1. Show Mike the record schemas, authority boundaries, and this file list. Refine TKV-19's requirements; do not treat this plan as his approval of model meaning or implementation.
+1. Show Mike the record schemas, authority boundaries, and this file list; record his approval in TKV-19. Completed on 2026-10-04 when Mike asked to execute this plan.
 2. Build in an isolated worktree. Start with the model's folder and the shared skill, then add the minimal routes in existing files. Change only named files.
 3. Review every changed skill, template, example, and reference with a separate agent against `dev/reviews/wording-review.md`. Review the new name, description, and model routing against `dev/reviews/overlap-review.md`. Review skill, rule, and model-agent changes against `dev/reviews/best-practices-review.md`. Fix verified findings and have the reviewer read the fix.
 4. Run the repository's complete validation list in `AGENTS.md`, including both plugin validations, workstreams test, skill and rule checks, and Node tests. Install the toolkit plugin in scratch Claude and Codex homes for platform and routing checks; do not change Mike's live installations.

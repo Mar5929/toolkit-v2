@@ -1,6 +1,6 @@
 {
   "name": "toolkit",
-  "version": "0.8.14",
+  "version": "0.8.16",
   "description": "Sets up Toolkit V2 in a project, or moves a project from the older toolkit onto it: copies the model files, the chosen work tracking and memory skills, and their hooks. Also lists the outside tool the owner uses for each kind of job.",
   "author": {
     "name": "Mike Rihm",

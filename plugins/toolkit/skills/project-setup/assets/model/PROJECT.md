@@ -30,6 +30,8 @@
 | --- | --- | --- | --- |
 | `<role>` | `<name or unknown>` | `<decision or operating responsibility>` | `<source and date>` |
 
+Keep this table short. Link a detailed person or authority record in `project-wide-records/people/` when this row cannot hold what the project needs.
+
 ## Work and project records
 
 - Work tracker: set under "Toolkit settings" below.
@@ -44,6 +46,7 @@
 <!-- endif -->
 - Decisions: every decision made while working an item is saved in its Questions and Answers first; a project-wide decision, after the owner's yes, also gets a memory record.
 - Functional requirements: [requirements/](requirements/)
+- Project-wide records: [project-wide-records/AGENTS.md](project-wide-records/AGENTS.md) shows where shared questions, domain maps, people and authority, target direction, and intake receipts link to their original records.
 - Design home: `With its work item: local DESIGN.md or the external item's own record or attachments.`
 - System Guide: `<enabled at system-guide/, or not used>`
 <!-- if memory=local -->
