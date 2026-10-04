@@ -47,17 +47,20 @@ A second plugin, `workstreams`, adds a side panel to Claude Code. Type
 `/streams` in any project folder. It shows the Claude chats you have going in
 that project and what each one is working on. It needs no Notion.
 
-- **Workstreams.** One card per piece of work: its name, its status (Needs
-  you, Blocked, or In progress), the chat handling it, and the next step.
-  What needs you comes first.
-- **Chats.** One card per chat: its name, whether it is working, asking you
-  a question, or stopped, your last message to it, and how many helper
-  agents it runs. A chat named "Main Orchestrator" is listed first.
+- **One card per chat.** It shows the chat's name, whether it is working,
+  asking you a question, or stopped, your last message to it, and how many
+  helper agents it runs. A chat named "Main Orchestrator" is listed first,
+  then the chats that need you.
+- **Its workstreams are inside the card.** Each has a colored status label
+  (Needs you, Blocked, or In progress), its name, and the next step.
+- **Done.** Press Done on a workstream when it is finished. It moves to the
+  "Done today" list. A chat's agent can also report a workstream as done.
+- **Dismiss.** Press Dismiss on a workstream to hide it without calling it
+  done. Press "Dismiss chat" after you archive a chat, because the panel is
+  not told about that. What you press applies in every chat's panel.
+- A workstream comes back if a chat reports it again. A chat comes back if
+  you write to it again.
 - **Done today.** The work finished in the last day.
-- **Dismiss.** Every card has a Dismiss button. Use it after you archive a
-  chat, because the panel is not told about that. A dismissed card is hidden
-  in every chat's panel. It comes back if the work is reported again, or if
-  you write to that chat again.
 - Each chat's agent reports its own work with a small tool the plugin gives
   it. That costs a few tokens per report, plus one short instruction at the
   start of each chat. Opening and refreshing the panel costs none.

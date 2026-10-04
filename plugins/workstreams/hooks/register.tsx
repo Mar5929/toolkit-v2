@@ -1,7 +1,7 @@
 import { atom, read, update } from 'claude-code'
 import type { EngineInterface, Register } from 'claude-code'
 
-import type { Chat, ChatState, Hidden, Stream, StreamStatus } from '../types'
+import type { Chat, ChatState, Marks, Stream, StreamStatus } from '../types'
 
 const PANE = 'workstreams'
 const TITLE = 'Workstreams'
@@ -15,8 +15,9 @@ const MAX_STREAMS = 20
 const DONE_SHOWN = 5
 // How often an open panel reads the chats again, in milliseconds.
 const REFRESH = 10 * 1000
-// The project's file of dismissed cards, beside the chats' files.
-const HIDDEN_FILE = '_dismissed.json'
+// The project's file of the owner's Done and Dismiss presses, beside the
+// chats' files.
+const MARKS_FILE = '_dismissed.json'
 
 const STATUSES: readonly StreamStatus[] = [
   'needs_owner',
@@ -49,7 +50,7 @@ const INSTRUCTION =
 
 const board = atom({ plugin: 'workstreams', key: 'board' } as const, {
   chats: [],
-  hidden: { streams: {}, chats: {} },
+  marks: { done: {}, streams: {}, chats: {} },
   note: '',
   here: '',
   at: 0,
@@ -155,13 +156,17 @@ const nameOf = async ($: EngineInterface, config: string, chat: Chat) => {
   return chat.name || 'Unnamed chat'
 }
 
-// The project's file of dismissed cards; empty when there is none yet.
-const readHidden = async ($: EngineInterface, folder: string): Promise<Hidden> => {
+// The project's file of the owner's marks; empty when there is none yet.
+const readMarks = async ($: EngineInterface, folder: string): Promise<Marks> => {
   const kept = await $.fs
-    .read(`${folder}/${HIDDEN_FILE}`)
+    .read(`${folder}/${MARKS_FILE}`)
     .then(JSON.parse, () => undefined)
 
-  return { streams: { ...kept?.streams }, chats: { ...kept?.chats } }
+  return {
+    done: { ...kept?.done },
+    streams: { ...kept?.streams },
+    chats: { ...kept?.chats },
+  }
 }
 
 // Reads the record of every chat in this project.
@@ -171,13 +176,13 @@ const load = async ($: EngineInterface) => {
     const folder = `${config}/workstreams/${projectOf(await chatDir($))}`
     const at = await $.clock.now()
     const here = await $.session.id()
-    const hidden = await readHidden($, folder)
+    const marks = await readMarks($, folder)
     const files = await $.fs.list(folder).catch(() => [])
     const recent = files
       .filter(
         file =>
           file.name.endsWith('.json') &&
-          file.name !== HIDDEN_FILE &&
+          file.name !== MARKS_FILE &&
           at - file.mtimeMs < KEEP,
       )
       .sort((a, b) => b.mtimeMs - a.mtimeMs)
@@ -196,22 +201,23 @@ const load = async ($: EngineInterface) => {
       }
     }
 
-    await update($, board, () => ({ chats, hidden, note: '', here, at }))
+    await update($, board, () => ({ chats, marks, note: '', here, at }))
   } catch {
     await update($, board, now => ({ ...now, note: 'Could not read the chats.' }))
   }
 }
 
-// Hides one card for every chat's panel: a piece of work by its name, or a
-// chat by its id. The card shows again when the work is reported again, or
-// when the owner writes to the chat again.
-const dismiss = async ($: EngineInterface, kind: keyof Hidden, key: string) => {
+// Saves the owner's press for every chat's panel. "done" moves a piece of
+// work, by its name, to the finished list. "streams" hides a piece of work,
+// and "chats" hides a chat, by its id. A mark on a piece of work holds until
+// the work is reported again; one on a chat, until the owner writes to it.
+const mark = async ($: EngineInterface, kind: keyof Marks, key: string) => {
   try {
     const config = await configDir($)
     const folder = `${config}/workstreams/${projectOf(await chatDir($))}`
-    const hidden = await readHidden($, folder)
-    hidden[kind][key] = await $.clock.now()
-    await $.fs.write(`${folder}/${HIDDEN_FILE}`, JSON.stringify(hidden))
+    const marks = await readMarks($, folder)
+    marks[kind][key] = await $.clock.now()
+    await $.fs.write(`${folder}/${MARKS_FILE}`, JSON.stringify(marks))
   } catch {
     // The card stays; the owner can press again.
   }
@@ -409,55 +415,87 @@ export const register: Register = on => {
 
   on('ui.render', { component: 'Pane', requestId: PANE }, async ($, e) => {
     const { Box, Button, Text } = $.ui.resolve(e)
-    const { chats: saved, hidden, note, here, at } = await read($, board)
+    const { chats: saved, marks, note, here, at } = await read($, board)
     const shownName = (chat: Chat) =>
       chat.id === here ? `${chat.name} (this chat)` : chat.name
     // A dismissed chat stays out until the owner writes to it, or it reports
     // work, again. Its pieces of work go with it.
     const chats = saved.filter(
-      chat => (hidden.chats[chat.id] ?? 0) < (chat.active ?? chat.at),
+      chat => (marks.chats[chat.id] ?? 0) < (chat.active ?? chat.at),
     )
-
-    // One entry per piece of work: the newest report, and every chat on it.
-    const works = new Map<string, { key: string; stream: Stream; chats: Chat[] }>()
+    const keyOfWork = (stream: Stream) => stream.name.toLowerCase()
+    // The newest report of each piece of work, from any chat.
+    const newest = new Map<string, number>()
 
     for (const chat of chats) {
       for (const stream of chat.streams) {
-        const key = stream.name.toLowerCase()
-        const held = works.get(key)
-
-        works.set(key, {
-          key,
-          stream: held && held.stream.at > stream.at ? held.stream : stream,
-          chats: [...(held?.chats ?? []), chat],
-        })
+        const key = keyOfWork(stream)
+        newest.set(key, Math.max(newest.get(key) ?? 0, stream.at))
       }
     }
 
-    // A dismissed piece of work stays out until it is reported again.
-    const all = [...works.values()]
-      .filter(work => (hidden.streams[work.key] ?? 0) < work.stream.at)
-      .sort(
-        (a, b) =>
-          STATUSES.indexOf(a.stream.status) - STATUSES.indexOf(b.stream.status) ||
-          b.stream.at - a.stream.at,
-      )
-    const open = all.filter(work => work.stream.status !== 'done')
-    const done = all
-      .filter(work => work.stream.status === 'done' && at - work.stream.at < DAY)
+    // The owner's Done or Dismiss holds until the work is reported again.
+    const isMarked = (kind: 'done' | 'streams', stream: Stream) => {
+      const key = keyOfWork(stream)
+
+      return (marks[kind][key] ?? 0) >= (newest.get(key) ?? 0)
+    }
+    const openOf = (chat: Chat) =>
+      chat.streams
+        .filter(
+          stream =>
+            stream.status !== 'done' &&
+            !isMarked('done', stream) &&
+            !isMarked('streams', stream),
+        )
+        .sort(
+          (a, b) =>
+            STATUSES.indexOf(a.status) - STATUSES.indexOf(b.status) || b.at - a.at,
+        )
+    const needsOwner = (chat: Chat) =>
+      chat.state === 'asking' ||
+      openOf(chat).some(stream => stream.status === 'needs_owner')
+
+    // Finished in the last day: a chat reported it done, or the owner pressed
+    // Done. One line per piece of work, with every chat that had it.
+    const done = new Map<string, { name: string; at: number; chats: string[] }>()
+
+    for (const chat of chats) {
+      for (const stream of chat.streams) {
+        const key = keyOfWork(stream)
+        const when = isMarked('done', stream)
+          ? (marks.done[key] ?? 0)
+          : stream.status === 'done'
+            ? stream.at
+            : 0
+
+        if (when > 0 && at - when < DAY && !isMarked('streams', stream)) {
+          const held = done.get(key)
+
+          done.set(key, {
+            name: stream.name,
+            at: Math.max(held?.at ?? 0, when),
+            chats: [...(held?.chats ?? []), shownName(chat)],
+          })
+        }
+      }
+    }
+
+    const finished = [...done.values()]
+      .sort((a, b) => b.at - a.at)
       .slice(0, DONE_SHOWN)
+    // A chat named Main Orchestrator is first, then the chats that need the
+    // owner, then the working ones, then the newest.
     const active = chats
-      .filter(
-        chat =>
-          at - chat.at < DAY ||
-          chat.streams.some(stream => stream.status !== 'done'),
-      )
+      .filter(chat => at - chat.at < DAY || openOf(chat).length > 0)
       .sort(
         (a, b) =>
           Number(ORCHESTRATOR.test(b.name)) - Number(ORCHESTRATOR.test(a.name)) ||
+          Number(needsOwner(b)) - Number(needsOwner(a)) ||
           STATE_ORDER.indexOf(a.state) - STATE_ORDER.indexOf(b.state) ||
           b.at - a.at,
       )
+    const total = active.reduce((sum, chat) => sum + openOf(chat).length, 0)
 
     const label = (kind: string) =>
       LOOK[kind] && (
@@ -467,8 +505,6 @@ export const register: Register = on => {
           </Text>
         </Box>
       )
-    const stateOf = (chat: Chat) =>
-      chat.state === 'stopped' ? `stopped ${ago(at - chat.at)}` : chat.state
     const heading = (text: string) => (
       <Box marginTop={1}>
         <Text bold>{text}</Text>
@@ -482,51 +518,19 @@ export const register: Register = on => {
           {note !== '' && <Text dimColor> {note}</Text>}
         </Box>
 
-        {heading(`Workstreams (${open.length})`)}
-        {open.length === 0 && (
+        {heading(`Chats (${active.length}) · Workstreams (${total})`)}
+        {active.length === 0 && (
           <Text dimColor wrap="wrap">
-            No chat has reported a piece of work yet. A chat reports after its
-            next message.
+            No chat in this project has reported yet. A chat shows here after
+            its next message.
           </Text>
         )}
-        {open.map((work, index) => (
+        {active.map((chat, chatIndex) => (
           <Box
             flexDirection="column"
             borderStyle="round"
-            borderColor={LOOK[work.stream.status]?.[1]}
-            paddingX={1}
-            marginTop={1}
-          >
-            <Text bold wrap="wrap">
-              {work.stream.name}
-            </Text>
-            {label(work.stream.status)}
-            {work.chats.map(chat => (
-              <Text wrap="wrap">
-                Chat: {shownName(chat)} · {stateOf(chat)}
-              </Text>
-            ))}
-            {work.stream.next !== '' && (
-              <Text wrap="wrap">Next: {work.stream.next}</Text>
-            )}
-            <Box>
-              <Button
-                key={`dismiss-work-${index}`}
-                label="Dismiss"
-                dimColor
-                onPress={() => dismiss($, 'streams', work.key)}
-              />
-            </Box>
-          </Box>
-        ))}
-
-        {heading(`Chats (${active.length})`)}
-        {active.map((chat, index) => (
-          <Box
-            flexDirection="column"
-            borderStyle="round"
-            borderDimColor={chat.state === 'stopped'}
-            borderColor={LOOK[chat.state]?.[1]}
+            borderDimColor={chat.state === 'stopped' && !needsOwner(chat)}
+            borderColor={needsOwner(chat) ? LOOK.asking[1] : LOOK[chat.state]?.[1]}
             paddingX={1}
             marginTop={1}
           >
@@ -542,21 +546,45 @@ export const register: Register = on => {
             {chat.helpers.length > 0 && (
               <Text dimColor>Helper agents running: {chat.helpers.length}</Text>
             )}
-            <Box>
+
+            {openOf(chat).map((stream, index) => (
+              <Box flexDirection="column" marginTop={1}>
+                {label(stream.status)}
+                <Text bold wrap="wrap">
+                  {stream.name}
+                </Text>
+                {stream.next !== '' && <Text wrap="wrap">Next: {stream.next}</Text>}
+                <Box columnGap={1}>
+                  <Button
+                    key={`done-${chatIndex}-${index}`}
+                    label="Done"
+                    onPress={() => mark($, 'done', keyOfWork(stream))}
+                  />
+                  <Button
+                    key={`dismiss-${chatIndex}-${index}`}
+                    label="Dismiss"
+                    dimColor
+                    onPress={() => mark($, 'streams', keyOfWork(stream))}
+                  />
+                </Box>
+              </Box>
+            ))}
+
+            <Box marginTop={1}>
               <Button
-                key={`dismiss-chat-${index}`}
-                label="Dismiss"
+                key={`dismiss-chat-${chatIndex}`}
+                label="Dismiss chat"
                 dimColor
-                onPress={() => dismiss($, 'chats', chat.id)}
+                onPress={() => mark($, 'chats', chat.id)}
               />
             </Box>
           </Box>
         ))}
 
-        {done.length > 0 && heading(`Done today (${done.length})`)}
-        {done.map(work => (
+        {finished.length > 0 && heading(`Done today (${finished.length})`)}
+        {finished.map(work => (
           <Text dimColor wrap="wrap">
-            ✓ {work.stream.name} · {work.chats.map(shownName).join(', ')}
+            ✓ {work.name} · {work.chats.join(', ')}
           </Text>
         ))}
       </Box>

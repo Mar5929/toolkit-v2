@@ -5,19 +5,22 @@
  * Fires before every Bash / PowerShell tool call. If the command runs a
  * guarded Salesforce CLI verb against an org that classifies as PRODUCTION, it
  * returns a "confirm before running" decision so the change cannot happen by
- * accident. A guarded verb is anything that changes an org: a deploy or deploy
- * validate, a data write, anonymous Apex, a metadata delete, or an org delete.
+ * accident. A guarded verb is anything that changes an org or runs its Apex
+ * or Flow tests: a deploy or deploy validate, a data write, anonymous Apex, a
+ * test run, a metadata delete, or an org delete.
  *
  * Policy is data-driven from .claude/protected-orgs.json, which this project
  * ships with action "deny". The built-in defaults below apply only when that
  * file is missing:
  *   - protect: any production org (auto-detected via `sf org list`)
  *   - action: ask  (confirm; nothing is hard-blocked)
- *   - watch:  deploys, validates, data writes, anonymous Apex, deletes
+ *   - watch:  deploys, validates, data writes, anonymous Apex, test runs,
+ *             deletes
  *   - sandboxAction: ask. The salesforce-org-safety rule allows sandbox
  *             deploys, data writes and anonymous Apex only after the owner says
  *             yes, so the hook asks for them on a sandbox or scratch org too. A
- *             deploy validate on a sandbox needs no yes and passes silently.
+ *             deploy validate or a test run on a sandbox needs no yes and
+ *             passes silently.
  *
  * Set action to "deny" for a project whose written rule says an agent may never
  * deploy to production. The block message changes with the setting: on "deny" it
@@ -159,12 +162,18 @@ const GUARDED = [
     'force:data:bulk:upsert', 'force:data:bulk:delete', 'force:data:tree:import',
   ]],
   ['apex', ['apex:run', 'force:apex:execute']],
+  // An Apex or Flow test run is not a read: it runs Apex code or flows in the
+  // target org. The safety rule forbids it in production and allows it on a
+  // sandbox with no yes, so it has its own category. `sf logic run test` runs
+  // Apex and Flow tests (checked against sf 2.142.7). `sf apex get test` and
+  // `sf flow get test` only read. Agentforce agent tests (`sf agent test run`)
+  // are not checked.
+  ['testRun', ['apex:run:test', 'force:apex:test:run', 'logic:run:test', 'flow:run:test']],
   ['metadataDelete', ['project:delete:source', 'force:source:delete']],
 ];
 // Real commands whose names hold every word of a guarded name and more. They
-// change nothing in an org: `sf apex run test` runs Apex tests, and the
-// others read or cancel a deploy.
-const NOT_GUARDED = ['apex:run:test', 'deploy:metadata:report', 'deploy:metadata:preview', 'deploy:metadata:cancel'];
+// change nothing in an org: they read or cancel a deploy.
+const NOT_GUARDED = ['deploy:metadata:report', 'deploy:metadata:preview', 'deploy:metadata:cancel'];
 
 const nameKey = (parts) => parts.map((p) => p.toLowerCase()).sort().join(' ');
 const GUARDED_BY_KEY = new Map();
@@ -175,7 +184,7 @@ const NOT_GUARDED_KEYS = new Set(NOT_GUARDED.map((name) => nameKey(name.split(':
 
 // Categories the safety rule allows on a sandbox or scratch org without the
 // owner's yes. Everything else asks there, unless sandboxAction is "allow".
-const SANDBOX_SILENT = new Set(['validate']);
+const SANDBOX_SILENT = new Set(['validate', 'testRun']);
 
 // Categories whose target org is never on the command line. No -o, setting,
 // or default org is taken for them: each is judged as a command with no
@@ -910,10 +919,10 @@ function judge(check, cfg, lookups) {
     };
   }
 
-  // A sandbox deploy, data write, Apex run or delete is allowed by the safety
-  // rule, but only after the owner says yes. Nothing else makes that happen,
-  // so the hook turns it into a prompt instead of letting it through
-  // silently. Set sandboxAction to "allow" to go back to silent.
+  // A sandbox deploy, data write, anonymous Apex run or delete is allowed by
+  // the safety rule, but only after the owner says yes. Nothing else makes
+  // that happen, so the hook turns it into a prompt instead of letting it
+  // through silently. Set sandboxAction to "allow" to go back to silent.
   if (
     sandboxReasons.length > 0 &&
     cfg.sandboxAction !== 'allow' &&
