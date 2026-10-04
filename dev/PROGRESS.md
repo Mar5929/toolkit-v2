@@ -3,10 +3,11 @@
 Read `dev/GOAL.md` first. This file says where the work stands.
 
 
-## Current State (2026-10-02)
+## Current State (2026-10-04)
 
 The Toolkit V2 build is tracked as work items in the Notion project "Toolkit V2" (https://app.notion.com/p/Toolkit-V2-3edb381da17681eeb7ddd0a6d662f9b2). Older sections below are history.
 
+- 2026-10-04: TKV-19 design refinement: `dev/research/project-wide-records-workflows.md` holds ten proposed workflow diagrams, and `dev/research/project-wide-records-implementation-plan.md` lists the exact Toolkit V2 changes and checks. Mike clarified that the pattern belongs in every project, regardless of tracker or memory choice, and that the new folder needs agent instructions rather than a README. These are design documents only. Next: Mike reviews the plan and requirements before any model or skill change.
 - 2026-10-03: Wrote `dev/research/project-knowledge-proposal.md` and created Backlog item TKV-19, "Structure knowledge across complex projects." The proposal covers cross-item questions, source intake, people, target architecture, domain maps, and change propagation. Made a 107-second Explainroo video in `~/Documents/Projects/explainroo/videos/toolkit-knowledge-before-after/out/video.mp4` to show the current and proposed states; its final audio check understood all narration. No model or skill changes are approved or built. Next: another agent reviews the proposal with Mike and refines the item.
 
 ### Now (in progress)

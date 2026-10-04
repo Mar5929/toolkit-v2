@@ -1,6 +1,6 @@
 # Proposal: keep complex project knowledge connected
 
-Status: Proposal for Mike's review. No Toolkit V2 behavior in this document is approved or built.
+Status: Early proposal for Mike's review. Its optional setup choice, `project-knowledge/` name, and folder README have been superseded by the later [implementation plan](project-wide-records-implementation-plan.md) and [workflow diagrams](project-wide-records-workflows.md). No Toolkit V2 behavior in these documents is approved or built.
 
 ## Problems to solve
 
