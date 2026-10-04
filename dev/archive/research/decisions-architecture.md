@@ -56,7 +56,7 @@ the current goal's final checklist.
   approved with "go with your recommendations on all of them", described in one
   line with no reason (`dev/model-changes.md:63-65`). The agent's review draft
   had asked Mike's exact question as open question 3
-  (`dev/research/model-review-draft.md:816-817`). Reopening it is fair.
+  (`dev/archive/research/model-review-draft.md:816-817`). Reopening it is fair.
 - **"Decisions for this work item" and "all decisions by work item" is the
   right shape, and nothing supports it today.** `DECISIONS.md` has no work item
   column (`plugins/toolkit/lib/work/decisions.mjs:416`). Decisions about one
@@ -65,7 +65,7 @@ the current goal's final checklist.
   "Every decision, by work item" cannot be answered exactly at all.
 - **The only strong reason for a separate file was Git, and it covers less
   than it seems.** The draft's reason was that memory "is Git-ignored or in a
-  service" (`dev/research/model-review-draft.md:101`). Work item decisions were
+  service" (`dev/archive/research/model-review-draft.md:101`). Work item decisions were
   never in Git: `.memory/` and `/.work-items/` are ignored
   (`S/.gitignore:1-2`, the same in `efa2440`). The two rows that truly must be
   readable from every checkout move to committed files that fit them better
@@ -81,7 +81,7 @@ the current goal's final checklist.
 - **Tying decisions to work items and tying memories to work items is the
   same field.** One `work_items` list on every memory record answers both this
   question and his earlier request that "memories could be tied to work items
-  in Notion" (`dev/PROGRESS.md:66-75`).
+  in Notion" (`dev/archive/model/progress-2026-09-29-to-2026-10-02.md`).
 - **The reason is stored twice today.** It sits in the `DECISIONS.md` Why
   column and again as "rationale" in a `project_` memory
   (`plugins/memory/skills/memory-save/SKILL.md:15`). One record per decision
@@ -357,9 +357,9 @@ tags `kind:record`, `type:decision`, `status:current`, `wi:WI-031`,
 
 The page body is the record body without its title line. Lore's own
 `lore-decision` tool would read these rows if Mike ever turned Lore on
-(`dev/research/lore.md:242`). The Lore research turned down Lore's decisions
+(`dev/archive/research/lore.md:242`). The Lore research turned down Lore's decisions
 because they would "duplicate the toolkit's `DECISIONS.md`"
-(`dev/research/lore.md:441-442`). With `DECISIONS.md` removed, that reason no
+(`dev/archive/research/lore.md:441-442`). With `DECISIONS.md` removed, that reason no
 longer applies. Until the Notion part is built, the new fields sit in the
 "Other fields" JSON column (`schema.mjs:187`) and the filter runs in code, the
 way type and status are filtered today (`plugins/toolkit/lib/memory/notion.mjs:740-751`).
@@ -494,7 +494,7 @@ Decisions view in the Memories database shows every decision.
 
 - On 2026-09-26 the agent's review draft recommended a root `DECISIONS.md`,
   because decisions were "spread across 8 places" and memory "is Git-ignored
-  or in a service" (`dev/research/model-review-draft.md:101`). The same draft
+  or in a service" (`dev/archive/research/model-review-draft.md:101`). The same draft
   asked Mike whether to add the file or keep project decisions in memory (open
   question 3, `:816-817`).
 - The list Mike approved at 18:45 EDT described item 6 in one line, "a log of
@@ -539,7 +539,7 @@ work_items: []
 
 **How to apply:** Record whole-project decisions in DECISIONS.md with toolkit decision add.
 
-**Evidence and limits:** The agent's own reasoning, not shown to the owner: dev/research/model-review-draft.md:101.
+**Evidence and limits:** The agent's own reasoning, not shown to the owner: dev/archive/research/model-review-draft.md:101.
 
 **Related memories:** None.
 
@@ -684,7 +684,7 @@ Everything else follows from his answer to the main question.
   gains the fifth prefix and the one-record-per-decision exception; approved
   change 6 is marked replaced.
 - `dev/ARCHITECTURE.md` section 4.6 (`:317-321`) and the Records part of
-  section 7; `dev/model-changes.md` item 6; `dev/PROGRESS.md:66-75`, the open
+  section 7; `dev/model-changes.md` item 6; `dev/archive/model/progress-2026-09-29-to-2026-10-02.md`, the open
   request, placed.
 
 ### Model branch `toolkit-v2/approved-changes` (Mike's yes)
@@ -800,7 +800,7 @@ Then `node dev/tools/import-model.mjs` and the parity test.
   as expected results, run on all three memory systems; a reversed decision is
   answered from its replacement; "I don't know" when no decision exists.
 - A live Notion test of the Memories-to-Work Items relation, which has never
-  been tried (`dev/research/notion-design.md:419-421`), and a live Hindsight
+  been tried (`dev/archive/research/notion-design.md:419-421`), and a live Hindsight
   test of the `wi:` tag filter.
 - Briefing, hook phrase, `work edit` refusal, and parity tests; the decision
   steps of the four sample runs run again.
@@ -822,7 +822,7 @@ Then `node dev/tools/import-model.mjs` and the parity test.
      a two-way relation from Memories to Work Items, a "Work item IDs" column,
      and a Decisions view. That session is designing the Work Items database
      now and owns `notion/schema.mjs` and `notion/ensure.mjs`
-     (`dev/next/notion-work-tracker-prompt.md`);
+     (`dev/archive/handoffs/notion-work-tracker-prompt.md`);
    - fix `memory-find` so it does not contradict `S/AGENTS.md:21`, once the
      running skills workflow (`wf_6e6bebee-68e`) stops editing skill files.
    - The `WI-012` search split is a real defect. Fix it now only if no running
@@ -836,7 +836,7 @@ Then `node dev/tools/import-model.mjs` and the parity test.
 4. **Phase B** inside the Notion work tracker refinement build, or right after
    it, because both change the same two files and the relation points at the
    Work Items database that session is reshaping. Phase B answers Mike's open
-   request (`dev/PROGRESS.md:66-75`).
+   request (`dev/archive/model/progress-2026-09-29-to-2026-10-02.md`).
 
 If Mike wants it inside the current goal instead, it becomes a finish item and
 items 9 and 10 run again for the memory and work parts.

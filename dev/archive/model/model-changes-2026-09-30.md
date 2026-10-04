@@ -232,7 +232,7 @@ Why, for all 8: you asked for a current state in each work item and chose the re
 
 ## Tenth commit (7a6928d)
 
-3 files, all edited: `AGENTS.md`, `work-items/work-item-template/WORK-ITEM.md`, and `.claude/rules/keep-work-item-current.md`. You approved this overnight (2026-09-30, "routing plus review, which is your recommendation"): the 5 recommendations in `dev/reviews/2026-09-30-routing-and-agents-md-review.md` section 6, and the recommended answers in `dev/reviews/2026-09-30-baseline-review.md` section 4, with A6 dropped and A7 as a situation line.
+3 files, all edited: `AGENTS.md`, `work-items/work-item-template/WORK-ITEM.md`, and `.claude/rules/keep-work-item-current.md`. You approved this overnight (2026-09-30, "routing plus review, which is your recommendation"): the 5 recommendations in `dev/archive/reviews/2026-09-30-routing-and-agents-md-review.md` section 6, and the recommended answers in `dev/archive/reviews/2026-09-30-baseline-review.md` section 4, with A6 dropped and A7 as a situation line.
 
 ### `AGENTS.md`: a short map with one line per skill
 
@@ -282,7 +282,7 @@ Why: you asked for `AGENTS.md` to be a map under 200 lines that lists the skills
 
 ## Eleventh commit (dfc6ba5)
 
-13 files, all edited. You approved this overnight (2026-09-30, "routing plus review, which is your recommendation"): every recommended answer in `dev/reviews/2026-09-30-baseline-review.md` section 4. This commit holds the answers that change a model file: A9 to A11 (the Salesforce skill descriptions), the model parts of part B (B1, B2, B6, B19, B22, B32), and the model parts of part C (C1 to C11 and C27 to C49). The `sf-architect-solutioning` fixes (C12 to C26) and the parts of other answers that live in skills and shared texts are not model files; the build applies them.
+13 files, all edited. You approved this overnight (2026-09-30, "routing plus review, which is your recommendation"): every recommended answer in `dev/archive/reviews/2026-09-30-baseline-review.md` section 4. This commit holds the answers that change a model file: A9 to A11 (the Salesforce skill descriptions), the model parts of part B (B1, B2, B6, B19, B22, B32), and the model parts of part C (C1 to C11 and C27 to C49). The `sf-architect-solutioning` fixes (C12 to C26) and the parts of other answers that live in skills and shared texts are not model files; the build applies them.
 
 ### A Sources list goes above the closing question (B1)
 

@@ -1,4 +1,4 @@
-# Model project review (draft for `dev/model-review.md`)
+# Model project review (draft for `dev/archive/model/model-review.md`)
 
 Written 2026-09-26 by a read-only research agent. Nothing in the model project,
 `claude-toolkit`, or Notion was changed.

@@ -86,7 +86,7 @@ Files read (all read-only):
 - Current toolkit `/Users/michaelrihm/Documents/Projects/claude-toolkit/plugins/work-tracker/skills/work/`:
   `references/lifecycle.md`, `references/record-format.md`, `scripts/lib/tracker.mjs`
   (constants `STATUSES`, `PRIORITIES`, `TYPES`, `STAGES`, `RELATIONSHIPS`).
-- Sibling brief `/Users/michaelrihm/Documents/Projects/toolkit-v2/dev/research/work-process.md`
+- Sibling brief `/Users/michaelrihm/Documents/Projects/toolkit-v2/dev/archive/research/work-process.md`
   (sections 3, 4, 14, 15, 16.4) so the Notion schema matches the same process.
 - Official Notion developer docs, fetched as Markdown on 2026-09-26:
   `creating-pages-from-templates`, `working-with-markdown-content`,
