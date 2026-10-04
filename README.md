@@ -47,17 +47,30 @@ A second plugin, `workstreams`, adds a side panel to Claude Code. Type
 `/streams` in any project folder. It shows the Claude chats you have going in
 that project and what each one is working on. It needs no Notion.
 
-- **Workstreams.** One card per piece of work: its name, its status (Needs
-  you, Blocked, or In progress), the chat handling it, and the next step.
-  What needs you comes first.
-- **Chats.** One card per chat: its name, whether it is working, asking you
-  a question, or stopped, your last message to it, and how many helper
-  agents it runs. A chat named "Main Orchestrator" is listed first.
+- **One card per chat.** A small "Chat" label sits above the chat's name.
+  The card shows whether the chat is working, asking you a question, or
+  stopped, your last message to it, and how many helper agents it runs. A
+  chat named "Main Orchestrator" is listed first, then the chats that need
+  you.
+- **Its workstreams are inside the card**, under a "Workstreams" label and
+  indented. Each one has a name and three labelled lines, always in this
+  order: About, Status, Next.
+  - The name is a short subject line in your own plain words.
+  - About is one or two plain sentences on what you asked for and why. It is
+    there to remind you what the work is, and it stays as first written.
+  - Status is a colored label: Needs you, Blocked, or In progress.
+  - Next is the next step and who does it.
+- **Collapse.** Press Collapse on a card to fold away its workstreams. The
+  folded card still says how many there are and how many need you. Press
+  Expand to open it again.
+- **Mark done.** Press it on a workstream when it is finished. It moves to
+  the "Done today" list. A chat's agent can also report a workstream as done.
+- **Hide.** Press it on a workstream to hide it without calling it done.
+  Press "Dismiss chat" after you archive a chat, because the panel is not
+  told about that. What you press applies in every chat's panel.
+- A workstream comes back if a chat reports it again. A chat comes back if
+  you write to it again.
 - **Done today.** The work finished in the last day.
-- **Dismiss.** Every card has a Dismiss button. Use it after you archive a
-  chat, because the panel is not told about that. A dismissed card is hidden
-  in every chat's panel. It comes back if the work is reported again, or if
-  you write to that chat again.
 - Each chat's agent reports its own work with a small tool the plugin gives
   it. That costs a few tokens per report, plus one short instruction at the
   start of each chat. Opening and refreshing the panel costs none.
@@ -70,8 +83,8 @@ that project and what each one is working on. It needs no Notion.
   in a worktree under the project's `.claude/worktrees/` folder counts as
   the same project.
 - It is built for the Claude Code terminal and the desktop app, on Mac and
-  Windows. So far it has run only in the terminal on Mac. It does not work
-  in Codex.
+  Windows. So far it has run in the desktop app and the terminal on Mac,
+  never on Windows. It does not work in Codex.
 
 Install it once per computer:
 
