@@ -12,7 +12,7 @@ Read-only research done before the build. Part 1 maps the request onto Toolkit V
   - the paragraph about what `installing-hindsight.md` installs is shortened;
   - the "Approve the `hindsight` server" owner step is removed from `SKILL.md`.
 - `hindsight.md`, `installing-hindsight.md`, the hook files and the settings snippets are not modified yet.
-- Its plan is in `<skill-cut>/dev/reviews/skill-cut-2026-10-01/proposals.md`, about lines 1455–1545. For Hindsight it plans to:
+- Its plan is in `<skill-cut>/dev/archive/reviews/skill-cut-2026-10-01/proposals.md`, about lines 1455–1545. For Hindsight it plans to:
   - move the 53-line background-service file (plist) out of `installing-hindsight.md` into `assets/`;
   - keep the Hindsight health check before setup, the bank creation, the tool limit, the MCP entries, and the "never codex mcp add" rule;
   - remove the sentences about Hindsight saves from `prompt-reminder.mjs`.
@@ -145,9 +145,9 @@ All from `<v2-build>/dev/GOAL.md`:
 - line 289: no writing to Hindsight banks in tests.
 
 **Notes in `dev/`:**
-- `dev/research/hindsight.md` covers the local install. Section 14 lists things not to use. Line 59 lists the `hindsight-admin` commands (`backup`, `export-bank`, `import-bank`). Line 396 covers re-downloading models on a new machine.
+- `dev/archive/research/hindsight.md` covers the local install. Section 14 lists things not to use. Line 59 lists the `hindsight-admin` commands (`backup`, `export-bank`, `import-bank`). Line 396 covers re-downloading models on a new machine.
 - `dev/research/skills-first-architecture.md` line 141: MCP tools "on the project's bank at `127.0.0.1:8…`".
-- New-computer and backup notes for V2: none. `dev/final-review.md` covers backups and machine-setup, but only for the retired program.
+- New-computer and backup notes for V2: none. `dev/archive/model/final-review.md` covers backups and machine-setup, but only for the retired program.
 
 ### 3. What V2 has today for each item Mike lists
 

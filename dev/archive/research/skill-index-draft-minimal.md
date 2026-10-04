@@ -569,7 +569,7 @@ plugin's shared `references/` folder and linked from each `SKILL.md`:
 - **Replaces:** `sf-component-tracker` and `sf-deploy-check`. Both work on
   `delivery/deployment/`, and the check reads the tracker the other keeps.
   This changes two folder names in the model scaffold, so the change must be
-  listed in `dev/model-review.md`.
+  listed in `dev/archive/model/model-review.md`.
 - **Steps:**
   1. On any create, change, rename, or delete under `force-app/`, in the same
      response: edit the component's one row in `component-tracker.csv`, its
@@ -837,7 +837,7 @@ description is ported as is. Section 11 lists the mitigation.
    which works when the whole plugin is installed.
 7. **Scaffold change.** `sf-deploy-prep` replaces two model skill folders
    (`sf-component-tracker`, `sf-deploy-check`); list it in
-   `dev/model-review.md` so the scaffold still matches the reviewed model.
+   `dev/archive/model/model-review.md` so the scaffold still matches the reviewed model.
 8. **Older plugins in V2 projects.** `handoff` and `solution-design` also
    exist in the current `claude-toolkit` session-skills plugin. `toolkit init`
    should set every current `claude-toolkit` plugin to `false` in the

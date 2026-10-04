@@ -1,7 +1,7 @@
 # Skill audit, group C: the twelve skill-set skills (2026-10-01)
 
 Read-only audit. No skill file was changed. The checklist is
-`dev/reviews/skill-audit-2026-10-01/checklist.md`. Mike's settled decisions
+`dev/archive/reviews/skill-audit-2026-10-01/checklist.md`. Mike's settled decisions
 (`dev/GOAL.md`, "Interview answers", and `AGENTS.md`, "Rules") decide what
 counts as a conflict for Mike instead of a fail.
 

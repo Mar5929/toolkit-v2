@@ -66,7 +66,7 @@ Warnings that were not acted on:
 - 2026-09-27, 17:20: Mike's research note on shared AI memory said to start
   small and add infrastructure only when measured failures justify it, and
   that curated memory beat Lore's automatic memory loop in Lore's own tests
-  (`dev/research/memory-architecture-notes.md`).
+  (`dev/archive/research/memory-architecture-notes.md`).
 - 2026-09-28, 13:54: the agent reported "about 30,000 lines of code" to Mike
   as a normal part of the build.
 - 2026-09-29, 11:26: Mike's own voice note: "I don't want to bloat this and
@@ -360,7 +360,7 @@ Do instead:
 - 16:29 First real Claude Code sample run passed (17 sessions). Test commits
   carried "Co-Authored-By: Claude". Skill routing: Claude Code 81%, Codex 94%,
   with two Salesforce skill overlaps.
-- 16:32 Lore research recommended option C (`dev/research/lore.md`).
+- 16:32 Lore research recommended option C (`dev/archive/research/lore.md`).
 - 16:33 Mike: "the skill descriptions need to be perfectly written so the
   agent knows exactly when to use them and what they are used for"; use
   Firecrawl for the official guidance.
@@ -437,7 +437,7 @@ Do instead:
   new session.
 - 11:50 Mike asked whether to hand off; the agent recommended staying and
   wrote "Resume here" in `dev/PROGRESS.md`. At 11:50 it also saved the Notion
-  prompt to `dev/next/notion-work-tracker-prompt.md` (commit b90893b).
+  prompt to `dev/archive/handoffs/notion-work-tracker-prompt.md` (commit b90893b).
 - 11:57 Mike pointed out the parallel session "Notion work tracker
   refinement". 12:00 The agent messaged it (section 8).
 - 12:17 Mike asked what a Notion-memory project looks like. 12:19 Shown.
@@ -518,14 +518,14 @@ Do instead:
 - 14:00 Diagrams redrawn; the Davis hooks found in the original model; handoff
   prompt written; Notion session told about the corrections.
 - 14:01 The 11 finish items can no longer be completed as written.
-- 14:03 The design review finished (`dev/research/skills-first-architecture-review.md`).
+- 14:03 The design review finished (`dev/archive/research/skills-first-architecture-review.md`).
 - 14:05 Mike's answers: Done is a written rule and the agent asks him; "why do
   I need to rename the folders .memory and .work items so Obsidian can link
   them?"; save and enrich the diagrams; "I want the memory skill to be called
   memory-refine."; give official URLs or use skill-creator.
 - 14:05 Mike: "It needs to know not to overengineer this. ... It needs to know
   everything: all the templates and all the decisions we made."
-- 14:10 Commit `da5986a`: diagrams saved in `dev/diagrams/`, the Corrections
+- 14:10 Commit `da5986a`: diagrams saved in `dev/archive/diagrams/`, the Corrections
   added to `dev/GOAL.md`, full handoff prompt. The agent also explained the
   Obsidian rename: three reasons, two options, a recommendation to rename,
   and "Which do you want?". Mike did not answer.
@@ -558,13 +558,13 @@ Do instead:
 | 09-29 | Direction change: skills and timely hooks; the `toolkit` program is retired; the 11 finish items are replaced | GOAL "Direction change" | current |
 | 09-29 | Every storage option is built. Trackers: local + Obsidian, Notion, GitHub Issues, Jira. Memory: local + Obsidian, Notion in Lore's layout, Hindsight | GOAL "Corrections" | current |
 | 09-29 | One skill set per storage option; onboarding brings in only the chosen sets and their hooks; each set holds its tool's instructions, templates, and fields | GOAL "Corrections" | current |
-| 09-29 | Session start loads the current focus; memory-find is used only when more is needed. Reloading after compacting comes from the review and diagram 2 | GOAL "Corrections"; `dev/diagrams/2-when-hooks-fire.png` | current |
+| 09-29 | Session start loads the current focus; memory-find is used only when more is needed. Reloading after compacting comes from the review and diagram 2 | GOAL "Corrections"; `dev/archive/diagrams/2-when-hooks-fire.png` | current |
 | 09-29 | Hooks fire at set moments; skills are picked by description | GOAL "Corrections" | current |
 | 09-29 | Local memory keeps the Davis shape (CLAUDE.md imports, 3 hooks); whether `scripts/memory.py` (505 lines) stays is open | GOAL "Corrections" | current; one part open |
 | 09-29 | `memory-tidy` becomes `memory-refine`, per set (for example `notion-memory-refine`) | GOAL "Corrections" | current; confirm this reading with Mike once |
 | 09-29 | Only Mike marks Done: the agent asks him first and records his words and the date; he can also mark it himself; a written rule, no hook | GOAL "Corrections" | current |
 | 09-29 | Build skills and hooks from the official URLs or the skill-creator skill; a skill is a folder | GOAL "Corrections" | current |
-| 09-29 | Save the Excalidraw diagrams and include them in the handoff; the next agent reads the whole history | GOAL "Corrections" | done (`dev/diagrams/`, this file) |
+| 09-29 | Save the Excalidraw diagrams and include them in the handoff; the next agent reads the whole history | GOAL "Corrections" | done (`dev/archive/diagrams/`, this file) |
 | 09-29 | Diagram 1 (onboarding, skills, hooks): Mike said "I agree with the first diagram that you wrote" while objecting to the "GitHub later" and "Hindsight later" shown in it. It also showed shared work and memory skills, which he replaced with one skill set per storage option | chat 13:56 | first version agreed with corrections; redrawn version not approved (he dismissed the approval question at 14:12) |
 | 09-29 | GitHub ticket: after Mike approves the refined diagrams, add them to the body of the GitHub issue for this work and rewrite the ticket to hold everything discussed (14:11) | GOAL "Corrections" | current; open where the ticket lives (section 5.2) |
 | 09-29 | Mixed setups are allowed (any tracker with any memory). Every memory stores the work item ID, plus the Notion link when work items are in Notion; the Notion relation exists only when both are in Notion. Mike: "ok" (14:14) | GOAL "Corrections" | current; Notion session told 14:15 |
@@ -608,7 +608,7 @@ Do instead:
 | 09-26 | Memory options: built-in `.memory/`, local Hindsight, Notion | GOAL "Settled decisions" | current |
 | 09-26 | Hindsight self-hosted only: no Cloud, no Docker, `uv tool install hindsight-api --python 3.12`, Ollama `gpt-oss:20b`, one bank per project | same | current |
 | 09-26 | Notion CLI `ntn`; Mike runs `ntn login` | same | current |
-| 09-26 | Model review is a checklist for Mike (`dev/model-review.md`) | same | current |
+| 09-26 | Model review is a checklist for Mike (`dev/archive/model/model-review.md`) | same | current |
 | 09-26 | Built by a team of Opus agents | same | current |
 | 09-26 | Goal lives in `dev/GOAL.md`; `/goal` points at it; `dev/PROGRESS.md` kept current | chat 13:59 | current |
 | 09-26 | Plain English output style in every new project | chat 13:45 | current |
@@ -638,7 +638,7 @@ Ask one at a time, each with a recommendation, explained in plain words first.
    item, with the reason Mike was shown. Explained; not answered.
 6. **Rules questions:** `dev/model-changes.md`, "Rules best practices: needs
    your yes", lists 16 (the chat said 15). Not answered.
-7. **Model review items:** 13 "Still open" items in `dev/model-review.md`,
+7. **Model review items:** 13 "Still open" items in `dev/archive/model/model-review.md`,
    including whether to bring back the "Proposed memory saves" card.
 8. **Not applied, waiting for a yes** (`dev/model-changes.md`): guard items A
    and B, Salesforce skill descriptions in what/why/when form, the guard's
@@ -748,7 +748,7 @@ Davis shape back for local memory.
 | Local Hindsight server: LaunchAgent `local.toolkit-v2.hindsight`, `127.0.0.1:8888`, Ollama `gpt-oss:20b` | `~/Library/LaunchAgents/local.toolkit-v2.hindsight.plist` | kept for the Hindsight memory set |
 | Everyday install: `toolkit@toolkit-v2` on in `~/.claude/settings.json` and `~/.codex/config.toml`, wrapper `~/.local/bin/toolkit`, `~/.config/toolkit-v2/plugin-root` | Mike's machine | must change or be removed when the program goes; needs Mike's yes; undo steps in `dev/test-runs/install-everyday.md`. Claude Code loads these plugins live from the repo folder, so edits reach every session on the Mac. |
 | Model branch `toolkit-v2/approved-changes`, 27 commits after `efa2440`, head `0b98c16` | `/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved` | kept; Mike merges it himself after the rewrite |
-| Build plan, skill index, reviews, sample-run evidence | `dev/ARCHITECTURE.md`, `dev/SKILL-INDEX.md`, `dev/final-review.md`, `dev/test-runs/` | history only |
+| Build plan, skill index, reviews, sample-run evidence | `dev/ARCHITECTURE.md`, `dev/SKILL-INDEX.md`, `dev/archive/model/final-review.md`, `dev/test-runs/` | history only |
 
 ## 7. Templates and records
 
@@ -778,7 +778,7 @@ Work items (local tracker only):
   selected design, diagrams, build and verification plan, sources, misread
   risks, notes.
 - Stages and statuses: 14 stages and 6 statuses, from the `work` skill's
-  lifecycle in `claude-toolkit` (`dev/research/work-process.md`).
+  lifecycle in `claude-toolkit` (`dev/archive/research/work-process.md`).
 
 Memory (built-in memory only):
 - `.memory/AGENTS.md`: how the store works; can be opened as an Obsidian
@@ -838,7 +838,7 @@ entries.
   `tests/test_memory_runtime.py`, `.toolkit-memory.json`.
 
 A copy is also in `/Users/michaelrihm/Downloads/davis-memory-system-package`.
-`dev/model-changes-ignored-folders.diff` holds the `.memory/` and
+`dev/archive/model/model-changes-ignored-folders.diff` holds the `.memory/` and
 `.work-items/` diff from `efa2440` to `5293d7c`.
 
 ### 7.2 Records in `dev/`
@@ -848,30 +848,30 @@ A copy is also in `/Users/michaelrihm/Downloads/davis-memory-system-package`.
 | `dev/GOAL.md` | Mike's goal and every settled decision. Wins over everything. The top two sections override the rest. |
 | `dev/HISTORY.md` | This file. |
 | `dev/PROGRESS.md` | Where the work stands. Read "Direction: skills-first". "Resume here" describes the program build and is outdated. The last line of "Direction: skills-first" ("one question: build only local + Obsidian and Notion + Lore first") is also outdated: Mike answered at 13:56 that every option is built. Items after 14:01 on 2026-09-29 are missing from it. |
-| `dev/next/handoff-2026-09-29.md` | The handoff prompt for the skills-first rebuild. |
-| `dev/next/notion-work-tracker-prompt.md` | Mike's voice-note request for a Notion work tracker. It names program paths that are now retired. |
-| `dev/diagrams/` | Three diagrams, each as `.excalidraw`, `.png`, and `.connector.json` (elements for the Excalidraw connector): 1 onboarding, skills, and hooks (Mike said "I agree with the first diagram that you wrote" while objecting to the "GitHub later" and "Hindsight later" shown in it; it also showed shared work and memory skills, which he replaced with one skill set per storage option. Status: first version agreed with corrections; redrawn version not approved); 2 when hooks fire (redrawn after Mike's correction; not approved); 3 what is inside a skill (not approved). |
+| `dev/archive/handoffs/handoff-2026-09-29.md` | The handoff prompt for the skills-first rebuild. |
+| `dev/archive/handoffs/notion-work-tracker-prompt.md` | Mike's voice-note request for a Notion work tracker. It names program paths that are now retired. |
+| `dev/archive/diagrams/` | Three diagrams, each as `.excalidraw`, `.png`, and `.connector.json` (elements for the Excalidraw connector): 1 onboarding, skills, and hooks (Mike said "I agree with the first diagram that you wrote" while objecting to the "GitHub later" and "Hindsight later" shown in it; it also showed shared work and memory skills, which he replaced with one skill set per storage option. Status: first version agreed with corrections; redrawn version not approved); 2 when hooks fire (redrawn after Mike's correction; not approved); 3 what is inside a skill (not approved). |
 | `dev/research/skills-first-architecture.md` | Draft 1 of the new design. Written before Mike's corrections; it defers GitHub, Jira, and Hindsight and uses one shared storage skill. The Corrections override it. |
-| `dev/research/skills-first-architecture-review.md` | Four reviews of draft 1: hook fixes, 62 model lines, gaps, simplifications, questions. Its "Hindsight later" and shared-skill ideas are overridden. |
-| `dev/research/decisions-architecture.md` | Design for decisions in memory. Mike's "keep it simple" answer overrides its heavier parts. |
+| `dev/archive/research/skills-first-architecture-review.md` | Four reviews of draft 1: hook fixes, 62 model lines, gaps, simplifications, questions. Its "Hindsight later" and shared-skill ideas are overridden. |
+| `dev/archive/research/decisions-architecture.md` | Design for decisions in memory. Mike's "keep it simple" answer overrides its heavier parts. |
 | `dev/research/rules-best-practices.md` | Rule checklist and audit of the 18 rules. |
 | `dev/research/skill-writing-guide.md` | 68 sourced rules for skills, descriptions, hooks, agents, trigger tests. |
-| `dev/research/skill-audit.md` | Why skill folders became self-contained. |
-| `dev/research/lore.md` | Lore research and option C. |
-| `dev/research/memory-architecture-notes.md` | Mike's memory research note mapped to V2. |
-| `dev/research/memory-system.md` | The Davis memory system in full. |
-| `dev/research/model-inventory.md` | Every file of the original model, read 2026-09-26. |
-| `dev/research/notion-design.md`, `notion-live-tests.md` | Notion IDs, properties, `ntn` use, and live test results. |
-| `dev/research/hindsight.md` | How to run Hindsight locally. |
+| `dev/archive/research/skill-audit.md` | Why skill folders became self-contained. |
+| `dev/archive/research/lore.md` | Lore research and option C. |
+| `dev/archive/research/memory-architecture-notes.md` | Mike's memory research note mapped to V2. |
+| `dev/archive/research/memory-system.md` | The Davis memory system in full. |
+| `dev/archive/research/model-inventory.md` | Every file of the original model, read 2026-09-26. |
+| `dev/archive/research/notion-design.md`, `notion-live-tests.md` | Notion IDs, properties, `ntn` use, and live test results. |
+| `dev/archive/research/hindsight.md` | How to run Hindsight locally. |
 | `dev/research/platform-best-practices.md` | Claude Code and Codex platform facts. |
-| `dev/research/work-process.md` | The work-item process to keep: 14 stages, approvals, lifecycle. |
-| `dev/research/project-init-library.md`, `session-skills.md` | What the old `claude-toolkit` ships. |
+| `dev/archive/research/work-process.md` | The work-item process to keep: 14 stages, approvals, lifecycle. |
+| `dev/archive/research/project-init-library.md`, `session-skills.md` | What the old `claude-toolkit` ships. |
 | `dev/research/critique-*.md`, `skill-index-draft-*.md`, `model-review-draft.md` | Program-era drafts and critiques. History. |
 | `dev/model-changes.md` | Every model branch change, how to merge it, and the "needs your yes" lists. |
-| `dev/model-review.md` | Mike's checklist: the 23 changes and 13 still-open items. |
+| `dev/archive/model/model-review.md` | Mike's checklist: the 23 changes and 13 still-open items. |
 | `dev/ARCHITECTURE.md` | Program build plan (revision 3). History only. |
 | `dev/SKILL-INDEX.md` | Program-era skill index. History only. |
-| `dev/final-review.md` | Independent reviews of the program build. History only. |
+| `dev/archive/model/final-review.md` | Independent reviews of the program build. History only. |
 | `dev/test-runs/` | Sample-run evidence, routing checks (last full round 97% Claude Code, 95% Codex), `open-bugs.md` (77 findings), `install-everyday.md`, `notion-after.md`, `lore-layout.md`. History, but the findings about skipped steps still apply. |
 
 ## 8. The parallel session
@@ -883,10 +883,10 @@ A copy is also in `/Users/michaelrihm/Downloads/davis-memory-system-package`.
   Tasks, board and table views, a Decisions view, memories grouped by work
   item) and the Notion instructions inside the Notion work tracking and Notion
   memory skill sets. It writes its part to
-  `dev/research/notion-skills-first.md` (not written yet at 14:10 on
+  `dev/archive/research/notion-skills-first.md` (not written yet at 14:10 on
   2026-09-29).
 - Mike's Notion tracker requirements are in
-  `dev/next/notion-work-tracker-prompt.md`: projects at the top, up to three
+  `dev/archive/handoffs/notion-work-tracker-prompt.md`: projects at the top, up to three
   levels of items, tasks as a checklist in the body, phases are not work
   items, board, table, and roadmap views, no assignee or points, one Solution
   Design page per item, and keep it simple.
@@ -901,7 +901,7 @@ A copy is also in `/Users/michaelrihm/Downloads/davis-memory-system-package`.
     this side writes the memory rules that tell agents to fill those links.
   - 13:29: the direction change; the program is retired; build nothing;
     resend four other questions that never arrived; write
-    `dev/research/notion-skills-first.md`.
+    `dev/archive/research/notion-skills-first.md`.
   - 13:46: review draft 1's Notion parts.
   - 14:00: Mike's corrections, including the names notion-work-track,
     notion-work-find, notion-memory-save/find/tidy; every option built;
