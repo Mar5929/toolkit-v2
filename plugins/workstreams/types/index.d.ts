@@ -1,6 +1,8 @@
 // What a chat's agent reports about one piece of work.
 export type Stream = {
   name: string
+  // One or two plain sentences: what the owner asked for and why.
+  about?: string
   status: StreamStatus
   next: string
   // When it was last reported, in milliseconds.
@@ -36,6 +38,8 @@ export type Chat = {
 export type Marks = {
   // Pieces of work the owner marked Done.
   done: Record<string, number>
+  // Chats whose card the owner folded; 0 when unfolded again.
+  folded: Record<string, number>
   // Pieces of work the owner dismissed.
   streams: Record<string, number>
   // Chats the owner dismissed.

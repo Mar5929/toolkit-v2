@@ -182,13 +182,22 @@ node --test 'dev/tests/*.test.mjs'
   lines of tests. With the Dismiss buttons (his yes, 2026-10-03, told about
   45 more lines) it was about 620 lines plus about 370 lines of tests. With
   the Done button and one card per chat (his yes and his idea, 2026-10-03,
-  told about 30 more lines) it is about 650 lines plus about 415 lines of
-  tests. Tell him the size again before it grows.
+  told about 30 more lines) it was about 650 lines plus about 415 lines of
+  tests. With plain names, the About line, the labelled layout, and
+  collapsible cards (his yes, 2026-10-04, told about 70 more lines) it is
+  about 715 lines plus about 475 lines of tests. Tell him the size again
+  before it grows.
   - It is installed once per computer in Claude Code. Nothing of it is copied
     into a project, so the code limit for projects stands.
   - Each chat reports its own work. The plugin gives the agent one tool,
     `mcp__workstreams__report`, and one short instruction at the start of
-    each chat. The agent sends a name, a status, and the next step. This
+    each chat. The agent sends a name, an "about" text, a status, and the
+    next step. Mike switches between many chats and needs reminding what each
+    piece of work is (2026-10-04), so the name is a subject line of 8 words
+    or fewer in his own plain words, and "about" is one or two plain
+    sentences, 30 words or fewer, on what he asked for and why. Neither holds
+    a ticket number, a file name, or a technical term. The first "about" is
+    kept; later reports change only the status and the next step. This
     costs a few tokens per report, plus the instruction and the tool's
     listing in every chat. A piece of work is Mike's "workstream" (his words,
     2026-10-03: "a significant piece of work ... a work item or some large
@@ -210,12 +219,18 @@ node --test 'dev/tests/*.test.mjs'
     chat renamed in the sidebar shows its new name. A chat named "Main
     Orchestrator" is listed first.
   - The panel shows one card per chat, with that chat's pieces of work inside
-    it, each with a colored status label (Mike's layout, 2026-10-03). The
-    work finished in the last day is listed below the cards.
+    it (Mike's layout, 2026-10-03 and 2026-10-04). A "Chat" label sits above
+    the chat's name and a "Workstreams" label above its work, so the two are
+    never confused. Each piece of work shows its name, then the lines About,
+    Status, and Next, always in that order; color is used only for status.
+    A card folds with Collapse and opens with Expand; a folded card still
+    says how many pieces of work it has and how many need him. The work
+    finished in the last day is listed below the cards.
   - Mike's own presses are kept in one file for the project,
     `_dismissed.json`, beside the chats' files, so every chat's panel shows
-    the same. Done moves a piece of work to the finished list. Dismiss hides
-    a piece of work. "Dismiss chat" hides a chat and its work: the panel is
+    the same. "Mark done" moves a piece of work to the finished list. "Hide"
+    hides a piece of work. Collapse folds a card. "Dismiss chat" hides a chat
+    and its work: the panel is
     not told when Mike archives a chat. A press on a piece of work holds
     until the work is reported again. A dismissed chat shows again when Mike
     writes to it or it reports work.

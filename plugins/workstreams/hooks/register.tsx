@@ -27,12 +27,14 @@ const STATUSES: readonly StreamStatus[] = [
 ]
 // The label and color of each status and state that gets a colored label.
 const LOOK: Record<string, readonly [string, string]> = {
-  needs_owner: ['NEEDS YOU', 'magenta'],
-  blocked: ['BLOCKED', 'red'],
-  in_progress: ['IN PROGRESS', 'blue'],
-  asking: ['ASKING YOU', 'magenta'],
-  working: ['WORKING', 'green'],
+  needs_owner: ['Needs you', 'magenta'],
+  blocked: ['Blocked', 'red'],
+  in_progress: ['In progress', 'blue'],
+  asking: ['Asking you', 'magenta'],
+  working: ['Working', 'green'],
 }
+// The width of the About, Status, and Next labels beside a piece of work.
+const LABEL_WIDTH = 8
 const STATE_ORDER: readonly ChatState[] = ['asking', 'working', 'stopped']
 // A prompt of one of these kinds is the owner's own message.
 const OWNER = ['composer', 'bridge', 'sdk']
@@ -44,13 +46,18 @@ const INSTRUCTION =
   'for and is following. Call mcp__workstreams__report (load it with ToolSearch first if it is ' +
   'deferred) when you start one, when its status changes, before you stop to wait for the ' +
   'owner, and when it is done. Do not report the steps inside a piece of work, questions, or ' +
-  'small chores. Helper agents do not report. Give a short name (with the work item ID when ' +
-  'there is one), the status, and the next step in one short sentence. Report each piece of ' +
-  'work separately. Do not mention the report in your reply.'
+  'small chores. Helper agents do not report. The owner switches between many chats and needs ' +
+  'reminding what each piece of work is, so write for him: the name is a subject line of 8 ' +
+  'words or fewer saying what he asked for, in his own plain words; "about" is one or two ' +
+  'plain sentences, 30 words or fewer, saying what he asked for and why it matters to him. ' +
+  'Use no ticket numbers, file names, or technical terms in either. Keep the same name for ' +
+  'the whole life of the work. Give the status, and the next step and who does it in one ' +
+  'short sentence. Report each piece of work separately. Do not mention the report in your ' +
+  'reply.'
 
 const board = atom({ plugin: 'workstreams', key: 'board' } as const, {
   chats: [],
-  marks: { done: {}, streams: {}, chats: {} },
+  marks: { done: {}, folded: {}, streams: {}, chats: {} },
   note: '',
   here: '',
   at: 0,
@@ -164,6 +171,7 @@ const readMarks = async ($: EngineInterface, folder: string): Promise<Marks> => 
 
   return {
     done: { ...kept?.done },
+    folded: { ...kept?.folded },
     streams: { ...kept?.streams },
     chats: { ...kept?.chats },
   }
@@ -211,12 +219,14 @@ const load = async ($: EngineInterface) => {
 // work, by its name, to the finished list. "streams" hides a piece of work,
 // and "chats" hides a chat, by its id. A mark on a piece of work holds until
 // the work is reported again; one on a chat, until the owner writes to it.
+// "folded" folds a chat's card, by its id; a second press unfolds it.
 const mark = async ($: EngineInterface, kind: keyof Marks, key: string) => {
   try {
     const config = await configDir($)
     const folder = `${config}/workstreams/${projectOf(await chatDir($))}`
     const marks = await readMarks($, folder)
-    marks[kind][key] = await $.clock.now()
+    const isUnfold = kind === 'folded' && (marks.folded[key] ?? 0) > 0
+    marks[kind][key] = isUnfold ? 0 : await $.clock.now()
     await $.fs.write(`${folder}/${MARKS_FILE}`, JSON.stringify(marks))
   } catch {
     // The card stays; the owner can press again.
@@ -248,7 +258,17 @@ export const register: Register = on => {
         properties: {
           name: {
             type: 'string',
-            description: 'A short name. Use the same name each time for the same work.',
+            description:
+              'A subject line of 8 words or fewer: what the owner asked for, in his own plain ' +
+              'words. No ticket numbers, file names, or technical terms. Use the same name ' +
+              'each time for the same work.',
+          },
+          about: {
+            type: 'string',
+            description:
+              'One or two plain sentences, 30 words or fewer: what the owner asked for and ' +
+              'why it matters to him. No ticket numbers or file names. Send it when the work ' +
+              'starts; the first one is kept.',
           },
           status: {
             type: 'string',
@@ -352,12 +372,7 @@ export const register: Register = on => {
     }
 
     const at = await $.clock.now()
-    const stream: Stream = {
-      name,
-      status: STATUSES.find(status => status === e.status) ?? 'in_progress',
-      next: clip(e.next, 200),
-      at,
-    }
+    const about = clip(e.about, 300)
     await change($, chat => ({
       ...chat,
       active: at,
@@ -367,7 +382,14 @@ export const register: Register = on => {
             !isSame(one.name, name) &&
             !(one.status === 'done' && at - one.at > DAY),
         ),
-        stream,
+        {
+          name,
+          // The reminder of what the work is stays as first written.
+          about: chat.streams.find(one => isSame(one.name, name))?.about || about,
+          status: STATUSES.find(status => status === e.status) ?? 'in_progress',
+          next: clip(e.next, 200),
+          at,
+        },
       ].slice(-MAX_STREAMS),
     }))
     void loadIfShown($).catch(() => {})
@@ -497,91 +519,127 @@ export const register: Register = on => {
       )
     const total = active.reduce((sum, chat) => sum + openOf(chat).length, 0)
 
-    const label = (kind: string) =>
+    const chip = (kind: string) =>
       LOOK[kind] && (
-        <Box>
-          <Text bold color="white" backgroundColor={LOOK[kind][1]}>
-            {` ${LOOK[kind][0]} `}
-          </Text>
-        </Box>
+        <Text bold color="white" backgroundColor={LOOK[kind][1]}>
+          {` ${LOOK[kind][0]} `}
+        </Text>
       )
-    const heading = (text: string) => (
-      <Box marginTop={1}>
-        <Text bold>{text}</Text>
+    // One labelled line of a piece of work: a grey label, then its value.
+    const line = (name: string, value: unknown) => (
+      <Box>
+        <Box flexShrink={0} width={LABEL_WIDTH}>
+          <Text dimColor>{name}</Text>
+        </Box>
+        <Box flexShrink={1}>{value}</Box>
       </Box>
     )
+    const count = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`
 
     return (
       <Box flexDirection="column" paddingX={1}>
-        <Box>
+        <Box justifyContent="space-between">
+          <Text dimColor>
+            {count(active.length, 'chat')} · {count(total, 'workstream')}
+          </Text>
           <Button key="refresh" label="Refresh" onPress={() => load($)} />
-          {note !== '' && <Text dimColor> {note}</Text>}
         </Box>
-
-        {heading(`Chats (${active.length}) · Workstreams (${total})`)}
+        {note !== '' && <Text dimColor>{note}</Text>}
         {active.length === 0 && (
           <Text dimColor wrap="wrap">
             No chat in this project has reported yet. A chat shows here after
             its next message.
           </Text>
         )}
-        {active.map((chat, chatIndex) => (
-          <Box
-            flexDirection="column"
-            borderStyle="round"
-            borderDimColor={chat.state === 'stopped' && !needsOwner(chat)}
-            borderColor={needsOwner(chat) ? LOOK.asking[1] : LOOK[chat.state]?.[1]}
-            paddingX={1}
-            marginTop={1}
-          >
-            <Text bold wrap="wrap">
-              {shownName(chat)}
-            </Text>
-            {label(chat.state) || <Text dimColor>Stopped {ago(at - chat.at)}</Text>}
-            {chat.asked !== '' && (
-              <Text dimColor wrap="wrap">
-                You: {chat.asked}
-              </Text>
-            )}
-            {chat.helpers.length > 0 && (
-              <Text dimColor>Helper agents running: {chat.helpers.length}</Text>
-            )}
 
-            {openOf(chat).map((stream, index) => (
-              <Box flexDirection="column" marginTop={1}>
-                {label(stream.status)}
-                <Text bold wrap="wrap">
-                  {stream.name}
-                </Text>
-                {stream.next !== '' && <Text wrap="wrap">Next: {stream.next}</Text>}
-                <Box columnGap={1}>
-                  <Button
-                    key={`done-${chatIndex}-${index}`}
-                    label="Done"
-                    onPress={() => mark($, 'done', keyOfWork(stream))}
-                  />
-                  <Button
-                    key={`dismiss-${chatIndex}-${index}`}
-                    label="Dismiss"
-                    dimColor
-                    onPress={() => mark($, 'streams', keyOfWork(stream))}
-                  />
-                </Box>
+        {active.map((chat, chatIndex) => {
+          const open = openOf(chat)
+          const isFolded = (marks.folded[chat.id] ?? 0) > 0
+          const waiting = open.filter(stream => stream.status === 'needs_owner').length
+
+          return (
+            <Box
+              flexDirection="column"
+              borderStyle="round"
+              borderDimColor={chat.state === 'stopped' && !needsOwner(chat)}
+              borderColor={needsOwner(chat) ? LOOK.asking[1] : LOOK[chat.state]?.[1]}
+              paddingX={1}
+              marginTop={1}
+            >
+              <Box justifyContent="space-between">
+                <Text dimColor>Chat</Text>
+                <Button
+                  key={`dismiss-chat-${chatIndex}`}
+                  label="Dismiss chat"
+                  dimColor
+                  onPress={() => mark($, 'chats', chat.id)}
+                />
               </Box>
-            ))}
+              <Text bold wrap="wrap">
+                {shownName(chat)}
+              </Text>
+              <Box>
+                {chip(chat.state) || <Text dimColor>Stopped {ago(at - chat.at)}</Text>}
+              </Box>
+              {chat.asked !== '' && (
+                <Text dimColor wrap="wrap">
+                  You said: {chat.asked}
+                </Text>
+              )}
+              {chat.helpers.length > 0 && (
+                <Text dimColor>Helper agents running: {chat.helpers.length}</Text>
+              )}
 
-            <Box marginTop={1}>
-              <Button
-                key={`dismiss-chat-${chatIndex}`}
-                label="Dismiss chat"
-                dimColor
-                onPress={() => mark($, 'chats', chat.id)}
-              />
+              {open.length > 0 && (
+                <Box marginTop={1} columnGap={1}>
+                  <Button
+                    key={`fold-${chatIndex}`}
+                    label={isFolded ? 'Expand' : 'Collapse'}
+                    dimColor
+                    onPress={() => mark($, 'folded', chat.id)}
+                  />
+                  <Text dimColor>
+                    Workstreams ({open.length})
+                    {isFolded && waiting > 0
+                      ? ` · ${waiting} ${waiting === 1 ? 'needs' : 'need'} you`
+                      : ''}
+                  </Text>
+                </Box>
+              )}
+              {!isFolded &&
+                open.map((stream, index) => (
+                  <Box flexDirection="column" marginTop={1} paddingLeft={2}>
+                    <Text bold wrap="wrap">
+                      {stream.name}
+                    </Text>
+                    {stream.about && line('About', <Text wrap="wrap">{stream.about}</Text>)}
+                    {line('Status', chip(stream.status))}
+                    {stream.next !== '' &&
+                      line('Next', <Text wrap="wrap">{stream.next}</Text>)}
+                    <Box columnGap={1}>
+                      <Button
+                        key={`done-${chatIndex}-${index}`}
+                        label="Mark done"
+                        onPress={() => mark($, 'done', keyOfWork(stream))}
+                      />
+                      <Button
+                        key={`dismiss-${chatIndex}-${index}`}
+                        label="Hide"
+                        dimColor
+                        onPress={() => mark($, 'streams', keyOfWork(stream))}
+                      />
+                    </Box>
+                  </Box>
+                ))}
             </Box>
-          </Box>
-        ))}
+          )
+        })}
 
-        {finished.length > 0 && heading(`Done today (${finished.length})`)}
+        {finished.length > 0 && (
+          <Box marginTop={1}>
+            <Text dimColor>Done today ({finished.length})</Text>
+          </Box>
+        )}
         {finished.map(work => (
           <Text dimColor wrap="wrap">
             ✓ {work.name} · {work.chats.join(', ')}
