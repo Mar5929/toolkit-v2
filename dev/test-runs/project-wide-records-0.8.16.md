@@ -3,7 +3,7 @@
 ## Repository checks
 
 - `claude plugin validate .`, `./plugins/toolkit`, and `./plugins/workstreams`: passed.
-- `claude plugin test ./plugins/workstreams`: 13 passed, 0 failed.
+- `claude plugin test ./plugins/workstreams`: 14 passed, 0 failed after merging the current main branch.
 - `node dev/tools/check-skills.mjs`: 22 skills, 0 errors, 0 warnings. This includes the five model-to-skill template comparisons and the shared-skill setup count.
 - `node dev/tools/check-rules.mjs --dir plugins/toolkit/skills/project-setup/assets/model`: passed with two existing warnings about `salesforce-org-safety.md` size and one long paragraph in `session-handoff.md`.
 - `node --test 'dev/tests/*.test.mjs'`: 42 passed, 0 failed.
