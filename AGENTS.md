@@ -73,6 +73,7 @@ chat handling each one, and each chat's state. It uses no Notion. See
 | `dev/tools/check-rules.mjs` | Checks the model's rule files against Claude Code's guidance for rules (`dev/research/rules-best-practices.md`). |
 | `dev/tools/rule-lint.mjs` | The checks `check-rules.mjs` runs, and the `AGENTS.md` rules list the rule files give. Dev only: nothing under `plugins/` imports it. |
 | `dev/tests/hooks.test.mjs` | Tests the three hook commands and the settings snippets in scratch folders. |
+| `dev/tests/org-guard.test.mjs` | Tests the model's Salesforce org guard, `guard-protected-orgs.cjs`, with the model's `protected-orgs.json`, in a scratch folder with a stand-in `sf`. No org is reached. |
 | `.claude/settings.json` | Settings for sessions working on this repository. `claudeMdExcludes` stops the model copy's `CLAUDE.md`, `AGENTS.md` files, and rules from loading as instructions here: they are for projects, not for this repository. |
 
 What a project gets from onboarding:
