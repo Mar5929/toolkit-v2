@@ -91,6 +91,12 @@ Do these in order.
 
 ## 2. Read what the project holds
 
+Look for existing architecture, stakeholder, shared-question, and
+source-intake locations. In the list below, name each location and which
+of the five `project-wide-records/` types it might serve. Keep the old
+records in place until the owner chooses a move; do not create a second
+authoritative copy during move-over.
+
 Every command here only reads. Run each alone, from the main checkout.
 
 | Read | With |

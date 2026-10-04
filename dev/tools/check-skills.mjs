@@ -64,6 +64,11 @@ const PATH_SPAN = /^(?:\.\/)?(?:references|assets|examples|scripts|agents)\/\S*$
 const MODEL_COPIES = {
   '.shared-skills/managing-work-items/assets/work-item-template.md': 'work-items/work-item-template/WORK-ITEM.md',
   '.shared-skills/managing-work-items/assets/design-template.md': 'work-items/work-item-template/DESIGN.md',
+  '.shared-skills/managing-project-wide-records/assets/DOMAIN-MAP.md': 'project-wide-records/templates/DOMAIN-MAP.md',
+  '.shared-skills/managing-project-wide-records/assets/PROJECT-QUESTION.md': 'project-wide-records/templates/PROJECT-QUESTION.md',
+  '.shared-skills/managing-project-wide-records/assets/PERSON.md': 'project-wide-records/templates/PERSON.md',
+  '.shared-skills/managing-project-wide-records/assets/TARGET-ARCHITECTURE.md': 'project-wide-records/templates/TARGET-ARCHITECTURE.md',
+  '.shared-skills/managing-project-wide-records/assets/INTAKE-RECEIPT.md': 'project-wide-records/templates/INTAKE-RECEIPT.md',
 };
 
 const findings = [];
@@ -261,7 +266,7 @@ if (HAS_MODEL) {
 if (HAS_MODEL) {
   // Files the model holds that every project gets. A model file in neither these lists nor the
   // Salesforce list of setup-copy.md fails the run, so a person decides where it belongs.
-  const EVERY_PROJECT_TOP = ['.agents', '.claude', '.gitignore', 'AGENTS.md', 'CLAUDE.md', 'PROJECT-ROADMAP.md', 'PROJECT.md', 'README.md', 'SOUL.md', 'ai-external-knowledge', 'memory', 'requirements', 'system-guide', 'tests', 'work-items'];
+  const EVERY_PROJECT_TOP = ['.agents', '.claude', '.gitignore', 'AGENTS.md', 'CLAUDE.md', 'PROJECT-ROADMAP.md', 'PROJECT.md', 'README.md', 'SOUL.md', 'ai-external-knowledge', 'memory', 'project-wide-records', 'requirements', 'system-guide', 'tests', 'work-items'];
   const EVERY_PROJECT_RULES = ['ai-external-knowledge.md', 'cite-recalled-knowledge.md', 'humanize-outbound-text.md', 'keep-work-item-current.md', 'memory-review-and-save.md', 'plain-english-artifacts.md', 'publish-project-documents.md', 'session-handoff.md', 'shared-repository-work.md', 'work-item-folders.md'];
   const copyFile = path.join(SETUP, 'references/setup-copy.md');
   const hooksFile = path.join(SETUP, 'references/skills-hooks-settings.md');

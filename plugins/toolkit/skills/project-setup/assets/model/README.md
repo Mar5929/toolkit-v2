@@ -26,6 +26,7 @@
 - [PROJECT-ROADMAP.md](PROJECT-ROADMAP.md): the project's phases and the top-level work items in each.
 <!-- endif -->
 - [requirements/](requirements/): accepted functional behavior by area.
+- [project-wide-records/AGENTS.md](project-wide-records/AGENTS.md): where to find questions, domain maps, people, target direction, and intake receipts shared across work items.
 - [AGENTS.md](AGENTS.md): how the agent works in this project, where each kind of information goes, and the full project map.
 - Active work, each item's design and decisions, and the project's own tasks: the work tracker chosen at setup, recorded in `PROJECT.md` under "Toolkit settings". Every decision made while working an item is saved in its Questions and Answers first; a project-wide decision, after the owner's yes, also gets a memory record.
 

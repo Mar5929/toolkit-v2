@@ -23,7 +23,7 @@ the routing rounds for the retired skills) is in Git history.
 - **1 tool list skill**, `choosing-outside-tools`, in the `toolkit` plugin
   (TKV-18). It is on for every folder in both hosts and is never copied into
   a project. It lists the outside tool the owner uses for each kind of job.
-- **9 shared skills** that every project gets.
+- **10 shared skills** that every project gets.
 - **Work tracking sets**, one per project, 1 skill each, always named
   `tracking-work-items`: local folders with Obsidian, Notion, or GitHub
   Issues. Jira is deferred by Mike: no Jira skills.
@@ -34,8 +34,8 @@ the routing rounds for the retired skills) is in Git history.
 - **Notion**: work items or memory in Notion add `using-notion-cli`, once.
 - **Salesforce projects** add 3 skills, plus Salesforce's own skills
   (`forcedotcom/sf-skills`), which the owner installs.
-- A project has 9 + 1 + 2 = 12 skills, 13 with work items or memory in
-  Notion; with Hindsight memory, 10, or 11 with work items in Notion.
+- A project has 10 + 1 + 2 = 13 skills, 14 with work items or memory in
+  Notion; with Hindsight memory, 11, or 12 with work items in Notion.
   Salesforce adds 3.
 
 ## 1. The `toolkit` plugin's own skills (onboarding and the tool list)
@@ -45,7 +45,7 @@ the routing rounds for the retired skills) is in Git history.
 | `project-setup` | `./` | Sets up, checks, or updates Toolkit V2 in a project, moves an older claude-toolkit project onto it, or changes where work items or memory live, so projects run the same files. Use when the owner says "toolkit v2", "set up this project", "initialize this project", or "update the toolkit". Not for a Git pull; use pull-latest. Not for running the older claude-toolkit (project-sync). |
 | `choosing-outside-tools` | `../choosing-outside-tools/` | Lists the outside tool the owner uses for each kind of job and how to set it up, so every computer uses the same tool. Use when he asks for a job on the list, such as "make an explainer video", and no skill for that tool is on this computer; when he asks which tool he uses for a job; or when he says "add this to my tool list". Not for doing the job when a skill for that tool is on this computer. |
 
-## 2. Shared skills (every project, 9)
+## 2. Shared skills (every project, 10)
 
 They never assume one tracker or memory. Every work tracking set holds a
 skill named `tracking-work-items`, and every project with local or Notion
@@ -59,7 +59,8 @@ names no skill (the model's `.claude/rules/keep-work-item-current.md`).
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `managing-work-items` | `assets/.shared-skills/managing-work-items/` | Runs every work item in this project from idea to Done: refining requirements by interview, designing, building, the testing loop, reflecting, and deploying, and stops for the owner's OK at each approval point. Use this whenever the owner mentions a work item, a feature, a bug, a plan, requirements, a design, a build, testing, or shipping, even if he does not name this skill. |
+| `managing-work-items` | `assets/.shared-skills/managing-work-items/` | Runs a work item from idea to Done through requirements, design, build, testing, reflection, and deployment, keeping its tracker current and asking for the owner's approval at each gate. Use when the owner asks to plan, change, build, test, or ship an item. When a source, question, or target direction affects other items, also use managing-project-wide-records. |
+| `managing-project-wide-records` | `assets/.shared-skills/managing-project-wide-records/` | Connects sources, questions, people, domains, and target direction that affect several work items or the whole project, so a fresh agent can find each authoritative record. Use when evidence, an answer, or a proposed design crosses item boundaries, or when those connections need review. Not for one item alone; use managing-work-items. |
 | `handoff` | `assets/.shared-skills/handoff/` | Updates this session's work items and Current State, offers what is worth keeping to memory, then writes a checked, self-contained prompt for a new session, or checks a pasted one, so nothing is lost when context clears. Use when the owner ends the session or says "write a handoff", "I'm clearing context", "start a new session", or "check this handoff". Not for a recap alone; use session-summary. |
 | `braindump` | `assets/.shared-skills/braindump/` | Plays back a loose brain dump in very simple words and waits for the owner's yes before any work starts, so nothing is planned, built, or saved on a misunderstanding. Use when he wants his brain dump checked first, such as "here's a brain dump", "play that back", "tell me what you heard", or "make sure you understood before you start". Not for a brain dump he asks only to plan; use managing-work-items. |
 | `explain-simply` | `assets/.shared-skills/explain-simply/` | Re-explains the last answer, a plan, or a named document as short plain bullets, keeping every number, name, and path, so the owner can follow it and no fact is lost. Use when he finds an answer too technical or hard to follow, for example "explain it like I'm five", "simpler", "less jargon", or "I don't get it". |
@@ -67,7 +68,7 @@ names no skill (the model's `.claude/rules/keep-work-item-current.md`).
 | `pull-latest` | `assets/.shared-skills/pull-latest/` | Brings the local repository up to date with its remote by fetching and merging, never rebasing or resetting, so no local work or shared history is lost. Use when the owner says "get the latest", "pull the latest changes", "sync with remote", or "update from origin". Not for throwing away local work; use reset-to-remote. Not for a toolkit update; use project-setup. |
 | `reset-to-remote` | `assets/.shared-skills/reset-to-remote/` | Makes the local repository an exact copy of its remote, discarding local commits and branches the remote no longer has, after showing a plan, so cloning again is not needed and nothing is lost without warning. Use only when the owner asks for it in his own words, for example "wipe local", "match remote exactly", or "fresh start from remote". Not for a routine update; use pull-latest. |
 | `merge-and-clean-up` | `assets/.shared-skills/merge-and-clean-up/` | Merges one approved GitHub pull request, then removes only its branches and worktree, after its checks and the merge-safety check pass, so nothing unchecked is merged and no other session's work is removed. Use when managing-work-items asks, or the owner names a pull request: "merge PR 12", "merge and clean up", "land this pull request". Not for shipping an approved work item; use managing-work-items. |
-| `publish-docs` | `assets/.shared-skills/publish-docs/` | Commits project document edits (requirements/, system guide, PROJECT-ROADMAP.md, PROJECT.md, READMEs) to the default branch, so it needs no pull request and touches no other session. Use when the owner asked for or approved a document edit, or says "publish the docs" or "save the docs to main". Not for a work item's requirements, or for code, rules, or skills; use managing-work-items. |
+| `publish-docs` | `assets/.shared-skills/publish-docs/` | Commits project document edits (requirements/, system guide, project-wide records, PROJECT-ROADMAP.md, PROJECT.md, READMEs) to the default branch, so it needs no pull request and touches no other session. Use when the owner asked for or approved a document edit, or says "publish the docs" or "save the docs to main". Not for a work item's requirements, or for code, rules, or skills; use managing-work-items. |
 
 ## 3. Work tracking sets (one per project)
 
@@ -209,6 +210,11 @@ fails when one differs from the model:
 | `managing-work-items`: `assets/work-item-template.md` | `work-items/work-item-template/WORK-ITEM.md` |
 | `managing-work-items`: `assets/design-template.md` | `work-items/work-item-template/DESIGN.md` |
 | `managing-project-memory`: `references/memory-criteria.md` | `memory/memory-criteria.md` |
+| `managing-project-wide-records`: `assets/DOMAIN-MAP.md` | `project-wide-records/templates/DOMAIN-MAP.md` |
+| `managing-project-wide-records`: `assets/PROJECT-QUESTION.md` | `project-wide-records/templates/PROJECT-QUESTION.md` |
+| `managing-project-wide-records`: `assets/PERSON.md` | `project-wide-records/templates/PERSON.md` |
+| `managing-project-wide-records`: `assets/TARGET-ARCHITECTURE.md` | `project-wide-records/templates/TARGET-ARCHITECTURE.md` |
+| `managing-project-wide-records`: `assets/INTAKE-RECEIPT.md` | `project-wide-records/templates/INTAKE-RECEIPT.md` |
 
 ## 9. Neighbors the routing test watches
 
@@ -224,6 +230,13 @@ the sets apart (draft 2, section 4.6).
   `managing-work-items`, which hands each read and save to
   `tracking-work-items`; only a lookup or a save opens `tracking-work-items`
   alone ("show me WI-031").
+- `managing-work-items` and `managing-project-wide-records`: one item's
+  requirements, questions, design, tasks, and approvals stay with that
+  item. The project-wide skill opens when a source, answer, or target
+  direction affects several items; it links back to each authority.
+- `managing-project-wide-records` and `managing-project-memory`: active
+  shared questions and intake receipts stay in project-wide records;
+  lasting selected decisions follow the chosen memory route.
 - `managing-work-items` and `braindump`: a brain dump he asks only to plan
   goes to `managing-work-items`; one he wants played back first goes to
   `braindump`.

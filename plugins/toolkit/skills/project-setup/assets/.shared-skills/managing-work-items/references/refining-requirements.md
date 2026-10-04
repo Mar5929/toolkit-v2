@@ -2,6 +2,15 @@
 
 Takes an item from a rough idea, meeting notes, or documents to requirements the owner approves. Every question is a row in the item's Questions and Answers, and every answer is saved the moment he gives it, so a later chat picks up at the first open question.
 
+## Contents
+
+- The Requirements layout
+- Steps
+- The question format
+- Sources
+- Roadmap, tasks, and sub-items
+- Gotchas
+
 ## The Requirements layout
 
 Each requirement is one block, headed "Requirement <number>: <short name>". `tracking-work-items` gives the block's exact form in this project's tracker.
@@ -25,6 +34,9 @@ Each requirement is one block, headed "Requirement <number>: <short name>". `tra
    - New work: create the item in State Refining Requirements, titled in his words. Give it one requirement for each separate thing he asked for, with his words for it as its Original verbatim requirement.
    - An existing item with open questions: say in one line what is settled, then ask the first open question again. Never start the interview over.
 2. **Read what the project already knows.** Search memory with `managing-project-memory`, related items with `tracking-work-items`, and the area's files in `requirements/` and `system-guide/`. Save each new source before you use it (Sources, below).
+   Also read a relevant domain map or shared question in
+   `project-wide-records/`. Use `managing-project-wide-records` when a
+   source or answer affects another item or the project as a whole.
 3. **Agree the goal first.** Ask "So the goal is <one sentence>?" After his yes, write it as the goal in the item's Overview.
 4. **Offer a helper team once.** After the goal, when the item is clearly large (a part of it meets a split test below) and `delivery` is `not-offered`, ask once whether he wants a team of helper agents to build it, and record his answer in `delivery`. A sub-item takes its parent's answer.
 5. **Interview one question at a time,** in the question format below. Ask first what later questions depend on. Ask about each vague word ("fast", "all users") until a tester could check it. Add the question's row before the reply ends, set `waiting_on` to the owner, and name its Q-ID in the Current state.
@@ -37,10 +49,16 @@ Each requirement is one block, headed "Requirement <number>: <short name>". `tra
    - an idea for how to build it: Notes, "Solution options and considerations", naming its `R-xx`.
 
    When the answer decides something a later item or another agent must follow, the next question is "This looks project-wide. Save it to memory too?", and on his yes, save it with `managing-project-memory`.
+   If the answer affects several items, update the shared question and its
+   incorporation checks with `managing-project-wide-records`. Memory does
+   not replace those checks.
 7. **Handle a change** to an earlier answer or an approved requirement.
    - Never rewrite the old row. Add "Change to Q-03: <the question now>" with his words and the date, and set the old row to "Superseded by Q-09".
    - Change the lines of each `R-xx` it affects, and keep the old wording in the Recent History row ("R-02 was: ...; changed by Q-12"). Never change an Original verbatim requirement: add his new words after it, with the date and the Q-ID.
    - When the old answer was saved to memory, ask "This changes a decision saved in memory. Save the new decision and mark the old one as replaced?"
+   - If a shared question, target direction, or another item relied on the
+     answer, reopen its incorporation checks with
+     `managing-project-wide-records`.
    - After the requirements were approved, a changed requirement and a new one each need his OK for that requirement only: add the row "Do you approve the change to R-02?", or "Do you approve R-05?" for a new one, and ask it. While that row is open, that requirement is not approved: design, build, and test nothing from it. The others stay approved, and `requirements_approved` stays as it is. A design it affects goes back to Designing. When a sub-item holds a copy of the changed requirement, change the copy the same way once he approves.
    - On his no, put the old lines back from that Recent History row, or mark a new requirement dropped, and save his words in the row. A design that went back to Designing for that change returns to the status it had.
    - A new requirement takes the next free number. A dropped one keeps its block, with " (dropped, <Q-ID>)" added to its heading: "Requirement 3: Export to PDF (dropped, Q-12)". Numbers are never reused.
@@ -71,6 +89,9 @@ Not yet covered: <what this affects that he has not raised>.
 - Save a transcript, document, or file before you use it, with `tracking-work-items`. Pasted text is saved exactly as pasted, named `YYYY-MM-DD-<short-name>.md`. Never edit a saved source; corrections go in the item.
 - Salesforce projects: a client file stays in `delivery/` and is saved there with `publish-docs`, never copied into the item.
 - Add one line per source under Notes, "Sources": where it is, what it is, and the IDs taken from it. Name the source again wherever the item uses it.
+- A source affecting several items follows `managing-project-wide-records`,
+  "Source intake across items". Keep its original in one approved source
+  home and link the other items through an intake receipt.
 - From a source: a stated behavior becomes a requirement, or a line of one, with the source's words as its Original verbatim requirement and the source named there; something another person decided becomes a question asking the owner to confirm it; a gap becomes a question with your recommendation; other facts go under Notes, Context. Tell him how many requirements and questions it gave, then ask the first question.
 
 ## Roadmap, tasks, and sub-items

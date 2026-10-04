@@ -116,6 +116,7 @@ file).
 - [ ] No setup marker left (command grep: see setup-copy.md; passes when it prints nothing, exit 1): command grep -rns -e '<!-- if ' -e '<!-- endif' AGENTS.md README.md PROJECT.md .claude/rules $(ls -d memory work-items 2>/dev/null)
 - [ ] Nothing from an option not chosen: ls -a shows work-items/ and PROJECT-ROADMAP.md only with local work items, memory/ only with local or Hindsight memory (Hindsight: only CURRENT_STATE.md in it), and delivery/, tools/, sfdx-project.json only in a Salesforce project
 - [ ] Skills: ls .claude/skills is exactly the list for the choices (skills-hooks-settings.md), each with a SKILL.md
+- [ ] Project-wide records: `project-wide-records/AGENTS.md`, the five category folders, and all five templates exist for every tracker and memory choice; the copied `managing-project-wide-records` skill has the matching five assets
 - [ ] The link: ls -la .agents shows skills -> ../.claude/skills
 - [ ] Hook commands: ls .claude/hooks shows session-start.mjs, prompt-reminder.mjs, codex-after-commit.mjs (plus the two guards in a Salesforce project)
 - [ ] Settings are valid: jq empty .claude/settings.json (and .codex/hooks.json, and .mcp.json when present)

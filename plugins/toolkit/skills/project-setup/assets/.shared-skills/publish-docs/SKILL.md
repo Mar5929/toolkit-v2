@@ -1,6 +1,6 @@
 ---
 name: publish-docs
-description: 'Commits project document edits (requirements/, system guide, PROJECT-ROADMAP.md, PROJECT.md, READMEs) to the default branch, so it needs no pull request and touches no other session. Use when the owner asked for or approved a document edit, or says "publish the docs" or "save the docs to main". Not for a work item''s requirements, or for code, rules, or skills; use managing-work-items.'
+description: 'Commits project document edits (requirements/, system guide, project-wide records, PROJECT-ROADMAP.md, PROJECT.md, READMEs) to the default branch, so it needs no pull request and touches no other session. Use when the owner asked for or approved a document edit, or says "publish the docs" or "save the docs to main". Not for a work item''s requirements, or for code, rules, or skills; use managing-work-items.'
 ---
 
 # Publish a documentation save
@@ -154,6 +154,7 @@ Never discard another session's changes.
 | For | Use |
 | --- | --- |
 | A pull request for rules, skills, prompts, hooks, settings, or code, or a work item's requirements | `managing-work-items` |
+| Deciding whether a project-wide record is needed and what it links | `managing-project-wide-records` |
 | A save that cannot finish now: the next action in its work item | `tracking-work-items` |
 | A save that cannot finish now: the next action in the handoff | `handoff` |
 

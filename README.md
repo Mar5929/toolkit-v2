@@ -11,10 +11,11 @@ exception is the workstream panel for Claude Code (your decision of
 
 ## The parts
 
-- **Your model project** (`toolkit-v2-model-project`) is the source of every
-  file a new project gets: `AGENTS.md` (the project manual the agent reads),
-  `PROJECT.md`, `PROJECT-ROADMAP.md`, the rules, and the templates. The
-  toolkit keeps an exact copy of it.
+- **The model project inside the toolkit** is the source of every project
+  file: `AGENTS.md` (the project manual the agent reads), `PROJECT.md`,
+  `PROJECT-ROADMAP.md` where local work tracking uses it, the rules,
+  `project-wide-records/`, and the templates. It lives under
+  `plugins/toolkit/skills/project-setup/assets/model/`.
 - **Skills** are written instructions, one per job. The agent picks one from
   what you say, by reading each skill's short description.
 - **Rules** are instructions the agent always follows, such as "ask before
@@ -106,6 +107,10 @@ project"**. The agent asks one question at a time and recommends an answer:
 - whether you want a `SOUL.md`.
 
 Any mix works, for example work items in Notion and memory in local files.
+Every choice also gets `project-wide-records/`: one place to connect
+sources, shared questions, people, domain maps, and target direction across
+work items. It links to the chosen tracker and memory system without
+replacing either.
 
 It shows you the plan and waits for your yes. Then it copies your model's
 files, the skills for your answers, the hooks, and the settings into the
@@ -157,11 +162,12 @@ are; the ones still in use are carried over into the Toolkit V2 form, and
 you see the first one before the rest are done. The changes are made on the
 agent's own branch and reach your main branch only after your yes.
 
-## Skills every project gets (9)
+## Skills every project gets (10)
 
 | Skill | What it does | You might say |
 | --- | --- | --- |
 | `managing-work-items` | Runs each work item from idea to Done. It works out the requirements with you one question at a time, then designs, builds, has an independent checker test the result, tidies up, and merges or deploys. It stops for your OK on the requirements, the design, the result, each merge, and Done. It saves and looks up items with `tracking-work-items`. | "help me plan this", "how should we build it", "is it ready", "ship it" |
+| `managing-project-wide-records` | Connects sources, shared questions, people, domain maps, and target direction across work items. It shows where each authoritative answer lives and which records still need an update. | "This workshop affects several items", "where did we decide the account model?" |
 | `handoff` | Saves where things stand and writes a checked prompt for a new session. | "write a handoff" |
 | `braindump` | Plays back a loose brain dump in simple words before any work starts. | "here's a brain dump" |
 | `explain-simply` | Explains the last answer again as short, plain bullets. | "explain it like I'm five" |

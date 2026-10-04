@@ -36,6 +36,10 @@ and never hold back the prompt because a save or the check failed.
    `AGENTS.md`, "Project memory", and save with the add-on's tools after his
    yes). Do not wait for his answer before the prompt: count each save
    question asked here as not answered. Nothing to keep: say so in one line.
+   Check `project-wide-records/` for intake receipts or shared questions
+   this session touched. Leave each unfinished record with its source,
+   affected destinations, and exact next action. Use
+   `managing-project-wide-records` for their procedure.
 4. **Update Current State.** Notion memory: use `managing-project-memory`.
    Local or Hindsight memory: edit `memory/CURRENT_STATE.md` in the main
    checkout (the first path `git worktree list` prints). Read it right
@@ -49,6 +53,8 @@ and never hold back the prompt because a save or the check failed.
      Cancelled has its line. Add a line under Waiting on the owner for each
      save question he has not answered.
    - Set "Last updated:" to the date, `handoff`, and `agent`.
+   - Link a shared question in Current State only while it blocks active
+     work. The shared question itself holds its full destination list.
 5. **Draft the prompt; do not show it yet.** Start from
    `assets/handoff-prompt-template.md`, written as instructions to an agent
    that knows nothing about this session. Keep a source for every claim: file,
@@ -110,6 +116,7 @@ nothing.
 | Reading and updating this session's work items and project tasks | `tracking-work-items` |
 | What a project task is, and when to tick it | `managing-work-items` |
 | Saving to memory | `managing-project-memory` (Hindsight: `AGENTS.md`, "Project memory") |
+| Open intake receipts and shared questions | `managing-project-wide-records` |
 | Notion memory: Current State | `managing-project-memory` |
 | A save that changed a Git-tracked document, such as `requirements/` or `PROJECT.md` | `publish-docs` |
 | The recap table, when the owner also asked for one | `session-summary` |
