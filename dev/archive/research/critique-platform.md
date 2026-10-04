@@ -15,7 +15,7 @@ Citation key:
   (fetched 2026-09-26; `developers.openai.com/codex/*` redirects there).
 - **CXP:`page`**: OpenAI plugin docs, `https://developers.openai.com/plugins/<page>.md`
   (fetched 2026-09-26).
-- **PBP**: `dev/research/platform-best-practices.md`. **HS**: `dev/research/hindsight.md`.
+- **PBP**: `dev/research/platform-best-practices.md`. **HS**: `dev/archive/research/hindsight.md`.
 - **Observed**: read or run on this Mac on 2026-09-26.
 
 ---

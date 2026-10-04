@@ -327,7 +327,7 @@ Sources, newest authority first: `toolkit-v2/dev/GOAL.md` (Mike, 2026-09-26); is
 - **G4. No README in every folder.** Follow Claude Code and Codex practice: hooks set up the documented way, rules path-scoped where that fits.
 - **G5. Work items everywhere use the same stages, lifecycle, `WORK-ITEM.md` body, and `DESIGN.md`.** Nesting and sub-items are allowed. When Mike moves or renames work-item files or folders, the agent detects it and adapts.
 - **G6. Port the model's memory system**, with a review for improvements.
-- **G7. The model folder itself stays unchanged.** The reviewed version goes into the new repo's scaffold; findings go in `dev/model-review.md`.
+- **G7. The model folder itself stays unchanged.** The reviewed version goes into the new repo's scaffold; findings go in `dev/archive/model/model-review.md`.
 - **G8. Review lens:** a solo "vibe coder" where the agent runs the project and the human only decides and steers.
 
 ### 5.2 Decisions recorded in issue 419 (Mike, 2026-09-25 and 2026-09-26)

@@ -9,7 +9,7 @@ Goal: refine Toolkit V2's Notion work tracker into a lightweight alternative to 
 
 Start from what exists; do not build a second tracker:
 - Code: plugins/toolkit/lib/notion/ (Notion tracker driver, ensure-root, ensure-project).
-- Design notes: dev/research/notion-design.md; what was built on my page: dev/test-runs/notion-after.md.
+- Design notes: dev/archive/research/notion-design.md; what was built on my page: dev/test-runs/notion-after.md.
 - Templates: plugins/toolkit/scaffold/model/.work-items/work-item-template/WORK-ITEM.md (work item body) and DESIGN.md (solution design).
 - Statuses and stages: run `toolkit work lifecycle`. Keep them.
 - My decisions: dev/GOAL.md. Current state: dev/PROGRESS.md. Follow AGENTS.md.

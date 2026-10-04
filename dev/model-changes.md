@@ -35,7 +35,7 @@ model folder was not touched.
   - `d655664` Group the Salesforce rules under headings and name what they mean (same)
   - `0b98c16` Put each rule line under a heading that names it, and split a long bullet (review fixes to the same)
 - Full diff of `.memory/` and `.work-items/` from `efa2440` to the branch's
-  last commit: `dev/model-changes-ignored-folders.diff` (made with
+  last commit: `dev/archive/model/model-changes-ignored-folders.diff` (made with
   `git diff efa2440 HEAD -- .memory .work-items` in the second folder).
 
 ## Decision for you
@@ -63,7 +63,7 @@ toolkit's `memory-save` skill, and that skill asks one line instead:
 6. **`DECISIONS.md` added** at the root (the V2 template: an append-only table of ID, Date, Decision, Why, Decided by, Replaces). Also linked from `PROJECT.md` and added to the paths of `.claude/rules/publish-project-documents.md`.
    - Why (recorded 2026-09-29, after Mike asked): the model had no single named place for whole-project decisions. One work item's decisions stayed in that item (`DESIGN.md` "Owner decision"); other decisions went to memory as `project_<topic>.md` ("otherwise-unowned decision" in `.memory/memory-criteria.md`); `CURRENT_FOCUS.md` listed up to three recent ones; and `.claude/rules/confirm-salesforce-changes.md` said "Record the decision where the project keeps decisions" without naming the place.
    - How it was approved: the agent added it during the first build without asking. It was item 6 of the list Mike approved on 2026-09-26 at 18:45 EDT with "go with your recommendations on all of them". That list described it in one line ("a log of project-wide decisions. Recommend: keep.") and gave no reason, so Mike approved it without the reason above.
-   - Reversed (Mike, 2026-09-29): decisions move into memory as one record each, and `DECISIONS.md` is removed from the model. See `dev/GOAL.md`, "Decisions live in memory", and `dev/research/decisions-architecture.md`. Not built yet.
+   - Reversed (Mike, 2026-09-29): decisions move into memory as one record each, and `DECISIONS.md` is removed from the model. See `dev/GOAL.md`, "Decisions live in memory", and `dev/archive/research/decisions-architecture.md`. Not built yet.
 7. **`.toolkit-memory.json` removed.** Toolkit init writes `.toolkit.json`. The memory line in `PROJECT.md` now names `.toolkit.json`, with one line per memory system.
 8. **`.claude/rules/work-item-folders.md` added** (the V2 rule). The example ID is written `WI-001`, the model's style, not a token. The toolkit must install it only for the local tracker.
 9. **Work item header fields.** `.work-items/work-item-template/WORK-ITEM.md` now has `id`, `title`, `type`, `stage`, `status`, `parent`, `waiting_on`, `priority`, `delivery`, `requirements_approved`, `design`, `result_approved`, `updated`. `active_phase` and `requirements_status` are gone. The `waiting_on` line is in double quotes, because the colon in `external: who` stops standard YAML readers (for example Python's) from reading an unquoted line. The toolkit writes a real value the same way, for example `waiting_on: "external: Acme IT"`.
@@ -129,7 +129,7 @@ Your model's `.memory/` and `.work-items/` files are tracked by Git even though 
    The first command should print `efa2440 Clarify project rules and seed fill-in guidance`. The other two should print nothing.
 
    - If the first shows a different commit, you have committed since. Do not merge by hand. Ask an agent to bring your newer commits onto the branch first; files both sides changed (for example `AGENTS.md` or `README.md`) need a careful merge.
-   - If either of the other two prints a file, you have edits not yet committed. Commit them first, then treat it like the case above. `dev/model-changes-ignored-folders.diff` shows exactly what this change does to `.memory/` and `.work-items/`.
+   - If either of the other two prints a file, you have edits not yet committed. Commit them first, then treat it like the case above. `dev/archive/model/model-changes-ignored-folders.diff` shows exactly what this change does to `.memory/` and `.work-items/`.
 
 2. Merge. Because the branch starts at your latest commit, this is a fast-forward: Git just moves `main` forward to the branch's last commit, with no new merge commit.
 
@@ -642,7 +642,7 @@ five prefixes, the labels, the fill-in guide style, and every other line stay.
   is still true: each line is one link, now with the title as its words),
   `CURRENT_FOCUS.md`, the glossary, and every rule.
 - Imported into `plugins/toolkit/scaffold/model/` (`import-model.mjs --check`
-  passes at `648bf4e`). `dev/model-changes-ignored-folders.diff` ran to
+  passes at `648bf4e`). `dev/archive/model/model-changes-ignored-folders.diff` ran to
   `648bf4e` then; it now runs to `5293d7c` (next section).
 - Bringing it in: the same merge as the rest of the branch ("How to bring the
   changes into your model", step 2). The copy command in step 3 now includes
@@ -711,7 +711,7 @@ other line stay.
   model: `toolkit rule add` creates it the first time you give an
   instruction, and rebuilds the AGENTS.md rules list so Codex reads it.
 - Imported into `plugins/toolkit/scaffold/model/` (`import-model.mjs
-  --check` passes at `5293d7c`). `dev/model-changes-ignored-folders.diff`
+  --check` passes at `5293d7c`). `dev/archive/model/model-changes-ignored-folders.diff`
   now runs from `efa2440` to `5293d7c`.
 - Bringing it in: the same merge as the rest of the branch ("How to bring
   the changes into your model", step 2).

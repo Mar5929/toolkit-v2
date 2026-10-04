@@ -773,7 +773,7 @@ Interview answers (Mike, 2026-09-29, the interview session):
   skills: "Claude fucking knows what that means." The skills were about
   40,500 lines, more than the 37,000-line program V2 replaced. Five Opus
   reviewers proposed per-skill cuts
-  (`dev/reviews/skill-cut-2026-10-01/proposals.md`); Mike: "just go - build
+  (`dev/archive/reviews/skill-cut-2026-10-01/proposals.md`); Mike: "just go - build
   it". Done in commit 89ab393 (0.5.0): work-on, work-status, and the three
   work find skills removed; the rest cut to 14,290 lines; model commits
   dcbf9ff and d3dcd65.
@@ -939,7 +939,7 @@ steps that must always run the same way.
 - Memory options: built-in `.memory/`, local Hindsight, or Notion.
 - **Notion memory uses Lore** (Mike, 2026-09-27): `github.com/makenotion/lore`,
   Notion's own open-source "persistent, shared AI memory backed by Notion for
-  MCP-compatible assistants". Research: `dev/research/lore.md`. Mike chose
+  MCP-compatible assistants". Research: `dev/archive/research/lore.md`. Mike chose
   (2026-09-27) "store in Lore's layout": the toolkit keeps its own `toolkit
   memory` commands, the model's formats, and the approval step, and writes
   each project's Notion memory in Lore's database layout (a "Memory" page
@@ -1022,7 +1022,7 @@ steps that must always run the same way.
   related to a work item, and we need to have a way to say, 'Okay, for
   this work item, here are the decisions.' Also, in memory, you could find
   just a list of all the decisions and scope them by the work items."
-  Design and the remaining open questions: `dev/research/decisions-architecture.md`.
+  Design and the remaining open questions: `dev/archive/research/decisions-architecture.md`.
 - **Keep it simple: rules plus each tool's own features, no big wrapper**
   (Mike, 2026-09-29, his words): "I don't want to overengineer this and
   create excessive code that's just going to fail at some point. I'm not
@@ -1069,7 +1069,7 @@ steps that must always run the same way.
   work-delegate; (3) new projects raise Claude Code's skill-list budget
   (`skillListingBudgetFraction`) so every Toolkit V2 description is visible.
 - **Memory additions from Mike's research note** (Mike, 2026-09-27; note
-  summarized in `dev/research/memory-architecture-notes.md`): (1) saved
+  summarized in `dev/archive/research/memory-architecture-notes.md`): (1) saved
   proposals: an unanswered "Save to memory?" becomes a `needs-review`
   record the agent does not rely on, listed under "what do you need from me"
   (work-decide) until Mike approves or rejects it; (2) a duplicate check in
@@ -1139,7 +1139,7 @@ steps that must always run the same way.
 - Review the model project's scaffolding, every template, and its root
   `AGENTS.md` as a solo "vibe coder" developer would: the agent runs the
   project, the human only makes decisions and steers. Say what is missing and
-  what is not needed. The findings are a checklist in `dev/model-review.md`.
+  what is not needed. The findings are a checklist in `dev/archive/model/model-review.md`.
   Nothing from it reaches new projects unless Mike approves it, and approved
   items are added to the model itself.
 - Notion CLI: `ntn` (official, by Notion) installed with `npm install -g ntn`.
@@ -1174,7 +1174,7 @@ with real command output, file listings, or links as proof.
 1. **Model review.** The model project's scaffolding, every template, and
    `AGENTS.md` reviewed as a solo vibe-coder would, where the agent runs the
    project and the human only decides and steers. Findings are a checklist in
-   `dev/model-review.md`. The scaffold project init installs is a re-runnable
+   `dev/archive/model/model-review.md`. The scaffold project init installs is a re-runnable
    copy of the model (a parity test shows setup output matches the model,
    apart from the chosen conditional parts and the memory mechanism files).
 2. **Plugins.** `toolkit-v2` registers its plugins for Claude Code and Codex,

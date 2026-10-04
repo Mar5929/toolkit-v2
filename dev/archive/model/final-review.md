@@ -57,7 +57,7 @@ from a command run in this close-out, unless it names an evidence file.
 | R-M3 | `toolkit doctor` in a plain folder prints "Warning:" before each computer line and "None of these blocks toolkit init." |
 | R-M9 | `postgres://admin:<password>@db.example.com:5432/app` refused, exit 2. |
 | R-M10 | `toolkit hook pre-tool`, both hosts: `rm -rf .memory` and `rm -r .work-items/` denied; `rm -rf /tmp/x` let through. |
-| R-M11 | Search of the 7,198 tracked and new files, captured docs left out: only descriptions of the no-credit rule, in `dev/research/project-init-library.md` and `dev/test-runs/skill-references-check.md`. Nothing under `plugins/`. |
+| R-M11 | Search of the 7,198 tracked and new files, captured docs left out: only descriptions of the no-credit rule, in `dev/archive/research/project-init-library.md` and `dev/test-runs/skill-references-check.md`. Nothing under `plugins/`. |
 | F1 | `plugins/toolkit/lib/memory/hindsight.mjs` line 497 still builds the find snippet with `.slice(0, 160)`. |
 | Read-only sources | `claude-toolkit` clean at `9d4ea8d`. Mike's model folder clean at `efa2440`. The approved branch head is `648bf4e` by Mike Rihm <michael@rihm.com>, no AI credit, three files under `.memory/`. |
 | Hindsight | Healthy. 24 banks, the same list as the re-review. This close-out made none. |
@@ -84,7 +84,7 @@ text the agent read.
 
 | # | Item | Verdict | Evidence |
 | --- | --- | --- | --- |
-| 1 | Model review | Met | `dev/model-review.md` is current (re-review). The import check passes at `648bf4e`, which adds concept memory to the model branch (`dev/model-changes.md` line 603). The parity tests pass in the suite. Merging the model branch is Mike's step. |
+| 1 | Model review | Met | `dev/archive/model/model-review.md` is current (re-review). The import check passes at `648bf4e`, which adds concept memory to the model branch (`dev/model-changes.md` line 603). The parity tests pass in the suite. Merging the model branch is Mike's step. |
 | 2 | Plugins | Met | Validation passes for the marketplace and all six plugin folders. Both marketplace files list all six. The installed 0.2.9 copies equal the source. |
 | 3 | Project init | Met | Scratch init here. Codex rerun s00a to s00h: six questions, one per turn, in the reply text, the backup folder included. Notion-only projects skip the backup question (`project-setup/references/interview.md` line 126, `lib/project/backup.mjs` line 449, `tests/notion/close-out.test.mjs`); not seen live, because no Notion setup ran after this change. |
 | 4 | Work items | Met | Codex rerun: WI-001 from `01-discovery` to Done, WI-002 made by a split, the hand rename reported in s10. All four setups in the final runs (re-review). |
@@ -270,7 +270,7 @@ evidence file.
 | `toolkit memory save` with secrets, in scratch p1 | An `sk-ant-` key, "The admin password is ...", and a `ghp_` token: refused, exit 2. A password inside a database address (`postgres://admin:<password>@...`): saved (R-M9). |
 | `compareRecords` on the first review's I6 pair | `{"description":0.625,"body":0.625,"similar":true}`. |
 | Hook run time outside a V2 project | 0.06 to 0.09 seconds for each of the five hooks. |
-| Search of the 6,664 tracked and new files for AI credit lines | Found only in test inputs, the captured Claude Code docs, this file's first review, `dev/research/project-init-library.md`, `dev/test-runs/skill-references-check.md`, and `dev/test-runs/confirm-claude-local/` (R-M11). |
+| Search of the 6,664 tracked and new files for AI credit lines | Found only in test inputs, the captured Claude Code docs, this file's first review, `dev/archive/research/project-init-library.md`, `dev/test-runs/skill-references-check.md`, and `dev/test-runs/confirm-claude-local/` (R-M11). |
 | Secret search of the same files | Only the fake keys in two test files. |
 | Read-only sources | `claude-toolkit` clean at `9d4ea8d`. Mike's model folder clean on `main` at `efa2440`. The approved branch head is `5e7d7a0`. |
 | Issue 419 | The note linking Toolkit V2 is in its comments. |
@@ -325,7 +325,7 @@ commit, and no `toolkit` command that waited on a hidden prompt.
 
 | # | Item | Verdict | Evidence |
 | --- | --- | --- | --- |
-| 1 | Model review | Met | `dev/model-review.md` is current. The import check passes. The parity test installs all 24 setups and passes, also from a copy of the tree as it would be committed. Merging the model branch is Mike's step. |
+| 1 | Model review | Met | `dev/archive/model/model-review.md` is current. The import check passes. The parity test installs all 24 setups and passes, also from a copy of the tree as it would be committed. Merging the model branch is Mike's step. |
 | 2 | Plugins | Met | Validation passes for the marketplace and all six plugin folders. Both marketplace files list all six. Installed in Mike's Claude Code and Codex (`install-everyday.md`). |
 | 3 | Project init | Met | Six setups in this review; the `project-setup` interview in all five final runs. Rules, the Plain English style, and Salesforce parts install as chosen. |
 | 4 | Work items | Met | Local: all four local runs. Notion: `final-notion` on Mike's real page (stages, sub-item, Notion hand move and rename, Solution Design page renamed on the next sync). GitHub Issues and Jira: written instructions only, as Mike decided. |
@@ -637,7 +637,7 @@ WI-001."
 
 | # | Item | Verdict | Evidence |
 | --- | --- | --- | --- |
-| 1 | Model review | Met | `dev/model-review.md` lists the 23 approved changes and an open checklist. The import check passes. The parity test installs all 24 setups and passes. The file is out of date in one place (M8). |
+| 1 | Model review | Met | `dev/archive/model/model-review.md` lists the 23 approved changes and an open checklist. The import check passes. The parity test installs all 24 setups and passes. The file is out of date in one place (M8). |
 | 2 | Plugins | Met | Validation passes for the marketplace and all six plugin folders. `.agents/plugins/marketplace.json` lists all six for Codex. The Codex copies in `~/.codex/plugins/cache/toolkit-v2/` are the current versions and match the source folders file for file. |
 | 3 | Project init | Met, with one documentation gap | Nine setups above. The interview is in `project-setup`. The Codex-first path in `README.md` does not work on a new computer (I3). |
 | 4 | Work items | Partly met | Local tracker: checked above. Notion: built and unit-tested; the last live Notion run (`c-notion`, round 3, version 0.2.2) says "not passed", and it has not been run again (B1). GitHub Issues and Jira: written instructions only, as Mike decided. |
@@ -903,7 +903,7 @@ for `work-on` step 3 was not added. O27 waits on Mike's yes for the
 `sf-component-tracker` description (`dev/model-changes.md`, "Needs your
 yes"). Fix: add the O21 sentence and re-run those messages.
 
-**M8. `dev/model-review.md` is out of date.** It says "Updated 2026-09-26" and
+**M8. `dev/archive/model/model-review.md` is out of date.** It says "Updated 2026-09-26" and
 names branch head `9940854`; the import check reports commit `54c5520`. Fix:
 update the date and head, and point to `dev/model-changes.md` for the later
 commits.
@@ -953,7 +953,7 @@ refused a deploy to an alias it could not classify.
 - The confirmation runs for Codex local and Salesforce, still running at
   13:18 EDT.
 - Which of the two "Plain English" output styles Claude Code applies (already
-  on Mike's checklist in `dev/model-review.md`).
+  on Mike's checklist in `dev/archive/model/model-review.md`).
 
 ## What this review left behind
 

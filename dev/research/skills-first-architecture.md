@@ -3,9 +3,9 @@
 Draft for Mike's review. Nothing here is built. It follows `dev/GOAL.md`,
 including "Interview answers" (2026-09-29), which wins where this file
 differs. The Notion part is owned by the Notion session
-(`dev/research/notion-skills-first.md` in its worktree); this file only
+(`dev/archive/research/notion-skills-first.md` in its worktree); this file only
 points to it. Draft 1 and its review are in Git history and
-`dev/research/skills-first-architecture-review.md`.
+`dev/archive/research/skills-first-architecture-review.md`.
 
 Documentation citations: `CC/` is `ai-external-knowledge/claude-code/`,
 `CX/` is `ai-external-knowledge/codex/`, `AS/` is

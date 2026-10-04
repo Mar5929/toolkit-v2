@@ -62,7 +62,7 @@ section wins.
 - **Approved changes are in the model.** The 23 changes Mike approved
   (GOAL.md) are applied on the model's branch `toolkit-v2/approved-changes`
   (`dev/model-changes.md`), and the copy is made from that branch. Other
-  review ideas are items in the `dev/model-review.md` checklist. Nothing
+  review ideas are items in the `dev/archive/model/model-review.md` checklist. Nothing
   reaches projects until Mike approves it and it is in the model.
 
 ## 1. What Toolkit V2 is
