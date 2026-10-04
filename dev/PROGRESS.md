@@ -2,6 +2,18 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## Merge update (2026-10-04)
+
+- Mike approved both merges. Pull request 20 landed the `dev/` cleanup, and
+  pull request 18 landed the project-wide records design and Toolkit V2
+  version 0.8.16. Both merged into `main`; the repository checks passed.
+- Notion work items TKV-19 and TKV-23 are Done. TKV-21 is no longer blocked
+  by TKV-19 and has its requirements step recorded.
+- The main checkout still has unrelated untracked files, including a path
+  added by pull request 18. Leave them in place until their owner reconciles
+  them; do not pull into that checkout yet. Existing client projects receive
+  version 0.8.16 only when Mike asks to update each project.
+
 ## Developer folder cleanup (2026-10-04)
 
 - The filing map is `dev/INDEX.md`. Superseded drafts, completed reviews,
@@ -20,7 +32,7 @@ Read `dev/GOAL.md` first. This file says where the work stands.
 
 The Toolkit V2 build is tracked as work items in the Notion project "Toolkit V2" (https://app.notion.com/p/Toolkit-V2-3edb381da17681eeb7ddd0a6d662f9b2). Older sections below are history.
 
-- 2026-10-04: TKV-19, version 0.8.16, built on draft pull request 18 after Mike asked to execute the plan. `dev/research/project-wide-records-workflows.md` holds eleven workflow diagrams; `dev/research/project-wide-records-implementation-plan.md` lists the design and changed files. Every new project gets `project-wide-records/` with five templates and a folder `AGENTS.md`, plus the shared `managing-project-wide-records` skill, regardless of tracker or memory choice. Existing item, requirement, system-guide, source, and memory homes stay authoritative. Setup, handoff, work-item, and document-save routes were updated; no hook or program was added. Independent wording, overlap, and best-practices findings were fixed and rechecked. The repository checks pass (two pre-existing rule warnings); a scratch project copy, 18 rendered AGENTS combinations, temporary plugin installs, and six read-only routing sessions in Claude Code and Codex passed (`dev/test-runs/project-wide-records-0.8.16.md`). No live Notion, GitHub, or Hindsight project was changed. Next: Mike reviews the draft pull request before merge; projects receive the new version only when he updates them.
+- 2026-10-04: TKV-19, version 0.8.16, built on pull request 18 after Mike asked to execute the plan; it merged later that day. `dev/research/project-wide-records-workflows.md` holds eleven workflow diagrams; `dev/research/project-wide-records-implementation-plan.md` lists the design and changed files. Every new project gets `project-wide-records/` with five templates and a folder `AGENTS.md`, plus the shared `managing-project-wide-records` skill, regardless of tracker or memory choice. Existing item, requirement, system-guide, source, and memory homes stay authoritative. Setup, handoff, work-item, and document-save routes were updated; no hook or program was added. Independent wording, overlap, and best-practices findings were fixed and rechecked. The repository checks pass (two pre-existing rule warnings); a scratch project copy, 18 rendered AGENTS combinations, temporary plugin installs, and six read-only routing sessions in Claude Code and Codex passed (`dev/test-runs/project-wide-records-0.8.16.md`). No live Notion or Hindsight project was changed during implementation; projects receive the new version only when Mike asks to update them.
 - 2026-10-03: Wrote `dev/research/project-knowledge-proposal.md` and created Backlog item TKV-19, "Structure knowledge across complex projects." The proposal covers cross-item questions, source intake, people, target architecture, domain maps, and change propagation. Made a 107-second Explainroo video in `~/Documents/Projects/explainroo/videos/toolkit-knowledge-before-after/out/video.mp4` to show the current and proposed states; its final audio check understood all narration. At that point no model or skill change had been approved or built. The 2026-10-04 entry above supersedes that next step.
 
 ### Now (in progress)
