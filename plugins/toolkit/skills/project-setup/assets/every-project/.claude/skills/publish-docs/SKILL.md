@@ -1,11 +1,11 @@
 ---
 name: publish-docs
-description: 'Commits an approved edit to project documents (system/, DECISIONS.md, sources/, reference/, delivery/, PROJECT.md, PROJECT-ROADMAP.md, READMEs) straight to the default branch, so it needs no pull request and touches no other session. Use when another skill sends a document save, or the owner approved a document edit or says "publish the docs" or "save the docs to main". Not for code, rules, skills, or a work item; use running-work-item-lifecycle.'
+description: 'Commits an approved edit to project documents, such as system/, DECISIONS.md, sources/, delivery/, and PROJECT.md, directly to the default branch, so it needs no pull request. Use when another skill hands over a document save, or the owner says "publish the docs". Not for deciding what DECISIONS.md, sources/, or system/ says; use filing-project-records. Not for code, rules, skills, or a work item; use running-work-item-lifecycle.'
 ---
 
 # Publish a documentation save
 
-Save a change to Git-tracked project documents straight to the default
+Save a change to Git-tracked project documents directly to the default
 branch, with no pull request, from a temporary Git worktree of its own (rule:
 `.claude/rules/publish-project-documents.md`). Only the agreed document edit
 reaches the default branch, no other session's files change, and the save

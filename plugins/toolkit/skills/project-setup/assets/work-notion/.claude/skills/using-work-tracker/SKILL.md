@@ -1,6 +1,6 @@
 ---
 name: using-work-tracker
-description: 'Stores and finds work items in the project''s Notion databases for running-work-item-lifecycle, so every read and save lands in the right property or page section. Use when looking up or saving a work item, phase, task, question, or comment, such as "show me WI-31" or "add a task to phase 2". Only for projects that track work in Notion.'
+description: 'Saves, finds, and changes work items in the project''s Notion databases, so running-work-item-lifecycle reads and writes every item the same way. Use when an item, phase, task, or question must be read, created, saved, or searched, such as "show me WI-31". Not for deciding an item''s plan, State, or approvals; use running-work-item-lifecycle. Only for projects that track work in Notion.'
 ---
 
 # The work tracker: Notion
@@ -16,14 +16,14 @@ This project keeps its work items in Notion. This skill says where each thing is
 - The project page shows the project's phases, its top-level items by project phase, and its project tasks (`references/database-layout.md`, "The project's phases and tasks").
 - Every item's page is made from the Work Items database's default template, the work item template. `references/page-layout.md` lists its sections. Six are text: Overview, Recent History, Requirements, Questions and Answers, Notes, Linked Github PRs. Four are live views of other databases: Roadmap, Sub-items, Tasks, Linked memory.
 - The Solution Design page is a child page of the item.
-- The ids of the databases and pages are in `PROJECT.md`, section "Toolkit settings", Notion block. Never search the workspace for them.
+- The ids of the databases and pages are in `PROJECT.md`, section "Toolkit settings": the nested bullets under the fixed line "Notion work items". Never search the workspace for them.
 
 ## Steps for any look-up or save
 
 1. Read the ids from `PROJECT.md`. Before your first Notion read or write in a session, whatever tool you use, open `using-notion-cli`.
 2. Read what you will look at or change, fresh in this turn. The owner edits in Notion, and his edits win, so never answer from an earlier read.
-3. Make the change with the section named in the Files table below.
-4. Read the changed page or row back. Notion saves all of an `update_content` call or none of it, so a call it refused changed nothing.
+3. Make the change with the section named in the References table below.
+4. Read the changed page or row back. Notion saves all of an `update_content` call or none of it, so a call it refused changed nothing. Report a save that failed, or that reads back differently, as `running-work-item-lifecycle`, "Every time", says.
 
 ## Create an item
 
@@ -55,7 +55,7 @@ This project keeps its work items in Notion. This skill says where each thing is
 | Moving work items to another tracker | `project-setup` |
 | Rebuilding a missing database template | `project-setup` |
 
-## Files
+## References
 
 | File | Open it when |
 | --- | --- |

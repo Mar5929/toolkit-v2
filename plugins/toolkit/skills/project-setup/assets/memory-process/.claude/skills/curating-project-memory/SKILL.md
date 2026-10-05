@@ -1,6 +1,6 @@
 ---
 name: curating-project-memory
-description: 'Keeps project memory to where work stopped and pointers to records: sends each fact the owner wants kept to its home, adds or removes a pointer, writes "from now on" instructions to the project rules, and tidies memory, so no fact is kept twice. Use whenever the owner says "remember this", "forget that", "from now on", or "clean up memory", or a hook reminder names this skill. Not for a handoff; use handoff.'
+description: 'Decides what project memory keeps, so no fact is kept twice: sends a fact to its home, adds or removes a pointer to a record, writes a standing instruction to the owner''s preferences file, and prunes Current State. Use whenever the owner asks to keep, correct, or forget something or gives a standing instruction, such as "remember this" or "from now on", or a hook reminder names this skill. Not for a handoff; use handoff.'
 ---
 
 # Curating project memory
@@ -13,13 +13,13 @@ Never put in memory: a fact, a decision, a term, a lesson, where a work item sta
 
 ## "Remember this"
 
-1. Find the fact's home with the filing test and the table in the root `AGENTS.md`, "Where information goes". A hook reminder is only a hint: when nothing in the message has a home, save nothing.
+1. Find the fact's home with the filing test and the table in the root `AGENTS.md`, "Where information goes". When a hook reminder brought you here and nothing in the message has a home, save nothing.
 2. Put the fact in its home, through the skill the root `AGENTS.md` names for that home ("Project map", column "When you change it"). The owner's request to remember a fact is the owner's yes to write it there.
    - The home already holds it: add nothing, and say where it is.
    - Two homes fit, or none: ask the owner one question, with your recommendation.
 3. Decide on a pointer. Add one, through `using-memory-store`, only when both are true:
    - the record has an ID (a DEC, an SRC, a rule ID, or a work item ID);
-   - the owner asked to keep it in mind across sessions, or work on other items will need the record and no open work item names its ID.
+   - the owner asked for a pointer in memory, or work on other items will need the record and no open work item names its ID.
 4. Tell the owner in one line where the fact is now, with its ID, and whether memory got a pointer.
 
 A record with no ID gets no pointer: a line in `PROJECT.md`, or a glossary term. Every session can find those in their file.
@@ -28,13 +28,13 @@ A record with no ID gets no pointer: a line in `PROJECT.md`, or a glossary term.
 
 - A pointer: remove it. The record it names stays.
 - A line of Current State: remove it.
-- The fact itself: it is in its home, not in memory. Say where it is, and change it there through the skill that owns the home. A decision is never deleted: `filing-project-records` supersedes or withdraws it.
+- The fact itself: it is in its home, not in memory. Say where it is, and change it there through the skill the root `AGENTS.md` names for that home. A decision is never deleted: `filing-project-records` supersedes or withdraws it.
 - Said right after a save made here: undo that save.
 - Never say something is removed when it is not.
 
 ## "From now on": the owner's instructions
 
-An instruction for how the agent works, a preference, or a correction of one is a rule, never memory. The owner's own words are the approval.
+An instruction for how the agent works, a preference, or a correction of one is a rule, never memory. The owner's own words are the approval. A line the owner dictates for a preferences file is written with the steps below alone; `writing-harness-files` is for every other change to a rule file.
 
 1. Choose the file from the row for the owner's preference in the root `AGENTS.md`, "Where information goes": this project, or every project. Ask "This project or all projects?" only when the owner's words leave it unclear.
 2. Read the file fresh. The comment at the top of `.claude/rules/owner-preferences.md` gives the layout of a line; use the same layout in a file that has no such comment.
@@ -52,12 +52,12 @@ Each line has one skill that decides what it says:
 | --- | --- |
 | A work item's line under Now | `running-work-item-lifecycle` |
 | "Next session starts with" | `handoff` |
-| A line under "Waiting on the owner", and pruning | This skill |
+| A line under "Waiting on the owner", such as an Open decision that no work item waits on, and pruning | This skill |
 
-Prune when a hook says Current State is too long or too old, and before "Clean up memory":
+Prune when a hook says Current State is too long or too old, when a work item closes, and before "Clean up memory":
 
 1. Read Current State, and the status of every work item it names with `using-work-tracker`.
-2. Remove each line that is no longer true, with no plan: a Done or Cancelled item under Now; a question the owner answered; a "Next session starts with" line that names a closed item. Cut a line that copies an item's status or next step down to the item's ID and a few words.
+2. Remove each line that is no longer true, with no plan: a Done or Cancelled item under Now; a question the owner answered, or an Open decision that is now Decided or Withdrawn; a "Next session starts with" line that names a closed item. Cut a line that copies an item's status or next step down to the item's ID and a few words.
 3. Set "Last updated". Tell the owner what was removed.
 4. A part still over its limit holds only true lines. Ask the owner which to cut; cut a true line only after the owner's yes.
 

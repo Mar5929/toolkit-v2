@@ -1,19 +1,17 @@
 # File a source
 
-For an original the project received and keeps: pasted text or a file. The step gives back the original's SRC-###. The form of a row in the list, the file name, and the rules for an original kept outside Git are in `sources/AGENTS.md`. This file gives the steps. They are the same whether work items are local files, in Notion, or in GitHub: an original never goes into the work tracker.
+For every original the project received and keeps, as pasted text or as a file, whether one work item uses it, several do, or none does yet. The step gives back the original's SRC-###. `sources/AGENTS.md` gives the form of a row in the list, the file name, what must stay true, and which originals need the owner's answer before they are filed. This file gives the steps. They are the same whether work items are local files, in Notion, or in GitHub: an original never goes into the work tracker.
 
 ## Steps
 
 1. Search `sources/README.md` for the original: its date, who it came from, and its subject. It is filed already: use its ID, add the work item's ID to the row's "Used by", and go to step 6.
-2. Decide where the original is kept.
-   - Text the owner pasted, or a Markdown or plain text file: in `sources/`.
-   - Any other file type; a file over 10 MB; or a file that holds personal data beyond people's names and work roles: ask the owner one question first: "Commit <file name> (<type>, <size>) to the repository, or keep it outside Git?" Outside Git: ask where it is kept for good.
+2. Decide where the original is kept, as `sources/AGENTS.md`, "An original kept outside Git", says. Ask the owner the question it gives when the original needs it.
 3. Take the next SRC number.
-4. Save the original unchanged, under the name `sources/AGENTS.md` gives. Write the short name in lowercase words joined by hyphens.
-   - Pasted text: save it exactly as pasted, as a `.md` file. Never tidy, shorten, translate, or correct it.
-   - A file: copy it as it is, with its own extension. An email with attachments is one folder.
+4. Save the original under the name `sources/AGENTS.md` gives, with the short name in lowercase words joined by hyphens.
+   - Pasted text: a `.md` file.
+   - A file: a copy with its own extension. An email with attachments is one folder.
    - Kept outside Git: save no file.
-5. Add the row to `sources/README.md` in the same edit. "Used by" names each work item that uses the source now.
+5. Add the row to `sources/README.md`. "Used by" names each work item that uses the source now.
 6. Save with `publish-docs` now, before you use the source. The save claims the number, and a link from Notion or GitHub works only once the file is on the default branch.
 7. In each work item that uses the source, add its line under Notes, Sources with `using-work-tracker`: the SRC ID, what it is, and the IDs taken from it. In Notion and GitHub, the line may add the web address of the file on the default branch.
 8. Report the SRC ID to the owner, and give it to the skill that asked for this step.

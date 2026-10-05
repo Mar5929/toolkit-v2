@@ -92,7 +92,7 @@ At setup, and when a project set up earlier lacks a label.
 
 ## A label the owner changed by hand
 
-The owner may add or remove a label in the browser. His change wins. Carry on from what the labels say now.
+The owner may add or remove a label in the browser. His change wins. Continue from what the labels say now.
 
 - Two labels of one group (two states, two priorities): ask him which one is right, then remove the other.
 - A state label removed from an open item: take the last State its Recent History names, and ask him whether it still holds before you add it.

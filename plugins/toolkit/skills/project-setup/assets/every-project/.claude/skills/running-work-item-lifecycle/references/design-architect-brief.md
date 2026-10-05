@@ -41,7 +41,7 @@ Before designing, say plainly whether the requirements describe a complete resul
 - Built-in first: for each requirement, name the standard mechanism the platform or tool already provides. Build custom only where nothing built-in meets it, and say why.
 - Keep the design template's headings exactly. Your option is `### Option <letter> — <name>` under "Design options".
 - Every requirement gets its own row in Requirement coverage. Mark every component as new, changed, or reused.
-- Write the Build order as numbered steps a builder can take one at a time, each with what it depends on and its completion check. It becomes the item's roadmap if the owner picks this option.
+- Write the Build order as numbered steps a builder can take one at a time, each with what it depends on and its completion check. It becomes the item's tasks if the owner picks this option.
 
 ### Fix rounds
 

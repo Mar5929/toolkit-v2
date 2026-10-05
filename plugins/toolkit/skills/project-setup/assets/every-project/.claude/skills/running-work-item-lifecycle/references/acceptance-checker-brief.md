@@ -45,7 +45,7 @@ First check that you are looking at the exact commit named, from the folder you 
 
 ### Boundaries
 
-Run only tests and read-only commands. Never edit, stage, commit, push, merge, deploy, install, or delete anything, and never touch a shared or production org, service, or data. Do not start other helpers or ask the owner anything; put questions in your report.
+Run only tests and read-only commands. Never edit, stage, commit, push, merge, deploy, install, or delete anything, and never run a command against a shared or production org or service, or against its data. Do not start other helpers or ask the owner anything; put questions in your report.
 
 ### Return
 

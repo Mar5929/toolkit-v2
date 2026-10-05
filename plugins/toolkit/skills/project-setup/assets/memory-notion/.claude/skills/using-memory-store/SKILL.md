@@ -1,6 +1,6 @@
 ---
 name: using-memory-store
-description: 'Reads and writes Current State and pointers in Notion, on the Current state page and in the Memories database of Lore''s layout, so every skill stores memory the same way. Use when Current State or a pointer must be read, added, changed, or removed, for example a line that another skill hands over, or "what does memory point to". Not for deciding what a line says or what to keep; use curating-project-memory. Only for projects with Notion memory.'
+description: 'Reads and writes Current State and pointers in Notion, on the Current state page and in Lore''s Memories database, so every skill stores memory the same way. Use when Current State or a pointer must be read, added, changed, or removed, such as "what does memory point to". Not for deciding what a line says or what to keep; use curating-project-memory. Only for projects with Notion memory.'
 ---
 
 # Using the memory store (Notion)
@@ -12,8 +12,8 @@ This skill holds the storage: where Current State and the pointers are kept in N
 - **Current state** is one page beside the Memory page: `references/current-state-page.md` gives its form and how to change it.
 - **A pointer** is one page of the **Memories** database. Its Title says what it points to, its Record Key is the ID of the record it names, and its Synopsis is the link. `references/database-layout.md` gives every column.
 - Memories is one of five databases on the project's Memory page: **Projects**, **Topics**, **Memories**, **Entities**, **Facts**. They are Lore's databases (Lore is Notion's open-source memory tool), and Lore finds them and their columns by their exact names. **Projects** holds one row naming this project, and every pointer links to it. **Topics**, **Entities**, and **Facts** are not written.
-- The **Terminology glossary** page beside the Memory page is not written. A project term goes in `system/glossary.md`, with `filing-project-records`.
-- The ids of the databases and pages are in `PROJECT.md`, section "Toolkit settings", Notion block. Never search the workspace for them.
+- A **Terminology glossary** page beside the Memory page is from the layout before pointer-only memory. Never read it for a term's meaning and never write it. A project term goes in `system/glossary.md`, with `filing-project-records`.
+- The ids of the databases and pages are in `PROJECT.md`, section "Toolkit settings": the nested bullets under the fixed line "Notion memory". Never search the workspace for them.
 - Lore's own saving and hooks stay off. Lore is not installed or run.
 
 ## Steps for any read or write
@@ -53,7 +53,6 @@ This skill holds the storage: where Current State and the pointers are kept in N
 | [references/database-layout.md](references/database-layout.md) | Checking which column holds which part of a pointer, or what a column of the five databases is. |
 | [references/views-and-layout.md](references/views-and-layout.md) | Checking the views, the column order, or the page layout of the databases, or sending a schema file to create or add to them. |
 | [assets/current-state.md](assets/current-state.md) | Building the Current state page's starting text. |
-| [assets/terminology-glossary.md](assets/terminology-glossary.md) | `project-setup` builds the Terminology glossary page from it. Nothing else uses it. |
 | [assets/schema/01-projects-database.json](assets/schema/01-projects-database.json), [02-topics-database.json](assets/schema/02-topics-database.json), [03-memories-database.json](assets/schema/03-memories-database.json), [04-entities-database.json](assets/schema/04-entities-database.json), [05-facts-database.json](assets/schema/05-facts-database.json) | Creating the five databases. |
 | [assets/schema/06-memories-lore-self-relations.json](assets/schema/06-memories-lore-self-relations.json), [07-memories-toolkit-columns.json](assets/schema/07-memories-toolkit-columns.json), [08-memories-type-tags.json](assets/schema/08-memories-type-tags.json) | Adding Lore's own relations, the toolkit's columns, or the five type tags to Memories, or adding a missing one. |
 | [assets/schema/09-memories-work-items-relation.json](assets/schema/09-memories-work-items-relation.json), [09-facts-work-items-relation.json](assets/schema/09-facts-work-items-relation.json), [09-entities-work-items-relation.json](assets/schema/09-entities-work-items-relation.json) | Linking the databases to Work Items, when work items are in Notion. |

@@ -1,11 +1,11 @@
 ---
 name: using-work-tracker
-description: 'Saves, finds, and changes work items as GitHub issues, so running-work-item-lifecycle reads and writes every item the same way. Use when an item must be read, created, saved, or searched, such as "show me #12" or "what is waiting on me". Not for deciding States or approvals; use running-work-item-lifecycle. Only for projects that track work in GitHub Issues.'
+description: 'Saves, finds, and changes work items as GitHub issues, so running-work-item-lifecycle reads and writes every item the same way. Use when an item must be read, created, saved, or searched, such as "show me #12". Not for deciding an item''s plan, State, or approvals; use running-work-item-lifecycle. Only for projects that track work in GitHub Issues.'
 ---
 
 # The work tracker: GitHub Issues
 
-This skill holds the storage: where each part of a work item lives in GitHub Issues, and the `gh` commands that read and change it. It never decides what happens next.
+This skill holds the storage: where each part of a work item is kept in GitHub Issues, and the `gh` commands that read and change it. It never decides what happens next.
 
 ## How an item is stored
 
@@ -30,6 +30,7 @@ Read the change back and check it says what you wrote. Report a write that faile
 - The body is one piece of text. Change it only with the steps in `references/gh-commands.md`, "Changing the body": the owner may have edited it in the browser.
 - Create nothing but issues and comments without the owner's yes. The labels are asked once at setup. A milestone is made only for a project phase he approved.
 - Never delete an issue, a comment, or a label. Close or cancel the issue instead. Remove a sub-issue link only to move an item.
+- GitHub Issues has no archive. A closed issue is already left out of the open lists. When the owner asks to archive an open item, tell him so and ask whether to cancel it.
 
 ## Hand-offs
 
@@ -40,7 +41,7 @@ Read the change back and check it says what you wrote. Report a write that faile
 | Moving the items to another tracker | `project-setup` |
 | Recording the GitHub repository when the line is empty | `project-setup` |
 
-## Files
+## References
 
 | File | Open it when |
 | --- | --- |

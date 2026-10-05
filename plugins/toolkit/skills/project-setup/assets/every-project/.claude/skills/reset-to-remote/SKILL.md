@@ -8,7 +8,7 @@ description: 'Makes the local repository an exact copy of its remote, discarding
 Make a local repository an exact copy of its remote: discard local commits
 on branches that have an upstream, and delete branches whose remote branch
 is gone. Discard nothing the owner did not see in the plan and say yes to,
-and never touch another session's work.
+and never change another session's work.
 
 The reset happens in the main checkout (the first path `git worktree list`
 prints). Run every Git command below as `git -C <main checkout> ...`: from
