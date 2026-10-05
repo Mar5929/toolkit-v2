@@ -165,7 +165,7 @@ has a filled "Toolkit settings" section.
 | `references/notion.md` | Work items or memory in Notion: the sign-in, his yes, which Notion setup to follow, the links |
 | `references/notion-build/work-setup.md` | Work items or memory in Notion: the steps of a new project, removing the part kept elsewhere, the links in `PROJECT.md`, adding work items or memory later, bringing a project up to the current template, moving from Stage to State, building the template, the checks |
 | `references/notion-build/work-layout.md` | Work items in Notion: the database views, the property order and page layout, the request bodies |
-| `references/notion-build/setup.md` | Memory in Notion: the memory steps of a new project, the links in `PROJECT.md`, bringing memory up to date, building the memory part of a template. Lore's databases, columns, views, and request files are in the Notion `storing-project-memory` skill, in `assets/memory-notion/.claude/skills/` |
+| `references/notion-build/setup.md` | Memory in Notion: the memory steps of a new project, the links in `PROJECT.md`, bringing memory up to date, building the memory part of a template. Lore's databases, columns, views, and request files are in the Notion `using-memory-store` skill, in `assets/memory-notion/.claude/skills/` |
 | `references/notion-build/project-page.md`, `references/notion-build/work-item-page.md`, `references/notion-build/memory-page.md` | Building the Notion template: the text of the project page, the work item template, and the Memory page |
 | `references/github.md` | Work items in GitHub Issues: the sign-in, the repository, the labels, bringing a project up to date, the checks |
 | `references/hindsight-on-vps.md` | Memory in Hindsight: what runs on the VPS, the access key, the bank, the coding-agent add-on, the save-and-search check, opening the dashboard, checking a Hindsight project, a new computer |
@@ -175,7 +175,7 @@ has a filled "Toolkit settings" section.
 | `references/move-over.md` | Moving a project that was set up another way onto Toolkit V2: which earlier setup it is, his choices, reading the project, sorting each piece, the list and its template, the order of the changes after his yes, carrying over old records, finishing |
 | `references/old-toolkit-pieces.md` | A move-over, steps 2, 3, and 6: the old toolkit's plugins, rules, hook commands, tools, and knowledge files with what Toolkit V2 has in their place, the old records, and how an old work item and old memory map to the Toolkit V2 form |
 | `assets/every-project/` | Step 4: everything every project gets: the project files, the shared skills, and the three hook commands, copied first into the scratch folder |
-| `assets/work-local/`, `assets/work-notion/`, `assets/work-github/` | Step 4: the files and the `tracking-work-items` skill for the work tracking choice |
+| `assets/work-local/`, `assets/work-notion/`, `assets/work-github/` | Step 4: the files and the `using-work-tracker` skill for the work tracking choice |
 | `assets/memory-local/`, `assets/memory-notion/`, `assets/memory-process/` | Step 4: the memory files and skills for the memory choice (`memory-process` goes with local or Notion memory; Hindsight takes one file of `memory-local`) |
 | `assets/notion-tools/` | Step 4: the `using-notion-cli` skill, for work items or memory in Notion |
 | `assets/salesforce/` | Step 4: everything only a Salesforce project gets |

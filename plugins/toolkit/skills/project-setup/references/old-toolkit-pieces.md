@@ -86,7 +86,7 @@ that file name; the setup copy holds it only for the choices it applies to.
 | `parallel-agent-sessions.md` | Compare | `shared-repository-work.md` |
 | `offer-context-handoff.md` | Compare | `session-handoff.md` |
 | `knowledge-direct-commit.md` | Compare | `publish-project-documents.md` |
-| `work-item-stages.md` | Compare | `keep-work-item-current.md` and the `managing-work-items` skill |
+| `work-item-stages.md` | Compare | `keep-work-item-current.md` and the `running-work-item-lifecycle` skill |
 | `work-item-folders.md` | Compare | Same name, only with local work items |
 | `plain-english-artifacts.md`, `humanize-outbound-text.md`, `ai-external-knowledge.md` | Compare | Same name |
 | `dependency-graph.md` | Compare | Same name in a Salesforce project; nothing otherwise |
@@ -97,7 +97,7 @@ that file name; the setup copy holds it only for the choices it applies to.
 | `deploy-hitchhiker-check.md` | Compare | `check-deployment-contents.md` |
 | `deployment-runbook.md` | Compare | `record-deployment-steps.md` |
 | `delivery-and-knowledge-boundary.md` | Compare | `project-file-locations.md` |
-| `capture-the-thinking.md`, `wrap-up-ritual.md`, `track-open-topics.md`, `spec-before-you-build.md` | Compare | `memory-review-and-save.md`, `keep-work-item-current.md`, and `managing-work-items` |
+| `capture-the-thinking.md`, `wrap-up-ritual.md`, `track-open-topics.md`, `spec-before-you-build.md` | Compare | `memory-review-and-save.md`, `keep-work-item-current.md`, and `running-work-item-lifecycle` |
 | `writing-and-language.md`, `how-to-reply.md`, `treat-owner-as-non-technical.md`, `define-your-terms.md` | Compare | The output style named by `outputStyle` in `.claude/settings.json` |
 | `.claude/RULES.md`, `.claude/rules/README.md` (indexes of the rules) | Delete | The rules list in `AGENTS.md` |
 | `.claude/toolkit-sync.md` (what the old sync skill recorded, with the owner's declines) | Carry | Each decision in it that the owner confirms is still true is saved as memory, in step 6. The file is deleted only when every decision in it was saved or he said to drop it; otherwise it is Kept. |
@@ -197,7 +197,7 @@ folder name. Put it under "Your call": recommend renaming the old folder to
 
 ## Old work item to Toolkit V2 work item
 
-Create each item with the project's `tracking-work-items` skill. The
+Create each item with the project's `using-work-tracker` skill. The
 earlier files of an item hold the same fields: `ITEM.yaml` or `ITEM.json`
 (the fields), `REQUIREMENTS.md` or `SPEC.md` (the requirements),
 `TASKS.yaml` (the tasks), `STATUS.md` and `HISTORY.ndjson` (the history).
@@ -225,12 +225,12 @@ earlier files of an item hold the same fields: `ITEM.yaml` or `ITEM.json`
 | Git branch and pull request fields, completion evidence, the schema version | No Toolkit V2 field. Name them on the Update line as not carried over. |
 
 The levels, the task IDs, and the project phase a top-level item goes under
-are in `managing-work-items`, "Levels". Add one Recent History row to each
+are in `running-work-item-lifecycle`, "Levels". Add one Recent History row to each
 new item: "Carried over from `<old path>` in the move to Toolkit V2."
 
 ## Old memory to Toolkit V2 memory
 
-Save each record with the project's `managing-project-memory` skill. The
+Save each record with the project's `curating-project-memory` skill. The
 owner's yes to the Update line is his request to keep these records. With
 Hindsight memory, write each as `update.md` says ("Changing a setup
 choice", step 5).
@@ -247,7 +247,7 @@ choice", step 5).
 | Header: `supersedes`, `superseded_by`, `related_memories` | Links to the carried-over records of those files; a link to a file that was not carried over is left out |
 | Header: `confidence`, `context`, `source_quote`, `effective_from`, `effective_to` | No Toolkit V2 field. Write each one that holds a value as a first line of the record's body. |
 | Header: `tags`, `group`, `project`, `auto_saved` | No Toolkit V2 field. Name them on the Update line as not carried over. |
-| `knowledge/memory/current.md` | Current State, written new from what is true today (`finishing.md`, "Current State"). An "Active work" entry becomes a "Now" line when its work item was carried over and has left Backlog. Each "General project to-dos" entry goes under "Your call": recommend a project task when it is administrative work for the whole project, and otherwise a new Backlog work item (`managing-work-items`, "Levels"). "Session handoffs" are not carried over. "Project goal" is the suggestion for the outcome question in `finishing.md`. |
+| `knowledge/memory/current.md` | Current State, written new from what is true today (`finishing.md`, "Current State"). An "Active work" entry becomes a "Now" line when its work item was carried over and has left Backlog. Each "General project to-dos" entry goes under "Your call": recommend a project task when it is administrative work for the whole project, and otherwise a new Backlog work item (`running-work-item-lifecycle`, "Levels"). "Session handoffs" are not carried over. "Project goal" is the suggestion for the outcome question in `finishing.md`. |
 | A save waiting in `knowledge/memory-inbox.md` | "Your call", one line each: he approves or declines it. Never save one without his answer. |
 | `knowledge/memory-self-improvement.md` | His instructions go to `.claude/rules/owner-preferences.md`, under Memory, in his words |
 | `knowledge/project.md`, or the old root `PROJECT.md` | The matching sections of the Toolkit V2 `PROJECT.md`. "Memory approval" starts as `onboarding`, whatever the old file allowed. |

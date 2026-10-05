@@ -1,7 +1,7 @@
 # The Notion work tracking layout: views, property order, and page layout
 
 Purpose: the views of a Notion project's databases, and the property order
-and page layout. The Notion `tracking-work-items` skill's `assets/schema/`
+and page layout. The Notion `using-work-tracker` skill's `assets/schema/`
 files hold every property and relation (its `database-layout.md` lists
 them and shows how a project looks), and `work-item-page.md` in this folder
 holds the page text. Use this to check a project, bring one up to date, or

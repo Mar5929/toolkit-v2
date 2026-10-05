@@ -26,13 +26,13 @@ folder whose name starts with a dot, so Codex does not load them in every
 folder on this computer. `ls` hides it; use `ls -a`. The copied skill
 folders have normal names.
 
-The shared skills are the same in every project (10): `managing-work-items`,
-`managing-project-wide-records`,
+The shared skills are the same in every project (10): `running-work-item-lifecycle`,
+`filing-project-records`,
 `handoff`, `braindump`, `explain-simply`, `session-summary`, `pull-latest`,
 `reset-to-remote`, `merge-and-clean-up`, `publish-docs`. `every-project`
 holds them. They name no tracker or memory system. Every work tracking
-folder holds one skill with the same name, `tracking-work-items`, and every local or Notion memory project
-gets `managing-project-memory`, so the shared skills name both directly. A
+folder holds one skill with the same name, `using-work-tracker`, and every local or Notion memory project
+gets `curating-project-memory`, so the shared skills name both directly. A
 Hindsight project has no memory skills: they send it to "Project memory" in
 `AGENTS.md`.
 
@@ -41,11 +41,11 @@ hold these skills:
 
 | Choice | Folders in `assets/` | Skills |
 | --- | --- | --- |
-| Work items local | `assets/work-local/` | `tracking-work-items` |
-| Work items in Notion | `assets/work-notion/` and `assets/notion-tools/` | `tracking-work-items`, `using-notion-cli` |
-| Work items in GitHub Issues | `assets/work-github/` | `tracking-work-items` |
-| Memory local | `assets/memory-process/` and `assets/memory-local/` | `managing-project-memory`, `storing-project-memory` |
-| Memory in Notion | `assets/memory-process/`, `assets/memory-notion/`, and `assets/notion-tools/` | `managing-project-memory`, `storing-project-memory`, `using-notion-cli` |
+| Work items local | `assets/work-local/` | `using-work-tracker` |
+| Work items in Notion | `assets/work-notion/` and `assets/notion-tools/` | `using-work-tracker`, `using-notion-cli` |
+| Work items in GitHub Issues | `assets/work-github/` | `using-work-tracker` |
+| Memory local | `assets/memory-process/` and `assets/memory-local/` | `curating-project-memory`, `using-memory-store` |
+| Memory in Notion | `assets/memory-process/`, `assets/memory-notion/`, and `assets/notion-tools/` | `curating-project-memory`, `using-memory-store`, `using-notion-cli` |
 | Memory in Hindsight | nothing | none: the agent uses the tools of Hindsight's coding-agent add-on (`hindsight-on-vps.md` in this folder) |
 | Salesforce | `assets/salesforce/` | `sf-component-tracker`, `sf-data-change`, and `sf-deploy-check`; Salesforce's own skills are installed by the owner (`salesforce.md` in this folder) |
 

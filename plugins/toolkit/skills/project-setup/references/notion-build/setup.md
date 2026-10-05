@@ -4,8 +4,8 @@ Purpose: the memory steps of onboarding, bringing an older project's
 memory up to the current layout, and building the memory part of a
 template. `database-layout.md`, `views-and-layout.md`,
 `current-state-page.md`, and the `assets/` files are in the Notion
-`storing-project-memory` skill,
-`assets/memory-notion/.claude/skills/storing-project-memory/` in this skill.
+`using-memory-store` skill,
+`assets/memory-notion/.claude/skills/using-memory-store/` in this skill.
 `ntn-commands.md` is in the `using-notion-cli` skill,
 `assets/notion-tools/.claude/skills/using-notion-cli/references/` in this skill;
 running `ntn` in Codex is in that skill's `SKILL.md`. The other files named

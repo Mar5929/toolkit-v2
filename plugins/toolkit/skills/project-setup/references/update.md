@@ -140,13 +140,30 @@ grep -n '^## ' <copy>/AGENTS.md
   are not sure, leave it and ask. Toolkit 0.6.0 retired `work-refine`,
   `solution-design`, `work-delegate`, `work-check`, `work-finish`,
   `local-work-track`, `notion-work-track`, and `github-work-track`:
-  `managing-work-items` and `tracking-work-items` replace them. Toolkit
+  `running-work-item-lifecycle` and `using-work-tracker` replace them. Toolkit
   0.7.0 retired `local-memory-save`, `local-memory-find`,
   `local-memory-refine`, `notion-memory-save`, `notion-memory-find`, and
-  `notion-memory-refine`: `managing-project-memory` and
-  `storing-project-memory` replace them, and a project with work items or
+  `notion-memory-refine`: `curating-project-memory` and
+  `using-memory-store` replace them, and a project with work items or
   memory in Notion also gets `using-notion-cli`. The memory records stay
   as they are.
+- Five skills were renamed. A project set up earlier holds the old folder
+  in `.claude/skills/`, and the "Toolkit skills" row in section 3 would add
+  the new folder beside it. A project never holds both: install the new
+  folder and remove the old one in the same change, after his yes, and list
+  both in the numbered table.
+
+  | Old folder | New folder |
+  | --- | --- |
+  | `managing-work-items` | `running-work-item-lifecycle` |
+  | `tracking-work-items` | `using-work-tracker` |
+  | `managing-project-wide-records` | `filing-project-records` |
+  | `managing-project-memory` | `curating-project-memory` |
+  | `storing-project-memory` | `using-memory-store` |
+
+  A project holds only the skills for its own choices, so it renames only
+  the ones it has. The new names reach `AGENTS.md` and the rules through
+  their own rows in section 3.
 - Toolkit 0.8.6 dropped `agents/openai.yaml` from `merge-and-clean-up`: it
   held only what the Codex app showed for the skill (a display name, a short
   description, and a starter prompt). The "Toolkit skills" row in section 3
@@ -155,7 +172,8 @@ grep -n '^## ' <copy>/AGENTS.md
   memory, so the owner trusts the hooks again in Codex `/hooks`. The
   session-start hook keeps the header of `memory/MEMORY.md` (the text above
   `## User`), so in a local memory project it may still name
-  `local-memory-save`: change only that name to `managing-project-memory`,
+  `local-memory-save` or `managing-project-memory`: change only that name to
+  `curating-project-memory`,
   in the main checkout.
 - A rule in `.claude/rules/` that the model no longer has (for example
   `hindsight-memory.md`): list it, remove it only after his yes, then
@@ -215,7 +233,7 @@ work item its State, using the first row that matches:
 | Stage 14 | Reflecting |
 
 - Set the Status that goes with the new State (the Status and State table
-  in `managing-work-items`' `SKILL.md`) in the same change.
+  in `running-work-item-lifecycle`' `SKILL.md`) in the same change.
 - Local: every item in `work-items/`, sub-items and `archive/` included.
   Replace the `stage:` line with a `state:` line, and set `status:` and
   `updated:` in the same edit.
@@ -237,8 +255,8 @@ work item its State, using the first row that matches:
 
 Since toolkit 0.8.0, only the project and its top-level items have phases:
 a sub-item's tasks are one plain list, and the project has its own phases
-(`P01`) and its own tasks (`managing-work-items`, "Levels"). The storage
-files named here are in each tracker's `tracking-work-items` skill, in this
+(`P01`) and its own tasks (`running-work-item-lifecycle`, "Levels"). The storage
+files named here are in each tracker's `using-work-tracker` skill, in this
 skill's `assets/work-local/`, `assets/work-notion/`, and
 `assets/work-github/` (under `.claude/skills/`). The same release gives a
 Notion task one status field (step 5) and removes "Untracked to-dos" from
@@ -266,7 +284,7 @@ what a step names, and each item keeps its task IDs.
      "The project's phases and tasks"; GitHub:
      `project-roadmap-and-tasks.md`). Then ask whether to remove the file
      in your worktree; it stays until he says yes.
-   - A project with no phases yet gets none now: `managing-work-items`
+   - A project with no phases yet gets none now: `running-work-item-lifecycle`
      proposes them when the next item leaves Backlog.
 4. **Project tasks.** Local: `work-items/PROJECT-TASKS.md` comes in with
    the missing files, in the main checkout. Notion: the "Project tasks"
@@ -285,7 +303,7 @@ what a step names, and each item keeps its task IDs.
 6. **Untracked to-dos.** Current State no longer has an "Untracked to-dos"
    section. For each line under it, propose where it goes: the work item
    it concerns, a project task for administrative work, or a new Backlog
-   item for other project work (`managing-work-items`). Move each line
+   item for other project work (`running-work-item-lifecycle`). Move each line
    where he approves, then remove the heading (local or Hindsight memory:
    `memory/CURRENT_STATE.md` in the main checkout; Notion memory: the
    "Current state" page, and the same page of the shared "Project"
@@ -302,7 +320,7 @@ Since toolkit 0.8.1, the Requirements section of a work item holds one
 block for each requirement, headed "Requirement <number>: <short name>":
 the original requirement word for word, its goal, its numbered Functional
 Requirements, and its numbered Acceptance Criteria
-(`managing-work-items`, `references/refining-requirements.md`). Text in
+(`running-work-item-lifecycle`, `references/refining-requirements.md`). Text in
 angle brackets in a template is an instruction, and an item an agent
 creates or changes keeps none.
 
@@ -317,7 +335,7 @@ creates or changes keeps none.
   The skills read the older layout as it is. An item moves to the new
   layout only when the owner asks for that item, and an item that holds
   the older label of its Functional Requirements (from before toolkit
-  0.8.4) keeps it (`managing-work-items`,
+  0.8.4) keeps it (`running-work-item-lifecycle`,
   `references/refining-requirements.md`, "The Requirements layout").
 - Tell the owner in one line that new items get the new layout and
   existing items keep theirs.
@@ -357,8 +375,8 @@ Where work items or memory live, for example "move memory to Notion":
    blocks in `AGENTS.md`, `README.md`, `PROJECT.md`, and
    `.claude/rules/memory-review-and-save.md` for the old choice are replaced
    with the new choice's blocks, after he sees them. The new choice's
-   skills are added. Its storage skill (`tracking-work-items` or
-   `storing-project-memory`) has the old one's name and replaces it: read
+   skills are added. Its storage skill (`using-work-tracker` or
+   `using-memory-store`) has the old one's name and replaces it: read
    the old one first, because step 5 reads the old records its way (this
    skill's `assets/` folders `work-local`, `work-notion`, `work-github`,
    `memory-local`, and `memory-notion` also hold it). A new memory choice
@@ -381,5 +399,5 @@ Where work items or memory live, for example "move memory to Notion":
    search command after its operation is `completed`.
 6. Remove the skills the new choices no longer need (for example
    `using-notion-cli` when nothing is left in Notion, or
-   `managing-project-memory` and `storing-project-memory` when memory moved
+   `curating-project-memory` and `using-memory-store` when memory moved
    to Hindsight) only after the records are moved and he says yes.

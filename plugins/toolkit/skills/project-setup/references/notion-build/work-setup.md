@@ -4,8 +4,8 @@ Purpose: the Notion steps onboarding runs for every new Notion project,
 adding work items or memory to a Notion project later, the one-time build
 of the template, bringing an older project up to the current template, and
 rebuilding a damaged template. `database-layout.md` and the
-`assets/schema/` files are in the Notion `tracking-work-items` skill,
-`assets/work-notion/.claude/skills/tracking-work-items/` in this skill.
+`assets/schema/` files are in the Notion `using-work-tracker` skill,
+`assets/work-notion/.claude/skills/using-work-tracker/` in this skill.
 `ntn-commands.md` is in the `using-notion-cli` skill,
 `assets/notion-tools/.claude/skills/using-notion-cli/references/` in this skill;
 running `ntn` in Codex is in that skill's `SKILL.md`. The other files named
@@ -562,7 +562,7 @@ the templates are built.
     hand in the Notion app, under that section's prompt line, and wait
     until he says it is done or says he does not want it. In an item, the
     agent adds each pull request as a plain link under the heading (the
-    Notion `tracking-work-items` skill, `page-layout.md`, "Pull request
+    Notion `using-work-tracker` skill, `page-layout.md`, "Pull request
     links").
 12. Its views. First, the owner may have pasted views in from another
     page; each keeps a filter that names that page. For each
