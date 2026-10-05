@@ -32,6 +32,7 @@ Run each command alone. None of them changes anything.
 | Salesforce | `sfdx-project.json` present | Confirm Salesforce in one line instead of asking question 4. |
 | An earlier setup | `PROJECT.md` with a filled "Toolkit settings" section | Already set up: go back to SKILL.md, "Pick the path". |
 | An earlier setup that is not Toolkit V2 | Any file SKILL.md, "Pick the path", lists for a move, such as `AGENTS.md`, `.work-items/`, or `.toolkit.json` | Not a new project: go back to SKILL.md, "Pick the path". |
+| A folder of the project's own with a name setup uses | `ls system sources delivery reference` (a folder that is missing gives an error line: that is the wanted result) | One of the four lists a file: stop, and copy nothing. Setup would put its guides into that folder, and the record check would then read every file in `system/` and `sources/` as a record and stop the setup commit and every later commit to those files. Name the folder and how many files it holds, and ask the owner: "This project already has `<folder>/`. Rename it, or move its files, before setup?" Go on only when none of the four lists a file. |
 
 ## Question 1: the name and the owner
 

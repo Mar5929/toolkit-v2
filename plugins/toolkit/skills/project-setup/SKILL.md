@@ -1,6 +1,6 @@
 ---
 name: project-setup
-description: 'Sets up Toolkit V2 in a project, checks or updates the setup, moves over a project set up another way, changes where work items or memory live, adds SOUL.md, opens the Hindsight dashboard, or connects Hindsight on a new computer, so projects run the same files. Use for any Toolkit V2 setup request, such as "toolkit v2", "set up this project", "check the setup", or "update the toolkit". Not for a Git pull; use pull-latest. Not for the older claude-toolkit (project-sync).'
+description: 'Sets up Toolkit V2 in a project, checks or updates the setup, moves over a project set up another way, changes where work items or memory are kept, adds SOUL.md, opens the Hindsight dashboard, or connects Hindsight on a new computer, so projects run the same files. Use for any Toolkit V2 setup request, such as "toolkit v2", "set up this project", "check the setup", or "update the toolkit". Not for a Git pull; use pull-latest. Not for the older claude-toolkit (project-sync).'
 ---
 
 # Project setup
@@ -53,7 +53,7 @@ has a filled "Toolkit settings" section.
     layout keeps what lasts longer than one work item in five places, as
     files in the repository: `DECISIONS.md`, `system/`, `sources/`,
     `delivery/`, and `reference/`.
-  - Change a setup choice (where work items or memory live):
+  - Change a setup choice (where work items or memory are kept):
     `references/update.md`, "Changing a setup choice".
 - He asks to open a project's Hindsight dashboard, or a Hindsight project is
   set up but this computer lacks its key or the add-on (a new computer):

@@ -118,13 +118,14 @@ move-over all do this section.
    | Git says this is not a Git repository | Skip this section, and tell the owner the check will not run before commits. |
    | The first prints `.githooks` | Nothing. |
    | The first prints another folder | Change nothing. Tell the owner as the text below the table says, naming that folder. |
-   | The first prints nothing, and the second lists a file named `pre-commit` (a name that ends in `.sample` does not count) | Change nothing: setting `core.hooksPath` turns off every hook in that folder. Tell the owner as the text below the table says, naming that file. |
-   | The first prints nothing, and the second lists no `pre-commit` | `git config core.hooksPath .githooks` |
+   | The first prints nothing, and the second lists any file whose name does not end in `.sample`, such as `pre-commit`, `commit-msg`, `pre-push`, or the hooks Git LFS installs | Change nothing: with `core.hooksPath` set, Git stops running every hook in that folder. Tell the owner as the text below the table says, naming each of those files. |
+   | The first prints nothing, and the second lists only files whose names end in `.sample`, or no file | `git config core.hooksPath .githooks` |
 
-   What to tell the owner when nothing is changed: the folder or file that
-   is already set; that the record check will not run before commits in
-   this project; and that he can add this one line to his own `pre-commit`
-   file to run it:
+   What to tell the owner when nothing is changed: the folder or the files
+   that are already there; that the record check will not run before
+   commits in this project; and that he can run it from his own hooks with
+   this one line in the `pre-commit` file of that folder, in a new file
+   named `pre-commit` when the folder has none:
 
    ```text
    "$(git rev-parse --show-toplevel)/.githooks/pre-commit" || exit 1

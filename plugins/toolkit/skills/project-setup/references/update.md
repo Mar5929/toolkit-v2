@@ -123,8 +123,11 @@ git status --short -- <file>
 
 - The first command lists the commits that changed the file.
 - A commit is the toolkit's when the second command also lists a file
-  under `.claude/skills/` for it: setup, a move-over, and "update the
-  toolkit" each commit skills together with the other toolkit files.
+  under `.claude/skills/` for it, and its message names the setup, a
+  move-over, or a toolkit update: each of those commits skills together
+  with the other toolkit files. The owner may also change a rule and a
+  skill in one commit of his own. When the message does not tell which it
+  is, ask him.
 - A file whose commits are all the toolkit's, and that the third command
   does not list, holds no edit of his. Say so in its table line, and
   recommend the toolkit's version.
@@ -194,7 +197,8 @@ the records pass the check first, and its entries go in last:
 
    It reads the records Git tracks (`DECISIONS.md`, `system/`, `sources/`,
    and the folder guides) in the worktree, and `work-items/` and `memory/`
-   in the main checkout. It only reads. It
+   in the main checkout. An ID that a work item names is looked up in the
+   main checkout's records, not in the worktree's. It only reads. It
    prints one line per finding: the file, what is wrong, and what to do.
 3. Fix each finding, then run the check again, until it prints nothing.
    - A finding in a file Git tracks: fix it in the worktree.
@@ -212,7 +216,8 @@ the records pass the check first, and its entries go in last:
    `skills-hooks-settings.md`.
 5. Set up the pre-commit file as `placing-files.md`, "5. The pre-commit
    check", says. Remove an old `pre-commit` Git hook that section 4 lists
-   first, after his yes.
+   first, after his yes. Every other hook in that folder stays: when one is
+   left, that section changes nothing and tells the owner.
 
 A project whose settings already hold the entries: run step 2 and report
 what it prints with the final checks, and do step 5.

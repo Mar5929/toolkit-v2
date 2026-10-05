@@ -45,7 +45,7 @@ work item its State, using the first row that matches:
   ignored.
 - A Next action that ends ", with <skill>." (one of the skills that
   `update.md`, section 4, lists as retired): remove that ending, so it
-  matches a form in `.claude/rules/keep-work-item-current.md`. In Notion, change the page's
+  matches a form the work item template gives. In Notion, change the page's
   Current state and the Next action property together.
 - Add a Recent History row to each changed item: "Toolkit update: stage
   <old> is now State <new>." Change nothing else in the item.

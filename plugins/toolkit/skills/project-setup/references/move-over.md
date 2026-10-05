@@ -245,7 +245,8 @@ it is in place.
 3. **Update.** Carry out each approved Update line. Merge settings with the
    merge rules in `skills-hooks-settings.md`, leaving out the entries that
    run `validate-records.mjs`: `update.md`, "The record check and the
-   pre-commit file", adds them in step 7, after the records pass the check.
+   pre-commit file", step 4, adds them after the records pass the check.
+   "7. Finish", step 2, below runs that section.
    Put each line of his in its new place and read it back there.
 4. **Services.** Step 7 of "New project" in `SKILL.md`.
 5. **Records.** Step 6, "Carry over the old records".

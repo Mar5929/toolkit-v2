@@ -107,7 +107,7 @@ An output style is a Markdown file of instructions that Claude Code sends with e
 - `keep-coding-instructions: true` keeps Claude Code's own software engineering instructions. Without it, a custom style leaves them out. Set it in a style that changes only how replies are written.
 - A style is chosen by the `outputStyle` key of a settings file. The value must equal the style's name, letter for letter, with the same capitals. A value that matches no style gives the default style, with no error.
 - Keep the style short: its text is sent with every request.
-- Codex and helper agents never see an output style. A writing rule they must follow goes in `AGENTS.md`, in the skill, or in the helper's brief.
+- Codex never sees an output style. In Claude Code a helper agent does not get it either, except a fork, which inherits the style of the conversation it was forked from. A writing rule they must follow goes in `AGENTS.md`, in the skill, or in the helper's brief.
 - A style is an instruction, and nothing enforces it. What must happen every time goes in a hook.
 - In the terminal, Claude Code reads style files when it starts. Tell the owner to restart it after a change.
 

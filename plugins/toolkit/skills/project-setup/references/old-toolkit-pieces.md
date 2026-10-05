@@ -152,7 +152,7 @@ says which are removed, added, and kept:
 | `.claude/output-styles/plain-english.md` | Compare | Same name |
 | `.claude/output-styles/terse.md`, `plain-language.md` | Kept when `outputStyle` names it; otherwise Compare | Nothing |
 | `tools/kb/`, `tools/permissions/` (Salesforce graph and permission set tools) | Compare | Same names |
-| `.system-guide.json`, and the System Guide pages (usually `knowledge/system/`) | Your call | `system/` and `reference/current-system/`. The pages are his approved text: recommend moving each page to `reference/current-system/<area>.md` with `git mv`, so its text and its Git history stay, and carrying over into `system/` only the rules a work item he can name delivered (`update.md`, "Where each old piece goes", the row for a verified description) |
+| `.system-guide.json`, and the System Guide pages (usually `knowledge/system/`) | Your call | `system/` and `reference/current-system/`. The pages are his approved text: recommend moving each page to `reference/current-system/<area>.md` with `git mv`, so its text and its Git history stay, and carrying over into `system/` only the rules a work item he can name delivered (`one-home-layout.md`, "Where each old piece goes", the row for a verified description) |
 | `.toolkit-memory.json` | Delete, after step 6 | "Toolkit settings" in `PROJECT.md` |
 | A folder's own `AGENTS.md` with a `CLAUDE.md` beside it holding `@AGENTS.md` | Kept | Check it for old names (`move-over.md`, step 3) |
 | Root `CLAUDE.md`, root `AGENTS.md`, `README.md`, `.gitignore`, `.mcp.json` | Update | `move-over.md`, step 3 |
@@ -258,7 +258,7 @@ records. Each new record says "Carried over from `<old path>`".
 | A save waiting in `knowledge/memory-inbox.md` | "Your call", one line each: he approves or declines it. Never file one without his answer. |
 | `knowledge/memory-self-improvement.md` | His instructions go to `.claude/rules/owner-preferences.md`, under Memory, in his words |
 | `knowledge/project.md`, or the old root `PROJECT.md` | The matching sections of the Toolkit V2 `PROJECT.md`. "Memory approval" starts as `onboarding`, whatever the old file allowed. |
-| A file in `knowledge/prds/` or `prds/` | "Your call": recommend moving the whole file to `sources/` with `git mv` and an SRC number, so its text and its Git history stay, and carrying its agreed requirements into the matching `system/` documents as rules whose Source names that SRC (`update.md`, "Where each old piece goes", the row for an agreed requirement) |
+| A file in `knowledge/prds/` or `prds/` | "Your call": recommend moving the whole file to `sources/` with `git mv` and an SRC number, so its text and its Git history stay, and carrying its agreed requirements into the matching `system/` documents as rules whose Source names that SRC (`one-home-layout.md`, "Where each old piece goes", the row for an agreed requirement) |
 | Memory in a service | Stays in the service. When it is Hindsight and he chose Hindsight memory: "Your call" whether this project uses that bank or a new one. |
 
 A pointer in the new memory is added only for a `DECISIONS.md` entry made
