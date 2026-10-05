@@ -206,3 +206,26 @@ complete in one file that reads the same in every project.
    `dev/PROGRESS.md`.
 8. HarborDesk is created from the branch with the real setup steps for the
    owner to look at.
+
+## 9. Settled during the build (2026-10-05)
+
+- Built and on the branch: one folder per setup choice; the five skill
+  renames; the root `AGENTS.md`, `DECISIONS.md`, `system/`, `sources/`,
+  `delivery/`, `reference/`, the folder guides, and the three choice-only
+  rule files `hindsight-memory.md`, `notion-records.md`,
+  `salesforce-project.md`.
+- The official pages were captured again on 2026-10-05. What changed and
+  matters here: a folder's `CLAUDE.md` and a path-scoped rule now load when
+  the agent reads or changes a file in scope (Claude Code 2.1.288);
+  `UserPromptSubmit` also runs on turns the app starts itself; Codex has a
+  newer plugin manifest form (a root `plugin.json`), and the older
+  `.codex-plugin/plugin.json` still works. No change to skill frontmatter,
+  the description limit, `paths`, `claudeMdExcludes`, or how Codex reads
+  `AGENTS.md`.
+- The builder of the starter files chose these, and they stand unless the
+  owner changes them in his review: new `DECISIONS.md` entries go at the
+  end; a source file is named `SRC-###-<short-name>` and has no status; a
+  rule in `system/` has the form Mark, Rule, Conditions and exceptions,
+  Source; IDs have two digits (three for DEC and SRC).
+- Each instruction lives in one file. A skill never repeats what the root
+  `AGENTS.md` or a folder guide says: it points to it.
