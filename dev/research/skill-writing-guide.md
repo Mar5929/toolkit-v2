@@ -5,6 +5,11 @@ Written 2026-09-27 for Toolkit V2. It turns the official guidance captured in
 bodies, reference files, hooks, and multi-agent workflows. Every rule names
 the captured file it comes from.
 
+Corrected 2026-10-05 against the pages captured that day (Claude Code
+2.1.289, Codex 0.160): D4 (the length limit and the why clause), the
+listing budget in D4, H3 (`UserPromptSubmit`), H11 (the Codex hooks file),
+and the Codex source commit below. Nothing else was checked again that day.
+
 Mike's decisions win over this guide. They are in `dev/GOAL.md` and the Rules
 section of `AGENTS.md`. Three of them shape everything below:
 
@@ -25,9 +30,11 @@ section of `AGENTS.md`. Three of them shape everything below:
   page in this repository. The text after it in quotes is the section heading.
   Each topic folder's `SOURCE-RECORD.md` gives the page's web address.
 - `ai-external-knowledge/codex/source-skills-*.md` files are Codex source code
-  at commit `21eb3551` (2026-09-27). They show exact behavior the Codex
-  documentation only summarizes. The installed Codex on this Mac is
-  `codex-cli 0.157.0`; the source can be newer.
+  at commit `7c2ce907` (2026-10-05; `21eb3551` when this guide was written).
+  They show exact behavior the Codex documentation only summarizes. The
+  installed Codex on this Mac was `codex-cli 0.157.0` on 2026-09-27 and
+  `codex-cli 0.160.0` on 2026-10-05
+  (`ai-external-knowledge/codex/SOURCE-RECORD.md`); the source can be newer.
 - **Observed** marks something seen on this Mac on 2026-09-27, with where it
   was seen. Observed facts are not in `ai-external-knowledge/`.
 - **Project evidence** marks a file in `dev/` that records a test of Toolkit V2
@@ -219,24 +226,30 @@ Toolkit V2 frontmatter holds only `name` and `description`.
 
 ### Length
 
-**D4. Aim for about 300 to 400 characters: one sentence on what the skill
-does and why (a ", so ..." clause), one on when to use it, and at most one
-short "Not for" clause. `dev/tools/check-skills.mjs` fails a description over
-400 characters.**
+**D4. Keep a description under 500 characters: one sentence on what the
+skill does, with the why where it helps (a ", so ..." clause), one sentence
+starting "Use" on when to use it, and at most one short "Not for" clause.
+`dev/tools/check-skills.mjs` fails a description of 500 characters or more.
+It does not test for a why clause.**
 Agent Skills: "A few sentences to a short paragraph is usually right".
 Claude Code: every skill in the listing adds to the context on every turn,
 whether or not Claude ever uses it.
 (`ai-external-knowledge/anthropic-agent-skills/agentskills-optimizing-descriptions.md`
 "Writing effective descriptions"; `ai-external-knowledge/claude-code/skills.md`
 "Find unused skills")
-The number range is this guide's arithmetic, not an official figure. The
-limit is 400 (`MAX_DESCRIPTION` in `dev/tools/check-skills.mjs`, and the
-build `AGENTS.md`): Mike's why clause (2026-09-29) adds about 40 to 80
-characters to the earlier aim of 150 to 300; 400 characters is about 100
-tokens, close to the "~100 tokens" the Agent Skills specification budgets
-for name and description together
+The number is this repository's rule, not an official figure. The limit is
+under 500 (`MAX_DESCRIPTION` in `dev/tools/check-skills.mjs`, and
+`AGENTS.md`, Rules, "Skills"). The official limits are higher: the Agent
+Skills standard allows 1,024 characters
 (`ai-external-knowledge/anthropic-agent-skills/agentskills-specification.md`
-"Progressive disclosure"), and far under the 1,024-character cap (D1). The
+"`description` field"), and Claude Code lists up to 1,536 characters of
+`description` and `when_to_use` together
+(`ai-external-knowledge/claude-code/skills.md` "Frontmatter reference").
+Mike's why clause (2026-09-29) adds about 40 to 80 characters; 400
+characters is about 100 tokens, close to the "~100 tokens" the Agent
+Skills specification budgets for name and description together
+("Progressive disclosure"). The 23 descriptions on this branch measured
+314 to 483 characters on 2026-10-05. The
 cost: with the Codex fallback of 8,000 characters and 30 skills, each line
 spends about 50 characters on name and path, which leaves about 215
 characters of description per skill before Codex starts cutting. Codex cuts
@@ -246,8 +259,12 @@ every description from the end
 first 120 characters (D5), where the check reads them. With a known context
 window the Codex budget is 2% of it, which is larger; the 8,000-character
 case is the crowded one. In Claude Code, every character adds to the budget
-that decides which skills lose their description (1.2); new projects set
-`skillListingBudgetFraction` to 0.02. Toolkit V2's descriptions measured 266
+that decides which skills lose their description (1.2). That budget is 1%
+of the model's context window by default
+(`ai-external-knowledge/claude-code/skills.md` "Skill descriptions are cut
+short"); a new project's `.claude/settings.json` sets
+`skillListingBudgetFraction` to 0.03 (the starter's file,
+`plugins/toolkit/skills/project-setup/assets/every-project/.claude/settings.json`). Toolkit V2's descriptions measured 266
 to 307 characters on 2026-09-27, and 299 to 405 after the why clauses
 (2026-09-29).
 
@@ -386,9 +403,9 @@ example "<phrase>", "<phrase>", or "<phrase>". Not for <neighbor job>; use
 
 Checks for each description:
 
-- It is 1,024 characters or fewer, and about 300 to 400 (D1, D4).
+- It is under 500 characters (D1, D4).
 - The first sentence alone says what the skill does (D5).
-- It has a why clause before "Use when" (D6).
+- It says why where that helps, before the "Use" sentence (D6). No check tests this.
 - No "I", "you", or "this skill" as the subject (D6).
 - It has a "Use when" part that names a situation, not just keywords (D8 to D11).
 - Any "Not for" clause names the competing skill (D12).
@@ -570,9 +587,14 @@ description and instructions stronger, or enforce the behavior with a hook.
 a routing reminder for an exact owner phrase or a briefing after
 compaction.** Both hosts add plain stdout, or `hookSpecificOutput.additionalContext`,
 from these events to the model's context. Both fire `SessionStart` with source
-`compact` after compaction.
-(`ai-external-knowledge/claude-code/hooks.md` "Exit code output", "SessionStart";
-`ai-external-knowledge/codex/hooks.md` "SessionStart", "UserPromptSubmit")
+`compact` after compaction. In Claude Code, `UserPromptSubmit` does not run
+only on prompts the owner types: it also runs when a scheduled task fires
+(a `/loop` turn included), when a background subagent reports back, and
+when another session sends a message. So a `UserPromptSubmit` hook must
+never treat the prompt text as the owner's own words.
+(`ai-external-knowledge/claude-code/hooks.md` "Exit code output", "SessionStart",
+"UserPromptSubmit"; `ai-external-knowledge/codex/hooks.md` "SessionStart",
+"UserPromptSubmit")
 
 **H4. Keep hook output short.** Claude Code caps `additionalContext`,
 `systemMessage`, and plain stdout at 10,000 characters; longer text goes to a
@@ -627,11 +649,13 @@ In Claude Code a `PreToolUse` deny holds even in bypass-permissions mode.
 modes")
 
 **H11. Expect Codex to ask the owner to trust each new or changed hook.**
-Codex records trust against the hook's hash and skips plugin hooks until they
-are trusted, so every change to `hooks/codex-hooks.json` needs Mike to trust it
-again in `/hooks`.
-(`ai-external-knowledge/codex/hooks.md` "Review and trust hooks",
-"Plugin-bundled hooks")
+Codex records trust against the hook's hash and skips a new or changed hook
+until it is trusted, so every change to an entry in a project's
+`.codex/hooks.json` needs Mike to trust it again in `/hooks`. Project hooks
+load only when the project's `.codex/` folder is trusted. Toolkit V2 ships
+no plugin hooks; a plugin's own hooks file would be `hooks/hooks.json`.
+(`ai-external-knowledge/codex/hooks.md` "Where Codex looks for hooks",
+"Review and trust hooks", "Plugin-bundled hooks")
 
 **H12. Find plugin files through the plugin root variable.** Claude Code sets
 `CLAUDE_PLUGIN_ROOT` and `CLAUDE_PLUGIN_DATA`. Codex sets `PLUGIN_ROOT` and
@@ -825,7 +849,7 @@ need more detail for Haiku."
 | Keywords | Claude Code and Codex: include the words users say (`skills.md`, `best-practices.md`). | Codex 0.157.0 model instructions: do not use a skill "based solely on keywords" (Observed). Agent Skills: do not add words from failed prompts (`agentskills-optimizing-descriptions.md`). | Name the situation first; add a few real phrases as examples of it (D9, D10). |
 | How broad | Agent Skills: "Err on the side of being pushy" (`agentskills-optimizing-descriptions.md`). | Claude Code: if it triggers too often, "Make the description more specific" (`skills.md`). | Firm about the situation, narrow in scope, with a named neighbor where two compete (D12 to D14). |
 | Codex trigger rule | Source: "you must use that skill" when the task clearly matches (`source-skills-catalog-prompt.md`). | Model instructions seen in 0.157.0: "use reasonable judgement" (Observed). | Write so the match is clear either way; do not rely on "must use". |
-| Length cap | Claude Code: 1,536 characters (`skills.md`). | Agent Skills standard and Codex: 1,024 (`agentskills-specification.md`, `source-skills-render.md`). | 1,024 is the hard cap; aim for about 300 to 400, and `check-skills.mjs` fails over 400 (D1, D4). |
+| Length cap | Claude Code: 1,536 characters (`skills.md`). | Agent Skills standard and Codex: 1,024 (`agentskills-specification.md`, `source-skills-render.md`). | 1,024 is the standard's cap; this repository's rule is under 500, and `check-skills.mjs` fails at 500 or more (D1, D4). |
 | Naming pattern | Anthropic prefers gerunds (`skill-authoring-best-practices.md`). | The standard's and Codex's examples use nouns and actions (`agentskills-specification.md`, `customization-overview.md`). | Any one pattern, used everywhere. Toolkit V2's names are settled in `dev/SKILL-INDEX.md` (N4). |
 | Trigger text field | Claude Code reads `when_to_use` (`skills.md`). | Codex does not; it can show `metadata.short-description` instead (`source-skills-parser.md`). | Only `description` (D3). This is also Mike's rule in `AGENTS.md`. |
 | Claude Code list after compaction | Settings reference: Claude sees the skill listing each turn (`settings-reference.md`). | Context window page: the listing "is not re-injected after `/compact`" (`context-window.md`). | Unsettled. Observed: the list sits in the Skill tool's description, which supports "each turn". If routing after compaction matters, a `SessionStart` hook with matcher `compact` can restate it (H3). |

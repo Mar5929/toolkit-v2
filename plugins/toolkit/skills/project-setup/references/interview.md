@@ -61,13 +61,15 @@ only one database of a workspace.
 
 ## Question 3: where memory lives
 
-Recommend local memory with Obsidian: it is private, fast, and needs no
-server.
+Memory holds where work stopped, and pointers to records. Decisions,
+sources, and the description of the system are files in the repository
+with every choice. Recommend local memory with Obsidian: it is private,
+fast, and needs no server.
 
 - When work items are in Notion, recommend Notion memory instead, so work
   and memory sit together, link to each other, and he can read both on his
   phone.
-- Offer Hindsight by name, for search by meaning across many memories. It
+- Offer Hindsight by name, for search by meaning across past sessions. It
   is the owner's Hindsight server on his VPS; nothing is installed on this
   Mac except Hindsight's coding-agent add-on.
 - When he picks Hindsight, explain that setup in plain words from
@@ -77,9 +79,9 @@ server.
 
 | Choice | "Memory" value | Good when | What to know |
 | --- | --- | --- | --- |
-| Local with Obsidian | `local` | Most projects | Files in `memory/`, which Git ignores, on this computer only. With local work items, memories link items as `[[WI-031]]`. |
-| Notion, in Lore's layout | `notion` | Work items are in Notion, or he reads memory on his phone | A Memory page holding Lore's databases, plus "Current state" and "Terminology glossary" pages. Needs `ntn` signed in. |
-| Hindsight | `hindsight` | Many memories, and search by meaning matters | His Hindsight server on the VPS, one memory bank per project, never Hindsight Cloud. Hindsight's coding-agent add-on, installed once on this computer, saves each session to the bank. No memory skills: the agent uses the add-on's tools. Current State is the local file `memory/CURRENT_STATE.md`. |
+| Local with Obsidian | `local` | Most projects | Two files in `memory/`, which Git ignores, on this computer only: Current State and the list of pointers. |
+| Notion, in Lore's layout | `notion` | Work items are in Notion, or he reads memory on his phone | A "Current state" page, and a Memory page holding Lore's databases, where each pointer is a page. Needs `ntn` signed in. |
+| Hindsight | `hindsight` | Search by meaning across past sessions matters | His Hindsight server on the VPS, one memory bank per project, never Hindsight Cloud. Hindsight's coding-agent add-on, installed once on this computer, saves each session to the bank. No memory skills: the agent uses the add-on's tools. Current State is the local file `memory/CURRENT_STATE.md`. |
 
 Any mix of work tracking and memory works, for example Notion work items
 with local memory.
@@ -88,8 +90,9 @@ with local memory.
 
 Skip the question when `sfdx-project.json` answered it. Otherwise recommend
 no when the file is absent. A yes adds the Salesforce rules and skills, the
-org guards, and the `delivery/` folder. Setup then checks that Salesforce's
-own skills are installed (`salesforce.md` in this folder).
+org guards, `tools/`, and the Salesforce templates inside `delivery/`.
+Setup then checks that Salesforce's own skills are installed
+(`salesforce.md` in this folder).
 
 For a Salesforce project, ask for the org aliases, one question per
 message. Show the aliases on this computer first with `sf org list` (it
@@ -111,9 +114,9 @@ cannot be read (`salesforce.md` in this folder, "The API version").
 `SOUL.md` is a short page on how he likes the agent to work with him.
 Recommend not now.
 
-- Yes: keep it in the setup copy and fill it with his words while finishing
-  (`finishing.md` in this folder).
-- No: leave it out of the setup copy.
+- Yes: the setup copy gets it, and you fill it with his words while
+  finishing (`finishing.md` in this folder).
+- No: the setup copy has none.
 
 ## The plan to confirm
 
@@ -121,10 +124,11 @@ After the answers, say in a few lines what will happen, and wait for his
 yes. Start with his answers in one short line: the name and the owner,
 where work items live (with the ID prefix for local folders; with Notion it
 is asked later), where memory lives, Salesforce (and the org aliases), and
-`SOUL.md`. Say that you will copy the toolkit's files for his choices
-into this folder, with the skills and the 3 small hook commands (give the
-skill count), and turn the older claude-toolkit plugins off for this
-project only. Name every thing that will be created outside the project
+`SOUL.md`. Say that you will copy the project files for his choices into
+this folder, with the skills and the 3 small hook commands (give the skill
+count), and turn the older claude-toolkit plugins off for this project
+only. Say that every project gets `DECISIONS.md`, `system/`, `sources/`,
+`delivery/`, and `reference/` as files in this folder, whatever he chose. Name every thing that will be created outside the project
 folder:
 
 | Choice | Say |
@@ -134,7 +138,7 @@ folder:
 | Hindsight | "create the memory bank <bank> on your Hindsight server (or use this project's own bank), and install Hindsight's coding-agent add-on for Claude Code and Codex, or add this project to it; that changes files in `~/.claude`, `~/.codex`, and `~/.hindsight`, and I'll show you each change before I make it" |
 | Local work and local memory | "nothing outside this folder" |
 
-Skill counts: 10 shared, plus 1 for the work tracking set, plus 2 for local
+Skill counts: 10 shared, plus 1 for the work tracking choice, plus 2 for local
 or Notion memory (none for Hindsight), plus 1 for Notion work items or
 memory (`using-notion-cli`, once), plus 3 for Salesforce.
 

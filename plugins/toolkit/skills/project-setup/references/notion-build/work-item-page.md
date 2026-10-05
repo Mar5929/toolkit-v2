@@ -55,6 +55,6 @@ One row per task, grouped by phase; a sub-item's tasks have no phase. Set a task
 These are possibilities to evaluate, **not approved requirements or design decisions**.
 - **For R-01:** \<Possible approach and the tradeoff or question it raises.\>
 # Linked memory
-Memory records and project-wide decisions that link to this item. Linked facts and entities are in the Facts and Entities properties.
+Memory pointers that link to this item.
 # Linked Github PRs
 \<Link any github PRs below in the Embed Github component. If there are multiple PRs, link multiple.\>

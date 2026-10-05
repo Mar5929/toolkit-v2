@@ -2,9 +2,9 @@
 
 Purpose: the Salesforce facts setup records: the org aliases, written while
 you build the setup copy, and the API version, written after the files are
-in place. Everything else a Salesforce project needs comes with the model:
-the rules, the three `sf-*` skills, the two org guards, the Salesforce
-templates in `delivery/`, and `tools/`. Salesforce's own skills come from Salesforce, not from setup.
+in place. Everything else a Salesforce project needs comes with the
+`salesforce` setup folder: the rules, the three `sf-*` skills, the two org
+guards, the Salesforce templates in `delivery/`, and `tools/`. Salesforce's own skills come from Salesforce, not from setup.
 
 ## Salesforce's skills
 
@@ -49,7 +49,7 @@ left. An instruction he gives about the other orgs (for example "don't use
 those") goes to `owner-preferences.md` (`finishing.md`, "Instructions he
 gives during setup").
 
-Leave `.claude/protected-orgs.json` as the model has it: the guard finds
+Leave `.claude/protected-orgs.json` as copied: the guard finds
 production orgs itself and blocks them. Agents never deploy to production or
 change its data; the guards hand the owner the command instead. In Codex
 the owner also runs every sandbox deploy and sandbox data change; the agent
@@ -57,7 +57,7 @@ gives him the exact command with its `-o <sandbox alias>`.
 
 ## The API version
 
-The model leaves the API version as `XX.0`. Fill it in two files.
+The copied files hold the API version as `XX.0`. Fill it in two files.
 
 1. Read it from the sandbox with a command that only reads: the
    `apiVersion` field of

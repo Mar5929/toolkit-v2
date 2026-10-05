@@ -31,8 +31,9 @@ The templates are Notion database templates
 with "New" in Notion is the same as one the agent makes. The owner's
 Projects database holds one, "Project", set as its default. It holds both
 parts: the work items part (Work Items, Phases, Tasks) and the memory part
-(Memory, Current state, Terminology glossary). Every project is made from
-it, then has the part it keeps elsewhere removed.
+(Memory and Current state; a template built before the one-home layout
+also holds a Terminology glossary page, which nothing writes). Every
+project is made from it, then has the part it keeps elsewhere removed.
 
 Inside "Project", the Work Items database has one template, set as its
 default: the work item template. Its title is empty, so the title the
@@ -110,8 +111,8 @@ under (`ntn-commands.md`, "Access and sign-in").
    of it. If the owner has no Projects database, stop, tell him a Notion
    project needs a Projects database, and ask him to make one in Notion.
 4. **Wait** until the copy is filled (`ntn-commands.md`, "Waiting for a
-   template"): the page lists Memory, Current state, Terminology glossary,
-   Work Items, Phases, and Tasks.
+   template"): the page lists Memory, Current state, Work Items, Phases,
+   and Tasks, and Terminology glossary when the template has that page.
 
    ```bash
    ntn api v1/blocks/<project-page-id>/children page_size==100 < /dev/null | jq -r '.results[] | select(.type=="child_database" or .type=="child_page") | [.type, .id, (.child_database.title // .child_page.title)] | @tsv'
@@ -160,7 +161,8 @@ It goes to Notion's trash; a page or database goes with everything in it.
 **Memory kept locally or in Hindsight:**
 
 1. On the project page, remove the "Project Memory" heading and the
-   Memory, Current state, and Terminology glossary pages.
+   Memory and Current state pages, and the Terminology glossary page when
+   the template has one.
 2. Remove the Work Items columns that linked to them:
    `PATCH v1/data_sources/<work-items-data-source-id>` with
    `{"properties":{"Memories":null,"Facts":null,"Entities":null}}`.
@@ -184,22 +186,33 @@ It goes to Notion's trash; a page or database goes with everything in it.
 
 ## Recording the links in PROJECT.md
 
-`PROJECT.md`, section "Toolkit settings", gets a "Notion" block the skills
-read every time:
+`PROJECT.md`, section "Toolkit settings", has two fixed lines for Notion:
+"Notion work items" and "Notion memory". The skills read the ids from them
+every time. Write the ids as nested bullets under the label line, in place
+of its prompt. Never add a line or a heading of your own to the section.
+
+With work items in Notion:
 
 ```markdown
-### Notion
-- Project page: <url>
-- ID prefix: <PREFIX>
-- Work Items: database <id>, data source <id>
-- Phases: database <id>, data source <id>
-- Tasks: database <id>, data source <id>
-- Projects database: data source <id>
+- Work item ID prefix: `<PREFIX>`
+- Notion work items:
+  - Project page: <url>
+  - Work Items: database <id>, data source <id>
+  - Phases: database <id>, data source <id>
+  - Tasks: database <id>, data source <id>
+  - Projects database: data source <id>
 ```
 
-Without work items in Notion, leave out the ID prefix, Work Items, Phases,
-and Tasks lines. `setup.md` adds the memory lines (Memory page, each Lore
-database, Current state, Terminology glossary, Lore project row).
+`setup.md` gives the bullets of "Notion memory". With memory in Notion and
+work items elsewhere, "Notion work items" holds `not used`, and the
+"Project page" and "Projects database" bullets are the first two under
+"Notion memory".
+
+A project set up earlier holds these ids under a `### Notion` heading at
+the end of the section. In an update, show the owner the section before
+and after, and after his yes move each line under its fixed line as a
+nested bullet, put the "ID prefix" value on the "Work item ID prefix" line,
+and remove the heading.
 
 ## Adding work items or memory later
 
@@ -215,8 +228,9 @@ stay on the page that holds them. A moved page keeps its id.
    titled "<Project name> (temporary, safe to delete)".
 2. Add a "Project Memory" heading at the end of the project page
    (`PATCH v1/blocks/<project-page-id>/children` with one `heading_1`
-   block), then move the temporary page's Memory, Current state, and
-   Terminology glossary pages to the project page.
+   block), then move the temporary page's Memory and Current state pages
+   to the project page. A Terminology glossary page stays on the temporary
+   page.
 3. Move the temporary row to the trash
    (`PATCH v1/pages/<id>` with `{"in_trash":true}`).
 4. Run `setup.md`, "A new project".
@@ -235,12 +249,13 @@ stay on the page that holds them. A moved page keeps its id.
 2. Copy the old page's Project brief text into the new page with one
    `update_content` call.
 3. Add a "Project Memory" heading at the end of the new page, then move
-   the old page's Memory, Current state, and Terminology glossary pages to
-   it.
+   the old page's Memory and Current state pages to it, and its
+   Terminology glossary page when it has one.
 4. Run `setup.md`, "Bringing memory up to the current layout", step 3.
 5. Copy the old row's field values into the new row, then fill its work
-   fields ("A new project", step 9). Change the Project page line and add
-   the work lines in `PROJECT.md`'s Notion block.
+   fields ("A new project", step 9). Change the "Project page" bullet and
+   add the work bullets in `PROJECT.md` ("Recording the links in
+   PROJECT.md").
 6. The old row now holds only its brief: move it to the trash after the
    owner's yes.
 
@@ -294,7 +309,11 @@ through the API, after the owner's yes.
 
    Create each missing view from its asset (fill the placeholders first),
    in file order (10 to 19b).
-   Each view named Board, By state, All items, Roadmap, Waiting on Mike,
+   A Work Items view named "Waiting on Mike" is the earlier name of
+   "Waiting on the owner": it is not missing. Rename it with
+   `PATCH v1/views/<id>` and `{"name":"Waiting on the owner"}`.
+   Each view named Board, By state, All items, Roadmap, Waiting on the
+   owner,
    Top-level items, or By project phase (files 10 to 14, 17, and 18) whose
    filter lacks
    `{"property":"title","title":{"is_not_empty":true}}` gets it: read the
@@ -344,8 +363,16 @@ through the API, after the owner's yes.
      add "Linked Github PRs" here: it comes only with the owner's yes to
      the Requirements layout, below.
    - **The toolkit's own guide text:** replace, with one `update_content`
-     call, each guide paragraph under Roadmap, Sub-items, and Tasks, and
-     the Related items prompt, that differs from `work-item-page.md`.
+     call, each guide paragraph under Roadmap, Sub-items, Tasks, Questions
+     and Answers, and Linked memory, and the Related items prompt, that
+     differs from `work-item-page.md`.
+   - **The parts the one-home layout added**, each with one
+     `update_content` call when the template lacks it: the `**Moved up:**`
+     line, as the line after `**Related items:**` in the Current state
+     toggle; the "Lessons not proven yet" heading and its prompt line,
+     under Notes after Sources; and the Sources prompt line in the form
+     `<SRC-###>: ...`, in place of a Sources prompt line that names a file.
+     Skip a part the owner removed and says he does not want.
    - **The Requirements layout from before toolkit 0.8.1** (the section
      holds the line `**Overall status:**`): ask the owner whether new
      items of this project should get the current layout. After his yes,
@@ -376,11 +403,11 @@ through the API, after the owner's yes.
    a missing section to one, and replace its
    Tasks guide paragraph, only when you next change that item.
 5. **The "Project" template** in the Projects database. Its data source id
-   is on the "Projects database" line of the Notion block in `PROJECT.md`.
-   When the block has none (an older project), read it from the project
-   page's parent (`ntn api v1/pages/<project-page-id> < /dev/null | jq -r .parent.data_source_id`),
-   add the line `- Projects database: data source <id>`, and remove the
-   block's "Work item template page" and "Templates page" lines. When the
+   is on the "Projects database" bullet in `PROJECT.md`, "Toolkit
+   settings". When there is none (an older project), read it from the
+   project page's parent (`ntn api v1/pages/<project-page-id> < /dev/null | jq -r .parent.data_source_id`),
+   add the bullet `- Projects database: data source <id>`, and remove the
+   "Work item template page" and "Templates page" lines. When the
    parent is a page, ask the owner which Projects database holds the
    template. Then bring "Project" up to date the same way, its memory part
    too (`setup.md`, "Bringing memory up to the current layout"), so new
@@ -508,8 +535,7 @@ the templates are built.
    and databases made under it go at the end of the page, so this order
    puts each under its heading.
 2. `setup.md`, "Building the memory part of a template", steps 1 to 4:
-   the Memory page with Lore's databases, Current state, and Terminology
-   glossary.
+   the Memory page with Lore's databases, and Current state.
 3. The last two lines of `project-page.md` (the `# Work` heading and its
    paragraph) at the end of the page:
    `{"type":"insert_content","insert_content":{"content":"<those lines>"}}`
@@ -534,7 +560,7 @@ the templates are built.
 9. `setup.md`, "Building the memory part of a template", steps 5 to 7:
    the links between the memory databases and Work Items, the Memories
    views, and their column order.
-10. Column order: for each table view (All items, Roadmap, Waiting on Mike,
+10. Column order: for each table view (All items, Roadmap, Waiting on the owner,
     Top-level items, Project phases, By item, All phases, Project tasks,
     Open tasks, All tasks), send
     `PATCH v1/views/<id>` with only
@@ -612,8 +638,8 @@ the templates are built.
   (`database-layout.md`, "Creating an item"), and check the item's page shows its own views. Never
   test inside a template: a copy would take the test item with it.
 - A new project: the project page lists only the parts it keeps in
-  Notion (Work Items, Phases, and Tasks; Memory, Current state, and
-  Terminology glossary); with work items, its Work Items templates list
+  Notion (Work Items, Phases, and Tasks; Memory and Current state); with
+  work items, its Work Items templates list
   shows one template with `is_default` true, the ID property shows the
   project's prefix, and the relations check below passes.
 - Each database's relations point at the same project's databases:

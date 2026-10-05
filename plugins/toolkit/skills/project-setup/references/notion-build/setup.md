@@ -52,18 +52,20 @@ Notion project later runs all four.
 
 ## Recording the links in PROJECT.md
 
-`PROJECT.md`, section "Toolkit settings", gets these lines in its
-`### Notion` block:
+`PROJECT.md`, section "Toolkit settings", gets these nested bullets under
+its fixed "Notion memory" line, in place of the prompt (`work-setup.md`,
+"Recording the links in PROJECT.md", says where the "Project page" and
+"Projects database" bullets go):
 
 ```markdown
-- Memory page: <id>
-- Memories: database <id>, data source <id>
-- Facts: database <id>, data source <id>
-- Entities: database <id>, data source <id>
-- Lore Projects: data source <id>; this project's row <id>
-- Topics: data source <id>
-- Current state page: <id>
-- Terminology glossary page: <id>
+- Notion memory:
+  - Memory page: <id>
+  - Memories: database <id>, data source <id>
+  - Facts: database <id>, data source <id>
+  - Entities: database <id>, data source <id>
+  - Lore Projects: data source <id>; this project's row <id>
+  - Topics: data source <id>
+  - Current state page: <id>
 ```
 
 ## Bringing memory up to the current layout
@@ -71,7 +73,8 @@ Notion project later runs all four.
 Onboarding's "update the toolkit" runs this. Compare the project with
 `database-layout.md` and `views-and-layout.md`, and add only what is
 missing; never remove, rename, or retype anything, except the one view in
-step 3 and the one heading in step 5.
+step 3, the one heading in step 5, and the one page in step 6 after the
+owner's yes.
 
 1. For each of Lore's databases and the toolkit's columns, list what the
    data source has
@@ -101,7 +104,18 @@ step 3 and the one heading in step 5.
    has. In the "Project" template the heading holds only its prompt line:
    remove both with one `update_content` call. In a project, `update.md`,
    "The levels structure (toolkit 0.8.0)", step 6, moves its lines first.
-6. Tell the owner in one short list what was added.
+6. The "Terminology glossary" page: a project or a "Project" template set
+   up before the one-home layout has one beside the Memory page. Memory no
+   longer writes it: a project term is a row of `system/glossary.md`.
+   - In a project, `update.md`, "The one-home layout", moves its rows
+     first. After they are read back in `system/glossary.md`, ask the owner
+     whether to move the page to Notion's trash
+     (`PATCH v1/pages/<id>` with `{"in_trash":true}`). It stays until he
+     says yes. Then remove the "Terminology glossary page" line from
+     "Toolkit settings" in `PROJECT.md`.
+   - In the "Project" template the page holds only its prompt rows: ask
+     the same question, so new projects start without it.
+7. Tell the owner in one short list what was added and what was removed.
 
 ## Building the memory part of a template
 
@@ -118,8 +132,7 @@ page" below is the Projects database template "Project".
    on Memories; the Tags options from 08 (step 2 of the update above shows
    the body).
 4. Under the template page, a "Current state" page from
-   `assets/current-state.md` and a "Terminology glossary" page from
-   `assets/terminology-glossary.md`.
+   `assets/current-state.md`.
 5. The three 09 files, each as `PATCH v1/data_sources/<id>` to its own
    database.
 6. Property ids of Memories (`ntn-commands.md`, "Filling a body from an

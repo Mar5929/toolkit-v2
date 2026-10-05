@@ -25,6 +25,11 @@ The `toolkit` plugin holds one more skill, `choosing-outside-tools` (Mike,
 kind of job, such as explainroo for explainer videos. It is text only. The
 toolkit ships none of those tools.
 
+The plugin holds a third skill, `writing-harness-files` (Mike, 2026-10-05):
+the steps, the official page addresses, and the checklist for writing or
+changing a skill, a rule, an `AGENTS.md` or `CLAUDE.md`, a hook, a settings
+file, a plugin manifest, a mod, or a helper-agent brief. It is text only.
+
 One exception (Mike, 2026-10-03): a second plugin, `workstreams`, for Claude
 Code only. It is a mod: code that runs inside Claude Code and draws a side
 panel. `/streams` lists the pieces of work the project's chats report, the
@@ -38,6 +43,9 @@ chat handling each one, and each chat's state. It uses no Notion. See
   file.
 - `dev/research/skills-first-architecture.md` (draft 2): the design.
   `dev/GOAL.md` wins where they differ.
+- `dev/research/layout-audit/DESIGN-SPEC.md`: the one-home layout Mike
+  approved on 2026-10-05: the project layout, the filing rule, and the one
+  job of each skill. It wins over the draft above where they differ.
 - `dev/HISTORY.md`: how the project got here, including why the program was
   retired. Read it before you propose anything bigger than a skill edit.
 - `dev/PROGRESS.md`: what is done, what is in progress, and the next step.
@@ -59,25 +67,26 @@ chat handling each one, and each chat's state. It uses no Notion. See
 | `plugins/workstreams/` | The `workstreams` plugin: its manifest, the mod in `hooks/register.tsx`, its tests in `hooks/register.test.tsx`, and the types of its stored values in `types/index.d.ts`. Claude Code writes `tsconfig.json` and `.claude-plugin/types/` there when it loads the plugin from this folder; `tsconfig.json` is kept in Git so it does not show as a new file, and the `types/` folder ignores itself. |
 | `plugins/toolkit/.claude-plugin/plugin.json` | The Claude Code manifest. |
 | `plugins/toolkit/.codex-plugin/plugin.json` | The Codex manifest: the same `name` and `version`, `"skills": "./skills/"`, and an `interface` block. |
-| `<setup>SKILL.md`, `<setup>references/` | Onboarding, "check the setup", "update the toolkit", and the move-over for a project set up with the older toolkit or by hand (`references/move-over.md`, `references/old-toolkit-pieces.md`). |
+| `<setup>SKILL.md`, `<setup>references/` | Onboarding, "check the setup", "update the toolkit", and the move-over for a project set up with the older toolkit or by hand (`references/move-over.md`, `references/old-toolkit-pieces.md`). `references/setup-copy.md` holds the one table of setup choices and the folders each one copies; the check tools read it. `references/update.md`, "The one-home layout", brings a project set up before that layout to it. |
 | `plugins/toolkit/skills/choosing-outside-tools/` | The owner's tool list: `SKILL.md` holds one row per job, and `references/` holds one file per tool (where it comes from, how to set it up, and the owner's choices). Never copied into a project. |
+| `plugins/toolkit/skills/writing-harness-files/` | How to write or change a harness file: `SKILL.md` holds the steps, `references/official-pages.md` the web address of the official page for each kind of file, and `references/checklist.md` the practices and the check for each kind. Never copied into a project. |
 | `<setup>assets/every-project/` | Everything every project gets, at the paths a project has: the project files (`AGENTS.md`, `PROJECT.md`, `DECISIONS.md`, the rules, `system/`, `sources/`, `delivery/`, `reference/`, the test plan template), the 10 shared skills in `.claude/skills/`, and the three hook commands in `.claude/hooks/` (`session-start.mjs`, `prompt-reminder.mjs`, `codex-after-commit.mjs`). Edited here directly (see "The model project and its copy"). |
-| `<setup>assets/work-local/`, `work-notion/`, `work-github/` | One folder per work tracking choice. Each holds one skill, `using-work-tracker`, in `.claude/skills/`. `work-local/` also holds `work-items/` (with its own `AGENTS.md`), `PROJECT-ROADMAP.md`, and the `work-item-folders.md` rule. |
-| `<setup>assets/memory-local/`, `memory-notion/`, `memory-process/`, `memory-hindsight/` | The memory choice. `memory-process/` holds `curating-project-memory` (the process) and goes with local or Notion memory. `memory-local/` and `memory-notion/` each hold their own `using-memory-store` (storage only); `memory-local/` also holds `memory/` (with its own `AGENTS.md`). `memory-hindsight/` holds one rule, `hindsight-memory.md`, and no skill. Hindsight takes it and only `memory/CURRENT_STATE.md` from `memory-local/`. |
+| `<setup>assets/work-local/`, `work-notion/`, `work-github/` | One folder per work tracking choice. Each holds one skill, `using-work-tracker`, in `.claude/skills/`. `work-local/` also holds `work-items/` (with its own `AGENTS.md` and `CLAUDE.md`) and `PROJECT-ROADMAP.md`. |
+| `<setup>assets/memory-local/`, `memory-notion/`, `memory-process/`, `memory-hindsight/` | The memory choice. `memory-process/` holds `curating-project-memory` (the process) and goes with local or Notion memory. `memory-local/` and `memory-notion/` each hold their own `using-memory-store` (storage only); `memory-local/` also holds `memory/`: its own `AGENTS.md` and `CLAUDE.md`, `CURRENT_STATE.md`, and `MEMORY.md`, the table of pointers. `memory-hindsight/` holds one rule, `hindsight-memory.md`, and no skill. Hindsight takes it and only `memory/CURRENT_STATE.md` from `memory-local/`. |
 | `<setup>assets/notion-tools/` | `using-notion-cli` and the rule `notion-records.md`, for every project with work items or memory in Notion. |
 | `<setup>assets/salesforce/` | Everything only a Salesforce project gets: `sfdx-project.json`, `.forceignore`, the Salesforce templates inside `delivery/` (a folder every project has), `tools/`, the protected-orgs file, the two guards, the `sf-*` skills, `.codex/hooks.json`, and ten rules. |
 | `<setup>assets/soul/` | `SOUL.md`, for a project whose owner keeps it. |
-| Why skills sit under `.claude/` | Every folder holds its skills under `.claude/skills/`, and `.claude` starts with a dot. Codex loads every `SKILL.md` under a plugin's `skills/` folder as a plugin skill, in every folder on the computer, unless a parent folder's name starts with a dot. So the 20 project skills stay out of Codex outside a project. Tested in a scratch Codex home: `dev/test-runs/one-folder-per-choice.md`; the first test, with the older folder names, is `dev/test-runs/codex-dot-folders.md` in Git history. |
+| Why skills sit under `.claude/` | Every folder holds its skills under `.claude/skills/`, and `.claude` starts with a dot. Codex loads every `SKILL.md` under a plugin's `skills/` folder as a plugin skill, in every folder on the computer, unless a parent folder's name starts with a dot. So the 20 project skills stay out of Codex outside a project. Tested in a scratch Codex home: `dev/test-runs/one-folder-per-choice.md` and `dev/test-runs/setup-update-and-tools.md`; the first test, with the older folder names, is `dev/test-runs/codex-dot-folders.md` in Git history. Claude Code is different: it loads a skill in a `.claude/skills/` folder below the session's folder once the agent reads or edits a file there, so `.claude/settings.json` turns the project skills off for this repository (last row). |
 | `<setup>assets/settings/` | The snippets onboarding merges into a project's `.claude/settings.json`, `.codex/hooks.json`, and `.codex/config.toml` for each choice. |
 | `ai-external-knowledge/` | Official Claude Code, Codex, Agent Skills, and Anthropic engineering pages, captured with Firecrawl. `INDEX.md` lists them; each folder's `SOURCE-RECORD.md` gives every page's web address. Not shipped. |
 | `dev/` | Goal, progress, design, research, diagrams, test runs, tools, and tests. Not shipped. |
 | `dev/build-shared/` | The source of every text several skills hold word for word: today only `helper-briefs/handoff-verifier.md`. |
-| `dev/tools/check-skills.mjs` | Checks every skill `project-setup` ships (see "Checks"). |
+| `dev/tools/check-skills.mjs` | Checks every skill the `toolkit` plugin holds and every skill `project-setup` copies into a project, and the setup folders (see "Checks"). |
 | `dev/tools/check-rules.mjs` | Checks the model's rule files against Claude Code's guidance for rules (`dev/research/rules-best-practices.md`). |
 | `dev/tools/rule-lint.mjs` | The checks `check-rules.mjs` runs, and the rules list that the `AGENTS.md` of a project set up before the one-home layout holds. Dev only: nothing under `plugins/` imports it. |
 | `dev/tests/hooks.test.mjs` | Tests the three hook commands and the settings snippets in scratch folders. |
 | `dev/tests/org-guard.test.mjs` | Tests the Salesforce org guard, `guard-protected-orgs.cjs`, with the `salesforce` folder's `protected-orgs.json`, in a scratch folder with a stand-in `sf`. No org is reached. |
-| `.claude/settings.json` | Settings for sessions working on this repository. `claudeMdExcludes` stops the `CLAUDE.md`, `AGENTS.md` files, and rules in every folder of `<setup>assets/` from loading as instructions here: they are for projects, not for this repository. |
+| `.claude/settings.json` | Settings for sessions working on this repository. `claudeMdExcludes` stops the `CLAUDE.md`, `AGENTS.md` files, and rules in every folder of `<setup>assets/` from loading as instructions here: they are for projects, not for this repository. `skillOverrides` sets each of the 17 project skill names to `"off"`, so a session that reads a file under `<setup>assets/` does not get the project skills (tested 2026-10-05: `dev/test-runs/setup-update-and-tools.md`). It matches by name, so add a new project skill's name there. It does not touch the `toolkit` plugin's own skills. |
 
 What a project gets from onboarding:
 
@@ -96,8 +105,20 @@ Mike, 2026-10-02: his model folder outside this repository "is sort of just
 like a throwaway folder ... as long as we have the structure set up properly
 in V2". So edit these folders directly, and never copy his outside model
 folder in again. A change that alters what a project file means still needs
-his yes. `project-setup` copies `every-project/`, then the folder for each of
-the owner's choices on top of it.
+his yes. `project-setup` copies `every-project/`, then the folders for the
+owner's choices. `<setup>references/setup-copy.md`, "Folders the choices
+add", is the only table of choices and folders; a new folder under
+`<setup>assets/` needs a row there, and `check-skills.mjs` fails without it.
+
+- Every project gets `DECISIONS.md`, `system/`, `sources/`, `delivery/`, and
+  `reference/` as files in its repository, whatever its tracker and memory
+  (Mike, 2026-10-05). Notion databases for decisions and sources are a
+  later, separate work item. `project-wide-records/`, `requirements/`,
+  `system-guide/`, and `ai-external-knowledge/` are no longer in the model.
+- Memory holds where work stopped plus pointers, an ID and a link, never a
+  restated fact; every memory entry carries the date it was created and the
+  date it last changed; and a work item holds no original: every original
+  goes to `sources/`, and the item holds its SRC ID (Mike, 2026-10-05).
 
 - A choice decides which files a project gets, never which lines inside a
   file (Mike, 2026-10-05). A folder holds files at the paths a project has
@@ -112,13 +133,15 @@ the owner's choices on top of it.
   project. What differs by choice is in a file only that choice gets
   (`hindsight-memory.md`, `notion-records.md`, `salesforce-project.md`,
   `work-items/AGENTS.md`, `memory/AGENTS.md`).
-- Three model files still hold setup markers: `README.md`, `PROJECT.md`,
-  and `.claude/rules/memory-review-and-save.md` (`<!-- if salesforce -->`,
-  `<!-- if not salesforce -->`, `<!-- if tracker=... -->`,
-  `<!-- if memory=... -->`, and `<!-- if tracker=local or memory=local -->`,
-  each closed by `<!-- endif -->`). The agent resolves them during setup,
-  following `<setup>references/setup-copy.md`. Never add a marker to
-  another file.
+- No file under `<setup>assets/` holds a setup marker (`<!-- if ... -->`,
+  `<!-- endif -->`): `check-skills.mjs` fails on one. Setup fills only
+  blanks: the project name, the prompts the owner answers, and the 11 lines
+  of "Toolkit settings" in `PROJECT.md`, which are the same lines in every
+  project (a line for a choice the owner did not make holds `not used`).
+  The settings files (`.claude/settings.json`, `.codex/hooks.json`,
+  `.codex/config.toml`) are machine settings: setup still merges them and
+  takes the Salesforce entries out of a project that is not a Salesforce
+  project.
 - `every-project/.gitignore` is a project file. It keeps the lines `/memory/`
   and `/work-items/`, which apply only inside `every-project/`, where neither
   folder exists. So `memory-local/memory/` and `work-local/work-items/` are
@@ -150,21 +173,33 @@ node --test 'dev/tests/*.test.mjs'
   runs `hooks/register.test.tsx` without a session, on the terminal and the
   desktop app.
 - `check-skills.mjs` checks project-setup, every skill under it, and the
-  plugin's other skills (`choosing-outside-tools`): only
+  plugin's other skills (`choosing-outside-tools` and
+  `writing-harness-files`): only
   `name` and `description` in the frontmatter, `name` equal to the folder
   and in the allowed form, the description's shape and its row in
   `dev/SKILL-INDEX.md`, a `SKILL.md` body under 500 lines, every file
   linked from `SKILL.md`, no link leaving the folder, a contents list in
-  every reference over 100 lines, no command of the retired program, every
-  shared copy equal to its source, every template copy equal to its project
-  file, and no project path in two setup folders (apart from the alternatives
-  named above). It also checks that the Next action prompt in the Notion work
-  item template's text (`<setup>references/notion-build/work-item-page.md`)
-  matches `work-local/work-items/work-item-template/WORK-ITEM.md`.
-  Warnings are on text that is Mike's (the `sf-*` skills): they do not fail
-  the run.
-- `check-rules.mjs` puts the setup folders together in a scratch folder, as one
-  project that has every choice, and checks that project's rules.
+  every reference over 100 lines, no command of the retired program (in the
+  skills and in the hook commands of every setup folder), every shared copy
+  equal to its source, and every template copy equal to its project file.
+  - It reads the setup folders from the table in
+    `<setup>references/setup-copy.md`, "Folders the choices add". It fails
+    when a folder under `<setup>assets/` other than `settings/` is in no
+    row, when a project path is in two setup folders (apart from the files
+    of the two storage skills named above), and when any file under
+    `<setup>assets/` holds a setup marker.
+  - It fails when the skills table in
+    `<setup>references/skills-hooks-settings.md` or the skill counts in
+    `<setup>references/interview.md` differ from what the folders hold.
+  - It checks that the Next action prompt in the Notion work item
+    template's text (`<setup>references/notion-build/work-item-page.md`)
+    matches `work-local/work-items/work-item-template/WORK-ITEM.md`.
+  - Warnings are on text that is Mike's (the `sf-*` skills): they do not
+    fail the run.
+- `check-rules.mjs` puts every folder under `<setup>assets/` except
+  `settings/` together in a scratch folder, as one project that has every
+  choice, and checks that project's rules. It fails when a folder for one
+  choice holds rules and the tool's `CHOICE_RULES` list does not name it.
 - Keep the quotes around the test pattern, so Node reads it, not the shell.
   A folder name instead of a pattern fails on the Node 25 installed here.
 - Codex has no validate command. To prove Codex accepts the plugin, install
@@ -285,8 +320,9 @@ node --test 'dev/tests/*.test.mjs'
     in the third person: it starts with a verb saying what the skill does,
     then a sentence starting "Use" saying when to use it. That sentence may
     be a little pushy ("Use this whenever ..."). Add "Not for ...; use
-    <skill>." only where a neighbor skill competes. A set's skills say which
-    projects they are for ("Only for projects that track work locally.").
+    <skill>." only where a neighbor skill competes. A skill that only one
+    choice gets says which projects it is for ("Only for projects that track
+    work locally.").
   - The description matches `dev/SKILL-INDEX.md` word for word. After you
     change one, run the routing test again in both hosts.
   - `SKILL.md` is short, and always under 500 lines: the steps, then a
@@ -295,15 +331,28 @@ node --test 'dev/tests/*.test.mjs'
     starts with a `## Contents` list. A skill reads only files inside its own
     folder, never `../`.
   - Shared skills never assume one tracker or memory. For work items they
-    name `using-work-tracker`: every work tracking set holds a skill of
-    that name. For memory they name `curating-project-memory`, which every
-    project with local or Notion memory has; a Hindsight project has no
-    memory skills, so they point it to the project's rule
+    name `using-work-tracker`: each of the three work tracking folders
+    holds a skill of that name. For memory they name
+    `curating-project-memory` and `using-memory-store`, which every project
+    with local or Notion memory has; a Hindsight project has no memory
+    skills, so they point it to the project's rule
     `.claude/rules/hindsight-memory.md`.
+  - One skill owns each job, and each instruction lives in one file (Mike,
+    2026-10-05). `running-work-item-lifecycle` runs one work item; its
+    `references/closing.md` asks the closing question, and it never writes
+    `DECISIONS.md`, `sources/`, or `system/`. `filing-project-records`
+    files what more than one item needs, in three steps named "record a
+    decision", "file a source", and "update a system document"; other
+    files hand over with those exact names. The form of a record is in its
+    home (the comment at the top of `DECISIONS.md`, and the folder's
+    `AGENTS.md`); a skill points to it and never repeats it.
+  - Test every written rule: a template field, a check, or delete. Keep a
+    sentence only when none of those can carry it (Mike, 2026-10-05).
   - Memory skills (Mike, 2026-10-01). `curating-project-memory` holds the
     process, the same for local and Notion memory: it never names a
     storage tool, file, folder, database, or command, and hands every read
-    and write to `using-memory-store`. Each version of
+    and write to `using-memory-store`. It keeps memory to Current State
+    and pointers, and sends each fact to its home (Mike, 2026-10-05). Each version of
     `using-memory-store` holds storage only, never a process rule. Both
     Notion storage skills (`using-work-tracker` and
     `using-memory-store`) run `ntn` through `using-notion-cli` and never
@@ -330,16 +379,26 @@ node --test 'dev/tests/*.test.mjs'
   not named in the description, add it there and in `dev/SKILL-INDEX.md`,
   then run the routing test again.
 - **Adding, renaming, or removing a skill** changes its folder,
-  `dev/SKILL-INDEX.md`, `<setup>references/skills-hooks-settings.md`,
-  `README.md`, and the routing lines in the model's `AGENTS.md`. The last one
-  is a model change and needs Mike's yes.
+  `dev/SKILL-INDEX.md`, `<setup>references/skills-hooks-settings.md`, the
+  skill counts in `<setup>references/interview.md`, `README.md`, the
+  `skillOverrides` list in this repository's `.claude/settings.json`, and
+  the "Which skill" table in the model's `AGENTS.md`. The last one is a
+  model change and needs Mike's yes. A renamed or removed project skill
+  also gets a line in `<setup>references/update.md`, "4. What the toolkit
+  no longer ships", so existing projects lose the old folder. No new
+  project skill without Mike's yes: closing a work item is a step inside
+  `running-work-item-lifecycle`, and recording a decision, filing a
+  source, and updating a system document are three steps inside
+  `filing-project-records` (Mike, 2026-10-05).
 - **Hooks.** A project's Claude Code hooks are in `.claude/settings.json` and
   its Codex hooks in `.codex/hooks.json` (only `description` and `hooks` at
   the top level). The snippets in `<setup>assets/settings/` must match the
   hook commands; `dev/tests/hooks.test.mjs` checks both. `work-items/` and
   `memory/` are kept out of Git, so they exist only in the main checkout:
   `session-start.mjs` finds it with `git rev-parse --git-common-dir`, and so
-  works from inside a Git worktree. Any change to a Codex hook means Mike
+  works from inside a Git worktree. With local memory it prints
+  `memory/MEMORY.md`, the table of pointers, and never writes it:
+  `using-memory-store` does (Mike, 2026-10-05). Any change to a Codex hook means Mike
   must trust it again in Codex `/hooks`; say so. Codex trusts the entry in
   `.codex/hooks.json`, not the `.mjs` file it runs, so the memory skill
   names live in `session-start.mjs` and `prompt-reminder.mjs`, and the
@@ -368,8 +427,11 @@ node --test 'dev/tests/*.test.mjs'
   for every folder in both hosts. It holds `project-setup` and
   `choosing-outside-tools`, and no hooks, so "set up this project" works in
   an empty folder, the tool list is on every computer, and nothing runs in
-  other projects. A third skill in this plugin needs Mike's yes first: every
-  chat in both hosts reads each one's description. `workstreams` is on for every folder in Claude Code only,
+  other projects. Its third skill is `writing-harness-files` (Mike's yes,
+  2026-10-05), so every agent on this computer, in any project, has the
+  steps for a harness file. A fourth skill in this plugin needs Mike's yes
+  first: every chat in both hosts reads each one's description.
+  `workstreams` is on for every folder in Claude Code only,
   and its hooks run there ("Workstreams plugin" above says what they do).
 - **Rule files** live in the model and follow
   `dev/research/rules-best-practices.md` Part 1: one topic per file, a `# `
@@ -378,14 +440,18 @@ node --test 'dev/tests/*.test.mjs'
   procedures in skills. A change to a rule is a model change; a change to a
   rule's meaning waits for Mike's yes. The 4 KB limit for an always-on rule
   is proposed, not decided, so `check-rules.mjs` only warns on it. Never cut
-  Mike's words to meet it.
+  Mike's words to meet it. What differs by choice is a rule file only that
+  choice gets (`hindsight-memory.md`, `notion-records.md`, the Salesforce
+  rules), never a marked block inside a rule (Mike, 2026-10-05).
 - **Harness files follow the current official documentation** (Mike,
   2026-10-05: "they must always be written using the most up to date claude
   code and codex best practices and up to date documentation", by every
   agent and helper agent, without him repeating it). A harness file is a
   skill, a rule, an `AGENTS.md` or `CLAUDE.md`, a hook command or its
   settings entry, a settings file, a plugin manifest, a helper-agent brief,
-  or a mod. Before you or a helper agent writes or changes one:
+  or a mod. The `writing-harness-files` skill is the way to follow this
+  rule: open it, in this repository and in any project. In this repository
+  its steps mean:
   - Read the official page for that kind of file in `ai-external-knowledge/`
     (`claude-code/`, `codex/`, `anthropic-agent-skills/`, `openai-plugins/`,
     `anthropic-engineering/`). Each folder's `SOURCE-RECORD.md` gives the
@@ -451,8 +517,10 @@ node --test 'dev/tests/*.test.mjs'
     `codex plugin` commands with the variable set).
 - **Instruction files.** This repository has no `CLAUDE.md`: a `CLAUDE.md`
   here would stop Claude Code from reading this `AGENTS.md`. Projects get
-  what the model has: a root `AGENTS.md`, and one in each of `system/`,
-  `sources/`, `delivery/`, `reference/`, `work-items/`, and `memory/`. Each
+  what the model has (Mike, 2026-10-05): a root `AGENTS.md` that is the
+  outline (one or two sentences per location, and the filing table), and
+  one detailed guide, under 200 lines, in each of `system/`, `sources/`,
+  `delivery/`, `reference/`, `work-items/`, and `memory/`. Each
   has a `CLAUDE.md` beside it that holds only `@AGENTS.md`: with a root
   `CLAUDE.md`, Claude Code loads a folder's `AGENTS.md` only through that
   file (`dev/test-runs/folder-instructions-load-test.md`). Never delete one

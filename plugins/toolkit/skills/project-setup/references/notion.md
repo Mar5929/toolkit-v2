@@ -108,14 +108,13 @@ another.
 
 ## The links in PROJECT.md
 
-The Notion setup files give a "Notion" block of links and ids for
-`PROJECT.md`, section "Toolkit settings". In the project's `PROJECT.md`:
-
-- put the prefix on the "Work item ID prefix" line;
-- put the project page link on the "Notion work items" line, and the Memory
-  page link on the "Notion memory" line;
-- add that "Notion" block once, at the end of "Toolkit settings", and read
-  it back. The Notion skills read every id from it.
+The links and ids go on three of the fixed lines of `PROJECT.md`, section
+"Toolkit settings": the prefix on "Work item ID prefix", and the ids as
+nested bullets under "Notion work items" and "Notion memory".
+`notion-build/work-setup.md` and `notion-build/setup.md`, each under
+"Recording the links in PROJECT.md", give the bullets. Read them back. The
+Notion skills read every id from these lines. Add no other line and no
+heading to the section.
 
 With memory in Notion, the memory setup also fills the "Current state" page
 with the project's first lines (`finishing.md` in this folder says what they
@@ -137,9 +136,9 @@ layout" in `notion-build/setup.md`, for the parts the project keeps in
 Notion. Both only add what is missing and bring the toolkit's own guide
 paragraphs up to date; they never remove, rename, or retype anything,
 except what those sections name: one Memories view, one Current state
-heading, the Tasks "Done" checkbox and Status type, and the Requirements
-section of a work item template that still has the layout from before
-toolkit 0.8.1. The parts of the work item template that the owner wrote
+heading, the Terminology glossary page after the owner's yes, the Tasks
+"Done" checkbox and Status type, and the Requirements section of a work
+item template that still has the layout from before toolkit 0.8.1. The parts of the work item template that the owner wrote
 himself, and every existing work item, stay as they are. A project
 with a Stage property also needs "From Stage to State" in
 `notion-build/work-setup.md`, and one with a Tasks "Done" checkbox needs
