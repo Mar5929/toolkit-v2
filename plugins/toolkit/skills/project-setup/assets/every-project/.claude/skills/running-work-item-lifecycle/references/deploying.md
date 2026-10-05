@@ -33,7 +33,7 @@ Only when the result must go beyond the default branch. A Salesforce project: `s
 
 - Use only the deploy command in `AGENTS.md`, "Commands", or `PROJECT.md`. None: ask how this project deploys. Each deploy needs his yes.
 - Never run a production deploy or data load. Hand him the exact command, what it deploys, and what to check afterwards, and record his report in his words.
-- Write each deploy's record in `delivery/deployments/`: `delivery/AGENTS.md` gives its folder name, its fields, and its Status values. Add a Recent History row with the result.
+- Write the item's deployment record in `delivery/deployments/`. A release that ships several work items together also gets a release plan and release notes in `delivery/releases/`. `delivery/AGENTS.md` gives each record's folder name, its fields, and its Status values. Add a Recent History row with the result.
 - A failed deploy: fill Blockers with the error and tell him. A code fix moves the item back to the Testing Loop.
 
 ## Gotchas

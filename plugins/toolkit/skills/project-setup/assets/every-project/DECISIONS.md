@@ -16,7 +16,7 @@ Rules for an entry:
 - An entry becomes Decided only on the answer of a person who may decide it: the owner, or the person `PROJECT.md` names for that kind of decision.
 - Never delete an entry. Never change the Decision text of a Decided entry: add a new entry, and set the old one to Superseded.
 - Name work items, rules, and sources by ID (WI-031, SEC-04, SRC-012). Never copy their text here.
-- When an entry is added or its Status changes, each work item under Affects gets a one-line pointer with the DEC ID.
+- Each work item under Affects of an Open or Decided entry names the DEC ID on its Related items line.
 
 Entry form:
 

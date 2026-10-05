@@ -43,8 +43,9 @@ Did this item change `system/` or `DECISIONS.md`?
    - a decision or an open question: step "record a decision";
    - a rule to add, change, or retire: step "update a system document";
    - a delivered rule: step "update a system document", to set its mark to Built with this item's ID;
-   - a lesson that moves up: the home that "Where information goes" gives it.
-4. **Write each lesson's outcome** at the end of its line: "Moved up: CON-07." or "Dropped (Q-12)."
+   - a lesson that moves up, about the system or the project: step "record a decision";
+   - a lesson that moves up, about how the agent works: a line in `.claude/rules/owner-preferences.md`, written by `curating-project-memory` (Hindsight memory: `.claude/rules/hindsight-memory.md`).
+4. **Write each lesson's outcome** at the end of its line: "Moved up: DEC-021.", "Moved up: owner-preferences.md.", or "Dropped (Q-12)."
 5. **Fill Moved up:** every entry in `DECISIONS.md` and every rule in `system/` that this item added or changed, by ID, with what happened to it. Include the ones filed before this step (rows that end "Filed as DEC-###"). When there are none: "Nothing: <the reason>." Add a Recent History row that names the Q-ID, or says that no question was needed.
 
 ## Marking Done

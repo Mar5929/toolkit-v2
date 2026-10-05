@@ -1,6 +1,6 @@
 # File a source
 
-For an original the project received and keeps. The form of a row in the list, the file name, and the rules for an original kept outside Git are in `sources/AGENTS.md`. This file gives the steps. They are the same whether work items are local files, in Notion, or in GitHub: an original never goes into the work tracker.
+For an original the project received and keeps: pasted text or a file. The step gives back the original's SRC-###. The form of a row in the list, the file name, and the rules for an original kept outside Git are in `sources/AGENTS.md`. This file gives the steps. They are the same whether work items are local files, in Notion, or in GitHub: an original never goes into the work tracker.
 
 ## Steps
 
@@ -16,7 +16,7 @@ For an original the project received and keeps. The form of a row in the list, t
 5. Add the row to `sources/README.md` in the same edit. "Used by" names each work item that uses the source now.
 6. Save with `publish-docs` now, before you use the source. The save claims the number, and a link from Notion or GitHub works only once the file is on the default branch.
 7. In each work item that uses the source, add its line under Notes, Sources with `using-work-tracker`: the SRC ID, what it is, and the IDs taken from it. In Notion and GitHub, the line may add the web address of the file on the default branch.
-8. Report the SRC ID to the owner.
+8. Report the SRC ID to the owner, and give it to the skill that asked for this step.
 
 ## What the source says
 
