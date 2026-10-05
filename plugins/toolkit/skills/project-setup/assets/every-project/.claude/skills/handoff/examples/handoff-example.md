@@ -11,10 +11,11 @@ After the brief from `references/handoff-verifier.md`, word for word:
 Draft prompt: <the whole draft below, without the fill-in guide>
 Main checkout: /Users/mike/Projects/acme-billing
 Tracker: local (work-items/ in the main checkout)
-Memory: local (memory/ in the main checkout)
+Current State: memory/CURRENT_STATE.md in the main checkout
 Sources for claims:
 - "WI-007 is in the Building State": file, WI-007 front matter
 - "Option A is approved": file, WI-007 DESIGN.md header
+- "DEC-006 is Open": file, DECISIONS.md
 - "branch claude/wi-007-csv-export": repository, git worktree list
 - "credit notes show negative amounts": owner, his words "just make them negative"
 - "the bank rejects files over 5 MB": worked out
@@ -27,8 +28,9 @@ Supplied text: none
 Not saved: nothing.
 Saved: WI-007 Current state and one Recent History row; Q-05
 (negative amounts) added to Questions and Answers. Current State: "Next
-session starts with" rewritten; WI-004 removed from Now (Done).
-Memory: nothing to keep this session.
+session starts with" rewritten.
+Filed: DEC-006 (the date format every bank export uses), Open, with a
+pointer in WI-007 and WI-009.
 
 Checked the handoff prompt: 1 fixed, 1 not confirmed.
 
@@ -56,6 +58,7 @@ credit note exports with the same columns as an invoice and the tests in
 ## Read first
 
 1. WI-007, opened with `using-work-tracker`: its Current state, and Q-06.
+   Q-06 points to DEC-006 in `DECISIONS.md`.
 2. `DESIGN.md` in WI-007's folder: Option A is approved.
 3. `src/export.js`, from line 40.
 
@@ -65,8 +68,8 @@ credit note exports with the same columns as an invoice and the tests in
 
 ## Open questions
 
-- Q-06 in WI-007: which date format the bank import expects. The owner
-  answers.
+- DEC-006 in `DECISIONS.md` (Open): which date format every bank export
+  uses. WI-007 and WI-009 wait on it. The owner answers.
 - The bank rejects files over 5 MB (worked out, this session; saved
   nowhere; not confirmed). The owner confirms or corrects it.
 

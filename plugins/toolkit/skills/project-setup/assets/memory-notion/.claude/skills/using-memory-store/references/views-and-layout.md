@@ -1,6 +1,6 @@
 # The memory views, column order, and page layout
 
-The views of the memory databases, the order of their columns, the page layout, and the schema files that build them. The `project-setup` skill uses this to build, check, and update a project's memory. Saving and finding memory never need it. The columns are in `database-layout.md`.
+The views of the memory databases, the order of their columns, the page layout, and the schema files that build them. The `project-setup` skill uses this to build, check, and update a project's memory. Reading and writing a pointer never need it. The columns are in `database-layout.md`.
 
 ## Contents
 
@@ -13,9 +13,9 @@ The views of the memory databases, the order of their columns, the page layout, 
 | Database | View | Grouping, filter, and order |
 | --- | --- | --- |
 | Memories | Index | Status accepted or proposed; by Record Key. |
-| Memories | Decisions | Kind = decision, not deprecated; newest first. Project-wide decisions only: an item's own decisions live in its Questions and Answers. |
+| Memories | Decisions | Kind = decision, not deprecated; newest first. No pointer has that Kind, so the view lists nothing new: decisions are in `DECISIONS.md`. |
 | Memories | By work item | Grouped by Work items (or by Work item IDs when work items are not in Notion); newest first. |
-| Memories | Retired | Status superseded or deprecated; newest first. |
+| Memories | Retired | Status superseded or deprecated; newest first. No pointer has those statuses, so the view lists nothing new. |
 
 ## Property order and page layout
 

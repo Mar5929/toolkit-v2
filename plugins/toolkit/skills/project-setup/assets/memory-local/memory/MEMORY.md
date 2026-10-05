@@ -1,25 +1,8 @@
-<!-- Generated file: the session-start hook rebuilds this index from each memory file's title, description, and updated date, grouped by prefix. Do not edit it by hand. -->
+# Memory pointers
 
-# Memory index
+<!-- Keep this guide. One row per pointer. A pointer names a record by its ID and links to it; it never says what the record says. Add, change, and remove a row with `using-memory-store`. `memory/AGENTS.md` gives the rules for a row. -->
 
-One short line per active memory file, with a link to it. Open a file before relying on it. Template files (`status: template`) and files whose status is retired, superseded, or withdrawn are left out. In a new project, the sections stay empty until real memories are saved with the `curating-project-memory` skill.
+| What it points to | ID | Link | Created | Last changed |
+| --- | --- | --- | --- | --- |
 
-## User
-
-
-## Project
-
-
-## Reference
-
-
-## Event
-
-
-## Decision
-
-
-## Other memory views
-
-- [Current state](CURRENT_STATE.md)
-- [Terminology glossary](terminology-glossary.md)
+No pointers yet. Remove this line with the first row.

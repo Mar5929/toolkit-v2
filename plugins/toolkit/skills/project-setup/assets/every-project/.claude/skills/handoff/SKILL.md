@@ -1,6 +1,6 @@
 ---
 name: handoff
-description: 'Updates this session''s work items and Current State, offers what is worth keeping to memory, then writes a checked, self-contained prompt for a new session, or checks a pasted one, so nothing is lost when context clears. Use when the owner ends the session or says "write a handoff", "I''m clearing context", "start a new session", or "check this handoff". Not for a recap alone; use session-summary.'
+description: 'Updates this session''s work items and Current State, files any decision or original this session left unfiled, then writes a checked, self-contained prompt for a new session, or checks a pasted one, so nothing is lost when context clears. Use when the owner ends the session or says "write a handoff", "I''m clearing context", "start a new session", or "check this handoff". Not for a recap alone; use session-summary.'
 ---
 
 # Handoff
@@ -30,37 +30,37 @@ and never hold back the prompt because a save or the check failed.
    task that belongs to no work item) this session worked on, by the step 1
    test: read it with `using-work-tracker`, make its status and who does
    it true, as `running-work-item-lifecycle`, "Levels", says, and read it back.
-3. **Offer what is worth keeping to memory.** At a handoff, save only what
-   the owner asked to keep or says yes to here. `curating-project-memory`
-   says what is worth keeping, how to ask, and how to save (Hindsight:
-   `AGENTS.md`, "Project memory", and save with the add-on's tools after his
-   yes). Do not wait for his answer before the prompt: count each save
-   question asked here as not answered. Nothing to keep: say so in one line.
-   Check `project-wide-records/` for intake receipts or shared questions
-   this session touched. Leave each unfinished record with its source,
-   affected destinations, and exact next action. Use
-   `filing-project-records` for their procedure.
-4. **Update Current State.** Notion memory: use `curating-project-memory`.
-   Local or Hindsight memory: edit `memory/CURRENT_STATE.md` in the main
-   checkout (the first path `git worktree list` prints). Read it right
-   before you change it, then:
-   - Rewrite "Next session starts with": one pointer per work item ("Continue
-     WI-007 from its Current state. Goal: <one line>."), or with no work item
-     a short note: the goal, where work stopped, the next action, and open
-     questions.
-   - Remove every line that is no longer true. Under Now, make sure each of
-     this session's work items that has left Backlog and is not Done or
-     Cancelled has its line. Add a line under Waiting on the owner for each
-     save question he has not answered.
-   - Set "Last updated:" to the date, `handoff`, and `agent`.
-   - Link a shared question in Current State only while it blocks active
-     work. The shared question itself holds its full destination list.
+3. **File what this session left unfiled.** Step 2 saved each decision that
+   only one work item needs. For the rest:
+   - A decision or question from this session that more than one work item
+     needs (the filing test in the root `AGENTS.md`) and that `DECISIONS.md`
+     does not hold: `filing-project-records`, step "record a decision". One
+     the owner has not confirmed is recorded as Open. Do not wait for the
+     owner's answer before the prompt.
+   - An original the owner gave this session that has no SRC ID:
+     `filing-project-records`, step "file a source".
+   - An instruction for how the agent works that is not written down:
+     `curating-project-memory`.
+   - Read the Open entries in `DECISIONS.md` that this session raised or
+     that name this session's work items. Each one goes under "Open
+     questions" in the prompt, by its DEC ID.
+
+   Nothing to file: say so in one line.
+4. **Update Current State** through `using-memory-store` (Hindsight memory:
+   `.claude/rules/hindsight-memory.md`).
+   - Write "Next session starts with": one line per work item this session
+     worked on, with its ID, what to read, and the next action. With no
+     work item: the goal, where work stopped, and the next action.
+   - A line under Now for one of this session's work items that is missing
+     or no longer true: add or correct it as `running-work-item-lifecycle`
+     says.
+   - "Last updated" names the date, `handoff`, and `agent`.
 5. **Draft the prompt; do not show it yet.** Start from
    `assets/handoff-prompt-template.md`, written as instructions to an agent
    that knows nothing about this session. Keep a source for every claim: file,
-   repository, owner (his words when you have them), or worked out, and for a
-   file or repository claim where it is. Put "not confirmed" beside any claim
-   no file, work item, memory record, or repository fact confirms.
+   repository, owner (the owner's words when you have them), or worked out,
+   and for a file or repository claim where it is. Put "not confirmed" beside
+   any claim no file, work item, or repository fact confirms.
 6. **Check the draft** with the handoff verifier, started as
    `references/handoff-verifier.md` says. Act on every verdict:
    - Wrong: correct the prompt to what the repository or tracker says.
@@ -103,9 +103,6 @@ nothing.
 - A failed save: lead with "Not saved" (the write failed) or "Saved but not
   verified" (the read-back differs), name the write, and put its content in
   the prompt.
-- Git ignores `memory/CURRENT_STATE.md`, so it is only in the main checkout:
-  from a worktree, edit it there, and never commit it. Other sessions share
-  it: edit only the lines you change.
 - Current State is missing: do not create it. Say so, suggest the setup
   check, and put the entry in the prompt.
 
@@ -114,11 +111,11 @@ nothing.
 | For | Use |
 | --- | --- |
 | Reading and updating this session's work items and project tasks | `using-work-tracker` |
-| What a project task is, and when to tick it | `running-work-item-lifecycle` |
-| Saving to memory | `curating-project-memory` (Hindsight: `AGENTS.md`, "Project memory") |
-| Open intake receipts and shared questions | `filing-project-records` |
-| Notion memory: Current State | `curating-project-memory` |
-| A save that changed a Git-tracked document, such as `requirements/` or `PROJECT.md` | `publish-docs` |
+| What a project task is, when to tick it, and a work item's line under Now | `running-work-item-lifecycle` |
+| A decision or question more than one work item needs, and an original | `filing-project-records` |
+| An instruction for how the agent works | `curating-project-memory` |
+| Every read and write of Current State | `using-memory-store` |
+| Hindsight memory: Current State, and an instruction for how the agent works | `.claude/rules/hindsight-memory.md` |
 | The recap table, when the owner also asked for one | `session-summary` |
 | Current State is missing | `project-setup` ("check the setup") |
 

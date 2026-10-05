@@ -17,10 +17,12 @@ commits the save does not.
    `git -C <save> rebase <default>`. The save's commit was never published, so
    rebasing it here rewrites nothing anyone else has.
 2. The rebase stops on a conflict: read both sides of each file. Both sides
-   added rows to `ai-external-knowledge/INDEX.md`: keep every row. When the
-   right result is not clear, run `git -C <save> rebase --abort` and ask the
-   owner. Otherwise stage each resolved file by name and finish without an
-   editor:
+   added a row to a list (`sources/README.md`, `reference/outside-docs/INDEX.md`)
+   or an entry to `DECISIONS.md`: keep every row and entry. Both sides took
+   the same DEC, SRC, or rule ID: this save's record gets the next free ID,
+   as `filing-project-records` says. When the right result is not clear, run
+   `git -C <save> rebase --abort` and ask the owner. Otherwise stage each
+   resolved file by name and finish without an editor:
 
    ```text
    git -C <save> add -- <file>

@@ -42,4 +42,4 @@ playback.
 | For | Use |
 | --- | --- |
 | A rough idea to plan, meeting notes, or a dump he asks only to plan | `running-work-item-lifecycle` |
-| Something worth keeping, after his yes | `curating-project-memory` (Hindsight: `AGENTS.md`, "Project memory") |
+| Something worth keeping, after his yes | `curating-project-memory` (Hindsight memory: `.claude/rules/hindsight-memory.md`) |

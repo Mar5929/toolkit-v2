@@ -1,64 +1,92 @@
 ---
 name: curating-project-memory
-description: 'Keeps project memory true and small: saves facts, lessons, decisions, glossary terms, and Current State; corrects, retires, or deletes what is wrong; writes "from now on" instructions to the project rules; finds what was recorded before; tidies all memory. Use whenever the owner says "remember this", "forget that", "from now on", "what did we decide", or "clean up memory", or a hook says to review memory, even if he does not name this skill. Not for a handoff; use handoff.'
+description: 'Keeps project memory to where work stopped and pointers to records: sends each fact the owner wants kept to its home, adds or removes a pointer, writes "from now on" instructions to the project rules, and tidies memory, so no fact is kept twice. Use whenever the owner says "remember this", "forget that", "from now on", or "clean up memory", or a hook reminder names this skill. Not for a handoff; use handoff.'
 ---
 
-# Managing project memory
+# Curating project memory
 
-This skill holds the process: what is worth keeping, when to ask the owner, and how to decide. It never says where memory is kept.
+Memory holds two things: Current State, which says where work stopped, and pointers. A pointer is the ID of a record and a link to it. Memory never holds the fact itself.
 
-## How memory is kept
+This skill holds the process. `using-memory-store` makes every read and every write of memory, and gives the form of Current State and of a pointer.
 
-- Memory is stored by concept, like a wiki. One record covers one concept or area, such as billing or the deploy process. A new fact joins its concept's record, which grows and is corrected over time. A new record is only for a new concept. Never make one record per fact.
-- `references/memory-criteria.md` says what is worth keeping.
-- A memory is current, proposed (the owner has not approved it), replaced by another, retired, or withdrawn (a decision he withdrew). `using-memory-store` says how each is marked. Never answer from a memory that is not current as if it were.
+Never put in memory: a fact, a decision, a term, a lesson, where a work item stands, an instruction for the agent, a secret, a key, or an email address.
 
-## Out of date, or no longer needed
+## "Remember this"
 
-When a memory is out of date, retire it or mark it replaced, so its history stays. When a memory is no longer needed, or was saved by mistake, delete it after the owner's yes, or when he asks.
+1. Find the fact's home with the filing test and the table in the root `AGENTS.md`, "Where information goes". A hook reminder is only a hint: when nothing in the message has a home, save nothing.
+2. Put the fact in its home, through the skill the root `AGENTS.md` names for that home ("Project map", column "When you change it"). The owner's request to remember a fact is the owner's yes to write it there.
+   - The home already holds it: add nothing, and say where it is.
+   - Two homes fit, or none: ask the owner one question, with your recommendation.
+3. Decide on a pointer. Add one, through `using-memory-store`, only when both are true:
+   - the record has an ID (a DEC, an SRC, a rule ID, or a work item ID);
+   - the owner asked to keep it in mind across sessions, or work on other items will need the record and no open work item names its ID.
+4. Tell the owner in one line where the fact is now, with its ID, and whether memory got a pointer.
 
-Never say a memory is deleted when it is not.
+A record with no ID gets no pointer: a line in `PROJECT.md`, or a glossary term. Every session can find those in their file.
 
-## Approval
+## "Forget that"
 
-- When the "Memory approval" line in `PROJECT.md` is missing or still shows its prompt, use `onboarding`.
-- His own request to keep, change, or forget something, or his yes to your question, is the approval. Act at once.
-- `onboarding`: anything you inferred gets one question first: "Save to memory: <one-line summary>?". Save after his yes.
-- `trusted`: a fact you inferred and can name a source for is saved without asking, and reported in one line, unless it is on the list below. A fact with no source gets the `onboarding` question.
-- In both modes, ask first for:
-  - an instruction you inferred: "Add to the project rules: <one line>?";
-  - a glossary term you inferred;
-  - a project-wide decision: "This looks project-wide. Save it to memory too?";
-  - anything about a named person, or personal details, that he did not ask you to remember;
-  - more than five records at once;
-  - retiring or deleting a memory he did not ask you to forget;
-  - a change to this policy.
-- No question in either mode: a lesson (report it in one line), a change to Current State alone, and glossary upkeep he already authorized.
-- A question he leaves unanswered stays a proposal: `references/saving.md`, "Proposals".
-- When he changes the mode, change the "Memory approval" line in `PROJECT.md`, as Hand-offs says, never `.claude/rules/owner-preferences.md`.
+- A pointer: remove it. The record it names stays.
+- A line of Current State: remove it.
+- The fact itself: it is in its home, not in memory. Say where it is, and change it there through the skill that owns the home. A decision is never deleted: `filing-project-records` supersedes or withdraws it.
+- Said right after a save made here: undo that save.
+- Never say something is removed when it is not.
+
+## "From now on": the owner's instructions
+
+An instruction for how the agent works, a preference, or a correction of one is a rule, never memory. The owner's own words are the approval.
+
+1. Choose the file from the row for the owner's preference in the root `AGENTS.md`, "Where information goes": this project, or every project. Ask "This project or all projects?" only when the owner's words leave it unclear.
+2. Read the file fresh. The comment at the top of `.claude/rules/owner-preferences.md` gives the layout of a line; use the same layout in a file that has no such comment.
+   - A line already says it: add nothing, and say so.
+   - A line says the opposite: replace it with the owner's new words, and name the old line in your reply.
+   - Otherwise: add one line in the owner's words. One instruction per line.
+3. An instruction you worked out yourself: ask first, "Add to the project rules: <one line>?" No answer in the owner's next message: put that question as one line under "Waiting on the owner" in Current State, and remove the line when the owner answers.
+4. A lesson that the closing step of `running-work-item-lifecycle` moves up as a rule, with the owner's yes, is written the same way. Its line ends with the work item's ID in place of "in chat".
+
+## Current State
+
+Each line has one skill that decides what it says:
+
+| Line | Decided by |
+| --- | --- |
+| A work item's line under Now | `running-work-item-lifecycle` |
+| "Next session starts with" | `handoff` |
+| A line under "Waiting on the owner", and pruning | This skill |
+
+Prune when a hook says Current State is too long or too old, and before "Clean up memory":
+
+1. Read Current State, and the status of every work item it names with `using-work-tracker`.
+2. Remove each line that is no longer true, with no plan: a Done or Cancelled item under Now; a question the owner answered; a "Next session starts with" line that names a closed item. Cut a line that copies an item's status or next step down to the item's ID and a few words.
+3. Set "Last updated". Tell the owner what was removed.
+4. A part still over its limit holds only true lines. Ask the owner which to cut; cut a true line only after the owner's yes.
+
+## "Clean up memory"
+
+Write one numbered plan, each line with its reason, and change nothing until the owner says yes. Two changes need no plan: pruning Current State, and removing a secret, a key, or an email address at once.
+
+Put on the plan:
+
+- A pointer whose record is gone: remove it.
+- A pointer to a record that was replaced, such as a Superseded decision or a corrected source: point it at the replacement.
+- Two pointers to one record: keep one.
+- An entry that holds a fact, not a pointer: move the fact to its home ("Remember this", steps 1 and 2), then replace the entry with a pointer or remove it.
+- In `.claude/rules/owner-preferences.md`: a line that repeats or contradicts another line, another rule file, or a line of the root `AGENTS.md`. A contradiction is a question for the owner. Never remove a line only because it is old.
+
+Report one short list of what changed, then the questions still open.
 
 ## Every time
 
-- Read a record fresh before you change it, and read it back after. Never run two writes to the same record at once.
-- His own edits win. Ask before you fix a record he changed by hand.
+- Read fresh before a change and read back after it. Never run two writes to memory at once.
+- The owner's own edits win. Ask before you change an entry the owner wrote by hand.
+- A failed write: start the reply with "Not saved", keep the text, and give the fix.
 
 ## Hand-offs
 
 | For | Use |
 | --- | --- |
 | Every read and every write of memory | `using-memory-store` |
-| Reading a work item: its status, decisions, and requirements | `using-work-tracker` |
-| A changed decision: the work item's new row | `running-work-item-lifecycle` |
-| Changing the memory approval mode | `project-setup` |
-| A finished item's Current State line | `running-work-item-lifecycle` |
-| A handoff, and the "Next session starts with" line | `handoff` |
-
-## Files
-
-| File | Open it when |
-| --- | --- |
-| [references/saving.md](references/saving.md) | Keeping, correcting, or forgetting anything: a fact, a lesson, a decision, a glossary term, a "from now on" instruction, a proposal, or a delete. |
-| [references/finding.md](references/finding.md) | The owner asks what was recorded or decided before, or why, or you need a remembered fact. |
-| [references/tidying.md](references/tidying.md) | Reviewing or cleaning up all memory. |
-| [references/current-state.md](references/current-state.md) | Reading, changing, or pruning Current State. |
-| [references/memory-criteria.md](references/memory-criteria.md) | Deciding whether something is worth keeping, and which kind of record it is. |
+| A decision, an original, or a fact about the system that more than one work item needs | `filing-project-records` |
+| Anything one work item needs, and a lesson that is not proven yet | `running-work-item-lifecycle` |
+| Reading a work item | `using-work-tracker` |
+| A handoff | `handoff` |

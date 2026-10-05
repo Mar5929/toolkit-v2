@@ -13,7 +13,7 @@ How to start it, as a new helper that does not see this conversation:
 - Claude Code: the Agent tool, `subagent_type` set to `general-purpose` and `model` set to `opus`. Never a fork: the verifier must not share this conversation.
 - Codex: the `spawn_agent` tool with `fork_turns` set to `none`. Wait for its report with `wait_agent`.
 - The message: everything under "Brief for the helper", word for word, then the job block, filled in. The helper sees nothing else.
-- The verifier can open local files and run `gh`. It cannot read Notion or Hindsight: paste the text of each Notion work item or memory record, and each Hindsight memory, that the draft relies on.
+- The verifier can open local files and run `gh`. It cannot read Notion or Hindsight: paste the text of each Notion work item, the Notion "Current state" page, and each Hindsight memory that the draft relies on.
 
 The job block:
 
@@ -22,11 +22,11 @@ Draft prompt: <the whole draft>
 Main checkout: <full path; the first path git worktree list prints>
 Tracker: local (work-items/ in the main checkout) | Notion (item text
   pasted below) | GitHub Issues (<account/repository>)
-Memory: local (memory/ in the main checkout) | Notion or Hindsight
-  (records pasted below)
+Current State: memory/CURRENT_STATE.md in the main checkout | Notion
+  (page text pasted below)
 Sources for claims: <for each claim you can: file, repository, owner (with
   the owner's words when you have them), or worked out>
-Supplied text: <Notion items, Notion memory records, Hindsight memories>
+Supplied text: <Notion items, the Notion Current state page, Hindsight memories>
 ```
 
 ## Brief for the helper
@@ -39,7 +39,7 @@ You check. You never write. The main agent drafted a handoff prompt for a fresh 
 
 ### Read-only means read-only
 
-- Never create, change, move, or delete a file, a work item, or a memory record. Run only reading commands, each on its own (`git status`, `log`, `diff`, `show`, `worktree list`, `ls`, `cat`, `grep`, `rg`, `gh issue view`, `gh pr view`). If you believe something needs changing, say what and where.
+- Never create, change, move, or delete a file, a work item, or anything in memory. Run only reading commands, each on its own (`git status`, `log`, `diff`, `show`, `worktree list`, `ls`, `cat`, `grep`, `rg`, `gh issue view`, `gh pr view`). If you believe something needs changing, say what and where.
 - Never run tests, builds, installs, or any script. If the draft says a test or a build passed, that claim is Unchecked unless you were given the command output.
 - If `gh` fails with a network or sign-in error, give each claim that needed `gh` the verdict Skipped, and list the check, with the error, under "Skipped".
 
@@ -53,16 +53,17 @@ Work items are named by ID, never by path. To open one:
 - GitHub: `gh issue view <number> --json title,body,labels,state`, and `gh issue view <number> --comments` for its design comment.
 - Notion: check against the supplied text.
 
-Local memory is the `memory/` folder in the main checkout (Current State is `memory/CURRENT_STATE.md`, except in a Notion project). Notion memory records, the Notion "Current state" page, and Hindsight memories: the supplied text only. The fixed notice on the first line of the prompt (that it is AI-generated and may contain hallucinations) is not a claim; if the draft has no such line, say so under "Also noticed".
+Current State is `memory/CURRENT_STATE.md` in the main checkout, except in a project with Notion memory. The Notion "Current state" page and Hindsight memories: the supplied text only. A decision that more than one work item needs is an entry in `DECISIONS.md`, an approved rule of the system is in `system/`, and a filed original is in `sources/`, all in the repository. The fixed notice on the first line of the prompt (that it is AI-generated and may contain hallucinations) is not a claim; if the draft has no such line, say so under "Also noticed".
 
 ### Job one: is the goal there
 
-Does the draft state the overarching goal (what the work is trying to achieve, not the next action), why it matters, and where it is written down (a work item ID, a `requirements/` file, an issue or pull request number)? Open the pointer and confirm it holds the goal the draft claims. Verdict: Confirmed; Wrong (the pointer does not exist or says something else); Unchecked (no pointer); or Missing (only the next step, or no goal at all). Missing must be fixed before the owner sees the prompt; say so.
+Does the draft state the overarching goal (what the work is trying to achieve, not the next action), why it matters, and where it is written down (a work item ID, a rule ID in `system/`, a DEC ID in `DECISIONS.md`, an issue or pull request number)? Open the pointer and confirm it holds the goal the draft claims. Verdict: Confirmed; Wrong (the pointer does not exist or says something else); Unchecked (no pointer); or Missing (only the next step, or no goal at all). Missing must be fixed before the owner sees the prompt; say so.
 
 ### Job two: check every checkable claim
 
 - Every file and folder path, and every claim about what a file says: does it exist, and does it say that? If a path is close to a real one, name the real one.
 - Every branch, worktree, commit, pull request, issue, and work item ID: is it the one named, in the state the draft says (for a work item: its State, `waiting_on`, the lines of its Current state, and its first open question)?
+- Every decision (DEC), source (SRC), and rule ID: does it exist, with the Status or the mark the draft says?
 - Every number, count, date, and duration, including any the draft worked out from others: work it out again.
 - Every claim that something was run, passed, failed, or was verified: with no command output behind it, Unchecked.
 - Anything carried over from an earlier handoff prompt is not a source: check it from scratch.
