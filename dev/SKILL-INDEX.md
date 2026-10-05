@@ -25,9 +25,11 @@ the routing rounds for the retired skills) is in Git history.
   a project. It lists the outside tool the owner uses for each kind of job.
 - **1 skill for harness files**, `writing-harness-files`, in the `toolkit`
   plugin (Mike's yes, 2026-10-05). It is on for every folder in both hosts
-  and is never copied into a project. It makes every change to a skill,
-  rule, instruction file, hook, settings file, plugin manifest, or helper
-  brief follow the current official pages.
+  and is never copied into a project. It makes every change to a harness
+  file follow the current official pages. A harness file is a skill, a
+  rule, an `AGENTS.md` or `CLAUDE.md`, a hook, a settings file, a Codex
+  `.rules` file, an output style, a plugin manifest or marketplace file, a
+  mod, a subagent definition, or a helper-agent brief.
 - **10 shared skills** that every project gets.
 - **The work tracking choice**, one per project, 1 skill, always named
   `using-work-tracker`: local folders with Obsidian, Notion, or GitHub
@@ -47,9 +49,9 @@ the routing rounds for the retired skills) is in Git history.
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `project-setup` | `./` | Sets up, checks, or updates Toolkit V2 in a project, moves an older claude-toolkit project onto it, or changes where work items or memory live, so projects run the same files. Use when the owner says "toolkit v2", "set up this project", "initialize this project", or "update the toolkit". Not for a Git pull; use pull-latest. Not for running the older claude-toolkit (project-sync). |
+| `project-setup` | `./` | Sets up Toolkit V2 in a project, checks or updates the setup, moves over a project set up another way, changes where work items or memory live, adds SOUL.md, opens the Hindsight dashboard, or connects Hindsight on a new computer, so projects run the same files. Use for any Toolkit V2 setup request, such as "toolkit v2", "set up this project", "check the setup", or "update the toolkit". Not for a Git pull; use pull-latest. Not for the older claude-toolkit (project-sync). |
 | `choosing-outside-tools` | `../choosing-outside-tools/` | Lists the outside tool the owner uses for each kind of job and how to set it up, so every computer uses the same tool. Use when he asks for a job on the list, such as "make an explainer video", and no skill for that tool is on this computer; when he asks which tool he uses for a job; or when he says "add this to my tool list". Not for doing the job when a skill for that tool is on this computer. |
-| `writing-harness-files` | `../writing-harness-files/` | Makes every change to a skill, rule, AGENTS.md or CLAUDE.md, hook, settings file, plugin manifest, or helper-agent brief follow the current official Claude Code, Codex, and Agent Skills documentation. Use this whenever you or a helper agent is about to write or change one of these files, in any project, even for a small edit, and when you write the brief for a helper agent that will. Not for setting up or updating a project from the toolkit; use project-setup. |
+| `writing-harness-files` | `../writing-harness-files/` | Makes every change to a harness file follow the current official Claude Code and Codex pages. A harness file is a skill, rule, AGENTS.md or CLAUDE.md, hook, settings file, Codex .rules file, output style, plugin manifest or marketplace file, mod, subagent definition, or helper-agent brief. Use before any agent writes or changes one. Not for toolkit setup; use project-setup. Not for a line the owner dictates for owner-preferences.md; use curating-project-memory. |
 
 ## 2. Shared skills (every project, 10)
 
@@ -300,10 +302,14 @@ of one skill never meet.
 - `project-setup` and `pull-latest` for "update": Toolkit V2's own files, or
   this repository's Git remote.
 - `project-setup` and `writing-harness-files`: setting up or updating a
-  project from the toolkit, or writing or changing one skill, rule,
-  instruction file, hook, settings file, manifest, or helper brief by
+  project from the toolkit, or writing or changing one harness file by
   hand. `writing-harness-files` is on in every folder, so check that it
   does not open for a plain "update the toolkit".
+- `writing-harness-files` and `curating-project-memory` for "write this up
+  as a rule for agents" or "from now on ...": a line the owner dictates
+  for `.claude/rules/owner-preferences.md` goes to
+  `curating-project-memory`; any other rule file goes to
+  `writing-harness-files`. Its description says so since 2026-10-05.
 - `writing-harness-files` and the skill-creator skills on Mike's Mac
   (`anthropic-skills:skill-creator`, `skill-creator:skill-creator`): both
   match "write a skill". `writing-harness-files` says which pages to read

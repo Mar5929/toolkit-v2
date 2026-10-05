@@ -1,13 +1,15 @@
 ---
 name: writing-harness-files
-description: 'Makes every change to a skill, rule, AGENTS.md or CLAUDE.md, hook, settings file, plugin manifest, or helper-agent brief follow the current official Claude Code, Codex, and Agent Skills documentation. Use this whenever you or a helper agent is about to write or change one of these files, in any project, even for a small edit, and when you write the brief for a helper agent that will. Not for setting up or updating a project from the toolkit; use project-setup.'
+description: 'Makes every change to a harness file follow the current official Claude Code and Codex pages. A harness file is a skill, rule, AGENTS.md or CLAUDE.md, hook, settings file, Codex .rules file, output style, plugin manifest or marketplace file, mod, subagent definition, or helper-agent brief. Use before any agent writes or changes one. Not for toolkit setup; use project-setup. Not for a line the owner dictates for owner-preferences.md; use curating-project-memory.'
 ---
 
 # Writing harness files
 
-A harness file tells Claude Code or Codex how to behave: a skill, a rule, an `AGENTS.md` or `CLAUDE.md`, a hook command or its settings entry, a settings file, a plugin manifest, a mod, a subagent definition, or the brief for a helper agent.
+A harness file is a file that tells Claude Code or Codex how to behave. It is one of these kinds: a skill, a rule, an `AGENTS.md` or `CLAUDE.md`, a hook, a settings file, a Codex `.rules` file, an output style, a plugin manifest or marketplace file, a mod, a subagent definition, or a helper-agent brief. A hook means the command and its entry in a settings or hooks file.
 
-Both products change often. A harness file written from memory repeats practices the documentation has since replaced, and the agent that reads it later cannot tell.
+Never write or change a harness file from memory. Both products change between releases, so read the page first (step 2).
+
+One change is not for this skill: a line the owner dictates for `.claude/rules/owner-preferences.md` ("from now on ..."). It is his instruction in his words, and the project's `curating-project-memory` skill writes it. In a project with no such skill, add the line in the form that file's own layout comment gives.
 
 ## Steps
 
@@ -20,7 +22,8 @@ Both products change often. A harness file written from memory repeats practices
 4. Read the project's own rules for these files in its root `AGENTS.md`, and two existing files of the same kind in the project. Match their form.
 5. Write the change, keeping to "Wording" below.
 6. Check it the way the checklist section says under "Check".
-7. Have an agent that did not write the change review it against the page and the checklist. Fix each finding it confirms, and have it read the fix. Size the review to the change: one reviewer and one read for a small edit.
+7. Have an agent that did not write the change review it against the page and the checklist. Fix each finding it confirms, and have it read the fix. A small edit gets one reviewer and one read.
+   - The host cannot start a helper agent: review the change yourself against the page and the checklist, and tell the owner in step 8 that no separate review ran.
 8. Tell the owner which pages you read and their dates, what you changed, and what the review found.
 
 A project may require the owner's yes before a rule, skill, or hook changes. Get it before step 5.

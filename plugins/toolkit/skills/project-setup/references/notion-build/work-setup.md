@@ -31,8 +31,9 @@ The templates are Notion database templates
 with "New" in Notion is the same as one the agent makes. The owner's
 Projects database holds one, "Project", set as its default. It holds both
 parts: the work items part (Work Items, Phases, Tasks) and the memory part
-(Memory and Current state; a template built before the one-home layout
-also holds a Terminology glossary page, which nothing writes). Every
+(Memory and Current state; a template built before the one-home layout,
+which keeps decisions, system rules, terms, and originals as files in the
+repository, also holds a Terminology glossary page, which nothing writes). Every
 project is made from it, then has the part it keeps elsewhere removed.
 
 Inside "Project", the Work Items database has one template, set as its
@@ -399,7 +400,8 @@ through the API, after the owner's yes.
    their own Tasks view; turn its new columns on only when you next change
    that item. Items made
    earlier keep their pages, and their Requirements section is never
-   rewritten (`update.md`, "The Requirements layout (toolkit 0.8.1)"); add
+   rewritten (`earlier-versions.md`, "The Requirements layout (toolkit
+   0.8.1)"); add
    a missing section to one, and replace its
    Tasks guide paragraph, only when you next change that item.
 5. **The "Project" template** in the Projects database. Its data source id
@@ -426,8 +428,8 @@ this after step 1 above has added the State property.
    call). Changing the Status options replaces the whole list, so send every
    option the database has now plus the new ones, each with its group
    (`database-layout.md`).
-2. Set each work item's State and Status as `update.md`, "Work items from
-   Stage to State", says (`database-layout.md`, "Setting State and
+2. Set each work item's State and Status as `earlier-versions.md`, "Work
+   items from Stage to State", says (`database-layout.md`, "Setting State and
    Status").
 3. In each work item template (step 4 above, and the one in "Project"),
    replace the Next action prompt with the one in

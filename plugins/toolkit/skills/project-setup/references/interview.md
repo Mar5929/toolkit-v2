@@ -125,11 +125,14 @@ yes. Start with his answers in one short line: the name and the owner,
 where work items live (with the ID prefix for local folders; with Notion it
 is asked later), where memory lives, Salesforce (and the org aliases), and
 `SOUL.md`. Say that you will copy the project files for his choices into
-this folder, with the skills and the 3 small hook commands (give the skill
-count), and turn the older claude-toolkit plugins off for this project
-only. Say that every project gets `DECISIONS.md`, `system/`, `sources/`,
-`delivery/`, and `reference/` as files in this folder, whatever he chose. Name every thing that will be created outside the project
-folder:
+this folder, with the skills and the 4 small hook commands (give the skill
+count), turn on the check of the project's records before each commit (the
+Git setting `core.hooksPath`, in this copy of the repository), and turn the
+older claude-toolkit plugins off for this project only. Say that every
+project gets `DECISIONS.md`, `system/`, `sources/`, `delivery/`, and
+`reference/` as files in this folder, whatever he chose.
+
+Name every thing that will be created outside the project folder:
 
 | Choice | Say |
 | --- | --- |

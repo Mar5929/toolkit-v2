@@ -84,8 +84,8 @@ copied in:
    before creating the missing ones; never change, rename, or delete an
    existing label.
 3. A project set up before toolkit 0.6.0 has `stage:` labels. Once the
-   `state:` labels exist, move each open issue to its State as `update.md`,
-   "Work items from Stage to State", says: add its `state:` label, then
+   `state:` labels exist, move each open issue to its State as
+   `earlier-versions.md`, "Work items from Stage to State", says: add its `state:` label, then
    remove its `stage:` label from the issue. The `stage:` labels stay in
    the repository. Tell the owner he may delete them himself on its Labels
    page.

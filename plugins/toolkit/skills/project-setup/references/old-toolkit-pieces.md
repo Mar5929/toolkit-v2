@@ -195,7 +195,7 @@ for each status.
 
 The topic folders of `ai-external-knowledge/` and the old `delivery/`
 folders are renamed, and the client files in them are filed in `sources/`:
-`update.md`, "Where each old piece goes", has the row for each.
+`one-home-layout.md`, "Where each old piece goes", has the row for each.
 
 A project that already has a root `work-items/` folder from an earlier
 tracker, and whose owner chose local work items: Toolkit V2 uses that same
@@ -213,7 +213,7 @@ earlier files of an item hold the same fields: `ITEM.yaml` or `ITEM.json`
 | --- | --- |
 | ID | Local folders: the same ID. Notion and GitHub Issues give their own IDs: write "Was <old ID> in the old tracker." as the first line of Notes, Context, and use the new ID wherever another carried-over item or memory names the old one. |
 | Title, Type, Priority | The same fields. A type Toolkit V2 does not list becomes `task`. |
-| Status and Stage | State and Status, from the table in `update.md`, "Work items from Stage to State". An item no row fits goes under "Your call". |
+| Status and Stage | State and Status, from the table in `earlier-versions.md`, "Work items from Stage to State". An item no row fits goes under "Your call". |
 | Purpose (`description`) | Goal |
 | Current state, Next action (`next_step`), Blockers, Updated date | The Current state lines |
 | Parent, children, and related items | `parent`, the parent's sub-items, and Related items. Create a parent before its sub-items. More than three levels: "Your call". |
@@ -228,7 +228,7 @@ earlier files of an item hold the same fields: `ITEM.yaml` or `ITEM.json`
 | Recent History | The ten newest entries become Recent History rows. The rest stay in the old item. |
 | Requirements | The Requirements section, in the layout the project's work item template gives, with the owner's request and each requirement in the old wording. A part the old text does not give is written "Not recorded." |
 | `DESIGN.md` | The item's design |
-| Every other file in the item's folder | An original: filed in `sources/` with an SRC number, and named by that ID on the item's Sources line (`update.md`, "Where each old piece goes", the row for an original inside a work item) |
+| Every other file in the item's folder | An original: filed in `sources/` with an SRC number, and named by that ID on the item's Sources line (`one-home-layout.md`, "Where each old piece goes", the row for an original inside a work item) |
 | No old field | The `**Moved up:**` line stays empty, and "Lessons not proven yet" holds "None.", in an item that is not Done or Cancelled |
 | Git branch and pull request fields, completion evidence, the schema version | No Toolkit V2 field. Name them on the Update line as not carried over. |
 

@@ -2,8 +2,18 @@
 
 Purpose: copy the finished setup copy into the project without overwriting
 a file the project already has, decide each file that differs with the
-owner, and make the `.agents/skills` link. Run every command from the
-project folder. `<copy>` is the scratch folder from `setup-copy.md`.
+owner, make the `.agents/skills` link, and turn on the check that runs
+before each commit. Run every command from the project folder. `<copy>` is
+the scratch folder from `setup-copy.md`.
+
+## Contents
+
+- 1. See what would change
+- 2. Copy the files the project does not have
+- 3. Files the project already has
+- 4. The .agents/skills link
+- 5. The pre-commit check
+- 6. Check
 
 ## 1. See what would change
 
@@ -76,17 +86,70 @@ diff -r .agents/skills .claude/skills
 Git stores the link as a link. Never replace it with copied folders to get
 past a problem; tell the owner instead.
 
-## 5. Check
+## 5. The pre-commit check
+
+`.githooks/pre-commit` runs `.claude/hooks/validate-records.mjs` before
+each commit and stops a commit that breaks the form of a record or changes
+a filed original. Git runs it only when `core.hooksPath` is `.githooks` in
+this copy of the repository. The setting is not in a file Git tracks, so
+each clone and each computer needs this section once; every worktree of
+one clone uses the same setting. New project, "update the toolkit", and a
+move-over all do this section.
+
+1. Keep the file executable. Git stores the mode with the file:
+
+   ```text
+   chmod +x .githooks/pre-commit
+   ```
+
+   In an update or a move-over, run it in your worktree, where the file
+   is.
+2. Look, in the main checkout. Both commands only read:
+
+   ```text
+   git config --get core.hooksPath
+   ls "$(git rev-parse --git-path hooks)"
+   ```
+
+3. Use the first row that fits:
+
+   | The commands show | Do |
+   | --- | --- |
+   | Git says this is not a Git repository | Skip this section, and tell the owner the check will not run before commits. |
+   | The first prints `.githooks` | Nothing. |
+   | The first prints another folder | Change nothing. Tell the owner as the text below the table says, naming that folder. |
+   | The first prints nothing, and the second lists a file named `pre-commit` (a name that ends in `.sample` does not count) | Change nothing: setting `core.hooksPath` turns off every hook in that folder. Tell the owner as the text below the table says, naming that file. |
+   | The first prints nothing, and the second lists no `pre-commit` | `git config core.hooksPath .githooks` |
+
+   What to tell the owner when nothing is changed: the folder or file that
+   is already set; that the record check will not run before commits in
+   this project; and that he can add this one line to his own `pre-commit`
+   file to run it:
+
+   ```text
+   "$(git rev-parse --show-toplevel)/.githooks/pre-commit" || exit 1
+   ```
+
+   Never add the line for him, and never change his setting.
+
+"Check the setup" changes nothing here: the final checks in `finishing.md`
+report the setting, whether the file is executable, and what the record
+check prints.
+
+## 6. Check
 
 ```text
 rsync -rcni <copy>/ ./
 ls -la .agents
 git status --short
+git config --get core.hooksPath
 ```
 
 - The first lists only files the owner chose to keep as his.
 - `.agents` shows `skills -> ../.claude/skills`, and `ls .agents/skills`
   shows the skills.
+- `core.hooksPath` prints `.githooks`, or the owner was told why it does
+  not.
 - `git status` lists the new files and nothing under `work-items/` or
   `memory/`: Git ignores both.
 
