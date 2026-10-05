@@ -1,6 +1,6 @@
 # Integrations
 
-<!-- Keep this guide. One row per integration document in this folder. Add the row in the same edit that adds the document, and keep its Status and rule IDs equal to the document's. `system/AGENTS.md` gives the rules. -->
+<!-- Keep this guide. One row per integration document in this folder. `system/AGENTS.md`, "An integration document", gives the rules for a row. -->
 
 | Document | Other system | Status | Rule IDs |
 | --- | --- | --- | --- |

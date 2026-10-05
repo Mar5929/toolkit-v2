@@ -15,8 +15,10 @@ Details and limits: `tools/kb/README.md`, section "What this cannot tell you".
 
 ## Keeping the system documents current
 
-- If `tools/kb/_drift_pending.md` exists, handle it this session: correct each document in `system/` that describes the connections it names, with `filing-project-records`, step "update a system document". Then delete the file.
-- After a meaningful `force-app/` change, update the document in `system/` that describes that metadata in the same session, with the same step.
+- If `tools/kb/_drift_pending.md` exists, handle it this session, then delete the file. For each connection it names that makes a rule in `system/` untrue:
+  - A Decided entry in `DECISIONS.md` covers the change: correct the rule with `filing-project-records`, step "update a system document".
+  - No Decided entry covers it: change no approved rule. Record the question with `filing-project-records`, step "record a decision", as an Open entry, and write what the org holds today in `reference/current-system/`.
+- After a `force-app/` change that makes a rule in `system/` untrue, do the same in the same session.
 - `GRAPH_FRESHNESS=0` turns the Stop hook off. Turn it back on afterwards.
 
 ## Org access

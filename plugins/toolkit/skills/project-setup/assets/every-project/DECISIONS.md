@@ -7,7 +7,7 @@ What goes here: every decision and open question that more than one work item ne
 Rules for an entry:
 - Add or change an entry with `filing-project-records`, step "record a decision".
 - One entry per decision or question. Add a new entry at the end of the file.
-- The ID is DEC- and three digits. The next ID is the highest ID in this file plus one. Never reuse an ID. An entry keeps its ID for as long as the file exists.
+- The ID is DEC- and three digits. The first entry is DEC-001. The next ID is the highest ID in this file plus one. Never reuse an ID. An entry keeps its ID for as long as the file exists.
 - Status is one of four words:
   - Open: a question that waits for an answer. Decided says "not yet".
   - Decided: the person named in Decided gave the answer on that date.

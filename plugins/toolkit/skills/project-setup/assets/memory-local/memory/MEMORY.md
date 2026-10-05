@@ -1,6 +1,6 @@
 # Memory pointers
 
-<!-- Keep this guide. One row per pointer. A pointer names a record by its ID and links to it; it never says what the record says. Add, change, and remove a row with `using-memory-store`. `memory/AGENTS.md` gives the rules for a row. -->
+<!-- Keep this guide. One row per pointer. `memory/AGENTS.md` gives the form of a row and what must stay true. Add, change, and remove a row with `using-memory-store`. -->
 
 | What it points to | ID | Link | Created | Last changed |
 | --- | --- | --- | --- | --- |

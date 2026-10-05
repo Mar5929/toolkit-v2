@@ -1,12 +1,12 @@
 # work-items/: the project's work items
 
-This folder is the project's work tracker: one folder per work item, from idea to Done. It holds temporary work. The lasting records are `DECISIONS.md`, `system/`, and `sources/`.
+This folder is the project's work tracker: one folder per work item. A work item is one piece of work, such as a feature, a fix, or a change, from idea to Done. An item is kept after it closes, but later work does not read a closed item: what later work needs is in `DECISIONS.md`, `system/`, and `sources/`.
 
 ## Files
 
 | File or folder | What it is |
 | --- | --- |
-| `<ID>-<short-slug>/` | One work item. A sub-item's folder sits inside its parent's folder. Three levels is the deepest. |
+| `<ID>-<short-slug>/` | One work item. A sub-item's folder is inside its parent's folder. |
 | `<ID>-<short-slug>/<ID>.md` | The item's main file: the header fields, the Overview with its Current state, the Roadmap, Tasks, Recent History, Requirements, Questions and Answers, and Notes. |
 | `<ID>-<short-slug>/DESIGN.md` | The item's design, made when a design starts. It stays with the item after delivery. |
 | `PROJECT-TASKS.md` | The project's own tasks, which belong to no work item. It is not an item. |
@@ -19,13 +19,8 @@ This folder is the project's work tracker: one folder per work item, from idea t
 | ID | Form | Rule |
 | --- | --- | --- |
 | Work item | The prefix, a hyphen, and three digits: `WI-031`. The prefix is "Work item ID prefix" under "Toolkit settings" in `PROJECT.md`. | The next ID is the highest `id:` anywhere in this folder plus one, `archive/` included and the template left out. |
-| Phase of a top-level item | `P1`, `P2` | A sub-item has no phases. |
-| Task | `P1-T01` in a top-level item; `T01` in a sub-item | |
-| Requirement | `R-01` | A dropped requirement keeps its block and its number. |
-| Question | `Q-01` | |
-| Project task | `PT-01` | In `PROJECT-TASKS.md`. |
 
-An ID is never reused. The IDs inside an item are unique within that item.
+An ID is never reused. The IDs inside an item (a phase, a task, a requirement, a question) and the ID of a project task: `running-work-item-lifecycle`, "Levels", and `work-item-template/WORK-ITEM.md` give their forms. They are unique within their item.
 
 ## Header fields that say where an item stands
 
@@ -33,25 +28,14 @@ An ID is never reused. The IDs inside an item are unique within that item.
 
 | Field | Meaning |
 | --- | --- |
-| `state` | The step the work is in. One of the ten States below. |
+| `state` | The step the work is in: one of the ten States. |
 | `status` | The summary of the State. It follows from the State, so the two change together. |
 | `waiting_on` | Who the item waits on: `owner`, `agent`, `external: <who>`, or `none`. |
 | `requirements_approved` | The date and the name of the person who approved the requirements, or `no`. |
 | `design` | `proposed`, `approved`, `superseded`, or `none`. |
 | `result_approved` | The date and the name of the person who approved the result, or `no`. |
 
-| State | Status | Meaning |
-| --- | --- | --- |
-| Backlog | Not Started | An idea in the owner's words. No work has started. |
-| Refining Requirements | Preparing | The requirements are being agreed with the owner. |
-| Designing | In Progress | Design options are being written for the owner to choose from. |
-| Building | In Progress | The tasks are being done. |
-| Testing Loop | In Progress | A separate checker tests the result, and the owner approves it. |
-| Reflecting | In Progress | The result is approved. The item's follow-up checklist is being done. |
-| Deploying | In Progress | The work is being merged and deployed. |
-| Blocked | Blocked | The work is stuck on something outside it: missing access, another team, or a piece that must be finished first. Waiting for the owner's answer is not Blocked. |
-| Done | Done | The owner marked it Done. |
-| Cancelled | Cancelled | The owner cancelled it. The item and every record in it are kept. |
+`running-work-item-lifecycle`, "Status and State", lists the ten States, the Status each one gives, what Blocked means, and when an item moves to the next State. "Levels" says how deep sub-items go.
 
 ## What must stay true
 
@@ -63,7 +47,6 @@ An ID is never reused. The IDs inside an item are unique within that item.
 - From a worktree, read and change items in the main checkout. Never copy an item into the worktree, and never `git add` a file from this folder.
 - An item folder holds no originals. An original goes in `sources/`, and the item names it by SRC-###.
 - Leave any other file the owner put in an item folder, and tell the owner it is there.
-- An item becomes Done or Cancelled only on the owner's word, and only after its closing step recorded whether it changed `system/` or `DECISIONS.md`.
 - What another work item needs to know never stays only here: it is in `DECISIONS.md` or `system/`, and the item holds its ID.
 - `.claude/hooks/validate-records.mjs` checks the items after each edit. Fix what it reports.
 

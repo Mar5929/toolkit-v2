@@ -7,6 +7,6 @@
 
 | Need | Command |
 | --- | --- |
-| See what reads, writes, or breaks when a field or object changes | `python3 tools/kb/build_edges.py`, then `python3 tools/kb/query_graph.py <Object.Field>`. What the result cannot show: `tools/kb/README.md`. |
-| Fetch, check, or prepare a permission set | `python3 tools/permissions/permsets.py`. The steps: `tools/permissions/PERMISSIONS-RUNBOOK.md`. |
-| Validate a change against the sandbox | `sf project deploy validate -x <the work item's package.xml> -o <sandbox alias>`. The aliases are under "Toolkit settings" in `PROJECT.md`. |
+| See what reads, writes, or breaks when a field or object changes | `.claude/rules/dependency-graph.md`, "Impact questions" |
+| Fetch, check, or prepare a permission set | `tools/permissions/PERMISSIONS-RUNBOOK.md`; the tool is `tools/permissions/permsets.py` |
+| Validate a change against the sandbox | `.claude/rules/salesforce-org-safety.md`, "Allowed". The aliases are under "Toolkit settings" in `PROJECT.md`. |

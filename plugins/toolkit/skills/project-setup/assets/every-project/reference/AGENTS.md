@@ -1,14 +1,14 @@
 # reference/: material that is not the project's own decision
 
-This folder holds two kinds of material the project reads but did not decide: documentation captured from outside, and the record of the system as it is today. Nothing here is the project's truth. What the project decided goes in `system/` or `DECISIONS.md`.
+This folder holds two kinds of material the project reads but did not decide: documentation captured from outside the project, and the record of how the existing system works today. Never use a page here as a decision or a rule of this project: what the project decided is in `system/` or `DECISIONS.md`.
 
 ## Folders
 
 | Folder | What goes in it |
 | --- | --- |
-| `outside-docs/` | Public documentation captured from a vendor or a product: a guide, an API reference, a release note. One folder per topic. |
+| `outside-docs/` | Documentation captured from outside the project, such as a vendor's guide, a product's API reference, or a release note. One folder per topic. |
 | `outside-docs/INDEX.md` | One row per topic folder. |
-| `current-system/` | What exists today, before this project's changes. One file per area of the system. |
+| `current-system/` | How the existing system works today, before this project's changes: what was observed, in which environment, and on which date. One file per area of the system. |
 
 Never put here: a client file, a meeting note, or a transcript (they go in `sources/`); a project decision; an instruction for agents.
 

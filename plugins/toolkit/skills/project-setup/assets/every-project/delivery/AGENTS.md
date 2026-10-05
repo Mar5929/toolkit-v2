@@ -1,29 +1,23 @@
-# delivery/: what goes out of the project
+# delivery/: the records of putting the work into use
 
-This folder records each release, deployment, data migration, and client handoff: what went out, where, when, and with what result. The work item keeps the requirements and the history of the work.
+This folder holds the records of putting the work into use: each release, each deployment to an environment, each data migration, and each handoff to the client or the next team, with what was done, where, when, and the result. It does not hold the work itself: the work item keeps the requirements, the tasks, and the history.
 
 ## Folders
 
 | Folder | What goes in it | Name of one record |
 | --- | --- | --- |
-| `releases/` | One folder per release that ships several work items together. | `<YYYY-MM-DD>-<release-name>/` |
-| `deployments/` | One folder per work item that is deployed. | `<work item ID>-<short-name>/` |
-| `migrations/` | One folder per area of data moved from an old system. | `<data-area>/` |
+| `releases/` | One folder per release: several work items put into use together. | `<YYYY-MM-DD>-<release-name>/` |
+| `deployments/` | One folder per deployment of a work item to an environment. | `<work item ID>-<short-name>/` |
+| `migrations/` | One folder per area of data that is moved, loaded, changed, or corrected in bulk. | `<data-area>/` |
 | `client-handoffs/` | One folder per handoff to the client or the next team. | `<YYYY-MM-DD>-<short-name>/` |
 
-Write each name in lowercase words joined by hyphens, after the date or the ID.
-
-A Salesforce project also has these, copied in at setup:
-
-- `deployments/component-tracker.csv`, `deployments/full-project-deployment-template/`, and `deployments/work-item-deployment-template/`;
-- `releases/release-cutover-template/`;
-- `migrations/area-template/`, `migrations/data-loads/`, and `migrations/production-backups/`.
-
-Where a template folder exists, start a record by copying it, and leave the template unchanged.
+- Write each name in lowercase words joined by hyphens, after the date or the ID.
+- A work item deployed to a second environment gets a second folder, with the environment added to the name: `<work item ID>-<short-name>-<environment>/`.
+- Where one of these folders holds a template folder, start a record by copying it, and leave the template unchanged.
 
 ## The form of a record
 
-With no template, a record is one Markdown file in its folder that holds these fields.
+With no template, a record is the file or files below, in its own folder, holding these fields.
 
 | Record | File | Fields |
 | --- | --- | --- |
@@ -58,7 +52,6 @@ A client handoff has no status.
 
 ## What must stay true
 
-- Name a work item by its ID, never by a folder path.
 - Set a Status from what happened. Never set Deployed, Complete, or Released before the checks passed.
 - Never commit a file that holds real records: a data load file or a backup. Keep the `.gitignore` in any folder that has one.
 - An original received from someone else goes in `sources/`, not here. A record here names it by SRC-###.
@@ -69,7 +62,7 @@ A client handoff has no status.
 | Change | Use |
 | --- | --- |
 | Write or update a deployment record, a release plan, or release notes | `running-work-item-lifecycle`, in its Deploying state |
-| Salesforce: the component tracker, a package file, or manual deploy steps | `sf-component-tracker` |
-| Salesforce: a production data change, its load file, and its backup | `sf-data-change` |
-| Salesforce: before a deploy to a shared org | `sf-deploy-check` |
+| Write or update a migration area | No skill: follow this file |
+| Write a client handoff record | No skill: follow this file |
+| Commit a record written before the work item's branch is merged | On that branch, with the work item's other changes |
 | Commit a change made after the work item's branch was merged | `publish-docs` |

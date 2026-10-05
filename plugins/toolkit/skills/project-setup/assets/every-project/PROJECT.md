@@ -38,11 +38,11 @@ Keep this table short. Write no biography and no contact details.
 ## Resources and project paths
 
 - Source code: `<actual source path>`
-- Tests and checks: `<actual commands and locations>`
+- Tests: `<actual location of the tests>`. The commands that build, test, and deploy are in `AGENTS.md`, "Commands".
 
 ## Operating conventions
 
-<Write only stable project-specific conventions here; link the source or governing rule. Write “None yet” if there are none.>
+<Stable facts about how the client's business and this project's team work that are not rules of the system and not instructions for the agent, such as the month the fiscal year starts, the days a release may happen, or who must review a change. Give the source of each: who said it and the date, or an ID. A rule the system must follow goes in `system/`. An instruction for how the agent works goes in `.claude/rules/owner-preferences.md`. Write “None yet” if there are none.>
 
 ## Toolkit settings
 
@@ -52,9 +52,9 @@ Keep this table short. Write no biography and no contact details.
 - Memory: `<local, notion, or hindsight>`
 - Memory approval: `<onboarding or trusted>`
 - Work item ID prefix: `<WI>`
-- Notion work items: `<links to the project's Notion page and its Work Items database>`
+- Notion work items: `<nested bullets under this line, written by the Notion setup step: the link to the project's Notion page, and the ids of its Work Items, Phases, Tasks, and Projects databases>`
 - GitHub repository: `<owner/name>`
-- Notion memory: `<links to the project's memory page, its Lore databases (Projects, Topics, Memories, Entities, Facts), and the "Current state" page>`
+- Notion memory: `<nested bullets under this line, written by the Notion setup step: the ids of the Memory page, its Lore databases (Memories, Facts, Entities, Projects, Topics), and the "Current state" page>`
 - Hindsight bank: `<bank ID on the Hindsight server>`
 - Hindsight server: `<API address of the Hindsight server>`
 - Hindsight dashboard: `<link to this bank in the Hindsight dashboard>`
