@@ -1,23 +1,23 @@
 ---
 name: using-work-tracker
-description: 'Saves, finds, and changes work items as local files in the work-items folder, so running-work-item-lifecycle reads and writes every item the same way. Use when an item must be read, created, saved, searched, nested, or moved, such as "show me WI-031" or "put WI-007 under WI-003". Not for deciding States or approvals; use running-work-item-lifecycle. Only for projects that track work locally.'
+description: 'Saves, finds, and changes work items as local files in the work-items folder, so running-work-item-lifecycle reads and writes every item the same way. Use when an item must be read, created, saved, searched, nested, or moved, such as "show me WI-031" or "put WI-007 under WI-003". Not for deciding an item''s plan, State, or approvals; use running-work-item-lifecycle. Only for projects that track work locally.'
 ---
 
 # The work tracker: local files
 
 This skill holds the storage: where each part of a work item is saved in local files, and how to find it again. It never decides what to save, a State, or an approval.
 
-`work-items/AGENTS.md` says what each file and folder is, the form of each ID, and what must stay true in the folder. Read it before your first change.
+`work-items/AGENTS.md`, in the main checkout, says what each file and folder is, the form of a work item's ID, and what must stay true in the folder. Read it before your first change.
 
 - A top-level item's phases and tasks are in its file, under Roadmap and Tasks. A sub-item has no phases: its tasks are one plain list in its file (`references/field-mapping.md`).
 - The project's own phases are in `PROJECT-ROADMAP.md`, and its project tasks in `work-items/PROJECT-TASKS.md` (`references/project-roadmap-and-tasks.md`).
 
 ## Every time
 
-1. Find the main checkout. `work-items/` lives only there, even when this session runs in a worktree: `MAIN="$(git worktree list --porcelain | sed -n '1s/^worktree //p')"`. Each shell command starts fresh, so begin every command that uses `$MAIN` with that line and a `;`, in the same command. It prints nothing when the project is not a Git repository: then set `MAIN` to the project folder, the one that holds `AGENTS.md`. Never run a command with an empty `MAIN`. No `work-items/` folder there: stop and tell the owner the setup is incomplete.
+1. Find the main checkout. `work-items/` is only there, even when this session runs in a worktree: `MAIN="$(git worktree list --porcelain | sed -n '1s/^worktree //p')"`. Each shell command starts fresh, so begin every command that uses `$MAIN` with that line and a `;`, in the same command. It prints nothing when the project is not a Git repository: then set `MAIN` to the project folder, the one that holds `AGENTS.md`. Never run a command with an empty `MAIN`. No `work-items/` folder there: stop and tell the owner the setup is incomplete.
 2. Find the item's file by its `id:` line (`references/searching.md`). Read the whole file in this turn, and again right before you change it: the owner edits and moves items by hand.
-3. Run the hand-change check (`references/folders-and-files.md`) at the first lookup of a session, before a move or a new sub-item, and whenever an item is not where you read it before, an ID has two files or none, or an item's folder, `parent:`, and its parent's sub-item list disagree. Tell the owner each finding in one line, record it, and carry on.
-4. Make the change with the matching reference (Files below). Change only the lines that change, keep every other line, heading, and bold label as the template has it, and set `updated:` to today. Never rewrite the whole file. Name other items as `[[WI-031]]` in an item's text, never by folder path; `parent:` stays a plain ID.
+3. Run the hand-change check (`references/folders-and-files.md`) at the first lookup of a session, before a move or a new sub-item, and whenever an item is not where you read it before, an ID has two files or none, or an item's folder, `parent:`, and its parent's sub-item list disagree. Tell the owner each finding in one line, record it, and continue.
+4. Make the change with the matching reference (References below). Change only the lines that change, keep every other line, heading, and bold label as the template has it, and set `updated:` to today. Never rewrite the whole file. Name other items as `[[WI-031]]` in an item's text, never by folder path; `parent:` stays a plain ID.
 5. Read the file back and check every change was saved. Report a save that failed, or that reads back differently, as `running-work-item-lifecycle`, "Every time", says.
 
 ## Gotchas
@@ -41,7 +41,7 @@ This skill holds the storage: where each part of a work item is saved in local f
 | Moving the items to another tracker | `project-setup` |
 | An incomplete setup, or a missing template | `project-setup` ("check the setup") |
 
-## Files
+## References
 
 | File | Open it when |
 | --- | --- |

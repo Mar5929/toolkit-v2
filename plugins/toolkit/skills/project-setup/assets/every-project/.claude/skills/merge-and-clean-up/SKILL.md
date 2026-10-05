@@ -1,6 +1,6 @@
 ---
 name: merge-and-clean-up
-description: 'Merges one approved GitHub pull request, then removes only its branches and worktree, after its checks and the merge-safety check pass, so nothing unchecked is merged and no other session''s work is removed. Use when running-work-item-lifecycle asks, or the owner names a pull request: "merge PR 12", "merge and clean up", "land this pull request". Not for shipping an approved work item; use running-work-item-lifecycle.'
+description: 'Merges one approved GitHub pull request, then removes only its branches and worktree, after its checks and the merge-safety check pass, so nothing unchecked is merged and no other session''s work is removed. Use when running-work-item-lifecycle asks, or the owner names a pull request to merge, such as "merge PR 12". Not for taking an approved work item through merge and deployment; use running-work-item-lifecycle.'
 ---
 
 # Merge and clean up
@@ -83,7 +83,8 @@ git -C <main-checkout> status --porcelain
 With no local head branch, use `origin/<head-branch>`. For a pull request from
 a fork, use `gh pr diff <number> --repo <owner/repo> --name-only`. A file in
 both lists: stop, name exactly those files, and let the owner decide whether
-to commit, stash, or wait. Never touch the main checkout's changes.
+to commit, stash, or wait. Never change, stage, stash, or discard the main
+checkout's changes.
 
 ## Step 5: merge
 

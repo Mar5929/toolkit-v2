@@ -8,9 +8,9 @@ import { readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 
 const COMPACTED = 'Context was just compacted. Before you answer the next message, re-read the'
-  + ' active work item with using-work-tracker, then PROJECT.md, SOUL.md if the project'
-  + ' has one, and .claude/rules/owner-preferences.md. In Codex, also re-read every file in'
-  + ' .claude/rules/ that has no paths line at its top.';
+  + ' active work item with using-work-tracker, then do "Every session" in the root AGENTS.md'
+  + ' again.';
+process.stdout.on('error', () => {}); // A reader that closed the output is no error.
 const arg = (name, i = process.argv.indexOf(`--${name}`)) => i > 1 && process.argv[i + 1];
 const memory = arg('memory') || 'local';
 const attempt = (read) => { try { return read() || ''; } catch { return ''; } };
@@ -20,9 +20,9 @@ const out = input.source === 'compact' ? [COMPACTED] : [];
 const where = memory === 'notion' ? 'the Current state page, with using-memory-store'
   : 'memory/CURRENT_STATE.md in the main checkout';
 try {
-  // Current State. memory/ is kept out of Git, so it is only in the main checkout.
-  const git = execFileSync('git', ['rev-parse', '--git-common-dir'], opts).trim();
-  const dir = join(dirname(resolve(opts.cwd, git)), 'memory');
+  // memory/ is kept out of Git, so it is only in the main checkout. No Git: the session's folder.
+  const git = attempt(() => execFileSync('git', ['rev-parse', '--git-common-dir'], opts).trim());
+  const dir = join(git ? dirname(resolve(opts.cwd, git)) : opts.cwd, 'memory');
   const read = (file) => attempt(() => readFileSync(join(dir, file), 'utf8'));
   const page = () => execFileSync('ntn', ['api', `v1/pages/${arg('page')}/markdown`], opts);
   const state = String(memory === 'notion' ? attempt(() => JSON.parse(page()).markdown)
@@ -31,7 +31,7 @@ try {
   else if (memory === 'notion') out.push('The Notion Current state page could not be read here.'
     + ' Read it with the using-memory-store skill.');
   else out.push(`memory/CURRENT_STATE.md is missing or empty in ${dirname(dir)}.`);
-  // A prune request when Current State is 40 lines or more (the limit is under 40), or 7 days old.
+  // A prune request when Current State is 40 lines or more, or was last updated over 7 days ago.
   const lines = state.split('\n').length;
   const updated = state.match(/Last updated:\W*(\d{4}-\d{2}-\d{2})/i)?.[1];
   const days = Math.floor((Date.now() - Date.parse(updated)) / 864e5) || 0;

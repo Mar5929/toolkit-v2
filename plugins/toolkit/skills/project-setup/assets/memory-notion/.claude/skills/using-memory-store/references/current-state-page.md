@@ -1,6 +1,6 @@
 # The Current state page
 
-The form of the project's Notion "Current state" page, and how to read and change it. The calling skill decides what a line says. The page's id is in `PROJECT.md`, section "Toolkit settings", Notion block.
+The form of the project's Notion "Current state" page, and how to read and change it. The calling skill decides what a line says. The page's id is in `PROJECT.md`, section "Toolkit settings": the nested bullet "Current state page" under the fixed line "Notion memory".
 
 ## The form
 

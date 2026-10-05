@@ -92,15 +92,6 @@ test('session-start, local: with no MEMORY.md, or an empty one, it prints Curren
   }
 });
 
-test('session-start, local: a MEMORY.md that cannot be written (a sandbox) is still printed', () => {
-  const { dir } = project({ 'CURRENT_STATE.md': state(), 'MEMORY.md': pointers(DEC) });
-  chmodSync(join(dir, 'memory', 'MEMORY.md'), 0o444);
-  const { code, out } = hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'local']);
-  assert.equal(code, 0);
-  assert.match(out, /\| The decision on which workspace a request belongs to \| DEC-004 \| DECISIONS\.md \|/);
-  assert.doesNotMatch(out, /stopped early/);
-});
-
 test('session-start, local: a missing or empty CURRENT_STATE.md prints one line naming the folder, then the pointers', () => {
   for (const files of [{}, { 'CURRENT_STATE.md': '\n' }]) {
     const { dir } = project({ 'MEMORY.md': pointers(DEC), ...files });
@@ -125,19 +116,63 @@ test('session-start: from inside a git worktree it reads memory/ in the main che
 test('session-start: after compact it adds the re-read line first', () => {
   const { dir } = project({ 'CURRENT_STATE.md': state() });
   const { out } = hook('session-start.mjs', { source: 'compact', cwd: dir }, ['--memory', 'hindsight']);
-  assert.match(out.split('\n')[0], /^Context was just compacted\. Before you answer the next message, re-read the active work item with using-work-tracker, then PROJECT\.md, SOUL\.md if the project has one, and \.claude\/rules\/owner-preferences\.md\. In Codex, also re-read every file in \.claude\/rules\/ that has no paths line at its top\.$/);
+  assert.equal(out.split('\n')[0], 'Context was just compacted. Before you answer the next message, re-read the active work item with using-work-tracker, then do "Every session" in the root AGENTS.md again.');
+  // The root AGENTS.md holds what to read again; the hook only points to it.
+  const root = readFileSync(join(assets, 'every-project/AGENTS.md'), 'utf8');
+  assert.match(root, /^## Every session$/m);
+  assert.match(root, /Read them again after resume, clear, or compaction\./);
+  assert.match(root, /Codex: at session start, and again after compaction, read every file in `\.claude\/rules\/`/);
   for (const source of ['startup', 'resume', 'clear']) {
     assert.doesNotMatch(hook('session-start.mjs', { source, cwd: dir }, ['--memory', 'hindsight']).out, /compacted/);
   }
 });
 
-test('session-start: asks for the refine step when Current State is too long or too old', () => {
+test('session-start: asks for a prune when Current State is too long or too old', () => {
   const old = project({ 'CURRENT_STATE.md': state('2026-01-02') });
   assert.match(hook('session-start.mjs', { source: 'startup', cwd: old.dir }, ['--memory', 'local']).out, /Current State is \d+ days old\. Prune it with the curating-project-memory skill\./);
   const long = project({ 'CURRENT_STATE.md': state(today, '- line\n'.repeat(40)) });
   assert.match(hook('session-start.mjs', { source: 'startup', cwd: long.dir }, ['--memory', 'hindsight']).out, /Current State is \d+ lines \(limit: under 40\)\. Prune it with a direct edit, as \.claude\/rules\/hindsight-memory\.md says\./);
   const unfilled = project({ 'CURRENT_STATE.md': 'Last updated: `<YYYY-MM-DD, source, and person or agent>`\n' });
   assert.doesNotMatch(hook('session-start.mjs', { source: 'startup', cwd: unfilled.dir }, ['--memory', 'local']).out, /Prune it/);
+});
+
+test('session-start: Current State last updated 7 days ago is not old; 8 days ago is', () => {
+  const daysAgo = (n) => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10);
+  const seven = project({ 'CURRENT_STATE.md': state(daysAgo(7)) });
+  assert.doesNotMatch(hook('session-start.mjs', { source: 'startup', cwd: seven.dir }, ['--memory', 'local']).out, /Prune it/);
+  const eight = project({ 'CURRENT_STATE.md': state(daysAgo(8)) });
+  assert.match(hook('session-start.mjs', { source: 'startup', cwd: eight.dir }, ['--memory', 'local']).out, /\nCurrent State is 8 days old\. Prune it with the curating-project-memory skill\.\n/);
+});
+
+test('session-start: with no --memory it reads local memory', () => {
+  const { dir } = project({ 'CURRENT_STATE.md': state(), 'MEMORY.md': pointers(DEC) });
+  const { code, out } = hook('session-start.mjs', { source: 'startup', cwd: dir });
+  assert.equal(code, 0);
+  assert.equal(out, hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'local']).out);
+  assert.match(out, /^Current State:[\s\S]*Memory pointers \(memory\/MEMORY\.md\):/);
+});
+
+test('session-start: from a subfolder of the project it still reads memory/ at the top', () => {
+  const { dir } = project({ 'CURRENT_STATE.md': state(today, '- Top folder line.\n') });
+  mkdirSync(join(dir, 'system', 'integrations'), { recursive: true });
+  const { code, out } = hook('session-start.mjs', { source: 'startup', cwd: join(dir, 'system', 'integrations') }, ['--memory', 'local']);
+  assert.equal(code, 0);
+  assert.match(out, /^Current State:[\s\S]*Top folder line\./);
+});
+
+test('session-start and prompt-reminder: a reader that closed the output gets exit 0 and no error text', () => {
+  const { dir } = project({ 'CURRENT_STATE.md': state() });
+  const runs = [
+    ['session-start.mjs', { source: 'startup', cwd: dir }, '--memory local'],
+    ['prompt-reminder.mjs', { prompt: 'From now on, ask first.' }, ''],
+    ['codex-after-commit.mjs', { tool_input: { command: 'git commit -m x' } }, ''],
+  ];
+  for (const [file, input, args] of runs) {
+    // ":" exits at once, so the hook writes into a closed pipe. The exit code goes to stderr.
+    const script = `{ "${process.execPath}" "${join(hooks, file)}" ${args}; echo "exit=$?" >&2; } | :`;
+    const result = spawnSync('/bin/sh', ['-c', script], { input: JSON.stringify(input), encoding: 'utf8', env: baseEnv });
+    assert.equal(result.stderr, 'exit=0\n', file);
+  }
 });
 
 test('session-start, hindsight: prints Current State only, the one memory file such a project has', () => {
@@ -206,17 +241,30 @@ test('session-start, notion: a failed or missing ntn prints one line and exits 0
   }
 });
 
-test('session-start: outside a Git repository, or with bad input, it prints one line and exits 0', () => {
+test('session-start: outside a Git repository it reads memory/ in the session folder; bad input prints one line', () => {
   const plain = join(scratch, 'not-a-repo');
   mkdirSync(plain);
-  const a = hook('session-start.mjs', { source: 'startup', cwd: plain }, ['--memory', 'local']);
-  assert.equal(a.code, 0);
-  assert.match(a.out, /^The session-start hook stopped early \(.+\)\. Read Current State yourself: memory\/CURRENT_STATE\.md in the main checkout\.\n$/);
-  assert.match(hook('session-start.mjs', { source: 'startup', cwd: plain }, ['--memory', 'hindsight']).out, /Read Current State yourself: memory\/CURRENT_STATE\.md in the main checkout\.\n$/);
-  assert.match(hook('session-start.mjs', { source: 'startup', cwd: plain }, ['--memory', 'notion']).out, /Read Current State yourself: the Current state page, with using-memory-store\.\n$/);
-  const b = hook('session-start.mjs', 'not json', ['--memory', 'local']);
-  assert.equal(b.code, 0);
-  assert.equal(b.out.trim().split('\n').length, 1);
+  for (const memory of ['local', 'hindsight']) {
+    const a = hook('session-start.mjs', { source: 'startup', cwd: plain }, ['--memory', memory]);
+    assert.equal(a.code, 0);
+    assert.equal(a.out, `memory/CURRENT_STATE.md is missing or empty in ${plain}.\n`, memory);
+  }
+  mkdirSync(join(plain, 'memory'));
+  writeFileSync(join(plain, 'memory', 'CURRENT_STATE.md'), state());
+  writeFileSync(join(plain, 'memory', 'MEMORY.md'), pointers(DEC));
+  const found = hook('session-start.mjs', { source: 'startup', cwd: plain }, ['--memory', 'local']);
+  assert.equal(found.code, 0);
+  assert.equal(found.out, `Current State:\n${state().trim()}\n\nMemory pointers (memory/MEMORY.md):\n${pointers(DEC).trim()}\n`);
+  assert.equal(hook('session-start.mjs', { source: 'startup', cwd: plain }, ['--memory', 'hindsight']).out, `Current State:\n${state().trim()}\n`);
+  assert.equal(hook('session-start.mjs', { source: 'startup', cwd: plain }, ['--memory', 'notion']).out, 'The Notion Current state page could not be read here. Read it with the using-memory-store skill.\n');
+  for (const input of ['not json', '']) {
+    const b = hook('session-start.mjs', input, ['--memory', 'local']);
+    assert.equal(b.code, 0);
+    assert.equal(b.out.trim().split('\n').length, 1, JSON.stringify(input));
+  }
+  const gone = hook('session-start.mjs', { source: 'startup', cwd: join(scratch, 'no-such-folder') }, ['--memory', 'local']);
+  assert.equal(gone.code, 0);
+  assert.match(gone.out, /^memory\/CURRENT_STATE\.md is missing or empty in .+no-such-folder\.\n$/);
 });
 
 test('session-start: output stays under the 10,000-character hook limit', () => {
@@ -256,11 +304,11 @@ const MATCHES = [
 
 const SKILLS_LINE = "Before you answer, check this project's skills and use every one that fits this message.\n";
 // The parts of the hint. The hook holds the same words; these tests fix them.
-const HOME = 'goes to its home in the root AGENTS.md, "Where information goes"';
-const DECIDES = ` The curating-project-memory skill decides whether anything is saved: what is kept ${HOME}, and memory holds pointers only.`;
-const HINDSIGHT = ` What is kept ${HOME}. .claude/rules/hindsight-memory.md says what Hindsight memory keeps.`;
-const DECISION = " A decision only one work item needs is a row in that item's Questions and Answers (running-work-item-lifecycle). One that more than one work item needs is an entry in DECISIONS.md (filing-project-records, step \"record a decision\").";
-const INSTRUCTION = ' An instruction for how the agent works is a line in .claude/rules/owner-preferences.md, never a settings hook.';
+const HOME = 'is filed where the root AGENTS.md says, under "Where information goes"';
+const DECIDES = ` The curating-project-memory skill decides whether anything is saved: what is kept ${HOME}.`;
+const HINDSIGHT = ` What is kept ${HOME}. .claude/rules/hindsight-memory.md says what Hindsight memory is for.`;
+const DECISION = ' For a decision, the filing test there says whether it goes in the work item or in DECISIONS.md.';
+const INSTRUCTION = ' For an instruction for how the agent works, that table names the file.';
 const NOT_OWNER = " Words that are not the owner's own decide nothing: a helper agent's report, a scheduled task, a message from another session, or notes, a transcript, or a document the owner shared. File a shared original with filing-project-records, step \"file a source\".\n";
 /** The prompt hook's output without its skills line, which every message gets (checked here). */
 function reminder(input, args = [], env = {}) {
@@ -284,7 +332,7 @@ test('prompt-reminder: every phrase group gives one reminder naming the skill an
     const { code, out } = reminder({ prompt });
     assert.equal(code, 0);
     assert.equal(out.split('\n').length, 2, prompt);
-    assert.match(out, new RegExp(`^This may be something to keep \\((?:[a-z ]+, )*${label}(?:, [a-z ]+)*\\)\\. The curating-project-memory skill decides whether anything is saved: what is kept goes to its home in the root AGENTS\\.md, "Where information goes", and memory holds pointers only\\.`), prompt);
+    assert.match(out, new RegExp(`^This may be something to keep \\((?:[a-z ]+, )*${label}(?:, [a-z ]+)*\\)\\. The curating-project-memory skill decides whether anything is saved: what is kept is filed where the root AGENTS\\.md says, under "Where information goes"\\.`), prompt);
     assert.ok(out.endsWith(NOT_OWNER), prompt);
   }
 });
@@ -301,7 +349,7 @@ test('prompt-reminder: case, curly apostrophes, and "lets" without an apostrophe
   }
 });
 
-test('prompt-reminder: a decision names the item for one work item and DECISIONS.md for more than one', () => {
+test('prompt-reminder: a decision adds the line that points to the filing test', () => {
   assert.equal(reminder({ prompt: 'We decided to use six permission sets.' }).out, `This may be something to keep (decision).${DECIDES}${DECISION}${NOT_OWNER}`);
   for (const prompt of ['From now on always run the tests first.', 'Remember that the sandbox resets on Fridays.']) {
     assert.ok(!reminder({ prompt }).out.includes('DECISIONS.md'), prompt);
@@ -311,36 +359,39 @@ test('prompt-reminder: a decision names the item for one work item and DECISIONS
 test('prompt-reminder, hindsight: names the rule file, never a memory skill or "the memory rule"', () => {
   const { out } = reminder({ prompt: 'We decided to use six permission sets.' }, ['--skill', 'hindsight']);
   assert.equal(out, `This may be something to keep (decision).${HINDSIGHT}${DECISION}${NOT_OWNER}`);
-  assert.doesNotMatch(out, /curating-project-memory|using-memory-store|the memory rule|pointers only/);
+  assert.doesNotMatch(out, /curating-project-memory|using-memory-store|the memory rule|pointer/);
 });
 
 test('prompt-reminder: no text names a section, rule, or skill the starter project does not have', () => {
   const every = [DECIDES, HINDSIGHT, DECISION, INSTRUCTION, NOT_OWNER].join('');
   assert.match(readFileSync(join(assets, 'every-project/AGENTS.md'), 'utf8'), /^## Where information goes$/m);
-  const paths = { '.claude/rules/hindsight-memory.md': 'memory-hindsight', '.claude/rules/owner-preferences.md': null, 'DECISIONS.md': 'every-project' };
+  // The hint points to the root's table and filing test. The root holds both, and the row for an instruction.
+  const root = readFileSync(join(assets, 'every-project/AGENTS.md'), 'utf8');
+  assert.match(root, /The test: would an agent working on a different work item need to know this\?/);
+  assert.match(root, /\| The owner's preference for how the agent works .*\| `\.claude\/rules\/owner-preferences\.md`\./);
+  const paths = { '.claude/rules/hindsight-memory.md': 'memory-hindsight', 'DECISIONS.md': 'every-project' };
   for (const [path, folder] of Object.entries(paths)) {
     assert.ok(every.includes(path), path);
-    // owner-preferences.md is a template beside the setup folders; setup copies it into the rules.
-    assert.ok(existsSync(folder ? join(assets, folder, path) : join(assets, 'owner-preferences.md')), path);
+    assert.ok(existsSync(join(assets, folder, path)), path);
   }
-  const skills = { 'curating-project-memory': 'memory-process', 'running-work-item-lifecycle': 'every-project', 'filing-project-records': 'every-project' };
+  const skills = { 'curating-project-memory': 'memory-process', 'filing-project-records': 'every-project' };
   for (const [skill, folder] of Object.entries(skills)) {
     assert.ok(every.includes(skill), skill);
     assert.ok(existsSync(join(assets, folder, '.claude/skills', skill, 'SKILL.md')), skill);
   }
   const filing = readFileSync(join(assets, 'every-project/.claude/skills/filing-project-records/SKILL.md'), 'utf8');
-  for (const step of ['Record a decision', 'File a source']) {
+  for (const step of ['File a source']) {
     assert.ok(every.includes(`step "${step[0].toLowerCase()}${step.slice(1)}"`), step);
     assert.ok(filing.includes(`| ${step} |`), `filing-project-records has the step ${step}`);
   }
 });
 
-test('prompt-reminder: a standing instruction adds the owner-preferences.md line, never a settings hook', () => {
+test('prompt-reminder: a standing instruction adds the line that points to the root table', () => {
   for (const [args, base] of [[[], DECIDES], [['--skill', 'hindsight'], HINDSIGHT]]) {
     const { out } = reminder({ prompt: 'From now on always run the tests first.' }, args);
     assert.equal(out, `This may be something to keep (standing instruction).${base}${INSTRUCTION}${NOT_OWNER}`, args.join(' '));
   }
-  assert.ok(!reminder({ prompt: 'We decided to use six permission sets.' }).out.includes('settings hook'));
+  assert.ok(!reminder({ prompt: 'We decided to use six permission sets.' }).out.includes(INSTRUCTION));
 });
 
 test('prompt-reminder: a transcript pasted without markers gets the line on words that are not the owner\'s', () => {
@@ -380,6 +431,15 @@ test('prompt-reminder: a question about a past decision prints nothing; a new de
   }
   for (const prompt of ["this is what we decided, merge the two sales personas", 'What we decided yesterday was to keep both personas']) {
     assert.match(reminder({ prompt }).out, /\(decision\)/, prompt);
+  }
+});
+
+test('prompt-reminder: a plain question or a statement about a habit gets no keep hint', () => {
+  const quiet = ['what is the root cause of the failure?', 'Do you remember the name of the flow?', 'do you remember the name of the flow', "I don't remember the name of the flow.", 'I never use tabs.', 'We always use the sandbox first.', 'Was it paused last week?', 'Should we forget the old vendor?'];
+  for (const prompt of quiet) assert.equal(reminder({ prompt }).out, '', prompt);
+  // The same words as a statement or an instruction still get the hint.
+  for (const [prompt, label] of [['The root cause was the trigger.', 'lesson'], ['Remember the name of the flow: Order Sync.', 'remember'], ['Never use tabs.', 'standing instruction'], ['Is that clear? From now on, ask first.', 'standing instruction'], ['From now on use https://example.com/a?b=1 for the docs.', 'standing instruction']]) {
+    assert.match(reminder({ prompt }).out, new RegExp(`^This may be something to keep \\(${label}\\)\\.`), prompt);
   }
 });
 
@@ -531,6 +591,34 @@ test('Codex hook snippet commands run as written from a scratch project', () => 
   assert.match(sh(JSON.parse(readFileSync(join(settings, 'codex-hooks.hindsight.json'), 'utf8')).hooks.UserPromptSubmit[0].hooks[0].command, { prompt: 'From now on, ask first.' }), /hindsight-memory\.md/);
   assert.equal(sh(h.PostToolUse[0].hooks[0].command, { tool_input: { command: 'git commit -m x' } }), AFTER_COMMIT);
   assert.equal(sh(h.PostToolUse[1].hooks[0].command, { tool_name: 'collaborationspawn_agent', tool_input: {} }), `${CODEX_HELPER}\n`);
+});
+
+test('the starter settings.json and the Salesforce Codex hooks name only commands the setup folders hold', () => {
+  const starter = JSON.parse(readFileSync(join(assets, 'every-project/.claude/settings.json'), 'utf8'));
+  // The starter file holds the Salesforce entries; setup takes them out of a project that is not one.
+  assert.deepEqual(Object.keys(starter.hooks).sort(), ['PreToolUse', 'Stop']);
+  const commands = Object.values(starter.hooks).flat().flatMap((group) => group.hooks.map((h) => h.command));
+  assert.equal(commands.length, 3);
+  for (const command of commands) {
+    const file = command.match(/"\$CLAUDE_PROJECT_DIR\/([^"]+)"/)[1];
+    assert.ok(existsSync(join(assets, 'salesforce', file)), `${file} is in the salesforce folder`);
+  }
+  assert.equal(starter.hooks.PreToolUse[0].matcher, 'Bash|PowerShell');
+  assert.equal(starter.autoMemoryEnabled, false);
+  assert.equal(starter.outputStyle, 'Plain English');
+  assert.ok(existsSync(join(assets, 'every-project/.claude/output-styles/plain-english.md')));
+  for (const never of ['Bash(git add -A)', 'Bash(git add .)', 'Bash(git commit -a *)', 'Bash(git push --force *)']) assert.ok(starter.permissions.deny.includes(never), never);
+  const codex = JSON.parse(readFileSync(join(assets, 'salesforce/.codex/hooks.json'), 'utf8'));
+  assert.deepEqual(Object.keys(codex), ['description', 'hooks'], 'only description and hooks at the top level');
+  assert.deepEqual(Object.keys(codex.hooks), ['PreToolUse']);
+  assert.equal(codex.hooks.PreToolUse[0].matcher, '^Bash$');
+  const guards = codex.hooks.PreToolUse[0].hooks;
+  assert.deepEqual(guards.map((g) => g.command.match(/hooks\/([a-z-]+\.cjs)" --host codex$/)[1]), ['guard-protected-orgs.cjs', 'guard-permission-set-deploy.cjs']);
+  for (const g of guards) {
+    assert.equal(g.type, 'command');
+    assert.match(g.command, /^node "\$\(git rev-parse --show-toplevel\)\/\.claude\/hooks\//);
+    assert.ok(existsSync(join(assets, 'salesforce/.claude/hooks', g.command.match(/hooks\/([a-z-]+\.cjs)/)[1])));
+  }
 });
 
 test('plugin switches: every old claude-toolkit plugin is off in both hosts; Codex also raises the skills limit', () => {

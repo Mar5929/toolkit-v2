@@ -24,7 +24,7 @@ The template's Requirements section gives a requirement's form and what each par
    - a fact that is not a requirement: Notes, Context;
    - an idea for how to build it: Notes, "Solution options and considerations", naming its `R-xx`.
 
-   Then apply the filing test in the root `AGENTS.md`, "Where information goes". An answer that an agent working on a different item would need goes to `filing-project-records`: step "record a decision" for a decision or an open question, step "update a system document" for a rule several items rely on. The row keeps his words and ends "Filed as DEC-014." A requirement that rests on a rule in `system/` names the rule's ID and never copies its text.
+   Then apply the filing test in the root `AGENTS.md`, "Where information goes". An answer that an agent working on a different item would need goes to `filing-project-records`: step "record a decision" for a decision or an open question, step "update a system document" for a rule several items rely on. That step adds "Filed as DEC-014." to the end of the row, which keeps his words. A requirement that rests on a rule in `system/` names the rule's ID and never copies its text.
 7. **Handle a change** to an earlier answer or an approved requirement.
    - Never rewrite the old row. Add "Change to Q-03: <the question now>" with his words and the date, and set the old row to "Superseded by Q-09".
    - Change the lines of each `R-xx` it affects, and keep the old wording in the Recent History row ("R-02 was: ...; changed by Q-12"). Never change an Original verbatim requirement: add his new words after it, with the date and the Q-ID.
@@ -52,7 +52,7 @@ Leave out "Watch out" or "Not yet covered" only when there is nothing real to sa
 
 ## Sources
 
-- File a transcript, a document, a file, or pasted text before you use it: `filing-project-records`, step "file a source". Then add its line under Notes, Sources, with its SRC-###.
+- File a transcript, a document, a file, or pasted text before you use it: `filing-project-records`, step "file a source". That step gives you the SRC-### and adds the source's line under Notes, Sources.
 - From a source: a stated behavior becomes a requirement, or a line of one, with the source's words as its Original verbatim requirement and its SRC-### named there; something another person decided becomes a question asking the owner to confirm it; a gap becomes a question with your recommendation; other facts go under Notes, Context. Tell him how many requirements and questions it gave, then ask the first question.
 
 ## Roadmap, tasks, and sub-items
@@ -69,4 +69,5 @@ The levels, and which ones have phases, are in `SKILL.md`, "Levels".
 
 - Only the owner's words answer a question. A source, another person, or your recommendation stays a candidate until he confirms it. A tentative answer ("probably B, let me think") leaves the question open.
 - Requirements say what and why, never how.
+- A sub-item has its own Questions and Answers. Save each answer in the item it is about.
 - Ask in the reply text, never through a question tool, one question per reply. A list of recommendations he can accept with one yes, each with a one-line reason, counts as one question.

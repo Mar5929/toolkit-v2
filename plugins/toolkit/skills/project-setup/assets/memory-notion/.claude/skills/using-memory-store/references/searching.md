@@ -1,6 +1,6 @@
 # Finding pointers in Notion
 
-The exact calls that find and list pointer pages. Replace `{{MEMORIES_DS}}` with the value in `PROJECT.md`, section "Toolkit settings", Notion block. The Current state page is read as `current-state-page.md` says.
+The exact calls that find and list pointer pages. Replace `{{MEMORIES_DS}}` with the Memories data source id in `PROJECT.md`, section "Toolkit settings": a nested bullet under the fixed line "Notion memory". The Current state page is read as `current-state-page.md` says.
 
 ## A pointer by its ID
 

@@ -1,13 +1,13 @@
 ---
 name: handoff
-description: 'Updates this session''s work items and Current State, files any decision or original this session left unfiled, then writes a checked, self-contained prompt for a new session, or checks a pasted one, so nothing is lost when context clears. Use when the owner ends the session or says "write a handoff", "I''m clearing context", "start a new session", or "check this handoff". Not for a recap alone; use session-summary.'
+description: 'Updates this session''s work items and Current State, files any decision or original this session left unfiled, then writes a checked, self-contained prompt for a new session, or checks a pasted one, so nothing is lost when context clears. Use when the owner ends the session, clears context, or asks for a handoff prompt or a check of one, such as "write a handoff". Not for a recap alone; use session-summary.'
 ---
 
 # Handoff
 
 Leave the project ready for a fresh session, then give the owner a checked
 prompt, so that a session that sees only the project's records and the
-prompt can carry on. Never ask the owner to wait before he clears context,
+prompt can continue the work. Never ask the owner to wait before he clears context,
 and never hold back the prompt because a save or the check failed.
 
 ## Steps

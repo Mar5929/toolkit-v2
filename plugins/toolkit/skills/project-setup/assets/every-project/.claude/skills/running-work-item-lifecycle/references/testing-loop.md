@@ -32,6 +32,6 @@ Keep it short, in this order:
 
 ## Gotchas
 
-- The checker runs before every result approval, whoever built the change (the owner's decision, 2026-09-28). If he asks to skip it, say it always runs, as he decided, and ask whether he wants to change that decision. When he does, write his words as a bullet in `.claude/rules/owner-preferences.md`.
+- The checker runs before every result approval, whoever built the change (the owner's decision, 2026-09-28). If he asks to skip it, say it always runs, as he decided, and ask whether he wants to change that decision. When he does, hand his words to `curating-project-memory`, which writes the line in `.claude/rules/owner-preferences.md` (Hindsight memory: `.claude/rules/hindsight-memory.md`).
 - A commit after the check needs a new checker. A change after his approval needs a new check and a new approval of what changed.
 - In Codex, each Git write, such as the test plan commit, follows "Git writes in Codex" in `building.md`.

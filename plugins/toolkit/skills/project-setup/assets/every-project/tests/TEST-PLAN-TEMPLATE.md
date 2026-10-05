@@ -8,7 +8,7 @@
 
 ## Environment and data
 
-<Verified org or test environment, required access, and approved test data.>
+<Verified test environment, required access, and approved test data.>
 
 ## Checks
 

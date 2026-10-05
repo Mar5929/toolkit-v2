@@ -1,6 +1,6 @@
 # memory/: where work stopped, and pointers
 
-This folder is the project's memory. It holds two things: where work stopped, and pointers to records. A pointer is an ID and a link. Memory never restates a fact: the fact lives in the record the pointer names.
+This folder is the project's memory. It holds two things: where work stopped, and pointers to records. A pointer is an ID and a link. Memory never restates a fact: the fact is in the record the pointer names.
 
 ## Files
 

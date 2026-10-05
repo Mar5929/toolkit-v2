@@ -14,7 +14,7 @@ Tracker: local (work-items/ in the main checkout)
 Current State: memory/CURRENT_STATE.md in the main checkout
 Sources for claims:
 - "WI-007 is in the Building State": file, WI-007 front matter
-- "Option A is approved": file, WI-007 DESIGN.md header
+- "Option A is approved": file, WI-007 front matter, `design: approved`
 - "DEC-006 is Open": file, DECISIONS.md
 - "branch claude/wi-007-csv-export": repository, git worktree list
 - "credit notes show negative amounts": owner, his words "just make them negative"

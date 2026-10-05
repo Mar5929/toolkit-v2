@@ -11,13 +11,13 @@ Put a rule in the one document for its area. A rule that covers more than one ar
 | `glossary.md` | A project term and its meaning here. | None |
 | `constraints.md` | A rule that covers several areas of the system. | CON-## |
 | `architecture.md` | A main part of the system, what it is responsible for, and how it connects to the others. | ARC-## |
-| `data-model.md` | An object, its required fields, and how its records relate to others. | DAT-## |
-| `security-model.md` | Who can see or change a kind of record or a function. | SEC-## |
-| `automation.md` | Something that runs by itself, what starts it, and what it changes. | AUT-## |
+| `data-model.md` | The data the system keeps: an object or table, its important fields, and how its records relate to others. | DAT-## |
+| `security-model.md` | Who can see, create, change, and delete a kind of record, who can use a function, and how that access is given. | SEC-## |
+| `automation.md` | Something that runs without a person starting it, such as a flow, a trigger, or a scheduled job: what starts it, what it does, and what it changes. | AUT-## |
 | `integrations/<system-name>.md` | One connection to another system: what is sent, in which direction, when, and which side holds the true value. | INT-## |
 | `integrations/README.md` | One row per integration document. | None |
 | `integrations/INTEGRATION-TEMPLATE.md` | The form for a new integration document. Never write an integration into it. | None |
-| `diagrams/` | A picture of the system. Link it from the document it explains. | None |
+| `diagrams/` | A diagram that explains the system, such as a data model diagram, a process flow, or a map of the integrations. | None |
 
 ## The form of a document
 
@@ -26,11 +26,13 @@ Every document has, in this order:
 1. Three lines at the top:
    - Status: Not started, Draft, or Approved.
    - Last changed via: the DEC-### behind the latest change, or "none".
-   - Governs: the parts of the system the document covers, in one line.
-2. Overview: a short description a new reader needs before the rules.
+   - Governs: the parts of the system the document covers, in one line. It says "not set" until the document gets its first rule or term.
+2. Overview: a short description a new reader needs before the rules. It says "Not written yet." until the document gets its first rule or term.
 3. Content: the rules. In `glossary.md`, the table of terms.
-4. Open questions: DEC-### links only. The question's text lives in `DECISIONS.md`.
+4. Open questions: DEC-### links only. The question's text is in `DECISIONS.md`.
 5. Changelog: one row per change, with the date, the change, the DEC, and the work item.
+
+Write Governs and the Overview in the same edit as the document's first rule or term.
 
 What each Status means:
 
@@ -68,7 +70,8 @@ What each mark means:
 ## A glossary term
 
 - One row per term: Term, System or context, Meaning here, Distinction or alias, Source, Last checked.
-- Source is the owner's words with the date, a DEC-###, or an SRC-###. Never infer a definition from a similar word.
+- Source is the owner's words with the date, or a DEC-###. Add the SRC-### when the meaning came from an original.
+- A meaning that only an original gives, or that you worked out, is not a term yet: the owner confirms it first. Never infer a definition from a similar word.
 - A word that two systems use differently gets two rows.
 - A renamed term gets a row under "Naming changes": the old term, the preferred term, the reason, the source, and the date.
 
@@ -77,9 +80,16 @@ What each mark means:
 - Copy `integrations/INTEGRATION-TEMPLATE.md` to `integrations/<system-name>.md`, with the name in lowercase words joined by hyphens.
 - Add its row to `integrations/README.md` in the same edit, and keep the row's Status and rule IDs equal to the document's.
 
+## A diagram
+
+- Save a diagram in `diagrams/`, named for what it shows, in lowercase words joined by hyphens.
+- Link it from the document it explains, in that document's Overview or beside the rule it shows.
+- A diagram shows only what the rules of its document say. When the two differ, the rules are right: correct the diagram.
+- A diagram has no rule ID and needs no decision. Add a Changelog row to the document it explains, with "none" in the DEC cell.
+
 ## What must stay true
 
-- A rule is added, changed, or retired only because of a decision. Write that DEC-### in the rule's Source and in "Last changed via", and add a Changelog row.
+- A rule is added, changed, or retired only because of a decision. The rule's Source, the document's "Last changed via", and the Changelog row of the change name that DEC-###.
 - One work item's proposal stays in that item's design. It comes here only when more than one work item depends on it, as a Draft rule.
 - This folder describes the system the owner approved. What exists today, before this project's changes, goes in `reference/current-system/`.
 - Name work items, decisions, and sources by ID. Never copy their text into a document.
@@ -89,7 +99,7 @@ What each mark means:
 
 | Change | Use |
 | --- | --- |
-| Add, change, or retire a rule; add or correct a term; add an integration document or a diagram | `filing-project-records`, step "update a system document" |
+| Add, change, or retire a rule; add or correct a term; add or change an integration document or a diagram | `filing-project-records`, step "update a system document" |
 | A question about a rule, or the decision that approves it | `filing-project-records`, step "record a decision" |
 | Mark a rule Built, when the closing step of `running-work-item-lifecycle` asks what the work item changed | `filing-project-records`, step "update a system document" |
 | Commit the change to the default branch | `publish-docs` |

@@ -133,5 +133,5 @@ Only when the owner asks.
 
 ## Links and Obsidian
 
-- The whole project folder is the Obsidian vault. `[[WI-031]]` links to the file `WI-031.md`, wherever its folder sits.
+- The whole project folder is the Obsidian vault. `[[WI-031]]` links to the file `WI-031.md`, wherever its folder sits. The link works with Obsidian's **Use `[[Wikilinks]]`** setting off, which the project's `README.md` asks for.
 - Examples written in backticks are not links. Write real links without backticks.

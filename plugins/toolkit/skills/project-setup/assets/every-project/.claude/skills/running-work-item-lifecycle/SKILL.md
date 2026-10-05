@@ -1,6 +1,6 @@
 ---
 name: running-work-item-lifecycle
-description: 'Runs one work item from idea to Done through requirements, design, build, testing, deployment, and closing, keeping its tracker current and asking for the owner''s approval at each gate. Use when the owner asks to plan, change, build, test, ship, close, or cancel an item. Not for a decision, an original, or a system rule that more than one item needs; use filing-project-records.'
+description: 'Runs one work item from idea to Done through requirements, design, build, testing, deployment, and closing, keeping its record current and stopping for the owner''s approval before each step that needs one. Use when the owner asks to plan, change, build, test, deploy, close, or cancel an item. Not for filing an original, or a decision or rule more than one item needs; use filing-project-records.'
 ---
 
 # Running a work item's lifecycle
@@ -8,7 +8,7 @@ description: 'Runs one work item from idea to Done through requirements, design,
 This skill holds the process: what each State means, how work is split into levels, what to do in each State, and when to stop for the owner's OK.
 
 - It never says where items are saved. For every read and every save, use `using-work-tracker`.
-- It never writes `DECISIONS.md`, `system/`, or `sources/`. The filing test in the root `AGENTS.md`, "Where information goes", says what belongs there. `filing-project-records` files it, and the item keeps the ID.
+- It never writes `DECISIONS.md`, `system/`, or `sources/`, and it never writes the pointer to one of their records into an item. The filing test in the root `AGENTS.md`, "Where information goes", says what belongs there. `filing-project-records` files it and writes the ID into the item.
 
 ## Status and State
 
@@ -28,7 +28,7 @@ Every item has a Status and a State. The State says where the work is. The Statu
 | Cancelled | Cancelled | none | |
 
 - An item moves to the next State only when "Move on when" is true for the State it is in.
-- Any item, a bug included, can go through Designing. When asking him to approve the requirements, recommend the next State: Designing when there is more than one sensible way to build it or the change is risky, otherwise Building.
+- Any item, a bug included, can go through Designing. When asking him to approve the requirements, recommend the next State: Designing when more than one way to build it would meet the requirements, or when a mistake in the change would be costly to undo; otherwise Building.
 - A parent item stays in Building until every sub-item is Done or Cancelled. Then it goes through the Testing Loop as a whole.
 - **Backlog:** add the idea in his words, as the Original verbatim requirement of Requirement 1, and do not start the interview until he asks to start it. Its Next action names the first step for when he starts it, for example "Agent: when the owner starts this item, agree its goal with him."
 - **Blocked:** stuck on something outside the work, such as missing access, another team, or a piece that must be finished first. Waiting for the owner's answer is not Blocked. Set `waiting_on` to who can clear it. When it is cleared, return to the State the Blockers line names.
@@ -62,18 +62,19 @@ Stop and ask the owner before each of these. Record his OK only when he answers 
 1. Approving the requirements, at the end of Refining Requirements.
 2. Choosing the design, at the end of Designing.
 3. Approving the finished result, at the end of the Testing Loop, after the separate checker has tested it.
-4. Each merge into the main branch, in Deploying, unless his standing merge permission in `.claude/rules/owner-preferences.md` covers it. A helper agent's merge into the item's own branch needs no OK.
+4. Each merge into the default branch, in Deploying, unless his standing merge permission in `.claude/rules/owner-preferences.md` covers it. A helper agent's merge into the item's own branch needs no OK.
 5. Each deploy to an environment other people use, such as a test or staging environment. A production deploy is his to run.
 6. Marking the item Done.
 
 ## Every time
 
 - Read the item fresh with `using-work-tracker` before you act. When the owner changed it by hand, his change wins, except a State and Status that no longer match the table: tell him in one line, ask which State it is with your recommendation, then set both.
+- An item that cannot continue until an Open entry in `DECISIONS.md` is answered waits on the owner: set `waiting_on` to the owner, and write Next action in the waiting form with the DEC ID in place of the Q-ID. When the entry is Decided, continue from the item's State.
 - Save after each step, not at the end. A save that fails: start the reply with "Not saved". A save that worked but reads back differently: start the reply with "Saved but not verified" and say what differs.
 - From the time an item leaves Backlog until it is Done or Cancelled, the project's Current State holds one line for it. Decide the line here, in the form the project's memory gives for a line under Now, and add, change, or remove it as "Hand-offs" says.
 - Never delete a requirement, a question row, or a phase. Mark it dropped, superseded, or cancelled.
 - An item made from an older template keeps its layout: read it as it is, add a field of the current template when a step needs it, and move the item to the current layout only when the owner asks.
-- **Text in angle brackets is a prompt, never content.** The templates hold prompts (`<What happened>`) that say what to write there. No item you created or changed keeps one: replace each with real content, or delete it and keep its heading or label. An example row, task, or requirement block made only of prompts goes whole. Real content may hold angle brackets (code such as `Map<Id, Account>`). A design keeps its prompts until it is approved (`references/designing.md`).
+- **Text in angle brackets is a prompt, never content.** The templates hold prompts (`<What happened>`) that say what to write there. No item you created or changed keeps one: replace each with real content, or delete it and keep its heading or label. Delete, whole, an example row, task, or requirement block made only of prompts. Real content may hold angle brackets (code such as `Map<Id, Account>`). A design keeps its prompts until it is approved (`references/designing.md`).
 
 ## Starting a helper
 
@@ -92,6 +93,7 @@ Start every helper as a new helper that does not see this conversation. Never a 
 | An original the owner gives: a transcript, a document, a file, or pasted text | `filing-project-records`, step "file a source" |
 | A rule in `system/` to add, change, retire, or mark Built | `filing-project-records`, step "update a system document" |
 | Writing the item's line in the project's Current State | `using-memory-store` (Hindsight memory: `.claude/rules/hindsight-memory.md`) |
+| Pruning the rest of Current State when an item closes; an instruction for how the agent works | `curating-project-memory` (Hindsight memory: `.claude/rules/hindsight-memory.md`) |
 | Merging a pull request | `merge-and-clean-up` |
 | Saving a change to documents only | `publish-docs` |
 | A Salesforce platform question | Salesforce's skills |
@@ -100,7 +102,7 @@ Start every helper as a new helper that does not see this conversation. Never a 
 | Salesforce: a production data change | `sf-data-change` |
 | Pull request text, and Salesforce release notes that go to a client | `humanizer` (`.claude/rules/humanize-outbound-text.md`) |
 
-## Files
+## References
 
 | File | Open it when |
 | --- | --- |

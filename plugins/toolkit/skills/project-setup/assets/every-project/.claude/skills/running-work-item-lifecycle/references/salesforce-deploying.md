@@ -5,7 +5,7 @@ The detail behind "A deployment" in `deploying.md`, for a Salesforce project. Wh
 ## Before any deploy
 
 - The item's deployment folder and the component tracker must be current. `sf-component-tracker` says what the folder holds and keeps both.
-- Before a deploy to a shared org (UAT, full copy, staging, production), `sf-deploy-check` must find nothing that would ship too early, on the exact deploy set. When it does, stop and tell him which component.
+- Before a deploy to a shared org (UAT, full copy, staging, production), `sf-deploy-check` must find nothing that would be deployed too early, on the exact deploy set. When it does, stop and tell him which component.
 - A permission set in the deploy needs a clean `permsets.py preflight` (`tools/permissions/PERMISSIONS-RUNBOOK.md`).
 
 ## Validate, then deploy
