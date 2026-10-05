@@ -20,7 +20,7 @@ For a decision or an open question that more than one work item needs. The comme
    - A lesson that the closing step of a work item moves up: the owner's yes to moving it up is the decision. The Decision line states the lesson as what to do or what to avoid. Why says what happened and where it was seen, with the work item's ID.
 5. When the entry states how the system must work, it is also a rule: do `update-system-doc.md` now, before the save. An Open entry gets a rule only when more than one work item depends on the rule.
 6. Save `DECISIONS.md`, `sources/README.md` when step 4 changed it, and every system document step 5 changed, in one save with `publish-docs`.
-7. Once the main checkout holds the save (`SKILL.md`, "Every time"), add the pointer in each work item under Affects with `using-work-tracker`: the DEC ID, and the ID of each rule that step 5 added or changed, on the item's Related items line.
+7. When `SKILL.md`, "Every time", says the pointer can be written, add it in each work item under Affects with `using-work-tracker`: the DEC ID, and the ID of each rule that step 5 added or changed, on the item's Related items line.
    - A Questions and Answers row in an item raised the decision: add "Filed as DEC-###." to the end of that row. The row keeps the owner's words.
    - An Open entry that a work item cannot continue without: that item waits on the owner. Hand it to `running-work-item-lifecycle`.
    - An Open entry that no work item waits on: hand a line for "Waiting on the owner" in Current State, with the DEC ID, to `curating-project-memory` (Hindsight memory: `.claude/rules/hindsight-memory.md`).

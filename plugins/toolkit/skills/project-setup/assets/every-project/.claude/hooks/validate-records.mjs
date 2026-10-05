@@ -27,6 +27,8 @@ const add = (file, line, ...t) => found.push({ file, line, text: t.join(' ').sli
 // A record made of two files is whole only after two edits, so it waits for the stop or commit.
 const pair = (...finding) => mode !== 'edit' && add(...finding);
 const read = (path) => (existsSync(path) ? readFileSync(path, 'utf8') : ''); // missing: empty
+const fail = (error, where = '') => console.error(`The record check did not run${where}.`
+  + ` Its own error: ${String(error).split('\n')[0]}`);
 const real = (path) => { try { return realpathSync(path); } catch { return path; } };
 function list(d) { try { return readdirSync(d, { withFileTypes: true }); } catch { return []; } }
 // The text of a comment is not checked. Its lines stay, so line numbers hold.
@@ -52,8 +54,7 @@ function check(top, main) {
   const scan = [[D, decRows, true]]; // [file, lines, look for prompts]: for checks 9 and 10
   const itemScan = [[D, decRows, 1]]; // [file, lines, first line number]: for check 15
   // Checks 1 and 2: the entries of DECISIONS.md.
-  const dec = new Map();
-  const entries = blocks(decRows, /^## (DEC-\d+)\b/);
+  const [dec, entries] = [new Map(), blocks(decRows, /^## (DEC-\d+)\b/)];
   let last = 0;
   for (const e of entries) {
     const n = Number(e.id.slice(4));
@@ -135,8 +136,7 @@ function check(top, main) {
     itemScan.push(...section('Changelog').map(([row, line]) => [file, [row], line]));
   }
   // Check 7: the list of sources against the files in sources/.
-  const src = new Map();
-  const srcRows = lines(read(join(top, S)));
+  const [src, srcRows] = [new Map(), lines(read(join(top, S)))];
   srcRows.forEach((row, i) => {
     const cells = row.split(/(?<!\\)\|/).map((cell) => cell.trim());
     const id = cells[1]?.match(/^SRC-\d+$/)?.[0];
@@ -260,20 +260,20 @@ try {
   const far = mode !== 'staged' && top !== main;
   check(top, mode === 'staged' ? null : main);
   const here = found.splice(0).filter(({ file }) => !far || !local(file));
-  if (far) check(main, main);
+  let lost; // an error of this second check must not lose the findings of the first
+  try { if (far) check(main, main); } catch (error) { lost = error; }
   const all = [...here, ...found.filter(({ file }) => local(file))].filter(({ file }) => mode
     !== 'edit' || groups.includes(local(file) ? 'local' : 'tracked'))
     .map(({ file, line, text: what }) => `${file}${line ? `:${line}` : ''}: ${what}`);
-  if (!all.length) process.exit(0);
+  if (!all.length && !lost) process.exit(0);
   // In Codex this text replaces the result of the edit, so it says the edit was not undone.
-  const out = [`The record check found problems: ${all.length}.${{ edit: ' The edit was not'
-    + ' undone.', staged: ' The commit was stopped.' }[mode] ?? ''} Fix each one. Tell the owner of`
-    + ' any you cannot fix.'];
+  const out = !all.length ? [] : [`The record check found problems: ${all.length}.${{ edit:
+    ' The edit was not undone.', staged: ' The commit was stopped.' }[mode] ?? ''} Fix each one.`
+    + ' Tell the owner of any you cannot fix.'];
   // Hosts cut long hook output, so the list stays under about 2,000 characters.
   while (all.length && out.join('\n').length + all[0].length < 1850) out.push(all.shift());
   if (all.length) out.push(`${all.length} more are not shown. Fix these first.`);
-  console.error(out.join('\n')); // console.error ignores a reader that closed the output
-  process.exitCode = 2;
-} catch (error) {
-  console.error(`The record check did not run. Its own error: ${String(error).split('\n')[0]}`);
-}
+  if (out.length) process.exitCode = 2;
+  if (out.length) console.error(out.join('\n')); // it ignores a reader that closed the output
+  if (lost) fail(lost, ' in the main checkout');
+} catch (error) { fail(error); }

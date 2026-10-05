@@ -9,9 +9,9 @@
 import { readFileSync } from 'node:fs';
 
 // A question stays quiet: a sentence that ends in "?", and "remind me what we decided". A request
-// phrased as a question, such as "can you ...?" or "from now on ...?", is not dropped.
+// phrased as a question, such as "can you ...?", "from now on ...?", or "always ...?", is kept.
 const QUESTION = new RegExp('(?<![^.!?\\n])(?![^.!?\\n]*\\b(?:(?:can|could|will|would) you|please'
-  + '|from now on|going forward)\\b)[^.!?\\n]*\\?(?=\\s|$)', 'gi');
+  + '|from now on|going forward|always|never)\\b)[^.!?\\n]*\\?(?=\\s|$)', 'gi');
 const ASKED = '(?<!\\b(?:remind me|tell me|explain|recall|remember|forgot|know|is that|was that)'
   + ' what )(?<!\\b(?:how|when|why) )';
 // Eleven phrase groups for something to keep, then the decision phrases.

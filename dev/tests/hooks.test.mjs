@@ -444,9 +444,9 @@ test('prompt-reminder: a plain question or a statement about a habit gets no kee
 });
 
 test('prompt-reminder: a request phrased as a question gets the keep hint; a plain question does not', () => {
-  const asked = [['From now on, can you always ask before you merge?', 'standing instruction'], ['Can you remember that the sandbox resets on Fridays?', 'remember'], ['Could you forget the old vendor name?', 'forget'], ['Please never use tabs, ok?', 'standing instruction'], ['It works. Going forward, should every deploy wait for my yes?', 'standing instruction']];
+  const asked = [['From now on, can you always ask before you merge?', 'standing instruction'], ['Can you remember that the sandbox resets on Fridays?', 'remember'], ['Could you forget the old vendor name?', 'forget'], ['Please never use tabs, ok?', 'standing instruction'], ['It works. Going forward, should every deploy wait for my yes?', 'standing instruction'], ['Always ask before you merge, ok?', 'standing instruction'], ['Never use tabs here, right?', 'standing instruction']];
   for (const [prompt, label] of asked) assert.match(reminder({ prompt }).out, new RegExp(`^This may be something to keep \\(${label}\\)\\.`), prompt);
-  for (const prompt of ['Do you remember the name of the flow?', 'Can you tell me what we decided on WI-002?', 'Could you explain why we decided to merge the personas?', 'Did the deploy finish? What is left?', 'Can you build the login page?']) assert.equal(reminder({ prompt }).out, '', prompt);
+  for (const prompt of ['Do you remember the name of the flow?', 'Can you tell me what we decided on WI-002?', 'Could you explain why we decided to merge the personas?', 'Did the deploy finish? What is left?', 'Can you build the login page?', 'Do we always use the sandbox first?', 'Did it never finish?']) assert.equal(reminder({ prompt }).out, '', prompt);
   // The rule is one list of request words, so a request for work that holds a keep phrase also gets the hint.
   assert.match(reminder({ prompt: 'Can you find the root cause?' }).out, /\(lesson\)/);
 });

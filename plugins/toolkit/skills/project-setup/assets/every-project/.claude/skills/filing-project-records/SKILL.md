@@ -23,11 +23,16 @@ Open the one file for the step. One message can need more than one step: do them
 ## Every time
 
 - The form of each record is in its home, never in this skill: the comment at the top of `DECISIONS.md`, `sources/AGENTS.md`, and `system/AGENTS.md`. Read the home's form in this turn before you write.
+- A session whose folder is not the main checkout reads and writes `DECISIONS.md`, `sources/`, and `system/` only in the save worktree that `publish-docs` makes from the default branch, never in its own worktree: its own branch can lack records the default branch holds. When no save worktree is there, do steps 1 to 3 of `publish-docs` before you read or write a record. Where a step says to save, go on from step 4 of `publish-docs`.
 - Read the file you will change fresh, right before the change. The owner edits these files by hand, and another session may have published a change.
 - Search before you add. A record that already covers the subject is changed, never copied.
-- An ID is yours only when its save is on the default branch. Save right after you write the record. Write a pointer to the record only after `publish-docs` reports that the main checkout holds the save: the record check looks the ID up there. When it reports that the main checkout does not hold it, write no pointer: tell the owner the ID, each work item that needs the pointer, and what `publish-docs` named as in the way. When `publish-docs` finds that another session's save took the same ID, take the next ID, change it in your record and in the file name of an original, then save again.
+- An ID is yours only when its save is on the default branch. Save right after you write the record. When `publish-docs` finds that another session's save took the same ID, take the next ID, change it in your record and in the file name of an original, then save again.
+- When to write a pointer to the record:
+  - Work items in Notion or GitHub: once the save is on the default branch.
+  - Local work items: only after `publish-docs` reports that the main checkout holds the save. The record check looks the ID up there.
+  - Local work items, and `publish-docs` reports that the main checkout does not hold the save: write no pointer. Hand one line for "Waiting on the owner" in Current State to `curating-project-memory` (Hindsight memory: `.claude/rules/hindsight-memory.md`): the ID, each work item that needs the pointer, and what `publish-docs` named as blocking the update. Tell the owner the same. When the main checkout's files hold the record, write each pointer, and hand the removal of that line to the same skill.
 - A pointer in a work item is the record's ID, in the place the work item template gives it: a DEC ID or a rule ID on the item's Related items line, an SRC ID on a line under Notes, Sources. Never copy the record's text into the item. Only this skill writes these pointers, with `using-work-tracker`.
-- When another skill asked for the step, give it each new ID when the save is done.
+- When another skill asked for the step, give it each new ID when the save is done, and what `publish-docs` reported about the main checkout.
 - Read each changed file and each pointer back. A save that failed: start the reply with "Not saved", and name the write.
 
 ## Hand-offs

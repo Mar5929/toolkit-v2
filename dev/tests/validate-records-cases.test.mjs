@@ -1,5 +1,6 @@
 // More tests for validate-records.mjs: the cases the second review found (2026-10-05, TKV-24).
 // Run from the repository root: node --test dev/tests/validate-records-cases.test.mjs
+// The last two tests are from the review of the second round of fixes (blocker and note 8).
 // The first file, validate-records.test.mjs, is at its size limit, so new cases go here.
 // Every run works in a temporary folder. HOME points there, so nothing else on this Mac changes.
 import { test } from 'node:test';
@@ -186,4 +187,56 @@ test('notes 25 and 36: the first line says what happened in each mode, with no "
   // In Codex, exit code 2 after apply_patch replaces the tool result with this text (codex/hooks.md, "PostToolUse").
   assert.equal(first(edit(dir, 'DECISIONS.md')), 'The record check found problems: 1. The edit was not undone. Fix each one. Tell the owner of any you cannot fix.');
   for (const result of [run(dir, ['--all']), run(dir, [], 'not json')]) assert.doesNotMatch(result.err, /\(s\)|validate-records\.mjs/);
+});
+
+test('review of the second fixes, blocker: a worktree session writes a record in the save worktree, which holds the default branch\'s records', () => {
+  const dir = project();
+  const session = join(dir, '.claude/worktrees/task');
+  git(dir, 'worktree', 'add', '-q', session, '-b', 'claude/task');
+  // A source filed after the session's branch was made: the default branch has it, the session's branch does not.
+  change(dir, 'sources/README.md', /No sources yet.*\n/, '| SRC-001 | 2026-10-01 | The client | Kickoff notes | [SRC-001-kickoff-notes.md](SRC-001-kickoff-notes.md) | none yet |\n');
+  put(dir, 'sources/SRC-001-kickoff-notes.md', 'Notes.\n');
+  git(dir, 'add', '--', 'sources');
+  git(dir, 'commit', '-q', '-m', 'File SRC-001');
+  const tree = join(dir, '.claude/worktrees/docsave-dec-002'); // what publish-docs, step 3, makes
+  git(dir, 'worktree', 'add', '-q', '--detach', tree, 'main');
+  const decision = entry('DEC-002').replace('Sources: none', 'Sources: SRC-001');
+  const edited = (file) => run(session, [], { cwd: session, hook_event_name: 'PostToolUse', tool_name: 'Edit', tool_input: { file_path: file } }, session);
+  add(tree, 'DECISIONS.md', decision);
+  clean(edited(join(tree, 'DECISIONS.md')), 'after the edit in the save worktree');
+  git(tree, 'add', '--', 'DECISIONS.md');
+  clean(run(tree, ['--staged'], '', tree), 'before the commit in the save worktree');
+  clean(run(session, ['--all'], { cwd: session, hook_event_name: 'Stop' }, session), 'at stop in the session worktree');
+  // The same entry written in the session's own worktree is checked against its branch, which has no SRC-001.
+  add(session, 'DECISIONS.md', decision);
+  assert.match(edited(join(session, 'DECISIONS.md')).err, /SRC-001 is written here, but sources\/README\.md has no SRC-001/);
+  // An ID that no record defines is still reported in the save worktree.
+  change(tree, 'DECISIONS.md', 'Sources: SRC-001', 'Sources: SRC-001, SRC-044');
+  const missing = edited(join(tree, 'DECISIONS.md'));
+  assert.match(missing.err, /^DECISIONS\.md:\d+: SRC-044 is written here/m);
+  assert.doesNotMatch(missing.err, /SRC-001 is written/);
+});
+
+test('review of the second fixes, note 8: in a worktree session, a record of the main checkout that cannot be read does not lose the findings of the session\'s own checkout', { skip: process.getuid?.() === 0 }, () => {
+  const dir = project();
+  const session = join(dir, '.claude/worktrees/task');
+  git(dir, 'worktree', 'add', '-q', session, '-b', 'claude/task');
+  change(session, 'DECISIONS.md', 'Status: Decided', 'Status: Approved');
+  chmodSync(join(dir, 'DECISIONS.md'), 0o000);
+  const stop = () => run(session, ['--all'], { cwd: session, hook_event_name: 'Stop' }, session);
+  const lost = /The record check did not run in the main checkout\. Its own error: Error: EACCES[^\n]*\n$/;
+  const both = stop();
+  assert.equal(both.code, 2, both.err);
+  assert.match(both.err, /^The record check found problems: 1\. Fix each one\./);
+  assert.match(both.err, /\nDECISIONS\.md:\d+: DEC-001 has Status "Approved"\./, 'the finding of the session\'s own checkout is kept');
+  assert.match(both.err, lost, 'then the one line for the main checkout');
+  assert.equal(edit(session, 'DECISIONS.md').code, 2, 'the same after an edit');
+  // With no finding in the session's own checkout: only the one line, and exit code 0.
+  change(session, 'DECISIONS.md', 'Status: Approved', 'Status: Decided');
+  const one = stop();
+  assert.equal(one.code, 0);
+  assert.equal(one.err.split('\n').length, 2, one.err);
+  assert.match(one.err, new RegExp(`^${lost.source}`));
+  chmodSync(join(dir, 'DECISIONS.md'), 0o644);
+  clean(stop(), 'readable again');
 });

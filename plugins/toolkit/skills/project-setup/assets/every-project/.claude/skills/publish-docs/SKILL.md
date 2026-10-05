@@ -96,8 +96,8 @@ never depends on the current folder.
      `origin/<default>`. With no remote:
      `git -C <main> branch --contains <commit id>` must list the default
      branch.
-   - With a remote: bring the main checkout up to date ("The main checkout",
-     below). With no remote, the fast-forward in step 7 did it.
+   - Find out whether the main checkout holds the save, and with a remote
+     bring it up to date ("The main checkout", below).
    - When no other save of the same files is pending in this conversation,
      remove the save worktree:
      `git -C <main> worktree remove .claude/worktrees/docsave-<short-slug>`.
@@ -139,18 +139,31 @@ describes goes in that code's pull request.
 
 ## Carrying an edit across
 
-When this session already edited a document in its working checkout, copy each
-edited file to the same path in the save worktree, stage it, and run the
-step 5 checks. Then remove this session's own copy from the working checkout,
-only for files this session edited or created:
-`git -C <working checkout> restore -- <file>` for a changed file, `rm` for a
-new one.
+When this session already edited a document in its working checkout, check
+each edited file before you copy it. `<save commit>` is what
+`git -C <save> rev-parse HEAD` prints before step 6:
 
-- With a remote: do it after step 8 verifies the save, before the main
+```text
+git -C <working checkout> diff --quiet HEAD <save commit> -- <file>
+```
+
+- Exit code 0: the working checkout started from the version the save
+  worktree has. Copy the edited file to the same path in the save worktree.
+- Exit code 1: the two versions differ. Never copy the file: the copy would
+  remove what the default branch has and the working checkout lacks. Make
+  the same change by hand in the save worktree's file.
+  `git -C <working checkout> diff HEAD -- <file>` shows the change.
+
+Stage each file, and run the step 5 checks. Then remove this session's own
+copy from the working checkout, only for files this session edited or
+created: `git -C <working checkout> restore -- <file>` for a changed file,
+`rm` for a new one.
+
+- With a remote: remove it after step 8 verifies the save, before the main
   checkout is brought up to date. The published version comes back with that
   update, or with the next `pull-latest` when the working checkout is another
   worktree.
-- With no remote: do it before step 7, once the copy is staged. Git refuses
+- With no remote: remove it before step 7, once the file is staged. Git refuses
   the fast-forward while the main checkout holds a changed copy of a saved
   file, or an untracked copy of a new one.
 
@@ -158,26 +171,33 @@ Never discard another session's changes.
 
 ## The main checkout
 
-A save pushed to a remote is not in the main checkout yet. Work items and
-the record check (`.claude/hooks/validate-records.mjs`) look up a record's ID
-there, so move the main checkout's default branch forward after step 8
-verifies the save. Fast-forward only: never merge, rebase, reset, or switch
-branches there.
+Local work items and the record check
+(`.claude/hooks/validate-records.mjs`) look up a record's ID in the main
+checkout, so the report says whether the main checkout holds the save.
+
+With no remote, the main checkout holds the save when step 7 ran the
+fast-forward in the main checkout. When step 7 ran it in another checkout, or
+ran `git push . HEAD:<default>`, the main checkout is on another branch and
+does not hold the save: change nothing there.
+
+With a remote, a pushed save is not in the main checkout yet. After step 8
+verifies the save, move the main checkout's default branch forward.
+Fast-forward only: never merge, rebase, reset, or switch branches there.
 
 1. `git -C <main> branch --show-current` prints `<default>`. It prints
    another branch: change nothing.
 2. The merge-safety check: `git -C <main> diff --name-only HEAD origin/<default>`
    lists the files the update changes, and `git -C <main> status --porcelain`
-   lists the files with uncommitted changes. A file in both lists is in the
-   way. This session's own copy of a saved file: remove it as "Carrying an
+   lists the files with uncommitted changes. A file in both lists blocks the
+   update. This session's own copy of a saved file: remove it as "Carrying an
    edit across" says. Any other file: change nothing.
-3. No file is in the way: `git -C <main> merge --ff-only origin/<default>`.
+3. No file blocks the update: `git -C <main> merge --ff-only origin/<default>`.
    Git refuses: change nothing.
 
-When the main checkout was not updated, the save is still finished. Say so in
-the report in one line: "The main checkout does not hold this save yet", then
-the branch it is on, the files in the way, or Git's message. Tell the skill
-that started the save.
+When the main checkout does not hold the save, the save is still finished.
+Say so in the report in one line: "The main checkout does not hold this save
+yet", then what blocks the update: the branch the main checkout is on, the
+files that block it, or Git's message. Tell the skill that started the save.
 
 ## Hand-offs
 

@@ -46,8 +46,9 @@ Did this item change `system/` or `DECISIONS.md`?
    - a delivered rule: step "update a system document", to set its mark to Built with this item's ID;
    - a lesson that moves up, about the system or the project: step "record a decision";
    - a lesson that moves up, about how the agent works: hand it to `curating-project-memory`, which writes the line in `.claude/rules/owner-preferences.md` (Hindsight memory: `.claude/rules/hindsight-memory.md`).
-4. **Write each lesson's outcome** at the end of its line: "Moved up: DEC-021.", "Moved up: owner-preferences.md.", or "Dropped (Q-12)."
-5. **Fill Moved up:** every entry in `DECISIONS.md` and every rule in `system/` that this item added or changed, by ID, with what happened to it. Include the ones filed before this step (rows that end "Filed as DEC-###"). When there are none: "Nothing: <the reason>." Write an ID on the line only after `filing-project-records` reports that the main checkout holds its save. When it reports that the main checkout does not hold it, stop here and tell the owner what it reported. Add a Recent History row that names the Q-ID, or says that no question was needed.
+4. **Local work items only: check that the main checkout holds each save.** With each ID, `filing-project-records` reports whether the main checkout holds its save. Steps 5 and 6 write those IDs into the item, and the record check looks each one up in the main checkout. When the main checkout does not hold a save: stop here, and tell the owner what was reported. `filing-project-records` records in Current State that the pointer is still to be written. Go on from this step when the main checkout holds the save.
+5. **Write each lesson's outcome** at the end of its line: "Moved up: DEC-021.", "Moved up: owner-preferences.md.", or "Dropped (Q-12)."
+6. **Fill Moved up:** every entry in `DECISIONS.md` and every rule in `system/` that this item added or changed, by ID, with what happened to it. Include the ones filed before this step (rows that end "Filed as DEC-###"). When there are none: "Nothing: <the reason>." Add a Recent History row that names the Q-ID, or says that no question was needed.
 
 ## Marking Done
 
