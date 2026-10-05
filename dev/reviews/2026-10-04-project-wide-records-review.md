@@ -1,6 +1,6 @@
 # Project-wide records review, 2026-10-04
 
-Scope: the new `filing-project-records` skill and its references, templates, and example; changed work-item, handoff, publish, setup, skill-index, and README text; and the model routes and templates. This is a manual description and text review. It is not a live Claude Code or Codex routing test.
+Scope: the new `managing-project-wide-records` skill and its references, templates, and example; changed work-item, handoff, publish, setup, skill-index, and README text; and the model routes and templates. This is a manual description and text review. It is not a live Claude Code or Codex routing test.
 
 ## Wording and platform checks
 
@@ -11,7 +11,7 @@ Scope: the new `filing-project-records` skill and its references, templates, and
 
 ## Forty request routing audit
 
-Abbreviations: **W** `running-work-item-lifecycle`; **P** `filing-project-records`; **T** `using-work-tracker`; **M** `curating-project-memory` (or the root `AGENTS.md` Hindsight route); **H** `handoff`; **D** `publish-docs`; **B** `braindump`; **S** `session-summary`; **U** `project-setup`. A plus sign means the skills have different jobs in one request, in the order shown. `T` is used by `W` for tracker reads and writes; it is listed separately only for a direct lookup or save request.
+Abbreviations: **W** `managing-work-items`; **P** `managing-project-wide-records`; **T** `tracking-work-items`; **M** `managing-project-memory` (or the root `AGENTS.md` Hindsight route); **H** `handoff`; **D** `publish-docs`; **B** `braindump`; **S** `session-summary`; **U** `project-setup`. A plus sign means the skills have different jobs in one request, in the order shown. `T` is used by `W` for tracker reads and writes; it is listed separately only for a direct lookup or save request.
 
 | # | Request in the owner's likely words | Descriptions that may match | Route and boundary |
 | --- | --- | --- | --- |
