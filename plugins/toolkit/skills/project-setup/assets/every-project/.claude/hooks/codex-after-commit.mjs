@@ -5,9 +5,10 @@ import { readFileSync } from 'node:fs';
 
 // "git commit", also with options before "commit", such as "git -C <folder> commit".
 const GIT_COMMIT = /\bgit(?:\s+(?:-[cC]\s+[^\s-]\S*|-[\w-]+(?:=\S+)?))*\s+commit(?:\s|$)/;
-const additionalContext = 'A git commit was just run. In this project, a commit that worked is'
-  + " followed by an update of the work item's Recent History and status with"
-  + ' running-work-item-lifecycle, and of Current State when it changed.';
+// The hook does not see whether the commit succeeded: Codex also runs it after a failed command.
+const additionalContext = 'A git commit command just ran. If the commit succeeded, update the work'
+  + " item's Recent History and status with running-work-item-lifecycle, and the item's line in"
+  + " the project's Current State when that line changed.";
 try {
   const input = JSON.parse(readFileSync(0, 'utf8'));
   const command = [input.tool_input?.command ?? ''].flat().join(' ');
