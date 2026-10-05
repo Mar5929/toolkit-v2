@@ -81,7 +81,7 @@ Do these in order.
   | --- | --- |
   | Old work items in local folders (`old-toolkit-pieces.md`, "Old records") | Work items in local folders, with the ID prefix the old items use |
   | A root `AGENTS.md` that names GitHub Issues or a GitHub project board as its tracker | Work items in GitHub Issues |
-  | `knowledge/memory/` | Local memory. Tell him before he answers: the old memory was committed to Git, so it reached his other computers; Toolkit V2 local memory is Git-ignored and stays on this computer. Memory in Notion or Hindsight is readable from every computer. |
+  | `knowledge/memory/` | Local memory. Tell him before he answers: the old memory was committed to Git, so it reached his other computers. In Toolkit V2 the decisions, the description of the system, and the terms are files Git tracks, with every memory choice. Local memory holds only Current State and pointers, is Git-ignored, and stays on this computer. Memory in Notion or Hindsight is readable from every computer. |
   | `.toolkit-memory.json` that names `hindsight` | Hindsight memory |
   | `.toolkit-memory.json` that names another service | Tell him Toolkit V2 does not offer that service, and ask question 3 |
   | `SOUL.md` | Yes: his file stays as it is |
@@ -91,11 +91,16 @@ Do these in order.
 
 ## 2. Read what the project holds
 
-Look for existing architecture, stakeholder, shared-question, and
-source-intake locations. In the list below, name each location and which
-of the five `project-wide-records/` types it might serve. Keep the old
-records in place until the owner chooses a move; do not create a second
-authoritative copy during move-over.
+Look for the places where the project keeps decisions, requirements, a
+description of the system, originals it received, and outside
+documentation. Each one gets a line in the list that says which Toolkit V2
+home its content goes to: `DECISIONS.md`, `system/`, `sources/`,
+`delivery/`, or `reference/` (`old-toolkit-pieces.md`, "Old records" and
+the two mapping sections). A project that an earlier Toolkit V2 setup
+touched may hold `project-wide-records/`, `requirements/`, `system-guide/`,
+or `ai-external-knowledge/`: sort those with the table in `update.md`,
+"Where each old piece goes". Keep every old record in place until the owner
+says yes to its line.
 
 Every command here only reads. Run each alone, from the main checkout.
 
@@ -129,7 +134,7 @@ copy goes under exactly one line of the list. Use the first row that fits:
 | The piece | Part of the list |
 | --- | --- |
 | A file of the setup copy that the project lacks | Add |
-| An old record (`old-toolkit-pieces.md`, "Old records") | One Update line per kind (step 6): the count for each status, how many are carried over, and that the old folder stays as it is. No "Kept untouched" line. |
+| An old record (`old-toolkit-pieces.md`, "Old records") | One Update line per kind (step 6): the count for each status, how many are carried over, the Toolkit V2 home they go to, and that the old folder stays as it is. No "Kept untouched" line. |
 | A piece `old-toolkit-pieces.md` marks Delete | Delete |
 | A piece `old-toolkit-pieces.md` marks Carry | Update: the line names where his words go |
 | A piece `old-toolkit-pieces.md` marks Compare, and it is an unchanged copy | Delete when Toolkit V2 has nothing of that name; Update ("replaced by the Toolkit V2 version") when the setup copy holds a file of that name |
@@ -256,15 +261,16 @@ it is in place.
 
 ## 6. Carry over the old records
 
-The old records stay where they are, unchanged, except as points 5 and 7
+The old records stay where they are, unchanged, except as points 6 and 8
 below say. A carry-over writes a new record in the Toolkit V2 form.
 
 1. What the list offers by default:
    - work items that are not Done or Cancelled, archived ones included;
    - with local folders, also the old item with the highest number,
      whatever its status, so new IDs continue above every old ID;
-   - memory topic files whose status is `current` or not set, and the
-     glossary.
+   - what the old memory holds that is still true: topic files whose
+     status is `current` or not set, and the glossary. Each fact goes to
+     its Toolkit V2 home, never into `memory/`.
 
    Finished work items and superseded or retired memory stay where they
    are. He may change any of this on the list.
@@ -276,27 +282,32 @@ below say. A carry-over writes a new record in the Toolkit V2 form.
    way." After his yes, do the rest. For a move-over, this takes the place
    of the preview of every record in `update.md`, "Changing a setup
    choice".
-4. Do the same for memory, with "Old memory to Toolkit V2 memory": the
-   first record, his yes, then the rest. Each record's source line reads
-   "Carried over from `<its old path>`", once for each old file whose
-   facts it holds.
-5. Old records that already sit where the new ones go (issues in the same
+4. Do the same for the old memory, with "Old memory to its Toolkit V2
+   home": the first record, his yes, then the rest. Each new record names
+   where it came from, "Carried over from `<its old path>`", as
+   `update.md`, "Where each old piece goes", says.
+5. A record that goes into a file Git tracks (`DECISIONS.md`, `system/`,
+   `sources/`, `PROJECT.md`) is written in your worktree. A line in a work
+   item or in memory that names such a record by its ID is written in the
+   main checkout after the branch landed (`update.md`, "After his yes",
+   step 8).
+6. Old records that already sit where the new ones go (issues in the same
    GitHub repository, pages in the same Notion database, a root
    `work-items/` or `memory/` folder with files of his) are not copied.
    They are a "Your call" line: recommend bringing each open one to the
    Toolkit V2 form in place, and change nothing in them before he answers
    that line.
-6. Add one line to `PROJECT.md`, under "Work and project records": "Old
+7. Add one line to `PROJECT.md`, under "Work and project records": "Old
    records, kept as history, read only: `<each old folder>`. Current work
    items and memory are under "Toolkit settings"." A folder named there is
    never offered for removal again.
-7. An `AGENTS.md`, `CLAUDE.md`, or `README.md` that the old toolkit wrote
+8. An `AGENTS.md`, `CLAUDE.md`, or `README.md` that the old toolkit wrote
    inside a kept old record folder, and that tells agents to use the old
    toolkit, is an Update line. Its text becomes: "This folder holds old
    records, kept as history, read only. Current work items and memory: see
    "Toolkit settings" in the root `PROJECT.md`." A record is never
    rewritten this way.
-8. Never delete an old record. When he asks later to remove an old folder
+9. Never delete an old record. When he asks later to remove an old folder
    that Git does not track, tell him it cannot be brought back, and remove
    it only after his yes to that exact folder.
 

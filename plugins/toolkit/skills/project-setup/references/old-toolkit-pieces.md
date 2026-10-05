@@ -17,7 +17,7 @@ maps to the Toolkit V2 form. `move-over.md` in this folder uses it in steps
 - Knowledge files that hold no records
 - Old records
 - Old work item to Toolkit V2 work item
-- Old memory to Toolkit V2 memory
+- Old memory to its Toolkit V2 home
 - The retired toolkit program
 
 ## How to read the tables
@@ -87,8 +87,9 @@ that file name; the setup copy holds it only for the choices it applies to.
 | `offer-context-handoff.md` | Compare | `session-handoff.md` |
 | `knowledge-direct-commit.md` | Compare | `publish-project-documents.md` |
 | `work-item-stages.md` | Compare | `keep-work-item-current.md` and the `running-work-item-lifecycle` skill |
-| `work-item-folders.md` | Compare | Same name, only with local work items |
-| `plain-english-artifacts.md`, `humanize-outbound-text.md`, `ai-external-knowledge.md` | Compare | Same name |
+| `work-item-folders.md` | Compare | `work-items/AGENTS.md`, only with local work items |
+| `ai-external-knowledge.md` | Compare | `reference/AGENTS.md` |
+| `plain-english-artifacts.md`, `humanize-outbound-text.md` | Compare | Same name |
 | `dependency-graph.md` | Compare | Same name in a Salesforce project; nothing otherwise |
 | `component-tracker.md`, `permissions-source-control.md` | Compare | Same name (Salesforce) |
 | `salesforce-safety-guardrails.md` | Compare | `salesforce-org-safety.md` |
@@ -96,11 +97,11 @@ that file name; the setup copy holds it only for the choices it applies to.
 | `production-data.md`, `data-change-handoff.md` | Compare | `production-data-changes.md` and the `sf-data-change` skill |
 | `deploy-hitchhiker-check.md` | Compare | `check-deployment-contents.md` |
 | `deployment-runbook.md` | Compare | `record-deployment-steps.md` |
-| `delivery-and-knowledge-boundary.md` | Compare | `project-file-locations.md` |
+| `delivery-and-knowledge-boundary.md` | Compare | `project-file-locations.md` (Salesforce), and "Where information goes" in `AGENTS.md` |
 | `capture-the-thinking.md`, `wrap-up-ritual.md`, `track-open-topics.md`, `spec-before-you-build.md` | Compare | `memory-review-and-save.md`, `keep-work-item-current.md`, and `running-work-item-lifecycle` |
 | `writing-and-language.md`, `how-to-reply.md`, `treat-owner-as-non-technical.md`, `define-your-terms.md` | Compare | The output style named by `outputStyle` in `.claude/settings.json` |
-| `.claude/RULES.md`, `.claude/rules/README.md` (indexes of the rules) | Delete | The rules list in `AGENTS.md` |
-| `.claude/toolkit-sync.md` (what the old sync skill recorded, with the owner's declines) | Carry | Each decision in it that the owner confirms is still true is saved as memory, in step 6. The file is deleted only when every decision in it was saved or he said to drop it; otherwise it is Kept. |
+| `.claude/RULES.md`, `.claude/rules/README.md` (indexes of the rules) | Delete | Nothing: `AGENTS.md` tells Codex to read the rule files |
+| `.claude/toolkit-sync.md` (what the old sync skill recorded, with the owner's declines) | Carry | Each decision in it that the owner confirms is still true goes to its home in step 6: an instruction for the agent to `.claude/rules/owner-preferences.md`, a decision about the project to `DECISIONS.md`. The file is deleted only when every decision in it was saved or he said to drop it; otherwise it is Kept. |
 
 ## Hook commands and their settings entries
 
@@ -143,7 +144,7 @@ says which are removed, added, and kept:
 
 | Old piece | Part | Toolkit V2 has in its place |
 | --- | --- | --- |
-| `.claude/tools/build-knowledge-index.mjs`, `check-knowledge.mjs`, `frontmatter.mjs`, `inspect-knowledge-save.mjs` | Delete | The session-start hook rebuilds the memory index; nothing else is needed |
+| `.claude/tools/build-knowledge-index.mjs`, `check-knowledge.mjs`, `frontmatter.mjs`, `inspect-knowledge-save.mjs` | Delete | Nothing: memory is Current State and a short list of pointers, and no index is built |
 | The Git hook `pre-commit` in this copy's Git hooks folder, when its text names `check-knowledge` | Delete, in the same step as `.claude/tools/` | Nothing. Git does not track it, so each computer's copy of the project has its own: say so on its line |
 | Any other Git hook of this copy (for example a `post-commit` that rebuilds a code graph) | Kept | Nothing |
 | `.claude/skills/sf-component-tracker/`, `sf-data-change/`, `sf-deploy-check/` | Compare | Same names |
@@ -151,7 +152,7 @@ says which are removed, added, and kept:
 | `.claude/output-styles/plain-english.md` | Compare | Same name |
 | `.claude/output-styles/terse.md`, `plain-language.md` | Kept when `outputStyle` names it; otherwise Compare | Nothing |
 | `tools/kb/`, `tools/permissions/` (Salesforce graph and permission set tools) | Compare | Same names |
-| `.system-guide.json`, and the System Guide pages (usually `knowledge/system/`) | Your call | `system-guide/`. The pages are his approved text: recommend keeping them where they are |
+| `.system-guide.json`, and the System Guide pages (usually `knowledge/system/`) | Your call | `system/` and `reference/current-system/`. The pages are his approved text: recommend moving each page to `reference/current-system/<area>.md` with `git mv`, so its text and its Git history stay, and carrying over into `system/` only the rules a work item he can name delivered (`update.md`, "Where each old piece goes", the row for a verified description) |
 | `.toolkit-memory.json` | Delete, after step 6 | "Toolkit settings" in `PROJECT.md` |
 | A folder's own `AGENTS.md` with a `CLAUDE.md` beside it holding `@AGENTS.md` | Kept | Check it for old names (`move-over.md`, step 3) |
 | Root `CLAUDE.md`, root `AGENTS.md`, `README.md`, `.gitignore`, `.mcp.json` | Update | `move-over.md`, step 3 |
@@ -161,10 +162,10 @@ says which are removed, added, and kept:
 | Old file | Part | Toolkit V2 has in its place |
 | --- | --- | --- |
 | `knowledge/knowledge-manual.md`, `knowledge/toolkit-manual.md`, `docs/knowledge-manual.md`, `docs/toolkit-manual.md` | Compare | The skills' own files, `AGENTS.md`, and `PROJECT.md` |
-| `knowledge/README.md` | Compare | `memory/AGENTS.md` |
-| `knowledge/memory/memory-index.md`, `knowledge/prds/prd-index.md` (generated indexes) | Delete, after step 6 | `memory/MEMORY.md`, rebuilt by the session-start hook; `requirements/` |
-| `ai-external-knowledge/README.md` (generated index) | Carry | `ai-external-knowledge/INDEX.md`: one row per topic folder |
-| `.work-items/README.md` | Update | Its text becomes the one line that says the folder is history (`move-over.md`, step 6, point 7) |
+| `knowledge/README.md` | Compare | The project map in `AGENTS.md`, and the folder guides |
+| `knowledge/memory/memory-index.md`, `knowledge/prds/prd-index.md` (generated indexes) | Delete, after step 6 | Nothing: the records they list are in their Toolkit V2 homes |
+| `ai-external-knowledge/README.md` (generated index) | Carry | `reference/outside-docs/INDEX.md`: one row per topic folder |
+| `.work-items/README.md` | Update | Its text becomes the one line that says the folder is history (`move-over.md`, step 6, point 8) |
 | `.work-items/DASHBOARD.md`, `.work-items/.work-tracker.yaml`, `.work-items/ACTIVE.json`, `.work-items/EVENTS.ndjson` | On the old work items' Update line: they stay with the old folder | Nothing |
 
 ## Old records
@@ -183,12 +184,18 @@ steps 3 and 6), except where a row below says Kept or "Your call".
 | Project facts | `knowledge/project.md`; with memory in a service, a root `PROJECT.md` | |
 | Requirements | `knowledge/prds/`, or a root `prds/` | `find knowledge/prds prds -name '*.md' -not -name prd-index.md 2>/dev/null` |
 | Memory in a service | `.toolkit-memory.json` says `"memory": "external"` and names the service | |
-| Other owner files the old toolkit made folders for | `brainstorms/`, the topic folders of `ai-external-knowledge/`, `docs/designs/`, `delivery/` or `engagement/`, `SOUL.md` | Kept; nothing to carry |
+| Outside documentation | The topic folders of `ai-external-knowledge/` | `find ai-external-knowledge -maxdepth 1 -type d` |
+| Delivery records and client files | `delivery/`, with the folders `deployment/`, `data/`, `meeting-notes/`, `references/`, `communications/`, `deliverables/`, and `archive/` | `ls delivery` |
+| Other owner files the old toolkit made folders for | `brainstorms/`, `docs/designs/`, `engagement/`, `SOUL.md` | Kept; nothing to carry |
 
 Read each work item's status from its `- Status:` line (`WORK-ITEM.md`), its
 `status:` line (`ITEM.yaml`), or its `"status"` value (`ITEM.json`), and
 each memory file's `status:` line from its header. The list gives the count
 for each status.
+
+The topic folders of `ai-external-knowledge/` and the old `delivery/`
+folders are renamed, and the client files in them are filed in `sources/`:
+`update.md`, "Where each old piece goes", has the row for each.
 
 A project that already has a root `work-items/` folder from an earlier
 tracker, and whose owner chose local work items: Toolkit V2 uses that same
@@ -214,45 +221,50 @@ earlier files of an item hold the same fields: `ITEM.yaml` or `ITEM.json`
 | Completion approval | `result_approved`, the same way |
 | Delivery choice | `delivery` |
 | Open questions | Questions and Answers rows, Status Open |
-| A recorded decision | An answered Questions and Answers row, with the owner's words and the date as the old item gives them |
+| A recorded decision | An answered Questions and Answers row, with the owner's words and the date as the old item gives them. A decision more than one work item needs is also a `DECISIONS.md` entry, and the row ends "Filed as DEC-###." |
 | Context and notes | Notes, Context |
 | Roadmap (`STAGE-001`, ...) | A top-level item: its phases `P1`, `P2`, ... in the same order. A sub-item has no phases. |
 | Tasks (`TASK-001`, ...) | A top-level item: tasks under their phase. A sub-item: one task list. Each task keeps its old status, objective, deliverable, and acceptance. |
 | Recent History | The ten newest entries become Recent History rows. The rest stay in the old item. |
 | Requirements | The Requirements section, in the layout the project's work item template gives, with the owner's request and each requirement in the old wording. A part the old text does not give is written "Not recorded." |
 | `DESIGN.md` | The item's design |
-| Every other file in the item's folder | A source file of the item |
+| Every other file in the item's folder | An original: filed in `sources/` with an SRC number, and named by that ID on the item's Sources line (`update.md`, "Where each old piece goes", the row for an original inside a work item) |
+| No old field | The `**Moved up:**` line stays empty, and "Lessons not proven yet" holds "None.", in an item that is not Done or Cancelled |
 | Git branch and pull request fields, completion evidence, the schema version | No Toolkit V2 field. Name them on the Update line as not carried over. |
 
 The levels, the task IDs, and the project phase a top-level item goes under
 are in `running-work-item-lifecycle`, "Levels". Add one Recent History row to each
 new item: "Carried over from `<old path>` in the move to Toolkit V2."
 
-## Old memory to Toolkit V2 memory
+## Old memory to its Toolkit V2 home
 
-Save each record with the project's `curating-project-memory` skill. The
-owner's yes to the Update line is his request to keep these records. With
-Hindsight memory, write each as `update.md` says ("Changing a setup
-choice", step 5).
+Toolkit V2 memory holds where work stopped, and pointers. So an old memory
+record is not saved as memory: each fact in it goes to the home that the
+root `AGENTS.md`, "Where information goes", gives it, in the form that home
+gives. The owner's yes to the Update line is his yes to write these
+records. Each new record says "Carried over from `<old path>`".
 
 | Old | Toolkit V2 |
 | --- | --- |
-| A topic file with `status: current` or no `status`, and `type: decision` | A decision record |
-| A topic file with `status: current` or no `status`, and another `type` | Its facts join the concept record for its topic. Files with the same `group` usually share one concept. |
-| A topic file that holds the steps of a job | Not memory in Toolkit V2. "Your call": recommend a document or a project skill of his own. |
+| A topic file with `status: current` or no `status`, and `type: decision` | More than one work item needs it, or none is named: a `DECISIONS.md` entry, Decided, with the person and date the header gives; a header that gives neither: "Your call". One work item needs it: an answered Questions and Answers row in that item. |
+| A topic file with `status: current` or no `status`, and another `type` | Each fact to its home: a fact about the project to `PROJECT.md`; a rule about the system to the matching `system/` document, marked Draft unless a decision that approved it can be found; a term to `system/glossary.md`; a fact with no home: "Your call". |
+| A topic file that holds the steps of a job | Not a record in Toolkit V2. "Your call": recommend a document or a project skill of his own. |
 | A topic file with `status: superseded` or `retired` | Stays where it is |
-| `terminology-glossary.md` | The glossary, one row per term |
-| Header: `summary`, `source`, `work_item`, `approved_by` with `approval_date` | The record's description, source, work item link, and authorization |
-| Header: `updated_at`; when it is missing, `confirmed_at`; when both are missing, `created_at` | The record's updated date |
-| Header: `supersedes`, `superseded_by`, `related_memories` | Links to the carried-over records of those files; a link to a file that was not carried over is left out |
-| Header: `confidence`, `context`, `source_quote`, `effective_from`, `effective_to` | No Toolkit V2 field. Write each one that holds a value as a first line of the record's body. |
-| Header: `tags`, `group`, `project`, `auto_saved` | No Toolkit V2 field. Name them on the Update line as not carried over. |
+| `terminology-glossary.md` | `system/glossary.md`, one row per term |
+| Header: `summary`, `source`, `work_item`, `approved_by` with `approval_date` | The new record's own lines: in a `DECISIONS.md` entry, Decision, Sources, Affects, and Decided |
+| Header: `supersedes`, `superseded_by` | "Replaces or replaced by" in the entry, when the other file was carried over too; otherwise left out |
+| Header: `related_memories`, `confidence`, `context`, `source_quote`, `effective_from`, `effective_to`, `tags`, `group`, `project`, `auto_saved`, the dates | No Toolkit V2 line. Name them on the Update line as not carried over; the old file keeps them. |
 | `knowledge/memory/current.md` | Current State, written new from what is true today (`finishing.md`, "Current State"). An "Active work" entry becomes a "Now" line when its work item was carried over and has left Backlog. Each "General project to-dos" entry goes under "Your call": recommend a project task when it is administrative work for the whole project, and otherwise a new Backlog work item (`running-work-item-lifecycle`, "Levels"). "Session handoffs" are not carried over. "Project goal" is the suggestion for the outcome question in `finishing.md`. |
-| A save waiting in `knowledge/memory-inbox.md` | "Your call", one line each: he approves or declines it. Never save one without his answer. |
+| A save waiting in `knowledge/memory-inbox.md` | "Your call", one line each: he approves or declines it. Never file one without his answer. |
 | `knowledge/memory-self-improvement.md` | His instructions go to `.claude/rules/owner-preferences.md`, under Memory, in his words |
 | `knowledge/project.md`, or the old root `PROJECT.md` | The matching sections of the Toolkit V2 `PROJECT.md`. "Memory approval" starts as `onboarding`, whatever the old file allowed. |
-| A file in `knowledge/prds/` or `prds/` | "Your call": recommend moving the whole file to `requirements/<area>/` with `git mv`, so its text and its Git history stay |
+| A file in `knowledge/prds/` or `prds/` | "Your call": recommend moving the whole file to `sources/` with `git mv` and an SRC number, so its text and its Git history stay, and carrying its agreed requirements into the matching `system/` documents as rules whose Source names that SRC (`update.md`, "Where each old piece goes", the row for an agreed requirement) |
 | Memory in a service | Stays in the service. When it is Hindsight and he chose Hindsight memory: "Your call" whether this project uses that bank or a new one. |
+
+A pointer in the new memory is added only for a `DECISIONS.md` entry made
+from an old memory record: its DEC ID and its link, in the form the
+project's memory gives (local: `memory/AGENTS.md`). With Hindsight memory
+no pointer is written.
 
 ## The retired toolkit program
 
@@ -260,5 +272,5 @@ choice", step 5).
 | --- | --- | --- |
 | `.toolkit.json` | Delete | "Toolkit settings" in `PROJECT.md` |
 | `.codex/rules/toolkit.rules`, `.toolkit-cache/` | Delete | Nothing |
-| `DECISIONS.md` | Carry | Each decision the owner confirms is still true is saved as memory, in step 6. The file is deleted only when every decision in it was saved or he said to drop it; otherwise it is Kept. |
+| `DECISIONS.md` | Carry | The Toolkit V2 `DECISIONS.md` takes its path, so the old file is moved first: `git mv` it to `sources/` with an SRC number. Each decision in it that the owner confirms is still true becomes an entry in the new file, in step 6, with that SRC under Sources. |
 | `.work-items/`, `.memory/` | Update | Old records: carried over as step 6 says, from the form the files have; the old folders stay as they are |
