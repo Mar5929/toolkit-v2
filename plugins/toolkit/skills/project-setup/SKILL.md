@@ -81,11 +81,10 @@ has a filled "Toolkit settings" section.
 3. **Ask for the sign-ins the choices need now** (`ntn login` for Notion,
    `gh auth login` for GitHub), so he can do them while you copy.
    `references/notion.md`, `references/github.md`.
-4. **Build the setup copy** in a scratch folder: the `every-project` folder,
-   plus the folder for each choice, the setup markers resolved, the name and
+4. **Build the setup copy** in a scratch folder: the `every-project` folder
+   and the folder for each choice, the setup markers resolved, the name and
    "Toolkit settings" filled, the rules list written. `every-project` holds
-   the `project-wide-records/` folder for every tracker and memory choice,
-   the shared skills, and the three hook commands.
+   `project-wide-records/`, so every tracker and memory choice gets it.
    `references/setup-copy.md`.
 5. **Add the settings** to the setup copy, and check its skills and hook
    commands. `references/skills-hooks-settings.md`.
@@ -143,9 +142,9 @@ has a filled "Toolkit settings" section.
   Never drop the Codex files to get past a refusal.
 - Never change anything in this skill's `assets/` folder: it is the source
   for every project.
-- The `.agents/skills` link in `assets/every-project/` is never copied. A project's
-  `.agents/skills` is a link to `.claude/skills`, so there is one copy of
-  each skill.
+- The `.agents/skills` link in `assets/every-project/` is never copied. A
+  project's `.agents/skills` is a link to `.claude/skills`, so there is one
+  copy of each skill.
 - Never write a script into a project. The only code a project runs is the
   three hook commands and, in a Salesforce project, the model's own
   Salesforce code: the two guards, the graph Stop hook, and the scripts in

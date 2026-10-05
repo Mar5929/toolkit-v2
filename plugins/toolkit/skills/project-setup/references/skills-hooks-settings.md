@@ -1,10 +1,9 @@
 # Skills, hook commands, and settings
 
-Purpose: say which skills and hook commands the setup copy now holds, then
-add the settings snippets, merged into the model's settings files. `<copy>`
-is the scratch folder from `setup-copy.md`, which already holds the skills
-and the hook commands; `<skill folder>` is the folder that holds this
-skill's `SKILL.md`.
+Purpose: add the settings snippets to the setup copy, merged into the
+model's settings files, and check the skills and hook commands the copy
+holds. `<copy>` is the scratch folder from `setup-copy.md`; `<skill folder>`
+is the folder that holds this skill's `SKILL.md`.
 
 ## Contents
 
@@ -31,8 +30,8 @@ The shared skills are the same in every project (10): `managing-work-items`,
 `managing-project-wide-records`,
 `handoff`, `braindump`, `explain-simply`, `session-summary`, `pull-latest`,
 `reset-to-remote`, `merge-and-clean-up`, `publish-docs`. `every-project`
-holds them. They name no tracker or memory system. Every work tracking folder holds one skill with the
-same name, `tracking-work-items`, and every local or Notion memory project
+holds them. They name no tracker or memory system. Every work tracking
+folder holds one skill with the same name, `tracking-work-items`, and every local or Notion memory project
 gets `managing-project-memory`, so the shared skills name both directly. A
 Hindsight project has no memory skills: they send it to "Project memory" in
 `AGENTS.md`.

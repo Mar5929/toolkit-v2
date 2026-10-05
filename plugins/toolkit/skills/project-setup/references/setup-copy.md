@@ -43,25 +43,30 @@ change anything inside `assets/`: it is the source for every project.
 ## Folders the choices add
 
 Each folder in `assets/` holds files at the paths a project has them.
-Copy the folder for each choice on top of `<copy>`, hidden files included:
+Copy the folder for each choice into `<copy>`, hidden files included:
 
 ```text
 cp -R <skill folder>/assets/<folder>/. <copy>/
 ```
 
-| Choice | Folders to copy | What a folder holds |
-| --- | --- | --- |
-| Work items local | `work-local` | `work-items/`, `.claude/rules/work-item-folders.md`, `PROJECT-ROADMAP.md`, and the `tracking-work-items` skill. With work items in Notion or GitHub, the project has no `work-items/`, no rule, and no roadmap file: its phases live there instead. |
-| Work items in Notion | `work-notion` and `notion-tools` | the Notion `tracking-work-items` skill and the `using-notion-cli` skill |
-| Work items in GitHub Issues | `work-github` | the GitHub `tracking-work-items` skill |
-| Memory local | `memory-process` and `memory-local` | `memory/` and the skills `managing-project-memory` and `storing-project-memory` |
-| Memory in Notion | `memory-process`, `memory-notion`, and `notion-tools` | the skills `managing-project-memory`, `storing-project-memory`, and `using-notion-cli`; the project has no `memory/` |
-| Memory in Hindsight | one file of `memory-local` (below) | `memory/CURRENT_STATE.md` and nothing else of `memory/` |
-| Salesforce | `salesforce` | the Salesforce list below |
-| SOUL.md kept | `soul` | `SOUL.md` |
+| Choice | Folders to copy |
+| --- | --- |
+| Work items local | `work-local` |
+| Work items in Notion | `work-notion` and `notion-tools` |
+| Work items in GitHub Issues | `work-github` |
+| Memory local | `memory-process` and `memory-local` |
+| Memory in Notion | `memory-process`, `memory-notion`, and `notion-tools` |
+| Memory in Hindsight | nothing, except the one file below |
+| Salesforce | `salesforce` |
+| SOUL.md kept | `soul` |
 
-With work items and memory both in Notion, copy `notion-tools` once. A
-Hindsight project copies only `CURRENT_STATE.md` from `memory-local`:
+- With work items and memory both in Notion, copy `notion-tools` once.
+- `work-local` also holds `work-items/`,
+  `.claude/rules/work-item-folders.md`, and `PROJECT-ROADMAP.md`. With work
+  items in Notion or GitHub, the project has none of them: its phases live
+  there instead.
+- `memory-local` holds `memory/`. With Notion memory the project has no
+  `memory/`. With Hindsight memory it has only `memory/CURRENT_STATE.md`:
 
 ```text
 mkdir -p <copy>/memory
@@ -97,8 +102,8 @@ find <copy> \( -name __pycache__ -o -name .DS_Store -o -name '*.pyc' -o -name '*
 ```
 
 The `.agents/skills` in `every-project/` is a link to its `.claude/skills`
-folder. It is removed here with the rest of `.agents`, and `placing-files.md` in this
-folder makes the project's own link after the copy.
+folder. It is removed here with the rest of `.agents`, and `placing-files.md`
+in this folder makes the project's own link after the copy.
 
 ## Setup markers
 
