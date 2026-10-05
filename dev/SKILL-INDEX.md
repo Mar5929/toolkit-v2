@@ -117,13 +117,13 @@ one per fact. `check-skills.mjs` matches these rows by folder.
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `curating-project-memory` | `assets/memory-process/.claude/skills/curating-project-memory/` | Keeps project memory true and small: saves facts, lessons, decisions, glossary terms, and Current State; corrects, retires, or deletes what is wrong; writes "from now on" instructions to the project rules; finds what was recorded before; tidies all memory. Use whenever the owner says "remember this", "forget that", "from now on", "what did we decide", or "clean up memory", or a hook says to review memory, even if he does not name this skill. Not for a handoff; use handoff. |
+| `curating-project-memory` | `assets/memory-process/.claude/skills/curating-project-memory/` | Keeps project memory to where work stopped and pointers to records: sends each fact the owner wants kept to its home, adds or removes a pointer, writes "from now on" instructions to the project rules, and tidies memory, so no fact is kept twice. Use whenever the owner says "remember this", "forget that", "from now on", or "clean up memory", or a hook reminder names this skill. Not for a handoff; use handoff. |
 
 ### 4.2 Local files and Obsidian (`assets/memory-local/`)
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `using-memory-store` | `assets/memory-local/.claude/skills/using-memory-store/` | Saves, finds, and changes project memory as Markdown files in the memory folder, so curating-project-memory reads and writes every memory the same way. Use when a memory must be read, saved, searched, renamed, retired, or deleted, such as "which memory files link to WI-031". Not for deciding what to keep or when to ask; use curating-project-memory. Only for projects with local memory. |
+| `using-memory-store` | `assets/memory-local/.claude/skills/using-memory-store/` | Reads and writes Current State and the list of pointers as two local files in the memory folder, so every skill stores memory the same way. Use when Current State or a pointer must be read, added, changed, or removed, for example a line that another skill hands over, or "what does memory point to". Not for deciding what a line says or what to keep; use curating-project-memory. Only for projects with local memory. |
 
 ### 4.3 Notion in Lore's layout (`assets/memory-notion/`)
 
@@ -134,7 +134,7 @@ views, and page layout in `references/database-layout.md` and
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `using-memory-store` | `assets/memory-notion/.claude/skills/using-memory-store/` | Stores and finds this project's memory in Notion, in Lore's five databases and the Current state page, for curating-project-memory, so every memory lands in the right column and page section. Use when a memory or the Current state must be read, saved, changed, searched, linked to a work item, merged, or deleted, or when the glossary is edited. Not for deciding what to keep or when to ask; use curating-project-memory. Only for projects with Notion memory. |
+| `using-memory-store` | `assets/memory-notion/.claude/skills/using-memory-store/` | Reads and writes Current State and pointers in Notion, on the Current state page and in the Memories database of Lore's layout, so every skill stores memory the same way. Use when Current State or a pointer must be read, added, changed, or removed, for example a line that another skill hands over, or "what does memory point to". Not for deciding what a line says or what to keep; use curating-project-memory. Only for projects with Notion memory. |
 
 ### 4.4 Hindsight
 
@@ -209,7 +209,6 @@ with the project file (`AGENTS.md`, "The model project and its copy"), and
 | --- | --- |
 | `running-work-item-lifecycle`: `assets/work-item-template.md` | `work-items/work-item-template/WORK-ITEM.md` |
 | `running-work-item-lifecycle`: `assets/design-template.md` | `work-items/work-item-template/DESIGN.md` |
-| `curating-project-memory`: `references/memory-criteria.md` | `memory/memory-criteria.md` |
 
 The five assets of `filing-project-records` were copies of
 `project-wide-records/templates/`. The starter project no longer has that
