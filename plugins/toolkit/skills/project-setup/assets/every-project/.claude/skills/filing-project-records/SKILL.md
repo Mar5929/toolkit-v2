@@ -1,61 +1,37 @@
 ---
 name: filing-project-records
-description: 'Connects sources, questions, people, domains, and target direction that affect several work items or the whole project, so a fresh agent can find each authoritative record. Use when evidence, an answer, or a proposed design crosses item boundaries, or when those connections need review. Not for one item alone; use running-work-item-lifecycle.'
+description: 'Files what more than one work item needs: records a decision or open question in DECISIONS.md, files an original in sources/, and applies an approved change to a system/ document, each with its ID and a pointer in the work item. Use when a decision or question reaches past one item ("we decided", "let''s go with"), the owner hands over a transcript or document, or a closing item changed the system. Not for one item''s own requirements or decisions; use running-work-item-lifecycle.'
 ---
 
-# Managing project-wide records
+# Filing project records
 
-Use `project-wide-records/` for five kinds of cross-item records only. Read
-its `AGENTS.md` before adding a file. Keep the original source, work item,
-accepted requirement, verified system description, and lasting memory in
-their existing homes. These records link them; they do not replace them.
+This skill files what more than one work item needs. The filing test, and the home of each kind of information, are in the root `AGENTS.md`, "Where information goes". Apply that test first. What only one work item needs stays in that item: use `running-work-item-lifecycle`.
 
 ## Steps
 
-1. Read the root `AGENTS.md` placement map and `PROJECT.md` settings. Find
-   related domain maps, questions, work items, requirements, system guides,
-   and memory before creating a record. Read
-   [placement-and-authority.md](references/placement-and-authority.md) when
-   the owner of a fact is unclear.
-2. Put a source in its existing home before extracting findings. Use
-   `using-work-tracker` for sources owned by a work item. Follow
-   [source-intake.md](references/source-intake.md) when it affects several
-   items or project-wide records.
-3. Keep a question local to one item in that item's Questions and Answers.
-   For a question affecting several items or the whole project, use
-   [questions-and-change-impact.md](references/questions-and-change-impact.md).
-4. Add or update a domain map, person, or target architecture record only
-   at the threshold in [record-lifecycle.md](references/record-lifecycle.md).
-   Copy its matching template from `project-wide-records/templates/`.
-5. Check every affected destination after an answer, source correction, or
-   delivery. Record what changed and what remains open. Never mark an intake
-   or shared question complete while a destination is unchecked.
-6. Save each Git-tracked document change with `publish-docs` when it can
-   stand on the default branch alone. Keep a record tied to a pending code,
-   skill, or rule change in that change's pull request. A change to
-   `project-wide-records/AGENTS.md` uses the reviewed instruction-file path.
+Open the one file for the step. One message can need more than one step: do them in the order of the table.
+
+| What happened | Step | Open |
+| --- | --- | --- |
+| An original arrived: a transcript, a meeting note, an email, a client document, a screenshot, an export | File a source | [references/file-source.md](references/file-source.md) |
+| A decision was made, or a question was raised, that more than one work item needs; or the status of an entry in `DECISIONS.md` changes | Record a decision | [references/record-decision.md](references/record-decision.md) |
+| An approved fact about the system changes: a rule, a term, an integration, a diagram; or a closing work item delivered a rule | Update a system document | [references/update-system-doc.md](references/update-system-doc.md) |
+
+## Every time
+
+- The form of each record is in its home, never in this skill: the comment at the top of `DECISIONS.md`, `sources/AGENTS.md`, and `system/AGENTS.md`. Read the home's form in this turn before you write.
+- Read the file you will change fresh, right before the change. The owner edits these files by hand, and another session may have published a change.
+- Search before you add. A record that already covers the subject is changed, never copied.
+- An ID is yours only when its save is on the default branch. Save right after you write the record, and write a pointer only after the save. When `publish-docs` finds that another session's save took the same ID, take the next ID, change it in your record and in the file name of an original, then save again.
+- A pointer in a work item is the record's ID and a few words. Never copy the record's text into the item. Write every pointer with `using-work-tracker`.
+- Read each changed file and each pointer back. A save that failed: start the reply with "Not saved", and name the write.
 
 ## Hand-offs
 
 | For | Use |
 | --- | --- |
-| Every work item or source read and write in the chosen tracker | `using-work-tracker` |
-| An item's requirements, approval, design, delivery, and status | `running-work-item-lifecycle` |
-| A lasting decision or memory route in local or Notion memory | `curating-project-memory` |
-| Hindsight memory | Root `AGENTS.md`, "Project memory" |
-| A Git-tracked document save | `publish-docs` |
-
-## References
-
-| File | Open it when |
-| --- | --- |
-| [references/placement-and-authority.md](references/placement-and-authority.md) | Deciding where information belongs and which record owns an answer |
-| [references/source-intake.md](references/source-intake.md) | A workshop, transcript, document, or other source affects several items |
-| [references/questions-and-change-impact.md](references/questions-and-change-impact.md) | A question crosses items, an answer changes, or records conflict |
-| [references/record-lifecycle.md](references/record-lifecycle.md) | Creating, reviewing, superseding, or retiring any of the five record types |
-| [examples/accounts-org-merge.md](examples/accounts-org-merge.md) | Checking a complete example across a workshop and several items |
-| [assets/DOMAIN-MAP.md](assets/DOMAIN-MAP.md) | Creating a domain map; identical to the model template |
-| [assets/PROJECT-QUESTION.md](assets/PROJECT-QUESTION.md) | Creating a shared question; identical to the model template |
-| [assets/PERSON.md](assets/PERSON.md) | Creating a detailed person record; identical to the model template |
-| [assets/TARGET-ARCHITECTURE.md](assets/TARGET-ARCHITECTURE.md) | Creating shared target direction; identical to the model template |
-| [assets/INTAKE-RECEIPT.md](assets/INTAKE-RECEIPT.md) | Recording a source intake across destinations; identical to the model template |
+| The commit of every change this skill makes | `publish-docs` |
+| The pointer in a work item, and reading an item | `using-work-tracker` |
+| Anything one work item alone needs; a requirement that a new decision changes; the closing step that says what an item delivered | `running-work-item-lifecycle` |
+| A pointer in memory, when the owner asked to remember the record | `curating-project-memory` (Hindsight memory: `.claude/rules/hindsight-memory.md`) |
+| A captured outside page, or a record of the system as it is today | `reference/AGENTS.md` |
