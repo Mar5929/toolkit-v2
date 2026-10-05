@@ -2,7 +2,7 @@
 
 Purpose: make the project's finished files in a scratch folder first: the
 folder every project gets, plus the folder for each of the owner's choices,
-with the setup markers resolved and the name and "Toolkit settings" filled.
+with the name and "Toolkit settings" filled.
 `skills-hooks-settings.md` adds to it next, and
 `placing-files.md` puts it into the project.
 
@@ -11,7 +11,7 @@ with the setup markers resolved and the name and "Toolkit settings" filled.
 - Make the scratch folder
 - Folders the choices add
 - Never copied
-- Setup markers
+- Every file is copied whole
 - The project name and "Toolkit settings"
 - Salesforce entries in shared files
 - The owner-preferences rule
@@ -61,10 +61,9 @@ cp -R <skill folder>/assets/<folder>/. <copy>/
 
 - With work items and memory both in Notion, copy `notion-tools` once. It
   holds `using-notion-cli` and the rule `.claude/rules/notion-records.md`.
-- `work-local` also holds `work-items/`,
-  `.claude/rules/work-item-folders.md`, and `PROJECT-ROADMAP.md`. With work
-  items in Notion or GitHub, the project has none of them: its phases live
-  there instead.
+- `work-local` also holds `work-items/` and `PROJECT-ROADMAP.md`. With work
+  items in Notion or GitHub, the project has neither: its phases live there
+  instead.
 - `memory-local` holds `memory/`. With Notion memory the project has no
   `memory/`.
 - `memory-hindsight` holds the rule `.claude/rules/hindsight-memory.md`.
@@ -116,44 +115,13 @@ The `.agents/skills` in `every-project/` is a link to its `.claude/skills`
 folder. It is removed here with the rest of `.agents`, and `placing-files.md`
 in this folder makes the project's own link after the copy.
 
-## Setup markers
+## Every file is copied whole
 
-Find the files that hold markers:
-
-```text
-command grep -rln -e '<!-- if ' <copy>
-```
-
-`command grep` runs the system grep. In Claude Code, plain grep skips the
-folders the copied `.gitignore` names (`memory/`, `work-items/`).
-
-These are the files that hold markers: `README.md`, `PROJECT.md`, and
-`.claude/rules/memory-review-and-save.md`; the grep above gives the current
-list. The root `AGENTS.md` and each folder's `AGENTS.md` hold none: they
-read the same in every project, so never change their words for a choice.
-A marker line is a line whose text, without spaces at either end, is
-exactly one of these:
-
-| Opening marker | Keep the block when |
-| --- | --- |
-| `<!-- if salesforce -->` | Salesforce is yes |
-| `<!-- if not salesforce -->` | Salesforce is no |
-| `<!-- if tracker=local -->`, `tracker=notion`, `tracker=github`, `tracker=jira` | work items are in that tracker (`jira` never, until Jira is built) |
-| `<!-- if memory=local -->`, `memory=notion`, `memory=hindsight` | memory is in that system |
-| `<!-- if tracker=local or memory=local -->` | work items are local, memory is local, or both |
-| `<!-- if tracker=notion or memory=notion -->` | work items are in Notion, memory is in Notion, or both |
-
-Every block ends with the line `<!-- endif -->`.
-
-- Keep a block whose condition holds. Delete a block whose condition does
-  not hold, from its opening marker line to its `<!-- endif -->` line.
-- Delete every marker line, in kept blocks too.
-- Change nothing else. Other lines, blank lines, and other HTML comments
-  (the fill-in guides) stay exactly as the model has them.
-- Blocks never nest. An opening marker inside an open block, an
-  `<!-- endif -->` with no open block, a block still open at the end of the
-  file, or a condition not in the table: stop and tell the owner that the
-  model has an error, naming the file and line.
+These are the files that hold markers: none. A choice decides which files a
+project gets, never which lines inside a file, so no file holds a line for
+setup to keep or delete. Copy every file whole, and change only the name and
+the values the next section lists. Every other line reads the same in every
+project.
 
 ## The project name and "Toolkit settings"
 
@@ -164,29 +132,34 @@ Every block ends with the line `<!-- endif -->`.
 - In `PROJECT.md`, "People and ownership", replace the example row (the
   line that starts with ``| `<role>` |``), keeping the header and separator
   rows, with
-  `| Owner | <name from question 1> | Makes the project's decisions: requirements, designs, results, merges, and Done | Setup, <YYYY-MM-DD> |`.
-  The work skills read the owner's name from this row.
+  `| Owner | <name from question 1> | Makes the project's decisions | Every decision: requirements, designs, results, merges, and Done | Setup, <YYYY-MM-DD> |`.
+  The work skills read the owner's name from this row. The fourth cell,
+  "May decide", says which decisions a person may make.
 - Leave every example ID in the model's text (`WI-31`, `WI-031`,
   `[[WI-031]]`) as the model has it, whatever prefix the owner chose. The
   skills read the real prefix from "Toolkit settings".
-- Fill these lines of `PROJECT.md`, section "Toolkit settings", writing each
+- Fill every line of `PROJECT.md`, section "Toolkit settings", writing each
   value inside the backticks in place of the prompt, for example
-  ``- Tracker: `local` ``. Keep every label exactly as written: the skills
-  read these lines.
+  ``- Tracker: `local` ``. The section has the same 11 lines in every
+  project. Keep every line and every label exactly as written: the skills
+  read these lines. A line for a choice the owner did not make gets the
+  value `not used`, for example ``- Hindsight bank: `not used` ``.
 
 | Line | Value |
 | --- | --- |
 | Tracker | `local`, `notion`, or `github` |
 | Memory | `local`, `notion`, or `hindsight` |
-| Memory approval (local or Notion memory) | `onboarding`. Only the owner changes it to `trusted`. |
-| Work item ID prefix (local work items) | The prefix he confirmed, for example `WI` |
-| Salesforce org aliases | Written as `salesforce.md` in this folder shows: the label line, then one nested bullet per org (alias, which org it is, its purpose; mark production). The backtick rule above does not apply to this line. |
+| Memory approval | Local or Notion memory: `onboarding`. Only the owner changes it to `trusted`. Hindsight memory: `not used`. |
+| Work item ID prefix | Local work items: the prefix he confirmed, for example `WI`. Work items in Notion: leave the prompt for the Notion step. GitHub Issues: `not used`. |
+| Notion work items | Work items in Notion: leave the prompt for the Notion step. Otherwise `not used`. |
+| GitHub repository | Work items in GitHub Issues: leave the prompt for the GitHub step. Otherwise `not used`. |
+| Notion memory | Memory in Notion: leave the prompt for the Notion step. Otherwise `not used`. |
+| Hindsight bank, Hindsight server, Hindsight dashboard | Memory in Hindsight: leave the three prompts for the Hindsight step. Otherwise `not used` on each line. |
+| Salesforce org aliases | A Salesforce project: written as `salesforce.md` in this folder shows: the label line, then one nested bullet per org (alias, which org it is, its purpose; mark production). The backtick rule above does not apply to that form. Otherwise `not used`. |
 
-The Notion links and prefix, the GitHub repository, and the Hindsight bank,
-server, and dashboard lines are filled by the service steps (`notion.md`,
-`github.md`, and `hindsight-on-vps.md` in this folder). Leave their
-prompts until then. Keep the section's own fill-in guide comment: later
-sessions read it.
+The service steps (`notion.md`, `github.md`, and `hindsight-on-vps.md` in
+this folder) fill the prompts left for them. Keep the section's own fill-in
+guide comment: later sessions read it.
 
 ## Salesforce entries in shared files
 
@@ -234,8 +207,12 @@ in this folder says ("Instructions he gives during setup").
 ## Check the setup copy
 
 Each of these only reads: `command grep -rn -e '<!-- if ' -e '<!-- endif' <copy>`
-prints nothing; `grep -n '<Project name>' <copy>/AGENTS.md <copy>/README.md <copy>/PROJECT.md`
+prints nothing (`command grep` runs the system grep; in Claude Code, plain
+grep skips the folders the copied `.gitignore` names);
+`grep -n '<Project name>' <copy>/AGENTS.md <copy>/README.md <copy>/PROJECT.md`
 shows only fill-in guide comment lines, never a heading;
+`command grep -c -E '^- (Tracker|Memory|Memory approval|Work item ID prefix|Notion work items|GitHub repository|Notion memory|Hindsight bank|Hindsight server|Hindsight dashboard|Salesforce org aliases):' <copy>/PROJECT.md`
+prints 11;
 `jq empty <copy>/.claude/settings.json` prints nothing (the JSON is valid);
 `find <copy> -maxdepth 2 -not -path '*/.claude/*' | sort` shows no
 folder for an option the owner did not choose; and

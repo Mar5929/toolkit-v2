@@ -19,5 +19,3 @@ Steps, checks, and recovery: the `publish-docs` skill.
 - Saving a document does not approve its requirements or its build.
 - Never force-push or change another session's checkout. Resolve a remote advance in this save's worktree.
 - An unpushed commit is unfinished. Verify the complete save reached the remote. In a repository with no remote (`git remote` prints nothing), the save is finished when its commit is on the local default branch.
-- `memory/` and `work-items/` are local and Git-ignored. Their saves do not use this publication route.
-- `project-wide-records/AGENTS.md` is an instruction file; change it through the reviewed instruction-file route, not a documentation-only save.
