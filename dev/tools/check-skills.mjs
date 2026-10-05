@@ -23,7 +23,7 @@
 //     "Use" saying when to use it; every "; use <skill>" names a skill that exists;
 //   - the SKILL.md body (after the frontmatter) is under 500 lines;
 //   - the description and folder match dev/SKILL-INDEX.md word for word (the three work
-//     tracking sets each hold a skill named using-work-tracker, so a name may have one row
+//     tracking folders each hold a skill named using-work-tracker, so a name may have one row
 //     per folder);
 //   - no when_to_use, $ARGUMENTS, !`command`, or ${CLAUDE_*}: Codex shows them as text;
 //   - SKILL.md links every file in the skill folder (a link to a folder covers what is in it),
@@ -37,6 +37,14 @@
 //   - a skill asset copied from a project file (MODEL_COPIES) equals that file;
 //   - every folder under assets/ except settings/ is every-project or a folder that a row of
 //     the setup-copy.md table names, and every folder the table names exists;
+//   - a folder is in one row of that table, except notion-tools and memory-process, which two
+//     choices share; and each word of such a folder's name (work-local: "work", "local") is in
+//     its row's Choice cell, so two folders swapped between rows fail;
+//   - the skillOverrides list in this repository's .claude/settings.json sets every project
+//     skill name to "off" and names nothing else;
+//   - the Salesforce entries that setup-copy.md tells setup to take out of a project's
+//     .claude/settings.json are the Salesforce entries every-project/.claude/settings.json holds:
+//     each sf or sfdx permission rule, and each hook command under tools/ or named guard-*;
 //   - no project path is in two setup folders, except the two storage skills named above;
 //   - no file under assets/ holds a setup marker ("<!-- if " or "<!-- endif"): a choice decides
 //     which files a project gets, never which lines inside a file;
@@ -61,6 +69,7 @@ const SETUP = path.join(ROOT, 'plugins/toolkit/skills/project-setup');
 const INDEX = path.join(ROOT, 'dev/SKILL-INDEX.md');
 const ASSETS = path.join(SETUP, 'assets');
 const COPY_FILE = path.join(SETUP, 'references/setup-copy.md');
+const REPO_SETTINGS = path.join(ROOT, '.claude/settings.json');
 // The one folder under assets/ that holds no project files: the settings snippets.
 const NOT_PROJECT_FOLDERS = ['settings'];
 // The table the agent acts on: each choice and the folders setup copies for it (setup-copy.md, "Folders the choices add").
@@ -73,6 +82,8 @@ const CHOICE_ROWS = [];
     CHOICE_ROWS.push({ choice: cells[1], folders: [...cells[2].matchAll(/`([\w-]+)`/g)].map((m) => m[1]) });
   }
 }
+// The two folders that two choices share. Every other folder is in one row of the table.
+const SHARED_FOLDERS = ['notion-tools', 'memory-process'];
 // The folders that hold files at the paths a project has them. The first is copied for every project.
 const PROJECT_FOLDERS = ['every-project', ...new Set(CHOICE_ROWS.flatMap((row) => row.folders))];
 // The two storage skills: the folders of choices that exclude each other hold one at the same path. Nothing else is shared.
@@ -196,6 +207,18 @@ const names = new Set([...skills.map((s) => path.basename(s.dir)), ...indexNames
 const projectRoots = PROJECT_FOLDERS.map((f) => path.join(ASSETS, f));
 if (!CHOICE_ROWS.length) report('error', COPY_FILE, 'has no table under "## Folders the choices add" in the expected shape (| Choice | Folders to copy |); update this check when the table changes');
 for (const root of projectRoots) if (!fs.existsSync(root)) report('error', COPY_FILE, `its table "Folders the choices add" names ${path.basename(root)}, but ${shown(root)} does not exist`);
+for (const folder of new Set(CHOICE_ROWS.flatMap((row) => row.folders))) {
+  const rows = CHOICE_ROWS.filter((row) => row.folders.includes(folder)).map((row) => `"${row.choice}"`);
+  if (folder === 'every-project') report('error', COPY_FILE, `its table "Folders the choices add" names every-project in the row ${rows.join(' and ')}: that folder is copied for every project, before the table`);
+  else if (rows.length > 1 && !SHARED_FOLDERS.includes(folder)) report('error', COPY_FILE, `its table "Folders the choices add" names ${folder} in the rows ${rows.join(' and ')}: a setup folder belongs to one choice; only ${SHARED_FOLDERS.join(' and ')} are in two rows`);
+}
+// A setup folder is named for its choice, so a folder written into the wrong row is found by its name.
+for (const row of CHOICE_ROWS) {
+  for (const folder of row.folders.filter((f) => !SHARED_FOLDERS.includes(f))) {
+    const missing = folder.split('-').filter((word) => !row.choice.toLowerCase().includes(word));
+    if (missing.length) report('error', COPY_FILE, `its table "Folders the choices add" gives the choice "${row.choice}" the folder ${folder}, but "${missing.join('", "')}" is not in that choice's name: a setup folder is named for its choice, so this folder is in the wrong row`);
+  }
+}
 for (const e of fs.readdirSync(ASSETS, { withFileTypes: true })) {
   if (e.isDirectory() && !NOT_PROJECT_FOLDERS.includes(e.name) && !PROJECT_FOLDERS.includes(e.name)) report('error', path.join(ASSETS, e.name), 'no row of the table "Folders the choices add" in setup-copy.md names this folder, so setup never copies it and no check covers its files: add it to a row');
 }
@@ -382,6 +405,40 @@ for (const f of walk(ASSETS)) {
     const count = (folder) => skillsOf(folder).length;
     const want = [sharedDirs.length, Math.max(...['work-local', 'work-notion', 'work-github'].map(count)), count('memory-process') + Math.max(...['memory-local', 'memory-notion'].map(count)), count('notion-tools'), sfSkills.filter((n) => n.startsWith('sf-')).length];
     if (interview.slice(1).map(Number).join() !== want.join()) report('error', interviewFile, `its skill counts are ${interview.slice(1).join(', ')}, but the folders give ${want.join(', ')}`);
+  }
+}
+
+// ------------------------------------------------------------------ this repository's skillOverrides
+
+// A session on this repository loads a project skill once it reads a file in a setup folder, unless
+// .claude/settings.json sets that skill's name to "off". The list is kept by hand, so compare it.
+{
+  const projectSkills = [...new Set([...setupSkillDirs.filter((dir) => dir !== SETUP), ...modelSkillDirs].map((dir) => path.basename(dir)))].sort();
+  let overrides = null;
+  try { overrides = JSON.parse(read(REPO_SETTINGS)).skillOverrides ?? {}; } catch (e) { report('error', REPO_SETTINGS, `cannot be read as JSON (${e.message}), so its skillOverrides list was not compared`); }
+  if (overrides) {
+    for (const name of projectSkills) if (overrides[name] !== 'off') report('error', REPO_SETTINGS, `skillOverrides does not set the project skill ${name} to "off": a session that reads a file under project-setup/assets/ would load it`);
+    for (const name of Object.keys(overrides)) if (!projectSkills.includes(name)) report('error', REPO_SETTINGS, `skillOverrides names ${name}, which is no project skill under project-setup/assets/: remove it, or correct the name`);
+  }
+}
+
+// ------------------------------------------------------------------ the Salesforce entries setup takes out
+
+// setup-copy.md lists by hand the Salesforce entries to delete from .claude/settings.json in a
+// project that is not a Salesforce project. An entry the list lacks would stay in every project.
+{
+  const settingsFile = path.join(EVERY, '.claude/settings.json');
+  const section = read(COPY_FILE).split(/^## /m).find((part) => part.startsWith('Salesforce entries in the settings file'));
+  let settings = null;
+  try { settings = JSON.parse(read(settingsFile)); } catch (e) { report('error', settingsFile, `cannot be read as JSON (${e.message})`); }
+  if (!section) report('error', COPY_FILE, 'has no section "## Salesforce entries in the settings file"; update this check when the section is renamed');
+  else if (settings) {
+    const listed = new Set([...section.replace(/\s+/g, ' ').matchAll(/`([^`]+)`/g)].map((m) => m[1]));
+    const rules = [...(settings.permissions?.deny ?? []), ...(settings.permissions?.ask ?? [])].filter((rule) => /^Bash\((?:sf|sfdx) /.test(rule));
+    const commands = Object.values(settings.hooks ?? {}).flat().flatMap((group) => group.hooks ?? []).map((hook) => [hook.command, ...(hook.args ?? [])].join(' '))
+      .flatMap((text) => text.match(/tools\/[\w./-]+|guard-[\w-]+\.cjs/g) ?? []);
+    for (const entry of [...rules, ...commands]) if (!listed.has(entry)) report('error', COPY_FILE, `"Salesforce entries in the settings file" does not name ${entry}, which ${shown(settingsFile)} holds: setup would leave it in a project that is not a Salesforce project`);
+    for (const entry of listed) if (/^Bash\((?:sf|sfdx) |^tools\/|^guard-/.test(entry) && ![...rules, ...commands].includes(entry)) report('error', COPY_FILE, `"Salesforce entries in the settings file" names ${entry}, which ${shown(settingsFile)} does not hold`);
   }
 }
 

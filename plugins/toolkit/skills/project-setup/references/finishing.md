@@ -63,11 +63,11 @@ this order:
    has no `PROJECT-ROADMAP.md`: its phases go in the tracker, later, with
    `running-work-item-lifecycle`. On a new project it
    usually stays as it is; list it as prompts left.
-   **`DECISIONS.md`, the documents in `system/`, and `sources/README.md`**
+5. **`DECISIONS.md`, the documents in `system/`, and `sources/README.md`**
    stay as copied: they hold no prompt, and each `system/` document says
    Status "Not started". Never write a decision, a rule, or a source into
    them during setup.
-5. Delete each fill-in guide comment when its own text says to. Keep the
+6. Delete each fill-in guide comment when its own text says to. Keep the
    guide comment inside "Toolkit settings": later sessions read it.
 
 Never invent a fact to fill a prompt. Setup is never a work item: never
@@ -118,12 +118,14 @@ Run each check alone from the project folder. Each only reads.
 - [ ] Project records, for every tracker and memory choice: DECISIONS.md; system/ with its six documents, integrations/README.md, and integrations/INTEGRATION-TEMPLATE.md; sources/README.md; delivery/ with releases/, deployments/, migrations/, and client-handoffs/; reference/ with outside-docs/INDEX.md and current-system/
 - [ ] Folder guides: find . -name AGENTS.md -not -path './.claude/*' -not -path './.git/*' lists the root file and one in system/, sources/, delivery/, and reference/ (plus work-items/ with local work items and memory/ with local memory); each has a CLAUDE.md beside it that holds only the line @AGENTS.md
 - [ ] The link: ls -la .agents shows skills -> ../.claude/skills
-- [ ] Hook commands: ls .claude/hooks shows session-start.mjs, prompt-reminder.mjs, codex-after-commit.mjs (plus the two guards in a Salesforce project)
+- [ ] Hook commands: ls .claude/hooks shows session-start.mjs, prompt-reminder.mjs, codex-after-commit.mjs, and validate-records.mjs (plus the two guards in a Salesforce project)
 - [ ] Settings are valid: jq empty .claude/settings.json (and .codex/hooks.json, and .mcp.json when present)
 - [ ] Every hook command the settings name exists in .claude/hooks/, and no {{ placeholder is left: grep -n '{{' .claude/settings.json .codex/hooks.json
 - [ ] The session-start hook prints Current State, and with local memory the pointers of memory/MEMORY.md: node .claude/hooks/session-start.mjs --memory <memory> </dev/null (Notion memory: add --page <Current state page id>). Codex with Notion memory: run it escalated; inside the sandbox it prints "could not be read here", which is the sandbox and not a setup failure
 - [ ] The prompt reminder prints a line telling the agent to check the project's skills for any message, and adds the memory reminder for a "remember this" message: echo '{"prompt":"remember this: we use Postgres"}' | node .claude/hooks/prompt-reminder.mjs (Hindsight memory: add --skill hindsight)
 - [ ] The after-commit reminder answers a commit: printf '{"tool_input":{"command":"git %s -m x"}}' commit | node .claude/hooks/codex-after-commit.mjs
+- [ ] The record check finds nothing: node .claude/hooks/validate-records.mjs --all < /dev/null prints nothing. Each line it prints is one finding: report it
+- [ ] The pre-commit check: test -x .githooks/pre-commit && echo executable prints "executable", and git config --get core.hooksPath prints .githooks. When it prints something else or nothing, report what it prints and what the owner was told (placing-files.md, "5. The pre-commit check")
 - [ ] AGENTS.md is within its limits: wc -lc AGENTS.md prints 200 lines or less and 20,480 bytes or less (Claude Code recommends under 200 lines; Codex stops reading instruction files at 32,768 bytes in all, ~/.codex/AGENTS.md included). When either is over, say so in the report and never cut lines from it
 - [ ] The text that loads in every session: command grep -L '^paths:' .claude/rules/*.md lists the rules with no paths frontmatter; wc -c AGENTS.md and each of those files, and give the total in bytes in the report (no limit is set for it)
 - [ ] PROJECT.md "Toolkit settings" holds no prompt, except one that waits on the owner
@@ -138,9 +140,36 @@ Run each check alone from the project folder. Each only reads.
 ```
 
 A check that fails: fix it, then run it again. Report any check you cannot
-make pass, with what it printed. In "check the setup" (`SKILL.md`, "Pick the
-path"), fix nothing: report each failed check with the fix you recommend.
-Then remove the scratch folder: `rm -rf <copy>`.
+make pass, with what it printed. Then remove the scratch folder:
+`rm -rf <copy>`.
+
+In "check the setup" (`SKILL.md`, "Pick the path"), fix nothing: report
+each failed check with the fix you recommend. Two checks run differently
+there, so that checking changes no file:
+
+- When `.claude/hooks/session-start.mjs` differs from the setup copy's
+  file, do not run the session-start check: a version from before
+  `memory/MEMORY.md` became the table of pointers writes that file each
+  time it runs. Report the hook command as out of date.
+- When the project has no `.claude/hooks/validate-records.mjs`, run the
+  setup copy's from the project folder:
+  `node <copy>/.claude/hooks/validate-records.mjs --all < /dev/null`.
+
+"Check the setup" puts one kind of file back. Git does not track
+`work-items/` and `memory/`, so a toolkit file that was deleted there cannot
+be brought back from Git. When one of these is missing in the main
+checkout, copy it from the setup copy with
+`cp -n <copy>/<file> <main checkout>/<file>` (`-n` never replaces a file),
+and name it in the report:
+
+- local work items: `work-items/AGENTS.md`, `work-items/CLAUDE.md`,
+  `work-items/work-item-template/WORK-ITEM.md`, and
+  `work-items/work-item-template/DESIGN.md`;
+- local memory: `memory/AGENTS.md` and `memory/CLAUDE.md`.
+
+Put none of them back in a project set up before the one-home layout
+(`one-home-layout.md`, "Find the old layout"): "update the toolkit" gives it
+these files.
 
 ## The owner's steps
 
@@ -168,7 +197,8 @@ do them for him.
 A short, plain report, in this order:
 
 1. What was set up: where work items and memory live, Salesforce or not,
-   how many skills, the three hook commands, and each line added to
+   how many skills, the four hook commands, the pre-commit check (on, or
+   why it is not), and each line added to
    `owner-preferences.md`, in his words.
 2. What was made outside this folder: Notion pages, the GitHub repository
    and labels, the Hindsight bank, and the add-on's changes in `~/.claude`,

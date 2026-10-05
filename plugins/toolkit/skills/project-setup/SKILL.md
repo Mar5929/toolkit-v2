@@ -1,6 +1,6 @@
 ---
 name: project-setup
-description: 'Sets up, checks, or updates Toolkit V2 in a project, moves an older claude-toolkit project onto it, or changes where work items or memory live, so projects run the same files. Use when the owner says "toolkit v2", "set up this project", "initialize this project", or "update the toolkit". Not for a Git pull; use pull-latest. Not for running the older claude-toolkit (project-sync).'
+description: 'Sets up Toolkit V2 in a project, checks or updates the setup, moves over a project set up another way, changes where work items or memory live, adds SOUL.md, opens the Hindsight dashboard, or connects Hindsight on a new computer, so projects run the same files. Use for any Toolkit V2 setup request, such as "toolkit v2", "set up this project", "check the setup", or "update the toolkit". Not for a Git pull; use pull-latest. Not for the older claude-toolkit (project-sync).'
 ---
 
 # Project setup
@@ -38,16 +38,23 @@ has a filled "Toolkit settings" section.
   the choices from "Toolkit settings", and continue at step 7 of "New
   project", then step 8.
 - `PROJECT.md` has a filled "Toolkit settings" section: the project is set
-  up. Update the toolkit, also when he says only "toolkit v2":
-  `references/update.md`. Check the setup: build a fresh setup copy and
-  compare (`references/update.md`, steps 1 and 2), run
-  the final checks (`references/finishing.md`) without fixing any that
-  fail, and report each difference and each failed check with the fix you
-  recommend. Change nothing in the project. A project that still has the
-  layout from before the one-home layout: say so, and list what
-  `references/update.md`, "The one-home layout", would move. Change a setup
-  choice (where work items or memory live): `references/update.md`,
-  "Changing a setup choice".
+  up.
+  - Update the toolkit, also when he says only "toolkit v2":
+    `references/update.md`.
+  - Check the setup: build a fresh setup copy and compare
+    (`references/update.md`, steps 1 and 2), run the final checks
+    (`references/finishing.md`, "Final checks") without fixing any that
+    fail, and report each difference and each failed check with the fix
+    you recommend. Change nothing in the project, with one exception: put
+    back a missing toolkit file in `work-items/` or `memory/`, as
+    `references/finishing.md`, "Final checks", says.
+  - Either one, in a project set up before the one-home layout: say so,
+    and list what `references/one-home-layout.md` would move. The one-home
+    layout keeps what lasts longer than one work item in five places, as
+    files in the repository: `DECISIONS.md`, `system/`, `sources/`,
+    `delivery/`, and `reference/`.
+  - Change a setup choice (where work items or memory live):
+    `references/update.md`, "Changing a setup choice".
 - He asks to open a project's Hindsight dashboard, or a Hindsight project is
   set up but this computer lacks its key or the add-on (a new computer):
   `references/hindsight-on-vps.md`, "Open the dashboard" or "A new
@@ -91,9 +98,10 @@ has a filled "Toolkit settings" section.
    settings" filled. `references/setup-copy.md`.
 5. **Add the settings** to the setup copy, and check its skills and hook
    commands. `references/skills-hooks-settings.md`.
-6. **Put it into the project** and make the `.agents/skills` link. Never
-   replace a file the project already has without showing the difference
-   and asking. `references/placing-files.md`.
+6. **Put it into the project**, make the `.agents/skills` link, and turn on
+   the check that runs before each commit. Never replace a file the
+   project already has without showing the difference and asking.
+   `references/placing-files.md`.
 7. **Set up each service**, once its sign-in is done: Notion pages, the
    GitHub repository and labels, the Hindsight bank and Hindsight's
    coding-agent add-on, the Salesforce facts. For a Salesforce project, also
@@ -146,11 +154,13 @@ has a filled "Toolkit settings" section.
 - Never change anything in this skill's `assets/` folder: it is the source
   for every project.
 - Never write a script into a project. The only code a project runs is the
-  three hook commands and, in a Salesforce project, the code of the
-  `salesforce` setup folder: the two guards, the graph Stop hook, and the
-  scripts in `tools/`.
-- Jira is not offered yet. Hindsight memory has no memory skills: the agent
-  uses the tools of Hindsight's coding-agent add-on.
+  four hook commands, the `.githooks/pre-commit` file that runs one of
+  them, and, in a Salesforce project, the code of the `salesforce` setup
+  folder: the two guards, the graph Stop hook, and the scripts in `tools/`.
+- Jira is not offered yet. A Hindsight project gets no memory skill from
+  the toolkit: Hindsight's coding-agent add-on brings its own skill and
+  tools, and the project's rule `.claude/rules/hindsight-memory.md` says
+  what the project keeps where.
 - Setup is never a work item. The project's one-sentence outcome is the
   owner's answer, never a sentence worked out from the code.
 
@@ -159,19 +169,21 @@ has a filled "Toolkit settings" section.
 | File | Open it when |
 | --- | --- |
 | `references/interview.md` | Steps 1 and 2: what to check before asking, the five questions with their recommendations, and the plan to confirm |
-| `references/setup-copy.md` | Step 4, and step 1 of an update: the scratch folder, the one table of choices and setup folders, what is never copied, the name and "Toolkit settings", the Salesforce entries in shared files, the owner-preferences rule, the checks |
-| `references/skills-hooks-settings.md` | Step 5: which skills each choice adds, the hook commands, the settings snippets and how to merge them, the older plugins turned off |
-| `references/placing-files.md` | Step 6: copying into the project, files it already has, the `.agents/skills` link |
+| `references/setup-copy.md` | Step 4, and step 1 of an update: the scratch folder, the one table of choices and setup folders, what is never copied, the name and "Toolkit settings", the Salesforce entries in the settings file, the owner-preferences rule, the checks |
+| `references/skills-hooks-settings.md` | Step 5: which skills each choice adds, the four hook commands, the settings snippets and how to merge them, the older plugins turned off |
+| `references/placing-files.md` | Step 6: copying into the project, files it already has, the `.agents/skills` link, and the pre-commit check (`core.hooksPath`), which an update and a move-over also follow |
 | `references/notion.md` | Work items or memory in Notion: the sign-in, his yes, which Notion setup to follow, the links |
 | `references/notion-build/work-setup.md` | Work items or memory in Notion: the steps of a new project, removing the part kept elsewhere, the links in `PROJECT.md`, adding work items or memory later, bringing a project up to the current template, moving from Stage to State, building the template, the checks |
 | `references/notion-build/work-layout.md` | Work items in Notion: the database views, the property order and page layout, the request bodies |
 | `references/notion-build/setup.md` | Memory in Notion: the memory steps of a new project, the links in `PROJECT.md`, bringing memory up to date, building the memory part of a template. Lore's databases, columns, views, and request files are in the Notion `using-memory-store` skill, in `assets/memory-notion/.claude/skills/` |
 | `references/notion-build/project-page.md`, `references/notion-build/work-item-page.md`, `references/notion-build/memory-page.md` | Building the Notion template: the text of the project page, the work item template, and the Memory page |
 | `references/github.md` | Work items in GitHub Issues: the sign-in, the repository, the labels, bringing a project up to date, the checks |
-| `references/hindsight-on-vps.md` | Memory in Hindsight: what runs on the VPS, the access key, the bank, the coding-agent add-on, the save-and-search check, opening the dashboard, checking a Hindsight project, a new computer |
+| `references/hindsight-on-vps.md` | Memory in Hindsight: what runs on the VPS and what an agent never does there, the access key, the bank, the coding-agent add-on, the save-and-search check, opening the dashboard, checking a Hindsight project, a new computer |
 | `references/salesforce.md` | A Salesforce project: Salesforce's skills check, the org aliases, and the API version |
 | `references/finishing.md` | Step 8: the prompts in the copied files, `SOUL.md`, Current State, the final checks, the owner's steps, the report, the commit offer |
-| `references/update.md` | Update the toolkit, check the setup, or change a setup choice; bringing a project set up before the one-home layout to it: how to find the old layout, the plan table, where each old record goes, and the order of the moves |
+| `references/update.md` | Update the toolkit, check the setup, or change a setup choice: the fresh setup copy, what to do with each kind of file that differs, whose edit a difference is, turning on the record check, what the toolkit no longer ships, the services, the checks, and the report |
+| `references/one-home-layout.md` | An update or a check of a project set up before the one-home layout: how to find the old layout, the plan table, where each old piece goes, and the order of the moves |
+| `references/earlier-versions.md` | An update of a project set up before toolkit 0.6.0, 0.8.0, or 0.8.1: work items from Stage to State, the levels structure, and the Requirements layout |
 | `references/move-over.md` | Moving a project that was set up another way onto Toolkit V2: which earlier setup it is, his choices, reading the project, sorting each piece, the list and its template, the order of the changes after his yes, carrying over old records, finishing |
 | `references/old-toolkit-pieces.md` | A move-over, steps 2, 3, and 6: the old toolkit's plugins, rules, hook commands, tools, and knowledge files with what Toolkit V2 has in their place, the old records, and how an old work item and old memory map to the Toolkit V2 form |
 | `assets/every-project/` | Step 4: the setup folder every project gets, copied first into the scratch folder |

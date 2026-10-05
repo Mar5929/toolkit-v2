@@ -229,3 +229,39 @@ complete in one file that reads the same in every project.
   Source; IDs have two digits (three for DEC and SRC).
 - Each instruction lives in one file. A skill never repeats what the root
   `AGENTS.md` or a folder guide says: it points to it.
+- The checking script was approved by the owner on 2026-10-05, so section
+  2 ("Still waiting for the owner's yes") and section 7 no longer hold for
+  it. It is `validate-records.mjs`, the fourth hook command, with 15 checks
+  (`CHECKS-SPEC.md`). He was told about 220 lines plus about 220 lines of
+  tests. He accepted its size on 2026-10-05: 279 lines, 279 lines of tests,
+  and a 6-line `.githooks/pre-commit` file. It cannot grow without his
+  yes.
+- `filing-project-records` holds no templates, so the "each with its
+  template in `assets/`" cell of section 5 no longer holds. The form of a
+  decision is in the comment at the top of `DECISIONS.md`, and the forms of
+  a source row, a rule, and a system document are in the folder guides
+  (`sources/AGENTS.md`, `system/AGENTS.md`). The skill points to them.
+- A Hindsight project gets no toolkit memory skill (the owner, 2026-10-05).
+  Hindsight's coding-agent add-on ships its own skill,
+  `hindsight-coding-agent`, and shows the agent a guide to its tools at
+  session start. The project's rule `hindsight-memory.md` says what the
+  project keeps in its own files, and toolkit text never lists the add-on's
+  tools.
+- The `toolkit` plugin has a third skill, `writing-harness-files` (the
+  owner's yes, 2026-10-05): the steps, the official page addresses, and the
+  checklist for writing or changing a harness file. It is on in every
+  folder and is never copied into a project, so section 5, which lists
+  project skills, does not hold it.
+- Settled during the build, for the owner to confirm. The builder of the
+  project files made these changes on 2026-10-05, and no review asked for
+  them:
+  - A second deployment of one work item gets its own folder in
+    `delivery/deployments/`, with the environment in its name.
+  - A diagram in `system/diagrams/` needs no decision, only a Changelog
+    row in the document it explains.
+  - A glossary meaning that only an original gives needs the owner's yes
+    before it is written.
+  - A new row of the root `AGENTS.md` sends a plain fact about the client
+    or the project to `PROJECT.md`, "Operating conventions".
+  - `work-items/AGENTS.md` points to `running-work-item-lifecycle` for the
+    States and repeats none of them.

@@ -102,13 +102,15 @@ owner's yes.
 5. The "Current state" page: a page set up before toolkit 0.8.0 has an
    "Untracked to-dos" heading, which `assets/current-state.md` no longer
    has. In the "Project" template the heading holds only its prompt line:
-   remove both with one `update_content` call. In a project, `update.md`,
-   "The levels structure (toolkit 0.8.0)", step 6, moves its lines first.
+   remove both with one `update_content` call. In a project,
+   `earlier-versions.md`, "The levels structure (toolkit 0.8.0)", step 6,
+   moves its lines first.
 6. The "Terminology glossary" page: a project or a "Project" template set
-   up before the one-home layout has one beside the Memory page. Memory no
-   longer writes it: a project term is a row of `system/glossary.md`.
-   - In a project, `update.md`, "The one-home layout", moves its rows
-     first. After they are read back in `system/glossary.md`, ask the owner
+   up before the one-home layout has one beside the Memory page. (The
+   one-home layout keeps decisions, system rules, terms, and originals as
+   files in the repository.) Memory no longer writes it: a project term is
+   a row of `system/glossary.md`.
+   - In a project, `one-home-layout.md` moves its rows first. After they are read back in `system/glossary.md`, ask the owner
      whether to move the page to Notion's trash
      (`PATCH v1/pages/<id>` with `{"in_trash":true}`). It stays until he
      says yes. Then remove the "Terminology glossary page" line from

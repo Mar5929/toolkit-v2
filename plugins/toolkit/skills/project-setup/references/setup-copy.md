@@ -12,7 +12,7 @@ choices, with the name and "Toolkit settings" filled.
 - Folders the choices add
 - Never copied
 - The project name and "Toolkit settings"
-- Salesforce entries in shared files
+- Salesforce entries in the settings file
 - The owner-preferences rule
 - Check the setup copy
 
@@ -68,23 +68,27 @@ cp <skill folder>/assets/memory-local/memory/CURRENT_STATE.md <copy>/memory/
 ```
 
 Every file is copied whole. A choice decides which files a project gets,
-never which lines inside a file. Change only what the next three sections
-name; every other line of every file stays as copied.
+never which lines inside a file. Change only what the three sections after
+"Never copied" name; every other line of every file stays as copied.
 
 ## Never copied
 
-These are local to one person or one computer, or were never meant to ship.
-Remove the ones present, in `<copy>` only. Check that each path starts with
-the scratch folder before you run it.
+The setup folders hold project files. Three kinds of file can be in the
+copy that no project gets. Remove the ones present, in `<copy>` only. Check
+that each path starts with the scratch folder before you run it.
 
 ```text
-rm -rf <copy>/.git <copy>/.agents <copy>/.vscode <copy>/.sfdx <copy>/.sf <copy>/.localdevserver <copy>/.obsidian <copy>/memory/.obsidian <copy>/.claude/worktrees <copy>/.claude/.permset-preflight <copy>/.claude/settings.local.json <copy>/CLAUDE.local.md <copy>/.import.json <copy>/tools/kb/out <copy>/tools/kb/_freshness_stamp.json <copy>/tools/kb/_drift_pending.md
+rm -rf <copy>/.agents <copy>/tools/kb/out <copy>/tools/kb/_freshness_stamp.json <copy>/tools/kb/_drift_pending.md
 find <copy> \( -name __pycache__ -o -name .DS_Store -o -name '*.pyc' -o -name '*.log' -o -name '_prev-*.json' \) -prune -exec rm -rf {} +
 ```
 
-The `.agents/skills` in `every-project` is a link to its `.claude/skills`
-folder. It is removed here with the rest of `.agents`, and `placing-files.md`
-in this folder makes the project's own link after the copy.
+- `.agents`: the `.agents/skills` in `every-project` is a link to its
+  `.claude/skills` folder. `placing-files.md` in this folder makes the
+  project's own link after the copy.
+- The paths in `tools/kb/`, `_prev-*.json`, `__pycache__`, and `*.pyc`:
+  files the Salesforce tools write when they were run inside the toolkit's
+  own `salesforce` folder.
+- `.DS_Store` and `*.log`: files macOS and a local run leave in a folder.
 
 ## The project name and "Toolkit settings"
 
@@ -124,13 +128,12 @@ The service steps (`notion.md`, `github.md`, and `hindsight-on-vps.md` in
 this folder) fill the prompts left for them. Keep the section's own fill-in
 guide comment: later sessions read it.
 
-## Salesforce entries in shared files
+## Salesforce entries in the settings file
 
-Two files every project gets are machine settings that hold Salesforce
-entries. In a project that is not a Salesforce project, take those entries
-out. A Salesforce project keeps them.
-
-`<copy>/.claude/settings.json`:
+`.claude/settings.json` is a machine settings file every project gets, and
+it holds Salesforce entries. In a project that is not a Salesforce project,
+take those entries out of `<copy>/.claude/settings.json`. A Salesforce
+project keeps them.
 
 - Delete the `Stop` hook group whose command runs
   `tools/kb/graph_freshness_hook.py`, and the `Stop` key when nothing is
@@ -148,17 +151,18 @@ out. A Salesforce project keeps them.
   `autoMemoryEnabled`, `enabledPlugins`, `outputStyle`, and
   `skillListingBudgetFraction`.
 
-`<copy>/.gitignore`: delete the lines `.sfdx/`, `.sf/`, `.localdevserver/`,
-`.claude/.permset-preflight/`, `tools/kb/out/`,
-`tools/kb/_freshness_stamp.json`, `tools/kb/_drift_pending.md`, and
-`tools/kb/_prev-*.json`. Keep every other line.
+`.gitignore` is copied whole in every project. Its lines for Salesforce
+tools ignore nothing in a project that has none of those files.
 
 ## The owner-preferences rule
 
 Every project gets `.claude/rules/owner-preferences.md`, whatever its memory
 choice, so the owner's "from now on" instructions are kept in one file that
 both hosts read. It starts with only the title, the lead paragraph, and a
-layout note:
+layout note. Its starting text is `assets/owner-preferences.md`, outside
+`every-project`, because it is the owner's own file from the first
+instruction on: setup and "update the toolkit" copy it only into a project
+that has none, and never compare or replace it afterwards.
 
 ```text
 cp <skill folder>/assets/owner-preferences.md <copy>/.claude/rules/owner-preferences.md
@@ -182,6 +186,8 @@ Each of these only reads.
   you copied, and `ls -A <copy>`: the last list holds every name of the
   other lists except `.agents`, plus `memory` with Hindsight memory, and no
   other name.
+- `test -x <copy>/.githooks/pre-commit && echo executable` prints
+  `executable`.
 - `find <copy> -name AGENTS.md -not -path '*/.claude/*'` lists the root
   file and one in each of `system/`, `sources/`, `delivery/`, and
   `reference/`, plus `work-items/` with local work items and `memory/` with

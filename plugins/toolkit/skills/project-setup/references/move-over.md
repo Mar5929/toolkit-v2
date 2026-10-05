@@ -98,8 +98,8 @@ home its content goes to: `DECISIONS.md`, `system/`, `sources/`,
 `delivery/`, or `reference/` (`old-toolkit-pieces.md`, "Old records" and
 the two mapping sections). A project that an earlier Toolkit V2 setup
 touched may hold `project-wide-records/`, `requirements/`, `system-guide/`,
-or `ai-external-knowledge/`: sort those with the table in `update.md`,
-"Where each old piece goes". Keep every old record in place until the owner
+or `ai-external-knowledge/`: sort those with the table in
+`one-home-layout.md`, "Where each old piece goes". Keep every old record in place until the owner
 says yes to its line.
 
 Every command here only reads. Run each alone, from the main checkout.
@@ -138,7 +138,7 @@ copy goes under exactly one line of the list. Use the first row that fits:
 | A piece `old-toolkit-pieces.md` marks Delete | Delete |
 | A piece `old-toolkit-pieces.md` marks Carry | Update: the line names where his words go |
 | A piece `old-toolkit-pieces.md` marks Compare, and it is an unchanged copy | Delete when Toolkit V2 has nothing of that name; Update ("replaced by the Toolkit V2 version") when the setup copy holds a file of that name |
-| A piece marked Compare that differs from the old toolkit's copy | Read the difference. Use your judgment: a line that names this project's own things (its orgs, people, folders, dates, a section about this project) or that the owner signed is his. At least one differing line is his: Update, quoting his lines and naming where each goes (below); after each is read back there, the file is removed or replaced as an unchanged copy would be. No differing line is his: treat it as an unchanged copy. You cannot tell: "Your call". |
+| A piece marked Compare that differs from the old toolkit's copy | Read the difference. A line that names this project's own things (its orgs, people, folders, dates, a section about this project) or that the owner signed is his. At least one differing line is his: Update, quoting his lines and naming where each goes (below); after each is read back there, the file is removed or replaced as an unchanged copy would be. No differing line is his: treat it as an unchanged copy. You cannot tell: "Your call". |
 | A piece marked Compare, with no copy to compare it with | "Your call": recommend keeping it until he has read it |
 | Root `AGENTS.md` | Update: built new as `update.md` says ("Updating AGENTS.md", the second case, steps 1 to 5), in place of the `AGENTS.md` row in `placing-files.md`. He sees the whole new file before it is written. |
 | Any other file the project and the setup copy both have, with different content | Update, by the table in `placing-files.md`, step 3. A settings file gets one Update line that says which entries are removed, added, and kept. |
@@ -243,8 +243,10 @@ it is in place.
    lands: stage nothing in them, and run the final check on them after
    landing.
 3. **Update.** Carry out each approved Update line. Merge settings with the
-   merge rules in `skills-hooks-settings.md`. Put each line of his in its
-   new place and read it back there.
+   merge rules in `skills-hooks-settings.md`, leaving out the entries that
+   run `validate-records.mjs`: `update.md`, "The record check and the
+   pre-commit file", adds them in step 7, after the records pass the check.
+   Put each line of his in its new place and read it back there.
 4. **Services.** Step 7 of "New project" in `SKILL.md`.
 5. **Records.** Step 6, "Carry over the old records".
 6. **Delete**, last. Remove only what an approved Delete line names.
@@ -285,12 +287,12 @@ below say. A carry-over writes a new record in the Toolkit V2 form.
 4. Do the same for the old memory, with "Old memory to its Toolkit V2
    home": the first record, his yes, then the rest. Each new record names
    where it came from, "Carried over from `<its old path>`", as
-   `update.md`, "Where each old piece goes", says.
+   `one-home-layout.md`, "Where each old piece goes", says.
 5. A record that goes into a file Git tracks (`DECISIONS.md`, `system/`,
    `sources/`, `PROJECT.md`) is written in your worktree. A line in a work
    item or in memory that names such a record by its ID is written in the
-   main checkout after the branch landed (`update.md`, "After his yes",
-   step 8).
+   main checkout after the branch landed (`one-home-layout.md`, "After his
+   yes", step 8).
 6. Old records that already sit where the new ones go (issues in the same
    GitHub repository, pages in the same Notion database, a root
    `work-items/` or `memory/` folder with files of his) are not copied.
@@ -316,7 +318,8 @@ below say. A carry-over writes a new record in the Toolkit V2 form.
 1. Follow `finishing.md`. A fact that an old file shows (the old project
    facts file, his `AGENTS.md`) counts as a fact a file in the repository
    shows: use it, and list it in the report so he can correct it.
-2. Run the final checks as `update.md` says ("6. Checks and report"). A
+2. Run the record check and the final checks as `update.md` says ("7.
+   Checks and report", steps 1 and 2). A
    check that fails only because of something on a "Kept untouched" line,
    such as a skill or folder of his own, is not a failure: say so in the
    report.
@@ -327,6 +330,6 @@ below say. A carry-over writes a new record in the Toolkit V2 form.
    lists that copy's old Git hook and removes it after his yes
    (`update.md`, "4. What the toolkit no longer ships").
 4. Offer the commit, and land the branch after his yes, as `update.md`
-   says ("6. Checks and report"). Until it lands, `PROJECT.md` is only in
+   says ("7. Checks and report", steps 4 to 6). Until it lands, `PROJECT.md` is only in
    the worktree, so the main checkout still shows the old setup: step 1
    ("An unfinished move") finds it.

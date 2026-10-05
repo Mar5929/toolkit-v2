@@ -42,10 +42,15 @@ Each choice adds these skills. Which setup folders hold them is in
 
 ## Hook commands
 
-The three hook commands are in `every-project/.claude/hooks/`, so the setup
+The four hook commands are in `every-project/.claude/hooks/`, so the setup
 copy has them in `<copy>/.claude/hooks/`: `session-start.mjs`,
-`prompt-reminder.mjs`, and `codex-after-commit.mjs`. Both hosts run them
-from `.claude/hooks/`. A Salesforce project also gets the two guards there
+`prompt-reminder.mjs`, `codex-after-commit.mjs`, and
+`validate-records.mjs`. Both hosts run them from `.claude/hooks/`.
+`validate-records.mjs` checks the form of the project's records
+(`DECISIONS.md`, `system/`, `sources/`, and local work items) and only
+reads. The setup copy also has `.githooks/pre-commit`, which runs it
+before each commit once `placing-files.md`, "5. The pre-commit check", is
+done. A Salesforce project also gets the two guards in `.claude/hooks/`
 from the `salesforce` folder, and the scripts in `tools/` (the graph Stop
 hook runs them).
 
@@ -57,8 +62,8 @@ into a project's settings files. `<memory>` is the memory choice: `local`,
 
 | Snippet | Merged into | For |
 | --- | --- | --- |
-| `claude-settings-hooks.<memory>.json` | `<copy>/.claude/settings.json` | the memory choice: the Claude Code hooks (session start, prompt reminder, after a commit, and a helper agent returned) |
-| `codex-hooks.<memory>.json` | `<copy>/.codex/hooks.json` | the memory choice: the Codex hooks (session start, prompt reminder, after a commit, and a helper agent started or returned) |
+| `claude-settings-hooks.<memory>.json` | `<copy>/.claude/settings.json` | the memory choice: the Claude Code hooks (session start, prompt reminder, after a commit, a helper agent returned, and the record check after a file edit and when the agent stops) |
+| `codex-hooks.<memory>.json` | `<copy>/.codex/hooks.json` | the memory choice: the Codex hooks (session start, prompt reminder, after a commit, a helper agent started or returned, and the record check after a file edit) |
 | `enabled-plugins-off.json` | `<copy>/.claude/settings.json` | every project |
 | `codex-plugins-off.toml` | `<copy>/.codex/config.toml` | every project |
 
@@ -74,7 +79,7 @@ project: the account's own setting replaces such a table.
 The Notion snippets hold `{{CURRENT_STATE_PAGE_ID}}`. Leave it in the setup
 copy; the Notion memory setup fills it with the "Current state" page id
 (`notion.md` in this folder). Never change a snippet's hook commands or
-texts: they are written to match the three hook commands.
+texts: they are written to match the four hook commands.
 
 ## Merge rules
 
@@ -84,7 +89,8 @@ texts: they are written to match the three hook commands.
   first snippet is the start.
 - The toolkit's own hook handlers are replaced, never joined. They are: a
   handler whose `args` or `command` names `session-start.mjs`,
-  `prompt-reminder.mjs`, or `codex-after-commit.mjs`; the `echo` handler in
+  `prompt-reminder.mjs`, `codex-after-commit.mjs`, or
+  `validate-records.mjs`; the `echo` handler in
   the `PostToolUse` group whose matcher is `Agent`; and the `echo` handler
   in the `.codex/hooks.json` `PostToolUse` group whose matcher is
   `^(collaboration)?(spawn_agent|wait_agent)$`. When the file already has
@@ -101,7 +107,12 @@ texts: they are written to match the three hook commands.
   (`placing-files.md`, `update.md`), ask the owner.
 - Never delete any other entry: the copied permission rules, the Git deny
   and ask rules, the Salesforce guards (and the `Stop` hook that runs
-  `tools/kb/graph_freshness_hook.py`), and hooks the owner added stay.
+  `tools/kb/graph_freshness_hook.py`), and hooks the owner added stay. In a
+  Salesforce project the `Stop` event then holds two groups: the graph
+  hook's and the record check's.
+- In an update or a move-over of a project whose settings hold no entry
+  that runs `validate-records.mjs`, those entries go in last: `update.md`,
+  "The record check and the pre-commit file".
 - `.codex/hooks.json` holds only `description` and `hooks` at the top level.
   In a Salesforce project, the `description` is the text of the
   `salesforce` folder's file, one space, then the snippet's text; otherwise
@@ -158,7 +169,9 @@ files in `~/.claude` or `~/.codex`.
   add it as "Merge rules" says.
 - Each of the toolkit's hook handlers is in each settings file once (count
   the `hooks/*.mjs` names with `grep -o`, and the `echo` helper reminders
-  with `jq`). The Codex helper reminder has only the matcher
-  `^(collaboration)?(spawn_agent|wait_agent)$`, and `.claude/settings.json`
-  has no `Stop` hook of type `prompt`; either one is an old handler to take
-  out ("Merge rules", `update.md`).
+  with `jq`). `validate-records.mjs` is named twice in
+  `.claude/settings.json` (after an edit, and at stop with `--all`) and
+  once in `.codex/hooks.json`. The Codex helper reminder has only the
+  matcher `^(collaboration)?(spawn_agent|wait_agent)$`, and
+  `.claude/settings.json` has no `Stop` hook of type `prompt`; either one
+  is an old handler to take out ("Merge rules", `update.md`).

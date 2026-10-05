@@ -9,9 +9,11 @@ Checked against the official pages on 2026-10-05 (Claude Code 2.1.289, Codex 0.1
 - AGENTS.md and CLAUDE.md
 - Hook
 - Settings file
-- Plugin manifest
+- Codex .rules file
+- Output style
+- Plugin manifest or marketplace file
 - Mod
-- Subagent definition or helper brief
+- Subagent definition or helper-agent brief
 
 ## Skill
 
@@ -31,7 +33,7 @@ Check: run the project's skill checks when it has them. After a new or changed n
 
 ## Rule
 
-A rule is a Markdown file in `.claude/rules/`. Claude Code loads it. Codex has no such folder.
+A rule is a Markdown file in `.claude/rules/`. Claude Code loads it. Codex does not read that folder. Codex has a `rules/` folder of its own for a different kind of file: see "Codex .rules file".
 
 - One topic per file, with a file name that says the topic.
 - One specific instruction per bullet, under one heading.
@@ -77,9 +79,44 @@ Check: run the command by hand with a sample input for the event, once for the n
 
 Check: confirm the file still parses, then confirm in a session that the setting is in force.
 
-## Plugin manifest
+## Codex .rules file
 
-- Claude Code reads `.claude-plugin/plugin.json`. Codex reads a `plugin.json` at the plugin's root in the Agent Plugins format; `.codex-plugin/plugin.json` is the older form and still works. Claude Code does not read a root `plugin.json`. A plugin for both carries the same `name` and `version` in each manifest.
+A `.rules` file tells Codex which commands it may run outside the sandbox. Only Codex reads it. Claude Code sets command permissions in a settings file.
+
+- The feature is experimental. Read the page again before every change.
+- The file sits in a `rules/` folder beside a Codex settings layer: `~/.codex/rules/` for every project, `<repo>/.codex/rules/` for one project. Codex loads a project's rules only after the owner trusted the project's `.codex/` folder.
+- Codex reads the files when it starts. Tell the owner to restart Codex after a change.
+- Each rule is one `prefix_rule(...)` call, written in Starlark:
+  - `pattern` is required: the list of words the command starts with. One position may hold a list of alternatives.
+  - `decision` is `allow`, `prompt`, or `forbidden`. With none, it is `allow`.
+  - `justification` is optional: the reason, in words the owner can read. For `forbidden`, name the command to use in its place.
+  - `match` and `not_match` are example commands. Codex tests them when it loads the file.
+- When several rules match one command, the strictest decision applies: `forbidden`, then `prompt`, then `allow`.
+- Give every rule at least one `match` and one `not_match` example.
+- Codex splits a `bash -lc` script into its commands only when the script is plain words joined by `&&`, `||`, `;`, or `|`. A script with a redirect, a substitution, a variable, a wildcard, or control flow is tested as one `bash -lc` command.
+- Codex writes `~/.codex/rules/default.rules` itself when the owner allows a command in a session. Add to that file; never replace it.
+
+Check: `codex execpolicy check --pretty --rules <file> -- <command>`, once with a command the rule must match and once with one it must not. The answer names the decision and the rules that matched.
+
+## Output style
+
+An output style is a Markdown file of instructions that Claude Code sends with every request in a session. Only Claude Code reads it.
+
+- The file sits in `~/.claude/output-styles/` for every project or `.claude/output-styles/` for one project. A plugin ships output styles in its `output-styles/` folder.
+- Every frontmatter field is optional: `name` (with none, the file name), `description`, and `keep-coding-instructions`. A plugin's style may also set `force-for-plugin`. Claude Code ignores a misspelled field without an error.
+- `keep-coding-instructions: true` keeps Claude Code's own software engineering instructions. Without it, a custom style leaves them out. Set it in a style that changes only how replies are written.
+- A style is chosen by the `outputStyle` key of a settings file. The value must equal the style's name, letter for letter, with the same capitals. A value that matches no style gives the default style, with no error.
+- Keep the style short: its text is sent with every request.
+- Codex and helper agents never see an output style. A writing rule they must follow goes in `AGENTS.md`, in the skill, or in the helper's brief.
+- A style is an instruction, and nothing enforces it. What must happen every time goes in a hook.
+- In the terminal, Claude Code reads style files when it starts. Tell the owner to restart it after a change.
+
+Check: start a new session and run `/output-style` with no argument. It lists the styles and marks the one in use.
+
+## Plugin manifest or marketplace file
+
+- Claude Code reads `.claude-plugin/plugin.json`. Codex reads a `plugin.json` at the plugin's root in the Agent Plugins format; `.codex-plugin/plugin.json` is the older form and still works. A plugin for both carries the same `name` and `version` in each manifest.
+- A marketplace file lists the plugins a folder or repository offers. Claude Code reads `.claude-plugin/marketplace.json`. Codex reads `.agents/plugins/marketplace.json`, in a repository or in the home folder. The two files have different fields: read the page for the product before you add one.
 - `claude plugin validate` refuses a plugin name that starts with `claude-`, `anthropic-`, `anthropics-`, or `cc-plugin-`.
 - A `version` in the manifest pins the plugin: a person who installed it gets a change only after the version is raised. Raise it with every shipped change.
 - Codex loads every `SKILL.md` under a plugin's `skills/` folder as a skill of the plugin. No official page says how to keep one out. In a test with Codex 0.160 on 2026-10-05, Codex did not load a `SKILL.md` below a folder whose name starts with a dot. Test it again before you rely on it.
@@ -93,10 +130,10 @@ Check: `claude plugin validate <folder>`. For Codex, install the plugin into a s
 
 Check: `claude plugin validate <folder>` lists what the mod hooks and calls. `claude plugin test` runs its tests with no session.
 
-## Subagent definition or helper brief
+## Subagent definition or helper-agent brief
 
 - A Claude Code subagent definition is a Markdown file in `.claude/agents/`. A Codex custom agent is a TOML file in `.codex/agents/`. Neither product reads the other's file.
-- A helper starts with only the brief. State the goal, the helper's own part, the files to read first, what it must not touch, how to verify the work, and what to report.
+- A helper starts with only the brief. State the goal, the helper's own part, the files to read first, what it must not change, how to verify the work, and what to report.
 - Tell the helper to report only on its own part.
 - Put the writing rules in the brief. A helper does not see the main chat's reply style.
 - Ask it to mark what it verified and what it inferred.

@@ -11,12 +11,12 @@ All work on Toolkit V2 is tracked in Notion, in the Toolkit V2 project
 starting TKV, are in the Work Items data source
 `b22b381d-a176-8301-a22c-0766e27d8dc9`.
 
-Toolkit V2 is rules, skills, and three small hooks. There is no custom
-program (Mike, 2026-09-29). It ships as one plugin, `toolkit`, for Claude Code
-and Codex. Its main skill is `project-setup`. That skill sets up a project by
-copying files: the folder every project gets (with the shared skills and the
-three hook commands), the folder for each of the owner's choices (with its
-skills), and the settings. Each tool is used its own way: plain
+Toolkit V2 is rules, skills, and four small hook commands. There is no
+custom program (Mike, 2026-09-29). It ships as one plugin, `toolkit`, for
+Claude Code and Codex. Its main skill is `project-setup`. That skill sets up
+a project by copying files: the folder every project gets (with the shared
+skills and the four hook commands), the folder for each of the owner's
+choices (with its skills), and the settings. Each tool is used its own way: plain
 files and Obsidian, Notion through `ntn` or the Notion connector, GitHub
 through `gh`, and Hindsight through its own MCP tools.
 
@@ -27,8 +27,7 @@ toolkit ships none of those tools.
 
 The plugin holds a third skill, `writing-harness-files` (Mike, 2026-10-05):
 the steps, the official page addresses, and the checklist for writing or
-changing a skill, a rule, an `AGENTS.md` or `CLAUDE.md`, a hook, a settings
-file, a plugin manifest, a mod, or a helper-agent brief. It is text only.
+changing a harness file. A harness file is a skill, a rule, an `AGENTS.md` or `CLAUDE.md`, a hook, a settings file, a Codex `.rules` file, an output style, a plugin manifest or marketplace file, a mod, a subagent definition, or a helper-agent brief. It is text only.
 
 One exception (Mike, 2026-10-03): a second plugin, `workstreams`, for Claude
 Code only. It is a mod: code that runs inside Claude Code and draws a side
@@ -67,40 +66,47 @@ chat handling each one, and each chat's state. It uses no Notion. See
 | `plugins/workstreams/` | The `workstreams` plugin: its manifest, the mod in `hooks/register.tsx`, its tests in `hooks/register.test.tsx`, and the types of its stored values in `types/index.d.ts`. Claude Code writes `tsconfig.json` and `.claude-plugin/types/` there when it loads the plugin from this folder; `tsconfig.json` is kept in Git so it does not show as a new file, and the `types/` folder ignores itself. |
 | `plugins/toolkit/.claude-plugin/plugin.json` | The Claude Code manifest. |
 | `plugins/toolkit/.codex-plugin/plugin.json` | The Codex manifest: the same `name` and `version`, `"skills": "./skills/"`, and an `interface` block. |
-| `<setup>SKILL.md`, `<setup>references/` | Onboarding, "check the setup", "update the toolkit", and the move-over for a project set up with the older toolkit or by hand (`references/move-over.md`, `references/old-toolkit-pieces.md`). `references/setup-copy.md` holds the one table of setup choices and the folders each one copies; the check tools read it. `references/update.md`, "The one-home layout", brings a project set up before that layout to it. |
+| `<setup>SKILL.md`, `<setup>references/` | Onboarding, "check the setup", "update the toolkit", and the move-over for a project set up with the older toolkit or by hand (`references/move-over.md`, `references/old-toolkit-pieces.md`). `references/setup-copy.md` holds the one table of setup choices and the folders each one copies; the check tools read it. `references/placing-files.md`, "5. The pre-commit check", is the one place that says how `core.hooksPath` is set. `references/update.md` is "update the toolkit"; two parts of it are in their own files: `references/one-home-layout.md` brings a project set up before the one-home layout to it, and `references/earlier-versions.md` holds the changes from toolkit 0.6.0, 0.8.0, and 0.8.1. |
 | `plugins/toolkit/skills/choosing-outside-tools/` | The owner's tool list: `SKILL.md` holds one row per job, and `references/` holds one file per tool (where it comes from, how to set it up, and the owner's choices). Never copied into a project. |
-| `plugins/toolkit/skills/writing-harness-files/` | How to write or change a harness file: `SKILL.md` holds the steps, `references/official-pages.md` the web address of the official page for each kind of file, and `references/checklist.md` the practices and the check for each kind. Never copied into a project. |
-| `<setup>assets/every-project/` | Everything every project gets, at the paths a project has: the project files (`AGENTS.md`, `PROJECT.md`, `DECISIONS.md`, the rules, `system/`, `sources/`, `delivery/`, `reference/`, the test plan template), the 10 shared skills in `.claude/skills/`, and the three hook commands in `.claude/hooks/` (`session-start.mjs`, `prompt-reminder.mjs`, `codex-after-commit.mjs`). Edited here directly (see "The model project and its copy"). |
+| `plugins/toolkit/skills/writing-harness-files/` | How to write or change a harness file: `SKILL.md` holds the steps and the one list of the kinds of harness file, `references/official-pages.md` the web address of the official page for each kind, and `references/checklist.md` the practices and the check for each kind. Never copied into a project. |
+| `<setup>assets/every-project/` | Everything every project gets, at the paths a project has: the project files (`AGENTS.md`, `PROJECT.md`, `DECISIONS.md`, the rules, `system/`, `sources/`, `delivery/`, `reference/`, the test plan template), the 10 shared skills in `.claude/skills/`, the four hook commands in `.claude/hooks/` (`session-start.mjs`, `prompt-reminder.mjs`, `codex-after-commit.mjs`, `validate-records.mjs`), and `.githooks/pre-commit`, which runs the fourth before each commit. Edited here directly (see "The starter project"). |
 | `<setup>assets/work-local/`, `work-notion/`, `work-github/` | One folder per work tracking choice. Each holds one skill, `using-work-tracker`, in `.claude/skills/`. `work-local/` also holds `work-items/` (with its own `AGENTS.md` and `CLAUDE.md`) and `PROJECT-ROADMAP.md`. |
 | `<setup>assets/memory-local/`, `memory-notion/`, `memory-process/`, `memory-hindsight/` | The memory choice. `memory-process/` holds `curating-project-memory` (the process) and goes with local or Notion memory. `memory-local/` and `memory-notion/` each hold their own `using-memory-store` (storage only); `memory-local/` also holds `memory/`: its own `AGENTS.md` and `CLAUDE.md`, `CURRENT_STATE.md`, and `MEMORY.md`, the table of pointers. `memory-hindsight/` holds one rule, `hindsight-memory.md`, and no skill. Hindsight takes it and only `memory/CURRENT_STATE.md` from `memory-local/`. |
 | `<setup>assets/notion-tools/` | `using-notion-cli` and the rule `notion-records.md`, for every project with work items or memory in Notion. |
-| `<setup>assets/salesforce/` | Everything only a Salesforce project gets: `sfdx-project.json`, `.forceignore`, the Salesforce templates inside `delivery/` (a folder every project has), `tools/`, the protected-orgs file, the two guards, the `sf-*` skills, `.codex/hooks.json`, and ten rules. |
+| `<setup>assets/salesforce/` | Everything only a Salesforce project gets: `sfdx-project.json`, `.forceignore`, the Salesforce templates inside `delivery/` (a folder every project has), `tools/`, the protected-orgs file, the two guards, the `sf-*` skills, `.codex/hooks.json`, and eleven rules. One of them, `salesforce-delivery.md`, holds the Salesforce lines for `delivery/` and loads only for files there (`paths: delivery/**`). |
 | `<setup>assets/soul/` | `SOUL.md`, for a project whose owner keeps it. |
+| `<setup>assets/owner-preferences.md` | The starting text of `.claude/rules/owner-preferences.md`, which every project gets. It is the one file every project gets that sits outside `every-project/`: from the first instruction on it is the owner's own file, so setup and "update the toolkit" copy it only into a project that has none, and never compare or replace it (`<setup>references/setup-copy.md`, "The owner-preferences rule"). `check-rules.mjs` counts its size with the rules. |
 | Why skills sit under `.claude/` | Every folder holds its skills under `.claude/skills/`, and `.claude` starts with a dot. Codex loads every `SKILL.md` under a plugin's `skills/` folder as a plugin skill, in every folder on the computer, unless a parent folder's name starts with a dot. So the 20 project skills stay out of Codex outside a project. Tested in a scratch Codex home: `dev/test-runs/one-folder-per-choice.md` and `dev/test-runs/setup-update-and-tools.md`; the first test, with the older folder names, is `dev/test-runs/codex-dot-folders.md` in Git history. Claude Code is different: it loads a skill in a `.claude/skills/` folder below the session's folder once the agent reads or edits a file there, so `.claude/settings.json` turns the project skills off for this repository (last row). |
 | `<setup>assets/settings/` | The snippets onboarding merges into a project's `.claude/settings.json`, `.codex/hooks.json`, and `.codex/config.toml` for each choice. |
-| `ai-external-knowledge/` | Official Claude Code, Codex, Agent Skills, and Anthropic engineering pages, captured with Firecrawl. `INDEX.md` lists them; each folder's `SOURCE-RECORD.md` gives every page's web address. Not shipped. |
+| `ai-external-knowledge/` | Official pages, captured with Firecrawl, one folder per source: `claude-code/`, `codex/`, `openai-plugins/`, `anthropic-agent-skills/`, `anthropic-engineering/`, and `hindsight/`. `INDEX.md` lists them; each folder's `SOURCE-RECORD.md` gives every page's web address and capture date. Not shipped. |
 | `dev/` | Goal, progress, design, research, diagrams, test runs, tools, and tests. Not shipped. |
 | `dev/build-shared/` | The source of every text several skills hold word for word: today only `helper-briefs/handoff-verifier.md`. |
 | `dev/tools/check-skills.mjs` | Checks every skill the `toolkit` plugin holds and every skill `project-setup` copies into a project, and the setup folders (see "Checks"). |
 | `dev/tools/check-rules.mjs` | Checks the model's rule files against Claude Code's guidance for rules (`dev/research/rules-best-practices.md`). |
 | `dev/tools/rule-lint.mjs` | The checks `check-rules.mjs` runs, and the rules list that the `AGENTS.md` of a project set up before the one-home layout holds. Dev only: nothing under `plugins/` imports it. |
-| `dev/tests/hooks.test.mjs` | Tests the three hook commands and the settings snippets in scratch folders. |
+| `dev/tests/hooks.test.mjs` | Tests the first three hook commands and the settings snippets in scratch folders, and the size limit of every hook command. |
+| `dev/tests/validate-records.test.mjs` | Tests `validate-records.mjs`: a new project gives no finding, each of the 15 checks reports a broken record, and a real `git commit` is stopped through `.githooks/pre-commit`. |
 | `dev/tests/org-guard.test.mjs` | Tests the Salesforce org guard, `guard-protected-orgs.cjs`, with the `salesforce` folder's `protected-orgs.json`, in a scratch folder with a stand-in `sf`. No org is reached. |
-| `.claude/settings.json` | Settings for sessions working on this repository. `claudeMdExcludes` stops the `CLAUDE.md`, `AGENTS.md` files, and rules in every folder of `<setup>assets/` from loading as instructions here: they are for projects, not for this repository. `skillOverrides` sets each of the 17 project skill names to `"off"`, so a session that reads a file under `<setup>assets/` does not get the project skills (tested 2026-10-05: `dev/test-runs/setup-update-and-tools.md`). It matches by name, so add a new project skill's name there. It does not touch the `toolkit` plugin's own skills. |
+| `dev/tests/permission-set-guard.test.mjs` | Tests the second Salesforce guard, `guard-permission-set-deploy.cjs`, in a scratch folder. No org is reached. |
+| `.claude/settings.json` | Settings for sessions working on this repository. `claudeMdExcludes` stops the `CLAUDE.md`, `AGENTS.md` files, and rules in every folder of `<setup>assets/` from loading as instructions here: they are for projects, not for this repository. `skillOverrides` sets each of the 17 project skill names to `"off"`, so a session that reads a file under `<setup>assets/` does not get the project skills. It matches by name, so add a new project skill's name there: `check-skills.mjs` fails when the list and the project skill names differ. It does not touch the `toolkit` plugin's own skills. Both settings were tested in a session started in a worktree on 2026-10-05: `dev/test-runs/fix-pass-setup-and-tools.md`. |
 
 What a project gets from onboarding:
 
 - the files of `every-project/` and of the folder for each choice it made;
 - the skills in `.claude/skills/<name>/`, with `.agents/skills` as a link to
   `.claude/skills`, so both hosts read one copy (Codex follows the link);
-- the hook commands in `.claude/hooks/`, and the hooks in
-  `.claude/settings.json` (Claude Code) and `.codex/hooks.json` (Codex);
+- the hook commands in `.claude/hooks/`, the hooks in
+  `.claude/settings.json` (Claude Code) and `.codex/hooks.json` (Codex),
+  and `.githooks/pre-commit`, with `core.hooksPath` set to `.githooks` in
+  that copy of the repository;
 - its settings in `PROJECT.md`, section "Toolkit settings".
 
-## The model project and its copy
+## The starter project
 
 The folders under `<setup>assets/` (`every-project/`, then one folder per
-choice) together are the model project: the source for every project file.
+choice) together are the starter project: the source for every project
+file. Older text, the check tools, and the rules below also call it "the
+model".
 Mike, 2026-10-02: his model folder outside this repository "is sort of just
 like a throwaway folder ... as long as we have the structure set up properly
 in V2". So edit these folders directly, and never copy his outside model
@@ -132,7 +138,7 @@ add", is the only table of choices and folders; a new folder under
   setup marker and no generated rules list: they read the same in every
   project. What differs by choice is in a file only that choice gets
   (`hindsight-memory.md`, `notion-records.md`, `salesforce-project.md`,
-  `work-items/AGENTS.md`, `memory/AGENTS.md`).
+  `salesforce-delivery.md`, `work-items/AGENTS.md`, `memory/AGENTS.md`).
 - No file under `<setup>assets/` holds a setup marker (`<!-- if ... -->`,
   `<!-- endif -->`): `check-skills.mjs` fails on one. Setup fills only
   blanks: the project name, the prompts the owner answers, and the 11 lines
@@ -185,12 +191,22 @@ node --test 'dev/tests/*.test.mjs'
   - It reads the setup folders from the table in
     `<setup>references/setup-copy.md`, "Folders the choices add". It fails
     when a folder under `<setup>assets/` other than `settings/` is in no
-    row, when a project path is in two setup folders (apart from the files
-    of the two storage skills named above), and when any file under
-    `<setup>assets/` holds a setup marker.
+    row, when a folder other than `notion-tools` and `memory-process` is
+    in two rows, when a word of such a folder's name is not in its row's
+    Choice cell (a setup folder is named for its choice, so `work-github`
+    in the row "Work items local" fails), when a project path is in two
+    setup folders (apart from the files of the two storage skills named
+    above), and when any file under `<setup>assets/` holds a setup marker.
   - It fails when the skills table in
     `<setup>references/skills-hooks-settings.md` or the skill counts in
     `<setup>references/interview.md` differ from what the folders hold.
+  - It fails when the `skillOverrides` list in this repository's
+    `.claude/settings.json` does not set every project skill name to
+    `"off"`, or names anything that is no project skill.
+  - It fails when the Salesforce entries listed in
+    `<setup>references/setup-copy.md`, "Salesforce entries in the settings
+    file", differ from the `sf` and `sfdx` permission rules and the
+    Salesforce hook commands in `every-project/.claude/settings.json`.
   - It checks that the Next action prompt in the Notion work item
     template's text (`<setup>references/notion-build/work-item-page.md`)
     matches `work-local/work-items/work-item-template/WORK-ITEM.md`.
@@ -198,8 +214,12 @@ node --test 'dev/tests/*.test.mjs'
     fail the run.
 - `check-rules.mjs` puts every folder under `<setup>assets/` except
   `settings/` together in a scratch folder, as one project that has every
-  choice, and checks that project's rules. It fails when a folder for one
-  choice holds rules and the tool's `CHOICE_RULES` list does not name it.
+  choice, and checks that project's rules. Its `CHOICE_RULES` list is kept
+  by hand: it says which setup folders hold rules only some projects get,
+  and which choice gets them. It is a second copy of part of the table in
+  `<setup>references/setup-copy.md`, so change both together. The tool
+  fails when a folder for one choice holds rules and the list does not
+  name it; nothing checks the choice written beside a folder.
 - Keep the quotes around the test pattern, so Node reads it, not the shell.
   A folder name instead of a pattern fails on the Node 25 installed here.
 - Codex has no validate command. To prove Codex accepts the plugin, install
@@ -227,6 +247,23 @@ node --test 'dev/tests/*.test.mjs'
   No other script goes into a skill or a project. A new command, or a new
   job for one, needs Mike's yes first, with its size in plain numbers: do not
   write it; stop and tell him.
+  - A fourth command, `validate-records.mjs` (Mike's yes, 2026-10-05, work
+    item TKV-24). It checks the form of a project's records with 15 checks
+    (`dev/research/layout-audit/CHECKS-SPEC.md`): after each file edit in
+    both hosts, when the agent stops in Claude Code, and before each
+    commit. It only reads, and a finding goes to the agent as text with
+    exit code 2. He was told about 220 lines plus about 220 lines of tests.
+    It is 279 lines plus 279 lines of tests
+    (`dev/tests/validate-records.test.mjs`), and he accepted that size on
+    2026-10-05. A test fails when it is over 280 lines. Tell him the size
+    again before it grows.
+  - With it comes `.githooks/pre-commit`, a 6-line shell file every project
+    gets (his yes with the same size, 2026-10-05). It runs the fourth
+    command before a commit and stops the commit only on a finding. Git
+    runs it once `core.hooksPath` is `.githooks` in that copy of the
+    repository; `project-setup` sets that, and changes nothing when a
+    project already has another hooks folder or a `pre-commit` hook of its
+    own (`<setup>references/placing-files.md`, "5. The pre-commit check").
 - **Workstreams plugin** (Mike, 2026-10-03, work items TKV-12 and TKV-14).
   The one other piece of code the toolkit ships. The first version (TKV-12)
   listed Notion work items. Mike had it rebuilt the same day (TKV-14) so it
@@ -365,7 +402,8 @@ node --test 'dev/tests/*.test.mjs'
   concise, no jargon, no figurative language, and one meaning for every
   instruction unless the text says the agent should use its judgment. The
   writer fixes each verified finding and the reviewer reads the fix. A new
-  or changed description, skill name, or model routing line also gets a
+  or changed description, skill name, or row of the "Which skill" table in
+  the starter's `AGENTS.md` also gets a
   review against `dev/reviews/overlap-review.md`, then the routing test in
   both hosts. Every change to a skill, rule, hook, settings snippet, or
   the model's `AGENTS.md` also gets a review against
@@ -381,8 +419,9 @@ node --test 'dev/tests/*.test.mjs'
 - **Adding, renaming, or removing a skill** changes its folder,
   `dev/SKILL-INDEX.md`, `<setup>references/skills-hooks-settings.md`, the
   skill counts in `<setup>references/interview.md`, `README.md`, the
-  `skillOverrides` list in this repository's `.claude/settings.json`, and
-  the "Which skill" table in the model's `AGENTS.md`. The last one is a
+  `skillOverrides` list in this repository's `.claude/settings.json`
+  (`check-skills.mjs` fails when it differs from the project skill names),
+  and the "Which skill" table in the model's `AGENTS.md`. The last one is a
   model change and needs Mike's yes. A renamed or removed project skill
   also gets a line in `<setup>references/update.md`, "4. What the toolkit
   no longer ships", so existing projects lose the old folder. No new
@@ -398,7 +437,13 @@ node --test 'dev/tests/*.test.mjs'
   `session-start.mjs` finds it with `git rev-parse --git-common-dir`, and so
   works from inside a Git worktree. With local memory it prints
   `memory/MEMORY.md`, the table of pointers, and never writes it:
-  `using-memory-store` does (Mike, 2026-10-05). Any change to a Codex hook means Mike
+  `using-memory-store` does (Mike, 2026-10-05). `validate-records.mjs`
+  runs from three places: a `PostToolUse` entry in both hosts, a `Stop`
+  entry in Claude Code only (Codex accepts only JSON output for `Stop`),
+  and `.githooks/pre-commit`. In an update of a project that does not have
+  its entries yet, the records must pass `--all` before the entries go in
+  (`<setup>references/update.md`, "The record check and the pre-commit
+  file"). Any change to a Codex hook means Mike
   must trust it again in Codex `/hooks`; say so. Codex trusts the entry in
   `.codex/hooks.json`, not the `.mjs` file it runs, so the memory skill
   names live in `session-start.mjs` and `prompt-reminder.mjs`, and the
@@ -446,15 +491,18 @@ node --test 'dev/tests/*.test.mjs'
 - **Harness files follow the current official documentation** (Mike,
   2026-10-05: "they must always be written using the most up to date claude
   code and codex best practices and up to date documentation", by every
-  agent and helper agent, without him repeating it). A harness file is a
-  skill, a rule, an `AGENTS.md` or `CLAUDE.md`, a hook command or its
-  settings entry, a settings file, a plugin manifest, a helper-agent brief,
-  or a mod. The `writing-harness-files` skill is the way to follow this
+  agent and helper agent, without him repeating it). A harness file is
+  a skill, a rule, an `AGENTS.md` or `CLAUDE.md`, a hook, a settings file, a Codex `.rules` file, an output style, a plugin manifest or marketplace file, a mod, a subagent definition, or a helper-agent brief. A hook means the command and its entry in a settings or hooks
+  file. This list is the same, word for word, in the
+  `writing-harness-files` skill's `SKILL.md` and in `README.md`: change all
+  three together, and the skill's description with them. The
+  `writing-harness-files` skill is the way to follow this
   rule: open it, in this repository and in any project. In this repository
   its steps mean:
   - Read the official page for that kind of file in `ai-external-knowledge/`
     (`claude-code/`, `codex/`, `anthropic-agent-skills/`, `openai-plugins/`,
-    `anthropic-engineering/`). Each folder's `SOURCE-RECORD.md` gives the
+    `anthropic-engineering/`; `hindsight/` for the Hindsight setup file).
+    Each folder's `SOURCE-RECORD.md` gives the
     capture date. When the capture is more than 14 days old, capture the
     page again with Firecrawl first, update its `SOURCE-RECORD.md`, and read
     what changed. Never edit a captured page by hand.
@@ -491,7 +539,13 @@ node --test 'dev/tests/*.test.mjs'
   and never Hindsight Cloud. Hindsight's coding-agent add-on, installed
   machine-wide with his yes, saves each session and gives the agent its
   `hindsight_*` tools, so there are no toolkit memory skills; Current State
-  stays in `memory/CURRENT_STATE.md`. The API key lives in
+  stays in `memory/CURRENT_STATE.md`. Mike, 2026-10-05: a Hindsight project
+  gets no toolkit memory skill, because the add-on ships its own skill,
+  `hindsight-coding-agent`, and shows the agent a guide to its tools at
+  session start. Toolkit text names that skill and never lists the tools.
+  The server is his: an agent never changes it, and the facts an agent
+  needs about it are in `<setup>references/hindsight-on-vps.md`, taken from
+  his own guide (`dev/research/hindsight-server-setup-guide.md`). The API key lives in
   `~/.hindsight/coding-agent.json` (or, by his choice, `HINDSIGHT_API_TOKEN`
   in `~/.zshenv`), never in a repository. Tests use only banks made for the
   test, with his yes, never his own.
