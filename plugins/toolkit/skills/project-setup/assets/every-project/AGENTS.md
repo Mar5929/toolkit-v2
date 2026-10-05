@@ -1,10 +1,6 @@
-Always execute work with the context in mind that the user will likely
-continue work across multiple AI coding sessions where the session context is
-cleared and picked up again. You must assist the user in helping establish
-that continuity across sessions while not adding context that might pollute
-future agents and skew them. Information must be curated and intentional.
+# AGENTS.md
 
-# <Project name>: agent guide
+## <Project name>: agent guide
 
 <!-- Project setup fill-in guide: the `project-setup` skill replaces <Project name> in the heading. Then replace the one-sentence outcome below, and the "Build, test, or deploy" row under Commands, with this project's confirmed values. Those are the only two prompts. Text such as `<ID>` in the tables is the form of a name: keep it. Change nothing else: this file reads the same in every project. Remove this guide when both prompts are filled. -->
 
@@ -33,48 +29,48 @@ Every folder and file, what it holds, and what to follow when you change it.
 
 | Location | What it holds | When you change it |
 | --- | --- | --- |
-| `PROJECT.md` | What the project is for, its scope, its people, its systems, and "Toolkit settings": the setup choices, the work item ID prefix, and links. | Ask the owner first. Save with `publish-docs`. |
-| `PROJECT-ROADMAP.md` (local work items) | The project's phases and the top-level work items in each. | `running-work-item-lifecycle` decides the change. |
-| `README.md` | A short introduction for a person who opens the folder. | Save with `publish-docs`. |
-| `AGENTS.md`, `CLAUDE.md` | This guide, and the one line that makes Claude Code read it. Each folder guide named below is the same pair of files inside its folder. | Only with the owner's yes, on a branch with a pull request. Never save one with `publish-docs`. |
-| `DECISIONS.md` | Every decision and open question that more than one work item needs. Each entry has an ID (DEC-###) and a status: Open, Decided, Superseded, or Withdrawn. | `filing-project-records`, step "record a decision". The rules for an entry are at the top of the file. |
-| `SOUL.md` (optional) | How the owner wants the agent to work. | Only the owner changes it. |
-| `.gitignore` | The paths Git does not track. | Only with the owner's yes. |
-| `work-items/` (local work items) | Temporary work: one folder per work item. | Read `work-items/AGENTS.md`. Use `using-work-tracker` for every read and save. |
-| `work-items/<ID>-<short-slug>/<ID>.md` (local work items) | One work item: its requirements, its own decisions, its tasks, and its history. | `running-work-item-lifecycle`. |
-| `work-items/<ID>-<short-slug>/DESIGN.md` (local work items) | The design for that one work item. | `running-work-item-lifecycle`. |
-| `work-items/PROJECT-TASKS.md` (local work items) | Chores for the project that belong to no work item. | `running-work-item-lifecycle`. |
-| `work-items/work-item-template/` (local work items) | The forms copied to start a new work item or design. | Never edit; they come from the toolkit. |
-| `memory/` (local memory, Hindsight memory) | Local memory: where work stopped, and pointers: an ID and a link. Never a second copy of a fact. Hindsight memory: only `CURRENT_STATE.md`. | Local memory: read `memory/AGENTS.md` and use `curating-project-memory`. Hindsight memory: `.claude/rules/hindsight-memory.md`. |
-| `memory/CURRENT_STATE.md` (local memory, Hindsight memory) | What is in progress, what waits on the owner, and where the next session starts. | Local memory: `using-memory-store` makes the write. Hindsight memory: `.claude/rules/hindsight-memory.md`. |
-| `memory/MEMORY.md` (local memory) | The pointers: one table, one row per pointer. The session-start hook prints it. | `using-memory-store` makes the write. |
-| `system/` | The approved description of the system. Every document has a Status line, numbered rules, open questions that link to `DECISIONS.md`, and a changelog. | Read `system/AGENTS.md`. Use `filing-project-records`, step "update a system document". |
-| `system/glossary.md` | The project's terms and what each means. | As for `system/`. Never infer a definition. |
-| `system/constraints.md` | Rules that cover several areas of the system (CON-##). | As for `system/`. |
-| `system/architecture.md` | The main parts of the system and how they connect (ARC-##). | As for `system/`. |
-| `system/data-model.md` | The objects, the fields, and how records relate (DAT-##). | As for `system/`. |
-| `system/security-model.md` | Who can see and change what (SEC-##). | As for `system/`. |
-| `system/automation.md` | What runs by itself: flows, triggers, scheduled jobs (AUT-##). | As for `system/`. |
-| `system/integrations/` | One document per connection to another system (INT-##). `README.md` lists them; `INTEGRATION-TEMPLATE.md` is the form. | As for `system/`. |
-| `system/diagrams/` | Pictures of the system. | As for `system/`. |
-| `sources/` | Every original the project keeps (SRC-###): meeting notes, transcripts, emails, client documents. Never stored inside a work item. | Read `sources/AGENTS.md`. Use `filing-project-records`, step "file a source". Never edit a filed original. |
-| `sources/README.md` | The list of sources: ID, date, from whom, what it is, where it is kept, and what used it. | The same step, in the same edit as the original. |
-| `delivery/` | What goes out of the project. | Read `delivery/AGENTS.md`. Save with `publish-docs`. |
-| `delivery/releases/` | One folder per release: its notes and its go-live plan. | As for `delivery/`. |
-| `delivery/deployments/` | One folder per work item that is deployed. Salesforce: also the component tracker and the package files. | As for `delivery/`. Salesforce: `sf-component-tracker`. |
-| `delivery/migrations/` | Moving data from an old system into the new one. Load files and backups are never committed. | As for `delivery/`. Salesforce production data: `sf-data-change`. |
-| `delivery/client-handoffs/` | What was given to the client or the next team. | As for `delivery/`. |
-| `reference/` | Material that is not the project's own decision. | Read `reference/AGENTS.md`. Save with `publish-docs`. |
-| `reference/outside-docs/` | Vendor and product documentation captured from outside. `INDEX.md` lists the topics. | As for `reference/`. Never edit a captured page. |
-| `reference/current-system/` | What exists today, before this project's changes, with the date it was observed. | As for `reference/`. |
-| `tests/` | Test plans, one file per work item or release: `<ID>-test-plan.md` or `<release>-test-plan.md`. `TEST-PLAN-TEMPLATE.md` is the form. | `running-work-item-lifecycle` writes them here, never in the work tracker. |
-| `force-app/`, `sfdx-project.json`, `.forceignore` (Salesforce) | The Salesforce source and its project settings. `force-app/` is made when the first metadata is added. | The Salesforce rules in `.claude/rules/`; `sf-component-tracker` before building. |
-| `tools/` (Salesforce) | `tools/kb/` lists what reads and writes each part of the org. `tools/permissions/` holds the permission set tool. | `.claude/rules/salesforce-project.md` gives the commands. |
-| `.claude/rules/` | The project's rules. `owner-preferences.md` holds the owner's own instructions. | Only with the owner's yes. |
-| `.claude/skills/` | The procedures named in "Which skill" below. | Only with the owner's yes. |
-| `.claude/hooks/`, `.claude/settings.json` | The small commands that run by themselves, and the settings that turn them on. Salesforce: also the two org guards and `.claude/protected-orgs.json`, the orgs they protect. | Only with the owner's yes. |
-| `.claude/output-styles/` | The Plain English style Claude Code applies to chat replies. | Only with the owner's yes. |
-| `.agents/skills`, `.codex/` | The link that lets Codex read the same skills, and Codex's hooks and settings. | Only with the owner's yes. |
+| `PROJECT.md` | The stable facts about the project: what it is for, what is in and out of scope, who the people are and what each may decide, and which systems it touches. Its "Toolkit settings" section says how this project was set up: where work items and memory are kept, the work item ID prefix, and links. | Ask the owner first. Save with `publish-docs`. |
+| `PROJECT-ROADMAP.md` (local work items) | The plan at project level: the project's phases in order, and the top-level work items that belong to each phase. | `running-work-item-lifecycle` decides the change. |
+| `README.md` | A short introduction for a person who opens the repository: what the project is and where things are. It holds no instructions for agents. | Save with `publish-docs`. |
+| `AGENTS.md`, `CLAUDE.md` | This guide: the instructions every agent session reads first. `CLAUDE.md` holds the one line that makes Claude Code read `AGENTS.md`. Each folder guide named below is the same pair of files inside its folder. | Only with the owner's yes, on a branch with a pull request. Never save one with `publish-docs`. |
+| `DECISIONS.md` | Every decision and open question that more than one work item needs, so no later work item has to find it out again. Each entry has an ID (DEC-###) and a status: Open, Decided, Superseded, or Withdrawn. | `filing-project-records`, step "record a decision". The rules for an entry are at the top of the file. |
+| `SOUL.md` (optional) | The owner's own description of how the agent should work with the owner and the project team. | Only the owner changes it. |
+| `.gitignore` | The list of files and folders Git does not track, such as `work-items/` and `memory/`. | Only with the owner's yes. |
+| `work-items/` (local work items) | The work tracker, when work items are kept as local files: one folder per work item. A work item is one piece of work, such as a feature, a fix, or a change, from idea to Done. It is temporary: what must last moves to `system/` and `DECISIONS.md` when the item closes. | Read `work-items/AGENTS.md`. Use `using-work-tracker` for every read and save. |
+| `work-items/<ID>-<short-slug>/<ID>.md` (local work items) | One work item's record: its goal, requirements, questions and answers, tasks, current state, and history. | `running-work-item-lifecycle`. |
+| `work-items/<ID>-<short-slug>/DESIGN.md` (local work items) | The solution design for that one work item: the options considered and the approach the owner approved. | `running-work-item-lifecycle`. |
+| `work-items/PROJECT-TASKS.md` (local work items) | Administrative tasks for the project that belong to no work item, such as giving a person access. | `running-work-item-lifecycle`. |
+| `work-items/work-item-template/` (local work items) | The blank forms that are copied to start a new work item and its design. | Never edit; they come from the toolkit. |
+| `memory/` (local memory, Hindsight memory) | What a new session needs to continue where the last one stopped. Local memory: Current State, and pointers (an ID and a link to a record). It never holds a second copy of a fact. Hindsight memory: only `CURRENT_STATE.md`. | Local memory: read `memory/AGENTS.md` and use `curating-project-memory`. Hindsight memory: `.claude/rules/hindsight-memory.md`. |
+| `memory/CURRENT_STATE.md` (local memory, Hindsight memory) | One short page: which work items are in progress, what waits on the owner, and where the next session starts. | Local memory: `using-memory-store` makes the write. Hindsight memory: `.claude/rules/hindsight-memory.md`. |
+| `memory/MEMORY.md` (local memory) | The table of pointers: one row per record a later session may need to find again, with its ID, a link, and the dates it was created and last changed. The session-start hook prints it. | `using-memory-store` makes the write. |
+| `system/` | The approved description of how the system must work, written as numbered rules, one document per area. Work items, decisions, and tests point to these rules by ID. Each rule shows whether it is a draft, approved, or built. | Read `system/AGENTS.md`. Use `filing-project-records`, step "update a system document". |
+| `system/glossary.md` | The words that have a special meaning in this project, such as business terms, system names, and abbreviations. Each has its meaning here, where that meaning came from, and any word it is often confused with. Read it before you use or define a project term. | As for `system/`. Never infer a definition. |
+| `system/constraints.md` | Rules that apply across several areas of the system, such as a naming standard or a limit every feature must respect (CON-##). | As for `system/`. |
+| `system/architecture.md` | The main parts of the system, what each part is responsible for, and how the parts connect (ARC-##). | As for `system/`. |
+| `system/data-model.md` | The data the system keeps: each object or table, its important fields, and how records relate to each other (DAT-##). | As for `system/`. |
+| `system/security-model.md` | Who can see, create, change, and delete each kind of record, who can use each function, and how that access is given (SEC-##). | As for `system/`. |
+| `system/automation.md` | Everything that runs without a person starting it, such as a flow, a trigger, or a scheduled job: what starts it, what it does, and what it changes (AUT-##). | As for `system/`. |
+| `system/integrations/` | One document per connection between this system and another one: what data is sent, in which direction, when, and which system holds the true value (INT-##). `README.md` lists them; `INTEGRATION-TEMPLATE.md` is the blank form. | As for `system/`. |
+| `system/diagrams/` | Diagrams that explain the system, such as a data model diagram, a process flow, or a map of the integrations. Each is linked from the `system/` document it explains. | As for `system/`. |
+| `sources/` | Every original the project received and keeps, unchanged, each with an ID (SRC-###): for example meeting notes, transcripts, emails, and client documents. Other records point to a source by its ID. An original is never stored inside a work item. | Read `sources/AGENTS.md`. Use `filing-project-records`, step "file a source". Never edit a filed original. |
+| `sources/README.md` | The list of all sources, one row each: its ID, the date received, who it came from, what it is, where it is kept, and which work items used it. | The same step, in the same edit as the original. |
+| `delivery/` | The records of putting the work into use: releases, deployments to an environment, data migrations, and what was handed to the client or the next team. Not the work itself, and not the plan for it. | Read `delivery/AGENTS.md`. Save with `publish-docs`. |
+| `delivery/releases/` | One folder per release: what the release contains, its release notes, and the plan for going live. | As for `delivery/`. |
+| `delivery/deployments/` | One folder per deployment of a work item to an environment: what was deployed, where, when, the result, and any manual steps. Salesforce: also the component tracker and the package files. | As for `delivery/`. Salesforce: `sf-component-tracker`. |
+| `delivery/migrations/` | Work that moves, loads, changes, or corrects data in bulk: the mapping, the transformation rules, and the record of each run. Data files and backups are never committed. | As for `delivery/`. Salesforce production data: `sf-data-change`. |
+| `delivery/client-handoffs/` | What was handed to the client or to the next team, and when: for example documents, messages, and training material. | As for `delivery/`. |
+| `reference/` | Material the project reads but did not decide: documentation from vendors and products, and the record of how the existing system works today. It is background. The project's own decisions are in `system/` and `DECISIONS.md`. | Read `reference/AGENTS.md`. Save with `publish-docs`. |
+| `reference/outside-docs/` | Documentation captured from outside the project, such as vendor and product documentation, one folder per topic. `INDEX.md` lists the topics. | As for `reference/`. Never edit a captured page. |
+| `reference/current-system/` | How the existing system works today, before this project's changes: what was observed, in which environment, and on which date. | As for `reference/`. |
+| `tests/` | Test plans: what will be tested, how, and the results. One file per work item or release: `<ID>-test-plan.md` or `<release>-test-plan.md`. `TEST-PLAN-TEMPLATE.md` is the blank form. | `running-work-item-lifecycle` writes them here, never in the work tracker. |
+| `force-app/`, `sfdx-project.json`, `.forceignore` (Salesforce) | The Salesforce metadata this project builds and deploys, in `force-app/`, and the two files that tell Salesforce tools how to treat this repository. `force-app/` is made when the first metadata is added. | The Salesforce rules in `.claude/rules/`; `sf-component-tracker` before building. An official Salesforce plugin with skills and tools for designing and building in Salesforce is installed: use them, as `.claude/rules/salesforce-project.md` says. |
+| `tools/` (Salesforce) | Scripts for Salesforce work. `tools/kb/` lists which parts of the org read and write each other, to show what a change affects. `tools/permissions/` holds the tool that keeps permission sets in Git. | `.claude/rules/salesforce-project.md` gives the commands. |
+| `.claude/rules/` | Short rules the agent follows in every session, or whenever it works on certain files. `owner-preferences.md` holds the owner's own standing instructions. | Only with the owner's yes. |
+| `.claude/skills/` | Step-by-step procedures the agent opens when a task calls for one. "Which skill" below says which skill owns which moment. | Only with the owner's yes. |
+| `.claude/hooks/`, `.claude/settings.json` | Small commands the agent's app runs by itself at set moments, such as the start of a session, and the settings file that turns them on. Salesforce: also the two org guards and `.claude/protected-orgs.json`, the orgs they protect. | Only with the owner's yes. |
+| `.claude/output-styles/` | The Plain English style that Claude Code applies to chat replies. | Only with the owner's yes. |
+| `.agents/skills`, `.codex/` | What Codex reads: a link to `.claude/skills`, so Codex uses the same skills, and Codex's own hooks and settings. | Only with the owner's yes. |
 
 ## Where information goes
 
