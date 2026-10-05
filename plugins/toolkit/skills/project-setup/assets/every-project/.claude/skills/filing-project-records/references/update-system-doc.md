@@ -18,7 +18,7 @@ A rule changes only together with a decision. Name the DEC ID before you write. 
 4. When an Open entry becomes Decided: change each Draft rule that waited for it to Approved, and remove its DEC ID from Open questions.
 5. Set "Last changed via" to the DEC ID. Set the document's Status again.
 6. Add one Changelog row: the date, the change with the rule ID, the DEC ID, and the work item that caused the change or "none".
-7. Add the rule ID to the Affects line of the entry in `DECISIONS.md`.
+7. Add the rule ID to the Affects line of the entry in `DECISIONS.md`. `record-decision.md`, step 7, writes the rule ID into each work item.
 8. Save the document and `DECISIONS.md` in one save with `publish-docs`.
 
 ## Mark a rule Built

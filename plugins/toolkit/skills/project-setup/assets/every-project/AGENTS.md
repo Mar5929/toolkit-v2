@@ -47,7 +47,7 @@ Every folder and file, what it holds, and what to follow when you change it.
 | `work-items/work-item-template/` (local work items) | The forms copied to start a new work item or design. | Never edit; they come from the toolkit. |
 | `memory/` (local memory, Hindsight memory) | Local memory: where work stopped, and pointers: an ID and a link. Never a second copy of a fact. Hindsight memory: only `CURRENT_STATE.md`. | Local memory: read `memory/AGENTS.md` and use `curating-project-memory`. Hindsight memory: `.claude/rules/hindsight-memory.md`. |
 | `memory/CURRENT_STATE.md` (local memory, Hindsight memory) | What is in progress, what waits on the owner, and where the next session starts. | Local memory: `using-memory-store` makes the write. Hindsight memory: `.claude/rules/hindsight-memory.md`. |
-| `memory/MEMORY.md` (local memory) | The list of pointers. The session-start hook writes it. | Never edit it. |
+| `memory/MEMORY.md` (local memory) | The pointers: one table, one row per pointer. The session-start hook prints it. | `using-memory-store` makes the write. |
 | `system/` | The approved description of the system. Every document has a Status line, numbered rules, open questions that link to `DECISIONS.md`, and a changelog. | Read `system/AGENTS.md`. Use `filing-project-records`, step "update a system document". |
 | `system/glossary.md` | The project's terms and what each means. | As for `system/`. Never infer a definition. |
 | `system/constraints.md` | Rules that cover several areas of the system (CON-##). | As for `system/`. |
@@ -156,4 +156,3 @@ Claude Code applies the Plain English output style to chat. Codex and helper age
 - When asking for a decision, name the choice and the difference that matters, and recommend one.
 - Use the exact status word: written, built, tested, merged, installed, or seen working. Say something works only when you saw it work.
 - Leave out routine narration. Give one direct line when the owner lost something, an action cannot be undone, work waits on the owner, or there is a cost.
-- When you use something recalled from project knowledge, name the source where you use it and end with a short Sources list.

@@ -15,7 +15,7 @@ Reads three things already on disk and contacts no org:
                                       for the same reason.
 
 Writes `crosscheck-<org>.json` and `crosscheck-<org>.md` into that same
-committed folder. The Markdown one is the report the SPEC says Mike reads.
+committed folder. The Markdown one is the report the SPEC says the owner reads.
 
 ## What is being compared, exactly
 
@@ -512,7 +512,7 @@ def score_expectations(rows: list[dict]) -> list[dict]:
         # about this tool. Phase 7 reported the first and read it as the second,
         # which is how it concluded that layouts were the weakest thing the tool
         # does when Salesforce reported 1,608 layout-to-field connections in Red
-        # and the tool had found every one of them. Mike caught it on 2026-08-06.
+        # and the tool had found every one of them. The owner caught it on 2026-08-06.
         #
         #   salesforce_covered = both / (both + local_only)
         #       Of the connections the files found, how many did Salesforce also

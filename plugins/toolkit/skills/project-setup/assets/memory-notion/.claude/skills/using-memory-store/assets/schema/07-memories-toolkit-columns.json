@@ -22,7 +22,7 @@
     },
     "Authorization": {
       "rich_text": {},
-      "description": "What allowed the save, for example \"Approved by Mike on 2026-09-29\"."
+      "description": "What allowed the save, for example \"Approved by the owner on 2026-09-29\"."
     },
     "Work item IDs": {
       "rich_text": {},

@@ -32,7 +32,7 @@ How one work item is laid out in its issue, and how each part is written. The he
     ## Notes                                Context, Sources, Lessons not proven yet, Solution options and considerations
   Comments, oldest first:
     ## Solution design                      the design: one comment, edited in place
-    Agent: helper finished P1-T02; 12 tests pass.
+    Agent: a helper started on P1-T02.
 ```
 
 A project set up for GitHub keeps no work item files in its folders. It has the repository named in `PROJECT.md` with Issues turned on, and the 30 labels in `labels.md`.

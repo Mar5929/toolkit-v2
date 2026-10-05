@@ -6,7 +6,7 @@ Last updated: `<YYYY-MM-DD, source, and person or agent>`
 
 ## Now
 
-- `<One active work item: its ID and a few words on what it is for, for example "WI-031: logging a transaction".>`
+- `<One work item that has left Backlog and is not Done or Cancelled: its ID and a few words on what it is for, for example "WI-031: logging a transaction".>`
 
 ## Waiting on the owner
 

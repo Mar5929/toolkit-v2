@@ -259,7 +259,7 @@
       },
       "Files": {
         "files": {},
-        "description": "Source files and attachments. Each one has a line in the page's Sources list."
+        "description": "Files the owner attached himself. The agent adds none: an original is filed in sources/."
       },
       "Archived": {
         "checkbox": {},

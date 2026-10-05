@@ -8,8 +8,8 @@ WI-007 in its own worktree. Another session works in the main checkout.
 After the brief from `references/handoff-verifier.md`, word for word:
 
 ```text
-Draft prompt: <the whole draft below, without the fill-in guide>
-Main checkout: /Users/mike/Projects/acme-billing
+Draft prompt: <the whole draft below>
+Main checkout: /Users/owner/Projects/acme-billing
 Tracker: local (work-items/ in the main checkout)
 Current State: memory/CURRENT_STATE.md in the main checkout
 Sources for claims:

@@ -4,7 +4,7 @@
 
 - Objects and source systems: <Names and ownership.>
 - Related requirements and work items: <Links.>
-- Mapping status: <Draft, verified, or superseded.>
+- Mapping status: <Draft, Verified, or Superseded.>
 - Last checked: <Date, source, and environment.>
 
 ## Files

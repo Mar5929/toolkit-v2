@@ -467,15 +467,17 @@ class TestFreshnessHook(unittest.TestCase):
         self.assertEqual(hook.changed_paths(before, after), ["b", "c"])
 
     def test_the_drift_file_carries_its_own_instructions(self) -> None:
-        """The rule that used to tell agents what to do with this file,
-        .claude/rules/dependency-graph.md, was deleted on 2026-08-04. The file
-        has to say it itself or nobody will know."""
+        """The rule .claude/rules/dependency-graph.md loads only for some
+        paths, so the file has to say what to do with it itself."""
         import graph_freshness_hook as hook
         self.assertIn("delete this file", hook.WHAT_TO_DO)
-        # Project memory is searched with the memory find skill; the old
+        # What the metadata does is described in system/, changed with the
+        # filing skill. Memory holds no such fact, and the old
         # knowledge/memory/ folder and the removed toolkit command do not
         # exist in these projects.
-        self.assertIn("memory find skill", hook.WHAT_TO_DO)
+        self.assertIn("`system/`", hook.WHAT_TO_DO)
+        self.assertIn("filing-project-records", hook.WHAT_TO_DO)
+        self.assertNotIn("memory", hook.WHAT_TO_DO)
         self.assertNotIn("toolkit memory", hook.WHAT_TO_DO)
         self.assertNotIn("knowledge/memory/", hook.WHAT_TO_DO)
         self.assertIn("README.md", hook.WHAT_TO_DO)

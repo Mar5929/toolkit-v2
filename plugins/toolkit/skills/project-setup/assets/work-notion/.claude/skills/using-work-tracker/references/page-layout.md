@@ -143,7 +143,7 @@ The section "Linked Github PRs" holds an "Embed Github" block that only the Noti
 Comments sit beside the page, apart from its text. Every comment the agent writes shows the owner's name, because the agent signs in as him. Start each one with "Agent:".
 
 ```bash
-ntn api v1/comments -d '{"parent":{"page_id":"<page-id>"},"markdown":"Agent: helper finished **P1-T02**; 12 tests pass."}' < /dev/null | jq -r .id
+ntn api v1/comments -d '{"parent":{"page_id":"<page-id>"},"markdown":"Agent: a helper started on **P1-T02**."}' < /dev/null | jq -r .id
 ```
 
 Read an item's comments, oldest first, the owner's too:
