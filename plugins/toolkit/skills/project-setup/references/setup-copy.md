@@ -2,8 +2,8 @@
 
 Purpose: make the project's finished files in a scratch folder first: the
 folder every project gets, plus the folder for each of the owner's choices,
-with the setup markers resolved, the name and "Toolkit settings" filled, and
-the rules list written. `skills-hooks-settings.md` adds to it next, and
+with the setup markers resolved and the name and "Toolkit settings" filled.
+`skills-hooks-settings.md` adds to it next, and
 `placing-files.md` puts it into the project.
 
 ## Contents
@@ -15,7 +15,6 @@ the rules list written. `skills-hooks-settings.md` adds to it next, and
 - The project name and "Toolkit settings"
 - Salesforce entries in shared files
 - The owner-preferences rule
-- The rules list in AGENTS.md
 - Check the setup copy
 
 ## Make the scratch folder
@@ -56,17 +55,21 @@ cp -R <skill folder>/assets/<folder>/. <copy>/
 | Work items in GitHub Issues | `work-github` |
 | Memory local | `memory-process` and `memory-local` |
 | Memory in Notion | `memory-process`, `memory-notion`, and `notion-tools` |
-| Memory in Hindsight | nothing, except the one file below |
+| Memory in Hindsight | `memory-hindsight`, and the one file below |
 | Salesforce | `salesforce` |
 | SOUL.md kept | `soul` |
 
-- With work items and memory both in Notion, copy `notion-tools` once.
+- With work items and memory both in Notion, copy `notion-tools` once. It
+  holds `using-notion-cli` and the rule `.claude/rules/notion-records.md`.
 - `work-local` also holds `work-items/`,
   `.claude/rules/work-item-folders.md`, and `PROJECT-ROADMAP.md`. With work
   items in Notion or GitHub, the project has none of them: its phases live
   there instead.
 - `memory-local` holds `memory/`. With Notion memory the project has no
-  `memory/`. With Hindsight memory it has only `memory/CURRENT_STATE.md`:
+  `memory/`.
+- `memory-hindsight` holds the rule `.claude/rules/hindsight-memory.md`.
+  With Hindsight memory the project's `memory/` has only
+  `CURRENT_STATE.md`, with no `AGENTS.md` and no `CLAUDE.md`:
 
 ```text
 mkdir -p <copy>/memory
@@ -76,16 +79,24 @@ cp <skill folder>/assets/memory-local/memory/CURRENT_STATE.md <copy>/memory/
 The Salesforce list (the `salesforce` folder holds all of these):
 
 - `sfdx-project.json`, `.forceignore`
-- `delivery/` and `tools/` (`tools/kb/` and `tools/permissions/`)
+- `tools/` (`tools/kb/` and `tools/permissions/`)
+- the Salesforce templates inside the delivery folder, which every project
+  has: `delivery/deployments/component-tracker.csv`,
+  `delivery/deployments/full-project-deployment-template/`,
+  `delivery/deployments/work-item-deployment-template/`,
+  `delivery/releases/release-cutover-template/`,
+  `delivery/migrations/area-template/`, `delivery/migrations/data-loads/`,
+  `delivery/migrations/production-backups/`
 - `.claude/protected-orgs.json`, `.claude/hooks/guard-protected-orgs.cjs`,
   `.claude/hooks/guard-permission-set-deploy.cjs`
 - every `sf-*` folder in `.claude/skills/`
 - `.codex/hooks.json`, which holds only the two Salesforce guards
-- nine rules in `.claude/rules/`: `check-deployment-contents.md`,
+- ten rules in `.claude/rules/`: `check-deployment-contents.md`,
   `component-tracker.md`, `confirm-salesforce-changes.md`,
   `dependency-graph.md`, `permissions-source-control.md`,
   `production-data-changes.md`, `project-file-locations.md`,
-  `record-deployment-steps.md`, `salesforce-org-safety.md`
+  `record-deployment-steps.md`, `salesforce-org-safety.md`,
+  `salesforce-project.md`
 
 `.gitignore` keeps its `/work-items/`, `/memory/`, and `.obsidian/` lines in
 every project.
@@ -116,10 +127,12 @@ command grep -rln -e '<!-- if ' <copy>
 `command grep` runs the system grep. In Claude Code, plain grep skips the
 folders the copied `.gitignore` names (`memory/`, `work-items/`).
 
-These are the files that hold markers: `AGENTS.md`, `README.md`,
-`PROJECT.md`, and `.claude/rules/memory-review-and-save.md`; the grep above
-gives the current list. A marker line is a line whose text, without spaces
-at either end, is exactly one of these:
+These are the files that hold markers: `README.md`, `PROJECT.md`, and
+`.claude/rules/memory-review-and-save.md`; the grep above gives the current
+list. The root `AGENTS.md` and each folder's `AGENTS.md` hold none: they
+read the same in every project, so never change their words for a choice.
+A marker line is a line whose text, without spaces at either end, is
+exactly one of these:
 
 | Opening marker | Keep the block when |
 | --- | --- |
@@ -178,7 +191,7 @@ sessions read it.
 ## Salesforce entries in shared files
 
 In a project that is not a Salesforce project, also take the Salesforce
-entries out of three files every project gets. A Salesforce project keeps
+entries out of two files every project gets. A Salesforce project keeps
 them.
 
 `<copy>/.claude/settings.json`:
@@ -204,14 +217,6 @@ them.
 `tools/kb/_freshness_stamp.json`, `tools/kb/_drift_pending.md`, and
 `tools/kb/_prev-*.json`. Keep `__pycache__/` and `*.pyc`: they are general.
 
-`<copy>/.claude/rules/publish-project-documents.md`: delete these two lines
-from its `paths:` list, so the rules list names no Salesforce path:
-
-```text
-  - "tools/permissions/PERMISSIONS-RUNBOOK.md"
-  - "delivery/**"
-```
-
 ## The owner-preferences rule
 
 Every project gets `.claude/rules/owner-preferences.md`, whatever its memory
@@ -224,50 +229,7 @@ cp <skill folder>/assets/owner-preferences.md <copy>/.claude/rules/owner-prefere
 ```
 
 Then add each instruction he gave during the interview, as `finishing.md`
-in this folder says ("Instructions he gives during setup"). Do both before
-the rules list below, so the list names the file.
-
-## The rules list in AGENTS.md
-
-`AGENTS.md` holds one list that setup writes, between the lines
-`<!-- toolkit:rules:start -->` and `<!-- toolkit:rules:end -->`. Replace
-only the lines between them; keep both marker lines. Build it from the rule
-files now in `<copy>/.claude/rules/`, sorted by file name:
-
-- A rule whose frontmatter has `paths:` is path-scoped. Every other rule is
-  always on.
-- Its purpose is the text of its first `# ` heading.
-
-These list what you need, without changing anything:
-
-```text
-grep -m1 '^# ' <copy>/.claude/rules/*.md
-grep -l '^paths:' <copy>/.claude/rules/*.md
-```
-
-The exact form:
-
-```text
-<!-- toolkit:rules:start -->
-Always on. Claude Code loads these at session start. Codex: read each one at session start.
-- `.claude/rules/cite-recalled-knowledge.md`: Cite Recalled Knowledge
-- `.claude/rules/humanize-outbound-text.md`: Humanize Anything Sent to Another Person
-
-Path-scoped. Claude Code loads each one when it reads a matching file. Codex: open the rule before working on a matching path.
-
-| Paths | Rule |
-| --- | --- |
-| `ai-external-knowledge/**` | `.claude/rules/ai-external-knowledge.md` |
-<!-- toolkit:rules:end -->
-```
-
-- In the table, wrap each path pattern in backticks and join them with
-  `, `, in the order the rule lists them.
-- With no path-scoped rules, leave out the second paragraph and the table.
-  With no always-on rules, leave out the first paragraph and its list.
-- Build it from the files, never from this example or from the list the
-  model's `AGENTS.md` already holds (that one is for a Salesforce project
-  with local work items).
+in this folder says ("Instructions he gives during setup").
 
 ## Check the setup copy
 
@@ -275,5 +237,8 @@ Each of these only reads: `command grep -rn -e '<!-- if ' -e '<!-- endif' <copy>
 prints nothing; `grep -n '<Project name>' <copy>/AGENTS.md <copy>/README.md <copy>/PROJECT.md`
 shows only fill-in guide comment lines, never a heading;
 `jq empty <copy>/.claude/settings.json` prints nothing (the JSON is valid);
-and `find <copy> -maxdepth 2 -not -path '*/.claude/*' | sort` shows no
-folder for an option the owner did not choose.
+`find <copy> -maxdepth 2 -not -path '*/.claude/*' | sort` shows no
+folder for an option the owner did not choose; and
+`find <copy> -name AGENTS.md -not -path '*/.claude/*'` lists the root file
+and one file per folder that has its own guide, each with a `CLAUDE.md`
+beside it that holds only the line `@AGENTS.md`.

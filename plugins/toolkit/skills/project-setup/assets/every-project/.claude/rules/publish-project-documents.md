@@ -1,12 +1,12 @@
 ---
 paths:
-  - "requirements/**"
+  - "system/**"
   - "PROJECT-ROADMAP.md"
   - "PROJECT.md"
-  - "system-guide/**"
-  - "project-wide-records/**"
+  - "DECISIONS.md"
+  - "sources/**"
   - "tools/permissions/PERMISSIONS-RUNBOOK.md"
-  - "ai-external-knowledge/**"
+  - "reference/**"
   - "delivery/**"
   - "**/README.md"
 ---

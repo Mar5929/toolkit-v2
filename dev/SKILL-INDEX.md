@@ -210,11 +210,10 @@ with the project file (`AGENTS.md`, "The model project and its copy"), and
 | `running-work-item-lifecycle`: `assets/work-item-template.md` | `work-items/work-item-template/WORK-ITEM.md` |
 | `running-work-item-lifecycle`: `assets/design-template.md` | `work-items/work-item-template/DESIGN.md` |
 | `curating-project-memory`: `references/memory-criteria.md` | `memory/memory-criteria.md` |
-| `filing-project-records`: `assets/DOMAIN-MAP.md` | `project-wide-records/templates/DOMAIN-MAP.md` |
-| `filing-project-records`: `assets/PROJECT-QUESTION.md` | `project-wide-records/templates/PROJECT-QUESTION.md` |
-| `filing-project-records`: `assets/PERSON.md` | `project-wide-records/templates/PERSON.md` |
-| `filing-project-records`: `assets/TARGET-ARCHITECTURE.md` | `project-wide-records/templates/TARGET-ARCHITECTURE.md` |
-| `filing-project-records`: `assets/INTAKE-RECEIPT.md` | `project-wide-records/templates/INTAKE-RECEIPT.md` |
+
+The five assets of `filing-project-records` were copies of
+`project-wide-records/templates/`. The starter project no longer has that
+folder (TKV-24), so `check-skills.mjs` compares nothing for them.
 
 ## 9. Neighbors the routing test watches
 

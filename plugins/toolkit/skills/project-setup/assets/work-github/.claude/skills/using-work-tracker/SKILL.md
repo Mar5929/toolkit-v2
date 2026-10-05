@@ -9,7 +9,7 @@ This skill holds the storage: where each part of a work item lives in GitHub Iss
 
 ## How an item is stored
 
-- One issue per work item. Its ID is the issue number, written `#12`. Find an item by its number, never by a link or a title.
+- One issue per work item. Its ID is the issue number, written `#12`. Find an item by its number, never by a link or a title. In a file or folder name, write the number without `#`: `12-test-plan.md`.
 - The body is the work item template from `## Overview` to the end.
 - The header fields are labels: State, type, priority, who it waits on, who builds it, and the approvals. Status has no label.
 - Done is closed as completed. Cancelled is closed as not planned.

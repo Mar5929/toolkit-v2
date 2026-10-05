@@ -33,8 +33,8 @@ The shared skills are the same in every project (10): `running-work-item-lifecyc
 holds them. They name no tracker or memory system. Every work tracking
 folder holds one skill with the same name, `using-work-tracker`, and every local or Notion memory project
 gets `curating-project-memory`, so the shared skills name both directly. A
-Hindsight project has no memory skills: they send it to "Project memory" in
-`AGENTS.md`.
+Hindsight project has no memory skills: its rule
+`.claude/rules/hindsight-memory.md` says what to use in their place.
 
 The folders for the choices (`setup-copy.md`, "Folders the choices add")
 hold these skills:
@@ -46,7 +46,7 @@ hold these skills:
 | Work items in GitHub Issues | `assets/work-github/` | `using-work-tracker` |
 | Memory local | `assets/memory-process/` and `assets/memory-local/` | `curating-project-memory`, `using-memory-store` |
 | Memory in Notion | `assets/memory-process/`, `assets/memory-notion/`, and `assets/notion-tools/` | `curating-project-memory`, `using-memory-store`, `using-notion-cli` |
-| Memory in Hindsight | nothing | none: the agent uses the tools of Hindsight's coding-agent add-on (`hindsight-on-vps.md` in this folder) |
+| Memory in Hindsight | `assets/memory-hindsight/` | none: the agent uses the tools of Hindsight's coding-agent add-on (`hindsight-on-vps.md` in this folder) |
 | Salesforce | `assets/salesforce/` | `sf-component-tracker`, `sf-data-change`, and `sf-deploy-check`; Salesforce's own skills are installed by the owner (`salesforce.md` in this folder) |
 
 ## Hook commands
@@ -156,10 +156,11 @@ files in `~/.claude` or `~/.codex`.
 ## Check
 
 - `<copy>/.claude/skills/` holds exactly the skill folders for the choices,
-  each with a `SKILL.md`, and a folder for every skill that the "Skills"
-  section of `AGENTS.md` names, except `project-setup` (the machine-wide
-  `toolkit` plugin holds it) and a skill of another plugin that the section
-  names only to say not to use it.
+  each with a `SKILL.md`, and a folder for every skill that the "Which
+  skill" section of `AGENTS.md` names, except `project-setup` (the
+  machine-wide `toolkit` plugin holds it) and the skills of a choice this
+  project did not make: the three `sf-*` skills without Salesforce, and
+  `curating-project-memory` and `using-memory-store` with Hindsight memory.
 - Both JSON files are valid, every hook command the settings name is in
   `<copy>/.claude/hooks/`, `.codex/config.toml` has each table once, and
   `[skills]` holds `max_context_tokens = 10000`.

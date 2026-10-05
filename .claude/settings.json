@@ -2,6 +2,8 @@
   "claudeMdExcludes": [
     "**/plugins/toolkit/skills/project-setup/assets/**",
     "**/plugins/toolkit/skills/project-setup/assets/*/.claude/rules/**",
-    "**/plugins/toolkit/skills/project-setup/assets/memory-local/memory/**"
+    "**/plugins/toolkit/skills/project-setup/assets/memory-local/memory/**",
+    "**/plugins/toolkit/skills/project-setup/assets/**/CLAUDE.md",
+    "**/plugins/toolkit/skills/project-setup/assets/**/AGENTS.md"
   ]
 }

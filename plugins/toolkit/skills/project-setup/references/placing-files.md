@@ -41,7 +41,7 @@ diff -u <file> <copy>/<file>
 | `.gitignore` | Add each line of the setup copy's file that the project's file lacks, at the end after one blank line. It only adds, so no question is needed. |
 | `.claude/settings.json`, `.codex/hooks.json`, `.codex/config.toml`, `.mcp.json` | Merge the setup copy's entries into the project's file with the merge rules in `skills-hooks-settings.md`. Ask before changing any value the project already has. |
 | `CLAUDE.md` with more than the line `@AGENTS.md` | Keep it. Ask whether to add the line `@AGENTS.md` at its top: while a `CLAUDE.md` exists, Claude Code reads `AGENTS.md` only through that line. |
-| `AGENTS.md` without the two rules-list marker lines (a repository that had its own) | Keep it. Show the owner what the Toolkit V2 version adds. After his yes, add its sections and the rules list with both marker lines, and keep his text. |
+| `AGENTS.md` (a repository that had its own) | Keep it. Show the owner what the Toolkit V2 version adds. After his yes, add its sections, and keep his text. |
 | Every other file (`README.md`, a rule, a template) | In its table row, say in one line what differs, and recommend one: keep his, take the toolkit's, or merge the two. His file stays until he chooses. |
 
 Show every file that needs his answer in one numbered table, one row per

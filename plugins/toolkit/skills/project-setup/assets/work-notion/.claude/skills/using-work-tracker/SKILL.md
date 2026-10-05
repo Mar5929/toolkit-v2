@@ -21,7 +21,7 @@ This project keeps its work items in Notion. This skill says where each thing is
 ## Steps for any look-up or save
 
 1. Read the ids from `PROJECT.md`. Before your first Notion read or write in a session, whatever tool you use, open `using-notion-cli`.
-2. Read what you will look at or change, fresh in this turn. The owner edits in Notion, so never answer from an earlier read.
+2. Read what you will look at or change, fresh in this turn. The owner edits in Notion, and his edits win, so never answer from an earlier read.
 3. Make the change with the section named in the Files table below.
 4. Read the changed page or row back. Notion saves all of an `update_content` call or none of it, so a call it refused changed nothing.
 

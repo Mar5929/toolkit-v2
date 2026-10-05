@@ -22,9 +22,12 @@
 //   - loads in every session (no `paths`) and is over 200 lines;
 //   - repeats an instruction in another rule, or says never where another
 //     rule says do in nearly the same words.
-// It also fails when the AGENTS.md rules list is not the one the rule files
-// give, and when the owner-preferences.md template that project-setup copies
+// It also fails when the owner-preferences.md template that project-setup copies
 // into a project (assets/owner-preferences.md) would itself fail these checks.
+// The starter AGENTS.md holds no rules list since the one-home layout (TKV-24): it
+// tells Codex to read the rule files. So the rules-list check runs only with --dir, on
+// a project whose AGENTS.md still holds the two toolkit:rules marker lines; there it
+// fails when the list is not the one the rule files give.
 //
 // It warns, and does not fail, when a rule:
 //   - loads in every session and is over 4,096 bytes. The number is a
@@ -42,7 +45,9 @@
 //     read.
 // It also prints, as information and never as a warning, how many bytes load in every
 // session in three setups (the rules without `paths` plus AGENTS.md, with the setup markers
-// resolved and the rules each setup leaves out removed). No ceiling for that total is set:
+// in the rule files resolved and the rules each setup leaves out removed: the rule files of
+// salesforce, work-local, memory-hindsight, and notion-tools go only to a project with that
+// choice). No ceiling for that total is set:
 // it waits for Mike's answer (dev/reviews/best-practices-review.md, question 9).
 // Not checked: that every file path a rule names exists. Most are files a
 // project or a tool makes later (`tools/kb/out/`, `.claude/rules/owner-preferences.md`,
@@ -61,7 +66,7 @@ const REPO = path.resolve(HERE, '..', '..');
 const SETUP = path.join(REPO, 'plugins', 'toolkit', 'skills', 'project-setup');
 const ASSETS = path.join(SETUP, 'assets');
 /** The setup folders: project files at the paths a project has them (setup-copy.md, "Folders the choices add"). */
-const PROJECT_FOLDERS = ['every-project', 'work-local', 'work-notion', 'work-github', 'memory-local', 'memory-notion', 'memory-process', 'notion-tools', 'salesforce', 'soul'];
+const PROJECT_FOLDERS = ['every-project', 'work-local', 'work-notion', 'work-github', 'memory-local', 'memory-notion', 'memory-process', 'memory-hindsight', 'notion-tools', 'salesforce', 'soul'];
 /** The owner's rule file. Its lines are the owner's own, so they are compared by list item only. */
 const RULE_FILE_NAME = 'owner-preferences.md';
 /** The owner-preferences.md template project-setup copies into a project's .claude/rules/. */
@@ -172,15 +177,23 @@ function resolveMarkers(text, setup) {
   return out.join('\n').replace(/<!-- Project setup fill-in guide[\s\S]*?-->\n?/, '');
 }
 
-/** The rules a project without Salesforce does not get: every rule in the salesforce folder. */
-function salesforceRuleNames() {
-  const dir = path.join(ASSETS, 'salesforce', '.claude', 'rules');
+/** The rule files one setup folder holds. */
+function ruleNamesOf(folder) {
+  const dir = path.join(ASSETS, folder, '.claude', 'rules');
   return fs.existsSync(dir) ? fs.readdirSync(dir).filter((n) => n.endsWith('.md')) : [];
 }
 
+/** The folders whose rules only some projects get, and the setups that get them (setup-copy.md, "Folders the choices add"). */
+const CHOICE_RULES = [
+  { folder: 'salesforce', when: (setup) => setup.salesforce },
+  { folder: 'work-local', when: (setup) => setup.tracker === 'local' },
+  { folder: 'memory-hindsight', when: (setup) => setup.memory === 'hindsight' },
+  { folder: 'notion-tools', when: (setup) => setup.tracker === 'notion' || setup.memory === 'notion' },
+];
+
 /** Bytes that load in every session in each setup: always-on rules plus AGENTS.md, and the owner-preferences.md template. */
 function setupTotals(dir, raw, rules) {
-  const salesforce = new Set(salesforceRuleNames());
+  const choiceRules = CHOICE_RULES.map((c) => ({ names: new Set(ruleNamesOf(c.folder)), when: c.when }));
   const agentsFile = path.join(dir, 'AGENTS.md');
   const agents = fs.existsSync(agentsFile) ? fs.readFileSync(agentsFile, 'utf8') : '';
   const ownerTemplate = fs.existsSync(OWNER_TEMPLATE) ? Buffer.byteLength(fs.readFileSync(OWNER_TEMPLATE, 'utf8')) : 0;
@@ -189,8 +202,7 @@ function setupTotals(dir, raw, rules) {
     for (const r of raw) {
       const parsed = rules.find((x) => x.name === r.name);
       if (!parsed || parsed.scoped) continue;
-      if (!setup.salesforce && salesforce.has(r.name)) continue;
-      if (setup.tracker !== 'local' && r.name === 'work-item-folders.md') continue;
+      if (choiceRules.some((c) => c.names.has(r.name) && !c.when(setup))) continue;
       bytes += Buffer.byteLength(resolveMarkers(r.text, setup));
     }
     return { name: setup.name, bytes };
@@ -226,12 +238,12 @@ function main() {
   }
   findings.push(...lintRuleSet(rules, { listItemsOnly: [RULE_FILE_NAME] }));
 
-  // The AGENTS.md rules list matches the rule files (R26).
+  // A project set up before the one-home layout: its AGENTS.md rules list matches the rule files (R26).
   const agentsFile = path.join(dir, 'AGENTS.md');
   if (fs.existsSync(agentsFile)) {
     const agents = fs.readFileSync(agentsFile, 'utf8');
     if (hasSpan(agents) && spanBody(agents) !== buildSpan(raw)) {
-      findings.push({ rule: 'AGENTS.md', line: null, check: 'rules-list', severity: 'error', message: 'The rules list in AGENTS.md is not the list the rule files give (a heading, a paths list, or a file changed).', fix: 'On the model branch, rewrite the list between the toolkit:rules markers to match buildSpan(readRules(<folder>)) in dev/tools/rule-lint.mjs, then refresh the model copy.' });
+      findings.push({ rule: 'AGENTS.md', line: null, check: 'rules-list', severity: 'error', message: 'The rules list in AGENTS.md is not the list the rule files give (a heading, a paths list, or a file changed).', fix: 'Rewrite the list between the toolkit:rules markers to match buildSpan(readRules(<folder>)) in dev/tools/rule-lint.mjs.' });
     }
   }
 

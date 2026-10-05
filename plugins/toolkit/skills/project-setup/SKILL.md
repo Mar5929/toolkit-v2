@@ -82,9 +82,10 @@ has a filled "Toolkit settings" section.
    `gh auth login` for GitHub), so he can do them while you copy.
    `references/notion.md`, `references/github.md`.
 4. **Build the setup copy** in a scratch folder: the `every-project` folder
-   and the folder for each choice, the setup markers resolved, the name and
-   "Toolkit settings" filled, the rules list written. `every-project` holds
-   `project-wide-records/`, so every tracker and memory choice gets it.
+   and the folder for each choice, the setup markers resolved, and the name
+   and "Toolkit settings" filled. `every-project` holds `DECISIONS.md`,
+   `system/`, `sources/`, `delivery/`, and `reference/`, so every tracker
+   and memory choice gets them.
    `references/setup-copy.md`.
 5. **Add the settings** to the setup copy, and check its skills and hook
    commands. `references/skills-hooks-settings.md`.
@@ -159,7 +160,7 @@ has a filled "Toolkit settings" section.
 | File | Open it when |
 | --- | --- |
 | `references/interview.md` | Steps 1 and 2: what to check before asking, the five questions with their recommendations, and the plan to confirm |
-| `references/setup-copy.md` | Step 4, and step 1 of an update: the scratch folder, the folders each choice adds, what never ships, the setup markers, "Toolkit settings", the Salesforce entries, the owner-preferences rule, the rules list |
+| `references/setup-copy.md` | Step 4, and step 1 of an update: the scratch folder, the folders each choice adds, what never ships, the setup markers, "Toolkit settings", the Salesforce entries, the owner-preferences rule |
 | `references/skills-hooks-settings.md` | Step 5: which skills each folder holds, the hook commands, the settings snippets and how to merge them, the older plugins turned off |
 | `references/placing-files.md` | Step 6: copying into the project, files it already has, the `.agents/skills` link |
 | `references/notion.md` | Work items or memory in Notion: the sign-in, his yes, which Notion setup to follow, the links |
@@ -176,8 +177,8 @@ has a filled "Toolkit settings" section.
 | `references/old-toolkit-pieces.md` | A move-over, steps 2, 3, and 6: the old toolkit's plugins, rules, hook commands, tools, and knowledge files with what Toolkit V2 has in their place, the old records, and how an old work item and old memory map to the Toolkit V2 form |
 | `assets/every-project/` | Step 4: everything every project gets: the project files, the shared skills, and the three hook commands, copied first into the scratch folder |
 | `assets/work-local/`, `assets/work-notion/`, `assets/work-github/` | Step 4: the files and the `using-work-tracker` skill for the work tracking choice |
-| `assets/memory-local/`, `assets/memory-notion/`, `assets/memory-process/` | Step 4: the memory files and skills for the memory choice (`memory-process` goes with local or Notion memory; Hindsight takes one file of `memory-local`) |
-| `assets/notion-tools/` | Step 4: the `using-notion-cli` skill, for work items or memory in Notion |
+| `assets/memory-local/`, `assets/memory-notion/`, `assets/memory-process/`, `assets/memory-hindsight/` | Step 4: the memory files, skills, and rule for the memory choice (`memory-process` goes with local or Notion memory; Hindsight takes `memory-hindsight` and one file of `memory-local`) |
+| `assets/notion-tools/` | Step 4: the `using-notion-cli` skill and the `notion-records.md` rule, for work items or memory in Notion |
 | `assets/salesforce/` | Step 4: everything only a Salesforce project gets |
 | `assets/soul/` | Step 4: `SOUL.md`, when the owner keeps it |
 | `assets/owner-preferences.md` | Step 4: the starting `.claude/rules/owner-preferences.md` every project gets |

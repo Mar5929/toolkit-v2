@@ -58,13 +58,15 @@ this order:
    nothing more for these files: leave their prompts and list them in the
    report. In a project with code, list in the report each value you took
    from the repository, so he can correct it.
-4. **`PROJECT-ROADMAP.md` (local work items) and
-   `requirements/SYSTEM-DATA-MODEL.md`**: fill them only when the owner
+4. **`PROJECT-ROADMAP.md` (local work items)**: fill it only when the owner
    already knows the facts. A project with work items in Notion or GitHub
    has no `PROJECT-ROADMAP.md`: its phases go in the tracker, later, with
-   `running-work-item-lifecycle`. On a new project they
-   usually stay as they are; list them as prompts left. The data model gets
-   only accepted requirements, never a guess.
+   `running-work-item-lifecycle`. On a new project it
+   usually stays as it is; list it as prompts left.
+   **`DECISIONS.md`, the documents in `system/`, and `sources/README.md`**
+   stay as copied: they hold no prompt, and each `system/` document says
+   Status "Not started". Never write a decision, a rule, or a source into
+   them during setup.
 5. Delete each fill-in guide comment when its own text says to. Keep the
    guide comment inside "Toolkit settings": later sessions read it.
 
@@ -114,9 +116,10 @@ file).
 
 ```text
 - [ ] No setup marker left (command grep: see setup-copy.md; passes when it prints nothing, exit 1): command grep -rns -e '<!-- if ' -e '<!-- endif' AGENTS.md README.md PROJECT.md .claude/rules $(ls -d memory work-items 2>/dev/null)
-- [ ] Nothing from an option not chosen: ls -a shows work-items/ and PROJECT-ROADMAP.md only with local work items, memory/ only with local or Hindsight memory (Hindsight: only CURRENT_STATE.md in it), and delivery/, tools/, sfdx-project.json only in a Salesforce project
+- [ ] Nothing from an option not chosen: ls -a shows work-items/ and PROJECT-ROADMAP.md only with local work items, memory/ only with local or Hindsight memory (Hindsight: only CURRENT_STATE.md in it), tools/ and sfdx-project.json only in a Salesforce project, .claude/rules/hindsight-memory.md only with Hindsight memory, and .claude/rules/notion-records.md only with work items or memory in Notion
 - [ ] Skills: ls .claude/skills is exactly the list for the choices (skills-hooks-settings.md), each with a SKILL.md
-- [ ] Project-wide records: `project-wide-records/AGENTS.md`, the five category folders, and all five templates exist for every tracker and memory choice; the copied `filing-project-records` skill has the matching five assets
+- [ ] Project records, for every tracker and memory choice: DECISIONS.md; system/ with its six documents, integrations/README.md, and integrations/INTEGRATION-TEMPLATE.md; sources/README.md; delivery/ with releases/, deployments/, migrations/, and client-handoffs/; reference/ with outside-docs/INDEX.md and current-system/
+- [ ] Folder guides: find . -name AGENTS.md -not -path './.claude/*' -not -path './.git/*' lists the root file and one in system/, sources/, delivery/, and reference/ (plus work-items/ with local work items and memory/ with local memory); each has a CLAUDE.md beside it that holds only the line @AGENTS.md
 - [ ] The link: ls -la .agents shows skills -> ../.claude/skills
 - [ ] Hook commands: ls .claude/hooks shows session-start.mjs, prompt-reminder.mjs, codex-after-commit.mjs (plus the two guards in a Salesforce project)
 - [ ] Settings are valid: jq empty .claude/settings.json (and .codex/hooks.json, and .mcp.json when present)
@@ -124,7 +127,6 @@ file).
 - [ ] The session-start hook prints Current State: node .claude/hooks/session-start.mjs --memory <memory> </dev/null (Notion memory: add --page <Current state page id>). Codex with Notion memory: run it escalated; inside the sandbox it prints "could not be read here", which is the sandbox and not a setup failure
 - [ ] The prompt reminder prints a line telling the agent to check the project's skills for any message, and adds the memory reminder for a "remember this" message: echo '{"prompt":"remember this: we use Postgres"}' | node .claude/hooks/prompt-reminder.mjs (Hindsight memory: add --skill hindsight)
 - [ ] The after-commit reminder answers a commit: printf '{"tool_input":{"command":"git %s -m x"}}' commit | node .claude/hooks/codex-after-commit.mjs
-- [ ] The AGENTS.md rules list names exactly the files in .claude/rules/
 - [ ] AGENTS.md is within its limits: wc -lc AGENTS.md prints 200 lines or less and 20,480 bytes or less (Claude Code recommends under 200 lines; Codex stops reading instruction files at 32,768 bytes in all, ~/.codex/AGENTS.md included). When either is over, say so in the report and never cut lines from it
 - [ ] The text that loads in every session: command grep -L '^paths:' .claude/rules/*.md lists the rules with no paths frontmatter; wc -c AGENTS.md and each of those files, and give the total in bytes in the report (no limit is set for it)
 - [ ] PROJECT.md "Toolkit settings" holds no prompt, except one that waits on the owner

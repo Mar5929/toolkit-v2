@@ -33,7 +33,9 @@
 //   - a skill asset copied from a project file (MODEL_COPIES) equals that file;
 //   - no project path is in two setup folders, except the alternatives named above;
 //   - the lists that setup-copy.md, skills-hooks-settings.md, and interview.md keep by hand match
-//     the setup folders: the Salesforce list and the salesforce folder, the files that hold setup
+//     the setup folders: the Salesforce list and the salesforce folder (every-project holds no
+//     path the list names, and inside a folder both have, such as delivery/, the list names every
+//     file the salesforce folder adds), the files that hold setup
 //     markers, the shared skills, the skills each choice's folders hold (a row may name several
 //     folders, such as memory-process and memory-local), every folder with skills named by a row,
 //     and the skill counts;
@@ -52,7 +54,7 @@ const SETUP = path.join(ROOT, 'plugins/toolkit/skills/project-setup');
 const INDEX = path.join(ROOT, 'dev/SKILL-INDEX.md');
 const ASSETS = path.join(SETUP, 'assets');
 // The folders that hold files at the paths a project has them. The first is copied for every project.
-const PROJECT_FOLDERS = ['every-project', 'work-local', 'work-notion', 'work-github', 'memory-local', 'memory-notion', 'memory-process', 'notion-tools', 'salesforce', 'soul'];
+const PROJECT_FOLDERS = ['every-project', 'work-local', 'work-notion', 'work-github', 'memory-local', 'memory-notion', 'memory-process', 'memory-hindsight', 'notion-tools', 'salesforce', 'soul'];
 // Folders for choices that exclude each other: they may hold a file at the same path.
 const ALTERNATIVES = [['work-local', 'work-notion', 'work-github'], ['memory-local', 'memory-notion']];
 const EVERY = path.join(ASSETS, 'every-project');
@@ -75,12 +77,9 @@ const SHARED = 'every-project/.claude/skills';
 const MODEL_COPIES = {
   [`${SHARED}/running-work-item-lifecycle/assets/work-item-template.md`]: 'work-items/work-item-template/WORK-ITEM.md',
   [`${SHARED}/running-work-item-lifecycle/assets/design-template.md`]: 'work-items/work-item-template/DESIGN.md',
-  [`${SHARED}/filing-project-records/assets/DOMAIN-MAP.md`]: 'project-wide-records/templates/DOMAIN-MAP.md',
-  [`${SHARED}/filing-project-records/assets/PROJECT-QUESTION.md`]: 'project-wide-records/templates/PROJECT-QUESTION.md',
-  [`${SHARED}/filing-project-records/assets/PERSON.md`]: 'project-wide-records/templates/PERSON.md',
-  [`${SHARED}/filing-project-records/assets/TARGET-ARCHITECTURE.md`]: 'project-wide-records/templates/TARGET-ARCHITECTURE.md',
-  [`${SHARED}/filing-project-records/assets/INTAKE-RECEIPT.md`]: 'project-wide-records/templates/INTAKE-RECEIPT.md',
 };
+// The five assets of filing-project-records were copies of project-wide-records/templates/. The one-home
+// layout (TKV-24) removed that folder from the starter, so those five have no project file to equal.
 
 const findings = [];
 const notes = [];
@@ -317,7 +316,19 @@ for (const [rel, folders] of holders) {
     for (const t of rules) if (!fs.existsSync(path.join(SALESFORCE, '.claude/rules', t))) report('error', copyFile, `its Salesforce list names the rule ${t}, which the salesforce folder does not have`);
     const salesforceTop = new Set(paths.map((t) => t.split('/')[0]));
     for (const name of fs.readdirSync(SALESFORCE)) if (!salesforceTop.has(name)) report('error', copyFile, `the salesforce folder has the top-level path ${name}, which the Salesforce list does not name: add it to the list`);
-    for (const name of fs.readdirSync(EVERY)) if (name !== '.claude' && salesforceTop.has(name)) report('error', copyFile, `every-project has the top-level path ${name}, which the Salesforce list gives to the salesforce folder`);
+    // every-project holds no path the list gives to the salesforce folder. A top-level folder both have (delivery/)
+    // is shared: the list names each thing the salesforce folder puts in it, never the folder itself.
+    const listed = paths.map((t) => t.replace(/\/$/, ''));
+    // .claude/skills and .claude/rules are named only to say where the sf-* skills and the rules sit; the checks below cover them.
+    const inBoth = new Set(['.claude/skills', '.claude/rules']);
+    for (const t of listed) if (!inBoth.has(t) && fs.existsSync(path.join(EVERY, t))) report('error', copyFile, `every-project has ${t}, which the Salesforce list gives to the salesforce folder`);
+    for (const name of fs.readdirSync(EVERY)) {
+      if (name === '.claude' || !salesforceTop.has(name)) continue;
+      for (const f of walk(path.join(SALESFORCE, name))) {
+        const rel = posix(path.relative(SALESFORCE, f));
+        if (!listed.some((t) => rel === t || rel.startsWith(`${t}/`))) report('error', copyFile, `the salesforce folder has ${rel} in ${name}/, a folder every project has, and the Salesforce list does not name it: add it to the list`);
+      }
+    }
     const ruleDir = path.join(SALESFORCE, '.claude/rules');
     if (fs.existsSync(ruleDir)) for (const name of fs.readdirSync(ruleDir)) if (!rules.includes(name)) report('error', copyFile, `the salesforce folder has the rule ${name}, which the Salesforce list does not name: add it to the list`);
     const hookDir = path.join(SALESFORCE, '.claude/hooks');

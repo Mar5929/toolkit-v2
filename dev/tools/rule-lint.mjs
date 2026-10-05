@@ -736,8 +736,9 @@ function clip(s) {
 }
 
 // ------------------------------------------------------------------ the AGENTS.md rules list
-// Copied from the retired program's lib/project/render.mjs. The project-setup
-// skill writes the same list by hand (references/setup-copy.md).
+// Copied from the retired program's lib/project/render.mjs. A project set up
+// before the one-home layout (TKV-24) holds this list in its AGENTS.md. Setup no
+// longer writes it: the starter AGENTS.md tells Codex to read the rule files.
 
 export const SPAN_START = '<!-- toolkit:rules:start -->';
 export const SPAN_END = '<!-- toolkit:rules:end -->';

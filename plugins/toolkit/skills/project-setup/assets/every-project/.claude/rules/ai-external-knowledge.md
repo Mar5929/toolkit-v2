@@ -1,17 +1,17 @@
 ---
 paths:
-  - "ai-external-knowledge/**"
+  - "reference/outside-docs/**"
 ---
 
-# Outside Documentation Goes in ai-external-knowledge
+# Outside Documentation Goes in reference/outside-docs
 
 This information is used to help ground the agent in official documentation or research so that it can provide better solutions.
 
 ## Where it goes
 
-- Save outside documentation, such as a vendor's docs, an API reference, or a framework guide, as Markdown in `ai-external-knowledge/` at the root of the project. Capturing it is a normal thing to do here, and this folder is its only home.
-- Inside `ai-external-knowledge/`, keep one folder per topic.
-- The root `INDEX.md` points to the topic folders.
+- Save outside documentation, such as a vendor's docs, an API reference, or a framework guide, as Markdown in `reference/outside-docs/`. Capturing it is a normal thing to do here, and this folder is its only home.
+- Inside `reference/outside-docs/`, keep one folder per topic.
+- `reference/outside-docs/INDEX.md` points to the topic folders.
 
 ## It is raw source material
 

@@ -61,11 +61,11 @@ chat handling each one, and each chat's state. It uses no Notion. See
 | `plugins/toolkit/.codex-plugin/plugin.json` | The Codex manifest: the same `name` and `version`, `"skills": "./skills/"`, and an `interface` block. |
 | `<setup>SKILL.md`, `<setup>references/` | Onboarding, "check the setup", "update the toolkit", and the move-over for a project set up with the older toolkit or by hand (`references/move-over.md`, `references/old-toolkit-pieces.md`). |
 | `plugins/toolkit/skills/choosing-outside-tools/` | The owner's tool list: `SKILL.md` holds one row per job, and `references/` holds one file per tool (where it comes from, how to set it up, and the owner's choices). Never copied into a project. |
-| `<setup>assets/every-project/` | Everything every project gets, at the paths a project has: the project files (`AGENTS.md`, `PROJECT.md`, the rules, `project-wide-records/`, the templates), the 10 shared skills in `.claude/skills/`, and the three hook commands in `.claude/hooks/` (`session-start.mjs`, `prompt-reminder.mjs`, `codex-after-commit.mjs`). Edited here directly (see "The model project and its copy"). |
-| `<setup>assets/work-local/`, `work-notion/`, `work-github/` | One folder per work tracking choice. Each holds one skill, `using-work-tracker`, in `.claude/skills/`. `work-local/` also holds `work-items/`, `PROJECT-ROADMAP.md`, and the `work-item-folders.md` rule. |
-| `<setup>assets/memory-local/`, `memory-notion/`, `memory-process/` | The memory choice. `memory-process/` holds `curating-project-memory` (the process) and goes with local or Notion memory. `memory-local/` and `memory-notion/` each hold their own `using-memory-store` (storage only); `memory-local/` also holds `memory/`. Hindsight takes only `memory/CURRENT_STATE.md` from `memory-local/`. |
-| `<setup>assets/notion-tools/` | `using-notion-cli`, for every project with work items or memory in Notion. |
-| `<setup>assets/salesforce/` | Everything only a Salesforce project gets: `sfdx-project.json`, `.forceignore`, `delivery/`, `tools/`, the protected-orgs file, the two guards, the `sf-*` skills, `.codex/hooks.json`, and nine rules. |
+| `<setup>assets/every-project/` | Everything every project gets, at the paths a project has: the project files (`AGENTS.md`, `PROJECT.md`, `DECISIONS.md`, the rules, `system/`, `sources/`, `delivery/`, `reference/`, the test plan template), the 10 shared skills in `.claude/skills/`, and the three hook commands in `.claude/hooks/` (`session-start.mjs`, `prompt-reminder.mjs`, `codex-after-commit.mjs`). Edited here directly (see "The model project and its copy"). |
+| `<setup>assets/work-local/`, `work-notion/`, `work-github/` | One folder per work tracking choice. Each holds one skill, `using-work-tracker`, in `.claude/skills/`. `work-local/` also holds `work-items/` (with its own `AGENTS.md`), `PROJECT-ROADMAP.md`, and the `work-item-folders.md` rule. |
+| `<setup>assets/memory-local/`, `memory-notion/`, `memory-process/`, `memory-hindsight/` | The memory choice. `memory-process/` holds `curating-project-memory` (the process) and goes with local or Notion memory. `memory-local/` and `memory-notion/` each hold their own `using-memory-store` (storage only); `memory-local/` also holds `memory/` (with its own `AGENTS.md`). `memory-hindsight/` holds one rule, `hindsight-memory.md`, and no skill. Hindsight takes it and only `memory/CURRENT_STATE.md` from `memory-local/`. |
+| `<setup>assets/notion-tools/` | `using-notion-cli` and the rule `notion-records.md`, for every project with work items or memory in Notion. |
+| `<setup>assets/salesforce/` | Everything only a Salesforce project gets: `sfdx-project.json`, `.forceignore`, the Salesforce templates inside `delivery/` (a folder every project has), `tools/`, the protected-orgs file, the two guards, the `sf-*` skills, `.codex/hooks.json`, and ten rules. |
 | `<setup>assets/soul/` | `SOUL.md`, for a project whose owner keeps it. |
 | Why skills sit under `.claude/` | Every folder holds its skills under `.claude/skills/`, and `.claude` starts with a dot. Codex loads every `SKILL.md` under a plugin's `skills/` folder as a plugin skill, in every folder on the computer, unless a parent folder's name starts with a dot. So the 20 project skills stay out of Codex outside a project. Tested in a scratch Codex home: `dev/test-runs/one-folder-per-choice.md`; the first test, with the older folder names, is `dev/test-runs/codex-dot-folders.md` in Git history. |
 | `<setup>assets/settings/` | The snippets onboarding merges into a project's `.claude/settings.json`, `.codex/hooks.json`, and `.codex/config.toml` for each choice. |
@@ -74,7 +74,7 @@ chat handling each one, and each chat's state. It uses no Notion. See
 | `dev/build-shared/` | The source of every text several skills hold word for word: today only `helper-briefs/handoff-verifier.md`. |
 | `dev/tools/check-skills.mjs` | Checks every skill `project-setup` ships (see "Checks"). |
 | `dev/tools/check-rules.mjs` | Checks the model's rule files against Claude Code's guidance for rules (`dev/research/rules-best-practices.md`). |
-| `dev/tools/rule-lint.mjs` | The checks `check-rules.mjs` runs, and the `AGENTS.md` rules list the rule files give. Dev only: nothing under `plugins/` imports it. |
+| `dev/tools/rule-lint.mjs` | The checks `check-rules.mjs` runs, and the rules list that the `AGENTS.md` of a project set up before the one-home layout holds. Dev only: nothing under `plugins/` imports it. |
 | `dev/tests/hooks.test.mjs` | Tests the three hook commands and the settings snippets in scratch folders. |
 | `dev/tests/org-guard.test.mjs` | Tests the Salesforce org guard, `guard-protected-orgs.cjs`, with the `salesforce` folder's `protected-orgs.json`, in a scratch folder with a stand-in `sf`. No org is reached. |
 | `.claude/settings.json` | Settings for sessions working on this repository. `claudeMdExcludes` stops the `CLAUDE.md`, `AGENTS.md` files, and rules in every folder of `<setup>assets/` from loading as instructions here: they are for projects, not for this repository. |
@@ -107,15 +107,18 @@ the owner's choices on top of it.
   `work-local/`, `work-notion/`, and `work-github/`, and
   `using-memory-store` in `memory-local/` and `memory-notion/`.
   `check-skills.mjs` fails on any other path in two folders.
-- The setup markers in the model's `AGENTS.md`, `README.md`, `PROJECT.md`,
+- The model's root `AGENTS.md` and its folder `AGENTS.md` files hold no
+  setup marker and no generated rules list: they read the same in every
+  project. What differs by choice is in a file only that choice gets
+  (`hindsight-memory.md`, `notion-records.md`, `salesforce-project.md`,
+  `work-items/AGENTS.md`, `memory/AGENTS.md`).
+- Three model files still hold setup markers: `README.md`, `PROJECT.md`,
   and `.claude/rules/memory-review-and-save.md` (`<!-- if salesforce -->`,
   `<!-- if not salesforce -->`, `<!-- if tracker=... -->`,
   `<!-- if memory=... -->`, and `<!-- if tracker=local or memory=local -->`,
-  each closed by `<!-- endif -->`) and the rules list between
-  `<!-- toolkit:rules:start -->` and `<!-- toolkit:rules:end -->` are
-  resolved by the agent during setup, following `<setup>references/setup-copy.md`.
-  A new marker form in the model also needs a row in that file's "Setup
-  markers" table.
+  each closed by `<!-- endif -->`). The agent resolves them during setup,
+  following `<setup>references/setup-copy.md`. Never add a marker to
+  another file.
 - `every-project/.gitignore` is a project file. It keeps the lines `/memory/`
   and `/work-items/`, which apply only inside `every-project/`, where neither
   folder exists. So `memory-local/memory/` and `work-local/work-items/` are
@@ -295,8 +298,8 @@ node --test 'dev/tests/*.test.mjs'
     name `using-work-tracker`: every work tracking set holds a skill of
     that name. For memory they name `curating-project-memory`, which every
     project with local or Notion memory has; a Hindsight project has no
-    memory skills, so they point it to "Project memory" in the project's
-    `AGENTS.md`.
+    memory skills, so they point it to the project's rule
+    `.claude/rules/hindsight-memory.md`.
   - Memory skills (Mike, 2026-10-01). `curating-project-memory` holds the
     process, the same for local and Notion memory: it never names a
     storage tool, file, folder, database, or command, and hands every read
@@ -430,8 +433,12 @@ node --test 'dev/tests/*.test.mjs'
     `codex plugin` commands with the variable set).
 - **Instruction files.** This repository has no `CLAUDE.md`: a `CLAUDE.md`
   here would stop Claude Code from reading this `AGENTS.md`. Projects get
-  what the model has: one root `CLAUDE.md` holding only `@AGENTS.md`, plus
-  the model's `AGENTS.md` files. Never delete the model copy's `CLAUDE.md`.
+  what the model has: a root `AGENTS.md`, and one in each of `system/`,
+  `sources/`, `delivery/`, `reference/`, `work-items/`, and `memory/`. Each
+  has a `CLAUDE.md` beside it that holds only `@AGENTS.md`: with a root
+  `CLAUDE.md`, Claude Code loads a folder's `AGENTS.md` only through that
+  file (`dev/test-runs/folder-instructions-load-test.md`). Never delete one
+  of the model's `CLAUDE.md` files.
 - **Git.** Several agents may work in this repository at once. Change only
   the files you were given. Stage paths by name; never `git add -A`,
   `git add .`, or `git commit -a`. The GitHub repository is
