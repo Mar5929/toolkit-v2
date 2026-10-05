@@ -14,8 +14,8 @@
 //     or has an invalid `paths` pattern (an unclosed "[" or "{", a leading
 //     "/", more than 1,000 patterns after brace expansion);
 //   - has a `paths` pattern that matches no file in the folder, unless the
-//     pattern is under a folder a project creates later (FOLDERS_MADE_LATER in
-//     dev/tools/rule-lint.mjs);
+//     pattern starts with a path a project creates later or only one setup
+//     choice has (FOLDERS_MADE_LATER in dev/tools/rule-lint.mjs);
 //   - does not start with a "# " heading, or has no instruction, or only vague
 //     ones ("properly", "as needed") that name nothing to check;
 //   - holds a numbered procedure of 5 or more steps (move it to a skill);
@@ -44,10 +44,10 @@
 //     rule names without a never: a possible contradiction for a person to
 //     read.
 // It also prints, as information and never as a warning, how many bytes load in every
-// session in three setups (the rules without `paths` plus AGENTS.md, with the setup markers
-// in the rule files resolved and the rules each setup leaves out removed: the rule files of
-// salesforce, work-local, memory-hindsight, and notion-tools go only to a project with that
-// choice). No ceiling for that total is set:
+// session in three setups (the rules without `paths` plus AGENTS.md, with the rules each
+// setup leaves out removed: the rule files of salesforce, memory-hindsight, and notion-tools
+// go only to a project with that choice). No file holds a setup marker since the one-home
+// layout (TKV-24), so every file counts whole. No ceiling for that total is set:
 // it waits for Mike's answer (dev/reviews/best-practices-review.md, question 9).
 // Not checked: that every file path a rule names exists. Most are files a
 // project or a tool makes later (`tools/kb/out/`, `.claude/rules/owner-preferences.md`,
@@ -155,26 +155,9 @@ const SETUPS = [
   { name: 'local work, Hindsight memory, Salesforce', tracker: 'local', memory: 'hindsight', salesforce: true },
 ];
 
-/** Keep the blocks whose setup marker holds and delete every marker line (project-setup/references/setup-copy.md, "Setup markers"). */
-function resolveMarkers(text, setup) {
-  const holds = (condition) => {
-    if (condition === 'salesforce') return setup.salesforce;
-    if (condition === 'not salesforce') return !setup.salesforce;
-    return condition.split(' or ').some((part) => {
-      const m = part.trim().match(/^(tracker|memory)=(\w+)$/);
-      return m ? setup[m[1]] === m[2] : false;
-    });
-  };
-  const out = [];
-  let keep = true;
-  for (const line of text.split('\n')) {
-    const t = line.trim();
-    const open = t.match(/^<!-- if (.+) -->$/);
-    if (open) keep = holds(open[1]);
-    else if (t === '<!-- endif -->') keep = true;
-    else if (keep) out.push(line);
-  }
-  return out.join('\n').replace(/<!-- Project setup fill-in guide[\s\S]*?-->\n?/, '');
+/** AGENTS.md as a session reads it once setup is finished: without its fill-in guide comment. */
+function withoutFillInGuide(text) {
+  return text.replace(/<!-- Project setup fill-in guide[\s\S]*?-->\n?/, '');
 }
 
 /** The rule files one setup folder holds. */
@@ -186,7 +169,6 @@ function ruleNamesOf(folder) {
 /** The folders whose rules only some projects get, and the setups that get them (setup-copy.md, "Folders the choices add"). */
 const CHOICE_RULES = [
   { folder: 'salesforce', when: (setup) => setup.salesforce },
-  { folder: 'work-local', when: (setup) => setup.tracker === 'local' },
   { folder: 'memory-hindsight', when: (setup) => setup.memory === 'hindsight' },
   { folder: 'notion-tools', when: (setup) => setup.tracker === 'notion' || setup.memory === 'notion' },
 ];
@@ -198,12 +180,12 @@ function setupTotals(dir, raw, rules) {
   const agents = fs.existsSync(agentsFile) ? fs.readFileSync(agentsFile, 'utf8') : '';
   const ownerTemplate = fs.existsSync(OWNER_TEMPLATE) ? Buffer.byteLength(fs.readFileSync(OWNER_TEMPLATE, 'utf8')) : 0;
   return SETUPS.map((setup) => {
-    let bytes = Buffer.byteLength(resolveMarkers(agents, setup)) + ownerTemplate;
+    let bytes = Buffer.byteLength(withoutFillInGuide(agents)) + ownerTemplate;
     for (const r of raw) {
       const parsed = rules.find((x) => x.name === r.name);
       if (!parsed || parsed.scoped) continue;
       if (choiceRules.some((c) => c.names.has(r.name) && !c.when(setup))) continue;
-      bytes += Buffer.byteLength(resolveMarkers(r.text, setup));
+      bytes += Buffer.byteLength(r.text);
     }
     return { name: setup.name, bytes };
   });
@@ -228,12 +210,12 @@ function main() {
       if (skills.has(s.name) || rule.text.includes(`\`${s.name}\` is not installed`)) continue;
       findings.push({ rule: rule.name, line: s.line, check: 'skill', severity: 'warning', message: `The rule names the \`${s.name}\` skill, which project-setup does not ship and no project skill in ${shown(dir)} holds, and does not say what to do when it is not installed.`, fix: 'Name a skill that exists, or add what to do when it is not installed.' });
     }
-    // A pattern must match a file the project has, or name a folder it makes later.
+    // A pattern must match a file the project has, or start with a path it makes later or only one choice has.
     for (const p of rule.paths || []) {
       if (globProblems(p) || files.some((f) => globMatches(p, f))) continue;
       const folder = firstFolder(p);
       if (folder && FOLDERS_MADE_LATER[folder]) continue;
-      findings.push({ rule: rule.name, line: 1, check: 'glob', severity: 'error', message: `The paths pattern "${p}" matches no file in ${shown(dir)}, so the rule never loads.`, fix: `Fix the pattern, or add its folder to FOLDERS_MADE_LATER in dev/tools/rule-lint.mjs with the reason a project creates it later.` });
+      findings.push({ rule: rule.name, line: 1, check: 'glob', severity: 'error', message: `The paths pattern "${p}" matches no file in ${shown(dir)}, so the rule never loads.`, fix: `Fix the pattern, or add its first path part to FOLDERS_MADE_LATER in dev/tools/rule-lint.mjs with the reason a project may not have it.` });
     }
   }
   findings.push(...lintRuleSet(rules, { listItemsOnly: [RULE_FILE_NAME] }));
@@ -267,7 +249,7 @@ function main() {
   const alwaysBytes = always.reduce((n, r) => n + ruleSize(r).bytes, 0);
   const largest = [...always].sort((a, b) => ruleSize(b).bytes - ruleSize(a).bytes)[0];
   console.log(`check-rules: ${rules.length} rules in ${shown(rulesDir)}: ${always.length} always on (${alwaysBytes} bytes in all; largest ${largest ? `${largest.name}, ${ruleSize(largest).bytes} bytes` : 'none'}; proposed limit ${RULE_LIMITS.alwaysOnBytes} bytes each, a warning until Mike says yes), ${rules.length - always.length} path-scoped.`);
-  console.log(`check-rules: bytes that load in every session (always-on rules plus AGENTS.md, setup markers resolved): ${setupTotals(dir, raw, rules).map((t) => `${t.name}, ${t.bytes}`).join('; ')}. No ceiling is set for this total yet; it waits for Mike's answer.`);
+  console.log(`check-rules: bytes that load in every session (always-on rules plus AGENTS.md): ${setupTotals(dir, raw, rules).map((t) => `${t.name}, ${t.bytes}`).join('; ')}. No ceiling is set for this total yet; it waits for Mike's answer.`);
   for (const x of [...errors, ...warnings]) {
     console.log(`${x.severity === 'error' ? 'Error' : 'Warning'}: ${x.rule}${x.line ? `, line ${x.line}` : ''}: ${x.message}${x.fix ? ` Fix: ${x.fix}` : ''}`);
   }

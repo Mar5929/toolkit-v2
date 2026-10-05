@@ -1,6 +1,6 @@
-# Client-Work Folder: delivery/ or engagement/
+# Delivery Folder: delivery/ or engagement/
 
-Which folder holds a Salesforce project's client-work files.
+Which folder holds a Salesforce project's releases, deployments, and migrations.
 
 - New projects use `delivery/`.
 - A project that already uses `engagement/` keeps it. Do not rename it, move its files, or create a parallel `delivery/` tree.
