@@ -46,6 +46,7 @@ A pointer has no status. A record gets one pointer. When the record it names is 
 - Every pointer names a record that exists. Check the ID before you save.
 - From a worktree, read and change memory in the main checkout. Never copy it into the worktree, and never `git add` a file from this folder.
 - `.claude/rules/memory-review-and-save.md` says when memory is reviewed, and what a yes or a no from the owner means for a save.
+- `.claude/hooks/validate-records.mjs` checks Current State after each edit. Fix what it reports.
 
 ## Which skill to use
 

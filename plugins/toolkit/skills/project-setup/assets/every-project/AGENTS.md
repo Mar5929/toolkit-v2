@@ -73,6 +73,7 @@ Every folder and file, what it holds, and what to follow when you change it.
 | `.claude/rules/` | The project's rules. `owner-preferences.md` holds the owner's own instructions. | Only with the owner's yes. |
 | `.claude/skills/` | The procedures named in "Which skill" below. | Only with the owner's yes. |
 | `.claude/hooks/`, `.claude/settings.json` | The small commands that run by themselves, and the settings that turn them on. Salesforce: also the two org guards and `.claude/protected-orgs.json`, the orgs they protect. | Only with the owner's yes. |
+| `.githooks/pre-commit` | The command Git runs before each commit. It runs `.claude/hooks/validate-records.mjs`, which checks the form of the records in `DECISIONS.md`, `system/`, and `sources/`. | Only with the owner's yes. |
 | `.claude/output-styles/` | The Plain English style Claude Code applies to chat replies. | Only with the owner's yes. |
 | `.agents/skills`, `.codex/` | The link that lets Codex read the same skills, and Codex's hooks and settings. | Only with the owner's yes. |
 

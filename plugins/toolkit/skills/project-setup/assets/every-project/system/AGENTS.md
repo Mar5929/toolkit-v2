@@ -80,11 +80,10 @@ What each mark means:
 ## What must stay true
 
 - A rule is added, changed, or retired only because of a decision. Write that DEC-### in the rule's Source and in "Last changed via", and add a Changelog row.
-- Only a Decided entry in `DECISIONS.md` makes a rule Approved.
-- Set the document's Status again after every change to a mark.
 - One work item's proposal stays in that item's design. It comes here only when more than one work item depends on it, as a Draft rule.
 - This folder describes the system the owner approved. What exists today, before this project's changes, goes in `reference/current-system/`.
 - Name work items, decisions, and sources by ID. Never copy their text into a document.
+- `.claude/hooks/validate-records.mjs` checks these documents after each edit and before each commit. Fix what it reports.
 
 ## Which skill to use
 
