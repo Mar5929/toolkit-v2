@@ -1,33 +1,19 @@
 # Review and Save Project Memory
 
-This rule applies to the main agent. The project's one memory store is the system named under "Memory" in `PROJECT.md`, "Toolkit settings". Never save project memory in a host's own memory feature (Claude Code's auto-memory, Codex Memories) or another plugin's (for example the `claude-toolkit` Second Brain plugin).
-
-In the rules and `AGENTS.md`, "the memory save skill" and "the memory find skill" mean `curating-project-memory` in a project with local or Notion memory.
+This rule applies to the main agent.
 
 ## When to review memory
 
-- Review memory after an explicit remember or forget request, a correction, a standing preference, a meaningful decision or discovery, a significant fix or episode, a change of people, tools, or references, a focus shift, a finished work item, and a handoff.
-- A hook reminder is not a save decision. Do not save on every hook reminder or every turn. A review can end with nothing saved.
+- Review memory after the owner asks to remember or forget something, after a correction to something memory holds, when a record a pointer names is moved, replaced, or removed, when the work in progress changes, when a work item is finished, and at a handoff.
+- When a review finds a decision, a fact about the system, a term, or a lesson that is not filed yet, file it where `AGENTS.md`, "Where information goes", says.
+- A review can end with nothing saved.
 
-## What never goes in memory
+## Entries
 
-- The owner's instructions for how the agent works go to `.claude/rules/owner-preferences.md`, never to memory.
-- A save the owner said no to is kept nowhere else: not in Current State, another memory, or a list of pending saves.
+- Every memory entry, in local files or in Notion, carries the date it was created and the date it was last changed.
 
 ## Approval
 
-- Save, correct, forget, and tidy memory only through the memory save skill, which holds the approval policy.
-- The approval mode (onboarding or trusted) is the "Memory approval" line in `PROJECT.md`, "Toolkit settings". Only an explicit owner instruction changes it.
 - A yes approves only the change and meaning shown. Silence approves nothing.
 - An unanswered save question stays a proposal: do not rely on it.
-<!-- if memory=hindsight -->
-
-## Hindsight projects
-
-This section applies when the "Memory" line in `PROJECT.md`, "Toolkit settings", is `hindsight`. Hindsight runs as its coding-agent add-on is designed: it saves each session and brings back what is relevant by itself. `AGENTS.md`, "Project memory", says what counts as project memory.
-
-- Where a rule, `AGENTS.md`, or a skill names the memory save or find skill, or Hindsight's `retain` or `recall` tool, use the add-on's tools for saving and searching.
-- Never open or show `~/.hindsight/coding-agent.json` or its `.hindsight-backup` copy whole, with any tool: they hold the API key. To list the Hindsight project folders: `jq -r '.mapPathToBank // {} | to_entries[] | "\(.key) \(.value)"' ~/.hindsight/coding-agent.json`.
-- The add-on cannot delete a memory. For "forget that", say which memory is wrong and ask the owner to remove it on the bank's page in the dashboard. Never say a memory is deleted when it is not.
-- Current State is the local file `memory/CURRENT_STATE.md`, kept out of Hindsight. Remove stale lines at each handoff and whenever the session-start hook says the file is too long or too old. Keep it within its limits: Now 5, Waiting on the owner 5, Next session starts with 3, and under 40 lines in all.
-<!-- endif -->
+- A save the owner said no to is kept nowhere else: not in Current State, another memory entry, or a list of pending saves.
