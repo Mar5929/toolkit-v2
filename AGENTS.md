@@ -379,12 +379,30 @@ node --test 'dev/tests/*.test.mjs'
   rule's meaning waits for Mike's yes. The 4 KB limit for an always-on rule
   is proposed, not decided, so `check-rules.mjs` only warns on it. Never cut
   Mike's words to meet it.
-- **Read the documentation before building a Claude Code or Codex piece.**
-  The captured pages are in `ai-external-knowledge/` (`claude-code/`,
-  `codex/`, `anthropic-agent-skills/`, `anthropic-engineering/`). More Codex
-  facts, with sources: `dev/research/platform-best-practices.md` part 3.
-  Never edit a captured page; capture it again with Firecrawl and update its
-  `SOURCE-RECORD.md`.
+- **Harness files follow the current official documentation** (Mike,
+  2026-10-05: "they must always be written using the most up to date claude
+  code and codex best practices and up to date documentation", by every
+  agent and helper agent, without him repeating it). A harness file is a
+  skill, a rule, an `AGENTS.md` or `CLAUDE.md`, a hook command or its
+  settings entry, a settings file, a plugin manifest, a helper-agent brief,
+  or a mod. Before you or a helper agent writes or changes one:
+  - Read the official page for that kind of file in `ai-external-knowledge/`
+    (`claude-code/`, `codex/`, `anthropic-agent-skills/`, `openai-plugins/`,
+    `anthropic-engineering/`). Each folder's `SOURCE-RECORD.md` gives the
+    capture date. When the capture is more than 14 days old, capture the
+    page again with Firecrawl first, update its `SOURCE-RECORD.md`, and read
+    what changed. Never edit a captured page by hand.
+  - Read the toolkit's guide for that kind of file:
+    `dev/research/skill-writing-guide.md`,
+    `dev/research/rules-best-practices.md` Part 1, or
+    `dev/research/platform-best-practices.md` part 3. Where a guide and the
+    current page differ, the page wins; correct the guide in the same
+    change.
+  - Write plain, terse, technical English with no figurative language and
+    one meaning for every instruction.
+  - Put this rule, the files above, and the wording rule in the brief of
+    every helper agent that will change a harness file.
+  - "Wording and overlap review" above covers the separate review.
 - **Notion memory uses Lore's layout.** Never rename or remove a Lore
   database or property: Lore finds them by their exact names. The layout is
   in the Notion `using-memory-store` skill,
