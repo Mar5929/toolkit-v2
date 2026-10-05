@@ -20,7 +20,7 @@ This folder is the project's work tracker: one folder per work item. A work item
 | --- | --- | --- |
 | Work item | The prefix, a hyphen, and three digits: `WI-031`. The prefix is "Work item ID prefix" under "Toolkit settings" in `PROJECT.md`. | The next ID is the highest `id:` anywhere in this folder plus one, `archive/` included and the template left out. |
 
-An ID is never reused. The IDs inside an item (a phase, a task, a requirement, a question) and the ID of a project task: `running-work-item-lifecycle`, "Levels", and `work-item-template/WORK-ITEM.md` give their forms. They are unique within their item.
+An ID is never reused. `running-work-item-lifecycle`, "Levels", and `work-item-template/WORK-ITEM.md` give the forms of the IDs inside an item (a phase, a task, a requirement, a question) and of a project task's ID. An ID inside an item is unique within that item. A project task's ID is unique within `PROJECT-TASKS.md`.
 
 ## Header fields that say where an item stands
 

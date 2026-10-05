@@ -8,7 +8,7 @@ This folder holds two kinds of material the project reads but did not decide: do
 | --- | --- |
 | `outside-docs/` | Documentation captured from outside the project, such as a vendor's guide, a product's API reference, or a release note. One folder per topic. |
 | `outside-docs/INDEX.md` | One row per topic folder. |
-| `current-system/` | How the existing system works today, before this project's changes: what was observed, in which environment, and on which date. One file per area of the system. |
+| `current-system/` | The record of how the system works today: what was observed, in which environment, and on which date. One file per area of the system. |
 
 Never put here: a client file, a meeting note, or a transcript (they go in `sources/`); a project decision; an instruction for agents.
 

@@ -91,7 +91,7 @@ What each mark means:
 
 - A rule is added, changed, or retired only because of a decision. The rule's Source, the document's "Last changed via", and the Changelog row of the change name that DEC-###.
 - One work item's proposal stays in that item's design. It comes here only when more than one work item depends on it, as a Draft rule.
-- This folder describes the system the owner approved. What exists today, before this project's changes, goes in `reference/current-system/`.
+- This folder describes the system the owner approved. The record of how the system works today (what was observed, in which environment, and on which date) goes in `reference/current-system/`.
 - Name work items, decisions, and sources by ID. Never copy their text into a document.
 - `.claude/hooks/validate-records.mjs` checks these documents after each edit and before each commit. Fix what it reports.
 

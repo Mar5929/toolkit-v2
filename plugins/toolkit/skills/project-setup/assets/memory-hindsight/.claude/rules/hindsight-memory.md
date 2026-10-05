@@ -1,13 +1,13 @@
 # Hindsight Project Memory
 
-This project's memory is Hindsight, on the owner's server, in the bank named under "Toolkit settings" in `PROJECT.md`. Hindsight's coding-agent add-on saves each session at its end. On the first message of a session it adds what the bank holds about that message to your context.
+This project's memory is Hindsight, on the owner's server, in the bank named under "Toolkit settings" in `PROJECT.md`. Hindsight's coding-agent add-on saves the session to the bank at the end of every turn. On the first message of a session it adds what the bank holds about that message to your context.
 
 - Hindsight is the search across past sessions. It is not the home of a decision or a system fact: file each one where `AGENTS.md`, "Where information goes", says, as in every project.
 - When Hindsight returns a decision or a rule, find it in `DECISIONS.md` or `system/` and name its DEC-### or rule ID. When no record holds it, file it before you rely on it.
-- The add-on's own skill, `hindsight-coding-agent`, says how to use the add-on's tools. Open it before you search, store, or correct a memory.
+- The add-on's own skill, `hindsight-coding-agent`, says how to use the add-on's tools. Open it before you search, store, or correct a memory. In Codex, which has no such skill, follow the guide the add-on shows at session start.
 - This project has no `curating-project-memory` skill and no `using-memory-store` skill. Where `AGENTS.md`, a rule, a skill, or a hook names one of them for something to remember or forget, follow this file. Where it names one for Current State, follow "Current State" below.
-- "Remember this": file the fact in its home, and tell the owner that the add-on saves this conversation at the end of the session.
-- "Forget that", or a memory that is wrong: the add-on cannot delete a memory. Save a correction with its tool `hindsight_ingest_document`, titled "Correction: <topic>", as its skill says. Deleting a memory is the owner's step, on the bank's page in the dashboard: say which memory. Never say a memory is deleted when it is not.
+- "Remember this": file the fact in its home, and tell the owner that the add-on saves this conversation at the end of the turn.
+- "Forget that", or a memory that is wrong: the add-on cannot delete a memory. Save a correction with its tool `hindsight_ingest_document`, titled "Correction: <topic>". Deleting a memory is the owner's step, on the bank's page in the dashboard: say which memory. Never say a memory is deleted when it is not.
 - "Clean up memory": prune Current State as "Current State" below says, save a correction for each memory you checked and found wrong, and list for the owner the memories only the owner can delete. Change nothing else in the bank.
 - Write an instruction from the owner for how the agent works as a line in `.claude/rules/owner-preferences.md`, by a direct edit, in the layout its top comment gives. Never put it in Hindsight.
 - Never put a secret, a key, or personal data in Hindsight.

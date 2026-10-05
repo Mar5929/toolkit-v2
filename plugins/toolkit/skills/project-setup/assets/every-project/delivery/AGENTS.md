@@ -66,3 +66,4 @@ A client handoff has no status.
 | Write a client handoff record | No skill: follow this file |
 | Commit a record written before the work item's branch is merged | On that branch, with the work item's other changes |
 | Commit a change made after the work item's branch was merged | `publish-docs` |
+| Commit a record that belongs to no single work item, such as a release of several items or a client handoff | `publish-docs` |
