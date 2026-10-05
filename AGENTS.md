@@ -62,8 +62,8 @@ chat handling each one, and each chat's state. It uses no Notion. See
 | `<setup>SKILL.md`, `<setup>references/` | Onboarding, "check the setup", "update the toolkit", and the move-over for a project set up with the older toolkit or by hand (`references/move-over.md`, `references/old-toolkit-pieces.md`). |
 | `plugins/toolkit/skills/choosing-outside-tools/` | The owner's tool list: `SKILL.md` holds one row per job, and `references/` holds one file per tool (where it comes from, how to set it up, and the owner's choices). Never copied into a project. |
 | `<setup>assets/every-project/` | Everything every project gets, at the paths a project has: the project files (`AGENTS.md`, `PROJECT.md`, the rules, `project-wide-records/`, the templates), the 10 shared skills in `.claude/skills/`, and the three hook commands in `.claude/hooks/` (`session-start.mjs`, `prompt-reminder.mjs`, `codex-after-commit.mjs`). Edited here directly (see "The model project and its copy"). |
-| `<setup>assets/work-local/`, `work-notion/`, `work-github/` | One folder per work tracking choice. Each holds one skill, `tracking-work-items`, in `.claude/skills/`. `work-local/` also holds `work-items/`, `PROJECT-ROADMAP.md`, and the `work-item-folders.md` rule. |
-| `<setup>assets/memory-local/`, `memory-notion/`, `memory-process/` | The memory choice. `memory-process/` holds `managing-project-memory` (the process) and goes with local or Notion memory. `memory-local/` and `memory-notion/` each hold their own `storing-project-memory` (storage only); `memory-local/` also holds `memory/`. Hindsight takes only `memory/CURRENT_STATE.md` from `memory-local/`. |
+| `<setup>assets/work-local/`, `work-notion/`, `work-github/` | One folder per work tracking choice. Each holds one skill, `using-work-tracker`, in `.claude/skills/`. `work-local/` also holds `work-items/`, `PROJECT-ROADMAP.md`, and the `work-item-folders.md` rule. |
+| `<setup>assets/memory-local/`, `memory-notion/`, `memory-process/` | The memory choice. `memory-process/` holds `curating-project-memory` (the process) and goes with local or Notion memory. `memory-local/` and `memory-notion/` each hold their own `using-memory-store` (storage only); `memory-local/` also holds `memory/`. Hindsight takes only `memory/CURRENT_STATE.md` from `memory-local/`. |
 | `<setup>assets/notion-tools/` | `using-notion-cli`, for every project with work items or memory in Notion. |
 | `<setup>assets/salesforce/` | Everything only a Salesforce project gets: `sfdx-project.json`, `.forceignore`, `delivery/`, `tools/`, the protected-orgs file, the two guards, the `sf-*` skills, `.codex/hooks.json`, and nine rules. |
 | `<setup>assets/soul/` | `SOUL.md`, for a project whose owner keeps it. |
@@ -103,9 +103,9 @@ the owner's choices on top of it.
   file (Mike, 2026-10-05). A folder holds files at the paths a project has
   them. A file every project gets goes in `every-project/`; a file for one
   choice goes in that choice's folder. A project path is in one folder. The
-  exception is a file the choices alternate: `tracking-work-items` in
+  exception is a file the choices alternate: `using-work-tracker` in
   `work-local/`, `work-notion/`, and `work-github/`, and
-  `storing-project-memory` in `memory-local/` and `memory-notion/`.
+  `using-memory-store` in `memory-local/` and `memory-notion/`.
   `check-skills.mjs` fails on any other path in two folders.
 - The setup markers in the model's `AGENTS.md`, `README.md`, `PROJECT.md`,
   and `.claude/rules/memory-review-and-save.md` (`<!-- if salesforce -->`,
@@ -292,18 +292,18 @@ node --test 'dev/tests/*.test.mjs'
     starts with a `## Contents` list. A skill reads only files inside its own
     folder, never `../`.
   - Shared skills never assume one tracker or memory. For work items they
-    name `tracking-work-items`: every work tracking set holds a skill of
-    that name. For memory they name `managing-project-memory`, which every
+    name `using-work-tracker`: every work tracking set holds a skill of
+    that name. For memory they name `curating-project-memory`, which every
     project with local or Notion memory has; a Hindsight project has no
     memory skills, so they point it to "Project memory" in the project's
     `AGENTS.md`.
-  - Memory skills (Mike, 2026-10-01). `managing-project-memory` holds the
+  - Memory skills (Mike, 2026-10-01). `curating-project-memory` holds the
     process, the same for local and Notion memory: it never names a
     storage tool, file, folder, database, or command, and hands every read
-    and write to `storing-project-memory`. Each version of
-    `storing-project-memory` holds storage only, never a process rule. Both
-    Notion storage skills (`tracking-work-items` and
-    `storing-project-memory`) run `ntn` through `using-notion-cli` and never
+    and write to `using-memory-store`. Each version of
+    `using-memory-store` holds storage only, never a process rule. Both
+    Notion storage skills (`using-work-tracker` and
+    `using-memory-store`) run `ntn` through `using-notion-cli` and never
     repeat its sign-in, Codex, or error text. Each instruction lives in
     exactly one file.
 - **Wording and overlap review** (Mike, 2026-09-30). New or changed text in
@@ -384,8 +384,8 @@ node --test 'dev/tests/*.test.mjs'
   `SOURCE-RECORD.md`.
 - **Notion memory uses Lore's layout.** Never rename or remove a Lore
   database or property: Lore finds them by their exact names. The layout is
-  in the Notion `storing-project-memory` skill,
-  `<setup>assets/memory-notion/.claude/skills/storing-project-memory/`: every
+  in the Notion `using-memory-store` skill,
+  `<setup>assets/memory-notion/.claude/skills/using-memory-store/`: every
   database and column in `references/database-layout.md`, the views and
   page layout in `references/views-and-layout.md`, and the request files in
   `assets/schema/`. The toolkit does not install or run Lore, and Lore's own

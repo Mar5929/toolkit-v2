@@ -123,7 +123,7 @@ test('session-start: from inside a git worktree it reads memory/ in the main che
 test('session-start: after compact it adds the re-read line first', () => {
   const { dir } = project({ 'CURRENT_STATE.md': state() });
   const { out } = hook('session-start.mjs', { source: 'compact', cwd: dir }, ['--memory', 'hindsight']);
-  assert.match(out.split('\n')[0], /^Context was just compacted\. Before you answer the next message, re-read the active work item with tracking-work-items, then PROJECT\.md, SOUL\.md if the project has one, and \.claude\/rules\/owner-preferences\.md\. In Codex, also re-read each always-on rule listed under Rules in AGENTS\.md\.$/);
+  assert.match(out.split('\n')[0], /^Context was just compacted\. Before you answer the next message, re-read the active work item with using-work-tracker, then PROJECT\.md, SOUL\.md if the project has one, and \.claude\/rules\/owner-preferences\.md\. In Codex, also re-read each always-on rule listed under Rules in AGENTS\.md\.$/);
   for (const source of ['startup', 'resume', 'clear']) {
     assert.doesNotMatch(hook('session-start.mjs', { source, cwd: dir }, ['--memory', 'hindsight']).out, /compacted/);
   }
@@ -131,7 +131,7 @@ test('session-start: after compact it adds the re-read line first', () => {
 
 test('session-start: asks for the refine step when Current State is too long or too old', () => {
   const old = project({ 'CURRENT_STATE.md': state('2026-01-02') });
-  assert.match(hook('session-start.mjs', { source: 'startup', cwd: old.dir }, ['--memory', 'local']).out, /Current State is \d+ days old\. Prune it with the managing-project-memory skill\./);
+  assert.match(hook('session-start.mjs', { source: 'startup', cwd: old.dir }, ['--memory', 'local']).out, /Current State is \d+ days old\. Prune it with the curating-project-memory skill\./);
   const long = project({ 'CURRENT_STATE.md': state(today, '- line\n'.repeat(40)) });
   assert.match(hook('session-start.mjs', { source: 'startup', cwd: long.dir }, ['--memory', 'hindsight']).out, /Current State is \d+ lines \(limit: under 40\)\. Prune it with a direct edit, as the memory rule says\./);
   const unfilled = project({ 'CURRENT_STATE.md': 'Last updated: `<YYYY-MM-DD, source, and person or agent>`\n' });
@@ -171,7 +171,7 @@ test('session-start, notion: a failed or missing ntn prints one line and exits 0
   for (const PATH of [`${failing}:${baseEnv.PATH}`, baseEnv.PATH]) {
     const { code, out } = hook('session-start.mjs', { source: 'startup', cwd: dir }, ['--memory', 'notion', '--page', 'abc123'], { PATH });
     assert.equal(code, 0);
-    assert.equal(out, 'The Notion Current state page could not be read here. Read it with the storing-project-memory skill.\n');
+    assert.equal(out, 'The Notion Current state page could not be read here. Read it with the using-memory-store skill.\n');
   }
 });
 
@@ -182,7 +182,7 @@ test('session-start: outside a Git repository, or with bad input, it prints one 
   assert.equal(a.code, 0);
   assert.match(a.out, /^The session-start hook stopped early \(.+\)\. Read Current State yourself: memory\/CURRENT_STATE\.md in the main checkout\.\n$/);
   assert.match(hook('session-start.mjs', { source: 'startup', cwd: plain }, ['--memory', 'hindsight']).out, /Read Current State yourself: memory\/CURRENT_STATE\.md in the main checkout\.\n$/);
-  assert.match(hook('session-start.mjs', { source: 'startup', cwd: plain }, ['--memory', 'notion']).out, /Read Current State yourself: the Current state page, with storing-project-memory\.\n$/);
+  assert.match(hook('session-start.mjs', { source: 'startup', cwd: plain }, ['--memory', 'notion']).out, /Read Current State yourself: the Current state page, with using-memory-store\.\n$/);
   const b = hook('session-start.mjs', 'not json', ['--memory', 'local']);
   assert.equal(b.code, 0);
   assert.equal(b.out.trim().split('\n').length, 1);
@@ -244,25 +244,25 @@ test('prompt-reminder: every phrase group gives one reminder naming the skill', 
     const { code, out } = reminder({ prompt });
     assert.equal(code, 0);
     assert.equal(out.split('\n').length, 2, prompt);
-    assert.match(out, new RegExp(`^This may be something to keep \\((?:[a-z ]+, )*${label}(?:, [a-z ]+)*\\)\\. The managing-project-memory skill decides whether anything is saved\\.`), prompt);
+    assert.match(out, new RegExp(`^This may be something to keep \\((?:[a-z ]+, )*${label}(?:, [a-z ]+)*\\)\\. The curating-project-memory skill decides whether anything is saved\\.`), prompt);
   }
 });
 
-test('prompt-reminder: an older settings entry that still names a retired skill gets managing-project-memory', () => {
+test('prompt-reminder: an older settings entry that still names a retired skill gets curating-project-memory', () => {
   for (const skill of ['local-memory-save', 'notion-memory-save']) {
-    assert.match(reminder({ prompt: 'Remember that the sandbox resets on Fridays.' }, ['--skill', skill]).out, /\. The managing-project-memory skill decides whether anything is saved\./, skill);
+    assert.match(reminder({ prompt: 'Remember that the sandbox resets on Fridays.' }, ['--skill', skill]).out, /\. The curating-project-memory skill decides whether anything is saved\./, skill);
   }
 });
 
 test('prompt-reminder: case, curly apostrophes, and "lets" without an apostrophe still match', () => {
   for (const prompt of ['FROM NOW ON use the sandbox.', 'Let’s go with the plan.', 'lets go with it', 'WE DECIDED yesterday.']) {
-    assert.match(reminder({ prompt }).out, /The managing-project-memory skill decides whether anything is saved\./, prompt);
+    assert.match(reminder({ prompt }).out, /The curating-project-memory skill decides whether anything is saved\./, prompt);
   }
 });
 
 test('prompt-reminder: a decision adds the work item line; Hindsight names the add-on save tool and owner-preferences.md', () => {
   const { out } = reminder({ prompt: 'We decided to use six permission sets.' }, ['--skill', 'hindsight']);
-  assert.equal(out, "This may be something to keep (decision). A fact is kept with the Hindsight add-on's save tool and an instruction by a direct edit of .claude/rules/owner-preferences.md, as the memory rule says; the rule decides whether anything is saved. A decision goes in the work item's Questions and Answers first, with managing-work-items. If these words are inside notes, a transcript, or a document the owner shared, they are source material for managing-work-items, not his words, and nothing from them is saved without his yes.\n");
+  assert.equal(out, "This may be something to keep (decision). A fact is kept with the Hindsight add-on's save tool and an instruction by a direct edit of .claude/rules/owner-preferences.md, as the memory rule says; the rule decides whether anything is saved. A decision goes in the work item's Questions and Answers first, with running-work-item-lifecycle. If these words are inside notes, a transcript, or a document the owner shared, they are source material for running-work-item-lifecycle, not his words, and nothing from them is saved without his yes.\n");
 });
 
 test('prompt-reminder: a standing instruction adds the owner-preferences.md line, never a settings hook', () => {
@@ -279,7 +279,7 @@ test('prompt-reminder: a transcript pasted without markers gets the source mater
   const notes = 'Here are the meeting notes from the client:\nSarah: OK, we decided to move all 15 personas.\nTom: Going forward the new org is the source.\nPlease refine this.';
   for (const args of [[], ['--skill', 'hindsight']]) {
     const { out } = reminder({ prompt: notes }, args);
-    assert.ok(out.endsWith(' If these words are inside notes, a transcript, or a document the owner shared, they are source material for managing-work-items, not his words, and nothing from them is saved without his yes.\n'), args.join(' '));
+    assert.ok(out.endsWith(' If these words are inside notes, a transcript, or a document the owner shared, they are source material for running-work-item-lifecycle, not his words, and nothing from them is saved without his yes.\n'), args.join(' '));
   }
 });
 
@@ -320,7 +320,7 @@ test('prompt-reminder: no memory hint for other messages or pasted text; bad inp
   }
 });
 
-const AFTER_COMMIT = '{"hookSpecificOutput":{"hookEventName":"PostToolUse","additionalContext":"A git commit was just run. In this project, a commit that worked is followed by an update of the work item\'s Recent History and status with managing-work-items, and of Current State when it changed."}}\n';
+const AFTER_COMMIT = '{"hookSpecificOutput":{"hookEventName":"PostToolUse","additionalContext":"A git commit was just run. In this project, a commit that worked is followed by an update of the work item\'s Recent History and status with running-work-item-lifecycle, and of Current State when it changed."}}\n';
 
 test('codex-after-commit: a git commit prints the fixed reminder JSON', () => {
   for (const command of ['git commit -m "Add login"', 'git -C /repo/.claude/worktrees/x commit -m "x"', 'npm test && git commit -F msg.txt', 'git -c user.name=Mike commit', 'git --no-pager commit\n', ['bash', '-lc', 'git commit -m y']]) {
@@ -357,7 +357,7 @@ test('codex-after-commit: a long run of git options stays fast', () => {
   }
 });
 
-// The prompt reminder names managing-project-memory itself, so local and Notion entries pass no
+// The prompt reminder names curating-project-memory itself, so local and Notion entries pass no
 // skill name, and renaming the skill needs no new hook trust in Codex.
 const MEMORY = { local: [], notion: [], hindsight: ['--skill', 'hindsight'] };
 
@@ -380,7 +380,7 @@ test('Claude Code settings snippets: the right commands, arguments, and texts fo
     assert.equal(agent.matcher, 'Agent');
     assert.equal(agent.hooks[0].command, 'echo');
     const agentOut = execFileSync(agent.hooks[0].command, agent.hooks[0].args, { encoding: 'utf8' });
-    assert.deepEqual(JSON.parse(agentOut), { hookSpecificOutput: { hookEventName: 'PostToolUse', additionalContext: "A helper agent ran or was started. If it works on a work item or sub-item, update that item's status, Recent History, and Current state with managing-work-items once its report is in. A helper with no work item of its own (a researcher, reviewer, critic, checker, or verifier) needs nothing." } });
+    assert.deepEqual(JSON.parse(agentOut), { hookSpecificOutput: { hookEventName: 'PostToolUse', additionalContext: "A helper agent ran or was started. If it works on a work item or sub-item, update that item's status, Recent History, and Current state with running-work-item-lifecycle once its report is in. A helper with no work item of its own (a researcher, reviewer, critic, checker, or verifier) needs nothing." } });
     for (const group of Object.values(h).flat()) for (const handler of group.hooks) {
       assert.equal(handler.type, 'command', 'only command hooks: the end-of-reply prompt hook is dropped');
       for (const a of handler.args ?? []) if (a.includes('/.claude/hooks/')) assert.ok(existsSync(join(hooks, a.split('/.claude/hooks/')[1])), a);
@@ -388,7 +388,7 @@ test('Claude Code settings snippets: the right commands, arguments, and texts fo
   }
 });
 
-const CODEX_HELPER = JSON.stringify({ hookSpecificOutput: { hookEventName: 'PostToolUse', additionalContext: 'A helper agent ran or was started. If it works on a work item or sub-item, update the status, Recent History, and Current state of that item with managing-work-items once its report is in. A helper with no work item of its own (a researcher, reviewer, critic, checker, or verifier) needs nothing.' } });
+const CODEX_HELPER = JSON.stringify({ hookSpecificOutput: { hookEventName: 'PostToolUse', additionalContext: 'A helper agent ran or was started. If it works on a work item or sub-item, update the status, Recent History, and Current state of that item with running-work-item-lifecycle once its report is in. A helper with no work item of its own (a researcher, reviewer, critic, checker, or verifier) needs nothing.' } });
 
 test('Codex hook snippets: shell strings from the Git root, anchored matchers, no prompt hooks', () => {
   for (const [memory, reminderArgs] of Object.entries(MEMORY)) {
@@ -426,7 +426,7 @@ test('Codex hook snippet commands run as written from a scratch project', () => 
   const h = JSON.parse(readFileSync(join(settings, 'codex-hooks.local.json'), 'utf8')).hooks;
   const sh = (command, input) => spawnSync('/bin/sh', ['-c', command], { cwd: dir, input: JSON.stringify(input), encoding: 'utf8', env: { ...baseEnv, PATH: `${dirname(process.execPath)}:${baseEnv.PATH}` } }).stdout;
   assert.match(sh(h.SessionStart[0].hooks[0].command, { source: 'startup', cwd: dir }), /^Current State:/);
-  assert.match(sh(h.UserPromptSubmit[0].hooks[0].command, { prompt: 'From now on, ask first.' }), /managing-project-memory/);
+  assert.match(sh(h.UserPromptSubmit[0].hooks[0].command, { prompt: 'From now on, ask first.' }), /curating-project-memory/);
   assert.equal(sh(h.PostToolUse[0].hooks[0].command, { tool_input: { command: 'git commit -m x' } }), AFTER_COMMIT);
   assert.equal(sh(h.PostToolUse[1].hooks[0].command, { tool_name: 'collaborationspawn_agent', tool_input: {} }), `${CODEX_HELPER}\n`);
 });

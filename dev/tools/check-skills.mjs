@@ -20,7 +20,7 @@
 //     "Use" saying when to use it; every "; use <skill>" names a skill that exists;
 //   - the SKILL.md body (after the frontmatter) is under 500 lines;
 //   - the description and folder match dev/SKILL-INDEX.md word for word (the three work
-//     tracking sets each hold a skill named tracking-work-items, so a name may have one row
+//     tracking sets each hold a skill named using-work-tracker, so a name may have one row
 //     per folder);
 //   - no when_to_use, $ARGUMENTS, !`command`, or ${CLAUDE_*}: Codex shows them as text;
 //   - SKILL.md links every file in the skill folder (a link to a folder covers what is in it),
@@ -73,13 +73,13 @@ const PATH_SPAN = /^(?:\.\/)?(?:references|assets|examples|scripts|agents)\/\S*$
 // Skill assets that are copies of project files: path under project-setup/assets -> the project path of the file.
 const SHARED = 'every-project/.claude/skills';
 const MODEL_COPIES = {
-  [`${SHARED}/managing-work-items/assets/work-item-template.md`]: 'work-items/work-item-template/WORK-ITEM.md',
-  [`${SHARED}/managing-work-items/assets/design-template.md`]: 'work-items/work-item-template/DESIGN.md',
-  [`${SHARED}/managing-project-wide-records/assets/DOMAIN-MAP.md`]: 'project-wide-records/templates/DOMAIN-MAP.md',
-  [`${SHARED}/managing-project-wide-records/assets/PROJECT-QUESTION.md`]: 'project-wide-records/templates/PROJECT-QUESTION.md',
-  [`${SHARED}/managing-project-wide-records/assets/PERSON.md`]: 'project-wide-records/templates/PERSON.md',
-  [`${SHARED}/managing-project-wide-records/assets/TARGET-ARCHITECTURE.md`]: 'project-wide-records/templates/TARGET-ARCHITECTURE.md',
-  [`${SHARED}/managing-project-wide-records/assets/INTAKE-RECEIPT.md`]: 'project-wide-records/templates/INTAKE-RECEIPT.md',
+  [`${SHARED}/running-work-item-lifecycle/assets/work-item-template.md`]: 'work-items/work-item-template/WORK-ITEM.md',
+  [`${SHARED}/running-work-item-lifecycle/assets/design-template.md`]: 'work-items/work-item-template/DESIGN.md',
+  [`${SHARED}/filing-project-records/assets/DOMAIN-MAP.md`]: 'project-wide-records/templates/DOMAIN-MAP.md',
+  [`${SHARED}/filing-project-records/assets/PROJECT-QUESTION.md`]: 'project-wide-records/templates/PROJECT-QUESTION.md',
+  [`${SHARED}/filing-project-records/assets/PERSON.md`]: 'project-wide-records/templates/PERSON.md',
+  [`${SHARED}/filing-project-records/assets/TARGET-ARCHITECTURE.md`]: 'project-wide-records/templates/TARGET-ARCHITECTURE.md',
+  [`${SHARED}/filing-project-records/assets/INTAKE-RECEIPT.md`]: 'project-wide-records/templates/INTAKE-RECEIPT.md',
 };
 
 const findings = [];
@@ -152,7 +152,7 @@ function frontmatter(file, text, level) {
 
 // ------------------------------------------------------------------ the index
 
-// Rows are keyed by folder: the three work tracking folders each hold a skill named tracking-work-items.
+// Rows are keyed by folder: the three work tracking folders each hold a skill named using-work-tracker.
 const indexDir = (folder) => path.join(SETUP, folder);
 const index = new Map();
 for (const [i, line] of read(INDEX).split('\n').entries()) {

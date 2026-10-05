@@ -168,8 +168,8 @@ agent's own branch and reach your main branch only after your yes.
 
 | Skill | What it does | You might say |
 | --- | --- | --- |
-| `managing-work-items` | Runs each work item from idea to Done. It works out the requirements with you one question at a time, then designs, builds, has an independent checker test the result, tidies up, and merges or deploys. It stops for your OK on the requirements, the design, the result, each merge, and Done. It saves and looks up items with `tracking-work-items`. | "help me plan this", "how should we build it", "is it ready", "ship it" |
-| `managing-project-wide-records` | Connects sources, shared questions, people, domain maps, and target direction across work items. It shows where each authoritative answer lives and which records still need an update. | "This workshop affects several items", "where did we decide the account model?" |
+| `running-work-item-lifecycle` | Runs each work item from idea to Done. It works out the requirements with you one question at a time, then designs, builds, has an independent checker test the result, tidies up, and merges or deploys. It stops for your OK on the requirements, the design, the result, each merge, and Done. It saves and looks up items with `using-work-tracker`. | "help me plan this", "how should we build it", "is it ready", "ship it" |
+| `filing-project-records` | Connects sources, shared questions, people, domain maps, and target direction across work items. It shows where each authoritative answer lives and which records still need an update. | "This workshop affects several items", "where did we decide the account model?" |
 | `handoff` | Saves where things stand and writes a checked prompt for a new session. | "write a handoff" |
 | `braindump` | Plays back a loose brain dump in simple words before any work starts. | "here's a brain dump" |
 | `explain-simply` | Explains the last answer again as short, plain bullets. | "explain it like I'm five" |
@@ -185,11 +185,11 @@ Each project gets the skills for where its work items and memory live:
 
 | Your choice | Skills it adds |
 | --- | --- |
-| Work items in local folders | `tracking-work-items` (saves, finds, and changes items in the `work-items/` folder) |
-| Work items in Notion | `tracking-work-items` (the Notion version), `using-notion-cli` (how to run Notion's command-line tool, `ntn`) |
-| Work items in GitHub Issues | `tracking-work-items` (the GitHub version) |
-| Memory in local files | `managing-project-memory` (decides what to keep, asks you, corrects, forgets, finds, and cleans up), `storing-project-memory` (saves and finds it as files in `memory/`) |
-| Memory in Notion | `managing-project-memory`, `storing-project-memory` (the Notion version), `using-notion-cli` |
+| Work items in local folders | `using-work-tracker` (saves, finds, and changes items in the `work-items/` folder) |
+| Work items in Notion | `using-work-tracker` (the Notion version), `using-notion-cli` (how to run Notion's command-line tool, `ntn`) |
+| Work items in GitHub Issues | `using-work-tracker` (the GitHub version) |
+| Memory in local files | `curating-project-memory` (decides what to keep, asks you, corrects, forgets, finds, and cleans up), `using-memory-store` (saves and finds it as files in `memory/`) |
+| Memory in Notion | `curating-project-memory`, `using-memory-store` (the Notion version), `using-notion-cli` |
 | Memory in Hindsight | None. Hindsight's coding-agent add-on saves each session to the project's bank, and the agent uses its save and search tools. |
 | Salesforce | `sf-deploy-check`, `sf-component-tracker`, `sf-data-change`; Salesforce's own skills (`forcedotcom/sf-skills`) are installed by you, and setup checks for them |
 
@@ -209,7 +209,7 @@ description.
 | --- | --- |
 | A session starts, resumes, or its context is compacted | The agent is shown Current State: a short list of what is happening now and what waits on you. With local memory, the hook first rebuilds the memory index, `memory/MEMORY.md`. When Current State is too long or older than 7 days, it asks the agent to clean it up. |
 | You send any message | The agent is told to check the project's skills and use every one that fits, before it answers. |
-| You say something worth keeping ("remember this", "from now on", "we decided", and similar) | A second one-line reminder names `managing-project-memory` (with Hindsight, the add-on's tools). The skill decides whether anything is saved, and asks you first. |
+| You say something worth keeping ("remember this", "from now on", "we decided", and similar) | A second one-line reminder names `curating-project-memory` (with Hindsight, the add-on's tools). The skill decides whether anything is saved, and asks you first. |
 | After a commit | A reminder to update the work item's history and status, and Current State if it changed. |
 | A helper agent starts or reports back | A reminder to update that helper's work item. |
 
