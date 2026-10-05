@@ -1,7 +1,7 @@
 {
   "database_id": "{{WORK_ITEMS_DB}}",
   "data_source_id": "{{WORK_ITEMS_DS}}",
-  "name": "Waiting on Mike",
+  "name": "Waiting on the owner",
   "type": "table",
   "position": {
     "type": "end"

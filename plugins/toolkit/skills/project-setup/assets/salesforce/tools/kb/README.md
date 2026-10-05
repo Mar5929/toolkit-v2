@@ -313,6 +313,6 @@ project's own.
 5. Optional: register `graph_freshness_hook.py` as a Stop hook in
    `.claude/settings.json`.
 
-The guide at `guides/salesforce-dependency-graph.md` covers what to do with the
-answers. The rule at `rules/salesforce/dependency-graph.md` covers when an agent
-must consult it and what it must never claim from it.
+The rule at `.claude/rules/dependency-graph.md` covers when an agent must
+consult the edge list, what to do with the answers, and what it must never
+claim from it.

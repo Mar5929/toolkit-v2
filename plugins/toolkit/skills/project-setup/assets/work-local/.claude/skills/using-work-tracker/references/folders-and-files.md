@@ -32,7 +32,7 @@ Fill the item's fields afterwards with `field-mapping.md`, "A new item's startin
    sed -nE 's/^- Work item ID prefix: `([^`]*)`.*/\1/p' "$MAIN/PROJECT.md"
    ```
 
-   Empty or still `<WI>`: stop and tell the owner the setup is incomplete.
+   Empty, `not used`, or still `<WI>`: stop and tell the owner the setup is incomplete.
 3. **The next ID.** Replace `WI` with the prefix:
 
    ```bash

@@ -34,10 +34,10 @@ It prints the signed-in account and the scopes. A private repository needs the `
 
 ## Which repository
 
-`<repo>` is the "GitHub repository" line in `PROJECT.md`, "Toolkit settings", written `owner/name`, for example `Mar5929/ios-money-log`.
+`<repo>` is the "GitHub repository" line in `PROJECT.md`, "Toolkit settings", written `owner/name`, for example `example-owner/money-log`.
 
 - Pass `-R <repo>` to every `gh issue` and `gh label` command, and write `repos/<repo>/...` in every `gh api` path.
-- The line is empty or missing: ask the owner which repository it is, and record it with the project-setup skill. Never guess it from the Git remote.
+- The line is empty, missing, or `not used`: ask the owner which repository it is, and record it with the project-setup skill. Never guess it from the Git remote.
 
 ## In Codex
 
