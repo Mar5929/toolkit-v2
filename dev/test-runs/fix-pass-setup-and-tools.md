@@ -316,6 +316,17 @@ window, so the second project has 13 characters left. The two descriptions
 changed here: `project-setup`, 382 to 474 characters, and
 `writing-harness-files`, 464 to 465.
 
+Correction, 2026-10-05 (second review, note 23). The totals above count the
+descriptions only. Each line of Codex's list also holds the skill's name
+and a short path, about 50 characters per skill
+(`dev/research/skill-writing-guide.md`, "Line format"), so the second
+project's list is about 9,000 characters, over the 8,000 that Codex uses
+when it does not know the context window. That number is not the one that
+applies in a project: setup writes `max_context_tokens = 10000` under
+`[skills]` in `.codex/config.toml`, which is about 40,000 characters at 4
+bytes per token. Inferred from the captured pages; not measured in a Codex
+session.
+
 ## 11. Added after the other builder finished
 
 The coordinator passed on these items from the other builder's work. Each

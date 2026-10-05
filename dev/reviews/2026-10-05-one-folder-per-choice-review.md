@@ -102,5 +102,10 @@ agent; the routing test (no description changed in this step).
 
 ## Status of the fixes
 
-Open. They are assigned to the build step that rewrites the setup
-instructions and the check tools.
+Set on 2026-10-05, after the second fix pass
+(`dev/test-runs/fix-pass-2.md`). Each finding was checked against the files
+as they are now.
+
+- Closed: 1 to 13, and 15.
+- Open: 14. The version number is raised in the last build step of the
+  branch.

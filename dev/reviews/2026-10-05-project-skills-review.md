@@ -195,4 +195,27 @@ checklist statements checked match the captured pages apart from findings
 
 ## Status of the fixes
 
-Open.
+Set on 2026-10-05, after the second fix pass
+(`dev/test-runs/fix-pass-2.md`). The first fix pass is recorded in
+`dev/test-runs/fix-pass-project-files.md` and
+`dev/test-runs/fix-pass-setup-and-tools.md`; the second review
+(`2026-10-05-fixes-reread-review.md`) read those fixes again.
+
+- Closed: 1 to 14, 16, 18 to 28, 30 to 32, 34, 36 to 38, and 41. Two of
+  them were closed in the second fix pass: 24 (the measure for recommending
+  Designing, `running-work-item-lifecycle/SKILL.md`) and 26
+  (`dev/reviews/overlap-review.md` now says 500 characters).
+- Closed, with a part that stays: 29. The design approval is a Questions
+  and Answers row in every tracker, by design.
+- Waits for the owner: 15, 17, and 33.
+- Stays by design: 39 (`dev/SKILL-INDEX.md` lists every skill with its
+  description; no second map is kept) and 40 (the first save claims the DEC
+  and rule IDs).
+- Open: 35. The Codex Git paragraph stays in each of the six skill files.
+  The six texts are not word for word the same: four name the calls of
+  their own skill, one is a one-line brief, and one is a section of five
+  steps. `check-skills.mjs` compares a shared text only as a whole file
+  whose first line names its source. One shared paragraph would need a
+  marker line inside each `SKILL.md`, a new check that cuts the paragraph
+  out of a larger file, and one wording for six places that drops what each
+  skill says about its own calls.

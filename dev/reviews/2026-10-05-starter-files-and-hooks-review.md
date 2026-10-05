@@ -218,4 +218,26 @@ live session; Windows; the two guards line by line; the Python tools.
 
 ## Status of the fixes
 
-Open.
+Set on 2026-10-05, after the second fix pass
+(`dev/test-runs/fix-pass-2.md`). The first fix pass is recorded in
+`dev/test-runs/fix-pass-project-files.md`; the second review
+(`2026-10-05-fixes-reread-review.md`) read those fixes again.
+
+- Closed: 1 to 5, 8 to 15, 19, 21, 24, and 26 to 28.
+- Closed, with a part that stays or waits:
+  - 16: each of the 25 instructions has one home. Items 8 and 21 stay by
+    design. Item 14 stays: they are the forms of five different records.
+    Item 20 stays: the output style is the owner's own text. Item 17 waits
+    for the owner.
+  - 18: closed in the root, `sources/AGENTS.md`, and
+    `reference/AGENTS.md`. `plain-english-artifacts.md` and `SOUL.md` are
+    the owner's own text and wait for him.
+  - 22: closed in the text of both storage skills. Not tested in a live
+    session.
+  - 23: closed. A request phrased as a question gets the keep hint again
+    (second review, note 17). Three points stay by design: the hook's two
+    jobs, `"command": "echo"` on Windows, and the name
+    `codex-after-commit.mjs`.
+  - 25: closed, except the date form and the rule size, which wait for the
+    owner.
+- Waits for the owner: 6, 7, 17, and 20.

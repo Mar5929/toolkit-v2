@@ -154,4 +154,20 @@ update walk for Notion or GitHub work items.
 
 ## Status of the fixes
 
-Open.
+Set on 2026-10-05, after the second fix pass
+(`dev/test-runs/fix-pass-2.md`). The first fix pass is recorded in
+`dev/test-runs/fix-pass-setup-and-tools.md`; the second review
+(`2026-10-05-fixes-reread-review.md`) read those fixes again.
+
+- Closed: 1 to 11, 13 to 18, 20 to 29, and 31 to 34. Three of them were
+  closed in the second fix pass: 11 (the two pointers in
+  `old-toolkit-pieces.md` now name `one-home-layout.md`), 23 (the three
+  starter files say "what was observed, in which environment, and on which
+  date"), and 28 (this section, in all five review files).
+- Waits for the owner: 12 (the "Memory approval" line and every count of
+  "11 lines").
+- Open: 19. The version fields and `dev/PROGRESS.md` change in the last
+  build step of the branch.
+- Open: 30. The rule "Challenge the current design" (Mike, 2026-10-04) is
+  an uncommitted edit in the main checkout, made by another session. It is
+  added when the branch lands.

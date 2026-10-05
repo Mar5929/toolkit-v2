@@ -220,4 +220,33 @@ a scratch Codex install; Notion, GitHub, Hindsight, and org steps; Windows.
 
 ## Status of the fixes
 
-Open.
+Set on 2026-10-05, after the second fix pass. The commands and their output
+are in `dev/test-runs/fix-pass-2.md`.
+
+- Blockers 1 and 2: closed.
+- Should fix, 3 to 15: closed.
+- Notes closed: 16 to 22, 25 to 34, and 36.
+- Note 23: closed as a correction in `dev/test-runs/fix-pass-2.md` and
+  under the table in `dev/test-runs/fix-pass-setup-and-tools.md`. No
+  shipped file held the number.
+- Note 24: closed for the matcher, which is `Edit|Write` now. The other
+  three points are open: the script is at its size limit, so they are
+  listed in `dev/research/layout-audit/CHECKS-SPEC.md`, "Known limits of
+  this version".
+- Note 35: stays. Each of the two files names one tool where a step needs
+  that exact tool: the correction route (the fix list asked for its exact
+  name) and the check of a new computer. Neither file lists the tools.
+- Earlier findings not closed:
+  - Review 2, finding 24: closed (finding 13).
+  - Review 2, finding 26: closed (finding 15).
+  - Review 2, finding 35: open. The reason is in the status section of
+    `2026-10-05-project-skills-review.md`.
+  - Review 3, finding 11: closed (finding 11).
+  - Review 3, finding 19: open. The last build step of the branch.
+  - Review 3, finding 23: closed (finding 9).
+  - Review 3, finding 28: closed. All five review files have their status.
+  - Review 3, finding 30: open. The rule is added when the branch lands.
+- The twelve changes the owner should see: none was changed except item 8
+  (finding 13) and item 9 (note 17). All twelve are in
+  `dev/research/layout-audit/DESIGN-SPEC.md`, section 9, for the owner to
+  confirm.
