@@ -1,6 +1,6 @@
 ---
 name: publish-docs
-description: 'Commits project document edits (requirements/, system guide, project-wide records, PROJECT-ROADMAP.md, PROJECT.md, READMEs) to the default branch, so it needs no pull request and touches no other session. Use when the owner asked for or approved a document edit, or says "publish the docs" or "save the docs to main". Not for a work item''s requirements, or for code, rules, or skills; use running-work-item-lifecycle.'
+description: 'Commits an approved edit to project documents (system/, DECISIONS.md, sources/, reference/, delivery/, PROJECT.md, PROJECT-ROADMAP.md, READMEs) straight to the default branch, so it needs no pull request and touches no other session. Use when another skill sends a document save, or the owner approved a document edit or says "publish the docs" or "save the docs to main". Not for code, rules, skills, or a work item; use running-work-item-lifecycle.'
 ---
 
 # Publish a documentation save
@@ -9,21 +9,27 @@ Save a change to Git-tracked project documents straight to the default
 branch, with no pull request, from a temporary Git worktree of its own (rule:
 `.claude/rules/publish-project-documents.md`). Only the agreed document edit
 reaches the default branch, no other session's files change, and the save
-is finished only when step 8 finds its commit on the default branch. Run
-each Git command on its own, with `git -C <folder>` so it never depends on
-the current folder.
+is finished only when step 8 finds its commit on the default branch. This
+skill decides nothing about what a document says: the skill that sent the
+save does. Run each Git command on its own, with `git -C <folder>` so it
+never depends on the current folder.
 
 ## Steps
 
 1. **Check the files.** Name every file in the save. Each must be a project
-   document: under the rule's paths, of type `.md`, `.txt`, `.csv`, `.xml`,
-   `.png`, `.jpg`, `.jpeg`, `.gif`, `.svg`, or `.pdf`, not refused below, and
-   not ignored by Git (`git -C <main> check-ignore <file>` printing the path
-   means ignored). `<main>` is the main checkout: the first path
-   `git worktree list` prints. Save only an edit the owner asked for or said
-   yes to, or one another skill tells you to save with this skill (for
-   example `running-work-item-lifecycle`, in Reflecting). That covers the push in
-   step 7.
+   document:
+   - under a path in the `paths` list at the top of the rule;
+   - of type `.md`, `.txt`, `.csv`, `.xml`, `.png`, `.jpg`, `.jpeg`, `.gif`,
+     `.svg`, or `.pdf`. An original under `sources/` may be any type: the
+     owner approved it when `filing-project-records` filed it;
+   - not refused below;
+   - not ignored by Git (`git -C <main> check-ignore <file>` printing the
+     path means ignored). `<main>` is the main checkout: the first path
+     `git worktree list` prints.
+
+   Save only an edit the owner asked for or said yes to, or one another
+   skill tells you to save with this skill (for example
+   `filing-project-records`). That covers the push in step 7.
 2. **Look first.** Run `git -C <session folder> worktree list`,
    `git -C <session folder> status`, and `git -C <session folder> remote`,
    each on its own. `<session folder>` is the folder this session works in.
@@ -57,9 +63,7 @@ the current folder.
    `origin/<default>`.
 4. **Make the edit in the save worktree and stage each file by name:**
    `git -C <save> add -- <file>`. When this session already made the edit in
-   its working checkout, carry it across (below). A new topic folder under
-   `ai-external-knowledge/` gets its row in `ai-external-knowledge/INDEX.md`
-   in the same save.
+   its working checkout, carry it across (below).
 5. **Check the staged save** in the save worktree:
 
    ```text
@@ -107,8 +111,6 @@ the current folder.
   never start a save from inside another save worktree. Other `docsave-`
   worktrees in `git worktree list` belong to other sessions: do not change or
   remove them.
-- Never edit a captured page in `ai-external-knowledge/` to make it agree with
-  the project.
 - In Codex the sandbox keeps `.git/` read-only and blocks the network. Run
   each Git write and each network call in this skill, `references/recovery.md`
   included, alone, with escalated permissions (`sandbox_permissions` set to
@@ -120,7 +122,7 @@ the current folder.
 - Every file under `delivery/migrations/` except `.md` notes and `.gitignore`.
   Load files and backups there can hold production records and personal data.
 - Code (`.js`, `.mjs`, `.py`, `.sh`, `.cls`, `.trigger`), settings, `.json`,
-  and spreadsheets such as `.xlsx`.
+  and spreadsheets such as `.xlsx`, except an original under `sources/`.
 - Hidden files and folders such as `.env` or `.github/`, except a
   `.gitignore` under `delivery/`.
 - Instruction files (`AGENTS.md`, `CLAUDE.md`, `CLAUDE.local.md`, `SKILL.md`)
@@ -153,8 +155,8 @@ Never discard another session's changes.
 
 | For | Use |
 | --- | --- |
-| A pull request for rules, skills, prompts, hooks, settings, or code, or a work item's requirements | `running-work-item-lifecycle` |
-| Deciding whether a project-wide record is needed and what it links | `filing-project-records` |
+| A pull request for rules, skills, prompts, hooks, settings, or code | `running-work-item-lifecycle` |
+| What a decision entry, a source row, or a system document says; an ID that another session's save took | `filing-project-records` |
 | A save that cannot finish now: the next action in its work item | `using-work-tracker` |
 | A save that cannot finish now: the next action in the handoff | `handoff` |
 

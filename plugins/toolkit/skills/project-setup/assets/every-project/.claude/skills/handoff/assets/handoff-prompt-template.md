@@ -2,7 +2,7 @@ This handoff prompt is AI-generated and may contain hallucinations, skewed conte
 
 ## Goal
 
-<What the whole piece of work is trying to achieve, in one or two plain sentences, and why it matters.> Written down in <the work item ID and section, for example WI-014, Overview, Goal; a requirements/ file; or an issue or pull request number>.
+<What the whole piece of work is trying to achieve, in one or two plain sentences, and why it matters.> Written down in <the work item ID and section, for example WI-014, Overview, Goal; a rule ID in `system/`; a DEC ID in `DECISIONS.md`; or an issue or pull request number>.
 
 ## Your task
 
@@ -16,11 +16,11 @@ This handoff prompt is AI-generated and may contain hallucinations, skewed conte
 
 ## Decisions not yet saved
 
-- <A decision nobody saved, with its source ("owner, this session" or "worked out, this session") and "saved nowhere; not confirmed". Include each save question from `SKILL.md` step 3 that the owner has not answered. Leave out a save he said no to. Use your judgment: give the reason for a decision when, without it, the next session could reverse or redo the decision. Write "None." when nothing is left unsaved.>
+- <A decision that a failed save left unsaved, with its source ("owner, this session" or "worked out, this session") and "saved nowhere; not confirmed". Use your judgment: give the reason for a decision when, without it, the next session could reverse or redo the decision. Write "None." when nothing is left unsaved.>
 
 ## Open questions
 
-- <A question nobody has settled, its Q-ID when it has one (for example Q-03 in WI-014), and who answers it.>
+- <A question nobody has settled, its ID when it has one (for example Q-03 in WI-014, or DEC-007 for an Open entry in `DECISIONS.md`), and who answers it.>
 
 ## First action
 
