@@ -4,7 +4,7 @@ The detail behind "A deployment" in `deploying.md`, for a Salesforce project. Wh
 
 ## Before any deploy
 
-- The item's folder `delivery/deployments/<ID>-<short-name>/` (a copy of `delivery/deployments/work-item-deployment-template/`) holds `package.xml`, `destructiveChanges.xml` when something is removed, `manual-steps.md` when there are manual steps, and `DEPLOYMENT-RECORD.md`. Update `delivery/deployments/component-tracker.csv` with `sf-component-tracker`.
+- The item's deployment folder and the component tracker must be current. `sf-component-tracker` says what the folder holds and keeps both.
 - Before a deploy to a shared org (UAT, full copy, staging, production), `sf-deploy-check` must find nothing that would ship too early, on the exact deploy set. When it does, stop and tell him which component.
 - A permission set in the deploy needs a clean `permsets.py preflight` (`tools/permissions/PERMISSIONS-RUNBOOK.md`).
 
@@ -19,10 +19,10 @@ Production: hand him the exact command (with `-o <production alias>`), what it d
 
 ## A release of several items
 
-Copy `delivery/releases/release-cutover-template/` to `delivery/releases/<YYYY-MM-DD>-<release-name>/` and fill its `CUTOVER-PLAN.md` and `RELEASE-NOTES.md`, one row per work item. Run release notes that go to a client through `humanizer`.
+Start the release folder from `delivery/releases/release-cutover-template/`, as `delivery/AGENTS.md` says, with one row per work item. Run release notes that go to a client through `humanizer`.
 
 ## After each deploy
 
-- Fill "Execution and outcome" in `DEPLOYMENT-RECORD.md`: the job ID, the result, the post-deploy checks.
+- Fill "Execution and outcome" in the item's `DEPLOYMENT-RECORD.md`: the job ID, the result, the post-deploy checks.
 - A successful deploy, yours or his: update the component tracker's org flags with `sf-component-tracker`.
-- Add a Recent History row with the org, the result, and the job ID (quote his report for a deploy he ran). Save `delivery/` files changed after the merge with `publish-docs`.
+- Add a Recent History row with the org, the result, and the job ID (quote his report for a deploy he ran).

@@ -141,7 +141,7 @@ A helper that worked a task on the parent itself: the same steps, on the parent'
 
 ## When the plan changes
 
-The owner changes his mind, a helper finds a problem, a check fails, or a phase turns out too big. Change phases, sub-items, and tasks with `using-work-tracker`. Phase and task IDs never change and are never reused.
+The owner changes his mind, a helper finds a problem, a check fails, or a phase turns out too big. Change phases, sub-items, and tasks with `using-work-tracker`. A phase or task that moves keeps its ID.
 
 - Record every plan change in a Recent History row on the parent: what changed and why, with the Q-ID when his answer caused it.
 - Ask him first when a change drops or merges work he approved. A new or changed requirement goes to `refining-requirements.md`; a changed design goes to `designing.md`.
@@ -162,5 +162,4 @@ The owner changes his mind, a helper finds a problem, a check fails, or a phase 
 
 ## Gotchas
 
-- Helpers never change a work item, memory, or the tracker. They report and you record.
 - While he decides something, keep the team on work his answer does not block.

@@ -3,14 +3,12 @@
 ## Contents
 
 - Front matter fields
-- Overview: Current state
+- Overview
 - Roadmap and Tasks
 - Recent History
 - Requirements
 - Questions and Answers
-- Notes and Sources
-- Approvals
-- Done, Cancelled, Blocked, and reopened
+- Notes
 - The design file
 - A new item's starting values
 
@@ -29,22 +27,22 @@ The front matter is the block between the two `---` lines at the top of `<ID>.md
 | `waiting_on` | Always in double quotes: `"owner"`, `"agent"`, `"external: bank API team"`, `"none"`. |
 | `priority` | `urgent`, `high`, `medium`, or `low`. |
 | `delivery` | `agent-led`, `owner-led`, or `not-offered`. |
-| `requirements_approved`, `result_approved` | `YYYY-MM-DD by <name>`, or `no`. The name is the owner's name as `PROJECT.md` gives it: `requirements_approved: 2026-09-30 by Mike Rihm`. |
-| `design` | `proposed`, `approved`, `superseded`, or `none`. |
+| `requirements_approved`, `result_approved` | `YYYY-MM-DD by <name>`, or `no`. The name is the owner's name as `PROJECT.md` gives it. |
+| `design` | `proposed`, `approved`, `superseded`, or `none`. The design file holds no status of its own. |
 | `updated` | Today, `YYYY-MM-DD`, in every edit. |
 
-## Overview: Current state
+## Overview
 
-- **Goal** and **Related items** are single paragraphs under `## Overview`. Related items names other items as `[[WI-031]]`, never by folder path.
-- The five lines under `### Current state` are the Current state: **Where it stands**, **Next action**, **Waiting on**, **Blockers**, **Last updated**. Edit each line in place. Never add a line, a date list, or a log to it; history goes in Recent History.
+- **Goal**, **Related items**, and **Moved up** are single paragraphs under `## Overview`. Name other items in them as `[[WI-031]]`, never by folder path.
+- The five lines under `### Current state` are the Current state: **Where it stands**, **Next action**, **Waiting on**, **Blockers**, **Last updated**. Edit each line in place.
 
 ## Roadmap and Tasks
 
-A top-level item (`parent: none`) has a Roadmap and its tasks under phase headings. A sub-item has no Roadmap: its tasks are one plain list (the template's sub-item form). `running-work-item-lifecycle`, "Levels", says why.
+A top-level item (`parent: none`) has a Roadmap and its tasks under phase headings. A sub-item has no Roadmap: its tasks are one plain list (the template's sub-item form).
 
-- A **phase** (top-level item only) is one row of the Roadmap table, in plan order. It has a stable phase ID (`P1`, `P2`), an Outcome, a Status (Not Started, In Progress, Done, Cancelled), an Exit result, and a Sub-items cell. A phase is never a work item.
+- A **phase** (top-level item only) is one row of the Roadmap table, in plan order. It has a phase ID (`P1`, `P2`), an Outcome, a Status (Not Started, In Progress, Done, Cancelled), an Exit result, and a Sub-items cell.
 - Each phase has a matching `### P2 — <name>` heading under Tasks, with the same ID and name, in the same order as the rows.
-- A **task** is a checkbox block, with a stable task ID: under its phase heading in a top-level item (`P2-T01`), or in the plain list in a sub-item (`T01`). Every line of the block except the last ends with two spaces, which Markdown reads as a line break:
+- A **task** is a checkbox block: under its phase heading in a top-level item (`P2-T01`), or in the plain list in a sub-item (`T01`). Every line of the block except the last ends with two spaces, which Markdown reads as a line break:
 
   ```markdown
   - [ ] **P2-T01 — Save a transaction** · Not Started  
@@ -56,17 +54,17 @@ A top-level item (`parent: none`) has a Roadmap and its tasks under phase headin
   ```
 
 - A **sub-item** is its own item, in a folder inside this item's folder. Its parent lists it once, as `[[WI-033]]`: a top-level parent in the Sub-items cell of one of its phases; a level-2 parent in its `**Sub-items:**` line under Tasks, with no phase. This file and `folders-and-files.md` call either one the parent's sub-item list.
-- Phase and task IDs are never reused, even when a cancelled one had a lower number. A moved task or phase keeps its ID: `P2-T03` stays `P2-T03` under P3.
+- A new phase or task ID is one more than the highest ever used, cancelled ones included. A moved task or phase keeps its ID: `P2-T03` stays `P2-T03` under P3.
 
 Adding:
 
-- **A phase:** add a row where it belongs in the order, with the next unused number for this item, and its `### P3 — <name>` heading at the same place in Tasks. When the template's example rows and headings (`P1 — <Phase 1 name>`) are still there, the first real phase replaces them. A row looks like this:
+- **A phase:** add a row where it belongs in the order, and its `### P3 — <name>` heading at the same place in Tasks. When the template's example rows and headings (`P1 — <Phase 1 name>`) are still there, the first real phase replaces them. A row looks like this:
 
   ```markdown
   | P3 — Monthly report | A report of spending by category | Not Started | The report matches the test data | None. |
   ```
 
-- **A task:** in a top-level item, add the block under its phase heading, after that phase's last task; its ID is the phase ID plus the next unused number in that phase: `P2-T04`. In a sub-item, add it at the end of the list; its ID is `T` plus the next unused number in the item: `T05`. "Depends on" names task IDs, a phase ("P1 completion."), or "None.".
+- **A task:** in a top-level item, add the block under its phase heading, after that phase's last task; its ID is the phase ID plus its number in that phase: `P2-T04`. In a sub-item, add it at the end of the list; its ID is `T` plus its number in the item: `T05`. "Depends on" names task IDs, a phase ("P1 completion."), or "None.".
 - **A sub-item:** after making it (`folders-and-files.md`, "Creating an item's folder and ID"), add `[[WI-033]]` to the parent's sub-item list (replace "None."; separate several with commas), add a Recent History row on the parent ("Sub-item [[WI-033]] created: <title>."), and set the parent's `updated:`.
 - **A new item's plan form:** as the template's guide comments under Roadmap and Tasks say for the item's level.
 
@@ -89,86 +87,32 @@ An item that changes level (a move, or an item made before toolkit 0.8.0 whose s
 A task's writes:
 
 - **Starting:** change `· Not Started` to `· In Progress`.
-- **Ticking:** `- [ ]` becomes `- [x]`, the status becomes `· Done`, and the evidence goes at the end of the "Done when" line: `Met 2026-09-30: test passes (commit 4f2a9c1).` When the owner says it is done, the evidence is `Met <date>: the owner said so ("<his words>").`
+- **Ticking:** `- [ ]` becomes `- [x]`, and the status becomes `· Done`.
 - **Cancelling:** the box stays empty, the status becomes `· Cancelled`, and the reason follows it: `· Cancelled: moved to [[WI-033]]`.
 
 ## Recent History
 
-The table under `## Recent History` has three columns: Date, Change or decision, Effect on the work. Add rows newest first: insert the row right after the separator line. When the template's placeholder row (`| <YYYY-MM-DD> | ...`) is still there, the first real row replaces it. For a decision, name its Q-ID instead of repeating it. The template's comment says which changes get a row.
-
-```markdown
-| 2026-09-30 | Q-02 answered: Face ID only. | R-03 updated; next action is Q-03. |
-```
+Insert a new row right after the table's separator line, so the newest row is first. When the template's placeholder row (`| <YYYY-MM-DD> | ...`) is still there, the first real row replaces it.
 
 ## Requirements
 
-Each requirement is one block under `## Requirements`, in the order of its number. `running-work-item-lifecycle` says what goes in each part. A block looks like this:
+Each requirement is one block under `## Requirements`, in the order of its number, in the form of the block in `work-items/work-item-template/WORK-ITEM.md`.
 
-```markdown
-### Requirement 1: Save a transaction
-
-- **Original verbatim requirement:** "I want to type in what I spent and have it saved."
-- **Goal:** A person can record one expense in a few seconds.
-
-**Functional Requirements**
-
-1. The form takes an amount, a date, and a category.
-2. Saving with no amount shows "Enter an amount" and saves nothing.
-
-**Acceptance Criteria:**
-
-1. A saved transaction shows in the list with the same amount, date, and category.
-2. Saving with no amount leaves the list unchanged.
-```
-
-- **A new requirement:** add its block after the last one, with the next unused number. Take the form from the block above, never from a prompt left in an item.
+- **A new requirement:** add its block after the last one, with the next unused number. Take the form from the template, never from a prompt left in an item.
 - **A new line:** add it at the end of its numbered list.
 - **A part with nothing to write yet:** keep its label and write nothing after it.
-- An item made before toolkit 0.8.1 has the older layout (`### Starting request`, `### Agreed goal`, `#### R-01 — <title>` blocks of labeled lines, `### Acceptance`). Read and change it in the layout it has. Rewrite it into this layout only when the owner asks.
 
 ## Questions and Answers
 
-The table sits under `## Questions and Answers` in the item's main file, for example `work-items/WI-031-transaction-entry/WI-031.md`.
-
-Columns, in order: ID, Question, Answer, Date answered, Decision?, Affects, Status, Decision needed from.
-
 - **A new row:** its ID is the highest Q-ID in this item plus one. Insert it after the last open row, or right after the separator line when none is open, so open rows stay on top, oldest first.
-- **An answer:** put his words in quotes under Answer, the date as `YYYY-MM-DD`, Decision? `yes` or `no`, and Status `Answered`. Then move the row to just below the last open row, so answered rows are newest first.
-- **A superseded row:** change only its Status, to `Superseded by Q-09`. Never edit its other cells.
-- `waiting_on` is in the front matter at the top of the file: `waiting_on: "owner"` while a question of his is open, otherwise `"agent"` or `"none"`.
+- **An answer:** put his words in quotes under Answer and the date as `YYYY-MM-DD`. Then move the row to just below the last open row, so answered rows are newest first.
+- **A superseded row:** change only its Status cell, to `Superseded by Q-09`.
 
-Answering Q-04, before:
+## Notes
 
-```markdown
-| Q-04 | Which fields must every transaction have? Recommended: amount, date, category, because reports group by all three. |  |  |  | R-01 | Open | owner |
-```
+A line under Sources or "Lessons not proven yet" has the form of the template's example line. The first real line replaces "None.", or the example line when it is still there:
 
-After:
-
-```markdown
-| Q-04 | Which fields must every transaction have? Recommended: amount, date, category, because reports group by all three. | "Amount, date, category. Notes are optional." | 2026-10-01 | yes | R-01 | Answered | owner |
-```
-
-## Notes and Sources
-
-- Copy each source file into the item's `references/` folder and keep its name. Text the owner pasted is saved as `YYYY-MM-DD-<short-name>.md`, exactly as pasted. Never edit a source after saving it.
-- In a Salesforce project a client file stays in `delivery/`; the Sources line names its `delivery/` path.
-- Add one line under Notes, "Sources", for each source (the first one replaces "None.", or the template's example line when it is still there):
-  `` - `references/2026-09-30-kickoff-transcript.md`: kickoff meeting transcript, 2026-09-30. Taken from it: R-01, Q-02. ``
-
-## Approvals
-
-| Approval | What to write |
-| --- | --- |
-| Design | `design: approved` in `<ID>.md`; in `DESIGN.md`, `status: approved`, `approved: "2026-09-30 by Mike Rihm"`, and its "Design status" and "Design approval" lines |
-| Result | `result_approved: 2026-09-30 by Mike Rihm` |
-
-## Done, Cancelled, Blocked, and reopened
-
-- **Done.** `state: Done`, `status: Done`, `waiting_on: "none"`, and the Current state lines and Recent History row as `running-work-item-lifecycle` gives them.
-- **Cancelled.** `state: Cancelled`, `status: Cancelled`, `waiting_on: "none"`, and the Current state lines and Recent History row as `running-work-item-lifecycle` gives them.
-- **Blocked.** `state: Blocked`, `status: Blocked`, `waiting_on` set to who can clear it, the Current state lines Waiting on and Blockers filled, and a Recent History row.
-- **Reopened, or no longer blocked.** Set `state` and `status` together, and add a Recent History row saying why.
+`- SRC-012: kickoff meeting transcript, 2026-09-30. Taken from it: R-01, Q-02.`
 
 ## The design file
 
@@ -179,19 +123,19 @@ After:
   ```
 
   The project's template is missing: stop and tell the owner.
-- In the new `DESIGN.md`: `work_item: WI-032`, `status: proposed`, `approved: "no"`; replace `WI-001` in the heading with the ID; set the `**Requirements:**` line to `[[WI-032]]`. Then set `design: proposed` in `<ID>.md`.
-- A sub-item built from its parent's approved design gets no `DESIGN.md`. Its Related items line says "Built from the design of [[WI-012]]."
+- In the new `DESIGN.md`: set `work_item: WI-032`, replace `WI-001` in the heading with the ID, and set the `**Requirements:**` line to `[[WI-032]]`.
+- A sub-item built from its parent's approved design gets no `DESIGN.md`.
 - Never link to a design as `[[DESIGN]]`: every item's design has that name. Name it "the design of WI-032".
 
 ## A new item's starting values
 
 After the folder and file exist (`folders-and-files.md`, "Creating an item's folder and ID"):
 
-- **Front matter:** the ID, the title in the owner's words, a `type` from the template's list, `state` and `status` for the item's first State, `parent` the parent's ID or `none`, `waiting_on: "none"`, `priority: medium`, `delivery: not-offered`, both approvals `no`, `design: none`, and `updated` today.
-- **Overview:** the heading `# WI-032: <title>`, the Goal, and the Current state lines: Where it stands "Created on `YYYY-MM-DD`; not started.", Next action in one of the template's forms, Waiting on "Nothing.", Blockers "None.", Last updated today. Related items: the parent as `[[WI-012]]`; for a top-level item, its project phase ("Project phase P01.") once it has one (before that: `running-work-item-lifecycle`, "Levels").
-- **Requirements:** one block for each requirement `running-work-item-lifecycle` gave you, in place of the template's pattern block ("Requirements" above). When the project's template still has the older layout (it holds `**Overall status:**`), replace everything between the `## Requirements` heading and the `## Questions and Answers` heading with the blocks.
+- **Front matter:** the ID, the title in the owner's words, the `type`, `state`, and `status` that `running-work-item-lifecycle` gave, `parent` (the parent's ID or `none`), the starting values the template's fill-in guide names, and `updated` today.
+- **Overview:** the heading `# WI-032: <title>`, the Goal, and the Current state lines: Where it stands "Created on `YYYY-MM-DD`; not started.", Next action in one of the template's forms, Waiting on "Nothing.", Blockers "None.", Last updated today. Related items as the template's prompt says, with the parent as `[[WI-012]]`. Moved up keeps its label and nothing after it.
+- **Requirements:** one block for each requirement `running-work-item-lifecycle` gave you, in place of the template's pattern block.
 - **Recent History:** "Created from the owner's request.", in place of the placeholder row.
-- **Every other angle-bracket prompt is deleted,** so none is left in the item (`running-work-item-lifecycle`, "Every time"). Delete the example phase rows, the example phase headings and tasks, and the example question rows. In a sub-item, delete the whole `## Roadmap` section and write `**Sub-items:** None.`; in a top-level item, delete the sub-item form. Under Notes, delete the prompt lines under Context and "Solution options and considerations", and write "None." under Sources. Keep every heading, table header, label, and `<!-- ... -->` guide comment, except the comment that starts "Fill-in guide for a new work item": delete it.
+- **Every other angle-bracket prompt is deleted.** Delete the example phase rows, the example phase headings and tasks, and the example question rows. In a sub-item, delete the whole `## Roadmap` section and write `**Sub-items:** None.`; in a top-level item, delete the sub-item form. Under Notes, write "None." under Sources and under "Lessons not proven yet", and delete the prompt lines under Context and "Solution options and considerations". Keep every heading, table header, label, and `<!-- ... -->` guide comment, except the comment that starts "Fill-in guide for a new work item": delete it.
 - **Check** that no prompt is left:
 
   ```bash

@@ -14,7 +14,7 @@ How a project looks in Notion, every property of its three databases with its op
 - Phases and tasks
 - An item that changes level
 - The project's phases and tasks
-- Links, tags, and files
+- Links and tags
 - Moving an item under another parent
 - A card the owner made by hand
 
@@ -44,13 +44,12 @@ The sections of a work item's page are in `page-layout.md`.
 | `parent` | Parent item. |
 | `waiting_on` | Waiting on: `owner`, `agent`, `external`, or `none`. For `external`, the Current state "Waiting on" line says who. |
 | `requirements_approved`, `result_approved` | Requirements approved, Result approved. |
-| (the design approval) | Design approved. The model's work item file has no field for it. |
+| (the design approval) | Design approved. The work item template has no field for it. |
 | `updated` | No property. The Current state "Last updated" line holds it. |
-| Goal, Current state, Related items, Recent History, Requirements, Questions and Answers, Notes | The page text (`page-layout.md`). The page calls the goal "Goals", a numbered list. |
+| Goal, Current state, Related items, Moved up, Recent History, Requirements, Questions and Answers, Notes | The page text (`page-layout.md`). The page calls the goal "Goals", a numbered list. |
 | Next action (a Current state line) | The page text, and a copy in the Next action property. |
 | Phases and their Roadmap | Rows of Phases. |
 | Tasks | Rows of Tasks. |
-| Source files | Files, and a line in the page's Notes, Sources. |
 
 ## Work Items properties
 
@@ -68,7 +67,7 @@ The sections of a work item's page are in `page-layout.md`.
 | Requirements approved, Design approved, Result approved | Text | `YYYY-MM-DD by <name>`, or `no`. |
 | Design | Select | none, proposed, approved, superseded. |
 | Delivery | Select | not-offered, agent-led, owner-led. |
-| Files | Files | Source files and attachments. |
+| Files | Files | Files the owner attached himself. The agent adds none. |
 | Archived | Checkbox | Hides the item from the boards. |
 | Parent item | Relation to Work Items | Two-way. The other side is Sub-items. |
 | Blocked by | Relation to Work Items | Two-way. The other side is Blocking. This item cannot finish until the other item is Done. |
@@ -87,7 +86,7 @@ Changing the Status options replaces the whole list: always send every option, e
 | Property | Type | Holds |
 | --- | --- | --- |
 | Phase | Title | The phase's name. |
-| Phase ID | Text | `P1`, `P2`, ... for an item's phases; `P01`, `P02`, ... for the project's phases. Stable: never reused or renumbered. |
+| Phase ID | Text | `P1`, `P2`, ... for an item's phases; `P01`, `P02`, ... for the project's phases. It never changes. |
 | Order | Number | The phase's place in the plan. Reordering changes only this. |
 | Status | Select | Not Started, In Progress, Done, Cancelled. |
 | Outcome | Text | What the phase establishes. |
@@ -101,7 +100,7 @@ Changing the Status options replaces the whole list: always send every option, e
 | Property | Type | Holds |
 | --- | --- | --- |
 | Task | Title | The task's name. |
-| Task ID | Text | `P1-T01` in a top-level item, `T01` in a sub-item, `PT-01` for a project task. Stable: never reused or renumbered. |
+| Task ID | Text | `P1-T01` in a top-level item, `T01` in a sub-item, `PT-01` for a project task. It never changes. |
 | Status | Status | Not Started, In Progress, Done, Cancelled. A task is open while its Status is Not Started or In Progress; views and searches filter on it. |
 | Order | Number | The order inside the phase, or inside a plain list (a sub-item's tasks, or the project tasks). |
 | Work | Text | The action to take. |
@@ -155,7 +154,7 @@ Waiting on is set the same way, with `{"Waiting on":{"select":{"name":"owner"}}}
 
 Only a top-level item has phases. A level-2 sub-item is in a phase when its "Phase" is one of its parent's phases. A sub-item's tasks have no "Phase": they are one plain list, in Order. The item's page shows the phases, sub-items, and tasks live, so there is nothing to copy into its text.
 
-Add a phase to a top-level item. Order is its place; Phase ID is the next unused number for this item, and a cancelled phase's ID is never reused:
+Add a phase to a top-level item. Order is its place; Phase ID is one more than the highest this item ever used, cancelled phases included:
 
 ```bash
 ntn api v1/pages -d '{"parent":{"type":"data_source_id","data_source_id":"{{PHASES_DS}}"},
@@ -252,7 +251,7 @@ Put a top-level item in a project phase, or move it, with the same "Phase" call 
 
 Add a project task: the same call as a task, without "Work item" and "Phase", with Task ID `PT-` and the next unused number (`PT-04`), and Order its place in the list. Starting, finishing, and cancelling are the same calls as for any task.
 
-## Links, tags, and files
+## Links and tags
 
 Links. Send the whole list of page ids for the property:
 
@@ -270,30 +269,6 @@ Tags. Send the whole list. A new name becomes a new option, and a name cannot ho
 ntn api v1/data_sources/{{WORK_ITEMS_DS}} < /dev/null | jq -r '.properties.Tags.multi_select.options[].name'
 ntn api v1/pages/<page-id> -X PATCH -d '{"properties":{"Tags":{"multi_select":[{"name":"ios"},{"name":"payments"}]}}}' < /dev/null
 ```
-
-Files. A meeting transcript, document, or other source goes in the Files property, with one line in the page's Notes, Sources.
-
-1. Upload the file. The limit is 20 MB; for a bigger file, tell the owner it is too big to upload this way. Text the owner pasted is written first to a scratch folder outside the project, named `YYYY-MM-DD-<short-name>.md` (`using-notion-cli`, "Sending a body"). Remove the scratch folder once the Files property is saved and read back.
-
-   ```bash
-   ntn files create --filename "<name>" --content-type "<type>" --json < "<path>" | jq -r '.id, .status'
-   ```
-
-   The status must be `uploaded`. Use the file's real type, such as `text/plain`, `text/markdown`, `application/pdf`, `image/png`, or `image/jpeg`. Notion refuses a type it does not support.
-2. Read the files already there, then send the whole list with the new file last. A file already there is kept by sending it back as it came:
-
-   ```bash
-   ntn api v1/pages/<page-id> < /dev/null | jq -c '.properties.Files.files'
-   ```
-
-   ```json
-   {"properties": {"Files": {"files": [
-     {"type": "file", "name": "kickoff-notes.txt", "file": {"url": "<url exactly as read>"}},
-     {"type": "file_upload", "name": "interview-2.txt", "file_upload": {"id": "<upload id>"}}
-   ]}}}
-   ```
-
-3. Add its line under Sources, with an `update_content` call. When the template's example line is still there, replace it. Example: `- interview-2.txt — second owner interview; the three login methods (R-03).`
 
 ## Moving an item under another parent
 

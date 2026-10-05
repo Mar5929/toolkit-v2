@@ -22,7 +22,7 @@ The header fields of a work item are labels, plus whether the issue is open or c
 | `waiting_on` | At most one: `waiting-on:owner`, `waiting-on:agent`, or `waiting-on:external` (the Current state "Waiting on" line says who and what). No label means `none`. |
 | `delivery` | `delivery:agent-led` or `delivery:owner-led`. No label means `not-offered`. |
 | `requirements_approved` | The `requirements-approved` label. The date, the name, and his words are in the Questions and Answers row. |
-| `design` | `design-proposed` while the design comment's "Design status" is Draft or In review, `design-approved` when it is Approved, never both. No label means `none`, or `superseded` when "Design status" says Superseded. |
+| `design` | `design-proposed` or `design-approved`, never both. No label means `none` when the issue has no design comment, and `superseded` when it has one. |
 | `result_approved` | The `result-approved` label, with his words in the Questions and Answers row. |
 | `parent` | GitHub's sub-issues: the item is a sub-issue of its parent. |
 | `updated` | GitHub keeps it (`updatedAt`). Nothing to set. |

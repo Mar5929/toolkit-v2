@@ -1,9 +1,9 @@
 ---
 name: using-work-tracker
-description: 'Stores and finds work items in the project''s Notion databases for running-work-item-lifecycle, so every read and save lands in the right property or page section. Use when looking up or saving a work item, phase, task, question, comment, or file, such as "show me WI-31" or "add a task to phase 2". Only for projects that track work in Notion.'
+description: 'Stores and finds work items in the project''s Notion databases for running-work-item-lifecycle, so every read and save lands in the right property or page section. Use when looking up or saving a work item, phase, task, question, or comment, such as "show me WI-31" or "add a task to phase 2". Only for projects that track work in Notion.'
 ---
 
-# Tracking work items in Notion
+# The work tracker: Notion
 
 This project keeps its work items in Notion. This skill says where each thing is stored in Notion and how to read and save it. It never decides what to save or when.
 
@@ -40,7 +40,6 @@ This project keeps its work items in Notion. This skill says where each thing is
 - Notion lists the work item template as a row of Work Items, with an empty title and usually ID 1. Leave out rows with an empty title in every Work Items query, except "Cards with no title" in `references/searching.md`.
 - Leave out archived items unless the owner asks for them.
 - The Roadmap, Sub-items, and Tasks sections of a page are views, shown in the page text only as `<database …>` lines. Read their rows with the tree queries in `references/searching.md`.
-- Attach an uploaded file within one hour of uploading it. After that the upload expires.
 - Never delete a page, row, phase, or task. Take it out of view instead: set a phase to Cancelled, or tick an item's Archived. When the owner wants it deleted, ask him to delete it himself in Notion.
 - Never add work to a template: the "Project" template in the owner's Projects database, or the Work Items database's work item template. Every copy takes it along.
 - When the owner drags a card on the Board, only its Status changes, so State and Status no longer match.
@@ -52,6 +51,7 @@ This project keeps its work items in Notion. This skill says where each thing is
 | Deciding what to save and when | `running-work-item-lifecycle` |
 | A State and Status that no longer match | `running-work-item-lifecycle` |
 | Every Notion read or write: sign-in, Codex, the shape of each call, and errors | `using-notion-cli` |
+| An original the item received | `filing-project-records`, step "file a source" |
 | Moving work items to another tracker | `project-setup` |
 | Rebuilding a missing database template | `project-setup` |
 
@@ -59,9 +59,9 @@ This project keeps its work items in Notion. This skill says where each thing is
 
 | File | Open it when |
 | --- | --- |
-| [references/database-layout.md](references/database-layout.md) | Checking what a property holds; creating or changing an item's properties, phases, tasks, links, tags, or files; an item that changes level; or the project's phases and tasks. |
-| [references/page-layout.md](references/page-layout.md) | Changing an item's text: Current state, Recent History, Requirements, Questions and Answers, a pull request link, or the Solution Design page; or adding a comment. |
-| [references/searching.md](references/searching.md) | Finding or reading items: one item, the board, what waits on the owner, a parent's tree, the project's phases and tasks, a search, a saved source file, cards with no title. |
+| [references/database-layout.md](references/database-layout.md) | Checking what a property holds; creating or changing an item's properties, phases, tasks, links, or tags; an item that changes level; or the project's phases and tasks. |
+| [references/page-layout.md](references/page-layout.md) | Changing an item's text: Current state, Moved up, Recent History, Requirements, Questions and Answers, a Notes line, a pull request link, or the Solution Design page; or adding a comment. |
+| [references/searching.md](references/searching.md) | Finding or reading items: one item, the board, what waits on the owner, a parent's tree, the project's phases and tasks, a search, cards with no title. |
 | [assets/schema/01-work-items-database.json](assets/schema/01-work-items-database.json), [02-phases-database.json](assets/schema/02-phases-database.json), [03-tasks-database.json](assets/schema/03-tasks-database.json) | Creating the databases, or adding a missing property. |
 | [assets/schema/04-work-items-relations.json](assets/schema/04-work-items-relations.json), [05-phases-relations.json](assets/schema/05-phases-relations.json), [06-tasks-relations.json](assets/schema/06-tasks-relations.json), [07-work-items-rollup.json](assets/schema/07-work-items-rollup.json), [07b-work-items-phase-column.json](assets/schema/07b-work-items-phase-column.json), [07c-phases-phase-type.json](assets/schema/07c-phases-phase-type.json), [07d-tasks-task-type.json](assets/schema/07d-tasks-task-type.json) | Creating the relations and the columns made from them, or adding a missing one. |
 | [assets/schema/10-view-board.json](assets/schema/10-view-board.json), [11-view-by-state.json](assets/schema/11-view-by-state.json), [12-view-all-items.json](assets/schema/12-view-all-items.json), [13-view-roadmap.json](assets/schema/13-view-roadmap.json), [14-view-waiting-on-owner.json](assets/schema/14-view-waiting-on-owner.json), [15-view-phases-by-item.json](assets/schema/15-view-phases-by-item.json), [16-view-open-tasks.json](assets/schema/16-view-open-tasks.json), [17-view-top-level.json](assets/schema/17-view-top-level.json), [18-view-by-project-phase.json](assets/schema/18-view-by-project-phase.json), [19-view-project-phases.json](assets/schema/19-view-project-phases.json), [19b-view-project-tasks.json](assets/schema/19b-view-project-tasks.json) | Creating the database views, or adding a missing one. |

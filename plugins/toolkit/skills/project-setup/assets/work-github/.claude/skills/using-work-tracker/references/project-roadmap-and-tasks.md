@@ -10,7 +10,7 @@ Where the project's own phases and its project tasks are saved on GitHub, and th
 
 ## The project's phases: milestones
 
-- Each project phase is one milestone of the repository, titled `P01 — <name>`: `P` and two digits, then the name. The title order is the plan order. A phase ID is never reused.
+- Each project phase is one milestone of the repository, titled `P01 — <name>`: `P` and two digits, then the name. The title order is the plan order.
 - Its description holds three lines: `Status: <Not Started | In Progress | Done | Cancelled>`, `Outcome: <what it establishes>`, and `Exit result: <the evidence that it is complete>`.
 - A Done or Cancelled phase is a closed milestone. Never delete a milestone.
 - Make a milestone only for a project phase the owner approved. Never set a due date.
@@ -40,7 +40,7 @@ gh api repos/<repo>/milestones/<milestone-number> -X PATCH -f state=closed
 
 ## Putting an item in a project phase
 
-A top-level issue sits in exactly one project phase: its milestone. A sub-issue has no milestone. Its Related items line names the phase too: "Project phase P01."
+A top-level issue's project phase is its milestone. A sub-issue has no milestone. Its Related items line names the phase too: "Project phase P01."
 
 ```text
 gh issue edit <number> -R <repo> --milestone 'P01 — Discovery'

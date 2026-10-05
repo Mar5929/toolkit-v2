@@ -6,8 +6,7 @@ The independent check of a finished result against the work item's requirements.
 
 Start it from the Testing Loop (`testing-loop.md`, step 4).
 
-- The checker is never the helper or the session that built the change.
-- Only you change the work item and talk to the owner. Record the verdict, the commit, the evidence, and the gaps in a Recent History row.
+The checker is never the helper or the session that built the change.
 
 The job block:
 

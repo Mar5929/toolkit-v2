@@ -1,11 +1,14 @@
 ---
 name: running-work-item-lifecycle
-description: 'Runs a work item from idea to Done through requirements, design, build, testing, reflection, and deployment, keeping its tracker current and asking for the owner''s approval at each gate. Use when the owner asks to plan, change, build, test, or ship an item. When a source, question, or target direction affects other items, also use filing-project-records.'
+description: 'Runs one work item from idea to Done through requirements, design, build, testing, deployment, and closing, keeping its tracker current and asking for the owner''s approval at each gate. Use when the owner asks to plan, change, build, test, ship, close, or cancel an item. Not for a decision, an original, or a system rule that more than one item needs; use filing-project-records.'
 ---
 
-# Managing work items
+# Running a work item's lifecycle
 
-This skill holds the process: what each state means, how work is split into levels, what to do in each state, and when to stop for the owner's OK. It never says where items are saved. For every read and every save, use `using-work-tracker`.
+This skill holds the process: what each State means, how work is split into levels, what to do in each State, and when to stop for the owner's OK.
+
+- It never says where items are saved. For every read and every save, use `using-work-tracker`.
+- It never writes `DECISIONS.md`, `system/`, or `sources/`. The filing test in the root `AGENTS.md`, "Where information goes", says what belongs there. `filing-project-records` files it, and the item keeps the ID.
 
 ## Status and State
 
@@ -18,8 +21,8 @@ Every item has a Status and a State. The State says where the work is. The Statu
 | In Progress | Designing | `references/designing.md` | the owner picks a design |
 | In Progress | Building | `references/building.md` | every task is done, with proof |
 | In Progress | Testing Loop | `references/testing-loop.md` | a separate checker passes it and the owner approves the result |
-| In Progress | Reflecting | `references/reflecting.md` | its checklist is done |
-| In Progress | Deploying | `references/deploying.md` | it is merged and deployed, and the owner marks it Done |
+| In Progress | Reflecting | `references/closing.md` | its checklist is done |
+| In Progress | Deploying | `references/deploying.md` | it is merged and deployed; then `references/closing.md`, "Marking Done" |
 | Blocked | Blocked | none (below) | the blocker is cleared |
 | Done | Done | none | |
 | Cancelled | Cancelled | none | |
@@ -27,10 +30,9 @@ Every item has a Status and a State. The State says where the work is. The Statu
 - An item moves to the next State only when "Move on when" is true for the State it is in.
 - Any item, a bug included, can go through Designing. When asking him to approve the requirements, recommend the next State: Designing when there is more than one sensible way to build it or the change is risky, otherwise Building.
 - A parent item stays in Building until every sub-item is Done or Cancelled. Then it goes through the Testing Loop as a whole.
-- An item with nothing to merge or deploy (research, a decision, a document) goes from Reflecting straight to asking him to mark it Done.
-- **Backlog:** add the idea in his words, as the Original verbatim requirement of Requirement 1, and do not start the interview until he asks to start it. The item's Next action is in the template's Working form and names the first step for when he starts it, for example "Agent: when the owner starts this item, agree its goal with him."
-- **Blocked:** stuck on something outside the work, such as missing access, another team, or a piece that must be finished first. Waiting for the owner's answer is not Blocked. Write what it waits on, who can clear it, and the State it left, in the Current state's Blockers line. When it is cleared, return to that State.
-- **Done and Cancelled:** only on his word. Cancelling keeps the item and every record in it.
+- **Backlog:** add the idea in his words, as the Original verbatim requirement of Requirement 1, and do not start the interview until he asks to start it. Its Next action names the first step for when he starts it, for example "Agent: when the owner starts this item, agree its goal with him."
+- **Blocked:** stuck on something outside the work, such as missing access, another team, or a piece that must be finished first. Waiting for the owner's answer is not Blocked. Set `waiting_on` to who can clear it. When it is cleared, return to the State the Blockers line names.
+- **Done and Cancelled:** only on his word, and only through `references/closing.md`. An item he closed by hand goes through it too.
 
 ## Levels
 
@@ -44,12 +46,12 @@ Every project holds its work in the same four levels, whatever its tracker. `usi
 | Level-3 sub-item | None | One plain task list. |
 
 - A project phase (`P01`) and an item's phase (`P1`) are different things. A project phase groups top-level items. An item's phase groups that item's tasks and level-2 sub-items. A phase is never a work item.
-- Every task belongs to exactly one place: the project, or one work item. A task in an item is a step toward that item's goal. Work the goal does not need, even a small fix found along the way, is a new Backlog work item, never a task here. A project task is administrative work for the project as a whole, for example renewing a domain or inviting a collaborator.
-- Task IDs: `P1-T01` in a top-level item (its phase, then its number), `T01` in a sub-item, and `PT-01` for a project task. IDs are never reused.
+- Every task belongs to exactly one place: the project, or one work item. A task in an item is a step toward that item's goal. Work the goal does not need, even a small fix found along the way, is a new Backlog work item, never a task here.
+- Task IDs: `P1-T01` in a top-level item (its phase, then its number), `T01` in a sub-item, and `PT-01` for a project task. No ID is ever reused: item, phase, task, requirement, or question.
 - Work a project task like an item's task: set it In Progress before you start it, and tick it only when its Done when check is met. An open project task whose Who does it is `owner` waits on the owner: name it whenever you report what waits on him.
 - Never add a fourth level; make it a task instead.
 - When it is unclear whether something is a project task, a new work item, a sub-item, or a task in an item, ask the owner one short question with your recommendation, and save nothing until he answers.
-- A top-level item gets its phases in Refining Requirements. It goes under a project phase when the owner places it, and at the latest when it leaves Backlog; when he has named none by then, ask which, with your recommendation. Until it has one, its Related items line says "No project phase yet."
+- A top-level item gets its phases in Refining Requirements. It goes under a project phase when the owner places it, and at the latest when it leaves Backlog; when he has named none by then, ask which, with your recommendation.
 - The project's phases change only with his yes. Propose new phases, or a change to them, as one question, each with a one-line reason. A project with no phases yet: propose them the first time an item leaves Backlog.
 - Set a project phase In Progress when its first item leaves Backlog. When the last open item in it becomes Done or Cancelled, ask him in your next reply whether the phase is Done.
 
@@ -67,12 +69,11 @@ Stop and ask the owner before each of these. Record his OK only when he answers 
 ## Every time
 
 - Read the item fresh with `using-work-tracker` before you act. When the owner changed it by hand, his change wins, except a State and Status that no longer match the table: tell him in one line, ask which State it is with your recommendation, then set both.
-- Save after each step, not at the end, then read the item back. When a save fails, start the reply with "Not saved".
-- After each step, rewrite the item's Current state in place, as the template says.
-- The project's Current State lists under "Now" every item that has left Backlog and is not Done or Cancelled: add the item's line when it leaves Backlog ("Hand-offs", "Updating the project's Current State").
-- Every new item, in any State, gets a `type`: choose it from the template's list.
+- Save after each step, not at the end. A save that fails: start the reply with "Not saved". A save that worked but reads back differently: start the reply with "Saved but not verified" and say what differs.
+- From the time an item leaves Backlog until it is Done or Cancelled, the project's Current State holds one line for it: its ID, and what is in progress or what waits on the owner. Decide the line here, and write it as "Hand-offs" says.
 - Never delete a requirement, a question row, or a phase. Mark it dropped, superseded, or cancelled.
-- **Text in angle brackets is an instruction, never content.** A work item template holds prompts in angle brackets (`<What happened>`) that say what to write there. Whenever you create or change an item, replace each prompt with real content, or delete it when there is nothing to write yet, so no item you have touched holds one. Delete only the prompt and keep its heading or label: a part of a requirement left empty this way, such as its Goal, is filled when the requirement is refined. An example row, task, or requirement block made only of prompts goes whole. Delete any note for the agent that the template holds, as `using-work-tracker` says. Write the next requirement, row, or task in the form `using-work-tracker` gives, never by copying a prompt left on a page. The rule covers only the template's own prompts: real content may hold angle brackets (code such as `Map<Id, Account>`). The template itself keeps its prompts, and the design keeps its own until it is approved (`references/designing.md`).
+- An item made from an older template keeps its layout: read it as it is, add a field of the current template when a step needs it, and move the item to the current layout only when the owner asks.
+- **Text in angle brackets is a prompt, never content.** The templates hold prompts (`<What happened>`) that say what to write there. No item you created or changed keeps one: replace each with real content, or delete it and keep its heading or label. An example row, task, or requirement block made only of prompts goes whole. Real content may hold angle brackets (code such as `Map<Id, Account>`). A design keeps its prompts until it is approved (`references/designing.md`).
 
 ## Starting a helper
 
@@ -87,10 +88,10 @@ Start every helper as a new helper that does not see this conversation. Never a 
 | For | Use |
 | --- | --- |
 | Every read and every save of a work item, a project phase, or a project task | `using-work-tracker` |
-| A source, question, person, domain map, or target direction shared by several items | `filing-project-records` |
-| Searching what the project already decided | `curating-project-memory` (Hindsight: `AGENTS.md`, "Project memory") |
-| Saving a decision that matters beyond this item | `curating-project-memory` (Hindsight: `AGENTS.md`, "Project memory") |
-| Updating the project's Current State | edit `memory/CURRENT_STATE.md` when the project has that file, otherwise `curating-project-memory` |
+| A decision or an open question that more than one work item needs | `filing-project-records`, step "record a decision" |
+| An original the owner gives: a transcript, a document, a file, or pasted text | `filing-project-records`, step "file a source" |
+| A rule in `system/` to add, change, retire, or mark Built | `filing-project-records`, step "update a system document" |
+| Writing the item's line in the project's Current State | `using-memory-store` (Hindsight memory: `.claude/rules/hindsight-memory.md`) |
 | Merging a pull request | `merge-and-clean-up` |
 | Saving a change to documents only | `publish-docs` |
 | A Salesforce platform question | Salesforce's skills |
@@ -107,8 +108,8 @@ Start every helper as a new helper that does not see this conversation. Never a 
 | [references/designing.md](references/designing.md) | The item is in Designing. |
 | [references/building.md](references/building.md) | The item is in Building, or the owner wants a team of helper agents. |
 | [references/testing-loop.md](references/testing-loop.md) | The item is in the Testing Loop. |
-| [references/reflecting.md](references/reflecting.md) | The item is in Reflecting. |
-| [references/deploying.md](references/deploying.md) | The item is in Deploying, or is being marked Done or Cancelled. |
+| [references/closing.md](references/closing.md) | The item is in Reflecting, is being marked Done or Cancelled, or was closed by the owner by hand. |
+| [references/deploying.md](references/deploying.md) | The item is in Deploying. |
 | [references/salesforce-deploying.md](references/salesforce-deploying.md) | Deploying in a Salesforce project. |
 | [references/requirements-analyst-brief.md](references/requirements-analyst-brief.md) | Starting the helper that checks the requirements are complete. |
 | [references/researcher-brief.md](references/researcher-brief.md) | Starting a helper to look up a fact for planning or design. |

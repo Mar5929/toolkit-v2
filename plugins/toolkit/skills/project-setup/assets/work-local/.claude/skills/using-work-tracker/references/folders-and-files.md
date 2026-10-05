@@ -16,46 +16,10 @@
 
 ## The work-items folder
 
-This is how `work-items/` looks in a project, with one item that stands alone, one item with a sub-item and a sub-sub-item (three levels, the deepest), a group, and the archive:
+`work-items/AGENTS.md` lists the files and folders. Two things it does not say:
 
-```text
-work-items/                          in the main checkout only; Git ignores it
-├── PROJECT-TASKS.md                 the project's own tasks; not an item
-├── work-item-template/              the blank form; never an item
-│   ├── WORK-ITEM.md                 the form for an item's main file
-│   ├── DESIGN.md                    the form for a design
-│   └── references/                  empty
-├── WI-001-login-screen/             an item that stands alone (level 1)
-│   ├── WI-001.md                    its main file, named by its ID
-│   └── references/                  its source files
-│       └── 2026-09-30-kickoff-transcript.md
-├── WI-002-reports/                  an item with sub-items (level 1)
-│   ├── WI-002.md
-│   ├── DESIGN.md                    its design, made when a design starts
-│   ├── references/
-│   ├── WI-003-monthly-report/       a sub-item (level 2), inside its parent's folder
-│   │   ├── WI-003.md                no DESIGN.md: built from the design of WI-002
-│   │   ├── references/
-│   │   └── WI-004-csv-export/       a sub-item of a sub-item (level 3, the deepest)
-│   │       ├── WI-004.md
-│   │       └── references/
-│   └── WI-005-yearly-report/        a second sub-item of WI-002 (level 2)
-│       ├── WI-005.md
-│       └── references/
-├── security/                        a group: a plain folder the owner asked for, no ID
-│   └── WI-006-password-rules/       an item in the group (level 1, `parent: none`)
-│       ├── WI-006.md
-│       └── references/
-└── archive/                         items the owner asked to archive
-    └── WI-007-old-idea/
-        ├── WI-007.md
-        └── references/
-```
-
-- An item is a folder named `<ID>-<short-slug>` holding `<ID>.md`, plus `DESIGN.md` when it has its own design and a `references/` folder.
-- A sub-item's folder sits inside its parent's folder. Level 1 is an item at the top of `work-items/`, in a group, or at the top of `archive/`; each item folder nested inside another is one level deeper.
+- Level 1 is an item at the top of `work-items/`, in a group, or at the top of `archive/`. Each item folder nested inside another is one level deeper.
 - The nesting, the sub-item's `parent:` line, and its parent's sub-item list say the same thing: WI-003 holds `parent: WI-002`, and the Sub-items cell of the phase of WI-002 that it delivers names `[[WI-003]]`. WI-004 holds `parent: WI-003`, and the `**Sub-items:**` line of WI-003 names `[[WI-004]]` (`field-mapping.md`, "Roadmap and Tasks").
-- Beside the item folders, `work-items/` holds `PROJECT-TASKS.md`, the project's own tasks (`project-roadmap-and-tasks.md`). It is not an item.
 
 ## Creating an item's folder and ID
 
@@ -69,26 +33,25 @@ Fill the item's fields afterwards with `field-mapping.md`, "A new item's startin
    ```
 
    Empty or still `<WI>`: stop and tell the owner the setup is incomplete.
-3. **The next ID** is the highest number anywhere under `work-items/`, `archive/` included, plus one. Replace `WI` with the prefix:
+3. **The next ID.** Replace `WI` with the prefix:
 
    ```bash
-   grep -rhE --include='*.md' --exclude-dir=work-item-template --exclude-dir=references --exclude=DESIGN.md '^id: *"?WI-[0-9]+"? *$' "$MAIN/work-items" | sed -E 's/.*-([0-9]+)"? *$/\1/' | sort -n | tail -1
+   grep -rhE --include='*.md' --exclude-dir=work-item-template --exclude=DESIGN.md '^id: *"?WI-[0-9]+"? *$' "$MAIN/work-items" | sed -E 's/.*-([0-9]+)"? *$/\1/' | sort -n | tail -1
    ```
 
-   It prints `031`: the new ID is `WI-032` (`printf '%s-%03d\n' WI 32`). It prints nothing: the first ID is `WI-001`. IDs are never reused.
+   It prints `031`: the new ID is `WI-032` (`printf '%s-%03d\n' WI 32`). It prints nothing: the first ID is `WI-001`.
 4. **Make the folder first**, with a plain `mkdir` (never `-p`), so it fails when the folder already exists. The slug is two to four lowercase words from the title, joined by hyphens. A top-level item goes in `"$MAIN/work-items/WI-032-transaction-entry"`, an item in a group the owner named in `"$MAIN/work-items/<group>/WI-032-transaction-entry"`, and a sub-item inside the parent's folder.
 5. **Check for a duplicate** right after:
 
    ```bash
    find "$MAIN/work-items" -type d -name 'WI-032-*' -not -path '*/work-item-template/*'
-   grep -rlE --include='*.md' --exclude-dir=work-item-template --exclude-dir=references --exclude=DESIGN.md '^id: *"?WI-032"? *$' "$MAIN/work-items"
+   grep -rlE --include='*.md' --exclude-dir=work-item-template --exclude=DESIGN.md '^id: *"?WI-032"? *$' "$MAIN/work-items"
    ```
 
-   The first must print only your folder, and the second nothing. Anything else: another session took the number, so your item is the later one. Take the next free number, rename your still-empty folder with `mv`, and check again. Never renumber another session's item.
-6. **Copy the template** into the folder, and make `references/`:
+   The first must print only your folder, and the second nothing. Anything else: another session took the number, so your item is the later one. Take the next free number, rename your still-empty folder with `mv`, and check again.
+6. **Copy the template** into the folder:
 
    ```bash
-   mkdir "<item folder>/references"
    cp "$MAIN/work-items/work-item-template/WORK-ITEM.md" "<item folder>/WI-032.md"
    ```
 
@@ -171,5 +134,4 @@ Only when the owner asks.
 ## Links and Obsidian
 
 - The whole project folder is the Obsidian vault. `[[WI-031]]` links to the file `WI-031.md`, wherever its folder sits.
-- Memories link to items with `work_items: ["[[WI-031]]"]`, so the item's Backlinks panel in Obsidian lists them. This skill never edits memory.
 - Examples written in backticks are not links. Write real links without backticks.
