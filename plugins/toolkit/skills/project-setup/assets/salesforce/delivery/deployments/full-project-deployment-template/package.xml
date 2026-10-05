@@ -2,7 +2,7 @@
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <!-- Fill-in guide: replace XX.0 below with the verified API version from
          sfdx-project.json. For each CLI-deployable metadata type tracked in
-         delivery/deployment/component-tracker.csv, add a types block containing
+         delivery/deployments/component-tracker.csv, add a types block containing
          its exact members and Salesforce metadata type, for example:
          <types><members>ExactMemberApiName</members><name>MetadataType</name></types>
          Replace that example with real values; do not copy it as a live member.

@@ -35,10 +35,10 @@ No agent writes data to production. The owner runs the change. This skill produc
 
 ## Step 3: file it
 
-Use `delivery/data/`. A project that already uses `engagement/` uses `engagement/data/` instead. Keep actual data files local and ignored by Git.
+Use `delivery/migrations/`. A project that already uses `engagement/` uses `engagement/data/` instead. Keep actual data files local and ignored by Git.
 
 ```
-delivery/data/
+delivery/migrations/
   production-backups/
     .gitignore
     prod-backup-<MMDDYYYY>-<slug>/
@@ -54,7 +54,7 @@ delivery/data/
 - Save the exact file that was loaded in the load event folder. Never leave the final copy loose in another folder.
 - Never commit data files containing record IDs or PII. Keep both `.gitignore` files.
 - Record the work item, date, org, objects and population, exact file paths and row counts, operation, mappings, settings, success check, and undo steps (or the backup file's path) in the work item for this change and in the step 4 handoff. Write no separate README or other record for the event.
-- Before the first data change in a project (no event folder under `delivery/data/data-loads/` yet), put a test `.csv` file in `delivery/data/production-backups/` and in `delivery/data/data-loads/`, check that `git status` lists neither, then delete both files.
+- Before the first data change in a project (no event folder under `delivery/migrations/data-loads/` yet), put a test `.csv` file in `delivery/migrations/production-backups/` and in `delivery/migrations/data-loads/`, check that `git status` lists neither, then delete both files.
 
 ## Step 4: hand over
 

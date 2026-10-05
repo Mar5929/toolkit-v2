@@ -9,7 +9,7 @@ Applies to every agent and subagent. Read-only against every org, except the san
 - Apex and Flow tests against a sandbox or scratch org: `sf apex run test -o <sandbox>`, `sf flow run test -o <sandbox>`.
 - Apex logs and test results: `sf apex get log`, `sf apex tail log`, `sf apex get test`.
 - Validate or preview against a sandbox: `sf project deploy validate -x <manifest> -o <sandbox>`, `sf project deploy preview`, `sf project deploy report`.
-- Deploy to a sandbox, after the owner says yes for that deploy: `sf project deploy start -x delivery/deployment/<chosen-folder>/package.xml -o <sandbox>` or `sf project deploy start -d <path> -o <sandbox>`. Use the work item's package for ordinary changes.
+- Deploy to a sandbox, after the owner says yes for that deploy: `sf project deploy start -x delivery/deployments/<chosen-folder>/package.xml -o <sandbox>` or `sf project deploy start -d <path> -o <sandbox>`. Use the work item's package for ordinary changes.
 - Sandbox data writes (`sf data create / update / delete / import / upsert`) and `sf apex run` against a sandbox, after the owner says yes for that change in the same chat.
 - In Codex, the owner runs every sandbox deploy and sandbox data change, including `sf apex run` against a sandbox. Hand him the exact command, with its `-o <sandbox>`; do not run it yourself, even after his yes.
 

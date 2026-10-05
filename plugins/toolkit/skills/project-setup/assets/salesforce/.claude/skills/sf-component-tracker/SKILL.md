@@ -7,30 +7,31 @@ description: 'Keeps the component tracker CSV, the master and per-work-item pack
 
 Keep the deployment records current in the same response as the change.
 
-A project that already uses `engagement/` uses `engagement/deployment/` wherever this skill says `delivery/deployment/`. Do not create a parallel `delivery/` tree. A project that keeps deployment records in another folder keeps these records in that folder.
+A project that already uses `engagement/` uses `engagement/deployment/` wherever this skill says `delivery/deployments/` or `delivery/releases/`. Do not create a parallel `delivery/` tree. A project that keeps deployment records in another folder keeps these records in that folder.
 
 ## Deployment folder
 
 ```
-delivery/deployment/
+delivery/deployments/
   component-tracker.csv                  one tracker for the whole project
   full-project-deployment-template/
       package.xml                        project-wide manifest; mirrors the tracker
       manual-steps.md                    manual steps for a full project cutover, if needed
   work-item-deployment-template/  copy it to start a work item's folder
-  release-cutover-template/       copy it to start a release folder
   <work-item-id>-<short-name>/  one folder per work item that ships metadata
       DEPLOYMENT-RECORD.md     deployment scope, evidence, and outcome
       package.xml              that item's new and changed components
       destructiveChanges.xml   only if the item removes components
       manual-steps.md          only if the item has manual steps
+delivery/releases/
+  release-cutover-template/       copy it to start a release folder
   <YYYY-MM-DD>-<release-name>/ one folder per release that ships several work items together: CUTOVER-PLAN.md and RELEASE-NOTES.md
 ```
 
 - One master tracker for the whole project. Never split it per work item.
-- `delivery/deployment/full-project-deployment-template/` holds the project-wide manifest and any full-cutover manual steps. Fill the verified API version before first use.
+- `delivery/deployments/full-project-deployment-template/` holds the project-wide manifest and any full-cutover manual steps. Fill the verified API version before first use.
 - Name each work-item folder with the work item's id and a short slug from the project's work tracker, for example `WI-031-account-merge`. This deployment folder is not the work item; find the item by its ID in the project's work tracker.
-- Keep work-item folders flat under `delivery/deployment/`: no folders by status. The work tracker holds each item's status; the component tracker's org flags record what is deployed where.
+- Keep work-item folders flat under `delivery/deployments/`: no folders by status. The work tracker holds each item's status; the component tracker's org flags record what is deployed where.
 - A manifest (`package.xml`) names the components a Salesforce CLI deploy includes.
 
 ## Step 1: update the tracker, master manifest, and work-item manifest
@@ -40,7 +41,7 @@ Do all three in the same response when any of these happens:
 1. You author, modify, or rename metadata under `force-app/`.
    - Add the row if none exists, with the correct flags and Change Type. Otherwise edit the existing row.
    - A change to an existing component edits its one row. Never create a second row.
-   - Add the member under the correct `<types>` block in `delivery/deployment/full-project-deployment-template/package.xml`. Refresh any member counts in its header when that header uses counts.
+   - Add the member under the correct `<types>` block in `delivery/deployments/full-project-deployment-template/package.xml`. Refresh any member counts in its header when that header uses counts.
    - Add the member to the work item's `package.xml`.
 2. The owner reports a successful deploy: set that org's flag to `Yes` for every component in the deploy.
 3. You stage a component for deletion:
@@ -52,7 +53,7 @@ Do all three in the same response when any of these happens:
    - If the component is gone from every org and from `force-app/`, delete the row and its master-manifest member.
 
 Rules for the master manifest:
-- Every CLI-deployable tracker row is a member of `delivery/deployment/full-project-deployment-template/package.xml`. Every member has a tracker row.
+- Every CLI-deployable tracker row is a member of `delivery/deployments/full-project-deployment-template/package.xml`. Every member has a tracker row.
 - A tracker row missing from the master manifest is dropped from the full-org cutover without warning.
 - The master manifest is add-only. It never names a removed component.
 - These rules apply to every agent and every session.
@@ -76,7 +77,7 @@ Permission sets are not on this list. They get a normal tracker row and a normal
 
 ## Step 4: manual steps (`manual-steps.md`)
 
-Manual deploy steps live in `manual-steps.md` beside the manifest they belong to: the work item's deployment folder, or `delivery/deployment/full-project-deployment-template/` for the full cutover. A folder whose deploy needs no manual steps has no `manual-steps.md`.
+Manual deploy steps live in `manual-steps.md` beside the manifest they belong to: the work item's deployment folder, or `delivery/deployments/full-project-deployment-template/` for the full cutover. A folder whose deploy needs no manual steps has no `manual-steps.md`.
 
 Add a step in the same response in which you author the triggering metadata. Triggers:
 

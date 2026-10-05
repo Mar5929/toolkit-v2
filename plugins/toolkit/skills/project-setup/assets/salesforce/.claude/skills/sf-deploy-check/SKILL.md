@@ -32,7 +32,7 @@ Two shapes:
 
 - Name only the components the change needs. For a help-text change on three fields, name those three fields, not a broad manifest.
 - Naming a component still ships its whole file. Run the per-file diff in step 3 on a narrow deploy too.
-- Prefer the work item's `package.xml` over `delivery/deployment/full-project-deployment-template/package.xml` unless the goal is a full cutover.
+- Prefer the work item's `package.xml` over `delivery/deployments/full-project-deployment-template/package.xml` unless the goal is a full cutover.
 
 ## Why the check ends with an org read
 

@@ -117,7 +117,7 @@ the current folder.
 
 ## Refused files
 
-- Every file under `delivery/data/` except `.md` notes and `.gitignore`.
+- Every file under `delivery/migrations/` except `.md` notes and `.gitignore`.
   Load files and backups there can hold production records and personal data.
 - Code (`.js`, `.mjs`, `.py`, `.sh`, `.cls`, `.trigger`), settings, `.json`,
   and spreadsheets such as `.xlsx`.

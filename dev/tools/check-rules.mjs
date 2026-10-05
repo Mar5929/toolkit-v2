@@ -46,7 +46,7 @@
 // it waits for Mike's answer (dev/reviews/best-practices-review.md, question 9).
 // Not checked: that every file path a rule names exists. Most are files a
 // project or a tool makes later (`tools/kb/out/`, `.claude/rules/owner-preferences.md`,
-// `delivery/data/...`), so the check would need a hand-kept list of them.
+// `delivery/migrations/...`), so the check would need a hand-kept list of them.
 
 import fs from 'node:fs';
 import os from 'node:os';

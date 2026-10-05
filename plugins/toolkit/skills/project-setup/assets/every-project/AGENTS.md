@@ -68,8 +68,8 @@ Git keeps each path below unless its line says Git ignores it.
 <!-- endif -->
 <!-- if salesforce -->
 - `delivery/`: client files (briefs, messages, meeting notes, transcripts), each in the folder for its kind, even one about a single work item, whose "Sources" list may name its path; never in a work item's Git-ignored `references/` folder.
-  - `delivery/data/`: production data loads and backups (`sf-data-change`); never committed.
-  - `delivery/deployment/`: the project-wide package, work-item packages, release cutovers, and manual deploy steps (`sf-component-tracker`).
+  - `delivery/migrations/`: production data loads and backups (`sf-data-change`); never committed.
+  - `delivery/deployments/`: the project-wide package, work-item packages, release cutovers, and manual deploy steps (`sf-component-tracker`).
 - `force-app/`: Salesforce source (`sfdx-project.json`), made when the first metadata is added. `tools/`: impact and permission tools (see "Commands").
 <!-- endif -->
 - `.claude/`: `rules/`, `skills/`, `hooks/`, and `settings.json`; change a rule or skill only with the owner's yes. `.agents/skills` links to `.claude/skills` for Codex; `.codex/` holds Codex's hooks and settings.
@@ -234,7 +234,7 @@ Path-scoped. Claude Code loads each one when it reads a matching file. Codex: op
 | `force-app/**`, `tools/kb/**` | `.claude/rules/dependency-graph.md` |
 | `force-app/**/permissionsets/**`, `force-app/**/permissionsetgroups/**`, `force-app/**/profiles/**` | `.claude/rules/permissions-source-control.md` |
 | `requirements/**`, `PROJECT-ROADMAP.md`, `PROJECT.md`, `system-guide/**`, `project-wide-records/**`, `tools/permissions/PERMISSIONS-RUNBOOK.md`, `ai-external-knowledge/**`, `delivery/**`, `**/README.md` | `.claude/rules/publish-project-documents.md` |
-| `delivery/deployment/**`, `engagement/deployment/**` | `.claude/rules/record-deployment-steps.md` |
+| `delivery/deployments/**`, `engagement/deployment/**` | `.claude/rules/record-deployment-steps.md` |
 <!-- toolkit:rules:end -->
 
 ## How to write replies

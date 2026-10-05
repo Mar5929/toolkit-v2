@@ -63,8 +63,8 @@ Keep this table short. Link a detailed person or authority record in `project-wi
 
 <!-- if salesforce -->
 - Salesforce source: `force-app/` or `<actual source path>`
-- Project-wide deployment manifest: `delivery/deployment/full-project-deployment-template/package.xml` after the API version and members are verified. Keep it as the full project component inventory; ordinary deployments use narrower work-item packages.
-- Work-item deployment manifests: `delivery/deployment/<work-item-id>-<short-name>/package.xml` when an item changes Salesforce metadata.
+- Project-wide deployment manifest: `delivery/deployments/full-project-deployment-template/package.xml` after the API version and members are verified. Keep it as the full project component inventory; ordinary deployments use narrower work-item packages.
+- Work-item deployment manifests: `delivery/deployments/<work-item-id>-<short-name>/package.xml` when an item changes Salesforce metadata.
 <!-- endif -->
 - Tests and checks: `<actual commands and locations>`
 - Outside references: `<source register or approved location>`

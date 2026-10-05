@@ -3,8 +3,8 @@
 Purpose: the Salesforce facts setup records: the org aliases, written while
 you build the setup copy, and the API version, written after the files are
 in place. Everything else a Salesforce project needs comes with the model:
-the rules, the three `sf-*` skills, the two org guards, `delivery/`, and
-`tools/`. Salesforce's own skills come from Salesforce, not from setup.
+the rules, the three `sf-*` skills, the two org guards, the Salesforce
+templates in `delivery/`, and `tools/`. Salesforce's own skills come from Salesforce, not from setup.
 
 ## Salesforce's skills
 
@@ -82,11 +82,11 @@ The model leaves the API version as `XX.0`. Fill it in two files.
    `package.xml` only.
 2. Write it in:
    - `sfdx-project.json`: the `sourceApiVersion` value;
-   - `delivery/deployment/full-project-deployment-template/package.xml`: the
+   - `delivery/deployments/full-project-deployment-template/package.xml`: the
      `<version>` line.
 
 Leave `XX.0` in the two work item templates,
-`delivery/deployment/work-item-deployment-template/package.xml` and
+`delivery/deployments/work-item-deployment-template/package.xml` and
 `destructiveChanges.xml`. Each copy of them fills the version from
 `sfdx-project.json`, as its fill-in guide says.
 
