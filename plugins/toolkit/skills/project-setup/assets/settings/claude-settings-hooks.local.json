@@ -54,7 +54,7 @@
             "type": "command",
             "command": "echo",
             "args": [
-              "{\"hookSpecificOutput\":{\"hookEventName\":\"PostToolUse\",\"additionalContext\":\"A helper agent ran or was started. If it works on a work item or sub-item, update that item's status, Recent History, and Current state with managing-work-items once its report is in. A helper with no work item of its own (a researcher, reviewer, critic, checker, or verifier) needs nothing.\"}}"
+              "{\"hookSpecificOutput\":{\"hookEventName\":\"PostToolUse\",\"additionalContext\":\"A helper agent ran or was started. If it works on a work item or sub-item, update that item's status, Recent History, and Current state with running-work-item-lifecycle once its report is in. A helper with no work item of its own (a researcher, reviewer, critic, checker, or verifier) needs nothing.\"}}"
             ],
             "timeout": 10
           }

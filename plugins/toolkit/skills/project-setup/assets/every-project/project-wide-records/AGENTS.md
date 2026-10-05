@@ -1,6 +1,6 @@
 # Project-wide records
 
-This folder holds five kinds of records that connect information across work items. Use `managing-project-wide-records` for the intake, change, and review procedure. Copy the matching file from `templates/` when a record meets its creation threshold. Keep one record per question, domain, person, shared target direction, or source intake.
+This folder holds five kinds of records that connect information across work items. Use `filing-project-records` for the intake, change, and review procedure. Copy the matching file from `templates/` when a record meets its creation threshold. Keep one record per question, domain, person, shared target direction, or source intake.
 
 | Information | Place it here when | Home |
 | --- | --- | --- |

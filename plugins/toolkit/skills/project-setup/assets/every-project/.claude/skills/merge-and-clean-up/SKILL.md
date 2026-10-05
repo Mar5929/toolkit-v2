@@ -1,6 +1,6 @@
 ---
 name: merge-and-clean-up
-description: 'Merges one approved GitHub pull request, then removes only its branches and worktree, after its checks and the merge-safety check pass, so nothing unchecked is merged and no other session''s work is removed. Use when managing-work-items asks, or the owner names a pull request: "merge PR 12", "merge and clean up", "land this pull request". Not for shipping an approved work item; use managing-work-items.'
+description: 'Merges one approved GitHub pull request, then removes only its branches and worktree, after its checks and the merge-safety check pass, so nothing unchecked is merged and no other session''s work is removed. Use when running-work-item-lifecycle asks, or the owner names a pull request: "merge PR 12", "merge and clean up", "land this pull request". Not for shipping an approved work item; use running-work-item-lifecycle.'
 ---
 
 # Merge and clean up
@@ -37,11 +37,11 @@ Neither of these: stop and ask.
   up" counts only when the pull request is clear from a number, a URL, or the
   current branch. A bare "yes" counts only when it answers a question about
   this merge. His result approval of a work item never covers the merge.
-- `managing-work-items` sent you here: it has already asked him, or checked
+- `running-work-item-lifecycle` sent you here: it has already asked him, or checked
   his standing merge instruction.
 
 A standing merge instruction in `.claude/rules/owner-preferences.md` is
-applied only by `managing-work-items` (Deploying), which holds its
+applied only by `running-work-item-lifecycle` (Deploying), which holds its
 conditions. Reached any other way, it does not count here: ask.
 
 ## Step 3: check the pull request on GitHub
@@ -114,7 +114,7 @@ a newer commit.
 
 - Refused because the head no longer matches: a new commit arrived. Stop,
   report it, and run steps 1 to 4 again on it. The owner's yes covers only
-  the head he was shown, so ask again. From `managing-work-items`: go back to
+  the head he was shown, so ask again. From `running-work-item-lifecycle`: go back to
   its merge step with the new head.
 - Any other refusal: stop and tell the owner the error.
 
@@ -165,15 +165,15 @@ the same repository and belongs to this pull request, then
 
 ## Step 7: work item note and report
 
-When step 1 found a work item: from `managing-work-items`, add nothing (it
+When step 1 found a work item: from `running-work-item-lifecycle`, add nothing (it
 adds the Recent History row); asked directly, add one row, "Merged pull
-request #<number> as <merge commit>.", with `tracking-work-items`. Never
+request #<number> as <merge commit>.", with `using-work-tracker`. Never
 change the State or mark anything Done.
 
 Verify: the pull request is merged; the base worktree matches its upstream;
 the head branch and its worktree are gone; every unrelated worktree remains.
 
-- From `managing-work-items`: say the pull request link, the merge commit,
+- From `running-work-item-lifecycle`: say the pull request link, the merge commit,
   and the cleanup result in one line, then go on with the rest of its
   Deploying steps.
 - Asked directly: the pull request link, the merge commit, whether the base
@@ -197,8 +197,8 @@ the head branch and its worktree are gone; every unrelated worktree remains.
 
 | For | Use |
 | --- | --- |
-| The merge note on the work item, when the owner asked directly | `tracking-work-items` |
-| Changing the work item's State, or marking it Done | `managing-work-items` |
-| Shipping an approved work item | `managing-work-items` |
-| A merge under the standing merge instruction | `managing-work-items` |
-| No remote: the local merge | `managing-work-items` |
+| The merge note on the work item, when the owner asked directly | `using-work-tracker` |
+| Changing the work item's State, or marking it Done | `running-work-item-lifecycle` |
+| Shipping an approved work item | `running-work-item-lifecycle` |
+| A merge under the standing merge instruction | `running-work-item-lifecycle` |
+| No remote: the local merge | `running-work-item-lifecycle` |

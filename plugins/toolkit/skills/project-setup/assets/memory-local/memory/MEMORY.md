@@ -2,7 +2,7 @@
 
 # Memory index
 
-One short line per active memory file, with a link to it. Open a file before relying on it. Template files (`status: template`) and files whose status is retired, superseded, or withdrawn are left out. In a new project, the sections stay empty until real memories are saved with the `managing-project-memory` skill.
+One short line per active memory file, with a link to it. Open a file before relying on it. Template files (`status: template`) and files whose status is retired, superseded, or withdrawn are left out. In a new project, the sections stay empty until real memories are saved with the `curating-project-memory` skill.
 
 ## User
 

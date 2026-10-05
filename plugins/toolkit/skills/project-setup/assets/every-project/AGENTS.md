@@ -32,14 +32,14 @@ This project's memory is Hindsight, on the owner's server, in the bank named in 
 - If Current State is missing from your context, read `memory/CURRENT_STATE.md` in the main checkout (the first path `git worktree list` prints).
 <!-- endif -->
 <!-- if memory=notion -->
-- If Current State is missing from your context, read the "Current state" page with `storing-project-memory`.
+- If Current State is missing from your context, read the "Current state" page with `using-memory-store`.
 <!-- endif -->
 - Read `SOUL.md` (when the project has one) and `PROJECT.md`; read them again after resume, clear, or compaction.
 - Before editing files in a folder that has its own `AGENTS.md` (for example `requirements/`), read that file.
 - Codex: at session start, read the always-on rules listed under "Rules".
 - The next four lines are for the main conversation; a helper agent follows its brief instead.
 - When a message continues a work item, find the item: the one the owner names; else the one this branch or this chat is working on; else the one Current State names under "Next session starts with". If two could fit, ask him which in one short question.
-- Before acting, read the work item's Current state with `tracking-work-items`, and read it again after resume, clear, or compaction. Then do its Next action with `managing-work-items`, and use it again for each message that continues the item.
+- Before acting, read the work item's Current state with `using-work-tracker`, and read it again after resume, clear, or compaction. Then do its Next action with `running-work-item-lifecycle`, and use it again for each message that continues the item.
 - If the item's status, State, `waiting_on`, approvals, or ticked tasks disagree with its Next action, take the step those fields point to and rewrite the Next action.
 - If the owner asks a question or asks for something else, pick the skill by what he wants done, from the Skills list. A question gets an answer, not the next step. When his plan changes, rewrite the item's Next action.
 
@@ -77,7 +77,7 @@ Git keeps each path below unless its line says Git ignores it.
 ## What the owner decides
 
 Ask the owner and record the answer before you:
-- take a work item approval step (`managing-work-items`, "The owner's OK");
+- take a work item approval step (`running-work-item-lifecycle`, "The owner's OK");
 - do anything that cannot be undone, spend money, sign in, or change an account.
 <!-- if salesforce -->
 
@@ -87,7 +87,7 @@ Agents never deploy to, validate against, or write data in production; hand the 
 Do everything else yourself, record it, and report it. When you need a decision:
 
 - Add a row to the work item's Questions and Answers with "Decision needed from: owner".
-- Set the item's `waiting_on` to `owner` with `tracking-work-items`, and write its Next action in the waiting form that `.claude/rules/keep-work-item-current.md` gives.
+- Set the item's `waiting_on` to `owner` with `using-work-tracker`, and write its Next action in the waiting form that `.claude/rules/keep-work-item-current.md` gives.
 - When he answers, record it in that row at once, update `waiting_on`, and rewrite the item's Next action.
 
 Give every item in a list of choices or recommendations you show the owner a one-line reason.
@@ -96,19 +96,19 @@ Give every item in a list of choices or recommendations you show the owner a one
 
 | Information | Home |
 | --- | --- |
-| New request, idea, or bug | A new work item (`managing-work-items`) |
-| An administrative task for the project that belongs to no work item | The project's tasks (`managing-work-items`) |
+| New request, idea, or bug | A new work item (`running-work-item-lifecycle`) |
+| An administrative task for the project that belongs to no work item | The project's tasks (`running-work-item-lifecycle`) |
 <!-- if not salesforce -->
 | Requirements, Questions and Answers, tasks, progress, history, design, and source files of one change | That work item |
 <!-- endif -->
 <!-- if salesforce -->
 | Requirements, Questions and Answers, tasks, progress, history, design, and source files of one change | That work item; a client file stays in `delivery/` |
 <!-- endif -->
-| Where one work item stands now, its next action, what it waits on, and its blockers | The Current state block at the top of that item's Overview, rewritten in place after each step (`managing-work-items`) |
+| Where one work item stands now, its next action, what it waits on, and its blockers | The Current state block at the top of that item's Overview, rewritten in place after each step (`running-work-item-lifecycle`) |
 | A decision made while working an item, or about an existing one when none was open (ask the owner which item when unclear) | That item's Questions and Answers: a row marked Decision? yes, with the owner's words and the date |
 | A decision a later work item, or an agent working on something else, will need to follow | Also a memory record, after the owner's yes, that links back to the item and names the Q-ID (the memory save skill) |
 | A project-wide decision that belongs to no work item | Straight to a memory record, after the owner's yes (the memory save skill) |
-| A question that affects several items, and the checks needed after its answer changes | `project-wide-records/questions/` (`managing-project-wide-records`); keep the authoritative answer in the owning item's Questions and Answers or the project-wide decision source |
+| A question that affects several items, and the checks needed after its answer changes | `project-wide-records/questions/` (`filing-project-records`); keep the authoritative answer in the owning item's Questions and Answers or the project-wide decision source |
 | A route through one business domain, shared target direction, or detailed decision authority | Respectively `project-wide-records/domains/`, `target-architecture/`, or `people/`; link to the authoritative records |
 | A source that affects several items and the record of where its findings went | Preserve the original in its existing source home; put only the processing receipt in `project-wide-records/intake/` |
 | A decision about something that is not a work item yet | A new work item, with the decision as its first Questions and Answers row |
@@ -128,20 +128,20 @@ Give every item in a list of choices or recommendations you show the owner a one
 - IDs look like `WI-31` (the card's ID property, no leading zeros). Find a card by its ID, even after the owner moves or renames it.
 <!-- endif -->
 <!-- if tracker=github -->
-- The tracker is GitHub Issues in the repository named in `PROJECT.md` under "Toolkit settings". Sub-items are sub-issues; `waiting_on`, the state, and other fields are the labels `tracking-work-items` names. The project's phases are milestones, and its project tasks are in the pinned "Project tasks" issue.
+- The tracker is GitHub Issues in the repository named in `PROJECT.md` under "Toolkit settings". Sub-items are sub-issues; `waiting_on`, the state, and other fields are the labels `using-work-tracker` names. The project's phases are milestones, and its project tasks are in the pinned "Project tasks" issue.
 - An item's ID is its issue number, written `#12`. In file and folder names, write the number without `#`, for example `12-test-plan.md`.
 <!-- endif -->
 <!-- if tracker=jira -->
 - The tracker is Jira, in the project named in `PROJECT.md` under "Toolkit settings" (its skills are not built yet; setup does not offer Jira until they are). Sub-items are Jira sub-tasks.
 - An item's ID is its Jira key, for example `ACME-42`.
 <!-- endif -->
-- This project has one tracker; never copy items into a second tracker or a local list. Refer to items by ID, never by path or link. `managing-work-items` holds the states, statuses, and approval points.
+- This project has one tracker; never copy items into a second tracker or a local list. Refer to items by ID, never by path or link. `running-work-item-lifecycle` holds the states, statuses, and approval points.
 - Keep each design with its item after delivery. The project's roadmap names items by ID; item detail stays with the item.
 <!-- if memory=local -->
-- Change memory only through `managing-project-memory`; `managing-work-items` and `handoff` also edit `memory/CURRENT_STATE.md`.
+- Change memory only through `curating-project-memory`; `running-work-item-lifecycle` and `handoff` also edit `memory/CURRENT_STATE.md`.
 <!-- endif -->
 <!-- if memory=notion -->
-- Memory is in the databases on this project's Notion page, in Lore's layout (links in `PROJECT.md`); Current State is its "Current state" page. Change memory only through `managing-project-memory`; `managing-work-items` and `handoff` also update that page.
+- Memory is in the databases on this project's Notion page, in Lore's layout (links in `PROJECT.md`); Current State is its "Current state" page. Change memory only through `curating-project-memory`; `running-work-item-lifecycle` and `handoff` also update that page.
 <!-- endif -->
 <!-- if memory=hindsight -->
 - Memory is Hindsight: see "Project memory" at the top.
@@ -155,32 +155,32 @@ Give every item in a list of choices or recommendations you show the owner a one
 
 Pick a skill by the situation; the examples only help you match it. This list stays in your context after compaction; the host's own skill list may be shortened or dropped. Method skills from other plugins (brainstorming, plans, debugging) may run inside these skills, never instead of them.
 
-- Anything about a work item, from a new idea to Done, and the project's phases and project tasks: `managing-work-items`.
-- A source, question, person, or target direction that spans several items, or a route through one domain: `managing-project-wide-records`. One item's questions, design, and execution stay with `managing-work-items`.
-- Saving or looking up a work item's record: `tracking-work-items` (`managing-work-items` uses it).
-- To start the next item, take started work first, then the next item in the earliest project phase that is not Done (`tracking-work-items` reads the project's phases), then the highest-priority Backlog item.
-- Where the project's work stands, what is next, or what waits on the owner: read Current State, the open items and questions (`tracking-work-items`), and memory records marked `needs-review` or `proposed`. Ask one decision at a time with your recommendation, and save each answer the moment he gives it. One item's open requirements questions go to `managing-work-items`. Examples: "where are we", "what do you need from me", "what's next".
+- Anything about a work item, from a new idea to Done, and the project's phases and project tasks: `running-work-item-lifecycle`.
+- A source, question, person, or target direction that spans several items, or a route through one domain: `filing-project-records`. One item's questions, design, and execution stay with `running-work-item-lifecycle`.
+- Saving or looking up a work item's record: `using-work-tracker` (`running-work-item-lifecycle` uses it).
+- To start the next item, take started work first, then the next item in the earliest project phase that is not Done (`using-work-tracker` reads the project's phases), then the highest-priority Backlog item.
+- Where the project's work stands, what is next, or what waits on the owner: read Current State, the open items and questions (`using-work-tracker`), and memory records marked `needs-review` or `proposed`. Ask one decision at a time with your recommendation, and save each answer the moment he gives it. One item's open requirements questions go to `running-work-item-lifecycle`. Examples: "where are we", "what do you need from me", "what's next".
 - The owner ends the session or clears context, or pastes a handoff to check: `handoff`. Examples: "write a handoff", "I'm clearing context", "start a new session".
-- A brain dump the owner wants played back before any work starts: `braindump`; one he asks only to plan goes to `managing-work-items`. Examples: "/braindump", "play that back", "tell me what you heard".
+- A brain dump the owner wants played back before any work starts: `braindump`; one he asks only to plan goes to `running-work-item-lifecycle`. Examples: "/braindump", "play that back", "tell me what you heard".
 - An answer the owner finds too technical or hard to follow: `explain-simply`. Examples: "explain that simply", "simpler", "put that in plain bullets".
 - A recap of this chat, what the owner asked for and what was done: `session-summary`. Examples: "summarize this session", "what did I ask for".
 - Updating this repository from its remote, keeping local work: `pull-latest`. Examples: "get the latest", "pull the latest changes", "sync with remote".
 - The owner asks, in his own words, to discard local work and match the remote exactly: `reset-to-remote`. Examples: "wipe local and match the remote", "fresh start from remote".
-- Merging a pull request, when the owner names it ("merge PR 12") or `managing-work-items` asks, and removing its branch and worktree: `merge-and-clean-up`.
-- Saving an agreed edit to a committed project document (`requirements/`, `system-guide/`, `project-wide-records/` records, `PROJECT.md`, a README) to the default branch: `publish-docs`. An edit to `project-wide-records/AGENTS.md` changes instructions and follows the reviewed instruction-file route. A change to the project's phases goes to `managing-work-items` first, even in a local project's `PROJECT-ROADMAP.md`.
+- Merging a pull request, when the owner names it ("merge PR 12") or `running-work-item-lifecycle` asks, and removing its branch and worktree: `merge-and-clean-up`.
+- Saving an agreed edit to a committed project document (`requirements/`, `system-guide/`, `project-wide-records/` records, `PROJECT.md`, a README) to the default branch: `publish-docs`. An edit to `project-wide-records/AGENTS.md` changes instructions and follows the reviewed instruction-file route. A change to the project's phases goes to `running-work-item-lifecycle` first, even in a local project's `PROJECT-ROADMAP.md`.
 <!-- if tracker=notion -->
-- Read and change this project's work items only through `tracking-work-items` and `managing-work-items`, whatever Notion tool is at hand (a `Notion:` plugin command, the connector, or the browser), even when a message holds a Notion page link. The `Notion:tasks:build` command can mark an item Done without the owner's yes.
+- Read and change this project's work items only through `using-work-tracker` and `running-work-item-lifecycle`, whatever Notion tool is at hand (a `Notion:` plugin command, the connector, or the browser), even when a message holds a Notion page link. The `Notion:tasks:build` command can mark an item Done without the owner's yes.
 <!-- endif -->
-- A decision that answers no open question ("we decided", "let's go with"): a Questions and Answers row marked `Decision?` yes in its work item, with `managing-work-items`. "Where information goes" says what else, and where it goes with no work item.
-- A project to-do the owner wants to be reminded of, with no time given: the work item it concerns; for administrative work that belongs to no work item, the project's tasks; for other project work, a new Backlog work item (all three with `managing-work-items`). A personal errand goes to Todoist. Example: "remind me to ...".
+- A decision that answers no open question ("we decided", "let's go with"): a Questions and Answers row marked `Decision?` yes in its work item, with `running-work-item-lifecycle`. "Where information goes" says what else, and where it goes with no work item.
+- A project to-do the owner wants to be reminded of, with no time given: the work item it concerns; for administrative work that belongs to no work item, the project's tasks; for other project work, a new Backlog work item (all three with `running-work-item-lifecycle`). A personal errand goes to Todoist. Example: "remind me to ...".
 <!-- if memory=local -->
-- The owner wants something kept, corrected, or forgotten, gives a standing instruction, or asks what was recorded or decided before and why; a change to Current State; a review or clean-up of all memory: `managing-project-memory`. Work on an item opens `managing-work-items` first, which searches memory itself; before any other recommendation, search memory with `managing-project-memory`.
-- Where and how memory is stored: `storing-project-memory`; `managing-project-memory` uses it for every read and write.
+- The owner wants something kept, corrected, or forgotten, gives a standing instruction, or asks what was recorded or decided before and why; a change to Current State; a review or clean-up of all memory: `curating-project-memory`. Work on an item opens `running-work-item-lifecycle` first, which searches memory itself; before any other recommendation, search memory with `curating-project-memory`.
+- Where and how memory is stored: `using-memory-store`; `curating-project-memory` uses it for every read and write.
 <!-- endif -->
 <!-- if memory=notion -->
-- The owner wants something kept, corrected, or forgotten, gives a standing instruction, or asks what was recorded or decided before and why; a change to Current State; a review or clean-up of all memory: `managing-project-memory`. Work on an item opens `managing-work-items` first, which searches memory itself; before any other recommendation, search memory with `managing-project-memory`.
-- Where and how memory is stored: `storing-project-memory`; `managing-project-memory` uses it for every read and write.
-- Read and change this project's memory only through `managing-project-memory`, whatever Notion tool is at hand (a `Notion:` plugin command, the connector, or the browser), even when a message holds a Notion page link or the owner says to search Notion.
+- The owner wants something kept, corrected, or forgotten, gives a standing instruction, or asks what was recorded or decided before and why; a change to Current State; a review or clean-up of all memory: `curating-project-memory`. Work on an item opens `running-work-item-lifecycle` first, which searches memory itself; before any other recommendation, search memory with `curating-project-memory`.
+- Where and how memory is stored: `using-memory-store`; `curating-project-memory` uses it for every read and write.
+- Read and change this project's memory only through `curating-project-memory`, whatever Notion tool is at hand (a `Notion:` plugin command, the connector, or the browser), even when a message holds a Notion page link or the owner says to search Notion.
 <!-- endif -->
 <!-- if memory=hindsight -->
 - Memory: Hindsight's add-on and its tools (see "Project memory" at the top). Current State is the file `memory/CURRENT_STATE.md`: edit it directly, within its line limits.

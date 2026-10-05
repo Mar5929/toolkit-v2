@@ -7,7 +7,7 @@ import { readFileSync } from 'node:fs';
 const GIT_COMMIT = /\bgit(?:\s+(?:-[cC]\s+[^\s-]\S*|-[\w-]+(?:=\S+)?))*\s+commit(?:\s|$)/;
 const additionalContext = 'A git commit was just run. In this project, a commit that worked is'
   + " followed by an update of the work item's Recent History and status with"
-  + ' managing-work-items, and of Current State when it changed.';
+  + ' running-work-item-lifecycle, and of Current State when it changed.';
 try {
   const input = JSON.parse(readFileSync(0, 'utf8'));
   const command = [input.tool_input?.command ?? ''].flat().join(' ');

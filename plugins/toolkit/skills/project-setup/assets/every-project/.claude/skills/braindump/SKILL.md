@@ -1,6 +1,6 @@
 ---
 name: braindump
-description: 'Plays back a loose brain dump in very simple words and waits for the owner''s yes before any work starts, so nothing is planned, built, or saved on a misunderstanding. Use when he wants his brain dump checked first, such as "here''s a brain dump", "play that back", "tell me what you heard", or "make sure you understood before you start". Not for a brain dump he asks only to plan; use managing-work-items.'
+description: 'Plays back a loose brain dump in very simple words and waits for the owner''s yes before any work starts, so nothing is planned, built, or saved on a misunderstanding. Use when he wants his brain dump checked first, such as "here''s a brain dump", "play that back", "tell me what you heard", or "make sure you understood before you start". Not for a brain dump he asks only to plan; use running-work-item-lifecycle.'
 ---
 
 # Brain dump playback
@@ -41,5 +41,5 @@ playback.
 
 | For | Use |
 | --- | --- |
-| A rough idea to plan, meeting notes, or a dump he asks only to plan | `managing-work-items` |
-| Something worth keeping, after his yes | `managing-project-memory` (Hindsight: `AGENTS.md`, "Project memory") |
+| A rough idea to plan, meeting notes, or a dump he asks only to plan | `running-work-item-lifecycle` |
+| Something worth keeping, after his yes | `curating-project-memory` (Hindsight: `AGENTS.md`, "Project memory") |

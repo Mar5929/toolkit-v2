@@ -2,7 +2,7 @@
 
 This rule applies to the main agent. The project's one memory store is the system named under "Memory" in `PROJECT.md`, "Toolkit settings". Never save project memory in a host's own memory feature (Claude Code's auto-memory, Codex Memories) or another plugin's (for example the `claude-toolkit` Second Brain plugin).
 
-In the rules and `AGENTS.md`, "the memory save skill" and "the memory find skill" mean `managing-project-memory` in a project with local or Notion memory.
+In the rules and `AGENTS.md`, "the memory save skill" and "the memory find skill" mean `curating-project-memory` in a project with local or Notion memory.
 
 ## When to review memory
 

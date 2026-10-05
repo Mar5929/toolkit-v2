@@ -19,7 +19,7 @@ and never hold back the prompt because a save or the check failed.
    only because it is open: another session may be working on it. None: ask
    the owner which item, if any. "None": in step 2, update only the project
    tasks.
-2. **Update each of those work items** with `tracking-work-items`, reading
+2. **Update each of those work items** with `using-work-tracker`, reading
    it first. Make its whole record true, as
    `.claude/rules/keep-work-item-current.md` says. Add a Questions and
    Answers row for each answer or decision from this session that is not
@@ -28,10 +28,10 @@ and never hold back the prompt because a save or the check failed.
    changed in this session. Add one Recent History row "Handoff: <where work
    stopped>". Read the item back. Then update each project task (`PT-01`: a
    task that belongs to no work item) this session worked on, by the step 1
-   test: read it with `tracking-work-items`, make its status and who does
-   it true, as `managing-work-items`, "Levels", says, and read it back.
+   test: read it with `using-work-tracker`, make its status and who does
+   it true, as `running-work-item-lifecycle`, "Levels", says, and read it back.
 3. **Offer what is worth keeping to memory.** At a handoff, save only what
-   the owner asked to keep or says yes to here. `managing-project-memory`
+   the owner asked to keep or says yes to here. `curating-project-memory`
    says what is worth keeping, how to ask, and how to save (Hindsight:
    `AGENTS.md`, "Project memory", and save with the add-on's tools after his
    yes). Do not wait for his answer before the prompt: count each save
@@ -39,8 +39,8 @@ and never hold back the prompt because a save or the check failed.
    Check `project-wide-records/` for intake receipts or shared questions
    this session touched. Leave each unfinished record with its source,
    affected destinations, and exact next action. Use
-   `managing-project-wide-records` for their procedure.
-4. **Update Current State.** Notion memory: use `managing-project-memory`.
+   `filing-project-records` for their procedure.
+4. **Update Current State.** Notion memory: use `curating-project-memory`.
    Local or Hindsight memory: edit `memory/CURRENT_STATE.md` in the main
    checkout (the first path `git worktree list` prints). Read it right
    before you change it, then:
@@ -113,11 +113,11 @@ nothing.
 
 | For | Use |
 | --- | --- |
-| Reading and updating this session's work items and project tasks | `tracking-work-items` |
-| What a project task is, and when to tick it | `managing-work-items` |
-| Saving to memory | `managing-project-memory` (Hindsight: `AGENTS.md`, "Project memory") |
-| Open intake receipts and shared questions | `managing-project-wide-records` |
-| Notion memory: Current State | `managing-project-memory` |
+| Reading and updating this session's work items and project tasks | `using-work-tracker` |
+| What a project task is, and when to tick it | `running-work-item-lifecycle` |
+| Saving to memory | `curating-project-memory` (Hindsight: `AGENTS.md`, "Project memory") |
+| Open intake receipts and shared questions | `filing-project-records` |
+| Notion memory: Current State | `curating-project-memory` |
 | A save that changed a Git-tracked document, such as `requirements/` or `PROJECT.md` | `publish-docs` |
 | The recap table, when the owner also asked for one | `session-summary` |
 | Current State is missing | `project-setup` ("check the setup") |

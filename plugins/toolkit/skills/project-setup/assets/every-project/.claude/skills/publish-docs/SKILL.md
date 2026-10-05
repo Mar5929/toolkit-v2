@@ -1,6 +1,6 @@
 ---
 name: publish-docs
-description: 'Commits project document edits (requirements/, system guide, project-wide records, PROJECT-ROADMAP.md, PROJECT.md, READMEs) to the default branch, so it needs no pull request and touches no other session. Use when the owner asked for or approved a document edit, or says "publish the docs" or "save the docs to main". Not for a work item''s requirements, or for code, rules, or skills; use managing-work-items.'
+description: 'Commits project document edits (requirements/, system guide, project-wide records, PROJECT-ROADMAP.md, PROJECT.md, READMEs) to the default branch, so it needs no pull request and touches no other session. Use when the owner asked for or approved a document edit, or says "publish the docs" or "save the docs to main". Not for a work item''s requirements, or for code, rules, or skills; use running-work-item-lifecycle.'
 ---
 
 # Publish a documentation save
@@ -22,7 +22,7 @@ the current folder.
    means ignored). `<main>` is the main checkout: the first path
    `git worktree list` prints. Save only an edit the owner asked for or said
    yes to, or one another skill tells you to save with this skill (for
-   example `managing-work-items`, in Reflecting). That covers the push in
+   example `running-work-item-lifecycle`, in Reflecting). That covers the push in
    step 7.
 2. **Look first.** Run `git -C <session folder> worktree list`,
    `git -C <session folder> status`, and `git -C <session folder> remote`,
@@ -153,9 +153,9 @@ Never discard another session's changes.
 
 | For | Use |
 | --- | --- |
-| A pull request for rules, skills, prompts, hooks, settings, or code, or a work item's requirements | `managing-work-items` |
-| Deciding whether a project-wide record is needed and what it links | `managing-project-wide-records` |
-| A save that cannot finish now: the next action in its work item | `tracking-work-items` |
+| A pull request for rules, skills, prompts, hooks, settings, or code, or a work item's requirements | `running-work-item-lifecycle` |
+| Deciding whether a project-wide record is needed and what it links | `filing-project-records` |
+| A save that cannot finish now: the next action in its work item | `using-work-tracker` |
 | A save that cannot finish now: the next action in the handoff | `handoff` |
 
 ## References

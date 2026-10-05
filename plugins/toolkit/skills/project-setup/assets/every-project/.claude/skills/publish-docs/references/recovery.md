@@ -52,7 +52,7 @@ account.
 - Report separately what is written, checked, committed, and published.
 - Keep the save worktree and the commit id.
 - For a work item, write the exact next action into its Current state with
-  `tracking-work-items`, in a form `.claude/rules/keep-work-item-current.md`
+  `using-work-tracker`, in a form `.claude/rules/keep-work-item-current.md`
   gives. Otherwise tell the owner the exact next action, and put it
   in the handoff when one is written (the `handoff` skill).
 

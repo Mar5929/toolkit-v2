@@ -1,6 +1,6 @@
 ---
 name: sf-deploy-check
-description: 'Finds components or edits that a Salesforce deploy would ship beyond the intended change, so no unfinished or unintended work reaches a shared org. Use when a deploy to a shared org (UAT, full copy, staging, or production) is about to run, or before the owner gets a deploy command. Not for testing whether a work item is ready, or for running the deploy; use managing-work-items.'
+description: 'Finds components or edits that a Salesforce deploy would ship beyond the intended change, so no unfinished or unintended work reaches a shared org. Use when a deploy to a shared org (UAT, full copy, staging, or production) is about to run, or before the owner gets a deploy command. Not for testing whether a work item is ready, or for running the deploy; use running-work-item-lifecycle.'
 ---
 
 # Salesforce deploy hitch-hiker check
@@ -43,7 +43,7 @@ A tracker can be wrong both ways: it can show a component as missing from an org
 | For | Use |
 | --- | --- |
 | The component tracker this check reads | `sf-component-tracker` |
-| Checking whether a work item is ready, or running the deploy | `managing-work-items` |
+| Checking whether a work item is ready, or running the deploy | `running-work-item-lifecycle` |
 
 ## Related
 

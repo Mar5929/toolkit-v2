@@ -1,6 +1,6 @@
 # Keep the Active Work Item Accurate
 
-The work tracker is the source of truth for current work. What needs the owner's approval, and how to ask for his decision: `AGENTS.md`, "What the owner decides". Run work items with `managing-work-items`.
+The work tracker is the source of truth for current work. What needs the owner's approval, and how to ask for his decision: `AGENTS.md`, "What the owner decides". Run work items with `running-work-item-lifecycle`.
 
 While you work an item, keep its whole record true, not only its Current state: each task's status and who does it, each phase's status, and every field you have information for.
 

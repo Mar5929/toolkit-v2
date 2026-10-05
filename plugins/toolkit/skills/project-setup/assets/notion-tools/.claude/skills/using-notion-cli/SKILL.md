@@ -1,6 +1,6 @@
 ---
 name: using-notion-cli
-description: 'Shows how to run ntn, Notion''s command-line tool, for the Notion storage skills: sign-in, Codex permissions, the calls every Notion step uses, and fixes for failed calls, so reads and saves in Notion work the first time. Use before any Notion read or write, when ntn will not sign in or cannot find a page, in Codex, and whenever a Notion call fails. tracking-work-items and storing-project-memory use it for every call. Only for projects that keep work or memory in Notion.'
+description: 'Shows how to run ntn, Notion''s command-line tool, for the Notion storage skills: sign-in, Codex permissions, the calls every Notion step uses, and fixes for failed calls, so reads and saves in Notion work the first time. Use before any Notion read or write, when ntn will not sign in or cannot find a page, in Codex, and whenever a Notion call fails. using-work-tracker and using-memory-store use it for every call. Only for projects that keep work or memory in Notion.'
 ---
 
 # Using the Notion command line
@@ -38,8 +38,8 @@ The Codex sandbox blocks network access and the keychain, so `ntn` fails inside 
 
 | For | Use |
 | --- | --- |
-| What to read and save for a work item | `tracking-work-items` |
-| What to read and save for project memory | `storing-project-memory` |
+| What to read and save for a work item | `using-work-tracker` |
+| What to read and save for project memory | `using-memory-store` |
 
 ## Files
 
