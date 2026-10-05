@@ -1,13 +1,14 @@
 # Hindsight on the VPS
 
-Purpose: memory in Hindsight. What runs where, the access key, setting up a
-project's bank and Hindsight's coding-agent add-on, the save-and-search
-check, opening the dashboard, checking a Hindsight project, and a new
-computer.
+Purpose: memory in Hindsight. What runs where, what an agent never does on
+the server, the access key, setting up a project's bank and Hindsight's
+coding-agent add-on, the save-and-search check, opening the dashboard,
+checking a Hindsight project, and a new computer.
 
 ## Contents
 
 - What runs where
+- The server is the owner's
 - The access key
 - Set up a project
   - 1. The server and the key
@@ -24,10 +25,17 @@ computer.
 
 ## What runs where
 
-- Hindsight and Ollama run on the owner's Hostinger VPS, behind Caddy.
-  Ollama on the VPS turns saved text into memories. Never install Hindsight
-  or Ollama on this Mac, never use Hindsight Cloud, and never ask for an
-  OpenAI key.
+On the server:
+
+- The owner's Hostinger VPS runs four services with Docker Compose, from
+  one folder, `/opt/hindsight`: the database (PostgreSQL), Ollama with its
+  model, Hindsight, and Caddy. Ollama on the VPS turns saved text into
+  memories. Never install Hindsight or Ollama on this Mac, never use
+  Hindsight Cloud, and never ask for an OpenAI key.
+- DNS sends two addresses to the VPS. Caddy accepts HTTPS for both and
+  passes each one to Hindsight: the API address and the dashboard address.
+- Only ports 22, 80, and 443 of the VPS are open. The ports of the
+  database, of Ollama, and of Hindsight itself are not public.
 - The API is `https://memory-api.mrihm-memory.com`. Every call except
   `/health` needs the API key, sent as `Authorization: Bearer <key>`.
 - The dashboard is `https://memory.mrihm-memory.com`. It asks for its own
@@ -35,29 +43,57 @@ computer.
   bank's page is `https://memory.mrihm-memory.com/banks/<URL-encoded bank ID>`.
 - One memory bank per project. Its ID is on the "Hindsight bank" line of
   `PROJECT.md`, "Toolkit settings".
+- The server has observations turned off (`GET /version` shows
+  `"observations":false`).
+- The memory lives only on the VPS. The VPS has weekly automatic backups at
+  Hostinger. The toolkit adds no backup step, and nothing of the memory is
+  copied to this Mac.
+
+On this computer:
+
 - Hindsight's coding-agent add-on (`@vectorize-io/hindsight-coding-agents`)
   connects Claude Code and Codex to the bank. It is installed once per
   computer: three hooks in `~/.claude/settings.json` and three in
   `~/.codex/hooks.json`, a user-level MCP server named `hindsight` in each
-  host, its companion skill `hindsight-coding-agent` in `~/.claude/skills/`
-  and `~/.agents/skills/`, its program in `~/.hindsight/coding-agents/`
-  (it updates itself once a day), and its settings in
-  `~/.hindsight/coding-agent.json`.
+  host, its own skill `hindsight-coding-agent` in `~/.claude/skills/`, its
+  program in `~/.hindsight/coding-agents/` (it updates itself once a day),
+  and its settings in `~/.hindsight/coding-agent.json`.
+- The add-on gives the agent eight tools: they search and read the bank's
+  knowledge pages and memory, save a document or the plan of new work into
+  the bank, and report the add-on's own state. Its skill and the guide it
+  shows the agent at session start say when to use each tool; the toolkit
+  repeats neither.
 - The settings map each Hindsight project's folder to its bank
   (`mapPathToBank`) and switch the add-on off in every other folder
   (`optInOnly` with `optInPaths`).
-- In a mapped folder the add-on saves each session to the bank at the end of
-  every turn, adds memory at the start of a session, fills a new bank from
-  the Git history, and surveys the code with the host's own command line on
-  a new bank and again every 20 commits (Claude Code: model haiku, at most
-  US$2 a survey).
-- The server has observations turned off (`GET /version` shows
-  `"observations":false`). The add-on recalls only observations unless told
-  otherwise, so its settings ask for the `world` and `experience` types. Its
-  bank template turns observations on for a bank, so its settings also set
+- In a mapped folder the add-on works by itself:
+  - it saves the session to the bank at the end of every turn;
+  - at session start it shows the agent the bank's knowledge pages and the
+    guide to its tools, and on the first message of a session it adds a
+    short summary from memory;
+  - it fills a new bank from the Git history, and keeps five knowledge
+    pages in the bank up to date;
+  - it surveys the code with the host's own command line on a new bank and
+    again every 20 commits (Claude Code: model haiku, at most US$2 a
+    survey).
+- When the add-on recalls memories, it asks only for observations unless
+  told otherwise, and the server makes none. So its settings ask for the
+  `world` and `experience` types. Its bank template turns observations on
+  for a bank, so its settings also set
   `defaultBankConfig.enable_observations` to `false`.
 - Current State stays in the local file `memory/CURRENT_STATE.md`.
-- The memory lives on the VPS. There is no backup step.
+
+## The server is the owner's
+
+- An agent never signs in to the VPS, never runs a command on it, and never
+  changes its files, its DNS records, or its firewall. Everything in this
+  file reaches the server only through the API address.
+- When the server needs work (it is down, slow, out of space, or needs a
+  newer Hindsight), stop and tell the owner what you saw. The work is his.
+- Never run `docker compose down -v` on the server, and never give the
+  owner that command: `-v` deletes the volumes that hold the database and
+  the model.
+- Bringing back a backup is the owner's step in Hostinger.
 
 ## The access key
 
@@ -208,10 +244,13 @@ the link: `jq -rn --arg b '<bank>' '$b|@uri'`.
    - `~/.hindsight/coding-agent.json`: the settings below, with this
      project's folder and bank.
    - Only when the add-on is not installed yet: the files and entries in
-     "What runs where" (hooks, MCP servers, companion skill, program). The
+     "What runs where" (hooks, MCP servers, its skill, its program). The
      installer keeps a copy of each file it changes the first time, as
-     `<file>.hindsight-backup`. In `~/.codex/config.toml` it also adds
-     `[features]` with `hooks = true` when that is missing.
+     `<file>.hindsight-backup`. Codex runs hooks only with its hooks
+     feature on, under `[features]` in `~/.codex/config.toml`. The
+     installer adds that section when the file has none. The key is
+     `hooks`; the older key `codex_hooks`, which the add-on's own
+     documentation names, still works.
 3. After his yes, write the settings first, so the installer never falls
    back to Hindsight Cloud:
 
@@ -226,9 +265,9 @@ the link: `jq -rn --arg b '<bank>' '$b|@uri'`.
    npx -y @vectorize-io/hindsight-coding-agents install claude-code codex --server self-hosted --api-url https://memory-api.mrihm-memory.com
    ```
 
-   When it prints that `hooks = true` must be added under an existing
-   `[features]` section, add that line to `~/.codex/config.toml` after his
-   yes.
+   When it prints that a line must be added under an existing
+   `[features]` section, add the line it names to `~/.codex/config.toml`
+   after his yes.
 5. Check:
    - `jq 'del(.. | .apiToken?)' ~/.hindsight/coding-agent.json` shows
      `serverMode` `self-hosted`, the API address, `optInOnly` `true`, the
