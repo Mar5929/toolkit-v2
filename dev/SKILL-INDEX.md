@@ -7,9 +7,9 @@ Every skill Toolkit V2 ships, its folder, and its description word for word.
 the routing rounds for the retired skills) is in Git history.
 
 - Folders are relative to `plugins/toolkit/skills/project-setup/`.
-- In a project, every skill except `project-setup` and
-  `choosing-outside-tools` sits in
-  `.claude/skills/<name>/`, and `.agents/skills` is a link to
+- In a project, every skill except the three of the `toolkit` plugin
+  (`project-setup`, `choosing-outside-tools`, and `writing-harness-files`)
+  sits in `.claude/skills/<name>/`, and `.agents/skills` is a link to
   `.claude/skills`, so Claude Code and Codex read the same files.
 - A description is changed in its `SKILL.md` and in this file in the same
   change. `node dev/tools/check-skills.mjs` fails when the two differ, when a
@@ -23,8 +23,13 @@ the routing rounds for the retired skills) is in Git history.
 - **1 tool list skill**, `choosing-outside-tools`, in the `toolkit` plugin
   (TKV-18). It is on for every folder in both hosts and is never copied into
   a project. It lists the outside tool the owner uses for each kind of job.
+- **1 skill for harness files**, `writing-harness-files`, in the `toolkit`
+  plugin (Mike's yes, 2026-10-05). It is on for every folder in both hosts
+  and is never copied into a project. It makes every change to a skill,
+  rule, instruction file, hook, settings file, plugin manifest, or helper
+  brief follow the current official pages.
 - **10 shared skills** that every project gets.
-- **Work tracking sets**, one per project, 1 skill each, always named
+- **The work tracking choice**, one per project, 1 skill, always named
   `using-work-tracker`: local folders with Obsidian, Notion, or GitHub
   Issues. Jira is deferred by Mike: no Jira skills.
 - **Memory**: local or Notion memory adds 2 skills, `curating-project-memory`
@@ -38,24 +43,37 @@ the routing rounds for the retired skills) is in Git history.
   Notion; with Hindsight memory, 11, or 12 with work items in Notion.
   Salesforce adds 3.
 
-## 1. The `toolkit` plugin's own skills (onboarding and the tool list)
+## 1. The `toolkit` plugin's own skills (onboarding, the tool list, and harness files)
 
 | Skill | Folder | Description |
 | --- | --- | --- |
 | `project-setup` | `./` | Sets up, checks, or updates Toolkit V2 in a project, moves an older claude-toolkit project onto it, or changes where work items or memory live, so projects run the same files. Use when the owner says "toolkit v2", "set up this project", "initialize this project", or "update the toolkit". Not for a Git pull; use pull-latest. Not for running the older claude-toolkit (project-sync). |
 | `choosing-outside-tools` | `../choosing-outside-tools/` | Lists the outside tool the owner uses for each kind of job and how to set it up, so every computer uses the same tool. Use when he asks for a job on the list, such as "make an explainer video", and no skill for that tool is on this computer; when he asks which tool he uses for a job; or when he says "add this to my tool list". Not for doing the job when a skill for that tool is on this computer. |
+| `writing-harness-files` | `../writing-harness-files/` | Makes every change to a skill, rule, AGENTS.md or CLAUDE.md, hook, settings file, plugin manifest, or helper-agent brief follow the current official Claude Code, Codex, and Agent Skills documentation. Use this whenever you or a helper agent is about to write or change one of these files, in any project, even for a small edit, and when you write the brief for a helper agent that will. Not for setting up or updating a project from the toolkit; use project-setup. |
 
 ## 2. Shared skills (every project, 10)
 
-They never assume one tracker or memory. Every work tracking set holds a
-skill named `using-work-tracker`, and every project with local or Notion
-memory has `curating-project-memory`, so they name both directly. A
-Hindsight project has no memory skills: they send it to "Project memory" in
-the project's `AGENTS.md`.
+They never assume one tracker or memory. Every work tracking folder holds
+a skill named `using-work-tracker`, and every project with local or Notion
+memory has `curating-project-memory` and `using-memory-store`, so they name
+all three directly. A Hindsight project has no memory skills: they send it
+to its rule `.claude/rules/hindsight-memory.md`.
 
-`running-work-item-lifecycle` runs every work item through its States and hands
-every read and save to `using-work-tracker`. A work item's Next action
-names no skill (the model's `.claude/rules/keep-work-item-current.md`).
+One skill owns each job (`dev/research/layout-audit/DESIGN-SPEC.md`,
+section 5):
+
+- `running-work-item-lifecycle` runs one work item through its States and
+  hands every read and save to `using-work-tracker`. Its
+  `references/closing.md` asks the closing question. It never writes
+  `DECISIONS.md`, `sources/`, or `system/`.
+- `filing-project-records` files what more than one work item needs, in
+  three steps with fixed names: "record a decision", "file a source", and
+  "update a system document". The form of each record is in its home (the
+  comment at the top of `DECISIONS.md`, `sources/AGENTS.md`,
+  `system/AGENTS.md`), never in the skill.
+- `publish-docs` makes the commit for every document change.
+- A work item's Next action names no skill (the starter's
+  `.claude/rules/keep-work-item-current.md`).
 
 | Skill | Folder | Description |
 | --- | --- | --- |
@@ -70,12 +88,13 @@ names no skill (the model's `.claude/rules/keep-work-item-current.md`).
 | `merge-and-clean-up` | `assets/every-project/.claude/skills/merge-and-clean-up/` | Merges one approved GitHub pull request, then removes only its branches and worktree, after its checks and the merge-safety check pass, so nothing unchecked is merged and no other session's work is removed. Use when running-work-item-lifecycle asks, or the owner names a pull request: "merge PR 12", "merge and clean up", "land this pull request". Not for shipping an approved work item; use running-work-item-lifecycle. |
 | `publish-docs` | `assets/every-project/.claude/skills/publish-docs/` | Commits an approved edit to project documents (system/, DECISIONS.md, sources/, reference/, delivery/, PROJECT.md, PROJECT-ROADMAP.md, READMEs) straight to the default branch, so it needs no pull request and touches no other session. Use when another skill sends a document save, or the owner approved a document edit or says "publish the docs" or "save the docs to main". Not for code, rules, skills, or a work item; use running-work-item-lifecycle. |
 
-## 3. Work tracking sets (one per project)
+## 3. The work tracking choice (one per project)
 
-Each set holds one skill, named `using-work-tracker` in every set, whose
-description ends "Only for projects that track work ...". A project holds
-one set, so no two sets claim the same request. `check-skills.mjs` matches
-these rows by folder.
+Each of the three folders holds one skill, named `using-work-tracker` in
+every folder, whose description ends "Only for projects that track work
+...". A project gets one of the three, so no two claim the same request.
+`check-skills.mjs` matches these rows by folder. No version stores an
+original: an original goes to `sources/`, and the item holds its SRC ID.
 
 ### 3.1 Local folders and Obsidian (`assets/work-local/`)
 
@@ -110,8 +129,10 @@ thing").
 A project with local or Notion memory gets two skills (Mike, 2026-10-01):
 `curating-project-memory`, the process, the same for both, which never names
 a storage tool; and its own version of `using-memory-store`, storage
-only. Memory is kept by concept, like a wiki: one record per concept, not
-one per fact. `check-skills.mjs` matches these rows by folder.
+only. Memory holds where work stopped (Current State) and pointers: the ID
+of a record and a link to it. It never holds a fact, a decision, or a term
+(Mike, 2026-10-05). Every entry carries the date it was created and the
+date it last changed. `check-skills.mjs` matches these rows by folder.
 
 ### 4.1 The process (`assets/memory-process/`)
 
@@ -130,7 +151,9 @@ one per fact. `check-skills.mjs` matches these rows by folder.
 Lore's database definitions are in its `assets/schema/`, and their columns,
 views, and page layout in `references/database-layout.md` and
 `references/views-and-layout.md`. Project-setup's
-`references/notion-build/setup.md` sends them.
+`references/notion-build/setup.md` sends them. A pointer is one page of the
+Memories database. The databases stay as Lore has them; Topics, Entities,
+and Facts are not written.
 
 | Skill | Folder | Description |
 | --- | --- | --- |
@@ -142,7 +165,8 @@ None (Mike, 2026-09-29: "Hindsight has its own complete way. It's a whole
 memory engine"). Hindsight's coding-agent add-on saves each session to the
 project's bank on Mike's VPS; the agent uses the add-on's `hindsight_*`
 tools and keeps Current State in the local file `memory/CURRENT_STATE.md`.
-The model's memory rule says how.
+The rule `.claude/rules/hindsight-memory.md`, which only a Hindsight project
+gets (`assets/memory-hindsight/`), says how.
 
 ## 5. Notion's command-line tool (`assets/notion-tools/`)
 
@@ -161,9 +185,8 @@ Salesforce's own skills (`forcedotcom/sf-skills`, installed with
 `npx skills add forcedotcom/sf-skills`) answer Salesforce platform questions.
 Toolkit V2 ships no Salesforce architect skill (Mike, 2026-10-02); setup only
 checks that Salesforce's skills are installed and gives him the command. The
-three skills below are the model's own project skills: they arrive with the
-`salesforce` folder, and a change to them is a model change that needs Mike's
-yes. The `.agents/skills` link in `every-project/` points to `.claude/skills`;
+three skills below are Mike's own project skills: they arrive with the
+`salesforce` folder, and a change to them needs Mike's yes. The `.agents/skills` link in `every-project/` points to `.claude/skills`;
 onboarding removes it from the setup copy and makes the project's own link.
 
 | Skill | Folder | Description |
@@ -201,18 +224,18 @@ first line names it. Edit the source, then copy it over every copy
 | --- | --- |
 | `helper-briefs/handoff-verifier.md` | `handoff` |
 
-Some skill templates are copies of project files. They are changed together
+Two skill templates are copies of project files. They are changed together
 with the project file (`AGENTS.md`, "The model project and its copy"), and
 `check-skills.mjs` fails when one differs from it:
 
 | Skill file | Project file (the path a project has) |
 | --- | --- |
-| `running-work-item-lifecycle`: `assets/work-item-template.md` | `work-items/work-item-template/WORK-ITEM.md` |
-| `running-work-item-lifecycle`: `assets/design-template.md` | `work-items/work-item-template/DESIGN.md` |
+| `running-work-item-lifecycle`: `assets/work-item-template.md` | `work-items/work-item-template/WORK-ITEM.md`, in `assets/work-local/` |
+| `running-work-item-lifecycle`: `assets/design-template.md` | `work-items/work-item-template/DESIGN.md`, in `assets/work-local/` |
 
-The five assets of `filing-project-records` were copies of
-`project-wide-records/templates/`. The starter project no longer has that
-folder (TKV-24), so `check-skills.mjs` compares nothing for them.
+`filing-project-records` holds no template: the form of a decision, a
+source, and a system document is in the project file itself, so there is no
+copy to keep equal.
 
 ## 9. Neighbors the routing test watches
 
@@ -220,8 +243,9 @@ Each pair is kept apart by the situation each description names early: what
 is open or waiting on the owner, or what he is doing right now
 (`dev/reviews/overlap-review.md`, "The principle: situation, not trigger
 words"). A "Not for ...; use <skill>." clause comes later, as a backup,
-because Codex cuts long descriptions from the end. The project's setup keeps
-the sets apart (draft 2, section 4.6).
+because Codex cuts long descriptions from the end. A project gets the
+skills of one work tracking choice and one memory choice, so the versions
+of one skill never meet.
 
 - `running-work-item-lifecycle` and `using-work-tracker`: deciding what happens to
   an item (its State, an approval, Done, or Cancelled) goes to
@@ -230,29 +254,35 @@ the sets apart (draft 2, section 4.6).
   alone ("show me WI-031").
 - `running-work-item-lifecycle` and `filing-project-records`: one item's
   requirements, questions, design, tasks, and approvals stay with that
-  item. The project-wide skill opens when a source, answer, or target
-  direction affects several items; it links back to each authority.
-- `filing-project-records` and `curating-project-memory`: active
-  shared questions and intake receipts stay in project-wide records;
-  lasting selected decisions follow the chosen memory route.
+  item. A decision or a question that more than one item needs, an
+  original the project received, and an approved change to a `system/`
+  document go to `filing-project-records`. At closing, the lifecycle skill
+  asks what moved up and hands each thing to `filing-project-records` by
+  its step name.
+- `filing-project-records` and `publish-docs`: writing the record, or
+  committing it. `filing-project-records` sends every save to
+  `publish-docs`; a plain document edit the owner approved goes to
+  `publish-docs` alone.
+- `filing-project-records` and `curating-project-memory` for "remember
+  this" and "we decided": a decision goes to `filing-project-records`.
+  "Remember this" goes to `curating-project-memory`, which sends the fact
+  to its home and adds at most a pointer.
 - `running-work-item-lifecycle` and `braindump`: a brain dump he asks only to plan
   goes to `running-work-item-lifecycle`; one he wants played back first goes to
   `braindump`.
-- `curating-project-memory` and `using-work-tracker`: what was recorded, or
-  where one item stands.
 - `curating-project-memory` and `using-memory-store`: deciding what to
   keep, correct, or forget goes to `curating-project-memory`, which hands
-  each read and save to `using-memory-store`; only a lookup opens
-  `using-memory-store` alone ("which memory files link to WI-031").
+  each read and write to `using-memory-store`; only a lookup opens
+  `using-memory-store` alone ("what does memory point to").
 - `handoff` and `curating-project-memory`: the owner ends the session, or
-  wants one thing kept. A handoff saves only what the owner says yes to.
+  wants one thing kept.
 - `curating-project-memory` and Claude Code's built-in `update-config` for
   "from now on" and "whenever you ...": an instruction for how the agent
   works is a line in `.claude/rules/owner-preferences.md`, never a settings
   hook.
 - `using-notion-cli` and the two Notion storage skills: how to run `ntn`,
   or a Notion call that failed, opens `using-notion-cli`; a work item or a
-  memory to read or save opens the storage skill, which uses it.
+  pointer to read or save opens the storage skill, which uses it.
 - `handoff` and `running-work-item-lifecycle` for "check it": a pasted handoff
   prompt ("check this handoff") goes to `handoff`; testing a work item goes
   to `running-work-item-lifecycle` (the Testing Loop).
@@ -266,14 +296,18 @@ the sets apart (draft 2, section 4.6).
 - `publish-docs` and `running-work-item-lifecycle` for "update the roadmap": the
   project's phases and one item's plan both go to `running-work-item-lifecycle`
   (since 0.8.0, a local project's `PROJECT-ROADMAP.md` is changed through
-  `using-work-tracker`, which saves it with `publish-docs`). A plain
-  document edit he already approved may still go to `publish-docs`.
+  `using-work-tracker`, which saves it with `publish-docs`).
 - `project-setup` and `pull-latest` for "update": Toolkit V2's own files, or
   this repository's Git remote.
-- `curating-project-memory` and `running-work-item-lifecycle` for "help me plan
-  this" and "design this": `running-work-item-lifecycle` opens first and searches
-  memory with `curating-project-memory` itself (the model's `AGENTS.md`
-  says so). Check which skill opens first.
+- `project-setup` and `writing-harness-files`: setting up or updating a
+  project from the toolkit, or writing or changing one skill, rule,
+  instruction file, hook, settings file, manifest, or helper brief by
+  hand. `writing-harness-files` is on in every folder, so check that it
+  does not open for a plain "update the toolkit".
+- `writing-harness-files` and the skill-creator skills on Mike's Mac
+  (`anthropic-skills:skill-creator`, `skill-creator:skill-creator`): both
+  match "write a skill". `writing-harness-files` says which pages to read
+  and what to check; the skill-creator runs inside it.
 
 Machine-wide skills on Mike's Mac that also match (check O7 in
 `dev/reviews/overlap-review.md`):
@@ -285,10 +319,11 @@ Machine-wide skills on Mike's Mac that also match (check O7 in
   the project over (since 0.8.3).
 - `running-work-item-lifecycle`, `using-work-tracker`, and the Notion plugin's own
   commands (`Notion:tasks:build` and the rest), and `curating-project-memory`
-  and `Notion:search`: the model's `AGENTS.md` says the plugin never
-  replaces the project's skills.
+  and `Notion:search`: the starter's rule `.claude/rules/notion-records.md`
+  says the plugin never replaces the project's skills.
 - `curating-project-memory` and `anthropic-skills:consolidate-memory`: the
-  model's `AGENTS.md` says never to use `consolidate-memory`.
+  starter's `AGENTS.md` says never to save project memory in another
+  plugin's memory feature.
 - `curating-project-memory` (local memory) and `obsidian:obsidian-cli` for
   "search my notes".
 
@@ -302,7 +337,7 @@ Machine-wide skills on Mike's Mac that also match (check O7 in
   `work-refine`.
 - `work-decide` joined `work-status`; `work-organize` was split between the
   work track skills and `work-on`.
-- `work-on` and `work-status` became lines in the model's `AGENTS.md`, and
+- `work-on` and `work-status` became lines in the starter's `AGENTS.md`, and
   each work find skill joined its work track skill (Mike, 2026-10-01).
 - `local-memory-save`, `local-memory-find`, `local-memory-refine`,
   `notion-memory-save`, `notion-memory-find`, and `notion-memory-refine`
@@ -315,3 +350,8 @@ Machine-wide skills on Mike's Mac that also match (check O7 in
 - `spec-check`, `work-guide`, and `track-tasks` were folded into
   `work-refine`, `AGENTS.md`, and Current State.
 - `unslop` was retired (Mike, 2026-09-29).
+- `managing-work-items` became `running-work-item-lifecycle`,
+  `tracking-work-items` became `using-work-tracker`,
+  `managing-project-wide-records` became `filing-project-records`,
+  `managing-project-memory` became `curating-project-memory`, and
+  `storing-project-memory` became `using-memory-store` (Mike, 2026-10-05).
