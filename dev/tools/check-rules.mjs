@@ -65,8 +65,16 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(HERE, '..', '..');
 const SETUP = path.join(REPO, 'plugins', 'toolkit', 'skills', 'project-setup');
 const ASSETS = path.join(SETUP, 'assets');
-/** The setup folders: project files at the paths a project has them (setup-copy.md, "Folders the choices add"). */
-const PROJECT_FOLDERS = ['every-project', 'work-local', 'work-notion', 'work-github', 'memory-local', 'memory-notion', 'memory-process', 'memory-hindsight', 'notion-tools', 'salesforce', 'soul'];
+/** The one folder under assets/ that holds no project files: the settings snippets. */
+const NOT_PROJECT_FOLDERS = ['settings'];
+/**
+ * The setup folders: project files at the paths a project has them. Read from the disk, so a new folder is
+ * never left out. check-skills.mjs fails when one of them is not in the table "Folders the choices add" of setup-copy.md.
+ */
+const PROJECT_FOLDERS = fs.readdirSync(ASSETS, { withFileTypes: true })
+  .filter((e) => e.isDirectory() && !NOT_PROJECT_FOLDERS.includes(e.name))
+  .map((e) => e.name)
+  .sort((a, b) => (a === 'every-project' ? -1 : b === 'every-project' ? 1 : a.localeCompare(b)));
 /** The owner's rule file. Its lines are the owner's own, so they are compared by list item only. */
 const RULE_FILE_NAME = 'owner-preferences.md';
 /** The owner-preferences.md template project-setup copies into a project's .claude/rules/. */
@@ -240,6 +248,14 @@ function main() {
     const sampleRule = parseRule(RULE_FILE_NAME, sample);
     for (const x of [...lintRule(sampleRule, { ownerFile: true }), ...lintText(sampleRule)]) {
       findings.push({ ...x, rule: `${shown(OWNER_TEMPLATE)} (with two sample lines)` });
+    }
+  }
+
+  // A setup folder for one choice that holds rules must be in CHOICE_RULES, or its rules are counted for every setup.
+  if (dir === mergedDir) {
+    for (const folder of PROJECT_FOLDERS) {
+      if (folder === 'every-project' || !ruleNamesOf(folder).length || CHOICE_RULES.some((c) => c.folder === folder)) continue;
+      findings.push({ rule: `assets/${folder}/.claude/rules`, line: null, check: 'choice-rules', severity: 'error', message: `The setup folder ${folder} holds rules, but CHOICE_RULES in dev/tools/check-rules.mjs does not say which setups get them.`, fix: 'Add the folder to CHOICE_RULES with the choice that copies it.' });
     }
   }
 

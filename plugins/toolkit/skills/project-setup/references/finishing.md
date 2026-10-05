@@ -110,13 +110,10 @@ Then delete the file's fill-in guide comment, as it says.
 
 ## Final checks
 
-Run each check alone from the project folder. Each only reads, except the
-session-start hook run, which may rebuild `memory/MEMORY.md` (a generated
-file).
+Run each check alone from the project folder. Each only reads.
 
 ```text
-- [ ] No setup marker left (command grep: see setup-copy.md; passes when it prints nothing, exit 1): command grep -rns -e '<!-- if ' -e '<!-- endif' AGENTS.md README.md PROJECT.md .claude/rules $(ls -d memory work-items 2>/dev/null)
-- [ ] Nothing from an option not chosen: ls -a shows work-items/ and PROJECT-ROADMAP.md only with local work items, memory/ only with local or Hindsight memory (Hindsight: only CURRENT_STATE.md in it), tools/ and sfdx-project.json only in a Salesforce project, .claude/rules/hindsight-memory.md only with Hindsight memory, and .claude/rules/notion-records.md only with work items or memory in Notion
+- [ ] Nothing from an option not chosen: ls -a shows work-items/ and PROJECT-ROADMAP.md only with local work items, memory/ only with local or Hindsight memory (local: AGENTS.md, CLAUDE.md, CURRENT_STATE.md, and MEMORY.md in it; Hindsight: only CURRENT_STATE.md), tools/ and sfdx-project.json only in a Salesforce project, SOUL.md only when he keeps one, .claude/rules/hindsight-memory.md only with Hindsight memory, and .claude/rules/notion-records.md only with work items or memory in Notion
 - [ ] Skills: ls .claude/skills is exactly the list for the choices (skills-hooks-settings.md), each with a SKILL.md
 - [ ] Project records, for every tracker and memory choice: DECISIONS.md; system/ with its six documents, integrations/README.md, and integrations/INTEGRATION-TEMPLATE.md; sources/README.md; delivery/ with releases/, deployments/, migrations/, and client-handoffs/; reference/ with outside-docs/INDEX.md and current-system/
 - [ ] Folder guides: find . -name AGENTS.md -not -path './.claude/*' -not -path './.git/*' lists the root file and one in system/, sources/, delivery/, and reference/ (plus work-items/ with local work items and memory/ with local memory); each has a CLAUDE.md beside it that holds only the line @AGENTS.md
@@ -124,7 +121,7 @@ file).
 - [ ] Hook commands: ls .claude/hooks shows session-start.mjs, prompt-reminder.mjs, codex-after-commit.mjs (plus the two guards in a Salesforce project)
 - [ ] Settings are valid: jq empty .claude/settings.json (and .codex/hooks.json, and .mcp.json when present)
 - [ ] Every hook command the settings name exists in .claude/hooks/, and no {{ placeholder is left: grep -n '{{' .claude/settings.json .codex/hooks.json
-- [ ] The session-start hook prints Current State: node .claude/hooks/session-start.mjs --memory <memory> </dev/null (Notion memory: add --page <Current state page id>). Codex with Notion memory: run it escalated; inside the sandbox it prints "could not be read here", which is the sandbox and not a setup failure
+- [ ] The session-start hook prints Current State, and with local memory the pointers of memory/MEMORY.md: node .claude/hooks/session-start.mjs --memory <memory> </dev/null (Notion memory: add --page <Current state page id>). Codex with Notion memory: run it escalated; inside the sandbox it prints "could not be read here", which is the sandbox and not a setup failure
 - [ ] The prompt reminder prints a line telling the agent to check the project's skills for any message, and adds the memory reminder for a "remember this" message: echo '{"prompt":"remember this: we use Postgres"}' | node .claude/hooks/prompt-reminder.mjs (Hindsight memory: add --skill hindsight)
 - [ ] The after-commit reminder answers a commit: printf '{"tool_input":{"command":"git %s -m x"}}' commit | node .claude/hooks/codex-after-commit.mjs
 - [ ] AGENTS.md is within its limits: wc -lc AGENTS.md prints 200 lines or less and 20,480 bytes or less (Claude Code recommends under 200 lines; Codex stops reading instruction files at 32,768 bytes in all, ~/.codex/AGENTS.md included). When either is over, say so in the report and never cut lines from it
@@ -134,7 +131,7 @@ file).
 - [ ] The older plugins are off here: jq '.enabledPlugins' .claude/settings.json
 - [ ] Salesforce projects only: Salesforce's skills are installed (`salesforce.md` in this skill, "Salesforce's skills"); when they are not, report it and give `npx skills add forcedotcom/sf-skills`
 - [ ] Services, Notion work items or memory: the "A new project" check under "Checks after any of these" in notion-build/work-setup.md in this skill
-- [ ] Services, Notion memory: the Notion block in PROJECT.md holds every id that `notion-build/setup.md` in this skill lists under "Recording the links in PROJECT.md", and the "Current state" page shows its first lines (ntn api v1/pages/<Current state page id>/markdown < /dev/null | jq -r .markdown)
+- [ ] Services, Notion memory: the "Notion memory" line in PROJECT.md holds every bullet that `notion-build/setup.md` in this skill lists under "Recording the links in PROJECT.md", and the "Current state" page shows its first lines (ntn api v1/pages/<Current state page id>/markdown < /dev/null | jq -r .markdown)
 - [ ] Services, GitHub Issues: the checks under "Checks after either" in github.md in this skill
 - [ ] Services, Hindsight: "Check a Hindsight project" in hindsight-on-vps.md
 - [ ] git status --short lists nothing under work-items/ or memory/
@@ -162,7 +159,7 @@ do them for him.
 | Connect the project's Salesforce org (`sf org login web --alias <alias>`) and tell the agent the alias | The agent never picks or signs in to an org itself. | Salesforce, when the project's org does not exist yet or is not connected |
 | Enter the Hindsight API key in his own Terminal window, with the two lines in `hindsight-on-vps.md` ("The access key"), never in the chat | The add-on and setup read it from `~/.hindsight/coding-agent.json`; the agent never sees it. | Hindsight, when the key is not set yet |
 | Sign in to the Hindsight dashboard with its own access key | The dashboard asks for that key, not the API key, before it shows the bank. | Hindsight, the first time he opens it |
-| Open the project folder as an Obsidian vault | To browse work items and memory with their links (the project's `README.md` says how). | Local work items or local memory; optional |
+| Open the project folder as an Obsidian vault | To browse the project's records, and local work items and memory, with their links (the project's `README.md` says how). | Optional |
 | Start a new session in each host | The skills, hooks, and settings load at session start. | Always |
 | Say yes to committing the setup files | New worktree sessions (the Claude desktop app, the Codex app) see only committed files. | Always |
 
@@ -185,9 +182,8 @@ A short, plain report, in this order:
    and, with local work items, the same `grep` on `PROJECT-ROADMAP.md`,
    then skip lines where the angle brackets are part of a file name or
    path pattern, not a prompt: `<ID>.md`, `<ID>-<short-slug>/`,
-   `<ID>-test-plan.md`, `decision_<short-name>.md`, and
-   `<work-item-id>-<short-name>`. With the project page in Notion, also
-   list its "Success criteria".
+   `<ID>-test-plan.md`, and `<release>-test-plan.md`. With the project page
+   in Notion, also list its "Success criteria".
 7. The last line: the commit offer.
 
 ## The commit offer

@@ -14,6 +14,10 @@ skills). There is no setup program: you copy and edit the files yourself,
 from this skill's `assets/` folder. This skill's folder is the folder that
 holds this `SKILL.md`; both hosts show its path when they load the skill.
 
+A setup folder is a folder in `assets/` that holds project files at the
+paths a project has them: `every-project`, and one or more for each choice.
+`references/setup-copy.md` has the one table of choices and setup folders.
+
 ## Pick the path
 
 The folder decides whether this is a new project, a project already on
@@ -39,10 +43,11 @@ has a filled "Toolkit settings" section.
   compare (`references/update.md`, steps 1 and 2), run
   the final checks (`references/finishing.md`) without fixing any that
   fail, and report each difference and each failed check with the fix you
-  recommend. Change nothing in the project; only the session-start hook run
-  in the final checks may rebuild the generated `memory/MEMORY.md`. Change a
-  setup choice (where work items or memory live, or the Memory approval
-  mode): `references/update.md`, "Changing a setup choice".
+  recommend. Change nothing in the project. A project that still has the
+  layout from before the one-home layout: say so, and list what
+  `references/update.md`, "The one-home layout", would move. Change a setup
+  choice (where work items or memory live): `references/update.md`,
+  "Changing a setup choice".
 - He asks to open a project's Hindsight dashboard, or a Hindsight project is
   set up but this computer lacks its key or the add-on (a new computer):
   `references/hindsight-on-vps.md`, "Open the dashboard" or "A new
@@ -81,12 +86,9 @@ has a filled "Toolkit settings" section.
 3. **Ask for the sign-ins the choices need now** (`ntn login` for Notion,
    `gh auth login` for GitHub), so he can do them while you copy.
    `references/notion.md`, `references/github.md`.
-4. **Build the setup copy** in a scratch folder: the `every-project` folder
-   and the folder for each choice, the setup markers resolved, and the name
-   and "Toolkit settings" filled. `every-project` holds `DECISIONS.md`,
-   `system/`, `sources/`, `delivery/`, and `reference/`, so every tracker
-   and memory choice gets them.
-   `references/setup-copy.md`.
+4. **Build the setup copy** in a scratch folder: the `every-project` setup
+   folder and the setup folders for his choices, with the name and "Toolkit
+   settings" filled. `references/setup-copy.md`.
 5. **Add the settings** to the setup copy, and check its skills and hook
    commands. `references/skills-hooks-settings.md`.
 6. **Put it into the project** and make the `.agents/skills` link. Never
@@ -143,13 +145,10 @@ has a filled "Toolkit settings" section.
   Never drop the Codex files to get past a refusal.
 - Never change anything in this skill's `assets/` folder: it is the source
   for every project.
-- The `.agents/skills` link in `assets/every-project/` is never copied. A
-  project's `.agents/skills` is a link to `.claude/skills`, so there is one
-  copy of each skill.
 - Never write a script into a project. The only code a project runs is the
-  three hook commands and, in a Salesforce project, the model's own
-  Salesforce code: the two guards, the graph Stop hook, and the scripts in
-  `tools/`.
+  three hook commands and, in a Salesforce project, the code of the
+  `salesforce` setup folder: the two guards, the graph Stop hook, and the
+  scripts in `tools/`.
 - Jira is not offered yet. Hindsight memory has no memory skills: the agent
   uses the tools of Hindsight's coding-agent add-on.
 - Setup is never a work item. The project's one-sentence outcome is the
@@ -160,8 +159,8 @@ has a filled "Toolkit settings" section.
 | File | Open it when |
 | --- | --- |
 | `references/interview.md` | Steps 1 and 2: what to check before asking, the five questions with their recommendations, and the plan to confirm |
-| `references/setup-copy.md` | Step 4, and step 1 of an update: the scratch folder, the folders each choice adds, what never ships, the setup markers, "Toolkit settings", the Salesforce entries, the owner-preferences rule |
-| `references/skills-hooks-settings.md` | Step 5: which skills each folder holds, the hook commands, the settings snippets and how to merge them, the older plugins turned off |
+| `references/setup-copy.md` | Step 4, and step 1 of an update: the scratch folder, the one table of choices and setup folders, what is never copied, the name and "Toolkit settings", the Salesforce entries in shared files, the owner-preferences rule, the checks |
+| `references/skills-hooks-settings.md` | Step 5: which skills each choice adds, the hook commands, the settings snippets and how to merge them, the older plugins turned off |
 | `references/placing-files.md` | Step 6: copying into the project, files it already has, the `.agents/skills` link |
 | `references/notion.md` | Work items or memory in Notion: the sign-in, his yes, which Notion setup to follow, the links |
 | `references/notion-build/work-setup.md` | Work items or memory in Notion: the steps of a new project, removing the part kept elsewhere, the links in `PROJECT.md`, adding work items or memory later, bringing a project up to the current template, moving from Stage to State, building the template, the checks |
@@ -172,14 +171,14 @@ has a filled "Toolkit settings" section.
 | `references/hindsight-on-vps.md` | Memory in Hindsight: what runs on the VPS, the access key, the bank, the coding-agent add-on, the save-and-search check, opening the dashboard, checking a Hindsight project, a new computer |
 | `references/salesforce.md` | A Salesforce project: Salesforce's skills check, the org aliases, and the API version |
 | `references/finishing.md` | Step 8: the prompts in the copied files, `SOUL.md`, Current State, the final checks, the owner's steps, the report, the commit offer |
-| `references/update.md` | Update the toolkit, check the setup, or change a setup choice |
+| `references/update.md` | Update the toolkit, check the setup, or change a setup choice; bringing a project set up before the one-home layout to it: how to find the old layout, the plan table, where each old record goes, and the order of the moves |
 | `references/move-over.md` | Moving a project that was set up another way onto Toolkit V2: which earlier setup it is, his choices, reading the project, sorting each piece, the list and its template, the order of the changes after his yes, carrying over old records, finishing |
 | `references/old-toolkit-pieces.md` | A move-over, steps 2, 3, and 6: the old toolkit's plugins, rules, hook commands, tools, and knowledge files with what Toolkit V2 has in their place, the old records, and how an old work item and old memory map to the Toolkit V2 form |
-| `assets/every-project/` | Step 4: everything every project gets: the project files, the shared skills, and the three hook commands, copied first into the scratch folder |
-| `assets/work-local/`, `assets/work-notion/`, `assets/work-github/` | Step 4: the files and the `using-work-tracker` skill for the work tracking choice |
-| `assets/memory-local/`, `assets/memory-notion/`, `assets/memory-process/`, `assets/memory-hindsight/` | Step 4: the memory files, skills, and rule for the memory choice (`memory-process` goes with local or Notion memory; Hindsight takes `memory-hindsight` and one file of `memory-local`) |
-| `assets/notion-tools/` | Step 4: the `using-notion-cli` skill and the `notion-records.md` rule, for work items or memory in Notion |
-| `assets/salesforce/` | Step 4: everything only a Salesforce project gets |
-| `assets/soul/` | Step 4: `SOUL.md`, when the owner keeps it |
+| `assets/every-project/` | Step 4: the setup folder every project gets, copied first into the scratch folder |
+| `assets/work-local/`, `assets/work-notion/`, `assets/work-github/` | Step 4: the setup folders of the work tracking choice |
+| `assets/memory-local/`, `assets/memory-notion/`, `assets/memory-process/`, `assets/memory-hindsight/` | Step 4: the setup folders of the memory choice |
+| `assets/notion-tools/` | Step 4: the setup folder for work items or memory in Notion |
+| `assets/salesforce/` | Step 4: the setup folder of a Salesforce project |
+| `assets/soul/` | Step 4: the setup folder that holds `SOUL.md` |
 | `assets/owner-preferences.md` | Step 4: the starting `.claude/rules/owner-preferences.md` every project gets |
 | `assets/settings/` | Step 5: the settings snippets for each choice |

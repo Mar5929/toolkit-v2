@@ -27,7 +27,7 @@ Every view has a set order (the owner's decision).
 | Work Items | All items | table | Sub-items nested under their parent; by ID; archived hidden. |
 | Work Items | By state | board | Columns by State, in option order, empty columns hidden; open items only; cards by Priority, then ID. |
 | Work Items | Roadmap | table | Items that have a parent, grouped by Parent item; rows by Phase order, then ID. No dates. |
-| Work Items | Waiting on Mike | table | Waiting on = owner, open items; by Priority, then ID. |
+| Work Items | Waiting on the owner | table | Waiting on = owner, open items; by Priority, then ID. |
 | Work Items | Top-level items | table | Items with no parent; by Priority, then ID; shows Blocked by and Blocking, the order between top-level items. |
 | Phases | Project phases | table | The project's own phases: Phase type is Project; by Order. Its Sub-items column lists each phase's top-level items. The first tab. |
 | Phases | By item | table | Grouped by Work item; by Order. |

@@ -120,8 +120,9 @@ the two lines and wait; check again after he says it is done.
 ### 2. The bank
 
 1. Look for this project's own bank in both places: the "Hindsight bank"
-   line of `PROJECT.md` when it holds an ID (a setup that stopped, or a
-   changed memory choice), and the add-on's map:
+   line of `PROJECT.md` when it holds a bank ID (a setup that stopped, or a
+   changed memory choice), and the add-on's map. The line holds no ID when
+   it holds its prompt or `not used`:
 
    ```text
    jq -r --arg p '<main checkout>' '.mapPathToBank[$p] // empty' ~/.hindsight/coding-agent.json
@@ -278,8 +279,9 @@ After setup, and whenever the owner asks:
    another project he names, read that project's `PROJECT.md`; the add-on's
    map lists each Hindsight project folder on this computer:
    `jq -r '.mapPathToBank // {} | to_entries[] | "\(.key) \(.value)"' ~/.hindsight/coding-agent.json`.
-   A `PROJECT.md` with a bank line but no dashboard line: build the link
-   from the bank, as "What runs where" shows.
+   A `PROJECT.md` whose bank line holds an ID and whose dashboard line is
+   missing or holds `not used`: build the link from the bank, as "What runs
+   where" shows.
 2. `open '<link>'`.
 3. Tell him that the dashboard asks for its own access key, not the API
    key, and that he signs in himself; it then shows the bank. Never add
@@ -296,7 +298,10 @@ his yes.
 - The checks in "1. The server and the key".
 - The bank on the "Hindsight bank" line is in the list in "2. The bank",
   step 3.
-- The `PROJECT.md` lines in "3. The settings lines" are all there.
+- The three `PROJECT.md` lines in "3. The settings lines" each hold their
+  value, not a prompt and not `not used`.
+- The project has `.claude/rules/hindsight-memory.md`, and `memory/` in the
+  main checkout holds only `CURRENT_STATE.md`.
 - "4. The add-on", steps 1 and 5.
 - In a session that has the add-on's tools, `hindsight_diagnose` shows the
   bank as `bank_id`, the API address as `api_url`, and `api_token_in_use`
@@ -321,9 +326,10 @@ the Hindsight projects there:
 
 ## A project on the old Mac server
 
-A project set up before the VPS has no "Hindsight server" line in
-`PROJECT.md`, or its `.mcp.json` or `.codex/config.toml` names
-`http://127.0.0.1:8888`. Its
+A project set up before the VPS has "Memory" set to `hindsight` in
+`PROJECT.md` and a "Hindsight server" line that is missing, holds
+`not used`, or holds an address on this computer; or its `.mcp.json` or
+`.codex/config.toml` names `http://127.0.0.1:8888`. Its
 memory is on a Hindsight server on that Mac, not on the VPS. Tell the
 owner; this skill has no step for moving memory between servers. When he
 says to use the VPS from now on, set the project up as in "Set up a

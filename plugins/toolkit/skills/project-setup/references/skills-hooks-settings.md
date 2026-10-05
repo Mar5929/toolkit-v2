@@ -1,8 +1,8 @@
 # Skills, hook commands, and settings
 
 Purpose: add the settings snippets to the setup copy, merged into the
-model's settings files, and check the skills and hook commands the copy
-holds. `<copy>` is the scratch folder from `setup-copy.md`; `<skill folder>`
+settings files it already holds, and check the skills and hook commands the
+copy holds. `<copy>` is the scratch folder from `setup-copy.md`; `<skill folder>`
 is the folder that holds this skill's `SKILL.md`.
 
 ## Contents
@@ -17,37 +17,28 @@ is the folder that holds this skill's `SKILL.md`.
 ## Skills
 
 Every skill is already in `<copy>/.claude/skills/`, one folder per skill,
-because `setup-copy.md` copied the folders for the choices. Claude Code reads
-that folder; Codex reads `.agents/skills`, which becomes a link to it
-(`placing-files.md` in this folder).
-
-Every folder in `assets/` holds its skills under `.claude/skills/`, a
-folder whose name starts with a dot, so Codex does not load them in every
-folder on this computer. `ls` hides it; use `ls -a`. The copied skill
-folders have normal names.
+because `setup-copy.md` copied the setup folders for the choices. Claude
+Code reads that folder; Codex reads `.agents/skills`, which becomes a link
+to it (`placing-files.md` in this folder).
 
 The shared skills are the same in every project (10): `running-work-item-lifecycle`,
 `filing-project-records`,
 `handoff`, `braindump`, `explain-simply`, `session-summary`, `pull-latest`,
 `reset-to-remote`, `merge-and-clean-up`, `publish-docs`. `every-project`
-holds them. They name no tracker or memory system. Every work tracking
-folder holds one skill with the same name, `using-work-tracker`, and every local or Notion memory project
-gets `curating-project-memory`, so the shared skills name both directly. A
-Hindsight project has no memory skills: its rule
-`.claude/rules/hindsight-memory.md` says what to use in their place.
+holds them.
 
-The folders for the choices (`setup-copy.md`, "Folders the choices add")
-hold these skills:
+Each choice adds these skills. Which setup folders hold them is in
+`setup-copy.md`, "Folders the choices add".
 
-| Choice | Folders in `assets/` | Skills |
-| --- | --- | --- |
-| Work items local | `assets/work-local/` | `using-work-tracker` |
-| Work items in Notion | `assets/work-notion/` and `assets/notion-tools/` | `using-work-tracker`, `using-notion-cli` |
-| Work items in GitHub Issues | `assets/work-github/` | `using-work-tracker` |
-| Memory local | `assets/memory-process/` and `assets/memory-local/` | `curating-project-memory`, `using-memory-store` |
-| Memory in Notion | `assets/memory-process/`, `assets/memory-notion/`, and `assets/notion-tools/` | `curating-project-memory`, `using-memory-store`, `using-notion-cli` |
-| Memory in Hindsight | `assets/memory-hindsight/` | none: the agent uses the tools of Hindsight's coding-agent add-on (`hindsight-on-vps.md` in this folder) |
-| Salesforce | `assets/salesforce/` | `sf-component-tracker`, `sf-data-change`, and `sf-deploy-check`; Salesforce's own skills are installed by the owner (`salesforce.md` in this folder) |
+| Choice | Skills |
+| --- | --- |
+| Work items local | `using-work-tracker` |
+| Work items in Notion | `using-work-tracker`, `using-notion-cli` |
+| Work items in GitHub Issues | `using-work-tracker` |
+| Memory local | `curating-project-memory`, `using-memory-store` |
+| Memory in Notion | `curating-project-memory`, `using-memory-store`, `using-notion-cli` |
+| Memory in Hindsight | none: the agent uses the tools of Hindsight's coding-agent add-on (`hindsight-on-vps.md` in this folder) |
+| Salesforce | `sf-component-tracker`, `sf-data-change`, and `sf-deploy-check`; Salesforce's own skills are installed by the owner (`salesforce.md` in this folder) |
 
 ## Hook commands
 
@@ -87,8 +78,8 @@ texts: they are written to match the three hook commands.
 
 ## Merge rules
 
-- Start from the model's file in `<copy>`, after the Salesforce removals in
-  `setup-copy.md`. When `<copy>` has no such file (`.codex/hooks.json` in a
+- Start from the file `<copy>` already holds, after the Salesforce removals
+  in `setup-copy.md`. When `<copy>` has no such file (`.codex/hooks.json` in a
   project that is not a Salesforce project, and `.codex/config.toml`), the
   first snippet is the start.
 - The toolkit's own hook handlers are replaced, never joined. They are: a
@@ -108,12 +99,13 @@ texts: they are written to match the three hook commands.
   is added. A plain value the file already has with a different value: in
   the setup copy, take the snippet's; in a file the project already had
   (`placing-files.md`, `update.md`), ask the owner.
-- Never delete any other entry: the model's permission rules, its Git deny
+- Never delete any other entry: the copied permission rules, the Git deny
   and ask rules, the Salesforce guards (and the `Stop` hook that runs
   `tools/kb/graph_freshness_hook.py`), and hooks the owner added stay.
 - `.codex/hooks.json` holds only `description` and `hooks` at the top level.
-  In a Salesforce project, the `description` is the model's text, one
-  space, then the snippet's text; otherwise it is the snippet's. In a file
+  In a Salesforce project, the `description` is the text of the
+  `salesforce` folder's file, one space, then the snippet's text; otherwise
+  it is the snippet's. In a file
   the project already had, a `description` that does not contain the
   snippet's text keeps the text it has, and the snippet's text is added
   after it with one space between them. List that change in the numbered
@@ -155,12 +147,9 @@ files in `~/.claude` or `~/.codex`.
 
 ## Check
 
-- `<copy>/.claude/skills/` holds exactly the skill folders for the choices,
-  each with a `SKILL.md`, and a folder for every skill that the "Which
-  skill" section of `AGENTS.md` names, except `project-setup` (the
-  machine-wide `toolkit` plugin holds it) and the skills of a choice this
-  project did not make: the three `sf-*` skills without Salesforce, and
-  `curating-project-memory` and `using-memory-store` with Hindsight memory.
+- `ls <copy>/.claude/skills` shows exactly the 10 shared skills and the
+  skills of the table above for the owner's choices, each with a
+  `SKILL.md`.
 - Both JSON files are valid, every hook command the settings name is in
   `<copy>/.claude/hooks/`, `.codex/config.toml` has each table once, and
   `[skills]` holds `max_context_tokens = 10000`.
