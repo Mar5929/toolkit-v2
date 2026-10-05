@@ -4,7 +4,7 @@ Toolkit V2 sets up a project folder so the agent can run the project for you
 in Claude Code or Codex. You make the decisions and steer. The agent does the
 work, tracks it, and remembers what matters.
 
-It is written instructions plus three small hooks. There is no program to
+It is written instructions plus four small hooks. There is no program to
 install, run, or keep working (your decision of 2026-09-29). The one
 exception is the workstream panel for Claude Code (your decision of
 2026-10-03), described below.
@@ -42,13 +42,14 @@ on the list, the agent uses your tool. When the tool is not on that computer,
 the agent says so and sets it up only after your yes. To add a tool, say "add
 this to my tool list" in a chat opened in this repository.
 
-Its third skill, `writing-harness-files`, is for the files that tell Claude
-Code or Codex how to behave: a skill, a rule, `AGENTS.md`, a hook, a
-settings file, a plugin manifest, or the brief for a helper agent. Before
-an agent writes or changes one, in any project, the skill has it read the
-current official documentation page for that kind of file, follow a short
-checklist, and have a second agent review the change (your decision of
-2026-10-05).
+Its third skill, `writing-harness-files`, is for harness files: the files
+that tell Claude Code or Codex how to behave. A harness file is a skill, a
+rule, an `AGENTS.md` or `CLAUDE.md`, a hook, a settings file, a Codex
+`.rules` file, an output style, a plugin manifest or marketplace file, a
+mod, a subagent definition, or a helper-agent brief. Before an agent writes
+or changes one, in any project, the skill has it read the current official
+documentation page for that kind of file, follow a short checklist, and
+have a second agent review the change (your decision of 2026-10-05).
 
 Setup copies everything a project needs into the project itself. That way the
 project works the same in Claude Code, the Codex app, and the Codex extension
@@ -133,7 +134,10 @@ project folder, for what lasts longer than one work item:
 
 It shows you the plan and waits for your yes. Then it copies the starter
 project's files, the skills for your answers, the hooks, and the settings
-into the project. It asks you to sign in where needed (`ntn login` for Notion,
+into the project. It turns on a check of the project's records that runs
+before each commit (a Git setting in that copy of the project; when the
+project already has its own commit check, setup changes nothing and tells
+you). It asks you to sign in where needed (`ntn login` for Notion,
 `gh auth login` for GitHub), then sets up the Notion pages, the GitHub labels,
 or the Hindsight memory bank. It finishes by running its checks and offering
 to commit.
@@ -151,7 +155,10 @@ the project folder and its hooks (`/hooks`).
 
 Later, say **"check the setup"** to see what differs (it changes nothing), or
 **"update the toolkit"** to bring a project up to date. It shows every change
-first and never overwrites a file you changed without asking.
+first and never overwrites a file you changed without asking. The check
+before each commit is a setting of one copy of the project: in a new copy,
+or on another computer, "check the setup" says it is off and "update the
+toolkit" turns it on.
 
 A project set up before the five places above existed keeps the same facts
 elsewhere: shared questions, requirements, a system guide, memory records,
@@ -215,7 +222,7 @@ Each project gets the skills for where its work items and memory live:
 | Work items in GitHub Issues | `using-work-tracker` (the GitHub version) |
 | Memory in local files | `curating-project-memory` (keeps memory to where work stopped plus pointers to records, and writes your "from now on" instructions to the rules), `using-memory-store` (stores Current State and the pointers as files in `memory/`) |
 | Memory in Notion | `curating-project-memory`, `using-memory-store` (the Notion version), `using-notion-cli` |
-| Memory in Hindsight | None. Hindsight's coding-agent add-on saves each session to the project's bank, and the agent uses its save and search tools. |
+| Memory in Hindsight | None from the toolkit (your decision of 2026-10-05). Hindsight's coding-agent add-on saves each session to the project's bank and brings its own skill and tools. One project rule says what the project still keeps in its own files. |
 | Salesforce | `sf-deploy-check`, `sf-component-tracker`, `sf-data-change`; Salesforce's own skills (`forcedotcom/sf-skills`) are installed by you, and setup checks for them |
 
 Local memory holds where work stopped, and pointers: an ID and a link to the
@@ -239,6 +246,13 @@ description.
 | You say something worth keeping ("remember this", "from now on", "we decided", and similar) | A second one-line reminder names `curating-project-memory` (with Hindsight, the add-on's tools). The skill decides whether anything is saved, and asks you first. |
 | After a commit | A reminder to update the work item's history and status, and Current State if it changed. |
 | A helper agent starts or reports back | A reminder to update that helper's work item. |
+| The agent edits a file | The record check runs: 15 checks on the form of `DECISIONS.md`, `system/`, `sources/`, and local work items, such as an ID used twice or a rule marked approved with no decision behind it. The agent is told what is wrong and fixes it. |
+| The agent finishes a turn (Claude Code only) | The record check runs on every record. A problem nobody fixed is reported again. |
+| Before each commit | The record check runs again, and a commit that breaks a record or changes a filed original is stopped. |
+
+The record check is the fourth hook command (your yes of 2026-10-05). It
+only reads. It checks the form of a record, never whether what it says is
+right.
 
 There is no hook for marking work Done. The agent asks you first, and
 records your words and the date.
@@ -300,7 +314,8 @@ codex plugin add toolkit@toolkit-v2
 Start a new session in each app afterwards.
 
 With Hindsight memory, the memory itself stays on your VPS, so nothing is
-copied to a new Mac and there is no backup step. On a new Mac, say **"update
+copied to a new Mac. The VPS has weekly automatic backups at Hostinger, and
+the toolkit adds no backup step of its own. On a new Mac, say **"update
 the toolkit"** in each Hindsight project. The agent names the server the
 project uses and what this Mac is missing. After your yes, you enter the API
 key yourself in Terminal, and the agent installs Hindsight's coding-agent
