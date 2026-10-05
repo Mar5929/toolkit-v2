@@ -9,7 +9,7 @@ The page is plain text, not a database. `assets/current-state.md` is its startin
 | Part | What it holds | Limit |
 | --- | --- | --- |
 | Last updated | The first line: `Last updated: YYYY-MM-DD`, then what caused the change and who made it. | One line |
-| Now | One line per active work item: its ID and a few words on what it is for. | 5 lines |
+| Now | One line per work item that has left Backlog and is not Done or Cancelled: its ID and a few words on what it is for. | 5 lines |
 | Waiting on the owner | A decision or action only the owner can take that has no work item, or a save question the owner has not answered: who needs it and when to check again. An Open decision is named by its DEC ID. | 5 lines |
 | Next session starts with | The work item's ID, what to read, and the next action. | 3 lines |
 
