@@ -50,7 +50,6 @@ Keep this table short. Write no biography and no contact details.
 
 - Tracker: `<local, notion, or github>`
 - Memory: `<local, notion, or hindsight>`
-- Memory approval: `<onboarding or trusted>`
 - Work item ID prefix: `<WI>`
 - Notion work items: `<nested bullets under this line, written by the Notion setup step: the link to the project's Notion page, and the ids of its Work Items, Phases, Tasks, and Projects databases>`
 - GitHub repository: `<owner/name>`

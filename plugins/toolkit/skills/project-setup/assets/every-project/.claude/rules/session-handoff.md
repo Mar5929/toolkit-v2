@@ -1,3 +1,5 @@
 # Prepare a Session Handoff
 
-When the owner says he is clearing context or ending the session, or asks for a handoff, use the `handoff` skill, whatever the session's length. When the session is long and the next step is complex, offer a handoff. Use the `handoff` skill. Before the handoff, rewrite the Current state block at the top of each work item the session worked on. Then review the project's Current State and the memory criteria; update Current State, and save only authorized lasting memory with `curating-project-memory`. Then write the prompt. Skip the offer for small edits and quick lookups.
+- Use the `handoff` skill when the owner says the session is ending, says context will be cleared, or asks for a handoff.
+- Offer a handoff when this session's context has been compacted, or when the owner says the work will continue in another session.
+- Do not offer one after a small edit or a quick lookup.

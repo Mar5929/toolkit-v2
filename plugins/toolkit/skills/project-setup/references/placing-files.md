@@ -119,7 +119,7 @@ move-over all do this section.
    | The first prints `.githooks` | Nothing. |
    | The first prints another folder | Change nothing. Tell the owner as the text below the table says, naming that folder. |
    | The first prints nothing, and the second lists any file whose name does not end in `.sample`, such as `pre-commit`, `commit-msg`, `pre-push`, or the hooks Git LFS installs | Change nothing: with `core.hooksPath` set, Git stops running every hook in that folder. Tell the owner as the text below the table says, naming each of those files. |
-   | The first prints nothing, and the second lists only files whose names end in `.sample`, or no file | `git config core.hooksPath .githooks` |
+   | The first prints nothing, and the second lists only files whose names end in `.sample`, lists no file, or says the folder does not exist | `git config core.hooksPath .githooks` |
 
    What to tell the owner when nothing is changed: the folder or the files
    that are already there; that the record check will not run before

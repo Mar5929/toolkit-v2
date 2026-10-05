@@ -107,7 +107,7 @@ find <copy> \( -name __pycache__ -o -name .DS_Store -o -name '*.pyc' -o -name '*
   the owner chose. The skills read the real prefix from "Toolkit settings".
 - Fill every line of `PROJECT.md`, section "Toolkit settings", writing each
   value inside the backticks in place of the prompt, for example
-  ``- Tracker: `local` ``. The section has the same 11 lines in every
+  ``- Tracker: `local` ``. The section has the same 10 lines in every
   project. Keep every line and every label exactly as written: the skills
   read these lines. A line for a choice the owner did not make gets the
   value `not used`, for example ``- Hindsight bank: `not used` ``.
@@ -116,7 +116,6 @@ find <copy> \( -name __pycache__ -o -name .DS_Store -o -name '*.pyc' -o -name '*
 | --- | --- |
 | Tracker | `local`, `notion`, or `github` |
 | Memory | `local`, `notion`, or `hindsight` |
-| Memory approval | Local or Notion memory: `onboarding`. Hindsight memory: `not used`. |
 | Work item ID prefix | Local work items: the prefix he confirmed, for example `WI`. Work items in Notion: leave the prompt for the Notion step. GitHub Issues: `not used`. |
 | Notion work items | Work items in Notion: leave the prompt for the Notion step, which writes nested bullets under the label line. Otherwise `not used`. |
 | GitHub repository | Work items in GitHub Issues: leave the prompt for the GitHub step. Otherwise `not used`. |
@@ -177,8 +176,8 @@ Each of these only reads.
 
 - `grep -n '<Project name>' <copy>/AGENTS.md <copy>/README.md <copy>/PROJECT.md`
   shows only fill-in guide comment lines, never a heading.
-- `command grep -c -E '^- (Tracker|Memory|Memory approval|Work item ID prefix|Notion work items|GitHub repository|Notion memory|Hindsight bank|Hindsight server|Hindsight dashboard|Salesforce org aliases):' <copy>/PROJECT.md`
-  prints 11 (`command grep` runs the system grep; in Claude Code, plain
+- `command grep -c -E '^- (Tracker|Memory|Work item ID prefix|Notion work items|GitHub repository|Notion memory|Hindsight bank|Hindsight server|Hindsight dashboard|Salesforce org aliases):' <copy>/PROJECT.md`
+  prints 10 (`command grep` runs the system grep; in Claude Code, plain
   grep skips the folders the copied `.gitignore` names).
 - `jq empty <copy>/.claude/settings.json` prints nothing (the JSON is
   valid).

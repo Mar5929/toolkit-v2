@@ -257,7 +257,7 @@ records. Each new record says "Carried over from `<old path>`".
 | `knowledge/memory/current.md` | Current State, written new from what is true today (`finishing.md`, "Current State"). An "Active work" entry becomes a "Now" line when its work item was carried over and has left Backlog. Each "General project to-dos" entry goes under "Your call": recommend a project task when it is administrative work for the whole project, and otherwise a new Backlog work item (`running-work-item-lifecycle`, "Levels"). "Session handoffs" are not carried over. "Project goal" is the suggestion for the outcome question in `finishing.md`. |
 | A save waiting in `knowledge/memory-inbox.md` | "Your call", one line each: he approves or declines it. Never file one without his answer. |
 | `knowledge/memory-self-improvement.md` | His instructions go to `.claude/rules/owner-preferences.md`, under Memory, in his words |
-| `knowledge/project.md`, or the old root `PROJECT.md` | The matching sections of the Toolkit V2 `PROJECT.md`. "Memory approval" starts as `onboarding`, whatever the old file allowed. |
+| `knowledge/project.md`, or the old root `PROJECT.md` | The matching sections of the Toolkit V2 `PROJECT.md`. |
 | A file in `knowledge/prds/` or `prds/` | "Your call": recommend moving the whole file to `sources/` with `git mv` and an SRC number, so its text and its Git history stay, and carrying its agreed requirements into the matching `system/` documents as rules whose Source names that SRC (`one-home-layout.md`, "Where each old piece goes", the row for an agreed requirement) |
 | Memory in a service | Stays in the service. When it is Hindsight and he chose Hindsight memory: "Your call" whether this project uses that bank or a new one. |
 

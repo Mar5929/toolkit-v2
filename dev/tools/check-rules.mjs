@@ -274,7 +274,7 @@ function main() {
     process.exit(1);
   }
   console.log(`check-rules: passed${warnings.length ? ` with ${warnings.length} warning${warnings.length === 1 ? '' : 's'}` : ''}.`);
-  if (warnings.length) console.log('Warnings do not fail the run. A fix that changes what a model rule means, or rewrites wording Mike approved (session-handoff.md is his), waits for his yes; the open questions are in dev/model-changes.md, "Rules best practices: needs your yes".');
+  if (warnings.length) console.log('Warnings do not fail the run. A fix that changes what a model rule means, or rewrites wording Mike approved (salesforce-org-safety.md is his), waits for his yes; the open questions are in dev/model-changes.md, "Rules best practices: needs your yes".');
 }
 
 main();
