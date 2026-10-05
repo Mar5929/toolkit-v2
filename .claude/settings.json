@@ -5,5 +5,24 @@
     "**/plugins/toolkit/skills/project-setup/assets/memory-local/memory/**",
     "**/plugins/toolkit/skills/project-setup/assets/**/CLAUDE.md",
     "**/plugins/toolkit/skills/project-setup/assets/**/AGENTS.md"
-  ]
+  ],
+  "skillOverrides": {
+    "braindump": "off",
+    "curating-project-memory": "off",
+    "explain-simply": "off",
+    "filing-project-records": "off",
+    "handoff": "off",
+    "merge-and-clean-up": "off",
+    "publish-docs": "off",
+    "pull-latest": "off",
+    "reset-to-remote": "off",
+    "running-work-item-lifecycle": "off",
+    "session-summary": "off",
+    "sf-component-tracker": "off",
+    "sf-data-change": "off",
+    "sf-deploy-check": "off",
+    "using-memory-store": "off",
+    "using-notion-cli": "off",
+    "using-work-tracker": "off"
+  }
 }

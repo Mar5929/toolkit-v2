@@ -137,12 +137,16 @@ do: organized sections are easier to follow than dense paragraphs."
 ### C. Load mode and `paths`
 
 **R12. Add `paths` only when the rule applies to certain files, and when the
-agent reads one of those files before the moment the rule is needed.** A
-path-scoped rule loads "when Claude reads files matching the pattern, not on
-every tool use" (`claude-code/memory.md` "Path-specific rules"). So it does
-not load when the agent creates a new file without reading one, runs a
-command, or answers a question. An instruction for those moments is always on
-(no `paths`) or in a skill.
+agent reads, writes, or edits one of those files before the moment the rule
+is needed.** A path-scoped rule loads "when Claude uses the Read, Write, or
+Edit tool on a file matching the pattern, not on every tool use"
+(`claude-code/memory.md` "Path-specific rules", captured 2026-10-05; the
+page captured 2026-09-29 named only reading, and this item said so until
+it was corrected on 2026-10-05). So it does not load when the agent runs a
+command, or answers a question. An instruction for those moments is always
+on (no `paths`) or in a skill. The audit in Part 2 was written under the
+earlier wording: where it says a rule is "not loaded yet" because the agent
+creates a file without reading one, that reason no longer holds.
 
 **R13. Write valid frontmatter and globs.** From `claude-code/memory.md`
 "Path-specific rules" and "Rule frontmatter reference":

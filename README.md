@@ -27,7 +27,7 @@ exception is the workstream panel for Claude Code (your decision of
 - **Hooks** are small commands Claude Code and Codex run by themselves at set
   moments, for example when a session starts.
 
-## The main plugin and its two skills
+## The main plugin and its three skills
 
 The toolkit's main plugin is `toolkit`. Its main skill is `project-setup`. The
 plugin is switched on for every folder, so "toolkit v2" or "set up this project"
@@ -41,6 +41,14 @@ choices for it. The toolkit does not ship those tools. When you ask for a job
 on the list, the agent uses your tool. When the tool is not on that computer,
 the agent says so and sets it up only after your yes. To add a tool, say "add
 this to my tool list" in a chat opened in this repository.
+
+Its third skill, `writing-harness-files`, is for the files that tell Claude
+Code or Codex how to behave: a skill, a rule, `AGENTS.md`, a hook, a
+settings file, a plugin manifest, or the brief for a helper agent. Before
+an agent writes or changes one, in any project, the skill has it read the
+current official documentation page for that kind of file, follow a short
+checklist, and have a second agent review the change (your decision of
+2026-10-05).
 
 Setup copies everything a project needs into the project itself. That way the
 project works the same in Claude Code, the Codex app, and the Codex extension
@@ -145,6 +153,14 @@ Later, say **"check the setup"** to see what differs (it changes nothing), or
 **"update the toolkit"** to bring a project up to date. It shows every change
 first and never overwrites a file you changed without asking.
 
+A project set up before the five places above existed keeps the same facts
+elsewhere: shared questions, requirements, a system guide, memory records,
+a glossary, and originals stored inside work items. "Update the toolkit"
+finds them and shows you one table: each old location, what is in it,
+where it goes, and what is removed afterwards. Nothing moves until you say
+yes, and nothing is removed before what it held is read back in its new
+place.
+
 ## Say "toolkit v2" in any project
 
 Say **"toolkit v2"** in a project folder and the agent works out which of
@@ -208,8 +224,8 @@ Notion memory and Hindsight store has not changed; that is a separate decision
 for you. `using-notion-cli` comes once, even with work items and memory both
 in Notion.
 
-A project ends up with 12 skills, or 13 when work items or memory are in
-Notion. With Hindsight memory it has 10, or 11 with work items in Notion. A
+A project ends up with 13 skills, or 14 when work items or memory are in
+Notion. With Hindsight memory it has 11, or 12 with work items in Notion. A
 Salesforce project has 3 more, plus Salesforce's own skills. Saying where the work stands needs no skill: the
 project's `AGENTS.md` says how. `dev/SKILL-INDEX.md` lists every skill with its exact
 description.
@@ -218,7 +234,7 @@ description.
 
 | When | What happens |
 | --- | --- |
-| A session starts, resumes, or its context is compacted | The agent is shown Current State: a short list of what is happening now and what waits on you. With local memory, the hook first rebuilds the memory index, `memory/MEMORY.md`. When Current State is too long or older than 7 days, it asks the agent to clean it up. |
+| A session starts, resumes, or its context is compacted | The agent is shown Current State: a short list of what is happening now and what waits on you. With local memory, it is also shown the list of memory pointers, `memory/MEMORY.md`. When Current State is too long or older than 7 days, it asks the agent to clean it up. |
 | You send any message | The agent is told to check the project's skills and use every one that fits, before it answers. |
 | You say something worth keeping ("remember this", "from now on", "we decided", and similar) | A second one-line reminder names `curating-project-memory` (with Hindsight, the add-on's tools). The skill decides whether anything is saved, and asks you first. |
 | After a commit | A reminder to update the work item's history and status, and Current State if it changed. |
@@ -310,9 +326,10 @@ The agent never does these for you. It tells you when each one is needed.
 
 ## Where things are
 
-- `plugins/toolkit/`: the main plugin. Its `skills/project-setup/assets/`
-  folder holds the starter project: `every-project/` (the files, skills, and
-  hooks every project gets), one folder for each choice, and `settings/`.
+- `plugins/toolkit/`: the main plugin, with its three skills in `skills/`.
+  The `skills/project-setup/assets/` folder holds the starter project:
+  `every-project/` (the files, skills, and hooks every project gets), one
+  or more folders for each choice, and `settings/`.
 - `plugins/workstreams/`: the workstream panel.
 - `dev/`: the goal, progress, design, research, checks, and test runs. It is
   not installed anywhere.
