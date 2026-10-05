@@ -100,14 +100,12 @@ File at the narrowest scope that covers everyone affected. The test: would an ag
 
 To find what was decided before, read `DECISIONS.md`, then `system/`, then the work item.
 
-## What the owner decides
+## Ask the owner first
 
-Ask the owner and record the answer before you:
+Ask the owner, and record the answer, before you:
 
 - take a work item approval step (`running-work-item-lifecycle`, "The owner's OK");
 - do anything that cannot be undone, spend money, sign in, or change an account.
-
-Do everything else yourself, record it, and report it. When you need a decision, add a row to the work item's Questions and Answers with "Decision needed from: owner", mark the item as waiting on the owner, and record the owner's answer in that row as soon as it is given. Give every choice or recommendation you show the owner a one-line reason.
 
 ## Which skill
 
