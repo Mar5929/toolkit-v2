@@ -239,8 +239,9 @@ Since toolkit 0.8.0, only the project and its top-level items have phases:
 a sub-item's tasks are one plain list, and the project has its own phases
 (`P01`) and its own tasks (`managing-work-items`, "Levels"). The storage
 files named here are in each tracker's `tracking-work-items` skill, in this
-skill's `assets/.skill-sets/`. The same release gives a Notion task one
-status field (step 5) and removes "Untracked to-dos" from Current State
+skill's `assets/work-local/`, `assets/work-notion/`, and
+`assets/work-github/` (under `.claude/skills/`). The same release gives a
+Notion task one status field (step 5) and removes "Untracked to-dos" from Current State
 (step 6). Show the owner every change below in one
 numbered list, and make each only after his yes. Nothing is deleted except
 what a step names, and each item keeps its task IDs.
@@ -359,8 +360,9 @@ Where work items or memory live, for example "move memory to Notion":
    skills are added. Its storage skill (`tracking-work-items` or
    `storing-project-memory`) has the old one's name and replaces it: read
    the old one first, because step 5 reads the old records its way (this
-   skill's `assets/.skill-sets/` also holds it). A new memory choice also
-   replaces the toolkit's hook handlers
+   skill's `assets/` folders `work-local`, `work-notion`, `work-github`,
+   `memory-local`, and `memory-notion` also hold it). A new memory choice
+   also replaces the toolkit's hook handlers
    in `.claude/settings.json` and `.codex/hooks.json` with the new choice's
    snippets (`skills-hooks-settings.md`, "Merge rules"); he trusts the
    changed Codex hooks again in `/hooks`.

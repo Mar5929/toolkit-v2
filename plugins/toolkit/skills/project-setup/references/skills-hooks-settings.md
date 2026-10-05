@@ -1,9 +1,10 @@
 # Skills, hook commands, and settings
 
-Purpose: add to the setup copy the skills for the owner's choices, the three
-hook commands, and the settings snippets, merged into the model's settings
-files. `<copy>` is the scratch folder from `setup-copy.md`; `<skill folder>`
-is the folder that holds this skill's `SKILL.md`.
+Purpose: say which skills and hook commands the setup copy now holds, then
+add the settings snippets, merged into the model's settings files. `<copy>`
+is the scratch folder from `setup-copy.md`, which already holds the skills
+and the hook commands; `<skill folder>` is the folder that holds this
+skill's `SKILL.md`.
 
 ## Contents
 
@@ -16,53 +17,47 @@ is the folder that holds this skill's `SKILL.md`.
 
 ## Skills
 
-Every skill goes in `<copy>/.claude/skills/`, one folder per skill. Claude
-Code reads that folder; Codex reads `.agents/skills`, which becomes a link to
-it (`placing-files.md` in this folder).
+Every skill is already in `<copy>/.claude/skills/`, one folder per skill,
+because `setup-copy.md` copied the folders for the choices. Claude Code reads
+that folder; Codex reads `.agents/skills`, which becomes a link to it
+(`placing-files.md` in this folder).
 
-The folders `.shared-skills`, `.skill-sets`, and `.salesforce` start with a
-dot, so Codex does not load their skills in every folder on this computer.
-`ls` hides them; use `ls -a`. The copied skill folders have normal names.
-
-```text
-mkdir -p <copy>/.claude/skills
-cp -R <skill folder>/assets/.shared-skills/. <copy>/.claude/skills/
-```
+Every folder in `assets/` holds its skills under `.claude/skills/`, a
+folder whose name starts with a dot, so Codex does not load them in every
+folder on this computer. `ls` hides it; use `ls -a`. The copied skill
+folders have normal names.
 
 The shared skills are the same in every project (10): `managing-work-items`,
 `managing-project-wide-records`,
 `handoff`, `braindump`, `explain-simply`, `session-summary`, `pull-latest`,
-`reset-to-remote`, `merge-and-clean-up`, `publish-docs`. They name no
-tracker or memory system. Every work tracking set holds one skill with the
+`reset-to-remote`, `merge-and-clean-up`, `publish-docs`. `every-project`
+holds them. They name no tracker or memory system. Every work tracking folder holds one skill with the
 same name, `tracking-work-items`, and every local or Notion memory project
 gets `managing-project-memory`, so the shared skills name both directly. A
 Hindsight project has no memory skills: they send it to "Project memory" in
 `AGENTS.md`.
 
-Then copy the sets for the choices. With work items and memory both in
-Notion, copy `notion-tools` once.
+The folders for the choices (`setup-copy.md`, "Folders the choices add")
+hold these skills:
 
-| Choice | Copy into `<copy>/.claude/skills/` | Skills |
+| Choice | Folders in `assets/` | Skills |
 | --- | --- | --- |
-| Work items local | `<skill folder>/assets/.skill-sets/local-work/.` | `tracking-work-items` |
-| Work items in Notion | `<skill folder>/assets/.skill-sets/notion-work/.` and `<skill folder>/assets/.skill-sets/notion-tools/.` | `tracking-work-items`, `using-notion-cli` |
-| Work items in GitHub Issues | `<skill folder>/assets/.skill-sets/github-work/.` | `tracking-work-items` |
-| Memory local | `<skill folder>/assets/.skill-sets/memory-process/.` and `<skill folder>/assets/.skill-sets/local-memory/.` | `managing-project-memory`, `storing-project-memory` |
-| Memory in Notion | `<skill folder>/assets/.skill-sets/memory-process/.`, `<skill folder>/assets/.skill-sets/notion-memory/.`, and `<skill folder>/assets/.skill-sets/notion-tools/.` | `managing-project-memory`, `storing-project-memory`, `using-notion-cli` |
+| Work items local | `assets/work-local/` | `tracking-work-items` |
+| Work items in Notion | `assets/work-notion/` and `assets/notion-tools/` | `tracking-work-items`, `using-notion-cli` |
+| Work items in GitHub Issues | `assets/work-github/` | `tracking-work-items` |
+| Memory local | `assets/memory-process/` and `assets/memory-local/` | `managing-project-memory`, `storing-project-memory` |
+| Memory in Notion | `assets/memory-process/`, `assets/memory-notion/`, and `assets/notion-tools/` | `managing-project-memory`, `storing-project-memory`, `using-notion-cli` |
 | Memory in Hindsight | nothing | none: the agent uses the tools of Hindsight's coding-agent add-on (`hindsight-on-vps.md` in this folder) |
-| Salesforce | nothing | none: the model copy already put `sf-component-tracker`, `sf-data-change`, and `sf-deploy-check` there; Salesforce's own skills are installed by the owner (`salesforce.md` in this folder) |
+| Salesforce | `assets/salesforce/` | `sf-component-tracker`, `sf-data-change`, and `sf-deploy-check`; Salesforce's own skills are installed by the owner (`salesforce.md` in this folder) |
 
 ## Hook commands
 
-```text
-mkdir -p <copy>/.claude/hooks
-cp <skill folder>/assets/hooks/*.mjs <copy>/.claude/hooks/
-```
-
-That is three small commands: `session-start.mjs`, `prompt-reminder.mjs`,
-and `codex-after-commit.mjs`. Both hosts run them from `.claude/hooks/`. A
-Salesforce project also keeps the model's two guards there, and the
-model's scripts in `tools/` (the graph Stop hook runs them).
+The three hook commands are in `every-project/.claude/hooks/`, so the setup
+copy has them in `<copy>/.claude/hooks/`: `session-start.mjs`,
+`prompt-reminder.mjs`, and `codex-after-commit.mjs`. Both hosts run them
+from `.claude/hooks/`. A Salesforce project also gets the two guards there
+from the `salesforce` folder, and the scripts in `tools/` (the graph Stop
+hook runs them).
 
 ## Settings snippets
 

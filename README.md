@@ -14,8 +14,10 @@ exception is the workstream panel for Claude Code (your decision of
 - **The model project inside the toolkit** is the source of every project
   file: `AGENTS.md` (the project manual the agent reads), `PROJECT.md`,
   `PROJECT-ROADMAP.md` where local work tracking uses it, the rules,
-  `project-wide-records/`, and the templates. It lives under
-  `plugins/toolkit/skills/project-setup/assets/model/`.
+  `project-wide-records/`, and the templates. It is one folder for what every
+  project gets (`every-project`) and one folder for each choice you make
+  (local or Notion work items, local or Notion memory, Salesforce, `SOUL.md`),
+  all under `plugins/toolkit/skills/project-setup/assets/`.
 - **Skills** are written instructions, one per job. The agent picks one from
   what you say, by reading each skill's short description.
 - **Rules** are instructions the agent always follows, such as "ask before

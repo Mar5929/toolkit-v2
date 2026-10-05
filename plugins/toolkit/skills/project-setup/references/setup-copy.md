@@ -1,16 +1,16 @@
 # Building the setup copy
 
 Purpose: make the project's finished files in a scratch folder first: the
-model project, minus what the owner's choices leave out, with the setup
-markers resolved, the name and "Toolkit settings" filled, and the rules list
-written. `skills-hooks-settings.md` adds to it next, and `placing-files.md`
-puts it into the project.
+folder every project gets, plus the folder for each of the owner's choices,
+with the setup markers resolved, the name and "Toolkit settings" filled, and
+the rules list written. `skills-hooks-settings.md` adds to it next, and
+`placing-files.md` puts it into the project.
 
 ## Contents
 
 - Make the scratch folder
+- Folders the choices add
 - Never copied
-- Left out by the choices
 - Setup markers
 - The project name and "Toolkit settings"
 - Salesforce entries in shared files
@@ -31,14 +31,59 @@ It prints a new folder's path. This file calls it `<copy>`. Write the real
 path into every later command: shell variables do not last from one command
 to the next. Never save the path in a file.
 
-Copy the model into it, hidden files included:
+Copy the folder every project gets into it, hidden files included:
 
 ```text
-cp -R <skill folder>/assets/model/. <copy>/
+cp -R <skill folder>/assets/every-project/. <copy>/
 ```
 
 `<skill folder>` is the folder that holds this skill's `SKILL.md`. Never
-change anything inside `assets/model/`: it is the source for every project.
+change anything inside `assets/`: it is the source for every project.
+
+## Folders the choices add
+
+Each folder in `assets/` holds files at the paths a project has them.
+Copy the folder for each choice on top of `<copy>`, hidden files included:
+
+```text
+cp -R <skill folder>/assets/<folder>/. <copy>/
+```
+
+| Choice | Folders to copy | What a folder holds |
+| --- | --- | --- |
+| Work items local | `work-local` | `work-items/`, `.claude/rules/work-item-folders.md`, `PROJECT-ROADMAP.md`, and the `tracking-work-items` skill. With work items in Notion or GitHub, the project has no `work-items/`, no rule, and no roadmap file: its phases live there instead. |
+| Work items in Notion | `work-notion` and `notion-tools` | the Notion `tracking-work-items` skill and the `using-notion-cli` skill |
+| Work items in GitHub Issues | `work-github` | the GitHub `tracking-work-items` skill |
+| Memory local | `memory-process` and `memory-local` | `memory/` and the skills `managing-project-memory` and `storing-project-memory` |
+| Memory in Notion | `memory-process`, `memory-notion`, and `notion-tools` | the skills `managing-project-memory`, `storing-project-memory`, and `using-notion-cli`; the project has no `memory/` |
+| Memory in Hindsight | one file of `memory-local` (below) | `memory/CURRENT_STATE.md` and nothing else of `memory/` |
+| Salesforce | `salesforce` | the Salesforce list below |
+| SOUL.md kept | `soul` | `SOUL.md` |
+
+With work items and memory both in Notion, copy `notion-tools` once. A
+Hindsight project copies only `CURRENT_STATE.md` from `memory-local`:
+
+```text
+mkdir -p <copy>/memory
+cp <skill folder>/assets/memory-local/memory/CURRENT_STATE.md <copy>/memory/
+```
+
+The Salesforce list (the `salesforce` folder holds all of these):
+
+- `sfdx-project.json`, `.forceignore`
+- `delivery/` and `tools/` (`tools/kb/` and `tools/permissions/`)
+- `.claude/protected-orgs.json`, `.claude/hooks/guard-protected-orgs.cjs`,
+  `.claude/hooks/guard-permission-set-deploy.cjs`
+- every `sf-*` folder in `.claude/skills/`
+- `.codex/hooks.json`, which holds only the two Salesforce guards
+- nine rules in `.claude/rules/`: `check-deployment-contents.md`,
+  `component-tracker.md`, `confirm-salesforce-changes.md`,
+  `dependency-graph.md`, `permissions-source-control.md`,
+  `production-data-changes.md`, `project-file-locations.md`,
+  `record-deployment-steps.md`, `salesforce-org-safety.md`
+
+`.gitignore` keeps its `/work-items/`, `/memory/`, and `.obsidian/` lines in
+every project.
 
 ## Never copied
 
@@ -51,44 +96,9 @@ rm -rf <copy>/.git <copy>/.agents <copy>/.vscode <copy>/.sfdx <copy>/.sf <copy>/
 find <copy> \( -name __pycache__ -o -name .DS_Store -o -name '*.pyc' -o -name '*.log' -o -name '_prev-*.json' \) -prune -exec rm -rf {} +
 ```
 
-The model's `.agents/skills` is a link to its `.claude/skills` folder. It is
-removed here with the rest of `.agents`, and `placing-files.md` in this
+The `.agents/skills` in `every-project/` is a link to its `.claude/skills`
+folder. It is removed here with the rest of `.agents`, and `placing-files.md` in this
 folder makes the project's own link after the copy.
-
-## Left out by the choices
-
-Remove from `<copy>`:
-
-| Choice | Remove |
-| --- | --- |
-| Work items are not local | `work-items/`, `.claude/rules/work-item-folders.md`, and `PROJECT-ROADMAP.md` (the project's phases live in Notion or GitHub instead) |
-| Memory is local | nothing |
-| Memory is Hindsight | every file in `memory/` except `CURRENT_STATE.md`: `find <copy>/memory -mindepth 1 ! -name CURRENT_STATE.md -exec rm -rf {} +` |
-| Memory is Notion | `memory/` |
-| Not a Salesforce project | the Salesforce list below |
-| SOUL.md declined | `SOUL.md` |
-
-The Salesforce list (only a Salesforce project keeps these):
-
-- `sfdx-project.json`, `.forceignore`
-- `delivery/`, `tools/kb/`, `tools/permissions/`, and then `tools/` when
-  nothing is left in it
-- `.claude/protected-orgs.json`, `.claude/hooks/guard-protected-orgs.cjs`,
-  `.claude/hooks/guard-permission-set-deploy.cjs`
-- every `sf-*` folder in `.claude/skills/`
-- `.codex/hooks.json`: in the model it holds only the two Salesforce guards
-- nine rules in `.claude/rules/`: `check-deployment-contents.md`,
-  `component-tracker.md`, `confirm-salesforce-changes.md`,
-  `dependency-graph.md`, `permissions-source-control.md`,
-  `production-data-changes.md`, `project-file-locations.md`,
-  `record-deployment-steps.md`, `salesforce-org-safety.md`
-
-Use your judgment for a file the list does not name: leave it out, and
-name it in the report, when it has no use outside Salesforce, such as a new
-`sf-` skill or a rule whose heading names Salesforce.
-
-`.gitignore` keeps its `/work-items/`, `/memory/`, and `.obsidian/` lines in
-every project.
 
 ## Setup markers
 

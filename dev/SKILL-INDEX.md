@@ -59,16 +59,16 @@ names no skill (the model's `.claude/rules/keep-work-item-current.md`).
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `managing-work-items` | `assets/.shared-skills/managing-work-items/` | Runs a work item from idea to Done through requirements, design, build, testing, reflection, and deployment, keeping its tracker current and asking for the owner's approval at each gate. Use when the owner asks to plan, change, build, test, or ship an item. When a source, question, or target direction affects other items, also use managing-project-wide-records. |
-| `managing-project-wide-records` | `assets/.shared-skills/managing-project-wide-records/` | Connects sources, questions, people, domains, and target direction that affect several work items or the whole project, so a fresh agent can find each authoritative record. Use when evidence, an answer, or a proposed design crosses item boundaries, or when those connections need review. Not for one item alone; use managing-work-items. |
-| `handoff` | `assets/.shared-skills/handoff/` | Updates this session's work items and Current State, offers what is worth keeping to memory, then writes a checked, self-contained prompt for a new session, or checks a pasted one, so nothing is lost when context clears. Use when the owner ends the session or says "write a handoff", "I'm clearing context", "start a new session", or "check this handoff". Not for a recap alone; use session-summary. |
-| `braindump` | `assets/.shared-skills/braindump/` | Plays back a loose brain dump in very simple words and waits for the owner's yes before any work starts, so nothing is planned, built, or saved on a misunderstanding. Use when he wants his brain dump checked first, such as "here's a brain dump", "play that back", "tell me what you heard", or "make sure you understood before you start". Not for a brain dump he asks only to plan; use managing-work-items. |
-| `explain-simply` | `assets/.shared-skills/explain-simply/` | Re-explains the last answer, a plan, or a named document as short plain bullets, keeping every number, name, and path, so the owner can follow it and no fact is lost. Use when he finds an answer too technical or hard to follow, for example "explain it like I'm five", "simpler", "less jargon", or "I don't get it". |
-| `session-summary` | `assets/.shared-skills/session-summary/` | Recaps this chat as a table of the owner's requests, the result of each one, and which still need him, so he sees what is done and what is open. Use when he asks what happened in this chat, for example "recap this chat", "what did I ask for", "what did we do today", or "summarize this session". Not for a handoff; use handoff. |
-| `pull-latest` | `assets/.shared-skills/pull-latest/` | Brings the local repository up to date with its remote by fetching and merging, never rebasing or resetting, so no local work or shared history is lost. Use when the owner says "get the latest", "pull the latest changes", "sync with remote", or "update from origin". Not for throwing away local work; use reset-to-remote. Not for a toolkit update; use project-setup. |
-| `reset-to-remote` | `assets/.shared-skills/reset-to-remote/` | Makes the local repository an exact copy of its remote, discarding local commits and branches the remote no longer has, after showing a plan, so cloning again is not needed and nothing is lost without warning. Use only when the owner asks for it in his own words, for example "wipe local", "match remote exactly", or "fresh start from remote". Not for a routine update; use pull-latest. |
-| `merge-and-clean-up` | `assets/.shared-skills/merge-and-clean-up/` | Merges one approved GitHub pull request, then removes only its branches and worktree, after its checks and the merge-safety check pass, so nothing unchecked is merged and no other session's work is removed. Use when managing-work-items asks, or the owner names a pull request: "merge PR 12", "merge and clean up", "land this pull request". Not for shipping an approved work item; use managing-work-items. |
-| `publish-docs` | `assets/.shared-skills/publish-docs/` | Commits project document edits (requirements/, system guide, project-wide records, PROJECT-ROADMAP.md, PROJECT.md, READMEs) to the default branch, so it needs no pull request and touches no other session. Use when the owner asked for or approved a document edit, or says "publish the docs" or "save the docs to main". Not for a work item's requirements, or for code, rules, or skills; use managing-work-items. |
+| `managing-work-items` | `assets/every-project/.claude/skills/managing-work-items/` | Runs a work item from idea to Done through requirements, design, build, testing, reflection, and deployment, keeping its tracker current and asking for the owner's approval at each gate. Use when the owner asks to plan, change, build, test, or ship an item. When a source, question, or target direction affects other items, also use managing-project-wide-records. |
+| `managing-project-wide-records` | `assets/every-project/.claude/skills/managing-project-wide-records/` | Connects sources, questions, people, domains, and target direction that affect several work items or the whole project, so a fresh agent can find each authoritative record. Use when evidence, an answer, or a proposed design crosses item boundaries, or when those connections need review. Not for one item alone; use managing-work-items. |
+| `handoff` | `assets/every-project/.claude/skills/handoff/` | Updates this session's work items and Current State, offers what is worth keeping to memory, then writes a checked, self-contained prompt for a new session, or checks a pasted one, so nothing is lost when context clears. Use when the owner ends the session or says "write a handoff", "I'm clearing context", "start a new session", or "check this handoff". Not for a recap alone; use session-summary. |
+| `braindump` | `assets/every-project/.claude/skills/braindump/` | Plays back a loose brain dump in very simple words and waits for the owner's yes before any work starts, so nothing is planned, built, or saved on a misunderstanding. Use when he wants his brain dump checked first, such as "here's a brain dump", "play that back", "tell me what you heard", or "make sure you understood before you start". Not for a brain dump he asks only to plan; use managing-work-items. |
+| `explain-simply` | `assets/every-project/.claude/skills/explain-simply/` | Re-explains the last answer, a plan, or a named document as short plain bullets, keeping every number, name, and path, so the owner can follow it and no fact is lost. Use when he finds an answer too technical or hard to follow, for example "explain it like I'm five", "simpler", "less jargon", or "I don't get it". |
+| `session-summary` | `assets/every-project/.claude/skills/session-summary/` | Recaps this chat as a table of the owner's requests, the result of each one, and which still need him, so he sees what is done and what is open. Use when he asks what happened in this chat, for example "recap this chat", "what did I ask for", "what did we do today", or "summarize this session". Not for a handoff; use handoff. |
+| `pull-latest` | `assets/every-project/.claude/skills/pull-latest/` | Brings the local repository up to date with its remote by fetching and merging, never rebasing or resetting, so no local work or shared history is lost. Use when the owner says "get the latest", "pull the latest changes", "sync with remote", or "update from origin". Not for throwing away local work; use reset-to-remote. Not for a toolkit update; use project-setup. |
+| `reset-to-remote` | `assets/every-project/.claude/skills/reset-to-remote/` | Makes the local repository an exact copy of its remote, discarding local commits and branches the remote no longer has, after showing a plan, so cloning again is not needed and nothing is lost without warning. Use only when the owner asks for it in his own words, for example "wipe local", "match remote exactly", or "fresh start from remote". Not for a routine update; use pull-latest. |
+| `merge-and-clean-up` | `assets/every-project/.claude/skills/merge-and-clean-up/` | Merges one approved GitHub pull request, then removes only its branches and worktree, after its checks and the merge-safety check pass, so nothing unchecked is merged and no other session's work is removed. Use when managing-work-items asks, or the owner names a pull request: "merge PR 12", "merge and clean up", "land this pull request". Not for shipping an approved work item; use managing-work-items. |
+| `publish-docs` | `assets/every-project/.claude/skills/publish-docs/` | Commits project document edits (requirements/, system guide, project-wide records, PROJECT-ROADMAP.md, PROJECT.md, READMEs) to the default branch, so it needs no pull request and touches no other session. Use when the owner asked for or approved a document edit, or says "publish the docs" or "save the docs to main". Not for a work item's requirements, or for code, rules, or skills; use managing-work-items. |
 
 ## 3. Work tracking sets (one per project)
 
@@ -77,13 +77,13 @@ description ends "Only for projects that track work ...". A project holds
 one set, so no two sets claim the same request. `check-skills.mjs` matches
 these rows by folder.
 
-### 3.1 Local folders and Obsidian (`assets/.skill-sets/local-work/`)
+### 3.1 Local folders and Obsidian (`assets/work-local/`)
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `tracking-work-items` | `assets/.skill-sets/local-work/tracking-work-items/` | Saves, finds, and changes work items as local files in the work-items folder, so managing-work-items reads and writes every item the same way. Use when an item must be read, created, saved, searched, nested, moved, or given a source file, such as "show me WI-031" or "put WI-007 under WI-003". Not for deciding States or approvals; use managing-work-items. Only for projects that track work locally. |
+| `tracking-work-items` | `assets/work-local/.claude/skills/tracking-work-items/` | Saves, finds, and changes work items as local files in the work-items folder, so managing-work-items reads and writes every item the same way. Use when an item must be read, created, saved, searched, nested, moved, or given a source file, such as "show me WI-031" or "put WI-007 under WI-003". Not for deciding States or approvals; use managing-work-items. Only for projects that track work locally. |
 
-### 3.2 Notion (`assets/.skill-sets/notion-work/`)
+### 3.2 Notion (`assets/work-notion/`)
 
 Moved on 2026-10-01 from `notion-work-track`, which the Notion session built
 and tested (commit `82aaaa6`). Its setup steps and the Notion page texts are
@@ -92,13 +92,13 @@ in project-setup's `references/notion-build/` (`work-setup.md`,
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `tracking-work-items` | `assets/.skill-sets/notion-work/tracking-work-items/` | Stores and finds work items in the project's Notion databases for managing-work-items, so every read and save lands in the right property or page section. Use when looking up or saving a work item, phase, task, question, comment, or file, such as "show me WI-31" or "add a task to phase 2". Only for projects that track work in Notion. |
+| `tracking-work-items` | `assets/work-notion/.claude/skills/tracking-work-items/` | Stores and finds work items in the project's Notion databases for managing-work-items, so every read and save lands in the right property or page section. Use when looking up or saving a work item, phase, task, question, comment, or file, such as "show me WI-31" or "add a task to phase 2". Only for projects that track work in Notion. |
 
-### 3.3 GitHub Issues (`assets/.skill-sets/github-work/`)
+### 3.3 GitHub Issues (`assets/work-github/`)
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `tracking-work-items` | `assets/.skill-sets/github-work/tracking-work-items/` | Saves, finds, and changes work items as GitHub issues, so managing-work-items reads and writes every item the same way. Use when an item must be read, created, saved, or searched, such as "show me #12" or "what is waiting on me". Not for deciding States or approvals; use managing-work-items. Only for projects that track work in GitHub Issues. |
+| `tracking-work-items` | `assets/work-github/.claude/skills/tracking-work-items/` | Saves, finds, and changes work items as GitHub issues, so managing-work-items reads and writes every item the same way. Use when an item must be read, created, saved, or searched, such as "show me #12" or "what is waiting on me". Not for deciding States or approvals; use managing-work-items. Only for projects that track work in GitHub Issues. |
 
 ### 3.4 Jira
 
@@ -113,19 +113,19 @@ a storage tool; and its own version of `storing-project-memory`, storage
 only. Memory is kept by concept, like a wiki: one record per concept, not
 one per fact. `check-skills.mjs` matches these rows by folder.
 
-### 4.1 The process (`assets/.skill-sets/memory-process/`)
+### 4.1 The process (`assets/memory-process/`)
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `managing-project-memory` | `assets/.skill-sets/memory-process/managing-project-memory/` | Keeps project memory true and small: saves facts, lessons, decisions, glossary terms, and Current State; corrects, retires, or deletes what is wrong; writes "from now on" instructions to the project rules; finds what was recorded before; tidies all memory. Use whenever the owner says "remember this", "forget that", "from now on", "what did we decide", or "clean up memory", or a hook says to review memory, even if he does not name this skill. Not for a handoff; use handoff. |
+| `managing-project-memory` | `assets/memory-process/.claude/skills/managing-project-memory/` | Keeps project memory true and small: saves facts, lessons, decisions, glossary terms, and Current State; corrects, retires, or deletes what is wrong; writes "from now on" instructions to the project rules; finds what was recorded before; tidies all memory. Use whenever the owner says "remember this", "forget that", "from now on", "what did we decide", or "clean up memory", or a hook says to review memory, even if he does not name this skill. Not for a handoff; use handoff. |
 
-### 4.2 Local files and Obsidian (`assets/.skill-sets/local-memory/`)
+### 4.2 Local files and Obsidian (`assets/memory-local/`)
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `storing-project-memory` | `assets/.skill-sets/local-memory/storing-project-memory/` | Saves, finds, and changes project memory as Markdown files in the memory folder, so managing-project-memory reads and writes every memory the same way. Use when a memory must be read, saved, searched, renamed, retired, or deleted, such as "which memory files link to WI-031". Not for deciding what to keep or when to ask; use managing-project-memory. Only for projects with local memory. |
+| `storing-project-memory` | `assets/memory-local/.claude/skills/storing-project-memory/` | Saves, finds, and changes project memory as Markdown files in the memory folder, so managing-project-memory reads and writes every memory the same way. Use when a memory must be read, saved, searched, renamed, retired, or deleted, such as "which memory files link to WI-031". Not for deciding what to keep or when to ask; use managing-project-memory. Only for projects with local memory. |
 
-### 4.3 Notion in Lore's layout (`assets/.skill-sets/notion-memory/`)
+### 4.3 Notion in Lore's layout (`assets/memory-notion/`)
 
 Lore's database definitions are in its `assets/schema/`, and their columns,
 views, and page layout in `references/database-layout.md` and
@@ -134,7 +134,7 @@ views, and page layout in `references/database-layout.md` and
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `storing-project-memory` | `assets/.skill-sets/notion-memory/storing-project-memory/` | Stores and finds this project's memory in Notion, in Lore's five databases and the Current state page, for managing-project-memory, so every memory lands in the right column and page section. Use when a memory or the Current state must be read, saved, changed, searched, linked to a work item, merged, or deleted, or when the glossary is edited. Not for deciding what to keep or when to ask; use managing-project-memory. Only for projects with Notion memory. |
+| `storing-project-memory` | `assets/memory-notion/.claude/skills/storing-project-memory/` | Stores and finds this project's memory in Notion, in Lore's five databases and the Current state page, for managing-project-memory, so every memory lands in the right column and page section. Use when a memory or the Current state must be read, saved, changed, searched, linked to a work item, merged, or deleted, or when the glossary is edited. Not for deciding what to keep or when to ask; use managing-project-memory. Only for projects with Notion memory. |
 
 ### 4.4 Hindsight
 
@@ -144,7 +144,7 @@ project's bank on Mike's VPS; the agent uses the add-on's `hindsight_*`
 tools and keeps Current State in the local file `memory/CURRENT_STATE.md`.
 The model's memory rule says how.
 
-## 5. Notion's command-line tool (`assets/.skill-sets/notion-tools/`)
+## 5. Notion's command-line tool (`assets/notion-tools/`)
 
 Every project with work items or memory in Notion gets it, once. Both Notion
 storage skills (`tracking-work-items` and `storing-project-memory`) send
@@ -153,7 +153,7 @@ once.
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `using-notion-cli` | `assets/.skill-sets/notion-tools/using-notion-cli/` | Shows how to run ntn, Notion's command-line tool, for the Notion storage skills: sign-in, Codex permissions, the calls every Notion step uses, and fixes for failed calls, so reads and saves in Notion work the first time. Use before any Notion read or write, when ntn will not sign in or cannot find a page, in Codex, and whenever a Notion call fails. tracking-work-items and storing-project-memory use it for every call. Only for projects that keep work or memory in Notion. |
+| `using-notion-cli` | `assets/notion-tools/.claude/skills/using-notion-cli/` | Shows how to run ntn, Notion's command-line tool, for the Notion storage skills: sign-in, Codex permissions, the calls every Notion step uses, and fixes for failed calls, so reads and saves in Notion work the first time. Use before any Notion read or write, when ntn will not sign in or cannot find a page, in Codex, and whenever a Notion call fails. tracking-work-items and storing-project-memory use it for every call. Only for projects that keep work or memory in Notion. |
 
 ## 6. Salesforce projects (3)
 
@@ -162,15 +162,15 @@ Salesforce's own skills (`forcedotcom/sf-skills`, installed with
 Toolkit V2 ships no Salesforce architect skill (Mike, 2026-10-02); setup only
 checks that Salesforce's skills are installed and gives him the command. The
 three skills below are the model's own project skills: they arrive with the
-model copy, and a change to them is a model change that needs Mike's yes. The
-model's `.agents/skills` is a link to `.claude/skills`; onboarding removes it
-from the setup copy and makes the project's own link.
+`salesforce` folder, and a change to them is a model change that needs Mike's
+yes. The `.agents/skills` link in `every-project/` points to `.claude/skills`;
+onboarding removes it from the setup copy and makes the project's own link.
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `sf-deploy-check` | `assets/model/.claude/skills/sf-deploy-check/` | Finds components or edits that a Salesforce deploy would ship beyond the intended change, so no unfinished or unintended work reaches a shared org. Use when a deploy to a shared org (UAT, full copy, staging, or production) is about to run, or before the owner gets a deploy command. Not for testing whether a work item is ready, or for running the deploy; use managing-work-items. |
-| `sf-component-tracker` | `assets/model/.claude/skills/sf-component-tracker/` | Keeps the component tracker CSV, the master and per-work-item package.xml files, destructiveChanges.xml, and manual steps in sync, so no changed component is left out of a deploy. Use when Salesforce metadata under force-app/ is added, changed, renamed, or deleted (open it before building and update the records in the same response), a deploy result comes back, or a deploy needs manual steps. |
-| `sf-data-change` | `assets/model/.claude/skills/sf-data-change/` | Builds the owner's handoff for a Salesforce production data change: load file, backup, numbered steps, success check, and undo steps, so no agent writes production data and every change can be undone. Use when the owner asks to load, import, update, or delete production records, even inside a build, for example "load this file into production". |
+| `sf-deploy-check` | `assets/salesforce/.claude/skills/sf-deploy-check/` | Finds components or edits that a Salesforce deploy would ship beyond the intended change, so no unfinished or unintended work reaches a shared org. Use when a deploy to a shared org (UAT, full copy, staging, or production) is about to run, or before the owner gets a deploy command. Not for testing whether a work item is ready, or for running the deploy; use managing-work-items. |
+| `sf-component-tracker` | `assets/salesforce/.claude/skills/sf-component-tracker/` | Keeps the component tracker CSV, the master and per-work-item package.xml files, destructiveChanges.xml, and manual steps in sync, so no changed component is left out of a deploy. Use when Salesforce metadata under force-app/ is added, changed, renamed, or deleted (open it before building and update the records in the same response), a deploy result comes back, or a deploy needs manual steps. |
+| `sf-data-change` | `assets/salesforce/.claude/skills/sf-data-change/` | Builds the owner's handoff for a Salesforce production data change: load file, backup, numbered steps, success check, and undo steps, so no agent writes production data and every change can be undone. Use when the owner asks to load, import, update, or delete production records, even inside a build, for example "load this file into production". |
 
 ## 7. Helper briefs
 
@@ -201,11 +201,11 @@ first line names it. Edit the source, then copy it over every copy
 | --- | --- |
 | `helper-briefs/handoff-verifier.md` | `handoff` |
 
-Some skill templates are copies of the model's files. They are refreshed with
-the model copy (`AGENTS.md`, "Refresh the model copy"), and `check-skills.mjs`
-fails when one differs from the model:
+Some skill templates are copies of project files. They are changed together
+with the project file (`AGENTS.md`, "The model project and its copy"), and
+`check-skills.mjs` fails when one differs from it:
 
-| Skill file | Model file |
+| Skill file | Project file (the path a project has) |
 | --- | --- |
 | `managing-work-items`: `assets/work-item-template.md` | `work-items/work-item-template/WORK-ITEM.md` |
 | `managing-work-items`: `assets/design-template.md` | `work-items/work-item-template/DESIGN.md` |

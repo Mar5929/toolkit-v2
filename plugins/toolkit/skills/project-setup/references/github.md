@@ -3,7 +3,7 @@
 Purpose: the GitHub steps setup runs when work items live in GitHub Issues,
 for a new project and for bringing a project up to date. `gh-commands.md`,
 `labels.md`, and `searching.md` are in the GitHub `tracking-work-items`
-skill, `assets/.skill-sets/github-work/tracking-work-items/references/` in
+skill, `assets/work-github/.claude/skills/tracking-work-items/references/` in
 this skill.
 
 ## Contents

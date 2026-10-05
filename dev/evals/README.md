@@ -9,7 +9,7 @@ Six prompts, three for each skill, in skill-creator's format (`evals.json`, with
 ## Running an eval
 
 1. Copy `fixtures/pocket-ledger/` to a scratch folder. Make a fresh copy for every run, because the runs change the items.
-2. Copy the model's `work-items/work-item-template/` (from `plugins/toolkit/skills/project-setup/assets/model/`) into the copy's `work-items/`. The template is not stored here, so it cannot drift from the model.
+2. Copy the model's `work-items/work-item-template/` (from `plugins/toolkit/skills/project-setup/assets/work-local/`) into the copy's `work-items/`. The template is not stored here, so it cannot drift from the model.
 3. `git init` the copy and add `work-items/` and `memory/` to its `.gitignore`, as the model does. Install `managing-work-items` and the local version of `tracking-work-items` into its `.claude/skills/`.
 4. Run the prompt in that folder. Today's date is the date to expect in saved answers.
 

@@ -121,8 +121,8 @@ After the answers, say in a few lines what will happen, and wait for his
 yes. Start with his answers in one short line: the name and the owner,
 where work items live (with the ID prefix for local folders; with Notion it
 is asked later), where memory lives, Salesforce (and the org aliases), and
-`SOUL.md`. Say that you will copy the model project's files for his choices
-into this folder, add the skills and the 3 small hook commands (give the
+`SOUL.md`. Say that you will copy the toolkit's files for his choices
+into this folder, with the skills and the 3 small hook commands (give the
 skill count), and turn the older claude-toolkit plugins off for this
 project only. Name every thing that will be created outside the project
 folder:

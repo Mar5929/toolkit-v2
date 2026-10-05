@@ -5,9 +5,9 @@ memory up to the current layout, and building the memory part of a
 template. `database-layout.md`, `views-and-layout.md`,
 `current-state-page.md`, and the `assets/` files are in the Notion
 `storing-project-memory` skill,
-`assets/.skill-sets/notion-memory/storing-project-memory/` in this skill.
+`assets/memory-notion/.claude/skills/storing-project-memory/` in this skill.
 `ntn-commands.md` is in the `using-notion-cli` skill,
-`assets/.skill-sets/notion-tools/using-notion-cli/references/` in this skill;
+`assets/notion-tools/.claude/skills/using-notion-cli/references/` in this skill;
 running `ntn` in Codex is in that skill's `SKILL.md`. The other files named
 here are in this folder.
 

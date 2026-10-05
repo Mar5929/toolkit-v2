@@ -15,8 +15,8 @@ the routing test runs again in both hosts (`AGENTS.md`, "Skills").
 - Every description in `dev/SKILL-INDEX.md` and in each `SKILL.md`: all the
   skills `project-setup` ships, the model's Salesforce skills, and
   `project-setup` itself.
-- The routing lines in the model's `AGENTS.md` (the model copy in
-  `plugins/toolkit/skills/project-setup/assets/model/AGENTS.md`). They are
+- The routing lines in the model's `AGENTS.md` (the copy in
+  `plugins/toolkit/skills/project-setup/assets/every-project/AGENTS.md`). They are
   Mike's text: a change there is a question for him.
 - The machine-wide skills on Mike's Mac that compete (`dev/SKILL-INDEX.md`
   section 8).

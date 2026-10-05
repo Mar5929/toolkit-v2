@@ -5,9 +5,9 @@ adding work items or memory to a Notion project later, the one-time build
 of the template, bringing an older project up to the current template, and
 rebuilding a damaged template. `database-layout.md` and the
 `assets/schema/` files are in the Notion `tracking-work-items` skill,
-`assets/.skill-sets/notion-work/tracking-work-items/` in this skill.
+`assets/work-notion/.claude/skills/tracking-work-items/` in this skill.
 `ntn-commands.md` is in the `using-notion-cli` skill,
-`assets/.skill-sets/notion-tools/using-notion-cli/references/` in this skill;
+`assets/notion-tools/.claude/skills/using-notion-cli/references/` in this skill;
 running `ntn` in Codex is in that skill's `SKILL.md`. The other files named
 here are in this folder.
 

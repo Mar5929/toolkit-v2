@@ -1,7 +1,7 @@
 {
   "claudeMdExcludes": [
-    "**/plugins/toolkit/skills/project-setup/assets/model/**",
-    "**/plugins/toolkit/skills/project-setup/assets/model/.claude/rules/**",
-    "**/plugins/toolkit/skills/project-setup/assets/model/memory/**"
+    "**/plugins/toolkit/skills/project-setup/assets/**",
+    "**/plugins/toolkit/skills/project-setup/assets/*/.claude/rules/**",
+    "**/plugins/toolkit/skills/project-setup/assets/memory-local/memory/**"
   ]
 }
