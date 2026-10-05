@@ -10,9 +10,11 @@ place by its text.
 
 ## Waits for the owner: do not change these
 
-- `session-handoff.md` (his wording): review 1, finding 6.
-- The "Memory approval" line in `PROJECT.md`: review 1 finding 7, review 3
-  finding 12. Leave the line and every count of "11 lines" as they are.
+- No longer waiting: the owner approved both of these on 2026-10-05, and
+  the third fix pass made the change (`dev/test-runs/fix-pass-3.md`).
+  - `session-handoff.md` (his wording): review 1, finding 6.
+  - The "Memory approval" line in `PROJECT.md`: review 1 finding 7, review 3
+    finding 12. The line is removed, and each count of "11 lines" is 10.
 - What Notion memory stores, and when its pointers are read: review 2,
   findings 15 and 17.
 - Figurative words in the owner's older, unchanged files: review 1 finding

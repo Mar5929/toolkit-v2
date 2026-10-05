@@ -86,4 +86,46 @@ starter root file is 19,879 bytes and no description became vaguer.
 
 ## Status of the fixes
 
-Open.
+Set on 2026-10-05, after the third fix pass. The commands and their output
+are in `dev/test-runs/fix-pass-3.md`. No separate agent has read these
+fixes yet.
+
+- Blocker 1: closed. `FPR/SKILL.md`, "Every time": a session whose folder
+  is not the main checkout reads and writes `DECISIONS.md`, `sources/`,
+  and `system/` only in the save worktree that `publish-docs` makes from
+  the default branch. `PD`, "Carrying an edit across", copies a file only
+  when the session's checkout started from the version the save worktree
+  has. Reproduced with a bare remote: no finding after the edit, at stop,
+  or before the commit; the published `DECISIONS.md` holds both decisions;
+  a missing ID is still reported.
+- Should fix 2: closed. `FPR/SKILL.md`, "Every time": with local work
+  items, when the main checkout does not hold the save, no pointer is
+  written, and one line for "Waiting on the owner" in Current State goes to
+  `curating-project-memory`, which writes it through `using-memory-store`
+  (Hindsight memory: `.claude/rules/hindsight-memory.md`). The line is
+  removed when the pointers are written. `closing.md` points to it.
+- Should fix 3: closed. `finishing.md` reports what the command prints and
+  the reason `placing-files.md`, section 5, gives.
+- Note 4: closed. `PD`, "The main checkout", says when the main checkout
+  holds a save made with no remote.
+- Note 5: closed. `closing.md` has the condition as its own step 4, before
+  the two steps that write an ID into the item.
+- Note 6: closed. Both files say the wait and the stop apply with local
+  work items; with Notion or GitHub the pointer is written once the save is
+  on the default branch.
+- Note 7: closed. "always" and "never" keep a sentence that ends in "?".
+  The hook is 65 lines. Tested in `dev/tests/hooks.test.mjs`.
+- Note 8: closed. The findings of the session's own checkout are reported,
+  then one line: "The record check did not run in the main checkout. Its
+  own error: ...". The script is 279 lines. Tested in
+  `dev/tests/validate-records-cases.test.mjs`.
+- Note 9: stays, by instruction. The script is not changed. Both limits
+  are in `CHECKS-SPEC.md`, "Known limits of this version".
+- Note 10: closed. The line is in `DESIGN-SPEC.md`, section 9, for the
+  owner to confirm.
+- Note 11: closed. `PD` and `FPR/SKILL.md` say "blocks the update".
+- Note 12: closed. `CHECKS-SPEC.md` names both Git commands, says "check
+  the setup" only reports the setting, and names a hook of the project's
+  own.
+- Note 13: closed. The last row of the table in `placing-files.md`, section
+  5, names a hooks folder that does not exist.

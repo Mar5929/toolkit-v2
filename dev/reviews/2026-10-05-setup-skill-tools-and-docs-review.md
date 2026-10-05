@@ -164,8 +164,10 @@ Set on 2026-10-05, after the second fix pass
   `old-toolkit-pieces.md` now name `one-home-layout.md`), 23 (the three
   starter files say "what was observed, in which environment, and on which
   date"), and 28 (this section, in all five review files).
-- Waits for the owner: 12 (the "Memory approval" line and every count of
-  "11 lines").
+- Closed in the third fix pass (`dev/test-runs/fix-pass-3.md`), after the
+  owner approved it on 2026-10-05: 12. The "Memory approval" line is
+  removed, each count of the settings lines is 10, and "update the
+  toolkit" deletes the line from an existing project.
 - Open: 19. The version fields and `dev/PROGRESS.md` change in the last
   build step of the branch.
 - Open: 30. The rule "Challenge the current design" (Mike, 2026-10-04) is

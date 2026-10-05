@@ -86,7 +86,7 @@ chat handling each one, and each chat's state. It uses no Notion. See
 | `dev/tools/rule-lint.mjs` | The checks `check-rules.mjs` runs, and the rules list that the `AGENTS.md` of a project set up before the one-home layout holds. Dev only: nothing under `plugins/` imports it. |
 | `dev/tests/hooks.test.mjs` | Tests the first three hook commands and the settings snippets in scratch folders, and the size limit of every hook command. |
 | `dev/tests/validate-records.test.mjs` | Tests `validate-records.mjs`: a new project gives no finding, each of the 15 checks reports a broken record, and a real `git commit` is stopped through `.githooks/pre-commit`. It is at its size limit. |
-| `dev/tests/validate-records-cases.test.mjs` | More tests for `validate-records.mjs`, from the second review: a record saved to the default branch and then named in a work item, with a remote and from a worktree; a work item that still holds the template's prompts; text in backticks; a source kept outside Git; an edit in another repository; a closed output; an unreadable record; and the first line of the findings in each mode. New cases go here. |
+| `dev/tests/validate-records-cases.test.mjs` | More tests for `validate-records.mjs`, from the second review: a record saved to the default branch and then named in a work item, with a remote and from a worktree; a work item that still holds the template's prompts; text in backticks; a source kept outside Git; an edit in another repository; a closed output; an unreadable record; and the first line of the findings in each mode. From the review of those fixes: a record written in a save worktree by a session that works in its own worktree, and an unreadable record in the main checkout. New cases go here. |
 | `dev/tests/org-guard.test.mjs` | Tests the Salesforce org guard, `guard-protected-orgs.cjs`, with the `salesforce` folder's `protected-orgs.json`, in a scratch folder with a stand-in `sf`. No org is reached. |
 | `dev/tests/permission-set-guard.test.mjs` | Tests the second Salesforce guard, `guard-permission-set-deploy.cjs`, in a scratch folder. No org is reached. |
 | `.claude/settings.json` | Settings for sessions working on this repository. `claudeMdExcludes` stops the `CLAUDE.md`, `AGENTS.md` files, and rules in every folder of `<setup>assets/` from loading as instructions here: they are for projects, not for this repository. `skillOverrides` sets each of the 17 project skill names to `"off"`, so a session that reads a file under `<setup>assets/` does not get the project skills. It matches by name, so add a new project skill's name there: `check-skills.mjs` fails when the list and the project skill names differ. It does not touch the `toolkit` plugin's own skills. Both settings were tested in a session started in a worktree on 2026-10-05: `dev/test-runs/fix-pass-setup-and-tools.md`. |
@@ -142,7 +142,7 @@ add", is the only table of choices and folders; a new folder under
   `salesforce-delivery.md`, `work-items/AGENTS.md`, `memory/AGENTS.md`).
 - No file under `<setup>assets/` holds a setup marker (`<!-- if ... -->`,
   `<!-- endif -->`): `check-skills.mjs` fails on one. Setup fills only
-  blanks: the project name, the prompts the owner answers, and the 11 lines
+  blanks: the project name, the prompts the owner answers, and the 10 lines
   of "Toolkit settings" in `PROJECT.md`, which are the same lines in every
   project (a line for a choice the owner did not make holds `not used`).
   The settings files (`.claude/settings.json`, `.codex/hooks.json`,
@@ -261,10 +261,10 @@ node --test 'dev/tests/*.test.mjs'
     (`dev/tests/validate-records.test.mjs`), and he accepted that size on
     2026-10-05. A test fails when the command is over 280 lines, and the
     command never goes over that. Tell him the size again before it grows.
-    The fixes after the second review (2026-10-05) kept the command at 279
-    lines. Their tests are in a second file,
-    `dev/tests/validate-records-cases.test.mjs` (189 lines), so the first
-    test file stays at 279: tell him about those 189 lines of tests.
+    The fixes after the second review and after the review of those fixes
+    (2026-10-05) kept the command at 279 lines. Their tests are in a second
+    file, `dev/tests/validate-records-cases.test.mjs` (242 lines), so the
+    first test file stays at 279: tell him about those 242 lines of tests.
   - With it comes `.githooks/pre-commit`, a 6-line shell file every project
     gets (his yes with the same size, 2026-10-05). It runs the fourth
     command before a commit and stops the commit only on a finding. Git

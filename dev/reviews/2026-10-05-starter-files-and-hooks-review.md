@@ -240,4 +240,8 @@ Set on 2026-10-05, after the second fix pass
     `codex-after-commit.mjs`.
   - 25: closed, except the date form and the rule size, which wait for the
     owner.
-- Waits for the owner: 6, 7, 17, and 20.
+- Closed in the third fix pass (`dev/test-runs/fix-pass-3.md`), after the
+  owner approved both on 2026-10-05: 6 (`session-handoff.md` holds three
+  lines he approved) and 7 (the "Memory approval" line is removed, and
+  "Toolkit settings" has 10 lines).
+- Waits for the owner: 17 and 20.

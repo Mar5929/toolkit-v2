@@ -12,8 +12,9 @@ never go over without the owner's yes.
 
 One file, `validate-records.mjs`, beside the other hook commands in
 `every-project/.claude/hooks/`. Node 20 or newer, ES modules, no
-dependencies. It only reads. It runs no program except `git`, and only to
-list staged files.
+dependencies. It only reads. It runs no program except `git`:
+`git rev-parse`, to find the repository and its main checkout, and
+`git diff --cached`, to list staged files.
 
 ## When it runs
 
@@ -43,6 +44,12 @@ Which records it reads:
   may not (second review, blocker 1).
 - After an edit of a file that is outside the session's repository and its
   main checkout, it checks nothing and exits 0.
+- In a session that works in its own worktree, when the check of the main
+  checkout fails on its own error, such as a record there that cannot be
+  read, the findings for the session's own checkout are still reported.
+  After them comes one line: "The record check did not run in the main
+  checkout. Its own error: ...". With no such finding, that line is the
+  only output and the exit code is 0 (review of the second fixes, note 8).
 
 ## What it must never do
 
@@ -120,6 +127,15 @@ note 24):
   when `system/` has no such rule.
 - A prompt after one unpaired backtick on the same line is not seen.
 
+Two more, from the review of the second round of fixes (note 9):
+
+- After a Codex patch that names files in more than one repository, the
+  first file whose folder exists decides which repository is checked. The
+  files in the other repository are not checked.
+- A session started in a folder that is in no Git repository, such as a
+  parent folder of several projects, gets no check after an edit of a file
+  in a Git project below it, and its stop checks only the session's folder.
+
 ## Not checked in this version
 
 The other 29 checks in audit 1, section 6 (for example the form of Current
@@ -130,9 +146,10 @@ items kept in Notion or GitHub cannot be read by the script.
 
 - The six settings snippets get the new entries, so a Codex project asks the
   owner to trust its hooks again.
-- `project-setup` sets `core.hooksPath` at onboarding, in "check the setup",
-  and in "update the toolkit". When a project already has another hooks
-  folder set, it tells the owner and changes nothing.
+- `project-setup` sets `core.hooksPath` at onboarding, in "update the
+  toolkit", and in a move-over. "Check the setup" only reports the setting.
+  When a project already has another hooks folder set, or any hook of its
+  own in its Git hooks folder, it tells the owner and changes nothing.
 - The repository `AGENTS.md` "Code limit" rule names the fourth command, the
   owner's yes, and its size.
 - A sentence in a rule, guide, or skill that only states a fact one of the

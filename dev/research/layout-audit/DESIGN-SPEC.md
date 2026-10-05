@@ -298,7 +298,7 @@ complete in one file that reads the same in every project.
   - After a save that was pushed to a remote, `publish-docs` moves the
     main checkout's default branch forward to it (a fast-forward only,
     after its merge-safety check). When it cannot, it says so and names
-    the files in the way.
+    what blocks the update.
   - A pointer to a new record is written into a work item only after the
     main checkout holds the save. In a session that works in its own
     worktree, the record check looks up an ID written in a work item in
@@ -320,3 +320,43 @@ complete in one file that reads the same in every project.
   - In Claude Code the record check runs after the tools `Edit` and
     `Write`. `MultiEdit` was taken out of the matcher: the captured hooks
     page does not name such a tool.
+  - In `sources/README.md`, the "Where kept" cell of an original kept in
+    the repository is a Markdown link to its file or folder, and the cell
+    of an original kept outside Git holds no Markdown link
+    (`sources/AGENTS.md`, "The form of a row in the list"). The record
+    check takes a row as kept in the repository only when the cell holds a
+    Markdown link. This is a rule for the form of a record that the second
+    fix pass added.
+- From the third fix pass (2026-10-05), also for the owner to confirm
+  (`dev/reviews/2026-10-05-second-fixes-review.md`):
+  - A session whose folder is not the main checkout reads and writes
+    `DECISIONS.md`, `sources/`, and `system/` only in the save worktree
+    that `publish-docs` makes from the default branch, never in its own
+    worktree (`filing-project-records`, "Every time").
+  - `publish-docs` copies a file a session already edited into the save
+    worktree only when the session's checkout started from the version the
+    save worktree has. Otherwise the same change is made by hand in the
+    save worktree's file. No review asked for this check: it stops a copy
+    from removing what the default branch gained.
+  - With local work items, when the main checkout does not hold a save,
+    the pointer that is owed is recorded as one line under "Waiting on the
+    owner" in Current State: the ID, the work items that need the pointer,
+    and what blocks the update. The line is removed when the pointers are
+    written.
+  - The wait for the main checkout applies only with local work items.
+    With work items in Notion or GitHub, a pointer is written once the
+    save is on the default branch.
+  - In the prompt reminder, a sentence that ends in "?" and holds "always"
+    or "never" is kept, so "Always ask before you merge, ok?" gets the
+    keep hint. This adds two words to item 9 above.
+  - The record check is still 279 lines. The second test file,
+    `dev/tests/validate-records-cases.test.mjs`, is now 242 lines (two
+    tests added): the owner has not been told about those lines yet.
+- Decided by the owner on 2026-10-05, and done in the third fix pass:
+  - The "Memory approval" line is removed from "Toolkit settings" in
+    `PROJECT.md`, on the owner's word: no skill, rule, or hook read it.
+    The section has 10 lines, and "update the toolkit" deletes the line
+    from an existing project.
+  - The rule `session-handoff.md` holds three lines the owner approved in
+    place of his earlier paragraph: when to use the `handoff` skill, when
+    to offer a handoff, and when not to offer one.
