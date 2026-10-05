@@ -12,9 +12,9 @@ import { fileURLToPath } from 'node:url';
 
 const repo = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const assets = join(repo, 'plugins/toolkit/skills/project-setup/assets');
-const hooks = join(assets, 'hooks');
+const hooks = join(assets, 'every-project/.claude/hooks');
 const settings = join(assets, 'settings');
-const MODEL_INDEX = [join(assets, 'model/memory/MEMORY.md'), '/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved/memory/MEMORY.md'].find(existsSync);
+const MODEL_INDEX = [join(assets, 'memory-local/memory/MEMORY.md'), '/Users/michaelrihm/Documents/Projects/toolkit-v2-model-project-approved/memory/MEMORY.md'].find(existsSync);
 const scratch = mkdtempSync(join(tmpdir(), 'tkv2-hooks-'));
 process.on('exit', () => rmSync(scratch, { recursive: true, force: true }));
 const gitPath = dirname(execFileSync('which', ['git'], { encoding: 'utf8' }).trim());

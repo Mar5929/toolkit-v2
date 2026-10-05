@@ -1,12 +1,13 @@
-// Checks the model's rule files against Claude Code's guidance for rules
+// Checks the model's rule files (the rules in the setup folders under
+// plugins/toolkit/skills/project-setup/assets/) against Claude Code's guidance for rules
 // (Mike, 2026-09-29: "Make sure the rules are written using Claude Code best
 // practices"; dev/GOAL.md, "Rules follow Claude Code best practices": a
 // checker enforces the format). The checklist and its sources:
 // dev/research/rules-best-practices.md, Part 1.
 //
-//   node dev/tools/check-rules.mjs                 check plugins/toolkit/skills/project-setup/assets/model/.claude/rules/
-//   node dev/tools/check-rules.mjs --dir <folder>  check another project folder (for example the model
-//                                                  branch folder before a refresh)
+//   node dev/tools/check-rules.mjs                 check the rules of every setup folder, put together
+//                                                  in a scratch folder as one project that has every choice
+//   node dev/tools/check-rules.mjs --dir <folder>  check another project folder (for example a set-up project)
 //
 // It fails (exit 1) when a rule:
 //   - has frontmatter that does not parse, holds a field other than `paths`,
@@ -48,6 +49,7 @@
 // `delivery/data/...`), so the check would need a hand-kept list of them.
 
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
@@ -57,16 +59,30 @@ import {
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(HERE, '..', '..');
 const SETUP = path.join(REPO, 'plugins', 'toolkit', 'skills', 'project-setup');
-const DEFAULT_DIR = path.join(SETUP, 'assets', 'model');
+const ASSETS = path.join(SETUP, 'assets');
+/** The setup folders: project files at the paths a project has them (setup-copy.md, "Folders the choices add"). */
+const PROJECT_FOLDERS = ['every-project', 'work-local', 'work-notion', 'work-github', 'memory-local', 'memory-notion', 'memory-process', 'notion-tools', 'salesforce', 'soul'];
 /** The owner's rule file. Its lines are the owner's own, so they are compared by list item only. */
 const RULE_FILE_NAME = 'owner-preferences.md';
 /** The owner-preferences.md template project-setup copies into a project's .claude/rules/. */
-const OWNER_TEMPLATE = path.join(SETUP, 'assets', RULE_FILE_NAME);
+const OWNER_TEMPLATE = path.join(ASSETS, RULE_FILE_NAME);
 
 const SKIP_DIRS = new Set(['.git', 'node_modules', '__pycache__', '.sfdx', '.sf']);
 
+/** Put every setup folder into one scratch folder: a project with every choice (the folders that alternate overwrite each other's skills only). */
+let mergedDir = null;
+function mergedModel() {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'check-rules-'));
+  mergedDir = dir;
+  process.on('exit', () => fs.rmSync(dir, { recursive: true, force: true }));
+  for (const folder of PROJECT_FOLDERS) {
+    fs.cpSync(path.join(ASSETS, folder), dir, { recursive: true, filter: (src) => path.basename(src) !== '.agents' });
+  }
+  return dir;
+}
+
 function parseArgs(argv) {
-  const out = { dir: DEFAULT_DIR };
+  const out = { dir: null };
   for (let i = 0; i < argv.length; i += 1) {
     const a = argv[i];
     if (a === '--dir') {
@@ -79,7 +95,7 @@ function parseArgs(argv) {
       process.exit(0);
     } else fail(`Unknown option ${a}.`);
   }
-  out.dir = path.resolve(out.dir);
+  out.dir = out.dir ? path.resolve(out.dir) : mergedModel();
   return out;
 }
 
@@ -114,15 +130,7 @@ function knownSkills(dir) {
     }
   };
   add(path.join(REPO, 'plugins', 'toolkit', 'skills'));
-  const assets = path.join(SETUP, 'assets');
-  add(path.join(assets, '.shared-skills'));
-  add(path.join(assets, '.salesforce'));
-  const sets = path.join(assets, '.skill-sets');
-  try {
-    for (const e of fs.readdirSync(sets, { withFileTypes: true })) if (e.isDirectory()) add(path.join(sets, e.name));
-  } catch {
-    // No skill sets.
-  }
+  for (const folder of PROJECT_FOLDERS) add(path.join(ASSETS, folder, '.claude', 'skills'));
   add(path.join(dir, '.claude', 'skills'));
   add(path.join(dir, '.agents', 'skills'));
   return names;
@@ -130,6 +138,7 @@ function knownSkills(dir) {
 
 /** A folder as a path inside this repository, or in full when it is outside. */
 function shown(dir) {
+  if (mergedDir && dir.startsWith(mergedDir)) return `the setup folders (put together)${dir.slice(mergedDir.length)}`;
   const rel = path.relative(REPO, dir);
   return rel && !rel.startsWith('..') ? rel : dir;
 }
@@ -163,20 +172,10 @@ function resolveMarkers(text, setup) {
   return out.join('\n').replace(/<!-- Project setup fill-in guide[\s\S]*?-->\n?/, '');
 }
 
-/** The rules a project without Salesforce leaves out: the bullets of "The Salesforce list" in setup-copy.md. */
+/** The rules a project without Salesforce does not get: every rule in the salesforce folder. */
 function salesforceRuleNames() {
-  const file = path.join(SETUP, 'references', 'setup-copy.md');
-  if (!fs.existsSync(file)) return [];
-  const text = fs.readFileSync(file, 'utf8');
-  const at = text.indexOf('The Salesforce list (only a Salesforce project keeps these):');
-  if (at === -1) return [];
-  const lines = [];
-  for (const line of text.slice(at).split('\n').slice(1)) {
-    if (line.trim() === '' && !lines.length) continue;
-    if (line.startsWith('- ') || line.startsWith('  ')) lines.push(line);
-    else break;
-  }
-  return [...lines.join('\n').matchAll(/`([\w-]+\.md)`/g)].map((m) => m[1]);
+  const dir = path.join(ASSETS, 'salesforce', '.claude', 'rules');
+  return fs.existsSync(dir) ? fs.readdirSync(dir).filter((n) => n.endsWith('.md')) : [];
 }
 
 /** Bytes that load in every session in each setup: always-on rules plus AGENTS.md, and the owner-preferences.md template. */

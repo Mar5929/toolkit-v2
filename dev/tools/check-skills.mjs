@@ -1,14 +1,18 @@
 #!/usr/bin/env node
 // check-skills.mjs: checks the skills that project-setup copies into projects. Dev only, not shipped.
 //
-// Usage: node dev/tools/check-skills.mjs [--model <folder>]
-//   --model <folder>  read the model's skills and templates from this folder instead of
-//                     plugins/toolkit/skills/project-setup/assets/model, for example the model
-//                     branch worktree before the copy is refreshed.
+// Usage: node dev/tools/check-skills.mjs [--assets <folder>]
+//   --assets <folder>  read the setup folders (every-project, work-local, salesforce, and the
+//                      others) from this folder instead of
+//                      plugins/toolkit/skills/project-setup/assets.
+//
+// The setup folders hold project files at the paths a project has them. A file the owner's
+// choices alternate (work-local, work-notion, work-github; memory-local, memory-notion) may sit
+// at the same path in each of those folders; every other path is in exactly one folder.
 //
 // For project-setup and every SKILL.md under it, the plugin's other skills beside
-// project-setup (the tool list), plus the model's .claude/skills/ (its
-// .agents/skills/ is skipped: a second copy that onboarding never copies):
+// project-setup (the tool list), plus the Salesforce folder's .claude/skills/ (the model's own
+// project skills; every-project/.agents/skills is a link that onboarding never copies):
 //   - the frontmatter holds only name and description, and name equals the folder name;
 //   - the name is lowercase letters, digits, and hyphens, at most 64 characters, and holds
 //     neither "anthropic" nor "claude";
@@ -27,15 +31,17 @@
 //   - no file names a command of the retired toolkit program;
 //   - a file whose first line names a dev/build-shared/ source equals that source after the
 //     first line;
-//   - a skill asset copied from the model (MODEL_COPIES) equals the model's file;
+//   - a skill asset copied from a project file (MODEL_COPIES) equals that file;
+//   - no project path is in two setup folders, except the alternatives named above;
 //   - the lists that setup-copy.md, skills-hooks-settings.md, and interview.md keep by hand match
-//     the model and the skill folders: the Salesforce list, the files that hold setup markers,
-//     the shared skills, the skills each choice copies (a row may copy several sets, such as
-//     memory-process and local-memory), every set folder named by a row, and the skill counts;
+//     the setup folders: the Salesforce list and the salesforce folder, the files that hold setup
+//     markers, the shared skills, the skills each choice's folders hold (a row may name several
+//     folders, such as memory-process and memory-local), every folder with skills named by a row,
+//     and the skill counts;
 //   - the Next action prompt kept by hand in project-setup's references/notion-build/
-//     work-item-page.md (the Notion work item template's text) says the same as the model's
-//     WORK-ITEM.md.
-// Findings on the model's own skills are warnings: changing them is a model change that needs
+//     work-item-page.md (the Notion work item template's text) says the same as the work item
+//     template's WORK-ITEM.md.
+// Findings on the model's own skills (the sf-* skills) are warnings: changing them is a model change that needs
 // Mike's yes (AGENTS.md). The run fails (exit 1) on any error.
 
 import fs from 'node:fs';
@@ -46,8 +52,14 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '.
 const SETUP = path.join(ROOT, 'plugins/toolkit/skills/project-setup');
 const INDEX = path.join(ROOT, 'dev/SKILL-INDEX.md');
 const argv = process.argv.slice(2);
-const MODEL = argv.includes('--model') ? path.resolve(argv[argv.indexOf('--model') + 1] || '.') : path.join(SETUP, 'assets/model');
-const HAS_MODEL = fs.existsSync(path.join(MODEL, 'AGENTS.md'));
+const ASSETS = argv.includes('--assets') ? path.resolve(argv[argv.indexOf('--assets') + 1] || '.') : path.join(SETUP, 'assets');
+// The folders that hold files at the paths a project has them. The first is copied for every project.
+const PROJECT_FOLDERS = ['every-project', 'work-local', 'work-notion', 'work-github', 'memory-local', 'memory-notion', 'memory-process', 'notion-tools', 'salesforce', 'soul'];
+// Folders for choices that exclude each other: they may hold a file at the same path.
+const ALTERNATIVES = [['work-local', 'work-notion', 'work-github'], ['memory-local', 'memory-notion']];
+const EVERY = path.join(ASSETS, 'every-project');
+const SALESFORCE = path.join(ASSETS, 'salesforce');
+const SALESFORCE_SKILLS = path.join(SALESFORCE, '.claude/skills');
 
 const MAX_DESCRIPTION = 500;
 const MAX_BODY_LINES = 500;
@@ -60,15 +72,16 @@ const LITERAL = [[/\$ARGUMENTS\b/, '$ARGUMENTS'], [/!`/, '!`command`'], [/\$\{CL
 const TOOLKIT_COMMAND = /\btoolkit (?:brief|config|decision|doctor|export|handoff-backup|hindsight|hook|import|index|init|machine-setup|memory|notion|rule|sync|version|work)\b|\bbin\/toolkit\b/;
 const TEXT_FILE = /\.(?:md|mjs|cjs|js|json|toml|ya?ml|rules|txt|csv|sh)$/;
 const PATH_SPAN = /^(?:\.\/)?(?:references|assets|examples|scripts|agents)\/\S*$/;
-// Skill assets that are copies of model files: path under project-setup/assets -> path in the model.
+// Skill assets that are copies of project files: path under project-setup/assets -> the project path of the file.
+const SHARED = 'every-project/.claude/skills';
 const MODEL_COPIES = {
-  '.shared-skills/managing-work-items/assets/work-item-template.md': 'work-items/work-item-template/WORK-ITEM.md',
-  '.shared-skills/managing-work-items/assets/design-template.md': 'work-items/work-item-template/DESIGN.md',
-  '.shared-skills/managing-project-wide-records/assets/DOMAIN-MAP.md': 'project-wide-records/templates/DOMAIN-MAP.md',
-  '.shared-skills/managing-project-wide-records/assets/PROJECT-QUESTION.md': 'project-wide-records/templates/PROJECT-QUESTION.md',
-  '.shared-skills/managing-project-wide-records/assets/PERSON.md': 'project-wide-records/templates/PERSON.md',
-  '.shared-skills/managing-project-wide-records/assets/TARGET-ARCHITECTURE.md': 'project-wide-records/templates/TARGET-ARCHITECTURE.md',
-  '.shared-skills/managing-project-wide-records/assets/INTAKE-RECEIPT.md': 'project-wide-records/templates/INTAKE-RECEIPT.md',
+  [`${SHARED}/managing-work-items/assets/work-item-template.md`]: 'work-items/work-item-template/WORK-ITEM.md',
+  [`${SHARED}/managing-work-items/assets/design-template.md`]: 'work-items/work-item-template/DESIGN.md',
+  [`${SHARED}/managing-project-wide-records/assets/DOMAIN-MAP.md`]: 'project-wide-records/templates/DOMAIN-MAP.md',
+  [`${SHARED}/managing-project-wide-records/assets/PROJECT-QUESTION.md`]: 'project-wide-records/templates/PROJECT-QUESTION.md',
+  [`${SHARED}/managing-project-wide-records/assets/PERSON.md`]: 'project-wide-records/templates/PERSON.md',
+  [`${SHARED}/managing-project-wide-records/assets/TARGET-ARCHITECTURE.md`]: 'project-wide-records/templates/TARGET-ARCHITECTURE.md',
+  [`${SHARED}/managing-project-wide-records/assets/INTAKE-RECEIPT.md`]: 'project-wide-records/templates/INTAKE-RECEIPT.md',
 };
 
 const findings = [];
@@ -141,8 +154,8 @@ function frontmatter(file, text, level) {
 
 // ------------------------------------------------------------------ the index
 
-// Rows are keyed by folder: the three work tracking sets each hold a skill named tracking-work-items.
-const indexDir = (folder) => (folder.startsWith('assets/model/') ? path.join(MODEL, folder.slice('assets/model/'.length)) : path.join(SETUP, folder));
+// Rows are keyed by folder: the three work tracking folders each hold a skill named tracking-work-items.
+const indexDir = (folder) => path.join(SETUP, folder);
 const index = new Map();
 for (const [i, line] of read(INDEX).split('\n').entries()) {
   const m = line.match(/^\|\s*`([a-z0-9-]+)`\s*\|\s*`([^`]+)`\s*\|\s*(.+?)\s*\|\s*$/);
@@ -155,14 +168,15 @@ const indexNames = new Set([...index.values()].map((row) => row.name));
 
 // ------------------------------------------------------------------ find the skills
 
-const setupSkillDirs = walk(SETUP).filter((f) => path.basename(f) === 'SKILL.md' && !inside(f, path.join(SETUP, 'assets/model'))).map(path.dirname);
-const modelSkillDirs = walk(path.join(MODEL, '.claude/skills')).filter((f) => path.basename(f) === 'SKILL.md').map(path.dirname);
+const setupSkillDirs = walk(SETUP).filter((f) => path.basename(f) === 'SKILL.md' && !inside(f, SALESFORCE)).map(path.dirname);
+const modelSkillDirs = walk(SALESFORCE_SKILLS).filter((f) => path.basename(f) === 'SKILL.md').map(path.dirname);
 // The plugin's own skills beside project-setup (the tool list): on in every folder, never copied into a project.
 const pluginSkillDirs = walk(path.dirname(SETUP)).filter((f) => path.basename(f) === 'SKILL.md' && !inside(f, SETUP)).map(path.dirname);
 const skills = [...setupSkillDirs.map((dir) => ({ dir, model: false })), ...pluginSkillDirs.map((dir) => ({ dir, model: false })), ...modelSkillDirs.map((dir) => ({ dir, model: true }))];
 const allDirs = skills.map((s) => s.dir);
 const names = new Set([...skills.map((s) => path.basename(s.dir)), ...indexNames]);
-if (!HAS_MODEL) notes.push(`The model copy ${shown(MODEL)} is not there yet: the model's skills, its template copies, and links into assets/model/ were not checked.`);
+const projectRoots = PROJECT_FOLDERS.map((f) => path.join(ASSETS, f));
+for (const root of projectRoots) if (!fs.existsSync(root)) report('error', root, 'this setup folder is missing');
 
 // ------------------------------------------------------------------ check each skill
 
@@ -199,10 +213,11 @@ for (const { dir, model } of skills) {
     if (description !== null && row.description !== description) report('error', INDEX, `line ${row.line}: the description of ${folderName} (${row.folder}) differs from its SKILL.md`);
   }
 
-  // The skill's own files: nested skills and the model copy are checked on their own.
-  const own = walk(dir).filter((f) => !allDirs.some((d) => d !== dir && inside(f, d) && inside(d, dir)) && !(dir === SETUP && inside(f, path.join(SETUP, 'assets/model'))));
+  // The skill's own files: nested skills and the setup folders are checked on their own.
+  const own = walk(dir).filter((f) => !allDirs.some((d) => d !== dir && inside(f, d) && inside(d, dir)) && !(dir === SETUP && projectRoots.some((r) => inside(f, r))));
   // A bare `assets/` or `references/` in a sentence names the folder, not what is in it.
   const linked = namedPaths(text).map((x) => x.path.replace(/\/$/, '')).filter((l) => l.includes('/'));
+  if (dir === SETUP) for (const folder of PROJECT_FOLDERS) if (!linked.includes(`assets/${folder}`)) report('error', skillFile, `the References table does not link assets/${folder}/, so the agent never opens it`);
   for (const f of own) {
     const rel = posix(path.relative(dir, f));
     if (rel !== 'SKILL.md' && !linked.some((l) => rel === l || rel.startsWith(`${l}/`))) report(level, f, 'SKILL.md does not link this file, so the agent never opens it; add it to the References table');
@@ -212,8 +227,7 @@ for (const { dir, model } of skills) {
     for (const x of namedPaths(body)) {
       if (x.path.startsWith('../')) { report(level, f, `line ${x.n}: ${x.path} leaves the skill folder`); continue; }
       if (x.span && !(f === skillFile && x.table)) continue; // prose code spans may name project paths
-      if (x.path.startsWith('assets/model/') && !HAS_MODEL && dir === SETUP) continue;
-      const target = x.path.startsWith('assets/model/') && dir === SETUP ? path.join(MODEL, x.path.slice('assets/model/'.length)) : path.join(dir, x.path);
+      const target = path.join(dir, x.path);
       if (!fs.existsSync(target) && !fs.existsSync(path.join(path.dirname(f), x.path))) report(level, f, `line ${x.n}: ${x.path} does not exist`);
     }
     const rel = posix(path.relative(dir, f));
@@ -235,39 +249,48 @@ for (const { dir, model } of skills) {
   }
 }
 
-// ------------------------------------------------------------------ index rows, model copies
+// ------------------------------------------------------------------ index rows, project files in the setup folders
 
 for (const [dir, row] of index) {
-  if (row.folder.startsWith('assets/model/') && !HAS_MODEL) continue;
   if (!fs.existsSync(path.join(dir, 'SKILL.md'))) report('error', INDEX, `line ${row.line}: ${row.name} has no SKILL.md in ${row.folder}`);
 }
-if (HAS_MODEL) {
+const folderOf = (rel) => PROJECT_FOLDERS.filter((f) => fs.existsSync(path.join(ASSETS, f, rel)));
+// Every project path is in one setup folder, except a file the choices alternate.
+const holders = new Map();
+for (const folder of PROJECT_FOLDERS) {
+  const root = path.join(ASSETS, folder);
+  for (const f of walk(root)) {
+    const rel = posix(path.relative(root, f));
+    holders.set(rel, [...(holders.get(rel) ?? []), folder]);
+  }
+}
+for (const [rel, folders] of holders) {
+  if (folders.length > 1 && !ALTERNATIVES.some((group) => folders.every((f) => group.includes(f)))) report('error', ASSETS, `the project path ${rel} is in ${folders.join(' and ')}: a project path is in one setup folder, unless the choices exclude each other`);
+}
+{
   for (const [copy, original] of Object.entries(MODEL_COPIES)) {
     const a = path.join(SETUP, 'assets', copy);
-    const b = path.join(MODEL, original);
-    if (!fs.existsSync(a) || !fs.existsSync(b)) report('error', a, `this copy or its model file ${shown(b)} is missing`);
-    else if (read(a) !== read(b)) report('error', a, `differs from the model's ${original}; copy the model's file over it`);
+    const homes = folderOf(original);
+    const b = homes.length ? path.join(ASSETS, homes[0], original) : null;
+    if (!fs.existsSync(a) || !b) report('error', a, `this copy or its project file ${original} is missing`);
+    else if (read(a) !== read(b)) report('error', a, `differs from the project file ${shown(b)}; copy that file over it`);
   }
   // The Next action prompt is written by hand in two places; they must match.
   const pageFile = path.join(SETUP, 'references/notion-build/work-item-page.md');
-  const templateFile = path.join(MODEL, 'work-items/work-item-template/WORK-ITEM.md');
+  const templateFile = path.join(ASSETS, 'work-local/work-items/work-item-template/WORK-ITEM.md');
   const prompt = (text) => text.replace(/\\/g, '').match(/\*\*Next action:\*\* (.*?)(?:<br>|\n|$)/)?.[1];
   if (!fs.existsSync(pageFile) || !fs.existsSync(templateFile)) report('error', pageFile, `this file or ${shown(templateFile)} is missing, so the Next action prompts were not compared`);
   else {
     const page = prompt(read(pageFile));
     const template = prompt(read(templateFile));
     if (!page || !template) report('error', page ? templateFile : pageFile, 'has no "**Next action:**" prompt');
-    else if (page !== template) report('error', pageFile, `its Next action prompt (backslashes removed) differs from the model's WORK-ITEM.md: "${page}" against "${template}"`);
+    else if (page !== template) report('error', pageFile, `its Next action prompt (backslashes removed) differs from the work item template's WORK-ITEM.md: "${page}" against "${template}"`);
   }
 }
 
 // ------------------------------------------------------------------ setup lists kept by hand
 
-if (HAS_MODEL) {
-  // Files the model holds that every project gets. A model file in neither these lists nor the
-  // Salesforce list of setup-copy.md fails the run, so a person decides where it belongs.
-  const EVERY_PROJECT_TOP = ['.agents', '.claude', '.gitignore', 'AGENTS.md', 'CLAUDE.md', 'PROJECT-ROADMAP.md', 'PROJECT.md', 'README.md', 'SOUL.md', 'ai-external-knowledge', 'memory', 'project-wide-records', 'requirements', 'system-guide', 'tests', 'work-items'];
-  const EVERY_PROJECT_RULES = ['ai-external-knowledge.md', 'cite-recalled-knowledge.md', 'humanize-outbound-text.md', 'keep-work-item-current.md', 'memory-review-and-save.md', 'plain-english-artifacts.md', 'publish-project-documents.md', 'session-handoff.md', 'shared-repository-work.md', 'work-item-folders.md'];
+{
   const copyFile = path.join(SETUP, 'references/setup-copy.md');
   const hooksFile = path.join(SETUP, 'references/skills-hooks-settings.md');
   const interviewFile = path.join(SETUP, 'references/interview.md');
@@ -277,9 +300,10 @@ if (HAS_MODEL) {
   const ticks = (text) => [...text.matchAll(/`([^`\n]+)`/g)].map((m) => m[1]);
   const dirs = (dir) => (fs.existsSync(dir) ? fs.readdirSync(dir, { withFileTypes: true }).filter((e) => e.isDirectory()).map((e) => e.name).sort() : []);
   const same = (a, b) => a.length === b.length && a.every((x, i) => x === b[i]);
+  const skillsOf = (folder) => dirs(path.join(ASSETS, folder, '.claude/skills'));
 
   // The Salesforce list: the bullets under "The Salesforce list", up to the first line that is not a bullet or its continuation.
-  const at = copyText.indexOf('The Salesforce list (only a Salesforce project keeps these):');
+  const at = copyText.indexOf('The Salesforce list (');
   const listLines = [];
   if (at !== -1) for (const line of copyText.slice(at).split('\n').slice(1)) {
     if (line.trim() === '' && !listLines.length) continue;
@@ -291,54 +315,59 @@ if (HAS_MODEL) {
     const named = ticks(listLines.join('\n')).filter((t) => !t.includes('*'));
     const rules = named.filter((t) => /^[\w-]+\.md$/.test(t));
     const paths = named.filter((t) => !rules.includes(t));
-    for (const t of paths) if (!fs.existsSync(path.join(MODEL, t))) report('error', copyFile, `its Salesforce list names ${t}, which the model does not have`);
-    for (const t of rules) if (!fs.existsSync(path.join(MODEL, '.claude/rules', t))) report('error', copyFile, `its Salesforce list names the rule ${t}, which the model does not have`);
+    for (const t of paths) if (!fs.existsSync(path.join(SALESFORCE, t))) report('error', copyFile, `its Salesforce list names ${t}, which the salesforce folder does not have`);
+    for (const t of rules) if (!fs.existsSync(path.join(SALESFORCE, '.claude/rules', t))) report('error', copyFile, `its Salesforce list names the rule ${t}, which the salesforce folder does not have`);
     const salesforceTop = new Set(paths.map((t) => t.split('/')[0]));
-    for (const name of fs.readdirSync(MODEL)) if (!EVERY_PROJECT_TOP.includes(name) && !salesforceTop.has(name)) report('error', copyFile, `the model has the top-level path ${name}, which is in neither the Salesforce list nor the every-project list in dev/tools/check-skills.mjs: decide which, then update the list`);
-    const ruleDir = path.join(MODEL, '.claude/rules');
-    if (fs.existsSync(ruleDir)) for (const name of fs.readdirSync(ruleDir)) if (!rules.includes(name) && !EVERY_PROJECT_RULES.includes(name)) report('error', copyFile, `the model has the rule ${name}, which is in neither the Salesforce list nor the every-project list in dev/tools/check-skills.mjs: decide which, then update the list`);
-    const modelSkills = dirs(path.join(MODEL, '.claude/skills'));
-    for (const name of modelSkills) if (!name.startsWith('sf-')) report('error', copyFile, `the model has the skill ${name}, but the Salesforce list takes only sf-* folders and every other skill is copied from this skill's assets/`);
+    for (const name of fs.readdirSync(SALESFORCE)) if (!salesforceTop.has(name)) report('error', copyFile, `the salesforce folder has the top-level path ${name}, which the Salesforce list does not name: add it to the list`);
+    for (const name of fs.readdirSync(EVERY)) if (name !== '.claude' && salesforceTop.has(name)) report('error', copyFile, `every-project has the top-level path ${name}, which the Salesforce list gives to the salesforce folder`);
+    const ruleDir = path.join(SALESFORCE, '.claude/rules');
+    if (fs.existsSync(ruleDir)) for (const name of fs.readdirSync(ruleDir)) if (!rules.includes(name)) report('error', copyFile, `the salesforce folder has the rule ${name}, which the Salesforce list does not name: add it to the list`);
+    const hookDir = path.join(SALESFORCE, '.claude/hooks');
+    if (fs.existsSync(hookDir)) for (const name of fs.readdirSync(hookDir)) if (!paths.includes(`.claude/hooks/${name}`)) report('error', copyFile, `the salesforce folder has the hook ${name}, which the Salesforce list does not name: add it to the list`);
+    const everySf = skillsOf('every-project').filter((n) => n.startsWith('sf-'));
+    if (everySf.length) report('error', copyFile, `every-project has the Salesforce skills ${everySf.join(', ')}: they belong in the salesforce folder`);
+    const sfSkills = skillsOf('salesforce');
+    for (const name of sfSkills) if (!name.startsWith('sf-')) report('error', copyFile, `the salesforce folder has the skill ${name}, but the Salesforce list takes only sf-* folders`);
     const row = hooksText.split('\n').find((l) => l.startsWith('| Salesforce |')) ?? '';
     const rowSkills = ticks(row).filter((t) => t.startsWith('sf-')).sort();
-    if (!same(rowSkills, modelSkills.filter((n) => n.startsWith('sf-')))) report('error', hooksFile, `its Salesforce row names ${rowSkills.join(', ') || 'no model skills'}, but the model has ${modelSkills.join(', ')}`);
-    modelSf = modelSkills.filter((n) => n.startsWith('sf-')).length;
+    if (!same(rowSkills, sfSkills.filter((n) => n.startsWith('sf-')))) report('error', hooksFile, `its Salesforce row names ${rowSkills.join(', ') || 'no Salesforce skills'}, but the salesforce folder has ${sfSkills.join(', ')}`);
+    modelSf = sfSkills.filter((n) => n.startsWith('sf-')).length;
   }
 
   // The files that hold setup markers.
   const markerPara = copyText.split(/\n\s*\n/).find((p) => p.startsWith('These are the files that hold markers'));
-  const modelMarked = walk(MODEL).filter((f) => fs.lstatSync(f).isFile() && read(f).includes('<!-- if ')).map((f) => posix(path.relative(MODEL, f))).sort();
+  const modelMarked = [...new Set(projectRoots.flatMap((root) => walk(root).filter((f) => fs.lstatSync(f).isFile() && read(f).includes('<!-- if ')).map((f) => posix(path.relative(root, f)))))].sort();
   if (!markerPara) report('error', copyFile, 'has no paragraph starting "These are the files that hold markers"');
   else {
     const named = ticks(markerPara.split('; the grep')[0]).sort();
-    if (!same(named, modelMarked)) report('error', copyFile, `its list of files that hold setup markers is ${named.join(', ')}, but the model's files are ${modelMarked.join(', ')}`);
+    if (!same(named, modelMarked)) report('error', copyFile, `its list of files that hold setup markers is ${named.join(', ')}, but the setup folders' files are ${modelMarked.join(', ')}`);
   }
 
-  // The shared skills, each set's skills, and the counts.
+  // The shared skills, each folder's skills, and the counts.
   const shared = hooksText.replace(/\s+/g, ' ').match(/The shared skills are the same in every project \((\d+)\): ([^.]*)\./);
-  const sharedDirs = dirs(path.join(SETUP, 'assets/.shared-skills'));
+  const sharedDirs = skillsOf('every-project');
   if (!shared) report('error', hooksFile, 'has no "The shared skills are the same in every project (N): ..." sentence in the expected shape');
   else {
     const named = ticks(shared[2]).sort();
-    if (Number(shared[1]) !== named.length || !same(named, sharedDirs)) report('error', hooksFile, `it lists ${shared[1]} shared skills (${named.length} names), but assets/.shared-skills holds ${sharedDirs.length}: ${sharedDirs.join(', ')}`);
+    if (Number(shared[1]) !== named.length || !same(named, sharedDirs)) report('error', hooksFile, `it lists ${shared[1]} shared skills (${named.length} names), but assets/every-project/.claude/skills holds ${sharedDirs.length}: ${sharedDirs.join(', ')}`);
   }
-  // Each row of the choices table copies one or more sets; its Skills cell names what they hold.
-  const setDir = (set) => path.join(SETUP, 'assets/.skill-sets', set);
-  const rowSets = new Set();
+  // Each row of the choices table names one or more folders; its Skills cell names what they hold.
+  const rowFolders = new Set();
   for (const line of hooksText.split('\n')) {
-    const sets = line.startsWith('|') ? [...new Set([...line.matchAll(/assets\/\.skill-sets\/([\w-]+)\/\./g)].map((m) => m[1]))] : [];
-    if (!sets.length) continue;
-    sets.forEach((set) => rowSets.add(set));
-    const named = ticks(line.split('|')[3] ?? '').sort();
-    const actual = sets.flatMap((set) => dirs(setDir(set))).sort();
-    if (!same(named, actual)) report('error', hooksFile, `its row for ${sets.join(' and ')} names ${named.join(', ')}, but the folders hold ${actual.join(', ')}`);
+    const cells = line.split('|');
+    const folders = line.startsWith('|') ? [...new Set([...(cells[2] ?? '').matchAll(/assets\/([\w-]+)\//g)].map((m) => m[1]))] : [];
+    if (!folders.length) continue;
+    folders.forEach((f) => rowFolders.add(f));
+    const named = ticks(cells[3] ?? '').filter((t) => !t.includes('.')).sort();
+    const actual = folders.flatMap((f) => skillsOf(f)).sort();
+    if (!same(named, actual)) report('error', hooksFile, `its row for ${folders.join(' and ')} names ${named.join(', ')}, but the folders hold ${actual.join(', ')}`);
   }
-  for (const set of dirs(path.join(SETUP, 'assets/.skill-sets'))) if (!rowSets.has(set)) report('error', hooksFile, `no row of its choices table copies assets/.skill-sets/${set}/, so no project gets its skills`);
+  for (const folder of PROJECT_FOLDERS.filter((f) => f !== 'every-project')) if (skillsOf(folder).length && !rowFolders.has(folder)) report('error', hooksFile, `no row of its choices table names assets/${folder}/, so its skills are never listed`);
   const interview = read(interviewFile).replace(/\s+/g, ' ').match(/(\d+) shared, plus (\d+) for the work tracking set, plus (\d+) for local or Notion memory \(none for Hindsight\), plus (\d+) for Notion work items or memory \(`using-notion-cli`, once\), plus (\d+) for Salesforce/);
   if (!interview) report('error', interviewFile, 'has no "N shared, plus N for the work tracking set, ..." sentence in the expected shape');
   else {
-    const count = (set) => dirs(setDir(set)).length;
-    const want = [sharedDirs.length, Math.max(...['local-work', 'notion-work', 'github-work'].map(count)), count('memory-process') + Math.max(...['local-memory', 'notion-memory'].map(count)), count('notion-tools'), modelSf];
+    const count = (folder) => skillsOf(folder).length;
+    const want = [sharedDirs.length, Math.max(...['work-local', 'work-notion', 'work-github'].map(count)), count('memory-process') + Math.max(...['memory-local', 'memory-notion'].map(count)), count('notion-tools'), modelSf];
     if (interview.slice(1).map(Number).join() !== want.join()) report('error', interviewFile, `its skill counts are ${interview.slice(1).join(', ')}, but the folders give ${want.join(', ')}`);
   }
 }
@@ -347,7 +376,7 @@ if (HAS_MODEL) {
 
 const errors = findings.filter((x) => x.level === 'error');
 const warnings = findings.filter((x) => x.level === 'warning');
-console.log(`check-skills: ${skills.length} skills checked (${setupSkillDirs.length} in project-setup, ${pluginSkillDirs.length} beside it in the plugin, ${modelSkillDirs.length} from the model), ${index.size} rows in dev/SKILL-INDEX.md.`);
+console.log(`check-skills: ${skills.length} skills checked (${setupSkillDirs.length} in project-setup, ${pluginSkillDirs.length} beside it in the plugin, ${modelSkillDirs.length} from the salesforce folder), ${index.size} rows in dev/SKILL-INDEX.md.`);
 for (const x of [...errors, ...warnings]) console.log(`${x.level === 'error' ? 'Error' : 'Warning'}: ${x.file}: ${x.message}`);
 for (const n of notes) console.log(`Note: ${n}`);
 if (warnings.length) console.log('Warnings do not fail the run. They are on the model\'s own skills, which are Mike\'s text: a change there needs his yes.');
