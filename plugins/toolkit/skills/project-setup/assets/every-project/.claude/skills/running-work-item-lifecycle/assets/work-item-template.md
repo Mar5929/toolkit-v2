@@ -38,9 +38,9 @@ updated: <YYYY-MM-DD>
 
 **Last updated:** <YYYY-MM-DD, and who: the owner or the agent.>
 
-**Related items:** <For a top-level item, “Project phase P01.”, or “No project phase yet.”; for a sub-item, its parent's ID, and “Built from the design of <parent ID>.” when it has no design of its own. Related work item IDs (never folder paths) and external links. Each decision in `DECISIONS.md` and each rule in `system/` that this item must follow, by ID, for example “DEC-014, SEC-04”.>
+**Related items:** <For a top-level item, “Project phase P01.”, or “No project phase yet.”; for a sub-item, its parent's ID, and “Built from the design of”, then the parent's ID, when it has no design of its own. Related work item IDs (never folder paths) and external links. Each decision in `DECISIONS.md` and each rule in `system/` that this item must follow, by ID, for example “DEC-014, SEC-04”.>
 
-**Moved up:** <Leave empty until the closing step of `running-work-item-lifecycle`; the item cannot become Done or Cancelled while it is empty. Then: each entry in `DECISIONS.md` and each rule in `system/` that this item added or changed, by ID, with what happened, for example “DEC-014 recorded. SEC-04 added and Built. DAT-02 changed.”; or “Nothing: <the reason>.”>
+**Moved up:** <Leave empty until the closing step of `running-work-item-lifecycle`; the item cannot become Done or Cancelled while it is empty. Then: each entry in `DECISIONS.md` and each rule in `system/` that this item added or changed, by ID, with what happened, for example “DEC-014 recorded. SEC-04 added and Built. DAT-02 changed.”; or “Nothing:”, then the reason.>
 
 ## Roadmap
 

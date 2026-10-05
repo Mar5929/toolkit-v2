@@ -16,8 +16,8 @@ const PREFIX = { constraints: 'CON', architecture: 'ARC', 'data-model': 'DAT',
 const GUIDES = ['README.md', 'AGENTS.md', 'CLAUDE.md', 'INTEGRATION-TEMPLATE.md'];
 const D = 'DECISIONS.md', S = 'sources/README.md', I = 'system/integrations/README.md';
 const ID = /\b(?:DEC|SRC)-\d{3}\b|\b(?:CON|ARC|DAT|SEC|AUT|INT)-\d{2}\b/g;
-// A prompt left from a form, such as <short title> or <YYYY-MM-DD>. Not a link or an HTML tag.
-const PROMPT = /<(?![a-z]+:|\/|a |img )(?:\S[^<>\n]*[ #][^<>\n]*|YYYY[^<>\n]*)>/;
+// A prompt left from a form, such as <short title>. Not a link, an HTML tag, or text in backticks.
+const PROMPT = /^(?:[^`]|`[^`]*`)*?<(?![a-z]+:|\/|a |img )(?:\S[^<>\n]*[ #][^<>\n]*|YYYY[^<>\n]*)>/;
 const SEPARATOR = /^\|[\s:|-]+$/;
 const GIT = { encoding: 'utf8', stdio: 'pipe', timeout: 15000 };
 
@@ -26,7 +26,7 @@ const found = [];
 const add = (file, line, ...t) => found.push({ file, line, text: t.join(' ').slice(0, 300) });
 // A record made of two files is whole only after two edits, so it waits for the stop or commit.
 const pair = (...finding) => mode !== 'edit' && add(...finding);
-const read = (path) => { try { return readFileSync(path, 'utf8'); } catch { return ''; } };
+const read = (path) => (existsSync(path) ? readFileSync(path, 'utf8') : ''); // missing: empty
 const real = (path) => { try { return realpathSync(path); } catch { return path; } };
 function list(d) { try { return readdirSync(d, { withFileTypes: true }); } catch { return []; } }
 // The text of a comment is not checked. Its lines stay, so line numbers hold.
@@ -143,25 +143,23 @@ function check(top, main) {
     if (!id) return;
     if (src.has(id)) add(S, i + 1, `${id} has two rows. Give the later source the next free ID.`);
     src.set(id, i + 1);
-    // A row kept in the repository links to its file. A row kept outside Git has no link here.
-    const kept = cells[5]?.match(/\]\((?!\w+:)([^)]+)\)/)?.[1]
-      ?? cells[5]?.match(/SRC-\d+-[^\s`|)\]]*/)?.[0];
+    // Only a row kept in the repository holds a Markdown link to its file.
+    const kept = cells[5]?.match(/\]\((?!\w+:)([^)]+)\)/)?.[1];
     if (kept && !existsSync(join(top, 'sources', kept.replace(/^(\.\/|sources\/)+/, '')))) pair(S,
       i + 1, `${id}: "Where kept" names ${kept}, which is not in sources/. Correct the link.`);
   });
   for (const { name } of list(join(top, 'sources'))) {
     if (GUIDES.includes(name) || name.startsWith('.')) continue;
     if (!src.has(name.match(/^SRC-\d+(?=[-.]|$)/)?.[0])) pair(`sources/${name}`, 0, 'has no row',
-      `in ${S}. Its name starts with its row's SRC ID. Add the row with filing-project-records.`);
+      `in ${S}. File it with filing-project-records, which gives it a row and its SRC ID.`);
   }
   scan.push([S, srcRows, true]);
   // Check 8, before a commit only: a filed original is never changed or deleted.
   const diff = main ? '' : execFileSync('git', ['diff', '--cached', '--name-only', '--no-renames',
     '--diff-filter=MD', '--', 'sources'], { ...GIT, cwd: top });
-  for (const file of diff.split('\n').filter((name) => name && !GUIDES.includes(name.slice(8)))) {
-    add(file, 0, 'this commit changes or deletes a filed original. Take that change out of the',
-      'commit, and file a corrected version as a new SRC.');
-  }
+  diff.split('\n').filter((name) => name && !GUIDES.includes(name.slice(8))).forEach((file) => add(
+    file, 0, 'this commit changes or deletes a filed original. Take that change out of the',
+    'commit, and file a corrected version as a new SRC.'));
   // Checks 13 and 14: local work items, in the main checkout.
   const items = new Map();
   const walk = (dir) => list(dir).flatMap((f) => (f.name === 'work-item-template' ? []
@@ -187,13 +185,12 @@ function check(top, main) {
   const said = new Set();
   for (const [file, rows, prompts] of scan) {
     const left = rows.flatMap((row, i) => (prompts && PROMPT.test(row) ? [i + 1] : []));
-    if (left.length) add(file, left[0], `${left.length} line(s) hold an angle-bracket prompt from`,
-      'the form. Replace each prompt with the real text.');
+    if (left.length) add(file, left[0], 'Lines that hold an angle-bracket prompt from the form:',
+      `${left.length}. Replace each prompt with the real text.`);
     rows.forEach((row, i) => {
       for (const id of row.match(ID) ?? []) {
-        const [home, has] = id.startsWith('DEC') ? [D, dec.has(id)]
-          : id.startsWith('SRC') ? [S, src.has(id)] : ['system/', rules.has(id)];
-        if (has || said.has(file + id)) continue;
+        const [home, ids] = { DEC: [D, dec], SRC: [S, src] }[id.slice(0, 3)] ?? ['system/', rules];
+        if (ids.has(id) || said.has(file + id)) continue;
         said.add(file + id);
         add(file, i + 1, `${id} is written here, but ${home} has no ${id}. Correct the ID, or`,
           `file the record first with filing-project-records.`);
@@ -214,9 +211,8 @@ function check(top, main) {
   const listed = lines(read(join(top, I))).map((row) => row.match(/^\|[^|]*?([\w.-]+\.md)/)?.[1]);
   listed.forEach((name, i) => name && !existsSync(join(top, dirname(I), name)) && pair(I, i + 1,
     `the row for ${name} names a document that is not in this folder. Correct or remove the row.`));
-  for (const { file } of docs.filter((doc) => doc.prefix === 'INT')) {
-    if (!listed.includes(basename(file))) pair(file, 0, `has no row in ${I}. Add its row.`);
-  }
+  docs.filter((doc) => doc.prefix === 'INT' && !listed.includes(basename(doc.file)))
+    .forEach((doc) => pair(doc.file, 0, `has no row in ${I}. Add its row.`));
   // Check 15: work item IDs written in DECISIONS.md, a Changelog, or Current State.
   const wi = read(join(top, 'PROJECT.md')).match(/^- Work item ID prefix: `([A-Za-z]\w*)`/m)?.[1];
   const state = 'memory/CURRENT_STATE.md';
@@ -245,35 +241,39 @@ try {
   const patch = [input.tool_input?.command ?? ''].flat().join('\n').trim();
   const named = [...patch.matchAll(/^\*\*\* (?:(?:Add|Update|Delete) File|Move to): (.+)$/gm)];
   const edited = [input.tool_input?.file_path, ...named.map((m) => m[1])].filter(Boolean)
-    .map((path) => resolve(cwd, String(path).trim()))
-    .map((path) => join(real(dirname(path)), basename(path)));
+    .map((p) => resolve(cwd, String(p).trim())).map((p) => join(real(dirname(p)), basename(p)));
   // work-items/ and memory/ are kept out of Git, so they are only in the main checkout.
-  const at = edited.map(dirname).find((dir) => existsSync(dir)) ?? cwd;
-  let [top, main] = [cwd, cwd];
-  try {
+  const repo = (at) => { try {
     const git = execFileSync('git', ['rev-parse', '--show-toplevel', '--git-common-dir'],
       { ...GIT, cwd: at }).trim().split('\n');
-    [top, main] = [real(git[0]), real(dirname(resolve(at, git[1])))];
-  } catch { /* Not a Git repository: the project is the folder the command ran in. */ }
+    return [real(git[0]), real(dirname(resolve(at, git[1])))];
+  } catch { return [cwd, cwd]; } }; // no Git repository: the folder the command ran in
+  const [top, main] = repo(edited.map(dirname).find((dir) => existsSync(dir)) ?? cwd);
+  if (repo(cwd)[1] !== main) process.exit(0); // an edit in another repository is not checked
   // After an edit, only the edited file's group is reported; for a patch that names no file, both.
   const local = (path) => /^(work-items|memory)\//.test(path);
-  const tracked = /^(DECISIONS\.md$|system\/|sources\/|(.*\/)?(AGENTS|CLAUDE)\.md$)/;
+  const tracked = /^(?!\.\.)(DECISIONS\.md$|system\/|sources\/|(.*\/)?(AGENTS|CLAUDE)\.md$)/;
   const groups = patch && !named.length ? ['local', 'tracked'] : edited.map((path) => (
     local(relative(main, path)) ? 'local' : tracked.test(relative(top, path)) && 'tracked'));
   if (mode === 'edit' && !groups.some(Boolean)) process.exit(0);
+  // In a worktree, work items and Current State are checked against the main checkout's records.
+  const far = mode !== 'staged' && top !== main;
   check(top, mode === 'staged' ? null : main);
-  const all = found.filter(({ file }) => mode !== 'edit'
-    || groups.includes(local(file) ? 'local' : 'tracked'))
+  const here = found.splice(0).filter(({ file }) => !far || !local(file));
+  if (far) check(main, main);
+  const all = [...here, ...found.filter(({ file }) => local(file))].filter(({ file }) => mode
+    !== 'edit' || groups.includes(local(file) ? 'local' : 'tracked'))
     .map(({ file, line, text: what }) => `${file}${line ? `:${line}` : ''}: ${what}`);
-  if (all.length) {
-    const out = [`The record check found ${all.length} problem(s).${mode === 'staged'
-      ? ' The commit was stopped.' : ''} Fix each one. Tell the owner about any you cannot fix.`];
-    // Hosts cut long hook output, so the list stays under about 2,000 characters.
-    while (all.length && out.join('\n').length + all[0].length < 1850) out.push(all.shift());
-    if (all.length) out.push(`${all.length} more are not shown. Fix these first.`);
-    process.stderr.write(`${out.join('\n')}\n`);
-    process.exitCode = 2;
-  }
+  if (!all.length) process.exit(0);
+  // In Codex this text replaces the result of the edit, so it says the edit was not undone.
+  const out = [`The record check found problems: ${all.length}.${{ edit: ' The edit was not'
+    + ' undone.', staged: ' The commit was stopped.' }[mode] ?? ''} Fix each one. Tell the owner of`
+    + ' any you cannot fix.'];
+  // Hosts cut long hook output, so the list stays under about 2,000 characters.
+  while (all.length && out.join('\n').length + all[0].length < 1850) out.push(all.shift());
+  if (all.length) out.push(`${all.length} more are not shown. Fix these first.`);
+  console.error(out.join('\n')); // console.error ignores a reader that closed the output
+  process.exitCode = 2;
 } catch (error) {
-  process.stderr.write(`validate-records.mjs: no check ran (${String(error).split('\n')[0]}).\n`);
+  console.error(`The record check did not run. Its own error: ${String(error).split('\n')[0]}`);
 }

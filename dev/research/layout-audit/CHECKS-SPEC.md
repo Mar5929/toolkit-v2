@@ -19,14 +19,30 @@ list staged files.
 
 | Trigger | Where it is set | What it checks |
 | --- | --- | --- |
-| After an edit in Claude Code (`PostToolUse`, matcher `Edit|Write|MultiEdit`) | the Claude Code settings snippets | the group of records the edited file belongs to |
+| After an edit in Claude Code (`PostToolUse`, matcher `Edit|Write`, the two edit tools the captured hooks page names) | the Claude Code settings snippets | the group of records the edited file belongs to |
 | When the agent stops in Claude Code (`Stop`) | the Claude Code settings snippets | every record; exits 0 when `stop_hook_active` is true |
 | After an edit in Codex (`PostToolUse`, matcher `apply_patch`) | the Codex hooks snippets | the group of records the edited file belongs to |
-| Before a commit (`.githooks/pre-commit`, three lines, with `git config core.hooksPath .githooks` set once per clone by `project-setup`) | a tracked file in the project | every tracked record, plus check 8 |
+| Before a commit (`.githooks/pre-commit`, six lines, with `git config core.hooksPath .githooks` set once per clone by `project-setup`) | a tracked file in the project | every tracked record, plus check 8 |
 
 A finding goes to the agent as text on stderr with exit code 2, in both
 products. One line per finding: the file, the line when known, what is
-wrong, and what to do. At most about 2,000 characters.
+wrong, and what to do. At most about 2,000 characters. In Codex, exit code
+2 after `apply_patch` replaces the result of the edit with this text
+(`ai-external-knowledge/codex/hooks.md`, "PostToolUse"), so after an edit
+the first line says "The edit was not undone."
+
+Which records it reads:
+
+- The records Git tracks (`DECISIONS.md`, `system/`, `sources/`, the folder
+  guides) are read in the checkout the session works in.
+- `work-items/` and `memory/` are read in the main checkout, the only place
+  they are. In a session that works in its own worktree, an ID written in a
+  work item is looked up in the main checkout's records, not in the
+  worktree's branch: a record that `publish-docs` just saved is on the
+  default branch, which the main checkout holds and the session's branch
+  may not (second review, blocker 1).
+- After an edit of a file that is outside the session's repository and its
+  main checkout, it checks nothing and exits 0.
 
 ## What it must never do
 
@@ -63,15 +79,17 @@ Records every project has (after an edit, at stop, and before a commit):
    only DEC IDs that exist and are Open.
 7. In `sources/README.md`, each `SRC-###` appears once; each row kept in the
    repository names a file that exists; each file under `sources/`, other
-   than the guide files, belongs to one row.
+   than the guide files, belongs to one row. A row is kept in the
+   repository only when its "Where kept" cell holds a Markdown link.
 8. Before a commit only: no file already under `sources/` is changed or
    deleted, other than `README.md`.
 9. Every DEC, SRC, and rule ID written in `DECISIONS.md`, `system/`,
    `sources/README.md`, or a local work item is defined.
 10. No angle-bracket prompt is left in a `DECISIONS.md` entry, a `system/`
-    document, or a `sources/README.md` row.
-11. Every folder that has an `AGENTS.md` has a `CLAUDE.md` that holds
-    exactly `@AGENTS.md`.
+    document, or a `sources/README.md` row. Text in backticks is never a
+    prompt.
+11. The project folder, and each folder directly inside it, that has an
+    `AGENTS.md` has a `CLAUDE.md` that holds exactly `@AGENTS.md`.
 12. `system/integrations/README.md` lists every integration document, and
     each row's document exists.
 
@@ -85,6 +103,22 @@ stop):
 15. Every work item ID written in `DECISIONS.md`, a `system/` Changelog, or
     Current State exists. With work items in Notion or GitHub, and before a
     commit, the ID only has to be well formed.
+
+## Known limits of this version
+
+The script is at its size limit, so these stay as they are (second review,
+note 24):
+
+- Check 11 does not look at a folder two levels down, such as
+  `system/integrations/`.
+- Check 11 reports a top-level folder that came from somewhere else, has
+  its own `AGENTS.md`, and has a `CLAUDE.md` with other text. It is
+  reported each time the agent stops, until the owner removes the folder or
+  makes its `CLAUDE.md` hold `@AGENTS.md`.
+- Check 9 reads an ID of another system that has a prefix and two digits
+  like a rule ID, such as a Jira key "SEC-45", as a rule ID, and reports it
+  when `system/` has no such rule.
+- A prompt after one unpaired backtick on the same line is not seen.
 
 ## Not checked in this version
 

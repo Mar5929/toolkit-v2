@@ -18,7 +18,7 @@ This folder holds every original the project received and keeps, unchanged, such
 | Date received | The date the project received it, as YYYY-MM-DD. |
 | From | The person, team, or system it came from. |
 | What it is | The kind of original and its subject, in one line. A corrected version says which SRC it replaces. |
-| Where kept | A link to the file or folder here. For an original kept outside Git, the lasting place it is kept. |
+| Where kept | A Markdown link to the file or folder here, such as `[SRC-004-kickoff-notes.md](SRC-004-kickoff-notes.md)`. For an original kept outside Git, the lasting place it is kept, with no Markdown link. |
 | Used by | The IDs of the work items, decisions, and rules that used it, or "none yet". |
 
 A source has no status. A row is never removed.

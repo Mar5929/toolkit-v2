@@ -133,7 +133,7 @@ const BROKEN = [
   [7, 'a file with no row', (d) => put(d, 'sources/SRC-009-email.md', 'An email.\n'), 'sources/SRC-009-email.md', /^sources\/SRC-009-email\.md: has no row in sources\/README\.md/m, 'later'],
   [9, 'an ID that is not defined', (d) => change(d, 'DECISIONS.md', 'Sources: SRC-001', 'Sources: SRC-077'), 'DECISIONS.md', /SRC-077 is written here, but sources\/README\.md has no SRC-077/],
   [9, 'a work item that names a rule that is not defined', (d) => change(d, W, 'DEC-001, SEC-01', 'DEC-001, DAT-05'), W, /WI-001\.md:\d+: DAT-05 is written here, but system\/ has no DAT-05/],
-  [10, 'an angle-bracket prompt left in an entry', (d) => change(d, 'DECISIONS.md', 'The owner asked for it.', '<the reason for the decision>'), 'DECISIONS.md', /1 line\(s\) hold an angle-bracket prompt/],
+  [10, 'an angle-bracket prompt left in an entry', (d) => change(d, 'DECISIONS.md', 'The owner asked for it.', '<the reason for the decision>'), 'DECISIONS.md', /Lines that hold an angle-bracket prompt from the form: 1\. Replace each prompt/],
   [11, 'a CLAUDE.md that does not hold @AGENTS.md', (d) => put(d, 'sources/CLAUDE.md', 'See AGENTS.md\n'), 'sources/CLAUDE.md', /^sources\/CLAUDE\.md: this folder has an AGENTS\.md, so its CLAUDE\.md holds exactly one line/m],
   [12, 'an integration document with no row', (d) => change(d, 'system/integrations/README.md', /\| \[billing.*\n/, ''), 'system/integrations/billing.md', /billing\.md: has no row in system\/integrations\/README\.md/, 'later'],
   [12, 'a row whose document is missing', (d) => add(d, 'system/integrations/README.md', '| [crm.md](crm.md) | CRM | Draft | INT-02 |\n'), 'system/integrations/README.md', /the row for crm\.md names a document that is not in this folder/, 'later'],
@@ -150,7 +150,7 @@ for (const [number, name, breakIt, file, finding, later] of BROKEN) {
     breakIt(dir);
     const all = run(dir, ['--all']);
     assert.equal(all.code, 2, all.err);
-    assert.match(all.err, /^The record check found \d+ problem\(s\)\. Fix each one\./);
+    assert.match(all.err, /^The record check found problems: \d+\. Fix each one\. Tell the owner of any you cannot fix\.$/m);
     const line = all.err.split('\n').find((each) => finding.test(each) || new RegExp(finding.source).test(each));
     assert.ok(line?.startsWith(file), `a line for ${file} matches ${finding} in:\n${all.err}`);
     const edited = file.endsWith('/') ? W : file;
@@ -211,7 +211,7 @@ test('never fails because of its own error: bad input, a missing folder, no Git 
     assert.equal(result.code, 0, JSON.stringify(input));
     assert.ok(result.err.trimEnd().split('\n').length <= 1, 'at most one line');
   }
-  assert.match(run(dir, [], 'not json').err, /^validate-records\.mjs: no check ran \(SyntaxError: .*\)\.\n$/);
+  assert.match(run(dir, [], 'not json').err, /^The record check did not run\. Its own error: SyntaxError: .*\n$/);
   clean(claudeEdit(dir, 'src/app.js'), 'an edit of a file that is not a record checks nothing');
   assert.equal(run(dir, [], { cwd: dir, tool_name: 'apply_patch', tool_input: { command: 'a patch in a form the check does not know' } }).code, 2, 'a Codex patch that names no file: every group is reported');
   clean(run(dir, ['--all'], { cwd: dir, hook_event_name: 'Stop', stop_hook_active: true }), 'the agent is never kept from stopping twice');
@@ -225,20 +225,20 @@ test('never fails because of its own error: bad input, a missing folder, no Git 
   assert.equal(run(bare, ['--staged'], '').code, 0, 'git fails outside a repository: one line, exit 0');
 });
 
-test('from a Git worktree: tracked records are read in the worktree, work items and Current State in the main checkout', () => {
+test('from a Git worktree: tracked records are read in the worktree; work items and Current State are read in the main checkout and checked against its records', () => {
   const dir = good();
   const tree = join(dir, '.claude/worktrees/task');
   git(dir, 'worktree', 'add', '-q', tree, '-b', 'claude/task');
   change(tree, 'DECISIONS.md', 'Status: Decided', 'Status: Approved');
-  change(dir, W, 'DEC-001, SEC-01', 'DEC-001, DAT-05');
+  add(dir, 'DECISIONS.md', entry('DEC-003')); // saved to the default branch after the worktree was made
+  change(dir, W, 'DEC-001, SEC-01', 'DEC-003, DAT-05');
   const stop = run(tree, ['--all'], { cwd: tree });
   assert.match(stop.err, /^DECISIONS\.md:\d+: DEC-001 has Status "Approved"/m);
-  assert.match(stop.err, /WI-001\.md:\d+: DAT-05 is written here/);
+  assert.deepEqual([/WI-001\.md:\d+: DAT-05 is written here/.test(stop.err), /DEC-003/.test(stop.err)], [true, false], 'DEC-003 is defined in the main checkout, where the work item is');
   clean(claudeEdit(dir, 'DECISIONS.md'), 'the main checkout\'s own DECISIONS.md is correct');
   // An edit reports only the group of the edited file: tracked records, or work items and memory.
   const item = run(tree, [], { cwd: tree, tool_input: { file_path: join(dir, W) } });
-  assert.match(item.err, /DAT-05/);
-  assert.doesNotMatch(item.err, /Approved/);
+  assert.deepEqual([/DAT-05/.test(item.err), /Approved|DEC-003/.test(item.err)], [true, false]);
   assert.doesNotMatch(run(tree, [], { cwd: tree, tool_input: { file_path: join(tree, 'DECISIONS.md') } }).err, /DAT-05/);
 });
 
@@ -258,12 +258,12 @@ test('output stays under about 2,000 characters, one line per finding, and the c
   assert.deepEqual(snapshot(dir), before, 'no file was written, changed, or removed');
 });
 
-test('settings snippets: Claude Code runs the check after Edit, Write, and MultiEdit and at Stop; Codex after apply_patch', () => {
+test('settings snippets: Claude Code runs the check after Edit and Write and at Stop; Codex after apply_patch', () => {
   const dir = good();
   change(dir, 'DECISIONS.md', 'Status: Decided', 'Status: Approved');
   for (const memory of ['local', 'notion', 'hindsight']) {
     const claude = JSON.parse(readFileSync(join(assets, `settings/claude-settings-hooks.${memory}.json`), 'utf8')).hooks;
-    const after = claude.PostToolUse.filter((group) => group.matcher === 'Edit|Write|MultiEdit');
+    const after = claude.PostToolUse.filter((group) => group.matcher === 'Edit|Write');
     assert.deepEqual(after.map((group) => group.hooks), [[{ type: 'command', command: 'node', args: ['${CLAUDE_PROJECT_DIR}/.claude/hooks/validate-records.mjs'], timeout: 10 }]]);
     assert.deepEqual(claude.Stop, [{ hooks: [{ type: 'command', command: 'node', args: ['${CLAUDE_PROJECT_DIR}/.claude/hooks/validate-records.mjs', '--all'], timeout: 10 }] }]);
     const codex = JSON.parse(readFileSync(join(assets, `settings/codex-hooks.${memory}.json`), 'utf8'));
