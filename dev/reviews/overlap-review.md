@@ -41,7 +41,7 @@ this a hard-coded nightmare of just trigger words."
 
 - **O1 Shape.** What the skill does (a verb first), why (", so ..."), when
   ("Use when ..." with two to four of Mike's own phrases), and "Not for ...;
-  use <skill>." only where a neighbor competes. Under 400 characters. A set's
+  use <skill>." only where a neighbor competes. Under 500 characters. A set's
   skills say which projects they are for.
 - **O2 Makes sense.** A reader who knows nothing about Toolkit V2 can tell
   from the description alone what the skill does and when to use it. The
@@ -73,7 +73,7 @@ this a hard-coded nightmare of just trigger words."
 
 For each finding give the two skills, the request that matches both, why an
 agent could pick either, and the exact new description text for each skill
-you would change (whole description, under 400 characters, same shape).
+you would change (whole description, under 500 characters, same shape).
 A change to a model routing line is a question for Mike. Report nothing that
 is only a matter of taste.
 
@@ -81,5 +81,5 @@ is only a matter of taste.
 
 A second agent checks each finding: is the overlap real for a request Mike
 would plausibly say; does the new text settle it without opening a new
-overlap with a third skill; does it keep the O1 shape and the 400-character
+overlap with a third skill; does it keep the O1 shape and the 500-character
 limit? A finding that fails any of these is dropped, with the reason.

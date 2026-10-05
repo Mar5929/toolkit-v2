@@ -85,7 +85,8 @@ chat handling each one, and each chat's state. It uses no Notion. See
 | `dev/tools/check-rules.mjs` | Checks the model's rule files against Claude Code's guidance for rules (`dev/research/rules-best-practices.md`). |
 | `dev/tools/rule-lint.mjs` | The checks `check-rules.mjs` runs, and the rules list that the `AGENTS.md` of a project set up before the one-home layout holds. Dev only: nothing under `plugins/` imports it. |
 | `dev/tests/hooks.test.mjs` | Tests the first three hook commands and the settings snippets in scratch folders, and the size limit of every hook command. |
-| `dev/tests/validate-records.test.mjs` | Tests `validate-records.mjs`: a new project gives no finding, each of the 15 checks reports a broken record, and a real `git commit` is stopped through `.githooks/pre-commit`. |
+| `dev/tests/validate-records.test.mjs` | Tests `validate-records.mjs`: a new project gives no finding, each of the 15 checks reports a broken record, and a real `git commit` is stopped through `.githooks/pre-commit`. It is at its size limit. |
+| `dev/tests/validate-records-cases.test.mjs` | More tests for `validate-records.mjs`, from the second review: a record saved to the default branch and then named in a work item, with a remote and from a worktree; a work item that still holds the template's prompts; text in backticks; a source kept outside Git; an edit in another repository; a closed output; an unreadable record; and the first line of the findings in each mode. New cases go here. |
 | `dev/tests/org-guard.test.mjs` | Tests the Salesforce org guard, `guard-protected-orgs.cjs`, with the `salesforce` folder's `protected-orgs.json`, in a scratch folder with a stand-in `sf`. No org is reached. |
 | `dev/tests/permission-set-guard.test.mjs` | Tests the second Salesforce guard, `guard-permission-set-deploy.cjs`, in a scratch folder. No org is reached. |
 | `.claude/settings.json` | Settings for sessions working on this repository. `claudeMdExcludes` stops the `CLAUDE.md`, `AGENTS.md` files, and rules in every folder of `<setup>assets/` from loading as instructions here: they are for projects, not for this repository. `skillOverrides` sets each of the 17 project skill names to `"off"`, so a session that reads a file under `<setup>assets/` does not get the project skills. It matches by name, so add a new project skill's name there: `check-skills.mjs` fails when the list and the project skill names differ. It does not touch the `toolkit` plugin's own skills. Both settings were tested in a session started in a worktree on 2026-10-05: `dev/test-runs/fix-pass-setup-and-tools.md`. |
@@ -237,13 +238,16 @@ node --test 'dev/tests/*.test.mjs'
   real names, and no metaphors. Skills and helper briefs carry their own
   writing rules, because helper agents and Codex never see the output style.
 - **Code limit** (`dev/GOAL.md`, "Code limit"; Mike, 2026-09-30). The only
-  code a project runs is the three hook commands (`session-start.mjs`,
-  `prompt-reminder.mjs`, `codex-after-commit.mjs`) and the model's own
+  code a project runs is the four hook commands (`session-start.mjs`,
+  `prompt-reminder.mjs`, `codex-after-commit.mjs`, and
+  `validate-records.mjs`, which has its own bullet below), the pre-commit
+  file that runs the fourth, and the model's own
   Salesforce code (its two guards, its graph Stop hook, and `tools/`). Each
   hook command does one job; can never break a session (on any error it
   prints one line and exits normally); needs nothing installed beyond Node
   (Node 20 or newer, ES modules, no npm dependencies); is covered by
-  `dev/tests/hooks.test.mjs`; and stays short enough to read in one sitting.
+  `dev/tests/hooks.test.mjs` (the fourth by the two files below); and stays
+  short enough to read in one sitting.
   No other script goes into a skill or a project. A new command, or a new
   job for one, needs Mike's yes first, with its size in plain numbers: do not
   write it; stop and tell him.
@@ -255,15 +259,22 @@ node --test 'dev/tests/*.test.mjs'
     exit code 2. He was told about 220 lines plus about 220 lines of tests.
     It is 279 lines plus 279 lines of tests
     (`dev/tests/validate-records.test.mjs`), and he accepted that size on
-    2026-10-05. A test fails when it is over 280 lines. Tell him the size
-    again before it grows.
+    2026-10-05. A test fails when the command is over 280 lines, and the
+    command never goes over that. Tell him the size again before it grows.
+    The fixes after the second review (2026-10-05) kept the command at 279
+    lines. Their tests are in a second file,
+    `dev/tests/validate-records-cases.test.mjs` (189 lines), so the first
+    test file stays at 279: tell him about those 189 lines of tests.
   - With it comes `.githooks/pre-commit`, a 6-line shell file every project
     gets (his yes with the same size, 2026-10-05). It runs the fourth
     command before a commit and stops the commit only on a finding. Git
     runs it once `core.hooksPath` is `.githooks` in that copy of the
     repository; `project-setup` sets that, and changes nothing when a
-    project already has another hooks folder or a `pre-commit` hook of its
-    own (`<setup>references/placing-files.md`, "5. The pre-commit check").
+    project already has another hooks folder, or any hook of its own in
+    its Git hooks folder (a file whose name does not end in `.sample`,
+    such as `commit-msg` or `pre-push`): with `core.hooksPath` set, Git
+    stops running every hook in that folder
+    (`<setup>references/placing-files.md`, "5. The pre-commit check").
 - **Workstreams plugin** (Mike, 2026-10-03, work items TKV-12 and TKV-14).
   The one other piece of code the toolkit ships. The first version (TKV-12)
   listed Notion work items. Mike had it rebuilt the same day (TKV-14) so it

@@ -252,16 +252,71 @@ complete in one file that reads the same in every project.
   checklist for writing or changing a harness file. It is on in every
   folder and is never copied into a project, so section 5, which lists
   project skills, does not hold it.
-- Settled during the build, for the owner to confirm. The builder of the
-  project files made these changes on 2026-10-05, and no review asked for
-  them:
-  - A second deployment of one work item gets its own folder in
-    `delivery/deployments/`, with the environment in its name.
-  - A diagram in `system/diagrams/` needs no decision, only a Changelog
-    row in the document it explains.
-  - A glossary meaning that only an original gives needs the owner's yes
-    before it is written.
-  - A new row of the root `AGENTS.md` sends a plain fact about the client
-    or the project to `PROJECT.md`, "Operating conventions".
-  - `work-items/AGENTS.md` points to `running-work-item-lifecycle` for the
-    States and repeats none of them.
+- Settled during the build, for the owner to confirm. The builders made
+  these twelve changes on 2026-10-05. No review asked for the first seven
+  or the last three; the second review listed all twelve
+  (`dev/reviews/2026-10-05-fixes-reread-review.md`, "Changes the owner
+  should see"):
+  1. A work item that is deployed to a second environment gets a second
+     folder in `delivery/deployments/`, with the environment in its name.
+  2. A diagram in `system/diagrams/` needs no decision. It needs only a
+     Changelog row, with "none" in the DEC cell, in the document it
+     explains.
+  3. A glossary meaning that only an original gives, and no decision or
+     word of the owner gives, needs the owner's yes before it is written.
+  4. A plain fact about how the client's business or the project team
+     works, such as the month the fiscal year starts, goes to
+     `PROJECT.md`, "Operating conventions". The root `AGENTS.md` has a row
+     for it.
+  5. `work-items/AGENTS.md` no longer lists the States, the levels, or the
+     IDs inside an item. It points to `running-work-item-lifecycle`. This
+     reverses section 2, decision 6 (the folder guide holds the statuses),
+     because a project with work items in Notion or GitHub has no such
+     guide.
+  6. "Check the setup" puts back a toolkit guide or blank form that is
+     missing from `work-items/` or `memory/`. It changes nothing else.
+  7. "Update the toolkit" writes a Moved up line and one history row into
+     every closed work item, because the record check needs that line.
+  8. The agent recommends the Designing State when two ways to build an
+     item differ in what the owner would see, pay for, or have to
+     maintain, or when a mistake in the change would be costly to undo.
+     The first fix pass had written "when more than one way to build it
+     would meet the requirements", which fits almost every item; the
+     second fix pass replaced it with this measure.
+  9. A plain question gets no keep hint from the prompt reminder. A
+     request phrased as a question still gets it: a sentence that ends in
+     "?" and holds "can you", "could you", "will you", "would you",
+     "please", "from now on", or "going forward". The first fix pass had
+     dropped every sentence that ends in "?".
+  10. `publish-docs` covers every `.md` file under `tools/` and every file
+      whose name starts with `PROJECT`.
+  11. The root `AGENTS.md` says never to edit the guides in `work-items/`
+      and `memory/`: they come from the toolkit.
+  12. In the starter `PROJECT.md` and `README.md`, the build, test, and
+      deploy commands are only in `AGENTS.md`, "Commands".
+- From the second fix pass (2026-10-05), also for the owner to confirm:
+  - After a save that was pushed to a remote, `publish-docs` moves the
+    main checkout's default branch forward to it (a fast-forward only,
+    after its merge-safety check). When it cannot, it says so and names
+    the files in the way.
+  - A pointer to a new record is written into a work item only after the
+    main checkout holds the save. In a session that works in its own
+    worktree, the record check looks up an ID written in a work item in
+    the main checkout's records.
+  - Setup turns the pre-commit check on only when the project's Git hooks
+    folder holds no hook of its own, of any name.
+  - Setup stops and asks when the folder already has its own `system/`,
+    `sources/`, `delivery/`, or `reference/` folder with files in it.
+  - A `delivery/` record that belongs to no single work item, such as a
+    release of several items or a client handoff, is saved with
+    `publish-docs`.
+  - The starter root `AGENTS.md` was cut from 20,664 to 19,879 bytes by
+    removing sentences it said twice or that a folder guide holds
+    (`dev/test-runs/fix-pass-2.md` lists each cut).
+  - The record check is still 279 lines. Its first test file is still
+    279 lines. The tests for the second review's cases are in a second
+    test file, `dev/tests/validate-records-cases.test.mjs`, of 189 lines:
+    the owner has not been told about those lines yet.
+  - In Claude Code the record check runs after the tools `Edit` and
+    `Write`. `MultiEdit` was taken out of the matcher: the captured hooks
+    page does not name such a tool.

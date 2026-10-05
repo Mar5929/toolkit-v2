@@ -136,8 +136,8 @@ It shows you the plan and waits for your yes. Then it copies the starter
 project's files, the skills for your answers, the hooks, and the settings
 into the project. It turns on a check of the project's records that runs
 before each commit (a Git setting in that copy of the project; when the
-project already has its own commit check, setup changes nothing and tells
-you). It asks you to sign in where needed (`ntn login` for Notion,
+project already has a Git hook of its own, or its own hooks folder, setup
+changes nothing there and tells you). It asks you to sign in where needed (`ntn login` for Notion,
 `gh auth login` for GitHub), then sets up the Notion pages, the GitHub labels,
 or the Hindsight memory bank. It finishes by running its checks and offering
 to commit.
@@ -153,7 +153,9 @@ the bank in the dashboard, `https://memory.mrihm-memory.com`.
 Start a new session afterwards, so the new files load. In Codex, also trust
 the project folder and its hooks (`/hooks`).
 
-Later, say **"check the setup"** to see what differs (it changes nothing), or
+Later, say **"check the setup"** to see what differs (it changes nothing,
+except that it puts back a toolkit guide or blank form that is missing from
+`work-items/` or `memory/`), or
 **"update the toolkit"** to bring a project up to date. It shows every change
 first and never overwrites a file you changed without asking. The check
 before each commit is a setting of one copy of the project: in a new copy,
@@ -243,7 +245,7 @@ description.
 | --- | --- |
 | A session starts, resumes, or its context is compacted | The agent is shown Current State: a short list of what is happening now and what waits on you. With local memory, it is also shown the list of memory pointers, `memory/MEMORY.md`. When Current State is too long or older than 7 days, it asks the agent to clean it up. |
 | You send any message | The agent is told to check the project's skills and use every one that fits, before it answers. |
-| You say something worth keeping ("remember this", "from now on", "we decided", and similar) | A second one-line reminder names `curating-project-memory` (with Hindsight, the add-on's tools). The skill decides whether anything is saved, and asks you first. |
+| You say something worth keeping ("remember this", "from now on", "we decided", and similar) | A second one-line reminder names `curating-project-memory` (with Hindsight, the project rule `.claude/rules/hindsight-memory.md`). The skill decides whether anything is saved, and asks you first. |
 | After a commit | A reminder to update the work item's history and status, and Current State if it changed. |
 | A helper agent starts or reports back | A reminder to update that helper's work item. |
 | The agent edits a file | The record check runs: 15 checks on the form of `DECISIONS.md`, `system/`, `sources/`, and local work items, such as an ID used twice or a rule marked approved with no decision behind it. The agent is told what is wrong and fixes it. |

@@ -42,6 +42,9 @@
 //     its row's Choice cell, so two folders swapped between rows fail;
 //   - the skillOverrides list in this repository's .claude/settings.json sets every project
 //     skill name to "off" and names nothing else;
+//   - the list of the kinds of harness file in writing-harness-files/SKILL.md is, word for word,
+//     in the repository AGENTS.md (twice) and README.md; each kind is in that skill's description;
+//     and each kind has a "## " section in its references/checklist.md;
 //   - the Salesforce entries that setup-copy.md tells setup to take out of a project's
 //     .claude/settings.json are the Salesforce entries every-project/.claude/settings.json holds:
 //     each sf or sfdx permission rule, and each hook command under tools/ or named guard-*;
@@ -419,6 +422,32 @@ for (const f of walk(ASSETS)) {
   if (overrides) {
     for (const name of projectSkills) if (overrides[name] !== 'off') report('error', REPO_SETTINGS, `skillOverrides does not set the project skill ${name} to "off": a session that reads a file under project-setup/assets/ would load it`);
     for (const name of Object.keys(overrides)) if (!projectSkills.includes(name)) report('error', REPO_SETTINGS, `skillOverrides names ${name}, which is no project skill under project-setup/assets/: remove it, or correct the name`);
+  }
+}
+
+// ------------------------------------------------------------------ the kinds of harness file
+
+// The list of the kinds of harness file is kept by hand in several places. The skill's SKILL.md
+// holds the one list; every other place must agree with it.
+{
+  const skillDir = path.join(ROOT, 'plugins/toolkit/skills/writing-harness-files');
+  const skillFile = path.join(skillDir, 'SKILL.md');
+  const flat = (file) => read(file).replace(/\s+/g, ' ');
+  const list = flat(skillFile).match(/It is one of these kinds: (a skill, .*?, or a [^.]+)\./)?.[1];
+  if (!list) report('error', skillFile, 'has no sentence "It is one of these kinds: a skill, ..., or a ...": update this check when the sentence changes');
+  else {
+    for (const [file, times] of [[path.join(ROOT, 'AGENTS.md'), 2], [path.join(ROOT, 'README.md'), 1]]) {
+      const found = flat(file).split(list).length - 1;
+      if (found < times) report('error', file, `holds the list of the kinds of harness file ${found} time${found === 1 ? '' : 's'}, word for word as ${shown(skillFile)} gives it; it must hold it ${times === 1 ? 'once' : 'twice'}`);
+    }
+    // "a Codex `.rules` file" gives "Codex .rules file"; "an `AGENTS.md` or `CLAUDE.md`" gives "AGENTS.md or CLAUDE.md".
+    const kinds = list.split(/, (?:or )?/).map((kind) => kind.replace(/^an? /, '').replace(/`/g, ''));
+    const description = flat(skillFile).match(/description: '(.*?)' ---/)?.[1] ?? '';
+    const sections = read(path.join(skillDir, 'references/checklist.md')).split('\n').filter((line) => line.startsWith('## ')).join('\n').toLowerCase();
+    for (const kind of kinds) {
+      if (!description.includes(kind)) report('error', skillFile, `its description does not name the kind "${kind}", which its list of the kinds of harness file holds`);
+      if (!kind.split(' or ').every((part) => sections.includes(part.toLowerCase()))) report('error', path.join(skillDir, 'references/checklist.md'), `has no "## " section for the kind "${kind}"`);
+    }
   }
 }
 
