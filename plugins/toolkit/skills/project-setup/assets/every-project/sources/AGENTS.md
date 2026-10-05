@@ -31,14 +31,13 @@ A source has no status. A row is never removed.
 
 ## What must stay true
 
-- Every original the project keeps has one row, and every row has one original.
-- The file or folder name starts with the row's ID.
 - Never edit, rename, or delete an original once it is filed. A corrected version is a new SRC whose row names the old one.
 - Add the row in the same edit that files the original.
 - Other records point here by SRC-###. Never copy a source's text into a work item, a decision, or a system document.
 - A source is somebody's words, not the project's truth. What the project decided from it goes in `DECISIONS.md` or `system/`.
 - When a record starts to use a source, add that record's ID to "Used by".
 - Outside documentation that the project captured from a public page is not a source. It goes in `reference/outside-docs/`.
+- `.claude/hooks/validate-records.mjs` checks the list and the files here after each edit and before each commit. Fix what it reports.
 
 ## Which skill to use
 

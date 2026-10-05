@@ -69,6 +69,7 @@ Every folder and file, what it holds, and what to follow when you change it.
 | `.claude/rules/` | Short rules the agent follows in every session, or whenever it works on certain files. `owner-preferences.md` holds the owner's own standing instructions. | Only with the owner's yes. |
 | `.claude/skills/` | Step-by-step procedures the agent opens when a task calls for one. "Which skill" below says which skill owns which moment. | Only with the owner's yes. |
 | `.claude/hooks/`, `.claude/settings.json` | Small commands the agent's app runs by itself at set moments, such as the start of a session, and the settings file that turns them on. Salesforce: also the two org guards and `.claude/protected-orgs.json`, the orgs they protect. | Only with the owner's yes. |
+| `.githooks/pre-commit` | The command Git runs before each commit. It runs `.claude/hooks/validate-records.mjs`, which checks the form of the records in `DECISIONS.md`, `system/`, and `sources/`. | Only with the owner's yes. |
 | `.claude/output-styles/` | The Plain English style that Claude Code applies to chat replies. | Only with the owner's yes. |
 | `.agents/skills`, `.codex/` | What Codex reads: a link to `.claude/skills`, so Codex uses the same skills, and Codex's own hooks and settings. | Only with the owner's yes. |
 

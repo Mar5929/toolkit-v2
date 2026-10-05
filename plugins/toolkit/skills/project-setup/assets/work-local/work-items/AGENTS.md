@@ -56,7 +56,7 @@ An ID is never reused. The IDs inside an item are unique within that item.
 ## What must stay true
 
 - The `id:` line in the header is the item's identity. Find an item by its `id:`, never by its path.
-- The main file is named `<ID>.md`. No other file in the project has that name.
+- No file in the project other than an item's main file is named `<ID>.md`.
 - The owner may move, rename, nest, or group item folders by hand. Find each item again by its `id:`, tell the owner what moved, and continue.
 - Never move, group, archive, or rename an item unless the owner asks.
 - When two items have one ID, renumber only an item you created in this session, and tell the owner.
@@ -65,6 +65,7 @@ An ID is never reused. The IDs inside an item are unique within that item.
 - Leave any other file the owner put in an item folder, and tell the owner it is there.
 - An item becomes Done or Cancelled only on the owner's word, and only after its closing step recorded whether it changed `system/` or `DECISIONS.md`.
 - What another work item needs to know never stays only here: it is in `DECISIONS.md` or `system/`, and the item holds its ID.
+- `.claude/hooks/validate-records.mjs` checks the items after each edit. Fix what it reports.
 
 ## Which skill to use
 
