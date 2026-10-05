@@ -7,7 +7,7 @@ Name the DEC ID behind the change before you write a rule. No entry exists: do `
 ## Add or change a rule
 
 1. Search `system/` for the subject. A rule that already says it gets no second rule.
-2. Choose the mark that the decision's Status gives (`system/AGENTS.md`, "What each mark means"). For a Draft rule, add its DEC ID under the document's Open questions.
+2. Choose the mark from the decision's Status: Decided gives Approved, and Open gives Draft (`system/AGENTS.md`, "What each mark means"). For a Draft rule, add its DEC ID under the document's Open questions.
 3. Write the rule.
    - A new rule: the next ID of the document's prefix, in the form `system/AGENTS.md` gives.
    - A changed rule: change its Rule line and its "Conditions and exceptions" line in place, under the same ID, and set its Source to the new DEC ID. Do not keep the old wording in the document: the superseded entry in `DECISIONS.md` holds it.
@@ -32,7 +32,7 @@ Use this when the closing step of `running-work-item-lifecycle` names a rule a w
 3. Change the mark to Built with the work item's ID. Change no other line of the rule.
 4. Set the document's Status again. Add one Changelog row: the date, "<rule ID> built", the rule's DEC ID, and the work item's ID. "Last changed via" keeps the rule's DEC ID.
 5. Save with `publish-docs`.
-6. Give the closing step each rule ID and the commit ID. It records them in the work item.
+6. Give the closing step each rule ID, the commit ID, and whether the main checkout holds the save (`SKILL.md`, "Every time"). It records the rule IDs in the work item.
 
 ## A glossary term
 

@@ -13,7 +13,7 @@ For every original the project received and keeps, as pasted text or as a file, 
    - Kept outside Git: save no file.
 5. Add the row to `sources/README.md`. "Used by" names each work item that uses the source now.
 6. Save with `publish-docs` now, before you use the source. The save claims the number, and a link from Notion or GitHub works only once the file is on the default branch.
-7. In each work item that uses the source, add its line under Notes, Sources with `using-work-tracker`: the SRC ID, what it is, and the IDs taken from it. In Notion and GitHub, the line may add the web address of the file on the default branch.
+7. Once the main checkout holds the save (`SKILL.md`, "Every time"), add the source's line under Notes, Sources in each work item that uses it, with `using-work-tracker`: the SRC ID, what it is, and the IDs taken from it. In Notion and GitHub, the line may add the web address of the file on the default branch.
 8. Report the SRC ID to the owner, and give it to the skill that asked for this step.
 
 ## What the source says

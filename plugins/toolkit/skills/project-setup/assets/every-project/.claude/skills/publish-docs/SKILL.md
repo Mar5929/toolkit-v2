@@ -8,7 +8,7 @@ description: 'Commits an approved edit to project documents, such as system/, DE
 Save a change to Git-tracked project documents directly to the default
 branch, with no pull request, from a temporary Git worktree of its own (rule:
 `.claude/rules/publish-project-documents.md`). Only the agreed document edit
-reaches the default branch, no other session's files change, and the save
+reaches the default branch, no other session's work changes, and the save
 is finished only when step 8 finds its commit on the default branch. This
 skill decides nothing about what a document says: the skill that sent the
 save does. Run each Git command on its own, with `git -C <folder>` so it
@@ -90,20 +90,23 @@ never depends on the current folder.
      checkout: `git -C <main> merge --ff-only <commit id>`. When no checkout
      has it: `git -C <save> push . HEAD:<default>`. Refused: open
      `references/recovery.md`.
-8. **Verify, clean up, report.**
+8. **Verify, update the main checkout, clean up, report.**
    - With a remote: `git -C <save> fetch origin <default>`, then
      `git -C <save> branch -r --contains <commit id>` must list
      `origin/<default>`. With no remote:
      `git -C <main> branch --contains <commit id>` must list the default
      branch.
+   - With a remote: bring the main checkout up to date ("The main checkout",
+     below). With no remote, the fast-forward in step 7 did it.
    - When no other save of the same files is pending in this conversation,
      remove the save worktree:
      `git -C <main> worktree remove .claude/worktrees/docsave-<short-slug>`.
-   - Report the commit id and where it is ("Saved to main and pushed to the
-     remote." or "No remote: saved to main on this computer only."). When
-     another skill started this save, go back to it and continue from the step
-     that started this save. Otherwise end with the one question for the owner
-     or the exact words that continue.
+   - Report the commit id, where it is ("Saved to main and pushed to the
+     remote." or "No remote: saved to main on this computer only."), and
+     whether the main checkout holds it. When another skill started this
+     save, go back to it and continue from the step that started this save.
+     Otherwise end with the one question for the owner or the exact words
+     that continue.
 
 ## Gotchas
 
@@ -143,13 +146,38 @@ only for files this session edited or created:
 `git -C <working checkout> restore -- <file>` for a changed file, `rm` for a
 new one.
 
-- With a remote: do it after step 8 verifies the save. The published version
-  comes back with the next `pull-latest`.
+- With a remote: do it after step 8 verifies the save, before the main
+  checkout is brought up to date. The published version comes back with that
+  update, or with the next `pull-latest` when the working checkout is another
+  worktree.
 - With no remote: do it before step 7, once the copy is staged. Git refuses
   the fast-forward while the main checkout holds a changed copy of a saved
   file, or an untracked copy of a new one.
 
 Never discard another session's changes.
+
+## The main checkout
+
+A save pushed to a remote is not in the main checkout yet. Work items and
+the record check (`.claude/hooks/validate-records.mjs`) look up a record's ID
+there, so move the main checkout's default branch forward after step 8
+verifies the save. Fast-forward only: never merge, rebase, reset, or switch
+branches there.
+
+1. `git -C <main> branch --show-current` prints `<default>`. It prints
+   another branch: change nothing.
+2. The merge-safety check: `git -C <main> diff --name-only HEAD origin/<default>`
+   lists the files the update changes, and `git -C <main> status --porcelain`
+   lists the files with uncommitted changes. A file in both lists is in the
+   way. This session's own copy of a saved file: remove it as "Carrying an
+   edit across" says. Any other file: change nothing.
+3. No file is in the way: `git -C <main> merge --ff-only origin/<default>`.
+   Git refuses: change nothing.
+
+When the main checkout was not updated, the save is still finished. Say so in
+the report in one line: "The main checkout does not hold this save yet", then
+the branch it is on, the files in the way, or Git's message. Tell the skill
+that started the save.
 
 ## Hand-offs
 

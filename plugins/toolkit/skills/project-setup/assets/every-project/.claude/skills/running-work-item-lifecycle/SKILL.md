@@ -28,7 +28,7 @@ Every item has a Status and a State. The State says where the work is. The Statu
 | Cancelled | Cancelled | none | |
 
 - An item moves to the next State only when "Move on when" is true for the State it is in.
-- Any item, a bug included, can go through Designing. When asking him to approve the requirements, recommend the next State: Designing when more than one way to build it would meet the requirements, or when a mistake in the change would be costly to undo; otherwise Building.
+- Any item, a bug included, can go through Designing. When asking him to approve the requirements, recommend the next State: Designing when two ways to build it differ in what the owner would see, pay for, or have to maintain, or when a mistake in the change would be costly to undo; otherwise Building.
 - A parent item stays in Building until every sub-item is Done or Cancelled. Then it goes through the Testing Loop as a whole.
 - **Backlog:** add the idea in his words, as the Original verbatim requirement of Requirement 1, and do not start the interview until he asks to start it. Its Next action names the first step for when he starts it, for example "Agent: when the owner starts this item, agree its goal with him."
 - **Blocked:** stuck on something outside the work, such as missing access, another team, or a piece that must be finished first. Waiting for the owner's answer is not Blocked. Set `waiting_on` to who can clear it. When it is cleared, return to the State the Blockers line names.
