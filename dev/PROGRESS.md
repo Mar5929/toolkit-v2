@@ -2,6 +2,70 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## The one-home layout, version 0.9.0 (2026-10-05, on a branch, not landed)
+
+Work item TKV-24. Branch `claude/one-home-layout`, worktree
+`.claude/worktrees/one-home-layout`. Not pushed. It lands only with Mike's
+yes, after he has looked at the HarborDesk sample built from it.
+
+What Mike decided is in `dev/research/layout-audit/DESIGN-SPEC.md`. The
+audits, the memory scenario test, and the specification of the checking
+script are beside it. The reviews are `dev/reviews/2026-10-05-*.md`.
+
+- One folder per setup choice under `project-setup/assets/` (`every-project`,
+  `work-local`, `work-notion`, `work-github`, `memory-local`,
+  `memory-notion`, `memory-process`, `memory-hindsight`, `notion-tools`,
+  `salesforce`, `soul`). A choice decides which files a project gets, never
+  which lines: all 53 setup marker blocks are gone.
+- The project layout: a root `AGENTS.md` that is the outline and the filing
+  table; `DECISIONS.md`; `system/`; `sources/`; `delivery/`; `reference/`;
+  a guide (`AGENTS.md` with a one-line `CLAUDE.md`) in each main folder.
+  `project-wide-records/`, `requirements/`, `system-guide/`, and
+  `ai-external-knowledge/` are removed from the starter.
+- Skills renamed: `running-work-item-lifecycle`, `using-work-tracker`,
+  `filing-project-records`, `curating-project-memory`, `using-memory-store`.
+  No new project skill: closing is a step of the lifecycle skill; recording
+  a decision, filing a source, and updating a system document are three
+  steps of the filing skill.
+- Local memory holds where work stopped plus pointers. A Hindsight project
+  gets no toolkit memory skill (Mike, 2026-10-05): the add-on ships its own.
+- A fourth hook command, `validate-records.mjs` (15 checks; Mike accepted
+  279 lines plus tests on 2026-10-05), run after an edit, at stop in Claude
+  Code, and before a commit through `.githooks/pre-commit`.
+- A third plugin skill, `writing-harness-files` (Mike's yes, 2026-10-05),
+  and the repository rule "Harness files follow the current official
+  documentation". The official pages were captured again on 2026-10-05, and
+  Hindsight's pages were added.
+- "Update the toolkit" has steps that move a project from the old layout to
+  the new one (`references/one-home-layout.md`).
+- Reviews: three separate reviews, a review of the fixes, and a review of
+  the second fixes. Their status sections say what is closed and what waits.
+- Routing test: `dev/test-runs/skill-routing-0.9.0.md`. Claude Code 54 of
+  60 right, Codex 51 of 60. The steady misses are listed there; the
+  description changes they suggest are not made yet.
+- A Codex project must trust its hooks again in `/hooks` after an update.
+
+Open with Mike (also in `dev/research/layout-audit/FIX-LIST.md`, "Waits for
+the owner", and `MEMORY-SCENARIOS.md`):
+- What memory holds: the scenario test recommends pointers plus short dated
+  notes for facts that fit no other file, and six fixes that do not depend
+  on that choice (project tasks shown at "where are we", a search that
+  covers `work-items/`, a run log in `delivery/`, a "Next session" line that
+  cannot go stale, lessons read before a deploy, `PROJECT.md` in front of
+  the session).
+- The "Memory approval" line in `PROJECT.md`, which nothing reads.
+- `session-handoff.md` (his wording) and the figurative words in his older
+  rule files.
+- What Notion memory stores and when its pointers are read.
+- The twelve changes the builders made on their own, listed in
+  `DESIGN-SPEC.md` section 9 for him to confirm.
+
+Before it lands:
+- The main checkout has an uncommitted `AGENTS.md` edit from another
+  session, the rule "Challenge the current design (Mike, 2026-10-04)". It is
+  not on this branch. It must be kept.
+- HarborDesk is built from the branch and Mike has looked.
+
 ## Merge update (2026-10-04)
 
 - Mike approved both merges. Pull request 20 landed the `dev/` cleanup, and
