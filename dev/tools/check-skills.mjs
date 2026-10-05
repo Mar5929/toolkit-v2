@@ -1,14 +1,13 @@
 #!/usr/bin/env node
 // check-skills.mjs: checks the skills that project-setup copies into projects. Dev only, not shipped.
 //
-// Usage: node dev/tools/check-skills.mjs [--assets <folder>]
-//   --assets <folder>  read the setup folders (every-project, work-local, salesforce, and the
-//                      others) from this folder instead of
-//                      plugins/toolkit/skills/project-setup/assets.
+// Usage: node dev/tools/check-skills.mjs
 //
-// The setup folders hold project files at the paths a project has them. A file the owner's
-// choices alternate (work-local, work-notion, work-github; memory-local, memory-notion) may sit
-// at the same path in each of those folders; every other path is in exactly one folder.
+// The setup folders (every-project, work-local, salesforce, and the others, in
+// plugins/toolkit/skills/project-setup/assets/) hold project files at the paths a project
+// has them. A file the owner's choices alternate (work-local, work-notion, work-github;
+// memory-local, memory-notion) may sit at the same path in each of those folders; every
+// other path is in exactly one folder.
 //
 // For project-setup and every SKILL.md under it, the plugin's other skills beside
 // project-setup (the tool list), plus the Salesforce folder's .claude/skills/ (the model's own
@@ -51,8 +50,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SETUP = path.join(ROOT, 'plugins/toolkit/skills/project-setup');
 const INDEX = path.join(ROOT, 'dev/SKILL-INDEX.md');
-const argv = process.argv.slice(2);
-const ASSETS = argv.includes('--assets') ? path.resolve(argv[argv.indexOf('--assets') + 1] || '.') : path.join(SETUP, 'assets');
+const ASSETS = path.join(SETUP, 'assets');
 // The folders that hold files at the paths a project has them. The first is copied for every project.
 const PROJECT_FOLDERS = ['every-project', 'work-local', 'work-notion', 'work-github', 'memory-local', 'memory-notion', 'memory-process', 'notion-tools', 'salesforce', 'soul'];
 // Folders for choices that exclude each other: they may hold a file at the same path.

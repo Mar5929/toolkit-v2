@@ -158,8 +158,8 @@ node --test 'dev/tests/*.test.mjs'
   named above). It also checks that the Next action prompt in the Notion work
   item template's text (`<setup>references/notion-build/work-item-page.md`)
   matches `work-local/work-items/work-item-template/WORK-ITEM.md`.
-  `--assets <folder>` checks another copy of the setup folders. Warnings are
-  on text that is Mike's (the `sf-*` skills): they do not fail the run.
+  Warnings are on text that is Mike's (the `sf-*` skills): they do not fail
+  the run.
 - `check-rules.mjs` puts the setup folders together in a scratch folder, as one
   project that has every choice, and checks that project's rules.
 - Keep the quotes around the test pattern, so Node reads it, not the shell.
