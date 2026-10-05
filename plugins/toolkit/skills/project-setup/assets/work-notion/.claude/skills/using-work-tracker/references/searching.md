@@ -10,7 +10,6 @@ The exact calls that read items, phases, and tasks, the project's own included, 
 - A parent's full tree
 - The project's phases and tasks
 - Search
-- Reading a source file
 - Pages without the template
 - Cards with no title
 
@@ -93,22 +92,6 @@ ntn api v1/data_sources/{{WORK_ITEMS_DS}}/query -d '{"filter":{"and":[{"property
 ```
 
 `v1/search` matches page titles only, not page text. For words inside the text, narrow the items first (by title, tag, type, parent, or status), then read each candidate's page text and look for the words.
-
-## Reading a source file
-
-A transcript or document saved on an item sits in its Files property. The item's Notes, Sources line names it. Get each file's name and address:
-
-```bash
-ntn api v1/pages/<page-id> < /dev/null | jq -r '.properties.Files.files[] | "\(.name)\t\(.file.url // .external.url)"'
-```
-
-A Notion file address lasts one hour, so download the file right away into a scratch folder outside the project (`using-notion-cli`, "Sending a body"):
-
-```bash
-curl -sfL '<url>' -o '<scratch folder>/<name>'
-```
-
-Read it whole there, then remove the scratch folder. When `curl` fails, the address has expired: read the page again to get a new address. In Codex, run `curl` as its own command with escalated permissions, the same as `ntn` (`using-notion-cli`, "In Codex"). A Salesforce client file is never attached: its Sources line names its `delivery/` path, so read it there.
 
 ## Pages without the template
 

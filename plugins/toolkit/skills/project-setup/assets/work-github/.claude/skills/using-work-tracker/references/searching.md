@@ -77,7 +77,7 @@ Without `in:`, GitHub's search matches words in titles, bodies, and comments. `i
 
 ## Recently finished, and changes since a date
 
-`<date>` is the date the owner names, or else the "Last updated" date of the project's Current State.
+`<date>` is the date the owner names, or else the date the project's Current State was last changed.
 
 ```text
 gh issue list -R <repo> --state closed --limit 200 --search 'closed:>=<date>' --json number,title,stateReason,closedAt

@@ -17,8 +17,9 @@ Requirements: <every requirement block that is not dropped, whole: its heading, 
   verbatim requirement, Goal, Functional Requirements, and Acceptance Criteria>
 Open questions: <the open Questions and Answers rows>
 Owner's decisions: <answered Questions and Answers rows marked Decision? yes>
-Files to read: <the area's files in requirements/ and system-guide/, the
-  item's source files, and the files of the existing build, or "none">
+Files to read: <the area's document in system/, system/constraints.md, the
+  item's sources in sources/ by SRC-###, and the files of the existing build,
+  or "none">
 ```
 
 ## Brief for the helper

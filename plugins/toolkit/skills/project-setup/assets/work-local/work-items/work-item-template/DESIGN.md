@@ -1,20 +1,16 @@
 ---
 work_item: WI-001
-status: proposed
-approved: "no"
 ---
 
 # WI-001: <Work item title> — solution design
 
-<!-- Fill-in guide: keep this file beside the item's main file, which is named by its ID (for example `WI-031.md`), replace WI-001 and every angle-bracket prompt with the actual value in that exact heading, field, table cell, or paragraph, and delete this guide. Add rows or options where needed; remove unused example rows, and each section or heading the template says to remove when unused. When the owner answers a question, update the relevant design section and the matching Questions and Answers row in the work item, then update Notes at the bottom and the work item's Current state. -->
+<!-- Fill-in guide: replace WI-001 and every angle-bracket prompt with the actual value in that exact heading, field, table cell, or paragraph, and delete this guide. Add rows or options where needed; remove unused example rows, and each section or heading the template says to remove when unused. When the owner answers a question, update the relevant design section and the matching Questions and Answers row in the work item, then update Notes at the bottom and the work item's Current state. -->
 
 **Requirements:** WI-001  
-**Design status:** <Draft | In review | Approved | Superseded>  
-**Requirements checked:** <Link to the work item's requirements (for example in `WI-031.md`) and date checked>  
-**Last updated:** <YYYY-MM-DD>  
-**Design approval:** <Owner, date, and decision source if approved; otherwise Pending>
+**Requirements checked:** <YYYY-MM-DD, the date this design was last checked against the work item's requirements>  
+**Last updated:** <YYYY-MM-DD>
 
-<!-- Keep this file with its work item. The work item's main file, not this file, holds the goal, its Current state (where work stands and the exact next action), the requirements, Questions and Answers (which holds the item's decisions), its Roadmap and Tasks, and its Recent History. This file explains how to meet those requirements. During an interview, update settled answers in the relevant design section, keep unresolved discussion in Notes at the bottom, and keep the next action in the work item's Current state. A recommendation or saved draft is not owner approval. -->
+<!-- Keep this file with its work item. The work item's main file, not this file, holds the goal, its Current state (where work stands and the exact next action), the requirements, Questions and Answers (which holds the item's decisions), its Roadmap and Tasks, its Recent History, and whether this design is proposed, approved, or superseded (its `design` field). This file explains how to meet those requirements. During an interview, update settled answers in the relevant design section, keep unresolved discussion in Notes at the bottom, and keep the next action in the work item's Current state. A recommendation or saved draft is not owner approval. -->
 
 ## What this design solves
 
@@ -36,7 +32,7 @@ approved: "no"
 
 | Type | Constraint or assumption | Source and status | Effect on the design |
 | --- | --- | --- | --- |
-| <Constraint / Assumption> | <Specific statement> | <Link or person, date; confirmed or open> | <What it limits or changes> |
+| <Constraint / Assumption> | <Specific statement> | <CON-##, DEC-###, SRC-###, a link, or a person and date; confirmed or open> | <What it limits or changes> |
 
 ## Design options
 
@@ -160,7 +156,7 @@ flowchart TD
 
 | Claim or decision | Source | Date | Evidence type | Checked how |
 | --- | --- | --- | --- | --- |
-| <Fact or choice that changes the design> | <Exact link, file, or the Q-ID of the owner's answer> | <YYYY-MM-DD> | <Official documentation / Project evidence / Owner decision / Community claim> | <Verification or Pending> |
+| <Fact or choice that changes the design> | <DEC-###, a rule ID in `system/`, SRC-###, an exact link, or the Q-ID of the owner's answer> | <YYYY-MM-DD> | <Official documentation / Project evidence / Owner decision / Community claim> | <Verification or Pending> |
 
 <Do not treat an unchecked community claim or an assistant proposal as a verified fact or owner decision.>
 

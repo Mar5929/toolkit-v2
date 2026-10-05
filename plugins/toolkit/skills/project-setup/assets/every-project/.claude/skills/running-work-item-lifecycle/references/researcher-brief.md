@@ -6,7 +6,7 @@ A helper that answers one bounded research question for a work item, with every 
 
 Start it from Refining Requirements or Designing (`designing.md`): one researcher for one bounded question. In Refining Requirements, that is a fact the owner cannot answer and the project files do not hold, such as a platform limit or what the existing system does. It needs no permission; honor any limit the owner set on helpers.
 
-What the researcher returns is evidence, not a decision. Name its sources when you use a finding. Record what the item needs from it in the item's Notes, "Context", or, for a design, in "Sources and decisions that affect the build".
+What the researcher returns is evidence, not a decision. Name its sources when you use a finding.
 
 The job block:
 

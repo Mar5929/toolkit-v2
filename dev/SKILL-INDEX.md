@@ -59,7 +59,7 @@ names no skill (the model's `.claude/rules/keep-work-item-current.md`).
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `running-work-item-lifecycle` | `assets/every-project/.claude/skills/running-work-item-lifecycle/` | Runs a work item from idea to Done through requirements, design, build, testing, reflection, and deployment, keeping its tracker current and asking for the owner's approval at each gate. Use when the owner asks to plan, change, build, test, or ship an item. When a source, question, or target direction affects other items, also use filing-project-records. |
+| `running-work-item-lifecycle` | `assets/every-project/.claude/skills/running-work-item-lifecycle/` | Runs one work item from idea to Done through requirements, design, build, testing, deployment, and closing, keeping its tracker current and asking for the owner's approval at each gate. Use when the owner asks to plan, change, build, test, ship, close, or cancel an item. Not for a decision, an original, or a system rule that more than one item needs; use filing-project-records. |
 | `filing-project-records` | `assets/every-project/.claude/skills/filing-project-records/` | Files what more than one work item needs: records a decision or open question in DECISIONS.md, files an original in sources/, and applies an approved change to a system/ document, each with its ID and a pointer in the work item. Use when a decision or question reaches past one item ("we decided", "let's go with"), the owner hands over a transcript or document, or a closing item changed the system. Not for one item's own requirements or decisions; use running-work-item-lifecycle. |
 | `handoff` | `assets/every-project/.claude/skills/handoff/` | Updates this session's work items and Current State, files any decision or original this session left unfiled, then writes a checked, self-contained prompt for a new session, or checks a pasted one, so nothing is lost when context clears. Use when the owner ends the session or says "write a handoff", "I'm clearing context", "start a new session", or "check this handoff". Not for a recap alone; use session-summary. |
 | `braindump` | `assets/every-project/.claude/skills/braindump/` | Plays back a loose brain dump in very simple words and waits for the owner's yes before any work starts, so nothing is planned, built, or saved on a misunderstanding. Use when he wants his brain dump checked first, such as "here's a brain dump", "play that back", "tell me what you heard", or "make sure you understood before you start". Not for a brain dump he asks only to plan; use running-work-item-lifecycle. |
@@ -81,7 +81,7 @@ these rows by folder.
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `using-work-tracker` | `assets/work-local/.claude/skills/using-work-tracker/` | Saves, finds, and changes work items as local files in the work-items folder, so running-work-item-lifecycle reads and writes every item the same way. Use when an item must be read, created, saved, searched, nested, moved, or given a source file, such as "show me WI-031" or "put WI-007 under WI-003". Not for deciding States or approvals; use running-work-item-lifecycle. Only for projects that track work locally. |
+| `using-work-tracker` | `assets/work-local/.claude/skills/using-work-tracker/` | Saves, finds, and changes work items as local files in the work-items folder, so running-work-item-lifecycle reads and writes every item the same way. Use when an item must be read, created, saved, searched, nested, or moved, such as "show me WI-031" or "put WI-007 under WI-003". Not for deciding States or approvals; use running-work-item-lifecycle. Only for projects that track work locally. |
 
 ### 3.2 Notion (`assets/work-notion/`)
 
@@ -92,7 +92,7 @@ in project-setup's `references/notion-build/` (`work-setup.md`,
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `using-work-tracker` | `assets/work-notion/.claude/skills/using-work-tracker/` | Stores and finds work items in the project's Notion databases for running-work-item-lifecycle, so every read and save lands in the right property or page section. Use when looking up or saving a work item, phase, task, question, comment, or file, such as "show me WI-31" or "add a task to phase 2". Only for projects that track work in Notion. |
+| `using-work-tracker` | `assets/work-notion/.claude/skills/using-work-tracker/` | Stores and finds work items in the project's Notion databases for running-work-item-lifecycle, so every read and save lands in the right property or page section. Use when looking up or saving a work item, phase, task, question, or comment, such as "show me WI-31" or "add a task to phase 2". Only for projects that track work in Notion. |
 
 ### 3.3 GitHub Issues (`assets/work-github/`)
 

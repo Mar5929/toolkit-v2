@@ -16,11 +16,11 @@ updated: <YYYY-MM-DD>
 
 # WI-001: <Work item title>
 
-<!-- Fill-in guide for a new work item: create it with `using-work-tracker`, which saves this file under the item's ID and sets the real ID in front matter and heading. `using-work-tracker` makes the design when a design starts. `WORK-ITEM.md` is the name of this template only. Find an item by its `id:` field, never by its path; the owner may move or rename item folders by hand. Save source files, such as meeting transcripts and documents (in a Salesforce project, a client file stays in `delivery/` and the Sources list names its path), with `using-work-tracker`, and list each one under Notes, Sources. A sub-item's `parent` names the item above it. Use stable phase, task, requirement, and question IDs for this item. In the front matter, keep one value from each list and change the fields with `using-work-tracker`; the status follows from the state, as `running-work-item-lifecycle` says. A blocked item has state and status Blocked, `waiting_on` set, and its Current state Waiting on and Blockers lines filled. Text in angle brackets tells you what to write in that same field, cell, or paragraph: replace it with real content, or delete it when there is nothing to write yet, so no angle-bracket prompt is left in the item. Keep the headings and field labels. Delete each example phase, task, question, and requirement the item does not have yet; `using-work-tracker` gives the form for the next one. Use the chosen tracker as the source of truth for status and links. Delete this guide when you create the item. -->
+<!-- Fill-in guide for a new work item: create it with `using-work-tracker`, which sets the real ID in the front matter and the heading. In the front matter, keep one value from each list; the status follows from the state, as `running-work-item-lifecycle` says. A new item starts with `waiting_on: "none"`, `priority: medium`, `delivery: not-offered`, both approvals `no`, and `design: none`. A sub-item's `parent` names the item above it. Text in angle brackets tells you what to write in that same field, cell, or paragraph: replace it with real content, or delete it when there is nothing to write yet, so no angle-bracket prompt is left in the item. Keep the headings and field labels. Delete each example phase, task, question, and requirement the item does not have yet. Delete this guide when you create the item. -->
 
 ## Overview
 
-<!-- Enter the text directly after each bold label below. Goal and Related items change only when the item's aim or links change; Current state changes after every step. Detailed tasks belong in Tasks, decisions in Questions and Answers, and what happened in Recent History, further down. -->
+<!-- Enter the text directly after each bold label below. Goal and Related items change only when the item's aim or links change; Current state changes after every step; Moved up stays empty until the item is closed. Detailed tasks belong in Tasks, decisions in Questions and Answers, and what happened in Recent History, further down. -->
 
 **Goal:** <The outcome this work item is meant to achieve.>
 
@@ -30,15 +30,17 @@ updated: <YYYY-MM-DD>
 
 **Where it stands:** <What is done and where work stands now.>
 
-**Next action:** <One of three forms. Working: “<Who>: <the exact next step, one sentence>.” Example: “Agent: write two design options for the permission set groups.” Waiting: “Waiting on Mike: Q-07 (<the question in a few words>). After his answer: <step>.” Example: “Waiting on Mike: Q-07 (merge or move the 15 personas). After his answer: finish R-04.” Finished or cancelled: “None. Finished.” or, for a cancelled item, “None. Cancelled.”>
+**Next action:** <One of three forms. Working: “<Who>: <the exact next step, one sentence>.” Example: “Agent: write two design options for the permission set groups.” Waiting: “Waiting on the owner: Q-07 (<the question in a few words>). After his answer: <step>.” Example: “Waiting on the owner: Q-07 (merge or move the 15 personas). After his answer: finish R-04.” Finished or cancelled: “None. Finished.” or, for a cancelled item, “None. Cancelled.”>
 
-**Waiting on:** <Who the item waits on and for what, matching `waiting_on`, for example “Mike: Q-07.”; or “Nothing.”>
+**Waiting on:** <Who the item waits on and for what, matching `waiting_on`, for example “The owner: Q-07.”; or “Nothing.”>
 
-**Blockers:** <Blocking decision or dependency, or “None.”>
+**Blockers:** <What blocks the item and who can clear it, and, for a Blocked item, the State it left; or “None.”>
 
 **Last updated:** <YYYY-MM-DD, and who: the owner or the agent.>
 
-**Related items:** <For a top-level item, its project phase (for example P01); for a sub-item, its parent's ID. Related work item IDs (never folder paths), design, or external links. Memories that name this item: Obsidian's Backlinks panel for a local item; an agent finds them with the memory find skill by this ID.>
+**Related items:** <For a top-level item, “Project phase P01.”, or “No project phase yet.”; for a sub-item, its parent's ID, and “Built from the design of <parent ID>.” when it has no design of its own. Related work item IDs (never folder paths) and external links. Each decision in `DECISIONS.md` and each rule in `system/` that this item must follow, by ID, for example “DEC-014, SEC-04”.>
+
+**Moved up:** <Leave empty until the closing step of `running-work-item-lifecycle`; the item cannot become Done or Cancelled while it is empty. Then: each entry in `DECISIONS.md` and each rule in `system/` that this item added or changed, by ID, with what happened, for example “DEC-014 recorded. SEC-04 added and Built. DAT-02 changed.”; or “Nothing: <the reason>.”>
 
 ## Roadmap
 
@@ -102,7 +104,7 @@ A phase is complete when its tasks are complete, its sub-items are Done or Cance
 
 ## Requirements
 
-<!-- Every requirement follows the structure below: one block per requirement, numbered 1, 2, 3 in the order they are added. After Original verbatim requirement, put the words of the owner, or of the stakeholder or source that asked for it, word for word. In each numbered list, write one line per thing that must be true, exact enough to check. A dropped requirement keeps its block, with " (dropped, Q-ID)" added to its heading; a number is never reused. Everywhere else, name a requirement in the short form R-01, which means Requirement 1. Approval is recorded in `requirements_approved` and in Questions and Answers, not here. Put solution ideas in the final Notes subsection, not here. -->
+<!-- Every requirement follows the structure below: one block per requirement, numbered 1, 2, 3 in the order they are added. After Original verbatim requirement, put the words of the owner, or of the stakeholder or source that asked for it, word for word, never reworded; when they are not the owner's words in this chat, name who said them and where (a source by its SRC-###). In each numbered list, write one line per thing that must be true, exact enough to check. Who or what a requirement applies to, and where it does not apply, are lines of its Functional Requirements. Each Acceptance Criteria line is one thing someone can observe. A dropped requirement keeps its block, with " (dropped, Q-ID)" added to its heading; a number is never reused. Everywhere else, name a requirement in the short form R-01, which means Requirement 1. Approval is recorded in `requirements_approved` and in Questions and Answers, not here. Put solution ideas in the final Notes subsection, not here. -->
 
 ### Requirement <number>: <short name>
 
@@ -123,7 +125,7 @@ A phase is complete when its tasks are complete, its sub-items are Done or Cance
 
 ## Questions and Answers
 
-<!-- Add a row for every question you ask about this item, with a stable Q-ID. Write the exact question, the requirement and task IDs it affects, and who can answer: `owner` for the project owner, or another person or role. The moment the owner answers, put his words in Answer and the date in Date answered, set Status to Answered, and update the goal, requirement, or task the answer affects. Set Decision? to yes when the answer decides something. The item's decisions are these rows: save every decision made while working this item here, with the owner's words and the date; when he decides something without being asked, add a row for the question it settles. A bulk “yes to all” is saved as one row per thing it covered, each with the reason the owner was shown (“reason shown: none” when there was none). A decision that matters beyond this item (will a later work item, or an agent working on something else, need to follow this?) is also offered for project memory: ask the owner “This looks project-wide. Save it to memory too?” and, on his yes, save it with the memory save skill, with a link back to this item that names the Q-ID. Keep unanswered rows first, so a new session resumes at the first open question. Do not hide an open question only in Notes. Replace the example rows with real ones. -->
+<!-- Add a row for every question you ask about this item, with a stable Q-ID. Write the exact question, then “Recommended: <answer>, because <reason>.” when you recommend one; the requirement and task IDs it affects; and who can answer: `owner` for the project owner, or another person or role. The moment the owner answers, put his words in Answer and the date in Date answered, set Status to Answered, and update the goal, requirement, or task the answer affects. Set Decision? to yes when the answer decides something. The item's decisions are these rows: save every decision made while working this item here, with the owner's words and the date; when he decides something without being asked, add a row for the question it settles. A bulk “yes to all” is saved as one row per thing it covered, each with the reason the owner was shown (“reason shown: none” when there was none). A decision more than one work item needs is an entry in `DECISIONS.md`: the row that raised it keeps his words and ends “Filed as DEC-###.” Keep unanswered rows first, so a new session resumes at the first open question. Do not hide an open question only in Notes. Replace the example rows with real ones. -->
 
 | ID | Question | Answer | Date answered | Decision? | Affects | Status | Decision needed from |
 |---|---|---|---|---|---|---|---|
@@ -140,9 +142,15 @@ A phase is complete when its tasks are complete, its sub-items are Done or Cance
 
 ### Sources
 
-<!-- One line per source: a file saved with the item (`using-work-tracker` says how), or a project file named by its path (a Salesforce client file stays in `delivery/`): what it is and what was taken from it. Wherever the item uses something drawn from a source, name that source. Write “None.” when the item has no sources. -->
+<!-- One line per original this item used. The original is filed in `sources/` first; this line holds its SRC-### ID, never the original or a copy of its text. Wherever the item uses something drawn from a source, name its SRC-###. Write “None.” when the item has no sources. -->
 
-- <File name>: <What it is, for example “kickoff meeting transcript, YYYY-MM-DD.”> Taken from it: <The requirement, question, or task IDs it informed.>
+- <SRC-###>: <What it is, for example “kickoff meeting transcript, YYYY-MM-DD.”> Taken from it: <The requirement, question, or task IDs it informed.>
+
+### Lessons not proven yet
+
+<!-- One line per thing the work taught that a later work item may need and that is not proven yet, for example a platform limit met once or an approach that failed. The closing step asks the owner whether each one moves up or is dropped, and writes the outcome at the end of its line. Write “None.” when there are none. -->
+
+- <The lesson, and where it was seen: a task ID, a commit, or a date.>
 
 ### Solution options and considerations
 
