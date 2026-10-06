@@ -7,8 +7,8 @@ The standard is met when a reader who opens the file alone can say what the file
 The short form of this standard is the rule `.claude/rules/write-for-the-reader.md`, which `project-setup` gives every project. This file explains each line of that rule and gives the reason and an example.
 
 - "Start from the whole file" below explains the first line under "A file that someone follows later" in the rule.
-- Points 1 to 9 explain the nine lines under "For everything this rule covers", in the same order.
-- Points 10 to 15 explain the other six lines under "A file that someone follows later", in the same order.
+- Points 1 to 10 explain the eleven lines under "For everything this rule covers", in the same order. Point 3 explains two lines: the line that begins "Say a thing in plain words before you give it a name" and the line after it, which begins "Plain never means vaguer".
+- Points 11 to 16 explain the other six lines under "A file that someone follows later", in the same order.
 
 The rule also has lines for something made for a person to look at, such as a diagram or a report. This file does not repeat those lines.
 
@@ -20,19 +20,20 @@ The rule also has lines for something made for a person to look at, such as a di
   - 1. Use common words, and one name for one thing
   - 2. Use the real name, never a picture word
   - 3. Say a thing in plain words before you give it a name
-  - 4. Write whole sentences, with one idea or two that belong together
-  - 5. Put the main point first
-  - 6. Be specific
-  - 7. Short means no sentence the reader does not need
-  - 8. Write about the subject, not about the file or the chat
-  - 9. Keep every fact exactly as it is
+  - 4. A name says its subject
+  - 5. Write whole sentences, with one idea or two that belong together
+  - 6. Put the main point first
+  - 7. Be specific
+  - 8. Short means no sentence the reader does not need
+  - 9. Write about the subject, not about the file or the chat
+  - 10. Keep every fact exactly as it is
 - The file
-  - 10. Open with what the file is for and what must be true when its job is done
-  - 11. Give each instruction its own sentence, and the main rule first
-  - 12. Decide whether an instruction is exact or general
-  - 13. A pointer says what is in the other file and when to open it
-  - 14. Give the reason when an instruction would look arbitrary
-  - 15. Regroup and rename freely, and change nothing that the file requires
+  - 11. Open with what the file is for and what must be true when its job is done
+  - 12. Give each instruction its own sentence, and the main rule first
+  - 13. Decide whether an instruction is exact or general
+  - 14. A pointer says what is in the other file and when to open it
+  - 15. Give the reason when an instruction would look arbitrary
+  - 16. Regroup and rename freely, and change nothing that the file requires
 - Forms that work well
 - When this file and the rule differ
 - Check before you hand the file back
@@ -52,7 +53,7 @@ Before you write a sentence, answer one question about the whole file: what must
 
 Do not repair a file line by line. A file that is hard to follow is rarely hard because of single lines. It is hard because it is built around words and groupings that made sense to its writers. A repair keeps those words and groupings and adds explanations to them, so the file gets longer and stays hard. For example, a repair keeps a made-up word and puts a definition in front of it, where plain words would have needed no definition (point 3).
 
-So you may change the order of the file, split a section that holds too much, merge two sections that say one thing, and rename a heading. Point 15 says what stays word for word, and which checks prove that the file still requires the same.
+So you may change the order of the file, split a section that holds too much, merge two sections that say one thing, and rename a heading. Point 16 says what stays word for word, what to leave because it is already clear, and which checks prove that the file still requires the same.
 
 ## The words
 
@@ -87,6 +88,8 @@ Use plain words for a thing first, and give the thing a name only when the file 
 - A dictionary does not have the word. The writers of the project built it, for example by joining two words.
 - A dictionary has the word, and the word has a meaning of its own only in this project. Such a word looks ordinary, for example home, pointer, concept, and record. A reader takes the word in its everyday sense and gets the instruction wrong.
 
+A word is not made up when a dictionary has it and the file uses it in its dictionary meaning, even when the word is not an everyday word. Keep such a word when it is exact, for example "outbound" for text that leaves the project, and "criteria" for the conditions that decide whether a fact is saved. A reader who does not know the word can look it up, and the word then tells the reader exactly which thing the sentence is about.
+
 A definition in front of a made-up word does not solve the problem, because the reader still has to learn the word and remember it.
 
 For each made-up word, try these three things in this order, and stop at the first one that works:
@@ -111,13 +114,53 @@ The next line is an example of step 3, for a word that is kept:
 
 A word is often used in more than one file: in other skills, in rules, in an agent guide, or in a message that a hook prints. Do not decide alone for such a word. Its choice goes on the shared word list that `references/rewrite-steps.md`, step 2, describes, so that every file changes in the same way.
 
+Plain never means vaguer. The words that take the place of another word must name the subject at least as exactly as that word did. Before you replace a word, check that a reader who sees only the new words can still tell which thing they mean. For example, "what to keep" in place of "memory criteria" fails this check: the reader cannot tell what is kept, or where. When the new words fit more things than the old word did, keep the old word.
+
 Do not explain general knowledge, such as what a commit or a table is.
 
-### 4. Write whole sentences, with one idea or two that belong together
+### 4. A name says its subject
+
+The name of a file, a heading, or a label tells a reader who sees only the name what it is about. A reader often meets a name with nothing around it: in a list of files, in a Contents list, or in a sentence of another file that points to it. The name is then all that the reader has to decide whether to open the file or to read the section. So a name holds the word for its subject, such as "memory". A name fails when it holds only words that fit many subjects, such as "keep" or "facts".
+
+A name is made of the same words as a sentence, so point 3 applies to it: a name in more everyday words is worse when it names its subject less exactly.
+
+In each of the three pairs below, the "Before" name uses more everyday words, and the "After" name says its subject more exactly. Use the "After" name.
+
+Before:
+
+> `what-to-keep.md`
+
+After:
+
+> `memory-criteria.md`
+
+"What to keep" does not say what is kept, or where. "Memory criteria" names the subject, which is memory, and what the file holds, which is the conditions that decide whether a fact is saved.
+
+Before:
+
+> `say-where-facts-come-from.md`
+
+After:
+
+> `cite-recalled-knowledge.md`
+
+The "Before" name does not say which facts it is about, so the reader cannot tell which rule or which part of the project it belongs to. The "After" name says both: the rule is about knowledge that the agent recalled, and it tells the agent to cite the source of that knowledge.
+
+Before:
+
+> `humanize-text-sent-to-others.md`
+
+After:
+
+> `humanize-outbound-text.md`
+
+"Outbound" is an ordinary word that is exact, so it stays (point 3). The "Before" name is longer and tells the reader nothing more.
+
+### 5. Write whole sentences, with one idea or two that belong together
 
 Keep the subject, the verb, and the condition of every sentence. Write a condition as "When ..., do ...". A label and a colon is not a sentence: the colon stands where the verb should be, and the reader has to guess what to do.
 
-A sentence holds one idea, or two ideas that belong together. Two ideas belong together when the reader needs both to act on either one, for example a condition and its instruction, or an instruction and its reason. A third idea starts a new sentence. A reader who reads once keeps one or two ideas and loses the third. The "Before" text under point 11 opens with one sentence that holds five ideas: which session the rule is for, where that session reads and writes `DECISIONS.md`, `sources/`, and `system/`, what the save worktree is, where the session must not work, and the reason. The "After" text gives the same ideas in three sentences, with no more than two ideas in each.
+A sentence holds one idea, or two ideas that belong together. Two ideas belong together when the reader needs both to act on either one, for example a condition and its instruction, or an instruction and its reason. A third idea starts a new sentence. A reader who reads once keeps one or two ideas and loses the third. The "Before" text under point 12 opens with one sentence that holds five ideas: which session the rule is for, where that session reads and writes `DECISIONS.md`, `sources/`, and `system/`, what the save worktree is, where the session must not work, and the reason. The "After" text gives the same ideas in three sentences, with no more than two ideas in each.
 
 Before:
 
@@ -131,7 +174,7 @@ A colon is still right in two places: where a whole sentence introduces a list, 
 
 In a table that is plainly a lookup, with the situation on one side and the action on the other, a short entry such as the name of a step or a file is right.
 
-### 5. Put the main point first
+### 6. Put the main point first
 
 A paragraph or a section starts with the sentence that states its point: the instruction, the answer, or the fact that the other sentences explain. What supports the point comes after it, such as the reason, the background, and a side fact. A reader who reads only the first sentence then still gets the point, and a reader who reads on knows what the other sentences are for.
 
@@ -145,9 +188,9 @@ After:
 
 The "Before" text gives a side fact, then the reason, and ends with its point, "use this command". The "After" text starts with the point.
 
-Two later points apply the same order to larger parts. Point 10 puts what the file is for at the top of the file. Point 11 puts the main rule before its special cases.
+Two later points apply the same order to larger parts. Point 11 puts what the file is for at the top of the file. Point 12 puts the main rule before its special cases.
 
-### 6. Be specific
+### 7. Be specific
 
 Name the thing, the person, or the number that the sentence is about. Write "the save failed because the file was locked", not "there were problems". A reader who opens the file alone cannot ask which problems, which file, or how many.
 
@@ -163,21 +206,21 @@ After:
 
 The "After" text gives "That" the word it stands for, and says which answer the reply gives.
 
-Specific does not mean narrow. When an instruction covers a class of cases, name the class in exact words and mark each example as an example (point 12).
+Specific does not mean narrow. When an instruction covers a class of cases, name the class in exact words and mark each example as an example (point 13).
 
-### 7. Short means no sentence the reader does not need
+### 8. Short means no sentence the reader does not need
 
 Short is about whole sentences. Write what the reader needs in order to act: what the file is for, the instruction, and the reason where the instruction would look arbitrary. Remove a sentence that repeats another, narrates what is happening, or states general knowledge. Short never means fewer words inside a sentence that stays. When clear and short disagree, choose clear.
 
 The official skill best practices page says "Only add context Claude doesn't already have", under the heading that tells the writer to be concise. This standard follows that page. The page's own examples of what to leave out are general knowledge, such as what a PDF is. What a project means by one of its own words is context that the agent does not already have, so plain words for it, or one clause that explains it, is what the page asks for. Concise means that the file leaves out the sentences the reader does not need. It does not mean that words are taken out of a sentence that stays.
 
-A file that is written to this standard is often longer than the file it replaces. The length is right when it comes from the opening, from plain words in place of a made-up word, from a bullet that held several rules and became a main rule and its special cases, from a reason that the project's files or the owner state, and from a sentence that says what is in another file. Check each sentence against one question: does it tell the reader something the reader needs in order to act? Remove a sentence that does not. For example, remove "This section gives the steps." under the heading "Steps". The opening of the file is never such a sentence (point 10).
+A file that is written to this standard is often longer than the file it replaces. The length is right when it comes from the opening, from plain words in place of a made-up word, from a bullet that held several rules and became a main rule and its special cases, from a reason that the project's files or the owner state, and from a sentence that says what is in another file. Check each sentence against one question: does it tell the reader something the reader needs in order to act? Remove a sentence that does not. For example, remove "This section gives the steps." under the heading "Steps". The opening of the file is never such a sentence (point 11).
 
-### 8. Write about the subject, not about the file or the chat
+### 9. Write about the subject, not about the file or the chat
 
 Every sentence says something about the job the reader has to do. A sentence about how the file came to be, or about the chat that produced it, tells the reader nothing to act on.
 
-The opening is not such a sentence. The opening says what the file is for and what must be true when its job is done, and the reader needs both. It always stays (point 10).
+The opening is not such a sentence. The opening says what the file is for and what must be true when its job is done, and the reader needs both. It always stays (point 11).
 
 Three kinds of sentence do go:
 
@@ -195,19 +238,19 @@ After:
 
 When the agent needs a fact about a past decision in order to act or to answer the owner, keep that fact, for example "the checker always runs, as the owner decided".
 
-### 9. Keep every fact exactly as it is
+### 10. Keep every fact exactly as it is
 
 A number, a name, a date, and a quotation stay exactly as they are when the wording around them changes. A reader who finds one changed value can no longer rely on the others.
 
 ## The file
 
-### 10. Open with what the file is for and what must be true when its job is done
+### 11. Open with what the file is for and what must be true when its job is done
 
 The first lines say what the file does and what must be true when its job is done. A reader who knows the goal can handle a case that the steps do not name, and the owner can tell at once whether he opened the right file. Take the goal from text that exists, such as the part of a skill's description that follows ", so". Do not invent a goal. When no text states a goal, ask the owner.
 
 When another skill or file does a neighbouring job, say in one sentence which one does which part. When no neighbour exists, leave this sentence out.
 
-Write the opening for the person who uses the file. A sentence about what the file "holds" or "never says" is a note for the authors (point 8). Say what the skill does instead.
+Write the opening for the person who uses the file. A sentence about what the file "holds" or "never says" is a note for the authors (point 9). Say what the skill does instead.
 
 Before:
 
@@ -219,7 +262,7 @@ After:
 
 A reference file opens in the same way, in one or two sentences: what it covers, when it applies, and what must be true when its job is done.
 
-### 11. Give each instruction its own sentence, and the main rule first
+### 12. Give each instruction its own sentence, and the main rule first
 
 Each instruction is one sentence that says who does what, and when. Each instruction has one meaning: a reader who reads it twice does the same thing both times.
 
@@ -243,16 +286,16 @@ After:
 
 A table cell can hold several rules in the same way. When one cell holds a main rule and its special cases, keep the main rule in the cell as one whole sentence. Move the special cases into rows of their own, or into a short list under the table that names the row. Never make such a cell fit by taking words out of its sentences.
 
-When you write a new file and a rule has a case that the file does not cover, and that case can happen, give that case a sentence or a bullet of its own. Never add another clause to the same sentence. When you rewrite a file and find such a case, do not make up the rule for it: ask the owner (point 15).
+When you write a new file and a rule has a case that the file does not cover, and that case can happen, give that case a sentence or a bullet of its own. Never add another clause to the same sentence. When you rewrite a file and find such a case, do not make up the rule for it: ask the owner (point 16).
 
-### 12. Decide whether an instruction is exact or general
+### 13. Decide whether an instruction is exact or general
 
 Decide for each instruction which of the two it is.
 
 - **Exact.** An instruction is exact when a different word or value would break something: a command, a name (of a file, a folder, a field, or a skill), a number or a limit, the form of an ID, the words the owner must see, the order of steps, or a point where the agent stops for the owner's yes. Keep these word for word, in backticks or quotation marks. Where it is not obvious, say that the text is exact, for example: The reply's last line is exactly "Do you approve this result?".
 - **General.** An instruction is general when it covers a class of cases. State the rule in one sentence. Then give two or three examples marked "for example"; "such as" marks an example in the same way. The mark tells the reader that the examples are not the whole rule, as in "A document arrived, such as a transcript, a meeting note, or an email". When a list is complete, say so, as in "A record is one of four kinds".
 
-### 13. A pointer says what is in the other file and when to open it
+### 14. A pointer says what is in the other file and when to open it
 
 State each instruction in one file. When a second file needs it, point to the first with a full sentence. Say what the reader will find there and when to open it. Give the file path and the section name exactly as they are now, so the reader can find the place. Do not copy the rule into the second file, and never leave a file name where the instruction should be.
 
@@ -266,7 +309,7 @@ After:
 
 A row of a References table is already such a sentence when it says when to open the file. So is a row of a table that names the skill for each job.
 
-### 14. Give the reason when an instruction would look arbitrary
+### 15. Give the reason when an instruction would look arbitrary
 
 One clause is enough, as in "Read the file fresh, because the owner edits these files by hand." A reader who knows the reason applies the rule correctly to a case that the text does not name. A plain mechanical step needs no reason.
 
@@ -274,9 +317,11 @@ Give a reason that the project's files or the owner state. Never invent one. Whe
 
 The Claude Code skill page tells the writer to state what to do and not to narrate how or why. One reason clause is not narration. Give the instruction, add the reason where it helps, and do not tell the reader how to think.
 
-### 15. Regroup and rename freely, and change nothing that the file requires
+### 16. Regroup and rename freely, and change nothing that the file requires
 
 A rewrite may change the order of a file, its sections, its headings, and its words. It never changes what the file requires.
+
+Leave a sentence or a name that is already clear. Change one only when a reader who meets it for the first time would stumble on it, which means that the reader would have to stop and work out what it means. Most sentences and names in these files are already right, and a change that is made only to fit a pattern can make a file worse. Point 4 shows three such changes to a name.
 
 Two things keep the requirements the same.
 
@@ -301,11 +346,14 @@ This file and the rule `.claude/rules/write-for-the-reader.md` say the same thin
 
 1. Do the first lines say what the file is for and what must be true when its job is done?
 2. Is every thing said in plain words or with a name the reader can see? Did you test each word against a dictionary? Is each made-up word that was kept explained once, where the reader first meets it?
-3. Is every sentence whole, and does it hold one idea, or two that belong together?
-4. Does every paragraph and every section start with the sentence that states its point?
-5. Does every sentence name the thing, the person, or the number it is about, and does every "this" and "that" have the word it stands for?
-6. Does every instruction name the one who acts as its subject, and give its condition before the instruction? Does every point with several rules start with its main rule?
-7. Does every pointer outside a table say what is in the other file and when to open it?
-8. Does the file still require exactly what it required before: no rule, limit, or number lost, added, weakened, or strengthened, and every exact string unchanged?
-9. Does one thing have one name in the whole file, and in every other file that names it?
-10. Does every file that cited a heading or a word you changed now use the new one?
+3. Do the words that took the place of another word name the subject at least as exactly as that word did? Did you keep each ordinary word that is exact?
+4. Does the name of every file, heading, and label tell a reader who sees only the name what it is about?
+5. Is every sentence whole, and does it hold one idea, or two that belong together?
+6. Does every paragraph and every section start with the sentence that states its point?
+7. Does every sentence name the thing, the person, or the number it is about, and does every "this" and "that" have the word it stands for?
+8. Does every instruction name the one who acts as its subject, and give its condition before the instruction? Does every point with several rules start with its main rule?
+9. Does every pointer outside a table say what is in the other file and when to open it?
+10. Does the file still require exactly what it required before: no rule, limit, or number lost, added, weakened, or strengthened, and every exact string unchanged?
+11. Did you leave every sentence and every name that was already clear?
+12. Does one thing have one name in the whole file, and in every other file that names it?
+13. Does every file that cited a heading or a word you changed now use the new one?
