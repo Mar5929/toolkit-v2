@@ -74,7 +74,7 @@ The owner chose the first two. The orchestrator chose the rest with the owner's 
 | Keeping a change | "save" for a work item or a memory record; "commit with `publish-docs`" for a project document | "publish" as a verb for either | The reader sees `publish-docs` only as the name of the skill. |
 | The field "Moved up" in a work item | Keep the field name; say in words "the owner agreed to keep it for the whole project" | "moves up" as a verb | The checking command and existing work items read the field. |
 | `needs-review` and `superseded` in a memory file | Keep the stored values; the process skill says "proposed" and "replaced", and each storage file maps them once | New stored values | A hook command and existing files read them. |
-| Lessons | "Lessons not proven yet" in a work item and in memory | "Gotchas and lessons" | One name for one thing. |
+| Lessons | Keep both headings as they are: "Lessons not proven yet" in a work item, and "Gotchas and lessons" in a memory record | A new name for either heading | Both are exact text: a search command and existing work items and memory records read them. Prose may say once what the section holds. |
 | A section of mistakes that are easy to make | "Mistakes to avoid" | "Gotchas" | A plain heading that names what is under it. |
 
 ## 3. Words to leave alone
