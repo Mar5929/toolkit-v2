@@ -1,6 +1,6 @@
 ---
 name: writing-harness-files
-description: 'Makes every change to a harness file follow the current official Claude Code and Codex pages. A harness file is a skill, rule, AGENTS.md or CLAUDE.md, hook, settings file, Codex .rules file, output style, plugin manifest or marketplace file, mod, subagent definition, or helper-agent brief. Use before any agent writes or changes one. Not for toolkit setup; use project-setup. Not for a line the owner dictates for owner-preferences.md; use curating-project-memory.'
+description: 'Uses current official Claude Code and Codex guidance when an agent writes or changes a harness file. A harness file is a skill, rule, AGENTS.md or CLAUDE.md, hook, settings file, Codex .rules file, output style, plugin manifest or marketplace file, mod, subagent definition, or helper-agent brief. Use before writing or changing one. For toolkit setup, use project-setup.'
 ---
 
 # Writing harness files
@@ -11,10 +11,7 @@ The goal is that every harness file follows the current official page for its ki
 
 Never write or change a harness file from memory. Claude Code and Codex are the two products that read these files. Both change between releases, so get the current official guidance first (step 2).
 
-Two neighbouring jobs belong to other skills:
-
-- Setting up or updating the toolkit in a project is the job of `project-setup`.
-- A line that the owner dictates for `.claude/rules/owner-preferences.md` ("from now on ...") is the owner's instruction in the owner's words. The project's `curating-project-memory` skill writes it. In a project with no such skill, add the line in the form that the `<!-- Layout: ... -->` comment in that file gives.
+Setting up or updating the toolkit in a project is the job of `project-setup`.
 
 ## Steps
 

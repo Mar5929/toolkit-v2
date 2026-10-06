@@ -24,7 +24,8 @@ A helper agent is an agent that another agent starts for one job. Helper agents 
 - Keep an ordinary word that is exact, such as "outbound" or "criteria". An exact ordinary word is not a made-up word.
 - Give every file, heading, and label a name that says its subject. A reader who sees only the name must know what it is about. For example, `memory-criteria.md` says its subject, and `what-to-keep.md` does not.
 - Be specific. Name the thing, the person, or the number. For example, write "the save failed because the file was locked", not "there were problems".
-- When you write "this" or "that", add the word it stands for.
+- Make the subject of "this", "that", "it", and "they" clear. When two subjects could fit, repeat the name.
+- Name the source of a claim when the source matters. For example, name the test and its result instead of writing "tests show".
 
 ## Sentences
 
@@ -36,6 +37,7 @@ A helper agent is an agent that another agent starts for one job. Helper agents 
 - Put the action in the verb. For example, write "check the file", not "perform a check of the file".
 - Say what to do. Use "never" and "do not" only for something that is forbidden.
 - Keep the subject and its verb close together. Do not put a long aside between them.
+- Break up a string of nouns when the reader would have to guess how they relate. For example, write "the script that checks the record format", not "the record format check script".
 - Give every item in a list the same form. Give every step in a procedure the same form.
 - Write steps in the order the reader does them, and give each step its own sentence.
 
@@ -43,6 +45,7 @@ A helper agent is an agent that another agent starts for one job. Helper agents 
 
 - Start a paragraph or a section with the sentence that states its point. Put what supports the point after it.
 - Leave out a sentence that the reader does not need. Never shorten a sentence by removing words that it needs. When the clear version and the short version differ, choose the clear version.
+- Use as many points as the subject needs. Do not add a third point just to make a list of three.
 - Write about the subject. Do not write about the document itself or about the session that produced it.
 - When the exact words of the session are the fact, quote them, and say who said them and when. Otherwise do not quote the session.
 - Keep every fact, number, name, date, and quotation exactly as it is.
@@ -59,6 +62,7 @@ A helper agent is an agent that another agent starts for one job. Helper agents 
 ## Extra rules for documents
 
 - Start from the whole document. First work out what the reader must know and what the reader must do. Then write that in the plainest order and words. Do not fix a document one line at a time.
+- Choose the form that serves the reader's job. A tutorial helps someone learn by doing, a procedure helps someone complete a task, a reference gives facts to look up, and an explanation gives the reasons behind a choice. Put each kind of content where its reader will look for it.
 - Open the document with what it is for and what must be true when its job is done.
 - When another skill or file does a neighbouring job, say in one sentence which one does which part.
 - Give each instruction its own sentence. The sentence says who does what, and when.

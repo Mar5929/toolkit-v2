@@ -1,6 +1,6 @@
 ---
 name: using-notion-cli
-description: 'Shows how to run ntn, Notion''s command-line tool, for the skills that store work items and memory in Notion: sign-in, Codex permissions, the calls every Notion step uses, and fixes for failed calls, so reads and saves in Notion work the first time. Use before any Notion read or write, when ntn will not sign in or cannot find a page, in Codex, and whenever a Notion call fails. Only for projects that keep work or memory in Notion.'
+description: 'Explains how to run ntn for this project''s Notion work and memory records, including sign-in, Codex access, API calls, and failed calls. Use before a Notion read or write through ntn, or when a call fails. This skill applies only when the project keeps work items or memory in Notion.'
 ---
 
 # Using the Notion command line

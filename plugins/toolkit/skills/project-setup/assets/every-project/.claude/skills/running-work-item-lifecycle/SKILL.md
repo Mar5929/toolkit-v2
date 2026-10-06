@@ -1,6 +1,6 @@
 ---
 name: running-work-item-lifecycle
-description: 'Runs one work item from idea to Done through requirements, design, build, testing, deployment, and closing, keeping the work item current and stopping for the owner''s yes before each step that needs one. Use when the owner asks to plan, change, build, test, deploy, close, or cancel a work item, or asks whether one is ready for its next step, such as "is WI-12 ready to test". Not for filing a source, or a decision or rule more than one work item needs; use filing-project-records.'
+description: 'Takes one work item from idea through requirements, design, build, testing, deployment, and closing. It keeps the work item current and gets the owner''s yes at each required point. Use to plan, change, build, test, deploy, close, cancel, or check the readiness of a work item. For a source, shared decision, or rule that more than one work item needs, use filing-project-records.'
 ---
 
 # Running a work item's lifecycle

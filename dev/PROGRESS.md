@@ -2,6 +2,36 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## Skill description clarity pass (2026-10-06)
+
+The 23 skills that Toolkit V2 ships have revised descriptions in their
+`SKILL.md` files and in `dev/SKILL-INDEX.md`. Each description now states the
+skill's job, when to use it, and any neighboring skill that could be confused
+with it. The opening of `filing-project-records/SKILL.md` gives each record
+type its own action and destination. The `choosing-outside-tools` and
+`sf-deploy-check` openings also use direct names in place of unclear words.
+The skills' operating requirements did not change. The before-and-after text is in
+`dev/reviews/2026-10-06-skill-descriptions-before-after.md`.
+
+After that description pass, Mike asked to keep the current skill names and
+decide the work and memory skill structure in a separate chat. The
+`writing-harness-files` description and opening no longer route an
+owner-dictated line in `owner-preferences.md` to the memory skill. The
+plain-English writing rule now adds the useful points from pstack's
+`unslop` and `technical-writing` skills that were missing: clear pronoun
+references, named evidence, readable noun phrases, natural list length,
+and choosing a document form for the reader's job. Its exact copy in
+`writing-harness-files/references/writing-rule.md` matches. No output style
+changed. Mike's PR 24 removes `explain-simply` and
+`choosing-outside-tools` separately; it waits for this description pass.
+
+The plugin version is 0.9.1. The marketplace, plugin, skill, rule, workstreams,
+and Node tests passed. `check-rules.mjs` gave its three existing size warnings.
+Two separate readers checked the old and new descriptions for skill routing.
+Live Claude Code and Codex routing runs did not start: Claude Code reported an
+expired OAuth session, and a scratch Codex home reported HTTP 401 because it
+has no credentials. Run live routing in both hosts when they are signed in.
+
 ## The one-home layout, version 0.9.0 (landed on main 2026-10-06)
 
 Work item TKV-24. It landed on main on 2026-10-06 as version 0.9.0, by pull

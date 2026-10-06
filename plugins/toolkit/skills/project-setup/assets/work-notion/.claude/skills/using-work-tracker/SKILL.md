@@ -1,6 +1,6 @@
 ---
 name: using-work-tracker
-description: 'Saves, finds, and changes work items in the project''s Notion databases, so running-work-item-lifecycle reads and writes every work item the same way. Use when a work item, phase, task, or question must be read, saved, or searched, such as "show me WI-31". Not for adding a phase or a task, or for deciding a work item''s plan, State, or approvals; use running-work-item-lifecycle. Only for projects that track work in Notion.'
+description: 'Reads, creates, finds, and saves work items in the project''s Notion databases. Use for a Notion-tracked work item, phase, task, or question, such as "show me WI-31". running-work-item-lifecycle decides the plan, State, and approvals, including when to add a phase or task. Only for projects that track work in Notion.'
 ---
 
 # Work items kept in Notion

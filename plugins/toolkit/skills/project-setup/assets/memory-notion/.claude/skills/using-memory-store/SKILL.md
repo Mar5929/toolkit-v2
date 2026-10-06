@@ -1,6 +1,6 @@
 ---
 name: using-memory-store
-description: 'Stores and finds this project''s memory records and the project''s Current State in Notion, in Lore''s databases and the Current state page, so every memory record is saved in the right column and page section. Use when a memory record or the project''s Current State must be read, saved, changed, searched, linked to a work item, merged, or deleted, such as "read the Current state page". Not for deciding what to keep or when to ask; use curating-project-memory. Only for projects with Notion memory.'
+description: 'Reads, finds, saves, changes, links, merges, and deletes project memory records and the project''s Current State in Notion. Use when a Notion memory record or the project''s Current State page must be read or changed. curating-project-memory decides what to keep and when to ask the owner. Only for projects with Notion memory.'
 ---
 
 # Using the memory store (Notion)
