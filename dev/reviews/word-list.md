@@ -2,7 +2,7 @@
 
 Work item TKV-24. Made 2026-10-06 from a scan of 162 files: every `.md` file under `plugins/toolkit/skills/` and the four hook commands, with `salesforce/tools/` left out.
 
-This list gives one answer for each made-up word, so that every file changes the same way. A word is made up when a dictionary does not have it, or when it has its own meaning only in this project. The rule for each word, in this order: say it in plain words; when that does not work, use a name the reader can already see, such as a folder name or a field name; keep the word only when both fail, and then explain it once where the reader first meets it. The rule is `write-documents-in-plain-english.md`, the one place for the writing rules; the `writing-harness-files` skill holds an exact copy of it, `references/writing-rule.md`.
+This list gives one answer for each made-up word, so that every file changes the same way. A word is made up when a dictionary does not have it, or when it has its own meaning only in this project. The rule for each word, in this order: say it in plain words; when that does not work, use a name the reader can already see, such as a folder name or a field name; keep the word only when both fail, and then explain it once where the reader first meets it. The rule is `document-clarity-standard.md`, the one place for the writing rules; the `writing-harness-files` skill holds an exact copy of it, `references/writing-rule.md`.
 
 In the Choice column, P means plain words, N means a name the reader can see, and K means keep the word and explain it once. The last column says what else changes when a tool, a template, a heading that another file cites, or a skill description uses the word.
 

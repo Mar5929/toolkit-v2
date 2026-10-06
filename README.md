@@ -55,7 +55,7 @@ provides for the job, and to the official page addresses when none is
 available, and always for Codex.
 
 All the writing rules are in one place (your decision of 2026-10-06): the
-rule `write-documents-in-plain-english.md`, which every project gets. It
+rule `document-clarity-standard.md`, which every project gets. It
 says that a file opens with what it is for and its goal, says things in
 plain words in place of made-up project words, and uses whole sentences.
 The skill holds an exact copy of that rule, so that it also works in a
