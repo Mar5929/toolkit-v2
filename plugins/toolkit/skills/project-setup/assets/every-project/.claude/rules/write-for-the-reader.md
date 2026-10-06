@@ -23,6 +23,17 @@ The reader opens the result alone. The reader was not in this chat and cannot as
 - Write about the subject, not about the document or the chat that produced it. Quote the chat only when the exact words are the fact, and then say who said them and when.
 - Keep every fact, number, name, date, and quotation exactly as it is.
 
+## How to build a sentence
+
+- Name who acts, and put them first. Write "The agent saves the file", not "The file is saved".
+- Put the condition before the action, so the reader knows whether the sentence applies before reading what to do. Write "When the save fails, tell the owner", not "Tell the owner when the save fails".
+- Put the goal before the action when a sentence has both. Write "To undo the change, run the reset step".
+- Put the action in the verb. Write "check the file", not "perform a check of the file".
+- Say what to do. Keep "never" and "do not" for a real ban.
+- Keep the subject and its verb close together. Do not put a long aside between them.
+- Give every item in a list the same form, and every step in a procedure the same form.
+- Write steps in the order the reader does them, one step per sentence.
+
 ## Something made to look at
 
 - Start with the content. No preamble, and no closing line that sums up.
