@@ -6,7 +6,9 @@ Read `dev/GOAL.md` first. This file says where the work stands.
 
 Work item TKV-24. Branch `claude/one-home-layout`, worktree
 `.claude/worktrees/one-home-layout`. Not pushed. It lands only with Mike's
-yes, after he has looked at the HarborDesk sample built from it.
+yes, after he has looked at a new project folder set up from it
+(`~/Documents/Projects/toolkit-setup-preview`; he asked for a fresh setup
+in place of a rebuilt HarborDesk sample, 2026-10-05).
 
 What Mike decided is in `dev/research/layout-audit/DESIGN-SPEC.md`. The
 audits, the memory scenario test, and the specification of the checking
@@ -27,7 +29,17 @@ script are beside it. The reviews are `dev/reviews/2026-10-05-*.md`.
   No new project skill: closing is a step of the lifecycle skill; recording
   a decision, filing a source, and updating a system document are three
   steps of the filing skill.
-- Local memory holds where work stopped plus pointers. A Hindsight project
+- Local memory is the Davis-based memory again (Mike, 2026-10-05: "restore
+  the Davis memory and fine-tune it"; he approved the component list the
+  same day): Current State in five parts, one Markdown file per concept in
+  four kinds (`user_`, `project_`, `reference_`, `event_`), a generated
+  index, and the "Memory approval" line. No decision records, glossary, or
+  system facts in memory. Two filing rows say to write an analysis of the
+  existing system to `reference/current-system/`, and a run of a recurring
+  job to memory, before the reply. Reviewed twice and fixed
+  (`dev/reviews/2026-10-05-memory-restore-review.md`,
+  `dev/test-runs/memory-restore.md`,
+  `dev/test-runs/skill-routing-memory-restore.md`). A Hindsight project
   gets no toolkit memory skill (Mike, 2026-10-05): the add-on ships its own.
 - A fourth hook command, `validate-records.mjs` (15 checks; Mike accepted
   279 lines plus tests on 2026-10-05), run after an edit, at stop in Claude
@@ -47,13 +59,18 @@ script are beside it. The reviews are `dev/reviews/2026-10-05-*.md`.
 
 Open with Mike (also in `dev/research/layout-audit/FIX-LIST.md`, "Waits for
 the owner", and `MEMORY-SCENARIOS.md`):
-- What memory holds: the scenario test recommends pointers plus short dated
-  notes for facts that fit no other file, and six fixes that do not depend
-  on that choice (project tasks shown at "where are we", a search that
-  covers `work-items/`, a run log in `delivery/`, a "Next session" line that
-  cannot go stale, lessons read before a deploy, `PROJECT.md` in front of
-  the session).
-- The "Memory approval" line in `PROJECT.md`, which nothing reads.
+- Memory, known limits from the live runs: a mid-size model does not save
+  a draft it gave only in the chat, such as a meeting preparation list (0
+  of 3); a reported job failure was saved in 4 of 5 runs. Fixing more needs
+  a new hook job, which needs his yes.
+- Memory, for him to confirm (`DESIGN-SPEC.md` section 9): the new starter
+  file `.ignore`; `@PROJECT.md` in the root guide; a project task may name
+  another person; whether his request for an analysis is also his yes to
+  commit its record; a save about a named person waits for his yes.
+- The review file `dev/reviews/2026-10-05-memory-restore-review.md` is
+  written but not committed: the reviewer's commit was refused by the
+  permission system, and the orchestrator did not commit it in its place.
+  It is in the `one-home-memory` worktree.
 - `session-handoff.md` (his wording) and the figurative words in his older
   rule files.
 - What Notion memory stores and when its pointers are read.
@@ -64,7 +81,7 @@ Before it lands:
 - The main checkout has an uncommitted `AGENTS.md` edit from another
   session, the rule "Challenge the current design (Mike, 2026-10-04)". It is
   not on this branch. It must be kept.
-- HarborDesk is built from the branch and Mike has looked.
+- Mike has looked at `toolkit-setup-preview` and said it looks right.
 
 ## Merge update (2026-10-04)
 
