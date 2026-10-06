@@ -45,7 +45,7 @@ With no template, a record is the file or files below, in its own folder, holdin
 | Release notes | Released | The release is complete. |
 | Release notes | Rolled back | The release was undone. |
 | Migration area | Draft | The mapping is being written. |
-| Migration area | Verified | The mapping was checked against the source and the target. |
+| Migration area | Verified | The mapping was checked against the source system and the target system. |
 | Migration area | Superseded | Another mapping replaced it. |
 
 A client handoff has no status.
@@ -54,7 +54,7 @@ A client handoff has no status.
 
 - Set a Status from what happened. Never set Deployed, Complete, or Released before the checks passed.
 - Never commit a file that holds real records: a data load file or a backup. Keep the `.gitignore` in any folder that has one.
-- An original received from someone else goes in `sources/`, not here. A record here names it by SRC-###.
+- A source, which is anything the project received and keeps, goes in `sources/`, not here. A record here names it by SRC-###.
 - A question that is still open goes in the work item, or in `DECISIONS.md` when more than one work item needs it. A record here names it by its ID.
 
 ## Which skill to use
@@ -66,4 +66,4 @@ A client handoff has no status.
 | Write a client handoff record | No skill: follow this file |
 | Commit a record written before the work item's branch is merged | On that branch, with the work item's other changes |
 | Commit a change made after the work item's branch was merged | `publish-docs` |
-| Commit a record that belongs to no single work item, such as a release of several items or a client handoff | `publish-docs` |
+| Commit a record that belongs to no single work item, such as a release of several work items or a client handoff | `publish-docs` |

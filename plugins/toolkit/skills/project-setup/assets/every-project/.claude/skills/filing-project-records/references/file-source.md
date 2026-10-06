@@ -2,7 +2,7 @@
 
 Use this file to save a source and give it an ID, so that other records can name it by that ID. A source is anything the project was given and keeps. It can arrive as pasted text or as a file. File every source, whether one work item uses it, several do, or none does yet. The result of this step is the source's ID, in the form SRC-###.
 
-`sources/AGENTS.md` gives the form of a row in the list of sources, the file name, what must stay true, and which sources need the owner's answer before they are filed. Read it before you write. That guide calls a source "an original".
+`sources/AGENTS.md` gives the form of a row in the list of sources, the file name, what must stay true, and which sources need the owner's answer before they are filed. Read it before you write.
 
 The steps are the same whether the project keeps its work items in local files, in Notion, or in GitHub, because a source is never saved where the work items are kept.
 
@@ -10,7 +10,7 @@ The steps are the same whether the project keeps its work items in local files, 
 
 1. Search `sources/README.md`, the list of sources, for this source. Search by its date, who it came from, and its subject.
    - When the source is filed already, use its ID, add the work item's ID to the row's "Used by" cell, and go to step 6.
-2. Decide where the source is kept: in `sources/`, or outside Git. `sources/AGENTS.md`, section "An original kept outside Git", says how to decide. When that section gives a question for this source, ask the owner that question.
+2. Decide where the source is kept: in `sources/`, or outside Git. `sources/AGENTS.md`, section "A source kept outside Git", says how to decide. When that section gives a question for this source, ask the owner that question.
 3. Take the next SRC number.
 4. Save the source under the name that `sources/AGENTS.md` gives. Write the short name in lowercase words joined by hyphens.
    - Save pasted text as a `.md` file.
