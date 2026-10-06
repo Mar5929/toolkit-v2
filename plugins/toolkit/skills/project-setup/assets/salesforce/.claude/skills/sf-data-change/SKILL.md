@@ -1,6 +1,6 @@
 ---
 name: sf-data-change
-description: 'Builds the owner''s handoff for a Salesforce production data change: load file, backup, numbered steps, success check, and undo steps, so no agent writes production data and every change can be undone. Use when the owner asks to load, import, update, or delete production records, even inside a build, for example "load this file into production".'
+description: 'Prepares the owner''s handoff for a Salesforce production data change: the load file, backup, numbered steps, success check, and undo steps. Use when the owner asks to load, import, update, or delete production records, including during a build. The owner runs the change.'
 ---
 
 # Salesforce data change handoff

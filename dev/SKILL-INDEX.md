@@ -49,9 +49,9 @@ the routing rounds for the retired skills) is in Git history.
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `project-setup` | `./` | Sets up Toolkit V2 in a project, checks or updates the setup, moves over a project set up another way, changes where work items or memory are kept, adds SOUL.md, opens the Hindsight dashboard, or connects Hindsight on a new computer, so projects run the same files. Use for any Toolkit V2 setup request, such as "toolkit v2", "set up this project", "check the setup", or "update the toolkit". Not for a Git pull; use pull-latest. Not for the older claude-toolkit (project-sync). |
-| `choosing-outside-tools` | `../choosing-outside-tools/` | Lists the outside tool the owner uses for each kind of job and how to set it up, so every computer uses the same tool. Use when he asks for a job on the list, such as "make an explainer video", and no skill for that tool is on this computer; when he asks which tool he uses for a job; or when he says "add this to my tool list". Not for doing the job when a skill for that tool is on this computer. |
-| `writing-harness-files` | `../writing-harness-files/` | Makes every change to a harness file follow the current official Claude Code and Codex pages. A harness file is a skill, rule, AGENTS.md or CLAUDE.md, hook, settings file, Codex .rules file, output style, plugin manifest or marketplace file, mod, subagent definition, or helper-agent brief. Use before any agent writes or changes one. Not for toolkit setup; use project-setup. Not for a line the owner dictates for owner-preferences.md; use curating-project-memory. |
+| `project-setup` | `./` | Sets up, checks, updates, or moves a project onto Toolkit V2. It also changes the project's work or memory choice, adds SOUL.md, opens the Hindsight dashboard, or connects Hindsight on a new computer. Use for requests such as "set up this project", "check the setup", or "update the toolkit". For new commits from Git, use pull-latest. The older claude-toolkit uses project-sync. |
+| `choosing-outside-tools` | `../choosing-outside-tools/` | Lists the outside tool the owner chose for each kind of job and explains how to set it up. Use when the owner asks which tool they use for a job, asks to add a tool to the list, or asks for a listed job when that tool has no installed skill. When the tool has an installed skill, use that skill to do the job. |
+| `writing-harness-files` | `../writing-harness-files/` | Uses current official Claude Code and Codex guidance when an agent writes or changes a harness file. A harness file is a skill, rule, AGENTS.md or CLAUDE.md, hook, settings file, Codex .rules file, output style, plugin manifest or marketplace file, mod, subagent definition, or helper-agent brief. Use before writing or changing one. For toolkit setup, use project-setup. |
 
 ## 2. Shared skills (every project, 10)
 
@@ -79,16 +79,16 @@ section 5):
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `running-work-item-lifecycle` | `assets/every-project/.claude/skills/running-work-item-lifecycle/` | Runs one work item from idea to Done through requirements, design, build, testing, deployment, and closing, keeping the work item current and stopping for the owner's yes before each step that needs one. Use when the owner asks to plan, change, build, test, deploy, close, or cancel a work item, or asks whether one is ready for its next step, such as "is WI-12 ready to test". Not for filing a source, or a decision or rule more than one work item needs; use filing-project-records. |
-| `filing-project-records` | `assets/every-project/.claude/skills/filing-project-records/` | Files the records the whole project needs, each with an ID, so later work finds them: every source the project receives, in sources/; a decision or open question more than one work item needs, in DECISIONS.md; a change to a document that describes the system, in system/. Use when the owner hands over a source, such as a transcript, a decision affects more than one work item, or a system document must be updated. Not for a decision only one work item needs; use running-work-item-lifecycle. |
-| `handoff` | `assets/every-project/.claude/skills/handoff/` | Updates this session's work items and the project's Current State, files any decision or source this session left unfiled, then writes a checked, self-contained prompt for a new session, or checks a pasted one, so nothing is lost when context clears. Use when the owner ends the session, clears context, or asks for a handoff prompt or a check of one, such as "write a handoff". Not for a recap alone; use session-summary. |
-| `braindump` | `assets/every-project/.claude/skills/braindump/` | Plays back a loose brain dump in very simple words and waits for the owner's yes before any work starts, so nothing is planned, built, or saved on a misunderstanding. Use when the owner wants a brain dump checked first, such as "here's a brain dump", "play that back", "tell me what you heard", or "make sure you understood before you start". Not for a brain dump the owner asks only to plan; use running-work-item-lifecycle. |
-| `explain-simply` | `assets/every-project/.claude/skills/explain-simply/` | Re-explains the last answer, a plan, or a named document as short plain bullets, keeping every number, name, and path, so the owner can follow it and no fact is lost. Use when the owner finds an answer too technical or hard to follow, for example "explain it like I'm five", "simpler", "less jargon", or "I don't get it". |
-| `session-summary` | `assets/every-project/.claude/skills/session-summary/` | Recaps this session as a table of the owner's requests, the result of each one, and which still need the owner, so the owner sees what is done and what is open. Use when the owner asks what happened in this session, for example "recap this chat", "what did I ask for", "what did we do in this chat", or "summarize this session". Not for a handoff; use handoff. |
-| `pull-latest` | `assets/every-project/.claude/skills/pull-latest/` | Brings the local repository up to date with its remote by fetching and merging, never rebasing or resetting, so no local work or shared history is lost. Use when the owner asks for the remote's newest commits, such as "get the latest" or "sync with remote". Not for discarding local work; use reset-to-remote. Not for a toolkit update; use project-setup. |
-| `reset-to-remote` | `assets/every-project/.claude/skills/reset-to-remote/` | Makes the local repository an exact copy of its remote, discarding local commits and branches the remote no longer has, after showing a plan, so cloning again is not needed and nothing is lost without warning. Use only when the owner asks for it in the owner's own words, for example "wipe local", "match remote exactly", or "fresh start from remote". Not for a routine update; use pull-latest. |
-| `merge-and-clean-up` | `assets/every-project/.claude/skills/merge-and-clean-up/` | Merges one approved GitHub pull request, then removes only its branches and worktree, after its checks and the merge-safety check pass, so nothing unchecked is merged and no other session's work is removed. Use when running-work-item-lifecycle asks, or the owner names a pull request to merge, such as "merge PR 12". Not for taking an approved work item through merge and deployment; use running-work-item-lifecycle. |
-| `publish-docs` | `assets/every-project/.claude/skills/publish-docs/` | Commits an approved edit to project documents, such as system/, DECISIONS.md, sources/, delivery/, and PROJECT.md, directly to the default branch, so it needs no pull request. Use when another skill asks for a document save, or the owner says "publish the docs". Not for deciding what DECISIONS.md, sources/, or system/ says; use filing-project-records. Not for code, rules, skills, or a work item; use running-work-item-lifecycle. |
+| `running-work-item-lifecycle` | `assets/every-project/.claude/skills/running-work-item-lifecycle/` | Takes one work item from idea through requirements, design, build, testing, deployment, and closing. It keeps the work item current and gets the owner's yes at each required point. Use to plan, change, build, test, deploy, close, cancel, or check the readiness of a work item. For a source, shared decision, or rule that more than one work item needs, use filing-project-records. |
+| `filing-project-records` | `assets/every-project/.claude/skills/filing-project-records/` | Files sources the project receives in sources/, decisions and open questions that more than one work item needs in DECISIONS.md, and changes to documents about system rules in system/. Each record gets an ID so later work can find it. Use when the owner gives the project a source, a shared decision or question needs recording, or a system document needs updating. For a decision that only one work item needs, use running-work-item-lifecycle. |
+| `handoff` | `assets/every-project/.claude/skills/handoff/` | Updates this session's work items and the project's Current State, files decisions or sources left unfiled, and writes a checked, self-contained prompt for the next session or checks one the owner provides. Use when the owner ends a session, clears context, asks for a handoff prompt, or asks to check one. For a recap without a handoff, use session-summary. |
+| `braindump` | `assets/every-project/.claude/skills/braindump/` | Plays back the owner's loose ideas in simple words and waits for the owner's yes before starting work. Use when the owner asks "tell me what you heard", "play that back", or otherwise asks to check understanding first. When the owner asks only to plan the idea, use running-work-item-lifecycle. |
+| `explain-simply` | `assets/every-project/.claude/skills/explain-simply/` | Explains the last answer, a plan, or a named document in short, plain bullets while keeping its facts, numbers, names, and paths. Use when the owner asks for a simpler explanation, says "less jargon", or says "I don't get it". |
+| `session-summary` | `assets/every-project/.claude/skills/session-summary/` | Puts the owner's requests, each result, and what still needs the owner in a table. Use when the owner asks to recap or summarize this session. For a prompt that lets a new session continue the work, use handoff. |
+| `pull-latest` | `assets/every-project/.claude/skills/pull-latest/` | Fetches and merges new remote commits into the local repository while preserving local work and commit history. Use when the owner asks to "get the latest" or "sync with remote". For discarding local work, use reset-to-remote. For updating installed Toolkit V2 files, use project-setup. |
+| `reset-to-remote` | `assets/every-project/.claude/skills/reset-to-remote/` | Shows a plan, then makes the local repository match its remote by discarding local commits and removing branches whose remote branches are gone. Use only when the owner explicitly asks to "wipe local", "match remote exactly", or start fresh from the remote. For a routine update that keeps local work, use pull-latest. |
+| `merge-and-clean-up` | `assets/every-project/.claude/skills/merge-and-clean-up/` | Merges one approved GitHub pull request only after its checks and the merge-safety check pass. It then removes only that pull request's branches and worktree. Use when the owner names a pull request to merge or running-work-item-lifecycle requests its merge. For an entire work item through merge and deployment, use running-work-item-lifecycle. |
+| `publish-docs` | `assets/every-project/.claude/skills/publish-docs/` | Commits an approved edit to project documents directly to the default branch. Use when another skill asks for a document save or the owner asks to "publish the docs". For deciding what belongs in DECISIONS.md, sources/, or system/, use filing-project-records. For code, rules, skills, or work items, use running-work-item-lifecycle. |
 
 ## 3. The work tracking choice (one per project)
 
@@ -102,7 +102,7 @@ original: an original goes to `sources/`, and the item holds its SRC ID.
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `using-work-tracker` | `assets/work-local/.claude/skills/using-work-tracker/` | Saves, finds, and changes work items as local files in the work-items folder, so running-work-item-lifecycle reads and writes every work item the same way. Use when a work item must be read, created, saved, searched, nested, or moved, such as "show me WI-031" or "put WI-007 under WI-003". Not for deciding a work item's plan, State, or approvals; use running-work-item-lifecycle. Only for projects that track work locally. |
+| `using-work-tracker` | `assets/work-local/.claude/skills/using-work-tracker/` | Reads, creates, finds, nests, moves, and saves work items as files in work-items/. Use for a locally tracked work item, such as "show me WI-031" or "put WI-007 under WI-003". running-work-item-lifecycle decides the plan, State, and approvals. Only for projects that track work locally. |
 
 ### 3.2 Notion (`assets/work-notion/`)
 
@@ -113,13 +113,13 @@ in project-setup's `references/notion-build/` (`work-setup.md`,
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `using-work-tracker` | `assets/work-notion/.claude/skills/using-work-tracker/` | Saves, finds, and changes work items in the project's Notion databases, so running-work-item-lifecycle reads and writes every work item the same way. Use when a work item, phase, task, or question must be read, saved, or searched, such as "show me WI-31". Not for adding a phase or a task, or for deciding a work item's plan, State, or approvals; use running-work-item-lifecycle. Only for projects that track work in Notion. |
+| `using-work-tracker` | `assets/work-notion/.claude/skills/using-work-tracker/` | Reads, creates, finds, and saves work items in the project's Notion databases. Use for a Notion-tracked work item, phase, task, or question, such as "show me WI-31". running-work-item-lifecycle decides the plan, State, and approvals, including when to add a phase or task. Only for projects that track work in Notion. |
 
 ### 3.3 GitHub Issues (`assets/work-github/`)
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `using-work-tracker` | `assets/work-github/.claude/skills/using-work-tracker/` | Saves, finds, and changes work items as GitHub issues, so running-work-item-lifecycle reads and writes every work item the same way. Use when a work item must be read, created, saved, or searched, such as "show me #12". Not for deciding a work item's plan, State, or approvals; use running-work-item-lifecycle. Only for projects that track work in GitHub Issues. |
+| `using-work-tracker` | `assets/work-github/.claude/skills/using-work-tracker/` | Reads, creates, finds, and saves work items as GitHub issues. Use when a GitHub-tracked work item must be read or changed, such as "show me #12". running-work-item-lifecycle decides the plan, State, and approvals. Only for projects that track work in GitHub Issues. |
 
 ### 3.4 Jira
 
@@ -144,13 +144,13 @@ and a record that is true only for a while a "check or remove by" date.
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `curating-project-memory` | `assets/memory-process/.claude/skills/curating-project-memory/` | Keeps project memory true: saves what no other file holds (a fact about a person or the client, an event, a job run), sends any other fact to its place, updates the project's Current State, writes "from now on" instructions as rules, and finds or cleans up what was saved. Use when the owner asks to keep, correct, forget, or find something, or reports a fact, a date, what someone said, or a job run. Not for a decision; use filing-project-records. Not for a to-do; use running-work-item-lifecycle. |
+| `curating-project-memory` | `assets/memory-process/.claude/skills/curating-project-memory/` | Saves facts that no other project file holds, routes other facts to their proper files, keeps the project's Current State accurate, writes "from now on" instructions as rules, and finds or cleans up saved facts. Use when the owner asks to remember, find, correct, or forget something, or reports a fact, date, statement, or job run. For a shared decision, use filing-project-records; for a task, use running-work-item-lifecycle. |
 
 ### 4.2 Local files and Obsidian (`assets/memory-local/`)
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `using-memory-store` | `assets/memory-local/.claude/skills/using-memory-store/` | Saves, finds, and changes project memory records and the project's Current State as Markdown files in the memory folder, so every skill reads and writes memory the same way. Use when a memory record or the project's Current State must be read, saved, searched, renamed, retired, or deleted, such as "which memory files link to WI-031" or "read Current State". Not for deciding what to keep or when to ask; use curating-project-memory. Only for projects with local memory. |
+| `using-memory-store` | `assets/memory-local/.claude/skills/using-memory-store/` | Reads, finds, saves, changes, renames, retires, and deletes project memory records and the project's Current State as files in memory/. Use when a local memory record or the project's Current State must be read or changed. curating-project-memory decides what to keep and when to ask the owner. Only for projects with local memory. |
 
 ### 4.3 Notion in Lore's layout (`assets/memory-notion/`)
 
@@ -164,7 +164,7 @@ and the glossary page are not written.
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `using-memory-store` | `assets/memory-notion/.claude/skills/using-memory-store/` | Stores and finds this project's memory records and the project's Current State in Notion, in Lore's databases and the Current state page, so every memory record is saved in the right column and page section. Use when a memory record or the project's Current State must be read, saved, changed, searched, linked to a work item, merged, or deleted, such as "read the Current state page". Not for deciding what to keep or when to ask; use curating-project-memory. Only for projects with Notion memory. |
+| `using-memory-store` | `assets/memory-notion/.claude/skills/using-memory-store/` | Reads, finds, saves, changes, links, merges, and deletes project memory records and the project's Current State in Notion. Use when a Notion memory record or the project's Current State page must be read or changed. curating-project-memory decides what to keep and when to ask the owner. Only for projects with Notion memory. |
 
 ### 4.4 Hindsight
 
@@ -184,7 +184,7 @@ once.
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `using-notion-cli` | `assets/notion-tools/.claude/skills/using-notion-cli/` | Shows how to run ntn, Notion's command-line tool, for the skills that store work items and memory in Notion: sign-in, Codex permissions, the calls every Notion step uses, and fixes for failed calls, so reads and saves in Notion work the first time. Use before any Notion read or write, when ntn will not sign in or cannot find a page, in Codex, and whenever a Notion call fails. Only for projects that keep work or memory in Notion. |
+| `using-notion-cli` | `assets/notion-tools/.claude/skills/using-notion-cli/` | Explains how to run ntn for this project's Notion work and memory records, including sign-in, Codex access, API calls, and failed calls. Use before a Notion read or write through ntn, or when a call fails. This skill applies only when the project keeps work items or memory in Notion. |
 
 ## 6. Salesforce projects (3)
 
@@ -198,9 +198,9 @@ onboarding removes it from the setup copy and makes the project's own link.
 
 | Skill | Folder | Description |
 | --- | --- | --- |
-| `sf-deploy-check` | `assets/salesforce/.claude/skills/sf-deploy-check/` | Finds components or edits that a Salesforce deploy would ship beyond the intended change, so no unfinished or unintended work reaches a shared org. Use when a deploy to a shared org (UAT, full copy, staging, or production) is about to run, or before the owner gets a deploy command. Not for testing whether a work item is ready, or for running the deploy; use running-work-item-lifecycle. |
-| `sf-component-tracker` | `assets/salesforce/.claude/skills/sf-component-tracker/` | Keeps the component tracker CSV, the master and per-work-item package.xml files, destructiveChanges.xml, and manual steps in sync, so no changed component is left out of a deploy. Use when Salesforce metadata under force-app/ is added, changed, renamed, or deleted (open it before building and update the records in the same response), a deploy result comes back, or a deploy needs manual steps. |
-| `sf-data-change` | `assets/salesforce/.claude/skills/sf-data-change/` | Builds the owner's handoff for a Salesforce production data change: load file, backup, numbered steps, success check, and undo steps, so no agent writes production data and every change can be undone. Use when the owner asks to load, import, update, or delete production records, even inside a build, for example "load this file into production". |
+| `sf-deploy-check` | `assets/salesforce/.claude/skills/sf-deploy-check/` | Checks whether a Salesforce deploy would include components or edits beyond the intended change, or whose feature is not ready in the target org. Use before a deploy to a shared org or before giving the owner a deploy command. For deciding whether a work item is ready or for running the deploy, use running-work-item-lifecycle. |
+| `sf-component-tracker` | `assets/salesforce/.claude/skills/sf-component-tracker/` | Keeps the Salesforce component tracker CSV, master and per-work-item package.xml files, destructiveChanges.xml, and manual steps in sync with metadata edits. Use before building when a component under force-app/ will change, when a deploy result arrives, or when a deploy needs manual steps. Update the records in the same response as the metadata change. |
+| `sf-data-change` | `assets/salesforce/.claude/skills/sf-data-change/` | Prepares the owner's handoff for a Salesforce production data change: the load file, backup, numbered steps, success check, and undo steps. Use when the owner asks to load, import, update, or delete production records, including during a build. The owner runs the change. |
 
 ## 7. Helper briefs
 
@@ -322,11 +322,6 @@ of one skill never meet.
   project from the toolkit, or writing or changing one harness file by
   hand. `writing-harness-files` is on in every folder, so check that it
   does not open for a plain "update the toolkit".
-- `writing-harness-files` and `curating-project-memory` for "write this up
-  as a rule for agents" or "from now on ...": a line the owner dictates
-  for `.claude/rules/owner-preferences.md` goes to
-  `curating-project-memory`; any other rule file goes to
-  `writing-harness-files`. Its description says so since 2026-10-05.
 - `writing-harness-files` and the skill-creator skills on Mike's Mac
   (`anthropic-skills:skill-creator`, `skill-creator:skill-creator`): both
   match "write a skill". `writing-harness-files` says which pages to read

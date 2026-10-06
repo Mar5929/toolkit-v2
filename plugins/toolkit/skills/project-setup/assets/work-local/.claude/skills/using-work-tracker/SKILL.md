@@ -1,6 +1,6 @@
 ---
 name: using-work-tracker
-description: 'Saves, finds, and changes work items as local files in the work-items folder, so running-work-item-lifecycle reads and writes every work item the same way. Use when a work item must be read, created, saved, searched, nested, or moved, such as "show me WI-031" or "put WI-007 under WI-003". Not for deciding a work item''s plan, State, or approvals; use running-work-item-lifecycle. Only for projects that track work locally.'
+description: 'Reads, creates, finds, nests, moves, and saves work items as files in work-items/. Use for a locally tracked work item, such as "show me WI-031" or "put WI-007 under WI-003". running-work-item-lifecycle decides the plan, State, and approvals. Only for projects that track work locally.'
 ---
 
 # Work items kept as local files

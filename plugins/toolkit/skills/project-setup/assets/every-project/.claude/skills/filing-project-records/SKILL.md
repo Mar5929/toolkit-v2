@@ -1,15 +1,15 @@
 ---
 name: filing-project-records
-description: 'Files the records the whole project needs, each with an ID, so later work finds them: every source the project receives, in sources/; a decision or open question more than one work item needs, in DECISIONS.md; a change to a document that describes the system, in system/. Use when the owner hands over a source, such as a transcript, a decision affects more than one work item, or a system document must be updated. Not for a decision only one work item needs; use running-work-item-lifecycle.'
+description: 'Files sources the project receives in sources/, decisions and open questions that more than one work item needs in DECISIONS.md, and changes to documents about system rules in system/. Each record gets an ID so later work can find it. Use when the owner gives the project a source, a shared decision or question needs recording, or a system document needs updating. For a decision that only one work item needs, use running-work-item-lifecycle.'
 ---
 
 # Filing project records
 
-Use this skill to save information the whole project needs, so that later work on any work item can find it. It saves three kinds of thing:
+Use this skill to file records that later work may need. File the three kinds of record as follows:
 
-1. **Sources.** Anything the project was given by someone else, such as a meeting transcript, an email, a client document, or a screenshot. Save every one in `sources/`, unchanged, with an ID like SRC-001. Do this even when only one work item uses it, or none does yet.
-2. **Decisions and open questions** that more than one work item needs. These go in `DECISIONS.md`, each with an ID like DEC-001.
-3. **Rules about how the system must work** that more than one work item needs. These go in a document in `system/`, each with an ID like SEC-04.
+1. Save every source the project receives from someone else in `sources/`, unchanged, with an ID like SRC-001. Sources include meeting transcripts, emails, client documents, and screenshots. File a source even when only one work item uses it, or none does yet.
+2. Record decisions and open questions that more than one work item needs in `DECISIONS.md`. Give each entry an ID like DEC-001.
+3. Record rules about how the system must work that more than one work item needs in a document in `system/`. Give each rule an ID like SEC-04.
 
 If only one work item needs a decision or a requirement, do not save it here. It stays in that work item: use `running-work-item-lifecycle`.
 
