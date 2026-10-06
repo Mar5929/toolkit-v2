@@ -4,7 +4,7 @@ This file lists the views of a Notion project's databases, and the property orde
 
 Two other places hold the rest of the layout:
 
-- The `assets/schema/` files of the Notion `using-work-tracker` skill hold every property and relation. That skill's `database-layout.md` lists them and shows how a project looks.
+- The `assets/schema/` files added to `managing-work-items` by the Notion work choice hold every property and relation. Its `references/work-tracker-database-layout.md` lists them and shows how a project looks.
 - `work-item-page.md` in this folder holds the page text.
 
 Never rename or remove anything listed here or in those files.

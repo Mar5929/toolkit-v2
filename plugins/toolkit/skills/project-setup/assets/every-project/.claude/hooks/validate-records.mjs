@@ -172,13 +172,13 @@ function check(top, main) {
     if (!id || basename(path) === 'DESIGN.md') continue;
     if (basename(path) !== `${id}.md` || !basename(dirname(path)).startsWith(`${id}-`)) add(file,
       0, `this work item's id is ${id}, so its file is ${id}.md, in a folder whose name starts`,
-      `with "${id}-". Rename it with using-work-tracker.`);
+      `with "${id}-". Rename it with managing-work-items.`);
     if (items.has(id)) add(file, 0, `${id} is also the id of ${items.get(id)}. Renumber the work`,
-      `item made in this session with using-work-tracker, and tell the owner.`);
+      `item made in this session with managing-work-items, and tell the owner.`);
     items.set(id, file);
     const moved = text.match(/^\*\*Moved up:\*\*(.*)$/m)?.[1].replace(/<[^<>\n]*>/g, '').trim();
     if (/^(Done|Cancelled)$/.test(value('status')) && !moved) add(file, 0, 'the work item is',
-      'closed, but its Moved up line is empty. Closing with running-work-item-lifecycle fills it.');
+      'closed, but its Moved up line is empty. Closing with managing-work-items fills it.');
     scan.push([file, noPrompts(lines(text)), false]);
   }
   // Check 9: every DEC, SRC, and rule ID that is written is defined. Check 10: no prompt is left.

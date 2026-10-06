@@ -61,7 +61,7 @@ A client handoff has no status.
 
 | Change | Use |
 | --- | --- |
-| Write or update a deployment record, a release plan, or release notes | `running-work-item-lifecycle`, in its Deploying state |
+| Write or update a deployment record, a release plan, or release notes | `managing-work-items`, in its Deploying state |
 | Write or update a migration area | No skill: follow this file |
 | Write a client handoff record | No skill: follow this file |
 | Commit a record written before the work item's branch is merged | On that branch, with the work item's other changes |

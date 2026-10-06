@@ -2,7 +2,7 @@
 
 <!-- Fill-in guide: replace every angle-bracket prompt in the outcome, the phase table, and the phase heading with this project's real text. Keep one table row and one matching ## heading per phase, with the same ID and name. Under each heading, list the phase's top-level work items. Remove the example row and heading, and this guide, after setup. -->
 
-This file is the project's roadmap in a project that tracks its work items in local files: the project's phases, in order, and the top-level work items in each phase. Each work item holds its own requirements, phases, tasks, and history. The `using-work-tracker` skill reads and changes this file.
+This file is the project's roadmap in a project that tracks its work items in local files: the project's phases, in order, and the top-level work items in each phase. Each work item holds its own requirements, phases, tasks, and history. The `managing-work-items` skill reads and changes this file.
 
 ```text
 PROJECT-ROADMAP.md

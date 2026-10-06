@@ -38,7 +38,7 @@ const PHRASES = {
   decision: new RegExp(`\\b(?:${ASKED}we decided|let'?s go with|go with option)\\b`, 'i'),
 };
 const HOME = 'is filed where the root AGENTS.md says, under "Where information goes"';
-const DECIDES = 'The curating-project-memory skill decides whether anything is saved: what is kept'
+const DECIDES = 'The managing-project-memory skill decides whether anything is saved: what is kept'
   + ` ${HOME}. A fact that fits no file there goes in a memory record.`;
 const HINDSIGHT = `What is kept ${HOME}. .claude/rules/hindsight-memory.md says what Hindsight`
   + ' memory is for.';

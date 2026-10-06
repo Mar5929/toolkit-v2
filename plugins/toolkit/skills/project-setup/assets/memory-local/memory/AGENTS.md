@@ -18,7 +18,7 @@ The folder is opened in Obsidian with the rest of the project. Git ignores the f
 
 ## What never goes in memory
 
-- A fact that the root `AGENTS.md`, section "Where information goes", keeps in a place outside memory never goes in this folder. `curating-project-memory` sends such a fact to that place.
+- A fact that the root `AGENTS.md`, section "Where information goes", keeps in a place outside memory never goes in this folder. `managing-project-memory` sends such a fact to that place.
 - A memory record may name a record outside memory by its ID. The memory record never repeats what that record says.
 - A secret, a key, or an email address never goes in a memory record.
 
@@ -31,9 +31,9 @@ The folder is opened in Obsidian with the rest of the project. Git ignores the f
 
 | Change | Use |
 | --- | --- |
-| Keep, correct, forget, or find something | `curating-project-memory` |
-| What each part of the project's Current State holds, and its limits | `curating-project-memory` |
-| Clean up memory | `curating-project-memory` |
-| A standing instruction from the owner | `curating-project-memory` |
-| Every read and every write of a file in this folder: the form of a memory record, its header fields, and the searches | `using-memory-store` |
-| A work item's line under "Now" in `CURRENT_STATE.md` | `running-work-item-lifecycle` decides the line |
+| Keep, correct, forget, or find something | `managing-project-memory` |
+| What each part of the project's Current State holds, and its limits | `managing-project-memory` |
+| Clean up memory | `managing-project-memory` |
+| A standing instruction from the owner | `managing-project-memory` |
+| Every read and every write of a file in this folder: the form of a memory record, its header fields, and the searches | `managing-project-memory` |
+| A work item's line under "Now" in `CURRENT_STATE.md` | `managing-work-items` decides the line |

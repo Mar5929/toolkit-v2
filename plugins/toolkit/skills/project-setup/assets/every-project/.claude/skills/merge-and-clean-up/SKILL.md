@@ -1,13 +1,13 @@
 ---
 name: merge-and-clean-up
-description: 'Merges one approved GitHub pull request only after its checks and the merge-safety check pass. It then removes only that pull request''s branches and worktree. Use when the owner names a pull request to merge or running-work-item-lifecycle requests its merge. For an entire work item through merge and deployment, use running-work-item-lifecycle.'
+description: 'Merges one approved GitHub pull request only after its checks and the merge-safety check pass. It then removes only that pull request''s branches and worktree. Use when the owner names a pull request to merge or managing-work-items requests its merge. For an entire work item through merge and deployment, use managing-work-items.'
 ---
 
 # Merge and clean up
 
 Use this skill to merge one exact GitHub pull request and to confirm that GitHub reports it merged. After that, the skill removes only that pull request's worktree and branches. The goal is that nothing unchecked is merged, and that no other session's work is removed.
 
-This skill merges one pull request. Taking an approved work item through merge and deployment is the job of `running-work-item-lifecycle`, which uses this skill for the merge of a pull request.
+This skill merges one pull request. Taking an approved work item through merge and deployment is the job of `managing-work-items`, which uses this skill for the merge of a pull request.
 
 Four rules apply to every step:
 
@@ -59,9 +59,9 @@ The merge is allowed in two cases. When neither case is true, stop and ask the o
   - "Merge and clean up" counts only when the pull request is clear from a number, a URL, or the current branch.
   - A bare "yes" counts only when it answers a question about this merge.
   - The owner's yes to the result of a work item never covers the merge.
-- **`running-work-item-lifecycle` sent you here.** That skill has already asked the owner, or checked the owner's standing merge instruction.
+- **`managing-work-items` sent you here.** That skill has already asked the owner, or checked the owner's standing merge instruction.
 
-A standing merge instruction is a line in `.claude/rules/owner-preferences.md` in which the owner allows merges without a question each time. Only `running-work-item-lifecycle` applies it, in its Deploying steps, because that skill holds the conditions for it. When you reached this skill in any other way, the standing merge instruction does not count here: ask the owner.
+A standing merge instruction is a line in `.claude/rules/owner-preferences.md` in which the owner allows merges without a question each time. Only `managing-work-items` applies it, in its Deploying steps, because that skill holds the conditions for it. When you reached this skill in any other way, the standing merge instruction does not count here: ask the owner.
 
 ## Step 3: check the pull request on GitHub
 
@@ -129,7 +129,7 @@ gh pr merge <number> --repo <owner/repo> --squash --delete-branch --match-head-c
 
 When GitHub refuses the merge:
 
-- When the merge is refused because the head no longer matches, a new commit arrived. Stop, report the new commit, and run steps 1 to 4 again on the new head. The owner's yes covers only the head that the owner was shown, so ask the owner again. When `running-work-item-lifecycle` sent you here, go back to its merge step with the new head.
+- When the merge is refused because the head no longer matches, a new commit arrived. Stop, report the new commit, and run steps 1 to 4 again on the new head. The owner's yes covers only the head that the owner was shown, so ask the owner again. When `managing-work-items` sent you here, go back to its merge step with the new head.
 - For any other refusal, stop and tell the owner the error.
 
 ### Confirm the merge
@@ -185,8 +185,8 @@ git -C <base-worktree> worktree prune
 
 When step 1 found a linked work item:
 
-- When `running-work-item-lifecycle` sent you here, add nothing, because that skill adds the Recent History row.
-- When the owner asked you directly, add one Recent History row with `using-work-tracker`: "Merged pull request #<number> as <merge commit>."
+- When `managing-work-items` sent you here, add nothing, because that skill adds the Recent History row.
+- When the owner asked you directly, add one Recent History row with `managing-work-items`: "Merged pull request #<number> as <merge commit>."
 
 Never change the State, and never mark anything Done.
 
@@ -201,7 +201,7 @@ Verify four things:
 
 ### Report
 
-- When `running-work-item-lifecycle` sent you here, say the pull request link, the merge commit, and the cleanup result in one line. Then go on with the rest of its Deploying steps.
+- When `managing-work-items` sent you here, say the pull request link, the merge commit, and the cleanup result in one line. Then go on with the rest of its Deploying steps.
 - When the owner asked you directly, report these six things:
   - the pull request link;
   - the merge commit;
@@ -221,8 +221,8 @@ Verify four things:
 
 | For | Use |
 | --- | --- |
-| The merge note on the work item, when the owner asked directly | `using-work-tracker` |
-| Changing the work item's State, or marking it Done | `running-work-item-lifecycle` |
-| Taking an approved work item through merge and deployment | `running-work-item-lifecycle` |
-| A merge under the standing merge instruction | `running-work-item-lifecycle` |
-| No remote: the local merge | `running-work-item-lifecycle` |
+| The merge note on the work item, when the owner asked directly | `managing-work-items` |
+| Changing the work item's State, or marking it Done | `managing-work-items` |
+| Taking an approved work item through merge and deployment | `managing-work-items` |
+| A merge under the standing merge instruction | `managing-work-items` |
+| No remote: the local merge | `managing-work-items` |

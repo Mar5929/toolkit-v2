@@ -2,6 +2,33 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## Work and memory skill merge, version 0.9.6 (2026-10-06)
+
+Work item TKV-29. Mike approved one `managing-work-items` skill and one
+`managing-project-memory` skill, each with the storage references selected
+by project setup. The work-item lifecycle remains a separate reference
+inside the work skill. The memory process is a reference inside the memory
+skill. Hindsight keeps its rule and receives no Toolkit memory skill.
+`filing-project-records` and `using-notion-cli` remain separate.
+
+The starter `AGENTS.md` now checks each turn for work items, project records,
+and memory, then routes to the relevant skill. The previous process and
+storage skill files moved into the merged skill folders; their record forms
+and approval rules were retained. Setup, update instructions, the skill
+index, descriptions, hook text, repository guides, and test expectations
+use the new names. The skill checker assembles all nine work and memory
+choice combinations and checks the files contributed by each choice.
+
+The marketplace and plugin validation, Workstreams tests, skill and rule
+checks, all 112 Node tests, and `git diff --check` passed. The rule check
+reported its three existing size warnings. A malformed tracker reference
+was detected by the assembled-skill check. A separate verifier reviewed
+the file mapping, setup combinations, and merged instructions and found no
+blocking issue. Scratch installs of toolkit 0.9.6 passed in Claude Code
+and Codex.
+Live skill routing in Claude Code and Codex remains unverified until those
+hosts have working authentication.
+
 ## Headings in the document clarity standard, version 0.9.5 (2026-10-06)
 
 Mike liked the short, clear headings in the standard and asked for useful

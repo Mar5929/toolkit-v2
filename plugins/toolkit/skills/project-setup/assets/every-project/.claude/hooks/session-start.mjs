@@ -7,7 +7,7 @@ import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 
 const COMPACTED = 'Context was just compacted. Before you answer the next message, re-read the'
-  + ' active work item with using-work-tracker, then do "Every session" in the root AGENTS.md'
+  + ' active work item with managing-work-items, then do "Every session" in the root AGENTS.md'
   + ' again.';
 const NEW_INDEX = '<!-- Generated file: the session-start hook rebuilds this index from each'
   + " memory file's title, description, and updated date. Do not edit it by hand. -->\n\n"
@@ -19,7 +19,7 @@ const attempt = (read) => { try { return read() || ''; } catch { return ''; } };
 const input = attempt(() => JSON.parse(readFileSync(0, 'utf8')));
 const opts = { cwd: input.cwd || process.cwd(), encoding: 'utf8', stdio: 'pipe', timeout: 15000 };
 const out = input.source === 'compact' ? [COMPACTED] : [];
-const where = memory === 'notion' ? 'the Current state page, with using-memory-store'
+const where = memory === 'notion' ? 'the Current state page, with managing-project-memory'
   : 'memory/CURRENT_STATE.md in the main checkout';
 try {
   // memory/ is kept out of Git, so it is only in the main checkout. No Git: the session's folder.
@@ -34,12 +34,12 @@ try {
   const updated = state.match(/Last updated:\W*(\d{4}-\d{2}-\d{2})/i)?.[1];
   const days = Math.floor((Date.now() - Date.parse(updated)) / 864e5) || 0;
   const prune = `Remove the lines that are no longer true with ${memory === 'hindsight' ? 'a direct'
-    + ' edit, as .claude/rules/hindsight-memory.md says' : 'the curating-project-memory skill'}`;
+    + ' edit, as .claude/rules/hindsight-memory.md says' : 'the managing-project-memory skill'}`;
   const size = lines >= 40 ? `${lines} lines (limit: under 40)` : days > 7 && `${days} days old`;
   if (size) out.push(`The project's Current State is ${size}. ${prune}.`);
   if (state) out.push("The project's Current State:", state);
   else if (memory === 'notion') out.push('The Notion Current state page could not be read here.'
-    + ' Read it with the using-memory-store skill.');
+    + ' Read it with the managing-project-memory skill.');
   else out.push(`memory/CURRENT_STATE.md is missing or empty in ${dirname(dir)}.`);
   // Local memory: rebuild the index, one line per current memory file.
   if (memory === 'local' && attempt(() => readdirSync(dir).length)) {

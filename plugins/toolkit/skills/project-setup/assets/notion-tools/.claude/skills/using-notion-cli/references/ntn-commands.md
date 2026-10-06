@@ -60,7 +60,7 @@ ntn api v1/pages/<page-id> -X PATCH -d '{"properties":{"Priority":{"select":{"na
 
 ## Filling a body from an asset
 
-The bodies in the `assets/schema/` folder of a skill that stores in Notion, which is `using-work-tracker` or `using-memory-store`, hold `{{PLACEHOLDERS}}`:
+The bodies in the `assets/schema/` folder of a skill that stores in Notion, which is `managing-work-items` or `managing-project-memory`, hold `{{PLACEHOLDERS}}`:
 
 | Placeholder | Value | Where it is |
 | --- | --- | --- |

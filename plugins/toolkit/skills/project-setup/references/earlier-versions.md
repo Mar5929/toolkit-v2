@@ -25,7 +25,7 @@ Before toolkit 0.6.0, each work item had a stage (`01-discovery` to `14-spec-upd
 | Stage 12 or 13 | Deploying |
 | Stage 14 | Reflecting |
 
-- In the same change, set the Status that goes with the new State. The Status and State table in the `SKILL.md` of `running-work-item-lifecycle` gives the Status for each State.
+- In the same change, set the Status that goes with the new State. The Status and State table in `managing-work-items/references/lifecycle-rules.md` gives the Status for each State.
 - With local work items, change every work item in `work-items/`, sub-items and `archive/` included. A sub-item is a work item inside another work item. Replace the `stage:` line with a `state:` line, and set `status:` and `updated:` in the same edit.
 - With work items in Notion, change every row of Work Items, archived rows included. Do this after "From Stage to State" in `notion-build/work-setup.md` has added the State property and the Status options.
 - With work items in GitHub, change open issues only, after the `state:` labels exist. `github.md`, "Bringing a project up to date", step 3, says which label to add to each issue and which to remove. A closed issue's labels are ignored.
@@ -35,27 +35,27 @@ Before toolkit 0.6.0, each work item had a stage (`01-discovery` to `14-spec-upd
 
 ## The levels structure (toolkit 0.8.0)
 
-Since toolkit 0.8.0, only the project and its top-level items have phases. A top-level item is a work item with no parent. A sub-item's tasks are one plain list. The project has its own phases (`P01`) and its own tasks, which are called project tasks. `running-work-item-lifecycle`, "Levels", describes the levels, the phases, and the tasks.
+Since toolkit 0.8.0, only the project and its top-level items have phases. A top-level item is a work item with no parent. A sub-item's tasks are one plain list. The project has its own phases (`P01`) and its own tasks, which are called project tasks. `managing-work-items/references/lifecycle-rules.md`, "Levels", describes the levels, the phases, and the tasks.
 
 The same release gives a Notion task one status field (step 5) and removes "Untracked to-dos" from the project's Current State (step 6). The project's Current State is the project's one short page of what is true now.
 
 Show the owner every change below in one numbered list, and make each change only after the owner's yes. Delete nothing except what a step names. Each work item keeps its task IDs.
 
-The steps name storage files, such as `field-mapping.md`. Each storage file is in the `using-work-tracker` skill for the place where the project keeps its work items. Those skills are in this skill's `assets/work-local/`, `assets/work-notion/`, and `assets/work-github/` (under `.claude/skills/`).
+The steps name storage references, such as `work-tracker-field-mapping.md` for local work. The chosen work folder adds those files inside `managing-work-items`; their sources are this skill's `assets/work-local/`, `assets/work-notion/`, and `assets/work-github/` (under `.claude/skills/`).
 
-1. **Sub-items that have phases.** List every level-2 and level-3 work item that still has a phase that is not Cancelled, or a task under a phase. Convert each one with "A work item that changes level", "Phases to a plain list". With local work items that text is in `field-mapping.md`, with Notion in `database-layout.md`, and with GitHub in `issue-layout.md`. A level-3 work item that sits under a phase of its level-2 parent leaves that phase.
+1. **Sub-items that have phases.** List every level-2 and level-3 work item that still has a phase that is not Cancelled, or a task under a phase. Convert each one with "A work item that changes level", "Phases to a plain list". With local work items that text is in `work-tracker-field-mapping.md`, with Notion in `work-tracker-database-layout.md`, and with GitHub in `work-tracker-issue-layout.md`. A level-3 work item that sits under a phase of its level-2 parent leaves that phase.
 2. **Top-level items with no phase.** List each top-level item that has left Backlog and has no phase. Give it one phase, as "A plain list to phases" says in the same storage file, with a name that the owner approves.
 3. **The project's roadmap.**
-   - With local work items, `PROJECT-ROADMAP.md` stays. When it still has work units (`### P01-U01` headings), show the owner the new version. In the new version, each phase lists the top-level items that its units named, in the form that `project-roadmap-and-tasks.md` gives. A unit with no work item is listed for the owner to keep as a new Backlog work item or to drop. Commit the new version with `publish-docs` after the owner's yes.
-   - With work items in Notion or GitHub, the phases move into Notion or GitHub. When the project folder has a `PROJECT-ROADMAP.md`, add each of its phases as a project phase, with the work items that its units named. For Notion, `database-layout.md`, "The project's phases and tasks", says how. For GitHub, `project-roadmap-and-tasks.md` says how. Then ask the owner whether to remove the file in your worktree, which is your separate folder with its own branch. The file stays until the owner says yes.
-   - A project with no phases yet gets none now. `running-work-item-lifecycle` proposes phases when the next work item leaves Backlog.
+   - With local work items, `PROJECT-ROADMAP.md` stays. When it still has work units (`### P01-U01` headings), show the owner the new version. In the new version, each phase lists the top-level items that its units named, in the form that `work-tracker-project-roadmap-and-tasks.md` gives. A unit with no work item is listed for the owner to keep as a new Backlog work item or to drop. Commit the new version with `publish-docs` after the owner's yes.
+   - With work items in Notion or GitHub, the phases move into Notion or GitHub. When the project folder has a `PROJECT-ROADMAP.md`, add each of its phases as a project phase, with the work items that its units named. For Notion, `work-tracker-database-layout.md`, "The project's phases and tasks", says how. For GitHub, `work-tracker-project-roadmap-and-tasks.md` says how. Then ask the owner whether to remove the file in your worktree, which is your separate folder with its own branch. The file stays until the owner says yes.
+   - A project with no phases yet gets none now. `managing-work-items` proposes phases when the next work item leaves Backlog.
 4. **Project tasks.** A project task is a task that belongs to no work item.
    - With local work items, `work-items/PROJECT-TASKS.md` comes in with the missing files, in the main checkout.
    - With work items in Notion, the "Project tasks" view comes with the views, as `notion-build/work-setup.md` says. Also add Phase type and Task type, and make "By project phase", "Project phases", and "Project tasks" the first tabs, in the project and in the shared "Project" template. Steps 2, 3, and 5 of `notion-build/work-setup.md`, "Bringing a project up to the current template", say how. Then give the owner the page-layout clicks that pin Phase type and Task type, from `notion-build/work-layout.md`, "Property order and page layout".
    - With work items in GitHub, do nothing now. The "Project tasks" issue is made with the first project task.
 5. **Task status in Notion.** A task has one status field, Status, and no "Done" checkbox. Make that change with the steps in `notion-build/work-setup.md`, "From the Done checkbox to Status", in the project and in the shared "Project" template.
 6. **Untracked to-dos.** The project's Current State no longer has an "Untracked to-dos" section.
-   - For each line under that heading, propose where the line goes: the work item it concerns, a project task for administrative work, or a new Backlog work item for other project work. `running-work-item-lifecycle` is the skill for a project task and for a new work item.
+   - For each line under that heading, propose where the line goes: the work item it concerns, a project task for administrative work, or a new Backlog work item for other project work. `managing-work-items` is the skill for a project task and for a new work item.
    - Move each line to the place that the owner approves, then remove the heading.
    - With local or Hindsight memory, the heading is in `memory/CURRENT_STATE.md` in the main checkout.
    - With Notion memory, the heading is on the "Current state" page, and on the same page of the shared "Project" template. Step 5 of `notion-build/setup.md`, "Bringing memory up to the current layout", covers this heading on both pages.
@@ -64,7 +64,7 @@ The steps name storage files, such as `field-mapping.md`. Each storage file is i
 
 ## The Requirements layout (toolkit 0.8.1)
 
-Since toolkit 0.8.1, the Requirements section of a work item holds one block for each requirement, headed "Requirement <number>: <short name>". A block holds the original requirement word for word, its goal, its numbered Functional Requirements, and its numbered Acceptance Criteria. `references/refining-requirements.md` in `running-work-item-lifecycle` gives the layout in full. Text in angle brackets in a template is an instruction, and a work item that an agent creates or changes keeps no such text.
+Since toolkit 0.8.1, the Requirements section of a work item holds one block for each requirement, headed "Requirement <number>: <short name>". A block holds the original requirement word for word, its goal, its numbered Functional Requirements, and its numbered Acceptance Criteria. `managing-work-items/references/refining-requirements.md` gives the layout in full. Text in angle brackets in a template is an instruction, and a work item that an agent creates or changes keeps no such text.
 
 - **New work items get the new layout** through the work item template.
   - With local work items, the template files in `work-items/work-item-template/` are "Other toolkit files" in the table in `update.md`, section 3. Take the toolkit's version of them after the owner's yes.
@@ -73,5 +73,5 @@ Since toolkit 0.8.1, the Requirements section of a work item holds one block for
 - **Existing work items stay as they are.** Never rewrite the Requirements section of an existing work item in an update, wherever the project keeps its work items. The skills read the older layout as it is.
   - A work item moves to the new layout only when the owner asks for that work item.
   - A work item that holds the older label of its Functional Requirements (from before toolkit 0.8.4) keeps that label.
-  - `running-work-item-lifecycle`, `SKILL.md`, "A work item from an older template", gives the rule for a work item in the older layout.
+  - `managing-work-items/references/lifecycle-rules.md`, "A work item from an older template", gives the rule for a work item in the older layout.
 - Tell the owner in one line that new work items get the new layout and existing work items keep theirs.

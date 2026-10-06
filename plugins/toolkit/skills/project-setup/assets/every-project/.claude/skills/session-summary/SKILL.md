@@ -95,5 +95,5 @@ Two work item files there have conflicting changes. I did not touch it.
 
 | For | Use |
 | --- | --- |
-| Turning an open request into a work item or a project task | `running-work-item-lifecycle` |
+| Turning an open request into a work item or a project task | `managing-work-items` |
 | A recap asked for together with a handoff: it shows this table first, then the handoff | `handoff` |

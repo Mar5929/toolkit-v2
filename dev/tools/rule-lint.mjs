@@ -522,7 +522,7 @@ export function lintRule(rule, opts = {}) {
       out.push(f(rule, null, 'size', 'warning', `The rule loads in every session and is ${size.bytes} bytes, over the limit of ${limits.alwaysOnBytes}.`, shorter));
     }
     if (opts.ownerFile && size.entries > limits.ownerEntries) {
-      out.push(f(rule, null, 'size', 'warning', `The rule has ${size.entries} instructions, over the limit of ${limits.ownerEntries}.`, 'Merge instructions that say the same thing, and move a procedure to a skill (curating-project-memory proposes these when it tidies memory). A change to the owner\'s own words needs his yes.'));
+      out.push(f(rule, null, 'size', 'warning', `The rule has ${size.entries} instructions, over the limit of ${limits.ownerEntries}.`, 'Merge instructions that say the same thing, and move a procedure to a skill (managing-project-memory proposes these when it tidies memory). A change to the owner\'s own words needs his yes.'));
     }
   }
   return out;

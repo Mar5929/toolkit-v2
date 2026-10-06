@@ -1,6 +1,6 @@
 ---
 name: braindump
-description: 'Plays back the owner''s loose ideas in simple words and waits for the owner''s yes before starting work. Use when the owner asks "tell me what you heard", "play that back", or otherwise asks to check understanding first. When the owner asks only to plan the idea, use running-work-item-lifecycle.'
+description: 'Plays back the owner''s loose ideas in simple words and waits for the owner''s yes before starting work. Use when the owner asks "tell me what you heard", "play that back", or otherwise asks to check understanding first. When the owner asks only to plan the idea, use managing-work-items.'
 ---
 
 # Brain dump playback
@@ -41,5 +41,5 @@ playback.
 
 | For | Use |
 | --- | --- |
-| A rough idea to plan, meeting notes, or a dump the owner asks only to plan | `running-work-item-lifecycle` |
-| Something worth keeping, after the owner's yes | `curating-project-memory` (Hindsight memory: `.claude/rules/hindsight-memory.md`) |
+| A rough idea to plan, meeting notes, or a dump the owner asks only to plan | `managing-work-items` |
+| Something worth keeping, after the owner's yes | `managing-project-memory` (Hindsight memory: `.claude/rules/hindsight-memory.md`) |

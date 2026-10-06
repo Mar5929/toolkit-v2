@@ -1,6 +1,6 @@
 # Current state
 
-<!-- Fill-in guide: replace each prompt in angle brackets with what is true now, and write "None." in a part that has nothing to hold. A line names a record by its ID and never copies a work item's own Current state. Line limits: Now 5, Coming up 3, Waiting on 4, Standing jobs and shared files 3, Next session starts with 3; the whole file stays under 40 lines. Remove a line the moment it stops being true. Local memory: `curating-project-memory` says what each part holds, and `using-memory-store` makes every change. Hindsight memory: `.claude/rules/hindsight-memory.md`. Remove this guide when the prompts are filled. -->
+<!-- Fill-in guide: replace each prompt in angle brackets with what is true now, and write "None." in a part that has nothing to hold. A line names a record by its ID and never copies a work item's own Current state. Line limits: Now 5, Coming up 3, Waiting on 4, Standing jobs and shared files 3, Next session starts with 3; the whole file stays under 40 lines. Remove a line the moment it stops being true. Local memory: `managing-project-memory` says what each part holds, and `managing-project-memory` makes every change. Hindsight memory: `.claude/rules/hindsight-memory.md`. Remove this guide when the prompts are filled. -->
 
 Last updated: `<YYYY-MM-DD, source, and person or agent>`
 

@@ -206,7 +206,7 @@ Then compare the two lists. One of two cases applies.
    - The command prints one line per finding: the file, what is wrong, and what to do.
 3. Fix each finding, then run the check again, until it prints nothing.
    - When a finding is in a file Git tracks, fix it in the worktree.
-   - When a finding is in `work-items/` or `memory/`, fix it in the main checkout now, with the `using-work-tracker` or `using-memory-store` skill that is in the setup copy. Write nothing there that names a record made on your branch.
+   - When a finding is in `work-items/` or `memory/`, fix it in the main checkout now, with `references/work-tracker.md` in the setup copy's `managing-work-items` skill or `references/memory-store.md` in its `managing-project-memory` skill. Write nothing there that names a record made on your branch.
    - When a finding is an `AGENTS.md` in `memory/` or `work-items/` with no `CLAUDE.md` beside it, copy that one file, the `CLAUDE.md`, from the setup copy.
    - When the fix for a finding is the owner's decision, for example two work items with one ID, ask the owner.
 4. Only then add the entries that run `validate-records.mjs` to the worktree's `.claude/settings.json` (a `PostToolUse` group and a `Stop` group) and `.codex/hooks.json` (a `PostToolUse` group). Take the entries from the settings snippets, which are the small files in this skill's `assets/settings/` folder that setup merges into a project's settings files. Add them with the merge rules in `skills-hooks-settings.md`, "Merge rules".
@@ -224,7 +224,7 @@ Each part of this section is about one thing that an earlier setup put into a pr
 
 ### Retired skills
 
-A retired skill is a folder in `.claude/skills/` that is not in the setup copy and that an earlier Toolkit V2 setup put there. List it, and remove it only after the owner's yes.
+A retired skill is a folder in `.claude/skills/` that is not in the setup copy and that an earlier Toolkit V2 setup put there. List it, check whether the owner edited it, and remove it only after the owner's yes. The current merge retires `running-work-item-lifecycle`, `using-work-tracker`, `curating-project-memory`, and `using-memory-store`; their instructions now live inside `managing-work-items` or `managing-project-memory`. A project with Hindsight memory has no Toolkit memory skill.
 
 - When a folder in `.claude/skills/` that is not in the setup copy is the owner's own project skill, or you are not sure, leave it and ask.
 - Toolkit 0.6.0 retired `work-refine`, `solution-design`, `work-delegate`, `work-check`, `work-finish`, `local-work-track`, `notion-work-track`, and `github-work-track`. `running-work-item-lifecycle` and `using-work-tracker` replace them.
@@ -233,7 +233,7 @@ A retired skill is a folder in `.claude/skills/` that is not in the setup copy a
 
 ### Renamed skills
 
-Five skills were renamed:
+Five skills were renamed in an earlier version. This table records that history; the current merged names are described below.
 
 | Old folder | New folder |
 | --- | --- |
@@ -243,7 +243,16 @@ Five skills were renamed:
 | `managing-project-memory` | `curating-project-memory` |
 | `storing-project-memory` | `using-memory-store` |
 
-A project that was set up earlier holds the old folder in `.claude/skills/`, and the "Toolkit skills" row in section 3 would add the new folder beside it. A project never holds both folders. Install the new folder and remove the old folder in the same change, after the owner's yes, and list both folders in the numbered table.
+A project from that earlier version may hold a folder in the "Old folder" column. In the current version, `managing-work-items` and `managing-project-memory` are the names of the merged skills. When one of those folder names is already present, compare its files and replace the toolkit files after the owner's yes; keep the folder. For any other old folder, check for the owner's edits before removal. A project must not keep the old process or storage skill beside its merged replacement.
+
+| Folder in a project set up before this merge | Current home |
+| --- | --- |
+| `running-work-item-lifecycle` | `managing-work-items` |
+| `using-work-tracker` | The selected `references/work-tracker.md` and supporting files inside `managing-work-items` |
+| `curating-project-memory` | `managing-project-memory` for local or Notion memory |
+| `using-memory-store` | The selected `references/memory-store.md` and supporting files inside `managing-project-memory` |
+
+Before replacing a merged skill, inspect both old folders and their files. Use section 3, "Whether a difference is the owner's edit", to identify each owner edit, and put each one in the numbered table. Carry an edit into the new skill only after the owner chooses where it belongs. After the owner's yes, install the merged skill and remove the old folders in the same change. Hindsight projects keep their existing Hindsight rule and add-on.
 
 - A project holds only the skills for its own choices, so it renames only the skills it has.
 - When a rule or a skill of the owner's own names an old skill, list it, and change the name after the owner's yes.
@@ -359,15 +368,15 @@ A choice decides which files a project has, never which lines inside a file. So 
    - Write `not used` on each line that only the old choice used.
    - Write the new choice's lines as `setup-copy.md`, "The project name and "Toolkit settings"", says. That section gives the value of each line.
 3. Build a new setup copy for the new choices and compare, as sections 1 and 2 say.
-   - Add each file the project lacks, as the "Missing files" row says.
-   - The new choice's storage skill (`using-work-tracker` or `using-memory-store`) has the same name as the old choice's storage skill, and replaces it. Read the old skill first, because step 5 reads the old records the way the old skill says.
+   - Add each file the project lacks, as the "Missing files" row says, except the affected merged skill folder. Keep that skill and its selected store reference in the old form until the records have moved in step 5. Install the affected skill folder from the setup copy in step 6.
+   - Keep the old choice's installed instructions until the records move in step 5. Read the old `references/work-tracker.md` or `references/memory-store.md` before the change. In a project from before the merge, read `using-work-tracker` or `using-memory-store` instead. Read the new choice's selected reference in the setup copy to learn how to create and read back its records. Do not install the new choice's reference over the old one yet.
    - A new memory choice also replaces the toolkit's hook handlers in `.claude/settings.json` and `.codex/hooks.json` with the new choice's snippets (`skills-hooks-settings.md`, "Merge rules"). The owner trusts the changed Codex hooks again in `/hooks`.
 4. Run the service step for the new choice (`notion.md`, `github.md`, or `hindsight-on-vps.md`).
    - When the project already has work items or memory in Notion and adds the other one, make no second project page. Follow `notion-build/work-setup.md`, "Adding work items or memory later".
    - When memory moved out of Hindsight, after the owner's yes also remove the project folder from `mapPathToBank` and `optInPaths` in `~/.hindsight/coding-agent.json`, so that Hindsight's coding-agent add-on stops saving there.
 5. Move the records one at a time, with a preview of each record and the owner's yes, and read each record back in its new place. Delete nothing from the place where the work items were kept before, or from the old memory system.
    - When the records go into Hindsight, the add-on's tools load only in the next session. So write each record with one `POST .../memories`, as `hindsight-on-vps.md`, "5. Save and search", shows, with `document_id` set to the record's ID and `async` `true`. Read the record back with that file's search command after its operation is `completed`.
-6. Remove the old choice's files, only after the records are moved and the owner says yes to the list.
+6. After the records are moved and the owner says yes to the list, install the new choice's merged skill folder from the setup copy and remove the old choice's files. Check for owner edits before replacing or removing a skill file. The selected `references/work-tracker.md` or `references/memory-store.md` then contains the new choice's instructions. Remove a retired storage-skill folder only after checking it for owner edits and getting the owner's yes.
    - The list is every file of the old choice's setup folders that no setup folder of the new choices holds. `(cd <skill folder>/assets/<folder> && find . -type f)` prints a folder's files, and `setup-copy.md`, "Folders the choices add", names the folders of each choice. `<skill folder>` is the folder that holds this skill's `SKILL.md`.
    - Memory that moved to Hindsight keeps `memory/CURRENT_STATE.md`.
    - A file in `work-items/` or `memory/` that is not in a setup folder is the owner's record. It stays until the owner says what to do with it.

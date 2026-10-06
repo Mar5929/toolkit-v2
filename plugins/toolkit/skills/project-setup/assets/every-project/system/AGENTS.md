@@ -101,5 +101,5 @@ What each mark means:
 | --- | --- |
 | Add, change, or retire a rule; add or correct a term; add or change an integration document or a diagram | `filing-project-records`, step "update a system document" |
 | A question about a rule, or the decision that approves it | `filing-project-records`, step "record a decision" |
-| Mark a rule Built, when `running-work-item-lifecycle` is closing a work item and asks what the work item changed | `filing-project-records`, step "update a system document" |
+| Mark a rule Built, when `managing-work-items` is closing a work item and asks what the work item changed | `filing-project-records`, step "update a system document" |
 | Commit the change to the default branch | `publish-docs` |

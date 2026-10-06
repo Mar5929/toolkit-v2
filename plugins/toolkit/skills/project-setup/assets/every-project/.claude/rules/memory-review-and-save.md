@@ -21,7 +21,7 @@ The project keeps its memory in one system: the one named on the "Memory" line i
 
 ## The owner's yes
 
-- Save, correct, forget, and clean up memory only with `curating-project-memory`, which says when a save needs the owner's yes. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in its place.
+- Save, correct, forget, and clean up memory only with `managing-project-memory`, which says when a save needs the owner's yes. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in its place.
 - The "Memory approval" line in `PROJECT.md`, section "Toolkit settings", holds the value `onboarding` or `trusted`. Only an explicit instruction from the owner changes that value.
 - The owner's yes covers only the change and the meaning that you showed. Silence is never a yes.
 - A question about a save that the owner has not answered stays a proposal. Do not rely on what the proposal says.
