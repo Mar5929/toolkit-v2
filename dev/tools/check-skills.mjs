@@ -35,6 +35,9 @@
 //   - a file whose first line names a dev/build-shared/ source equals that source after the
 //     first line;
 //   - a skill asset copied from a project file (MODEL_COPIES) equals that file;
+//   - a skill file that is an exact copy of a project rule (RULE_COPIES) is one comment line that
+//     names the rule, a blank line, and then the rule's whole text: today the writing rule in
+//     writing-harness-files/references/writing-rule.md;
 //   - every folder under assets/ except settings/ is every-project or a folder that a row of
 //     the setup-copy.md table names, and every folder the table names exists;
 //   - a folder is in one row of that table, except notion-tools and memory-process, which two
@@ -114,6 +117,12 @@ const SHARED = 'every-project/.claude/skills';
 const MODEL_COPIES = {
   [`${SHARED}/running-work-item-lifecycle/assets/work-item-template.md`]: 'work-items/work-item-template/WORK-ITEM.md',
   [`${SHARED}/running-work-item-lifecycle/assets/design-template.md`]: 'work-items/work-item-template/DESIGN.md',
+};
+
+// Skill files that are exact copies of a project rule: path from the repository root -> the rule it copies.
+// A plugin skill reads only files in its own folder, so it holds the rule's text itself. The rule is the source.
+const RULE_COPIES = {
+  'plugins/toolkit/skills/writing-harness-files/references/writing-rule.md': 'plugins/toolkit/skills/project-setup/assets/every-project/.claude/rules/write-documents-in-plain-english.md',
 };
 
 const findings = [];
@@ -340,6 +349,15 @@ for (const f of walk(ASSETS)) {
     const b = homes.length ? path.join(ASSETS, homes[0], original) : null;
     if (!fs.existsSync(a) || !b) report('error', a, `this copy or its project file ${original} is missing`);
     else if (read(a) !== read(b)) report('error', a, `differs from the project file ${shown(b)}; copy that file over it`);
+  }
+  // A copy of a rule: its first line names the rule, its second line is blank, and the rest is the rule, whole.
+  for (const [copy, rule] of Object.entries(RULE_COPIES)) {
+    const a = path.join(ROOT, copy);
+    const b = path.join(ROOT, rule);
+    if (!fs.existsSync(a) || !fs.existsSync(b)) { report('error', a, `this copy or the rule it copies, ${rule}, is missing`); continue; }
+    const [first, second, ...rest] = read(a).split('\n');
+    if (!first.startsWith('<!--') || !first.includes(rule)) report('error', a, `its first line must be a comment that names the rule it copies, ${rule}`);
+    if (second !== '' || rest.join('\n') !== read(b)) report('error', a, `differs from the rule ${rule}: edit the rule, then copy it over this file below its first line and one blank line`);
   }
   // The Next action prompt is written by hand in two places; they must match.
   const pageFile = path.join(SETUP, 'references/notion-build/work-item-page.md');

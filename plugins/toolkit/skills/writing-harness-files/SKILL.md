@@ -7,14 +7,14 @@ description: 'Makes every change to a harness file follow the current official C
 
 This skill gives the steps for writing or changing a harness file. A harness file is a file that tells Claude Code or Codex how to behave. It is one of these kinds: a skill, a rule, an `AGENTS.md` or `CLAUDE.md`, a hook, a settings file, a Codex `.rules` file, an output style, a plugin manifest or marketplace file, a mod, a subagent definition, or a helper-agent brief. A hook means the command and its entry in a settings or hooks file.
 
-The goal is that every harness file follows the current official page for its kind, and that a reader who opens the file alone can follow it after one read. The owner is the person the agent works for, and he is one of those readers.
+The goal is that every harness file follows the current official page for its kind, and that a reader who opens the file alone can follow it after one read. The owner is the person the agent works for, and the owner is one of those readers.
 
 Never write or change a harness file from memory. Claude Code and Codex are the two products that read these files. Both change between releases, so get the current official guidance first (step 2).
 
 Two neighbouring jobs belong to other skills:
 
 - Setting up or updating the toolkit in a project is the job of `project-setup`.
-- A line that the owner dictates for `.claude/rules/owner-preferences.md` ("from now on ...") is his instruction in his words. The project's `curating-project-memory` skill writes it. In a project with no such skill, add the line in the form that the `<!-- Layout: ... -->` comment in that file gives.
+- A line that the owner dictates for `.claude/rules/owner-preferences.md` ("from now on ...") is the owner's instruction in the owner's words. The project's `curating-project-memory` skill writes it. In a project with no such skill, add the line in the form that the `<!-- Layout: ... -->` comment in that file gives.
 
 ## Steps
 
@@ -24,15 +24,16 @@ Two neighbouring jobs belong to other skills:
    - When none is available, open the address of the page. Always do so for a Codex page.
    - For a skill, read the skill best practices page every time, together with the Claude Code skill page and the Codex skill page: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
    - A dated copy of a page that the project keeps counts only when it was captured in the last 14 days. Otherwise, read the live page.
-   - When you cannot read the page, tell the owner before you write. Name the page, and say that the change rests on the checklist alone.
+   - When you cannot read the page, tell the owner before you write. Name the page, and say that the change is based on the checklist alone.
 3. Open the section for that kind of file in [references/checklist.md](references/checklist.md). The checklist gives the practices for each kind of file and the way to check a change. Where the live page and the checklist differ, follow the page, and tell the owner which checklist line is out of date so the checklist can be corrected.
 4. Read the project's own rules for these files in its root `AGENTS.md`. Then read two existing files of the same kind in the project, and match their form.
 5. Write the change.
-   - Write it to the writing standard in [references/writing-standard.md](references/writing-standard.md). The standard says how to build and word a file so that a reader who opens it alone can follow it.
+   - Follow the writing rule in [references/writing-rule.md](references/writing-rule.md). All the writing rules are in that one rule: how to choose words and names, and how to build a sentence, a paragraph, and a document.
+   - That file is an exact copy of the rule `.claude/rules/write-documents-in-plain-english.md`, which `project-setup` gives every project. The copy is here so that this skill also works in a folder that has no such rule. When the project holds the rule in `.claude/rules/`, follow the project's file, because the owner may have changed it.
    - A file that both products read uses only what both support.
 6. Check the change the way the checklist section says under "Check".
-7. Have an agent that did not write the change review it against the page, the checklist, and the writing standard. Fix each finding that the reviewer confirms, and have the reviewer read the fix. A small edit gets one reviewer and one read.
-   - A helper agent is an agent that the main agent starts to do one part of the work. When the product you work in cannot start a helper agent, review the change yourself against the page, the checklist, and the writing standard, and tell the owner in step 8 that no separate review ran.
+7. Have an agent that did not write the change review it against the page, the checklist, and the writing rule. Fix each finding that the reviewer confirms, and have the reviewer read the fix. A small edit gets one reviewer and one read.
+   - A helper agent is an agent that the main agent starts to do one part of the work. When the product you work in cannot start a helper agent, review the change yourself against the page, the checklist, and the writing rule, and tell the owner in step 8 that no separate review ran.
 8. Tell the owner which pages you read and their dates, what you changed, and what the review found.
 
 A project may require the owner's yes before a rule, a skill, or a hook changes. Get that yes before step 5.
@@ -47,7 +48,7 @@ A helper agent starts with only its brief. When a helper will change a harness f
 
 - It names the kind of file and the products that read it.
 - It tells the helper to use this skill. When the helper cannot load skills, the brief gives it the page addresses and the checklist section for that kind of file.
-- It gives the helper the path of `references/writing-standard.md`, or the text of that file when the helper cannot open it. A helper does not see the main chat's reply style, so it has no other wording rules.
+- It gives the helper the path of `references/writing-rule.md`, or the text of that file when the helper cannot open it. A helper does not get the output style that the replies of the main session follow, so the helper has no other writing rules.
 - It says that a separate agent reviews the change.
 
 ## References
@@ -56,5 +57,5 @@ A helper agent starts with only its brief. When a helper will change a harness f
 | --- | --- |
 | [references/official-pages.md](references/official-pages.md) | Step 2: you need the official page for a kind of file. |
 | [references/checklist.md](references/checklist.md) | Steps 3 and 6: you need the practices and the check for a kind of file. |
-| [references/writing-standard.md](references/writing-standard.md) | Step 5, and every rewrite: you need the writing standard, with the reason and an example for each point. |
+| [references/writing-rule.md](references/writing-rule.md) | Step 5, and every rewrite: you need the writing rules. The file is an exact copy of the rule `.claude/rules/write-documents-in-plain-english.md`. |
 | [references/rewrite-steps.md](references/rewrite-steps.md) | The job is to rewrite a file that exists: you need the order of work, the checks, and the prompt for a team. |

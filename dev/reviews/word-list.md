@@ -2,7 +2,7 @@
 
 Work item TKV-24. Made 2026-10-06 from a scan of 162 files: every `.md` file under `plugins/toolkit/skills/` and the four hook commands, with `salesforce/tools/` left out.
 
-This list gives one answer for each made-up word, so that every file changes the same way. A word is made up when a dictionary does not have it, or when it has its own meaning only in this project. The rule for each word, in this order: say it in plain words; when that does not work, use a name the reader can already see, such as a folder name or a field name; keep the word only when both fail, and then explain it once where the reader first meets it. The rule and its long form are `write-for-the-reader.md` and `plugins/toolkit/skills/writing-harness-files/references/writing-standard.md`.
+This list gives one answer for each made-up word, so that every file changes the same way. A word is made up when a dictionary does not have it, or when it has its own meaning only in this project. The rule for each word, in this order: say it in plain words; when that does not work, use a name the reader can already see, such as a folder name or a field name; keep the word only when both fail, and then explain it once where the reader first meets it. The rule is `write-documents-in-plain-english.md`, the one place for the writing rules; the `writing-harness-files` skill holds an exact copy of it, `references/writing-rule.md`.
 
 In the Choice column, P means plain words, N means a name the reader can see, and K means keep the word and explain it once. The last column says what else changes when a tool, a template, a heading that another file cites, or a skill description uses the word.
 
@@ -27,7 +27,7 @@ A writer who meets a made-up word that is not in this list adds a row in the sam
 | helper | a separate agent started for one job, which sees only its instructions | K | Keep | 28 / 105 | No |
 | project task | a task that belongs to no work item | K | Keep | 28 / 63 | `PROJECT-TASKS.md`, PT- IDs |
 | lesson | something the work taught that is not proven yet | K | Keep | 28 / 68 | Template heading |
-| proposed, replaced, retired | a memory record not approved; replaced by another; no longer true | P | Keep; each storage file maps them once to its stored values | 27 / 52 | `status:` values the hook reads; Lore's names |
+| proposed, replaced, retired | a memory record not approved; replaced by another; no longer used for answers, and kept only as history | P | Keep; each storage file maps them once to its stored values | 27 / 52 | `status:` values the hook reads; Lore's names |
 | Waiting on, and the other four parts of Current State | who owes what | N | Keep; add "in Current State" | 25 / 58 | Template, Notion page, tests |
 | home | the place a kind of information is kept | P | "the place where it is kept" | 24 / 100 | One heading cited 5 times; one description |
 | a memory, memories | a memory record | P | "memory record" | 23 / 63 | No |

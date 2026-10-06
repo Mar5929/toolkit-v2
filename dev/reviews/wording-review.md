@@ -17,12 +17,13 @@ uses project words without saying what they mean." The same day he read a
 trial rewrite that kept a made-up word and put a definition in front of it,
 and said: "Why did you feel like you needed to keep the word 'an original'?
 Isn't there a better way to just rewrite? We need to look at the file as a
-whole." The writing standard says how to write:
-`plugins/toolkit/skills/writing-harness-files/references/writing-standard.md`,
-and its short form, the starter rule `write-for-the-reader.md`. This file
-says how to check and report. Read the standard before you review. Where a
-check below and the standard differ, the standard wins: report the check as
-a finding on this file.
+whole." The writing rules are in one file, the starter rule
+`plugins/toolkit/skills/project-setup/assets/every-project/.claude/rules/write-documents-in-plain-english.md`
+(Mike, 2026-10-06: one place for the writing rules). The
+`writing-harness-files` skill holds an exact copy,
+`references/writing-rule.md`. This file says how to check and report. Read
+the rule before you review. Where a check below and the rule differ, the
+rule wins: report the check as a finding on this file.
 
 ## What to review
 
@@ -49,7 +50,8 @@ Each finding names one check.
   is a finding when plain words, or a name the reader can already see such
   as a folder name or a field name, would do. A made-up word that neither
   can replace is explained in one clause where the reader first meets it:
-  once for a whole skill, normally in `SKILL.md` (the standard, point 3).
+  once for a whole skill, normally in `SKILL.md` (the writing rule, "Words
+  and names").
   The replacement for a word that other files also use comes from the
   shared word list (`AGENTS.md`, Rules, "Plain English").
 - **W3 No figurative language.** No idioms, sayings, metaphors, jokes, or

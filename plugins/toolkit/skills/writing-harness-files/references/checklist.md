@@ -22,10 +22,10 @@ The practices were checked against the official pages on 2026-10-05 (Claude Code
 ## Skill
 
 - A skill is a folder that holds `SKILL.md`, plus `references/` and `assets/` as needed. Add `scripts/` only when the project allows scripts in skills.
-- The frontmatter is the block of fields between two `---` lines at the top of `SKILL.md`. Its `name` field equals the folder name: lowercase letters, digits, and hyphens, 64 characters or fewer, with no hyphen at the start or the end and no two hyphens in a row. It holds neither "anthropic" nor "claude".
+- The front matter is the block of fields between two `---` lines at the top of `SKILL.md`. Its `name` field equals the folder name: lowercase letters, digits, and hyphens, 64 characters or fewer, with no hyphen at the start or the end and no two hyphens in a row. It holds neither "anthropic" nor "claude".
 - `description` is required by the Agent Skills standard and by Codex, and is 1,024 characters or fewer. Claude Code cuts the text it lists for one skill at 1,536 characters.
-- Codex reads only `name`, `description`, and `metadata.short-description` from the frontmatter. A field that only Claude Code reads, such as `when_to_use`, `allowed-tools`, `paths`, or `disable-model-invocation`, does nothing in Codex. So a skill that both products read must work with `name` and `description` alone.
-- The description says what the skill does and when to use it, in the third person, with the words the owner would say. Put the main use first. When the list of skills is over its budget, Codex cuts each description from the end, and Claude Code drops whole descriptions, starting with the skills used least. Keep it far below the limit: every chat reads every description.
+- Codex reads only `name`, `description`, and `metadata.short-description` from the front matter. A field that only Claude Code reads, such as `when_to_use`, `allowed-tools`, `paths`, or `disable-model-invocation`, does nothing in Codex. So a skill that both products read must work with `name` and `description` alone.
+- The description says what the skill does and when to use it, in the third person, with the words the owner would say. Put the main use first. When the list of skills is over its budget, Codex cuts each description from the end, and Claude Code drops whole descriptions, starting with the skills used least. Keep it far below the limit: every session reads every description.
 - Name a neighbour skill in the description only where the two compete: "Not for ...; use <skill>."
 - `SKILL.md` stays under 500 lines. It says first what the skill is for and what must be true when its job is done, then gives the steps, then a table that links every file in the folder and says when to open it.
 - A reference over 100 lines starts with a contents list. References link from `SKILL.md`, not from each other.
@@ -42,7 +42,7 @@ A rule is a Markdown file in `.claude/rules/`. Claude Code loads it. Codex does 
 - One topic per file, with a file name that says the topic.
 - One specific instruction per bullet, under one heading.
 - A rule with no `paths` line loads in every session, so keep it short.
-- `paths` is the only frontmatter field Claude Code reads in a rule. Give a rule a `paths` line only when it is about certain files. It then loads when the agent reads, writes, or edits a matching file, and not when it runs a command or answers a question.
+- `paths` is the only front matter field Claude Code reads in a rule. Give a rule a `paths` line only when it is about certain files. It then loads when the agent reads, writes, or edits a matching file, and not when it runs a command or answers a question.
 - A procedure with several steps goes in a skill, not in a rule.
 - The project's `AGENTS.md` must tell Codex which rule files to read, and when.
 
@@ -107,11 +107,11 @@ Check: `codex execpolicy check --pretty --rules <file> -- <command>`, once with 
 An output style is a Markdown file of instructions that Claude Code sends with every request in a session. Only Claude Code reads it.
 
 - The file sits in `~/.claude/output-styles/` for every project or `.claude/output-styles/` for one project. A plugin ships output styles in its `output-styles/` folder.
-- Every frontmatter field is optional: `name` (with none, the file name), `description`, and `keep-coding-instructions`. A plugin's style may also set `force-for-plugin`. Claude Code ignores a misspelled field without an error.
+- Every front matter field is optional: `name` (with none, the file name), `description`, and `keep-coding-instructions`. A plugin's style may also set `force-for-plugin`. Claude Code ignores a misspelled field without an error.
 - `keep-coding-instructions: true` keeps Claude Code's own software engineering instructions. Without it, a custom style leaves them out. Set it in a style that changes only how replies are written.
 - A style is chosen by the `outputStyle` key of a settings file. The value must equal the style's name, letter for letter, with the same capitals. A value that matches no style gives the default style, with no error.
 - Keep the style short: its text is sent with every request.
-- Codex never sees an output style. In Claude Code a helper agent does not get it either, except a fork, which inherits the style of the conversation it was forked from. A writing rule they must follow goes in `AGENTS.md`, in the skill, or in the helper's brief.
+- Codex never sees an output style. In Claude Code a helper agent does not get it either, except a fork, which inherits the style of the session it was forked from. A writing rule they must follow goes in `AGENTS.md`, in the skill, or in the helper's brief.
 - A style is an instruction, and nothing enforces it. What must happen every time goes in a hook.
 - In the terminal, Claude Code reads style files when it starts. Tell the owner to restart it after a change.
 
@@ -139,7 +139,7 @@ Check: `claude plugin validate <folder>` lists what the mod hooks and calls. `cl
 - A Claude Code subagent definition is a Markdown file in `.claude/agents/`. A Codex custom agent is a TOML file in `.codex/agents/`. Neither product reads the other's file.
 - A helper starts with only the brief. State the goal, the helper's own part, the files to read first, what it must not change, how to verify the work, and what to report.
 - Tell the helper to report only on its own part.
-- Give the helper the writing standard in the brief: the path of `references/writing-standard.md`, or its text when the helper cannot open it. A helper does not see the main chat's reply style.
+- Give the helper the writing rule in the brief: the path of `references/writing-rule.md`, or its text when the helper cannot open it. A helper does not get the output style that the replies of the main session follow.
 - Ask it to mark what it verified and what it inferred.
 
 Check: read the brief as if you knew nothing else. Every file it names exists, and every instruction has one meaning.
