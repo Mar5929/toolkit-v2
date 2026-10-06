@@ -18,7 +18,7 @@ trial rewrite that kept a made-up word and put a definition in front of it,
 and said: "Why did you feel like you needed to keep the word 'an original'?
 Isn't there a better way to just rewrite? We need to look at the file as a
 whole." The writing rules are in one file, the starter rule
-`plugins/toolkit/skills/project-setup/assets/every-project/.claude/rules/write-documents-in-plain-english.md`
+`plugins/toolkit/skills/project-setup/assets/every-project/.claude/rules/document-clarity-standard.md`
 (Mike, 2026-10-06: one place for the writing rules). The
 `writing-harness-files` skill holds an exact copy,
 `references/writing-rule.md`. This file says how to check and report. Read

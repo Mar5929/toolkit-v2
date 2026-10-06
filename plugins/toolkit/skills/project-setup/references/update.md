@@ -267,13 +267,13 @@ A removed rule is a rule in `.claude/rules/` that the new setup copy lacks and t
 
 ### The renamed rule
 
-One rule was renamed and rewritten, and it has had three file names. The first name was `plain-english-artifacts.md`. A project that was set up from the branch that rewrote the rule may hold the second name, `write-for-the-reader.md`. The rule is now `write-documents-in-plain-english.md`. The new rule says how to word two kinds of writing: an artifact, which is something made for a person to look at and which the first rule covered, and a document, which is a file that someone follows or relies on later. A project never holds two of these three files.
+The writing rule has had four file names. The first was `plain-english-artifacts.md`. A project set up from the rewrite branch may hold `write-for-the-reader.md`. Version 0.9.1 used `write-documents-in-plain-english.md`. The current name is `document-clarity-standard.md`. The rule covers documents and the words inside artifacts. A project keeps only the current file.
 
-Find an old file with `ls .claude/rules/plain-english-artifacts.md .claude/rules/write-for-the-reader.md 2>/dev/null`. The "Missing files" row in section 3 adds the new file. For each old file the project holds, decide whether the old file holds an edit of the owner's, as section 3, "Whether a difference is the owner's edit", says.
+Find an old file with `ls .claude/rules/plain-english-artifacts.md .claude/rules/write-for-the-reader.md .claude/rules/write-documents-in-plain-english.md 2>/dev/null`. The "Missing files" row in section 3 adds the new file. For each old file the project holds, decide whether the old file holds an edit of the owner's, as section 3, "Whether a difference is the owner's edit", says.
 
 - When the old file holds no edit of the owner's, list the old file and the new file in the numbered table. After the owner's yes, remove the old file with `git rm` in the same change that adds the new file.
 - When the old file holds an edit of the owner's, show the owner the lines the owner changed before you replace the file. `git log -p -- .claude/rules/<old file name>` shows them in each commit that is the owner's, and `git diff -- .claude/rules/<old file name>` shows an edit the owner has not committed. A comparison of `plain-english-artifacts.md` with the new rule would show every line, because the whole text changed. Ask the owner whether those lines go into the new rule. Add the lines the owner names to the new file, and only then remove the old file. The owner's file stays until the owner answers.
-- When a rule or a skill of the owner's own, or a rule from the toolkit that holds an edit of the owner's, names `plain-english-artifacts.md` or `write-for-the-reader.md`, list it, and change the name after the owner's yes.
+- When a rule or a skill of the owner's own, or a rule from the toolkit that holds an edit of the owner's, names an old writing rule, list it, and change the name after the owner's yes.
 
 ### Old hook entries
 

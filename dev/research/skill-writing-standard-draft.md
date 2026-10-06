@@ -1,6 +1,6 @@
 # Skill writing standard: findings, draft standard, and team prompt
 
-Status: a research record, kept for history. The draft standard and the team prompt in this file were replaced on 2026-10-06 by the rule `write-documents-in-plain-english.md` and by `plugins/toolkit/skills/writing-harness-files/references/rewrite-steps.md`. Where this file and those two differ, they are right. The scan results and the diagnosis below still describe the text as it was before the rewrite.
+Status: a research record, kept for history. The draft standard and the team prompt in this file were replaced on 2026-10-06 by the rule `document-clarity-standard.md` and by `plugins/toolkit/skills/writing-harness-files/references/rewrite-steps.md`. Where this file and those two differ, they are right. The scan results and the diagnosis below still describe the text as it was before the rewrite.
 
 Draft for Mike to review. Written 2026-10-06 from a read of the worktree `one-home-layout`. Nothing in the toolkit was changed.
 

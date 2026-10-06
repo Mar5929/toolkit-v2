@@ -2,7 +2,20 @@
 
 Read `dev/GOAL.md` first. This file says where the work stands.
 
+## Document clarity standard (2026-10-06)
+
+Mike named the writing rule `document-clarity-standard.md` and asked for the
+rule and `writing-harness-files` to follow their own clarity guidance. The
+new name replaces `write-documents-in-plain-english.md` in the starter
+project, the rule copy, the check tool, the setup update steps, and the
+repository guides. The skill description and opening now state their job
+without a long definition in the description. This change raises the
+toolkit version to 0.9.2. PR 24 also proposes version 0.9.2 and will need
+a version update before it can land after this change.
+
 ## Skill description clarity pass (2026-10-06)
+
+The description pass landed in pull request 25 as version 0.9.1.
 
 The 23 skills that Toolkit V2 ships have revised descriptions in their
 `SKILL.md` files and in `dev/SKILL-INDEX.md`. Each description now states the
@@ -96,7 +109,7 @@ the version is still 0.9.0):
   file is for, whole sentences, and plain words or a name the reader can
   see in place of each made-up word. No rule was changed. A last pass made
   the words and the headings the same across the files.
-- The writing rule has a new name, `write-documents-in-plain-english.md`
+- The writing rule was named `write-documents-in-plain-english.md`
   (Mike, 2026-10-06). It was `write-for-the-reader.md` for about two hours on a branch, and
   `plain-english-artifacts.md` before that. "Update the toolkit" replaces
   either old file in an existing project.

@@ -15,7 +15,7 @@ Rules, "Plain English"): B0 was added, B4 and B5 say what they never
 remove, and Part 9 has a row on giving a reason. Part 4 gives the rules and
 their sources. How to word a sentence is in the writing rule, the one place
 for the writing rules:
-`plugins/toolkit/skills/project-setup/assets/every-project/.claude/rules/write-documents-in-plain-english.md`.
+`plugins/toolkit/skills/project-setup/assets/every-project/.claude/rules/document-clarity-standard.md`.
 The `writing-harness-files` skill holds an exact copy of it,
 `references/writing-rule.md`.
 
@@ -425,7 +425,7 @@ Checks for each description:
 ## Part 4. Rules for SKILL.md bodies
 
 The wording of a body follows the writing rule,
-`plugins/toolkit/skills/project-setup/assets/every-project/.claude/rules/write-documents-in-plain-english.md`.
+`plugins/toolkit/skills/project-setup/assets/every-project/.claude/rules/document-clarity-standard.md`.
 The rules below say what a body holds and where each rule comes from.
 
 **B0. Start with what the skill is for and what it must achieve.** The first

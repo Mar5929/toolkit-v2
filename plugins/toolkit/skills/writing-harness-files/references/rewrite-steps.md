@@ -80,7 +80,7 @@ may not be a developer.
 
 Read first, in the writing-harness-files skill:
 - the writing rule, which says how to write: the project's own file
-  .claude/rules/write-documents-in-plain-english.md when the project holds
+  .claude/rules/document-clarity-standard.md when the project holds
   it, and references/writing-rule.md in any other folder.
 - references/rewrite-steps.md: how to work on one file, and how the work is
   checked.

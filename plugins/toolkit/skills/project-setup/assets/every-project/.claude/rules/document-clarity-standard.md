@@ -1,23 +1,23 @@
-# Write Documents and Artifacts in Plain English
+# Document Clarity Standard
 
-Follow this rule whenever you write an artifact or a document. The goal is that a reader who was not in the session can understand the result after one read, without asking what a word means.
+Write documents and the words inside artifacts so that someone who was not in the session can understand them after one read.
 
-An artifact is something made for a person to look at, such as a diagram, a chart, a dashboard, a mockup, a slide deck, a published page, or a report. This rule covers the words inside an artifact: the title, headings, labels, notes, captions, and body text.
+An artifact is something made for a person to look at, such as a diagram, chart, dashboard, mockup, slide deck, published page, or report. Follow this standard for its title, headings, labels, notes, captions, and body text.
 
 A document is a file that someone follows or relies on later. Skills, rules, agent guides (`AGENTS.md` and `CLAUDE.md`), requirements, designs, system documents, decisions, test plans, and delivery records are all documents.
 
-Two kinds of writing have their own guides, so this rule does not cover them. Replies to the owner in a session follow the output style, which is the writing style that Claude Code applies to replies. Text sent to another person follows `humanize-outbound-text.md`.
+Replies to the owner in a session follow the output style. Text sent to another person follows `humanize-outbound-text.md`.
 
-A helper agent is an agent that another agent starts for one job. Helper agents and Codex do not get the output style, so this rule states its points for them. When this rule and the active style file disagree, follow the style file.
+A helper agent is an agent started for one job. Helper agents and Codex do not get the output style, so they follow this standard. When the standard and the active style file disagree, follow the style file.
 
 ## Words and names
 
 - Use common words.
 - Use the exact name the system uses for a thing, and use the same name every time.
-- Use the real name of a thing. A picture word describes a thing as something else, so never put a picture word, an idiom, or a joke in place of the real name. For example, write "the only setting you can change", not "the only lever".
+- Name the thing directly. Do not replace its name with a metaphor, idiom, or joke. For example, write "the only setting you can change", not "the only lever".
 - Say a thing in plain words before you give it a name.
 - When a name is needed, use a name the reader can already see, such as a folder name or a field name.
-- A made-up word is a word that a dictionary does not have, or a word that has its own meaning only in this project. When plain words and a visible name both fail, keep the made-up word and explain it once, where it first appears, in one clause with an example.
+- A made-up word is new or has a meaning that exists only in this project. If plain words and a visible name do not work, explain the made-up word when it first appears. Use one clause and an example.
 - Plain never means vaguer. When you replace a word, the new words must name the subject at least as exactly as the old word did.
 - Keep an ordinary word that is exact, such as "outbound" or "criteria". An exact ordinary word is not a made-up word.
 - Give every file, heading, and label a name that says its subject. A reader who sees only the name must know what it is about. For example, `memory-criteria.md` says its subject, and `what-to-keep.md` does not.

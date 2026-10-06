@@ -122,7 +122,7 @@ const MODEL_COPIES = {
 // Skill files that are exact copies of a project rule: path from the repository root -> the rule it copies.
 // A plugin skill reads only files in its own folder, so it holds the rule's text itself. The rule is the source.
 const RULE_COPIES = {
-  'plugins/toolkit/skills/writing-harness-files/references/writing-rule.md': 'plugins/toolkit/skills/project-setup/assets/every-project/.claude/rules/write-documents-in-plain-english.md',
+  'plugins/toolkit/skills/writing-harness-files/references/writing-rule.md': 'plugins/toolkit/skills/project-setup/assets/every-project/.claude/rules/document-clarity-standard.md',
 };
 
 const findings = [];
@@ -463,9 +463,9 @@ for (const f of walk(ASSETS)) {
     // "a Codex `.rules` file" gives "Codex .rules file"; "an `AGENTS.md` or `CLAUDE.md`" gives "AGENTS.md or CLAUDE.md".
     const kinds = list.split(/, (?:or )?/).map((kind) => kind.replace(/^an? /, '').replace(/`/g, ''));
     const description = flat(skillFile).match(/description: '(.*?)' ---/)?.[1] ?? '';
+    if (!description.includes('harness files') || !description.includes('Use before')) report('error', skillFile, 'its description must say what harness files it covers and when to use the skill');
     const sections = read(path.join(skillDir, 'references/checklist.md')).split('\n').filter((line) => line.startsWith('## ')).join('\n').toLowerCase();
     for (const kind of kinds) {
-      if (!description.includes(kind)) report('error', skillFile, `its description does not name the kind "${kind}", which its list of the kinds of harness file holds`);
       if (!kind.split(' or ').every((part) => sections.includes(part.toLowerCase()))) report('error', path.join(skillDir, 'references/checklist.md'), `has no "## " section for the kind "${kind}"`);
     }
   }

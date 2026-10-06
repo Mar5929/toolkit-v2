@@ -51,7 +51,7 @@ the routing rounds for the retired skills) is in Git history.
 | --- | --- | --- |
 | `project-setup` | `./` | Sets up, checks, updates, or moves a project onto Toolkit V2. It also changes the project's work or memory choice, adds SOUL.md, opens the Hindsight dashboard, or connects Hindsight on a new computer. Use for requests such as "set up this project", "check the setup", or "update the toolkit". For new commits from Git, use pull-latest. The older claude-toolkit uses project-sync. |
 | `choosing-outside-tools` | `../choosing-outside-tools/` | Lists the outside tool the owner chose for each kind of job and explains how to set it up. Use when the owner asks which tool they use for a job, asks to add a tool to the list, or asks for a listed job when that tool has no installed skill. When the tool has an installed skill, use that skill to do the job. |
-| `writing-harness-files` | `../writing-harness-files/` | Uses current official Claude Code and Codex guidance when an agent writes or changes a harness file. A harness file is a skill, rule, AGENTS.md or CLAUDE.md, hook, settings file, Codex .rules file, output style, plugin manifest or marketplace file, mod, subagent definition, or helper-agent brief. Use before writing or changing one. For toolkit setup, use project-setup. |
+| `writing-harness-files` | `../writing-harness-files/` | Uses current official Claude Code and Codex guidance to write or change skills, rules, agent guides, hooks, settings, plugin files, and other harness files. Use before creating or editing one of these files. For toolkit setup, use project-setup. |
 
 ## 2. Shared skills (every project, 10)
 
