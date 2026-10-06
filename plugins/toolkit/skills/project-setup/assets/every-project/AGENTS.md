@@ -90,12 +90,12 @@ File at the narrowest scope that covers everyone affected. The test: would an ag
 | A project term | `system/glossary.md` |
 | An original the project received and keeps | `sources/` (SRC-###); the item holds the ID |
 | Outside documentation | `reference/outside-docs/` |
-| An analysis of how the system works today, for the owner or a work item | Write it to `reference/current-system/` before you reply, and answer from that record. Its work item or project task holds a pointer. |
+| An analysis of how the system works today, for the owner or a work item | Write it to `reference/current-system/` before you reply (`reference/AGENTS.md`). |
 | A release, deployment, data migration, or client handoff | `delivery/` |
 | A test plan | `tests/` |
 | A lesson that is not proven yet | The work item's Notes; the closing step decides whether it moves up. With no work item open: memory |
-| A fact about a person, the client, or the project that fits no row above; a claim nobody checked; where to find something; something that happened that no other record shows | Memory: `curating-project-memory` |
-| A run of a recurring job, also a failure or result the owner reports | Write a run row in the job's event record before you reply: `curating-project-memory` |
+| A fact about a person, the client, or the project that fits no row above; a claim nobody checked; where to find something | Memory: `curating-project-memory` |
+| Something that happened, such as a meeting, a run of a recurring job, or a failure the owner reports, or a result given only in the chat, that a later session would need and no other record shows | Write it to memory before you reply: `curating-project-memory` |
 | The owner's preference for how the agent works ("from now on", "always", "never") | `.claude/rules/owner-preferences.md`. For every project: `~/.claude/rules/owner-preferences.md` and `~/.codex/AGENTS.md`. Never a host setting or a hook. |
 | How agents should work here, or a procedure that proved itself | A rule or a skill, with the owner's yes |
 
