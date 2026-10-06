@@ -14,7 +14,7 @@ in those files.
 - Property order and page layout
 - The request bodies in assets
 
-No assignee, points, effort, dates, or time tracking (the owner's decision); a task's Who does it says only agent or owner.
+No assignee, points, effort, dates, or time tracking (the owner's decision); a task's Who does it says agent or owner, and a project task may name another person who owes it (the owner, 2026-10-05).
 
 ## Views of the databases
 

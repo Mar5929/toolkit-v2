@@ -57,8 +57,8 @@ one work item is kept in five places, as files in the repository:
 - Git ignores `memory/` and `work-items/`, so they are not in the worktree.
   Compare them in the main checkout (step 2). Change them in the main
   checkout, and only after the branch landed (section 7, step 5): a work
-  item or a pointer must never name a record that is not on the default
-  branch. The one change made there earlier is a fix for a finding of the
+  item or a memory record must never name a record that is not on the
+  default branch. The one change made there earlier is a fix for a finding of the
   record check (section 3, "The record check and the pre-commit file").
 
 ## 1. Build a fresh setup copy
@@ -97,11 +97,11 @@ says which four rows are the exception.
 | Settings | `.claude/settings.json`, `.codex/hooks.json`, `.codex/config.toml`, `.mcp.json` | Merge with the rules in `skills-hooks-settings.md`: add what is missing, ask before changing a value, replace the toolkit's own hook handlers instead of adding a second copy, and delete no other entry. Leave out the entries that run `validate-records.mjs` until "The record check and the pre-commit file" below says to add them. A changed Codex hook must be trusted again in `/hooks`: tell the owner. |
 | Missing files | every `>f+++++++` line | List them. Into the worktree: `rsync -rlt --ignore-existing --exclude /memory/ --exclude /work-items/ <copy>/ <worktree>/` (not `-a`: it would give the project folder the scratch folder's private permissions). Into the main checkout, after the branch landed (section 7, step 5), only when the setup copy has the folder: `rsync -rlt --ignore-existing <copy>/memory/ <main checkout>/memory/` and `rsync -rlt --ignore-existing <copy>/work-items/ <main checkout>/work-items/`. |
 | `AGENTS.md` | the root file | Follow "Updating AGENTS.md" below. |
-| `PROJECT.md`, "Toolkit settings" | | The section holds the 10 lines of the setup copy's section, with the same labels, in the same order. Add each line the project's section lacks, with the value `not used`. Keep every value the section has. Delete the line that starts `- Memory approval:` when the section has it: no skill, rule, or hook reads it, and the toolkit no longer ships it. A `### Notion` heading with ids under it: move them under the two fixed Notion lines, as `notion-build/work-setup.md`, "Recording the links in PROJECT.md", says. Show him the section before and after. |
+| `PROJECT.md`, "Toolkit settings" | | The section holds the 11 lines of the setup copy's section, with the same labels, in the same order. Add each line the project's section lacks, with the value `not used`; a missing "Memory approval" line gets `onboarding` with local or Notion memory. Keep every value the section has, the "Memory approval" value included. A `### Notion` heading with ids under it: move them under the two fixed Notion lines, as `notion-build/work-setup.md`, "Recording the links in PROJECT.md", says. Show him the section before and after. |
 | Files that hold his facts | the rest of `PROJECT.md`; `README.md`, `SOUL.md`, `PROJECT-ROADMAP.md`, `DECISIONS.md`, each document in `system/`, `sources/README.md`, `reference/outside-docs/INDEX.md` | Never overwrite. Name only the toolkit's changes (a new section, a changed heading, a changed guide comment) and make them after his yes. |
 | Rules in `.claude/rules/` | | Show what differs. "Whose edit a difference is" below says whether a rule holds an edit of his. A rule with none: recommend the toolkit's version. His edit stays unless he says to take the toolkit's. A project with no `owner-preferences.md` gets the setup copy's through the missing files row; one that has it follows the "His own records" row. |
 | Other toolkit files | the folder guides (`system/AGENTS.md`, `sources/AGENTS.md`, `delivery/AGENTS.md`, `reference/AGENTS.md`, `work-items/AGENTS.md`, `memory/AGENTS.md`), the templates, the output style, `.githooks/pre-commit`, the Salesforce guards and `tools/` | Say in one line what changed, and whether the file holds an edit of his ("Whose edit a difference is" below). A file with none: recommend the toolkit's version. Take the toolkit's after his yes. |
-| His own records | work items and `work-items/PROJECT-TASKS.md`; the entries of `DECISIONS.md`; the rules and terms in `system/`; the originals in `sources/`; the records in `delivery/` and `reference/`; `memory/CURRENT_STATE.md` and `memory/MEMORY.md`; `.claude/rules/owner-preferences.md`; his own skills and rules | Never compare or change. |
+| His own records | work items and `work-items/PROJECT-TASKS.md`; the entries of `DECISIONS.md`; the rules and terms in `system/`; the originals in `sources/`; the records in `delivery/` and `reference/`; `memory/CURRENT_STATE.md` and every memory record in `memory/` (each file whose name starts `user_`, `project_`, `reference_`, or `event_`); `.claude/rules/owner-preferences.md`; his own skills and rules | Never compare or change. `memory/MEMORY.md` is the generated index: the session-start hook rebuilds it, so it is not compared either. |
 
 Show every file that needs his answer in one numbered table, one line per
 file with its reason, and ask once. Carry out what he says yes to. When
@@ -263,9 +263,13 @@ changed, so Codex asks the owner to trust the project's hooks again in
   held only what the Codex app showed for the skill (a display name, a short
   description, and a starter prompt). The "Toolkit skills" row in section 3
   lists it with the files the new copy lacks; give this as its reason.
-- The one-home layout dropped `assets/terminology-glossary.md` from the
-  Notion `using-memory-store`: setup no longer builds a glossary page from
-  it, and a project term is a row of `system/glossary.md`. The "Toolkit
+- The one-home layout dropped `assets/terminology-glossary.md` and
+  `assets/decision-record.md` from the Notion `using-memory-store`: setup no
+  longer builds a glossary page, a project term is a row of
+  `system/glossary.md`, and a decision more than one work item needs is an
+  entry in `DECISIONS.md`. The local `memory/` folder lost
+  `decision_template.md` and `terminology-glossary.md` for the same reason:
+  `one-home-layout.md` moves what a project wrote in them. The "Toolkit
   skills" row in section 3 lists it with the files the new copy lacks; give
   this as its reason, and remove it with the rest of the old folder.
 - A rule in `.claude/rules/` that the fresh setup copy lacks and that an
@@ -355,6 +359,13 @@ Do these in order.
 ## Changing a setup choice
 
 Only when the owner asks, for example "move memory to Notion".
+
+The Memory approval line (`onboarding` or `trusted`, local or Notion
+memory) changes only on the owner's own words. Edit that line in
+`PROJECT.md`, "Toolkit settings", and save it with `publish-docs`. Nothing
+else changes.
+
+Where work items or memory are kept:
 
 A choice decides which files a project has, never which lines inside a
 file. So a changed choice adds the files of the new choice's setup folders,

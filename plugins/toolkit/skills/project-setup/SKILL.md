@@ -45,16 +45,18 @@ has a filled "Toolkit settings" section.
     (`references/update.md`, steps 1 and 2), run the final checks
     (`references/finishing.md`, "Final checks") without fixing any that
     fail, and report each difference and each failed check with the fix
-    you recommend. Change nothing in the project, with one exception: put
+    you recommend. Change nothing in the project, with two exceptions: put
     back a missing toolkit file in `work-items/` or `memory/`, as
-    `references/finishing.md`, "Final checks", says.
+    `references/finishing.md`, "Final checks", says; and the session-start
+    check may rebuild the generated `memory/MEMORY.md`.
   - Either one, in a project set up before the one-home layout: say so,
     and list what `references/one-home-layout.md` would move. The one-home
     layout keeps what lasts longer than one work item in five places, as
     files in the repository: `DECISIONS.md`, `system/`, `sources/`,
     `delivery/`, and `reference/`.
-  - Change a setup choice (where work items or memory are kept):
-    `references/update.md`, "Changing a setup choice".
+  - Change a setup choice (where work items or memory are kept, or the
+    Memory approval mode): `references/update.md`, "Changing a setup
+    choice".
 - He asks to open a project's Hindsight dashboard, or a Hindsight project is
   set up but this computer lacks its key or the add-on (a new computer):
   `references/hindsight-on-vps.md`, "Open the dashboard" or "A new

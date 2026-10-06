@@ -104,12 +104,18 @@ owner's yes.
    has. In the "Project" template the heading holds only its prompt line:
    remove both with one `update_content` call. In a project,
    `earlier-versions.md`, "The levels structure (toolkit 0.8.0)", step 6,
-   moves its lines first.
+   moves its lines first. A page set up before the one-home layout has the
+   heading "Waiting on the owner" and no "Coming up" or "Standing jobs and
+   shared files": bring it to the headings of `assets/current-state.md`,
+   keeping every line, as `one-home-layout.md`, "Current State in the
+   earlier form", says. In the "Project" template, replace the page's text
+   with `assets/current-state.md`.
 6. The "Terminology glossary" page: a project or a "Project" template set
    up before the one-home layout has one beside the Memory page. (The
    one-home layout keeps decisions, system rules, terms, and originals as
    files in the repository.) Memory no longer writes it: a project term is
-   a row of `system/glossary.md`.
+   a row of `system/glossary.md`. Every other memory page stays as it is;
+   `one-home-layout.md` moves only the decision pages, to `DECISIONS.md`.
    - In a project, `one-home-layout.md` moves its rows first. After they are read back in `system/glossary.md`, ask the owner
      whether to move the page to Notion's trash
      (`PATCH v1/pages/<id>` with `{"in_trash":true}`). It stays until he

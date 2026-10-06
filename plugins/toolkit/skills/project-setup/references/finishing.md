@@ -56,7 +56,8 @@ this order:
    "Outside scope" lines in `PROJECT.md` describe the product, never setup
    choices or toolkit files. In a new project with no code yet, ask
    nothing more for these files: leave their prompts and list them in the
-   report. In a project with code, list in the report each value you took
+   report. A file keeps its fill-in guide comment for as long as it holds
+   a prompt; delete the guide when the last prompt is filled. In a project with code, list in the report each value you took
    from the repository, so he can correct it.
 4. **`PROJECT-ROADMAP.md` (local work items)**: fill it only when the owner
    already knows the facts. A project with work items in Notion or GitHub
@@ -97,13 +98,16 @@ setup.
 Local or Hindsight memory: write the first lines of
 `memory/CURRENT_STATE.md` now. Notion memory: the Notion memory setup wrote
 these lines on the "Current state" page in step 7 of "New project"
-(`notion.md` in this folder); now bring its "Waiting on the owner" lines up
-to date. Keep the three headings and their line limits:
+(`notion.md` in this folder); now bring its "Waiting on" lines up
+to date. Keep the five headings and their line limits:
 
 - Last updated: the date, "setup", and "agent".
 - Now: "None."
-- Waiting on the owner: one line for each owner step still open (below),
-  each ending "Setup step; remove this line when it is done."
+- Coming up: "None."
+- Waiting on: one line for each owner step still open (below), each
+  starting "Owner:" and ending "Setup step; remove this line when it is
+  done."
+- Standing jobs and shared files: "None."
 - Next session starts with: "Ask the owner for the first thing to build."
 
 Then delete the file's fill-in guide comment, as it says.
@@ -113,7 +117,7 @@ Then delete the file's fill-in guide comment, as it says.
 Run each check alone from the project folder. Each only reads.
 
 ```text
-- [ ] Nothing from an option not chosen: ls -a shows work-items/ and PROJECT-ROADMAP.md only with local work items, memory/ only with local or Hindsight memory (local: AGENTS.md, CLAUDE.md, CURRENT_STATE.md, and MEMORY.md in it; Hindsight: only CURRENT_STATE.md), tools/ and sfdx-project.json only in a Salesforce project, SOUL.md only when he keeps one, .claude/rules/hindsight-memory.md only with Hindsight memory, and .claude/rules/notion-records.md only with work items or memory in Notion
+- [ ] Nothing from an option not chosen: ls -a shows work-items/ and PROJECT-ROADMAP.md only with local work items, memory/ only with local or Hindsight memory (local: AGENTS.md, CLAUDE.md, CURRENT_STATE.md, MEMORY.md, and project_topic_template.md in it; Hindsight: only CURRENT_STATE.md), tools/ and sfdx-project.json only in a Salesforce project, SOUL.md only when he keeps one, .claude/rules/hindsight-memory.md only with Hindsight memory, and .claude/rules/notion-records.md only with work items or memory in Notion
 - [ ] Skills: ls .claude/skills is exactly the list for the choices (skills-hooks-settings.md), each with a SKILL.md
 - [ ] Project records, for every tracker and memory choice: DECISIONS.md; system/ with its six documents, integrations/README.md, and integrations/INTEGRATION-TEMPLATE.md; sources/README.md; delivery/ with releases/, deployments/, migrations/, and client-handoffs/; reference/ with outside-docs/INDEX.md and current-system/
 - [ ] Folder guides: find . -name AGENTS.md -not -path './.claude/*' -not -path './.git/*' lists the root file and one in system/, sources/, delivery/, and reference/ (plus work-items/ with local work items and memory/ with local memory); each has a CLAUDE.md beside it that holds only the line @AGENTS.md
@@ -121,12 +125,12 @@ Run each check alone from the project folder. Each only reads.
 - [ ] Hook commands: ls .claude/hooks shows session-start.mjs, prompt-reminder.mjs, codex-after-commit.mjs, and validate-records.mjs (plus the two guards in a Salesforce project)
 - [ ] Settings are valid: jq empty .claude/settings.json (and .codex/hooks.json, and .mcp.json when present)
 - [ ] Every hook command the settings name exists in .claude/hooks/, and no {{ placeholder is left: grep -n '{{' .claude/settings.json .codex/hooks.json
-- [ ] The session-start hook prints Current State, and with local memory the pointers of memory/MEMORY.md: node .claude/hooks/session-start.mjs --memory <memory> </dev/null (Notion memory: add --page <Current state page id>). Codex with Notion memory: run it escalated; inside the sandbox it prints "could not be read here", which is the sandbox and not a setup failure
+- [ ] The session-start hook prints Current State, and with local memory the memory index ("No memory files yet." in a new project): node .claude/hooks/session-start.mjs --memory <memory> </dev/null (Notion memory: add --page <Current state page id>). Codex with Notion memory: run it escalated; inside the sandbox it prints "could not be read here", which is the sandbox and not a setup failure
 - [ ] The prompt reminder prints a line telling the agent to check the project's skills for any message, and adds the memory reminder for a "remember this" message: echo '{"prompt":"remember this: we use Postgres"}' | node .claude/hooks/prompt-reminder.mjs (Hindsight memory: add --skill hindsight)
 - [ ] The after-commit reminder answers a commit: printf '{"tool_input":{"command":"git %s -m x"}}' commit | node .claude/hooks/codex-after-commit.mjs
 - [ ] The record check finds nothing: node .claude/hooks/validate-records.mjs --all < /dev/null prints nothing. Each line it prints is one finding: report it
 - [ ] The pre-commit check: test -x .githooks/pre-commit && echo executable prints "executable", and git config --get core.hooksPath prints .githooks. When it prints something else or nothing: report what it prints, and the reason placing-files.md, "5. The pre-commit check", gives for it (its step 2 holds the two commands that show which row of its table fits)
-- [ ] AGENTS.md is within its limits: wc -lc AGENTS.md prints 200 lines or less and 20,480 bytes or less (Claude Code recommends under 200 lines; Codex stops reading instruction files at 32,768 bytes in all, ~/.codex/AGENTS.md included). When either is over, say so in the report and never cut lines from it
+- [ ] AGENTS.md is within its limits: wc -lc AGENTS.md prints 200 lines or less and 20,480 bytes or less (Claude Code recommends under 200 lines; Codex stops reading instruction files at 32,768 bytes in all, ~/.codex/AGENTS.md included). Count AGENTS.md only: PROJECT.md, which Claude Code loads through the @PROJECT.md line in AGENTS.md, is not counted, because Codex does not load it that way. When either is over, say so in the report and never cut lines from it
 - [ ] The text that loads in every session: command grep -L '^paths:' .claude/rules/*.md lists the rules with no paths frontmatter; wc -c AGENTS.md and each of those files, and give the total in bytes in the report (no limit is set for it)
 - [ ] PROJECT.md "Toolkit settings" holds no prompt, except one that waits on the owner
 - [ ] PROJECT.md "People and ownership" names the owner: grep -n '^| Owner |' PROJECT.md
@@ -147,10 +151,11 @@ In "check the setup" (`SKILL.md`, "Pick the path"), fix nothing: report
 each failed check with the fix you recommend. Two checks run differently
 there, so that checking changes no file:
 
-- When `.claude/hooks/session-start.mjs` differs from the setup copy's
-  file, do not run the session-start check: a version from before
-  `memory/MEMORY.md` became the table of pointers writes that file each
-  time it runs. Report the hook command as out of date.
+- The session-start check runs the project's own hook command. With local
+  memory it may rebuild the generated index `memory/MEMORY.md`: that is the
+  one file a check may change. When `.claude/hooks/session-start.mjs`
+  differs from the setup copy's file, also report the hook command as out
+  of date.
 - When the project has no `.claude/hooks/validate-records.mjs`, run the
   setup copy's from the project folder:
   `node <copy>/.claude/hooks/validate-records.mjs --all < /dev/null`.
@@ -165,7 +170,8 @@ and name it in the report:
 - local work items: `work-items/AGENTS.md`, `work-items/CLAUDE.md`,
   `work-items/work-item-template/WORK-ITEM.md`, and
   `work-items/work-item-template/DESIGN.md`;
-- local memory: `memory/AGENTS.md` and `memory/CLAUDE.md`.
+- local memory: `memory/AGENTS.md`, `memory/CLAUDE.md`, and
+  `memory/project_topic_template.md`.
 
 Put none of them back in a project set up before the one-home layout
 (`one-home-layout.md`, "Find the old layout"): "update the toolkit" gives it

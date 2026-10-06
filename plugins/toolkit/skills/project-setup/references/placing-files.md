@@ -48,7 +48,7 @@ diff -u <file> <copy>/<file>
 
 | File | What to do |
 | --- | --- |
-| `.gitignore` | Add each line of the setup copy's file that the project's file lacks, at the end after one blank line. It only adds, so no question is needed. |
+| `.gitignore`, `.ignore` | Add each line of the setup copy's file that the project's file lacks, at the end after one blank line. It only adds, so no question is needed. `.ignore` makes search tools that skip what `.gitignore` names (ripgrep, and with it the search tools of Claude Code) read `work-items/` and `memory/`. |
 | `.claude/settings.json`, `.codex/hooks.json`, `.codex/config.toml`, `.mcp.json` | Merge the setup copy's entries into the project's file with the merge rules in `skills-hooks-settings.md`. Ask before changing any value the project already has. |
 | `CLAUDE.md` with more than the line `@AGENTS.md` | Keep it. Ask whether to add the line `@AGENTS.md` at its top: while a `CLAUDE.md` exists, Claude Code reads `AGENTS.md` only through that line. |
 | `AGENTS.md` (a repository that had its own) | Keep it. Show the owner what the Toolkit V2 version adds. After his yes, add its sections, and keep his text. |
