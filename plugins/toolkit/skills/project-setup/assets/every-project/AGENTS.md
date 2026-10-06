@@ -118,7 +118,7 @@ A method skill from another plugin (brainstorming, plans, debugging) may run ins
 | Reading or saving a work item's record; moving, nesting, or archiving items | `using-work-tracker` |
 | A decision or question reaches past one work item; an original arrives; an approved fact about the system changes | `filing-project-records` |
 | The owner asks to keep, correct, forget, or find something, reports a fact, a date, or what another person said, gives a standing instruction for how the agent works, asks what happened in a period, or asks to tidy memory | `curating-project-memory` |
-| Reading or writing Current State or a memory record | `using-memory-store` |
+| A plain read of memory, or the write `curating-project-memory` decided on | `using-memory-store` |
 | The owner ends the session or clears context, or pastes a handoff to check | `handoff` |
 | The owner asks what happened in this chat, such as "recap this chat" | `session-summary` |
 | A brain dump the owner wants played back before any work starts | `braindump` |
