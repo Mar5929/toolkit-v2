@@ -95,7 +95,7 @@ rsync -rcni <copy>/work-items/ <main checkout>/work-items/
 - In the output, `>f+++++++` is a file the project lacks. Any other `>f` line is a file that differs.
 - Read each difference with `diff -u <file> <copy>/<file>`.
 
-Then run "Find the old layout" in `one-home-layout.md`. Its commands show whether the project still has the layout from before the current folder layout. Only `one-home-layout.md` handles what "Find the old layout" finds, so leave what it finds out of sections 3 and 4. Four rows of the table in "Find the old layout" are the exception, and the paragraph under that table says which four.
+Then run "Find the old layout" in `one-home-layout.md`. Its commands show whether the project still has the layout from before the current folder layout. Only `one-home-layout.md` handles what "Find the old layout" finds, so leave what it finds out of sections 3 and 4. Four rows of the table in "Find the old layout" are the exception, and the last paragraph of that section says which four.
 
 ## 3. What to do with each kind of file
 

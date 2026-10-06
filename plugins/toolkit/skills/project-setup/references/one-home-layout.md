@@ -332,7 +332,7 @@ Do the nine steps in this order.
 6. **Read back** every new record against the old file it came from. Then do these two things, in this order:
    - First, remove each tracked old file that an approved row names, with `git rm`. When a file changed since you listed it, leave the file and ask again.
    - Then list every mention of an old path that is left in a tracked file: `command grep -rnE 'ai-external-knowledge/|delivery/(deployment|data|meeting-notes|references|communications|deliverables|archive)/|project-wide-records/|system-guide/|requirements/' . --exclude-dir=.git --exclude-dir=.claude`.
-   - In that list, a line that says "Carried over from" stays, and so does a source in `sources/`. Change each other line after the owner's yes.
+     In that list, a line that says "Carried over from" stays, and so does a source in `sources/`. Change each other line after the owner's yes.
 7. **Check, commit, and merge** as `update.md`, "7. Checks and report", says. The run of `validate-records.mjs` that the section asks for happens here, before the commit.
    - Two findings are usual in a project on the old layout:
      - A closed work item has no filled Moved up line. The rules for a work item that is Done or Cancelled, above, give the line to write.
