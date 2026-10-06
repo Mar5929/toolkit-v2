@@ -1,24 +1,29 @@
 # The Current state page
 
-How the project's Notion "Current state" page is laid out and how to read and change it. `curating-project-memory` says what each part holds, its limit, and when to change it; the skill that calls this one decides what a line says. The page's id is in `PROJECT.md`, section "Toolkit settings": the nested bullet "Current state page" under the fixed line "Notion memory".
+This file says how the project's Notion "Current state" page is laid out, and how to read and change it. That page holds the project's Current State. Open this file before you read or change the page.
+
+`curating-project-memory` says what each part of the page holds, the limit of each part, and when to change it. The skill that asked for the change decides what a line says.
+
+The page's id is in `PROJECT.md`, section "Toolkit settings": the nested bullet "Current state page" under the fixed line "Notion memory".
 
 ## The page
 
 The page is plain text, not a database. `assets/current-state.md` is its starting text.
 
-Keep the first line in the form `Last updated: YYYY-MM-DD`, then what caused the change and who made it. The session-start hook reads the date after "Last updated:" to tell when the page is old. Keep every heading, an empty part included: an empty part holds "None."
+- Keep the first line in the form `Last updated: YYYY-MM-DD`, followed by what caused the change and who made it. The session-start hook reads the date after "Last updated:" to tell when the page is old.
+- Keep every heading, also the heading of an empty part. An empty part holds "None."
 
 ## Reading it
 
-The session-start hook prints it. To read it again, follow `using-notion-cli` ("Reading and changing page text"), with the Current state page's id from `PROJECT.md`.
+The session-start hook prints the page. To read the page again, follow `using-notion-cli`, section "Reading and changing page text", with the Current state page's id from `PROJECT.md`.
 
 ## Changing it
 
-Change it with `update_content` (`using-notion-cli`), from a fresh read. Update the "Last updated:" line in the same call.
+Read the page again in this turn first. Then change the page with an `update_content` call, which `using-notion-cli` describes, and take the text for the call from that read. Update the "Last updated:" line in the same call.
 
-- **Replace a line:** `old_str` is the line, `new_str` the new line.
-- **Add a line:** `old_str` is the part's last line (or its heading), `new_str` is that text followed by the new line. In a part that says "None.", replace that line with the new line.
-- **Remove a line:** `old_str` is the line with its line break, `new_str` empty.
+- **Replace a line:** `old_str` is the line, and `new_str` is the new line.
+- **Add a line:** `old_str` is the last line of the part, or the heading of the part. `new_str` is that text followed by the new line. In a part that says "None.", replace that line with the new line.
+- **Remove a line:** `old_str` is the line with its line break, and `new_str` is empty.
 
 ```json
 {"type":"update_content","update_content":{"content_updates":[
