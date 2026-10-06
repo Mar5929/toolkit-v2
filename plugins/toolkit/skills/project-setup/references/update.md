@@ -330,7 +330,7 @@ Do these in order.
 3. **Report.** Report what was replaced, merged, added, moved, and left as the owner's. Then name the owner's steps:
    - trust the hooks again in Codex `/hooks`, only when an entry or the `description` in `.codex/hooks.json` changed;
    - start a new session.
-4. **Commit and merge.** End with the commit offer in `finishing.md`, "The commit offer", made in your worktree. After the commit, merge the branch only after the owner's yes. Merge it by pull request, or, when the project has no remote, by `git merge --ff-only <branch>` from the main checkout, after the merge-safety check in the project's `.claude/rules/shared-repository-work.md`.
+4. **Commit and merge.** End with the commit offer in `finishing.md`, "The commit offer", made in your worktree. After the commit, merge the branch only after the owner's yes. Before the merge, whether it is by pull request or by `git merge`, do the merge-safety check in the project's `.claude/rules/shared-repository-work.md`. Merge the branch by pull request, or, when the project has no remote, by `git merge --ff-only <branch>` from the main checkout.
 5. **In the main checkout, after the branch was merged**, make every change to `memory/` and `work-items/`:
    - the missing files (section 3);
    - each difference in those two folders that the owner said yes to;

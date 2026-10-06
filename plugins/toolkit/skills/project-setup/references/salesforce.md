@@ -16,7 +16,7 @@ Check that they are installed on this computer or in the project. Look in the sk
 npx skills add forcedotcom/sf-skills
 ```
 
-Setup never installs them itself. When the owner has not installed them yet, add a line to the report, and add a "Waiting on the owner" line to the project's Current State. The project's Current State is the project's one short page of what is true now. `finishing.md`, "The project's Current State", says how to write that line.
+Setup never installs them itself. When the owner has not installed them yet, add a line to the report, and add a "Waiting on" line to the project's Current State. The project's Current State is the project's one short page of what is true now. `finishing.md`, "The project's Current State", says how to write that line.
 
 ## The org aliases
 
@@ -33,7 +33,7 @@ The aliases go in `PROJECT.md`, section "Toolkit settings", on the "Salesforce o
 Use only the aliases the owner names for this project.
 
 - When none of this project's orgs is on this computer yet (the org does not exist or is not connected), never invent an alias, and never write an alias that the owner says belongs to another project into this project's files. Write ``- Salesforce org aliases: `none yet` ``.
-- The owner's step "Connect the project's Salesforce org" then gets a "Waiting on the owner" line in the project's Current State, and the report lists the line as a prompt left. `finishing.md`, "The project's Current State", says how to write the "Waiting on the owner" line.
+- The owner's step "Connect the project's Salesforce org" then gets a "Waiting on" line in the project's Current State, and the report lists the line as a prompt left. `finishing.md`, "The project's Current State", says how to write the "Waiting on" line.
 - When the owner gives an instruction about the other orgs (for example "don't use those"), put it in `owner-preferences.md`, as `finishing.md`, "Instructions the owner gives during setup", says.
 
 Leave `.claude/protected-orgs.json` as copied, because the guard finds production orgs itself and blocks them. Agents never deploy to production or change its data. The guards give the owner the command instead. In Codex, the owner also runs every sandbox deploy and every sandbox data change, and the agent gives the owner the exact command with its `-o <sandbox alias>`.

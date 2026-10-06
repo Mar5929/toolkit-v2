@@ -57,7 +57,7 @@ Six header fields say where a work item stands. `work-item-template/WORK-ITEM.md
 - When this session works in a worktree, read and change work items in the main checkout. A worktree is a separate folder with its own branch. The main checkout is the project's main folder: the first path that `git worktree list` prints.
 - Never copy a work item into the worktree.
 - Never `git add` a file from this folder.
-- A work item's folder holds no sources. A source is anything the project was given by someone else, such as a transcript or a client document. A source goes in `sources/`, and the work item names the source by its ID, in the form SRC-###.
+- A work item's folder holds no sources. A source is anything the project was given by someone else, such as a transcript or a client document. A source goes in `sources/`, and the work item holds the source's ID, in the form SRC-###.
 - When the owner put any other file in a work item's folder, leave the file there, and tell the owner that it is there.
 - Information that another work item needs is never kept only in this folder. That information is in `DECISIONS.md` or `system/`, and the work item holds the ID that the information has there.
 - The command `.claude/hooks/validate-records.mjs` checks the work items after each edit. Fix what the command reports.

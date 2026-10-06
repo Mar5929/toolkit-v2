@@ -5,7 +5,11 @@ This file gives the exact calls that find memory pages by key, subject, work ite
 Three things to know before you use the calls:
 
 - Replace `{{MEMORIES_DS}}` and the page ids with the values in `PROJECT.md`, section "Toolkit settings": the nested bullets under the fixed line "Notion memory".
-- The queries return pages with the Status accepted or proposed. To see history too, take the Status clause out.
+- Each call returns pages by their Status, as follows:
+  - "Pages about a subject" and "Pages linked to a work item" return pages with the Status accepted or proposed. To see history too, take the Status clause out.
+  - "Pages by date" returns only pages with the Status accepted.
+  - "The open proposals" returns only pages with the Status proposed.
+  - "A page by its key" and "Every page" have no Status clause, so they return pages of every Status.
 - The Current state page is not read with these calls. `current-state-page.md` says how to read it.
 
 ## Contents

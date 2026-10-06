@@ -204,7 +204,7 @@ Do these seven points in order, so that nothing is removed before what replaces 
 2. **Add.** Copy the missing files.
    - Copy them into the worktree with `rsync -rlt --ignore-existing --exclude /memory/ --exclude /work-items/ <copy>/ <worktree>/`.
    - Copy into the main checkout only `<copy>/memory/` and `<copy>/work-items/`, when the owner's choices have them, with the same `rsync -rlt --ignore-existing`.
-   - The main checkout ignores these two folders only after the branch is merged. Until then, stage nothing in them. Run the final check on them after the branch is merged.
+   - The main checkout ignores these two folders only after the branch is merged. Until then, stage nothing in them. After the branch is merged, run on these two folders the final checks that `finishing.md`, "Final checks", gives for them, such as the check that Git does not track `work-items/` or `memory/`.
 3. **Update.** Carry out each approved Update line.
    - Merge the settings files with the rules in `skills-hooks-settings.md`, "Merge rules". Leave out the entries that run the command that checks the records, `.claude/hooks/validate-records.mjs`. Step 4 of `update.md`, "Turning on validate-records.mjs and the pre-commit file", adds those entries after the records pass the check. "7. Finish", step 2, below runs that section.
    - Put each line of the owner's in its new place, and read it back there.
