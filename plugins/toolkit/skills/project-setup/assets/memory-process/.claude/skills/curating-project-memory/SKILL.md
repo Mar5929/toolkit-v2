@@ -27,7 +27,7 @@ Find what happened in the turn in this table, and save what the row names.
 | What happened in the turn | What to save | Where the steps are |
 | --- | --- | --- |
 | You did work for the owner that is not a work item, and the work has a project task | The work goes in its project task. Tick the task when the work is done. | `running-work-item-lifecycle` |
-| You did work for the owner that is not a work item, and the work has no project task | An event record. When the work was a run of a recurring job, a row in the Runs table of that job's memory record. | `references/saving.md` |
+| You did work for the owner that is not a work item, and the work has no project task | An event record. When the work was a run of a recurring job, a row in the Runs table of that job's memory record in its place. | `references/saving.md` |
 | You gave the owner a result that is only in your reply, such as an agenda, a draft, or an analysis, and the root `AGENTS.md`, section "Where information goes", names a place for that kind of result | The result, in the file where it belongs. | The root `AGENTS.md`, section "Where information goes" |
 | You gave the owner such a result, and that section names no place for it | An event record that holds the result in a few lines. | `references/saving.md`, section "An event" |
 | A recurring job ran, or the owner reported that it ran or failed | A row in the Runs table of the job's memory record. | `references/saving.md`, section "A recurring job and its runs" |
@@ -51,7 +51,7 @@ Find what happened in the turn in this table, and save what the row names.
   - Current.
   - Proposed: the owner has not said yes to it.
   - Replaced: another memory record took its place.
-  - Retired: it is out of date, or the owner asked to forget it, and it is kept only as history.
+  - Retired: it is no longer used for answers, and kept only as history.
 - Never answer from a memory record that is not current as if it were current.
 
 ## When to search memory
@@ -60,7 +60,7 @@ Search memory at the moments that the root `AGENTS.md`, section "Where informati
 
 ## The owner's yes before a save
 
-Some saves need the owner's yes first, and some never do. The line "Memory approval" in `PROJECT.md` holds one of two values, `onboarding` or `trusted`, and the value decides how often you ask. When that line is missing or still shows its prompt, use `onboarding`.
+The line "Memory approval" in `PROJECT.md` holds one of two values, `onboarding` or `trusted`. When that line is missing or still shows its prompt, use `onboarding`.
 
 ### What counts as the owner's yes
 
@@ -81,11 +81,11 @@ With both values, ask the owner before each of these:
 - anything about a named person, or personal details, that the owner did not ask you to remember;
 - more than five memory records at once;
 - retiring or deleting a memory record that the owner did not ask you to forget;
-- a change to the rules in this section.
+- a change to the rules under "The owner's yes before a save".
 
 ### Never ask
 
-With both values, save each of these without a question, and report each save in one line:
+With both values, save each of these without a question, and report each save in one line. `references/saving.md`, section "Reply lines", gives the line for each kind of save.
 
 - a lesson;
 - an event record;
@@ -103,7 +103,7 @@ A question must never be the only trace of a save, because the session can end b
 
 ### When the owner changes the "Memory approval" value
 
-Change the "Memory approval" line in `PROJECT.md` with `project-setup`. Never write the change in `.claude/rules/owner-preferences.md`.
+When the owner tells you to change the value, change the "Memory approval" line in `PROJECT.md` with `project-setup`. Never write the change in `.claude/rules/owner-preferences.md`.
 
 ## Out of date, or no longer needed
 

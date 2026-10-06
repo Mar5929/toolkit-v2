@@ -10,7 +10,7 @@ The folder is opened in Obsidian with the rest of the project. Git ignores the f
 | --- | --- |
 | `CURRENT_STATE.md` | The project's Current State: where the project stands now, in five parts. The session-start hook prints it. |
 | `MEMORY.md` | The index, with one line per current memory record. The session-start hook rebuilds it and prints it. Never edit it by hand. |
-| `project_topic_template.md` | The template for a memory record. Copy it. Never write a memory record into the template itself. |
+| `project_topic_template.md` | The template for a memory file. Copy it; never write a memory record into it. |
 | `user_<name>.md` | Facts about the owner or another person that matter to the work, such as who is away and who covers. |
 | `project_<name>.md` | One subject or area of the project or the client that fits no other file. Also a claim that nobody checked yet, and a lesson that is not proven yet. |
 | `reference_<name>.md` | Where to find one thing that is hard to find again, such as a shared spreadsheet, and why to open it. |

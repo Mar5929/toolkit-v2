@@ -1,8 +1,8 @@
 # Memory criteria
 
-Use this file to decide whether something is worth keeping in a memory record in this project, and which type of memory record holds it. Its job is done when memory holds only what a later session needs and no other project file holds.
+Use this file to decide whether something is worth keeping in a memory record in this project, and which type of memory record holds it, so that memory holds only what a later session needs.
 
-A rule in `.claude/rules/owner-preferences.md` overrides this file. When the two differ, follow the rule.
+A rule in `.claude/rules/owner-preferences.md` overrides this file.
 
 ## First find the place where the fact is kept
 

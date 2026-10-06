@@ -35,7 +35,7 @@ Read each hit whole, in this turn, and check its status:
 
 - Current: it is a fact.
 - Proposed: a proposed memory record and a proposed section are not facts.
-- An unchecked claim and an entry under "Lessons not proven yet" are not facts either.
+- An unchecked claim and an entry under "Gotchas and lessons" are not facts either.
 - Replaced: answer from the memory record that replaces it.
 - Retired: it is history. Leave it out unless the owner asks for history.
 - Past its "check or remove by" date: say so, and check it before you act on it.

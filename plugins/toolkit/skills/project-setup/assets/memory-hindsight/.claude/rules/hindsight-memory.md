@@ -1,16 +1,16 @@
 # Hindsight Project Memory
 
-This project's memory is Hindsight, on the owner's server, in the project's bank named under "Toolkit settings" in `PROJECT.md`. Hindsight's coding-agent add-on saves the session to the bank at the end of every turn. On the first message of a session it adds what the bank holds about that message to your context.
+This project's memory is Hindsight, on the owner's server, in the bank named under "Toolkit settings" in `PROJECT.md`. Hindsight's coding-agent add-on saves the session to the bank at the end of every turn. On the first message of a session it adds what the bank holds about that message to your context.
 
-- Use Hindsight to search past sessions. A decision or a system fact is not kept there: file each one where `AGENTS.md`, "Where information goes", says.
+- Use Hindsight to search past sessions. It is not the place where a decision or a system fact is kept: file each one where `AGENTS.md`, "Where information goes", says.
 - When Hindsight returns a decision or a rule, find it in `DECISIONS.md` or `system/` and name its DEC-### or rule ID. When no record holds it, file it before you rely on it.
-- Before you search, store, or correct anything in the bank, open the add-on's skill `hindsight-coding-agent`, which says how to use its tools. Codex has no such skill: there, follow the guide the add-on shows at session start.
-- This project has no `curating-project-memory` and no `using-memory-store` skill. Where `AGENTS.md`, a rule, a skill, or a hook names one of them, follow this file. For the project's Current State, follow its last section.
-- When the owner says "remember this", file the fact where it is kept, and tell the owner that the add-on saves this session at the end of the turn.
-- When a recurring job ran, or another thing happened, make no event record. Say in your reply the date, what ran or happened, and the result, so that the add-on saves them. When the job has a `delivery/` record, write the run there.
-- The add-on cannot delete from the bank. When the owner says "forget that", or the bank holds something wrong, save a correction with its tool `hindsight_ingest_document`, titled "Correction: <topic>".
-- Deleting from the bank is the owner's step, on the bank's page in the dashboard: tell the owner what to delete. Never say that something is deleted when it is not.
-- When the owner says "clean up memory", remove the lines of the project's Current State that are no longer true, save a correction for each thing in the bank that you checked and found wrong, and list what only the owner can delete. Change nothing else in the bank.
+- Before you search, store, or correct a memory, open the add-on's skill `hindsight-coding-agent`, which says how to use its tools. Codex has no such skill: there, follow the guide the add-on shows at session start.
+- This project has no `curating-project-memory` or `using-memory-store` skill. Where `AGENTS.md`, a rule, a skill, or a hook names one of them, follow this file. For the project's Current State, follow "The project's Current State" below.
+- When the owner says "remember this", file the fact where it is kept, and tell the owner the add-on saves this session at the end of the turn.
+- When a recurring job ran, or another thing happened, make no event record. Say in your reply the date, what ran or happened, and the result, so the add-on saves them. When the job has a `delivery/` record, write the run there.
+- The add-on cannot delete a memory. When the owner says "forget that", or a memory in the bank is wrong, save a correction with its tool `hindsight_ingest_document`, titled "Correction: <topic>".
+- Deleting a memory is the owner's step, on the bank's page in the dashboard: say which memory. Never say a memory is deleted when it is not.
+- When the owner says "clean up memory", remove the lines of the project's Current State that are no longer true, as the last section says, save a correction for each memory you checked and found wrong, and list for the owner the memories only the owner can delete. Change nothing else in the bank.
 - Write the owner's instruction for how the agent works as a line in `.claude/rules/owner-preferences.md`, by a direct edit, in the layout its top comment gives. Never put it in Hindsight.
 - Never put a secret, a key, or personal data in Hindsight.
 - Never store where work stands now in Hindsight with a tool. The work items and `memory/CURRENT_STATE.md` hold it.
@@ -20,7 +20,7 @@ This project's memory is Hindsight, on the owner's server, in the project's bank
 
 ## The project's Current State
 
-- `memory/CURRENT_STATE.md` is the only memory file in the project folder. It is in the main checkout only (`AGENTS.md`, "Project map"). Edit it directly, and change only the lines that change.
+- `memory/CURRENT_STATE.md` is the only memory file in the project folder. It is in the main checkout only (`AGENTS.md`, "Project map"). Edit it directly: change only the lines that change.
 - Last updated: one line with the date as YYYY-MM-DD, what caused the change, and who made it. Set it with every change.
 - Now: one line per active piece of work, at most 5. A work item that has left Backlog and is not Done or Cancelled gets its ID and a few words; `running-work-item-lifecycle` decides that line. Other work gets a few words and the ID of its record.
 - Coming up: a dated event or deadline, the date first as YYYY-MM-DD. At most 3 lines.

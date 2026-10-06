@@ -23,7 +23,7 @@ Work in this order: the project's Current State first, then duplicates, proposal
 
 ## Plan first, then ask
 
-- Read every memory record whole. `using-memory-store` says which things in its layout are not memory records, such as an index or a template, and what else to check there.
+- Read every memory record whole. `using-memory-store` says what in its layout is not a memory record (an index, a template), and what else to check there.
 - Write the plan as one numbered list. Each line holds one change, the memory records it changes, and a one-line reason.
   - A contradiction between two memory records is a question on the list. Never settle a contradiction by date alone.
   - A delete is its own numbered line, and the line names the memory record. In every other case, retire the memory record or mark it as replaced, as `SKILL.md`, section "Out of date, or no longer needed", says.
@@ -87,7 +87,7 @@ A stale record is a memory record, or a section of one, that may no longer be tr
 - A section may hold work item status, next steps, undelivered requirements, a decision that only one work item needs, or a copy of a requirement or a design. Propose moving its meaning to the work item, and then removing the section.
 - A memory record or a section may hold a decision that more than one work item needs, a project term, or how the system works or must work. Propose saving it in the place where it is kept, with `filing-project-records`, and then removing it from memory. Check first whether that place already holds it. `references/memory-criteria.md`, section "First find the place where the fact is kept", names the place for each of these.
 - A section may be an instruction, such as "always ...", "never ...", or a preference. Propose moving it to `.claude/rules/owner-preferences.md`, and then removing the section. `references/saving.md`, section "The owner's instructions", says how to write the line.
-- When a memory record or a section is a guess, or a fact that the owner rejected, retire it.
+- Retire a guess, or a fact that the owner rejected.
 - When a memory record is of the wrong type, move it to the right type, and correct every link to it. `using-memory-store` says how to move it.
 - A memory record may no longer follow the layout because the owner made it or changed it by hand. Keep the owner's edit. List these memory records for the owner, and correct one only with the owner's yes.
 

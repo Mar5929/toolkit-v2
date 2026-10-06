@@ -39,7 +39,7 @@ Search before every save. Search for the fact's words and their synonyms, and re
 - When a section says something different, the save is a correction. "Correcting a fact" below gives the steps.
 - When a memory record of the right type covers the subject, add a section to it.
 - When no memory record covers the subject, make a new memory record.
-- When two memory records fit, pick the one that a future session would open first, and link the other one under "Related memories".
+- When two memory records fit, pick the one that a future session would open first, and link the other one under the label "Related memories" in that memory record.
 
 ## Write the change
 
@@ -52,7 +52,7 @@ Search before every save. Search for the fact's words and their synonyms, and re
 - The one-line summary states the fact itself in a few words, with its dates, and not only the subject. Write "Tom away to 2026-10-20; Sarah covers approvals", never "Notes on availability". A later session sees only this line until it opens the memory record, so keep the summary to one line of about 100 characters or fewer.
 - A fact that is true only for a while gets a "check or remove by" date. `references/memory-criteria.md`, section "A fact that is true only for a while", says which date.
 - Record what allowed the save, as one of these three: "Approved by <owner> on <date>", "Trusted grant, <date>", or "Proposed by the agent on <date>; not approved".
-- When several separate things call for a save, group them into one save.
+- When several independent things call for a save, group them into one save.
 - Read the memory record back. When the save changes the project's Current State, update the project's Current State as `references/current-state.md` says.
 
 ## An unchecked claim
@@ -72,10 +72,10 @@ When the claim is checked, do one of these, and tell the owner which:
 
 ## A lesson
 
-A lesson is something you learned that is not proven yet. Where a lesson goes depends on whether its work item is open.
+A lesson is something you learned that is not proven yet.
 
 - While the lesson's work item is open, the lesson goes in that work item, with `running-work-item-lifecycle`. When `running-work-item-lifecycle` closes the work item, one of three things happens to the lesson: the owner agrees to keep it for the whole project, it is dropped, or it is given to this skill to be kept.
-- When no work item is open, or when the lesson is given to this skill at closing, the lesson goes in the memory record for its subject, in the section "Lessons not proven yet", as one entry.
+- When no work item is open, or when the lesson is given to this skill at closing, the lesson goes in the memory record for its subject, in the section "Gotchas and lessons", as one entry. That section holds the lessons that are not proven yet.
   - The entry says what happened and what to do. Its Seen line lists the date, and the session or work item, of each time the lesson came up.
   - The first lesson replaces "None yet."
   - When the same lesson comes up again, add a date to its Seen line. Never give the same lesson a second entry.
@@ -136,8 +136,6 @@ A shared file is a file kept outside the project's records that people keep up t
 
 ## "Forget that", retiring, and deleting
 
-What you do when the owner says "forget that" depends on what the owner wants forgotten.
-
 | "Forget that" is about | Do this |
 | --- | --- |
 | A save you just made | Undo the save: remove the section you added, put back the old wording of a section you changed, or delete the memory record you made. |
@@ -159,7 +157,7 @@ When you find a secret or an email address in memory, remove that text at once, 
 
 A proposal is a save that needs the owner's yes and does not have it yet. Keep such a save as a proposal in the same turn in which you ask "Save to memory: <one line>?", so that the save is not lost when the session ends before the owner answers. Do so for every such question, also for one about a fact found in a document that the owner shared.
 
-Two kinds of save are never kept as a proposal in memory. Each of them gets only its line from step 1:
+Two kinds of save are never kept as a proposal in memory. Each of them gets only its line under "Waiting on", which step 1 below describes:
 
 - a rule you inferred;
 - a save that holds more about a named person than attendance, work role, when the person is away, or who covers. The line for this save names the person and leaves those details out until the owner's yes.
