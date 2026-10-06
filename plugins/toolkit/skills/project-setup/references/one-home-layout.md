@@ -47,7 +47,7 @@ old layout.
 | Outside documentation | `find ai-external-knowledge -maxdepth 2` |
 | Old delivery folders | `ls -d delivery/deployment delivery/data delivery/meeting-notes delivery/references delivery/communications delivery/deliverables delivery/archive 2>/dev/null` |
 | Data files Git ignores (Salesforce) | `find <main>/delivery/data/data-loads <main>/delivery/data/production-backups -type f -not -name .gitignore 2>/dev/null` |
-| Local memory: decision records, the glossary, and the earlier Current State | `ls <main>/memory/decision_*.md <main>/memory/terminology-glossary.md 2>/dev/null` lists a file; or `command grep -n -e '^## Decision' -e 'terminology-glossary' <main>/memory/MEMORY.md` prints a line; or `command grep -n '^## Waiting on the owner' <main>/memory/CURRENT_STATE.md` prints a line |
+| Local memory: decision records, the glossary, and the earlier Current State | `find <main>/memory -maxdepth 1 -name 'decision_*.md' -exec grep -LE '^description: *"?Moved on ' {} +` lists a file (a decision record that an earlier update marked as moved is not listed); or `ls <main>/memory/terminology-glossary.md 2>/dev/null` lists the file; or `command grep -n -e '^## Decision' -e 'terminology-glossary' <main>/memory/MEMORY.md` prints a line; or `command grep -n '^## Waiting on the owner' <main>/memory/CURRENT_STATE.md` prints a line |
 | Notion memory: decision pages and the glossary | With `using-memory-store` in the setup copy: the query under "Every page" in its `references/searching.md` prints a line whose key starts `decision_` and whose status is accepted or proposed; or the "Terminology glossary" page beside the Memory page holds a row (read its text as `using-notion-cli` says); or the "Current state" page holds the heading "Waiting on the owner" |
 | Originals inside local work items | `find <main>/work-items -type d -name references` |
 | Originals inside GitHub issues | `gh issue list --state all --search '"## Source:" in:comments' --json number,title` |
@@ -152,8 +152,11 @@ Toolkit files hold nothing of his and need no new home. Give them one row.
 
 - `AGENTS.md`, every template, and every `.gitkeep` in
   `project-wide-records/`, `requirements/`, and `system-guide/`.
-- `memory/decision_template.md`, which is removed, and
-  `memory/project_topic_template.md`, which the setup copy's file replaces.
+- `memory/decision_template.md`, which is removed.
+- `memory/project_topic_template.md`, the blank form for a memory file.
+  Git does not track it, so show how it differs from the setup copy's
+  file, as `update.md`, "Whose edit a difference is", says, and replace it
+  after his yes.
 - The generated `memory/MEMORY.md`: the setup copy's file replaces it, and
   the session-start hook fills it again at the next session start.
 - The template folders and `.gitkeep` files in the old `delivery/` folders,
@@ -228,8 +231,9 @@ there earlier is a fix for a finding of the record check (step 7).
      row for a memory decision record says. Local memory: remove
      `memory/decision_template.md`; remove `memory/terminology-glossary.md`
      after its rows are read back in `system/glossary.md`; replace
-     `memory/MEMORY.md` and `memory/project_topic_template.md` with the
-     setup copy's files. Every other memory record stays as it is;
+     `memory/MEMORY.md` with the setup copy's file, and
+     `memory/project_topic_template.md` when he said yes to its row. Every
+     other memory record stays as it is;
    - Current State: bring it to the five parts ("Current State in the
      earlier form"), and rewrite a line that names an old path, keeping
      its meaning;
