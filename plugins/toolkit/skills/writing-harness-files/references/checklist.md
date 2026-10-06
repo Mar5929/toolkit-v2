@@ -27,7 +27,7 @@ The practices were checked against the official pages on 2026-10-05 (Claude Code
 - Codex reads only `name`, `description`, and `metadata.short-description` from the front matter. A field that only Claude Code reads, such as `when_to_use`, `allowed-tools`, `paths`, or `disable-model-invocation`, does nothing in Codex. So a skill that both products read must work with `name` and `description` alone.
 - The description says what the skill does and when to use it, in the third person, with the words the owner would say. Put the main use first. When the list of skills is over its budget, Codex cuts each description from the end, and Claude Code drops whole descriptions, starting with the skills used least. Keep it far below the limit: every session reads every description.
 - Name a neighbour skill in the description only where the two compete: "Not for ...; use <skill>."
-- `SKILL.md` stays under 500 lines. It says first what the skill is for and what must be true when its job is done, then gives the steps, then a table that links every file in the folder and says when to open it.
+- `SKILL.md` stays under 500 lines. It opens as the writing rule says a document opens, then gives the steps, then a table that links every file in the folder and says when to open it.
 - A reference over 100 lines starts with a contents list. References link from `SKILL.md`, not from each other.
 - A skill names its own files by a path from the skill folder, and reads no file outside that folder.
 - In Claude Code a personal or project skill with the name of a built-in command or a bundled skill replaces it. A personal or project skill named `verify` or `simplify` is run before each commit. Choose another name unless that is the purpose.
@@ -111,7 +111,7 @@ An output style is a Markdown file of instructions that Claude Code sends with e
 - `keep-coding-instructions: true` keeps Claude Code's own software engineering instructions. Without it, a custom style leaves them out. Set it in a style that changes only how replies are written.
 - A style is chosen by the `outputStyle` key of a settings file. The value must equal the style's name, letter for letter, with the same capitals. A value that matches no style gives the default style, with no error.
 - Keep the style short: its text is sent with every request.
-- Codex never sees an output style. In Claude Code a helper agent does not get it either, except a fork, which inherits the style of the session it was forked from. A writing rule they must follow goes in `AGENTS.md`, in the skill, or in the helper's brief.
+- Codex never sees an output style. In Claude Code a helper agent does not get it either, except a fork, which inherits the style of the session it was forked from. Give them the path of the writing rule. `SKILL.md`, step 5, says which file is the writing rule.
 - A style is an instruction, and nothing enforces it. What must happen every time goes in a hook.
 - In the terminal, Claude Code reads style files when it starts. Tell the owner to restart it after a change.
 
@@ -139,7 +139,7 @@ Check: `claude plugin validate <folder>` lists what the mod hooks and calls. `cl
 - A Claude Code subagent definition is a Markdown file in `.claude/agents/`. A Codex custom agent is a TOML file in `.codex/agents/`. Neither product reads the other's file.
 - A helper starts with only the brief. State the goal, the helper's own part, the files to read first, what it must not change, how to verify the work, and what to report.
 - Tell the helper to report only on its own part.
-- Give the helper the writing rule in the brief: the path of `references/writing-rule.md`, or its text when the helper cannot open it. A helper does not get the output style that the replies of the main session follow.
+- Give the helper the writing rule in the brief: its path, or its text when the helper cannot open it. `SKILL.md`, step 5, says which file is the writing rule. A helper does not get the output style that the replies of the main session follow.
 - Ask it to mark what it verified and what it inferred.
 
 Check: read the brief as if you knew nothing else. Every file it names exists, and every instruction has one meaning.

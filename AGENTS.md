@@ -33,8 +33,9 @@ available, and always for Codex. It also holds the checklist and the steps
 for rewriting a file. Mike, 2026-10-06: "the `writing-harness-files` skill is
 basically just supposed to point at the Claude documentation ... best
 practices ... and tell it to use the installed skills". The writing rules
-are not written there: they are in one rule ("Plain English" under Rules),
-and the skill holds an exact copy of it. A harness file is a skill, a rule, an `AGENTS.md` or `CLAUDE.md`, a hook, a settings file, a Codex `.rules` file, an output style, a plugin manifest or marketplace file, a mod, a subagent definition, or a helper-agent brief. It is text only.
+are not written there: they are in one rule ("Plain English" under Rules).
+The skill holds an exact copy of it, `references/writing-rule.md`, which
+`check-skills.mjs` compares with the rule. A harness file is a skill, a rule, an `AGENTS.md` or `CLAUDE.md`, a hook, a settings file, a Codex `.rules` file, an output style, a plugin manifest or marketplace file, a mod, a subagent definition, or a helper-agent brief. It is text only.
 
 One exception (Mike, 2026-10-03): a second plugin, `workstreams`, for Claude
 Code only. It is a mod: code that runs inside Claude Code and draws a side
@@ -253,9 +254,11 @@ node --test 'dev/tests/*.test.mjs'
 - **No AI credit anywhere.** No "Generated with" line, no `Co-Authored-By`
   naming an AI, and no AI named in a comment, file header, manifest, README,
   commit, or pull request.
-- **Plain English.** Every file, message, and skill follows the writing
-  rule, `write-documents-in-plain-english.md`: whole sentences, real names,
-  and no metaphors. Helper agents and Codex never see the output style, so
+- **Plain English.** Every skill, rule, agent guide, project document, and
+  artifact follows the writing rule, `write-documents-in-plain-english.md`:
+  whole sentences, real names, and no metaphors. The rule does not cover
+  replies to the owner, which follow the output style, or text sent to
+  another person, which follows `humanize-outbound-text.md`. Helper agents and Codex never see the output style, so
   a helper's brief gives it the path of the writing rule.
   - The writing rule (Mike, 2026-10-06). He found the skill text hard
     to follow and agreed with this statement: "The skills are organized
@@ -292,7 +295,8 @@ node --test 'dev/tests/*.test.mjs'
     `<setup>assets/every-project/.claude/rules/write-documents-in-plain-english.md`,
     and only there. He approved its text: change a word of it only with his
     yes. He gave the file that name on 2026-10-06. It was
-    `write-for-the-reader.md` for one day on the branch that rewrote it, and
+    `write-for-the-reader.md` for about two hours on the branch that rewrote
+    it, a name no released version held, and
     it replaced `plain-english-artifacts.md`; `<setup>references/update.md`,
     "The renamed rule", replaces either old file in an existing project. No
     other file states a writing rule again: a file that needs one points to
@@ -640,7 +644,9 @@ node --test 'dev/tests/*.test.mjs'
     change.
   - Follow the writing rule,
     `<setup>assets/every-project/.claude/rules/write-documents-in-plain-english.md`
-    ("Plain English" above).
+    ("Plain English" above). The skill holds an exact copy of it,
+    `references/writing-rule.md`, which `check-skills.mjs` compares with
+    the rule.
   - Put this rule, the files above, and the path of the writing rule in
     the brief of every helper agent that will change a harness file.
   - "Wording and overlap review" above covers the separate review.

@@ -28,8 +28,8 @@ Two neighbouring jobs belong to other skills:
 3. Open the section for that kind of file in [references/checklist.md](references/checklist.md). The checklist gives the practices for each kind of file and the way to check a change. Where the live page and the checklist differ, follow the page, and tell the owner which checklist line is out of date so the checklist can be corrected.
 4. Read the project's own rules for these files in its root `AGENTS.md`. Then read two existing files of the same kind in the project, and match their form.
 5. Write the change.
-   - Follow the writing rule in [references/writing-rule.md](references/writing-rule.md). All the writing rules are in that one rule: how to choose words and names, and how to build a sentence, a paragraph, and a document.
-   - That file is an exact copy of the rule `.claude/rules/write-documents-in-plain-english.md`, which `project-setup` gives every project. The copy is here so that this skill also works in a folder that has no such rule. When the project holds the rule in `.claude/rules/`, follow the project's file, because the owner may have changed it.
+   - Follow the writing rule. All the writing rules are in that one rule: how to choose words and names, and how to build a sentence, a paragraph, and a document.
+   - When the project holds the rule `.claude/rules/write-documents-in-plain-english.md`, the writing rule is the project's file, because the owner may have changed it. In any other folder, the writing rule is [references/writing-rule.md](references/writing-rule.md). That file is an exact copy of the rule that `project-setup` gives every project, and it is here so that this skill also works in a folder that has no such rule.
    - A file that both products read uses only what both support.
 6. Check the change the way the checklist section says under "Check".
 7. Have an agent that did not write the change review it against the page, the checklist, and the writing rule. Fix each finding that the reviewer confirms, and have the reviewer read the fix. A small edit gets one reviewer and one read.
@@ -48,7 +48,7 @@ A helper agent starts with only its brief. When a helper will change a harness f
 
 - It names the kind of file and the products that read it.
 - It tells the helper to use this skill. When the helper cannot load skills, the brief gives it the page addresses and the checklist section for that kind of file.
-- It gives the helper the path of `references/writing-rule.md`, or the text of that file when the helper cannot open it. A helper does not get the output style that the replies of the main session follow, so the helper has no other writing rules.
+- It gives the helper the path of the writing rule, or the text of that file when the helper cannot open it. Step 5 says which file is the writing rule. A helper does not get the output style that the replies of the main session follow, so the helper has no other writing rules.
 - It says that a separate agent reviews the change.
 
 ## References

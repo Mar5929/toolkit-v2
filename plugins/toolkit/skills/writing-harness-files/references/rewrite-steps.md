@@ -2,7 +2,7 @@
 
 This file gives the steps for rewriting a skill, a rule, or an agent guide (`AGENTS.md` or `CLAUDE.md`) that is hard to follow. Use it when the job is to make a file clearer, and not to change what the file requires. The job is done when a reader who opens the new file alone can follow it after one read, and when the checks in steps 6 to 8 show that the new file requires exactly what the old file required.
 
-`references/writing-rule.md` holds the writing rules, which say how to write. This file says how to work and how the work is checked.
+The writing rule holds the writing rules, which say how to write. `SKILL.md`, step 5, says which file is the writing rule: the project's own rule file when the project holds one, and `references/writing-rule.md` in any other folder. This file says how to work and how the work is checked.
 
 ## Contents
 
@@ -21,10 +21,9 @@ When the project requires the owner's yes before a rule, a skill, or a hook chan
 ## The steps
 
 1. Read the whole file, and every file it sends the reader to. Then answer one question in a few lines of your own: what must the reader know, and what must the reader do? The rewrite starts from that answer, not from the old lines.
-2. Decide what happens to each made-up word. A made-up word is a word that a dictionary does not have, or a word that has its own meaning only in this project. For each one in the file, choose in this order: plain words, a name the reader can already see, or keep the word and explain it once. `references/writing-rule.md`, section "Words and names", gives the three choices. The two examples below show them.
-   - Plain words, and then a name the reader can see. The old sentence is "An original is always filed here, in `sources/`, whether one work item uses it, several do, or none does yet." The new text is "File every document or message that the project receives from someone, unchanged, in `sources/`, whether one work item uses it, several do, or none does yet. A file in `sources/` is called a source." The made-up word "original" is gone, and the name "source" is one that the reader sees in the folder name.
-   - A word that is kept and explained once. For example: "The project's Current State is the one short page that says what is true in the project now, for example which work is in progress and what waits on the owner."
-   - Write down each choice: the word, the choice, and the text that takes the word's place. This is the file's word list.
+2. Decide what happens to each made-up word in the file. For each made-up word, make the choice that the writing rule, section "Words and names", gives.
+   - Write down each choice: the word, the choice, and the text that takes the word's place. This list is the file's word list.
+   - The following example shows what one row of the word list holds. The word is "original". The choice is a name the reader can already see, which is "source", from the folder name `sources/`. The old sentence is "An original is always filed here, in `sources/`, whether one work item uses it, several do, or none does yet." The text that takes its place is "File every document or message that the project receives from someone, unchanged, in `sources/`, whether one work item uses it, several do, or none does yet. A file in `sources/` is called a source."
    - Search the project for each word. When another skill, a rule, an agent guide, or a message that a hook prints also uses the word, the choice reaches past this file. Put it on the shared word list.
    - The shared word list is one file for the whole rewrite. It has one row per word: the word, the files that use it, the choice, and the text that takes the word's place. The project's root `AGENTS.md` or the brief says where the list is kept. When neither does, ask the owner where to keep it.
    - Read the shared word list before you choose. When a word is already on it, use the choice it gives.
@@ -35,7 +34,7 @@ When the project requires the owner's yes before a rule, a skill, or a hook chan
    - every name the file uses: of a file, a folder, a skill, a section, a field, or a status;
    - every place where the file sends the reader to another skill or file for part of the job;
    - every heading of the file that another file cites, with the files that cite it. Search for each heading to find them.
-4. Write the new file to the writing rule in `references/writing-rule.md`. Start with the opening. Put the content in the order that the reader needs it. You may regroup the file, split a section that holds too much, and rename a heading.
+4. Write the new file to the writing rule.
 5. Update every file that cites a heading you renamed or uses a word you replaced. Do it in the same change, so that no file points to a name that is gone.
 6. Check each line of the inventory against the new file.
    - Every rule, limit, and number must still be there, with the same meaning.
@@ -43,7 +42,7 @@ When the project requires the owner's yes before a rule, a skill, or a hook chan
    - Beside a word that the file's word list replaced, write the text that took its place.
 7. Have a separate agent, which did not write the new file, compare the old file with the new file. Give it the inventory.
    - It reports every rule, limit, number, or exact string that was lost, added, weakened, or strengthened.
-   - It also checks the new file against each line of `references/writing-rule.md`, and reports each line that the new file does not follow.
+   - It also checks the new file against each line of the writing rule, and reports each line that the new file does not follow.
    - These are not additions: the opening, plain words in place of a made-up word, a bullet that was split into a main rule and its special cases, a reason that the project's files or the owner state, and a sentence that says what is in another file.
    - Correct each thing it reports, and have it read the correction.
 8. Test the file on a reader that knows nothing about the subject. Use a helper agent that is given only the project's root `AGENTS.md` and the file. For a reference file of a skill, the helper also gets that skill's `SKILL.md`, because a reader opens `SKILL.md` first.
@@ -57,7 +56,7 @@ When the project requires the owner's yes before a rule, a skill, or a hook chan
 
 A rewrite never decides what a file requires. In each case below, stop and ask the owner. Give the file, the line, and your recommendation.
 
-- When no text states what the file is for, ask the owner. Take the goal from text that exists, such as the part of a skill's description that follows ", so". Never invent a goal.
+- Take what the file is for from text that exists, such as the part of a skill's description that follows ", so". When no text states what the file is for, ask the owner. Never invent a goal.
 - When an instruction looks arbitrary and neither the project's files nor the owner's words give its reason, ask the owner. Never invent a reason.
 - When you cannot make a sentence clear without deciding what it means, ask the owner.
 - When two files say different things, ask the owner which one is right.
@@ -80,7 +79,9 @@ The readers are an agent that has just loaded the file, and the owner, who
 may not be a developer.
 
 Read first, in the writing-harness-files skill:
-- references/writing-rule.md: the writing rules, which say how to write.
+- the writing rule, which says how to write: the project's own file
+  .claude/rules/write-documents-in-plain-english.md when the project holds
+  it, and references/writing-rule.md in any other folder.
 - references/rewrite-steps.md: how to work on one file, and how the work is
   checked.
 Follow both for every file.
@@ -92,9 +93,6 @@ it with your proposal, and tell the agent that gave you this prompt before
 you use it.
 Do not change: <files that are the owner's own text; copies whose source is
 another file, which are changed at the source>
-
-Start from the whole file: what must the reader know and do? Do not repair
-the file line by line.
 
 Stop and ask the owner in each case that the rewrite steps list under "When
 to stop and ask the owner". Do not guess.

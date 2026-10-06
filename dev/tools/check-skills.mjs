@@ -29,7 +29,7 @@
 //   - SKILL.md links every file in the skill folder (a link to a folder covers what is in it),
 //     every link resolves, and no link leaves the folder with ../;
 //   - a Markdown file in references/ or examples/ over 100 lines has "## Contents" as its first
-//     section;
+//     section, except a copy of a rule (RULE_COPIES), which must equal the rule;
 //   - no file names a command of the retired toolkit program; the hook commands in every setup
 //     folder's .claude/hooks/ are checked the same way;
 //   - a file whose first line names a dev/build-shared/ source equals that source after the
@@ -289,7 +289,9 @@ for (const { dir, model } of skills) {
     }
     const rel = posix(path.relative(dir, f));
     const lines = body.split('\n').length - (body.endsWith('\n') ? 1 : 0);
-    if (/^(references|examples)\//.test(rel) && lines > CONTENTS_OVER) {
+    // A copy of a rule must equal the rule, so it cannot start with a Contents list: it is exempt.
+    const ruleCopy = Object.keys(RULE_COPIES).includes(posix(path.relative(ROOT, f)));
+    if (/^(references|examples)\//.test(rel) && lines > CONTENTS_OVER && !ruleCopy) {
       const heading = proseLines(body).find((l) => /^#{2,6}\s/.test(l.text));
       if (!heading || !/^#{2,6}\s+(?:Table of )?Contents\s*$/i.test(heading.text)) report(level, f, `${lines} lines: a reference over ${CONTENTS_OVER} lines starts with a "## Contents" section`);
     }

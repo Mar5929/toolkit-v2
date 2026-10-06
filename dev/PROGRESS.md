@@ -65,7 +65,7 @@ not landed; the version is still 0.9.0):
   see in place of each made-up word. No rule was changed. A last pass made
   the words and the headings the same across the files.
 - The writing rule has a new name, `write-documents-in-plain-english.md`
-  (Mike, 2026-10-06). It was `write-for-the-reader.md` for one day, and
+  (Mike, 2026-10-06). It was `write-for-the-reader.md` for about two hours on a branch, and
   `plain-english-artifacts.md` before that. "Update the toolkit" replaces
   either old file in an existing project.
 - All the writing rules are in that one rule (Mike, 2026-10-06). The long
