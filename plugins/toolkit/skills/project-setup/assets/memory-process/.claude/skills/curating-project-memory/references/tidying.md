@@ -26,7 +26,7 @@ Work in this order: the project's Current State first, then duplicates, proposal
 - Read every memory record whole. `using-memory-store` says what in its layout is not a memory record (an index, a template), and what else to check there.
 - Write the plan as one numbered list. Each line holds one change, the memory records it changes, and a one-line reason.
   - A contradiction between two memory records is a question on the list. Never settle a contradiction by date alone.
-  - A delete is its own numbered line, and the line names the memory record. In every other case, retire the memory record or mark it as replaced, as `SKILL.md`, section "Out of date, or no longer needed", says.
+  - A delete is its own numbered line, and the line names the memory record. In every other case, retire the memory record or mark it as replaced, as `SKILL.md`, section "A memory record that is out of date or no longer needed", says.
 - Change nothing until the owner says yes. The owner's answer often comes in the next turn. Open this file again in that turn, because Codex does not keep a skill across turns.
 - Two changes do not go on the plan: removing lines of the project's Current State that are no longer true, and removing a secret or an email address at once.
 

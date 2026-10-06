@@ -160,7 +160,7 @@ gh api repos/<repo>/issues/<number>/parent --jq .number
 - Use `-F`, not `-f`. `-F` sends the id as a number, which the call requires.
 - `replace_parent=true` moves a child that already has a parent.
 - The call that removes a sub-issue ends in `sub_issue`, without the `s`.
-- The parent call fails with "No parent issue found" (HTTP 404) when the issue is top level. That reply tells you that the issue has no parent. Do not treat the reply as an error.
+- The parent call fails with "No parent issue found" (HTTP 404) when the issue is top-level. That reply tells you that the issue has no parent. Do not treat the reply as an error.
 - Count the levels before you add a sub-issue. Run the parent call on the new work item's parent, and then on that issue's parent. A parent that has two ancestors is already at level 3. Do not add a sub-issue to it.
 
 ## When a call fails

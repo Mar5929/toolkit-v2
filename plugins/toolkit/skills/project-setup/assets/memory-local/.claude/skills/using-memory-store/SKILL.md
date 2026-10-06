@@ -14,7 +14,7 @@ Two names are used in every file of this skill:
 
 This skill only stores. It never decides what to keep, whether a change needs the owner's yes, or what to tell the owner. `curating-project-memory` decides what to save.
 
-## Where memory is stored
+## Where memory is kept
 
 - Memory is Markdown files in `memory/` in the main checkout. The main checkout is the project's main folder: the first path that `git worktree list` prints. Never commit these files. `references/folders-and-files.md` starts with a picture of the whole folder.
 - The project folder is an Obsidian vault, which is a folder that the note app Obsidian opens. So the owner can read and edit these files too.
@@ -32,7 +32,7 @@ This skill only stores. It never decides what to keep, whether a change needs th
 
 `curating-project-memory` calls a memory record current, proposed, replaced, or retired. When you read or set a status, open `references/record-format.md`, section "Status". It gives the `status` value that a file stores for each of those four words.
 
-## Steps for any look-up or save
+## Steps for every read and every save
 
 1. Find the main checkout, and put its path in `MAIN` with this line:
 

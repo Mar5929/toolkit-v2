@@ -2,7 +2,7 @@
 
 Use this file when you keep something in memory, correct it, or forget it. It gives the steps for each kind of save, and the line to give the owner after each save.
 
-`SKILL.md` says when a save needs the owner's yes, in its section "The owner's yes before a save". It says when a memory record is retired or deleted in its section "Out of date, or no longer needed".
+`SKILL.md` says when a save needs the owner's yes, in its section "The owner's yes before a save". It says when a memory record is retired or deleted in its section "A memory record that is out of date or no longer needed".
 
 ## Contents
 

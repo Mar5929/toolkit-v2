@@ -157,7 +157,7 @@ Read the owner's answer by these rules:
 Moving <project name> to Toolkit V2
 
 Your choices: work items in <place> (ID prefix <prefix>); memory in <place>; Salesforce <yes or no>; SOUL.md <yes or no>.
-You also said: <each wish in his words, or "nothing else">.
+You also said: <each wish in the owner's words, or "nothing else">.
 Nothing changes until you say yes. Nothing of yours is deleted.
 
 Counts: delete <n>, add <n>, update <n>, kept <n>, your call <n>.

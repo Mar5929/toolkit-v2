@@ -33,13 +33,13 @@ The list of inputs:
 ```text
 Draft prompt: <the whole draft>
 Main checkout: <full path; the first path git worktree list prints>
-Tracker: local (work-items/ in the main checkout) | Notion (item text
+Tracker: local (work-items/ in the main checkout) | Notion (work item text
   pasted below) | GitHub Issues (<account/repository>)
 Current State: memory/CURRENT_STATE.md in the main checkout | Notion
   (page text pasted below)
 Sources for claims: <for each claim you can: file, repository, owner (with
   the owner's words when you have them), or worked out>
-Supplied text: <Notion items, the Notion Current state page, Hindsight memories>
+Supplied text: <Notion work items, the Notion Current state page, Hindsight memories>
 ```
 
 ## Brief for the helper

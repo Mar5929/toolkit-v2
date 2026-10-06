@@ -4,7 +4,7 @@ Use this file to merge a work item's approved work, and to deploy it where it mu
 
 Before you start:
 
-- Read `.claude/rules/owner-preferences.md` for a standing merge permission. A standing merge permission is an instruction of the owner that allows merges without a question for each one.
+- Read `.claude/rules/owner-preferences.md` for a standing merge instruction. A standing merge instruction is an instruction of the owner that allows merges without a question for each one.
 - Read `PROJECT.md` for the owner's name and, in a Salesforce project, for the org aliases.
 - Ask every question as a Questions and Answers row, with `waiting_on` set to the owner.
 - In Codex, every Git write and every call that needs the network follows `building.md`, section "Git writes in Codex".
@@ -31,11 +31,11 @@ Use `merge-and-clean-up` to merge a pull request. That skill also removes the br
 
 A merge into the default branch needs one of these two:
 
-- **The owner's yes to this merge.** Ask for it as its own question: "Pull request #14 is open and its checks pass. Merge it into main?" The owner's approval of the result is not a yes to the merge.
-- **The owner's standing merge permission** in `.claude/rules/owner-preferences.md`. It counts only when all three of these are true:
+- **The owner's yes to this merge.** Ask for it as its own question: "Pull request #14 is open and its checks pass. Merge it into main?" The owner's yes to the result is not a yes to the merge.
+- **The owner's standing merge instruction** in `.claude/rules/owner-preferences.md`. It counts only when all three of these are true:
   1. The checker reported no blocking issue on the exact head commit that is being merged.
   2. Every check passes on that head.
-  3. The work item does not say that its merge needs the owner's approval.
+  3. The work item does not say that its merge needs the owner's yes.
 
   When all three are true, merge. Add the Recent History row "Merged under the standing merge instruction; checker passed `<commit>`", and tell the owner in one line, naming the rule. When any one of the three is not true, ask the owner.
 
@@ -50,11 +50,11 @@ Two other rules apply to merges:
 
 A project has no remote when `git remote` prints nothing. Such a project has no pull request, so `merge-and-clean-up` has nothing to do. Merge on this computer:
 
-1. Get the owner's yes, or use the standing merge permission, as "What a merge into the default branch needs" says.
-2. Run the merge safety check in `.claude/rules/shared-repository-work.md`. That check compares the files the merge changes with the uncommitted files in the main checkout.
+1. Get the owner's yes, or use the standing merge instruction, as "What a merge into the default branch needs" says.
+2. Run the merge-safety check in `.claude/rules/shared-repository-work.md`. That check compares the files the merge changes with the uncommitted files in the main checkout.
 3. Run `git -C <main checkout> merge --ff-only <item branch>` from the main checkout. The main checkout is the first path that `git worktree list` prints. With `--ff-only`, Git makes only a fast-forward merge: it moves the default branch forward to the work item's commits, and it refuses when it cannot.
    - The main checkout must be on the default branch. When it is on another branch, stop and tell the owner. Never switch its branch.
-   - When the fast-forward fails, merge the default branch into the work item's branch in the work item's worktree, run the checks again, and try the merge again. Under a standing merge permission, the new head needs a new checker.
+   - When the fast-forward fails, merge the default branch into the work item's branch in the work item's worktree, run the checks again, and try the merge again. Under a standing merge instruction, the new head needs a new checker.
 4. Remove the work item's worktree and branch, and add the Recent History row "No remote: merged locally into main."
 
 ### After a merge

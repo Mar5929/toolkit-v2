@@ -30,7 +30,7 @@ This skill says where each part of a work item is kept in GitHub Issues, and it 
 
 ## After every write
 
-Read the change back, and check that it says what you wrote. When a write failed, or reads back differently, report it as `running-work-item-lifecycle`, section "Every time", says. That section gives the words your reply must start with.
+Read the change back, and check that it says what you wrote. When a write failed, or reads back differently, report it as `running-work-item-lifecycle`, section "Rules that apply in every State", says. That section gives the words your reply must start with.
 
 ## Mistakes to avoid
 

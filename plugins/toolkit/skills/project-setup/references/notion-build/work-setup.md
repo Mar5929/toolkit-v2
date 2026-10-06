@@ -373,7 +373,7 @@ Keep the ids you get in a file in a temporary folder, never in the project, beca
   - No row may have a template's id, because a template that comes back as a row shows as a card on the owner's board.
 - Only after building or rebuilding the templates, and only after the owner's yes, test the template in a throwaway project. Never run this test for a new project.
   - Make a throwaway project from the template, named "… (safe to delete)".
-  - Make one work item in it, as `database-layout.md`, "Creating an item", says, and check that the work item's page shows its own views.
+  - Make one work item in it, as `database-layout.md`, "Creating a work item", says, and check that the work item's page shows its own views.
   - Never test inside a template, because a copy would take the test work item with it.
 - For a new project, the project page lists only the parts the project keeps in Notion: Work Items, Phases, and Tasks; Memory and "Current state". When the project keeps work items in Notion, its Work Items templates list shows one template with `is_default` true, the ID property shows the project's prefix, and the relations check below passes.
 - Each database's relations point at the same project's databases. Check with `ntn api v1/data_sources/<id> < /dev/null | jq '.properties | map_values(select(.type=="relation") | .relation.data_source_id)'`.

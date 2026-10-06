@@ -61,5 +61,5 @@ Keep the reply short, and give its parts in this order:
   - When the owner asks to skip the checker, say that it always runs, as the owner decided, and ask whether the owner wants to change that decision.
   - When the owner does change the decision, give the owner's words to `curating-project-memory`, which writes the line in `.claude/rules/owner-preferences.md`. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in place of `curating-project-memory`.
 - A commit after the check needs a new checker.
-- A change after the owner's approval needs a new check, and a new approval of what changed.
+- A change after the owner's yes to the result needs a new check, and a new yes from the owner to what changed.
 - In Codex, each Git write, such as the test plan commit, follows `building.md`, section "Git writes in Codex".

@@ -18,7 +18,7 @@ grep -rHE --include='*.md' --exclude='*_template.md' --exclude=AGENTS.md --exclu
 ```
 
 - The lines that come from one file describe one memory record. A file with no `status:` line has no header.
-- `MEMORY.md` holds the same summaries for the files that are in the index, as of the last session start. `SKILL.md`, section "Where memory is stored", says how the index is made and which files it leaves out.
+- `MEMORY.md` holds the same summaries for the files that are in the index, as of the last session start. `SKILL.md`, section "Where memory is kept", says how the index is made and which files it leaves out.
 
 ## By topic
 

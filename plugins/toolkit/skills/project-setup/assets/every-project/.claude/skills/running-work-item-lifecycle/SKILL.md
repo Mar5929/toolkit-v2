@@ -40,7 +40,7 @@ A work item stays in Backlog until the owner asks to start it.
 
 - Add the idea in the owner's words, as the Original verbatim requirement of Requirement 1.
 - Do not start the interview until the owner asks to start the work item. The interview is the set of questions that Refining Requirements asks the owner, one at a time.
-- Write a Next action that names the first step for when the owner starts the work item, for example "Agent: when the owner starts this item, agree its goal with him."
+- Write a Next action that names the first step for when the owner starts the work item, for example "Agent: when the owner starts this work item, agree its goal with the owner."
 
 ### Designing or Building after the requirements
 
@@ -125,12 +125,12 @@ Stop and ask the owner before each of these six steps. Record the owner's yes on
 2. Choosing the design, at the end of Designing.
 3. Approving the finished result, at the end of the Testing Loop, after the separate checker has tested it.
 4. Each merge into the default branch, in Deploying.
-   - A merge that the owner's standing merge permission in `.claude/rules/owner-preferences.md` covers needs no new yes from the owner.
+   - A merge that the owner's standing merge instruction in `.claude/rules/owner-preferences.md` covers needs no new yes from the owner.
    - A merge that a helper makes into the work item's own branch needs no yes from the owner. "Starting a helper" below says what a helper is.
 5. Each deploy to an environment that other people use, such as a test or staging environment. A production deploy is the owner's to run.
 6. Marking the work item Done.
 
-## Every time
+## Rules that apply in every State
 
 These rules apply every time you work on a work item, in every State.
 

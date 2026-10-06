@@ -95,7 +95,7 @@ Write each question to the owner in this form:
 Q-07: <One question that settles one thing.>
 Recommended: <your answer>, because <the reason>.
 Watch out: <the catch of this choice>.
-Not yet covered: <what this affects that he has not raised>.
+Not yet covered: <what this affects that the owner has not raised>.
 ```
 
 Leave out "Watch out" or "Not yet covered" only when there is nothing real to say on that line.

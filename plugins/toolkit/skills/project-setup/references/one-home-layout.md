@@ -76,7 +76,7 @@ Moving <project name> to the one-home layout
 Nothing changes until you say yes. Nothing is removed before what it held is read back in its new place.
 
 | # | Old location | What is in it | Where it goes | Removed afterwards |
-| 1 | `project-wide-records/questions/` | 3 shared questions: 2 open, 1 answered | `DECISIONS.md`: 2 Open entries and 1 Decided entry, each with a pointer in the work items it names | The 3 files |
+| 1 | `project-wide-records/questions/` | 3 shared questions: 2 open, 1 answered | `DECISIONS.md`: 2 Open entries and 1 Decided entry, each with its ID in the work items it names | The 3 files |
 | 2 | `memory/decision_pricing-model.md` | 1 decision, current | `DECISIONS.md`: 1 Decided entry | Nothing: the memory file stays, marked as moved, with the DEC ID |
 | 3 | `memory/` | 14 other memory records | They stay where they are | Nothing |
 
@@ -217,7 +217,7 @@ The table says where each old file or record goes. The rules for each row are in
 - Copy a file unchanged. Save the text of a comment exactly as it is.
 - In "Used by", name the work item.
 - Change the work item's Sources line to `SRC-###: <what it is>. Taken from it: <IDs>.`
-- Ask the owner before the source is committed when it is a file over 10 MB, a file with personal data beyond names and work roles, or a file type that is not text. `sources/AGENTS.md`, "An original kept outside Git", gives the question to ask. That file calls a source "an original".
+- Ask the owner before the source is committed when it is a file over 10 MB, a file with personal data beyond names and work roles, or a file type that is not text. `sources/AGENTS.md`, "A source kept outside Git", gives the question to ask.
 - A GitHub comment and a Notion file stay where they are.
 
 **A client file in `delivery/meeting-notes/` or `delivery/references/`**

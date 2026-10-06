@@ -143,7 +143,7 @@ Run each check alone, from the project folder. Each check only reads.
     - Claude Code recommends under 200 lines. Codex stops reading instruction files at 32,768 bytes in all, `~/.codex/AGENTS.md` included.
     - Count `AGENTS.md` only. `PROJECT.md` is not counted. Claude Code loads `PROJECT.md` through the `@PROJECT.md` line in `AGENTS.md`, and Codex does not load it that way.
     - When either number is over its limit, say so in the report. Never cut lines from `AGENTS.md`.
-15. **The text that loads in every session.** `command grep -L '^paths:' .claude/rules/*.md` lists the rules with no `paths` frontmatter. Count the bytes of `AGENTS.md` and of each of those files with `wc -c`, and give the total in bytes in the report. No limit is set for the total.
+15. **The text that loads in every session.** `command grep -L '^paths:' .claude/rules/*.md` lists the rules with no `paths` line in their front matter. Count the bytes of `AGENTS.md` and of each of those files with `wc -c`, and give the total in bytes in the report. No limit is set for the total.
 16. **"Toolkit settings" holds no prompt.** The "Toolkit settings" section of `PROJECT.md` must hold no prompt, except a prompt that waits on the owner.
 17. **The owner is named.** "People and ownership" in `PROJECT.md` must name the owner. Check it with `grep -n '^| Owner |' PROJECT.md`.
 18. **The older plugins are off in this project.** Check it with `jq '.enabledPlugins' .claude/settings.json`. `skills-hooks-settings.md`, "The older plugins, off in this project", says which plugins must be off.

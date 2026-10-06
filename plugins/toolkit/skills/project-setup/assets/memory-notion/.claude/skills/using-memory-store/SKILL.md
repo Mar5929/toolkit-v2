@@ -14,7 +14,7 @@ Two names are used in every file of this skill:
 
 This skill only stores. It never decides what is worth keeping or when to ask the owner. `curating-project-memory` decides what to save.
 
-## Where memory is stored
+## Where memory is kept
 
 - Memory is five databases on the project's Memory page: **Projects**, **Topics**, **Memories**, **Entities**, **Facts**. They are Lore's databases. Lore is Notion's open-source memory tool, and it finds the databases and their columns by their exact names. `references/database-layout.md` shows how the project looks in Notion and lists every column.
 - One page of **Memories** holds one subject, and the body of the page is the memory record's text.
@@ -31,7 +31,7 @@ This skill only stores. It never decides what is worth keeping or when to ask th
 
 `curating-project-memory` calls a memory record current, proposed, replaced, or retired. When you read or set a status, open `references/database-layout.md`, section "Status". It gives the option of the Status column that a page stores for each of those four words.
 
-## Steps for any look-up or save
+## Steps for every read and every save
 
 1. Read the ids from `PROJECT.md`. Before your first Notion read or write in a session, whatever tool you use, open `using-notion-cli`.
 2. In this turn, read again what you will look at or change. The owner edits in Notion, so never answer from an earlier read.

@@ -1,6 +1,6 @@
 ---
 name: filing-project-records
-description: 'Files the project''s lasting records, each with an ID, so later work finds them: every original the project receives, in sources/; a decision or open question more than one work item needs, in DECISIONS.md; a change to a document that describes the system, in system/. Use when the owner hands over an original, such as a transcript, a decision affects more than one work item, or a system document must be updated. Not for a decision only one item needs; use running-work-item-lifecycle.'
+description: 'Files the records the whole project needs, each with an ID, so later work finds them: every source the project receives, in sources/; a decision or open question more than one work item needs, in DECISIONS.md; a change to a document that describes the system, in system/. Use when the owner hands over a source, such as a transcript, a decision affects more than one work item, or a system document must be updated. Not for a decision only one work item needs; use running-work-item-lifecycle.'
 ---
 
 # Filing project records
@@ -17,7 +17,7 @@ Before you save a decision, an open question, or a rule, check that more than on
 
 In this skill, a record is one saved source, one entry in `DECISIONS.md`, or one rule in `system/`. To save a record is to commit the change to the default branch with `publish-docs`.
 
-## Which step to do
+## Which filing step to do
 
 Find what happened in the table, and open only the file in that row. When one message needs more than one step, do the steps in the order of the table.
 
@@ -38,7 +38,7 @@ The rest of this file applies to all three steps.
   - for a decision or an open question, the comment at the top of `DECISIONS.md`;
   - for a source, `sources/AGENTS.md`;
   - for a rule or anything else in `system/`, `system/AGENTS.md`.
-- Read the file you will change again, right before you change it. The owner edits these files by hand, and another session may have published a change.
+- Read the file you will change again, right before you change it. The owner edits these files by hand, and another session may have committed a change.
 - Search before you add a record. When a record already covers the subject, change that record. Never add a second record for the same subject.
 
 ## When this session works in its own worktree
@@ -73,7 +73,7 @@ The time depends on where the project keeps its work items.
 - When work items are in Notion or GitHub, write the ID once the save is on the default branch.
 - When work items are local files, write the ID only after `publish-docs` reports that the main checkout holds the save. The command that checks the records, `.claude/hooks/validate-records.mjs`, looks the ID up there.
 - When work items are local files and `publish-docs` reports that the main checkout does not hold the save, write no ID in the work item. Do this in its place:
-  - Give `curating-project-memory` one line for "Waiting on" in Current State. Current State is the project's one short page of what is true now, and "Waiting on" is one of its parts. The line holds the record's ID, each work item that needs the ID, and what `publish-docs` named as blocking the update.
+  - Give `curating-project-memory` one line for "Waiting on" in the project's Current State. The project's Current State is the project's one short page of what is true now, and "Waiting on" is one of its parts. The line holds the record's ID, each work item that needs the ID, and what `publish-docs` named as blocking the update.
   - Tell the owner the same.
   - When the main checkout's files hold the record, write the ID in each work item, and ask `curating-project-memory` to remove that line.
   - In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in place of `curating-project-memory`.
@@ -99,5 +99,5 @@ The record can be a rule in `system/`, an entry in `DECISIONS.md`, or a source. 
 | The commit of every change this skill makes | `publish-docs` |
 | Writing a record's ID in a work item, and reading a work item | `using-work-tracker` |
 | Anything that one work item alone needs; a requirement that a new decision changes; the closing of a work item, which says what the work item built | `running-work-item-lifecycle` |
-| A line under "Waiting on" in Current State; a memory record that says where to find a record, when the owner asks for one; a fact that fits no record here | `curating-project-memory`. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in its place. |
+| A line under "Waiting on" in the project's Current State; a memory record that says where to find a record, when the owner asks for one; a fact that fits no record here | `curating-project-memory`. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in its place. |
 | A captured outside page, or a record of the system as it is today | `reference/AGENTS.md` |

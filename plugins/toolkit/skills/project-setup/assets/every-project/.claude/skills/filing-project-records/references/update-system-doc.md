@@ -8,7 +8,7 @@ The mark of a rule is one of four words: Draft (the owner has not approved the r
 
 Before you write a rule, name the DEC ID behind the change. When `DECISIONS.md` has no entry for the change, do `record-decision.md` first. It sends you back here before its save.
 
-## Which section to use
+## Which section of this file to use
 
 | What you change | Section |
 | --- | --- |
@@ -53,7 +53,7 @@ Use this section when `running-work-item-lifecycle` closes a work item and names
 The glossary is `system/glossary.md`.
 
 - Ask the owner first about a meaning that the owner did not give and no decision gives, such as one a source gives or one you worked out. Ask: "Add to the glossary: <term> means <meaning>?"
-- A term the owner defined in the conversation needs no entry in `DECISIONS.md`. The row's Source is the owner's words with the date, and the Changelog row's DEC cell says "none".
+- A term the owner defined in the session needs no entry in `DECISIONS.md`. The row's Source is the owner's words with the date, and the Changelog row's DEC cell says "none".
 - Search the table before you add a term. When the term is there, change its row.
 - Add the Changelog row, set the Status again, and save with `publish-docs`.
 

@@ -42,7 +42,7 @@ This skill only reads and saves. It never decides what happens next: what to sav
    - Change only the lines that change. Keep every other line, heading, and bold label as the work item template has it. Never rewrite the whole file.
    - Set `updated:` to today.
    - In a work item's text, name another work item as `[[WI-031]]`, never by its folder path. The `parent:` line is different: it stays a plain ID.
-5. Read the file back, and check that it says what you wrote. When a save failed, or reads back differently, report it as `running-work-item-lifecycle`, section "Every time", says. That section gives the words your reply must start with.
+5. Read the file back, and check that it says what you wrote. When a save failed, or reads back differently, report it as `running-work-item-lifecycle`, section "Rules that apply in every State", says. That section gives the words your reply must start with.
 
 ## Mistakes to avoid
 

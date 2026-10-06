@@ -93,7 +93,7 @@ Use this section after Deploying, or after Reflecting when the work item has not
    - Blockers: "None."
 5. Update the project's Current State, which is the project's one short page of what is true now. `SKILL.md`, section "Work that another skill does", names the skill for each of these writes.
    - Remove the work item's line under Now.
-   - Ask `curating-project-memory` to remove the rest: each line under "Coming up" or "Waiting on" that is about this work item, and a "Next session starts with" line that names it. The Current State reference of that skill, section "Removing what is no longer true", gives the steps. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in place of `curating-project-memory`.
+   - Ask `curating-project-memory` to remove the rest: each line under "Coming up" or "Waiting on" that is about this work item, and a "Next session starts with" line that names it. The reference file on the project's Current State in that skill, section "Removing what is no longer true", gives the steps. In a project with Hindsight memory, follow `.claude/rules/hindsight-memory.md` in place of `curating-project-memory`.
    - For a top-level work item, check its project phase, as `SKILL.md`, section "Levels", says. That section says what to ask the owner when the last open work item in a project phase is closed.
 6. After the owner's "no", record the owner's words, turn each problem into a task, and move the work item back to Building. After the fix, run the Testing Loop again and fill the Moved up line again, before you ask again.
 7. Report to the owner whether the work reached the default branch, what was deployed, and what was kept for the whole project: what the Moved up line says, and each lesson whose outcome starts "Moved up:". End the report with what the section "Leftover branches and worktrees" below asks the owner. When that section leaves nothing to ask, end with "Tell me the next thing to build."
@@ -106,7 +106,7 @@ Use this section when the owner cancels a work item.
 2. Ask the owner about each open sub-item. The choices are to cancel it, to move it to the top level, or to move it under another work item.
 3. Fill the Moved up line, as "Filling the Moved up line" says.
 4. Set the State to Cancelled and `waiting_on` to `none`. Rewrite the work item's Current state. Write these two of its lines as follows:
-   - Where it stands: "Cancelled on `YYYY-MM-DD`: <his reason>."
+   - Where it stands: "Cancelled on `YYYY-MM-DD`: <the owner's reason>."
    - Next action: "None. Cancelled."
 5. Update the project's Current State, as step 5 of "Marking Done" says.
 6. Leave the work item's open pull request, its branch, and its worktree as they are until the owner says what to do with them. Delete nothing.

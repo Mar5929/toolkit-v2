@@ -41,7 +41,7 @@ A project that is set up for GitHub keeps no work item files in its folders. It 
 
 1. Make the body in a temporary folder. Take the work item template text that `running-work-item-lifecycle` opened from its `assets/`, from the line `## Overview` to the end.
    - Leave out the front matter, the `# WI-001: ...` title line, and the fill-in guide above `## Overview`.
-   - Fill the body as the template's guide says, and leave no angle-bracket prompt in the body. A prompt is text in angle brackets that says what to write there. `running-work-item-lifecycle`, section "Every time", gives the rule about prompts.
+   - Fill the body as the template's guide says, and leave no angle-bracket prompt in the body. A prompt is text in angle brackets that says what to write there. `running-work-item-lifecycle`, section "Rules that apply in every State", gives the rule about prompts.
    - Write one block for each requirement that `running-work-item-lifecycle` gave you, in place of the template's example requirement block. "Requirements" below gives the form.
    - Delete the example phase rows, the example phase headings and tasks, the example question rows, and the prompt lines under Context and under "Solution options and considerations".
    - Write "None." under Sources and under "Lessons not proven yet".
@@ -97,11 +97,11 @@ How to change them:
 - **Move a task or a sub-item to another phase** (in a top-level issue only). Move the task's lines, or move `#<number>` from one Sub-items cell to the other. For a sub-item, also update the sub-item's Related items line.
 - **Move a work item under another parent.**
   - First count the levels, for the work item and for every level under it.
-  - Add the work item to the new parent with `replace_parent=true`, or remove it from its parent to make it top level.
+  - Add the work item to the new parent with `replace_parent=true`, or remove it from its parent to make it top-level.
   - Take `#<number>` out of the old parent's list, and put it in the new parent's list.
   - Update the work item's Related items line.
-  - When the work item is now top level, put it in a milestone, as `project-roadmap-and-tasks.md` says.
-  - When the work item is no longer top level, remove its milestone.
+  - When the work item is now top-level, put it in a milestone, as `project-roadmap-and-tasks.md` says.
+  - When the work item is no longer top-level, remove its milestone.
   - When its level changed, follow "A work item that changes level" below.
 - The owner may move a sub-issue in the browser. At your next change, make the parents' lists and the Related items lines agree with what the owner did.
 - After you link or move a sub-issue, check the parent's sub-issues against its list.
@@ -115,7 +115,7 @@ Use this part in two cases: a move puts a work item at another level, or a sub-i
   2. After that line, write every task in plan order. Each task keeps its ID, its status, and its tick.
   3. Delete the `### P1 — ...` headings and the whole `## Roadmap` section.
   4. Add one Recent History row that keeps what was deleted: "Phases removed, because a sub-item has no phases: P1 — <name> (<status>; <outcome>), P2 — ... Tasks kept with their IDs."
-- **A plain list to phases** (the work item is now top level). Do these four things:
+- **A plain list to phases** (the work item is now top-level). Do these four things:
   1. Add the template's `## Roadmap` section above `## Tasks`, with one phase, `P1`, named as the owner approves.
   2. Put the `### P1 — <name>` heading above the tasks. The tasks keep their IDs.
   3. Move the numbers from the `**Sub-items:**` line into P1's Sub-items cell, and delete that line.

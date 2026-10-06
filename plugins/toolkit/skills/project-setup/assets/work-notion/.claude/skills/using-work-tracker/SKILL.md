@@ -34,7 +34,7 @@ This skill says where each part of a work item is stored in Notion. `using-notio
 1. Read the ids from `PROJECT.md`. Before your first Notion read or write in a session, open `using-notion-cli`, whatever tool you use. That skill says how to sign in, how to run a call, and what to do when a call fails.
 2. In this turn, read again what you will look at or change. Never answer from an earlier read, because the owner edits in Notion, and the owner's edit is the one to keep.
 3. Make the change with the file that the References table below names for it.
-4. Read the changed page or row back, and check that it says what you wrote. When a save failed, or reads back differently, report it as `running-work-item-lifecycle`, section "Every time", says. That section gives the words your reply must start with.
+4. Read the changed page or row back, and check that it says what you wrote. When a save failed, or reads back differently, report it as `running-work-item-lifecycle`, section "Rules that apply in every State", says. That section gives the words your reply must start with.
    - An `update_content` call is the call that changes the text of a page. Notion saves all of an `update_content` call or none of it, so a call that Notion refused changed nothing.
 
 ## Create a work item

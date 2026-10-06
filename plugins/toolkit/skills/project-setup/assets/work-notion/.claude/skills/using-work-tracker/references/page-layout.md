@@ -35,7 +35,7 @@ A work item's page has these sections, in this order. Each one is marked as text
 Three more things are true of every page:
 
 - **Heading levels.** In the current template, a section heading is level 1 (`# Overview`), and a heading inside a section is level 2 (`## Current state`). A project whose template was made before toolkit 0.8.1 can have both one level lower. Match a heading by its words, at the level you read. Write a new heading at the level that the page uses for that kind of heading.
-- **The note at the top.** The template's first block is a note for the agent, in a callout. The note says what `running-work-item-lifecycle`, section "Every time", says about text in angle brackets. A page that you create or change never keeps the note. "Filling a new work item" below says how to delete it.
+- **The note at the top.** The template's first block is a note for the agent, in a callout. The note says what `running-work-item-lifecycle`, section "Rules that apply in every State", says about text in angle brackets. A page that you create or change never keeps the note. "Filling a new work item" below says how to delete it.
 - **Lines that are not text.** The Solution Design is a child page, and the page text shows it as a `<page url="…">` line. The page text shows each view as one `<database url="…">` line. Change the rows in the view's database, never the line.
 
 ## Where the work item's Current state is
@@ -61,7 +61,7 @@ Related items is the paragraph just below that block, and Moved up is the paragr
 
 ## Filling a new work item
 
-After the template's content is on the page, send one `update_content` call that leaves no `\<…\>` prompt on the page. A prompt is text in angle brackets that says what to write there. `running-work-item-lifecycle`, section "Every time", gives the rule about prompts.
+After the template's content is on the page, send one `update_content` call that leaves no `\<…\>` prompt on the page. A prompt is text in angle brackets that says what to write there. `running-work-item-lifecycle`, section "Rules that apply in every State", gives the rule about prompts.
 
 **Replace** these with what `running-work-item-lifecycle` told you to save:
 

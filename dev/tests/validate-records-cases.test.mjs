@@ -88,7 +88,7 @@ test('blocker 1, from a worktree with no remote: a work item is checked against 
   const session = join(dir, '.claude/worktrees/task');
   git(dir, 'worktree', 'add', '-q', session, '-b', 'claude/task');
   const [, commit] = save(dir, 'main');
-  git(dir, 'merge', '-q', '--ff-only', commit); // publish-docs, step 7, "No remote"
+  git(dir, 'merge', '-q', '--ff-only', commit); // publish-docs, step 7, "With no remote"
   put(dir, W, item('DEC-001, DEC-003'));
   assert.doesNotMatch(get(session, 'DECISIONS.md'), /DEC-003/, 'the session\'s branch does not hold the new record');
   clean(run(session, ['--all'], { cwd: session, hook_event_name: 'Stop' }, session), 'at stop, in the session worktree');

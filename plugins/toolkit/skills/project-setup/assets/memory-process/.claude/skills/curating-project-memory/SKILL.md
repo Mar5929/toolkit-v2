@@ -105,7 +105,7 @@ A question must never be the only trace of a save, because the session can end b
 
 When the owner tells you to change the value, change the "Memory approval" line in `PROJECT.md` with `project-setup`. Never write the change in `.claude/rules/owner-preferences.md`.
 
-## Out of date, or no longer needed
+## A memory record that is out of date or no longer needed
 
 - When a memory record is out of date, retire it or mark it as replaced, so that its history stays.
 - When a memory record is no longer needed, or was saved by mistake, delete it. Delete it only after the owner's yes, or when the owner asks.

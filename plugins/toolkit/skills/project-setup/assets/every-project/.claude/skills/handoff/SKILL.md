@@ -64,7 +64,7 @@ Do the steps in this order. Steps 1 to 4 save what this session knows. Steps 5 t
      - For a work item, the line holds the work item's ID and the words "read its Current state".
      - For a piece of work that is not a work item, the line says what the work is and its next step.
    - Check the line under "Now" for each of this session's work items. When that line is missing or no longer true, add or correct it as `running-work-item-lifecycle` says.
-   - Check every other line, and remove each line that is no longer true, for example a piece of work that ended, a date that passed, or a thing owed that was delivered. The reference file on Current State in `curating-project-memory`, section "Removing what is no longer true", says how.
+   - Check every other line, and remove each line that is no longer true, for example a piece of work that ended, a date that passed, or a thing owed that was delivered. The reference file on the project's Current State in `curating-project-memory`, section "Removing what is no longer true", says how.
    - Set the "Last updated" line to the date, `handoff`, and `agent`.
    - When the project's Current State is missing, do not create it. Tell the owner that it is missing, and suggest the setup check (`project-setup`, "check the setup"). Put in the prompt the entry that this step would have written.
 5. **Draft the prompt. Do not show it yet.**
@@ -129,4 +129,4 @@ When the owner gives you a handoff prompt that was written elsewhere and wants i
 | --- | --- |
 | [assets/handoff-prompt-template.md](assets/handoff-prompt-template.md) | Step 5: you need the fixed first line and the headings of the prompt, to copy and fill in. |
 | [references/handoff-verifier.md](references/handoff-verifier.md) | Step 6, and when you check a prompt the owner gives you: you need the way to start the verifier, its brief, and the list of inputs. |
-| [examples/handoff-example.md](examples/handoff-example.md) | Steps 6 and 7: you need to see a filled list of inputs (the example calls it the job block), the lines for the saves, the check results, and a filled prompt. |
+| [examples/handoff-example.md](examples/handoff-example.md) | Steps 6 and 7: you need to see a filled list of inputs, the lines for the saves, the check results, and a filled prompt. |

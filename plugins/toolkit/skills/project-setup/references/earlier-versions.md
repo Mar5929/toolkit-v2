@@ -43,7 +43,7 @@ Show the owner every change below in one numbered list, and make each change onl
 
 The steps name storage files, such as `field-mapping.md`. Each storage file is in the `using-work-tracker` skill for the place where the project keeps its work items. Those skills are in this skill's `assets/work-local/`, `assets/work-notion/`, and `assets/work-github/` (under `.claude/skills/`).
 
-1. **Sub-items that have phases.** List every level-2 and level-3 work item that still has a phase that is not Cancelled, or a task under a phase. Convert each one with "An item that changes level", "Phases to a plain list". With local work items that text is in `field-mapping.md`, with Notion in `database-layout.md`, and with GitHub in `issue-layout.md`. A level-3 work item that sits under a phase of its level-2 parent leaves that phase.
+1. **Sub-items that have phases.** List every level-2 and level-3 work item that still has a phase that is not Cancelled, or a task under a phase. Convert each one with "A work item that changes level", "Phases to a plain list". With local work items that text is in `field-mapping.md`, with Notion in `database-layout.md`, and with GitHub in `issue-layout.md`. A level-3 work item that sits under a phase of its level-2 parent leaves that phase.
 2. **Top-level items with no phase.** List each top-level item that has left Backlog and has no phase. Give it one phase, as "A plain list to phases" says in the same storage file, with a name that the owner approves.
 3. **The project's roadmap.**
    - With local work items, `PROJECT-ROADMAP.md` stays. When it still has work units (`### P01-U01` headings), show the owner the new version. In the new version, each phase lists the top-level items that its units named, in the form that `project-roadmap-and-tasks.md` gives. A unit with no work item is listed for the owner to keep as a new Backlog work item or to drop. Commit the new version with `publish-docs` after the owner's yes.
@@ -73,5 +73,5 @@ Since toolkit 0.8.1, the Requirements section of a work item holds one block for
 - **Existing work items stay as they are.** Never rewrite the Requirements section of an existing work item in an update, wherever the project keeps its work items. The skills read the older layout as it is.
   - A work item moves to the new layout only when the owner asks for that work item.
   - A work item that holds the older label of its Functional Requirements (from before toolkit 0.8.4) keeps that label.
-  - `running-work-item-lifecycle`, `references/refining-requirements.md`, "The Requirements layout", gives these rules for a work item in the older layout.
+  - `running-work-item-lifecycle`, `SKILL.md`, "A work item from an older template", gives the rule for a work item in the older layout.
 - Tell the owner in one line that new work items get the new layout and existing work items keep theirs.
