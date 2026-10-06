@@ -146,7 +146,7 @@ The table is under the toggle heading "Questions and Answers", which is `# Quest
   - When the template's two example rows (Q-02 open, Q-01 answered) are still there, delete them in the same call.
 - **An answer.** Replace the row, with the owner's words in quotation marks under Answer, and the date as `YYYY-MM-DD`. Then move the row to just below the last open row, so that answered rows are newest first. To move it, remove the row and insert it after the last open row.
 - **A superseded row.** Change only the row's Status cell, to `Superseded by Q-09`.
-- **Waiting on.** Set the Waiting on property to who the open rows wait on. `database-layout.md`, section "Setting State and Status", gives the call.
+- **Waiting on.** Set the Waiting on property to who the open rows wait on. `work-tracker-database-layout.md`, section "Setting State and Status", gives the call.
 - **The shape of a row.** Match the rows exactly as the page returns them, with each `<td>` on its own line. Inside the toggle, only the `<table …>` line, the `</table>` line, and the line of text above the table start with a tab. The rows do not.
 
 This example answers Q-01:

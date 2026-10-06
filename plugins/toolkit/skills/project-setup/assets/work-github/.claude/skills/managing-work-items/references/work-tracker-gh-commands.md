@@ -172,7 +172,7 @@ gh api repos/<repo>/issues/<number>/parent --jq .number
 | Exit code 4, "gh auth login" in the message, or HTTP 401 "Bad credentials" | No one is signed in, or the sign-in expired. Ask the owner to run `gh auth login`, and then wait. |
 | "Could not resolve to a Repository", or HTTP 404 on `repos/<repo>` | The name in `PROJECT.md` is wrong, or this account cannot see the repository. Check `<repo>`. When `<repo>` is right, ask the owner whether this account has access. |
 | "Could not resolve to an issue", or HTTP 404 on one issue | This repository has no issue with that number. Tell the owner. Never make a new issue to replace it. |
-| "could not add label: '<name>' not found" | The label does not exist, and the whole `gh issue edit` call fails. Ask the owner before you create the label. `labels.md` says how to create it. |
+| "could not add label: '<name>' not found" | The label does not exist, and the whole `gh issue edit` call fails. Ask the owner before you create the label. `work-tracker-labels.md` says how to create it. |
 | HTTP 422, "Validation Failed" | The request is not valid: a sub-issue was given by its number instead of its id, a child already has a parent, or a body is over 65,536 characters. Fix the request, and retry once. |
 
 ## Limits

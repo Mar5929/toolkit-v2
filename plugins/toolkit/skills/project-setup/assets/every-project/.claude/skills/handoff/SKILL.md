@@ -49,7 +49,7 @@ Do the steps in this order. Steps 1 to 4 save what this session knows. Steps 5 t
 
    Then update each project task that this session worked on. A project task is a task that belongs to no work item, with an ID such as `PT-01`. Use the test of step 1 to decide whether this session worked on a project task. For each project task:
    - Read the project task with `managing-work-items`.
-   - Make its status and who does it true. `managing-work-items`, section "Levels", says what a project task is and when to tick it.
+   - Make its status and who does it true. `managing-work-items/references/lifecycle-rules.md`, "Levels", says what a project task is and when to tick it.
    - Read the project task back.
 3. **File what this session left unfiled.** Step 2 saved each decision that only one work item needs. Go through the five kinds below for the rest.
    - **A decision or a question that more than one work item needs.** When one came from this session and `DECISIONS.md` does not hold it, record it with `filing-project-records`, step "record a decision". The root `AGENTS.md`, section "Where information goes", gives the test for whether more than one work item needs it. When the owner has not confirmed it, record it as Open. Do not wait for the owner's answer before you write the prompt.
@@ -64,7 +64,7 @@ Do the steps in this order. Steps 1 to 4 save what this session knows. Steps 5 t
      - For a work item, the line holds the work item's ID and the words "read its Current state".
      - For a piece of work that is not a work item, the line says what the work is and its next step.
    - Check the line under "Now" for each of this session's work items. When that line is missing or no longer true, add or correct it as `managing-work-items` says.
-   - Check every other line, and remove each line that is no longer true, for example a piece of work that ended, a date that passed, or a thing owed that was delivered. The reference file on the project's Current State in `managing-project-memory`, section "Removing what is no longer true", says how.
+   - Check every other line, and remove each line that is no longer true, for example a piece of work that ended, a date that passed, or a thing owed that was delivered. `managing-project-memory/references/current-state.md`, "Removing what is no longer true", says how.
    - Set the "Last updated" line to the date, `handoff`, and `agent`.
    - When the project's Current State is missing, do not create it. Tell the owner that it is missing, and suggest the setup check (`project-setup`, "check the setup"). Put in the prompt the entry that this step would have written.
 5. **Draft the prompt. Do not show it yet.**

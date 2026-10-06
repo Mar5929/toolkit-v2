@@ -69,7 +69,7 @@ Do these steps when the owner says "update the toolkit", after the newer skill f
 3. A project set up before toolkit 0.6.0 has `stage:` labels. Once the `state:` labels exist, move each open issue to its State as `earlier-versions.md`, "Work items from Stage to State", says: add the issue's `state:` label, then remove its `stage:` label from the issue.
    - The `stage:` labels stay in the repository.
    - Tell the owner that the owner may delete them on the repository's Labels page.
-4. List the open issues without the layout, with the command in `searching.md`, "Issues without the layout". An issue made from an older template keeps its text. Add a missing section heading only after the owner's yes, and never rewrite the owner's text.
+4. List the open issues without the layout, with the command in `work-tracker-searching.md`, "Issues without the layout". An issue made from an older template keeps its text. Add a missing section heading only after the owner's yes, and never rewrite the owner's text.
 
 ## Checks after either
 

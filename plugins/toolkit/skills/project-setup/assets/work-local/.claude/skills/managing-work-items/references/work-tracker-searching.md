@@ -15,8 +15,8 @@ grep -rlE --include='*.md' --exclude-dir=work-item-template --exclude=DESIGN.md 
 ```
 
 - When the command prints one path, read the whole file, starting with the five lines under `### Current state`. The file's folder also holds `DESIGN.md` and the folders of the work item's sub-items.
-- When the command prints no path, run the check for changes made by hand, and then search by title. `folders-and-files.md`, section "The check for changes made by hand", gives the check. Never make a second work item for work that already has one.
-- When the command prints two paths, two work items share the ID. `folders-and-files.md`, section "Two work items with one ID", says what to do.
+- When the command prints no path, run the check for changes made by hand, and then search by title. `work-tracker-folders-and-files.md`, section "The check for changes made by hand", gives the check. Never make a second work item for work that already has one.
+- When the command prints two paths, two work items share the ID. `work-tracker-folders-and-files.md`, section "Two work items with one ID", says what to do.
 
 ## The board
 
@@ -67,7 +67,7 @@ grep -rliE --include='*.md' --exclude-dir=work-item-template --exclude=DESIGN.md
 
 ## The commands of the check for changes made by hand
 
-These three commands only read. The first prints every work item's file, ID, and `parent:` line. The second prints each ID that two files share. The third prints the template copies that the owner made by hand. `folders-and-files.md`, section "The check for changes made by hand", explains how to read what they print.
+These three commands only read. The first prints every work item's file, ID, and `parent:` line. The second prints each ID that two files share. The third prints the template copies that the owner made by hand. `work-tracker-folders-and-files.md`, section "The check for changes made by hand", explains how to read what they print.
 
 ```bash
 grep -rHE --include='*.md' --exclude-dir=work-item-template --exclude=DESIGN.md '^(id|parent):' "$MAIN/work-items"

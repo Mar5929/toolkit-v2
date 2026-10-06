@@ -1,6 +1,6 @@
 # Issue layout: how a work item looks on GitHub
 
-This file says how one work item is laid out in its issue, and how to write each part. The header fields are labels, which `labels.md` describes. Open this file when you create an issue, write a part of its body, or save the design or a note.
+This file says how one work item is laid out in its issue, and how to write each part. The header fields are labels, which `work-tracker-labels.md` describes. Open this file when you create an issue, write a part of its body, or save the design or a note.
 
 ## Contents
 
@@ -35,7 +35,7 @@ This file says how one work item is laid out in its issue, and how to write each
     Agent: a helper started on P1-T02.
 ```
 
-A project that is set up for GitHub keeps no work item files in its folders. It has the repository that `PROJECT.md` names, with Issues turned on, and the 30 labels in `labels.md`.
+A project that is set up for GitHub keeps no work item files in its folders. It has the repository that `PROJECT.md` names, with Issues turned on, and the 30 labels in `work-tracker-labels.md`.
 
 ## Creating an issue
 
@@ -51,10 +51,10 @@ A project that is set up for GitHub keeps no work item files in its folders. It 
    - For a level-2 sub-item, Related items says "Parent #12, phase P2."
    - For a level-3 sub-item, Related items says "Parent #14."
    - For a top-level item, Related items says "Project phase P01." once the work item has a project phase. Before that, `references/lifecycle-rules.md`, section "Levels", says what to do.
-3. Create the issue with its labels: the State that `managing-work-items` gives it, the type, and the priority. Use `priority:medium` when no priority is named. Add no other label. `gh-commands.md`, section "Creating an issue", gives the command.
+3. Create the issue with its labels: the State that `managing-work-items` gives it, the type, and the priority. Use `priority:medium` when no priority is named. Add no other label. `work-tracker-gh-commands.md`, section "Creating an issue", gives the command.
 4. Link the issue to what it belongs to:
    - For a sub-item, count its levels, and then link it to its parent, as "Phases, tasks, and sub-items" below says.
-   - For a top-level item, put it in the milestone of its project phase once the owner has named a project phase. `project-roadmap-and-tasks.md` gives the command.
+   - For a top-level item, put it in the milestone of its project phase once the owner has named a project phase. `work-tracker-project-roadmap-and-tasks.md` gives the command.
 
 ## Requirements
 
@@ -91,7 +91,7 @@ Insert a new row right after the table's `|---|---|---|` line, so that the newes
 
 How to change them:
 
-- **Link a sub-item.** Make it a sub-issue of its parent, with the calls in `gh-commands.md`, section "Sub-issues". Then put `#<number>` in the parent's list: the Sub-items cell of its phase's Roadmap row, or the `**Sub-items:**` line of a level-2 parent. Replace "None." the first time. Add a Recent History row on the parent: "Sub-item #14 created: <title>."
+- **Link a sub-item.** Make it a sub-issue of its parent, with the calls in `work-tracker-gh-commands.md`, section "Sub-issues". Then put `#<number>` in the parent's list: the Sub-items cell of its phase's Roadmap row, or the `**Sub-items:**` line of a level-2 parent. Replace "None." the first time. Add a Recent History row on the parent: "Sub-item #14 created: <title>."
 - **Start a task.** Change the status after `·` to In Progress, in one change to the body.
 - **Tick a task.** Change `- [ ]` to `- [x]`, and change the status after `·` to Done, in one change to the body. The owner may tick a box in the browser, and that tick counts.
 - **Move a task or a sub-item to another phase** (in a top-level issue only). Move the task's lines, or move `#<number>` from one Sub-items cell to the other. For a sub-item, also update the sub-item's Related items line.
@@ -100,7 +100,7 @@ How to change them:
   - Add the work item to the new parent with `replace_parent=true`, or remove it from its parent to make it top-level.
   - Take `#<number>` out of the old parent's list, and put it in the new parent's list.
   - Update the work item's Related items line.
-  - When the work item is now top-level, put it in a milestone, as `project-roadmap-and-tasks.md` says.
+  - When the work item is now top-level, put it in a milestone, as `work-tracker-project-roadmap-and-tasks.md` says.
   - When the work item is no longer top-level, remove its milestone.
   - When its level changed, follow "A work item that changes level" below.
 - The owner may move a sub-issue in the browser. At your next change, make the parents' lists and the Related items lines agree with what the owner did.
@@ -127,14 +127,14 @@ Use this part in two cases: a move puts a work item at another level, or a sub-i
 
 One comment for each work item holds the design. Its first line is exactly `## Solution design`. The rest is the design template text that `managing-work-items` opened from its `assets/`, from its `**Requirements:**` line to the end. Leave out the front matter, the title line, and the fill-in guide.
 
-- **Make it** with `gh issue comment`. `gh-commands.md`, section "Comments", gives the command. Then add `design-proposed`.
+- **Make it** with `gh issue comment`. `work-tracker-gh-commands.md`, section "Comments", gives the command. Then add `design-proposed`.
 - **Find it** with this command:
 
   ```text
   gh api --paginate repos/<repo>/issues/<number>/comments --jq '.[] | select(.body | startswith("## Solution design")) | [.id, .html_url] | @tsv'
   ```
 
-- **Change it.** Read the comment into a file, edit the file, and send it back with `-X PATCH`. `gh-commands.md`, section "Comments", gives the commands.
+- **Change it.** Read the comment into a file, edit the file, and send it back with `-X PATCH`. `work-tracker-gh-commands.md`, section "Comments", gives the commands.
   - Never post a second design comment. A replacement design goes in the same comment.
   - GitHub keeps every earlier version under the comment's "edited" menu.
 - **A design longer than 60,000 characters.** Put the rest in a second comment whose first line is `## Solution design (part 2)`, and keep it up to date the same way. The last line of the first comment says "Continued in part 2."

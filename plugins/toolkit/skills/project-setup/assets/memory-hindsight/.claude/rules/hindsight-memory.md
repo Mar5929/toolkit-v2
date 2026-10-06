@@ -5,7 +5,7 @@ This project's memory is Hindsight, on the owner's server, in the bank named und
 - Use Hindsight to search past sessions. It is not the place where a decision or a system fact is kept: file each one where `AGENTS.md`, "Where information goes", says.
 - When Hindsight returns a decision or a rule, find it in `DECISIONS.md` or `system/` and name its DEC-### or rule ID. When no record holds it, file it before you rely on it.
 - Before you search, store, or correct a memory, open the add-on's skill `hindsight-coding-agent`, which says how to use its tools. Codex has no such skill: there, follow the guide the add-on shows at session start.
-- This project has no `managing-project-memory` or `managing-project-memory` skill. Where `AGENTS.md`, a rule, a skill, or a hook names one of them, follow this file. For the project's Current State, follow "The project's Current State" below.
+- This project does not install `managing-project-memory`. When `AGENTS.md`, a rule, a skill, or a hook names that skill, follow this file instead. For the project's Current State, follow "The project's Current State" below.
 - When the owner says "remember this", file the fact where it is kept, and tell the owner the add-on saves this session at the end of the turn.
 - When a recurring job ran, or another thing happened, make no event record. Say in your reply the date, what ran or happened, and the result, so the add-on saves them. When the job has a `delivery/` record, write the run there.
 - The add-on cannot delete a memory. When the owner says "forget that", or a memory in the bank is wrong, save a correction with its tool `hindsight_ingest_document`, titled "Correction: <topic>".

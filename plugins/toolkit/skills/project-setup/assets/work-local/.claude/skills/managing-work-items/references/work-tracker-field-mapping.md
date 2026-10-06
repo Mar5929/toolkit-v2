@@ -20,7 +20,7 @@ The front matter is the block between the two `---` lines at the top of `<ID>.md
 
 - Keep every field, and keep any extra field that the owner or Obsidian added.
 - Add no new field.
-- The owner may edit any field in Obsidian's Properties panel. `folders-and-files.md`, section "The check for changes made by hand", says what to do when the owner changed a field.
+- The owner may edit any field in Obsidian's Properties panel. `work-tracker-folders-and-files.md`, section "The check for changes made by hand", says what to do when the owner changed a field.
 
 | Field | What goes in it |
 | --- | --- |
@@ -63,7 +63,7 @@ A top-level item (`parent: none`) has a Roadmap, and its tasks are under phase h
   - A top-level parent lists it in the Sub-items cell of one of its phases.
   - A level-2 parent lists it in its `**Sub-items:**` line under Tasks, with no phase.
 
-  This file and `folders-and-files.md` call either place the parent's list of sub-items.
+  This file and `work-tracker-folders-and-files.md` call either place the parent's list of sub-items.
 - A new phase ID or task ID is one more than the highest ID ever used, cancelled ones included.
 - A task or a phase that moves keeps its ID: `P2-T03` stays `P2-T03` under P3.
 
@@ -78,7 +78,7 @@ A top-level item (`parent: none`) has a Roadmap, and its tasks are under phase h
 - **A task in a top-level item.** Add the block under its phase heading, after that phase's last task. Its ID is the phase ID plus its number in that phase, for example `P2-T04`.
 - **A task in a sub-item.** Add the block at the end of the list. Its ID is `T` plus its number in the work item, for example `T05`.
 - In both kinds of task, "Depends on" names task IDs, a phase ("P1 completion."), or "None.".
-- **A sub-item.** First make the sub-item. `folders-and-files.md`, section "Creating a work item's folder and ID", gives the steps. Then do these three things:
+- **A sub-item.** First make the sub-item. `work-tracker-folders-and-files.md`, section "Creating a work item's folder and ID", gives the steps. Then do these three things:
   - Add `[[WI-033]]` to the parent's list of sub-items. Replace "None." when it is there, and separate several IDs with commas.
   - Add a Recent History row on the parent: "Sub-item [[WI-033]] created: <title>."
   - Set the parent's `updated:`.
@@ -157,7 +157,7 @@ A line under Sources or under "Lessons not proven yet" has the form of the templ
 
 ## A new work item's starting values
 
-Fill these values after the folder and the file exist. `folders-and-files.md`, section "Creating a work item's folder and ID", says how to make them.
+Fill these values after the folder and the file exist. `work-tracker-folders-and-files.md`, section "Creating a work item's folder and ID", says how to make them.
 
 - **Front matter.** Set the ID, the title in the owner's words, the `type`, `state`, and `status` that `managing-work-items` gave, `parent` (the parent's ID or `none`), the starting values that the template's fill-in guide names, and `updated` to today.
 - **Overview.**
@@ -181,4 +181,4 @@ Fill these values after the folder and the file exist. `folders-and-files.md`, s
   ```
 
   A line that the command prints is not finished when it holds a template prompt. `<br>` is fine, and so are angle brackets in real content, for example code such as `Map<Id, Account>`.
-- A sub-item is also linked from its parent's list of sub-items, as "Roadmap and Tasks" above says. A top-level item is also listed under its project phase, as `project-roadmap-and-tasks.md` says.
+- A sub-item is also linked from its parent's list of sub-items, as "Roadmap and Tasks" above says. A top-level item is also listed under its project phase, as `work-tracker-project-roadmap-and-tasks.md` says.

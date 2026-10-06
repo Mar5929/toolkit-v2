@@ -25,11 +25,11 @@ This file says how to make a work item's folder and ID, how to check for changes
   - WI-003 holds `parent: WI-002`, and the Sub-items cell of the phase of WI-002 that WI-003 delivers names `[[WI-003]]`.
   - WI-004 holds `parent: WI-003`, and the `**Sub-items:**` line of WI-003 names `[[WI-004]]`.
 
-  `field-mapping.md`, section "Roadmap and Tasks", says where a parent's list of sub-items is.
+  `work-tracker-field-mapping.md`, section "Roadmap and Tasks", says where a parent's list of sub-items is.
 
 ## Creating a work item's folder and ID
 
-These steps make the folder and the file of a new work item. Afterwards, fill the work item's fields as `field-mapping.md`, section "A new work item's starting values", says.
+These steps make the folder and the file of a new work item. Afterwards, fill the work item's fields as `work-tracker-field-mapping.md`, section "A new work item's starting values", says.
 
 1. **Level check** (for a sub-item only). Read the parent's `parent:` line. Then read the `parent:` line of the work item that it names, which is the grandparent. When the grandparent has a parent, the parent is at level 3: make no sub-item.
 2. **The prefix.** Read it from `PROJECT.md`:
@@ -71,7 +71,7 @@ These steps make the folder and the file of a new work item. Afterwards, fill th
 
 The owner may move, rename, nest, copy, or delete work item folders and files in Finder or Obsidian, and may edit fields in Obsidian's Properties panel. The owner's change is the one to keep. Never undo it, and never move a folder back on your own.
 
-Run the three commands in `searching.md`, section "The commands of the check for changes made by hand":
+Run the three commands in `work-tracker-searching.md`, section "The commands of the check for changes made by hand":
 
 1. The first command lists every work item's file, ID, and `parent:` line. For each work item, compare these five things:
    - its parent by folders. That parent is the nearest folder above the work item that holds a work item file. It is `none` for a work item at the top of `work-items/`, in a group, or at the top of `archive/`;
@@ -90,12 +90,12 @@ When the folders and the `parent:` line disagree, use the folders. Tell the owne
   - Set `parent: X`.
   - Move the work item from Y's list of sub-items to X's list. When X is top-level, move it to the cell of the phase of X that it serves, and name the phase.
   - Add "Moved by hand" rows on the work item, on X, and on Y.
-  - When the work item's level changed, also follow `field-mapping.md`, section "A work item that changes level".
+  - When the work item's level changed, also follow `work-tracker-field-mapping.md`, section "A work item that changes level".
 - **The work item is at the top level or in a group, and `parent:` names a work item.**
   - Set `parent: none`.
   - Remove the work item from the old parent's list of sub-items.
   - Add rows on both work items.
-  - The work item is now top-level. Follow `field-mapping.md`, section "A work item that changes level", and ask the owner which project phase the work item goes under.
+  - The work item is now top-level. Follow `work-tracker-field-mapping.md`, section "A work item that changes level", and ask the owner which project phase the work item goes under.
 - **The work item is in `archive/`, and no Recent History row says so.** Add a row "Archived by hand". The `state` stays.
 - **The file name is not `<ID>.md`.** The file is still the work item. Tell the owner that `[[WI-031]]` links no longer reach it, and offer to rename it back.
 - **A template copy has a real title.** It is a work item that the owner made by hand. Follow "A work item that the owner made by hand", below.
@@ -129,9 +129,9 @@ Move a work item only when the owner asks.
 4. **Lists of sub-items and the roadmap.**
    - Remove the work item's `[[WI-007]]` from the old parent's list of sub-items. Write "None." when the list is then empty.
    - Add it to the new parent's list. Under a top-level parent, put it in the cell of the phase that the owner names. When the owner names no phase, ask which phase, with your recommendation, and save the question as a Questions and Answers row.
-   - When the work item moved to the top level, list it under a project phase, as `project-roadmap-and-tasks.md` says.
+   - When the work item moved to the top level, list it under a project phase, as `work-tracker-project-roadmap-and-tasks.md` says.
    - When the work item moved from the top level, remove it from its project phase.
-   - When the work item's level changed, follow `field-mapping.md`, section "A work item that changes level".
+   - When the work item's level changed, follow `work-tracker-field-mapping.md`, section "A work item that changes level".
 5. **Recent History.** Add a row on the work item, on the old parent, and on the new parent, with the owner's words or the Q-ID: "Moved under [[WI-003]] at the owner's request (Q-05)."
 6. **Read back.** The work item is found by its ID at the new path, and its sub-items are found under it.
 
@@ -164,7 +164,7 @@ Move a work item only when the owner asks.
 - A copy of the template with a real title is a work item that the owner made by hand. A title is real when `title:` is not `<Work item title>`. Do these things:
   - Give it the next ID, with steps 2 and 3 of "Creating a work item's folder and ID".
   - Set `id:` and the heading, and rename its file to `<ID>.md`.
-  - Fill any empty field with the value that a new work item gets, and delete every template prompt that the owner left unfilled. A prompt is text in angle brackets that says what to write there. `field-mapping.md`, section "A new work item's starting values", gives the values. Keep everything that the owner wrote.
+  - Fill any empty field with the value that a new work item gets, and delete every template prompt that the owner left unfilled. A prompt is text in angle brackets that says what to write there. `work-tracker-field-mapping.md`, section "A new work item's starting values", gives the values. Keep everything that the owner wrote.
   - Add a Recent History row: "Made by hand by the owner; given the ID WI-034."
   - Keep the owner's folder name.
   - Tell the owner in one line.

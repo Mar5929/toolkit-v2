@@ -257,9 +257,11 @@ items and memory both in Notion.
 
 A project with local or Notion memory has 10 skills, or 11 when work items
 or memory are in Notion. With Hindsight memory it has 9, or 10 when work
-items are in Notion. A Salesforce project has 3 more, plus Salesforce's
-own skills. Saying where the work stands needs no skill: the project's
-`AGENTS.md` says how. `dev/SKILL-INDEX.md` lists every skill with its exact
+items are in Notion. A Salesforce project adds three Toolkit Salesforce skills;
+the owner also installs Salesforce's own skills.
+When you ask where the work stands, the project's `AGENTS.md` routes the
+agent to the work and memory skills for the records it reads.
+`dev/SKILL-INDEX.md` lists every skill with its exact
 description.
 
 ## The hooks

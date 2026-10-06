@@ -44,11 +44,11 @@ When the project has a remote, pipe the output of the `git show` command into th
 
 The project's tasks are in `work-items/PROJECT-TASKS.md`, in the main checkout. When the file is missing, stop and tell the owner that the setup is incomplete. `project-setup` restores the file.
 
-- Each project task is a checkbox block in the same form as a work item's task. `field-mapping.md`, section "Roadmap and Tasks", shows that form. The project tasks are one plain list with no phase headings.
+- Each project task is a checkbox block in the same form as a work item's task. `work-tracker-field-mapping.md`, section "Roadmap and Tasks", shows that form. The project tasks are one plain list with no phase headings.
 - Its Who does it line may also hold the name of another person who owes the task, with the party: `Sarah Chen (client)`.
 - The ID of a project task is `PT-` and two digits: `PT-01`, then the next unused number.
 - A new project task goes at the end of the list. The first real project task replaces the template's example task.
-- Starting, ticking, and cancelling a project task are the same writes as for a work item's task. `field-mapping.md`, section "A task's writes", gives them.
+- Starting, ticking, and cancelling a project task are the same writes as for a work item's task. `work-tracker-field-mapping.md`, section "A task's writes", gives them.
 
 This command prints the open project tasks, each with who does it:
 

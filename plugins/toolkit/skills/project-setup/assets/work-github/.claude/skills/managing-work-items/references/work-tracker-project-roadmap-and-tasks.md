@@ -2,7 +2,7 @@
 
 This file says where the project's own phases and its project tasks are saved on GitHub, and it gives the `gh` commands that read and change them. `references/lifecycle-rules.md`, section "Levels", says what a project phase and a project task are.
 
-Run each command on its own. In Codex, run each command with escalated permissions, as `gh-commands.md`, section "In Codex", says.
+Run each command on its own. In Codex, run each command with escalated permissions, as `work-tracker-gh-commands.md`, section "In Codex", says.
 
 ## Contents
 
@@ -86,5 +86,5 @@ gh issue pin <number> -R <repo>
 A repository pins at most three issues. When the pin fails for that reason, tell the owner. The issue still works when it is not pinned.
 
 - Each project task is a checkbox block in the task form of the work item template. Its ID is `PT-` and two digits: `PT-01`, then the next unused number. A new project task goes at the end.
-- Change the body, start a project task, and tick a project task as for a work item. `gh-commands.md`, section "Changing the body", gives the steps for the body. `issue-layout.md`, section "Phases, tasks, and sub-items", says how to start and tick a task.
+- Change the body, start a project task, and tick a project task as for a work item. `work-tracker-gh-commands.md`, section "Changing the body", gives the steps for the body. `work-tracker-issue-layout.md`, section "Phases, tasks, and sub-items", says how to start and tick a task.
 - When two issues have the marker line `## Project tasks`, tell the owner, and ask which one to keep using.

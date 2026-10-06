@@ -2,7 +2,7 @@
 
 This file gives the calls that read work items from the project's issues. The calls only read. Open it when you find work items.
 
-Run each command on its own. In Codex, run each command with escalated permissions, as `gh-commands.md`, section "In Codex", says.
+Run each command on its own. In Codex, run each command with escalated permissions, as `work-tracker-gh-commands.md`, section "In Codex", says.
 
 ## Contents
 
@@ -17,7 +17,7 @@ Run each command on its own. In Codex, run each command with escalated permissio
 
 ## One work item, a section, a parent
 
-`gh-commands.md` has these commands, in its sections "Reading an issue" and "Sub-issues".
+`work-tracker-gh-commands.md` has these commands, in its sections "Reading an issue" and "Sub-issues".
 
 ## By state
 
@@ -72,7 +72,7 @@ gh api --paginate repos/<repo>/issues/<number>/sub_issues --jq '.[] | [.number, 
 
 - For a top-level parent, read its Roadmap to find the phase that each sub-issue belongs to. A sub-issue that no Roadmap row names goes last, under "No phase".
 - A level-2 parent has no Roadmap. Its `**Sub-items:**` line lists its sub-issues.
-- `project-roadmap-and-tasks.md` says how to read the project's phases and its project tasks.
+- `work-tracker-project-roadmap-and-tasks.md` says how to read the project's phases and its project tasks.
 - When there is a fourth level, tell the owner which issue is at level 4.
 
 ## Search
@@ -106,5 +106,5 @@ gh issue list -R <repo> --state open --limit 200 --json number,title,labels,body
 
 Tell the owner about each issue that the command lists.
 
-- When the issue has no `## Overview` or no state label, offer to add the layout. `issue-layout.md`, section "An issue made by hand", gives the steps.
-- When the issue has two or more state labels, follow `labels.md`, section "A label the owner changed by hand".
+- When the issue has no `## Overview` or no state label, offer to add the layout. `work-tracker-issue-layout.md`, section "An issue made by hand", gives the steps.
+- When the issue has two or more state labels, follow `work-tracker-labels.md`, section "A label the owner changed by hand".

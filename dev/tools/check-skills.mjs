@@ -354,6 +354,9 @@ for (const [folder, skill, anchor] of [
     if (!TEXT_FILE.test(file)) continue;
     const body = read(file);
     const lines = body.split('\n');
+    if (skill === 'managing-work-items' && /(?<!work-tracker-)\b(?:gh-commands|issue-layout|labels|field-mapping|folders-and-files|project-roadmap-and-tasks|database-layout|page-layout|searching)\.md\b/.test(body)) {
+      report('error', file, 'names a work tracker reference by its old filename; use its work-tracker- filename');
+    }
     const hits = lines.flatMap((line, i) => (TOOLKIT_COMMAND.test(line) ? [i + 1] : []));
     if (hits.length) report('error', file, `names a command of the retired toolkit program on line${hits.length > 1 ? 's' : ''} ${hits.join(', ')}`);
     const source = lines[0].match(/dev\/build-shared\/([\w./-]+\.md)/);
@@ -366,6 +369,9 @@ for (const [folder, skill, anchor] of [
       if (!heading || !/^#{2,6}\s+(?:Table of )?Contents\s*$/i.test(heading.text)) report('error', file, `a reference over ${CONTENTS_OVER} lines must start with a Contents section`);
     }
   }
+}
+if (/(?<!work-tracker-)\b(?:gh-commands|issue-layout|labels|project-roadmap-and-tasks|searching)\.md\b/.test(read(path.join(SETUP, 'references/github.md')))) {
+  report('error', path.join(SETUP, 'references/github.md'), 'names a GitHub work tracker reference by its old filename');
 }
 // Read the skills as a project will receive them. The shared indexes refer to one selected
 // work tracker and, for local or Notion memory, one selected memory store. Check every

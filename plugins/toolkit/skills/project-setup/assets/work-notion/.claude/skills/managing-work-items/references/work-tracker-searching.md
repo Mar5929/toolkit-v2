@@ -113,7 +113,7 @@ A work item has fewer than five blocks when the owner made it with "Empty" in th
 ntn api v1/blocks/<page-id>/children < /dev/null | jq '.results | length'
 ```
 
-Tell the owner that the work item has no template sections, and offer to add them. `database-layout.md`, section "A card the owner made by hand", says how to add them.
+Tell the owner that the work item has no template sections, and offer to add them. `work-tracker-database-layout.md`, section "A card the owner made by hand", says how to add them.
 
 ## Cards with no title
 

@@ -33,7 +33,7 @@ Projects database (the owner's; its title column is "Project")
     └── Memory, Current state, Terminology glossary    only with memory in Notion
 ```
 
-`page-layout.md` lists the sections of a work item's page.
+`work-tracker-page-layout.md` lists the sections of a work item's page.
 
 ## Where each work item field goes
 
@@ -48,7 +48,7 @@ Projects database (the owner's; its title column is "Project")
 | `requirements_approved`, `result_approved` | Requirements approved, Result approved. |
 | (the design approval) | Design approved. The work item template has no field for it. |
 | `updated` | No property. The "Last updated" line of the work item's Current state holds it. |
-| Goal, Current state, Related items, Moved up, Recent History, Requirements, Questions and Answers, Notes | The page text, which `page-layout.md` describes. The page calls the goal "Goals", and it is a numbered list. |
+| Goal, Current state, Related items, Moved up, Recent History, Requirements, Questions and Answers, Notes | The page text, which `work-tracker-page-layout.md` describes. The page calls the goal "Goals", and it is a numbered list. |
 | Next action (a line of the work item's Current state) | The page text, and a copy in the Next action property. |
 | Phases and their Roadmap | Rows of Phases. |
 | Tasks | Rows of Tasks. |
@@ -237,7 +237,7 @@ A change to the plan is a change to rows:
 | Split a phase | Add the new phase, and then move the sub-items and tasks that belong to it. |
 | A phase is done | Set its Status to Done. |
 
-After a change to the plan, list the work item's phases and check the order. `searching.md`, section "A parent's full tree", gives the query.
+After a change to the plan, list the work item's phases and check the order. `work-tracker-searching.md`, section "A parent's full tree", gives the query.
 
 ### A task with an empty Status, and a Tasks database from before toolkit 0.8.0
 
@@ -246,7 +246,7 @@ A task that was made by hand can have an empty Status. Set its Status to Not Sta
 A Tasks database that still has a "Done" checkbox, or a Status of type select, was set up before toolkit 0.8.0.
 
 - Tell the owner that "update the toolkit" converts the database.
-- Until the database is converted, send and read the Tasks Status with the type that the database has. Write `"select"` in place of `"status"`, in the calls in this file and in `searching.md`.
+- Until the database is converted, send and read the Tasks Status with the type that the database has. Write `"select"` in place of `"status"`, in the calls in this file and in `work-tracker-searching.md`.
 - Until the database is converted, tick Done, where it exists, exactly when Status is Done or Cancelled.
 
 ## A work item that changes level
@@ -254,7 +254,7 @@ A Tasks database that still has a "Done" checkbox, or a Status of type select, w
 Use this section in two cases: a move puts a work item at another level, or a work item that was made before toolkit 0.8.0 is a sub-item that still has phases.
 
 - **Phases to a plain list** (the work item is now a sub-item). Do these six things:
-  1. Read the work item's phases and tasks. `searching.md`, section "A parent's full tree", gives the queries.
+  1. Read the work item's phases and tasks. `work-tracker-searching.md`, section "A parent's full tree", gives the queries.
   2. Give its tasks new Orders 1, 2, 3, ... in plan order. Plan order is phase Order first, and then task Order.
   3. Empty each task's "Phase", with `{"Phase":{"relation":[]}}`. Each task keeps its Task ID and its Status.
   4. Empty "Phase" on each of its sub-items.
@@ -271,7 +271,7 @@ Use this section in two cases: a move puts a work item at another level, or a wo
 - A project task is a row of Tasks whose "Work item" and "Phase" are both empty, with a Task ID like `PT-01`. Its Task type shows `Project`.
 - A row with an empty "Work item" and another ID was made by hand. Ask the owner whether the row belongs to the project or to a work item.
 - The project page shows the project's phases and tasks in three views: the Phases view "Project phases", the Tasks view "Project tasks", and the Work Items board "By project phase".
-- `searching.md`, section "The project's phases and tasks", gives the queries that read them.
+- `work-tracker-searching.md`, section "The project's phases and tasks", gives the queries that read them.
 
 ### Add a project phase
 
@@ -338,7 +338,7 @@ When the owner changed "Parent item" by hand, add the same Recent History rows a
 A card that the owner made with "New" or "+ New page" gets the sections of the work item template by itself. Its other properties are empty unless the template holds a value, so its State is empty.
 
 1. Give such a card State Backlog and Status Not Started, and the other defaults of "Creating a work item".
-2. Add a Recent History row: "Made in Notion by hand." In the same call, delete the template's note and every prompt that the owner left unfilled, and keep everything that the owner wrote. `page-layout.md`, section "Filling a new work item", says how.
+2. Add a Recent History row: "Made in Notion by hand." In the same call, delete the template's note and every prompt that the owner left unfilled, and keep everything that the owner wrote. `work-tracker-page-layout.md`, section "Filling a new work item", says how.
 3. A page that was made with "Empty" in the New menu, or made before the project had a default template, has an empty body (fewer than five blocks). Give it the default template. Its properties are kept.
    - Read the id of the template with `is_default` true. `using-notion-cli`, section "Database templates", gives the call.
    - Apply the template with the call below, and then wait for the content. `using-notion-cli`, section "Waiting for a template", says how to wait.
@@ -349,4 +349,4 @@ A card that the owner made with "New" or "+ New page" gets the sections of the w
 
    Its Recent History row is: "Made in Notion by hand; the template was filled in."
 
-A card with an empty title is hidden from every Work Items view and from every query except "Cards with no title" in `searching.md`. Name it or archive it only after the owner says which of the two the owner wants and, to name it, what the title is.
+A card with an empty title is hidden from every Work Items view and from every query except "Cards with no title" in `work-tracker-searching.md`. Name it or archive it only after the owner says which of the two the owner wants and, to name it, what the title is.

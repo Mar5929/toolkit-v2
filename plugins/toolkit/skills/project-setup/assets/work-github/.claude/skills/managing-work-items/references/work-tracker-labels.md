@@ -100,4 +100,4 @@ The owner may add or remove a label in the browser. The owner's change is the on
 - **A state label was removed from an open work item.** Take the last State that the work item's Recent History names. Ask the owner whether that State still holds before you add its label.
 - **A priority label is missing.** Add `priority:medium`, and say so in one line.
 - **A type label is missing.** Ask the owner the type.
-- **An issue that the owner made by hand has no labels.** Follow `issue-layout.md`, section "An issue made by hand".
+- **An issue that the owner made by hand has no labels.** Follow `work-tracker-issue-layout.md`, section "An issue made by hand".
