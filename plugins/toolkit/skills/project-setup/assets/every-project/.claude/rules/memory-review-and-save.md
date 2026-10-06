@@ -12,7 +12,7 @@ This rule applies to the main agent. The project's one memory store is the syste
 ## What never goes in memory
 
 - The owner's instructions for how the agent works go to `.claude/rules/owner-preferences.md`, never to memory.
-- A decision, a project term, a fact about the system, a to-do, and an original each have a home outside memory. When a review finds one that is not filed yet, file it where `AGENTS.md`, "Where information goes", says.
+- A fact that `AGENTS.md`, "Where information goes", gives a home outside memory never goes in memory. When a review finds one that is not filed yet, file it in that home.
 - A save the owner said no to is kept nowhere else: not in Current State, another memory, or a list of pending saves.
 
 ## Approval

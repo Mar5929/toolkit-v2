@@ -11,13 +11,13 @@ The owner dictates most messages with voice-to-text, so words may be misheard, m
 ## Every session
 
 - The session-start hook adds Current State to your context. If it is missing, read it with `using-memory-store`.
-- Read `PROJECT.md`, and `SOUL.md` when the project has one. Read them again after resume, clear, or compaction. In Claude Code this line loads the first: @PROJECT.md
+- Read `PROJECT.md`, and `SOUL.md` when the project has one. Read them again after resume, clear, or compaction. In Claude Code this import has already loaded `PROJECT.md`: @PROJECT.md
 - Before you change a file in a folder that has its own `AGENTS.md`, read that file.
 - Codex: at session start, and again after compaction, read every file in `.claude/rules/` that has no `paths` line at its top. Open each of the others before you work on a path it names.
 - The next three lines are for the main conversation. A helper agent follows its brief.
 - When a message continues a work item, find the item (the one the owner names; else the one this branch or chat is working on; else the one Current State names), read its Current state, and do its Next action with `running-work-item-lifecycle`. If two items fit, ask the owner which.
 - When the owner asks a question, answer it. Do not take the next step of a work item in place of an answer.
-- Before you end a turn, record each of these that no record holds yet: a result you gave only in the chat (an analysis, a draft, a plan), a to-do or a date the owner named, who owes what, and each question you asked that is still open. `curating-project-memory` says where each goes. End the reply with "Recorded:" and each record you wrote, or "Recorded: nothing new."
+- Before a turn ends, record what a later session must know and no record holds: `curating-project-memory`, "Before a turn ends".
 
 ## Project map
 
@@ -33,14 +33,14 @@ The owner dictates most messages with voice-to-text, so words may be misheard, m
 | `AGENTS.md`, `CLAUDE.md` | This guide: the instructions every agent session reads first. `CLAUDE.md` holds the one line that makes Claude Code read `AGENTS.md`. Each folder guide named below is the same pair of files inside its folder. | Only with the owner's yes, on a branch with a pull request. Never edit the guides in `work-items/` and `memory/`: they come from the toolkit, and `project-setup` ("check the setup") puts back a missing one. |
 | `DECISIONS.md` | Every decision and open question that more than one work item needs, so no later work item has to find it out again. Each entry has an ID (DEC-###) and a status: Open, Decided, Superseded, or Withdrawn. | `filing-project-records`, step "record a decision". The rules for an entry are at the top of the file. |
 | `SOUL.md` (optional) | The owner's own description of how the agent should work with the owner and the project team. | Only the owner changes it. |
-| `.gitignore`, `.ignore` | The files and folders Git does not track, such as `work-items/` and `memory/`. `.ignore` makes the search tools read those two all the same. | Only with the owner's yes. |
+| `.gitignore`, `.ignore` | The files and folders Git does not track, such as `work-items/` and `memory/`. `.ignore` lets the search tools read those two. | Only with the owner's yes. |
 | `work-items/` (local work items) | The work tracker, when work items are kept as local files: one folder per work item. A work item is one piece of work, such as a feature, a fix, or a change, from idea to Done. | `using-work-tracker` for every read and save. |
 | `work-items/<ID>-<short-slug>/<ID>.md` (local work items) | One work item's record: its goal, requirements, questions and answers, tasks, current state, and history. | `running-work-item-lifecycle`. |
 | `work-items/<ID>-<short-slug>/DESIGN.md` (local work items) | The solution design for that one work item: the options considered and the approach the owner approved. | `running-work-item-lifecycle`. |
 | `work-items/PROJECT-TASKS.md` (local work items) | Administrative tasks for the project that belong to no work item, such as giving a person access. | `running-work-item-lifecycle`. |
 | `work-items/work-item-template/` (local work items) | The blank forms that are copied to start a new work item and its design. | Never edit; they come from the toolkit. |
 | `memory/` (local memory, Hindsight memory) | What a later session needs and no other file holds. Local memory: Current State, and one file per concept. Hindsight memory: only `CURRENT_STATE.md`. | Local memory: `curating-project-memory`. Hindsight memory: `.claude/rules/hindsight-memory.md`. |
-| `memory/CURRENT_STATE.md` (local memory, Hindsight memory) | One short page: the active threads of work, what is coming up, who owes what, the standing jobs and shared files, and where the next session starts. | Local memory: `using-memory-store` makes the write. Hindsight memory: as for `memory/`. |
+| `memory/CURRENT_STATE.md` (local memory, Hindsight memory) | One short page of what is true now, in five parts. | As for `memory/`; with local memory, `using-memory-store` writes it. |
 | `memory/MEMORY.md` (local memory) | The index of the memory files. The session-start hook rebuilds and prints it. | Never edit it. |
 | `system/` | The approved description of how the system must work, written as numbered rules, one document per area. Work items, decisions, and tests point to these rules by ID. Each rule shows whether it is a draft, approved, built, or retired. | `filing-project-records`, step "update a system document". |
 | `system/glossary.md` | The words that have a special meaning in this project, such as business terms, system names, and abbreviations. Each has its meaning here, where that meaning came from, and any word it is often confused with. Read it before you use or define a project term. | As for `system/`. |
@@ -89,15 +89,17 @@ File at the narrowest scope that covers everyone affected. The test: would an ag
 | A rule that covers several areas | `system/constraints.md` (CON-##) |
 | A project term | `system/glossary.md` |
 | An original the project received and keeps | `sources/` (SRC-###); the item holds the ID |
-| Outside documentation, or a record of the system as it is today | `reference/` |
+| Outside documentation | `reference/outside-docs/` |
+| An analysis of how the system works today, for the owner or a work item | Write it to `reference/current-system/` before you reply, and answer from that record. Its work item or project task holds a pointer. |
 | A release, deployment, data migration, or client handoff | `delivery/` |
 | A test plan | `tests/` |
 | A lesson that is not proven yet | The work item's Notes; the closing step decides whether it moves up. With no work item open: memory |
-| A fact about a person, the client, or the project that fits no row above; a claim nobody checked; where to find something; something that happened, or a job that ran, that no other record shows | Memory: `curating-project-memory` |
+| A fact about a person, the client, or the project that fits no row above; a claim nobody checked; where to find something; something that happened that no other record shows | Memory: `curating-project-memory` |
+| A run of a recurring job, also a failure or result the owner reports | Write a run row in the job's event record before you reply: `curating-project-memory` |
 | The owner's preference for how the agent works ("from now on", "always", "never") | `.claude/rules/owner-preferences.md`. For every project: `~/.claude/rules/owner-preferences.md` and `~/.codex/AGENTS.md`. Never a host setting or a hook. |
 | How agents should work here, or a procedure that proved itself | A rule or a skill, with the owner's yes |
 
-To find what was decided before, read `DECISIONS.md`, then `system/`, then the work item. Before you say nothing is recorded, search `work-items/` and `memory/` too (`using-work-tracker`, `using-memory-store`): a Git search skips them. Search memory before you ask the owner to repeat something, promise a date, or run a recurring job.
+To find what was decided before, read `DECISIONS.md`, then `system/`, then the work item. Before you say nothing is recorded, search `work-items/` and `memory/` too (`using-work-tracker`, `using-memory-store`). Search memory before you ask the owner to repeat something, name who does or decides something, set a date, deploy, load data, or run a recurring job.
 
 ## Ask the owner first
 
@@ -126,7 +128,7 @@ A method skill from another plugin (brainstorming, plans, debugging) may run ins
 | The owner asks to bring the local repository up to date with its remote, such as "get the latest" | `pull-latest` |
 | The owner asks, in the owner's own words, to make the local repository an exact copy of its remote and discard local work, such as "wipe local" | `reset-to-remote` |
 | Salesforce metadata changes, a production data change, or a deploy to a shared org (Salesforce) | `sf-component-tracker`, `sf-data-change`, `sf-deploy-check`. The Salesforce rules say when to open each. |
-| The owner asks where the project stands, what waits on the owner, or what comes next, such as "where are we" | No skill: read Current State, the open work items and project tasks, and the Open entries in `DECISIONS.md`. Report each dated line of Current State, each open project task with who owes it, and unsaved work in the worktree of each item in progress. Ask one decision at a time, with your recommendation. The next item to start: started work first, then the earliest project phase that is not Done, then the highest-priority Backlog item. |
+| The owner asks where the project stands, what waits on the owner, or what comes next, such as "where are we" | No skill: read Current State, the open work items and project tasks, and the Open entries in `DECISIONS.md`. Report each dated line of Current State, saying when its date has passed, each open project task with who owes it, and unsaved work in the worktree of each item in progress. Ask one decision at a time, with your recommendation. The next item to start: started work first, then the earliest project phase that is not Done, then the highest-priority Backlog item. |
 
 ## Commands
 
