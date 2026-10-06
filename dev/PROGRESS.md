@@ -57,6 +57,33 @@ script are beside it. The reviews are `dev/reviews/2026-10-05-*.md`.
   description changes they suggest are not made yet.
 - A Codex project must trust its hooks again in `/hooks` after an update.
 
+The plain-English rewrite (2026-10-06, on the branch `claude/one-home-plain`,
+not landed; the version is still 0.9.0):
+- Seven writers rewrote the skills, the setup references, the folder
+  guides, and the rules into plain English: an opening that says what the
+  file is for, whole sentences, and plain words or a name the reader can
+  see in place of each made-up word. No rule was changed. A last pass made
+  the words and the headings the same across the files.
+- The writing rule has a new name, `write-documents-in-plain-english.md`
+  (Mike, 2026-10-06). It was `write-for-the-reader.md` for one day, and
+  `plain-english-artifacts.md` before that. "Update the toolkit" replaces
+  either old file in an existing project.
+- All the writing rules are in that one rule (Mike, 2026-10-06). The long
+  second text in `writing-harness-files` was deleted. The skill holds an
+  exact copy of the rule, `references/writing-rule.md`, and
+  `check-skills.mjs` fails when the copy and the rule differ.
+- The word list is `dev/reviews/word-list.md`: one answer for each made-up
+  word, and one word where the files used several, such as "session" (never
+  "chat"), "the project's Current State" and "the work item's Current
+  state", "the owner's yes", and "source".
+- Not rewritten: the Salesforce skills and rules, `choosing-outside-tools`,
+  and the templates (the work item and design templates, the memory record
+  template, and the three Notion page texts).
+- The root guide of a project is 19,880 bytes; setup fails a project whose
+  guide is over 20,480.
+- Still to do: the skill routing test in both hosts, because 15 skill
+  descriptions changed.
+
 Open with Mike (also in `dev/research/layout-audit/FIX-LIST.md`, "Waits for
 the owner", and `MEMORY-SCENARIOS.md`):
 - Memory, known limits from the live runs: a mid-size model does not save
